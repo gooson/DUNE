@@ -8,24 +8,62 @@ enum TimePeriod: String, CaseIterable, Sendable {
     case sixMonths = "6M"
     case year = "Y"
 
-    /// The date range for this period ending now.
-    var dateRange: (start: Date, end: Date) {
+    /// The date range for this period ending now, shifted by `offset` periods backward (negative) or forward.
+    /// `offset = 0` is the current period, `offset = -1` is the previous period, etc.
+    func dateRange(offset: Int = 0) -> (start: Date, end: Date) {
         let calendar = Calendar.current
-        let end = Date()
-        let start: Date
+        let now = Date()
+
+        // First compute current period end/start
+        let baseEnd: Date
+        let baseStart: Date
         switch self {
         case .day:
-            start = calendar.startOfDay(for: end)
+            baseEnd = now
+            baseStart = calendar.startOfDay(for: now)
         case .week:
-            start = calendar.date(byAdding: .day, value: -6, to: calendar.startOfDay(for: end))!
+            baseEnd = now
+            baseStart = calendar.date(byAdding: .day, value: -6, to: calendar.startOfDay(for: now))!
         case .month:
-            start = calendar.date(byAdding: .month, value: -1, to: calendar.startOfDay(for: end))!
+            baseEnd = now
+            baseStart = calendar.date(byAdding: .month, value: -1, to: calendar.startOfDay(for: now))!
         case .sixMonths:
-            start = calendar.date(byAdding: .month, value: -6, to: calendar.startOfDay(for: end))!
+            baseEnd = now
+            baseStart = calendar.date(byAdding: .month, value: -6, to: calendar.startOfDay(for: now))!
         case .year:
-            start = calendar.date(byAdding: .year, value: -1, to: calendar.startOfDay(for: end))!
+            baseEnd = now
+            baseStart = calendar.date(byAdding: .year, value: -1, to: calendar.startOfDay(for: now))!
         }
-        return (start, end)
+
+        guard offset != 0 else { return (baseStart, baseEnd) }
+
+        // Shift both start and end by the offset
+        let shiftedStart: Date
+        let shiftedEnd: Date
+        switch self {
+        case .day:
+            shiftedStart = calendar.date(byAdding: .day, value: offset, to: baseStart)!
+            shiftedEnd = calendar.date(byAdding: .day, value: offset, to: baseEnd)!
+        case .week:
+            shiftedStart = calendar.date(byAdding: .day, value: offset * 7, to: baseStart)!
+            shiftedEnd = calendar.date(byAdding: .day, value: offset * 7, to: baseEnd)!
+        case .month:
+            shiftedStart = calendar.date(byAdding: .month, value: offset, to: baseStart)!
+            shiftedEnd = calendar.date(byAdding: .month, value: offset, to: baseEnd)!
+        case .sixMonths:
+            shiftedStart = calendar.date(byAdding: .month, value: offset * 6, to: baseStart)!
+            shiftedEnd = calendar.date(byAdding: .month, value: offset * 6, to: baseEnd)!
+        case .year:
+            shiftedStart = calendar.date(byAdding: .year, value: offset, to: baseStart)!
+            shiftedEnd = calendar.date(byAdding: .year, value: offset, to: baseEnd)!
+        }
+
+        return (shiftedStart, shiftedEnd)
+    }
+
+    /// The date range for this period ending now (shorthand for offset 0).
+    var dateRange: (start: Date, end: Date) {
+        dateRange(offset: 0)
     }
 
     /// Calendar component for x-axis stride.
@@ -69,6 +107,34 @@ enum TimePeriod: String, CaseIterable, Sendable {
         case .month: 30
         case .sixMonths: 26   // ~26 weeks
         case .year: 12
+        }
+    }
+
+    /// Formatted label for the given offset's date range.
+    func rangeLabel(offset: Int) -> String {
+        guard offset != 0 else { return "" }
+        let range = dateRange(offset: offset)
+        let formatter = DateFormatter()
+        switch self {
+        case .day:
+            formatter.dateFormat = "M/d (E)"
+            return formatter.string(from: range.start)
+        case .week:
+            formatter.dateFormat = "M/d"
+            let start = formatter.string(from: range.start)
+            let end = formatter.string(from: range.end)
+            return "\(start) – \(end)"
+        case .month:
+            formatter.dateFormat = "yyyy.M"
+            return formatter.string(from: range.start)
+        case .sixMonths:
+            formatter.dateFormat = "yyyy.M"
+            let start = formatter.string(from: range.start)
+            let end = formatter.string(from: range.end)
+            return "\(start) – \(end)"
+        case .year:
+            formatter.dateFormat = "yyyy"
+            return formatter.string(from: range.start)
         }
     }
 

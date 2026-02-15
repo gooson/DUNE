@@ -8,13 +8,18 @@ import OSLog
 @MainActor
 final class ConditionScoreDetailViewModel {
     var selectedPeriod: TimePeriod = .week {
-        didSet { if oldValue != selectedPeriod { triggerReload() } }
+        didSet { if oldValue != selectedPeriod { periodOffset = 0; triggerReload() } }
+    }
+    var periodOffset: Int = 0 {
+        didSet { if oldValue != periodOffset { triggerReload() } }
     }
     var chartData: [ChartDataPoint] = []
     var summaryStats: MetricSummary?
     var highlights: [Highlight] = []
     var isLoading = false
     var errorMessage: String?
+
+    var canGoForward: Bool { periodOffset < 0 }
 
     private(set) var currentScore: ConditionScore?
 
@@ -55,7 +60,7 @@ final class ConditionScoreDetailViewModel {
     }
 
     private func loadScoreData() async throws {
-        let range = selectedPeriod.dateRange
+        let range = selectedPeriod.dateRange(offset: periodOffset)
 
         // Fetch all HRV samples for the period
         let calendar = Calendar.current
@@ -64,7 +69,7 @@ final class ConditionScoreDetailViewModel {
         async let currentSamplesTask = hrvService.fetchHRVSamples(days: daysInRange + 7)
 
         // Previous period for comparison
-        let prevRange = HealthDataAggregator.previousPeriodRange(for: selectedPeriod)
+        let prevRange = HealthDataAggregator.previousPeriodRange(for: selectedPeriod, offset: periodOffset)
         let prevDays = max(1, calendar.dateComponents([.day], from: prevRange.start, to: prevRange.end).day ?? 7)
         async let prevSamplesTask = hrvService.fetchHRVSamples(days: daysInRange + prevDays + 7)
 

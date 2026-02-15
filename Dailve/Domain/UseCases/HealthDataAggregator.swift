@@ -97,8 +97,8 @@ enum HealthDataAggregator {
     // MARK: - Previous Period
 
     /// Computes the previous period date range matching the given period's duration.
-    static func previousPeriodRange(for period: TimePeriod) -> (start: Date, end: Date) {
-        let current = period.dateRange
+    static func previousPeriodRange(for period: TimePeriod, offset: Int = 0) -> (start: Date, end: Date) {
+        let current = period.dateRange(offset: offset)
         let calendar = Calendar.current
         let duration = current.end.timeIntervalSince(current.start)
         let prevEnd = current.start

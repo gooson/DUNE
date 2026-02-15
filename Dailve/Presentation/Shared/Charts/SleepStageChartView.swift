@@ -80,7 +80,7 @@ struct SleepStageChartView: View {
                 ForEach(dailyData) { dataPoint in
                     ForEach(dataPoint.segments, id: \.category) { segment in
                         BarMark(
-                            x: .value("Date", dataPoint.date, unit: .day),
+                            x: .value("Date", dataPoint.date, unit: barXUnit),
                             y: .value("Hours", segment.value / 3600)
                         )
                         .foregroundStyle(segmentColor(segment.category))
@@ -88,7 +88,7 @@ struct SleepStageChartView: View {
                 }
 
                 if let point = selectedDailyPoint {
-                    RuleMark(x: .value("Selected", point.date, unit: .day))
+                    RuleMark(x: .value("Selected", point.date, unit: barXUnit))
                         .foregroundStyle(.gray.opacity(0.3))
                         .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
                 }
@@ -166,6 +166,15 @@ struct SleepStageChartView: View {
         case "REM": .cyan
         case "Awake": .orange
         default: .gray
+        }
+    }
+
+    private var barXUnit: Calendar.Component {
+        switch period {
+        case .day:        .hour
+        case .sixMonths:  .weekOfYear
+        case .year:       .month
+        default:          .day
         }
     }
 

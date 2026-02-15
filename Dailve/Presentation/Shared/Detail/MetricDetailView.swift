@@ -19,20 +19,25 @@ struct MetricDetailView: View {
                     lastUpdated: viewModel.lastUpdated
                 )
 
-                // Period picker
-                Picker("Period", selection: $viewModel.selectedPeriod) {
-                    ForEach(TimePeriod.allCases, id: \.self) { period in
-                        Text(period.rawValue).tag(period)
+                // Period picker + range label
+                VStack(spacing: DS.Spacing.xs) {
+                    Picker("Period", selection: $viewModel.selectedPeriod) {
+                        ForEach(TimePeriod.allCases, id: \.self) { period in
+                            Text(period.rawValue).tag(period)
+                        }
                     }
-                }
-                .pickerStyle(.segmented)
-                .sensoryFeedback(.selection, trigger: viewModel.selectedPeriod)
+                    .pickerStyle(.segmented)
+                    .sensoryFeedback(.selection, trigger: viewModel.selectedPeriod)
 
-                // Chart
+                    periodRangeLabel
+                }
+
+                // Chart (swipeable)
                 StandardCard {
                     chart
                         .frame(height: chartHeight)
                 }
+                .periodSwipe(offset: $viewModel.periodOffset, canGoForward: viewModel.canGoForward)
 
                 // Highlights
                 MetricHighlightsView(
@@ -73,6 +78,49 @@ struct MetricDetailView: View {
                 lastUpdated: metric.date
             )
             await viewModel.loadData()
+        }
+    }
+
+    // MARK: - Period Range Label
+
+    @ViewBuilder
+    private var periodRangeLabel: some View {
+        let label = viewModel.selectedPeriod.rangeLabel(offset: viewModel.periodOffset)
+        if !label.isEmpty {
+            HStack {
+                Button {
+                    viewModel.periodOffset -= 1
+                } label: {
+                    Image(systemName: "chevron.left")
+                        .font(.caption2)
+                        .fontWeight(.semibold)
+                }
+
+                Spacer()
+
+                Text(label)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .contentTransition(.numericText())
+
+                Spacer()
+
+                if viewModel.canGoForward {
+                    Button {
+                        viewModel.periodOffset += 1
+                    } label: {
+                        Image(systemName: "chevron.right")
+                            .font(.caption2)
+                            .fontWeight(.semibold)
+                    }
+                } else {
+                    Image(systemName: "chevron.right")
+                        .font(.caption2)
+                        .foregroundStyle(.quaternary)
+                }
+            }
+            .padding(.horizontal, DS.Spacing.sm)
+            .sensoryFeedback(.selection, trigger: viewModel.periodOffset)
         }
     }
 

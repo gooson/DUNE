@@ -8,7 +8,10 @@ import OSLog
 @MainActor
 final class MetricDetailViewModel {
     var selectedPeriod: TimePeriod = .week {
-        didSet { if oldValue != selectedPeriod { triggerReload() } }
+        didSet { if oldValue != selectedPeriod { periodOffset = 0; triggerReload() } }
+    }
+    var periodOffset: Int = 0 {
+        didSet { if oldValue != periodOffset { triggerReload() } }
     }
     var chartData: [ChartDataPoint] = []
     var rangeData: [RangeDataPoint] = []
@@ -17,6 +20,8 @@ final class MetricDetailViewModel {
     var highlights: [Highlight] = []
     var isLoading = false
     var errorMessage: String?
+
+    var canGoForward: Bool { periodOffset < 0 }
 
     private(set) var category: HealthMetric.Category = .hrv
     private(set) var currentValue: Double = 0
@@ -84,13 +89,13 @@ final class MetricDetailViewModel {
     // MARK: - HRV
 
     private func loadHRVData() async throws {
-        let range = selectedPeriod.dateRange
+        let range = selectedPeriod.dateRange(offset: periodOffset)
         let interval = HealthDataAggregator.intervalComponents(for: selectedPeriod)
 
         async let currentData = hrvService.fetchHRVCollection(
             start: range.start, end: range.end, interval: interval
         )
-        let prevRange = HealthDataAggregator.previousPeriodRange(for: selectedPeriod)
+        let prevRange = HealthDataAggregator.previousPeriodRange(for: selectedPeriod, offset: periodOffset)
         async let prevData = hrvService.fetchHRVCollection(
             start: prevRange.start, end: prevRange.end, interval: interval
         )
@@ -108,13 +113,13 @@ final class MetricDetailViewModel {
     // MARK: - RHR
 
     private func loadRHRData() async throws {
-        let range = selectedPeriod.dateRange
+        let range = selectedPeriod.dateRange(offset: periodOffset)
         let interval = HealthDataAggregator.intervalComponents(for: selectedPeriod)
 
         async let currentData = hrvService.fetchRHRCollection(
             start: range.start, end: range.end, interval: interval
         )
-        let prevRange = HealthDataAggregator.previousPeriodRange(for: selectedPeriod)
+        let prevRange = HealthDataAggregator.previousPeriodRange(for: selectedPeriod, offset: periodOffset)
         async let prevData = hrvService.fetchRHRCollection(
             start: prevRange.start, end: prevRange.end, interval: interval
         )
@@ -143,7 +148,7 @@ final class MetricDetailViewModel {
     // MARK: - Sleep
 
     private func loadSleepData() async throws {
-        let range = selectedPeriod.dateRange
+        let range = selectedPeriod.dateRange(offset: periodOffset)
 
         if selectedPeriod == .day {
             // Day mode: show raw sleep stages
@@ -157,7 +162,7 @@ final class MetricDetailViewModel {
             async let currentSleep = sleepService.fetchDailySleepDurations(
                 start: range.start, end: range.end
             )
-            let prevRange = HealthDataAggregator.previousPeriodRange(for: selectedPeriod)
+            let prevRange = HealthDataAggregator.previousPeriodRange(for: selectedPeriod, offset: periodOffset)
             async let prevSleep = sleepService.fetchDailySleepDurations(
                 start: prevRange.start, end: prevRange.end
             )
@@ -201,13 +206,13 @@ final class MetricDetailViewModel {
     // MARK: - Steps
 
     private func loadStepsData() async throws {
-        let range = selectedPeriod.dateRange
+        let range = selectedPeriod.dateRange(offset: periodOffset)
         let interval = HealthDataAggregator.intervalComponents(for: selectedPeriod)
 
         async let currentData = stepsService.fetchStepsCollection(
             start: range.start, end: range.end, interval: interval
         )
-        let prevRange = HealthDataAggregator.previousPeriodRange(for: selectedPeriod)
+        let prevRange = HealthDataAggregator.previousPeriodRange(for: selectedPeriod, offset: periodOffset)
         async let prevData = stepsService.fetchStepsCollection(
             start: prevRange.start, end: prevRange.end, interval: interval
         )
@@ -235,10 +240,10 @@ final class MetricDetailViewModel {
     // MARK: - Exercise
 
     private func loadExerciseData() async throws {
-        let range = selectedPeriod.dateRange
+        let range = selectedPeriod.dateRange(offset: periodOffset)
 
         async let currentWorkouts = workoutService.fetchWorkouts(start: range.start, end: range.end)
-        let prevRange = HealthDataAggregator.previousPeriodRange(for: selectedPeriod)
+        let prevRange = HealthDataAggregator.previousPeriodRange(for: selectedPeriod, offset: periodOffset)
         async let prevWorkouts = workoutService.fetchWorkouts(start: prevRange.start, end: prevRange.end)
 
         let current = try await currentWorkouts
@@ -266,10 +271,10 @@ final class MetricDetailViewModel {
     // MARK: - Weight
 
     private func loadWeightData() async throws {
-        let range = selectedPeriod.dateRange
+        let range = selectedPeriod.dateRange(offset: periodOffset)
 
         async let currentSamples = bodyService.fetchWeight(start: range.start, end: range.end)
-        let prevRange = HealthDataAggregator.previousPeriodRange(for: selectedPeriod)
+        let prevRange = HealthDataAggregator.previousPeriodRange(for: selectedPeriod, offset: periodOffset)
         async let prevSamples = bodyService.fetchWeight(start: prevRange.start, end: prevRange.end)
 
         let current = try await currentSamples

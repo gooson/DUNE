@@ -22,7 +22,8 @@ struct BarChartView: View {
                 ForEach(data) { point in
                     BarMark(
                         x: .value("Date", point.date, unit: xUnit),
-                        y: .value(valueLabel, point.value)
+                        y: .value(valueLabel, point.value),
+                        width: barWidth
                     )
                     .foregroundStyle(barColor(for: point))
                     .clipShape(RoundedRectangle(cornerRadius: 3))
@@ -84,7 +85,22 @@ struct BarChartView: View {
     // MARK: - Helpers
 
     private var xUnit: Calendar.Component {
-        period == .day ? .hour : .day
+        switch period {
+        case .day:        .hour
+        case .sixMonths:  .weekOfYear
+        case .year:       .month
+        default:          .day
+        }
+    }
+
+    private var barWidth: MarkDimension {
+        switch period {
+        case .day:        .automatic
+        case .week:       .automatic
+        case .month:      .automatic
+        case .sixMonths:  .fixed(8)
+        case .year:       .fixed(16)
+        }
     }
 
     private var selectedPoint: ChartDataPoint? {

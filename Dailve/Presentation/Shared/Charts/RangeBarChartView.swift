@@ -95,16 +95,21 @@ struct RangeBarChartView: View {
     // MARK: - Helpers
 
     private var xUnit: Calendar.Component {
-        period == .day ? .hour : .day
+        switch period {
+        case .day:        .hour
+        case .sixMonths:  .weekOfYear
+        case .year:       .month
+        default:          .day
+        }
     }
 
     private var barWidth: MarkDimension {
         switch period {
-        case .day: .fixed(6)
-        case .week: .fixed(12)
-        case .month: .fixed(6)
-        case .sixMonths: .fixed(4)
-        case .year: .fixed(8)
+        case .day:        .fixed(6)
+        case .week:       .fixed(12)
+        case .month:      .fixed(6)
+        case .sixMonths:  .fixed(8)
+        case .year:       .fixed(16)
         }
     }
 
