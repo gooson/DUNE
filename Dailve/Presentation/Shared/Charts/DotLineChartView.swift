@@ -6,9 +6,10 @@ struct DotLineChartView: View {
     let baseline: Double?
     let yAxisLabel: String
     var period: Period = .week
+    var timePeriod: TimePeriod?
     var tintColor: Color = DS.Color.hrv
 
-    @State private var selectedPoint: ChartDataPoint?
+    @State private var selectedDate: Date?
 
     enum Period: String, CaseIterable {
         case week = "7D"
@@ -25,11 +26,11 @@ struct DotLineChartView: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             // Selected point info
             if let selected = selectedPoint {
                 HStack {
-                    Text(selected.date, style: .date)
+                    Text(selected.date, format: .dateTime.month(.abbreviated).day())
                         .font(.caption)
                     Spacer()
                     Text(String(format: "%.1f", selected.value))
@@ -37,23 +38,27 @@ struct DotLineChartView: View {
                         .fontWeight(.semibold)
                 }
                 .foregroundStyle(.secondary)
+                .transition(.opacity)
             }
 
             Chart {
                 ForEach(data) { point in
                     LineMark(
-                        x: .value("Date", point.date, unit: .day),
+                        x: .value("Date", point.date, unit: xUnit),
                         y: .value("Value", point.value)
                     )
                     .interpolationMethod(.catmullRom)
                     .foregroundStyle(tintColor.opacity(0.6))
 
-                    PointMark(
-                        x: .value("Date", point.date, unit: .day),
-                        y: .value("Value", point.value)
-                    )
-                    .foregroundStyle(tintColor)
-                    .symbolSize(24)
+                    // Hide points when data is dense (>30 points)
+                    if data.count <= 30 {
+                        PointMark(
+                            x: .value("Date", point.date, unit: xUnit),
+                            y: .value("Value", point.value)
+                        )
+                        .foregroundStyle(tintColor)
+                        .symbolSize(24)
+                    }
                 }
 
                 // Baseline
@@ -62,46 +67,72 @@ struct DotLineChartView: View {
                         .foregroundStyle(.gray.opacity(0.5))
                         .lineStyle(StrokeStyle(lineWidth: 1, dash: [5, 3]))
                 }
+
+                // Selection indicator
+                if let point = selectedPoint {
+                    PointMark(
+                        x: .value("Date", point.date, unit: xUnit),
+                        y: .value("Value", point.value)
+                    )
+                    .foregroundStyle(tintColor)
+                    .symbolSize(48)
+
+                    RuleMark(x: .value("Selected", point.date, unit: xUnit))
+                        .foregroundStyle(.gray.opacity(0.3))
+                        .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
+                }
             }
             .chartXAxis {
-                AxisMarks(values: .stride(by: .day, count: period == .week ? 1 : 7)) { value in
-                    AxisValueLabel(format: .dateTime.day().month(.abbreviated))
+                AxisMarks(values: .stride(by: xStrideComponent, count: xStrideCount)) { _ in
+                    AxisValueLabel(format: axisFormat)
                     AxisGridLine()
                 }
             }
             .chartYAxis {
-                AxisMarks(position: .leading) { value in
+                AxisMarks(position: .leading) { _ in
                     AxisValueLabel()
                     AxisGridLine()
                 }
             }
-            .chartOverlay { proxy in
-                GeometryReader { geometry in
-                    Rectangle()
-                        .fill(.clear)
-                        .contentShape(Rectangle())
-                        .gesture(
-                            DragGesture(minimumDistance: 0)
-                                .onChanged { value in
-                                    guard let plotFrame = proxy.plotFrame else { return }
-                                    let x = value.location.x - geometry[plotFrame].origin.x
-                                    guard let date: Date = proxy.value(atX: x) else { return }
-                                    selectedPoint = data.min(by: {
-                                        abs($0.date.timeIntervalSince(date)) < abs($1.date.timeIntervalSince(date))
-                                    })
-                                }
-                                .onEnded { _ in
-                                    selectedPoint = nil
-                                }
-                        )
-                }
-            }
+            .chartXSelection(value: $selectedDate)
+            .sensoryFeedback(.selection, trigger: selectedDate)
         }
     }
-}
 
-struct ChartDataPoint: Identifiable {
-    var id: Date { date }
-    let date: Date
-    let value: Double
+    // MARK: - Helpers
+
+    private var xUnit: Calendar.Component {
+        if let timePeriod {
+            return timePeriod == .day ? .hour : .day
+        }
+        return .day
+    }
+
+    private var xStrideComponent: Calendar.Component {
+        if let timePeriod {
+            return timePeriod.strideComponent
+        }
+        return .day
+    }
+
+    private var xStrideCount: Int {
+        if let timePeriod {
+            return timePeriod.strideCount
+        }
+        return period == .week ? 1 : 7
+    }
+
+    private var axisFormat: Date.FormatStyle {
+        if let timePeriod {
+            return timePeriod.axisLabelFormat
+        }
+        return .dateTime.day().month(.abbreviated)
+    }
+
+    private var selectedPoint: ChartDataPoint? {
+        guard let selectedDate else { return nil }
+        return data.min(by: {
+            abs($0.date.timeIntervalSince(selectedDate)) < abs($1.date.timeIntervalSince(selectedDate))
+        })
+    }
 }
