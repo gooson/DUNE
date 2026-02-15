@@ -2,7 +2,6 @@ import SwiftUI
 
 struct MetricCardView: View {
     let metric: HealthMetric
-    @State private var isExpanded = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -25,11 +24,8 @@ struct MetricCardView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(16)
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
-        .onTapGesture {
-            withAnimation(.spring(response: 0.3)) {
-                isExpanded.toggle()
-            }
-        }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(metric.name), \(metric.formattedValue)")
     }
 
     private var changeColor: Color {

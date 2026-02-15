@@ -8,9 +8,7 @@ extension HealthMetric {
         case .rhr:
             return String(format: "%.0fbpm", value)
         case .sleep:
-            let hours = Int(value) / 60
-            let minutes = Int(value) % 60
-            return "\(hours)h \(minutes)m"
+            return value.hoursMinutesFormatted
         case .exercise:
             return String(format: "%.0fmin", value)
         case .steps:

@@ -3,6 +3,11 @@ import SwiftUI
 @Observable
 @MainActor
 final class BodyCompositionViewModel {
+    private let maxWeight = 500.0
+    private let maxBodyFat = 100.0
+    private let maxMuscleMass = 300.0
+    private let maxMemoLength = 500
+
     var isShowingAddSheet = false
     var isShowingEditSheet = false
     var editingRecord: BodyCompositionRecord?
@@ -25,7 +30,7 @@ final class BodyCompositionViewModel {
             weight: validated.weight,
             bodyFatPercentage: validated.bodyFat,
             muscleMass: validated.muscleMass,
-            memo: String(newMemo.prefix(500))
+            memo: String(newMemo.prefix(maxMemoLength))
         )
     }
 
@@ -34,7 +39,7 @@ final class BodyCompositionViewModel {
         record.weight = validated.weight
         record.bodyFatPercentage = validated.bodyFat
         record.muscleMass = validated.muscleMass
-        record.memo = String(newMemo.prefix(500))
+        record.memo = String(newMemo.prefix(maxMemoLength))
         return true
     }
 
@@ -43,24 +48,24 @@ final class BodyCompositionViewModel {
 
         let weight: Double? = newWeight.isEmpty ? nil : Double(newWeight)
         if !newWeight.isEmpty {
-            guard let w = weight, w > 0, w < 500 else {
-                validationError = "Weight must be between 0 and 500 kg"
+            guard let w = weight, w > 0, w < maxWeight else {
+                validationError = "Weight must be between 0 and \(Int(maxWeight)) kg"
                 return nil
             }
         }
 
         let bodyFat: Double? = newBodyFat.isEmpty ? nil : Double(newBodyFat)
         if !newBodyFat.isEmpty {
-            guard let bf = bodyFat, bf >= 0, bf <= 100 else {
-                validationError = "Body fat must be between 0% and 100%"
+            guard let bf = bodyFat, bf >= 0, bf <= maxBodyFat else {
+                validationError = "Body fat must be between 0% and \(Int(maxBodyFat))%"
                 return nil
             }
         }
 
         let muscleMass: Double? = newMuscleMass.isEmpty ? nil : Double(newMuscleMass)
         if !newMuscleMass.isEmpty {
-            guard let mm = muscleMass, mm > 0, mm < 300 else {
-                validationError = "Muscle mass must be between 0 and 300 kg"
+            guard let mm = muscleMass, mm > 0, mm < maxMuscleMass else {
+                validationError = "Muscle mass must be between 0 and \(Int(maxMuscleMass)) kg"
                 return nil
             }
         }

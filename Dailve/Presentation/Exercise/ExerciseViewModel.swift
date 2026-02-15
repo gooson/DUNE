@@ -3,6 +3,16 @@ import SwiftUI
 @Observable
 @MainActor
 final class ExerciseViewModel {
+    static let exerciseTypes = [
+        "Running", "Walking", "Cycling", "Swimming",
+        "Strength", "HIIT", "Yoga", "Hiking", "Other"
+    ]
+
+    private let maxCalories = 10_000.0
+    private let maxDistanceMeters = 500_000.0
+    private let maxMemoLength = 500
+    private let defaultDuration: TimeInterval = 30 * 60
+
     var healthKitWorkouts: [WorkoutSummary] = []
     var manualRecords: [ExerciseRecord] = []
     var isLoading = false
@@ -11,7 +21,7 @@ final class ExerciseViewModel {
 
     // Add form fields
     var newExerciseType = ""
-    var newDuration: TimeInterval = 30 * 60
+    var newDuration: TimeInterval = 30 * 60 // overwritten by defaultDuration in resetForm
     var newCalories: String = ""
     var newDistance: String = ""
     var newMemo = ""
@@ -73,14 +83,14 @@ final class ExerciseViewModel {
         validationError = nil
 
         if !newCalories.isEmpty {
-            guard let cal = Double(newCalories), cal >= 0, cal <= 10000 else {
-                validationError = "Calories must be between 0 and 10,000 kcal"
+            guard let cal = Double(newCalories), cal >= 0, cal <= maxCalories else {
+                validationError = "Calories must be between 0 and \(Int(maxCalories).formatted()) kcal"
                 return nil
             }
         }
         if !newDistance.isEmpty {
-            guard let dist = Double(newDistance), dist >= 0, dist <= 500_000 else {
-                validationError = "Distance must be between 0 and 500 km"
+            guard let dist = Double(newDistance), dist >= 0, dist <= maxDistanceMeters else {
+                validationError = "Distance must be between 0 and \(Int(maxDistanceMeters / 1000)) km"
                 return nil
             }
         }
@@ -94,13 +104,13 @@ final class ExerciseViewModel {
             duration: newDuration,
             calories: Double(newCalories),
             distance: Double(newDistance),
-            memo: String(newMemo.prefix(500))
+            memo: String(newMemo.prefix(maxMemoLength))
         )
     }
 
     func resetForm() {
         newExerciseType = ""
-        newDuration = 30 * 60
+        newDuration = defaultDuration
         newCalories = ""
         newDistance = ""
         newMemo = ""

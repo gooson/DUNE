@@ -7,6 +7,12 @@ protocol ConditionScoreCalculating: Sendable {
 struct CalculateConditionScoreUseCase: ConditionScoreCalculating, Sendable {
     let requiredDays = 7
 
+    private let baselineScore = 50.0
+    private let zScoreMultiplier = 25.0
+    private let minimumStdDev = 0.05
+    private let rhrChangeThreshold = 2.0
+    private let rhrPenaltyMultiplier = 2.0
+
     struct Input: Sendable {
         let hrvSamples: [HRVSample]
         let todayRHR: Double?
@@ -49,18 +55,17 @@ struct CalculateConditionScoreUseCase: ConditionScoreCalculating, Sendable {
         }
 
         let stdDev = sqrt(variance)
-        let normalRange = max(stdDev, 0.05) // Minimum range to avoid division by zero
+        let normalRange = max(stdDev, minimumStdDev)
 
-        // Score mapping: how far today is from baseline, normalized by normal range
         let zScore = (todayLn - baseline) / normalRange
-        var rawScore = 50.0 + (zScore * 25.0)
+        var rawScore = baselineScore + (zScore * zScoreMultiplier)
 
         // RHR correction: rising RHR + falling HRV = stronger fatigue signal
         if let todayRHR = input.todayRHR, let yesterdayRHR = input.yesterdayRHR {
             let rhrChange = todayRHR - yesterdayRHR
-            if rhrChange > 2 && zScore < 0 {
-                rawScore -= rhrChange * 2
-            } else if rhrChange < -2 && zScore > 0 {
+            if rhrChange > rhrChangeThreshold && zScore < 0 {
+                rawScore -= rhrChange * rhrPenaltyMultiplier
+            } else if rhrChange < -rhrChangeThreshold && zScore > 0 {
                 rawScore += abs(rhrChange)
             }
         }

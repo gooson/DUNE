@@ -36,9 +36,7 @@ struct SleepView: View {
             Text("\(viewModel.sleepScore)")
                 .font(.system(size: 56, weight: .bold, design: .rounded))
 
-            let hours = Int(viewModel.totalSleepMinutes) / 60
-            let minutes = Int(viewModel.totalSleepMinutes) % 60
-            Text("\(hours)h \(minutes)m")
+            Text(viewModel.totalSleepMinutes.hoursMinutesFormatted)
                 .font(.title3)
                 .foregroundStyle(.secondary)
 
@@ -59,7 +57,7 @@ struct SleepView: View {
             ForEach(viewModel.stageBreakdown, id: \.stage.rawValue) { item in
                 HStack {
                     Circle()
-                        .fill(stageColor(item.stage))
+                        .fill(item.stage.color)
                         .frame(width: 10, height: 10)
                     Text(item.stage.label)
                         .font(.subheadline)
@@ -103,14 +101,6 @@ struct SleepView: View {
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
     }
 
-    private func stageColor(_ stage: SleepStage.Stage) -> Color {
-        switch stage {
-        case .deep: .indigo
-        case .core: .blue
-        case .rem: .cyan
-        case .awake: .orange
-        }
-    }
 }
 
 #Preview {

@@ -5,6 +5,22 @@ protocol SleepScoreCalculating: Sendable {
 }
 
 struct CalculateSleepScoreUseCase: SleepScoreCalculating, Sendable {
+    // Score weights (total = 100)
+    private let durationMaxScore = 40.0
+    private let deepSleepMaxScore = 30.0
+    private let efficiencyMaxScore = 30.0
+
+    // Duration thresholds (hours)
+    private let idealDurationRange = 7.0...9.0
+    private let acceptableDurationRange = 6.0...10.0
+    private let idealDurationCenter = 8.0
+    private let durationPenaltyRate = 10.0
+
+    // Deep sleep thresholds (ratio)
+    private let idealDeepSleepRange = 0.15...0.25
+    private let idealDeepSleepCenter = 0.20
+    private let deepSleepPenaltyRate = 150.0
+
     struct Input: Sendable {
         let stages: [SleepStage]
     }
@@ -34,32 +50,29 @@ struct CalculateSleepScoreUseCase: SleepScoreCalculating, Sendable {
             return Output(score: 0, totalMinutes: 0, efficiency: 0)
         }
 
-        // Duration score (0-40): 7-9 hours ideal
         let hours = totalMinutes / 60
         let durationScore: Double
-        if hours >= 7 && hours <= 9 {
-            durationScore = 40
-        } else if hours >= 6 && hours <= 10 {
-            durationScore = 30
+        if idealDurationRange.contains(hours) {
+            durationScore = durationMaxScore
+        } else if acceptableDurationRange.contains(hours) {
+            durationScore = durationMaxScore - durationPenaltyRate
         } else {
-            durationScore = max(0, 40 - abs(hours - 8) * 10)
+            durationScore = max(0, durationMaxScore - abs(hours - idealDurationCenter) * durationPenaltyRate)
         }
 
-        // Deep sleep ratio score (0-30): 15-25% ideal
         let deepMinutes = input.stages
             .filter { $0.stage == .deep }
             .map(\.duration)
             .reduce(0, +) / 60.0
         let deepRatio = deepMinutes / totalMinutes
         let deepScore: Double
-        if deepRatio >= 0.15 && deepRatio <= 0.25 {
-            deepScore = 30
+        if idealDeepSleepRange.contains(deepRatio) {
+            deepScore = deepSleepMaxScore
         } else {
-            deepScore = max(0, 30 - abs(deepRatio - 0.20) * 150)
+            deepScore = max(0, deepSleepMaxScore - abs(deepRatio - idealDeepSleepCenter) * deepSleepPenaltyRate)
         }
 
-        // Efficiency score (0-30)
-        let efficiencyScore = min(30, efficiency / 100 * 30)
+        let efficiencyScore = min(efficiencyMaxScore, efficiency / 100 * efficiencyMaxScore)
 
         let score = Int(min(100, durationScore + deepScore + efficiencyScore))
         return Output(score: score, totalMinutes: totalMinutes, efficiency: efficiency)

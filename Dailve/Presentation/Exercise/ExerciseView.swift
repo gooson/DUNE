@@ -88,11 +88,6 @@ private struct AddExerciseSheet: View {
     let modelContext: ModelContext
     @Environment(\.dismiss) private var dismiss
 
-    private let exerciseTypes = [
-        "Running", "Walking", "Cycling", "Swimming",
-        "Strength", "HIIT", "Yoga", "Hiking", "Other"
-    ]
-
     var body: some View {
         NavigationStack {
             Form {
@@ -102,7 +97,7 @@ private struct AddExerciseSheet: View {
                         .font(.caption)
                 }
                 Picker("Type", selection: $viewModel.newExerciseType) {
-                    ForEach(exerciseTypes, id: \.self) { type in
+                    ForEach(ExerciseViewModel.exerciseTypes, id: \.self) { type in
                         Text(type).tag(type)
                     }
                 }
@@ -144,7 +139,7 @@ private struct AddExerciseSheet: View {
         }
         .onAppear {
             if viewModel.newExerciseType.isEmpty {
-                viewModel.newExerciseType = exerciseTypes[0]
+                viewModel.newExerciseType = ExerciseViewModel.exerciseTypes[0]
             }
         }
     }

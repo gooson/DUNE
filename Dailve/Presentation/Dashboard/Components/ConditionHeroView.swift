@@ -38,6 +38,8 @@ struct ConditionHeroView: View {
                 .animation(.easeInOut(duration: 0.8), value: score.status)
         )
         .clipShape(RoundedRectangle(cornerRadius: 20))
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Condition score \(score.score), \(score.status.label)")
         .onAppear {
             guard !isAppeared else { return }
             isAppeared = true
