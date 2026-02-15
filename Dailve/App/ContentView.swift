@@ -19,7 +19,7 @@ struct ContentView: View {
                 DashboardView()
             }
             Tab(AppSection.exercise.title, systemImage: AppSection.exercise.icon) {
-                ExerciseView()
+                ActivityView()
             }
             Tab(AppSection.sleep.title, systemImage: AppSection.sleep.icon) {
                 SleepView()
@@ -47,7 +47,7 @@ struct ContentView: View {
             case .dashboard:
                 DashboardView()
             case .exercise:
-                ExerciseView()
+                ActivityView()
             case .sleep:
                 SleepView()
             case .body:
