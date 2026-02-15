@@ -6,18 +6,26 @@ struct SleepView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: 20) {
-                    // Sleep Score Hero
-                    sleepScoreCard
-
-                    // Stage Breakdown
-                    stageBreakdownCard
-
-                    // Weekly Trend
-                    weeklyTrendCard
+            Group {
+                if viewModel.isLoading && viewModel.weeklyData.isEmpty {
+                    ProgressView()
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else if viewModel.weeklyData.isEmpty && viewModel.sleepScore == 0 && !viewModel.isLoading {
+                    EmptyStateView(
+                        icon: "moon.zzz.fill",
+                        title: "No Sleep Data",
+                        message: "Wear Apple Watch to bed to automatically track your sleep stages and quality."
+                    )
+                } else {
+                    ScrollView {
+                        VStack(spacing: DS.Spacing.xl) {
+                            sleepScoreCard
+                            stageBreakdownCard
+                            weeklyTrendCard
+                        }
+                        .padding()
+                    }
                 }
-                .padding()
             }
             .navigationTitle("Sleep")
             .task {
@@ -32,73 +40,95 @@ struct SleepView: View {
     // MARK: - Components
 
     private var sleepScoreCard: some View {
-        VStack(spacing: 12) {
-            Text("\(viewModel.sleepScore)")
-                .font(.system(size: 56, weight: .bold, design: .rounded))
+        StandardCard {
+            VStack(spacing: DS.Spacing.md) {
+                Text("\(viewModel.sleepScore)")
+                    .font(DS.Typography.heroScore)
+                    .foregroundStyle(DS.Color.sleep)
 
-            Text(viewModel.totalSleepMinutes.hoursMinutesFormatted)
-                .font(.title3)
-                .foregroundStyle(.secondary)
+                Text(viewModel.totalSleepMinutes.hoursMinutesFormatted)
+                    .font(.title3)
+                    .foregroundStyle(.secondary)
 
-            Text("Efficiency: \(Int(viewModel.sleepEfficiency))%")
-                .font(.caption)
-                .foregroundStyle(.secondary)
+                Text("Efficiency: \(Int(viewModel.sleepEfficiency))%")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .frame(maxWidth: .infinity)
         }
-        .frame(maxWidth: .infinity)
-        .padding(24)
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
     }
 
     private var stageBreakdownCard: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Sleep Stages")
-                .font(.headline)
+        StandardCard {
+            VStack(alignment: .leading, spacing: DS.Spacing.md) {
+                Text("Sleep Stages")
+                    .font(.headline)
 
-            ForEach(viewModel.stageBreakdown, id: \.stage.rawValue) { item in
-                HStack {
-                    Circle()
-                        .fill(item.stage.color)
-                        .frame(width: 10, height: 10)
-                    Text(item.stage.label)
-                        .font(.subheadline)
-                    Spacer()
-                    Text("\(Int(item.minutes)) min")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                // Horizontal stacked bar
+                let totalMinutes = viewModel.stageBreakdown.map(\.minutes).reduce(0, +)
+                if totalMinutes > 0 {
+                    GeometryReader { geo in
+                        HStack(spacing: 2) {
+                            ForEach(viewModel.stageBreakdown.filter { $0.minutes > 0 }, id: \.stage.rawValue) { item in
+                                let fraction = item.minutes / totalMinutes
+                                RoundedRectangle(cornerRadius: DS.Radius.sm / 2)
+                                    .fill(item.stage.color.gradient)
+                                    .frame(width: max(geo.size.width * fraction - 2, 4))
+                            }
+                        }
+                    }
+                    .frame(height: 28)
+                    .clipShape(RoundedRectangle(cornerRadius: DS.Radius.sm))
+                }
+
+                // Legend
+                HStack(spacing: DS.Spacing.lg) {
+                    ForEach(viewModel.stageBreakdown, id: \.stage.rawValue) { item in
+                        HStack(spacing: DS.Spacing.xs) {
+                            Circle()
+                                .fill(item.stage.color)
+                                .frame(width: 8, height: 8)
+                            VStack(alignment: .leading, spacing: 0) {
+                                Text(item.stage.label)
+                                    .font(.caption2)
+                                    .foregroundStyle(.secondary)
+                                Text("\(Int(item.minutes))m")
+                                    .font(.caption.weight(.medium))
+                            }
+                        }
+                    }
                 }
             }
         }
-        .padding(16)
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
     }
 
     private var weeklyTrendCard: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Weekly Trend")
-                .font(.headline)
+        StandardCard {
+            VStack(alignment: .leading, spacing: DS.Spacing.md) {
+                Text("Weekly Trend")
+                    .font(.headline)
 
-            Chart(viewModel.weeklyData) { day in
-                BarMark(
-                    x: .value("Date", day.date, unit: .day),
-                    y: .value("Hours", day.totalMinutes / 60)
-                )
-                .foregroundStyle(.blue.gradient)
-                .cornerRadius(4)
-            }
-            .chartYAxis {
-                AxisMarks(values: .automatic(desiredCount: 4)) { value in
-                    AxisValueLabel {
-                        if let hours = value.as(Double.self) {
-                            Text("\(Int(hours))h")
-                        }
-                    }
-                    AxisGridLine()
+                Chart(viewModel.weeklyData) { day in
+                    BarMark(
+                        x: .value("Date", day.date, unit: .day),
+                        y: .value("Hours", day.totalMinutes / 60)
+                    )
+                    .foregroundStyle(DS.Color.sleep.gradient)
+                    .cornerRadius(4)
                 }
+                .chartYAxis {
+                    AxisMarks(values: .automatic(desiredCount: 4)) { value in
+                        AxisValueLabel {
+                            if let hours = value.as(Double.self) {
+                                Text("\(Int(hours))h")
+                            }
+                        }
+                        AxisGridLine()
+                    }
+                }
+                .frame(height: 150)
             }
-            .frame(height: 150)
         }
-        .padding(16)
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
     }
 
 }

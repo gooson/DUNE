@@ -31,6 +31,10 @@ targets:
         PRODUCT_NAME: Dailve
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         GENERATE_INFOPLIST_FILE: true
+        INFOPLIST_KEY_UILaunchScreen_Generation: true
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: true
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: "UIInterfaceOrientationPortrait"
         INFOPLIST_KEY_NSHealthShareUsageDescription: "Dailve needs access to your health data to calculate condition scores and track your fitness progress."
         INFOPLIST_KEY_NSHealthUpdateUsageDescription: "Dailve may write workout and body composition data to Health."
     entitlements:

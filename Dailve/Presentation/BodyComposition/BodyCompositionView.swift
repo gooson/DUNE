@@ -9,22 +9,32 @@ struct BodyCompositionView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: 20) {
-                    // Weight Trend Chart
-                    if records.count >= 2 {
-                        weightTrendChart
+            Group {
+                if records.isEmpty {
+                    EmptyStateView(
+                        icon: "figure.stand",
+                        title: "No Body Records",
+                        message: "Track your weight, body fat, and muscle mass to monitor changes over time.",
+                        actionTitle: "Add First Record",
+                        action: {
+                            viewModel.resetForm()
+                            viewModel.isShowingAddSheet = true
+                        }
+                    )
+                } else {
+                    ScrollView {
+                        VStack(spacing: DS.Spacing.xl) {
+                            if records.count >= 2 {
+                                weightTrendChart
+                            }
+                            if let latest = records.first {
+                                latestValuesCard(latest)
+                            }
+                            historySection
+                        }
+                        .padding()
                     }
-
-                    // Latest Values
-                    if let latest = records.first {
-                        latestValuesCard(latest)
-                    }
-
-                    // History List
-                    historySection
                 }
-                .padding()
             }
             .navigationTitle("Body")
             .toolbar {
@@ -72,31 +82,31 @@ struct BodyCompositionView: View {
     private var weightTrendChart: some View {
         let weightRecords = records.filter { $0.weight != nil }.reversed()
 
-        return VStack(alignment: .leading, spacing: 12) {
-            Text("Weight Trend")
-                .font(.headline)
+        return StandardCard {
+            VStack(alignment: .leading, spacing: DS.Spacing.md) {
+                Text("Weight Trend")
+                    .font(.headline)
 
-            Chart(Array(weightRecords), id: \.id) { record in
-                if let weight = record.weight {
-                    LineMark(
-                        x: .value("Date", record.date, unit: .day),
-                        y: .value("Weight", weight)
-                    )
-                    .interpolationMethod(.catmullRom)
-                    .foregroundStyle(.blue)
+                Chart(Array(weightRecords), id: \.id) { record in
+                    if let weight = record.weight {
+                        LineMark(
+                            x: .value("Date", record.date, unit: .day),
+                            y: .value("Weight", weight)
+                        )
+                        .interpolationMethod(.catmullRom)
+                        .foregroundStyle(DS.Color.body)
 
-                    PointMark(
-                        x: .value("Date", record.date, unit: .day),
-                        y: .value("Weight", weight)
-                    )
-                    .foregroundStyle(.blue)
-                    .symbolSize(30)
+                        PointMark(
+                            x: .value("Date", record.date, unit: .day),
+                            y: .value("Weight", weight)
+                        )
+                        .foregroundStyle(DS.Color.body)
+                        .symbolSize(30)
+                    }
                 }
+                .frame(height: 180)
             }
-            .frame(height: 180)
         }
-        .padding(16)
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
     }
 
     private func latestValuesCard(_ record: BodyCompositionRecord) -> some View {
@@ -146,27 +156,28 @@ struct BodyCompositionView: View {
 
     private func historyRow(_ record: BodyCompositionRecord) -> some View {
         HStack {
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: DS.Spacing.xs) {
                 Text(record.date, style: .date)
                     .font(.subheadline)
-                HStack(spacing: 12) {
+                HStack(spacing: DS.Spacing.md) {
                     if let w = record.weight { Text("\(String(format: "%.1f", w))kg").font(.caption).foregroundStyle(.secondary) }
                     if let f = record.bodyFatPercentage { Text("\(String(format: "%.1f", f))%").font(.caption).foregroundStyle(.secondary) }
                     if let m = record.muscleMass { Text("\(String(format: "%.1f", m))kg").font(.caption).foregroundStyle(.secondary) }
                 }
             }
             Spacer()
+            Image(systemName: "ellipsis")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+        .padding(DS.Spacing.md)
+        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+        .contextMenu {
             Button {
                 viewModel.startEditing(record)
             } label: {
-                Image(systemName: "pencil")
-                    .font(.caption)
+                Label("Edit", systemImage: "pencil")
             }
-            .buttonStyle(.borderless)
-        }
-        .padding(12)
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 8))
-        .swipeActions(edge: .trailing) {
             Button(role: .destructive) {
                 modelContext.delete(record)
             } label: {
@@ -183,6 +194,7 @@ private struct BodyCompositionFormSheet: View {
     let isEdit: Bool
     let onSave: () -> Void
     @Environment(\.dismiss) private var dismiss
+    @State private var saveCount = 0
 
     var body: some View {
         NavigationStack {
@@ -207,11 +219,15 @@ private struct BodyCompositionFormSheet: View {
                     Button("Cancel") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") { onSave() }
-                        .disabled(viewModel.newWeight.isEmpty && viewModel.newBodyFat.isEmpty && viewModel.newMuscleMass.isEmpty)
+                    Button("Save") {
+                        saveCount += 1
+                        onSave()
+                    }
+                    .disabled(viewModel.newWeight.isEmpty && viewModel.newBodyFat.isEmpty && viewModel.newMuscleMass.isEmpty)
                 }
             }
         }
+        .sensoryFeedback(.success, trigger: saveCount)
     }
 }
 

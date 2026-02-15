@@ -6,6 +6,7 @@ struct DotLineChartView: View {
     let baseline: Double?
     let yAxisLabel: String
     var period: Period = .week
+    var tintColor: Color = DS.Color.hrv
 
     @State private var selectedPoint: ChartDataPoint?
 
@@ -45,13 +46,13 @@ struct DotLineChartView: View {
                         y: .value("Value", point.value)
                     )
                     .interpolationMethod(.catmullRom)
-                    .foregroundStyle(.blue.opacity(0.6))
+                    .foregroundStyle(tintColor.opacity(0.6))
 
                     PointMark(
                         x: .value("Date", point.date, unit: .day),
                         y: .value("Value", point.value)
                     )
-                    .foregroundStyle(.blue)
+                    .foregroundStyle(tintColor)
                     .symbolSize(24)
                 }
 
@@ -100,7 +101,7 @@ struct DotLineChartView: View {
 }
 
 struct ChartDataPoint: Identifiable {
-    let id = UUID()
+    var id: Date { date }
     let date: Date
     let value: Double
 }

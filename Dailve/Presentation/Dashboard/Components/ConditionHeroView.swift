@@ -7,49 +7,61 @@ struct ConditionHeroView: View {
 
     @State private var animatedScore: Int = 0
     @State private var isAppeared = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
-        VStack(spacing: 16) {
-            // Score + Emoji
-            HStack(spacing: 12) {
-                Text("\(animatedScore)")
-                    .font(.system(size: 72, weight: .bold, design: .rounded))
-                    .contentTransition(.numericText())
+        HeroCard(tintColor: score.status.color) {
+            VStack(spacing: DS.Spacing.xl) {
+                // Progress Ring + Score
+                ZStack {
+                    ProgressRingView(
+                        progress: Double(score.score) / 100.0,
+                        ringColor: score.status.color,
+                        lineWidth: 14,
+                        size: 160
+                    )
 
-                VStack(alignment: .leading) {
-                    Text(score.status.emoji)
-                        .font(.title)
-                    Text(score.status.label)
-                        .font(.subheadline)
-                        .fontWeight(.medium)
+                    VStack(spacing: DS.Spacing.xs) {
+                        Text("\(animatedScore)")
+                            .font(DS.Typography.heroScore)
+                            .contentTransition(.numericText())
+
+                        Text(score.status.label)
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+
+                // 7-day sparkline
+                if !recentScores.isEmpty {
+                    TrendChartView(scores: recentScores)
+                        .frame(height: 48)
+                        .padding(.horizontal, DS.Spacing.sm)
                 }
             }
-
-            // 7-day Trend (dot + line)
-            if !recentScores.isEmpty {
-                TrendChartView(scores: recentScores)
-                    .frame(height: 60)
-            }
         }
-        .frame(maxWidth: .infinity)
-        .padding(24)
-        .background(
-            score.status.color.opacity(0.15)
-                .animation(.easeInOut(duration: 0.8), value: score.status)
-        )
-        .clipShape(RoundedRectangle(cornerRadius: 20))
         .accessibilityElement(children: .combine)
         .accessibilityLabel("Condition score \(score.score), \(score.status.label)")
+        .sensoryFeedback(.impact(weight: .light), trigger: isAppeared)
         .onAppear {
             guard !isAppeared else { return }
             isAppeared = true
-            withAnimation(.easeOut(duration: 1.0)) {
+            if reduceMotion {
                 animatedScore = score.score
+            } else {
+                withAnimation(DS.Animation.numeric.delay(0.2)) {
+                    animatedScore = score.score
+                }
             }
         }
         .onChange(of: score.score) { _, newValue in
-            withAnimation(.easeOut(duration: 0.6)) {
+            if reduceMotion {
                 animatedScore = newValue
+            } else {
+                withAnimation(DS.Animation.numeric) {
+                    animatedScore = newValue
+                }
             }
         }
     }
