@@ -41,7 +41,13 @@ struct BodyCompositionView: View {
                 BodyCompositionFormSheet(
                     viewModel: viewModel,
                     isEdit: false,
-                    onSave: { viewModel.saveRecord(context: modelContext) }
+                    onSave: {
+                        if let record = viewModel.createValidatedRecord() {
+                            modelContext.insert(record)
+                            viewModel.resetForm()
+                            viewModel.isShowingAddSheet = false
+                        }
+                    }
                 )
             }
             .sheet(isPresented: $viewModel.isShowingEditSheet) {
@@ -49,7 +55,12 @@ struct BodyCompositionView: View {
                     BodyCompositionFormSheet(
                         viewModel: viewModel,
                         isEdit: true,
-                        onSave: { viewModel.updateRecord(record) }
+                        onSave: {
+                        if viewModel.applyUpdate(to: record) {
+                            viewModel.isShowingEditSheet = false
+                            viewModel.editingRecord = nil
+                        }
+                    }
                     )
                 }
             }
@@ -157,7 +168,7 @@ struct BodyCompositionView: View {
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 8))
         .swipeActions(edge: .trailing) {
             Button(role: .destructive) {
-                viewModel.deleteRecord(record, context: modelContext)
+                modelContext.delete(record)
             } label: {
                 Label("Delete", systemImage: "trash")
             }

@@ -52,14 +52,14 @@ final class DashboardViewModel {
     // MARK: - Private
 
     private func fetchHRVData() async throws -> [HealthMetric] {
-        let samples = try await hrvService.fetchHRVSamples(days: 7)
+        let today = Date()
+        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: today) ?? today
 
-        let todayRHR = try await hrvService.fetchRestingHeartRate(for: Date())
-        let yesterdayRHR: Double? = if let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date()) {
-            try await hrvService.fetchRestingHeartRate(for: yesterday)
-        } else {
-            nil
-        }
+        async let samplesTask = hrvService.fetchHRVSamples(days: 7)
+        async let todayRHRTask = hrvService.fetchRestingHeartRate(for: today)
+        async let yesterdayRHRTask = hrvService.fetchRestingHeartRate(for: yesterday)
+
+        let (samples, todayRHR, yesterdayRHR) = try await (samplesTask, todayRHRTask, yesterdayRHRTask)
 
         let input = CalculateConditionScoreUseCase.Input(
             hrvSamples: samples,

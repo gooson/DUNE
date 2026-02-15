@@ -1,4 +1,4 @@
-import SwiftUI
+import Foundation
 
 struct ConditionScore: Sendable {
     let score: Int
@@ -29,16 +29,6 @@ struct ConditionScore: Sendable {
             case .fair: "\u{1F610}"
             case .tired: "\u{1F634}"
             case .warning: "\u{26A0}\u{FE0F}"
-            }
-        }
-
-        var color: Color {
-            switch self {
-            case .excellent: .green
-            case .good: Color(red: 0.6, green: 0.8, blue: 0.2)
-            case .fair: .yellow
-            case .tired: .orange
-            case .warning: .red
             }
         }
     }

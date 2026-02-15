@@ -127,7 +127,11 @@ private struct AddExerciseSheet: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
-                        viewModel.saveManualRecord(context: modelContext)
+                        if let record = viewModel.createValidatedRecord() {
+                            modelContext.insert(record)
+                            viewModel.resetForm()
+                            viewModel.isShowingAddSheet = false
+                        }
                     }
                     .disabled(viewModel.newExerciseType.isEmpty)
                 }

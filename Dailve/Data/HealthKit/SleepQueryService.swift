@@ -63,16 +63,23 @@ struct SleepQueryService: Sendable {
     }
 
     private func deduplicateSamples(_ samples: [HKCategorySample]) -> [HKCategorySample] {
-        // Group by overlapping time intervals, prefer Watch source
+        // Sort by start time for sweep-line approach
+        let sorted = samples.sorted { $0.startDate < $1.startDate }
         var result: [HKCategorySample] = []
-        for sample in samples {
-            let overlapping = result.filter { existing in
+
+        for sample in sorted {
+            let hasOverlap = result.contains { existing in
                 existing.startDate < sample.endDate && sample.startDate < existing.endDate
             }
-            if overlapping.isEmpty {
+            if !hasOverlap {
                 result.append(sample)
             } else if isWatchSource(sample) {
-                result.removeAll { overlapping.contains($0) }
+                // Replace overlapping non-Watch samples with Watch sample
+                result.removeAll { existing in
+                    !isWatchSource(existing)
+                        && existing.startDate < sample.endDate
+                        && sample.startDate < existing.endDate
+                }
                 result.append(sample)
             }
         }

@@ -1,5 +1,4 @@
 import SwiftUI
-import SwiftData
 
 @Observable
 @MainActor
@@ -59,25 +58,42 @@ final class ExerciseViewModel {
         isLoading = false
     }
 
-    func saveManualRecord(context: ModelContext) {
-        let record = ExerciseRecord(
+    var isSaving = false
+    var validationError: String?
+
+    func createValidatedRecord() -> ExerciseRecord? {
+        guard !isSaving else { return nil }
+        guard !newExerciseType.isEmpty else { return nil }
+
+        validationError = nil
+
+        if !newCalories.isEmpty {
+            guard let cal = Double(newCalories), cal >= 0, cal <= 10000 else {
+                validationError = "Calories must be between 0 and 10,000 kcal"
+                return nil
+            }
+        }
+        if !newDistance.isEmpty {
+            guard let dist = Double(newDistance), dist >= 0, dist <= 500_000 else {
+                validationError = "Distance must be between 0 and 500 km"
+                return nil
+            }
+        }
+
+        isSaving = true
+        defer { isSaving = false }
+
+        return ExerciseRecord(
             date: Date(),
             exerciseType: newExerciseType,
             duration: newDuration,
             calories: Double(newCalories),
             distance: Double(newDistance),
-            memo: newMemo
+            memo: String(newMemo.prefix(500))
         )
-        context.insert(record)
-        resetForm()
-        isShowingAddSheet = false
     }
 
-    func deleteRecord(_ record: ExerciseRecord, context: ModelContext) {
-        context.delete(record)
-    }
-
-    private func resetForm() {
+    func resetForm() {
         newExerciseType = ""
         newDuration = 30 * 60
         newCalories = ""

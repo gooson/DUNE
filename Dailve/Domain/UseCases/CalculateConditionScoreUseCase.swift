@@ -26,13 +26,24 @@ struct CalculateConditionScoreUseCase: Sendable {
             return Output(score: nil, baselineStatus: baselineStatus)
         }
 
-        let lnValues = dailyAverages.map { log($0.value) }
+        // Guard against log(0) and invalid values
+        let validAverages = dailyAverages.filter { $0.value > 0 }
+        guard !validAverages.isEmpty, todayAverage.value > 0 else {
+            return Output(score: nil, baselineStatus: baselineStatus)
+        }
+
+        let lnValues = validAverages.map { log($0.value) }
         let baseline = lnValues.reduce(0, +) / Double(lnValues.count)
         let todayLn = log(todayAverage.value)
 
         // Coefficient of variation for normal range
         let variance = lnValues.map { ($0 - baseline) * ($0 - baseline) }
             .reduce(0, +) / Double(lnValues.count)
+
+        guard !variance.isNaN && !variance.isInfinite else {
+            return Output(score: nil, baselineStatus: baselineStatus)
+        }
+
         let stdDev = sqrt(variance)
         let normalRange = max(stdDev, 0.05) // Minimum range to avoid division by zero
 

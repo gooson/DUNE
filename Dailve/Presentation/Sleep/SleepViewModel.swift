@@ -42,18 +42,27 @@ final class SleepViewModel {
     func loadData() async {
         isLoading = true
         do {
-            todayStages = try await sleepService.fetchSleepStages(for: Date())
-
-            // Load weekly data
-            var weekly: [DailySleep] = []
             let calendar = Calendar.current
-            for dayOffset in 0..<7 {
-                guard let date = calendar.date(byAdding: .day, value: -dayOffset, to: Date()) else { continue }
-                let stages = try await sleepService.fetchSleepStages(for: date)
-                let totalMinutes = stages.filter { $0.stage != .awake }.map(\.duration).reduce(0, +) / 60.0
-                weekly.append(DailySleep(date: date, totalMinutes: totalMinutes))
+            let today = Date()
+
+            // Parallel: fetch today + 7 days concurrently
+            todayStages = try await sleepService.fetchSleepStages(for: today)
+
+            weeklyData = try await withThrowingTaskGroup(of: DailySleep?.self) { group in
+                for dayOffset in 0..<7 {
+                    group.addTask { [sleepService] in
+                        guard let date = calendar.date(byAdding: .day, value: -dayOffset, to: today) else { return nil }
+                        let stages = try await sleepService.fetchSleepStages(for: date)
+                        let totalMinutes = stages.filter { $0.stage != .awake }.map(\.duration).reduce(0, +) / 60.0
+                        return DailySleep(date: date, totalMinutes: totalMinutes)
+                    }
+                }
+                var results: [DailySleep] = []
+                for try await result in group {
+                    if let result { results.append(result) }
+                }
+                return results.sorted { $0.date < $1.date }
             }
-            weeklyData = weekly.reversed()
         } catch {
             errorMessage = error.localizedDescription
         }
