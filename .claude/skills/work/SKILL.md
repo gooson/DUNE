@@ -27,6 +27,7 @@ $ARGUMENTS 에 대한 구현을 수행합니다.
 2. 각 Step 완료 후:
    - 해당 Step의 Verification 기준을 확인합니다
    - 구문 오류가 없는지 확인합니다
+   - **새 로직이 포함된 경우 유닛 테스트를 작성합니다** (testing-patterns skill 참조)
 
 3. 중요 규칙:
    - 기존 패턴을 최대한 따릅니다
