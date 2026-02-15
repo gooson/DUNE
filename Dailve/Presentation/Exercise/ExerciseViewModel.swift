@@ -53,6 +53,7 @@ final class ExerciseViewModel {
         do {
             healthKitWorkouts = try await workoutService.fetchWorkouts(days: 30)
         } catch {
+            AppLogger.ui.error("Exercise data load failed: \(error.localizedDescription)")
             errorMessage = error.localizedDescription
         }
         isLoading = false

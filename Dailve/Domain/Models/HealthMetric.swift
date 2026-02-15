@@ -76,3 +76,12 @@ struct HRVSample: Sendable {
     let value: Double
     let date: Date
 }
+
+struct WorkoutSummary: Identifiable, Sendable {
+    let id: String
+    let type: String
+    let duration: TimeInterval
+    let calories: Double?
+    let distance: Double?
+    let date: Date
+}

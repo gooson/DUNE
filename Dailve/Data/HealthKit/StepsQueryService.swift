@@ -8,6 +8,7 @@ struct StepsQueryService: Sendable {
     }
 
     func fetchSteps(for date: Date) async throws -> Double? {
+        try await manager.ensureNotDenied(for: HKQuantityType(.stepCount))
         let calendar = Calendar.current
         let startOfDay = calendar.startOfDay(for: date)
         guard let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay) else {

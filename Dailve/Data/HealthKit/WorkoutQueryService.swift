@@ -8,6 +8,7 @@ struct WorkoutQueryService: Sendable {
     }
 
     func fetchWorkouts(days: Int) async throws -> [WorkoutSummary] {
+        try await manager.ensureNotDenied(for: HKObjectType.workoutType())
         let calendar = Calendar.current
         let endDate = Date()
         guard let startDate = calendar.date(byAdding: .day, value: -days, to: endDate) else {

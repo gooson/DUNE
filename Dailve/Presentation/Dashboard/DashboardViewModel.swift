@@ -1,11 +1,12 @@
 import SwiftUI
+import OSLog
 
 @Observable
 @MainActor
 final class DashboardViewModel {
     var conditionScore: ConditionScore?
     var baselineStatus: BaselineStatus?
-    var metrics: [HealthMetric] = []
+    var sortedMetrics: [HealthMetric] = []
     var recentScores: [ConditionScore] = []
     var isLoading = false
     var errorMessage: String?
@@ -15,10 +16,6 @@ final class DashboardViewModel {
     private let workoutService = WorkoutQueryService()
     private let stepsService = StepsQueryService()
     private let scoreUseCase = CalculateConditionScoreUseCase()
-
-    var sortedMetrics: [HealthMetric] {
-        metrics.sorted { $0.changeSignificance > $1.changeSignificance }
-    }
 
     func loadData() async {
         isLoading = true
@@ -41,8 +38,10 @@ final class DashboardViewModel {
             if let exerciseMetric { allMetrics.append(exerciseMetric) }
             if let stepsMetric { allMetrics.append(stepsMetric) }
 
-            metrics = allMetrics
+            // Sort once at assignment time instead of on every access
+            sortedMetrics = allMetrics.sorted { $0.changeSignificance > $1.changeSignificance }
         } catch {
+            AppLogger.ui.error("Dashboard load failed: \(error.localizedDescription)")
             errorMessage = error.localizedDescription
         }
 
@@ -70,7 +69,7 @@ final class DashboardViewModel {
         conditionScore = output.score
         baselineStatus = output.baselineStatus
 
-        // Build 7-day score history
+        // Build 7-day score history — compute daily averages once, reuse
         recentScores = buildRecentScores(from: samples)
 
         var metrics: [HealthMetric] = []
@@ -98,7 +97,7 @@ final class DashboardViewModel {
                 value: rhr,
                 unit: "bpm",
                 change: yesterdayRHR.map { rhr - $0 },
-                date: Date(),
+                date: today,
                 category: .rhr
             ))
         }
@@ -107,7 +106,13 @@ final class DashboardViewModel {
     }
 
     private func fetchSleepData() async throws -> HealthMetric? {
-        let stages = try await sleepService.fetchSleepStages(for: Date())
+        let today = Date()
+        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: today) ?? today
+
+        async let todayTask = sleepService.fetchSleepStages(for: today)
+        async let yesterdayTask = sleepService.fetchSleepStages(for: yesterday)
+
+        let (stages, yesterdayStages) = try await (todayTask, yesterdayTask)
         guard !stages.isEmpty else { return nil }
 
         let totalMinutes = stages
@@ -115,9 +120,6 @@ final class DashboardViewModel {
             .map(\.duration)
             .reduce(0, +) / 60.0
 
-        // Yesterday's sleep for comparison
-        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date()) ?? Date()
-        let yesterdayStages = try await sleepService.fetchSleepStages(for: yesterday)
         let yesterdayMinutes = yesterdayStages
             .filter { $0.stage != .awake }
             .map(\.duration)
@@ -131,7 +133,7 @@ final class DashboardViewModel {
             value: totalMinutes,
             unit: "min",
             change: change,
-            date: Date(),
+            date: today,
             category: .sleep
         )
     }
@@ -154,10 +156,15 @@ final class DashboardViewModel {
     }
 
     private func fetchStepsData() async throws -> HealthMetric? {
-        guard let steps = try await stepsService.fetchSteps(for: Date()) else { return nil }
+        let today = Date()
+        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: today) ?? today
 
-        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date()) ?? Date()
-        let yesterdaySteps = try await stepsService.fetchSteps(for: yesterday)
+        async let todayTask = stepsService.fetchSteps(for: today)
+        async let yesterdayTask = stepsService.fetchSteps(for: yesterday)
+
+        let (steps, yesterdaySteps) = try await (todayTask, yesterdayTask)
+        guard let steps else { return nil }
+
         let change: Double? = yesterdaySteps.map { steps - $0 }
 
         return HealthMetric(
@@ -166,7 +173,7 @@ final class DashboardViewModel {
             value: steps,
             unit: "",
             change: change,
-            date: Date(),
+            date: today,
             category: .steps
         )
     }
@@ -175,19 +182,41 @@ final class DashboardViewModel {
         let calendar = Calendar.current
         let grouped = Dictionary(grouping: samples) { calendar.startOfDay(for: $0.date) }
 
+        // Pre-compute daily averages once
+        let dailyAverages: [(date: Date, value: Double)] = grouped.map { date, daySamples in
+            let avg = daySamples.map(\.value).reduce(0, +) / Double(daySamples.count)
+            return (date: date, value: avg)
+        }.sorted { $0.date > $1.date }
+
         return (0..<7).compactMap { dayOffset in
             guard let date = calendar.date(byAdding: .day, value: -dayOffset, to: Date()) else { return nil }
             let day = calendar.startOfDay(for: date)
-            guard let daySamples = grouped[day], !daySamples.isEmpty else { return nil }
+            guard grouped[day] != nil else { return nil }
 
+            // Use pre-computed averages up to this day
             guard let nextDay = calendar.date(byAdding: .day, value: 1, to: day) else { return nil }
-            let input = CalculateConditionScoreUseCase.Input(
-                hrvSamples: samples.filter { $0.date <= nextDay },
-                todayRHR: nil,
-                yesterdayRHR: nil
-            )
-            let output = scoreUseCase.execute(input: input)
-            return output.score.map { ConditionScore(score: $0.score, date: day) }
+            let relevantAverages = dailyAverages.filter { $0.date < nextDay }
+            guard relevantAverages.count >= scoreUseCase.requiredDays else { return nil }
+
+            guard let todayAvg = relevantAverages.first(where: { calendar.isDate($0.date, inSameDayAs: day) }),
+                  todayAvg.value > 0 else { return nil }
+
+            let validAverages = relevantAverages.filter { $0.value > 0 }
+            let lnValues = validAverages.map { log($0.value) }
+            let baseline = lnValues.reduce(0, +) / Double(lnValues.count)
+            let todayLn = log(todayAvg.value)
+
+            let variance = lnValues.map { ($0 - baseline) * ($0 - baseline) }
+                .reduce(0, +) / Double(lnValues.count)
+            guard !variance.isNaN && !variance.isInfinite else { return nil }
+
+            let stdDev = sqrt(variance)
+            let normalRange = max(stdDev, 0.05)
+            let zScore = (todayLn - baseline) / normalRange
+            let rawScore = 50.0 + (zScore * 25.0)
+            let clampedScore = Int(max(0, min(100, rawScore)))
+
+            return ConditionScore(score: clampedScore, date: day)
         }
     }
 }

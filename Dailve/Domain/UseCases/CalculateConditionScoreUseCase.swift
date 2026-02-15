@@ -1,7 +1,7 @@
 import Foundation
 
 struct CalculateConditionScoreUseCase: Sendable {
-    private let requiredDays = 7
+    let requiredDays = 7
 
     struct Input: Sendable {
         let hrvSamples: [HRVSample]

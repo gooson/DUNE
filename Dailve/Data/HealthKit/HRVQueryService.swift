@@ -8,6 +8,7 @@ struct HRVQueryService: Sendable {
     }
 
     func fetchHRVSamples(days: Int) async throws -> [HRVSample] {
+        try await manager.ensureNotDenied(for: HKQuantityType(.heartRateVariabilitySDNN))
         let calendar = Calendar.current
         let endDate = Date()
         guard let startDate = calendar.date(byAdding: .day, value: -days, to: endDate) else {
@@ -35,6 +36,7 @@ struct HRVQueryService: Sendable {
     }
 
     func fetchRestingHeartRate(for date: Date) async throws -> Double? {
+        try await manager.ensureNotDenied(for: HKQuantityType(.restingHeartRate))
         let calendar = Calendar.current
         let startOfDay = calendar.startOfDay(for: date)
         guard let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay) else {

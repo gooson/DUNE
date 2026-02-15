@@ -8,6 +8,7 @@ struct SleepQueryService: Sendable {
     }
 
     func fetchSleepStages(for date: Date) async throws -> [SleepStage] {
+        try await manager.ensureNotDenied(for: HKCategoryType(.sleepAnalysis))
         let calendar = Calendar.current
         // Sleep data typically starts the evening before
         guard let sleepWindowStart = calendar.date(byAdding: .hour, value: -12, to: calendar.startOfDay(for: date)),
