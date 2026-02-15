@@ -3,6 +3,7 @@ name: reviewer-security
 description: "보안 전문 리뷰어. OWASP Top 10, 인증/인가, 입력 유효성, 비밀 노출을 분석합니다."
 tools: Read, Grep, Glob, Bash(git diff *)
 model: sonnet
+memory: project
 ---
 
 You are a Security Sentinel reviewing code for security vulnerabilities.

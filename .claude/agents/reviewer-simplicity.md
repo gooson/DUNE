@@ -3,6 +3,7 @@ name: reviewer-simplicity
 description: "코드 단순성 전문 리뷰어. 과잉 설계, 불필요한 추상화, 가독성, dead code를 분석합니다."
 tools: Read, Grep, Glob, Bash(git diff *)
 model: sonnet
+memory: project
 ---
 
 You are a Code Simplicity Reviewer focused on keeping code simple and maintainable.

@@ -68,27 +68,32 @@ struct SleepQueryService: SleepQuerying, Sendable {
     }
 
     private func deduplicateSamples(_ samples: [HKCategorySample]) -> [HKCategorySample] {
-        // Sort by start time for sweep-line approach
         let sorted = samples.sorted { $0.startDate < $1.startDate }
         var result: [HKCategorySample] = []
 
         for sample in sorted {
-            let hasOverlap = result.contains { existing in
-                existing.startDate < sample.endDate && sample.startDate < existing.endDate
+            // Sweep-line: only check trailing entries that could overlap (already sorted by startDate)
+            var overlapIndices: [Int] = []
+            for i in stride(from: result.count - 1, through: 0, by: -1) {
+                let existing = result[i]
+                guard existing.endDate > sample.startDate else { break }
+                if existing.startDate < sample.endDate {
+                    overlapIndices.append(i)
+                }
             }
-            if !hasOverlap {
+
+            if overlapIndices.isEmpty {
                 result.append(sample)
             } else if isWatchSource(sample) {
                 // Replace overlapping non-Watch samples with Watch sample
-                result.removeAll { existing in
-                    !isWatchSource(existing)
-                        && existing.startDate < sample.endDate
-                        && sample.startDate < existing.endDate
+                for i in overlapIndices.sorted(by: >) where !isWatchSource(result[i]) {
+                    result.remove(at: i)
                 }
                 result.append(sample)
             }
+            // else: non-Watch sample overlaps existing → skip
         }
-        return result.sorted { $0.startDate < $1.startDate }
+        return result
     }
 
     private func isWatchSource(_ sample: HKSample) -> Bool {

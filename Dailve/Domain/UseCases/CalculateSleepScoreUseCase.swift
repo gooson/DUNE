@@ -1,6 +1,10 @@
 import Foundation
 
-struct CalculateSleepScoreUseCase: Sendable {
+protocol SleepScoreCalculating: Sendable {
+    func execute(input: CalculateSleepScoreUseCase.Input) -> CalculateSleepScoreUseCase.Output
+}
+
+struct CalculateSleepScoreUseCase: SleepScoreCalculating, Sendable {
     struct Input: Sendable {
         let stages: [SleepStage]
     }

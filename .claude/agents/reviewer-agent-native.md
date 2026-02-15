@@ -3,6 +3,7 @@ name: reviewer-agent-native
 description: "에이전트 네이티브 리뷰어. 프롬프트 품질, 컨텍스트 관리, 도구 사용, 에러 복구를 분석합니다. AI/Agent 관련 코드에 특화."
 tools: Read, Grep, Glob, Bash(git diff *)
 model: sonnet
+memory: project
 ---
 
 You are an Agent-Native Reviewer specializing in AI agent code quality.

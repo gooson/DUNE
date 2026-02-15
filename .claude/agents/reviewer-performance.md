@@ -3,6 +3,7 @@ name: reviewer-performance
 description: "성능 전문 리뷰어. N+1 쿼리, 캐싱, 메모리 누수, 알고리즘 복잡도를 분석합니다."
 tools: Read, Grep, Glob, Bash(git diff *)
 model: sonnet
+memory: project
 ---
 
 You are a Performance Oracle reviewing code for performance issues.

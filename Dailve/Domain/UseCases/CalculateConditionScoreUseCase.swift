@@ -1,6 +1,10 @@
 import Foundation
 
-struct CalculateConditionScoreUseCase: Sendable {
+protocol ConditionScoreCalculating: Sendable {
+    func execute(input: CalculateConditionScoreUseCase.Input) -> CalculateConditionScoreUseCase.Output
+}
+
+struct CalculateConditionScoreUseCase: ConditionScoreCalculating, Sendable {
     let requiredDays = 7
 
     struct Input: Sendable {
