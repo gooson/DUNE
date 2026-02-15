@@ -8,15 +8,24 @@ struct ExerciseView: View {
 
     var body: some View {
         NavigationStack {
-            List {
-                if viewModel.isLoading {
+            Group {
+                if viewModel.isLoading && viewModel.allExercises.isEmpty {
                     ProgressView()
-                        .frame(maxWidth: .infinity)
-                        .listRowBackground(Color.clear)
-                }
-
-                ForEach(viewModel.allExercises) { item in
-                    ExerciseRowView(item: item)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else if viewModel.allExercises.isEmpty && !viewModel.isLoading {
+                    EmptyStateView(
+                        icon: "figure.run",
+                        title: "No Exercises",
+                        message: "Record your workouts or sync from Apple Health to track activity.",
+                        actionTitle: "Add Exercise",
+                        action: { viewModel.isShowingAddSheet = true }
+                    )
+                } else {
+                    List {
+                        ForEach(viewModel.allExercises) { item in
+                            ExerciseRowView(item: item)
+                        }
+                    }
                 }
             }
             .navigationTitle("Exercise")
@@ -87,6 +96,7 @@ private struct AddExerciseSheet: View {
     @Bindable var viewModel: ExerciseViewModel
     let modelContext: ModelContext
     @Environment(\.dismiss) private var dismiss
+    @State private var saveCount = 0
 
     var body: some View {
         NavigationStack {
@@ -129,6 +139,7 @@ private struct AddExerciseSheet: View {
                     Button("Save") {
                         if let record = viewModel.createValidatedRecord() {
                             modelContext.insert(record)
+                            saveCount += 1
                             viewModel.resetForm()
                             viewModel.isShowingAddSheet = false
                         }
@@ -137,6 +148,7 @@ private struct AddExerciseSheet: View {
                 }
             }
         }
+        .sensoryFeedback(.success, trigger: saveCount)
         .onAppear {
             if viewModel.newExerciseType.isEmpty {
                 viewModel.newExerciseType = ExerciseViewModel.exerciseTypes[0]

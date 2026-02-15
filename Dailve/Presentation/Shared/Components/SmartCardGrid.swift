@@ -3,18 +3,30 @@ import SwiftUI
 struct SmartCardGrid: View {
     let metrics: [HealthMetric]
 
-    private let columns = [
-        GridItem(.flexible(), spacing: 12),
-        GridItem(.flexible(), spacing: 12)
-    ]
+    @Environment(\.horizontalSizeClass) private var sizeClass
+
+    private var columns: [GridItem] {
+        let count = sizeClass == .regular ? 3 : 2
+        return Array(
+            repeating: GridItem(.flexible(), spacing: DS.Spacing.md),
+            count: count
+        )
+    }
 
     var body: some View {
-        LazyVGrid(columns: columns, spacing: 12) {
-            ForEach(metrics) { metric in
+        LazyVGrid(columns: columns, spacing: DS.Spacing.md) {
+            ForEach(Array(metrics.enumerated()), id: \.element.id) { index, metric in
                 MetricCardView(metric: metric)
-                    .transition(.move(edge: .top).combined(with: .opacity))
+                    .transition(
+                        .asymmetric(
+                            insertion: .opacity
+                                .combined(with: .offset(y: 8))
+                                .animation(DS.Animation.standard.delay(Double(index) * 0.05)),
+                            removal: .opacity
+                        )
+                    )
             }
         }
-        .animation(.spring(response: 0.4), value: metrics.map(\.id))
+        .animation(DS.Animation.standard, value: metrics.map(\.id))
     }
 }
