@@ -10,6 +10,8 @@ struct BarChartView: View {
     var valueLabel: String = "Value"
     var unitSuffix: String = ""
 
+    @ScaledMetric(relativeTo: .body) private var chartHeight: CGFloat = 220
+
     @State private var selectedDate: Date?
 
     var body: some View {
@@ -46,7 +48,19 @@ struct BarChartView: View {
             }
             .chartXSelection(value: $selectedDate)
             .sensoryFeedback(.selection, trigger: selectedDate)
+            .frame(height: chartHeight)
+            .drawingGroup()
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel("\(valueLabel) chart, \(data.count) data points")
+            .accessibilityValue(accessibilitySummary)
         }
+    }
+
+    private var accessibilitySummary: String {
+        guard !data.isEmpty else { return "No data" }
+        let values = data.map(\.value)
+        let avg = values.reduce(0, +) / Double(values.count)
+        return "Average \(String(format: "%.0f", avg))\(unitSuffix)"
     }
 
     // MARK: - Subviews

@@ -8,6 +8,8 @@ struct RangeBarChartView: View {
     let period: TimePeriod
     var tintColor: Color = DS.Color.rhr
 
+    @ScaledMetric(relativeTo: .body) private var chartHeight: CGFloat = 220
+
     @State private var selectedDate: Date?
 
     var body: some View {
@@ -58,7 +60,18 @@ struct RangeBarChartView: View {
             }
             .chartXSelection(value: $selectedDate)
             .sensoryFeedback(.selection, trigger: selectedDate)
+            .frame(height: chartHeight)
+            .drawingGroup()
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel("Resting heart rate chart, \(data.count) data points")
+            .accessibilityValue(accessibilitySummary)
         }
+    }
+
+    private var accessibilitySummary: String {
+        guard !data.isEmpty else { return "No data" }
+        let avg = data.map(\.average).reduce(0, +) / Double(data.count)
+        return "Average \(String(format: "%.0f", avg)) bpm"
     }
 
     // MARK: - Subviews

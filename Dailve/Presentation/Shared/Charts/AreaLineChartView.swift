@@ -9,6 +9,8 @@ struct AreaLineChartView: View {
     var tintColor: Color = DS.Color.body
     var unitSuffix: String = "kg"
 
+    @ScaledMetric(relativeTo: .body) private var chartHeight: CGFloat = 220
+
     @State private var selectedDate: Date?
 
     var body: some View {
@@ -62,7 +64,19 @@ struct AreaLineChartView: View {
             }
             .chartXSelection(value: $selectedDate)
             .sensoryFeedback(.selection, trigger: selectedDate)
+            .frame(height: chartHeight)
+            .drawingGroup()
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel("Weight trend chart, \(data.count) data points")
+            .accessibilityValue(accessibilitySummary)
         }
+    }
+
+    private var accessibilitySummary: String {
+        guard !data.isEmpty else { return "No data" }
+        let values = data.map(\.value)
+        let latest = values.last ?? 0
+        return "Latest \(String(format: "%.1f", latest)) \(unitSuffix)"
     }
 
     // MARK: - Subviews
