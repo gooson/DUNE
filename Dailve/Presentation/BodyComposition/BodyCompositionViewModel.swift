@@ -1,4 +1,5 @@
-import SwiftUI
+import Foundation
+import Observation
 
 @Observable
 @MainActor
@@ -17,16 +18,23 @@ final class BodyCompositionViewModel {
     var newBodyFat: String = ""
     var newMuscleMass: String = ""
     var newMemo: String = ""
+    var selectedDate: Date = Date() { didSet { validationError = nil } }
     var validationError: String?
     var isSaving = false
 
     func createValidatedRecord() -> BodyCompositionRecord? {
         guard !isSaving else { return nil }
+
+        if selectedDate.isFuture {
+            validationError = "Future dates are not allowed"
+            return nil
+        }
+
         guard let validated = validateInputs() else { return nil }
         isSaving = true
         defer { isSaving = false }
         return BodyCompositionRecord(
-            date: Date(),
+            date: selectedDate,
             weight: validated.weight,
             bodyFatPercentage: validated.bodyFat,
             muscleMass: validated.muscleMass,
@@ -35,7 +43,14 @@ final class BodyCompositionViewModel {
     }
 
     func applyUpdate(to record: BodyCompositionRecord) -> Bool {
+        guard !isSaving else { return false }
+        if selectedDate.isFuture {
+            validationError = "Future dates are not allowed"
+            return false
+        }
+
         guard let validated = validateInputs() else { return false }
+        record.date = selectedDate
         record.weight = validated.weight
         record.bodyFatPercentage = validated.bodyFat
         record.muscleMass = validated.muscleMass
@@ -79,6 +94,7 @@ final class BodyCompositionViewModel {
         newBodyFat = record.bodyFatPercentage.map { String(format: "%.1f", $0) } ?? ""
         newMuscleMass = record.muscleMass.map { String(format: "%.1f", $0) } ?? ""
         newMemo = record.memo
+        selectedDate = record.date
         isShowingEditSheet = true
     }
 
@@ -87,6 +103,7 @@ final class BodyCompositionViewModel {
         newBodyFat = ""
         newMuscleMass = ""
         newMemo = ""
+        selectedDate = Date()
         validationError = nil
         editingRecord = nil
     }

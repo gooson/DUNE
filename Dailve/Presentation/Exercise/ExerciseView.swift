@@ -7,48 +7,47 @@ struct ExerciseView: View {
     @Query(sort: \ExerciseRecord.date, order: .reverse) private var manualRecords: [ExerciseRecord]
 
     var body: some View {
-        NavigationStack {
-            Group {
-                if viewModel.isLoading && viewModel.allExercises.isEmpty {
-                    ProgressView()
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                } else if viewModel.allExercises.isEmpty && !viewModel.isLoading {
-                    EmptyStateView(
-                        icon: "figure.run",
-                        title: "No Exercises",
-                        message: "Record your workouts or sync from Apple Health to track activity.",
-                        actionTitle: "Add Exercise",
-                        action: { viewModel.isShowingAddSheet = true }
-                    )
-                } else {
-                    List {
-                        ForEach(viewModel.allExercises) { item in
-                            ExerciseRowView(item: item)
-                        }
+        Group {
+            if viewModel.isLoading && viewModel.allExercises.isEmpty {
+                ProgressView()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else if viewModel.allExercises.isEmpty && !viewModel.isLoading {
+                EmptyStateView(
+                    icon: "figure.run",
+                    title: "No Exercises",
+                    message: "Record your workouts or sync from Apple Health to track activity.",
+                    actionTitle: "Add Exercise",
+                    action: { viewModel.isShowingAddSheet = true }
+                )
+            } else {
+                List {
+                    ForEach(viewModel.allExercises) { item in
+                        ExerciseRowView(item: item)
                     }
                 }
-            }
-            .navigationTitle("Exercise")
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Button {
-                        viewModel.isShowingAddSheet = true
-                    } label: {
-                        Image(systemName: "plus")
-                    }
-                }
-            }
-            .sheet(isPresented: $viewModel.isShowingAddSheet) {
-                AddExerciseSheet(viewModel: viewModel, modelContext: modelContext)
-            }
-            .task {
-                viewModel.manualRecords = manualRecords
-                await viewModel.loadHealthKitWorkouts()
-            }
-            .onChange(of: manualRecords) { _, newValue in
-                viewModel.manualRecords = newValue
             }
         }
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Button {
+                    viewModel.isShowingAddSheet = true
+                } label: {
+                    Image(systemName: "plus")
+                }
+                .accessibilityIdentifier("exercise-add-button")
+            }
+        }
+        .sheet(isPresented: $viewModel.isShowingAddSheet) {
+            AddExerciseSheet(viewModel: viewModel, modelContext: modelContext)
+        }
+        .task {
+            viewModel.manualRecords = manualRecords
+            await viewModel.loadHealthKitWorkouts()
+        }
+        .onChange(of: manualRecords) { _, newValue in
+            viewModel.manualRecords = newValue
+        }
+        .adaptiveNavigation(title: "Exercise")
     }
 }
 
@@ -106,6 +105,15 @@ private struct AddExerciseSheet: View {
                         .foregroundStyle(.red)
                         .font(.caption)
                 }
+
+                DatePicker(
+                    "Date & Time",
+                    selection: $viewModel.selectedDate,
+                    in: ...Date(),
+                    displayedComponents: [.date, .hourAndMinute]
+                )
+                .accessibilityIdentifier("exercise-date-picker")
+
                 Picker("Type", selection: $viewModel.newExerciseType) {
                     ForEach(ExerciseViewModel.exerciseTypes, id: \.self) { type in
                         Text(type).tag(type)
@@ -134,6 +142,7 @@ private struct AddExerciseSheet: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }
+                        .accessibilityIdentifier("exercise-cancel-button")
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
@@ -145,6 +154,7 @@ private struct AddExerciseSheet: View {
                         }
                     }
                     .disabled(viewModel.newExerciseType.isEmpty)
+                    .accessibilityIdentifier("exercise-save-button")
                 }
             }
         }

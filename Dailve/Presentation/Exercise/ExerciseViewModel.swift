@@ -1,4 +1,5 @@
-import SwiftUI
+import Foundation
+import Observation
 
 @Observable
 @MainActor
@@ -13,8 +14,8 @@ final class ExerciseViewModel {
     private let maxMemoLength = 500
     private let defaultDuration: TimeInterval = 30 * 60
 
-    var healthKitWorkouts: [WorkoutSummary] = []
-    var manualRecords: [ExerciseRecord] = []
+    var healthKitWorkouts: [WorkoutSummary] = [] { didSet { invalidateCache() } }
+    var manualRecords: [ExerciseRecord] = [] { didSet { invalidateCache() } }
     var isLoading = false
     var isShowingAddSheet = false
     var errorMessage: String?
@@ -25,6 +26,7 @@ final class ExerciseViewModel {
     var newCalories: String = ""
     var newDistance: String = ""
     var newMemo = ""
+    var selectedDate: Date = Date() { didSet { validationError = nil } }
 
     private let workoutService: WorkoutQuerying
 
@@ -32,8 +34,11 @@ final class ExerciseViewModel {
         self.workoutService = workoutService ?? WorkoutQueryService(manager: .shared)
     }
 
-    var allExercises: [ExerciseListItem] {
+    private(set) var allExercises: [ExerciseListItem] = []
+
+    private func invalidateCache() {
         var items: [ExerciseListItem] = []
+        items.reserveCapacity(healthKitWorkouts.count + manualRecords.count)
 
         for workout in healthKitWorkouts {
             items.append(ExerciseListItem(
@@ -59,7 +64,7 @@ final class ExerciseViewModel {
             ))
         }
 
-        return items.sorted { $0.date > $1.date }
+        allExercises = items.sorted { $0.date > $1.date }
     }
 
     func loadHealthKitWorkouts() async {
@@ -82,6 +87,11 @@ final class ExerciseViewModel {
 
         validationError = nil
 
+        if selectedDate.isFuture {
+            validationError = "Future dates are not allowed"
+            return nil
+        }
+
         if !newCalories.isEmpty {
             guard let cal = Double(newCalories), cal >= 0, cal <= maxCalories else {
                 validationError = "Calories must be between 0 and \(Int(maxCalories).formatted()) kcal"
@@ -99,7 +109,7 @@ final class ExerciseViewModel {
         defer { isSaving = false }
 
         return ExerciseRecord(
-            date: Date(),
+            date: selectedDate,
             exerciseType: newExerciseType,
             duration: newDuration,
             calories: Double(newCalories),
@@ -114,6 +124,7 @@ final class ExerciseViewModel {
         newCalories = ""
         newDistance = ""
         newMemo = ""
+        selectedDate = Date()
     }
 }
 

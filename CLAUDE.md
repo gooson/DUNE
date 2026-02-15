@@ -117,3 +117,12 @@
 4. **수학 함수 입력 도메인 검증**: `log()`, `sqrt()` 호출 전 입력값 > 0 확인. 결과의 `isNaN`, `isInfinite` 체크
 5. **HealthKit 쿼리 병렬화**: 독립 쿼리 2-3개는 `async let`, 4개+는 `withThrowingTaskGroup`. for 루프 내 await 금지
 6. **저장 버튼 idempotency**: `isSaving` 플래그로 중복 탭 방지
+
+### 2026-02-16: Triage 수정사항 교정
+
+7. **ViewModel에서 `import SwiftUI` 금지**: `@Observable`은 `import Observation`으로 충분. SwiftUI import는 ViewModel이 UI 타입에 접근 가능하게 만들어 레이어 경계 위반
+8. **Computed property 캐싱**: 정렬/필터 포함 computed property가 SwiftUI body에서 반복 접근되면 `private(set) var` + `didSet { invalidateCache() }` 패턴으로 캐싱
+9. **공통 검증 로직 DRY**: 동일 검증(`selectedDate.isFuture`)이 2곳 이상이면 Extension으로 추출. 위치: `Presentation/Shared/Extensions/`
+10. **sizeClass 기반 View 분기 안정화**: `@Environment(\.horizontalSizeClass)` 값으로 View 트리를 분기할 때, `@State`로 초기값 캡처하여 iPad multitasking 전환 시 View 재생성 방지
+11. **mutation 메서드에 isSaving guard 통일**: `createValidatedRecord`뿐 아니라 `applyUpdate` 등 모든 저장/수정 메서드에 `guard !isSaving` 적용
+12. **selectedDate 변경 시 validationError 클리어**: `didSet { validationError = nil }`로 stale error 메시지 방지
