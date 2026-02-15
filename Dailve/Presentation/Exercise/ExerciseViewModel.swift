@@ -25,6 +25,7 @@ final class ExerciseViewModel {
     var newCalories: String = ""
     var newDistance: String = ""
     var newMemo = ""
+    var selectedDate: Date = Date()
 
     private let workoutService: WorkoutQuerying
 
@@ -82,6 +83,11 @@ final class ExerciseViewModel {
 
         validationError = nil
 
+        if selectedDate > Date() {
+            validationError = "Future dates are not allowed"
+            return nil
+        }
+
         if !newCalories.isEmpty {
             guard let cal = Double(newCalories), cal >= 0, cal <= maxCalories else {
                 validationError = "Calories must be between 0 and \(Int(maxCalories).formatted()) kcal"
@@ -99,7 +105,7 @@ final class ExerciseViewModel {
         defer { isSaving = false }
 
         return ExerciseRecord(
-            date: Date(),
+            date: selectedDate,
             exerciseType: newExerciseType,
             duration: newDuration,
             calories: Double(newCalories),
@@ -114,6 +120,7 @@ final class ExerciseViewModel {
         newCalories = ""
         newDistance = ""
         newMemo = ""
+        selectedDate = Date()
     }
 }
 

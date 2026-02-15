@@ -38,7 +38,9 @@ struct ContentView: View {
         NavigationSplitView {
             List(AppSection.allCases, selection: $selectedSection) { section in
                 Label(section.title, systemImage: section.icon)
+                    .accessibilityIdentifier("sidebar-\(section.rawValue)")
             }
+            .accessibilityIdentifier("sidebar-list")
             .navigationTitle("Dailve")
         } detail: {
             switch selectedSection {

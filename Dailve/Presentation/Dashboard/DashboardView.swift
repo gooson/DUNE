@@ -4,58 +4,56 @@ struct DashboardView: View {
     @State private var viewModel = DashboardViewModel()
 
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(spacing: DS.Spacing.xl) {
-                    if viewModel.isLoading && viewModel.conditionScore == nil && viewModel.sortedMetrics.isEmpty {
-                        ProgressView()
-                            .frame(maxWidth: .infinity, minHeight: 200)
-                    } else if viewModel.conditionScore == nil && viewModel.sortedMetrics.isEmpty && !viewModel.isLoading {
-                        EmptyStateView(
-                            icon: "heart.text.clipboard",
-                            title: "No Health Data",
-                            message: "Grant HealthKit access to see your condition score and daily metrics."
+        ScrollView {
+            VStack(spacing: DS.Spacing.xl) {
+                if viewModel.isLoading && viewModel.conditionScore == nil && viewModel.sortedMetrics.isEmpty {
+                    ProgressView()
+                        .frame(maxWidth: .infinity, minHeight: 200)
+                } else if viewModel.conditionScore == nil && viewModel.sortedMetrics.isEmpty && !viewModel.isLoading {
+                    EmptyStateView(
+                        icon: "heart.text.clipboard",
+                        title: "No Health Data",
+                        message: "Grant HealthKit access to see your condition score and daily metrics."
+                    )
+                } else {
+                    // Hero Section
+                    if let score = viewModel.conditionScore {
+                        ConditionHeroView(
+                            score: score,
+                            recentScores: viewModel.recentScores
                         )
-                    } else {
-                        // Hero Section
-                        if let score = viewModel.conditionScore {
-                            ConditionHeroView(
-                                score: score,
-                                recentScores: viewModel.recentScores
-                            )
-                        } else if let status = viewModel.baselineStatus, !status.isReady {
-                            BaselineProgressView(status: status)
-                        }
+                    } else if let status = viewModel.baselineStatus, !status.isReady {
+                        BaselineProgressView(status: status)
+                    }
 
-                        // Metric Cards (smart sorted)
-                        SmartCardGrid(metrics: viewModel.sortedMetrics)
+                    // Metric Cards (smart sorted)
+                    SmartCardGrid(metrics: viewModel.sortedMetrics)
 
-                        if let error = viewModel.errorMessage {
-                            Text(error)
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                                .padding()
-                        }
+                    if let error = viewModel.errorMessage {
+                        Text(error)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .padding()
                     }
                 }
-                .padding()
             }
-            .background {
-                LinearGradient(
-                    colors: [DS.Color.hrv.opacity(0.03), .clear],
-                    startPoint: .top,
-                    endPoint: .center
-                )
-                .ignoresSafeArea()
-            }
-            .navigationTitle("Dailve")
-            .refreshable {
-                await viewModel.loadData()
-            }
-            .task {
-                await viewModel.loadData()
-            }
+            .padding()
         }
+        .background {
+            LinearGradient(
+                colors: [DS.Color.hrv.opacity(0.03), .clear],
+                startPoint: .top,
+                endPoint: .center
+            )
+            .ignoresSafeArea()
+        }
+        .refreshable {
+            await viewModel.loadData()
+        }
+        .task {
+            await viewModel.loadData()
+        }
+        .adaptiveNavigation(title: "Dailve")
     }
 }
 

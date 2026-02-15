@@ -95,4 +95,54 @@ struct BodyCompositionViewModelTests {
         #expect(vm.newMemo == "")
         #expect(vm.validationError == nil)
     }
+
+    // MARK: - Date Selection
+
+    @Test("createValidatedRecord uses selectedDate")
+    func usesSelectedDate() {
+        let vm = BodyCompositionViewModel()
+        vm.newWeight = "70.0"
+        let pastDate = Calendar.current.date(byAdding: .day, value: -3, to: Date())!
+        vm.selectedDate = pastDate
+
+        let record = vm.createValidatedRecord()
+        #expect(record != nil)
+        #expect(record?.date == pastDate)
+    }
+
+    @Test("createValidatedRecord rejects future date")
+    func rejectsFutureDate() {
+        let vm = BodyCompositionViewModel()
+        vm.newWeight = "70.0"
+        vm.selectedDate = Calendar.current.date(byAdding: .day, value: 1, to: Date())!
+
+        let record = vm.createValidatedRecord()
+        #expect(record == nil)
+        #expect(vm.validationError != nil)
+    }
+
+    @Test("resetForm resets selectedDate to now")
+    func resetFormResetsDate() {
+        let vm = BodyCompositionViewModel()
+        vm.selectedDate = Calendar.current.date(byAdding: .day, value: -5, to: Date())!
+
+        let before = Date()
+        vm.resetForm()
+        let after = Date()
+
+        #expect(vm.selectedDate >= before)
+        #expect(vm.selectedDate <= after)
+    }
+
+    @Test("startEditing restores record date")
+    func startEditingRestoresDate() {
+        let vm = BodyCompositionViewModel()
+        let record = BodyCompositionRecord(
+            date: Calendar.current.date(byAdding: .day, value: -2, to: Date())!,
+            weight: 72.0
+        )
+        vm.startEditing(record)
+        #expect(vm.selectedDate == record.date)
+        #expect(vm.newWeight == "72.0")
+    }
 }

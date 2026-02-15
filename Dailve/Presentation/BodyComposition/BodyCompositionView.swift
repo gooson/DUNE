@@ -8,73 +8,72 @@ struct BodyCompositionView: View {
     @Query(sort: \BodyCompositionRecord.date, order: .reverse) private var records: [BodyCompositionRecord]
 
     var body: some View {
-        NavigationStack {
-            Group {
-                if records.isEmpty {
-                    EmptyStateView(
-                        icon: "figure.stand",
-                        title: "No Body Records",
-                        message: "Track your weight, body fat, and muscle mass to monitor changes over time.",
-                        actionTitle: "Add First Record",
-                        action: {
-                            viewModel.resetForm()
-                            viewModel.isShowingAddSheet = true
-                        }
-                    )
-                } else {
-                    ScrollView {
-                        VStack(spacing: DS.Spacing.xl) {
-                            if records.count >= 2 {
-                                weightTrendChart
-                            }
-                            if let latest = records.first {
-                                latestValuesCard(latest)
-                            }
-                            historySection
-                        }
-                        .padding()
-                    }
-                }
-            }
-            .navigationTitle("Body")
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Button {
+        Group {
+            if records.isEmpty {
+                EmptyStateView(
+                    icon: "figure.stand",
+                    title: "No Body Records",
+                    message: "Track your weight, body fat, and muscle mass to monitor changes over time.",
+                    actionTitle: "Add First Record",
+                    action: {
                         viewModel.resetForm()
                         viewModel.isShowingAddSheet = true
-                    } label: {
-                        Image(systemName: "plus")
-                    }
-                }
-            }
-            .sheet(isPresented: $viewModel.isShowingAddSheet) {
-                BodyCompositionFormSheet(
-                    viewModel: viewModel,
-                    isEdit: false,
-                    onSave: {
-                        if let record = viewModel.createValidatedRecord() {
-                            modelContext.insert(record)
-                            viewModel.resetForm()
-                            viewModel.isShowingAddSheet = false
-                        }
                     }
                 )
+            } else {
+                ScrollView {
+                    VStack(spacing: DS.Spacing.xl) {
+                        if records.count >= 2 {
+                            weightTrendChart
+                        }
+                        if let latest = records.first {
+                            latestValuesCard(latest)
+                        }
+                        historySection
+                    }
+                    .padding()
+                }
             }
-            .sheet(isPresented: $viewModel.isShowingEditSheet) {
-                if let record = viewModel.editingRecord {
-                    BodyCompositionFormSheet(
-                        viewModel: viewModel,
-                        isEdit: true,
-                        onSave: {
+        }
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Button {
+                    viewModel.resetForm()
+                    viewModel.isShowingAddSheet = true
+                } label: {
+                    Image(systemName: "plus")
+                }
+                .accessibilityIdentifier("body-add-button")
+            }
+        }
+        .sheet(isPresented: $viewModel.isShowingAddSheet) {
+            BodyCompositionFormSheet(
+                viewModel: viewModel,
+                isEdit: false,
+                onSave: {
+                    if let record = viewModel.createValidatedRecord() {
+                        modelContext.insert(record)
+                        viewModel.resetForm()
+                        viewModel.isShowingAddSheet = false
+                    }
+                }
+            )
+        }
+        .sheet(isPresented: $viewModel.isShowingEditSheet) {
+            if let record = viewModel.editingRecord {
+                BodyCompositionFormSheet(
+                    viewModel: viewModel,
+                    isEdit: true,
+                    onSave: {
                         if viewModel.applyUpdate(to: record) {
                             viewModel.isShowingEditSheet = false
                             viewModel.editingRecord = nil
                         }
                     }
-                    )
-                }
+                )
             }
         }
+        .adaptiveNavigation(title: "Body")
     }
 
     // MARK: - Components
@@ -204,12 +203,24 @@ private struct BodyCompositionFormSheet: View {
                         .foregroundStyle(.red)
                         .font(.caption)
                 }
+
+                DatePicker(
+                    "Date & Time",
+                    selection: $viewModel.selectedDate,
+                    in: ...Date(),
+                    displayedComponents: [.date, .hourAndMinute]
+                )
+                .accessibilityIdentifier("body-date-picker")
+
                 TextField("Weight (kg)", text: $viewModel.newWeight)
                     .keyboardType(.decimalPad)
+                    .accessibilityIdentifier("body-weight-field")
                 TextField("Body Fat (%)", text: $viewModel.newBodyFat)
                     .keyboardType(.decimalPad)
+                    .accessibilityIdentifier("body-fat-field")
                 TextField("Muscle Mass (kg)", text: $viewModel.newMuscleMass)
                     .keyboardType(.decimalPad)
+                    .accessibilityIdentifier("body-muscle-field")
                 TextField("Memo", text: $viewModel.newMemo)
             }
             .navigationTitle(isEdit ? "Edit Record" : "Add Record")
@@ -217,6 +228,7 @@ private struct BodyCompositionFormSheet: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }
+                        .accessibilityIdentifier("body-cancel-button")
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
@@ -224,6 +236,7 @@ private struct BodyCompositionFormSheet: View {
                         onSave()
                     }
                     .disabled(viewModel.newWeight.isEmpty && viewModel.newBodyFat.isEmpty && viewModel.newMuscleMass.isEmpty)
+                    .accessibilityIdentifier("body-save-button")
                 }
             }
         }

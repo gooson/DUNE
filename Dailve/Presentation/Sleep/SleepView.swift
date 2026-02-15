@@ -5,36 +5,34 @@ struct SleepView: View {
     @State private var viewModel = SleepViewModel()
 
     var body: some View {
-        NavigationStack {
-            Group {
-                if viewModel.isLoading && viewModel.weeklyData.isEmpty {
-                    ProgressView()
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                } else if viewModel.weeklyData.isEmpty && viewModel.sleepScore == 0 && !viewModel.isLoading {
-                    EmptyStateView(
-                        icon: "moon.zzz.fill",
-                        title: "No Sleep Data",
-                        message: "Wear Apple Watch to bed to automatically track your sleep stages and quality."
-                    )
-                } else {
-                    ScrollView {
-                        VStack(spacing: DS.Spacing.xl) {
-                            sleepScoreCard
-                            stageBreakdownCard
-                            weeklyTrendCard
-                        }
-                        .padding()
+        Group {
+            if viewModel.isLoading && viewModel.weeklyData.isEmpty {
+                ProgressView()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else if viewModel.weeklyData.isEmpty && viewModel.sleepScore == 0 && !viewModel.isLoading {
+                EmptyStateView(
+                    icon: "moon.zzz.fill",
+                    title: "No Sleep Data",
+                    message: "Wear Apple Watch to bed to automatically track your sleep stages and quality."
+                )
+            } else {
+                ScrollView {
+                    VStack(spacing: DS.Spacing.xl) {
+                        sleepScoreCard
+                        stageBreakdownCard
+                        weeklyTrendCard
                     }
+                    .padding()
                 }
             }
-            .navigationTitle("Sleep")
-            .task {
-                await viewModel.loadData()
-            }
-            .refreshable {
-                await viewModel.loadData()
-            }
         }
+        .task {
+            await viewModel.loadData()
+        }
+        .refreshable {
+            await viewModel.loadData()
+        }
+        .adaptiveNavigation(title: "Sleep")
     }
 
     // MARK: - Components
