@@ -126,3 +126,9 @@
 10. **sizeClass 기반 View 분기 안정화**: `@Environment(\.horizontalSizeClass)` 값으로 View 트리를 분기할 때, `@State`로 초기값 캡처하여 iPad multitasking 전환 시 View 재생성 방지
 11. **mutation 메서드에 isSaving guard 통일**: `createValidatedRecord`뿐 아니라 `applyUpdate` 등 모든 저장/수정 메서드에 `guard !isSaving` 적용
 12. **selectedDate 변경 시 validationError 클리어**: `didSet { validationError = nil }`로 stale error 메시지 방지
+
+### 2026-02-16: /plan 워크플로우 교정
+
+13. **Task 에이전트 리서치 scope 제한**: general-purpose 에이전트에 8개+ 질문 금지. 3개 이하로 제한하고, 코드베이스 내 정보로 충분하면 외부 검색 생략
+14. **플랜 파일 생성 후 즉시 경로 안내**: 파일 생성 → 절대 경로 출력 → 요약 → 승인 순서. 사용자가 기다리지 않도록
+15. **80% 품질 + 빠른 전달 > 100% 품질 + 느린 전달**: 리서치 완벽주의 금지. 코드베이스 분석 + 기존 지식으로 충분한 경우 외부 검색 생략
