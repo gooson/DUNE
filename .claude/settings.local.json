@@ -34,7 +34,23 @@
       "Bash(xcrun simctl list:*)",
       "Bash(git pull:*)",
       "mcp__plugin_serena_serena__list_dir",
-      "mcp__Context7__resolve-library-id"
+      "mcp__Context7__resolve-library-id",
+      "Bash(git stash pop:*)",
+      "Bash(git worktree remove:*)",
+      "Bash(git -C /Users/shanks/work/Health status:*)",
+      "Bash(git -C /Users/shanks/work/Health log --oneline -3)",
+      "Bash(git -C /Users/shanks/work/Health diff --stat HEAD)",
+      "Bash(git -C /Users/shanks/work/Health commit -m \"$\\(cat <<''EOF''\nfix: resolve 6-perspective review findings \\(P1-4, P2-8, P3\\)\n\n- P1: div/0 in trend calc, O\\(n²\\)→O\\(n+m\\) daily score, extract\n  HighlightBuilder shared util, consolidate isDistanceBased to\n  WorkoutSummary domain model\n- P2: didSet cache invalidation for scroll-reactive props, move\n  TimePeriod formatting to Presentation extension, cancel-before-spawn\n  Task pattern, Task.isCancelled guard on isLoading reset, pagination\n  race fix, chart accessibility div/0, linear regression NaN validation,\n  aggregator empty-group guard\n- P3: replace 12 force-unwraps with nil-coalescing in TimePeriod\n- Fix deprecated HKWorkout.totalEnergyBurned → statistics\\(for:\\) API\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git -C /Users/shanks/work/Health add:*)",
+      "Bash(git -C /Users/shanks/work/Health commit -m \"$\\(cat <<''EOF''\ndocs: compound review findings into solution docs and correction log\n\n- Add 4 solution docs \\(div/0+NaN, DRY extraction, task cancellation,\n  layer boundary enforcement\\)\n- Add correction log entries #16-#21 to CLAUDE.md\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git -C /Users/shanks/work/Health push origin main)",
+      "mcp__serena__list_dir",
+      "mcp__serena__list_memories",
+      "mcp__serena__activate_project",
+      "mcp__serena__check_onboarding_performed",
+      "mcp__plugin_serena_serena__read_file",
+      "mcp__plugin_serena_serena__activate_project",
+      "mcp__plugin_serena_serena__search_for_pattern"
     ]
   }
 }
