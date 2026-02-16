@@ -11,34 +11,52 @@ struct ConditionHeroView: View {
 
     var body: some View {
         HeroCard(tintColor: score.status.color) {
-            VStack(spacing: DS.Spacing.xl) {
-                // Progress Ring + Score
+            HStack(spacing: DS.Spacing.xl) {
+                // Compact ring
                 ZStack {
                     ProgressRingView(
                         progress: Double(score.score) / 100.0,
                         ringColor: score.status.color,
-                        lineWidth: 14,
-                        size: 160
+                        lineWidth: 10,
+                        size: 88
                     )
 
-                    VStack(spacing: DS.Spacing.xs) {
-                        Text("\(animatedScore)")
-                            .font(DS.Typography.heroScore)
-                            .contentTransition(.numericText())
+                    Text("\(animatedScore)")
+                        .font(DS.Typography.cardScore)
+                        .contentTransition(.numericText())
+                }
 
+                // Score info + sparkline
+                VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                    // Status label
+                    HStack(spacing: DS.Spacing.xs) {
                         Text(score.status.label)
+                            .font(.headline)
+                            .fontWeight(.semibold)
+
+                        Text(score.status.emoji)
                             .font(.subheadline)
-                            .fontWeight(.medium)
-                            .foregroundStyle(.secondary)
+                    }
+
+                    // Guide message
+                    Text(score.status.guideMessage)
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+
+                    // 7-day sparkline
+                    if !recentScores.isEmpty {
+                        HStack(spacing: DS.Spacing.xs) {
+                            TrendChartView(scores: recentScores)
+                                .frame(height: 32)
+
+                            Text("7d")
+                                .font(.caption2)
+                                .foregroundStyle(.tertiary)
+                        }
                     }
                 }
 
-                // 7-day sparkline
-                if !recentScores.isEmpty {
-                    TrendChartView(scores: recentScores)
-                        .frame(height: 48)
-                        .padding(.horizontal, DS.Spacing.sm)
-                }
+                Spacer(minLength: 0)
             }
         }
         .accessibilityElement(children: .combine)

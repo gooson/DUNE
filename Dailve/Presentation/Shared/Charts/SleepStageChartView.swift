@@ -9,6 +9,7 @@ struct SleepStageChartView: View {
     let dailyData: [StackedDataPoint]
     let period: TimePeriod
     var tintColor: Color = DS.Color.sleep
+    @Binding var scrollPosition: Date
 
     @ScaledMetric(relativeTo: .body) private var chartHeight: CGFloat = 220
 
@@ -93,6 +94,10 @@ struct SleepStageChartView: View {
                         .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
                 }
             }
+            .chartScrollableAxes(.horizontal)
+            .chartXVisibleDomain(length: period.visibleDomainSeconds)
+            .chartScrollPosition(x: $scrollPosition)
+            .chartYScale(domain: yDomain)
             .chartXAxis {
                 AxisMarks(values: .stride(by: period.strideComponent, count: period.strideCount)) { _ in
                     AxisValueLabel(format: period.axisLabelFormat)
@@ -108,7 +113,6 @@ struct SleepStageChartView: View {
             .chartXSelection(value: $selectedDate)
             .sensoryFeedback(.selection, trigger: selectedDate)
             .frame(height: chartHeight)
-            .drawingGroup()
             .accessibilityElement(children: .combine)
             .accessibilityLabel("Sleep duration chart, \(dailyData.count) days")
             .accessibilityValue(accessibilitySummary)
@@ -176,6 +180,16 @@ struct SleepStageChartView: View {
         case .year:       .month
         default:          .day
         }
+    }
+
+    /// Y-axis domain with top padding to prevent clipping.
+    private var yDomain: ClosedRange<Double> {
+        guard let maxVal = dailyData.map(\.total).max(), maxVal > 0 else {
+            return 0...12
+        }
+        let maxHours = maxVal / 3600
+        let padding = maxHours * 0.1
+        return 0...(maxHours + padding)
     }
 
     private var selectedDailyPoint: StackedDataPoint? {

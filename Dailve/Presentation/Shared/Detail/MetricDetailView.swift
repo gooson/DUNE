@@ -1,7 +1,7 @@
 import SwiftUI
 
 /// Unified detail view for all metric types.
-/// Shows summary header, period picker, chart (category-specific), highlights, and "Show All Data" link.
+/// Shows summary header, period picker, chart (scrollable), highlights, and "Show All Data" link.
 struct MetricDetailView: View {
     let metric: HealthMetric
 
@@ -16,23 +16,23 @@ struct MetricDetailView: View {
                     category: metric.category,
                     currentValue: metric.value,
                     summary: viewModel.summaryStats,
-                    lastUpdated: viewModel.lastUpdated
+                    lastUpdated: viewModel.lastUpdated,
+                    unitOverride: viewModel.metricUnit.isEmpty ? nil : viewModel.metricUnit
                 )
 
-                // Period picker + range label
-                VStack(spacing: DS.Spacing.xs) {
-                    Picker("Period", selection: $viewModel.selectedPeriod) {
-                        ForEach(TimePeriod.allCases, id: \.self) { period in
-                            Text(period.rawValue).tag(period)
-                        }
+                // Period picker
+                Picker("Period", selection: $viewModel.selectedPeriod) {
+                    ForEach(TimePeriod.allCases, id: \.self) { period in
+                        Text(period.rawValue).tag(period)
                     }
-                    .pickerStyle(.segmented)
-                    .sensoryFeedback(.selection, trigger: viewModel.selectedPeriod)
-
-                    periodRangeLabel
                 }
+                .pickerStyle(.segmented)
+                .sensoryFeedback(.selection, trigger: viewModel.selectedPeriod)
 
-                // Chart (swipeable)
+                // Chart header: visible range + trend toggle
+                chartHeader
+
+                // Chart (natively scrollable)
                 StandardCard {
                     if viewModel.chartData.isEmpty && !viewModel.isLoading {
                         chartEmptyState
@@ -41,7 +41,12 @@ struct MetricDetailView: View {
                             .frame(height: chartHeight)
                     }
                 }
-                .periodSwipe(offset: $viewModel.periodOffset, canGoForward: viewModel.canGoForward)
+                .animation(DS.Animation.snappy, value: viewModel.selectedPeriod)
+
+                // Exercise period totals
+                if metric.category == .exercise, let totals = viewModel.exerciseTotals {
+                    ExerciseTotalsView(totals: totals, tintColor: metric.category.themeColor)
+                }
 
                 // Highlights
                 MetricHighlightsView(
@@ -68,7 +73,7 @@ struct MetricDetailView: View {
             }
             .padding()
         }
-        .navigationTitle(metric.category.displayName)
+        .navigationTitle(metric.name)
         .navigationBarTitleDisplayMode(.large)
         .overlay {
             if viewModel.isLoading && viewModel.chartData.isEmpty {
@@ -79,50 +84,12 @@ struct MetricDetailView: View {
             viewModel.configure(
                 category: metric.category,
                 currentValue: metric.value,
-                lastUpdated: metric.date
+                lastUpdated: metric.date,
+                workoutTypeName: metric.iconOverride != nil ? metric.name : nil,
+                metricUnit: metric.unit
             )
             await viewModel.loadData()
         }
-    }
-
-    // MARK: - Period Range Label
-
-    private var periodRangeLabel: some View {
-        HStack {
-            Button {
-                viewModel.periodOffset -= 1
-            } label: {
-                Image(systemName: "chevron.left")
-                    .font(.caption2)
-                    .fontWeight(.semibold)
-            }
-
-            Spacer()
-
-            Text(viewModel.selectedPeriod.rangeLabel(offset: viewModel.periodOffset))
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .contentTransition(.numericText())
-                .animation(.default, value: viewModel.periodOffset)
-
-            Spacer()
-
-            if viewModel.canGoForward {
-                Button {
-                    viewModel.periodOffset += 1
-                } label: {
-                    Image(systemName: "chevron.right")
-                        .font(.caption2)
-                        .fontWeight(.semibold)
-                }
-            } else {
-                Image(systemName: "chevron.right")
-                    .font(.caption2)
-                    .foregroundStyle(.quaternary)
-            }
-        }
-        .padding(.horizontal, DS.Spacing.sm)
-        .sensoryFeedback(.selection, trigger: viewModel.periodOffset)
     }
 
     // MARK: - Empty State
@@ -146,10 +113,51 @@ struct MetricDetailView: View {
         .frame(height: chartHeight)
     }
 
+    // MARK: - Chart Header
+
+    private var chartHeader: some View {
+        HStack {
+            Text(viewModel.visibleRangeLabel)
+                .font(.subheadline)
+                .fontWeight(.medium)
+                .foregroundStyle(.secondary)
+                .contentTransition(.numericText())
+                .animation(DS.Animation.snappy, value: viewModel.visibleRangeLabel)
+
+            Spacer()
+
+            Button {
+                withAnimation(DS.Animation.snappy) {
+                    viewModel.showTrendLine.toggle()
+                }
+            } label: {
+                HStack(spacing: DS.Spacing.xs) {
+                    Image(systemName: "chart.line.uptrend.xyaxis")
+                        .font(.caption)
+                    Text("Trend")
+                        .font(.caption)
+                }
+                .foregroundStyle(viewModel.showTrendLine ? metric.category.themeColor : .secondary)
+                .padding(.horizontal, DS.Spacing.sm)
+                .padding(.vertical, DS.Spacing.xs)
+                .background(
+                    Capsule()
+                        .fill(viewModel.showTrendLine
+                              ? metric.category.themeColor.opacity(0.12)
+                              : Color.clear)
+                )
+            }
+            .buttonStyle(.plain)
+            .sensoryFeedback(.selection, trigger: viewModel.showTrendLine)
+        }
+    }
+
     // MARK: - Chart
 
     @ViewBuilder
     private var chart: some View {
+        let trend = viewModel.trendLineData
+
         switch metric.category {
         case .hrv:
             DotLineChartView(
@@ -157,7 +165,9 @@ struct MetricDetailView: View {
                 baseline: nil,
                 yAxisLabel: "ms",
                 timePeriod: viewModel.selectedPeriod,
-                tintColor: DS.Color.hrv
+                tintColor: DS.Color.hrv,
+                trendLine: trend,
+                scrollPosition: $viewModel.scrollPosition
             )
 
         case .rhr:
@@ -165,7 +175,9 @@ struct MetricDetailView: View {
                 RangeBarChartView(
                     data: viewModel.rangeData,
                     period: viewModel.selectedPeriod,
-                    tintColor: DS.Color.rhr
+                    tintColor: DS.Color.rhr,
+                    trendLine: trend,
+                    scrollPosition: $viewModel.scrollPosition
                 )
             } else {
                 DotLineChartView(
@@ -173,7 +185,9 @@ struct MetricDetailView: View {
                     baseline: nil,
                     yAxisLabel: "bpm",
                     timePeriod: viewModel.selectedPeriod,
-                    tintColor: DS.Color.rhr
+                    tintColor: DS.Color.rhr,
+                    trendLine: trend,
+                    scrollPosition: $viewModel.scrollPosition
                 )
             }
 
@@ -183,7 +197,9 @@ struct MetricDetailView: View {
                 period: viewModel.selectedPeriod,
                 tintColor: DS.Color.sleep,
                 valueLabel: "Sleep",
-                unitSuffix: " min"
+                unitSuffix: " min",
+                trendLine: trend,
+                scrollPosition: $viewModel.scrollPosition
             )
 
         case .steps:
@@ -191,7 +207,9 @@ struct MetricDetailView: View {
                 data: viewModel.chartData,
                 period: viewModel.selectedPeriod,
                 tintColor: DS.Color.steps,
-                valueLabel: "Steps"
+                valueLabel: "Steps",
+                trendLine: trend,
+                scrollPosition: $viewModel.scrollPosition
             )
 
         case .exercise:
@@ -200,7 +218,9 @@ struct MetricDetailView: View {
                 period: viewModel.selectedPeriod,
                 tintColor: DS.Color.activity,
                 valueLabel: "Exercise",
-                unitSuffix: " min"
+                unitSuffix: viewModel.metricUnit == "km" ? " km" : " min",
+                trendLine: trend,
+                scrollPosition: $viewModel.scrollPosition
             )
 
         case .weight:
@@ -208,7 +228,9 @@ struct MetricDetailView: View {
                 data: viewModel.chartData,
                 period: viewModel.selectedPeriod,
                 tintColor: DS.Color.body,
-                unitSuffix: "kg"
+                unitSuffix: "kg",
+                trendLine: trend,
+                scrollPosition: $viewModel.scrollPosition
             )
         }
     }

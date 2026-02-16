@@ -7,7 +7,7 @@ struct MetricCardView: View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             // Header: icon + label + relative date
             HStack(spacing: DS.Spacing.xs) {
-                Image(systemName: metric.category.iconName)
+                Image(systemName: metric.resolvedIconName)
                     .font(.caption)
                     .foregroundStyle(metric.category.themeColor)
                 Text(metric.name)

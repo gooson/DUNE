@@ -8,10 +8,13 @@ struct DotLineChartView: View {
     var period: Period = .week
     var timePeriod: TimePeriod?
     var tintColor: Color = DS.Color.hrv
+    var trendLine: [ChartDataPoint]?
+    var scrollPosition: Binding<Date>?
 
     @ScaledMetric(relativeTo: .body) private var chartHeight: CGFloat = 220
 
     @State private var selectedDate: Date?
+    @State private var internalScrollPosition: Date = .now
 
     enum Period: String, CaseIterable {
         case week = "7D"
@@ -70,6 +73,20 @@ struct DotLineChartView: View {
                         .lineStyle(StrokeStyle(lineWidth: 1, dash: [5, 3]))
                 }
 
+                // Trend line
+                if let trendLine, trendLine.count >= 2 {
+                    ForEach(trendLine) { point in
+                        LineMark(
+                            x: .value("Trend", point.date),
+                            y: .value("TrendValue", point.value),
+                            series: .value("Series", "trend")
+                        )
+                        .foregroundStyle(tintColor.opacity(0.5))
+                        .lineStyle(StrokeStyle(lineWidth: 2, dash: [6, 4]))
+                        .interpolationMethod(.linear)
+                    }
+                }
+
                 // Selection indicator
                 if let point = selectedPoint {
                     PointMark(
@@ -84,6 +101,12 @@ struct DotLineChartView: View {
                         .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
                 }
             }
+            .chartScrollableAxes(timePeriod != nil ? .horizontal : [])
+            .modifier(DotLineScrollModifier(
+                timePeriod: timePeriod,
+                scrollPosition: scrollPosition ?? $internalScrollPosition
+            ))
+            .chartYScale(domain: yDomain)
             .chartXAxis {
                 AxisMarks(values: .stride(by: xStrideComponent, count: xStrideCount)) { _ in
                     AxisValueLabel(format: axisFormat)
@@ -99,7 +122,6 @@ struct DotLineChartView: View {
             .chartXSelection(value: $selectedDate)
             .sensoryFeedback(.selection, trigger: selectedDate)
             .frame(height: chartHeight)
-            .drawingGroup()
             .accessibilityElement(children: .combine)
             .accessibilityLabel("\(yAxisLabel) chart, \(data.count) data points")
             .accessibilityValue(accessibilitySummary)
@@ -117,7 +139,12 @@ struct DotLineChartView: View {
 
     private var xUnit: Calendar.Component {
         if let timePeriod {
-            return timePeriod == .day ? .hour : .day
+            switch timePeriod {
+            case .day:       return .hour
+            case .sixMonths: return .weekOfYear
+            case .year:      return .month
+            default:         return .day
+            }
         }
         return .day
     }
@@ -143,10 +170,36 @@ struct DotLineChartView: View {
         return .dateTime.day().month(.abbreviated)
     }
 
+    /// Y-axis domain with padding to prevent top/bottom clipping.
+    private var yDomain: ClosedRange<Double> {
+        guard let minVal = data.map(\.value).min(),
+              let maxVal = data.map(\.value).max() else {
+            return 0...100
+        }
+        let padding = max((maxVal - minVal) * 0.15, 2)
+        return (minVal - padding)...(maxVal + padding)
+    }
+
     private var selectedPoint: ChartDataPoint? {
         guard let selectedDate else { return nil }
         return data.min(by: {
             abs($0.date.timeIntervalSince(selectedDate)) < abs($1.date.timeIntervalSince(selectedDate))
         })
+    }
+}
+
+/// Applies chartXVisibleDomain + chartScrollPosition only when timePeriod is set.
+private struct DotLineScrollModifier: ViewModifier {
+    let timePeriod: TimePeriod?
+    @Binding var scrollPosition: Date
+
+    func body(content: Content) -> some View {
+        if let timePeriod {
+            content
+                .chartXVisibleDomain(length: timePeriod.visibleDomainSeconds)
+                .chartScrollPosition(x: $scrollPosition)
+        } else {
+            content
+        }
     }
 }

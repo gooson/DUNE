@@ -14,20 +14,19 @@ struct ConditionScoreDetailView: View {
                 // Hero: Score ring + status
                 scoreHero
 
-                // Period picker + range label
-                VStack(spacing: DS.Spacing.xs) {
-                    Picker("Period", selection: $viewModel.selectedPeriod) {
-                        ForEach(TimePeriod.allCases, id: \.self) { period in
-                            Text(period.rawValue).tag(period)
-                        }
+                // Period picker
+                Picker("Period", selection: $viewModel.selectedPeriod) {
+                    ForEach(TimePeriod.allCases, id: \.self) { period in
+                        Text(period.rawValue).tag(period)
                     }
-                    .pickerStyle(.segmented)
-                    .sensoryFeedback(.selection, trigger: viewModel.selectedPeriod)
-
-                    periodRangeLabel
                 }
+                .pickerStyle(.segmented)
+                .sensoryFeedback(.selection, trigger: viewModel.selectedPeriod)
 
-                // Trend chart (swipeable)
+                // Chart header: visible range + trend toggle
+                chartHeader
+
+                // Trend chart (natively scrollable)
                 StandardCard {
                     if viewModel.chartData.isEmpty && !viewModel.isLoading {
                         chartEmptyState
@@ -37,12 +36,14 @@ struct ConditionScoreDetailView: View {
                             baseline: 50,
                             yAxisLabel: "Score",
                             timePeriod: viewModel.selectedPeriod,
-                            tintColor: score.status.color
+                            tintColor: score.status.color,
+                            trendLine: viewModel.trendLineData,
+                            scrollPosition: $viewModel.scrollPosition
                         )
                         .frame(height: chartHeight)
                     }
                 }
-                .periodSwipe(offset: $viewModel.periodOffset, canGoForward: viewModel.canGoForward)
+                .animation(DS.Animation.snappy, value: viewModel.selectedPeriod)
 
                 // Summary stats
                 if let summary = viewModel.summaryStats {
@@ -77,46 +78,6 @@ struct ConditionScoreDetailView: View {
         }
     }
 
-    // MARK: - Period Range Label
-
-    private var periodRangeLabel: some View {
-        HStack {
-            Button {
-                viewModel.periodOffset -= 1
-            } label: {
-                Image(systemName: "chevron.left")
-                    .font(.caption2)
-                    .fontWeight(.semibold)
-            }
-
-            Spacer()
-
-            Text(viewModel.selectedPeriod.rangeLabel(offset: viewModel.periodOffset))
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .contentTransition(.numericText())
-                .animation(.default, value: viewModel.periodOffset)
-
-            Spacer()
-
-            if viewModel.canGoForward {
-                Button {
-                    viewModel.periodOffset += 1
-                } label: {
-                    Image(systemName: "chevron.right")
-                        .font(.caption2)
-                        .fontWeight(.semibold)
-                }
-            } else {
-                Image(systemName: "chevron.right")
-                    .font(.caption2)
-                    .foregroundStyle(.quaternary)
-            }
-        }
-        .padding(.horizontal, DS.Spacing.sm)
-        .sensoryFeedback(.selection, trigger: viewModel.periodOffset)
-    }
-
     // MARK: - Empty State
 
     private var chartEmptyState: some View {
@@ -136,6 +97,45 @@ struct ConditionScoreDetailView: View {
         }
         .frame(maxWidth: .infinity)
         .frame(height: chartHeight)
+    }
+
+    // MARK: - Chart Header
+
+    private var chartHeader: some View {
+        HStack {
+            Text(viewModel.visibleRangeLabel)
+                .font(.subheadline)
+                .fontWeight(.medium)
+                .foregroundStyle(.secondary)
+                .contentTransition(.numericText())
+                .animation(DS.Animation.snappy, value: viewModel.visibleRangeLabel)
+
+            Spacer()
+
+            Button {
+                withAnimation(DS.Animation.snappy) {
+                    viewModel.showTrendLine.toggle()
+                }
+            } label: {
+                HStack(spacing: DS.Spacing.xs) {
+                    Image(systemName: "chart.line.uptrend.xyaxis")
+                        .font(.caption)
+                    Text("Trend")
+                        .font(.caption)
+                }
+                .foregroundStyle(viewModel.showTrendLine ? score.status.color : .secondary)
+                .padding(.horizontal, DS.Spacing.sm)
+                .padding(.vertical, DS.Spacing.xs)
+                .background(
+                    Capsule()
+                        .fill(viewModel.showTrendLine
+                              ? score.status.color.opacity(0.12)
+                              : Color.clear)
+                )
+            }
+            .buttonStyle(.plain)
+            .sensoryFeedback(.selection, trigger: viewModel.showTrendLine)
+        }
     }
 
     // MARK: - Subviews

@@ -53,14 +53,14 @@ final class DashboardViewModel {
         async let exerciseTask = safeExerciseFetch()
         async let stepsTask = safeStepsFetch()
 
-        let (hrvMetrics, sleepMetric, exerciseMetric, stepsMetric) = await (
+        let (hrvMetrics, sleepMetric, exerciseMetrics, stepsMetric) = await (
             hrvTask, sleepTask, exerciseTask, stepsTask
         )
 
         var allMetrics: [HealthMetric] = []
         allMetrics.append(contentsOf: hrvMetrics)
         if let sleepMetric { allMetrics.append(sleepMetric) }
-        if let exerciseMetric { allMetrics.append(exerciseMetric) }
+        allMetrics.append(contentsOf: exerciseMetrics)
         if let stepsMetric { allMetrics.append(stepsMetric) }
 
         sortedMetrics = allMetrics.sorted { $0.changeSignificance > $1.changeSignificance }
@@ -83,11 +83,11 @@ final class DashboardViewModel {
         }
     }
 
-    private func safeExerciseFetch() async -> HealthMetric? {
+    private func safeExerciseFetch() async -> [HealthMetric] {
         do { return try await fetchExerciseData() }
         catch {
             AppLogger.ui.error("Exercise fetch failed: \(error.localizedDescription)")
-            return nil
+            return []
         }
     }
 
@@ -224,16 +224,23 @@ final class DashboardViewModel {
         )
     }
 
-    private func fetchExerciseData() async throws -> HealthMetric? {
+    private func fetchExerciseData() async throws -> [HealthMetric] {
         let calendar = Calendar.current
-        let workouts = try await workoutService.fetchWorkouts(days: 7)
-        guard !workouts.isEmpty else { return nil }
 
-        // Group by today vs. historical
-        let todayWorkouts = workouts.filter { calendar.isDateInToday($0.date) }
+        // 30 days for per-type cards (covers less frequent activities like cycling)
+        let workouts = try await workoutService.fetchWorkouts(days: 30)
+        guard !workouts.isEmpty else { return [] }
+
+        var metrics: [HealthMetric] = []
+
+        // 1. Total Exercise card (today or most recent within 7 days)
+        let recentWorkouts = workouts.filter {
+            $0.date >= (calendar.date(byAdding: .day, value: -7, to: Date()) ?? Date())
+        }
+        let todayWorkouts = recentWorkouts.filter { calendar.isDateInToday($0.date) }
         if !todayWorkouts.isEmpty {
             let totalMinutes = todayWorkouts.map(\.duration).reduce(0, +) / 60.0
-            return HealthMetric(
+            metrics.append(HealthMetric(
                 id: "exercise",
                 name: "Exercise",
                 value: totalMinutes,
@@ -241,13 +248,10 @@ final class DashboardViewModel {
                 change: nil,
                 date: Date(),
                 category: .exercise
-            )
-        }
-
-        // Fallback: show most recent workout
-        if let latest = workouts.first {
+            ))
+        } else if let latest = recentWorkouts.first {
             let totalMinutes = latest.duration / 60.0
-            return HealthMetric(
+            metrics.append(HealthMetric(
                 id: "exercise",
                 name: "Exercise",
                 value: totalMinutes,
@@ -256,10 +260,98 @@ final class DashboardViewModel {
                 date: latest.date,
                 category: .exercise,
                 isHistorical: true
-            )
+            ))
         }
 
-        return nil
+        // 2. Per-type cards from full 30-day range
+        let grouped = Dictionary(grouping: workouts, by: \.type)
+
+        var typeMetrics: [HealthMetric] = []
+        for (type, typeWorkouts) in grouped {
+            let todayOnes = typeWorkouts.filter { calendar.isDateInToday($0.date) }
+            let relevantWorkouts = todayOnes.isEmpty
+                ? [typeWorkouts.max(by: { $0.date < $1.date })].compactMap { $0 }
+                : todayOnes
+            let isToday = !todayOnes.isEmpty
+            let latestDate = isToday ? Date() : (relevantWorkouts.first?.date ?? Date())
+
+            let (value, unit) = Self.preferredMetric(for: type, workouts: relevantWorkouts)
+
+            typeMetrics.append(HealthMetric(
+                id: "exercise-\(type.lowercased())",
+                name: type,
+                value: value,
+                unit: unit,
+                change: nil,
+                date: latestDate,
+                category: .exercise,
+                isHistorical: !isToday,
+                iconOverride: Self.workoutIcon(type)
+            ))
+        }
+
+        typeMetrics.sort { $0.date > $1.date }
+        metrics.append(contentsOf: typeMetrics)
+
+        return metrics
+    }
+
+    /// Returns the preferred display value and unit for a workout type.
+    /// Distance-based types (running, cycling, walking, hiking, swimming) show distance.
+    /// Swimming shows meters; others show km. Falls back to duration if no distance data.
+    private static func preferredMetric(
+        for type: String,
+        workouts: [WorkoutSummary]
+    ) -> (value: Double, unit: String) {
+        let typeLower = type.lowercased()
+        let totalMinutes = workouts.map(\.duration).reduce(0, +) / 60.0
+
+        guard isDistanceBased(typeLower) else {
+            return (totalMinutes, "min")
+        }
+
+        let totalMeters = workouts.compactMap(\.distance).reduce(0, +)
+        guard totalMeters > 0 else {
+            return (totalMinutes, "min")
+        }
+
+        if typeLower == "swimming" {
+            return (totalMeters, "m")
+        }
+        return (totalMeters / 1000.0, "km")
+    }
+
+    /// Whether this workout type primarily measures distance.
+    private static func isDistanceBased(_ type: String) -> Bool {
+        switch type {
+        case "running", "cycling", "walking", "hiking", "swimming":
+            return true
+        default:
+            return false
+        }
+    }
+
+    /// Maps workout type name to SF Symbol.
+    private static func workoutIcon(_ type: String) -> String {
+        switch type.lowercased() {
+        case "running":     "figure.run"
+        case "walking":     "figure.walk"
+        case "cycling":     "figure.outdoor.cycle"
+        case "swimming":    "figure.pool.swim"
+        case "hiking":      "figure.hiking"
+        case "yoga":        "figure.yoga"
+        case "strength", "strength training": "dumbbell.fill"
+        case "dance", "dancing": "figure.dance"
+        case "elliptical":  "figure.elliptical"
+        case "rowing":      "figure.rower"
+        case "stair stepper", "stairs": "figure.stairs"
+        case "pilates":     "figure.pilates"
+        case "martial arts": "figure.martial.arts"
+        case "cooldown":    "figure.cooldown"
+        case "core training": "figure.core.training"
+        case "stretching", "flexibility": "figure.flexibility"
+        default:            "figure.mixed.cardio"
+        }
     }
 
     private func fetchStepsData() async throws -> HealthMetric? {

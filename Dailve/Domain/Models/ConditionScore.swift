@@ -14,11 +14,11 @@ struct ConditionScore: Sendable, Hashable {
 
         var label: String {
             switch self {
-            case .excellent: "매우 좋음"
-            case .good: "좋음"
-            case .fair: "보통"
-            case .tired: "피로"
-            case .warning: "주의"
+            case .excellent: "Excellent"
+            case .good: "Good"
+            case .fair: "Fair"
+            case .tired: "Tired"
+            case .warning: "Warning"
             }
         }
 
@@ -29,6 +29,16 @@ struct ConditionScore: Sendable, Hashable {
             case .fair: "\u{1F610}"
             case .tired: "\u{1F634}"
             case .warning: "\u{26A0}\u{FE0F}"
+            }
+        }
+
+        var guideMessage: String {
+            switch self {
+            case .excellent: "You're in top shape"
+            case .good: "Condition looks good"
+            case .fair: "Take it easy today"
+            case .tired: "You need more rest"
+            case .warning: "Rest is recommended"
             }
         }
     }

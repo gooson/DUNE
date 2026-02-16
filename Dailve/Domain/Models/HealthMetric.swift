@@ -9,6 +9,7 @@ struct HealthMetric: Identifiable, Hashable, Sendable {
     let date: Date
     let category: Category
     var isHistorical: Bool = false
+    var iconOverride: String? = nil
 
     enum Category: String, Sendable, CaseIterable {
         case hrv

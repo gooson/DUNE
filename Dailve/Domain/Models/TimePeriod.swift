@@ -110,6 +110,29 @@ enum TimePeriod: String, CaseIterable, Sendable {
         }
     }
 
+    /// Visible time window in seconds for `chartXVisibleDomain(length:)`.
+    var visibleDomainSeconds: TimeInterval {
+        switch self {
+        case .day:       24 * 3600                  // 24 hours
+        case .week:      7 * 24 * 3600              // 7 days
+        case .month:     31 * 24 * 3600             // ~31 days
+        case .sixMonths: 183 * 24 * 3600            // ~6 months
+        case .year:      365 * 24 * 3600            // ~1 year
+        }
+    }
+
+    /// Number of periods of historical data to preload for scroll buffer.
+    /// Keep small for large periods to avoid HealthKit query latency.
+    var scrollBufferPeriods: Int {
+        switch self {
+        case .day: 7        // 7 days back
+        case .week: 4       // 4 weeks back
+        case .month: 3      // 3 months back
+        case .sixMonths: 1  // 6 months back (= 1 year total)
+        case .year: 1       // 1 year back (= 2 years total)
+        }
+    }
+
     /// Formatted label for the given offset's date range.
     func rangeLabel(offset: Int) -> String {
         let range = dateRange(offset: offset)
@@ -134,6 +157,43 @@ enum TimePeriod: String, CaseIterable, Sendable {
         case .year:
             formatter.dateFormat = "yyyy"
             return formatter.string(from: range.start)
+        }
+    }
+
+    /// Formatted label for the visible date range starting at `scrollDate`.
+    func visibleRangeLabel(from scrollDate: Date) -> String {
+        let calendar = Calendar.current
+        let end: Date
+        switch self {
+        case .day:
+            end = calendar.date(byAdding: .hour, value: 24, to: scrollDate)!
+        case .week:
+            end = calendar.date(byAdding: .day, value: 7, to: scrollDate)!
+        case .month:
+            end = calendar.date(byAdding: .month, value: 1, to: scrollDate)!
+        case .sixMonths:
+            end = calendar.date(byAdding: .month, value: 6, to: scrollDate)!
+        case .year:
+            end = calendar.date(byAdding: .year, value: 1, to: scrollDate)!
+        }
+
+        let formatter = DateFormatter()
+        switch self {
+        case .day:
+            formatter.dateFormat = "M월 d일 (E)"
+            return formatter.string(from: scrollDate)
+        case .week:
+            formatter.dateFormat = "M.d"
+            return "\(formatter.string(from: scrollDate)) – \(formatter.string(from: end))"
+        case .month:
+            formatter.dateFormat = "yyyy년 M월"
+            return formatter.string(from: scrollDate)
+        case .sixMonths:
+            formatter.dateFormat = "yyyy.M"
+            return "\(formatter.string(from: scrollDate)) – \(formatter.string(from: end))"
+        case .year:
+            formatter.dateFormat = "yyyy년"
+            return formatter.string(from: scrollDate)
         }
     }
 

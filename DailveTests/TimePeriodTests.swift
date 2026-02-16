@@ -141,4 +141,46 @@ struct TimePeriodTests {
         #expect(TimePeriod.sixMonths.rawValue == "6M")
         #expect(TimePeriod.year.rawValue == "Y")
     }
+
+    // MARK: - scrollBufferPeriods
+
+    @Test("scrollBufferPeriods are reasonable for performance",
+          arguments: TimePeriod.allCases)
+    func scrollBufferPeriodsReasonable(period: TimePeriod) {
+        let buffer = period.scrollBufferPeriods
+        #expect(buffer >= 1)
+        #expect(buffer <= 7)
+    }
+
+    @Test("large periods have small buffer to avoid performance issues")
+    func largePeriodsSmallBuffer() {
+        #expect(TimePeriod.sixMonths.scrollBufferPeriods <= 1)
+        #expect(TimePeriod.year.scrollBufferPeriods <= 1)
+    }
+
+    // MARK: - visibleRangeLabel
+
+    @Test("visibleRangeLabel returns non-empty string for all periods",
+          arguments: TimePeriod.allCases)
+    func visibleRangeLabelNonEmpty(period: TimePeriod) {
+        let label = period.visibleRangeLabel(from: Date())
+        #expect(!label.isEmpty)
+    }
+
+    @Test("week visibleRangeLabel contains dash separator")
+    func weekRangeLabelFormat() {
+        let label = TimePeriod.week.visibleRangeLabel(from: Date())
+        #expect(label.contains("–"))
+    }
+
+    // MARK: - visibleDomainSeconds
+
+    @Test("visibleDomainSeconds increases with period size")
+    func visibleDomainIncreases() {
+        let periods = TimePeriod.allCases
+        for i in 0..<(periods.count - 1) {
+            #expect(periods[i].visibleDomainSeconds < periods[i + 1].visibleDomainSeconds,
+                    "\(periods[i]) should have smaller domain than \(periods[i + 1])")
+        }
+    }
 }

@@ -128,7 +128,11 @@ struct MetricDetailViewModelTests {
 
         await vm.loadData()
 
-        #expect(vm.chartData.count == 2)
+        // Chart data includes gap-filled dates (all days in range)
+        #expect(vm.chartData.count >= 2)
+        // Verify actual data points are present
+        let nonZero = vm.chartData.filter { $0.value > 0 }
+        #expect(nonZero.count == 2)
         #expect(vm.summaryStats!.sum == 18000.0)
     }
 
@@ -146,9 +150,12 @@ struct MetricDetailViewModelTests {
 
         await vm.loadData()
 
-        // Both workouts on same day → 1 chart point
-        #expect(vm.chartData.count == 1)
-        #expect(vm.chartData.first!.value == 90.0) // (1800+3600)/60
+        // Chart data includes gap-filled dates (all days in range)
+        #expect(vm.chartData.count >= 1)
+        // Both workouts on same day → 1 non-zero chart point = 90 min
+        let nonZero = vm.chartData.filter { $0.value > 0 }
+        #expect(nonZero.count == 1)
+        #expect(nonZero.first!.value == 90.0) // (1800+3600)/60
     }
 
     // MARK: - Weight
@@ -185,7 +192,10 @@ struct MetricDetailViewModelTests {
 
         await vm.loadData()
 
-        #expect(vm.chartData.count == 2)
+        // Chart data includes gap-filled dates (all days in range)
+        #expect(vm.chartData.count >= 2)
+        let nonZero = vm.chartData.filter { $0.value > 0 }
+        #expect(nonZero.count == 2)
         #expect(vm.stackedData.count == 2)
         #expect(vm.stackedData.first!.segments.count == 3)
     }
@@ -257,5 +267,74 @@ struct MetricDetailViewModelTests {
         #expect(vm.isLoading == false)
         await vm.loadData()
         #expect(vm.isLoading == false)
+    }
+
+    // MARK: - Trend Line
+
+    @Test("computeTrendLine returns nil for fewer than 3 points")
+    func trendLineTooFewPoints() {
+        let data = [
+            ChartDataPoint(date: Date(), value: 10),
+            ChartDataPoint(date: Date().addingTimeInterval(3600), value: 20),
+        ]
+        let result = MetricDetailViewModel.computeTrendLine(
+            from: data, period: .week, scrollPosition: data[0].date
+        )
+        #expect(result == nil)
+    }
+
+    @Test("computeTrendLine returns 2 points for valid data")
+    func trendLineValidData() {
+        let start = Date()
+        let data = (0..<7).map { i in
+            ChartDataPoint(
+                date: start.addingTimeInterval(Double(i) * 86400),
+                value: 40 + Double(i) * 2
+            )
+        }
+        let result = MetricDetailViewModel.computeTrendLine(
+            from: data, period: .week, scrollPosition: start
+        )
+        #expect(result != nil)
+        #expect(result!.count == 2)
+        // Linear data → trend should go from ~40 to ~52
+        #expect(result!.first!.value < result!.last!.value)
+    }
+
+    @Test("computeTrendLine ignores data outside visible window")
+    func trendLineWindowFiltering() {
+        let start = Date()
+        // Data way before the visible window
+        let oldData = (0..<5).map { i in
+            ChartDataPoint(
+                date: start.addingTimeInterval(Double(i - 30) * 86400),
+                value: 100
+            )
+        }
+        // Data in the visible window
+        let visibleData = (0..<5).map { i in
+            ChartDataPoint(
+                date: start.addingTimeInterval(Double(i) * 86400),
+                value: 50 + Double(i)
+            )
+        }
+        let allData = oldData + visibleData
+        let result = MetricDetailViewModel.computeTrendLine(
+            from: allData, period: .week, scrollPosition: start
+        )
+        #expect(result != nil)
+        // Trend should reflect visible data (~50-54), not the old data (100)
+        #expect(result!.first!.value < 60)
+    }
+
+    // MARK: - Visible Range Label
+
+    @Test("visibleRangeLabel returns non-empty string")
+    func visibleRangeLabel() {
+        let vm = makeVM()
+        vm.configure(category: .hrv, currentValue: 50, lastUpdated: Date())
+
+        let label = vm.visibleRangeLabel
+        #expect(!label.isEmpty)
     }
 }

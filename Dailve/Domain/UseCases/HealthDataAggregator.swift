@@ -119,6 +119,57 @@ enum HealthDataAggregator {
         }
     }
 
+    // MARK: - Date Gap Filling
+
+    /// Fills date gaps in chart data so every expected date slot has a data point.
+    /// Missing dates get value 0. Ensures charts render a continuous date axis
+    /// like Apple Health, even when no data exists for some dates.
+    static func fillDateGaps(
+        _ data: [ChartDataPoint],
+        period: TimePeriod,
+        start: Date,
+        end: Date,
+        calendar: Calendar = .current
+    ) -> [ChartDataPoint] {
+        let unit = period.aggregationUnit
+
+        // Build a set of existing date keys for fast lookup
+        var existing: [Date: Double] = [:]
+        for point in data {
+            let key = dateKey(for: point.date, unit: unit, calendar: calendar)
+            existing[key] = point.value
+        }
+
+        // Generate all expected date slots from start to end
+        var result: [ChartDataPoint] = []
+        var current = dateKey(for: start, unit: unit, calendar: calendar)
+        let endKey = dateKey(for: end, unit: unit, calendar: calendar)
+
+        let stepComponent: Calendar.Component
+        let stepValue: Int
+        switch unit {
+        case .hour:
+            stepComponent = .hour; stepValue = 1
+        case .day:
+            stepComponent = .day; stepValue = 1
+        case .weekOfYear:
+            stepComponent = .weekOfYear; stepValue = 1
+        case .month:
+            stepComponent = .month; stepValue = 1
+        default:
+            stepComponent = .day; stepValue = 1
+        }
+
+        while current <= endKey {
+            let value = existing[current] ?? 0
+            result.append(ChartDataPoint(date: current, value: value))
+            guard let next = calendar.date(byAdding: stepComponent, value: stepValue, to: current) else { break }
+            current = next
+        }
+
+        return result
+    }
+
     // MARK: - Private
 
     private static func groupByUnit(

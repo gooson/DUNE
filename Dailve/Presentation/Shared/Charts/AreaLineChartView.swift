@@ -8,6 +8,8 @@ struct AreaLineChartView: View {
     let period: TimePeriod
     var tintColor: Color = DS.Color.body
     var unitSuffix: String = "kg"
+    var trendLine: [ChartDataPoint]?
+    @Binding var scrollPosition: Date
 
     @ScaledMetric(relativeTo: .body) private var chartHeight: CGFloat = 220
 
@@ -35,6 +37,20 @@ struct AreaLineChartView: View {
                     .interpolationMethod(.catmullRom)
                 }
 
+                // Trend line
+                if let trendLine, trendLine.count >= 2 {
+                    ForEach(trendLine) { point in
+                        LineMark(
+                            x: .value("Trend", point.date),
+                            y: .value("TrendValue", point.value),
+                            series: .value("Series", "trend")
+                        )
+                        .foregroundStyle(tintColor.opacity(0.5))
+                        .lineStyle(StrokeStyle(lineWidth: 2, dash: [6, 4]))
+                        .interpolationMethod(.linear)
+                    }
+                }
+
                 // Selection indicator
                 if let point = selectedPoint {
                     PointMark(
@@ -49,6 +65,9 @@ struct AreaLineChartView: View {
                         .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
                 }
             }
+            .chartScrollableAxes(.horizontal)
+            .chartXVisibleDomain(length: period.visibleDomainSeconds)
+            .chartScrollPosition(x: $scrollPosition)
             .chartYScale(domain: yDomain)
             .chartXAxis {
                 AxisMarks(values: .stride(by: period.strideComponent, count: period.strideCount)) { _ in
@@ -65,7 +84,6 @@ struct AreaLineChartView: View {
             .chartXSelection(value: $selectedDate)
             .sensoryFeedback(.selection, trigger: selectedDate)
             .frame(height: chartHeight)
-            .drawingGroup()
             .accessibilityElement(children: .combine)
             .accessibilityLabel("Weight trend chart, \(data.count) data points")
             .accessibilityValue(accessibilitySummary)
@@ -100,7 +118,12 @@ struct AreaLineChartView: View {
     // MARK: - Helpers
 
     private var xUnit: Calendar.Component {
-        period == .day ? .hour : .day
+        switch period {
+        case .day:       .hour
+        case .sixMonths: .weekOfYear
+        case .year:      .month
+        default:         .day
+        }
     }
 
     private var areaGradient: LinearGradient {

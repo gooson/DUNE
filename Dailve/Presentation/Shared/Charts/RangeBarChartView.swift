@@ -7,6 +7,8 @@ struct RangeBarChartView: View {
     let data: [RangeDataPoint]
     let period: TimePeriod
     var tintColor: Color = DS.Color.rhr
+    var trendLine: [ChartDataPoint]?
+    @Binding var scrollPosition: Date
 
     @ScaledMetric(relativeTo: .body) private var chartHeight: CGFloat = 220
 
@@ -40,12 +42,30 @@ struct RangeBarChartView: View {
                     .interpolationMethod(.catmullRom)
                 }
 
+                // Trend line (linear regression)
+                if let trendLine, trendLine.count >= 2 {
+                    ForEach(trendLine) { point in
+                        LineMark(
+                            x: .value("Trend", point.date),
+                            y: .value("TrendValue", point.value),
+                            series: .value("Series", "trend")
+                        )
+                        .foregroundStyle(tintColor.opacity(0.4))
+                        .lineStyle(StrokeStyle(lineWidth: 2, dash: [6, 4]))
+                        .interpolationMethod(.linear)
+                    }
+                }
+
                 if let point = selectedPoint {
                     RuleMark(x: .value("Selected", point.date, unit: xUnit))
                         .foregroundStyle(.gray.opacity(0.3))
                         .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
                 }
             }
+            .chartScrollableAxes(.horizontal)
+            .chartXVisibleDomain(length: period.visibleDomainSeconds)
+            .chartScrollPosition(x: $scrollPosition)
+            .chartYScale(domain: yDomain)
             .chartXAxis {
                 AxisMarks(values: .stride(by: period.strideComponent, count: period.strideCount)) { _ in
                     AxisValueLabel(format: period.axisLabelFormat)
@@ -61,7 +81,6 @@ struct RangeBarChartView: View {
             .chartXSelection(value: $selectedDate)
             .sensoryFeedback(.selection, trigger: selectedDate)
             .frame(height: chartHeight)
-            .drawingGroup()
             .accessibilityElement(children: .combine)
             .accessibilityLabel("Resting heart rate chart, \(data.count) data points")
             .accessibilityValue(accessibilitySummary)
@@ -111,6 +130,17 @@ struct RangeBarChartView: View {
         case .sixMonths:  .fixed(8)
         case .year:       .fixed(16)
         }
+    }
+
+    /// Y-axis domain with padding to prevent clipping.
+    private var yDomain: ClosedRange<Double> {
+        guard let minVal = data.map(\.min).min(),
+              let maxVal = data.map(\.max).max() else {
+            return 40...100
+        }
+        let range = maxVal - minVal
+        let padding = max(range * 0.15, 2)
+        return (minVal - padding)...(maxVal + padding)
     }
 
     private var selectedPoint: RangeDataPoint? {

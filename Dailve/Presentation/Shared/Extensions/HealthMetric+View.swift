@@ -10,7 +10,12 @@ extension HealthMetric {
         case .sleep:
             return value.hoursMinutesFormatted
         case .exercise:
-            return String(format: "%.0fmin", value)
+            // Per-type cards use their own unit (km, m, etc.)
+            switch unit {
+            case "km":  return String(format: "%.1fkm", value)
+            case "m":   return String(format: "%.0fm", value)
+            default:    return String(format: "%.0fmin", value)
+            }
         case .steps:
             return String(format: "%.0f", value)
         case .weight:
@@ -22,6 +27,13 @@ extension HealthMetric {
         guard let change else { return nil }
         let arrow = change > 0 ? "\u{25B2}" : "\u{25BC}"
         return "\(arrow)\(String(format: "%.1f", abs(change)))"
+    }
+}
+
+extension HealthMetric {
+    /// Resolved icon: uses iconOverride if set, otherwise falls back to category default.
+    var resolvedIconName: String {
+        iconOverride ?? category.iconName
     }
 }
 

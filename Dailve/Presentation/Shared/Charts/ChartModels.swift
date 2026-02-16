@@ -56,6 +56,16 @@ struct MetricSummary: Sendable {
     }
 }
 
+// MARK: - Exercise Totals
+
+/// Aggregate exercise stats for a time period.
+struct ExerciseTotals: Sendable {
+    let workoutCount: Int
+    let totalDuration: TimeInterval
+    let totalCalories: Double?
+    let totalDistanceMeters: Double?
+}
+
 // MARK: - Highlight
 
 /// Notable data point within a time period (e.g. weekly high/low).

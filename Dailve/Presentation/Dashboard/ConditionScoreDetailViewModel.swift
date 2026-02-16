@@ -8,18 +8,20 @@ import OSLog
 @MainActor
 final class ConditionScoreDetailViewModel {
     var selectedPeriod: TimePeriod = .week {
-        didSet { if oldValue != selectedPeriod { periodOffset = 0; triggerReload() } }
+        didSet {
+            if oldValue != selectedPeriod {
+                resetScrollPosition()
+                triggerReload()
+            }
+        }
     }
-    var periodOffset: Int = 0 {
-        didSet { if oldValue != periodOffset { triggerReload() } }
-    }
+    var scrollPosition: Date = .now
+    var showTrendLine: Bool = false
     var chartData: [ChartDataPoint] = []
     var summaryStats: MetricSummary?
     var highlights: [Highlight] = []
     var isLoading = false
     var errorMessage: String?
-
-    var canGoForward: Bool { periodOffset < 0 }
 
     private(set) var currentScore: ConditionScore?
 
@@ -53,6 +55,34 @@ final class ConditionScoreDetailViewModel {
         isLoading = false
     }
 
+    // MARK: - Scroll Position
+
+    /// Label showing the currently visible date range, like Health app.
+    var visibleRangeLabel: String {
+        selectedPeriod.visibleRangeLabel(from: scrollPosition)
+    }
+
+    /// Trend line data points (linear regression) for the visible chart data.
+    var trendLineData: [ChartDataPoint]? {
+        guard showTrendLine else { return nil }
+        return MetricDetailViewModel.computeTrendLine(
+            from: chartData, period: selectedPeriod, scrollPosition: scrollPosition
+        )
+    }
+
+    private func resetScrollPosition() {
+        let range = selectedPeriod.dateRange(offset: 0)
+        scrollPosition = range.start
+    }
+
+    // MARK: - Extended Range
+
+    private var extendedRange: (start: Date, end: Date) {
+        let currentRange = selectedPeriod.dateRange(offset: 0)
+        let bufferRange = selectedPeriod.dateRange(offset: -selectedPeriod.scrollBufferPeriods)
+        return (start: bufferRange.start, end: currentRange.end)
+    }
+
     // MARK: - Private
 
     private func triggerReload() {
@@ -60,24 +90,29 @@ final class ConditionScoreDetailViewModel {
     }
 
     private func loadScoreData() async throws {
-        let range = selectedPeriod.dateRange(offset: periodOffset)
+        let range = extendedRange
 
-        // Fetch all HRV samples for the period
+        // Fetch all HRV samples for the extended period
         let calendar = Calendar.current
         let daysInRange = max(1, calendar.dateComponents([.day], from: range.start, to: range.end).day ?? 7)
 
         async let currentSamplesTask = hrvService.fetchHRVSamples(days: daysInRange + 7)
 
-        // Previous period for comparison
-        let prevRange = HealthDataAggregator.previousPeriodRange(for: selectedPeriod, offset: periodOffset)
+        // Previous period for comparison (based on current period, not extended)
+        let prevRange = HealthDataAggregator.previousPeriodRange(for: selectedPeriod, offset: 0)
         let prevDays = max(1, calendar.dateComponents([.day], from: prevRange.start, to: prevRange.end).day ?? 7)
-        async let prevSamplesTask = hrvService.fetchHRVSamples(days: daysInRange + prevDays + 7)
+        let currentPeriodDays = max(1, calendar.dateComponents(
+            [.day],
+            from: selectedPeriod.dateRange(offset: 0).start,
+            to: selectedPeriod.dateRange(offset: 0).end
+        ).day ?? 7)
+        async let prevSamplesTask = hrvService.fetchHRVSamples(days: currentPeriodDays + prevDays + 7)
 
         let allSamples = try await currentSamplesTask
         let allSamplesForPrev = try await prevSamplesTask
 
-        // Compute daily scores for the current period
-        let currentScores = computeDailyScores(
+        // Compute daily scores for the extended range
+        let allScores = computeDailyScores(
             samples: allSamples,
             range: range,
             calendar: calendar
@@ -90,7 +125,7 @@ final class ConditionScoreDetailViewModel {
             calendar: calendar
         )
 
-        chartData = currentScores
+        chartData = allScores
 
         // Aggregate for longer periods
         if selectedPeriod == .sixMonths || selectedPeriod == .year {
@@ -99,8 +134,14 @@ final class ConditionScoreDetailViewModel {
             )
         }
 
+        // Summary stats from current period only
+        let currentPeriodRange = selectedPeriod.dateRange(offset: 0)
+        let currentPeriodScores = allScores.filter {
+            $0.date >= currentPeriodRange.start && $0.date <= currentPeriodRange.end
+        }
+
         summaryStats = HealthDataAggregator.computeSummary(
-            from: currentScores.map(\.value),
+            from: currentPeriodScores.map(\.value),
             previousPeriodValues: previousScores.isEmpty ? nil : previousScores.map(\.value)
         )
     }
@@ -143,14 +184,18 @@ final class ConditionScoreDetailViewModel {
     // MARK: - Highlights
 
     private func buildHighlights() {
-        guard !chartData.isEmpty else {
+        let currentPeriodRange = selectedPeriod.dateRange(offset: 0)
+        let currentValues = chartData.filter {
+            $0.date >= currentPeriodRange.start && $0.date <= currentPeriodRange.end
+        }
+        guard !currentValues.isEmpty else {
             highlights = []
             return
         }
 
         var result: [Highlight] = []
 
-        if let maxPoint = chartData.max(by: { $0.value < $1.value }) {
+        if let maxPoint = currentValues.max(by: { $0.value < $1.value }) {
             result.append(Highlight(
                 type: .high,
                 value: maxPoint.value,
@@ -159,7 +204,7 @@ final class ConditionScoreDetailViewModel {
             ))
         }
 
-        if let minPoint = chartData.min(by: { $0.value < $1.value }) {
+        if let minPoint = currentValues.min(by: { $0.value < $1.value }) {
             result.append(Highlight(
                 type: .low,
                 value: minPoint.value,
@@ -169,10 +214,10 @@ final class ConditionScoreDetailViewModel {
         }
 
         // Trend
-        if chartData.count >= 4 {
-            let mid = chartData.count / 2
-            let firstHalf = chartData[..<mid].map(\.value)
-            let secondHalf = chartData[mid...].map(\.value)
+        if currentValues.count >= 4 {
+            let mid = currentValues.count / 2
+            let firstHalf = currentValues[..<mid].map(\.value)
+            let secondHalf = currentValues[mid...].map(\.value)
             let firstAvg = firstHalf.reduce(0, +) / Double(firstHalf.count)
             let secondAvg = secondHalf.reduce(0, +) / Double(secondHalf.count)
 

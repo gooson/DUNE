@@ -6,6 +6,7 @@ struct MetricSummaryHeader: View {
     let currentValue: Double
     let summary: MetricSummary?
     let lastUpdated: Date?
+    var unitOverride: String?
 
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
@@ -24,7 +25,7 @@ struct MetricSummaryHeader: View {
                     .font(DS.Typography.cardScore)
                     .fontDesign(.rounded)
 
-                Text(category.unitLabel)
+                Text(resolvedUnit)
                     .font(.title3)
                     .foregroundStyle(.secondary)
             }
@@ -51,7 +52,7 @@ struct MetricSummaryHeader: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(category.displayName), \(formattedCurrentValue) \(category.unitLabel)")
+        .accessibilityLabel("\(category.displayName), \(formattedCurrentValue) \(resolvedUnit)")
     }
 
     // MARK: - Subviews
@@ -83,12 +84,20 @@ struct MetricSummaryHeader: View {
 
     // MARK: - Helpers
 
+    private var resolvedUnit: String {
+        unitOverride ?? category.unitLabel
+    }
+
     private var formattedCurrentValue: String {
         formatValue(currentValue)
     }
 
     private func formatValue(_ value: Double) -> String {
-        switch category {
+        // Use distance formatting when unit is km
+        if let override = unitOverride, override == "km" {
+            return String(format: "%.1f", value)
+        }
+        return switch category {
         case .hrv:      String(format: "%.0f", value)
         case .rhr:      String(format: "%.0f", value)
         case .sleep:    value.hoursMinutesFormatted
