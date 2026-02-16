@@ -93,7 +93,11 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
             options: .mostRecent
         )
         let statistics = try await manager.executeStatistics(descriptor)
-        return statistics?.mostRecentQuantity()?.doubleValue(for: .count())
+        guard let value = statistics?.mostRecentQuantity()?.doubleValue(for: .count()),
+              value > 0 else {
+            return nil
+        }
+        return value
     }
 
     func fetchLatestBMI(withinDays days: Int) async throws -> (value: Double, date: Date)? {

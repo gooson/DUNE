@@ -67,11 +67,17 @@ struct ScoreContributorsView: View {
         }
     }
 
+    private enum BarFraction {
+        static let positive: CGFloat = 0.85
+        static let neutral: CGFloat = 0.5
+        static let negative: CGFloat = 0.25
+    }
+
     private func barWidth(for impact: ScoreContribution.Impact, in totalWidth: CGFloat) -> CGFloat {
         let fraction: CGFloat = switch impact {
-        case .positive: 0.85
-        case .neutral: 0.5
-        case .negative: 0.25
+        case .positive: BarFraction.positive
+        case .neutral: BarFraction.neutral
+        case .negative: BarFraction.negative
         }
         return totalWidth * fraction
     }

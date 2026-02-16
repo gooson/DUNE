@@ -2,13 +2,11 @@ import SwiftUI
 
 struct MetricCardView: View {
     let metric: HealthMetric
-    var sparklineData: [Double]?
 
     @Environment(\.horizontalSizeClass) private var sizeClass
 
     private var isRegular: Bool { sizeClass == .regular }
     private var cardPadding: CGFloat { isRegular ? DS.Spacing.xxl : DS.Spacing.lg }
-    private var sparklineHeight: CGFloat { isRegular ? 44 : 28 }
     private var valueFont: Font { isRegular ? .title : .title2 }
     private var headerFont: Font { isRegular ? .subheadline : .caption }
     private var cardSpacing: CGFloat { isRegular ? DS.Spacing.md : DS.Spacing.sm }
@@ -64,11 +62,6 @@ struct MetricCardView: View {
                 }
             }
 
-            // Mini sparkline (7-day trend)
-            if let data = sparklineData, data.count >= 2 {
-                MiniSparklineView(dataPoints: data, color: metric.category.themeColor)
-                    .frame(height: sparklineHeight)
-            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(cardPadding)

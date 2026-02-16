@@ -7,11 +7,24 @@ import OSLog
 final class DashboardViewModel {
     var conditionScore: ConditionScore?
     var baselineStatus: BaselineStatus?
-    var sortedMetrics: [HealthMetric] = []
+    var sortedMetrics: [HealthMetric] = [] {
+        didSet { invalidateFilteredMetrics() }
+    }
     var recentScores: [ConditionScore] = []
     var isLoading = false
     var errorMessage: String?
     var lastUpdated: Date?
+
+    // Cached filtered metrics (avoid recomputing in View body)
+    private(set) var healthSignals: [HealthMetric] = []
+    private(set) var activityMetrics: [HealthMetric] = []
+
+    private static let healthCategories: Set<HealthMetric.Category> = [.hrv, .rhr, .weight, .bmi]
+
+    private func invalidateFilteredMetrics() {
+        healthSignals = sortedMetrics.filter { Self.healthCategories.contains($0.category) }
+        activityMetrics = sortedMetrics.filter { !Self.healthCategories.contains($0.category) }
+    }
 
     private let healthKitManager: HealthKitManager
     private var authorizationChecked = false
@@ -63,68 +76,80 @@ final class DashboardViewModel {
         async let weightTask = safeWeightFetch()
         async let bmiTask = safeBMIFetch()
 
-        let (hrvMetrics, sleepMetric, exerciseMetrics, stepsMetric, weightMetric, bmiMetric) = await (
+        let (hrvResult, sleepResult, exerciseResult, stepsResult, weightResult, bmiResult) = await (
             hrvTask, sleepTask, exerciseTask, stepsTask, weightTask, bmiTask
         )
 
         var allMetrics: [HealthMetric] = []
-        allMetrics.append(contentsOf: hrvMetrics)
-        if let sleepMetric { allMetrics.append(sleepMetric) }
-        allMetrics.append(contentsOf: exerciseMetrics)
-        if let stepsMetric { allMetrics.append(stepsMetric) }
-        if let weightMetric { allMetrics.append(weightMetric) }
-        if let bmiMetric { allMetrics.append(bmiMetric) }
+        allMetrics.append(contentsOf: hrvResult.metrics)
+        if let sleepMetric = sleepResult.metric { allMetrics.append(sleepMetric) }
+        allMetrics.append(contentsOf: exerciseResult.metrics)
+        if let stepsMetric = stepsResult.metric { allMetrics.append(stepsMetric) }
+        if let weightMetric = weightResult.metric { allMetrics.append(weightMetric) }
+        if let bmiMetric = bmiResult.metric { allMetrics.append(bmiMetric) }
+
+        // Track partial failures
+        let failureCount = [
+            hrvResult.failed, sleepResult.failed, exerciseResult.failed,
+            stepsResult.failed, weightResult.failed, bmiResult.failed
+        ].filter { $0 }.count
+
+        if failureCount > 0 && !allMetrics.isEmpty {
+            errorMessage = "Some data could not be loaded (\(failureCount) of 6 sources)"
+        } else if failureCount > 0 && allMetrics.isEmpty {
+            errorMessage = "Failed to load health data"
+        }
 
         sortedMetrics = allMetrics.sorted { $0.changeSignificance > $1.changeSignificance }
         lastUpdated = Date()
         isLoading = false
     }
 
-    private func safeHRVFetch() async -> [HealthMetric] {
-        do { return try await fetchHRVData() }
+    private func safeHRVFetch() async -> (metrics: [HealthMetric], failed: Bool) {
+        do { return (try await fetchHRVData(), false) }
         catch {
             AppLogger.ui.error("HRV fetch failed: \(error.localizedDescription)")
-            return []
+            return ([], true)
         }
     }
 
-    private func safeSleepFetch() async -> HealthMetric? {
-        do { return try await fetchSleepData() }
+    private func safeSleepFetch() async -> (metric: HealthMetric?, failed: Bool) {
+        do { return (try await fetchSleepData(), false) }
         catch {
             AppLogger.ui.error("Sleep fetch failed: \(error.localizedDescription)")
-            return nil
+            return (nil, true)
         }
     }
 
-    private func safeExerciseFetch() async -> [HealthMetric] {
-        do { return try await fetchExerciseData() }
+    private func safeExerciseFetch() async -> (metrics: [HealthMetric], failed: Bool) {
+        do { return (try await fetchExerciseData(), false) }
         catch {
             AppLogger.ui.error("Exercise fetch failed: \(error.localizedDescription)")
-            return []
+            return ([], true)
         }
     }
 
-    private func safeStepsFetch() async -> HealthMetric? {
-        do { return try await fetchStepsData() }
+    private func safeStepsFetch() async -> (metric: HealthMetric?, failed: Bool) {
+        do { return (try await fetchStepsData(), false) }
         catch {
             AppLogger.ui.error("Steps fetch failed: \(error.localizedDescription)")
-            return nil
+            return (nil, true)
         }
     }
 
-    private func safeWeightFetch() async -> HealthMetric? {
-        do { return try await fetchWeightData() }
+    private func safeWeightFetch() async -> (metric: HealthMetric?, failed: Bool) {
+        do { return (try await fetchWeightData(), false) }
         catch {
             AppLogger.ui.error("Weight fetch failed: \(error.localizedDescription)")
-            return nil
+            return (nil, true)
         }
     }
 
-    private func safeBMIFetch() async -> HealthMetric? {
-        do { return try await fetchBMIData() }
+    private func safeBMIFetch() async -> (metric: HealthMetric?, failed: Bool) {
+        do { return (try await fetchBMIData(), false) }
         catch {
             AppLogger.ui.error("BMI fetch failed: \(error.localizedDescription)")
-            return nil
+            return (nil, true)
         }
     }
 
@@ -403,11 +428,12 @@ final class DashboardViewModel {
         let effectiveWeight: Double
         let weightDate: Date
         let isHistorical: Bool
-        if let latest = todaySamples.first {
+        if let latest = todaySamples.first, latest.value > 0, latest.value < 500 {
             effectiveWeight = latest.value
             weightDate = today
             isHistorical = false
-        } else if let latest = try await bodyService.fetchLatestWeight(withinDays: 30) {
+        } else if let latest = try await bodyService.fetchLatestWeight(withinDays: 30),
+                  latest.value > 0, latest.value < 500 {
             effectiveWeight = latest.value
             weightDate = latest.date
             isHistorical = true
@@ -415,16 +441,19 @@ final class DashboardViewModel {
             return nil
         }
 
-        // Yesterday's weight for change calculation
-        let yesterdayStart = calendar.startOfDay(for: yesterday)
-        guard let yesterdayEnd = calendar.date(byAdding: .day, value: 1, to: yesterdayStart) else {
-            return HealthMetric(
-                id: "weight", name: "Weight", value: effectiveWeight, unit: "kg",
-                change: nil, date: weightDate, category: .weight, isHistorical: isHistorical
-            )
+        // Change calculation only meaningful for today's data
+        let change: Double?
+        if !isHistorical {
+            let yesterdayStart = calendar.startOfDay(for: yesterday)
+            if let yesterdayEnd = calendar.date(byAdding: .day, value: 1, to: yesterdayStart) {
+                let yesterdaySamples = try await bodyService.fetchWeight(start: yesterdayStart, end: yesterdayEnd)
+                change = yesterdaySamples.first.map { effectiveWeight - $0.value }
+            } else {
+                change = nil
+            }
+        } else {
+            change = nil
         }
-        let yesterdaySamples = try await bodyService.fetchWeight(start: yesterdayStart, end: yesterdayEnd)
-        let change = yesterdaySamples.first.map { effectiveWeight - $0.value }
 
         return HealthMetric(
             id: "weight",
@@ -446,11 +475,12 @@ final class DashboardViewModel {
         let effectiveBMI: Double
         let bmiDate: Date
         let isHistorical: Bool
-        if let todayBMI = try await bodyService.fetchBMI(for: today), todayBMI > 0 {
+        if let todayBMI = try await bodyService.fetchBMI(for: today), todayBMI > 0, todayBMI < 100 {
             effectiveBMI = todayBMI
             bmiDate = today
             isHistorical = false
-        } else if let latest = try await bodyService.fetchLatestBMI(withinDays: 30) {
+        } else if let latest = try await bodyService.fetchLatestBMI(withinDays: 30),
+                  latest.value > 0, latest.value < 100 {
             effectiveBMI = latest.value
             bmiDate = latest.date
             isHistorical = true
@@ -458,8 +488,14 @@ final class DashboardViewModel {
             return nil
         }
 
-        let yesterdayBMI = try await bodyService.fetchBMI(for: yesterday)
-        let change = yesterdayBMI.map { effectiveBMI - $0 }
+        // Change calculation only meaningful for today's data
+        let change: Double?
+        if !isHistorical {
+            let yesterdayBMI = try await bodyService.fetchBMI(for: yesterday)
+            change = yesterdayBMI.map { effectiveBMI - $0 }
+        } else {
+            change = nil
+        }
 
         return HealthMetric(
             id: "bmi",

@@ -3,6 +3,7 @@ import SwiftUI
 struct DashboardView: View {
     @State private var viewModel = DashboardViewModel()
     @Environment(\.horizontalSizeClass) private var sizeClass
+    @Environment(\.openURL) private var openURL
 
     var body: some View {
         ScrollView {
@@ -55,13 +56,9 @@ struct DashboardView: View {
                     }
 
                     // Health Signals section (HRV, RHR, Weight, BMI)
-                    let healthCategories: Set<HealthMetric.Category> = [.hrv, .rhr, .weight, .bmi]
-                    let healthSignals = viewModel.sortedMetrics.filter { healthCategories.contains($0.category) }
-                    let activityMetrics = viewModel.sortedMetrics.filter { !healthCategories.contains($0.category) }
-
-                    if !healthSignals.isEmpty {
+                    if !viewModel.healthSignals.isEmpty {
                         Section {
-                            SmartCardGrid(metrics: healthSignals)
+                            SmartCardGrid(metrics: viewModel.healthSignals)
                         } header: {
                             Text("Health Signals")
                                 .font(DS.Typography.sectionTitle)
@@ -69,9 +66,9 @@ struct DashboardView: View {
                         }
                     }
 
-                    if !activityMetrics.isEmpty {
+                    if !viewModel.activityMetrics.isEmpty {
                         Section {
-                            SmartCardGrid(metrics: activityMetrics)
+                            SmartCardGrid(metrics: viewModel.activityMetrics)
                         } header: {
                             Text("Activity")
                                 .font(DS.Typography.sectionTitle)
@@ -144,7 +141,7 @@ struct DashboardView: View {
 
     private func openSettings() {
         guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
-        UIApplication.shared.open(url)
+        openURL(url)
     }
 }
 

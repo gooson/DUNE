@@ -42,7 +42,7 @@ struct SmartCardGrid: View {
                         : .asymmetric(
                             insertion: .opacity
                                 .combined(with: .offset(y: 8))
-                                .animation(DS.Animation.standard.delay(Double(index) * 0.05)),
+                                .animation(DS.Animation.standard),
                             removal: .opacity
                         )
                 )

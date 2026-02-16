@@ -1,6 +1,6 @@
 import Foundation
 
-struct ScoreContribution: Sendable, Identifiable {
+struct ScoreContribution: Sendable, Identifiable, Hashable, Equatable {
     var id: String { factor.rawValue }
     let factor: Factor
     let impact: Impact

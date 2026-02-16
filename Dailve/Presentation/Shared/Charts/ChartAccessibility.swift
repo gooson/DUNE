@@ -1,6 +1,30 @@
 import SwiftUI
 import Charts
 
+// MARK: - Shared Helpers
+
+private func emptyChartDescriptor(title: String, yAxisTitle: String = "Value") -> AXChartDescriptor {
+    AXChartDescriptor(
+        title: title,
+        summary: "No data available",
+        xAxis: AXNumericDataAxisDescriptor(title: "Date", range: 0...1, gridlinePositions: []) { _ in "" },
+        yAxis: AXNumericDataAxisDescriptor(title: yAxisTitle, range: 0...1, gridlinePositions: []) { _ in "" },
+        series: []
+    )
+}
+
+private func makeDateFormatter() -> DateFormatter {
+    let formatter = DateFormatter()
+    formatter.setLocalizedDateFormatFromTemplate("MMMdE")
+    return formatter
+}
+
+private func dateRange<T>(from sorted: [T], dateKeyPath: KeyPath<T, Date>) -> (min: Double, max: Double) {
+    let first = sorted.first?[keyPath: dateKeyPath].timeIntervalSince1970 ?? 0
+    let last = sorted.last?[keyPath: dateKeyPath].timeIntervalSince1970 ?? 1
+    return (first, last)
+}
+
 // MARK: - Standard Chart Descriptor (line/bar/area)
 
 /// Provides AXChartDescriptor for VoiceOver navigation of standard single-value charts.
@@ -19,29 +43,21 @@ struct StandardChartAccessibility: AXChartDescriptorRepresentable {
 
     func makeChartDescriptor() -> AXChartDescriptor {
         guard !data.isEmpty else {
-            return AXChartDescriptor(
-                title: title,
-                summary: "No data available",
-                xAxis: AXNumericDataAxisDescriptor(title: "Date", range: 0...1, gridlinePositions: []) { _ in "" },
-                yAxis: AXNumericDataAxisDescriptor(title: "Value", range: 0...1, gridlinePositions: []) { _ in "" },
-                series: []
-            )
+            return emptyChartDescriptor(title: title)
         }
 
         let sorted = data.sorted { $0.date < $1.date }
-        let minDate = sorted.first!.date.timeIntervalSince1970
-        let maxDate = sorted.last!.date.timeIntervalSince1970
+        let range = dateRange(from: sorted, dateKeyPath: \.date)
 
         let values = sorted.map(\.value)
         let minVal = values.min() ?? 0
         let maxVal = values.max() ?? 1
 
-        let dateFormatter = DateFormatter()
-        dateFormatter.setLocalizedDateFormatFromTemplate("MMMdE")
+        let dateFormatter = makeDateFormatter()
 
         let xAxis = AXNumericDataAxisDescriptor(
             title: "Date",
-            range: minDate...maxDate,
+            range: range.min...range.max,
             gridlinePositions: []
         ) { value in
             dateFormatter.string(from: Date(timeIntervalSince1970: value))
@@ -89,28 +105,20 @@ struct RangeChartAccessibility: AXChartDescriptorRepresentable {
 
     func makeChartDescriptor() -> AXChartDescriptor {
         guard !data.isEmpty else {
-            return AXChartDescriptor(
-                title: title,
-                summary: "No data available",
-                xAxis: AXNumericDataAxisDescriptor(title: "Date", range: 0...1, gridlinePositions: []) { _ in "" },
-                yAxis: AXNumericDataAxisDescriptor(title: "Value", range: 0...1, gridlinePositions: []) { _ in "" },
-                series: []
-            )
+            return emptyChartDescriptor(title: title)
         }
 
         let sorted = data.sorted { $0.date < $1.date }
-        let minDate = sorted.first!.date.timeIntervalSince1970
-        let maxDate = sorted.last!.date.timeIntervalSince1970
+        let range = dateRange(from: sorted, dateKeyPath: \.date)
 
         let allMin = sorted.map(\.min).min() ?? 0
         let allMax = sorted.map(\.max).max() ?? 1
 
-        let dateFormatter = DateFormatter()
-        dateFormatter.setLocalizedDateFormatFromTemplate("MMMdE")
+        let dateFormatter = makeDateFormatter()
 
         let xAxis = AXNumericDataAxisDescriptor(
             title: "Date",
-            range: minDate...maxDate,
+            range: range.min...range.max,
             gridlinePositions: []
         ) { value in
             dateFormatter.string(from: Date(timeIntervalSince1970: value))
@@ -157,27 +165,19 @@ struct SleepChartAccessibility: AXChartDescriptorRepresentable {
 
     func makeChartDescriptor() -> AXChartDescriptor {
         guard !data.isEmpty else {
-            return AXChartDescriptor(
-                title: title,
-                summary: "No data available",
-                xAxis: AXNumericDataAxisDescriptor(title: "Date", range: 0...1, gridlinePositions: []) { _ in "" },
-                yAxis: AXNumericDataAxisDescriptor(title: "Hours", range: 0...1, gridlinePositions: []) { _ in "" },
-                series: []
-            )
+            return emptyChartDescriptor(title: title, yAxisTitle: "Hours")
         }
 
         let sorted = data.sorted { $0.date < $1.date }
-        let minDate = sorted.first!.date.timeIntervalSince1970
-        let maxDate = sorted.last!.date.timeIntervalSince1970
+        let range = dateRange(from: sorted, dateKeyPath: \.date)
 
         let maxHours = (sorted.map(\.total).max() ?? 1) / 3600
 
-        let dateFormatter = DateFormatter()
-        dateFormatter.setLocalizedDateFormatFromTemplate("MMMdE")
+        let dateFormatter = makeDateFormatter()
 
         let xAxis = AXNumericDataAxisDescriptor(
             title: "Date",
-            range: minDate...maxDate,
+            range: range.min...range.max,
             gridlinePositions: []
         ) { value in
             dateFormatter.string(from: Date(timeIntervalSince1970: value))

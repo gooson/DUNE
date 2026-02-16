@@ -11,8 +11,18 @@ struct ConditionHeroView: View {
     @Environment(\.horizontalSizeClass) private var sizeClass
 
     private var isRegular: Bool { sizeClass == .regular }
-    private var ringSize: CGFloat { isRegular ? 128 : 88 }
-    private var ringLineWidth: CGFloat { isRegular ? 14 : 10 }
+
+    private enum Layout {
+        static let ringSizeRegular: CGFloat = 128
+        static let ringSizeCompact: CGFloat = 88
+        static let ringLineWidthRegular: CGFloat = 14
+        static let ringLineWidthCompact: CGFloat = 10
+        static let sparklineHeightRegular: CGFloat = 56
+        static let sparklineHeightCompact: CGFloat = 44
+    }
+
+    private var ringSize: CGFloat { isRegular ? Layout.ringSizeRegular : Layout.ringSizeCompact }
+    private var ringLineWidth: CGFloat { isRegular ? Layout.ringLineWidthRegular : Layout.ringLineWidthCompact }
 
     var body: some View {
         HeroCard(tintColor: score.status.color) {
@@ -53,7 +63,7 @@ struct ConditionHeroView: View {
                     if !recentScores.isEmpty {
                         HStack(spacing: DS.Spacing.xs) {
                             TrendChartView(scores: recentScores)
-                                .frame(height: isRegular ? 56 : 44)
+                                .frame(height: isRegular ? Layout.sparklineHeightRegular : Layout.sparklineHeightCompact)
 
                             Text("7d")
                                 .font(.caption2)

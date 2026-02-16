@@ -7,12 +7,13 @@ struct ConditionScore: Sendable, Hashable {
     let contributions: [ScoreContribution]
 
     static func == (lhs: ConditionScore, rhs: ConditionScore) -> Bool {
-        lhs.score == rhs.score && lhs.date == rhs.date
+        lhs.score == rhs.score && lhs.date == rhs.date && lhs.contributions == rhs.contributions
     }
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(score)
         hasher.combine(date)
+        hasher.combine(contributions)
     }
 
     enum Status: String, Sendable, CaseIterable {
@@ -72,5 +73,8 @@ struct BaselineStatus: Sendable {
     let daysRequired: Int
 
     var isReady: Bool { daysCollected >= daysRequired }
-    var progress: Double { Double(daysCollected) / Double(daysRequired) }
+    var progress: Double {
+        guard daysRequired > 0 else { return 0 }
+        return Double(daysCollected) / Double(daysRequired)
+    }
 }

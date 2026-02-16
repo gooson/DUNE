@@ -59,6 +59,9 @@ struct CalculateConditionScoreUseCase: ConditionScoreCalculating, Sendable {
         let normalRange = max(stdDev, minimumStdDev)
 
         let zScore = (todayLn - baseline) / normalRange
+        guard !zScore.isNaN && !zScore.isInfinite else {
+            return Output(score: nil, baselineStatus: baselineStatus, contributions: [])
+        }
         var rawScore = baselineScore + (zScore * zScoreMultiplier)
 
         // Build contributions
@@ -104,7 +107,7 @@ struct CalculateConditionScoreUseCase: ConditionScoreCalculating, Sendable {
             contributions.append(ScoreContribution(factor: .rhr, impact: rhrImpact, detail: rhrDetail))
         }
 
-        let clampedScore = Int(max(0, min(100, rawScore)))
+        let clampedScore = Int(max(0, min(100, rawScore)).rounded())
         let score = ConditionScore(score: clampedScore, date: Date(), contributions: contributions)
 
         return Output(score: score, baselineStatus: baselineStatus, contributions: contributions)
