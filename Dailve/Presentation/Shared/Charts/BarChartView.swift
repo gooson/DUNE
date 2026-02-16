@@ -78,8 +78,8 @@ struct BarChartView: View {
 
     private var accessibilitySummary: String {
         guard !data.isEmpty else { return "No data" }
-        let values = data.map(\.value)
-        let avg = values.reduce(0, +) / Double(values.count)
+        let sum = data.reduce(0.0) { $0 + $1.value }
+        let avg = sum / Double(data.count)
         return "Average \(String(format: "%.0f", avg))\(unitSuffix)"
     }
 

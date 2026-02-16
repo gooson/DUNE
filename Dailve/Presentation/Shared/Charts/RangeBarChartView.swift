@@ -89,7 +89,8 @@ struct RangeBarChartView: View {
 
     private var accessibilitySummary: String {
         guard !data.isEmpty else { return "No data" }
-        let avg = data.map(\.average).reduce(0, +) / Double(data.count)
+        let sum = data.reduce(0.0) { $0 + $1.average }
+        let avg = sum / Double(data.count)
         return "Average \(String(format: "%.0f", avg)) bpm"
     }
 

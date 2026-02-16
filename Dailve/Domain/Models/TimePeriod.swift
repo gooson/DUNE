@@ -13,26 +13,22 @@ enum TimePeriod: String, CaseIterable, Sendable {
     func dateRange(offset: Int = 0) -> (start: Date, end: Date) {
         let calendar = Calendar.current
         let now = Date()
+        let startOfToday = calendar.startOfDay(for: now)
 
         // First compute current period end/start
-        let baseEnd: Date
+        let baseEnd: Date = now
         let baseStart: Date
         switch self {
         case .day:
-            baseEnd = now
-            baseStart = calendar.startOfDay(for: now)
+            baseStart = startOfToday
         case .week:
-            baseEnd = now
-            baseStart = calendar.date(byAdding: .day, value: -6, to: calendar.startOfDay(for: now))!
+            baseStart = calendar.date(byAdding: .day, value: -6, to: startOfToday) ?? startOfToday
         case .month:
-            baseEnd = now
-            baseStart = calendar.date(byAdding: .month, value: -1, to: calendar.startOfDay(for: now))!
+            baseStart = calendar.date(byAdding: .month, value: -1, to: startOfToday) ?? startOfToday
         case .sixMonths:
-            baseEnd = now
-            baseStart = calendar.date(byAdding: .month, value: -6, to: calendar.startOfDay(for: now))!
+            baseStart = calendar.date(byAdding: .month, value: -6, to: startOfToday) ?? startOfToday
         case .year:
-            baseEnd = now
-            baseStart = calendar.date(byAdding: .year, value: -1, to: calendar.startOfDay(for: now))!
+            baseStart = calendar.date(byAdding: .year, value: -1, to: startOfToday) ?? startOfToday
         }
 
         guard offset != 0 else { return (baseStart, baseEnd) }
@@ -42,20 +38,20 @@ enum TimePeriod: String, CaseIterable, Sendable {
         let shiftedEnd: Date
         switch self {
         case .day:
-            shiftedStart = calendar.date(byAdding: .day, value: offset, to: baseStart)!
-            shiftedEnd = calendar.date(byAdding: .day, value: offset, to: baseEnd)!
+            shiftedStart = calendar.date(byAdding: .day, value: offset, to: baseStart) ?? baseStart
+            shiftedEnd = calendar.date(byAdding: .day, value: offset, to: baseEnd) ?? baseEnd
         case .week:
-            shiftedStart = calendar.date(byAdding: .day, value: offset * 7, to: baseStart)!
-            shiftedEnd = calendar.date(byAdding: .day, value: offset * 7, to: baseEnd)!
+            shiftedStart = calendar.date(byAdding: .day, value: offset * 7, to: baseStart) ?? baseStart
+            shiftedEnd = calendar.date(byAdding: .day, value: offset * 7, to: baseEnd) ?? baseEnd
         case .month:
-            shiftedStart = calendar.date(byAdding: .month, value: offset, to: baseStart)!
-            shiftedEnd = calendar.date(byAdding: .month, value: offset, to: baseEnd)!
+            shiftedStart = calendar.date(byAdding: .month, value: offset, to: baseStart) ?? baseStart
+            shiftedEnd = calendar.date(byAdding: .month, value: offset, to: baseEnd) ?? baseEnd
         case .sixMonths:
-            shiftedStart = calendar.date(byAdding: .month, value: offset * 6, to: baseStart)!
-            shiftedEnd = calendar.date(byAdding: .month, value: offset * 6, to: baseEnd)!
+            shiftedStart = calendar.date(byAdding: .month, value: offset * 6, to: baseStart) ?? baseStart
+            shiftedEnd = calendar.date(byAdding: .month, value: offset * 6, to: baseEnd) ?? baseEnd
         case .year:
-            shiftedStart = calendar.date(byAdding: .year, value: offset, to: baseStart)!
-            shiftedEnd = calendar.date(byAdding: .year, value: offset, to: baseEnd)!
+            shiftedStart = calendar.date(byAdding: .year, value: offset, to: baseStart) ?? baseStart
+            shiftedEnd = calendar.date(byAdding: .year, value: offset, to: baseEnd) ?? baseEnd
         }
 
         return (shiftedStart, shiftedEnd)
@@ -133,69 +129,7 @@ enum TimePeriod: String, CaseIterable, Sendable {
         }
     }
 
-    /// Formatted label for the given offset's date range.
-    func rangeLabel(offset: Int) -> String {
-        let range = dateRange(offset: offset)
-        let formatter = DateFormatter()
-        switch self {
-        case .day:
-            formatter.dateFormat = "M/d (E)"
-            return formatter.string(from: range.start)
-        case .week:
-            formatter.dateFormat = "M/d"
-            let start = formatter.string(from: range.start)
-            let end = formatter.string(from: range.end)
-            return "\(start) – \(end)"
-        case .month:
-            formatter.dateFormat = "yyyy.M"
-            return formatter.string(from: range.start)
-        case .sixMonths:
-            formatter.dateFormat = "yyyy.M"
-            let start = formatter.string(from: range.start)
-            let end = formatter.string(from: range.end)
-            return "\(start) – \(end)"
-        case .year:
-            formatter.dateFormat = "yyyy"
-            return formatter.string(from: range.start)
-        }
-    }
-
-    /// Formatted label for the visible date range starting at `scrollDate`.
-    func visibleRangeLabel(from scrollDate: Date) -> String {
-        let calendar = Calendar.current
-        let end: Date
-        switch self {
-        case .day:
-            end = calendar.date(byAdding: .hour, value: 24, to: scrollDate)!
-        case .week:
-            end = calendar.date(byAdding: .day, value: 7, to: scrollDate)!
-        case .month:
-            end = calendar.date(byAdding: .month, value: 1, to: scrollDate)!
-        case .sixMonths:
-            end = calendar.date(byAdding: .month, value: 6, to: scrollDate)!
-        case .year:
-            end = calendar.date(byAdding: .year, value: 1, to: scrollDate)!
-        }
-
-        let formatter = DateFormatter()
-        switch self {
-        case .day:
-            formatter.dateFormat = "M월 d일 (E)"
-            return formatter.string(from: scrollDate)
-        case .week:
-            formatter.dateFormat = "M.d"
-            return "\(formatter.string(from: scrollDate)) – \(formatter.string(from: end))"
-        case .month:
-            formatter.dateFormat = "yyyy년 M월"
-            return formatter.string(from: scrollDate)
-        case .sixMonths:
-            formatter.dateFormat = "yyyy.M"
-            return "\(formatter.string(from: scrollDate)) – \(formatter.string(from: end))"
-        case .year:
-            formatter.dateFormat = "yyyy년"
-            return formatter.string(from: scrollDate)
-        }
-    }
+    // rangeLabel and visibleRangeLabel moved to Presentation/Shared/Extensions/TimePeriod+View.swift
 
     /// X-axis date format for chart labels.
     var axisLabelFormat: Date.FormatStyle {

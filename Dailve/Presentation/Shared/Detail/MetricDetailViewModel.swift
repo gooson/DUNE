@@ -15,9 +15,13 @@ final class MetricDetailViewModel {
             }
         }
     }
-    var scrollPosition: Date = .now
+    var scrollPosition: Date = .now {
+        didSet { invalidateScrollCache() }
+    }
     var showTrendLine: Bool = false
-    var chartData: [ChartDataPoint] = []
+    var chartData: [ChartDataPoint] = [] {
+        didSet { invalidateScrollCache() }
+    }
     var rangeData: [RangeDataPoint] = []
     var stackedData: [StackedDataPoint] = []
     var summaryStats: MetricSummary?
@@ -86,6 +90,10 @@ final class MetricDetailViewModel {
             case .exercise: try await loadExerciseData()
             case .weight:   try await loadWeightData()
             }
+            guard !Task.isCancelled else {
+                isLoading = false
+                return
+            }
             buildHighlights()
         } catch {
             AppLogger.ui.error("MetricDetail load failed for \(self.category.rawValue): \(error.localizedDescription)")
@@ -95,29 +103,45 @@ final class MetricDetailViewModel {
         isLoading = false
     }
 
-    // MARK: - Exercise Totals (scroll-reactive)
+    // MARK: - Cached Scroll-Reactive Properties (correction log #8)
 
     /// Exercise totals for the currently visible scroll range.
-    /// Recalculates automatically when scrollPosition changes.
-    var exerciseTotals: ExerciseTotals? {
-        guard category == .exercise, !loadedWorkouts.isEmpty else { return nil }
-        let visibleEnd = scrollPosition.addingTimeInterval(selectedPeriod.visibleDomainSeconds)
-        let visible = loadedWorkouts.filter { $0.date >= scrollPosition && $0.date <= visibleEnd }
-        return buildExerciseTotals(from: visible)
-    }
+    private(set) var exerciseTotals: ExerciseTotals?
 
-    // MARK: - Scroll Position
+    /// Trend line data points (linear regression) for the visible chart data.
+    private(set) var cachedTrendLine: [ChartDataPoint]?
 
     /// Label showing the currently visible date range, like Health app.
     var visibleRangeLabel: String {
         selectedPeriod.visibleRangeLabel(from: scrollPosition)
     }
 
-    /// Trend line data points (linear regression) for the visible chart data.
-    /// Returns nil if fewer than 3 data points in the visible range.
+    /// Public accessor for trend line (respects showTrendLine toggle).
     var trendLineData: [ChartDataPoint]? {
         guard showTrendLine else { return nil }
-        return Self.computeTrendLine(from: chartData, period: selectedPeriod, scrollPosition: scrollPosition)
+        return cachedTrendLine
+    }
+
+    /// Invalidates cached values that depend on scrollPosition or chartData.
+    private func invalidateScrollCache() {
+        recomputeExerciseTotals()
+        recomputeTrendLine()
+    }
+
+    private func recomputeExerciseTotals() {
+        guard category == .exercise, !loadedWorkouts.isEmpty else {
+            exerciseTotals = nil
+            return
+        }
+        let visibleEnd = scrollPosition.addingTimeInterval(selectedPeriod.visibleDomainSeconds)
+        let visible = loadedWorkouts.filter { $0.date >= scrollPosition && $0.date <= visibleEnd }
+        exerciseTotals = buildExerciseTotals(from: visible)
+    }
+
+    private func recomputeTrendLine() {
+        cachedTrendLine = Self.computeTrendLine(
+            from: chartData, period: selectedPeriod, scrollPosition: scrollPosition
+        )
     }
 
     /// Resets scroll position to show the current period (latest data at the right edge).
@@ -137,8 +161,11 @@ final class MetricDetailViewModel {
 
     // MARK: - Private Reload Trigger
 
+    private var reloadTask: Task<Void, Never>?
+
     private func triggerReload() {
-        Task { await loadData() }
+        reloadTask?.cancel()
+        reloadTask = Task { await loadData() }
     }
 
     // MARK: - HRV
@@ -423,15 +450,10 @@ final class MetricDetailViewModel {
             .sorted { $0.date < $1.date }
     }
 
-    /// Whether the current workout type is distance-based (running, cycling, walking, hiking, swimming).
+    /// Whether the current workout type is distance-based.
     private var isDistanceBased: Bool {
         guard let typeName = workoutTypeName else { return false }
-        switch typeName.lowercased() {
-        case "running", "cycling", "walking", "hiking", "swimming":
-            return true
-        default:
-            return false
-        }
+        return WorkoutSummary.isDistanceBasedType(typeName.lowercased())
     }
 
     private func buildExerciseTotals(from workouts: [WorkoutSummary]) -> ExerciseTotals? {
@@ -450,57 +472,7 @@ final class MetricDetailViewModel {
     // MARK: - Highlights
 
     private func buildHighlights() {
-        let currentValues = currentPeriodChartData()
-        guard !currentValues.isEmpty else {
-            highlights = []
-            return
-        }
-
-        var result: [Highlight] = []
-
-        // Highest value
-        if let maxPoint = currentValues.max(by: { $0.value < $1.value }) {
-            result.append(Highlight(
-                type: .high,
-                value: maxPoint.value,
-                date: maxPoint.date,
-                label: "Highest"
-            ))
-        }
-
-        // Lowest value
-        if let minPoint = currentValues.min(by: { $0.value < $1.value }) {
-            result.append(Highlight(
-                type: .low,
-                value: minPoint.value,
-                date: minPoint.date,
-                label: "Lowest"
-            ))
-        }
-
-        // Trend direction (simple: compare first half vs second half average)
-        if currentValues.count >= 4 {
-            let mid = currentValues.count / 2
-            let firstHalf = currentValues[..<mid].map(\.value)
-            let secondHalf = currentValues[mid...].map(\.value)
-            let firstAvg = firstHalf.reduce(0, +) / Double(firstHalf.count)
-            let secondAvg = secondHalf.reduce(0, +) / Double(secondHalf.count)
-
-            if firstAvg > 0 {
-                let changePercent = ((secondAvg - firstAvg) / firstAvg) * 100
-                if abs(changePercent) >= 3 {
-                    let direction = changePercent > 0 ? "Trending up" : "Trending down"
-                    result.append(Highlight(
-                        type: .trend,
-                        value: changePercent,
-                        date: Date(),
-                        label: direction
-                    ))
-                }
-            }
-        }
-
-        highlights = result
+        highlights = HighlightBuilder.buildHighlights(from: currentPeriodChartData())
     }
 
     /// Returns chart data filtered to the current period only (for highlights).
@@ -539,6 +511,8 @@ final class MetricDetailViewModel {
 
         let m = (n * sumXY - sumX * sumY) / denominator
         let b = (sumY - m * sumX) / n
+
+        guard !m.isNaN && !m.isInfinite && !b.isNaN && !b.isInfinite else { return nil }
 
         // Generate two end points for the trend line
         guard let firstDate = visible.first?.date,

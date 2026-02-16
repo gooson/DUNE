@@ -61,4 +61,42 @@ struct WorkoutSummary: Identifiable, Sendable {
     let calories: Double?
     let distance: Double?
     let date: Date
+
+    /// Whether this workout type primarily measures distance.
+    var isDistanceBased: Bool {
+        Self.isDistanceBasedType(type.lowercased())
+    }
+
+    /// Whether the given lowercased workout type primarily measures distance.
+    static func isDistanceBasedType(_ type: String) -> Bool {
+        switch type {
+        case "running", "cycling", "walking", "hiking", "swimming":
+            return true
+        default:
+            return false
+        }
+    }
+
+    /// Maps workout type name to SF Symbol.
+    static func iconName(for type: String) -> String {
+        switch type.lowercased() {
+        case "running":     "figure.run"
+        case "walking":     "figure.walk"
+        case "cycling":     "figure.outdoor.cycle"
+        case "swimming":    "figure.pool.swim"
+        case "hiking":      "figure.hiking"
+        case "yoga":        "figure.yoga"
+        case "strength", "strength training": "dumbbell.fill"
+        case "dance", "dancing": "figure.dance"
+        case "elliptical":  "figure.elliptical"
+        case "rowing":      "figure.rower"
+        case "stair stepper", "stairs": "figure.stairs"
+        case "pilates":     "figure.pilates"
+        case "martial arts": "figure.martial.arts"
+        case "cooldown":    "figure.cooldown"
+        case "core training": "figure.core.training"
+        case "stretching", "flexibility": "figure.flexibility"
+        default:            "figure.mixed.cardio"
+        }
+    }
 }

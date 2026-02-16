@@ -286,7 +286,7 @@ final class DashboardViewModel {
                 date: latestDate,
                 category: .exercise,
                 isHistorical: !isToday,
-                iconOverride: Self.workoutIcon(type)
+                iconOverride: WorkoutSummary.iconName(for: type)
             ))
         }
 
@@ -306,7 +306,7 @@ final class DashboardViewModel {
         let typeLower = type.lowercased()
         let totalMinutes = workouts.map(\.duration).reduce(0, +) / 60.0
 
-        guard isDistanceBased(typeLower) else {
+        guard WorkoutSummary.isDistanceBasedType(typeLower) else {
             return (totalMinutes, "min")
         }
 
@@ -321,38 +321,7 @@ final class DashboardViewModel {
         return (totalMeters / 1000.0, "km")
     }
 
-    /// Whether this workout type primarily measures distance.
-    private static func isDistanceBased(_ type: String) -> Bool {
-        switch type {
-        case "running", "cycling", "walking", "hiking", "swimming":
-            return true
-        default:
-            return false
-        }
-    }
-
-    /// Maps workout type name to SF Symbol.
-    private static func workoutIcon(_ type: String) -> String {
-        switch type.lowercased() {
-        case "running":     "figure.run"
-        case "walking":     "figure.walk"
-        case "cycling":     "figure.outdoor.cycle"
-        case "swimming":    "figure.pool.swim"
-        case "hiking":      "figure.hiking"
-        case "yoga":        "figure.yoga"
-        case "strength", "strength training": "dumbbell.fill"
-        case "dance", "dancing": "figure.dance"
-        case "elliptical":  "figure.elliptical"
-        case "rowing":      "figure.rower"
-        case "stair stepper", "stairs": "figure.stairs"
-        case "pilates":     "figure.pilates"
-        case "martial arts": "figure.martial.arts"
-        case "cooldown":    "figure.cooldown"
-        case "core training": "figure.core.training"
-        case "stretching", "flexibility": "figure.flexibility"
-        default:            "figure.mixed.cardio"
-        }
-    }
+    // isDistanceBased and workoutIcon are now on WorkoutSummary (Domain layer)
 
     private func fetchStepsData() async throws -> HealthMetric? {
         let today = Date()

@@ -27,8 +27,11 @@ final class ActivityViewModel {
         self.stepsService = stepsService ?? StepsQueryService(manager: healthKitManager)
     }
 
+    private var loadTask: Task<Void, Never>?
+
     func loadActivityData() async {
         guard !isLoading else { return }
+        loadTask?.cancel()
         isLoading = true
         errorMessage = nil
 
@@ -38,6 +41,11 @@ final class ActivityViewModel {
         async let workoutsTask = safeWorkoutsFetch()
 
         let (exerciseResult, stepsResult, workoutsResult) = await (exerciseTask, stepsTask, workoutsTask)
+
+        guard !Task.isCancelled else {
+            isLoading = false
+            return
+        }
 
         weeklyExerciseMinutes = exerciseResult.weeklyData
         todayExercise = exerciseResult.todayMetric

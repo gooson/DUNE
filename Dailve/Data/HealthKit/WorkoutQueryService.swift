@@ -34,14 +34,7 @@ struct WorkoutQueryService: WorkoutQuerying, Sendable {
         let workouts = try await manager.execute(descriptor)
 
         return workouts.map { workout in
-            WorkoutSummary(
-                id: workout.uuid.uuidString,
-                type: workoutTypeName(workout.workoutActivityType),
-                duration: workout.duration,
-                calories: workout.totalEnergyBurned?.doubleValue(for: HKUnit.kilocalorie()),
-                distance: workout.totalDistance?.doubleValue(for: HKUnit.meter()),
-                date: workout.startDate
-            )
+            toSummary(workout)
         }
     }
 
@@ -62,15 +55,24 @@ struct WorkoutQueryService: WorkoutQuerying, Sendable {
         let workouts = try await manager.execute(descriptor)
 
         return workouts.map { workout in
-            WorkoutSummary(
-                id: workout.uuid.uuidString,
-                type: workoutTypeName(workout.workoutActivityType),
-                duration: workout.duration,
-                calories: workout.totalEnergyBurned?.doubleValue(for: HKUnit.kilocalorie()),
-                distance: workout.totalDistance?.doubleValue(for: HKUnit.meter()),
-                date: workout.startDate
-            )
+            toSummary(workout)
         }
+    }
+
+    private func toSummary(_ workout: HKWorkout) -> WorkoutSummary {
+        let calories = workout.statistics(for: HKQuantityType(.activeEnergyBurned))?
+            .sumQuantity()?.doubleValue(for: .kilocalorie())
+        let distance = workout.statistics(for: HKQuantityType(.distanceWalkingRunning))?
+            .sumQuantity()?.doubleValue(for: .meter())
+
+        return WorkoutSummary(
+            id: workout.uuid.uuidString,
+            type: workoutTypeName(workout.workoutActivityType),
+            duration: workout.duration,
+            calories: calories,
+            distance: distance,
+            date: workout.startDate
+        )
     }
 
     private func workoutTypeName(_ type: HKWorkoutActivityType) -> String {

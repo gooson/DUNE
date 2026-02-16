@@ -56,7 +56,8 @@ enum HealthDataAggregator {
         }
 
         return grouped
-            .map { date, points in
+            .compactMap { date, points in
+                guard !points.isEmpty else { return nil }
                 let minVal = points.map(\.min).min() ?? 0
                 let maxVal = points.map(\.max).max() ?? 0
                 let avgVal = points.map(\.average).reduce(0, +) / Double(points.count)

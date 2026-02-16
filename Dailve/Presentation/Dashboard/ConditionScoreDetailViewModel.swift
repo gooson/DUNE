@@ -46,6 +46,10 @@ final class ConditionScoreDetailViewModel {
 
         do {
             try await loadScoreData()
+            guard !Task.isCancelled else {
+                isLoading = false
+                return
+            }
             buildHighlights()
         } catch {
             AppLogger.ui.error("ConditionScoreDetail load failed: \(error.localizedDescription)")
@@ -85,8 +89,11 @@ final class ConditionScoreDetailViewModel {
 
     // MARK: - Private
 
+    private var reloadTask: Task<Void, Never>?
+
     private func triggerReload() {
-        Task { await loadData() }
+        reloadTask?.cancel()
+        reloadTask = Task { await loadData() }
     }
 
     private func loadScoreData() async throws {
@@ -148,24 +155,32 @@ final class ConditionScoreDetailViewModel {
 
     /// Computes daily condition scores within the given range.
     /// For each day, uses all HRV samples up to (and including) that day to calculate a score.
+    /// Uses cursor-based iteration (O(n+m)) instead of per-day filtering (O(n*m)).
     private func computeDailyScores(
         samples: [HRVSample],
         range: (start: Date, end: Date),
         calendar: Calendar
     ) -> [ChartDataPoint] {
+        let sortedSamples = samples.sorted { $0.date < $1.date }
         var results: [ChartDataPoint] = []
         let startDay = calendar.startOfDay(for: range.start)
         let endDay = calendar.startOfDay(for: range.end)
+
+        var sampleCursor = 0
+        var cumulativeSamples: [HRVSample] = []
 
         var current = startDay
         while current <= endDay {
             guard let nextDay = calendar.date(byAdding: .day, value: 1, to: current) else { break }
 
-            // Include all samples up to the end of this day for baseline calculation
-            let relevantSamples = samples.filter { $0.date < nextDay }
+            // Advance cursor: add new samples up to this day (amortized O(1) per day)
+            while sampleCursor < sortedSamples.count && sortedSamples[sampleCursor].date < nextDay {
+                cumulativeSamples.append(sortedSamples[sampleCursor])
+                sampleCursor += 1
+            }
 
             let input = CalculateConditionScoreUseCase.Input(
-                hrvSamples: relevantSamples,
+                hrvSamples: cumulativeSamples,
                 todayRHR: nil,
                 yesterdayRHR: nil
             )
@@ -188,53 +203,10 @@ final class ConditionScoreDetailViewModel {
         let currentValues = chartData.filter {
             $0.date >= currentPeriodRange.start && $0.date <= currentPeriodRange.end
         }
-        guard !currentValues.isEmpty else {
-            highlights = []
-            return
-        }
-
-        var result: [Highlight] = []
-
-        if let maxPoint = currentValues.max(by: { $0.value < $1.value }) {
-            result.append(Highlight(
-                type: .high,
-                value: maxPoint.value,
-                date: maxPoint.date,
-                label: "Best day"
-            ))
-        }
-
-        if let minPoint = currentValues.min(by: { $0.value < $1.value }) {
-            result.append(Highlight(
-                type: .low,
-                value: minPoint.value,
-                date: minPoint.date,
-                label: "Lowest day"
-            ))
-        }
-
-        // Trend
-        if currentValues.count >= 4 {
-            let mid = currentValues.count / 2
-            let firstHalf = currentValues[..<mid].map(\.value)
-            let secondHalf = currentValues[mid...].map(\.value)
-            let firstAvg = firstHalf.reduce(0, +) / Double(firstHalf.count)
-            let secondAvg = secondHalf.reduce(0, +) / Double(secondHalf.count)
-
-            if firstAvg > 0 {
-                let changePercent = ((secondAvg - firstAvg) / firstAvg) * 100
-                if abs(changePercent) >= 3 {
-                    let direction = changePercent > 0 ? "Trending up" : "Trending down"
-                    result.append(Highlight(
-                        type: .trend,
-                        value: changePercent,
-                        date: Date(),
-                        label: direction
-                    ))
-                }
-            }
-        }
-
-        highlights = result
+        highlights = HighlightBuilder.buildHighlights(
+            from: currentValues,
+            highLabel: "Best day",
+            lowLabel: "Lowest day"
+        )
     }
 }

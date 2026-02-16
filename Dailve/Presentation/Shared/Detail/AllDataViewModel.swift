@@ -47,8 +47,11 @@ final class AllDataViewModel {
         await loadNextPage()
     }
 
+    private var pageTask: Task<Void, Never>?
+
     func loadNextPage() async {
         guard !isLoading, hasMoreData else { return }
+        pageTask?.cancel()
         isLoading = true
 
         let startDay = currentPage * pageSize
@@ -56,6 +59,10 @@ final class AllDataViewModel {
 
         do {
             let newPoints = try await fetchData(fromDaysAgo: endDay, toDaysAgo: startDay)
+            guard !Task.isCancelled else {
+                isLoading = false
+                return
+            }
             if newPoints.isEmpty {
                 hasMoreData = false
             } else {
