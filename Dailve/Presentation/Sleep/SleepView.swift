@@ -45,7 +45,7 @@ struct SleepView: View {
         .refreshable {
             await viewModel.loadData()
         }
-        .adaptiveNavigation(title: "Sleep")
+        .navigationTitle("Sleep")
     }
 
     // MARK: - Components

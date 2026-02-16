@@ -85,7 +85,7 @@ struct BodyCompositionView: View {
                 )
             }
         }
-        .adaptiveNavigation(title: "Body")
+        .navigationTitle("Body")
     }
 
     // MARK: - Components

@@ -25,14 +25,4 @@ enum AppSection: String, CaseIterable, Identifiable {
         case .body: "figure.arms.open"
         }
     }
-
-    /// Keyboard shortcut key equivalent (⌘1, ⌘2, ⌘3, ⌘4) for iPad sidebar.
-    var keyEquivalent: Character {
-        switch self {
-        case .dashboard: "1"
-        case .exercise: "2"
-        case .sleep: "3"
-        case .body: "4"
-        }
-    }
 }

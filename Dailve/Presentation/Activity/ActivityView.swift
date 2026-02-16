@@ -69,7 +69,7 @@ struct ActivityView: View {
         .task {
             await viewModel.loadActivityData()
         }
-        .adaptiveNavigation(title: "Activity")
+        .navigationTitle("Activity")
     }
 
     // MARK: - Today Section

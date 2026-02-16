@@ -47,7 +47,7 @@ struct ExerciseView: View {
         .onChange(of: manualRecords) { _, newValue in
             viewModel.manualRecords = newValue
         }
-        .adaptiveNavigation(title: "Exercise")
+        .navigationTitle("Exercise")
     }
 }
 
