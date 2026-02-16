@@ -132,3 +132,12 @@
 13. **Task 에이전트 리서치 scope 제한**: general-purpose 에이전트에 8개+ 질문 금지. 3개 이하로 제한하고, 코드베이스 내 정보로 충분하면 외부 검색 생략
 14. **플랜 파일 생성 후 즉시 경로 안내**: 파일 생성 → 절대 경로 출력 → 요약 → 승인 순서. 사용자가 기다리지 않도록
 15. **80% 품질 + 빠른 전달 > 100% 품질 + 느린 전달**: 리서치 완벽주의 금지. 코드베이스 분석 + 기존 지식으로 충분한 경우 외부 검색 생략
+
+### 2026-02-16: 6-관점 리뷰 수정 교정
+
+16. **Cancel-before-spawn 필수**: `triggerReload()` 등 Task 재실행 시 `reloadTask?.cancel()` 후 새 Task 할당. 이전 Task가 stale 데이터를 반영하는 것 방지
+17. **isLoading 리셋 전 Task.isCancelled 검사**: 취소된 Task가 `isLoading = false`로 리셋하면 현재 진행 중인 로드의 표시가 사라짐. `guard !Task.isCancelled` 후 state 업데이트
+18. **나눗셈 결과 이중 검증**: 분모 != 0 체크만으로 부족 — 중간 계산값(m, b)과 최종값(y1, y2) 모두 `.isNaN && .isInfinite` 검사
+19. **Deprecated API 즉시 교체**: Xcode warning 0 정책. `HKWorkout.totalEnergyBurned` → `statistics(for:).sumQuantity()` 등 deprecated는 발견 즉시 수정
+20. **Domain에 DateFormatter 금지**: `TimePeriod.rangeLabel` 같은 locale-specific 포맷팅은 `Presentation/Shared/Extensions/{Type}+View.swift`로 분리
+21. **Force-unwrap은 `Calendar.date(byAdding:)` 등에도 금지**: 실패 확률이 극히 낮더라도 `?? fallback` 사용. 방어 코딩 원칙 우선
