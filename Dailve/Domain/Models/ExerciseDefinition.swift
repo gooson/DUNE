@@ -11,6 +11,12 @@ struct ExerciseDefinition: Codable, Identifiable, Sendable, Hashable {
     let equipment: Equipment
     let metValue: Double
     let description: String?
+    let customCategoryName: String?
+
+    /// Display-friendly category label: user category name if set, otherwise built-in display name
+    var categoryDisplayName: String {
+        customCategoryName ?? category.displayName
+    }
 
     init(
         id: String,
@@ -22,7 +28,8 @@ struct ExerciseDefinition: Codable, Identifiable, Sendable, Hashable {
         secondaryMuscles: [MuscleGroup],
         equipment: Equipment,
         metValue: Double,
-        description: String? = nil
+        description: String? = nil,
+        customCategoryName: String? = nil
     ) {
         self.id = id
         self.name = name
@@ -34,5 +41,6 @@ struct ExerciseDefinition: Codable, Identifiable, Sendable, Hashable {
         self.equipment = equipment
         self.metValue = metValue
         self.description = description
+        self.customCategoryName = customCategoryName
     }
 }

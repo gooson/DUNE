@@ -8,8 +8,10 @@ struct ExercisePickerView: View {
 
     @Environment(\.dismiss) private var dismiss
     @Query(sort: \CustomExercise.createdAt, order: .reverse) private var customExercises: [CustomExercise]
+    @Query(sort: \UserCategory.sortOrder) private var userCategories: [UserCategory]
     @State private var searchText = ""
     @State private var selectedCategory: ExerciseCategory?
+    @State private var selectedUserCategoryName: String?
     @State private var selectedMuscle: MuscleGroup?
     @State private var selectedEquipment: Equipment?
     @State private var showingCreateCustom = false
@@ -29,9 +31,13 @@ struct ExercisePickerView: View {
             customResults = customDefinitions.filter {
                 $0.localizedName.localizedCaseInsensitiveContains(query)
             }
+        } else if let userCatName = selectedUserCategoryName {
+            // User-defined category filter — only applies to custom exercises
+            libraryResults = []
+            customResults = customDefinitions.filter { $0.customCategoryName == userCatName }
         } else if let category = selectedCategory {
             libraryResults = library.exercises(forCategory: category)
-            customResults = customDefinitions.filter { $0.category == category }
+            customResults = customDefinitions.filter { $0.category == category && $0.customCategoryName == nil }
         } else {
             libraryResults = library.allExercises()
             customResults = customDefinitions
@@ -64,7 +70,7 @@ struct ExercisePickerView: View {
     }
 
     private var hasActiveFilters: Bool {
-        selectedCategory != nil || selectedMuscle != nil || selectedEquipment != nil
+        selectedCategory != nil || selectedUserCategoryName != nil || selectedMuscle != nil || selectedEquipment != nil
     }
 
     var body: some View {
@@ -97,6 +103,7 @@ struct ExercisePickerView: View {
                             Button("Clear Filters") {
                                 withAnimation(DS.Animation.snappy) {
                                     selectedCategory = nil
+                                    selectedUserCategoryName = nil
                                     selectedMuscle = nil
                                     selectedEquipment = nil
                                 }
@@ -147,6 +154,10 @@ struct ExercisePickerView: View {
                 categoryChip(nil, label: "All")
                 ForEach(ExerciseCategory.allCases, id: \.self) { category in
                     categoryChip(category, label: category.displayName)
+                }
+                // User-defined categories
+                ForEach(userCategories) { userCat in
+                    userCategoryChip(userCat)
                 }
             }
             .padding(.horizontal, DS.Spacing.lg)
@@ -234,9 +245,11 @@ struct ExercisePickerView: View {
     // MARK: - Chips
 
     private func categoryChip(_ category: ExerciseCategory?, label: String) -> some View {
-        Button {
+        let isSelected = selectedCategory == category && selectedUserCategoryName == nil
+        return Button {
             withAnimation(DS.Animation.snappy) {
                 selectedCategory = category
+                selectedUserCategoryName = nil
             }
         } label: {
             Text(label)
@@ -244,14 +257,47 @@ struct ExercisePickerView: View {
                 .padding(.horizontal, DS.Spacing.md)
                 .padding(.vertical, DS.Spacing.xs)
                 .background(
-                    selectedCategory == category
+                    isSelected
                         ? DS.Color.activity
                         : Color.secondary.opacity(0.15),
                     in: Capsule()
                 )
                 .foregroundStyle(
-                    selectedCategory == category ? .white : .primary
+                    isSelected ? .white : .primary
                 )
+        }
+        .buttonStyle(.plain)
+    }
+
+    private func userCategoryChip(_ userCat: UserCategory) -> some View {
+        let isSelected = selectedUserCategoryName == userCat.name
+        return Button {
+            withAnimation(DS.Animation.snappy) {
+                if isSelected {
+                    selectedUserCategoryName = nil
+                } else {
+                    selectedUserCategoryName = userCat.name
+                    selectedCategory = nil
+                }
+            }
+        } label: {
+            HStack(spacing: DS.Spacing.xxs) {
+                Image(systemName: userCat.iconName)
+                    .font(.system(size: 9))
+                Text(userCat.name)
+                    .font(.caption.weight(.medium))
+            }
+            .padding(.horizontal, DS.Spacing.md)
+            .padding(.vertical, DS.Spacing.xs)
+            .background(
+                isSelected
+                    ? (Color(hex: userCat.colorHex) ?? DS.Color.activity)
+                    : Color.secondary.opacity(0.15),
+                in: Capsule()
+            )
+            .foregroundStyle(
+                isSelected ? .white : .primary
+            )
         }
         .buttonStyle(.plain)
     }

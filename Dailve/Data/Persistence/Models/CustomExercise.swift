@@ -11,6 +11,7 @@ final class CustomExercise {
     var secondaryMusclesRaw: [String] = []
     var equipmentRaw: String = Equipment.bodyweight.rawValue
     var metValue: Double = 3.5
+    var customCategoryName: String?
     var createdAt: Date = Date()
 
     init(
@@ -20,7 +21,8 @@ final class CustomExercise {
         primaryMuscles: [MuscleGroup],
         secondaryMuscles: [MuscleGroup] = [],
         equipment: Equipment,
-        metValue: Double = 3.5
+        metValue: Double = 3.5,
+        customCategoryName: String? = nil
     ) {
         self.id = UUID()
         self.name = name
@@ -30,6 +32,7 @@ final class CustomExercise {
         self.secondaryMusclesRaw = secondaryMuscles.map(\.rawValue)
         self.equipmentRaw = equipment.rawValue
         self.metValue = metValue
+        self.customCategoryName = customCategoryName
         self.createdAt = Date()
     }
 
@@ -66,7 +69,8 @@ final class CustomExercise {
             primaryMuscles: primaryMuscles,
             secondaryMuscles: secondaryMuscles,
             equipment: equipment,
-            metValue: metValue
+            metValue: metValue,
+            customCategoryName: customCategoryName
         )
     }
 }

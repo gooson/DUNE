@@ -4,11 +4,13 @@ import SwiftData
 struct CreateCustomExerciseView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Query(sort: \UserCategory.sortOrder) private var userCategories: [UserCategory]
 
     let onCreated: (ExerciseDefinition) -> Void
 
     @State private var name = ""
     @State private var selectedCategory: ExerciseCategory = .strength
+    @State private var selectedUserCategory: UserCategory?
     @State private var selectedInputType: ExerciseInputType = .setsRepsWeight
     @State private var selectedMuscles: Set<MuscleGroup> = []
     @State private var selectedEquipment: Equipment = .bodyweight
@@ -23,8 +25,9 @@ struct CreateCustomExerciseView: View {
                         .autocorrectionDisabled()
                 }
 
-                // Category
+                // Category — built-in + user-defined
                 Section("Category") {
+                    // Built-in categories
                     Picker("Category", selection: $selectedCategory) {
                         ForEach(ExerciseCategory.allCases, id: \.self) { cat in
                             Text(cat.displayName).tag(cat)
@@ -32,7 +35,7 @@ struct CreateCustomExerciseView: View {
                     }
                     .pickerStyle(.segmented)
                     .onChange(of: selectedCategory) { _, newValue in
-                        // Auto-select appropriate input type
+                        selectedUserCategory = nil
                         switch newValue {
                         case .strength: selectedInputType = .setsRepsWeight
                         case .cardio: selectedInputType = .durationDistance
@@ -40,6 +43,44 @@ struct CreateCustomExerciseView: View {
                         case .flexibility: selectedInputType = .durationIntensity
                         case .bodyweight: selectedInputType = .setsReps
                         }
+                    }
+
+                    // User-defined categories
+                    if !userCategories.isEmpty {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: DS.Spacing.sm) {
+                                ForEach(userCategories) { userCat in
+                                    Button {
+                                        if selectedUserCategory?.id == userCat.id {
+                                            selectedUserCategory = nil
+                                        } else {
+                                            selectedUserCategory = userCat
+                                            selectedInputType = userCat.defaultInputType
+                                        }
+                                    } label: {
+                                        HStack(spacing: DS.Spacing.xs) {
+                                            Image(systemName: userCat.iconName)
+                                                .font(.caption2)
+                                            Text(userCat.name)
+                                                .font(.caption.weight(.medium))
+                                        }
+                                        .padding(.horizontal, DS.Spacing.md)
+                                        .padding(.vertical, DS.Spacing.sm)
+                                        .background(
+                                            selectedUserCategory?.id == userCat.id
+                                                ? (Color(hex: userCat.colorHex) ?? DS.Color.activity)
+                                                : Color.secondary.opacity(0.12),
+                                            in: Capsule()
+                                        )
+                                        .foregroundStyle(
+                                            selectedUserCategory?.id == userCat.id ? .white : .primary
+                                        )
+                                    }
+                                    .buttonStyle(.plain)
+                                }
+                            }
+                        }
+                        .listRowInsets(EdgeInsets(top: DS.Spacing.xs, leading: DS.Spacing.lg, bottom: DS.Spacing.xs, trailing: DS.Spacing.lg))
                     }
                 }
 
@@ -142,7 +183,8 @@ struct CreateCustomExerciseView: View {
             category: selectedCategory,
             inputType: selectedInputType,
             primaryMuscles: Array(selectedMuscles),
-            equipment: selectedEquipment
+            equipment: selectedEquipment,
+            customCategoryName: selectedUserCategory?.name
         )
         modelContext.insert(custom)
 

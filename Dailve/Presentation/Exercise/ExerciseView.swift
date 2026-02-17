@@ -87,6 +87,13 @@ struct ExerciseView: View {
                     Image(systemName: "chart.bar.fill")
                 }
                 .accessibilityIdentifier("exercise-volume-analysis-button")
+
+                NavigationLink {
+                    UserCategoryManagementView()
+                } label: {
+                    Image(systemName: "tag")
+                }
+                .accessibilityIdentifier("exercise-categories-button")
             }
             ToolbarItem(placement: .primaryAction) {
                 Menu {
