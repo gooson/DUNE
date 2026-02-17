@@ -182,3 +182,12 @@
 45. **Collection extension에서 `Swift.max()` 명시적 호출**: `max()` global function이 `Collection.max()` instance method와 이름 충돌. `Swift.max(a, b)` 로 모듈 지정 필수
 46. **Watch `isReachable`은 cached state 대신 computed property**: `WCSession.default.isReachable` 직접 조회로 stale state 방지. `sessionReachabilityDidChange`에서 캐시 업데이트 불필요
 47. **`.onChange(of: array)` 대신 `.onChange(of: array.count)`**: 전체 배열 비교는 O(n). 변경 감지가 count 레벨로 충분하면 count 사용으로 비용 감소
+
+### 2026-02-17: Wellness 탭 통합 리뷰 교정
+
+48. **`.navigationDestination(for:)`은 조건 블록 밖에 배치**: `if hasData { ... .navigationDestination(for:) }` 패턴은 조건이 false일 때 navigation routing 불가. `body` 최상위에 배치 필수
+49. **Push 자식 뷰의 sheet은 자체 `@State` 사용**: 부모 ViewModel의 `isShowingEditSheet`을 자식에서도 bind하면 back navigation 시 양쪽에서 sheet 표시 시도. 자식은 독립 `@State` 사용
+50. **CloudKit 삭제는 반드시 확인 다이얼로그**: `modelContext.delete()` 전에 `.alert()` 또는 `.confirmationDialog()` 필수. 전 디바이스 전파되므로 실수 복구 불가
+51. **비교 데이터(change indicator)에 유효 기간 threshold**: 7일 전 비교 데이터가 실제로 90일 전이면 오해 유발. `comparisonWindowDays` 상수로 최대 허용 범위 제한
+52. **computed property가 merge 로직 포함 시 `@State` 캐싱**: `bodyItems`처럼 두 데이터 소스를 합치는 computed property는 렌더마다 재계산. `@State` + `onChange(of: count)` 무효화 패턴 사용
+53. **탭 통합 시 dead code 즉시 삭제**: 기존 뷰 파일을 "참고용"으로 남기면 유지보수 비용만 증가. 통합 완료 후 리뷰 단계에서 삭제

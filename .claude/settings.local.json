@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "WebFetch(domain:every.to)",
+      "WebFetch",
+      "WebSearch",
       "Bash(git -C /Users/shanks/work/Agentic-coding/BaseArchitecture rev-parse --git-dir)",
       "mcp__sequential-thinking__sequentialthinking",
       "Bash(bash:*)",
@@ -22,11 +23,6 @@
       "Bash(git checkout:*)",
       "Bash(git status:*)",
       "Bash(git push:*)",
-      "WebFetch(domain:mobbin.com)",
-      "WebFetch(domain:developer.whoop.com)",
-      "WebFetch(domain:medium.com)",
-      "WebFetch(domain:www.droid-life.com)",
-      "WebFetch(domain:sarunw.com)",
       "Bash(gh pr create:*)",
       "Bash(gh auth status:*)",
       "Bash(git merge:*)",
@@ -54,10 +50,6 @@
       "Bash(gh pr merge:*)",
       "Bash(git stash:*)",
       "Bash(python3:*)",
-      "WebFetch(domain:stormotion.io)",
-      "WebFetch(domain:www.sensai.fit)",
-      "WebFetch(domain:just12reps.com)",
-      "WebFetch(domain:pacompendium.com)",
       "Bash(git -C /Users/shanks/work/Health checkout -b feature/activity-tab-redesign:*)",
       "Bash(git -C /Users/shanks/work/Health log --oneline -5)",
       "Bash(git -C /Users/shanks/work/Health diff --cached --stat)",
@@ -73,7 +65,8 @@
       "Bash(xcrun devicectl:*)",
       "Bash(instruments -s devices:*)",
       "Bash(echo:*)",
-      "Bash(gh pr review:*)"
+      "Bash(gh pr review:*)",
+      "Bash(git diff:*)"
     ]
   }
 }

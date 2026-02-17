@@ -3,24 +3,19 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         TabView {
-            Tab(AppSection.dashboard.title, systemImage: AppSection.dashboard.icon) {
+            Tab(AppSection.today.title, systemImage: AppSection.today.icon) {
                 NavigationStack {
                     DashboardView()
                 }
             }
-            Tab(AppSection.exercise.title, systemImage: AppSection.exercise.icon) {
+            Tab(AppSection.train.title, systemImage: AppSection.train.icon) {
                 NavigationStack {
                     ActivityView()
                 }
             }
-            Tab(AppSection.sleep.title, systemImage: AppSection.sleep.icon) {
+            Tab(AppSection.wellness.title, systemImage: AppSection.wellness.icon) {
                 NavigationStack {
-                    SleepView()
-                }
-            }
-            Tab(AppSection.body.title, systemImage: AppSection.body.icon) {
-                NavigationStack {
-                    BodyCompositionView()
+                    WellnessView()
                 }
             }
         }

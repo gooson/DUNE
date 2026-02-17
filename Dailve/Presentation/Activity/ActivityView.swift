@@ -100,7 +100,7 @@ struct ActivityView: View {
         .onChange(of: recentRecords.count) { _, _ in
             viewModel.updateSuggestion(records: recentRecords)
         }
-        .navigationTitle("Activity")
+        .navigationTitle("Train")
     }
 
     // MARK: - Today Section

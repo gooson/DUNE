@@ -102,7 +102,7 @@ struct DashboardView: View {
         .task {
             await viewModel.loadData()
         }
-        .navigationTitle("Dailve")
+        .navigationTitle("Today")
     }
 
     // MARK: - Error States
