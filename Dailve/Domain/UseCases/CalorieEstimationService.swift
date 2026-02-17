@@ -25,7 +25,10 @@ struct CalorieEstimationService: CalorieEstimating {
         durationSeconds: TimeInterval,
         restSeconds: TimeInterval
     ) -> Double? {
-        guard metValue > 0, bodyWeightKg > 0, durationSeconds > 0 else { return nil }
+        // Domain validation: MET 1-23 (sleep to sprinting uphill), weight 20-300kg, duration max 8h
+        guard metValue > 0, metValue < 30,
+              bodyWeightKg > 0, bodyWeightKg < 500,
+              durationSeconds > 0, durationSeconds < 28800 else { return nil }
 
         let activeSeconds = max(durationSeconds - restSeconds, 0)
         guard activeSeconds > 0 else { return nil }

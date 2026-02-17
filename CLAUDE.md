@@ -166,3 +166,11 @@
 35. **JSON 파싱 서비스는 싱글턴 사용**: 번들 JSON을 매번 파싱하면 메모리/CPU 낭비. `static let shared` 패턴 적용
 36. **rawValue를 UI에 직접 표시 금지**: `rawValue.capitalized` 대신 `Presentation/Shared/Extensions/{Type}+View.swift`에 `displayName` computed property 사용
 37. **동일 로직 3곳 이상 중복 시 즉시 추출**: Collection extension 또는 공통 함수로 DRY 적용. 2곳은 허용, 3곳부터 필수
+
+### 2026-02-17: 2차 리뷰 검증 강화 교정
+
+38. **문자열→숫자 변환 전 trim+isEmpty 필수**: `Int("")`은 nil 반환하므로 optional binding 실패 시 "비어있으면 skip" 분기가 validation을 우회함. `.trimmingCharacters(in: .whitespaces)` 후 `!trimmed.isEmpty` 먼저 체크
+39. **`defer`로 isSaving 리셋 금지**: 반환값이 있는 함수에서 `defer { isSaving = false }`를 사용하면 record가 caller에게 전달된 후 insert 전에 flag가 리셋됨. 명시적으로 return 직전에 리셋
+40. **CloudKit inverse relationship 명시적 설정**: `workoutSet.exerciseRecord = record` — SwiftData가 자동 처리하지만 CloudKit sync 경로에서는 타이밍 이슈 가능. 방어적 코딩
+41. **정수 곱셈 결과 overflow 검증**: `mins * 60` 등 단위 변환 시 `result / divisor == original` 패턴으로 overflow 확인
+42. **도메인 서비스도 자체 입력 범위 검증**: caller의 검증을 신뢰하지 않음. MET(0-30), weight(0-500), duration(0-28800s) 등 물리적 한계 기반 guard

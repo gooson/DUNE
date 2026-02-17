@@ -104,4 +104,37 @@ struct CalorieEstimationTests {
     func defaultWeight() {
         #expect(CalorieEstimationService.defaultBodyWeightKg == 70.0)
     }
+
+    @Test("Returns nil for MET value exceeding domain range (>= 30)")
+    func metTooHigh() {
+        let result = service.estimate(
+            metValue: 30,
+            bodyWeightKg: 70,
+            durationSeconds: 1800,
+            restSeconds: 0
+        )
+        #expect(result == nil)
+    }
+
+    @Test("Returns nil for body weight exceeding domain range (>= 500)")
+    func weightTooHigh() {
+        let result = service.estimate(
+            metValue: 6.0,
+            bodyWeightKg: 500,
+            durationSeconds: 1800,
+            restSeconds: 0
+        )
+        #expect(result == nil)
+    }
+
+    @Test("Returns nil for duration exceeding 8 hours (>= 28800s)")
+    func durationTooLong() {
+        let result = service.estimate(
+            metValue: 6.0,
+            bodyWeightKg: 70,
+            durationSeconds: 28800,
+            restSeconds: 0
+        )
+        #expect(result == nil)
+    }
 }

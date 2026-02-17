@@ -152,19 +152,33 @@ final class WorkoutSessionViewModel {
     }
 
     private var totalRestSeconds: TimeInterval {
-        let completedCount = sets.filter(\.isCompleted).count
-        let restSets = max(completedCount - 1, 0)
+        let restSets = max(completedSetCount - 1, 0)
         return Double(restSets) * defaultRestSeconds
     }
 
-    // MARK: - Summary
+    // MARK: - Summary (cached to avoid redundant filter calls)
+
+    private var _cachedCompletedSets: [EditableSet]?
+    private var _cachedSetsSnapshot: [EditableSet]?
+
+    private var cachedCompletedSets: [EditableSet] {
+        if _cachedSetsSnapshot?.count == sets.count,
+           _cachedSetsSnapshot?.elementsEqual(sets, by: { $0.id == $1.id && $0.isCompleted == $1.isCompleted }) == true,
+           let cached = _cachedCompletedSets {
+            return cached
+        }
+        let completed = sets.filter(\.isCompleted)
+        _cachedCompletedSets = completed
+        _cachedSetsSnapshot = sets
+        return completed
+    }
 
     var completedSetCount: Int {
-        sets.filter(\.isCompleted).count
+        cachedCompletedSets.count
     }
 
     var weightRange: String? {
-        let weights = sets.filter(\.isCompleted).compactMap { Double($0.weight) }.filter { $0 > 0 }
+        let weights = cachedCompletedSets.compactMap { Double($0.weight) }.filter { $0 > 0 }
         guard !weights.isEmpty else { return nil }
         let minW = weights.min() ?? 0
         let maxW = weights.max() ?? 0
@@ -175,7 +189,7 @@ final class WorkoutSessionViewModel {
     }
 
     var totalReps: Int {
-        sets.filter(\.isCompleted).compactMap { Int($0.reps) }.reduce(0, +)
+        cachedCompletedSets.compactMap { Int($0.reps) }.reduce(0, +)
     }
 
     // MARK: - Validation & Record Creation
@@ -184,7 +198,7 @@ final class WorkoutSessionViewModel {
         guard !isSaving else { return nil }
         validationError = nil
 
-        let completedSets = sets.filter(\.isCompleted)
+        let completedSets = cachedCompletedSets
         guard !completedSets.isEmpty else {
             validationError = "Complete at least one set"
             return nil
@@ -193,51 +207,58 @@ final class WorkoutSessionViewModel {
         // Validate each completed set
         for set in completedSets {
             if exercise.inputType == .setsRepsWeight || exercise.inputType == .setsReps {
-                guard let reps = Int(set.reps), reps > 0, reps <= maxReps else {
+                let trimmed = set.reps.trimmingCharacters(in: .whitespaces)
+                guard !trimmed.isEmpty, let reps = Int(trimmed), reps > 0, reps <= maxReps else {
                     validationError = "Reps must be between 1 and \(maxReps)"
                     return nil
                 }
             }
             if exercise.inputType == .setsRepsWeight {
-                if !set.weight.isEmpty {
-                    guard let weight = Double(set.weight), weight >= 0, weight <= maxWeightKg else {
+                let trimmed = set.weight.trimmingCharacters(in: .whitespaces)
+                if !trimmed.isEmpty {
+                    guard let weight = Double(trimmed), weight >= 0, weight <= maxWeightKg else {
                         validationError = "Weight must be between 0 and \(Int(maxWeightKg))kg"
                         return nil
                     }
                 }
             }
             if exercise.inputType == .durationDistance || exercise.inputType == .durationIntensity {
-                if !set.duration.isEmpty {
-                    guard let mins = Int(set.duration), mins > 0, mins <= maxDurationMinutes else {
+                let trimmed = set.duration.trimmingCharacters(in: .whitespaces)
+                if !trimmed.isEmpty {
+                    guard let mins = Int(trimmed), mins > 0, mins <= maxDurationMinutes else {
                         validationError = "Duration must be between 1 and \(maxDurationMinutes) minutes"
                         return nil
                     }
                 }
             }
             if exercise.inputType == .durationDistance {
-                if !set.distance.isEmpty {
-                    guard let dist = Double(set.distance), dist > 0, dist <= maxDistanceKm else {
+                let trimmed = set.distance.trimmingCharacters(in: .whitespaces)
+                if !trimmed.isEmpty {
+                    guard let dist = Double(trimmed), dist > 0, dist <= maxDistanceKm else {
                         validationError = "Distance must be between 0.1 and \(Int(maxDistanceKm))km"
                         return nil
                     }
                 }
             }
             if exercise.inputType == .durationIntensity {
-                if !set.intensity.isEmpty {
-                    guard let val = Int(set.intensity), val >= 1, val <= maxIntensity else {
+                let trimmed = set.intensity.trimmingCharacters(in: .whitespaces)
+                if !trimmed.isEmpty {
+                    guard let val = Int(trimmed), val >= 1, val <= maxIntensity else {
                         validationError = "Intensity must be between 1 and \(maxIntensity)"
                         return nil
                     }
                 }
             }
             if exercise.inputType == .roundsBased {
-                guard let reps = Int(set.reps), reps > 0, reps <= maxReps else {
+                let trimmedReps = set.reps.trimmingCharacters(in: .whitespaces)
+                guard !trimmedReps.isEmpty, let reps = Int(trimmedReps), reps > 0, reps <= maxReps else {
                     validationError = "Rounds must be between 1 and \(maxReps)"
                     return nil
                 }
-                if !set.duration.isEmpty {
-                    guard let secs = Int(set.duration), secs > 0 else {
-                        validationError = "Duration must be greater than 0"
+                let trimmedDur = set.duration.trimmingCharacters(in: .whitespaces)
+                if !trimmedDur.isEmpty {
+                    guard let secs = Int(trimmedDur), secs > 0, secs <= maxDurationMinutes * 60 else {
+                        validationError = "Duration must be between 1 and \(maxDurationMinutes * 60) seconds"
                         return nil
                     }
                 }
@@ -245,7 +266,6 @@ final class WorkoutSessionViewModel {
         }
 
         isSaving = true
-        defer { isSaving = false }
 
         let duration = Date().timeIntervalSince(sessionStartTime)
         let calories = estimatedCalories
@@ -264,23 +284,38 @@ final class WorkoutSessionViewModel {
         )
 
         // Create WorkoutSet objects for completed sets
-        // SwiftData handles inverse relationship via @Relationship
         var workoutSets: [WorkoutSet] = []
         for editableSet in completedSets {
+            let trimmedWeight = editableSet.weight.trimmingCharacters(in: .whitespaces)
+            let trimmedReps = editableSet.reps.trimmingCharacters(in: .whitespaces)
+            let trimmedDuration = editableSet.duration.trimmingCharacters(in: .whitespaces)
+            let trimmedDistance = editableSet.distance.trimmingCharacters(in: .whitespaces)
+            let trimmedIntensity = editableSet.intensity.trimmingCharacters(in: .whitespaces)
+
+            // Safe duration conversion with overflow guard
+            let durationSeconds: TimeInterval? = Int(trimmedDuration).flatMap { mins in
+                let secs = mins * 60
+                guard secs / 60 == mins else { return nil } // overflow check
+                return TimeInterval(secs)
+            }
+
             let workoutSet = WorkoutSet(
                 setNumber: editableSet.setNumber,
                 setType: editableSet.setType,
-                weight: Double(editableSet.weight),
-                reps: Int(editableSet.reps),
-                duration: Int(editableSet.duration).map { TimeInterval($0 * 60) },
-                distance: Double(editableSet.distance),
-                intensity: Int(editableSet.intensity),
+                weight: trimmedWeight.isEmpty ? nil : Double(trimmedWeight),
+                reps: trimmedReps.isEmpty ? nil : Int(trimmedReps),
+                duration: durationSeconds,
+                distance: trimmedDistance.isEmpty ? nil : Double(trimmedDistance),
+                intensity: trimmedIntensity.isEmpty ? nil : Int(trimmedIntensity),
                 isCompleted: true
             )
+            // Explicit bidirectional link for CloudKit reliability
+            workoutSet.exerciseRecord = record
             workoutSets.append(workoutSet)
         }
         record.sets = workoutSets
 
+        isSaving = false
         return record
     }
 }

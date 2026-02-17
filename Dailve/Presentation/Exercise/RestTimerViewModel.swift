@@ -30,8 +30,13 @@ final class RestTimerViewModel {
         isRunning = true
 
         timerTask = Task {
-            while secondsRemaining > 0 {
-                try? await Task.sleep(for: .seconds(1))
+            while secondsRemaining > 0, !Task.isCancelled {
+                do {
+                    try await Task.sleep(for: .seconds(1))
+                } catch {
+                    // Sleep interrupted (cancellation or system)
+                    break
+                }
                 guard !Task.isCancelled else { break }
                 secondsRemaining -= 1
             }
