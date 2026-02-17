@@ -34,3 +34,12 @@ protocol ExerciseRecordVolumeProviding {
     var volumePrimaryMuscles: [MuscleGroup] { get }
     var volumeSecondaryMuscles: [MuscleGroup] { get }
 }
+
+// MARK: - ExerciseRecord Conformance
+
+extension ExerciseRecord: ExerciseRecordVolumeProviding {
+    var volumeDate: Date { date }
+    var volumeSetCount: Int { completedSets.count }
+    var volumePrimaryMuscles: [MuscleGroup] { primaryMuscles }
+    var volumeSecondaryMuscles: [MuscleGroup] { secondaryMuscles }
+}

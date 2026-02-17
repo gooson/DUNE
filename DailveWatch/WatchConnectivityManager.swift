@@ -9,10 +9,8 @@ import Observation
 final class WatchConnectivityManager: NSObject {
     static let shared = WatchConnectivityManager()
 
-    /// Live reachability check — no cached state, always up-to-date
-    var isReachable: Bool {
-        WCSession.default.isReachable
-    }
+    /// Reachability state — updated by WCSessionDelegate
+    private(set) var isReachable = false
 
     /// Active workout state received from iPhone
     private(set) var activeWorkout: WatchWorkoutState?
@@ -29,6 +27,24 @@ final class WatchConnectivityManager: NSObject {
         let session = WCSession.default
         session.delegate = self
         session.activate()
+    }
+
+    /// Notify iPhone that a workout has started on Watch.
+    func sendWorkoutStarted(templateName: String) {
+        guard WCSession.default.isReachable else { return }
+        let message: [String: Any] = ["workoutStarted": templateName]
+        WCSession.default.sendMessage(message, replyHandler: nil) { error in
+            print("Failed to send workoutStarted: \(error.localizedDescription)")
+        }
+    }
+
+    /// Notify iPhone that a workout has ended on Watch.
+    func sendWorkoutEnded() {
+        guard WCSession.default.isReachable else { return }
+        let message: [String: Any] = ["workoutEnded": true]
+        WCSession.default.sendMessage(message, replyHandler: nil) { error in
+            print("Failed to send workoutEnded: \(error.localizedDescription)")
+        }
     }
 
     /// Send completed set data back to iPhone
@@ -82,10 +98,17 @@ extension WatchConnectivityManager: WCSessionDelegate {
         if let error {
             print("WCSession activation failed: \(error.localizedDescription)")
         }
+        let reachable = session.isReachable
+        Task { @MainActor in
+            self.isReachable = reachable
+        }
     }
 
     nonisolated func sessionReachabilityDidChange(_ session: WCSession) {
-        // No cached state needed — use WCSession.default.isReachable directly
+        let reachable = session.isReachable
+        Task { @MainActor in
+            self.isReachable = reachable
+        }
     }
 
     nonisolated func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {

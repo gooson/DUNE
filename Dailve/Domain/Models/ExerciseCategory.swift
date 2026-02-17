@@ -6,6 +6,16 @@ enum ExerciseCategory: String, Codable, CaseIterable, Sendable {
     case hiit
     case flexibility
     case bodyweight
+
+    var displayName: String {
+        switch self {
+        case .strength: "Strength"
+        case .cardio: "Cardio"
+        case .hiit: "HIIT"
+        case .flexibility: "Flexibility"
+        case .bodyweight: "Bodyweight"
+        }
+    }
 }
 
 enum ExerciseInputType: String, Codable, Sendable {
