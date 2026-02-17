@@ -129,6 +129,23 @@ final class WorkoutSessionViewModel {
         sets.append(newSet)
     }
 
+    /// Creates a new set pre-filled with the last completed set's values.
+    func repeatLastCompletedSet() {
+        guard let lastCompleted = sets.last(where: \.isCompleted) else { return }
+        let newSetNumber = sets.count + 1
+        var newSet = EditableSet(setNumber: newSetNumber)
+        newSet.weight = lastCompleted.weight
+        newSet.reps = lastCompleted.reps
+        newSet.duration = lastCompleted.duration
+        newSet.distance = lastCompleted.distance
+        newSet.intensity = lastCompleted.intensity
+        sets.append(newSet)
+    }
+
+    var hasCompletedSet: Bool {
+        sets.contains(where: \.isCompleted)
+    }
+
     func removeSet(at index: Int) {
         guard sets.indices.contains(index) else { return }
         sets.remove(at: index)

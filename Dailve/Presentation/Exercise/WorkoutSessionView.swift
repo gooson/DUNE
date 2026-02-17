@@ -278,25 +278,46 @@ struct WorkoutSessionView: View {
         }
     }
 
-    // MARK: - Add Set Button
+    // MARK: - Add Set Buttons
 
     private var addSetButton: some View {
-        Button {
-            withAnimation(DS.Animation.snappy) {
-                viewModel.addSet(weightUnit: weightUnit)
+        HStack(spacing: DS.Spacing.sm) {
+            Button {
+                withAnimation(DS.Animation.snappy) {
+                    viewModel.addSet(weightUnit: weightUnit)
+                }
+            } label: {
+                Label("Add Set", systemImage: "plus.circle.fill")
+                    .font(.body.weight(.medium))
+                    .foregroundStyle(DS.Color.activity)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, DS.Spacing.md)
+                    .background(
+                        DS.Color.activity.opacity(0.08),
+                        in: RoundedRectangle(cornerRadius: DS.Radius.sm)
+                    )
             }
-        } label: {
-            Label("Add Set", systemImage: "plus.circle.fill")
-                .font(.body.weight(.medium))
-                .foregroundStyle(DS.Color.activity)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, DS.Spacing.md)
-                .background(
-                    DS.Color.activity.opacity(0.08),
-                    in: RoundedRectangle(cornerRadius: DS.Radius.sm)
-                )
+            .buttonStyle(.plain)
+
+            if viewModel.hasCompletedSet {
+                Button {
+                    withAnimation(DS.Animation.snappy) {
+                        viewModel.repeatLastCompletedSet()
+                    }
+                } label: {
+                    Label("Repeat", systemImage: "arrow.2.squarepath")
+                        .font(.body.weight(.medium))
+                        .foregroundStyle(.secondary)
+                        .padding(.vertical, DS.Spacing.md)
+                        .padding(.horizontal, DS.Spacing.lg)
+                        .background(
+                            Color.secondary.opacity(0.08),
+                            in: RoundedRectangle(cornerRadius: DS.Radius.sm)
+                        )
+                }
+                .buttonStyle(.plain)
+            }
         }
-        .buttonStyle(.plain)
     }
 
     // MARK: - Memo
