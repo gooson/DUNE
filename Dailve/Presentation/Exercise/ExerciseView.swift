@@ -78,6 +78,13 @@ struct ExerciseView: View {
                     Image(systemName: "figure.stand")
                 }
                 .accessibilityIdentifier("exercise-muscle-map-button")
+
+                NavigationLink {
+                    VolumeAnalysisView()
+                } label: {
+                    Image(systemName: "chart.bar.fill")
+                }
+                .accessibilityIdentifier("exercise-volume-analysis-button")
             }
             ToolbarItem(placement: .primaryAction) {
                 Button {
