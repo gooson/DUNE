@@ -157,3 +157,12 @@
 29. **차트 period 전환은 `.id()` + `.transition(.opacity)`**: Spring 애니메이션은 데이터 차트에 부적합. `.id()`로 뷰 교체하면 `@State` 자동 리셋 + crossfade 효과
 30. **데이터 종속 UI는 항상 렌더 + placeholder**: `if let data { stats }` 대신 `stats(data ?? "—")` 패턴으로 레이아웃 안정성 확보. `Text(" ")` 대신 `.frame(minHeight:)` 사용
 31. **중복 차트 UI는 공통 컴포넌트 추출**: 4개 이상 차트에서 동일 패턴 반복 시 `Shared/Charts/` 에 공통 View 생성 (예: `ChartSelectionOverlay`)
+
+### 2026-02-17: Activity Tab 리뷰 및 CloudKit 교정
+
+32. **CloudKit @Relationship은 반드시 Optional**: `[Type]` 아닌 `[Type]?`으로 선언. non-optional relationship은 두 번째 앱 실행부터 `ModelContainer` fatal crash 유발
+33. **@Model 스키마 변경 후 2회 실행 테스트**: 첫 실행은 로컬 스토어만 생성되어 통과. CloudKit 스키마 검증은 두 번째 실행에서 발생
+34. **새 필드 추가 시 전체 파이프라인 점검**: EditableSet(입력) → ViewModel(검증) → WorkoutSet(저장) → View(표시)까지 모든 경로 확인
+35. **JSON 파싱 서비스는 싱글턴 사용**: 번들 JSON을 매번 파싱하면 메모리/CPU 낭비. `static let shared` 패턴 적용
+36. **rawValue를 UI에 직접 표시 금지**: `rawValue.capitalized` 대신 `Presentation/Shared/Extensions/{Type}+View.swift`에 `displayName` computed property 사용
+37. **동일 로직 3곳 이상 중복 시 즉시 추출**: Collection extension 또는 공통 함수로 DRY 적용. 2곳은 허용, 3곳부터 필수
