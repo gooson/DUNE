@@ -19,11 +19,18 @@ final class ExerciseViewModel {
 
     private(set) var allExercises: [ExerciseListItem] = []
 
+    // Note: didSet fires separately per property. In practice, manualRecords and
+    // healthKitWorkouts are not assigned in the same run loop tick (manualRecords
+    // comes from @Query, healthKitWorkouts from async fetch), so double invalidation
+    // does not occur. If batch updates are needed in the future, add an
+    // updateData(workouts:records:) method that sets both before a single invalidation.
     private func invalidateCache() {
-        var items: [ExerciseListItem] = []
-        items.reserveCapacity(healthKitWorkouts.count + manualRecords.count)
+        let externalWorkouts = healthKitWorkouts.filteringAppDuplicates(against: manualRecords)
 
-        for workout in healthKitWorkouts {
+        var items: [ExerciseListItem] = []
+        items.reserveCapacity(externalWorkouts.count + manualRecords.count)
+
+        for workout in externalWorkouts {
             items.append(ExerciseListItem(
                 id: workout.id,
                 type: workout.type,

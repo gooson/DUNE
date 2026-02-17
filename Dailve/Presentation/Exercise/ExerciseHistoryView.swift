@@ -6,6 +6,8 @@ struct ExerciseHistoryView: View {
     @State private var viewModel: ExerciseHistoryViewModel
     @State private var oneRMAnalysis: OneRMAnalysis?
     @State private var shareImage: UIImage?
+    @State private var recordToDelete: ExerciseRecord?
+    @Environment(\.modelContext) private var modelContext
     @AppStorage(WeightUnit.storageKey) private var weightUnitRaw = WeightUnit.kg.rawValue
 
     @Query private var exerciseRecords: [ExerciseRecord]
@@ -55,6 +57,7 @@ struct ExerciseHistoryView: View {
             ShareImageSheet(image: shareable.image, title: "\(exerciseName) Workout")
                 .presentationDetents([.medium])
         }
+        .confirmDeleteRecord($recordToDelete, context: modelContext)
     }
 
     // MARK: - Metric Picker
@@ -282,6 +285,11 @@ struct ExerciseHistoryView: View {
                 shareSession(session)
             } label: {
                 Label("Share", systemImage: "square.and.arrow.up")
+            }
+            Button(role: .destructive) {
+                recordToDelete = exerciseRecords.first { $0.id == session.id }
+            } label: {
+                Label("Delete", systemImage: "trash")
             }
         }
     }

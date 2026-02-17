@@ -62,6 +62,24 @@ struct WorkoutSummary: Identifiable, Sendable {
     let calories: Double?
     let distance: Double?
     let date: Date
+    /// Whether this workout was created by this app (resolved at Data layer from HealthKit source metadata).
+    let isFromThisApp: Bool
+
+    // Explicit init provides default `false` for isFromThisApp, supporting backward
+    // compatibility with existing call sites that don't specify app ownership.
+    init(
+        id: String, type: String, duration: TimeInterval,
+        calories: Double?, distance: Double?, date: Date,
+        isFromThisApp: Bool = false
+    ) {
+        self.id = id
+        self.type = type
+        self.duration = duration
+        self.calories = calories
+        self.distance = distance
+        self.date = date
+        self.isFromThisApp = isFromThisApp
+    }
 
     /// Whether this workout type primarily measures distance.
     var isDistanceBased: Bool {

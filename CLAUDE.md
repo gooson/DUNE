@@ -205,3 +205,9 @@
 59. **`@State` 데이터 보호 — `onDisappear` safety net**: 비정상 dismiss 시 `@State` 데이터 유실은 silent failure. `onDisappear`에서 미저장 데이터 전송, 정상 경로에서 데이터 비워 중복 방지
 60. **`onChange` 감시 범위 최소화**: `nil → non-nil` 등 특정 전환만 트리거. 모든 변경에 반응하면 운동 종료 시 불필요한 navigation 리셋 등 side effect 유발
 61. **Navigation routing은 enum 사용**: `NavigationLink(value: String)` 금지. `WatchRoute` enum으로 type-safe routing. 단일 destination이라도 enum으로 시작
+
+### 2026-02-18: HealthKit Dedup 리뷰 교정
+
+62. **Domain 모델에 인프라 문자열 금지**: `sourceBundleIdentifier: String?`처럼 HealthKit/시스템 문자열을 Domain에 노출하지 않음. Data 레이어에서 의미 있는 타입(`isFromThisApp: Bool`)으로 해소 후 Domain에 전달
+63. **Dedup 필터에서 빈 문자열 ID 방어**: `compactMap`으로 ID를 수집할 때 `!id.isEmpty` 검증 필수. `healthKitWorkoutID = ""`인 corrupted record가 모든 빈 ID 워크아웃과 false-positive 매칭
+64. **ViewModifier 추출은 복잡도 높으면 2곳부터**: 기존 규칙(#37)은 3곳부터 추출이지만, `modelContext.save()` + stale reference guard 등 복잡한 로직은 2곳 중복에서도 ViewModifier로 추출. 복잡도가 높을수록 DRY threshold를 낮춤

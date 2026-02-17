@@ -7,6 +7,8 @@ struct ExerciseListSection: View {
     let exerciseRecords: [ExerciseRecord]
     let limit: Int
 
+    @State private var externalWorkouts: [WorkoutSummary] = []
+
     init(
         workouts: [WorkoutSummary],
         exerciseRecords: [ExerciseRecord] = [],
@@ -27,7 +29,7 @@ struct ExerciseListSection: View {
 
                 Spacer()
 
-                if workouts.count > limit || !exerciseRecords.isEmpty {
+                if externalWorkouts.count > limit || !exerciseRecords.isEmpty {
                     NavigationLink {
                         ExerciseView()
                     } label: {
@@ -44,15 +46,15 @@ struct ExerciseListSection: View {
                 setRecordRow(record)
             }
 
-            // HealthKit workouts
+            // External HealthKit workouts (excluding app-created duplicates)
             let remaining = max(limit - setRecords.count, 0)
             if remaining > 0 {
-                ForEach(workouts.prefix(remaining)) { workout in
+                ForEach(externalWorkouts.prefix(remaining)) { workout in
                     workoutRow(workout)
                 }
             }
 
-            if workouts.isEmpty && setRecords.isEmpty {
+            if externalWorkouts.isEmpty && setRecords.isEmpty {
                 InlineCard {
                     HStack {
                         Image(systemName: "figure.run")
@@ -64,6 +66,15 @@ struct ExerciseListSection: View {
                     }
                 }
             }
+        }
+        .onAppear {
+            externalWorkouts = workouts.filteringAppDuplicates(against: exerciseRecords)
+        }
+        .onChange(of: workouts.count) { _, _ in
+            externalWorkouts = workouts.filteringAppDuplicates(against: exerciseRecords)
+        }
+        .onChange(of: exerciseRecords.count) { _, _ in
+            externalWorkouts = workouts.filteringAppDuplicates(against: exerciseRecords)
         }
     }
 
