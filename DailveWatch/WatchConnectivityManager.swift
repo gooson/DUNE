@@ -31,6 +31,15 @@ final class WatchConnectivityManager: NSObject {
         session.activate()
     }
 
+    /// Load any previously-received applicationContext (e.g. exerciseLibrary).
+    /// `didReceiveApplicationContext` only fires on *new* updates,
+    /// so we must read the cached context after activation completes.
+    private func loadCachedContext() {
+        let context = WCSession.default.receivedApplicationContext
+            .compactMapValues { $0 as? Data }
+        handleContext(context)
+    }
+
     /// Notify iPhone that a workout has started on Watch.
     func sendWorkoutStarted(templateName: String) {
         guard WCSession.default.isReachable else { return }
@@ -99,6 +108,11 @@ extension WatchConnectivityManager: WCSessionDelegate {
     ) {
         if let error {
             print("WCSession activation failed: \(error.localizedDescription)")
+        }
+        if activationState == .activated {
+            Task { @MainActor in
+                loadCachedContext()
+            }
         }
     }
 

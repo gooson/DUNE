@@ -31,9 +31,7 @@ struct RoutineListView: View {
         List {
             // Quick Start entry point
             Section {
-                NavigationLink {
-                    QuickStartPickerView()
-                } label: {
+                NavigationLink(value: WatchRoute.quickStart) {
                     Label("Quick Start", systemImage: "bolt.fill")
                         .font(.caption.weight(.semibold))
                         .foregroundStyle(.green)
@@ -72,9 +70,7 @@ struct RoutineListView: View {
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
 
-            NavigationLink {
-                QuickStartPickerView()
-            } label: {
+            NavigationLink(value: WatchRoute.quickStart) {
                 Label("Quick Start", systemImage: "bolt.fill")
             }
             .buttonStyle(.borderedProminent)

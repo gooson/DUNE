@@ -38,21 +38,20 @@ struct QuickStartPickerView: View {
     // MARK: - Exercise List
 
     private var exerciseList: some View {
-        List(filteredExercises, id: \.id) { exercise in
-            Button {
-                startQuickWorkout(exercise)
-            } label: {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(exercise.name)
-                        .font(.caption.weight(.medium))
-                        .lineLimit(1)
-                    Text("\(exercise.defaultSets) sets · \(exercise.defaultReps ?? 10) reps")
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
+        List {
+            ForEach(filteredExercises, id: \.id) { exercise in
+                Button(action: { startQuickWorkout(exercise) }) {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(exercise.name)
+                            .font(.caption.weight(.medium))
+                            .lineLimit(1)
+                        Text("\(exercise.defaultSets) sets · \(exercise.defaultReps ?? 10) reps")
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                    }
                 }
             }
         }
-        .searchable(text: $searchText, prompt: "Search")
     }
 
     // MARK: - Empty State

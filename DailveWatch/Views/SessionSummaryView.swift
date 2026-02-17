@@ -126,6 +126,20 @@ struct SessionSummaryView: View {
         }
 
         saveWorkoutRecords()
+
+        // Explicit save before reset — reset() triggers view transition
+        // which can prevent SwiftData auto-save from flushing.
+        do {
+            try modelContext.save()
+        } catch {
+            saveError = "Failed to save: \(error.localizedDescription)"
+            isSaving = false
+            return
+        }
+
+        // Send workout data to iPhone via WatchConnectivity as backup
+        sendWorkoutToPhone()
+
         hasSaved = true
         isSaving = false
         workoutManager.reset()
@@ -167,6 +181,38 @@ struct SessionSummaryView: View {
                 workoutSets.append(workoutSet)
             }
             record.sets = workoutSets
+        }
+    }
+
+    /// Send workout summary to iPhone via WatchConnectivity message.
+    private func sendWorkoutToPhone() {
+        guard let template = workoutManager.templateSnapshot else { return }
+
+        // Build WatchWorkoutUpdate from completed data
+        for (exerciseIndex, setsData) in completedSetsData.enumerated() {
+            guard exerciseIndex < template.entries.count, !setsData.isEmpty else { continue }
+            let entry = template.entries[exerciseIndex]
+
+            let watchSets = setsData.map { set in
+                WatchSetData(
+                    setNumber: set.setNumber,
+                    weight: set.weight,
+                    reps: set.reps,
+                    duration: nil,
+                    isCompleted: true
+                )
+            }
+
+            let update = WatchWorkoutUpdate(
+                exerciseID: entry.exerciseDefinitionID,
+                exerciseName: entry.exerciseName,
+                completedSets: watchSets,
+                startTime: startDate,
+                endTime: endDate,
+                heartRateSamples: []
+            )
+
+            WatchConnectivityManager.shared.sendWorkoutCompletion(update)
         }
     }
 
