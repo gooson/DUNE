@@ -6,6 +6,7 @@ struct ExerciseView: View {
     @State private var showingExercisePicker = false
     @State private var selectedExercise: ExerciseDefinition?
     @State private var pendingDraft: WorkoutSessionDraft?
+    @State private var showingTemplates = false
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \ExerciseRecord.date, order: .reverse) private var manualRecords: [ExerciseRecord]
 
@@ -49,6 +50,16 @@ struct ExerciseView: View {
             }
         }
         .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                NavigationLink {
+                    WorkoutTemplateListView { template in
+                        startFromTemplate(template)
+                    }
+                } label: {
+                    Image(systemName: "list.clipboard")
+                }
+                .accessibilityIdentifier("exercise-templates-button")
+            }
             ToolbarItem(placement: .primaryAction) {
                 Button {
                     showingExercisePicker = true
@@ -78,6 +89,28 @@ struct ExerciseView: View {
             viewModel.manualRecords = newValue
         }
         .navigationTitle("Exercise")
+    }
+
+    private func startFromTemplate(_ template: WorkoutTemplate) {
+        guard let firstEntry = template.exerciseEntries.first else { return }
+        // Look up in library first, then custom exercises
+        if let definition = library.exercise(byID: firstEntry.exerciseDefinitionID) {
+            selectedExercise = definition
+        } else if firstEntry.exerciseDefinitionID.hasPrefix("custom-") {
+            // Custom exercise — build definition from entry name
+            let definition = ExerciseDefinition(
+                id: firstEntry.exerciseDefinitionID,
+                name: firstEntry.exerciseName,
+                localizedName: firstEntry.exerciseName,
+                category: .strength,
+                inputType: .setsRepsWeight,
+                primaryMuscles: [],
+                secondaryMuscles: [],
+                equipment: .bodyweight,
+                metValue: 5.0
+            )
+            selectedExercise = definition
+        }
     }
 
     private var recentExerciseIDs: [String] {
