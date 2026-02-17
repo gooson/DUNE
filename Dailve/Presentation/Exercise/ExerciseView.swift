@@ -50,7 +50,7 @@ struct ExerciseView: View {
             }
         }
         .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
+            ToolbarItemGroup(placement: .topBarLeading) {
                 NavigationLink {
                     WorkoutTemplateListView { template in
                         startFromTemplate(template)
@@ -59,6 +59,13 @@ struct ExerciseView: View {
                     Image(systemName: "list.clipboard")
                 }
                 .accessibilityIdentifier("exercise-templates-button")
+
+                NavigationLink {
+                    MuscleMapView()
+                } label: {
+                    Image(systemName: "figure.stand")
+                }
+                .accessibilityIdentifier("exercise-muscle-map-button")
             }
             ToolbarItem(placement: .primaryAction) {
                 Button {
