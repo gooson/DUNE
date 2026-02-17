@@ -3,6 +3,7 @@ options:
   bundleIdPrefix: com.raftel
   deploymentTarget:
     iOS: "26.0"
+    watchOS: "26.0"
   xcodeVersion: "16.0"
   generateEmptyDirectories: true
   groupSortPosition: top
@@ -35,6 +36,11 @@ schemes:
     test:
       targets:
         - DailveTests
+
+  DailveWatch:
+    build:
+      targets:
+        DailveWatch: all
 
 targets:
   Dailve:
@@ -75,6 +81,33 @@ targets:
         com.apple.developer.ubiquity-kvstore-identifier: "$(TeamIdentifierPrefix)$(CFBundleIdentifier)"
     dependencies:
       - sdk: HealthKit.framework
+
+  DailveWatch:
+    type: application
+    platform: watchOS
+    sources:
+      - path: ../DailveWatch
+        excludes:
+          - "Resources/**"
+      - path: ../DailveWatch/Resources
+        type: folder
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.raftel.dailve.watchkitapp
+        PRODUCT_NAME: DailveWatch
+        CURRENT_PROJECT_VERSION: "1"
+        MARKETING_VERSION: "0.1.0"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        GENERATE_INFOPLIST_FILE: true
+        WATCHOS_DEPLOYMENT_TARGET: "26.0"
+        SWIFT_VERSION: "6.0"
+        SWIFT_STRICT_CONCURRENCY: complete
+        DEVELOPMENT_TEAM: "4GWU9QB2JZ"
+        CODE_SIGN_IDENTITY: "Apple Development"
+        INFOPLIST_KEY_WKCompanionAppBundleIdentifier: com.raftel.dailve
+    dependencies:
+      - sdk: HealthKit.framework
+      - sdk: WatchConnectivity.framework
 
   DailveTests:
     type: bundle.unit-test
