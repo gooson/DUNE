@@ -3,8 +3,18 @@ import SwiftData
 
 struct ExerciseView: View {
     @State private var viewModel = ExerciseViewModel()
+    @State private var showingExercisePicker = false
+    @State private var selectedExercise: ExerciseDefinition?
+    @State private var pendingDraft: WorkoutSessionDraft?
+    @State private var showingTemplates = false
+    @State private var workoutSuggestion: WorkoutSuggestion?
+    @State private var showingCompoundSetup = false
+    @State private var compoundConfig: CompoundWorkoutConfig?
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \ExerciseRecord.date, order: .reverse) private var manualRecords: [ExerciseRecord]
+
+    private let library: ExerciseLibraryQuerying = ExerciseLibraryService.shared
+    private let recommendationService: WorkoutRecommending = WorkoutRecommendationService()
 
     var body: some View {
         Group {
@@ -17,37 +27,203 @@ struct ExerciseView: View {
                     title: "No Exercises",
                     message: "Record your workouts or sync from Apple Health to track activity.",
                     actionTitle: "Add Exercise",
-                    action: { viewModel.isShowingAddSheet = true }
+                    action: { showingExercisePicker = true }
                 )
             } else {
                 List {
+                    // Draft recovery banner
+                    if let draft = pendingDraft {
+                        draftBanner(draft)
+                    }
+
+                    // AI workout suggestion
+                    if let suggestion = workoutSuggestion, !suggestion.exercises.isEmpty {
+                        Section {
+                            SuggestedWorkoutCard(suggestion: suggestion) { exercise in
+                                selectedExercise = exercise
+                            }
+                            .listRowInsets(EdgeInsets())
+                        }
+                    }
+
                     ForEach(viewModel.allExercises) { item in
-                        ExerciseRowView(item: item)
+                        if let defID = item.exerciseDefinitionID {
+                            NavigationLink {
+                                ExerciseHistoryView(
+                                    exerciseDefinitionID: defID,
+                                    exerciseName: item.type
+                                )
+                            } label: {
+                                ExerciseRowView(item: item)
+                            }
+                        } else {
+                            ExerciseRowView(item: item)
+                        }
                     }
                 }
             }
         }
         .toolbar {
+            ToolbarItemGroup(placement: .topBarLeading) {
+                NavigationLink {
+                    WorkoutTemplateListView { template in
+                        startFromTemplate(template)
+                    }
+                } label: {
+                    Image(systemName: "list.clipboard")
+                }
+                .accessibilityIdentifier("exercise-templates-button")
+
+                NavigationLink {
+                    MuscleMapView()
+                } label: {
+                    Image(systemName: "figure.stand")
+                }
+                .accessibilityIdentifier("exercise-muscle-map-button")
+
+                NavigationLink {
+                    VolumeAnalysisView()
+                } label: {
+                    Image(systemName: "chart.bar.fill")
+                }
+                .accessibilityIdentifier("exercise-volume-analysis-button")
+
+                NavigationLink {
+                    UserCategoryManagementView()
+                } label: {
+                    Image(systemName: "tag")
+                }
+                .accessibilityIdentifier("exercise-categories-button")
+            }
             ToolbarItem(placement: .primaryAction) {
-                Button {
-                    viewModel.isShowingAddSheet = true
+                Menu {
+                    Button {
+                        showingExercisePicker = true
+                    } label: {
+                        Label("Single Exercise", systemImage: "figure.run")
+                    }
+                    Button {
+                        showingCompoundSetup = true
+                    } label: {
+                        Label("Superset / Circuit", systemImage: "arrow.triangle.2.circlepath")
+                    }
                 } label: {
                     Image(systemName: "plus")
                 }
                 .accessibilityIdentifier("exercise-add-button")
             }
         }
-        .sheet(isPresented: $viewModel.isShowingAddSheet) {
-            AddExerciseSheet(viewModel: viewModel, modelContext: modelContext)
+        .sheet(isPresented: $showingExercisePicker) {
+            ExercisePickerView(
+                library: library,
+                recentExerciseIDs: recentExerciseIDs
+            ) { exercise in
+                selectedExercise = exercise
+            }
+        }
+        .navigationDestination(item: $selectedExercise) { exercise in
+            WorkoutSessionView(exercise: exercise)
+        }
+        .sheet(isPresented: $showingCompoundSetup) {
+            CompoundWorkoutSetupView(
+                library: library,
+                recentExerciseIDs: recentExerciseIDs
+            ) { config in
+                compoundConfig = config
+            }
+        }
+        .navigationDestination(item: $compoundConfig) { config in
+            CompoundWorkoutView(config: config)
         }
         .task {
+            pendingDraft = WorkoutSessionDraft.load()
             viewModel.manualRecords = manualRecords
+            updateSuggestion()
             await viewModel.loadHealthKitWorkouts()
         }
         .onChange(of: manualRecords) { _, newValue in
             viewModel.manualRecords = newValue
+            updateSuggestion()
         }
         .navigationTitle("Exercise")
+    }
+
+    private func startFromTemplate(_ template: WorkoutTemplate) {
+        guard let firstEntry = template.exerciseEntries.first else { return }
+        // Look up in library first, then custom exercises
+        if let definition = library.exercise(byID: firstEntry.exerciseDefinitionID) {
+            selectedExercise = definition
+        } else if firstEntry.exerciseDefinitionID.hasPrefix("custom-") {
+            // Custom exercise — build definition from entry name
+            let definition = ExerciseDefinition(
+                id: firstEntry.exerciseDefinitionID,
+                name: firstEntry.exerciseName,
+                localizedName: firstEntry.exerciseName,
+                category: .strength,
+                inputType: .setsRepsWeight,
+                primaryMuscles: [],
+                secondaryMuscles: [],
+                equipment: .bodyweight,
+                metValue: 5.0
+            )
+            selectedExercise = definition
+        }
+    }
+
+    private func updateSuggestion() {
+        let snapshots = manualRecords.map { record in
+            ExerciseRecordSnapshot(
+                date: record.date,
+                exerciseDefinitionID: record.exerciseDefinitionID,
+                primaryMuscles: record.primaryMuscles,
+                secondaryMuscles: record.secondaryMuscles,
+                completedSetCount: record.completedSets.count
+            )
+        }
+        workoutSuggestion = recommendationService.recommend(from: snapshots, library: library)
+    }
+
+    private var recentExerciseIDs: [String] {
+        var seen = Set<String>()
+        return manualRecords.compactMap { record in
+            guard let id = record.exerciseDefinitionID, !seen.contains(id) else { return nil }
+            seen.insert(id)
+            return id
+        }
+    }
+
+    private func draftBanner(_ draft: WorkoutSessionDraft) -> some View {
+        HStack(spacing: DS.Spacing.sm) {
+            Image(systemName: "exclamationmark.triangle.fill")
+                .foregroundStyle(.orange)
+            VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                Text("Unfinished Workout")
+                    .font(.subheadline.weight(.medium))
+                Text("\(draft.exerciseDefinition.localizedName) - \(draft.sets.filter(\.isCompleted).count) sets")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            Spacer()
+            Button("Resume") {
+                selectedExercise = draft.exerciseDefinition
+            }
+            .font(.caption.weight(.semibold))
+            .buttonStyle(.borderedProminent)
+            .tint(DS.Color.activity)
+
+            Button {
+                WorkoutSessionViewModel.clearDraft()
+                pendingDraft = nil
+            } label: {
+                Image(systemName: "xmark")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(DS.Spacing.md)
+        .listRowInsets(EdgeInsets())
+        .listRowBackground(Color.orange.opacity(0.08))
     }
 }
 
@@ -72,6 +248,12 @@ private struct ExerciseRowView: View {
                 Text(item.formattedDuration)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
+
+                if let summary = item.setSummary {
+                    Text(summary)
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
+                }
             }
 
             Spacer()
@@ -89,85 +271,7 @@ private struct ExerciseRowView: View {
     }
 }
 
-// MARK: - Add Sheet
-
-private struct AddExerciseSheet: View {
-    @Bindable var viewModel: ExerciseViewModel
-    let modelContext: ModelContext
-    @Environment(\.dismiss) private var dismiss
-    @State private var saveCount = 0
-
-    var body: some View {
-        NavigationStack {
-            Form {
-                if let error = viewModel.validationError {
-                    Text(error)
-                        .foregroundStyle(.red)
-                        .font(.caption)
-                }
-
-                DatePicker(
-                    "Date & Time",
-                    selection: $viewModel.selectedDate,
-                    in: ...Date(),
-                    displayedComponents: [.date, .hourAndMinute]
-                )
-                .accessibilityIdentifier("exercise-date-picker")
-
-                Picker("Type", selection: $viewModel.newExerciseType) {
-                    ForEach(ExerciseViewModel.exerciseTypes, id: \.self) { type in
-                        Text(type).tag(type)
-                    }
-                }
-
-                LabeledContent("Duration") {
-                    Stepper(
-                        "\(Int(viewModel.newDuration / 60)) min",
-                        value: $viewModel.newDuration,
-                        in: (5 * 60)...(300 * 60),
-                        step: 5 * 60
-                    )
-                }
-
-                TextField("Calories (kcal)", text: $viewModel.newCalories)
-                    .keyboardType(.numberPad)
-
-                TextField("Distance (m)", text: $viewModel.newDistance)
-                    .keyboardType(.decimalPad)
-
-                TextField("Memo", text: $viewModel.newMemo)
-            }
-            .navigationTitle("Add Exercise")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
-                        .accessibilityIdentifier("exercise-cancel-button")
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") {
-                        if let record = viewModel.createValidatedRecord() {
-                            modelContext.insert(record)
-                            saveCount += 1
-                            viewModel.resetForm()
-                            viewModel.isShowingAddSheet = false
-                        }
-                    }
-                    .disabled(viewModel.newExerciseType.isEmpty)
-                    .accessibilityIdentifier("exercise-save-button")
-                }
-            }
-        }
-        .sensoryFeedback(.success, trigger: saveCount)
-        .onAppear {
-            if viewModel.newExerciseType.isEmpty {
-                viewModel.newExerciseType = ExerciseViewModel.exerciseTypes[0]
-            }
-        }
-    }
-}
-
 #Preview {
     ExerciseView()
-        .modelContainer(for: ExerciseRecord.self, inMemory: true)
+        .modelContainer(for: [ExerciseRecord.self, WorkoutSet.self], inMemory: true)
 }

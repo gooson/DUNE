@@ -4,8 +4,13 @@ import SwiftData
 /// Redesigned Activity tab with weekly summary chart, today's metrics, and recent workouts.
 struct ActivityView: View {
     @State private var viewModel = ActivityViewModel()
-    @State private var showingAddExercise = false
+    @State private var showingExercisePicker = false
+    @State private var selectedExercise: ExerciseDefinition?
     @Environment(\.modelContext) private var modelContext
+
+    private let library: ExerciseLibraryQuerying = ExerciseLibraryService.shared
+
+    @Query(sort: \ExerciseRecord.date, order: .reverse) private var recentRecords: [ExerciseRecord]
 
     var body: some View {
         ScrollView {
@@ -14,17 +19,31 @@ struct ActivityView: View {
                     ProgressView()
                         .frame(maxWidth: .infinity, minHeight: 200)
                 } else {
+                    // AI Workout Suggestion
+                    if let suggestion = viewModel.workoutSuggestion,
+                       !suggestion.exercises.isEmpty {
+                        SuggestedWorkoutCard(suggestion: suggestion) { exercise in
+                            selectedExercise = exercise
+                        }
+                    }
+
                     // Weekly Summary Hero Chart
                     WeeklySummaryChartView(
                         exerciseData: viewModel.weeklyExerciseMinutes,
                         stepsData: viewModel.weeklySteps
                     )
 
+                    // Muscle Activity Summary
+                    MuscleMapSummaryCard(records: recentRecords)
+
                     // Today's Metrics
                     todaySection
 
                     // Recent Workouts
-                    ExerciseListSection(workouts: viewModel.recentWorkouts)
+                    ExerciseListSection(
+                        workouts: viewModel.recentWorkouts,
+                        exerciseRecords: recentRecords
+                    )
 
                     if let error = viewModel.errorMessage {
                         Text(error)
@@ -47,15 +66,20 @@ struct ActivityView: View {
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button {
-                    showingAddExercise = true
+                    showingExercisePicker = true
                 } label: {
                     Image(systemName: "plus")
                 }
                 .accessibilityIdentifier("activity-add-button")
             }
         }
-        .sheet(isPresented: $showingAddExercise) {
-            AddExerciseSheetWrapper(modelContext: modelContext)
+        .sheet(isPresented: $showingExercisePicker) {
+            ExercisePickerView(
+                library: library,
+                recentExerciseIDs: recentExerciseIDs
+            ) { exercise in
+                selectedExercise = exercise
+            }
         }
         .navigationDestination(for: HealthMetric.self) { metric in
             MetricDetailView(metric: metric)
@@ -63,11 +87,18 @@ struct ActivityView: View {
         .navigationDestination(for: AllDataDestination.self) { destination in
             AllDataView(category: destination.category)
         }
+        .navigationDestination(item: $selectedExercise) { exercise in
+            WorkoutSessionView(exercise: exercise)
+        }
         .refreshable {
             await viewModel.loadActivityData()
         }
         .task {
+            viewModel.updateSuggestion(records: recentRecords)
             await viewModel.loadActivityData()
+        }
+        .onChange(of: recentRecords.count) { _, _ in
+            viewModel.updateSuggestion(records: recentRecords)
         }
         .navigationTitle("Activity")
     }
@@ -104,85 +135,21 @@ struct ActivityView: View {
             }
         }
     }
-}
 
-// MARK: - Add Exercise Sheet Wrapper
+    // MARK: - Helpers
 
-/// Thin wrapper to create ExerciseViewModel for the add sheet.
-private struct AddExerciseSheetWrapper: View {
-    let modelContext: ModelContext
-    @State private var exerciseVM = ExerciseViewModel()
-    @Environment(\.dismiss) private var dismiss
-    @State private var saveCount = 0
-
-    var body: some View {
-        NavigationStack {
-            Form {
-                if let error = exerciseVM.validationError {
-                    Text(error)
-                        .foregroundStyle(.red)
-                        .font(.caption)
-                }
-
-                DatePicker(
-                    "Date & Time",
-                    selection: $exerciseVM.selectedDate,
-                    in: ...Date(),
-                    displayedComponents: [.date, .hourAndMinute]
-                )
-
-                Picker("Type", selection: $exerciseVM.newExerciseType) {
-                    ForEach(ExerciseViewModel.exerciseTypes, id: \.self) { type in
-                        Text(type).tag(type)
-                    }
-                }
-
-                LabeledContent("Duration") {
-                    Stepper(
-                        "\(Int(exerciseVM.newDuration / 60)) min",
-                        value: $exerciseVM.newDuration,
-                        in: (5 * 60)...(300 * 60),
-                        step: 5 * 60
-                    )
-                }
-
-                TextField("Calories (kcal)", text: $exerciseVM.newCalories)
-                    .keyboardType(.numberPad)
-
-                TextField("Distance (m)", text: $exerciseVM.newDistance)
-                    .keyboardType(.decimalPad)
-
-                TextField("Memo", text: $exerciseVM.newMemo)
-            }
-            .navigationTitle("Add Exercise")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") {
-                        if let record = exerciseVM.createValidatedRecord() {
-                            modelContext.insert(record)
-                            saveCount += 1
-                            exerciseVM.resetForm()
-                            dismiss()
-                        }
-                    }
-                    .disabled(exerciseVM.newExerciseType.isEmpty)
-                }
-            }
-        }
-        .sensoryFeedback(.success, trigger: saveCount)
-        .onAppear {
-            if exerciseVM.newExerciseType.isEmpty {
-                exerciseVM.newExerciseType = ExerciseViewModel.exerciseTypes[0]
-            }
+    private var recentExerciseIDs: [String] {
+        // Unique exercise definition IDs from recent records, ordered by most recent
+        var seen = Set<String>()
+        return recentRecords.compactMap { record in
+            guard let id = record.exerciseDefinitionID, !seen.contains(id) else { return nil }
+            seen.insert(id)
+            return id
         }
     }
 }
 
 #Preview {
     ActivityView()
-        .modelContainer(for: ExerciseRecord.self, inMemory: true)
+        .modelContainer(for: [ExerciseRecord.self, WorkoutSet.self], inMemory: true)
 }

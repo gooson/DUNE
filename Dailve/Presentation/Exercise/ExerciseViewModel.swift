@@ -4,29 +4,10 @@ import Observation
 @Observable
 @MainActor
 final class ExerciseViewModel {
-    static let exerciseTypes = [
-        "Running", "Walking", "Cycling", "Swimming",
-        "Strength", "HIIT", "Yoga", "Hiking", "Other"
-    ]
-
-    private let maxCalories = 10_000.0
-    private let maxDistanceMeters = 500_000.0
-    private let maxMemoLength = 500
-    private let defaultDuration: TimeInterval = 30 * 60
-
     var healthKitWorkouts: [WorkoutSummary] = [] { didSet { invalidateCache() } }
     var manualRecords: [ExerciseRecord] = [] { didSet { invalidateCache() } }
     var isLoading = false
-    var isShowingAddSheet = false
     var errorMessage: String?
-
-    // Add form fields
-    var newExerciseType = ""
-    var newDuration: TimeInterval = 30 * 60 // overwritten by defaultDuration in resetForm
-    var newCalories: String = ""
-    var newDistance: String = ""
-    var newMemo = ""
-    var selectedDate: Date = Date() { didSet { validationError = nil } }
 
     private let workoutService: WorkoutQuerying
 
@@ -57,10 +38,12 @@ final class ExerciseViewModel {
                 id: record.id.uuidString,
                 type: record.exerciseType,
                 duration: record.duration,
-                calories: record.calories,
+                calories: record.bestCalories,
                 distance: record.distance,
                 date: record.date,
-                source: .manual
+                source: .manual,
+                completedSets: record.completedSets,
+                exerciseDefinitionID: record.exerciseDefinitionID
             ))
         }
 
@@ -78,54 +61,6 @@ final class ExerciseViewModel {
         isLoading = false
     }
 
-    var isSaving = false
-    var validationError: String?
-
-    func createValidatedRecord() -> ExerciseRecord? {
-        guard !isSaving else { return nil }
-        guard !newExerciseType.isEmpty else { return nil }
-
-        validationError = nil
-
-        if selectedDate.isFuture {
-            validationError = "Future dates are not allowed"
-            return nil
-        }
-
-        if !newCalories.isEmpty {
-            guard let cal = Double(newCalories), cal >= 0, cal <= maxCalories else {
-                validationError = "Calories must be between 0 and \(Int(maxCalories).formatted()) kcal"
-                return nil
-            }
-        }
-        if !newDistance.isEmpty {
-            guard let dist = Double(newDistance), dist >= 0, dist <= maxDistanceMeters else {
-                validationError = "Distance must be between 0 and \(Int(maxDistanceMeters / 1000)) km"
-                return nil
-            }
-        }
-
-        isSaving = true
-        defer { isSaving = false }
-
-        return ExerciseRecord(
-            date: selectedDate,
-            exerciseType: newExerciseType,
-            duration: newDuration,
-            calories: Double(newCalories),
-            distance: Double(newDistance),
-            memo: String(newMemo.prefix(maxMemoLength))
-        )
-    }
-
-    func resetForm() {
-        newExerciseType = ""
-        newDuration = defaultDuration
-        newCalories = ""
-        newDistance = ""
-        newMemo = ""
-        selectedDate = Date()
-    }
 }
 
 struct ExerciseListItem: Identifiable {
@@ -136,6 +71,25 @@ struct ExerciseListItem: Identifiable {
     let distance: Double?
     let date: Date
     let source: Source
+    let completedSets: [WorkoutSet]
+    let exerciseDefinitionID: String?
+
+    init(
+        id: String, type: String, duration: TimeInterval,
+        calories: Double?, distance: Double?, date: Date,
+        source: Source, completedSets: [WorkoutSet] = [],
+        exerciseDefinitionID: String? = nil
+    ) {
+        self.id = id
+        self.type = type
+        self.duration = duration
+        self.calories = calories
+        self.distance = distance
+        self.date = date
+        self.source = source
+        self.completedSets = completedSets
+        self.exerciseDefinitionID = exerciseDefinitionID
+    }
 
     enum Source {
         case healthKit
@@ -145,5 +99,9 @@ struct ExerciseListItem: Identifiable {
     var formattedDuration: String {
         let minutes = Int(duration / 60)
         return "\(minutes) min"
+    }
+
+    var setSummary: String? {
+        completedSets.setSummary()
     }
 }

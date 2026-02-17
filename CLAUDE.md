@@ -157,3 +157,28 @@
 29. **차트 period 전환은 `.id()` + `.transition(.opacity)`**: Spring 애니메이션은 데이터 차트에 부적합. `.id()`로 뷰 교체하면 `@State` 자동 리셋 + crossfade 효과
 30. **데이터 종속 UI는 항상 렌더 + placeholder**: `if let data { stats }` 대신 `stats(data ?? "—")` 패턴으로 레이아웃 안정성 확보. `Text(" ")` 대신 `.frame(minHeight:)` 사용
 31. **중복 차트 UI는 공통 컴포넌트 추출**: 4개 이상 차트에서 동일 패턴 반복 시 `Shared/Charts/` 에 공통 View 생성 (예: `ChartSelectionOverlay`)
+
+### 2026-02-17: Activity Tab 리뷰 및 CloudKit 교정
+
+32. **CloudKit @Relationship은 반드시 Optional**: `[Type]` 아닌 `[Type]?`으로 선언. non-optional relationship은 두 번째 앱 실행부터 `ModelContainer` fatal crash 유발
+33. **@Model 스키마 변경 후 2회 실행 테스트**: 첫 실행은 로컬 스토어만 생성되어 통과. CloudKit 스키마 검증은 두 번째 실행에서 발생
+34. **새 필드 추가 시 전체 파이프라인 점검**: EditableSet(입력) → ViewModel(검증) → WorkoutSet(저장) → View(표시)까지 모든 경로 확인
+35. **JSON 파싱 서비스는 싱글턴 사용**: 번들 JSON을 매번 파싱하면 메모리/CPU 낭비. `static let shared` 패턴 적용
+36. **rawValue를 UI에 직접 표시 금지**: `rawValue.capitalized` 대신 `Presentation/Shared/Extensions/{Type}+View.swift`에 `displayName` computed property 사용
+37. **동일 로직 3곳 이상 중복 시 즉시 추출**: Collection extension 또는 공통 함수로 DRY 적용. 2곳은 허용, 3곳부터 필수
+
+### 2026-02-17: 2차 리뷰 검증 강화 교정
+
+38. **문자열→숫자 변환 전 trim+isEmpty 필수**: `Int("")`은 nil 반환하므로 optional binding 실패 시 "비어있으면 skip" 분기가 validation을 우회함. `.trimmingCharacters(in: .whitespaces)` 후 `!trimmed.isEmpty` 먼저 체크
+39. **`defer`로 isSaving 리셋 금지**: 반환값이 있는 함수에서 `defer { isSaving = false }`를 사용하면 record가 caller에게 전달된 후 insert 전에 flag가 리셋됨. 명시적으로 return 직전에 리셋
+40. **CloudKit inverse relationship 명시적 설정**: `workoutSet.exerciseRecord = record` — SwiftData가 자동 처리하지만 CloudKit sync 경로에서는 타이밍 이슈 가능. 방어적 코딩
+41. **정수 곱셈 결과 overflow 검증**: `mins * 60` 등 단위 변환 시 `result / divisor == original` 패턴으로 overflow 확인
+42. **도메인 서비스도 자체 입력 범위 검증**: caller의 검증을 신뢰하지 않음. MET(0-30), weight(0-500), duration(0-28800s) 등 물리적 한계 기반 guard
+
+### 2026-02-17: 6-관점 리뷰 전체 수정 교정
+
+43. **`isSaving` 리셋은 View에서 insert 완료 후**: `createValidatedRecord()` → View에서 `modelContext.insert(record)` → `viewModel.didFinishSaving()`순서. ViewModel 내부에서 리셋 금지
+44. **방어 코드도 비즈니스 로직 고려**: `guard !records.isEmpty else { return nil }`이 첫 사용자(모든 근육 회복 상태) 시나리오를 깨뜨림. 테스트로 검증 후 적용
+45. **Collection extension에서 `Swift.max()` 명시적 호출**: `max()` global function이 `Collection.max()` instance method와 이름 충돌. `Swift.max(a, b)` 로 모듈 지정 필수
+46. **Watch `isReachable`은 cached state 대신 computed property**: `WCSession.default.isReachable` 직접 조회로 stale state 방지. `sessionReachabilityDidChange`에서 캐시 업데이트 불필요
+47. **`.onChange(of: array)` 대신 `.onChange(of: array.count)`**: 전체 배열 비교는 O(n). 변경 감지가 count 레벨로 충분하면 count 사용으로 비용 감소

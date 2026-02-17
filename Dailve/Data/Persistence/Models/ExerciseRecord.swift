@@ -14,6 +14,16 @@ final class ExerciseRecord {
     var healthKitWorkoutID: String?
     var createdAt: Date = Date()
 
+    // V2 fields
+    @Relationship(deleteRule: .cascade, inverse: \WorkoutSet.exerciseRecord)
+    var sets: [WorkoutSet]? = []
+    var exerciseDefinitionID: String?
+    var primaryMusclesRaw: [String] = []
+    var secondaryMusclesRaw: [String] = []
+    var equipmentRaw: String?
+    var estimatedCalories: Double?
+    var calorieSourceRaw: String = CalorieSource.manual.rawValue
+
     init(
         date: Date = Date(),
         exerciseType: String = "",
@@ -22,7 +32,13 @@ final class ExerciseRecord {
         distance: Double? = nil,
         memo: String = "",
         isFromHealthKit: Bool = false,
-        healthKitWorkoutID: String? = nil
+        healthKitWorkoutID: String? = nil,
+        exerciseDefinitionID: String? = nil,
+        primaryMuscles: [MuscleGroup] = [],
+        secondaryMuscles: [MuscleGroup] = [],
+        equipment: Equipment? = nil,
+        estimatedCalories: Double? = nil,
+        calorieSource: CalorieSource = .manual
     ) {
         self.id = UUID()
         self.date = date
@@ -34,5 +50,57 @@ final class ExerciseRecord {
         self.isFromHealthKit = isFromHealthKit
         self.healthKitWorkoutID = healthKitWorkoutID
         self.createdAt = Date()
+        self.exerciseDefinitionID = exerciseDefinitionID
+        self.primaryMusclesRaw = primaryMuscles.map(\.rawValue)
+        self.secondaryMusclesRaw = secondaryMuscles.map(\.rawValue)
+        self.equipmentRaw = equipment?.rawValue
+        self.estimatedCalories = estimatedCalories
+        self.calorieSourceRaw = calorieSource.rawValue
     }
+
+    // MARK: - Computed Accessors
+
+    var primaryMuscles: [MuscleGroup] {
+        primaryMusclesRaw.compactMap { MuscleGroup(rawValue: $0) }
+    }
+
+    var secondaryMuscles: [MuscleGroup] {
+        secondaryMusclesRaw.compactMap { MuscleGroup(rawValue: $0) }
+    }
+
+    var equipment: Equipment? {
+        equipmentRaw.flatMap { Equipment(rawValue: $0) }
+    }
+
+    var calorieSource: CalorieSource {
+        CalorieSource(rawValue: calorieSourceRaw) ?? .manual
+    }
+
+    /// Best available calorie value: HealthKit > MET estimation > manual input
+    var bestCalories: Double? {
+        switch calorieSource {
+        case .healthKit: calories
+        case .met: estimatedCalories
+        case .manual: calories
+        }
+    }
+
+    /// Whether this record has structured set data (vs legacy flat record)
+    var hasSetData: Bool {
+        !(sets ?? []).isEmpty
+    }
+
+    /// Completed sets sorted by setNumber
+    var completedSets: [WorkoutSet] {
+        (sets ?? []).filter(\.isCompleted).sorted { $0.setNumber < $1.setNumber }
+    }
+}
+
+// MARK: - ExerciseRecordVolumeProviding
+
+extension ExerciseRecord: ExerciseRecordVolumeProviding {
+    var volumeDate: Date { date }
+    var volumeSetCount: Int { completedSets.count }
+    var volumePrimaryMuscles: [MuscleGroup] { primaryMuscles }
+    var volumeSecondaryMuscles: [MuscleGroup] { secondaryMuscles }
 }

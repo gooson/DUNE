@@ -14,17 +14,39 @@ final class ActivityViewModel {
     var recentWorkouts: [WorkoutSummary] = []
     var isLoading = false
     var errorMessage: String?
+    var workoutSuggestion: WorkoutSuggestion?
 
     private let workoutService: WorkoutQuerying
     private let stepsService: StepsQuerying
+    private let recommendationService: WorkoutRecommending
+    private let library: ExerciseLibraryQuerying
 
     init(
         workoutService: WorkoutQuerying? = nil,
         stepsService: StepsQuerying? = nil,
-        healthKitManager: HealthKitManager = .shared
+        healthKitManager: HealthKitManager = .shared,
+        recommendationService: WorkoutRecommending? = nil,
+        library: ExerciseLibraryQuerying? = nil
     ) {
         self.workoutService = workoutService ?? WorkoutQueryService(manager: healthKitManager)
         self.stepsService = stepsService ?? StepsQueryService(manager: healthKitManager)
+        self.recommendationService = recommendationService ?? WorkoutRecommendationService()
+        self.library = library ?? ExerciseLibraryService.shared
+    }
+
+    // MARK: - Workout Suggestion
+
+    func updateSuggestion(records: [ExerciseRecord]) {
+        let snapshots = records.map { record in
+            ExerciseRecordSnapshot(
+                date: record.date,
+                exerciseDefinitionID: record.exerciseDefinitionID,
+                primaryMuscles: record.primaryMuscles,
+                secondaryMuscles: record.secondaryMuscles,
+                completedSetCount: record.completedSets.count
+            )
+        }
+        workoutSuggestion = recommendationService.recommend(from: snapshots, library: library)
     }
 
     private var loadTask: Task<Void, Never>?
@@ -42,10 +64,7 @@ final class ActivityViewModel {
 
         let (exerciseResult, stepsResult, workoutsResult) = await (exerciseTask, stepsTask, workoutsTask)
 
-        guard !Task.isCancelled else {
-            isLoading = false
-            return
-        }
+        guard !Task.isCancelled else { return }
 
         weeklyExerciseMinutes = exerciseResult.weeklyData
         todayExercise = exerciseResult.todayMetric

@@ -18,9 +18,11 @@ private func validateInputs() -> ValidatedInput? {
 ## 필수 검증 항목
 
 - **숫자 입력**: min/max 범위 체크 (예: weight 0-500, bodyFat 0-100)
+- **문자열→숫자 변환**: `.trimmingCharacters(in: .whitespaces)` 후 `!trimmed.isEmpty` 먼저 체크. `Int("")`은 nil이므로 optional binding 실패가 "비어있으면 skip" 분기를 우회함
 - **문자열 입력**: 길이 제한 (memo: 500자 — `String(input.prefix(500))`)
-- **중복 저장 방지**: `isSaving` 플래그로 idempotency 보장
+- **중복 저장 방지**: `isSaving` 플래그로 idempotency 보장. `defer`로 리셋 금지 — 반환값 함수에서는 명시적 리셋
 - **에러 표시**: `validationError: String?` 프로퍼티로 UI에 에러 전달
+- **정수 곱셈 overflow**: 단위 변환(`mins * 60`) 시 `result / divisor == original` 패턴으로 overflow 검증
 
 ## 수학 함수 방어
 

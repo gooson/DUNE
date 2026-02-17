@@ -21,6 +21,9 @@ actor HealthKitManager {
         HKQuantityType(.bodyMassIndex),
     ]
 
+    /// Exposed for `HKWorkoutBuilder` which requires a store reference at init.
+    var healthStore: HKHealthStore { store }
+
     var isAvailable: Bool {
         HKHealthStore.isHealthDataAvailable()
     }
@@ -32,7 +35,10 @@ actor HealthKitManager {
         }
         do {
             try await store.requestAuthorization(
-                toShare: [],
+                toShare: [
+                    HKQuantityType(.activeEnergyBurned),
+                    HKQuantityType.workoutType(),
+                ],
                 read: readTypes.union([HKObjectType.workoutType()])
             )
             logger.info("HealthKit authorization requested successfully")

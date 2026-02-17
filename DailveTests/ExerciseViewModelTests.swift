@@ -5,105 +5,121 @@ import Testing
 @Suite("ExerciseViewModel")
 @MainActor
 struct ExerciseViewModelTests {
-    @Test("createValidatedRecord returns nil without exercise type")
-    func missingType() {
+    @Test("allExercises sorted by date descending")
+    func sortedByDate() {
         let vm = ExerciseViewModel()
-        vm.newExerciseType = ""
+        let now = Date()
+        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: now) ?? now
 
-        let record = vm.createValidatedRecord()
-        #expect(record == nil)
+        vm.healthKitWorkouts = [
+            WorkoutSummary(id: "1", type: "Running", duration: 1800, calories: 200, distance: nil, date: yesterday),
+            WorkoutSummary(id: "2", type: "Cycling", duration: 3600, calories: 400, distance: nil, date: now),
+        ]
+
+        #expect(vm.allExercises.count == 2)
+        #expect(vm.allExercises[0].type == "Cycling")
+        #expect(vm.allExercises[1].type == "Running")
     }
 
-    @Test("createValidatedRecord succeeds with valid data")
-    func validRecord() {
+    @Test("HealthKit items have correct source")
+    func healthKitSource() {
         let vm = ExerciseViewModel()
-        vm.newExerciseType = "Running"
-        vm.newDuration = 30 * 60
-        vm.newCalories = "300"
+        vm.healthKitWorkouts = [
+            WorkoutSummary(id: "1", type: "Running", duration: 1800, calories: 200, distance: nil, date: Date()),
+        ]
 
-        let record = vm.createValidatedRecord()
-        #expect(record != nil)
-        #expect(record?.exerciseType == "Running")
-        #expect(record?.calories == 300)
+        #expect(vm.allExercises.first?.source == .healthKit)
+    }
+}
+
+@Suite("ExerciseListItem")
+struct ExerciseListItemTests {
+    @Test("formattedDuration converts seconds to minutes")
+    func formattedDuration() {
+        let item = ExerciseListItem(
+            id: "1", type: "Running", duration: 1800,
+            calories: nil, distance: nil, date: Date(), source: .healthKit
+        )
+        #expect(item.formattedDuration == "30 min")
     }
 
-    @Test("createValidatedRecord rejects invalid calories")
-    func invalidCalories() {
-        let vm = ExerciseViewModel()
-        vm.newExerciseType = "Running"
-        vm.newCalories = "15000"
-
-        let record = vm.createValidatedRecord()
-        #expect(record == nil)
-        #expect(vm.validationError != nil)
+    @Test("setSummary returns nil when no completed sets")
+    func noSets() {
+        let item = ExerciseListItem(
+            id: "1", type: "Bench Press", duration: 1800,
+            calories: nil, distance: nil, date: Date(), source: .manual
+        )
+        #expect(item.setSummary == nil)
     }
 
-    @Test("createValidatedRecord rejects invalid distance")
-    func invalidDistance() {
-        let vm = ExerciseViewModel()
-        vm.newExerciseType = "Running"
-        vm.newDistance = "999999"
+    @Test("setSummary formats set count and reps")
+    func setSummaryWithReps() {
+        let set1 = WorkoutSet()
+        set1.reps = 10
+        set1.isCompleted = true
 
-        let record = vm.createValidatedRecord()
-        #expect(record == nil)
-        #expect(vm.validationError != nil)
+        let set2 = WorkoutSet()
+        set2.reps = 8
+        set2.isCompleted = true
+
+        let item = ExerciseListItem(
+            id: "1", type: "Pull Up", duration: 600,
+            calories: nil, distance: nil, date: Date(),
+            source: .manual, completedSets: [set1, set2]
+        )
+
+        let summary = item.setSummary
+        #expect(summary != nil)
+        #expect(summary?.contains("2 sets") == true)
+        #expect(summary?.contains("18 reps") == true)
     }
 
-    @Test("isSaving prevents duplicate creation")
-    func isSavingGuard() {
-        let vm = ExerciseViewModel()
-        vm.newExerciseType = "Running"
-        vm.isSaving = true
+    @Test("setSummary includes weight range")
+    func setSummaryWithWeightRange() {
+        let set1 = WorkoutSet()
+        set1.weight = 60
+        set1.reps = 10
+        set1.isCompleted = true
 
-        let record = vm.createValidatedRecord()
-        #expect(record == nil)
+        let set2 = WorkoutSet()
+        set2.weight = 65
+        set2.reps = 8
+        set2.isCompleted = true
+
+        let item = ExerciseListItem(
+            id: "1", type: "Bench Press", duration: 1200,
+            calories: nil, distance: nil, date: Date(),
+            source: .manual, completedSets: [set1, set2]
+        )
+
+        let summary = item.setSummary
+        #expect(summary != nil)
+        #expect(summary?.contains("60") == true)
+        #expect(summary?.contains("65") == true)
     }
 
-    @Test("Memo truncated to 500 chars")
-    func memoTruncation() {
-        let vm = ExerciseViewModel()
-        vm.newExerciseType = "Running"
-        vm.newMemo = String(repeating: "x", count: 600)
+    @Test("setSummary shows single weight when all same")
+    func setSummarySingleWeight() {
+        let set1 = WorkoutSet()
+        set1.weight = 60
+        set1.reps = 10
+        set1.isCompleted = true
 
-        let record = vm.createValidatedRecord()
-        #expect(record?.memo.count == 500)
-    }
+        let set2 = WorkoutSet()
+        set2.weight = 60
+        set2.reps = 10
+        set2.isCompleted = true
 
-    // MARK: - Date Selection
+        let item = ExerciseListItem(
+            id: "1", type: "Squat", duration: 1200,
+            calories: nil, distance: nil, date: Date(),
+            source: .manual, completedSets: [set1, set2]
+        )
 
-    @Test("createValidatedRecord uses selectedDate")
-    func usesSelectedDate() {
-        let vm = ExerciseViewModel()
-        vm.newExerciseType = "Running"
-        let pastDate = Calendar.current.date(byAdding: .day, value: -3, to: Date())!
-        vm.selectedDate = pastDate
-
-        let record = vm.createValidatedRecord()
-        #expect(record != nil)
-        #expect(record?.date == pastDate)
-    }
-
-    @Test("createValidatedRecord rejects future date")
-    func rejectsFutureDate() {
-        let vm = ExerciseViewModel()
-        vm.newExerciseType = "Running"
-        vm.selectedDate = Calendar.current.date(byAdding: .day, value: 1, to: Date())!
-
-        let record = vm.createValidatedRecord()
-        #expect(record == nil)
-        #expect(vm.validationError != nil)
-    }
-
-    @Test("resetForm resets selectedDate to now")
-    func resetFormResetsDate() {
-        let vm = ExerciseViewModel()
-        vm.selectedDate = Calendar.current.date(byAdding: .day, value: -5, to: Date())!
-
-        let before = Date()
-        vm.resetForm()
-        let after = Date()
-
-        #expect(vm.selectedDate >= before)
-        #expect(vm.selectedDate <= after)
+        let summary = item.setSummary
+        #expect(summary != nil)
+        // Should contain "60kg" once, not a range
+        #expect(summary?.contains("60") == true)
+        #expect(summary?.contains("-") == false)
     }
 }

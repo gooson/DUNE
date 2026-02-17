@@ -16,11 +16,32 @@ struct DailveApp: App {
         )
         do {
             modelContainer = try ModelContainer(
-                for: BodyCompositionRecord.self, ExerciseRecord.self,
+                for: ExerciseRecord.self, BodyCompositionRecord.self, WorkoutSet.self, CustomExercise.self, WorkoutTemplate.self, UserCategory.self,
+                migrationPlan: AppMigrationPlan.self,
                 configurations: config
             )
         } catch {
-            fatalError("Failed to create ModelContainer: \(error)")
+            // Schema migration failed — delete store and retry (MVP: no user data to preserve)
+            AppLogger.data.error("ModelContainer failed: \(error)")
+            Self.deleteStoreFiles(at: config.url)
+            do {
+                modelContainer = try ModelContainer(
+                    for: ExerciseRecord.self, BodyCompositionRecord.self, WorkoutSet.self, CustomExercise.self, WorkoutTemplate.self, UserCategory.self,
+                    migrationPlan: AppMigrationPlan.self,
+                    configurations: config
+                )
+            } catch {
+                fatalError("Failed to create ModelContainer after reset: \(error)")
+            }
+        }
+    }
+
+    private static func deleteStoreFiles(at url: URL) {
+        let fm = FileManager.default
+        // SwiftData/SQLite uses .sqlite, .sqlite-wal, .sqlite-shm
+        for suffix in ["", "-wal", "-shm"] {
+            let fileURL = URL(fileURLWithPath: url.path + suffix)
+            try? fm.removeItem(at: fileURL)
         }
     }
 
