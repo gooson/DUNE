@@ -16,7 +16,7 @@ final class ExerciseRecord {
 
     // V2 fields
     @Relationship(deleteRule: .cascade, inverse: \WorkoutSet.exerciseRecord)
-    var sets: [WorkoutSet] = []
+    var sets: [WorkoutSet]? = []
     var exerciseDefinitionID: String?
     var primaryMusclesRaw: [String] = []
     var secondaryMusclesRaw: [String] = []
@@ -87,11 +87,11 @@ final class ExerciseRecord {
 
     /// Whether this record has structured set data (vs legacy flat record)
     var hasSetData: Bool {
-        !sets.isEmpty
+        !(sets ?? []).isEmpty
     }
 
     /// Completed sets sorted by setNumber
     var completedSets: [WorkoutSet] {
-        sets.filter(\.isCompleted).sorted { $0.setNumber < $1.setNumber }
+        (sets ?? []).filter(\.isCompleted).sorted { $0.setNumber < $1.setNumber }
     }
 }

@@ -265,6 +265,7 @@ final class WorkoutSessionViewModel {
 
         // Create WorkoutSet objects for completed sets
         // SwiftData handles inverse relationship via @Relationship
+        var workoutSets: [WorkoutSet] = []
         for editableSet in completedSets {
             let workoutSet = WorkoutSet(
                 setNumber: editableSet.setNumber,
@@ -276,8 +277,9 @@ final class WorkoutSessionViewModel {
                 intensity: Int(editableSet.intensity),
                 isCompleted: true
             )
-            record.sets.append(workoutSet)
+            workoutSets.append(workoutSet)
         }
+        record.sets = workoutSets
 
         return record
     }
