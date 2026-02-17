@@ -6,6 +6,7 @@ struct WorkoutSessionView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.scenePhase) private var scenePhase
 
+    @AppStorage(WeightUnit.storageKey) private var weightUnitRaw = WeightUnit.kg.rawValue
     @State private var viewModel: WorkoutSessionViewModel
     @State private var timer = RestTimerViewModel()
     @State private var saveCount = 0
@@ -13,6 +14,10 @@ struct WorkoutSessionView: View {
     @State private var sessionTimerTask: Task<Void, Never>?
 
     @Query private var exerciseRecords: [ExerciseRecord]
+
+    private var weightUnit: WeightUnit {
+        WeightUnit(rawValue: weightUnitRaw) ?? .kg
+    }
 
     let exercise: ExerciseDefinition
     private let draftToRestore: WorkoutSessionDraft?
@@ -59,6 +64,17 @@ struct WorkoutSessionView: View {
         .navigationTitle(exercise.localizedName)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    weightUnitRaw = (weightUnit == .kg ? WeightUnit.lb : WeightUnit.kg).rawValue
+                } label: {
+                    Text(weightUnit.displayName.uppercased())
+                        .font(.caption.weight(.bold))
+                        .padding(.horizontal, DS.Spacing.sm)
+                        .padding(.vertical, DS.Spacing.xxs)
+                        .background(DS.Color.activity.opacity(0.15), in: Capsule())
+                }
+            }
             ToolbarItem(placement: .confirmationAction) {
                 Button("Done") {
                     saveWorkout()
@@ -189,6 +205,7 @@ struct WorkoutSessionView: View {
                     editableSet: $viewModel.sets[index],
                     inputType: exercise.inputType,
                     previousSet: viewModel.previousSetInfo(for: viewModel.sets[index].setNumber),
+                    weightUnit: weightUnit,
                     onComplete: {
                         let completed = viewModel.toggleSetCompletion(at: index)
                         if completed {
@@ -196,7 +213,7 @@ struct WorkoutSessionView: View {
                         }
                     },
                     onFillFromPrevious: viewModel.previousSetInfo(for: viewModel.sets[index].setNumber) != nil ? {
-                        viewModel.fillSetFromPrevious(at: index)
+                        viewModel.fillSetFromPrevious(at: index, weightUnit: weightUnit)
                     } : nil
                 )
                 .contextMenu {
@@ -238,7 +255,7 @@ struct WorkoutSessionView: View {
         switch exercise.inputType {
         case .setsRepsWeight:
             HStack(spacing: DS.Spacing.xs) {
-                Text("KG").frame(maxWidth: 70)
+                Text(weightUnit.displayName.uppercased()).frame(maxWidth: 70)
                 Text("REPS").frame(maxWidth: 60)
             }
         case .setsReps:
@@ -266,7 +283,7 @@ struct WorkoutSessionView: View {
     private var addSetButton: some View {
         Button {
             withAnimation(DS.Animation.snappy) {
-                viewModel.addSet()
+                viewModel.addSet(weightUnit: weightUnit)
             }
         } label: {
             Label("Add Set", systemImage: "plus.circle.fill")
@@ -319,7 +336,7 @@ struct WorkoutSessionView: View {
     // MARK: - Save
 
     private func saveWorkout() {
-        guard let record = viewModel.createValidatedRecord() else { return }
+        guard let record = viewModel.createValidatedRecord(weightUnit: weightUnit) else { return }
         modelContext.insert(record)
         WorkoutSessionViewModel.clearDraft()
         saveCount += 1

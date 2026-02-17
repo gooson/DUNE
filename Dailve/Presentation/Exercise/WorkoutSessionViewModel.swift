@@ -96,7 +96,7 @@ final class WorkoutSessionViewModel {
 
     // MARK: - Set Management
 
-    func addSet() {
+    func addSet(weightUnit: WeightUnit = .kg) {
         let newSetNumber = sets.count + 1
         var newSet = EditableSet(setNumber: newSetNumber)
 
@@ -105,7 +105,8 @@ final class WorkoutSessionViewModel {
         if previousIndex < previousSets.count {
             let prev = previousSets[previousIndex]
             if let weight = prev.weight {
-                newSet.weight = weight.formatted(.number.precision(.fractionLength(0...1)))
+                let displayWeight = weightUnit.fromKg(weight)
+                newSet.weight = displayWeight.formatted(.number.precision(.fractionLength(0...1)))
             }
             if let reps = prev.reps {
                 newSet.reps = "\(reps)"
@@ -172,11 +173,12 @@ final class WorkoutSessionViewModel {
         return previousSets[index]
     }
 
-    func fillSetFromPrevious(at index: Int) {
+    func fillSetFromPrevious(at index: Int, weightUnit: WeightUnit = .kg) {
         guard sets.indices.contains(index) else { return }
         guard let prev = previousSetInfo(for: sets[index].setNumber) else { return }
         if let weight = prev.weight {
-            sets[index].weight = weight.formatted(.number.precision(.fractionLength(0...1)))
+            let displayWeight = weightUnit.fromKg(weight)
+            sets[index].weight = displayWeight.formatted(.number.precision(.fractionLength(0...1)))
         }
         if let reps = prev.reps {
             sets[index].reps = "\(reps)"
@@ -294,7 +296,7 @@ final class WorkoutSessionViewModel {
 
     // MARK: - Validation & Record Creation
 
-    func createValidatedRecord() -> ExerciseRecord? {
+    func createValidatedRecord(weightUnit: WeightUnit = .kg) -> ExerciseRecord? {
         guard !isSaving else { return nil }
         validationError = nil
 
@@ -316,8 +318,9 @@ final class WorkoutSessionViewModel {
             if exercise.inputType == .setsRepsWeight {
                 let trimmed = set.weight.trimmingCharacters(in: .whitespaces)
                 if !trimmed.isEmpty {
-                    guard let weight = Double(trimmed), weight >= 0, weight <= maxWeightKg else {
-                        validationError = "Weight must be between 0 and \(Int(maxWeightKg))kg"
+                    let maxDisplay = weightUnit.fromKg(maxWeightKg)
+                    guard let weight = Double(trimmed), weight >= 0, weight <= maxDisplay else {
+                        validationError = "Weight must be between 0 and \(Int(maxDisplay))\(weightUnit.displayName)"
                         return nil
                     }
                 }
@@ -399,10 +402,13 @@ final class WorkoutSessionViewModel {
                 return TimeInterval(secs)
             }
 
+            // Convert weight from display unit to internal kg
+            let weightKg: Double? = trimmedWeight.isEmpty ? nil : Double(trimmedWeight).map { weightUnit.toKg($0) }
+
             let workoutSet = WorkoutSet(
                 setNumber: editableSet.setNumber,
                 setType: editableSet.setType,
-                weight: trimmedWeight.isEmpty ? nil : Double(trimmedWeight),
+                weight: weightKg,
                 reps: trimmedReps.isEmpty ? nil : Int(trimmedReps),
                 duration: durationSeconds,
                 distance: trimmedDistance.isEmpty ? nil : Double(trimmedDistance),

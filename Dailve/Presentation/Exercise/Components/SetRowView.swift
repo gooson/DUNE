@@ -4,6 +4,7 @@ struct SetRowView: View {
     @Binding var editableSet: EditableSet
     let inputType: ExerciseInputType
     let previousSet: PreviousSetInfo?
+    let weightUnit: WeightUnit
     let onComplete: () -> Void
     var onFillFromPrevious: (() -> Void)?
 
@@ -64,7 +65,7 @@ struct SetRowView: View {
             switch inputType {
             case .setsRepsWeight:
                 let w = prev.weight.map {
-                    $0.formatted(.number.precision(.fractionLength(0...1)))
+                    weightUnit.fromKg($0).formatted(.number.precision(.fractionLength(0...1)))
                 } ?? "—"
                 let r = prev.reps.map { "\($0)" } ?? "—"
                 Text("\(w)×\(r)")
@@ -94,7 +95,7 @@ struct SetRowView: View {
         switch inputType {
         case .setsRepsWeight:
             HStack(spacing: DS.Spacing.xs) {
-                TextField("kg", text: $editableSet.weight)
+                TextField(weightUnit.displayName, text: $editableSet.weight)
                     .keyboardType(.decimalPad)
                     .textFieldStyle(.roundedBorder)
                     .frame(maxWidth: 70)
