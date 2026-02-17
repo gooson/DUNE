@@ -30,6 +30,112 @@ struct ExerciseViewModelTests {
 
         #expect(vm.allExercises.first?.source == .healthKit)
     }
+
+    // MARK: - Deduplication Tests
+
+    @Test("Filters out HealthKit workout matching SwiftData healthKitWorkoutID")
+    func dedupByHealthKitWorkoutID() {
+        let vm = ExerciseViewModel()
+        let now = Date()
+        let hkUUID = "HK-UUID-123"
+
+        let record = ExerciseRecord(
+            date: now,
+            exerciseType: "Bench Press",
+            duration: 1800,
+            healthKitWorkoutID: hkUUID
+        )
+
+        vm.healthKitWorkouts = [
+            WorkoutSummary(id: hkUUID, type: "Strength", duration: 1800, calories: 200, distance: nil, date: now),
+        ]
+        vm.manualRecords = [record]
+
+        #expect(vm.allExercises.count == 1)
+        #expect(vm.allExercises[0].source == .manual)
+        #expect(vm.allExercises[0].type == "Bench Press")
+    }
+
+    @Test("Keeps external HealthKit workouts without matching SwiftData record")
+    func dedupExternalWorkoutsKept() {
+        let vm = ExerciseViewModel()
+        let now = Date()
+
+        let record = ExerciseRecord(
+            date: now,
+            exerciseType: "Squat",
+            duration: 1200,
+            healthKitWorkoutID: "HK-APP-1"
+        )
+
+        vm.healthKitWorkouts = [
+            WorkoutSummary(id: "HK-APP-1", type: "Strength", duration: 1200, calories: 100, distance: nil, date: now),
+            WorkoutSummary(id: "HK-WATCH-1", type: "Running", duration: 1800, calories: 300, distance: 5000, date: now, sourceBundleIdentifier: "com.apple.health"),
+        ]
+        vm.manualRecords = [record]
+
+        #expect(vm.allExercises.count == 2)
+        let sources = vm.allExercises.map(\.source)
+        #expect(sources.contains(.manual))
+        #expect(sources.contains(.healthKit))
+    }
+
+    @Test("Filters out own app bundleIdentifier as fallback when healthKitWorkoutID is nil")
+    func dedupByBundleIdentifier() {
+        let vm = ExerciseViewModel()
+        let now = Date()
+        let appBundleID = Bundle.main.bundleIdentifier ?? ""
+
+        let record = ExerciseRecord(
+            date: now,
+            exerciseType: "Deadlift",
+            duration: 2400,
+            healthKitWorkoutID: nil
+        )
+
+        vm.healthKitWorkouts = [
+            WorkoutSummary(id: "HK-ORPHAN", type: "Strength", duration: 2400, calories: 300, distance: nil, date: now, sourceBundleIdentifier: appBundleID),
+        ]
+        vm.manualRecords = [record]
+
+        #expect(vm.allExercises.count == 1)
+        #expect(vm.allExercises[0].source == .manual)
+    }
+
+    @Test("Empty data produces empty list")
+    func dedupEmptyData() {
+        let vm = ExerciseViewModel()
+        vm.healthKitWorkouts = []
+        vm.manualRecords = []
+        #expect(vm.allExercises.isEmpty)
+    }
+
+    @Test("Mixed sources maintain date sort order after dedup")
+    func dedupSortOrder() {
+        let vm = ExerciseViewModel()
+        let now = Date()
+        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: now) ?? now
+        let twoDaysAgo = Calendar.current.date(byAdding: .day, value: -2, to: now) ?? now
+
+        let record = ExerciseRecord(
+            date: yesterday,
+            exerciseType: "Bench Press",
+            duration: 1800,
+            healthKitWorkoutID: "HK-1"
+        )
+
+        vm.healthKitWorkouts = [
+            WorkoutSummary(id: "HK-1", type: "Strength", duration: 1800, calories: 200, distance: nil, date: yesterday),
+            WorkoutSummary(id: "HK-WATCH", type: "Running", duration: 1800, calories: 300, distance: 5000, date: now, sourceBundleIdentifier: "com.apple.health"),
+            WorkoutSummary(id: "HK-WATCH-2", type: "Cycling", duration: 3600, calories: 500, distance: nil, date: twoDaysAgo, sourceBundleIdentifier: "com.apple.health"),
+        ]
+        vm.manualRecords = [record]
+
+        #expect(vm.allExercises.count == 3)
+        #expect(vm.allExercises[0].type == "Running")
+        #expect(vm.allExercises[1].type == "Bench Press")
+        #expect(vm.allExercises[2].type == "Cycling")
+    }
 }
 
 @Suite("ExerciseListItem")

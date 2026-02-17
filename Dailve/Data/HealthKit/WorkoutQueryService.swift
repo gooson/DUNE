@@ -71,7 +71,8 @@ struct WorkoutQueryService: WorkoutQuerying, Sendable {
             duration: workout.duration,
             calories: calories,
             distance: distance,
-            date: workout.startDate
+            date: workout.startDate,
+            sourceBundleIdentifier: workout.sourceRevision.source.bundleIdentifier
         )
     }
 

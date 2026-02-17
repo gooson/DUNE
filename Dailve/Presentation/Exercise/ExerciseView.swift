@@ -10,6 +10,7 @@ struct ExerciseView: View {
     @State private var workoutSuggestion: WorkoutSuggestion?
     @State private var showingCompoundSetup = false
     @State private var compoundConfig: CompoundWorkoutConfig?
+    @State private var recordToDelete: ExerciseRecord?
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \ExerciseRecord.date, order: .reverse) private var manualRecords: [ExerciseRecord]
 
@@ -47,17 +48,28 @@ struct ExerciseView: View {
                     }
 
                     ForEach(viewModel.allExercises) { item in
-                        if let defID = item.exerciseDefinitionID {
-                            NavigationLink {
-                                ExerciseHistoryView(
-                                    exerciseDefinitionID: defID,
-                                    exerciseName: item.localizedType ?? item.type
-                                )
-                            } label: {
+                        Group {
+                            if let defID = item.exerciseDefinitionID {
+                                NavigationLink {
+                                    ExerciseHistoryView(
+                                        exerciseDefinitionID: defID,
+                                        exerciseName: item.localizedType ?? item.type
+                                    )
+                                } label: {
+                                    ExerciseRowView(item: item)
+                                }
+                            } else {
                                 ExerciseRowView(item: item)
                             }
-                        } else {
-                            ExerciseRowView(item: item)
+                        }
+                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                            if item.source == .manual {
+                                Button(role: .destructive) {
+                                    recordToDelete = findRecord(for: item)
+                                } label: {
+                                    Label("Delete", systemImage: "trash")
+                                }
+                            }
                         }
                     }
                 }
@@ -146,6 +158,24 @@ struct ExerciseView: View {
             updateSuggestion()
         }
         .navigationTitle("Exercise")
+        .alert(
+            "Delete Exercise?",
+            isPresented: Binding(
+                get: { recordToDelete != nil },
+                set: { if !$0 { recordToDelete = nil } }
+            ),
+            presenting: recordToDelete
+        ) { record in
+            Button("Delete", role: .destructive) {
+                modelContext.delete(record)
+                recordToDelete = nil
+            }
+            Button("Cancel", role: .cancel) {
+                recordToDelete = nil
+            }
+        } message: { record in
+            Text("\(record.exerciseType) on \(record.date.formatted(date: .abbreviated, time: .omitted)) will be permanently deleted from all your devices.")
+        }
     }
 
     private func startFromTemplate(_ template: WorkoutTemplate) {
@@ -181,6 +211,11 @@ struct ExerciseView: View {
             )
         }
         workoutSuggestion = recommendationService.recommend(from: snapshots, library: library)
+    }
+
+    private func findRecord(for item: ExerciseListItem) -> ExerciseRecord? {
+        guard let uuid = UUID(uuidString: item.id) else { return nil }
+        return manualRecords.first { $0.id == uuid }
     }
 
     private var recentExerciseIDs: [String] {

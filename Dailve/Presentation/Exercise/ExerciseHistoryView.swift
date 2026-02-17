@@ -6,6 +6,8 @@ struct ExerciseHistoryView: View {
     @State private var viewModel: ExerciseHistoryViewModel
     @State private var oneRMAnalysis: OneRMAnalysis?
     @State private var shareImage: UIImage?
+    @State private var recordToDelete: ExerciseRecord?
+    @Environment(\.modelContext) private var modelContext
     @AppStorage(WeightUnit.storageKey) private var weightUnitRaw = WeightUnit.kg.rawValue
 
     @Query private var exerciseRecords: [ExerciseRecord]
@@ -54,6 +56,24 @@ struct ExerciseHistoryView: View {
         )) { shareable in
             ShareImageSheet(image: shareable.image, title: "\(exerciseName) Workout")
                 .presentationDetents([.medium])
+        }
+        .alert(
+            "Delete Session?",
+            isPresented: Binding(
+                get: { recordToDelete != nil },
+                set: { if !$0 { recordToDelete = nil } }
+            ),
+            presenting: recordToDelete
+        ) { record in
+            Button("Delete", role: .destructive) {
+                modelContext.delete(record)
+                recordToDelete = nil
+            }
+            Button("Cancel", role: .cancel) {
+                recordToDelete = nil
+            }
+        } message: { record in
+            Text("This session from \(record.date.formatted(date: .abbreviated, time: .omitted)) will be permanently deleted from all your devices.")
         }
     }
 
@@ -282,6 +302,11 @@ struct ExerciseHistoryView: View {
                 shareSession(session)
             } label: {
                 Label("Share", systemImage: "square.and.arrow.up")
+            }
+            Button(role: .destructive) {
+                recordToDelete = exerciseRecords.first { $0.id == session.id }
+            } label: {
+                Label("Delete", systemImage: "trash")
             }
         }
     }

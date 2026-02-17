@@ -62,6 +62,23 @@ struct WorkoutSummary: Identifiable, Sendable {
     let calories: Double?
     let distance: Double?
     let date: Date
+    let sourceBundleIdentifier: String?
+
+    // Explicit init required for default parameter on sourceBundleIdentifier.
+    // Struct memberwise init does not propagate defaults from Optional properties.
+    init(
+        id: String, type: String, duration: TimeInterval,
+        calories: Double?, distance: Double?, date: Date,
+        sourceBundleIdentifier: String? = nil
+    ) {
+        self.id = id
+        self.type = type
+        self.duration = duration
+        self.calories = calories
+        self.distance = distance
+        self.date = date
+        self.sourceBundleIdentifier = sourceBundleIdentifier
+    }
 
     /// Whether this workout type primarily measures distance.
     var isDistanceBased: Bool {

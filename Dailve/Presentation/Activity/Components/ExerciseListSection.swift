@@ -17,7 +17,13 @@ struct ExerciseListSection: View {
         self.limit = limit
     }
 
+    /// Cached external workouts to avoid recomputation on each body evaluation.
+    private var externalWorkouts: [WorkoutSummary] {
+        workouts.filteringAppDuplicates(against: exerciseRecords)
+    }
+
     var body: some View {
+        let external = externalWorkouts
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             // Section header
             HStack {
@@ -27,7 +33,7 @@ struct ExerciseListSection: View {
 
                 Spacer()
 
-                if workouts.count > limit || !exerciseRecords.isEmpty {
+                if external.count > limit || !exerciseRecords.isEmpty {
                     NavigationLink {
                         ExerciseView()
                     } label: {
@@ -44,15 +50,15 @@ struct ExerciseListSection: View {
                 setRecordRow(record)
             }
 
-            // HealthKit workouts
+            // External HealthKit workouts (excluding app-created duplicates)
             let remaining = max(limit - setRecords.count, 0)
             if remaining > 0 {
-                ForEach(workouts.prefix(remaining)) { workout in
+                ForEach(external.prefix(remaining)) { workout in
                     workoutRow(workout)
                 }
             }
 
-            if workouts.isEmpty && setRecords.isEmpty {
+            if external.isEmpty && setRecords.isEmpty {
                 InlineCard {
                     HStack {
                         Image(systemName: "figure.run")
