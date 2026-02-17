@@ -48,19 +48,33 @@ enum AppSchemaV2: VersionedSchema {
     }
 }
 
+// MARK: - Schema V3 (Custom Exercises)
+
+enum AppSchemaV3: VersionedSchema {
+    static let versionIdentifier = Schema.Version(3, 0, 0)
+    static var models: [any PersistentModel.Type] {
+        [ExerciseRecord.self, BodyCompositionRecord.self, WorkoutSet.self, CustomExercise.self]
+    }
+}
+
 // MARK: - Migration Plan
 
 enum AppMigrationPlan: SchemaMigrationPlan {
     static var schemas: [any VersionedSchema.Type] {
-        [AppSchemaV1.self, AppSchemaV2.self]
+        [AppSchemaV1.self, AppSchemaV2.self, AppSchemaV3.self]
     }
 
     static var stages: [MigrationStage] {
-        [migrateV1toV2]
+        [migrateV1toV2, migrateV2toV3]
     }
 
     static let migrateV1toV2 = MigrationStage.lightweight(
         fromVersion: AppSchemaV1.self,
         toVersion: AppSchemaV2.self
+    )
+
+    static let migrateV2toV3 = MigrationStage.lightweight(
+        fromVersion: AppSchemaV2.self,
+        toVersion: AppSchemaV3.self
     )
 }

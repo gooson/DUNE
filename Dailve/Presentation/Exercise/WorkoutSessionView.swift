@@ -4,6 +4,7 @@ import SwiftData
 struct WorkoutSessionView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.scenePhase) private var scenePhase
 
     @State private var viewModel: WorkoutSessionViewModel
     @State private var timer = RestTimerViewModel()
@@ -14,10 +15,21 @@ struct WorkoutSessionView: View {
     @Query private var exerciseRecords: [ExerciseRecord]
 
     let exercise: ExerciseDefinition
+    private let draftToRestore: WorkoutSessionDraft?
 
     init(exercise: ExerciseDefinition) {
         self.exercise = exercise
-        self._viewModel = State(initialValue: WorkoutSessionViewModel(exercise: exercise))
+        // Check if there's a draft for this exercise
+        let draft = WorkoutSessionDraft.load()
+        if let draft, draft.exerciseDefinition.id == exercise.id {
+            let vm = WorkoutSessionViewModel(exercise: exercise)
+            vm.restoreFromDraft(draft)
+            self._viewModel = State(initialValue: vm)
+            self.draftToRestore = draft
+        } else {
+            self._viewModel = State(initialValue: WorkoutSessionViewModel(exercise: exercise))
+            self.draftToRestore = nil
+        }
     }
 
     var body: some View {
@@ -57,11 +69,19 @@ struct WorkoutSessionView: View {
         }
         .onAppear {
             viewModel.loadPreviousSets(from: exerciseRecords)
+            if draftToRestore != nil {
+                WorkoutSessionViewModel.clearDraft()
+            }
             startSessionTimer()
         }
         .onDisappear {
             sessionTimerTask?.cancel()
             sessionTimerTask = nil
+        }
+        .onChange(of: scenePhase) { _, newPhase in
+            if newPhase == .background || newPhase == .inactive {
+                viewModel.saveDraft()
+            }
         }
         .alert("Validation Error", isPresented: .init(
             get: { viewModel.validationError != nil },
@@ -301,6 +321,7 @@ struct WorkoutSessionView: View {
     private func saveWorkout() {
         guard let record = viewModel.createValidatedRecord() else { return }
         modelContext.insert(record)
+        WorkoutSessionViewModel.clearDraft()
         saveCount += 1
         dismiss()
     }

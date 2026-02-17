@@ -22,6 +22,44 @@ struct PreviousSetInfo: Sendable {
     let distance: Double?
 }
 
+// MARK: - Draft Persistence
+
+/// Codable snapshot of a workout session for background/crash recovery
+struct WorkoutSessionDraft: Codable {
+    let exerciseDefinition: ExerciseDefinition
+    let sets: [DraftSet]
+    let sessionStartTime: Date
+    let memo: String
+    let savedAt: Date
+
+    struct DraftSet: Codable {
+        let setNumber: Int
+        let weight: String
+        let reps: String
+        let duration: String
+        let distance: String
+        let intensity: String
+        let isCompleted: Bool
+        let setTypeRaw: String
+    }
+
+    private static let userDefaultsKey = "com.raftel.dailve.workoutDraft"
+
+    static func save(_ draft: WorkoutSessionDraft) {
+        guard let data = try? JSONEncoder().encode(draft) else { return }
+        UserDefaults.standard.set(data, forKey: userDefaultsKey)
+    }
+
+    static func load() -> WorkoutSessionDraft? {
+        guard let data = UserDefaults.standard.data(forKey: userDefaultsKey) else { return nil }
+        return try? JSONDecoder().decode(WorkoutSessionDraft.self, from: data)
+    }
+
+    static func clear() {
+        UserDefaults.standard.removeObject(forKey: userDefaultsKey)
+    }
+}
+
 @Observable
 @MainActor
 final class WorkoutSessionViewModel {
@@ -207,6 +245,51 @@ final class WorkoutSessionViewModel {
 
     var totalReps: Int {
         cachedCompletedSets.compactMap { Int($0.reps) }.reduce(0, +)
+    }
+
+    // MARK: - Draft Persistence
+
+    func saveDraft() {
+        let draftSets = sets.map { set in
+            WorkoutSessionDraft.DraftSet(
+                setNumber: set.setNumber,
+                weight: set.weight,
+                reps: set.reps,
+                duration: set.duration,
+                distance: set.distance,
+                intensity: set.intensity,
+                isCompleted: set.isCompleted,
+                setTypeRaw: set.setType.rawValue
+            )
+        }
+        let draft = WorkoutSessionDraft(
+            exerciseDefinition: exercise,
+            sets: draftSets,
+            sessionStartTime: sessionStartTime,
+            memo: memo,
+            savedAt: Date()
+        )
+        WorkoutSessionDraft.save(draft)
+    }
+
+    func restoreFromDraft(_ draft: WorkoutSessionDraft) {
+        sessionStartTime = draft.sessionStartTime
+        memo = draft.memo
+        sets = draft.sets.map { draftSet in
+            var editable = EditableSet(setNumber: draftSet.setNumber)
+            editable.weight = draftSet.weight
+            editable.reps = draftSet.reps
+            editable.duration = draftSet.duration
+            editable.distance = draftSet.distance
+            editable.intensity = draftSet.intensity
+            editable.isCompleted = draftSet.isCompleted
+            editable.setType = SetType(rawValue: draftSet.setTypeRaw) ?? .working
+            return editable
+        }
+    }
+
+    static func clearDraft() {
+        WorkoutSessionDraft.clear()
     }
 
     // MARK: - Validation & Record Creation

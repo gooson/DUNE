@@ -10,22 +10,11 @@ updated: 2026-02-17
 
 `docs/brainstorms/2026-02-17-activity-tab-redesign.md` 기반 미구현 항목 체크리스트.
 
-## MVP Gaps (Phase 1 잔여)
+## MVP Gaps (Phase 1 잔여) ✅ All Done
 
-- [ ] **커스텀 운동 생성**: 라이브러리에 없는 운동을 사용자가 직접 추가
-  - 운동명, 카테고리, 근육 그룹, 장비, inputType 선택
-  - SwiftData에 저장 (ExerciseDefinition을 기반으로 한 CustomExercise 모델)
-  - ExercisePickerView 상단에 "Create Custom" 버튼 추가
-
-- [ ] **운동 중 앱 종료 시 draft 저장**: 세션 데이터 유실 방지
-  - `WorkoutSessionViewModel` 상태를 UserDefaults 또는 SwiftData로 임시 저장
-  - 앱 재시작 시 미완료 세션 복원 알림
-  - `scenePhase` 감시로 background 진입 시 자동 저장
-
-- [ ] **운동 검색 UX 개선**
-  - 근육 그룹별 필터 (현재: 카테고리만)
-  - 장비별 필터 추가
-  - 최근 검색어 저장
+- [x] **커스텀 운동 생성**: CustomExercise SwiftData 모델 + CreateCustomExerciseView + ExercisePickerView 통합
+- [x] **운동 중 앱 종료 시 draft 저장**: WorkoutSessionDraft (UserDefaults) + scenePhase 감시 + ExerciseView 복원 배너
+- [x] **운동 검색 UX 개선**: 근육 그룹별 필터 + 장비별 필터 + 결과 수 표시 + Clear Filters
 
 ## Phase 2 Items
 

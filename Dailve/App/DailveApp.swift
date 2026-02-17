@@ -16,7 +16,7 @@ struct DailveApp: App {
         )
         do {
             modelContainer = try ModelContainer(
-                for: ExerciseRecord.self, BodyCompositionRecord.self, WorkoutSet.self,
+                for: ExerciseRecord.self, BodyCompositionRecord.self, WorkoutSet.self, CustomExercise.self,
                 migrationPlan: AppMigrationPlan.self,
                 configurations: config
             )
@@ -26,7 +26,7 @@ struct DailveApp: App {
             Self.deleteStoreFiles(at: config.url)
             do {
                 modelContainer = try ModelContainer(
-                    for: ExerciseRecord.self, BodyCompositionRecord.self, WorkoutSet.self,
+                    for: ExerciseRecord.self, BodyCompositionRecord.self, WorkoutSet.self, CustomExercise.self,
                     migrationPlan: AppMigrationPlan.self,
                     configurations: config
                 )

@@ -5,6 +5,7 @@ struct ExerciseView: View {
     @State private var viewModel = ExerciseViewModel()
     @State private var showingExercisePicker = false
     @State private var selectedExercise: ExerciseDefinition?
+    @State private var pendingDraft: WorkoutSessionDraft?
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \ExerciseRecord.date, order: .reverse) private var manualRecords: [ExerciseRecord]
 
@@ -25,6 +26,11 @@ struct ExerciseView: View {
                 )
             } else {
                 List {
+                    // Draft recovery banner
+                    if let draft = pendingDraft {
+                        draftBanner(draft)
+                    }
+
                     ForEach(viewModel.allExercises) { item in
                         ExerciseRowView(item: item)
                     }
@@ -53,6 +59,7 @@ struct ExerciseView: View {
             WorkoutSessionView(exercise: exercise)
         }
         .task {
+            pendingDraft = WorkoutSessionDraft.load()
             viewModel.manualRecords = manualRecords
             await viewModel.loadHealthKitWorkouts()
         }
@@ -69,6 +76,40 @@ struct ExerciseView: View {
             seen.insert(id)
             return id
         }
+    }
+
+    private func draftBanner(_ draft: WorkoutSessionDraft) -> some View {
+        HStack(spacing: DS.Spacing.sm) {
+            Image(systemName: "exclamationmark.triangle.fill")
+                .foregroundStyle(.orange)
+            VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                Text("Unfinished Workout")
+                    .font(.subheadline.weight(.medium))
+                Text("\(draft.exerciseDefinition.localizedName) - \(draft.sets.filter(\.isCompleted).count) sets")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            Spacer()
+            Button("Resume") {
+                selectedExercise = draft.exerciseDefinition
+            }
+            .font(.caption.weight(.semibold))
+            .buttonStyle(.borderedProminent)
+            .tint(DS.Color.activity)
+
+            Button {
+                WorkoutSessionViewModel.clearDraft()
+                pendingDraft = nil
+            } label: {
+                Image(systemName: "xmark")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(DS.Spacing.md)
+        .listRowInsets(EdgeInsets())
+        .listRowBackground(Color.orange.opacity(0.08))
     }
 }
 
