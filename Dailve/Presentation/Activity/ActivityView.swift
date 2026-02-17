@@ -19,11 +19,22 @@ struct ActivityView: View {
                     ProgressView()
                         .frame(maxWidth: .infinity, minHeight: 200)
                 } else {
+                    // AI Workout Suggestion
+                    if let suggestion = viewModel.workoutSuggestion,
+                       !suggestion.exercises.isEmpty {
+                        SuggestedWorkoutCard(suggestion: suggestion) { exercise in
+                            selectedExercise = exercise
+                        }
+                    }
+
                     // Weekly Summary Hero Chart
                     WeeklySummaryChartView(
                         exerciseData: viewModel.weeklyExerciseMinutes,
                         stepsData: viewModel.weeklySteps
                     )
+
+                    // Muscle Activity Summary
+                    MuscleMapSummaryCard()
 
                     // Today's Metrics
                     todaySection
@@ -83,7 +94,11 @@ struct ActivityView: View {
             await viewModel.loadActivityData()
         }
         .task {
+            viewModel.updateSuggestion(records: recentRecords)
             await viewModel.loadActivityData()
+        }
+        .onChange(of: recentRecords) { _, newValue in
+            viewModel.updateSuggestion(records: newValue)
         }
         .navigationTitle("Activity")
     }
