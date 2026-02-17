@@ -8,6 +8,8 @@ struct ExerciseView: View {
     @State private var pendingDraft: WorkoutSessionDraft?
     @State private var showingTemplates = false
     @State private var workoutSuggestion: WorkoutSuggestion?
+    @State private var showingCompoundSetup = false
+    @State private var compoundConfig: CompoundWorkoutConfig?
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \ExerciseRecord.date, order: .reverse) private var manualRecords: [ExerciseRecord]
 
@@ -87,8 +89,17 @@ struct ExerciseView: View {
                 .accessibilityIdentifier("exercise-volume-analysis-button")
             }
             ToolbarItem(placement: .primaryAction) {
-                Button {
-                    showingExercisePicker = true
+                Menu {
+                    Button {
+                        showingExercisePicker = true
+                    } label: {
+                        Label("Single Exercise", systemImage: "figure.run")
+                    }
+                    Button {
+                        showingCompoundSetup = true
+                    } label: {
+                        Label("Superset / Circuit", systemImage: "arrow.triangle.2.circlepath")
+                    }
                 } label: {
                     Image(systemName: "plus")
                 }
@@ -105,6 +116,17 @@ struct ExerciseView: View {
         }
         .navigationDestination(item: $selectedExercise) { exercise in
             WorkoutSessionView(exercise: exercise)
+        }
+        .sheet(isPresented: $showingCompoundSetup) {
+            CompoundWorkoutSetupView(
+                library: library,
+                recentExerciseIDs: recentExerciseIDs
+            ) { config in
+                compoundConfig = config
+            }
+        }
+        .navigationDestination(item: $compoundConfig) { config in
+            CompoundWorkoutView(config: config)
         }
         .task {
             pendingDraft = WorkoutSessionDraft.load()
