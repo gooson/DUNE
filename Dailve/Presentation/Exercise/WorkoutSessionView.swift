@@ -118,23 +118,7 @@ struct WorkoutSessionView: View {
     }
 
     private var previousSummary: String {
-        let sets = viewModel.previousSets
-        let weights = sets.compactMap(\.weight).filter { $0 > 0 }
-        let reps = sets.compactMap(\.reps)
-        let totalReps = reps.reduce(0, +)
-
-        var parts: [String] = ["\(sets.count) sets"]
-        if let minW = weights.min(), let maxW = weights.max() {
-            if minW == maxW {
-                parts.append("\(minW.formatted(.number.precision(.fractionLength(0...1))))kg")
-            } else {
-                parts.append("\(minW.formatted(.number.precision(.fractionLength(0...1))))-\(maxW.formatted(.number.precision(.fractionLength(0...1))))kg")
-            }
-        }
-        if totalReps > 0 {
-            parts.append("\(totalReps) reps")
-        }
-        return parts.joined(separator: " · ")
+        viewModel.previousSets.summary()
     }
 
     // MARK: - Set List

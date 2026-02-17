@@ -74,9 +74,11 @@ struct WorkoutSessionViewModelTests {
         let vm = WorkoutSessionViewModel(exercise: exercise)
 
         #expect(!vm.sets[0].isCompleted)
-        vm.toggleSetCompletion(at: 0)
+        let first = vm.toggleSetCompletion(at: 0)
+        #expect(first == true)
         #expect(vm.sets[0].isCompleted)
-        vm.toggleSetCompletion(at: 0)
+        let second = vm.toggleSetCompletion(at: 0)
+        #expect(second == false)
         #expect(!vm.sets[0].isCompleted)
     }
 
