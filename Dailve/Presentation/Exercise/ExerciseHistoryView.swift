@@ -57,24 +57,7 @@ struct ExerciseHistoryView: View {
             ShareImageSheet(image: shareable.image, title: "\(exerciseName) Workout")
                 .presentationDetents([.medium])
         }
-        .alert(
-            "Delete Session?",
-            isPresented: Binding(
-                get: { recordToDelete != nil },
-                set: { if !$0 { recordToDelete = nil } }
-            ),
-            presenting: recordToDelete
-        ) { record in
-            Button("Delete", role: .destructive) {
-                modelContext.delete(record)
-                recordToDelete = nil
-            }
-            Button("Cancel", role: .cancel) {
-                recordToDelete = nil
-            }
-        } message: { record in
-            Text("This session from \(record.date.formatted(date: .abbreviated, time: .omitted)) will be permanently deleted from all your devices.")
-        }
+        .confirmDeleteRecord($recordToDelete, context: modelContext)
     }
 
     // MARK: - Metric Picker

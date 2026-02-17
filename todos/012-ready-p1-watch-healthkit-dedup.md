@@ -1,12 +1,14 @@
 ---
 source: review/healthkit-dedup
 priority: p1
-status: ready
+status: pending
 created: 2026-02-18
 updated: 2026-02-18
 ---
 
 # Watch HealthKit Dedup 보완
+
+<!-- Blocked: requires Watch app HealthKit integration to be implemented first -->
 
 ## 배경
 

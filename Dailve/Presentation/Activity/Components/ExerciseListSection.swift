@@ -7,6 +7,8 @@ struct ExerciseListSection: View {
     let exerciseRecords: [ExerciseRecord]
     let limit: Int
 
+    @State private var externalWorkouts: [WorkoutSummary] = []
+
     init(
         workouts: [WorkoutSummary],
         exerciseRecords: [ExerciseRecord] = [],
@@ -17,13 +19,7 @@ struct ExerciseListSection: View {
         self.limit = limit
     }
 
-    /// Cached external workouts to avoid recomputation on each body evaluation.
-    private var externalWorkouts: [WorkoutSummary] {
-        workouts.filteringAppDuplicates(against: exerciseRecords)
-    }
-
     var body: some View {
-        let external = externalWorkouts
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             // Section header
             HStack {
@@ -33,7 +29,7 @@ struct ExerciseListSection: View {
 
                 Spacer()
 
-                if external.count > limit || !exerciseRecords.isEmpty {
+                if externalWorkouts.count > limit || !exerciseRecords.isEmpty {
                     NavigationLink {
                         ExerciseView()
                     } label: {
@@ -53,12 +49,12 @@ struct ExerciseListSection: View {
             // External HealthKit workouts (excluding app-created duplicates)
             let remaining = max(limit - setRecords.count, 0)
             if remaining > 0 {
-                ForEach(external.prefix(remaining)) { workout in
+                ForEach(externalWorkouts.prefix(remaining)) { workout in
                     workoutRow(workout)
                 }
             }
 
-            if external.isEmpty && setRecords.isEmpty {
+            if externalWorkouts.isEmpty && setRecords.isEmpty {
                 InlineCard {
                     HStack {
                         Image(systemName: "figure.run")
@@ -70,6 +66,15 @@ struct ExerciseListSection: View {
                     }
                 }
             }
+        }
+        .onAppear {
+            externalWorkouts = workouts.filteringAppDuplicates(against: exerciseRecords)
+        }
+        .onChange(of: workouts.count) { _, _ in
+            externalWorkouts = workouts.filteringAppDuplicates(against: exerciseRecords)
+        }
+        .onChange(of: exerciseRecords.count) { _, _ in
+            externalWorkouts = workouts.filteringAppDuplicates(against: exerciseRecords)
         }
     }
 

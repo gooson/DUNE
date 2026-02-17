@@ -32,6 +32,7 @@ struct ExerciseViewModelTests {
     }
 
     // MARK: - Deduplication Tests
+    // Edge cases mapped from: docs/plans/2026-02-18-healthkit-dedup.md
 
     @Test("Filters out HealthKit workout matching SwiftData healthKitWorkoutID")
     func dedupByHealthKitWorkoutID() {
@@ -70,7 +71,7 @@ struct ExerciseViewModelTests {
 
         vm.healthKitWorkouts = [
             WorkoutSummary(id: "HK-APP-1", type: "Strength", duration: 1200, calories: 100, distance: nil, date: now),
-            WorkoutSummary(id: "HK-WATCH-1", type: "Running", duration: 1800, calories: 300, distance: 5000, date: now, sourceBundleIdentifier: "com.apple.health"),
+            WorkoutSummary(id: "HK-WATCH-1", type: "Running", duration: 1800, calories: 300, distance: 5000, date: now),
         ]
         vm.manualRecords = [record]
 
@@ -80,11 +81,11 @@ struct ExerciseViewModelTests {
         #expect(sources.contains(.healthKit))
     }
 
-    @Test("Filters out own app bundleIdentifier as fallback when healthKitWorkoutID is nil")
-    func dedupByBundleIdentifier() {
+    // Edge case: HealthKit write failure — healthKitWorkoutID never populated
+    @Test("Filters out own app workouts (isFromThisApp) as fallback when healthKitWorkoutID is nil")
+    func dedupByIsFromThisApp() {
         let vm = ExerciseViewModel()
         let now = Date()
-        let appBundleID = Bundle.main.bundleIdentifier ?? ""
 
         let record = ExerciseRecord(
             date: now,
@@ -94,12 +95,34 @@ struct ExerciseViewModelTests {
         )
 
         vm.healthKitWorkouts = [
-            WorkoutSummary(id: "HK-ORPHAN", type: "Strength", duration: 2400, calories: 300, distance: nil, date: now, sourceBundleIdentifier: appBundleID),
+            WorkoutSummary(id: "HK-ORPHAN", type: "Strength", duration: 2400, calories: 300, distance: nil, date: now, isFromThisApp: true),
         ]
         vm.manualRecords = [record]
 
         #expect(vm.allExercises.count == 1)
         #expect(vm.allExercises[0].source == .manual)
+    }
+
+    // Edge case: corrupted record with empty string healthKitWorkoutID
+    @Test("Ignores empty healthKitWorkoutID during dedup matching")
+    func dedupIgnoresEmptyHealthKitWorkoutID() {
+        let vm = ExerciseViewModel()
+        let now = Date()
+
+        let record = ExerciseRecord(
+            date: now,
+            exerciseType: "Bench Press",
+            duration: 1800,
+            healthKitWorkoutID: ""
+        )
+
+        vm.healthKitWorkouts = [
+            WorkoutSummary(id: "", type: "Strength", duration: 1800, calories: 200, distance: nil, date: now),
+        ]
+        vm.manualRecords = [record]
+
+        // Empty ID should NOT cause false-positive match; both items should appear
+        #expect(vm.allExercises.count == 2)
     }
 
     @Test("Empty data produces empty list")
@@ -126,8 +149,8 @@ struct ExerciseViewModelTests {
 
         vm.healthKitWorkouts = [
             WorkoutSummary(id: "HK-1", type: "Strength", duration: 1800, calories: 200, distance: nil, date: yesterday),
-            WorkoutSummary(id: "HK-WATCH", type: "Running", duration: 1800, calories: 300, distance: 5000, date: now, sourceBundleIdentifier: "com.apple.health"),
-            WorkoutSummary(id: "HK-WATCH-2", type: "Cycling", duration: 3600, calories: 500, distance: nil, date: twoDaysAgo, sourceBundleIdentifier: "com.apple.health"),
+            WorkoutSummary(id: "HK-WATCH", type: "Running", duration: 1800, calories: 300, distance: 5000, date: now, isFromThisApp: false),
+            WorkoutSummary(id: "HK-WATCH-2", type: "Cycling", duration: 3600, calories: 500, distance: nil, date: twoDaysAgo, isFromThisApp: false),
         ]
         vm.manualRecords = [record]
 

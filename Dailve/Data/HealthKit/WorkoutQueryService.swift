@@ -72,7 +72,7 @@ struct WorkoutQueryService: WorkoutQuerying, Sendable {
             calories: calories,
             distance: distance,
             date: workout.startDate,
-            sourceBundleIdentifier: workout.sourceRevision.source.bundleIdentifier
+            isFromThisApp: workout.sourceRevision.source.bundleIdentifier == Bundle.main.bundleIdentifier
         )
     }
 
