@@ -37,9 +37,9 @@ description: "현재 브랜치를 PR 생성 → GitHub 머지 → 브랜치 삭�
 
 GitHub의 PR 머지 API를 통해 머지합니다. **로컬 머지나 자체 스쿼시를 수행하지 않습니다.**
 
-1. `gh pr merge {PR_NUMBER} --delete-branch` 실행
-   - `--squash`, `--merge`, `--rebase` 플래그를 명시하지 않으면 GitHub 리포지토리의 기본 머지 전략을 따름
-   - 사용자가 특정 전략을 원하면 해당 플래그 추가
+1. `gh pr merge {PR_NUMBER} --merge --delete-branch` 실행
+   - **기본 전략은 `--merge`** (커밋 이력 보존). squash 사용 금지
+   - 사용자가 명시적으로 다른 전략을 요청한 경우에만 `--rebase` 또는 `--squash` 사용
 2. 머지 완료 확인
 
 ### Step 4: 로컬 정리
