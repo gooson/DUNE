@@ -7,6 +7,7 @@ struct RestTimerView: View {
     let duration: TimeInterval
     let onComplete: () -> Void
     let onSkip: () -> Void
+    let onEnd: () -> Void
 
     @Environment(WorkoutManager.self) private var workoutManager
 
@@ -14,11 +15,13 @@ struct RestTimerView: View {
     @State private var targetDate: Date = .distantFuture
     /// Total seconds for progress calculation.
     @State private var totalSeconds: Int = 0
+    /// Mutated each tick to force SwiftUI re-render.
+    @State private var tick: Int = 0
     /// The running countdown task (cancelled on disappear).
     @State private var countdownTask: Task<Void, Never>?
 
     var body: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: 6) {
             Text("Rest")
                 .font(.caption2)
                 .foregroundStyle(.secondary)
@@ -32,7 +35,7 @@ struct RestTimerView: View {
                     .trim(from: 0, to: progress)
                     .stroke(.green, style: StrokeStyle(lineWidth: 6, lineCap: .round))
                     .rotationEffect(.degrees(-90))
-                    .animation(.linear(duration: 1), value: progress)
+                    .animation(.linear(duration: 1), value: tick)
 
                 VStack(spacing: 2) {
                     Text(timeString)
@@ -57,13 +60,13 @@ struct RestTimerView: View {
             }
             .frame(width: 100, height: 100)
 
-            // +30s / Skip buttons
-            HStack(spacing: 16) {
+            // +30s / Skip / End buttons
+            HStack(spacing: 10) {
                 Button {
                     addTime(30)
                 } label: {
                     Text("+30s")
-                        .font(.caption2.weight(.medium))
+                        .font(.system(size: 11, weight: .medium))
                 }
                 .buttonStyle(.bordered)
                 .tint(.gray)
@@ -73,10 +76,20 @@ struct RestTimerView: View {
                     onSkip()
                 } label: {
                     Text("Skip")
-                        .font(.caption2.weight(.medium))
+                        .font(.system(size: 11, weight: .medium))
                 }
                 .buttonStyle(.bordered)
                 .tint(.green)
+
+                Button(role: .destructive) {
+                    cancelCountdown()
+                    onEnd()
+                } label: {
+                    Text("End")
+                        .font(.system(size: 11, weight: .medium))
+                }
+                .buttonStyle(.bordered)
+                .tint(.red)
             }
         }
         .onAppear {
@@ -90,6 +103,8 @@ struct RestTimerView: View {
     // MARK: - Computed
 
     private var remainingSeconds: Int {
+        // `tick` dependency ensures SwiftUI re-evaluates on each tick
+        _ = tick
         let remaining = Int(targetDate.timeIntervalSinceNow.rounded(.up))
         return Swift.max(remaining, 0)
     }
@@ -121,6 +136,8 @@ struct RestTimerView: View {
             while !Task.isCancelled {
                 try? await Task.sleep(for: .seconds(1))
                 guard !Task.isCancelled else { return }
+                // Mutate @State to force view update
+                tick += 1
                 if targetDate.timeIntervalSinceNow <= 0 {
                     timerFinished()
                     return

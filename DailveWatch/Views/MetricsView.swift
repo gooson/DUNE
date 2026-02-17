@@ -11,6 +11,7 @@ struct MetricsView: View {
     @State private var reps: Int = 0
     @State private var showRestTimer = false
     @State private var showNextExercise = false
+    @State private var showEndConfirmation = false
     @State private var transitionTask: Task<Void, Never>?
 
     var body: some View {
@@ -19,7 +20,8 @@ struct MetricsView: View {
                 RestTimerView(
                     duration: currentRestDuration,
                     onComplete: handleRestComplete,
-                    onSkip: handleRestComplete
+                    onSkip: handleRestComplete,
+                    onEnd: { showEndConfirmation = true }
                 )
             } else if showNextExercise {
                 nextExerciseTransition
@@ -32,6 +34,24 @@ struct MetricsView: View {
         }
         .onAppear {
             prefillFromEntry()
+        }
+        .confirmationDialog(
+            "End Workout?",
+            isPresented: $showEndConfirmation,
+            titleVisibility: .visible
+        ) {
+            Button("End Workout", role: .destructive) {
+                showRestTimer = false
+                showNextExercise = false
+                workoutManager.end()
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            if workoutManager.completedSetsData.flatMap({ $0 }).isEmpty {
+                Text("No sets recorded. End without saving?")
+            } else {
+                Text("Save and finish this workout?")
+            }
         }
     }
 
@@ -48,7 +68,7 @@ struct MetricsView: View {
 
                 Divider()
 
-                // Weight input (Digital Crown)
+                // Weight input (Digital Crown + buttons)
                 weightInput
 
                 // Reps input (+/-)
@@ -127,14 +147,59 @@ struct MetricsView: View {
     // MARK: - Weight Input
 
     private var weightInput: some View {
-        HStack {
-            Text("Weight")
-                .font(.caption2)
-                .foregroundStyle(.secondary)
-            Spacer()
-            Text("\(weight, specifier: "%.1f") kg")
-                .font(.body.monospacedDigit().weight(.semibold))
-                .foregroundStyle(.green)
+        VStack(spacing: 4) {
+            HStack {
+                Text("Weight")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                Spacer()
+                Text("\(weight, specifier: "%.1f") kg")
+                    .font(.body.monospacedDigit().weight(.semibold))
+                    .foregroundStyle(.green)
+            }
+
+            // +/- buttons for precise adjustment
+            HStack(spacing: 12) {
+                Button {
+                    if weight >= 5 { weight -= 5 }
+                } label: {
+                    Text("-5")
+                        .font(.caption2.weight(.medium))
+                        .frame(width: 32)
+                }
+                .buttonStyle(.bordered)
+                .tint(.gray)
+
+                Button {
+                    if weight >= 2.5 { weight -= 2.5 }
+                } label: {
+                    Text("-2.5")
+                        .font(.caption2.weight(.medium))
+                        .frame(width: 36)
+                }
+                .buttonStyle(.bordered)
+                .tint(.gray)
+
+                Button {
+                    if weight <= 497.5 { weight += 2.5 }
+                } label: {
+                    Text("+2.5")
+                        .font(.caption2.weight(.medium))
+                        .frame(width: 36)
+                }
+                .buttonStyle(.bordered)
+                .tint(.gray)
+
+                Button {
+                    if weight <= 495 { weight += 5 }
+                } label: {
+                    Text("+5")
+                        .font(.caption2.weight(.medium))
+                        .frame(width: 32)
+                }
+                .buttonStyle(.bordered)
+                .tint(.gray)
+            }
         }
         .focusable()
         .digitalCrownRotation($weight, from: 0, through: 500, by: 2.5, sensitivity: .medium)
