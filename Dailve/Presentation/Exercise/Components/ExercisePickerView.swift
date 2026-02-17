@@ -13,6 +13,7 @@ struct ExercisePickerView: View {
     @State private var selectedMuscle: MuscleGroup?
     @State private var selectedEquipment: Equipment?
     @State private var showingCreateCustom = false
+    @State private var detailExercise: ExerciseDefinition?
 
     private var customDefinitions: [ExerciseDefinition] {
         customExercises.map { $0.toDefinition() }
@@ -126,6 +127,13 @@ struct ExercisePickerView: View {
                     dismiss()
                 }
             }
+            .sheet(item: $detailExercise) { exercise in
+                ExerciseDetailSheet(exercise: exercise) {
+                    onSelect(exercise)
+                    dismiss()
+                }
+                .presentationDetents([.medium, .large])
+            }
         }
     }
 
@@ -211,8 +219,14 @@ struct ExercisePickerView: View {
                     }
                 }
                 Spacer()
-                Image(systemName: WorkoutSummary.iconName(for: exercise.name))
-                    .foregroundStyle(.secondary)
+
+                Button {
+                    detailExercise = exercise
+                } label: {
+                    Image(systemName: "info.circle")
+                        .foregroundStyle(.secondary)
+                }
+                .buttonStyle(.plain)
             }
         }
     }
