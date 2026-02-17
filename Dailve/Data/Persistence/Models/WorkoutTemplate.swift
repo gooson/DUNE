@@ -28,13 +28,16 @@ struct TemplateEntry: Codable, Identifiable, Sendable {
     var defaultSets: Int
     var defaultReps: Int
     var defaultWeightKg: Double?
+    /// Rest duration in seconds between sets for this exercise (nil = use global default 60s)
+    var restDuration: TimeInterval?
 
     init(
         exerciseDefinitionID: String,
         exerciseName: String,
         defaultSets: Int = 3,
         defaultReps: Int = 10,
-        defaultWeightKg: Double? = nil
+        defaultWeightKg: Double? = nil,
+        restDuration: TimeInterval? = nil
     ) {
         self.id = UUID()
         self.exerciseDefinitionID = exerciseDefinitionID
@@ -45,6 +48,11 @@ struct TemplateEntry: Codable, Identifiable, Sendable {
             self.defaultWeightKg = min(max(weight, 0), 500)
         } else {
             self.defaultWeightKg = nil
+        }
+        if let rest = restDuration {
+            self.restDuration = min(max(rest, 0), 600) // Max 10 minutes
+        } else {
+            self.restDuration = nil
         }
     }
 }

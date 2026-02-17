@@ -52,6 +52,8 @@ struct DailveApp: App {
                     if !hasShownConsent {
                         showConsentSheet = true
                     }
+                    // Activate WatchConnectivity — syncs exercise library to Watch
+                    WatchSessionManager.shared.activate()
                 }
                 .sheet(isPresented: $showConsentSheet) {
                     CloudSyncConsentView(isPresented: $showConsentSheet)

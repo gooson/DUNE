@@ -95,12 +95,3 @@ final class ExerciseRecord {
         (sets ?? []).filter(\.isCompleted).sorted { $0.setNumber < $1.setNumber }
     }
 }
-
-// MARK: - ExerciseRecordVolumeProviding
-
-extension ExerciseRecord: ExerciseRecordVolumeProviding {
-    var volumeDate: Date { date }
-    var volumeSetCount: Int { completedSets.count }
-    var volumePrimaryMuscles: [MuscleGroup] { primaryMuscles }
-    var volumeSecondaryMuscles: [MuscleGroup] { secondaryMuscles }
-}

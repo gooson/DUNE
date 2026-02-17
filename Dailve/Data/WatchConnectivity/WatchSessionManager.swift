@@ -62,6 +62,21 @@ final class WatchSessionManager: NSObject {
             AppLogger.ui.error("Failed to transfer exercise library: \(error.localizedDescription)")
         }
     }
+
+    /// Converts the full exercise library to WatchExerciseInfo and sends via applicationContext.
+    func syncExerciseLibraryToWatch() {
+        let definitions = ExerciseLibraryService.shared.allExercises()
+        let watchExercises = definitions.map { def in
+            WatchExerciseInfo(
+                id: def.id,
+                name: def.localizedName,
+                inputType: def.inputType.rawValue,
+                defaultSets: 3,
+                defaultReps: (def.inputType == .setsRepsWeight || def.inputType == .setsReps) ? 10 : nil
+            )
+        }
+        transferExerciseLibrary(watchExercises)
+    }
 }
 
 // MARK: - WCSessionDelegate
@@ -77,6 +92,10 @@ extension WatchSessionManager: WCSessionDelegate {
             isWatchAppInstalled = session.isWatchAppInstalled
             if let error {
                 AppLogger.ui.error("WCSession activation failed: \(error.localizedDescription)")
+            }
+            // Auto-sync exercise library to Watch on successful activation
+            if activationState == .activated, session.isWatchAppInstalled {
+                syncExerciseLibraryToWatch()
             }
         }
     }

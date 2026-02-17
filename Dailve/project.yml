@@ -93,6 +93,20 @@ targets:
         excludes:
           - "Resources/**"
       - path: ../DailveWatch/Resources
+      # Shared SwiftData models
+      - path: Data/Persistence/Models
+        group: Shared/Models
+      - path: Data/Persistence/Migration
+        group: Shared/Migration
+      # Shared Domain enums (required by @Model files)
+      - path: Domain/Models/ExerciseCategory.swift
+        group: Shared/Domain
+      - path: Domain/Models/MuscleGroup.swift
+        group: Shared/Domain
+      - path: Domain/Models/Equipment.swift
+        group: Shared/Domain
+      - path: Domain/Models/ExerciseDefinition.swift
+        group: Shared/Domain
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.raftel.dailve.watchkitapp
@@ -107,6 +121,18 @@ targets:
         DEVELOPMENT_TEAM: "4GWU9QB2JZ"
         CODE_SIGN_IDENTITY: "Apple Development"
         INFOPLIST_KEY_WKCompanionAppBundleIdentifier: com.raftel.dailve
+        INFOPLIST_KEY_NSHealthShareUsageDescription: "Dailve needs access to your health data to track heart rate during workouts."
+        INFOPLIST_KEY_NSHealthUpdateUsageDescription: "Dailve records your workout data to Health."
+        CODE_SIGN_ENTITLEMENTS: ../DailveWatch/DailveWatch.entitlements
+    entitlements:
+      path: ../DailveWatch/DailveWatch.entitlements
+      properties:
+        com.apple.developer.healthkit: true
+        com.apple.developer.healthkit.access: []
+        com.apple.developer.icloud-container-identifiers:
+          - iCloud.com.raftel.dailve
+        com.apple.developer.icloud-services:
+          - CloudKit
     dependencies:
       - sdk: HealthKit.framework
       - sdk: WatchConnectivity.framework

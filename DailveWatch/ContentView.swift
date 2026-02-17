@@ -1,24 +1,40 @@
 import SwiftUI
 
+/// Root view: routes between RoutineList (idle), SessionPaging (active), and Summary (ended).
 struct ContentView: View {
     @Environment(WatchConnectivityManager.self) private var connectivity
-    @State private var navigationPath = NavigationPath()
+    @State private var workoutManager = WorkoutManager.shared
+
+    /// Captured once when session ends to avoid stale Date() on every body recompute.
+    @State private var sessionEndDate: Date?
 
     var body: some View {
-        NavigationStack(path: $navigationPath) {
-            if let activeWorkout = connectivity.activeWorkout {
-                WorkoutActiveView(workout: activeWorkout)
-            } else {
-                WorkoutIdleView()
+        NavigationStack {
+            Group {
+                if workoutManager.isSessionEnded, let endDate = sessionEndDate {
+                    SessionSummaryView(
+                        startDate: workoutManager.startDate ?? endDate,
+                        endDate: endDate,
+                        completedSetsData: workoutManager.completedSetsData,
+                        averageHR: workoutManager.averageHeartRate,
+                        maxHR: workoutManager.maxHeartRate,
+                        activeCalories: workoutManager.activeCalories
+                    )
+                } else if workoutManager.isActive {
+                    SessionPagingView()
+                } else {
+                    RoutineListView()
+                }
             }
         }
-        .onChange(of: connectivity.activeWorkout?.exerciseID) { oldValue, newValue in
-            // When iPhone starts a workout (nil → exerciseID), pop QuickStartView
-            // so root switches from WorkoutIdleView to WorkoutActiveView.
-            // Without this, pushed views remain on stack and cover the transition.
-            if oldValue == nil, newValue != nil {
-                navigationPath = NavigationPath()
+        .environment(workoutManager)
+        .onChange(of: workoutManager.isSessionEnded) { _, ended in
+            if ended {
+                sessionEndDate = Date()
             }
+        }
+        .task {
+            await workoutManager.recoverSession()
         }
     }
 }

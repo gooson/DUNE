@@ -6,6 +6,8 @@ struct WorkoutTemplateListView: View {
     @Query(sort: \WorkoutTemplate.updatedAt, order: .reverse) private var templates: [WorkoutTemplate]
 
     @State private var showingCreateSheet = false
+    @State private var templateToEdit: WorkoutTemplate?
+    @State private var templateToDelete: WorkoutTemplate?
     let onStartTemplate: (WorkoutTemplate) -> Void
 
     var body: some View {
@@ -28,7 +30,30 @@ struct WorkoutTemplateListView: View {
             }
         }
         .sheet(isPresented: $showingCreateSheet) {
-            CreateTemplateView()
+            TemplateFormView()
+        }
+        .sheet(item: $templateToEdit) { template in
+            TemplateFormView(template: template)
+        }
+        .confirmationDialog(
+            "Delete Template?",
+            isPresented: .init(
+                get: { templateToDelete != nil },
+                set: { if !$0 { templateToDelete = nil } }
+            ),
+            titleVisibility: .visible
+        ) {
+            Button("Delete", role: .destructive) {
+                if let template = templateToDelete {
+                    modelContext.delete(template)
+                    templateToDelete = nil
+                }
+            }
+            Button("Cancel", role: .cancel) {
+                templateToDelete = nil
+            }
+        } message: {
+            Text("This will permanently remove the template from all devices.")
         }
     }
 
@@ -62,9 +87,17 @@ struct WorkoutTemplateListView: View {
                     templateRow(template)
                 }
                 .buttonStyle(.plain)
+                .swipeActions(edge: .leading, allowsFullSwipe: false) {
+                    Button {
+                        templateToEdit = template
+                    } label: {
+                        Label("Edit", systemImage: "pencil")
+                    }
+                    .tint(.orange)
+                }
                 .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                     Button(role: .destructive) {
-                        modelContext.delete(template)
+                        templateToDelete = template
                     } label: {
                         Label("Delete", systemImage: "trash")
                     }
