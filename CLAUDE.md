@@ -197,3 +197,9 @@
 54. **`/ship`에서 머지 전략은 `--merge` 기본**: squash는 커밋 이력을 소실시킴. 사용자가 명시적으로 요청하지 않는 한 `--merge` 사용
 55. **리뷰 수정 시 dead code 삭제를 별도 단계로 분리하지 않음**: 리뷰에서 발견된 dead code는 같은 fix 커밋에서 삭제. 별도 TODO로 미루면 잊혀짐
 56. **BodyCompositionViewModel에 `errorMessage` 없음 확인 후 코딩**: 기존 VM의 프로퍼티 존재 여부를 빌드 전에 grep으로 확인. 빌드 실패 후 수정보다 사전 확인이 효율적
+
+### 2026-02-18: HealthKit Dedup 리뷰 교정
+
+57. **Domain 모델에 인프라 문자열 금지**: `sourceBundleIdentifier: String?`처럼 HealthKit/시스템 문자열을 Domain에 노출하지 않음. Data 레이어에서 의미 있는 타입(`isFromThisApp: Bool`)으로 해소 후 Domain에 전달
+58. **Dedup 필터에서 빈 문자열 ID 방어**: `compactMap`으로 ID를 수집할 때 `!id.isEmpty` 검증 필수. `healthKitWorkoutID = ""`인 corrupted record가 모든 빈 ID 워크아웃과 false-positive 매칭
+59. **ViewModifier 추출은 복잡도 높으면 2곳부터**: 기존 규칙(#37)은 3곳부터 추출이지만, `modelContext.save()` + stale reference guard 등 복잡한 로직은 2곳 중복에서도 ViewModifier로 추출. 복잡도가 높을수록 DRY threshold를 낮춤
