@@ -192,10 +192,19 @@ struct WatchHeartRateSample: Codable, Sendable {
     let timestamp: Date
 }
 
-struct WatchExerciseInfo: Codable, Sendable {
+struct WatchExerciseInfo: Codable, Sendable, Hashable {
     let id: String
     let name: String
     let inputType: String
     let defaultSets: Int
     let defaultReps: Int?
+
+    // Hashable uses id only to match Identifiable semantics (Correction Log #26)
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.id == rhs.id
+    }
 }

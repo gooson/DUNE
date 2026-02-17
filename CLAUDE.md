@@ -197,3 +197,11 @@
 54. **`/ship`에서 머지 전략은 `--merge` 기본**: squash는 커밋 이력을 소실시킴. 사용자가 명시적으로 요청하지 않는 한 `--merge` 사용
 55. **리뷰 수정 시 dead code 삭제를 별도 단계로 분리하지 않음**: 리뷰에서 발견된 dead code는 같은 fix 커밋에서 삭제. 별도 TODO로 미루면 잊혀짐
 56. **BodyCompositionViewModel에 `errorMessage` 없음 확인 후 코딩**: 기존 VM의 프로퍼티 존재 여부를 빌드 전에 grep으로 확인. 빌드 실패 후 수정보다 사전 확인이 효율적
+
+### 2026-02-18: Watch Navigation 상태 전환 교정
+
+57. **`NavigationStack(path:)` 필수 — 외부 상태로 root 전환 시**: `if/else`로 root view를 바꿔도 push된 child view는 stack에 남음. `NavigationPath`를 명시적으로 초기화해야 pop
+58. **`sheet(item:)` 바인딩 타입에 `Hashable` 필수**: `Identifiable`만으로 부족. SwiftUI 값 변경 감지에 `Equatable`(`Hashable` 포함) 필요
+59. **`@State` 데이터 보호 — `onDisappear` safety net**: 비정상 dismiss 시 `@State` 데이터 유실은 silent failure. `onDisappear`에서 미저장 데이터 전송, 정상 경로에서 데이터 비워 중복 방지
+60. **`onChange` 감시 범위 최소화**: `nil → non-nil` 등 특정 전환만 트리거. 모든 변경에 반응하면 운동 종료 시 불필요한 navigation 리셋 등 side effect 유발
+61. **Navigation routing은 enum 사용**: `NavigationLink(value: String)` 금지. `WatchRoute` enum으로 type-safe routing. 단일 destination이라도 enum으로 시작
