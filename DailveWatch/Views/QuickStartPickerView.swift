@@ -4,17 +4,13 @@ import SwiftUI
 /// Uses `WatchConnectivityManager.exerciseLibrary` synced from iPhone.
 struct QuickStartPickerView: View {
     @Environment(WatchConnectivityManager.self) private var connectivity
-    @Environment(WorkoutManager.self) private var workoutManager
-    @Environment(\.dismiss) private var dismiss
 
     @State private var searchText = ""
-    @State private var errorMessage: String?
+    @State private var cachedFiltered: [WatchExerciseInfo] = []
+    @State private var cachedRecent: [WatchExerciseInfo] = []
 
-    private var filteredExercises: [WatchExerciseInfo] {
-        let library = connectivity.exerciseLibrary
-        guard !searchText.isEmpty else { return library }
-        return library.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
-    }
+    private var filteredExercises: [WatchExerciseInfo] { cachedFiltered }
+    private var recentExercises: [WatchExerciseInfo] { cachedRecent }
 
     var body: some View {
         Group {
@@ -25,31 +21,44 @@ struct QuickStartPickerView: View {
             }
         }
         .navigationTitle("Quick Start")
-        .alert("Error", isPresented: .init(
-            get: { errorMessage != nil },
-            set: { if !$0 { errorMessage = nil } }
-        )) {
-            Button("OK", role: .cancel) {}
-        } message: {
-            Text(errorMessage ?? "")
-        }
+        .onAppear { rebuildFilteredLists() }
+        .onChange(of: searchText) { _, _ in rebuildFilteredLists() }
+        .onChange(of: connectivity.exerciseLibrary.count) { _, _ in rebuildFilteredLists() }
     }
 
     // MARK: - Exercise List
 
     private var exerciseList: some View {
         List {
-            ForEach(filteredExercises, id: \.id) { exercise in
-                Button(action: { startQuickWorkout(exercise) }) {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(exercise.name)
-                            .font(.caption.weight(.medium))
-                            .lineLimit(1)
-                        Text("\(exercise.defaultSets) sets · \(exercise.defaultReps ?? 10) reps")
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
+            // Recent section (only when not searching and has history)
+            if !recentExercises.isEmpty {
+                Section("Recent") {
+                    ForEach(recentExercises, id: \.id) { exercise in
+                        exerciseRow(exercise)
                     }
                 }
+            }
+
+            // All exercises
+            Section(recentExercises.isEmpty ? "Exercises" : "All") {
+                ForEach(filteredExercises, id: \.id) { exercise in
+                    exerciseRow(exercise)
+                }
+            }
+        }
+    }
+
+    private func exerciseRow(_ exercise: WatchExerciseInfo) -> some View {
+        NavigationLink(value: WatchRoute.workoutPreview(
+            snapshotFromExercise(exercise)
+        )) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(exercise.name)
+                    .font(.caption.weight(.medium))
+                    .lineLimit(1)
+                Text("\(exercise.defaultSets) sets · \(exercise.defaultReps ?? 10) reps")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
             }
         }
     }
@@ -71,9 +80,31 @@ struct QuickStartPickerView: View {
         .padding()
     }
 
-    // MARK: - Start Workout
+    // MARK: - Filter Computation
 
-    private func startQuickWorkout(_ exercise: WatchExerciseInfo) {
+    private func rebuildFilteredLists() {
+        let library = connectivity.exerciseLibrary
+        let base = searchText.isEmpty ? library : library.filter {
+            $0.name.localizedCaseInsensitiveContains(searchText)
+        }
+        cachedFiltered = RecentExerciseTracker.sorted(base)
+
+        if searchText.isEmpty {
+            cachedRecent = library.filter {
+                RecentExerciseTracker.lastUsed(exerciseID: $0.id) != nil
+            }.sorted {
+                let a = RecentExerciseTracker.lastUsed(exerciseID: $0.id) ?? .distantPast
+                let b = RecentExerciseTracker.lastUsed(exerciseID: $1.id) ?? .distantPast
+                return a > b
+            }
+        } else {
+            cachedRecent = []
+        }
+    }
+
+    // MARK: - Helpers
+
+    private func snapshotFromExercise(_ exercise: WatchExerciseInfo) -> WorkoutSessionTemplate {
         let entry = TemplateEntry(
             exerciseDefinitionID: exercise.id,
             exerciseName: exercise.name,
@@ -81,17 +112,9 @@ struct QuickStartPickerView: View {
             defaultReps: exercise.defaultReps ?? 10,
             defaultWeightKg: exercise.defaultWeightKg
         )
-        let snapshot = WorkoutSessionTemplate(
+        return WorkoutSessionTemplate(
             name: exercise.name,
             entries: [entry]
         )
-        Task {
-            do {
-                try await workoutManager.requestAuthorization()
-                try await workoutManager.startQuickWorkout(with: snapshot)
-            } catch {
-                errorMessage = "Failed to start: \(error.localizedDescription)"
-            }
-        }
     }
 }

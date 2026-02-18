@@ -71,7 +71,7 @@ final class WatchSessionManager: NSObject {
                 id: def.id,
                 name: def.localizedName,
                 inputType: def.inputType.rawValue,
-                defaultSets: 3,
+                defaultSets: WorkoutDefaults.setCount,
                 defaultReps: (def.inputType == .setsRepsWeight || def.inputType == .setsReps) ? 10 : nil,
                 defaultWeightKg: nil
             )
@@ -229,7 +229,9 @@ struct WatchHeartRateSample: Codable, Sendable {
     }
 }
 
-/// Compact exercise info for Watch display
+/// Compact exercise info for Watch display.
+/// IMPORTANT: Duplicated in DailveWatch/WatchConnectivityManager.swift — keep both in sync.
+/// TODO: Extract to shared Swift package to eliminate duplication (#69).
 struct WatchExerciseInfo: Codable, Sendable {
     let id: String
     let name: String

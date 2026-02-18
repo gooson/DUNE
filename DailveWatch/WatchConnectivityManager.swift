@@ -2,6 +2,14 @@ import Foundation
 @preconcurrency import WatchConnectivity
 import Observation
 
+/// Sync status for exercise library data from iPhone.
+enum SyncStatus: Equatable {
+    case syncing
+    case synced(Date)
+    case failed(String)
+    case notConnected
+}
+
 /// Watch-side WatchConnectivity manager.
 /// Receives workout state from iPhone and sends completed sets back.
 @Observable
@@ -19,6 +27,9 @@ final class WatchConnectivityManager: NSObject {
 
     /// Exercise library transferred from iPhone
     private(set) var exerciseLibrary: [WatchExerciseInfo] = []
+
+    /// Sync status for UI display
+    private(set) var syncStatus: SyncStatus = .notConnected
 
     private override init() {
         super.init()
@@ -108,9 +119,14 @@ extension WatchConnectivityManager: WCSessionDelegate {
     ) {
         if let error {
             print("WCSession activation failed: \(error.localizedDescription)")
+            Task { @MainActor in
+                syncStatus = .failed(error.localizedDescription)
+            }
+            return
         }
         if activationState == .activated {
             Task { @MainActor in
+                syncStatus = .syncing
                 loadCachedContext()
             }
         }
@@ -165,9 +181,15 @@ extension WatchConnectivityManager {
         if let data = context["exerciseLibrary"] {
             do {
                 exerciseLibrary = try JSONDecoder().decode([WatchExerciseInfo].self, from: data)
+                syncStatus = .synced(Date())
             } catch {
                 print("Failed to decode exercise library: \(error.localizedDescription)")
+                syncStatus = .failed("Decode error")
             }
+        } else {
+            // P3: No exerciseLibrary key — mark synced regardless of library state.
+            // The context may contain other keys, or be empty on first launch.
+            syncStatus = .synced(Date())
         }
     }
 }
@@ -206,6 +228,8 @@ struct WatchHeartRateSample: Codable, Sendable {
     let timestamp: Date
 }
 
+/// IMPORTANT: Duplicated in Dailve/Data/WatchConnectivity/WatchSessionManager.swift — keep both in sync.
+/// TODO: Extract to shared Swift package to eliminate duplication (#69).
 struct WatchExerciseInfo: Codable, Sendable, Hashable {
     let id: String
     let name: String

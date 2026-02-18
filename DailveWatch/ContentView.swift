@@ -3,6 +3,19 @@ import SwiftUI
 /// Type-safe navigation routes for Watch app (correction #61).
 enum WatchRoute: Hashable {
     case quickStart
+    case workoutPreview(WorkoutSessionTemplate)
+}
+
+// WorkoutSessionTemplate needs Hashable for navigation value
+extension WorkoutSessionTemplate: Hashable {
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.name == rhs.name && lhs.entries.count == rhs.entries.count
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(name)
+        hasher.combine(entries.count)
+    }
 }
 
 /// Root view: routes between RoutineList (idle), SessionPaging (active), and Summary (ended).
@@ -39,6 +52,8 @@ struct ContentView: View {
                 switch route {
                 case .quickStart:
                     QuickStartPickerView()
+                case .workoutPreview(let snapshot):
+                    WorkoutPreviewView(snapshot: snapshot)
                 }
             }
         }

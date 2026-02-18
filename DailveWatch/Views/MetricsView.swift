@@ -1,18 +1,24 @@
 import SwiftUI
 import WatchKit
 
-/// Center page of SessionPagingView: Set entry with Digital Crown weight,
-/// +/- reps, Complete button, and real-time HR display.
+/// Center page of SessionPagingView: Hierarchical set display with
+/// tap-to-edit input sheet. Crown is free for scrolling.
 struct MetricsView: View {
     @Environment(WorkoutManager.self) private var workoutManager
     @Environment(\.isLuminanceReduced) private var isLuminanceReduced
 
     @State private var weight: Double = 0
     @State private var reps: Int = 0
+    @State private var showInputSheet = false
     @State private var showRestTimer = false
     @State private var showNextExercise = false
     @State private var showEndConfirmation = false
+    @State private var showEmptySetConfirmation = false
+    @State private var showLastSetOptions = false
     @State private var transitionTask: Task<Void, Never>?
+    @State private var didInitialAppear = false
+    /// Deferred input sheet trigger to prevent double-present with onAppear
+    @State private var pendingInputSheet = false
 
     var body: some View {
         Group {
@@ -34,6 +40,20 @@ struct MetricsView: View {
         }
         .onAppear {
             prefillFromEntry()
+            // Only show input sheet on first appear, not after rest/transition
+            if !didInitialAppear {
+                didInitialAppear = true
+                showInputSheet = true
+            }
+        }
+        .onChange(of: pendingInputSheet) { _, shouldShow in
+            if shouldShow {
+                pendingInputSheet = false
+                showInputSheet = true
+            }
+        }
+        .sheet(isPresented: $showInputSheet) {
+            SetInputSheet(weight: $weight, reps: $reps)
         }
         .confirmationDialog(
             "End Workout?",
@@ -53,35 +73,58 @@ struct MetricsView: View {
                 Text("Save and finish this workout?")
             }
         }
+        // P2: Empty set confirmation
+        .confirmationDialog(
+            "Empty Set",
+            isPresented: $showEmptySetConfirmation,
+            titleVisibility: .visible
+        ) {
+            Button("Record Empty") {
+                executeCompleteSet()
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("Weight and reps are both 0. Record anyway?")
+        }
+        // Last set options: +1 Set or Finish Exercise
+        .confirmationDialog(
+            "All Sets Done",
+            isPresented: $showLastSetOptions,
+            titleVisibility: .visible
+        ) {
+            Button("+1 Set") {
+                addExtraSet()
+            }
+            Button("Finish Exercise") {
+                finishCurrentExercise()
+            }
+        } message: {
+            Text("Add another set or move on?")
+        }
     }
 
-    // MARK: - Set Entry
+    // MARK: - Set Entry (Redesigned)
 
+    /// Plain VStack instead of ScrollView — crown must stay free for TabView paging.
+    /// ScrollView in a non-last vertical page tab cannot receive crown events.
     private var setEntryView: some View {
-        ScrollView {
-            VStack(spacing: 6) {
-                // Progress bar
-                sessionProgressBar
+        VStack(spacing: 8) {
+            // Progress bar
+            sessionProgressBar
 
-                // Exercise name + set counter
-                exerciseHeader
+            // Exercise name (large)
+            exerciseHeader
 
-                Divider()
+            // Weight × Reps — tap to edit
+            inputCard
 
-                // Weight input (Digital Crown + buttons)
-                weightInput
+            // Complete Set button (large touch target)
+            completeButton
 
-                // Reps input (+/-)
-                repsInput
-
-                // Complete Set button
-                completeButton
-
-                // Heart rate
-                heartRateDisplay
-            }
-            .padding(.horizontal, 4)
+            // Heart rate (secondary)
+            heartRateDisplay
         }
+        .padding(.horizontal, 8)
     }
 
     // MARK: - Progress
@@ -101,29 +144,30 @@ struct MetricsView: View {
                 }
         }
         .frame(height: 3)
-        .padding(.bottom, 4)
+        .padding(.bottom, 2)
     }
 
     // MARK: - Header
 
     private var exerciseHeader: some View {
-        VStack(spacing: 2) {
+        VStack(spacing: 4) {
             if let entry = workoutManager.currentEntry {
                 Text(entry.exerciseName)
-                    .font(.caption.weight(.semibold))
-                    .lineLimit(1)
+                    .font(.headline.bold())
+                    .lineLimit(2)
                     .minimumScaleFactor(0.7)
+                    .multilineTextAlignment(.center)
 
-                Text("Set \(workoutManager.currentSetIndex + 1) / \(entry.defaultSets)")
-                    .font(.caption2)
+                Text("Set \(workoutManager.currentSetIndex + 1) of \(workoutManager.effectiveTotalSets)")
+                    .font(.subheadline)
                     .foregroundStyle(.secondary)
 
-                // Set progress dots
-                HStack(spacing: 3) {
-                    ForEach(0..<entry.defaultSets, id: \.self) { i in
+                // Set progress dots (larger)
+                HStack(spacing: 4) {
+                    ForEach(0..<workoutManager.effectiveTotalSets, id: \.self) { i in
                         Circle()
                             .fill(dotColor(for: i))
-                            .frame(width: 6, height: 6)
+                            .frame(width: 8, height: 8)
                     }
                 }
             }
@@ -144,99 +188,47 @@ struct MetricsView: View {
         }
     }
 
-    // MARK: - Weight Input
+    // MARK: - Input Card (Tap to Edit)
 
-    private var weightInput: some View {
-        VStack(spacing: 4) {
-            HStack {
-                Text("Weight")
+    private var inputCard: some View {
+        Button {
+            showInputSheet = true
+        } label: {
+            VStack(spacing: 2) {
+                HStack(spacing: 4) {
+                    Text("\(weight, specifier: "%.1f")")
+                        .font(.system(.title3, design: .rounded).monospacedDigit().bold())
+                    Text("kg")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+
+                HStack(spacing: 4) {
+                    Text("×")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                    Text("\(reps)")
+                        .font(.system(.title3, design: .rounded).monospacedDigit().bold())
+                    Text("reps")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .foregroundStyle(.green)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 8)
+            .background {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(.green.opacity(0.15))
+            }
+            .overlay(alignment: .topTrailing) {
+                Image(systemName: "pencil")
                     .font(.caption2)
                     .foregroundStyle(.secondary)
-                Spacer()
-                Text("\(weight, specifier: "%.1f") kg")
-                    .font(.body.monospacedDigit().weight(.semibold))
-                    .foregroundStyle(.green)
-            }
-
-            // +/- buttons for precise adjustment
-            HStack(spacing: 12) {
-                Button {
-                    if weight >= 5 { weight -= 5 }
-                } label: {
-                    Text("-5")
-                        .font(.caption2.weight(.medium))
-                        .frame(width: 32)
-                }
-                .buttonStyle(.bordered)
-                .tint(.gray)
-
-                Button {
-                    if weight >= 2.5 { weight -= 2.5 }
-                } label: {
-                    Text("-2.5")
-                        .font(.caption2.weight(.medium))
-                        .frame(width: 36)
-                }
-                .buttonStyle(.bordered)
-                .tint(.gray)
-
-                Button {
-                    if weight <= 497.5 { weight += 2.5 }
-                } label: {
-                    Text("+2.5")
-                        .font(.caption2.weight(.medium))
-                        .frame(width: 36)
-                }
-                .buttonStyle(.bordered)
-                .tint(.gray)
-
-                Button {
-                    if weight <= 495 { weight += 5 }
-                } label: {
-                    Text("+5")
-                        .font(.caption2.weight(.medium))
-                        .frame(width: 32)
-                }
-                .buttonStyle(.bordered)
-                .tint(.gray)
+                    .padding(6)
             }
         }
-        .focusable()
-        .digitalCrownRotation($weight, from: 0, through: 500, by: 2.5, sensitivity: .medium)
-    }
-
-    // MARK: - Reps Input
-
-    private var repsInput: some View {
-        HStack {
-            Text("Reps")
-                .font(.caption2)
-                .foregroundStyle(.secondary)
-            Spacer()
-
-            HStack(spacing: 8) {
-                Button {
-                    if reps > 0 { reps -= 1 }
-                } label: {
-                    Image(systemName: "minus.circle")
-                        .font(.title3)
-                }
-                .buttonStyle(.plain)
-
-                Text("\(reps)")
-                    .font(.body.monospacedDigit().weight(.semibold))
-                    .foregroundStyle(.green)
-                    .frame(minWidth: 24)
-
-                Button {
-                    if reps < 100 { reps += 1 }
-                } label: {
-                    Image(systemName: "plus.circle")
-                        .font(.title3)
-                }
-                .buttonStyle(.plain)
-            }
-        }
+        .buttonStyle(.plain)
     }
 
     // MARK: - Complete Button
@@ -246,15 +238,14 @@ struct MetricsView: View {
             completeSet()
         } label: {
             HStack {
-                Image(systemName: "checkmark.circle")
+                Image(systemName: "checkmark.circle.fill")
                 Text("Complete Set")
-                    .font(.caption.weight(.semibold))
+                    .font(.headline)
             }
-            .frame(maxWidth: .infinity)
+            .frame(maxWidth: .infinity, minHeight: 44)
         }
         .buttonStyle(.borderedProminent)
         .tint(.green)
-        .padding(.top, 4)
     }
 
     // MARK: - Heart Rate
@@ -267,12 +258,12 @@ struct MetricsView: View {
 
             if workoutManager.heartRate > 0 {
                 Text("\(Int(workoutManager.heartRate)) bpm")
-                    .font(.caption2.monospacedDigit())
+                    .font(.caption.monospacedDigit())
                     .foregroundStyle(.secondary)
                     .contentTransition(.numericText())
             } else {
                 Text("--")
-                    .font(.caption2)
+                    .font(.caption)
                     .foregroundStyle(.tertiary)
             }
         }
@@ -304,6 +295,9 @@ struct MetricsView: View {
                 guard !Task.isCancelled else { return }
                 workoutManager.advanceToNextExercise()
                 showNextExercise = false
+                prefillFromEntry()
+                WKInterfaceDevice.current().play(.notification)
+                pendingInputSheet = true
             }
         }
         .onDisappear {
@@ -339,25 +333,54 @@ struct MetricsView: View {
     }
 
     private func completeSet() {
+        // P2: Validate empty set
+        if weight <= 0, reps <= 0 {
+            showEmptySetConfirmation = true
+            return
+        }
+        executeCompleteSet()
+    }
+
+    private func executeCompleteSet() {
+        let wasLastSet = workoutManager.isLastSet
+
         workoutManager.completeSet(weight: weight > 0 ? weight : nil, reps: reps > 0 ? reps : nil)
 
-        if workoutManager.isLastSet {
-            if workoutManager.isLastExercise {
-                // All done — end workout
-                workoutManager.end()
-            } else {
-                // Show next exercise transition
-                showNextExercise = true
-            }
+        // Haptic on set completion
+        WKInterfaceDevice.current().play(.success)
+
+        if wasLastSet {
+            // Offer +1 Set option instead of auto-finishing
+            showLastSetOptions = true
         } else {
-            // Show rest timer, then advance to next set
+            // Go to rest first, input sheet comes after rest
             showRestTimer = true
         }
+    }
+
+    private func finishCurrentExercise() {
+        if workoutManager.isLastExercise {
+            WKInterfaceDevice.current().play(.success)
+            workoutManager.end()
+        } else {
+            WKInterfaceDevice.current().play(.start)
+            showNextExercise = true
+        }
+    }
+
+    private func addExtraSet() {
+        workoutManager.addExtraSet()
+        WKInterfaceDevice.current().play(.start)
+        showRestTimer = true
     }
 
     private func handleRestComplete() {
         showRestTimer = false
         workoutManager.advanceToNextSet()
         prefillFromEntry()
+
+        // Haptic on rest complete → defer input sheet to avoid double-present
+        WKInterfaceDevice.current().play(.notification)
+        pendingInputSheet = true
     }
 }

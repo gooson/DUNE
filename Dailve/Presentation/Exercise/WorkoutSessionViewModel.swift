@@ -91,7 +91,9 @@ final class WorkoutSessionViewModel {
     ) {
         self.exercise = exercise
         self.calorieService = calorieService
-        addSet()
+        for _ in 0..<WorkoutDefaults.setCount {
+            addSet()
+        }
     }
 
     // MARK: - Set Management
@@ -163,7 +165,8 @@ final class WorkoutSessionViewModel {
 
     // MARK: - Previous Session
 
-    func loadPreviousSets(from records: [ExerciseRecord]) {
+    func loadPreviousSets(from records: [ExerciseRecord], weightUnit: WeightUnit = .kg) {
+        guard !isSaving else { return }
         // Find the most recent record for this exercise
         let matching = records
             .filter { $0.exerciseDefinitionID == exercise.id }
@@ -181,6 +184,16 @@ final class WorkoutSessionViewModel {
                 duration: set.duration,
                 distance: set.distance
             )
+        }
+
+        // Match set count to previous session if it had more sets
+        while sets.count < previousSets.count {
+            addSet(weightUnit: weightUnit)
+        }
+
+        // Re-fill sets with previous data (init created sets before previousSets was loaded)
+        for i in sets.indices where !sets[i].isCompleted {
+            fillSetFromPrevious(at: i, weightUnit: weightUnit)
         }
     }
 

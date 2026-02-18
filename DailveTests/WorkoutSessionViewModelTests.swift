@@ -23,49 +23,51 @@ struct WorkoutSessionViewModelTests {
         )
     }
 
-    @Test("Initial state has one empty set")
+    @Test("Initial state has default number of empty sets")
     func initialState() {
         let exercise = makeExercise()
         let vm = WorkoutSessionViewModel(exercise: exercise)
 
-        #expect(vm.sets.count == 1)
+        #expect(vm.sets.count == WorkoutDefaults.setCount)
         #expect(vm.sets[0].setNumber == 1)
         #expect(vm.sets[0].weight.isEmpty)
         #expect(vm.sets[0].reps.isEmpty)
+        #expect(vm.sets.last?.setNumber == WorkoutDefaults.setCount)
     }
 
     @Test("addSet increments set number")
     func addSet() {
         let exercise = makeExercise()
         let vm = WorkoutSessionViewModel(exercise: exercise)
+        let initialCount = vm.sets.count
 
         vm.addSet()
-        #expect(vm.sets.count == 2)
-        #expect(vm.sets[1].setNumber == 2)
+        #expect(vm.sets.count == initialCount + 1)
+        #expect(vm.sets.last?.setNumber == initialCount + 1)
     }
 
     @Test("removeSet at valid index")
     func removeSet() {
         let exercise = makeExercise()
         let vm = WorkoutSessionViewModel(exercise: exercise)
-        vm.addSet()
-        vm.addSet()
-        #expect(vm.sets.count == 3)
+        let initialCount = vm.sets.count
 
         vm.removeSet(at: 1)
-        #expect(vm.sets.count == 2)
+        #expect(vm.sets.count == initialCount - 1)
         // Set numbers should be renumbered
-        #expect(vm.sets[0].setNumber == 1)
-        #expect(vm.sets[1].setNumber == 2)
+        for (i, set) in vm.sets.enumerated() {
+            #expect(set.setNumber == i + 1)
+        }
     }
 
     @Test("removeSet ignores invalid index")
     func removeSetInvalidIndex() {
         let exercise = makeExercise()
         let vm = WorkoutSessionViewModel(exercise: exercise)
+        let initialCount = vm.sets.count
 
-        vm.removeSet(at: 5)
-        #expect(vm.sets.count == 1)
+        vm.removeSet(at: 100)
+        #expect(vm.sets.count == initialCount)
     }
 
     @Test("toggleSetCompletion changes isCompleted")

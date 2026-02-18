@@ -57,9 +57,9 @@ struct RestTimerViewModelTests {
         #expect(vm.progress == 0.0)
     }
 
-    @Test("Default duration is 90 seconds")
+    @Test("Default duration is 30 seconds")
     func defaultDuration() {
         let vm = RestTimerViewModel()
-        #expect(vm.defaultDuration == 90)
+        #expect(vm.defaultDuration == 30)
     }
 }

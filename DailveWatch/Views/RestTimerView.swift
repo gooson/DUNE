@@ -10,6 +10,12 @@ struct RestTimerView: View {
     let onEnd: () -> Void
 
     @Environment(WorkoutManager.self) private var workoutManager
+    @Environment(\.isLuminanceReduced) private var isLuminanceReduced
+
+    /// Maximum total rest duration (including +30s additions).
+    private static let maxDurationSeconds = 600
+    /// Seconds before end to play warning haptic.
+    private static let warningThresholdSeconds: TimeInterval = 10
 
     /// The absolute time when the timer should finish.
     @State private var targetDate: Date = .distantFuture
@@ -19,6 +25,8 @@ struct RestTimerView: View {
     @State private var tick: Int = 0
     /// The running countdown task (cancelled on disappear).
     @State private var countdownTask: Task<Void, Never>?
+    /// Whether the warning haptic has fired.
+    @State private var didPlayWarning = false
 
     var body: some View {
         VStack(spacing: 6) {
@@ -39,7 +47,7 @@ struct RestTimerView: View {
 
                 VStack(spacing: 2) {
                     Text(timeString)
-                        .font(.system(.title2, design: .rounded).monospacedDigit().weight(.bold))
+                        .font(.system(.title, design: .rounded).monospacedDigit().weight(.bold))
 
                     // HR display during rest
                     HStack(spacing: 2) {
@@ -61,12 +69,13 @@ struct RestTimerView: View {
             .frame(width: 100, height: 100)
 
             // +30s / Skip / End buttons
-            HStack(spacing: 10) {
+            HStack(spacing: 8) {
                 Button {
                     addTime(30)
                 } label: {
                     Text("+30s")
-                        .font(.system(size: 11, weight: .medium))
+                        .font(.caption2.weight(.medium))
+                        .frame(minHeight: 32)
                 }
                 .buttonStyle(.bordered)
                 .tint(.gray)
@@ -76,7 +85,8 @@ struct RestTimerView: View {
                     onSkip()
                 } label: {
                     Text("Skip")
-                        .font(.system(size: 11, weight: .medium))
+                        .font(.caption.weight(.semibold))
+                        .frame(minHeight: 36)
                 }
                 .buttonStyle(.bordered)
                 .tint(.green)
@@ -86,7 +96,8 @@ struct RestTimerView: View {
                     onEnd()
                 } label: {
                     Text("End")
-                        .font(.system(size: 11, weight: .medium))
+                        .font(.caption2.weight(.medium))
+                        .frame(minHeight: 32)
                 }
                 .buttonStyle(.bordered)
                 .tint(.red)
@@ -127,18 +138,29 @@ struct RestTimerView: View {
     // MARK: - Countdown
 
     private func startCountdown() {
-        let total = Int(min(max(duration, 0), 600))
+        let total = Int(min(max(duration, 0), TimeInterval(Self.maxDurationSeconds)))
         totalSeconds = total
         targetDate = Date().addingTimeInterval(TimeInterval(total))
 
+        didPlayWarning = false
         countdownTask?.cancel()
         countdownTask = Task {
             while !Task.isCancelled {
-                try? await Task.sleep(for: .seconds(1))
+                // P2: Reduce tick frequency when AOD is active
+                let interval: Duration = isLuminanceReduced ? .seconds(5) : .seconds(1)
+                try? await Task.sleep(for: interval)
                 guard !Task.isCancelled else { return }
                 // Mutate @State to force view update
                 tick += 1
-                if targetDate.timeIntervalSinceNow <= 0 {
+
+                let remaining = targetDate.timeIntervalSinceNow
+                // Warning haptic (fires once per countdown)
+                if remaining <= Self.warningThresholdSeconds, remaining > 0, !didPlayWarning {
+                    didPlayWarning = true
+                    WKInterfaceDevice.current().play(.start)
+                }
+
+                if remaining <= 0 {
                     timerFinished()
                     return
                 }
@@ -152,8 +174,11 @@ struct RestTimerView: View {
     }
 
     private func addTime(_ seconds: Int) {
+        // P3: Cap total duration to prevent overflow
+        let newTotal = totalSeconds + seconds
+        guard newTotal <= Self.maxDurationSeconds else { return }
         targetDate = targetDate.addingTimeInterval(TimeInterval(seconds))
-        totalSeconds += seconds
+        totalSeconds = newTotal
     }
 
     private func timerFinished() {

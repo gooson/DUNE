@@ -87,8 +87,9 @@ struct ActivityView: View {
         .navigationDestination(for: AllDataDestination.self) { destination in
             AllDataView(category: destination.category)
         }
-        .navigationDestination(item: $selectedExercise) { exercise in
-            WorkoutSessionView(exercise: exercise)
+        .sheet(item: $selectedExercise) { exercise in
+            ExerciseStartView(exercise: exercise)
+                .interactiveDismissDisabled()
         }
         .refreshable {
             await viewModel.loadActivityData()
