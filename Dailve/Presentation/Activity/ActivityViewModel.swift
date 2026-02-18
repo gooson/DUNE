@@ -11,11 +11,47 @@ final class ActivityViewModel {
     var weeklySteps: [ChartDataPoint] = []
     var todayExercise: HealthMetric?
     var todaySteps: HealthMetric?
-    var recentWorkouts: [WorkoutSummary] = []
     var trainingLoadData: [TrainingLoadDataPoint] = []
     var isLoading = false
     var errorMessage: String?
     var workoutSuggestion: WorkoutSuggestion?
+
+    /// Weekly training goal in active days.
+    let weeklyGoal: Int = 5
+
+    // MARK: - Recent Workouts (cached metrics)
+
+    var recentWorkouts: [WorkoutSummary] = [] {
+        didSet { invalidateWorkoutCache() }
+    }
+
+    /// Last workout day's total calories from recent workouts.
+    private(set) var lastWorkoutCalories: Double = 0
+
+    /// Last workout day's total exercise minutes from recent workouts.
+    private(set) var lastWorkoutMinutes: Double = 0
+
+    /// Number of active days (at least 1 workout) in the last 7 days.
+    private(set) var activeDays: Int = 0
+
+    private func invalidateWorkoutCache() {
+        let calendar = Calendar.current
+        let lastDate = recentWorkouts
+            .map { calendar.startOfDay(for: $0.date) }
+            .max()
+
+        if let lastDate {
+            let lastDayWorkouts = recentWorkouts
+                .filter { calendar.startOfDay(for: $0.date) == lastDate }
+            lastWorkoutCalories = lastDayWorkouts.compactMap(\.calories).reduce(0, +)
+            lastWorkoutMinutes = lastDayWorkouts.reduce(0) { $0 + $1.duration / 60.0 }
+        } else {
+            lastWorkoutCalories = 0
+            lastWorkoutMinutes = 0
+        }
+
+        activeDays = Set(recentWorkouts.map { calendar.startOfDay(for: $0.date) }).count
+    }
 
     private let workoutService: WorkoutQuerying
     private let stepsService: StepsQuerying

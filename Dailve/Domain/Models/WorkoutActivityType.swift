@@ -40,7 +40,6 @@ enum WorkoutActivityType: String, Codable, Sendable, CaseIterable {
     case preparationAndRecovery
 
     // Dance
-    case dance
     case socialDance
     case cardioDance
 
@@ -137,7 +136,7 @@ enum WorkoutActivityType: String, Codable, Sendable, CaseIterable {
         case .yoga, .pilates, .flexibility, .taiChi, .mindAndBody, .barre,
              .cooldown, .preparationAndRecovery:
             return .mindBody
-        case .dance, .socialDance, .cardioDance:
+        case .socialDance, .cardioDance:
             return .dance
         case .boxing, .martialArts, .wrestling, .kickboxing, .fencing:
             return .combat
@@ -178,7 +177,7 @@ enum WorkoutActivityType: String, Codable, Sendable, CaseIterable {
         case .rowing: "Rowing"
         case .coreTraining: "Core"
         case .flexibility: "Flexibility"
-        case .dance, .socialDance, .cardioDance: "Dance"
+        case .socialDance, .cardioDance: "Dance"
         case .pilates: "Pilates"
         case .boxing: "Boxing"
         case .martialArts: "Martial Arts"
