@@ -81,6 +81,19 @@ final class ActivityViewModel {
         recentWorkouts = workoutsResult
         trainingLoadData = loadResult
 
+        // Report partial failures (Correction #25)
+        let failedCount = [
+            exerciseResult.weeklyData.isEmpty && exerciseResult.todayMetric == nil,
+            stepsResult.weeklyData.isEmpty && stepsResult.todayMetric == nil,
+            workoutsResult.isEmpty,
+            loadResult.isEmpty
+        ].filter(\.self).count
+        if failedCount > 0, failedCount < 4 {
+            errorMessage = "일부 데이터를 불러올 수 없습니다 (\(failedCount)/4 소스)"
+        } else if failedCount == 4 {
+            errorMessage = "데이터를 불러올 수 없습니다. HealthKit 권한을 확인하세요."
+        }
+
         isLoading = false
     }
 

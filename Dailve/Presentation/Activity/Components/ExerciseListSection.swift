@@ -77,13 +77,7 @@ struct ExerciseListSection: View {
                 }
             }
         }
-        .onAppear {
-            externalWorkouts = workouts.filteringAppDuplicates(against: exerciseRecords)
-        }
-        .onChange(of: workouts.count) { _, _ in
-            externalWorkouts = workouts.filteringAppDuplicates(against: exerciseRecords)
-        }
-        .onChange(of: exerciseRecords.count) { _, _ in
+        .task(id: "\(workouts.count)-\(exerciseRecords.count)") {
             externalWorkouts = workouts.filteringAppDuplicates(against: exerciseRecords)
         }
     }

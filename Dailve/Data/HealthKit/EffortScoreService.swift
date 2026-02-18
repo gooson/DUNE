@@ -16,26 +16,45 @@ struct EffortScoreService: Sendable {
         let workout = try await fetchWorkout(uuid: uuid)
         guard let workout else { return nil }
 
-        // Try user-rated effort first
-        if let userEffort = try await fetchEffort(
+        // Fetch both in parallel; prefer user-rated over estimated
+        async let userEffort = fetchEffort(
             type: HKQuantityType(.workoutEffortScore),
             workout: workout
-        ) {
-            return userEffort
-        }
-
-        // Fallback to estimated effort
-        return try await fetchEffort(
+        )
+        async let estimatedEffort = fetchEffort(
             type: HKQuantityType(.estimatedWorkoutEffortScore),
             workout: workout
         )
+
+        let (user, estimated) = try await (userEffort, estimatedEffort)
+        return user ?? estimated
+    }
+
+    enum EffortScoreError: LocalizedError {
+        case invalidScore(Double)
+        case invalidWorkoutID(String)
+        case workoutNotFound(String)
+
+        var errorDescription: String? {
+            switch self {
+            case .invalidScore(let score): "Invalid effort score: \(score). Must be 1-10."
+            case .invalidWorkoutID(let id): "Invalid workout ID format: \(id)"
+            case .workoutNotFound(let id): "Workout not found: \(id)"
+            }
+        }
     }
 
     /// Saves a user-rated effort score (1-10) and relates it to the given workout.
     func saveEffortScore(_ score: Double, forWorkoutID workoutID: String) async throws {
-        guard score >= 1, score <= 10, score.isFinite else { return }
-        guard let uuid = UUID(uuidString: workoutID) else { return }
-        guard let workout = try await fetchWorkout(uuid: uuid) else { return }
+        guard score >= 1, score <= 10, score.isFinite else {
+            throw EffortScoreError.invalidScore(score)
+        }
+        guard let uuid = UUID(uuidString: workoutID) else {
+            throw EffortScoreError.invalidWorkoutID(workoutID)
+        }
+        guard let workout = try await fetchWorkout(uuid: uuid) else {
+            throw EffortScoreError.workoutNotFound(workoutID)
+        }
 
         let store = await manager.healthStore
         let type = HKQuantityType(.workoutEffortScore)

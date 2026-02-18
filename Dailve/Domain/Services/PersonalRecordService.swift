@@ -49,8 +49,8 @@ enum PersonalRecordService {
             }
         }
 
-        // Highest elevation
-        if let elevation = workout.elevationAscended, elevation > 0, elevation.isFinite {
+        // Highest elevation (max ~9000m Everest; allow 10000 for safety)
+        if let elevation = workout.elevationAscended, elevation > 0, elevation.isFinite, elevation < 10_000 {
             if let existing = existingRecords[.highestElevation] {
                 if elevation > existing.value { newRecords.append(.highestElevation) }
             } else {
@@ -131,11 +131,15 @@ enum TrainingLoadService {
         switch source {
         case .effort:
             let effort = effortScore ?? 5.0
-            return effort * durationMinutes / 60.0
+            let result = effort * durationMinutes / 60.0
+            guard result.isFinite, !result.isNaN else { return 0 }
+            return result
 
         case .rpe:
             let rpeValue = Double(rpe ?? 5)
-            return rpeValue * durationMinutes / 60.0
+            let result = rpeValue * durationMinutes / 60.0
+            guard result.isFinite, !result.isNaN else { return 0 }
+            return result
 
         case .trimp:
             guard let avgHR = heartRateAvg, let restHR = restingHR, let mHR = maxHR,

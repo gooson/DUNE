@@ -7,6 +7,8 @@ struct TrainingLoadChartView: View {
     let data: [TrainingLoadDataPoint]
 
     @State private var selectedDate: Date?
+    @State private var cachedMovingAverage: [ChartDataPoint] = []
+    @State private var cachedWeekSummary: String?
 
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
@@ -15,7 +17,7 @@ struct TrainingLoadChartView: View {
                 Label("훈련량", systemImage: "flame.fill")
                     .font(.subheadline.weight(.semibold))
                 Spacer()
-                if let summary = weekSummary {
+                if let summary = cachedWeekSummary {
                     Text(summary)
                         .font(.caption)
                         .foregroundStyle(.secondary)
@@ -41,6 +43,13 @@ struct TrainingLoadChartView: View {
         }
         .padding(DS.Spacing.md)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        .onAppear { recalculateChartData() }
+        .onChange(of: data.count) { _, _ in recalculateChartData() }
+    }
+
+    private func recalculateChartData() {
+        cachedMovingAverage = computeMovingAverage()
+        cachedWeekSummary = computeWeekSummary()
     }
 
     // MARK: - Chart
@@ -57,8 +66,8 @@ struct TrainingLoadChartView: View {
             }
 
             // 7-day moving average line
-            if movingAverage.count >= 2 {
-                ForEach(movingAverage) { point in
+            if cachedMovingAverage.count >= 2 {
+                ForEach(cachedMovingAverage) { point in
                     LineMark(
                         x: .value("Date", point.date),
                         y: .value("Average", point.value),
@@ -142,7 +151,7 @@ struct TrainingLoadChartView: View {
     }
 
     /// 7-day rolling average
-    private var movingAverage: [ChartDataPoint] {
+    private func computeMovingAverage() -> [ChartDataPoint] {
         guard data.count >= 7 else { return [] }
         var result: [ChartDataPoint] = []
         for i in 6..<data.count {
@@ -155,7 +164,7 @@ struct TrainingLoadChartView: View {
     }
 
     /// This week's total vs last week
-    private var weekSummary: String? {
+    private func computeWeekSummary() -> String? {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
         guard let weekAgo = calendar.date(byAdding: .day, value: -7, to: today),

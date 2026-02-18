@@ -123,19 +123,19 @@ struct WorkoutQueryService: WorkoutQuerying, Sendable {
     // MARK: - Extraction helpers
 
     private func extractDistance(_ workout: HKWorkout) -> Double? {
-        // Try walking/running first (most common)
+        // Try walking/running first (most common) — max 500km per workout
         if let d = workout.statistics(for: HKQuantityType(.distanceWalkingRunning))?
-            .sumQuantity()?.doubleValue(for: .meter()), d > 0 {
+            .sumQuantity()?.doubleValue(for: .meter()), d > 0, d.isFinite, d < 500_000 {
             return d
         }
         // Cycling
         if let d = workout.statistics(for: HKQuantityType(.distanceCycling))?
-            .sumQuantity()?.doubleValue(for: .meter()), d > 0 {
+            .sumQuantity()?.doubleValue(for: .meter()), d > 0, d.isFinite, d < 500_000 {
             return d
         }
         // Swimming
         if let d = workout.statistics(for: HKQuantityType(.distanceSwimming))?
-            .sumQuantity()?.doubleValue(for: .meter()), d > 0 {
+            .sumQuantity()?.doubleValue(for: .meter()), d > 0, d.isFinite, d < 500_000 {
             return d
         }
         return nil
@@ -174,7 +174,7 @@ struct WorkoutQueryService: WorkoutQuerying, Sendable {
             return nil
         }
         let value = quantity.doubleValue(for: .meter())
-        guard value >= 0, value.isFinite else { return nil }
+        guard value >= 0, value.isFinite, value < 10_000 else { return nil }
         return value
     }
 
