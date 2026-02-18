@@ -229,3 +229,9 @@
 74. **SwiftUI sheet 이중 트리거 방지**: `showSheet = true`가 여러 경로(onAppear + completion handler)에서 동시 호출 가능하면 `pendingSheet` @State + `onChange(of:)` 패턴으로 한 프레임 지연
 75. **UserDefaults ID 캐시는 garbage collection 필수**: 삭제된 엔티티의 ID가 UserDefaults에 남으면 maxEntries를 점유. 읽기 시점에 현재 유효 ID와 대조하여 stale 키 정리
 76. **UserDefaults key에 bundle identifier prefix**: 테스트/프로덕션 환경 격리를 위해 `Bundle.main.bundleIdentifier`를 key prefix로 사용
+
+### 2026-02-19: Enhanced Workout Display 리뷰 교정
+
+77. **`throws` 함수에서 silent `guard...return` 금지**: Service 레이어의 `throws` 함수가 `guard ... else { return }` 으로 실패를 삼키면 caller가 성공/실패 구분 불가. `throw TypedError` 사용 필수
+78. **`onAppear` + `onChange` 동일 로직은 `.task(id:)` 통합**: 동일 코드가 `onAppear`와 `onChange(of:)`에 중복되면 `.task(id: "\(dep1)-\(dep2)")` 하나로 통합. 초기 실행 + 의존값 변경 시 자동 재실행
+79. **HealthKit 거리 값 상한 500km**: `extractDistance()`에서 `d < 500_000` (미터) 검증. 센서 오류로 비현실적 거리가 PR/통계를 왜곡하는 것 방지
