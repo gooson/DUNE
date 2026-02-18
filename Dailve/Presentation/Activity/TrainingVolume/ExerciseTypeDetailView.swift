@@ -90,7 +90,7 @@ struct ExerciseTypeDetailView: View {
                 if let summary = viewModel.currentSummary {
                     statItem(
                         label: "Duration",
-                        value: formatDuration(summary.totalDuration)
+                        value: summary.totalDuration.formattedDuration()
                     )
                     statItem(
                         label: "Calories",
@@ -182,7 +182,7 @@ struct ExerciseTypeDetailView: View {
             LazyVGrid(columns: columns, spacing: DS.Spacing.md) {
                 comparisonItem(
                     label: "Duration",
-                    current: formatDuration(current.totalDuration),
+                    current: current.totalDuration.formattedDuration(),
                     change: viewModel.durationChange
                 )
                 comparisonItem(
@@ -223,20 +223,9 @@ struct ExerciseTypeDetailView: View {
             Text(current)
                 .font(.subheadline.weight(.semibold))
                 .monospacedDigit()
-            if let change {
-                changeBadge(change)
-            }
+            ChangeBadge(change: change)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-    }
-
-    private func changeBadge(_ change: Double) -> some View {
-        let isPositive = change >= 0
-        let color = isPositive ? DS.Color.positive : DS.Color.negative
-        let arrow = isPositive ? "↑" : "↓"
-        return Text("\(arrow)\(String(format: "%.0f", abs(change)))%")
-            .font(.caption2.weight(.medium))
-            .foregroundStyle(color)
     }
 
     // MARK: - Recent Sessions
@@ -269,7 +258,7 @@ struct ExerciseTypeDetailView: View {
                 Text(workout.date, format: .dateTime.month(.abbreviated).day().weekday(.wide))
                     .font(.subheadline)
                 HStack(spacing: DS.Spacing.md) {
-                    Label(formatDuration(workout.duration), systemImage: "clock")
+                    Label(workout.duration.formattedDuration(), systemImage: "clock")
                     if let cal = workout.calories, cal > 0 {
                         Label("\(cal.formattedWithSeparator()) kcal", systemImage: "flame.fill")
                     }
@@ -327,14 +316,6 @@ struct ExerciseTypeDetailView: View {
         }
     }
 
-    private func formatDuration(_ seconds: TimeInterval) -> String {
-        let hours = seconds / 3600
-        let mins = seconds / 60
-        if hours >= 1 {
-            return String(format: "%.1fh", hours)
-        }
-        return String(format: "%.0fm", mins)
-    }
 
     private func formatDistance(_ meters: Double) -> String {
         if meters >= 1000 {

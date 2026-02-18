@@ -15,7 +15,7 @@ struct PeriodComparisonView: View {
             ) {
                 comparisonItem(
                     label: "Duration",
-                    current: formatDuration(comparison.current.totalDuration),
+                    current: comparison.current.totalDuration.formattedDuration(),
                     change: comparison.durationChange
                 )
                 comparisonItem(
@@ -49,38 +49,10 @@ struct PeriodComparisonView: View {
             Text(current)
                 .font(.subheadline.weight(.semibold))
                 .monospacedDigit()
-            changeBadge(change)
+            ChangeBadge(change: change, showNoData: true)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    @ViewBuilder
-    private func changeBadge(_ change: Double?) -> some View {
-        if let change {
-            let isPositive = change >= 0
-            HStack(spacing: 2) {
-                Image(systemName: isPositive ? "arrow.up.right" : "arrow.down.right")
-                    .font(.caption2)
-                Text(String(format: "%.0f%%", abs(change)))
-                    .font(.caption2.weight(.medium))
-                    .monospacedDigit()
-            }
-            .foregroundStyle(isPositive ? DS.Color.positive : DS.Color.negative)
-        } else {
-            Text("— No previous data")
-                .font(.caption2)
-                .foregroundStyle(.tertiary)
-        }
-    }
 
-    // MARK: - Helpers
-
-    private func formatDuration(_ seconds: TimeInterval) -> String {
-        let hours = seconds / 3600
-        let mins = seconds / 60
-        if hours >= 1 {
-            return String(format: "%.1fh", hours)
-        }
-        return String(format: "%.0fm", mins)
-    }
 }

@@ -107,7 +107,7 @@ struct TrainingVolumeDetailView: View {
                 )
                 statRow(
                     label: "Duration",
-                    value: formatDuration(comparison.current.totalDuration),
+                    value: comparison.current.totalDuration.formattedDuration(),
                     change: comparison.durationChange
                 )
                 statRow(
@@ -137,22 +137,7 @@ struct TrainingVolumeDetailView: View {
             Text(value)
                 .font(.subheadline.weight(.semibold))
                 .monospacedDigit()
-            changeBadge(change)
-        }
-    }
-
-    @ViewBuilder
-    private func changeBadge(_ change: Double?) -> some View {
-        if let change {
-            let isPositive = change >= 0
-            HStack(spacing: 2) {
-                Image(systemName: isPositive ? "arrow.up.right" : "arrow.down.right")
-                    .font(.caption2)
-                Text(String(format: "%.0f%%", abs(change)))
-                    .font(.caption2.weight(.medium))
-                    .monospacedDigit()
-            }
-            .foregroundStyle(isPositive ? DS.Color.positive : DS.Color.negative)
+            ChangeBadge(change: change)
         }
     }
 
@@ -186,14 +171,6 @@ struct TrainingVolumeDetailView: View {
 
     // MARK: - Helpers
 
-    private func formatDuration(_ seconds: TimeInterval) -> String {
-        let hours = seconds / 3600
-        let mins = seconds / 60
-        if hours >= 1 {
-            return String(format: "%.1fh", hours)
-        }
-        return String(format: "%.0fm", mins)
-    }
 
     private func buildTypeColors(_ types: [ExerciseTypeVolume]) -> [String: Color] {
         Dictionary(uniqueKeysWithValues: types.map { ($0.typeKey, $0.color) })

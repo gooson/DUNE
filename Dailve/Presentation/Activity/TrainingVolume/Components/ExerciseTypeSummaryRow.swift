@@ -28,7 +28,7 @@ struct ExerciseTypeSummaryRow: View {
 
             // Duration + calories
             VStack(alignment: .trailing, spacing: 2) {
-                Text(formattedDuration)
+                Text(exerciseType.totalDuration.formattedDuration())
                     .font(.subheadline.weight(.medium))
                     .monospacedDigit()
                 if exerciseType.totalCalories > 0 {
@@ -44,13 +44,5 @@ struct ExerciseTypeSummaryRow: View {
                 .foregroundStyle(.tertiary)
         }
         .padding(.vertical, DS.Spacing.xs)
-    }
-
-    private var formattedDuration: String {
-        let mins = exerciseType.totalDuration / 60.0
-        if mins >= 60 {
-            return String(format: "%.1fh", mins / 60)
-        }
-        return String(format: "%.0fm", mins)
     }
 }

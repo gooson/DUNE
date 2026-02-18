@@ -70,18 +70,9 @@ final class TrainingVolumeViewModel {
 
         comparison = result
         trainingLoadData = loadData
+
+        guard !Task.isCancelled else { return }
         isLoading = false
-    }
-
-    // MARK: - Type Colors and Names (for charts)
-
-    var typeColors: [String: any Sendable] {
-        // Returns raw values; View layer resolves to Color via ExerciseTypeVolume+View
-        [:]
-    }
-
-    var topTypeKeys: [String] {
-        comparison?.current.exerciseTypes.prefix(5).map(\.typeKey) ?? []
     }
 
     // MARK: - Private
@@ -170,20 +161,5 @@ final class TrainingVolumeViewModel {
             AppLogger.ui.error("Training load fetch failed: \(error.localizedDescription)")
             return []
         }
-    }
-}
-
-// MARK: - ExerciseRecord Helpers
-
-private extension ExerciseRecord {
-    var totalVolume: Double {
-        (sets ?? [])
-            .filter(\.isCompleted)
-            .reduce(0.0) { total, set in
-                let weight = set.weight ?? 0
-                let reps = Double(set.reps ?? 0)
-                guard weight > 0, reps > 0 else { return total }
-                return total + weight * reps
-            }
     }
 }

@@ -75,7 +75,7 @@ enum TrainingVolumeAnalysisService {
             agg.totalDuration += workout.duration
             agg.totalCalories += workout.calories ?? 0
             agg.sessionCount += 1
-            if workout.activityType.isDistanceBased, let d = workout.distance, d > 0, d.isFinite {
+            if workout.activityType.isDistanceBased, let d = workout.distance, d > 0, d.isFinite, d < 500_000 {
                 agg.totalDistance += d
             }
             typeAggregates[key] = agg

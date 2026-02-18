@@ -92,6 +92,7 @@ final class ExerciseTypeDetailViewModel {
             AppLogger.ui.error("Exercise type detail fetch failed: \(error.localizedDescription)")
         }
 
+        guard !Task.isCancelled else { return }
         isLoading = false
     }
 
@@ -120,20 +121,5 @@ final class ExerciseTypeDetailViewModel {
         currentSummary = nil
         previousSummary = nil
         trendData = []
-    }
-}
-
-// MARK: - ExerciseRecord Helpers
-
-private extension ExerciseRecord {
-    var totalVolume: Double {
-        (sets ?? [])
-            .filter(\.isCompleted)
-            .reduce(0.0) { total, set in
-                let weight = set.weight ?? 0
-                let reps = Double(set.reps ?? 0)
-                guard weight > 0, reps > 0 else { return total }
-                return total + weight * reps
-            }
     }
 }

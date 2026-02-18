@@ -48,6 +48,7 @@ struct VolumeDonutChartView: View {
         }
         .chartAngleSelection(value: $selectedAngle)
         .frame(height: 200)
+        .clipped()
         .overlay {
             centerLabel
         }
@@ -153,8 +154,7 @@ struct VolumeDonutChartView: View {
     private func formattedMetricValue(for type: ExerciseTypeVolume) -> String {
         switch selectedMetric {
         case .duration:
-            let mins = type.totalDuration / 60.0
-            return mins >= 60 ? String(format: "%.1fh", mins / 60) : String(format: "%.0fm", mins)
+            return type.totalDuration.formattedDuration()
         case .calories:
             return "\(type.totalCalories.formattedWithSeparator()) kcal"
         case .sessions:
@@ -165,8 +165,7 @@ struct VolumeDonutChartView: View {
     private var totalLabel: String {
         switch selectedMetric {
         case .duration:
-            let mins = exerciseTypes.reduce(0.0) { $0 + $1.totalDuration } / 60.0
-            return mins >= 60 ? String(format: "%.1fh", mins / 60) : String(format: "%.0fm", mins)
+            return exerciseTypes.reduce(0.0) { $0 + $1.totalDuration }.formattedDuration()
         case .calories:
             return exerciseTypes.reduce(0.0) { $0 + $1.totalCalories }.formattedWithSeparator()
         case .sessions:
