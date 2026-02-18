@@ -212,6 +212,7 @@ struct WatchExerciseInfo: Codable, Sendable, Hashable {
     let inputType: String
     let defaultSets: Int
     let defaultReps: Int?
+    let defaultWeightKg: Double?
 
     // Hashable uses id only to match Identifiable semantics (Correction Log #26)
     func hash(into hasher: inout Hasher) {

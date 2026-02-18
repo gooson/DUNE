@@ -43,7 +43,12 @@ struct ExerciseListSection: View {
             // Manual records with set data (newest first)
             let setRecords = exerciseRecords.filter(\.hasSetData).prefix(limit)
             ForEach(Array(setRecords)) { record in
-                setRecordRow(record)
+                NavigationLink {
+                    ExerciseSessionDetailView(record: record)
+                } label: {
+                    setRecordRow(record)
+                }
+                .buttonStyle(.plain)
             }
 
             // External HealthKit workouts (excluding app-created duplicates)
@@ -88,9 +93,16 @@ struct ExerciseListSection: View {
                     .frame(width: 28)
 
                 VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                    Text(record.exerciseType)
-                        .font(.subheadline)
-                        .fontWeight(.medium)
+                    HStack(spacing: DS.Spacing.xs) {
+                        Text(record.exerciseType)
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+                        if let hkID = record.healthKitWorkoutID, !hkID.isEmpty {
+                            Image(systemName: "heart.circle.fill")
+                                .font(.caption2)
+                                .foregroundStyle(.red.opacity(0.6))
+                        }
+                    }
 
                     HStack(spacing: DS.Spacing.xs) {
                         Text(record.date, format: .dateTime.weekday(.wide).hour().minute())

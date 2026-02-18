@@ -55,6 +55,22 @@ struct HRVSample: Sendable {
     let date: Date
 }
 
+/// Heart rate sample point for workout timeline chart.
+struct HeartRateSample: Sendable {
+    let bpm: Double
+    let date: Date
+}
+
+/// Aggregated heart rate data for a workout session.
+struct HeartRateSummary: Sendable {
+    let average: Double
+    let max: Double
+    let min: Double
+    let samples: [HeartRateSample]
+
+    var isEmpty: Bool { samples.isEmpty }
+}
+
 struct WorkoutSummary: Identifiable, Sendable {
     let id: String
     let type: String

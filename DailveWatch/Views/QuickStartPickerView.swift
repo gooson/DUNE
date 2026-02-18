@@ -78,7 +78,8 @@ struct QuickStartPickerView: View {
             exerciseDefinitionID: exercise.id,
             exerciseName: exercise.name,
             defaultSets: exercise.defaultSets,
-            defaultReps: exercise.defaultReps ?? 10
+            defaultReps: exercise.defaultReps ?? 10,
+            defaultWeightKg: exercise.defaultWeightKg
         )
         let snapshot = WorkoutSessionTemplate(
             name: exercise.name,

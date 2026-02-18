@@ -46,6 +46,7 @@ final class ExerciseViewModel {
             let localizedName: String? = record.exerciseDefinitionID.flatMap {
                 exerciseLibrary.exercise(byID: $0)?.localizedName
             }
+            let hasHKLink = record.healthKitWorkoutID.map { !$0.isEmpty } ?? false
             items.append(ExerciseListItem(
                 id: record.id.uuidString,
                 type: record.exerciseType,
@@ -56,7 +57,8 @@ final class ExerciseViewModel {
                 date: record.date,
                 source: .manual,
                 completedSets: record.completedSets,
-                exerciseDefinitionID: record.exerciseDefinitionID
+                exerciseDefinitionID: record.exerciseDefinitionID,
+                isLinkedToHealthKit: hasHKLink
             ))
         }
 
@@ -69,7 +71,7 @@ final class ExerciseViewModel {
             healthKitWorkouts = try await workoutService.fetchWorkouts(days: 30)
         } catch {
             AppLogger.ui.error("Exercise data load failed: \(error.localizedDescription)")
-            errorMessage = error.localizedDescription
+            errorMessage = "Could not load workout data"
         }
         isLoading = false
     }
@@ -87,13 +89,15 @@ struct ExerciseListItem: Identifiable {
     let source: Source
     let completedSets: [WorkoutSet]
     let exerciseDefinitionID: String?
+    let isLinkedToHealthKit: Bool
 
     init(
         id: String, type: String, localizedType: String? = nil,
         duration: TimeInterval,
         calories: Double?, distance: Double?, date: Date,
         source: Source, completedSets: [WorkoutSet] = [],
-        exerciseDefinitionID: String? = nil
+        exerciseDefinitionID: String? = nil,
+        isLinkedToHealthKit: Bool = false
     ) {
         self.id = id
         self.type = type
@@ -105,6 +109,7 @@ struct ExerciseListItem: Identifiable {
         self.source = source
         self.completedSets = completedSets
         self.exerciseDefinitionID = exerciseDefinitionID
+        self.isLinkedToHealthKit = isLinkedToHealthKit
     }
 
     enum Source {

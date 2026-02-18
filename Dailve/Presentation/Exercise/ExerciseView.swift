@@ -11,6 +11,7 @@ struct ExerciseView: View {
     @State private var showingCompoundSetup = false
     @State private var compoundConfig: CompoundWorkoutConfig?
     @State private var recordToDelete: ExerciseRecord?
+    @State private var recordsByID: [UUID: ExerciseRecord] = [:]
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \ExerciseRecord.date, order: .reverse) private var manualRecords: [ExerciseRecord]
 
@@ -49,7 +50,15 @@ struct ExerciseView: View {
 
                     ForEach(viewModel.allExercises) { item in
                         Group {
-                            if let defID = item.exerciseDefinitionID {
+                            if item.source == .manual, let record = findRecord(for: item) {
+                                // Manual records navigate directly to session detail
+                                NavigationLink {
+                                    ExerciseSessionDetailView(record: record)
+                                } label: {
+                                    ExerciseRowView(item: item)
+                                }
+                            } else if let defID = item.exerciseDefinitionID {
+                                // HealthKit-only items navigate to exercise history
                                 NavigationLink {
                                     ExerciseHistoryView(
                                         exerciseDefinitionID: defID,
@@ -64,11 +73,12 @@ struct ExerciseView: View {
                         }
                         .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                             if item.source == .manual {
-                                Button(role: .destructive) {
+                                Button {
                                     recordToDelete = findRecord(for: item)
                                 } label: {
                                     Label("Delete", systemImage: "trash")
                                 }
+                                .tint(.red)
                             }
                         }
                     }
@@ -149,13 +159,18 @@ struct ExerciseView: View {
         }
         .task {
             pendingDraft = WorkoutSessionDraft.load()
+            rebuildRecordIndex()
             viewModel.manualRecords = manualRecords
             updateSuggestion()
             await viewModel.loadHealthKitWorkouts()
         }
         .onChange(of: manualRecords) { _, newValue in
+            rebuildRecordIndex()
             viewModel.manualRecords = newValue
             updateSuggestion()
+        }
+        .refreshable {
+            await viewModel.loadHealthKitWorkouts()
         }
         .navigationTitle("Exercise")
         .confirmDeleteRecord($recordToDelete, context: modelContext)
@@ -196,9 +211,13 @@ struct ExerciseView: View {
         workoutSuggestion = recommendationService.recommend(from: snapshots, library: library)
     }
 
+    private func rebuildRecordIndex() {
+        recordsByID = Dictionary(uniqueKeysWithValues: manualRecords.map { ($0.id, $0) })
+    }
+
     private func findRecord(for item: ExerciseListItem) -> ExerciseRecord? {
         guard let uuid = UUID(uuidString: item.id) else { return nil }
-        return manualRecords.first { $0.id == uuid }
+        return recordsByID[uuid]
     }
 
     private var recentExerciseIDs: [String] {
@@ -260,6 +279,10 @@ private struct ExerciseRowView: View {
                         Image(systemName: "heart.fill")
                             .font(.caption2)
                             .foregroundStyle(.red)
+                    } else if item.isLinkedToHealthKit {
+                        Image(systemName: "heart.circle.fill")
+                            .font(.caption2)
+                            .foregroundStyle(.red.opacity(0.6))
                     }
                 }
                 if let localized = item.localizedType, localized != item.type {

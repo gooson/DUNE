@@ -6,7 +6,7 @@ import Observation
 final class RestTimerViewModel {
     var secondsRemaining: Int = 0
     var isRunning: Bool = false
-    var defaultDuration: Int = 90
+    var defaultDuration: Int = 30
     var completionCount: Int = 0
 
     private var timerTask: Task<Void, Never>?

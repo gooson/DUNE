@@ -211,3 +211,13 @@
 62. **Domain 모델에 인프라 문자열 금지**: `sourceBundleIdentifier: String?`처럼 HealthKit/시스템 문자열을 Domain에 노출하지 않음. Data 레이어에서 의미 있는 타입(`isFromThisApp: Bool`)으로 해소 후 Domain에 전달
 63. **Dedup 필터에서 빈 문자열 ID 방어**: `compactMap`으로 ID를 수집할 때 `!id.isEmpty` 검증 필수. `healthKitWorkoutID = ""`인 corrupted record가 모든 빈 ID 워크아웃과 false-positive 매칭
 64. **ViewModifier 추출은 복잡도 높으면 2곳부터**: 기존 규칙(#37)은 3곳부터 추출이지만, `modelContext.save()` + stale reference guard 등 복잡한 로직은 2곳 중복에서도 ViewModifier로 추출. 복잡도가 높을수록 DRY threshold를 낮춤
+
+### 2026-02-18: Exercise 탭 리뷰 + 크래시 교정
+
+65. **`modelContext.delete()`는 반드시 `withAnimation {}` 래핑**: `@Query` + `List`/`ForEach` 조합에서 delete가 `UICollectionView` 내부 item count와 불일치하면 `NSInternalInconsistencyException` crash. `withAnimation { modelContext.delete(record) }`로 SwiftUI가 diff를 올바르게 처리하도록 보장
+66. **`.swipeActions`의 `Button(role: .destructive)` 금지 (확인 필요 시)**: `role: .destructive`를 사용하면 SwiftUI가 자동으로 row 제거 애니메이션 실행 — alert 표시 전에 아이템이 사라짐. 삭제 확인 dialog가 필요한 경우 `Button { ... }.tint(.red)` 사용
+67. **HK ID 캡처 → SwiftData 삭제 → HK 삭제 순서**: `modelContext.delete(record)` 이후 record 프로퍼티 접근 불가. `let hkWorkoutID = record.healthKitWorkoutID`로 사전 캡처 후 삭제 실행, HK cleanup은 fire-and-forget `Task`
+68. **ForEach 내 O(N) lookup 금지**: `manualRecords.first(where:)`은 ForEach body에서 매 row마다 O(N) 탐색. `@State private var recordsByID: [UUID: Record] = [:]` Dictionary 캐시 + `rebuildRecordIndex()` 패턴으로 O(1) 접근
+69. **Watch DTO 필드 추가 시 양쪽 target 동기화**: `WatchExerciseInfo`가 iOS(`WatchSessionManager`)와 Watch(`WatchConnectivityManager`)에 중복 존재. 필드 추가 시 양쪽 모두 동일하게 반영. 향후 shared package 통합 필요
+70. **Swift Charts `.clipped()` 필수**: `AreaMark` gradient가 chart frame 바깥으로 overflow 가능. `.frame(height:)` 다음에 `.clipped()` 항상 추가
+71. **`modelContext.save()` 명시적 호출 지양**: SwiftData auto-save가 기본 동작. 명시적 `save()`는 `@Query` 타이밍과 충돌 가능. `withAnimation { delete }` 후 auto-save에 위임

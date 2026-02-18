@@ -161,6 +161,7 @@ struct SessionSummaryView: View {
                 exerciseType: entry.exerciseName,
                 duration: sessionDuration / activeExerciseCount,
                 calories: activeCalories > 0 ? activeCalories / activeExerciseCount : nil,
+                healthKitWorkoutID: workoutManager.healthKitWorkoutUUID,
                 exerciseDefinitionID: entry.exerciseDefinitionID,
                 calorieSource: activeCalories > 0 ? .healthKit : .manual
             )

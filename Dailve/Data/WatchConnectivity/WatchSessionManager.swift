@@ -72,7 +72,8 @@ final class WatchSessionManager: NSObject {
                 name: def.localizedName,
                 inputType: def.inputType.rawValue,
                 defaultSets: 3,
-                defaultReps: (def.inputType == .setsRepsWeight || def.inputType == .setsReps) ? 10 : nil
+                defaultReps: (def.inputType == .setsRepsWeight || def.inputType == .setsReps) ? 10 : nil,
+                defaultWeightKg: nil
             )
         }
         transferExerciseLibrary(watchExercises)
@@ -235,4 +236,5 @@ struct WatchExerciseInfo: Codable, Sendable {
     let inputType: String  // rawValue of ExerciseInputType
     let defaultSets: Int
     let defaultReps: Int?
+    let defaultWeightKg: Double?
 }

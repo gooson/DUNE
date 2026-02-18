@@ -10,6 +10,7 @@ actor HealthKitManager {
     private let readTypes: Set<HKSampleType> = [
         HKQuantityType(.heartRateVariabilitySDNN),
         HKQuantityType(.restingHeartRate),
+        HKQuantityType(.heartRate),
         HKQuantityType(.stepCount),
         HKCategoryType(.sleepAnalysis),
         HKQuantityType(.activeEnergyBurned),

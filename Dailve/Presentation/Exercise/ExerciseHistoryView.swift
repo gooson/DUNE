@@ -11,6 +11,7 @@ struct ExerciseHistoryView: View {
     @AppStorage(WeightUnit.storageKey) private var weightUnitRaw = WeightUnit.kg.rawValue
 
     @Query private var exerciseRecords: [ExerciseRecord]
+    @State private var recordByID: [UUID: ExerciseRecord] = [:]
     private let oneRMService = OneRMEstimationService()
 
     private var weightUnit: WeightUnit {
@@ -43,11 +44,13 @@ struct ExerciseHistoryView: View {
         .navigationTitle(exerciseName)
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
+            rebuildRecordIndex()
             viewModel.loadHistory(from: exerciseRecords)
             updateOneRMAnalysis()
         }
-        .onChange(of: exerciseRecords) { _, newValue in
-            viewModel.loadHistory(from: newValue)
+        .onChange(of: exerciseRecords.count) { _, _ in
+            rebuildRecordIndex()
+            viewModel.loadHistory(from: exerciseRecords)
             updateOneRMAnalysis()
         }
         .sheet(item: Binding(
@@ -246,40 +249,49 @@ struct ExerciseHistoryView: View {
     }
 
     private func sessionRow(_ session: ExerciseHistoryViewModel.SessionSummary) -> some View {
-        HStack {
-            VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                Text(session.date, style: .date)
-                    .font(.subheadline.weight(.medium))
-                HStack(spacing: DS.Spacing.xs) {
-                    Text("\(session.setCount) sets")
-                    if let maxW = session.maxWeight {
-                        Text("\u{00B7}")
-                        Text("\(formattedWeight(maxW)) \(weightUnit.displayName)")
+        NavigationLink {
+            if let record = recordByID[session.id] {
+                ExerciseSessionDetailView(record: record, showHistoryLink: false)
+            } else {
+                ContentUnavailableView("Record not found", systemImage: "exclamationmark.triangle")
+            }
+        } label: {
+            HStack {
+                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                    Text(session.date, style: .date)
+                        .font(.subheadline.weight(.medium))
+                    HStack(spacing: DS.Spacing.xs) {
+                        Text("\(session.setCount) sets")
+                        if let maxW = session.maxWeight {
+                            Text("\u{00B7}")
+                            Text("\(formattedWeight(maxW)) \(weightUnit.displayName)")
+                        }
+                        if session.totalReps > 0 {
+                            Text("\u{00B7}")
+                            Text("\(session.totalReps) reps")
+                        }
                     }
-                    if session.totalReps > 0 {
-                        Text("\u{00B7}")
-                        Text("\(session.totalReps) reps")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                }
+
+                Spacer()
+
+                if let oneRM = session.estimatedOneRM {
+                    VStack(alignment: .trailing, spacing: DS.Spacing.xxs) {
+                        Text("1RM")
+                            .font(.caption2)
+                            .foregroundStyle(.tertiary)
+                        Text(formattedWeight(oneRM))
+                            .font(.caption.weight(.medium))
+                            .foregroundStyle(DS.Color.activity)
                     }
                 }
-                .font(.caption)
-                .foregroundStyle(.secondary)
             }
-
-            Spacer()
-
-            if let oneRM = session.estimatedOneRM {
-                VStack(alignment: .trailing, spacing: DS.Spacing.xxs) {
-                    Text("1RM")
-                        .font(.caption2)
-                        .foregroundStyle(.tertiary)
-                    Text(formattedWeight(oneRM))
-                        .font(.caption.weight(.medium))
-                        .foregroundStyle(DS.Color.activity)
-                }
-            }
+            .padding(DS.Spacing.md)
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
         }
-        .padding(DS.Spacing.md)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+        .buttonStyle(.plain)
         .contextMenu {
             Button {
                 shareSession(session)
@@ -287,7 +299,7 @@ struct ExerciseHistoryView: View {
                 Label("Share", systemImage: "square.and.arrow.up")
             }
             Button(role: .destructive) {
-                recordToDelete = exerciseRecords.first { $0.id == session.id }
+                recordToDelete = recordByID[session.id]
             } label: {
                 Label("Delete", systemImage: "trash")
             }
@@ -295,8 +307,7 @@ struct ExerciseHistoryView: View {
     }
 
     private func shareSession(_ session: ExerciseHistoryViewModel.SessionSummary) {
-        // Find the matching ExerciseRecord for this session
-        guard let record = exerciseRecords.first(where: { $0.id == session.id }) else { return }
+        guard let record = recordByID[session.id] else { return }
         let input = ExerciseRecordShareInput(
             exerciseType: record.exerciseType,
             date: record.date,
@@ -320,6 +331,12 @@ struct ExerciseHistoryView: View {
         }
         let data = WorkoutShareService.buildShareData(from: input, personalBest: pbString)
         shareImage = WorkoutShareService.renderShareImage(data: data, weightUnit: weightUnit)
+    }
+
+    // MARK: - Record Index
+
+    private func rebuildRecordIndex() {
+        recordByID = Dictionary(uniqueKeysWithValues: exerciseRecords.map { ($0.id, $0) })
     }
 
     // MARK: - 1RM

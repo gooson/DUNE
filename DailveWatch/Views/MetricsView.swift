@@ -323,12 +323,19 @@ struct MetricsView: View {
 
     private func prefillFromEntry() {
         guard let entry = workoutManager.currentEntry else { return }
-        weight = entry.defaultWeightKg ?? 0
-        reps = entry.defaultReps
+
+        // Use previous set's weight/reps if available, otherwise fall back to template default
+        if let lastSet = workoutManager.lastCompletedSetForCurrentExercise {
+            weight = lastSet.weight ?? entry.defaultWeightKg ?? 0
+            reps = lastSet.reps ?? entry.defaultReps
+        } else {
+            weight = entry.defaultWeightKg ?? 0
+            reps = entry.defaultReps
+        }
     }
 
     private var currentRestDuration: TimeInterval {
-        workoutManager.currentEntry?.restDuration ?? 60
+        workoutManager.currentEntry?.restDuration ?? 30
     }
 
     private func completeSet() {
@@ -351,5 +358,6 @@ struct MetricsView: View {
     private func handleRestComplete() {
         showRestTimer = false
         workoutManager.advanceToNextSet()
+        prefillFromEntry()
     }
 }
