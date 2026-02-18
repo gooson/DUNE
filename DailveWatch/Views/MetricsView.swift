@@ -14,7 +14,9 @@ struct MetricsView: View {
     @State private var showNextExercise = false
     @State private var showEndConfirmation = false
     @State private var showEmptySetConfirmation = false
+    @State private var showLastSetOptions = false
     @State private var transitionTask: Task<Void, Never>?
+    @State private var didInitialAppear = false
 
     var body: some View {
         Group {
@@ -36,6 +38,11 @@ struct MetricsView: View {
         }
         .onAppear {
             prefillFromEntry()
+            // Only show input sheet on first appear, not after rest/transition
+            if !didInitialAppear {
+                didInitialAppear = true
+                showInputSheet = true
+            }
         }
         .sheet(isPresented: $showInputSheet) {
             SetInputSheet(weight: $weight, reps: $reps)
@@ -70,6 +77,21 @@ struct MetricsView: View {
             Button("Cancel", role: .cancel) {}
         } message: {
             Text("Weight and reps are both 0. Record anyway?")
+        }
+        // Last set options: +1 Set or Finish Exercise
+        .confirmationDialog(
+            "All Sets Done",
+            isPresented: $showLastSetOptions,
+            titleVisibility: .visible
+        ) {
+            Button("+1 Set") {
+                addExtraSet()
+            }
+            Button("Finish Exercise") {
+                finishCurrentExercise()
+            }
+        } message: {
+            Text("Add another set or move on?")
         }
     }
 
@@ -128,13 +150,13 @@ struct MetricsView: View {
                     .minimumScaleFactor(0.7)
                     .multilineTextAlignment(.center)
 
-                Text("Set \(workoutManager.currentSetIndex + 1) of \(entry.defaultSets)")
+                Text("Set \(workoutManager.currentSetIndex + 1) of \(workoutManager.effectiveTotalSets)")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
 
                 // Set progress dots (larger)
                 HStack(spacing: 4) {
-                    ForEach(0..<entry.defaultSets, id: \.self) { i in
+                    ForEach(0..<workoutManager.effectiveTotalSets, id: \.self) { i in
                         Circle()
                             .fill(dotColor(for: i))
                             .frame(width: 8, height: 8)
@@ -265,6 +287,9 @@ struct MetricsView: View {
                 guard !Task.isCancelled else { return }
                 workoutManager.advanceToNextExercise()
                 showNextExercise = false
+                prefillFromEntry()
+                WKInterfaceDevice.current().play(.notification)
+                showInputSheet = true
             }
         }
         .onDisappear {
@@ -309,25 +334,45 @@ struct MetricsView: View {
     }
 
     private func executeCompleteSet() {
+        let wasLastSet = workoutManager.isLastSet
+
         workoutManager.completeSet(weight: weight > 0 ? weight : nil, reps: reps > 0 ? reps : nil)
 
-        // P3: Play haptic before navigation to ensure it's felt
+        // Haptic on set completion
         WKInterfaceDevice.current().play(.success)
 
-        if workoutManager.isLastSet {
-            if workoutManager.isLastExercise {
-                workoutManager.end()
-            } else {
-                showNextExercise = true
-            }
+        if wasLastSet {
+            // Offer +1 Set option instead of auto-finishing
+            showLastSetOptions = true
         } else {
+            // Go to rest first, input sheet comes after rest
             showRestTimer = true
         }
+    }
+
+    private func finishCurrentExercise() {
+        if workoutManager.isLastExercise {
+            WKInterfaceDevice.current().play(.success)
+            workoutManager.end()
+        } else {
+            WKInterfaceDevice.current().play(.start)
+            showNextExercise = true
+        }
+    }
+
+    private func addExtraSet() {
+        workoutManager.addExtraSet()
+        WKInterfaceDevice.current().play(.start)
+        showRestTimer = true
     }
 
     private func handleRestComplete() {
         showRestTimer = false
         workoutManager.advanceToNextSet()
         prefillFromEntry()
+
+        // Haptic on rest complete → input sheet
+        WKInterfaceDevice.current().play(.notification)
+        showInputSheet = true
     }
 }

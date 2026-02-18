@@ -85,6 +85,10 @@ struct WorkoutPreviewView: View {
             do {
                 try await workoutManager.requestAuthorization()
                 try await workoutManager.startQuickWorkout(with: snapshot)
+                // Track recently used exercises for Quick Start sorting
+                for entry in snapshot.entries {
+                    RecentExerciseTracker.recordUsage(exerciseID: entry.exerciseDefinitionID)
+                }
                 WKInterfaceDevice.current().play(.success)
                 isStarting = false
             } catch {

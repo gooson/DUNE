@@ -71,7 +71,7 @@ final class WatchSessionManager: NSObject {
                 id: def.id,
                 name: def.localizedName,
                 inputType: def.inputType.rawValue,
-                defaultSets: 3,
+                defaultSets: 5,
                 defaultReps: (def.inputType == .setsRepsWeight || def.inputType == .setsReps) ? 10 : nil,
                 defaultWeightKg: nil
             )

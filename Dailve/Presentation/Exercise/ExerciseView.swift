@@ -143,8 +143,9 @@ struct ExerciseView: View {
                 selectedExercise = exercise
             }
         }
-        .navigationDestination(item: $selectedExercise) { exercise in
-            WorkoutSessionView(exercise: exercise)
+        .sheet(item: $selectedExercise) { exercise in
+            ExerciseStartView(exercise: exercise)
+                .interactiveDismissDisabled()
         }
         .sheet(isPresented: $showingCompoundSetup) {
             CompoundWorkoutSetupView(

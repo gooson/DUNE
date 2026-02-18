@@ -55,6 +55,9 @@ final class WorkoutManager: NSObject {
     private(set) var currentSetIndex: Int = 0
     private(set) var completedSetsData: [[CompletedSetData]] = []
 
+    /// Extra sets added beyond the default per exercise (indexed by exercise index).
+    private(set) var extraSetsPerExercise: [Int: Int] = [:]
+
     var currentEntry: TemplateEntry? {
         guard let snapshot = templateSnapshot,
               currentExerciseIndex < snapshot.entries.count else { return nil }
@@ -63,9 +66,15 @@ final class WorkoutManager: NSObject {
 
     var totalExercises: Int { templateSnapshot?.entries.count ?? 0 }
 
+    /// Total sets for the current exercise (default + extra).
+    var effectiveTotalSets: Int {
+        guard let entry = currentEntry else { return 0 }
+        let extra = extraSetsPerExercise[currentExerciseIndex] ?? 0
+        return entry.defaultSets + extra
+    }
+
     var isLastSet: Bool {
-        guard let entry = currentEntry else { return true }
-        return currentSetIndex >= entry.defaultSets - 1
+        return currentSetIndex >= effectiveTotalSets - 1
     }
 
     var isLastExercise: Bool {
@@ -114,6 +123,7 @@ final class WorkoutManager: NSObject {
         self.currentExerciseIndex = 0
         self.currentSetIndex = 0
         self.completedSetsData = Array(repeating: [], count: snapshot.entries.count)
+        self.extraSetsPerExercise = [:]
         self.heartRateSamples = []
         self.isRecoveredSession = false
 
@@ -175,10 +185,15 @@ final class WorkoutManager: NSObject {
     }
 
     func advanceToNextSet() {
-        guard let entry = currentEntry else { return }
-        if currentSetIndex < entry.defaultSets - 1 {
+        if currentSetIndex < effectiveTotalSets - 1 {
             currentSetIndex += 1
         }
+    }
+
+    /// Add one extra set to the current exercise.
+    func addExtraSet() {
+        let current = extraSetsPerExercise[currentExerciseIndex] ?? 0
+        extraSetsPerExercise[currentExerciseIndex] = current + 1
     }
 
     func advanceToNextExercise() {
@@ -200,6 +215,7 @@ final class WorkoutManager: NSObject {
         currentExerciseIndex = 0
         currentSetIndex = 0
         completedSetsData = []
+        extraSetsPerExercise = [:]
         heartRate = 0
         activeCalories = 0
         heartRateSamples = []

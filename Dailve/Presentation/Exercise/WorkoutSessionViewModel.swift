@@ -85,13 +85,17 @@ final class WorkoutSessionViewModel {
     /// Body weight for calorie estimation (fetched externally, defaults to 70kg)
     var bodyWeightKg: Double = 70.0
 
+    static let defaultSetCount = 5
+
     init(
         exercise: ExerciseDefinition,
         calorieService: CalorieEstimating = CalorieEstimationService()
     ) {
         self.exercise = exercise
         self.calorieService = calorieService
-        addSet()
+        for _ in 0..<Self.defaultSetCount {
+            addSet()
+        }
     }
 
     // MARK: - Set Management
@@ -163,7 +167,7 @@ final class WorkoutSessionViewModel {
 
     // MARK: - Previous Session
 
-    func loadPreviousSets(from records: [ExerciseRecord]) {
+    func loadPreviousSets(from records: [ExerciseRecord], weightUnit: WeightUnit = .kg) {
         // Find the most recent record for this exercise
         let matching = records
             .filter { $0.exerciseDefinitionID == exercise.id }
@@ -181,6 +185,16 @@ final class WorkoutSessionViewModel {
                 duration: set.duration,
                 distance: set.distance
             )
+        }
+
+        // Match set count to previous session if it had more sets
+        while sets.count < previousSets.count {
+            addSet(weightUnit: weightUnit)
+        }
+
+        // Re-fill sets with previous data (init created sets before previousSets was loaded)
+        for i in sets.indices where !sets[i].isCompleted {
+            fillSetFromPrevious(at: i, weightUnit: weightUnit)
         }
     }
 

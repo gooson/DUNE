@@ -9,8 +9,22 @@ struct QuickStartPickerView: View {
 
     private var filteredExercises: [WatchExerciseInfo] {
         let library = connectivity.exerciseLibrary
-        guard !searchText.isEmpty else { return library }
-        return library.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
+        let base = searchText.isEmpty ? library : library.filter {
+            $0.name.localizedCaseInsensitiveContains(searchText)
+        }
+        return RecentExerciseTracker.sorted(base)
+    }
+
+    /// Recently used exercises (non-empty only when not searching).
+    private var recentExercises: [WatchExerciseInfo] {
+        guard searchText.isEmpty else { return [] }
+        return connectivity.exerciseLibrary.filter {
+            RecentExerciseTracker.lastUsed(exerciseID: $0.id) != nil
+        }.sorted {
+            let a = RecentExerciseTracker.lastUsed(exerciseID: $0.id) ?? .distantPast
+            let b = RecentExerciseTracker.lastUsed(exerciseID: $1.id) ?? .distantPast
+            return a > b
+        }
     }
 
     var body: some View {
@@ -28,19 +42,35 @@ struct QuickStartPickerView: View {
 
     private var exerciseList: some View {
         List {
-            ForEach(filteredExercises, id: \.id) { exercise in
-                NavigationLink(value: WatchRoute.workoutPreview(
-                    snapshotFromExercise(exercise)
-                )) {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(exercise.name)
-                            .font(.caption.weight(.medium))
-                            .lineLimit(1)
-                        Text("\(exercise.defaultSets) sets · \(exercise.defaultReps ?? 10) reps")
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
+            // Recent section (only when not searching and has history)
+            if !recentExercises.isEmpty {
+                Section("Recent") {
+                    ForEach(recentExercises, id: \.id) { exercise in
+                        exerciseRow(exercise)
                     }
                 }
+            }
+
+            // All exercises
+            Section(recentExercises.isEmpty ? "Exercises" : "All") {
+                ForEach(filteredExercises, id: \.id) { exercise in
+                    exerciseRow(exercise)
+                }
+            }
+        }
+    }
+
+    private func exerciseRow(_ exercise: WatchExerciseInfo) -> some View {
+        NavigationLink(value: WatchRoute.workoutPreview(
+            snapshotFromExercise(exercise)
+        )) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(exercise.name)
+                    .font(.caption.weight(.medium))
+                    .lineLimit(1)
+                Text("\(exercise.defaultSets) sets · \(exercise.defaultReps ?? 10) reps")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
             }
         }
     }
