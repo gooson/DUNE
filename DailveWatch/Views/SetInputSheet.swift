@@ -2,60 +2,58 @@ import SwiftUI
 import WatchKit
 
 /// Dedicated sheet for weight/reps input with Digital Crown support.
-/// Crown controls weight, +/- buttons adjust reps.
-/// Layout is compact to fit all elements on screen without scrolling.
+/// Crown controls weight (scroll = touch), layout adapts to any watch size.
 struct SetInputSheet: View {
     @Binding var weight: Double
     @Binding var reps: Int
     @Environment(\.dismiss) private var dismiss
 
-    /// Tracks last haptic play time for debouncing rapid taps.
     @State private var lastHapticDate: Date = .distantPast
 
     var body: some View {
-        VStack(spacing: 6) {
-            // Weight section
-            weightSection
+        ScrollView {
+            VStack(spacing: 12) {
+                // Weight — large display + crown + ±2.5 buttons
+                weightSection
 
-            Divider()
+                Divider()
 
-            // Reps section
-            repsSection
-
-            // Done button
-            Button("Done") { dismiss() }
-                .buttonStyle(.borderedProminent)
-                .tint(.green)
+                // Reps — inline ± row
+                repsSection
+            }
+            .padding(.horizontal, 8)
         }
-        .padding(.horizontal, 8)
+        // Done at bottom via toolbar — always visible regardless of scroll
+        .toolbar {
+            ToolbarItem(placement: .confirmationAction) {
+                Button("Done") { dismiss() }
+            }
+        }
         .focusable()
         .digitalCrownRotation($weight, from: 0, through: 500, by: 2.5, sensitivity: .medium)
         .onChange(of: weight) { _, newValue in
             let clamped = min(max(newValue, 0), 500)
-            if clamped != newValue {
-                weight = clamped
-            }
+            if clamped != newValue { weight = clamped }
         }
     }
 
-    // MARK: - Weight Section
+    // MARK: - Weight
 
     private var weightSection: some View {
-        VStack(spacing: 4) {
-            Text("Weight (kg)")
-                .font(.caption2)
-                .foregroundStyle(.secondary)
-
+        VStack(spacing: 6) {
             Text("\(weight, specifier: "%.1f")")
-                .font(.system(.title2, design: .rounded).monospacedDigit().bold())
+                .font(.system(.largeTitle, design: .rounded).monospacedDigit().bold())
                 .foregroundStyle(.green)
                 .contentTransition(.numericText())
 
-            HStack(spacing: 4) {
-                weightButton("-5", delta: -5)
+            Text("kg")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+            // ± buttons for quick jumps (crown for fine tuning)
+            HStack(spacing: 8) {
                 weightButton("-2.5", delta: -2.5)
                 weightButton("+2.5", delta: 2.5)
-                weightButton("+5", delta: 5)
             }
         }
     }
@@ -69,31 +67,33 @@ struct SetInputSheet: View {
             }
         } label: {
             Text(label)
-                .font(.caption2.weight(.medium))
-                .frame(minWidth: 34, minHeight: 24)
+                .font(.caption.weight(.medium))
+                .frame(maxWidth: .infinity, minHeight: 32)
         }
         .buttonStyle(.bordered)
         .tint(.gray)
     }
 
-    // MARK: - Reps Section
+    // MARK: - Reps
 
     private var repsSection: some View {
-        HStack(spacing: 12) {
+        HStack {
             Button {
                 if reps > 0 {
                     reps -= 1
                     playDebouncedHaptic()
                 }
             } label: {
-                Text("-")
-                    .font(.title3.weight(.semibold))
-                    .frame(minWidth: 40, minHeight: 40)
+                Image(systemName: "minus")
+                    .font(.body.weight(.semibold))
+                    .frame(minWidth: 44, minHeight: 44)
             }
             .buttonStyle(.bordered)
             .tint(.gray)
 
-            VStack(spacing: 1) {
+            Spacer()
+
+            VStack(spacing: 0) {
                 Text("\(reps)")
                     .font(.system(.title2, design: .rounded).monospacedDigit().bold())
                     .foregroundStyle(.green)
@@ -102,7 +102,8 @@ struct SetInputSheet: View {
                     .font(.caption2)
                     .foregroundStyle(.secondary)
             }
-            .frame(minWidth: 50)
+
+            Spacer()
 
             Button {
                 if reps < 100 {
@@ -110,9 +111,9 @@ struct SetInputSheet: View {
                     playDebouncedHaptic()
                 }
             } label: {
-                Text("+")
-                    .font(.title3.weight(.semibold))
-                    .frame(minWidth: 40, minHeight: 40)
+                Image(systemName: "plus")
+                    .font(.body.weight(.semibold))
+                    .frame(minWidth: 44, minHeight: 44)
             }
             .buttonStyle(.bordered)
             .tint(.gray)
@@ -121,7 +122,6 @@ struct SetInputSheet: View {
 
     // MARK: - Haptic
 
-    /// Debounced haptic — skips if last play was < 100ms ago.
     private func playDebouncedHaptic() {
         let now = Date()
         guard now.timeIntervalSince(lastHapticDate) >= 0.1 else { return }
