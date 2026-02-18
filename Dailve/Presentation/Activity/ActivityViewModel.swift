@@ -17,6 +17,40 @@ final class ActivityViewModel {
     var errorMessage: String?
     var workoutSuggestion: WorkoutSuggestion?
 
+    /// Weekly training goal in active days.
+    let weeklyGoal: Int = 5
+
+    /// Last workout day's total calories from recent workouts.
+    var lastWorkoutCalories: Double {
+        guard let lastDate = lastWorkoutDate else { return 0 }
+        return recentWorkouts
+            .filter { Calendar.current.startOfDay(for: $0.date) == lastDate }
+            .compactMap(\.calories)
+            .reduce(0, +)
+    }
+
+    /// Last workout day's total exercise minutes from recent workouts.
+    var lastWorkoutMinutes: Double {
+        guard let lastDate = lastWorkoutDate else { return 0 }
+        return recentWorkouts
+            .filter { Calendar.current.startOfDay(for: $0.date) == lastDate }
+            .reduce(0) { $0 + $1.duration / 60.0 }
+    }
+
+    /// The most recent workout date (start of day).
+    private var lastWorkoutDate: Date? {
+        recentWorkouts
+            .map { Calendar.current.startOfDay(for: $0.date) }
+            .max()
+    }
+
+    /// Number of active days (at least 1 workout) in the last 7 days.
+    var activeDays: Int {
+        let calendar = Calendar.current
+        let uniqueDays = Set(recentWorkouts.map { calendar.startOfDay(for: $0.date) })
+        return uniqueDays.count
+    }
+
     private let workoutService: WorkoutQuerying
     private let stepsService: StepsQuerying
     private let hrvService: HRVQuerying

@@ -1,7 +1,7 @@
 import SwiftUI
 import SwiftData
 
-/// Redesigned Activity tab with weekly summary chart, today's metrics, and recent workouts.
+/// Activity tab with unified training volume card, AI suggestions, and recent workouts.
 struct ActivityView: View {
     @State private var viewModel = ActivityViewModel()
     @State private var showingExercisePicker = false
@@ -27,22 +27,14 @@ struct ActivityView: View {
                         }
                     }
 
-                    // Weekly Summary Hero Chart
-                    WeeklySummaryChartView(
-                        exerciseData: viewModel.weeklyExerciseMinutes,
-                        stepsData: viewModel.weeklySteps
+                    // Training Volume (unified card, 28-day training load)
+                    TrainingVolumeSummaryCard(
+                        trainingLoadData: viewModel.trainingLoadData,
+                        lastWorkoutMinutes: viewModel.lastWorkoutMinutes,
+                        lastWorkoutCalories: viewModel.lastWorkoutCalories,
+                        activeDays: viewModel.activeDays,
+                        weeklyGoal: viewModel.weeklyGoal
                     )
-
-                    // Muscle Activity Summary
-                    MuscleMapSummaryCard(records: recentRecords)
-
-                    // Training Load (28-day)
-                    if !viewModel.trainingLoadData.isEmpty {
-                        TrainingLoadChartView(data: viewModel.trainingLoadData)
-                    }
-
-                    // Today's Metrics
-                    todaySection
 
                     // Recent Workouts
                     ExerciseListSection(
@@ -92,6 +84,14 @@ struct ActivityView: View {
         .navigationDestination(for: AllDataDestination.self) { destination in
             AllDataView(category: destination.category)
         }
+        .navigationDestination(for: TrainingVolumeDestination.self) { destination in
+            switch destination {
+            case .overview:
+                TrainingVolumeDetailView()
+            case .exerciseType(let typeKey, let displayName):
+                ExerciseTypeDetailView(typeKey: typeKey, displayName: displayName)
+            }
+        }
         .sheet(item: $selectedExercise) { exercise in
             ExerciseStartView(exercise: exercise)
                 .interactiveDismissDisabled()
@@ -107,39 +107,6 @@ struct ActivityView: View {
             viewModel.updateSuggestion(records: recentRecords)
         }
         .navigationTitle("Train")
-    }
-
-    // MARK: - Today Section
-
-    @ViewBuilder
-    private var todaySection: some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            Text("Today")
-                .font(.subheadline)
-                .fontWeight(.semibold)
-
-            LazyVGrid(
-                columns: [
-                    GridItem(.flexible(), spacing: DS.Spacing.md),
-                    GridItem(.flexible(), spacing: DS.Spacing.md),
-                ],
-                spacing: DS.Spacing.md
-            ) {
-                if let exercise = viewModel.todayExercise {
-                    NavigationLink(value: exercise) {
-                        MetricCardView(metric: exercise)
-                    }
-                    .buttonStyle(.plain)
-                }
-
-                if let steps = viewModel.todaySteps {
-                    NavigationLink(value: steps) {
-                        MetricCardView(metric: steps)
-                    }
-                    .buttonStyle(.plain)
-                }
-            }
-        }
     }
 
     // MARK: - Helpers

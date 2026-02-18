@@ -14,7 +14,7 @@ struct TrainingLoadChartView: View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             // Header
             HStack {
-                Label("훈련량", systemImage: "flame.fill")
+                Label("Training Load", systemImage: "flame.fill")
                     .font(.subheadline.weight(.semibold))
                 Spacer()
                 if let summary = cachedWeekSummary {
@@ -33,10 +33,10 @@ struct TrainingLoadChartView: View {
 
                 // Legend
                 HStack(spacing: DS.Spacing.md) {
-                    legendItem(color: DS.Color.positive, label: "낮음")
-                    legendItem(color: DS.Color.caution, label: "보통")
-                    legendItem(color: .orange, label: "높음")
-                    legendItem(color: DS.Color.negative, label: "매우 높음")
+                    legendItem(color: DS.Color.positive, label: "Low")
+                    legendItem(color: DS.Color.caution, label: "Moderate")
+                    legendItem(color: .orange, label: "High")
+                    legendItem(color: DS.Color.negative, label: "Very High")
                 }
                 .font(.caption2)
             }
@@ -97,6 +97,7 @@ struct TrainingLoadChartView: View {
                 AxisGridLine()
             }
         }
+        .chartYScale(domain: 0...(maxLoad * 1.15))
         .chartXSelection(value: $selectedDate)
         .sensoryFeedback(.selection, trigger: selectedDate)
         .overlay(alignment: .top) {
@@ -119,7 +120,7 @@ struct TrainingLoadChartView: View {
             Image(systemName: "chart.bar.fill")
                 .font(.title2)
                 .foregroundStyle(.tertiary)
-            Text("운동 데이터가 쌓이면 훈련량을 표시합니다")
+            Text("Training load will appear as you exercise")
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
@@ -141,6 +142,11 @@ struct TrainingLoadChartView: View {
             Circle().fill(color).frame(width: 6, height: 6)
             Text(label).foregroundStyle(.secondary)
         }
+    }
+
+    private var maxLoad: Double {
+        let maxVal = data.map(\.load).max() ?? 0
+        return Swift.max(maxVal, 1)
     }
 
     private var selectedPoint: TrainingLoadDataPoint? {
@@ -178,11 +184,11 @@ struct TrainingLoadChartView: View {
 
         if lastWeek > 0 {
             let change = ((thisWeek - lastWeek) / lastWeek) * 100
-            guard change.isFinite, !change.isNaN else { return String(format: "이번 주 %.1f", thisWeek) }
+            guard change.isFinite, !change.isNaN else { return String(format: "This week %.1f", thisWeek) }
             let arrow = change >= 0 ? "↑" : "↓"
-            return String(format: "이번 주 %.1f (%@%.0f%%)", thisWeek, arrow, abs(change))
+            return String(format: "This week %.1f (%@%.0f%%)", thisWeek, arrow, abs(change))
         }
-        return String(format: "이번 주 %.1f", thisWeek)
+        return String(format: "This week %.1f", thisWeek)
     }
 }
 
