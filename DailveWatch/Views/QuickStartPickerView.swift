@@ -6,26 +6,11 @@ struct QuickStartPickerView: View {
     @Environment(WatchConnectivityManager.self) private var connectivity
 
     @State private var searchText = ""
+    @State private var cachedFiltered: [WatchExerciseInfo] = []
+    @State private var cachedRecent: [WatchExerciseInfo] = []
 
-    private var filteredExercises: [WatchExerciseInfo] {
-        let library = connectivity.exerciseLibrary
-        let base = searchText.isEmpty ? library : library.filter {
-            $0.name.localizedCaseInsensitiveContains(searchText)
-        }
-        return RecentExerciseTracker.sorted(base)
-    }
-
-    /// Recently used exercises (non-empty only when not searching).
-    private var recentExercises: [WatchExerciseInfo] {
-        guard searchText.isEmpty else { return [] }
-        return connectivity.exerciseLibrary.filter {
-            RecentExerciseTracker.lastUsed(exerciseID: $0.id) != nil
-        }.sorted {
-            let a = RecentExerciseTracker.lastUsed(exerciseID: $0.id) ?? .distantPast
-            let b = RecentExerciseTracker.lastUsed(exerciseID: $1.id) ?? .distantPast
-            return a > b
-        }
-    }
+    private var filteredExercises: [WatchExerciseInfo] { cachedFiltered }
+    private var recentExercises: [WatchExerciseInfo] { cachedRecent }
 
     var body: some View {
         Group {
@@ -36,6 +21,9 @@ struct QuickStartPickerView: View {
             }
         }
         .navigationTitle("Quick Start")
+        .onAppear { rebuildFilteredLists() }
+        .onChange(of: searchText) { _, _ in rebuildFilteredLists() }
+        .onChange(of: connectivity.exerciseLibrary.count) { _, _ in rebuildFilteredLists() }
     }
 
     // MARK: - Exercise List
@@ -90,6 +78,28 @@ struct QuickStartPickerView: View {
                 .multilineTextAlignment(.center)
         }
         .padding()
+    }
+
+    // MARK: - Filter Computation
+
+    private func rebuildFilteredLists() {
+        let library = connectivity.exerciseLibrary
+        let base = searchText.isEmpty ? library : library.filter {
+            $0.name.localizedCaseInsensitiveContains(searchText)
+        }
+        cachedFiltered = RecentExerciseTracker.sorted(base)
+
+        if searchText.isEmpty {
+            cachedRecent = library.filter {
+                RecentExerciseTracker.lastUsed(exerciseID: $0.id) != nil
+            }.sorted {
+                let a = RecentExerciseTracker.lastUsed(exerciseID: $0.id) ?? .distantPast
+                let b = RecentExerciseTracker.lastUsed(exerciseID: $1.id) ?? .distantPast
+                return a > b
+            }
+        } else {
+            cachedRecent = []
+        }
     }
 
     // MARK: - Helpers

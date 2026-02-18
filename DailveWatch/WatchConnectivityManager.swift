@@ -228,6 +228,8 @@ struct WatchHeartRateSample: Codable, Sendable {
     let timestamp: Date
 }
 
+/// IMPORTANT: Duplicated in Dailve/Data/WatchConnectivity/WatchSessionManager.swift — keep both in sync.
+/// TODO: Extract to shared Swift package to eliminate duplication (#69).
 struct WatchExerciseInfo: Codable, Sendable, Hashable {
     let id: String
     let name: String

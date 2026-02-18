@@ -17,6 +17,8 @@ struct MetricsView: View {
     @State private var showLastSetOptions = false
     @State private var transitionTask: Task<Void, Never>?
     @State private var didInitialAppear = false
+    /// Deferred input sheet trigger to prevent double-present with onAppear
+    @State private var pendingInputSheet = false
 
     var body: some View {
         Group {
@@ -41,6 +43,12 @@ struct MetricsView: View {
             // Only show input sheet on first appear, not after rest/transition
             if !didInitialAppear {
                 didInitialAppear = true
+                showInputSheet = true
+            }
+        }
+        .onChange(of: pendingInputSheet) { _, shouldShow in
+            if shouldShow {
+                pendingInputSheet = false
                 showInputSheet = true
             }
         }
@@ -289,7 +297,7 @@ struct MetricsView: View {
                 showNextExercise = false
                 prefillFromEntry()
                 WKInterfaceDevice.current().play(.notification)
-                showInputSheet = true
+                pendingInputSheet = true
             }
         }
         .onDisappear {
@@ -371,8 +379,8 @@ struct MetricsView: View {
         workoutManager.advanceToNextSet()
         prefillFromEntry()
 
-        // Haptic on rest complete → input sheet
+        // Haptic on rest complete → defer input sheet to avoid double-present
         WKInterfaceDevice.current().play(.notification)
-        showInputSheet = true
+        pendingInputSheet = true
     }
 }

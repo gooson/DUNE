@@ -33,6 +33,8 @@ struct WorkoutSessionView: View {
     private let draftToRestore: WorkoutSessionDraft?
 
     private var totalSets: Int { viewModel.sets.count }
+    /// Max dots before truncating the progress indicator (UI width limit)
+    private let maxProgressDots = 12
 
     init(exercise: ExerciseDefinition) {
         self.exercise = exercise
@@ -156,7 +158,7 @@ struct WorkoutSessionView: View {
                 }
 
                 // Animated extra dot placeholder
-                if totalSets < 12 {
+                if totalSets < maxProgressDots {
                     Circle()
                         .strokeBorder(.tertiary, lineWidth: 1)
                         .frame(width: 10, height: 10)
@@ -433,7 +435,8 @@ struct WorkoutSessionView: View {
     // MARK: - Value Adjusters
 
     private func adjustDecimalValue(_ binding: Binding<String>, by delta: Double, min minVal: Double, max maxVal: Double) {
-        let current = Double(binding.wrappedValue) ?? 0
+        let trimmed = binding.wrappedValue.trimmingCharacters(in: .whitespaces)
+        let current = trimmed.isEmpty ? 0 : (Double(trimmed) ?? 0)
         let newValue = Swift.max(minVal, Swift.min(maxVal, current + delta))
         // Remove trailing .0 for whole numbers
         if newValue.truncatingRemainder(dividingBy: 1) == 0 {
@@ -444,7 +447,8 @@ struct WorkoutSessionView: View {
     }
 
     private func adjustIntValue(_ binding: Binding<String>, by delta: Int, min minVal: Int, max maxVal: Int) {
-        let current = Int(binding.wrappedValue) ?? 0
+        let trimmed = binding.wrappedValue.trimmingCharacters(in: .whitespaces)
+        let current = trimmed.isEmpty ? 0 : (Int(trimmed) ?? 0)
         let newValue = Swift.max(minVal, Swift.min(maxVal, current + delta))
         binding.wrappedValue = String(newValue)
     }
@@ -532,6 +536,8 @@ struct WorkoutSessionView: View {
     private var restControls: some View {
         HStack(spacing: DS.Spacing.md) {
             Button {
+                let maxRestSeconds = 3600 // 1 hour cap
+                guard restTotalSeconds + 30 <= maxRestSeconds else { return }
                 restSecondsRemaining += 30
                 restTotalSeconds += 30
             } label: {

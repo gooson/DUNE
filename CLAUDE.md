@@ -221,3 +221,11 @@
 69. **Watch DTO 필드 추가 시 양쪽 target 동기화**: `WatchExerciseInfo`가 iOS(`WatchSessionManager`)와 Watch(`WatchConnectivityManager`)에 중복 존재. 필드 추가 시 양쪽 모두 동일하게 반영. 향후 shared package 통합 필요
 70. **Swift Charts `.clipped()` 필수**: `AreaMark` gradient가 chart frame 바깥으로 overflow 가능. `.frame(height:)` 다음에 `.clipped()` 항상 추가
 71. **`modelContext.save()` 명시적 호출 지양**: SwiftData auto-save가 기본 동작. 명시적 `save()`는 `@Query` 타이밍과 충돌 가능. `withAnimation { delete }` 후 auto-save에 위임
+
+### 2026-02-18: Watch/iOS 리뷰 P1~P3 일괄 수정 교정
+
+72. **Watch 입력도 iOS와 동일 수준 검증**: `WorkoutManager.completeSet()`에서 weight 0-500, reps 0-1000 범위 검증 필수. WatchConnectivity 전송 전 마지막 방어선
+73. **Cross-VM static 프로퍼티 참조 금지**: `ViewModelA.defaultX`를 다른 View에서 참조하면 불필요한 ViewModel 의존. 공유 상수는 `WorkoutDefaults` 같은 중립 enum으로 추출
+74. **SwiftUI sheet 이중 트리거 방지**: `showSheet = true`가 여러 경로(onAppear + completion handler)에서 동시 호출 가능하면 `pendingSheet` @State + `onChange(of:)` 패턴으로 한 프레임 지연
+75. **UserDefaults ID 캐시는 garbage collection 필수**: 삭제된 엔티티의 ID가 UserDefaults에 남으면 maxEntries를 점유. 읽기 시점에 현재 유효 ID와 대조하여 stale 키 정리
+76. **UserDefaults key에 bundle identifier prefix**: 테스트/프로덕션 환경 격리를 위해 `Bundle.main.bundleIdentifier`를 key prefix로 사용

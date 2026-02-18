@@ -28,11 +28,11 @@ struct WorkoutSessionViewModelTests {
         let exercise = makeExercise()
         let vm = WorkoutSessionViewModel(exercise: exercise)
 
-        #expect(vm.sets.count == WorkoutSessionViewModel.defaultSetCount)
+        #expect(vm.sets.count == WorkoutDefaults.setCount)
         #expect(vm.sets[0].setNumber == 1)
         #expect(vm.sets[0].weight.isEmpty)
         #expect(vm.sets[0].reps.isEmpty)
-        #expect(vm.sets.last?.setNumber == WorkoutSessionViewModel.defaultSetCount)
+        #expect(vm.sets.last?.setNumber == WorkoutDefaults.setCount)
     }
 
     @Test("addSet increments set number")

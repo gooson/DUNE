@@ -68,7 +68,9 @@ final class WorkoutManager: NSObject {
 
     /// Total sets for the current exercise (default + extra).
     var effectiveTotalSets: Int {
-        guard let entry = currentEntry else { return 0 }
+        guard let snapshot = templateSnapshot,
+              currentExerciseIndex < snapshot.entries.count else { return 0 }
+        let entry = snapshot.entries[currentExerciseIndex]
         let extra = extraSetsPerExercise[currentExerciseIndex] ?? 0
         return entry.defaultSets + extra
     }
@@ -172,10 +174,14 @@ final class WorkoutManager: NSObject {
     // MARK: - Set/Exercise Navigation
 
     func completeSet(weight: Double?, reps: Int?) {
+        // Validate input ranges before recording (mirrors iPhone validation rules)
+        let validatedWeight: Double? = weight.flatMap { (0...500).contains($0) ? $0 : nil }
+        let validatedReps: Int? = reps.flatMap { (0...1000).contains($0) ? $0 : nil }
+
         let data = CompletedSetData(
             setNumber: currentSetIndex + 1,
-            weight: weight,
-            reps: reps,
+            weight: validatedWeight,
+            reps: validatedReps,
             completedAt: Date()
         )
         if currentExerciseIndex < completedSetsData.count {

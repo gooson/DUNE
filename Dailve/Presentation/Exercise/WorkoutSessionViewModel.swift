@@ -85,15 +85,13 @@ final class WorkoutSessionViewModel {
     /// Body weight for calorie estimation (fetched externally, defaults to 70kg)
     var bodyWeightKg: Double = 70.0
 
-    static let defaultSetCount = 5
-
     init(
         exercise: ExerciseDefinition,
         calorieService: CalorieEstimating = CalorieEstimationService()
     ) {
         self.exercise = exercise
         self.calorieService = calorieService
-        for _ in 0..<Self.defaultSetCount {
+        for _ in 0..<WorkoutDefaults.setCount {
             addSet()
         }
     }
@@ -168,6 +166,7 @@ final class WorkoutSessionViewModel {
     // MARK: - Previous Session
 
     func loadPreviousSets(from records: [ExerciseRecord], weightUnit: WeightUnit = .kg) {
+        guard !isSaving else { return }
         // Find the most recent record for this exercise
         let matching = records
             .filter { $0.exerciseDefinitionID == exercise.id }
