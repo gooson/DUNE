@@ -235,3 +235,8 @@
 77. **`throws` 함수에서 silent `guard...return` 금지**: Service 레이어의 `throws` 함수가 `guard ... else { return }` 으로 실패를 삼키면 caller가 성공/실패 구분 불가. `throw TypedError` 사용 필수
 78. **`onAppear` + `onChange` 동일 로직은 `.task(id:)` 통합**: 동일 코드가 `onAppear`와 `onChange(of:)`에 중복되면 `.task(id: "\(dep1)-\(dep2)")` 하나로 통합. 초기 실행 + 의존값 변경 시 자동 재실행
 79. **HealthKit 거리 값 상한 500km**: `extractDistance()`에서 `d < 500_000` (미터) 검증. 센서 오류로 비현실적 거리가 PR/통계를 왜곡하는 것 방지
+
+### 2026-02-19: Training Volume 리뷰 수정 교정
+
+80. **Formatter 객체는 static let 캐싱 필수**: `NumberFormatter`, `DateFormatter` 등 `NSObject` 기반 formatter를 hot path(차트 렌더링 등)에서 매번 생성 금지. `private enum Cache { static let formatter = ... }` 패턴 사용
+81. **새 기능 구현 후 관련 Correction 항목 재검증**: `/review` 전에 새 코드가 기존 Correction Log 항목(특히 #17 Task.isCancelled, #70 .clipped(), #79 거리 상한)을 위반하지 않는지 사전 점검. `/work` 단계에서 관련 항목을 구현 체크리스트에 포함

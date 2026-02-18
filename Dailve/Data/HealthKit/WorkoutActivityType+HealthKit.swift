@@ -18,7 +18,6 @@ extension WorkoutActivityType {
         case .rowing:                           self = .rowing
         case .coreTraining:                     self = .coreTraining
         case .flexibility:                      self = .flexibility
-        case .socialDance, .cardioDance:         self = .dance
         case .pilates:                          self = .pilates
         case .boxing:                           self = .boxing
         case .martialArts:                      self = .martialArts
@@ -104,7 +103,6 @@ extension WorkoutActivityType {
         case .rowing:                           .rowing
         case .coreTraining:                     .coreTraining
         case .flexibility:                      .flexibility
-        case .dance:                            .socialDance
         case .pilates:                          .pilates
         case .boxing:                           .boxing
         case .martialArts:                      .martialArts
