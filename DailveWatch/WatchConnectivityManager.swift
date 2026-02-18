@@ -2,6 +2,14 @@ import Foundation
 @preconcurrency import WatchConnectivity
 import Observation
 
+/// Sync status for exercise library data from iPhone.
+enum SyncStatus: Equatable {
+    case syncing
+    case synced(Date)
+    case failed(String)
+    case notConnected
+}
+
 /// Watch-side WatchConnectivity manager.
 /// Receives workout state from iPhone and sends completed sets back.
 @Observable
@@ -19,6 +27,9 @@ final class WatchConnectivityManager: NSObject {
 
     /// Exercise library transferred from iPhone
     private(set) var exerciseLibrary: [WatchExerciseInfo] = []
+
+    /// Sync status for UI display
+    private(set) var syncStatus: SyncStatus = .notConnected
 
     private override init() {
         super.init()
@@ -108,9 +119,14 @@ extension WatchConnectivityManager: WCSessionDelegate {
     ) {
         if let error {
             print("WCSession activation failed: \(error.localizedDescription)")
+            Task { @MainActor in
+                syncStatus = .failed(error.localizedDescription)
+            }
+            return
         }
         if activationState == .activated {
             Task { @MainActor in
+                syncStatus = .syncing
                 loadCachedContext()
             }
         }
@@ -165,8 +181,15 @@ extension WatchConnectivityManager {
         if let data = context["exerciseLibrary"] {
             do {
                 exerciseLibrary = try JSONDecoder().decode([WatchExerciseInfo].self, from: data)
+                syncStatus = .synced(Date())
             } catch {
                 print("Failed to decode exercise library: \(error.localizedDescription)")
+                syncStatus = .failed("Decode error")
+            }
+        } else if context.isEmpty {
+            // No data received yet — keep current status or mark synced with empty library
+            if exerciseLibrary.isEmpty {
+                syncStatus = .synced(Date())
             }
         }
     }

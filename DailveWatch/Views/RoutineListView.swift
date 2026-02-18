@@ -7,6 +7,9 @@ struct RoutineListView: View {
     @Environment(WorkoutManager.self) private var workoutManager
 
     @State private var errorMessage: String?
+    @State private var isStartingWorkout = false
+
+    private var connectivity: WatchConnectivityManager { .shared }
 
     var body: some View {
         Group {
@@ -17,6 +20,11 @@ struct RoutineListView: View {
             }
         }
         .navigationTitle("Dailve")
+        .overlay {
+            if isStartingWorkout {
+                startingOverlay
+            }
+        }
         .alert("Error", isPresented: .init(
             get: { errorMessage != nil },
             set: { if !$0 { errorMessage = nil } }
@@ -27,18 +35,11 @@ struct RoutineListView: View {
         }
     }
 
+    // MARK: - Routine List
+
     private var routineList: some View {
         List {
-            // Quick Start entry point
-            Section {
-                NavigationLink(value: WatchRoute.quickStart) {
-                    Label("Quick Start", systemImage: "bolt.fill")
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle(.green)
-                }
-            }
-
-            // Template list
+            // Template list (primary content)
             Section("Routines") {
                 ForEach(templates) { template in
                     Button {
@@ -53,10 +54,27 @@ struct RoutineListView: View {
                                 .foregroundStyle(.secondary)
                         }
                     }
+                    .disabled(isStartingWorkout)
                 }
+            }
+
+            // Quick Start (secondary, at bottom)
+            Section {
+                NavigationLink(value: WatchRoute.quickStart) {
+                    Label("Quick Start", systemImage: "bolt.fill")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.green)
+                }
+            }
+
+            // Sync status indicator
+            Section {
+                syncStatusView
             }
         }
     }
+
+    // MARK: - Empty State
 
     private var emptyState: some View {
         VStack(spacing: 12) {
@@ -76,17 +94,81 @@ struct RoutineListView: View {
             .buttonStyle(.borderedProminent)
             .tint(.green)
             .padding(.top, 8)
+
+            syncStatusView
+                .padding(.top, 4)
         }
         .padding()
     }
 
+    // MARK: - Sync Status
+
+    private var syncStatusView: some View {
+        HStack(spacing: 4) {
+            switch connectivity.syncStatus {
+            case .syncing:
+                ProgressView()
+                    .frame(width: 12, height: 12)
+                Text("Syncing...")
+            case .synced(let date):
+                Image(systemName: "checkmark.circle")
+                    .foregroundStyle(.green)
+                Text(syncTimeLabel(from: date))
+            case .failed(let message):
+                Image(systemName: "exclamationmark.triangle")
+                    .foregroundStyle(.yellow)
+                Text(message)
+            case .notConnected:
+                Image(systemName: "iphone.slash")
+                    .foregroundStyle(.secondary)
+                Text("iPhone not connected")
+            }
+        }
+        .font(.caption2)
+        .foregroundStyle(.secondary)
+    }
+
+    private func syncTimeLabel(from date: Date) -> String {
+        let interval = Date().timeIntervalSince(date)
+        if interval < 60 {
+            return "Just synced"
+        } else if interval < 3600 {
+            return "\(Int(interval / 60)) min ago"
+        } else {
+            return "\(Int(interval / 3600))h ago"
+        }
+    }
+
+    // MARK: - Starting Overlay
+
+    private var startingOverlay: some View {
+        ZStack {
+            Color.black.opacity(0.6)
+                .ignoresSafeArea()
+            VStack(spacing: 8) {
+                ProgressView()
+                Text("Starting...")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    // MARK: - Actions
+
     private func startWorkout(with template: WorkoutTemplate) {
+        guard !isStartingWorkout else { return }
+        isStartingWorkout = true
+
         Task {
             do {
                 try await workoutManager.requestAuthorization()
                 try await workoutManager.startWorkout(with: template)
+                WKInterfaceDevice.current().play(.success)
             } catch {
+                isStartingWorkout = false
                 errorMessage = "Failed to start: \(error.localizedDescription)"
+                WKInterfaceDevice.current().play(.failure)
             }
         }
     }

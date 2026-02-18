@@ -19,6 +19,8 @@ struct RestTimerView: View {
     @State private var tick: Int = 0
     /// The running countdown task (cancelled on disappear).
     @State private var countdownTask: Task<Void, Never>?
+    /// Whether the 10-second warning haptic has fired.
+    @State private var didPlay10sWarning = false
 
     var body: some View {
         VStack(spacing: 6) {
@@ -39,7 +41,7 @@ struct RestTimerView: View {
 
                 VStack(spacing: 2) {
                     Text(timeString)
-                        .font(.system(.title2, design: .rounded).monospacedDigit().weight(.bold))
+                        .font(.system(.title, design: .rounded).monospacedDigit().weight(.bold))
 
                     // HR display during rest
                     HStack(spacing: 2) {
@@ -61,12 +63,13 @@ struct RestTimerView: View {
             .frame(width: 100, height: 100)
 
             // +30s / Skip / End buttons
-            HStack(spacing: 10) {
+            HStack(spacing: 8) {
                 Button {
                     addTime(30)
                 } label: {
                     Text("+30s")
-                        .font(.system(size: 11, weight: .medium))
+                        .font(.caption2.weight(.medium))
+                        .frame(minHeight: 32)
                 }
                 .buttonStyle(.bordered)
                 .tint(.gray)
@@ -76,7 +79,8 @@ struct RestTimerView: View {
                     onSkip()
                 } label: {
                     Text("Skip")
-                        .font(.system(size: 11, weight: .medium))
+                        .font(.caption.weight(.semibold))
+                        .frame(minHeight: 36)
                 }
                 .buttonStyle(.bordered)
                 .tint(.green)
@@ -86,7 +90,8 @@ struct RestTimerView: View {
                     onEnd()
                 } label: {
                     Text("End")
-                        .font(.system(size: 11, weight: .medium))
+                        .font(.caption2.weight(.medium))
+                        .frame(minHeight: 32)
                 }
                 .buttonStyle(.bordered)
                 .tint(.red)
@@ -131,6 +136,7 @@ struct RestTimerView: View {
         totalSeconds = total
         targetDate = Date().addingTimeInterval(TimeInterval(total))
 
+        didPlay10sWarning = false
         countdownTask?.cancel()
         countdownTask = Task {
             while !Task.isCancelled {
@@ -138,7 +144,15 @@ struct RestTimerView: View {
                 guard !Task.isCancelled else { return }
                 // Mutate @State to force view update
                 tick += 1
-                if targetDate.timeIntervalSinceNow <= 0 {
+
+                let remaining = targetDate.timeIntervalSinceNow
+                // 10-second warning haptic (fires once per countdown)
+                if remaining <= 10, remaining > 0, !didPlay10sWarning {
+                    didPlay10sWarning = true
+                    WKInterfaceDevice.current().play(.start)
+                }
+
+                if remaining <= 0 {
                     timerFinished()
                     return
                 }
