@@ -35,11 +35,6 @@ struct FatigueLegendView: View {
             Text("Recovered")
                 .foregroundStyle(.secondary)
             Spacer()
-            if onTap != nil {
-                Image(systemName: "info.circle")
-                    .foregroundStyle(.secondary)
-            }
-            Spacer()
             Text("Fatigued")
                 .foregroundStyle(.secondary)
         }
