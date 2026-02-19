@@ -168,6 +168,7 @@ final class ActivityViewModel {
         // Recompute fatigue with newly fetched HealthKit workouts
         recomputeFatigueAndSuggestion()
 
+        guard !Task.isCancelled else { return }
         isLoading = false
     }
 

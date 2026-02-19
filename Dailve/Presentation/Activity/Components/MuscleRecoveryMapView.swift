@@ -9,10 +9,7 @@ struct MuscleRecoveryMapView: View {
     let onMuscleSelected: (MuscleGroup) -> Void
 
     @State private var showingFront = true
-
-    private var fatigueByMuscle: [MuscleGroup: MuscleFatigueState] {
-        Dictionary(uniqueKeysWithValues: fatigueStates.map { ($0.muscle, $0) })
-    }
+    @State private var fatigueByMuscle: [MuscleGroup: MuscleFatigueState] = [:]
 
     var body: some View {
         HeroCard(tintColor: DS.Color.activity) {
@@ -22,6 +19,12 @@ struct MuscleRecoveryMapView: View {
                 suggestionSection
             }
         }
+        .onAppear { rebuildFatigueIndex() }
+        .onChange(of: fatigueStates.count) { _, _ in rebuildFatigueIndex() }
+    }
+
+    private func rebuildFatigueIndex() {
+        fatigueByMuscle = Dictionary(uniqueKeysWithValues: fatigueStates.map { ($0.muscle, $0) })
     }
 
     // MARK: - Header
@@ -98,6 +101,7 @@ struct MuscleRecoveryMapView: View {
         }
         .aspectRatio(aspectRatio, contentMode: .fit)
         .frame(maxHeight: 380)
+        .clipped()
         .padding(.horizontal, DS.Spacing.xxxl)
         .id(showingFront)
         .transition(.opacity)
@@ -222,13 +226,11 @@ struct MuscleRecoveryMapView: View {
     // MARK: - Colors
 
     private func recoveryColor(for muscle: MuscleGroup) -> Color {
-        guard let state = fatigueByMuscle[muscle] else {
-            return .secondary.opacity(0.2)
-        }
-        guard state.lastTrainedDate != nil else {
+        guard let state = fatigueByMuscle[muscle], state.lastTrainedDate != nil else {
             return .secondary.opacity(0.2)
         }
         let pct = state.recoveryPercent
+        guard pct.isFinite else { return .secondary.opacity(0.2) }
         if pct >= 0.8 {
             return .green.opacity(0.35 + pct * 0.25)
         } else if pct >= 0.5 {
@@ -243,6 +245,7 @@ struct MuscleRecoveryMapView: View {
             return .secondary.opacity(0.15)
         }
         let pct = state.recoveryPercent
+        guard pct.isFinite else { return .secondary.opacity(0.15) }
         if pct >= 0.8 { return .green.opacity(0.4) }
         if pct >= 0.5 { return .yellow.opacity(0.4) }
         return .red.opacity(0.4)

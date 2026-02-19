@@ -28,15 +28,23 @@ struct MuscleBodyPart: Identifiable {
     let pathData: [String]
     /// X offset for back body SVG paths (0 for front)
     let xOffset: CGFloat
+    /// Pre-parsed SVG path (parsed once at init, scaled at render time)
+    let cachedPath: Path
 
     init(id: String, muscle: MuscleGroup, pathData: [String], xOffset: CGFloat = 0) {
         self.id = id
         self.muscle = muscle
         self.pathData = pathData
         self.xOffset = xOffset
+        // Parse SVG once at init — avoid re-parsing on every SwiftUI render
+        var combined = Path()
+        for d in pathData {
+            combined.addPath(SVGPathParser.parse(d))
+        }
+        self.cachedPath = combined
     }
 
-    var shape: MuscleBodyShape { MuscleBodyShape(pathData, xOffset: xOffset) }
+    var shape: MuscleBodyShape { MuscleBodyShape(cachedPath: cachedPath, xOffset: xOffset) }
 }
 
 // MARK: - Body Outline SVG Paths

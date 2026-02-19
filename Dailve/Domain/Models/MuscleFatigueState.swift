@@ -17,8 +17,9 @@ struct MuscleFatigueState: Sendable {
 
     /// Estimated date when this muscle will be fully recovered. nil if already recovered or never trained.
     var nextReadyDate: Date? {
-        guard let lastTrained = lastTrainedDate else { return nil }
+        guard let lastTrained = lastTrainedDate, muscle.recoveryHours > 0 else { return nil }
         let recoverySeconds = muscle.recoveryHours * 3600
+        guard recoverySeconds.isFinite, !recoverySeconds.isNaN else { return nil }
         let readyDate = lastTrained.addingTimeInterval(recoverySeconds)
         return readyDate > Date() ? readyDate : nil
     }

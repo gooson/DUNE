@@ -6,39 +6,43 @@ import SwiftUI
 /// Paths use viewBox "0 0 724 1448" from react-native-body-highlighter (MIT license).
 /// Attribution: https://github.com/HichamELBSI/react-native-body-highlighter
 struct MuscleBodyShape: Shape {
-    let pathData: [String]
+    /// Pre-parsed path (avoids re-parsing SVG on every render)
+    let cachedPath: Path
     /// X offset to subtract from absolute SVG coordinates (e.g. 724 for back body paths)
     let xOffset: CGFloat
 
-    /// Single path convenience
-    init(_ path: String, xOffset: CGFloat = 0) {
-        self.pathData = [path]
+    /// Create from pre-parsed path (preferred — used by MuscleBodyPart)
+    init(cachedPath: Path, xOffset: CGFloat = 0) {
+        self.cachedPath = cachedPath
         self.xOffset = xOffset
     }
 
+    /// Create from raw SVG path strings (parses once at init)
     init(_ paths: [String], xOffset: CGFloat = 0) {
-        self.pathData = paths
+        var combined = Path()
+        for d in paths {
+            combined.addPath(SVGPathParser.parse(d))
+        }
+        self.cachedPath = combined
         self.xOffset = xOffset
+    }
+
+    /// Single path convenience
+    init(_ path: String, xOffset: CGFloat = 0) {
+        self.init([path], xOffset: xOffset)
     }
 
     func path(in rect: CGRect) -> Path {
         let scaleX = rect.width / 724.0
         let scaleY = rect.height / 1448.0
-        var combined = Path()
         let transform: CGAffineTransform
         if xOffset != 0 {
-            // Shift paths left by xOffset, then scale
             transform = CGAffineTransform(translationX: -xOffset, y: 0)
                 .concatenating(CGAffineTransform(scaleX: scaleX, y: scaleY))
         } else {
             transform = CGAffineTransform(scaleX: scaleX, y: scaleY)
         }
-        for d in pathData {
-            let parsed = SVGPathParser.parse(d)
-            let scaled = parsed.applying(transform)
-            combined.addPath(scaled)
-        }
-        return combined
+        return cachedPath.applying(transform)
     }
 }
 

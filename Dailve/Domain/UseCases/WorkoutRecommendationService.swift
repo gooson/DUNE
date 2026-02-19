@@ -158,10 +158,10 @@ struct WorkoutRecommendationService: WorkoutRecommending {
             }
 
             let recovery: Double
-            if let hoursSince {
+            if let hoursSince, muscle.recoveryHours > 0 {
                 recovery = min(hoursSince / muscle.recoveryHours, 1.0)
             } else {
-                recovery = 1.0  // Never trained = fully "recovered"
+                recovery = 1.0  // Never trained or zero recoveryHours = fully "recovered"
             }
 
             return MuscleFatigueState(

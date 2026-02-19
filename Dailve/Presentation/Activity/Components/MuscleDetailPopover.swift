@@ -110,7 +110,7 @@ struct MuscleDetailPopover: View {
         return LazyVGrid(columns: columns, spacing: DS.Spacing.sm) {
             statItem(
                 title: "Recovery",
-                value: "\(Int(state.recoveryPercent * 100))%",
+                value: state.recoveryPercent.isFinite ? "\(Int(state.recoveryPercent * 100))%" : "—",
                 icon: "heart.fill"
             )
             statItem(
@@ -150,7 +150,7 @@ struct MuscleDetailPopover: View {
     }
 
     private func lastTrainedText(state: MuscleFatigueState) -> String {
-        guard let hours = state.hoursSinceLastTrained else { return "Never" }
+        guard let hours = state.hoursSinceLastTrained, hours.isFinite else { return "Never" }
         if hours < 1 { return "Just now" }
         if hours < 24 { return "\(Int(hours))h ago" }
         let days = Int(hours / 24)
