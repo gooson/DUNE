@@ -50,7 +50,7 @@ enum SVGPathParser {
 
     static func parse(_ d: String) -> Path {
         var path = Path()
-        let tokens = tokenize(d)
+        var tokens = tokenize(d)
         var i = 0
         var currentPoint = CGPoint.zero
         var startPoint = CGPoint.zero
@@ -68,13 +68,44 @@ enum SVGPathParser {
             CGPoint(x: nextNumber(), y: nextNumber())
         }
 
+        /// Read a single arc flag (0 or 1) that may be packed with subsequent data.
+        /// In compact SVG, "01.81" means flag=0, then "1.81" continues.
+        /// "01" means flag=0, then "1" continues.
+        func nextFlag() -> CGFloat {
+            guard i < tokens.count else { return 0 }
+            let token = tokens[i]
+            guard let first = token.first, (first == "0" || first == "1") else {
+                return nextNumber()
+            }
+            let flagVal: CGFloat = first == "1" ? 1 : 0
+            let rest = String(token.dropFirst())
+            if rest.isEmpty {
+                // Token is just "0" or "1"
+                i += 1
+            } else {
+                // Token is like "01.81" or "1.5" — consume flag, put rest back
+                i += 1
+                tokens.insert(rest, at: i)
+            }
+            return flagVal
+        }
+
+        /// Arc flags (0 or 1) can be compressed in SVG: "01" = largeArc=0, sweep=1.
+        /// Handles compressed ("01.81.1"), separate ("0", "1"), and mixed formats.
+        func nextArcFlags() -> (CGFloat, CGFloat) {
+            let flag1 = nextFlag()
+            let flag2 = nextFlag()
+            return (flag1, flag2)
+        }
+
         while i < tokens.count {
             let token = tokens[i]
             guard let cmd = token.first, token.count == 1 && cmd.isLetter else {
                 // Implicit repeat of last command
                 let cmd = lastCommand
                 processCommand(cmd, path: &path, currentPoint: &currentPoint, startPoint: &startPoint,
-                               lastControl: &lastControl, nextNumber: nextNumber, nextPoint: nextPoint)
+                               lastControl: &lastControl, nextNumber: nextNumber, nextPoint: nextPoint,
+                               nextArcFlags: nextArcFlags)
                 lastCommand = cmd
                 continue
             }
@@ -82,7 +113,8 @@ enum SVGPathParser {
             lastCommand = cmd
 
             processCommand(cmd, path: &path, currentPoint: &currentPoint, startPoint: &startPoint,
-                           lastControl: &lastControl, nextNumber: nextNumber, nextPoint: nextPoint)
+                           lastControl: &lastControl, nextNumber: nextNumber, nextPoint: nextPoint,
+                           nextArcFlags: nextArcFlags)
         }
         return path
     }
@@ -94,7 +126,8 @@ enum SVGPathParser {
         startPoint: inout CGPoint,
         lastControl: inout CGPoint?,
         nextNumber: () -> CGFloat,
-        nextPoint: () -> CGPoint
+        nextPoint: () -> CGPoint,
+        nextArcFlags: () -> (CGFloat, CGFloat)
     ) {
         switch cmd {
         case "M":
@@ -225,8 +258,7 @@ enum SVGPathParser {
             let rx = nextNumber()
             let ry = nextNumber()
             let rotation = nextNumber()
-            let largeArc = nextNumber()
-            let sweep = nextNumber()
+            let (largeArc, sweep) = nextArcFlags()
             let rawEnd = nextPoint()
             let endPoint = cmd == "a"
                 ? CGPoint(x: currentPoint.x + rawEnd.x, y: currentPoint.y + rawEnd.y)
@@ -367,6 +399,9 @@ enum SVGPathParser {
     // MARK: - Tokenizer
 
     /// Split SVG path data into command letters and numbers.
+    /// Handles compact SVG notation where:
+    /// - A second decimal point starts a new number (e.g. ".52.52" → ".52", ".52")
+    /// - A minus sign starts a new number (e.g. "3-2" → "3", "-2")
     private static func tokenize(_ d: String) -> [String] {
         var tokens: [String] = []
         var current = ""
@@ -384,6 +419,10 @@ enum SVGPathParser {
                     current = ""
                 }
             } else if char == "-" && !current.isEmpty && !current.hasSuffix("e") && !current.hasSuffix("E") {
+                tokens.append(current)
+                current = String(char)
+            } else if char == "." && current.contains(".") {
+                // Second decimal point starts a new number (compact SVG notation)
                 tokens.append(current)
                 current = String(char)
             } else {
