@@ -161,8 +161,8 @@ struct SleepQueryService: SleepQuerying, Sendable {
         let deepSeconds = sleepStages.filter { $0.stage == .deep }.reduce(0.0) { $0 + $1.duration }
         let remSeconds = sleepStages.filter { $0.stage == .rem }.reduce(0.0) { $0 + $1.duration }
 
-        let deepRatio = deepSeconds / totalSeconds
-        let remRatio = remSeconds / totalSeconds
+        let deepRatio = Swift.min(deepSeconds / totalSeconds, 1.0)
+        let remRatio = Swift.min(remSeconds / totalSeconds, 1.0)
 
         return SleepSummary(
             totalSleepMinutes: totalMinutes,

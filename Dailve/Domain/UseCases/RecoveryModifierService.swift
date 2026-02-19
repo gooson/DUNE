@@ -28,7 +28,7 @@ struct RecoveryModifierService: RecoveryModifying, Sendable {
         remSleepRatio: Double?
     ) -> Double {
         guard let minutes = totalSleepMinutes,
-              minutes.isFinite, minutes >= 0 else {
+              minutes.isFinite, minutes >= 0, minutes <= 1440 else {
             return 1.0
         }
 
@@ -45,7 +45,7 @@ struct RecoveryModifierService: RecoveryModifying, Sendable {
 
         var qualityBonus = 0.0
 
-        if let deep = deepSleepRatio, deep.isFinite, deep >= 0 {
+        if let deep = deepSleepRatio, deep.isFinite, deep >= 0, deep <= 1.0 {
             if deep >= 0.20 {
                 qualityBonus += 0.05
             } else if deep < 0.10 {
@@ -53,7 +53,7 @@ struct RecoveryModifierService: RecoveryModifying, Sendable {
             }
         }
 
-        if let rem = remSleepRatio, rem.isFinite, rem >= 0 {
+        if let rem = remSleepRatio, rem.isFinite, rem >= 0, rem <= 1.0 {
             if rem >= 0.20 {
                 qualityBonus += 0.05
             } else if rem < 0.10 {

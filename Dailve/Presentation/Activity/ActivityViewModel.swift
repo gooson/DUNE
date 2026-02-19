@@ -108,8 +108,10 @@ final class ActivityViewModel {
             }
 
             let completedSets = record.completedSets
-            let totalWeight = completedSets.compactMap(\.weight).reduce(0, +)
-            let totalReps = completedSets.compactMap(\.reps).reduce(0, +)
+            let totalWeight = Swift.min(completedSets.compactMap(\.weight).reduce(0, +), 50_000)
+            let totalReps = Swift.min(completedSets.compactMap(\.reps).reduce(0, +), 10_000)
+            let durationMin = record.duration > 0 ? Swift.min(record.duration / 60.0, 480) : nil
+            let distKm = record.distance.flatMap { $0 > 0 ? Swift.min($0 / 1000.0, 500) : nil }
 
             return ExerciseRecordSnapshot(
                 date: record.date,
@@ -120,8 +122,8 @@ final class ActivityViewModel {
                 completedSetCount: completedSets.count,
                 totalWeight: totalWeight > 0 ? totalWeight : nil,
                 totalReps: totalReps > 0 ? totalReps : nil,
-                durationMinutes: record.duration > 0 ? record.duration / 60.0 : nil,
-                distanceKm: record.distance.flatMap { $0 > 0 ? $0 / 1000.0 : nil }
+                durationMinutes: durationMin,
+                distanceKm: distKm
             )
         }
         recomputeFatigueAndSuggestion()
@@ -140,8 +142,8 @@ final class ActivityViewModel {
                     primaryMuscles: workout.activityType.primaryMuscles,
                     secondaryMuscles: workout.activityType.secondaryMuscles,
                     completedSetCount: 0,
-                    durationMinutes: workout.duration > 0 ? workout.duration / 60.0 : nil,
-                    distanceKm: workout.distance.flatMap { $0 > 0 ? $0 / 1000.0 : nil }
+                    durationMinutes: workout.duration > 0 ? Swift.min(workout.duration / 60.0, 480) : nil,
+                    distanceKm: workout.distance.flatMap { $0 > 0 ? Swift.min($0 / 1000.0, 500) : nil }
                 )
             }
 
@@ -463,7 +465,7 @@ final class ActivityViewModel {
 
         // Group by day and compute daily averages
         var dailyValues: [Date: [Double]] = [:]
-        for sample in samples where sample.value > 0 && sample.value.isFinite {
+        for sample in samples where sample.value > 0 && sample.value <= 500 && sample.value.isFinite {
             let day = calendar.startOfDay(for: sample.date)
             dailyValues[day, default: []].append(sample.value)
         }
