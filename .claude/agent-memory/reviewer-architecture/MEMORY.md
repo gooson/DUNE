@@ -61,6 +61,21 @@ Layer boundary: App → Presentation → Domain ← Data
 - Views that embed service dependencies (`ExerciseLibraryService.shared` hardcoded) violate DI patterns used elsewhere
 - All service access should flow from ViewModel injection or be passed as View parameters
 
+### ViewModel holding @Model references without import SwiftData
+- A ViewModel can reference a SwiftData `@Model` class without `import SwiftData` because the module resolves it transitively — this creates a false impression of a clean boundary
+- Symptom: `var editingRecord: InjuryRecord?` on `InjuryViewModel` with no SwiftData import
+- Detection: grep for `@Model` class names in Presentation/ViewModel files even when `import SwiftData` is absent
+- Fix: ViewModels should use only Domain DTOs (e.g., `InjuryInfo`); mutation returns a value-type update struct the View applies via `modelContext`
+
+### Pure use-case methods should not require a ViewModel intermediary
+- If a View calls `someViewModel.method()` where that method is a one-liner wrapping a Domain use case, inject the use case directly
+- Symptom: `ActivityView` instantiating `InjuryViewModel` only to call `checkConflicts()`, which wraps `CheckInjuryConflictUseCase`
+- Fix: `let conflictUseCase = CheckInjuryConflictUseCase()` directly on the View or pass computed `[InjuryConflict]` as a parameter
+
+### Data layer durationDays duplicating Domain logic
+- `InjuryRecord.durationDays` is identical to `InjuryInfo.durationDays` — the Data layer should delegate: `var durationDays: Int { toInjuryInfo().durationDays }`
+- General rule: when a Data `@Model` already has a `toDomain()` method, computed properties that mirror Domain logic should delegate rather than duplicate
+
 ## Key Files
 - Domain models: `Dailve/Domain/Models/HealthMetric.swift` (WorkoutSummary, HRVSample, SleepStage, HealthMetric)
 - Workout data boundary: `Dailve/Data/HealthKit/WorkoutQueryService.swift`

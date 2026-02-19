@@ -32,3 +32,6 @@
 8. Plan says tests required for new `infer(from:)` and `resolvedActivityType` — check that `WorkoutActivityTypeTests` and `ExerciseDefinitionTests` actually cover the new code.
 9. `buildItems()` duplicated in ExerciseListSection (View) and ExerciseViewModel — plan acknowledged risk but DRY extraction was marked as "선호 접근" yet not done.
 10. `ExerciseListSection` hardwires `ExerciseLibraryService.shared` — breaks testability; plan specified protocol injection.
+11. `isSaving` reset belongs in View after `modelContext.insert`, via `didFinishSaving()`. Pattern: ViewModel sets `isSaving = true`, returns record, View inserts, View calls `didFinishSaving()`. `WorkoutSessionViewModel` and `CompoundWorkoutViewModel` do this correctly; new ViewModels sometimes omit it.
+12. Computed properties that invoke UseCases (even pure/synchronous ones) inside SwiftUI body still run on every render. Cache with `@State` + `onChange(of: count)` when the data source is a `@Query` array.
+13. Swift Charts `BarMark`/`AreaMark` with dynamic `.frame(height:)` must add `.clipped()` immediately after — applies even when using `BarMark` (not just `AreaMark`). Correction #70 is not limited to `AreaMark`.

@@ -23,6 +23,9 @@
 
 ### Known Gaps (P3 level)
 - UnifiedWorkoutRow compactTrailing/fullTrailing renders item.calories without an upper-bound guard (no < 5000 check). The `calories` field on ExerciseListItem is sourced from `record.bestCalories` (manual/HK) or `workout.calories` (HK). HK path is already validated upstream but manual path relies on input validation at entry time. Risk: a corrupted/absurd calorie value would display in the row list but not in the session detail header (where the guard exists).
+- InjuryRecord.startDate has no lower-bound date validation — a CloudKit-injected record with startDate in the distant past (e.g. year 1900) will produce an arbitrarily large durationDays value and distort statistics. `isFuture` only validates the upper bound.
+- InjuryViewModel.applyUpdate() resets isSaving = false implicitly via early return — but in success path the flag is never reset (isSaving is only set in createValidatedRecord, not applyUpdate). This is an inconsistency but not exploitable since applyUpdate does not set isSaving = true.
+- InjuryCardView.durationLabel creates a new DateFormatter on every render call — performance gap, not security (P3 overlap with Performance Oracle).
 
 ### Recurring Patterns to Watch
 - `errorMessage = error.localizedDescription` — can expose internal error details to UI (P3)

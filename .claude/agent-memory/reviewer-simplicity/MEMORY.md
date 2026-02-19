@@ -69,6 +69,17 @@
 - **SVG Parser**: 437-line `MuscleBodyShape.swift` is justified complexity for SVG path parsing. Domain-specific requirement, not over-engineering.
 - **WorkoutActivityType**: 385-line enum with muscle mappings — large but necessary. Exhaustive switch cases ensure type safety.
 
+### 2026-02-19: Injury Tracking Review
+- **`InjuryConflictChecking` protocol (P1 dead)**: Protocol defined in `CheckInjuryConflictUseCase.swift` with one conformer and zero call-sites via the protocol type. `InjuryViewModel` holds a concrete `CheckInjuryConflictUseCase`, not the protocol. Delete the protocol.
+- **`durationDays` duplication (P2)**: Identical 2-line implementation in `InjuryRecord` (Data layer) and `InjuryInfo` (Domain). 2 occurrences — monitor. If a 3rd appears, extract.
+- **`isActive` duplication (P2)**: `isActive: Bool { endDate == nil }` implemented in both `InjuryRecord` and `InjuryInfo`. Same 2-occurrence rule — monitor.
+- **`InjuryBodyMapView` is unreferenced (P1 dead)**: Only `Dailve/Presentation/Injury/InjuryBodyMapView.swift` defines the type; zero call sites found across the entire codebase.
+- **`localizedDisplayName` on `InjurySeverity` and `BodyPart`/`BodySide` is unused (P2 dead)**: No call site references `.localizedDisplayName` on injury-specific types. Other types in the project do use it (MuscleGroup, Equipment), so the pattern exists, but the injury-specific ones are dead.
+- **Double `.isActive` filter in `InjuryViewModel.checkConflicts` (P3)**: Caller already passes `activeInjuries`, then line 116 filters again by `.isActive`. One of the two filters is redundant.
+- **`DateFormatter` created per render in `InjuryCardView.durationLabel` (P2)**: Formatter allocated on every call to `durationLabel` (every render). Should be `private static let`.
+- **`InjuryWarningBanner` recomputes `maxSeverity` inline (P3)**: `conflicts.map(\.severity).max()` is computed in body, same value already available from `CheckInjuryConflictUseCase.Output.maxSeverity`. Banner could accept `maxSeverity` directly or use `Output` struct.
+- **`hasConflict` and `maxSeverity` on `Output` are unused at call sites (P2 dead)**: `ActivityView.injuryConflicts` extracts `.conflicts` directly; `.hasConflict` and `.maxSeverity` on `Output` are never read.
+
 ### 2026-02-17: Prior Findings
 - Muscle Volume Calculation extracted to shared extension (resolved)
 - Formula/Metric rawValue display: acceptable for technical context

@@ -38,6 +38,17 @@
 - [ ] Stale data: items/@State index rebuilt atomically — buildItems() and rebuildRecordIndex() must stay in sync
 - [ ] Silent navigation sink (EmptyView()) signals item/index desync — count change alone won't catch same-size record replacement
 
+## Patterns: Injury Tracking (@Model with rawValue enums)
+- `InjurySeverity` uses `Int` rawValue — CloudKit can sync arbitrary Int values; decode fallback `.minor` silently accepts invalid server values (e.g., 0, 4, 99). Needs range guard at read site.
+- `BodyPart` uses `String` rawValue — fallback to `.knee` on unknown string is safe but opaque; a corrupted record looks valid in the UI.
+- `markAsRecovered()` mutates a SwiftData @Model directly with no `isSaving` guard — concurrent taps from swipeAction + contextMenu can both fire before CloudKit sync.
+- `applyUpdate()` has `isSaving` guard but never sets `isSaving = true` before mutating — a second tap within the same runloop frame bypasses the guard.
+- `endDate` future validation missing from `validateInputs()` — the DatePicker `in: startDate...Date()` enforces this in the UI, but the ViewModel has no corresponding guard.
+- `startDate` `isFuture` check has ~60-second grace window (`Date().addingTimeInterval(60)`); if `endDate` is also provided and also sneaks in as slightly future, the check passes.
+- Statistics `averageRecoveryDays` divides by `recoveryDays.count` which is guarded by `!recoveryDays.isEmpty`, so no divide-by-zero risk.
+- `comparisonWindowDays` negative values not validated in `computeVolumeComparisons` — caller could pass 0 or negative; `calendar.date(byAdding: .day, value: 0/negative)` returns unexpected windows.
+- WellnessView edit sheet for injury has no `isSaving` reset path after `applyUpdate` — `isSaving` is always false in `applyUpdate` because it was never set true, making the guard vestigial.
+
 ## Patterns: View-local item merge (ExerciseListSection pattern)
 - buildItems() + rebuildRecordIndex() called from same .task(id:) — items and index can briefly desync if task is cancelled after first call but before second
 - Count-only task ID misses same-count replacements (delete+add in same batch), causing stale rendered rows until next count change
