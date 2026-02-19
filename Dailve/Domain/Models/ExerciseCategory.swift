@@ -16,6 +16,18 @@ enum ExerciseCategory: String, Codable, CaseIterable, Sendable {
         case .bodyweight: "Bodyweight"
         }
     }
+
+    /// Default `WorkoutActivityType` for this category (no HealthKit dependency).
+    /// For finer resolution, use `WorkoutActivityType.infer(from: exerciseName)` first.
+    var defaultActivityType: WorkoutActivityType {
+        switch self {
+        case .strength:    .traditionalStrengthTraining
+        case .cardio:      .other
+        case .hiit:        .highIntensityIntervalTraining
+        case .flexibility: .flexibility
+        case .bodyweight:  .functionalStrengthTraining
+        }
+    }
 }
 
 enum ExerciseInputType: String, Codable, Sendable {

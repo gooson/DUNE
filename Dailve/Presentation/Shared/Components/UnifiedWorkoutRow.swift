@@ -1,0 +1,224 @@
+import SwiftUI
+
+/// Unified workout row used in both Train (compact) and Exercise (full) tabs.
+/// Single source of truth for workout list item rendering.
+struct UnifiedWorkoutRow: View {
+    let item: ExerciseListItem
+    let style: Style
+
+    enum Style {
+        /// Train dashboard — InlineCard, compact info, weekday+time date
+        case compact
+        /// Exercise tab — plain row, full metrics, date-only
+        case full
+    }
+
+    var body: some View {
+        switch style {
+        case .compact:
+            InlineCard { compactContent }
+                .prHighlight(item.isPersonalRecord)
+        case .full:
+            fullContent
+        }
+    }
+
+    // MARK: - Compact (Train Dashboard)
+
+    private var compactContent: some View {
+        HStack(spacing: DS.Spacing.md) {
+            activityIcon(size: 28)
+
+            VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                titleRow
+                dateRow
+
+                if let summary = item.setSummary {
+                    Text(summary)
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
+                }
+
+                muscleBadges
+            }
+
+            Spacer()
+
+            compactTrailing
+        }
+    }
+
+    // MARK: - Full (Exercise Tab)
+
+    private var fullContent: some View {
+        HStack(spacing: DS.Spacing.md) {
+            activityIcon(size: 32)
+
+            VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                titleRow
+
+                if item.source == .manual, let localized = item.localizedType,
+                   !localized.isEmpty, localized != item.type {
+                    Text(item.type)
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
+                }
+
+                metricsRow
+
+                if item.milestoneDistance != nil || item.isPersonalRecord {
+                    WorkoutBadgeView.inlineBadge(
+                        milestone: item.milestoneDistance,
+                        isPersonalRecord: item.isPersonalRecord
+                    )
+                }
+
+                if let summary = item.setSummary {
+                    Text(summary)
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
+                }
+            }
+
+            Spacer()
+
+            fullTrailing
+        }
+        .prHighlight(item.isPersonalRecord)
+    }
+
+    // MARK: - Shared Sub-views
+
+    private func activityIcon(size: CGFloat) -> some View {
+        Image(systemName: item.activityType.iconName)
+            .font(style == .compact ? .body : .title3)
+            .foregroundStyle(item.activityType.color)
+            .frame(width: size)
+            .accessibilityHidden(true)
+    }
+
+    private var titleRow: some View {
+        HStack(spacing: DS.Spacing.xs) {
+            Text(item.displayName)
+                .font(style == .compact ? .subheadline.weight(.medium) : .headline)
+                .lineLimit(1)
+
+            sourceBadge
+
+            if style == .compact,
+               item.milestoneDistance != nil || item.isPersonalRecord {
+                WorkoutBadgeView.inlineBadge(
+                    milestone: item.milestoneDistance,
+                    isPersonalRecord: item.isPersonalRecord
+                )
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var sourceBadge: some View {
+        if item.source == .healthKit {
+            Image(systemName: "heart.fill")
+                .font(.caption2)
+                .foregroundStyle(.red)
+        } else if item.isLinkedToHealthKit {
+            Image(systemName: "heart.circle.fill")
+                .font(.caption2)
+                .foregroundStyle(.red.opacity(0.6))
+        }
+    }
+
+    private var dateRow: some View {
+        HStack(spacing: DS.Spacing.sm) {
+            Text(item.date, format: .dateTime.weekday(.wide).hour().minute())
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+            if let hrAvg = item.heartRateAvg {
+                Label("\(Int(hrAvg))", systemImage: "heart.fill")
+                    .font(.caption.monospacedDigit())
+                    .foregroundStyle(.red.opacity(0.8))
+            }
+        }
+    }
+
+    /// Full-style metrics: duration + HR + pace + elevation
+    private var metricsRow: some View {
+        HStack(spacing: DS.Spacing.sm) {
+            Text(item.formattedDuration)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+
+            if let hrAvg = item.heartRateAvg {
+                Label("\(Int(hrAvg))", systemImage: "heart.fill")
+                    .font(.caption.monospacedDigit())
+                    .foregroundStyle(.red.opacity(0.8))
+            }
+
+            if let pace = item.averagePace {
+                Text(Self.formattedPace(pace))
+                    .font(.caption.monospacedDigit())
+                    .foregroundStyle(DS.Color.activity)
+            }
+
+            if let elevation = item.elevationAscended, elevation > 0 {
+                Text("↑\(Int(elevation))m")
+                    .font(.caption.monospacedDigit())
+                    .foregroundStyle(.green)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var muscleBadges: some View {
+        if !item.primaryMuscles.isEmpty {
+            HStack(spacing: DS.Spacing.xxs) {
+                ForEach(item.primaryMuscles.prefix(3), id: \.self) { muscle in
+                    Text(muscle.displayName)
+                        .font(.system(size: 9, weight: .medium))
+                        .padding(.horizontal, DS.Spacing.xs)
+                        .padding(.vertical, 1)
+                        .background(item.activityType.color.opacity(0.12), in: Capsule())
+                        .foregroundStyle(item.activityType.color)
+                }
+            }
+            .clipped()
+        }
+    }
+
+    // MARK: - Trailing
+
+    private var compactTrailing: some View {
+        VStack(alignment: .trailing, spacing: DS.Spacing.xxs) {
+            Text(item.formattedDuration)
+                .font(.subheadline)
+                .fontWeight(.medium)
+            if let cal = item.calories {
+                Text(item.source == .manual ? "~\(Int(cal)) kcal" : "\(Int(cal)) kcal")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    private var fullTrailing: some View {
+        VStack(alignment: .trailing, spacing: DS.Spacing.xs) {
+            if let cal = item.calories {
+                Text("\(Int(cal)) kcal")
+                    .font(.subheadline)
+            }
+            Text(item.date, style: .date)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+    }
+
+    // MARK: - Helpers
+
+    private static func formattedPace(_ secPerKm: Double) -> String {
+        let totalSeconds = Int(secPerKm)
+        let minutes = totalSeconds / 60
+        let seconds = totalSeconds % 60
+        return "\(minutes)'\(String(format: "%02d", seconds))\"/km"
+    }
+}

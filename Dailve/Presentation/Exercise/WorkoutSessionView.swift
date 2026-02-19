@@ -208,9 +208,9 @@ struct WorkoutSessionView: View {
 
             // Exercise info
             VStack(spacing: DS.Spacing.xs) {
-                Image(systemName: WorkoutSummary.iconName(for: exercise.name))
+                Image(systemName: exercise.resolvedActivityType.iconName)
                     .font(.largeTitle)
-                    .foregroundStyle(DS.Color.activity)
+                    .foregroundStyle(exercise.resolvedActivityType.color)
 
                 Text(exercise.localizedName)
                     .font(.title2.weight(.bold))

@@ -41,9 +41,9 @@ struct ExerciseDetailSheet: View {
 
     private var headerSection: some View {
         HStack(spacing: DS.Spacing.md) {
-            Image(systemName: WorkoutSummary.iconName(for: exercise.name))
+            Image(systemName: exercise.resolvedActivityType.iconName)
                 .font(.system(size: 40))
-                .foregroundStyle(DS.Color.activity)
+                .foregroundStyle(exercise.resolvedActivityType.color)
                 .frame(width: 64, height: 64)
                 .background(DS.Color.activity.opacity(0.12), in: RoundedRectangle(cornerRadius: DS.Radius.md))
 

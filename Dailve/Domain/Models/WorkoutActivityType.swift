@@ -311,6 +311,32 @@ enum WorkoutActivityType: String, Codable, Sendable, CaseIterable {
         case .other: "Workout"
         }
     }
+
+    // MARK: - Name-Based Inference
+
+    /// Infers a `WorkoutActivityType` from an exercise name string.
+    /// Returns `nil` if no keyword matches, allowing the caller to apply a category-based fallback.
+    static func infer(from exerciseName: String) -> WorkoutActivityType? {
+        let name = exerciseName.lowercased()
+        switch name {
+        case let n where n.contains("running") || n.contains("run"):   return .running
+        case let n where n.contains("walking") || n.contains("walk"):  return .walking
+        case let n where n.contains("cycling") || n.contains("bike") || n.contains("cycle"):  return .cycling
+        case let n where n.contains("swimming") || n.contains("swim"): return .swimming
+        case let n where n.contains("hiking") || n.contains("hike"):   return .hiking
+        case let n where n.contains("yoga"):       return .yoga
+        case let n where n.contains("pilates"):    return .pilates
+        case let n where n.contains("rowing") || n.contains("row"):    return .rowing
+        case let n where n.contains("elliptical"): return .elliptical
+        case let n where n.contains("dance") || n.contains("dancing"): return .socialDance
+        case let n where n.contains("core"):       return .coreTraining
+        case let n where n.contains("boxing"):     return .boxing
+        case let n where n.contains("kickbox"):    return .kickboxing
+        case let n where n.contains("climb"):      return .climbing
+        case let n where n.contains("jump rope") || n.contains("jumprope"): return .jumpRope
+        default: return nil
+        }
+    }
 }
 
 // MARK: - ActivityCategory

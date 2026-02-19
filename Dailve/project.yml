@@ -107,6 +107,8 @@ targets:
         group: Shared/Domain
       - path: Domain/Models/ExerciseDefinition.swift
         group: Shared/Domain
+      - path: Domain/Models/WorkoutActivityType.swift
+        group: Shared/Domain
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.raftel.dailve.watchkitapp

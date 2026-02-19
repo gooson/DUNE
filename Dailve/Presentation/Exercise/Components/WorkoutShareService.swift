@@ -37,7 +37,7 @@ enum WorkoutShareService {
             duration: record.duration,
             estimatedCalories: record.bestCalories,
             personalBest: personalBest,
-            exerciseIcon: WorkoutSummary.iconName(for: record.exerciseType)
+            exerciseIcon: WorkoutActivityType.infer(from: record.exerciseType)?.iconName ?? "figure.mixed.cardio"
         )
     }
 }

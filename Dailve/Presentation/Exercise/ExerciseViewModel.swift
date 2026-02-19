@@ -70,14 +70,19 @@ final class ExerciseViewModel {
         }
 
         for record in manualRecords {
-            let localizedName: String? = record.exerciseDefinitionID.flatMap {
-                exerciseLibrary.exercise(byID: $0)?.localizedName
+            let definition = record.exerciseDefinitionID.flatMap {
+                exerciseLibrary.exercise(byID: $0)
             }
+            let localizedName = definition?.localizedName
+            let activityType = definition?.resolvedActivityType
+                ?? WorkoutActivityType.infer(from: record.exerciseType)
+                ?? .other
             let hasHKLink = record.healthKitWorkoutID.map { !$0.isEmpty } ?? false
             items.append(ExerciseListItem(
                 id: record.id.uuidString,
                 type: record.exerciseType,
                 localizedType: localizedName,
+                activityType: activityType,
                 duration: record.duration,
                 calories: record.bestCalories,
                 distance: record.distance,
@@ -85,7 +90,8 @@ final class ExerciseViewModel {
                 source: .manual,
                 completedSets: record.completedSets,
                 exerciseDefinitionID: record.exerciseDefinitionID,
-                isLinkedToHealthKit: hasHKLink
+                isLinkedToHealthKit: hasHKLink,
+                primaryMuscles: record.primaryMuscles
             ))
         }
 
@@ -171,6 +177,7 @@ struct ExerciseListItem: Identifiable {
     let completedSets: [WorkoutSet]
     let exerciseDefinitionID: String?
     let isLinkedToHealthKit: Bool
+    let primaryMuscles: [MuscleGroup]
 
     // Rich data for HealthKit workouts
     let heartRateAvg: Double?
@@ -191,6 +198,7 @@ struct ExerciseListItem: Identifiable {
         source: Source, completedSets: [WorkoutSet] = [],
         exerciseDefinitionID: String? = nil,
         isLinkedToHealthKit: Bool = false,
+        primaryMuscles: [MuscleGroup] = [],
         heartRateAvg: Double? = nil,
         averagePace: Double? = nil,
         elevationAscended: Double? = nil,
@@ -211,6 +219,7 @@ struct ExerciseListItem: Identifiable {
         self.completedSets = completedSets
         self.exerciseDefinitionID = exerciseDefinitionID
         self.isLinkedToHealthKit = isLinkedToHealthKit
+        self.primaryMuscles = primaryMuscles
         self.heartRateAvg = heartRateAvg
         self.averagePace = averagePace
         self.elevationAscended = elevationAscended
@@ -223,6 +232,20 @@ struct ExerciseListItem: Identifiable {
     enum Source {
         case healthKit
         case manual
+    }
+
+    /// Resolved display name with localization priority:
+    /// 1. localizedType (exercise library Korean name) — manual records only
+    /// 2. activityType.displayName (WorkoutActivityType Korean name) — unless `.other`
+    /// 3. type (raw string) — final fallback
+    var displayName: String {
+        if let localized = localizedType, !localized.isEmpty {
+            return localized
+        }
+        if activityType != .other {
+            return activityType.displayName
+        }
+        return type
     }
 
     var formattedDuration: String {

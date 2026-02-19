@@ -1,13 +1,17 @@
 import SwiftUI
 
 /// Compact list of recent workouts with "See All" link.
-/// Enriched with set summary data from ExerciseRecord when available.
+/// Merges manual records and HealthKit workouts into a unified, date-sorted list
+/// using ExerciseListItem and UnifiedWorkoutRow.
 struct ExerciseListSection: View {
     let workouts: [WorkoutSummary]
     let exerciseRecords: [ExerciseRecord]
     let limit: Int
 
-    @State private var externalWorkouts: [WorkoutSummary] = []
+    @State private var items: [ExerciseListItem] = []
+    @State private var recordsByID: [UUID: ExerciseRecord] = [:]
+
+    private let exerciseLibrary: ExerciseLibraryQuerying = ExerciseLibraryService.shared
 
     init(
         workouts: [WorkoutSummary],
@@ -29,7 +33,7 @@ struct ExerciseListSection: View {
 
                 Spacer()
 
-                if externalWorkouts.count > limit || !exerciseRecords.isEmpty {
+                if !items.isEmpty {
                     NavigationLink {
                         ExerciseView()
                     } label: {
@@ -40,31 +44,17 @@ struct ExerciseListSection: View {
                 }
             }
 
-            // Manual records with set data (newest first)
-            let setRecords = exerciseRecords.filter(\.hasSetData).prefix(limit)
-            ForEach(Array(setRecords)) { record in
+            // Unified rows — date-sorted, limited
+            ForEach(items.prefix(limit)) { item in
                 NavigationLink {
-                    ExerciseSessionDetailView(record: record)
+                    destination(for: item)
                 } label: {
-                    setRecordRow(record)
+                    UnifiedWorkoutRow(item: item, style: .compact)
                 }
                 .buttonStyle(.plain)
             }
 
-            // External HealthKit workouts (excluding app-created duplicates)
-            let remaining = max(limit - setRecords.count, 0)
-            if remaining > 0 {
-                ForEach(externalWorkouts.prefix(remaining)) { workout in
-                    NavigationLink {
-                        HealthKitWorkoutDetailView(workout: workout)
-                    } label: {
-                        workoutRow(workout)
-                    }
-                    .buttonStyle(.plain)
-                }
-            }
-
-            if externalWorkouts.isEmpty && setRecords.isEmpty {
+            if items.isEmpty {
                 InlineCard {
                     HStack {
                         Image(systemName: "figure.run")
@@ -78,130 +68,96 @@ struct ExerciseListSection: View {
             }
         }
         .task(id: "\(workouts.count)-\(exerciseRecords.count)") {
-            externalWorkouts = workouts.filteringAppDuplicates(against: exerciseRecords)
+            items = buildItems()
+            rebuildRecordIndex()
         }
     }
 
-    // MARK: - Set Record Row (new format)
+    // MARK: - Navigation
 
-    private func setRecordRow(_ record: ExerciseRecord) -> some View {
-        InlineCard {
-            HStack(spacing: DS.Spacing.md) {
-                Image(systemName: WorkoutSummary.iconName(for: record.exerciseType))
-                    .foregroundStyle(DS.Color.activity)
-                    .frame(width: 28)
-
-                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                    HStack(spacing: DS.Spacing.xs) {
-                        Text(record.exerciseType)
-                            .font(.subheadline)
-                            .fontWeight(.medium)
-                        if let hkID = record.healthKitWorkoutID, !hkID.isEmpty {
-                            Image(systemName: "heart.circle.fill")
-                                .font(.caption2)
-                                .foregroundStyle(.red.opacity(0.6))
-                        }
-                    }
-
-                    HStack(spacing: DS.Spacing.xs) {
-                        Text(record.date, format: .dateTime.weekday(.wide).hour().minute())
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-
-                    // Set summary line
-                    if let summary = setSummary(for: record) {
-                        Text(summary)
-                            .font(.caption)
-                            .foregroundStyle(.tertiary)
-                    }
-
-                    // Muscle group badges
-                    if !record.primaryMuscles.isEmpty {
-                        HStack(spacing: DS.Spacing.xxs) {
-                            ForEach(record.primaryMuscles.prefix(3), id: \.self) { muscle in
-                                Text(muscle.displayName)
-                                    .font(.system(size: 9, weight: .medium))
-                                    .padding(.horizontal, DS.Spacing.xs)
-                                    .padding(.vertical, 1)
-                                    .background(DS.Color.activity.opacity(0.12), in: Capsule())
-                                    .foregroundStyle(DS.Color.activity)
-                            }
-                        }
-                    }
-                }
-
-                Spacer()
-
-                VStack(alignment: .trailing, spacing: DS.Spacing.xxs) {
-                    Text("\(Int(record.duration / 60)) min")
-                        .font(.subheadline)
-                        .fontWeight(.medium)
-                    if let cal = record.bestCalories {
-                        Text("~\(Int(cal)) kcal")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-            }
+    @ViewBuilder
+    private func destination(for item: ExerciseListItem) -> some View {
+        if item.source == .manual, let record = findRecord(for: item) {
+            ExerciseSessionDetailView(
+                record: record,
+                activityType: item.activityType,
+                displayName: item.displayName
+            )
+        } else if item.source == .healthKit, let summary = item.workoutSummary {
+            HealthKitWorkoutDetailView(workout: summary)
+        } else {
+            EmptyView()
         }
     }
 
-    // MARK: - Legacy Workout Row (HealthKit)
+    // MARK: - Build ExerciseListItem array
 
-    private func workoutRow(_ workout: WorkoutSummary) -> some View {
-        InlineCard {
-            HStack(spacing: DS.Spacing.md) {
-                Image(systemName: workout.activityType.iconName)
-                    .foregroundStyle(workout.activityType.color)
-                    .frame(width: 28)
+    private func buildItems() -> [ExerciseListItem] {
+        let externalWorkouts = workouts.filteringAppDuplicates(against: exerciseRecords)
 
-                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                    HStack(spacing: DS.Spacing.xs) {
-                        Text(workout.activityType.displayName)
-                            .font(.subheadline)
-                            .fontWeight(.medium)
-                        if workout.milestoneDistance != nil || workout.isPersonalRecord {
-                            WorkoutBadgeView.inlineBadge(
-                                milestone: workout.milestoneDistance,
-                                isPersonalRecord: workout.isPersonalRecord
-                            )
-                        }
-                    }
+        var result: [ExerciseListItem] = []
+        result.reserveCapacity(externalWorkouts.count + exerciseRecords.count)
 
-                    HStack(spacing: DS.Spacing.sm) {
-                        Text(workout.date, format: .dateTime.weekday(.wide).hour().minute())
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-
-                        if let hrAvg = workout.heartRateAvg {
-                            Text("♥ \(Int(hrAvg))")
-                                .font(.caption.monospacedDigit())
-                                .foregroundStyle(.red.opacity(0.8))
-                        }
-                    }
-                }
-
-                Spacer()
-
-                VStack(alignment: .trailing, spacing: DS.Spacing.xxs) {
-                    Text("\(Int(workout.duration / 60)) min")
-                        .font(.subheadline)
-                        .fontWeight(.medium)
-                    if let cal = workout.calories {
-                        Text("\(Int(cal)) kcal")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-            }
+        // HealthKit workouts
+        for workout in externalWorkouts {
+            result.append(ExerciseListItem(
+                id: workout.id,
+                type: workout.type,
+                activityType: workout.activityType,
+                duration: workout.duration,
+                calories: workout.calories,
+                distance: workout.distance,
+                date: workout.date,
+                source: .healthKit,
+                heartRateAvg: workout.heartRateAvg,
+                averagePace: workout.averagePace,
+                elevationAscended: workout.elevationAscended,
+                milestoneDistance: workout.milestoneDistance,
+                isPersonalRecord: workout.isPersonalRecord,
+                personalRecordTypes: workout.personalRecordTypes,
+                workoutSummary: workout
+            ))
         }
-        .prHighlight(workout.isPersonalRecord)
+
+        // Manual records (with set data only, matching original behavior)
+        let setRecords = exerciseRecords.filter(\.hasSetData)
+        for record in setRecords {
+            let definition = record.exerciseDefinitionID.flatMap {
+                exerciseLibrary.exercise(byID: $0)
+            }
+            let localizedName = definition?.localizedName
+            let activityType = definition?.resolvedActivityType
+                ?? WorkoutActivityType.infer(from: record.exerciseType)
+                ?? .other
+            let hasHKLink = record.healthKitWorkoutID.map { !$0.isEmpty } ?? false
+            result.append(ExerciseListItem(
+                id: record.id.uuidString,
+                type: record.exerciseType,
+                localizedType: localizedName,
+                activityType: activityType,
+                duration: record.duration,
+                calories: record.bestCalories,
+                distance: record.distance,
+                date: record.date,
+                source: .manual,
+                completedSets: record.completedSets,
+                exerciseDefinitionID: record.exerciseDefinitionID,
+                isLinkedToHealthKit: hasHKLink,
+                primaryMuscles: record.primaryMuscles
+            ))
+        }
+
+        return result.sorted { $0.date > $1.date }
     }
 
     // MARK: - Helpers
 
-    private func setSummary(for record: ExerciseRecord) -> String? {
-        record.completedSets.setSummary()
+    private func rebuildRecordIndex() {
+        recordsByID = Dictionary(uniqueKeysWithValues: exerciseRecords.map { ($0.id, $0) })
+    }
+
+    private func findRecord(for item: ExerciseListItem) -> ExerciseRecord? {
+        guard let uuid = UUID(uuidString: item.id) else { return nil }
+        return recordsByID[uuid]
     }
 }

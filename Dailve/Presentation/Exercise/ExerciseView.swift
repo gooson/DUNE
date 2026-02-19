@@ -51,22 +51,23 @@ struct ExerciseView: View {
                     ForEach(viewModel.allExercises) { item in
                         Group {
                             if item.source == .manual, let record = findRecord(for: item) {
-                                // Manual records navigate directly to session detail
                                 NavigationLink {
-                                    ExerciseSessionDetailView(record: record)
+                                    ExerciseSessionDetailView(
+                                        record: record,
+                                        activityType: item.activityType,
+                                        displayName: item.displayName
+                                    )
                                 } label: {
-                                    ExerciseRowView(item: item)
+                                    UnifiedWorkoutRow(item: item, style: .full)
                                 }
                             } else if item.source == .healthKit, let summary = item.workoutSummary {
-                                // HealthKit-only items navigate to rich detail view
                                 NavigationLink {
                                     HealthKitWorkoutDetailView(workout: summary)
                                 } label: {
-                                    ExerciseRowView(item: item)
+                                    UnifiedWorkoutRow(item: item, style: .full)
                                 }
-                                .prHighlight(item.isPersonalRecord)
                             } else {
-                                ExerciseRowView(item: item)
+                                UnifiedWorkoutRow(item: item, style: .full)
                             }
                         }
                         .swipeActions(edge: .trailing, allowsFullSwipe: false) {
@@ -291,108 +292,7 @@ struct ExerciseView: View {
     }
 }
 
-// MARK: - Row
-
-private struct ExerciseRowView: View {
-    let item: ExerciseListItem
-
-    var body: some View {
-        HStack(spacing: DS.Spacing.md) {
-            // Activity type icon
-            if item.source == .healthKit {
-                Image(systemName: item.activityType.iconName)
-                    .font(.title3)
-                    .foregroundStyle(item.activityType.color)
-                    .frame(width: 32)
-            }
-
-            VStack(alignment: .leading, spacing: 4) {
-                HStack(spacing: 6) {
-                    if item.source == .healthKit {
-                        Text(item.activityType.displayName)
-                            .font(.headline)
-                    } else {
-                        Text(item.localizedType ?? item.type)
-                            .font(.headline)
-                    }
-                    if item.source == .healthKit {
-                        Image(systemName: "heart.fill")
-                            .font(.caption2)
-                            .foregroundStyle(.red)
-                    } else if item.isLinkedToHealthKit {
-                        Image(systemName: "heart.circle.fill")
-                            .font(.caption2)
-                            .foregroundStyle(.red.opacity(0.6))
-                    }
-                }
-
-                if item.source == .manual, let localized = item.localizedType, localized != item.type {
-                    Text(item.type)
-                        .font(.caption)
-                        .foregroundStyle(.tertiary)
-                }
-
-                // Duration + key metric
-                HStack(spacing: DS.Spacing.sm) {
-                    Text(item.formattedDuration)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-
-                    if let hrAvg = item.heartRateAvg {
-                        Text("♥ \(Int(hrAvg))")
-                            .font(.caption.monospacedDigit())
-                            .foregroundStyle(.red.opacity(0.8))
-                    }
-
-                    if let pace = item.averagePace {
-                        Text(formattedPace(pace))
-                            .font(.caption.monospacedDigit())
-                            .foregroundStyle(DS.Color.activity)
-                    }
-
-                    if let elevation = item.elevationAscended, elevation > 0 {
-                        Text("↑\(Int(elevation))m")
-                            .font(.caption.monospacedDigit())
-                            .foregroundStyle(.green)
-                    }
-                }
-
-                // Badges
-                if item.milestoneDistance != nil || item.isPersonalRecord {
-                    WorkoutBadgeView.inlineBadge(
-                        milestone: item.milestoneDistance,
-                        isPersonalRecord: item.isPersonalRecord
-                    )
-                }
-
-                if let summary = item.setSummary {
-                    Text(summary)
-                        .font(.caption)
-                        .foregroundStyle(.tertiary)
-                }
-            }
-
-            Spacer()
-
-            VStack(alignment: .trailing, spacing: 4) {
-                if let cal = item.calories {
-                    Text("\(Int(cal)) kcal")
-                        .font(.subheadline)
-                }
-                Text(item.date, style: .date)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-        }
-    }
-
-    private func formattedPace(_ secPerKm: Double) -> String {
-        let totalSeconds = Int(secPerKm)
-        let minutes = totalSeconds / 60
-        let seconds = totalSeconds % 60
-        return "\(minutes)'\(String(format: "%02d", seconds))\"/km"
-    }
-}
+// MARK: - Row (replaced by UnifiedWorkoutRow)
 
 #Preview {
     ExerciseView()
