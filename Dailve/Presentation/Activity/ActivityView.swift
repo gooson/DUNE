@@ -1,11 +1,13 @@
 import SwiftUI
 import SwiftData
 
-/// Activity tab with unified training volume card, AI suggestions, and recent workouts.
+/// Activity tab with recovery-centered dashboard.
+/// Layout: WeeklyProgressBar → MuscleRecoveryMap (hero) → TrainingVolume → RecentWorkouts.
 struct ActivityView: View {
     @State private var viewModel = ActivityViewModel()
     @State private var showingExercisePicker = false
     @State private var selectedExercise: ExerciseDefinition?
+    @State private var selectedMuscle: MuscleGroup?
     @Environment(\.modelContext) private var modelContext
 
     private let library: ExerciseLibraryQuerying = ExerciseLibraryService.shared
@@ -14,29 +16,33 @@ struct ActivityView: View {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: DS.Spacing.xl) {
+            VStack(spacing: DS.Spacing.lg) {
                 if viewModel.isLoading && viewModel.weeklyExerciseMinutes.isEmpty {
                     ProgressView()
                         .frame(maxWidth: .infinity, minHeight: 200)
                 } else {
-                    // AI Workout Suggestion
-                    if let suggestion = viewModel.workoutSuggestion,
-                       !suggestion.exercises.isEmpty {
-                        SuggestedWorkoutCard(suggestion: suggestion) { exercise in
-                            selectedExercise = exercise
-                        }
-                    }
+                    // ① Weekly Progress Bar
+                    WeeklyProgressBar(
+                        activeDays: viewModel.activeDays,
+                        goal: viewModel.weeklyGoal
+                    )
 
-                    // Training Volume (unified card, 28-day training load)
+                    // ② Muscle Recovery Map (hero)
+                    MuscleRecoveryMapView(
+                        fatigueStates: viewModel.fatigueStates,
+                        suggestion: viewModel.workoutSuggestion,
+                        onStartExercise: { exercise in selectedExercise = exercise },
+                        onMuscleSelected: { muscle in selectedMuscle = muscle }
+                    )
+
+                    // ③ Training Volume Summary (compact)
                     TrainingVolumeSummaryCard(
                         trainingLoadData: viewModel.trainingLoadData,
                         lastWorkoutMinutes: viewModel.lastWorkoutMinutes,
-                        lastWorkoutCalories: viewModel.lastWorkoutCalories,
-                        activeDays: viewModel.activeDays,
-                        weeklyGoal: viewModel.weeklyGoal
+                        lastWorkoutCalories: viewModel.lastWorkoutCalories
                     )
 
-                    // Recent Workouts
+                    // ④ Recent Workouts
                     ExerciseListSection(
                         workouts: viewModel.recentWorkouts,
                         exerciseRecords: recentRecords
@@ -78,6 +84,13 @@ struct ActivityView: View {
                 selectedExercise = exercise
             }
         }
+        .sheet(item: $selectedMuscle) { muscle in
+            MuscleDetailPopover(
+                muscle: muscle,
+                fatigueState: viewModel.fatigueStates.first { $0.muscle == muscle },
+                library: library
+            )
+        }
         .navigationDestination(for: HealthMetric.self) { metric in
             MetricDetailView(metric: metric)
         }
@@ -99,12 +112,10 @@ struct ActivityView: View {
         .refreshable {
             await viewModel.loadActivityData()
         }
-        .task {
+        // Correction #78: consolidate .task + .onChange → .task(id:)
+        .task(id: recentRecords.count) {
             viewModel.updateSuggestion(records: recentRecords)
             await viewModel.loadActivityData()
-        }
-        .onChange(of: recentRecords.count) { _, _ in
-            viewModel.updateSuggestion(records: recentRecords)
         }
         .navigationTitle("Train")
     }
@@ -112,7 +123,6 @@ struct ActivityView: View {
     // MARK: - Helpers
 
     private var recentExerciseIDs: [String] {
-        // Unique exercise definition IDs from recent records, ordered by most recent
         var seen = Set<String>()
         return recentRecords.compactMap { record in
             guard let id = record.exerciseDefinitionID, !seen.contains(id) else { return nil }

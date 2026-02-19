@@ -15,6 +15,7 @@ final class ActivityViewModel {
     var isLoading = false
     var errorMessage: String?
     var workoutSuggestion: WorkoutSuggestion?
+    var fatigueStates: [MuscleFatigueState] = []
 
     /// Weekly training goal in active days.
     let weeklyGoal: Int = 5
@@ -87,6 +88,7 @@ final class ActivityViewModel {
                 completedSetCount: record.completedSets.count
             )
         }
+        fatigueStates = recommendationService.computeFatigueStates(from: snapshots)
         workoutSuggestion = recommendationService.recommend(from: snapshots, library: library)
     }
 

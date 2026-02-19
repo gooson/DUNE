@@ -1,39 +1,13 @@
 import Foundation
 
-/// Muscle fatigue state computed from recent training history
-struct MuscleFatigueState: Sendable {
-    let muscle: MuscleGroup
-    /// Days since last trained (nil if never trained)
-    let daysSinceLastTrained: Int?
-    /// Total sets targeting this muscle in the last 7 days
-    let weeklyVolume: Int
-    /// Recovery percentage (0.0 = just trained, 1.0 = fully recovered)
-    let recoveryPercent: Double
-
-    var isRecovered: Bool { recoveryPercent >= 0.8 }
-    var isOverworked: Bool { weeklyVolume >= 20 }
-}
-
-/// A suggested workout with exercises and reasoning
-struct WorkoutSuggestion: Sendable {
-    let exercises: [SuggestedExercise]
-    let reasoning: String
-    let focusMuscles: [MuscleGroup]
-}
-
-struct SuggestedExercise: Identifiable, Sendable {
-    let id: String
-    let definition: ExerciseDefinition
-    let suggestedSets: Int
-    let reason: String
-}
-
 /// Protocol for workout recommendation
 protocol WorkoutRecommending: Sendable {
     func recommend(
         from records: [ExerciseRecordSnapshot],
         library: ExerciseLibraryQuerying
     ) -> WorkoutSuggestion?
+
+    func computeFatigueStates(from records: [ExerciseRecordSnapshot]) -> [MuscleFatigueState]
 }
 
 /// Lightweight snapshot of ExerciseRecord for recommendation (avoids SwiftData dependency)
@@ -55,42 +29,40 @@ extension ExerciseRecordSnapshot: ExerciseRecordVolumeProviding {
 /// Recovery-based workout recommendation engine
 ///
 /// Algorithm:
-/// 1. Compute fatigue state for each muscle group based on recent records
-/// 2. Rank muscles by recovery (prefer recovered, under-trained muscles)
-/// 3. Select 3-5 exercises targeting the most recovered muscles
-/// 4. Balance push/pull/legs for weekly variety
+/// 1. Compute fatigue state for each muscle group based on recent records (hour-based, differential recovery)
+/// 2. Rank muscles by recovery (prefer recovered, under-trained muscles) + weekday pattern bonus
+/// 3. Select 3-5 exercises targeting the most recovered muscles (prefer least-recently performed)
+/// 4. Fill remaining slots with compound movements (recovery-verified)
 struct WorkoutRecommendationService: WorkoutRecommending {
 
-    // Recovery model constants
-    private let fullRecoveryHours: Double = 72  // 3 days for full recovery
-    private let primaryFatigueMultiplier: Double = 1.0
-    private let secondaryFatigueMultiplier: Double = 0.5
     private let maxWeeklyVolume = 20  // sets per muscle group
     private let targetExerciseCount = 4
+    private let maxAlternatives = 3
+    private let weekdayPatternMinWeeks = 4  // Minimum weeks of data before applying weekday bonus
 
     func recommend(
         from records: [ExerciseRecordSnapshot],
         library: ExerciseLibraryQuerying
     ) -> WorkoutSuggestion? {
         let fatigueStates = computeFatigueStates(from: records)
+        let weekdayBonusMuscles = computeWeekdayPatterns(from: records)
 
         // Find recovered, under-trained muscles
         let candidates = fatigueStates
             .filter { $0.isRecovered && !$0.isOverworked }
             .sorted { lhs, rhs in
-                // Prioritize: most recovered + least weekly volume
-                if lhs.recoveryPercent != rhs.recoveryPercent {
-                    return lhs.recoveryPercent > rhs.recoveryPercent
+                let lhsBonus: Double = weekdayBonusMuscles.contains(lhs.muscle) ? 0.1 : 0.0
+                let rhsBonus: Double = weekdayBonusMuscles.contains(rhs.muscle) ? 0.1 : 0.0
+                let lhsScore = lhs.recoveryPercent + lhsBonus
+                let rhsScore = rhs.recoveryPercent + rhsBonus
+                if lhsScore != rhsScore {
+                    return lhsScore > rhsScore
                 }
                 return lhs.weeklyVolume < rhs.weeklyVolume
             }
 
         guard !candidates.isEmpty else {
-            return WorkoutSuggestion(
-                exercises: [],
-                reasoning: "All muscle groups are still recovering. Consider a rest day or light cardio.",
-                focusMuscles: []
-            )
+            return restDaySuggestion(from: fatigueStates)
         }
 
         // Select top muscle groups (up to 3 for focus)
@@ -101,36 +73,52 @@ struct WorkoutRecommendationService: WorkoutRecommending {
         var usedIDs = Set<String>()
 
         for muscle in focusMuscles {
-            let exercises = library.exercises(forMuscle: muscle)
+            let allForMuscle = library.exercises(forMuscle: muscle)
                 .filter { $0.category == .strength || $0.category == .bodyweight }
                 .filter { !usedIDs.contains($0.id) }
 
-            // Pick the first matching exercise (could be randomized for variety)
-            if let exercise = exercises.first {
+            // Prefer least-recently performed exercise for variety
+            let sorted = sortByLeastRecent(exercises: allForMuscle, records: records)
+
+            if let exercise = sorted.first {
                 usedIDs.insert(exercise.id)
                 let fatigueState = fatigueStates.first { $0.muscle == muscle }
                 let suggestedSets = suggestedSetCount(for: fatigueState)
+                let alternatives = Array(sorted.dropFirst().prefix(maxAlternatives))
 
                 selectedExercises.append(SuggestedExercise(
                     id: exercise.id,
                     definition: exercise,
                     suggestedSets: suggestedSets,
-                    reason: reasonText(for: muscle, state: fatigueState)
+                    reason: reasonText(for: muscle, state: fatigueState),
+                    alternatives: alternatives
                 ))
             }
 
             if selectedExercises.count >= targetExerciseCount { break }
         }
 
-        // If we still need more exercises, add compound movements
+        // Fill remaining slots with compound movements — recovery-verified
         if selectedExercises.count < targetExerciseCount {
+            let fatigueByMuscle = Dictionary(
+                uniqueKeysWithValues: fatigueStates.map { ($0.muscle, $0) }
+            )
+
             let compounds = library.allExercises()
                 .filter { $0.primaryMuscles.count >= 2 || !$0.secondaryMuscles.isEmpty }
                 .filter { $0.category == .strength }
                 .filter { !usedIDs.contains($0.id) }
-                .prefix(targetExerciseCount - selectedExercises.count)
+                .filter { exercise in
+                    // All primary muscles must be recovered
+                    exercise.primaryMuscles.allSatisfy { muscle in
+                        fatigueByMuscle[muscle]?.isRecovered == true
+                    }
+                }
 
-            for exercise in compounds {
+            let sortedCompounds = sortByLeastRecent(exercises: Array(compounds), records: records)
+
+            for exercise in sortedCompounds.prefix(targetExerciseCount - selectedExercises.count) {
+                usedIDs.insert(exercise.id)
                 selectedExercises.append(SuggestedExercise(
                     id: exercise.id,
                     definition: exercise,
@@ -159,33 +147,64 @@ struct WorkoutRecommendationService: WorkoutRecommending {
         let volumeByMuscle = records.weeklyMuscleVolume(from: now)
 
         return MuscleGroup.allCases.map { muscle in
-            // Find last training date for this muscle
             let muscleRecords = records.filter {
                 $0.primaryMuscles.contains(muscle) || $0.secondaryMuscles.contains(muscle)
             }
             let lastTrainedDate = muscleRecords.map(\.date).max()
 
-            // Compute days since last trained
-            let daysSince: Int? = lastTrainedDate.map { date in
-                max(0, Calendar.current.dateComponents([.day], from: date, to: now).day ?? 0)
+            // Hour-based recovery using actual time interval
+            let hoursSince: Double? = lastTrainedDate.map { date in
+                max(0, now.timeIntervalSince(date) / 3600.0)
             }
 
-            // Recovery percentage based on time since last trained
             let recovery: Double
-            if let daysSince {
-                let hoursSince = Double(daysSince) * 24.0
-                recovery = min(hoursSince / fullRecoveryHours, 1.0)
+            if let hoursSince {
+                recovery = min(hoursSince / muscle.recoveryHours, 1.0)
             } else {
                 recovery = 1.0  // Never trained = fully "recovered"
             }
 
             return MuscleFatigueState(
                 muscle: muscle,
-                daysSinceLastTrained: daysSince,
+                lastTrainedDate: lastTrainedDate,
+                hoursSinceLastTrained: hoursSince,
                 weeklyVolume: volumeByMuscle[muscle] ?? 0,
                 recoveryPercent: recovery
             )
         }
+    }
+
+    // MARK: - Weekday Pattern
+
+    /// Returns muscle groups that the user frequently trains on the current weekday.
+    func computeWeekdayPatterns(from records: [ExerciseRecordSnapshot]) -> Set<MuscleGroup> {
+        let calendar = Calendar.current
+        let currentWeekday = calendar.component(.weekday, from: Date())
+
+        // Only consider records from recent 8 weeks
+        let eightWeeksAgo = calendar.date(byAdding: .weekOfYear, value: -8, to: Date()) ?? Date()
+        let relevantRecords = records.filter { $0.date >= eightWeeksAgo }
+
+        // Need at least 4 weeks of data for meaningful patterns
+        let distinctWeeks = Set(relevantRecords.compactMap { record -> Int? in
+            calendar.component(.weekOfYear, from: record.date)
+        })
+        guard distinctWeeks.count >= weekdayPatternMinWeeks else { return [] }
+
+        // Count muscle occurrences on this weekday
+        let weekdayRecords = relevantRecords.filter {
+            calendar.component(.weekday, from: $0.date) == currentWeekday
+        }
+
+        var muscleCounts: [MuscleGroup: Int] = [:]
+        for record in weekdayRecords {
+            for muscle in record.primaryMuscles {
+                muscleCounts[muscle, default: 0] += 1
+            }
+        }
+
+        // Return muscles trained on this weekday at least 3 times (out of ~8 weeks)
+        return Set(muscleCounts.filter { $0.value >= 3 }.map(\.key))
     }
 
     // MARK: - Helpers
@@ -199,12 +218,58 @@ struct WorkoutRecommendationService: WorkoutRecommending {
     private func reasonText(for muscle: MuscleGroup, state: MuscleFatigueState?) -> String {
         guard let state else { return "No recent data for \(muscle.rawValue)" }
 
-        if let days = state.daysSinceLastTrained, days >= 3 {
-            return "\(days) days since last trained, \(state.weeklyVolume) sets this week"
-        } else if state.weeklyVolume < 10 {
+        if let hours = state.hoursSinceLastTrained {
+            let days = Int(hours / 24)
+            if days >= 3 {
+                return "\(days) days since last trained, \(state.weeklyVolume) sets this week"
+            }
+        }
+        if state.weeklyVolume < 10 {
             return "Low weekly volume (\(state.weeklyVolume) sets), room for more"
-        } else {
-            return "Recovered and ready for training"
+        }
+        return "Recovered and ready for training"
+    }
+
+    private func restDaySuggestion(from fatigueStates: [MuscleFatigueState]) -> WorkoutSuggestion {
+        // Find the muscle that will recover soonest
+        let nextReady = fatigueStates
+            .compactMap { state -> (muscle: MuscleGroup, readyDate: Date)? in
+                guard let readyDate = state.nextReadyDate else { return nil }
+                return (state.muscle, readyDate)
+            }
+            .min { $0.readyDate < $1.readyDate }
+
+        return WorkoutSuggestion(
+            exercises: [],
+            reasoning: "Recovery in progress — your muscles are rebuilding stronger.",
+            focusMuscles: [],
+            activeRecoverySuggestions: ActiveRecoverySuggestion.defaults,
+            nextReadyMuscle: nextReady
+        )
+    }
+
+    /// Sort exercises by least-recently performed (never performed first, then oldest first)
+    private func sortByLeastRecent(
+        exercises: [ExerciseDefinition],
+        records: [ExerciseRecordSnapshot]
+    ) -> [ExerciseDefinition] {
+        let lastPerformedByID: [String: Date] = {
+            var result: [String: Date] = [:]
+            for record in records {
+                guard let defID = record.exerciseDefinitionID else { continue }
+                if let existing = result[defID] {
+                    if record.date > existing { result[defID] = record.date }
+                } else {
+                    result[defID] = record.date
+                }
+            }
+            return result
+        }()
+
+        return exercises.sorted { lhs, rhs in
+            let lhsDate = lastPerformedByID[lhs.id] ?? .distantPast
+            let rhsDate = lastPerformedByID[rhs.id] ?? .distantPast
+            return lhsDate < rhsDate
         }
     }
 }

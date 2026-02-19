@@ -1,20 +1,18 @@
 import SwiftUI
 import Charts
 
-/// Consolidated training volume card for the Activity dashboard.
-/// Replaces the 4 separate sections (WeeklySummary, MuscleMap, TrainingLoad, Today).
+/// Compact training volume card for the Activity dashboard.
+/// Shows 28-day training load bar chart + last workout metrics.
 /// Tapping navigates to TrainingVolumeDetailView.
 struct TrainingVolumeSummaryCard: View {
     let trainingLoadData: [TrainingLoadDataPoint]
     let lastWorkoutMinutes: Double
     let lastWorkoutCalories: Double
-    let activeDays: Int
-    let weeklyGoal: Int
 
     var body: some View {
         NavigationLink(value: TrainingVolumeDestination.overview) {
-            HeroCard(tintColor: DS.Color.activity) {
-                VStack(alignment: .leading, spacing: DS.Spacing.lg) {
+            StandardCard {
+                VStack(alignment: .leading, spacing: DS.Spacing.md) {
                     headerRow
                     metricsRow
                     miniBarChart
@@ -27,30 +25,19 @@ struct TrainingVolumeSummaryCard: View {
     // MARK: - Header
 
     private var headerRow: some View {
-        HStack(spacing: DS.Spacing.md) {
-            ActivityRingView(
-                progress: weeklyGoal > 0 ? Double(activeDays) / Double(weeklyGoal) : 0,
-                ringColor: DS.Color.activity,
-                lineWidth: 6,
-                size: 44
-            )
-            .overlay {
-                Text("\(activeDays)")
-                    .font(.caption.bold())
-            }
-
-            VStack(alignment: .leading, spacing: 2) {
+        HStack {
+            HStack(spacing: DS.Spacing.xs) {
+                Image(systemName: "chart.bar.fill")
+                    .font(.subheadline)
+                    .foregroundStyle(DS.Color.activity)
                 Text("Training Volume")
                     .font(.subheadline.weight(.semibold))
-                Text("\(activeDays)/\(weeklyGoal) days this week")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
             }
 
             Spacer()
 
             Image(systemName: "chevron.right")
-                .font(.caption)
+                .font(.caption2)
                 .foregroundStyle(.tertiary)
         }
     }
@@ -122,9 +109,7 @@ struct TrainingVolumeSummaryCard: View {
                 )
             },
             lastWorkoutMinutes: 45,
-            lastWorkoutCalories: 320,
-            activeDays: 4,
-            weeklyGoal: 5
+            lastWorkoutCalories: 320
         )
         .padding()
     }
