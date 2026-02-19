@@ -316,26 +316,33 @@ enum WorkoutActivityType: String, Codable, Sendable, CaseIterable {
 
     /// Infers a `WorkoutActivityType` from an exercise name string.
     /// Returns `nil` if no keyword matches, allowing the caller to apply a category-based fallback.
+    ///
+    /// Keywords are searched in priority order. Multi-word keywords (e.g. "jump rope")
+    /// are checked before shorter ones to avoid false-positives.
     static func infer(from exerciseName: String) -> WorkoutActivityType? {
         let name = exerciseName.lowercased()
-        switch name {
-        case let n where n.contains("running") || n.contains("run"):   return .running
-        case let n where n.contains("walking") || n.contains("walk"):  return .walking
-        case let n where n.contains("cycling") || n.contains("bike") || n.contains("cycle"):  return .cycling
-        case let n where n.contains("swimming") || n.contains("swim"): return .swimming
-        case let n where n.contains("hiking") || n.contains("hike"):   return .hiking
-        case let n where n.contains("yoga"):       return .yoga
-        case let n where n.contains("pilates"):    return .pilates
-        case let n where n.contains("rowing") || n.contains("row"):    return .rowing
-        case let n where n.contains("elliptical"): return .elliptical
-        case let n where n.contains("dance") || n.contains("dancing"): return .socialDance
-        case let n where n.contains("core"):       return .coreTraining
-        case let n where n.contains("boxing"):     return .boxing
-        case let n where n.contains("kickbox"):    return .kickboxing
-        case let n where n.contains("climb"):      return .climbing
-        case let n where n.contains("jump rope") || n.contains("jumprope"): return .jumpRope
-        default: return nil
-        }
+
+        // Keyword table — checked in order. First match wins.
+        // Use longer/more specific keywords to avoid false-positives on short substrings.
+        let table: [(keyword: String, type: WorkoutActivityType)] = [
+            ("jump rope", .jumpRope), ("jumprope", .jumpRope),
+            ("kickbox", .kickboxing),
+            ("running", .running),
+            ("walking", .walking),
+            ("cycling", .cycling), ("bike", .cycling), ("cycle", .cycling),
+            ("swimming", .swimming), ("swim", .swimming),
+            ("hiking", .hiking), ("hike", .hiking),
+            ("yoga", .yoga),
+            ("pilates", .pilates),
+            ("rowing", .rowing),
+            ("elliptical", .elliptical),
+            ("dance", .socialDance), ("dancing", .socialDance),
+            ("core", .coreTraining),
+            ("boxing", .boxing),
+            ("climb", .climbing),
+        ]
+
+        return table.first { name.contains($0.keyword) }?.type
     }
 }
 

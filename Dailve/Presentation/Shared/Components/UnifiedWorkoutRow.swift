@@ -27,11 +27,22 @@ struct UnifiedWorkoutRow: View {
 
     private var compactContent: some View {
         HStack(spacing: DS.Spacing.md) {
-            activityIcon(size: 28)
+            activityIcon(size: 28, font: .body)
 
             VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                 titleRow
-                dateRow
+
+                HStack(spacing: DS.Spacing.sm) {
+                    Text(item.date, format: .dateTime.weekday(.wide).hour().minute())
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+
+                    if let hrAvg = item.heartRateAvg {
+                        Label("\(Int(hrAvg))", systemImage: "heart.fill")
+                            .font(.caption.monospacedDigit())
+                            .foregroundStyle(.red.opacity(0.8))
+                    }
+                }
 
                 if let summary = item.setSummary {
                     Text(summary)
@@ -52,7 +63,7 @@ struct UnifiedWorkoutRow: View {
 
     private var fullContent: some View {
         HStack(spacing: DS.Spacing.md) {
-            activityIcon(size: 32)
+            activityIcon(size: 32, font: .title3)
 
             VStack(alignment: .leading, spacing: DS.Spacing.xs) {
                 titleRow
@@ -89,9 +100,9 @@ struct UnifiedWorkoutRow: View {
 
     // MARK: - Shared Sub-views
 
-    private func activityIcon(size: CGFloat) -> some View {
+    private func activityIcon(size: CGFloat, font: Font) -> some View {
         Image(systemName: item.activityType.iconName)
-            .font(style == .compact ? .body : .title3)
+            .font(font)
             .foregroundStyle(item.activityType.color)
             .frame(width: size)
             .accessibilityHidden(true)
@@ -128,20 +139,6 @@ struct UnifiedWorkoutRow: View {
         }
     }
 
-    private var dateRow: some View {
-        HStack(spacing: DS.Spacing.sm) {
-            Text(item.date, format: .dateTime.weekday(.wide).hour().minute())
-                .font(.caption)
-                .foregroundStyle(.secondary)
-
-            if let hrAvg = item.heartRateAvg {
-                Label("\(Int(hrAvg))", systemImage: "heart.fill")
-                    .font(.caption.monospacedDigit())
-                    .foregroundStyle(.red.opacity(0.8))
-            }
-        }
-    }
-
     /// Full-style metrics: duration + HR + pace + elevation
     private var metricsRow: some View {
         HStack(spacing: DS.Spacing.sm) {
@@ -172,14 +169,15 @@ struct UnifiedWorkoutRow: View {
     @ViewBuilder
     private var muscleBadges: some View {
         if !item.primaryMuscles.isEmpty {
+            let badgeColor = item.activityType.color
             HStack(spacing: DS.Spacing.xxs) {
                 ForEach(item.primaryMuscles.prefix(3), id: \.self) { muscle in
                     Text(muscle.displayName)
                         .font(.system(size: 9, weight: .medium))
                         .padding(.horizontal, DS.Spacing.xs)
                         .padding(.vertical, 1)
-                        .background(item.activityType.color.opacity(0.12), in: Capsule())
-                        .foregroundStyle(item.activityType.color)
+                        .background(badgeColor.opacity(0.12), in: Capsule())
+                        .foregroundStyle(badgeColor)
                 }
             }
             .clipped()
@@ -193,7 +191,7 @@ struct UnifiedWorkoutRow: View {
             Text(item.formattedDuration)
                 .font(.subheadline)
                 .fontWeight(.medium)
-            if let cal = item.calories {
+            if let cal = item.calories, cal > 0, cal < 5_000 {
                 Text(item.source == .manual ? "~\(Int(cal)) kcal" : "\(Int(cal)) kcal")
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -203,7 +201,7 @@ struct UnifiedWorkoutRow: View {
 
     private var fullTrailing: some View {
         VStack(alignment: .trailing, spacing: DS.Spacing.xs) {
-            if let cal = item.calories {
+            if let cal = item.calories, cal > 0, cal < 5_000 {
                 Text("\(Int(cal)) kcal")
                     .font(.subheadline)
             }
@@ -216,6 +214,7 @@ struct UnifiedWorkoutRow: View {
     // MARK: - Helpers
 
     private static func formattedPace(_ secPerKm: Double) -> String {
+        guard secPerKm.isFinite, secPerKm > 0, secPerKm < 86_400 else { return "—" }
         let totalSeconds = Int(secPerKm)
         let minutes = totalSeconds / 60
         let seconds = totalSeconds % 60

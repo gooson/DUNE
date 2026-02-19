@@ -11,16 +11,26 @@ struct ExerciseListSection: View {
     @State private var items: [ExerciseListItem] = []
     @State private var recordsByID: [UUID: ExerciseRecord] = [:]
 
-    private let exerciseLibrary: ExerciseLibraryQuerying = ExerciseLibraryService.shared
+    private let exerciseLibrary: ExerciseLibraryQuerying
 
     init(
         workouts: [WorkoutSummary],
         exerciseRecords: [ExerciseRecord] = [],
-        limit: Int = 5
+        limit: Int = 5,
+        exerciseLibrary: ExerciseLibraryQuerying = ExerciseLibraryService.shared
     ) {
         self.workouts = workouts
         self.exerciseRecords = exerciseRecords
         self.limit = limit
+        self.exerciseLibrary = exerciseLibrary
+    }
+
+    /// Content-based task key — fires on any ID change, not just count.
+    private var taskID: Int {
+        var hasher = Hasher()
+        for w in workouts { hasher.combine(w.id) }
+        for r in exerciseRecords { hasher.combine(r.id) }
+        return hasher.finalize()
     }
 
     var body: some View {
@@ -67,9 +77,11 @@ struct ExerciseListSection: View {
                 }
             }
         }
-        .task(id: "\(workouts.count)-\(exerciseRecords.count)") {
-            items = buildItems()
-            rebuildRecordIndex()
+        .task(id: taskID) {
+            let (newItems, newIndex) = buildItemsAndIndex()
+            guard !Task.isCancelled else { return }
+            items = newItems
+            recordsByID = newIndex
         }
     }
 
@@ -86,13 +98,17 @@ struct ExerciseListSection: View {
         } else if item.source == .healthKit, let summary = item.workoutSummary {
             HealthKitWorkoutDetailView(workout: summary)
         } else {
-            EmptyView()
+            ContentUnavailableView(
+                "Workout Not Found",
+                systemImage: "exclamationmark.triangle",
+                description: Text("This record may have been deleted.")
+            )
         }
     }
 
-    // MARK: - Build ExerciseListItem array
+    // MARK: - Build Items + Index Atomically
 
-    private func buildItems() -> [ExerciseListItem] {
+    private func buildItemsAndIndex() -> ([ExerciseListItem], [UUID: ExerciseRecord]) {
         let externalWorkouts = workouts.filteringAppDuplicates(against: exerciseRecords)
 
         var result: [ExerciseListItem] = []
@@ -100,61 +116,27 @@ struct ExerciseListSection: View {
 
         // HealthKit workouts
         for workout in externalWorkouts {
-            result.append(ExerciseListItem(
-                id: workout.id,
-                type: workout.type,
-                activityType: workout.activityType,
-                duration: workout.duration,
-                calories: workout.calories,
-                distance: workout.distance,
-                date: workout.date,
-                source: .healthKit,
-                heartRateAvg: workout.heartRateAvg,
-                averagePace: workout.averagePace,
-                elevationAscended: workout.elevationAscended,
-                milestoneDistance: workout.milestoneDistance,
-                isPersonalRecord: workout.isPersonalRecord,
-                personalRecordTypes: workout.personalRecordTypes,
-                workoutSummary: workout
-            ))
+            result.append(.fromWorkoutSummary(workout))
         }
 
         // Manual records (with set data only, matching original behavior)
         let setRecords = exerciseRecords.filter(\.hasSetData)
         for record in setRecords {
-            let definition = record.exerciseDefinitionID.flatMap {
-                exerciseLibrary.exercise(byID: $0)
-            }
-            let localizedName = definition?.localizedName
-            let activityType = definition?.resolvedActivityType
-                ?? WorkoutActivityType.infer(from: record.exerciseType)
-                ?? .other
-            let hasHKLink = record.healthKitWorkoutID.map { !$0.isEmpty } ?? false
-            result.append(ExerciseListItem(
-                id: record.id.uuidString,
-                type: record.exerciseType,
-                localizedType: localizedName,
-                activityType: activityType,
-                duration: record.duration,
-                calories: record.bestCalories,
-                distance: record.distance,
-                date: record.date,
-                source: .manual,
-                completedSets: record.completedSets,
-                exerciseDefinitionID: record.exerciseDefinitionID,
-                isLinkedToHealthKit: hasHKLink,
-                primaryMuscles: record.primaryMuscles
-            ))
+            result.append(.fromManualRecord(record, library: exerciseLibrary))
         }
 
-        return result.sorted { $0.date > $1.date }
+        let sorted = result.sorted { $0.date > $1.date }
+
+        // Build index only for records with set data (safe merge for duplicate IDs)
+        let index = Dictionary(
+            setRecords.map { ($0.id, $0) },
+            uniquingKeysWith: { existing, _ in existing }
+        )
+
+        return (sorted, index)
     }
 
     // MARK: - Helpers
-
-    private func rebuildRecordIndex() {
-        recordsByID = Dictionary(uniqueKeysWithValues: exerciseRecords.map { ($0.id, $0) })
-    }
 
     private func findRecord(for item: ExerciseListItem) -> ExerciseRecord? {
         guard let uuid = UUID(uuidString: item.id) else { return nil }

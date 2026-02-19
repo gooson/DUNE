@@ -27,3 +27,8 @@
 3. JSON decoding without fallback (crashes on malformed data)
 4. Protocol dependency injection missing in ViewModels
 5. SwiftData migration failures without recovery strategy
+6. `.task(id:)` string hash collision: `"5-3"` == `"53-"` — use separators that cannot appear in the values (e.g., `"\(a)|\(b)"`)
+7. Keyword matching with short tokens like "row" creates false positives (e.g., "elbow row" hits rowing before boxing). Use word-boundary-safe patterns or prefer longer keywords.
+8. Plan says tests required for new `infer(from:)` and `resolvedActivityType` — check that `WorkoutActivityTypeTests` and `ExerciseDefinitionTests` actually cover the new code.
+9. `buildItems()` duplicated in ExerciseListSection (View) and ExerciseViewModel — plan acknowledged risk but DRY extraction was marked as "선호 접근" yet not done.
+10. `ExerciseListSection` hardwires `ExerciseLibraryService.shared` — breaks testability; plan specified protocol injection.

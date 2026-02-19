@@ -292,8 +292,6 @@ struct ExerciseView: View {
     }
 }
 
-// MARK: - Row (replaced by UnifiedWorkoutRow)
-
 #Preview {
     ExerciseView()
         .modelContainer(for: [ExerciseRecord.self, WorkoutSet.self], inMemory: true)

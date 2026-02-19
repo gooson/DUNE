@@ -22,7 +22,7 @@ enum ExerciseCategory: String, Codable, CaseIterable, Sendable {
     var defaultActivityType: WorkoutActivityType {
         switch self {
         case .strength:    .traditionalStrengthTraining
-        case .cardio:      .other
+        case .cardio:      .mixedCardio
         case .hiit:        .highIntensityIntervalTraining
         case .flexibility: .flexibility
         case .bodyweight:  .functionalStrengthTraining

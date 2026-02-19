@@ -270,10 +270,16 @@ struct ExerciseSessionDetailView: View {
 
         do {
             let summary = try await heartRateService.fetchHeartRateSummary(forWorkoutID: workoutID)
-            guard !Task.isCancelled else { return }
+            guard !Task.isCancelled else {
+                isLoadingHR = false
+                return
+            }
             heartRateSummary = summary
         } catch {
-            guard !Task.isCancelled else { return }
+            guard !Task.isCancelled else {
+                isLoadingHR = false
+                return
+            }
             hrError = "Could not load heart rate data"
         }
         isLoadingHR = false

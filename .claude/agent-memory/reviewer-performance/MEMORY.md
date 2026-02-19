@@ -61,6 +61,48 @@ Call recalculate in .task and .onChange, not in body
 - User navigates ActivityView (summary) → MuscleMapView (full) → duplicate computation
 - Mitigation: Extract volume calculation to shared service with @Observable cache
 
+## ExerciseListSection / ExerciseViewModel Snapshot Patterns
+
+### .task(id:) with string interpolation key
+- `ExerciseListSection` uses `.task(id: "\(workouts.count)-\(exerciseRecords.count)")` to rebuild items
+- String interpolation ID is correct (Correction #78) but creates a new String on every body evaluation
+- Prefer using a tuple-based stable key or a numeric hash when both count values fit in a struct
+
+### completedSets inside invalidateCache() / buildItems()
+- `record.completedSets` is the expensive computed filter+sort (see Relationship Access in Loops)
+- `ExerciseViewModel.invalidateCache()` calls `record.completedSets` once per record when building ExerciseListItem — this is **acceptable** because it is outside the SwiftUI body and runs only on data change
+- `ExerciseListSection.buildItems()` also calls `record.completedSets` once per record — also in .task, not in body — acceptable
+- `ExerciseView.updateSuggestion()` calls `record.completedSets.count` inside a `.map` over ALL manualRecords every time `.onChange(of: manualRecords)` fires — this IS a hot path concern
+
+### .onChange(of: manualRecords) — full array comparison
+- ExerciseView line 185: `.onChange(of: manualRecords) { _, newValue in rebuildRecordIndex(); viewModel.manualRecords = newValue; updateSuggestion() }`
+- Correction #47: use `.onChange(of: manualRecords.count)` when the full collection diff is not needed
+- `updateSuggestion()` snapshots ALL records including `.completedSets.count` — fires on every set completion
+
+### item.activityType.color.opacity(0.12) inside ForEach muscleBadges
+- UnifiedWorkoutRow.muscleBadges: `item.activityType.color.opacity(0.12)` evaluated per muscle badge in inner ForEach
+- `.color` is a computed property (switch on category) — not expensive, but `.opacity()` creates a new Color value
+- Called up to 3× per row on every render. Not a P1, but worth hoisting to a local let.
+- Fix: `let badgeColor = item.activityType.color` before the ForEach, use `badgeColor.opacity(0.12)` and `badgeColor` inside.
+
+### DashboardViewModel: WorkoutActivityType.infer(from:) called per workout type in hot path
+- `DashboardViewModel` calls `WorkoutActivityType.infer(from: type)` inside a loop over workout types
+- `infer(from:)` calls `.lowercased()` + 15 `.contains()` checks per invocation
+- Called every time `calculateExerciseMetrics()` runs (on every HealthKit refresh)
+- Pattern introduced in this PR: replaces `WorkoutSummary.iconName(for:)` (same hot-path risk)
+- Fix: the result is stable for a given type string — cache in a `[String: WorkoutActivityType]` dictionary
+
+### activityIcon(size:) evaluates style == .compact on every render
+- `UnifiedWorkoutRow.activityIcon(size:)` computes `.font(style == .compact ? .body : .title3)` on every body evaluation
+- This is a value-type enum comparison — cheap, but the font + color are recomputed on every render
+- With a list of 50+ exercise rows scrolling, both `activityType.iconName` and `activityType.color` (switch statements) fire per row per frame
+- Fix: hoist font and color to stored properties on init, or use `@ViewBuilder` style split
+
+### formattedPace in UnifiedWorkoutRow — String(format:) hot path
+- `formattedPace(_:)` calls `String(format: "%02d", seconds)` — allocates a new String per row per render
+- Appears in `metricsRow` (full style) for running/cycling workouts
+- Fix: cache via `item.formattedPace` on ExerciseListItem (computed once at build time, not per render)
+
 ## Canvas Rendering Performance
 
 ### Color Computation in Canvas Body
