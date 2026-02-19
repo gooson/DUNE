@@ -171,27 +171,4 @@ struct WorkoutSummary: Identifiable, Sendable {
             return false
         }
     }
-
-    /// Maps workout type name to SF Symbol (legacy — prefer activityType-based lookup).
-    static func iconName(for type: String) -> String {
-        switch type.lowercased() {
-        case "running":     "figure.run"
-        case "walking":     "figure.walk"
-        case "cycling":     "figure.outdoor.cycle"
-        case "swimming":    "figure.pool.swim"
-        case "hiking":      "figure.hiking"
-        case "yoga":        "figure.yoga"
-        case "strength", "strength training": "dumbbell.fill"
-        case "dance", "dancing": "figure.dance"
-        case "elliptical":  "figure.elliptical"
-        case "rowing":      "figure.rower"
-        case "stair stepper", "stairs": "figure.stairs"
-        case "pilates":     "figure.pilates"
-        case "martial arts": "figure.martial.arts"
-        case "cooldown":    "figure.cooldown"
-        case "core training": "figure.core.training"
-        case "stretching", "flexibility": "figure.flexibility"
-        default:            "figure.mixed.cardio"
-        }
-    }
 }

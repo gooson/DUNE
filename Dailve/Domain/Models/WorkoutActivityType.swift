@@ -311,6 +311,39 @@ enum WorkoutActivityType: String, Codable, Sendable, CaseIterable {
         case .other: "Workout"
         }
     }
+
+    // MARK: - Name-Based Inference
+
+    /// Infers a `WorkoutActivityType` from an exercise name string.
+    /// Returns `nil` if no keyword matches, allowing the caller to apply a category-based fallback.
+    ///
+    /// Keywords are searched in priority order. Multi-word keywords (e.g. "jump rope")
+    /// are checked before shorter ones to avoid false-positives.
+    static func infer(from exerciseName: String) -> WorkoutActivityType? {
+        let name = exerciseName.lowercased()
+
+        // Keyword table — checked in order. First match wins.
+        // Use longer/more specific keywords to avoid false-positives on short substrings.
+        let table: [(keyword: String, type: WorkoutActivityType)] = [
+            ("jump rope", .jumpRope), ("jumprope", .jumpRope),
+            ("kickbox", .kickboxing),
+            ("running", .running),
+            ("walking", .walking),
+            ("cycling", .cycling), ("bike", .cycling), ("cycle", .cycling),
+            ("swimming", .swimming), ("swim", .swimming),
+            ("hiking", .hiking), ("hike", .hiking),
+            ("yoga", .yoga),
+            ("pilates", .pilates),
+            ("rowing", .rowing),
+            ("elliptical", .elliptical),
+            ("dance", .socialDance), ("dancing", .socialDance),
+            ("core", .coreTraining),
+            ("boxing", .boxing),
+            ("climb", .climbing),
+        ]
+
+        return table.first { name.contains($0.keyword) }?.type
+    }
 }
 
 // MARK: - ActivityCategory

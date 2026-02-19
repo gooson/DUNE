@@ -4,7 +4,15 @@ import SwiftData
 /// Detail view for a single exercise session, showing set data + HealthKit heart rate chart.
 struct ExerciseSessionDetailView: View {
     let record: ExerciseRecord
+    var activityType: WorkoutActivityType = .other
+    var displayName: String?
     var showHistoryLink: Bool = true
+
+    /// Resolved title: explicit displayName → record.exerciseType fallback
+    private var resolvedTitle: String {
+        if let name = displayName, !name.isEmpty { return name }
+        return record.exerciseType
+    }
 
     @State private var heartRateSummary: HeartRateSummary?
     @State private var isLoadingHR = false
@@ -29,7 +37,7 @@ struct ExerciseSessionDetailView: View {
             }
             .padding(.horizontal, DS.Spacing.lg)
         }
-        .navigationTitle(record.exerciseType)
+        .navigationTitle(resolvedTitle)
         .navigationBarTitleDisplayMode(.inline)
         .task {
             await loadHeartRate()
@@ -39,21 +47,52 @@ struct ExerciseSessionDetailView: View {
     // MARK: - Header
 
     private var sessionHeader: some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-            Text(record.date, style: .date)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-            Text(record.date, style: .time)
-                .font(.caption)
-                .foregroundStyle(.tertiary)
+        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            HStack(spacing: DS.Spacing.md) {
+                Image(systemName: activityType.iconName)
+                    .font(.title)
+                    .foregroundStyle(activityType.color)
 
-            if record.duration > 0 {
-                Text(formattedDuration(record.duration))
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                    Text(resolvedTitle)
+                        .font(.title2.weight(.semibold))
+                    Text(record.date, style: .date)
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                    Text(record.date, style: .time)
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
+                }
+
+                Spacer()
+            }
+
+            if record.duration > 0 || record.bestCalories != nil {
+                HStack(spacing: DS.Spacing.xl) {
+                    if record.duration > 0 {
+                        VStack {
+                            Text(formattedDuration(record.duration))
+                                .font(.title3.weight(.semibold).monospacedDigit())
+                            Text("Duration")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    if let cal = record.bestCalories, cal > 0, cal < 5000 {
+                        VStack {
+                            Text("\(Int(cal))")
+                                .font(.title3.weight(.semibold).monospacedDigit())
+                            Text("kcal")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+                .padding(.top, DS.Spacing.xs)
             }
         }
-        .padding(.top, DS.Spacing.sm)
+        .padding(DS.Spacing.lg)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
     }
 
     // MARK: - HealthKit Badge
@@ -228,13 +267,22 @@ struct ExerciseSessionDetailView: View {
               let workoutID = record.healthKitWorkoutID else { return }
 
         isLoadingHR = true
-        defer { isLoadingHR = false }
 
         do {
-            heartRateSummary = try await heartRateService.fetchHeartRateSummary(forWorkoutID: workoutID)
+            let summary = try await heartRateService.fetchHeartRateSummary(forWorkoutID: workoutID)
+            guard !Task.isCancelled else {
+                isLoadingHR = false
+                return
+            }
+            heartRateSummary = summary
         } catch {
+            guard !Task.isCancelled else {
+                isLoadingHR = false
+                return
+            }
             hrError = "Could not load heart rate data"
         }
+        isLoadingHR = false
     }
 
     // MARK: - Formatting

@@ -195,9 +195,9 @@ struct CompoundWorkoutView: View {
         return VStack(alignment: .leading, spacing: DS.Spacing.md) {
             // Exercise header
             HStack(spacing: DS.Spacing.sm) {
-                Image(systemName: WorkoutSummary.iconName(for: exercise.name))
+                Image(systemName: exercise.resolvedActivityType.iconName)
                     .font(.title2)
-                    .foregroundStyle(DS.Color.activity)
+                    .foregroundStyle(exercise.resolvedActivityType.color)
                 VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                     Text(exercise.localizedName)
                         .font(.title3.weight(.semibold))

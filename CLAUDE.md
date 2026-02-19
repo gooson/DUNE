@@ -250,3 +250,10 @@
 83. **Color 인스턴스는 static 배열로 캐싱**: `Color(hue:saturation:brightness:)` 등 초기화가 ForEach 내에서 반복 호출되면 `private enum Cache { static let colors = build() }` 패턴 사용. enum rawValue를 인덱스로 O(1) 접근
 84. **Recovery modifier 입력에 물리적 상한 필수**: sleep minutes ≤ 1440 (24h), sleep ratio ≤ 1.0. Domain 서비스가 caller의 검증을 신뢰하지 않는 원칙(#42) 확장
 85. **Snapshot 생성 시 aggregate 값에도 상한 적용**: `totalWeight`, `totalReps` 등 reduce 합산 결과는 개별 값의 합이므로 예상 외로 커질 수 있음. 세션 단위 물리적 상한 설정 (weight ≤ 50k, reps ≤ 10k, duration ≤ 480min)
+
+### 2026-02-19: Unified Workout Row 리뷰 교정
+
+86. **공유 DTO는 `Presentation/Shared/Models/`에 배치**: ViewModel 내부 struct로 정의된 DTO가 2곳 이상에서 사용되면 static factory method와 함께 Shared/Models/로 추출. ViewModel 간 import 의존 방지
+87. **`.task(id:)` key는 content-aware Hasher 사용**: count 기반 String key는 삭제+추가 동시 발생 시 변경 감지 실패. `Hasher`로 모든 ID를 combine한 Int 사용
+88. **관련 `@State` 변수는 원자적 업데이트**: 2개 이상의 `@State`를 순차 할당하면 중간 상태가 렌더에 노출됨. tuple return + `Task.isCancelled` guard 후 동시 할당
+89. **문자열 키워드 매칭은 false-positive 테스트 필수**: 4자 미만 키워드("row", "run")는 실제 운동명과 충돌 가능. 키워드 추가 시 `noFalsePositive*` 테스트 작성 필수

@@ -56,6 +56,13 @@
 
 ## Recent Review Findings
 
+### 2026-02-19: Unified Workout Row Review (FINAL)
+- **ExerciseListItem construction (P1 DRY)**: `ExerciseRecord`→`ExerciseListItem` mapping (resolve definition, infer activityType, check HK link, ~15 lines) is duplicated verbatim in `ExerciseListSection.buildItems()` (lines 122-148) and `ExerciseViewModel.invalidateCache()` (lines 72-96). Correction Log #37: 3 occurrences = must extract. Target: `ExerciseListItem.fromManualRecord(_:library:)` static factory on `ExerciseListItem`.
+- **`infer(from:)` switch pattern (P2)**: 15 `case let n where n.contains(...)` arms are more verbose than a direct `if/else` or dictionary-based lookup. A `[(String, WorkoutActivityType)]` keyword table is easier to extend and avoids the `n` rebinding boilerplate. Not a correctness issue.
+- **`activityIcon(size:)` style-conditional font (P2)**: Font resolved via ternary on `style` inside a helper that already receives `size`. The caller (compact vs full) already controls `size`; having the function also infer `.body` vs `.title3` from `style` adds a hidden coupling. Better to pass `font` alongside `size`, or use two explicit call sites.
+- **`// MARK: - Row (replaced by UnifiedWorkoutRow)` empty MARK (P3)**: Dead section marker at `ExerciseView.swift:295` with no body. Should be deleted.
+- **`dateRow` property used once (P3)**: Named computed property used exactly once inside `compactContent`. Inlining removes indirection without cost.
+
 ### 2026-02-19: Training Dashboard Redesign Review
 - **Muscle Volume Calculation**: Already extracted to `ExerciseRecord+WeeklyVolume.swift` extension. Pattern is clean.
 - **Recovery Color Logic**: Duplication of recovery threshold (0.8) across `MuscleFatigueState.isRecovered` and `MuscleRecoveryMapView` color functions. Acceptable — Domain defines threshold, View uses derived state.

@@ -34,3 +34,14 @@
 - [ ] Enum decoding has fallback (compactMap or ?? default)
 - [ ] isSaving flag on all mutation methods
 - [ ] CloudKit implications considered (bad data spreads)
+- [ ] .task(id:) key covers CONTENT change, not just count change (count-only keys miss same-count mutations)
+- [ ] Stale data: items/@State index rebuilt atomically — buildItems() and rebuildRecordIndex() must stay in sync
+- [ ] Silent navigation sink (EmptyView()) signals item/index desync — count change alone won't catch same-size record replacement
+
+## Patterns: View-local item merge (ExerciseListSection pattern)
+- buildItems() + rebuildRecordIndex() called from same .task(id:) — items and index can briefly desync if task is cancelled after first call but before second
+- Count-only task ID misses same-count replacements (delete+add in same batch), causing stale rendered rows until next count change
+- destination(for:) with EmptyView fallback is a silent failure — navigation taps produce a blank sheet with no error
+- Dictionary(uniqueKeysWithValues:) in rebuildRecordIndex() will crash if exerciseRecords contains duplicate IDs (SwiftData @Model IDs should be unique in practice, but defensive use of init(_:uniquingKeysWith:) is safer)
+- calories displayed in UnifiedWorkoutRow without validation bounds — ExerciseSessionDetailView guards cal > 0 && cal < 5000 but row display does not (minor consistency)
+- WorkoutActivityType.infer(from:) keyword matching is duplicated in ExerciseListSection and ExerciseViewModel — single source of truth exists (ExerciseDefinition.resolvedActivityType) but the fallback call path is duplicated

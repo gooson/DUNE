@@ -18,6 +18,12 @@ struct ExerciseDefinition: Codable, Identifiable, Sendable, Hashable {
         customCategoryName ?? category.displayName
     }
 
+    /// Resolves the best-matching `WorkoutActivityType` for this exercise.
+    /// Uses name-based keyword matching first, then falls back to the category default.
+    var resolvedActivityType: WorkoutActivityType {
+        WorkoutActivityType.infer(from: name) ?? category.defaultActivityType
+    }
+
     init(
         id: String,
         name: String,

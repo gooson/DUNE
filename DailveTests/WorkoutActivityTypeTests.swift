@@ -45,6 +45,140 @@ struct WorkoutActivityTypeTests {
     }
 }
 
+// MARK: - infer(from:) Tests
+
+@Suite("WorkoutActivityType.infer")
+struct WorkoutActivityTypeInferTests {
+
+    @Test("Matches full keyword — Running")
+    func matchRunning() {
+        #expect(WorkoutActivityType.infer(from: "Running") == .running)
+        #expect(WorkoutActivityType.infer(from: "Outdoor Running") == .running)
+    }
+
+    @Test("Matches full keyword — Walking")
+    func matchWalking() {
+        #expect(WorkoutActivityType.infer(from: "Walking") == .walking)
+        #expect(WorkoutActivityType.infer(from: "Power Walking") == .walking)
+    }
+
+    @Test("Matches cycling keywords")
+    func matchCycling() {
+        #expect(WorkoutActivityType.infer(from: "Indoor Cycling") == .cycling)
+        #expect(WorkoutActivityType.infer(from: "Stationary Bike") == .cycling)
+        #expect(WorkoutActivityType.infer(from: "Spin Cycle") == .cycling)
+    }
+
+    @Test("Matches swimming keywords")
+    func matchSwimming() {
+        #expect(WorkoutActivityType.infer(from: "Swimming") == .swimming)
+        #expect(WorkoutActivityType.infer(from: "Open Water Swim") == .swimming)
+    }
+
+    @Test("Matches hiking keywords")
+    func matchHiking() {
+        #expect(WorkoutActivityType.infer(from: "Hiking") == .hiking)
+        #expect(WorkoutActivityType.infer(from: "Mountain Hike") == .hiking)
+    }
+
+    @Test("Matches mind-body keywords")
+    func matchMindBody() {
+        #expect(WorkoutActivityType.infer(from: "Yoga Flow") == .yoga)
+        #expect(WorkoutActivityType.infer(from: "Pilates Mat") == .pilates)
+    }
+
+    @Test("Matches rowing — full word only")
+    func matchRowing() {
+        #expect(WorkoutActivityType.infer(from: "Rowing Machine") == .rowing)
+    }
+
+    @Test("Matches combat keywords")
+    func matchCombat() {
+        #expect(WorkoutActivityType.infer(from: "Boxing Bag Work") == .boxing)
+        #expect(WorkoutActivityType.infer(from: "Kickboxing Class") == .kickboxing)
+    }
+
+    @Test("Matches climbing")
+    func matchClimbing() {
+        #expect(WorkoutActivityType.infer(from: "Rock Climbing") == .climbing)
+    }
+
+    @Test("Matches jump rope")
+    func matchJumpRope() {
+        #expect(WorkoutActivityType.infer(from: "Jump Rope HIIT") == .jumpRope)
+        #expect(WorkoutActivityType.infer(from: "Jumprope Workout") == .jumpRope)
+    }
+
+    @Test("Matches dance keywords")
+    func matchDance() {
+        #expect(WorkoutActivityType.infer(from: "Zumba Dancing") == .socialDance)
+        #expect(WorkoutActivityType.infer(from: "Dance Cardio") == .socialDance)
+    }
+
+    @Test("Matches core training")
+    func matchCore() {
+        #expect(WorkoutActivityType.infer(from: "Core Workout") == .coreTraining)
+    }
+
+    @Test("Case insensitive")
+    func caseInsensitive() {
+        #expect(WorkoutActivityType.infer(from: "SWIMMING") == .swimming)
+        #expect(WorkoutActivityType.infer(from: "yOgA") == .yoga)
+    }
+
+    @Test("Returns nil for unmatched exercise names")
+    func noMatch() {
+        #expect(WorkoutActivityType.infer(from: "Bench Press") == nil)
+        #expect(WorkoutActivityType.infer(from: "Plank") == nil)
+        #expect(WorkoutActivityType.infer(from: "Deadlift") == nil)
+        #expect(WorkoutActivityType.infer(from: "Lat Pulldown") == nil)
+    }
+
+    @Test("No false-positive: 'Dumbbell Row' should NOT match rowing (only 'rowing' keyword)")
+    func noFalsePositiveRow() {
+        // "Dumbbell Row" does not contain "rowing", so it should NOT match
+        #expect(WorkoutActivityType.infer(from: "Dumbbell Row") == nil)
+        #expect(WorkoutActivityType.infer(from: "Barbell Row") == nil)
+        #expect(WorkoutActivityType.infer(from: "Seated Cable Row") == nil)
+    }
+
+    @Test("Empty string returns nil")
+    func emptyString() {
+        #expect(WorkoutActivityType.infer(from: "") == nil)
+    }
+}
+
+// MARK: - ExerciseCategory.defaultActivityType Tests
+
+@Suite("ExerciseCategory.defaultActivityType")
+struct ExerciseCategoryDefaultActivityTypeTests {
+
+    @Test("Strength maps to traditionalStrengthTraining")
+    func strength() {
+        #expect(ExerciseCategory.strength.defaultActivityType == .traditionalStrengthTraining)
+    }
+
+    @Test("Cardio maps to mixedCardio")
+    func cardio() {
+        #expect(ExerciseCategory.cardio.defaultActivityType == .mixedCardio)
+    }
+
+    @Test("HIIT maps to highIntensityIntervalTraining")
+    func hiit() {
+        #expect(ExerciseCategory.hiit.defaultActivityType == .highIntensityIntervalTraining)
+    }
+
+    @Test("Flexibility maps to flexibility")
+    func flexibility() {
+        #expect(ExerciseCategory.flexibility.defaultActivityType == .flexibility)
+    }
+
+    @Test("Bodyweight maps to functionalStrengthTraining")
+    func bodyweight() {
+        #expect(ExerciseCategory.bodyweight.defaultActivityType == .functionalStrengthTraining)
+    }
+}
+
 @Suite("MilestoneDistance")
 struct MilestoneDistanceTests {
 
