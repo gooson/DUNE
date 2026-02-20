@@ -89,8 +89,6 @@ final class WellnessViewModel {
 
         // Build cards from results
         var cards: [VitalCardData] = []
-        var failureCount = 0
-        let totalSources = 8 // sleep, condition(+hrv/rhr), weight, spo2, respRate, vo2Max, hrRecovery, wristTemp
 
         // --- Sleep ---
         if let sleep = results.sleep {
@@ -109,7 +107,6 @@ final class WellnessViewModel {
             ))
         } else {
             sleepScore = nil
-            failureCount += 1
         }
 
         // --- Condition (HRV/RHR) ---
@@ -119,7 +116,6 @@ final class WellnessViewModel {
         } else {
             conditionScore = nil
             conditionScoreFull = nil
-            failureCount += 1
         }
 
         // --- HRV ---
@@ -169,8 +165,6 @@ final class WellnessViewModel {
                 date: weight.date,
                 isHistorical: false
             ))
-        } else {
-            failureCount += 1
         }
 
         // --- BMI ---
@@ -203,8 +197,6 @@ final class WellnessViewModel {
                 date: spo2.date,
                 isHistorical: false
             ))
-        } else {
-            failureCount += 1
         }
 
         // --- Respiratory Rate ---
@@ -221,8 +213,6 @@ final class WellnessViewModel {
                 date: resp.date,
                 isHistorical: false
             ))
-        } else {
-            failureCount += 1
         }
 
         // --- VO2 Max ---
@@ -239,8 +229,6 @@ final class WellnessViewModel {
                 date: vo2.date,
                 isHistorical: false
             ))
-        } else {
-            failureCount += 1
         }
 
         // --- HR Recovery ---
@@ -257,8 +245,6 @@ final class WellnessViewModel {
                 date: hrr.date,
                 isHistorical: false
             ))
-        } else {
-            failureCount += 1
         }
 
         // --- Wrist Temperature ---
@@ -276,8 +262,6 @@ final class WellnessViewModel {
                 date: temp.date,
                 isHistorical: false
             ))
-        } else {
-            failureCount += 1
         }
 
         guard !Task.isCancelled else {
@@ -302,9 +286,11 @@ final class WellnessViewModel {
             return a.lastUpdated > b.lastUpdated
         }
 
-        // Partial failure message (Correction #25)
-        if failureCount > 0, failureCount < totalSources {
-            partialFailureMessage = "Some data could not be loaded (\(failureCount) of \(totalSources) sources)"
+        // Partial failure message (Correction #25) — only for actual fetch errors, not missing data
+        let primarySources: Set<FetchKey> = [.sleep, .condition, .weight, .spo2, .respRate, .vo2Max, .hrRecovery, .wristTemp]
+        let failedSources = results.errorKeys.intersection(primarySources)
+        if !failedSources.isEmpty, failedSources.count < primarySources.count {
+            partialFailureMessage = "Some data could not be loaded (\(failedSources.count) of \(primarySources.count) sources)"
         }
 
         isLoading = false
@@ -313,6 +299,8 @@ final class WellnessViewModel {
     // MARK: - Parallel Fetch
 
     private struct FetchResults: Sendable {
+        // Error tracking: only actual fetch errors, not "no data available"
+        var errorKeys: Set<FetchKey> = []
         // Sleep
         var sleep: CalculateSleepScoreUseCase.Output?
         var sleepDate: Date?
@@ -379,6 +367,7 @@ final class WellnessViewModel {
         case weightHistoryResult([BodyCompositionSample])
         case baselineResult(Double?)
         case empty
+        case fetchError
     }
 
     private func fetchAllData() async -> FetchResults {
@@ -412,7 +401,7 @@ final class WellnessViewModel {
                     return (.sleep, .sleepResult(output: output, date: sleepDate, isHistorical: isHistorical))
                 } catch {
                     print("[Wellness] sleep fetch failed: \(error)")
-                    return (.sleep, .sleepResult(output: nil, date: nil, isHistorical: false))
+                    return (.sleep, .fetchError)
                 }
             }
 
@@ -441,7 +430,7 @@ final class WellnessViewModel {
                     return (.sleepWeekly, .sleepWeekly(dailyData.sorted { $0.date < $1.date }))
                 } catch {
                     print("[Wellness] sleepWeekly fetch failed: \(error)")
-                    return (.sleepWeekly, .sleepWeekly([]))
+                    return (.sleepWeekly, .fetchError)
                 }
             }
 
@@ -472,7 +461,7 @@ final class WellnessViewModel {
                     return (.condition, .conditionResult(score: output.score, latestHRV: latestHRV, latestRHR: latestRHRVital))
                 } catch {
                     print("[Wellness] condition fetch failed: \(error)")
-                    return (.condition, .conditionResult(score: nil, latestHRV: nil, latestRHR: nil))
+                    return (.condition, .fetchError)
                 }
             }
 
@@ -489,7 +478,7 @@ final class WellnessViewModel {
                     return (.hrvWeekly, .hrvWeeklyResult(history.map { VitalSample(value: $0.average, date: $0.date) }))
                 } catch {
                     print("[Wellness] hrvWeekly fetch failed: \(error)")
-                    return (.hrvWeekly, .hrvWeeklyResult([]))
+                    return (.hrvWeekly, .fetchError)
                 }
             }
 
@@ -506,7 +495,7 @@ final class WellnessViewModel {
                     return (.rhrWeekly, .rhrWeeklyResult(history.map { VitalSample(value: $0.average, date: $0.date) }))
                 } catch {
                     print("[Wellness] rhrWeekly fetch failed: \(error)")
-                    return (.rhrWeekly, .rhrWeeklyResult([]))
+                    return (.rhrWeekly, .fetchError)
                 }
             }
 
@@ -520,7 +509,7 @@ final class WellnessViewModel {
                     return (.weight, .empty)
                 } catch {
                     print("[Wellness] weight fetch failed: \(error)")
-                    return (.weight, .empty)
+                    return (.weight, .fetchError)
                 }
             }
 
@@ -532,7 +521,7 @@ final class WellnessViewModel {
                     return (.weightHistory, .weightHistoryResult(history))
                 } catch {
                     print("[Wellness] weightHistory fetch failed: \(error)")
-                    return (.weightHistory, .weightHistoryResult([]))
+                    return (.weightHistory, .fetchError)
                 }
             }
 
@@ -546,7 +535,7 @@ final class WellnessViewModel {
                     return (.bmi, .empty)
                 } catch {
                     print("[Wellness] bmi fetch failed: \(error)")
-                    return (.bmi, .empty)
+                    return (.bmi, .fetchError)
                 }
             }
 
@@ -561,7 +550,7 @@ final class WellnessViewModel {
                     return (.bodyFat, .empty)
                 } catch {
                     print("[Wellness] bodyFat fetch failed: \(error)")
-                    return (.bodyFat, .empty)
+                    return (.bodyFat, .fetchError)
                 }
             }
 
@@ -573,7 +562,7 @@ final class WellnessViewModel {
                     return (.spo2, .vitalSample(sample))
                 } catch {
                     print("[Wellness] spo2 fetch failed: \(error)")
-                    return (.spo2, .vitalSample(nil))
+                    return (.spo2, .fetchError)
                 }
             }
 
@@ -585,7 +574,7 @@ final class WellnessViewModel {
                     return (.spo2History, .vitalHistory(history))
                 } catch {
                     print("[Wellness] spo2History fetch failed: \(error)")
-                    return (.spo2History, .vitalHistory([]))
+                    return (.spo2History, .fetchError)
                 }
             }
 
@@ -597,7 +586,7 @@ final class WellnessViewModel {
                     return (.respRate, .vitalSample(sample))
                 } catch {
                     print("[Wellness] respRate fetch failed: \(error)")
-                    return (.respRate, .vitalSample(nil))
+                    return (.respRate, .fetchError)
                 }
             }
 
@@ -609,7 +598,7 @@ final class WellnessViewModel {
                     return (.respRateHistory, .vitalHistory(history))
                 } catch {
                     print("[Wellness] respRateHistory fetch failed: \(error)")
-                    return (.respRateHistory, .vitalHistory([]))
+                    return (.respRateHistory, .fetchError)
                 }
             }
 
@@ -621,7 +610,7 @@ final class WellnessViewModel {
                     return (.vo2Max, .vitalSample(sample))
                 } catch {
                     print("[Wellness] vo2Max fetch failed: \(error)")
-                    return (.vo2Max, .vitalSample(nil))
+                    return (.vo2Max, .fetchError)
                 }
             }
 
@@ -633,7 +622,7 @@ final class WellnessViewModel {
                     return (.vo2MaxHistory, .vitalHistory(history))
                 } catch {
                     print("[Wellness] vo2MaxHistory fetch failed: \(error)")
-                    return (.vo2MaxHistory, .vitalHistory([]))
+                    return (.vo2MaxHistory, .fetchError)
                 }
             }
 
@@ -645,7 +634,7 @@ final class WellnessViewModel {
                     return (.hrRecovery, .vitalSample(sample))
                 } catch {
                     print("[Wellness] hrRecovery fetch failed: \(error)")
-                    return (.hrRecovery, .vitalSample(nil))
+                    return (.hrRecovery, .fetchError)
                 }
             }
 
@@ -657,7 +646,7 @@ final class WellnessViewModel {
                     return (.hrRecoveryHistory, .vitalHistory(history))
                 } catch {
                     print("[Wellness] hrRecoveryHistory fetch failed: \(error)")
-                    return (.hrRecoveryHistory, .vitalHistory([]))
+                    return (.hrRecoveryHistory, .fetchError)
                 }
             }
 
@@ -669,7 +658,7 @@ final class WellnessViewModel {
                     return (.wristTemp, .vitalSample(sample))
                 } catch {
                     print("[Wellness] wristTemp fetch failed: \(error)")
-                    return (.wristTemp, .vitalSample(nil))
+                    return (.wristTemp, .fetchError)
                 }
             }
 
@@ -681,7 +670,7 @@ final class WellnessViewModel {
                     return (.wristTempBaseline, .baselineResult(baseline))
                 } catch {
                     print("[Wellness] wristTempBaseline fetch failed: \(error)")
-                    return (.wristTempBaseline, .baselineResult(nil))
+                    return (.wristTempBaseline, .fetchError)
                 }
             }
 
@@ -693,12 +682,16 @@ final class WellnessViewModel {
                     return (.wristTempHistory, .vitalHistory(history))
                 } catch {
                     print("[Wellness] wristTempHistory fetch failed: \(error)")
-                    return (.wristTempHistory, .vitalHistory([]))
+                    return (.wristTempHistory, .fetchError)
                 }
             }
 
             // Collect all results
             for await (key, value) in group {
+                if case .fetchError = value {
+                    results.errorKeys.insert(key)
+                    continue
+                }
                 switch (key, value) {
                 case let (.sleep, .sleepResult(output, date, isHistorical)):
                     results.sleep = output
