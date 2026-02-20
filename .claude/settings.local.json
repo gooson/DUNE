@@ -20,27 +20,11 @@
       "Bash(brew install:*)",
       "Bash(/usr/libexec/PlistBuddy:*)",
       "mcp__sequential-thinking__sequentialthinking",
-      "mcp__plugin_serena_serena__list_dir",
-      "mcp__plugin_serena_serena__read_file",
-      "mcp__plugin_serena_serena__activate_project",
-      "mcp__plugin_serena_serena__search_for_pattern",
-      "mcp__plugin_serena_serena__find_file",
-      "mcp__plugin_context7_context7__resolve-library-id",
-      "mcp__plugin_context7_context7__query-docs",
-      "mcp__serena__list_dir",
-      "mcp__serena__list_memories",
-      "mcp__serena__activate_project",
-      "mcp__serena__check_onboarding_performed",
-      "mcp__serena__get_symbols_overview",
-      "mcp__serena__find_symbol",
-      "mcp__serena__search_for_pattern",
-      "mcp__serena__find_file",
-      "mcp__serena__read_file",
-      "mcp__serena__insert_after_symbol",
-      "mcp__serena__initial_instructions",
-      "mcp__serena__think_about_collected_information",
-      "mcp__mcp-deepwiki__deepwiki_fetch",
-      "mcp__Context7__resolve-library-id"
+      "mcp__plugin_serena_serena__*",
+      "mcp__plugin_context7_context7__*",
+      "mcp__serena__*",
+      "mcp__mcp-deepwiki__*",
+      "mcp__Context7__*"
     ]
   }
 }
