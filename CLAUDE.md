@@ -257,3 +257,9 @@
 87. **`.task(id:)` key는 content-aware Hasher 사용**: count 기반 String key는 삭제+추가 동시 발생 시 변경 감지 실패. `Hasher`로 모든 ID를 combine한 Int 사용
 88. **관련 `@State` 변수는 원자적 업데이트**: 2개 이상의 `@State`를 순차 할당하면 중간 상태가 렌더에 노출됨. tuple return + `Task.isCancelled` guard 후 동시 할당
 89. **문자열 키워드 매칭은 false-positive 테스트 필수**: 4자 미만 키워드("row", "run")는 실제 운동명과 충돌 가능. 키워드 추가 시 `noFalsePositive*` 테스트 작성 필수
+
+### 2026-02-20: Review Agent + Wellness 리뷰 교정
+
+90. **`Sendable` struct 내 튜플 사용 금지**: `(value: Double, date: Date)?` 대신 `VitalSample`처럼 명시적 `Sendable` struct 사용. 기존에 동일 구조의 Sendable 타입이 있으면 재활용
+91. **리뷰 에이전트 output 크기 제어 필수**: 에이전트 `.md`에 "tool call 최소화, findings만 출력" 지시. `max_turns: 6` 설정. diff 2000줄 이상이면 에이전트 대신 직접 리뷰
+92. **TaskGroup catch 블록에 에러 식별 로그 필수**: `print("[모듈명] {key} fetch failed: \(error)")` 패턴으로 어떤 쿼리가 실패했는지 식별 가능하게. silent catch 금지
