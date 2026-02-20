@@ -451,7 +451,7 @@ final class WellnessViewModel {
                     ))
 
                     // Extract latest HRV/RHR raw values for individual cards (Correction #22: range validation)
-                    let latestHRV: VitalSample? = hrvSamples.last.flatMap { sample in
+                    let latestHRV: VitalSample? = hrvSamples.first.flatMap { sample in
                         sample.value > 0 && sample.value <= 500 ? VitalSample(value: sample.value, date: sample.date) : nil
                     }
                     let latestRHRVital: VitalSample? = latestRHRSample.flatMap { sample in
