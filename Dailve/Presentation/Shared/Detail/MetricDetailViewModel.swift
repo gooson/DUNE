@@ -414,14 +414,12 @@ final class MetricDetailViewModel {
             .map { ChartDataPoint(date: $0.date, value: $0.value) }
             .sorted { $0.date < $1.date }
 
-        // Weight uses average aggregation for longer periods
-        if selectedPeriod == .sixMonths || selectedPeriod == .year {
-            chartData = HealthDataAggregator.aggregateByAverage(
-                raw, unit: selectedPeriod.aggregationUnit
-            )
-        } else {
-            chartData = raw
-        }
+        // Aggregate by day (or larger) to avoid duplicate points on the same day
+        // causing Catmull-Rom interpolation spikes
+        chartData = HealthDataAggregator.aggregateByAverage(
+            raw, unit: selectedPeriod == .sixMonths || selectedPeriod == .year
+                ? selectedPeriod.aggregationUnit : .day
+        )
 
         summaryStats = HealthDataAggregator.computeSummary(
             from: currentPeriodValues(),
@@ -445,14 +443,11 @@ final class MetricDetailViewModel {
             .map { ChartDataPoint(date: $0.date, value: $0.value) }
             .sorted { $0.date < $1.date }
 
-        // BMI uses average aggregation for longer periods
-        if selectedPeriod == .sixMonths || selectedPeriod == .year {
-            chartData = HealthDataAggregator.aggregateByAverage(
-                raw, unit: selectedPeriod.aggregationUnit
-            )
-        } else {
-            chartData = raw
-        }
+        // Aggregate by day (or larger) to avoid duplicate points on the same day
+        chartData = HealthDataAggregator.aggregateByAverage(
+            raw, unit: selectedPeriod == .sixMonths || selectedPeriod == .year
+                ? selectedPeriod.aggregationUnit : .day
+        )
 
         summaryStats = HealthDataAggregator.computeSummary(
             from: currentPeriodValues(),
