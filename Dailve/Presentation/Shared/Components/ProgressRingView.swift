@@ -31,6 +31,7 @@ struct ProgressRingView: View {
         }
         .frame(width: size, height: size)
         .onAppear {
+            animatedProgress = 0
             if reduceMotion {
                 animatedProgress = progress
             } else {

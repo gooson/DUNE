@@ -93,12 +93,13 @@ struct WellnessHeroCard: View {
         .accessibilityHint("Tap to see score details")
         .sensoryFeedback(.impact(weight: .light), trigger: isAppeared)
         .onAppear {
-            guard !isAppeared else { return }
+            let isFirst = !isAppeared
             isAppeared = true
+            animatedScore = 0
             if reduceMotion {
                 animatedScore = score.score
             } else {
-                withAnimation(DS.Animation.numeric.delay(0.2)) {
+                withAnimation(DS.Animation.numeric.delay(isFirst ? 0.2 : 0.1)) {
                     animatedScore = score.score
                 }
             }
