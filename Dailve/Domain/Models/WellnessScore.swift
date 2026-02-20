@@ -14,16 +14,6 @@ struct WellnessScore: Sendable, Hashable {
         case fair
         case tired
         case warning
-
-        var label: String {
-            switch self {
-            case .excellent: "Excellent"
-            case .good: "Good"
-            case .fair: "Fair"
-            case .tired: "Tired"
-            case .warning: "Warning"
-            }
-        }
     }
 
     init(score: Int, sleepScore: Int? = nil, conditionScore: Int? = nil, bodyScore: Int? = nil) {

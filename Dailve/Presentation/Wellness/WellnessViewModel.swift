@@ -1,32 +1,6 @@
 import Foundation
 import Observation
 
-// MARK: - VitalCardData DTO
-
-struct VitalCardData: Identifiable, Hashable, Sendable {
-    let id: String
-    let category: HealthMetric.Category
-    let title: String
-    let value: String
-    let unit: String
-    let change: String?
-    let changeIsPositive: Bool?
-    let sparklineData: [Double]
-    let metric: HealthMetric
-    let lastUpdated: Date
-    let isStale: Bool
-
-    static func == (lhs: VitalCardData, rhs: VitalCardData) -> Bool {
-        lhs.id == rhs.id && lhs.value == rhs.value && lhs.lastUpdated == rhs.lastUpdated
-    }
-
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-        hasher.combine(value)
-        hasher.combine(lastUpdated)
-    }
-}
-
 // MARK: - WellnessViewModel
 
 @Observable
@@ -150,7 +124,7 @@ final class WellnessViewModel {
 
         // --- HRV ---
         if let hrv = results.latestHRV {
-            let sparkline = results.hrvWeekly.map(\.average)
+            let sparkline = results.hrvWeekly.map(\.value)
             cards.append(buildCard(
                 category: .hrv,
                 title: "HRV",
@@ -166,7 +140,7 @@ final class WellnessViewModel {
 
         // --- RHR ---
         if let rhr = results.latestRHR {
-            let sparkline = results.rhrWeekly.map(\.average)
+            let sparkline = results.rhrWeekly.map(\.value)
             cards.append(buildCard(
                 category: .rhr,
                 title: "Resting HR",
@@ -214,7 +188,7 @@ final class WellnessViewModel {
             ))
         }
 
-        // --- SpO2 ---
+        // --- SpO2 (HealthKit returns decimal fraction: 0.98 = 98%) ---
         if let spo2 = results.latestSpO2 {
             let displayValue = spo2.value * 100
             let sparkline = results.spo2History.map { $0.value * 100 }
@@ -347,17 +321,16 @@ final class WellnessViewModel {
         // Condition
         var condition: ConditionScore?
         // HRV / RHR (raw values for individual cards)
-        var latestHRV: (value: Double, date: Date)?
-        var latestRHR: (value: Double, date: Date)?
-        var hrvWeekly: [(date: Date, average: Double)] = []
-        var rhrWeekly: [(date: Date, average: Double)] = []
+        var latestHRV: VitalSample?
+        var latestRHR: VitalSample?
+        var hrvWeekly: [VitalSample] = []
+        var rhrWeekly: [VitalSample] = []
         // Body
-        var latestWeight: (value: Double, date: Date)?
+        var latestWeight: VitalSample?
         var weightWeekAgo: Double?
         var weightHistory: [BodyCompositionSample] = []
-        var latestBMI: (value: Double, date: Date)?
-        var latestBodyFat: (value: Double, date: Date)?
-        var bodyFatWeekAgo: Double?
+        var latestBMI: VitalSample?
+        var latestBodyFat: VitalSample?
         // Vitals
         var latestSpO2: VitalSample?
         var spo2History: [VitalSample] = []
@@ -398,15 +371,12 @@ final class WellnessViewModel {
     private enum FetchValue: Sendable {
         case sleepResult(output: CalculateSleepScoreUseCase.Output?, date: Date?, isHistorical: Bool)
         case sleepWeekly([DailySleep])
-        case conditionResult(score: ConditionScore?, latestHRV: (Double, Date)?, latestRHR: (Double, Date)?)
-        case hrvWeeklyResult([(date: Date, average: Double)])
-        case rhrWeeklyResult([(date: Date, average: Double)])
-        case weightResult(value: Double, date: Date)
-        case weightHistoryResult([BodyCompositionSample])
-        case bmiResult(value: Double, date: Date)
-        case bodyFatResult(value: Double, date: Date)
+        case conditionResult(score: ConditionScore?, latestHRV: VitalSample?, latestRHR: VitalSample?)
+        case hrvWeeklyResult([VitalSample])
+        case rhrWeeklyResult([VitalSample])
         case vitalSample(VitalSample?)
         case vitalHistory([VitalSample])
+        case weightHistoryResult([BodyCompositionSample])
         case baselineResult(Double?)
         case empty
     }
@@ -441,6 +411,7 @@ final class WellnessViewModel {
                     let output = stages.isEmpty ? nil : sleepScoreUseCase.execute(input: .init(stages: stages))
                     return (.sleep, .sleepResult(output: output, date: sleepDate, isHistorical: isHistorical))
                 } catch {
+                    print("[Wellness] sleep fetch failed: \(error)")
                     return (.sleep, .sleepResult(output: nil, date: nil, isHistorical: false))
                 }
             }
@@ -451,9 +422,7 @@ final class WellnessViewModel {
                 do {
                     let calendar = Calendar.current
                     let today = Date()
-                    var weekly: [DailySleep] = []
 
-                    // Use TaskGroup for parallel daily queries
                     let dailyData = try await withThrowingTaskGroup(of: DailySleep?.self) { inner in
                         for dayOffset in 0..<7 {
                             inner.addTask { [sleepService] in
@@ -469,9 +438,9 @@ final class WellnessViewModel {
                         }
                         return collected
                     }
-                    weekly = dailyData.sorted { $0.date < $1.date }
-                    return (.sleepWeekly, .sleepWeekly(weekly))
+                    return (.sleepWeekly, .sleepWeekly(dailyData.sorted { $0.date < $1.date }))
                 } catch {
+                    print("[Wellness] sleepWeekly fetch failed: \(error)")
                     return (.sleepWeekly, .sleepWeekly([]))
                 }
             }
@@ -493,15 +462,16 @@ final class WellnessViewModel {
                     ))
 
                     // Extract latest HRV/RHR raw values for individual cards (Correction #22: range validation)
-                    let latestHRV: (Double, Date)? = hrvSamples.last.flatMap { sample in
-                        sample.value > 0 && sample.value <= 500 ? (sample.value, sample.date) : nil
+                    let latestHRV: VitalSample? = hrvSamples.last.flatMap { sample in
+                        sample.value > 0 && sample.value <= 500 ? VitalSample(value: sample.value, date: sample.date) : nil
                     }
-                    let latestRHRTuple: (Double, Date)? = latestRHRSample.flatMap { sample in
-                        sample.value >= 20 && sample.value <= 300 ? (sample.value, sample.date) : nil
+                    let latestRHRVital: VitalSample? = latestRHRSample.flatMap { sample in
+                        sample.value >= 20 && sample.value <= 300 ? VitalSample(value: sample.value, date: sample.date) : nil
                     }
 
-                    return (.condition, .conditionResult(score: output.score, latestHRV: latestHRV, latestRHR: latestRHRTuple))
+                    return (.condition, .conditionResult(score: output.score, latestHRV: latestHRV, latestRHR: latestRHRVital))
                 } catch {
+                    print("[Wellness] condition fetch failed: \(error)")
                     return (.condition, .conditionResult(score: nil, latestHRV: nil, latestRHR: nil))
                 }
             }
@@ -516,8 +486,9 @@ final class WellnessViewModel {
                     let history = try await hrvService.fetchHRVCollection(
                         start: start, end: end, interval: DateComponents(day: 1)
                     )
-                    return (.hrvWeekly, .hrvWeeklyResult(history))
+                    return (.hrvWeekly, .hrvWeeklyResult(history.map { VitalSample(value: $0.average, date: $0.date) }))
                 } catch {
+                    print("[Wellness] hrvWeekly fetch failed: \(error)")
                     return (.hrvWeekly, .hrvWeeklyResult([]))
                 }
             }
@@ -532,8 +503,9 @@ final class WellnessViewModel {
                     let history = try await hrvService.fetchRHRCollection(
                         start: start, end: end, interval: DateComponents(day: 1)
                     )
-                    return (.rhrWeekly, .rhrWeeklyResult(history.map { ($0.date, $0.average) }))
+                    return (.rhrWeekly, .rhrWeeklyResult(history.map { VitalSample(value: $0.average, date: $0.date) }))
                 } catch {
+                    print("[Wellness] rhrWeekly fetch failed: \(error)")
                     return (.rhrWeekly, .rhrWeeklyResult([]))
                 }
             }
@@ -543,10 +515,11 @@ final class WellnessViewModel {
                 guard !Task.isCancelled else { return (.weight, .empty) }
                 do {
                     if let w = try await bodyService.fetchLatestWeight(withinDays: 30) {
-                        return (.weight, .weightResult(value: w.value, date: w.date))
+                        return (.weight, .vitalSample(VitalSample(value: w.value, date: w.date)))
                     }
                     return (.weight, .empty)
                 } catch {
+                    print("[Wellness] weight fetch failed: \(error)")
                     return (.weight, .empty)
                 }
             }
@@ -558,6 +531,7 @@ final class WellnessViewModel {
                     let history = try await bodyService.fetchWeight(days: 7)
                     return (.weightHistory, .weightHistoryResult(history))
                 } catch {
+                    print("[Wellness] weightHistory fetch failed: \(error)")
                     return (.weightHistory, .weightHistoryResult([]))
                 }
             }
@@ -567,10 +541,11 @@ final class WellnessViewModel {
                 guard !Task.isCancelled else { return (.bmi, .empty) }
                 do {
                     if let b = try await bodyService.fetchLatestBMI(withinDays: 30) {
-                        return (.bmi, .bmiResult(value: b.value, date: b.date))
+                        return (.bmi, .vitalSample(VitalSample(value: b.value, date: b.date)))
                     }
                     return (.bmi, .empty)
                 } catch {
+                    print("[Wellness] bmi fetch failed: \(error)")
                     return (.bmi, .empty)
                 }
             }
@@ -581,21 +556,23 @@ final class WellnessViewModel {
                 do {
                     let bfHistory = try await bodyService.fetchBodyFat(days: 7)
                     if let latest = bfHistory.last {
-                        return (.bodyFat, .bodyFatResult(value: latest.value, date: latest.date))
+                        return (.bodyFat, .vitalSample(VitalSample(value: latest.value, date: latest.date)))
                     }
                     return (.bodyFat, .empty)
                 } catch {
+                    print("[Wellness] bodyFat fetch failed: \(error)")
                     return (.bodyFat, .empty)
                 }
             }
 
-            // --- SpO2 ---
+            // --- SpO2 (value is decimal fraction, e.g. 0.98 = 98%) ---
             group.addTask {
                 guard !Task.isCancelled else { return (.spo2, .empty) }
                 do {
                     let sample = try await vitalsService.fetchLatestSpO2(withinDays: 7)
                     return (.spo2, .vitalSample(sample))
                 } catch {
+                    print("[Wellness] spo2 fetch failed: \(error)")
                     return (.spo2, .vitalSample(nil))
                 }
             }
@@ -607,6 +584,7 @@ final class WellnessViewModel {
                     let history = try await vitalsService.fetchSpO2Collection(days: 7)
                     return (.spo2History, .vitalHistory(history))
                 } catch {
+                    print("[Wellness] spo2History fetch failed: \(error)")
                     return (.spo2History, .vitalHistory([]))
                 }
             }
@@ -618,6 +596,7 @@ final class WellnessViewModel {
                     let sample = try await vitalsService.fetchLatestRespiratoryRate(withinDays: 7)
                     return (.respRate, .vitalSample(sample))
                 } catch {
+                    print("[Wellness] respRate fetch failed: \(error)")
                     return (.respRate, .vitalSample(nil))
                 }
             }
@@ -629,6 +608,7 @@ final class WellnessViewModel {
                     let history = try await vitalsService.fetchRespiratoryRateCollection(days: 7)
                     return (.respRateHistory, .vitalHistory(history))
                 } catch {
+                    print("[Wellness] respRateHistory fetch failed: \(error)")
                     return (.respRateHistory, .vitalHistory([]))
                 }
             }
@@ -640,6 +620,7 @@ final class WellnessViewModel {
                     let sample = try await vitalsService.fetchLatestVO2Max(withinDays: 180)
                     return (.vo2Max, .vitalSample(sample))
                 } catch {
+                    print("[Wellness] vo2Max fetch failed: \(error)")
                     return (.vo2Max, .vitalSample(nil))
                 }
             }
@@ -651,6 +632,7 @@ final class WellnessViewModel {
                     let history = try await vitalsService.fetchVO2MaxHistory(days: 90)
                     return (.vo2MaxHistory, .vitalHistory(history))
                 } catch {
+                    print("[Wellness] vo2MaxHistory fetch failed: \(error)")
                     return (.vo2MaxHistory, .vitalHistory([]))
                 }
             }
@@ -662,6 +644,7 @@ final class WellnessViewModel {
                     let sample = try await vitalsService.fetchLatestHeartRateRecovery(withinDays: 30)
                     return (.hrRecovery, .vitalSample(sample))
                 } catch {
+                    print("[Wellness] hrRecovery fetch failed: \(error)")
                     return (.hrRecovery, .vitalSample(nil))
                 }
             }
@@ -673,6 +656,7 @@ final class WellnessViewModel {
                     let history = try await vitalsService.fetchHeartRateRecoveryHistory(days: 90)
                     return (.hrRecoveryHistory, .vitalHistory(history))
                 } catch {
+                    print("[Wellness] hrRecoveryHistory fetch failed: \(error)")
                     return (.hrRecoveryHistory, .vitalHistory([]))
                 }
             }
@@ -684,6 +668,7 @@ final class WellnessViewModel {
                     let sample = try await vitalsService.fetchLatestWristTemperature(withinDays: 7)
                     return (.wristTemp, .vitalSample(sample))
                 } catch {
+                    print("[Wellness] wristTemp fetch failed: \(error)")
                     return (.wristTemp, .vitalSample(nil))
                 }
             }
@@ -695,6 +680,7 @@ final class WellnessViewModel {
                     let baseline = try await vitalsService.fetchWristTemperatureBaseline(days: 14)
                     return (.wristTempBaseline, .baselineResult(baseline))
                 } catch {
+                    print("[Wellness] wristTempBaseline fetch failed: \(error)")
                     return (.wristTempBaseline, .baselineResult(nil))
                 }
             }
@@ -706,6 +692,7 @@ final class WellnessViewModel {
                     let history = try await vitalsService.fetchWristTemperatureCollection(days: 7)
                     return (.wristTempHistory, .vitalHistory(history))
                 } catch {
+                    print("[Wellness] wristTempHistory fetch failed: \(error)")
                     return (.wristTempHistory, .vitalHistory([]))
                 }
             }
@@ -721,20 +708,20 @@ final class WellnessViewModel {
                     results.sleepWeekly = weekly
                 case let (.condition, .conditionResult(score, latestHRV, latestRHR)):
                     results.condition = score
-                    if let hrv = latestHRV { results.latestHRV = (value: hrv.0, date: hrv.1) }
-                    if let rhr = latestRHR { results.latestRHR = (value: rhr.0, date: rhr.1) }
+                    results.latestHRV = latestHRV
+                    results.latestRHR = latestRHR
                 case let (.hrvWeekly, .hrvWeeklyResult(history)):
                     results.hrvWeekly = history
                 case let (.rhrWeekly, .rhrWeeklyResult(history)):
                     results.rhrWeekly = history
-                case let (.weight, .weightResult(value, date)):
-                    results.latestWeight = (value, date)
+                case let (.weight, .vitalSample(sample)):
+                    results.latestWeight = sample
                 case let (.weightHistory, .weightHistoryResult(history)):
                     results.weightHistory = history
-                case let (.bmi, .bmiResult(value, date)):
-                    results.latestBMI = (value, date)
-                case let (.bodyFat, .bodyFatResult(value, date)):
-                    results.latestBodyFat = (value, date)
+                case let (.bmi, .vitalSample(sample)):
+                    results.latestBMI = sample
+                case let (.bodyFat, .vitalSample(sample)):
+                    results.latestBodyFat = sample
                 case let (.spo2, .vitalSample(sample)):
                     results.latestSpO2 = sample
                 case let (.spo2History, .vitalHistory(history)):
@@ -771,8 +758,6 @@ final class WellnessViewModel {
             results.weightWeekAgo = weekAgoWeight?.value
         }
 
-        // TODO: Body fat weekly delta requires separate history fetch — bodyFatChange is always nil for now
-
         return results
     }
 
@@ -793,7 +778,7 @@ final class WellnessViewModel {
         let isStale = daysSince >= Self.staleDays
 
         var changeStr: String?
-        var changePositive: Bool?
+        var changePositive: Bool? // Note: true means numerically positive, not necessarily "good" (e.g. weight increase)
         if let change, !isHistorical { // Correction #24: skip change for historical data
             let absChange = abs(change)
             if absChange >= 0.1 {
@@ -836,19 +821,12 @@ final class WellnessViewModel {
             weightChange = nil
         }
 
-        let bodyFatChange: Double?
-        if let current = results.latestBodyFat {
-            // Simplified: use available data, nil if insufficient
-            bodyFatChange = nil // Body fat weekly comparison requires separate fetch
-        } else {
-            bodyFatChange = nil
-        }
-
-        guard weightChange != nil || bodyFatChange != nil else { return nil }
+        // bodyFatChange requires weekly history fetch — not yet implemented
+        guard weightChange != nil else { return nil }
 
         return CalculateWellnessScoreUseCase.BodyTrend(
             weightChange: weightChange,
-            bodyFatChange: bodyFatChange
+            bodyFatChange: nil
         )
     }
 

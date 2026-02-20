@@ -1,6 +1,16 @@
 import SwiftUI
 
 extension WellnessScore.Status {
+    var label: String {
+        switch self {
+        case .excellent: "Excellent"
+        case .good:      "Good"
+        case .fair:      "Fair"
+        case .tired:     "Tired"
+        case .warning:   "Warning"
+        }
+    }
+
     var color: Color {
         switch self {
         case .excellent: DS.Color.wellnessExcellent
