@@ -22,11 +22,18 @@ Three similar lines of code is better than a premature abstraction. Only extract
 
 ## Review Process
 
-1. Run `git diff` to see changes
+1. Run `git diff HEAD` (or `git diff main...HEAD` if empty) to see changes — **한 번만 실행**
 2. Look for unnecessary complexity
 3. Check if simpler alternatives exist
 4. Verify all added code is actually used
 5. Assess naming clarity
+
+## CRITICAL: Output Size Control
+
+- Tool call을 최소화합니다. `git diff` 1회 + 필요 시 `Read` 몇 회만 실행
+- 불필요한 `Grep`/`Glob` 탐색을 하지 않습니다
+- **최종 응답은 findings만 포함** — 분석 과정, 읽은 파일 내용, 중간 사고를 포함하지 않습니다
+- 발견사항이 없으면 한 줄로 "No simplicity issues found." 만 출력합니다
 
 ## Output Format
 

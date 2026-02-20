@@ -9,6 +9,10 @@
 - HealthKit workout UUIDs stored as String in SwiftData models
 
 ### Confirmed Safe Patterns
+- VitalsQueryService applies validRange guards on every fetchLatest/fetchCollection path — spo2 (0.70-1.0), respRate (4-60), vo2Max (10-90), hrRecovery (0-120), wristTemp (30-42°C)
+- CalculateWellnessScoreUseCase guards totalWeight > 0 and checks .isNaN/.isInfinite on rawScore before returning
+- WellnessScore.init clamps incoming score with max(0, min(100, score)) — display-time overflow impossible
+- WellnessViewModel: no print()/NSLog()/errorMessage=localizedDescription in any of the 8 new files
 - HealthKit BPM range validated (20-300 bpm) in HeartRateQueryService.validatedSample AND WorkoutQueryService.validHR
 - HealthKit distance validated (< 500km) in WorkoutQueryService.extractDistance
 - HealthKit pace validated (60-3600 sec/km) in WorkoutQueryService.extractPaceAndSpeed
@@ -22,6 +26,10 @@
 - calories field passed to ExerciseListItem.calories has no display-time bounds guard — only guarded in ExerciseSessionDetailView, not in UnifiedWorkoutRow compactTrailing/fullTrailing
 
 ### Known Gaps (P3 level)
+- WellnessViewModel.formatSleepMinutes() uses Int(minutes) % 60 without guarding minutes >= 0 — negative input (corrupted HealthKit sleep record) produces negative display string like "-1m"
+- VitalsQueryService hrRecoveryRange lower bound is 0.0, not > 0. A 0 bpm HRR sample passes validation and scores as valid data. Physiologically 0 bpm drop = no recovery, arguably a sensor/data error.
+- WellnessViewModel weight change calculation (line 769) uses >= 6 days threshold for "week-ago" weight without capping the upper window — a weight entry 90 days old will be accepted as "7-day change", violating Correction #51's valid comparison window principle
+- subScoreCard/subScoreRow (WellnessScoreDetailView) compute `fraction = CGFloat(score ?? 0) / 100.0` without clamping — if a score > 100 were passed in, the progress bar would overflow its bounds. WellnessScore.init already clamps 0-100 so risk is low but no defence-in-depth at rendering site
 - UnifiedWorkoutRow compactTrailing/fullTrailing renders item.calories without an upper-bound guard (no < 5000 check). The `calories` field on ExerciseListItem is sourced from `record.bestCalories` (manual/HK) or `workout.calories` (HK). HK path is already validated upstream but manual path relies on input validation at entry time. Risk: a corrupted/absurd calorie value would display in the row list but not in the session detail header (where the guard exists).
 - InjuryRecord.startDate has no lower-bound date validation — a CloudKit-injected record with startDate in the distant past (e.g. year 1900) will produce an arbitrarily large durationDays value and distort statistics. `isFuture` only validates the upper bound.
 - InjuryViewModel.applyUpdate() resets isSaving = false implicitly via early return — but in success path the flag is never reset (isSaving is only set in createValidatedRecord, not applyUpdate). This is an inconsistency but not exploitable since applyUpdate does not set isSaving = true.

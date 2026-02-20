@@ -49,6 +49,15 @@
 - `comparisonWindowDays` negative values not validated in `computeVolumeComparisons` — caller could pass 0 or negative; `calendar.date(byAdding: .day, value: 0/negative)` returns unexpected windows.
 - WellnessView edit sheet for injury has no `isSaving` reset path after `applyUpdate` — `isSaving` is always false in `applyUpdate` because it was never set true, making the guard vestigial.
 
+## Patterns: WellnessViewModel parallel fetch pattern
+- `fetchAllData()` uses `withTaskGroup` returning `(FetchKey, FetchValue)` pairs — race-free because `FetchResults` is a local `var` mutated only in the `for await` loop (single consumer). No concurrency risk on the struct.
+- `weightWeekAgo` is computed from `weightHistory` (fetched over 7 days) after the group closes. But `fetchLatestWeight(withinDays: 30)` can return a sample from up to 30 days ago while the history window is only 7 days — no overlap, so `weightWeekAgo` is always `nil` when the latest weight is >7 days old. The change indicator silently shows nothing rather than nil-gating.
+- `BodyCompositionQueryService.fetchLatestWeight(withinDays:)` explicitly excludes today (end = startOfDay), meaning a weight logged today is never returned. `WellnessViewModel` calls it for its weight card without any today-specific fallback path (unlike `DashboardViewModel`). Today's weight is invisible.
+- Body fat `bodyFatChange` is hardcoded `nil` despite `results.latestBodyFat` being populated — the `if let current` branch is dead code and the `BodyTrend` is always created with `bodyFatChange: nil`.
+- Missing stale-comparison threshold (Correction #51): weight change is shown regardless of how old `weightWeekAgo` is. A 7-day window capped at 6+ days means the comparison sample could be from up to day 7, but the "latest" sample from `fetchLatestWeight(withinDays: 30)` could be 30 days old — making the delta meaningless.
+- `totalSources = 8` is hardcoded but the actual counted failure paths are: sleep, condition, weight, spo2, respRate, vo2Max, hrRecovery, wristTemp = 8. BMI, HRV card, RHR card, body fat are NOT counted. Mismatch between "sources counted" and "sources displayed" could mislead users.
+- `BodyCompositionQueryService.fetchWeight(days:)` and `fetchLatestWeight(withinDays:)` have no value range validation (0-500 kg). `DashboardViewModel` does its own guard at line 435-436 but `WellnessViewModel` passes the raw value through unchecked.
+
 ## Patterns: View-local item merge (ExerciseListSection pattern)
 - buildItems() + rebuildRecordIndex() called from same .task(id:) — items and index can briefly desync if task is cancelled after first call but before second
 - Count-only task ID misses same-count replacements (delete+add in same batch), causing stale rendered rows until next count change

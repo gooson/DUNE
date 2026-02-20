@@ -118,6 +118,29 @@ Call recalculate in .task and .onChange, not in body
 - Impact: With List showing 10 exercise rows × EquipmentIllustrationView = 40-50 Path allocations
 - Fix: Reuse single Path with `.removeAllPoints()` between iterations
 
+### Nested TaskGroup — Sleep Weekly Pattern
+- `fetchAllData()` spawns a `group.addTask` for sleep weekly, which itself spawns `withThrowingTaskGroup` with 7 inner tasks
+- 7 separate HealthKit queries for individual days when a single date-ranged query would suffice
+- Each inner task calls `sleepService.fetchSleepStages(for:)` — if that method uses an `HKSampleQueryDescriptor` per call, this is 7 serial HK round-trips hidden inside parallel tasks
+- Fix: use a single `fetchSleepStages(from: start, to: end)` range query; split results by day in memory
+
+### Calendar.current in SwiftUI Body (VitalCard staleLabel)
+- `VitalCard.staleLabel` is a `var` (not @ViewBuilder func), evaluated every render
+- Calls `Calendar.current.dateComponents([.day], from: data.lastUpdated, to: Date())` per card per render
+- With 8–10 visible VitalCards in LazyVGrid: 8–10 Calendar computations per scroll frame
+- Fix: pre-compute `daysSinceUpdate: Int` on `VitalCardData` at build time (in `buildCard()`)
+
+### color.opacity() in MiniSparklineView body
+- `MiniSparklineView.body` calls `color.opacity(0.15)`, `color.opacity(0.02)`, `color.opacity(0.6)` on every render
+- These create new Color values per render call
+- With 8–10 VitalCards each containing a sparkline, = 24–30 Color allocations per scroll frame
+- Fix: hoist to stored `let` properties initialized from the passed `color` parameter
+
+### ProgressRingView color.opacity() in body during animation
+- `ProgressRingView.body` calls `ringColor.opacity(0.15)` and `ringColor.opacity(0.6)` inside the animation loop
+- During the score count-up animation (~20–30 frames at 60fps), these are recomputed every frame
+- Fix: precompute `private let trackColor: Color` and `private let arcColorDim: Color` in init
+
 ### Path Template Caching
 - Path construction with CGRect is expensive (addEllipse, addRoundedRect)
 - Creating `bodyOutline(width:height:)` on every GeometryReader layout = repeated allocation

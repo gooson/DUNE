@@ -80,6 +80,13 @@
 - **`InjuryWarningBanner` recomputes `maxSeverity` inline (P3)**: `conflicts.map(\.severity).max()` is computed in body, same value already available from `CheckInjuryConflictUseCase.Output.maxSeverity`. Banner could accept `maxSeverity` directly or use `Output` struct.
 - **`hasConflict` and `maxSeverity` on `Output` are unused at call sites (P2 dead)**: `ActivityView.injuryConflicts` extracts `.conflicts` directly; `.hasConflict` and `.maxSeverity` on `Output` are never read.
 
+### 2026-02-20: Wellness Tab Redesign v2 Review
+- **Metric value formatting switch (P1 DRY)**: `switch category` → formatted string appears in 4 places: `HealthMetric+View.formattedNumericValue`, `MetricSummaryHeader.formatValue`, `MetricHighlightsView.formattedValue`, `AllDataView.formattedValue`. All 4 differ slightly (units embedded vs. separate; spo2 ×100). Extract to `HealthMetric.Category.formatValue(_:)` in `HealthMetric+View.swift`. 4 occurrences = must extract (rule #37).
+- **`buildBodyTrend` dead if/else branch (P2 dead)**: `bodyFatChange` is set to `nil` unconditionally inside a guard that depends on it never being non-nil. The `if let current = results.latestBodyFat` branch is dead — it always assigns `nil`. Remove the if/else; just `let bodyFatChange: Double? = nil` with a comment.
+- **`FetchKey/FetchValue` enum pattern (P2)**: 20 tasks × (key, value) pair dispatched and re-matched in a single 50-case switch. Pattern is justified for 20 parallel queries (Correction #5), but the enum-match coupling is fragile — `.vitalSample(nil)` is indistinguishable from `.vitalHistory([])` only by the matched key. A struct-per-result approach would eliminate the `default: break` fallthrough. Not a blocker for this feature but worth noting.
+- **`subScoreCard` vs `subScoreRow` duplication (P2)**: iPad card and iPhone row render the same data (label/weight/score/color/icon/description) with only visual density differences. Content is 3 fixed items; could share a model array + unified renderer. 2 renderers for 2 layouts is acceptable, but the 6-parameter signature is repeated 3 times each = 6 call sites. Consider a `SubScoreItem` value type.
+- **`bodyFatWeekAgo` in `FetchResults` is always nil (P3 dead)**: `FetchResults.bodyFatWeekAgo` is declared but never assigned — `weightWeekAgo` is computed post-fetch but the analogous `bodyFatWeekAgo` computation was never added.
+
 ### 2026-02-17: Prior Findings
 - Muscle Volume Calculation extracted to shared extension (resolved)
 - Formula/Metric rawValue display: acceptable for technical context
