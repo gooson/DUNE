@@ -14,11 +14,14 @@ struct HealthMetric: Identifiable, Hashable, Sendable {
     enum Category: String, Sendable, CaseIterable {
         case hrv
         case rhr
+        case heartRate
         case sleep
         case exercise
         case steps
         case weight
         case bmi
+        case bodyFat
+        case leanBodyMass
         case spo2
         case respiratoryRate
         case vo2Max

@@ -5,6 +5,12 @@ protocol HeartRateQuerying: Sendable {
     func fetchHeartRateSamples(forWorkoutID workoutID: String) async throws -> [HeartRateSample]
     /// Fetch downsampled heart rate summary (avg/max/min + samples) for a workout.
     func fetchHeartRateSummary(forWorkoutID workoutID: String) async throws -> HeartRateSummary
+    /// Fetch the most recent heart rate sample within the given day window.
+    func fetchLatestHeartRate(withinDays days: Int) async throws -> VitalSample?
+    /// Fetch daily average heart rate samples for sparkline display.
+    func fetchHeartRateHistory(days: Int) async throws -> [VitalSample]
+    /// Compute heart rate zone distribution for a workout.
+    func fetchHeartRateZones(forWorkoutID workoutID: String, maxHR: Double) async throws -> [HeartRateZone]
 }
 
 struct HeartRateQueryService: HeartRateQuerying, Sendable {
@@ -65,6 +71,85 @@ struct HeartRateQueryService: HeartRateQuerying, Sendable {
             return HeartRateSummary(average: 0, max: 0, min: 0, samples: downsampled)
         }
         return HeartRateSummary(average: avg, max: maxBPM, min: minBPM, samples: downsampled)
+    }
+
+    // MARK: - General Heart Rate (non-workout)
+
+    private static let bpmUnit = HKUnit.count().unitDivided(by: .minute())
+    private static let hrValidRange: ClosedRange<Double> = 20...300
+
+    func fetchLatestHeartRate(withinDays days: Int) async throws -> VitalSample? {
+        let quantityType = HKQuantityType(.heartRate)
+        try await manager.ensureNotDenied(for: quantityType)
+
+        let calendar = Calendar.current
+        let endDate = Date()
+        guard let startDate = calendar.date(byAdding: .day, value: -days, to: endDate) else {
+            return nil
+        }
+
+        let predicate = HKQuery.predicateForSamples(
+            withStart: startDate,
+            end: endDate,
+            options: .strictStartDate
+        )
+
+        let descriptor = HKSampleQueryDescriptor(
+            predicates: [.quantitySample(type: quantityType, predicate: predicate)],
+            sortDescriptors: [SortDescriptor(\.startDate, order: .reverse)],
+            limit: 1
+        )
+
+        let samples = try await manager.execute(descriptor)
+        guard let sample = samples.first else { return nil }
+
+        let value = sample.quantity.doubleValue(for: Self.bpmUnit)
+        guard Self.hrValidRange.contains(value) else { return nil }
+
+        return VitalSample(value: value, date: sample.startDate)
+    }
+
+    func fetchHeartRateHistory(days: Int) async throws -> [VitalSample] {
+        let quantityType = HKQuantityType(.heartRate)
+        try await manager.ensureNotDenied(for: quantityType)
+
+        let calendar = Calendar.current
+        let endDate = Date()
+        guard let startDate = calendar.date(byAdding: .day, value: -days, to: endDate) else {
+            return []
+        }
+
+        // Use statistics collection for daily averages (auto-dedup)
+        let predicate = HKQuery.predicateForSamples(
+            withStart: startDate,
+            end: endDate,
+            options: .strictStartDate
+        )
+
+        let interval = DateComponents(day: 1)
+        let query = HKStatisticsCollectionQueryDescriptor(
+            predicate: .quantitySample(type: quantityType, predicate: predicate),
+            options: .discreteAverage,
+            anchorDate: calendar.startOfDay(for: startDate),
+            intervalComponents: interval
+        )
+
+        let collection = try await manager.executeStatisticsCollection(query)
+        var results: [VitalSample] = []
+
+        collection.enumerateStatistics(from: startDate, to: endDate) { stats, _ in
+            if let avg = stats.averageQuantity()?.doubleValue(for: Self.bpmUnit),
+               Self.hrValidRange.contains(avg) {
+                results.append(VitalSample(value: avg, date: stats.startDate))
+            }
+        }
+
+        return results.sorted { $0.date < $1.date }
+    }
+
+    func fetchHeartRateZones(forWorkoutID workoutID: String, maxHR: Double) async throws -> [HeartRateZone] {
+        let samples = try await fetchHeartRateSamples(forWorkoutID: workoutID)
+        return HeartRateZoneCalculator.computeZones(samples: samples, maxHR: maxHR)
     }
 
     // MARK: - Validation

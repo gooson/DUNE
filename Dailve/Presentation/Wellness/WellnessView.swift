@@ -21,10 +21,10 @@ struct WellnessView: View {
 
     var body: some View {
         Group {
-            if viewModel.isLoading && viewModel.vitalCards.isEmpty && viewModel.wellnessScore == nil {
+            if viewModel.isLoading && viewModel.physicalCards.isEmpty && viewModel.activeCards.isEmpty && viewModel.wellnessScore == nil {
                 ProgressView()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else if viewModel.vitalCards.isEmpty && viewModel.wellnessScore == nil && !viewModel.isLoading {
+            } else if viewModel.physicalCards.isEmpty && viewModel.activeCards.isEmpty && viewModel.wellnessScore == nil && !viewModel.isLoading {
                 EmptyStateView(
                     icon: "leaf.fill",
                     title: "No Wellness Data",
@@ -122,6 +122,9 @@ struct WellnessView: View {
         .navigationDestination(for: HealthMetric.self) { metric in
             MetricDetailView(metric: metric)
         }
+        .navigationDestination(for: AllDataDestination.self) { destination in
+            AllDataView(category: destination.category)
+        }
         .navigationDestination(for: BodyHistoryDestination.self) { _ in
             BodyHistoryDetailView(viewModel: bodyViewModel)
         }
@@ -181,14 +184,38 @@ struct WellnessView: View {
                     )
                 }
 
-                // 2-column grid
-                if !viewModel.vitalCards.isEmpty {
-                    LazyVGrid(columns: gridColumns, spacing: DS.Spacing.md) {
-                        ForEach(viewModel.vitalCards) { card in
-                            NavigationLink(value: card.metric) {
-                                VitalCard(data: card)
+                // Physical section
+                if !viewModel.physicalCards.isEmpty {
+                    WellnessSectionGroup(
+                        title: "Physical",
+                        icon: "figure.stand",
+                        iconColor: DS.Color.body
+                    ) {
+                        LazyVGrid(columns: gridColumns, spacing: DS.Spacing.md) {
+                            ForEach(viewModel.physicalCards) { card in
+                                NavigationLink(value: card.metric) {
+                                    VitalCard(data: card)
+                                }
+                                .buttonStyle(.plain)
                             }
-                            .buttonStyle(.plain)
+                        }
+                    }
+                }
+
+                // Active Indicators section
+                if !viewModel.activeCards.isEmpty {
+                    WellnessSectionGroup(
+                        title: "Active Indicators",
+                        icon: "heart.text.square",
+                        iconColor: DS.Color.vitals
+                    ) {
+                        LazyVGrid(columns: gridColumns, spacing: DS.Spacing.md) {
+                            ForEach(viewModel.activeCards) { card in
+                                NavigationLink(value: card.metric) {
+                                    VitalCard(data: card)
+                                }
+                                .buttonStyle(.plain)
+                            }
                         }
                     }
                 }

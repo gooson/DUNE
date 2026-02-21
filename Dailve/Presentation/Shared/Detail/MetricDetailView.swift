@@ -306,6 +306,47 @@ struct MetricDetailView: View {
                 scrollPosition: $viewModel.scrollPosition
             )
 
+        case .heartRate:
+            if !viewModel.rangeData.isEmpty {
+                RangeBarChartView(
+                    data: viewModel.rangeData,
+                    period: viewModel.selectedPeriod,
+                    tintColor: DS.Color.heartRate,
+                    trendLine: trend,
+                    scrollPosition: $viewModel.scrollPosition
+                )
+            } else {
+                DotLineChartView(
+                    data: viewModel.chartData,
+                    baseline: nil,
+                    yAxisLabel: "bpm",
+                    timePeriod: viewModel.selectedPeriod,
+                    tintColor: DS.Color.heartRate,
+                    trendLine: trend,
+                    scrollPosition: $viewModel.scrollPosition
+                )
+            }
+
+        case .bodyFat:
+            AreaLineChartView(
+                data: viewModel.chartData,
+                period: viewModel.selectedPeriod,
+                tintColor: DS.Color.body,
+                unitSuffix: "%",
+                trendLine: trend,
+                scrollPosition: $viewModel.scrollPosition
+            )
+
+        case .leanBodyMass:
+            AreaLineChartView(
+                data: viewModel.chartData,
+                period: viewModel.selectedPeriod,
+                tintColor: DS.Color.body,
+                unitSuffix: "kg",
+                trendLine: trend,
+                scrollPosition: $viewModel.scrollPosition
+            )
+
         case .wristTemperature:
             AreaLineChartView(
                 data: viewModel.chartData,

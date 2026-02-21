@@ -67,11 +67,14 @@ struct MetricHighlightsView: View {
         switch category {
         case .hrv:               String(format: "%.0f ms", value)
         case .rhr:               String(format: "%.0f bpm", value)
+        case .heartRate:         String(format: "%.0f bpm", value)
         case .sleep:             value.hoursMinutesFormatted
         case .exercise:          String(format: "%.0f min", value)
         case .steps:             String(format: "%.0f", value)
         case .weight:            String(format: "%.1f kg", value)
         case .bmi:               String(format: "%.1f", value)
+        case .bodyFat:           String(format: "%.1f%%", value)
+        case .leanBodyMass:      String(format: "%.1f kg", value)
         case .spo2:              String(format: "%.0f%%", value * 100)
         case .respiratoryRate:   String(format: "%.0f breaths/min", value)
         case .vo2Max:            String(format: "%.1f ml/kg/min", value)

@@ -17,6 +17,7 @@ final class AllDataViewModel {
     private let stepsService: StepsQuerying
     private let workoutService: WorkoutQuerying
     private let bodyService: BodyCompositionQuerying
+    private let heartRateService: HeartRateQuerying
     private let vitalsService: VitalsQuerying
 
     private var currentPage = 0
@@ -28,6 +29,7 @@ final class AllDataViewModel {
         stepsService: StepsQuerying? = nil,
         workoutService: WorkoutQuerying? = nil,
         bodyService: BodyCompositionQuerying? = nil,
+        heartRateService: HeartRateQuerying? = nil,
         vitalsService: VitalsQuerying? = nil,
         healthKitManager: HealthKitManager = .shared
     ) {
@@ -36,6 +38,7 @@ final class AllDataViewModel {
         self.stepsService = stepsService ?? StepsQueryService(manager: healthKitManager)
         self.workoutService = workoutService ?? WorkoutQueryService(manager: healthKitManager)
         self.bodyService = bodyService ?? BodyCompositionQueryService(manager: healthKitManager)
+        self.heartRateService = heartRateService ?? HeartRateQueryService(manager: healthKitManager)
         self.vitalsService = vitalsService ?? VitalsQueryService(manager: healthKitManager)
     }
 
@@ -179,6 +182,24 @@ final class AllDataViewModel {
             let start = Calendar.current.date(byAdding: .day, value: -fromDaysAgo, to: Date()) ?? Date()
             let cutoff = Calendar.current.date(byAdding: .day, value: -toDaysAgo, to: Date()) ?? Date()
             let samples = try await bodyService.fetchBMI(start: start, end: cutoff)
+            return samples
+                .map { ChartDataPoint(date: $0.date, value: $0.value) }
+                .sorted(by: { $0.date > $1.date })
+
+        case .heartRate:
+            let samples = try await heartRateService.fetchHeartRateHistory(days: fromDaysAgo)
+            return samples
+                .map { ChartDataPoint(date: $0.date, value: $0.value) }
+                .sorted(by: { $0.date > $1.date })
+
+        case .bodyFat:
+            let samples = try await bodyService.fetchBodyFat(days: fromDaysAgo)
+            return samples
+                .map { ChartDataPoint(date: $0.date, value: $0.value) }
+                .sorted(by: { $0.date > $1.date })
+
+        case .leanBodyMass:
+            let samples = try await bodyService.fetchLeanBodyMass(days: fromDaysAgo)
             return samples
                 .map { ChartDataPoint(date: $0.date, value: $0.value) }
                 .sorted(by: { $0.date > $1.date })

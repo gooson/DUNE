@@ -9,7 +9,9 @@ final class WellnessViewModel {
     // MARK: - Published State
 
     var wellnessScore: WellnessScore?
-    var vitalCards: [VitalCardData] = []
+    var physicalCards: [VitalCardData] = []
+    var activeCards: [VitalCardData] = []
+
     var isLoading = false
     var partialFailureMessage: String?
 
@@ -27,6 +29,7 @@ final class WellnessViewModel {
     private let bodyService: BodyCompositionQuerying
     private let hrvService: HRVQuerying
     private let vitalsService: VitalsQuerying
+    private let heartRateService: HeartRateQuerying
     private let wellnessScoreUseCase: WellnessScoreCalculating
     private let sleepScoreUseCase: SleepScoreCalculating
     private let conditionScoreUseCase: ConditionScoreCalculating
@@ -43,6 +46,7 @@ final class WellnessViewModel {
         bodyService: BodyCompositionQuerying? = nil,
         hrvService: HRVQuerying? = nil,
         vitalsService: VitalsQuerying? = nil,
+        heartRateService: HeartRateQuerying? = nil,
         wellnessScoreUseCase: WellnessScoreCalculating? = nil,
         sleepScoreUseCase: SleepScoreCalculating? = nil,
         conditionScoreUseCase: ConditionScoreCalculating? = nil
@@ -52,6 +56,7 @@ final class WellnessViewModel {
         self.bodyService = bodyService ?? BodyCompositionQueryService(manager: manager)
         self.hrvService = hrvService ?? HRVQueryService(manager: manager)
         self.vitalsService = vitalsService ?? VitalsQueryService(manager: manager)
+        self.heartRateService = heartRateService ?? HeartRateQueryService(manager: manager)
         self.wellnessScoreUseCase = wellnessScoreUseCase ?? CalculateWellnessScoreUseCase()
         self.sleepScoreUseCase = sleepScoreUseCase ?? CalculateSleepScoreUseCase()
         self.conditionScoreUseCase = conditionScoreUseCase ?? CalculateConditionScoreUseCase()
@@ -182,6 +187,53 @@ final class WellnessViewModel {
             ))
         }
 
+        // --- Body Fat ---
+        if let bf = results.latestBodyFat {
+            let sparkline = results.bodyFatHistory.map(\.value)
+            cards.append(buildCard(
+                category: .bodyFat,
+                title: "Body Fat",
+                rawValue: bf.value,
+                formattedValue: String(format: "%.1f", bf.value),
+                unit: "%",
+                change: nil,
+                sparkline: sparkline,
+                date: bf.date,
+                isHistorical: false
+            ))
+        }
+
+        // --- Lean Body Mass ---
+        if let lbm = results.latestLeanBodyMass {
+            cards.append(buildCard(
+                category: .leanBodyMass,
+                title: "Lean Body Mass",
+                rawValue: lbm.value,
+                formattedValue: String(format: "%.1f", lbm.value),
+                unit: "kg",
+                change: nil,
+                sparkline: [],
+                date: lbm.date,
+                isHistorical: false
+            ))
+        }
+
+        // --- Heart Rate (general) ---
+        if let hr = results.latestHeartRate {
+            let sparkline = results.heartRateHistory.map(\.value)
+            cards.append(buildCard(
+                category: .heartRate,
+                title: "Heart Rate",
+                rawValue: hr.value,
+                formattedValue: String(format: "%.0f", hr.value),
+                unit: "bpm",
+                change: nil,
+                sparkline: sparkline,
+                date: hr.date,
+                isHistorical: false
+            ))
+        }
+
         // --- SpO2 (HealthKit returns decimal fraction: 0.98 = 98%) ---
         if let spo2 = results.latestSpO2 {
             let displayValue = spo2.value * 100
@@ -280,14 +332,16 @@ final class WellnessViewModel {
             bodyTrend: bodyTrend
         ))
 
-        // Dynamic sort: cards with data sorted by recency (most recent first)
-        vitalCards = cards.sorted { a, b in
+        // Sort and split into sections (Correction #88: atomic update)
+        let sortedCards = cards.sorted { a, b in
             if a.isStale != b.isStale { return !a.isStale }
             return a.lastUpdated > b.lastUpdated
         }
+        physicalCards = sortedCards.filter { $0.section == .physical }
+        activeCards = sortedCards.filter { $0.section == .active }
 
         // Partial failure message (Correction #25) — only for actual fetch errors, not missing data
-        let primarySources: Set<FetchKey> = [.sleep, .condition, .weight, .spo2, .respRate, .vo2Max, .hrRecovery, .wristTemp]
+        let primarySources: Set<FetchKey> = [.sleep, .condition, .weight, .heartRate, .spo2, .respRate, .vo2Max, .hrRecovery, .wristTemp]
         let failedSources = results.errorKeys.intersection(primarySources)
         if !failedSources.isEmpty, failedSources.count < primarySources.count {
             partialFailureMessage = "Some data could not be loaded (\(failedSources.count) of \(primarySources.count) sources)"
@@ -313,12 +367,17 @@ final class WellnessViewModel {
         var latestRHR: VitalSample?
         var hrvWeekly: [VitalSample] = []
         var rhrWeekly: [VitalSample] = []
+        // Heart Rate (general, non-workout)
+        var latestHeartRate: VitalSample?
+        var heartRateHistory: [VitalSample] = []
         // Body
         var latestWeight: VitalSample?
         var weightWeekAgo: Double?
         var weightHistory: [BodyCompositionSample] = []
         var latestBMI: VitalSample?
         var latestBodyFat: VitalSample?
+        var bodyFatHistory: [BodyCompositionSample] = []
+        var latestLeanBodyMass: VitalSample?
         // Vitals
         var latestSpO2: VitalSample?
         var spo2History: [VitalSample] = []
@@ -339,10 +398,14 @@ final class WellnessViewModel {
         case condition
         case hrvWeekly
         case rhrWeekly
+        case heartRate
+        case heartRateHistory
         case weight
         case weightHistory
         case bmi
         case bodyFat
+        case bodyFatHistory
+        case leanBodyMass
         case spo2
         case spo2History
         case respRate
@@ -365,6 +428,7 @@ final class WellnessViewModel {
         case vitalSample(VitalSample?)
         case vitalHistory([VitalSample])
         case weightHistoryResult([BodyCompositionSample])
+        case bodyCompositionHistory([BodyCompositionSample])
         case baselineResult(Double?)
         case empty
         case fetchError
@@ -374,7 +438,7 @@ final class WellnessViewModel {
         var results = FetchResults()
 
         await withTaskGroup(of: (FetchKey, FetchValue).self) { [
-            sleepService, bodyService, hrvService, vitalsService,
+            sleepService, bodyService, hrvService, vitalsService, heartRateService,
             sleepScoreUseCase, conditionScoreUseCase
         ] group in
 
@@ -554,6 +618,56 @@ final class WellnessViewModel {
                 }
             }
 
+            // --- Body Fat History (sparkline) ---
+            group.addTask {
+                guard !Task.isCancelled else { return (.bodyFatHistory, .empty) }
+                do {
+                    let history = try await bodyService.fetchBodyFat(days: 30)
+                    return (.bodyFatHistory, .bodyCompositionHistory(history))
+                } catch {
+                    print("[Wellness] bodyFatHistory fetch failed: \(error)")
+                    return (.bodyFatHistory, .fetchError)
+                }
+            }
+
+            // --- Lean Body Mass ---
+            group.addTask {
+                guard !Task.isCancelled else { return (.leanBodyMass, .empty) }
+                do {
+                    if let lbm = try await bodyService.fetchLatestLeanBodyMass(withinDays: 30) {
+                        return (.leanBodyMass, .vitalSample(VitalSample(value: lbm.value, date: lbm.date)))
+                    }
+                    return (.leanBodyMass, .empty)
+                } catch {
+                    print("[Wellness] leanBodyMass fetch failed: \(error)")
+                    return (.leanBodyMass, .fetchError)
+                }
+            }
+
+            // --- Heart Rate (general) ---
+            group.addTask {
+                guard !Task.isCancelled else { return (.heartRate, .empty) }
+                do {
+                    let sample = try await heartRateService.fetchLatestHeartRate(withinDays: 1)
+                    return (.heartRate, .vitalSample(sample))
+                } catch {
+                    print("[Wellness] heartRate fetch failed: \(error)")
+                    return (.heartRate, .fetchError)
+                }
+            }
+
+            // --- Heart Rate History (sparkline) ---
+            group.addTask {
+                guard !Task.isCancelled else { return (.heartRateHistory, .empty) }
+                do {
+                    let history = try await heartRateService.fetchHeartRateHistory(days: 7)
+                    return (.heartRateHistory, .vitalHistory(history))
+                } catch {
+                    print("[Wellness] heartRateHistory fetch failed: \(error)")
+                    return (.heartRateHistory, .fetchError)
+                }
+            }
+
             // --- SpO2 (value is decimal fraction, e.g. 0.98 = 98%) ---
             group.addTask {
                 guard !Task.isCancelled else { return (.spo2, .empty) }
@@ -715,6 +829,14 @@ final class WellnessViewModel {
                     results.latestBMI = sample
                 case let (.bodyFat, .vitalSample(sample)):
                     results.latestBodyFat = sample
+                case let (.bodyFatHistory, .bodyCompositionHistory(history)):
+                    results.bodyFatHistory = history
+                case let (.leanBodyMass, .vitalSample(sample)):
+                    results.latestLeanBodyMass = sample
+                case let (.heartRate, .vitalSample(sample)):
+                    results.latestHeartRate = sample
+                case let (.heartRateHistory, .vitalHistory(history)):
+                    results.heartRateHistory = history
                 case let (.spo2, .vitalSample(sample)):
                     results.latestSpO2 = sample
                 case let (.spo2History, .vitalHistory(history)):
@@ -794,6 +916,7 @@ final class WellnessViewModel {
         return VitalCardData(
             id: category.rawValue,
             category: category,
+            section: CardSection.section(for: category),
             title: title,
             value: formattedValue,
             unit: unit,

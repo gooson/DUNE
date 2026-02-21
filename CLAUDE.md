@@ -263,3 +263,8 @@
 90. **`Sendable` struct 내 튜플 사용 금지**: `(value: Double, date: Date)?` 대신 `VitalSample`처럼 명시적 `Sendable` struct 사용. 기존에 동일 구조의 Sendable 타입이 있으면 재활용
 91. **리뷰 에이전트 output 크기 제어 필수**: 에이전트 `.md`에 "tool call 최소화, findings만 출력" 지시. `max_turns: 6` 설정. diff 2000줄 이상이면 에이전트 대신 직접 리뷰
 92. **TaskGroup catch 블록에 에러 식별 로그 필수**: `print("[모듈명] {key} fetch failed: \(error)")` 패턴으로 어떤 쿼리가 실패했는지 식별 가능하게. silent catch 금지
+
+### 2026-02-21: Wellness Section Split 리뷰 교정
+
+93. **분류 switch에 `default:` 금지**: `CardSection.section(for:)` 등 enum case를 분류하는 switch에는 exhaustive case 나열 필수. `default:` 사용 시 새 case 추가가 컴파일 타임에 감지되지 않음
+94. **새 `HealthMetric.Category` 추가 시 10+ 파일 수정 필수**: 추가 시 체크리스트 — `HealthMetric+View.swift` (5개 switch), `MetricSummaryHeader`, `MetricHighlightsView`, `AllDataView`, `AllDataViewModel`, `MetricDetailView`, `MetricDetailViewModel`, `VitalCardData`, `WellnessViewModel`. `docs/solutions/architecture/2026-02-21-wellness-section-split-patterns.md` 참조

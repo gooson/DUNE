@@ -14,6 +14,8 @@ protocol BodyCompositionQuerying: Sendable {
     func fetchBMI(for date: Date) async throws -> Double?
     func fetchLatestBMI(withinDays days: Int) async throws -> (value: Double, date: Date)?
     func fetchBMI(start: Date, end: Date) async throws -> [BodyCompositionSample]
+    func fetchLatestBodyFat(withinDays days: Int) async throws -> (value: Double, date: Date)?
+    func fetchLatestLeanBodyMass(withinDays days: Int) async throws -> (value: Double, date: Date)?
 }
 
 struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
@@ -124,6 +126,22 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
             start: start,
             end: end
         )
+    }
+
+    func fetchLatestBodyFat(withinDays days: Int) async throws -> (value: Double, date: Date)? {
+        let samples = try await fetchBodyFat(days: days)
+        // fetchBodyFat returns newest first; value already * 100 (0-100%)
+        guard let latest = samples.first,
+              latest.value > 0, latest.value <= 100 else { return nil }
+        return (value: latest.value, date: latest.date)
+    }
+
+    func fetchLatestLeanBodyMass(withinDays days: Int) async throws -> (value: Double, date: Date)? {
+        let samples = try await fetchLeanBodyMass(days: days)
+        // Newest first; validate 0-300 kg range
+        guard let latest = samples.first,
+              latest.value > 0, latest.value <= 300 else { return nil }
+        return (value: latest.value, date: latest.date)
     }
 
     // MARK: - Private

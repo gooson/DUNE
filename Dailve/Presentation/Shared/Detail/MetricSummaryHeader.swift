@@ -118,11 +118,14 @@ struct MetricSummaryHeader: View {
         return switch category {
         case .hrv:               String(format: "%.0f", value)
         case .rhr:               String(format: "%.0f", value)
+        case .heartRate:         String(format: "%.0f", value)
         case .sleep:             value.hoursMinutesFormatted
         case .exercise:          String(format: "%.0f", value)
         case .steps:             String(format: "%.0f", value)
         case .weight:            String(format: "%.1f", value)
         case .bmi:               String(format: "%.1f", value)
+        case .bodyFat:           String(format: "%.1f", value)
+        case .leanBodyMass:      String(format: "%.1f", value)
         case .spo2:              String(format: "%.0f", value * 100)
         case .respiratoryRate:   String(format: "%.0f", value)
         case .vo2Max:            String(format: "%.1f", value)

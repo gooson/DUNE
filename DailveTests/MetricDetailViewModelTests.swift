@@ -52,6 +52,8 @@ private struct StubBodyService: BodyCompositionQuerying {
     func fetchBMI(for date: Date) async throws -> Double? { nil }
     func fetchLatestBMI(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
     func fetchBMI(start: Date, end: Date) async throws -> [BodyCompositionSample] { bmiSamples }
+    func fetchLatestBodyFat(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
+    func fetchLatestLeanBodyMass(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
 }
 
 // MARK: - Tests
