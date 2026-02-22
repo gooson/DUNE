@@ -14,6 +14,20 @@ final class DashboardViewModel {
     var isLoading = false
     var errorMessage: String?
     var lastUpdated: Date?
+    var coachingMessage: String?
+    var heroBaselineDetails: [BaselineDetail] = []
+    var pinnedCategories: [HealthMetric.Category]
+    var baselineDeltasByMetricID: [String: MetricBaselineDelta] = [:]
+
+    private(set) var pinnedMetrics: [HealthMetric] = []
+    private(set) var activeDaysThisWeek = 0
+    private let weeklyGoalDays = 5
+    var weeklyGoalProgress: (completedDays: Int, goalDays: Int) {
+        (completedDays: min(activeDaysThisWeek, weeklyGoalDays), goalDays: weeklyGoalDays)
+    }
+    var availablePinnedCategories: [HealthMetric.Category] {
+        HealthMetric.Category.allCases.filter { TodayPinnedMetricsStore.allowedCategories.contains($0) }
+    }
 
     // Cached filtered metrics (avoid recomputing in View body)
     private(set) var healthSignals: [HealthMetric] = []
@@ -22,8 +36,14 @@ final class DashboardViewModel {
     private static let healthCategories: Set<HealthMetric.Category> = [.hrv, .rhr, .weight, .bmi]
 
     private func invalidateFilteredMetrics() {
-        healthSignals = sortedMetrics.filter { Self.healthCategories.contains($0.category) }
-        activityMetrics = sortedMetrics.filter { !Self.healthCategories.contains($0.category) }
+        updatePinnedMetrics()
+        let pinnedIDs = Set(pinnedMetrics.map(\.id))
+        healthSignals = sortedMetrics.filter {
+            Self.healthCategories.contains($0.category) && !pinnedIDs.contains($0.id)
+        }
+        activityMetrics = sortedMetrics.filter {
+            !Self.healthCategories.contains($0.category) && !pinnedIDs.contains($0.id)
+        }
     }
 
     private let healthKitManager: HealthKitManager
@@ -33,6 +53,7 @@ final class DashboardViewModel {
     private let workoutService: WorkoutQuerying
     private let stepsService: StepsQuerying
     private let bodyService: BodyCompositionQuerying
+    private let pinnedMetricsStore: TodayPinnedMetricsStore
     private let scoreUseCase = CalculateConditionScoreUseCase()
 
     init(
@@ -41,7 +62,8 @@ final class DashboardViewModel {
         sleepService: SleepQuerying? = nil,
         workoutService: WorkoutQuerying? = nil,
         stepsService: StepsQuerying? = nil,
-        bodyService: BodyCompositionQuerying? = nil
+        bodyService: BodyCompositionQuerying? = nil,
+        pinnedMetricsStore: TodayPinnedMetricsStore = .shared
     ) {
         self.healthKitManager = healthKitManager
         self.hrvService = hrvService ?? HRVQueryService(manager: healthKitManager)
@@ -49,12 +71,36 @@ final class DashboardViewModel {
         self.workoutService = workoutService ?? WorkoutQueryService(manager: healthKitManager)
         self.stepsService = stepsService ?? StepsQueryService(manager: healthKitManager)
         self.bodyService = bodyService ?? BodyCompositionQueryService(manager: healthKitManager)
+        self.pinnedMetricsStore = pinnedMetricsStore
+        self.pinnedCategories = pinnedMetricsStore.load()
+    }
+
+    func setPinnedCategories(_ categories: [HealthMetric.Category]) {
+        pinnedMetricsStore.save(categories)
+        pinnedCategories = pinnedMetricsStore.load()
+        invalidateFilteredMetrics()
+    }
+
+    private func updatePinnedMetrics() {
+        pinnedMetrics = pinnedCategories.compactMap { category in
+            if category == .exercise {
+                return sortedMetrics.first { $0.id == "exercise" }
+            }
+            return sortedMetrics.first { $0.category == category }
+        }
     }
 
     func loadData() async {
         guard !isLoading else { return }
         isLoading = true
         errorMessage = nil
+        conditionScore = nil
+        baselineStatus = nil
+        recentScores = []
+        coachingMessage = nil
+        heroBaselineDetails = []
+        baselineDeltasByMetricID = [:]
+        activeDaysThisWeek = 0
 
         if !authorizationChecked {
             do {
@@ -101,6 +147,8 @@ final class DashboardViewModel {
         }
 
         sortedMetrics = allMetrics.sorted { $0.changeSignificance > $1.changeSignificance }
+        coachingMessage = buildCoachingMessage()
+        heroBaselineDetails = buildHeroBaselineDetails()
         lastUpdated = Date()
         isLoading = false
     }
@@ -160,11 +208,21 @@ final class DashboardViewModel {
         let today = Date()
         let yesterday = calendar.date(byAdding: .day, value: -1, to: today) ?? today
 
-        async let samplesTask = hrvService.fetchHRVSamples(days: 7)
+        let rhrCollectionStart = calendar.date(byAdding: .day, value: -60, to: today) ?? today
+
+        async let samplesTask = hrvService.fetchHRVSamples(days: 60)
         async let todayRHRTask = hrvService.fetchRestingHeartRate(for: today)
         async let yesterdayRHRTask = hrvService.fetchRestingHeartRate(for: yesterday)
+        async let rhrCollectionTask = hrvService.fetchRHRCollection(
+            start: rhrCollectionStart,
+            end: today,
+            interval: DateComponents(day: 1)
+        )
 
-        let (samples, todayRHR, yesterdayRHR) = try await (samplesTask, todayRHRTask, yesterdayRHRTask)
+        let (samples, todayRHR, yesterdayRHR, rhrCollection) = try await (
+            samplesTask, todayRHRTask, yesterdayRHRTask, rhrCollectionTask
+        )
+        let recentSamples = Array(samples.prefix(7))
 
         // Fallback RHR: if today is nil, use latest within 7 days for condition score
         let effectiveRHR: Double?
@@ -185,7 +243,7 @@ final class DashboardViewModel {
         }
 
         let input = CalculateConditionScoreUseCase.Input(
-            hrvSamples: samples,
+            hrvSamples: recentSamples,
             todayRHR: effectiveRHR,
             yesterdayRHR: yesterdayRHR
         )
@@ -194,7 +252,7 @@ final class DashboardViewModel {
         baselineStatus = output.baselineStatus
 
         // Build 7-day score history
-        recentScores = buildRecentScores(from: samples)
+        recentScores = buildRecentScores(from: recentSamples)
 
         var metrics: [HealthMetric] = []
 
@@ -213,6 +271,16 @@ final class DashboardViewModel {
                 category: .hrv,
                 isHistorical: !isToday
             ))
+
+            let dailyHRV = dailyAveragesFromHRVSamples(samples)
+            let yesterdayHRV = dailyHRV.first { calendar.isDateInYesterday($0.date) }?.value
+            let shortTermAvg = average(dailyHRV.dropFirst().prefix(14).map(\.value))
+            let longTermAvg = average(dailyHRV.dropFirst().prefix(60).map(\.value))
+            baselineDeltasByMetricID["hrv"] = MetricBaselineDelta(
+                yesterdayDelta: yesterdayHRV.map { latest.value - $0 },
+                shortTermDelta: shortTermAvg.map { latest.value - $0 },
+                longTermDelta: longTermAvg.map { latest.value - $0 }
+            )
         }
 
         // RHR (with fallback)
@@ -227,6 +295,20 @@ final class DashboardViewModel {
                 category: .rhr,
                 isHistorical: rhrIsHistorical
             ))
+
+            let sortedCollection = rhrCollection
+                .filter { $0.average > 0 && $0.average.isFinite }
+                .sorted { $0.date > $1.date }
+            let baselineSeries = sortedCollection
+                .filter { !calendar.isDate($0.date, inSameDayAs: rhrDate) }
+            let shortTermAvg = average(baselineSeries.prefix(14).map(\.average))
+            let longTermAvg = average(baselineSeries.prefix(60).map(\.average))
+
+            baselineDeltasByMetricID["rhr"] = MetricBaselineDelta(
+                yesterdayDelta: yesterdayRHR.map { rhr - $0 },
+                shortTermDelta: shortTermAvg.map { rhr - $0 },
+                longTermDelta: longTermAvg.map { rhr - $0 }
+            )
         }
 
         return metrics
@@ -235,8 +317,9 @@ final class DashboardViewModel {
     private let sleepScoreUseCase = CalculateSleepScoreUseCase()
 
     private func fetchSleepData() async throws -> HealthMetric? {
+        let calendar = Calendar.current
         let today = Date()
-        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: today) ?? today
+        let yesterday = calendar.date(byAdding: .day, value: -1, to: today) ?? today
 
         async let todayTask = sleepService.fetchSleepStages(for: today)
         async let yesterdayTask = sleepService.fetchSleepStages(for: yesterday)
@@ -266,6 +349,19 @@ final class DashboardViewModel {
             ? output.totalMinutes - yesterdayOutput.totalMinutes
             : nil
 
+        let baselineStart = calendar.date(byAdding: .day, value: -14, to: today) ?? today
+        let baselineEnd = calendar.date(byAdding: .day, value: 1, to: today) ?? today
+        let dailySleep = try await sleepService.fetchDailySleepDurations(start: baselineStart, end: baselineEnd)
+        let baselineValues = dailySleep
+            .filter { !calendar.isDate($0.date, inSameDayAs: sleepDate) }
+            .map(\.totalMinutes)
+        let shortTermAvg = average(baselineValues)
+        baselineDeltasByMetricID["sleep"] = MetricBaselineDelta(
+            yesterdayDelta: change,
+            shortTermDelta: shortTermAvg.map { output.totalMinutes - $0 },
+            longTermDelta: nil
+        )
+
         return HealthMetric(
             id: "sleep",
             name: "Sleep",
@@ -280,18 +376,38 @@ final class DashboardViewModel {
 
     private func fetchExerciseData() async throws -> [HealthMetric] {
         let calendar = Calendar.current
+        let today = Date()
+        let yesterday = calendar.date(byAdding: .day, value: -1, to: today) ?? today
 
         // 30 days for per-type cards (covers less frequent activities like cycling)
         let workouts = try await workoutService.fetchWorkouts(days: 30)
         guard !workouts.isEmpty else { return [] }
 
+        let minutesByDay = Dictionary(grouping: workouts) {
+            calendar.startOfDay(for: $0.date)
+        }
+        .mapValues { dayWorkouts in
+            dayWorkouts.reduce(0.0) { $0 + $1.duration / 60.0 }
+        }
+
         var metrics: [HealthMetric] = []
 
         // 1. Total Exercise card (today or most recent within 7 days)
         let recentWorkouts = workouts.filter {
-            $0.date >= (calendar.date(byAdding: .day, value: -7, to: Date()) ?? Date())
+            $0.date >= (calendar.date(byAdding: .day, value: -7, to: today) ?? today)
+        }
+        if let currentWeek = calendar.dateInterval(of: .weekOfYear, for: today) {
+            let thisWeekWorkouts = workouts.filter { currentWeek.contains($0.date) }
+            activeDaysThisWeek = Set(thisWeekWorkouts.map { calendar.startOfDay(for: $0.date) }).count
+        } else {
+            activeDaysThisWeek = Set(recentWorkouts.map { calendar.startOfDay(for: $0.date) }).count
         }
         let todayWorkouts = recentWorkouts.filter { calendar.isDateInToday($0.date) }
+
+        var currentExerciseValue: Double?
+        var currentExerciseDate: Date?
+        var isCurrentHistorical = false
+
         if !todayWorkouts.isEmpty {
             let totalMinutes = todayWorkouts.map(\.duration).reduce(0, +) / 60.0
             metrics.append(HealthMetric(
@@ -303,6 +419,9 @@ final class DashboardViewModel {
                 date: Date(),
                 category: .exercise
             ))
+            currentExerciseValue = totalMinutes
+            currentExerciseDate = today
+            isCurrentHistorical = false
         } else if let latest = recentWorkouts.first {
             let totalMinutes = latest.duration / 60.0
             metrics.append(HealthMetric(
@@ -315,6 +434,26 @@ final class DashboardViewModel {
                 category: .exercise,
                 isHistorical: true
             ))
+            currentExerciseValue = totalMinutes
+            currentExerciseDate = latest.date
+            isCurrentHistorical = true
+        }
+
+        if let currentExerciseValue, let currentExerciseDate {
+            let currentDay = calendar.startOfDay(for: currentExerciseDate)
+            let baselineSeries = minutesByDay
+                .filter { $0.key != currentDay }
+                .sorted { $0.key > $1.key }
+                .map(\.value)
+
+            let yesterdayMinutes = minutesByDay[calendar.startOfDay(for: yesterday)]
+            baselineDeltasByMetricID["exercise"] = MetricBaselineDelta(
+                yesterdayDelta: (!isCurrentHistorical
+                    ? yesterdayMinutes.map { currentExerciseValue - $0 }
+                    : nil),
+                shortTermDelta: average(baselineSeries.prefix(14)).map { currentExerciseValue - $0 },
+                longTermDelta: average(baselineSeries.prefix(30)).map { currentExerciseValue - $0 }
+            )
         }
 
         // 2. Per-type cards from full 30-day range
@@ -378,15 +517,32 @@ final class DashboardViewModel {
     // isDistanceBased and workoutIcon are now on WorkoutSummary (Domain layer)
 
     private func fetchStepsData() async throws -> HealthMetric? {
+        let calendar = Calendar.current
         let today = Date()
-        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: today) ?? today
+        let yesterday = calendar.date(byAdding: .day, value: -1, to: today) ?? today
+        let baselineStart = calendar.date(byAdding: .day, value: -14, to: today) ?? today
+        let baselineEnd = calendar.date(byAdding: .day, value: 1, to: today) ?? today
 
         async let todayTask = stepsService.fetchSteps(for: today)
         async let yesterdayTask = stepsService.fetchSteps(for: yesterday)
+        async let baselineTask = stepsService.fetchStepsCollection(
+            start: baselineStart,
+            end: baselineEnd,
+            interval: DateComponents(day: 1)
+        )
 
-        let (todaySteps, yesterdaySteps) = try await (todayTask, yesterdayTask)
+        let (todaySteps, yesterdaySteps, baselineCollection) = try await (todayTask, yesterdayTask, baselineTask)
+        let baselineValues = baselineCollection
+            .filter { !calendar.isDateInToday($0.date) }
+            .map(\.sum)
+        let shortTermAvg = average(baselineValues)
 
         if let steps = todaySteps {
+            baselineDeltasByMetricID["steps"] = MetricBaselineDelta(
+                yesterdayDelta: yesterdaySteps.map { steps - $0 },
+                shortTermDelta: shortTermAvg.map { steps - $0 },
+                longTermDelta: nil
+            )
             return HealthMetric(
                 id: "steps",
                 name: "Steps",
@@ -400,6 +556,11 @@ final class DashboardViewModel {
 
         // Fallback: find most recent steps within 7 days
         if let latest = try await stepsService.fetchLatestSteps(withinDays: 7) {
+            baselineDeltasByMetricID["steps"] = MetricBaselineDelta(
+                yesterdayDelta: nil,
+                shortTermDelta: shortTermAvg.map { latest.value - $0 },
+                longTermDelta: nil
+            )
             return HealthMetric(
                 id: "steps",
                 name: "Steps",
@@ -507,6 +668,68 @@ final class DashboardViewModel {
             category: .bmi,
             isHistorical: isHistorical
         )
+    }
+
+    private func buildCoachingMessage() -> String {
+        let remainingDays = max(0, weeklyGoalDays - activeDaysThisWeek)
+        let sleepMinutes = sortedMetrics.first { $0.category == .sleep }?.value
+
+        if let score = conditionScore {
+            switch score.status {
+            case .warning, .tired:
+                return "Recovery is low today. Choose low intensity and prioritize early sleep."
+            case .fair:
+                if let sleepMinutes, sleepMinutes < 360 {
+                    return "Sleep was short. Keep today's training easy and protect recovery."
+                }
+                return "Keep the session moderate today and focus on consistency."
+            case .good, .excellent:
+                if remainingDays > 0 {
+                    return "You're ready. Complete \(remainingDays) more active day\(remainingDays == 1 ? "" : "s") this week."
+                }
+                return "Weekly goal achieved. Keep the momentum with quality movement."
+            }
+        }
+
+        if remainingDays > 0 {
+            return "No score yet. A short workout today helps maintain your weekly goal rhythm."
+        }
+        return "No score yet. Keep your routine steady and collect more recovery data."
+    }
+
+    private func buildHeroBaselineDetails() -> [BaselineDetail] {
+        guard let hrvDelta = baselineDeltasByMetricID["hrv"] else { return [] }
+        var details: [BaselineDetail] = []
+        if let yesterday = hrvDelta.yesterdayDelta {
+            details.append(BaselineDetail(label: "HRV vs yesterday", value: yesterday))
+        }
+        if let short = hrvDelta.shortTermDelta {
+            details.append(BaselineDetail(label: "HRV vs 14d avg", value: short))
+        }
+        return details
+    }
+
+    private func average<S: Sequence>(_ values: S) -> Double? where S.Element == Double {
+        let array = Array(values)
+        guard !array.isEmpty else { return nil }
+        let sum = array.reduce(0, +)
+        return sum / Double(array.count)
+    }
+
+    private func dailyAveragesFromHRVSamples(_ samples: [HRVSample]) -> [(date: Date, value: Double)] {
+        let calendar = Calendar.current
+        let grouped = Dictionary(grouping: samples) { sample in
+            calendar.startOfDay(for: sample.date)
+        }
+
+        return grouped.compactMap { date, samples in
+            let validValues = samples
+                .map(\.value)
+                .filter { $0 > 0 && $0.isFinite }
+            guard let avg = average(validValues) else { return nil }
+            return (date: date, value: avg)
+        }
+        .sorted { $0.date > $1.date }
     }
 
     private func buildRecentScores(from samples: [HRVSample]) -> [ConditionScore] {

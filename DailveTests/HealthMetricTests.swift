@@ -68,4 +68,11 @@ struct DateRelativeLabelTests {
         let date = Calendar.current.date(byAdding: .day, value: -3, to: Date())!
         #expect(date.relativeLabel == "3 days ago")
     }
+
+    @Test("freshnessLabel returns compact format")
+    func freshnessLabelFormat() {
+        let threeDaysAgo = Calendar.current.date(byAdding: .day, value: -3, to: Date())!
+        #expect(Date().freshnessLabel == "Today")
+        #expect(threeDaysAgo.freshnessLabel == "3d ago")
+    }
 }

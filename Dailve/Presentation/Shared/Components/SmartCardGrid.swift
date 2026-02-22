@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SmartCardGrid: View {
     let metrics: [HealthMetric]
+    var baselineDeltasByMetricID: [String: MetricBaselineDelta] = [:]
 
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -18,9 +19,12 @@ struct SmartCardGrid: View {
 
     var body: some View {
         LazyVGrid(columns: columns, spacing: gridSpacing) {
-            ForEach(Array(metrics.enumerated()), id: \.element.id) { index, metric in
+            ForEach(metrics, id: \.id) { metric in
                 NavigationLink(value: metric) {
-                    MetricCardView(metric: metric)
+                    MetricCardView(
+                        metric: metric,
+                        baselineDelta: baselineDeltasByMetricID[metric.id]
+                    )
                 }
                 .buttonStyle(.plain)
                 .hoverEffect(.highlight)
@@ -32,7 +36,10 @@ struct SmartCardGrid: View {
                         Label("Show All Data", systemImage: "list.bullet")
                     }
                 } preview: {
-                    MetricCardView(metric: metric)
+                    MetricCardView(
+                        metric: metric,
+                        baselineDelta: baselineDeltasByMetricID[metric.id]
+                    )
                         .padding()
                         .frame(width: 240)
                 }

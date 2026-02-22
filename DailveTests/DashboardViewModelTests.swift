@@ -9,6 +9,7 @@ private struct MockHRVService: HRVQuerying {
     var todayRHR: Double?
     var yesterdayRHR: Double?
     var latestRHR: (value: Double, date: Date)?
+    var rhrCollection: [(date: Date, min: Double, max: Double, average: Double)] = []
 
     func fetchHRVSamples(days: Int) async throws -> [HRVSample] { samples }
     func fetchRestingHeartRate(for date: Date) async throws -> Double? {
@@ -19,7 +20,64 @@ private struct MockHRVService: HRVQuerying {
     }
     func fetchLatestRestingHeartRate(withinDays days: Int) async throws -> (value: Double, date: Date)? { latestRHR }
     func fetchHRVCollection(start: Date, end: Date, interval: DateComponents) async throws -> [(date: Date, average: Double)] { [] }
-    func fetchRHRCollection(start: Date, end: Date, interval: DateComponents) async throws -> [(date: Date, min: Double, max: Double, average: Double)] { [] }
+    func fetchRHRCollection(start: Date, end: Date, interval: DateComponents) async throws -> [(date: Date, min: Double, max: Double, average: Double)] { rhrCollection }
+}
+
+private actor ToggleHRVService: HRVQuerying {
+    enum TestError: Error {
+        case forcedFailure
+    }
+
+    private let samples: [HRVSample]
+    private let todayRHR: Double?
+    private let yesterdayRHR: Double?
+    private let latestRHR: (value: Double, date: Date)?
+    private let rhrCollection: [(date: Date, min: Double, max: Double, average: Double)]
+    private var shouldThrowSamples = false
+
+    init(
+        samples: [HRVSample],
+        todayRHR: Double?,
+        yesterdayRHR: Double?,
+        latestRHR: (value: Double, date: Date)? = nil,
+        rhrCollection: [(date: Date, min: Double, max: Double, average: Double)] = []
+    ) {
+        self.samples = samples
+        self.todayRHR = todayRHR
+        self.yesterdayRHR = yesterdayRHR
+        self.latestRHR = latestRHR
+        self.rhrCollection = rhrCollection
+    }
+
+    func setShouldThrowSamples(_ shouldThrow: Bool) {
+        shouldThrowSamples = shouldThrow
+    }
+
+    func fetchHRVSamples(days: Int) async throws -> [HRVSample] {
+        if shouldThrowSamples {
+            throw TestError.forcedFailure
+        }
+        return samples
+    }
+
+    func fetchRestingHeartRate(for date: Date) async throws -> Double? {
+        let calendar = Calendar.current
+        if calendar.isDateInToday(date) { return todayRHR }
+        if calendar.isDateInYesterday(date) { return yesterdayRHR }
+        return nil
+    }
+
+    func fetchLatestRestingHeartRate(withinDays days: Int) async throws -> (value: Double, date: Date)? {
+        latestRHR
+    }
+
+    func fetchHRVCollection(start: Date, end: Date, interval: DateComponents) async throws -> [(date: Date, average: Double)] {
+        []
+    }
+
+    func fetchRHRCollection(start: Date, end: Date, interval: DateComponents) async throws -> [(date: Date, min: Double, max: Double, average: Double)] {
+        rhrCollection
+    }
 }
 
 private struct MockSleepService: SleepQuerying {
@@ -305,5 +363,170 @@ struct DashboardViewModelTests {
 
         #expect(vm.sortedMetrics.isEmpty)
         #expect(vm.conditionScore == nil)
+    }
+
+    @Test("Pinned metrics honor saved category order")
+    func pinnedMetricsOrder() async {
+        let today = Date()
+        let sleepStages = [
+            SleepStage(stage: .core, duration: 3600, startDate: today, endDate: today.addingTimeInterval(3600))
+        ]
+        let hrv = MockHRVService(
+            samples: [HRVSample(value: 50.0, date: today)],
+            todayRHR: 58.0,
+            yesterdayRHR: 60.0,
+            latestRHR: nil
+        )
+        let workout = MockWorkoutService(workouts: [
+            WorkoutSummary(id: "w1", type: "Running", duration: 1800, calories: 200, distance: nil, date: today)
+        ])
+        let steps = MockStepsService(todaySteps: 7000, yesterdaySteps: 6000, latestSteps: nil)
+        let pinnedStore = makePinnedStore([.steps, .exercise, .hrv])
+
+        let vm = DashboardViewModel(
+            hrvService: hrv,
+            sleepService: MockSleepService(todayStages: sleepStages, yesterdayStages: [], latestStages: nil),
+            workoutService: workout,
+            stepsService: steps,
+            pinnedMetricsStore: pinnedStore
+        )
+
+        await vm.loadData()
+
+        #expect(vm.pinnedMetrics.map(\.category) == [.steps, .exercise, .hrv])
+        #expect(vm.healthSignals.contains(where: { $0.category == .hrv }) == false)
+    }
+
+    @Test("Coaching message is generated even when score is unavailable")
+    func coachingWithoutScore() async {
+        let vm = DashboardViewModel(
+            hrvService: MockHRVService(),
+            sleepService: MockSleepService(),
+            workoutService: MockWorkoutService(),
+            stepsService: MockStepsService(),
+            bodyService: MockBodyService()
+        )
+
+        await vm.loadData()
+
+        #expect(vm.coachingMessage != nil)
+        #expect(vm.coachingMessage?.contains("No score yet") == true)
+    }
+
+    @Test("HRV baseline delta is computed when enough samples exist")
+    func hrvBaselineDelta() async {
+        let calendar = Calendar.current
+        let samples = (0..<16).compactMap { offset -> HRVSample? in
+            guard let date = calendar.date(byAdding: .day, value: -offset, to: Date()) else { return nil }
+            return HRVSample(value: 45 + Double(offset), date: date)
+        }
+        let hrv = MockHRVService(
+            samples: samples,
+            todayRHR: 58.0,
+            yesterdayRHR: 60.0,
+            latestRHR: nil
+        )
+        let vm = DashboardViewModel(
+            hrvService: hrv,
+            sleepService: MockSleepService(),
+            workoutService: MockWorkoutService(),
+            stepsService: MockStepsService()
+        )
+
+        await vm.loadData()
+
+        let delta = vm.baselineDeltasByMetricID["hrv"]
+        #expect(delta != nil)
+        #expect(delta?.shortTermDelta != nil)
+    }
+
+    @Test("Condition score resets when HRV fetch fails on refresh")
+    func conditionScoreClearsAfterHRVFailure() async {
+        let hrv = ToggleHRVService(
+            samples: [HRVSample(value: 52.0, date: Date())],
+            todayRHR: 58.0,
+            yesterdayRHR: 60.0
+        )
+        let vm = DashboardViewModel(
+            hrvService: hrv,
+            sleepService: MockSleepService(),
+            workoutService: MockWorkoutService(),
+            stepsService: MockStepsService()
+        )
+
+        await vm.loadData()
+        #expect(vm.conditionScore != nil)
+
+        await hrv.setShouldThrowSamples(true)
+        await vm.loadData()
+
+        #expect(vm.conditionScore == nil)
+        #expect(vm.recentScores.isEmpty)
+    }
+
+    @Test("Weekly goal counts only workouts in current calendar week")
+    func weeklyGoalUsesCalendarWeek() async {
+        let calendar = Calendar.current
+        guard let weekStart = calendar.dateInterval(of: .weekOfYear, for: Date())?.start,
+              let previousWeekDate = calendar.date(byAdding: .day, value: -1, to: weekStart) else {
+            Issue.record("Failed to build week boundary dates for test")
+            return
+        }
+
+        let workouts = MockWorkoutService(workouts: [
+            WorkoutSummary(id: "this-week", type: "Running", duration: 1800, calories: 200, distance: nil, date: weekStart),
+            WorkoutSummary(id: "prev-week", type: "Running", duration: 1800, calories: 180, distance: nil, date: previousWeekDate)
+        ])
+        let vm = DashboardViewModel(
+            hrvService: MockHRVService(),
+            sleepService: MockSleepService(),
+            workoutService: workouts,
+            stepsService: MockStepsService()
+        )
+
+        await vm.loadData()
+
+        #expect(vm.weeklyGoalProgress.completedDays == 1)
+    }
+
+    @Test("RHR baseline excludes current comparison day")
+    func rhrBaselineExcludesCurrentDay() async {
+        let calendar = Calendar.current
+        let today = Date()
+        guard let fallbackDate = calendar.date(byAdding: .day, value: -1, to: today),
+              let olderDate = calendar.date(byAdding: .day, value: -2, to: today) else {
+            Issue.record("Failed to build date fixtures for RHR baseline test")
+            return
+        }
+
+        let hrv = MockHRVService(
+            samples: [HRVSample(value: 50.0, date: today)],
+            todayRHR: nil,
+            yesterdayRHR: nil,
+            latestRHR: (value: 60.0, date: fallbackDate),
+            rhrCollection: [
+                (date: fallbackDate, min: 60.0, max: 60.0, average: 60.0),
+                (date: olderDate, min: 50.0, max: 50.0, average: 50.0)
+            ]
+        )
+        let vm = DashboardViewModel(
+            hrvService: hrv,
+            sleepService: MockSleepService(),
+            workoutService: MockWorkoutService(),
+            stepsService: MockStepsService()
+        )
+
+        await vm.loadData()
+
+        #expect(vm.baselineDeltasByMetricID["rhr"]?.shortTermDelta == 10.0)
+    }
+
+    private func makePinnedStore(_ categories: [HealthMetric.Category]) -> TodayPinnedMetricsStore {
+        let suiteName = "DashboardPinnedStore.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suiteName) ?? .standard
+        defaults.removePersistentDomain(forName: suiteName)
+        let store = TodayPinnedMetricsStore(defaults: defaults)
+        store.save(categories)
+        return store
     }
 }
