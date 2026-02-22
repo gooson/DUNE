@@ -45,6 +45,7 @@ struct ExerciseLibraryService: ExerciseLibraryQuerying {
         return exercises.filter { exercise in
             exercise.localizedName.localizedCaseInsensitiveContains(query)
                 || exercise.name.localizedCaseInsensitiveContains(query)
+                || (exercise.aliases ?? []).contains { $0.localizedCaseInsensitiveContains(query) }
         }
     }
 
