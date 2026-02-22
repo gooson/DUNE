@@ -26,7 +26,7 @@ struct MetricCardView: View {
                 Spacer()
                 Text(metric.date.freshnessLabel)
                     .font(isRegular ? .caption : .caption2)
-                    .foregroundStyle(metric.daysAgo > 3 ? .tertiary : .secondary)
+                    .foregroundStyle(metric.date.daysAgo > 3 ? .tertiary : .secondary)
             }
 
             // Value (separated from unit) + change badge with SF Symbol
@@ -75,7 +75,7 @@ struct MetricCardView: View {
             RoundedRectangle(cornerRadius: sizeClass == .regular ? DS.Radius.lg : DS.Radius.md)
                 .fill(.thinMaterial)
         }
-        .opacity(metric.daysAgo > 3 ? 0.84 : 1.0)
+        .opacity(metric.date.daysAgo > 3 ? 0.84 : 1.0)
         .accessibilityElement(children: .combine)
         .accessibilityLabel(accessibilitySummary)
     }

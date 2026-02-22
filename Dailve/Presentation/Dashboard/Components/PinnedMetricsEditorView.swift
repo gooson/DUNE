@@ -14,7 +14,7 @@ struct PinnedMetricsEditorView: View {
     var body: some View {
         NavigationStack {
             List {
-                Section("Top 3 Metrics") {
+                Section {
                     ForEach(allowedCategories, id: \.rawValue) { category in
                         Button {
                             toggle(category)
@@ -34,6 +34,8 @@ struct PinnedMetricsEditorView: View {
                         .buttonStyle(.plain)
                         .disabled(!selectedSet.contains(category) && workingSelection.count >= 3)
                     }
+                } header: {
+                    Text("Top 3 Metrics")
                 } footer: {
                     Text("Select up to 3 metrics shown at the top of Today.")
                 }
