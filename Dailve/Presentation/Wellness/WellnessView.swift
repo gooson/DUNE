@@ -21,10 +21,18 @@ struct WellnessView: View {
 
     var body: some View {
         Group {
-            if viewModel.isLoading && viewModel.physicalCards.isEmpty && viewModel.activeCards.isEmpty && viewModel.wellnessScore == nil {
+            if viewModel.isLoading &&
+                viewModel.physicalCards.isEmpty &&
+                viewModel.activeCards.isEmpty &&
+                viewModel.wellnessScore == nil &&
+                injuryRecords.isEmpty {
                 ProgressView()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else if viewModel.physicalCards.isEmpty && viewModel.activeCards.isEmpty && viewModel.wellnessScore == nil && !viewModel.isLoading {
+            } else if viewModel.physicalCards.isEmpty &&
+                        viewModel.activeCards.isEmpty &&
+                        viewModel.wellnessScore == nil &&
+                        !viewModel.isLoading &&
+                        injuryRecords.isEmpty {
                 EmptyStateView(
                     icon: "leaf.fill",
                     title: "No Wellness Data",
@@ -52,8 +60,7 @@ struct WellnessView: View {
                         Label("Body Record", systemImage: "figure.stand")
                     }
                     Button {
-                        injuryViewModel.resetForm()
-                        injuryViewModel.isShowingAddSheet = true
+                        startAddingInjury()
                     } label: {
                         Label("Injury", systemImage: "bandage.fill")
                     }
@@ -159,6 +166,9 @@ struct WellnessView: View {
         .onChange(of: injuryRecords.count) { _, _ in
             refreshActiveInjuriesCache()
         }
+        .onChange(of: injuryRecords.map(\.endDate)) { _, _ in
+            refreshActiveInjuriesCache()
+        }
         .navigationTitle("Wellness")
     }
 
@@ -228,10 +238,8 @@ struct WellnessView: View {
                     }
                 }
 
-                // Injury Banner (conditional)
-                if !cachedActiveInjuries.isEmpty {
-                    injuryBanner
-                }
+                // Injury Banner
+                injuryBanner
 
                 // Body History link
                 if records.count > 0 {
@@ -270,22 +278,44 @@ struct WellnessView: View {
                         .font(.subheadline)
                         .foregroundStyle(DS.Color.caution)
 
-                    Text("Active Injuries")
+                    Text("Injuries")
                         .font(.subheadline)
                         .fontWeight(.semibold)
 
                     Spacer()
 
-                    NavigationLink(value: InjuryHistoryDestination()) {
-                        Text("View All")
-                            .font(.caption)
-                            .fontWeight(.medium)
+                    if !injuryRecords.isEmpty {
+                        NavigationLink(value: InjuryHistoryDestination()) {
+                            Text("View All")
+                                .font(.caption)
+                                .fontWeight(.medium)
+                        }
                     }
                 }
 
-                ForEach(cachedActiveInjuries.prefix(3)) { record in
-                    InjuryCardView(record: record) {
-                        injuryViewModel.startEditing(record)
+                if cachedActiveInjuries.isEmpty {
+                    InlineCard {
+                        HStack(spacing: DS.Spacing.sm) {
+                            Image(systemName: "checkmark.circle")
+                                .foregroundStyle(.secondary)
+
+                            Text("No active injuries")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+
+                            Spacer()
+
+                            Button("Add") {
+                                startAddingInjury()
+                            }
+                            .font(.caption.weight(.medium))
+                        }
+                    }
+                } else {
+                    ForEach(cachedActiveInjuries.prefix(3)) { record in
+                        InjuryCardView(record: record) {
+                            injuryViewModel.startEditing(record)
+                        }
                     }
                 }
             }
@@ -318,6 +348,11 @@ struct WellnessView: View {
 
     private func refreshActiveInjuriesCache() {
         cachedActiveInjuries = injuryRecords.filter(\.isActive)
+    }
+
+    private func startAddingInjury() {
+        injuryViewModel.resetForm()
+        injuryViewModel.isShowingAddSheet = true
     }
 }
 
