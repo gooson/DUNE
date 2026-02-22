@@ -42,9 +42,11 @@ cd Dailve && xcodegen generate
 
 ### 빌드
 ```bash
-xcodebuild build -project Dailve.xcodeproj -scheme Dailve \
-  -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.2' -quiet
+scripts/build-ios.sh
 ```
+
+> 주의: `generic/platform=iOS` 대신 **iOS Simulator destination**을 고정 사용합니다.
+> 프로젝트 생성이 필요하면 스크립트가 `xcodegen generate --spec Dailve/project.yml`를 자동 실행합니다.
 
 ### 유닛 테스트
 ```bash

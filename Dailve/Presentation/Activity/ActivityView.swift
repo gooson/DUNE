@@ -68,10 +68,12 @@ struct ActivityView: View {
                     }
 
                     // ⑦ Recent Workouts
-                    ExerciseListSection(
-                        workouts: viewModel.recentWorkouts,
-                        exerciseRecords: recentRecords
-                    )
+                    SectionGroup(title: "Recent Workouts", icon: "clock.arrow.circlepath", iconColor: DS.Color.activity) {
+                        ExerciseListSection(
+                            workouts: viewModel.recentWorkouts,
+                            exerciseRecords: recentRecords
+                        )
+                    }
 
                     // ⑧ Personal Records
                     SectionGroup(title: "Personal Records", icon: "trophy.fill", iconColor: DS.Color.activity) {
