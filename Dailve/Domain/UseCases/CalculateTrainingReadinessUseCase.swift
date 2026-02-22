@@ -169,7 +169,6 @@ struct CalculateTrainingReadinessUseCase: TrainingReadinessCalculating, Sendable
     private func computeFatigueScore(states: [MuscleFatigueState]) -> Int {
         guard !states.isEmpty else { return 80 }  // No data = mostly recovered
 
-        let calendar = Calendar.current
         let now = Date()
         var weightedSum = 0.0
         var totalWeight = 0.0
