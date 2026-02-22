@@ -4,6 +4,8 @@ import Charts
 struct ConditionHeroView: View {
     let score: ConditionScore
     let recentScores: [ConditionScore]
+    var weeklyGoalProgress: (completedDays: Int, goalDays: Int)? = nil
+    var trendBadges: [BaselineDetail] = []
 
     @State private var animatedScore: Int = 0
     @State private var isAppeared = false
@@ -68,6 +70,34 @@ struct ConditionHeroView: View {
                             Text("7d")
                                 .font(.caption2)
                                 .foregroundStyle(.tertiary)
+                        }
+                    }
+
+                    if let weeklyGoalProgress {
+                        VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                            HStack(spacing: DS.Spacing.xs) {
+                                Text("Weekly Goal")
+                                    .font(.caption2)
+                                    .foregroundStyle(.tertiary)
+                                Spacer()
+                                Text("\(weeklyGoalProgress.completedDays)/\(weeklyGoalProgress.goalDays)")
+                                    .font(.caption2)
+                                    .foregroundStyle(.secondary)
+                                    .monospacedDigit()
+                            }
+                            ProgressView(
+                                value: Double(weeklyGoalProgress.completedDays),
+                                total: Double(max(1, weeklyGoalProgress.goalDays))
+                            )
+                            .tint(DS.Color.activity)
+                        }
+                    }
+
+                    if !trendBadges.isEmpty {
+                        VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                            ForEach(Array(trendBadges.enumerated()), id: \.offset) { _, detail in
+                                BaselineTrendBadge(detail: detail, inversePolarity: false)
+                            }
                         }
                     }
                 }

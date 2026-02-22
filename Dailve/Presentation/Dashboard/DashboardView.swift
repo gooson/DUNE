@@ -2,6 +2,7 @@ import SwiftUI
 
 struct DashboardView: View {
     @State private var viewModel = DashboardViewModel()
+    @State private var isShowingPinnedEditor = false
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.openURL) private var openURL
 
@@ -23,6 +24,44 @@ struct DashboardView: View {
                         )
                     }
                 } else {
+                    if let score = viewModel.conditionScore {
+                        NavigationLink(value: score) {
+                            ConditionHeroView(
+                                score: score,
+                                recentScores: viewModel.recentScores,
+                                weeklyGoalProgress: viewModel.weeklyGoalProgress,
+                                trendBadges: viewModel.heroBaselineDetails
+                            )
+                        }
+                        .buttonStyle(.plain)
+                    } else if let status = viewModel.baselineStatus, !status.isReady {
+                        BaselineProgressView(status: status)
+                    }
+
+                    if let coachingMessage = viewModel.coachingMessage {
+                        TodayCoachingCard(message: coachingMessage)
+                    }
+
+                    if !viewModel.pinnedMetrics.isEmpty {
+                        Section {
+                            SmartCardGrid(
+                                metrics: viewModel.pinnedMetrics,
+                                baselineDeltasByMetricID: viewModel.baselineDeltasByMetricID
+                            )
+                        } header: {
+                            HStack {
+                                Text("Pinned Metrics")
+                                    .font(DS.Typography.sectionTitle)
+                                Spacer()
+                                Button("Edit") {
+                                    isShowingPinnedEditor = true
+                                }
+                                .font(.subheadline.weight(.medium))
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                    }
+
                     // Last updated timestamp
                     if let lastUpdated = viewModel.lastUpdated {
                         Text("Updated \(lastUpdated, format: .relative(presentation: .named))")
@@ -39,7 +78,10 @@ struct DashboardView: View {
                     // Health Signals section (HRV, RHR, Weight, BMI)
                     if !viewModel.healthSignals.isEmpty {
                         Section {
-                            SmartCardGrid(metrics: viewModel.healthSignals)
+                            SmartCardGrid(
+                                metrics: viewModel.healthSignals,
+                                baselineDeltasByMetricID: viewModel.baselineDeltasByMetricID
+                            )
                         } header: {
                             Text("Health Signals")
                                 .font(DS.Typography.sectionTitle)
@@ -49,7 +91,10 @@ struct DashboardView: View {
 
                     if !viewModel.activityMetrics.isEmpty {
                         Section {
-                            SmartCardGrid(metrics: viewModel.activityMetrics)
+                            SmartCardGrid(
+                                metrics: viewModel.activityMetrics,
+                                baselineDeltasByMetricID: viewModel.baselineDeltasByMetricID
+                            )
                         } header: {
                             Text("Activity")
                                 .font(DS.Typography.sectionTitle)
@@ -82,6 +127,15 @@ struct DashboardView: View {
         }
         .task {
             await viewModel.loadData()
+        }
+        .sheet(isPresented: $isShowingPinnedEditor) {
+            PinnedMetricsEditorView(
+                selection: Binding(
+                    get: { viewModel.pinnedCategories },
+                    set: { viewModel.setPinnedCategories($0) }
+                ),
+                allowedCategories: viewModel.availablePinnedCategories
+            )
         }
         .navigationTitle("Today")
     }

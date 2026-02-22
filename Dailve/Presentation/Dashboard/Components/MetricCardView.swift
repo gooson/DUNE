@@ -2,6 +2,7 @@ import SwiftUI
 
 struct MetricCardView: View {
     let metric: HealthMetric
+    var baselineDelta: MetricBaselineDelta? = nil
 
     @Environment(\.horizontalSizeClass) private var sizeClass
 
@@ -13,7 +14,7 @@ struct MetricCardView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: cardSpacing) {
-            // Header: icon + label + relative date
+            // Header: icon + label + freshness
             HStack(spacing: DS.Spacing.xs) {
                 Image(systemName: metric.resolvedIconName)
                     .font(headerFont)
@@ -22,12 +23,10 @@ struct MetricCardView: View {
                     .font(headerFont)
                     .foregroundStyle(.secondary)
 
-                if metric.isHistorical, let label = metric.date.relativeLabel {
-                    Spacer()
-                    Text(label)
-                        .font(isRegular ? .caption : .caption2)
-                        .foregroundStyle(.tertiary)
-                }
+                Spacer()
+                Text(metric.date.freshnessLabel)
+                    .font(isRegular ? .caption : .caption2)
+                    .foregroundStyle(metric.daysAgo > 3 ? .tertiary : .secondary)
             }
 
             // Value (separated from unit) + change badge with SF Symbol
@@ -62,6 +61,13 @@ struct MetricCardView: View {
                 }
             }
 
+            if let detail = baselineDelta?.preferredDetail {
+                BaselineTrendBadge(
+                    detail: detail,
+                    inversePolarity: metric.category == .rhr
+                )
+            }
+
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(cardPadding)
@@ -69,8 +75,9 @@ struct MetricCardView: View {
             RoundedRectangle(cornerRadius: sizeClass == .regular ? DS.Radius.lg : DS.Radius.md)
                 .fill(.thinMaterial)
         }
+        .opacity(metric.daysAgo > 3 ? 0.84 : 1.0)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(metric.name), \(metric.formattedValue)")
+        .accessibilityLabel(accessibilitySummary)
     }
 
     private var changeColor: Color {
@@ -85,5 +92,13 @@ struct MetricCardView: View {
         default:
             return change > 0 ? DS.Color.positive : .secondary
         }
+    }
+
+    private var accessibilitySummary: String {
+        let freshness = metric.date.freshnessLabel
+        if let detail = baselineDelta?.preferredDetail {
+            return "\(metric.name), \(metric.formattedValue), \(freshness), \(detail.label), \(String(format: "%.1f", detail.value))"
+        }
+        return "\(metric.name), \(metric.formattedValue), \(freshness)"
     }
 }
