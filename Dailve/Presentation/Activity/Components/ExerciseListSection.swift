@@ -35,15 +35,10 @@ struct ExerciseListSection: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            // Section header
-            HStack {
-                Text("Recent Workouts")
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
+            if !items.isEmpty {
+                HStack {
+                    Spacer()
 
-                Spacer()
-
-                if !items.isEmpty {
                     NavigationLink {
                         ExerciseView()
                     } label: {
