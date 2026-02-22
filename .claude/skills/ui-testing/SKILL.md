@@ -152,7 +152,74 @@ app.launchArguments = ["--uitesting"]
 
 ## Anti-Patterns
 
-- **금지**: `sleep()` 사용 → `waitForExistence(timeout:)` 사용
-- **금지**: 하드코딩된 좌표 탭 → accessibilityIdentifier 사용
-- **금지**: 테스트 간 상태 의존 → 각 테스트는 독립적
-- **금지**: DatePicker 값 직접 조작 → 존재 확인만, 값 검증은 유닛 테스트에서
+### 1) `sleep()` 사용 금지
+
+**BAD**
+
+```swift
+app.buttons["exercise-add-button"].tap()
+sleep(2)
+XCTAssertTrue(app.buttons["exercise-save-button"].exists)
+```
+
+**GOOD**
+
+```swift
+app.buttons["exercise-add-button"].tap()
+let saveButton = app.buttons["exercise-save-button"]
+XCTAssertTrue(saveButton.waitForExistence(timeout: 3))
+```
+
+### 2) 하드코딩 좌표 탭 금지
+
+**BAD**
+
+```swift
+app.coordinate(withNormalizedOffset: CGVector(dx: 0.8, dy: 0.1)).tap()
+```
+
+**GOOD**
+
+```swift
+let addButton = app.buttons["exercise-add-button"]
+XCTAssertTrue(addButton.waitForExistence(timeout: 5))
+addButton.tap()
+```
+
+### 3) 테스트 간 상태 의존 금지
+
+**BAD**
+
+```swift
+func test02EditRecord() {
+    // test01AddRecord가 먼저 실행되어야 통과
+    app.cells["record-row-0"].tap()
+}
+```
+
+**GOOD**
+
+```swift
+func testEditRecord() {
+    launchWithUITestingReset()
+    createRecordIfNeeded()
+    app.cells["record-row-0"].tap()
+}
+```
+
+### 4) DatePicker 값 직접 조작 금지
+
+**BAD**
+
+```swift
+app.datePickers["exercise-date-picker"].adjust(toDate: Date(timeIntervalSince1970: 0))
+```
+
+**GOOD**
+
+```swift
+let datePicker = app.datePickers["exercise-date-picker"]
+XCTAssertTrue(datePicker.waitForExistence(timeout: 3))
+```
+
+Date 계산/경계값 검증은 유닛 테스트에서 수행합니다.

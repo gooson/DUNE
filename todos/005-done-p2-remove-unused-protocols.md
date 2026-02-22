@@ -1,9 +1,9 @@
 ---
 source: review/simplicity
 priority: p2
-status: ready
+status: done
 created: 2026-02-15
-updated: 2026-02-15
+updated: 2026-02-22
 ---
 
 # 미사용 Repository 프로토콜 정리

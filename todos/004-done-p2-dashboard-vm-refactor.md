@@ -1,9 +1,9 @@
 ---
 source: review/architecture+performance
 priority: p2
-status: ready
+status: done
 created: 2026-02-15
-updated: 2026-02-15
+updated: 2026-02-22
 ---
 
 # DashboardViewModel SRP 리팩토링

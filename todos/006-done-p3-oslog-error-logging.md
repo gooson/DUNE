@@ -1,9 +1,9 @@
 ---
 source: review/security+agent
 priority: p3
-status: ready
+status: done
 created: 2026-02-15
-updated: 2026-02-15
+updated: 2026-02-22
 ---
 
 # OSLog 에러 로깅 추가

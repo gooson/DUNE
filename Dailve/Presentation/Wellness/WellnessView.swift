@@ -82,9 +82,17 @@ struct WellnessView: View {
                     viewModel: bodyViewModel,
                     isEdit: true,
                     onSave: {
-                        if bodyViewModel.applyUpdate(to: record) {
-                            bodyViewModel.isShowingEditSheet = false
-                            bodyViewModel.editingRecord = nil
+                        var didUpdate = false
+                        do {
+                            try modelContext.transaction {
+                                didUpdate = bodyViewModel.applyUpdate(to: record)
+                            }
+                            if didUpdate {
+                                bodyViewModel.isShowingEditSheet = false
+                                bodyViewModel.editingRecord = nil
+                            }
+                        } catch {
+                            bodyViewModel.validationError = "Failed to save record changes. Please try again."
                         }
                     }
                 )

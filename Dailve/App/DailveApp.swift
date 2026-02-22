@@ -4,15 +4,27 @@ import SwiftData
 @main
 struct DailveApp: App {
     @AppStorage("hasShownCloudSyncConsent") private var hasShownConsent = false
-    @AppStorage("isCloudSyncEnabled") private var isCloudSyncEnabled = false
     @State private var showConsentSheet = false
 
     let modelContainer: ModelContainer
 
+    private static var isRunningXCTest: Bool {
+        ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
+    }
+
+    private static var isRunningUITests: Bool {
+        let arguments = ProcessInfo.processInfo.arguments
+        return arguments.contains("--uitesting") || arguments.contains("--healthkit-permission-uitest")
+    }
+
+    private static var isRunningUnitTests: Bool {
+        isRunningXCTest && !isRunningUITests
+    }
+
     init() {
         let cloudSyncEnabled = UserDefaults.standard.bool(forKey: "isCloudSyncEnabled")
         let config = ModelConfiguration(
-            cloudKitDatabase: cloudSyncEnabled ? .automatic : .none
+            cloudKitDatabase: (cloudSyncEnabled && !Self.isRunningXCTest) ? .automatic : .none
         )
         do {
             modelContainer = try ModelContainer(
@@ -47,17 +59,25 @@ struct DailveApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .onAppear {
-                    if !hasShownConsent {
-                        showConsentSheet = true
-                    }
-                    // Activate WatchConnectivity — syncs exercise library to Watch
-                    WatchSessionManager.shared.activate()
+            Group {
+                if Self.isRunningUnitTests {
+                    Color.clear
+                } else {
+                    ContentView()
+                        .onAppear {
+                            if !hasShownConsent && !Self.isRunningXCTest {
+                                showConsentSheet = true
+                            }
+                            // Skip WC activation during XCTest to reduce startup flakiness.
+                            if !Self.isRunningXCTest {
+                                WatchSessionManager.shared.activate()
+                            }
+                        }
+                        .sheet(isPresented: $showConsentSheet) {
+                            CloudSyncConsentView(isPresented: $showConsentSheet)
+                        }
                 }
-                .sheet(isPresented: $showConsentSheet) {
-                    CloudSyncConsentView(isPresented: $showConsentSheet)
-                }
+            }
         }
         .modelContainer(modelContainer)
     }

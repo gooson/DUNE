@@ -1,9 +1,9 @@
 ---
 source: review/data-integrity
 priority: p1
-status: ready
+status: done
 created: 2026-02-16
-updated: 2026-02-16
+updated: 2026-02-22
 ---
 
 # Edit 작업 transaction boundary 추가
@@ -15,8 +15,9 @@ SwiftData auto-save가 중간 상태를 CloudKit으로 전파할 이론적 위�
 
 ## Location
 
-- `Dailve/Presentation/BodyComposition/BodyCompositionView.swift:68` (호출부)
-- `Dailve/Presentation/BodyComposition/BodyCompositionViewModel.swift:45` (applyUpdate)
+- `Dailve/Presentation/Wellness/WellnessView.swift` (edit sheet onSave)
+- `Dailve/Presentation/Wellness/BodyHistoryDetailView.swift` (edit sheet onSave)
+- `Dailve/Presentation/BodyComposition/BodyCompositionViewModel.swift` (`applyUpdate`)
 
 ## Solution
 
@@ -24,11 +25,17 @@ View의 onSave 클로저에서 `modelContext.transaction { }` 블록으로 감�
 
 ```swift
 onSave: {
-    modelContext.transaction {
-        if viewModel.applyUpdate(to: record) {
+    var didUpdate = false
+    do {
+        try modelContext.transaction {
+            didUpdate = viewModel.applyUpdate(to: record)
+        }
+        if didUpdate {
             viewModel.isShowingEditSheet = false
             viewModel.editingRecord = nil
         }
+    } catch {
+        viewModel.validationError = "Failed to save record changes. Please try again."
     }
 }
 ```

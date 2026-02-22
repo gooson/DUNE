@@ -19,6 +19,8 @@ final class WorkoutManager: NSObject {
     var isActive: Bool { session != nil && !isSessionEnded }
     private(set) var isPaused = false
     private(set) var isSessionEnded = false
+    /// True while HKLiveWorkoutBuilder is finishing and workout UUID is being resolved.
+    private(set) var isFinalizingWorkout = false
     private(set) var startDate: Date?
 
     /// UUID of the saved HKWorkout, captured after finishWorkout().
@@ -127,6 +129,9 @@ final class WorkoutManager: NSObject {
         self.completedSetsData = Array(repeating: [], count: snapshot.entries.count)
         self.extraSetsPerExercise = [:]
         self.heartRateSamples = []
+        self.isSessionEnded = false
+        self.isFinalizingWorkout = false
+        self.healthKitWorkoutUUID = nil
         self.isRecoveredSession = false
 
         let config = HKWorkoutConfiguration()
@@ -169,6 +174,15 @@ final class WorkoutManager: NSObject {
 
     func end() {
         session?.end()
+    }
+
+    /// Wait briefly for HealthKit workout finalization after `.ended` to reduce UUID races.
+    func waitForWorkoutFinalization(timeout seconds: TimeInterval = 5) async {
+        guard isSessionEnded else { return }
+        let deadline = Date().addingTimeInterval(seconds)
+        while isFinalizingWorkout, Date() < deadline {
+            try? await Task.sleep(for: .milliseconds(100))
+        }
     }
 
     // MARK: - Set/Exercise Navigation
@@ -227,6 +241,7 @@ final class WorkoutManager: NSObject {
         heartRateSamples = []
         isPaused = false
         isSessionEnded = false
+        isFinalizingWorkout = false
         isRecoveredSession = false
         startDate = nil
         healthKitWorkoutUUID = nil
@@ -317,11 +332,15 @@ extension WorkoutManager: HKWorkoutSessionDelegate {
                 isPaused = true
             case .ended:
                 isSessionEnded = true
+                isFinalizingWorkout = true
                 WatchConnectivityManager.shared.sendWorkoutEnded()
+                defer { isFinalizingWorkout = false }
                 do {
                     try await builder?.endCollection(at: date)
                     let workout = try await builder?.finishWorkout()
-                    healthKitWorkoutUUID = workout?.uuid.uuidString
+                    if let workoutID = workout?.uuid.uuidString, !workoutID.isEmpty {
+                        healthKitWorkoutUUID = workoutID
+                    }
                 } catch {
                     print("Failed to finish workout: \(error.localizedDescription)")
                 }
