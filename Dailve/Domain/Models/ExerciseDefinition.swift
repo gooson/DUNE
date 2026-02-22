@@ -10,6 +10,9 @@ struct ExerciseDefinition: Codable, Identifiable, Sendable, Hashable {
     let secondaryMuscles: [MuscleGroup]
     let equipment: Equipment
     let metValue: Double
+    let aliases: [String]?
+    let difficulty: String?
+    let tags: [String]?
     let description: String?
     let customCategoryName: String?
 
@@ -34,6 +37,9 @@ struct ExerciseDefinition: Codable, Identifiable, Sendable, Hashable {
         secondaryMuscles: [MuscleGroup],
         equipment: Equipment,
         metValue: Double,
+        aliases: [String]? = nil,
+        difficulty: String? = nil,
+        tags: [String]? = nil,
         description: String? = nil,
         customCategoryName: String? = nil
     ) {
@@ -46,6 +52,9 @@ struct ExerciseDefinition: Codable, Identifiable, Sendable, Hashable {
         self.secondaryMuscles = secondaryMuscles
         self.equipment = equipment
         self.metValue = metValue
+        self.aliases = aliases
+        self.difficulty = difficulty
+        self.tags = tags
         self.description = description
         self.customCategoryName = customCategoryName
     }

@@ -1,9 +1,9 @@
 ---
 source: review/security
 priority: p2
-status: ready
+status: done
 created: 2026-02-15
-updated: 2026-02-15
+updated: 2026-02-22
 ---
 
 # HealthKit 권한 상태 확인 후 쿼리 실행

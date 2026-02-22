@@ -34,6 +34,12 @@ final class DashboardViewModel {
     private(set) var activityMetrics: [HealthMetric] = []
 
     private static let healthCategories: Set<HealthMetric.Category> = [.hrv, .rhr, .weight, .bmi]
+    private static var shouldBypassAuthorizationForTests: Bool {
+        let isRunningXCTest = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
+        let arguments = ProcessInfo.processInfo.arguments
+        let isHealthKitPermissionUITest = arguments.contains("--healthkit-permission-uitest")
+        return isRunningXCTest && !isHealthKitPermissionUITest
+    }
 
     private func invalidateFilteredMetrics() {
         updatePinnedMetrics()
@@ -103,14 +109,18 @@ final class DashboardViewModel {
         activeDaysThisWeek = 0
 
         if !authorizationChecked {
-            do {
-                try await healthKitManager.requestAuthorization()
+            if Self.shouldBypassAuthorizationForTests {
                 authorizationChecked = true
-            } catch {
-                AppLogger.ui.error("HealthKit authorization failed: \(error.localizedDescription)")
-                errorMessage = error.localizedDescription
-                isLoading = false
-                return
+            } else {
+                do {
+                    try await healthKitManager.requestAuthorization()
+                    authorizationChecked = true
+                } catch {
+                    AppLogger.ui.error("HealthKit authorization failed: \(error.localizedDescription)")
+                    errorMessage = error.localizedDescription
+                    isLoading = false
+                    return
+                }
             }
         }
 

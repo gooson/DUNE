@@ -52,9 +52,17 @@ struct BodyHistoryDetailView: View {
                     viewModel: viewModel,
                     isEdit: true,
                     onSave: {
-                        if viewModel.applyUpdate(to: record) {
-                            isShowingEditSheet = false
-                            viewModel.editingRecord = nil
+                        var didUpdate = false
+                        do {
+                            try modelContext.transaction {
+                                didUpdate = viewModel.applyUpdate(to: record)
+                            }
+                            if didUpdate {
+                                isShowingEditSheet = false
+                                viewModel.editingRecord = nil
+                            }
+                        } catch {
+                            viewModel.validationError = "Failed to save record changes. Please try again."
                         }
                     }
                 )

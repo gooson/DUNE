@@ -1,9 +1,9 @@
 ---
 source: review/architecture
 priority: p2
-status: ready
+status: done
 created: 2026-02-15
-updated: 2026-02-15
+updated: 2026-02-22
 ---
 
 # UseCase 패턴 일관적 적용

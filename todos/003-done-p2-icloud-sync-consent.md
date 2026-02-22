@@ -1,9 +1,9 @@
 ---
 source: review/security
 priority: p2
-status: ready
+status: done
 created: 2026-02-15
-updated: 2026-02-15
+updated: 2026-02-22
 ---
 
 # iCloud 동기화 사용자 동의 UI

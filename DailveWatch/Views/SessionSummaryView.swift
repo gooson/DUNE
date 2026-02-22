@@ -42,13 +42,13 @@ struct SessionSummaryView: View {
                 Button {
                     saveAndDismiss()
                 } label: {
-                    Text("Done")
+                    Text(workoutManager.isFinalizingWorkout && !isSaving ? "Finishing..." : "Done")
                         .font(.body.weight(.semibold))
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.borderedProminent)
                 .tint(.green)
-                .disabled(isSaving)
+                .disabled(isSaving || workoutManager.isFinalizingWorkout)
                 .padding(.top, 8)
             }
             .padding(.horizontal, 4)
@@ -118,14 +118,22 @@ struct SessionSummaryView: View {
     private func saveAndDismiss() {
         guard !isSaving, !hasSaved else { return }
         isSaving = true
+        Task {
+            await saveAndDismissAsync()
+        }
+    }
 
+    @MainActor
+    private func saveAndDismissAsync() async {
         guard workoutManager.templateSnapshot != nil else {
             isSaving = false
             saveError = "Workout data could not be recovered. Sets cannot be saved."
             return
         }
 
-        saveWorkoutRecords()
+        // Wait for HKWorkout finalization to reduce `healthKitWorkoutID = nil` race on Watch saves.
+        await workoutManager.waitForWorkoutFinalization()
+        saveWorkoutRecords(healthKitWorkoutID: workoutManager.healthKitWorkoutUUID)
 
         // Explicit save before reset — reset() triggers view transition
         // which can prevent SwiftData auto-save from flushing.
@@ -146,7 +154,7 @@ struct SessionSummaryView: View {
     }
 
     /// Persist ExerciseRecord + WorkoutSet to SwiftData for each exercise in the session.
-    private func saveWorkoutRecords() {
+    private func saveWorkoutRecords(healthKitWorkoutID: String?) {
         guard let template = workoutManager.templateSnapshot else { return }
         let sessionDuration = Swift.max(endDate.timeIntervalSince(startDate), 1)
         let activeExerciseCount = Double(Swift.max(completedSetsData.filter { !$0.isEmpty }.count, 1))
@@ -161,7 +169,7 @@ struct SessionSummaryView: View {
                 exerciseType: entry.exerciseName,
                 duration: sessionDuration / activeExerciseCount,
                 calories: activeCalories > 0 ? activeCalories / activeExerciseCount : nil,
-                healthKitWorkoutID: workoutManager.healthKitWorkoutUUID,
+                healthKitWorkoutID: healthKitWorkoutID,
                 exerciseDefinitionID: entry.exerciseDefinitionID,
                 calorieSource: activeCalories > 0 ? .healthKit : .manual
             )

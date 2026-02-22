@@ -53,8 +53,64 @@ When generating UI tests:
 
 ## Output Format
 
-When providing recommendations:
-- List missing accessibility identifiers with exact modifier suggestions
-- Provide test method skeletons for uncovered flows
-- Flag iPad-specific issues separately
-- Rate test coverage: adequate / needs improvement / critical gaps
+Use the following section order in every response:
+
+1. **Summary** (1-2 lines)
+2. **Findings** (priority-ordered: P1 -> P2 -> P3)
+3. **Missing Test Cases**
+4. **iPad-Specific Risks**
+5. **Coverage Rating**
+
+### Findings Format
+
+For each finding, use this template:
+
+````markdown
+### [P{N}] {Title}
+- **File**: {path}:{line}
+- **Platform**: common | iphone | ipad
+- **Category**: accessibility-id | navigation | sheet | form-state | date-picker | test-flakiness
+- **Issue**: {what is wrong}
+- **Evidence**: {how this was detected in code}
+- **Recommendation**: {exact fix direction}
+- **Patch Snippet**:
+```swift
+// minimal suggested patch
+```
+````
+
+### Missing Test Cases Format
+
+For each uncovered flow:
+
+````markdown
+- **Test**: `{testMethodName}`
+- **Why Missing**: {risk if not covered}
+- **Skeleton**:
+```swift
+@MainActor
+func {testMethodName}() throws {
+    // Arrange
+    // Act
+    // Assert
+}
+```
+````
+
+### iPad-Specific Risks
+
+Always provide this section, even if empty:
+- Sidebar navigation path coverage
+- Split view / size-class dependent element lookup
+- Sheet presentation parity vs iPhone
+
+### Coverage Rating
+
+Rate using one of:
+- `adequate`: must-have flows covered, no critical selector/navigation gap
+- `needs improvement`: at least one must-have flow or iPad path missing
+- `critical gaps`: major flow untestable due missing identifiers or flaky strategy
+
+If no findings exist, output:
+- `No UI testing issues found.`
+- Still include `Coverage Rating` and `Missing Test Cases` (can be `None`).
