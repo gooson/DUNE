@@ -6,10 +6,10 @@ import Testing
 struct ExerciseDefinitionTests {
     let library = ExerciseLibraryService()
 
-    @Test("Library loads 100+ exercises")
+    @Test("Library loads 500+ exercises")
     func loadsAll() {
         let all = library.allExercises()
-        #expect(all.count >= 100)
+        #expect(all.count >= 500)
     }
 
     @Test("Each exercise has a non-empty name")
@@ -26,10 +26,10 @@ struct ExerciseDefinitionTests {
         }
     }
 
-    @Test("Each exercise has valid MET value (> 0)")
+    @Test("Each exercise has valid MET value (0.9...30.0)")
     func allHaveValidMET() {
         for exercise in library.allExercises() {
-            #expect(exercise.metValue > 0, "Exercise \(exercise.name) has invalid MET: \(exercise.metValue)")
+            #expect((0.9...30.0).contains(exercise.metValue), "Exercise \(exercise.name) has invalid MET: \(exercise.metValue)")
         }
     }
 
@@ -66,7 +66,24 @@ struct ExerciseDefinitionTests {
         for result in results {
             let nameContains = result.name.localizedCaseInsensitiveContains("bench")
             let localizedContains = result.localizedName.localizedCaseInsensitiveContains("bench")
-            #expect(nameContains || localizedContains)
+            let aliasContains = (result.aliases ?? []).contains { $0.localizedCaseInsensitiveContains("bench") }
+            #expect(nameContains || localizedContains || aliasContains)
+        }
+    }
+
+    @Test("Search finds exercises by alias")
+    func searchByAlias() {
+        let results = library.search(query: "플랫 벤치")
+        #expect(!results.isEmpty)
+        #expect(results.contains { $0.id == "barbell-bench-press" })
+    }
+
+    @Test("Exercises with aliases have non-empty alias arrays")
+    func aliasesAreValid() {
+        let withAliases = library.allExercises().filter { $0.aliases != nil }
+        #expect(!withAliases.isEmpty)
+        for exercise in withAliases {
+            #expect(!(exercise.aliases ?? []).isEmpty, "\(exercise.id) has empty aliases array")
         }
     }
 
@@ -109,6 +126,15 @@ struct ExerciseDefinitionTests {
         #expect(!barbellExercises.isEmpty)
         for exercise in barbellExercises {
             #expect(exercise.equipment == .barbell)
+        }
+    }
+
+    @Test("New equipment types have exercises")
+    func newEquipmentHasExercises() {
+        let newTypes: [Equipment] = [.smithMachine, .ezBar, .trapBar, .trx]
+        for equip in newTypes {
+            let exercises = library.exercises(forEquipment: equip)
+            #expect(!exercises.isEmpty, "No exercises for \(equip)")
         }
     }
 
