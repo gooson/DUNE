@@ -96,7 +96,7 @@ struct VolumeAnalysisView: View {
                 Text("Weekly Goal per Muscle")
                     .font(.subheadline.weight(.medium))
                 Spacer()
-                Stepper("\(weeklySetGoal) sets", value: $weeklySetGoal, in: 5...30, step: 5)
+                Stepper("\(weeklySetGoal.formattedWithSeparator) sets", value: $weeklySetGoal, in: 5...30, step: 5)
                     .font(.caption)
             }
         }
@@ -133,7 +133,7 @@ struct VolumeAnalysisView: View {
 
                 Spacer()
 
-                Text("\(volume)/\(weeklySetGoal)")
+                Text("\(volume.formattedWithSeparator)/\(weeklySetGoal.formattedWithSeparator)")
                     .font(.caption.weight(.medium))
                     .monospacedDigit()
                     .foregroundStyle(volume >= weeklySetGoal ? .green : .secondary)

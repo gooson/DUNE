@@ -83,10 +83,10 @@ struct WeeklySummaryChartView: View {
         switch selectedTab {
         case .exercise:
             let total = exerciseData.map(\.value).reduce(0, +)
-            return "\(Int(total)) min"
+            return "\(Int(total).formattedWithSeparator) min"
         case .steps:
             let avg = stepsData.isEmpty ? 0 : stepsData.map(\.value).reduce(0, +) / Double(stepsData.count)
-            return "\(Int(avg)) avg"
+            return "\(Int(avg).formattedWithSeparator) avg"
         }
     }
 }

@@ -64,7 +64,7 @@ struct OneRMAnalysisSection: View {
             }
 
             if let first = analysis.formulaComparison.first {
-                Text("Based on \(formatWeight(first.basedOnWeight)) × \(first.basedOnReps) reps")
+                Text("Based on \(formatWeight(first.basedOnWeight)) × \(first.basedOnReps.formattedWithSeparator) reps")
                     .font(.caption)
                     .foregroundStyle(.tertiary)
             }
@@ -106,8 +106,8 @@ struct OneRMAnalysisSection: View {
     private func formatWeight(_ kg: Double) -> String {
         let converted = unit.fromKg(kg)
         if converted >= 100 {
-            return "\(Int(converted.rounded())) \(unit.displayName)"
+            return "\(Int(converted.rounded()).formattedWithSeparator) \(unit.displayName)"
         }
-        return String(format: "%.1f \(unit.displayName)", converted)
+        return "\(converted.formattedWithSeparator(fractionDigits: 1)) \(unit.displayName)"
     }
 }

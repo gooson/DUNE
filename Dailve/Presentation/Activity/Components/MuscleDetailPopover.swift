@@ -124,7 +124,7 @@ struct MuscleDetailPopover: View {
             )
             statItem(
                 title: "Weekly Volume",
-                value: "\(state.weeklyVolume) sets",
+                value: "\(state.weeklyVolume.formattedWithSeparator) sets",
                 icon: "chart.bar.fill"
             )
             statItem(
@@ -135,13 +135,13 @@ struct MuscleDetailPopover: View {
             if let score = state.compoundScore {
                 statItem(
                     title: "Sleep Modifier",
-                    value: String(format: "%.2f×", score.breakdown.sleepModifier),
+                    value: "\(score.breakdown.sleepModifier.formattedWithSeparator(fractionDigits: 2))×",
                     icon: "moon.fill"
                 )
             } else {
                 statItem(
                     title: "Base Recovery",
-                    value: "\(Int(muscle.recoveryHours))h",
+                    value: "\(Int(muscle.recoveryHours).formattedWithSeparator)h",
                     icon: "timer"
                 )
             }
@@ -169,8 +169,8 @@ struct MuscleDetailPopover: View {
     private func lastTrainedText(state: MuscleFatigueState) -> String {
         guard let hours = state.hoursSinceLastTrained, hours.isFinite else { return "Never" }
         if hours < 1 { return "Just now" }
-        if hours < 24 { return "\(Int(hours))h ago" }
+        if hours < 24 { return "\(Int(hours).formattedWithSeparator)h ago" }
         let days = Int(hours / 24)
-        return "\(days)d ago"
+        return "\(days.formattedWithSeparator)d ago"
     }
 }

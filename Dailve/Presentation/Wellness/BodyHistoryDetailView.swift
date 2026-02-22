@@ -82,17 +82,17 @@ struct BodyHistoryDetailView: View {
                     .font(.subheadline)
                 HStack(spacing: DS.Spacing.md) {
                     if let w = item.weight {
-                        Text("\(String(format: "%.1f", w)) kg")
+                        Text("\(w.formattedWithSeparator(fractionDigits: 1)) kg")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
                     if let f = item.bodyFatPercentage {
-                        Text("\(String(format: "%.1f", f))%")
+                        Text("\(f.formattedWithSeparator(fractionDigits: 1))%")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
                     if let m = item.muscleMass {
-                        Text("\(String(format: "%.1f", m)) kg")
+                        Text("\(m.formattedWithSeparator(fractionDigits: 1)) kg")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }

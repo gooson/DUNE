@@ -104,7 +104,7 @@ struct TrainingLoadChartView: View {
             if let point = selectedPoint {
                 ChartSelectionOverlay(
                     date: point.date,
-                    value: String(format: "%.1f", point.load),
+                    value: point.load.formattedWithSeparator(fractionDigits: 1),
                     dateFormat: .dateTime.month(.abbreviated).day()
                 )
                 .transition(.opacity)
@@ -184,11 +184,11 @@ struct TrainingLoadChartView: View {
 
         if lastWeek > 0 {
             let change = ((thisWeek - lastWeek) / lastWeek) * 100
-            guard change.isFinite, !change.isNaN else { return String(format: "This week %.1f", thisWeek) }
+            guard change.isFinite, !change.isNaN else { return "This week \(thisWeek.formattedWithSeparator(fractionDigits: 1))" }
             let arrow = change >= 0 ? "↑" : "↓"
-            return String(format: "This week %.1f (%@%.0f%%)", thisWeek, arrow, abs(change))
+            return "This week \(thisWeek.formattedWithSeparator(fractionDigits: 1)) (\(arrow)\(abs(change).formattedWithSeparator())%)"
         }
-        return String(format: "This week %.1f", thisWeek)
+        return "This week \(thisWeek.formattedWithSeparator(fractionDigits: 1))"
     }
 }
 

@@ -106,7 +106,7 @@ struct ExerciseStartView: View {
     private var detailRow: some View {
         HStack(spacing: DS.Spacing.lg) {
             Label(exercise.equipment.displayName, systemImage: "dumbbell.fill")
-            Label("\(WorkoutDefaults.setCount) sets", systemImage: "list.number")
+            Label("\(WorkoutDefaults.setCount.formattedWithSeparator) sets", systemImage: "list.number")
         }
         .font(.subheadline)
         .foregroundStyle(.secondary)

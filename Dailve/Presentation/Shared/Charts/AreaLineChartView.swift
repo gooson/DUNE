@@ -86,7 +86,7 @@ struct AreaLineChartView: View {
                 if let point = selectedPoint {
                     ChartSelectionOverlay(
                         date: point.date,
-                        value: String(format: "%.1f %@", point.value, unitSuffix)
+                        value: "\(point.value.formattedWithSeparator(fractionDigits: 1)) \(unitSuffix)"
                     )
                     .transition(.opacity)
                     .animation(.easeInOut(duration: 0.15), value: selectedDate)

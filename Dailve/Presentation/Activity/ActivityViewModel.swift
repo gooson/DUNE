@@ -240,20 +240,20 @@ final class ActivityViewModel {
 
         weeklyStats = [
             .volume(
-                value: totalVolume > 0 ? String(format: "%.0f", min(totalVolume, 50_000)) : "—",
-                change: volumeChange.map { String(format: "%+.0f%%", $0) },
+                value: totalVolume > 0 ? min(totalVolume, 50_000).formattedWithSeparator() : "—",
+                change: volumeChange.map { "\($0.formattedWithSeparator(alwaysShowSign: true))%" },
                 isPositive: volumeChange.map { $0 >= 0 }
             ),
             .calories(
-                value: totalCal > 0 ? String(format: "%.0f", totalCal) : "—"
+                value: totalCal > 0 ? totalCal.formattedWithSeparator() : "—"
             ),
             .duration(
-                value: totalDuration > 0 ? String(format: "%.0f", min(totalDuration, 28_800)) : "—",
-                change: durationChange.map { String(format: "%+.0f%%", $0) },
+                value: totalDuration > 0 ? min(totalDuration, 28_800).formattedWithSeparator() : "—",
+                change: durationChange.map { "\($0.formattedWithSeparator(alwaysShowSign: true))%" },
                 isPositive: durationChange.map { $0 >= 0 }
             ),
             .activeDays(
-                value: "\(activeDaySet.count)"
+                value: activeDaySet.count.formattedWithSeparator
             ),
         ]
     }

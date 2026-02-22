@@ -225,11 +225,11 @@ struct ConditionScoreDetailView: View {
                     .foregroundStyle(.secondary)
 
                 HStack(spacing: DS.Spacing.lg) {
-                    summaryItem(label: "Avg", value: String(format: "%.0f", summary.average))
+                    summaryItem(label: "Avg", value: summary.average.formattedWithSeparator())
                     if sizeClass == .regular { Divider().frame(height: 24) }
-                    summaryItem(label: "Min", value: String(format: "%.0f", summary.min))
+                    summaryItem(label: "Min", value: summary.min.formattedWithSeparator())
                     if sizeClass == .regular { Divider().frame(height: 24) }
-                    summaryItem(label: "Max", value: String(format: "%.0f", summary.max))
+                    summaryItem(label: "Max", value: summary.max.formattedWithSeparator())
 
                     if let change = summary.changePercentage {
                         Spacer()
@@ -260,7 +260,7 @@ struct ConditionScoreDetailView: View {
         return HStack(spacing: 2) {
             Image(systemName: icon)
                 .font(.system(size: 9, weight: .bold))
-            Text("\(String(format: "%.1f", abs(change)))%")
+            Text("\(abs(change).formattedWithSeparator(fractionDigits: 1))%")
                 .font(.caption2)
                 .fontWeight(.medium)
         }
@@ -287,7 +287,7 @@ struct ConditionScoreDetailView: View {
                             Text(highlight.label)
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
-                            Text(String(format: "%.0f", highlight.value))
+                            Text(highlight.value.formattedWithSeparator())
                                 .font(.subheadline)
                                 .fontWeight(.medium)
                         }

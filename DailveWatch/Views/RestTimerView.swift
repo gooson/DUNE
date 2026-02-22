@@ -55,7 +55,7 @@ struct RestTimerView: View {
                             .font(.system(size: 8))
                             .foregroundStyle(.red)
                         if workoutManager.heartRate > 0 {
-                            Text("\(Int(workoutManager.heartRate))")
+                            Text(Int(workoutManager.heartRate).formattedWithSeparator)
                                 .font(.caption2.monospacedDigit())
                                 .foregroundStyle(.secondary)
                         } else {

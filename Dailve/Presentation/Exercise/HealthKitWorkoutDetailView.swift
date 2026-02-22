@@ -57,7 +57,7 @@ struct HealthKitWorkoutDetailView: View {
                 )
                 if let cal = workout.calories, cal > 0 {
                     statItem(
-                        value: "\(Int(cal))",
+                        value: Int(cal).formattedWithSeparator,
                         label: "kcal"
                     )
                 }
@@ -119,7 +119,7 @@ struct HealthKitWorkoutDetailView: View {
                     icon: "heart.fill",
                     iconColor: .red,
                     title: "평균 심박수",
-                    value: "\(Int(hrAvg))",
+                    value: Int(hrAvg).formattedWithSeparator,
                     unit: "bpm"
                 )
             }
@@ -129,7 +129,7 @@ struct HealthKitWorkoutDetailView: View {
                     icon: "heart.fill",
                     iconColor: .red.opacity(0.7),
                     title: "최대 심박수",
-                    value: "\(Int(hrMax))",
+                    value: Int(hrMax).formattedWithSeparator,
                     unit: "bpm"
                 )
             }
@@ -149,7 +149,7 @@ struct HealthKitWorkoutDetailView: View {
                     icon: "mountain.2.fill",
                     iconColor: .green,
                     title: "고도 상승",
-                    value: "\(Int(elevation))",
+                    value: Int(elevation).formattedWithSeparator,
                     unit: "m"
                 )
             }
@@ -159,7 +159,7 @@ struct HealthKitWorkoutDetailView: View {
                     icon: "figure.walk",
                     iconColor: DS.Color.steps,
                     title: "걸음수",
-                    value: "\(Int(steps))",
+                    value: Int(steps).formattedWithSeparator,
                     unit: "걸음"
                 )
             }
@@ -169,7 +169,7 @@ struct HealthKitWorkoutDetailView: View {
                     icon: "flame.fill",
                     iconColor: .orange,
                     title: "Effort",
-                    value: String(format: "%.1f", effort),
+                    value: effort.formattedWithSeparator(fractionDigits: 1),
                     unit: "/10"
                 )
             }
@@ -251,7 +251,7 @@ struct HealthKitWorkoutDetailView: View {
                 HStack(spacing: DS.Spacing.xl) {
                     if let temp = workout.weatherTemperature {
                         VStack(spacing: DS.Spacing.xxs) {
-                            Text("\(Int(temp))°")
+                            Text("\(Int(temp).formattedWithSeparator)°")
                                 .font(.title2.weight(.semibold).monospacedDigit())
                             Text("온도")
                                 .font(.caption)
@@ -269,7 +269,7 @@ struct HealthKitWorkoutDetailView: View {
                     }
                     if let humidity = workout.weatherHumidity {
                         VStack(spacing: DS.Spacing.xxs) {
-                            Text("\(Int(humidity))%")
+                            Text("\(Int(humidity).formattedWithSeparator)%")
                                 .font(.title2.weight(.semibold).monospacedDigit())
                             Text("습도")
                                 .font(.caption)
@@ -306,15 +306,15 @@ struct HealthKitWorkoutDetailView: View {
             let mins = totalMinutes % 60
             return "\(hours):\(String(format: "%02d", mins))"
         }
-        return "\(totalMinutes)"
+        return totalMinutes.formattedWithSeparator
     }
 
     private func formattedDistance(_ meters: Double) -> String {
         let km = meters / 1000.0
         if km >= 10 {
-            return String(format: "%.1f", km)
+            return km.formattedWithSeparator(fractionDigits: 1)
         }
-        return String(format: "%.2f", km)
+        return km.formattedWithSeparator(fractionDigits: 2)
     }
 
     private func formattedPace(_ secPerKm: Double) -> String {

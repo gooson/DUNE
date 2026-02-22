@@ -68,21 +68,21 @@ struct AllDataView: View {
 
     private func formattedValue(_ value: Double) -> String {
         switch category {
-        case .hrv:               "\(String(format: "%.0f", value)) ms"
-        case .rhr:               "\(String(format: "%.0f", value)) bpm"
-        case .heartRate:         "\(String(format: "%.0f", value)) bpm"
+        case .hrv:               "\(value.formattedWithSeparator()) ms"
+        case .rhr:               "\(value.formattedWithSeparator()) bpm"
+        case .heartRate:         "\(value.formattedWithSeparator()) bpm"
         case .sleep:             value.hoursMinutesFormatted
-        case .exercise:          "\(String(format: "%.0f", value)) min"
-        case .steps:             "\(String(format: "%.0f", value))"
-        case .weight:            "\(String(format: "%.1f", value)) kg"
-        case .bmi:               "\(String(format: "%.1f", value))"
-        case .bodyFat:           "\(String(format: "%.1f", value))%"
-        case .leanBodyMass:      "\(String(format: "%.1f", value)) kg"
-        case .spo2:              "\(String(format: "%.0f", value * 100))%"
-        case .respiratoryRate:   "\(String(format: "%.0f", value)) breaths/min"
-        case .vo2Max:            "\(String(format: "%.1f", value)) ml/kg/min"
-        case .heartRateRecovery: "\(String(format: "%.0f", value)) bpm"
-        case .wristTemperature:  "\(String(format: "%+.1f", value)) °C"
+        case .exercise:          "\(value.formattedWithSeparator()) min"
+        case .steps:             value.formattedWithSeparator()
+        case .weight:            "\(value.formattedWithSeparator(fractionDigits: 1)) kg"
+        case .bmi:               value.formattedWithSeparator(fractionDigits: 1)
+        case .bodyFat:           "\(value.formattedWithSeparator(fractionDigits: 1))%"
+        case .leanBodyMass:      "\(value.formattedWithSeparator(fractionDigits: 1)) kg"
+        case .spo2:              "\((value * 100).formattedWithSeparator())%"
+        case .respiratoryRate:   "\(value.formattedWithSeparator()) breaths/min"
+        case .vo2Max:            "\(value.formattedWithSeparator(fractionDigits: 1)) ml/kg/min"
+        case .heartRateRecovery: "\(value.formattedWithSeparator()) bpm"
+        case .wristTemperature:  "\(value.formattedWithSeparator(fractionDigits: 1, alwaysShowSign: true)) °C"
         }
     }
 }

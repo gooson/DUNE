@@ -5,39 +5,39 @@ extension HealthMetric {
     var formattedNumericValue: String {
         switch category {
         case .hrv:
-            return String(format: "%.0f", value)
+            return value.formattedWithSeparator()
         case .rhr:
-            return String(format: "%.0f", value)
+            return value.formattedWithSeparator()
         case .sleep:
             return value.hoursMinutesFormatted
         case .exercise:
             switch unit {
-            case "km":  return String(format: "%.1f", value)
-            case "m":   return String(format: "%.0f", value)
-            default:    return String(format: "%.0f", value)
+            case "km":  return value.formattedWithSeparator(fractionDigits: 1)
+            case "m":   return value.formattedWithSeparator()
+            default:    return value.formattedWithSeparator()
             }
         case .steps:
-            return String(format: "%.0f", value)
+            return value.formattedWithSeparator()
         case .weight:
-            return String(format: "%.1f", value)
+            return value.formattedWithSeparator(fractionDigits: 1)
         case .bmi:
-            return String(format: "%.1f", value)
+            return value.formattedWithSeparator(fractionDigits: 1)
         case .spo2:
-            return String(format: "%.0f", value * 100) // stored as 0-1 decimal
+            return (value * 100).formattedWithSeparator() // stored as 0-1 decimal
         case .respiratoryRate:
-            return String(format: "%.1f", value)
+            return value.formattedWithSeparator(fractionDigits: 1)
         case .vo2Max:
-            return String(format: "%.1f", value)
+            return value.formattedWithSeparator(fractionDigits: 1)
         case .heartRateRecovery:
-            return String(format: "%.0f", value)
+            return value.formattedWithSeparator()
         case .heartRate:
-            return String(format: "%.0f", value)
+            return value.formattedWithSeparator()
         case .bodyFat:
-            return String(format: "%.1f", value)
+            return value.formattedWithSeparator(fractionDigits: 1)
         case .leanBodyMass:
-            return String(format: "%.1f", value)
+            return value.formattedWithSeparator(fractionDigits: 1)
         case .wristTemperature:
-            return String(format: "%+.1f", value) // show as delta from baseline
+            return value.formattedWithSeparator(fractionDigits: 1, alwaysShowSign: true) // show as delta from baseline
         }
     }
 
@@ -59,7 +59,7 @@ extension HealthMetric {
     /// Absolute change value formatted (no arrow).
     var formattedChangeValue: String? {
         guard let change else { return nil }
-        return String(format: "%.1f", abs(change))
+        return abs(change).formattedWithSeparator(fractionDigits: 1)
     }
 
     /// SF Symbol name for change direction.
@@ -72,7 +72,7 @@ extension HealthMetric {
     var formattedChange: String? {
         guard let change else { return nil }
         let arrow = change > 0 ? "\u{25B2}" : "\u{25BC}"
-        return "\(arrow)\(String(format: "%.1f", abs(change)))"
+        return "\(arrow)\(abs(change).formattedWithSeparator(fractionDigits: 1))"
     }
 }
 

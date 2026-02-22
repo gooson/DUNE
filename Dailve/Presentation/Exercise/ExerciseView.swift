@@ -264,7 +264,7 @@ struct ExerciseView: View {
             VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                 Text("Unfinished Workout")
                     .font(.subheadline.weight(.medium))
-                Text("\(draft.exerciseDefinition.localizedName) - \(draft.sets.filter(\.isCompleted).count) sets")
+                Text("\(draft.exerciseDefinition.localizedName) - \(draft.sets.filter(\.isCompleted).count.formattedWithSeparator) sets")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }

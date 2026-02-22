@@ -93,7 +93,7 @@ struct MuscleMapSummaryCard: View {
             }
             .frame(height: 8)
 
-            Text("\(sets) sets")
+            Text("\(sets.formattedWithSeparator) sets")
                 .font(.caption2)
                 .foregroundStyle(.secondary)
                 .frame(width: 48, alignment: .trailing)

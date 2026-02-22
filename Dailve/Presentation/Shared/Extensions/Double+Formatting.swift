@@ -23,8 +23,9 @@ private enum FormatterCache {
 extension Double {
     /// Formats a number with thousand separators.
     /// - Parameter fractionDigits: Number of decimal places (default 0).
+    /// - Parameter alwaysShowSign: Shows `+` prefix for positive values when true.
     /// - Returns: Formatted string with comma separators, e.g. "1,234" or "1,234.5".
-    func formattedWithSeparator(fractionDigits: Int = 0) -> String {
+    func formattedWithSeparator(fractionDigits: Int = 0, alwaysShowSign: Bool = false) -> String {
         let formatter: NumberFormatter
         switch fractionDigits {
         case 0: formatter = FormatterCache.integerFormatter
@@ -37,7 +38,9 @@ extension Double {
             f.maximumFractionDigits = fractionDigits
             formatter = f
         }
-        return formatter.string(from: NSNumber(value: self)) ?? "\(self)"
+        let formatted = formatter.string(from: NSNumber(value: self)) ?? "\(self)"
+        guard alwaysShowSign, self > 0 else { return formatted }
+        return "+\(formatted)"
     }
 }
 

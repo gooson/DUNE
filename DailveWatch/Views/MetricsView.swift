@@ -257,7 +257,7 @@ struct MetricsView: View {
                 .foregroundStyle(.red)
 
             if workoutManager.heartRate > 0 {
-                Text("\(Int(workoutManager.heartRate)) bpm")
+                Text("\(Int(workoutManager.heartRate).formattedWithSeparator) bpm")
                     .font(.caption.monospacedDigit())
                     .foregroundStyle(.secondary)
                     .contentTransition(.numericText())

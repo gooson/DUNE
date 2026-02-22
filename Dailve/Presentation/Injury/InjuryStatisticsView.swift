@@ -32,12 +32,12 @@ struct InjuryStatisticsView: View {
             HStack(spacing: DS.Spacing.md) {
                 StatCard(
                     title: "Total",
-                    value: "\(statistics.totalCount)",
+                    value: statistics.totalCount.formattedWithSeparator,
                     subtitle: "injuries recorded"
                 )
                 StatCard(
                     title: "Active",
-                    value: "\(statistics.activeCount)",
+                    value: statistics.activeCount.formattedWithSeparator,
                     subtitle: "current",
                     tintColor: statistics.activeCount > 0 ? DS.Color.caution : .green
                 )
@@ -46,12 +46,12 @@ struct InjuryStatisticsView: View {
             HStack(spacing: DS.Spacing.md) {
                 StatCard(
                     title: "Avg Recovery",
-                    value: statistics.averageRecoveryDays.map { "\(Int($0.rounded()))d" } ?? "—",
+                    value: statistics.averageRecoveryDays.map { "\(Int($0.rounded()).formattedWithSeparator)d" } ?? "—",
                     subtitle: "per injury"
                 )
                 StatCard(
                     title: "Longest",
-                    value: statistics.longestRecoveryDays.map { "\($0)d" } ?? "—",
+                    value: statistics.longestRecoveryDays.map { "\($0.formattedWithSeparator)d" } ?? "—",
                     subtitle: "recovery"
                 )
             }

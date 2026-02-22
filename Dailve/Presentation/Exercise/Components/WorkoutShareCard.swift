@@ -146,7 +146,7 @@ struct WorkoutShareCard: View {
             }
 
             if data.sets.count > 8 {
-                Text("+\(data.sets.count - 8) more sets")
+                Text("+\((data.sets.count - 8).formattedWithSeparator) more sets")
                     .font(.caption2)
                     .foregroundStyle(.white.opacity(0.4))
             }
@@ -182,7 +182,7 @@ struct WorkoutShareCard: View {
             parts.append("\(display.formatted(.number.precision(.fractionLength(0...1))))\(weightUnit.displayName)")
         }
         if let r = set.reps, r > 0 {
-            parts.append("\(r) reps")
+            parts.append("\(r.formattedWithSeparator) reps")
         }
         if let d = set.duration, d > 0 {
             let mins = Int(d) / 60
@@ -210,7 +210,7 @@ struct WorkoutShareCard: View {
         HStack(spacing: 0) {
             statItem(
                 icon: "number",
-                value: "\(data.sets.count)",
+                value: data.sets.count.formattedWithSeparator,
                 label: "Sets"
             )
 
@@ -227,13 +227,13 @@ struct WorkoutShareCard: View {
             if let cal = data.estimatedCalories, cal > 0 {
                 statItem(
                     icon: "flame.fill",
-                    value: "\(Int(cal))",
+                    value: Int(cal).formattedWithSeparator,
                     label: "kcal"
                 )
             } else {
                 statItem(
                     icon: "repeat",
-                    value: "\(totalReps)",
+                    value: totalReps.formattedWithSeparator,
                     label: "Reps"
                 )
             }
