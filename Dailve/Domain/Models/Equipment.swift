@@ -38,3 +38,28 @@ enum Equipment: String, Codable, CaseIterable, Sendable {
     // Other
     case other
 }
+
+extension Equipment {
+    /// Fallback mapping while exercises.json still uses legacy generic equipment values.
+    /// Example: selecting `legPressMachine` should still surface entries tagged as `.machine`.
+    var compatibleLibraryValues: Set<Equipment> {
+        switch self {
+        case .smithMachine,
+             .legPressMachine,
+             .hackSquatMachine,
+             .chestPressMachine,
+             .shoulderPressMachine,
+             .latPulldownMachine,
+             .legExtensionMachine,
+             .legCurlMachine,
+             .pecDeckMachine:
+            return [self, .machine]
+
+        case .cableMachine:
+            return [self, .cable]
+
+        default:
+            return [self]
+        }
+    }
+}

@@ -55,8 +55,9 @@ struct ExercisePickerView: View {
 
         // Apply equipment filter
         if let equipment = selectedEquipment {
-            libraryResults = libraryResults.filter { $0.equipment == equipment }
-            customResults = customResults.filter { $0.equipment == equipment }
+            let allowedEquipment = equipment.compatibleLibraryValues
+            libraryResults = libraryResults.filter { allowedEquipment.contains($0.equipment) }
+            customResults = customResults.filter { allowedEquipment.contains($0.equipment) }
         }
 
         return customResults + libraryResults
