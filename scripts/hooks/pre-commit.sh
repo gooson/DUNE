@@ -2,9 +2,14 @@
 # Pre-commit hook: validate before committing
 # Install: ln -sf ../../scripts/hooks/pre-commit.sh .git/hooks/pre-commit
 
-set -e
+set -euo pipefail
+
+ROOT_DIR="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 
 echo "Running pre-commit checks..."
+
+# Always clean local build artifacts before validating commit state.
+"$ROOT_DIR/scripts/hooks/cleanup-artifacts.sh"
 
 # Check for secrets/credentials in staged files
 if git diff --cached --diff-filter=ACM -U0 | grep -iE "(api_key|api_secret|secret_key|password|token|credential|private_key)\s*[:=]" | grep -v "test" | grep -v ".md" | grep -v "#"; then
