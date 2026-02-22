@@ -2,7 +2,9 @@
 # Pre-commit hook: validate before committing
 # Install: ln -sf ../../scripts/hooks/pre-commit.sh .git/hooks/pre-commit
 
-set -e
+set -euo pipefail
+
+ROOT_DIR="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 
 echo "Running pre-commit checks..."
 
@@ -46,5 +48,15 @@ fi
 # npm run lint 2>/dev/null || true
 # npm run typecheck 2>/dev/null || true
 # pytest 2>/dev/null || true
+
+# iOS build check for Swift/Xcode changes (can be skipped with DAILVE_SKIP_PRECOMMIT_BUILD=1)
+if git diff --cached --name-only | grep -Eq "^(Dailve/|DailveTests/|DailveUITests/|DailveWatch/).*\\.(swift|yml|plist|entitlements)$"; then
+    if [ "${DAILVE_SKIP_PRECOMMIT_BUILD:-0}" = "1" ]; then
+        echo "Skipping iOS build check (DAILVE_SKIP_PRECOMMIT_BUILD=1)."
+    else
+        echo "Running iOS build check..."
+        "$ROOT_DIR/scripts/build-ios.sh"
+    fi
+fi
 
 echo "Pre-commit checks passed."
