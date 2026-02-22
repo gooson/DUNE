@@ -16,7 +16,7 @@ struct PersonalRecordsSection: View {
             emptyState
         } else {
             LazyVGrid(columns: columns, spacing: DS.Spacing.sm) {
-                ForEach(records) { record in
+                ForEach(records.prefix(8)) { record in
                     prCard(record)
                 }
             }

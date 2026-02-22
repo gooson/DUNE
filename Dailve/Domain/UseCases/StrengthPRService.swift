@@ -1,18 +1,19 @@
 import Foundation
 
-/// Extracts personal records (session max weight) per exercise from workout history.
+/// Extracts personal records (best average weight per set) per exercise from workout history.
 enum StrengthPRService: Sendable {
 
     struct WorkoutEntry: Sendable {
         let exerciseName: String
         let date: Date
-        let maxWeight: Double  // Max weight across all sets in this session
+        /// Best approximation of session weight: totalWeight / setCount (avg per set).
+        let bestWeight: Double
     }
 
-    /// Extracts per-exercise max weight PRs from workout entries.
-    /// - Parameter entries: Flat list of (exercise, date, maxWeight) from ExerciseRecord+WorkoutSet.
+    /// Extracts per-exercise best weight PRs from workout entries.
+    /// - Parameter entries: Flat list of (exercise, date, bestWeight) from ExerciseRecord snapshots.
     /// - Parameter referenceDate: Date to determine "recent" flag (default: now).
-    /// - Returns: One StrengthPersonalRecord per exercise, sorted by maxWeight descending.
+    /// - Returns: One StrengthPersonalRecord per exercise, sorted by bestWeight descending.
     static func extractPRs(
         from entries: [WorkoutEntry],
         referenceDate: Date = Date()
@@ -23,14 +24,14 @@ enum StrengthPRService: Sendable {
         var bestByExercise: [String: WorkoutEntry] = [:]
 
         for entry in entries {
-            guard entry.maxWeight > 0, entry.maxWeight <= 500,
-                  entry.maxWeight.isFinite else { continue }
+            guard entry.bestWeight > 0, entry.bestWeight <= 500,
+                  entry.bestWeight.isFinite else { continue }
 
             let name = entry.exerciseName.trimmingCharacters(in: .whitespaces)
             guard !name.isEmpty else { continue }
 
             if let existing = bestByExercise[name] {
-                if entry.maxWeight > existing.maxWeight {
+                if entry.bestWeight > existing.bestWeight {
                     bestByExercise[name] = entry
                 }
             } else {
@@ -42,7 +43,7 @@ enum StrengthPRService: Sendable {
             .map { entry in
                 StrengthPersonalRecord(
                     exerciseName: entry.exerciseName,
-                    maxWeight: entry.maxWeight,
+                    maxWeight: entry.bestWeight,
                     date: entry.date,
                     referenceDateForRecent: referenceDate
                 )

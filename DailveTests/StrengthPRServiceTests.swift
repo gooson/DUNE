@@ -9,7 +9,7 @@ struct StrengthPRServiceTests {
         .init(
             exerciseName: name,
             date: Calendar.current.date(byAdding: .day, value: -daysAgo, to: Date()) ?? Date(),
-            maxWeight: weight
+            bestWeight: weight
         )
     }
 

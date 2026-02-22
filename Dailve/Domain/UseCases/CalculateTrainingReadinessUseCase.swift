@@ -21,7 +21,6 @@ struct CalculateTrainingReadinessUseCase: TrainingReadinessCalculating, Sendable
         let deepSleepRatio: Double?
         let remSleepRatio: Double?
         let fatigueStates: [MuscleFatigueState]
-        let hrvHistory: [Double]
     }
 
     // MARK: - Weights
@@ -39,7 +38,8 @@ struct CalculateTrainingReadinessUseCase: TrainingReadinessCalculating, Sendable
     private let minimumStdDev = 0.05
 
     func execute(input: Input) -> TrainingReadiness? {
-        let hrvComponent = computeHRVScore(from: input.hrvSamples)
+        let dailyAverages = computeDailyAverages(from: input.hrvSamples)
+        let hrvComponent = computeHRVScore(dailyAverages: dailyAverages)
         let rhrComponent = computeRHRScore(today: input.todayRHR, baseline: input.rhrBaseline)
         let sleepComponent = computeSleepScore(
             durationMinutes: input.sleepDurationMinutes,
@@ -47,10 +47,10 @@ struct CalculateTrainingReadinessUseCase: TrainingReadinessCalculating, Sendable
             remSleepRatio: input.remSleepRatio
         )
         let fatigueComponent = computeFatigueScore(states: input.fatigueStates)
-        let trendComponent = computeTrendBonus(history: input.hrvHistory)
+        let trendComponent = computeTrendBonus(dailyAverages: dailyAverages)
 
         let isCalibrating = input.hrvSamples.isEmpty
-            || computeDailyAverages(from: input.hrvSamples).count < minimumBaselineDays
+            || dailyAverages.count < minimumBaselineDays
 
         let rawScore = Double(hrvComponent) * hrvWeight
             + Double(rhrComponent) * rhrWeight
@@ -74,8 +74,7 @@ struct CalculateTrainingReadinessUseCase: TrainingReadinessCalculating, Sendable
     // MARK: - HRV Score (30%)
 
     /// Normalizes today's HRV against personal baseline using ln-domain z-score.
-    private func computeHRVScore(from samples: [HRVSample]) -> Int {
-        let dailyAverages = computeDailyAverages(from: samples)
+    private func computeHRVScore(dailyAverages: [(date: Date, value: Double)]) -> Int {
         guard dailyAverages.count >= minimumBaselineDays,
               let todayAvg = dailyAverages.first,
               todayAvg.value > 0 else {
@@ -207,10 +206,10 @@ struct CalculateTrainingReadinessUseCase: TrainingReadinessCalculating, Sendable
     // MARK: - Trend Bonus (10%)
 
     /// Positive trend in recent HRV daily averages = bonus.
-    private func computeTrendBonus(history: [Double]) -> Int {
-        guard history.count >= 3 else { return 50 }
+    private func computeTrendBonus(dailyAverages: [(date: Date, value: Double)]) -> Int {
+        guard dailyAverages.count >= 3 else { return 50 }
 
-        let recent = Array(history.prefix(7))
+        let recent = Array(dailyAverages.prefix(7).map(\.value))
         guard recent.count >= 3 else { return 50 }
 
         // Simple linear regression slope

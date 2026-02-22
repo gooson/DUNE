@@ -53,8 +53,7 @@ struct CalculateTrainingReadinessUseCaseTests {
         sleepMinutes: Double? = 450,
         deepSleepRatio: Double? = 0.22,
         remSleepRatio: Double? = 0.22,
-        fatigueStates: [MuscleFatigueState] = [],
-        hrvHistory: [Double] = [50, 52, 48, 51, 49, 53, 50]
+        fatigueStates: [MuscleFatigueState] = []
     ) -> CalculateTrainingReadinessUseCase.Input {
         .init(
             hrvSamples: makeHRVSamples(values: hrvValues),
@@ -63,8 +62,7 @@ struct CalculateTrainingReadinessUseCaseTests {
             sleepDurationMinutes: sleepMinutes,
             deepSleepRatio: deepSleepRatio,
             remSleepRatio: remSleepRatio,
-            fatigueStates: fatigueStates,
-            hrvHistory: hrvHistory
+            fatigueStates: fatigueStates
         )
     }
 
@@ -129,8 +127,7 @@ struct CalculateTrainingReadinessUseCaseTests {
             sleepDurationMinutes: 450,
             deepSleepRatio: 0.22,
             remSleepRatio: 0.22,
-            fatigueStates: [],
-            hrvHistory: [50, 52, 48]
+            fatigueStates: []
         )
         let result = sut.execute(input: input)
         #expect(result != nil)
@@ -365,7 +362,8 @@ struct CalculateTrainingReadinessUseCaseTests {
 
     @Test("Trend component higher with improving HRV")
     func trendHigherImproving() {
-        let input = makeDefaultInput(hrvHistory: [40, 42, 44, 46, 48, 50, 52])
+        // hrvValues[0]=today, [1]=1d ago, etc. Improving = recent > old.
+        let input = makeDefaultInput(hrvValues: [52, 50, 48, 46, 44, 42, 40])
         let result = sut.execute(input: input)
         #expect(result != nil)
         #expect(result!.components.trendBonus > 50)
@@ -373,7 +371,8 @@ struct CalculateTrainingReadinessUseCaseTests {
 
     @Test("Trend component lower with declining HRV")
     func trendLowerDeclining() {
-        let input = makeDefaultInput(hrvHistory: [60, 55, 50, 45, 40, 35, 30])
+        // Declining = recent < old.
+        let input = makeDefaultInput(hrvValues: [30, 35, 40, 45, 50, 55, 60])
         let result = sut.execute(input: input)
         #expect(result != nil)
         #expect(result!.components.trendBonus < 50)
@@ -381,8 +380,10 @@ struct CalculateTrainingReadinessUseCaseTests {
 
     @Test("Trend component neutral with insufficient data")
     func trendNeutralInsufficient() {
-        let input = makeDefaultInput(hrvHistory: [50, 55])  // < 3 points
+        // Only 2 daily averages — not enough for trend
+        let input = makeDefaultInput(hrvValues: [50, 55])
         let result = sut.execute(input: input)
+        // With < 7 days, isCalibrating=true and trendBonus=50 (neutral)
         #expect(result != nil)
         #expect(result!.components.trendBonus == 50)
     }
@@ -424,8 +425,7 @@ struct CalculateTrainingReadinessUseCaseTests {
             todayRHR: nil,
             rhrBaseline: [],
             sleepMinutes: nil,
-            fatigueStates: [],
-            hrvHistory: []
+            fatigueStates: []
         )
         let result = sut.execute(input: input)
         #expect(result != nil)

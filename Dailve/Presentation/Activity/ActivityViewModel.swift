@@ -177,7 +177,7 @@ final class ActivityViewModel {
             return StrengthPRService.WorkoutEntry(
                 exerciseName: name,
                 date: snapshot.date,
-                maxWeight: weight / Double(snapshot.completedSetCount)
+                bestWeight: weight / Double(snapshot.completedSetCount)
             )
         }
         personalRecords = StrengthPRService.extractPRs(from: prEntries)
@@ -219,12 +219,14 @@ final class ActivityViewModel {
         // Volume
         let totalVolume = thisWeek.compactMap(\.totalWeight).reduce(0, +)
         let prevVolume = prevWeek.compactMap(\.totalWeight).reduce(0, +)
-        let volumeChange = prevVolume > 0 ? ((totalVolume - prevVolume) / prevVolume * 100) : nil
+        let rawVolumeChange = prevVolume > 0 ? ((totalVolume - prevVolume) / prevVolume * 100) : nil
+        let volumeChange = rawVolumeChange.flatMap { $0.isFinite ? $0 : nil }
 
         // Duration
         let totalDuration = thisWeek.compactMap(\.durationMinutes).reduce(0, +)
         let prevDuration = prevWeek.compactMap(\.durationMinutes).reduce(0, +)
-        let durationChange = prevDuration > 0 ? ((totalDuration - prevDuration) / prevDuration * 100) : nil
+        let rawDurationChange = prevDuration > 0 ? ((totalDuration - prevDuration) / prevDuration * 100) : nil
+        let durationChange = rawDurationChange.flatMap { $0.isFinite ? $0 : nil }
 
         // Calories from HealthKit workouts this week
         let hkThisWeek = recentWorkouts.filter { $0.date >= weekAgo }
@@ -313,16 +315,6 @@ final class ActivityViewModel {
         recomputeFatigueAndSuggestion()
 
         // Compute Training Readiness Score
-        let calendar = Calendar.current
-        let dailyHRVAverages = Dictionary(
-            grouping: readinessResult.hrvSamples.filter { $0.value > 0 && $0.value <= 500 && $0.value.isFinite },
-            by: { calendar.startOfDay(for: $0.date) }
-        )
-        .compactMap { _, samples -> Double? in
-            let avg = samples.map(\.value).reduce(0, +) / Double(samples.count)
-            return avg > 0 ? avg : nil
-        }
-
         let readinessInput = CalculateTrainingReadinessUseCase.Input(
             hrvSamples: readinessResult.hrvSamples,
             todayRHR: readinessResult.todayRHR,
@@ -330,8 +322,7 @@ final class ActivityViewModel {
             sleepDurationMinutes: sleepResult?.totalSleepMinutes,
             deepSleepRatio: sleepResult?.deepSleepRatio,
             remSleepRatio: sleepResult?.remSleepRatio,
-            fatigueStates: fatigueStates,
-            hrvHistory: dailyHRVAverages
+            fatigueStates: fatigueStates
         )
         trainingReadiness = readinessUseCase.execute(input: readinessInput)
 
