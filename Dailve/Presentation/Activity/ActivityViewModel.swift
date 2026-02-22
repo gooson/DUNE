@@ -17,6 +17,13 @@ final class ActivityViewModel {
     var workoutSuggestion: WorkoutSuggestion?
     var fatigueStates: [MuscleFatigueState] = []
 
+    // New data for redesigned Activity tab
+    var trainingReadiness: TrainingReadiness?
+    var personalRecords: [StrengthPersonalRecord] = []
+    var workoutStreak: WorkoutStreak?
+    var exerciseFrequencies: [ExerciseFrequency] = []
+    var weeklyStats: [ActivityStat] = []
+
     /// Weekly training goal in active days.
     let weeklyGoal: Int = 5
 
@@ -62,6 +69,7 @@ final class ActivityViewModel {
     private let recommendationService: WorkoutRecommending
     private let recoveryModifierService: RecoveryModifying
     private let library: ExerciseLibraryQuerying
+    private let readinessUseCase: TrainingReadinessCalculating
 
     /// Cached recovery modifiers from the most recent fetch.
     private var sleepModifier: Double = 1.0
@@ -74,7 +82,8 @@ final class ActivityViewModel {
         healthKitManager: HealthKitManager = .shared,
         recommendationService: WorkoutRecommending? = nil,
         recoveryModifierService: RecoveryModifying = RecoveryModifierService(),
-        library: ExerciseLibraryQuerying? = nil
+        library: ExerciseLibraryQuerying? = nil,
+        readinessUseCase: TrainingReadinessCalculating = CalculateTrainingReadinessUseCase()
     ) {
         self.workoutService = workoutService ?? WorkoutQueryService(manager: healthKitManager)
         self.stepsService = stepsService ?? StepsQueryService(manager: healthKitManager)
@@ -84,6 +93,7 @@ final class ActivityViewModel {
         self.recommendationService = recommendationService ?? WorkoutRecommendationService()
         self.recoveryModifierService = recoveryModifierService
         self.library = library ?? ExerciseLibraryService.shared
+        self.readinessUseCase = readinessUseCase
     }
 
     // MARK: - Workout Suggestion
@@ -127,6 +137,7 @@ final class ActivityViewModel {
             )
         }
         recomputeFatigueAndSuggestion()
+        recomputeDerivedStats()
     }
 
     /// Recompute fatigue states and suggestion from both SwiftData records and HealthKit workouts.
@@ -154,6 +165,97 @@ final class ActivityViewModel {
             readinessModifier: readinessModifier
         )
         workoutSuggestion = recommendationService.recommend(from: allSnapshots, library: library)
+    }
+
+    /// Computes PR, Streak, and Frequency from current exercise record snapshots.
+    func recomputeDerivedStats() {
+        // Personal Records: extract max weight per exercise
+        let prEntries = exerciseRecordSnapshots.compactMap { snapshot -> StrengthPRService.WorkoutEntry? in
+            guard let name = snapshot.exerciseName, !name.isEmpty,
+                  let weight = snapshot.totalWeight, weight > 0,
+                  snapshot.completedSetCount > 0 else { return nil }
+            return StrengthPRService.WorkoutEntry(
+                exerciseName: name,
+                date: snapshot.date,
+                bestWeight: weight / Double(snapshot.completedSetCount)
+            )
+        }
+        personalRecords = StrengthPRService.extractPRs(from: prEntries)
+
+        // Workout Streak
+        let streakEntries = exerciseRecordSnapshots.map { snapshot in
+            WorkoutStreakService.WorkoutDay(
+                date: snapshot.date,
+                durationMinutes: snapshot.durationMinutes ?? 0
+            )
+        }
+        // Also include HealthKit workouts
+        let hkStreakEntries = recentWorkouts.map { workout in
+            WorkoutStreakService.WorkoutDay(
+                date: workout.date,
+                durationMinutes: workout.duration / 60.0
+            )
+        }
+        workoutStreak = WorkoutStreakService.calculate(from: streakEntries + hkStreakEntries)
+
+        // Exercise Frequency
+        let freqEntries = exerciseRecordSnapshots.compactMap { snapshot -> ExerciseFrequencyService.WorkoutEntry? in
+            guard let name = snapshot.exerciseName, !name.isEmpty else { return nil }
+            return ExerciseFrequencyService.WorkoutEntry(exerciseName: name, date: snapshot.date)
+        }
+        exerciseFrequencies = ExerciseFrequencyService.analyze(from: freqEntries)
+
+        // Weekly Stats
+        rebuildWeeklyStats()
+    }
+
+    private func rebuildWeeklyStats() {
+        let calendar = Calendar.current
+        let weekAgo = calendar.date(byAdding: .day, value: -7, to: Date()) ?? Date()
+        let thisWeek = exerciseRecordSnapshots.filter { $0.date >= weekAgo }
+        let prevWeekStart = calendar.date(byAdding: .day, value: -14, to: Date()) ?? Date()
+        let prevWeek = exerciseRecordSnapshots.filter { $0.date >= prevWeekStart && $0.date < weekAgo }
+
+        // Volume
+        let totalVolume = thisWeek.compactMap(\.totalWeight).reduce(0, +)
+        let prevVolume = prevWeek.compactMap(\.totalWeight).reduce(0, +)
+        let rawVolumeChange = prevVolume > 0 ? ((totalVolume - prevVolume) / prevVolume * 100) : nil
+        let volumeChange = rawVolumeChange.flatMap { $0.isFinite ? $0 : nil }
+
+        // Duration
+        let totalDuration = thisWeek.compactMap(\.durationMinutes).reduce(0, +)
+        let prevDuration = prevWeek.compactMap(\.durationMinutes).reduce(0, +)
+        let rawDurationChange = prevDuration > 0 ? ((totalDuration - prevDuration) / prevDuration * 100) : nil
+        let durationChange = rawDurationChange.flatMap { $0.isFinite ? $0 : nil }
+
+        // Calories from HealthKit workouts this week
+        let hkThisWeek = recentWorkouts.filter { $0.date >= weekAgo }
+        let totalCal = hkThisWeek.compactMap(\.calories).reduce(0, +)
+
+        // Active days
+        let activeDaySet = Set(
+            (thisWeek.map { calendar.startOfDay(for: $0.date) })
+            + (hkThisWeek.map { calendar.startOfDay(for: $0.date) })
+        )
+
+        weeklyStats = [
+            .volume(
+                value: totalVolume > 0 ? String(format: "%.0f", min(totalVolume, 50_000)) : "—",
+                change: volumeChange.map { String(format: "%+.0f%%", $0) },
+                isPositive: volumeChange.map { $0 >= 0 }
+            ),
+            .calories(
+                value: totalCal > 0 ? String(format: "%.0f", totalCal) : "—"
+            ),
+            .duration(
+                value: totalDuration > 0 ? String(format: "%.0f", min(totalDuration, 28_800)) : "—",
+                change: durationChange.map { String(format: "%+.0f%%", $0) },
+                isPositive: durationChange.map { $0 >= 0 }
+            ),
+            .activeDays(
+                value: "\(activeDaySet.count)"
+            ),
+        ]
     }
 
     private var loadTask: Task<Void, Never>?
@@ -211,6 +313,21 @@ final class ActivityViewModel {
 
         // Recompute fatigue with newly fetched HealthKit workouts + recovery modifiers
         recomputeFatigueAndSuggestion()
+
+        // Compute Training Readiness Score
+        let readinessInput = CalculateTrainingReadinessUseCase.Input(
+            hrvSamples: readinessResult.hrvSamples,
+            todayRHR: readinessResult.todayRHR,
+            rhrBaseline: readinessResult.rhrBaseline,
+            sleepDurationMinutes: sleepResult?.totalSleepMinutes,
+            deepSleepRatio: sleepResult?.deepSleepRatio,
+            remSleepRatio: sleepResult?.remSleepRatio,
+            fatigueStates: fatigueStates
+        )
+        trainingReadiness = readinessUseCase.execute(input: readinessInput)
+
+        // Compute derived stats (PRs, streak, frequency, weekly stats)
+        recomputeDerivedStats()
 
         guard !Task.isCancelled else { return }
         isLoading = false
@@ -427,18 +544,28 @@ final class ActivityViewModel {
     private struct ReadinessResult {
         let hrvZScore: Double?
         let rhrDelta: Double?
+        let hrvSamples: [HRVSample]
+        let todayRHR: Double?
+        let rhrBaseline: [Double]
     }
 
     private func safeReadinessFetch() async -> ReadinessResult {
         do {
-            // Fetch 14 days of HRV for baseline + today/yesterday RHR
-            async let hrvTask = hrvService.fetchHRVSamples(days: 14)
-            async let todayRHRTask = hrvService.fetchRestingHeartRate(for: Date())
             let calendar = Calendar.current
             let yesterday = calendar.date(byAdding: .day, value: -1, to: Date()) ?? Date()
-            async let yesterdayRHRTask = hrvService.fetchRestingHeartRate(for: yesterday)
+            let twoWeeksAgo = calendar.date(byAdding: .day, value: -14, to: Date()) ?? Date()
 
-            let (hrvSamples, todayRHR, yesterdayRHR) = try await (hrvTask, todayRHRTask, yesterdayRHRTask)
+            // Fetch 14 days of HRV + today RHR + yesterday RHR + RHR collection in parallel
+            async let hrvTask = hrvService.fetchHRVSamples(days: 14)
+            async let todayRHRTask = hrvService.fetchRestingHeartRate(for: Date())
+            async let yesterdayRHRTask = hrvService.fetchRestingHeartRate(for: yesterday)
+            async let rhrCollectionTask = hrvService.fetchRHRCollection(
+                start: twoWeeksAgo, end: Date(), interval: DateComponents(day: 1)
+            )
+
+            let (hrvSamples, todayRHR, yesterdayRHR, rhrCollection) = try await (
+                hrvTask, todayRHRTask, yesterdayRHRTask, rhrCollectionTask
+            )
 
             // Compute HRV z-score from daily averages (ln-domain)
             let hrvZScore = computeHRVZScore(from: hrvSamples)
@@ -452,10 +579,21 @@ final class ActivityViewModel {
                 rhrDelta = nil
             }
 
-            return ReadinessResult(hrvZScore: hrvZScore, rhrDelta: rhrDelta)
+            // RHR baseline: daily averages for training readiness
+            let rhrBaseline = rhrCollection
+                .map(\.average)
+                .filter { $0 > 0 && $0.isFinite && $0 >= 20 && $0 <= 300 }
+
+            return ReadinessResult(
+                hrvZScore: hrvZScore,
+                rhrDelta: rhrDelta,
+                hrvSamples: hrvSamples,
+                todayRHR: todayRHR,
+                rhrBaseline: rhrBaseline
+            )
         } catch {
             AppLogger.ui.error("Readiness fetch failed: \(error.localizedDescription)")
-            return ReadinessResult(hrvZScore: nil, rhrDelta: nil)
+            return ReadinessResult(hrvZScore: nil, rhrDelta: nil, hrvSamples: [], todayRHR: nil, rhrBaseline: [])
         }
     }
 

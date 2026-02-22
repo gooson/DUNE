@@ -10,7 +10,7 @@ enum AppSection: String, CaseIterable, Identifiable {
     var title: String {
         switch self {
         case .today: "Today"
-        case .train: "Train"
+        case .train: "Activity"
         case .wellness: "Wellness"
         }
     }
