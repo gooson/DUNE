@@ -72,7 +72,7 @@ struct BarChartView: View {
                 if let point = selectedPoint {
                     ChartSelectionOverlay(
                         date: point.date,
-                        value: "\(String(format: "%.0f", point.value))\(unitSuffix)",
+                        value: "\(point.value.formattedWithSeparator())\(unitSuffix)",
                         dateFormat: headerDateFormat
                     )
                     .transition(.opacity)

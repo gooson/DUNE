@@ -25,7 +25,7 @@ struct HealthMetricTests {
         #expect(sleep.formattedValue == "7h 30m")
 
         let steps = HealthMetric(id: "3", name: "Steps", value: 8500, unit: "", change: nil, date: Date(), category: .steps)
-        #expect(steps.formattedValue == "8500 steps")
+        #expect(steps.formattedValue == "8,500 steps")
     }
 
     @Test("formattedChange returns nil when no change")

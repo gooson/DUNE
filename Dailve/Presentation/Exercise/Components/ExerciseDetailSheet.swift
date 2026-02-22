@@ -187,7 +187,7 @@ struct ExerciseDetailSheet: View {
 
             HStack(spacing: DS.Spacing.lg) {
                 infoItem(label: "Input", value: inputTypeLabel)
-                infoItem(label: "MET", value: String(format: "%.1f", exercise.metValue))
+                infoItem(label: "MET", value: exercise.metValue.formattedWithSeparator(fractionDigits: 1))
             }
         }
     }

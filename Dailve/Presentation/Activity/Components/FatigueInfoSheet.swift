@@ -68,7 +68,7 @@ struct FatigueInfoSheet: View {
                     Text("소계")
                         .font(.caption.weight(.semibold))
                     Spacer()
-                    Text(String(format: "%.2f", score.breakdown.baseFatigue))
+                    Text(score.breakdown.baseFatigue.formattedWithSeparator(fractionDigits: 2))
                         .font(.caption.weight(.semibold).monospacedDigit())
                 }
                 .padding(.top, DS.Spacing.xxs)
@@ -90,13 +90,13 @@ struct FatigueInfoSheet: View {
             Spacer()
 
             HStack(spacing: DS.Spacing.xxs) {
-                Text(String(format: "%.1f", contribution.rawLoad))
+                Text(contribution.rawLoad.formattedWithSeparator(fractionDigits: 1))
                     .font(.caption2.monospacedDigit())
                     .foregroundStyle(.secondary)
                 Image(systemName: "arrow.right")
                     .font(.system(size: 8))
                     .foregroundStyle(.tertiary)
-                Text(String(format: "%.2f", contribution.decayedLoad))
+                Text(contribution.decayedLoad.formattedWithSeparator(fractionDigits: 2))
                     .font(.caption2.weight(.medium).monospacedDigit())
             }
         }
@@ -113,7 +113,7 @@ struct FatigueInfoSheet: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 Spacer()
-                Text(String(format: "×%.2f", score.breakdown.sleepModifier))
+                Text("×\(score.breakdown.sleepModifier.formattedWithSeparator(fractionDigits: 2))")
                     .font(.caption.weight(.medium).monospacedDigit())
                     .foregroundStyle(modifierColor(score.breakdown.sleepModifier))
             }
@@ -137,7 +137,7 @@ struct FatigueInfoSheet: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 Spacer()
-                Text(String(format: "×%.2f", score.breakdown.readinessModifier))
+                Text("×\(score.breakdown.readinessModifier.formattedWithSeparator(fractionDigits: 2))")
                     .font(.caption.weight(.medium).monospacedDigit())
                     .foregroundStyle(modifierColor(score.breakdown.readinessModifier))
             }
@@ -159,7 +159,7 @@ struct FatigueInfoSheet: View {
                     .font(.subheadline.weight(.semibold))
                 Spacer()
                 HStack(spacing: DS.Spacing.xs) {
-                    Text(String(format: "%.2f", score.normalizedScore))
+                    Text(score.normalizedScore.formattedWithSeparator(fractionDigits: 2))
                         .font(.subheadline.weight(.bold).monospacedDigit())
                     Image(systemName: "arrow.right")
                         .font(.caption2)
@@ -175,7 +175,7 @@ struct FatigueInfoSheet: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 Spacer()
-                Text(String(format: "%.0fh", score.breakdown.effectiveTau))
+                Text("\(score.breakdown.effectiveTau.formattedWithSeparator())h")
                     .font(.caption.monospacedDigit())
                     .foregroundStyle(.secondary)
             }

@@ -235,10 +235,10 @@ struct WorkoutSessionView: View {
             Image(systemName: "clock.arrow.circlepath")
                 .font(.caption2)
             if let w = prev.weight, let r = prev.reps {
-                Text("\(weightUnit.fromKg(w), specifier: "%.1f")\(weightUnit.displayName) × \(r)")
+                Text("\(weightUnit.fromKg(w), specifier: "%.1f")\(weightUnit.displayName) × \(r.formattedWithSeparator)")
                     .font(.caption)
             } else if let r = prev.reps {
-                Text("\(r) reps")
+                Text("\(r.formattedWithSeparator) reps")
                     .font(.caption)
             }
         }
@@ -491,14 +491,15 @@ struct WorkoutSessionView: View {
 
     private var completedSetSummary: some View {
         let set = viewModel.sets[currentSetIndex]
+        let formattedReps = Int(set.reps).map(\.formattedWithSeparator) ?? set.reps
         return HStack(spacing: DS.Spacing.sm) {
             Image(systemName: "checkmark.circle.fill")
                 .foregroundStyle(DS.Color.activity)
             if !set.weight.isEmpty, !set.reps.isEmpty {
-                Text("\(set.weight)\(weightUnit.displayName) × \(set.reps) reps")
+                Text("\(set.weight)\(weightUnit.displayName) × \(formattedReps) reps")
                     .font(.headline)
             } else if !set.reps.isEmpty {
-                Text("\(set.reps) reps")
+                Text("\(formattedReps) reps")
                     .font(.headline)
             }
         }

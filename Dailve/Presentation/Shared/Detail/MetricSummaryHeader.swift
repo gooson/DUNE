@@ -90,7 +90,7 @@ struct MetricSummaryHeader: View {
         return HStack(spacing: 2) {
             Image(systemName: icon)
                 .font(.caption2)
-            Text("\(String(format: "%.1f", abs(change)))%")
+            Text("\(abs(change).formattedWithSeparator(fractionDigits: 1))%")
                 .font(.caption2)
                 .fontWeight(.medium)
         }
@@ -113,24 +113,24 @@ struct MetricSummaryHeader: View {
     private func formatValue(_ value: Double) -> String {
         // Use distance formatting when unit is km
         if let override = unitOverride, override == "km" {
-            return String(format: "%.1f", value)
+            return value.formattedWithSeparator(fractionDigits: 1)
         }
         return switch category {
-        case .hrv:               String(format: "%.0f", value)
-        case .rhr:               String(format: "%.0f", value)
-        case .heartRate:         String(format: "%.0f", value)
+        case .hrv:               value.formattedWithSeparator()
+        case .rhr:               value.formattedWithSeparator()
+        case .heartRate:         value.formattedWithSeparator()
         case .sleep:             value.hoursMinutesFormatted
-        case .exercise:          String(format: "%.0f", value)
-        case .steps:             String(format: "%.0f", value)
-        case .weight:            String(format: "%.1f", value)
-        case .bmi:               String(format: "%.1f", value)
-        case .bodyFat:           String(format: "%.1f", value)
-        case .leanBodyMass:      String(format: "%.1f", value)
-        case .spo2:              String(format: "%.0f", value * 100)
-        case .respiratoryRate:   String(format: "%.0f", value)
-        case .vo2Max:            String(format: "%.1f", value)
-        case .heartRateRecovery: String(format: "%.0f", value)
-        case .wristTemperature:  String(format: "%+.1f", value)
+        case .exercise:          value.formattedWithSeparator()
+        case .steps:             value.formattedWithSeparator()
+        case .weight:            value.formattedWithSeparator(fractionDigits: 1)
+        case .bmi:               value.formattedWithSeparator(fractionDigits: 1)
+        case .bodyFat:           value.formattedWithSeparator(fractionDigits: 1)
+        case .leanBodyMass:      value.formattedWithSeparator(fractionDigits: 1)
+        case .spo2:              (value * 100).formattedWithSeparator()
+        case .respiratoryRate:   value.formattedWithSeparator()
+        case .vo2Max:            value.formattedWithSeparator(fractionDigits: 1)
+        case .heartRateRecovery: value.formattedWithSeparator()
+        case .wristTemperature:  value.formattedWithSeparator(fractionDigits: 1, alwaysShowSign: true)
         }
     }
 
@@ -139,7 +139,7 @@ struct MetricSummaryHeader: View {
         Group {
             if let change {
                 let direction = change > 0 ? "higher" : "lower"
-                let absChange = String(format: "%.1f", abs(change))
+                let absChange = abs(change).formattedWithSeparator(fractionDigits: 1)
                 Text("Your average is \(absChange)% \(direction) than last period")
                     .foregroundStyle(.secondary)
                     .transition(.opacity)

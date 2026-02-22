@@ -61,7 +61,11 @@ struct StackedVolumeBarChartView: View {
             AxisMarks(position: .leading) { value in
                 if let mins = value.as(Double.self) {
                     AxisValueLabel {
-                        Text(mins >= 60 ? String(format: "%.0fh", mins / 60) : String(format: "%.0f", mins))
+                        Text(
+                            mins >= 60
+                            ? "\((mins / 60).formattedWithSeparator())h"
+                            : mins.formattedWithSeparator()
+                        )
                     }
                 }
                 AxisGridLine()
@@ -79,7 +83,7 @@ struct StackedVolumeBarChartView: View {
                 ChartSelectionOverlay(
                     date: day.date,
                     value: totalMins >= 60
-                        ? String(format: "%.1fh", totalMins / 60)
+                        ? "\((totalMins / 60).formattedWithSeparator(fractionDigits: 1))h"
                         : "\(totalMins.formattedWithSeparator())m",
                     dateFormat: .dateTime.month(.abbreviated).day()
                 )

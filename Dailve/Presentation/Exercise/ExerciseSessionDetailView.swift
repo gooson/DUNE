@@ -80,7 +80,7 @@ struct ExerciseSessionDetailView: View {
                     }
                     if let cal = record.bestCalories, cal > 0, cal < 5000 {
                         VStack {
-                            Text("\(Int(cal))")
+                            Text(Int(cal).formattedWithSeparator)
                                 .font(.title3.weight(.semibold).monospacedDigit())
                             Text("kcal")
                                 .font(.caption)
@@ -147,7 +147,7 @@ struct ExerciseSessionDetailView: View {
                         .font(.subheadline.monospacedDigit())
                 }
                 if let reps = workoutSet.reps {
-                    Text("\(reps) reps")
+                    Text("\(reps.formattedWithSeparator) reps")
                         .font(.subheadline.monospacedDigit())
                         .foregroundStyle(.secondary)
                 }

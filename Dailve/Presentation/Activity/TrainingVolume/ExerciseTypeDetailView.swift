@@ -319,14 +319,14 @@ struct ExerciseTypeDetailView: View {
 
     private func formatDistance(_ meters: Double) -> String {
         if meters >= 1000 {
-            return String(format: "%.1f km", meters / 1000)
+            return "\((meters / 1000).formattedWithSeparator(fractionDigits: 1)) km"
         }
         return "\(meters.formattedWithSeparator()) m"
     }
 
     private func formatVolume(_ volume: Double) -> String {
         if volume >= 1000 {
-            return String(format: "%.1ft", volume / 1000)
+            return "\((volume / 1000).formattedWithSeparator(fractionDigits: 1))t"
         }
         return "\(volume.formattedWithSeparator()) kg"
     }

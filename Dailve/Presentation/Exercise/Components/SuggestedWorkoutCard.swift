@@ -43,7 +43,7 @@ struct SuggestedWorkoutCard: View {
 
                         Spacer()
 
-                        Text("\(exercise.suggestedSets) sets")
+                        Text("\(exercise.suggestedSets.formattedWithSeparator) sets")
                             .font(.caption)
                             .foregroundStyle(.secondary)
 

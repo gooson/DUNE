@@ -170,7 +170,7 @@ struct CompoundWorkoutView: View {
                     .font(.caption.weight(isCurrent ? .bold : .regular))
                     .lineLimit(1)
                 if completed > 0 {
-                    Text("\(completed) sets")
+                    Text("\(completed.formattedWithSeparator) sets")
                         .font(.system(size: 9))
                         .foregroundStyle(.secondary)
                 }
@@ -362,7 +362,7 @@ struct CompoundWorkoutView: View {
                     Text(exercise.localizedName)
                         .font(.subheadline)
                     Spacer()
-                    Text("\(vm.completedSetCount) sets")
+                    Text("\(vm.completedSetCount.formattedWithSeparator) sets")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }

@@ -23,7 +23,7 @@ struct HeartRateChartView: View {
                     if let point = selectedPoint {
                         ChartSelectionOverlay(
                             date: point.date,
-                            value: "\(Int(point.bpm)) bpm",
+                            value: "\(Int(point.bpm).formattedWithSeparator) bpm",
                             dateFormat: .dateTime.hour().minute()
                         )
                         .transition(.opacity)
@@ -37,8 +37,8 @@ struct HeartRateChartView: View {
 
     private var headerStats: some View {
         HStack(spacing: DS.Spacing.lg) {
-            statLabel(title: "Avg", value: averageBPM > 0 ? "\(Int(averageBPM))" : "--", unit: "bpm")
-            statLabel(title: "Max", value: maxBPM > 0 ? "\(Int(maxBPM))" : "--", unit: "bpm")
+            statLabel(title: "Avg", value: averageBPM > 0 ? Int(averageBPM).formattedWithSeparator : "--", unit: "bpm")
+            statLabel(title: "Max", value: maxBPM > 0 ? Int(maxBPM).formattedWithSeparator : "--", unit: "bpm")
         }
     }
 
@@ -82,7 +82,7 @@ struct HeartRateChartView: View {
                     .foregroundStyle(.gray.opacity(0.4))
                     .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
                     .annotation(position: .top, alignment: .trailing) {
-                        Text("avg \(Int(averageBPM))")
+                        Text("avg \(Int(averageBPM).formattedWithSeparator)")
                             .font(.system(size: 9))
                             .foregroundStyle(.secondary)
                     }

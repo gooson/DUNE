@@ -52,7 +52,7 @@ struct HeartRateZoneChartView: View {
                             Circle()
                                 .fill(zone.zone.color)
                                 .frame(width: 8, height: 8)
-                            Text("\(Int(zone.percentage * 100))%")
+                            Text("\(Int(zone.percentage * 100).formattedWithSeparator)%")
                                 .font(.caption2)
                                 .foregroundStyle(.secondary)
                         }
@@ -69,9 +69,9 @@ struct HeartRateZoneChartView: View {
 
     private func formatMinutes(_ mins: Double) -> String {
         if mins < 1 {
-            return "\(Int(mins * 60))s"
+            return "\(Int(mins * 60).formattedWithSeparator)s"
         }
-        return "\(Int(mins))m"
+        return "\(Int(mins).formattedWithSeparator)m"
     }
 }
 

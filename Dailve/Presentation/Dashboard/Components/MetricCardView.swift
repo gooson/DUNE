@@ -97,7 +97,7 @@ struct MetricCardView: View {
     private var accessibilitySummary: String {
         let freshness = metric.date.freshnessLabel
         if let detail = baselineDelta?.preferredDetail {
-            return "\(metric.name), \(metric.formattedValue), \(freshness), \(detail.label), \(String(format: "%.1f", detail.value))"
+            return "\(metric.name), \(metric.formattedValue), \(freshness), \(detail.label), \(detail.value.formattedWithSeparator(fractionDigits: 1))"
         }
         return "\(metric.name), \(metric.formattedValue), \(freshness)"
     }

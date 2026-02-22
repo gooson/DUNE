@@ -78,10 +78,10 @@ struct SuggestedWorkoutSection: View {
         if hours < 1 {
             timeText = "soon"
         } else if hours < 24 {
-            timeText = "in ~\(Int(hours))h"
+            timeText = "in ~\(Int(hours).formattedWithSeparator)h"
         } else {
             let days = Int(hours / 24)
-            timeText = "in ~\(days)d"
+            timeText = "in ~\(days.formattedWithSeparator)d"
         }
 
         return HStack(spacing: DS.Spacing.xs) {

@@ -83,7 +83,7 @@ struct RangeBarChartView: View {
                 if let point = selectedPoint {
                     ChartSelectionOverlay(
                         date: point.date,
-                        value: "\(Int(point.min))–\(Int(point.max)) bpm (avg \(Int(point.average)))"
+                        value: "\(Int(point.min).formattedWithSeparator)–\(Int(point.max).formattedWithSeparator) bpm (avg \(Int(point.average).formattedWithSeparator))"
                     )
                     .transition(.opacity)
                     .animation(.easeInOut(duration: 0.15), value: selectedDate)

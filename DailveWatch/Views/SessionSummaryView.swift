@@ -75,8 +75,8 @@ struct SessionSummaryView: View {
         ], spacing: 8) {
             statItem(title: "Duration", value: formattedDuration)
             statItem(title: "Volume", value: formattedVolume)
-            statItem(title: "Sets", value: "\(totalSets)")
-            statItem(title: "Avg HR", value: averageHR > 0 ? "\(Int(averageHR))" : "--")
+            statItem(title: "Sets", value: totalSets.formattedWithSeparator)
+            statItem(title: "Avg HR", value: averageHR > 0 ? Int(averageHR).formattedWithSeparator : "--")
         }
     }
 
@@ -104,7 +104,7 @@ struct SessionSummaryView: View {
                             .font(.caption2)
                             .lineLimit(1)
                         Spacer()
-                        Text("\(sets.count) sets")
+                        Text("\(sets.count.formattedWithSeparator) sets")
                             .font(.caption2)
                             .foregroundStyle(.secondary)
                     }
@@ -244,9 +244,6 @@ struct SessionSummaryView: View {
             let r = Double(set.reps ?? 0)
             return total + (w * r)
         }
-        if volume >= 1000 {
-            return String(format: "%.1fk kg", volume / 1000)
-        }
-        return String(format: "%.0f kg", volume)
+        return "\(Int(volume.rounded()).formattedWithSeparator) kg"
     }
 }

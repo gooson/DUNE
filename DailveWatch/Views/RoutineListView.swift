@@ -118,9 +118,9 @@ struct RoutineListView: View {
         if interval < 60 {
             return "Just synced"
         } else if interval < 3600 {
-            return "\(Int(interval / 60)) min ago"
+            return "\(Int(interval / 60).formattedWithSeparator) min ago"
         } else {
-            return "\(Int(interval / 3600))h ago"
+            return "\(Int(interval / 3600).formattedWithSeparator)h ago"
         }
     }
 }

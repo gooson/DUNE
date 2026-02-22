@@ -112,7 +112,7 @@ struct DotLineChartView: View {
                 if let selected = selectedPoint {
                     ChartSelectionOverlay(
                         date: selected.date,
-                        value: String(format: "%.1f", selected.value)
+                        value: selected.value.formattedWithSeparator(fractionDigits: 1)
                     )
                     .transition(.opacity)
                     .animation(.easeInOut(duration: 0.15), value: selectedDate)

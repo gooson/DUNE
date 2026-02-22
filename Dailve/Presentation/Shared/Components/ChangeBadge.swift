@@ -11,7 +11,7 @@ struct ChangeBadge: View {
             HStack(spacing: 2) {
                 Image(systemName: isPositive ? "arrow.up.right" : "arrow.down.right")
                     .font(.caption2)
-                Text(String(format: "%.0f%%", abs(change)))
+                Text("\(abs(change).formattedWithSeparator())%")
                     .font(.caption2.weight(.medium))
                     .monospacedDigit()
             }

@@ -273,3 +273,7 @@
 
 95. **빌드 검증은 `scripts/build-ios.sh` 단일 경로 사용**: `xcodegen generate --spec Dailve/project.yml` + `xcodebuild -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.2'`를 스크립트로 표준화. 임의 `generic/platform=iOS` 사용 금지
 96. **Swift/Xcode 변경 커밋 전 iOS 빌드 자동 검증**: `scripts/hooks/pre-commit.sh`에서 Swift/Xcode 관련 staged 변경 감지 시 `scripts/build-ios.sh` 실행. 긴급 시 `DAILVE_SKIP_PRECOMMIT_BUILD=1`로 1회 스킵 가능
+
+### 2026-02-22: 숫자 표기 일관성 교정
+
+97. **화면 숫자 표기는 `formattedWithSeparator` 경유 필수**: UI 라벨에서 `String(format: "%.0f")`, `"\(Int(...))"` 직접 렌더링 금지. `Int.formattedWithSeparator` 또는 `Double.formattedWithSeparator(fractionDigits:)`를 사용해 `1,000` 단위 구분을 기본값으로 유지

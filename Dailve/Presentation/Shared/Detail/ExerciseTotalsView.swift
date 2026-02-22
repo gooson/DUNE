@@ -23,7 +23,7 @@ struct ExerciseTotalsView: View {
                 totalItem(
                     icon: "number",
                     label: "Workouts",
-                    value: "\(totals.workoutCount)"
+                    value: totals.workoutCount.formattedWithSeparator
                 )
 
                 totalItem(
@@ -36,7 +36,7 @@ struct ExerciseTotalsView: View {
                     totalItem(
                         icon: "flame",
                         label: "Calories",
-                        value: "\(Int(calories)) kcal"
+                        value: "\(Int(calories).formattedWithSeparator) kcal"
                     )
                 }
 
@@ -92,8 +92,8 @@ struct ExerciseTotalsView: View {
 
     private func formatDistance(_ meters: Double) -> String {
         if meters >= 1000 {
-            return String(format: "%.1f km", meters / 1000.0)
+            return "\((meters / 1000.0).formattedWithSeparator(fractionDigits: 1)) km"
         }
-        return "\(Int(meters)) m"
+        return "\(Int(meters).formattedWithSeparator) m"
     }
 }

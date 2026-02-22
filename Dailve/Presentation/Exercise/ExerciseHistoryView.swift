@@ -188,7 +188,7 @@ struct ExerciseHistoryView: View {
             }
             statCard(
                 title: "Sessions",
-                value: "\(viewModel.sessions.count)",
+                value: viewModel.sessions.count.formattedWithSeparator,
                 icon: "calendar",
                 color: DS.Color.activity
             )
@@ -202,7 +202,7 @@ struct ExerciseHistoryView: View {
                     if !change.isNaN && !change.isInfinite {
                         statCard(
                             title: "Progress",
-                            value: String(format: "%+.1f%%", change),
+                            value: "\(change.formattedWithSeparator(fractionDigits: 1, alwaysShowSign: true))%",
                             icon: change >= 0 ? "arrow.up.right" : "arrow.down.right",
                             color: change >= 0 ? .green : .red
                         )
@@ -212,7 +212,7 @@ struct ExerciseHistoryView: View {
 
             if !viewModel.sessions.isEmpty {
                 let totalReps = viewModel.sessions.map(\.totalReps).reduce(0, +)
-                statCard(title: "Total Reps", value: "\(totalReps)", icon: "repeat", color: .blue)
+                statCard(title: "Total Reps", value: totalReps.formattedWithSeparator, icon: "repeat", color: .blue)
             }
         }
     }
@@ -261,14 +261,14 @@ struct ExerciseHistoryView: View {
                     Text(session.date, style: .date)
                         .font(.subheadline.weight(.medium))
                     HStack(spacing: DS.Spacing.xs) {
-                        Text("\(session.setCount) sets")
+                        Text("\(session.setCount.formattedWithSeparator) sets")
                         if let maxW = session.maxWeight {
                             Text("\u{00B7}")
                             Text("\(formattedWeight(maxW)) \(weightUnit.displayName)")
                         }
                         if session.totalReps > 0 {
                             Text("\u{00B7}")
-                            Text("\(session.totalReps) reps")
+                            Text("\(session.totalReps.formattedWithSeparator) reps")
                         }
                     }
                     .font(.caption)

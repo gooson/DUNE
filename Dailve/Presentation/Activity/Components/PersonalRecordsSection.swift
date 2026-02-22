@@ -35,7 +35,7 @@ struct PersonalRecordsSection: View {
 
                 // Weight
                 HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xxs) {
-                    Text(String(format: "%.0f", record.maxWeight))
+                    Text(record.maxWeight.formattedWithSeparator())
                         .font(DS.Typography.cardScore)
                         .minimumScaleFactor(0.7)
                         .lineLimit(1)

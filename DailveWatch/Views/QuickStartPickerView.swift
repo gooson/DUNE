@@ -56,7 +56,7 @@ struct QuickStartPickerView: View {
                 Text(exercise.name)
                     .font(.caption.weight(.medium))
                     .lineLimit(1)
-                Text("\(exercise.defaultSets) sets · \(exercise.defaultReps ?? 10) reps")
+                Text("\(exercise.defaultSets.formattedWithSeparator) sets · \((exercise.defaultReps ?? 10).formattedWithSeparator) reps")
                     .font(.caption2)
                     .foregroundStyle(.secondary)
             }

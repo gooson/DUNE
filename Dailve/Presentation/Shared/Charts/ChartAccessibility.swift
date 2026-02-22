@@ -41,6 +41,19 @@ struct StandardChartAccessibility: AXChartDescriptorRepresentable {
         self.valueFormat = valueFormat
     }
 
+    private func formattedValue(_ value: Double) -> String {
+        switch valueFormat {
+        case "%.0f":
+            value.formattedWithSeparator()
+        case "%.1f":
+            value.formattedWithSeparator(fractionDigits: 1)
+        case "%.2f":
+            value.formattedWithSeparator(fractionDigits: 2)
+        default:
+            String(format: valueFormat, value)
+        }
+    }
+
     func makeChartDescriptor() -> AXChartDescriptor {
         guard !data.isEmpty else {
             return emptyChartDescriptor(title: title)
@@ -68,14 +81,14 @@ struct StandardChartAccessibility: AXChartDescriptorRepresentable {
             range: minVal...maxVal,
             gridlinePositions: []
         ) { value in
-            "\(String(format: valueFormat, value)) \(unitSuffix)"
+            "\(formattedValue(value)) \(unitSuffix)"
         }
 
         let dataPoints = sorted.map { point in
             AXDataPoint(
                 x: point.date.timeIntervalSince1970,
                 y: point.value,
-                label: "\(dateFormatter.string(from: point.date)): \(String(format: valueFormat, point.value)) \(unitSuffix)"
+                label: "\(dateFormatter.string(from: point.date)): \(formattedValue(point.value)) \(unitSuffix)"
             )
         }
 
@@ -129,14 +142,14 @@ struct RangeChartAccessibility: AXChartDescriptorRepresentable {
             range: allMin...allMax,
             gridlinePositions: []
         ) { value in
-            "\(String(format: "%.0f", value)) \(unitSuffix)"
+            "\(value.formattedWithSeparator()) \(unitSuffix)"
         }
 
         let dataPoints = sorted.map { point in
             AXDataPoint(
                 x: point.date.timeIntervalSince1970,
                 y: point.average,
-                label: "\(dateFormatter.string(from: point.date)): \(Int(point.min))–\(Int(point.max)) \(unitSuffix), avg \(Int(point.average))"
+                label: "\(dateFormatter.string(from: point.date)): \(Int(point.min).formattedWithSeparator)–\(Int(point.max).formattedWithSeparator) \(unitSuffix), avg \(Int(point.average).formattedWithSeparator)"
             )
         }
 
@@ -188,16 +201,18 @@ struct SleepChartAccessibility: AXChartDescriptorRepresentable {
             range: 0...maxHours,
             gridlinePositions: []
         ) { value in
-            "\(String(format: "%.1f", value)) hours"
+            "\(value.formattedWithSeparator(fractionDigits: 1)) hours"
         }
 
         let dataPoints = sorted.map { point in
             let totalHours = point.total / 3600
-            let breakdown = point.segments.map { "\($0.category): \(String(format: "%.1f", $0.value / 3600))h" }.joined(separator: ", ")
+            let breakdown = point.segments
+                .map { "\($0.category): \((($0.value / 3600)).formattedWithSeparator(fractionDigits: 1))h" }
+                .joined(separator: ", ")
             return AXDataPoint(
                 x: point.date.timeIntervalSince1970,
                 y: totalHours,
-                label: "\(dateFormatter.string(from: point.date)): \(String(format: "%.1f", totalHours)) hours (\(breakdown))"
+                label: "\(dateFormatter.string(from: point.date)): \(totalHours.formattedWithSeparator(fractionDigits: 1)) hours (\(breakdown))"
             )
         }
 

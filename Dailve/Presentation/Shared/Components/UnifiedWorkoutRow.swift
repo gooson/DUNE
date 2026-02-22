@@ -40,7 +40,7 @@ struct UnifiedWorkoutRow: View {
                     if let hrAvg = item.heartRateAvg {
                         HStack(spacing: 2) {
                             Image(systemName: "heart.fill")
-                            Text("\(Int(hrAvg))")
+                            Text(Int(hrAvg).formattedWithSeparator)
                         }
                         .font(.caption.monospacedDigit())
                         .foregroundStyle(.red.opacity(0.8))
@@ -150,7 +150,7 @@ struct UnifiedWorkoutRow: View {
             if let hrAvg = item.heartRateAvg {
                 HStack(spacing: 2) {
                     Image(systemName: "heart.fill")
-                    Text("\(Int(hrAvg))")
+                    Text(Int(hrAvg).formattedWithSeparator)
                 }
                 .font(.caption.monospacedDigit())
                 .foregroundStyle(.red.opacity(0.8))
@@ -167,7 +167,7 @@ struct UnifiedWorkoutRow: View {
             }
 
             if let elevation = item.elevationAscended, elevation > 0 {
-                Text("↑\(Int(elevation))m")
+                Text("↑\(Int(elevation).formattedWithSeparator)m")
                     .font(.caption.monospacedDigit())
                     .foregroundStyle(.green)
                     .lineLimit(1)
@@ -202,7 +202,7 @@ struct UnifiedWorkoutRow: View {
                 .font(.subheadline)
                 .fontWeight(.medium)
             if let cal = item.calories, cal > 0, cal < 5_000 {
-                Text(item.source == .manual ? "~\(Int(cal)) kcal" : "\(Int(cal)) kcal")
+                Text(item.source == .manual ? "~\(Int(cal).formattedWithSeparator) kcal" : "\(Int(cal).formattedWithSeparator) kcal")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -212,7 +212,7 @@ struct UnifiedWorkoutRow: View {
     private var fullTrailing: some View {
         VStack(alignment: .trailing, spacing: DS.Spacing.xs) {
             if let cal = item.calories, cal > 0, cal < 5_000 {
-                Text("\(Int(cal)) kcal")
+                Text("\(Int(cal).formattedWithSeparator) kcal")
                     .font(.subheadline)
             }
             Text(item.date, style: .date)

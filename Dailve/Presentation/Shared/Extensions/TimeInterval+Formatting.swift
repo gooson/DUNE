@@ -6,8 +6,8 @@ extension TimeInterval {
         let hours = self / 3600
         let mins = self / 60
         if hours >= 1 {
-            return String(format: "%.1fh", hours)
+            return "\(hours.formattedWithSeparator(fractionDigits: 1))h"
         }
-        return String(format: "%.0fm", mins)
+        return "\(mins.formattedWithSeparator())m"
     }
 }
