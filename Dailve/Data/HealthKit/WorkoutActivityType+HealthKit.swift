@@ -80,9 +80,15 @@ extension WorkoutActivityType {
         case .underwaterDiving:                 self = .underwaterDiving
         case .wheelchairRunPace:                self = .wheelchairRunPace
         case .wheelchairWalkPace:               self = .wheelchairWalkPace
+        case .skatingSports:                    self = .skating
+        case .gymnastics:                       self = .gymnastics
         case .pickleball:                       self = .pickleball
         case .swimBikeRun:                      self = .swimBikeRun
         case .transition:                       self = .transition
+        case .dance:                            self = .socialDance
+        case .danceInspiredTraining:            self = .barre
+        case .mixedMetabolicCardioTraining:     self = .mixedCardio
+        case .other:                            self = .other
         @unknown default:                       self = .other
         }
     }
@@ -169,8 +175,10 @@ extension WorkoutActivityType {
         case .swimBikeRun:                      .swimBikeRun
         case .transition:                       .transition
         case .mountaineering:                   .hiking
-        case .skating:                          .other
+        case .skating:                          .skatingSports
+        case .gymnastics:                       .gymnastics
         case .other:                            .other
         }
     }
 }
+

@@ -72,6 +72,7 @@ enum WorkoutActivityType: String, Codable, Sendable, CaseIterable {
     case golf
     case discSports
     case australianFootball
+    case gymnastics
 
     // Water
     case paddleSports
@@ -209,7 +210,7 @@ enum WorkoutActivityType: String, Codable, Sendable, CaseIterable {
              .volleyball, .baseball, .softball, .americanFootball,
              .rugby, .hockey, .lacrosse, .cricket, .handball,
              .racquetball, .squash, .pickleball, .bowling, .golf,
-             .discSports, .australianFootball, .trackAndField, .curling:
+             .discSports, .australianFootball, .gymnastics, .trackAndField, .curling:
             return .sports
         case .swimming, .paddleSports, .surfingSports, .waterFitness,
              .waterPolo, .waterSports, .sailing, .underwaterDiving:
@@ -280,6 +281,7 @@ enum WorkoutActivityType: String, Codable, Sendable, CaseIterable {
         case .bowling: "Bowling"
         case .discSports: "Disc Sports"
         case .australianFootball: "Australian Football"
+        case .gymnastics: "Gymnastics"
         case .waterFitness: "Water Fitness"
         case .waterPolo: "Water Polo"
         case .waterSports: "Water Sports"
