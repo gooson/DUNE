@@ -1,8 +1,8 @@
 import SwiftUI
 import SwiftData
 
-/// Activity tab with recovery-centered dashboard.
-/// Layout: WeeklyProgressBar → MuscleRecoveryMap (hero) → TrainingVolume → RecentWorkouts.
+/// Activity tab — redesigned recovery-centered dashboard.
+/// Layout: Hero → Muscle Map → Weekly Stats → Suggestion → Volume → Workouts → PRs → Consistency → Frequency.
 struct ActivityView: View {
     @State private var viewModel = ActivityViewModel()
     @State private var showingExercisePicker = false
@@ -26,37 +26,66 @@ struct ActivityView: View {
                     ProgressView()
                         .frame(maxWidth: .infinity, minHeight: 200)
                 } else {
-                    // ① Weekly Progress Bar
-                    WeeklyProgressBar(
-                        activeDays: viewModel.activeDays,
-                        goal: viewModel.weeklyGoal
+                    // ① Training Readiness Hero Card
+                    TrainingReadinessHeroCard(
+                        readiness: viewModel.trainingReadiness,
+                        isCalibrating: viewModel.trainingReadiness?.isCalibrating ?? true
                     )
 
-                    // ①-b Injury Warning Banner
+                    // ② Injury Warning Banner
                     if !cachedInjuryConflicts.isEmpty {
                         InjuryWarningBanner(conflicts: cachedInjuryConflicts)
                     }
 
-                    // ② Muscle Recovery Map (hero)
-                    MuscleRecoveryMapView(
-                        fatigueStates: viewModel.fatigueStates,
-                        suggestion: viewModel.workoutSuggestion,
-                        onStartExercise: { exercise in selectedExercise = exercise },
-                        onMuscleSelected: { muscle in selectedMuscle = muscle }
-                    )
+                    // ③ Muscle Recovery Map
+                    SectionGroup(title: "Recovery Map", icon: "figure.stand", iconColor: DS.Color.activity) {
+                        MuscleRecoveryMapView(
+                            fatigueStates: viewModel.fatigueStates,
+                            onMuscleSelected: { muscle in selectedMuscle = muscle }
+                        )
+                    }
 
-                    // ③ Training Volume Summary (compact)
-                    TrainingVolumeSummaryCard(
-                        trainingLoadData: viewModel.trainingLoadData,
-                        lastWorkoutMinutes: viewModel.lastWorkoutMinutes,
-                        lastWorkoutCalories: viewModel.lastWorkoutCalories
-                    )
+                    // ④ Weekly Stats Grid
+                    SectionGroup(title: "This Week", icon: "chart.bar.fill", iconColor: DS.Color.activity) {
+                        WeeklyStatsGrid(stats: viewModel.weeklyStats)
+                    }
 
-                    // ④ Recent Workouts
+                    // ⑤ Suggested Workout
+                    SectionGroup(title: "Suggested Workout", icon: "sparkles", iconColor: DS.Color.activity) {
+                        SuggestedWorkoutSection(
+                            suggestion: viewModel.workoutSuggestion,
+                            onStartExercise: { exercise in selectedExercise = exercise }
+                        )
+                    }
+
+                    // ⑥ Training Volume Summary
+                    SectionGroup(title: "Training Volume", icon: "chart.line.uptrend.xyaxis", iconColor: DS.Color.activity) {
+                        TrainingVolumeSummaryCard(
+                            trainingLoadData: viewModel.trainingLoadData,
+                            lastWorkoutMinutes: viewModel.lastWorkoutMinutes,
+                            lastWorkoutCalories: viewModel.lastWorkoutCalories
+                        )
+                    }
+
+                    // ⑦ Recent Workouts
                     ExerciseListSection(
                         workouts: viewModel.recentWorkouts,
                         exerciseRecords: recentRecords
                     )
+
+                    // ⑧ Personal Records
+                    SectionGroup(title: "Personal Records", icon: "trophy.fill", iconColor: DS.Color.activity) {
+                        PersonalRecordsSection(records: viewModel.personalRecords)
+                    }
+
+                    // ⑨ Consistency & Frequency
+                    SectionGroup(title: "Consistency", icon: "flame.fill", iconColor: DS.Color.activity) {
+                        ConsistencyCard(streak: viewModel.workoutStreak)
+                    }
+
+                    SectionGroup(title: "Exercise Mix", icon: "chart.bar.xaxis", iconColor: DS.Color.activity) {
+                        ExerciseFrequencySection(frequencies: viewModel.exerciseFrequencies)
+                    }
 
                     if let error = viewModel.errorMessage {
                         Text(error)
@@ -131,7 +160,7 @@ struct ActivityView: View {
         .onChange(of: activeInjuryRecords.count) { _, _ in
             recomputeInjuryConflicts()
         }
-        .navigationTitle("Train")
+        .navigationTitle("Activity")
     }
 
     // MARK: - Helpers
