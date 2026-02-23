@@ -62,7 +62,9 @@ struct MuscleRecoveryMapView: View {
         VStack(spacing: DS.Spacing.sm) {
             HStack(spacing: DS.Spacing.sm) {
                 bodyDiagram(isFront: true)
+                    .frame(maxWidth: 170)
                 bodyDiagram(isFront: false)
+                    .frame(maxWidth: 170)
             }
             .frame(maxWidth: .infinity, alignment: .center)
             legendRow
