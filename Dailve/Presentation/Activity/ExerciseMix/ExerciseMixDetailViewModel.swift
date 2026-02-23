@@ -6,6 +6,7 @@ import Observation
 @MainActor
 final class ExerciseMixDetailViewModel {
     var exerciseFrequencies: [ExerciseFrequency] = []
+    var frequencyByName: [String: ExerciseFrequency] = [:]
     var isLoading = false
 
     private let library: ExerciseLibraryQuerying
@@ -26,6 +27,7 @@ final class ExerciseMixDetailViewModel {
         }
 
         exerciseFrequencies = ExerciseFrequencyService.analyze(from: entries)
+        frequencyByName = Dictionary(uniqueKeysWithValues: exerciseFrequencies.map { ($0.exerciseName, $0) })
         isLoading = false
     }
 }

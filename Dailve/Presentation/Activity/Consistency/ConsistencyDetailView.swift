@@ -81,12 +81,12 @@ struct ConsistencyDetailView: View {
                 }
 
                 // Leading spacers for alignment
-                ForEach(0..<viewModel.firstWeekdayOffset(), id: \.self) { _ in
+                ForEach(0..<viewModel.cachedFirstWeekdayOffset, id: \.self) { _ in
                     Color.clear.frame(height: 28)
                 }
 
                 // Day cells
-                ForEach(viewModel.calendarDays(), id: \.self) { date in
+                ForEach(viewModel.cachedCalendarDays, id: \.self) { date in
                     let hasWorkout = viewModel.hasWorkout(on: date)
                     let isToday = Calendar.current.isDateInToday(date)
                     RoundedRectangle(cornerRadius: 4)

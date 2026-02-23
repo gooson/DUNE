@@ -8,13 +8,9 @@ final class ConsistencyDetailViewModel {
     var workoutStreak: WorkoutStreak?
     var streakHistory: [StreakPeriod] = []
     var workoutDates: Set<DateComponents> = []
+    var cachedCalendarDays: [Date] = []
+    var cachedFirstWeekdayOffset: Int = 0
     var isLoading = false
-
-    private let library: ExerciseLibraryQuerying
-
-    init(library: ExerciseLibraryQuerying = ExerciseLibraryService.shared) {
-        self.library = library
-    }
 
     /// Loads streak and calendar data from exercise records.
     func loadData(from exerciseRecords: [ExerciseRecord]) {
@@ -37,11 +33,22 @@ final class ConsistencyDetailViewModel {
                 .map { calendar.dateComponents([.year, .month, .day], from: $0.date) }
         )
 
+        // Cache calendar grid data to avoid recomputation on each render
+        cachedCalendarDays = computeCalendarDays()
+        cachedFirstWeekdayOffset = computeFirstWeekdayOffset()
+
         isLoading = false
     }
 
-    /// Returns dates for the current month grid.
-    func calendarDays(for month: Date = Date()) -> [Date] {
+    /// Checks if a given date had a workout.
+    func hasWorkout(on date: Date) -> Bool {
+        let dc = Calendar.current.dateComponents([.year, .month, .day], from: date)
+        return workoutDates.contains(dc)
+    }
+
+    // MARK: - Private
+
+    private func computeCalendarDays(for month: Date = Date()) -> [Date] {
         let calendar = Calendar.current
         guard let monthInterval = calendar.dateInterval(of: .month, for: month) else { return [] }
 
@@ -55,14 +62,7 @@ final class ConsistencyDetailViewModel {
         return days
     }
 
-    /// Checks if a given date had a workout.
-    func hasWorkout(on date: Date) -> Bool {
-        let dc = Calendar.current.dateComponents([.year, .month, .day], from: date)
-        return workoutDates.contains(dc)
-    }
-
-    /// First weekday offset for month grid alignment (0 = Sunday).
-    func firstWeekdayOffset(for month: Date = Date()) -> Int {
+    private func computeFirstWeekdayOffset(for month: Date = Date()) -> Int {
         let calendar = Calendar.current
         guard let firstDay = calendar.date(from: calendar.dateComponents([.year, .month], from: month)) else { return 0 }
         // weekday: 1=Sunday...7=Saturday

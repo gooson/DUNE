@@ -22,16 +22,16 @@ final class PersonalRecordsDetailViewModel {
             let name = definition?.name ?? record.exerciseType
             guard !name.isEmpty else { return nil }
 
-            let completedSets = record.completedSets
-            guard completedSets.count > 0 else { return nil }
+            let weights = record.completedSets.compactMap(\.weight).filter { $0 > 0 }
+            guard !weights.isEmpty else { return nil }
 
-            let totalWeight = completedSets.compactMap(\.weight).reduce(0, +)
-            guard totalWeight > 0 else { return nil }
+            let avgWeight = weights.reduce(0, +) / Double(weights.count)
+            guard avgWeight > 0, avgWeight <= 500 else { return nil }
 
             return StrengthPRService.WorkoutEntry(
                 exerciseName: name,
                 date: record.date,
-                bestWeight: totalWeight / Double(completedSets.count)
+                bestWeight: avgWeight
             )
         }
         personalRecords = StrengthPRService.extractPRs(from: entries)

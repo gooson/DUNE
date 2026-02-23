@@ -100,7 +100,7 @@ struct ExerciseMixDetailView: View {
     private var donutCenterLabel: some View {
         VStack(spacing: 2) {
             if let name = selectedExercise,
-               let freq = viewModel.exerciseFrequencies.first(where: { $0.exerciseName == name }) {
+               let freq = viewModel.frequencyByName[name] {
                 Text(name)
                     .font(.caption.weight(.semibold))
                     .lineLimit(1)
