@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="#000000">
+  <!-- Angled rail -->
+  <path d="M12 54 L52 14 L54 16 L14 56 Z"/>
+  <!-- Seat base -->
+  <rect x="6" y="48" width="20" height="4" rx="1"/>
+  <!-- Seat back (angled) -->
+  <path d="M8 34 L12 48 L16 48 L12 34 Z"/>
+  <!-- Foot platform -->
+  <rect x="44" y="10" width="4" height="18" rx="1" transform="rotate(-40 46 19)"/>
+  <!-- Weight plates -->
+  <rect x="48" y="8" width="6" height="10" rx="1" transform="rotate(-40 51 13)"/>
+  <!-- Base frame -->
+  <rect x="4" y="56" width="28" height="4" rx="1.5"/>
+</svg>

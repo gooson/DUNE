@@ -120,4 +120,34 @@ extension Equipment {
         case .other: "ellipsis.circle"
         }
     }
+
+    var svgAssetName: String {
+        switch self {
+        case .barbell: "Equipment/equipment.barbell"
+        case .dumbbell: "Equipment/equipment.dumbbell"
+        case .kettlebell: "Equipment/equipment.kettlebell"
+        case .ezBar: "Equipment/equipment.ez-bar"
+        case .trapBar: "Equipment/equipment.trap-bar"
+        case .smithMachine: "Equipment/equipment.smith-machine"
+        case .legPressMachine: "Equipment/equipment.leg-press"
+        case .hackSquatMachine: "Equipment/equipment.hack-squat"
+        case .chestPressMachine: "Equipment/equipment.chest-press"
+        case .shoulderPressMachine: "Equipment/equipment.shoulder-press"
+        case .latPulldownMachine: "Equipment/equipment.lat-pulldown"
+        case .legExtensionMachine: "Equipment/equipment.leg-extension"
+        case .legCurlMachine: "Equipment/equipment.leg-curl"
+        case .pecDeckMachine: "Equipment/equipment.pec-deck"
+        case .cableMachine: "Equipment/equipment.cable-machine"
+        case .machine: "Equipment/equipment.machine"
+        case .cable: "Equipment/equipment.cable"
+        case .bodyweight: "Equipment/equipment.bodyweight"
+        case .pullUpBar: "Equipment/equipment.pull-up-bar"
+        case .dipStation: "Equipment/equipment.dip-station"
+        case .band: "Equipment/equipment.band"
+        case .trx: "Equipment/equipment.trx"
+        case .medicineBall: "Equipment/equipment.medicine-ball"
+        case .stabilityBall: "Equipment/equipment.stability-ball"
+        case .other: "Equipment/equipment.other"
+        }
+    }
 }
