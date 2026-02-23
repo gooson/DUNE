@@ -442,8 +442,13 @@ struct DashboardViewModelTests {
 
     @Test("Condition score resets when HRV fetch fails on refresh")
     func conditionScoreClearsAfterHRVFailure() async {
+        let calendar = Calendar.current
+        let samples = (0..<7).compactMap { offset -> HRVSample? in
+            guard let date = calendar.date(byAdding: .day, value: -offset, to: Date()) else { return nil }
+            return HRVSample(value: 52.0 + Double(offset), date: date)
+        }
         let hrv = ToggleHRVService(
-            samples: [HRVSample(value: 52.0, date: Date())],
+            samples: samples,
             todayRHR: 58.0,
             yesterdayRHR: 60.0
         )

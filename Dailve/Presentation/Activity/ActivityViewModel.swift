@@ -75,6 +75,7 @@ final class ActivityViewModel {
     private let recoveryModifierService: RecoveryModifying
     private let library: ExerciseLibraryQuerying
     private let readinessUseCase: TrainingReadinessCalculating
+    private let sharedHealthDataService: SharedHealthDataService?
 
     /// Cached recovery modifiers from the most recent fetch.
     private var sleepModifier: Double = 1.0
@@ -88,7 +89,8 @@ final class ActivityViewModel {
         recommendationService: WorkoutRecommending? = nil,
         recoveryModifierService: RecoveryModifying = RecoveryModifierService(),
         library: ExerciseLibraryQuerying? = nil,
-        readinessUseCase: TrainingReadinessCalculating = CalculateTrainingReadinessUseCase()
+        readinessUseCase: TrainingReadinessCalculating = CalculateTrainingReadinessUseCase(),
+        sharedHealthDataService: SharedHealthDataService? = nil
     ) {
         self.workoutService = workoutService ?? WorkoutQueryService(manager: healthKitManager)
         self.stepsService = stepsService ?? StepsQueryService(manager: healthKitManager)
@@ -99,6 +101,7 @@ final class ActivityViewModel {
         self.recoveryModifierService = recoveryModifierService
         self.library = library ?? ExerciseLibraryService.shared
         self.readinessUseCase = readinessUseCase
+        self.sharedHealthDataService = sharedHealthDataService
     }
 
     // MARK: - Workout Suggestion
@@ -271,14 +274,16 @@ final class ActivityViewModel {
         isLoading = true
         errorMessage = nil
 
+        let sharedSnapshot = await sharedHealthDataService?.fetchSnapshot()
+
         // 7 independent queries — parallel via async let
         async let exerciseTask = safeExerciseFetch()
         async let stepsTask = safeStepsFetch()
         async let workoutsTask = safeWorkoutsFetch()
-        async let trainingLoadTask = safeTrainingLoadFetch()
-        async let sleepTask = safeSleepFetch()
-        async let readinessTask = safeReadinessFetch()
-        async let sleepDailyTask = safeSleepDailyFetch()
+        async let trainingLoadTask = safeTrainingLoadFetch(snapshot: sharedSnapshot)
+        async let sleepTask = safeSleepFetch(snapshot: sharedSnapshot)
+        async let readinessTask = safeReadinessFetch(snapshot: sharedSnapshot)
+        async let sleepDailyTask = safeSleepDailyFetch(snapshot: sharedSnapshot)
 
         let (exerciseResult, stepsResult, workoutsResult, loadResult, sleepResult, readinessResult, sleepDailyResult) = await (
             exerciseTask, stepsTask, workoutsTask, trainingLoadTask, sleepTask, readinessTask, sleepDailyTask
@@ -463,7 +468,7 @@ final class ActivityViewModel {
 
     // MARK: - Training Load (28-day)
 
-    private func safeTrainingLoadFetch() async -> [TrainingLoadDataPoint] {
+    private func safeTrainingLoadFetch(snapshot: SharedHealthSnapshot?) async -> [TrainingLoadDataPoint] {
         do {
             let calendar = Calendar.current
             let today = calendar.startOfDay(for: Date())
@@ -471,13 +476,13 @@ final class ActivityViewModel {
                 return []
             }
 
-            // Fetch workouts and resting HR in parallel
-            async let workoutsTask = workoutService.fetchWorkouts(start: start, end: Date())
-            async let rhrTask = hrvService.fetchLatestRestingHeartRate(withinDays: 30)
-
-            let (workouts, rhrResult) = try await (workoutsTask, rhrTask)
-
-            let restingHR = rhrResult?.value
+            let workouts = try await workoutService.fetchWorkouts(start: start, end: Date())
+            let restingHR: Double?
+            if let snapshot {
+                restingHR = snapshot.effectiveRHR?.value
+            } else {
+                restingHR = try await hrvService.fetchLatestRestingHeartRate(withinDays: 30)?.value
+            }
             // Estimate max HR from 220-age formula; fallback to 190
             let maxHR: Double = 190
 
@@ -541,7 +546,10 @@ final class ActivityViewModel {
 
     // MARK: - Sleep Fetch (for recovery modifier)
 
-    private func safeSleepFetch() async -> SleepSummary? {
+    private func safeSleepFetch(snapshot: SharedHealthSnapshot?) async -> SleepSummary? {
+        if let snapshot {
+            return snapshot.sleepSummaryForRecovery
+        }
         do {
             return try await sleepService.fetchLastNightSleepSummary(for: Date())
         } catch {
@@ -552,7 +560,18 @@ final class ActivityViewModel {
 
     // MARK: - Sleep Daily Fetch (14-day)
 
-    private func safeSleepDailyFetch() async -> [SleepDailySample] {
+    private func safeSleepDailyFetch(snapshot: SharedHealthSnapshot?) async -> [SleepDailySample] {
+        if let snapshot {
+            return snapshot.sleepDailyDurations
+                .sorted { $0.date < $1.date }
+                .suffix(14)
+                .map {
+                    SleepDailySample(
+                        date: $0.date,
+                        minutes: Swift.max(0, Swift.min($0.totalMinutes, 1440))
+                    )
+                }
+        }
         do {
             let twoWeeksAgo = Calendar.current.date(byAdding: .day, value: -14, to: Date()) ?? Date()
             let results = try await sleepService.fetchDailySleepDurations(start: twoWeeksAgo, end: Date())
@@ -587,7 +606,37 @@ final class ActivityViewModel {
         let rhrCollection: [(date: Date, average: Double)]
     }
 
-    private func safeReadinessFetch() async -> ReadinessResult {
+    private func safeReadinessFetch(snapshot: SharedHealthSnapshot?) async -> ReadinessResult {
+        if let snapshot {
+            let hrvSamples = snapshot.hrvSamples14Day
+            let todayRHR = snapshot.todayRHR
+            let yesterdayRHR = snapshot.yesterdayRHR
+
+            let hrvZScore = computeHRVZScore(from: hrvSamples)
+
+            let rhrDelta: Double?
+            if let todayRHR, let yesterdayRHR,
+               todayRHR > 0, todayRHR.isFinite, yesterdayRHR > 0, yesterdayRHR.isFinite {
+                rhrDelta = todayRHR - yesterdayRHR
+            } else {
+                rhrDelta = nil
+            }
+
+            let validRHRCollection = snapshot.rhrCollection14Day
+                .filter { $0.average > 0 && $0.average.isFinite && $0.average >= 20 && $0.average <= 300 }
+
+            let rhrBaseline = validRHRCollection.map(\.average)
+
+            return ReadinessResult(
+                hrvZScore: hrvZScore,
+                rhrDelta: rhrDelta,
+                hrvSamples: hrvSamples,
+                todayRHR: todayRHR,
+                rhrBaseline: rhrBaseline,
+                rhrCollection: validRHRCollection
+            )
+        }
+
         do {
             let calendar = Calendar.current
             let yesterday = calendar.date(byAdding: .day, value: -1, to: Date()) ?? Date()
