@@ -277,3 +277,9 @@
 ### 2026-02-22: 숫자 표기 일관성 교정
 
 97. **화면 숫자 표기는 `formattedWithSeparator` 경유 필수**: UI 라벨에서 `String(format: "%.0f")`, `"\(Int(...))"` 직접 렌더링 금지. `Int.formattedWithSeparator` 또는 `Double.formattedWithSeparator(fractionDigits:)`를 사용해 `1,000` 단위 구분을 기본값으로 유지
+
+### 2026-02-23: Today Tab UX 통일 교정
+
+98. **`changeFractionDigits` 단일 소스 필수**: 카테고리별 소수점 자릿수는 `HealthMetric+View.changeFractionDigits`만 수정. ViewModel에 inline switch로 중복 구현 금지
+99. **UI 컴포넌트 삭제 시 기능 이관 체크리스트**: `.contextMenu`, `.hoverEffect`, `.accessibilityReduceMotion` 등 부가 기능이 삭제 대상 View에만 있으면 대체 View로 이관 필수
+100. **`TodayPinnedMetricsStore` 빈 배열 fallback 주의**: `save([])` → `load()` 시 `[.hrv, .rhr, .sleep]` fallback 반환. 테스트에서 "피닝 없음"이 필요하면 비충돌 카테고리(`[.weight]`) 저장

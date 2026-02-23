@@ -27,4 +27,11 @@ struct MetricBaselineDelta: Sendable {
 struct BaselineDetail: Sendable {
     let label: String
     let value: Double
+    let fractionDigits: Int
+
+    init(label: String, value: Double, fractionDigits: Int = 1) {
+        self.label = label
+        self.value = value
+        self.fractionDigits = fractionDigits
+    }
 }

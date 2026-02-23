@@ -23,7 +23,7 @@ struct BaselineTrendBadge: View {
     }
 
     private var formattedDelta: String {
-        abs(detail.value).formattedWithSeparator(fractionDigits: 1)
+        abs(detail.value).formattedWithSeparator(fractionDigits: detail.fractionDigits)
     }
 
     var body: some View {

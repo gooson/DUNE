@@ -56,10 +56,22 @@ extension HealthMetric {
         return category.unitLabel
     }
 
+    /// Fraction digits appropriate for change/delta formatting of this metric's category.
+    var changeFractionDigits: Int {
+        switch category {
+        case .weight, .bmi, .bodyFat, .leanBodyMass, .respiratoryRate, .vo2Max, .wristTemperature:
+            return 1
+        case .exercise where unit == "km":
+            return 1
+        case .hrv, .rhr, .heartRate, .sleep, .exercise, .steps, .spo2, .heartRateRecovery:
+            return 0
+        }
+    }
+
     /// Absolute change value formatted (no arrow).
     var formattedChangeValue: String? {
         guard let change else { return nil }
-        return abs(change).formattedWithSeparator(fractionDigits: 1)
+        return abs(change).formattedWithSeparator(fractionDigits: changeFractionDigits)
     }
 
     /// SF Symbol name for change direction.
@@ -72,7 +84,7 @@ extension HealthMetric {
     var formattedChange: String? {
         guard let change else { return nil }
         let arrow = change > 0 ? "\u{25B2}" : "\u{25BC}"
-        return "\(arrow)\(abs(change).formattedWithSeparator(fractionDigits: 1))"
+        return "\(arrow)\(abs(change).formattedWithSeparator(fractionDigits: changeFractionDigits))"
     }
 }
 
