@@ -65,6 +65,55 @@ enum WorkoutStreakService: Sendable {
         )
     }
 
+    /// Extracts all streak periods (consecutive workout day sequences) from history.
+    /// - Parameter workouts: List of workout dates + durations.
+    /// - Parameter minimumMinutes: Minimum duration to count as a valid day.
+    /// - Returns: Array of StreakPeriod sorted by startDate descending (most recent first).
+    static func extractStreakHistory(
+        from workouts: [WorkoutDay],
+        minimumMinutes: Double = 20
+    ) -> [StreakPeriod] {
+        guard !workouts.isEmpty else { return [] }
+
+        let calendar = Calendar.current
+        let clampedMinimum = max(0, min(1440, minimumMinutes))
+
+        // Unique valid days, ascending
+        let uniqueDays: [Date] = Set(
+            workouts
+                .filter { $0.durationMinutes >= clampedMinimum }
+                .map { calendar.startOfDay(for: $0.date) }
+        )
+        .sorted()
+
+        guard !uniqueDays.isEmpty else { return [] }
+
+        var streaks: [StreakPeriod] = []
+        var streakStart = uniqueDays[0]
+        var prev = uniqueDays[0]
+
+        for day in uniqueDays.dropFirst() {
+            let diff = calendar.dateComponents([.day], from: prev, to: day).day ?? 0
+            if diff == 1 {
+                // Continue current streak
+                prev = day
+            } else {
+                // End current streak, start new one
+                let days = (calendar.dateComponents([.day], from: streakStart, to: prev).day ?? 0) + 1
+                streaks.append(StreakPeriod(id: streakStart, startDate: streakStart, endDate: prev, days: days))
+                streakStart = day
+                prev = day
+            }
+        }
+
+        // Finalize last streak
+        let lastDays = (calendar.dateComponents([.day], from: streakStart, to: prev).day ?? 0) + 1
+        streaks.append(StreakPeriod(id: streakStart, startDate: streakStart, endDate: prev, days: lastDays))
+
+        // Return sorted by startDate descending (most recent first)
+        return streaks.sorted { $0.startDate > $1.startDate }
+    }
+
     // MARK: - Private
 
     private static func computeCurrentStreak(

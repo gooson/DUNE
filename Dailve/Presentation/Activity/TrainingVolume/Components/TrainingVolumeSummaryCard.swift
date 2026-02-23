@@ -13,33 +13,12 @@ struct TrainingVolumeSummaryCard: View {
         NavigationLink(value: TrainingVolumeDestination.overview) {
             StandardCard {
                 VStack(alignment: .leading, spacing: DS.Spacing.md) {
-                    headerRow
                     metricsRow
                     miniBarChart
                 }
             }
         }
         .buttonStyle(.plain)
-    }
-
-    // MARK: - Header
-
-    private var headerRow: some View {
-        HStack {
-            HStack(spacing: DS.Spacing.xs) {
-                Image(systemName: "chart.bar.fill")
-                    .font(.subheadline)
-                    .foregroundStyle(DS.Color.activity)
-                Text("Training Volume")
-                    .font(.subheadline.weight(.semibold))
-            }
-
-            Spacer()
-
-            Image(systemName: "chevron.right")
-                .font(.caption2)
-                .foregroundStyle(.tertiary)
-        }
     }
 
     // MARK: - Last Workout Metrics
