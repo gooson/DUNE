@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="#000000">
+  <!-- Main ball -->
+  <circle cx="32" cy="32" r="22"/>
+  <!-- Inner cutout for detail -->
+  <circle cx="32" cy="32" r="18" fill="white"/>
+  <!-- Ball outline ring -->
+  <circle cx="32" cy="32" r="22"/>
+  <circle cx="32" cy="32" r="19" fill="white"/>
+  <!-- Vertical seam -->
+  <path d="M32 10 Q26 22 26 32 Q26 42 32 54" fill="none" stroke="#000000" stroke-width="2.5"/>
+  <path d="M32 10 Q38 22 38 32 Q38 42 32 54" fill="none" stroke="#000000" stroke-width="2.5"/>
+  <!-- Horizontal seam -->
+  <path d="M10 32 Q22 26 32 26 Q42 26 54 32" fill="none" stroke="#000000" stroke-width="2.5"/>
+  <path d="M10 32 Q22 38 32 38 Q42 38 54 32" fill="none" stroke="#000000" stroke-width="2.5"/>
+</svg>

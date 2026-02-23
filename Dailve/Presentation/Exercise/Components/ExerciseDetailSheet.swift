@@ -159,8 +159,14 @@ struct ExerciseDetailSheet: View {
             Text("사용 기구")
                 .font(.headline)
             HStack(spacing: DS.Spacing.md) {
-                EquipmentIllustrationView(equipment: exercise.equipment, size: 56)
-                    .background(DS.Color.activity.opacity(0.06), in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+                Image(exercise.equipment.svgAssetName)
+                    .resizable()
+                    .renderingMode(.template)
+                    .aspectRatio(contentMode: .fit)
+                    .foregroundStyle(DS.Color.activity)
+                    .frame(width: 80, height: 80)
+                    .padding(DS.Spacing.sm)
+                    .background(DS.Color.activity.opacity(0.06), in: RoundedRectangle(cornerRadius: DS.Radius.md))
                 VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                     HStack(spacing: DS.Spacing.xs) {
                         Text(exercise.equipment.localizedDisplayName)

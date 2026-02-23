@@ -340,19 +340,26 @@ struct ExercisePickerView: View {
                 selectedEquipment = selectedEquipment == equipment ? nil : equipment
             }
         } label: {
-            Text(equipment.localizedDisplayName)
-                .font(.system(size: 11, weight: .medium))
-                .padding(.horizontal, DS.Spacing.sm)
-                .padding(.vertical, DS.Spacing.xxs)
-                .background(
-                    selectedEquipment == equipment
-                        ? DS.Color.activity
-                        : Color.secondary.opacity(0.12),
-                    in: Capsule()
-                )
-                .foregroundStyle(
-                    selectedEquipment == equipment ? .white : .primary
-                )
+            HStack(spacing: DS.Spacing.xxs) {
+                Image(equipment.svgAssetName)
+                    .resizable()
+                    .renderingMode(.template)
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 14, height: 14)
+                Text(equipment.localizedDisplayName)
+                    .font(.system(size: 11, weight: .medium))
+            }
+            .padding(.horizontal, DS.Spacing.sm)
+            .padding(.vertical, DS.Spacing.xxs)
+            .background(
+                selectedEquipment == equipment
+                    ? DS.Color.activity
+                    : Color.secondary.opacity(0.12),
+                in: Capsule()
+            )
+            .foregroundStyle(
+                selectedEquipment == equipment ? .white : .primary
+            )
         }
         .buttonStyle(.plain)
     }
