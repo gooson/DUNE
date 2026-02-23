@@ -1,8 +1,9 @@
 import SwiftUI
 
-/// Individual metric card for the 2-column wellness grid.
+/// Unified metric card for 2-column grids (Today + Wellness).
 struct VitalCard: View {
     let data: VitalCardData
+    var animationIndex: Int = 0
 
     @Environment(\.horizontalSizeClass) private var sizeClass
 
@@ -25,9 +26,9 @@ struct VitalCard: View {
 
                     Spacer(minLength: 0)
 
-                    // Stale indicator
+                    // Freshness label
                     if data.isStale {
-                        staleLabel
+                        freshnessLabel
                     }
                 }
 
@@ -52,6 +53,11 @@ struct VitalCard: View {
                     }
                 }
 
+                // Baseline trend badge
+                if let detail = data.baselineDetail {
+                    BaselineTrendBadge(detail: detail, inversePolarity: data.inversePolarity)
+                }
+
                 // Sparkline
                 if data.sparklineData.count >= 2 {
                     MiniSparklineView(dataPoints: data.sparklineData, color: themeColor)
@@ -68,9 +74,8 @@ struct VitalCard: View {
 
     // MARK: - Components
 
-    private var staleLabel: some View {
-        let days = Calendar.current.dateComponents([.day], from: data.lastUpdated, to: Date()).day ?? 0
-        return Text("\(days)d ago")
+    private var freshnessLabel: some View {
+        Text(data.lastUpdated.freshnessLabel)
             .font(.caption2)
             .foregroundStyle(.tertiary)
     }

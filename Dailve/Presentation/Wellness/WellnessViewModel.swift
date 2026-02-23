@@ -892,16 +892,6 @@ final class WellnessViewModel {
         let daysSince = Calendar.current.dateComponents([.day], from: date, to: Date()).day ?? 0
         let isStale = daysSince >= Self.staleDays
 
-        var changeStr: String?
-        var changePositive: Bool? // Note: true means numerically positive, not necessarily "good" (e.g. weight increase)
-        if let change, !isHistorical { // Correction #24: skip change for historical data
-            let absChange = abs(change)
-            if absChange >= 0.1 {
-                changeStr = change.formattedWithSeparator(fractionDigits: 1, alwaysShowSign: true)
-                changePositive = change > 0
-            }
-        }
-
         let metric = HealthMetric(
             id: category.rawValue,
             name: title,
@@ -912,6 +902,18 @@ final class WellnessViewModel {
             category: category,
             isHistorical: isHistorical
         )
+
+        let fractionDigits = metric.changeFractionDigits
+
+        var changeStr: String?
+        var changePositive: Bool? // Note: true means numerically positive, not necessarily "good" (e.g. weight increase)
+        if let change, !isHistorical { // Correction #24: skip change for historical data
+            let absChange = abs(change)
+            if absChange >= 0.1 {
+                changeStr = change.formattedWithSeparator(fractionDigits: fractionDigits, alwaysShowSign: true)
+                changePositive = change > 0
+            }
+        }
 
         return VitalCardData(
             id: category.rawValue,

@@ -3,8 +3,14 @@ import SwiftUI
 struct DashboardView: View {
     @State private var viewModel = DashboardViewModel()
     @State private var isShowingPinnedEditor = false
+    @State private var hasAppeared = false
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.openURL) private var openURL
+
+    private let gridColumns: [GridItem] = [
+        GridItem(.flexible(), spacing: DS.Spacing.md),
+        GridItem(.flexible(), spacing: DS.Spacing.md)
+    ]
 
     var body: some View {
         ScrollView {
@@ -24,6 +30,7 @@ struct DashboardView: View {
                         )
                     }
                 } else {
+                    // Hero
                     if let score = viewModel.conditionScore {
                         NavigationLink(value: score) {
                             ConditionHeroView(
@@ -38,31 +45,17 @@ struct DashboardView: View {
                         BaselineProgressView(status: status)
                     }
 
+                    // Coaching
                     if let coachingMessage = viewModel.coachingMessage {
                         TodayCoachingCard(message: coachingMessage)
                     }
 
-                    if !viewModel.pinnedMetrics.isEmpty {
-                        Section {
-                            SmartCardGrid(
-                                metrics: viewModel.pinnedMetrics,
-                                baselineDeltasByMetricID: viewModel.baselineDeltasByMetricID
-                            )
-                        } header: {
-                            HStack {
-                                Text("Pinned Metrics")
-                                    .font(DS.Typography.sectionTitle)
-                                Spacer()
-                                Button("Edit") {
-                                    isShowingPinnedEditor = true
-                                }
-                                .font(.subheadline.weight(.medium))
-                            }
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        }
+                    // Pinned Metrics
+                    if !viewModel.pinnedCards.isEmpty {
+                        pinnedSection
                     }
 
-                    // Last updated timestamp
+                    // Last updated + error banner
                     if let lastUpdated = viewModel.lastUpdated {
                         Text("Updated \(lastUpdated, format: .relative(presentation: .named))")
                             .font(.caption2)
@@ -70,36 +63,38 @@ struct DashboardView: View {
                             .frame(maxWidth: .infinity, alignment: .trailing)
                     }
 
-                    // Error banner (non-blocking — data may be partially loaded)
                     if let error = viewModel.errorMessage {
                         errorBanner(error)
                     }
 
-                    // Health Signals section (HRV, RHR, Weight, BMI)
-                    if !viewModel.healthSignals.isEmpty {
-                        Section {
-                            SmartCardGrid(
-                                metrics: viewModel.healthSignals,
-                                baselineDeltasByMetricID: viewModel.baselineDeltasByMetricID
-                            )
-                        } header: {
-                            Text("Health Signals")
-                                .font(DS.Typography.sectionTitle)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                        }
+                    // Condition (HRV, RHR)
+                    if !viewModel.conditionCards.isEmpty {
+                        cardSection(
+                            title: "Condition",
+                            icon: "heart.fill",
+                            iconColor: DS.Color.vitals,
+                            cards: viewModel.conditionCards
+                        )
                     }
 
-                    if !viewModel.activityMetrics.isEmpty {
-                        Section {
-                            SmartCardGrid(
-                                metrics: viewModel.activityMetrics,
-                                baselineDeltasByMetricID: viewModel.baselineDeltasByMetricID
-                            )
-                        } header: {
-                            Text("Activity")
-                                .font(DS.Typography.sectionTitle)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                        }
+                    // Activity (Steps, Exercise)
+                    if !viewModel.activityCards.isEmpty {
+                        cardSection(
+                            title: "Activity",
+                            icon: "figure.run",
+                            iconColor: DS.Color.activity,
+                            cards: viewModel.activityCards
+                        )
+                    }
+
+                    // Body (Weight, BMI, Sleep)
+                    if !viewModel.bodyCards.isEmpty {
+                        cardSection(
+                            title: "Body",
+                            icon: "bed.double.fill",
+                            iconColor: DS.Color.body,
+                            cards: viewModel.bodyCards
+                        )
                     }
                 }
             }
@@ -127,6 +122,9 @@ struct DashboardView: View {
         }
         .task {
             await viewModel.loadData()
+            withAnimation(.easeOut(duration: 0.3)) {
+                hasAppeared = true
+            }
         }
         .sheet(isPresented: $isShowingPinnedEditor) {
             PinnedMetricsEditorView(
@@ -138,6 +136,75 @@ struct DashboardView: View {
             )
         }
         .navigationTitle("Today")
+    }
+
+    // MARK: - Sections
+
+    private var pinnedSection: some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.md) {
+            HStack(spacing: DS.Spacing.xs) {
+                Image(systemName: "pin.fill")
+                    .font(.subheadline)
+                    .foregroundStyle(.tint)
+
+                Text("Pinned")
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.secondary)
+
+                Spacer()
+
+                Button("Edit") {
+                    isShowingPinnedEditor = true
+                }
+                .font(.subheadline.weight(.medium))
+            }
+            .padding(.horizontal, DS.Spacing.xs)
+
+            cardGrid(cards: viewModel.pinnedCards)
+        }
+    }
+
+    private func cardSection(
+        title: String,
+        icon: String,
+        iconColor: Color,
+        cards: [VitalCardData]
+    ) -> some View {
+        SectionGroup(title: title, icon: icon, iconColor: iconColor) {
+            cardGrid(cards: cards)
+        }
+    }
+
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    private func cardGrid(cards: [VitalCardData]) -> some View {
+        LazyVGrid(columns: gridColumns, spacing: DS.Spacing.md) {
+            ForEach(cards.indices, id: \.self) { index in
+                let card = cards[index]
+                NavigationLink(value: card.metric) {
+                    VitalCard(data: card, animationIndex: index)
+                }
+                .buttonStyle(.plain)
+                .hoverEffect(.highlight)
+                .contextMenu {
+                    NavigationLink(value: card.metric) {
+                        Label("View Trend", systemImage: "chart.line.uptrend.xyaxis")
+                    }
+                    NavigationLink(value: AllDataDestination(category: card.category)) {
+                        Label("Show All Data", systemImage: "list.bullet")
+                    }
+                }
+                .opacity(hasAppeared ? 1 : 0)
+                .offset(y: hasAppeared ? 0 : 8)
+                .animation(
+                    reduceMotion
+                        ? .none
+                        : .easeOut(duration: 0.35).delay(Double(min(index, 5)) * 0.05),
+                    value: hasAppeared
+                )
+            }
+        }
     }
 
     // MARK: - Error States

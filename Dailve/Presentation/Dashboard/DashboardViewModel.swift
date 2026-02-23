@@ -29,11 +29,15 @@ final class DashboardViewModel {
         HealthMetric.Category.allCases.filter { TodayPinnedMetricsStore.allowedCategories.contains($0) }
     }
 
-    // Cached filtered metrics (avoid recomputing in View body)
-    private(set) var healthSignals: [HealthMetric] = []
-    private(set) var activityMetrics: [HealthMetric] = []
+    // Cached filtered cards (VitalCardData for unified rendering)
+    private(set) var pinnedCards: [VitalCardData] = []
+    private(set) var conditionCards: [VitalCardData] = []
+    private(set) var activityCards: [VitalCardData] = []
+    private(set) var bodyCards: [VitalCardData] = []
 
-    private static let healthCategories: Set<HealthMetric.Category> = [.hrv, .rhr, .weight, .bmi]
+    private static let conditionCategories: Set<HealthMetric.Category> = [.hrv, .rhr]
+    private static let activityCardCategories: Set<HealthMetric.Category> = [.steps, .exercise]
+    private static let bodyCategories: Set<HealthMetric.Category> = [.weight, .bmi, .sleep]
     private static var shouldBypassAuthorizationForTests: Bool {
         let isRunningXCTest = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
         let arguments = ProcessInfo.processInfo.arguments
@@ -44,12 +48,20 @@ final class DashboardViewModel {
     private func invalidateFilteredMetrics() {
         updatePinnedMetrics()
         let pinnedIDs = Set(pinnedMetrics.map(\.id))
-        healthSignals = sortedMetrics.filter {
-            Self.healthCategories.contains($0.category) && !pinnedIDs.contains($0.id)
-        }
-        activityMetrics = sortedMetrics.filter {
-            !Self.healthCategories.contains($0.category) && !pinnedIDs.contains($0.id)
-        }
+
+        // Build VitalCardData arrays for unified rendering
+        pinnedCards = pinnedMetrics.map { buildVitalCardData(from: $0) }
+
+        let unpinned = sortedMetrics.filter { !pinnedIDs.contains($0.id) }
+        conditionCards = unpinned
+            .filter { Self.conditionCategories.contains($0.category) }
+            .map { buildVitalCardData(from: $0) }
+        activityCards = unpinned
+            .filter { Self.activityCardCategories.contains($0.category) }
+            .map { buildVitalCardData(from: $0) }
+        bodyCards = unpinned
+            .filter { Self.bodyCategories.contains($0.category) }
+            .map { buildVitalCardData(from: $0) }
     }
 
     private let healthKitManager: HealthKitManager
@@ -711,10 +723,10 @@ final class DashboardViewModel {
         guard let hrvDelta = baselineDeltasByMetricID["hrv"] else { return [] }
         var details: [BaselineDetail] = []
         if let yesterday = hrvDelta.yesterdayDelta {
-            details.append(BaselineDetail(label: "HRV vs yesterday", value: yesterday))
+            details.append(BaselineDetail(label: "HRV vs yesterday", value: yesterday, fractionDigits: 0))
         }
         if let short = hrvDelta.shortTermDelta {
-            details.append(BaselineDetail(label: "HRV vs 14d avg", value: short))
+            details.append(BaselineDetail(label: "HRV vs 14d avg", value: short, fractionDigits: 0))
         }
         return details
     }
@@ -740,6 +752,51 @@ final class DashboardViewModel {
             return (date: date, value: avg)
         }
         .sorted { $0.date > $1.date }
+    }
+
+    // MARK: - VitalCardData Conversion
+
+    private static let staleDays = 3
+
+    private func buildVitalCardData(from metric: HealthMetric) -> VitalCardData {
+        let daysSince = Calendar.current.dateComponents([.day], from: metric.date, to: Date()).day ?? 0
+        let isStale = daysSince >= Self.staleDays
+        let fractionDigits = metric.changeFractionDigits
+
+        var changeStr: String?
+        var changePositive: Bool?
+        if let change = metric.change, !metric.isHistorical {
+            let absChange = abs(change)
+            if absChange >= 0.1 {
+                changeStr = change.formattedWithSeparator(fractionDigits: fractionDigits, alwaysShowSign: true)
+                changePositive = change > 0
+            }
+        }
+
+        // Apply category-aware fraction digits to baseline detail
+        let baseline: BaselineDetail?
+        if let raw = baselineDeltasByMetricID[metric.id]?.preferredDetail {
+            baseline = BaselineDetail(label: raw.label, value: raw.value, fractionDigits: fractionDigits)
+        } else {
+            baseline = nil
+        }
+
+        return VitalCardData(
+            id: metric.id,
+            category: metric.category,
+            section: CardSection.section(for: metric.category),
+            title: metric.name,
+            value: metric.formattedNumericValue,
+            unit: metric.resolvedUnitLabel,
+            change: changeStr,
+            changeIsPositive: changePositive,
+            sparklineData: [],
+            metric: metric,
+            lastUpdated: metric.date,
+            isStale: isStale,
+            baselineDetail: baseline,
+            inversePolarity: metric.category == .rhr
+        )
     }
 
     private func buildRecentScores(from samples: [HRVSample]) -> [ConditionScore] {

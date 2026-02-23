@@ -181,7 +181,7 @@ struct DashboardViewModelTests {
 
     @Test("RHR falls back to latest when today is nil")
     func rhrFallback() async {
-        let threeDaysAgo = Calendar.current.date(byAdding: .day, value: -3, to: Date())!
+        let threeDaysAgo = Calendar.current.date(byAdding: .day, value: -3, to: Date()) ?? Date()
         let hrv = MockHRVService(
             samples: [HRVSample(value: 50.0, date: Date())],
             todayRHR: nil,
@@ -303,7 +303,7 @@ struct DashboardViewModelTests {
 
     @Test("Weight falls back to latest when today is empty")
     func weightFallback() async {
-        let threeDaysAgo = Calendar.current.date(byAdding: .day, value: -3, to: Date())!
+        let threeDaysAgo = Calendar.current.date(byAdding: .day, value: -3, to: Date()) ?? Date()
         let body = MockBodyService(
             latestWeight: (value: 72.5, date: threeDaysAgo)
         )
@@ -394,7 +394,7 @@ struct DashboardViewModelTests {
         await vm.loadData()
 
         #expect(vm.pinnedMetrics.map(\.category) == [.steps, .exercise, .hrv])
-        #expect(vm.healthSignals.contains(where: { $0.category == .hrv }) == false)
+        #expect(vm.conditionCards.contains(where: { $0.category == .hrv }) == false)
     }
 
     @Test("Coaching message is generated even when score is unavailable")
@@ -519,6 +519,243 @@ struct DashboardViewModelTests {
         await vm.loadData()
 
         #expect(vm.baselineDeltasByMetricID["rhr"]?.shortTermDelta == 10.0)
+    }
+
+    private func makePinnedStore(_ categories: [HealthMetric.Category]) -> TodayPinnedMetricsStore {
+        let suiteName = "DashboardPinnedStore.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suiteName) ?? .standard
+        defaults.removePersistentDomain(forName: suiteName)
+        let store = TodayPinnedMetricsStore(defaults: defaults)
+        store.save(categories)
+        return store
+    }
+}
+
+// MARK: - VitalCardData Conversion Tests
+
+@Suite("DashboardViewModel VitalCardData")
+@MainActor
+struct DashboardViewModelVitalCardTests {
+
+    @Test("Condition cards contain HRV and RHR")
+    func conditionCardsContainHRVAndRHR() async {
+        let hrv = MockHRVService(
+            samples: [HRVSample(value: 50.0, date: Date())],
+            todayRHR: 58.0,
+            yesterdayRHR: 60.0,
+            latestRHR: nil
+        )
+        let vm = DashboardViewModel(
+            hrvService: hrv,
+            sleepService: MockSleepService(),
+            workoutService: MockWorkoutService(),
+            stepsService: MockStepsService(),
+            bodyService: MockBodyService(),
+            pinnedMetricsStore: makePinnedStore([.weight])
+        )
+
+        await vm.loadData()
+
+        let categories = Set(vm.conditionCards.map(\.category))
+        #expect(categories.contains(.hrv))
+        #expect(categories.contains(.rhr))
+    }
+
+    @Test("Activity cards contain steps and exercise")
+    func activityCardsContainStepsAndExercise() async {
+        let steps = MockStepsService(todaySteps: 7000, yesterdaySteps: 6000, latestSteps: nil)
+        let workout = MockWorkoutService(workouts: [
+            WorkoutSummary(id: "w1", type: "Running", duration: 1800, calories: 200, distance: nil, date: Date())
+        ])
+        let vm = DashboardViewModel(
+            hrvService: MockHRVService(),
+            sleepService: MockSleepService(),
+            workoutService: workout,
+            stepsService: steps,
+            bodyService: MockBodyService(),
+            pinnedMetricsStore: makePinnedStore([])
+        )
+
+        await vm.loadData()
+
+        let categories = Set(vm.activityCards.map(\.category))
+        #expect(categories.contains(.steps))
+        #expect(categories.contains(.exercise))
+    }
+
+    @Test("Body cards contain weight and BMI")
+    func bodyCardsContainWeightAndBMI() async {
+        let today = Date()
+        let body = MockBodyService(
+            latestWeight: (value: 72.5, date: today),
+            latestBMI: (value: 23.1, date: today)
+        )
+        let vm = DashboardViewModel(
+            hrvService: MockHRVService(),
+            sleepService: MockSleepService(),
+            workoutService: MockWorkoutService(),
+            stepsService: MockStepsService(),
+            bodyService: body,
+            pinnedMetricsStore: makePinnedStore([])
+        )
+
+        await vm.loadData()
+
+        let categories = Set(vm.bodyCards.map(\.category))
+        #expect(categories.contains(.weight))
+        #expect(categories.contains(.bmi))
+    }
+
+    @Test("Pinned metrics excluded from section cards")
+    func pinnedExcludedFromSections() async {
+        let today = Date()
+        let hrv = MockHRVService(
+            samples: [HRVSample(value: 50.0, date: today)],
+            todayRHR: 58.0,
+            yesterdayRHR: 60.0,
+            latestRHR: nil
+        )
+        let steps = MockStepsService(todaySteps: 7000, yesterdaySteps: 6000, latestSteps: nil)
+        let pinnedStore = makePinnedStore([.hrv, .steps])
+
+        let vm = DashboardViewModel(
+            hrvService: hrv,
+            sleepService: MockSleepService(),
+            workoutService: MockWorkoutService(),
+            stepsService: steps,
+            bodyService: MockBodyService(),
+            pinnedMetricsStore: pinnedStore
+        )
+
+        await vm.loadData()
+
+        #expect(vm.pinnedCards.contains { $0.category == .hrv })
+        #expect(vm.pinnedCards.contains { $0.category == .steps })
+        #expect(!vm.conditionCards.contains { $0.category == .hrv })
+        #expect(!vm.activityCards.contains { $0.category == .steps })
+    }
+
+    @Test("Empty input produces empty card arrays")
+    func emptyInputProducesEmptyCards() async {
+        let vm = DashboardViewModel(
+            hrvService: MockHRVService(),
+            sleepService: MockSleepService(),
+            workoutService: MockWorkoutService(),
+            stepsService: MockStepsService(),
+            bodyService: MockBodyService(),
+            pinnedMetricsStore: makePinnedStore([])
+        )
+
+        await vm.loadData()
+
+        #expect(vm.pinnedCards.isEmpty)
+        #expect(vm.conditionCards.isEmpty)
+        #expect(vm.activityCards.isEmpty)
+        #expect(vm.bodyCards.isEmpty)
+    }
+
+    @Test("VitalCardData has correct value formatting")
+    func vitalCardValueFormatting() async {
+        let hrv = MockHRVService(
+            samples: [HRVSample(value: 45.0, date: Date())],
+            todayRHR: nil,
+            yesterdayRHR: nil,
+            latestRHR: nil
+        )
+        let vm = DashboardViewModel(
+            hrvService: hrv,
+            sleepService: MockSleepService(),
+            workoutService: MockWorkoutService(),
+            stepsService: MockStepsService(),
+            bodyService: MockBodyService(),
+            pinnedMetricsStore: makePinnedStore([.weight])
+        )
+
+        await vm.loadData()
+
+        let hrvCard = vm.conditionCards.first { $0.category == .hrv }
+        #expect(hrvCard != nil)
+        #expect(hrvCard?.value == "45")
+        #expect(hrvCard?.unit == "ms")
+        #expect(hrvCard?.title == "HRV")
+    }
+
+    @Test("RHR card has inversePolarity set to true")
+    func rhrInversePolarity() async {
+        let hrv = MockHRVService(
+            samples: [HRVSample(value: 50.0, date: Date())],
+            todayRHR: 58.0,
+            yesterdayRHR: 60.0,
+            latestRHR: nil
+        )
+        let vm = DashboardViewModel(
+            hrvService: hrv,
+            sleepService: MockSleepService(),
+            workoutService: MockWorkoutService(),
+            stepsService: MockStepsService(),
+            bodyService: MockBodyService(),
+            pinnedMetricsStore: makePinnedStore([.weight])
+        )
+
+        await vm.loadData()
+
+        let rhrCard = vm.conditionCards.first { $0.category == .rhr }
+        #expect(rhrCard?.inversePolarity == true)
+
+        let hrvCard = vm.conditionCards.first { $0.category == .hrv }
+        #expect(hrvCard?.inversePolarity == false)
+    }
+
+    @Test("Stale card is marked when data is 3+ days old")
+    func staleCardMarking() async {
+        let threeDaysAgo = Calendar.current.date(byAdding: .day, value: -3, to: Date()) ?? Date()
+        let hrv = MockHRVService(
+            samples: [HRVSample(value: 45.0, date: threeDaysAgo)],
+            todayRHR: nil,
+            yesterdayRHR: nil,
+            latestRHR: nil
+        )
+        let vm = DashboardViewModel(
+            hrvService: hrv,
+            sleepService: MockSleepService(),
+            workoutService: MockWorkoutService(),
+            stepsService: MockStepsService(),
+            bodyService: MockBodyService(),
+            pinnedMetricsStore: makePinnedStore([.weight])
+        )
+
+        await vm.loadData()
+
+        let hrvCard = vm.conditionCards.first { $0.category == .hrv }
+        #expect(hrvCard?.isStale == true)
+    }
+
+    @Test("Baseline detail populated when delta exists")
+    func baselineDetailPopulated() async {
+        let calendar = Calendar.current
+        let samples = (0..<16).compactMap { offset -> HRVSample? in
+            guard let date = calendar.date(byAdding: .day, value: -offset, to: Date()) else { return nil }
+            return HRVSample(value: 45 + Double(offset), date: date)
+        }
+        let hrv = MockHRVService(
+            samples: samples,
+            todayRHR: 58.0,
+            yesterdayRHR: 60.0,
+            latestRHR: nil
+        )
+        let vm = DashboardViewModel(
+            hrvService: hrv,
+            sleepService: MockSleepService(),
+            workoutService: MockWorkoutService(),
+            stepsService: MockStepsService(),
+            bodyService: MockBodyService(),
+            pinnedMetricsStore: makePinnedStore([.weight])
+        )
+
+        await vm.loadData()
+
+        let hrvCard = vm.conditionCards.first { $0.category == .hrv }
+        #expect(hrvCard?.baselineDetail != nil)
     }
 
     private func makePinnedStore(_ categories: [HealthMetric.Category]) -> TodayPinnedMetricsStore {
