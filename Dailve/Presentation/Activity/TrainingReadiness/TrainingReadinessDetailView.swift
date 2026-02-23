@@ -23,6 +23,7 @@ struct TrainingReadinessDetailView: View {
                     ReadinessTrendChartView(data: detailVM.readinessTrend)
                     subScoreCharts
                     componentWeights(readiness)
+                    calculationMethodSection(readiness)
                 } else {
                     emptyState
                 }
@@ -181,6 +182,43 @@ struct TrainingReadinessDetailView: View {
                 .fontWeight(.medium)
                 .monospacedDigit()
                 .frame(width: 28, alignment: .trailing)
+        }
+    }
+
+    // MARK: - Calculation Method
+
+    private func calculationMethodSection(_ readiness: TrainingReadiness) -> some View {
+        StandardCard {
+            VStack(alignment: .leading, spacing: DS.Spacing.md) {
+                HStack(spacing: DS.Spacing.sm) {
+                    Image(systemName: "function")
+                        .foregroundStyle(.secondary)
+                    Text("Calculation Method")
+                        .font(.subheadline.weight(.semibold))
+                }
+
+                calculationMethodLine("Final score = HRV(30%) + RHR(20%) + Sleep(25%) + Recovery(15%) + Trend(10%).")
+                calculationMethodLine("Each component is normalized to 0-100 before weighting.")
+                calculationMethodLine("HRV/RHR are compared against your personal baseline; positive trend increases score.")
+
+                if readiness.isCalibrating {
+                    calculationMethodLine("Calibration in progress: more recent data will stabilize the baseline.")
+                }
+            }
+        }
+    }
+
+    private func calculationMethodLine(_ text: String) -> some View {
+        HStack(alignment: .top, spacing: DS.Spacing.sm) {
+            Circle()
+                .fill(.tertiary)
+                .frame(width: 4, height: 4)
+                .padding(.top, 6)
+
+            Text(text)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 

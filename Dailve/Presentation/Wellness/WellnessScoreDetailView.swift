@@ -232,15 +232,15 @@ struct WellnessScoreDetailView: View {
                 HStack(spacing: DS.Spacing.sm) {
                     Image(systemName: "info.circle.fill")
                         .foregroundStyle(.secondary)
-                    Text("How It Works")
+                    Text("Calculation Method")
                         .font(.subheadline)
                         .fontWeight(.semibold)
                 }
 
-                explainerItem("Sleep contributes 40% based on duration and quality from Apple Watch.")
-                explainerItem("Condition contributes 35% using HRV and resting heart rate relative to baseline.")
-                explainerItem("Body contributes 25% from recent body trend stability.")
-                explainerItem("If some inputs are missing, available inputs are re-weighted.")
+                explainerItem("Final score = weighted average of Sleep(40%), Condition(35%), and Body(25%).")
+                explainerItem("Sleep and Condition come from Apple Watch signals, then normalized to 0-100.")
+                explainerItem("Body score is derived from 7-day trend stability and direction changes.")
+                explainerItem("If any component is missing, remaining weights are re-normalized before final scoring.")
             }
         }
     }
