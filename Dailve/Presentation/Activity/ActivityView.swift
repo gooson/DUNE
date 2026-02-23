@@ -85,7 +85,10 @@ struct ActivityView: View {
                                  iconColor: DS.Color.activity,
                                  infoAction: { showingPRInfo = true }) {
                         NavigationLink(value: ActivityDetailDestination.personalRecords) {
-                            PersonalRecordsSection(records: viewModel.personalRecords)
+                            PersonalRecordsSection(
+                                records: viewModel.personalRecords,
+                                notice: viewModel.personalRecordNotice
+                            )
                         }
                         .buttonStyle(.plain)
                     }
@@ -170,7 +173,10 @@ struct ActivityView: View {
         .navigationDestination(for: ActivityDetailDestination.self) { destination in
             switch destination {
             case .personalRecords:
-                PersonalRecordsDetailView()
+                PersonalRecordsDetailView(
+                    records: viewModel.personalRecords,
+                    notice: viewModel.personalRecordNotice
+                )
             case .consistency:
                 ConsistencyDetailView()
             case .exerciseMix:

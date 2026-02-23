@@ -24,7 +24,8 @@ final class ActivityViewModel {
     var hrvDailyAverages: [DailySample] = []
     var rhrDailyData: [DailySample] = []
     var sleepDailyData: [SleepDailySample] = []
-    var personalRecords: [StrengthPersonalRecord] = []
+    var personalRecords: [ActivityPersonalRecord] = []
+    var personalRecordNotice: String?
     var workoutStreak: WorkoutStreak?
     var exerciseFrequencies: [ExerciseFrequency] = []
     var weeklyStats: [ActivityStat] = []
@@ -76,10 +77,16 @@ final class ActivityViewModel {
     private let library: ExerciseLibraryQuerying
     private let readinessUseCase: TrainingReadinessCalculating
     private let sharedHealthDataService: SharedHealthDataService?
+    private let personalRecordStore: PersonalRecordStore
 
     /// Cached recovery modifiers from the most recent fetch.
     private var sleepModifier: Double = 1.0
     private var readinessModifier: Double = 1.0
+    private var didAttemptCardioSeed = false
+    private var cardioSeedTask: Task<Void, Never>?
+
+    /// Cached manual records for manual-cardio fallback PR calculations.
+    private var manualRecordsCache: [ExerciseRecord] = []
 
     init(
         workoutService: WorkoutQuerying? = nil,
@@ -91,7 +98,8 @@ final class ActivityViewModel {
         recoveryModifierService: RecoveryModifying = RecoveryModifierService(),
         library: ExerciseLibraryQuerying? = nil,
         readinessUseCase: TrainingReadinessCalculating = CalculateTrainingReadinessUseCase(),
-        sharedHealthDataService: SharedHealthDataService? = nil
+        sharedHealthDataService: SharedHealthDataService? = nil,
+        personalRecordStore: PersonalRecordStore = .shared
     ) {
         self.workoutService = workoutService ?? WorkoutQueryService(manager: healthKitManager)
         self.stepsService = stepsService ?? StepsQueryService(manager: healthKitManager)
@@ -103,6 +111,7 @@ final class ActivityViewModel {
         self.library = library ?? ExerciseLibraryService.shared
         self.readinessUseCase = readinessUseCase
         self.sharedHealthDataService = sharedHealthDataService
+        self.personalRecordStore = personalRecordStore
     }
 
     // MARK: - Workout Suggestion
@@ -111,6 +120,7 @@ final class ActivityViewModel {
     private var exerciseRecordSnapshots: [ExerciseRecordSnapshot] = []
 
     func updateSuggestion(records: [ExerciseRecord]) {
+        manualRecordsCache = records
         exerciseRecordSnapshots = records.map { record -> ExerciseRecordSnapshot in
             var primary = record.primaryMuscles
             var secondary = record.secondaryMuscles
@@ -129,8 +139,9 @@ final class ActivityViewModel {
             let completedSets = record.completedSets
             let totalWeight = Swift.min(completedSets.compactMap(\.weight).reduce(0, +), 50_000)
             let totalReps = Swift.min(completedSets.compactMap(\.reps).reduce(0, +), 10_000)
-            let durationMin = record.duration > 0 ? Swift.min(record.duration / 60.0, 480) : nil
-            let distKm = record.distance.flatMap { $0 > 0 ? Swift.min($0 / 1000.0, 500) : nil }
+            let durationSec = resolveManualDurationSeconds(for: record)
+            let durationMin = durationSec.flatMap { $0 > 0 ? Swift.min($0 / 60.0, 480) : nil }
+            let distKm = resolveManualDistanceMeters(for: record).flatMap { $0 > 0 ? Swift.min($0 / 1000.0, 500) : nil }
 
             return ExerciseRecordSnapshot(
                 date: record.date,
@@ -178,7 +189,7 @@ final class ActivityViewModel {
 
     /// Computes PR, Streak, and Frequency from current exercise record snapshots.
     func recomputeDerivedStats() {
-        // Personal Records: extract max weight per exercise
+        // Strength PRs: extract max weight per exercise
         let prEntries = exerciseRecordSnapshots.compactMap { snapshot -> StrengthPRService.WorkoutEntry? in
             guard let name = snapshot.exerciseName, !name.isEmpty,
                   let weight = snapshot.totalWeight, weight > 0,
@@ -189,7 +200,23 @@ final class ActivityViewModel {
                 bestWeight: weight / Double(snapshot.completedSetCount)
             )
         }
-        personalRecords = StrengthPRService.extractPRs(from: prEntries)
+        let strengthRecords = StrengthPRService.extractPRs(from: prEntries)
+        let manualCardioEntries = buildManualCardioEntries()
+        let cardioRecordsByActivity = personalRecordStore.allRecords()
+        personalRecords = ActivityPersonalRecordService.merge(
+            strengthRecords: strengthRecords,
+            cardioRecordsByActivity: cardioRecordsByActivity,
+            manualCardioEntries: manualCardioEntries
+        )
+
+        let hasCardio = personalRecords.contains { $0.kind != .strengthWeight }
+        if hasCardio {
+            personalRecordNotice = nil
+        } else if recentWorkouts.isEmpty {
+            personalRecordNotice = "HealthKit 권한을 허용하면 유산소 PR을 볼 수 있어요."
+        } else {
+            personalRecordNotice = "유산소 운동 기록이 쌓이면 카드에 자동 표시됩니다."
+        }
 
         // Workout Streak
         let streakEntries = exerciseRecordSnapshots.map { snapshot in
@@ -297,6 +324,8 @@ final class ActivityViewModel {
         weeklySteps = stepsResult.weeklyData
         todaySteps = stepsResult.todayMetric
         recentWorkouts = workoutsResult
+        refreshCardioPersonalRecords(with: workoutsResult)
+        triggerCardioPersonalRecordSeedIfNeeded()
         trainingLoadData = loadResult
 
         // Compute recovery modifiers from sleep + HRV/RHR data
@@ -348,6 +377,104 @@ final class ActivityViewModel {
 
         guard !Task.isCancelled else { return }
         isLoading = false
+    }
+
+    // MARK: - Personal Record Helpers
+
+    /// Updates cardio PR cache from fresh HealthKit workouts.
+    private func refreshCardioPersonalRecords(with workouts: [WorkoutSummary]) {
+        for workout in workouts.sorted(by: { $0.date < $1.date }) where isCardioCandidate(workout) {
+            _ = personalRecordStore.updateIfNewRecords(workout)
+        }
+    }
+
+    private func isCardioCandidate(_ workout: WorkoutSummary) -> Bool {
+        workout.activityType.isDistanceBased || workout.activityType.category == .cardio
+    }
+
+    /// Triggers one-time best-effort seed for users with old HealthKit history but empty PR store.
+    /// Seed runs in background so initial Activity load is not blocked.
+    private func triggerCardioPersonalRecordSeedIfNeeded() {
+        guard !didAttemptCardioSeed else { return }
+        guard cardioSeedTask == nil else { return }
+        guard !hasCardioRecordsInStore else {
+            didAttemptCardioSeed = true
+            return
+        }
+
+        didAttemptCardioSeed = true
+        cardioSeedTask = Task { [weak self] in
+            guard let self else { return }
+            defer { self.cardioSeedTask = nil }
+
+            do {
+                let history = try await self.workoutService.fetchWorkouts(days: 3650)
+                guard !Task.isCancelled else { return }
+                self.refreshCardioPersonalRecords(with: history)
+                self.recomputeDerivedStats()
+            } catch {
+                AppLogger.ui.error("Cardio PR seed failed: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    private var hasCardioRecordsInStore: Bool {
+        personalRecordStore
+            .allRecords()
+            .contains { activityType, _ in
+                activityType.isDistanceBased || activityType.category == .cardio
+            }
+    }
+
+    private func buildManualCardioEntries() -> [ActivityPersonalRecordService.ManualCardioEntry] {
+        manualRecordsCache.compactMap { record -> ActivityPersonalRecordService.ManualCardioEntry? in
+            let definition = record.exerciseDefinitionID.flatMap { library.exercise(byID: $0) }
+            let activityType = definition?.resolvedActivityType
+                ?? WorkoutActivityType.infer(from: record.exerciseType)
+                ?? .other
+
+            let distanceMeters = resolveManualDistanceMeters(for: record)
+            let duration = resolveManualDurationSeconds(for: record)
+            let calories = record.bestCalories.flatMap {
+                ($0 > 0 && $0.isFinite && $0 < 10_000) ? $0 : nil
+            }
+
+            let isCardio = activityType.isDistanceBased || activityType.category == .cardio || distanceMeters != nil
+            guard isCardio else { return nil }
+            guard distanceMeters != nil || duration != nil || calories != nil else { return nil }
+
+            return ActivityPersonalRecordService.ManualCardioEntry(
+                title: definition?.name ?? record.exerciseType,
+                date: record.date,
+                duration: duration ?? 0,
+                distanceMeters: distanceMeters,
+                calories: calories
+            )
+        }
+    }
+
+    private func resolveManualDurationSeconds(for record: ExerciseRecord) -> TimeInterval? {
+        if record.duration > 0, record.duration.isFinite, record.duration < 86_400 {
+            return record.duration
+        }
+        let setDuration = record.completedSets.compactMap(\.duration).reduce(0, +)
+        guard setDuration > 0, setDuration.isFinite, setDuration < 86_400 else { return nil }
+        return setDuration
+    }
+
+    /// Manual set distances are entered in km. Record distance may be legacy data.
+    private func resolveManualDistanceMeters(for record: ExerciseRecord) -> Double? {
+        let setDistanceKm = record.completedSets.compactMap(\.distance).reduce(0, +)
+        if setDistanceKm > 0, setDistanceKm.isFinite {
+            let meters = setDistanceKm * 1000.0
+            if meters > 0, meters < 500_000 { return meters }
+        }
+
+        guard let distance = record.distance, distance > 0, distance.isFinite else { return nil }
+        // Legacy data can be either meters or km. Treat small values as km.
+        let meters = distance <= 500 ? distance * 1000.0 : distance
+        guard meters > 0, meters < 500_000 else { return nil }
+        return meters
     }
 
     // MARK: - Exercise Fetch
