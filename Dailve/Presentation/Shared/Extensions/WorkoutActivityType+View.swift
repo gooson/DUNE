@@ -252,3 +252,38 @@ extension PersonalRecordType {
         }
     }
 }
+
+extension ActivityPersonalRecord.Kind {
+    var displayName: String {
+        switch self {
+        case .strengthWeight: "근력 중량"
+        case .fastestPace: "최고 페이스"
+        case .longestDistance: "최장 거리"
+        case .highestCalories: "최고 칼로리"
+        case .longestDuration: "최장 시간"
+        case .highestElevation: "최고 고도"
+        }
+    }
+
+    var iconName: String {
+        switch self {
+        case .strengthWeight: "dumbbell.fill"
+        case .fastestPace: "speedometer"
+        case .longestDistance: "point.topleft.down.to.point.bottomright.curvepath.fill"
+        case .highestCalories: "flame.fill"
+        case .longestDuration: "timer"
+        case .highestElevation: "mountain.2.fill"
+        }
+    }
+
+    var tintColor: Color {
+        switch self {
+        case .strengthWeight: .orange
+        case .fastestPace: DS.Color.activity
+        case .longestDistance: DS.Color.activity
+        case .highestCalories: .orange
+        case .longestDuration: DS.Color.fitness
+        case .highestElevation: .green
+        }
+    }
+}

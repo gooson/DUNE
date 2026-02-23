@@ -70,8 +70,18 @@ enum PersonalRecordService {
         for type in types {
             guard let value = recordValue(for: type, from: workout) else { continue }
             records[type] = PersonalRecord(
-                type: type, value: value,
-                date: workout.date, workoutID: workout.id
+                type: type,
+                value: value,
+                date: workout.date,
+                workoutID: workout.id,
+                heartRateAvg: workout.heartRateAvg,
+                heartRateMax: workout.heartRateMax,
+                heartRateMin: workout.heartRateMin,
+                stepCount: workout.stepCount,
+                weatherTemperature: workout.weatherTemperature,
+                weatherCondition: workout.weatherCondition,
+                weatherHumidity: workout.weatherHumidity,
+                isIndoor: workout.isIndoor
             )
         }
         return records
