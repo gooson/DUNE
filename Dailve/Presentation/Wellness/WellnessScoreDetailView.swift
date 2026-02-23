@@ -1,7 +1,6 @@
 import SwiftUI
 
-/// Detail view for the Wellness Score.
-/// Shows score ring, sub-score breakdown, condition contributors, and explainer.
+/// Detail view for Wellness Score in the same visual pattern as Training Readiness detail.
 struct WellnessScoreDetailView: View {
     let wellnessScore: WellnessScore
     let conditionScore: ConditionScore?
@@ -12,316 +11,141 @@ struct WellnessScoreDetailView: View {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: isRegular ? DS.Spacing.xl : DS.Spacing.lg) {
+            VStack(spacing: DS.Spacing.lg) {
                 scoreHero
+                componentWeights
 
-                if isRegular {
-                    iPadContent
-                } else {
-                    iPhoneContent
+                if let conditionScore, !conditionScore.contributions.isEmpty {
+                    contributorsCard(conditionScore.contributions)
                 }
+
+                explainerCard
             }
-            .padding(isRegular ? DS.Spacing.xxl : DS.Spacing.lg)
+            .padding()
         }
         .navigationTitle("Wellness Score")
         .navigationBarTitleDisplayMode(.large)
     }
 
-    // MARK: - iPhone Layout
-
-    private var iPhoneContent: some View {
-        Group {
-            subScoreBreakdown
-
-            if let condition = conditionScore, !condition.contributions.isEmpty {
-                contributorsCard(condition.contributions)
-            }
-
-            StandardCard {
-                explainerSection
-            }
-        }
-    }
-
-    // MARK: - iPad Layout
-
-    private let iPadGridColumns: [GridItem] = [
-        GridItem(.flexible(), spacing: DS.Spacing.lg),
-        GridItem(.flexible(), spacing: DS.Spacing.lg),
-        GridItem(.flexible(), spacing: DS.Spacing.lg)
-    ]
-
-    private var iPadContent: some View {
-        VStack(spacing: DS.Spacing.xl) {
-            // 3-column sub-score cards
-            LazyVGrid(columns: iPadGridColumns, spacing: DS.Spacing.lg) {
-                subScoreCard(
-                    label: "Sleep",
-                    weight: 40,
-                    score: wellnessScore.sleepScore,
-                    color: DS.Color.sleep,
-                    icon: "moon.zzz.fill",
-                    description: "Sleep quality and duration from last night."
-                )
-
-                subScoreCard(
-                    label: "Condition",
-                    weight: 35,
-                    score: wellnessScore.conditionScore,
-                    color: DS.Color.hrv,
-                    icon: "waveform.path.ecg",
-                    description: "HRV and resting heart rate relative to your baseline."
-                )
-
-                subScoreCard(
-                    label: "Body",
-                    weight: 25,
-                    score: wellnessScore.bodyScore,
-                    color: DS.Color.body,
-                    icon: "figure.stand",
-                    description: "Weight and body composition trend over the past week."
-                )
-            }
-
-            // Contributors + Explainer side-by-side
-            HStack(alignment: .top, spacing: DS.Spacing.lg) {
-                if let condition = conditionScore, !condition.contributions.isEmpty {
-                    contributorsCard(condition.contributions)
-                }
-
-                StandardCard {
-                    explainerSection
-                }
-            }
-        }
-    }
-
     // MARK: - Score Hero
 
-    private var ringSize: CGFloat { isRegular ? 160 : 120 }
-    private var ringLineWidth: CGFloat { isRegular ? 14 : 12 }
-
     private var scoreHero: some View {
-        StandardCard {
-            VStack(spacing: DS.Spacing.lg) {
-                HStack(spacing: isRegular ? DS.Spacing.xxl : DS.Spacing.xl) {
-                    // Ring
-                    ZStack {
-                        ProgressRingView(
-                            progress: Double(wellnessScore.score) / 100.0,
-                            ringColor: wellnessScore.status.color,
-                            lineWidth: ringLineWidth,
-                            size: ringSize
-                        )
+        VStack(spacing: DS.Spacing.md) {
+            ZStack {
+                ProgressRingView(
+                    progress: Double(wellnessScore.score) / 100.0,
+                    ringColor: wellnessScore.status.color,
+                    lineWidth: isRegular ? 18 : 16,
+                    size: isRegular ? 180 : 140
+                )
 
-                        VStack(spacing: DS.Spacing.xxs) {
-                            Text("\(wellnessScore.score)")
-                                .font(DS.Typography.heroScore)
-                                .fontDesign(.rounded)
+                VStack(spacing: 2) {
+                    Text("\(wellnessScore.score)")
+                        .font(DS.Typography.heroScore)
+                        .contentTransition(.numericText())
 
-                            Text("WELLNESS")
-                                .font(.system(size: 9, weight: .semibold, design: .rounded))
-                                .foregroundStyle(.tertiary)
-                                .tracking(1)
-                        }
-                    }
-
-                    // Status + Guide
-                    VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                        HStack(spacing: DS.Spacing.xs) {
-                            Image(systemName: wellnessScore.status.iconName)
-                                .font(.title3)
-                                .foregroundStyle(wellnessScore.status.color)
-
-                            Text(wellnessScore.status.label)
-                                .font(.title3)
-                                .fontWeight(.semibold)
-                        }
-
-                        Text(wellnessScore.guideMessage)
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                            .fixedSize(horizontal: false, vertical: true)
-
-                        // Mini sub-score summary
-                        HStack(spacing: DS.Spacing.lg) {
-                            miniScore(label: "Sleep", value: wellnessScore.sleepScore, color: DS.Color.sleep)
-                            miniScore(label: "Condition", value: wellnessScore.conditionScore, color: DS.Color.hrv)
-                            miniScore(label: "Body", value: wellnessScore.bodyScore, color: DS.Color.body)
-                        }
-                        .padding(.top, DS.Spacing.xs)
-                    }
-
-                    Spacer(minLength: 0)
+                    Text("WELLNESS")
+                        .font(.system(size: 10, weight: .semibold, design: .rounded))
+                        .foregroundStyle(.tertiary)
+                        .tracking(1)
                 }
             }
+
+            HStack(spacing: DS.Spacing.xs) {
+                Image(systemName: wellnessScore.status.iconName)
+                    .foregroundStyle(wellnessScore.status.color)
+
+                Text(wellnessScore.status.label)
+                    .font(.title3.weight(.semibold))
+            }
+
+            Text(wellnessScore.guideMessage)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+
+            HStack(spacing: DS.Spacing.lg) {
+                subScoreBadge(label: "Sleep", value: wellnessScore.sleepScore, color: DS.Color.sleep)
+                subScoreBadge(label: "Condition", value: wellnessScore.conditionScore, color: DS.Color.hrv)
+                subScoreBadge(label: "Body", value: wellnessScore.bodyScore, color: DS.Color.body)
+            }
         }
+        .frame(maxWidth: .infinity)
+        .padding(DS.Spacing.lg)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
         .accessibilityElement(children: .combine)
         .accessibilityLabel("Wellness score \(wellnessScore.score), \(wellnessScore.status.label)")
     }
 
-    private func miniScore(label: String, value: Int?, color: Color) -> some View {
+    private func subScoreBadge(label: String, value: Int?, color: Color) -> some View {
         VStack(spacing: DS.Spacing.xxs) {
             Text(value.map { "\($0)" } ?? "--")
-                .font(.headline)
-                .fontWeight(.semibold)
-                .fontDesign(.rounded)
-                .foregroundStyle(value != nil ? .primary : .quaternary)
+                .font(.headline.weight(.bold))
+                .monospacedDigit()
+                .foregroundStyle(value != nil ? color : .secondary)
 
             Text(label)
                 .font(.caption2)
                 .foregroundStyle(.tertiary)
         }
-        .frame(minWidth: 44)
     }
 
-    // MARK: - Contributors Card
+    // MARK: - Component Weights
 
-    private func contributorsCard(_ contributions: [ScoreContribution]) -> some View {
-        StandardCard {
-            ScoreContributorsView(contributions: contributions)
-        }
-    }
-
-    // MARK: - Sub-Score Card (iPad individual)
-
-    private func subScoreCard(
-        label: String,
-        weight: Int,
-        score: Int?,
-        color: Color,
-        icon: String,
-        description: String
-    ) -> some View {
-        StandardCard {
-            VStack(alignment: .leading, spacing: DS.Spacing.md) {
-                HStack(spacing: DS.Spacing.sm) {
-                    Image(systemName: icon)
-                        .font(.title3)
-                        .foregroundStyle(color)
-                        .frame(width: 24)
-
-                    VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                        Text(label)
-                            .font(.headline)
-                            .fontWeight(.medium)
-
-                        Text("\(weight)% weight")
-                            .font(.caption)
-                            .foregroundStyle(.tertiary)
-                    }
-
-                    Spacer()
-
-                    Text(score.map { "\($0)" } ?? "--")
-                        .font(.system(size: 32, weight: .bold, design: .rounded))
-                        .foregroundStyle(score != nil ? .primary : .quaternary)
-                }
-
-                // Progress bar
-                GeometryReader { geo in
-                    let fraction = CGFloat(score ?? 0) / 100.0
-                    Capsule()
-                        .fill(color.opacity(0.15))
-                        .overlay(alignment: .leading) {
-                            Capsule()
-                                .fill(color)
-                                .frame(width: geo.size.width * fraction)
-                        }
-                }
-                .frame(height: 8)
-
-                Text(description)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-        }
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(label), \(weight) percent weight, score \(score.map { "\($0)" } ?? "no data")")
-    }
-
-    // MARK: - Sub-Score Breakdown (iPhone)
-
-    private var subScoreBreakdown: some View {
-        StandardCard {
-            VStack(alignment: .leading, spacing: DS.Spacing.md) {
-                Text("Score Breakdown")
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-
-                subScoreRow(
-                    label: "Sleep",
-                    weight: 40,
-                    score: wellnessScore.sleepScore,
-                    color: DS.Color.sleep,
-                    icon: "moon.zzz.fill",
-                    description: "Sleep quality and duration from last night."
-                )
-
-                Divider()
-
-                subScoreRow(
-                    label: "Condition",
-                    weight: 35,
-                    score: wellnessScore.conditionScore,
-                    color: DS.Color.hrv,
-                    icon: "waveform.path.ecg",
-                    description: "HRV and resting heart rate relative to your baseline."
-                )
-
-                Divider()
-
-                subScoreRow(
-                    label: "Body",
-                    weight: 25,
-                    score: wellnessScore.bodyScore,
-                    color: DS.Color.body,
-                    icon: "figure.stand",
-                    description: "Weight and body composition trend over the past week."
-                )
-            }
-        }
-    }
-
-    private func subScoreRow(
-        label: String,
-        weight: Int,
-        score: Int?,
-        color: Color,
-        icon: String,
-        description: String
-    ) -> some View {
+    private var componentWeights: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            HStack(spacing: DS.Spacing.sm) {
-                Image(systemName: icon)
-                    .font(.subheadline)
-                    .foregroundStyle(color)
-                    .frame(width: 20)
+            Text("Score Composition")
+                .font(.subheadline.weight(.semibold))
 
-                Text(label)
-                    .font(.subheadline)
-                    .fontWeight(.medium)
+            weightRow(
+                label: "Sleep Quality",
+                weight: "40%",
+                score: wellnessScore.sleepScore,
+                color: DS.Color.sleep,
+                fallbackLabel: "No sleep data"
+            )
 
-                Text("\(weight)%")
-                    .font(.caption)
-                    .foregroundStyle(.tertiary)
-                    .padding(.horizontal, 6)
-                    .padding(.vertical, 2)
-                    .background(color.opacity(0.1), in: Capsule())
+            weightRow(
+                label: "Condition",
+                weight: "35%",
+                score: wellnessScore.conditionScore,
+                color: DS.Color.hrv,
+                fallbackLabel: "No condition data"
+            )
 
-                Spacer()
+            weightRow(
+                label: "Body Trend",
+                weight: "25%",
+                score: wellnessScore.bodyScore,
+                color: DS.Color.body,
+                fallbackLabel: "No body data"
+            )
+        }
+        .padding(DS.Spacing.md)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+    }
 
-                Text(score.map { "\($0)" } ?? "--")
-                    .font(.headline)
-                    .fontWeight(.semibold)
-                    .fontDesign(.rounded)
-                    .foregroundStyle(score != nil ? .primary : .quaternary)
-            }
+    private func weightRow(
+        label: String,
+        weight: String,
+        score: Int?,
+        color: Color,
+        fallbackLabel: String
+    ) -> some View {
+        HStack {
+            Text(label)
+                .font(.subheadline)
 
-            // Progress bar
+            Spacer()
+
+            Text(weight)
+                .font(.caption)
+                .foregroundStyle(.tertiary)
+
             GeometryReader { geo in
-                let fraction = CGFloat(score ?? 0) / 100.0
+                let resolved = max(0, min(score ?? 0, 100))
+                let fraction = CGFloat(resolved) / 100.0
+
                 Capsule()
                     .fill(color.opacity(0.15))
                     .overlay(alignment: .leading) {
@@ -330,44 +154,43 @@ struct WellnessScoreDetailView: View {
                             .frame(width: geo.size.width * fraction)
                     }
             }
-            .frame(height: 6)
+            .frame(width: 60, height: 6)
+            .clipShape(Capsule())
 
-            Text(description)
+            Text(score.map { "\($0)" } ?? "--")
                 .font(.caption)
-                .foregroundStyle(.tertiary)
+                .fontWeight(.medium)
+                .monospacedDigit()
+                .foregroundStyle(score != nil ? .primary : .tertiary)
+                .frame(width: 32, alignment: .trailing)
         }
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(label), \(weight) percent weight, score \(score.map { "\($0)" } ?? "no data")")
+        .accessibilityLabel("\(label), \(weight), \(score.map { "score \($0)" } ?? fallbackLabel)")
     }
 
-    // MARK: - Explainer
+    // MARK: - Contributors + Explainer
 
-    private var explainerSection: some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.md) {
-            HStack(spacing: DS.Spacing.sm) {
-                Image(systemName: "info.circle.fill")
-                    .foregroundStyle(.secondary)
-                Text("How It Works")
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-            }
+    private func contributorsCard(_ contributions: [ScoreContribution]) -> some View {
+        StandardCard {
+            ScoreContributorsView(contributions: contributions)
+        }
+    }
 
-            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                explainerItem(
-                    "Your Wellness Score combines three key health dimensions into a single 0-100 score."
-                )
-                explainerItem(
-                    "Sleep (40%): Based on sleep duration, stages, and efficiency from Apple Watch."
-                )
-                explainerItem(
-                    "Condition (35%): Uses HRV trends and resting heart rate changes compared to your personal baseline."
-                )
-                explainerItem(
-                    "Body (25%): Tracks weight and body composition stability over the past week."
-                )
-                explainerItem(
-                    "Missing data is handled by redistributing weights among available scores."
-                )
+    private var explainerCard: some View {
+        StandardCard {
+            VStack(alignment: .leading, spacing: DS.Spacing.md) {
+                HStack(spacing: DS.Spacing.sm) {
+                    Image(systemName: "info.circle.fill")
+                        .foregroundStyle(.secondary)
+                    Text("How It Works")
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                }
+
+                explainerItem("Sleep contributes 40% based on duration and quality from Apple Watch.")
+                explainerItem("Condition contributes 35% using HRV and resting heart rate relative to baseline.")
+                explainerItem("Body contributes 25% from recent body trend stability.")
+                explainerItem("If some inputs are missing, available inputs are re-weighted.")
             }
         }
     }
