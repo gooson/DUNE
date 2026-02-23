@@ -5,4 +5,6 @@ enum ActivityDetailDestination: Hashable {
     case personalRecords
     case consistency
     case exerciseMix
+    case trainingReadiness
+    case weeklyStats
 }

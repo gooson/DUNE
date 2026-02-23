@@ -42,7 +42,7 @@ struct WeeklyStatsGrid: View {
 
 // MARK: - Card View
 
-private struct ActivityStatCardView: View {
+struct ActivityStatCardView: View {
     let stat: ActivityStat
 
     var body: some View {

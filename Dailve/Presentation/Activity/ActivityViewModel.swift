@@ -19,6 +19,11 @@ final class ActivityViewModel {
 
     // New data for redesigned Activity tab
     var trainingReadiness: TrainingReadiness?
+
+    // 14-day raw data for Training Readiness detail view
+    var hrvDailyAverages: [DailySample] = []
+    var rhrDailyData: [DailySample] = []
+    var sleepDailyData: [SleepDailySample] = []
     var personalRecords: [StrengthPersonalRecord] = []
     var workoutStreak: WorkoutStreak?
     var exerciseFrequencies: [ExerciseFrequency] = []
@@ -266,16 +271,17 @@ final class ActivityViewModel {
         isLoading = true
         errorMessage = nil
 
-        // 6 independent queries — parallel via async let
+        // 7 independent queries — parallel via async let
         async let exerciseTask = safeExerciseFetch()
         async let stepsTask = safeStepsFetch()
         async let workoutsTask = safeWorkoutsFetch()
         async let trainingLoadTask = safeTrainingLoadFetch()
         async let sleepTask = safeSleepFetch()
         async let readinessTask = safeReadinessFetch()
+        async let sleepDailyTask = safeSleepDailyFetch()
 
-        let (exerciseResult, stepsResult, workoutsResult, loadResult, sleepResult, readinessResult) = await (
-            exerciseTask, stepsTask, workoutsTask, trainingLoadTask, sleepTask, readinessTask
+        let (exerciseResult, stepsResult, workoutsResult, loadResult, sleepResult, readinessResult, sleepDailyResult) = await (
+            exerciseTask, stepsTask, workoutsTask, trainingLoadTask, sleepTask, readinessTask, sleepDailyTask
         )
 
         guard !Task.isCancelled else { return }
@@ -313,6 +319,11 @@ final class ActivityViewModel {
 
         // Recompute fatigue with newly fetched HealthKit workouts + recovery modifiers
         recomputeFatigueAndSuggestion()
+
+        // Store 14-day raw data for Training Readiness detail
+        hrvDailyAverages = computeHRVDailyAverages(from: readinessResult.hrvSamples)
+        rhrDailyData = readinessResult.rhrCollection.map { DailySample(date: $0.date, value: $0.average) }
+        sleepDailyData = sleepDailyResult
 
         // Compute Training Readiness Score
         let readinessInput = CalculateTrainingReadinessUseCase.Input(
@@ -539,6 +550,32 @@ final class ActivityViewModel {
         }
     }
 
+    // MARK: - Sleep Daily Fetch (14-day)
+
+    private func safeSleepDailyFetch() async -> [SleepDailySample] {
+        do {
+            let twoWeeksAgo = Calendar.current.date(byAdding: .day, value: -14, to: Date()) ?? Date()
+            let results = try await sleepService.fetchDailySleepDurations(start: twoWeeksAgo, end: Date())
+            return results.map { SleepDailySample(date: $0.date, minutes: Swift.max(0, Swift.min($0.totalMinutes, 1440))) }
+        } catch {
+            AppLogger.ui.error("Sleep daily fetch failed: \(error.localizedDescription)")
+            return []
+        }
+    }
+
+    // MARK: - HRV Daily Averages
+
+    private nonisolated func computeHRVDailyAverages(from samples: [HRVSample]) -> [DailySample] {
+        let calendar = Calendar.current
+        var dailyValues: [Date: [Double]] = [:]
+        for sample in samples where sample.value > 0 && sample.value <= 500 && sample.value.isFinite {
+            let day = calendar.startOfDay(for: sample.date)
+            dailyValues[day, default: []].append(sample.value)
+        }
+        return dailyValues.map { DailySample(date: $0.key, value: $0.value.reduce(0, +) / Double($0.value.count)) }
+            .sorted { $0.date < $1.date }
+    }
+
     // MARK: - Readiness Fetch (HRV z-score + RHR delta)
 
     private struct ReadinessResult {
@@ -547,6 +584,7 @@ final class ActivityViewModel {
         let hrvSamples: [HRVSample]
         let todayRHR: Double?
         let rhrBaseline: [Double]
+        let rhrCollection: [(date: Date, average: Double)]
     }
 
     private func safeReadinessFetch() async -> ReadinessResult {
@@ -584,16 +622,21 @@ final class ActivityViewModel {
                 .map(\.average)
                 .filter { $0 > 0 && $0.isFinite && $0 >= 20 && $0 <= 300 }
 
+            let validRHRCollection = rhrCollection
+                .filter { $0.average > 0 && $0.average.isFinite && $0.average >= 20 && $0.average <= 300 }
+                .map { (date: $0.date, average: $0.average) }
+
             return ReadinessResult(
                 hrvZScore: hrvZScore,
                 rhrDelta: rhrDelta,
                 hrvSamples: hrvSamples,
                 todayRHR: todayRHR,
-                rhrBaseline: rhrBaseline
+                rhrBaseline: rhrBaseline,
+                rhrCollection: validRHRCollection
             )
         } catch {
             AppLogger.ui.error("Readiness fetch failed: \(error.localizedDescription)")
-            return ReadinessResult(hrvZScore: nil, rhrDelta: nil, hrvSamples: [], todayRHR: nil, rhrBaseline: [])
+            return ReadinessResult(hrvZScore: nil, rhrDelta: nil, hrvSamples: [], todayRHR: nil, rhrBaseline: [], rhrCollection: [])
         }
     }
 
