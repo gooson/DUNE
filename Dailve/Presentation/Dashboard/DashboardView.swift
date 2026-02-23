@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct DashboardView: View {
-    @State private var viewModel = DashboardViewModel()
+    @State private var viewModel: DashboardViewModel
     @State private var isShowingPinnedEditor = false
     @State private var hasAppeared = false
     @Environment(\.horizontalSizeClass) private var sizeClass
@@ -11,6 +11,10 @@ struct DashboardView: View {
         GridItem(.flexible(), spacing: DS.Spacing.md),
         GridItem(.flexible(), spacing: DS.Spacing.md)
     ]
+
+    init(sharedHealthDataService: SharedHealthDataService? = nil) {
+        _viewModel = State(initialValue: DashboardViewModel(sharedHealthDataService: sharedHealthDataService))
+    }
 
     var body: some View {
         ScrollView {

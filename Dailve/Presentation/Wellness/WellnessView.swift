@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftData
 
 struct WellnessView: View {
-    @State private var viewModel = WellnessViewModel()
+    @State private var viewModel: WellnessViewModel
     @State private var bodyViewModel = BodyCompositionViewModel()
     @State private var injuryViewModel = InjuryViewModel()
     @Environment(\.modelContext) private var modelContext
@@ -18,6 +18,10 @@ struct WellnessView: View {
         GridItem(.flexible(), spacing: DS.Spacing.md),
         GridItem(.flexible(), spacing: DS.Spacing.md)
     ]
+
+    init(sharedHealthDataService: SharedHealthDataService? = nil) {
+        _viewModel = State(initialValue: WellnessViewModel(sharedHealthDataService: sharedHealthDataService))
+    }
 
     var body: some View {
         Group {

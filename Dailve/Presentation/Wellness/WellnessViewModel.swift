@@ -33,6 +33,7 @@ final class WellnessViewModel {
     private let wellnessScoreUseCase: WellnessScoreCalculating
     private let sleepScoreUseCase: SleepScoreCalculating
     private let conditionScoreUseCase: ConditionScoreCalculating
+    private let sharedHealthDataService: SharedHealthDataService?
 
     // MARK: - Internal State
 
@@ -49,7 +50,8 @@ final class WellnessViewModel {
         heartRateService: HeartRateQuerying? = nil,
         wellnessScoreUseCase: WellnessScoreCalculating? = nil,
         sleepScoreUseCase: SleepScoreCalculating? = nil,
-        conditionScoreUseCase: ConditionScoreCalculating? = nil
+        conditionScoreUseCase: ConditionScoreCalculating? = nil,
+        sharedHealthDataService: SharedHealthDataService? = nil
     ) {
         let manager = HealthKitManager.shared
         self.sleepService = sleepService ?? SleepQueryService(manager: manager)
@@ -60,6 +62,7 @@ final class WellnessViewModel {
         self.wellnessScoreUseCase = wellnessScoreUseCase ?? CalculateWellnessScoreUseCase()
         self.sleepScoreUseCase = sleepScoreUseCase ?? CalculateSleepScoreUseCase()
         self.conditionScoreUseCase = conditionScoreUseCase ?? CalculateConditionScoreUseCase()
+        self.sharedHealthDataService = sharedHealthDataService
     }
 
     // MARK: - Public
@@ -436,130 +439,136 @@ final class WellnessViewModel {
 
     private func fetchAllData() async -> FetchResults {
         var results = FetchResults()
+        let sharedSnapshot = await sharedHealthDataService?.fetchSnapshot()
+        if let sharedSnapshot {
+            applySharedSnapshot(sharedSnapshot, to: &results)
+        }
 
         await withTaskGroup(of: (FetchKey, FetchValue).self) { [
             sleepService, bodyService, hrvService, vitalsService, heartRateService,
-            sleepScoreUseCase, conditionScoreUseCase
+            sleepScoreUseCase, conditionScoreUseCase, sharedSnapshot
         ] group in
 
-            // --- Sleep ---
-            group.addTask {
-                guard !Task.isCancelled else { return (.sleep, .empty) }
-                do {
-                    let today = Date()
-                    var stages = try await sleepService.fetchSleepStages(for: today)
-                    var sleepDate: Date? = today
-                    var isHistorical = false
+            if sharedSnapshot == nil {
+                // --- Sleep ---
+                group.addTask {
+                    guard !Task.isCancelled else { return (.sleep, .empty) }
+                    do {
+                        let today = Date()
+                        var stages = try await sleepService.fetchSleepStages(for: today)
+                        var sleepDate: Date? = today
+                        var isHistorical = false
 
-                    if stages.isEmpty {
-                        if let latest = try await sleepService.fetchLatestSleepStages(withinDays: 7) {
-                            stages = latest.stages
-                            sleepDate = latest.date
-                            isHistorical = true
-                        } else {
-                            sleepDate = nil
-                        }
-                    }
-
-                    let output = stages.isEmpty ? nil : sleepScoreUseCase.execute(input: .init(stages: stages))
-                    return (.sleep, .sleepResult(output: output, date: sleepDate, isHistorical: isHistorical))
-                } catch {
-                    print("[Wellness] sleep fetch failed: \(error)")
-                    return (.sleep, .fetchError)
-                }
-            }
-
-            // --- Sleep Weekly ---
-            group.addTask {
-                guard !Task.isCancelled else { return (.sleepWeekly, .empty) }
-                do {
-                    let calendar = Calendar.current
-                    let today = Date()
-
-                    let dailyData = try await withThrowingTaskGroup(of: DailySleep?.self) { inner in
-                        for dayOffset in 0..<7 {
-                            inner.addTask { [sleepService] in
-                                guard let date = calendar.date(byAdding: .day, value: -dayOffset, to: today) else { return nil }
-                                let stages = try await sleepService.fetchSleepStages(for: date)
-                                let totalMinutes = stages.filter { $0.stage != .awake }.map(\.duration).reduce(0, +) / 60.0
-                                return DailySleep(date: date, totalMinutes: totalMinutes)
+                        if stages.isEmpty {
+                            if let latest = try await sleepService.fetchLatestSleepStages(withinDays: 7) {
+                                stages = latest.stages
+                                sleepDate = latest.date
+                                isHistorical = true
+                            } else {
+                                sleepDate = nil
                             }
                         }
-                        var collected: [DailySleep] = []
-                        for try await item in inner {
-                            if let item { collected.append(item) }
+
+                        let output = stages.isEmpty ? nil : sleepScoreUseCase.execute(input: .init(stages: stages))
+                        return (.sleep, .sleepResult(output: output, date: sleepDate, isHistorical: isHistorical))
+                    } catch {
+                        print("[Wellness] sleep fetch failed: \(error)")
+                        return (.sleep, .fetchError)
+                    }
+                }
+
+                // --- Sleep Weekly ---
+                group.addTask {
+                    guard !Task.isCancelled else { return (.sleepWeekly, .empty) }
+                    do {
+                        let calendar = Calendar.current
+                        let today = Date()
+
+                        let dailyData = try await withThrowingTaskGroup(of: DailySleep?.self) { inner in
+                            for dayOffset in 0..<7 {
+                                inner.addTask { [sleepService] in
+                                    guard let date = calendar.date(byAdding: .day, value: -dayOffset, to: today) else { return nil }
+                                    let stages = try await sleepService.fetchSleepStages(for: date)
+                                    let totalMinutes = stages.filter { $0.stage != .awake }.map(\.duration).reduce(0, +) / 60.0
+                                    return DailySleep(date: date, totalMinutes: totalMinutes)
+                                }
+                            }
+                            var collected: [DailySleep] = []
+                            for try await item in inner {
+                                if let item { collected.append(item) }
+                            }
+                            return collected
                         }
-                        return collected
+                        return (.sleepWeekly, .sleepWeekly(dailyData.sorted { $0.date < $1.date }))
+                    } catch {
+                        print("[Wellness] sleepWeekly fetch failed: \(error)")
+                        return (.sleepWeekly, .fetchError)
                     }
-                    return (.sleepWeekly, .sleepWeekly(dailyData.sorted { $0.date < $1.date }))
-                } catch {
-                    print("[Wellness] sleepWeekly fetch failed: \(error)")
-                    return (.sleepWeekly, .fetchError)
                 }
-            }
 
-            // --- Condition (HRV + RHR) ---
-            group.addTask {
-                guard !Task.isCancelled else { return (.condition, .empty) }
-                do {
-                    let hrvSamples = try await hrvService.fetchHRVSamples(days: 14)
-                    let latestRHRSample = try await hrvService.fetchLatestRestingHeartRate(withinDays: 1)
-                    let todayRHR: Double? = latestRHRSample?.value
-                    let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date()) ?? Date()
-                    let yesterdayRHR = try await hrvService.fetchRestingHeartRate(for: yesterday)
+                // --- Condition (HRV + RHR) ---
+                group.addTask {
+                    guard !Task.isCancelled else { return (.condition, .empty) }
+                    do {
+                        let hrvSamples = try await hrvService.fetchHRVSamples(days: 14)
+                        let latestRHRSample = try await hrvService.fetchLatestRestingHeartRate(withinDays: 1)
+                        let todayRHR: Double? = latestRHRSample?.value
+                        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date()) ?? Date()
+                        let yesterdayRHR = try await hrvService.fetchRestingHeartRate(for: yesterday)
 
-                    let output = conditionScoreUseCase.execute(input: .init(
-                        hrvSamples: hrvSamples,
-                        todayRHR: todayRHR,
-                        yesterdayRHR: yesterdayRHR
-                    ))
+                        let output = conditionScoreUseCase.execute(input: .init(
+                            hrvSamples: hrvSamples,
+                            todayRHR: todayRHR,
+                            yesterdayRHR: yesterdayRHR
+                        ))
 
-                    // Extract latest HRV/RHR raw values for individual cards (Correction #22: range validation)
-                    let latestHRV: VitalSample? = hrvSamples.first.flatMap { sample in
-                        sample.value > 0 && sample.value <= 500 ? VitalSample(value: sample.value, date: sample.date) : nil
+                        // Extract latest HRV/RHR raw values for individual cards (Correction #22: range validation)
+                        let latestHRV: VitalSample? = hrvSamples.first.flatMap { sample in
+                            sample.value > 0 && sample.value <= 500 ? VitalSample(value: sample.value, date: sample.date) : nil
+                        }
+                        let latestRHRVital: VitalSample? = latestRHRSample.flatMap { sample in
+                            sample.value >= 20 && sample.value <= 300 ? VitalSample(value: sample.value, date: sample.date) : nil
+                        }
+
+                        return (.condition, .conditionResult(score: output.score, latestHRV: latestHRV, latestRHR: latestRHRVital))
+                    } catch {
+                        print("[Wellness] condition fetch failed: \(error)")
+                        return (.condition, .fetchError)
                     }
-                    let latestRHRVital: VitalSample? = latestRHRSample.flatMap { sample in
-                        sample.value >= 20 && sample.value <= 300 ? VitalSample(value: sample.value, date: sample.date) : nil
+                }
+
+                // --- HRV Weekly (sparkline) ---
+                group.addTask {
+                    guard !Task.isCancelled else { return (.hrvWeekly, .empty) }
+                    do {
+                        let calendar = Calendar.current
+                        let end = Date()
+                        let start = calendar.date(byAdding: .day, value: -7, to: end) ?? end
+                        let history = try await hrvService.fetchHRVCollection(
+                            start: start, end: end, interval: DateComponents(day: 1)
+                        )
+                        return (.hrvWeekly, .hrvWeeklyResult(history.map { VitalSample(value: $0.average, date: $0.date) }))
+                    } catch {
+                        print("[Wellness] hrvWeekly fetch failed: \(error)")
+                        return (.hrvWeekly, .fetchError)
                     }
-
-                    return (.condition, .conditionResult(score: output.score, latestHRV: latestHRV, latestRHR: latestRHRVital))
-                } catch {
-                    print("[Wellness] condition fetch failed: \(error)")
-                    return (.condition, .fetchError)
                 }
-            }
 
-            // --- HRV Weekly (sparkline) ---
-            group.addTask {
-                guard !Task.isCancelled else { return (.hrvWeekly, .empty) }
-                do {
-                    let calendar = Calendar.current
-                    let end = Date()
-                    let start = calendar.date(byAdding: .day, value: -7, to: end) ?? end
-                    let history = try await hrvService.fetchHRVCollection(
-                        start: start, end: end, interval: DateComponents(day: 1)
-                    )
-                    return (.hrvWeekly, .hrvWeeklyResult(history.map { VitalSample(value: $0.average, date: $0.date) }))
-                } catch {
-                    print("[Wellness] hrvWeekly fetch failed: \(error)")
-                    return (.hrvWeekly, .fetchError)
-                }
-            }
-
-            // --- RHR Weekly (sparkline) ---
-            group.addTask {
-                guard !Task.isCancelled else { return (.rhrWeekly, .empty) }
-                do {
-                    let calendar = Calendar.current
-                    let end = Date()
-                    let start = calendar.date(byAdding: .day, value: -7, to: end) ?? end
-                    let history = try await hrvService.fetchRHRCollection(
-                        start: start, end: end, interval: DateComponents(day: 1)
-                    )
-                    return (.rhrWeekly, .rhrWeeklyResult(history.map { VitalSample(value: $0.average, date: $0.date) }))
-                } catch {
-                    print("[Wellness] rhrWeekly fetch failed: \(error)")
-                    return (.rhrWeekly, .fetchError)
+                // --- RHR Weekly (sparkline) ---
+                group.addTask {
+                    guard !Task.isCancelled else { return (.rhrWeekly, .empty) }
+                    do {
+                        let calendar = Calendar.current
+                        let end = Date()
+                        let start = calendar.date(byAdding: .day, value: -7, to: end) ?? end
+                        let history = try await hrvService.fetchRHRCollection(
+                            start: start, end: end, interval: DateComponents(day: 1)
+                        )
+                        return (.rhrWeekly, .rhrWeeklyResult(history.map { VitalSample(value: $0.average, date: $0.date) }))
+                    } catch {
+                        print("[Wellness] rhrWeekly fetch failed: \(error)")
+                        return (.rhrWeekly, .fetchError)
+                    }
                 }
             }
 
@@ -874,6 +883,91 @@ final class WellnessViewModel {
         }
 
         return results
+    }
+
+    private func applySharedSnapshot(_ snapshot: SharedHealthSnapshot, to results: inout FetchResults) {
+        if let sleepInput = snapshot.sleepScoreInput {
+            results.sleep = sleepScoreUseCase.execute(input: .init(stages: sleepInput.stages))
+            results.sleepDate = sleepInput.date
+            results.sleepIsHistorical = sleepInput.isHistorical
+        }
+
+        results.sleepWeekly = buildSleepWeeklySeries(from: snapshot)
+
+        results.condition = snapshot.conditionScore
+
+        results.latestHRV = snapshot.hrvSamples.first.flatMap { sample in
+            sample.value > 0 && sample.value <= 500 && sample.value.isFinite
+                ? VitalSample(value: sample.value, date: sample.date)
+                : nil
+        }
+        results.latestRHR = snapshot.effectiveRHR.flatMap { rhr in
+            rhr.value >= 20 && rhr.value <= 300 && rhr.value.isFinite
+                ? VitalSample(value: rhr.value, date: rhr.date)
+                : nil
+        }
+
+        results.hrvWeekly = buildHRVWeeklyHistory(from: snapshot.hrvSamples)
+        results.rhrWeekly = snapshot.rhrCollection
+            .filter { $0.average > 0 && $0.average.isFinite }
+            .sorted { $0.date < $1.date }
+            .suffix(7)
+            .map { VitalSample(value: $0.average, date: $0.date) }
+
+        let sleepSources: Set<SharedHealthSnapshot.Source> = [.todaySleepStages, .yesterdaySleepStages, .latestSleepStages]
+        if !snapshot.failedSources.isDisjoint(with: sleepSources) {
+            results.errorKeys.insert(.sleep)
+        }
+        if snapshot.failedSources.contains(.sleepDailyDurations) {
+            results.errorKeys.insert(.sleepWeekly)
+        }
+
+        let conditionSources: Set<SharedHealthSnapshot.Source> = [.hrvSamples, .todayRHR, .yesterdayRHR, .latestRHR]
+        if !snapshot.failedSources.isDisjoint(with: conditionSources) {
+            results.errorKeys.insert(.condition)
+        }
+        if snapshot.failedSources.contains(.hrvSamples) {
+            results.errorKeys.insert(.hrvWeekly)
+        }
+        if snapshot.failedSources.contains(.rhrCollection) {
+            results.errorKeys.insert(.rhrWeekly)
+        }
+    }
+
+    private func buildHRVWeeklyHistory(from samples: [HRVSample]) -> [VitalSample] {
+        let calendar = Calendar.current
+        let endDate = Date()
+        let startDate = calendar.date(byAdding: .day, value: -7, to: endDate) ?? endDate
+
+        let grouped = Dictionary(grouping: samples) { sample in
+            calendar.startOfDay(for: sample.date)
+        }
+
+        return grouped.compactMap { date, daySamples in
+            guard date >= startDate else { return nil }
+            let validValues = daySamples
+                .map(\.value)
+                .filter { $0 > 0 && $0 <= 500 && $0.isFinite }
+            guard !validValues.isEmpty else { return nil }
+            let average = validValues.reduce(0, +) / Double(validValues.count)
+            return VitalSample(value: average, date: date)
+        }
+        .sorted { $0.date < $1.date }
+    }
+
+    private func buildSleepWeeklySeries(from snapshot: SharedHealthSnapshot) -> [DailySleep] {
+        let calendar = Calendar.current
+        let totalsByDay = snapshot.sleepDailyDurations.reduce(into: [Date: Double]()) { partialResult, item in
+            partialResult[calendar.startOfDay(for: item.date)] = item.totalMinutes
+        }
+
+        return (0..<7).reversed().compactMap { dayOffset in
+            guard let date = calendar.date(byAdding: .day, value: -dayOffset, to: snapshot.fetchedAt) else {
+                return nil
+            }
+            let day = calendar.startOfDay(for: date)
+            return DailySleep(date: day, totalMinutes: totalsByDay[day] ?? 0)
+        }
     }
 
     // MARK: - Helpers

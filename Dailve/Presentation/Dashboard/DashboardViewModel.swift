@@ -72,6 +72,7 @@ final class DashboardViewModel {
     private let stepsService: StepsQuerying
     private let bodyService: BodyCompositionQuerying
     private let pinnedMetricsStore: TodayPinnedMetricsStore
+    private let sharedHealthDataService: SharedHealthDataService?
     private let scoreUseCase = CalculateConditionScoreUseCase()
 
     init(
@@ -81,7 +82,8 @@ final class DashboardViewModel {
         workoutService: WorkoutQuerying? = nil,
         stepsService: StepsQuerying? = nil,
         bodyService: BodyCompositionQuerying? = nil,
-        pinnedMetricsStore: TodayPinnedMetricsStore = .shared
+        pinnedMetricsStore: TodayPinnedMetricsStore = .shared,
+        sharedHealthDataService: SharedHealthDataService? = nil
     ) {
         self.healthKitManager = healthKitManager
         self.hrvService = hrvService ?? HRVQueryService(manager: healthKitManager)
@@ -90,6 +92,7 @@ final class DashboardViewModel {
         self.stepsService = stepsService ?? StepsQueryService(manager: healthKitManager)
         self.bodyService = bodyService ?? BodyCompositionQueryService(manager: healthKitManager)
         self.pinnedMetricsStore = pinnedMetricsStore
+        self.sharedHealthDataService = sharedHealthDataService
         self.pinnedCategories = pinnedMetricsStore.load()
     }
 
@@ -136,9 +139,11 @@ final class DashboardViewModel {
             }
         }
 
+        let sharedSnapshot = await sharedHealthDataService?.fetchSnapshot()
+
         // Each fetch is independent — one failure should not block others (6 parallel)
-        async let hrvTask = safeHRVFetch()
-        async let sleepTask = safeSleepFetch()
+        async let hrvTask = safeHRVFetch(snapshot: sharedSnapshot)
+        async let sleepTask = safeSleepFetch(snapshot: sharedSnapshot)
         async let exerciseTask = safeExerciseFetch()
         async let stepsTask = safeStepsFetch()
         async let weightTask = safeWeightFetch()
@@ -175,7 +180,15 @@ final class DashboardViewModel {
         isLoading = false
     }
 
-    private func safeHRVFetch() async -> (metrics: [HealthMetric], failed: Bool) {
+    private func safeHRVFetch(snapshot: SharedHealthSnapshot?) async -> (metrics: [HealthMetric], failed: Bool) {
+        if let snapshot {
+            let hrvRelatedSources: Set<SharedHealthSnapshot.Source> = [
+                .hrvSamples, .todayRHR, .yesterdayRHR, .latestRHR, .rhrCollection
+            ]
+            let failed = !snapshot.failedSources.isDisjoint(with: hrvRelatedSources)
+            return (fetchHRVData(from: snapshot), failed)
+        }
+
         do { return (try await fetchHRVData(), false) }
         catch {
             AppLogger.ui.error("HRV fetch failed: \(error.localizedDescription)")
@@ -183,7 +196,15 @@ final class DashboardViewModel {
         }
     }
 
-    private func safeSleepFetch() async -> (metric: HealthMetric?, failed: Bool) {
+    private func safeSleepFetch(snapshot: SharedHealthSnapshot?) async -> (metric: HealthMetric?, failed: Bool) {
+        if let snapshot {
+            let sleepRelatedSources: Set<SharedHealthSnapshot.Source> = [
+                .todaySleepStages, .yesterdaySleepStages, .latestSleepStages, .sleepDailyDurations
+            ]
+            let failed = !snapshot.failedSources.isDisjoint(with: sleepRelatedSources)
+            return (fetchSleepData(from: snapshot), failed)
+        }
+
         do { return (try await fetchSleepData(), false) }
         catch {
             AppLogger.ui.error("Sleep fetch failed: \(error.localizedDescription)")
@@ -336,6 +357,73 @@ final class DashboardViewModel {
         return metrics
     }
 
+    private func fetchHRVData(from snapshot: SharedHealthSnapshot) -> [HealthMetric] {
+        let calendar = Calendar.current
+
+        conditionScore = snapshot.conditionScore
+        baselineStatus = snapshot.baselineStatus
+        recentScores = snapshot.recentConditionScores
+
+        var metrics: [HealthMetric] = []
+        let samples = snapshot.hrvSamples
+
+        if let latest = samples.first {
+            let isToday = calendar.isDateInToday(latest.date)
+            let previousAvg = samples.dropFirst().prefix(7).map(\.value)
+            let avgPrev = previousAvg.isEmpty ? nil : previousAvg.reduce(0, +) / Double(previousAvg.count)
+            metrics.append(HealthMetric(
+                id: "hrv",
+                name: "HRV",
+                value: latest.value,
+                unit: "ms",
+                change: avgPrev.map { latest.value - $0 },
+                date: latest.date,
+                category: .hrv,
+                isHistorical: !isToday
+            ))
+
+            let dailyHRV = dailyAveragesFromHRVSamples(samples)
+            let yesterdayHRV = dailyHRV.first { calendar.isDateInYesterday($0.date) }?.value
+            let shortTermAvg = average(dailyHRV.dropFirst().prefix(14).map(\.value))
+            let longTermAvg = average(dailyHRV.dropFirst().prefix(60).map(\.value))
+            baselineDeltasByMetricID["hrv"] = MetricBaselineDelta(
+                yesterdayDelta: yesterdayHRV.map { latest.value - $0 },
+                shortTermDelta: shortTermAvg.map { latest.value - $0 },
+                longTermDelta: longTermAvg.map { latest.value - $0 }
+            )
+        }
+
+        if let effectiveRHR = snapshot.effectiveRHR {
+            let rhr = effectiveRHR.value
+            metrics.append(HealthMetric(
+                id: "rhr",
+                name: "RHR",
+                value: rhr,
+                unit: "bpm",
+                change: snapshot.yesterdayRHR.map { rhr - $0 },
+                date: effectiveRHR.date,
+                category: .rhr,
+                isHistorical: effectiveRHR.isHistorical
+            ))
+
+            let sortedCollection = snapshot.rhrCollection
+                .filter { $0.average > 0 && $0.average.isFinite }
+                .sorted { $0.date > $1.date }
+            let baselineSeries = sortedCollection
+                .filter { !calendar.isDate($0.date, inSameDayAs: effectiveRHR.date) }
+            let shortTermAvg = average(baselineSeries.prefix(14).map(\.average))
+            let longTermAvg = average(baselineSeries.prefix(60).map(\.average))
+
+            baselineDeltasByMetricID["rhr"] = MetricBaselineDelta(
+                yesterdayDelta: snapshot.yesterdayRHR.map { rhr - $0 },
+                shortTermDelta: shortTermAvg.map { rhr - $0 },
+                longTermDelta: longTermAvg.map { rhr - $0 }
+            )
+        }
+
+        return metrics
+    }
+
     private let sleepScoreUseCase = CalculateSleepScoreUseCase()
 
     private func fetchSleepData() async throws -> HealthMetric? {
@@ -393,6 +481,39 @@ final class DashboardViewModel {
             date: sleepDate,
             category: .sleep,
             isHistorical: isHistorical
+        )
+    }
+
+    private func fetchSleepData(from snapshot: SharedHealthSnapshot) -> HealthMetric? {
+        let calendar = Calendar.current
+        guard let sleepInput = snapshot.sleepScoreInput else { return nil }
+
+        let output = sleepScoreUseCase.execute(input: .init(stages: sleepInput.stages))
+        let yesterdayOutput = sleepScoreUseCase.execute(input: .init(stages: snapshot.yesterdaySleepStages))
+
+        let change: Double? = yesterdayOutput.totalMinutes > 0
+            ? output.totalMinutes - yesterdayOutput.totalMinutes
+            : nil
+
+        let baselineValues = snapshot.sleepDailyDurations
+            .filter { !calendar.isDate($0.date, inSameDayAs: sleepInput.date) }
+            .map(\.totalMinutes)
+        let shortTermAvg = average(baselineValues)
+        baselineDeltasByMetricID["sleep"] = MetricBaselineDelta(
+            yesterdayDelta: change,
+            shortTermDelta: shortTermAvg.map { output.totalMinutes - $0 },
+            longTermDelta: nil
+        )
+
+        return HealthMetric(
+            id: "sleep",
+            name: "Sleep",
+            value: output.totalMinutes,
+            unit: "min",
+            change: change,
+            date: sleepInput.date,
+            category: .sleep,
+            isHistorical: sleepInput.isHistorical
         )
     }
 

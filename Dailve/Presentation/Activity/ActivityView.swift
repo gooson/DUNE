@@ -4,7 +4,7 @@ import SwiftData
 /// Activity tab — redesigned recovery-centered dashboard.
 /// Layout: Hero → Muscle Map → Weekly Stats → Suggestion → Volume → Workouts → PRs → Consistency → Frequency.
 struct ActivityView: View {
-    @State private var viewModel = ActivityViewModel()
+    @State private var viewModel: ActivityViewModel
     @State private var showingExercisePicker = false
     @State private var selectedExercise: ExerciseDefinition?
     @State private var selectedMuscle: MuscleGroup?
@@ -24,6 +24,10 @@ struct ActivityView: View {
     private let conflictUseCase = CheckInjuryConflictUseCase()
 
     private var isRegular: Bool { sizeClass == .regular }
+
+    init(sharedHealthDataService: SharedHealthDataService? = nil) {
+        _viewModel = State(initialValue: ActivityViewModel(sharedHealthDataService: sharedHealthDataService))
+    }
 
     var body: some View {
         ScrollView {

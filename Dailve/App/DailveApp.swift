@@ -7,6 +7,7 @@ struct DailveApp: App {
     @State private var showConsentSheet = false
 
     let modelContainer: ModelContainer
+    private let sharedHealthDataService: SharedHealthDataService
 
     private static var isRunningXCTest: Bool {
         ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
@@ -22,6 +23,7 @@ struct DailveApp: App {
     }
 
     init() {
+        self.sharedHealthDataService = SharedHealthDataServiceImpl(healthKitManager: .shared)
         let cloudSyncEnabled = UserDefaults.standard.bool(forKey: "isCloudSyncEnabled")
         let config = ModelConfiguration(
             cloudKitDatabase: (cloudSyncEnabled && !Self.isRunningXCTest) ? .automatic : .none
@@ -63,7 +65,7 @@ struct DailveApp: App {
                 if Self.isRunningUnitTests {
                     Color.clear
                 } else {
-                    ContentView()
+                    ContentView(sharedHealthDataService: sharedHealthDataService)
                         .onAppear {
                             if !hasShownConsent && !Self.isRunningXCTest {
                                 showConsentSheet = true
