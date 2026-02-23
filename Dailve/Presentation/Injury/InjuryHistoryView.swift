@@ -162,7 +162,7 @@ struct InjuryHistoryView: View {
 
             VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                 HStack(spacing: DS.Spacing.xs) {
-                    Text(record.bodyPart.displayName)
+                    Text(record.bodyPart.bilingualDisplayName)
                         .font(.subheadline.weight(.medium))
                     if let side = record.bodySide {
                         Text("(\(side.abbreviation))")
@@ -172,15 +172,19 @@ struct InjuryHistoryView: View {
                 }
 
                 HStack(spacing: DS.Spacing.xs) {
-                    Text(record.severity.displayName)
+                    Text(record.severity.bilingualDisplayName)
                         .font(.caption2)
                         .foregroundStyle(record.severity.color)
                     Text("·")
                         .foregroundStyle(.quaternary)
-                    Text("\(record.durationDays)d")
+                    Text(record.durationLabel)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
+
+                Text(record.dateRangeLabel)
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
             }
 
             Spacer()
@@ -273,18 +277,22 @@ private struct InjuryDetailView: View {
 
                     VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                         HStack(spacing: DS.Spacing.xs) {
-                            Text(record.bodyPart.displayName)
+                            Text(record.bodyPart.bilingualDisplayName)
                                 .font(.headline)
                             if let side = record.bodySide {
-                                Text("(\(side.displayName))")
+                                Text("(\(side.bilingualDisplayName))")
                                     .font(.subheadline)
                                     .foregroundStyle(.secondary)
                             }
                         }
 
-                        Text(record.severity.displayName)
+                        Text(record.severity.bilingualDisplayName)
                             .font(.caption)
                             .foregroundStyle(record.severity.color)
+
+                        Text(record.severity.localizedSeverityDescription)
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
                     }
 
                     Spacer()

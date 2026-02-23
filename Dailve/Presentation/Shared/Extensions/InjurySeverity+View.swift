@@ -32,4 +32,20 @@ extension InjurySeverity {
         case .severe: "xmark.octagon.fill"
         }
     }
+
+    var bilingualDisplayName: String {
+        switch self {
+        case .minor: "경미 (Minor)"
+        case .moderate: "보통 (Moderate)"
+        case .severe: "심각 (Severe)"
+        }
+    }
+
+    var localizedSeverityDescription: String {
+        switch self {
+        case .minor: "주의하며 운동 가능"
+        case .moderate: "해당 부위 운동 회피 권장"
+        case .severe: "해당 부위 운동 금지"
+        }
+    }
 }

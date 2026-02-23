@@ -47,6 +47,10 @@ extension BodyPart {
         }
     }
 
+    var bilingualDisplayName: String {
+        "\(displayName) (\(localizedDisplayName))"
+    }
+
     var iconName: String {
         if isJoint {
             return "circle.circle.fill"
@@ -77,6 +81,10 @@ extension BodySide {
         case .right: "오른쪽"
         case .both: "양쪽"
         }
+    }
+
+    var bilingualDisplayName: String {
+        "\(displayName) (\(localizedDisplayName))"
     }
 
     var abbreviation: String {
