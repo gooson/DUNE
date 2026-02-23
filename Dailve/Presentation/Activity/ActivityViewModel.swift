@@ -82,6 +82,7 @@ final class ActivityViewModel {
     private var sleepModifier: Double = 1.0
     private var readinessModifier: Double = 1.0
     private var didAttemptCardioSeed = false
+    private var cardioSeedTask: Task<Void, Never>?
 
     /// Cached manual records for manual-cardio fallback PR calculations.
     private var manualRecordsCache: [ExerciseRecord] = []
@@ -318,7 +319,7 @@ final class ActivityViewModel {
         todaySteps = stepsResult.todayMetric
         recentWorkouts = workoutsResult
         refreshCardioPersonalRecords(with: workoutsResult)
-        await seedCardioPersonalRecordsIfNeeded()
+        triggerCardioPersonalRecordSeedIfNeeded()
         trainingLoadData = loadResult
 
         // Compute recovery modifiers from sleep + HRV/RHR data
@@ -385,20 +386,29 @@ final class ActivityViewModel {
         workout.activityType.isDistanceBased || workout.activityType.category == .cardio
     }
 
-    /// One-time best-effort seed for users with old HealthKit history but empty PR store.
-    private func seedCardioPersonalRecordsIfNeeded() async {
+    /// Triggers one-time best-effort seed for users with old HealthKit history but empty PR store.
+    /// Seed runs in background so initial Activity load is not blocked.
+    private func triggerCardioPersonalRecordSeedIfNeeded() {
         guard !didAttemptCardioSeed else { return }
+        guard cardioSeedTask == nil else { return }
         guard !hasCardioRecordsInStore else {
             didAttemptCardioSeed = true
             return
         }
 
         didAttemptCardioSeed = true
-        do {
-            let history = try await workoutService.fetchWorkouts(days: 3650)
-            refreshCardioPersonalRecords(with: history)
-        } catch {
-            AppLogger.ui.error("Cardio PR seed failed: \(error.localizedDescription)")
+        cardioSeedTask = Task { [weak self] in
+            guard let self else { return }
+            defer { self.cardioSeedTask = nil }
+
+            do {
+                let history = try await self.workoutService.fetchWorkouts(days: 3650)
+                guard !Task.isCancelled else { return }
+                self.refreshCardioPersonalRecords(with: history)
+                self.recomputeDerivedStats()
+            } catch {
+                AppLogger.ui.error("Cardio PR seed failed: \(error.localizedDescription)")
+            }
         }
     }
 

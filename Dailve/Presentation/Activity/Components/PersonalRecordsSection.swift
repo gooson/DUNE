@@ -157,19 +157,44 @@ struct PersonalRecordsSection: View {
         var parts: [String] = []
 
         if let avg = record.heartRateAvg, avg > 0 {
-            parts.append("심박 \(Int(avg).formattedWithSeparator)")
+            parts.append("심박 \(Int(avg).formattedWithSeparator)bpm")
         }
         if let steps = record.stepCount, steps > 0 {
             parts.append("\(Int(steps).formattedWithSeparator)걸음")
         }
+
+        var weatherParts: [String] = []
+        if let condition = record.weatherCondition {
+            weatherParts.append(weatherConditionLabel(for: condition))
+        }
         if let temp = record.weatherTemperature, temp.isFinite {
-            parts.append("\(Int(temp).formattedWithSeparator)°")
+            weatherParts.append("\(Int(temp).formattedWithSeparator)°")
+        }
+        if let humidity = record.weatherHumidity, humidity.isFinite, humidity >= 0 {
+            weatherParts.append("습도 \(Int(humidity).formattedWithSeparator)%")
         }
         if let isIndoor = record.isIndoor {
-            parts.append(isIndoor ? "실내" : "실외")
+            weatherParts.append(isIndoor ? "실내" : "실외")
+        }
+        if !weatherParts.isEmpty {
+            parts.append(weatherParts.joined(separator: " "))
         }
 
         guard !parts.isEmpty else { return nil }
         return parts.prefix(3).joined(separator: " · ")
+    }
+
+    private func weatherConditionLabel(for rawValue: Int) -> String {
+        switch rawValue {
+        case 1: return "맑음"
+        case 2: return "대체로 맑음"
+        case 3, 4, 5: return "흐림"
+        case 6, 7: return "안개"
+        case 8, 9: return "바람"
+        case 12, 18, 20: return "눈"
+        case 13, 14, 15, 16, 17, 21, 22, 23: return "비"
+        case 24: return "뇌우"
+        default: return "날씨"
+        }
     }
 }
