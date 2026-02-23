@@ -69,9 +69,26 @@ GitHub의 PR 머지 API를 통해 머지합니다. **로컬 머지나 자체 스
    - 변경이 있으면 `git add .claude/settings.local.json && git commit -m "chore: sync Claude local settings" && git push`
 5. 최종 상태를 사용자에게 표시
 
+### Step 5: 최종 xcodegen 실행
+
+ship 완료 후, **머지 반영된 main 기준**으로 Xcode 프로젝트를 다시 생성합니다.
+
+1. **실행 경로 결정**
+   - Step 4a(워크트리)인 경우: `{main_repo_path}`
+   - Step 4b(일반)인 경우: 현재 repo root
+2. **main 최신 동기화 확인**
+   - `git -C {repo_path} checkout main`
+   - `git -C {repo_path} pull --ff-only`
+3. **xcodegen 실행**
+   - `(cd {repo_path} && xcodegen generate --spec Dailve/project.yml)`
+4. **결과 안내**
+   - 성공 시 "ship + xcodegen 완료"를 사용자에게 보고
+   - 실패 시 에러 로그를 함께 전달하고 중단
+
 ## 주의사항
 
 - **절대 로컬에서 직접 머지하지 않습니다** — 반드시 `gh pr merge`를 통해 GitHub API로 머지
 - PR 생성 시 `--base main` 명시
 - 머지 실패 시 (충돌, CI 실패 등) 사용자에게 안내하고 중단
 - `--delete-branch` 로 리모트 브랜치 자동 삭제
+- 최종 단계에서 반드시 merged 결과(main 최신) 기준으로 `xcodegen`을 실행
