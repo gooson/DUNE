@@ -57,7 +57,7 @@ struct InjuryFormSheet: View {
                                     .frame(width: 28)
 
                                 VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                                    Text("\(severity.localizedDisplayName) (\(severity.displayName))")
+                                    Text(severity.bilingualDisplayName)
                                         .font(.subheadline.weight(.medium))
                                         .foregroundStyle(.primary)
                                     Text(severity.localizedSeverityDescription)

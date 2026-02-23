@@ -33,11 +33,11 @@ extension InjurySeverity {
         }
     }
 
-    var severityDescription: String {
+    var bilingualDisplayName: String {
         switch self {
-        case .minor: "Can train with caution"
-        case .moderate: "Avoid exercises for affected area"
-        case .severe: "No exercises for affected area"
+        case .minor: "경미 (Minor)"
+        case .moderate: "보통 (Moderate)"
+        case .severe: "심각 (Severe)"
         }
     }
 

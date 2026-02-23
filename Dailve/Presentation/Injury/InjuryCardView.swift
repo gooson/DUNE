@@ -37,12 +37,12 @@ struct InjuryCardView: View {
                             .background(record.severity.color.opacity(0.12), in: Capsule())
                             .foregroundStyle(record.severity.color)
 
-                        Text(durationLabel)
+                        Text(record.durationLabel)
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
 
-                    Text(dateLabel)
+                    Text(record.dateRangeLabel)
                         .font(.caption2)
                         .foregroundStyle(.tertiary)
 
@@ -66,32 +66,5 @@ struct InjuryCardView: View {
             .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
         }
         .buttonStyle(.plain)
-    }
-
-    private enum Cache {
-        static let dateFormatter: DateFormatter = {
-            let f = DateFormatter()
-            f.dateFormat = "M/d"
-            return f
-        }()
-    }
-
-    private var durationLabel: String {
-        let days = record.durationDays
-        if record.isActive {
-            return days == 0 ? "Today" : "\(days)일째"
-        } else {
-            return "\(days)일"
-        }
-    }
-
-    private var dateLabel: String {
-        let start = Cache.dateFormatter.string(from: record.startDate)
-        if record.isActive {
-            return "\(start)~"
-        } else {
-            let end = record.endDate.map { Cache.dateFormatter.string(from: $0) } ?? ""
-            return "\(start) ~ \(end)"
-        }
     }
 }
