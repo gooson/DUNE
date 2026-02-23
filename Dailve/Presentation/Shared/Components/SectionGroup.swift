@@ -7,6 +7,7 @@ struct SectionGroup<Content: View>: View {
     let icon: String
     let iconColor: Color
     var infoAction: (() -> Void)? = nil
+    var fillHeight: Bool = false
     @ViewBuilder let content: () -> Content
 
     @Environment(\.horizontalSizeClass) private var sizeClass
@@ -43,6 +44,7 @@ struct SectionGroup<Content: View>: View {
             content()
         }
         .padding(outerPadding)
+        .frame(maxHeight: fillHeight ? .infinity : nil, alignment: .top)
         .background {
             RoundedRectangle(cornerRadius: cornerRadius)
                 .fill(.thinMaterial)

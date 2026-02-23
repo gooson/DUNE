@@ -76,14 +76,18 @@ struct MuscleRecoveryMapView: View {
         let aspectRatio: CGFloat = 200.0 / 400.0
 
         return GeometryReader { geo in
-            let width = geo.size.width
-            let height = geo.size.height
+            let size = geo.size
+            // Center body content using outline's actual bounding box
+            let outlineBounds = outlineShape.path(
+                in: CGRect(origin: .zero, size: size)
+            ).boundingRect
+            let centerOffsetX = (size.width - outlineBounds.width) / 2 - outlineBounds.minX
 
             ZStack {
                 // Body outline from original SVG
                 outlineShape
                     .stroke(Color.secondary.opacity(0.3), lineWidth: 1.5)
-                    .frame(width: width, height: height)
+                    .frame(width: size.width, height: size.height)
 
                 // Muscle parts with recovery coloring
                 ForEach(parts) { part in
@@ -96,12 +100,13 @@ struct MuscleRecoveryMapView: View {
                                 part.shape
                                     .stroke(recoveryStrokeColor(for: part.muscle), lineWidth: 0.5)
                             }
-                            .frame(width: width, height: height)
+                            .frame(width: size.width, height: size.height)
                     }
                     .buttonStyle(.plain)
                 }
             }
-            .frame(width: width, height: height)
+            .frame(width: size.width, height: size.height)
+            .offset(x: centerOffsetX)
         }
         .aspectRatio(aspectRatio, contentMode: .fit)
         .frame(maxHeight: 300)

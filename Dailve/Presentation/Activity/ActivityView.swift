@@ -49,23 +49,23 @@ struct ActivityView: View {
                     // ③④ Recovery Map + Weekly Stats (side-by-side on iPad)
                     if isRegular {
                         HStack(alignment: .top, spacing: DS.Spacing.md) {
-                            recoveryMapSection
-                            weeklyStatsSection
+                            recoveryMapSection(fillHeight: true)
+                            weeklyStatsSection(fillHeight: true)
                         }
                     } else {
-                        recoveryMapSection
-                        weeklyStatsSection
+                        recoveryMapSection()
+                        weeklyStatsSection()
                     }
 
                     // ⑤⑥ Suggested Workout + Training Volume (side-by-side on iPad)
                     if isRegular {
                         HStack(alignment: .top, spacing: DS.Spacing.md) {
-                            suggestedWorkoutSection
-                            trainingVolumeSection
+                            suggestedWorkoutSection(fillHeight: true)
+                            trainingVolumeSection(fillHeight: true)
                         }
                     } else {
-                        suggestedWorkoutSection
-                        trainingVolumeSection
+                        suggestedWorkoutSection()
+                        trainingVolumeSection()
                     }
 
                     // ⑦ Recent Workouts
@@ -212,8 +212,8 @@ struct ActivityView: View {
 
     // MARK: - Extracted Sections
 
-    private var recoveryMapSection: some View {
-        SectionGroup(title: "Recovery Map", icon: "figure.stand", iconColor: DS.Color.activity) {
+    private func recoveryMapSection(fillHeight: Bool = false) -> some View {
+        SectionGroup(title: "Recovery Map", icon: "figure.stand", iconColor: DS.Color.activity, fillHeight: fillHeight) {
             MuscleRecoveryMapView(
                 fatigueStates: viewModel.fatigueStates,
                 onMuscleSelected: { muscle in selectedMuscle = muscle }
@@ -221,8 +221,8 @@ struct ActivityView: View {
         }
     }
 
-    private var weeklyStatsSection: some View {
-        SectionGroup(title: "This Week", icon: "chart.bar.fill", iconColor: DS.Color.activity) {
+    private func weeklyStatsSection(fillHeight: Bool = false) -> some View {
+        SectionGroup(title: "This Week", icon: "chart.bar.fill", iconColor: DS.Color.activity, fillHeight: fillHeight) {
             NavigationLink(value: ActivityDetailDestination.weeklyStats) {
                 WeeklyStatsGrid(stats: viewModel.weeklyStats)
             }
@@ -230,8 +230,8 @@ struct ActivityView: View {
         }
     }
 
-    private var suggestedWorkoutSection: some View {
-        SectionGroup(title: "Suggested Workout", icon: "sparkles", iconColor: DS.Color.activity) {
+    private func suggestedWorkoutSection(fillHeight: Bool = false) -> some View {
+        SectionGroup(title: "Suggested Workout", icon: "sparkles", iconColor: DS.Color.activity, fillHeight: fillHeight) {
             SuggestedWorkoutSection(
                 suggestion: viewModel.workoutSuggestion,
                 onStartExercise: { exercise in selectedExercise = exercise }
@@ -239,8 +239,8 @@ struct ActivityView: View {
         }
     }
 
-    private var trainingVolumeSection: some View {
-        SectionGroup(title: "Training Volume", icon: "chart.line.uptrend.xyaxis", iconColor: DS.Color.activity) {
+    private func trainingVolumeSection(fillHeight: Bool = false) -> some View {
+        SectionGroup(title: "Training Volume", icon: "chart.line.uptrend.xyaxis", iconColor: DS.Color.activity, fillHeight: fillHeight) {
             TrainingVolumeSummaryCard(
                 trainingLoadData: viewModel.trainingLoadData,
                 lastWorkoutMinutes: viewModel.lastWorkoutMinutes,
