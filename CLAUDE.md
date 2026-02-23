@@ -283,3 +283,8 @@
 98. **`changeFractionDigits` 단일 소스 필수**: 카테고리별 소수점 자릿수는 `HealthMetric+View.changeFractionDigits`만 수정. ViewModel에 inline switch로 중복 구현 금지
 99. **UI 컴포넌트 삭제 시 기능 이관 체크리스트**: `.contextMenu`, `.hoverEffect`, `.accessibilityReduceMotion` 등 부가 기능이 삭제 대상 View에만 있으면 대체 View로 이관 필수
 100. **`TodayPinnedMetricsStore` 빈 배열 fallback 주의**: `save([])` → `load()` 시 `[.hrv, .rhr, .sleep]` fallback 반환. 테스트에서 "피닝 없음"이 필요하면 비충돌 카테고리(`[.weight]`) 저장
+
+### 2026-02-23: Activity Detail Views 리뷰 교정
+
+101. **`compactMap` 후 분모는 필터링된 count 사용**: `compactMap(\.weight).reduce(0, +) / Double(allSets.count)` 패턴은 nil 값이 분모에 포함됨. 반드시 `weights.count`를 분모로 사용
+102. **body에서 호출되는 Calendar 연산 캐싱 필수**: `calendarDays()`, `firstWeekdayOffset()` 같은 Date/Calendar 함수는 ViewModel의 `loadData`에서 1회 계산 후 프로퍼티 저장. body 내 함수 호출은 매 렌더마다 실행됨
