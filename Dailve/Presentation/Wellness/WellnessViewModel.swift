@@ -892,11 +892,7 @@ final class WellnessViewModel {
             results.sleepIsHistorical = sleepInput.isHistorical
         }
 
-        let weeklySleep = snapshot.sleepDailyDurations
-            .sorted { $0.date < $1.date }
-            .suffix(7)
-            .map { DailySleep(date: $0.date, totalMinutes: $0.totalMinutes) }
-        results.sleepWeekly = weeklySleep
+        results.sleepWeekly = buildSleepWeeklySeries(from: snapshot)
 
         results.condition = snapshot.conditionScore
 
@@ -957,6 +953,21 @@ final class WellnessViewModel {
             return VitalSample(value: average, date: date)
         }
         .sorted { $0.date < $1.date }
+    }
+
+    private func buildSleepWeeklySeries(from snapshot: SharedHealthSnapshot) -> [DailySleep] {
+        let calendar = Calendar.current
+        let totalsByDay = snapshot.sleepDailyDurations.reduce(into: [Date: Double]()) { partialResult, item in
+            partialResult[calendar.startOfDay(for: item.date)] = item.totalMinutes
+        }
+
+        return (0..<7).reversed().compactMap { dayOffset in
+            guard let date = calendar.date(byAdding: .day, value: -dayOffset, to: snapshot.fetchedAt) else {
+                return nil
+            }
+            let day = calendar.startOfDay(for: date)
+            return DailySleep(date: day, totalMinutes: totalsByDay[day] ?? 0)
+        }
     }
 
     // MARK: - Helpers

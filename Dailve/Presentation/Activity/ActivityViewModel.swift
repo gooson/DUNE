@@ -84,6 +84,7 @@ final class ActivityViewModel {
     init(
         workoutService: WorkoutQuerying? = nil,
         stepsService: StepsQuerying? = nil,
+        hrvService: HRVQuerying? = nil,
         sleepService: SleepQuerying? = nil,
         healthKitManager: HealthKitManager = .shared,
         recommendationService: WorkoutRecommending? = nil,
@@ -94,7 +95,7 @@ final class ActivityViewModel {
     ) {
         self.workoutService = workoutService ?? WorkoutQueryService(manager: healthKitManager)
         self.stepsService = stepsService ?? StepsQueryService(manager: healthKitManager)
-        self.hrvService = HRVQueryService(manager: healthKitManager)
+        self.hrvService = hrvService ?? HRVQueryService(manager: healthKitManager)
         self.sleepService = sleepService ?? SleepQueryService(manager: healthKitManager)
         self.effortScoreService = EffortScoreService(manager: healthKitManager)
         self.recommendationService = recommendationService ?? WorkoutRecommendationService()
@@ -479,7 +480,12 @@ final class ActivityViewModel {
             let workouts = try await workoutService.fetchWorkouts(start: start, end: Date())
             let restingHR: Double?
             if let snapshot {
-                restingHR = snapshot.effectiveRHR?.value
+                if let effectiveRHR = snapshot.effectiveRHR?.value {
+                    restingHR = effectiveRHR
+                } else {
+                    // Keep the original 30-day fallback behavior for training load.
+                    restingHR = try await hrvService.fetchLatestRestingHeartRate(withinDays: 30)?.value
+                }
             } else {
                 restingHR = try await hrvService.fetchLatestRestingHeartRate(withinDays: 30)?.value
             }

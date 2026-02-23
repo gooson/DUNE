@@ -30,6 +30,42 @@ private struct MockStepsService: StepsQuerying {
     }
 }
 
+private actor MockHRVService: HRVQuerying {
+    private(set) var latestRHRRequestDays: [Int] = []
+    let latestRHRResult: (value: Double, date: Date)?
+
+    init(latestRHRResult: (value: Double, date: Date)? = nil) {
+        self.latestRHRResult = latestRHRResult
+    }
+
+    func fetchHRVSamples(days: Int) async throws -> [HRVSample] { [] }
+    func fetchRestingHeartRate(for date: Date) async throws -> Double? { nil }
+    func fetchLatestRestingHeartRate(withinDays days: Int) async throws -> (value: Double, date: Date)? {
+        latestRHRRequestDays.append(days)
+        return latestRHRResult
+    }
+    func fetchHRVCollection(start: Date, end: Date, interval: DateComponents) async throws -> [(date: Date, average: Double)] { [] }
+    func fetchRHRCollection(start: Date, end: Date, interval: DateComponents) async throws -> [(date: Date, min: Double, max: Double, average: Double)] { [] }
+}
+
+private struct MockSleepService: SleepQuerying {
+    func fetchSleepStages(for date: Date) async throws -> [SleepStage] { [] }
+    func fetchLatestSleepStages(withinDays days: Int) async throws -> (stages: [SleepStage], date: Date)? { nil }
+    func fetchDailySleepDurations(start: Date, end: Date) async throws -> [(date: Date, totalMinutes: Double, stageBreakdown: [SleepStage.Stage: Double])] { [] }
+    func fetchLastNightSleepSummary(for date: Date) async throws -> SleepSummary? { nil }
+}
+
+private actor MockSharedHealthDataService: SharedHealthDataService {
+    private let snapshot: SharedHealthSnapshot
+
+    init(snapshot: SharedHealthSnapshot) {
+        self.snapshot = snapshot
+    }
+
+    func fetchSnapshot() async -> SharedHealthSnapshot { snapshot }
+    func invalidateCache() async {}
+}
+
 private enum TestError: Error {
     case mockFailure
 }
@@ -196,5 +232,40 @@ struct ActivityViewModelTests {
         for i in 1..<vm.weeklySteps.count {
             #expect(vm.weeklySteps[i].date >= vm.weeklySteps[i - 1].date)
         }
+    }
+
+    @Test("training load keeps 30-day RHR fallback when shared snapshot has no effective RHR")
+    func trainingLoadUses30DayFallbackWithSharedSnapshot() async {
+        let now = Date()
+        let hrvService = MockHRVService(latestRHRResult: (value: 56, date: now))
+        let snapshot = SharedHealthSnapshot(
+            hrvSamples: [],
+            todayRHR: nil,
+            yesterdayRHR: nil,
+            latestRHR: nil,
+            rhrCollection: [],
+            todaySleepStages: [],
+            yesterdaySleepStages: [],
+            latestSleepStages: nil,
+            sleepDailyDurations: [],
+            conditionScore: nil,
+            baselineStatus: nil,
+            recentConditionScores: [],
+            failedSources: [],
+            fetchedAt: now
+        )
+
+        let vm = ActivityViewModel(
+            workoutService: MockWorkoutService(),
+            stepsService: MockStepsService(),
+            hrvService: hrvService,
+            sleepService: MockSleepService(),
+            sharedHealthDataService: MockSharedHealthDataService(snapshot: snapshot)
+        )
+
+        await vm.loadActivityData()
+
+        let requestedDays = await hrvService.latestRHRRequestDays
+        #expect(requestedDays.contains(30))
     }
 }
