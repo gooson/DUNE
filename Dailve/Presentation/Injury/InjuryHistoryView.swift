@@ -154,6 +154,14 @@ struct InjuryHistoryView: View {
         }
     }
 
+    private enum RowDateCache {
+        static let formatter: DateFormatter = {
+            let f = DateFormatter()
+            f.dateFormat = "M/d"
+            return f
+        }()
+    }
+
     private func injuryRowContent(_ record: InjuryRecord) -> some View {
         HStack(spacing: DS.Spacing.md) {
             Image(systemName: record.severity.iconName)
@@ -162,7 +170,7 @@ struct InjuryHistoryView: View {
 
             VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                 HStack(spacing: DS.Spacing.xs) {
-                    Text(record.bodyPart.displayName)
+                    Text(record.bodyPart.bilingualDisplayName)
                         .font(.subheadline.weight(.medium))
                     if let side = record.bodySide {
                         Text("(\(side.abbreviation))")
@@ -172,15 +180,19 @@ struct InjuryHistoryView: View {
                 }
 
                 HStack(spacing: DS.Spacing.xs) {
-                    Text(record.severity.displayName)
+                    Text("\(record.severity.localizedDisplayName) (\(record.severity.displayName))")
                         .font(.caption2)
                         .foregroundStyle(record.severity.color)
                     Text("·")
                         .foregroundStyle(.quaternary)
-                    Text("\(record.durationDays)d")
+                    Text(rowDurationLabel(record))
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
+
+                Text(rowDateLabel(record))
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
             }
 
             Spacer()
@@ -193,6 +205,25 @@ struct InjuryHistoryView: View {
                     .background(record.severity.color.opacity(0.12), in: Capsule())
                     .foregroundStyle(record.severity.color)
             }
+        }
+    }
+
+    private func rowDurationLabel(_ record: InjuryRecord) -> String {
+        let days = record.durationDays
+        if record.isActive {
+            return days == 0 ? "Today" : "\(days)일째"
+        } else {
+            return "\(days)일"
+        }
+    }
+
+    private func rowDateLabel(_ record: InjuryRecord) -> String {
+        let start = RowDateCache.formatter.string(from: record.startDate)
+        if record.isActive {
+            return "\(start)~"
+        } else {
+            let end = record.endDate.map { RowDateCache.formatter.string(from: $0) } ?? ""
+            return "\(start) ~ \(end)"
         }
     }
 }
@@ -273,18 +304,22 @@ private struct InjuryDetailView: View {
 
                     VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                         HStack(spacing: DS.Spacing.xs) {
-                            Text(record.bodyPart.displayName)
+                            Text(record.bodyPart.bilingualDisplayName)
                                 .font(.headline)
                             if let side = record.bodySide {
-                                Text("(\(side.displayName))")
+                                Text("(\(side.bilingualDisplayName))")
                                     .font(.subheadline)
                                     .foregroundStyle(.secondary)
                             }
                         }
 
-                        Text(record.severity.displayName)
+                        Text("\(record.severity.localizedDisplayName) (\(record.severity.displayName))")
                             .font(.caption)
                             .foregroundStyle(record.severity.color)
+
+                        Text(record.severity.localizedSeverityDescription)
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
                     }
 
                     Spacer()

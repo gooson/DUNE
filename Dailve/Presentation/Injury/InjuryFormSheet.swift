@@ -20,12 +20,12 @@ struct InjuryFormSheet: View {
                     Picker("Location", selection: $viewModel.selectedBodyPart) {
                         Section("Joints") {
                             ForEach(BodyPart.allCases.filter(\.isJoint), id: \.self) { part in
-                                Text(part.displayName).tag(part)
+                                Text(part.bilingualDisplayName).tag(part)
                             }
                         }
                         Section("Muscles") {
                             ForEach(BodyPart.allCases.filter { !$0.isJoint }, id: \.self) { part in
-                                Text(part.displayName).tag(part)
+                                Text(part.bilingualDisplayName).tag(part)
                             }
                         }
                     }
@@ -37,7 +37,7 @@ struct InjuryFormSheet: View {
                             set: { viewModel.selectedSide = $0 }
                         )) {
                             ForEach(BodySide.allCases, id: \.self) { side in
-                                Text(side.displayName).tag(side)
+                                Text(side.bilingualDisplayName).tag(side)
                             }
                         }
                         .pickerStyle(.segmented)
@@ -46,18 +46,38 @@ struct InjuryFormSheet: View {
                 }
 
                 Section("Severity") {
-                    Picker("Severity", selection: $viewModel.selectedSeverity) {
-                        ForEach(InjurySeverity.allCases, id: \.self) { severity in
-                            HStack(spacing: DS.Spacing.xs) {
+                    ForEach(InjurySeverity.allCases, id: \.self) { severity in
+                        Button {
+                            viewModel.selectedSeverity = severity
+                        } label: {
+                            HStack(spacing: DS.Spacing.sm) {
                                 Image(systemName: severity.iconName)
+                                    .font(.title3)
                                     .foregroundStyle(severity.color)
-                                Text(severity.displayName)
+                                    .frame(width: 28)
+
+                                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                                    Text("\(severity.localizedDisplayName) (\(severity.displayName))")
+                                        .font(.subheadline.weight(.medium))
+                                        .foregroundStyle(.primary)
+                                    Text(severity.localizedSeverityDescription)
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+
+                                Spacer()
+
+                                if viewModel.selectedSeverity == severity {
+                                    Image(systemName: "checkmark")
+                                        .font(.subheadline.weight(.semibold))
+                                        .foregroundStyle(severity.color)
+                                }
                             }
-                            .tag(severity)
+                            .contentShape(Rectangle())
                         }
+                        .buttonStyle(.plain)
+                        .accessibilityIdentifier("injury-severity-\(severity.displayName.lowercased())")
                     }
-                    .pickerStyle(.segmented)
-                    .accessibilityIdentifier("injury-severity-picker")
                 }
 
                 Section("Duration") {

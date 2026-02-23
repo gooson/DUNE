@@ -20,7 +20,7 @@ struct InjuryCardView: View {
 
                 VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                     HStack(spacing: DS.Spacing.xs) {
-                        Text(record.bodyPart.displayName)
+                        Text(record.bodyPart.bilingualDisplayName)
                             .font(.subheadline.weight(.semibold))
                         if let side = record.bodySide {
                             Text("(\(side.abbreviation))")
@@ -30,7 +30,7 @@ struct InjuryCardView: View {
                     }
 
                     HStack(spacing: DS.Spacing.xs) {
-                        Text(record.severity.displayName)
+                        Text(record.severity.localizedDisplayName)
                             .font(.caption2.weight(.medium))
                             .padding(.horizontal, DS.Spacing.sm)
                             .padding(.vertical, DS.Spacing.xxs)
@@ -41,6 +41,10 @@ struct InjuryCardView: View {
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
+
+                    Text(dateLabel)
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
 
                     if !record.memo.isEmpty {
                         Text(record.memo)
@@ -67,7 +71,7 @@ struct InjuryCardView: View {
     private enum Cache {
         static let dateFormatter: DateFormatter = {
             let f = DateFormatter()
-            f.dateStyle = .short
+            f.dateFormat = "M/d"
             return f
         }()
     }
@@ -75,11 +79,19 @@ struct InjuryCardView: View {
     private var durationLabel: String {
         let days = record.durationDays
         if record.isActive {
-            return days == 0 ? "Today" : "\(days)d active"
+            return days == 0 ? "Today" : "\(days)일째"
         } else {
-            let start = Cache.dateFormatter.string(from: record.startDate)
+            return "\(days)일"
+        }
+    }
+
+    private var dateLabel: String {
+        let start = Cache.dateFormatter.string(from: record.startDate)
+        if record.isActive {
+            return "\(start)~"
+        } else {
             let end = record.endDate.map { Cache.dateFormatter.string(from: $0) } ?? ""
-            return "\(start) – \(end)"
+            return "\(start) ~ \(end)"
         }
     }
 }
