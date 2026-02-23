@@ -15,53 +15,65 @@ struct PersonalRecordsSection: View {
         if records.isEmpty {
             emptyState
         } else {
-            LazyVGrid(columns: columns, spacing: DS.Spacing.sm) {
-                ForEach(records.prefix(8)) { record in
-                    prCard(record)
+            StandardCard {
+                VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                    LazyVGrid(columns: columns, spacing: DS.Spacing.sm) {
+                        ForEach(records.prefix(8)) { record in
+                            prCard(record)
+                        }
+                    }
+
+                    // Chevron hint
+                    HStack {
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .font(.caption2)
+                            .foregroundStyle(.tertiary)
+                    }
                 }
             }
         }
     }
 
     private func prCard(_ record: StrengthPersonalRecord) -> some View {
-        StandardCard {
-            VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-                // Exercise name
-                Text(record.exerciseName)
-                    .font(.caption)
-                    .fontWeight(.medium)
-                    .foregroundStyle(.secondary)
+        VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+            // Exercise name
+            Text(record.exerciseName)
+                .font(.caption)
+                .fontWeight(.medium)
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
+
+            // Weight
+            HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xxs) {
+                Text(record.maxWeight.formattedWithSeparator())
+                    .font(DS.Typography.cardScore)
+                    .minimumScaleFactor(0.7)
                     .lineLimit(1)
 
-                // Weight
-                HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xxs) {
-                    Text(record.maxWeight.formattedWithSeparator())
-                        .font(DS.Typography.cardScore)
-                        .minimumScaleFactor(0.7)
-                        .lineLimit(1)
+                Text("kg")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
 
-                    Text("kg")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                Spacer(minLength: 0)
 
-                    Spacer(minLength: 0)
-
-                    if record.isRecent {
-                        Text("NEW")
-                            .font(.system(size: 9, weight: .bold))
-                            .foregroundStyle(.white)
-                            .padding(.horizontal, 5)
-                            .padding(.vertical, 2)
-                            .background(DS.Color.activity, in: Capsule())
-                    }
+                if record.isRecent {
+                    Text("NEW")
+                        .font(.system(size: 9, weight: .bold))
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 5)
+                        .padding(.vertical, 2)
+                        .background(DS.Color.activity, in: Capsule())
                 }
-
-                // Date
-                Text(record.date, style: .date)
-                    .font(.caption2)
-                    .foregroundStyle(.tertiary)
             }
+
+            // Date
+            Text(record.date, style: .date)
+                .font(.caption2)
+                .foregroundStyle(.tertiary)
         }
+        .padding(DS.Spacing.sm)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
     }
 
     private var emptyState: some View {

@@ -8,6 +8,9 @@ struct ActivityView: View {
     @State private var showingExercisePicker = false
     @State private var selectedExercise: ExerciseDefinition?
     @State private var selectedMuscle: MuscleGroup?
+    @State private var showingPRInfo = false
+    @State private var showingConsistencyInfo = false
+    @State private var showingExerciseMixInfo = false
     @Environment(\.modelContext) private var modelContext
 
     private let library: ExerciseLibraryQuerying = ExerciseLibraryService.shared
@@ -76,17 +79,33 @@ struct ActivityView: View {
                     }
 
                     // ⑧ Personal Records
-                    SectionGroup(title: "Personal Records", icon: "trophy.fill", iconColor: DS.Color.activity) {
-                        PersonalRecordsSection(records: viewModel.personalRecords)
+                    SectionGroup(title: "Personal Records", icon: "trophy.fill",
+                                 iconColor: DS.Color.activity,
+                                 infoAction: { showingPRInfo = true }) {
+                        NavigationLink(value: ActivityDetailDestination.personalRecords) {
+                            PersonalRecordsSection(records: viewModel.personalRecords)
+                        }
+                        .buttonStyle(.plain)
                     }
 
-                    // ⑨ Consistency & Frequency
-                    SectionGroup(title: "Consistency", icon: "flame.fill", iconColor: DS.Color.activity) {
-                        ConsistencyCard(streak: viewModel.workoutStreak)
+                    // ⑨ Consistency
+                    SectionGroup(title: "Consistency", icon: "flame.fill",
+                                 iconColor: DS.Color.activity,
+                                 infoAction: { showingConsistencyInfo = true }) {
+                        NavigationLink(value: ActivityDetailDestination.consistency) {
+                            ConsistencyCard(streak: viewModel.workoutStreak)
+                        }
+                        .buttonStyle(.plain)
                     }
 
-                    SectionGroup(title: "Exercise Mix", icon: "chart.bar.xaxis", iconColor: DS.Color.activity) {
-                        ExerciseFrequencySection(frequencies: viewModel.exerciseFrequencies)
+                    // ⑩ Exercise Mix
+                    SectionGroup(title: "Exercise Mix", icon: "chart.bar.xaxis",
+                                 iconColor: DS.Color.activity,
+                                 infoAction: { showingExerciseMixInfo = true }) {
+                        NavigationLink(value: ActivityDetailDestination.exerciseMix) {
+                            ExerciseFrequencySection(frequencies: viewModel.exerciseFrequencies)
+                        }
+                        .buttonStyle(.plain)
                     }
 
                     if let error = viewModel.errorMessage {
@@ -145,6 +164,25 @@ struct ActivityView: View {
             case .exerciseType(let typeKey, let displayName):
                 ExerciseTypeDetailView(typeKey: typeKey, displayName: displayName)
             }
+        }
+        .navigationDestination(for: ActivityDetailDestination.self) { destination in
+            switch destination {
+            case .personalRecords:
+                PersonalRecordsDetailView()
+            case .consistency:
+                ConsistencyDetailView()
+            case .exerciseMix:
+                ExerciseMixDetailView()
+            }
+        }
+        .sheet(isPresented: $showingPRInfo) {
+            PersonalRecordsInfoSheet()
+        }
+        .sheet(isPresented: $showingConsistencyInfo) {
+            ConsistencyInfoSheet()
+        }
+        .sheet(isPresented: $showingExerciseMixInfo) {
+            ExerciseMixInfoSheet()
         }
         .sheet(item: $selectedExercise) { exercise in
             ExerciseStartView(exercise: exercise)

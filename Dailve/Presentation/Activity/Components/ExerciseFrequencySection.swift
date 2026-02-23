@@ -13,6 +13,14 @@ struct ExerciseFrequencySection: View {
                     ForEach(frequencies.prefix(6)) { freq in
                         frequencyRow(freq)
                     }
+
+                    // Chevron hint
+                    HStack {
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .font(.caption2)
+                            .foregroundStyle(.tertiary)
+                    }
                 }
             }
         }

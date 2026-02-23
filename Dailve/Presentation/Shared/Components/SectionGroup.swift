@@ -6,6 +6,7 @@ struct SectionGroup<Content: View>: View {
     let title: String
     let icon: String
     let iconColor: Color
+    var infoAction: (() -> Void)? = nil
     @ViewBuilder let content: () -> Content
 
     @Environment(\.horizontalSizeClass) private var sizeClass
@@ -25,6 +26,16 @@ struct SectionGroup<Content: View>: View {
                     .font(.subheadline)
                     .fontWeight(.semibold)
                     .foregroundStyle(.secondary)
+
+                if let infoAction {
+                    Spacer()
+
+                    Button(action: infoAction) {
+                        Image(systemName: "info.circle")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+                }
             }
             .padding(.horizontal, DS.Spacing.xs)
 
