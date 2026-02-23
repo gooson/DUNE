@@ -4,15 +4,37 @@ import SwiftUI
 struct WellnessScoreDetailView: View {
     let wellnessScore: WellnessScore
     let conditionScore: ConditionScore?
+    let sleepDailyData: [SleepDailySample]
+    let hrvDailyData: [DailySample]
+    let rhrDailyData: [DailySample]
 
     @Environment(\.horizontalSizeClass) private var sizeClass
 
     private var isRegular: Bool { sizeClass == .regular }
 
+    private var sleepTrendData: [ChartDataPoint] {
+        sleepDailyData
+            .sorted { $0.date < $1.date }
+            .map { ChartDataPoint(date: $0.date, value: $0.minutes / 60.0) }
+    }
+
+    private var hrvTrendData: [ChartDataPoint] {
+        hrvDailyData
+            .sorted { $0.date < $1.date }
+            .map { ChartDataPoint(date: $0.date, value: $0.value) }
+    }
+
+    private var rhrTrendData: [ChartDataPoint] {
+        rhrDailyData
+            .sorted { $0.date < $1.date }
+            .map { ChartDataPoint(date: $0.date, value: $0.value) }
+    }
+
     var body: some View {
         ScrollView {
             VStack(spacing: DS.Spacing.lg) {
                 scoreHero
+                subScoreCharts
                 componentWeights
 
                 if let conditionScore, !conditionScore.contributions.isEmpty {
@@ -87,6 +109,34 @@ struct WellnessScoreDetailView: View {
             Text(label)
                 .font(.caption2)
                 .foregroundStyle(.tertiary)
+        }
+    }
+
+    // MARK: - Sub-score Charts
+
+    private var subScoreCharts: some View {
+        VStack(spacing: DS.Spacing.md) {
+            SubScoreTrendChartView(
+                title: "Sleep Duration",
+                data: sleepTrendData,
+                color: DS.Color.sleep,
+                unit: "hrs",
+                fractionDigits: 1
+            )
+
+            SubScoreTrendChartView(
+                title: "HRV",
+                data: hrvTrendData,
+                color: DS.Color.hrv,
+                unit: "ms"
+            )
+
+            SubScoreTrendChartView(
+                title: "Resting Heart Rate",
+                data: rhrTrendData,
+                color: DS.Color.heartRate,
+                unit: "bpm"
+            )
         }
     }
 

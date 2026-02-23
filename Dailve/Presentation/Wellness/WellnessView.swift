@@ -154,7 +154,10 @@ struct WellnessView: View {
             if let score = viewModel.wellnessScore {
                 WellnessScoreDetailView(
                     wellnessScore: score,
-                    conditionScore: viewModel.conditionScoreFull
+                    conditionScore: viewModel.conditionScoreFull,
+                    sleepDailyData: viewModel.sleepDetailTrend,
+                    hrvDailyData: viewModel.hrvDetailTrend,
+                    rhrDailyData: viewModel.rhrDetailTrend
                 )
             } else {
                 ProgressView()

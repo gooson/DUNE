@@ -23,6 +23,11 @@ final class WellnessViewModel {
     // Full condition score for detail navigation
     var conditionScoreFull: ConditionScore?
 
+    // Trend inputs for wellness detail charts
+    var sleepDetailTrend: [SleepDailySample] = []
+    var hrvDetailTrend: [DailySample] = []
+    var rhrDetailTrend: [DailySample] = []
+
     // MARK: - Dependencies
 
     private let sleepService: SleepQuerying
@@ -94,6 +99,16 @@ final class WellnessViewModel {
             isLoading = false
             return
         }
+        // Keep trend inputs for wellness detail charts
+        sleepDetailTrend = results.sleepWeekly
+            .sorted { $0.date < $1.date }
+            .map { SleepDailySample(date: $0.date, minutes: $0.totalMinutes) }
+        hrvDetailTrend = results.hrvWeekly
+            .sorted { $0.date < $1.date }
+            .map { DailySample(date: $0.date, value: $0.value) }
+        rhrDetailTrend = results.rhrWeekly
+            .sorted { $0.date < $1.date }
+            .map { DailySample(date: $0.date, value: $0.value) }
 
         // Build cards from results
         var cards: [VitalCardData] = []
