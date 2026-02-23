@@ -19,8 +19,11 @@ struct ActivityView: View {
     @Query(filter: #Predicate<InjuryRecord> { $0.endDate == nil },
            sort: \InjuryRecord.startDate, order: .reverse) private var activeInjuryRecords: [InjuryRecord]
 
+    @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var cachedInjuryConflicts: [InjuryConflict] = []
     private let conflictUseCase = CheckInjuryConflictUseCase()
+
+    private var isRegular: Bool { sizeClass == .regular }
 
     var body: some View {
         ScrollView {
@@ -30,44 +33,39 @@ struct ActivityView: View {
                         .frame(maxWidth: .infinity, minHeight: 200)
                 } else {
                     // ① Training Readiness Hero Card
-                    TrainingReadinessHeroCard(
-                        readiness: viewModel.trainingReadiness,
-                        isCalibrating: viewModel.trainingReadiness?.isCalibrating ?? true
-                    )
+                    NavigationLink(value: ActivityDetailDestination.trainingReadiness) {
+                        TrainingReadinessHeroCard(
+                            readiness: viewModel.trainingReadiness,
+                            isCalibrating: viewModel.trainingReadiness?.isCalibrating ?? true
+                        )
+                    }
+                    .buttonStyle(.plain)
 
                     // ② Injury Warning Banner
                     if !cachedInjuryConflicts.isEmpty {
                         InjuryWarningBanner(conflicts: cachedInjuryConflicts)
                     }
 
-                    // ③ Muscle Recovery Map
-                    SectionGroup(title: "Recovery Map", icon: "figure.stand", iconColor: DS.Color.activity) {
-                        MuscleRecoveryMapView(
-                            fatigueStates: viewModel.fatigueStates,
-                            onMuscleSelected: { muscle in selectedMuscle = muscle }
-                        )
+                    // ③④ Recovery Map + Weekly Stats (side-by-side on iPad)
+                    if isRegular {
+                        HStack(alignment: .top, spacing: DS.Spacing.md) {
+                            recoveryMapSection
+                            weeklyStatsSection
+                        }
+                    } else {
+                        recoveryMapSection
+                        weeklyStatsSection
                     }
 
-                    // ④ Weekly Stats Grid
-                    SectionGroup(title: "This Week", icon: "chart.bar.fill", iconColor: DS.Color.activity) {
-                        WeeklyStatsGrid(stats: viewModel.weeklyStats)
-                    }
-
-                    // ⑤ Suggested Workout
-                    SectionGroup(title: "Suggested Workout", icon: "sparkles", iconColor: DS.Color.activity) {
-                        SuggestedWorkoutSection(
-                            suggestion: viewModel.workoutSuggestion,
-                            onStartExercise: { exercise in selectedExercise = exercise }
-                        )
-                    }
-
-                    // ⑥ Training Volume Summary
-                    SectionGroup(title: "Training Volume", icon: "chart.line.uptrend.xyaxis", iconColor: DS.Color.activity) {
-                        TrainingVolumeSummaryCard(
-                            trainingLoadData: viewModel.trainingLoadData,
-                            lastWorkoutMinutes: viewModel.lastWorkoutMinutes,
-                            lastWorkoutCalories: viewModel.lastWorkoutCalories
-                        )
+                    // ⑤⑥ Suggested Workout + Training Volume (side-by-side on iPad)
+                    if isRegular {
+                        HStack(alignment: .top, spacing: DS.Spacing.md) {
+                            suggestedWorkoutSection
+                            trainingVolumeSection
+                        }
+                    } else {
+                        suggestedWorkoutSection
+                        trainingVolumeSection
                     }
 
                     // ⑦ Recent Workouts
@@ -173,6 +171,15 @@ struct ActivityView: View {
                 ConsistencyDetailView()
             case .exerciseMix:
                 ExerciseMixDetailView()
+            case .trainingReadiness:
+                TrainingReadinessDetailView(
+                    readiness: viewModel.trainingReadiness,
+                    hrvDailyAverages: viewModel.hrvDailyAverages,
+                    rhrDailyData: viewModel.rhrDailyData,
+                    sleepDailyData: viewModel.sleepDailyData
+                )
+            case .weeklyStats:
+                WeeklyStatsDetailView()
             }
         }
         .sheet(isPresented: $showingPRInfo) {
@@ -201,6 +208,45 @@ struct ActivityView: View {
             recomputeInjuryConflicts()
         }
         .navigationTitle("Activity")
+    }
+
+    // MARK: - Extracted Sections
+
+    private var recoveryMapSection: some View {
+        SectionGroup(title: "Recovery Map", icon: "figure.stand", iconColor: DS.Color.activity) {
+            MuscleRecoveryMapView(
+                fatigueStates: viewModel.fatigueStates,
+                onMuscleSelected: { muscle in selectedMuscle = muscle }
+            )
+        }
+    }
+
+    private var weeklyStatsSection: some View {
+        SectionGroup(title: "This Week", icon: "chart.bar.fill", iconColor: DS.Color.activity) {
+            NavigationLink(value: ActivityDetailDestination.weeklyStats) {
+                WeeklyStatsGrid(stats: viewModel.weeklyStats)
+            }
+            .buttonStyle(.plain)
+        }
+    }
+
+    private var suggestedWorkoutSection: some View {
+        SectionGroup(title: "Suggested Workout", icon: "sparkles", iconColor: DS.Color.activity) {
+            SuggestedWorkoutSection(
+                suggestion: viewModel.workoutSuggestion,
+                onStartExercise: { exercise in selectedExercise = exercise }
+            )
+        }
+    }
+
+    private var trainingVolumeSection: some View {
+        SectionGroup(title: "Training Volume", icon: "chart.line.uptrend.xyaxis", iconColor: DS.Color.activity) {
+            TrainingVolumeSummaryCard(
+                trainingLoadData: viewModel.trainingLoadData,
+                lastWorkoutMinutes: viewModel.lastWorkoutMinutes,
+                lastWorkoutCalories: viewModel.lastWorkoutCalories
+            )
+        }
     }
 
     // MARK: - Helpers

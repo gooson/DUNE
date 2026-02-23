@@ -64,6 +64,7 @@ struct MuscleRecoveryMapView: View {
                 bodyDiagram(isFront: true)
                 bodyDiagram(isFront: false)
             }
+            .frame(maxWidth: .infinity, alignment: .center)
             legendRow
         }
     }

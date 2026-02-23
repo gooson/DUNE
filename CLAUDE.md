@@ -288,3 +288,10 @@
 
 101. **`compactMap` 후 분모는 필터링된 count 사용**: `compactMap(\.weight).reduce(0, +) / Double(allSets.count)` 패턴은 nil 값이 분모에 포함됨. 반드시 `weights.count`를 분모로 사용
 102. **body에서 호출되는 Calendar 연산 캐싱 필수**: `calendarDays()`, `firstWeekdayOffset()` 같은 Date/Calendar 함수는 ViewModel의 `loadData`에서 1회 계산 후 프로퍼티 저장. body 내 함수 호출은 매 렌더마다 실행됨
+
+### 2026-02-23: Activity Detail View v2 리뷰 교정
+
+103. **Detail View는 parent ViewModel 참조 금지**: 필요한 데이터만 개별 프로퍼티(`let readiness: TrainingReadiness?`, `let hrvData: [DailySample]`)로 전달. 테스트 용이성, 프리뷰, 재사용성 확보
+104. **`Dictionary(uniqueKeysWithValues:)` 사용 금지**: 날짜 기반 그룹핑에서 중복 키 가능성 항상 존재. `Dictionary(_:uniquingKeysWith: { _, last in last })` 필수 사용
+105. **Chart body 내 gradient/color allocation 금지**: constant color → `private enum Gradients { static let }`, dynamic color → `private var gradient` computed property로 호이스트. Chart closure는 데이터 포인트마다 실행되므로 allocation-free 원칙
+106. **iPad HStack layout은 섹션을 computed property로 추출**: `if isRegular { HStack { sectionA; sectionB } } else { sectionA; sectionB }` 패턴에서 섹션 중복 방지. `private var recoveryMapSection: some View { ... }` 패턴 사용
