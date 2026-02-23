@@ -42,6 +42,13 @@ struct ActivityViewModelTests {
 
     private let calendar = Calendar.current
 
+    private func makeIsolatedPRStore() -> PersonalRecordStore {
+        let suiteName = "ActivityViewModelTests.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suiteName)!
+        defaults.removePersistentDomain(forName: suiteName)
+        return PersonalRecordStore(defaults: defaults)
+    }
+
     // MARK: - Parallel Loading
 
     @Test("loads exercise, steps, and workouts in parallel")
@@ -196,5 +203,66 @@ struct ActivityViewModelTests {
         for i in 1..<vm.weeklySteps.count {
             #expect(vm.weeklySteps[i].date >= vm.weeklySteps[i - 1].date)
         }
+    }
+
+    // MARK: - Personal Records (Unified)
+
+    @Test("manual cardio fallback appears in unified personal records")
+    func manualCardioFallbackPR() {
+        let store = makeIsolatedPRStore()
+        let vm = ActivityViewModel(
+            workoutService: MockWorkoutService(),
+            stepsService: MockStepsService(),
+            personalRecordStore: store
+        )
+
+        let record = ExerciseRecord(
+            date: Date(),
+            exerciseType: "Running",
+            duration: 1_800,
+            calories: 320,
+            distance: 5_000
+        )
+
+        vm.updateSuggestion(records: [record])
+
+        #expect(vm.personalRecords.contains { $0.kind == .longestDistance })
+        #expect(vm.personalRecords.contains { $0.kind == .fastestPace })
+        #expect(vm.personalRecords.contains { $0.kind == .highestCalories })
+    }
+
+    @Test("HealthKit cardio records take precedence over manual fallback")
+    func healthKitCardioPrecedence() {
+        let store = makeIsolatedPRStore()
+        let vm = ActivityViewModel(
+            workoutService: MockWorkoutService(),
+            stepsService: MockStepsService(),
+            personalRecordStore: store
+        )
+
+        let hkWorkout = WorkoutSummary(
+            id: "hk-running-1",
+            type: WorkoutActivityType.running.typeName,
+            activityType: .running,
+            duration: 1_500,
+            calories: 400,
+            distance: 10_000,
+            date: Date()
+        )
+        _ = store.updateIfNewRecords(hkWorkout)
+
+        let manualRecord = ExerciseRecord(
+            date: Date(),
+            exerciseType: "Running",
+            duration: 2_100,
+            calories: 500,
+            distance: 12_000
+        )
+        vm.updateSuggestion(records: [manualRecord])
+
+        let distanceRecord = vm.personalRecords.first { $0.kind == .longestDistance }
+        #expect(distanceRecord != nil)
+        #expect(distanceRecord?.source == .healthKit)
+        #expect(distanceRecord?.value == 10_000)
     }
 }

@@ -1,28 +1,64 @@
 import SwiftUI
-import SwiftData
 import Charts
 
-/// Full detail view for Personal Records with timeline chart and complete PR list.
+/// Full detail view for unified personal records (strength + cardio).
 struct PersonalRecordsDetailView: View {
-    @State private var viewModel = PersonalRecordsDetailViewModel()
-    @Query(sort: \ExerciseRecord.date, order: .reverse) private var exerciseRecords: [ExerciseRecord]
+    let records: [ActivityPersonalRecord]
+    let notice: String?
 
-    @Environment(\.horizontalSizeClass) private var sizeClass
+    @State private var viewModel = PersonalRecordsDetailViewModel()
+    @State private var selectedKind: ActivityPersonalRecord.Kind?
 
     private var columns: [GridItem] {
         [GridItem(.flexible(), spacing: DS.Spacing.sm),
          GridItem(.flexible(), spacing: DS.Spacing.sm)]
     }
 
+    private var recordsUpdateKey: Int {
+        var hasher = Hasher()
+        for record in records {
+            hasher.combine(record.id)
+            hasher.combine(record.value)
+            hasher.combine(record.date.timeIntervalSince1970)
+        }
+        return hasher.finalize()
+    }
+
+    private var availableKinds: [ActivityPersonalRecord.Kind] {
+        let kinds = Set(viewModel.personalRecords.map(\.kind))
+        return kinds.sorted { $0.sortOrder < $1.sortOrder }
+    }
+
+    private var selectedKindValue: ActivityPersonalRecord.Kind? {
+        if let selectedKind, availableKinds.contains(selectedKind) {
+            return selectedKind
+        }
+        return availableKinds.first
+    }
+
+    private var filteredRecords: [ActivityPersonalRecord] {
+        guard let selectedKind = selectedKindValue else { return [] }
+        return viewModel.personalRecords
+            .filter { $0.kind == selectedKind }
+            .sorted { $0.date > $1.date }
+    }
+
+    private var chartRecords: [ActivityPersonalRecord] {
+        filteredRecords.sorted { $0.date < $1.date }
+    }
+
     var body: some View {
         ScrollView {
             VStack(spacing: DS.Spacing.lg) {
-                if viewModel.isLoading {
-                    ProgressView()
-                        .frame(maxWidth: .infinity, minHeight: 200)
-                } else if viewModel.personalRecords.isEmpty {
+                if viewModel.personalRecords.isEmpty {
                     emptyState
                 } else {
+                    if let notice, !notice.isEmpty {
+                        noticeBanner(notice)
+                    }
+                    if availableKinds.count > 1 {
+                        metricPicker
+                    }
                     timelineChart
                     prGrid
                 }
@@ -30,12 +66,45 @@ struct PersonalRecordsDetailView: View {
             .padding()
         }
         .navigationTitle("Personal Records")
-        .task(id: exerciseRecords.count) {
-            viewModel.loadRecords(from: exerciseRecords)
+        .task(id: recordsUpdateKey) {
+            viewModel.load(records: records)
+            if selectedKindValue == nil {
+                selectedKind = availableKinds.first
+            }
         }
     }
 
-    // MARK: - Timeline Chart
+    // MARK: - Components
+
+    private func noticeBanner(_ text: String) -> some View {
+        HStack(spacing: DS.Spacing.sm) {
+            Image(systemName: "info.circle")
+                .foregroundStyle(.secondary)
+            Text(text)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            Spacer(minLength: 0)
+        }
+        .padding(DS.Spacing.sm)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+    }
+
+    private var metricPicker: some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+            Text("Metric")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            Picker("Metric", selection: Binding(
+                get: { selectedKindValue ?? availableKinds.first },
+                set: { selectedKind = $0 }
+            )) {
+                ForEach(availableKinds, id: \.self) { kind in
+                    Text(kind.displayName).tag(Optional(kind))
+                }
+            }
+            .pickerStyle(.segmented)
+        }
+    }
 
     private var timelineChart: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
@@ -43,16 +112,16 @@ struct PersonalRecordsDetailView: View {
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(.secondary)
 
-            Chart(viewModel.personalRecords) { record in
+            Chart(chartRecords) { record in
                 PointMark(
                     x: .value("Date", record.date),
-                    y: .value("Weight", record.maxWeight)
+                    y: .value("Value", record.value)
                 )
-                .foregroundStyle(DS.Color.activity)
+                .foregroundStyle(record.kind.tintColor)
                 .symbolSize(record.isRecent ? 80 : 40)
                 .annotation(position: .top, spacing: 4) {
                     if record.isRecent {
-                        Text(record.exerciseName)
+                        Text(record.title)
                             .font(.system(size: 8))
                             .foregroundStyle(.secondary)
                             .lineLimit(1)
@@ -69,55 +138,47 @@ struct PersonalRecordsDetailView: View {
                 AxisMarks { value in
                     AxisGridLine()
                     AxisValueLabel {
-                        if let v = value.as(Double.self) {
-                            Text(v.formattedWithSeparator())
+                        if let v = value.as(Double.self), let selectedKind = selectedKindValue {
+                            Text(chartAxisValue(v, for: selectedKind))
                         }
                     }
                 }
             }
-            .frame(height: 200)
+            .frame(height: 220)
             .clipped()
         }
         .padding(DS.Spacing.md)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
     }
 
-    // MARK: - Full PR Grid
-
     private var prGrid: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            Text("All Records")
-                .font(.subheadline.weight(.semibold))
-                .foregroundStyle(.secondary)
+            if let selectedKind = selectedKindValue {
+                Text(selectedKind.displayName)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.secondary)
+            }
 
             LazyVGrid(columns: columns, spacing: DS.Spacing.sm) {
-                ForEach(viewModel.personalRecords) { record in
+                ForEach(filteredRecords) { record in
                     prCard(record)
                 }
             }
         }
     }
 
-    private func prCard(_ record: StrengthPersonalRecord) -> some View {
+    private func prCard(_ record: ActivityPersonalRecord) -> some View {
         VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-            Text(record.exerciseName)
-                .font(.caption)
-                .fontWeight(.medium)
-                .foregroundStyle(.secondary)
-                .lineLimit(1)
-
-            HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xxs) {
-                Text(record.maxWeight.formattedWithSeparator())
-                    .font(DS.Typography.cardScore)
-                    .minimumScaleFactor(0.7)
-                    .lineLimit(1)
-
-                Text("kg")
+            HStack(spacing: DS.Spacing.xxs) {
+                Image(systemName: record.kind.iconName)
+                    .font(.caption2)
+                    .foregroundStyle(record.kind.tintColor)
+                Text(record.title)
                     .font(.caption)
+                    .fontWeight(.medium)
                     .foregroundStyle(.secondary)
-
+                    .lineLimit(1)
                 Spacer(minLength: 0)
-
                 if record.isRecent {
                     Text("NEW")
                         .font(.system(size: 9, weight: .bold))
@@ -128,6 +189,26 @@ struct PersonalRecordsDetailView: View {
                 }
             }
 
+            HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xxs) {
+                Text(primaryValueText(for: record))
+                    .font(DS.Typography.cardScore)
+                    .minimumScaleFactor(0.7)
+                    .lineLimit(1)
+
+                if let unit = unitText(for: record) {
+                    Text(unit)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+
+            if let context = contextText(for: record) {
+                Text(context)
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+            }
+
             Text(record.date, style: .date)
                 .font(.caption2)
                 .foregroundStyle(.tertiary)
@@ -135,8 +216,6 @@ struct PersonalRecordsDetailView: View {
         .padding(DS.Spacing.sm)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
     }
-
-    // MARK: - Empty State
 
     private var emptyState: some View {
         VStack(spacing: DS.Spacing.lg) {
@@ -146,12 +225,80 @@ struct PersonalRecordsDetailView: View {
             Text("No personal records yet.")
                 .font(.headline)
                 .foregroundStyle(.secondary)
-            Text("Log sets with weight to start tracking your PRs.")
+            Text("운동 기록을 쌓으면 근력과 유산소 PR을 함께 확인할 수 있어요.")
                 .font(.subheadline)
                 .foregroundStyle(.tertiary)
                 .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, DS.Spacing.xl)
+    }
+
+    // MARK: - Formatting
+
+    private func primaryValueText(for record: ActivityPersonalRecord) -> String {
+        switch record.kind {
+        case .strengthWeight:
+            return record.value.formattedWithSeparator()
+        case .fastestPace:
+            let totalSeconds = Int(record.value)
+            let minutes = totalSeconds / 60
+            let seconds = totalSeconds % 60
+            return "\(minutes)'\(String(format: "%02d", seconds))\""
+        case .longestDistance:
+            let km = record.value / 1000.0
+            return km.formattedWithSeparator(fractionDigits: km >= 10 ? 1 : 2)
+        case .highestCalories:
+            return record.value.formattedWithSeparator()
+        case .longestDuration:
+            return TimeInterval(record.value).formattedDuration()
+        case .highestElevation:
+            return record.value.formattedWithSeparator()
+        }
+    }
+
+    private func chartAxisValue(_ value: Double, for kind: ActivityPersonalRecord.Kind) -> String {
+        switch kind {
+        case .fastestPace:
+            let totalSeconds = Int(value)
+            let minutes = totalSeconds / 60
+            let seconds = totalSeconds % 60
+            return "\(minutes)'\(String(format: "%02d", seconds))\""
+        case .longestDistance:
+            return (value / 1000.0).formattedWithSeparator(fractionDigits: 1)
+        case .longestDuration:
+            return TimeInterval(value).formattedDuration()
+        default:
+            return value.formattedWithSeparator()
+        }
+    }
+
+    private func unitText(for record: ActivityPersonalRecord) -> String? {
+        switch record.kind {
+        case .strengthWeight: "kg"
+        case .fastestPace: "/km"
+        case .longestDistance: "km"
+        case .highestCalories: "kcal"
+        case .longestDuration: nil
+        case .highestElevation: "m"
+        }
+    }
+
+    private func contextText(for record: ActivityPersonalRecord) -> String? {
+        var parts: [String] = []
+        if let avg = record.heartRateAvg, avg > 0 {
+            parts.append("심박 \(Int(avg).formattedWithSeparator)")
+        }
+        if let steps = record.stepCount, steps > 0 {
+            parts.append("\(Int(steps).formattedWithSeparator)걸음")
+        }
+        if let temp = record.weatherTemperature, temp.isFinite {
+            parts.append("\(Int(temp).formattedWithSeparator)°")
+        }
+        if let isIndoor = record.isIndoor {
+            parts.append(isIndoor ? "실내" : "실외")
+        }
+        guard !parts.isEmpty else { return nil }
+        return parts.prefix(3).joined(separator: " · ")
     }
 }
