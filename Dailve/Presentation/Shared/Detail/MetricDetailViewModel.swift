@@ -282,11 +282,15 @@ final class MetricDetailViewModel {
 
             // Build stacked data for stage breakdown
             stackedData = current.map { day in
-                let segments: [StackedDataPoint.Segment] = [
+                var segments: [StackedDataPoint.Segment] = [
                     .init(category: "Deep", value: day.stageBreakdown[.deep] ?? 0),
                     .init(category: "Core", value: day.stageBreakdown[.core] ?? 0),
-                    .init(category: "REM", value: day.stageBreakdown[.rem] ?? 0),
                 ]
+                let unspecifiedMinutes = day.stageBreakdown[.unspecified] ?? 0
+                if unspecifiedMinutes > 0 {
+                    segments.append(.init(category: "Asleep", value: unspecifiedMinutes))
+                }
+                segments.append(.init(category: "REM", value: day.stageBreakdown[.rem] ?? 0))
                 return StackedDataPoint(
                     id: day.date.ISO8601Format(),
                     date: day.date,

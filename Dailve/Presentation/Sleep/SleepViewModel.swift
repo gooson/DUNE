@@ -10,6 +10,10 @@ final class SleepViewModel {
     var errorMessage: String?
     var latestSleepDate: Date?
 
+    // Cached outputs (rebuilt in loadData — not recomputed per render)
+    private(set) var cachedOutput = CalculateSleepScoreUseCase.Output(score: 0, totalMinutes: 0, efficiency: 0)
+    private(set) var stageBreakdown: [(stage: SleepStage.Stage, minutes: Double)] = []
+
     private let sleepService: SleepQuerying
     private let sleepScoreUseCase = CalculateSleepScoreUseCase()
 
@@ -17,28 +21,13 @@ final class SleepViewModel {
         self.sleepService = sleepService ?? SleepQueryService(manager: .shared)
     }
 
-    private var todayOutput: CalculateSleepScoreUseCase.Output {
-        sleepScoreUseCase.execute(input: .init(stages: todayStages))
-    }
-
-    var totalSleepMinutes: Double { todayOutput.totalMinutes }
-    var sleepEfficiency: Double { todayOutput.efficiency }
-    var sleepScore: Int { todayOutput.score }
+    var totalSleepMinutes: Double { cachedOutput.totalMinutes }
+    var sleepEfficiency: Double { cachedOutput.efficiency }
+    var sleepScore: Int { cachedOutput.score }
 
     var isShowingHistoricalData: Bool {
         guard let latestSleepDate else { return false }
         return !Calendar.current.isDateInToday(latestSleepDate)
-    }
-
-    var stageBreakdown: [(stage: SleepStage.Stage, minutes: Double)] {
-        let stages: [SleepStage.Stage] = [.deep, .core, .rem, .awake]
-        return stages.map { stage in
-            let minutes = todayStages
-                .filter { $0.stage == stage }
-                .map(\.duration)
-                .reduce(0, +) / 60.0
-            return (stage: stage, minutes: minutes)
-        }
     }
 
     func loadData() async {
@@ -62,6 +51,12 @@ final class SleepViewModel {
                 latestSleepDate = nil
             }
 
+            // Cache sleep score (single computation instead of 3× per render)
+            cachedOutput = sleepScoreUseCase.execute(input: .init(stages: todayStages))
+
+            // Cache stage breakdown (single-pass dictionary instead of 5×O(N) per render)
+            rebuildStageBreakdown()
+
             weeklyData = try await withThrowingTaskGroup(of: DailySleep?.self) { group in
                 for dayOffset in 0..<7 {
                     group.addTask { [sleepService] in
@@ -82,6 +77,20 @@ final class SleepViewModel {
             errorMessage = error.localizedDescription
         }
         isLoading = false
+    }
+
+    private func rebuildStageBreakdown() {
+        var totals: [SleepStage.Stage: Double] = [:]
+        for s in todayStages {
+            totals[s.stage, default: 0] += s.duration / 60.0
+        }
+        // Display unspecified as separate "Asleep" entry (consistent with score calculation)
+        var order: [SleepStage.Stage] = [.deep, .core]
+        if totals[.unspecified, default: 0] > 0 {
+            order.append(.unspecified)
+        }
+        order.append(contentsOf: [.rem, .awake])
+        stageBreakdown = order.map { (stage: $0, minutes: totals[$0, default: 0]) }
     }
 }
 

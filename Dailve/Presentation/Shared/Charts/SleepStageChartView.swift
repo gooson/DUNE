@@ -41,7 +41,7 @@ struct SleepStageChartView: View {
                     xEnd: .value("End", stage.endDate),
                     y: .value("Stage", stage.stage.label)
                 )
-                .foregroundStyle(stageColor(stage.stage))
+                .foregroundStyle(stage.stage.color)
                 .clipShape(RoundedRectangle(cornerRadius: 2))
             }
         }
@@ -131,7 +131,7 @@ struct SleepStageChartView: View {
             ForEach([SleepStage.Stage.deep, .core, .rem, .awake], id: \.rawValue) { stage in
                 HStack(spacing: DS.Spacing.xs) {
                     Circle()
-                        .fill(stageColor(stage))
+                        .fill(stage.color)
                         .frame(width: 8, height: 8)
                     Text(stage.label)
                         .font(.caption2)
@@ -143,23 +143,16 @@ struct SleepStageChartView: View {
 
     // MARK: - Helpers
 
-    private func stageColor(_ stage: SleepStage.Stage) -> Color {
-        switch stage {
-        case .deep: .indigo
-        case .core: .blue
-        case .rem: .cyan
-        case .awake: .orange
-        }
-    }
-
     private func segmentColor(_ category: String) -> Color {
-        switch category {
-        case "Deep": .indigo
-        case "Core": .blue
-        case "REM": .cyan
-        case "Awake": .orange
-        default: .gray
+        let stage: SleepStage.Stage? = switch category {
+        case "Deep": .deep
+        case "Core": .core
+        case "REM": .rem
+        case "Awake": .awake
+        case "Asleep": .unspecified
+        default: nil
         }
+        return stage?.color ?? .gray
     }
 
     private var barXUnit: Calendar.Component {

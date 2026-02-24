@@ -36,7 +36,7 @@ struct SleepQueryService: SleepQuerying, Sendable {
 
         let samples = try await manager.execute(descriptor)
 
-        // Deduplicate: prefer Apple Watch source over iPhone
+        // Deduplicate: prefer Apple Watch source over iPhone; same-source overlaps kept
         let deduped = deduplicateSamples(samples)
 
         return deduped.compactMap { sample in
@@ -63,7 +63,9 @@ struct SleepQueryService: SleepQuerying, Sendable {
             return .deep
         case .asleepREM:
             return .rem
-        case .inBed, .asleepUnspecified:
+        case .asleepUnspecified:
+            return .unspecified
+        case .inBed:
             return nil
         @unknown default:
             return nil
@@ -87,14 +89,54 @@ struct SleepQueryService: SleepQuerying, Sendable {
 
             if overlapIndices.isEmpty {
                 result.append(sample)
-            } else if isWatchSource(sample) {
-                // Replace overlapping non-Watch samples with Watch sample
-                for i in overlapIndices.sorted(by: >) where !isWatchSource(result[i]) {
+                continue
+            }
+
+            // Same source overlap: keep both unless unspecified duplicates specific stages
+            let sampleSource = sample.sourceRevision.source.bundleIdentifier
+            let allSameSource = overlapIndices.allSatisfy {
+                result[$0].sourceRevision.source.bundleIdentifier == sampleSource
+            }
+            if allSameSource {
+                // Skip broad unspecified when specific stages already cover the period
+                let category = HKCategoryValueSleepAnalysis(rawValue: sample.value)
+                if category == .asleepUnspecified {
+                    let hasSpecificOverlap = overlapIndices.contains { i in
+                        let existing = HKCategoryValueSleepAnalysis(rawValue: result[i].value)
+                        return existing != .asleepUnspecified && existing != .inBed
+                    }
+                    if hasSpecificOverlap { continue }
+                }
+                result.append(sample)
+                continue
+            }
+
+            // Cross-source overlap: prefer Watch over non-Watch
+            let sampleIsWatch = isWatchSource(sample)
+            let anyOverlapIsWatch = overlapIndices.contains { isWatchSource(result[$0]) }
+
+            if sampleIsWatch && !anyOverlapIsWatch {
+                // Watch replaces non-Watch
+                for i in overlapIndices.sorted(by: >) {
                     result.remove(at: i)
                 }
                 result.append(sample)
+            } else if !sampleIsWatch && anyOverlapIsWatch {
+                // Non-Watch overlaps Watch → skip
+                continue
+            } else {
+                // Same priority, different source: keep longer duration
+                let sampleDuration = sample.endDate.timeIntervalSince(sample.startDate)
+                let maxExistingDuration = overlapIndices.map {
+                    result[$0].endDate.timeIntervalSince(result[$0].startDate)
+                }.max() ?? 0
+                if sampleDuration > maxExistingDuration {
+                    for i in overlapIndices.sorted(by: >) {
+                        result.remove(at: i)
+                    }
+                    result.append(sample)
+                }
             }
-            // else: non-Watch sample overlaps existing → skip
         }
         return result
     }
@@ -173,7 +215,13 @@ struct SleepQueryService: SleepQuerying, Sendable {
     }
 
     private func isWatchSource(_ sample: HKSample) -> Bool {
+        // 1. Product type check: most reliable (e.g., "Watch6,18", "Watch7,1")
+        if let productType = sample.sourceRevision.productType,
+           productType.hasPrefix("Watch") {
+            return true
+        }
+        // 2. Bundle ID fallback (e.g., com.apple.NanoHealthApp)
         let bundleID = sample.sourceRevision.source.bundleIdentifier
-        return bundleID.contains("watch") || bundleID.contains("Watch")
+        return bundleID.localizedCaseInsensitiveContains("watch")
     }
 }

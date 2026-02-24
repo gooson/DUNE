@@ -295,3 +295,11 @@
 104. **`Dictionary(uniqueKeysWithValues:)` 사용 금지**: 날짜 기반 그룹핑에서 중복 키 가능성 항상 존재. `Dictionary(_:uniquingKeysWith: { _, last in last })` 필수 사용
 105. **Chart body 내 gradient/color allocation 금지**: constant color → `private enum Gradients { static let }`, dynamic color → `private var gradient` computed property로 호이스트. Chart closure는 데이터 포인트마다 실행되므로 allocation-free 원칙
 106. **iPad HStack layout은 섹션을 computed property로 추출**: `if isRegular { HStack { sectionA; sectionB } } else { sectionA; sectionB }` 패턴에서 섹션 중복 방지. `private var recoveryMapSection: some View { ... }` 패턴 사용
+
+### 2026-02-24: Sleep Dedup + Watch 소스 감지 교정
+
+107. **HealthKit Watch 소스 감지에 `bundleIdentifier` 단독 사용 금지**: Apple Watch 동기화 데이터는 `com.apple.health.{UUID}` 번들 ID 사용. `sourceRevision.productType.hasPrefix("Watch")`를 우선 체크
+108. **Sleep dedup에서 동일 소스 overlap은 유지**: 같은 소스의 다른 수면 단계가 전환기에 겹치는 것은 정상 동작. 삭제하면 수면 시간 과소 집계
+109. **동일 소스 `asleepUnspecified` + 구체적 stage overlap 시 unspecified skip**: 3rd-party 앱이 부모(unspecified)+자식(core/deep/rem) span을 겹쳐 쓸 때 과다 집계 방지
+110. **Display와 Score 계산의 stage 분류 일관성 필수**: 차트에서 `.unspecified`를 `.core`로 병합하면서 점수에서 `.core`로 안 세면 사용자 혼란. 동일 정책 적용 (#23 확장)
+111. **ViewModel computed property가 UseCase를 호출하면 캐싱 필수**: `todayOutput` 같은 UseCase 실행 결과를 3개 computed property가 각각 호출하면 렌더당 3회 실행. `loadData()`에서 1회 계산 후 stored property에 저장

@@ -46,15 +46,7 @@ struct SleepStage: Sendable {
         case core
         case deep
         case rem
-
-        var label: String {
-            switch self {
-            case .awake: "Awake"
-            case .core: "Core"
-            case .deep: "Deep"
-            case .rem: "REM"
-            }
-        }
+        case unspecified
     }
 }
 

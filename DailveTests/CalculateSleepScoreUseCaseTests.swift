@@ -74,4 +74,52 @@ struct CalculateSleepScoreUseCaseTests {
         // Should get durationScore of 30 (6h is in 6-10 range but not 7-9)
         #expect(output.totalMinutes == 360)
     }
+
+    @Test("Unspecified stage counts toward total sleep time")
+    func unspecifiedCountsTowardTotal() {
+        let now = Date()
+        let stages = [
+            SleepStage(stage: .core, duration: 180 * 60, startDate: now, endDate: now.addingTimeInterval(180 * 60)),
+            SleepStage(stage: .unspecified, duration: 120 * 60, startDate: now.addingTimeInterval(180 * 60), endDate: now.addingTimeInterval(300 * 60)),
+        ]
+        let output = sut.execute(input: .init(stages: stages))
+        // 3h core + 2h unspecified = 5h total
+        #expect(output.totalMinutes == 300)
+    }
+
+    @Test("Unspecified stage does not count as deep sleep in ratio")
+    func unspecifiedNotDeep() {
+        let now = Date()
+        // 6h core + 2h unspecified → deep ratio = 0
+        let stagesWithUnspecified = [
+            SleepStage(stage: .core, duration: 360 * 60, startDate: now, endDate: now.addingTimeInterval(360 * 60)),
+            SleepStage(stage: .unspecified, duration: 120 * 60, startDate: now.addingTimeInterval(360 * 60), endDate: now.addingTimeInterval(480 * 60)),
+        ]
+        // 6h core + 2h deep → deep ratio = 0.25 (ideal range)
+        let stagesWithDeep = [
+            SleepStage(stage: .core, duration: 360 * 60, startDate: now, endDate: now.addingTimeInterval(360 * 60)),
+            SleepStage(stage: .deep, duration: 120 * 60, startDate: now.addingTimeInterval(360 * 60), endDate: now.addingTimeInterval(480 * 60)),
+        ]
+        let outputUnspecified = sut.execute(input: .init(stages: stagesWithUnspecified))
+        let outputDeep = sut.execute(input: .init(stages: stagesWithDeep))
+        // Same total minutes
+        #expect(outputUnspecified.totalMinutes == outputDeep.totalMinutes)
+        // Deep version scores higher because 25% deep is in ideal range
+        #expect(outputDeep.score > outputUnspecified.score)
+    }
+
+    @Test("Mixed stages with unspecified produces correct efficiency")
+    func mixedWithUnspecifiedEfficiency() {
+        let now = Date()
+        let stages = [
+            SleepStage(stage: .deep, duration: 60 * 60, startDate: now, endDate: now.addingTimeInterval(60 * 60)),
+            SleepStage(stage: .unspecified, duration: 120 * 60, startDate: now.addingTimeInterval(60 * 60), endDate: now.addingTimeInterval(180 * 60)),
+            SleepStage(stage: .awake, duration: 30 * 60, startDate: now.addingTimeInterval(180 * 60), endDate: now.addingTimeInterval(210 * 60)),
+        ]
+        let output = sut.execute(input: .init(stages: stages))
+        // Sleep = deep(60m) + unspecified(120m) = 180m, awake = 30m, total = 210m
+        #expect(output.totalMinutes == 180)
+        // Efficiency = 180/210 * 100 ≈ 85.7%
+        #expect(output.efficiency > 85 && output.efficiency < 86)
+    }
 }

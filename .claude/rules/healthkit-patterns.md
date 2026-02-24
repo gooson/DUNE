@@ -32,8 +32,24 @@ try await withThrowingTaskGroup(of: Result.self) { group in
 - 결과 수집 후 정렬 필요 (TaskGroup은 완료 순서가 비결정적)
 - `Optional` 결과는 `of: Result?.self`로 선언, 수집 시 `if let` 필터
 
+## Watch 소스 감지
+
+`bundleIdentifier.contains("watch")` 단독 사용 금지. Apple Watch → iPhone 동기화 경로에서 `com.apple.health.{UUID}` 패턴 사용.
+
+```swift
+// GOOD: productType 우선 → bundleID fallback
+private func isWatchSource(_ sample: HKSample) -> Bool {
+    if let productType = sample.sourceRevision.productType,
+       productType.hasPrefix("Watch") { return true }
+    return sample.sourceRevision.source.bundleIdentifier
+        .localizedCaseInsensitiveContains("watch")
+}
+```
+
 ## Sleep 데이터 중복 제거
 
 - 정렬 후 sweep-line 방식 사용
-- Apple Watch 소스 우선 (`isWatchSource()`)
+- **동일 소스** overlap: 유지 (수면 단계 전환기의 겹침은 정상)
+- **동일 소스 unspecified** + 구체적 stage overlap: unspecified skip (과다 집계 방지)
+- **다른 소스** overlap: Watch 우선, 동일 우선순위면 더 긴 duration 유지
 - 시간 겹침 판정: `a.startDate < b.endDate && b.startDate < a.endDate`
