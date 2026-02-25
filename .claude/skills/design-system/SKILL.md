@@ -126,7 +126,8 @@ All Dynamic Type compatible (scales automatically).
 | `InlineCard` | `.ultraThinMaterial` | None | None | sm/md |
 | `SectionGroup` | `.thinMaterial` | None | None | md/lg |
 
-HeroCard accepts `tintColor` — applies `tintColor.opacity(0.08).gradient` overlay.
+HeroCard accepts `tintColor` — applies a warm gradient overlay
+(`Color.accentColor.opacity(0.10)` → `tintColor.opacity(0.08)`).
 
 ### Progress Ring (ProgressRingView.swift)
 
@@ -144,11 +145,12 @@ HeroCard accepts `tintColor` — applies `tintColor.opacity(0.08).gradient` over
 - `bottomFade` parameter: smooth gradient mask at bottom edge (0~1)
 - `TabWaveBackground`: reusable tab background combining wave + gradient
 - `WaveRefreshIndicator`: compact wave animation for loading states
-- Applied to: all 4 tab backgrounds (animated), EmptyStateView (static)
+- Applied to: 3 main tabs (Today/Activity/Wellness, animated),
+  Exercise screen (animated), EmptyStateView (static)
 
 ### Tab Background Pattern
 
-All 4 tabs use `TabWaveBackground` with their key color:
+All main tabs and the Exercise screen use `TabWaveBackground` with a key color:
 ```swift
 .background { TabWaveBackground(primaryColor: DS.Color.activity) }
 ```
@@ -157,8 +159,8 @@ All 4 tabs use `TabWaveBackground` with their key color:
 1. Wave overlay at top 200pt with `bottomFade: 0.4` (smooth fade-out)
 2. Linear gradient from `primaryColor.opacity(0.10)` to clear
 
-| Tab | Primary Color |
-|-----|---------------|
+| Screen | Primary Color |
+|--------|---------------|
 | Dashboard (Today) | `.accentColor` (amber) |
 | Activity | `DS.Color.activity` (warm emerald) |
 | Exercise | `DS.Color.activity` (warm emerald) |

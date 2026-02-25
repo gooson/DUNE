@@ -158,8 +158,7 @@ struct WellnessView: View {
             }
         }
         .waveRefreshable(
-            color: DS.Color.fitness,
-            hasContent: !viewModel.physicalCards.isEmpty || !viewModel.activeCards.isEmpty
+            color: DS.Color.fitness
         ) {
             await viewModel.performRefresh()
         }

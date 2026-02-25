@@ -199,8 +199,7 @@ struct ActivityView: View {
                 .interactiveDismissDisabled()
         }
         .waveRefreshable(
-            color: DS.Color.activity,
-            hasContent: !viewModel.weeklyExerciseMinutes.isEmpty
+            color: DS.Color.activity
         ) {
             await viewModel.loadActivityData()
         }

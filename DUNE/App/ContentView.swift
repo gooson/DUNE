@@ -5,8 +5,6 @@ struct ContentView: View {
 
     init(sharedHealthDataService: SharedHealthDataService? = nil) {
         self.sharedHealthDataService = sharedHealthDataService
-        // Hide system refresh spinner — replaced by WaveRefreshIndicator
-        UIRefreshControl.appearance().tintColor = .clear
     }
 
     var body: some View {

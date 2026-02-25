@@ -115,8 +115,7 @@ struct DashboardView: View {
             AllDataView(category: destination.category)
         }
         .waveRefreshable(
-            color: .accentColor,
-            hasContent: !viewModel.sortedMetrics.isEmpty
+            color: .accentColor
         ) {
             await viewModel.loadData()
         }

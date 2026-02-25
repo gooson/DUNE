@@ -57,7 +57,6 @@ struct WaveRefreshIndicator: View {
 /// Replaces the system spinner with `WaveRefreshIndicator`.
 struct WaveRefreshModifier: ViewModifier {
     let color: Color
-    let hasContent: Bool
     let action: @Sendable () async -> Void
 
     /// Minimum display time so the indicator doesn't flash too briefly.
@@ -77,7 +76,7 @@ struct WaveRefreshModifier: ViewModifier {
                 showIndicator = false
             }
             .overlay(alignment: .top) {
-                if showIndicator && hasContent {
+                if showIndicator {
                     WaveRefreshIndicator(color: color)
                         .padding(.top, DS.Spacing.sm)
                         .transition(.move(edge: .top).combined(with: .opacity))
@@ -91,12 +90,10 @@ extension View {
     /// Wave-branded pull-to-refresh.
     func waveRefreshable(
         color: Color = .accentColor,
-        hasContent: Bool = true,
         action: @escaping @Sendable () async -> Void
     ) -> some View {
         modifier(WaveRefreshModifier(
             color: color,
-            hasContent: hasContent,
             action: action
         ))
     }

@@ -188,8 +188,7 @@ struct ExerciseView: View {
             updateSuggestion()
         }
         .waveRefreshable(
-            color: DS.Color.activity,
-            hasContent: !viewModel.allExercises.isEmpty
+            color: DS.Color.activity
         ) {
             await viewModel.loadHealthKitWorkouts()
         }

@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 import Testing
 @testable import DUNE
 
@@ -42,15 +43,18 @@ struct WaveShapeTests {
         let rect = CGRect(x: 0, y: 0, width: 200, height: 100)
         let wave0 = WaveShape(amplitude: 0.1, frequency: 2, phase: 0, verticalOffset: 0.5)
         let waveHalfPi = WaveShape(amplitude: 0.1, frequency: 2, phase: .pi / 2, verticalOffset: 0.5)
-        let bounds0 = wave0.path(in: rect).boundingRect
-        let boundsHalfPi = waveHalfPi.path(in: rect).boundingRect
-        // Different phase should shift the wave vertically at different points
-        let sameBounds = bounds0.origin == boundsHalfPi.origin && bounds0.size == boundsHalfPi.size
-        // They MAY have similar bounding rects, but shouldn't be identical due to phase shift
-        // This is a soft check — the key thing is both paths are valid
-        #expect(!wave0.path(in: rect).isEmpty)
-        #expect(!waveHalfPi.path(in: rect).isEmpty)
-        _ = sameBounds // suppress unused warning
+        let path0 = wave0.path(in: rect)
+        let pathHalfPi = waveHalfPi.path(in: rect)
+        let start0 = firstWavePoint(from: path0)
+        let startHalfPi = firstWavePoint(from: pathHalfPi)
+
+        #expect(start0 != nil)
+        #expect(startHalfPi != nil)
+        if let start0, let startHalfPi {
+            // Both paths start at x=0; phase shift should move y significantly.
+            #expect(abs(start0.x - startHalfPi.x) < 0.001)
+            #expect(abs(start0.y - startHalfPi.y) > 0.1)
+        }
     }
 
     @Test("Zero amplitude produces flat wave")
@@ -69,5 +73,20 @@ struct WaveShapeTests {
         #expect(wave.animatableData == 1.5)
         wave.animatableData = 3.0
         #expect(wave.animatableData == 3.0)
+    }
+
+    private func firstWavePoint(from path: Path) -> CGPoint? {
+        var point: CGPoint?
+        path.cgPath.applyWithBlock { elementPtr in
+            guard point == nil else { return }
+            let element = elementPtr.pointee
+            switch element.type {
+            case .moveToPoint, .addLineToPoint:
+                point = element.points[0]
+            default:
+                break
+            }
+        }
+        return point
     }
 }
