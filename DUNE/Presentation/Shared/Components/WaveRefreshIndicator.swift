@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 /// Compact wave animation shown during pull-to-refresh loading.
 /// Uses a dedicated sine-curve path (not WaveShape) for a small pill-shaped indicator.
@@ -75,6 +76,11 @@ struct WaveRefreshModifier: ViewModifier {
                 }
                 showIndicator = false
             }
+            // Hide only this scroll view's system spinner to avoid overlap.
+            .background {
+                RefreshControlTintHider()
+                    .frame(width: 0, height: 0)
+            }
             .overlay(alignment: .top) {
                 if showIndicator {
                     WaveRefreshIndicator(color: color)
@@ -83,6 +89,60 @@ struct WaveRefreshModifier: ViewModifier {
                         .animation(DS.Animation.snappy, value: showIndicator)
                 }
             }
+    }
+}
+
+/// Finds the underlying ScrollView refresh control and hides its tint.
+private struct RefreshControlTintHider: UIViewRepresentable {
+    func makeUIView(context: Context) -> UIView {
+        let view = UIView(frame: .zero)
+        view.isUserInteractionEnabled = false
+        return view
+    }
+
+    func updateUIView(_ uiView: UIView, context: Context) {
+        context.coordinator.apply(to: uiView)
+    }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator()
+    }
+
+    final class Coordinator {
+        func apply(to view: UIView) {
+            if let refreshControl = Self.findRefreshControl(from: view) {
+                refreshControl.tintColor = .clear
+                return
+            }
+
+            DispatchQueue.main.async { [weak view] in
+                guard let view else { return }
+                if let refreshControl = Self.findRefreshControl(from: view) {
+                    refreshControl.tintColor = .clear
+                }
+            }
+        }
+
+        private static func findRefreshControl(from view: UIView) -> UIRefreshControl? {
+            guard let scrollView = view.enclosingScrollView else { return nil }
+            if let refreshControl = scrollView.refreshControl {
+                return refreshControl
+            }
+            return scrollView.subviews.first(where: { $0 is UIRefreshControl }) as? UIRefreshControl
+        }
+    }
+}
+
+private extension UIView {
+    var enclosingScrollView: UIScrollView? {
+        var current = superview
+        while let view = current {
+            if let scrollView = view as? UIScrollView {
+                return scrollView
+            }
+            current = view.superview
+        }
+        return nil
     }
 }
 
