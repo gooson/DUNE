@@ -316,3 +316,10 @@
 116. **Score 추가 시 `{Type}ScoreDetail` + `{Type}CalculationCard` 세트 구현**: 새 score 컴포넌트는 중간 계산값 노출 모델 + breakdown UI를 함께 만들어 디버깅 가능하게
 117. **분류 threshold는 Domain 단일 소스**: weight "stable/losing/gaining" 같은 분류 기준이 Domain과 Presentation에 중복되면 enum으로 Domain에서 산출 후 Presentation은 rawValue만 표시
 118. **Correction #80 적용 범위 한정**: `NSObject` 기반 formatter(`DateFormatter`, `NumberFormatter`)만 static 캐싱 대상. `String(format:)`은 value operation이므로 init pre-cache 불필요
+
+### 2026-02-26: App Icon + Launch Screen 통합 교정
+
+119. **xcassets 색상은 `Colors/` 하위에 배치**: root에 `.colorset` 생성 금지. `AccentColor` 포함 모든 named color는 `Assets.xcassets/Colors/`에 위치
+120. **light/dark 동일 색상은 universal만 유지**: dark appearance 항목이 universal과 동일 값이면 삭제. Xcode가 자동으로 universal을 dark에 적용
+121. **xcodegen 후 objectVersion/compatibilityVersion 후처리 필수**: xcodegen이 Xcode 16.3 포맷(objectVersion 90)을 미지원. 생성 후 `sed`로 교체. `xcodeVersion`(IDE 버전)과 `compatibilityVersion`(파일 포맷)은 별개 개념
+122. **UILaunchScreen 이미지 크기는 universal 단일 파일**: scale factor(@1x/@2x/@3x) 미지정 시 px = pt. 디바이스별 반응형 크기 조절 불가하므로 iPhone~iPad 공통 적정 크기(500px) 선택
