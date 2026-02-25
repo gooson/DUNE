@@ -560,6 +560,7 @@
 		7ACBCB122B69E6A13026B077 /* SubScoreTrendChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubScoreTrendChartView.swift; sourceTree = "<group>"; };
 		7AE76877ED74539AE86B9D55 /* ConditionExplainerSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionExplainerSection.swift; sourceTree = "<group>"; };
 		7AF2986240452D0307456866 /* ExerciseCategory+HealthKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExerciseCategory+HealthKit.swift"; sourceTree = "<group>"; };
+		7BAC66CDD1581BBA06A90F65 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		7C8E3D8D1BFA2E6513AD623B /* ExerciseCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ExerciseCategory.swift; path = Domain/Models/ExerciseCategory.swift; sourceTree = "<group>"; };
 		7C97D9F59BA6C144BD4E18CD /* HighlightBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightBuilder.swift; sourceTree = "<group>"; };
 		7EA71C1E5B8D72EC62710A19 /* VitalCardData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalCardData.swift; sourceTree = "<group>"; };
@@ -1436,6 +1437,7 @@
 			isa = PBXGroup;
 			children = (
 				33305E3A090F5E3AF3DFDD31 /* Assets.xcassets */,
+				7BAC66CDD1581BBA06A90F65 /* Info.plist */,
 			);
 			name = Resources;
 			path = ../DUNEWatch/Resources;
@@ -2294,6 +2296,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 4GWU9QB2JZ;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ../DUNEWatch/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = DUNE;
 				INFOPLIST_KEY_CFBundleIconName = AppIcon;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "DUNE needs access to your health data to track heart rate during workouts.";
@@ -2320,6 +2323,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 4GWU9QB2JZ;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ../DUNEWatch/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = DUNE;
 				INFOPLIST_KEY_CFBundleIconName = AppIcon;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "DUNE needs access to your health data to track heart rate during workouts.";
