@@ -7,11 +7,20 @@ protocol ConditionScoreCalculating: Sendable {
 struct CalculateConditionScoreUseCase: ConditionScoreCalculating, Sendable {
     let requiredDays = 7
 
+    /// Number of days to include in the condition score baseline window.
+    /// Callers should filter HRV samples to this window before passing to execute().
+    static let conditionWindowDays = 14
+
     private let baselineScore = 50.0
     private let zScoreMultiplier = 15.0
     private let minimumStdDev = 0.25
     private let rhrChangeThreshold = 2.0
     private let rhrPenaltyMultiplier = 2.0
+
+    /// Physiological RHR bounds (bpm) — values outside are ignored
+    private let rhrValidRange = 20.0...300.0
+    /// Physiological HRV bounds (ms) — daily averages outside are excluded
+    private let hrvValidRange = 0.0...500.0
 
     struct Input: Sendable {
         let hrvSamples: [HRVSample]
@@ -37,9 +46,9 @@ struct CalculateConditionScoreUseCase: ConditionScoreCalculating, Sendable {
             return Output(score: nil, baselineStatus: baselineStatus, contributions: [])
         }
 
-        // Guard against log(0) and invalid values
-        let validAverages = dailyAverages.filter { $0.value > 0 }
-        guard !validAverages.isEmpty, todayAverage.value > 0 else {
+        // Filter to valid physiological range (0–500ms) and positive values for log()
+        let validAverages = dailyAverages.filter { $0.value > 0 && hrvValidRange.contains($0.value) }
+        guard !validAverages.isEmpty, todayAverage.value > 0, hrvValidRange.contains(todayAverage.value) else {
             return Output(score: nil, baselineStatus: baselineStatus, contributions: [])
         }
 
@@ -67,6 +76,12 @@ struct CalculateConditionScoreUseCase: ConditionScoreCalculating, Sendable {
         // Build contributions with actual numbers
         var contributions: [ScoreContribution] = []
         let baselineHRV = exp(baseline)
+
+        // Guard against exp() overflow for display
+        guard !baselineHRV.isNaN && !baselineHRV.isInfinite else {
+            return Output(score: nil, baselineStatus: baselineStatus, contributions: [])
+        }
+
         let todayHRVms = todayAverage.value
 
         let hrvImpact: ScoreContribution.Impact
@@ -84,8 +99,10 @@ struct CalculateConditionScoreUseCase: ConditionScoreCalculating, Sendable {
         contributions.append(ScoreContribution(factor: .hrv, impact: hrvImpact, detail: hrvDetail))
 
         // RHR correction: rising RHR + falling HRV = stronger fatigue signal
+        // Only apply when both values are within physiological range (20–300 bpm)
         var rhrPenalty = 0.0
-        if let todayRHR = input.todayRHR, let yesterdayRHR = input.yesterdayRHR {
+        if let todayRHR = input.todayRHR, let yesterdayRHR = input.yesterdayRHR,
+           rhrValidRange.contains(todayRHR), rhrValidRange.contains(yesterdayRHR) {
             let rhrChange = todayRHR - yesterdayRHR
             if rhrChange > rhrChangeThreshold && zScore < 0 {
                 rhrPenalty = rhrChange * rhrPenaltyMultiplier

@@ -5,6 +5,30 @@ import SwiftUI
 struct ConditionCalculationCard: View {
     let detail: ConditionScoreDetail
 
+    // Pre-compute formatted strings to avoid allocation in body (Correction #80)
+    private let todayHRVText: String
+    private let baselineHRVText: String
+    private let zScoreText: String
+    private let stdDevText: String
+    private let stdDevSub: String
+    private let rhrPenaltyText: String
+    private let rawScoreText: String
+    private let dateText: String
+
+    init(detail: ConditionScoreDetail) {
+        self.detail = detail
+        self.todayHRVText = String(format: "%.1f ms", detail.todayHRV)
+        self.baselineHRVText = String(format: "%.1f ms", detail.baselineHRV)
+        self.zScoreText = String(format: "%+.2f", detail.zScore)
+        self.stdDevText = String(format: "%.3f", detail.stdDev)
+        self.stdDevSub = detail.stdDev < detail.effectiveStdDev
+            ? String(format: "→ floor %.2f", detail.effectiveStdDev)
+            : "natural"
+        self.rhrPenaltyText = String(format: "-%.1f", detail.rhrPenalty)
+        self.rawScoreText = String(format: "%.1f", detail.rawScore)
+        self.dateText = Self.formatDate(detail.todayDate)
+    }
+
     var body: some View {
         StandardCard {
             VStack(alignment: .leading, spacing: DS.Spacing.md) {
@@ -17,47 +41,21 @@ struct ConditionCalculationCard: View {
                 }
 
                 VStack(spacing: DS.Spacing.sm) {
-                    row(
-                        label: "Today HRV",
-                        value: String(format: "%.1f ms", detail.todayHRV),
-                        sub: formatDate(detail.todayDate)
-                    )
-                    row(
-                        label: "Baseline HRV",
-                        value: String(format: "%.1f ms", detail.baselineHRV),
-                        sub: "\(detail.daysInBaseline) days"
-                    )
+                    row(label: "Today HRV", value: todayHRVText, sub: dateText)
+                    row(label: "Baseline HRV", value: baselineHRVText, sub: "\(detail.daysInBaseline) days")
 
                     Divider()
 
-                    row(
-                        label: "Z-Score",
-                        value: String(format: "%+.2f", detail.zScore),
-                        sub: zScoreLabel(detail.zScore)
-                    )
-                    row(
-                        label: "StdDev (ln)",
-                        value: String(format: "%.3f", detail.stdDev),
-                        sub: detail.stdDev < detail.effectiveStdDev
-                            ? String(format: "→ floor %.2f", detail.effectiveStdDev)
-                            : "natural"
-                    )
+                    row(label: "Z-Score", value: zScoreText, sub: zScoreLabel(detail.zScore))
+                    row(label: "StdDev (ln)", value: stdDevText, sub: stdDevSub)
 
                     if detail.rhrPenalty > 0 {
-                        row(
-                            label: "RHR Penalty",
-                            value: String(format: "-%.1f", detail.rhrPenalty),
-                            sub: ""
-                        )
+                        row(label: "RHR Penalty", value: rhrPenaltyText, sub: "")
                     }
 
                     Divider()
 
-                    row(
-                        label: "Raw Score",
-                        value: String(format: "%.1f", detail.rawScore),
-                        sub: "clamped [0–100]"
-                    )
+                    row(label: "Raw Score", value: rawScoreText, sub: "clamped [0–100]")
                 }
             }
         }
@@ -97,12 +95,19 @@ struct ConditionCalculationCard: View {
         return "well below"
     }
 
-    private func formatDate(_ date: Date) -> String {
+    // Correction #80: DateFormatter cached as static let
+    private enum Cache {
+        static let shortDate: DateFormatter = {
+            let f = DateFormatter()
+            f.dateFormat = "M/d"
+            return f
+        }()
+    }
+
+    private static func formatDate(_ date: Date) -> String {
         let calendar = Calendar.current
         if calendar.isDateInToday(date) { return "today" }
         if calendar.isDateInYesterday(date) { return "yesterday" }
-        let formatter = DateFormatter()
-        formatter.dateFormat = "M/d"
-        return formatter.string(from: date)
+        return Cache.shortDate.string(from: date)
     }
 }

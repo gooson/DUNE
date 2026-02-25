@@ -221,7 +221,12 @@ actor SharedHealthDataServiceImpl: SharedHealthDataService {
         referenceDate: Date
     ) -> (score: ConditionScore?, baselineStatus: BaselineStatus?, recentScores: [ConditionScore]) {
         let calendar = Calendar.current
-        let conditionWindowStart = calendar.date(byAdding: .day, value: -14, to: referenceDate) ?? referenceDate
+        let startOfRef = calendar.startOfDay(for: referenceDate)
+        let conditionWindowStart = calendar.date(
+            byAdding: .day,
+            value: -CalculateConditionScoreUseCase.conditionWindowDays,
+            to: startOfRef
+        ) ?? startOfRef
         let conditionSamples = hrvSamples.filter { $0.date >= conditionWindowStart }
 
         // Only use actual today's RHR for condition change comparison.

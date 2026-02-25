@@ -265,8 +265,13 @@ final class DashboardViewModel {
         let (samples, todayRHR, yesterdayRHR, rhrCollection) = try await (
             samplesTask, todayRHRTask, yesterdayRHRTask, rhrCollectionTask
         )
-        // Filter to 14-day window for condition score (matches shared snapshot path)
-        let conditionWindowStart = calendar.date(byAdding: .day, value: -14, to: today) ?? today
+        // Filter to condition window (matches shared snapshot path)
+        let startOfToday = calendar.startOfDay(for: today)
+        let conditionWindowStart = calendar.date(
+            byAdding: .day,
+            value: -CalculateConditionScoreUseCase.conditionWindowDays,
+            to: startOfToday
+        ) ?? startOfToday
         let conditionSamples = samples.filter { $0.date >= conditionWindowStart }
 
         // Fallback RHR: if today is nil, use latest within 7 days for condition score
