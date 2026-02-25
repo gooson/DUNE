@@ -48,9 +48,9 @@ struct WellnessView: View {
         }
         .background {
             LinearGradient(
-                colors: [DS.Color.fitness.opacity(0.03), .clear],
+                colors: [DS.Color.fitness.opacity(0.10), Color.accentColor.opacity(0.06), .clear],
                 startPoint: .top,
-                endPoint: .center
+                endPoint: DS.Gradient.tabBackgroundEnd
             )
             .ignoresSafeArea()
         }

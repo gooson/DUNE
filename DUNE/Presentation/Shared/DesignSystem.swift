@@ -44,6 +44,16 @@ enum DS {
         // Surface
         static let cardBackground = SwiftUI.Color("CardBackground")
         static let surfacePrimary = SwiftUI.Color("SurfacePrimary")
+
+        // Warm glow (derived from AccentColor for icon-aligned highlights)
+        static let warmGlow = SwiftUI.Color.accentColor
+    }
+
+    // MARK: - Gradient
+
+    enum Gradient {
+        /// Tab background gradient fade-out point (slightly below center)
+        static let tabBackgroundEnd = UnitPoint(x: 0.5, y: 0.6)
     }
 
     // MARK: - Spacing (4pt grid)

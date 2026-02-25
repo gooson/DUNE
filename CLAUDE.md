@@ -327,3 +327,9 @@
 124. **Asset catalog `platform` 값은 반드시 소문자**: `"watchOS"` → `"watchos"`, `"iOS"` → `"ios"`. 대소문자 틀리면 Xcode가 "Unassigned" 처리 → `Assets.car`에 아이콘 미포함 → Archive validation "Missing Icons". 빌드는 성공하므로 발견이 늦음
 125. **watchOS AppIcon Contents.json 최종 포맷**: `"idiom": "universal"` + `"platform": "watchos"` + `"size": "1024x1024"` (scale 없음). 레거시 `"idiom": "watch"` + `"scale": "2x"` 금지
 126. **validation 에러는 Xcode asset catalog 에디터에서 "Unassigned" 먼저 확인**: 빌드 설정/Info.plist 수정보다 리소스 파일 자체를 먼저 검증. Archive 산출물에 `Assets.car` 존재 여부 확인이 확실한 진단법
+
+### 2026-02-26: Visual Overhaul — Warm Tone 전환 교정
+
+127. **다크 모드 배경 gradient opacity 최소 0.06**: 0.03 이하는 사실상 투명하여 디자인 의도가 전달되지 않음. 시각적 효과가 필요한 배경은 0.06~0.14 범위 사용
+128. **반복 UnitPoint/opacity는 DS 토큰으로 추출**: 3곳 이상 동일 `UnitPoint(x:y:)` 사용 시 `DS.Gradient.*` 상수로 추출. 매직넘버 제거 + 일괄 조정 가능
+129. **비주얼 변경은 v1(보수적) → v2(강화) 2단계 접근**: 먼저 안전한 값으로 커밋+확인 후 강도 조절. 한 번에 강하게 가면 롤백 범위가 넓어짐
