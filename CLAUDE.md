@@ -324,5 +324,6 @@
 121. **xcodegen 후 objectVersion/compatibilityVersion 후처리 필수**: xcodegen이 Xcode 16.3 포맷(objectVersion 90)을 미지원. 생성 후 `sed`로 교체. `xcodeVersion`(IDE 버전)과 `compatibilityVersion`(파일 포맷)은 별개 개념
 122. **UILaunchScreen 이미지 크기는 universal 단일 파일**: scale factor(@1x/@2x/@3x) 미지정 시 px = pt. 디바이스별 반응형 크기 조절 불가하므로 iPhone~iPad 공통 적정 크기(500px) 선택
 123. **watchOS 타겟에 `INFOPLIST_KEY_CFBundleIconName` 명시 필수**: `ASSETCATALOG_COMPILER_APPICON_NAME`만으로 부족. `GENERATE_INFOPLIST_FILE: true` 사용 시 watchOS validation은 `CFBundleIconName` Info.plist 키를 명시적으로 요구. iOS는 관대하지만 watchOS는 엄격
-124. **watchOS AppIcon Contents.json은 `"idiom": "universal"` 필수**: `"idiom": "watch"` + `"scale": "2x"`는 레거시 다중 사이즈 포맷으로 여러 아이콘을 요구함. 현대 watchOS(10+)는 `"idiom": "universal"` + scale 없음 + 단일 1024x1024. 빌드는 성공하지만 Archive validation에서 "Missing Icons" 발생
-125. **validation 에러는 빌드 설정보다 리소스 파일 먼저 검증**: "Missing Icons" 에러 시 Info.plist/빌드 설정 의심 전에 asset catalog Contents.json 포맷부터 확인. 클린 빌드로 캐시 탓하기 전에 리소스 자체가 올바른지 검증
+124. **Asset catalog `platform` 값은 반드시 소문자**: `"watchOS"` → `"watchos"`, `"iOS"` → `"ios"`. 대소문자 틀리면 Xcode가 "Unassigned" 처리 → `Assets.car`에 아이콘 미포함 → Archive validation "Missing Icons". 빌드는 성공하므로 발견이 늦음
+125. **watchOS AppIcon Contents.json 최종 포맷**: `"idiom": "universal"` + `"platform": "watchos"` + `"size": "1024x1024"` (scale 없음). 레거시 `"idiom": "watch"` + `"scale": "2x"` 금지
+126. **validation 에러는 Xcode asset catalog 에디터에서 "Unassigned" 먼저 확인**: 빌드 설정/Info.plist 수정보다 리소스 파일 자체를 먼저 검증. Archive 산출물에 `Assets.car` 존재 여부 확인이 확실한 진단법
