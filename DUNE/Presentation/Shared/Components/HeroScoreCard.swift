@@ -42,6 +42,12 @@ struct HeroScoreCard: View {
         static let ringLineWidthCompact: CGFloat = 12
         static let subScoreBarWidthRegular: CGFloat = 48
         static let subScoreBarWidthCompact: CGFloat = 36
+        // Correction #83 — static gradient for score text
+        static let scoreGradient = LinearGradient(
+            colors: [Color.accentColor, Color.accentColor.opacity(0.7)],
+            startPoint: .top,
+            endPoint: .bottom
+        )
     }
 
     private var ringSize: CGFloat { isRegular ? Layout.ringSizeRegular : Layout.ringSizeCompact }
@@ -98,12 +104,14 @@ struct HeroScoreCard: View {
                 progress: Double(score) / 100.0,
                 ringColor: statusColor,
                 lineWidth: ringLineWidth,
-                size: ringSize
+                size: ringSize,
+                useWarmGradient: true
             )
 
             VStack(spacing: 2) {
                 Text("\(animatedScore)")
                     .font(DS.Typography.heroScore)
+                    .foregroundStyle(Layout.scoreGradient)
                     .contentTransition(.numericText())
 
                 Text(scoreLabel)

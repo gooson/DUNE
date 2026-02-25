@@ -54,6 +54,15 @@ enum DS {
     enum Gradient {
         /// Tab background gradient fade-out point (slightly below center)
         static let tabBackgroundEnd = UnitPoint(x: 0.5, y: 0.6)
+
+        // Wave motif defaults
+        static let waveAmplitude: CGFloat = 0.03
+        static let waveFrequency: CGFloat = 2
+        static let waveVerticalOffset: CGFloat = 0.7
+
+        // Hero card ring gradient direction
+        static let heroRingStart = UnitPoint(x: 0, y: 0)
+        static let heroRingEnd = UnitPoint(x: 1, y: 1)
     }
 
     // MARK: - Spacing (4pt grid)
@@ -92,6 +101,8 @@ enum DS {
         static let slow = SwiftUI.Animation.spring(duration: 1.0, bounce: 0.1)
         /// Numeric value changes (score counters)
         static let numeric = SwiftUI.Animation.easeOut(duration: 0.6)
+        /// Subtle wave drift (background decoration)
+        static let waveDrift = SwiftUI.Animation.linear(duration: 6).repeatForever(autoreverses: false)
     }
 
     // MARK: - Typography (Dynamic Type compatible)

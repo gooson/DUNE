@@ -19,7 +19,16 @@ struct HeroCard<Content: View>: View {
                     .fill(.ultraThinMaterial)
                     .overlay(
                         RoundedRectangle(cornerRadius: cornerRadius)
-                            .fill(tintColor.opacity(0.08).gradient)
+                            .fill(
+                                LinearGradient(
+                                    colors: [
+                                        SwiftUI.Color.accentColor.opacity(0.10),
+                                        tintColor.opacity(0.08)
+                                    ],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                            )
                     )
                     // Warm accent border — top-leading highlight fades to subtle bottom-trailing
                     .overlay(

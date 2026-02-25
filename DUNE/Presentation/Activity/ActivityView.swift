@@ -123,14 +123,7 @@ struct ActivityView: View {
             }
             .padding()
         }
-        .background {
-            LinearGradient(
-                colors: [DS.Color.activity.opacity(0.10), Color.accentColor.opacity(0.06), .clear],
-                startPoint: .top,
-                endPoint: DS.Gradient.tabBackgroundEnd
-            )
-            .ignoresSafeArea()
-        }
+        .background { TabWaveBackground(primaryColor: DS.Color.activity) }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button {
@@ -205,7 +198,9 @@ struct ActivityView: View {
             ExerciseStartView(exercise: exercise)
                 .interactiveDismissDisabled()
         }
-        .refreshable {
+        .waveRefreshable(
+            color: DS.Color.activity
+        ) {
             await viewModel.loadActivityData()
         }
         // Correction #78: consolidate .task + .onChange → .task(id:)
