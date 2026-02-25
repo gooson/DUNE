@@ -303,3 +303,9 @@
 109. **동일 소스 `asleepUnspecified` + 구체적 stage overlap 시 unspecified skip**: 3rd-party 앱이 부모(unspecified)+자식(core/deep/rem) span을 겹쳐 쓸 때 과다 집계 방지
 110. **Display와 Score 계산의 stage 분류 일관성 필수**: 차트에서 `.unspecified`를 `.core`로 병합하면서 점수에서 `.core`로 안 세면 사용자 혼란. 동일 정책 적용 (#23 확장)
 111. **ViewModel computed property가 UseCase를 호출하면 캐싱 필수**: `todayOutput` 같은 UseCase 실행 결과를 3개 computed property가 각각 호출하면 렌더당 3회 실행. `loadData()`에서 1회 계산 후 stored property에 저장
+
+### 2026-02-25: Condition Score 0점 수정 교정
+
+112. **RHR fallback을 condition input의 "today" 파라미터로 전달 금지**: `todayRHR ?? latestRHR?.value` 패턴은 비인접일 비교를 유발하여 거짓 패널티 발생. `todayRHR`이 nil이면 RHR 보정을 스킵하는 것이 올바른 동작
+113. **z-score 기반 점수 알고리즘에 ConditionScoreDetail 패턴 적용**: 중간 계산값(todayHRV, baselineHRV, zScore, stdDev, rawScore)을 Domain 모델에 포함하여 UI에서 디버깅 가능하게. 점수가 비정상일 때 원인 추적 가능
+114. **통계 파라미터(minimumStdDev, zScoreMultiplier) 변경 시 실데이터 시나리오 검증**: 야간 미착용(주간 전용 HRV), 운동 직후, 컨디션 저하 등 3개 이상 시나리오에서 산출 점수가 0-100 범위 내 합리적 분포인지 확인
