@@ -93,6 +93,7 @@ struct WaveRefreshModifier: ViewModifier {
 }
 
 /// Finds the underlying ScrollView refresh control and hides its tint.
+@MainActor
 private struct RefreshControlTintHider: UIViewRepresentable {
     func makeUIView(context: Context) -> UIView {
         let view = UIView(frame: .zero)
@@ -101,38 +102,21 @@ private struct RefreshControlTintHider: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: UIView, context: Context) {
-        context.coordinator.apply(to: uiView)
+        if let refreshControl = findRefreshControl(from: uiView) {
+            refreshControl.tintColor = .clear
+        }
     }
 
-    func makeCoordinator() -> Coordinator {
-        Coordinator()
-    }
-
-    final class Coordinator {
-        func apply(to view: UIView) {
-            if let refreshControl = Self.findRefreshControl(from: view) {
-                refreshControl.tintColor = .clear
-                return
-            }
-
-            DispatchQueue.main.async { [weak view] in
-                guard let view else { return }
-                if let refreshControl = Self.findRefreshControl(from: view) {
-                    refreshControl.tintColor = .clear
-                }
-            }
+    private func findRefreshControl(from view: UIView) -> UIRefreshControl? {
+        guard let scrollView = view.enclosingScrollView else { return nil }
+        if let refreshControl = scrollView.refreshControl {
+            return refreshControl
         }
-
-        private static func findRefreshControl(from view: UIView) -> UIRefreshControl? {
-            guard let scrollView = view.enclosingScrollView else { return nil }
-            if let refreshControl = scrollView.refreshControl {
-                return refreshControl
-            }
-            return scrollView.subviews.first(where: { $0 is UIRefreshControl }) as? UIRefreshControl
-        }
+        return scrollView.subviews.first(where: { $0 is UIRefreshControl }) as? UIRefreshControl
     }
 }
 
+@MainActor
 private extension UIView {
     var enclosingScrollView: UIScrollView? {
         var current = superview
