@@ -46,6 +46,11 @@ fi
 if [[ "$REGENERATE" -eq 1 || ! -d "$PROJECT_FILE" ]]; then
     echo "Generating Xcode project from $PROJECT_SPEC..."
     xcodegen generate --spec "$PROJECT_SPEC" >/tmp/dune-xcodegen.log 2>&1
+
+    # Post-process: xcodegen doesn't support Xcode 16.3 format (objectVersion 90)
+    PBXPROJ="$PROJECT_FILE/project.pbxproj"
+    sed -i '' 's/objectVersion = 77;/objectVersion = 90;/' "$PBXPROJ"
+    sed -i '' 's/compatibilityVersion = "Xcode 14.0";/compatibilityVersion = "Xcode 16.3";/' "$PBXPROJ"
 fi
 
 echo "Building scheme '$SCHEME' for destination '$DESTINATION'..."
