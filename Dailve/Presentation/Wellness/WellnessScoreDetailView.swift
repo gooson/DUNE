@@ -4,6 +4,7 @@ import SwiftUI
 struct WellnessScoreDetailView: View {
     let wellnessScore: WellnessScore
     let conditionScore: ConditionScore?
+    let bodyScoreDetail: BodyScoreDetail?
     let sleepDailyData: [SleepDailySample]
     let hrvDailyData: [DailySample]
     let rhrDailyData: [DailySample]
@@ -43,6 +44,10 @@ struct WellnessScoreDetailView: View {
 
                 if let detail = conditionScore?.detail {
                     ConditionCalculationCard(detail: detail)
+                }
+
+                if let bodyDetail = bodyScoreDetail {
+                    BodyCalculationCard(detail: bodyDetail)
                 }
 
                 explainerCard

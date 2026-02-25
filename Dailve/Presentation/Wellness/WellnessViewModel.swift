@@ -19,6 +19,7 @@ final class WellnessViewModel {
     var sleepScore: Int?
     var conditionScore: Int?
     var bodyScore: Int?
+    var bodyScoreDetail: BodyScoreDetail?
 
     // Full condition score for detail navigation
     var conditionScoreFull: ConditionScore?
@@ -342,6 +343,7 @@ final class WellnessViewModel {
         // --- Body Trend for Wellness Score ---
         let bodyTrend = buildBodyTrend(results: results)
         bodyScore = bodyTrend?.score
+        bodyScoreDetail = bodyTrend?.detail
 
         // --- Compute Wellness Score ---
         wellnessScore = wellnessScoreUseCase.execute(input: .init(

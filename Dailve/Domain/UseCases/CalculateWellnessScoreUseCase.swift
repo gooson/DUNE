@@ -23,18 +23,23 @@ struct CalculateWellnessScoreUseCase: WellnessScoreCalculating, Sendable {
 
         /// Convert body trend into a 0-100 score.
         /// Stable or improving trends score higher.
-        var score: Int {
-            var points = 50.0 // neutral baseline
+        var score: Int { detail.finalScore }
+
+        /// Detailed breakdown of the body score calculation.
+        var detail: BodyScoreDetail {
+            let baseline = 50.0
+            var weightPts = 0.0
+            var bodyFatPts = 0.0
 
             // Weight stability/loss is generally positive for fitness users
             if let wc = weightChange {
                 let absChange = abs(wc)
                 if absChange < 0.5 {
-                    points += 25 // stable weight
+                    weightPts = 25 // stable weight
                 } else if wc < 0 {
-                    points += 15 // losing weight (generally positive)
+                    weightPts = 15 // losing weight (generally positive)
                 } else {
-                    points -= min(15, absChange * 5) // gaining weight
+                    weightPts = -min(15, absChange * 5) // gaining weight
                 }
             }
 
@@ -42,15 +47,25 @@ struct CalculateWellnessScoreUseCase: WellnessScoreCalculating, Sendable {
             if let bfc = bodyFatChange {
                 let absChange = abs(bfc)
                 if absChange < 0.3 {
-                    points += 25 // stable body fat
+                    bodyFatPts = 25 // stable body fat
                 } else if bfc < 0 {
-                    points += 25 // losing body fat
+                    bodyFatPts = 25 // losing body fat
                 } else {
-                    points -= min(25, absChange * 10) // gaining body fat
+                    bodyFatPts = -min(25, absChange * 10) // gaining body fat
                 }
             }
 
-            return Int(max(0, min(100, points)).rounded())
+            let raw = baseline + weightPts + bodyFatPts
+            let clamped = Int(max(0, min(100, raw)).rounded())
+
+            return BodyScoreDetail(
+                weightChange: weightChange,
+                bodyFatChange: bodyFatChange,
+                weightPoints: weightPts,
+                bodyFatPoints: bodyFatPts,
+                baselinePoints: baseline,
+                finalScore: clamped
+            )
         }
     }
 
