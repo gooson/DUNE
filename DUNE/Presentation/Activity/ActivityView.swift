@@ -127,7 +127,7 @@ struct ActivityView: View {
             LinearGradient(
                 colors: [DS.Color.activity.opacity(0.10), Color.accentColor.opacity(0.06), .clear],
                 startPoint: .top,
-                endPoint: UnitPoint(x: 0.5, y: 0.6)
+                endPoint: DS.Gradient.tabBackgroundEnd
             )
             .ignoresSafeArea()
         }

@@ -21,6 +21,7 @@ struct HeroCard<Content: View>: View {
                         RoundedRectangle(cornerRadius: cornerRadius)
                             .fill(tintColor.opacity(0.08).gradient)
                     )
+                    // Warm accent border — top-leading highlight fades to subtle bottom-trailing
                     .overlay(
                         RoundedRectangle(cornerRadius: cornerRadius)
                             .strokeBorder(
