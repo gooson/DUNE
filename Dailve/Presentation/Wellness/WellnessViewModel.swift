@@ -605,7 +605,7 @@ final class WellnessViewModel {
             group.addTask {
                 guard !Task.isCancelled else { return (.weightHistory, .empty) }
                 do {
-                    let history = try await bodyService.fetchWeight(days: 7)
+                    let history = try await bodyService.fetchWeight(days: 14)
                     return (.weightHistory, .weightHistoryResult(history))
                 } catch {
                     print("[Wellness] weightHistory fetch failed: \(error)")
