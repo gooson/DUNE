@@ -26,13 +26,13 @@ struct HeroCard<Content: View>: View {
                             .strokeBorder(
                                 LinearGradient(
                                     colors: [
-                                        SwiftUI.Color.accentColor.opacity(0.15),
-                                        SwiftUI.Color.accentColor.opacity(0.03)
+                                        SwiftUI.Color.accentColor.opacity(0.30),
+                                        SwiftUI.Color.accentColor.opacity(0.06)
                                     ],
                                     startPoint: .topLeading,
                                     endPoint: .bottomTrailing
                                 ),
-                                lineWidth: 0.5
+                                lineWidth: 1
                             )
                     )
             }
@@ -62,16 +62,16 @@ struct StandardCard<Content: View>: View {
                         RoundedRectangle(cornerRadius: cornerRadius)
                             .strokeBorder(
                                 SwiftUI.Color.accentColor.opacity(
-                                    colorScheme == .dark ? 0.08 : 0.0
+                                    colorScheme == .dark ? 0.15 : 0.0
                                 ),
                                 lineWidth: 0.5
                             )
                     )
                     .shadow(
                         color: colorScheme == .dark
-                            ? SwiftUI.Color.accentColor.opacity(0.04)
+                            ? SwiftUI.Color.accentColor.opacity(0.08)
                             : .black.opacity(0.06),
-                        radius: 8,
+                        radius: 10,
                         y: 2
                     )
             }

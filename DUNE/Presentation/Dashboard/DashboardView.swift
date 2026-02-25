@@ -106,9 +106,9 @@ struct DashboardView: View {
         }
         .background {
             LinearGradient(
-                colors: [Color.accentColor.opacity(0.07), DS.Color.hrv.opacity(0.03), .clear],
+                colors: [Color.accentColor.opacity(0.14), DS.Color.hrv.opacity(0.06), .clear],
                 startPoint: .top,
-                endPoint: UnitPoint(x: 0.5, y: 0.5)
+                endPoint: UnitPoint(x: 0.5, y: 0.6)
             )
             .ignoresSafeArea()
         }
