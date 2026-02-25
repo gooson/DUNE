@@ -36,6 +36,11 @@ struct ConditionScoreDetailView: View {
                     if !score.contributions.isEmpty {
                         ScoreContributorsView(contributions: score.contributions)
                     }
+
+                }
+
+                if let detail = score.detail {
+                    ConditionCalculationCard(detail: detail)
                 }
 
                 // Period picker

@@ -265,7 +265,9 @@ final class DashboardViewModel {
         let (samples, todayRHR, yesterdayRHR, rhrCollection) = try await (
             samplesTask, todayRHRTask, yesterdayRHRTask, rhrCollectionTask
         )
-        let recentSamples = Array(samples.prefix(7))
+        // Filter to 14-day window for condition score (matches shared snapshot path)
+        let conditionWindowStart = calendar.date(byAdding: .day, value: -14, to: today) ?? today
+        let conditionSamples = samples.filter { $0.date >= conditionWindowStart }
 
         // Fallback RHR: if today is nil, use latest within 7 days for condition score
         let effectiveRHR: Double?
@@ -285,17 +287,19 @@ final class DashboardViewModel {
             rhrIsHistorical = false
         }
 
+        // Only use actual today's RHR for condition change comparison.
+        // Historical RHR fallback would compare non-adjacent days (Correction #24)
         let input = CalculateConditionScoreUseCase.Input(
-            hrvSamples: recentSamples,
-            todayRHR: effectiveRHR,
+            hrvSamples: conditionSamples,
+            todayRHR: todayRHR,
             yesterdayRHR: yesterdayRHR
         )
         let output = scoreUseCase.execute(input: input)
         conditionScore = output.score
         baselineStatus = output.baselineStatus
 
-        // Build 7-day score history
-        recentScores = buildRecentScores(from: recentSamples)
+        // Build 7-day score history (use full samples for historical range)
+        recentScores = buildRecentScores(from: samples)
 
         var metrics: [HealthMetric] = []
 

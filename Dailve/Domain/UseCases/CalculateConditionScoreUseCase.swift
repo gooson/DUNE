@@ -8,8 +8,8 @@ struct CalculateConditionScoreUseCase: ConditionScoreCalculating, Sendable {
     let requiredDays = 7
 
     private let baselineScore = 50.0
-    private let zScoreMultiplier = 25.0
-    private let minimumStdDev = 0.05
+    private let zScoreMultiplier = 15.0
+    private let minimumStdDev = 0.25
     private let rhrChangeThreshold = 2.0
     private let rhrPenaltyMultiplier = 2.0
 
@@ -64,51 +64,67 @@ struct CalculateConditionScoreUseCase: ConditionScoreCalculating, Sendable {
         }
         var rawScore = baselineScore + (zScore * zScoreMultiplier)
 
-        // Build contributions
+        // Build contributions with actual numbers
         var contributions: [ScoreContribution] = []
+        let baselineHRV = exp(baseline)
+        let todayHRVms = todayAverage.value
 
-        // HRV contribution based on z-score
         let hrvImpact: ScoreContribution.Impact
         let hrvDetail: String
         if zScore > 0.5 {
             hrvImpact = .positive
-            hrvDetail = "Above baseline"
+            hrvDetail = String(format: "%.0fms — above %.0fms avg", todayHRVms, baselineHRV)
         } else if zScore < -0.5 {
             hrvImpact = .negative
-            hrvDetail = "Below baseline"
+            hrvDetail = String(format: "%.0fms — below %.0fms avg", todayHRVms, baselineHRV)
         } else {
             hrvImpact = .neutral
-            hrvDetail = "Within normal range"
+            hrvDetail = String(format: "%.0fms — near %.0fms avg", todayHRVms, baselineHRV)
         }
         contributions.append(ScoreContribution(factor: .hrv, impact: hrvImpact, detail: hrvDetail))
 
         // RHR correction: rising RHR + falling HRV = stronger fatigue signal
+        var rhrPenalty = 0.0
         if let todayRHR = input.todayRHR, let yesterdayRHR = input.yesterdayRHR {
             let rhrChange = todayRHR - yesterdayRHR
             if rhrChange > rhrChangeThreshold && zScore < 0 {
-                rawScore -= rhrChange * rhrPenaltyMultiplier
+                rhrPenalty = rhrChange * rhrPenaltyMultiplier
+                rawScore -= rhrPenalty
             } else if rhrChange < -rhrChangeThreshold && zScore > 0 {
                 rawScore += abs(rhrChange)
             }
 
-            // RHR contribution based on change
             let rhrImpact: ScoreContribution.Impact
             let rhrDetail: String
+            let changeSign = rhrChange >= 0 ? "+" : ""
             if rhrChange < -rhrChangeThreshold {
                 rhrImpact = .positive
-                rhrDetail = "Decreased from yesterday"
+                rhrDetail = String(format: "%.0f → %.0f bpm (%@%.0f)", yesterdayRHR, todayRHR, changeSign, rhrChange)
             } else if rhrChange > rhrChangeThreshold {
                 rhrImpact = .negative
-                rhrDetail = "Increased from yesterday"
+                rhrDetail = String(format: "%.0f → %.0f bpm (%@%.0f)", yesterdayRHR, todayRHR, changeSign, rhrChange)
             } else {
                 rhrImpact = .neutral
-                rhrDetail = "Stable"
+                rhrDetail = String(format: "%.0f bpm (stable)", todayRHR)
             }
             contributions.append(ScoreContribution(factor: .rhr, impact: rhrImpact, detail: rhrDetail))
         }
 
         let clampedScore = Int(max(0, min(100, rawScore)).rounded())
-        let score = ConditionScore(score: clampedScore, date: Date(), contributions: contributions)
+
+        let detail = ConditionScoreDetail(
+            todayHRV: todayHRVms,
+            baselineHRV: baselineHRV,
+            zScore: zScore,
+            stdDev: stdDev,
+            effectiveStdDev: normalRange,
+            daysInBaseline: validAverages.count,
+            todayDate: todayAverage.date,
+            rawScore: rawScore,
+            rhrPenalty: rhrPenalty
+        )
+
+        let score = ConditionScore(score: clampedScore, date: Date(), contributions: contributions, detail: detail)
 
         return Output(score: score, baselineStatus: baselineStatus, contributions: contributions)
     }

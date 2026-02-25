@@ -5,15 +5,17 @@ struct ConditionScore: Sendable, Hashable {
     let status: Status
     let date: Date
     let contributions: [ScoreContribution]
+    let detail: ConditionScoreDetail?
 
     static func == (lhs: ConditionScore, rhs: ConditionScore) -> Bool {
-        lhs.score == rhs.score && lhs.date == rhs.date && lhs.contributions == rhs.contributions
+        lhs.score == rhs.score && lhs.date == rhs.date && lhs.contributions == rhs.contributions && lhs.detail == rhs.detail
     }
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(score)
         hasher.combine(date)
         hasher.combine(contributions)
+        hasher.combine(detail)
     }
 
     enum Status: String, Sendable, CaseIterable {
@@ -54,10 +56,11 @@ struct ConditionScore: Sendable, Hashable {
         }
     }
 
-    init(score: Int, date: Date = Date(), contributions: [ScoreContribution] = []) {
+    init(score: Int, date: Date = Date(), contributions: [ScoreContribution] = [], detail: ConditionScoreDetail? = nil) {
         self.score = max(0, min(100, score))
         self.date = date
         self.contributions = contributions
+        self.detail = detail
         switch self.score {
         case 80...100: self.status = .excellent
         case 60...79: self.status = .good
@@ -66,6 +69,29 @@ struct ConditionScore: Sendable, Hashable {
         default: self.status = .warning
         }
     }
+}
+
+// MARK: - Condition Score Computation Detail
+
+struct ConditionScoreDetail: Sendable, Hashable {
+    /// Today's daily average HRV in ms
+    let todayHRV: Double
+    /// Baseline average HRV in ms (exp of ln-mean)
+    let baselineHRV: Double
+    /// Z-score: (todayLn - baselineLn) / effectiveStdDev
+    let zScore: Double
+    /// Actual standard deviation in ln-space
+    let stdDev: Double
+    /// Effective std dev used: max(stdDev, minimumStdDev)
+    let effectiveStdDev: Double
+    /// Number of daily averages in baseline
+    let daysInBaseline: Int
+    /// Date of the "today" average (most recent day with data)
+    let todayDate: Date
+    /// Raw score before clamping to [0, 100]
+    let rawScore: Double
+    /// RHR penalty applied (0 if none)
+    let rhrPenalty: Double
 }
 
 struct BaselineStatus: Sendable {

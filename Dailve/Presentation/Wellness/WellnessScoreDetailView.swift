@@ -41,6 +41,10 @@ struct WellnessScoreDetailView: View {
                     contributorsCard(conditionScore.contributions)
                 }
 
+                if let detail = conditionScore?.detail {
+                    ConditionCalculationCard(detail: detail)
+                }
+
                 explainerCard
             }
             .padding()
@@ -225,6 +229,8 @@ struct WellnessScoreDetailView: View {
             ScoreContributorsView(contributions: contributions)
         }
     }
+
+    // MARK: - Explainer
 
     private var explainerCard: some View {
         StandardCard {

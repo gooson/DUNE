@@ -220,18 +220,21 @@ actor SharedHealthDataServiceImpl: SharedHealthDataService {
         latestRHR: (value: Double, date: Date)?,
         referenceDate: Date
     ) -> (score: ConditionScore?, baselineStatus: BaselineStatus?, recentScores: [ConditionScore]) {
-        let recentSamples = Array(hrvSamples.prefix(7))
-        let effectiveRHR = todayRHR ?? latestRHR?.value
+        let calendar = Calendar.current
+        let conditionWindowStart = calendar.date(byAdding: .day, value: -14, to: referenceDate) ?? referenceDate
+        let conditionSamples = hrvSamples.filter { $0.date >= conditionWindowStart }
 
+        // Only use actual today's RHR for condition change comparison.
+        // Historical RHR fallback would compare non-adjacent days (Correction #24)
         let output = conditionScoreUseCase.execute(
             input: .init(
-                hrvSamples: recentSamples,
-                todayRHR: effectiveRHR,
+                hrvSamples: conditionSamples,
+                todayRHR: todayRHR,
                 yesterdayRHR: yesterdayRHR
             )
         )
 
-        let recentScores = buildRecentScores(from: recentSamples, referenceDate: referenceDate)
+        let recentScores = buildRecentScores(from: hrvSamples, referenceDate: referenceDate)
 
         return (score: output.score, baselineStatus: output.baselineStatus, recentScores: recentScores)
     }
