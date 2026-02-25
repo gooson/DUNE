@@ -309,3 +309,10 @@
 112. **RHR fallback을 condition input의 "today" 파라미터로 전달 금지**: `todayRHR ?? latestRHR?.value` 패턴은 비인접일 비교를 유발하여 거짓 패널티 발생. `todayRHR`이 nil이면 RHR 보정을 스킵하는 것이 올바른 동작
 113. **z-score 기반 점수 알고리즘에 ConditionScoreDetail 패턴 적용**: 중간 계산값(todayHRV, baselineHRV, zScore, stdDev, rawScore)을 Domain 모델에 포함하여 UI에서 디버깅 가능하게. 점수가 비정상일 때 원인 추적 가능
 114. **통계 파라미터(minimumStdDev, zScoreMultiplier) 변경 시 실데이터 시나리오 검증**: 야간 미착용(주간 전용 HRV), 운동 직후, 컨디션 저하 등 3개 이상 시나리오에서 산출 점수가 0-100 범위 내 합리적 분포인지 확인
+
+### 2026-02-25: Body Score "--" 수정 + Calculation Card 교정
+
+115. **Fetch window는 필터 threshold의 2배 이상**: `dateComponents([.day]) >= N` 필터 사용 시 fetch range는 최소 `2N일`. `dateComponents`의 시간 truncation으로 "7일 전"이 `.day = 5`로 계산될 수 있음
+116. **Score 추가 시 `{Type}ScoreDetail` + `{Type}CalculationCard` 세트 구현**: 새 score 컴포넌트는 중간 계산값 노출 모델 + breakdown UI를 함께 만들어 디버깅 가능하게
+117. **분류 threshold는 Domain 단일 소스**: weight "stable/losing/gaining" 같은 분류 기준이 Domain과 Presentation에 중복되면 enum으로 Domain에서 산출 후 Presentation은 rawValue만 표시
+118. **Correction #80 적용 범위 한정**: `NSObject` 기반 formatter(`DateFormatter`, `NumberFormatter`)만 static 캐싱 대상. `String(format:)`은 value operation이므로 init pre-cache 불필요
