@@ -21,6 +21,20 @@ struct HeroCard<Content: View>: View {
                         RoundedRectangle(cornerRadius: cornerRadius)
                             .fill(tintColor.opacity(0.08).gradient)
                     )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: cornerRadius)
+                            .strokeBorder(
+                                LinearGradient(
+                                    colors: [
+                                        SwiftUI.Color.accentColor.opacity(0.15),
+                                        SwiftUI.Color.accentColor.opacity(0.03)
+                                    ],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                ),
+                                lineWidth: 0.5
+                            )
+                    )
             }
     }
 }
@@ -44,9 +58,18 @@ struct StandardCard<Content: View>: View {
             .background {
                 RoundedRectangle(cornerRadius: cornerRadius)
                     .fill(.thinMaterial)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: cornerRadius)
+                            .strokeBorder(
+                                SwiftUI.Color.accentColor.opacity(
+                                    colorScheme == .dark ? 0.08 : 0.0
+                                ),
+                                lineWidth: 0.5
+                            )
+                    )
                     .shadow(
                         color: colorScheme == .dark
-                            ? .white.opacity(0.03)
+                            ? SwiftUI.Color.accentColor.opacity(0.04)
                             : .black.opacity(0.06),
                         radius: 8,
                         y: 2

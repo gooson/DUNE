@@ -44,6 +44,9 @@ enum DS {
         // Surface
         static let cardBackground = SwiftUI.Color("CardBackground")
         static let surfacePrimary = SwiftUI.Color("SurfacePrimary")
+
+        // Warm glow (derived from AccentColor for icon-aligned highlights)
+        static let warmGlow = SwiftUI.Color.accentColor
     }
 
     // MARK: - Spacing (4pt grid)
