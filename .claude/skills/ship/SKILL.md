@@ -80,7 +80,7 @@ ship 완료 후, **머지 반영된 main 기준**으로 Xcode 프로젝트를 �
    - `git -C {repo_path} checkout main`
    - `git -C {repo_path} pull --ff-only`
 3. **xcodegen 실행**
-   - `(cd {repo_path} && xcodegen generate --spec Dailve/project.yml)`
+   - `(cd {repo_path} && xcodegen generate --spec DUNE/project.yml)`
 4. **결과 안내**
    - 성공 시 "ship + xcodegen 완료"를 사용자에게 보고
    - 실패 시 에러 로그를 함께 전달하고 중단

@@ -2,7 +2,7 @@
 
 ## Root NavigationStack 소유권
 
-- iOS 탭 루트 `NavigationStack`은 `Dailve/App/ContentView.swift`에서만 생성합니다.
+- iOS 탭 루트 `NavigationStack`은 `DUNE/App/ContentView.swift`에서만 생성합니다.
 - 탭 루트 View(`DashboardView`, `ActivityView`, `WellnessView`) 내부에 추가 `NavigationStack`을 만들지 않습니다.
 
 ```swift

@@ -9,7 +9,7 @@ description: "테스트 작성 패턴과 커버리지 기대치. 테스트 관�
 
 - Pattern: Arrange / Act / Assert (AAA)
 - Framework: Swift Testing (`@Suite`, `@Test`, `#expect`)
-- Location: `DailveTests/` (unit), `DailveUITests/` (UI)
+- Location: `DUNETests/` (unit), `DUNEUITests/` (UI)
 - File naming: `{TargetType}Tests.swift` (예: `CalculateConditionScoreUseCaseTests.swift`)
 
 ## Required Imports
@@ -17,7 +17,7 @@ description: "테스트 작성 패턴과 커버리지 기대치. 테스트 관�
 ```swift
 import Foundation
 import Testing
-@testable import Dailve
+@testable import DUNE
 ```
 
 ViewModel 테스트는 `@MainActor` 추가:
@@ -32,12 +32,12 @@ struct SomeViewModelTests { ... }
 ### Unit Tests
 - **Framework**: Swift Testing
 - **Coverage target**: Domain UseCases 100%, ViewModel validation 100%
-- **Run command**: `xcodebuild test -project Dailve.xcodeproj -scheme DailveTests -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.2' -only-testing DailveTests -quiet`
+- **Run command**: `xcodebuild test -project DUNE.xcodeproj -scheme DUNETests -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.2' -only-testing DUNETests -quiet`
 
 ### UI Tests
 - **Framework**: XCTest
 - **Coverage target**: Critical user flows (launch, navigation)
-- **Run command**: `xcodebuild test -project Dailve.xcodeproj -scheme DailveUITests -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.2' -only-testing DailveUITests -quiet`
+- **Run command**: `xcodebuild test -project DUNE.xcodeproj -scheme DUNEUITests -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.2' -only-testing DUNEUITests -quiet`
 
 ## Mocking Strategy
 
