@@ -1,5 +1,5 @@
 #!/bin/bash
-# Standard iOS build check for Dailve.
+# Standard iOS build check for DUNE.
 # - Regenerates project from xcodegen (unless --no-regen)
 # - Builds with iOS Simulator destination (avoids generic platform ambiguity)
 # - Prints concise failure summary
@@ -9,9 +9,9 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT_DIR"
 
-PROJECT_SPEC="Dailve/project.yml"
-PROJECT_FILE="Dailve/Dailve.xcodeproj"
-SCHEME="Dailve"
+PROJECT_SPEC="DUNE/project.yml"
+PROJECT_FILE="DUNE/DUNE.xcodeproj"
+SCHEME="DUNE"
 DESTINATION="${DAILVE_IOS_DESTINATION:-platform=iOS Simulator,name=iPhone 17,OS=26.2}"
 DERIVED_DATA_DIR=".deriveddata"
 LOG_DIR=".xcodebuild"
@@ -45,7 +45,7 @@ fi
 
 if [[ "$REGENERATE" -eq 1 || ! -d "$PROJECT_FILE" ]]; then
     echo "Generating Xcode project from $PROJECT_SPEC..."
-    xcodegen generate --spec "$PROJECT_SPEC" >/tmp/dailve-xcodegen.log 2>&1
+    xcodegen generate --spec "$PROJECT_SPEC" >/tmp/dune-xcodegen.log 2>&1
 fi
 
 echo "Building scheme '$SCHEME' for destination '$DESTINATION'..."

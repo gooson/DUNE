@@ -53,7 +53,7 @@ fi
 # pytest 2>/dev/null || true
 
 # iOS build check for Swift/Xcode changes (can be skipped with DAILVE_SKIP_PRECOMMIT_BUILD=1)
-if git diff --cached --name-only | grep -Eq "^(Dailve/|DailveTests/|DailveUITests/|DailveWatch/).*\\.(swift|yml|plist|entitlements)$"; then
+if git diff --cached --name-only | grep -Eq "^(DUNE/|DUNETests/|DUNEUITests/|DUNEWatch/).*\\.(swift|yml|plist|entitlements)$"; then
     if [ "${DAILVE_SKIP_PRECOMMIT_BUILD:-0}" = "1" ]; then
         echo "Skipping iOS build check (DAILVE_SKIP_PRECOMMIT_BUILD=1)."
     else

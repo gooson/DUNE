@@ -25,14 +25,14 @@
 
 - Framework: Swift Testing (`@Suite`, `@Test`, `#expect`)
 - Pattern: Arrange / Act / Assert
-- Location: `DailveTests/`
+- Location: `DUNETests/`
 - Naming: `{TargetType}Tests.swift`
 - 상세 패턴: `.claude/skills/testing-patterns/SKILL.md` 참조
 
 ### 검증 명령
 
 ```bash
-xcodebuild test -project Dailve/Dailve.xcodeproj -scheme DailveTests \
+xcodebuild test -project DUNE/DUNE.xcodeproj -scheme DUNETests \
   -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.2' \
-  -only-testing DailveTests -quiet
+  -only-testing DUNETests -quiet
 ```

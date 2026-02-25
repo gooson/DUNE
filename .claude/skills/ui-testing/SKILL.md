@@ -9,10 +9,10 @@ agent: ui-test-expert
 ## Framework & Location
 
 - **Framework**: XCTest (`XCUIApplication`, `XCUIElement`)
-- **Location**: `DailveUITests/`
+- **Location**: `DUNEUITests/`
 - **File naming**: `{Feature}UITests.swift`
-- **Run command**: `xcodebuild test -project Dailve/Dailve.xcodeproj -scheme DailveUITests -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.2' -only-testing DailveUITests -quiet`
-- **iPad command**: `xcodebuild test -project Dailve/Dailve.xcodeproj -scheme DailveUITests -destination 'platform=iOS Simulator,name=iPad Pro 13-inch (M4),OS=26.2' -only-testing DailveUITests -quiet`
+- **Run command**: `xcodebuild test -project DUNE/DUNE.xcodeproj -scheme DUNEUITests -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.2' -only-testing DUNEUITests -quiet`
+- **iPad command**: `xcodebuild test -project DUNE/DUNE.xcodeproj -scheme DUNEUITests -destination 'platform=iOS Simulator,name=iPad Pro 13-inch (M4),OS=26.2' -only-testing DUNEUITests -quiet`
 
 ## Accessibility Identifier Convention
 
@@ -116,7 +116,7 @@ var isIPad: Bool {
 
 ## Helpers
 
-`DailveUITests/Helpers/UITestHelpers.swift`에 공통 유틸리티를 배치합니다:
+`DUNEUITests/Helpers/UITestHelpers.swift`에 공통 유틸리티를 배치합니다:
 
 ```swift
 extension XCUIApplication {

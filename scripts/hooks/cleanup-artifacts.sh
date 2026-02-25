@@ -9,8 +9,8 @@ CANDIDATES=(
   ".xcodebuild"
   ".deriveddata"
   "DerivedData"
-  "Dailve/.xcodebuild"
-  "Dailve/.deriveddata"
+  "DUNE/.xcodebuild"
+  "DUNE/.deriveddata"
 )
 
 removed=0
