@@ -34,5 +34,16 @@ struct EmptyStateView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, DS.Spacing.xxxl)
+        .background(alignment: .bottom) {
+            // Static wave decoration (no animation — empty state shouldn't distract)
+            ZStack {
+                WaveShape(amplitude: 0.15, frequency: 1.5, phase: 0, verticalOffset: 0.5)
+                    .fill(Color.accentColor.opacity(0.06))
+                WaveShape(amplitude: 0.2, frequency: 2, phase: .pi / 3, verticalOffset: 0.5)
+                    .fill(Color.accentColor.opacity(0.06))
+            }
+            .frame(height: 60)
+            .clipped()
+        }
     }
 }

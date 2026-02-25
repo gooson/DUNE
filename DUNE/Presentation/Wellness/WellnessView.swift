@@ -46,14 +46,7 @@ struct WellnessView: View {
                 scrollContent
             }
         }
-        .background {
-            LinearGradient(
-                colors: [DS.Color.fitness.opacity(0.10), Color.accentColor.opacity(0.06), .clear],
-                startPoint: .top,
-                endPoint: DS.Gradient.tabBackgroundEnd
-            )
-            .ignoresSafeArea()
-        }
+        .background { TabWaveBackground(primaryColor: DS.Color.fitness) }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Menu {
@@ -164,7 +157,10 @@ struct WellnessView: View {
                 ProgressView()
             }
         }
-        .refreshable {
+        .waveRefreshable(
+            color: DS.Color.fitness,
+            hasContent: !viewModel.physicalCards.isEmpty || !viewModel.activeCards.isEmpty
+        ) {
             await viewModel.performRefresh()
         }
         .task {

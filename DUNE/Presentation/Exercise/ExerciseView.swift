@@ -187,9 +187,13 @@ struct ExerciseView: View {
             viewModel.manualRecords = newValue
             updateSuggestion()
         }
-        .refreshable {
+        .waveRefreshable(
+            color: DS.Color.activity,
+            hasContent: !viewModel.allExercises.isEmpty
+        ) {
             await viewModel.loadHealthKitWorkouts()
         }
+        .background { TabWaveBackground(primaryColor: DS.Color.activity) }
         .navigationTitle("Exercise")
         .confirmDeleteRecord($recordToDelete, context: modelContext)
     }

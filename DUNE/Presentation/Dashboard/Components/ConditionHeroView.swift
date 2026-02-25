@@ -21,6 +21,12 @@ struct ConditionHeroView: View {
         static let ringLineWidthCompact: CGFloat = 10
         static let sparklineHeightRegular: CGFloat = 56
         static let sparklineHeightCompact: CGFloat = 44
+        // Correction #83 — static gradient for score text
+        static let scoreGradient = LinearGradient(
+            colors: [Color.accentColor, Color.accentColor.opacity(0.7)],
+            startPoint: .top,
+            endPoint: .bottom
+        )
     }
 
     private var ringSize: CGFloat { isRegular ? Layout.ringSizeRegular : Layout.ringSizeCompact }
@@ -35,11 +41,13 @@ struct ConditionHeroView: View {
                         progress: Double(score.score) / 100.0,
                         ringColor: score.status.color,
                         lineWidth: ringLineWidth,
-                        size: ringSize
+                        size: ringSize,
+                        useWarmGradient: true
                     )
 
                     Text("\(animatedScore)")
                         .font(DS.Typography.cardScore)
+                        .foregroundStyle(Layout.scoreGradient)
                         .contentTransition(.numericText())
                 }
 

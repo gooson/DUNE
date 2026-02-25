@@ -104,14 +104,7 @@ struct DashboardView: View {
             }
             .padding(sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.lg)
         }
-        .background {
-            LinearGradient(
-                colors: [Color.accentColor.opacity(0.14), DS.Color.hrv.opacity(0.06), .clear],
-                startPoint: .top,
-                endPoint: DS.Gradient.tabBackgroundEnd
-            )
-            .ignoresSafeArea()
-        }
+        .background { TabWaveBackground(primaryColor: .accentColor) }
         .navigationDestination(for: ConditionScore.self) { score in
             ConditionScoreDetailView(score: score)
         }
@@ -121,7 +114,10 @@ struct DashboardView: View {
         .navigationDestination(for: AllDataDestination.self) { destination in
             AllDataView(category: destination.category)
         }
-        .refreshable {
+        .waveRefreshable(
+            color: .accentColor,
+            hasContent: !viewModel.sortedMetrics.isEmpty
+        ) {
             await viewModel.loadData()
         }
         .task {

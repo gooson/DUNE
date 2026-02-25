@@ -5,6 +5,7 @@ struct ProgressRingView: View {
     let ringColor: Color
     var lineWidth: CGFloat = 14
     var size: CGFloat = 160
+    var useWarmGradient: Bool = false
 
     @State private var animatedProgress: Double = 0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -20,7 +21,9 @@ struct ProgressRingView: View {
                 .trim(from: 0, to: animatedProgress)
                 .stroke(
                     AngularGradient(
-                        colors: [ringColor.opacity(0.6), ringColor],
+                        colors: useWarmGradient
+                            ? Cache.warmGradientColors(base: ringColor)
+                            : [ringColor.opacity(0.6), ringColor],
                         center: .center,
                         startAngle: .degrees(-90),
                         endAngle: .degrees(270)
@@ -48,6 +51,13 @@ struct ProgressRingView: View {
                     animatedProgress = newValue
                 }
             }
+        }
+    }
+
+    // Correction #83 — static color caching for hot path
+    private enum Cache {
+        static func warmGradientColors(base: Color) -> [Color] {
+            [Color.accentColor.opacity(0.6), base, Color.accentColor.opacity(0.8)]
         }
     }
 }
