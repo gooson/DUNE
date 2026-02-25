@@ -12,7 +12,7 @@ struct CalculateWellnessScoreUseCaseTests {
         let input = CalculateWellnessScoreUseCase.Input(
             sleepScore: 80,
             conditionScore: 70,
-            bodyTrend: .init(weightChange: -0.3, bodyFatChange: nil)
+            bodyTrend: .init(weightChange: -0.3)
         )
         let result = sut.execute(input: input)
         #expect(result != nil)
@@ -94,26 +94,23 @@ struct CalculateWellnessScoreUseCaseTests {
     @Test("Stable weight scores high")
     func stableWeight() {
         let trend = CalculateWellnessScoreUseCase.BodyTrend(
-            weightChange: 0.2,
-            bodyFatChange: -0.1
+            weightChange: 0.2
         )
-        #expect(trend.score >= 75) // stable weight + stable body fat
+        #expect(trend.score >= 65) // stable weight (baseline 50 + 25)
     }
 
     @Test("Large weight gain scores low")
     func largeWeightGain() {
         let trend = CalculateWellnessScoreUseCase.BodyTrend(
-            weightChange: 3.0,
-            bodyFatChange: 2.0
+            weightChange: 3.0
         )
-        #expect(trend.score <= 30) // gaining weight + body fat
+        #expect(trend.score <= 40) // gaining weight
     }
 
     @Test("Weight loss scores moderately")
     func weightLoss() {
         let trend = CalculateWellnessScoreUseCase.BodyTrend(
-            weightChange: -1.5,
-            bodyFatChange: nil
+            weightChange: -1.5
         )
         #expect(trend.score >= 50) // losing weight is positive
     }
@@ -121,8 +118,7 @@ struct CalculateWellnessScoreUseCaseTests {
     @Test("Nil weight and body fat gives baseline")
     func nilTrend() {
         let trend = CalculateWellnessScoreUseCase.BodyTrend(
-            weightChange: nil,
-            bodyFatChange: nil
+            weightChange: nil
         )
         #expect(trend.score == 50) // baseline neutral
     }

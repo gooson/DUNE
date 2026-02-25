@@ -342,8 +342,9 @@ final class WellnessViewModel {
 
         // --- Body Trend for Wellness Score ---
         let bodyTrend = buildBodyTrend(results: results)
-        bodyScore = bodyTrend?.score
-        bodyScoreDetail = bodyTrend?.detail
+        let computedBodyDetail = bodyTrend?.detail
+        bodyScoreDetail = computedBodyDetail
+        bodyScore = computedBodyDetail?.finalScore
 
         // --- Compute Wellness Score ---
         wellnessScore = wellnessScoreUseCase.execute(input: .init(
@@ -1050,12 +1051,10 @@ final class WellnessViewModel {
             weightChange = nil
         }
 
-        // bodyFatChange requires weekly history fetch — not yet implemented
         guard weightChange != nil else { return nil }
 
         return CalculateWellnessScoreUseCase.BodyTrend(
-            weightChange: weightChange,
-            bodyFatChange: nil
+            weightChange: weightChange
         )
     }
 

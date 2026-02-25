@@ -41,50 +41,27 @@ struct ConditionCalculationCard: View {
                 }
 
                 VStack(spacing: DS.Spacing.sm) {
-                    row(label: "Today HRV", value: todayHRVText, sub: dateText)
-                    row(label: "Baseline HRV", value: baselineHRVText, sub: "\(detail.daysInBaseline) days")
+                    CalculationRow(label: "Today HRV", value: todayHRVText, sub: dateText)
+                    CalculationRow(label: "Baseline HRV", value: baselineHRVText, sub: "\(detail.daysInBaseline) days")
 
                     Divider()
 
-                    row(label: "Z-Score", value: zScoreText, sub: zScoreLabel(detail.zScore))
-                    row(label: "StdDev (ln)", value: stdDevText, sub: stdDevSub)
+                    CalculationRow(label: "Z-Score", value: zScoreText, sub: zScoreLabel(detail.zScore))
+                    CalculationRow(label: "StdDev (ln)", value: stdDevText, sub: stdDevSub)
 
                     if detail.rhrPenalty > 0 {
-                        row(label: "RHR Penalty", value: rhrPenaltyText, sub: "")
+                        CalculationRow(label: "RHR Penalty", value: rhrPenaltyText, sub: "")
                     }
 
                     Divider()
 
-                    row(label: "Raw Score", value: rawScoreText, sub: "clamped [0–100]")
+                    CalculationRow(label: "Raw Score", value: rawScoreText, sub: "clamped [0–100]")
                 }
             }
         }
     }
 
     // MARK: - Private
-
-    private func row(label: String, value: String, sub: String) -> some View {
-        HStack {
-            Text(label)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-
-            Spacer()
-
-            VStack(alignment: .trailing, spacing: 1) {
-                Text(value)
-                    .font(.caption)
-                    .fontWeight(.medium)
-                    .monospacedDigit()
-
-                if !sub.isEmpty {
-                    Text(sub)
-                        .font(.caption2)
-                        .foregroundStyle(.tertiary)
-                }
-            }
-        }
-    }
 
     private func zScoreLabel(_ z: Double) -> String {
         if z > 1.0 { return "well above" }

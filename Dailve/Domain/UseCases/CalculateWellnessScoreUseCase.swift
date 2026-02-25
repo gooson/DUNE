@@ -19,50 +19,39 @@ struct CalculateWellnessScoreUseCase: WellnessScoreCalculating, Sendable {
     /// Body composition trend over the last 7 days.
     struct BodyTrend: Sendable {
         let weightChange: Double?   // kg change (negative = loss)
-        let bodyFatChange: Double?  // percentage points change (negative = loss)
 
         /// Convert body trend into a 0-100 score.
-        /// Stable or improving trends score higher.
         var score: Int { detail.finalScore }
 
         /// Detailed breakdown of the body score calculation.
         var detail: BodyScoreDetail {
             let baseline = 50.0
             var weightPts = 0.0
-            var bodyFatPts = 0.0
+            var label: BodyScoreDetail.TrendLabel = .noData
 
             // Weight stability/loss is generally positive for fitness users
-            if let wc = weightChange {
+            // Correction #4: isFinite guard on math inputs
+            if let wc = weightChange, wc.isFinite {
                 let absChange = abs(wc)
                 if absChange < 0.5 {
                     weightPts = 25 // stable weight
+                    label = .stable
                 } else if wc < 0 {
                     weightPts = 15 // losing weight (generally positive)
+                    label = .losing
                 } else {
                     weightPts = -min(15, absChange * 5) // gaining weight
+                    label = .gaining
                 }
             }
 
-            // Body fat decrease is positive
-            if let bfc = bodyFatChange {
-                let absChange = abs(bfc)
-                if absChange < 0.3 {
-                    bodyFatPts = 25 // stable body fat
-                } else if bfc < 0 {
-                    bodyFatPts = 25 // losing body fat
-                } else {
-                    bodyFatPts = -min(25, absChange * 10) // gaining body fat
-                }
-            }
-
-            let raw = baseline + weightPts + bodyFatPts
+            let raw = baseline + weightPts
             let clamped = Int(max(0, min(100, raw)).rounded())
 
             return BodyScoreDetail(
                 weightChange: weightChange,
-                bodyFatChange: bodyFatChange,
+                weightLabel: label,
                 weightPoints: weightPts,
-                bodyFatPoints: bodyFatPts,
                 baselinePoints: baseline,
                 finalScore: clamped
             )
