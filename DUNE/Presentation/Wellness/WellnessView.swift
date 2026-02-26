@@ -11,6 +11,11 @@ struct WellnessView: View {
     @Query(sort: \InjuryRecord.startDate, order: .reverse) private var injuryRecords: [InjuryRecord]
 
     @State private var cachedActiveInjuries: [InjuryRecord] = []
+    private let scrollToTopSignal: Int
+
+    private enum ScrollAnchor: Hashable {
+        case top
+    }
 
     private var isRegular: Bool { sizeClass == .regular }
 
@@ -19,8 +24,9 @@ struct WellnessView: View {
         GridItem(.flexible(), spacing: DS.Spacing.md)
     ]
 
-    init(sharedHealthDataService: SharedHealthDataService? = nil) {
+    init(sharedHealthDataService: SharedHealthDataService? = nil, scrollToTopSignal: Int = 0) {
         _viewModel = State(initialValue: WellnessViewModel(sharedHealthDataService: sharedHealthDataService))
+        self.scrollToTopSignal = scrollToTopSignal
     }
 
     var body: some View {
@@ -178,16 +184,30 @@ struct WellnessView: View {
     // MARK: - Scroll Content
 
     private var scrollContent: some View {
-        ScrollView {
-            VStack(spacing: isRegular ? DS.Spacing.xxl : DS.Spacing.xl) {
-                // Partial failure banner
-                if let message = viewModel.partialFailureMessage {
-                    partialFailureBanner(message)
-                }
+        ScrollViewReader { proxy in
+            ScrollView {
+                Color.clear
+                    .frame(height: 0)
+                    .id(ScrollAnchor.top)
 
-                // Hero Card
-                if viewModel.wellnessScore != nil {
-                    NavigationLink(value: WellnessScoreDestination()) {
+                VStack(spacing: isRegular ? DS.Spacing.xxl : DS.Spacing.xl) {
+                    // Partial failure banner
+                    if let message = viewModel.partialFailureMessage {
+                        partialFailureBanner(message)
+                    }
+
+                    // Hero Card
+                    if viewModel.wellnessScore != nil {
+                        NavigationLink(value: WellnessScoreDestination()) {
+                            WellnessHeroCard(
+                                score: viewModel.wellnessScore,
+                                sleepScore: viewModel.sleepScore,
+                                conditionScore: viewModel.conditionScore,
+                                bodyScore: viewModel.bodyScore
+                            )
+                        }
+                        .buttonStyle(.plain)
+                    } else {
                         WellnessHeroCard(
                             score: viewModel.wellnessScore,
                             sleepScore: viewModel.sleepScore,
@@ -195,79 +215,76 @@ struct WellnessView: View {
                             bodyScore: viewModel.bodyScore
                         )
                     }
-                    .buttonStyle(.plain)
-                } else {
-                    WellnessHeroCard(
-                        score: viewModel.wellnessScore,
-                        sleepScore: viewModel.sleepScore,
-                        conditionScore: viewModel.conditionScore,
-                        bodyScore: viewModel.bodyScore
-                    )
-                }
 
-                // Physical section
-                if !viewModel.physicalCards.isEmpty {
-                    WellnessSectionGroup(
-                        title: "Physical",
-                        icon: "figure.stand",
-                        iconColor: DS.Color.body
-                    ) {
-                        LazyVGrid(columns: gridColumns, spacing: DS.Spacing.md) {
-                            ForEach(viewModel.physicalCards) { card in
-                                NavigationLink(value: card.metric) {
-                                    VitalCard(data: card)
+                    // Physical section
+                    if !viewModel.physicalCards.isEmpty {
+                        WellnessSectionGroup(
+                            title: "Physical",
+                            icon: "figure.stand",
+                            iconColor: DS.Color.body
+                        ) {
+                            LazyVGrid(columns: gridColumns, spacing: DS.Spacing.md) {
+                                ForEach(viewModel.physicalCards) { card in
+                                    NavigationLink(value: card.metric) {
+                                        VitalCard(data: card)
+                                    }
+                                    .buttonStyle(.plain)
                                 }
-                                .buttonStyle(.plain)
                             }
                         }
                     }
-                }
 
-                // Active Indicators section
-                if !viewModel.activeCards.isEmpty {
-                    WellnessSectionGroup(
-                        title: "Active Indicators",
-                        icon: "heart.text.square",
-                        iconColor: DS.Color.vitals
-                    ) {
-                        LazyVGrid(columns: gridColumns, spacing: DS.Spacing.md) {
-                            ForEach(viewModel.activeCards) { card in
-                                NavigationLink(value: card.metric) {
-                                    VitalCard(data: card)
+                    // Active Indicators section
+                    if !viewModel.activeCards.isEmpty {
+                        WellnessSectionGroup(
+                            title: "Active Indicators",
+                            icon: "heart.text.square",
+                            iconColor: DS.Color.vitals
+                        ) {
+                            LazyVGrid(columns: gridColumns, spacing: DS.Spacing.md) {
+                                ForEach(viewModel.activeCards) { card in
+                                    NavigationLink(value: card.metric) {
+                                        VitalCard(data: card)
+                                    }
+                                    .buttonStyle(.plain)
                                 }
-                                .buttonStyle(.plain)
                             }
                         }
                     }
-                }
 
-                // Injury Banner
-                injuryBanner
+                    // Injury Banner
+                    injuryBanner
 
-                // Body History link
-                if records.count > 0 {
-                    NavigationLink(value: BodyHistoryDestination()) {
-                        HStack {
-                            Image(systemName: "figure.stand")
-                                .font(.subheadline)
-                                .foregroundStyle(DS.Color.body)
-                            Text("Body Composition History")
-                                .font(.subheadline)
-                            Spacer()
-                            Image(systemName: "chevron.right")
-                                .font(.caption)
-                                .foregroundStyle(.tertiary)
+                    // Body History link
+                    if records.count > 0 {
+                        NavigationLink(value: BodyHistoryDestination()) {
+                            HStack {
+                                Image(systemName: "figure.stand")
+                                    .font(.subheadline)
+                                    .foregroundStyle(DS.Color.body)
+                                Text("Body Composition History")
+                                    .font(.subheadline)
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .font(.caption)
+                                    .foregroundStyle(.tertiary)
+                            }
+                            .padding(DS.Spacing.lg)
+                            .background {
+                                RoundedRectangle(cornerRadius: DS.Radius.md)
+                                    .fill(.thinMaterial)
+                            }
                         }
-                        .padding(DS.Spacing.lg)
-                        .background {
-                            RoundedRectangle(cornerRadius: DS.Radius.md)
-                                .fill(.thinMaterial)
-                        }
+                        .buttonStyle(.plain)
                     }
-                    .buttonStyle(.plain)
+                }
+                .padding(isRegular ? DS.Spacing.xxl : DS.Spacing.lg)
+            }
+            .onChange(of: scrollToTopSignal) { _, _ in
+                withAnimation(DS.Animation.standard) {
+                    proxy.scrollTo(ScrollAnchor.top, anchor: .top)
                 }
             }
-            .padding(isRegular ? DS.Spacing.xxl : DS.Spacing.lg)
         }
     }
 
