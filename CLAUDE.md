@@ -365,3 +365,9 @@
 144. **웨이브 색상 오버라이드는 Environment 전용**: `DetailWaveBackground(overrideColor:)` 같은 init 파라미터 패턴 금지. `.environment(\.waveColor, color)` 패턴으로 3-tier(Tab/Detail/Sheet) 모두 동일 API 유지
 145. **WavePreset에 소비자 없는 case 추가 금지**: `.injury`, `.watch` 등 실제 environment setter가 없는 case는 모든 switch에 dead 분기를 추가함. consumer가 생길 때 case를 추가할 것
 146. **새 View 추가 시 웨이브 배경 적용 체크**: Tab root → `TabWaveBackground`, Push detail → `DetailWaveBackground`, Sheet/Modal → `SheetWaveBackground`. 누락 시 디자인 일관성 파괴
+
+### 2026-02-27: Muscle Map Volume Mode 통합 교정
+
+147. **SVG body diagram 위 DragGesture 금지**: ForEach 내 Button 수십 개가 렌더되는 영역에서 DragGesture는 탭 이벤트를 소비함. 모드 전환은 diagram 영역 밖(header의 Segmented Picker 등)에 배치할 것
+148. **모드별 dispatch 함수보다 튜플 반환 단일 함수**: `fillColor(for:)` + `strokeColor(for:)` 각각 switch하면 4개 함수로 팽창. `muscleColors(for:) -> (fill: Color, stroke: Color)` 패턴으로 switch 1회로 통합
+149. **3개+ 파일에서 참조되는 enum은 전용 파일 즉시 분리**: `VolumeIntensity`처럼 View 파일 하단에 정의된 enum이 다른 View에서도 사용되면 `{Type}.swift`로 분리. description extension도 동일 파일에 위치
