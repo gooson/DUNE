@@ -3,6 +3,7 @@ import SwiftUI
 /// Type-safe navigation routes for Watch app (correction #61).
 enum WatchRoute: Hashable {
     case quickStart
+    case quickStartAll
     case workoutPreview(WorkoutSessionTemplate)
 }
 
@@ -52,6 +53,8 @@ struct ContentView: View {
                 switch route {
                 case .quickStart:
                     QuickStartPickerView()
+                case .quickStartAll:
+                    QuickStartAllExercisesView()
                 case .workoutPreview(let snapshot):
                     WorkoutPreviewView(snapshot: snapshot)
                 }

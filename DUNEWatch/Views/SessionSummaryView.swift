@@ -148,6 +148,7 @@ struct SessionSummaryView: View {
 
         // Send workout data to iPhone via WatchConnectivity as backup
         sendWorkoutToPhone()
+        recordExerciseUsage()
 
         hasSaved = true
         isSaving = false
@@ -223,6 +224,17 @@ struct SessionSummaryView: View {
             )
 
             WatchConnectivityManager.shared.sendWorkoutCompletion(update)
+        }
+    }
+
+    /// Record usage for personalization in Quick Start popular ranking.
+    private func recordExerciseUsage() {
+        guard let template = workoutManager.templateSnapshot else { return }
+
+        for (exerciseIndex, setsData) in completedSetsData.enumerated() {
+            guard exerciseIndex < template.entries.count, !setsData.isEmpty else { continue }
+            let entry = template.entries[exerciseIndex]
+            RecentExerciseTracker.recordUsage(exerciseID: entry.exerciseDefinitionID)
         }
     }
 

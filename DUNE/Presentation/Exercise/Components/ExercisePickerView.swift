@@ -1,9 +1,16 @@
 import SwiftUI
 import SwiftData
 
+enum ExercisePickerMode {
+    case full
+    case quickStart
+}
+
 struct ExercisePickerView: View {
     let library: ExerciseLibraryQuerying
     let recentExerciseIDs: [String]
+    let popularExerciseIDs: [String]
+    let mode: ExercisePickerMode
     let onSelect: (ExerciseDefinition) -> Void
 
     @Environment(\.dismiss) private var dismiss
@@ -16,12 +23,31 @@ struct ExercisePickerView: View {
     @State private var selectedEquipment: Equipment?
     @State private var showingCreateCustom = false
     @State private var detailExercise: ExerciseDefinition?
+    @State private var showingAllQuickStartExercises = false
+
+    init(
+        library: ExerciseLibraryQuerying,
+        recentExerciseIDs: [String],
+        popularExerciseIDs: [String] = [],
+        mode: ExercisePickerMode = .full,
+        onSelect: @escaping (ExerciseDefinition) -> Void
+    ) {
+        self.library = library
+        self.recentExerciseIDs = recentExerciseIDs
+        self.popularExerciseIDs = popularExerciseIDs
+        self.mode = mode
+        self.onSelect = onSelect
+    }
 
     private var customDefinitions: [ExerciseDefinition] {
         customExercises.map { $0.toDefinition() }
     }
 
-    private var filteredExercises: [ExerciseDefinition] {
+    private var isQuickStartMode: Bool {
+        mode == .quickStart
+    }
+
+    private var fullModeFilteredExercises: [ExerciseDefinition] {
         var libraryResults: [ExerciseDefinition]
         var customResults: [ExerciseDefinition]
 
@@ -63,69 +89,77 @@ struct ExercisePickerView: View {
         return customResults + libraryResults
     }
 
-    private var recentExercises: [ExerciseDefinition] {
-        recentExerciseIDs.compactMap { id in
-            library.exercise(byID: id)
-                ?? customDefinitions.first { $0.id == id }
+    private var quickStartFilteredExercises: [ExerciseDefinition] {
+        let definitions: [ExerciseDefinition]
+        if searchText.isEmpty {
+            definitions = customDefinitions + library.allExercises()
+        } else {
+            let query = searchText.lowercased()
+            let customResults = customDefinitions.filter {
+                $0.localizedName.localizedCaseInsensitiveContains(query)
+                    || $0.name.localizedCaseInsensitiveContains(query)
+            }
+            definitions = customResults + library.search(query: searchText)
         }
+
+        return sortQuickStartExercises(uniqueByID(definitions))
+    }
+
+    private var filteredExercises: [ExerciseDefinition] {
+        isQuickStartMode ? quickStartFilteredExercises : fullModeFilteredExercises
+    }
+
+    private var recentExercises: [ExerciseDefinition] {
+        uniqueByID(
+            recentExerciseIDs.compactMap { resolveExerciseDefinition(by: $0) }
+        )
+    }
+
+    private var popularExercises: [ExerciseDefinition] {
+        uniqueByID(
+            popularExerciseIDs.compactMap { resolveExerciseDefinition(by: $0) }
+        )
     }
 
     private var hasActiveFilters: Bool {
         selectedCategory != nil || selectedUserCategoryName != nil || selectedMuscle != nil || selectedEquipment != nil
     }
 
+    private var shouldShowQuickStartHub: Bool {
+        isQuickStartMode && searchText.isEmpty && !showingAllQuickStartExercises
+    }
+
+    private var quickStartPriorityIndexByID: [String: Int] {
+        let ids = dedupedIDs(popularExerciseIDs + recentExerciseIDs)
+        return Dictionary(uniqueKeysWithValues: ids.enumerated().map { ($1, $0) })
+    }
+
     var body: some View {
         NavigationStack {
             List {
-                // Recent exercises section
-                if searchText.isEmpty && !hasActiveFilters && !recentExercises.isEmpty {
-                    Section("Recent") {
-                        ForEach(recentExercises) { exercise in
-                            exerciseRow(exercise)
-                        }
-                    }
-                }
-
-                // Filters
-                if searchText.isEmpty {
-                    filtersSection
-                }
-
-                // Exercise list
-                Section {
-                    ForEach(filteredExercises) { exercise in
-                        exerciseRow(exercise)
-                    }
-                } header: {
-                    if hasActiveFilters {
-                        HStack {
-                            Text("\(filteredExercises.count) exercises")
-                            Spacer()
-                            Button("Clear Filters") {
-                                withAnimation(DS.Animation.snappy) {
-                                    selectedCategory = nil
-                                    selectedUserCategoryName = nil
-                                    selectedMuscle = nil
-                                    selectedEquipment = nil
-                                }
-                            }
-                            .font(.caption)
-                        }
-                    }
+                if shouldShowQuickStartHub {
+                    quickStartHubSections
+                } else if isQuickStartMode {
+                    quickStartAllSection
+                } else {
+                    fullModeSections
                 }
             }
             .searchable(text: $searchText, prompt: "Search exercises")
-            .navigationTitle("Select Exercise")
+            .navigationTitle(isQuickStartMode ? "Quick Start" : "Select Exercise")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }
                 }
-                ToolbarItem(placement: .primaryAction) {
-                    Button {
-                        showingCreateCustom = true
-                    } label: {
-                        Image(systemName: "plus")
+
+                if !isQuickStartMode {
+                    ToolbarItem(placement: .primaryAction) {
+                        Button {
+                            showingCreateCustom = true
+                        } label: {
+                            Image(systemName: "plus")
+                        }
                     }
                 }
             }
@@ -144,6 +178,100 @@ struct ExercisePickerView: View {
                     dismiss()
                 }
                 .presentationDetents([.medium, .large])
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var fullModeSections: some View {
+        // Recent exercises section
+        if searchText.isEmpty && !hasActiveFilters && !recentExercises.isEmpty {
+            Section("Recent") {
+                ForEach(recentExercises) { exercise in
+                    exerciseRow(exercise)
+                }
+            }
+        }
+
+        // Filters
+        if searchText.isEmpty {
+            filtersSection
+        }
+
+        // Exercise list
+        Section {
+            ForEach(filteredExercises) { exercise in
+                exerciseRow(exercise)
+            }
+        } header: {
+            if hasActiveFilters {
+                HStack {
+                    Text("\(filteredExercises.count) exercises")
+                    Spacer()
+                    Button("Clear Filters") {
+                        withAnimation(DS.Animation.snappy) {
+                            selectedCategory = nil
+                            selectedUserCategoryName = nil
+                            selectedMuscle = nil
+                            selectedEquipment = nil
+                        }
+                    }
+                    .font(.caption)
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var quickStartHubSections: some View {
+        if !popularExercises.isEmpty {
+            Section("Popular") {
+                ForEach(popularExercises) { exercise in
+                    exerciseRow(exercise)
+                }
+            }
+        }
+
+        if !recentExercises.isEmpty {
+            Section("Recent") {
+                ForEach(recentExercises) { exercise in
+                    exerciseRow(exercise)
+                }
+            }
+        }
+
+        Section {
+            Button {
+                showingAllQuickStartExercises = true
+            } label: {
+                HStack {
+                    Label("All Exercises", systemImage: "plus.circle.fill")
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
+                }
+            }
+            .foregroundStyle(DS.Color.activity)
+        }
+    }
+
+    @ViewBuilder
+    private var quickStartAllSection: some View {
+        Section {
+            ForEach(filteredExercises) { exercise in
+                exerciseRow(exercise)
+            }
+        } header: {
+            HStack {
+                Text("All Exercises")
+                Spacer()
+                if showingAllQuickStartExercises && searchText.isEmpty {
+                    Button("Hide") {
+                        showingAllQuickStartExercises = false
+                    }
+                    .font(.caption)
+                }
             }
         }
     }
@@ -362,5 +490,43 @@ struct ExercisePickerView: View {
             )
         }
         .buttonStyle(.plain)
+    }
+
+    // MARK: - Helpers
+
+    private func resolveExerciseDefinition(by id: String) -> ExerciseDefinition? {
+        library.exercise(byID: id)
+            ?? customDefinitions.first { $0.id == id }
+    }
+
+    private func dedupedIDs(_ ids: [String]) -> [String] {
+        var seen = Set<String>()
+        return ids.filter { seen.insert($0).inserted }
+    }
+
+    private func uniqueByID(_ exercises: [ExerciseDefinition]) -> [ExerciseDefinition] {
+        var seen = Set<String>()
+        return exercises.filter { seen.insert($0.id).inserted }
+    }
+
+    private func sortQuickStartExercises(_ exercises: [ExerciseDefinition]) -> [ExerciseDefinition] {
+        let priority = quickStartPriorityIndexByID
+        return exercises.sorted { lhs, rhs in
+            let lhsPriority = priority[lhs.id]
+            let rhsPriority = priority[rhs.id]
+
+            switch (lhsPriority, rhsPriority) {
+            case let (.some(l), .some(r)):
+                if l != r { return l < r }
+            case (.some, .none):
+                return true
+            case (.none, .some):
+                return false
+            case (.none, .none):
+                break
+            }
+
+            return lhs.localizedName.localizedCaseInsensitiveCompare(rhs.localizedName) == .orderedAscending
+        }
     }
 }
