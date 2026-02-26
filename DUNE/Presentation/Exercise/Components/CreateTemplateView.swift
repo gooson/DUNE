@@ -95,7 +95,8 @@ struct TemplateFormView: View {
             .sheet(isPresented: $showingExercisePicker) {
                 ExercisePickerView(
                     library: library,
-                    recentExerciseIDs: []
+                    recentExerciseIDs: [],
+                    mode: .full
                 ) { exercise in
                     let entry = TemplateEntry(
                         exerciseDefinitionID: exercise.id,

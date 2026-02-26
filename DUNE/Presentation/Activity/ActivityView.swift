@@ -137,7 +137,9 @@ struct ActivityView: View {
         .sheet(isPresented: $showingExercisePicker) {
             ExercisePickerView(
                 library: library,
-                recentExerciseIDs: recentExerciseIDs
+                recentExerciseIDs: recentExerciseIDs,
+                popularExerciseIDs: popularExerciseIDs,
+                mode: .quickStart
             ) { exercise in
                 selectedExercise = exercise
             }
@@ -281,6 +283,18 @@ struct ActivityView: View {
             seen.insert(id)
             return id
         }
+    }
+
+    private var popularExerciseIDs: [String] {
+        let usages: [QuickStartPopularityService.Usage] = recentRecords.compactMap { record in
+            guard let id = record.exerciseDefinitionID else { return nil }
+            return .init(exerciseDefinitionID: id, date: record.date)
+        }
+        return QuickStartPopularityService.popularExerciseIDs(
+            from: usages,
+            limit: 10,
+            canonicalize: QuickStartCanonicalService.canonicalExerciseID(for:)
+        )
     }
 }
 

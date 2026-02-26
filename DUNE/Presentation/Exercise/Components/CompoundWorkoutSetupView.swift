@@ -36,7 +36,8 @@ struct CompoundWorkoutSetupView: View {
             .sheet(isPresented: $showingPicker) {
                 ExercisePickerView(
                     library: library,
-                    recentExerciseIDs: recentExerciseIDs
+                    recentExerciseIDs: recentExerciseIDs,
+                    mode: .full
                 ) { exercise in
                     if !selectedExercises.contains(where: { $0.id == exercise.id }) {
                         selectedExercises.append(exercise)

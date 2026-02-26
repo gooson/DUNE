@@ -155,7 +155,9 @@ struct ExerciseView: View {
         .sheet(isPresented: $showingExercisePicker) {
             ExercisePickerView(
                 library: library,
-                recentExerciseIDs: recentExerciseIDs
+                recentExerciseIDs: recentExerciseIDs,
+                popularExerciseIDs: popularExerciseIDs,
+                mode: .quickStart
             ) { exercise in
                 selectedExercise = exercise
             }
@@ -258,6 +260,18 @@ struct ExerciseView: View {
             seen.insert(id)
             return id
         }
+    }
+
+    private var popularExerciseIDs: [String] {
+        let usages: [QuickStartPopularityService.Usage] = manualRecords.compactMap { record in
+            guard let id = record.exerciseDefinitionID else { return nil }
+            return .init(exerciseDefinitionID: id, date: record.date)
+        }
+        return QuickStartPopularityService.popularExerciseIDs(
+            from: usages,
+            limit: 10,
+            canonicalize: QuickStartCanonicalService.canonicalExerciseID(for:)
+        )
     }
 
     private func draftBanner(_ draft: WorkoutSessionDraft) -> some View {
