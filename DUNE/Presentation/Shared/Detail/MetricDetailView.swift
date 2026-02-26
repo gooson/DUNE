@@ -7,6 +7,7 @@ struct MetricDetailView: View {
 
     @State private var viewModel = MetricDetailViewModel()
     @State private var showShimmer = false
+    @State private var shimmerTask: Task<Void, Never>?
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -59,11 +60,27 @@ struct MetricDetailView: View {
                 }
                 .animation(.easeInOut(duration: 0.25), value: viewModel.selectedPeriod)
                 .onChange(of: viewModel.selectedPeriod) {
-                    guard !reduceMotion else { return }
-                    showShimmer = true
-                    withAnimation(DS.Animation.shimmer) {
+                    shimmerTask?.cancel()
+                    guard !reduceMotion else {
                         showShimmer = false
+                        shimmerTask = nil
+                        return
                     }
+
+                    showShimmer = true
+                    shimmerTask = Task {
+                        try? await Task.sleep(for: .milliseconds(120))
+                        guard !Task.isCancelled else { return }
+                        await MainActor.run {
+                            withAnimation(DS.Animation.shimmer) {
+                                showShimmer = false
+                            }
+                        }
+                    }
+                }
+                .onDisappear {
+                    shimmerTask?.cancel()
+                    shimmerTask = nil
                 }
 
                 // Exercise totals + Highlights
