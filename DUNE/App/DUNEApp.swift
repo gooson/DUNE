@@ -173,7 +173,6 @@ private struct LaunchSplashView: View {
     var body: some View {
         ZStack {
             Color("LaunchBackground")
-                .ignoresSafeArea()
                 .opacity(isResolving ? 0 : 1)
                 .animation(backgroundDissolveAnimation, value: isResolving)
             Image("LaunchLogo")
@@ -181,5 +180,6 @@ private struct LaunchSplashView: View {
                 .scaleEffect(isResolving ? 0.985 : 1)
                 .animation(logoDissolveAnimation, value: isResolving)
         }
+        .ignoresSafeArea()
     }
 }
