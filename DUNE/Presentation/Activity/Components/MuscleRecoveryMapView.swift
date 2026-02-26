@@ -1,7 +1,7 @@
 import SwiftUI
 
 /// Body diagram with recovery/volume coloring — front and back side by side.
-/// Swipe horizontally to switch between Recovery and Volume modes.
+/// Segmented picker to switch between Recovery and Volume modes.
 /// Uses original outline + muscle paths from react-native-body-highlighter (MIT).
 struct MuscleRecoveryMapView: View {
     let fatigueStates: [MuscleFatigueState]
@@ -32,6 +32,7 @@ struct MuscleRecoveryMapView: View {
             headerSection
             bodyDiagramSection
         }
+        .animation(.easeInOut(duration: 0.3), value: mode)
         .onAppear { rebuildFatigueIndex() }
         .onChange(of: fatigueStates.count) { _, _ in rebuildFatigueIndex() }
     }
@@ -43,17 +44,28 @@ struct MuscleRecoveryMapView: View {
     // MARK: - Header
 
     private var headerSection: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+        VStack(spacing: DS.Spacing.sm) {
+            HStack {
+                Picker("Mode", selection: $mode) {
+                    ForEach(MapMode.allCases, id: \.rawValue) { m in
+                        Text(m.label).tag(m)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .frame(maxWidth: 200)
+
+                Spacer()
+
+                infoButton
+            }
+
+            HStack {
                 Text(subtitle)
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .contentTransition(.numericText())
+                Spacer()
             }
-
-            infoButton
-
-            Spacer()
         }
     }
 
@@ -107,10 +119,6 @@ struct MuscleRecoveryMapView: View {
                     .frame(maxWidth: 170)
             }
             .frame(maxWidth: .infinity, alignment: .center)
-            .contentShape(Rectangle())
-            .gesture(swipeGesture)
-
-            pageIndicator
 
             legendRow
         }
@@ -160,18 +168,6 @@ struct MuscleRecoveryMapView: View {
         .clipped()
     }
 
-    // MARK: - Page Indicator
-
-    private var pageIndicator: some View {
-        HStack(spacing: DS.Spacing.xs) {
-            ForEach(MapMode.allCases, id: \.rawValue) { m in
-                Circle()
-                    .fill(m == mode ? DS.Color.activity : Color.secondary.opacity(0.3))
-                    .frame(width: 6, height: 6)
-            }
-        }
-    }
-
     // MARK: - Legend
 
     @ViewBuilder
@@ -182,23 +178,6 @@ struct MuscleRecoveryMapView: View {
         case .volume:
             VolumeLegendView(onTap: { showingVolumeInfoSheet = true })
         }
-    }
-
-    // MARK: - Swipe Gesture
-
-    private var swipeGesture: some Gesture {
-        DragGesture(minimumDistance: 30, coordinateSpace: .local)
-            .onEnded { value in
-                let horizontal = value.translation.width
-                guard abs(horizontal) > abs(value.translation.height) else { return }
-                withAnimation(.easeInOut(duration: 0.3)) {
-                    if horizontal < 0, mode == .recovery {
-                        mode = .volume
-                    } else if horizontal > 0, mode == .volume {
-                        mode = .recovery
-                    }
-                }
-            }
     }
 
     // MARK: - Colors (mode-dependent)
