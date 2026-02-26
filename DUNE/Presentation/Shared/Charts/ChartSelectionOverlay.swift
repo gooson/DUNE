@@ -19,6 +19,10 @@ struct ChartSelectionOverlay: View {
         .padding(.horizontal, DS.Spacing.sm)
         .padding(.vertical, DS.Spacing.xs)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+        .overlay {
+            RoundedRectangle(cornerRadius: DS.Radius.sm)
+                .strokeBorder(DS.Color.warmGlow.opacity(0.15), lineWidth: 0.5)
+        }
         .padding(.horizontal, DS.Spacing.xs)
     }
 }

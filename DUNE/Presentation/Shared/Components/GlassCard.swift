@@ -71,10 +71,21 @@ struct StandardCard<Content: View>: View {
                     .overlay(
                         RoundedRectangle(cornerRadius: cornerRadius)
                             .strokeBorder(
-                                DS.Color.warmGlow.opacity(
-                                    colorScheme == .dark ? DS.Opacity.border : 0
-                                ),
-                                lineWidth: 0.5
+                                colorScheme == .dark
+                                    ? LinearGradient(
+                                        colors: [
+                                            DS.Color.warmGlow.opacity(0.25),
+                                            DS.Color.desertDusk.opacity(0.20)
+                                        ],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
+                                    : LinearGradient(
+                                        colors: [Color.clear, Color.clear],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    ),
+                                lineWidth: 1
                             )
                     )
                     .shadow(
@@ -103,6 +114,19 @@ struct InlineCard<Content: View>: View {
             .background {
                 RoundedRectangle(cornerRadius: cornerRadius)
                     .fill(.ultraThinMaterial)
+            }
+            .overlay(alignment: .bottom) {
+                LinearGradient(
+                    colors: [
+                        DS.Color.warmGlow.opacity(0),
+                        DS.Color.warmGlow.opacity(0.15),
+                        DS.Color.warmGlow.opacity(0)
+                    ],
+                    startPoint: .leading,
+                    endPoint: .trailing
+                )
+                .frame(height: 0.5)
+                .padding(.horizontal, DS.Spacing.md)
             }
     }
 }

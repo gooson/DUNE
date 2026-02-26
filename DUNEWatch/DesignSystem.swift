@@ -30,6 +30,11 @@ enum DS {
         // cardBackground intentionally omitted — watchOS uses system material backgrounds
         static let surfacePrimary = SwiftUI.Color("SurfacePrimary")
 
+        // Desert Palette — extracted from Desert Horizon ring gradient (mirrors iOS DS)
+        static let desertDusk   = SwiftUI.Color("DesertDusk")    // Cool blue-gray (ring bottom)
+        static let desertBronze = SwiftUI.Color("DesertBronze")  // Copper/bronze (ring number)
+        static let sandMuted    = SwiftUI.Color("SandMuted")     // Muted sand (decorative text)
+
         // Tab wave identity — Desert Horizon palette (mirrors iOS DS)
         static let tabTrain    = SwiftUI.Color("TabTrain")     // Desert Coral
         static let tabWellness = SwiftUI.Color("TabWellness")  // Oasis Teal

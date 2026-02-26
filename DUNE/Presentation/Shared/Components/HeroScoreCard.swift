@@ -43,8 +43,9 @@ struct HeroScoreCard: View {
         static let subScoreBarWidthRegular: CGFloat = 48
         static let subScoreBarWidthCompact: CGFloat = 36
         // Correction #83 — static gradient for score text
+        // Desert Palette: bronze top → desertDusk bottom (gold→blue horizon)
         static let scoreGradient = LinearGradient(
-            colors: [Color.accentColor, Color.accentColor.opacity(0.7)],
+            colors: [DS.Color.desertBronze, DS.Color.desertDusk],
             startPoint: .top,
             endPoint: .bottom
         )
@@ -116,7 +117,7 @@ struct HeroScoreCard: View {
 
                 Text(scoreLabel)
                     .font(.system(size: 9, weight: .semibold, design: .rounded))
-                    .foregroundStyle(.tertiary)
+                    .foregroundStyle(DS.Color.sandMuted)
                     .tracking(1)
             }
         }
@@ -161,7 +162,7 @@ struct HeroScoreCard: View {
         VStack(alignment: .leading, spacing: 2) {
             Text(item.label)
                 .font(.caption2)
-                .foregroundStyle(.tertiary)
+                .foregroundStyle(DS.Color.sandMuted)
 
             HStack(spacing: DS.Spacing.xs) {
                 GeometryReader { geo in

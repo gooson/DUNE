@@ -82,7 +82,7 @@ struct DotLineChartView: View {
                     .symbolSize(48)
 
                     RuleMark(x: .value("Selected", point.date, unit: xUnit))
-                        .foregroundStyle(.gray.opacity(0.3))
+                        .foregroundStyle(DS.Color.warmGlow.opacity(0.25))
                         .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
                 }
             }
@@ -96,12 +96,14 @@ struct DotLineChartView: View {
                 AxisMarks(values: .stride(by: xStrideComponent, count: xStrideCount)) { _ in
                     AxisValueLabel(format: axisFormat)
                     AxisGridLine()
+                        .foregroundStyle(DS.Color.warmGlow.opacity(0.12))
                 }
             }
             .chartYAxis {
                 AxisMarks(position: .leading) { _ in
                     AxisValueLabel()
                     AxisGridLine()
+                        .foregroundStyle(DS.Color.warmGlow.opacity(0.12))
                 }
             }
             .chartXSelection(value: $selectedDate)

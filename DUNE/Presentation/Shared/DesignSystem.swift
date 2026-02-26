@@ -48,6 +48,11 @@ enum DS {
         // Warm glow (derived from AccentColor for icon-aligned highlights)
         static let warmGlow = SwiftUI.Color("AccentColor")
 
+        // Desert Palette — extracted from Desert Horizon ring gradient
+        static let desertDusk   = SwiftUI.Color("DesertDusk")    // Cool blue-gray (ring bottom)
+        static let desertBronze = SwiftUI.Color("DesertBronze")  // Copper/bronze (ring number)
+        static let sandMuted    = SwiftUI.Color("SandMuted")     // Muted sand (decorative text)
+
         // Tab wave identity — Desert Horizon palette
         static let tabTrain    = SwiftUI.Color("TabTrain")     // Desert Coral
         static let tabWellness = SwiftUI.Color("TabWellness")  // Oasis Teal
@@ -119,6 +124,8 @@ enum DS {
         static let numeric = SwiftUI.Animation.easeOut(duration: 0.6)
         /// Subtle wave drift (background decoration)
         static let waveDrift = SwiftUI.Animation.linear(duration: 6).repeatForever(autoreverses: false)
+        /// Sand shimmer flash (period transition overlay)
+        static let shimmer = SwiftUI.Animation.easeInOut(duration: 0.4)
     }
 
     // MARK: - Typography (Dynamic Type compatible)

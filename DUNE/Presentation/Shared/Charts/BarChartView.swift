@@ -44,7 +44,7 @@ struct BarChartView: View {
 
                 if selectedDate != nil, let point = selectedPoint {
                     RuleMark(x: .value("Selected", point.date, unit: xUnit))
-                        .foregroundStyle(.gray.opacity(0.3))
+                        .foregroundStyle(DS.Color.warmGlow.opacity(0.25))
                         .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
                 }
             }
@@ -56,12 +56,14 @@ struct BarChartView: View {
                 AxisMarks(values: .stride(by: period.strideComponent, count: period.strideCount)) { _ in
                     AxisValueLabel(format: period.axisLabelFormat)
                     AxisGridLine()
+                        .foregroundStyle(DS.Color.warmGlow.opacity(0.12))
                 }
             }
             .chartYAxis {
                 AxisMarks(position: .leading) { _ in
                     AxisValueLabel()
                     AxisGridLine()
+                        .foregroundStyle(DS.Color.warmGlow.opacity(0.12))
                 }
             }
             .chartXSelection(value: $selectedDate)
