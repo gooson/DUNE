@@ -68,6 +68,7 @@ struct TrainingVolumeSummaryCard: View {
         .chartXAxis {
             AxisMarks(values: .stride(by: .day, count: 7)) { _ in
                 AxisValueLabel(format: .dateTime.day())
+                    .foregroundStyle(DS.Color.sandMuted)
             }
         }
         .chartYAxis(.hidden)

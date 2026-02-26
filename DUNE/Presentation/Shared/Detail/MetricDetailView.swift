@@ -6,7 +6,10 @@ struct MetricDetailView: View {
     let metric: HealthMetric
 
     @State private var viewModel = MetricDetailViewModel()
+    @State private var showShimmer = false
+    @State private var shimmerTask: Task<Void, Never>?
     @Environment(\.horizontalSizeClass) private var sizeClass
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         ScrollView {
@@ -47,7 +50,38 @@ struct MetricDetailView: View {
                     .id(viewModel.selectedPeriod)
                     .transition(.opacity)
                 }
+                .overlay {
+                    if showShimmer {
+                        RoundedRectangle(cornerRadius: DS.Radius.md)
+                            .fill(DS.Color.warmGlow.opacity(0.25))
+                            .allowsHitTesting(false)
+                            .transition(.opacity)
+                    }
+                }
                 .animation(.easeInOut(duration: 0.25), value: viewModel.selectedPeriod)
+                .onChange(of: viewModel.selectedPeriod) {
+                    shimmerTask?.cancel()
+                    guard !reduceMotion else {
+                        showShimmer = false
+                        shimmerTask = nil
+                        return
+                    }
+
+                    showShimmer = true
+                    shimmerTask = Task {
+                        try? await Task.sleep(for: .milliseconds(120))
+                        guard !Task.isCancelled else { return }
+                        await MainActor.run {
+                            withAnimation(DS.Animation.shimmer) {
+                                showShimmer = false
+                            }
+                        }
+                    }
+                }
+                .onDisappear {
+                    shimmerTask?.cancel()
+                    shimmerTask = nil
+                }
 
                 // Exercise totals + Highlights
                 if sizeClass == .regular {

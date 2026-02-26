@@ -81,20 +81,24 @@ struct TrainingLoadChartView: View {
 
             if selectedDate != nil, let point = selectedPoint {
                 RuleMark(x: .value("Selected", point.date, unit: .day))
-                    .foregroundStyle(.gray.opacity(0.3))
+                    .foregroundStyle(DS.Color.warmGlow.opacity(0.35))
                     .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
             }
         }
         .chartXAxis {
             AxisMarks(values: .stride(by: .day, count: 7)) { _ in
                 AxisValueLabel(format: .dateTime.month(.abbreviated).day())
+                    .foregroundStyle(DS.Color.sandMuted)
                 AxisGridLine()
+                    .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
             }
         }
         .chartYAxis {
             AxisMarks(position: .leading) { _ in
                 AxisValueLabel()
+                    .foregroundStyle(DS.Color.sandMuted)
                 AxisGridLine()
+                    .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
             }
         }
         .chartYScale(domain: 0...(maxLoad * 1.15))

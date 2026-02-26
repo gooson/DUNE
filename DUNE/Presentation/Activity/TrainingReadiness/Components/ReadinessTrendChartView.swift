@@ -64,23 +64,27 @@ struct ReadinessTrendChartView: View {
                 .symbolSize(50)
 
                 RuleMark(x: .value("Date", point.date, unit: .day))
-                    .foregroundStyle(.secondary.opacity(0.3))
+                    .foregroundStyle(DS.Color.warmGlow.opacity(0.35))
                     .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
             }
         }
         .chartXAxis {
             AxisMarks(values: .stride(by: .day, count: 3)) { _ in
                 AxisGridLine()
+                    .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
                 AxisValueLabel(format: .dateTime.month(.abbreviated).day(), centered: true)
+                    .foregroundStyle(DS.Color.sandMuted)
             }
         }
         .chartYScale(domain: 0...110)
         .chartYAxis {
             AxisMarks(values: [0, 25, 50, 75, 100]) { value in
                 AxisGridLine()
+                    .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
                 AxisValueLabel {
                     if let v = value.as(Int.self) {
                         Text("\(v)")
+                            .foregroundStyle(DS.Color.sandMuted)
                     }
                 }
             }

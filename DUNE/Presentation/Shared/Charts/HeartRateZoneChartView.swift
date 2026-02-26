@@ -26,9 +26,11 @@ struct HeartRateZoneChartView: View {
                         if let mins = value.as(Double.self) {
                             Text(formatMinutes(mins))
                                 .font(.caption2)
+                                .foregroundStyle(DS.Color.sandMuted)
                         }
                     }
                     AxisGridLine()
+                        .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
                 }
             }
             .chartYAxis {
@@ -37,6 +39,7 @@ struct HeartRateZoneChartView: View {
                         if let label = value.as(String.self) {
                             Text(label)
                                 .font(.caption)
+                                .foregroundStyle(DS.Color.sandMuted)
                         }
                     }
                 }

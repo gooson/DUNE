@@ -67,12 +67,15 @@ struct WeeklySummaryChartView: View {
         .chartXAxis {
             AxisMarks(values: .stride(by: .day)) { _ in
                 AxisValueLabel(format: .dateTime.weekday(.abbreviated))
+                    .foregroundStyle(DS.Color.sandMuted)
             }
         }
         .chartYAxis {
             AxisMarks(position: .leading) { _ in
                 AxisValueLabel()
+                    .foregroundStyle(DS.Color.sandMuted)
                 AxisGridLine()
+                    .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
             }
         }
     }

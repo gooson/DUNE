@@ -13,7 +13,11 @@ struct MiniSparklineView: View {
             areaPath
                 .fill(
                     LinearGradient(
-                        colors: [color.opacity(0.15), color.opacity(0.02)],
+                        colors: [
+                            color.opacity(0.12),
+                            color.opacity(0.04),
+                            DS.Color.warmGlow.opacity(0.20)
+                        ],
                         startPoint: .top,
                         endPoint: .bottom
                     )

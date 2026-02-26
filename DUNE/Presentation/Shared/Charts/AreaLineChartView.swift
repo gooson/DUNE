@@ -58,7 +58,7 @@ struct AreaLineChartView: View {
                     .symbolSize(48)
 
                     RuleMark(x: .value("Selected", point.date, unit: xUnit))
-                        .foregroundStyle(.gray.opacity(0.3))
+                        .foregroundStyle(DS.Color.warmGlow.opacity(0.35))
                         .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
                 }
             }
@@ -69,13 +69,17 @@ struct AreaLineChartView: View {
             .chartXAxis {
                 AxisMarks(values: .stride(by: period.strideComponent, count: period.strideCount)) { _ in
                     AxisValueLabel(format: period.axisLabelFormat)
+                        .foregroundStyle(DS.Color.sandMuted)
                     AxisGridLine()
+                        .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
                 }
             }
             .chartYAxis {
                 AxisMarks(position: .leading) { _ in
                     AxisValueLabel()
+                        .foregroundStyle(DS.Color.sandMuted)
                     AxisGridLine()
+                        .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
                 }
             }
             .chartXSelection(value: $selectedDate)
@@ -111,7 +115,11 @@ struct AreaLineChartView: View {
 
     private var areaGradient: LinearGradient {
         LinearGradient(
-            colors: [tintColor.opacity(0.3), tintColor.opacity(0.05)],
+            colors: [
+                tintColor.opacity(0.25),
+                tintColor.opacity(0.08),
+                DS.Color.warmGlow.opacity(0.25)
+            ],
             startPoint: .top,
             endPoint: .bottom
         )

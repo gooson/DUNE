@@ -87,7 +87,9 @@ struct SubScoreTrendChartView: View {
         .chartXAxis {
             AxisMarks(values: .stride(by: .day, count: 3)) { _ in
                 AxisGridLine()
+                    .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
                 AxisValueLabel(format: .dateTime.month(.abbreviated).day(), centered: true)
+                    .foregroundStyle(DS.Color.sandMuted)
             }
         }
         .chartYScale(domain: yDomain)

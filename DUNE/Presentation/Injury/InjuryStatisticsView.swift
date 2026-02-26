@@ -79,7 +79,12 @@ struct InjuryStatisticsView: View {
                     .cornerRadius(4)
                 }
                 .chartXAxis {
-                    AxisMarks(values: .automatic(desiredCount: 4))
+                    AxisMarks(values: .automatic(desiredCount: 4)) { _ in
+                        AxisValueLabel()
+                            .foregroundStyle(DS.Color.sandMuted)
+                        AxisGridLine()
+                            .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
+                    }
                 }
                 .frame(height: CGFloat(statistics.frequencyByBodyPart.count) * 36)
                 .clipped()

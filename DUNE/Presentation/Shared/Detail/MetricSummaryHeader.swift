@@ -73,7 +73,7 @@ struct MetricSummaryHeader: View {
         return VStack(spacing: DS.Spacing.xxs) {
             Text(label)
                 .font(sizeClass == .regular ? .caption : .caption2)
-                .foregroundStyle(.tertiary)
+                .foregroundStyle(DS.Color.sandMuted)
             Text(value)
                 .font(valueFont)
                 .fontWeight(.medium)
