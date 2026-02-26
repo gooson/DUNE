@@ -1,7 +1,7 @@
 import Foundation
 
 /// Shared weekly volume computation for ExerciseRecord collections.
-/// Used by MuscleMapSummaryCard, MuscleMapView, and VolumeAnalysisView.
+/// Used by MuscleRecoveryMapView and VolumeAnalysisView.
 extension Collection where Element: ExerciseRecordVolumeProviding {
 
     /// Computes weekly muscle volume from records within the last 7 days.

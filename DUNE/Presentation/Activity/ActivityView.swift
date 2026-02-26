@@ -238,7 +238,7 @@ struct ActivityView: View {
     // MARK: - Extracted Sections
 
     private func recoveryMapSection(fillHeight: Bool = false) -> some View {
-        SectionGroup(title: "Recovery Map", icon: "figure.stand", iconColor: DS.Color.activity, fillHeight: fillHeight) {
+        SectionGroup(title: "Muscle Map", icon: "figure.stand", iconColor: DS.Color.activity, fillHeight: fillHeight) {
             MuscleRecoveryMapView(
                 fatigueStates: viewModel.fatigueStates,
                 onMuscleSelected: { muscle in selectedMuscle = muscle }
