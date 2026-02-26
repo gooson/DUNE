@@ -167,10 +167,29 @@ final class WorkoutSessionViewModel {
 
     func loadPreviousSets(from records: [ExerciseRecord], weightUnit: WeightUnit = .kg) {
         guard !isSaving else { return }
-        // Find the most recent record for this exercise
-        let matching = records
+        let exactMatches = records
             .filter { $0.exerciseDefinitionID == exercise.id }
             .sorted { $0.date > $1.date }
+
+        let matching: [ExerciseRecord]
+        if !exactMatches.isEmpty {
+            matching = exactMatches
+        } else if let targetCanonical = QuickStartCanonicalService.canonicalKey(
+            exerciseID: exercise.id,
+            exerciseName: exercise.localizedName
+        ) {
+            matching = records
+                .filter { record in
+                    let recordCanonical = QuickStartCanonicalService.canonicalKey(
+                        exerciseID: record.exerciseDefinitionID,
+                        exerciseName: record.exerciseType
+                    )
+                    return recordCanonical == targetCanonical
+                }
+                .sorted { $0.date > $1.date }
+        } else {
+            matching = []
+        }
 
         guard let lastSession = matching.first else {
             previousSets = []

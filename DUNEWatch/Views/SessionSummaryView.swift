@@ -235,6 +235,13 @@ struct SessionSummaryView: View {
             guard exerciseIndex < template.entries.count, !setsData.isEmpty else { continue }
             let entry = template.entries[exerciseIndex]
             RecentExerciseTracker.recordUsage(exerciseID: entry.exerciseDefinitionID)
+            if let lastSet = setsData.last {
+                RecentExerciseTracker.recordLatestSet(
+                    exerciseID: entry.exerciseDefinitionID,
+                    weight: lastSet.weight,
+                    reps: lastSet.reps
+                )
+            }
         }
     }
 

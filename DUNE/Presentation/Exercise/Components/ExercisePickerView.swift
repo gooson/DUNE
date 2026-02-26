@@ -102,7 +102,8 @@ struct ExercisePickerView: View {
             definitions = customResults + library.search(query: searchText)
         }
 
-        return sortQuickStartExercises(uniqueByID(definitions))
+        let sorted = sortQuickStartExercises(uniqueByID(definitions))
+        return uniqueByCanonical(sorted)
     }
 
     private var filteredExercises: [ExerciseDefinition] {
@@ -110,13 +111,13 @@ struct ExercisePickerView: View {
     }
 
     private var recentExercises: [ExerciseDefinition] {
-        uniqueByID(
+        uniqueByCanonical(
             recentExerciseIDs.compactMap { resolveExerciseDefinition(by: $0) }
         )
     }
 
     private var popularExercises: [ExerciseDefinition] {
-        uniqueByID(
+        uniqueByCanonical(
             popularExerciseIDs.compactMap { resolveExerciseDefinition(by: $0) }
         )
     }
@@ -507,6 +508,21 @@ struct ExercisePickerView: View {
     private func uniqueByID(_ exercises: [ExerciseDefinition]) -> [ExerciseDefinition] {
         var seen = Set<String>()
         return exercises.filter { seen.insert($0.id).inserted }
+    }
+
+    private func uniqueByCanonical(_ exercises: [ExerciseDefinition]) -> [ExerciseDefinition] {
+        var seen = Set<String>()
+        return exercises.filter { exercise in
+            let key = canonicalKey(for: exercise)
+            return seen.insert(key).inserted
+        }
+    }
+
+    private func canonicalKey(for exercise: ExerciseDefinition) -> String {
+        QuickStartCanonicalService.canonicalKey(
+            exerciseID: exercise.id,
+            exerciseName: exercise.localizedName
+        ) ?? exercise.id
     }
 
     private func sortQuickStartExercises(_ exercises: [ExerciseDefinition]) -> [ExerciseDefinition] {

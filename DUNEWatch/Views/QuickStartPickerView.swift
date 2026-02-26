@@ -55,12 +55,13 @@ struct QuickStartPickerView: View {
     }
 
     private func exerciseRow(_ exercise: WatchExerciseInfo) -> some View {
+        let defaults = resolvedDefaults(for: exercise)
         NavigationLink(value: WatchRoute.workoutPreview(snapshotFromExercise(exercise))) {
             VStack(alignment: .leading, spacing: 2) {
                 Text(exercise.name)
                     .font(.caption.weight(.medium))
                     .lineLimit(1)
-                Text("\(exercise.defaultSets.formattedWithSeparator) sets · \((exercise.defaultReps ?? 10).formattedWithSeparator) reps")
+                Text("\(exercise.defaultSets.formattedWithSeparator) sets · \(defaults.reps.formattedWithSeparator) reps")
                     .font(.caption2)
                     .foregroundStyle(.secondary)
             }
@@ -89,25 +90,55 @@ struct QuickStartPickerView: View {
     private func rebuildSections() {
         let library = connectivity.exerciseLibrary
 
-        cachedPopular = RecentExerciseTracker.personalizedPopular(from: library, limit: 10)
-        cachedRecent = library
+        cachedPopular = Array(
+            uniqueByCanonical(
+                RecentExerciseTracker.personalizedPopular(from: library, limit: library.count)
+            )
+            .prefix(10)
+        )
+
+        let popularCanonical = Set(
+            cachedPopular.map { RecentExerciseTracker.canonicalExerciseID(exerciseID: $0.id) }
+        )
+
+        cachedRecent = uniqueByCanonical(
+            library
             .filter { RecentExerciseTracker.lastUsed(exerciseID: $0.id) != nil }
             .sorted {
                 let a = RecentExerciseTracker.lastUsed(exerciseID: $0.id) ?? .distantPast
                 let b = RecentExerciseTracker.lastUsed(exerciseID: $1.id) ?? .distantPast
                 return a > b
             }
+        ).filter { exercise in
+            !popularCanonical.contains(RecentExerciseTracker.canonicalExerciseID(exerciseID: exercise.id))
+        }
     }
 
     // MARK: - Helpers
 
+    private func uniqueByCanonical(_ exercises: [WatchExerciseInfo]) -> [WatchExerciseInfo] {
+        var seen = Set<String>()
+        return exercises.filter { exercise in
+            let canonical = RecentExerciseTracker.canonicalExerciseID(exerciseID: exercise.id)
+            return seen.insert(canonical).inserted
+        }
+    }
+
+    private func resolvedDefaults(for exercise: WatchExerciseInfo) -> (weight: Double?, reps: Int) {
+        let latest = RecentExerciseTracker.latestSet(exerciseID: exercise.id)
+        let reps = latest?.reps ?? exercise.defaultReps ?? 10
+        let weight = latest?.weight ?? exercise.defaultWeightKg
+        return (weight: weight, reps: reps)
+    }
+
     private func snapshotFromExercise(_ exercise: WatchExerciseInfo) -> WorkoutSessionTemplate {
+        let defaults = resolvedDefaults(for: exercise)
         let entry = TemplateEntry(
             exerciseDefinitionID: exercise.id,
             exerciseName: exercise.name,
             defaultSets: exercise.defaultSets,
-            defaultReps: exercise.defaultReps ?? 10,
-            defaultWeightKg: exercise.defaultWeightKg
+            defaultReps: defaults.reps,
+            defaultWeightKg: defaults.weight
         )
         return WorkoutSessionTemplate(
             name: exercise.name,
@@ -154,12 +185,13 @@ struct QuickStartAllExercisesView: View {
     }
 
     private func exerciseRow(_ exercise: WatchExerciseInfo) -> some View {
+        let defaults = resolvedDefaults(for: exercise)
         NavigationLink(value: WatchRoute.workoutPreview(snapshotFromExercise(exercise))) {
             VStack(alignment: .leading, spacing: 2) {
                 Text(exercise.name)
                     .font(.caption.weight(.medium))
                     .lineLimit(1)
-                Text("\(exercise.defaultSets.formattedWithSeparator) sets · \((exercise.defaultReps ?? 10).formattedWithSeparator) reps")
+                Text("\(exercise.defaultSets.formattedWithSeparator) sets · \(defaults.reps.formattedWithSeparator) reps")
                     .font(.caption2)
                     .foregroundStyle(.secondary)
             }
@@ -171,20 +203,36 @@ struct QuickStartAllExercisesView: View {
         let base = searchText.isEmpty ? library : library.filter {
             $0.name.localizedCaseInsensitiveContains(searchText)
         }
-        cachedFiltered = RecentExerciseTracker.sorted(base)
+        cachedFiltered = uniqueByCanonical(RecentExerciseTracker.sorted(base))
     }
 
     private func snapshotFromExercise(_ exercise: WatchExerciseInfo) -> WorkoutSessionTemplate {
+        let defaults = resolvedDefaults(for: exercise)
         let entry = TemplateEntry(
             exerciseDefinitionID: exercise.id,
             exerciseName: exercise.name,
             defaultSets: exercise.defaultSets,
-            defaultReps: exercise.defaultReps ?? 10,
-            defaultWeightKg: exercise.defaultWeightKg
+            defaultReps: defaults.reps,
+            defaultWeightKg: defaults.weight
         )
         return WorkoutSessionTemplate(
             name: exercise.name,
             entries: [entry]
         )
+    }
+
+    private func uniqueByCanonical(_ exercises: [WatchExerciseInfo]) -> [WatchExerciseInfo] {
+        var seen = Set<String>()
+        return exercises.filter { exercise in
+            let canonical = RecentExerciseTracker.canonicalExerciseID(exerciseID: exercise.id)
+            return seen.insert(canonical).inserted
+        }
+    }
+
+    private func resolvedDefaults(for exercise: WatchExerciseInfo) -> (weight: Double?, reps: Int) {
+        let latest = RecentExerciseTracker.latestSet(exerciseID: exercise.id)
+        let reps = latest?.reps ?? exercise.defaultReps ?? 10
+        let weight = latest?.weight ?? exercise.defaultWeightKg
+        return (weight: weight, reps: reps)
     }
 }

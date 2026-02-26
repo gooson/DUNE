@@ -290,7 +290,11 @@ struct ActivityView: View {
             guard let id = record.exerciseDefinitionID else { return nil }
             return .init(exerciseDefinitionID: id, date: record.date)
         }
-        return QuickStartPopularityService.popularExerciseIDs(from: usages, limit: 10)
+        return QuickStartPopularityService.popularExerciseIDs(
+            from: usages,
+            limit: 10,
+            canonicalize: QuickStartCanonicalService.canonicalExerciseID(for:)
+        )
     }
 }
 
