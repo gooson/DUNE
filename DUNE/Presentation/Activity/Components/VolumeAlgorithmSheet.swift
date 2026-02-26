@@ -145,17 +145,3 @@ struct VolumeAlgorithmSheet: View {
         }
     }
 }
-
-// MARK: - VolumeIntensity Description
-
-extension VolumeIntensity {
-    var description: String {
-        switch self {
-        case .none:     "이번 주 미훈련, 훈련 필요"
-        case .light:    "가벼운 자극, 볼륨 추가 가능"
-        case .moderate: "적정 볼륨, 유지 또는 소폭 증가"
-        case .high:     "높은 볼륨, 회복 상태 확인 권장"
-        case .veryHigh: "매우 높은 볼륨, 과훈련 주의"
-        }
-    }
-}

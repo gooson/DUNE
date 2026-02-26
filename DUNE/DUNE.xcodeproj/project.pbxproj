@@ -114,6 +114,7 @@
 		5771D24DD281539BA75BD4E4 /* ActivityStat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD82B41CC1C02B8F2B255D /* ActivityStat.swift */; };
 		58AAFC6918945F2DE4EDD153 /* GlassCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A10A17F0E61C704CCB337DF /* GlassCard.swift */; };
 		59A8EA2CA07CD2D6F715F6B7 /* ExerciseListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7FEC4AA6299D3FCB967C45 /* ExerciseListItem.swift */; };
+		5B9DA412BE4055B8E24D786E /* VolumeIntensity.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1173511F5BE6141F1A19014 /* VolumeIntensity.swift */; };
 		5BB49D0A064E908D9C766435 /* WorkoutRecommendationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEEA89E77F352F69B0434B8 /* WorkoutRecommendationServiceTests.swift */; };
 		5BF9B9A572625FBF3EAE1FEC /* WorkoutActivityType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88B2B8031AAF4EE274CEDA39 /* WorkoutActivityType.swift */; };
 		5BFD0AB7F615BB6E7B16DDF9 /* TrainingLoadChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF4F0967F55EBAC9F363427 /* TrainingLoadChartView.swift */; };
@@ -689,6 +690,7 @@
 		D0829D70CAB9526CFDBB4B72 /* ExerciseRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseRecord.swift; sourceTree = "<group>"; };
 		D087E9495A3B7438090B2BF2 /* ConsistencyDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsistencyDetailViewModel.swift; sourceTree = "<group>"; };
 		D0DCE59A0DC6093A20800D5C /* FatigueAlgorithmSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FatigueAlgorithmSheet.swift; sourceTree = "<group>"; };
+		D1173511F5BE6141F1A19014 /* VolumeIntensity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeIntensity.swift; sourceTree = "<group>"; };
 		D15E79F0E6EBADC2E05272BF /* VolumePeriod+View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VolumePeriod+View.swift"; sourceTree = "<group>"; };
 		D1C2A997B63EE5525745B11A /* DUNEUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = DUNEUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D200C6E20FA7E3B7F91389B5 /* MetricsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricsView.swift; sourceTree = "<group>"; };
@@ -1351,6 +1353,7 @@
 				5DF4F0967F55EBAC9F363427 /* TrainingLoadChartView.swift */,
 				96F02DC68CDAF71C461DC601 /* TrainingReadinessHeroCard.swift */,
 				D50E724AFD91D19F98C21037 /* VolumeAlgorithmSheet.swift */,
+				D1173511F5BE6141F1A19014 /* VolumeIntensity.swift */,
 				491FF703165491C066FC3574 /* VolumeLegendView.swift */,
 				F37F37503A420F3A6A430F62 /* WeeklyStatsGrid.swift */,
 				A32006BDDED8B1640BA94847 /* WeeklySummaryChartView.swift */,
@@ -1991,6 +1994,7 @@
 				29E2277FAB082C8B32CF541B /* VolumeAlgorithmSheet.swift in Sources */,
 				EF72C1AD3560F7606C6A44E4 /* VolumeAnalysisView.swift in Sources */,
 				5CC8E6F6587F950DB57BE3AC /* VolumeDonutChartView.swift in Sources */,
+				5B9DA412BE4055B8E24D786E /* VolumeIntensity.swift in Sources */,
 				881415C8D88671CAC67E1063 /* VolumeLegendView.swift in Sources */,
 				CB1243FAA1FA52ED06B3BB63 /* VolumePeriod+View.swift in Sources */,
 				9429A2ED4EDBFD6E9121DD6F /* WatchSessionManager.swift in Sources */,

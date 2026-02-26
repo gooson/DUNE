@@ -26,6 +26,8 @@ struct MuscleRecoveryMapView: View {
     @State private var mode: MapMode = .recovery
     @State private var showingRecoveryInfoSheet = false
     @State private var showingVolumeInfoSheet = false
+    @State private var recoveredCount = 0
+    @State private var trainedCount = 0
 
     var body: some View {
         VStack(spacing: DS.Spacing.md) {
@@ -39,6 +41,8 @@ struct MuscleRecoveryMapView: View {
 
     private func rebuildFatigueIndex() {
         fatigueByMuscle = Dictionary(uniqueKeysWithValues: fatigueStates.map { ($0.muscle, $0) })
+        recoveredCount = fatigueStates.filter(\.isRecovered).count
+        trainedCount = fatigueStates.filter { $0.weeklyVolume > 0 }.count
     }
 
     // MARK: - Header
@@ -50,7 +54,16 @@ struct MuscleRecoveryMapView: View {
                 .foregroundStyle(.secondary)
                 .contentTransition(.numericText())
 
-            infoButton
+            Button {
+                switch mode {
+                case .recovery: showingRecoveryInfoSheet = true
+                case .volume: showingVolumeInfoSheet = true
+                }
+            } label: {
+                Image(systemName: "info.circle")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
 
             Spacer()
 
@@ -62,44 +75,24 @@ struct MuscleRecoveryMapView: View {
             .pickerStyle(.segmented)
             .frame(maxWidth: 160)
         }
+        .sheet(isPresented: $showingRecoveryInfoSheet) {
+            FatigueAlgorithmSheet()
+        }
+        .sheet(isPresented: $showingVolumeInfoSheet) {
+            VolumeAlgorithmSheet()
+        }
     }
 
     private var subtitle: String {
         switch mode {
         case .recovery:
-            let recovered = fatigueStates.filter(\.isRecovered).count
             let total = fatigueStates.count
             guard total > 0 else { return "Start training to track recovery" }
-            if recovered == total { return "All \(total) muscle groups ready" }
-            return "\(recovered)/\(total) muscle groups ready"
+            if recoveredCount == total { return "All \(total) muscle groups ready" }
+            return "\(recoveredCount)/\(total) muscle groups ready"
         case .volume:
-            let trained = fatigueStates.filter { $0.weeklyVolume > 0 }.count
-            guard trained > 0 else { return "Start recording workouts to see volume" }
-            return "\(trained) muscles trained this week"
-        }
-    }
-
-    @ViewBuilder
-    private var infoButton: some View {
-        switch mode {
-        case .recovery:
-            Button { showingRecoveryInfoSheet = true } label: {
-                Image(systemName: "info.circle")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-            }
-            .sheet(isPresented: $showingRecoveryInfoSheet) {
-                FatigueAlgorithmSheet()
-            }
-        case .volume:
-            Button { showingVolumeInfoSheet = true } label: {
-                Image(systemName: "info.circle")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-            }
-            .sheet(isPresented: $showingVolumeInfoSheet) {
-                VolumeAlgorithmSheet()
-            }
+            guard trainedCount > 0 else { return "Start recording workouts to see volume" }
+            return "\(trainedCount) muscles trained this week"
         }
     }
 
@@ -144,11 +137,12 @@ struct MuscleRecoveryMapView: View {
                     Button {
                         onMuscleSelected(part.muscle)
                     } label: {
+                        let colors = muscleColors(for: part.muscle)
                         part.shape
-                            .fill(fillColor(for: part.muscle))
+                            .fill(colors.fill)
                             .overlay {
                                 part.shape
-                                    .stroke(strokeColor(for: part.muscle), lineWidth: 0.5)
+                                    .stroke(colors.stroke, lineWidth: 0.5)
                             }
                             .frame(width: size.width, height: size.height)
                     }
@@ -177,21 +171,13 @@ struct MuscleRecoveryMapView: View {
 
     // MARK: - Colors (mode-dependent)
 
-    private func fillColor(for muscle: MuscleGroup) -> Color {
+    private func muscleColors(for muscle: MuscleGroup) -> (fill: Color, stroke: Color) {
         switch mode {
         case .recovery:
-            return recoveryColor(for: muscle)
+            return (recoveryColor(for: muscle), recoveryStrokeColor(for: muscle))
         case .volume:
-            return volumeColor(for: muscle)
-        }
-    }
-
-    private func strokeColor(for muscle: MuscleGroup) -> Color {
-        switch mode {
-        case .recovery:
-            return recoveryStrokeColor(for: muscle)
-        case .volume:
-            return volumeStrokeColor(for: muscle)
+            let intensity = VolumeIntensity.from(sets: fatigueByMuscle[muscle]?.weeklyVolume ?? 0)
+            return (intensity.color, intensity.strokeColor)
         }
     }
 
@@ -209,65 +195,5 @@ struct MuscleRecoveryMapView: View {
             return FatigueLevel.noData.strokeColor(for: colorScheme)
         }
         return state.fatigueLevel.strokeColor(for: colorScheme)
-    }
-
-    // Volume colors — absolute weekly sets threshold
-
-    private func volumeColor(for muscle: MuscleGroup) -> Color {
-        let volume = fatigueByMuscle[muscle]?.weeklyVolume ?? 0
-        return VolumeIntensity.from(sets: volume).color
-    }
-
-    private func volumeStrokeColor(for muscle: MuscleGroup) -> Color {
-        let volume = fatigueByMuscle[muscle]?.weeklyVolume ?? 0
-        return VolumeIntensity.from(sets: volume).strokeColor
-    }
-}
-
-// MARK: - Volume Intensity
-
-/// 5-level volume intensity based on weekly set count.
-enum VolumeIntensity: Int, CaseIterable {
-    case none = 0
-    case light = 1
-    case moderate = 2
-    case high = 3
-    case veryHigh = 4
-
-    static func from(sets: Int) -> VolumeIntensity {
-        switch sets {
-        case 0:     .none
-        case 1...5: .light
-        case 6...10: .moderate
-        case 11...15: .high
-        default:     .veryHigh
-        }
-    }
-
-    var label: String {
-        switch self {
-        case .none:     "0"
-        case .light:    "1-5"
-        case .moderate: "6-10"
-        case .high:     "11-15"
-        case .veryHigh: "16+"
-        }
-    }
-
-    var color: Color {
-        switch self {
-        case .none:     Color.secondary.opacity(0.08)
-        case .light:    DS.Color.activity.opacity(0.2)
-        case .moderate: DS.Color.activity.opacity(0.4)
-        case .high:     DS.Color.activity.opacity(0.6)
-        case .veryHigh: DS.Color.activity.opacity(0.8)
-        }
-    }
-
-    var strokeColor: Color {
-        switch self {
-        case .none: Color.secondary.opacity(0.15)
-        default:    color.opacity(0.6)
-        }
     }
 }

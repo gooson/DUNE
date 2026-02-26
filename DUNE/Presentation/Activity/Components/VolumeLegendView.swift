@@ -34,17 +34,11 @@ struct VolumeLegendView: View {
     }
 
     private var labelRow: some View {
-        HStack {
-            Text("0 sets")
-                .foregroundStyle(.secondary)
-            Spacer()
-            // Set count labels
-            ForEach(VolumeIntensity.allCases.dropFirst(), id: \.rawValue) { level in
-                Text(level.label)
+        HStack(spacing: 0) {
+            ForEach(VolumeIntensity.allCases, id: \.rawValue) { level in
+                Text(level == .none ? "0 sets" : level.label)
+                    .frame(maxWidth: .infinity)
                     .foregroundStyle(.secondary)
-                if level != .veryHigh {
-                    Spacer()
-                }
             }
         }
         .font(.caption2)
