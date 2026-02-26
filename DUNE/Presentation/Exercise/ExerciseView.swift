@@ -115,13 +115,6 @@ struct ExerciseView: View {
                 .accessibilityIdentifier("exercise-templates-button")
 
                 NavigationLink {
-                    VolumeAnalysisView()
-                } label: {
-                    Image(systemName: "chart.bar.fill")
-                }
-                .accessibilityIdentifier("exercise-volume-analysis-button")
-
-                NavigationLink {
                     UserCategoryManagementView()
                 } label: {
                     Image(systemName: "tag")

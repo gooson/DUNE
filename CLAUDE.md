@@ -375,3 +375,11 @@
 ### 2026-02-27: TabBar Tint iOS 26 교정
 
 150. **iOS 26 `.sidebarAdaptable`에서 `UITabBar.appearance()` 무시됨**: 새 렌더링 경로가 UIKit UITabBar를 우회. 탭바 tint는 SwiftUI `.tint(DS.Color.warmGlow)` modifier로 TabView에 직접 적용. `import UIKit` + appearance proxy 패턴 금지
+
+### 2026-02-27: Muscle Map Detail View 통합 교정
+
+151. **Popover/inline 중복은 `isInline: Bool` 파라미터로 통합**: sheet용 View와 inline section이 동일 로직이면 `isInline` 분기로 container만 교체. 별도 View 생성 금지 → DRY 위반 + `×` vs `\u{00d7}` 같은 silent inconsistency 유발
+152. **computed property에서 service 호출 금지 (body hot path)**: `library.exercises(forMuscle:)` 같은 서비스 호출을 computed property에 넣으면 매 렌더마다 실행. `@State` + `.task(id:)` 캐싱 필수
+153. **UserDefaults computed getter는 ForEach 내 O(N) lock**: `UserDefaults.standard.integer(forKey:)`는 plist lock 획득 → row당 3회 × N rows = 50+ lock/render. stored property + setter 메서드 패턴으로 캐싱
+154. **undertrained 리스트는 비즈니스 필터 후 prefix/suffix**: `sortedMuscleVolumes.suffix(3)`은 전체 리스트(untrained volume=0 포함)의 마지막 3개 → 거의 항상 빈 결과. `.filter { volume > 0 && volume < threshold }.sorted { $0 < $1 }.prefix(3)` 패턴 사용
+155. **ViewModel 내부 struct가 외부 컴포넌트에서 사용되면 top-level 추출**: `MuscleMapDetailViewModel.BalanceInfo` → `MuscleBalanceInfo` top-level struct. Correction #86 확장 — ViewModel-namespaced type은 컴포넌트 재사용성을 저해
