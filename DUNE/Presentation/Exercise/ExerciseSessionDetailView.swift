@@ -37,6 +37,7 @@ struct ExerciseSessionDetailView: View {
             }
             .padding(.horizontal, DS.Spacing.lg)
         }
+        .background { DetailWaveBackground() }
         .navigationTitle(resolvedTitle)
         .navigationBarTitleDisplayMode(.inline)
         .task {

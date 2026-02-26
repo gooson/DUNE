@@ -56,6 +56,7 @@ struct CompoundWorkoutView: View {
                     .transition(.move(edge: .bottom).combined(with: .opacity))
             }
         }
+        .background { DetailWaveBackground() }
         .animation(DS.Animation.snappy, value: setTimer.isRunning)
         .animation(DS.Animation.snappy, value: viewModel.isTransitioning)
         .sensoryFeedback(.success, trigger: saveCount)

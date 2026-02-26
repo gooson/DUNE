@@ -65,6 +65,7 @@ struct PersonalRecordsDetailView: View {
             }
             .padding()
         }
+        .background { DetailWaveBackground() }
         .navigationTitle("Personal Records")
         .task(id: recordsUpdateKey) {
             viewModel.load(records: records)

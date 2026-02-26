@@ -43,6 +43,7 @@ struct WorkoutPreviewView: View {
                     Text("\(snapshot.entries.count) exercises")
                 }
             }
+            .scrollContentBackground(.hidden)
 
             // Start button — fixed at bottom
             Button {
@@ -66,6 +67,7 @@ struct WorkoutPreviewView: View {
             .padding(.horizontal, 12)
             .padding(.bottom, 4)
         }
+        .background { WatchWaveBackground() }
         .navigationTitle(snapshot.name)
         .alert("Error", isPresented: .init(
             get: { errorMessage != nil },

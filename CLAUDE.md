@@ -358,3 +358,10 @@
 
 141. **최소 노출 타이머는 `CancellationError` 명시 처리 필수**: `try? await Task.sleep(...)`는 취소 시 즉시 반환하며 에러를 삼켜 요구사항(예: 최소 1초 노출)을 깨뜨릴 수 있음. `do/catch`로 취소를 분기하고, 취소 시 UI 상태를 변경하지 않는 것이 안전
 142. **Launch→Custom Splash 연속 전환에서는 로고 고정 frame 금지**: 시스템 Launch Screen과 커스텀 스플래시의 렌더링 규칙이 다를 수 있으므로 `.frame(width:height:)` 하드코딩은 점프(축소/확대) 체감을 유발. 동일 에셋 사용 시 크기 강제보다 기본 렌더링을 우선
+
+### 2026-02-27: Wave Expansion 전면 적용 교정
+
+143. **List/Form + 웨이브 배경은 `.scrollContentBackground(.hidden)` 필수**: SwiftUI `List`/`Form`의 기본 불투명 배경이 웨이브를 가림. `.background { WaveBackground() }` 추가 시 반드시 `.scrollContentBackground(.hidden)` 세트로 적용
+144. **웨이브 색상 오버라이드는 Environment 전용**: `DetailWaveBackground(overrideColor:)` 같은 init 파라미터 패턴 금지. `.environment(\.waveColor, color)` 패턴으로 3-tier(Tab/Detail/Sheet) 모두 동일 API 유지
+145. **WavePreset에 소비자 없는 case 추가 금지**: `.injury`, `.watch` 등 실제 environment setter가 없는 case는 모든 switch에 dead 분기를 추가함. consumer가 생길 때 case를 추가할 것
+146. **새 View 추가 시 웨이브 배경 적용 체크**: Tab root → `TabWaveBackground`, Push detail → `DetailWaveBackground`, Sheet/Modal → `SheetWaveBackground`. 누락 시 디자인 일관성 파괴

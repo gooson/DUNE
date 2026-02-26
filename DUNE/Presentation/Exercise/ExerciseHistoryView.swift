@@ -61,6 +61,7 @@ struct ExerciseHistoryView: View {
                 .presentationDetents([.medium])
         }
         .confirmDeleteRecord($recordToDelete, context: modelContext)
+        .background { DetailWaveBackground() }
     }
 
     // MARK: - Metric Picker

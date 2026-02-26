@@ -24,6 +24,7 @@ struct ConsistencyDetailView: View {
             }
             .padding()
         }
+        .background { DetailWaveBackground() }
         .navigationTitle("Consistency")
         .task(id: exerciseRecords.count) {
             viewModel.loadData(from: exerciseRecords)

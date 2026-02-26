@@ -121,7 +121,7 @@ struct DashboardView: View {
                 }
             }
         }
-        .background { TabWaveBackground(primaryColor: DS.Color.warmGlow) }
+        .background { TabWaveBackground() }
         .navigationDestination(for: ConditionScore.self) { score in
             ConditionScoreDetailView(score: score)
         }

@@ -72,6 +72,7 @@ struct WorkoutSessionView: View {
             // Bottom action button
             bottomAction
         }
+        .background { DetailWaveBackground() }
         .sensoryFeedback(.success, trigger: setCompleteCount)
         .sensoryFeedback(.success, trigger: restTimerCompleted)
         .navigationTitle(exercise.localizedName)

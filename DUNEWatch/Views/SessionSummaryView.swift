@@ -54,6 +54,7 @@ struct SessionSummaryView: View {
             }
             .padding(.horizontal, 4)
         }
+        .background { WatchWaveBackground(color: DS.Color.positive) }
         .navigationBarBackButtonHidden()
         .alert("Save Error", isPresented: .init(
             get: { saveError != nil },

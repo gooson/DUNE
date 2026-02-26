@@ -71,6 +71,7 @@ struct CloudSyncConsentView: View {
             .padding(.horizontal)
             .padding(.bottom, 32)
         }
+        .background { SheetWaveBackground() }
         .interactiveDismissDisabled()
     }
 }

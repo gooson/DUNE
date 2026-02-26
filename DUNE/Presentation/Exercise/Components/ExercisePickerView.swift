@@ -206,6 +206,8 @@ struct ExercisePickerView: View {
                 fullModeSections
             }
         }
+        .scrollContentBackground(.hidden)
+        .background { SheetWaveBackground() }
     }
 
     @ViewBuilder

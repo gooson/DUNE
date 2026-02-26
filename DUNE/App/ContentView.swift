@@ -24,6 +24,8 @@ struct ContentView: View {
                         scrollToTopSignal: todayScrollToTopSignal
                     )
                 }
+                .environment(\.wavePreset, .today)
+                .environment(\.waveColor, DS.Color.warmGlow)
             }
             Tab(AppSection.train.title, systemImage: AppSection.train.icon, value: AppSection.train) {
                 NavigationStack {
@@ -32,6 +34,8 @@ struct ContentView: View {
                         scrollToTopSignal: activityScrollToTopSignal
                     )
                 }
+                .environment(\.wavePreset, .train)
+                .environment(\.waveColor, DS.Color.tabTrain)
             }
             Tab(AppSection.wellness.title, systemImage: AppSection.wellness.icon, value: AppSection.wellness) {
                 NavigationStack {
@@ -40,6 +44,8 @@ struct ContentView: View {
                         scrollToTopSignal: wellnessScrollToTopSignal
                     )
                 }
+                .environment(\.wavePreset, .wellness)
+                .environment(\.waveColor, DS.Color.tabWellness)
             }
         }
         .tabViewStyle(.sidebarAdaptable)

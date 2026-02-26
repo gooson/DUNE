@@ -29,6 +29,10 @@ enum DS {
         // Surface
         // cardBackground intentionally omitted — watchOS uses system material backgrounds
         static let surfacePrimary = SwiftUI.Color("SurfacePrimary")
+
+        // Tab wave identity — Desert Horizon palette (mirrors iOS DS)
+        static let tabTrain    = SwiftUI.Color("TabTrain")     // Desert Coral
+        static let tabWellness = SwiftUI.Color("TabWellness")  // Oasis Teal
     }
 
     // MARK: - Opacity (mirrors iOS DS.Opacity)
@@ -39,5 +43,12 @@ enum DS {
         static let medium: Double = 0.10
         static let border: Double = 0.15
         static let strong: Double = 0.30
+    }
+
+    // MARK: - Animation
+
+    enum Animation {
+        /// Slow, infinite drift for wave background decoration.
+        static let waveDrift: SwiftUI.Animation = .linear(duration: 8).repeatForever(autoreverses: false)
     }
 }

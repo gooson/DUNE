@@ -40,6 +40,7 @@ struct MuscleMapView: View {
         }
         .navigationTitle("Muscle Map")
         .navigationBarTitleDisplayMode(.inline)
+        .background { DetailWaveBackground() }
     }
 
     // MARK: - Body Map

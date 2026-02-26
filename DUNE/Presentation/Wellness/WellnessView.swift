@@ -52,7 +52,7 @@ struct WellnessView: View {
                 scrollContent
             }
         }
-        .background { TabWaveBackground(primaryColor: DS.Color.fitness) }
+        .background { TabWaveBackground() }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Menu {

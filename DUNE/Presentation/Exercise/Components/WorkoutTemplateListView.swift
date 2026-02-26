@@ -20,6 +20,7 @@ struct WorkoutTemplateListView: View {
         }
         .navigationTitle("Templates")
         .navigationBarTitleDisplayMode(.inline)
+        .background { DetailWaveBackground() }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button {
@@ -103,6 +104,7 @@ struct WorkoutTemplateListView: View {
                     }
                 }
             }
+            .scrollContentBackground(.hidden)
         }
     }
 

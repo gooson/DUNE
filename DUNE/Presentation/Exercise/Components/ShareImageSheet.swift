@@ -41,6 +41,7 @@ struct ShareImageSheet: View {
             }
             .navigationTitle("Share Workout")
             .navigationBarTitleDisplayMode(.inline)
+            .background { SheetWaveBackground() }
         }
     }
 }

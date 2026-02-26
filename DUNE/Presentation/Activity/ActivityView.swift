@@ -141,7 +141,7 @@ struct ActivityView: View {
                 }
             }
         }
-        .background { TabWaveBackground(primaryColor: DS.Color.activity) }
+        .background { TabWaveBackground() }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button {

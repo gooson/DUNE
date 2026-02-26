@@ -27,6 +27,7 @@ struct WeeklyStatsDetailView: View {
             }
             .padding()
         }
+        .background { DetailWaveBackground() }
         .navigationTitle(viewModel.selectedPeriod.rawValue)
         .task(id: viewModel.selectedPeriod) {
             let snapshots = recentRecords.map { record in

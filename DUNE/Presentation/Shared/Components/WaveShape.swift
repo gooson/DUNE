@@ -124,27 +124,109 @@ struct WaveOverlayView: View {
 
 // MARK: - Tab Background
 
-/// Common tab background pattern: wave motif + warm gradient.
-/// Each tab provides its own `primaryColor` (key color for that tab).
+/// Tab root background: wave motif + warm gradient.
+/// Reads `wavePreset` and `waveColor` from the environment (set by ContentView per tab).
 struct TabWaveBackground: View {
-    let primaryColor: Color
+    @Environment(\.wavePreset) private var preset
+    @Environment(\.waveColor) private var color
 
     var body: some View {
+        let gradientTop = color.opacity(DS.Opacity.medium)
+        let gradientMid = DS.Color.warmGlow.opacity(DS.Opacity.subtle)
+
         ZStack(alignment: .top) {
+            // Primary wave
             WaveOverlayView(
-                color: primaryColor,
-                opacity: 0.15,
-                amplitude: 0.06,
-                frequency: DS.Gradient.waveFrequency,
-                verticalOffset: 0.5,
-                bottomFade: 0.4
+                color: color,
+                opacity: preset.opacity,
+                amplitude: preset.amplitude,
+                frequency: preset.frequency,
+                verticalOffset: preset.verticalOffset,
+                bottomFade: preset.bottomFade
             )
             .frame(height: 200)
 
+            // Secondary wave (Train tab dual-layer)
+            if let secondary = preset.secondaryWave {
+                WaveOverlayView(
+                    color: color,
+                    opacity: secondary.opacity,
+                    amplitude: secondary.amplitude,
+                    frequency: secondary.frequency,
+                    verticalOffset: preset.verticalOffset,
+                    bottomFade: preset.bottomFade
+                )
+                .frame(height: 200)
+            }
+
             LinearGradient(
-                colors: [primaryColor.opacity(DS.Opacity.medium), DS.Color.warmGlow.opacity(DS.Opacity.subtle), .clear],
+                colors: [gradientTop, gradientMid, .clear],
                 startPoint: .top,
                 endPoint: DS.Gradient.tabBackgroundEnd
+            )
+        }
+        .ignoresSafeArea()
+    }
+}
+
+// MARK: - Detail Background
+
+/// Subtler wave for push-destination detail screens.
+/// Inherits `wavePreset` / `waveColor` from parent tab, scaled down (50% amp, 70% opacity).
+struct DetailWaveBackground: View {
+    @Environment(\.wavePreset) private var preset
+    @Environment(\.waveColor) private var color
+
+    var body: some View {
+        let gradientTop = color.opacity(DS.Opacity.light)
+
+        ZStack(alignment: .top) {
+            WaveOverlayView(
+                color: color,
+                opacity: preset.opacity * 0.7,
+                amplitude: preset.amplitude * 0.5,
+                frequency: preset.frequency,
+                verticalOffset: preset.verticalOffset,
+                bottomFade: 0.5
+            )
+            .frame(height: 150)
+
+            LinearGradient(
+                colors: [gradientTop, .clear],
+                startPoint: .top,
+                endPoint: DS.Gradient.tabBackgroundEnd
+            )
+        }
+        .ignoresSafeArea()
+    }
+}
+
+// MARK: - Sheet Background
+
+/// Lightest wave for sheet / modal presentations.
+/// Scaled down further (40% amp, 60% opacity) with shorter height.
+struct SheetWaveBackground: View {
+    @Environment(\.wavePreset) private var preset
+    @Environment(\.waveColor) private var color
+
+    var body: some View {
+        let gradientTop = color.opacity(DS.Opacity.light)
+
+        ZStack(alignment: .top) {
+            WaveOverlayView(
+                color: color,
+                opacity: preset.opacity * 0.6,
+                amplitude: preset.amplitude * 0.4,
+                frequency: preset.frequency,
+                verticalOffset: 0.5,
+                bottomFade: 0.5
+            )
+            .frame(height: 120)
+
+            LinearGradient(
+                colors: [gradientTop, .clear],
+                startPoint: .top,
+                endPoint: DS.Gradient.sheetBackgroundEnd
             )
         }
         .ignoresSafeArea()
