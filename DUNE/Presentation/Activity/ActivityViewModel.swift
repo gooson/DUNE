@@ -294,13 +294,15 @@ final class ActivityViewModel {
         ]
     }
 
-    private var loadTask: Task<Void, Never>?
-
     func loadActivityData() async {
         guard !isLoading else { return }
-        loadTask?.cancel()
         isLoading = true
         errorMessage = nil
+
+        // Always reset isLoading on ALL exit paths — including Task cancellation.
+        // Without defer, Task.isCancelled guards leave isLoading stuck at true,
+        // permanently blocking future loads. Safe for Void async functions.
+        defer { isLoading = false }
 
         let sharedSnapshot = await sharedHealthDataService?.fetchSnapshot()
 
@@ -376,7 +378,6 @@ final class ActivityViewModel {
         recomputeDerivedStats()
 
         guard !Task.isCancelled else { return }
-        isLoading = false
     }
 
     // MARK: - Personal Record Helpers

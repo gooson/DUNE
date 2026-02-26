@@ -20,8 +20,6 @@ final class TrainingVolumeViewModel {
     private let stepsService: StepsQuerying
     private let hrvService: HRVQuerying
     private let effortScoreService: EffortScoreService
-    private var loadTask: Task<Void, Never>?
-
     init(
         workoutService: WorkoutQuerying? = nil,
         stepsService: StepsQuerying? = nil,
@@ -37,9 +35,9 @@ final class TrainingVolumeViewModel {
 
     func loadData(manualRecords: [ExerciseRecord]) async {
         guard !isLoading else { return }
-        loadTask?.cancel()
         isLoading = true
         errorMessage = nil
+        defer { isLoading = false }
 
         let snapshots = manualRecords.map { record in
             ManualExerciseSnapshot(
@@ -72,13 +70,11 @@ final class TrainingVolumeViewModel {
         trainingLoadData = loadData
 
         guard !Task.isCancelled else { return }
-        isLoading = false
     }
 
     // MARK: - Private
 
     private func triggerReload() {
-        loadTask?.cancel()
         comparison = nil
         // View will call loadData() via .task(id:)
     }

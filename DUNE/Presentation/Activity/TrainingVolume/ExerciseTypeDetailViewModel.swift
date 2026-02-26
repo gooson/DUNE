@@ -19,7 +19,6 @@ final class ExerciseTypeDetailViewModel {
     var isLoading = false
 
     private let workoutService: WorkoutQuerying
-    private var loadTask: Task<Void, Never>?
 
     init(
         typeKey: String,
@@ -36,8 +35,8 @@ final class ExerciseTypeDetailViewModel {
 
     func loadData(manualRecords: [ExerciseRecord]) async {
         guard !isLoading else { return }
-        loadTask?.cancel()
         isLoading = true
+        defer { isLoading = false }
 
         let snapshots = manualRecords
             .filter { "manual-\($0.exerciseType)" == typeKey || $0.exerciseType == typeKey }
@@ -93,7 +92,6 @@ final class ExerciseTypeDetailViewModel {
         }
 
         guard !Task.isCancelled else { return }
-        isLoading = false
     }
 
     // MARK: - Computed
@@ -117,7 +115,6 @@ final class ExerciseTypeDetailViewModel {
     // MARK: - Private
 
     private func triggerReload() {
-        loadTask?.cancel()
         currentSummary = nil
         previousSummary = nil
         trendData = []

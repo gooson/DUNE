@@ -334,6 +334,15 @@
 128. **반복 UnitPoint/opacity는 DS 토큰으로 추출**: 3곳 이상 동일 `UnitPoint(x:y:)` 사용 시 `DS.Gradient.*` 상수로 추출. 매직넘버 제거 + 일괄 조정 가능
 129. **비주얼 변경은 v1(보수적) → v2(강화) 2단계 접근**: 먼저 안전한 값으로 커밋+확인 후 강도 조절. 한 번에 강하게 가면 롤백 범위가 넓어짐
 
+### 2026-02-26: Watch Workout Dedup False-Positive 교정
+
+130. **`isFromThisApp` 단독 필터 조건 사용 금지**: Watch companion 앱은 parent iOS 앱의 bundle ID(`com.raftel.dailve`)를 HealthKit `sourceRevision`에 공유. `isFromThisApp=true`만으로 dedup 필터링하면 ExerciseRecord 없는 Watch 워크아웃이 완전히 사라짐. 반드시 type+date proximity(±2분) 매칭 조건을 병행
+131. **Dedup fallback은 보수적(inclusive)이어야 함**: "중복 표시"보다 "보이지 않음"이 사용자 경험에 훨씬 치명적. 확신 없는 경우 보여주고, 확실히 중복인 경우만 필터링
+132. **Correction #39 적용 범위 명확화 — Void async 함수는 `defer` 사용 필수**: #39(`defer`로 isSaving 리셋 금지)는 반환값이 있는 함수(`-> Record?`)에만 적용. Void async 함수(`loadActivityData()`)에서는 `defer { isLoading = false }`가 모든 exit path(Task cancellation 포함)를 커버하는 유일한 안전 수단
+133. **Dead code(선언만 있고 미할당 프로퍼티)는 리뷰 시 즉시 제거**: `private var loadTask: Task<Void, Never>?`처럼 선언 후 한 번도 할당되지 않는 프로퍼티는 `loadTask?.cancel()`이 항상 no-op. Optional chaining이 실패를 삼키므로 dead code가 잠복 버그를 은폐
+134. **버그 수정 후 사용자 확인 전 "해결됨" 판정 금지**: 첫 가설(`isLoading` stuck)만 수정하고 검증 없이 다음 단계 진행하면 실제 원인(dedup false-positive)을 놓침. 수정 → 빌드 → 사용자 확인 → 다음 단계 순서 필수
+135. **진단 로그는 핵심 결정 지점에 집중**: `print("[DEBUG] count=\(items.count)")`보다 `print("[DEBUG] workout: \(type) | isFromThisApp=\(flag) | filtered=\(result)")`처럼 판정 로직의 입출력을 로깅. 데이터 흐름의 "어디서 사라졌는지"를 즉시 파악 가능
+
 ### 2026-02-26: AccentColor Fallback 교정
 
-130. **브랜드 컬러에 `.accentColor` 직접 사용 금지**: xcodegen 환경에서 `ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME` 미설정 시 시스템 기본 파란색 반환. `Color("AccentColor")` 또는 `DS.Color.warmGlow` 경유 필수
+136. **브랜드 컬러에 `.accentColor` 직접 사용 금지**: xcodegen 환경에서 `ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME` 미설정 시 시스템 기본 파란색 반환. `Color("AccentColor")` 또는 `DS.Color.warmGlow` 경유 필수

@@ -5,8 +5,12 @@ extension Array where Element == WorkoutSummary {
     ///
     /// Strategy:
     /// - **Primary**: Match by `healthKitWorkoutID` (links SwiftData → HealthKit record)
-    /// - **Fallback**: Exclude workouts where `isFromThisApp == true` (handles HealthKit write
-    ///   failures where `healthKitWorkoutID` was never populated on the SwiftData side)
+    /// - **Fallback**: If `isFromThisApp` AND a type+date-proximate record exists, assume duplicate
+    ///   (handles HealthKit write failures where `healthKitWorkoutID` was never populated)
+    ///
+    /// Watch workouts share the parent iOS app's bundle ID, so `isFromThisApp` alone
+    /// cannot distinguish Watch vs iOS workouts. Without type+date-proximity check,
+    /// Watch workouts without ExerciseRecords are incorrectly hidden.
     func filteringAppDuplicates(against records: [ExerciseRecord]) -> [WorkoutSummary] {
         let appLinkedHKIDs: Set<String> = Set(
             records.compactMap { id in
@@ -16,8 +20,17 @@ extension Array where Element == WorkoutSummary {
         )
 
         return filter { workout in
+            // Primary: exact HK ID match → ExerciseRecord covers this workout
             if appLinkedHKIDs.contains(workout.id) { return false }
-            if workout.isFromThisApp { return false }
+            // Fallback: from this app AND a type+date matching record exists (±2 min)
+            // Without type+date check, Watch workouts with no ExerciseRecord are lost.
+            if workout.isFromThisApp {
+                let hasProbableMatch = records.contains { record in
+                    record.exerciseType == workout.activityType.rawValue
+                        && abs(record.date.timeIntervalSince(workout.date)) < 120
+                }
+                if hasProbableMatch { return false }
+            }
             return true
         }
     }
