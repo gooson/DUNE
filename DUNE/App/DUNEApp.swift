@@ -5,9 +5,11 @@ import SwiftData
 struct DUNEApp: App {
     @AppStorage("hasShownCloudSyncConsent") private var hasShownConsent = false
     @State private var showConsentSheet = false
+    @State private var isShowingLaunchSplash = !DUNEApp.isRunningXCTest
 
     let modelContainer: ModelContainer
     private let sharedHealthDataService: SharedHealthDataService
+    private static let minimumLaunchSplashDuration: Duration = .seconds(1)
 
     private static var isRunningXCTest: Bool {
         ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
@@ -65,22 +67,64 @@ struct DUNEApp: App {
                 if Self.isRunningUnitTests {
                     Color.clear
                 } else {
-                    ContentView(sharedHealthDataService: sharedHealthDataService)
-                        .onAppear {
-                            if !hasShownConsent && !Self.isRunningXCTest {
-                                showConsentSheet = true
-                            }
-                            // Skip WC activation during XCTest to reduce startup flakiness.
-                            if !Self.isRunningXCTest {
-                                WatchSessionManager.shared.activate()
-                            }
+                    Group {
+                        if isShowingLaunchSplash {
+                            LaunchSplashView()
+                                .transition(.opacity)
+                        } else {
+                            appContent
                         }
-                        .sheet(isPresented: $showConsentSheet) {
-                            CloudSyncConsentView(isPresented: $showConsentSheet)
-                        }
+                    }
+                    .task(id: isShowingLaunchSplash) {
+                        guard isShowingLaunchSplash else { return }
+                        await dismissLaunchSplashAfterMinimumDuration()
+                    }
                 }
             }
         }
         .modelContainer(modelContainer)
+    }
+
+    private var appContent: some View {
+        ContentView(sharedHealthDataService: sharedHealthDataService)
+            .onAppear {
+                if !hasShownConsent && !Self.isRunningXCTest {
+                    showConsentSheet = true
+                }
+                // Skip WC activation during XCTest to reduce startup flakiness.
+                if !Self.isRunningXCTest {
+                    WatchSessionManager.shared.activate()
+                }
+            }
+            .sheet(isPresented: $showConsentSheet) {
+                CloudSyncConsentView(isPresented: $showConsentSheet)
+            }
+    }
+
+    @MainActor
+    private func dismissLaunchSplashAfterMinimumDuration() async {
+        do {
+            try await Task.sleep(for: Self.minimumLaunchSplashDuration)
+        } catch is CancellationError {
+            // Keep splash state unchanged when the task is cancelled.
+            return
+        } catch {
+            return
+        }
+
+        guard !Task.isCancelled, isShowingLaunchSplash else { return }
+        withAnimation(.easeOut(duration: 0.2)) {
+            isShowingLaunchSplash = false
+        }
+    }
+}
+
+private struct LaunchSplashView: View {
+    var body: some View {
+        ZStack {
+            Color("LaunchBackground")
+                .ignoresSafeArea()
+            Image("LaunchLogo")
+        }
     }
 }
