@@ -98,7 +98,7 @@ struct HeartRateChartView: View {
                 .symbolSize(48)
 
                 RuleMark(x: .value("Selected", point.date))
-                    .foregroundStyle(DS.Color.warmGlow.opacity(0.25))
+                    .foregroundStyle(DS.Color.warmGlow.opacity(0.35))
                     .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
             }
         }
@@ -108,7 +108,7 @@ struct HeartRateChartView: View {
                 AxisValueLabel(format: .dateTime.hour().minute())
                     .foregroundStyle(DS.Color.sandMuted)
                 AxisGridLine()
-                    .foregroundStyle(DS.Color.warmGlow.opacity(0.20))
+                    .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
             }
         }
         .chartYAxis {
@@ -116,7 +116,7 @@ struct HeartRateChartView: View {
                 AxisValueLabel()
                     .foregroundStyle(DS.Color.sandMuted)
                 AxisGridLine()
-                    .foregroundStyle(DS.Color.warmGlow.opacity(0.20))
+                    .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
             }
         }
         .chartXSelection(value: $selectedDate)

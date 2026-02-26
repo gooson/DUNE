@@ -52,7 +52,7 @@ struct MetricDetailView: View {
                 .overlay {
                     if showShimmer {
                         RoundedRectangle(cornerRadius: DS.Radius.md)
-                            .fill(DS.Color.warmGlow.opacity(0.15))
+                            .fill(DS.Color.warmGlow.opacity(0.25))
                             .allowsHitTesting(false)
                             .transition(.opacity)
                     }

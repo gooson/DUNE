@@ -50,7 +50,7 @@ struct SleepStageChartView: View {
                 AxisValueLabel(format: .dateTime.hour())
                     .foregroundStyle(DS.Color.sandMuted)
                 AxisGridLine()
-                    .foregroundStyle(DS.Color.warmGlow.opacity(0.20))
+                    .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
             }
         }
         .chartYAxis {
@@ -83,7 +83,7 @@ struct SleepStageChartView: View {
 
                 if let point = selectedDailyPoint {
                     RuleMark(x: .value("Selected", point.date, unit: barXUnit))
-                        .foregroundStyle(DS.Color.warmGlow.opacity(0.25))
+                        .foregroundStyle(DS.Color.warmGlow.opacity(0.35))
                         .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
                 }
             }
@@ -96,7 +96,7 @@ struct SleepStageChartView: View {
                     AxisValueLabel(format: period.axisLabelFormat)
                         .foregroundStyle(DS.Color.sandMuted)
                     AxisGridLine()
-                        .foregroundStyle(DS.Color.warmGlow.opacity(0.20))
+                        .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
                 }
             }
             .chartYAxis {
@@ -104,7 +104,7 @@ struct SleepStageChartView: View {
                     AxisValueLabel()
                         .foregroundStyle(DS.Color.sandMuted)
                     AxisGridLine()
-                        .foregroundStyle(DS.Color.warmGlow.opacity(0.20))
+                        .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
                 }
             }
             .chartXSelection(value: $selectedDate)

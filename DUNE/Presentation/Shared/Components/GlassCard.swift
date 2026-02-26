@@ -74,8 +74,8 @@ struct StandardCard<Content: View>: View {
                                 colorScheme == .dark
                                     ? LinearGradient(
                                         colors: [
-                                            DS.Color.warmGlow.opacity(0.25),
-                                            DS.Color.desertDusk.opacity(0.20)
+                                            DS.Color.warmGlow.opacity(0.35),
+                                            DS.Color.desertDusk.opacity(0.25)
                                         ],
                                         startPoint: .topLeading,
                                         endPoint: .bottomTrailing
@@ -119,7 +119,7 @@ struct InlineCard<Content: View>: View {
                 LinearGradient(
                     colors: [
                         DS.Color.warmGlow.opacity(0),
-                        DS.Color.warmGlow.opacity(0.15),
+                        DS.Color.warmGlow.opacity(0.25),
                         DS.Color.warmGlow.opacity(0)
                     ],
                     startPoint: .leading,

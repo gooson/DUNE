@@ -30,7 +30,7 @@ struct HeartRateZoneChartView: View {
                         }
                     }
                     AxisGridLine()
-                        .foregroundStyle(DS.Color.warmGlow.opacity(0.20))
+                        .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
                 }
             }
             .chartYAxis {
