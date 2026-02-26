@@ -6,10 +6,13 @@ struct DUNEApp: App {
     @AppStorage("hasShownCloudSyncConsent") private var hasShownConsent = false
     @State private var showConsentSheet = false
     @State private var isShowingLaunchSplash = !DUNEApp.isRunningXCTest
+    @State private var isResolvingLaunchSplash = false
+    @State private var hasCompletedPostSplashSetup = false
 
     let modelContainer: ModelContainer
     private let sharedHealthDataService: SharedHealthDataService
     private static let minimumLaunchSplashDuration: Duration = .seconds(1)
+    private static let launchSplashResolveDuration: Duration = .milliseconds(700)
 
     private static var isRunningXCTest: Bool {
         ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
@@ -67,17 +70,23 @@ struct DUNEApp: App {
                 if Self.isRunningUnitTests {
                     Color.clear
                 } else {
-                    Group {
-                        if isShowingLaunchSplash {
-                            LaunchSplashView()
-                                .transition(.opacity)
-                        } else {
+                    ZStack {
+                        if !isShowingLaunchSplash || isResolvingLaunchSplash {
                             appContent
+                                .transition(.opacity)
+                        }
+
+                        if isShowingLaunchSplash {
+                            LaunchSplashView(isResolving: isResolvingLaunchSplash)
+                                .allowsHitTesting(!isResolvingLaunchSplash)
                         }
                     }
                     .task(id: isShowingLaunchSplash) {
-                        guard isShowingLaunchSplash else { return }
-                        await dismissLaunchSplashAfterMinimumDuration()
+                        if isShowingLaunchSplash {
+                            await dismissLaunchSplashAfterMinimumDuration()
+                        } else {
+                            runPostSplashSetupIfNeeded()
+                        }
                     }
                 }
             }
@@ -87,18 +96,24 @@ struct DUNEApp: App {
 
     private var appContent: some View {
         ContentView(sharedHealthDataService: sharedHealthDataService)
-            .onAppear {
-                if !hasShownConsent && !Self.isRunningXCTest {
-                    showConsentSheet = true
-                }
-                // Skip WC activation during XCTest to reduce startup flakiness.
-                if !Self.isRunningXCTest {
-                    WatchSessionManager.shared.activate()
-                }
-            }
             .sheet(isPresented: $showConsentSheet) {
                 CloudSyncConsentView(isPresented: $showConsentSheet)
             }
+    }
+
+    @MainActor
+    private func runPostSplashSetupIfNeeded() {
+        guard !hasCompletedPostSplashSetup else { return }
+        hasCompletedPostSplashSetup = true
+
+        if !hasShownConsent && !Self.isRunningXCTest {
+            showConsentSheet = true
+        }
+
+        // Skip WC activation during XCTest to reduce startup flakiness.
+        if !Self.isRunningXCTest {
+            WatchSessionManager.shared.activate()
+        }
     }
 
     @MainActor
@@ -113,18 +128,58 @@ struct DUNEApp: App {
         }
 
         guard !Task.isCancelled, isShowingLaunchSplash else { return }
-        withAnimation(.easeOut(duration: 0.2)) {
-            isShowingLaunchSplash = false
+
+        isResolvingLaunchSplash = true
+
+        do {
+            try await Task.sleep(for: Self.launchSplashResolveDuration)
+        } catch is CancellationError {
+            if isShowingLaunchSplash {
+                isResolvingLaunchSplash = false
+            }
+            return
+        } catch {
+            if isShowingLaunchSplash {
+                isResolvingLaunchSplash = false
+            }
+            return
         }
+
+        guard !Task.isCancelled, isShowingLaunchSplash else { return }
+        isShowingLaunchSplash = false
+        isResolvingLaunchSplash = false
     }
 }
 
 private struct LaunchSplashView: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    let isResolving: Bool
+
+    private var backgroundDissolveAnimation: SwiftUI.Animation {
+        if reduceMotion {
+            return .easeOut(duration: 0.15)
+        }
+        return .easeOut(duration: 0.28)
+    }
+
+    private var logoDissolveAnimation: SwiftUI.Animation {
+        if reduceMotion {
+            return .easeOut(duration: 0.2)
+        }
+        return .timingCurve(0.22, 0.61, 0.36, 1.0, duration: 0.45).delay(0.18)
+    }
+
     var body: some View {
         ZStack {
             Color("LaunchBackground")
                 .ignoresSafeArea()
+                .opacity(isResolving ? 0 : 1)
+                .animation(backgroundDissolveAnimation, value: isResolving)
             Image("LaunchLogo")
+                .opacity(isResolving ? 0 : 1)
+                .scaleEffect(isResolving ? 0.985 : 1)
+                .animation(logoDissolveAnimation, value: isResolving)
         }
     }
 }
