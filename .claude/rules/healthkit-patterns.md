@@ -46,6 +46,26 @@ private func isWatchSource(_ sample: HKSample) -> Bool {
 }
 ```
 
+## Watch Workout Bundle ID
+
+Watch companion 앱이 HealthKit에 저장한 워크아웃은 parent iOS 앱의 bundle ID를 사용.
+`isFromThisApp` 판정만으로 Watch vs iOS를 구분할 수 없음.
+Dedup 시 `isFromThisApp`을 단독 필터 조건으로 사용 금지.
+
+```swift
+// BAD: Watch 워크아웃이 ExerciseRecord 없으면 사라짐
+if workout.isFromThisApp { return false }
+
+// GOOD: type + date proximity (±2min) 매칭 필수
+if workout.isFromThisApp {
+    let hasProbableMatch = records.contains { record in
+        record.exerciseType == workout.activityType.rawValue
+            && abs(record.date.timeIntervalSince(workout.date)) < 120
+    }
+    if hasProbableMatch { return false }
+}
+```
+
 ## Sleep 데이터 중복 제거
 
 - 정렬 후 sweep-line 방식 사용
