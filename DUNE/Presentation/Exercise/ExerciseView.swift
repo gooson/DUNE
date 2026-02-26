@@ -115,13 +115,6 @@ struct ExerciseView: View {
                 .accessibilityIdentifier("exercise-templates-button")
 
                 NavigationLink {
-                    MuscleMapView()
-                } label: {
-                    Image(systemName: "figure.stand")
-                }
-                .accessibilityIdentifier("exercise-muscle-map-button")
-
-                NavigationLink {
                     VolumeAnalysisView()
                 } label: {
                     Image(systemName: "chart.bar.fill")

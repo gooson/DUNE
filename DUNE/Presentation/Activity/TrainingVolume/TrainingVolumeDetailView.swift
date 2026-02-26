@@ -72,9 +72,6 @@ struct TrainingVolumeDetailView: View {
             TrainingLoadChartView(data: viewModel.trainingLoadData)
         }
 
-        // Muscle Map
-        MuscleMapSummaryCard(records: exerciseRecords)
-
         // Exercise type list
         exerciseTypeList(comparison.current.exerciseTypes)
     }

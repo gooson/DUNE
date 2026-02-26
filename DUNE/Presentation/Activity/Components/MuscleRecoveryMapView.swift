@@ -1,59 +1,99 @@
 import SwiftUI
 
-/// Body diagram with recovery coloring — front and back side by side.
+/// Body diagram with recovery/volume coloring — front and back side by side.
+/// Segmented picker to switch between Recovery and Volume modes.
 /// Uses original outline + muscle paths from react-native-body-highlighter (MIT).
 struct MuscleRecoveryMapView: View {
     let fatigueStates: [MuscleFatigueState]
     let onMuscleSelected: (MuscleGroup) -> Void
 
+    // MARK: - Mode
+
+    enum MapMode: Int, CaseIterable {
+        case recovery
+        case volume
+
+        var label: String {
+            switch self {
+            case .recovery: "Recovery"
+            case .volume: "Volume"
+            }
+        }
+    }
+
     @Environment(\.colorScheme) private var colorScheme
     @State private var fatigueByMuscle: [MuscleGroup: MuscleFatigueState] = [:]
-    @State private var showingAlgorithmSheet = false
+    @State private var mode: MapMode = .recovery
+    @State private var showingRecoveryInfoSheet = false
+    @State private var showingVolumeInfoSheet = false
+    @State private var recoveredCount = 0
+    @State private var trainedCount = 0
 
     var body: some View {
         VStack(spacing: DS.Spacing.md) {
             headerSection
             bodyDiagramSection
         }
+        .animation(.easeInOut(duration: 0.3), value: mode)
         .onAppear { rebuildFatigueIndex() }
         .onChange(of: fatigueStates.count) { _, _ in rebuildFatigueIndex() }
     }
 
     private func rebuildFatigueIndex() {
         fatigueByMuscle = Dictionary(uniqueKeysWithValues: fatigueStates.map { ($0.muscle, $0) })
+        recoveredCount = fatigueStates.filter(\.isRecovered).count
+        trainedCount = fatigueStates.filter { $0.weeklyVolume > 0 }.count
     }
 
     // MARK: - Header
 
     private var headerSection: some View {
         HStack {
-            VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                Text(recoverySubtitle)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
+            Text(subtitle)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .contentTransition(.numericText())
 
             Button {
-                showingAlgorithmSheet = true
+                switch mode {
+                case .recovery: showingRecoveryInfoSheet = true
+                case .volume: showingVolumeInfoSheet = true
+                }
             } label: {
                 Image(systemName: "info.circle")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
-            .sheet(isPresented: $showingAlgorithmSheet) {
-                FatigueAlgorithmSheet()
-            }
 
             Spacer()
+
+            Picker("Mode", selection: $mode) {
+                ForEach(MapMode.allCases, id: \.rawValue) { m in
+                    Text(m.label).tag(m)
+                }
+            }
+            .pickerStyle(.segmented)
+            .frame(maxWidth: 160)
+        }
+        .sheet(isPresented: $showingRecoveryInfoSheet) {
+            FatigueAlgorithmSheet()
+        }
+        .sheet(isPresented: $showingVolumeInfoSheet) {
+            VolumeAlgorithmSheet()
         }
     }
 
-    private var recoverySubtitle: String {
-        let recovered = fatigueStates.filter(\.isRecovered).count
-        let total = fatigueStates.count
-        guard total > 0 else { return "Start training to track recovery" }
-        if recovered == total { return "All \(total) muscle groups ready" }
-        return "\(recovered)/\(total) muscle groups ready"
+    private var subtitle: String {
+        switch mode {
+        case .recovery:
+            let total = fatigueStates.count
+            guard total > 0 else { return "Start training to track recovery" }
+            if recoveredCount == total { return "All \(total) muscle groups ready" }
+            return "\(recoveredCount)/\(total) muscle groups ready"
+        case .volume:
+            guard trainedCount > 0 else { return "Start recording workouts to see volume" }
+            return "\(trainedCount) muscles trained this week"
+        }
     }
 
     // MARK: - Body Diagram
@@ -67,6 +107,7 @@ struct MuscleRecoveryMapView: View {
                     .frame(maxWidth: 170)
             }
             .frame(maxWidth: .infinity, alignment: .center)
+
             legendRow
         }
     }
@@ -91,16 +132,17 @@ struct MuscleRecoveryMapView: View {
                     .stroke(Color.secondary.opacity(0.3), lineWidth: 1.5)
                     .frame(width: size.width, height: size.height)
 
-                // Muscle parts with recovery coloring
+                // Muscle parts with mode-dependent coloring
                 ForEach(parts) { part in
                     Button {
                         onMuscleSelected(part.muscle)
                     } label: {
+                        let colors = muscleColors(for: part.muscle)
                         part.shape
-                            .fill(recoveryColor(for: part.muscle))
+                            .fill(colors.fill)
                             .overlay {
                                 part.shape
-                                    .stroke(recoveryStrokeColor(for: part.muscle), lineWidth: 0.5)
+                                    .stroke(colors.stroke, lineWidth: 0.5)
                             }
                             .frame(width: size.width, height: size.height)
                     }
@@ -117,11 +159,29 @@ struct MuscleRecoveryMapView: View {
 
     // MARK: - Legend
 
+    @ViewBuilder
     private var legendRow: some View {
-        FatigueLegendView(onTap: { showingAlgorithmSheet = true })
+        switch mode {
+        case .recovery:
+            FatigueLegendView(onTap: { showingRecoveryInfoSheet = true })
+        case .volume:
+            VolumeLegendView(onTap: { showingVolumeInfoSheet = true })
+        }
     }
 
-    // MARK: - Colors
+    // MARK: - Colors (mode-dependent)
+
+    private func muscleColors(for muscle: MuscleGroup) -> (fill: Color, stroke: Color) {
+        switch mode {
+        case .recovery:
+            return (recoveryColor(for: muscle), recoveryStrokeColor(for: muscle))
+        case .volume:
+            let intensity = VolumeIntensity.from(sets: fatigueByMuscle[muscle]?.weeklyVolume ?? 0)
+            return (intensity.color, intensity.strokeColor)
+        }
+    }
+
+    // Recovery colors (existing logic)
 
     private func recoveryColor(for muscle: MuscleGroup) -> Color {
         guard let state = fatigueByMuscle[muscle] else {
