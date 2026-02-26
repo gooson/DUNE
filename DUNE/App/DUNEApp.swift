@@ -171,15 +171,15 @@ private struct LaunchSplashView: View {
     }
 
     var body: some View {
-        ZStack {
-            Color("LaunchBackground")
-                .ignoresSafeArea()
-                .opacity(isResolving ? 0 : 1)
-                .animation(backgroundDissolveAnimation, value: isResolving)
-            Image("LaunchLogo")
-                .opacity(isResolving ? 0 : 1)
-                .scaleEffect(isResolving ? 0.985 : 1)
-                .animation(logoDissolveAnimation, value: isResolving)
-        }
+        Color("LaunchBackground")
+            .opacity(isResolving ? 0 : 1)
+            .animation(backgroundDissolveAnimation, value: isResolving)
+            .overlay {
+                Image("LaunchLogo")
+                    .opacity(isResolving ? 0 : 1)
+                    .scaleEffect(isResolving ? 0.985 : 1)
+                    .animation(logoDissolveAnimation, value: isResolving)
+            }
+            .ignoresSafeArea()
     }
 }

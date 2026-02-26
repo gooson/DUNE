@@ -6,7 +6,7 @@ struct VolumeBreakdownSection: View {
     let sortedMuscleVolumes: [(muscle: MuscleGroup, volume: Int)]
     let totalWeeklySets: Int
     let trainedCount: Int
-    let balanceInfo: MuscleMapDetailViewModel.BalanceInfo
+    let balanceInfo: MuscleBalanceInfo
     @Binding var weeklySetGoal: Int
 
     var body: some View {
@@ -95,12 +95,13 @@ struct VolumeBreakdownSection: View {
 
     private func muscleRow(muscle: MuscleGroup, volume: Int) -> some View {
         let progress = weeklySetGoal > 0 ? min(Double(volume) / Double(weeklySetGoal), 1.0) : 0
+        let bar = barColor(progress: progress)
 
         return VStack(spacing: DS.Spacing.xxs) {
             HStack {
                 Image(systemName: muscle.iconName)
                     .font(.caption)
-                    .foregroundStyle(barColor(progress: progress))
+                    .foregroundStyle(bar)
                     .frame(width: 20)
 
                 Text(muscle.displayName)
@@ -120,7 +121,7 @@ struct VolumeBreakdownSection: View {
                     RoundedRectangle(cornerRadius: 3)
                         .fill(Color.secondary.opacity(0.1))
                     RoundedRectangle(cornerRadius: 3)
-                        .fill(barColor(progress: progress))
+                        .fill(bar)
                         .frame(width: geo.size.width * progress)
                 }
             }

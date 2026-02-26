@@ -1,6 +1,15 @@
 import Foundation
 import Observation
 
+/// Balance information for muscle volume distribution.
+struct MuscleBalanceInfo: Sendable {
+    let isBalanced: Bool
+    let ratio: Double
+    let undertrainedMuscles: [MuscleGroup]
+
+    static let noData = MuscleBalanceInfo(isBalanced: true, ratio: 0, undertrainedMuscles: [])
+}
+
 /// ViewModel for the Muscle Map detail view.
 /// Transforms pre-fetched fatigue states into display-ready data for volume and recovery sections.
 @Observable
@@ -9,7 +18,6 @@ final class MuscleMapDetailViewModel {
     // MARK: - State
 
     var selectedMuscle: MuscleGroup?
-    var mode: MuscleRecoveryMapView.MapMode = .recovery
 
     private(set) var fatigueByMuscle: [MuscleGroup: MuscleFatigueState] = [:]
     private(set) var sortedMuscleVolumes: [(muscle: MuscleGroup, volume: Int)] = []
@@ -18,11 +26,23 @@ final class MuscleMapDetailViewModel {
     private(set) var totalWeeklySets = 0
     private(set) var overworkedMuscles: [MuscleGroup] = []
     private(set) var nextRecovery: (muscle: MuscleGroup, date: Date)?
-    private(set) var balanceInfo: BalanceInfo = .noData
+    private(set) var balanceInfo: MuscleBalanceInfo = .noData
 
-    var weeklySetGoal: Int {
-        get { UserDefaults.standard.integer(forKey: "weeklySetGoal").clamped(to: 5...30, fallback: 15) }
-        set { UserDefaults.standard.set(newValue, forKey: "weeklySetGoal") }
+    // MARK: - Weekly Set Goal (cached)
+
+    private enum Keys {
+        static let weeklySetGoal = "\(Bundle.main.bundleIdentifier ?? "com.raftel.dailve").weeklySetGoal"
+    }
+
+    private(set) var weeklySetGoal: Int = {
+        let stored = UserDefaults.standard.integer(forKey: Keys.weeklySetGoal)
+        return stored == 0 ? 15 : stored.clamped(to: 5...30)
+    }()
+
+    func setWeeklySetGoal(_ value: Int) {
+        let clamped = value.clamped(to: 5...30)
+        weeklySetGoal = clamped
+        UserDefaults.standard.set(clamped, forKey: Keys.weeklySetGoal)
     }
 
     // MARK: - Load
@@ -66,17 +86,10 @@ final class MuscleMapDetailViewModel {
 
     // MARK: - Balance
 
-    struct BalanceInfo: Sendable {
-        let isBalanced: Bool
-        let ratio: Double
-        let undertrainedMuscles: [MuscleGroup]
-
-        static let noData = BalanceInfo(isBalanced: true, ratio: 0, undertrainedMuscles: [])
-    }
-
-    private func computeBalance(volumes: [Int]) -> BalanceInfo {
+    private func computeBalance(volumes: [Int]) -> MuscleBalanceInfo {
         guard !volumes.isEmpty else { return .noData }
         let avg = Double(volumes.reduce(0, +)) / Double(volumes.count)
+        guard avg.isFinite, !avg.isNaN else { return .noData }
         let maxV = volumes.max() ?? 1
         let minV = volumes.min() ?? 0
         let ratio = avg > 0 ? Double(maxV - minV) / avg : 0
@@ -85,18 +98,19 @@ final class MuscleMapDetailViewModel {
         let isBalanced = ratio < 1.5
         let goalHalf = weeklySetGoal / 2
         let undertrained = sortedMuscleVolumes
-            .suffix(3)
-            .filter { $0.volume < goalHalf && $0.volume > 0 }
+            .filter { $0.volume > 0 && $0.volume < goalHalf }
+            .sorted { $0.volume < $1.volume }
+            .prefix(3)
             .map(\.muscle)
 
-        return BalanceInfo(isBalanced: isBalanced, ratio: ratio, undertrainedMuscles: undertrained)
+        return MuscleBalanceInfo(isBalanced: isBalanced, ratio: ratio, undertrainedMuscles: undertrained)
     }
 }
 
 // MARK: - Helpers
 
 private extension Int {
-    func clamped(to range: ClosedRange<Int>, fallback: Int) -> Int {
-        self == 0 ? fallback : Swift.max(range.lowerBound, Swift.min(self, range.upperBound))
+    func clamped(to range: ClosedRange<Int>) -> Int {
+        Swift.max(range.lowerBound, Swift.min(self, range.upperBound))
     }
 }

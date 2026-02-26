@@ -376,8 +376,16 @@
 
 150. **iOS 26 `.sidebarAdaptable`에서 `UITabBar.appearance()` 무시됨**: 새 렌더링 경로가 UIKit UITabBar를 우회. 탭바 tint는 SwiftUI `.tint(DS.Color.warmGlow)` modifier로 TabView에 직접 적용. `import UIKit` + appearance proxy 패턴 금지
 
+### 2026-02-27: Muscle Map Detail View 통합 교정
+
+151. **Popover/inline 중복은 `isInline: Bool` 파라미터로 통합**: sheet용 View와 inline section이 동일 로직이면 `isInline` 분기로 container만 교체. 별도 View 생성 금지 → DRY 위반 + `×` vs `\u{00d7}` 같은 silent inconsistency 유발
+152. **computed property에서 service 호출 금지 (body hot path)**: `library.exercises(forMuscle:)` 같은 서비스 호출을 computed property에 넣으면 매 렌더마다 실행. `@State` + `.task(id:)` 캐싱 필수
+153. **UserDefaults computed getter는 ForEach 내 O(N) lock**: `UserDefaults.standard.integer(forKey:)`는 plist lock 획득 → row당 3회 × N rows = 50+ lock/render. stored property + setter 메서드 패턴으로 캐싱
+154. **undertrained 리스트는 비즈니스 필터 후 prefix/suffix**: `sortedMuscleVolumes.suffix(3)`은 전체 리스트(untrained volume=0 포함)의 마지막 3개 → 거의 항상 빈 결과. `.filter { volume > 0 && volume < threshold }.sorted { $0 < $1 }.prefix(3)` 패턴 사용
+155. **ViewModel 내부 struct가 외부 컴포넌트에서 사용되면 top-level 추출**: `MuscleMapDetailViewModel.BalanceInfo` → `MuscleBalanceInfo` top-level struct. Correction #86 확장 — ViewModel-namespaced type은 컴포넌트 재사용성을 저해
+
 ### 2026-02-27: 테스트 실패 일괄 수정 교정
 
-151. **시계열 regression 입력은 oldest-first 정렬 필수**: `dailyAverages`가 newest-first일 때 index 0=newest가 되어 기울기 부호 반전. `.reversed()` 적용 후 주석으로 정렬 방향 명시
-152. **가중 평균 테스트는 최소 2개 데이터 포인트**: 단일 데이터에서 `weightedSum / totalWeight = rawValue` 항상 성립(가중치 상쇄). 가중치 차이가 결과에 영향을 주는 시나리오 구성 필수
-153. **UI 구조 변경 시 UI 테스트 동시 갱신**: 탭/네비게이션 구조 변경 커밋에 UI 테스트 수정 포함. 별도 커밋으로 분리하면 stale test가 축적됨
+156. **시계열 regression 입력은 oldest-first 정렬 필수**: `dailyAverages`가 newest-first일 때 index 0=newest가 되어 기울기 부호 반전. `.reversed()` 적용 후 주석으로 정렬 방향 명시
+157. **가중 평균 테스트는 최소 2개 데이터 포인트**: 단일 데이터에서 `weightedSum / totalWeight = rawValue` 항상 성립(가중치 상쇄). 가중치 차이가 결과에 영향을 주는 시나리오 구성 필수
+158. **UI 구조 변경 시 UI 테스트 동시 갱신**: 탭/네비게이션 구조 변경 커밋에 UI 테스트 수정 포함. 별도 커밋으로 분리하면 stale test가 축적됨

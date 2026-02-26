@@ -1,22 +1,44 @@
 import SwiftUI
 
 /// Popover/sheet showing detailed recovery info for a single muscle group.
+/// When `isInline` is true, renders as an inline section (e.g., inside MuscleMapDetailView)
+/// instead of a sheet presentation.
 struct MuscleDetailPopover: View {
     let muscle: MuscleGroup
     let fatigueState: MuscleFatigueState?
     let library: ExerciseLibraryQuerying
-    @State private var showingInfoSheet = false
+    var isInline: Bool = false
 
-    private var topExercises: [ExerciseDefinition] {
-        Array(
-            library.exercises(forMuscle: muscle)
-                .filter { $0.category == .strength || $0.category == .bodyweight }
-                .prefix(3)
-        )
-    }
+    @State private var showingInfoSheet = false
+    @State private var topExercises: [ExerciseDefinition] = []
 
     var body: some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.lg) {
+        content
+            .task(id: muscle) {
+                topExercises = Array(
+                    library.exercises(forMuscle: muscle)
+                        .filter { $0.category == .strength || $0.category == .bodyweight }
+                        .prefix(3)
+                )
+            }
+    }
+
+    @ViewBuilder
+    private var content: some View {
+        if isInline {
+            inlineBody
+                .padding(DS.Spacing.lg)
+                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        } else {
+            inlineBody
+                .padding(DS.Spacing.xl)
+                .presentationDetents([.medium])
+                .presentationDragIndicator(.visible)
+        }
+    }
+
+    private var inlineBody: some View {
+        VStack(alignment: .leading, spacing: isInline ? DS.Spacing.md : DS.Spacing.lg) {
             // Header
             HStack(spacing: DS.Spacing.sm) {
                 Image(systemName: muscle.iconName)
@@ -57,6 +79,10 @@ struct MuscleDetailPopover: View {
                         FatigueInfoSheet(score: score)
                     }
                 }
+            } else if isInline {
+                Text("No recent activity for this muscle")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
             }
 
             // Recommended exercises
@@ -71,9 +97,6 @@ struct MuscleDetailPopover: View {
                 }
             }
         }
-        .padding(DS.Spacing.xl)
-        .presentationDetents([.medium])
-        .presentationDragIndicator(.visible)
     }
 
     private func exerciseRow(_ exercise: ExerciseDefinition) -> some View {
@@ -95,6 +118,7 @@ struct MuscleDetailPopover: View {
     private var recoveryBadge: some View {
         let level = fatigueState?.fatigueLevel ?? .noData
         let color = level.color(for: colorScheme)
+        let badgeBackground = color.opacity(0.15)
 
         return HStack(spacing: DS.Spacing.xxs) {
             Text(level.shortLabel)
@@ -104,7 +128,7 @@ struct MuscleDetailPopover: View {
         }
         .padding(.horizontal, DS.Spacing.sm)
         .padding(.vertical, DS.Spacing.xxs)
-        .background(color.opacity(0.15), in: Capsule())
+        .background(badgeBackground, in: Capsule())
         .foregroundStyle(color)
     }
 
