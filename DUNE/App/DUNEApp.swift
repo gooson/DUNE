@@ -7,6 +7,7 @@ struct DUNEApp: App {
     @State private var showConsentSheet = false
     @State private var isShowingLaunchSplash = !DUNEApp.isRunningXCTest
     @State private var isResolvingLaunchSplash = false
+    @State private var hasCompletedPostSplashSetup = false
 
     let modelContainer: ModelContainer
     private let sharedHealthDataService: SharedHealthDataService
@@ -77,11 +78,15 @@ struct DUNEApp: App {
 
                         if isShowingLaunchSplash {
                             LaunchSplashView(isResolving: isResolvingLaunchSplash)
+                                .allowsHitTesting(!isResolvingLaunchSplash)
                         }
                     }
                     .task(id: isShowingLaunchSplash) {
-                        guard isShowingLaunchSplash else { return }
-                        await dismissLaunchSplashAfterMinimumDuration()
+                        if isShowingLaunchSplash {
+                            await dismissLaunchSplashAfterMinimumDuration()
+                        } else {
+                            runPostSplashSetupIfNeeded()
+                        }
                     }
                 }
             }
@@ -91,18 +96,24 @@ struct DUNEApp: App {
 
     private var appContent: some View {
         ContentView(sharedHealthDataService: sharedHealthDataService)
-            .onAppear {
-                if !hasShownConsent && !Self.isRunningXCTest {
-                    showConsentSheet = true
-                }
-                // Skip WC activation during XCTest to reduce startup flakiness.
-                if !Self.isRunningXCTest {
-                    WatchSessionManager.shared.activate()
-                }
-            }
             .sheet(isPresented: $showConsentSheet) {
                 CloudSyncConsentView(isPresented: $showConsentSheet)
             }
+    }
+
+    @MainActor
+    private func runPostSplashSetupIfNeeded() {
+        guard !hasCompletedPostSplashSetup else { return }
+        hasCompletedPostSplashSetup = true
+
+        if !hasShownConsent && !Self.isRunningXCTest {
+            showConsentSheet = true
+        }
+
+        // Skip WC activation during XCTest to reduce startup flakiness.
+        if !Self.isRunningXCTest {
+            WatchSessionManager.shared.activate()
+        }
     }
 
     @MainActor
