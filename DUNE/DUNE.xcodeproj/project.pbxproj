@@ -343,7 +343,6 @@
 		E66F32C1C8AF607D8C331C5A /* FatigueInfoSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5907DB969008B8027458B07 /* FatigueInfoSheet.swift */; };
 		E7F1AF544CAD32DD7B409A21 /* PinnedMetricsEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 775103119D9E09A557F52EC2 /* PinnedMetricsEditorView.swift */; };
 		E8A180628249B11C8F614351 /* ScoreContributorsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB349F1B347A5B2772BFE9F /* ScoreContributorsView.swift */; };
-		E99D370F2B782FCA70FB111B /* MuscleInlineDetailSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41F42BE0A6216342E03C916B /* MuscleInlineDetailSection.swift */; };
 		ED5294E449F5779F4B48DB8D /* InjuryHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD04390CF37B201CDA79AE4 /* InjuryHistoryView.swift */; };
 		ED87C5A33D7FD41685B431D3 /* HeartRateChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 247CC39B5728218A14FE6E52 /* HeartRateChartView.swift */; };
 		EDBF923C0D1C03DD9E2DF442 /* WorkoutTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C05E6A1A691E65D754CF1E6 /* WorkoutTemplate.swift */; };
@@ -504,7 +503,6 @@
 		40655C321FE61A542FE09A74 /* FatigueLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FatigueLevel.swift; sourceTree = "<group>"; };
 		410149E84AD2A0B5C9D9EB75 /* VolumeDonutChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeDonutChartView.swift; sourceTree = "<group>"; };
 		41CBCEE401B5E080B05554D3 /* WorkoutDeleteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDeleteService.swift; sourceTree = "<group>"; };
-		41F42BE0A6216342E03C916B /* MuscleInlineDetailSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuscleInlineDetailSection.swift; sourceTree = "<group>"; };
 		430C276FBF710AFD40665727 /* ExerciseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseViewModel.swift; sourceTree = "<group>"; };
 		43CCC0DB1937B6304D21EB31 /* WorkoutSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSessionView.swift; sourceTree = "<group>"; };
 		44A8B9695E041B2FDA423693 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -1216,7 +1214,6 @@
 		8DCDA79C7FA8EE5665604C21 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				41F42BE0A6216342E03C916B /* MuscleInlineDetailSection.swift */,
 				0E39C76F1FF85BFFEEB2B958 /* RecoveryOverviewSection.swift */,
 				F7944307D4E4C93277963331 /* VolumeBreakdownSection.swift */,
 			);
@@ -1955,7 +1952,6 @@
 				FBF1D2EBED933492A3F18408 /* MuscleFatigueState.swift in Sources */,
 				DE0DCF3CC9D8132407B30269 /* MuscleGroup+View.swift in Sources */,
 				C8743F68AAA9B8D5088DD8F3 /* MuscleGroup.swift in Sources */,
-				E99D370F2B782FCA70FB111B /* MuscleInlineDetailSection.swift in Sources */,
 				FD94829E09DD79C8D31A743C /* MuscleMapData.swift in Sources */,
 				232D67D166F5F6F8E70B6C63 /* MuscleMapDetailView.swift in Sources */,
 				F00068720A9E11F22210A50A /* MuscleMapDetailViewModel.swift in Sources */,

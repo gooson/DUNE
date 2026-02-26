@@ -158,6 +158,26 @@ struct MuscleMapDetailViewModelTests {
         #expect(calfEntry?.volume == 0)
     }
 
+    // MARK: - Undertrained Muscles
+
+    @Test("Undertrained muscles are correctly identified when imbalanced")
+    @MainActor
+    func undertrainedMuscles() {
+        let states = [
+            makeFatigueState(muscle: .chest, weeklyVolume: 20),
+            makeFatigueState(muscle: .back, weeklyVolume: 3),
+            makeFatigueState(muscle: .biceps, weeklyVolume: 2),
+        ]
+        let vm = MuscleMapDetailViewModel()
+        vm.setWeeklySetGoal(15)
+        vm.loadData(fatigueStates: states)
+
+        // goalHalf = 7, back(3) and biceps(2) are < 7 and > 0
+        #expect(!vm.balanceInfo.isBalanced)
+        #expect(vm.balanceInfo.undertrainedMuscles.contains(.back))
+        #expect(vm.balanceInfo.undertrainedMuscles.contains(.biceps))
+    }
+
     // MARK: - Fatigue Index
 
     @Test("Fatigue by muscle dictionary is correctly indexed")

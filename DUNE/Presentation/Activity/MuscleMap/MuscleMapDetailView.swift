@@ -4,10 +4,14 @@ import SwiftUI
 /// Push-navigated from Activity tab when tapping the muscle map area.
 struct MuscleMapDetailView: View {
     let fatigueStates: [MuscleFatigueState]
+    let library: ExerciseLibraryQuerying
 
     @State private var viewModel = MuscleMapDetailViewModel()
 
-    private let library: ExerciseLibraryQuerying = ExerciseLibraryService.shared
+    init(fatigueStates: [MuscleFatigueState], library: ExerciseLibraryQuerying = ExerciseLibraryService.shared) {
+        self.fatigueStates = fatigueStates
+        self.library = library
+    }
 
     var body: some View {
         ScrollView {
@@ -25,10 +29,11 @@ struct MuscleMapDetailView: View {
 
                 // Selected muscle inline detail
                 if let muscle = viewModel.selectedMuscle {
-                    MuscleInlineDetailSection(
+                    MuscleDetailPopover(
                         muscle: muscle,
                         fatigueState: viewModel.fatigueByMuscle[muscle],
-                        library: library
+                        library: library,
+                        isInline: true
                     )
                     .transition(.opacity.combined(with: .move(edge: .top)))
                 }
@@ -43,7 +48,7 @@ struct MuscleMapDetailView: View {
                             balanceInfo: viewModel.balanceInfo,
                             weeklySetGoal: Binding(
                                 get: { viewModel.weeklySetGoal },
-                                set: { viewModel.weeklySetGoal = $0 }
+                                set: { viewModel.setWeeklySetGoal($0) }
                             )
                         )
                     } else {
