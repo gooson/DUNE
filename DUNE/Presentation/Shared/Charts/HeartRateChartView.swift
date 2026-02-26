@@ -106,15 +106,17 @@ struct HeartRateChartView: View {
         .chartXAxis {
             AxisMarks(values: .automatic(desiredCount: 4)) { _ in
                 AxisValueLabel(format: .dateTime.hour().minute())
+                    .foregroundStyle(DS.Color.sandMuted)
                 AxisGridLine()
-                    .foregroundStyle(DS.Color.warmGlow.opacity(0.12))
+                    .foregroundStyle(DS.Color.warmGlow.opacity(0.20))
             }
         }
         .chartYAxis {
             AxisMarks(position: .leading) { _ in
                 AxisValueLabel()
+                    .foregroundStyle(DS.Color.sandMuted)
                 AxisGridLine()
-                    .foregroundStyle(DS.Color.warmGlow.opacity(0.12))
+                    .foregroundStyle(DS.Color.warmGlow.opacity(0.20))
             }
         }
         .chartXSelection(value: $selectedDate)

@@ -48,8 +48,9 @@ struct SleepStageChartView: View {
         .chartXAxis {
             AxisMarks(values: .stride(by: .hour, count: 2)) { _ in
                 AxisValueLabel(format: .dateTime.hour())
+                    .foregroundStyle(DS.Color.sandMuted)
                 AxisGridLine()
-                    .foregroundStyle(DS.Color.warmGlow.opacity(0.12))
+                    .foregroundStyle(DS.Color.warmGlow.opacity(0.20))
             }
         }
         .chartYAxis {
@@ -93,15 +94,17 @@ struct SleepStageChartView: View {
             .chartXAxis {
                 AxisMarks(values: .stride(by: period.strideComponent, count: period.strideCount)) { _ in
                     AxisValueLabel(format: period.axisLabelFormat)
+                        .foregroundStyle(DS.Color.sandMuted)
                     AxisGridLine()
-                        .foregroundStyle(DS.Color.warmGlow.opacity(0.12))
+                        .foregroundStyle(DS.Color.warmGlow.opacity(0.20))
                 }
             }
             .chartYAxis {
                 AxisMarks(position: .leading) { _ in
                     AxisValueLabel()
+                        .foregroundStyle(DS.Color.sandMuted)
                     AxisGridLine()
-                        .foregroundStyle(DS.Color.warmGlow.opacity(0.12))
+                        .foregroundStyle(DS.Color.warmGlow.opacity(0.20))
                 }
             }
             .chartXSelection(value: $selectedDate)
