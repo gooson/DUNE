@@ -371,3 +371,7 @@
 147. **SVG body diagram 위 DragGesture 금지**: ForEach 내 Button 수십 개가 렌더되는 영역에서 DragGesture는 탭 이벤트를 소비함. 모드 전환은 diagram 영역 밖(header의 Segmented Picker 등)에 배치할 것
 148. **모드별 dispatch 함수보다 튜플 반환 단일 함수**: `fillColor(for:)` + `strokeColor(for:)` 각각 switch하면 4개 함수로 팽창. `muscleColors(for:) -> (fill: Color, stroke: Color)` 패턴으로 switch 1회로 통합
 149. **3개+ 파일에서 참조되는 enum은 전용 파일 즉시 분리**: `VolumeIntensity`처럼 View 파일 하단에 정의된 enum이 다른 View에서도 사용되면 `{Type}.swift`로 분리. description extension도 동일 파일에 위치
+
+### 2026-02-27: TabBar Tint iOS 26 교정
+
+150. **iOS 26 `.sidebarAdaptable`에서 `UITabBar.appearance()` 무시됨**: 새 렌더링 경로가 UIKit UITabBar를 우회. 탭바 tint는 SwiftUI `.tint(DS.Color.warmGlow)` modifier로 TabView에 직접 적용. `import UIKit` + appearance proxy 패턴 금지
