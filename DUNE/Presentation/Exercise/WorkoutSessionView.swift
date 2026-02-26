@@ -15,6 +15,7 @@ struct WorkoutSessionView: View {
     @State private var shareImage: UIImage?
     @State private var showingShareSheet = false
     @State private var savedRecord: ExerciseRecord?
+    @FocusState private var isInputFieldFocused: Bool
 
     // Set-by-set flow state
     @State private var currentSetIndex = 0
@@ -91,6 +92,14 @@ struct WorkoutSessionView: View {
                 Button("Done") { saveWorkout() }
                     .disabled(viewModel.completedSetCount == 0)
                     .fontWeight(.semibold)
+            }
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Done") {
+                    isInputFieldFocused = false
+                }
+                .fontWeight(.semibold)
+                .accessibilityIdentifier("workout-keyboard-done-button")
             }
         }
         .onAppear {
@@ -421,6 +430,9 @@ struct WorkoutSessionView: View {
                 .font(.system(size: 48, weight: .bold, design: .rounded))
                 .multilineTextAlignment(.center)
                 .keyboardType(keyboardType)
+                .submitLabel(.done)
+                .focused($isInputFieldFocused)
+                .onSubmit { isInputFieldFocused = false }
                 .foregroundStyle(DS.Color.activity)
 
             HStack(spacing: DS.Spacing.sm) {
@@ -650,6 +662,7 @@ struct WorkoutSessionView: View {
     // MARK: - Actions
 
     private func completeCurrentSet() {
+        isInputFieldFocused = false
         guard viewModel.sets.indices.contains(currentSetIndex) else { return }
 
         // Mark set as completed
@@ -731,6 +744,7 @@ struct WorkoutSessionView: View {
     // MARK: - Save
 
     private func saveWorkout() {
+        isInputFieldFocused = false
         guard let record = viewModel.createValidatedRecord(weightUnit: weightUnit) else { return }
 
         let shareData = buildShareData(from: record)
