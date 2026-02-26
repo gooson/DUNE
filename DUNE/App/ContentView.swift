@@ -1,10 +1,14 @@
 import SwiftUI
+import UIKit
 
 struct ContentView: View {
     private let sharedHealthDataService: SharedHealthDataService?
 
     init(sharedHealthDataService: SharedHealthDataService? = nil) {
         self.sharedHealthDataService = sharedHealthDataService
+        if let keyColor = UIColor(named: "AccentColor") {
+            UITabBar.appearance().tintColor = keyColor
+        }
     }
 
     var body: some View {
