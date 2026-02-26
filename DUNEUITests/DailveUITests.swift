@@ -32,7 +32,7 @@ final class DailveUITests: XCTestCase {
         let tabBar = app.tabBars.firstMatch
         guard tabBar.waitForExistence(timeout: 5) else { return } // iPad skips
 
-        let tabs = ["Today", "Activity", "Sleep", "Body"]
+        let tabs = ["Today", "Activity", "Wellness"]
         for tab in tabs {
             let button = tabBar.buttons[tab]
             XCTAssertTrue(button.exists, "Tab '\(tab)' should exist")

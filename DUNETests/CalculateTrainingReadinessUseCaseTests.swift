@@ -345,16 +345,22 @@ struct CalculateTrainingReadinessUseCaseTests {
 
     @Test("Fatigue recency weighting: older fatigue has less impact")
     func fatigueRecencyWeighting() {
+        // With a single muscle, weighted average = raw value regardless of recency weight
+        // (recency weight cancels out in weightedSum / totalWeight).
+        // Use two muscles so recency weighting shifts the overall average.
         let recentHigh = [
-            makeFatigueState(muscle: .chest, hoursAgo: 12, fatigueRawValue: 8)
+            makeFatigueState(muscle: .chest, hoursAgo: 12, fatigueRawValue: 8),
+            makeFatigueState(muscle: .back, hoursAgo: 12, fatigueRawValue: 2),
         ]
         let oldHigh = [
-            makeFatigueState(muscle: .chest, hoursAgo: 80, fatigueRawValue: 8)
+            makeFatigueState(muscle: .chest, hoursAgo: 80, fatigueRawValue: 8),
+            makeFatigueState(muscle: .back, hoursAgo: 12, fatigueRawValue: 2),
         ]
         let recentResult = sut.execute(input: makeDefaultInput(fatigueStates: recentHigh))
         let oldResult = sut.execute(input: makeDefaultInput(fatigueStates: oldHigh))
         #expect(recentResult != nil && oldResult != nil)
-        // Recent high fatigue should score lower than old high fatigue
+        // Recent high-fatigue chest (weight=1.0) pulls average up more than
+        // old chest (weight=0.1), so recent scenario has lower score.
         #expect(recentResult!.components.fatigueScore < oldResult!.components.fatigueScore)
     }
 

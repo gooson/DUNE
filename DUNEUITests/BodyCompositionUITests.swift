@@ -11,35 +11,38 @@ final class BodyCompositionUITests: XCTestCase {
         app.launch()
     }
 
-    private func navigateToBody() {
+    private func navigateToWellness() {
         let tabBar = app.tabBars.firstMatch
         if tabBar.waitForExistence(timeout: 5) {
-            tabBar.buttons["Body"].tap()
+            tabBar.buttons["Wellness"].tap()
         }
+    }
+
+    private func openBodyAddSheet() {
+        navigateToWellness()
+        let addMenu = app.buttons["Add record"]
+        guard addMenu.waitForExistence(timeout: 5) else { return }
+        addMenu.tap()
+
+        let bodyRecordButton = app.buttons["Body Record"]
+        guard bodyRecordButton.waitForExistence(timeout: 3) else { return }
+        bodyRecordButton.tap()
     }
 
     // MARK: - Add Button
 
     func testAddButtonExists() throws {
-        navigateToBody()
+        navigateToWellness()
 
-        let addButton = app.buttons["body-add-button"]
-        XCTAssertTrue(addButton.waitForExistence(timeout: 5), "Add button should be visible")
+        let addMenu = app.buttons["Add record"]
+        XCTAssertTrue(addMenu.waitForExistence(timeout: 5), "Add record menu should be visible in Wellness toolbar")
     }
 
     // MARK: - Add Sheet
 
     func testAddSheetOpens() throws {
-        navigateToBody()
+        openBodyAddSheet()
 
-        let addButton = app.buttons["body-add-button"]
-        guard addButton.waitForExistence(timeout: 5) else {
-            XCTFail("Add button not found")
-            return
-        }
-        addButton.tap()
-
-        // Verify sheet content
         let saveButton = app.buttons["body-save-button"]
         XCTAssertTrue(saveButton.waitForExistence(timeout: 3), "Save button should appear in sheet")
 
@@ -53,11 +56,7 @@ final class BodyCompositionUITests: XCTestCase {
     // MARK: - Form Fields
 
     func testFormFieldsExist() throws {
-        navigateToBody()
-
-        let addButton = app.buttons["body-add-button"]
-        guard addButton.waitForExistence(timeout: 5) else { return }
-        addButton.tap()
+        openBodyAddSheet()
 
         let weightField = app.textFields["body-weight-field"]
         XCTAssertTrue(weightField.waitForExistence(timeout: 3), "Weight field should exist")
@@ -72,11 +71,7 @@ final class BodyCompositionUITests: XCTestCase {
     // MARK: - Save Button State
 
     func testSaveButtonDisabledWhenEmpty() throws {
-        navigateToBody()
-
-        let addButton = app.buttons["body-add-button"]
-        guard addButton.waitForExistence(timeout: 5) else { return }
-        addButton.tap()
+        openBodyAddSheet()
 
         let saveButton = app.buttons["body-save-button"]
         guard saveButton.waitForExistence(timeout: 3) else { return }
@@ -88,16 +83,14 @@ final class BodyCompositionUITests: XCTestCase {
     // MARK: - Cancel Dismisses Sheet
 
     func testCancelDismissesSheet() throws {
-        navigateToBody()
-
-        let addButton = app.buttons["body-add-button"]
-        guard addButton.waitForExistence(timeout: 5) else { return }
-        addButton.tap()
+        openBodyAddSheet()
 
         let cancelButton = app.buttons["body-cancel-button"]
         guard cancelButton.waitForExistence(timeout: 3) else { return }
         cancelButton.tap()
 
-        XCTAssertTrue(addButton.waitForExistence(timeout: 3))
+        // Sheet should be dismissed — add menu button should be visible again
+        let addMenu = app.buttons["Add record"]
+        XCTAssertTrue(addMenu.waitForExistence(timeout: 3))
     }
 }
