@@ -32,7 +32,7 @@ struct EmptyStateView: View {
                 .controlSize(.regular)
             }
         }
-        .frame(maxWidth: .infinity)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding(.vertical, DS.Spacing.xxxl)
         .background(alignment: .bottom) {
             // Static wave decoration (no animation — empty state shouldn't distract)
