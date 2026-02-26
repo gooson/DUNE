@@ -44,28 +44,23 @@ struct MuscleRecoveryMapView: View {
     // MARK: - Header
 
     private var headerSection: some View {
-        VStack(spacing: DS.Spacing.sm) {
-            HStack {
-                Picker("Mode", selection: $mode) {
-                    ForEach(MapMode.allCases, id: \.rawValue) { m in
-                        Text(m.label).tag(m)
-                    }
+        HStack {
+            Text(subtitle)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .contentTransition(.numericText())
+
+            infoButton
+
+            Spacer()
+
+            Picker("Mode", selection: $mode) {
+                ForEach(MapMode.allCases, id: \.rawValue) { m in
+                    Text(m.label).tag(m)
                 }
-                .pickerStyle(.segmented)
-                .frame(maxWidth: 200)
-
-                Spacer()
-
-                infoButton
             }
-
-            HStack {
-                Text(subtitle)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .contentTransition(.numericText())
-                Spacer()
-            }
+            .pickerStyle(.segmented)
+            .frame(maxWidth: 160)
         }
     }
 
