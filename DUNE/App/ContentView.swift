@@ -1,5 +1,4 @@
 import SwiftUI
-import UIKit
 
 struct ContentView: View {
     private let sharedHealthDataService: SharedHealthDataService?
@@ -10,9 +9,6 @@ struct ContentView: View {
 
     init(sharedHealthDataService: SharedHealthDataService? = nil) {
         self.sharedHealthDataService = sharedHealthDataService
-        if let keyColor = UIColor(named: "AccentColor") {
-            UITabBar.appearance().tintColor = keyColor
-        }
     }
 
     var body: some View {
@@ -49,6 +45,7 @@ struct ContentView: View {
             }
         }
         .tabViewStyle(.sidebarAdaptable)
+        .tint(DS.Color.warmGlow)
     }
 
     private var tabSelection: Binding<AppSection> {
