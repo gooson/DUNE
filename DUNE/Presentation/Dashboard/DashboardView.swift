@@ -104,7 +104,7 @@ struct DashboardView: View {
             }
             .padding(sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.lg)
         }
-        .background { TabWaveBackground(primaryColor: .accentColor) }
+        .background { TabWaveBackground(primaryColor: DS.Color.warmGlow) }
         .navigationDestination(for: ConditionScore.self) { score in
             ConditionScoreDetailView(score: score)
         }
@@ -115,7 +115,7 @@ struct DashboardView: View {
             AllDataView(category: destination.category)
         }
         .waveRefreshable(
-            color: .accentColor
+            color: DS.Color.warmGlow
         ) {
             await viewModel.loadData()
         }

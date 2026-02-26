@@ -23,7 +23,7 @@ struct ConditionHeroView: View {
         static let sparklineHeightCompact: CGFloat = 44
         // Correction #83 — static gradient for score text
         static let scoreGradient = LinearGradient(
-            colors: [Color.accentColor, Color.accentColor.opacity(0.7)],
+            colors: [DS.Color.warmGlow, DS.Color.warmGlow.opacity(0.7)],
             startPoint: .top,
             endPoint: .bottom
         )

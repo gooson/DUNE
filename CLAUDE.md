@@ -342,3 +342,7 @@
 133. **Dead code(선언만 있고 미할당 프로퍼티)는 리뷰 시 즉시 제거**: `private var loadTask: Task<Void, Never>?`처럼 선언 후 한 번도 할당되지 않는 프로퍼티는 `loadTask?.cancel()`이 항상 no-op. Optional chaining이 실패를 삼키므로 dead code가 잠복 버그를 은폐
 134. **버그 수정 후 사용자 확인 전 "해결됨" 판정 금지**: 첫 가설(`isLoading` stuck)만 수정하고 검증 없이 다음 단계 진행하면 실제 원인(dedup false-positive)을 놓침. 수정 → 빌드 → 사용자 확인 → 다음 단계 순서 필수
 135. **진단 로그는 핵심 결정 지점에 집중**: `print("[DEBUG] count=\(items.count)")`보다 `print("[DEBUG] workout: \(type) | isFromThisApp=\(flag) | filtered=\(result)")`처럼 판정 로직의 입출력을 로깅. 데이터 흐름의 "어디서 사라졌는지"를 즉시 파악 가능
+
+### 2026-02-26: AccentColor Fallback 교정
+
+136. **브랜드 컬러에 `.accentColor` 직접 사용 금지**: xcodegen 환경에서 `ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME` 미설정 시 시스템 기본 파란색 반환. `Color("AccentColor")` 또는 `DS.Color.warmGlow` 경유 필수
