@@ -148,6 +148,10 @@ struct ExerciseDetailSheet: View {
                             .foregroundStyle(.secondary)
                     }
                 }
+
+                Text("주동근은 동작의 핵심 자극 부위이고, 보조근은 함께 보조적으로 활성화되는 부위입니다.")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
             }
         }
     }

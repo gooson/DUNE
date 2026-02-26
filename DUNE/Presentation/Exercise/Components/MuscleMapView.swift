@@ -4,7 +4,6 @@ import SwiftData
 struct MuscleMapView: View {
     @Query(sort: \ExerciseRecord.date, order: .reverse) private var records: [ExerciseRecord]
 
-    @State private var showingFront = true
     @State private var selectedMuscle: MuscleGroup?
 
     private var weeklyVolume: [MuscleGroup: Int] {
@@ -15,29 +14,34 @@ struct MuscleMapView: View {
         weeklyVolume.values.max() ?? 1
     }
 
+    private var trainedMuscleCount: Int {
+        weeklyVolume.values.filter { $0 > 0 }.count
+    }
+
     var body: some View {
         VStack(spacing: DS.Spacing.lg) {
-            // Toggle front/back
-            Picker("View", selection: $showingFront) {
-                Text("Front").tag(true)
-                Text("Back").tag(false)
+            HStack {
+                Text(trainedMuscleCount == 0 ? "Start recording workouts to populate the map" : "\(trainedMuscleCount) muscles trained this week")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Spacer()
             }
-            .pickerStyle(.segmented)
-            .padding(.horizontal, DS.Spacing.xl)
 
-            // Body map
-            bodyMap
-                .frame(height: 400)
-                .padding(.horizontal, DS.Spacing.xl)
+            HStack(spacing: DS.Spacing.sm) {
+                bodyDiagram(isFront: true)
+                    .frame(maxWidth: 170)
+                bodyDiagram(isFront: false)
+                    .frame(maxWidth: 170)
+            }
+            .frame(maxWidth: .infinity, alignment: .center)
 
-            // Legend
             legendView
 
-            // Muscle detail
             if let muscle = selectedMuscle {
                 muscleDetail(muscle)
             }
         }
+        .padding(.horizontal, DS.Spacing.lg)
         .navigationTitle("Muscle Map")
         .navigationBarTitleDisplayMode(.inline)
         .background { DetailWaveBackground() }
@@ -45,51 +49,63 @@ struct MuscleMapView: View {
 
     // MARK: - Body Map
 
-    private var bodyMap: some View {
-        GeometryReader { geo in
-            let w = geo.size.width
-            let h = geo.size.height
+    private func bodyDiagram(isFront: Bool) -> some View {
+        let parts = isFront ? MuscleMapData.svgFrontParts : MuscleMapData.svgBackParts
+        let outlineShape = isFront ? MuscleMapData.frontOutlineShape : MuscleMapData.backOutlineShape
+        let aspectRatio: CGFloat = 200.0 / 400.0
+
+        return GeometryReader { geo in
+            let size = geo.size
+            let outlineBounds = outlineShape.path(in: CGRect(origin: .zero, size: size)).boundingRect
+            let centerOffsetX = (size.width - outlineBounds.width) / 2 - outlineBounds.minX
 
             ZStack {
-                // Body outline
-                MuscleMapData.bodyOutline(width: w, height: h)
+                outlineShape
                     .stroke(Color.secondary.opacity(0.3), lineWidth: 1.5)
+                    .frame(width: size.width, height: size.height)
 
-                // Muscle groups
-                let muscles = showingFront ? MuscleMapData.frontMuscles : MuscleMapData.backMuscles
-                ForEach(muscles, id: \.muscle) { item in
-                    muscleShape(item: item, width: w, height: h)
+                ForEach(parts) { part in
+                    Button {
+                        withAnimation(DS.Animation.snappy) {
+                            selectedMuscle = selectedMuscle == part.muscle ? nil : part.muscle
+                        }
+                    } label: {
+                        part.shape
+                            .fill(muscleColor(for: part.muscle))
+                            .overlay {
+                                part.shape
+                                    .stroke(strokeColor(for: part.muscle), lineWidth: selectedMuscle == part.muscle ? 2 : 0.5)
+                            }
+                            .frame(width: size.width, height: size.height)
+                    }
+                    .buttonStyle(.plain)
                 }
             }
+            .frame(width: size.width, height: size.height)
+            .offset(x: centerOffsetX)
         }
+        .aspectRatio(aspectRatio, contentMode: .fit)
+        .frame(maxHeight: 320)
+        .clipped()
     }
 
-    private func muscleShape(item: MuscleMapItem, width: CGFloat, height: CGFloat) -> some View {
-        let volume = weeklyVolume[item.muscle] ?? 0
-        let intensity = maxVolume > 0 ? Double(volume) / Double(maxVolume) : 0
+    private func normalizedIntensity(for muscle: MuscleGroup) -> Double {
+        guard maxVolume > 0 else { return 0 }
+        let volume = weeklyVolume[muscle] ?? 0
+        return min(1.0, Double(volume) / Double(maxVolume))
+    }
 
-        return RoundedRectangle(cornerRadius: item.cornerRadius)
-            .fill(muscleColor(intensity: intensity))
-            .frame(width: item.size.width * width, height: item.size.height * height)
-            .position(x: item.position.x * width, y: item.position.y * height)
-            .onTapGesture {
-                withAnimation(DS.Animation.snappy) {
-                    selectedMuscle = selectedMuscle == item.muscle ? nil : item.muscle
-                }
-            }
-            .overlay {
-                if selectedMuscle == item.muscle {
-                    RoundedRectangle(cornerRadius: item.cornerRadius)
-                        .stroke(DS.Color.activity, lineWidth: 2)
-                        .frame(width: item.size.width * width, height: item.size.height * height)
-                        .position(x: item.position.x * width, y: item.position.y * height)
-                }
-            }
+    private func muscleColor(for muscle: MuscleGroup) -> Color {
+        muscleColor(intensity: normalizedIntensity(for: muscle))
     }
 
     private func muscleColor(intensity: Double) -> Color {
         if intensity <= 0 { return Color.secondary.opacity(0.08) }
         return DS.Color.activity.opacity(0.2 + intensity * 0.6)
+    }
+
+    private func strokeColor(for muscle: MuscleGroup) -> Color {
+        selectedMuscle == muscle ? DS.Color.activity : Color.secondary.opacity(0.2)
     }
 
     // MARK: - Legend
@@ -152,4 +168,3 @@ struct MuscleMapView: View {
         .transition(.opacity.combined(with: .move(edge: .bottom)))
     }
 }
-
