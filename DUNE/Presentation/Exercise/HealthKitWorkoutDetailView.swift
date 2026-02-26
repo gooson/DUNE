@@ -18,6 +18,7 @@ struct HealthKitWorkoutDetailView: View {
             }
             .padding(.horizontal, DS.Spacing.lg)
         }
+        .background { DetailWaveBackground() }
         .navigationTitle(workout.activityType.displayName)
         .navigationBarTitleDisplayMode(.inline)
         .task {

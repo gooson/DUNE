@@ -26,6 +26,7 @@ struct CompoundWorkoutSetupView: View {
                 settingsSection
                 startButton
             }
+            .scrollContentBackground(.hidden)
             .navigationTitle("Compound Workout")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -44,6 +45,7 @@ struct CompoundWorkoutSetupView: View {
                     }
                 }
             }
+            .background { SheetWaveBackground() }
         }
     }
 

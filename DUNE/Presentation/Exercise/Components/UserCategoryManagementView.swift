@@ -61,6 +61,8 @@ struct UserCategoryManagementView: View {
                 }
             }
         }
+        .scrollContentBackground(.hidden)
+        .background { DetailWaveBackground() }
         .navigationTitle("Categories")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -228,6 +230,8 @@ struct UserCategoryEditView: View {
                     }
                 }
             }
+            .scrollContentBackground(.hidden)
+            .background { SheetWaveBackground() }
             .navigationTitle(mode.isCreate ? "New Category" : "Edit Category")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

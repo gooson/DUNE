@@ -30,6 +30,7 @@ struct TrainingVolumeDetailView: View {
             }
             .padding()
         }
+        .background { DetailWaveBackground() }
         .navigationTitle("Training Volume")
         .navigationBarTitleDisplayMode(.large)
         .task(id: viewModel.selectedPeriod) {

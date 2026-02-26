@@ -28,6 +28,9 @@ struct AllDataView: View {
             }
         }
         .listStyle(.insetGrouped)
+        .scrollContentBackground(.hidden)
+        .background { DetailWaveBackground() }
+        .environment(\.waveColor, category.themeColor)
         .navigationTitle(category.displayName)
         .navigationBarTitleDisplayMode(.inline)
         .overlay {

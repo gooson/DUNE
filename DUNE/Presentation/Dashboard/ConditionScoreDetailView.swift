@@ -110,6 +110,7 @@ struct ConditionScoreDetailView: View {
             }
             .padding(sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.lg)
         }
+        .background { DetailWaveBackground() }
         .navigationTitle("Condition Score")
         .navigationBarTitleDisplayMode(.large)
         .overlay {

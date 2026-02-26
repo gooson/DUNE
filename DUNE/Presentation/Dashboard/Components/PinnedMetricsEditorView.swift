@@ -40,6 +40,8 @@ struct PinnedMetricsEditorView: View {
                     Text("Select up to 3 metrics shown at the top of Today.")
                 }
             }
+            .scrollContentBackground(.hidden)
+            .background { SheetWaveBackground() }
             .navigationTitle("Edit Pinned Metrics")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

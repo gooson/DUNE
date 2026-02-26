@@ -35,6 +35,7 @@ struct BodyCompositionFormSheet: View {
                     .accessibilityIdentifier("body-muscle-field")
                 TextField("Memo", text: $viewModel.newMemo)
             }
+            .scrollContentBackground(.hidden)
             .navigationTitle(isEdit ? "Edit Record" : "Add Record")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -53,5 +54,6 @@ struct BodyCompositionFormSheet: View {
             }
         }
         .sensoryFeedback(.success, trigger: saveCount)
+        .background { SheetWaveBackground() }
     }
 }

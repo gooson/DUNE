@@ -116,6 +116,8 @@ struct InjuryFormSheet: View {
                         .accessibilityIdentifier("injury-memo-field")
                 }
             }
+            .scrollContentBackground(.hidden)
+            .background { SheetWaveBackground() }
             .navigationTitle(isEdit ? "Edit Injury" : "Add Injury")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

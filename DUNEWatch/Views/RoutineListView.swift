@@ -14,6 +14,7 @@ struct RoutineListView: View {
                 routineList
             }
         }
+        .background { WatchWaveBackground() }
         .navigationTitle("DUNE")
     }
 
@@ -56,6 +57,7 @@ struct RoutineListView: View {
                 syncStatusView
             }
         }
+        .scrollContentBackground(.hidden)
     }
 
     // MARK: - Empty State

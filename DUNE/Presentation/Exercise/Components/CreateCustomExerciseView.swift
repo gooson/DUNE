@@ -123,6 +123,8 @@ struct CreateCustomExerciseView: View {
                     }
                 }
             }
+            .scrollContentBackground(.hidden)
+            .background { SheetWaveBackground() }
             .navigationTitle("New Exercise")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

@@ -93,6 +93,8 @@ struct MetricDetailView: View {
             }
             .padding(sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.lg)
         }
+        .background { DetailWaveBackground() }
+        .environment(\.waveColor, metric.category.themeColor)
         .navigationTitle(metric.name)
         .navigationBarTitleDisplayMode(.large)
         .overlay {

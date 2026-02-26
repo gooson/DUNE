@@ -47,6 +47,10 @@ enum DS {
 
         // Warm glow (derived from AccentColor for icon-aligned highlights)
         static let warmGlow = SwiftUI.Color("AccentColor")
+
+        // Tab wave identity — Desert Horizon palette
+        static let tabTrain    = SwiftUI.Color("TabTrain")     // Desert Coral
+        static let tabWellness = SwiftUI.Color("TabWellness")  // Oasis Teal
     }
 
     // MARK: - Opacity
@@ -69,11 +73,8 @@ enum DS {
     enum Gradient {
         /// Tab background gradient fade-out point (slightly below center)
         static let tabBackgroundEnd = UnitPoint(x: 0.5, y: 0.6)
-
-        // Wave motif defaults
-        static let waveAmplitude: CGFloat = 0.03
-        static let waveFrequency: CGFloat = 2
-        static let waveVerticalOffset: CGFloat = 0.7
+        /// Sheet/modal gradient fade-out point (center)
+        static let sheetBackgroundEnd = UnitPoint(x: 0.5, y: 0.5)
 
         // Hero card ring gradient direction
         static let heroRingStart = UnitPoint(x: 0, y: 0)

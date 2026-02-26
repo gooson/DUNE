@@ -41,6 +41,9 @@ struct InjuryHistoryView: View {
         .onChange(of: allRecords.count) { _, _ in rebuildRecordCache() }
         .onChange(of: allRecords.map(\.endDate)) { _, _ in rebuildRecordCache() }
         .onAppear { rebuildRecordCache() }
+        .scrollContentBackground(.hidden)
+        .background { DetailWaveBackground() }
+        .environment(\.waveColor, DS.Color.caution)
         .navigationTitle("Injury History")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

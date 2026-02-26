@@ -19,6 +19,7 @@ struct QuickStartPickerView: View {
                 quickStartHub
             }
         }
+        .background { WatchWaveBackground() }
         .navigationTitle("Quick Start")
         .onAppear { rebuildSections() }
         .onChange(of: connectivity.exerciseLibrary.map(\.id)) { _, _ in rebuildSections() }
@@ -52,6 +53,7 @@ struct QuickStartPickerView: View {
                 }
             }
         }
+        .scrollContentBackground(.hidden)
     }
 
     private func exerciseRow(_ exercise: WatchExerciseInfo) -> some View {
@@ -176,8 +178,10 @@ struct QuickStartAllExercisesView: View {
                         }
                     }
                 }
+                .scrollContentBackground(.hidden)
             }
         }
+        .background { WatchWaveBackground() }
         .navigationTitle("All Exercises")
         .searchable(text: $searchText, prompt: "Search")
         .onAppear { rebuildFilteredList() }

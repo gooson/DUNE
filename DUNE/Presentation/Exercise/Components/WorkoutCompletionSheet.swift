@@ -98,5 +98,6 @@ struct WorkoutCompletionSheet: View {
             }
         }
         .interactiveDismissDisabled(false)
+        .background { SheetWaveBackground() }
     }
 }

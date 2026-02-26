@@ -24,6 +24,7 @@ struct ExerciseStartView: View {
 
                 startButton
             }
+            .background { SheetWaveBackground() }
             .navigationTitle(exercise.localizedName)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

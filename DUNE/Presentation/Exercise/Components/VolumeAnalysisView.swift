@@ -46,6 +46,7 @@ struct VolumeAnalysisView: View {
             }
             .padding(.horizontal, DS.Spacing.lg)
         }
+        .background { DetailWaveBackground() }
         .navigationTitle("Volume Analysis")
         .navigationBarTitleDisplayMode(.inline)
     }

@@ -38,6 +38,7 @@ struct ExerciseTypeDetailView: View {
             }
             .padding()
         }
+        .background { DetailWaveBackground() }
         .navigationTitle(displayName)
         .navigationBarTitleDisplayMode(.large)
         .task(id: viewModel.selectedPeriod) {

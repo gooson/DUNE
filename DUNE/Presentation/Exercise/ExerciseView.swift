@@ -100,6 +100,7 @@ struct ExerciseView: View {
                         .listRowSeparator(.hidden)
                     }
                 }
+                .scrollContentBackground(.hidden)
             }
         }
         .toolbar {
@@ -194,7 +195,7 @@ struct ExerciseView: View {
         ) {
             await viewModel.loadHealthKitWorkouts()
         }
-        .background { TabWaveBackground(primaryColor: DS.Color.activity) }
+        .background { TabWaveBackground() }
         .navigationTitle("Exercise")
         .confirmDeleteRecord($recordToDelete, context: modelContext)
     }

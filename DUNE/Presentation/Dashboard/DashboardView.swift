@@ -104,7 +104,7 @@ struct DashboardView: View {
             }
             .padding(sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.lg)
         }
-        .background { TabWaveBackground(primaryColor: DS.Color.warmGlow) }
+        .background { TabWaveBackground() }
         .navigationDestination(for: ConditionScore.self) { score in
             ConditionScoreDetailView(score: score)
         }
