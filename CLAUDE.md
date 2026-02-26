@@ -353,3 +353,8 @@
 138. **Watch DS 토큰 추가 시 iOS DS와 동기 확인**: `DUNEWatch/DesignSystem.swift`는 iOS DS의 부분 집합. 새 토큰 추가 시 양쪽 파일 모두 업데이트 필수. 향후 shared Swift package 통합 필요
 139. **DS.Opacity 토큰은 용도 기반 네이밍**: `emphasis`(강도) 대신 `border`(용도)처럼 실제 사용처를 반영하는 이름 사용. `DS.Animation.emphasize` 등 기존 토큰과의 이름 충돌 방지
 140. **심장 아이콘에 `DS.Color.heartRate` 사용**: `DS.Color.negative`(에러/실패 피드백)를 심장 박동 아이콘에 사용하면 시맨틱 오용. 전용 metric 색상 토큰이 있으면 그것을 사용
+
+### 2026-02-27: Launch Splash 최소 노출 안정화 교정
+
+141. **최소 노출 타이머는 `CancellationError` 명시 처리 필수**: `try? await Task.sleep(...)`는 취소 시 즉시 반환하며 에러를 삼켜 요구사항(예: 최소 1초 노출)을 깨뜨릴 수 있음. `do/catch`로 취소를 분기하고, 취소 시 UI 상태를 변경하지 않는 것이 안전
+142. **Launch→Custom Splash 연속 전환에서는 로고 고정 frame 금지**: 시스템 Launch Screen과 커스텀 스플래시의 렌더링 규칙이 다를 수 있으므로 `.frame(width:height:)` 하드코딩은 점프(축소/확대) 체감을 유발. 동일 에셋 사용 시 크기 강제보다 기본 렌더링을 우선
