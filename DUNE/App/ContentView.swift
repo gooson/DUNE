@@ -45,7 +45,6 @@ struct ContentView: View {
             }
         }
         .tabViewStyle(.sidebarAdaptable)
-        .tint(DS.Color.warmGlow)
     }
 
     private var tabSelection: Binding<AppSection> {
