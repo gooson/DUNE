@@ -353,3 +353,10 @@
 138. **Watch DS 토큰 추가 시 iOS DS와 동기 확인**: `DUNEWatch/DesignSystem.swift`는 iOS DS의 부분 집합. 새 토큰 추가 시 양쪽 파일 모두 업데이트 필수. 향후 shared Swift package 통합 필요
 139. **DS.Opacity 토큰은 용도 기반 네이밍**: `emphasis`(강도) 대신 `border`(용도)처럼 실제 사용처를 반영하는 이름 사용. `DS.Animation.emphasize` 등 기존 토큰과의 이름 충돌 방지
 140. **심장 아이콘에 `DS.Color.heartRate` 사용**: `DS.Color.negative`(에러/실패 피드백)를 심장 박동 아이콘에 사용하면 시맨틱 오용. 전용 metric 색상 토큰이 있으면 그것을 사용
+
+### 2026-02-27: Wave Expansion 전면 적용 교정
+
+141. **List/Form + 웨이브 배경은 `.scrollContentBackground(.hidden)` 필수**: SwiftUI `List`/`Form`의 기본 불투명 배경이 웨이브를 가림. `.background { WaveBackground() }` 추가 시 반드시 `.scrollContentBackground(.hidden)` 세트로 적용
+142. **웨이브 색상 오버라이드는 Environment 전용**: `DetailWaveBackground(overrideColor:)` 같은 init 파라미터 패턴 금지. `.environment(\.waveColor, color)` 패턴으로 3-tier(Tab/Detail/Sheet) 모두 동일 API 유지
+143. **WavePreset에 소비자 없는 case 추가 금지**: `.injury`, `.watch` 등 실제 environment setter가 없는 case는 모든 switch에 dead 분기를 추가함. consumer가 생길 때 case를 추가할 것
+144. **새 View 추가 시 웨이브 배경 적용 체크**: Tab root → `TabWaveBackground`, Push detail → `DetailWaveBackground`, Sheet/Modal → `SheetWaveBackground`. 누락 시 디자인 일관성 파괴
