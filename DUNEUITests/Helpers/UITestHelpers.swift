@@ -13,6 +13,7 @@ enum AXID {
     static let exerciseCancelButton = "exercise-cancel-button"
     static let exerciseDatePicker = "exercise-date-picker"
     static let exerciseTypePicker = "exercise-type-picker"
+    static let activityReadinessCard = "activity-readiness-card"
 
     // Body Composition
     static let bodyAddButton = "body-add-button"
