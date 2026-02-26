@@ -47,14 +47,16 @@ struct StackedVolumeBarChartView: View {
                 Calendar.current.isDate($0.date, inSameDayAs: selectedDate)
             }) {
                 RuleMark(x: .value("Selected", day.date, unit: .day))
-                    .foregroundStyle(.gray.opacity(0.3))
+                    .foregroundStyle(DS.Color.warmGlow.opacity(0.35))
                     .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
             }
         }
         .chartXAxis {
             AxisMarks(values: .stride(by: .day, count: xAxisStride)) { _ in
                 AxisValueLabel(format: .dateTime.month(.abbreviated).day())
+                    .foregroundStyle(DS.Color.sandMuted)
                 AxisGridLine()
+                    .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
             }
         }
         .chartYAxis {
@@ -66,9 +68,11 @@ struct StackedVolumeBarChartView: View {
                             ? "\((mins / 60).formattedWithSeparator())h"
                             : mins.formattedWithSeparator()
                         )
+                        .foregroundStyle(DS.Color.sandMuted)
                     }
                 }
                 AxisGridLine()
+                    .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
             }
         }
         .chartYScale(domain: 0...(maxDailyMinutes * 1.15))

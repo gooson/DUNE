@@ -142,13 +142,17 @@ struct ExerciseTypeDetailView: View {
             .chartXAxis {
                 AxisMarks(values: .stride(by: xAxisStride, count: xAxisStrideCount)) { _ in
                     AxisValueLabel(format: .dateTime.month(.abbreviated).day())
+                        .foregroundStyle(DS.Color.sandMuted)
                     AxisGridLine()
+                        .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
                 }
             }
             .chartYAxis {
                 AxisMarks(position: .leading) { _ in
                     AxisValueLabel()
+                        .foregroundStyle(DS.Color.sandMuted)
                     AxisGridLine()
+                        .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
                 }
             }
             .chartYScale(domain: 0...(maxTrendMinutes * 1.15))
