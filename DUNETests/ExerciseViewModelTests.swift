@@ -82,6 +82,7 @@ struct ExerciseViewModelTests {
     }
 
     // Edge case: HealthKit write failure — healthKitWorkoutID never populated
+    // Fallback dedup requires isFromThisApp AND matching activityType + date proximity (±2 min)
     @Test("Filters out own app workouts (isFromThisApp) as fallback when healthKitWorkoutID is nil")
     func dedupByIsFromThisApp() {
         let vm = ExerciseViewModel()
@@ -89,13 +90,13 @@ struct ExerciseViewModelTests {
 
         let record = ExerciseRecord(
             date: now,
-            exerciseType: "Deadlift",
+            exerciseType: WorkoutActivityType.traditionalStrengthTraining.rawValue,
             duration: 2400,
             healthKitWorkoutID: nil
         )
 
         vm.healthKitWorkouts = [
-            WorkoutSummary(id: "HK-ORPHAN", type: "Strength", duration: 2400, calories: 300, distance: nil, date: now, isFromThisApp: true),
+            WorkoutSummary(id: "HK-ORPHAN", type: "Strength", activityType: .traditionalStrengthTraining, duration: 2400, calories: 300, distance: nil, date: now, isFromThisApp: true),
         ]
         vm.manualRecords = [record]
 

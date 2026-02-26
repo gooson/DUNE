@@ -208,7 +208,8 @@ struct CalculateTrainingReadinessUseCase: TrainingReadinessCalculating, Sendable
     private func computeTrendBonus(dailyAverages: [(date: Date, value: Double)]) -> Int {
         guard dailyAverages.count >= 3 else { return 50 }
 
-        let recent = Array(dailyAverages.prefix(7).map(\.value))
+        // Reverse to oldest-first so index increases with time (positive slope = improving)
+        let recent = Array(dailyAverages.prefix(7).map(\.value).reversed())
         guard recent.count >= 3 else { return 50 }
 
         // Simple linear regression slope
