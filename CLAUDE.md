@@ -333,3 +333,7 @@
 127. **다크 모드 배경 gradient opacity 최소 0.06**: 0.03 이하는 사실상 투명하여 디자인 의도가 전달되지 않음. 시각적 효과가 필요한 배경은 0.06~0.14 범위 사용
 128. **반복 UnitPoint/opacity는 DS 토큰으로 추출**: 3곳 이상 동일 `UnitPoint(x:y:)` 사용 시 `DS.Gradient.*` 상수로 추출. 매직넘버 제거 + 일괄 조정 가능
 129. **비주얼 변경은 v1(보수적) → v2(강화) 2단계 접근**: 먼저 안전한 값으로 커밋+확인 후 강도 조절. 한 번에 강하게 가면 롤백 범위가 넓어짐
+
+### 2026-02-26: AccentColor Fallback 교정
+
+130. **브랜드 컬러에 `.accentColor` 직접 사용 금지**: xcodegen 환경에서 `ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME` 미설정 시 시스템 기본 파란색 반환. `Color("AccentColor")` 또는 `DS.Color.warmGlow` 경유 필수
