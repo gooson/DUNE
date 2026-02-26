@@ -10,37 +10,44 @@ struct ExerciseMuscleMapView: View {
     private var secondarySet: Set<MuscleGroup> { Set(secondaryMuscles) }
 
     var body: some View {
-        HStack(spacing: DS.Spacing.lg) {
-            bodyView(muscles: MuscleMapData.frontMuscles, label: "전면")
-            bodyView(muscles: MuscleMapData.backMuscles, label: "후면")
+        HStack(spacing: DS.Spacing.md) {
+            bodyView(isFront: true, label: "전면")
+            bodyView(isFront: false, label: "후면")
         }
-        .frame(height: 160)
+        .frame(height: 170)
     }
 
-    private func bodyView(muscles: [MuscleMapItem], label: String) -> some View {
-        VStack(spacing: DS.Spacing.xxs) {
+    private func bodyView(isFront: Bool, label: String) -> some View {
+        let parts = isFront ? MuscleMapData.svgFrontParts : MuscleMapData.svgBackParts
+        let outlineShape = isFront ? MuscleMapData.frontOutlineShape : MuscleMapData.backOutlineShape
+        let aspectRatio: CGFloat = 200.0 / 400.0
+
+        return VStack(spacing: DS.Spacing.xxs) {
             GeometryReader { geo in
-                let w = geo.size.width
-                let h = geo.size.height
+                let size = geo.size
+                let outlineBounds = outlineShape.path(in: CGRect(origin: .zero, size: size)).boundingRect
+                let centerOffsetX = (size.width - outlineBounds.width) / 2 - outlineBounds.minX
 
                 ZStack {
-                    MuscleMapData.bodyOutline(width: w, height: h)
-                        .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
+                    outlineShape
+                        .stroke(Color.secondary.opacity(0.25), lineWidth: 1.2)
+                        .frame(width: size.width, height: size.height)
 
-                    ForEach(muscles) { item in
-                        RoundedRectangle(cornerRadius: item.cornerRadius)
-                            .fill(colorForMuscle(item.muscle))
-                            .frame(
-                                width: item.size.width * w,
-                                height: item.size.height * h
-                            )
-                            .position(
-                                x: item.position.x * w,
-                                y: item.position.y * h
-                            )
+                    ForEach(parts) { part in
+                        part.shape
+                            .fill(colorForMuscle(part.muscle))
+                            .overlay {
+                                part.shape
+                                    .stroke(strokeColorForMuscle(part.muscle), lineWidth: 0.5)
+                            }
+                            .frame(width: size.width, height: size.height)
                     }
                 }
+                .frame(width: size.width, height: size.height)
+                .offset(x: centerOffsetX)
             }
+            .aspectRatio(aspectRatio, contentMode: .fit)
+            .clipped()
 
             Text(label)
                 .font(.caption2)
@@ -55,6 +62,15 @@ struct ExerciseMuscleMapView: View {
             return DS.Color.activity.opacity(0.25)
         }
         return Color.secondary.opacity(0.06)
+    }
+
+    private func strokeColorForMuscle(_ muscle: MuscleGroup) -> Color {
+        if primarySet.contains(muscle) {
+            return DS.Color.activity.opacity(0.45)
+        } else if secondarySet.contains(muscle) {
+            return DS.Color.activity.opacity(0.25)
+        }
+        return Color.secondary.opacity(0.12)
     }
 }
 
