@@ -185,6 +185,8 @@ struct ActivityView: View {
         }
         .navigationDestination(for: ActivityDetailDestination.self) { destination in
             switch destination {
+            case .muscleMap:
+                MuscleMapDetailView(fatigueStates: viewModel.fatigueStates)
             case .personalRecords:
                 PersonalRecordsDetailView(
                     records: viewModel.personalRecords,
@@ -238,12 +240,15 @@ struct ActivityView: View {
     // MARK: - Extracted Sections
 
     private func recoveryMapSection(fillHeight: Bool = false) -> some View {
-        SectionGroup(title: "Muscle Map", icon: "figure.stand", iconColor: DS.Color.activity, fillHeight: fillHeight) {
-            MuscleRecoveryMapView(
-                fatigueStates: viewModel.fatigueStates,
-                onMuscleSelected: { muscle in selectedMuscle = muscle }
-            )
+        NavigationLink(value: ActivityDetailDestination.muscleMap) {
+            SectionGroup(title: "Muscle Map", icon: "figure.stand", iconColor: DS.Color.activity, fillHeight: fillHeight) {
+                MuscleRecoveryMapView(
+                    fatigueStates: viewModel.fatigueStates,
+                    onMuscleSelected: { muscle in selectedMuscle = muscle }
+                )
+            }
         }
+        .buttonStyle(.plain)
     }
 
     private func weeklyStatsSection(fillHeight: Bool = false) -> some View {

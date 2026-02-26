@@ -5,6 +5,7 @@ import SwiftUI
 /// Uses original outline + muscle paths from react-native-body-highlighter (MIT).
 struct MuscleRecoveryMapView: View {
     let fatigueStates: [MuscleFatigueState]
+    var isExpanded: Bool = false
     let onMuscleSelected: (MuscleGroup) -> Void
 
     // MARK: - Mode
@@ -99,12 +100,14 @@ struct MuscleRecoveryMapView: View {
     // MARK: - Body Diagram
 
     private var bodyDiagramSection: some View {
-        VStack(spacing: DS.Spacing.sm) {
+        let maxDiagramWidth: CGFloat = isExpanded ? 220 : 170
+
+        return VStack(spacing: DS.Spacing.sm) {
             HStack(spacing: DS.Spacing.sm) {
                 bodyDiagram(isFront: true)
-                    .frame(maxWidth: 170)
+                    .frame(maxWidth: maxDiagramWidth)
                 bodyDiagram(isFront: false)
-                    .frame(maxWidth: 170)
+                    .frame(maxWidth: maxDiagramWidth)
             }
             .frame(maxWidth: .infinity, alignment: .center)
 
@@ -153,7 +156,7 @@ struct MuscleRecoveryMapView: View {
             .offset(x: centerOffsetX)
         }
         .aspectRatio(aspectRatio, contentMode: .fit)
-        .frame(maxHeight: 300)
+        .frame(maxHeight: isExpanded ? 400 : 300)
         .clipped()
     }
 
