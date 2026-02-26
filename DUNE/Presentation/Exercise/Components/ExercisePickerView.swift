@@ -127,7 +127,18 @@ struct ExercisePickerView: View {
     }
 
     private var shouldShowQuickStartHub: Bool {
-        isQuickStartMode && searchText.isEmpty && !showingAllQuickStartExercises
+        isQuickStartMode && !showingAllQuickStartExercises
+    }
+
+    private var shouldShowSearchBar: Bool {
+        !isQuickStartMode || showingAllQuickStartExercises
+    }
+
+    private var quickStartRecentExercises: [ExerciseDefinition] {
+        let popularCanonical = Set(popularExercises.map(canonicalKey(for:)))
+        return recentExercises.filter { exercise in
+            !popularCanonical.contains(canonicalKey(for: exercise))
+        }
     }
 
     private var quickStartPriorityIndexByID: [String: Int] {
@@ -137,48 +148,62 @@ struct ExercisePickerView: View {
 
     var body: some View {
         NavigationStack {
-            List {
-                if shouldShowQuickStartHub {
-                    quickStartHubSections
-                } else if isQuickStartMode {
-                    quickStartAllSection
-                } else {
-                    fullModeSections
-                }
-            }
-            .searchable(text: $searchText, prompt: "Search exercises")
-            .navigationTitle(isQuickStartMode ? "Quick Start" : "Select Exercise")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
-                }
+            pickerContent
+                .navigationTitle(isQuickStartMode ? "Quick Start" : "Select Exercise")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Cancel") { dismiss() }
+                    }
 
-                if !isQuickStartMode {
-                    ToolbarItem(placement: .primaryAction) {
-                        Button {
-                            showingCreateCustom = true
-                        } label: {
-                            Image(systemName: "plus")
+                    if !isQuickStartMode {
+                        ToolbarItem(placement: .primaryAction) {
+                            Button {
+                                showingCreateCustom = true
+                            } label: {
+                                Image(systemName: "plus")
+                            }
                         }
                     }
                 }
-            }
-            .sheet(isPresented: $showingCreateCustom) {
-                CreateCustomExerciseView { definition in
-                    onSelect(definition)
-                    dismiss()
+                .sheet(isPresented: $showingCreateCustom) {
+                    CreateCustomExerciseView { definition in
+                        onSelect(definition)
+                        dismiss()
+                    }
                 }
-            }
-            .sheet(item: $detailExercise) { exercise in
-                let freshExercise = library.exercise(byID: exercise.id)
-                    ?? customDefinitions.first { $0.id == exercise.id }
-                    ?? exercise
-                ExerciseDetailSheet(exercise: freshExercise) {
-                    onSelect(freshExercise)
-                    dismiss()
+                .sheet(item: $detailExercise) { exercise in
+                    let freshExercise = library.exercise(byID: exercise.id)
+                        ?? customDefinitions.first { $0.id == exercise.id }
+                        ?? exercise
+                    ExerciseDetailSheet(exercise: freshExercise) {
+                        onSelect(freshExercise)
+                        dismiss()
+                    }
+                    .presentationDetents([.medium, .large])
                 }
-                .presentationDetents([.medium, .large])
+        }
+    }
+
+    @ViewBuilder
+    private var pickerContent: some View {
+        if shouldShowSearchBar {
+            exerciseList
+                .searchable(text: $searchText, prompt: "Search exercises")
+        } else {
+            exerciseList
+        }
+    }
+
+    @ViewBuilder
+    private var exerciseList: some View {
+        List {
+            if shouldShowQuickStartHub {
+                quickStartHubSections
+            } else if isQuickStartMode {
+                quickStartAllSection
+            } else {
+                fullModeSections
             }
         }
     }
@@ -233,9 +258,9 @@ struct ExercisePickerView: View {
             }
         }
 
-        if !recentExercises.isEmpty {
+        if !quickStartRecentExercises.isEmpty {
             Section("Recent") {
-                ForEach(recentExercises) { exercise in
+                ForEach(quickStartRecentExercises) { exercise in
                     exerciseRow(exercise)
                 }
             }
@@ -269,6 +294,7 @@ struct ExercisePickerView: View {
                 Spacer()
                 if showingAllQuickStartExercises && searchText.isEmpty {
                     Button("Hide") {
+                        searchText = ""
                         showingAllQuickStartExercises = false
                     }
                     .font(.caption)

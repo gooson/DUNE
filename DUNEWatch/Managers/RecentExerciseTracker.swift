@@ -74,6 +74,11 @@ enum RecentExerciseTracker {
         loadUsageCounts()[exerciseID] ?? 0
     }
 
+    /// Returns raw last-used timestamps snapshot for batch sorting/filtering.
+    static func lastUsedTimestamps() -> [String: Double] {
+        loadLastUsedHistory()
+    }
+
     /// Canonicalized exercise ID for integrating common variants.
     static func canonicalExerciseID(exerciseID: String) -> String {
         var normalized = exerciseID.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()

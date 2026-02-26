@@ -56,7 +56,7 @@ struct QuickStartPickerView: View {
 
     private func exerciseRow(_ exercise: WatchExerciseInfo) -> some View {
         let defaults = resolvedDefaults(for: exercise)
-        NavigationLink(value: WatchRoute.workoutPreview(snapshotFromExercise(exercise))) {
+        return NavigationLink(value: WatchRoute.workoutPreview(snapshotFromExercise(exercise))) {
             VStack(alignment: .leading, spacing: 2) {
                 Text(exercise.name)
                     .font(.caption.weight(.medium))
@@ -89,6 +89,7 @@ struct QuickStartPickerView: View {
 
     private func rebuildSections() {
         let library = connectivity.exerciseLibrary
+        let lastUsed = RecentExerciseTracker.lastUsedTimestamps()
 
         cachedPopular = Array(
             uniqueByCanonical(
@@ -103,10 +104,10 @@ struct QuickStartPickerView: View {
 
         cachedRecent = uniqueByCanonical(
             library
-            .filter { RecentExerciseTracker.lastUsed(exerciseID: $0.id) != nil }
+            .filter { lastUsed[$0.id] != nil }
             .sorted {
-                let a = RecentExerciseTracker.lastUsed(exerciseID: $0.id) ?? .distantPast
-                let b = RecentExerciseTracker.lastUsed(exerciseID: $1.id) ?? .distantPast
+                let a = lastUsed[$0.id] ?? Date.distantPast.timeIntervalSince1970
+                let b = lastUsed[$1.id] ?? Date.distantPast.timeIntervalSince1970
                 return a > b
             }
         ).filter { exercise in
@@ -186,7 +187,7 @@ struct QuickStartAllExercisesView: View {
 
     private func exerciseRow(_ exercise: WatchExerciseInfo) -> some View {
         let defaults = resolvedDefaults(for: exercise)
-        NavigationLink(value: WatchRoute.workoutPreview(snapshotFromExercise(exercise))) {
+        return NavigationLink(value: WatchRoute.workoutPreview(snapshotFromExercise(exercise))) {
             VStack(alignment: .leading, spacing: 2) {
                 Text(exercise.name)
                     .font(.caption.weight(.medium))
