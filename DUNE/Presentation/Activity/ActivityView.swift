@@ -22,106 +22,124 @@ struct ActivityView: View {
     @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var cachedInjuryConflicts: [InjuryConflict] = []
     private let conflictUseCase = CheckInjuryConflictUseCase()
+    private let scrollToTopSignal: Int
+
+    private enum ScrollAnchor: Hashable {
+        case top
+    }
 
     private var isRegular: Bool { sizeClass == .regular }
 
-    init(sharedHealthDataService: SharedHealthDataService? = nil) {
+    init(sharedHealthDataService: SharedHealthDataService? = nil, scrollToTopSignal: Int = 0) {
         _viewModel = State(initialValue: ActivityViewModel(sharedHealthDataService: sharedHealthDataService))
+        self.scrollToTopSignal = scrollToTopSignal
     }
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: DS.Spacing.lg) {
-                if viewModel.isLoading && viewModel.weeklyExerciseMinutes.isEmpty {
-                    ProgressView()
-                        .frame(maxWidth: .infinity, minHeight: 200)
-                } else {
-                    // ① Training Readiness Hero Card
-                    NavigationLink(value: ActivityDetailDestination.trainingReadiness) {
-                        TrainingReadinessHeroCard(
-                            readiness: viewModel.trainingReadiness,
-                            isCalibrating: viewModel.trainingReadiness?.isCalibrating ?? true
-                        )
-                    }
-                    .buttonStyle(.plain)
+        ScrollViewReader { proxy in
+            ScrollView {
+                Color.clear
+                    .frame(height: 0)
+                    .id(ScrollAnchor.top)
 
-                    // ② Injury Warning Banner
-                    if !cachedInjuryConflicts.isEmpty {
-                        InjuryWarningBanner(conflicts: cachedInjuryConflicts)
-                    }
-
-                    // ③④ Recovery Map + Weekly Stats (side-by-side on iPad)
-                    if isRegular {
-                        HStack(alignment: .top, spacing: DS.Spacing.md) {
-                            recoveryMapSection(fillHeight: true)
-                            weeklyStatsSection(fillHeight: true)
-                        }
+                VStack(spacing: DS.Spacing.lg) {
+                    if viewModel.isLoading && viewModel.weeklyExerciseMinutes.isEmpty {
+                        ProgressView()
+                            .frame(maxWidth: .infinity, minHeight: 200)
                     } else {
-                        recoveryMapSection()
-                        weeklyStatsSection()
-                    }
-
-                    // ⑤⑥ Suggested Workout + Training Volume (side-by-side on iPad)
-                    if isRegular {
-                        HStack(alignment: .top, spacing: DS.Spacing.md) {
-                            suggestedWorkoutSection(fillHeight: true)
-                            trainingVolumeSection(fillHeight: true)
-                        }
-                    } else {
-                        suggestedWorkoutSection()
-                        trainingVolumeSection()
-                    }
-
-                    // ⑦ Recent Workouts
-                    SectionGroup(title: "Recent Workouts", icon: "clock.arrow.circlepath", iconColor: DS.Color.activity) {
-                        ExerciseListSection(
-                            workouts: viewModel.recentWorkouts,
-                            exerciseRecords: recentRecords
-                        )
-                    }
-
-                    // ⑧ Personal Records
-                    SectionGroup(title: "Personal Records", icon: "trophy.fill",
-                                 iconColor: DS.Color.activity,
-                                 infoAction: { showingPRInfo = true }) {
-                        NavigationLink(value: ActivityDetailDestination.personalRecords) {
-                            PersonalRecordsSection(
-                                records: viewModel.personalRecords,
-                                notice: viewModel.personalRecordNotice
+                        // ① Training Readiness Hero Card
+                        NavigationLink(value: ActivityDetailDestination.trainingReadiness) {
+                            TrainingReadinessHeroCard(
+                                readiness: viewModel.trainingReadiness,
+                                isCalibrating: viewModel.trainingReadiness?.isCalibrating ?? true
                             )
                         }
+                        .accessibilityIdentifier("activity-readiness-card")
                         .buttonStyle(.plain)
-                    }
 
-                    // ⑨ Consistency
-                    SectionGroup(title: "Consistency", icon: "flame.fill",
-                                 iconColor: DS.Color.activity,
-                                 infoAction: { showingConsistencyInfo = true }) {
-                        NavigationLink(value: ActivityDetailDestination.consistency) {
-                            ConsistencyCard(streak: viewModel.workoutStreak)
+                        // ② Injury Warning Banner
+                        if !cachedInjuryConflicts.isEmpty {
+                            InjuryWarningBanner(conflicts: cachedInjuryConflicts)
                         }
-                        .buttonStyle(.plain)
-                    }
 
-                    // ⑩ Exercise Mix
-                    SectionGroup(title: "Exercise Mix", icon: "chart.bar.xaxis",
-                                 iconColor: DS.Color.activity,
-                                 infoAction: { showingExerciseMixInfo = true }) {
-                        NavigationLink(value: ActivityDetailDestination.exerciseMix) {
-                            ExerciseFrequencySection(frequencies: viewModel.exerciseFrequencies)
+                        // ③④ Recovery Map + Weekly Stats (side-by-side on iPad)
+                        if isRegular {
+                            HStack(alignment: .top, spacing: DS.Spacing.md) {
+                                recoveryMapSection(fillHeight: true)
+                                weeklyStatsSection(fillHeight: true)
+                            }
+                        } else {
+                            recoveryMapSection()
+                            weeklyStatsSection()
                         }
-                        .buttonStyle(.plain)
-                    }
 
-                    if let error = viewModel.errorMessage {
-                        Text(error)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                            .padding()
+                        // ⑤⑥ Suggested Workout + Training Volume (side-by-side on iPad)
+                        if isRegular {
+                            HStack(alignment: .top, spacing: DS.Spacing.md) {
+                                suggestedWorkoutSection(fillHeight: true)
+                                trainingVolumeSection(fillHeight: true)
+                            }
+                        } else {
+                            suggestedWorkoutSection()
+                            trainingVolumeSection()
+                        }
+
+                        // ⑦ Recent Workouts
+                        SectionGroup(title: "Recent Workouts", icon: "clock.arrow.circlepath", iconColor: DS.Color.activity) {
+                            ExerciseListSection(
+                                workouts: viewModel.recentWorkouts,
+                                exerciseRecords: recentRecords
+                            )
+                        }
+
+                        // ⑧ Personal Records
+                        SectionGroup(title: "Personal Records", icon: "trophy.fill",
+                                     iconColor: DS.Color.activity,
+                                     infoAction: { showingPRInfo = true }) {
+                            NavigationLink(value: ActivityDetailDestination.personalRecords) {
+                                PersonalRecordsSection(
+                                    records: viewModel.personalRecords,
+                                    notice: viewModel.personalRecordNotice
+                                )
+                            }
+                            .buttonStyle(.plain)
+                        }
+
+                        // ⑨ Consistency
+                        SectionGroup(title: "Consistency", icon: "flame.fill",
+                                     iconColor: DS.Color.activity,
+                                     infoAction: { showingConsistencyInfo = true }) {
+                            NavigationLink(value: ActivityDetailDestination.consistency) {
+                                ConsistencyCard(streak: viewModel.workoutStreak)
+                            }
+                            .buttonStyle(.plain)
+                        }
+
+                        // ⑩ Exercise Mix
+                        SectionGroup(title: "Exercise Mix", icon: "chart.bar.xaxis",
+                                     iconColor: DS.Color.activity,
+                                     infoAction: { showingExerciseMixInfo = true }) {
+                            NavigationLink(value: ActivityDetailDestination.exerciseMix) {
+                                ExerciseFrequencySection(frequencies: viewModel.exerciseFrequencies)
+                            }
+                            .buttonStyle(.plain)
+                        }
+
+                        if let error = viewModel.errorMessage {
+                            Text(error)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                                .padding()
+                        }
                     }
                 }
+                .padding()
             }
-            .padding()
+            .onChange(of: scrollToTopSignal) { _, _ in
+                withAnimation(DS.Animation.standard) {
+                    proxy.scrollTo(ScrollAnchor.top, anchor: .top)
+                }
+            }
         }
         .background { TabWaveBackground(primaryColor: DS.Color.activity) }
         .toolbar {

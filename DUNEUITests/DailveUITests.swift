@@ -39,4 +39,37 @@ final class DailveUITests: XCTestCase {
             button.tap()
         }
     }
+
+    func testReselectCurrentTabScrollsToTop() throws {
+        let tabBar = app.tabBars.firstMatch
+        guard tabBar.waitForExistence(timeout: 5) else {
+            throw XCTSkip("iPad sidebar layout does not support this tab-bar regression test")
+        }
+
+        let activityTab = tabBar.buttons["Activity"]
+        XCTAssertTrue(activityTab.exists, "Activity tab should exist")
+        activityTab.tap()
+
+        let topCard = app.buttons[AXID.activityReadinessCard]
+        XCTAssertTrue(topCard.waitForExistence(timeout: 10), "Top activity card should exist")
+        XCTAssertTrue(topCard.isHittable, "Top activity card should be visible before scroll")
+
+        var swipeCount = 0
+        while topCard.isHittable && swipeCount < 6 {
+            app.swipeUp()
+            swipeCount += 1
+        }
+
+        XCTAssertFalse(
+            topCard.isHittable,
+            "Top card should move out of viewport after swiping down the feed"
+        )
+
+        activityTab.tap() // reselect current tab
+
+        let becameVisible = NSPredicate(format: "hittable == true")
+        expectation(for: becameVisible, evaluatedWith: topCard)
+        waitForExpectations(timeout: 3)
+        XCTAssertTrue(topCard.isHittable, "Reselecting current tab should scroll feed back to top")
+    }
 }
