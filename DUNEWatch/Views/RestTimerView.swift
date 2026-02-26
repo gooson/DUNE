@@ -41,7 +41,7 @@ struct RestTimerView: View {
 
                 Circle()
                     .trim(from: 0, to: progress)
-                    .stroke(.green, style: StrokeStyle(lineWidth: 6, lineCap: .round))
+                    .stroke(DS.Color.positive, style: StrokeStyle(lineWidth: 6, lineCap: .round))
                     .rotationEffect(.degrees(-90))
                     .animation(.linear(duration: 1), value: tick)
 
@@ -53,7 +53,7 @@ struct RestTimerView: View {
                     HStack(spacing: 2) {
                         Image(systemName: "heart.fill")
                             .font(.system(size: 8))
-                            .foregroundStyle(.red)
+                            .foregroundStyle(DS.Color.heartRate)
                         if workoutManager.heartRate > 0 {
                             Text(Int(workoutManager.heartRate).formattedWithSeparator)
                                 .font(.caption2.monospacedDigit())
@@ -78,7 +78,7 @@ struct RestTimerView: View {
                         .frame(minHeight: 32)
                 }
                 .buttonStyle(.bordered)
-                .tint(.gray)
+                .tint(.secondary)
 
                 Button {
                     cancelCountdown()
@@ -89,7 +89,7 @@ struct RestTimerView: View {
                         .frame(minHeight: 36)
                 }
                 .buttonStyle(.bordered)
-                .tint(.green)
+                .tint(DS.Color.positive)
 
                 Button(role: .destructive) {
                     cancelCountdown()
@@ -100,7 +100,7 @@ struct RestTimerView: View {
                         .frame(minHeight: 32)
                 }
                 .buttonStyle(.bordered)
-                .tint(.red)
+                .tint(DS.Color.negative)
             }
         }
         .onAppear {

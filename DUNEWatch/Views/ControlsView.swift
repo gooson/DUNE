@@ -20,7 +20,7 @@ struct ControlsView: View {
                 }
                 .frame(maxWidth: .infinity)
             }
-            .tint(.red)
+            .tint(DS.Color.negative)
 
             // Pause / Resume
             Button {
@@ -38,7 +38,7 @@ struct ControlsView: View {
                 }
                 .frame(maxWidth: .infinity)
             }
-            .tint(.yellow)
+            .tint(DS.Color.caution)
 
             // Skip Exercise
             if !workoutManager.isLastExercise {
@@ -53,7 +53,7 @@ struct ControlsView: View {
                     }
                     .frame(maxWidth: .infinity)
                 }
-                .tint(.gray)
+                .tint(.secondary)
             }
         }
         .confirmationDialog(

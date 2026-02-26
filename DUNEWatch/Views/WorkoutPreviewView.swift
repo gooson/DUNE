@@ -61,7 +61,7 @@ struct WorkoutPreviewView: View {
                 .frame(maxWidth: .infinity, minHeight: 44)
             }
             .buttonStyle(.borderedProminent)
-            .tint(.green)
+            .tint(DS.Color.positive)
             .disabled(isStarting)
             .padding(.horizontal, 12)
             .padding(.bottom, 4)

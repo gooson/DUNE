@@ -4,7 +4,7 @@ import UIKit
 /// Compact wave animation shown during pull-to-refresh loading.
 /// Uses a dedicated sine-curve path (not WaveShape) for a small pill-shaped indicator.
 struct WaveRefreshIndicator: View {
-    var color: Color = .accentColor
+    var color: Color = DS.Color.warmGlow
 
     @State private var phase: CGFloat = 0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -133,7 +133,7 @@ private extension UIView {
 extension View {
     /// Wave-branded pull-to-refresh.
     func waveRefreshable(
-        color: Color = .accentColor,
+        color: Color = DS.Color.warmGlow,
         action: @escaping @Sendable () async -> Void
     ) -> some View {
         modifier(WaveRefreshModifier(

@@ -38,9 +38,9 @@ struct EmptyStateView: View {
             // Static wave decoration (no animation — empty state shouldn't distract)
             ZStack {
                 WaveShape(amplitude: 0.15, frequency: 1.5, phase: 0, verticalOffset: 0.5)
-                    .fill(Color.accentColor.opacity(0.06))
+                    .fill(DS.Color.warmGlow.opacity(DS.Opacity.subtle))
                 WaveShape(amplitude: 0.2, frequency: 2, phase: .pi / 3, verticalOffset: 0.5)
-                    .fill(Color.accentColor.opacity(0.06))
+                    .fill(DS.Color.warmGlow.opacity(DS.Opacity.subtle))
             }
             .frame(height: 60)
             .clipped()

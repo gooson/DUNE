@@ -98,7 +98,7 @@ struct ExerciseMixDetailView: View {
     }
 
     private var donutCenterLabel: some View {
-        VStack(spacing: 2) {
+        VStack(spacing: DS.Spacing.xxs) {
             if let name = selectedExercise,
                let freq = viewModel.frequencyByName[name] {
                 Text(name)

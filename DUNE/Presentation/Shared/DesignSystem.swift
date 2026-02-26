@@ -49,6 +49,21 @@ enum DS {
         static let warmGlow = SwiftUI.Color("AccentColor")
     }
 
+    // MARK: - Opacity
+
+    enum Opacity {
+        /// Background wave decorations, empty-state fills (0.06)
+        static let subtle: Double = 0.06
+        /// Card shadow, badge background tint (0.08)
+        static let light: Double = 0.08
+        /// Tab background gradient mid-stop (0.10)
+        static let medium: Double = 0.10
+        /// Card border in dark mode (0.15)
+        static let border: Double = 0.15
+        /// Hero card border highlight (0.30)
+        static let strong: Double = 0.30
+    }
+
     // MARK: - Gradient
 
     enum Gradient {

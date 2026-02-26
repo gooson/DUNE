@@ -216,7 +216,7 @@ struct ExerciseTypeDetailView: View {
     }
 
     private func comparisonItem(label: String, current: String, change: Double?) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: DS.Spacing.xs) {
             Text(label)
                 .font(.caption)
                 .foregroundStyle(.secondary)
