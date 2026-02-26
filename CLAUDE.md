@@ -375,3 +375,9 @@
 ### 2026-02-27: TabBar Tint iOS 26 교정
 
 150. **iOS 26 `.sidebarAdaptable`에서 `UITabBar.appearance()` 무시됨**: 새 렌더링 경로가 UIKit UITabBar를 우회. 탭바 tint는 SwiftUI `.tint(DS.Color.warmGlow)` modifier로 TabView에 직접 적용. `import UIKit` + appearance proxy 패턴 금지
+
+### 2026-02-27: 테스트 실패 일괄 수정 교정
+
+151. **시계열 regression 입력은 oldest-first 정렬 필수**: `dailyAverages`가 newest-first일 때 index 0=newest가 되어 기울기 부호 반전. `.reversed()` 적용 후 주석으로 정렬 방향 명시
+152. **가중 평균 테스트는 최소 2개 데이터 포인트**: 단일 데이터에서 `weightedSum / totalWeight = rawValue` 항상 성립(가중치 상쇄). 가중치 차이가 결과에 영향을 주는 시나리오 구성 필수
+153. **UI 구조 변경 시 UI 테스트 동시 갱신**: 탭/네비게이션 구조 변경 커밋에 UI 테스트 수정 포함. 별도 커밋으로 분리하면 stale test가 축적됨
