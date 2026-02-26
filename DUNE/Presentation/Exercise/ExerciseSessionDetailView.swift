@@ -110,7 +110,7 @@ struct ExerciseSessionDetailView: View {
             }
             .padding(.horizontal, DS.Spacing.sm)
             .padding(.vertical, DS.Spacing.xxs)
-            .background(.red.opacity(0.08), in: Capsule())
+            .background(.red.opacity(DS.Opacity.light), in: Capsule())
         }
     }
 

@@ -43,7 +43,7 @@ struct SetInputSheet: View {
         VStack(spacing: 6) {
             Text("\(weight, specifier: "%.1f")")
                 .font(.system(.largeTitle, design: .rounded).monospacedDigit().bold())
-                .foregroundStyle(.green)
+                .foregroundStyle(DS.Color.positive)
                 .contentTransition(.numericText())
 
             Text("kg")
@@ -71,7 +71,7 @@ struct SetInputSheet: View {
                 .frame(maxWidth: .infinity, minHeight: 32)
         }
         .buttonStyle(.bordered)
-        .tint(.gray)
+        .tint(.secondary)
     }
 
     // MARK: - Reps
@@ -89,14 +89,14 @@ struct SetInputSheet: View {
                     .frame(minWidth: 44, minHeight: 44)
             }
             .buttonStyle(.bordered)
-            .tint(.gray)
+            .tint(.secondary)
 
             Spacer()
 
             VStack(spacing: 0) {
                 Text("\(reps)")
                     .font(.system(.title2, design: .rounded).monospacedDigit().bold())
-                    .foregroundStyle(.green)
+                    .foregroundStyle(DS.Color.positive)
                     .contentTransition(.numericText())
                 Text("reps")
                     .font(.caption2)
@@ -116,7 +116,7 @@ struct SetInputSheet: View {
                     .frame(minWidth: 44, minHeight: 44)
             }
             .buttonStyle(.bordered)
-            .tint(.gray)
+            .tint(.secondary)
         }
     }
 

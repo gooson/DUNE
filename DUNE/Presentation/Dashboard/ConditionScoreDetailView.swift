@@ -262,7 +262,7 @@ struct ConditionScoreDetailView: View {
         let icon = isPositive ? "arrow.up.right" : "arrow.down.right"
         let color: Color = isPositive ? DS.Color.positive : DS.Color.negative
 
-        return HStack(spacing: 2) {
+        return HStack(spacing: DS.Spacing.xxs) {
             Image(systemName: icon)
                 .font(.system(size: 9, weight: .bold))
             Text("\(abs(change).formattedWithSeparator(fractionDigits: 1))%")
@@ -270,8 +270,8 @@ struct ConditionScoreDetailView: View {
                 .fontWeight(.medium)
         }
         .foregroundStyle(color)
-        .padding(.horizontal, 6)
-        .padding(.vertical, 2)
+        .padding(.horizontal, DS.Spacing.sm)
+        .padding(.vertical, DS.Spacing.xxs)
         .background(color.opacity(0.12), in: Capsule())
     }
 

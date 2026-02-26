@@ -47,7 +47,7 @@ struct RoutineListView: View {
                 NavigationLink(value: WatchRoute.quickStart) {
                     Label("Quick Start", systemImage: "bolt.fill")
                         .font(.caption.weight(.semibold))
-                        .foregroundStyle(.green)
+                        .foregroundStyle(DS.Color.positive)
                 }
             }
 
@@ -76,7 +76,7 @@ struct RoutineListView: View {
                 Label("Quick Start", systemImage: "bolt.fill")
             }
             .buttonStyle(.borderedProminent)
-            .tint(.green)
+            .tint(DS.Color.positive)
             .padding(.top, 8)
 
             syncStatusView
@@ -96,11 +96,11 @@ struct RoutineListView: View {
                 Text("Syncing...")
             case .synced(let date):
                 Image(systemName: "checkmark.circle")
-                    .foregroundStyle(.green)
+                    .foregroundStyle(DS.Color.positive)
                 Text(Self.syncTimeLabel(from: date))
             case .failed(let message):
                 Image(systemName: "exclamationmark.triangle")
-                    .foregroundStyle(.yellow)
+                    .foregroundStyle(DS.Color.caution)
                 Text(message)
             case .notConnected:
                 Image(systemName: "iphone.slash")

@@ -77,7 +77,7 @@ struct WaveShape: Shape {
 
 /// Subtle animated wave background decoration.
 struct WaveOverlayView: View {
-    var color: Color = .accentColor
+    var color: Color = DS.Color.warmGlow
     var opacity: Double = 0.04
     var amplitude: CGFloat = 0.03
     var frequency: CGFloat = 2
@@ -142,7 +142,7 @@ struct TabWaveBackground: View {
             .frame(height: 200)
 
             LinearGradient(
-                colors: [primaryColor.opacity(0.10), Color.accentColor.opacity(0.06), .clear],
+                colors: [primaryColor.opacity(DS.Opacity.medium), DS.Color.warmGlow.opacity(DS.Opacity.subtle), .clear],
                 startPoint: .top,
                 endPoint: DS.Gradient.tabBackgroundEnd
             )

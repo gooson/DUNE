@@ -139,7 +139,7 @@ struct MetricsView: View {
                 .frame(height: 3)
                 .overlay(alignment: .leading) {
                     RoundedRectangle(cornerRadius: 2)
-                        .fill(.green)
+                        .fill(DS.Color.positive)
                         .frame(width: geo.size.width * progress, height: 3)
                 }
         }
@@ -180,11 +180,11 @@ struct MetricsView: View {
             : 0
 
         if setIndex < completedCount {
-            return .green
+            return DS.Color.positive
         } else if setIndex == workoutManager.currentSetIndex {
-            return .green.opacity(0.4)
+            return DS.Color.positive.opacity(0.4)
         } else {
-            return .gray.opacity(0.3)
+            return .secondary.opacity(0.3)
         }
     }
 
@@ -214,12 +214,12 @@ struct MetricsView: View {
                         .foregroundStyle(.secondary)
                 }
             }
-            .foregroundStyle(.green)
+            .foregroundStyle(DS.Color.positive)
             .frame(maxWidth: .infinity)
             .padding(.vertical, 8)
             .background {
                 RoundedRectangle(cornerRadius: 10)
-                    .fill(.green.opacity(0.15))
+                    .fill(DS.Color.positive.opacity(0.15))
             }
             .overlay(alignment: .topTrailing) {
                 Image(systemName: "pencil")
@@ -245,7 +245,7 @@ struct MetricsView: View {
             .frame(maxWidth: .infinity, minHeight: 44)
         }
         .buttonStyle(.borderedProminent)
-        .tint(.green)
+        .tint(DS.Color.positive)
     }
 
     // MARK: - Heart Rate
@@ -254,7 +254,7 @@ struct MetricsView: View {
         HStack(spacing: 4) {
             Image(systemName: "heart.fill")
                 .font(.caption2)
-                .foregroundStyle(.red)
+                .foregroundStyle(DS.Color.negative)
 
             if workoutManager.heartRate > 0 {
                 Text("\(Int(workoutManager.heartRate).formattedWithSeparator) bpm")
@@ -286,7 +286,7 @@ struct MetricsView: View {
             }
 
             ProgressView()
-                .tint(.green)
+                .tint(DS.Color.positive)
         }
         .onAppear {
             transitionTask?.cancel()

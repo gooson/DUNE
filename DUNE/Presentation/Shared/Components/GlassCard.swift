@@ -22,7 +22,7 @@ struct HeroCard<Content: View>: View {
                             .fill(
                                 LinearGradient(
                                     colors: [
-                                        SwiftUI.Color.accentColor.opacity(0.10),
+                                        DS.Color.warmGlow.opacity(DS.Opacity.medium),
                                         tintColor.opacity(0.08)
                                     ],
                                     startPoint: .topLeading,
@@ -36,8 +36,8 @@ struct HeroCard<Content: View>: View {
                             .strokeBorder(
                                 LinearGradient(
                                     colors: [
-                                        SwiftUI.Color.accentColor.opacity(0.30),
-                                        SwiftUI.Color.accentColor.opacity(0.06)
+                                        DS.Color.warmGlow.opacity(DS.Opacity.strong),
+                                        DS.Color.warmGlow.opacity(DS.Opacity.subtle)
                                     ],
                                     startPoint: .topLeading,
                                     endPoint: .bottomTrailing
@@ -71,16 +71,16 @@ struct StandardCard<Content: View>: View {
                     .overlay(
                         RoundedRectangle(cornerRadius: cornerRadius)
                             .strokeBorder(
-                                SwiftUI.Color.accentColor.opacity(
-                                    colorScheme == .dark ? 0.15 : 0.0
+                                DS.Color.warmGlow.opacity(
+                                    colorScheme == .dark ? DS.Opacity.emphasis : 0
                                 ),
                                 lineWidth: 0.5
                             )
                     )
                     .shadow(
                         color: colorScheme == .dark
-                            ? SwiftUI.Color.accentColor.opacity(0.08)
-                            : .black.opacity(0.06),
+                            ? DS.Color.warmGlow.opacity(DS.Opacity.light)
+                            : .black.opacity(DS.Opacity.subtle),
                         radius: 10,
                         y: 2
                     )

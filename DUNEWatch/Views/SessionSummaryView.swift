@@ -24,7 +24,7 @@ struct SessionSummaryView: View {
                 // Header
                 Image(systemName: "checkmark.circle.fill")
                     .font(.system(size: 32))
-                    .foregroundStyle(.green)
+                    .foregroundStyle(DS.Color.positive)
 
                 Text("Workout Complete")
                     .font(.headline)
@@ -48,7 +48,7 @@ struct SessionSummaryView: View {
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.borderedProminent)
-                .tint(.green)
+                .tint(DS.Color.positive)
                 .disabled(isSaving || workoutManager.isFinalizingWorkout)
                 .padding(.top, 8)
             }
