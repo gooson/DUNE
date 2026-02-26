@@ -53,7 +53,7 @@ struct RestTimerView: View {
                     HStack(spacing: 2) {
                         Image(systemName: "heart.fill")
                             .font(.system(size: 8))
-                            .foregroundStyle(DS.Color.negative)
+                            .foregroundStyle(DS.Color.heartRate)
                         if workoutManager.heartRate > 0 {
                             Text(Int(workoutManager.heartRate).formattedWithSeparator)
                                 .font(.caption2.monospacedDigit())

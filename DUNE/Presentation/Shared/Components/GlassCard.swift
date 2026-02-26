@@ -72,7 +72,7 @@ struct StandardCard<Content: View>: View {
                         RoundedRectangle(cornerRadius: cornerRadius)
                             .strokeBorder(
                                 DS.Color.warmGlow.opacity(
-                                    colorScheme == .dark ? DS.Opacity.emphasis : 0
+                                    colorScheme == .dark ? DS.Opacity.border : 0
                                 ),
                                 lineWidth: 0.5
                             )

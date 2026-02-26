@@ -59,7 +59,7 @@ enum DS {
         /// Tab background gradient mid-stop (0.10)
         static let medium: Double = 0.10
         /// Card border in dark mode (0.15)
-        static let emphasis: Double = 0.15
+        static let border: Double = 0.15
         /// Hero card border highlight (0.30)
         static let strong: Double = 0.30
     }

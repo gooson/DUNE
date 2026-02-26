@@ -219,7 +219,7 @@ struct MetricsView: View {
             .padding(.vertical, 8)
             .background {
                 RoundedRectangle(cornerRadius: 10)
-                    .fill(DS.Color.positive.opacity(0.15))
+                    .fill(DS.Color.positive.opacity(DS.Opacity.border))
             }
             .overlay(alignment: .topTrailing) {
                 Image(systemName: "pencil")
@@ -254,7 +254,7 @@ struct MetricsView: View {
         HStack(spacing: 4) {
             Image(systemName: "heart.fill")
                 .font(.caption2)
-                .foregroundStyle(DS.Color.negative)
+                .foregroundStyle(DS.Color.heartRate)
 
             if workoutManager.heartRate > 0 {
                 Text("\(Int(workoutManager.heartRate).formattedWithSeparator) bpm")

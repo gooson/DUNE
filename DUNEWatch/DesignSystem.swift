@@ -2,6 +2,7 @@ import SwiftUI
 
 /// Watch Design System — lightweight token set mirroring iOS DS.
 /// Colors reference named assets in DUNEWatch/Resources/Assets.xcassets/Colors/.
+/// TODO: Consolidate with iOS DS via shared Swift package to enforce single source of truth.
 enum DS {
     // MARK: - Color
 
@@ -26,6 +27,17 @@ enum DS {
         static let fitness   = SwiftUI.Color("WellnessFitness")
 
         // Surface
+        // cardBackground intentionally omitted — watchOS uses system material backgrounds
         static let surfacePrimary = SwiftUI.Color("SurfacePrimary")
+    }
+
+    // MARK: - Opacity (mirrors iOS DS.Opacity)
+
+    enum Opacity {
+        static let subtle: Double = 0.06
+        static let light: Double = 0.08
+        static let medium: Double = 0.10
+        static let border: Double = 0.15
+        static let strong: Double = 0.30
     }
 }
