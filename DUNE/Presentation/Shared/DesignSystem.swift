@@ -46,7 +46,7 @@ enum DS {
         static let surfacePrimary = SwiftUI.Color("SurfacePrimary")
 
         // Warm glow (derived from AccentColor for icon-aligned highlights)
-        static let warmGlow = SwiftUI.Color.accentColor
+        static let warmGlow = SwiftUI.Color("AccentColor")
     }
 
     // MARK: - Gradient
