@@ -118,7 +118,7 @@ struct ExerciseTypeDetailView: View {
         let color = resolveColor()
         let icon = resolveIcon()
         return Image(systemName: icon)
-            .font(.title)
+            .font(.system(size: 30))
             .foregroundStyle(.white)
             .frame(width: 60, height: 60)
             .background(color.gradient, in: RoundedRectangle(cornerRadius: DS.Radius.md))
