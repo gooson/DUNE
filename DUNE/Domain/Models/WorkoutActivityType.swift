@@ -351,6 +351,7 @@ enum WorkoutActivityType: String, Codable, Sendable, CaseIterable {
 // MARK: - ActivityCategory
 
 /// High-level grouping for workout activity types.
+/// CaseIterable: used by Presentation for chart color palette derivation.
 enum ActivityCategory: String, CaseIterable, Codable, Sendable {
     case cardio
     case strength
