@@ -35,7 +35,7 @@ struct WeeklyStatsDetailView: View {
                     date: record.date,
                     exerciseType: record.exerciseType,
                     categoryRawValue: ActivityCategory.strength.rawValue,
-                    equipmentRawValue: record.equipmentRaw,
+                    equipmentRawValue: record.resolvedEquipmentRaw,
                     duration: record.duration,
                     calories: record.estimatedCalories ?? record.calories ?? 0,
                     totalVolume: record.totalVolume

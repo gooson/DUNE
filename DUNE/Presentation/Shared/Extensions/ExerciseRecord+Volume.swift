@@ -11,4 +11,12 @@ extension ExerciseRecord {
             return total + weight * reps
         }
     }
+
+    /// Equipment raw value resolved from stored field, falling back to ExerciseLibrary.
+    /// Older records may have nil `equipmentRaw` — this resolves from the definition.
+    var resolvedEquipmentRaw: String? {
+        if let raw = equipmentRaw { return raw }
+        guard let defID = exerciseDefinitionID else { return nil }
+        return ExerciseLibraryService.shared.exercise(byID: defID)?.equipment.rawValue
+    }
 }
