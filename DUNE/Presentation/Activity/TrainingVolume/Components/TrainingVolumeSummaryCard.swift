@@ -42,7 +42,7 @@ struct TrainingVolumeSummaryCard: View {
         HStack(spacing: DS.Spacing.xs) {
             Image(systemName: icon)
                 .font(.caption2)
-                .foregroundStyle(DS.Color.activity)
+                .foregroundStyle(DS.Color.warmGlow)
             VStack(alignment: .leading, spacing: 0) {
                 Text(value)
                     .font(.subheadline.weight(.semibold))
@@ -62,7 +62,7 @@ struct TrainingVolumeSummaryCard: View {
                 x: .value("Day", point.date, unit: .day),
                 y: .value("Load", point.load)
             )
-            .foregroundStyle(DS.Color.activity.gradient)
+            .foregroundStyle(DS.Color.warmGlow.gradient)
             .clipShape(RoundedRectangle(cornerRadius: 2))
         }
         .chartXAxis {

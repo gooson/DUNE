@@ -10,12 +10,19 @@ struct ExerciseMixDetailView: View {
     @State private var selectedAngle: Double?
     @State private var selectedExercise: String?
 
-    // Correction #83: static color cache
+    // Correction #83: static color cache — Desert Horizon palette
     private enum Cache {
         static let chartColors: [Color] = [
-            DS.Color.activity,
-            .blue, .purple, .pink, .orange, .teal,
-            .cyan, .mint, .indigo, .brown
+            DS.Color.activityCardio,
+            DS.Color.activityStrength,
+            DS.Color.activityMindBody,
+            DS.Color.activityDance,
+            DS.Color.activityCombat,
+            DS.Color.activitySports,
+            DS.Color.activityWater,
+            DS.Color.activityWinter,
+            DS.Color.activityOutdoor,
+            DS.Color.activityOther
         ]
     }
 
@@ -162,10 +169,10 @@ struct ExerciseMixDetailView: View {
 
                     GeometryReader { geo in
                         Capsule()
-                            .fill(DS.Color.activity.opacity(0.15))
+                            .fill(DS.Color.warmGlow.opacity(0.15))
                             .overlay(alignment: .leading) {
                                 Capsule()
-                                    .fill(DS.Color.activity)
+                                    .fill(DS.Color.warmGlow)
                                     .frame(width: geo.size.width * CGFloat(freq.percentage))
                             }
                     }

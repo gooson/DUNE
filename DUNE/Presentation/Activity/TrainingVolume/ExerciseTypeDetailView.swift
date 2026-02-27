@@ -353,23 +353,23 @@ struct ExerciseTypeDetailView: View {
         if let actType = WorkoutActivityType(rawValue: typeKey) {
             return actType.color
         }
-        // Use category-based color for manual exercises
+        // Use category-based color for manual exercises (Desert Horizon palette)
         if let category = ActivityCategory(rawValue: categoryRawValue) {
             switch category {
-            case .cardio: return DS.Color.activity
-            case .strength: return .orange
-            case .mindBody: return .purple
-            case .dance: return .pink
-            case .combat: return .red
-            case .sports: return .blue
-            case .water: return .cyan
-            case .winter: return .indigo
-            case .outdoor: return .green
-            case .multiSport: return DS.Color.activity
-            case .other: return .gray
+            case .cardio: return DS.Color.activityCardio
+            case .strength: return DS.Color.activityStrength
+            case .mindBody: return DS.Color.activityMindBody
+            case .dance: return DS.Color.activityDance
+            case .combat: return DS.Color.activityCombat
+            case .sports: return DS.Color.activitySports
+            case .water: return DS.Color.activityWater
+            case .winter: return DS.Color.activityWinter
+            case .outdoor: return DS.Color.activityOutdoor
+            case .multiSport: return DS.Color.activityCardio
+            case .other: return DS.Color.activityOther
             }
         }
-        return DS.Color.activity
+        return DS.Color.activityOther
     }
 
     private func resolveIcon() -> String {

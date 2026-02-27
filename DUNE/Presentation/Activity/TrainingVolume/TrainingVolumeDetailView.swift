@@ -84,7 +84,7 @@ struct TrainingVolumeDetailView: View {
                 progress: viewModel.weeklyGoal > 0
                     ? Double(comparison.current.activeDays) / Double(viewModel.weeklyGoal)
                     : 0,
-                ringColor: DS.Color.activity,
+                ringColor: DS.Color.warmGlow,
                 lineWidth: 8,
                 size: 80
             ) {

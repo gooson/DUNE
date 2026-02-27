@@ -177,20 +177,20 @@ extension WorkoutActivityType {
         }
     }
 
-    /// Category-based color for the activity type.
+    /// Category-based color for the activity type (Desert Horizon palette).
     var color: Color {
         switch category {
-        case .cardio: DS.Color.activity
-        case .strength: .orange
-        case .mindBody: .purple
-        case .dance: .pink
-        case .combat: .red
-        case .sports: .blue
-        case .water: .cyan
-        case .winter: .indigo
-        case .outdoor: .green
-        case .multiSport: DS.Color.activity
-        case .other: .gray
+        case .cardio: DS.Color.activityCardio
+        case .strength: DS.Color.activityStrength
+        case .mindBody: DS.Color.activityMindBody
+        case .dance: DS.Color.activityDance
+        case .combat: DS.Color.activityCombat
+        case .sports: DS.Color.activitySports
+        case .water: DS.Color.activityWater
+        case .winter: DS.Color.activityWinter
+        case .outdoor: DS.Color.activityOutdoor
+        case .multiSport: DS.Color.activityCardio
+        case .other: DS.Color.activityOther
         }
     }
 }
