@@ -53,7 +53,11 @@ struct MetricsView: View {
             }
         }
         .sheet(isPresented: $showInputSheet) {
-            SetInputSheet(weight: $weight, reps: $reps)
+            SetInputSheet(
+                weight: $weight,
+                reps: $reps,
+                previousSets: currentExercisePreviousSets
+            )
         }
         .confirmationDialog(
             "End Workout?",
@@ -330,6 +334,13 @@ struct MetricsView: View {
 
     private var currentRestDuration: TimeInterval {
         workoutManager.currentEntry?.restDuration ?? 30
+    }
+
+    /// Completed sets for the current exercise (for input sheet history display)
+    private var currentExercisePreviousSets: [CompletedSetData] {
+        let idx = workoutManager.currentExerciseIndex
+        guard idx < workoutManager.completedSetsData.count else { return [] }
+        return workoutManager.completedSetsData[idx]
     }
 
     private func completeSet() {

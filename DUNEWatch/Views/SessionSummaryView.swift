@@ -101,18 +101,35 @@ struct SessionSummaryView: View {
                    let template = workoutManager.templateSnapshot,
                    index < template.entries.count {
                     let entry = template.entries[index]
-                    HStack {
-                        Text(entry.exerciseName)
-                            .font(.caption2)
-                            .lineLimit(1)
-                        Spacer()
-                        Text("\(sets.count.formattedWithSeparator) sets")
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
+                    let volume = exerciseVolume(sets: sets)
+                    HStack(spacing: DS.Spacing.sm) {
+                        EquipmentIconView(equipment: entry.equipment, size: 16)
+                            .frame(width: 16, height: 16)
+
+                        VStack(alignment: .leading, spacing: 0) {
+                            Text(entry.exerciseName)
+                                .font(.caption2)
+                                .lineLimit(1)
+                            Text("\(sets.count) sets · \(volume.formattedWithSeparator)kg")
+                                .font(.system(size: 9))
+                                .foregroundStyle(.secondary)
+                        }
+
+                        Spacer(minLength: 0)
                     }
                 }
             }
         }
+    }
+
+    /// Calculates total volume (weight × reps) for a set of completed sets.
+    private func exerciseVolume(sets: [CompletedSetData]) -> Int {
+        let vol = sets.reduce(0.0) { total, set in
+            let w = set.weight ?? 0
+            let r = Double(set.reps ?? 0)
+            return total + (w * r)
+        }
+        return Int(vol.rounded())
     }
 
     // MARK: - Save

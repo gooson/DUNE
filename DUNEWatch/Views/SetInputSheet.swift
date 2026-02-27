@@ -3,9 +3,12 @@ import WatchKit
 
 /// Dedicated sheet for weight/reps input with Digital Crown support.
 /// Crown controls weight (scroll = touch), layout adapts to any watch size.
+/// Shows previous set history for reference when available.
 struct SetInputSheet: View {
     @Binding var weight: Double
     @Binding var reps: Int
+    /// Previously completed sets for the current exercise (newest last)
+    var previousSets: [CompletedSetData] = []
     @Environment(\.dismiss) private var dismiss
 
     @State private var lastHapticDate: Date = .distantPast
@@ -13,6 +16,12 @@ struct SetInputSheet: View {
     var body: some View {
         ScrollView {
             VStack(spacing: DS.Spacing.lg) {
+                // Previous set history (if any)
+                if !previousSets.isEmpty {
+                    previousSetHistory
+                    Divider()
+                }
+
                 // Weight — large display + crown + ±2.5 buttons
                 weightSection
 
@@ -117,6 +126,37 @@ struct SetInputSheet: View {
             }
             .buttonStyle(.bordered)
             .tint(.secondary)
+        }
+    }
+
+    // MARK: - Previous Sets
+
+    private var previousSetHistory: some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+            Text("Previous Sets")
+                .font(DS.Typography.metricLabel)
+                .foregroundStyle(.secondary)
+
+            ForEach(previousSets, id: \.setNumber) { set in
+                HStack(spacing: DS.Spacing.sm) {
+                    Text("Set \(set.setNumber)")
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
+                        .frame(width: 36, alignment: .leading)
+
+                    if let w = set.weight, w > 0 {
+                        Text("\(w, specifier: "%.1f")kg")
+                            .font(.caption2.monospacedDigit())
+                    }
+
+                    if let r = set.reps, r > 0 {
+                        Text("\u{00d7}\(r)")
+                            .font(.caption2.monospacedDigit())
+                    }
+
+                    Spacer()
+                }
+            }
         }
     }
 
