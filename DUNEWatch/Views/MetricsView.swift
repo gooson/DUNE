@@ -19,6 +19,8 @@ struct MetricsView: View {
     @State private var didInitialAppear = false
     /// Deferred input sheet trigger to prevent double-present with onAppear
     @State private var pendingInputSheet = false
+    /// Cached previous sets for current exercise (avoids recompute per render)
+    @State private var cachedPreviousSets: [CompletedSetData] = []
 
     var body: some View {
         Group {
@@ -37,9 +39,11 @@ struct MetricsView: View {
         }
         .onChange(of: workoutManager.currentExerciseIndex) { _, _ in
             prefillFromEntry()
+            refreshPreviousSetsCache()
         }
         .onAppear {
             prefillFromEntry()
+            refreshPreviousSetsCache()
             // Only show input sheet on first appear, not after rest/transition
             if !didInitialAppear {
                 didInitialAppear = true
@@ -56,7 +60,7 @@ struct MetricsView: View {
             SetInputSheet(
                 weight: $weight,
                 reps: $reps,
-                previousSets: currentExercisePreviousSets
+                previousSets: cachedPreviousSets
             )
         }
         .confirmationDialog(
@@ -336,11 +340,14 @@ struct MetricsView: View {
         workoutManager.currentEntry?.restDuration ?? 30
     }
 
-    /// Completed sets for the current exercise (for input sheet history display)
-    private var currentExercisePreviousSets: [CompletedSetData] {
+    /// Refresh cached previous sets for the current exercise.
+    private func refreshPreviousSetsCache() {
         let idx = workoutManager.currentExerciseIndex
-        guard idx < workoutManager.completedSetsData.count else { return [] }
-        return workoutManager.completedSetsData[idx]
+        guard idx >= 0, idx < workoutManager.completedSetsData.count else {
+            cachedPreviousSets = []
+            return
+        }
+        cachedPreviousSets = workoutManager.completedSetsData[idx]
     }
 
     private func completeSet() {
@@ -356,6 +363,7 @@ struct MetricsView: View {
         let wasLastSet = workoutManager.isLastSet
 
         workoutManager.completeSet(weight: weight > 0 ? weight : nil, reps: reps > 0 ? reps : nil)
+        refreshPreviousSetsCache()
 
         // Haptic on set completion
         WKInterfaceDevice.current().play(.success)

@@ -1,5 +1,31 @@
 import SwiftUI
 
+// MARK: - Shared Helpers
+
+/// Builds subtitle: "3 sets · 10 reps" or "3 sets · 10 reps · 80.0kg"
+private func exerciseSubtitle(sets: Int, reps: Int, weight: Double?) -> String {
+    var parts = "\(sets) sets · \(reps) reps"
+    if let w = weight, w > 0, w <= 500 {
+        parts += " · \(w.formattedWeight)kg"
+    }
+    return parts
+}
+
+/// Maps ExerciseInputType rawValue to user-facing category label.
+/// Returns "Other" for unrecognized types to avoid silent miscategorisation (#93).
+private func categoryLabel(for inputType: String) -> String {
+    switch inputType {
+    case "setsRepsWeight": return "Strength"
+    case "setsReps": return "Bodyweight"
+    case "durationDistance": return "Cardio"
+    case "durationIntensity": return "Flexibility"
+    case "roundsBased": return "HIIT"
+    default:
+        assertionFailure("Unknown inputType: \(inputType)")
+        return "Other"
+    }
+}
+
 /// Watch Quick Start hub.
 /// Default IA: Popular + Recent. Full list is accessible via "+" entry.
 struct QuickStartPickerView: View {
@@ -22,7 +48,7 @@ struct QuickStartPickerView: View {
         .background { WatchWaveBackground() }
         .navigationTitle("Quick Start")
         .onAppear { rebuildSections() }
-        .onChange(of: connectivity.exerciseLibrary.map(\.id)) { _, _ in rebuildSections() }
+        .onChange(of: connectivity.exerciseLibrary.count) { _, _ in rebuildSections() }
     }
 
     // MARK: - Hub
@@ -143,15 +169,6 @@ struct QuickStartPickerView: View {
             entries: [entry]
         )
     }
-
-    /// Builds subtitle: "3 sets · 10 reps" or "3 sets · 10 reps · 80kg"
-    private func exerciseSubtitle(sets: Int, reps: Int, weight: Double?) -> String {
-        var parts = "\(sets) sets · \(reps) reps"
-        if let w = weight, w > 0 {
-            parts += " · \(String(format: "%.1f", w))kg"
-        }
-        return parts
-    }
 }
 
 /// Full exercise list for Quick Start, accessible from the hub's "+" entry.
@@ -203,7 +220,7 @@ struct QuickStartAllExercisesView: View {
         .searchable(text: $searchText, prompt: "Search")
         .onAppear { rebuildLists() }
         .onChange(of: searchText) { _, _ in rebuildLists() }
-        .onChange(of: connectivity.exerciseLibrary.map(\.id)) { _, _ in rebuildLists() }
+        .onChange(of: connectivity.exerciseLibrary.count) { _, _ in rebuildLists() }
     }
 
     private func exerciseRow(_ exercise: WatchExerciseInfo) -> some View {
@@ -222,13 +239,15 @@ struct QuickStartAllExercisesView: View {
                 $0.name.localizedCaseInsensitiveContains(searchText)
             }
             cachedFiltered = uniqueByCanonical(RecentExerciseTracker.sorted(filtered))
+            cachedGrouped = []
         } else {
+            cachedFiltered = []
             // Group by category (derived from inputType)
             let unique = uniqueByCanonical(RecentExerciseTracker.sorted(library))
             let grouped = Dictionary(grouping: unique) { categoryLabel(for: $0.inputType) }
 
-            // Stable ordering: Strength → Bodyweight → Cardio → HIIT → Flexibility
-            let order = ["Strength", "Bodyweight", "Cardio", "HIIT", "Flexibility"]
+            // Stable ordering: Strength → Bodyweight → Cardio → HIIT → Flexibility → Other
+            let order = ["Strength", "Bodyweight", "Cardio", "HIIT", "Flexibility", "Other"]
             cachedGrouped = order.compactMap { name in
                 guard let exercises = grouped[name], !exercises.isEmpty else { return nil }
                 return (category: name, exercises: exercises)
@@ -265,26 +284,5 @@ struct QuickStartAllExercisesView: View {
         let reps = latest?.reps ?? exercise.defaultReps ?? 10
         let weight = latest?.weight ?? exercise.defaultWeightKg
         return (weight: weight, reps: reps)
-    }
-
-    /// Builds subtitle: "3 sets · 10 reps" or "3 sets · 10 reps · 80kg"
-    private func exerciseSubtitle(sets: Int, reps: Int, weight: Double?) -> String {
-        var parts = "\(sets) sets · \(reps) reps"
-        if let w = weight, w > 0 {
-            parts += " · \(String(format: "%.1f", w))kg"
-        }
-        return parts
-    }
-
-    /// Maps ExerciseInputType rawValue to user-facing category label.
-    private func categoryLabel(for inputType: String) -> String {
-        switch inputType {
-        case "setsRepsWeight": return "Strength"
-        case "setsReps": return "Bodyweight"
-        case "durationDistance": return "Cardio"
-        case "durationIntensity": return "Flexibility"
-        case "roundsBased": return "HIIT"
-        default: return "Strength"
-        }
     }
 }

@@ -87,7 +87,7 @@ struct SessionSummaryView: View {
             Text(value)
                 .font(DS.Typography.tileSubtitle)
             Text(title)
-                .font(.system(size: 9))
+                .font(DS.Typography.tinyLabel)
                 .foregroundStyle(.secondary)
         }
     }
@@ -110,8 +110,10 @@ struct SessionSummaryView: View {
                             Text(entry.exerciseName)
                                 .font(.caption2)
                                 .lineLimit(1)
-                            Text("\(sets.count) sets · \(volume.formattedWithSeparator)kg")
-                                .font(.system(size: 9))
+                            Text(volume > 0
+                                ? "\(sets.count) sets · \(volume.formattedWithSeparator)kg"
+                                : "\(sets.count) sets")
+                                .font(DS.Typography.tinyLabel)
                                 .foregroundStyle(.secondary)
                         }
 
@@ -123,13 +125,15 @@ struct SessionSummaryView: View {
     }
 
     /// Calculates total volume (weight × reps) for a set of completed sets.
+    /// Capped at 50,000kg per Correction #85 (session-level physical upper bound).
     private func exerciseVolume(sets: [CompletedSetData]) -> Int {
         let vol = sets.reduce(0.0) { total, set in
             let w = set.weight ?? 0
             let r = Double(set.reps ?? 0)
             return total + (w * r)
         }
-        return Int(vol.rounded())
+        guard vol.isFinite else { return 0 }
+        return min(Int(vol.rounded()), 50_000)
     }
 
     // MARK: - Save
@@ -296,10 +300,26 @@ private enum WatchFormatterCache {
         formatter.minimumFractionDigits = 0
         return formatter
     }()
+
+    static let weightFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.groupingSeparator = ","
+        formatter.maximumFractionDigits = 1
+        formatter.minimumFractionDigits = 1
+        return formatter
+    }()
 }
 
 extension Int {
     var formattedWithSeparator: String {
         WatchFormatterCache.integerFormatter.string(from: NSNumber(value: self)) ?? "\(self)"
+    }
+}
+
+extension Double {
+    /// Formats weight with 1 decimal and thousand separator (e.g. "1,234.5").
+    var formattedWeight: String {
+        WatchFormatterCache.weightFormatter.string(from: NSNumber(value: self)) ?? String(format: "%.1f", self)
     }
 }

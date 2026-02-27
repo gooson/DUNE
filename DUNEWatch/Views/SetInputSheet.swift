@@ -137,7 +137,7 @@ struct SetInputSheet: View {
                 .font(DS.Typography.metricLabel)
                 .foregroundStyle(.secondary)
 
-            ForEach(previousSets, id: \.setNumber) { set in
+            ForEach(Array(previousSets.enumerated()), id: \.offset) { _, set in
                 HStack(spacing: DS.Spacing.sm) {
                     Text("Set \(set.setNumber)")
                         .font(.caption2)

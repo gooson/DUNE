@@ -1,7 +1,7 @@
 ---
 source: brainstorm/2026-02-27-watch-ux-renewal
 priority: p3
-status: ready
+status: done
 created: 2026-02-27
 updated: 2026-02-27
 ---

@@ -87,6 +87,8 @@ enum DS {
         static let tileSubtitle = Font.caption.weight(.medium)
         /// Section header
         static let sectionTitle = Font.headline.weight(.semibold)
+        /// Smallest label (9pt — summary breakdowns, stat labels)
+        static let tinyLabel = Font.system(size: 9)
     }
 
     // MARK: - Animation
