@@ -408,3 +408,10 @@
 169. **aggregate 볼륨 UI에 isFinite guard + 물리적 상한**: `reduce`로 합산한 볼륨을 `Int()`로 변환할 때 `Double.infinity` → `Int` 변환은 undefined behavior. `guard vol.isFinite else { return 0 }` + `min(result, 50_000)` 패턴 (#85 확장)
 170. **bodyweight 운동(volume=0)에서 "0kg" 표시 금지**: `volume > 0` 분기로 kg suffix를 조건부 표시. 0kg은 사용자에게 오해("데이터 없음" vs "체중 운동")를 유발
 171. **검색↔브라우징 모드 전환 시 반대편 캐시 초기화**: `cachedFiltered`와 `cachedGrouped`처럼 모드별 캐시가 있을 때, 모드 전환 시 사용하지 않는 캐시를 `[]`로 초기화. stale 데이터가 미래 코드에서 참조될 위험 제거
+
+### 2026-02-28: Watch Carousel Home 리뷰 교정
+
+172. **ScrollView paging 카드의 body/init에서 UserDefaults 접근 금지**: `scrollTransition` 활성 시 모든 카드의 body가 매 스크롤 프레임마다 재평가됨. `RecentExerciseTracker.latestSet()` 등 UserDefaults 호출은 데이터 빌드 시점(`rebuildCards()`)에 1회 pre-compute 후 associated value로 전달
+173. **같은 빌드 타겟의 두 파일에 동일 함수 → 공유 파일 즉시 추출**: `private` file-scope 함수는 같은 파일 내에서만 공유 가능. 파일 분리 시 자동으로 DRY 위반 발생하므로, 같은 타겟의 2개 파일에 동일 함수가 있으면 `Helpers/{Target}Helpers.swift`로 추출 (Correction #167 확장)
+174. **`personalizedPopular(limit:)`에 실제 필요 수량 전달**: `limit: library.count`로 전체를 정렬한 뒤 `.prefix(N)`하면 O(N log N) 낭비. `limit: N`을 직접 전달하여 내부 최적화 활용
+175. **Content enum Hashable에 associated value의 identity 포함**: `entries.count`만 hash/==에 사용하면 같은 수의 다른 항목이 동일 취급되어 SwiftUI diffing 실패. `entries.forEach { hasher.combine($0.id) }` 패턴 사용 (Correction #26/#87 확장)
