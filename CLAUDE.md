@@ -400,3 +400,11 @@
 164. **Codable struct의 rawValue 필드에 explicit CodingKeys + WARNING 주석**: CloudKit 영구 저장되는 enum rawValue는 rename 시 모든 디바이스에서 silent break. CodingKeys로 스키마 계약 명시 + rawValue rename 위험 경고
 165. **Static let > static func for body-called gradients**: `DS.Gradient.cardBackground`처럼 기본 파라미터 호출이 대부분이면 static let으로 캐싱. 커스텀 색상용 함수 오버로드만 별도 유지
 166. **Equipment.other → nil 매핑으로 "없음" vs "미인식" 구분**: `nil`은 "장비 없음"(의도적), `default` 분기는 "미인식 rawValue"(잠재적 오류). WatchSessionManager에서 catch-all case를 nil로 변환하여 시맨틱 구분
+
+### 2026-02-28: Watch UX Enhancement 리뷰 교정
+
+167. **같은 파일 내 struct 간 동일 함수는 file-scope 추출 필수**: 2개 struct가 같은 파일에 있고 동일 private func을 가지면 즉시 file-scope `private func`으로 추출. Correction #37(3곳 이상)보다 낮은 threshold — 같은 파일 = 같은 유지보수 단위
+168. **sheet에 전달하는 computed property는 @State 캐싱**: `.sheet(isPresented:) { Child(data: computedProp) }` 패턴에서 computedProp이 매 렌더마다 배열 diff를 유발. `@State`로 캐싱하고 명시적 갱신 시점(onAppear, onChange, action 완료 후)에서만 업데이트
+169. **aggregate 볼륨 UI에 isFinite guard + 물리적 상한**: `reduce`로 합산한 볼륨을 `Int()`로 변환할 때 `Double.infinity` → `Int` 변환은 undefined behavior. `guard vol.isFinite else { return 0 }` + `min(result, 50_000)` 패턴 (#85 확장)
+170. **bodyweight 운동(volume=0)에서 "0kg" 표시 금지**: `volume > 0` 분기로 kg suffix를 조건부 표시. 0kg은 사용자에게 오해("데이터 없음" vs "체중 운동")를 유발
+171. **검색↔브라우징 모드 전환 시 반대편 캐시 초기화**: `cachedFiltered`와 `cachedGrouped`처럼 모드별 캐시가 있을 때, 모드 전환 시 사용하지 않는 캐시를 `[]`로 초기화. stale 데이터가 미래 코드에서 참조될 위험 제거
