@@ -103,12 +103,23 @@ struct UnifiedWorkoutRow: View {
 
     // MARK: - Shared Sub-views
 
+    @ViewBuilder
     private func activityIcon(size: CGFloat, font: Font) -> some View {
-        Image(systemName: item.activityType.iconName)
-            .font(font)
-            .foregroundStyle(item.activityType.color)
-            .frame(width: size)
-            .accessibilityHidden(true)
+        if let equipment = item.equipment {
+            Image(equipment.svgAssetName)
+                .resizable()
+                .renderingMode(.template)
+                .aspectRatio(contentMode: .fit)
+                .foregroundStyle(item.activityType.color)
+                .frame(width: size, height: size)
+                .accessibilityHidden(true)
+        } else {
+            Image(systemName: item.activityType.iconName)
+                .font(font)
+                .foregroundStyle(item.activityType.color)
+                .frame(width: size)
+                .accessibilityHidden(true)
+        }
     }
 
     private var titleRow: some View {

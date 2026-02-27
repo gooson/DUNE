@@ -16,6 +16,7 @@ struct ExerciseListItem: Identifiable {
     let exerciseDefinitionID: String?
     let isLinkedToHealthKit: Bool
     let primaryMuscles: [MuscleGroup]
+    let equipment: Equipment?
 
     // Rich data for HealthKit workouts
     let heartRateAvg: Double?
@@ -37,6 +38,7 @@ struct ExerciseListItem: Identifiable {
         exerciseDefinitionID: String? = nil,
         isLinkedToHealthKit: Bool = false,
         primaryMuscles: [MuscleGroup] = [],
+        equipment: Equipment? = nil,
         heartRateAvg: Double? = nil,
         averagePace: Double? = nil,
         elevationAscended: Double? = nil,
@@ -58,6 +60,7 @@ struct ExerciseListItem: Identifiable {
         self.exerciseDefinitionID = exerciseDefinitionID
         self.isLinkedToHealthKit = isLinkedToHealthKit
         self.primaryMuscles = primaryMuscles
+        self.equipment = equipment
         self.heartRateAvg = heartRateAvg
         self.averagePace = averagePace
         self.elevationAscended = elevationAscended
@@ -125,7 +128,8 @@ struct ExerciseListItem: Identifiable {
             completedSets: record.completedSets,
             exerciseDefinitionID: record.exerciseDefinitionID,
             isLinkedToHealthKit: hasHKLink,
-            primaryMuscles: record.primaryMuscles
+            primaryMuscles: record.primaryMuscles,
+            equipment: definition?.equipment
         )
     }
 
