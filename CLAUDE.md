@@ -389,3 +389,14 @@
 156. **시계열 regression 입력은 oldest-first 정렬 필수**: `dailyAverages`가 newest-first일 때 index 0=newest가 되어 기울기 부호 반전. `.reversed()` 적용 후 주석으로 정렬 방향 명시
 157. **가중 평균 테스트는 최소 2개 데이터 포인트**: 단일 데이터에서 `weightedSum / totalWeight = rawValue` 항상 성립(가중치 상쇄). 가중치 차이가 결과에 영향을 주는 시나리오 구성 필수
 158. **UI 구조 변경 시 UI 테스트 동시 갱신**: 탭/네비게이션 구조 변경 커밋에 UI 테스트 수정 포함. 별도 커밋으로 분리하면 stale test가 축적됨
+
+### 2026-02-27: Watch Equipment Icon 통합 교정
+
+159. **Asset catalog 폴더에 `"provides-namespace": true` 필수**: `Image("Equipment/equipment.barbell")` 같은 네임스페이스 경로는 폴더 `Contents.json`에 namespace 설정 없으면 실패. 새 에셋 폴더 생성 시 반드시 확인
+160. **AI 생성 아이콘은 투명 배경 확인 후 asset catalog 통합**: `.renderingMode(.template)`는 alpha 채널만 사용 — 불투명 배경이 있으면 전체 사각형이 tint 색으로 렌더링. PIL brightness threshold 스크립트로 배경 제거 후 통합
+161. **제네릭 장비 카테고리(machine, cable, bodyweight, other)는 커스텀 아이콘 매핑 금지**: 하나의 아이콘으로 다양한 운동을 대표할 수 없음. SF Symbol fallback 사용이 안전
+162. **Icon switch dispatch는 View init에서 pre-resolve**: `EquipmentIcon.Resolved` enum으로 init 시 1회 resolve 후 body에서는 switch-free rendering. 50+ 아이템 리스트에서 프레임당 N×2 switch 방지
+163. **DS 토큰 통일 시 용도별 시맨틱 크기 보존**: `.title` → `.title2` 자동 치환은 rest timer 같은 primary focus 요소를 축소. `countdownValue`(title) vs `metricValue`(title2) 분리 필수
+164. **Codable struct의 rawValue 필드에 explicit CodingKeys + WARNING 주석**: CloudKit 영구 저장되는 enum rawValue는 rename 시 모든 디바이스에서 silent break. CodingKeys로 스키마 계약 명시 + rawValue rename 위험 경고
+165. **Static let > static func for body-called gradients**: `DS.Gradient.cardBackground`처럼 기본 파라미터 호출이 대부분이면 static let으로 캐싱. 커스텀 색상용 함수 오버로드만 별도 유지
+166. **Equipment.other → nil 매핑으로 "없음" vs "미인식" 구분**: `nil`은 "장비 없음"(의도적), `default` 분기는 "미인식 rawValue"(잠재적 오류). WatchSessionManager에서 catch-all case를 nil로 변환하여 시맨틱 구분
