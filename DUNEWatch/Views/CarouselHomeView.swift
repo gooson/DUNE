@@ -83,8 +83,8 @@ struct CarouselHomeView: View {
     /// Content-aware invalidation key (Correction #87).
     @State private var templateContentKey: Int = 0
 
-    private let popularLimit = 5
-    private let recentLimit = 5
+    private let popularLimit = 20
+    private let recentLimit = 20
 
     var body: some View {
         Group {
