@@ -58,7 +58,7 @@ struct QuickStartPickerView: View {
 
     private func exerciseRow(_ exercise: WatchExerciseInfo) -> some View {
         let defaults = resolvedDefaults(for: exercise)
-        let subtitle = "\(exercise.defaultSets.formattedWithSeparator) sets · \(defaults.reps.formattedWithSeparator) reps"
+        let subtitle = exerciseSubtitle(sets: exercise.defaultSets, reps: defaults.reps, weight: defaults.weight)
         return NavigationLink(value: WatchRoute.workoutPreview(snapshotFromExercise(exercise))) {
             ExerciseTileView(exercise: exercise, subtitle: subtitle)
         }
@@ -143,16 +143,27 @@ struct QuickStartPickerView: View {
             entries: [entry]
         )
     }
+
+    /// Builds subtitle: "3 sets · 10 reps" or "3 sets · 10 reps · 80kg"
+    private func exerciseSubtitle(sets: Int, reps: Int, weight: Double?) -> String {
+        var parts = "\(sets) sets · \(reps) reps"
+        if let w = weight, w > 0 {
+            parts += " · \(String(format: "%.1f", w))kg"
+        }
+        return parts
+    }
 }
 
 /// Full exercise list for Quick Start, accessible from the hub's "+" entry.
+/// Groups exercises by category (derived from inputType) when not searching.
 struct QuickStartAllExercisesView: View {
     @Environment(WatchConnectivityManager.self) private var connectivity
 
     @State private var searchText = ""
     @State private var cachedFiltered: [WatchExerciseInfo] = []
+    @State private var cachedGrouped: [(category: String, exercises: [WatchExerciseInfo])] = []
 
-    private var filteredExercises: [WatchExerciseInfo] { cachedFiltered }
+    private var isSearching: Bool { !searchText.isEmpty }
 
     var body: some View {
         Group {
@@ -165,11 +176,22 @@ struct QuickStartAllExercisesView: View {
                         .font(DS.Typography.exerciseName)
                 }
                 .padding()
-            } else {
+            } else if isSearching {
+                // Flat filtered list during search
                 List {
-                    Section("Exercises") {
-                        ForEach(filteredExercises, id: \.id) { exercise in
-                            exerciseRow(exercise)
+                    ForEach(cachedFiltered, id: \.id) { exercise in
+                        exerciseRow(exercise)
+                    }
+                }
+                .scrollContentBackground(.hidden)
+            } else {
+                // Category-grouped list
+                List {
+                    ForEach(cachedGrouped, id: \.category) { group in
+                        Section(group.category) {
+                            ForEach(group.exercises, id: \.id) { exercise in
+                                exerciseRow(exercise)
+                            }
                         }
                     }
                 }
@@ -179,25 +201,39 @@ struct QuickStartAllExercisesView: View {
         .background { WatchWaveBackground() }
         .navigationTitle("All Exercises")
         .searchable(text: $searchText, prompt: "Search")
-        .onAppear { rebuildFilteredList() }
-        .onChange(of: searchText) { _, _ in rebuildFilteredList() }
-        .onChange(of: connectivity.exerciseLibrary.map(\.id)) { _, _ in rebuildFilteredList() }
+        .onAppear { rebuildLists() }
+        .onChange(of: searchText) { _, _ in rebuildLists() }
+        .onChange(of: connectivity.exerciseLibrary.map(\.id)) { _, _ in rebuildLists() }
     }
 
     private func exerciseRow(_ exercise: WatchExerciseInfo) -> some View {
         let defaults = resolvedDefaults(for: exercise)
-        let subtitle = "\(exercise.defaultSets.formattedWithSeparator) sets · \(defaults.reps.formattedWithSeparator) reps"
+        let subtitle = exerciseSubtitle(sets: exercise.defaultSets, reps: defaults.reps, weight: defaults.weight)
         return NavigationLink(value: WatchRoute.workoutPreview(snapshotFromExercise(exercise))) {
             ExerciseTileView(exercise: exercise, subtitle: subtitle)
         }
     }
 
-    private func rebuildFilteredList() {
+    private func rebuildLists() {
         let library = connectivity.exerciseLibrary
-        let base = searchText.isEmpty ? library : library.filter {
-            $0.name.localizedCaseInsensitiveContains(searchText)
+
+        if isSearching {
+            let filtered = library.filter {
+                $0.name.localizedCaseInsensitiveContains(searchText)
+            }
+            cachedFiltered = uniqueByCanonical(RecentExerciseTracker.sorted(filtered))
+        } else {
+            // Group by category (derived from inputType)
+            let unique = uniqueByCanonical(RecentExerciseTracker.sorted(library))
+            let grouped = Dictionary(grouping: unique) { categoryLabel(for: $0.inputType) }
+
+            // Stable ordering: Strength → Bodyweight → Cardio → HIIT → Flexibility
+            let order = ["Strength", "Bodyweight", "Cardio", "HIIT", "Flexibility"]
+            cachedGrouped = order.compactMap { name in
+                guard let exercises = grouped[name], !exercises.isEmpty else { return nil }
+                return (category: name, exercises: exercises)
+            }
         }
-        cachedFiltered = uniqueByCanonical(RecentExerciseTracker.sorted(base))
     }
 
     private func snapshotFromExercise(_ exercise: WatchExerciseInfo) -> WorkoutSessionTemplate {
@@ -229,5 +265,26 @@ struct QuickStartAllExercisesView: View {
         let reps = latest?.reps ?? exercise.defaultReps ?? 10
         let weight = latest?.weight ?? exercise.defaultWeightKg
         return (weight: weight, reps: reps)
+    }
+
+    /// Builds subtitle: "3 sets · 10 reps" or "3 sets · 10 reps · 80kg"
+    private func exerciseSubtitle(sets: Int, reps: Int, weight: Double?) -> String {
+        var parts = "\(sets) sets · \(reps) reps"
+        if let w = weight, w > 0 {
+            parts += " · \(String(format: "%.1f", w))kg"
+        }
+        return parts
+    }
+
+    /// Maps ExerciseInputType rawValue to user-facing category label.
+    private func categoryLabel(for inputType: String) -> String {
+        switch inputType {
+        case "setsRepsWeight": return "Strength"
+        case "setsReps": return "Bodyweight"
+        case "durationDistance": return "Cardio"
+        case "durationIntensity": return "Flexibility"
+        case "roundsBased": return "HIIT"
+        default: return "Strength"
+        }
     }
 }

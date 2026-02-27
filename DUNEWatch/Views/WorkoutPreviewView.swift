@@ -23,6 +23,9 @@ struct WorkoutPreviewView: View {
                                 .foregroundStyle(.secondary)
                                 .frame(width: 16)
 
+                            EquipmentIconView(equipment: entry.equipment, size: 20)
+                                .frame(width: 20, height: 20)
+
                             VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                                 Text(entry.exerciseName)
                                     .font(DS.Typography.tileSubtitle)
