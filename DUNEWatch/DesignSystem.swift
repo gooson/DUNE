@@ -64,6 +64,7 @@ enum DS {
     // MARK: - Corner Radius
 
     enum Radius {
+        static let xs: CGFloat = 2   // Pill-shaped progress bars (3px height)
         static let sm: CGFloat = 8
         static let md: CGFloat = 12
         static let lg: CGFloat = 18  // watchOS standard card radius
@@ -74,8 +75,10 @@ enum DS {
     enum Typography {
         /// Exercise name in tile / metrics header
         static let exerciseName = Font.headline.bold()
-        /// Large metric value (weight, timer countdown)
+        /// Large metric value (weight, inline set display)
         static let metricValue = Font.system(.title2, design: .rounded).monospacedDigit().bold()
+        /// Prominent countdown (rest timer — larger than metricValue for primary focus element)
+        static let countdownValue = Font.system(.title, design: .rounded).monospacedDigit().bold()
         /// Metric label / caption
         static let metricLabel = Font.caption2.weight(.medium)
         /// Tile primary text (exercise name in list)
@@ -100,8 +103,15 @@ enum DS {
     // MARK: - Gradient
 
     enum Gradient {
-        /// Warm card background (top-leading warm glow fade)
-        static func cardBackground(color: SwiftUI.Color = DS.Color.warmGlow) -> LinearGradient {
+        /// Default warm card background — cached static to avoid per-render allocation.
+        static let cardBackground = LinearGradient(
+            colors: [DS.Color.warmGlow.opacity(DS.Opacity.subtle), .clear],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+
+        /// Custom-color card background (use only when overriding warm glow).
+        static func cardBackground(color: SwiftUI.Color) -> LinearGradient {
             LinearGradient(
                 colors: [color.opacity(DS.Opacity.subtle), .clear],
                 startPoint: .topLeading,

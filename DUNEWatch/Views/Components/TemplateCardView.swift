@@ -9,6 +9,15 @@ struct TemplateCardView: View {
     /// Maximum number of exercise icons to preview
     private let maxIconPreview = 4
 
+    /// Pre-computed label (entries is immutable let — no per-render recomputation)
+    private let exerciseCountLabel: String
+
+    init(name: String, entries: [TemplateEntry]) {
+        self.name = name
+        self.entries = entries
+        self.exerciseCountLabel = "\(entries.count) exercise\(entries.count == 1 ? "" : "s")"
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             // Template name
@@ -35,7 +44,7 @@ struct TemplateCardView: View {
     private var exerciseIconStrip: some View {
         HStack(spacing: DS.Spacing.xs) {
             ForEach(Array(entries.prefix(maxIconPreview).enumerated()), id: \.element.id) { _, entry in
-                exerciseIcon(for: entry)
+                EquipmentIconView(equipment: entry.equipment, size: 18)
                     .frame(width: 18, height: 18)
             }
 
@@ -45,27 +54,5 @@ struct TemplateCardView: View {
                     .foregroundStyle(.secondary)
             }
         }
-    }
-
-    @ViewBuilder
-    private func exerciseIcon(for entry: TemplateEntry) -> some View {
-        if let equipment = entry.equipment,
-           let assetName = EquipmentIcon.assetName(for: equipment) {
-            Image(assetName)
-                .resizable()
-                .renderingMode(.template)
-                .aspectRatio(contentMode: .fit)
-                .foregroundStyle(DS.Color.sandMuted)
-        } else {
-            Image(systemName: EquipmentIcon.sfSymbol(for: entry.equipment))
-                .font(.system(size: 10))
-                .foregroundStyle(DS.Color.sandMuted)
-        }
-    }
-
-    // MARK: - Helpers
-
-    private var exerciseCountLabel: String {
-        "\(entries.count) exercise\(entries.count == 1 ? "" : "s")"
     }
 }

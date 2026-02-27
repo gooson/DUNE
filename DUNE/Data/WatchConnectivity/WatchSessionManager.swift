@@ -74,7 +74,9 @@ final class WatchSessionManager: NSObject {
                 defaultSets: WorkoutDefaults.setCount,
                 defaultReps: (def.inputType == .setsRepsWeight || def.inputType == .setsReps) ? 10 : nil,
                 defaultWeightKg: nil,
-                equipment: def.equipment.rawValue
+                // Map generic catch-all Equipment cases to nil so Watch shows SF Symbol fallback
+                // instead of treating them identically to unknown/corrupted rawValues.
+                equipment: def.equipment == .other ? nil : def.equipment.rawValue
             )
         }
         transferExerciseLibrary(watchExercises)

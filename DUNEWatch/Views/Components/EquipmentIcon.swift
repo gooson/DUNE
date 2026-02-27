@@ -1,9 +1,29 @@
-import Foundation
+import SwiftUI
 
 /// Shared equipment icon mapping for Watch views.
 /// Centralizes asset catalog path and SF Symbol fallback logic used by
-/// ExerciseTileView and TemplateCardView.
+/// EquipmentIconView (via ExerciseTileView and TemplateCardView).
+///
+/// WARNING: The rawValue strings here must match `Equipment.rawValue` from iOS Domain exactly.
+/// These values are persisted in CloudKit via TemplateEntry and synced via WatchConnectivity.
+/// Renaming an Equipment case requires a data migration strategy.
 enum EquipmentIcon {
+
+    /// Resolved icon type — pre-computed at init to avoid per-render switch dispatch.
+    enum Resolved {
+        case asset(String)   // Asset catalog path
+        case symbol(String)  // SF Symbol name
+    }
+
+    /// Pre-resolves equipment rawValue to either an asset path or SF Symbol name.
+    /// Call once at view init, not in body.
+    static func resolve(for equipmentRawValue: String?) -> Resolved {
+        if let eq = equipmentRawValue,
+           let asset = assetName(for: eq) {
+            return .asset(asset)
+        }
+        return .symbol(sfSymbol(for: equipmentRawValue))
+    }
 
     /// Maps Equipment rawValue to Watch asset catalog path.
     /// Returns nil if the asset doesn't exist — callers should fall back to `sfSymbol(for:)`.
@@ -54,8 +74,41 @@ enum EquipmentIcon {
             return "figure.core.training"
         case "medicineBall", "stabilityBall":
             return "circle.fill"
+        case "other":
+            // Explicit handling — "other" is a valid Equipment case, not an unknown rawValue
+            return "figure.strengthtraining.traditional"
         default:
             return "figure.strengthtraining.traditional"
+        }
+    }
+}
+
+// MARK: - EquipmentIconView
+
+/// Reusable icon view that pre-resolves equipment mapping at init time.
+/// Eliminates per-render switch dispatch in scrolling lists.
+struct EquipmentIconView: View {
+    let size: CGFloat
+    private let resolved: EquipmentIcon.Resolved
+
+    init(equipment: String?, size: CGFloat) {
+        self.size = size
+        self.resolved = EquipmentIcon.resolve(for: equipment)
+    }
+
+    var body: some View {
+        switch resolved {
+        case .asset(let name):
+            Image(name)
+                .resizable()
+                .renderingMode(.template)
+                .aspectRatio(contentMode: .fit)
+                .foregroundStyle(DS.Color.sandMuted)
+        case .symbol(let name):
+            Image(systemName: name)
+                .font(.system(size: size * 0.65))
+                .foregroundStyle(DS.Color.sandMuted)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
 }

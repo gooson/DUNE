@@ -11,7 +11,7 @@ struct ExerciseTileView: View {
 
     var body: some View {
         HStack(spacing: DS.Spacing.md) {
-            equipmentIcon
+            EquipmentIconView(equipment: exercise.equipment, size: iconSize)
                 .frame(width: iconSize, height: iconSize)
 
             VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
@@ -28,24 +28,5 @@ struct ExerciseTileView: View {
             Spacer(minLength: 0)
         }
         .padding(.vertical, DS.Spacing.xs)
-    }
-
-    // MARK: - Equipment Icon
-
-    @ViewBuilder
-    private var equipmentIcon: some View {
-        if let equipment = exercise.equipment,
-           let assetName = EquipmentIcon.assetName(for: equipment) {
-            Image(assetName)
-                .resizable()
-                .renderingMode(.template)
-                .aspectRatio(contentMode: .fit)
-                .foregroundStyle(DS.Color.sandMuted)
-        } else {
-            Image(systemName: EquipmentIcon.sfSymbol(for: exercise.equipment))
-                .font(.system(size: iconSize * 0.65))
-                .foregroundStyle(DS.Color.sandMuted)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-        }
     }
 }

@@ -21,7 +21,24 @@ final class WorkoutTemplate {
 
 /// A single exercise entry within a workout template.
 /// Uses Codable so it can be stored as a transformable array in SwiftData.
+///
+/// WARNING: This struct is persisted in CloudKit via SwiftData. Key names form a permanent
+/// serialization contract — renaming a CodingKey requires a data migration strategy.
 struct TemplateEntry: Codable, Identifiable, Sendable {
+
+    /// Explicit coding keys — documents the on-wire contract for CloudKit persistence.
+    /// Adding a new field? Add a case here and ensure it has a default value for backward compatibility.
+    enum CodingKeys: String, CodingKey {
+        case id
+        case exerciseDefinitionID
+        case exerciseName
+        case defaultSets
+        case defaultReps
+        case defaultWeightKg
+        case restDuration
+        case equipment
+    }
+
     var id: UUID = UUID()
     let exerciseDefinitionID: String
     let exerciseName: String
@@ -30,7 +47,8 @@ struct TemplateEntry: Codable, Identifiable, Sendable {
     var defaultWeightKg: Double?
     /// Rest duration in seconds between sets for this exercise (nil = use global default 60s)
     var restDuration: TimeInterval?
-    /// Equipment rawValue for icon display (nil for legacy entries before this field was added)
+    /// Equipment rawValue for icon display (nil for legacy entries before this field was added).
+    /// WARNING: rawValue renames in Equipment enum silently break icon display for existing records.
     var equipment: String?
 
     init(

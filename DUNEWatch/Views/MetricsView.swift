@@ -134,11 +134,11 @@ struct MetricsView: View {
             let total = workoutManager.totalExercises
             let progress = total > 0 ? Double(workoutManager.currentExerciseIndex) / Double(total) : 0
 
-            RoundedRectangle(cornerRadius: DS.Spacing.xxs)
+            RoundedRectangle(cornerRadius: DS.Radius.xs)
                 .fill(.tertiary)
                 .frame(height: 3)
                 .overlay(alignment: .leading) {
-                    RoundedRectangle(cornerRadius: DS.Spacing.xxs)
+                    RoundedRectangle(cornerRadius: DS.Radius.xs)
                         .fill(DS.Color.positive)
                         .frame(width: geo.size.width * progress, height: 3)
                 }

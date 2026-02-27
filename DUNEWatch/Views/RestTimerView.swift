@@ -47,7 +47,7 @@ struct RestTimerView: View {
 
                 VStack(spacing: DS.Spacing.xxs) {
                     Text(timeString)
-                        .font(DS.Typography.metricValue)
+                        .font(DS.Typography.countdownValue)
 
                     // HR display during rest
                     HStack(spacing: DS.Spacing.xxs) {
