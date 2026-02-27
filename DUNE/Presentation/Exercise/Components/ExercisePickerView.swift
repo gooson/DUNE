@@ -390,9 +390,17 @@ struct ExercisePickerView: View {
                             .foregroundStyle(.secondary)
                         Text("\u{00B7}")
                             .foregroundStyle(.tertiary)
-                        Label(exercise.equipment.localizedDisplayName, systemImage: exercise.equipment.iconName)
-                            .font(.caption)
-                            .foregroundStyle(.tertiary)
+                        Label {
+                            Text(exercise.equipment.localizedDisplayName)
+                        } icon: {
+                            Image(exercise.equipment.svgAssetName)
+                                .resizable()
+                                .renderingMode(.template)
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 12, height: 12)
+                        }
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
                     }
                 }
                 Spacer()

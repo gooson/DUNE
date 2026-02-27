@@ -55,7 +55,8 @@ struct ExerciseView: View {
                                     ExerciseSessionDetailView(
                                         record: record,
                                         activityType: item.activityType,
-                                        displayName: item.displayName
+                                        displayName: item.displayName,
+                                        equipment: item.equipment
                                     )
                                 } label: {
                                     UnifiedWorkoutRow(item: item, style: .full)

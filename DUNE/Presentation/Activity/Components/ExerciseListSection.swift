@@ -88,7 +88,8 @@ struct ExerciseListSection: View {
             ExerciseSessionDetailView(
                 record: record,
                 activityType: item.activityType,
-                displayName: item.displayName
+                displayName: item.displayName,
+                equipment: item.equipment
             )
         } else if item.source == .healthKit, let summary = item.workoutSummary {
             HealthKitWorkoutDetailView(workout: summary)

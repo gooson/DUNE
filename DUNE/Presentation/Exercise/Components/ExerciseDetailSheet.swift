@@ -41,9 +41,12 @@ struct ExerciseDetailSheet: View {
 
     private var headerSection: some View {
         HStack(spacing: DS.Spacing.md) {
-            Image(systemName: exercise.resolvedActivityType.iconName)
-                .font(.system(size: 40))
+            Image(exercise.equipment.svgAssetName)
+                .resizable()
+                .renderingMode(.template)
+                .aspectRatio(contentMode: .fit)
                 .foregroundStyle(exercise.resolvedActivityType.color)
+                .frame(width: 40, height: 40)
                 .frame(width: 64, height: 64)
                 .background(DS.Color.activity.opacity(0.12), in: RoundedRectangle(cornerRadius: DS.Radius.md))
 
@@ -57,9 +60,17 @@ struct ExerciseDetailSheet: View {
                     Label(exercise.category.displayName, systemImage: categoryIcon)
                         .font(.caption)
                         .foregroundStyle(.secondary)
-                    Label(exercise.equipment.localizedDisplayName, systemImage: exercise.equipment.iconName)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                    Label {
+                        Text(exercise.equipment.localizedDisplayName)
+                    } icon: {
+                        Image(exercise.equipment.svgAssetName)
+                            .resizable()
+                            .renderingMode(.template)
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 12, height: 12)
+                    }
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
                 }
             }
         }

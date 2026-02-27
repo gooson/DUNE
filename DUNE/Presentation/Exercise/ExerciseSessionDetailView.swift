@@ -6,6 +6,7 @@ struct ExerciseSessionDetailView: View {
     let record: ExerciseRecord
     var activityType: WorkoutActivityType = .other
     var displayName: String?
+    var equipment: Equipment?
     var showHistoryLink: Bool = true
 
     /// Resolved title: explicit displayName → record.exerciseType fallback
@@ -50,9 +51,19 @@ struct ExerciseSessionDetailView: View {
     private var sessionHeader: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             HStack(spacing: DS.Spacing.md) {
-                Image(systemName: activityType.iconName)
-                    .font(.title)
-                    .foregroundStyle(activityType.color)
+                Group {
+                    if let equipment {
+                        Image(equipment.svgAssetName)
+                            .resizable()
+                            .renderingMode(.template)
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 28, height: 28)
+                    } else {
+                        Image(systemName: activityType.iconName)
+                            .font(.title)
+                    }
+                }
+                .foregroundStyle(activityType.color)
 
                 VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                     Text(resolvedTitle)
