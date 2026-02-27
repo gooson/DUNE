@@ -17,24 +17,24 @@ struct WorkoutPreviewView: View {
             List {
                 Section {
                     ForEach(Array(snapshot.entries.enumerated()), id: \.element.id) { index, entry in
-                        HStack(spacing: 8) {
+                        HStack(spacing: DS.Spacing.md) {
                             Text("\(index + 1)")
-                                .font(.caption2.weight(.bold))
+                                .font(DS.Typography.metricLabel)
                                 .foregroundStyle(.secondary)
                                 .frame(width: 16)
 
-                            VStack(alignment: .leading, spacing: 1) {
+                            VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                                 Text(entry.exerciseName)
-                                    .font(.caption.weight(.medium))
+                                    .font(DS.Typography.tileSubtitle)
                                     .lineLimit(1)
 
-                                HStack(spacing: 4) {
-                                    Text("\(entry.defaultSets)×\(entry.defaultReps)")
+                                HStack(spacing: DS.Spacing.xs) {
+                                    Text("\(entry.defaultSets)\u{00d7}\(entry.defaultReps)")
                                     if let kg = entry.defaultWeightKg, kg > 0 {
                                         Text("· \(kg, specifier: "%.1f")kg")
                                     }
                                 }
-                                .font(.caption2)
+                                .font(DS.Typography.metricLabel)
                                 .foregroundStyle(.secondary)
                             }
                         }
@@ -64,8 +64,8 @@ struct WorkoutPreviewView: View {
             .buttonStyle(.borderedProminent)
             .tint(DS.Color.positive)
             .disabled(isStarting)
-            .padding(.horizontal, 12)
-            .padding(.bottom, 4)
+            .padding(.horizontal, DS.Spacing.lg)
+            .padding(.bottom, DS.Spacing.xs)
         }
         .background { WatchWaveBackground() }
         .navigationTitle(snapshot.name)

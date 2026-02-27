@@ -31,14 +31,10 @@ struct RoutineListView: View {
                             entries: template.exerciseEntries
                         )
                     )) {
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text(template.name)
-                                .font(.headline)
-                                .lineLimit(1)
-                            Text("\(template.exerciseEntries.count) exercises")
-                                .font(.caption2)
-                                .foregroundStyle(.secondary)
-                        }
+                        TemplateCardView(
+                            name: template.name,
+                            entries: template.exerciseEntries
+                        )
                     }
                 }
             }
@@ -47,7 +43,7 @@ struct RoutineListView: View {
             Section {
                 NavigationLink(value: WatchRoute.quickStart) {
                     Label("Quick Start", systemImage: "bolt.fill")
-                        .font(.caption.weight(.semibold))
+                        .font(DS.Typography.tileSubtitle)
                         .foregroundStyle(DS.Color.positive)
                 }
             }
@@ -63,14 +59,14 @@ struct RoutineListView: View {
     // MARK: - Empty State
 
     private var emptyState: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: DS.Spacing.lg) {
             Image(systemName: "dumbbell.fill")
                 .font(.system(size: 36))
                 .foregroundStyle(.secondary)
             Text("No Routines")
-                .font(.headline)
+                .font(DS.Typography.exerciseName)
             Text("Create a routine\non your iPhone")
-                .font(.caption2)
+                .font(DS.Typography.metricLabel)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
 
@@ -79,10 +75,10 @@ struct RoutineListView: View {
             }
             .buttonStyle(.borderedProminent)
             .tint(DS.Color.positive)
-            .padding(.top, 8)
+            .padding(.top, DS.Spacing.md)
 
             syncStatusView
-                .padding(.top, 4)
+                .padding(.top, DS.Spacing.xs)
         }
         .padding()
     }

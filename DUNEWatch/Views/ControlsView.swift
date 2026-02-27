@@ -7,16 +7,16 @@ struct ControlsView: View {
     @State private var showEndConfirmation = false
 
     var body: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: DS.Spacing.lg) {
             // End Workout
             Button(role: .destructive) {
                 showEndConfirmation = true
             } label: {
-                VStack(spacing: 2) {
+                VStack(spacing: DS.Spacing.xxs) {
                     Image(systemName: "xmark")
                         .font(.title3)
                     Text("End")
-                        .font(.caption2)
+                        .font(DS.Typography.metricLabel)
                 }
                 .frame(maxWidth: .infinity)
             }
@@ -30,11 +30,11 @@ struct ControlsView: View {
                     workoutManager.pause()
                 }
             } label: {
-                VStack(spacing: 2) {
+                VStack(spacing: DS.Spacing.xxs) {
                     Image(systemName: workoutManager.isPaused ? "play.fill" : "pause.fill")
                         .font(.title3)
                     Text(workoutManager.isPaused ? "Resume" : "Pause")
-                        .font(.caption2)
+                        .font(DS.Typography.metricLabel)
                 }
                 .frame(maxWidth: .infinity)
             }
@@ -45,11 +45,11 @@ struct ControlsView: View {
                 Button {
                     workoutManager.skipExercise()
                 } label: {
-                    VStack(spacing: 2) {
+                    VStack(spacing: DS.Spacing.xxs) {
                         Image(systemName: "forward.fill")
                             .font(.title3)
                         Text("Skip")
-                            .font(.caption2)
+                            .font(DS.Typography.metricLabel)
                     }
                     .frame(maxWidth: .infinity)
                 }

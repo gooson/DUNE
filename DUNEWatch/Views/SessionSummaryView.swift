@@ -20,14 +20,14 @@ struct SessionSummaryView: View {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: 12) {
+            VStack(spacing: DS.Spacing.lg) {
                 // Header
                 Image(systemName: "checkmark.circle.fill")
                     .font(.system(size: 32))
                     .foregroundStyle(DS.Color.positive)
 
                 Text("Workout Complete")
-                    .font(.headline)
+                    .font(DS.Typography.exerciseName)
 
                 Divider()
 
@@ -44,15 +44,15 @@ struct SessionSummaryView: View {
                     saveAndDismiss()
                 } label: {
                     Text(workoutManager.isFinalizingWorkout && !isSaving ? "Finishing..." : "Done")
-                        .font(.body.weight(.semibold))
+                        .font(DS.Typography.tileTitle)
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.borderedProminent)
                 .tint(DS.Color.positive)
                 .disabled(isSaving || workoutManager.isFinalizingWorkout)
-                .padding(.top, 8)
+                .padding(.top, DS.Spacing.md)
             }
-            .padding(.horizontal, 4)
+            .padding(.horizontal, DS.Spacing.xs)
         }
         .background { WatchWaveBackground(color: DS.Color.positive) }
         .navigationBarBackButtonHidden()
@@ -74,7 +74,7 @@ struct SessionSummaryView: View {
         LazyVGrid(columns: [
             GridItem(.flexible()),
             GridItem(.flexible())
-        ], spacing: 8) {
+        ], spacing: DS.Spacing.md) {
             statItem(title: "Duration", value: formattedDuration)
             statItem(title: "Volume", value: formattedVolume)
             statItem(title: "Sets", value: totalSets.formattedWithSeparator)
@@ -83,9 +83,9 @@ struct SessionSummaryView: View {
     }
 
     private func statItem(title: String, value: String) -> some View {
-        VStack(spacing: 2) {
+        VStack(spacing: DS.Spacing.xxs) {
             Text(value)
-                .font(.caption.monospacedDigit().weight(.semibold))
+                .font(DS.Typography.tileSubtitle)
             Text(title)
                 .font(.system(size: 9))
                 .foregroundStyle(.secondary)
@@ -95,7 +95,7 @@ struct SessionSummaryView: View {
     // MARK: - Exercise Breakdown
 
     private var exerciseBreakdown: some View {
-        VStack(alignment: .leading, spacing: 6) {
+        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             ForEach(Array(completedSetsData.enumerated()), id: \.offset) { index, sets in
                 if !sets.isEmpty,
                    let template = workoutManager.templateSnapshot,

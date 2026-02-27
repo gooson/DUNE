@@ -237,6 +237,7 @@ struct WatchExerciseInfo: Codable, Sendable, Hashable {
     let defaultSets: Int
     let defaultReps: Int?
     let defaultWeightKg: Double?
+    let equipment: String?  // rawValue of Equipment — used for tile icon display
 
     // Hashable uses id only to match Identifiable semantics (Correction Log #26)
     func hash(into hasher: inout Hasher) {

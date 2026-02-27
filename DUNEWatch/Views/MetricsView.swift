@@ -108,7 +108,7 @@ struct MetricsView: View {
     /// Plain VStack instead of ScrollView — crown must stay free for TabView paging.
     /// ScrollView in a non-last vertical page tab cannot receive crown events.
     private var setEntryView: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: DS.Spacing.md) {
             // Progress bar
             sessionProgressBar
 
@@ -124,7 +124,7 @@ struct MetricsView: View {
             // Heart rate (secondary)
             heartRateDisplay
         }
-        .padding(.horizontal, 8)
+        .padding(.horizontal, DS.Spacing.md)
     }
 
     // MARK: - Progress
@@ -134,40 +134,40 @@ struct MetricsView: View {
             let total = workoutManager.totalExercises
             let progress = total > 0 ? Double(workoutManager.currentExerciseIndex) / Double(total) : 0
 
-            RoundedRectangle(cornerRadius: 2)
+            RoundedRectangle(cornerRadius: DS.Spacing.xxs)
                 .fill(.tertiary)
                 .frame(height: 3)
                 .overlay(alignment: .leading) {
-                    RoundedRectangle(cornerRadius: 2)
+                    RoundedRectangle(cornerRadius: DS.Spacing.xxs)
                         .fill(DS.Color.positive)
                         .frame(width: geo.size.width * progress, height: 3)
                 }
         }
         .frame(height: 3)
-        .padding(.bottom, 2)
+        .padding(.bottom, DS.Spacing.xxs)
     }
 
     // MARK: - Header
 
     private var exerciseHeader: some View {
-        VStack(spacing: 4) {
+        VStack(spacing: DS.Spacing.xs) {
             if let entry = workoutManager.currentEntry {
                 Text(entry.exerciseName)
-                    .font(.headline.bold())
+                    .font(DS.Typography.exerciseName)
                     .lineLimit(2)
                     .minimumScaleFactor(0.7)
                     .multilineTextAlignment(.center)
 
                 Text("Set \(workoutManager.currentSetIndex + 1) of \(workoutManager.effectiveTotalSets)")
-                    .font(.subheadline)
+                    .font(DS.Typography.tileSubtitle)
                     .foregroundStyle(.secondary)
 
-                // Set progress dots (larger)
-                HStack(spacing: 4) {
+                // Set progress dots
+                HStack(spacing: DS.Spacing.xs) {
                     ForEach(0..<workoutManager.effectiveTotalSets, id: \.self) { i in
                         Circle()
                             .fill(dotColor(for: i))
-                            .frame(width: 8, height: 8)
+                            .frame(width: DS.Spacing.md, height: DS.Spacing.md)
                     }
                 }
             }
@@ -194,38 +194,38 @@ struct MetricsView: View {
         Button {
             showInputSheet = true
         } label: {
-            VStack(spacing: 2) {
-                HStack(spacing: 4) {
+            VStack(spacing: DS.Spacing.xxs) {
+                HStack(spacing: DS.Spacing.xs) {
                     Text("\(weight, specifier: "%.1f")")
-                        .font(.system(.title3, design: .rounded).monospacedDigit().bold())
+                        .font(DS.Typography.metricValue)
                     Text("kg")
-                        .font(.subheadline)
+                        .font(DS.Typography.tileSubtitle)
                         .foregroundStyle(.secondary)
                 }
 
-                HStack(spacing: 4) {
-                    Text("×")
-                        .font(.subheadline)
+                HStack(spacing: DS.Spacing.xs) {
+                    Text("\u{00d7}")
+                        .font(DS.Typography.tileSubtitle)
                         .foregroundStyle(.secondary)
                     Text("\(reps)")
-                        .font(.system(.title3, design: .rounded).monospacedDigit().bold())
+                        .font(DS.Typography.metricValue)
                     Text("reps")
-                        .font(.subheadline)
+                        .font(DS.Typography.tileSubtitle)
                         .foregroundStyle(.secondary)
                 }
             }
             .foregroundStyle(DS.Color.positive)
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 8)
+            .padding(.vertical, DS.Spacing.md)
             .background {
-                RoundedRectangle(cornerRadius: 10)
+                RoundedRectangle(cornerRadius: DS.Radius.md)
                     .fill(DS.Color.positive.opacity(DS.Opacity.border))
             }
             .overlay(alignment: .topTrailing) {
                 Image(systemName: "pencil")
                     .font(.caption2)
                     .foregroundStyle(.secondary)
-                    .padding(6)
+                    .padding(DS.Spacing.sm)
             }
         }
         .buttonStyle(.plain)
@@ -251,7 +251,7 @@ struct MetricsView: View {
     // MARK: - Heart Rate
 
     private var heartRateDisplay: some View {
-        HStack(spacing: 4) {
+        HStack(spacing: DS.Spacing.xs) {
             Image(systemName: "heart.fill")
                 .font(.caption2)
                 .foregroundStyle(DS.Color.heartRate)
@@ -267,20 +267,20 @@ struct MetricsView: View {
                     .foregroundStyle(.tertiary)
             }
         }
-        .padding(.top, 2)
+        .padding(.top, DS.Spacing.xxs)
     }
 
     // MARK: - Next Exercise Transition
 
     private var nextExerciseTransition: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: DS.Spacing.lg) {
             Text("Next Exercise")
-                .font(.caption2)
+                .font(DS.Typography.metricLabel)
                 .foregroundStyle(.secondary)
 
             if let next = nextEntryName {
                 Text(next)
-                    .font(.headline)
+                    .font(DS.Typography.exerciseName)
                     .lineLimit(2)
                     .multilineTextAlignment(.center)
             }

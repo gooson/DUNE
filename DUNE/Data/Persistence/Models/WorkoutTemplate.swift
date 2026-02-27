@@ -30,6 +30,8 @@ struct TemplateEntry: Codable, Identifiable, Sendable {
     var defaultWeightKg: Double?
     /// Rest duration in seconds between sets for this exercise (nil = use global default 60s)
     var restDuration: TimeInterval?
+    /// Equipment rawValue for icon display (nil for legacy entries before this field was added)
+    var equipment: String?
 
     init(
         exerciseDefinitionID: String,
@@ -37,7 +39,8 @@ struct TemplateEntry: Codable, Identifiable, Sendable {
         defaultSets: Int = 3,
         defaultReps: Int = 10,
         defaultWeightKg: Double? = nil,
-        restDuration: TimeInterval? = nil
+        restDuration: TimeInterval? = nil,
+        equipment: String? = nil
     ) {
         self.id = UUID()
         self.exerciseDefinitionID = exerciseDefinitionID
@@ -54,5 +57,6 @@ struct TemplateEntry: Codable, Identifiable, Sendable {
         } else {
             self.restDuration = nil
         }
+        self.equipment = equipment
     }
 }

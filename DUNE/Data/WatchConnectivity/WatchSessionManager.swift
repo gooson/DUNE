@@ -73,7 +73,8 @@ final class WatchSessionManager: NSObject {
                 inputType: def.inputType.rawValue,
                 defaultSets: WorkoutDefaults.setCount,
                 defaultReps: (def.inputType == .setsRepsWeight || def.inputType == .setsReps) ? 10 : nil,
-                defaultWeightKg: nil
+                defaultWeightKg: nil,
+                equipment: def.equipment.rawValue
             )
         }
         transferExerciseLibrary(watchExercises)
@@ -239,4 +240,5 @@ struct WatchExerciseInfo: Codable, Sendable {
     let defaultSets: Int
     let defaultReps: Int?
     let defaultWeightKg: Double?
+    let equipment: String?  // rawValue of Equipment — used for tile icon display
 }

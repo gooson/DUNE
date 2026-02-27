@@ -102,7 +102,8 @@ struct TemplateFormView: View {
                 ) { exercise in
                     let entry = TemplateEntry(
                         exerciseDefinitionID: exercise.id,
-                        exerciseName: exercise.localizedName
+                        exerciseName: exercise.localizedName,
+                        equipment: exercise.equipment.rawValue
                     )
                     entries.append(entry)
                 }

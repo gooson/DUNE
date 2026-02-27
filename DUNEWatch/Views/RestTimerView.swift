@@ -29,9 +29,9 @@ struct RestTimerView: View {
     @State private var didPlayWarning = false
 
     var body: some View {
-        VStack(spacing: 6) {
+        VStack(spacing: DS.Spacing.sm) {
             Text("Rest")
-                .font(.caption2)
+                .font(DS.Typography.metricLabel)
                 .foregroundStyle(.secondary)
 
             // Circular gauge
@@ -45,12 +45,12 @@ struct RestTimerView: View {
                     .rotationEffect(.degrees(-90))
                     .animation(.linear(duration: 1), value: tick)
 
-                VStack(spacing: 2) {
+                VStack(spacing: DS.Spacing.xxs) {
                     Text(timeString)
-                        .font(.system(.title, design: .rounded).monospacedDigit().weight(.bold))
+                        .font(DS.Typography.metricValue)
 
                     // HR display during rest
-                    HStack(spacing: 2) {
+                    HStack(spacing: DS.Spacing.xxs) {
                         Image(systemName: "heart.fill")
                             .font(.system(size: 8))
                             .foregroundStyle(DS.Color.heartRate)
@@ -69,7 +69,7 @@ struct RestTimerView: View {
             .frame(width: 100, height: 100)
 
             // +30s / Skip / End buttons
-            HStack(spacing: 8) {
+            HStack(spacing: DS.Spacing.md) {
                 Button {
                     addTime(30)
                 } label: {

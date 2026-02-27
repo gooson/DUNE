@@ -48,8 +48,8 @@ struct QuickStartPickerView: View {
             Section {
                 NavigationLink(value: WatchRoute.quickStartAll) {
                     Label("All Exercises", systemImage: "plus.circle.fill")
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle(.green)
+                        .font(DS.Typography.tileSubtitle)
+                        .foregroundStyle(DS.Color.positive)
                 }
             }
         }
@@ -58,29 +58,23 @@ struct QuickStartPickerView: View {
 
     private func exerciseRow(_ exercise: WatchExerciseInfo) -> some View {
         let defaults = resolvedDefaults(for: exercise)
+        let subtitle = "\(exercise.defaultSets.formattedWithSeparator) sets · \(defaults.reps.formattedWithSeparator) reps"
         return NavigationLink(value: WatchRoute.workoutPreview(snapshotFromExercise(exercise))) {
-            VStack(alignment: .leading, spacing: 2) {
-                Text(exercise.name)
-                    .font(.caption.weight(.medium))
-                    .lineLimit(1)
-                Text("\(exercise.defaultSets.formattedWithSeparator) sets · \(defaults.reps.formattedWithSeparator) reps")
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-            }
+            ExerciseTileView(exercise: exercise, subtitle: subtitle)
         }
     }
 
     // MARK: - Empty State
 
     private var emptyState: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: DS.Spacing.lg) {
             Image(systemName: "iphone.and.arrow.right.inward")
                 .font(.system(size: 28))
                 .foregroundStyle(.secondary)
             Text("No Exercises")
-                .font(.headline)
+                .font(DS.Typography.exerciseName)
             Text("Open the DUNE app\non your iPhone to sync")
-                .font(.caption2)
+                .font(DS.Typography.metricLabel)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
         }
@@ -141,7 +135,8 @@ struct QuickStartPickerView: View {
             exerciseName: exercise.name,
             defaultSets: exercise.defaultSets,
             defaultReps: defaults.reps,
-            defaultWeightKg: defaults.weight
+            defaultWeightKg: defaults.weight,
+            equipment: exercise.equipment
         )
         return WorkoutSessionTemplate(
             name: exercise.name,
@@ -162,12 +157,12 @@ struct QuickStartAllExercisesView: View {
     var body: some View {
         Group {
             if connectivity.exerciseLibrary.isEmpty {
-                VStack(spacing: 12) {
+                VStack(spacing: DS.Spacing.lg) {
                     Image(systemName: "text.magnifyingglass")
                         .font(.system(size: 26))
                         .foregroundStyle(.secondary)
                     Text("No Exercises")
-                        .font(.headline)
+                        .font(DS.Typography.exerciseName)
                 }
                 .padding()
             } else {
@@ -191,15 +186,9 @@ struct QuickStartAllExercisesView: View {
 
     private func exerciseRow(_ exercise: WatchExerciseInfo) -> some View {
         let defaults = resolvedDefaults(for: exercise)
+        let subtitle = "\(exercise.defaultSets.formattedWithSeparator) sets · \(defaults.reps.formattedWithSeparator) reps"
         return NavigationLink(value: WatchRoute.workoutPreview(snapshotFromExercise(exercise))) {
-            VStack(alignment: .leading, spacing: 2) {
-                Text(exercise.name)
-                    .font(.caption.weight(.medium))
-                    .lineLimit(1)
-                Text("\(exercise.defaultSets.formattedWithSeparator) sets · \(defaults.reps.formattedWithSeparator) reps")
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-            }
+            ExerciseTileView(exercise: exercise, subtitle: subtitle)
         }
     }
 
@@ -218,7 +207,8 @@ struct QuickStartAllExercisesView: View {
             exerciseName: exercise.name,
             defaultSets: exercise.defaultSets,
             defaultReps: defaults.reps,
-            defaultWeightKg: defaults.weight
+            defaultWeightKg: defaults.weight,
+            equipment: exercise.equipment
         )
         return WorkoutSessionTemplate(
             name: exercise.name,

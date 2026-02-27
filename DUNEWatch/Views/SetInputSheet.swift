@@ -12,7 +12,7 @@ struct SetInputSheet: View {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: 12) {
+            VStack(spacing: DS.Spacing.lg) {
                 // Weight — large display + crown + ±2.5 buttons
                 weightSection
 
@@ -21,7 +21,7 @@ struct SetInputSheet: View {
                 // Reps — inline ± row
                 repsSection
             }
-            .padding(.horizontal, 8)
+            .padding(.horizontal, DS.Spacing.md)
         }
         // Done at bottom via toolbar — always visible regardless of scroll
         .toolbar {
@@ -40,18 +40,18 @@ struct SetInputSheet: View {
     // MARK: - Weight
 
     private var weightSection: some View {
-        VStack(spacing: 6) {
+        VStack(spacing: DS.Spacing.sm) {
             Text("\(weight, specifier: "%.1f")")
                 .font(.system(.largeTitle, design: .rounded).monospacedDigit().bold())
                 .foregroundStyle(DS.Color.positive)
                 .contentTransition(.numericText())
 
             Text("kg")
-                .font(.caption)
+                .font(DS.Typography.metricLabel)
                 .foregroundStyle(.secondary)
 
             // ± buttons for quick jumps (crown for fine tuning)
-            HStack(spacing: 8) {
+            HStack(spacing: DS.Spacing.md) {
                 weightButton("-2.5", delta: -2.5)
                 weightButton("+2.5", delta: 2.5)
             }
