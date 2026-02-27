@@ -79,11 +79,13 @@ struct CarouselRoutineCardView: View {
         let setExecutionSeconds: Double = 40
         var totalSeconds: Double = 0
         for entry in entries {
-            let sets = Double(entry.defaultSets)
+            let sets = Double(min(entry.defaultSets, 100))
             let rest = entry.restDuration ?? 60
             totalSeconds += sets * setExecutionSeconds + Swift.max(sets - 1, 0) * rest
         }
-        let minutes = Int((totalSeconds / 60).rounded())
+        // Correction #85/#169: guard isFinite + physical upper bound (480min = 8h)
+        guard totalSeconds.isFinite else { return nil }
+        let minutes = min(Int((totalSeconds / 60).rounded()), 480)
         return minutes > 0 ? minutes : nil
     }
 }

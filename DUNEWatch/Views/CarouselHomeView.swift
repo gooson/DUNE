@@ -14,23 +14,43 @@ struct CarouselCard: Identifiable, Hashable {
         case popular
         case recent
         case allExercises
+
+        /// Section label for display (Correction #93 — exhaustive switch, no default).
+        var label: String {
+            switch self {
+            case .routine: return "Routine"
+            case .popular: return "Popular"
+            case .recent: return "Recent"
+            case .allExercises: return "Browse"
+            }
+        }
+
+        /// Section accent color.
+        var color: Color {
+            switch self {
+            case .routine: return DS.Color.warmGlow
+            case .popular: return DS.Color.positive
+            case .recent: return .secondary
+            case .allExercises: return .secondary
+            }
+        }
     }
 
     enum Content: Hashable {
-        case exercise(WatchExerciseInfo)
+        case exercise(WatchExerciseInfo, snapshot: WorkoutSessionTemplate, daysAgo: String?)
         case routine(name: String, entries: [TemplateEntry])
         case allExercises
 
-        // TemplateEntry is Codable+Identifiable; hash by entry count + name for perf
+        // Correction #26: == and hash must use the same fields
         func hash(into hasher: inout Hasher) {
             switch self {
-            case .exercise(let info):
+            case .exercise(let info, _, _):
                 hasher.combine("exercise")
                 hasher.combine(info.id)
             case .routine(let name, let entries):
                 hasher.combine("routine")
                 hasher.combine(name)
-                hasher.combine(entries.count)
+                entries.forEach { hasher.combine($0.id) }
             case .allExercises:
                 hasher.combine("all")
             }
@@ -38,10 +58,10 @@ struct CarouselCard: Identifiable, Hashable {
 
         static func == (lhs: Content, rhs: Content) -> Bool {
             switch (lhs, rhs) {
-            case (.exercise(let a), .exercise(let b)):
+            case (.exercise(let a, _, _), .exercise(let b, _, _)):
                 return a.id == b.id
             case (.routine(let aName, let aEntries), .routine(let bName, let bEntries)):
-                return aName == bName && aEntries.count == bEntries.count
+                return aName == bName && aEntries.map(\.id) == bEntries.map(\.id)
             case (.allExercises, .allExercises):
                 return true
             default:
@@ -49,51 +69,6 @@ struct CarouselCard: Identifiable, Hashable {
             }
         }
     }
-}
-
-// MARK: - Shared Helpers
-
-/// Builds subtitle: "3 sets · 10 reps" or "3 sets · 10 reps · 80.0kg"
-private func exerciseSubtitle(sets: Int, reps: Int, weight: Double?) -> String {
-    var parts = "\(sets) sets · \(reps) reps"
-    if let w = weight, w > 0, w <= 500 {
-        parts += " · \(w.formattedWeight)kg"
-    }
-    return parts
-}
-
-/// Deduplicates exercises by canonical ID, keeping first occurrence.
-private func uniqueByCanonical(_ exercises: [WatchExerciseInfo]) -> [WatchExerciseInfo] {
-    var seen = Set<String>()
-    return exercises.filter { exercise in
-        let canonical = RecentExerciseTracker.canonicalExerciseID(exerciseID: exercise.id)
-        return seen.insert(canonical).inserted
-    }
-}
-
-/// Resolves weight/reps defaults from latest set or exercise defaults.
-private func resolvedDefaults(for exercise: WatchExerciseInfo) -> (weight: Double?, reps: Int) {
-    let latest = RecentExerciseTracker.latestSet(exerciseID: exercise.id)
-    let reps = latest?.reps ?? exercise.defaultReps ?? 10
-    let weight = latest?.weight ?? exercise.defaultWeightKg
-    return (weight: weight, reps: reps)
-}
-
-/// Creates a single-exercise template snapshot for navigation.
-private func snapshotFromExercise(_ exercise: WatchExerciseInfo) -> WorkoutSessionTemplate {
-    let defaults = resolvedDefaults(for: exercise)
-    let entry = TemplateEntry(
-        exerciseDefinitionID: exercise.id,
-        exerciseName: exercise.name,
-        defaultSets: exercise.defaultSets,
-        defaultReps: defaults.reps,
-        defaultWeightKg: defaults.weight,
-        equipment: exercise.equipment
-    )
-    return WorkoutSessionTemplate(
-        name: exercise.name,
-        entries: [entry]
-    )
 }
 
 // MARK: - Carousel Home View
@@ -105,14 +80,8 @@ struct CarouselHomeView: View {
     @Environment(WatchConnectivityManager.self) private var connectivity
 
     @State private var cards: [CarouselCard] = []
-
-    /// Section label/color for each visible card
-    private static let sectionConfig: [CarouselCard.Section: (label: String, color: Color)] = [
-        .routine: ("Routine", DS.Color.warmGlow),
-        .popular: ("Popular", DS.Color.positive),
-        .recent: ("Recent", .secondary),
-        .allExercises: ("Browse", .secondary),
-    ]
+    /// Content-aware invalidation key (Correction #87).
+    @State private var templateContentKey: Int = 0
 
     private let popularLimit = 5
     private let recentLimit = 5
@@ -127,9 +96,27 @@ struct CarouselHomeView: View {
         }
         .background { WatchWaveBackground() }
         .navigationTitle("DUNE")
-        .onAppear { rebuildCards() }
-        .onChange(of: templates.count) { _, _ in rebuildCards() }
+        .onAppear {
+            updateTemplateContentKey()
+            rebuildCards()
+        }
+        .onChange(of: templateContentKey) { _, _ in rebuildCards() }
+        .onChange(of: templates.count) { _, _ in updateTemplateContentKey() }
         .onChange(of: connectivity.exerciseLibrary.count) { _, _ in rebuildCards() }
+    }
+
+    /// Computes a content-aware hash of all templates (Correction #87).
+    private func updateTemplateContentKey() {
+        var hasher = Hasher()
+        for t in templates {
+            hasher.combine(t.id)
+            hasher.combine(t.name)
+            hasher.combine(t.updatedAt)
+        }
+        let newKey = hasher.finalize()
+        if newKey != templateContentKey {
+            templateContentKey = newKey
+        }
     }
 
     // MARK: - Carousel
@@ -157,13 +144,13 @@ struct CarouselHomeView: View {
     @ViewBuilder
     private func cardContent(for card: CarouselCard) -> some View {
         switch card.content {
-        case .exercise(let exercise):
-            let config = Self.sectionConfig[card.section] ?? ("", .secondary)
-            NavigationLink(value: WatchRoute.workoutPreview(snapshotFromExercise(exercise))) {
+        case .exercise(let exercise, let snapshot, let daysAgo):
+            NavigationLink(value: WatchRoute.workoutPreview(snapshot)) {
                 ExerciseCardView(
                     exercise: exercise,
-                    sectionLabel: config.label,
-                    sectionColor: config.color
+                    sectionLabel: card.section.label,
+                    sectionColor: card.section.color,
+                    daysAgo: daysAgo
                 )
             }
             .buttonStyle(.plain)
@@ -274,6 +261,7 @@ struct CarouselHomeView: View {
     // MARK: - Rebuild Cards
 
     /// Builds carousel card array: Routines → Popular → Recent → All Exercises.
+    /// Pre-computes snapshots and daysAgo to avoid UserDefaults reads in body (P1 #2, P2 #5).
     /// @State caching with onChange invalidation (Correction #47, #87).
     private func rebuildCards() {
         var result: [CarouselCard] = []
@@ -302,7 +290,7 @@ struct CarouselHomeView: View {
 
         let popular = Array(
             uniqueByCanonical(
-                RecentExerciseTracker.personalizedPopular(from: library, limit: library.count)
+                RecentExerciseTracker.personalizedPopular(from: library, limit: popularLimit)
             )
             .prefix(popularLimit)
         )
@@ -312,11 +300,7 @@ struct CarouselHomeView: View {
         )
 
         for exercise in popular {
-            result.append(CarouselCard(
-                id: "popular-\(exercise.id)",
-                section: .popular,
-                content: .exercise(exercise)
-            ))
+            result.append(exerciseCard(exercise, section: .popular))
         }
 
         // 3. Recent exercises (excluding Popular)
@@ -336,11 +320,7 @@ struct CarouselHomeView: View {
         )
 
         for exercise in recent {
-            result.append(CarouselCard(
-                id: "recent-\(exercise.id)",
-                section: .recent,
-                content: .exercise(exercise)
-            ))
+            result.append(exerciseCard(exercise, section: .recent))
         }
 
         // 4. All Exercises card (always last)
@@ -351,5 +331,26 @@ struct CarouselHomeView: View {
         ))
 
         cards = result
+    }
+
+    /// Pre-builds a CarouselCard with snapshot + daysAgo resolved at build time.
+    private func exerciseCard(_ exercise: WatchExerciseInfo, section: CarouselCard.Section) -> CarouselCard {
+        let snapshot = snapshotFromExercise(exercise)
+        let daysAgo = daysAgoLabel(for: exercise)
+        return CarouselCard(
+            id: "\(section.rawValue)-\(exercise.id)",
+            section: section,
+            content: .exercise(exercise, snapshot: snapshot, daysAgo: daysAgo)
+        )
+    }
+
+    /// Computes "N days ago" label at card-build time (not in body).
+    private func daysAgoLabel(for exercise: WatchExerciseInfo) -> String? {
+        guard !exercise.id.isEmpty,
+              let lastDate = RecentExerciseTracker.lastUsed(exerciseID: exercise.id) else { return nil }
+        let days = Calendar.current.dateComponents([.day], from: lastDate, to: Date()).day ?? 0
+        if days == 0 { return "Today" }
+        if days == 1 { return "Yesterday" }
+        return "\(days) days ago"
     }
 }

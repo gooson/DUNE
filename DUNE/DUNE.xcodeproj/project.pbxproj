@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 90;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -50,6 +50,7 @@
 		1F23D260D43937E7F493340B /* InjuryFormSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B5E73F4F0E92FC9A60E5A2 /* InjuryFormSheet.swift */; };
 		20BA312107CD67E1CE92E963 /* ExerciseFrequencyServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE8F91B7C40220F1D202474 /* ExerciseFrequencyServiceTests.swift */; };
 		21282CF3FDE940FD58A512F5 /* WorkoutSessionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C5BD8AF2C8218EB5451F5B2 /* WorkoutSessionViewModel.swift */; };
+		21A29D0E4D1E8068F240842C /* WatchExerciseHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3CF4C3686EE0524CFAAD67 /* WatchExerciseHelpers.swift */; };
 		232D67D166F5F6F8E70B6C63 /* MuscleMapDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879001FAB9537B847897FEEE /* MuscleMapDetailView.swift */; };
 		23B3853B764877C83FEF015C /* RecoveryModifierService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09E940F479194F56A19F818C /* RecoveryModifierService.swift */; };
 		2411F03C7A26F9FE158561CB /* WeightUnitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B54224D013D2357C84E5CDC /* WeightUnitTests.swift */; };
@@ -695,6 +696,7 @@
 		C8E5858D7F6763E3E221F0B3 /* ChartModelsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartModelsTests.swift; sourceTree = "<group>"; };
 		C8EA9DFC7868FFC7235D54D7 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		C952F0DA31FE40CB2E87C80A /* HealthKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
+		CA3CF4C3686EE0524CFAAD67 /* WatchExerciseHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchExerciseHelpers.swift; sourceTree = "<group>"; };
 		CA7D790965C7EF31FD27B8C0 /* RPEInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RPEInputView.swift; sourceTree = "<group>"; };
 		CB50864805F4D6E860B99E58 /* MuscleMapDetailViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuscleMapDetailViewModelTests.swift; sourceTree = "<group>"; };
 		CD1C29088266B222BF0578AF /* ExerciseMixDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseMixDetailViewModel.swift; sourceTree = "<group>"; };
@@ -1029,6 +1031,14 @@
 			path = Data;
 			sourceTree = "<group>";
 		};
+		56E5BF75D28BA7186842732D /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				CA3CF4C3686EE0524CFAAD67 /* WatchExerciseHelpers.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		5CD28FE87658341029544999 /* Components */ = {
 			isa = PBXGroup;
 			children = (
@@ -1074,6 +1084,7 @@
 		75B8587760A2355B6E730718 /* DUNEWatch */ = {
 			isa = PBXGroup;
 			children = (
+				56E5BF75D28BA7186842732D /* Helpers */,
 				CFC3A6DD63CAE3766790BA30 /* Managers */,
 				EBACEDD54E1005CD17AF4D50 /* Views */,
 				44A8B9695E041B2FDA423693 /* ContentView.swift */,
@@ -1773,7 +1784,7 @@
 				};
 			};
 			buildConfigurationList = 72FF33C470E02207EC0B53E4 /* Build configuration list for PBXProject "DUNE" */;
-			compatibilityVersion = "Xcode 16.3";
+			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -2128,6 +2139,7 @@
 				90F601E50C6DDD8E837C01C6 /* TemplateCardView.swift in Sources */,
 				CBDFBA81EEA3680DF5A0607B /* UserCategory.swift in Sources */,
 				FD87BBA05EF17E493554CF81 /* WatchConnectivityManager.swift in Sources */,
+				21A29D0E4D1E8068F240842C /* WatchExerciseHelpers.swift in Sources */,
 				120D3F5511B60F2304711CCE /* WatchWaveBackground.swift in Sources */,
 				ADAC0AF185F3063B43183E3D /* WorkoutActivityType.swift in Sources */,
 				8C6EEC914158E860F90617FF /* WorkoutManager.swift in Sources */,
