@@ -2,7 +2,6 @@ import SwiftUI
 
 /// Type-safe navigation routes for Watch app (correction #61).
 enum WatchRoute: Hashable {
-    case quickStart
     case quickStartAll
     case workoutPreview(WorkoutSessionTemplate)
 }
@@ -19,7 +18,7 @@ extension WorkoutSessionTemplate: Hashable {
     }
 }
 
-/// Root view: routes between RoutineList (idle), SessionPaging (active), and Summary (ended).
+/// Root view: routes between CarouselHome (idle), SessionPaging (active), and Summary (ended).
 struct ContentView: View {
     @Environment(WatchConnectivityManager.self) private var connectivity
     @State private var workoutManager = WorkoutManager.shared
@@ -27,8 +26,8 @@ struct ContentView: View {
     /// Captured once when session ends to avoid stale Date() on every body recompute.
     @State private var sessionEndDate: Date?
 
-    /// Explicit path so we can pop pushed views (e.g. QuickStartPickerView)
-    /// when the root switches to SessionPagingView (correction #57).
+    /// Explicit path so we can pop pushed views when the root switches
+    /// to SessionPagingView (correction #57).
     @State private var navigationPath = NavigationPath()
 
     var body: some View {
@@ -46,13 +45,11 @@ struct ContentView: View {
                 } else if workoutManager.isActive {
                     SessionPagingView()
                 } else {
-                    RoutineListView()
+                    CarouselHomeView()
                 }
             }
             .navigationDestination(for: WatchRoute.self) { route in
                 switch route {
-                case .quickStart:
-                    QuickStartPickerView()
                 case .quickStartAll:
                     QuickStartAllExercisesView()
                 case .workoutPreview(let snapshot):
