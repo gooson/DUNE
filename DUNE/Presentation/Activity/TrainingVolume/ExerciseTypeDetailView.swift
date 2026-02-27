@@ -128,9 +128,9 @@ struct ExerciseTypeDetailView: View {
                     .font(.system(size: 30))
             }
         }
-        .foregroundStyle(.white)
+        .foregroundStyle(color)
         .frame(width: 60, height: 60)
-        .background(color.gradient, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        .background(color.opacity(0.12), in: RoundedRectangle(cornerRadius: DS.Radius.md))
     }
 
     // MARK: - Trend Chart
