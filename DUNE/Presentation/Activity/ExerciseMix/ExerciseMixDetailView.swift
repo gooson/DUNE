@@ -10,7 +10,9 @@ struct ExerciseMixDetailView: View {
     @State private var selectedAngle: Double?
     @State private var selectedExercise: String?
 
-    // Correction #83: static color cache — derived from ActivityCategory (excludes multiSport = cardio duplicate)
+    // Correction #83: static color cache — palette derived from ActivityCategory.allCases (excludes multiSport).
+    // NOTE: Chart access is index-based (cycling palette), not category-keyed.
+    // Adding a new ActivityCategory case changes palette assignment — aesthetic only, not a correctness issue.
     private enum Cache {
         static let chartColors: [Color] = ActivityCategory.allCases
             .filter { $0 != .multiSport }

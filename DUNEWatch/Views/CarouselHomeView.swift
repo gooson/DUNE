@@ -265,18 +265,27 @@ struct CarouselHomeView: View {
     /// @State caching with onChange invalidation (Correction #47, #87).
     private func rebuildCards() {
         var result: [CarouselCard] = []
+        let library = connectivity.exerciseLibrary
+
+        // Build equipment lookup for enriching legacy template entries (equipment == nil).
+        // Keys only present when equipment is non-nil and non-empty.
+        var equipmentByID: [String: String] = [:]
+        for exercise in library {
+            guard let eq = exercise.equipment, !eq.isEmpty else { continue }
+            equipmentByID[exercise.id] = eq
+        }
 
         // 1. Routine cards (most recently updated first)
         for template in templates {
+            let entries = Self.enrichedEntries(template.exerciseEntries, equipmentByID: equipmentByID)
             result.append(CarouselCard(
                 id: "routine-\(template.id)",
                 section: .routine,
-                content: .routine(name: template.name, entries: template.exerciseEntries)
+                content: .routine(name: template.name, entries: entries)
             ))
         }
 
         // 2. Popular exercises
-        let library = connectivity.exerciseLibrary
         guard !library.isEmpty else {
             // No library synced — show routines (if any) + all exercises card
             result.append(CarouselCard(
@@ -342,6 +351,22 @@ struct CarouselHomeView: View {
             section: section,
             content: .exercise(exercise, snapshot: snapshot, daysAgo: daysAgo)
         )
+    }
+
+    /// Enriches template entries with equipment from exercise library when equipment is nil.
+    /// Handles legacy entries created before the equipment field was added to TemplateEntry.
+    /// NOTE: Relies on TemplateEntry being a value type (struct) for copy-on-write mutation.
+    private static func enrichedEntries(
+        _ entries: [TemplateEntry],
+        equipmentByID: [String: String]
+    ) -> [TemplateEntry] {
+        entries.map { entry in
+            guard entry.equipment == nil else { return entry }
+            guard let equipment = equipmentByID[entry.exerciseDefinitionID] else { return entry }
+            var enriched = entry
+            enriched.equipment = equipment
+            return enriched
+        }
     }
 
     /// Computes "N days ago" label at card-build time (not in body).
