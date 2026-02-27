@@ -60,7 +60,8 @@ struct ExerciseSessionDetailView: View {
                             .frame(width: 28, height: 28)
                     } else {
                         Image(systemName: activityType.iconName)
-                            .font(.title)
+                            .font(.system(size: 28))
+                            .frame(width: 28, height: 28)
                     }
                 }
                 .foregroundStyle(activityType.color)

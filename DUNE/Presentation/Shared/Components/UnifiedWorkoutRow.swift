@@ -115,9 +115,9 @@ struct UnifiedWorkoutRow: View {
                 .accessibilityHidden(true)
         } else {
             Image(systemName: item.activityType.iconName)
-                .font(font)
+                .font(.system(size: size * 0.75))
                 .foregroundStyle(item.activityType.color)
-                .frame(width: size)
+                .frame(width: size, height: size)
                 .accessibilityHidden(true)
         }
     }
