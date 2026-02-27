@@ -38,6 +38,7 @@ struct TrainingVolumeAnalysisServiceTests {
             date: date,
             exerciseType: exerciseType,
             categoryRawValue: "strength",
+            equipmentRawValue: nil,
             duration: duration,
             calories: calories,
             totalVolume: totalVolume

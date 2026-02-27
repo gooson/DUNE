@@ -393,11 +393,7 @@ struct ExercisePickerView: View {
                         Label {
                             Text(exercise.equipment.localizedDisplayName)
                         } icon: {
-                            Image(exercise.equipment.svgAssetName)
-                                .resizable()
-                                .renderingMode(.template)
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 12, height: 12)
+                            exercise.equipment.svgIcon(size: 12)
                         }
                         .font(.caption)
                         .foregroundStyle(.tertiary)
@@ -506,11 +502,7 @@ struct ExercisePickerView: View {
             }
         } label: {
             HStack(spacing: DS.Spacing.xxs) {
-                Image(equipment.svgAssetName)
-                    .resizable()
-                    .renderingMode(.template)
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 14, height: 14)
+                equipment.svgIcon(size: 14)
                 Text(equipment.localizedDisplayName)
                     .font(.system(size: 11, weight: .medium))
             }

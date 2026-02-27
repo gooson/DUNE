@@ -8,8 +8,7 @@ struct ExerciseTypeSummaryRow: View {
     var body: some View {
         HStack(spacing: DS.Spacing.md) {
             // Icon
-            Image(systemName: exerciseType.iconName)
-                .font(.body)
+            typeIcon
                 .foregroundStyle(exerciseType.color)
                 .frame(width: 28, height: 28)
                 .background(exerciseType.color.opacity(0.12))
@@ -44,5 +43,15 @@ struct ExerciseTypeSummaryRow: View {
                 .foregroundStyle(.tertiary)
         }
         .padding(.vertical, DS.Spacing.xs)
+    }
+
+    @ViewBuilder
+    private var typeIcon: some View {
+        if let equipment = exerciseType.equipment {
+            equipment.svgIcon(size: 18)
+        } else {
+            Image(systemName: exerciseType.iconName)
+                .font(.system(size: 16))
+        }
     }
 }

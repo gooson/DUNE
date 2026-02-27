@@ -33,4 +33,9 @@ extension ExerciseTypeVolume {
         }
         return "dumbbell.fill"
     }
+
+    /// Resolves the Equipment from the raw value, if available.
+    var equipment: Equipment? {
+        equipmentRawValue.flatMap { Equipment(rawValue: $0) }
+    }
 }

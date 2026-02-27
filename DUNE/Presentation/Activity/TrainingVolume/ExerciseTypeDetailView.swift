@@ -7,15 +7,19 @@ import Charts
 struct ExerciseTypeDetailView: View {
     let typeKey: String
     let displayName: String
+    let categoryRawValue: String
+    let equipmentRawValue: String?
 
     @State private var viewModel: ExerciseTypeDetailViewModel
     @Query(sort: \ExerciseRecord.date, order: .reverse) private var exerciseRecords: [ExerciseRecord]
 
     @State private var selectedDate: Date?
 
-    init(typeKey: String, displayName: String) {
+    init(typeKey: String, displayName: String, categoryRawValue: String = "", equipmentRawValue: String? = nil) {
         self.typeKey = typeKey
         self.displayName = displayName
+        self.categoryRawValue = categoryRawValue
+        self.equipmentRawValue = equipmentRawValue
         _viewModel = State(initialValue: ExerciseTypeDetailViewModel(
             typeKey: typeKey,
             displayName: displayName
@@ -116,12 +120,17 @@ struct ExerciseTypeDetailView: View {
 
     private var iconBadge: some View {
         let color = resolveColor()
-        let icon = resolveIcon()
-        return Image(systemName: icon)
-            .font(.system(size: 30))
-            .foregroundStyle(.white)
-            .frame(width: 60, height: 60)
-            .background(color.gradient, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        return Group {
+            if let equipment = resolvedEquipment {
+                equipment.svgIcon(size: 30)
+            } else {
+                Image(systemName: resolveIcon())
+                    .font(.system(size: 30))
+            }
+        }
+        .foregroundStyle(.white)
+        .frame(width: 60, height: 60)
+        .background(color.gradient, in: RoundedRectangle(cornerRadius: DS.Radius.md))
     }
 
     // MARK: - Trend Chart
@@ -336,9 +345,29 @@ struct ExerciseTypeDetailView: View {
         return "\(volume.formattedWithSeparator()) kg"
     }
 
+    private var resolvedEquipment: Equipment? {
+        equipmentRawValue.flatMap { Equipment(rawValue: $0) }
+    }
+
     private func resolveColor() -> Color {
         if let actType = WorkoutActivityType(rawValue: typeKey) {
             return actType.color
+        }
+        // Use category-based color for manual exercises
+        if let category = ActivityCategory(rawValue: categoryRawValue) {
+            switch category {
+            case .cardio: return DS.Color.activity
+            case .strength: return .orange
+            case .mindBody: return .purple
+            case .dance: return .pink
+            case .combat: return .red
+            case .sports: return .blue
+            case .water: return .cyan
+            case .winter: return .indigo
+            case .outdoor: return .green
+            case .multiSport: return DS.Color.activity
+            case .other: return .gray
+            }
         }
         return DS.Color.activity
     }

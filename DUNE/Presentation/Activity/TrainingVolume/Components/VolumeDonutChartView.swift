@@ -134,6 +134,7 @@ struct VolumeDonutChartView: View {
             typeKey: "other-combined",
             displayName: "Others",
             categoryRawValue: "other",
+            equipmentRawValue: nil,
             totalDuration: otherDuration,
             totalCalories: otherCalories,
             sessionCount: otherSessions,

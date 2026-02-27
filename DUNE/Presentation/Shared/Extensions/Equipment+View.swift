@@ -121,6 +121,15 @@ extension Equipment {
         }
     }
 
+    /// Reusable template-rendered equipment icon at the given size.
+    func svgIcon(size: CGFloat) -> some View {
+        Image(svgAssetName)
+            .resizable()
+            .renderingMode(.template)
+            .aspectRatio(contentMode: .fit)
+            .frame(width: size, height: size)
+    }
+
     var svgAssetName: String {
         switch self {
         case .barbell: "Equipment/equipment.barbell"

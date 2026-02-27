@@ -101,12 +101,8 @@ struct MuscleDetailPopover: View {
 
     private func exerciseRow(_ exercise: ExerciseDefinition) -> some View {
         HStack(spacing: DS.Spacing.sm) {
-            Image(exercise.equipment.svgAssetName)
-                .resizable()
-                .renderingMode(.template)
-                .aspectRatio(contentMode: .fit)
+            exercise.equipment.svgIcon(size: 16)
                 .foregroundStyle(.secondary)
-                .frame(width: 16, height: 16)
                 .frame(width: 20)
             Text(exercise.localizedName)
                 .font(.subheadline)

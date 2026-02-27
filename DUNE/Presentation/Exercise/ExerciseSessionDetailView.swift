@@ -53,11 +53,7 @@ struct ExerciseSessionDetailView: View {
             HStack(spacing: DS.Spacing.md) {
                 Group {
                     if let equipment {
-                        Image(equipment.svgAssetName)
-                            .resizable()
-                            .renderingMode(.template)
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 28, height: 28)
+                        equipment.svgIcon(size: 28)
                     } else {
                         Image(systemName: activityType.iconName)
                             .font(.system(size: 28))

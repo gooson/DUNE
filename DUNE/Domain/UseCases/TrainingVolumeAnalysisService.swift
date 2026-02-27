@@ -70,6 +70,7 @@ enum TrainingVolumeAnalysisService {
                 typeKey: key,
                 typeName: workout.activityType.typeName,
                 categoryRawValue: workout.activityType.category.rawValue,
+                equipmentRawValue: nil,
                 isDistanceBased: workout.activityType.isDistanceBased
             )
             agg.totalDuration += workout.duration
@@ -90,6 +91,7 @@ enum TrainingVolumeAnalysisService {
                 typeKey: key,
                 typeName: record.exerciseType,
                 categoryRawValue: record.categoryRawValue,
+                equipmentRawValue: record.equipmentRawValue,
                 isDistanceBased: false
             )
             agg.totalDuration += record.duration
@@ -109,6 +111,7 @@ enum TrainingVolumeAnalysisService {
                 typeKey: agg.typeKey,
                 displayName: agg.typeName,
                 categoryRawValue: agg.categoryRawValue,
+                equipmentRawValue: agg.equipmentRawValue,
                 totalDuration: agg.totalDuration,
                 totalCalories: agg.totalCalories,
                 sessionCount: agg.sessionCount,
@@ -215,6 +218,7 @@ private struct TypeAggregate {
     let typeKey: String
     let typeName: String
     let categoryRawValue: String
+    let equipmentRawValue: String?
     let isDistanceBased: Bool
     var totalDuration: TimeInterval = 0
     var totalCalories: Double = 0
@@ -231,6 +235,7 @@ struct ManualExerciseSnapshot: Sendable {
     let date: Date
     let exerciseType: String
     let categoryRawValue: String
+    let equipmentRawValue: String?
     let duration: TimeInterval
     let calories: Double
     let totalVolume: Double // weight × reps sum

@@ -179,8 +179,13 @@ struct ActivityView: View {
             switch destination {
             case .overview:
                 TrainingVolumeDetailView()
-            case .exerciseType(let typeKey, let displayName):
-                ExerciseTypeDetailView(typeKey: typeKey, displayName: displayName)
+            case .exerciseType(let typeKey, let displayName, let categoryRawValue, let equipmentRawValue):
+                ExerciseTypeDetailView(
+                    typeKey: typeKey,
+                    displayName: displayName,
+                    categoryRawValue: categoryRawValue,
+                    equipmentRawValue: equipmentRawValue
+                )
             }
         }
         .navigationDestination(for: ActivityDetailDestination.self) { destination in

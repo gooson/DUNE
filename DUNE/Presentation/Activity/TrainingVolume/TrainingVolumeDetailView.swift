@@ -151,7 +151,9 @@ struct TrainingVolumeDetailView: View {
                 ForEach(types) { type in
                     NavigationLink(value: TrainingVolumeDestination.exerciseType(
                         typeKey: type.typeKey,
-                        displayName: type.displayName
+                        displayName: type.displayName,
+                        categoryRawValue: type.categoryRawValue,
+                        equipmentRawValue: type.equipmentRawValue
                     )) {
                         ExerciseTypeSummaryRow(exerciseType: type)
                     }

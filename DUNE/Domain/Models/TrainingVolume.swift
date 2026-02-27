@@ -27,6 +27,7 @@ struct ExerciseTypeVolume: Identifiable, Sendable, Hashable {
     let typeKey: String
     let displayName: String
     let categoryRawValue: String
+    let equipmentRawValue: String?
     let totalDuration: TimeInterval
     let totalCalories: Double
     let sessionCount: Int

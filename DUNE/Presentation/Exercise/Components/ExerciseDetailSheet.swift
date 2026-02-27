@@ -41,12 +41,8 @@ struct ExerciseDetailSheet: View {
 
     private var headerSection: some View {
         HStack(spacing: DS.Spacing.md) {
-            Image(exercise.equipment.svgAssetName)
-                .resizable()
-                .renderingMode(.template)
-                .aspectRatio(contentMode: .fit)
+            exercise.equipment.svgIcon(size: 40)
                 .foregroundStyle(exercise.resolvedActivityType.color)
-                .frame(width: 40, height: 40)
                 .frame(width: 64, height: 64)
                 .background(DS.Color.activity.opacity(0.12), in: RoundedRectangle(cornerRadius: DS.Radius.md))
 
@@ -63,11 +59,7 @@ struct ExerciseDetailSheet: View {
                     Label {
                         Text(exercise.equipment.localizedDisplayName)
                     } icon: {
-                        Image(exercise.equipment.svgAssetName)
-                            .resizable()
-                            .renderingMode(.template)
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 12, height: 12)
+                        exercise.equipment.svgIcon(size: 12)
                     }
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -174,12 +166,8 @@ struct ExerciseDetailSheet: View {
             Text("사용 기구")
                 .font(.headline)
             HStack(spacing: DS.Spacing.md) {
-                Image(exercise.equipment.svgAssetName)
-                    .resizable()
-                    .renderingMode(.template)
-                    .aspectRatio(contentMode: .fit)
+                exercise.equipment.svgIcon(size: 80)
                     .foregroundStyle(DS.Color.activity)
-                    .frame(width: 80, height: 80)
                     .padding(DS.Spacing.sm)
                     .background(DS.Color.activity.opacity(0.06), in: RoundedRectangle(cornerRadius: DS.Radius.md))
                 VStack(alignment: .leading, spacing: DS.Spacing.xxs) {

@@ -42,12 +42,8 @@ struct ExerciseStartView: View {
 
     private var exerciseInfoCard: some View {
         HStack(spacing: DS.Spacing.md) {
-            Image(exercise.equipment.svgAssetName)
-                .resizable()
-                .renderingMode(.template)
-                .aspectRatio(contentMode: .fit)
+            exercise.equipment.svgIcon(size: 36)
                 .foregroundStyle(exercise.resolvedActivityType.color)
-                .frame(width: 36, height: 36)
                 .frame(width: 60, height: 60)
                 .background(DS.Color.activity.opacity(0.12), in: RoundedRectangle(cornerRadius: DS.Radius.md))
 
@@ -112,11 +108,7 @@ struct ExerciseStartView: View {
             Label {
                 Text(exercise.equipment.displayName)
             } icon: {
-                Image(exercise.equipment.svgAssetName)
-                    .resizable()
-                    .renderingMode(.template)
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 14, height: 14)
+                exercise.equipment.svgIcon(size: 14)
             }
             Label("\(WorkoutDefaults.setCount.formattedWithSeparator) sets", systemImage: "list.number")
         }

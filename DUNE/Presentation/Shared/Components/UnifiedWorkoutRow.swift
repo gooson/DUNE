@@ -106,12 +106,8 @@ struct UnifiedWorkoutRow: View {
     @ViewBuilder
     private func activityIcon(size: CGFloat, font: Font) -> some View {
         if let equipment = item.equipment {
-            Image(equipment.svgAssetName)
-                .resizable()
-                .renderingMode(.template)
-                .aspectRatio(contentMode: .fit)
+            equipment.svgIcon(size: size)
                 .foregroundStyle(item.activityType.color)
-                .frame(width: size, height: size)
                 .accessibilityHidden(true)
         } else {
             Image(systemName: item.activityType.iconName)
