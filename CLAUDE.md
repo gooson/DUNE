@@ -415,3 +415,9 @@
 173. **같은 빌드 타겟의 두 파일에 동일 함수 → 공유 파일 즉시 추출**: `private` file-scope 함수는 같은 파일 내에서만 공유 가능. 파일 분리 시 자동으로 DRY 위반 발생하므로, 같은 타겟의 2개 파일에 동일 함수가 있으면 `Helpers/{Target}Helpers.swift`로 추출 (Correction #167 확장)
 174. **`personalizedPopular(limit:)`에 실제 필요 수량 전달**: `limit: library.count`로 전체를 정렬한 뒤 `.prefix(N)`하면 O(N log N) 낭비. `limit: N`을 직접 전달하여 내부 최적화 활용
 175. **Content enum Hashable에 associated value의 identity 포함**: `entries.count`만 hash/==에 사용하면 같은 수의 다른 항목이 동일 취급되어 SwiftUI diffing 실패. `entries.forEach { hasher.combine($0.id) }` 패턴 사용 (Correction #26/#87 확장)
+
+### 2026-02-28: Activity Chart Desert Palette 리뷰 교정
+
+176. **카테고리→색상 매핑은 enum extension에 단일 소스 필수**: `ActivityCategory.color`처럼 enum 자체에 computed property로 정의. `WorkoutActivityType.color`, `ExerciseTypeVolume.color` 등은 `category.color`로 위임. 동일 switch가 3곳 이상이면 Correction #37 즉시 적용
+177. **DS 색상 토큰은 반드시 xcassets 패턴 사용**: `Color(red:green:blue:)` 인라인 금지. `Assets.xcassets/Colors/{Name}.colorset` 생성 → `Color("Name")` 참조. dark mode variant 지원 + Xcode 색상 편집기 호환 + 기존 DS 패턴 일관성
+178. **정적 색상 배열은 `CaseIterable`에서 파생**: `[DS.Color.a, DS.Color.b, ...]` 수동 나열 대신 `Category.allCases.filter { ... }.map(\.color)` 패턴. 새 case 추가 시 자동 반영 + 중복 색상(multiSport=cardio) 명시적 제외

@@ -351,7 +351,7 @@ enum WorkoutActivityType: String, Codable, Sendable, CaseIterable {
 // MARK: - ActivityCategory
 
 /// High-level grouping for workout activity types.
-enum ActivityCategory: String, Codable, Sendable {
+enum ActivityCategory: String, CaseIterable, Codable, Sendable {
     case cardio
     case strength
     case mindBody

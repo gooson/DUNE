@@ -178,8 +178,13 @@ extension WorkoutActivityType {
     }
 
     /// Category-based color for the activity type (Desert Horizon palette).
+    var color: Color { category.color }
+}
+
+extension ActivityCategory {
+    /// Desert Horizon palette color for the category.
     var color: Color {
-        switch category {
+        switch self {
         case .cardio: DS.Color.activityCardio
         case .strength: DS.Color.activityStrength
         case .mindBody: DS.Color.activityMindBody
@@ -193,9 +198,7 @@ extension WorkoutActivityType {
         case .other: DS.Color.activityOther
         }
     }
-}
 
-extension ActivityCategory {
     /// Korean display name for the category.
     var displayName: String {
         switch self {

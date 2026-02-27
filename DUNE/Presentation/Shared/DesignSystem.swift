@@ -54,16 +54,16 @@ enum DS {
         static let sandMuted    = SwiftUI.Color("SandMuted")     // Muted sand (decorative text)
 
         // Activity Category Colors — Desert Horizon Chart Palette
-        static let activityCardio    = SwiftUI.Color(red: 0.92, green: 0.75, blue: 0.35) // Desert Gold
-        static let activityStrength  = SwiftUI.Color(red: 0.88, green: 0.58, blue: 0.36) // Copper
-        static let activityMindBody  = SwiftUI.Color(red: 0.74, green: 0.60, blue: 0.80) // Dusk Lavender
-        static let activityDance     = SwiftUI.Color(red: 0.85, green: 0.54, blue: 0.58) // Desert Rose
-        static let activityCombat    = SwiftUI.Color(red: 0.82, green: 0.46, blue: 0.36) // Terracotta
-        static let activitySports    = SwiftUI.Color(red: 0.58, green: 0.66, blue: 0.82) // Dusk Slate
-        static let activityWater     = SwiftUI.Color(red: 0.48, green: 0.72, blue: 0.68) // Oasis Teal
-        static let activityWinter    = SwiftUI.Color(red: 0.60, green: 0.54, blue: 0.76) // Twilight
-        static let activityOutdoor   = SwiftUI.Color(red: 0.62, green: 0.74, blue: 0.50) // Desert Sage
-        static let activityOther     = SwiftUI.Color(red: 0.64, green: 0.60, blue: 0.54) // Warm Stone
+        static let activityCardio    = SwiftUI.Color("ActivityCardio")    // Desert Gold
+        static let activityStrength  = SwiftUI.Color("ActivityStrength")  // Copper
+        static let activityMindBody  = SwiftUI.Color("ActivityMindBody")  // Dusk Lavender
+        static let activityDance     = SwiftUI.Color("ActivityDance")     // Desert Rose
+        static let activityCombat    = SwiftUI.Color("ActivityCombat")    // Terracotta
+        static let activitySports    = SwiftUI.Color("ActivitySports")    // Dusk Slate
+        static let activityWater     = SwiftUI.Color("ActivityWater")     // Oasis Teal
+        static let activityWinter    = SwiftUI.Color("ActivityWinter")    // Twilight
+        static let activityOutdoor   = SwiftUI.Color("ActivityOutdoor")   // Desert Sage
+        static let activityOther     = SwiftUI.Color("ActivityOther")     // Warm Stone
 
         // Tab wave identity — Desert Horizon palette
         static let tabTrain    = SwiftUI.Color("TabTrain")     // Desert Coral

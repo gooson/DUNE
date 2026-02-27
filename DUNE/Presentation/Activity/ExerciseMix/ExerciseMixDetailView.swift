@@ -10,20 +10,11 @@ struct ExerciseMixDetailView: View {
     @State private var selectedAngle: Double?
     @State private var selectedExercise: String?
 
-    // Correction #83: static color cache — Desert Horizon palette
+    // Correction #83: static color cache — derived from ActivityCategory (excludes multiSport = cardio duplicate)
     private enum Cache {
-        static let chartColors: [Color] = [
-            DS.Color.activityCardio,
-            DS.Color.activityStrength,
-            DS.Color.activityMindBody,
-            DS.Color.activityDance,
-            DS.Color.activityCombat,
-            DS.Color.activitySports,
-            DS.Color.activityWater,
-            DS.Color.activityWinter,
-            DS.Color.activityOutdoor,
-            DS.Color.activityOther
-        ]
+        static let chartColors: [Color] = ActivityCategory.allCases
+            .filter { $0 != .multiSport }
+            .map(\.color)
     }
 
     var body: some View {

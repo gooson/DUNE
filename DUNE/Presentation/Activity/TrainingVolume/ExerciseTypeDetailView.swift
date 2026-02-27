@@ -353,21 +353,9 @@ struct ExerciseTypeDetailView: View {
         if let actType = WorkoutActivityType(rawValue: typeKey) {
             return actType.color
         }
-        // Use category-based color for manual exercises (Desert Horizon palette)
+        // Fallback: resolve category raw value
         if let category = ActivityCategory(rawValue: categoryRawValue) {
-            switch category {
-            case .cardio: return DS.Color.activityCardio
-            case .strength: return DS.Color.activityStrength
-            case .mindBody: return DS.Color.activityMindBody
-            case .dance: return DS.Color.activityDance
-            case .combat: return DS.Color.activityCombat
-            case .sports: return DS.Color.activitySports
-            case .water: return DS.Color.activityWater
-            case .winter: return DS.Color.activityWinter
-            case .outdoor: return DS.Color.activityOutdoor
-            case .multiSport: return DS.Color.activityCardio
-            case .other: return DS.Color.activityOther
-            }
+            return category.color
         }
         return DS.Color.activityOther
     }
