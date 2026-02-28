@@ -26,10 +26,11 @@ struct MetricSummaryHeader: View {
                 Text(formattedCurrentValue)
                     .font(sizeClass == .regular ? DS.Typography.heroScore : DS.Typography.cardScore)
                     .fontDesign(.rounded)
+                    .foregroundStyle(DS.Gradient.heroText)
 
                 Text(resolvedUnit)
                     .font(sizeClass == .regular ? .title2 : .title3)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.sandMuted)
             }
 
             // Period summary stats (always visible — shows "—" placeholders when loading)

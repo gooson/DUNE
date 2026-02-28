@@ -40,7 +40,7 @@ struct EmptyStateView: View {
                 WaveShape(amplitude: 0.15, frequency: 1.5, phase: 0, verticalOffset: 0.5)
                     .fill(DS.Color.warmGlow.opacity(DS.Opacity.subtle))
                 WaveShape(amplitude: 0.2, frequency: 2, phase: .pi / 3, verticalOffset: 0.5)
-                    .fill(DS.Color.warmGlow.opacity(DS.Opacity.subtle))
+                    .fill(DS.Color.desertDusk.opacity(DS.Opacity.subtle))
             }
             .frame(height: 60)
             .clipped()

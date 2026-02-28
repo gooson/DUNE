@@ -36,6 +36,7 @@ struct VitalCard: View {
                 HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xs) {
                     Text(data.value)
                         .font(DS.Typography.cardScore)
+                        .foregroundStyle(DS.Gradient.heroText)
                         .minimumScaleFactor(0.7)
                         .lineLimit(1)
 

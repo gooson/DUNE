@@ -105,6 +105,20 @@ enum DS {
     // MARK: - Gradient
 
     enum Gradient {
+        /// Hero/metric value text — DesertBronze → WarmGlow horizontal blend (mirrors iOS DS)
+        static let heroText = LinearGradient(
+            colors: [DS.Color.desertBronze, DS.Color.warmGlow],
+            startPoint: .leading,
+            endPoint: .trailing
+        )
+
+        /// Section title accent bar gradient (mirrors iOS DS)
+        static let sectionAccent = LinearGradient(
+            colors: [DS.Color.warmGlow.opacity(DS.Opacity.strong), DS.Color.desertDusk.opacity(DS.Opacity.border)],
+            startPoint: .top,
+            endPoint: .bottom
+        )
+
         /// Default warm card background — cached static to avoid per-render allocation.
         static let cardBackground = LinearGradient(
             colors: [DS.Color.warmGlow.opacity(DS.Opacity.subtle), .clear],

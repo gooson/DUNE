@@ -30,12 +30,6 @@ enum DS {
         static let zone4 = SwiftUI.Color("HRZone4")
         static let zone5 = SwiftUI.Color("HRZone5")
 
-        // Wellness Score gradient (4 levels)
-        static let wellnessExcellent = SwiftUI.Color("WellnessScoreExcellent")
-        static let wellnessGood      = SwiftUI.Color("WellnessScoreGood")
-        static let wellnessFair      = SwiftUI.Color("WellnessScoreFair")
-        static let wellnessWarning   = SwiftUI.Color("WellnessScoreWarning")
-
         // Feedback
         static let positive = SwiftUI.Color("Positive")
         static let negative = SwiftUI.Color("Negative")
@@ -96,6 +90,20 @@ enum DS {
         // Hero card ring gradient direction
         static let heroRingStart = UnitPoint(x: 0, y: 0)
         static let heroRingEnd = UnitPoint(x: 1, y: 1)
+
+        /// Hero/metric value text — DesertBronze → WarmGlow horizontal blend
+        static let heroText = LinearGradient(
+            colors: [DS.Color.desertBronze, DS.Color.warmGlow],
+            startPoint: .leading,
+            endPoint: .trailing
+        )
+
+        /// Section title accent bar gradient
+        static let sectionAccent = LinearGradient(
+            colors: [DS.Color.warmGlow.opacity(DS.Opacity.strong), DS.Color.desertDusk.opacity(DS.Opacity.border)],
+            startPoint: .top,
+            endPoint: .bottom
+        )
     }
 
     // MARK: - Spacing (4pt grid)

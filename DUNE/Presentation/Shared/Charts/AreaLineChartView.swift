@@ -11,6 +11,30 @@ struct AreaLineChartView: View {
     var trendLine: [ChartDataPoint]?
     @Binding var scrollPosition: Date
 
+    // Correction #105/#165 — pre-computed gradient to avoid per-ForEach allocation
+    private let areaGradient: LinearGradient
+
+    init(
+        data: [ChartDataPoint],
+        period: TimePeriod,
+        tintColor: Color = DS.Color.body,
+        unitSuffix: String = "kg",
+        trendLine: [ChartDataPoint]? = nil,
+        scrollPosition: Binding<Date>
+    ) {
+        self.data = data
+        self.period = period
+        self.tintColor = tintColor
+        self.unitSuffix = unitSuffix
+        self.trendLine = trendLine
+        self._scrollPosition = scrollPosition
+        self.areaGradient = LinearGradient(
+            colors: [tintColor.opacity(0.22), DS.Color.warmGlow.opacity(DS.Opacity.subtle), .clear],
+            startPoint: .top,
+            endPoint: .bottom
+        )
+    }
+
     @ScaledMetric(relativeTo: .body) private var chartHeight: CGFloat = 220
 
     @State private var selectedDate: Date?
@@ -113,17 +137,6 @@ struct AreaLineChartView: View {
         }
     }
 
-    private var areaGradient: LinearGradient {
-        LinearGradient(
-            colors: [
-                tintColor.opacity(0.25),
-                tintColor.opacity(0.08),
-                DS.Color.warmGlow.opacity(0.25)
-            ],
-            startPoint: .top,
-            endPoint: .bottom
-        )
-    }
 
     /// Y-axis domain with padding around min/max values.
     private var yDomain: ClosedRange<Double> {
