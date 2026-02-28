@@ -1,10 +1,12 @@
 import SwiftUI
 import SwiftData
+import CoreLocation
 
 struct SettingsView: View {
     @AppStorage("isCloudSyncEnabled") private var isCloudSyncEnabled = false
     @Environment(\.openURL) private var openURL
 
+    @State private var locationStatus: CLAuthorizationStatus = CLLocationManager().authorizationStatus
     @State private var restSeconds: Double = WorkoutSettingsStore.shared.restSeconds
     @State private var setCount: Int = WorkoutSettingsStore.shared.setCount
     @State private var bodyWeightKg: Double = WorkoutSettingsStore.shared.bodyWeightKg
@@ -30,6 +32,9 @@ struct SettingsView: View {
         }
         .onChange(of: bodyWeightKg) { _, newValue in
             store.bodyWeightKg = newValue
+        }
+        .onAppear {
+            locationStatus = CLLocationManager().authorizationStatus
         }
     }
 
@@ -126,6 +131,29 @@ struct SettingsView: View {
             } label: {
                 Label("HealthKit Permissions", systemImage: "heart.circle")
             }
+
+            Button {
+                guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+                openURL(url)
+            } label: {
+                HStack {
+                    Label("Location Access", systemImage: "location")
+                    Spacer()
+                    Text(locationStatusText)
+                        .foregroundStyle(DS.Color.textSecondary)
+                }
+            }
+        }
+    }
+
+    private var locationStatusText: String {
+        switch locationStatus {
+        case .authorizedWhenInUse: "When In Use"
+        case .authorizedAlways: "Always"
+        case .denied: "Denied"
+        case .restricted: "Restricted"
+        case .notDetermined: "Not Set"
+        @unknown default: "Unknown"
         }
     }
 
