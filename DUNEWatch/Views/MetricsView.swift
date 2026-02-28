@@ -103,7 +103,7 @@ struct MetricsView: View {
             Button("+1 Set") {
                 addExtraSet()
             }
-            Button("Finish Exercise") {
+            Button("Finish Exercise", role: .destructive) {
                 finishCurrentExercise()
             }
         } message: {
