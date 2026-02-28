@@ -21,7 +21,7 @@ struct ConditionExplainerSection: View {
                     Text("점수 계산 원리")
                         .font(.subheadline)
                         .fontWeight(.semibold)
-                        .foregroundStyle(.primary)
+                        .foregroundStyle(DS.Color.primaryText)
 
                     Spacer()
 

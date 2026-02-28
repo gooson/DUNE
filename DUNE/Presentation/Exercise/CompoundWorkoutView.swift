@@ -182,7 +182,7 @@ struct CompoundWorkoutView: View {
                 isCurrent ? DS.Color.activity.opacity(0.15) : Color.secondary.opacity(0.08),
                 in: RoundedRectangle(cornerRadius: DS.Radius.sm)
             )
-            .foregroundStyle(isCurrent ? DS.Color.activity : .primary)
+            .foregroundStyle(isCurrent ? DS.Color.activity : DS.Color.primaryText)
         }
         .buttonStyle(.plain)
     }

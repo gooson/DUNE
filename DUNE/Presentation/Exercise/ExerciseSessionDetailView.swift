@@ -177,7 +177,7 @@ struct ExerciseSessionDetailView: View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             Label("Heart Rate", systemImage: "heart.fill")
                 .font(.headline)
-                .foregroundStyle(.primary)
+                .foregroundStyle(DS.Color.primaryText)
 
             if !hasHealthKitLink {
                 placeholderView(

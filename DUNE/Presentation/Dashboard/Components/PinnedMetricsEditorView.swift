@@ -23,7 +23,7 @@ struct PinnedMetricsEditorView: View {
                                 Image(systemName: category.iconName)
                                     .foregroundStyle(category.themeColor)
                                 Text(category.displayName)
-                                    .foregroundStyle(.primary)
+                                    .foregroundStyle(DS.Color.primaryText)
                                 Spacer()
                                 if selectedSet.contains(category) {
                                     Image(systemName: "checkmark.circle.fill")

@@ -218,7 +218,7 @@ struct HealthKitWorkoutDetailView: View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             Label("심박수", systemImage: "heart.fill")
                 .font(.headline)
-                .foregroundStyle(.primary)
+                .foregroundStyle(DS.Color.primaryText)
 
             if viewModel.isLoading {
                 ProgressView()

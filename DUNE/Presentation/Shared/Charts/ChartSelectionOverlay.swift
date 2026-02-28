@@ -15,7 +15,7 @@ struct ChartSelectionOverlay: View {
                 .fontWeight(.semibold)
         }
         .font(.caption)
-        .foregroundStyle(.primary)
+        .foregroundStyle(DS.Color.primaryText)
         .padding(.horizontal, DS.Spacing.sm)
         .padding(.vertical, DS.Spacing.xs)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
