@@ -443,3 +443,9 @@
 189. **@unknown default는 conservative(부정적) 매핑**: 미인식 WeatherCondition을 `.clear`로 매핑하면 심각한 기상에서 "야외 추천" 코칭 발동. `.cloudy`(중립~부정적)로 매핑하여 false-positive 안전 코칭 방지
 190. **단일 소비자 캐시는 inline**: WeatherCache처럼 단일 클래스에서만 사용하는 캐시는 별도 파일/타입으로 분리하지 않음. NSLock + Optional로 소비자 내부에 inline
 191. **Environment key는 관련 View extension 파일에 배치**: `WeatherAtmosphereKey`는 `WavePreset.swift`(무관)가 아닌 `WeatherAtmosphere+View.swift`(관련)에 위치. key + EnvironmentValues extension + view properties를 한 파일에 응집
+
+### 2026-02-28: Watch Target Build Errors Post-Merge 교정
+
+192. **새 @Model 추가 시 Watch 타겟 Shared/Domain 동기화 필수**: `Data/Persistence/Models/` 폴더 전체가 Watch 타겟에 포함되므로, 새 @Model이 Domain 타입을 참조하면 `project.yml`의 Watch Shared/Domain 목록에 해당 Domain 파일 추가 필수. 누락 시 iOS는 빌드 통과하지만 Watch 타겟에서 `cannot find type` 에러
+193. **DS 색상 토큰 사용 전 `DesignSystem.swift` grep 필수**: `DS.Color.warning` 같은 추정 토큰명 사용 금지. `grep 'static.*let.*warning' DesignSystem.swift`로 정확한 토큰명 확인 후 사용. 유사 토큰(`caution` vs `warning`)이 혼동될 수 있음
+194. **init 시그니처 변경 시 모든 호출 사이트 grep**: `struct` init에 파라미터 추가 후 `grep -rn "StructName("` 으로 전체 호출 사이트 갱신 확인. 한 곳만 갱신하고 다른 호출 사이트를 누락하면 별도 타겟에서만 에러 발생 가능
