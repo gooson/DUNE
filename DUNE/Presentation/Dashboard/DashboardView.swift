@@ -67,7 +67,9 @@ struct DashboardView: View {
                         if let weather = viewModel.weatherSnapshot {
                             WeatherCard(snapshot: weather)
                         } else {
-                            WeatherCardPlaceholder()
+                            WeatherCardPlaceholder {
+                                Task { await viewModel.requestLocationPermission() }
+                            }
                         }
 
                         // Coaching

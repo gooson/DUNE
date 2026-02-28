@@ -267,6 +267,14 @@ final class DashboardViewModel {
         }
     }
 
+    /// Request location permission from user action (e.g. tapping weather placeholder).
+    func requestLocationPermission() async {
+        guard let weatherProvider else { return }
+        await weatherProvider.requestLocationPermission()
+        // Re-fetch weather after permission is granted
+        weatherSnapshot = await safeWeatherFetch()
+    }
+
     private func safeWeatherFetch() async -> WeatherSnapshot? {
         guard let weatherProvider else { return nil }
         do {

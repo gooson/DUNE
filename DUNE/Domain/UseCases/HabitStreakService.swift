@@ -41,18 +41,17 @@ enum HabitStreakService {
         referenceDate: Date,
         calendar: Calendar
     ) -> Int {
-        // Dedup to unique calendar days
-        let uniqueDays = Set(completedDates.map { calendar.startOfDay(for: $0) })
-        let today = calendar.startOfDay(for: referenceDate)
+        // Pre-compute day offsets from reference for O(1) lookup
+        let refDay = calendar.startOfDay(for: referenceDate)
+        let uniqueDayOffsets = Set(completedDates.map { dayOffset(from: refDay, to: $0, calendar: calendar) })
 
-        // Start from today and walk backwards
+        // Walk backwards from offset 0 (today)
         var streak = 0
-        var checkDate = today
+        var offset = 0
 
-        while uniqueDays.contains(checkDate) {
+        while uniqueDayOffsets.contains(offset) {
             streak += 1
-            guard let previous = calendar.date(byAdding: .day, value: -1, to: checkDate) else { break }
-            checkDate = previous
+            offset -= 1
         }
 
         return streak
@@ -68,29 +67,28 @@ enum HabitStreakService {
     ) -> Int {
         guard targetDays > 0 else { return 0 }
 
-        let uniqueDays = Set(completedDates.map { calendar.startOfDay(for: $0) })
+        // Pre-compute all completed day offsets from reference (single Calendar batch)
+        let refDay = calendar.startOfDay(for: referenceDate)
+        let uniqueDayOffsets = Set(completedDates.map { dayOffset(from: refDay, to: $0, calendar: calendar) })
 
-        // Find start of current week
-        guard var weekStart = calendar.dateInterval(of: .weekOfYear, for: referenceDate)?.start else {
+        // Find start of current week as day offset
+        guard let weekInterval = calendar.dateInterval(of: .weekOfYear, for: referenceDate) else {
             return 0
         }
+        let refWeekStartOffset = dayOffset(from: refDay, to: weekInterval.start, calendar: calendar)
 
         var streak = 0
-        // Check up to 52 weeks back
         let maxWeeks = 52
 
-        for _ in 0..<maxWeeks {
-            guard let weekEnd = calendar.date(byAdding: .day, value: 7, to: weekStart) else { break }
+        for weekIndex in 0..<maxWeeks {
+            let weekStartOffset = refWeekStartOffset - (weekIndex * 7)
 
-            // Count completed days in this week
+            // Count completed days in this week using pre-computed offsets (no Calendar calls)
             var daysInWeek = 0
-            var day = weekStart
-            while day < weekEnd {
-                if uniqueDays.contains(day) {
+            for dayInWeek in 0..<7 {
+                if uniqueDayOffsets.contains(weekStartOffset + dayInWeek) {
                     daysInWeek += 1
                 }
-                guard let next = calendar.date(byAdding: .day, value: 1, to: day) else { break }
-                day = next
             }
 
             if daysInWeek >= targetDays {
@@ -98,12 +96,17 @@ enum HabitStreakService {
             } else {
                 break
             }
-
-            // Move to previous week
-            guard let prevWeek = calendar.date(byAdding: .day, value: -7, to: weekStart) else { break }
-            weekStart = prevWeek
         }
 
         return streak
+    }
+
+    // MARK: - Helpers
+
+    /// Day offset from `reference` to `date` (negative = past, positive = future).
+    /// Uses Calendar only once per call, enabling batch pre-computation.
+    private static func dayOffset(from reference: Date, to date: Date, calendar: Calendar) -> Int {
+        let target = calendar.startOfDay(for: date)
+        return calendar.dateComponents([.day], from: reference, to: target).day ?? 0
     }
 }

@@ -73,6 +73,7 @@ struct LifeView: View {
                     isEdit: true,
                     onSave: {
                         if let habit = viewModel.editingHabit, viewModel.applyUpdate(to: habit) {
+                            viewModel.didFinishSaving()
                             viewModel.isShowingEditSheet = false
                             viewModel.resetForm()
                         }
@@ -147,6 +148,13 @@ private struct HabitListQueryView: View {
         Color.clear
             .frame(height: 0)
             .onChange(of: habits.count) { _, _ in
+                recalculate()
+            }
+            .onChange(of: viewModel.isShowingEditSheet) { old, new in
+                // Recalculate when edit sheet dismisses (habit properties may have changed)
+                if old, !new { recalculate() }
+            }
+            .onChange(of: cachedTodayExerciseExists) { _, _ in
                 recalculate()
             }
             .onAppear {
@@ -265,10 +273,18 @@ private struct HabitListQueryView: View {
 // Avoids unbounded ExerciseRecord fetch in parent view.
 
 private struct TodayExerciseCheckView: View {
-    @Query(sort: \ExerciseRecord.date, order: .reverse)
-    private var recentRecords: [ExerciseRecord]
+    @Query private var recentRecords: [ExerciseRecord]
 
     @Binding var exists: Bool
+
+    init(exists: Binding<Bool>) {
+        _exists = exists
+        var descriptor = FetchDescriptor<ExerciseRecord>(
+            sortBy: [SortDescriptor(\.date, order: .reverse)]
+        )
+        descriptor.fetchLimit = 20
+        _recentRecords = Query(descriptor)
+    }
 
     var body: some View {
         Color.clear
@@ -285,7 +301,7 @@ private struct TodayExerciseCheckView: View {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
         // Check only first few records (sorted by date desc) — today's records are at the front
-        exists = recentRecords.prefix(20).contains { calendar.isDate($0.date, inSameDayAs: today) }
+        exists = recentRecords.contains { calendar.isDate($0.date, inSameDayAs: today) }
     }
 }
 

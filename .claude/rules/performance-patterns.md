@@ -30,6 +30,7 @@
 - parallel fetch → partial failure 보고 ("N of M sources")
 - TaskGroup catch → 에러 식별 로그: `"[Module] {key} fetch failed: \(error)"`
 - `defer` 사용: Void async → 필수, returning func → 금지 (명시적 리셋)
+- Swift 6 `@MainActor` 클래스에서 `withThrowingTaskGroup` 내 `@MainActor addTask` 금지 → continuation 내부 Task timeout 패턴 사용
 
 ## JSON/Data
 - 번들 JSON 파싱 → `static let shared` 싱글턴

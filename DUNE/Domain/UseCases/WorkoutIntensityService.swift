@@ -67,79 +67,54 @@ struct WorkoutIntensityService: Sendable {
         history: [IntensitySessionInput],
         estimated1RM: Double? = nil
     ) -> WorkoutIntensityResult? {
+        let signals: (primary: Double?, volume: Double?, method: IntensityMethod)?
         switch current.exerciseType {
         case .setsRepsWeight:
-            return strengthIntensity(current: current, history: history, estimated1RM: estimated1RM)
+            signals = strengthSignals(current: current, history: history, estimated1RM: estimated1RM)
         case .setsReps:
-            return bodyweightIntensity(current: current, history: history)
+            signals = bodyweightSignals(current: current, history: history)
         case .durationDistance:
-            return cardioIntensity(current: current, history: history)
+            signals = cardioSignals(current: current, history: history)
         case .durationIntensity:
-            return flexibilityIntensity(current: current, history: history)
+            signals = flexibilitySignals(current: current, history: history)
         case .roundsBased:
-            return roundsIntensity(current: current, history: history)
+            signals = roundsSignals(current: current, history: history)
         }
+        return buildResult(signals: signals, current: current)
     }
 
-    // MARK: - Strength (setsRepsWeight)
+    // MARK: - Signal Extraction per Exercise Type
 
-    private func strengthIntensity(
+    private func strengthSignals(
         current: IntensitySessionInput,
         history: [IntensitySessionInput],
         estimated1RM: Double?
-    ) -> WorkoutIntensityResult? {
+    ) -> (primary: Double?, volume: Double?, method: IntensityMethod)? {
         let workingSets = validWorkingSets(from: current.sets)
         let weights = workingSets.compactMap(\.weight).filter { Limits.weightRange.contains($0) }
-        guard !weights.isEmpty else { return rpeFallback(current: current) }
+        guard !weights.isEmpty else { return nil }
 
-        // Primary: average working weight as % of 1RM
         var primarySignal: Double?
         if let oneRM = estimated1RM, oneRM > 0 {
             let avgWeight = weights.reduce(0, +) / Double(weights.count)
-            guard avgWeight.isFinite else { return rpeFallback(current: current) }
-            let ratio = avgWeight / oneRM
-            primarySignal = clamp01(ratio)
+            guard avgWeight.isFinite else { return nil }
+            primarySignal = clamp01(avgWeight / oneRM)
         }
 
-        // Volume: session volume vs history average
         let volumeSignal = volumeRatio(current: current, history: history)
-
-        // RPE
-        let rpeSignal = normalizedRPE(current.rpe)
-
-        if primarySignal == nil && volumeSignal == nil {
-            return rpeFallback(current: current)
-        }
-
-        let score = combineSignals(primary: primarySignal, volume: volumeSignal, rpe: rpeSignal)
-        guard let score else { return rpeFallback(current: current) }
-
-        return WorkoutIntensityResult(
-            level: WorkoutIntensityLevel(rawScore: score),
-            rawScore: score,
-            detail: WorkoutIntensityDetail(
-                primarySignal: primarySignal,
-                volumeSignal: volumeSignal,
-                rpeSignal: rpeSignal,
-                method: primarySignal != nil ? .oneRMBased : .repsPercentile
-            )
-        )
+        return (primarySignal, volumeSignal, primarySignal != nil ? .oneRMBased : .repsPercentile)
     }
 
-    // MARK: - Bodyweight (setsReps)
-
-    private func bodyweightIntensity(
+    private func bodyweightSignals(
         current: IntensitySessionInput,
         history: [IntensitySessionInput]
-    ) -> WorkoutIntensityResult? {
+    ) -> (primary: Double?, volume: Double?, method: IntensityMethod)? {
         let currentReps = totalValidReps(from: current.sets)
-        guard currentReps > 0 else { return rpeFallback(current: current) }
+        guard currentReps > 0 else { return nil }
 
-        // Primary: reps percentile in history
         let historyReps = history.map { totalValidReps(from: $0.sets) }.filter { $0 > 0 }
-        let primarySignal: Double? = percentile(value: Double(currentReps), in: historyReps.map(Double.init))
+        let primarySignal = percentile(value: Double(currentReps), in: historyReps.map(Double.init))
 
-        // Volume: total reps vs avg
         let volumeSignal: Double? = {
             guard !historyReps.isEmpty else { return nil }
             let avg = Double(historyReps.reduce(0, +)) / Double(historyReps.count)
@@ -147,40 +122,16 @@ struct WorkoutIntensityService: Sendable {
             return clamp01(Double(currentReps) / avg)
         }()
 
-        let rpeSignal = normalizedRPE(current.rpe)
-
-        if primarySignal == nil && volumeSignal == nil {
-            return rpeFallback(current: current)
-        }
-
-        let score = combineSignals(primary: primarySignal, volume: volumeSignal, rpe: rpeSignal)
-        guard let score else { return rpeFallback(current: current) }
-
-        return WorkoutIntensityResult(
-            level: WorkoutIntensityLevel(rawScore: score),
-            rawScore: score,
-            detail: WorkoutIntensityDetail(
-                primarySignal: primarySignal,
-                volumeSignal: volumeSignal,
-                rpeSignal: rpeSignal,
-                method: .repsPercentile
-            )
-        )
+        return (primarySignal, volumeSignal, .repsPercentile)
     }
 
-    // MARK: - Cardio (durationDistance)
-
-    private func cardioIntensity(
+    private func cardioSignals(
         current: IntensitySessionInput,
         history: [IntensitySessionInput]
-    ) -> WorkoutIntensityResult? {
-        // Pace = duration / distance (lower = faster = harder)
+    ) -> (primary: Double?, volume: Double?, method: IntensityMethod)? {
         let currentPace = sessionPace(from: current.sets)
-        guard let currentPace, currentPace > 0, currentPace.isFinite else {
-            return rpeFallback(current: current)
-        }
+        guard let currentPace, currentPace > 0, currentPace.isFinite else { return nil }
 
-        // Primary: inverted pace percentile (faster = higher intensity)
         let historyPaces = history.compactMap { sessionPace(from: $0.sets) }
             .filter { $0 > 0 && $0.isFinite }
         let primarySignal: Double? = {
@@ -189,34 +140,13 @@ struct WorkoutIntensityService: Sendable {
         }()
 
         let volumeSignal = durationVolumeSignal(current: current, history: history)
-        let rpeSignal = normalizedRPE(current.rpe)
-
-        if primarySignal == nil && volumeSignal == nil {
-            return rpeFallback(current: current)
-        }
-
-        let score = combineSignals(primary: primarySignal, volume: volumeSignal, rpe: rpeSignal)
-        guard let score else { return rpeFallback(current: current) }
-
-        return WorkoutIntensityResult(
-            level: WorkoutIntensityLevel(rawScore: score),
-            rawScore: score,
-            detail: WorkoutIntensityDetail(
-                primarySignal: primarySignal,
-                volumeSignal: volumeSignal,
-                rpeSignal: rpeSignal,
-                method: .pacePercentile
-            )
-        )
+        return (primarySignal, volumeSignal, .pacePercentile)
     }
 
-    // MARK: - Flexibility (durationIntensity)
-
-    private func flexibilityIntensity(
+    private func flexibilitySignals(
         current: IntensitySessionInput,
         history: [IntensitySessionInput]
-    ) -> WorkoutIntensityResult? {
-        // Primary: average manual intensity across sets
+    ) -> (primary: Double?, volume: Double?, method: IntensityMethod)? {
         let intensities = current.sets
             .compactMap(\.manualIntensity)
             .filter { Limits.manualIntensityRange.contains($0) }
@@ -228,58 +158,49 @@ struct WorkoutIntensityService: Sendable {
         }()
 
         let volumeSignal = durationVolumeSignal(current: current, history: history)
-        let rpeSignal = normalizedRPE(current.rpe)
-
-        if primarySignal == nil && volumeSignal == nil {
-            return rpeFallback(current: current)
-        }
-
-        let score = combineSignals(primary: primarySignal, volume: volumeSignal, rpe: rpeSignal)
-        guard let score else { return rpeFallback(current: current) }
-
-        return WorkoutIntensityResult(
-            level: WorkoutIntensityLevel(rawScore: score),
-            rawScore: score,
-            detail: WorkoutIntensityDetail(
-                primarySignal: primarySignal,
-                volumeSignal: volumeSignal,
-                rpeSignal: rpeSignal,
-                method: .manualIntensity
-            )
-        )
+        return (primarySignal, volumeSignal, .manualIntensity)
     }
 
-    // MARK: - Rounds-Based (HIIT)
-
-    private func roundsIntensity(
+    private func roundsSignals(
         current: IntensitySessionInput,
         history: [IntensitySessionInput]
-    ) -> WorkoutIntensityResult? {
-        // Primary: completed set count percentile
+    ) -> (primary: Double?, volume: Double?, method: IntensityMethod)? {
         let currentCount = current.sets.filter { validSet($0) }.count
-        guard currentCount > 0 else { return rpeFallback(current: current) }
+        guard currentCount > 0 else { return nil }
 
         let historyCounts = history.map { $0.sets.filter { self.validSet($0) }.count }.filter { $0 > 0 }
         let primarySignal = percentile(value: Double(currentCount), in: historyCounts.map(Double.init))
 
         let volumeSignal = durationVolumeSignal(current: current, history: history)
+        return (primarySignal, volumeSignal, .roundsPercentile)
+    }
+
+    // MARK: - Common Result Builder (Correction #148)
+
+    /// Combines extracted signals into a result, with RPE fallback when both primary and volume are nil.
+    private func buildResult(
+        signals: (primary: Double?, volume: Double?, method: IntensityMethod)?,
+        current: IntensitySessionInput
+    ) -> WorkoutIntensityResult? {
+        guard let signals else { return rpeFallback(current: current) }
+
         let rpeSignal = normalizedRPE(current.rpe)
 
-        if primarySignal == nil && volumeSignal == nil {
+        if signals.primary == nil && signals.volume == nil {
             return rpeFallback(current: current)
         }
 
-        let score = combineSignals(primary: primarySignal, volume: volumeSignal, rpe: rpeSignal)
+        let score = combineSignals(primary: signals.primary, volume: signals.volume, rpe: rpeSignal)
         guard let score else { return rpeFallback(current: current) }
 
         return WorkoutIntensityResult(
             level: WorkoutIntensityLevel(rawScore: score),
             rawScore: score,
             detail: WorkoutIntensityDetail(
-                primarySignal: primarySignal,
-                volumeSignal: volumeSignal,
+                primarySignal: signals.primary,
+                volumeSignal: signals.volume,
                 rpeSignal: rpeSignal,
-                method: .roundsPercentile
+                method: signals.method
             )
         )
     }
