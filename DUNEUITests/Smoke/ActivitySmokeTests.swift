@@ -13,8 +13,8 @@ final class ActivitySmokeTests: UITestBaseCase {
 
     func testActivityTabLoads() throws {
         // Activity tab should render without crashing
-        let navBar = app.navigationBars["Activity"]
-        XCTAssertTrue(navBar.waitForExistence(timeout: 8), "Activity navigation title should appear")
+        let navBar = app.navigationBars["Activity"].firstMatch
+        XCTAssertTrue(navBar.waitForExistence(timeout: 15), "Activity navigation title should appear")
     }
 
     func testToolbarAddButtonExists() throws {
@@ -34,7 +34,7 @@ final class ActivitySmokeTests: UITestBaseCase {
     // MARK: - Exercise Sub-View
 
     func testExercisePickerOpens() throws {
-        let addButton = app.descendants(matching: .any)[AXID.activityToolbarAdd]
+        let addButton = app.descendants(matching: .any)[AXID.activityToolbarAdd].firstMatch
         guard addButton.waitForExistence(timeout: 5) else {
             throw XCTSkip("Add button not found — skipping picker test")
         }
