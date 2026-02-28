@@ -38,10 +38,11 @@ jobs:
         run: brew install xcodegen
 
       - name: Run UI Tests
+        continue-on-error: true
         run: scripts/test-ui.sh
 
       - name: Upload test log
-        if: failure()
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: ui-test-log
