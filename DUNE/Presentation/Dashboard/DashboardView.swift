@@ -64,8 +64,15 @@ struct DashboardView: View {
                         }
 
                         // Coaching
-                        if let coachingMessage = viewModel.coachingMessage {
+                        if let insight = viewModel.focusInsight {
+                            TodayCoachingCard(insight: insight)
+                        } else if let coachingMessage = viewModel.coachingMessage {
                             TodayCoachingCard(message: coachingMessage)
+                        }
+
+                        // Insight Cards
+                        if !viewModel.insightCards.isEmpty {
+                            insightCardsSection
                         }
 
                         // Pinned Metrics
@@ -189,6 +196,18 @@ struct DashboardView: View {
             .padding(.horizontal, DS.Spacing.xs)
 
             cardGrid(cards: viewModel.pinnedCards)
+        }
+    }
+
+    private var insightCardsSection: some View {
+        VStack(spacing: DS.Spacing.sm) {
+            ForEach(viewModel.insightCards) { card in
+                InsightCardView(data: card) {
+                    withAnimation(DS.Animation.standard) {
+                        viewModel.dismissInsightCard(id: card.id)
+                    }
+                }
+            }
         }
     }
 

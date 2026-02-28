@@ -397,7 +397,7 @@ struct DashboardViewModelTests {
         #expect(vm.conditionCards.contains(where: { $0.category == .hrv }) == false)
     }
 
-    @Test("Coaching message is generated even when score is unavailable")
+    @Test("Coaching insight and message are generated even when score is unavailable")
     func coachingWithoutScore() async {
         let vm = DashboardViewModel(
             hrvService: MockHRVService(),
@@ -409,8 +409,11 @@ struct DashboardViewModelTests {
 
         await vm.loadData()
 
+        // focusInsight should be populated from CoachingEngine (Korean default messages)
+        #expect(vm.focusInsight != nil)
+        // coachingMessage derives from focusInsight?.message
         #expect(vm.coachingMessage != nil)
-        #expect(vm.coachingMessage?.contains("No score yet") == true)
+        #expect(!vm.coachingMessage!.isEmpty)
     }
 
     @Test("HRV baseline delta is computed when enough samples exist")
