@@ -116,16 +116,20 @@ struct WorkoutStreakServiceTests {
 
     @Test("Monthly count only includes current month")
     func monthlyCountCurrentMonth() {
-        let today = Date()
-        let thisMonth = [
-            workoutDay(daysAgo: 0),
-            workoutDay(daysAgo: 1),
+        // Use a fixed mid-month reference date to avoid 1st-of-month boundary issues
+        let refDate = calendar.date(from: DateComponents(year: 2026, month: 6, day: 15))!
+        let day1 = refDate
+        let day2 = calendar.date(byAdding: .day, value: -1, to: refDate)!
+
+        let thisMonth: [WorkoutStreakService.WorkoutDay] = [
+            .init(date: day1, durationMinutes: 30),
+            .init(date: day2, durationMinutes: 30),
         ]
         // Last month workout
-        let lastMonthDate = calendar.date(byAdding: .month, value: -1, to: today) ?? today
+        let lastMonthDate = calendar.date(byAdding: .month, value: -1, to: refDate)!
         let lastMonth = WorkoutStreakService.WorkoutDay(date: lastMonthDate, durationMinutes: 30)
 
-        let result = WorkoutStreakService.calculate(from: thisMonth + [lastMonth], referenceDate: today)
+        let result = WorkoutStreakService.calculate(from: thisMonth + [lastMonth], referenceDate: refDate)
         #expect(result.monthlyCount == 2)
     }
 
