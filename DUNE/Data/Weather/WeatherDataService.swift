@@ -11,11 +11,16 @@ protocol WeatherFetching: Sendable {
 /// ViewModels depend on this protocol to avoid CoreLocation import.
 protocol WeatherProviding: Sendable {
     func fetchCurrentWeather() async throws -> WeatherSnapshot
+    /// Request location permission from the user. Should be called from an explicit user action.
+    func requestLocationPermission() async
+    /// Whether location permission has been determined (denied or authorized).
+    var isLocationPermissionDetermined: Bool { get async }
 }
 
 enum WeatherError: Error, Sendable {
     case locationNotAuthorized
     case locationRequestInFlight
+    case locationTimeout
 }
 
 /// Combines LocationService + WeatherDataService behind a single async call.
@@ -33,19 +38,24 @@ final class WeatherProvider: WeatherProviding, Sendable {
 
     func fetchCurrentWeather() async throws -> WeatherSnapshot {
         let authorized = await locationService.isAuthorized
-        let denied = await locationService.isDenied
 
-        if !authorized {
-            if denied { throw WeatherError.locationNotAuthorized }
-            // Permission not yet determined — request it.
-            // The system dialog is async; this attempt will fail.
-            // Next loadData() (after user grants) will succeed.
-            await locationService.requestPermission()
+        guard authorized else {
             throw WeatherError.locationNotAuthorized
         }
 
         let location = try await locationService.requestLocation()
         return try await weatherService.fetchWeather(for: location)
+    }
+
+    func requestLocationPermission() async {
+        await locationService.requestPermission()
+    }
+
+    var isLocationPermissionDetermined: Bool {
+        get async {
+            let status = await locationService.authorizationStatus
+            return status != .notDetermined
+        }
     }
 }
 

@@ -79,7 +79,7 @@ final class LifeViewModel {
             habit.weeklyTargetDays = days
         }
 
-        isSaving = false
+        // Caller (View) must call didFinishSaving() after SwiftData auto-save (Correction #43)
         return true
     }
 

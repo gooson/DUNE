@@ -140,7 +140,10 @@ struct WeatherCard: View {
 // MARK: - Placeholder (weather unavailable)
 
 /// Compact card shown when weather data is not available.
+/// Tapping triggers location permission request when permission is undetermined.
 struct WeatherCardPlaceholder: View {
+    var onRequestPermission: (() -> Void)?
+
     var body: some View {
         InlineCard {
             HStack(spacing: DS.Spacing.sm) {
@@ -159,5 +162,8 @@ struct WeatherCardPlaceholder: View {
             }
         }
         .accessibilityLabel("날씨 정보 없음")
+        .onTapGesture {
+            onRequestPermission?()
+        }
     }
 }

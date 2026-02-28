@@ -105,7 +105,7 @@
 ## Correction Log
 
 > 안정화된 패턴은 `.claude/rules/`로 졸업되었습니다.
-> 전체 이력(#1~#182)은 `docs/corrections-archive.md`에 보존됩니다.
+> 전체 이력(#1~#184)은 `docs/corrections-archive.md`에 보존됩니다.
 > 아래는 rules로 졸업하지 않은 **프로젝트 특화** 교정 사항입니다.
 
 <!-- Rules 졸업 현황:
@@ -207,3 +207,5 @@
 - **Cross-VM static 프로퍼티 참조 금지 -> 중립 enum** (#73)
 - **UserDefaults: bundle prefix + garbage collection** (#75-76)
 - **`personalizedPopular(limit:)`에 실제 필요 수량 전달** (#174)
+- **`@Query` fetchLimit → `Query(FetchDescriptor)` init 사용** (매크로 직접 파라미터 미지원) (#183)
+- **Swift 6 `@MainActor` + `withThrowingTaskGroup` 내 `@MainActor addTask` 금지** → continuation 내부 Task timeout 패턴 (#184)

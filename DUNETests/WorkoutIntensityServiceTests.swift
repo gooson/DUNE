@@ -340,15 +340,17 @@ struct WorkoutIntensityServiceTests {
 
     // MARK: - Percentile Minimum Count
 
-    @Test("Percentile returns nil with only 1 history session")
+    @Test("Percentile nil with 1 history session but volume signal still works")
     func percentileMinimumCount() {
         let current = session(type: .setsReps, sets: [bodyweightSet(reps: 30)])
         let history = [
             session(type: .setsReps, sets: [bodyweightSet(reps: 20)], daysAgo: 2),
         ]
         let result = service.calculateIntensity(current: current, history: history)
-        // With < 2 history sessions, percentile returns nil → RPE fallback → nil
-        #expect(result == nil)
+        // Percentile needs 2+ history sessions → nil, but volume ratio (30/20) is valid
+        #expect(result != nil)
+        #expect(result?.detail.primarySignal == nil)
+        #expect(result?.detail.volumeSignal != nil)
     }
 
     @Test("Percentile works with 2+ history sessions")

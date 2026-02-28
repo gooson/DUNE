@@ -34,6 +34,7 @@ final class LocationService: NSObject, CLLocationManagerDelegate, Sendable {
 
     /// Requests a single location update. Returns cached location if fresh (< 15min).
     /// Throws if a request is already in flight (prevents continuation leak).
+    /// Times out after 30 seconds to prevent indefinite hang in poor-signal environments.
     func requestLocation() async throws -> CLLocation {
         // Return cached if fresh enough
         if let cached = currentLocation,
@@ -46,8 +47,16 @@ final class LocationService: NSObject, CLLocationManagerDelegate, Sendable {
         }
 
         return try await withCheckedThrowingContinuation { continuation in
-            locationContinuation = continuation
-            manager.requestLocation()
+            self.locationContinuation = continuation
+            self.manager.requestLocation()
+
+            // Timeout after 30 seconds — @MainActor serializes access with delegate callbacks
+            Task { @MainActor [weak self] in
+                try? await Task.sleep(for: .seconds(30))
+                guard let self, self.locationContinuation != nil else { return }
+                self.locationContinuation?.resume(throwing: WeatherError.locationTimeout)
+                self.locationContinuation = nil
+            }
         }
     }
 
