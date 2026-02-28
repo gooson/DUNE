@@ -5,6 +5,7 @@ struct WorkoutCompletionSheet: View {
     let shareImage: UIImage?
     let exerciseName: String
     let setCount: Int
+    let autoIntensity: WorkoutIntensityResult?
     let onDismiss: (Int?) -> Void
 
     @State private var showCelebration = false
@@ -29,6 +30,12 @@ struct WorkoutCompletionSheet: View {
                         .foregroundStyle(.secondary)
                 }
                 .padding(.top, DS.Spacing.lg)
+
+                // Auto intensity badge
+                if let intensity = autoIntensity {
+                    IntensityBadgeView(intensity: intensity)
+                        .padding(.horizontal, DS.Spacing.lg)
+                }
 
                 Spacer()
 

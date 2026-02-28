@@ -42,6 +42,7 @@ final class ExerciseHistoryViewModel {
         let totalReps: Int
         let estimatedOneRM: Double?
         let duration: TimeInterval
+        let autoIntensity: Double?
     }
 
     init(exerciseDefinitionID: String, exerciseName: String) {
@@ -90,7 +91,8 @@ final class ExerciseHistoryViewModel {
                 totalVolume: totalVolume,
                 totalReps: reps.reduce(0, +),
                 estimatedOneRM: bestOneRM,
-                duration: record.duration
+                duration: record.duration,
+                autoIntensity: record.autoIntensityRaw
             )
         }
 

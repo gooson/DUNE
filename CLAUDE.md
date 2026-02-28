@@ -428,3 +428,11 @@
 180. **효과 확인된 수정은 즉시 커밋**: 테스트에서 동작이 확인된 fix를 커밋하지 않으면 context 소실 시 작업 반복. `사용자 확인 → 즉시 git commit` 습관화
 181. **ScrollView에 동적 content size 요소 있으면 `.scrollBounceBehavior(.basedOnSize)` 적용**: LazyVGrid, GeometryReader 등 content size가 스크롤 중 변할 수 있는 요소가 ScrollView 내부에 있으면 방어적으로 적용
 182. **eager grid ForEach는 stable identity 필수**: `id: \.self`(Int index)는 배열 교체 시 SwiftUI diffing 실패. `id: \.left.id` 등 데이터 고유 식별자를 사용하여 row identity 보장
+
+### 2026-02-28: Auto Workout Intensity 리뷰 교정
+
+183. **Percentile 계산 최소 샘플 수 2개 필수**: 1건 히스토리에서 percentile은 항상 0.0 반환하여 PR 세션도 "Very Light"로 분류됨. `guard valid.count >= minimumHistorySessions` 후 nil 반환으로 RPE fallback 유도
+184. **`@Model`에 Domain enum 참조 금지**: `ExerciseRecord.autoIntensityLevel`처럼 Data 레이어 모델이 Domain enum(`WorkoutIntensityLevel`)을 직접 생성하면 레이어 결합 발생. raw `Double?`만 저장하고 Presentation에서 변환
+185. **CloudKit 숫자 필드 저장 시 `isFinite + 범위` 이중 검증**: `autoIntensityRaw`에 `score.isFinite && (0...1).contains(score)` 확인 후 할당. `clamp01` 내부 검증만 신뢰하면 미래 코드 경로에서 범위 이탈 가능
+186. **3곳 이상 동일 duration 기반 signal은 즉시 helper 추출**: cardio/flexibility/rounds가 동일한 `totalValidDuration → history avg → ratio` 블록을 인라인 사용하면 버그 전파 위험. `durationVolumeSignal()` 헬퍼로 통합 (Correction #37 적용)
+187. **View body에서 Color 4회+ 접근 시 `let` 바인딩**: `intensity.level.color`가 switch를 4번 실행. `let levelColor = ...` 한 번 resolve 후 재사용. Correction #83/#105 확장
