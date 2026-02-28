@@ -3,10 +3,11 @@ import XCTest
 // MARK: - Accessibility Identifier Constants (3-tier: {tab}-{section}-{element})
 
 enum AXID {
-    // MARK: - Dashboard Tab
+    // MARK: - Dashboard Tab (active: hero, settings, pinned-edit)
     static let dashboardHeroCondition = "dashboard-hero-condition"
     static let dashboardToolbarSettings = "dashboard-toolbar-settings"
     static let dashboardPinnedEdit = "dashboard-pinned-edit"
+    // Planned — identifiers not yet applied to views
     static let dashboardPinnedGrid = "dashboard-pinned-grid"
     static let dashboardWeatherCard = "dashboard-weather-card"
     static let dashboardCoachingCard = "dashboard-coaching-card"
@@ -14,9 +15,10 @@ enum AXID {
     static let dashboardSectionActivity = "dashboard-section-activity"
     static let dashboardSectionBody = "dashboard-section-body"
 
-    // MARK: - Activity Tab
+    // MARK: - Activity Tab (active: hero, toolbar-add)
     static let activityHeroReadiness = "activity-hero-readiness"
     static let activityToolbarAdd = "activity-toolbar-add"
+    // Planned — identifiers not yet applied to views
     static let activitySectionMuscleMap = "activity-section-musclemap"
     static let activitySectionWeeklyStats = "activity-section-weeklystats"
     static let activitySectionVolume = "activity-section-volume"
@@ -25,23 +27,26 @@ enum AXID {
     static let activitySectionExerciseMix = "activity-section-exercisemix"
     static let activitySectionRecent = "activity-section-recent"
 
-    // MARK: - Wellness Tab
+    // MARK: - Wellness Tab (active: hero, toolbar-add)
     static let wellnessHeroScore = "wellness-hero-score"
     static let wellnessToolbarAdd = "wellness-toolbar-add"
+    // Planned — identifiers not yet applied to views
     static let wellnessSectionPhysical = "wellness-section-physical"
     static let wellnessSectionActive = "wellness-section-active"
     static let wellnessSectionInjury = "wellness-section-injury"
     static let wellnessLinkBodyHistory = "wellness-link-bodyhistory"
     static let wellnessLinkInjuryHistory = "wellness-link-injuryhistory"
 
-    // MARK: - Life Tab
+    // MARK: - Life Tab (active: hero, toolbar-add)
     static let lifeHeroProgress = "life-hero-progress"
     static let lifeToolbarAdd = "life-toolbar-add"
+    // Planned — identifier not yet applied to view
     static let lifeSectionHabits = "life-section-habits"
 
-    // MARK: - Settings
-    static let settingsRowWorkoutDefaults = "settings-row-workoutdefaults"
+    // MARK: - Settings (active: exercise-defaults)
     static let settingsRowExerciseDefaults = "settings-row-exercisedefaults"
+    // Planned — identifiers not yet applied to views
+    static let settingsRowWorkoutDefaults = "settings-row-workoutdefaults"
     static let settingsRowAppearance = "settings-row-appearance"
     static let settingsRowDataPrivacy = "settings-row-dataprivacy"
     static let settingsRowAbout = "settings-row-about"

@@ -47,7 +47,7 @@ final class LifeSmokeTests: UITestBaseCase {
         }
         addButton.tap()
 
-        let cancelButton = app.buttons["Cancel"]
+        let cancelButton = app.descendants(matching: .any)[AXID.habitFormCancel]
         guard cancelButton.waitForExistence(timeout: 3) else { return }
         cancelButton.tap()
 

@@ -60,7 +60,7 @@ class UITestBaseCase: XCTestCase {
 
     func navigateToSettings() {
         navigateToDashboard()
-        let settingsButton = app.buttons["Settings"]
+        let settingsButton = app.descendants(matching: .any)[AXID.dashboardToolbarSettings]
         if settingsButton.waitForExistence(timeout: 5) {
             settingsButton.tap()
         }

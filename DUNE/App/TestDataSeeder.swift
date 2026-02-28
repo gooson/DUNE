@@ -1,3 +1,4 @@
+#if DEBUG
 import SwiftData
 import Foundation
 
@@ -35,21 +36,19 @@ enum TestDataSeeder {
                 primaryMuscles: exercise.muscles,
                 equipment: .barbell
             )
+            context.insert(record)
 
-            // Add workout sets
-            var sets: [WorkoutSet] = []
+            // Add workout sets after record is in context
             for setNum in 1...3 {
                 let set = WorkoutSet(
                     setNumber: setNum,
                     weight: Double(60 + index * 20),
-                    reps: 10 - index,
+                    reps: Swift.max(1, 10 - index),
                     isCompleted: true
                 )
-                sets.append(set)
+                context.insert(set)
+                record.sets?.append(set)
             }
-            record.sets = sets
-
-            context.insert(record)
         }
     }
 
@@ -114,9 +113,10 @@ enum TestDataSeeder {
             // Add a log for today for the first habit
             if index == 0 {
                 let log = HabitLog(date: today, value: 1.0, completedAt: Date())
-                log.habitDefinition = definition
                 context.insert(log)
+                log.habitDefinition = definition
             }
         }
     }
 }
+#endif
