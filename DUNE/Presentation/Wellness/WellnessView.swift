@@ -32,6 +32,7 @@ struct WellnessView: View {
                     .id(ScrollAnchor.top)
 
                 VStack(spacing: isRegular ? DS.Spacing.xxl : DS.Spacing.xl) {
+                    // Note: injuryRecords check omitted — injuries live in isolated @Query child view
                     if viewModel.isLoading &&
                         viewModel.physicalCards.isEmpty &&
                         viewModel.activeCards.isEmpty &&
@@ -80,7 +81,7 @@ struct WellnessView: View {
                                 icon: "figure.stand",
                                 iconColor: DS.Color.body
                             ) {
-                                twoColumnGrid(cards: viewModel.physicalCards)
+                                cardGrid(cards: viewModel.physicalCards)
                             }
                         }
 
@@ -91,7 +92,7 @@ struct WellnessView: View {
                                 icon: "heart.text.square",
                                 iconColor: DS.Color.vitals
                             ) {
-                                twoColumnGrid(cards: viewModel.activeCards)
+                                cardGrid(cards: viewModel.activeCards)
                             }
                         }
 
@@ -258,20 +259,21 @@ struct WellnessView: View {
         }
     }
 
-    /// Eager two-column grid — avoids LazyVGrid lazy-loading layout recalculation during scroll bounce.
-    private func twoColumnGrid(cards: [VitalCardData]) -> some View {
-        VStack(spacing: DS.Spacing.md) {
-            ForEach(0..<((cards.count + 1) / 2), id: \.self) { rowIndex in
-                let leftIndex = rowIndex * 2
-                let rightIndex = leftIndex + 1
+    /// Eager two-column grid — avoids LazyVGrid layout recalculation during scroll bounce.
+    private func cardGrid(cards: [VitalCardData]) -> some View {
+        let rows: [(left: VitalCardData, right: VitalCardData?)] = stride(from: 0, to: cards.count, by: 2).map { i in
+            (left: cards[i], right: i + 1 < cards.count ? cards[i + 1] : nil)
+        }
+        return VStack(spacing: DS.Spacing.md) {
+            ForEach(rows, id: \.left.id) { row in
                 HStack(spacing: DS.Spacing.md) {
-                    NavigationLink(value: cards[leftIndex].metric) {
-                        VitalCard(data: cards[leftIndex])
+                    NavigationLink(value: row.left.metric) {
+                        VitalCard(data: row.left)
                     }
                     .buttonStyle(.plain)
-                    if rightIndex < cards.count {
-                        NavigationLink(value: cards[rightIndex].metric) {
-                            VitalCard(data: cards[rightIndex])
+                    if let right = row.right {
+                        NavigationLink(value: right.metric) {
+                            VitalCard(data: right)
                         }
                         .buttonStyle(.plain)
                     } else {
@@ -304,9 +306,8 @@ private struct WellnessInjuryBannerView: View {
     let onEdit: (InjuryRecord) -> Void
     let onAdd: () -> Void
 
-    private var activeInjuries: [InjuryRecord] { injuryRecords.filter(\.isActive) }
-
     var body: some View {
+        let activeInjuries = injuryRecords.filter(\.isActive)
         StandardCard {
             VStack(alignment: .leading, spacing: DS.Spacing.sm) {
                 HStack(spacing: DS.Spacing.xs) {
