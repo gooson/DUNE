@@ -329,7 +329,8 @@ struct WorkoutSessionView: View {
     }
 
     private func durationDistanceInput(set: Binding<EditableSet>) -> some View {
-        VStack(spacing: DS.Spacing.lg) {
+        let unit = viewModel.exercise.cardioSecondaryUnit ?? .km
+        return VStack(spacing: DS.Spacing.lg) {
             stepperField(
                 label: "MINUTES",
                 value: set.duration,
@@ -341,19 +342,34 @@ struct WorkoutSessionView: View {
                 ]
             )
 
-            Divider()
-                .padding(.horizontal, DS.Spacing.xl)
+            if let config = unit.stepperConfig {
+                Divider()
+                    .padding(.horizontal, DS.Spacing.xl)
 
-            stepperField(
-                label: "KM",
-                value: set.distance,
-                placeholder: "0",
-                keyboardType: .decimalPad,
-                stepButtons: [
-                    ("-0.1", { adjustDecimalValue(set.distance, by: -0.1, min: 0, max: 100) }),
-                    ("+0.1", { adjustDecimalValue(set.distance, by: 0.1, min: 0, max: 100) })
-                ]
-            )
+                if unit.usesDistanceField {
+                    stepperField(
+                        label: config.label,
+                        value: set.distance,
+                        placeholder: "0",
+                        keyboardType: unit.keyboardType,
+                        stepButtons: [
+                            ("-\(config.step.formatted())", { adjustDecimalValue(set.distance, by: -config.step, min: config.min, max: config.max) }),
+                            ("+\(config.step.formatted())", { adjustDecimalValue(set.distance, by: config.step, min: config.min, max: config.max) })
+                        ]
+                    )
+                } else if unit.usesRepsField {
+                    stepperField(
+                        label: config.label,
+                        value: set.reps,
+                        placeholder: "0",
+                        keyboardType: .numberPad,
+                        stepButtons: [
+                            ("-\(Int(config.step))", { adjustIntValue(set.reps, by: -Int(config.step), min: Int(config.min), max: Int(config.max)) }),
+                            ("+\(Int(config.step))", { adjustIntValue(set.reps, by: Int(config.step), min: Int(config.min), max: Int(config.max)) })
+                        ]
+                    )
+                }
+            }
         }
     }
 

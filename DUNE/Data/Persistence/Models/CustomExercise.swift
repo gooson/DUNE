@@ -12,6 +12,7 @@ final class CustomExercise {
     var equipmentRaw: String = Equipment.bodyweight.rawValue
     var metValue: Double = 3.5
     var customCategoryName: String?
+    var cardioSecondaryUnitRaw: String?
     var createdAt: Date = Date()
 
     /// Valid MET value range (physiological limits: 0.9 resting to ~30 sprint)
@@ -25,7 +26,8 @@ final class CustomExercise {
         secondaryMuscles: [MuscleGroup] = [],
         equipment: Equipment,
         metValue: Double = 3.5,
-        customCategoryName: String? = nil
+        customCategoryName: String? = nil,
+        cardioSecondaryUnit: CardioSecondaryUnit? = nil
     ) {
         self.id = UUID()
         self.name = String(name.prefix(100))
@@ -36,6 +38,7 @@ final class CustomExercise {
         self.equipmentRaw = equipment.rawValue
         self.metValue = min(max(metValue, Self.metValueRange.lowerBound), Self.metValueRange.upperBound)
         self.customCategoryName = customCategoryName.map { String($0.prefix(50)) }
+        self.cardioSecondaryUnitRaw = cardioSecondaryUnit?.rawValue
         self.createdAt = Date()
     }
 
@@ -61,6 +64,10 @@ final class CustomExercise {
         Equipment(rawValue: equipmentRaw) ?? .bodyweight
     }
 
+    var cardioSecondaryUnit: CardioSecondaryUnit? {
+        cardioSecondaryUnitRaw.flatMap { CardioSecondaryUnit(rawValue: $0) }
+    }
+
     /// Convert to ExerciseDefinition for use in workout sessions
     func toDefinition() -> ExerciseDefinition {
         ExerciseDefinition(
@@ -73,7 +80,8 @@ final class CustomExercise {
             secondaryMuscles: secondaryMuscles,
             equipment: equipment,
             metValue: metValue,
-            customCategoryName: customCategoryName
+            customCategoryName: customCategoryName,
+            cardioSecondaryUnit: cardioSecondaryUnit
         )
     }
 }

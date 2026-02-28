@@ -14,6 +14,7 @@ struct CreateCustomExerciseView: View {
     @State private var selectedInputType: ExerciseInputType = .setsRepsWeight
     @State private var selectedMuscles: Set<MuscleGroup> = []
     @State private var selectedEquipment: Equipment = .bodyweight
+    @State private var selectedCardioUnit: CardioSecondaryUnit = .km
     @State private var validationError: String?
 
     var body: some View {
@@ -92,6 +93,16 @@ struct CreateCustomExerciseView: View {
                         Text("Duration + Distance").tag(ExerciseInputType.durationDistance)
                         Text("Duration + Intensity").tag(ExerciseInputType.durationIntensity)
                         Text("Rounds Based").tag(ExerciseInputType.roundsBased)
+                    }
+
+                    if selectedInputType == .durationDistance {
+                        Picker("Distance Unit", selection: $selectedCardioUnit) {
+                            Text("Kilometers").tag(CardioSecondaryUnit.km)
+                            Text("Meters").tag(CardioSecondaryUnit.meters)
+                            Text("Floors").tag(CardioSecondaryUnit.floors)
+                            Text("Count").tag(CardioSecondaryUnit.count)
+                            Text("None (time only)").tag(CardioSecondaryUnit.none)
+                        }
                     }
                 }
 
@@ -186,7 +197,8 @@ struct CreateCustomExerciseView: View {
             inputType: selectedInputType,
             primaryMuscles: Array(selectedMuscles),
             equipment: selectedEquipment,
-            customCategoryName: selectedUserCategory?.name
+            customCategoryName: selectedUserCategory?.name,
+            cardioSecondaryUnit: selectedInputType == .durationDistance ? selectedCardioUnit : nil
         )
         modelContext.insert(custom)
 

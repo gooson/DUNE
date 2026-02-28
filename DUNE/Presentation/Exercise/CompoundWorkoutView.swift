@@ -248,6 +248,7 @@ struct CompoundWorkoutView: View {
                     inputType: exercise.inputType,
                     previousSet: vm.previousSetInfo(for: vm.sets[index].setNumber),
                     weightUnit: weightUnit,
+                    cardioUnit: exercise.cardioSecondaryUnit,
                     onComplete: {
                         let completed = vm.toggleSetCompletion(at: index)
                         if completed {
@@ -282,9 +283,12 @@ struct CompoundWorkoutView: View {
         case .setsReps:
             Text("REPS").frame(maxWidth: 80)
         case .durationDistance:
+            let unit = exercise.cardioSecondaryUnit ?? .km
             HStack(spacing: DS.Spacing.xs) {
                 Text("MIN").frame(maxWidth: 60)
-                Text("KM").frame(maxWidth: 70)
+                if unit != .none {
+                    Text(unit.placeholder.uppercased()).frame(maxWidth: 70)
+                }
             }
         case .durationIntensity:
             HStack(spacing: DS.Spacing.xs) {

@@ -384,13 +384,25 @@ final class WorkoutSessionViewModel {
                 }
             }
             if exercise.inputType == .durationDistance {
-                let trimmed = set.distance.trimmingCharacters(in: .whitespaces)
-                if !trimmed.isEmpty {
-                    guard let dist = Double(trimmed), dist > 0, dist <= maxDistanceKm else {
-                        validationError = "Distance must be between 0.1 and \(Int(maxDistanceKm))km"
-                        return nil
+                let unit = exercise.cardioSecondaryUnit ?? .km
+                if unit.usesDistanceField {
+                    let trimmed = set.distance.trimmingCharacters(in: .whitespaces)
+                    if !trimmed.isEmpty, let range = unit.validationRange {
+                        guard let dist = Double(trimmed), range.contains(dist) else {
+                            validationError = "\(unit.placeholder.capitalized) must be between \(Int(range.lowerBound)) and \(Int(range.upperBound))"
+                            return nil
+                        }
+                    }
+                } else if unit.usesRepsField {
+                    let trimmed = set.reps.trimmingCharacters(in: .whitespaces)
+                    if !trimmed.isEmpty, let range = unit.validationRange {
+                        guard let val = Int(trimmed), Double(val) >= range.lowerBound, Double(val) <= range.upperBound else {
+                            validationError = "\(unit.placeholder.capitalized) must be between \(Int(range.lowerBound)) and \(Int(range.upperBound))"
+                            return nil
+                        }
                     }
                 }
+                // unit == .none → no secondary field validation needed
             }
             if exercise.inputType == .durationIntensity {
                 let trimmed = set.intensity.trimmingCharacters(in: .whitespaces)
@@ -454,13 +466,35 @@ final class WorkoutSessionViewModel {
             // Convert weight from display unit to internal kg
             let weightKg: Double? = trimmedWeight.isEmpty ? nil : Double(trimmedWeight).map { weightUnit.toKg($0) }
 
+            // Convert distance based on cardio secondary unit
+            let distanceKm: Double?
+            let repsValue: Int?
+
+            if exercise.inputType == .durationDistance {
+                let unit = exercise.cardioSecondaryUnit ?? .km
+                if unit.usesDistanceField {
+                    distanceKm = Double(trimmedDistance).flatMap { unit.toKm($0) }
+                    repsValue = nil
+                } else if unit.usesRepsField {
+                    distanceKm = nil
+                    repsValue = trimmedReps.isEmpty ? nil : Int(trimmedReps)
+                } else {
+                    // .none — no secondary field
+                    distanceKm = nil
+                    repsValue = nil
+                }
+            } else {
+                distanceKm = trimmedDistance.isEmpty ? nil : Double(trimmedDistance)
+                repsValue = trimmedReps.isEmpty ? nil : Int(trimmedReps)
+            }
+
             let workoutSet = WorkoutSet(
                 setNumber: editableSet.setNumber,
                 setType: editableSet.setType,
                 weight: weightKg,
-                reps: trimmedReps.isEmpty ? nil : Int(trimmedReps),
+                reps: repsValue,
                 duration: durationSeconds,
-                distance: trimmedDistance.isEmpty ? nil : Double(trimmedDistance),
+                distance: distanceKm,
                 intensity: trimmedIntensity.isEmpty ? nil : Int(trimmedIntensity),
                 isCompleted: true
             )

@@ -8,7 +8,8 @@ struct WorkoutSessionViewModelTests {
     // Helper to create a test exercise definition
     private func makeExercise(
         inputType: ExerciseInputType = .setsRepsWeight,
-        metValue: Double = 6.0
+        metValue: Double = 6.0,
+        cardioSecondaryUnit: CardioSecondaryUnit? = nil
     ) -> ExerciseDefinition {
         ExerciseDefinition(
             id: "test-bench-press",
@@ -19,7 +20,8 @@ struct WorkoutSessionViewModelTests {
             primaryMuscles: [.chest],
             secondaryMuscles: [.triceps, .shoulders],
             equipment: .barbell,
-            metValue: metValue
+            metValue: metValue,
+            cardioSecondaryUnit: cardioSecondaryUnit
         )
     }
 
@@ -278,5 +280,115 @@ struct WorkoutSessionViewModelTests {
         let record = vm.createValidatedRecord()
         #expect(record == nil)
         #expect(vm.validationError != nil)
+    }
+
+    // MARK: - Cardio Secondary Unit Tests
+
+    @Test("durationDistance with meters unit converts to km in WorkoutSet")
+    func metersConvertedToKm() {
+        let exercise = makeExercise(inputType: .durationDistance, cardioSecondaryUnit: .meters)
+        let vm = WorkoutSessionViewModel(exercise: exercise)
+        vm.sets[0].duration = "30"
+        vm.sets[0].distance = "1500"  // 1500 meters
+        vm.sets[0].isCompleted = true
+
+        let record = vm.createValidatedRecord()
+        #expect(record != nil)
+        let setDistance = record?.completedSets.first?.distance
+        #expect(setDistance == 1.5)  // 1500m = 1.5km
+    }
+
+    @Test("durationDistance with km unit stores distance as-is")
+    func kmStoredDirectly() {
+        let exercise = makeExercise(inputType: .durationDistance, cardioSecondaryUnit: .km)
+        let vm = WorkoutSessionViewModel(exercise: exercise)
+        vm.sets[0].duration = "30"
+        vm.sets[0].distance = "5.0"
+        vm.sets[0].isCompleted = true
+
+        let record = vm.createValidatedRecord()
+        #expect(record != nil)
+        #expect(record?.completedSets.first?.distance == 5.0)
+    }
+
+    @Test("durationDistance with floors unit stores in reps field")
+    func floorsStoredInReps() {
+        let exercise = makeExercise(inputType: .durationDistance, cardioSecondaryUnit: .floors)
+        let vm = WorkoutSessionViewModel(exercise: exercise)
+        vm.sets[0].duration = "20"
+        vm.sets[0].reps = "50"  // 50 floors
+        vm.sets[0].isCompleted = true
+
+        let record = vm.createValidatedRecord()
+        #expect(record != nil)
+        #expect(record?.completedSets.first?.reps == 50)
+        #expect(record?.completedSets.first?.distance == nil)
+    }
+
+    @Test("durationDistance with count unit stores in reps field")
+    func countStoredInReps() {
+        let exercise = makeExercise(inputType: .durationDistance, cardioSecondaryUnit: .count)
+        let vm = WorkoutSessionViewModel(exercise: exercise)
+        vm.sets[0].duration = "10"
+        vm.sets[0].reps = "500"  // 500 jumps
+        vm.sets[0].isCompleted = true
+
+        let record = vm.createValidatedRecord()
+        #expect(record != nil)
+        #expect(record?.completedSets.first?.reps == 500)
+        #expect(record?.completedSets.first?.distance == nil)
+    }
+
+    @Test("durationDistance with none unit stores only duration")
+    func noneUnitDurationOnly() {
+        let exercise = makeExercise(inputType: .durationDistance, cardioSecondaryUnit: .none)
+        let vm = WorkoutSessionViewModel(exercise: exercise)
+        vm.sets[0].duration = "45"
+        vm.sets[0].isCompleted = true
+
+        let record = vm.createValidatedRecord()
+        #expect(record != nil)
+        #expect(record?.completedSets.first?.duration == 2700.0)  // 45 * 60
+        #expect(record?.completedSets.first?.distance == nil)
+        #expect(record?.completedSets.first?.reps == nil)
+    }
+
+    @Test("durationDistance with meters rejects values over 50000")
+    func metersOverLimit() {
+        let exercise = makeExercise(inputType: .durationDistance, cardioSecondaryUnit: .meters)
+        let vm = WorkoutSessionViewModel(exercise: exercise)
+        vm.sets[0].duration = "30"
+        vm.sets[0].distance = "60000"  // Over 50000m limit
+        vm.sets[0].isCompleted = true
+
+        let record = vm.createValidatedRecord()
+        #expect(record == nil)
+        #expect(vm.validationError != nil)
+    }
+
+    @Test("durationDistance with floors rejects values over 500")
+    func floorsOverLimit() {
+        let exercise = makeExercise(inputType: .durationDistance, cardioSecondaryUnit: .floors)
+        let vm = WorkoutSessionViewModel(exercise: exercise)
+        vm.sets[0].duration = "30"
+        vm.sets[0].reps = "600"  // Over 500 floors limit
+        vm.sets[0].isCompleted = true
+
+        let record = vm.createValidatedRecord()
+        #expect(record == nil)
+        #expect(vm.validationError != nil)
+    }
+
+    @Test("durationDistance nil cardioSecondaryUnit defaults to km behavior")
+    func nilUnitDefaultsToKm() {
+        let exercise = makeExercise(inputType: .durationDistance, cardioSecondaryUnit: nil)
+        let vm = WorkoutSessionViewModel(exercise: exercise)
+        vm.sets[0].duration = "30"
+        vm.sets[0].distance = "5.0"
+        vm.sets[0].isCompleted = true
+
+        let record = vm.createValidatedRecord()
+        #expect(record != nil)
+        #expect(record?.completedSets.first?.distance == 5.0)
     }
 }

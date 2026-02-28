@@ -76,7 +76,8 @@ final class WatchSessionManager: NSObject {
                 defaultWeightKg: nil,
                 // Map generic catch-all Equipment cases to nil so Watch shows SF Symbol fallback
                 // instead of treating them identically to unknown/corrupted rawValues.
-                equipment: def.equipment == .other ? nil : def.equipment.rawValue
+                equipment: def.equipment == .other ? nil : def.equipment.rawValue,
+                cardioSecondaryUnit: def.cardioSecondaryUnit?.rawValue
             )
         }
         transferExerciseLibrary(watchExercises)
@@ -243,4 +244,5 @@ struct WatchExerciseInfo: Codable, Sendable {
     let defaultReps: Int?
     let defaultWeightKg: Double?
     let equipment: String?  // rawValue of Equipment — used for tile icon display
+    let cardioSecondaryUnit: String?  // rawValue of CardioSecondaryUnit — nil for non-cardio
 }
