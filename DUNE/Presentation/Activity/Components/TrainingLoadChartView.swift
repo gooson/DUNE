@@ -35,7 +35,7 @@ struct TrainingLoadChartView: View {
                 HStack(spacing: DS.Spacing.md) {
                     legendItem(color: DS.Color.positive, label: "Low")
                     legendItem(color: DS.Color.caution, label: "Moderate")
-                    legendItem(color: .orange, label: "High")
+                    legendItem(color: DS.Color.scoreTired, label: "High")
                     legendItem(color: DS.Color.negative, label: "Very High")
                 }
                 .font(.caption2)
@@ -136,7 +136,7 @@ struct TrainingLoadChartView: View {
         switch point.load {
         case ..<2:   DS.Color.positive
         case 2..<4:  DS.Color.caution
-        case 4..<7:  .orange
+        case 4..<7:  DS.Color.scoreTired
         default:     DS.Color.negative
         }
     }

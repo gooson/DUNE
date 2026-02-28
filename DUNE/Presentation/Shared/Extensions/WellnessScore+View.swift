@@ -13,11 +13,11 @@ extension WellnessScore.Status {
 
     var color: Color {
         switch self {
-        case .excellent: DS.Color.wellnessExcellent
-        case .good:      DS.Color.wellnessGood
-        case .fair:      DS.Color.wellnessFair
+        case .excellent: DS.Color.scoreExcellent
+        case .good:      DS.Color.scoreGood
+        case .fair:      DS.Color.scoreFair
         case .tired:     DS.Color.scoreTired
-        case .warning:   DS.Color.wellnessWarning
+        case .warning:   DS.Color.scoreWarning
         }
     }
 

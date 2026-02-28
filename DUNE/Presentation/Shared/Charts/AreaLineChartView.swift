@@ -116,9 +116,9 @@ struct AreaLineChartView: View {
     private var areaGradient: LinearGradient {
         LinearGradient(
             colors: [
-                tintColor.opacity(0.25),
-                tintColor.opacity(0.08),
-                DS.Color.warmGlow.opacity(0.25)
+                tintColor.opacity(0.22),
+                DS.Color.warmGlow.opacity(DS.Opacity.chartGrid),
+                DS.Color.warmGlow.opacity(DS.Opacity.cardOverlay)
             ],
             startPoint: .top,
             endPoint: .bottom

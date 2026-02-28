@@ -19,6 +19,11 @@ struct SectionGroup<Content: View>: View {
         VStack(alignment: .leading, spacing: DS.Spacing.md) {
             // Section header
             HStack(spacing: DS.Spacing.xs) {
+                // Desert accent bar
+                RoundedRectangle(cornerRadius: 1)
+                    .fill(DS.Gradient.sectionAccent)
+                    .frame(width: 2, height: 14)
+
                 Image(systemName: icon)
                     .font(.subheadline)
                     .foregroundStyle(iconColor)
