@@ -26,6 +26,9 @@
 - `modelContext.save()` 명시적 호출 지양 → auto-save 위임
 - 분류 switch에 `default:` 금지 → exhaustive case 나열
 
+## @Query
+- `fetchLimit` → `Query(FetchDescriptor)` init 사용 (`@Query` 매크로는 fetchLimit 직접 파라미터 미지원)
+
 ## ScrollView
 - LazyVGrid + @Query 동일 View 금지 → child 격리 또는 eager grid
 - `.scrollBounceBehavior(.basedOnSize)` 동적 content에 적용
