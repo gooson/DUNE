@@ -38,7 +38,7 @@ struct WeatherSnapshot: Sendable, Hashable {
 
     /// Whether the weather is favorable for outdoor exercise
     var isFavorableOutdoor: Bool {
-        !isExtremeHeat && !isFreezing && !isHighUV
+        !isExtremeHeat && !isFreezing && !isHighUV && !isHighHumidity
             && condition != .rain && condition != .heavyRain
             && condition != .snow && condition != .sleet
             && condition != .thunderstorm

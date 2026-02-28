@@ -87,7 +87,7 @@ struct CoachingEngine: Sendable {
                 priority: .high,
                 category: .weather,
                 title: "한파 주의",
-                message: "체감 온도 \(temp)°C — 워밍업을 충분히 하고 실내 운동을 고려하세요. 한랭 환경은 부상 위험을 높입니다.",
+                message: "체감 온도 \(temp)°C — 워밍업을 충분히 하고 실내 운동을 고려하세요. 추운 날씨는 근육 부상 위험을 높입니다.",
                 iconName: "thermometer.snowflake"
             ))
         }

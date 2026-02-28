@@ -15,6 +15,7 @@ protocol WeatherProviding: Sendable {
 
 enum WeatherError: Error, Sendable {
     case locationNotAuthorized
+    case locationRequestInFlight
 }
 
 /// Combines LocationService + WeatherDataService behind a single async call.
@@ -49,14 +50,16 @@ final class WeatherProvider: WeatherProviding, Sendable {
 }
 
 /// Fetches weather data from Apple WeatherKit with 15-minute caching.
-final class WeatherDataService: WeatherFetching, Sendable {
+/// Cache is inlined (single consumer) — no separate WeatherCache class needed.
+final class WeatherDataService: WeatherFetching, @unchecked Sendable {
     private let weatherService = WeatherService.shared
-    private let cache = WeatherCache()
+    private var cached: WeatherSnapshot?
+    private let lock = NSLock()
 
     func fetchWeather(for location: CLLocation) async throws -> WeatherSnapshot {
-        // Return cached if not stale
-        if let cached = cache.get(), !cached.isStale {
-            return cached
+        // Return cached if not stale (TTL enforced at read site)
+        if let snapshot = lock.withLock({ cached }), !snapshot.isStale {
+            return snapshot
         }
 
         let (current, hourly) = try await weatherService.weather(
@@ -65,7 +68,7 @@ final class WeatherDataService: WeatherFetching, Sendable {
         )
 
         let snapshot = mapToSnapshot(current: current, hourly: hourly)
-        cache.set(snapshot)
+        lock.withLock { cached = snapshot }
         return snapshot
     }
 
@@ -139,7 +142,7 @@ final class WeatherDataService: WeatherFetching, Sendable {
         case .sunFlurries, .sunShowers:
             return .partlyCloudy
         @unknown default:
-            return .clear
+            return .cloudy  // Conservative: unrecognized conditions should not trigger "favorable outdoor"
         }
     }
 }

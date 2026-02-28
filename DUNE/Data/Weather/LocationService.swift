@@ -33,11 +33,16 @@ final class LocationService: NSObject, CLLocationManagerDelegate, Sendable {
     }
 
     /// Requests a single location update. Returns cached location if fresh (< 15min).
+    /// Throws if a request is already in flight (prevents continuation leak).
     func requestLocation() async throws -> CLLocation {
         // Return cached if fresh enough
         if let cached = currentLocation,
            Date().timeIntervalSince(cached.timestamp) < 15 * 60 {
             return cached
+        }
+
+        guard locationContinuation == nil else {
+            throw WeatherError.locationRequestInFlight
         }
 
         return try await withCheckedThrowingContinuation { continuation in

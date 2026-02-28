@@ -1,5 +1,20 @@
 import SwiftUI
 
+// MARK: - Environment Key
+
+private struct WeatherAtmosphereKey: EnvironmentKey {
+    static let defaultValue: WeatherAtmosphere = .default
+}
+
+extension EnvironmentValues {
+    var weatherAtmosphere: WeatherAtmosphere {
+        get { self[WeatherAtmosphereKey.self] }
+        set { self[WeatherAtmosphereKey.self] = newValue }
+    }
+}
+
+// MARK: - View Properties
+
 extension WeatherAtmosphere {
     /// Wave color derived from weather condition and time of day.
     var waveColor: Color {

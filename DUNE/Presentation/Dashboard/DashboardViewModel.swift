@@ -22,12 +22,9 @@ final class DashboardViewModel {
     var pinnedCategories: [HealthMetric.Category]
     var baselineDeltasByMetricID: [String: MetricBaselineDelta] = [:]
 
-    // Weather
+    // Weather (Correction #8/#52: cached, not computed — accessed in SwiftUI body)
     private(set) var weatherSnapshot: WeatherSnapshot?
-    var weatherAtmosphere: WeatherAtmosphere {
-        guard let snapshot = weatherSnapshot else { return .default }
-        return WeatherAtmosphere.from(snapshot)
-    }
+    private(set) var weatherAtmosphere: WeatherAtmosphere = .default
 
     private(set) var pinnedMetrics: [HealthMetric] = []
     private(set) var activeDaysThisWeek = 0
@@ -142,6 +139,7 @@ final class DashboardViewModel {
         baselineDeltasByMetricID = [:]
         activeDaysThisWeek = 0
         weatherSnapshot = nil
+        weatherAtmosphere = .default
 
         if !authorizationChecked {
             if Self.shouldBypassAuthorizationForTests {
@@ -175,6 +173,7 @@ final class DashboardViewModel {
         )
 
         weatherSnapshot = weatherResult
+        weatherAtmosphere = weatherResult.map { WeatherAtmosphere.from($0) } ?? .default
 
         var allMetrics: [HealthMetric] = []
         allMetrics.append(contentsOf: hrvResult.metrics)
@@ -274,7 +273,7 @@ final class DashboardViewModel {
             return try await weatherProvider.fetchCurrentWeather()
         } catch {
             // Weather is non-critical — fail silently (graceful degradation)
-            AppLogger.ui.info("Weather fetch skipped: \(error.localizedDescription)")
+            AppLogger.data.info("Weather fetch skipped: \(type(of: error)): \(error.localizedDescription)")
             return nil
         }
     }

@@ -9,6 +9,26 @@ struct WeatherCard: View {
 
     private var isRegular: Bool { sizeClass == .regular }
 
+    /// Pre-computed hour labels (Correction #102: avoid Calendar in body).
+    private let hourLabels: [Date: String]
+
+    init(snapshot: WeatherSnapshot) {
+        self.snapshot = snapshot
+        var labels: [Date: String] = [:]
+        let calendar = Calendar.current
+        for hourly in snapshot.hourlyForecast {
+            let hour = calendar.component(.hour, from: hourly.hour)
+            if hour == 0 {
+                labels[hourly.hour] = "자정"
+            } else if hour == 12 {
+                labels[hourly.hour] = "정오"
+            } else {
+                labels[hourly.hour] = hour < 12 ? "오전 \(hour)" : "오후 \(hour - 12)"
+            }
+        }
+        self.hourLabels = labels
+    }
+
     var body: some View {
         InlineCard {
             VStack(alignment: .leading, spacing: DS.Spacing.md) {
@@ -81,7 +101,7 @@ struct WeatherCard: View {
 
     private func hourCell(_ hour: WeatherSnapshot.HourlyWeather) -> some View {
         VStack(spacing: DS.Spacing.xs) {
-            Text(hourLabel(hour.hour))
+            Text(hourLabels[hour.hour] ?? "")
                 .font(.caption2)
                 .foregroundStyle(.tertiary)
 
@@ -115,10 +135,4 @@ struct WeatherCard: View {
         }
     }
 
-    private func hourLabel(_ date: Date) -> String {
-        let hour = Calendar.current.component(.hour, from: date)
-        if hour == 0 { return "자정" }
-        if hour == 12 { return "정오" }
-        return hour < 12 ? "오전 \(hour)" : "오후 \(hour - 12)"
-    }
 }
