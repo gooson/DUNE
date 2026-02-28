@@ -22,8 +22,9 @@ struct ConditionHeroView: View {
         static let sparklineHeightRegular: CGFloat = 56
         static let sparklineHeightCompact: CGFloat = 44
         // Correction #83 — static gradient for score text
+        // Desert Palette: bronze top → desertDusk bottom (matches HeroScoreCard)
         static let scoreGradient = LinearGradient(
-            colors: [DS.Color.warmGlow, DS.Color.warmGlow.opacity(0.7)],
+            colors: [DS.Color.desertBronze, DS.Color.desertDusk],
             startPoint: .top,
             endPoint: .bottom
         )

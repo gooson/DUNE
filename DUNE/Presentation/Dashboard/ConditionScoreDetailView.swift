@@ -198,18 +198,20 @@ struct ConditionScoreDetailView: View {
                         progress: Double(score.score) / 100.0,
                         ringColor: score.status.color,
                         lineWidth: ringLineWidth,
-                        size: ringSize
+                        size: ringSize,
+                        useWarmGradient: true
                     )
 
                     VStack(spacing: DS.Spacing.xxs) {
                         Text("\(score.score)")
                             .font(DS.Typography.heroScore)
                             .fontDesign(.rounded)
+                            .foregroundStyle(DS.Gradient.detailScore)
 
                         Text(score.status.label)
                             .font(.caption)
                             .fontWeight(.medium)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(DS.Color.sandMuted)
                     }
                 }
 

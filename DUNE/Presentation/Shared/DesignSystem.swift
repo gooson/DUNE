@@ -98,6 +98,13 @@ enum DS {
             endPoint: .trailing
         )
 
+        /// Detail view score text — DesertBronze → DesertDusk vertical (same as HeroScoreCard ring number)
+        static let detailScore = LinearGradient(
+            colors: [DS.Color.desertBronze, DS.Color.desertDusk],
+            startPoint: .top,
+            endPoint: .bottom
+        )
+
         /// Section title accent bar gradient
         static let sectionAccent = LinearGradient(
             colors: [DS.Color.warmGlow.opacity(DS.Opacity.strong), DS.Color.desertDusk.opacity(DS.Opacity.border)],

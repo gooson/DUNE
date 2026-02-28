@@ -51,17 +51,19 @@ struct TrainingReadinessDetailView: View {
                     progress: Double(readiness.score) / 100.0,
                     ringColor: readiness.status.color,
                     lineWidth: isRegular ? 18 : 16,
-                    size: isRegular ? 180 : 140
+                    size: isRegular ? 180 : 140,
+                    useWarmGradient: true
                 )
 
                 VStack(spacing: 2) {
                     Text("\(readiness.score)")
                         .font(DS.Typography.heroScore)
+                        .foregroundStyle(DS.Gradient.detailScore)
                         .contentTransition(.numericText())
 
                     Text("READINESS")
                         .font(.system(size: 10, weight: .semibold, design: .rounded))
-                        .foregroundStyle(.tertiary)
+                        .foregroundStyle(DS.Color.sandMuted)
                         .tracking(1)
                 }
             }
