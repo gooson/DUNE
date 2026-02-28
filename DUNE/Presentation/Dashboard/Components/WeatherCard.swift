@@ -76,11 +76,10 @@ struct WeatherCard: View {
                     Divider()
                         .opacity(0.3)
 
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: isRegular ? DS.Spacing.xl : DS.Spacing.lg) {
-                            ForEach(snapshot.hourlyForecast) { hour in
-                                hourCell(hour)
-                            }
+                    HStack(spacing: 0) {
+                        ForEach(snapshot.hourlyForecast) { hour in
+                            hourCell(hour)
+                                .frame(maxWidth: .infinity)
                         }
                     }
                 }
