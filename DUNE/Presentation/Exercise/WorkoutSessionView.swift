@@ -15,6 +15,7 @@ struct WorkoutSessionView: View {
     @State private var shareImage: UIImage?
     @State private var showingShareSheet = false
     @State private var savedRecord: ExerciseRecord?
+    @State private var savedIntensity: WorkoutIntensityResult?
     @FocusState private var isInputFieldFocused: Bool
 
     // Set-by-set flow state
@@ -150,6 +151,7 @@ struct WorkoutSessionView: View {
                 shareImage: shareImage,
                 exerciseName: exercise.localizedName,
                 setCount: viewModel.completedSetCount,
+                autoIntensity: savedIntensity,
                 onDismiss: { selectedRPE in
                     if let rpe = selectedRPE, (1...10).contains(rpe) {
                         savedRecord?.rpe = rpe
@@ -748,6 +750,11 @@ struct WorkoutSessionView: View {
         isInputFieldFocused = false
         guard let record = viewModel.createValidatedRecord(weightUnit: weightUnit) else { return }
 
+        // Auto intensity calculation before insert
+        let intensityResult = calculateAutoIntensity(for: record)
+        record.autoIntensityRaw = intensityResult?.rawScore
+        savedIntensity = intensityResult
+
         let shareData = buildShareData(from: record)
         shareImage = WorkoutShareService.renderShareImage(data: shareData, weightUnit: weightUnit)
 
@@ -781,6 +788,55 @@ struct WorkoutSessionView: View {
         } else {
             dismiss()
         }
+    }
+
+    private func calculateAutoIntensity(for record: ExerciseRecord) -> WorkoutIntensityResult? {
+        let service = WorkoutIntensityService()
+
+        let currentInput = buildIntensityInput(from: record)
+
+        // History: same exercise, last 30 sessions, oldest-first (Correction #156)
+        let thirtyDaysAgo = Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? Date()
+        let history: [IntensitySessionInput] = exerciseRecords
+            .filter { $0.exerciseDefinitionID == exercise.id && $0.date >= thirtyDaysAgo }
+            .sorted { $0.date < $1.date }
+            .map { buildIntensityInput(from: $0) }
+
+        // Estimated 1RM for strength exercises
+        var estimated1RM: Double?
+        if exercise.inputType == .setsRepsWeight {
+            let oneRMSessions = history.map { session in
+                OneRMSessionInput(
+                    date: session.date,
+                    sets: session.sets.map { OneRMSetInput(weight: $0.weight, reps: $0.reps) }
+                )
+            }
+            estimated1RM = OneRMEstimationService().analyze(sessions: oneRMSessions).currentBest
+        }
+
+        return service.calculateIntensity(
+            current: currentInput,
+            history: history,
+            estimated1RM: estimated1RM
+        )
+    }
+
+    private func buildIntensityInput(from record: ExerciseRecord) -> IntensitySessionInput {
+        IntensitySessionInput(
+            date: record.date,
+            exerciseType: exercise.inputType,
+            sets: record.completedSets.map { set in
+                IntensitySetInput(
+                    weight: set.weight,
+                    reps: set.reps,
+                    duration: set.duration,
+                    distance: set.distance,
+                    manualIntensity: set.intensity,
+                    setType: set.setType
+                )
+            },
+            rpe: record.rpe
+        )
     }
 
     private func buildShareData(from record: ExerciseRecord) -> WorkoutShareData {

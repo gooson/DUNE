@@ -25,6 +25,8 @@ final class ExerciseRecord {
     var calorieSourceRaw: String = CalorieSource.manual.rawValue
     /// User-rated perceived exertion (1-10). nil means user skipped.
     var rpe: Int?
+    /// Auto-calculated workout intensity (0.0–1.0). nil means not computed.
+    var autoIntensityRaw: Double?
 
     init(
         date: Date = Date(),
@@ -41,7 +43,8 @@ final class ExerciseRecord {
         equipment: Equipment? = nil,
         estimatedCalories: Double? = nil,
         calorieSource: CalorieSource = .manual,
-        rpe: Int? = nil
+        rpe: Int? = nil,
+        autoIntensityRaw: Double? = nil
     ) {
         self.id = UUID()
         self.date = date
@@ -60,6 +63,7 @@ final class ExerciseRecord {
         self.estimatedCalories = estimatedCalories
         self.calorieSourceRaw = calorieSource.rawValue
         self.rpe = rpe
+        self.autoIntensityRaw = autoIntensityRaw
     }
 
     // MARK: - Computed Accessors
@@ -87,6 +91,12 @@ final class ExerciseRecord {
         case .met: estimatedCalories
         case .manual: calories
         }
+    }
+
+    /// Auto-calculated intensity level, if available.
+    var autoIntensityLevel: WorkoutIntensityLevel? {
+        guard let raw = autoIntensityRaw, raw.isFinite else { return nil }
+        return WorkoutIntensityLevel(rawScore: raw)
     }
 
     /// Whether this record has structured set data (vs legacy flat record)
