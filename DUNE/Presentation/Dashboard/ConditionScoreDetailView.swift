@@ -22,7 +22,9 @@ struct ConditionScoreDetailView: View {
                             ConditionInsightSection(status: score.status)
 
                             if !score.contributions.isEmpty {
-                                ScoreContributorsView(contributions: score.contributions)
+                                StandardCard {
+                                    ScoreContributorsView(contributions: score.contributions)
+                                }
                             }
                         }
                         .frame(maxWidth: .infinity)
@@ -34,7 +36,9 @@ struct ConditionScoreDetailView: View {
                     ConditionInsightSection(status: score.status)
 
                     if !score.contributions.isEmpty {
-                        ScoreContributorsView(contributions: score.contributions)
+                        StandardCard {
+                            ScoreContributorsView(contributions: score.contributions)
+                        }
                     }
 
                 }
@@ -186,43 +190,15 @@ struct ConditionScoreDetailView: View {
 
     // MARK: - Subviews
 
-    private var ringSize: CGFloat { sizeClass == .regular ? 180 : 120 }
-    private var ringLineWidth: CGFloat { sizeClass == .regular ? 16 : 12 }
-
     private var scoreHero: some View {
-        HStack {
-            Spacer()
-            VStack(spacing: DS.Spacing.md) {
-                ZStack {
-                    ProgressRingView(
-                        progress: Double(score.score) / 100.0,
-                        ringColor: score.status.color,
-                        lineWidth: ringLineWidth,
-                        size: ringSize,
-                        useWarmGradient: true
-                    )
-
-                    VStack(spacing: DS.Spacing.xxs) {
-                        Text("\(score.score)")
-                            .font(DS.Typography.heroScore)
-                            .fontDesign(.rounded)
-                            .foregroundStyle(DS.Gradient.detailScore)
-
-                        Text(score.status.label)
-                            .font(.caption)
-                            .fontWeight(.medium)
-                            .foregroundStyle(DS.Color.sandMuted)
-                    }
-                }
-
-                Text(score.date, format: .dateTime.month(.abbreviated).day().weekday(.wide))
-                    .font(.caption)
-                    .foregroundStyle(.tertiary)
-            }
-            Spacer()
-        }
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel("Condition score \(score.score), \(score.status.label)")
+        DetailScoreHero(
+            score: score.score,
+            scoreLabel: "CONDITION",
+            statusLabel: score.status.label,
+            statusIcon: score.status.iconName,
+            statusColor: score.status.color,
+            guideMessage: score.status.guideMessage
+        )
     }
 
     private func scoreSummary(_ summary: MetricSummary) -> some View {

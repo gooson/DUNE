@@ -45,74 +45,22 @@ struct TrainingReadinessDetailView: View {
     // MARK: - Score Hero
 
     private func scoreHero(_ readiness: TrainingReadiness) -> some View {
-        VStack(spacing: DS.Spacing.md) {
-            ZStack {
-                ProgressRingView(
-                    progress: Double(readiness.score) / 100.0,
-                    ringColor: readiness.status.color,
-                    lineWidth: isRegular ? 18 : 16,
-                    size: isRegular ? 180 : 140,
-                    useWarmGradient: true
-                )
-
-                VStack(spacing: 2) {
-                    Text("\(readiness.score)")
-                        .font(DS.Typography.heroScore)
-                        .foregroundStyle(DS.Gradient.detailScore)
-                        .contentTransition(.numericText())
-
-                    Text("READINESS")
-                        .font(.system(size: 10, weight: .semibold, design: .rounded))
-                        .foregroundStyle(DS.Color.sandMuted)
-                        .tracking(1)
-                }
-            }
-
-            HStack(spacing: DS.Spacing.xs) {
-                Image(systemName: readiness.status.iconName)
-                    .foregroundStyle(readiness.status.color)
-                Text(readiness.status.label)
-                    .font(.title3.weight(.semibold))
-
-                if readiness.isCalibrating {
-                    Text("Calibrating")
-                        .font(.caption2)
-                        .fontWeight(.medium)
-                        .padding(.horizontal, 6)
-                        .padding(.vertical, 2)
-                        .background(Capsule().fill(.quaternary))
-                }
-            }
-
-            Text(readiness.status.guideMessage)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-
-            // Sub-score summary row
-            HStack(spacing: DS.Spacing.lg) {
-                subScoreBadge(label: "HRV", value: readiness.components.hrvScore, color: DS.Color.hrv)
-                subScoreBadge(label: "RHR", value: readiness.components.rhrScore, color: DS.Color.heartRate)
-                subScoreBadge(label: "Sleep", value: readiness.components.sleepScore, color: DS.Color.sleep)
-                subScoreBadge(label: "Recovery", value: readiness.components.fatigueScore, color: DS.Color.activity)
-                subScoreBadge(label: "Trend", value: readiness.components.trendBonus, color: DS.Color.fitness)
-            }
-        }
-        .frame(maxWidth: .infinity)
-        .padding(DS.Spacing.lg)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
-    }
-
-    private func subScoreBadge(label: String, value: Int, color: Color) -> some View {
-        VStack(spacing: DS.Spacing.xxs) {
-            Text("\(value)")
-                .font(.headline.weight(.bold))
-                .monospacedDigit()
-                .foregroundStyle(color)
-            Text(label)
-                .font(.caption2)
-                .foregroundStyle(.tertiary)
-        }
+        DetailScoreHero(
+            score: readiness.score,
+            scoreLabel: "READINESS",
+            statusLabel: readiness.status.label,
+            statusIcon: readiness.status.iconName,
+            statusColor: readiness.status.color,
+            guideMessage: readiness.status.guideMessage,
+            subScores: [
+                .init(label: "HRV", value: readiness.components.hrvScore, color: DS.Color.hrv),
+                .init(label: "RHR", value: readiness.components.rhrScore, color: DS.Color.heartRate),
+                .init(label: "Sleep", value: readiness.components.sleepScore, color: DS.Color.sleep),
+                .init(label: "Recovery", value: readiness.components.fatigueScore, color: DS.Color.activity),
+                .init(label: "Trend", value: readiness.components.trendBonus, color: DS.Color.fitness),
+            ],
+            badgeText: readiness.isCalibrating ? "Calibrating" : nil
+        )
     }
 
     // MARK: - Sub-Score Charts
