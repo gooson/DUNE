@@ -13,7 +13,7 @@ Compound Engineering 시스템이 2주간 성장하면서 다음 문제가 누�
 1. **Correction Log 비대화**: 182항목 → 매 세션 컨텍스트 비용 과다
 2. **스킬 실효성 격차**: 19개 중 2개 미구현, 일부 사용 빈도 낮음
 3. **자동화 부재**: 규칙 위반이 빌드/커밋 시점에 자동 감지되지 않음
-4. **워크플로우 마찰**: /lfg 파이프라인이 무겁고, MCP 활용도 불투명
+4. **워크플로우 마찰**: /run 파이프라인이 무겁고, MCP 활용도 불투명
 
 ## Current Inventory
 
@@ -30,7 +30,7 @@ Compound Engineering 시스템이 2주간 성장하면서 다음 문제가 누�
 | retrospective | 구현 | 낮음 | 세션 종료 시 |
 | debug | 구현 | 중 | 버그 발생 시 |
 | ship | 구현 | 높음 | PR/머지 자동화 |
-| lfg | 구현 | 중 | 전체 파이프라인 |
+| run | 구현 | 중 | 전체 파이프라인 |
 | onboard | 구현 | 낮음 | 새 세션 시 |
 | changelog | 구현 | 낮음 | 릴리스 시 |
 | **code-style** | **미구현** | - | 대부분 "To be defined" |
@@ -110,7 +110,7 @@ Compound Engineering 시스템이 2주간 성장하면서 다음 문제가 누�
 **강화 후보**:
 - `review`: diff 2000줄 초과 시 자동 파일 분할 리뷰
 - `ship`: changelog 자동 생성 연계
-- `lfg`: 단계별 조기 종료 옵션 (P1 없으면 triage 스킵)
+- `run`: 단계별 조기 종료 옵션 (P1 없으면 triage 스킵)
 
 ### 3. 자동화 확대
 
@@ -131,7 +131,7 @@ Compound Engineering 시스템이 2주간 성장하면서 다음 문제가 누�
 
 ### 5. 워크플로우 개선
 
-- `/lfg`에 `--fast` 모드: Plan → Work → Quick Review (에이전트 3개만) → Ship
+- `/run`에 `--fast` 모드: Plan → Work → Quick Review (에이전트 3개만) → Ship
 - `/review`에 `--focused` 모드: 변경 파일 관련 에이전트만 실행
 - `/triage` 자동 모드: P1 → 자동 Fix, P2 → Fix, P3 → Skip (확인 없이)
 
@@ -151,7 +151,7 @@ Compound Engineering 시스템이 2주간 성장하면서 다음 문제가 누�
 
 ### 향후 (별도 세션)
 - Hook 자동화 추가
-- /lfg --fast 모드 구현
+- /run --fast 모드 구현
 - MCP 활용 가이드를 onboard 스킬에 통합
 - Serena memory에 프로젝트 패턴 저장
 
