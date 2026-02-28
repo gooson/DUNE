@@ -32,7 +32,7 @@ struct BodyCompositionFormSheet: View {
                     .accessibilityIdentifier("body-form-fat")
                 TextField("Muscle Mass (kg)", text: $viewModel.newMuscleMass)
                     .keyboardType(.decimalPad)
-                    .accessibilityIdentifier("body-muscle-field")
+                    .accessibilityIdentifier("body-form-muscle")
                 TextField("Memo", text: $viewModel.newMemo)
             }
             .scrollContentBackground(.hidden)
