@@ -93,21 +93,14 @@ private struct HabitListQueryView: View {
         sort: \HabitDefinition.sortOrder
     ) private var habits: [HabitDefinition]
 
-    @Query(
-        filter: #Predicate<ExerciseRecord> { _ in true },
-        sort: \ExerciseRecord.date,
-        order: .reverse
-    ) private var exerciseRecords: [ExerciseRecord]
-
     @Bindable var viewModel: LifeViewModel
 
     @Environment(\.modelContext) private var modelContext
 
-    private var todayExerciseExists: Bool {
-        let calendar = Calendar.current
-        let today = calendar.startOfDay(for: Date())
-        return exerciseRecords.contains { calendar.isDate($0.date, inSameDayAs: today) }
-    }
+    // Correction #68: O(1) lookup instead of O(N) per row
+    @State private var habitsByID: [UUID: HabitDefinition] = [:]
+    // Correction #102: cached today exercise check (avoid body-path Calendar ops)
+    @State private var cachedTodayExerciseExists = false
 
     var body: some View {
         if habits.isEmpty {
@@ -129,14 +122,14 @@ private struct HabitListQueryView: View {
                 )
                 .contextMenu {
                     Button {
-                        if let habit = habits.first(where: { $0.id == progress.id }) {
+                        if let habit = habitsByID[progress.id] {
                             viewModel.startEditing(habit)
                         }
                     } label: {
                         Label("Edit", systemImage: "pencil")
                     }
                     Button(role: .destructive) {
-                        if let habit = habits.first(where: { $0.id == progress.id }) {
+                        if let habit = habitsByID[progress.id] {
                             withAnimation {
                                 habit.isArchived = true
                             }
@@ -147,6 +140,9 @@ private struct HabitListQueryView: View {
                 }
             }
         }
+
+        // Isolated exercise record check — own @Query to avoid parent re-layout
+        TodayExerciseCheckView(exists: $cachedTodayExerciseExists)
 
         Color.clear
             .frame(height: 0)
@@ -211,7 +207,7 @@ private struct HabitListQueryView: View {
     // MARK: - Actions
 
     private func toggleCheck(habitId: UUID) {
-        guard let habit = habits.first(where: { $0.id == habitId }) else { return }
+        guard let habit = habitsByID[habitId] else { return }
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
         let existingLog = (habit.logs ?? []).first { calendar.isDate($0.date, inSameDayAs: today) }
@@ -233,7 +229,7 @@ private struct HabitListQueryView: View {
     }
 
     private func updateValue(habitId: UUID, value: Double) {
-        guard let habit = habits.first(where: { $0.id == habitId }) else { return }
+        guard let habit = habitsByID[habitId] else { return }
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
 
@@ -255,10 +251,41 @@ private struct HabitListQueryView: View {
     }
 
     private func recalculate() {
+        // Correction #68: rebuild O(1) lookup dictionary
+        // Correction #104: uniquingKeysWith instead of uniqueKeysWithValues
+        habitsByID = Dictionary(habits.map { ($0.id, $0) }, uniquingKeysWith: { _, last in last })
         viewModel.calculateProgresses(
             habits: habits,
-            todayExerciseExists: todayExerciseExists
+            todayExerciseExists: cachedTodayExerciseExists
         )
+    }
+}
+
+// MARK: - Today Exercise Check (Isolated @Query)
+// Avoids unbounded ExerciseRecord fetch in parent view.
+
+private struct TodayExerciseCheckView: View {
+    @Query(sort: \ExerciseRecord.date, order: .reverse)
+    private var recentRecords: [ExerciseRecord]
+
+    @Binding var exists: Bool
+
+    var body: some View {
+        Color.clear
+            .frame(width: 0, height: 0)
+            .onChange(of: recentRecords.count) { _, _ in
+                updateCheck()
+            }
+            .onAppear {
+                updateCheck()
+            }
+    }
+
+    private func updateCheck() {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        // Check only first few records (sorted by date desc) — today's records are at the front
+        exists = recentRecords.prefix(20).contains { calendar.isDate($0.date, inSameDayAs: today) }
     }
 }
 

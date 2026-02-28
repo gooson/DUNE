@@ -40,10 +40,6 @@ final class HabitDefinition {
         return .daily
     }
 
-    var completedDates: [Date] {
-        (logs ?? []).map(\.date)
-    }
-
     // MARK: - Init
 
     init(
