@@ -104,6 +104,7 @@ struct CompoundWorkoutView: View {
                 shareImage: shareImage,
                 exerciseName: config.mode.displayName,
                 setCount: viewModel.totalCompletedSets,
+                autoIntensity: nil,
                 onDismiss: { selectedRPE in
                     if let rpe = selectedRPE, (1...10).contains(rpe) {
                         for record in savedRecords {

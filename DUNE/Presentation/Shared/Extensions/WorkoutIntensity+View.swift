@@ -18,7 +18,7 @@ extension WorkoutIntensityLevel {
     var color: Color {
         switch self {
         case .veryLight, .light: DS.Color.positive
-        case .moderate: DS.Color.warning
+        case .moderate: DS.Color.caution
         case .hard: DS.Color.activity
         case .maxEffort: DS.Color.negative
         }

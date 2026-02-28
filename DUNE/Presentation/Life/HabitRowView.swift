@@ -90,7 +90,7 @@ struct HabitRowView: View {
             HStack(spacing: DS.Spacing.sm) {
                 Image(systemName: progress.isCompleted ? "checkmark.circle.fill" : "circle")
                     .font(.title2)
-                    .foregroundStyle(progress.isCompleted ? DS.Color.positive : .tertiary)
+                    .foregroundStyle(progress.isCompleted ? AnyShapeStyle(DS.Color.positive) : AnyShapeStyle(.tertiary))
 
                 Text(progress.isCompleted ? "Done" : "Tap to complete")
                     .font(.caption)
