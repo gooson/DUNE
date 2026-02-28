@@ -45,7 +45,7 @@ struct UserCategoryManagementView: View {
                                     .frame(width: 24)
                                 VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                                     Text(category.name)
-                                        .foregroundStyle(DS.Color.sandMuted)
+                                        .foregroundStyle(DS.Color.primaryText)
                                     Text(category.defaultInputType.displayLabel)
                                         .font(.caption)
                                         .foregroundStyle(.secondary)

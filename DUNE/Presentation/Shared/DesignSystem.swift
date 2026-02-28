@@ -46,6 +46,8 @@ enum DS {
         static let desertDusk   = SwiftUI.Color("DesertDusk")    // Cool blue-gray (ring bottom)
         static let desertBronze = SwiftUI.Color("DesertBronze")  // Copper/bronze (ring number)
         static let sandMuted    = SwiftUI.Color("SandMuted")     // Muted sand (decorative text)
+        /// Semantic alias — primary readable text on dark warm backgrounds.
+        static let primaryText  = sandMuted
 
         // Activity Category Colors — Desert Horizon Chart Palette
         static let activityCardio    = SwiftUI.Color("ActivityCardio")    // Desert Gold
@@ -62,6 +64,13 @@ enum DS {
         // Tab wave identity — Desert Horizon palette
         static let tabTrain    = SwiftUI.Color("TabTrain")     // Desert Coral
         static let tabWellness = SwiftUI.Color("TabWellness")  // Oasis Teal
+        /// Type-erased primaryText with hierarchical fallback for ternary expressions.
+        static func primaryTextStyle(
+            active: Bool,
+            fallback: AnyShapeStyle = AnyShapeStyle(.tertiary)
+        ) -> AnyShapeStyle {
+            active ? AnyShapeStyle(primaryText) : fallback
+        }
     }
 
     // MARK: - Opacity

@@ -117,7 +117,7 @@ struct HeroScoreCard: View {
 
                 Text(scoreLabel)
                     .font(.system(size: 9, weight: .semibold, design: .rounded))
-                    .foregroundStyle(DS.Color.sandMuted)
+                    .foregroundStyle(DS.Color.primaryText)
                     .tracking(1)
             }
         }
@@ -162,7 +162,7 @@ struct HeroScoreCard: View {
         VStack(alignment: .leading, spacing: 2) {
             Text(item.label)
                 .font(.caption2)
-                .foregroundStyle(DS.Color.sandMuted)
+                .foregroundStyle(DS.Color.primaryText)
 
             HStack(spacing: DS.Spacing.xs) {
                 GeometryReader { geo in
@@ -181,7 +181,7 @@ struct HeroScoreCard: View {
                 Text(item.value.map { "\($0)" } ?? "--")
                     .font(.caption)
                     .fontWeight(.medium)
-                    .foregroundStyle(item.value != nil ? AnyShapeStyle(DS.Color.sandMuted) : AnyShapeStyle(.quaternary))
+                    .foregroundStyle(DS.Color.primaryTextStyle(active: item.value != nil, fallback: AnyShapeStyle(.quaternary)))
                     .monospacedDigit()
             }
         }
