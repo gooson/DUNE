@@ -73,6 +73,9 @@ struct WaveRefreshModifier: ViewModifier {
         content
             .refreshable {
                 showIndicator = true
+                // Always reset indicator on ALL exit paths — including Task cancellation.
+                // Without defer, cancellation during settle delay leaves showIndicator stuck true.
+                defer { showIndicator = false }
                 await withTaskGroup(of: Void.self) { group in
                     // Correction #141 — propagate CancellationError so the group
                     // drains properly; try? would break the minimum-display floor.
@@ -85,15 +88,8 @@ struct WaveRefreshModifier: ViewModifier {
                     await group.waitForAll()
                 }
                 // Brief settle delay so UIRefreshControl finishes scroll restoration
-                // before we remove our overlay — prevents stuck scroll offset.
-                // On cancellation (e.g. rapid re-pull), skip indicator reset so
-                // the new refresh cycle owns `showIndicator` state.
-                do {
-                    try await Task.sleep(nanoseconds: 100_000_000) // 0.1s
-                } catch is CancellationError {
-                    return
-                } catch {}
-                showIndicator = false
+                // before we remove our overlay. Skipped on cancellation (defer still resets).
+                try? await Task.sleep(nanoseconds: 100_000_000) // 0.1s
             }
             // Hide only this scroll view's system spinner to avoid overlap.
             .background {
