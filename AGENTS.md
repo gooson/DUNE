@@ -24,7 +24,7 @@ A skill is a set of local instructions to follow that is stored in a `SKILL.md` 
 - copy-voice: 문서/UI 문구 톤앤매너 가이드. (file: /Users/shanks/work/Health/.claude/skills/copy-voice/SKILL.md)
 - debug: 재현->격리->가설->검증->수정->확인->문서화 디버깅 루프. (file: /Users/shanks/work/Health/.claude/skills/debug/SKILL.md)
 - design-system: UI/UX 디자인 시스템 가이드. (file: /Users/shanks/work/Health/.claude/skills/design-system/SKILL.md)
-- lfg: Plan->Work->Review->Resolve->Compound->Ship 전체 파이프라인 실행. (file: /Users/shanks/work/Health/.claude/skills/lfg/SKILL.md)
+- run: Plan->Work->Review->Resolve->Compound->Ship 전체 파이프라인 자동 실행. (file: /Users/shanks/work/Health/.claude/skills/run/SKILL.md)
 - onboard: 프로젝트 온보딩 실행. (file: /Users/shanks/work/Health/.claude/skills/onboard/SKILL.md)
 - plan: 구현 계획 생성. (file: /Users/shanks/work/Health/.claude/skills/plan/SKILL.md)
 - retrospective: 세션 회고 및 교정사항 반영. (file: /Users/shanks/work/Health/.claude/skills/retrospective/SKILL.md)
@@ -100,7 +100,7 @@ A skill is a set of local instructions to follow that is stored in a `SKILL.md` 
 
 ## Trigger Rules (Parity)
 
-- 사용자 입력에 `/brainstorm`, `/plan`, `/work`, `/review`, `/triage`, `/compound`, `/ship`, `/lfg`, `/debug`, `/onboard`, `/retrospective`, `/changelog` 가 포함되면 동일 이름 skill을 우선 적용합니다.
+- 사용자 입력에 `/brainstorm`, `/plan`, `/work`, `/review`, `/triage`, `/compound`, `/ship`, `/run`, `/debug`, `/onboard`, `/retrospective`, `/changelog` 가 포함되면 동일 이름 skill을 우선 적용합니다.
 - 사용자가 특정 agent 이름(예: `reviewer-security`, `swift-ui-expert`)을 직접 언급하면 해당 `.claude/agents/{name}.md`를 우선 적용합니다.
 - "리뷰해줘/품질 검토/출시 전 점검" 요청은 `review` + `app-quality-gate` 조합을 기본으로 사용합니다.
 - UI 변경 작업은 `ui-testing`과 `swift-ui-expert`를 자동 후보로 평가합니다.

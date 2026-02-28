@@ -54,7 +54,7 @@
 | /review | 6관점 코드 리뷰 | PR 전 또는 코드 변경 후 |
 | /compound | 해결책 문서화 | 문제 해결 후 |
 | /triage | 리뷰 결과 분류 | /review 후 |
-| /lfg | 전체 파이프라인 자동화 | 기능 전체 구현 |
+| /run | 전체 파이프라인 자동 실행 | 기능 전체 구현 |
 | /changelog | 릴리스 노트 생성 | 릴리스 전 |
 | /onboard | 프로젝트 온보딩 | 새 팀원/세션 |
 | /retrospective | 세션 회고 + 학습 | 작업 완료 후 |
@@ -91,7 +91,7 @@
 ### Git
 - Branch naming: feature/{topic}, fix/{topic}, refactor/{topic}
 - Commit messages: conventional commits (feat:, fix:, refactor:, docs:, test:)
-- PR은 /lfg 또는 /work 를 통해 생성
+- PR은 /run 또는 /work 를 통해 생성
 
 ## Compounding Mechanisms
 
