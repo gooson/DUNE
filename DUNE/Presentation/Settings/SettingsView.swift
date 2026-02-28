@@ -5,6 +5,7 @@ import CoreLocation
 struct SettingsView: View {
     @AppStorage("isCloudSyncEnabled") private var isCloudSyncEnabled = false
     @Environment(\.openURL) private var openURL
+    @Environment(\.scenePhase) private var scenePhase
 
     @State private var locationStatus: CLAuthorizationStatus = CLLocationManager().authorizationStatus
     @State private var restSeconds: Double = WorkoutSettingsStore.shared.restSeconds
@@ -33,8 +34,10 @@ struct SettingsView: View {
         .onChange(of: bodyWeightKg) { _, newValue in
             store.bodyWeightKg = newValue
         }
-        .onAppear {
-            locationStatus = CLLocationManager().authorizationStatus
+        .onChange(of: scenePhase) { _, newPhase in
+            if newPhase == .active {
+                locationStatus = CLLocationManager().authorizationStatus
+            }
         }
     }
 
