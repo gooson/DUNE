@@ -2,13 +2,21 @@ import SwiftUI
 
 struct ContentView: View {
     private let sharedHealthDataService: SharedHealthDataService?
+    private let refreshCoordinator: AppRefreshCoordinating?
+    @Environment(\.scenePhase) private var scenePhase
     @State private var selectedSection: AppSection = .today
     @State private var todayScrollToTopSignal = 0
     @State private var activityScrollToTopSignal = 0
     @State private var wellnessScrollToTopSignal = 0
+    @State private var refreshSignal = 0
+    @State private var foregroundTask: Task<Void, Never>?
 
-    init(sharedHealthDataService: SharedHealthDataService? = nil) {
+    init(
+        sharedHealthDataService: SharedHealthDataService? = nil,
+        refreshCoordinator: AppRefreshCoordinating? = nil
+    ) {
         self.sharedHealthDataService = sharedHealthDataService
+        self.refreshCoordinator = refreshCoordinator
     }
 
     var body: some View {
@@ -17,7 +25,8 @@ struct ContentView: View {
                 NavigationStack {
                     DashboardView(
                         sharedHealthDataService: sharedHealthDataService,
-                        scrollToTopSignal: todayScrollToTopSignal
+                        scrollToTopSignal: todayScrollToTopSignal,
+                        refreshSignal: refreshSignal
                     )
                 }
                 .environment(\.wavePreset, .today)
@@ -27,7 +36,8 @@ struct ContentView: View {
                 NavigationStack {
                     ActivityView(
                         sharedHealthDataService: sharedHealthDataService,
-                        scrollToTopSignal: activityScrollToTopSignal
+                        scrollToTopSignal: activityScrollToTopSignal,
+                        refreshSignal: refreshSignal
                     )
                 }
                 .environment(\.wavePreset, .train)
@@ -37,7 +47,8 @@ struct ContentView: View {
                 NavigationStack {
                     WellnessView(
                         sharedHealthDataService: sharedHealthDataService,
-                        scrollToTopSignal: wellnessScrollToTopSignal
+                        scrollToTopSignal: wellnessScrollToTopSignal,
+                        refreshSignal: refreshSignal
                     )
                 }
                 .environment(\.wavePreset, .wellness)
@@ -45,6 +56,22 @@ struct ContentView: View {
             }
         }
         .tabViewStyle(.sidebarAdaptable)
+        // Foreground refresh: scenePhase .background → .active (Correction #16/#60)
+        .onChange(of: scenePhase) { oldPhase, newPhase in
+            if oldPhase == .background, newPhase == .active {
+                foregroundTask?.cancel()
+                foregroundTask = Task {
+                    _ = await refreshCoordinator?.requestRefresh(source: .foreground)
+                }
+            }
+        }
+        // Listen for refresh signals from coordinator (foreground + HK observer triggers)
+        .task {
+            guard let coordinator = refreshCoordinator else { return }
+            for await _ in coordinator.refreshNeededStream {
+                refreshSignal += 1
+            }
+        }
     }
 
     private var tabSelection: Binding<AppSection> {

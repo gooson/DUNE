@@ -17,9 +17,12 @@ struct DashboardView: View {
         GridItem(.flexible(), spacing: DS.Spacing.md)
     ]
 
-    init(sharedHealthDataService: SharedHealthDataService? = nil, scrollToTopSignal: Int = 0) {
+    private let refreshSignal: Int
+
+    init(sharedHealthDataService: SharedHealthDataService? = nil, scrollToTopSignal: Int = 0, refreshSignal: Int = 0) {
         _viewModel = State(initialValue: DashboardViewModel(sharedHealthDataService: sharedHealthDataService))
         self.scrollToTopSignal = scrollToTopSignal
+        self.refreshSignal = refreshSignal
     }
 
     var body: some View {
@@ -136,7 +139,7 @@ struct DashboardView: View {
         ) {
             await viewModel.loadData()
         }
-        .task {
+        .task(id: refreshSignal) {
             await viewModel.loadData()
             withAnimation(.easeOut(duration: 0.3)) {
                 hasAppeared = true

@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import HealthKit
 
 @main
 struct DUNEApp: App {
@@ -11,6 +12,8 @@ struct DUNEApp: App {
 
     let modelContainer: ModelContainer
     private let sharedHealthDataService: SharedHealthDataService
+    private let refreshCoordinator: AppRefreshCoordinating
+    private let observerManager: HealthKitObserverManager
     private static let minimumLaunchSplashDuration: Duration = .seconds(1)
     private static let launchSplashResolveDuration: Duration = .milliseconds(700)
 
@@ -28,7 +31,14 @@ struct DUNEApp: App {
     }
 
     init() {
-        self.sharedHealthDataService = SharedHealthDataServiceImpl(healthKitManager: .shared)
+        let sharedService: SharedHealthDataService = SharedHealthDataServiceImpl(healthKitManager: .shared)
+        self.sharedHealthDataService = sharedService
+        let coordinator = AppRefreshCoordinatorImpl(sharedHealthDataService: sharedService)
+        self.refreshCoordinator = coordinator
+        self.observerManager = HealthKitObserverManager(
+            store: HKHealthStore(),
+            coordinator: coordinator
+        )
         let cloudSyncEnabled = UserDefaults.standard.bool(forKey: "isCloudSyncEnabled")
         let config = ModelConfiguration(
             cloudKitDatabase: (cloudSyncEnabled && !Self.isRunningXCTest) ? .automatic : .none
@@ -95,10 +105,13 @@ struct DUNEApp: App {
     }
 
     private var appContent: some View {
-        ContentView(sharedHealthDataService: sharedHealthDataService)
-            .sheet(isPresented: $showConsentSheet) {
-                CloudSyncConsentView(isPresented: $showConsentSheet)
-            }
+        ContentView(
+            sharedHealthDataService: sharedHealthDataService,
+            refreshCoordinator: refreshCoordinator
+        )
+        .sheet(isPresented: $showConsentSheet) {
+            CloudSyncConsentView(isPresented: $showConsentSheet)
+        }
     }
 
     @MainActor
@@ -113,6 +126,7 @@ struct DUNEApp: App {
         // Skip WC activation during XCTest to reduce startup flakiness.
         if !Self.isRunningXCTest {
             WatchSessionManager.shared.activate()
+            observerManager.startObserving()
         }
     }
 
