@@ -3,50 +3,64 @@ name: copy-voice
 description: "문서와 UI 텍스트의 톤앤매너 가이드. 단어 선택, 메시지 패턴. 사용자 대면 텍스트 작성 시 자동으로 참조됩니다."
 ---
 
-# Copy & Voice Guide
-
-> 이 파일은 프로젝트별로 커스터마이즈합니다.
-> 프로젝트의 보이스가 확정되면 아래 항목을 채웁니다.
+# Copy & Voice Guide — DUNE Health App
 
 ## Tone
 
-- [To be defined: friendly, professional, casual, authoritative, etc.]
+- **Calm & Supportive**: 건강 데이터를 판단 없이 전달
+- **Data-Informed**: 수치 기반이되 위협적이지 않게
+- **Concise**: 짧고 명확한 문장, 불필요한 수식어 최소화
+- **Korean-first**: UI 텍스트는 한국어, 단위/약어는 영어 유지
 
 ## Principles
 
-1. [To be defined, e.g., "Human conversation tone"]
-2. [To be defined, e.g., "Helpful errors - no blame"]
-3. [To be defined, e.g., "Short sentences, clear words"]
+1. **사실 전달, 판단 최소화**: "컨디션이 나쁩니다" → "평소보다 낮은 수치입니다"
+2. **행동 유도보다 정보 제공**: "운동하세요" → "회복이 충분합니다"
+3. **짧은 문장**: 카드 UI에 맞게 1-2줄 이내
+4. **숫자는 항상 formattedWithSeparator 경유**: 1000 → 1,000
 
 ## Word Choices
 
 ### Preferred Terms
 | Instead of | Use |
 |-----------|-----|
-| [e.g., "Invalid"] | [e.g., "didn't work"] |
-| [e.g., "Error"] | [e.g., describe what happened] |
-| [e.g., "Successfully"] | [e.g., state what happened] |
+| 에러/오류 | 데이터를 불러올 수 없습니다 |
+| 실패 | 다시 시도해 주세요 |
+| 성공적으로 저장됨 | 저장되었습니다 |
+| 잘못된 입력 | {필드}를 확인해 주세요 |
+| 없음/N/A | — (em dash) |
+| 나쁨/위험 | 평소보다 낮음 |
+| 좋음/최고 | 평소보다 높음 |
 
 ### Words to Avoid
-- [To be defined]
+- "위험", "경고" — 의료 앱이 아니므로 공포 유발 금지
+- "완벽", "최고" — 과장 표현 금지
+- "실패했습니다" — 사용자 탓으로 느껴지는 표현
+
+## Score Display
+
+- 점수 범위: 0-100
+- 점수가 없을 때: "--" (double dash)
+- 점수 라벨: "컨디션", "수면 점수", "신체 점수" (한국어)
+- 변화량: "+3", "-5" (부호 항상 표시), 변화 없음은 표시 안 함
 
 ## Error Messages
 
-- Pattern: [To be defined, e.g., "what happened + what to do next"]
-- Tone: [To be defined, e.g., "empathetic, never blame the user"]
-- Example: [To be defined]
-
-## Button Labels
-
-- Pattern: [To be defined, e.g., "verb + noun"]
-- Examples: [To be defined]
-
-## Notification Messages
-
-- Success: [To be defined]
-- Warning: [To be defined]
-- Info: [To be defined]
+- Pattern: **무엇이 안 됐는지 + 어떻게 하면 되는지**
+- 예시: "수면 데이터를 불러올 수 없습니다. Apple Health 권한을 확인해 주세요."
+- Empty state에서 비난 금지: "데이터가 없습니다" → "아직 기록이 없습니다"
 
 ## Empty States
 
-- Pattern: [To be defined, e.g., "explain why + suggest action"]
+- Pattern: **상태 설명 + 행동 제안** (강요하지 않음)
+- 예시: "아직 운동 기록이 없습니다. Apple Watch로 운동하면 자동으로 기록됩니다."
+- 첫 사용자 시나리오 항상 고려
+
+## Units & Formatting
+
+- 체중: kg (소수점 1자리)
+- 심박수: bpm (정수)
+- HRV: ms (정수)
+- 수면: 시간 분 (예: "7시간 30분")
+- 볼륨: kg (정수, 천단위 구분)
+- 거리: km (소수점 1자리)

@@ -23,6 +23,10 @@ git diff HEAD > /tmp/review-diff.txt
 - diff가 비어있으면 `git diff main...HEAD` 로 브랜치 전체 변경 확인
 - diff 라인 수를 세어 크기 파악: `wc -l /tmp/review-diff.txt`
 
+**MCP 보조 분석** (변경 파일이 복잡한 의존 관계를 가질 때):
+- **Serena** `find_referencing_symbols`: 변경된 함수/타입의 호출자 파악 → 영향 범위 누락 방지
+- 리뷰 범위가 명확하면 MCP 없이 진행 (불필요한 호출 지양)
+
 ### Step 2: 6관점 리뷰 실행
 
 다음 6개 전문가 관점에서 리뷰를 수행합니다.
