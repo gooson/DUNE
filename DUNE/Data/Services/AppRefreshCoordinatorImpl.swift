@@ -52,6 +52,9 @@ actor AppRefreshCoordinatorImpl: AppRefreshCoordinating {
         AppLogger.ui.info("[AppRefreshCoordinator] Force refresh triggered")
     }
 
+    // Intentionally does NOT update lastRefreshDate — background delivery
+    // only pre-warms cache. Next foreground requestRefresh() should still
+    // pass throttle check so the UI gets fresh data.
     func invalidateCacheOnly() async {
         await sharedHealthDataService.invalidateCache()
         AppLogger.ui.info("[AppRefreshCoordinator] Cache invalidated (background delivery)")

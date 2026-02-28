@@ -9,6 +9,7 @@ struct ContentView: View {
     @State private var activityScrollToTopSignal = 0
     @State private var wellnessScrollToTopSignal = 0
     @State private var refreshSignal = 0
+    @State private var foregroundTask: Task<Void, Never>?
 
     init(
         sharedHealthDataService: SharedHealthDataService? = nil,
@@ -55,12 +56,12 @@ struct ContentView: View {
             }
         }
         .tabViewStyle(.sidebarAdaptable)
-        // Foreground refresh: scenePhase .background → .active (Correction #60: specific transition only)
+        // Foreground refresh: scenePhase .background → .active (Correction #16/#60)
         .onChange(of: scenePhase) { oldPhase, newPhase in
             if oldPhase == .background, newPhase == .active {
-                Task {
+                foregroundTask?.cancel()
+                foregroundTask = Task {
                     _ = await refreshCoordinator?.requestRefresh(source: .foreground)
-                    // UI update is handled by refreshNeededStream listener below
                 }
             }
         }

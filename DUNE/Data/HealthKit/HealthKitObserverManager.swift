@@ -23,7 +23,7 @@ final class HealthKitObserverManager: Sendable {
         (HKQuantityType(.bodyMass), .hourly),
         (HKQuantityType(.bodyFatPercentage), .hourly),
         (HKQuantityType(.bodyMassIndex), .hourly),
-        (HKObjectType.workoutType() as! HKSampleType, .hourly),
+        (HKSampleType.workoutType(), .hourly),
     ]
 
     init(
@@ -75,11 +75,11 @@ final class HealthKitObserverManager: Sendable {
             }
         }
 
-        store.execute(query)
-
         Task {
             await state.addQuery(query, for: typeName)
         }
+
+        store.execute(query)
 
         AppLogger.healthKit.info("[ObserverManager] Registered observer for \(typeName)")
     }
@@ -91,7 +91,7 @@ final class HealthKitObserverManager: Sendable {
             if let error {
                 AppLogger.healthKit.error("[ObserverManager] Background delivery failed for \(typeName): \(error.localizedDescription)")
             } else if success {
-                AppLogger.healthKit.info("[ObserverManager] Background delivery enabled for \(typeName) (\(frequency.debugDescription))")
+                AppLogger.healthKit.info("[ObserverManager] Background delivery enabled for \(typeName) (\(frequency.logDescription))")
             }
         }
     }
@@ -119,7 +119,7 @@ extension HealthKitObserverManager {
 // MARK: - HKUpdateFrequency Debug
 
 extension HKUpdateFrequency {
-    var debugDescription: String {
+    var logDescription: String {
         switch self {
         case .immediate: return "immediate"
         case .hourly: return "hourly"
