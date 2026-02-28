@@ -1,0 +1,189 @@
+import CoreLocation
+import Foundation
+import OSLog
+
+/// Fetches weather data from Open-Meteo REST API as a fallback for WeatherKit.
+/// Uses the same 15-minute caching pattern as WeatherDataService.
+/// Attribution: Open-Meteo.com (CC BY 4.0)
+final class OpenMeteoService: WeatherFetching, @unchecked Sendable {
+    private var cached: WeatherSnapshot?
+    private let lock = NSLock()
+    private let session: URLSession
+
+    init(session: URLSession = .shared) {
+        self.session = session
+    }
+
+    func fetchWeather(for location: CLLocation) async throws -> WeatherSnapshot {
+        if let snapshot = lock.withLock({ cached }), !snapshot.isStale {
+            return snapshot
+        }
+
+        let url = buildURL(latitude: location.coordinate.latitude,
+                           longitude: location.coordinate.longitude)
+        let (data, response) = try await session.data(from: url)
+
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw OpenMeteoError.invalidResponse
+        }
+        guard (200..<300).contains(httpResponse.statusCode) else {
+            throw OpenMeteoError.httpError(httpResponse.statusCode)
+        }
+
+        let decoded = try JSONDecoder().decode(OpenMeteoResponse.self, from: data)
+        let snapshot = mapToSnapshot(decoded)
+        lock.withLock { cached = snapshot }
+        return snapshot
+    }
+
+    // MARK: - URL
+
+    private func buildURL(latitude: Double, longitude: Double) -> URL {
+        var components = URLComponents(string: "https://api.open-meteo.com/v1/forecast")!
+        components.queryItems = [
+            URLQueryItem(name: "latitude", value: String(latitude)),
+            URLQueryItem(name: "longitude", value: String(longitude)),
+            URLQueryItem(
+                name: "current",
+                value: "temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,wind_speed_10m,uv_index,is_day"
+            ),
+            URLQueryItem(
+                name: "hourly",
+                value: "temperature_2m,weather_code,is_day"
+            ),
+            URLQueryItem(name: "forecast_hours", value: "6"),
+            URLQueryItem(name: "timezone", value: "auto"),
+        ]
+        return components.url!
+    }
+
+    // MARK: - Mapping
+
+    private func mapToSnapshot(_ response: OpenMeteoResponse) -> WeatherSnapshot {
+        let current = response.current
+
+        let hourlyItems: [WeatherSnapshot.HourlyWeather]
+        if let hourly = response.hourly {
+            hourlyItems = zip(hourly.time, zip(hourly.temperature_2m, hourly.weather_code))
+                .prefix(6)
+                .compactMap { timeString, pair -> WeatherSnapshot.HourlyWeather? in
+                    let (temp, code) = pair
+                    guard let date = Self.parseISO8601(timeString) else { return nil }
+                    return WeatherSnapshot.HourlyWeather(
+                        hour: date,
+                        temperature: clampTemperature(temp),
+                        condition: Self.mapWMOCode(code)
+                    )
+                }
+        } else {
+            hourlyItems = []
+        }
+
+        return WeatherSnapshot(
+            temperature: clampTemperature(current.temperature_2m),
+            feelsLike: clampTemperature(current.apparent_temperature),
+            condition: Self.mapWMOCode(current.weather_code),
+            humidity: Swift.max(0, Swift.min(1, current.relative_humidity_2m / 100.0)),
+            uvIndex: Swift.max(0, Swift.min(15, Int(current.uv_index.rounded()))),
+            windSpeed: Swift.max(0, Swift.min(200, current.wind_speed_10m)),
+            isDaytime: current.is_day == 1,
+            fetchedAt: Date(),
+            hourlyForecast: hourlyItems
+        )
+    }
+
+    /// Clamp temperature to physical range (-50°C to 60°C), matching WeatherDataService.
+    private func clampTemperature(_ value: Double) -> Double {
+        guard value.isFinite else { return 20 }
+        return Swift.max(-50, Swift.min(60, value))
+    }
+
+    /// Maps WMO weather interpretation codes to WeatherConditionType.
+    /// Reference: https://open-meteo.com/en/docs
+    static func mapWMOCode(_ code: Int) -> WeatherConditionType {
+        switch code {
+        case 0, 1:
+            return .clear
+        case 2:
+            return .partlyCloudy
+        case 3:
+            return .cloudy
+        case 45, 48:
+            return .fog
+        case 51, 53, 55:
+            return .rain
+        case 56, 57:
+            return .sleet
+        case 61, 63:
+            return .rain
+        case 65:
+            return .heavyRain
+        case 66, 67:
+            return .sleet
+        case 71, 73, 75, 77:
+            return .snow
+        case 80, 81:
+            return .rain
+        case 82:
+            return .heavyRain
+        case 85, 86:
+            return .snow
+        case 95:
+            return .thunderstorm
+        case 96, 99:
+            return .thunderstorm
+        default:
+            return .cloudy
+        }
+    }
+
+    // MARK: - ISO 8601 Parsing
+
+    /// Open-Meteo returns "2026-02-28T14:00" (no seconds, no timezone offset in hourly).
+    /// Uses nonisolated(unsafe) to satisfy Swift 6 strict concurrency for NSObject-based formatters.
+    static func parseISO8601(_ string: String) -> Date? {
+        // Try standard ISO 8601 first
+        let isoFormatter = ISO8601DateFormatter()
+        isoFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        if let date = isoFormatter.date(from: string) { return date }
+
+        isoFormatter.formatOptions = [.withInternetDateTime]
+        if let date = isoFormatter.date(from: string) { return date }
+
+        // Open-Meteo hourly format: "2026-02-28T14:00" (no timezone suffix)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm"
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        return dateFormatter.date(from: string)
+    }
+}
+
+// MARK: - Errors
+
+enum OpenMeteoError: Error, Sendable {
+    case invalidResponse
+    case httpError(Int)
+}
+
+// MARK: - Response Models
+
+struct OpenMeteoResponse: Decodable, Sendable {
+    let current: CurrentData
+    let hourly: HourlyData?
+
+    struct CurrentData: Decodable, Sendable {
+        let temperature_2m: Double
+        let apparent_temperature: Double
+        let relative_humidity_2m: Double
+        let weather_code: Int
+        let wind_speed_10m: Double
+        let uv_index: Double
+        let is_day: Int
+    }
+
+    struct HourlyData: Decodable, Sendable {
+        let time: [String]
+        let temperature_2m: [Double]
+        let weather_code: [Int]
+    }
+}

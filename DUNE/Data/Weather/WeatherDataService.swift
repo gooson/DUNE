@@ -1,6 +1,7 @@
-import Foundation
-import WeatherKit
 import CoreLocation
+import Foundation
+import OSLog
+import WeatherKit
 
 /// Protocol for weather data fetching (testable).
 protocol WeatherFetching: Sendable {
@@ -19,16 +20,20 @@ enum WeatherError: Error, Sendable {
 }
 
 /// Combines LocationService + WeatherDataService behind a single async call.
+/// Falls back to OpenMeteoService when the primary WeatherKit service fails.
 final class WeatherProvider: WeatherProviding, Sendable {
     private let locationService: LocationService
     private let weatherService: WeatherFetching
+    private let fallbackService: WeatherFetching?
 
     init(
         locationService: LocationService,
-        weatherService: WeatherFetching = WeatherDataService()
+        weatherService: WeatherFetching = WeatherDataService(),
+        fallbackService: WeatherFetching? = OpenMeteoService()
     ) {
         self.locationService = locationService
         self.weatherService = weatherService
+        self.fallbackService = fallbackService
     }
 
     func fetchCurrentWeather() async throws -> WeatherSnapshot {
@@ -45,7 +50,13 @@ final class WeatherProvider: WeatherProviding, Sendable {
         }
 
         let location = try await locationService.requestLocation()
-        return try await weatherService.fetchWeather(for: location)
+        do {
+            return try await weatherService.fetchWeather(for: location)
+        } catch {
+            guard let fallbackService else { throw error }
+            AppLogger.data.info("[Weather] Primary failed (\(error.localizedDescription)), trying fallback")
+            return try await fallbackService.fetchWeather(for: location)
+        }
     }
 }
 
