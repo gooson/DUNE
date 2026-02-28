@@ -141,7 +141,7 @@ struct SetInputSheet: View {
 
     private var previousSetsDetail: some View {
         List {
-            ForEach(Array(previousSets.enumerated()), id: \.offset) { _, set in
+            ForEach(previousSets, id: \.setNumber) { set in
                 HStack(spacing: DS.Spacing.sm) {
                     Text("Set \(set.setNumber)")
                         .font(.caption2)
