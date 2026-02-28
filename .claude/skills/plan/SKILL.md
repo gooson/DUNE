@@ -21,6 +21,18 @@ $ARGUMENTS 에 대한 구조화된 구현 계획을 생성합니다.
 - **Solution Research**: docs/solutions/ 에서 관련 과거 해결책 검색
 - **Best Practices**: 해당 기술/프레임워크의 최신 모범 사례 조사
 
+### MCP 도구 활용
+
+리서치 단계에서 MCP 도구를 적극 활용합니다:
+
+| 도구 | 활용 시점 | 예시 |
+|------|----------|------|
+| **Context7** | Swift/SwiftUI/HealthKit API 동작 확인 | `resolve-library-id` → `get-library-docs` 로 공식 문서 참조 |
+| **Serena** | 심볼 의존 관계 파악 | `find_symbol` + `find_referencing_symbols`로 영향 범위 분석 |
+| **Sequential Thinking** | 복잡한 설계 결정 분해 | 대안 비교 시 단계적 사고로 trade-off 분석 |
+
+**활용 우선순위**: Serena(코드 구조) → Context7(API 확인) → Sequential Thinking(설계 결정)
+
 ### Phase 2: Design (설계)
 
 분석 결과를 바탕으로 다음을 설계합니다:
