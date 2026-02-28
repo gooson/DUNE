@@ -15,6 +15,9 @@ final class DashboardViewModel {
     var errorMessage: String?
     var lastUpdated: Date?
     var coachingMessage: String?
+    var focusInsight: CoachingInsight?
+    private(set) var insightCards: [InsightCardData] = []
+    var workoutSuggestion: WorkoutSuggestion?
     var heroBaselineDetails: [BaselineDetail] = []
     var pinnedCategories: [HealthMetric.Category]
     var baselineDeltasByMetricID: [String: MetricBaselineDelta] = [:]
@@ -74,6 +77,9 @@ final class DashboardViewModel {
     private let pinnedMetricsStore: TodayPinnedMetricsStore
     private let sharedHealthDataService: SharedHealthDataService?
     private let scoreUseCase = CalculateConditionScoreUseCase()
+    private let coachingEngine = CoachingEngine()
+    private let trendService = TrendAnalysisService()
+    private let dismissStore = InsightCardDismissStore.shared
 
     init(
         healthKitManager: HealthKitManager = .shared,
@@ -119,6 +125,8 @@ final class DashboardViewModel {
         baselineStatus = nil
         recentScores = []
         coachingMessage = nil
+        focusInsight = nil
+        insightCards = []
         heroBaselineDetails = []
         baselineDeltasByMetricID = [:]
         activeDaysThisWeek = 0
@@ -174,7 +182,8 @@ final class DashboardViewModel {
         }
 
         sortedMetrics = allMetrics.sorted { $0.changeSignificance > $1.changeSignificance }
-        coachingMessage = buildCoachingMessage()
+        buildCoachingInsights()
+        coachingMessage = focusInsight?.message ?? buildCoachingMessage()
         heroBaselineDetails = buildHeroBaselineDetails()
         lastUpdated = Date()
         isLoading = false
@@ -820,6 +829,40 @@ final class DashboardViewModel {
             category: .bmi,
             isHistorical: isHistorical
         )
+    }
+
+    func dismissInsightCard(id: String) {
+        dismissStore.dismiss(cardID: id)
+        insightCards.removeAll { $0.id == id }
+    }
+
+    private func buildCoachingInsights() {
+        let sleepMetric = sortedMetrics.first { $0.category == .sleep }
+
+        let input = CoachingInput(
+            conditionScore: conditionScore,
+            fatigueStates: [],
+            sleepScore: nil,
+            sleepMinutes: sleepMetric?.value,
+            deepSleepMinutes: nil,
+            workoutStreak: nil,
+            hrvTrend: .insufficient,
+            sleepTrend: .insufficient,
+            activeDaysThisWeek: activeDaysThisWeek,
+            weeklyGoalDays: weeklyGoalDays,
+            daysSinceLastWorkout: nil,
+            workoutSuggestion: workoutSuggestion,
+            recentPRExerciseName: nil,
+            currentStreakMilestone: nil
+        )
+
+        let output = coachingEngine.generate(from: input)
+        focusInsight = output.focusInsight
+
+        // Filter dismissed cards
+        insightCards = output.insightCards
+            .filter { !dismissStore.isDismissed(cardID: $0.id) }
+            .map { InsightCardData(from: $0) }
     }
 
     private func buildCoachingMessage() -> String {
