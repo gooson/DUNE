@@ -12,6 +12,8 @@ struct RangeBarChartView: View {
 
     @ScaledMetric(relativeTo: .body) private var chartHeight: CGFloat = 220
 
+    @Environment(\.appTheme) private var theme
+
     @State private var selectedDate: Date?
 
     var body: some View {
@@ -55,7 +57,7 @@ struct RangeBarChartView: View {
 
                 if let point = selectedPoint {
                     RuleMark(x: .value("Selected", point.date, unit: xUnit))
-                        .foregroundStyle(DS.Color.warmGlow.opacity(0.35))
+                        .foregroundStyle(theme.accentColor.opacity(0.35))
                         .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
                 }
             }
@@ -66,17 +68,17 @@ struct RangeBarChartView: View {
             .chartXAxis {
                 AxisMarks(values: .stride(by: period.strideComponent, count: period.strideCount)) { _ in
                     AxisValueLabel(format: period.axisLabelFormat)
-                        .foregroundStyle(DS.Color.sandMuted)
+                        .foregroundStyle(theme.sandColor)
                     AxisGridLine()
-                        .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
+                        .foregroundStyle(theme.accentColor.opacity(0.30))
                 }
             }
             .chartYAxis {
                 AxisMarks(position: .leading) { _ in
                     AxisValueLabel()
-                        .foregroundStyle(DS.Color.sandMuted)
+                        .foregroundStyle(theme.sandColor)
                     AxisGridLine()
-                        .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
+                        .foregroundStyle(theme.accentColor.opacity(0.30))
                 }
             }
             .chartXSelection(value: $selectedDate)

@@ -8,6 +8,7 @@ struct MetricDetailView: View {
     @State private var viewModel = MetricDetailViewModel()
     @State private var showShimmer = false
     @State private var shimmerTask: Task<Void, Never>?
+    @Environment(\.appTheme) private var theme
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -53,7 +54,7 @@ struct MetricDetailView: View {
                 .overlay {
                     if showShimmer {
                         RoundedRectangle(cornerRadius: DS.Radius.md)
-                            .fill(DS.Color.warmGlow.opacity(0.25))
+                            .fill(theme.accentColor.opacity(0.25))
                             .allowsHitTesting(false)
                             .transition(.opacity)
                     }

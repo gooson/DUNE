@@ -9,11 +9,12 @@ struct ProgressRingView: View {
 
     @State private var animatedProgress: Double = 0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.appTheme) private var theme
 
     /// Pre-resolved gradient colors — computed once at init, not per render (P1 perf fix).
     private var gradientColors: [Color] {
         useWarmGradient
-            ? Cache.warmGradientColors(base: ringColor)
+            ? Cache.accentGradientColors(base: ringColor, theme: theme)
             : [ringColor.opacity(0.6), ringColor]
     }
 
@@ -59,13 +60,18 @@ struct ProgressRingView: View {
         }
     }
 
-    // Correction #83 — static color caching for warm gradient
+    // Correction #83 — static color caching for accent gradient (per-theme)
     private enum Cache {
-        static let warmGlow06 = Color("AccentColor").opacity(0.6)
-        static let warmGlow08 = Color("AccentColor").opacity(0.8)
+        static let desertAccent06 = Color("AccentColor").opacity(0.6)
+        static let desertAccent08 = Color("AccentColor").opacity(0.8)
+        static let oceanAccent06 = Color("OceanAccent").opacity(0.6)
+        static let oceanAccent08 = Color("OceanAccent").opacity(0.8)
 
-        static func warmGradientColors(base: Color) -> [Color] {
-            [warmGlow06, base, warmGlow08]
+        static func accentGradientColors(base: Color, theme: AppTheme) -> [Color] {
+            switch theme {
+            case .desertWarm: [desertAccent06, base, desertAccent08]
+            case .oceanCool:  [oceanAccent06, base, oceanAccent08]
+            }
         }
     }
 }

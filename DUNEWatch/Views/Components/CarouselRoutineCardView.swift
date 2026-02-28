@@ -24,12 +24,14 @@ struct CarouselRoutineCardView: View {
         self.metaLabel = meta
     }
 
+    @Environment(\.appTheme) private var theme
+
     var body: some View {
         VStack(spacing: DS.Spacing.sm) {
             // Section badge
             Text("ROUTINE")
                 .font(DS.Typography.tinyLabel)
-                .foregroundStyle(DS.Color.warmGlow)
+                .foregroundStyle(theme.accentColor)
                 .tracking(0.5)
 
             Spacer()

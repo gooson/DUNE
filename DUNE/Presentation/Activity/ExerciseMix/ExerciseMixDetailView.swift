@@ -7,6 +7,7 @@ struct ExerciseMixDetailView: View {
     @State private var viewModel = ExerciseMixDetailViewModel()
     @Query(sort: \ExerciseRecord.date, order: .reverse) private var exerciseRecords: [ExerciseRecord]
 
+    @Environment(\.appTheme) private var theme
     @State private var selectedAngle: Double?
     @State private var selectedExercise: String?
 
@@ -162,10 +163,10 @@ struct ExerciseMixDetailView: View {
 
                     GeometryReader { geo in
                         Capsule()
-                            .fill(DS.Color.warmGlow.opacity(0.15))
+                            .fill(theme.accentColor.opacity(0.15))
                             .overlay(alignment: .leading) {
                                 Capsule()
-                                    .fill(DS.Color.warmGlow)
+                                    .fill(theme.accentColor)
                                     .frame(width: geo.size.width * CGFloat(freq.percentage))
                             }
                     }

@@ -4,6 +4,7 @@ struct InjuryFormSheet: View {
     @Bindable var viewModel: InjuryViewModel
     let isEdit: Bool
     let onSave: () -> Void
+    @Environment(\.appTheme) private var theme
     @Environment(\.dismiss) private var dismiss
     @State private var saveCount = 0
 
@@ -59,7 +60,7 @@ struct InjuryFormSheet: View {
                                 VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                                     Text(severity.displayName)
                                         .font(.subheadline.weight(.medium))
-                                        .foregroundStyle(DS.Color.primaryText)
+                                        .foregroundStyle(theme.sandColor)
                                     Text(severity.severityDescription)
                                         .font(.caption)
                                         .foregroundStyle(DS.Color.textSecondary)

@@ -1,23 +1,15 @@
 import SwiftUI
 
-/// Theme selection UI. Currently shows Desert Warm as the only available theme
-/// with placeholders for future themes. Actual theme switching is a separate task.
+/// Theme selection UI with functional theme switching.
 struct ThemePickerSection: View {
+    @AppStorage("com.dune.app.theme") private var selectedTheme: AppTheme = .desertWarm
+    @Environment(\.appTheme) private var theme
+
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.md) {
-            themeRow(
-                name: "Desert Warm",
-                colors: [DS.Color.warmGlow, DS.Color.desertBronze, DS.Color.desertDusk],
-                isSelected: true,
-                isAvailable: true
-            )
-
-            themeRow(
-                name: "Ocean Cool",
-                colors: [.cyan, .blue, .indigo],
-                isSelected: false,
-                isAvailable: false
-            )
+            ForEach(AppTheme.allCases, id: \.self) { appTheme in
+                themeRow(appTheme)
+            }
 
             themeRow(
                 name: "Forest Green",
@@ -28,6 +20,37 @@ struct ThemePickerSection: View {
         }
     }
 
+    private func themeRow(_ appTheme: AppTheme) -> some View {
+        Button {
+            withAnimation(DS.Animation.standard) {
+                selectedTheme = appTheme
+            }
+        } label: {
+            HStack(spacing: DS.Spacing.md) {
+                HStack(spacing: DS.Spacing.xs) {
+                    ForEach(appTheme.swatchColors.indices, id: \.self) { index in
+                        Circle()
+                            .fill(appTheme.swatchColors[index])
+                            .frame(width: 20, height: 20)
+                    }
+                }
+
+                Text(appTheme.displayName)
+                    .foregroundStyle(.primary)
+
+                Spacer()
+
+                if selectedTheme == appTheme {
+                    Image(systemName: "checkmark")
+                        .foregroundStyle(theme.accentColor)
+                        .fontWeight(.semibold)
+                }
+            }
+        }
+        .buttonStyle(.plain)
+    }
+
+    /// Placeholder for future themes (Forest Green etc.)
     private func themeRow(
         name: String,
         colors: [Color],
@@ -35,7 +58,6 @@ struct ThemePickerSection: View {
         isAvailable: Bool
     ) -> some View {
         HStack(spacing: DS.Spacing.md) {
-            // Color swatches
             HStack(spacing: DS.Spacing.xs) {
                 ForEach(colors.indices, id: \.self) { index in
                     Circle()
@@ -45,21 +67,28 @@ struct ThemePickerSection: View {
             }
 
             Text(name)
-                .foregroundStyle(isAvailable ? .primary : .secondary)
+                .foregroundStyle(.secondary)
 
             Spacer()
 
-            if isSelected {
-                Image(systemName: "checkmark")
-                    .foregroundStyle(DS.Color.warmGlow)
-                    .fontWeight(.semibold)
-            } else if !isAvailable {
-                Text("Coming Soon")
-                    .font(.caption)
-                    .foregroundStyle(.tertiary)
-            }
+            Text("Coming Soon")
+                .font(.caption)
+                .foregroundStyle(.tertiary)
         }
-        .opacity(isAvailable ? 1.0 : 0.6)
+        .opacity(0.6)
+    }
+}
+
+// MARK: - Swatch Colors
+
+private extension AppTheme {
+    var swatchColors: [Color] {
+        switch self {
+        case .desertWarm:
+            [DS.Color.warmGlow, DS.Color.desertBronze, DS.Color.desertDusk]
+        case .oceanCool:
+            [Color("OceanSurface"), Color("OceanMid"), Color("OceanDeep")]
+        }
     }
 }
 

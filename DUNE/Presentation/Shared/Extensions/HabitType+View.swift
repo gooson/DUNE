@@ -64,4 +64,22 @@ extension HabitIconCategory {
         case .chores:      DS.Color.activityOther
         }
     }
+
+    /// Theme-aware variant of `themeColor`.
+    func themeColor(for theme: AppTheme) -> Color {
+        switch self {
+        case .health:      DS.Color.positive
+        case .fitness:     DS.Color.activity
+        case .study:       DS.Color.hrv
+        case .coding:      DS.Color.rhr
+        case .mindfulness: DS.Color.sleep
+        case .nutrition:   theme.accentColor
+        case .hydration:   DS.Color.tabWellness
+        case .sleep:       DS.Color.sleep
+        case .social:      DS.Color.activityDance
+        case .creative:    DS.Color.activityMindBody
+        case .finance:     theme.bronzeColor
+        case .chores:      DS.Color.activityOther
+        }
+    }
 }

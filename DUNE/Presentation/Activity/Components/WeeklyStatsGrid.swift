@@ -45,6 +45,8 @@ struct WeeklyStatsGrid: View {
 struct ActivityStatCardView: View {
     let stat: ActivityStat
 
+    @Environment(\.appTheme) private var theme
+
     var body: some View {
         StandardCard {
             VStack(alignment: .leading, spacing: DS.Spacing.sm) {
@@ -66,7 +68,7 @@ struct ActivityStatCardView: View {
                 HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xs) {
                     Text(stat.value)
                         .font(DS.Typography.cardScore)
-                        .foregroundStyle(DS.Gradient.heroText)
+                        .foregroundStyle(theme.heroTextGradient)
                         .minimumScaleFactor(0.7)
                         .lineLimit(1)
 

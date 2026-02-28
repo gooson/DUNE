@@ -25,10 +25,10 @@ struct CarouselCard: Identifiable, Hashable {
             }
         }
 
-        /// Section accent color.
-        var color: Color {
+        /// Section accent color (theme-aware).
+        func color(for theme: AppTheme) -> Color {
             switch self {
-            case .routine: return DS.Color.warmGlow
+            case .routine: return theme.accentColor
             case .popular: return DS.Color.positive
             case .recent: return .secondary
             case .allExercises: return .secondary
@@ -78,6 +78,7 @@ struct CarouselCard: Identifiable, Hashable {
 struct CarouselHomeView: View {
     @Query(sort: \WorkoutTemplate.updatedAt, order: .reverse) private var templates: [WorkoutTemplate]
     @Environment(WatchConnectivityManager.self) private var connectivity
+    @Environment(\.appTheme) private var theme
 
     @State private var cards: [CarouselCard] = []
     /// Content-aware invalidation key (Correction #87).
@@ -149,7 +150,7 @@ struct CarouselHomeView: View {
                 ExerciseCardView(
                     exercise: exercise,
                     sectionLabel: card.section.label,
-                    sectionColor: card.section.color,
+                    sectionColor: card.section.color(for: theme),
                     daysAgo: daysAgo
                 )
             }

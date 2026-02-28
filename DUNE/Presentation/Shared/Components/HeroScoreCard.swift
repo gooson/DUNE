@@ -32,6 +32,7 @@ struct HeroScoreCard: View {
     @State private var isAppeared = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.horizontalSizeClass) private var sizeClass
+    @Environment(\.appTheme) private var theme
 
     private var isRegular: Bool { sizeClass == .regular }
 
@@ -42,13 +43,23 @@ struct HeroScoreCard: View {
         static let ringLineWidthCompact: CGFloat = 12
         static let subScoreBarWidthRegular: CGFloat = 48
         static let subScoreBarWidthCompact: CGFloat = 36
-        // Correction #83 — static gradient for score text
-        // Desert Palette: bronze top → desertDusk bottom (gold→blue horizon)
-        static let scoreGradient = LinearGradient(
+        // Correction #83 — cached gradients for score text (per-theme)
+        static let desertScoreGradient = LinearGradient(
             colors: [DS.Color.desertBronze, DS.Color.desertDusk],
             startPoint: .top,
             endPoint: .bottom
         )
+        static let oceanScoreGradient = LinearGradient(
+            colors: [Color("OceanBronze"), Color("OceanDusk")],
+            startPoint: .top,
+            endPoint: .bottom
+        )
+        static func scoreGradient(for theme: AppTheme) -> LinearGradient {
+            switch theme {
+            case .desertWarm: desertScoreGradient
+            case .oceanCool:  oceanScoreGradient
+            }
+        }
     }
 
     private var ringSize: CGFloat { isRegular ? Layout.ringSizeRegular : Layout.ringSizeCompact }
@@ -112,12 +123,12 @@ struct HeroScoreCard: View {
             VStack(spacing: 2) {
                 Text("\(animatedScore)")
                     .font(DS.Typography.heroScore)
-                    .foregroundStyle(Layout.scoreGradient)
+                    .foregroundStyle(Layout.scoreGradient(for: theme))
                     .contentTransition(.numericText())
 
                 Text(scoreLabel)
                     .font(.system(size: 9, weight: .semibold, design: .rounded))
-                    .foregroundStyle(DS.Color.primaryText)
+                    .foregroundStyle(theme.sandColor)
                     .tracking(1)
             }
         }
@@ -162,7 +173,7 @@ struct HeroScoreCard: View {
         VStack(alignment: .leading, spacing: 2) {
             Text(item.label)
                 .font(.caption2)
-                .foregroundStyle(DS.Color.primaryText)
+                .foregroundStyle(theme.sandColor)
 
             HStack(spacing: DS.Spacing.xs) {
                 GeometryReader { geo in
@@ -181,7 +192,7 @@ struct HeroScoreCard: View {
                 Text(item.value.map { "\($0)" } ?? "--")
                     .font(.caption)
                     .fontWeight(.medium)
-                    .foregroundStyle(item.value != nil ? AnyShapeStyle(DS.Color.primaryText) : AnyShapeStyle(.quaternary))
+                    .foregroundStyle(item.value != nil ? AnyShapeStyle(theme.sandColor) : AnyShapeStyle(.quaternary))
                     .monospacedDigit()
             }
         }

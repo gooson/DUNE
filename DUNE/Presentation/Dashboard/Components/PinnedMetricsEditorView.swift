@@ -4,6 +4,7 @@ struct PinnedMetricsEditorView: View {
     @Binding var selection: [HealthMetric.Category]
     let allowedCategories: [HealthMetric.Category]
 
+    @Environment(\.appTheme) private var theme
     @Environment(\.dismiss) private var dismiss
     @State private var workingSelection: [HealthMetric.Category] = []
 
@@ -23,7 +24,7 @@ struct PinnedMetricsEditorView: View {
                                 Image(systemName: category.iconName)
                                     .foregroundStyle(category.themeColor)
                                 Text(category.displayName)
-                                    .foregroundStyle(DS.Color.primaryText)
+                                    .foregroundStyle(theme.sandColor)
                                 Spacer()
                                 if selectedSet.contains(category) {
                                     Image(systemName: "checkmark.circle.fill")

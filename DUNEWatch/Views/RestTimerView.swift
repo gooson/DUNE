@@ -11,6 +11,7 @@ struct RestTimerView: View {
 
     @Environment(WorkoutManager.self) private var workoutManager
     @Environment(\.isLuminanceReduced) private var isLuminanceReduced
+    @Environment(\.appTheme) private var theme
 
     /// Maximum total rest duration (including +30s additions).
     private static let maxDurationSeconds = 600
@@ -53,7 +54,7 @@ struct RestTimerView: View {
                     HStack(spacing: DS.Spacing.xxs) {
                         Image(systemName: "heart.fill")
                             .font(.system(size: 8))
-                            .foregroundStyle(DS.Color.heartRate)
+                            .foregroundStyle(theme.metricHeartRate)
                         if workoutManager.heartRate > 0 {
                             Text(Int(workoutManager.heartRate).formattedWithSeparator)
                                 .font(.caption2.monospacedDigit())

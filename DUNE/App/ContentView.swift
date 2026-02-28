@@ -4,6 +4,7 @@ struct ContentView: View {
     private let sharedHealthDataService: SharedHealthDataService?
     private let refreshCoordinator: AppRefreshCoordinating?
     @Environment(\.scenePhase) private var scenePhase
+    @AppStorage("com.dune.app.theme") private var selectedTheme: AppTheme = .desertWarm
     @State private var selectedSection: AppSection = .today
     @State private var todayScrollToTopSignal = 0
     @State private var activityScrollToTopSignal = 0
@@ -31,7 +32,7 @@ struct ContentView: View {
                     )
                 }
                 .environment(\.wavePreset, .today)
-                .environment(\.waveColor, DS.Color.warmGlow)
+                .environment(\.waveColor, selectedTheme.tabTodayColor)
             }
             Tab(AppSection.train.title, systemImage: AppSection.train.icon, value: AppSection.train) {
                 NavigationStack {
@@ -42,7 +43,7 @@ struct ContentView: View {
                     )
                 }
                 .environment(\.wavePreset, .train)
-                .environment(\.waveColor, DS.Color.tabTrain)
+                .environment(\.waveColor, selectedTheme.tabTrainColor)
             }
             Tab(AppSection.wellness.title, systemImage: AppSection.wellness.icon, value: AppSection.wellness) {
                 NavigationStack {
@@ -53,7 +54,7 @@ struct ContentView: View {
                     )
                 }
                 .environment(\.wavePreset, .wellness)
-                .environment(\.waveColor, DS.Color.tabWellness)
+                .environment(\.waveColor, selectedTheme.tabWellnessColor)
             }
             Tab(AppSection.life.title, systemImage: AppSection.life.icon, value: AppSection.life) {
                 NavigationStack {
@@ -63,9 +64,11 @@ struct ContentView: View {
                     )
                 }
                 .environment(\.wavePreset, .life)
-                .environment(\.waveColor, DS.Color.tabLife)
+                .environment(\.waveColor, selectedTheme.tabLifeColor)
             }
         }
+        .environment(\.appTheme, selectedTheme)
+        .tint(selectedTheme.accentColor)
         .tabViewStyle(.sidebarAdaptable)
         // Foreground refresh: scenePhase .background → .active (Correction #16/#60)
         .onChange(of: scenePhase) { oldPhase, newPhase in

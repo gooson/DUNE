@@ -19,6 +19,7 @@ struct DetailScoreHero: View {
     }
 
     @Environment(\.horizontalSizeClass) private var sizeClass
+    @Environment(\.appTheme) private var theme
 
     private var isRegular: Bool { sizeClass == .regular }
 
@@ -36,12 +37,12 @@ struct DetailScoreHero: View {
                 VStack(spacing: 2) {
                     Text("\(score)")
                         .font(DS.Typography.heroScore)
-                        .foregroundStyle(DS.Gradient.detailScore)
+                        .foregroundStyle(theme.detailScoreGradient)
                         .contentTransition(.numericText())
 
                     Text(scoreLabel)
                         .font(.system(size: 10, weight: .semibold, design: .rounded))
-                        .foregroundStyle(DS.Color.sandMuted)
+                        .foregroundStyle(theme.sandColor)
                         .tracking(1)
                 }
             }

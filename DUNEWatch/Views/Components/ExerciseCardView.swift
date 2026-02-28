@@ -27,6 +27,8 @@ struct ExerciseCardView: View {
         )
     }
 
+    @Environment(\.appTheme) private var theme
+
     var body: some View {
         VStack(spacing: DS.Spacing.sm) {
             // Section badge
@@ -77,11 +79,11 @@ struct ExerciseCardView: View {
                 .resizable()
                 .renderingMode(.template)
                 .aspectRatio(contentMode: .fit)
-                .foregroundStyle(DS.Color.warmGlow)
+                .foregroundStyle(theme.accentColor)
         case .symbol(let name):
             Image(systemName: name)
                 .font(.system(size: 34))
-                .foregroundStyle(DS.Color.warmGlow)
+                .foregroundStyle(theme.accentColor)
         }
     }
 }

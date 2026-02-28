@@ -124,11 +124,21 @@ struct WaveOverlayView: View {
 
 // MARK: - Tab Background
 
-/// Tab root background: wave motif + warm gradient.
-/// Reads `wavePreset`, `waveColor`, and `weatherAtmosphere` from the environment.
-/// When preset is `.today` and a non-default atmosphere is set, wave color/params
-/// adapt to current weather conditions.
+/// Tab root background: theme-aware wave motif + gradient.
+/// Dispatches to Desert (sine) or Ocean (4-layer parallax) based on `\.appTheme`.
 struct TabWaveBackground: View {
+    @Environment(\.appTheme) private var theme
+
+    var body: some View {
+        switch theme {
+        case .desertWarm: DesertTabWaveContent()
+        case .oceanCool:  OceanTabWaveBackground()
+        }
+    }
+}
+
+/// Desert Warm tab background: sine wave motif + warm gradient.
+private struct DesertTabWaveContent: View {
     @Environment(\.wavePreset) private var preset
     @Environment(\.waveColor) private var color
     @Environment(\.weatherAtmosphere) private var atmosphere
@@ -159,7 +169,6 @@ struct TabWaveBackground: View {
             : [color.opacity(DS.Opacity.medium), DS.Color.warmGlow.opacity(DS.Opacity.subtle), .clear]
 
         ZStack(alignment: .top) {
-            // Primary wave
             WaveOverlayView(
                 color: resolvedColor,
                 opacity: resolvedOpacity,
@@ -170,7 +179,6 @@ struct TabWaveBackground: View {
             )
             .frame(height: 200)
 
-            // Secondary wave (Train tab dual-layer)
             if let secondary = preset.secondaryWave {
                 WaveOverlayView(
                     color: color,
@@ -196,9 +204,20 @@ struct TabWaveBackground: View {
 
 // MARK: - Detail Background
 
-/// Subtler wave for push-destination detail screens.
-/// Inherits `wavePreset` / `waveColor` from parent tab, scaled down (50% amp, 70% opacity).
+/// Theme-aware detail wave background.
 struct DetailWaveBackground: View {
+    @Environment(\.appTheme) private var theme
+
+    var body: some View {
+        switch theme {
+        case .desertWarm: DesertDetailWaveContent()
+        case .oceanCool:  OceanDetailWaveBackground()
+        }
+    }
+}
+
+/// Desert Warm detail background: single sine, scaled down.
+private struct DesertDetailWaveContent: View {
     @Environment(\.wavePreset) private var preset
     @Environment(\.waveColor) private var color
 
@@ -228,9 +247,20 @@ struct DetailWaveBackground: View {
 
 // MARK: - Sheet Background
 
-/// Lightest wave for sheet / modal presentations.
-/// Scaled down further (40% amp, 60% opacity) with shorter height.
+/// Theme-aware sheet wave background.
 struct SheetWaveBackground: View {
+    @Environment(\.appTheme) private var theme
+
+    var body: some View {
+        switch theme {
+        case .desertWarm: DesertSheetWaveContent()
+        case .oceanCool:  OceanSheetWaveBackground()
+        }
+    }
+}
+
+/// Desert Warm sheet background: single sine, lightest.
+private struct DesertSheetWaveContent: View {
     @Environment(\.wavePreset) private var preset
     @Environment(\.waveColor) private var color
 

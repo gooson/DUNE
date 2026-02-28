@@ -5,6 +5,7 @@ import SwiftUI
 struct HealthKitWorkoutDetailView: View {
     let workout: WorkoutSummary
 
+    @Environment(\.appTheme) private var theme
     @State private var viewModel = HealthKitWorkoutDetailViewModel()
 
     var body: some View {
@@ -218,7 +219,7 @@ struct HealthKitWorkoutDetailView: View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             Label("Heart Rate", systemImage: "heart.fill")
                 .font(.headline)
-                .foregroundStyle(DS.Color.primaryText)
+                .foregroundStyle(theme.sandColor)
 
             if viewModel.isLoading {
                 ProgressView()

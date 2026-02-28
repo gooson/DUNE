@@ -80,6 +80,10 @@ private struct WaveColorKey: EnvironmentKey {
     static let defaultValue: Color = DS.Color.warmGlow
 }
 
+private struct AppThemeKey: EnvironmentKey {
+    static let defaultValue: AppTheme = .desertWarm
+}
+
 extension EnvironmentValues {
     var wavePreset: WavePreset {
         get { self[WavePresetKey.self] }
@@ -89,5 +93,10 @@ extension EnvironmentValues {
     var waveColor: Color {
         get { self[WaveColorKey.self] }
         set { self[WaveColorKey.self] = newValue }
+    }
+
+    var appTheme: AppTheme {
+        get { self[AppThemeKey.self] }
+        set { self[AppThemeKey.self] = newValue }
     }
 }

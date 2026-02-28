@@ -5,6 +5,7 @@ struct LifeView: View {
     @State private var viewModel = LifeViewModel()
     @Environment(\.modelContext) private var modelContext
     @Environment(\.horizontalSizeClass) private var sizeClass
+    @Environment(\.appTheme) private var theme
 
     private let scrollToTopSignal: Int
     private let refreshSignal: Int
@@ -98,6 +99,7 @@ private struct HabitListQueryView: View {
     @Bindable var viewModel: LifeViewModel
 
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.appTheme) private var theme
 
     // Correction #68: O(1) lookup instead of O(N) per row
     @State private var habitsByID: [UUID: HabitDefinition] = [:]
@@ -177,7 +179,7 @@ private struct HabitListQueryView: View {
                         HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xs) {
                             Text("\(viewModel.completedCount)")
                                 .font(DS.Typography.cardScore)
-                                .foregroundStyle(DS.Gradient.heroText)
+                                .foregroundStyle(theme.heroTextGradient)
                             Text("/ \(viewModel.totalActiveCount)")
                                 .font(.title3)
                                 .foregroundStyle(.secondary)

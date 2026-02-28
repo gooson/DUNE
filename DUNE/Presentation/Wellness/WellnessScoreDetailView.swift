@@ -9,6 +9,7 @@ struct WellnessScoreDetailView: View {
     let hrvDailyData: [DailySample]
     let rhrDailyData: [DailySample]
 
+    @Environment(\.appTheme) private var theme
     @Environment(\.horizontalSizeClass) private var sizeClass
 
     private var isRegular: Bool { sizeClass == .regular }
@@ -176,7 +177,7 @@ struct WellnessScoreDetailView: View {
                 .font(.caption)
                 .fontWeight(.medium)
                 .monospacedDigit()
-                .foregroundStyle(score != nil ? AnyShapeStyle(DS.Color.primaryText) : AnyShapeStyle(.tertiary))
+                .foregroundStyle(score != nil ? AnyShapeStyle(theme.sandColor) : AnyShapeStyle(.tertiary))
                 .frame(width: 32, alignment: .trailing)
         }
         .accessibilityElement(children: .combine)

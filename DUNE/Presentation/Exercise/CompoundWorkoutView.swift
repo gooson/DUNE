@@ -5,6 +5,7 @@ struct CompoundWorkoutView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.appTheme) private var theme
 
     @AppStorage(WeightUnit.storageKey) private var weightUnitRaw = WeightUnit.kg.rawValue
     @State private var viewModel: CompoundWorkoutViewModel
@@ -183,7 +184,7 @@ struct CompoundWorkoutView: View {
                 isCurrent ? DS.Color.activity.opacity(0.15) : Color.secondary.opacity(0.08),
                 in: RoundedRectangle(cornerRadius: DS.Radius.sm)
             )
-            .foregroundStyle(isCurrent ? DS.Color.activity : DS.Color.primaryText)
+            .foregroundStyle(isCurrent ? DS.Color.activity : theme.sandColor)
         }
         .buttonStyle(.plain)
     }
@@ -392,7 +393,7 @@ struct CompoundWorkoutView: View {
             if transitionTimer.isRunning {
                 Text(transitionTimer.formattedTime)
                     .font(DS.Typography.cardScore)
-                    .foregroundStyle(DS.Gradient.heroText)
+                    .foregroundStyle(theme.heroTextGradient)
                     .monospacedDigit()
                     .contentTransition(.numericText())
 

@@ -105,6 +105,8 @@ struct EquipmentIconView: View {
         self.resolved = EquipmentIcon.resolve(for: equipment)
     }
 
+    @Environment(\.appTheme) private var theme
+
     var body: some View {
         switch resolved {
         case .asset(let name):
@@ -112,11 +114,11 @@ struct EquipmentIconView: View {
                 .resizable()
                 .renderingMode(.template)
                 .aspectRatio(contentMode: .fit)
-                .foregroundStyle(DS.Color.sandMuted)
+                .foregroundStyle(theme.sandColor)
         case .symbol(let name):
             Image(systemName: name)
                 .font(.system(size: size * 0.65))
-                .foregroundStyle(DS.Color.sandMuted)
+                .foregroundStyle(theme.sandColor)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }

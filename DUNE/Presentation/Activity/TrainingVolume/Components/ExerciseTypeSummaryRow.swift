@@ -5,6 +5,8 @@ import SwiftUI
 struct ExerciseTypeSummaryRow: View {
     let exerciseType: ExerciseTypeVolume
 
+    @Environment(\.appTheme) private var theme
+
     var body: some View {
         HStack(spacing: DS.Spacing.md) {
             // Icon
@@ -30,7 +32,7 @@ struct ExerciseTypeSummaryRow: View {
                 Text(exerciseType.totalDuration.formattedDuration())
                     .font(.subheadline.weight(.medium))
                     .monospacedDigit()
-                    .foregroundStyle(DS.Gradient.heroText)
+                    .foregroundStyle(theme.heroTextGradient)
                 if exerciseType.totalCalories > 0 {
                     Text("\(exerciseType.totalCalories.formattedWithSeparator()) kcal")
                         .font(.caption)

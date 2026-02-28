@@ -13,6 +13,8 @@ struct DotLineChartView: View {
 
     @ScaledMetric(relativeTo: .body) private var chartHeight: CGFloat = 220
 
+    @Environment(\.appTheme) private var theme
+
     @State private var selectedDate: Date?
     @State private var internalScrollPosition: Date = .now
 
@@ -82,7 +84,7 @@ struct DotLineChartView: View {
                     .symbolSize(48)
 
                     RuleMark(x: .value("Selected", point.date, unit: xUnit))
-                        .foregroundStyle(DS.Color.warmGlow.opacity(0.35))
+                        .foregroundStyle(theme.accentColor.opacity(0.35))
                         .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
                 }
             }
@@ -95,17 +97,17 @@ struct DotLineChartView: View {
             .chartXAxis {
                 AxisMarks(values: .stride(by: xStrideComponent, count: xStrideCount)) { _ in
                     AxisValueLabel(format: axisFormat)
-                        .foregroundStyle(DS.Color.sandMuted)
+                        .foregroundStyle(theme.sandColor)
                     AxisGridLine()
-                        .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
+                        .foregroundStyle(theme.accentColor.opacity(0.30))
                 }
             }
             .chartYAxis {
                 AxisMarks(position: .leading) { _ in
                     AxisValueLabel()
-                        .foregroundStyle(DS.Color.sandMuted)
+                        .foregroundStyle(theme.sandColor)
                     AxisGridLine()
-                        .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
+                        .foregroundStyle(theme.accentColor.opacity(0.30))
                 }
             }
             .chartXSelection(value: $selectedDate)

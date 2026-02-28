@@ -3,6 +3,7 @@ import SwiftUI
 /// Expandable section explaining how the condition score is calculated.
 struct ConditionExplainerSection: View {
     @State private var isExpanded = false
+    @Environment(\.appTheme) private var theme
     @Environment(\.horizontalSizeClass) private var sizeClass
 
     private var isRegular: Bool { sizeClass == .regular }
@@ -21,7 +22,7 @@ struct ConditionExplainerSection: View {
                     Text("How the Score Works")
                         .font(.subheadline)
                         .fontWeight(.semibold)
-                        .foregroundStyle(DS.Color.primaryText)
+                        .foregroundStyle(theme.sandColor)
 
                     Spacer()
 
