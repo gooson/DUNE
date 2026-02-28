@@ -5,6 +5,7 @@ struct SetRowView: View {
     let inputType: ExerciseInputType
     let previousSet: PreviousSetInfo?
     let weightUnit: WeightUnit
+    let cardioUnit: CardioSecondaryUnit?
     let onComplete: () -> Void
     var onFillFromPrevious: (() -> Void)?
 
@@ -73,11 +74,25 @@ struct SetRowView: View {
                 let r = prev.reps.map { "\($0)" } ?? "—"
                 Text("×\(r)")
             case .durationDistance:
+                let unit = cardioUnit ?? .km
                 let d = prev.duration.map { "\(Int($0 / 60).formattedWithSeparator)m" } ?? "—"
-                let dist = prev.distance.map {
-                    $0.formatted(.number.precision(.fractionLength(0...1))) + "k"
-                } ?? ""
-                Text(dist.isEmpty ? d : "\(d) \(dist)")
+                let suffix = unit.previousSuffix
+                let secondary: String = {
+                    if unit.usesRepsField {
+                        return prev.reps.map { "\($0)\(suffix)" } ?? ""
+                    } else if unit.usesDistanceField {
+                        // Convert stored km back to display unit
+                        let displayValue: Double? = switch unit {
+                        case .meters: prev.distance.map { $0 * 1000 }
+                        default: prev.distance
+                        }
+                        return displayValue.map {
+                            $0.formatted(.number.precision(.fractionLength(0...1))) + suffix
+                        } ?? ""
+                    }
+                    return ""
+                }()
+                Text(secondary.isEmpty ? d : "\(d) \(secondary)")
             case .durationIntensity:
                 let d = prev.duration.map { "\(Int($0 / 60).formattedWithSeparator)m" } ?? "—"
                 Text(d)
@@ -119,10 +134,20 @@ struct SetRowView: View {
                     .textFieldStyle(.roundedBorder)
                     .frame(maxWidth: 60)
 
-                TextField("km", text: $editableSet.distance)
-                    .keyboardType(.decimalPad)
-                    .textFieldStyle(.roundedBorder)
-                    .frame(maxWidth: 70)
+                let unit = cardioUnit ?? .km
+                if unit != .timeOnly {
+                    if unit.usesDistanceField {
+                        TextField(unit.placeholder, text: $editableSet.distance)
+                            .keyboardType(unit.keyboardType)
+                            .textFieldStyle(.roundedBorder)
+                            .frame(maxWidth: 70)
+                    } else if unit.usesRepsField {
+                        TextField(unit.placeholder, text: $editableSet.reps)
+                            .keyboardType(.numberPad)
+                            .textFieldStyle(.roundedBorder)
+                            .frame(maxWidth: 70)
+                    }
+                }
             }
 
         case .durationIntensity:

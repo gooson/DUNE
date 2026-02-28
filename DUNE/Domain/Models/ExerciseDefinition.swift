@@ -15,6 +15,7 @@ struct ExerciseDefinition: Codable, Identifiable, Sendable, Hashable {
     let tags: [String]?
     let description: String?
     let customCategoryName: String?
+    let cardioSecondaryUnit: CardioSecondaryUnit?
 
     /// Display-friendly category label: user category name if set, otherwise built-in display name
     var categoryDisplayName: String {
@@ -41,7 +42,8 @@ struct ExerciseDefinition: Codable, Identifiable, Sendable, Hashable {
         difficulty: String? = nil,
         tags: [String]? = nil,
         description: String? = nil,
-        customCategoryName: String? = nil
+        customCategoryName: String? = nil,
+        cardioSecondaryUnit: CardioSecondaryUnit? = nil
     ) {
         self.id = id
         self.name = name
@@ -57,5 +59,6 @@ struct ExerciseDefinition: Codable, Identifiable, Sendable, Hashable {
         self.tags = tags
         self.description = description
         self.customCategoryName = customCategoryName
+        self.cardioSecondaryUnit = cardioSecondaryUnit
     }
 }

@@ -187,6 +187,9 @@ final class WorkoutManager: NSObject {
 
     // MARK: - Set/Exercise Navigation
 
+    // TODO: Watch-side cardio logging (duration/distance) not yet implemented.
+    // WatchExerciseInfo.cardioSecondaryUnit is transmitted but unused on Watch.
+    // durationDistance exercises currently fall through to weight+reps input path.
     func completeSet(weight: Double?, reps: Int?) {
         // Validate input ranges before recording (mirrors iPhone validation rules)
         let validatedWeight: Double? = weight.flatMap { (0...500).contains($0) ? $0 : nil }
