@@ -13,13 +13,13 @@ extension CardioSecondaryUnit {
     /// Min/max derived from `validationRange` — single source of truth.
     /// Returns nil for `.timeOnly` (no secondary field).
     var stepperConfig: (label: String, step: Double, min: Double, max: Double)? {
-        guard let range = validationRange else { return nil }
+        guard self != .timeOnly, let range = validationRange else { return nil }
         let step: Double = switch self {
         case .km: 0.1
         case .meters: 50
         case .floors: 1
         case .count: 10
-        case .timeOnly: 0 // unreachable — guard above
+        case .timeOnly: return nil
         }
         return (placeholder.uppercased(), step, range.lowerBound, range.upperBound)
     }

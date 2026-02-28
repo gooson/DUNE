@@ -386,6 +386,8 @@ final class WorkoutSessionViewModel {
             if exercise.inputType == .durationDistance {
                 let unit = exercise.cardioSecondaryUnit ?? .km
                 if unit.usesDistanceField {
+                    // Empty distance is intentionally permitted — user may log a time-only session
+                    // (e.g., swim without tracking distance). Stored as nil distance.
                     let trimmed = set.distance.trimmingCharacters(in: .whitespaces)
                     if !trimmed.isEmpty, let range = unit.validationRange {
                         guard let dist = Double(trimmed), range.contains(dist) else {
