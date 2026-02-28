@@ -80,10 +80,10 @@ final class WorkoutSessionViewModel {
     private let maxDistanceKm = 500.0
     private let maxIntensity = 10
     private let maxMemoLength = 500
-    private let defaultRestSeconds: TimeInterval = 90
+    private let defaultRestSeconds: TimeInterval = WorkoutDefaults.restSeconds
 
-    /// Body weight for calorie estimation (fetched externally, defaults to 70kg)
-    var bodyWeightKg: Double = 70.0
+    /// Body weight for calorie estimation (fetched externally, uses store default)
+    var bodyWeightKg: Double = WorkoutDefaults.bodyWeightKg
 
     init(
         exercise: ExerciseDefinition,
