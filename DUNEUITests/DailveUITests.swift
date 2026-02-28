@@ -1,16 +1,7 @@
 import XCTest
 
 @MainActor
-final class DailveUITests: XCTestCase {
-    var app: XCUIApplication!
-
-    override func setUpWithError() throws {
-        continueAfterFailure = false
-        app = XCUIApplication()
-        app.launchArguments = ["--uitesting"]
-        addSystemPermissionMonitor()
-        app.launch()
-    }
+final class DailveUITests: BaseUITestCase {
 
     // MARK: - Launch
 

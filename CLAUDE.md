@@ -188,6 +188,9 @@
 ### 프로세스
 
 - **빌드 검증은 `scripts/build-ios.sh` 단일 경로** (#95-96)
+- **CI 스크립트 xcodegen 로직은 `scripts/lib/regen-project.sh` 단일 소스** (#185)
+- **workflow paths에 `scripts/**` 대신 개별 스크립트 경로 지정** (#186)
+- **새 UI 테스트 파일은 `BaseUITestCase` 상속** (#187)
 - **`/ship` 머지 전략은 `--merge` 기본** (#54)
 - **리뷰 적용은 파일별 batch, dead code는 같은 커밋에서 삭제** (#27, #55, #133)
 - **리뷰 에이전트 output 크기 제어: max_turns 6, diff 2000줄+은 직접 리뷰** (#91)

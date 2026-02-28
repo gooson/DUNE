@@ -1,16 +1,7 @@
 import XCTest
 
 @MainActor
-final class ExerciseUITests: XCTestCase {
-    var app: XCUIApplication!
-
-    override func setUpWithError() throws {
-        continueAfterFailure = false
-        app = XCUIApplication()
-        app.launchArguments = ["--uitesting"]
-        addSystemPermissionMonitor()
-        app.launch()
-    }
+final class ExerciseUITests: BaseUITestCase {
 
     private func navigateToActivity() {
         let tabBar = app.tabBars.firstMatch

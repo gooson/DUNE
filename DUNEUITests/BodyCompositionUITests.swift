@@ -1,16 +1,7 @@
 import XCTest
 
 @MainActor
-final class BodyCompositionUITests: XCTestCase {
-    var app: XCUIApplication!
-
-    override func setUpWithError() throws {
-        continueAfterFailure = false
-        app = XCUIApplication()
-        app.launchArguments = ["--uitesting"]
-        addSystemPermissionMonitor()
-        app.launch()
-    }
+final class BodyCompositionUITests: BaseUITestCase {
 
     private func navigateToWellness() {
         let tabBar = app.tabBars.firstMatch
