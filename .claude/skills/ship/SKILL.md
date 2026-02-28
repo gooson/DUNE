@@ -52,11 +52,11 @@ GitHub의 PR 머지 API를 통해 머지합니다. **로컬 머지나 자체 스
 #### Step 4a: 워크트리 정리
 
 워크트리에서 ship한 경우:
-1. **리모트 브랜치 삭제**: `gh pr merge`에서 `--delete-branch`로 이미 삭제됨. 안 됐으면 `git push origin --delete {branch}`
-2. **메인 repo에서 워크트리 제거**: `git -C {main_repo_path} worktree remove {worktree_path} --force`
-   - main repo 경로는 `git rev-parse --git-common-dir`에서 추출
-3. **로컬 브랜치 삭제**: `git -C {main_repo_path} branch -D {branch}`
-4. 사용자에게 "워크트리 + 브랜치 정리 완료" 안내
+1. **메인 repo 경로 확인**: `git rev-parse --git-common-dir`에서 `.git` 경로를 얻고, 그 부모 디렉토리가 메인 repo
+2. **리모트 브랜치 삭제**: `gh pr merge`에서 `--delete-branch`로 이미 삭제됨. 안 됐으면 `git push origin --delete {branch}`
+3. **메인 repo로 이동 후 워크트리 제거**: `cd {main_repo_path} && git worktree remove {worktree_path} --force`
+4. **로컬 브랜치 삭제**: `git branch -D {branch}` (이미 메인 repo에 있으므로 `-C` 불필요)
+5. 사용자에게 "워크트리 + 브랜치 정리 완료" 안내
 
 #### Step 4b: 일반 브랜치 정리
 
@@ -73,14 +73,14 @@ GitHub의 PR 머지 API를 통해 머지합니다. **로컬 머지나 자체 스
 
 ship 완료 후, **머지 반영된 main 기준**으로 Xcode 프로젝트를 다시 생성합니다.
 
-1. **실행 경로 결정**
-   - Step 4a(워크트리)인 경우: `{main_repo_path}`
-   - Step 4b(일반)인 경우: 현재 repo root
+1. **실행 경로 확인**
+   - Step 4a(워크트리)인 경우: 이미 메인 repo로 `cd` 완료 상태
+   - Step 4b(일반)인 경우: 이미 repo root에 있음
 2. **main 최신 동기화 확인**
-   - `git -C {repo_path} checkout main`
-   - `git -C {repo_path} pull --ff-only`
+   - `git checkout main`
+   - `git pull --ff-only`
 3. **xcodegen 실행**
-   - `(cd {repo_path} && xcodegen generate --spec DUNE/project.yml)`
+   - `xcodegen generate --spec DUNE/project.yml`
 4. **결과 안내**
    - 성공 시 "ship + xcodegen 완료"를 사용자에게 보고
    - 실패 시 에러 로그를 함께 전달하고 중단

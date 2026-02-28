@@ -18,7 +18,7 @@ removed=0
 for rel in "${CANDIDATES[@]}"; do
   target="${ROOT_DIR}/${rel}"
   if [ -e "$target" ]; then
-    rm -rf "$target"
+    rm -rf "$target" 2>/dev/null || true
     echo "Removed artifact: $rel"
     removed=1
   fi
