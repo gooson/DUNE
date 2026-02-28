@@ -128,10 +128,12 @@ struct CoachingEngineTests {
 
     // MARK: - Fallback
 
-    @Test("Minimal input produces fallback insight")
+    @Test("Minimal input produces ambient or fallback insight")
     func fallbackInsight() {
         let output = engine.generate(from: makeInput())
-        #expect(output.focusInsight.priority == .fallback)
+        // With minimal input (no weather, no scores), weather-unavailable (.ambient)
+        // or default condition-based (.fallback) insight becomes focus
+        #expect(output.focusInsight.priority == .ambient || output.focusInsight.priority == .fallback)
     }
 
     // MARK: - Insight properties
@@ -252,13 +254,15 @@ struct CoachingEngineTests {
         #expect(hasWeather)
     }
 
-    @Test("Nil weather produces no weather insights")
-    func noWeatherNoInsight() {
+    @Test("Nil weather produces fallback weather insight")
+    func noWeatherFallbackInsight() {
         let input = makeInput(weather: nil)
         let output = engine.generate(from: input)
         let allInsights = [output.focusInsight] + output.insightCards
-        let hasWeather = allInsights.contains { $0.category == .weather }
-        #expect(!hasWeather)
+        let weatherInsights = allInsights.filter { $0.category == .weather }
+        // weather=nil → "weather-unavailable-default" ambient insight is generated
+        #expect(!weatherInsights.isEmpty)
+        #expect(weatherInsights.allSatisfy { $0.priority == .ambient })
     }
 
     private func makeWeather(
