@@ -3,10 +3,10 @@ import SwiftUI
 extension SetType {
     var displayName: String {
         switch self {
-        case .warmup: "Warmup"
-        case .working: "Working"
-        case .drop: "Drop Set"
-        case .failure: "Failure"
+        case .warmup: String(localized: "Warmup")
+        case .working: String(localized: "Working")
+        case .drop: String(localized: "Drop Set")
+        case .failure: String(localized: "Failure")
         }
     }
 

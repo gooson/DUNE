@@ -57,7 +57,7 @@ struct ExerciseDetailSheet: View {
                         .font(.caption)
                         .foregroundStyle(DS.Color.textSecondary)
                     Label {
-                        Text(exercise.equipment.localizedDisplayName)
+                        Text(exercise.equipment.displayName)
                     } icon: {
                         exercise.equipment.svgIcon(size: 12)
                     }
@@ -125,7 +125,7 @@ struct ExerciseDetailSheet: View {
     private var targetMuscleSection: some View {
         if !exercise.primaryMuscles.isEmpty || !exercise.secondaryMuscles.isEmpty {
             VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                Text("타겟 근육")
+                Text("Target Muscles")
                     .font(.headline)
                 ExerciseMuscleMapView(
                     primaryMuscles: exercise.primaryMuscles,
@@ -138,7 +138,7 @@ struct ExerciseDetailSheet: View {
                         RoundedRectangle(cornerRadius: 3)
                             .fill(DS.Color.activity.opacity(0.7))
                             .frame(width: 12, height: 12)
-                        Text("주동근")
+                        Text("Primary")
                             .font(.caption2)
                             .foregroundStyle(DS.Color.textSecondary)
                     }
@@ -146,13 +146,13 @@ struct ExerciseDetailSheet: View {
                         RoundedRectangle(cornerRadius: 3)
                             .fill(DS.Color.activity.opacity(0.25))
                             .frame(width: 12, height: 12)
-                        Text("보조근")
+                        Text("Secondary")
                             .font(.caption2)
                             .foregroundStyle(DS.Color.textSecondary)
                     }
                 }
 
-                Text("주동근은 동작의 핵심 자극 부위이고, 보조근은 함께 보조적으로 활성화되는 부위입니다.")
+                Text("Primary muscles are the main targets of the movement. Secondary muscles assist and are activated alongside.")
                     .font(.caption2)
                     .foregroundStyle(DS.Color.textSecondary)
             }
@@ -163,7 +163,7 @@ struct ExerciseDetailSheet: View {
 
     private var equipmentInfoSection: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            Text("사용 기구")
+            Text("Equipment")
                 .font(.headline)
             HStack(spacing: DS.Spacing.md) {
                 exercise.equipment.svgIcon(size: 80)
@@ -171,13 +171,8 @@ struct ExerciseDetailSheet: View {
                     .padding(DS.Spacing.sm)
                     .background(DS.Color.activity.opacity(0.06), in: RoundedRectangle(cornerRadius: DS.Radius.md))
                 VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                    HStack(spacing: DS.Spacing.xs) {
-                        Text(exercise.equipment.localizedDisplayName)
-                            .font(.subheadline.weight(.medium))
-                        Text(exercise.equipment.displayName)
-                            .font(.caption)
-                            .foregroundStyle(DS.Color.textSecondary)
-                    }
+                    Text(exercise.equipment.displayName)
+                        .font(.subheadline.weight(.medium))
                     Text(exercise.equipment.equipmentDescription)
                         .font(.caption)
                         .foregroundStyle(DS.Color.textSecondary)

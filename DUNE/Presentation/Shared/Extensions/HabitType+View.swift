@@ -5,17 +5,17 @@ import SwiftUI
 extension HabitType {
     var displayName: String {
         switch self {
-        case .check:    "Check"
-        case .duration: "Duration"
-        case .count:    "Count"
+        case .check:    String(localized: "Check")
+        case .duration: String(localized: "Duration")
+        case .count:    String(localized: "Count")
         }
     }
 
     var description: String {
         switch self {
-        case .check:    "Done or not done"
-        case .duration: "Track minutes spent"
-        case .count:    "Track number of times"
+        case .check:    String(localized: "Done or not done")
+        case .duration: String(localized: "Track minutes spent")
+        case .count:    String(localized: "Track number of times")
         }
     }
 
@@ -33,18 +33,18 @@ extension HabitType {
 extension HabitIconCategory {
     var displayName: String {
         switch self {
-        case .health:      "Health"
-        case .fitness:     "Fitness"
-        case .study:       "Study"
-        case .coding:      "Coding"
-        case .mindfulness: "Mindfulness"
-        case .nutrition:   "Nutrition"
-        case .hydration:   "Hydration"
-        case .sleep:       "Sleep"
-        case .social:      "Social"
-        case .creative:    "Creative"
-        case .finance:     "Finance"
-        case .chores:      "Chores"
+        case .health:      String(localized: "Health")
+        case .fitness:     String(localized: "Fitness")
+        case .study:       String(localized: "Study")
+        case .coding:      String(localized: "Coding")
+        case .mindfulness: String(localized: "Mindfulness")
+        case .nutrition:   String(localized: "Nutrition")
+        case .hydration:   String(localized: "Hydration")
+        case .sleep:       String(localized: "Sleep")
+        case .social:      String(localized: "Social")
+        case .creative:    String(localized: "Creative")
+        case .finance:     String(localized: "Finance")
+        case .chores:      String(localized: "Chores")
         }
     }
 

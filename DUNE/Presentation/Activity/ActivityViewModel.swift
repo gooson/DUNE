@@ -213,9 +213,9 @@ final class ActivityViewModel {
         if hasCardio {
             personalRecordNotice = nil
         } else if recentWorkouts.isEmpty {
-            personalRecordNotice = "HealthKit 권한을 허용하면 유산소 PR을 볼 수 있어요."
+            personalRecordNotice = String(localized: "Enable HealthKit permissions to see cardio PRs.")
         } else {
-            personalRecordNotice = "유산소 운동 기록이 쌓이면 카드에 자동 표시됩니다."
+            personalRecordNotice = String(localized: "Cardio PRs will appear automatically as you build your workout history.")
         }
 
         // Workout Streak
@@ -349,9 +349,9 @@ final class ActivityViewModel {
             loadResult.isEmpty
         ].filter(\.self).count
         if failedCount > 0, failedCount < 4 {
-            errorMessage = "일부 데이터를 불러올 수 없습니다 (\(failedCount)/4 소스)"
+            errorMessage = String(localized: "Some data could not be loaded (\(failedCount)/4 sources)")
         } else if failedCount == 4 {
-            errorMessage = "데이터를 불러올 수 없습니다. HealthKit 권한을 확인하세요."
+            errorMessage = String(localized: "Unable to load data. Please check HealthKit permissions.")
         }
 
         // Recompute fatigue with newly fetched HealthKit workouts + recovery modifiers

@@ -54,7 +54,7 @@ struct HealthKitWorkoutDetailView: View {
             HStack(spacing: DS.Spacing.xl) {
                 statItem(
                     value: formattedDuration(workout.duration),
-                    label: "시간"
+                    label: "Duration"
                 )
                 if let cal = workout.calories, cal > 0 {
                     statItem(
@@ -119,7 +119,7 @@ struct HealthKitWorkoutDetailView: View {
                 statCard(
                     icon: "heart.fill",
                     iconColor: .red,
-                    title: "평균 심박수",
+                    title: "Avg Heart Rate",
                     value: Int(hrAvg).formattedWithSeparator,
                     unit: "bpm"
                 )
@@ -129,7 +129,7 @@ struct HealthKitWorkoutDetailView: View {
                 statCard(
                     icon: "heart.fill",
                     iconColor: .red.opacity(0.7),
-                    title: "최대 심박수",
+                    title: "Max Heart Rate",
                     value: Int(hrMax).formattedWithSeparator,
                     unit: "bpm"
                 )
@@ -139,7 +139,7 @@ struct HealthKitWorkoutDetailView: View {
                 statCard(
                     icon: "speedometer",
                     iconColor: DS.Color.activity,
-                    title: "평균 페이스",
+                    title: "Avg Pace",
                     value: formattedPace(pace),
                     unit: "/km"
                 )
@@ -149,7 +149,7 @@ struct HealthKitWorkoutDetailView: View {
                 statCard(
                     icon: "mountain.2.fill",
                     iconColor: .green,
-                    title: "고도 상승",
+                    title: "Elevation Gain",
                     value: Int(elevation).formattedWithSeparator,
                     unit: "m"
                 )
@@ -159,9 +159,9 @@ struct HealthKitWorkoutDetailView: View {
                 statCard(
                     icon: "figure.walk",
                     iconColor: DS.Color.steps,
-                    title: "걸음수",
+                    title: "Steps",
                     value: Int(steps).formattedWithSeparator,
-                    unit: "걸음"
+                    unit: "steps"
                 )
             }
             // Effort score
@@ -179,8 +179,8 @@ struct HealthKitWorkoutDetailView: View {
                 statCard(
                     icon: isIndoor ? "building.fill" : "sun.max.fill",
                     iconColor: isIndoor ? .gray : .yellow,
-                    title: "환경",
-                    value: isIndoor ? "실내" : "실외",
+                    title: "Environment",
+                    value: isIndoor ? "Indoor" : "Outdoor",
                     unit: ""
                 )
             }
@@ -216,7 +216,7 @@ struct HealthKitWorkoutDetailView: View {
 
     private var heartRateSection: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            Label("심박수", systemImage: "heart.fill")
+            Label("Heart Rate", systemImage: "heart.fill")
                 .font(.headline)
                 .foregroundStyle(DS.Color.primaryText)
 
@@ -232,7 +232,7 @@ struct HealthKitWorkoutDetailView: View {
             } else {
                 placeholderView(
                     icon: "waveform.path.ecg",
-                    title: "심박수 데이터 없음"
+                    title: "No heart rate data"
                 )
             }
         }
@@ -246,7 +246,7 @@ struct HealthKitWorkoutDetailView: View {
     private var weatherSection: some View {
         if workout.weatherTemperature != nil || workout.weatherCondition != nil {
             VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                Label("날씨", systemImage: "cloud.sun.fill")
+                Label("Weather", systemImage: "cloud.sun.fill")
                     .font(.headline)
 
                 HStack(spacing: DS.Spacing.xl) {
@@ -254,7 +254,7 @@ struct HealthKitWorkoutDetailView: View {
                         VStack(spacing: DS.Spacing.xxs) {
                             Text("\(Int(temp).formattedWithSeparator)°")
                                 .font(.title2.weight(.semibold).monospacedDigit())
-                            Text("온도")
+                            Text("Temp")
                                 .font(.caption)
                                 .foregroundStyle(DS.Color.textSecondary)
                         }
@@ -263,7 +263,7 @@ struct HealthKitWorkoutDetailView: View {
                         VStack(spacing: DS.Spacing.xxs) {
                             Image(systemName: weatherIcon(for: condition))
                                 .font(.title2)
-                            Text("상태")
+                            Text("Condition")
                                 .font(.caption)
                                 .foregroundStyle(DS.Color.textSecondary)
                         }
@@ -272,7 +272,7 @@ struct HealthKitWorkoutDetailView: View {
                         VStack(spacing: DS.Spacing.xxs) {
                             Text("\(Int(humidity).formattedWithSeparator)%")
                                 .font(.title2.weight(.semibold).monospacedDigit())
-                            Text("습도")
+                            Text("Humidity")
                                 .font(.caption)
                                 .foregroundStyle(DS.Color.textSecondary)
                         }

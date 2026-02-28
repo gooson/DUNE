@@ -351,7 +351,7 @@ final class WorkoutSessionViewModel {
 
         let completedSets = cachedCompletedSets
         guard !completedSets.isEmpty else {
-            validationError = "Complete at least one set"
+            validationError = String(localized: "Complete at least one set")
             return nil
         }
 
@@ -360,7 +360,7 @@ final class WorkoutSessionViewModel {
             if exercise.inputType == .setsRepsWeight || exercise.inputType == .setsReps {
                 let trimmed = set.reps.trimmingCharacters(in: .whitespaces)
                 guard !trimmed.isEmpty, let reps = Int(trimmed), reps > 0, reps <= maxReps else {
-                    validationError = "Reps must be between 1 and \(maxReps)"
+                    validationError = String(localized: "Reps must be between 1 and \(maxReps)")
                     return nil
                 }
             }
@@ -369,7 +369,7 @@ final class WorkoutSessionViewModel {
                 if !trimmed.isEmpty {
                     let maxDisplay = weightUnit.fromKg(maxWeightKg)
                     guard let weight = Double(trimmed), weight >= 0, weight <= maxDisplay else {
-                        validationError = "Weight must be between 0 and \(Int(maxDisplay))\(weightUnit.displayName)"
+                        validationError = String(localized: "Weight must be between 0 and \(Int(maxDisplay))\(weightUnit.displayName)")
                         return nil
                     }
                 }
@@ -378,7 +378,7 @@ final class WorkoutSessionViewModel {
                 let trimmed = set.duration.trimmingCharacters(in: .whitespaces)
                 if !trimmed.isEmpty {
                     guard let mins = Int(trimmed), mins > 0, mins <= maxDurationMinutes else {
-                        validationError = "Duration must be between 1 and \(maxDurationMinutes) minutes"
+                        validationError = String(localized: "Duration must be between 1 and \(maxDurationMinutes) minutes")
                         return nil
                     }
                 }
@@ -392,7 +392,7 @@ final class WorkoutSessionViewModel {
                     if !trimmed.isEmpty, let range = unit.validationRange {
                         guard let dist = Double(trimmed), range.contains(dist) else {
                             let lo = range.lowerBound.formatted(.number.precision(.fractionLength(0...1)))
-                            validationError = "\(unit.placeholder.capitalized) must be between \(lo) and \(Int(range.upperBound))"
+                            validationError = String(localized: "\(unit.placeholder.capitalized) must be between \(lo) and \(Int(range.upperBound))")
                             return nil
                         }
                     }
@@ -400,7 +400,7 @@ final class WorkoutSessionViewModel {
                     let trimmed = set.reps.trimmingCharacters(in: .whitespaces)
                     if !trimmed.isEmpty, let range = unit.validationRange {
                         guard let val = Int(trimmed), Double(val) >= range.lowerBound, Double(val) <= range.upperBound else {
-                            validationError = "\(unit.placeholder.capitalized) must be between \(Int(range.lowerBound)) and \(Int(range.upperBound))"
+                            validationError = String(localized: "\(unit.placeholder.capitalized) must be between \(Int(range.lowerBound)) and \(Int(range.upperBound))")
                             return nil
                         }
                     }
@@ -411,7 +411,7 @@ final class WorkoutSessionViewModel {
                 let trimmed = set.intensity.trimmingCharacters(in: .whitespaces)
                 if !trimmed.isEmpty {
                     guard let val = Int(trimmed), val >= 1, val <= maxIntensity else {
-                        validationError = "Intensity must be between 1 and \(maxIntensity)"
+                        validationError = String(localized: "Intensity must be between 1 and \(maxIntensity)")
                         return nil
                     }
                 }
@@ -419,13 +419,13 @@ final class WorkoutSessionViewModel {
             if exercise.inputType == .roundsBased {
                 let trimmedReps = set.reps.trimmingCharacters(in: .whitespaces)
                 guard !trimmedReps.isEmpty, let reps = Int(trimmedReps), reps > 0, reps <= maxReps else {
-                    validationError = "Rounds must be between 1 and \(maxReps)"
+                    validationError = String(localized: "Rounds must be between 1 and \(maxReps)")
                     return nil
                 }
                 let trimmedDur = set.duration.trimmingCharacters(in: .whitespaces)
                 if !trimmedDur.isEmpty {
                     guard let secs = Int(trimmedDur), secs > 0, secs <= maxDurationMinutes * 60 else {
-                        validationError = "Duration must be between 1 and \(maxDurationMinutes * 60) seconds"
+                        validationError = String(localized: "Duration must be between 1 and \(maxDurationMinutes * 60) seconds")
                         return nil
                     }
                 }

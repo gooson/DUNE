@@ -167,7 +167,7 @@ struct WellnessView: View {
                                 bodyViewModel.editingRecord = nil
                             }
                         } catch {
-                            bodyViewModel.validationError = "Failed to save record changes. Please try again."
+                            bodyViewModel.validationError = String(localized: "Failed to save record changes. Please try again.")
                         }
                     }
                 )

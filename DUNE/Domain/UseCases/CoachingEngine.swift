@@ -68,8 +68,8 @@ struct CoachingEngine: Sendable {
                 id: "weather-unavailable-default",
                 priority: .ambient,
                 category: .weather,
-                title: "오늘도 운동하기 좋은 날",
-                message: "날씨 정보를 불러올 수 없지만, 실내 운동은 언제나 좋은 선택입니다.",
+                title: String(localized: "A good day for exercise"),
+                message: String(localized: "Weather data is unavailable, but indoor exercise is always a great option."),
                 iconName: "figure.strengthtraining.traditional"
             )]
         }
@@ -82,8 +82,8 @@ struct CoachingEngine: Sendable {
                 id: "weather-extreme-heat",
                 priority: .high,
                 category: .weather,
-                title: "극심한 더위 주의",
-                message: "체감 온도 \(temp)°C — 실내 운동이나 이른 아침/저녁 세션을 권합니다. 수분 보충을 충분히 하세요.",
+                title: String(localized: "Extreme heat warning"),
+                message: String(localized: "Feels like \(temp)°C — try indoor workouts or early morning/evening sessions. Stay well hydrated."),
                 iconName: "sun.max.trianglebadge.exclamationmark.fill"
             ))
         }
@@ -95,8 +95,8 @@ struct CoachingEngine: Sendable {
                 id: "weather-freezing",
                 priority: .high,
                 category: .weather,
-                title: "한파 주의",
-                message: "체감 온도 \(temp)°C — 워밍업을 충분히 하고 실내 운동을 고려하세요. 추운 날씨는 근육 부상 위험을 높입니다.",
+                title: String(localized: "Freezing cold warning"),
+                message: String(localized: "Feels like \(temp)°C — warm up thoroughly and consider indoor workouts. Cold weather increases the risk of muscle injuries."),
                 iconName: "thermometer.snowflake"
             ))
         }
@@ -107,8 +107,8 @@ struct CoachingEngine: Sendable {
                 id: "weather-high-uv",
                 priority: .medium,
                 category: .weather,
-                title: "자외선 매우 높음 (UV \(weather.uvIndex))",
-                message: "야외 운동 시 자외선 차단제를 바르고 모자를 착용하세요. 가능하면 그늘에서 운동하세요.",
+                title: String(localized: "Very high UV (UV \(weather.uvIndex))"),
+                message: String(localized: "Apply sunscreen and wear a hat for outdoor workouts. Exercise in the shade when possible."),
                 iconName: "sun.max.fill"
             ))
         }
@@ -120,8 +120,8 @@ struct CoachingEngine: Sendable {
                 id: "weather-rain-indoor",
                 priority: .standard,
                 category: .weather,
-                title: "비 예보 — 실내 운동 추천",
-                message: "오늘은 실내 근력 운동이나 홈트레이닝이 좋은 날입니다.",
+                title: String(localized: "Rain forecast — indoor workout recommended"),
+                message: String(localized: "Today is a great day for indoor strength training or a home workout."),
                 iconName: "cloud.rain.fill"
             ))
         case .snow, .sleet:
@@ -129,8 +129,8 @@ struct CoachingEngine: Sendable {
                 id: "weather-snow-indoor",
                 priority: .standard,
                 category: .weather,
-                title: "눈/진눈깨비 — 실내 운동 추천",
-                message: "미끄러운 노면에서의 야외 운동은 부상 위험이 있습니다. 실내에서 안전하게 운동하세요.",
+                title: String(localized: "Snow/sleet — indoor workout recommended"),
+                message: String(localized: "Outdoor exercise on slippery surfaces risks injury. Stay safe and train indoors."),
                 iconName: "cloud.snow.fill"
             ))
         default:
@@ -144,8 +144,8 @@ struct CoachingEngine: Sendable {
                 id: "weather-high-humidity",
                 priority: .standard,
                 category: .weather,
-                title: "높은 습도 (\(humidityPercent)%)",
-                message: "높은 습도는 체온 조절을 어렵게 합니다. 운동 강도를 낮추고 수분을 자주 보충하세요.",
+                title: String(localized: "High humidity (\(humidityPercent)%)"),
+                message: String(localized: "High humidity makes it harder for your body to cool down. Lower the intensity and hydrate frequently."),
                 iconName: "humidity.fill"
             ))
         }
@@ -157,8 +157,8 @@ struct CoachingEngine: Sendable {
                 id: "weather-outdoor-favorable",
                 priority: .low,
                 category: .weather,
-                title: "야외 운동하기 좋은 날씨",
-                message: "\(temp)°C — 러닝이나 산책을 즐기기에 좋은 날씨입니다.",
+                title: String(localized: "Great weather for outdoor exercise"),
+                message: String(localized: "\(temp)°C — perfect conditions for a run or a walk."),
                 iconName: "sun.and.horizon.fill"
             ))
         }
@@ -180,8 +180,8 @@ struct CoachingEngine: Sendable {
                 id: "recovery-warning-trend",
                 priority: .critical,
                 category: .recovery,
-                title: "회복이 시급합니다",
-                message: "HRV가 \(input.hrvTrend.consecutiveDays)일 연속 하락 중이고 컨디션이 경고 수준입니다. 오늘은 완전한 휴식을 권합니다. 충분한 수면과 수분 섭취에 집중하세요.",
+                title: String(localized: "Recovery is urgent"),
+                message: String(localized: "Your HRV has been declining for \(input.hrvTrend.consecutiveDays) consecutive days and your condition is at warning level. Take a full rest day today. Focus on sleep and hydration."),
                 iconName: "exclamationmark.triangle.fill"
             ))
         }
@@ -194,8 +194,8 @@ struct CoachingEngine: Sendable {
                 id: "recovery-warning",
                 priority: .critical,
                 category: .recovery,
-                title: "회복이 필요합니다",
-                message: "컨디션이 낮은 상태입니다. 오늘은 가벼운 산책이나 스트레칭 정도만 하시고, 일찍 취침하세요.",
+                title: String(localized: "Recovery is needed"),
+                message: String(localized: "Your condition is low. Stick to a light walk or stretching today and get to bed early."),
                 iconName: "bed.double.fill"
             ))
         }
@@ -208,8 +208,8 @@ struct CoachingEngine: Sendable {
                 id: "recovery-overtrained",
                 priority: .critical,
                 category: .recovery,
-                title: "과훈련 징후가 감지되었습니다",
-                message: "\(muscleNames) 등 \(overtrainedMuscles.count)개 근육군의 피로도가 매우 높습니다. 1-2일 휴식 후 가벼운 운동부터 재개하세요.",
+                title: String(localized: "Signs of overtraining detected"),
+                message: String(localized: "\(muscleNames) and \(overtrainedMuscles.count) muscle groups total show very high fatigue. Rest for 1–2 days, then ease back in with light exercise."),
                 iconName: "exclamationmark.shield.fill"
             ))
         }
@@ -220,8 +220,8 @@ struct CoachingEngine: Sendable {
                 id: "recovery-tired",
                 priority: .high,
                 category: .recovery,
-                title: "피로가 누적되어 있습니다",
-                message: "오늘은 가벼운 활동 위주로 진행하세요. 스트레칭이나 요가 같은 저강도 운동이 회복에 도움됩니다.",
+                title: String(localized: "Fatigue is building up"),
+                message: String(localized: "Keep it light today. Low-intensity activities like stretching or yoga can help with recovery."),
                 iconName: "figure.mind.and.body"
             ))
         }
@@ -235,8 +235,8 @@ struct CoachingEngine: Sendable {
                 id: "recovery-hrv-falling",
                 priority: .high,
                 category: .recovery,
-                title: "컨디션 하락 추세입니다",
-                message: "HRV가 \(input.hrvTrend.consecutiveDays)일째 하락 중입니다. 운동 볼륨을 평소의 70%로 줄이고 수면 시간을 30분 늘려보세요.",
+                title: String(localized: "Condition is trending down"),
+                message: String(localized: "Your HRV has been declining for \(input.hrvTrend.consecutiveDays) days. Reduce training volume to 70% and try to get 30 more minutes of sleep."),
                 iconName: "arrow.down.right.circle.fill"
             ))
         }
@@ -256,8 +256,8 @@ struct CoachingEngine: Sendable {
                     id: "sleep-debt-critical",
                     priority: .high,
                     category: .sleep,
-                    title: "수면 부채가 쌓이고 있습니다",
-                    message: "어젯밤 수면이 \(formatHoursMinutes(minutes))로 부족합니다. 수면 부채는 체력 회복을 늦추고 부상 위험을 높입니다. 오늘은 일찍 취침하세요.",
+                    title: String(localized: "Sleep debt is accumulating"),
+                    message: String(localized: "You only slept \(formatHoursMinutes(minutes)) last night. Sleep debt slows recovery and increases injury risk. Get to bed early tonight."),
                     iconName: "moon.zzz.fill",
                     actionHint: "sleepDetail"
                 ))
@@ -266,8 +266,8 @@ struct CoachingEngine: Sendable {
                     id: "sleep-short",
                     priority: .medium,
                     category: .sleep,
-                    title: "수면이 부족했습니다",
-                    message: "어젯밤 \(formatHoursMinutes(minutes))만 주무셨습니다. 오늘은 고강도 운동을 피하고 회복에 집중하세요.",
+                    title: String(localized: "Sleep was insufficient"),
+                    message: String(localized: "You only got \(formatHoursMinutes(minutes)) of sleep last night. Skip high-intensity training today and focus on recovery."),
                     iconName: "moon.fill",
                     actionHint: "sleepDetail"
                 ))
@@ -281,8 +281,8 @@ struct CoachingEngine: Sendable {
                 id: "sleep-deep-improving",
                 priority: .low,
                 category: .sleep,
-                title: "깊은 수면이 개선되고 있습니다",
-                message: "깊은 수면 \(formatHoursMinutes(deep))으로 양호합니다. 현재 수면 루틴을 유지하세요. 깊은 수면은 근육 회복과 호르몬 분비에 핵심입니다.",
+                title: String(localized: "Deep sleep is improving"),
+                message: String(localized: "Deep sleep at \(formatHoursMinutes(deep)) — looking good. Keep your current sleep routine. Deep sleep is key for muscle recovery and hormone balance."),
                 iconName: "sparkles",
                 actionHint: "sleepDetail"
             ))
@@ -294,8 +294,8 @@ struct CoachingEngine: Sendable {
                 id: "sleep-quality-good",
                 priority: .low,
                 category: .sleep,
-                title: "수면 품질이 좋습니다",
-                message: "어젯밤 수면 점수 \(score)점으로 우수합니다. 잘 쉬었으니 오늘 운동 효과가 극대화됩니다.",
+                title: String(localized: "Sleep quality is excellent"),
+                message: String(localized: "Last night's sleep score was \(score) — outstanding. Well rested means your workout will be extra effective today."),
                 iconName: "moon.stars.fill",
                 actionHint: "sleepDetail"
             ))
@@ -308,8 +308,8 @@ struct CoachingEngine: Sendable {
                 id: "sleep-quality-declining",
                 priority: .info,
                 category: .sleep,
-                title: "수면 품질이 떨어지고 있습니다",
-                message: "수면 점수가 하락 추세입니다. 취침 1시간 전부터 스크린을 줄이고 카페인은 오후 2시 이전에만 섭취해 보세요.",
+                title: String(localized: "Sleep quality is declining"),
+                message: String(localized: "Your sleep score is trending downward. Try reducing screen time an hour before bed and limiting caffeine to before 2 PM."),
                 iconName: "moon.haze.fill",
                 actionHint: "sleepDetail"
             ))
@@ -336,8 +336,8 @@ struct CoachingEngine: Sendable {
                 id: "training-muscle-switch",
                 priority: .medium,
                 category: .training,
-                title: "부위를 전환하세요",
-                message: "\(avoidNames)의 피로도가 높습니다. 오늘은 \(targetNames) 위주로 운동하면 효율적입니다.",
+                title: String(localized: "Switch muscle groups"),
+                message: String(localized: "\(avoidNames) fatigue is high. Focus on \(targetNames) today for a more effective session."),
                 iconName: "arrow.triangle.swap",
                 actionHint: "startWorkout"
             ))
@@ -350,8 +350,8 @@ struct CoachingEngine: Sendable {
                 id: "training-goal-near",
                 priority: .standard,
                 category: .training,
-                title: "주간 목표에 거의 도달했습니다",
-                message: "이번 주 목표까지 \(remaining)일 남았습니다. 짧은 운동이라도 좋으니 목표를 완성하세요!",
+                title: String(localized: "Almost at your weekly goal"),
+                message: String(localized: "\(remaining) day(s) left to hit your weekly target. Even a short workout counts — finish strong!"),
                 iconName: "flag.fill"
             ))
         }
@@ -362,8 +362,8 @@ struct CoachingEngine: Sendable {
                 id: "training-goal-achieved",
                 priority: .standard,
                 category: .motivation,
-                title: "주간 목표를 달성했습니다!",
-                message: "이번 주 \(input.activeDaysThisWeek)일 운동을 완료했습니다. 꾸준함이 가장 큰 무기입니다.",
+                title: String(localized: "Weekly goal achieved!"),
+                message: String(localized: "You worked out \(input.activeDaysThisWeek) days this week. Consistency is your greatest strength."),
                 iconName: "trophy.fill"
             ))
         }
@@ -372,13 +372,15 @@ struct CoachingEngine: Sendable {
         if let score = input.conditionScore,
            (score.status == .good || score.status == .excellent),
            input.hrvTrend.direction == .rising {
-            let intensityLabel = score.status == .excellent ? "고강도" : "중-고강도"
+            let intensityLabel = score.status == .excellent
+                ? String(localized: "high-intensity")
+                : String(localized: "moderate-to-high intensity")
             results.append(CoachingInsight(
                 id: "training-push-harder",
                 priority: .low,
                 category: .training,
-                title: "컨디션이 상승 중입니다",
-                message: "HRV가 \(input.hrvTrend.consecutiveDays)일 연속 상승 중입니다. \(intensityLabel) 운동을 시도하기 좋은 타이밍입니다.",
+                title: String(localized: "Your condition is on the rise"),
+                message: String(localized: "HRV has been rising for \(input.hrvTrend.consecutiveDays) consecutive days. Great timing to try a \(intensityLabel) workout."),
                 iconName: "flame.fill",
                 actionHint: "startWorkout"
             ))
@@ -392,8 +394,8 @@ struct CoachingEngine: Sendable {
                 id: "training-steady",
                 priority: .low,
                 category: .training,
-                title: "컨디션이 안정적입니다",
-                message: "오늘은 평소 강도의 운동을 유지하기 좋은 상태입니다. 일관성이 성장의 열쇠입니다.",
+                title: String(localized: "Condition is stable"),
+                message: String(localized: "Today is ideal for maintaining your usual training intensity. Consistency is the key to growth."),
                 iconName: "figure.strengthtraining.traditional",
                 actionHint: "startWorkout"
             ))
@@ -407,8 +409,8 @@ struct CoachingEngine: Sendable {
                 id: "training-excellent",
                 priority: .low,
                 category: .training,
-                title: "최상의 컨디션입니다",
-                message: "오늘은 도전적인 목표를 세워보세요. PR 도전이나 새로운 운동을 시도하기에 최적입니다.",
+                title: String(localized: "Peak condition"),
+                message: String(localized: "Set an ambitious goal today. It's the perfect time to chase a PR or try a new exercise."),
                 iconName: "star.fill",
                 actionHint: "startWorkout"
             ))
@@ -421,8 +423,8 @@ struct CoachingEngine: Sendable {
                     id: "training-fair-sleep",
                     priority: .low,
                     category: .training,
-                    title: "가볍게 움직이세요",
-                    message: "수면이 짧았으니 오늘은 가벼운 운동 위주로 진행하세요. 무리하면 내일 더 피로합니다.",
+                    title: String(localized: "Keep it light today"),
+                    message: String(localized: "Sleep was short, so stick to light exercise today. Pushing too hard will only make tomorrow worse."),
                     iconName: "figure.walk",
                     actionHint: "startWorkout"
                 ))
@@ -431,8 +433,8 @@ struct CoachingEngine: Sendable {
                     id: "training-fair-normal",
                     priority: .low,
                     category: .training,
-                    title: "적당한 운동이 좋습니다",
-                    message: "컨디션이 평균 수준입니다. 중간 강도로 운동하되 무리하지 마세요.",
+                    title: String(localized: "Moderate exercise is best"),
+                    message: String(localized: "Your condition is average. Train at a moderate intensity and avoid overexertion."),
                     iconName: "figure.run",
                     actionHint: "startWorkout"
                 ))
@@ -445,8 +447,8 @@ struct CoachingEngine: Sendable {
                 id: "training-gap",
                 priority: .ambient,
                 category: .training,
-                title: "\(daysSince)일째 운동을 쉬고 있습니다",
-                message: "오래 쉬면 다시 시작하기가 어려워집니다. 오늘 가볍게라도 움직여보세요. 10분 산책도 좋습니다.",
+                title: String(localized: "\(daysSince) days since your last workout"),
+                message: String(localized: "The longer the break, the harder it is to restart. Get moving today — even a 10-minute walk helps."),
                 iconName: "figure.walk.motion",
                 actionHint: "startWorkout"
             ))
@@ -460,8 +462,8 @@ struct CoachingEngine: Sendable {
                 id: "training-recommendation",
                 priority: .standard,
                 category: .training,
-                title: "오늘의 추천 운동",
-                message: "\(muscleText) 중심 \(exerciseCount)가지 운동을 추천합니다. 회복된 근육 위주로 구성했습니다.",
+                title: String(localized: "Today's recommended workout"),
+                message: String(localized: "\(exerciseCount) exercises focusing on \(muscleText). Built around your most recovered muscles."),
                 iconName: "sparkles.rectangle.stack.fill",
                 actionHint: "workoutRecommendation"
             ))
@@ -470,8 +472,8 @@ struct CoachingEngine: Sendable {
                 id: "training-rest-day",
                 priority: .standard,
                 category: .recovery,
-                title: "오늘은 회복의 날",
-                message: "대부분의 근육이 회복 중입니다. 가벼운 스트레칭이나 산책으로 혈류를 촉진하세요.",
+                title: String(localized: "Today is a recovery day"),
+                message: String(localized: "Most muscles are still recovering. Light stretching or a walk will help improve circulation."),
                 iconName: "leaf.fill"
             ))
         }
@@ -490,8 +492,8 @@ struct CoachingEngine: Sendable {
                 id: "motivation-pr",
                 priority: .celebration,
                 category: .motivation,
-                title: "PR을 달성했습니다!",
-                message: "\(prName)에서 개인 최고 기록을 세웠습니다. 꾸준한 노력의 결과입니다!",
+                title: String(localized: "New PR achieved!"),
+                message: String(localized: "You set a personal record on \(prName). That's the payoff of consistent effort!"),
                 iconName: "medal.fill"
             ))
         }
@@ -500,21 +502,21 @@ struct CoachingEngine: Sendable {
         if let milestone = input.currentStreakMilestone, milestone > 0 {
             let milestoneText: String
             switch milestone {
-            case 7: milestoneText = "1주"
-            case 14: milestoneText = "2주"
-            case 30: milestoneText = "한 달"
-            case 60: milestoneText = "두 달"
-            case 90: milestoneText = "세 달"
-            case 100: milestoneText = "100일"
-            case 365: milestoneText = "1년"
-            default: milestoneText = "\(milestone)일"
+            case 7: milestoneText = "1 Week"
+            case 14: milestoneText = "2 Weeks"
+            case 30: milestoneText = "1 Month"
+            case 60: milestoneText = "2 Months"
+            case 90: milestoneText = "3 Months"
+            case 100: milestoneText = "100 Days"
+            case 365: milestoneText = "1 Year"
+            default: milestoneText = "\(milestone) Days"
             }
             results.append(CoachingInsight(
                 id: "motivation-streak-\(milestone)",
                 priority: .celebration,
                 category: .motivation,
-                title: "\(milestoneText) 연속 운동!",
-                message: "\(milestone)일 연속으로 운동했습니다. 대단한 꾸준함입니다! 이 습관을 계속 이어가세요.",
+                title: String(localized: "\(milestoneText) workout streak!"),
+                message: String(localized: "\(milestone) consecutive days of exercise. Incredible consistency! Keep the habit going."),
                 iconName: "flame.circle.fill"
             ))
         }
@@ -525,8 +527,8 @@ struct CoachingEngine: Sendable {
                 id: "motivation-monthly-high",
                 priority: .celebration,
                 category: .motivation,
-                title: "이번 달 운동 목표 80% 이상!",
-                message: "이번 달 \(streak.monthlyCount)/\(streak.monthlyGoal)일 운동을 달성했습니다. 목표를 완주하세요!",
+                title: String(localized: "Over 80% of monthly goal reached!"),
+                message: String(localized: "You've hit \(streak.monthlyCount)/\(streak.monthlyGoal) days this month. Go all the way!"),
                 iconName: "chart.bar.fill"
             ))
         }
@@ -547,8 +549,8 @@ struct CoachingEngine: Sendable {
                     id: "default-no-score-goal",
                     priority: .fallback,
                     category: .general,
-                    title: "데이터를 수집 중입니다",
-                    message: "컨디션 점수가 아직 준비되지 않았습니다. 오늘 운동하면 주간 목표에 한 걸음 더 가까워집니다.",
+                    title: String(localized: "Gathering your data"),
+                    message: String(localized: "Your condition score isn't ready yet. A workout today brings you one step closer to your weekly goal."),
                     iconName: "chart.line.uptrend.xyaxis"
                 ))
             } else {
@@ -556,8 +558,8 @@ struct CoachingEngine: Sendable {
                     id: "default-no-score",
                     priority: .fallback,
                     category: .general,
-                    title: "데이터를 수집 중입니다",
-                    message: "Apple Watch를 착용하고 며칠간 데이터를 수집하면 개인화된 코칭을 받을 수 있습니다.",
+                    title: String(localized: "Gathering your data"),
+                    message: String(localized: "Wear your Apple Watch for a few days to collect data, and you'll receive personalized coaching."),
                     iconName: "applewatch"
                 ))
             }
@@ -573,8 +575,8 @@ struct CoachingEngine: Sendable {
             id: "fallback-default",
             priority: .fallback,
             category: .general,
-            title: "오늘도 건강한 하루 되세요",
-            message: "꾸준한 운동과 충분한 수면이 최고의 건강 투자입니다.",
+            title: String(localized: "Have a healthy day"),
+            message: String(localized: "Consistent exercise and quality sleep are the best investments in your health."),
             iconName: "heart.fill"
         )
     }
@@ -587,8 +589,8 @@ struct CoachingEngine: Sendable {
         let total = Int(clamped)
         let h = total / 60
         let m = total % 60
-        if h > 0, m > 0 { return "\(h)시간 \(m)분" }
-        if h > 0 { return "\(h)시간" }
-        return "\(m)분"
+        if h > 0, m > 0 { return String(localized: "\(h)h \(m)min") }
+        if h > 0 { return String(localized: "\(h)h") }
+        return String(localized: "\(m)min")
     }
 }

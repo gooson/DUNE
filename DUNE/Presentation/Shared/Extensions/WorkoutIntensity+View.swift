@@ -3,11 +3,11 @@ import SwiftUI
 extension WorkoutIntensityLevel {
     var displayName: String {
         switch self {
-        case .veryLight: "Very Light"
-        case .light: "Light"
-        case .moderate: "Moderate"
-        case .hard: "Hard"
-        case .maxEffort: "Max Effort"
+        case .veryLight: String(localized: "Very Light")
+        case .light: String(localized: "Light")
+        case .moderate: String(localized: "Moderate")
+        case .hard: String(localized: "Hard")
+        case .maxEffort: String(localized: "Max Effort")
         }
     }
 

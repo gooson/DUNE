@@ -22,7 +22,7 @@ struct WorkoutRecommendationCard: View {
                 HStack(spacing: DS.Spacing.xs) {
                     Image(systemName: "sparkles.rectangle.stack.fill")
                         .foregroundStyle(DS.Color.activity)
-                    Text("오늘의 추천 운동")
+                    Text("Today's Recommended Workout")
                         .font(.subheadline.weight(.semibold))
                 }
 
@@ -31,7 +31,7 @@ struct WorkoutRecommendationCard: View {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: DS.Spacing.xs) {
                             ForEach(suggestion.focusMuscles.prefix(4), id: \.self) { muscle in
-                                Text(muscle.localizedDisplayName)
+                                Text(muscle.displayName)
                                     .font(.caption2.weight(.medium))
                                     .padding(.horizontal, DS.Spacing.xs)
                                     .padding(.vertical, 2)
@@ -75,7 +75,7 @@ struct WorkoutRecommendationCard: View {
 
                     if let onStartWorkout {
                         Button(action: onStartWorkout) {
-                            Text("운동 시작")
+                            Text("Start Workout")
                                 .font(.caption.weight(.semibold))
                         }
                         .buttonStyle(.borderedProminent)

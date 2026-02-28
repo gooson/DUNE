@@ -112,7 +112,7 @@ struct PersonalRecordsSection: View {
                 Image(systemName: "trophy")
                     .font(.title3)
                     .foregroundStyle(.quaternary)
-                Text("근력과 유산소 운동을 기록하면 PR을 추적할 수 있어요.")
+                Text("Record strength and cardio workouts to track your PRs.")
                     .font(.caption)
                     .foregroundStyle(.tertiary)
                     .multilineTextAlignment(.center)
@@ -158,10 +158,10 @@ struct PersonalRecordsSection: View {
         var parts: [String] = []
 
         if let avg = record.heartRateAvg, avg > 0 {
-            parts.append("심박 \(Int(avg).formattedWithSeparator)bpm")
+            parts.append("HR \(Int(avg).formattedWithSeparator)bpm")
         }
         if let steps = record.stepCount, steps > 0 {
-            parts.append("\(Int(steps).formattedWithSeparator)걸음")
+            parts.append("\(Int(steps).formattedWithSeparator) steps")
         }
 
         var weatherParts: [String] = []
@@ -172,10 +172,10 @@ struct PersonalRecordsSection: View {
             weatherParts.append("\(Int(temp).formattedWithSeparator)°")
         }
         if let humidity = record.weatherHumidity, humidity.isFinite, humidity >= 0 {
-            weatherParts.append("습도 \(Int(humidity).formattedWithSeparator)%")
+            weatherParts.append("Humidity \(Int(humidity).formattedWithSeparator)%")
         }
         if let isIndoor = record.isIndoor {
-            weatherParts.append(isIndoor ? "실내" : "실외")
+            weatherParts.append(isIndoor ? "Indoor" : "Outdoor")
         }
         if !weatherParts.isEmpty {
             parts.append(weatherParts.joined(separator: " "))
@@ -187,15 +187,15 @@ struct PersonalRecordsSection: View {
 
     private func weatherConditionLabel(for rawValue: Int) -> String {
         switch rawValue {
-        case 1: return "맑음"
-        case 2: return "대체로 맑음"
-        case 3, 4, 5: return "흐림"
-        case 6, 7: return "안개"
-        case 8, 9: return "바람"
-        case 12, 18, 20: return "눈"
-        case 13, 14, 15, 16, 17, 21, 22, 23: return "비"
-        case 24: return "뇌우"
-        default: return "날씨"
+        case 1: return "Clear"
+        case 2: return "Mostly Clear"
+        case 3, 4, 5: return "Cloudy"
+        case 6, 7: return "Foggy"
+        case 8, 9: return "Windy"
+        case 12, 18, 20: return "Snow"
+        case 13, 14, 15, 16, 17, 21, 22, 23: return "Rain"
+        case 24: return "Thunderstorm"
+        default: return "Weather"
         }
     }
 }

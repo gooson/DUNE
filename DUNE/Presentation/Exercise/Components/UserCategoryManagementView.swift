@@ -171,7 +171,7 @@ struct UserCategoryEditView: View {
                     TextField("Category name", text: $name)
                         .autocorrectionDisabled()
                     if name.trimmingCharacters(in: .whitespaces).count > Self.maxNameLength {
-                        Text("\(Self.maxNameLength)자 이하로 입력해주세요")
+                        Text("Must be \(Self.maxNameLength) characters or less")
                             .font(.caption)
                             .foregroundStyle(.red)
                     }

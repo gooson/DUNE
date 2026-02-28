@@ -32,7 +32,7 @@ struct FatigueInfoSheet: View {
                 .foregroundStyle(DS.Color.activity)
 
             VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                Text("피로도 계산 방법")
+                Text("Fatigue Calculation")
                     .font(.headline)
                 HStack(spacing: DS.Spacing.xs) {
                     Text(score.muscle.displayName)
@@ -53,10 +53,10 @@ struct FatigueInfoSheet: View {
 
     private var workoutContributionsSection: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            sectionHeader(icon: "chart.bar.fill", title: "운동 부하 (14일)")
+            sectionHeader(icon: "chart.bar.fill", title: "Workout Load (14 days)")
 
             if score.breakdown.workoutContributions.isEmpty {
-                Text("운동 기록 없음")
+                Text("No workout records")
                     .font(.caption)
                     .foregroundStyle(DS.Color.textSecondary)
             } else {
@@ -65,7 +65,7 @@ struct FatigueInfoSheet: View {
                 }
 
                 HStack {
-                    Text("소계")
+                    Text("Subtotal")
                         .font(.caption.weight(.semibold))
                     Spacer()
                     Text(score.breakdown.baseFatigue.formattedWithSeparator(fractionDigits: 2))
@@ -106,10 +106,10 @@ struct FatigueInfoSheet: View {
 
     private var sleepModifierSection: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            sectionHeader(icon: "moon.fill", title: "수면 보정")
+            sectionHeader(icon: "moon.fill", title: "Sleep Adjustment")
 
             HStack {
-                Text("보정 계수")
+                Text("Modifier")
                     .font(.caption)
                     .foregroundStyle(DS.Color.textSecondary)
                 Spacer()
@@ -119,7 +119,7 @@ struct FatigueInfoSheet: View {
             }
 
             if score.breakdown.sleepModifier == 1.0 {
-                Text("수면 데이터 미수집 — 기본값 적용")
+                Text("No sleep data collected — default applied")
                     .font(.caption2)
                     .foregroundStyle(DS.Color.textSecondary)
             }
@@ -130,10 +130,10 @@ struct FatigueInfoSheet: View {
 
     private var readinessModifierSection: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            sectionHeader(icon: "heart.fill", title: "생체 보정")
+            sectionHeader(icon: "heart.fill", title: "Bio Adjustment")
 
             HStack {
-                Text("보정 계수")
+                Text("Modifier")
                     .font(.caption)
                     .foregroundStyle(DS.Color.textSecondary)
                 Spacer()
@@ -143,7 +143,7 @@ struct FatigueInfoSheet: View {
             }
 
             if score.breakdown.readinessModifier == 1.0 {
-                Text("HRV/RHR 데이터 미수집 — 기본값 적용")
+                Text("No HRV/RHR data collected — default applied")
                     .font(.caption2)
                     .foregroundStyle(DS.Color.textSecondary)
             }
@@ -155,7 +155,7 @@ struct FatigueInfoSheet: View {
     private var resultSection: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             HStack {
-                Text("최종 피로도")
+                Text("Final Fatigue")
                     .font(.subheadline.weight(.semibold))
                 Spacer()
                 HStack(spacing: DS.Spacing.xs) {
@@ -171,7 +171,7 @@ struct FatigueInfoSheet: View {
             }
 
             HStack {
-                Text("감쇠 시간 상수 (τ)")
+                Text("Decay Time Constant (τ)")
                     .font(.caption)
                     .foregroundStyle(DS.Color.textSecondary)
                 Spacer()

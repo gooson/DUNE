@@ -215,6 +215,7 @@
 		84FCC93F0147A4C58E866688 /* ExerciseHistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A530BAEA88566D1AC1293CE7 /* ExerciseHistoryViewModel.swift */; };
 		851EBC33F4660E48851BB292 /* ActivityViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB1E8F32CD7A47312B29431 /* ActivityViewModelTests.swift */; };
 		859B77E27807125C750586B5 /* WellnessSmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E939EC2882FFF467DEA00F2C /* WellnessSmokeTests.swift */; };
+		860DA5777EE9371E83BD33A6 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = F6F420632B2F0E20B94E2F04 /* Localizable.xcstrings */; };
 		8626AD75967E80028AF1437C /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E2950F45E1971E01442B09 /* ActivityView.swift */; };
 		867E38B3FD10A28FE7C729DC /* SharedHealthDataServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E351F3EEEA566A369A425F1 /* SharedHealthDataServiceTests.swift */; };
 		86CFA8A8FF454B4180202E6A /* CloudSyncConsentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15FEB0BAA096F51B026FF58C /* CloudSyncConsentView.swift */; };
@@ -359,6 +360,7 @@
 		CE42E1FD582FF5BDEC41A7AB /* ShareImageSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDDA577F6A0204116C406D82 /* ShareImageSheet.swift */; };
 		CE7C9F606E59F82FDF4DCBAE /* WorkoutSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CCC0DB1937B6304D21EB31 /* WorkoutSessionView.swift */; };
 		CEB63DDF54ED6F02B8C96A8D /* TrainingReadiness+View.swift in Sources */ = {isa = PBXBuildFile; fileRef = B320FABEE3984540983AF448 /* TrainingReadiness+View.swift */; };
+		CEB69AE8E8EBA45CC1FEB0B2 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 9B9BE16725DDF1E1E79C538F /* Localizable.xcstrings */; };
 		D01080855E68D7FC1AC92039 /* StackedVolumeBarChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A028A62C35DB0E1202EAED00 /* StackedVolumeBarChartView.swift */; };
 		D0118A459F5A43537701F1C5 /* OneRMEstimationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DAEC1F640FEAAD7F01271ED /* OneRMEstimationService.swift */; };
 		D0462BE2D063B6855E4304E1 /* StepsQueryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24766189E066511DFFAA8B9D /* StepsQueryService.swift */; };
@@ -741,6 +743,7 @@
 		9A17E1B32410A97AC25B4136 /* HabitStreakServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitStreakServiceTests.swift; sourceTree = "<group>"; };
 		9A8EC4689E07E9EA391D6094 /* WorkoutActivityType+View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkoutActivityType+View.swift"; sourceTree = "<group>"; };
 		9B2289ED768B51C92A48A699 /* NumberFormattingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFormattingTests.swift; sourceTree = "<group>"; };
+		9B9BE16725DDF1E1E79C538F /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		9C05E6A1A691E65D754CF1E6 /* WorkoutTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTemplate.swift; sourceTree = "<group>"; };
 		9CB6A65B8ED66EC8ACC1666F /* ExerciseCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseCardView.swift; sourceTree = "<group>"; };
 		9D00ABC0D2ECBC407A806BFF /* LifeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifeViewModel.swift; sourceTree = "<group>"; };
@@ -899,6 +902,7 @@
 		F4CC125AA1C302C661BEE191 /* TemplateCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateCardView.swift; sourceTree = "<group>"; };
 		F51B4047868B5E4CF2305F85 /* StrengthPersonalRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrengthPersonalRecord.swift; sourceTree = "<group>"; };
 		F562D9D475F5874B7193B4F5 /* TrendDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendDirection.swift; sourceTree = "<group>"; };
+		F6F420632B2F0E20B94E2F04 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		F7944307D4E4C93277963331 /* VolumeBreakdownSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeBreakdownSection.swift; sourceTree = "<group>"; };
 		F8526175C4C64A1255EA2024 /* AllDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllDataView.swift; sourceTree = "<group>"; };
 		F86A89B0FC99753E8B78E501 /* WorkoutIntensityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutIntensityService.swift; sourceTree = "<group>"; };
@@ -1384,6 +1388,7 @@
 				33CC3EE14AF0CEDCA19E0890 /* Assets.xcassets */,
 				33A6D715375E6129E6C6E4CF /* DUNE.entitlements */,
 				9D619820EADBDB1E0551E5AC /* Info.plist */,
+				9B9BE16725DDF1E1E79C538F /* Localizable.xcstrings */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -1723,6 +1728,7 @@
 			children = (
 				33305E3A090F5E3AF3DFDD31 /* Assets.xcassets */,
 				7BAC66CDD1581BBA06A90F65 /* Info.plist */,
+				F6F420632B2F0E20B94E2F04 /* Localizable.xcstrings */,
 			);
 			name = Resources;
 			path = ../DUNEWatch/Resources;
@@ -2036,6 +2042,8 @@
 			knownRegions = (
 				Base,
 				en,
+				ja,
+				ko,
 			);
 			mainGroup = FCDAEB9076CD2CC414294FE1;
 			minimizedProjectReferenceProxies = 1;
@@ -2057,6 +2065,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2CC062932AC3FEEBDE51A750 /* Assets.xcassets in Resources */,
+				CEB69AE8E8EBA45CC1FEB0B2 /* Localizable.xcstrings in Resources */,
 				DA19EF7C2EBC2AD86FEE416F /* exercises.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2066,6 +2075,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				891107CED07D50F4A6E6DB2C /* Assets.xcassets in Resources */,
+				860DA5777EE9371E83BD33A6 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

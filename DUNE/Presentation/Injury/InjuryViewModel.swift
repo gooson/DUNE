@@ -156,22 +156,22 @@ final class InjuryViewModel {
         validationError = nil
 
         if startDate.isFuture {
-            validationError = "Start date cannot be in the future"
+            validationError = String(localized: "Start date cannot be in the future")
             return nil
         }
 
         if startDate < Self.earliestStartDate {
-            validationError = "Start date is too far in the past"
+            validationError = String(localized: "Start date is too far in the past")
             return nil
         }
 
         if let end = endDate {
             if end < startDate {
-                validationError = "End date must be after start date"
+                validationError = String(localized: "End date must be after start date")
                 return nil
             }
             if end.isFuture {
-                validationError = "End date cannot be in the future"
+                validationError = String(localized: "End date cannot be in the future")
                 return nil
             }
         }

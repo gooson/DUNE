@@ -19,11 +19,11 @@ struct WeatherCard: View {
         for hourly in snapshot.hourlyForecast {
             let hour = calendar.component(.hour, from: hourly.hour)
             if hour == 0 {
-                labels[hourly.hour] = "자정"
+                labels[hourly.hour] = String(localized: "Midnight")
             } else if hour == 12 {
-                labels[hourly.hour] = "정오"
+                labels[hourly.hour] = String(localized: "Noon")
             } else {
-                labels[hourly.hour] = hour < 12 ? "오전 \(hour)" : "오후 \(hour - 12)"
+                labels[hourly.hour] = hour < 12 ? "\(hour)AM" : "\(hour - 12)PM"
             }
         }
         self.hourLabels = labels
@@ -46,7 +46,7 @@ struct WeatherCard: View {
                                 .monospacedDigit()
 
                             if feelsLikeDiffers {
-                                Text("체감 \(Int(snapshot.feelsLike))°")
+                                Text("Feels \(Int(snapshot.feelsLike))°")
                                     .font(.subheadline)
                                     .foregroundStyle(.secondary)
                             }
@@ -86,14 +86,14 @@ struct WeatherCard: View {
 
                 // Stale indicator
                 if snapshot.isStale {
-                    Text("날씨 정보가 오래되었습니다")
+                    Text("Weather data is outdated")
                         .font(.caption2)
                         .foregroundStyle(.tertiary)
                 }
             }
         }
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("현재 날씨 \(snapshot.condition.label), \(Int(snapshot.temperature))도")
+        .accessibilityLabel("Current weather \(snapshot.condition.label), \(Int(snapshot.temperature)) degrees")
     }
 
     // MARK: - Subviews
@@ -151,17 +151,17 @@ struct WeatherCardPlaceholder: View {
                     .font(.title3)
                     .foregroundStyle(.tertiary)
 
-                Text("날씨")
+                Text("Weather")
                     .font(.subheadline.weight(.medium))
 
                 Spacer()
 
-                Text("날씨 정보를 불러올 수 없습니다")
+                Text("Unable to load weather data")
                     .font(.caption)
                     .foregroundStyle(.tertiary)
             }
         }
-        .accessibilityLabel("날씨 정보 없음")
+        .accessibilityLabel("Weather data unavailable")
         .onTapGesture {
             onRequestPermission?()
         }

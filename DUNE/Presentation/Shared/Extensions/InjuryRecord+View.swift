@@ -12,9 +12,9 @@ extension InjuryRecord {
     var durationLabel: String {
         let days = durationDays
         if isActive {
-            return days == 0 ? "Today" : "\(days)일째"
+            return days == 0 ? "Today" : "\(days)d"
         } else {
-            return "\(days)일"
+            return "\(days)d"
         }
     }
 

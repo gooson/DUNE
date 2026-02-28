@@ -9,11 +9,11 @@ enum ExerciseCategory: String, Codable, CaseIterable, Sendable {
 
     var displayName: String {
         switch self {
-        case .strength: "Strength"
-        case .cardio: "Cardio"
+        case .strength: String(localized: "Strength")
+        case .cardio: String(localized: "Cardio")
         case .hiit: "HIIT"
-        case .flexibility: "Flexibility"
-        case .bodyweight: "Bodyweight"
+        case .flexibility: String(localized: "Flexibility")
+        case .bodyweight: String(localized: "Bodyweight")
         }
     }
 

@@ -21,17 +21,17 @@ extension WeatherConditionType {
     /// Localized label for this weather condition.
     var label: String {
         switch self {
-        case .clear:        "맑음"
-        case .partlyCloudy: "구름 조금"
-        case .cloudy:       "흐림"
-        case .rain:         "비"
-        case .heavyRain:    "폭우"
-        case .snow:         "눈"
-        case .sleet:        "진눈깨비"
-        case .wind:         "강풍"
-        case .fog:          "안개"
-        case .haze:         "연무"
-        case .thunderstorm: "뇌우"
+        case .clear:        String(localized: "Clear")
+        case .partlyCloudy: String(localized: "Partly Cloudy")
+        case .cloudy:       String(localized: "Cloudy")
+        case .rain:         String(localized: "Rain")
+        case .heavyRain:    String(localized: "Heavy Rain")
+        case .snow:         String(localized: "Snow")
+        case .sleet:        String(localized: "Sleet")
+        case .wind:         String(localized: "Wind")
+        case .fog:          String(localized: "Fog")
+        case .haze:         String(localized: "Haze")
+        case .thunderstorm: String(localized: "Thunderstorm")
         }
     }
 
