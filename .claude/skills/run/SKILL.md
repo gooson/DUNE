@@ -1,19 +1,21 @@
 ---
-name: lfg
-description: "전체 파이프라인 자동화. Plan -> Work -> Review -> Resolve -> Compound -> Ship. 기능 전체를 처음부터 끝까지 구현합니다."
+name: run
+description: "전체 파이프라인 자동 실행. Plan -> Work -> Review -> Resolve -> Compound -> Ship. 승인 없이 끝까지 자동 진행합니다."
 ---
 
-# LFG: Full Pipeline Execution
+# Run: Full Pipeline Execution (Auto)
 
-$ARGUMENTS 에 대해 전체 Compound Engineering 파이프라인을 실행합니다.
+$ARGUMENTS 에 대해 전체 Compound Engineering 파이프라인을 **승인 없이** 자동 실행합니다.
 
 ## Pipeline Overview
 
 ```
 Phase 1: Plan ──> Phase 2: Work ──> Phase 3: Review ──> Phase 4: Resolve ──> Phase 5: Compound ──> Phase 6: Ship
      │                 │                  │                   │                    │                    │
-  [승인 필요]      [테스트 통과]       [결과 생성]          [P1 해결]           [문서화]            [PR 생성]
+  [자동 진행]      [빌드 통과]       [결과 생성]         [전체 자동 수정]       [문서화]            [PR 생성]
 ```
+
+모든 Phase는 승인 없이 자동 진행됩니다. 오류 발생 시에만 사용자에게 보고합니다.
 
 ## Phase 1: Plan (계획)
 
@@ -23,7 +25,7 @@ Phase 1: Plan ──> Phase 2: Work ──> Phase 3: Review ──> Phase 4: Res
 3. 구현 계획 생성
 4. docs/plans/ 에 저장
 
-**Quality Gate**: 사용자에게 계획을 제시하고 승인을 받아야 다음 단계로 진행합니다.
+자동 진행합니다.
 
 ## Phase 2: Work (구현)
 
@@ -33,7 +35,7 @@ Phase 1: Plan ──> Phase 2: Work ──> Phase 3: Review ──> Phase 4: Res
 3. Quality Check: 빌드, 테스트, 전문 에이전트 검증 (/work Phase 3 참조)
 4. Commit: 변경사항 커밋
 
-**Quality Gate**: 빌드 + 테스트 통과, 에이전트 검증 완료 후 다음 단계로 진행합니다.
+빌드 + 테스트 통과 후 자동 진행합니다.
 
 ## Phase 3: Review (리뷰)
 
@@ -63,13 +65,13 @@ Phase 1: Plan ──> Phase 2: Work ──> Phase 3: Review ──> Phase 4: Res
 ## Phase 4: Resolve (해결)
 
 리뷰 + 에이전트 결과를 통합 처리합니다:
-- **P1 (Critical)**: 즉시 자동 수정합니다
-- **P2 (Important)**: 사용자에게 수정 여부를 확인합니다
-- **P3 (Minor)**: TODO로 기록합니다
+- **P1 (Critical)**: 즉시 자동 수정
+- **P2 (Important)**: 자동 수정
+- **P3 (Minor)**: 자동 수정
 
-수정 후 Phase 3 (Review)를 다시 실행하여 P1이 0건인지 확인합니다.
+모든 우선순위를 자동 수정합니다. 수정 후 Phase 3 (Review)를 다시 실행하여 P1이 0건인지 확인합니다.
 
-**Quality Gate**: P1이 모두 해결되어야 다음 단계로 진행합니다.
+**자동 게이트**: P1이 모두 해결되어야 다음 단계로 진행합니다. 2회 시도 후에도 P1이 남으면 사용자에게 보고합니다.
 
 ## Phase 5: Compound (문서화)
 
@@ -99,13 +101,10 @@ Phase 1: Plan ──> Phase 2: Work ──> Phase 3: Review ──> Phase 4: Res
 ```
 ━━━ Phase {N}: {Name} Complete ━━━
 {summary}
-
-Next: Phase {N+1} - {Name}
-Continue? [Y/n/back]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-사용자가 언제든 파이프라인을 중단하거나 이전 Phase로 돌아갈 수 있습니다.
+승인 없이 자동 진행합니다. 사용자가 중단하면 즉시 멈춥니다.
 
 ## Error Recovery
 
