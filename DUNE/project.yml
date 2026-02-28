@@ -76,6 +76,7 @@ targets:
         aps-environment: development
         com.apple.developer.healthkit: true
         com.apple.developer.healthkit.access: []
+        com.apple.developer.healthkit.background-delivery: true
         com.apple.developer.weatherkit: true
         com.apple.developer.icloud-container-identifiers:
           - iCloud.com.raftel.dailve

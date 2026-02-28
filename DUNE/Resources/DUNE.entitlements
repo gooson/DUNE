@@ -8,7 +8,7 @@
 	<true/>
 	<key>com.apple.developer.healthkit.access</key>
 	<array/>
-	<key>com.apple.developer.weatherkit</key>
+	<key>com.apple.developer.healthkit.background-delivery</key>
 	<true/>
 	<key>com.apple.developer.icloud-container-identifiers</key>
 	<array>
@@ -20,5 +20,7 @@
 	</array>
 	<key>com.apple.developer.ubiquity-kvstore-identifier</key>
 	<string>$(TeamIdentifierPrefix)$(CFBundleIdentifier)</string>
+	<key>com.apple.developer.weatherkit</key>
+	<true/>
 </dict>
 </plist>
