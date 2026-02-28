@@ -14,6 +14,10 @@ struct ExerciseDefaultEditView: View {
     @State private var weightText: String = ""
     @State private var repsText: String = ""
     @State private var isManualOverride: Bool = false
+    /// Correction #6/#11: Prevent duplicate saves on double-tap
+    @State private var isSaving: Bool = false
+    /// Correction #50: Confirmation before CloudKit delete
+    @State private var showClearConfirmation: Bool = false
 
     private let maxWeightKg = 500.0
     private let maxReps = 1000
@@ -67,7 +71,7 @@ struct ExerciseDefaultEditView: View {
             if existingRecord != nil {
                 Section {
                     Button("Clear Defaults", role: .destructive) {
-                        clearDefaults()
+                        showClearConfirmation = true
                     }
                 }
             }
@@ -82,10 +86,22 @@ struct ExerciseDefaultEditView: View {
                     saveDefaults()
                     dismiss()
                 }
+                .disabled(isSaving)
             }
         }
         .onAppear {
             loadExistingValues()
+        }
+        .confirmationDialog(
+            "Clear exercise defaults?",
+            isPresented: $showClearConfirmation,
+            titleVisibility: .visible
+        ) {
+            Button("Clear Defaults", role: .destructive) {
+                clearDefaults()
+            }
+        } message: {
+            Text("This will remove the saved default weight and reps for \(exercise.localizedName). This change syncs across all your devices.")
         }
     }
 
@@ -103,10 +119,13 @@ struct ExerciseDefaultEditView: View {
     }
 
     private func saveDefaults() {
+        guard !isSaving else { return }
+        isSaving = true
+
         // Parse weight (Correction #38: trim + isEmpty check)
         let trimmedWeight = weightText.trimmingCharacters(in: .whitespaces)
         let weight: Double? = if !trimmedWeight.isEmpty, let parsed = Double(trimmedWeight) {
-            Swift.min(Swift.max(parsed, 0), maxWeightKg)
+            parsed > 0 ? Swift.min(parsed, maxWeightKg) : nil
         } else {
             nil
         }
@@ -125,6 +144,7 @@ struct ExerciseDefaultEditView: View {
             if let record = existingRecord {
                 withAnimation { modelContext.delete(record) }
             }
+            isSaving = false
             return
         }
 
@@ -143,6 +163,7 @@ struct ExerciseDefaultEditView: View {
             )
             modelContext.insert(record)
         }
+        isSaving = false
     }
 
     private func clearDefaults() {

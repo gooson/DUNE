@@ -8,6 +8,10 @@ struct ExerciseDefaultsListView: View {
     private var savedDefaults: [ExerciseDefaultRecord]
 
     @State private var searchText = ""
+    /// Correction #68: Dictionary cache for O(1) lookup in ForEach
+    @State private var defaultsByExerciseID: [String: ExerciseDefaultRecord] = [:]
+    /// Correction #8/#152: Cache sorted exercises to avoid re-sorting every render
+    @State private var cachedAllExercises: [ExerciseDefinition] = []
 
     private let library = ExerciseLibraryService.shared
 
@@ -22,6 +26,15 @@ struct ExerciseDefaultsListView: View {
         .background { DetailWaveBackground() }
         .navigationTitle("Exercise Defaults")
         .searchable(text: $searchText, prompt: "Search exercises")
+        .onAppear {
+            rebuildDefaultsIndex()
+            if cachedAllExercises.isEmpty {
+                cachedAllExercises = library.allExercises().sorted { $0.localizedName < $1.localizedName }
+            }
+        }
+        .onChange(of: savedDefaults.count) {
+            rebuildDefaultsIndex()
+        }
     }
 
     // MARK: - Saved Defaults
@@ -51,7 +64,7 @@ struct ExerciseDefaultsListView: View {
                 NavigationLink {
                     ExerciseDefaultEditView(exercise: exercise)
                 } label: {
-                    exerciseRow(exercise: exercise, record: defaultRecord(for: exercise.id))
+                    exerciseRow(exercise: exercise, record: defaultsByExerciseID[exercise.id])
                 }
             }
         }
@@ -59,7 +72,7 @@ struct ExerciseDefaultsListView: View {
 
     private var filteredExercises: [ExerciseDefinition] {
         if searchText.isEmpty {
-            return library.allExercises().sorted { $0.localizedName < $1.localizedName }
+            return cachedAllExercises
         }
         return library.search(query: searchText)
     }
@@ -91,9 +104,12 @@ struct ExerciseDefaultsListView: View {
 
     // MARK: - Helpers
 
-    /// Build a lookup from savedDefaults (Correction #68: avoid O(N) in ForEach)
-    private func defaultRecord(for exerciseID: String) -> ExerciseDefaultRecord? {
-        savedDefaults.first { $0.exerciseDefinitionID == exerciseID }
+    /// Rebuild O(1) lookup dictionary from savedDefaults (Correction #68)
+    private func rebuildDefaultsIndex() {
+        defaultsByExerciseID = Dictionary(
+            savedDefaults.map { ($0.exerciseDefinitionID, $0) },
+            uniquingKeysWith: { _, latest in latest }
+        )
     }
 }
 
