@@ -30,6 +30,12 @@ for item in items {
 record.children = newChildren
 ```
 
+## 새 @Model 추가 시 VersionedSchema 동기화 필수
+
+`ModelContainer(for:)`에 모델을 추가하면 최신 `VersionedSchema.models`에도 반드시 추가.
+불일치 시 staged migration이 "unknown coordinator model version" (134504) 에러로 실패하며,
+store 삭제 fallback으로도 복구 불가 (새 store 생성에도 스키마 일치 필요).
+
 ## 스키마 변경 테스트
 
 @Model 변경 후 반드시:

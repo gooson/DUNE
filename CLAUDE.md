@@ -114,7 +114,7 @@
   - swift-layer-boundaries.md: #1, #2, #7, #20, #36, #62, #73, #86, #103, #117, #155
   - input-validation.md: #3, #4, #6, #11, #18, #21, #22, #38-39, #41-42, #84-85, #101
   - healthkit-patterns.md: #5, #107-110, #130-131
-  - swiftdata-cloudkit.md: #32-33, #40, #50, #65, #71, #164
+  - swiftdata-cloudkit.md: #32-33, #40, #50, #65, #71, #164, #188
   - watch-navigation.md: #57-61
 -->
 
