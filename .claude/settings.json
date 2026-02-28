@@ -1,4 +1,17 @@
 {
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/approve-safe-pipes.sh"
+          }
+        ]
+      }
+    ]
+  },
   "permissions": {
     "allow": [
       "WebFetch",
@@ -67,7 +80,24 @@
       "mcp__Claude_in_Chrome__*",
       "mcp__Claude_Preview__*",
       "mcp__mcp-registry__*",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(done)",
+      "Bash(scripts/build-ios.sh)",
+      "Bash(curl:*)",
+      "Bash(jq:*)",
+      "Bash(zip:*)",
+      "Bash(unzip:*)",
+      "Bash(tar:*)",
+      "Bash(ln:*)",
+      "Bash(killall:*)",
+      "Bash(ps:*)",
+      "Bash(lsof:*)",
+      "Bash(du:*)",
+      "Bash(uname:*)",
+      "Bash(pbcopy:*)",
+      "Bash(pbpaste:*)",
+      "Bash(node:*)",
+      "Bash(ruby:*)"
     ]
   }
 }
