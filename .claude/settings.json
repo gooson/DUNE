@@ -34,6 +34,13 @@
   },
   "permissions": {
     "allow": [
+      "Read",
+      "Edit",
+      "Write",
+      "Glob",
+      "Grep",
+      "Task",
+      "TodoWrite",
       "Bash(*)",
       "WebFetch",
       "WebSearch",
