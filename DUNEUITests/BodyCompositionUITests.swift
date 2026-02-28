@@ -8,6 +8,7 @@ final class BodyCompositionUITests: XCTestCase {
         continueAfterFailure = false
         app = XCUIApplication()
         app.launchArguments = ["--uitesting"]
+        addSystemPermissionMonitor()
         app.launch()
     }
 
