@@ -93,12 +93,6 @@ final class ExerciseRecord {
         }
     }
 
-    /// Auto-calculated intensity level, if available.
-    var autoIntensityLevel: WorkoutIntensityLevel? {
-        guard let raw = autoIntensityRaw, raw.isFinite else { return nil }
-        return WorkoutIntensityLevel(rawScore: raw)
-    }
-
     /// Whether this record has structured set data (vs legacy flat record)
     var hasSetData: Bool {
         !(sets ?? []).isEmpty

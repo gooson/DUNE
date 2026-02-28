@@ -232,7 +232,8 @@ struct WorkoutIntensityServiceTests {
             roundsSet(duration: 30),
             roundsSet(duration: 30),
         ])
-        let history = (1...5).map { i in
+        // oldest-first per Correction #156
+        let history = (1...5).reversed().map { i in
             session(type: .roundsBased, sets: [
                 roundsSet(duration: 30),
                 roundsSet(duration: 30),
@@ -243,6 +244,7 @@ struct WorkoutIntensityServiceTests {
         let result = service.calculateIntensity(current: current, history: history)
         #expect(result != nil)
         #expect(result!.rawScore > 0.3)
+        #expect(result!.detail.method == .roundsPercentile)
     }
 
     // MARK: - RPE Integration
@@ -334,6 +336,31 @@ struct WorkoutIntensityServiceTests {
     @Test("Level from score above 1 is maxEffort")
     func levelFromAboveOne() {
         #expect(WorkoutIntensityLevel(rawScore: 1.5) == .maxEffort)
+    }
+
+    // MARK: - Percentile Minimum Count
+
+    @Test("Percentile returns nil with only 1 history session")
+    func percentileMinimumCount() {
+        let current = session(type: .setsReps, sets: [bodyweightSet(reps: 30)])
+        let history = [
+            session(type: .setsReps, sets: [bodyweightSet(reps: 20)], daysAgo: 2),
+        ]
+        let result = service.calculateIntensity(current: current, history: history)
+        // With < 2 history sessions, percentile returns nil → RPE fallback → nil
+        #expect(result == nil)
+    }
+
+    @Test("Percentile works with 2+ history sessions")
+    func percentileWithEnoughHistory() {
+        let current = session(type: .setsReps, sets: [bodyweightSet(reps: 30)])
+        let history = [
+            session(type: .setsReps, sets: [bodyweightSet(reps: 15)], daysAgo: 4),
+            session(type: .setsReps, sets: [bodyweightSet(reps: 20)], daysAgo: 2),
+        ]
+        let result = service.calculateIntensity(current: current, history: history)
+        #expect(result != nil)
+        #expect(result!.detail.method == .repsPercentile)
     }
 
     // MARK: - Multi-Signal Combination

@@ -750,9 +750,11 @@ struct WorkoutSessionView: View {
         isInputFieldFocused = false
         guard let record = viewModel.createValidatedRecord(weightUnit: weightUnit) else { return }
 
-        // Auto intensity calculation before insert
+        // Auto intensity — called BEFORE modelContext.insert so @Query history excludes this record
         let intensityResult = calculateAutoIntensity(for: record)
-        record.autoIntensityRaw = intensityResult?.rawScore
+        if let score = intensityResult?.rawScore, score.isFinite, (0...1).contains(score) {
+            record.autoIntensityRaw = score
+        }
         savedIntensity = intensityResult
 
         let shareData = buildShareData(from: record)

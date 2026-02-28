@@ -43,6 +43,8 @@ struct WorkoutIntensityService: Sendable {
         static let distanceRange: ClosedRange<Double> = 0.001...500_000
         static let rpeRange: ClosedRange<Int> = 1...10
         static let manualIntensityRange: ClosedRange<Int> = 1...10
+        /// Minimum history sessions required for percentile calculation.
+        static let minimumHistorySessions = 2
     }
 
     private enum Weights {
@@ -105,7 +107,6 @@ struct WorkoutIntensityService: Sendable {
         // RPE
         let rpeSignal = normalizedRPE(current.rpe)
 
-        // If no primary signal and no history, try RPE fallback
         if primarySignal == nil && volumeSignal == nil {
             return rpeFallback(current: current)
         }
@@ -187,16 +188,7 @@ struct WorkoutIntensityService: Sendable {
             return clamp01(1.0 - p) // Invert: lower pace (faster) = higher intensity
         }()
 
-        // Volume: duration vs avg
-        let currentDuration = totalValidDuration(from: current.sets)
-        let volumeSignal: Double? = {
-            let historyDurations = history.map { totalValidDuration(from: $0.sets) }.filter { $0 > 0 }
-            guard !historyDurations.isEmpty else { return nil }
-            let avg = historyDurations.reduce(0, +) / Double(historyDurations.count)
-            guard avg > 0, avg.isFinite, currentDuration > 0 else { return nil }
-            return clamp01(currentDuration / avg)
-        }()
-
+        let volumeSignal = durationVolumeSignal(current: current, history: history)
         let rpeSignal = normalizedRPE(current.rpe)
 
         if primarySignal == nil && volumeSignal == nil {
@@ -235,16 +227,7 @@ struct WorkoutIntensityService: Sendable {
             return clamp01(avg / 10.0)
         }()
 
-        // Volume: duration vs avg
-        let currentDuration = totalValidDuration(from: current.sets)
-        let volumeSignal: Double? = {
-            let historyDurations = history.map { totalValidDuration(from: $0.sets) }.filter { $0 > 0 }
-            guard !historyDurations.isEmpty else { return nil }
-            let avg = historyDurations.reduce(0, +) / Double(historyDurations.count)
-            guard avg > 0, avg.isFinite, currentDuration > 0 else { return nil }
-            return clamp01(currentDuration / avg)
-        }()
-
+        let volumeSignal = durationVolumeSignal(current: current, history: history)
         let rpeSignal = normalizedRPE(current.rpe)
 
         if primarySignal == nil && volumeSignal == nil {
@@ -279,16 +262,7 @@ struct WorkoutIntensityService: Sendable {
         let historyCounts = history.map { $0.sets.filter { self.validSet($0) }.count }.filter { $0 > 0 }
         let primarySignal = percentile(value: Double(currentCount), in: historyCounts.map(Double.init))
 
-        // Volume: duration vs avg
-        let currentDuration = totalValidDuration(from: current.sets)
-        let volumeSignal: Double? = {
-            let historyDurations = history.map { totalValidDuration(from: $0.sets) }.filter { $0 > 0 }
-            guard !historyDurations.isEmpty else { return nil }
-            let avg = historyDurations.reduce(0, +) / Double(historyDurations.count)
-            guard avg > 0, avg.isFinite, currentDuration > 0 else { return nil }
-            return clamp01(currentDuration / avg)
-        }()
-
+        let volumeSignal = durationVolumeSignal(current: current, history: history)
         let rpeSignal = normalizedRPE(current.rpe)
 
         if primarySignal == nil && volumeSignal == nil {
@@ -305,7 +279,7 @@ struct WorkoutIntensityService: Sendable {
                 primarySignal: primarySignal,
                 volumeSignal: volumeSignal,
                 rpeSignal: rpeSignal,
-                method: .repsPercentile
+                method: .roundsPercentile
             )
         )
     }
@@ -391,7 +365,7 @@ struct WorkoutIntensityService: Sendable {
         return pace
     }
 
-    /// Volume for strength exercises: sum of (weight × reps) for working sets.
+    /// Volume for strength exercises: sum of (weight x reps) for working sets.
     private func sessionVolume(from sets: [IntensitySetInput]) -> Double {
         var total = 0.0
         for set in validWorkingSets(from: sets) {
@@ -405,6 +379,7 @@ struct WorkoutIntensityService: Sendable {
         return total
     }
 
+    /// Strength volume ratio: current session volume / history average volume.
     private func volumeRatio(
         current: IntensitySessionInput,
         history: [IntensitySessionInput]
@@ -415,7 +390,9 @@ struct WorkoutIntensityService: Sendable {
         let historyVols = history.map { sessionVolume(from: $0.sets) }.filter { $0 > 0 }
         guard !historyVols.isEmpty else { return nil }
 
-        let avg = historyVols.reduce(0, +) / Double(historyVols.count)
+        let histSum = historyVols.reduce(0, +)
+        guard histSum.isFinite else { return nil }
+        let avg = histSum / Double(historyVols.count)
         guard avg > 0, avg.isFinite else { return nil }
 
         let ratio = currentVol / avg
@@ -423,10 +400,33 @@ struct WorkoutIntensityService: Sendable {
         return clamp01(ratio)
     }
 
-    /// Percentile rank of value within sorted array (0.0 = lowest, 1.0 = highest).
+    /// Duration-based volume signal: current total duration / history average duration.
+    /// Shared by cardio, flexibility, and rounds-based exercise types.
+    private func durationVolumeSignal(
+        current: IntensitySessionInput,
+        history: [IntensitySessionInput]
+    ) -> Double? {
+        let currentDuration = totalValidDuration(from: current.sets)
+        guard currentDuration > 0 else { return nil }
+
+        let historyDurations = history.map { totalValidDuration(from: $0.sets) }.filter { $0 > 0 }
+        guard !historyDurations.isEmpty else { return nil }
+
+        let histSum = historyDurations.reduce(0, +)
+        guard histSum.isFinite else { return nil }
+        let avg = histSum / Double(historyDurations.count)
+        guard avg > 0, avg.isFinite else { return nil }
+
+        let ratio = currentDuration / avg
+        guard ratio.isFinite else { return nil }
+        return clamp01(ratio)
+    }
+
+    /// Percentile rank of value within history (0.0 = lowest, 1.0 = highest).
+    /// Returns nil if fewer than `minimumHistorySessions` valid values.
     private func percentile(value: Double, in values: [Double]) -> Double? {
         let valid = values.filter { $0.isFinite }
-        guard !valid.isEmpty else { return nil }
+        guard valid.count >= Limits.minimumHistorySessions else { return nil }
         let belowCount = valid.filter { $0 < value }.count
         let result = Double(belowCount) / Double(valid.count)
         guard result.isFinite else { return nil }

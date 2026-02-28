@@ -55,10 +55,10 @@ enum IntensityMethod: String, Sendable {
     case repsPercentile
     /// Cardio: pace percentile across history
     case pacePercentile
+    /// HIIT: completed rounds percentile across history
+    case roundsPercentile
     /// Flexibility/HIIT: user-provided manual intensity field
     case manualIntensity
     /// Fallback: only RPE was available
     case rpeOnly
-    /// Not enough data to compute any signal
-    case insufficientData
 }
