@@ -80,7 +80,7 @@ struct CarouselRoutineCardView: View {
         var totalSeconds: Double = 0
         for entry in entries {
             let sets = Double(min(entry.defaultSets, 100))
-            let rest = entry.restDuration ?? 60
+            let rest = entry.restDuration ?? WatchConnectivityManager.shared.globalRestSeconds
             totalSeconds += sets * setExecutionSeconds + Swift.max(sets - 1, 0) * rest
         }
         // Correction #85/#169: guard isFinite + physical upper bound (480min = 8h)

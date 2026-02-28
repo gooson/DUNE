@@ -91,7 +91,7 @@ struct TemplateCardView: View {
         var totalSeconds: Double = 0
         for entry in entries {
             let sets = Double(entry.defaultSets)
-            let rest = entry.restDuration ?? 60
+            let rest = entry.restDuration ?? WatchConnectivityManager.shared.globalRestSeconds
             // Each set takes ~40s + rest between sets (no rest after last set)
             totalSeconds += sets * setExecutionSeconds + Swift.max(sets - 1, 0) * rest
         }

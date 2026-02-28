@@ -107,6 +107,7 @@ struct DUNEApp: App {
                     }
                 }
             }
+            .tint(DS.Color.warmGlow)
         }
         .modelContainer(modelContainer)
     }

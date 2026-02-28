@@ -28,6 +28,10 @@ final class WatchConnectivityManager: NSObject {
     /// Exercise library transferred from iPhone
     private(set) var exerciseLibrary: [WatchExerciseInfo] = []
 
+    /// Global rest time (seconds) synced from iPhone settings.
+    /// Fallback to 90s if never synced (matches iOS WorkoutSettingsStore default).
+    private(set) var globalRestSeconds: TimeInterval = 90
+
     /// Sync status for UI display
     private(set) var syncStatus: SyncStatus = .notConnected
 
@@ -42,13 +46,12 @@ final class WatchConnectivityManager: NSObject {
         session.activate()
     }
 
-    /// Load any previously-received applicationContext (e.g. exerciseLibrary).
+    /// Load any previously-received applicationContext (e.g. exerciseLibrary, globalRestSeconds).
     /// `didReceiveApplicationContext` only fires on *new* updates,
     /// so we must read the cached context after activation completes.
     private func loadCachedContext() {
-        let context = WCSession.default.receivedApplicationContext
-            .compactMapValues { $0 as? Data }
-        handleContext(context)
+        let parsed = ParsedWatchContext(from: WCSession.default.receivedApplicationContext)
+        handleParsedContext(parsed)
     }
 
     /// Notify iPhone that a workout has started on Watch.
@@ -137,9 +140,9 @@ extension WatchConnectivityManager: WCSessionDelegate {
     }
 
     nonisolated func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
-        let messageCopy = message.compactMapValues { $0 as? Data }
+        let parsed = ParsedWatchMessage(from: message)
         Task { @MainActor in
-            handleMessage(messageCopy)
+            handleParsedMessage(parsed)
         }
     }
 
@@ -148,26 +151,50 @@ extension WatchConnectivityManager: WCSessionDelegate {
         didReceiveMessage message: [String: Any],
         replyHandler: @escaping ([String: Any]) -> Void
     ) {
-        let messageCopy = message.compactMapValues { $0 as? Data }
+        let parsed = ParsedWatchMessage(from: message)
         replyHandler(["status": "received"])
         Task { @MainActor in
-            handleMessage(messageCopy)
+            handleParsedMessage(parsed)
         }
     }
 
     nonisolated func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String: Any]) {
-        let contextCopy = applicationContext.compactMapValues { $0 as? Data }
+        let parsed = ParsedWatchContext(from: applicationContext)
         Task { @MainActor in
-            handleContext(contextCopy)
+            handleParsedContext(parsed)
         }
+    }
+}
+
+// MARK: - Sendable Message Wrappers
+
+/// Extracts Sendable fields from a WCSession message in a nonisolated context.
+private struct ParsedWatchMessage: Sendable {
+    let workoutStateData: Data?
+    let globalRestSeconds: Double?
+
+    init(from message: [String: Any]) {
+        workoutStateData = message["workoutState"] as? Data
+        globalRestSeconds = message["globalRestSeconds"] as? Double
+    }
+}
+
+/// Extracts Sendable fields from a WCSession applicationContext in a nonisolated context.
+private struct ParsedWatchContext: Sendable {
+    let exerciseLibraryData: Data?
+    let globalRestSeconds: Double?
+
+    init(from context: [String: Any]) {
+        exerciseLibraryData = context["exerciseLibrary"] as? Data
+        globalRestSeconds = context["globalRestSeconds"] as? Double
     }
 }
 
 // MARK: - Message Handling
 
 extension WatchConnectivityManager {
-    private func handleMessage(_ message: [String: Data]) {
-        if let data = message["workoutState"] {
+    private func handleParsedMessage(_ parsed: ParsedWatchMessage) {
+        if let data = parsed.workoutStateData {
             do {
                 let state = try JSONDecoder().decode(WatchWorkoutState.self, from: data)
                 activeWorkout = state.isActive ? state : nil
@@ -175,10 +202,15 @@ extension WatchConnectivityManager {
                 print("Failed to decode workout state: \(error.localizedDescription)")
             }
         }
+
+        // Immediate rest time update from iPhone settings change
+        if let restSeconds = parsed.globalRestSeconds {
+            globalRestSeconds = restSeconds
+        }
     }
 
-    private func handleContext(_ context: [String: Data]) {
-        if let data = context["exerciseLibrary"] {
+    private func handleParsedContext(_ parsed: ParsedWatchContext) {
+        if let data = parsed.exerciseLibraryData {
             do {
                 exerciseLibrary = try JSONDecoder().decode([WatchExerciseInfo].self, from: data)
                 syncStatus = .synced(Date())
@@ -190,6 +222,11 @@ extension WatchConnectivityManager {
             // P3: No exerciseLibrary key — mark synced regardless of library state.
             // The context may contain other keys, or be empty on first launch.
             syncStatus = .synced(Date())
+        }
+
+        // Global rest time from iPhone settings
+        if let restSeconds = parsed.globalRestSeconds {
+            globalRestSeconds = restSeconds
         }
     }
 }

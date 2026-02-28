@@ -698,8 +698,9 @@ struct WorkoutSessionView: View {
     }
 
     private func startRest() {
-        restTotalSeconds = 30
-        restSecondsRemaining = 30
+        let seconds = Int(WorkoutSettingsStore.shared.restSeconds)
+        restTotalSeconds = seconds
+        restSecondsRemaining = seconds
         showRestTimer = true
         startRestCountdown()
     }

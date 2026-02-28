@@ -50,16 +50,44 @@ final class WatchSessionManager: NSObject {
         }
     }
 
-    /// Send exercise library subset to Watch for offline use
+    /// Send exercise library subset to Watch for offline use.
+    /// Also includes global workout settings (rest time) in the same context.
     func transferExerciseLibrary(_ exercises: [WatchExerciseInfo]) {
         guard WCSession.default.activationState == .activated else { return }
 
         do {
             let data = try JSONEncoder().encode(exercises)
-            let context: [String: Any] = ["exerciseLibrary": data]
+            let context: [String: Any] = [
+                "exerciseLibrary": data,
+                "globalRestSeconds": WorkoutSettingsStore.shared.restSeconds,
+            ]
             try WCSession.default.updateApplicationContext(context)
         } catch {
             AppLogger.ui.error("Failed to transfer exercise library: \(error.localizedDescription)")
+        }
+    }
+
+    /// Send updated workout settings to Watch immediately (if reachable).
+    /// Falls back to applicationContext for delivery when Watch is not reachable.
+    func syncWorkoutSettingsToWatch() {
+        let restSeconds = WorkoutSettingsStore.shared.restSeconds
+
+        // Immediate message if reachable
+        if WCSession.default.isReachable {
+            let message: [String: Any] = ["globalRestSeconds": restSeconds]
+            WCSession.default.sendMessage(message, replyHandler: nil) { error in
+                AppLogger.ui.error("Failed to send workout settings: \(error.localizedDescription)")
+            }
+        }
+
+        // Also update applicationContext so Watch gets it on next sync
+        guard WCSession.default.activationState == .activated else { return }
+        do {
+            var context = WCSession.default.applicationContext
+            context["globalRestSeconds"] = restSeconds
+            try WCSession.default.updateApplicationContext(context)
+        } catch {
+            AppLogger.ui.error("Failed to update applicationContext with rest settings: \(error.localizedDescription)")
         }
     }
 

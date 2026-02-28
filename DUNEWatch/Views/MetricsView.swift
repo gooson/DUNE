@@ -337,7 +337,8 @@ struct MetricsView: View {
     }
 
     private var currentRestDuration: TimeInterval {
-        workoutManager.currentEntry?.restDuration ?? 30
+        workoutManager.currentEntry?.restDuration
+            ?? WatchConnectivityManager.shared.globalRestSeconds
     }
 
     /// Refresh cached previous sets for the current exercise.
