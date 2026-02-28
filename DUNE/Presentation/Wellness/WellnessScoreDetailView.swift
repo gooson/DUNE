@@ -62,64 +62,19 @@ struct WellnessScoreDetailView: View {
     // MARK: - Score Hero
 
     private var scoreHero: some View {
-        VStack(spacing: DS.Spacing.md) {
-            ZStack {
-                ProgressRingView(
-                    progress: Double(wellnessScore.score) / 100.0,
-                    ringColor: wellnessScore.status.color,
-                    lineWidth: isRegular ? 18 : 16,
-                    size: isRegular ? 180 : 140
-                )
-
-                VStack(spacing: 2) {
-                    Text("\(wellnessScore.score)")
-                        .font(DS.Typography.heroScore)
-                        .contentTransition(.numericText())
-
-                    Text("WELLNESS")
-                        .font(.system(size: 10, weight: .semibold, design: .rounded))
-                        .foregroundStyle(.tertiary)
-                        .tracking(1)
-                }
-            }
-
-            HStack(spacing: DS.Spacing.xs) {
-                Image(systemName: wellnessScore.status.iconName)
-                    .foregroundStyle(wellnessScore.status.color)
-
-                Text(wellnessScore.status.label)
-                    .font(.title3.weight(.semibold))
-            }
-
-            Text(wellnessScore.guideMessage)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-
-            HStack(spacing: DS.Spacing.lg) {
-                subScoreBadge(label: "Sleep", value: wellnessScore.sleepScore, color: DS.Color.sleep)
-                subScoreBadge(label: "Condition", value: wellnessScore.conditionScore, color: DS.Color.hrv)
-                subScoreBadge(label: "Body", value: wellnessScore.bodyScore, color: DS.Color.body)
-            }
-        }
-        .frame(maxWidth: .infinity)
-        .padding(DS.Spacing.lg)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel("Wellness score \(wellnessScore.score), \(wellnessScore.status.label)")
-    }
-
-    private func subScoreBadge(label: String, value: Int?, color: Color) -> some View {
-        VStack(spacing: DS.Spacing.xxs) {
-            Text(value.map { "\($0)" } ?? "--")
-                .font(.headline.weight(.bold))
-                .monospacedDigit()
-                .foregroundStyle(value != nil ? color : .secondary)
-
-            Text(label)
-                .font(.caption2)
-                .foregroundStyle(.tertiary)
-        }
+        DetailScoreHero(
+            score: wellnessScore.score,
+            scoreLabel: "WELLNESS",
+            statusLabel: wellnessScore.status.label,
+            statusIcon: wellnessScore.status.iconName,
+            statusColor: wellnessScore.status.color,
+            guideMessage: wellnessScore.guideMessage,
+            subScores: [
+                .init(label: "Sleep", value: wellnessScore.sleepScore, color: DS.Color.sleep),
+                .init(label: "Condition", value: wellnessScore.conditionScore, color: DS.Color.hrv),
+                .init(label: "Body", value: wellnessScore.bodyScore, color: DS.Color.body),
+            ]
+        )
     }
 
     // MARK: - Sub-score Charts
