@@ -421,3 +421,10 @@
 176. **카테고리→색상 매핑은 enum extension에 단일 소스 필수**: `ActivityCategory.color`처럼 enum 자체에 computed property로 정의. `WorkoutActivityType.color`, `ExerciseTypeVolume.color` 등은 `category.color`로 위임. 동일 switch가 3곳 이상이면 Correction #37 즉시 적용
 177. **DS 색상 토큰은 반드시 xcassets 패턴 사용**: `Color(red:green:blue:)` 인라인 금지. `Assets.xcassets/Colors/{Name}.colorset` 생성 → `Color("Name")` 참조. dark mode variant 지원 + Xcode 색상 편집기 호환 + 기존 DS 패턴 일관성
 178. **정적 색상 배열은 `CaseIterable`에서 파생**: `[DS.Color.a, DS.Color.b, ...]` 수동 나열 대신 `Category.allCases.filter { ... }.map(\.color)` 패턴. 새 case 추가 시 자동 반영 + 중복 색상(multiSport=cardio) 명시적 제외
+
+### 2026-02-28: Wellness ScrollView Infinite Bounce 교정
+
+179. **LazyVGrid + @Query 동일 View 금지**: @Query(SwiftData)가 body 재평가를 트리거하고, LazyVGrid가 lazy 로드/언로드로 content size를 변동시키면 scroll bounce feedback loop 발생. @Query를 격리된 child view로 추출하거나, 카드 수 20개 미만이면 eager grid(VStack+HStack) 사용
+180. **효과 확인된 수정은 즉시 커밋**: 테스트에서 동작이 확인된 fix를 커밋하지 않으면 context 소실 시 작업 반복. `사용자 확인 → 즉시 git commit` 습관화
+181. **ScrollView에 동적 content size 요소 있으면 `.scrollBounceBehavior(.basedOnSize)` 적용**: LazyVGrid, GeometryReader 등 content size가 스크롤 중 변할 수 있는 요소가 ScrollView 내부에 있으면 방어적으로 적용
+182. **eager grid ForEach는 stable identity 필수**: `id: \.self`(Int index)는 배열 교체 시 SwiftUI diffing 실패. `id: \.left.id` 등 데이터 고유 식별자를 사용하여 row identity 보장
