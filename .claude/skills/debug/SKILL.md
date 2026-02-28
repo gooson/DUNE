@@ -29,6 +29,10 @@ $ARGUMENTS 에 대한 체계적인 디버깅을 수행합니다.
 - 관련 파일과 함수 식별
 - 외부 의존성 문제인지 내부 로직 문제인지 구분
 
+**MCP 활용**:
+- **Serena** `find_symbol` + `find_referencing_symbols`: 문제 함수의 호출 체인 추적
+- **Sequential Thinking**: 격리 단계가 복잡할 때 단계적 사고로 범위 축소
+
 ### Phase 3: Hypothesize (가설)
 
 가능한 원인을 나열합니다 (확률 순):
@@ -42,6 +46,10 @@ $ARGUMENTS 에 대한 체계적인 디버깅을 수행합니다.
   근거: ...
   검증 방법: ...
 ```
+
+**가설이 3개 이상이거나 원인이 불명확할 때**:
+- **Sequential Thinking** MCP로 각 가설의 근거와 반증을 체계적으로 분해
+- **Context7**로 관련 API의 예상 동작과 실제 동작 비교
 
 ### Phase 4: Test (검증)
 
