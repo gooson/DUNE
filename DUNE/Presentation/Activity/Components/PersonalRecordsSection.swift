@@ -69,6 +69,7 @@ struct PersonalRecordsSection: View {
             HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xxs) {
                 Text(primaryValueText(for: record))
                     .font(DS.Typography.cardScore)
+                    .foregroundStyle(DS.Gradient.heroText)
                     .minimumScaleFactor(0.7)
                     .lineLimit(1)
 

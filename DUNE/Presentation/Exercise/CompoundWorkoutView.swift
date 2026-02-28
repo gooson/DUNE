@@ -387,6 +387,7 @@ struct CompoundWorkoutView: View {
             if transitionTimer.isRunning {
                 Text(transitionTimer.formattedTime)
                     .font(DS.Typography.cardScore)
+                    .foregroundStyle(DS.Gradient.heroText)
                     .monospacedDigit()
                     .contentTransition(.numericText())
 

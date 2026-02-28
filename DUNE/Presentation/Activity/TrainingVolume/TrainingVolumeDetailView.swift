@@ -91,6 +91,7 @@ struct TrainingVolumeDetailView: View {
                 VStack(spacing: 2) {
                     Text("\(comparison.current.activeDays)")
                         .font(.title3.bold())
+                        .foregroundStyle(DS.Gradient.heroText)
                     Text("/ \(viewModel.weeklyGoal)")
                         .font(.caption2)
                         .foregroundStyle(.secondary)
@@ -135,6 +136,7 @@ struct TrainingVolumeDetailView: View {
             Text(value)
                 .font(.subheadline.weight(.semibold))
                 .monospacedDigit()
+                .foregroundStyle(DS.Gradient.heroText)
             ChangeBadge(change: change)
         }
     }
