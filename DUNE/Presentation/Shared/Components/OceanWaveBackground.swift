@@ -18,16 +18,6 @@ struct OceanTabWaveBackground: View {
         preset == .today && atmosphere != .default
     }
 
-    /// Swell modulation phase (0→2π in 20s) for surface wave amplitude variation.
-    @State private var swellPhase: CGFloat = 0
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
-
-    /// Swell multiplier: amplitude oscillates between 85% and 115%.
-    private var swellMultiplier: CGFloat {
-        guard !reduceMotion else { return 1.0 }
-        return 0.85 + 0.15 * sin(swellPhase)
-    }
-
     /// Scale factor based on tab preset character.
     private var intensityScale: CGFloat {
         switch preset {
@@ -79,7 +69,7 @@ struct OceanTabWaveBackground: View {
             OceanWaveOverlayView(
                 color: theme.oceanSurfaceColor,
                 opacity: 0.15 * scale,
-                amplitude: 0.07 * scale * swellMultiplier,
+                amplitude: 0.07 * scale,
                 frequency: 2.0,
                 verticalOffset: 0.55,
                 bottomFade: 0.4,
@@ -113,12 +103,6 @@ struct OceanTabWaveBackground: View {
             )
         }
         .ignoresSafeArea()
-        .onAppear {
-            guard !reduceMotion else { return }
-            withAnimation(.linear(duration: 20).repeatForever(autoreverses: false)) {
-                swellPhase = 2 * .pi
-            }
-        }
         .animation(DS.Animation.atmosphereTransition, value: atmosphere)
     }
 

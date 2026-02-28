@@ -27,13 +27,15 @@ struct AreaLineChartView: View {
     }
 
     var body: some View {
+        // Correction #105/#165 — capture gradient before ForEach to avoid per-row allocation
+        let resolvedAreaGradient = areaGradient
         Chart {
                 ForEach(data) { point in
                     AreaMark(
                         x: .value("Date", point.date, unit: xUnit),
                         y: .value("Weight", point.value)
                     )
-                    .foregroundStyle(areaGradient)
+                    .foregroundStyle(resolvedAreaGradient)
                     .interpolationMethod(.catmullRom)
 
                     LineMark(
