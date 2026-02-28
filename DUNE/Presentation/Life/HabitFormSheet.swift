@@ -50,7 +50,7 @@ struct HabitFormSheet: View {
     private var nameSection: some View {
         Section("Name") {
             TextField("Habit name", text: $viewModel.name)
-                .accessibilityIdentifier("habit-name-field")
+                .accessibilityIdentifier("habit-form-name")
         }
     }
 
@@ -63,7 +63,7 @@ struct HabitFormSheet: View {
                 }
             }
             .pickerStyle(.segmented)
-            .accessibilityIdentifier("habit-type-picker")
+            .accessibilityIdentifier("habit-form-type")
         }
     }
 
@@ -78,20 +78,20 @@ struct HabitFormSheet: View {
                 HStack {
                     TextField("Minutes", text: $viewModel.goalValue)
                         .keyboardType(.numberPad)
-                        .accessibilityIdentifier("habit-goal-value")
+                        .accessibilityIdentifier("habit-form-goalvalue")
                     Text("min")
                         .foregroundStyle(.secondary)
                 }
                 TextField("Unit label (optional)", text: $viewModel.goalUnit)
-                    .accessibilityIdentifier("habit-goal-unit")
+                    .accessibilityIdentifier("habit-form-goalunit")
             case .count:
                 HStack {
                     TextField("Count", text: $viewModel.goalValue)
                         .keyboardType(.numberPad)
-                        .accessibilityIdentifier("habit-goal-value")
+                        .accessibilityIdentifier("habit-form-goalvalue")
                     TextField("Unit (e.g. glasses)", text: $viewModel.goalUnit)
                         .foregroundStyle(.secondary)
-                        .accessibilityIdentifier("habit-goal-unit")
+                        .accessibilityIdentifier("habit-form-goalunit")
                 }
             }
         }
@@ -104,7 +104,7 @@ struct HabitFormSheet: View {
                 Text("Weekly").tag("weekly")
             }
             .pickerStyle(.segmented)
-            .accessibilityIdentifier("habit-frequency-picker")
+            .accessibilityIdentifier("habit-form-frequency")
 
             if viewModel.frequencyType == "weekly" {
                 Stepper(

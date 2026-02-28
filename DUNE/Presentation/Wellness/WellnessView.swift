@@ -65,6 +65,7 @@ struct WellnessView: View {
                                 )
                             }
                             .buttonStyle(.plain)
+                            .accessibilityIdentifier("wellness-hero-score")
                         } else {
                             WellnessHeroCard(
                                 score: viewModel.wellnessScore,
@@ -134,6 +135,7 @@ struct WellnessView: View {
                     Image(systemName: "plus")
                 }
                 .accessibilityLabel("Add record")
+                .accessibilityIdentifier("wellness-toolbar-add")
             }
         }
         .sheet(isPresented: $bodyViewModel.isShowingAddSheet) {

@@ -29,7 +29,7 @@ struct InjuryFormSheet: View {
                             }
                         }
                     }
-                    .accessibilityIdentifier("injury-bodypart-picker")
+                    .accessibilityIdentifier("injury-form-bodypart")
 
                     if viewModel.selectedBodyPart.isLateral {
                         Picker("Side", selection: Binding(
@@ -41,7 +41,7 @@ struct InjuryFormSheet: View {
                             }
                         }
                         .pickerStyle(.segmented)
-                        .accessibilityIdentifier("injury-side-picker")
+                        .accessibilityIdentifier("injury-form-side")
                     }
                 }
 
@@ -76,7 +76,7 @@ struct InjuryFormSheet: View {
                             .contentShape(Rectangle())
                         }
                         .buttonStyle(.plain)
-                        .accessibilityIdentifier("injury-severity-\(severity.displayName.lowercased())")
+                        .accessibilityIdentifier("injury-form-severity-\(severity.displayName.lowercased())")
                     }
                 }
 
@@ -87,7 +87,7 @@ struct InjuryFormSheet: View {
                         in: ...Date(),
                         displayedComponents: [.date]
                     )
-                    .accessibilityIdentifier("injury-start-date")
+                    .accessibilityIdentifier("injury-form-startdate")
 
                     Toggle("Recovered", isOn: Binding(
                         get: { viewModel.endDate != nil },
@@ -106,14 +106,14 @@ struct InjuryFormSheet: View {
                             in: viewModel.startDate...Date(),
                             displayedComponents: [.date]
                         )
-                        .accessibilityIdentifier("injury-end-date")
+                        .accessibilityIdentifier("injury-form-enddate")
                     }
                 }
 
                 Section("Notes") {
                     TextField("Memo (optional)", text: $viewModel.memo, axis: .vertical)
                         .lineLimit(3...6)
-                        .accessibilityIdentifier("injury-memo-field")
+                        .accessibilityIdentifier("injury-form-memo")
                 }
             }
             .scrollContentBackground(.hidden)
@@ -123,7 +123,7 @@ struct InjuryFormSheet: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }
-                        .accessibilityIdentifier("injury-cancel-button")
+                        .accessibilityIdentifier("injury-form-cancel")
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
@@ -134,7 +134,7 @@ struct InjuryFormSheet: View {
                             saveCount += 1
                         }
                     }
-                    .accessibilityIdentifier("injury-save-button")
+                    .accessibilityIdentifier("injury-form-save")
                 }
             }
         }

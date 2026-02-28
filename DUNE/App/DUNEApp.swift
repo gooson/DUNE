@@ -9,6 +9,7 @@ struct DUNEApp: App {
     @State private var isShowingLaunchSplash = !DUNEApp.isRunningXCTest
     @State private var isResolvingLaunchSplash = false
     @State private var hasCompletedPostSplashSetup = false
+    @State private var hasSeededMockData = false
 
     let modelContainer: ModelContainer
     private let sharedHealthDataService: SharedHealthDataService
@@ -29,6 +30,9 @@ struct DUNEApp: App {
     private static var isRunningUnitTests: Bool {
         isRunningXCTest && !isRunningUITests
     }
+
+    private static let shouldSeedMockData: Bool =
+        isRunningXCTest && ProcessInfo.processInfo.arguments.contains("--seed-mock")
 
     init() {
         let sharedService: SharedHealthDataService = SharedHealthDataServiceImpl(healthKitManager: .shared)
@@ -79,6 +83,9 @@ struct DUNEApp: App {
             Group {
                 if Self.isRunningUnitTests {
                     Color.clear
+                } else if Self.shouldSeedMockData {
+                    // UI test with mock data — seed and skip splash
+                    seedableAppContent
                 } else {
                     ZStack {
                         if !isShowingLaunchSplash || isResolvingLaunchSplash {
@@ -113,6 +120,22 @@ struct DUNEApp: App {
             CloudSyncConsentView(isPresented: $showConsentSheet)
         }
     }
+
+    #if DEBUG
+    @ViewBuilder
+    private var seedableAppContent: some View {
+        appContent
+            .task {
+                guard !hasSeededMockData else { return }
+                hasSeededMockData = true
+                TestDataSeeder.seed(into: modelContainer.mainContext)
+            }
+    }
+    #else
+    // Stub to keep the `else if` branch compiling in Release builds.
+    // shouldSeedMockData is always false outside XCTest, so this is unreachable.
+    private var seedableAppContent: some View { appContent }
+    #endif
 
     @MainActor
     private func runPostSplashSetupIfNeeded() {

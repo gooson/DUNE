@@ -1,28 +1,96 @@
 import XCTest
 
-// MARK: - Accessibility Identifier Constants
+// MARK: - Accessibility Identifier Constants (3-tier: {tab}-{section}-{element})
 
 enum AXID {
-    // Sidebar (iPad)
-    static let sidebarList = "sidebar-list"
-    static func sidebarItem(_ section: String) -> String { "sidebar-\(section)" }
+    // MARK: - Dashboard Tab (active: hero, settings, pinned-edit)
+    static let dashboardHeroCondition = "dashboard-hero-condition"
+    static let dashboardToolbarSettings = "dashboard-toolbar-settings"
+    static let dashboardPinnedEdit = "dashboard-pinned-edit"
+    // Planned — identifiers not yet applied to views
+    static let dashboardPinnedGrid = "dashboard-pinned-grid"
+    static let dashboardWeatherCard = "dashboard-weather-card"
+    static let dashboardCoachingCard = "dashboard-coaching-card"
+    static let dashboardSectionCondition = "dashboard-section-condition"
+    static let dashboardSectionActivity = "dashboard-section-activity"
+    static let dashboardSectionBody = "dashboard-section-body"
 
-    // Exercise
-    static let exerciseAddButton = "exercise-add-button"
-    static let exerciseSaveButton = "exercise-save-button"
-    static let exerciseCancelButton = "exercise-cancel-button"
-    static let exerciseDatePicker = "exercise-date-picker"
-    static let exerciseTypePicker = "exercise-type-picker"
-    static let activityReadinessCard = "activity-readiness-card"
+    // MARK: - Activity Tab (active: hero, toolbar-add)
+    static let activityHeroReadiness = "activity-hero-readiness"
+    static let activityToolbarAdd = "activity-toolbar-add"
+    // Planned — identifiers not yet applied to views
+    static let activitySectionMuscleMap = "activity-section-musclemap"
+    static let activitySectionWeeklyStats = "activity-section-weeklystats"
+    static let activitySectionVolume = "activity-section-volume"
+    static let activitySectionPR = "activity-section-pr"
+    static let activitySectionConsistency = "activity-section-consistency"
+    static let activitySectionExerciseMix = "activity-section-exercisemix"
+    static let activitySectionRecent = "activity-section-recent"
 
-    // Body Composition
-    static let bodyAddButton = "body-add-button"
-    static let bodySaveButton = "body-save-button"
-    static let bodyCancelButton = "body-cancel-button"
-    static let bodyDatePicker = "body-date-picker"
-    static let bodyWeightField = "body-weight-field"
-    static let bodyFatField = "body-fat-field"
-    static let bodyMuscleField = "body-muscle-field"
+    // MARK: - Wellness Tab (active: hero, toolbar-add)
+    static let wellnessHeroScore = "wellness-hero-score"
+    static let wellnessToolbarAdd = "wellness-toolbar-add"
+    // Planned — identifiers not yet applied to views
+    static let wellnessSectionPhysical = "wellness-section-physical"
+    static let wellnessSectionActive = "wellness-section-active"
+    static let wellnessSectionInjury = "wellness-section-injury"
+    static let wellnessLinkBodyHistory = "wellness-link-bodyhistory"
+    static let wellnessLinkInjuryHistory = "wellness-link-injuryhistory"
+
+    // MARK: - Life Tab (active: hero, toolbar-add)
+    static let lifeHeroProgress = "life-hero-progress"
+    static let lifeToolbarAdd = "life-toolbar-add"
+    // Planned — identifier not yet applied to view
+    static let lifeSectionHabits = "life-section-habits"
+
+    // MARK: - Settings (active: exercise-defaults)
+    static let settingsRowExerciseDefaults = "settings-row-exercisedefaults"
+    // Planned — identifiers not yet applied to views
+    static let settingsRowWorkoutDefaults = "settings-row-workoutdefaults"
+    static let settingsRowAppearance = "settings-row-appearance"
+    static let settingsRowDataPrivacy = "settings-row-dataprivacy"
+    static let settingsRowAbout = "settings-row-about"
+
+    // MARK: - Body Form
+    static let bodyFormSave = "body-form-save"
+    static let bodyFormCancel = "body-form-cancel"
+    static let bodyFormDate = "body-form-date"
+    static let bodyFormWeight = "body-form-weight"
+    static let bodyFormFat = "body-form-fat"
+    static let bodyFormMuscle = "body-form-muscle"
+
+    // MARK: - Injury Form
+    static let injuryFormSave = "injury-form-save"
+    static let injuryFormCancel = "injury-form-cancel"
+    static let injuryFormBodyPart = "injury-form-bodypart"
+    static let injuryFormSide = "injury-form-side"
+    static let injuryFormStartDate = "injury-form-startdate"
+    static let injuryFormEndDate = "injury-form-enddate"
+    static let injuryFormMemo = "injury-form-memo"
+    static func injuryFormSeverity(_ name: String) -> String { "injury-form-severity-\(name)" }
+
+    // MARK: - Habit Form
+    static let habitFormSave = "habit-form-save"
+    static let habitFormCancel = "habit-form-cancel"
+    static let habitFormName = "habit-form-name"
+    static let habitFormType = "habit-form-type"
+    static let habitFormGoalValue = "habit-form-goalvalue"
+    static let habitFormGoalUnit = "habit-form-goalunit"
+    static let habitFormFrequency = "habit-form-frequency"
+
+    // MARK: - Exercise (Activity sub-view)
+    static let exerciseToolbarTemplates = "exercise-toolbar-templates"
+    static let exerciseToolbarCategories = "exercise-toolbar-categories"
+    static let exerciseToolbarAdd = "exercise-toolbar-add"
+
+    // MARK: - Exercise Picker
+    static let pickerSearchField = "picker-search-field"
+    static let pickerSectionRecent = "picker-section-recent"
+    static let pickerSectionPopular = "picker-section-popular"
+
+    // MARK: - Sidebar (iPad)
+    static let sidebarNavList = "sidebar-nav-list"
+    static func sidebarNavItem(_ section: String) -> String { "sidebar-nav-\(section)" }
 }
 
 // MARK: - System Permission Alert Handling

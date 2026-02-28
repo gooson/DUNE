@@ -38,8 +38,7 @@ jobs:
         run: brew install xcodegen
 
       - name: Run UI Tests
-        continue-on-error: true
-        run: scripts/test-ui.sh
+        run: scripts/test-ui.sh --test-plan UITests-CI
 
       - name: Upload test log
         if: always()
