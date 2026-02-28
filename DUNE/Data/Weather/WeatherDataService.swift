@@ -54,7 +54,7 @@ final class WeatherProvider: WeatherProviding, Sendable {
             return try await weatherService.fetchWeather(for: location)
         } catch {
             guard let fallbackService else { throw error }
-            AppLogger.data.info("[Weather] Primary failed (\(error.localizedDescription)), trying fallback")
+            AppLogger.data.info("[Weather] Primary failed (\(error.localizedDescription, privacy: .private)), trying fallback")
             return try await fallbackService.fetchWeather(for: location)
         }
     }
@@ -95,15 +95,15 @@ final class WeatherDataService: WeatherFetching, @unchecked Sendable {
                 .map { hour in
                     WeatherSnapshot.HourlyWeather(
                         hour: hour.date,
-                        temperature: clampTemperature(hour.temperature.converted(to: .celsius).value),
+                        temperature: hour.temperature.converted(to: .celsius).value.clampedToPhysicalTemperature(),
                         condition: mapCondition(hour.condition)
                     )
                 }
         )
 
         return WeatherSnapshot(
-            temperature: clampTemperature(current.temperature.converted(to: .celsius).value),
-            feelsLike: clampTemperature(current.apparentTemperature.converted(to: .celsius).value),
+            temperature: current.temperature.converted(to: .celsius).value.clampedToPhysicalTemperature(),
+            feelsLike: current.apparentTemperature.converted(to: .celsius).value.clampedToPhysicalTemperature(),
             condition: mapCondition(current.condition),
             humidity: Swift.max(0, Swift.min(1, current.humidity)),
             uvIndex: Swift.max(0, Swift.min(15, current.uvIndex.value)),
@@ -112,12 +112,6 @@ final class WeatherDataService: WeatherFetching, @unchecked Sendable {
             fetchedAt: Date(),
             hourlyForecast: hourlyItems
         )
-    }
-
-    /// Clamp temperature to physical range (-50°C to 60°C)
-    private func clampTemperature(_ value: Double) -> Double {
-        guard value.isFinite else { return 20 } // safe fallback
-        return Swift.max(-50, Swift.min(60, value))
     }
 
     private func mapCondition(_ wkCondition: WeatherCondition) -> WeatherConditionType {
