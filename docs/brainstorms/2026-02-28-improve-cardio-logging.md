@@ -239,12 +239,30 @@ enum SetType: String, Codable, Sendable {
 | `DUNETests/WorkoutSessionViewModelTests.swift` | 새 단위 validation 테스트 |
 | `DUNEWatch/Views/QuickStartAllExercisesView.swift` | Watch UI 동기화 |
 
-## Open Questions
+## Resolved Questions
 
-1. 수영 기본 단위를 `meters`와 `laps` 중 어느 것으로 할 것인가? (laps면 풀 길이 설정 필요)
-2. Elliptical의 보조 입력을 완전히 숨길 것인가, 아니면 "strides" 같은 대안 단위를 제공할 것인가?
-3. 인터벌 세트의 rest 구간도 기록할 것인가? (on/off 패턴)
-4. `WorkoutSet.reps`를 laps/floors/count로 재활용할 때 기존 strength 세트와의 의미 충돌은 없는가?
+### 1. 수영 기본 단위 → `meters`
+**근거**: Apple Watch, Garmin, Strava 모두 수영은 **미터** 기본 단위 사용. 랩 수는 풀 길이(25m/50m) 설정 후 자동 계산되는 파생값.
+- MVP: meters 입력만 지원
+- Future: 풀 길이 설정 → laps 입력 시 자동 meters 변환
+
+### 2. Elliptical → `none` (시간만 기록)
+Elliptical 머신의 "거리"는 실제 이동 거리가 아닌 인위적 수치. 보조 입력 필드를 숨기고 시간만 기록.
+
+### 3. 인터벌 rest 구간 → Yes, 기록
+**근거**: Apple Watch/Garmin 내장 인터벌 모드, Intervals Pro 등 전용 앱 모두 work/rest 구간을 분리 기록하는 것이 표준.
+- MVP: `SetType.interval` + `SetType.rest` 추가, rest 세트는 시간만 기록
+- 인터벌 세트 라벨: "Int 1", "Rest", "Int 2", "Rest", ...
+
+### 4. `WorkoutSet.reps` 재활용 → 충돌 없음
+`inputType`이 어떤 필드가 유효한지 결정하므로, strength의 "반복수"와 cardio의 "층수/횟수"가 혼동될 가능성 없음. `reps` 필드는 cardio에서 현재 항상 nil이므로 기존 데이터와도 충돌 없음.
+
+## References
+
+- [Swim Activities on Strava](https://support.strava.com/hc/en-us/articles/206645830-Swim-Activities-on-Strava)
+- [Best Tools for Tracking Swim Metrics (2026)](https://theinfluencerforum.com/best-tools-for-tracking-swim-metrics/)
+- [Interval Running App Guide](https://wellness.alibaba.com/fitlife/best-interval-running-apps-for-structured-workouts)
+- [Best Running Apps (2026) - Garage Gym Reviews](https://www.garagegymreviews.com/best-running-apps)
 
 ## Next Steps
 
