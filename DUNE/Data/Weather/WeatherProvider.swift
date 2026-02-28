@@ -1,6 +1,5 @@
 import CoreLocation
 import Foundation
-import OSLog
 
 /// Protocol for weather data fetching (testable).
 protocol WeatherFetching: Sendable {
@@ -24,6 +23,7 @@ enum WeatherError: Error, Sendable {
 }
 
 /// Combines LocationService + OpenMeteoService behind a single async call.
+/// Accepts a WeatherFetching dependency for test injection.
 final class WeatherProvider: WeatherProviding, Sendable {
     private let locationService: LocationService
     private let weatherService: WeatherFetching

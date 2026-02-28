@@ -38,6 +38,7 @@ final class LocationService: NSObject, CLLocationManagerDelegate, Sendable {
     func requestLocation() async throws -> CLLocation {
         // Return cached if fresh enough (aligned with weather cache TTL)
         if let cached = currentLocation,
+           cached.horizontalAccuracy >= 0,
            Date().timeIntervalSince(cached.timestamp) < 60 * 60 {
             return cached
         }

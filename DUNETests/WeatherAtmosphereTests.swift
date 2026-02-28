@@ -110,6 +110,10 @@ struct WeatherAtmosphereTests {
         let recent = makeSnapshot(fetchedAt: Date())
         #expect(!recent.isStale)
 
+        // 16 min was stale under old 15-min TTL — now fresh under 60-min TTL
+        let was15Min = makeSnapshot(fetchedAt: Date(timeIntervalSinceNow: -16 * 60))
+        #expect(!was15Min.isStale)
+
         let borderline = makeSnapshot(fetchedAt: Date(timeIntervalSinceNow: -59 * 60))
         #expect(!borderline.isStale)
 
