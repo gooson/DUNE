@@ -11,6 +11,7 @@ struct RestTimerView: View {
 
             Text(timer.formattedTime)
                 .font(DS.Typography.cardScore)
+                .foregroundStyle(DS.Gradient.heroText)
                 .monospacedDigit()
                 .contentTransition(.numericText())
 

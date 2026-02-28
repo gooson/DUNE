@@ -24,6 +24,7 @@ struct ConsistencyCard: View {
                         HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xxs) {
                             Text("\(streak.currentStreak)")
                                 .font(DS.Typography.cardScore)
+                                .foregroundStyle(DS.Gradient.heroText)
                             Text("days")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)

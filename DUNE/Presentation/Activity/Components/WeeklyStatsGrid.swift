@@ -66,6 +66,7 @@ struct ActivityStatCardView: View {
                 HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xs) {
                     Text(stat.value)
                         .font(DS.Typography.cardScore)
+                        .foregroundStyle(DS.Gradient.heroText)
                         .minimumScaleFactor(0.7)
                         .lineLimit(1)
 
