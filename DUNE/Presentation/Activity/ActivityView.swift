@@ -30,9 +30,12 @@ struct ActivityView: View {
 
     private var isRegular: Bool { sizeClass == .regular }
 
-    init(sharedHealthDataService: SharedHealthDataService? = nil, scrollToTopSignal: Int = 0) {
+    private let refreshSignal: Int
+
+    init(sharedHealthDataService: SharedHealthDataService? = nil, scrollToTopSignal: Int = 0, refreshSignal: Int = 0) {
         _viewModel = State(initialValue: ActivityViewModel(sharedHealthDataService: sharedHealthDataService))
         self.scrollToTopSignal = scrollToTopSignal
+        self.refreshSignal = refreshSignal
     }
 
     var body: some View {
@@ -231,7 +234,7 @@ struct ActivityView: View {
             await viewModel.loadActivityData()
         }
         // Correction #78: consolidate .task + .onChange → .task(id:)
-        .task(id: recentRecords.count) {
+        .task(id: "\(recentRecords.count)-\(refreshSignal)") {
             viewModel.updateSuggestion(records: recentRecords)
             await viewModel.loadActivityData()
             recomputeInjuryConflicts()

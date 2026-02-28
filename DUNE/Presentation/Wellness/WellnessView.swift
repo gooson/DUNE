@@ -24,9 +24,12 @@ struct WellnessView: View {
         GridItem(.flexible(), spacing: DS.Spacing.md)
     ]
 
-    init(sharedHealthDataService: SharedHealthDataService? = nil, scrollToTopSignal: Int = 0) {
+    private let refreshSignal: Int
+
+    init(sharedHealthDataService: SharedHealthDataService? = nil, scrollToTopSignal: Int = 0, refreshSignal: Int = 0) {
         _viewModel = State(initialValue: WellnessViewModel(sharedHealthDataService: sharedHealthDataService))
         self.scrollToTopSignal = scrollToTopSignal
+        self.refreshSignal = refreshSignal
     }
 
     var body: some View {
@@ -168,7 +171,7 @@ struct WellnessView: View {
         ) {
             await viewModel.performRefresh()
         }
-        .task {
+        .task(id: refreshSignal) {
             viewModel.loadData()
             refreshActiveInjuriesCache()
         }
