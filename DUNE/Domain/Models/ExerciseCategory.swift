@@ -11,7 +11,7 @@ enum ExerciseCategory: String, Codable, CaseIterable, Sendable {
         switch self {
         case .strength: String(localized: "Strength")
         case .cardio: String(localized: "Cardio")
-        case .hiit: "HIIT"
+        case .hiit: String(localized: "HIIT")
         case .flexibility: String(localized: "Flexibility")
         case .bodyweight: String(localized: "Bodyweight")
         }

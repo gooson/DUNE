@@ -502,14 +502,14 @@ struct CoachingEngine: Sendable {
         if let milestone = input.currentStreakMilestone, milestone > 0 {
             let milestoneText: String
             switch milestone {
-            case 7: milestoneText = "1 Week"
-            case 14: milestoneText = "2 Weeks"
-            case 30: milestoneText = "1 Month"
-            case 60: milestoneText = "2 Months"
-            case 90: milestoneText = "3 Months"
-            case 100: milestoneText = "100 Days"
-            case 365: milestoneText = "1 Year"
-            default: milestoneText = "\(milestone) Days"
+            case 7: milestoneText = String(localized: "1 Week")
+            case 14: milestoneText = String(localized: "2 Weeks")
+            case 30: milestoneText = String(localized: "1 Month")
+            case 60: milestoneText = String(localized: "2 Months")
+            case 90: milestoneText = String(localized: "3 Months")
+            case 100: milestoneText = String(localized: "100 Days")
+            case 365: milestoneText = String(localized: "1 Year")
+            default: milestoneText = String(localized: "\(milestone) Days")
             }
             results.append(CoachingInsight(
                 id: "motivation-streak-\(milestone)",

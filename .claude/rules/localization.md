@@ -121,6 +121,21 @@ var localizedDisplayName: String {
 // ja: "%lld日" (단수=복수 동일)
 ```
 
+## 검증 명령
+
+```bash
+# 번역 커버리지 확인 (미번역 항목은 XLIFF에 untranslated로 표시)
+xcodebuild -exportLocalizations -project DUNE/DUNE.xcodeproj \
+  -localizationPath /tmp/loc-export -exportLanguage ko -exportLanguage ja
+```
+
+## 테이블 정책
+
+단일 `Localizable` 테이블을 유지한다. 필요 시 타겟별로 분리하되 `table:` 파라미터를 명시한다.
+기본값(`Localizable`)에서 벗어나는 경우 이 문서에 반드시 기록한다.
+
+약어(HIIT 등)도 `String(localized:)` 래핑 필수 — 모든 locale에서 동일해도 xcstrings 등록으로 번역자 검토 기회를 보장한다.
+
 ## 리뷰 체크포인트
 
 - 새 UI 문자열 추가 시 xcstrings에 3개 언어 모두 포함되었는가
