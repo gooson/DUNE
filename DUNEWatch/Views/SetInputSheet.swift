@@ -3,7 +3,7 @@ import WatchKit
 
 /// Dedicated sheet for weight/reps input with Digital Crown support.
 /// Crown controls weight (scroll = touch), layout adapts to any watch size.
-/// Shows previous set history for reference when available.
+/// Previous set history accessible via toolbar button to keep weight input at top.
 struct SetInputSheet: View {
     @Binding var weight: Double
     @Binding var reps: Int
@@ -12,34 +12,42 @@ struct SetInputSheet: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var lastHapticDate: Date = .distantPast
+    @State private var showPreviousSets = false
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: DS.Spacing.lg) {
-                // Previous set history (if any)
-                if !previousSets.isEmpty {
-                    previousSetHistory
+        NavigationStack {
+            ScrollView {
+                VStack(spacing: DS.Spacing.lg) {
+                    // Weight — large display + crown + ±2.5 buttons
+                    weightSection
+
                     Divider()
+
+                    // Reps — inline ± row
+                    repsSection
                 }
-
-                // Weight — large display + crown + ±2.5 buttons
-                weightSection
-
-                Divider()
-
-                // Reps — inline ± row
-                repsSection
+                .padding(.horizontal, DS.Spacing.md)
             }
-            .padding(.horizontal, DS.Spacing.md)
-        }
-        // Done at bottom via toolbar — always visible regardless of scroll
-        .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
-                Button("Done") { dismiss() }
+            .focusable()
+            .digitalCrownRotation($weight, from: 0, through: 500, by: 2.5, sensitivity: .medium)
+            .toolbar {
+                if !previousSets.isEmpty {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button {
+                            showPreviousSets = true
+                        } label: {
+                            Image(systemName: "list.bullet.clipboard")
+                        }
+                    }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Done") { dismiss() }
+                }
+            }
+            .navigationDestination(isPresented: $showPreviousSets) {
+                previousSetsDetail
             }
         }
-        .focusable()
-        .digitalCrownRotation($weight, from: 0, through: 500, by: 2.5, sensitivity: .medium)
         .onChange(of: weight) { _, newValue in
             let clamped = min(max(newValue, 0), 500)
             if clamped != newValue { weight = clamped }
@@ -129,14 +137,10 @@ struct SetInputSheet: View {
         }
     }
 
-    // MARK: - Previous Sets
+    // MARK: - Previous Sets (Push Destination)
 
-    private var previousSetHistory: some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-            Text("Previous Sets")
-                .font(DS.Typography.metricLabel)
-                .foregroundStyle(.secondary)
-
+    private var previousSetsDetail: some View {
+        List {
             ForEach(Array(previousSets.enumerated()), id: \.offset) { _, set in
                 HStack(spacing: DS.Spacing.sm) {
                     Text("Set \(set.setNumber)")
@@ -158,6 +162,7 @@ struct SetInputSheet: View {
                 }
             }
         }
+        .navigationTitle("Previous Sets")
     }
 
     // MARK: - Haptic
