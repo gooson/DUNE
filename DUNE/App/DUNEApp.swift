@@ -45,7 +45,7 @@ struct DUNEApp: App {
         )
         do {
             modelContainer = try ModelContainer(
-                for: ExerciseRecord.self, BodyCompositionRecord.self, WorkoutSet.self, CustomExercise.self, WorkoutTemplate.self, UserCategory.self, InjuryRecord.self,
+                for: ExerciseRecord.self, BodyCompositionRecord.self, WorkoutSet.self, CustomExercise.self, WorkoutTemplate.self, UserCategory.self, InjuryRecord.self, ExerciseDefaultRecord.self,
                 migrationPlan: AppMigrationPlan.self,
                 configurations: config
             )
@@ -55,7 +55,7 @@ struct DUNEApp: App {
             Self.deleteStoreFiles(at: config.url)
             do {
                 modelContainer = try ModelContainer(
-                    for: ExerciseRecord.self, BodyCompositionRecord.self, WorkoutSet.self, CustomExercise.self, WorkoutTemplate.self, UserCategory.self, InjuryRecord.self,
+                    for: ExerciseRecord.self, BodyCompositionRecord.self, WorkoutSet.self, CustomExercise.self, WorkoutTemplate.self, UserCategory.self, InjuryRecord.self, ExerciseDefaultRecord.self,
                     migrationPlan: AppMigrationPlan.self,
                     configurations: config
                 )

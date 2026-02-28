@@ -153,6 +153,16 @@ struct DashboardView: View {
             )
         }
         .navigationTitle("Today")
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                NavigationLink {
+                    SettingsView()
+                } label: {
+                    Image(systemName: "gearshape")
+                }
+                .accessibilityLabel("Settings")
+            }
+        }
     }
 
     // MARK: - Sections
