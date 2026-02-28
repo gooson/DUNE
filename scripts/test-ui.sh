@@ -19,7 +19,7 @@ DERIVED_DATA_DIR=".deriveddata"
 LOG_DIR=".xcodebuild"
 LOG_FILE="$LOG_DIR/ui-test.log"
 REGENERATE=1
-TEST_PLAN=""
+SKIP_TESTING=()
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -31,13 +31,13 @@ while [[ $# -gt 0 ]]; do
             LOG_FILE="$2"
             shift 2
             ;;
-        --test-plan)
-            TEST_PLAN="$2"
+        --skip-testing)
+            SKIP_TESTING+=("$2")
             shift 2
             ;;
         *)
             echo "Unknown option: $1"
-            echo "Usage: $0 [--no-regen] [--log-file <path>] [--test-plan <name>]"
+            echo "Usage: $0 [--no-regen] [--log-file <path>] [--skip-testing <target>]"
             exit 2
             ;;
     esac
@@ -90,12 +90,12 @@ TEST_CMD=(xcodebuild test -project "$PROJECT_FILE"
     CODE_SIGNING_ALLOWED=NO
     CODE_SIGNING_REQUIRED=NO)
 
-if [[ -n "$TEST_PLAN" ]]; then
-    TEST_CMD+=(-testPlan "$TEST_PLAN")
-    echo "Using test plan: $TEST_PLAN"
-else
-    TEST_CMD+=(-only-testing DUNEUITests)
-fi
+TEST_CMD+=(-only-testing DUNEUITests)
+
+for skip in "${SKIP_TESTING[@]}"; do
+    TEST_CMD+=(-skip-testing "$skip")
+    echo "Skipping: $skip"
+done
 
 set +e
 "${TEST_CMD[@]}" >"$LOG_FILE" 2>&1
