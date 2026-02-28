@@ -16,7 +16,7 @@ struct SuggestedExerciseRow: View {
                 HStack(spacing: DS.Spacing.sm) {
                     Text(exercise.definition.localizedName)
                         .font(.subheadline)
-                        .foregroundStyle(.primary)
+                        .foregroundStyle(DS.Color.sandMuted)
                         .lineLimit(1)
 
                     Spacer()

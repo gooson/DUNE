@@ -369,7 +369,7 @@ struct ExercisePickerView: View {
                     HStack(spacing: DS.Spacing.xs) {
                         Text(exercise.localizedName)
                             .font(.body)
-                            .foregroundStyle(.primary)
+                            .foregroundStyle(DS.Color.sandMuted)
                         if exercise.id.hasPrefix("custom-") {
                             Text("Custom")
                                 .font(.system(size: 9, weight: .medium))
@@ -433,7 +433,7 @@ struct ExercisePickerView: View {
                     in: Capsule()
                 )
                 .foregroundStyle(
-                    isSelected ? .white : .primary
+                    isSelected ? .white : DS.Color.sandMuted
                 )
         }
         .buttonStyle(.plain)
@@ -466,7 +466,7 @@ struct ExercisePickerView: View {
                 in: Capsule()
             )
             .foregroundStyle(
-                isSelected ? .white : .primary
+                isSelected ? .white : DS.Color.sandMuted
             )
         }
         .buttonStyle(.plain)
@@ -489,7 +489,7 @@ struct ExercisePickerView: View {
                     in: Capsule()
                 )
                 .foregroundStyle(
-                    selectedMuscle == muscle ? .white : .primary
+                    selectedMuscle == muscle ? .white : DS.Color.sandMuted
                 )
         }
         .buttonStyle(.plain)
@@ -515,7 +515,7 @@ struct ExercisePickerView: View {
                 in: Capsule()
             )
             .foregroundStyle(
-                selectedEquipment == equipment ? .white : .primary
+                selectedEquipment == equipment ? .white : DS.Color.sandMuted
             )
         }
         .buttonStyle(.plain)

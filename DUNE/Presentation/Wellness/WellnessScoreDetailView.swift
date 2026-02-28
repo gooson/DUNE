@@ -176,7 +176,7 @@ struct WellnessScoreDetailView: View {
                 .font(.caption)
                 .fontWeight(.medium)
                 .monospacedDigit()
-                .foregroundStyle(score != nil ? .primary : .tertiary)
+                .foregroundStyle(score != nil ? AnyShapeStyle(DS.Color.sandMuted) : AnyShapeStyle(.tertiary))
                 .frame(width: 32, alignment: .trailing)
         }
         .accessibilityElement(children: .combine)

@@ -196,7 +196,7 @@ private struct VolumeBar: View {
         VStack(spacing: DS.Spacing.xs) {
             Text(isNA ? "—" : "\(count)")
                 .font(.caption.weight(.bold).monospacedDigit())
-                .foregroundStyle(isNA ? .tertiary : .primary)
+                .foregroundStyle(isNA ? AnyShapeStyle(.tertiary) : AnyShapeStyle(DS.Color.sandMuted))
 
             GeometryReader { geo in
                 let fraction = maxCount > 0 ? CGFloat(count) / CGFloat(maxCount) : 0

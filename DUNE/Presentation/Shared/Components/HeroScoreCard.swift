@@ -181,7 +181,7 @@ struct HeroScoreCard: View {
                 Text(item.value.map { "\($0)" } ?? "--")
                     .font(.caption)
                     .fontWeight(.medium)
-                    .foregroundStyle(item.value != nil ? .primary : .quaternary)
+                    .foregroundStyle(item.value != nil ? AnyShapeStyle(DS.Color.sandMuted) : AnyShapeStyle(.quaternary))
                     .monospacedDigit()
             }
         }
