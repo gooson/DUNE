@@ -1,0 +1,47 @@
+name: UI Tests
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'DUNE/**'
+      - 'DUNEUITests/**'
+      - 'scripts/**'
+      - '.github/workflows/test-ui.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'DUNE/**'
+      - 'DUNEUITests/**'
+      - 'scripts/**'
+      - '.github/workflows/test-ui.yml'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ui-tests:
+    runs-on: macos-15
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_26.2.app/Contents/Developer
+
+      - name: Install xcodegen
+        run: brew install xcodegen
+
+      - name: Run UI Tests
+        run: scripts/test-ui.sh
+
+      - name: Upload test log
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-test-log
+          path: .xcodebuild/ui-test.log
+          retention-days: 7
