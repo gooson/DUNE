@@ -9,7 +9,8 @@ final class OpenMeteoService: WeatherFetching, @unchecked Sendable {
     private let lock = NSLock()
     private let session: URLSession
 
-    private static let decoder = JSONDecoder()
+    // JSONDecoder created per-call: not Sendable, and fetch is max once per 15 min.
+    private static func makeDecoder() -> JSONDecoder { JSONDecoder() }
 
     init(session: URLSession = .shared) {
         self.session = session
@@ -31,7 +32,7 @@ final class OpenMeteoService: WeatherFetching, @unchecked Sendable {
             throw OpenMeteoError.httpError(httpResponse.statusCode)
         }
 
-        let decoded = try Self.decoder.decode(OpenMeteoResponse.self, from: data)
+        let decoded = try Self.makeDecoder().decode(OpenMeteoResponse.self, from: data)
         let snapshot = mapToSnapshot(decoded)
         lock.withLock { cached = snapshot }
         return snapshot
