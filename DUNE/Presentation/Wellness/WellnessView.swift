@@ -326,6 +326,7 @@ private struct WellnessInjuryBannerView: View {
                                 .font(.caption)
                                 .fontWeight(.medium)
                         }
+                        .tint(DS.Color.warmGlow)
                     }
                 }
 
@@ -345,6 +346,7 @@ private struct WellnessInjuryBannerView: View {
                                 onAdd()
                             }
                             .font(.caption.weight(.medium))
+                            .tint(DS.Color.warmGlow)
                         }
                     }
                 } else {
