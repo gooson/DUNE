@@ -53,11 +53,37 @@ private static func estimateMinutes(entries: [TemplateEntry]) -> Int? {
 }
 ```
 
-### 3. SetInputSheet — 이전 세트 히스토리
+### 3. SetInputSheet — 이전 세트 히스토리 (toolbar 버튼 방식)
 
 `previousSets: [CompletedSetData]` 파라미터로 전달. MetricsView에서 `@State cachedPreviousSets`로 캐싱하여 매 렌더 재계산 방지.
 
 **캐시 갱신 시점**: `onAppear`, `onChange(of: currentExerciseIndex)`, `executeCompleteSet()` 후.
+
+**레이아웃 패턴**: 이전 세트 데이터는 인라인 표시 대신 `.topBarLeading` toolbar 버튼 → NavigationStack push 방식. 무게 입력이 항상 sheet 최상단에 위치하여 즉시 접근 가능.
+
+```swift
+// Sheet 내부 NavigationStack + toolbar 버튼 패턴
+NavigationStack {
+    ScrollView { weightSection; repsSection }
+        .toolbar {
+            if !previousSets.isEmpty {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button { showPreviousSets = true } label: {
+                        Image(systemName: "list.bullet.clipboard")
+                    }
+                }
+            }
+            ToolbarItem(placement: .confirmationAction) {
+                Button("Done") { dismiss() }
+            }
+        }
+        .navigationDestination(isPresented: $showPreviousSets) {
+            previousSetsDetail
+        }
+}
+```
+
+**핵심 원칙**: Watch 화면에서 빈번한 조작(무게 입력)은 최상단, 참고 데이터(이전 세트)는 명시적 액션 뒤에 배치.
 
 ### 4. SessionSummaryView — 볼륨 breakdown
 
