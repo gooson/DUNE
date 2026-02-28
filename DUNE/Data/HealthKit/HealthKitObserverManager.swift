@@ -38,9 +38,18 @@ final class HealthKitObserverManager: Sendable {
     /// Call once at app launch (after HealthKit authorization).
     /// Types without read permission are silently skipped.
     func startObserving() {
-        for entry in Self.observedTypes {
-            registerObserver(for: entry.type)
-            enableBackgroundDelivery(for: entry.type, frequency: entry.frequency)
+        Task {
+            let alreadyObserving = await state.isObserving
+            guard !alreadyObserving else {
+                AppLogger.healthKit.info("[ObserverManager] Already observing — skipping duplicate registration")
+                return
+            }
+            await state.setObserving(true)
+
+            for entry in Self.observedTypes {
+                registerObserver(for: entry.type)
+                enableBackgroundDelivery(for: entry.type, frequency: entry.frequency)
+            }
         }
     }
 
@@ -103,6 +112,11 @@ extension HealthKitObserverManager {
     /// Thread-safe storage for active observer queries.
     private actor StateActor {
         private var queries: [String: HKObserverQuery] = [:]
+        private(set) var isObserving = false
+
+        func setObserving(_ value: Bool) {
+            isObserving = value
+        }
 
         func addQuery(_ query: HKObserverQuery, for key: String) {
             queries[key] = query
@@ -111,6 +125,7 @@ extension HealthKitObserverManager {
         func removeAllQueries() -> [HKObserverQuery] {
             let all = Array(queries.values)
             queries.removeAll()
+            isObserving = false
             return all
         }
     }

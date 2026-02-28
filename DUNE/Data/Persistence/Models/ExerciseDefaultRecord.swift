@@ -24,10 +24,11 @@ final class ExerciseDefaultRecord {
         isManualOverride: Bool = false,
         lastUsedDate: Date = Date()
     ) {
+        precondition(!exerciseDefinitionID.isEmpty, "exerciseDefinitionID must not be empty")
         self.id = UUID()
         self.exerciseDefinitionID = exerciseDefinitionID
-        self.defaultWeight = defaultWeight
-        self.defaultReps = defaultReps
+        self.defaultWeight = defaultWeight.flatMap { $0.isFinite && (0...500).contains($0) ? $0 : nil }
+        self.defaultReps = defaultReps.flatMap { (0...9999).contains($0) ? $0 : nil }
         self.isManualOverride = isManualOverride
         self.lastUsedDate = lastUsedDate
     }

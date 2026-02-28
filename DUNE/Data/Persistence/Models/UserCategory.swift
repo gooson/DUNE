@@ -22,9 +22,11 @@ final class UserCategory {
         self.id = UUID()
         self.name = String(name.prefix(50))
         self.iconName = iconName.isEmpty ? "tag.fill" : iconName
-        // Validate hex is exactly 6 hex characters
+        // Validate hex is exactly 6 hex characters (0-9, A-F only)
         let sanitizedHex = colorHex.replacingOccurrences(of: "#", with: "")
-        self.colorHex = sanitizedHex.count == 6 ? sanitizedHex : "007AFF"
+        let isValidHex = sanitizedHex.count == 6
+            && sanitizedHex.allSatisfy { $0.isHexDigit }
+        self.colorHex = isValidHex ? sanitizedHex : "007AFF"
         self.defaultInputTypeRaw = defaultInputType.rawValue
         self.sortOrder = max(sortOrder, 0)
         self.createdAt = Date()
