@@ -6,10 +6,12 @@ import SwiftUI
 /// - **today**: Slow, gentle — calm monitoring
 /// - **train**: Dynamic, dual-layer — energetic activity
 /// - **wellness**: Broad, smooth — balance and stability
+/// - **life**: Calm, steady — consistent habit rhythm
 enum WavePreset: Sendable {
     case today
     case train
     case wellness
+    case life
 
     // MARK: - Primary wave parameters
 
@@ -18,6 +20,7 @@ enum WavePreset: Sendable {
         case .today:    0.04
         case .train:    0.08
         case .wellness: 0.05
+        case .life:     0.04
         }
     }
 
@@ -26,6 +29,7 @@ enum WavePreset: Sendable {
         case .today:    1.5
         case .train:    2.5
         case .wellness: 1.8
+        case .life:     1.4
         }
     }
 
@@ -34,6 +38,7 @@ enum WavePreset: Sendable {
         case .today:    0.12
         case .train:    0.15
         case .wellness: 0.14
+        case .life:     0.12
         }
     }
 

@@ -70,6 +70,7 @@ enum DS {
         // Tab wave identity — Desert Horizon palette
         static let tabTrain    = SwiftUI.Color("TabTrain")     // Desert Coral
         static let tabWellness = SwiftUI.Color("TabWellness")  // Oasis Teal
+        static let tabLife     = SwiftUI.Color("TabLife")       // Desert Amber
         /// Type-erased primaryText with hierarchical fallback for ternary expressions.
         static func primaryTextStyle(
             active: Bool,

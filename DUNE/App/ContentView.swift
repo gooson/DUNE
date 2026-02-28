@@ -8,6 +8,7 @@ struct ContentView: View {
     @State private var todayScrollToTopSignal = 0
     @State private var activityScrollToTopSignal = 0
     @State private var wellnessScrollToTopSignal = 0
+    @State private var lifeScrollToTopSignal = 0
     @State private var refreshSignal = 0
     @State private var foregroundTask: Task<Void, Never>?
 
@@ -54,6 +55,16 @@ struct ContentView: View {
                 .environment(\.wavePreset, .wellness)
                 .environment(\.waveColor, DS.Color.tabWellness)
             }
+            Tab(AppSection.life.title, systemImage: AppSection.life.icon, value: AppSection.life) {
+                NavigationStack {
+                    LifeView(
+                        scrollToTopSignal: lifeScrollToTopSignal,
+                        refreshSignal: refreshSignal
+                    )
+                }
+                .environment(\.wavePreset, .life)
+                .environment(\.waveColor, DS.Color.tabLife)
+            }
         }
         .tabViewStyle(.sidebarAdaptable)
         // Foreground refresh: scenePhase .background → .active (Correction #16/#60)
@@ -86,6 +97,8 @@ struct ContentView: View {
                         activityScrollToTopSignal += 1
                     case .wellness:
                         wellnessScrollToTopSignal += 1
+                    case .life:
+                        lifeScrollToTopSignal += 1
                     }
                 }
                 selectedSection = newValue
