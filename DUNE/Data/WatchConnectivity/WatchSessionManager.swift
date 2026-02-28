@@ -50,17 +50,39 @@ final class WatchSessionManager: NSObject {
         }
     }
 
-    /// Send exercise library subset to Watch for offline use
+    /// Send exercise library subset to Watch for offline use.
+    /// Also includes global workout settings (rest time) in the same context.
     func transferExerciseLibrary(_ exercises: [WatchExerciseInfo]) {
         guard WCSession.default.activationState == .activated else { return }
 
         do {
             let data = try JSONEncoder().encode(exercises)
-            let context: [String: Any] = ["exerciseLibrary": data]
+            let context: [String: Any] = [
+                "exerciseLibrary": data,
+                "globalRestSeconds": WorkoutSettingsStore.shared.restSeconds,
+            ]
             try WCSession.default.updateApplicationContext(context)
         } catch {
             AppLogger.ui.error("Failed to transfer exercise library: \(error.localizedDescription)")
         }
+    }
+
+    /// Send updated workout settings to Watch immediately (if reachable).
+    /// Also re-syncs the full exercise library via applicationContext to avoid
+    /// read-modify-write race with `transferExerciseLibrary()`.
+    func syncWorkoutSettingsToWatch() {
+        let restSeconds = WorkoutSettingsStore.shared.restSeconds
+
+        // Immediate message if reachable
+        if WCSession.default.isReachable {
+            let message: [String: Any] = ["globalRestSeconds": restSeconds]
+            WCSession.default.sendMessage(message, replyHandler: nil) { error in
+                AppLogger.ui.error("Failed to send workout settings: \(error.localizedDescription)")
+            }
+        }
+
+        // Re-sync full context (library + settings) to avoid partial overwrite
+        syncExerciseLibraryToWatch()
     }
 
     /// Converts the full exercise library to WatchExerciseInfo and sends via applicationContext.

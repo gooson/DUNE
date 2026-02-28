@@ -253,7 +253,7 @@ struct CompoundWorkoutView: View {
                     onComplete: {
                         let completed = vm.toggleSetCompletion(at: index)
                         if completed {
-                            setTimer.start()
+                            setTimer.start(seconds: Int(WorkoutSettingsStore.shared.restSeconds))
                         }
                     },
                     onFillFromPrevious: vm.previousSetInfo(for: vm.sets[index].setNumber) != nil ? {

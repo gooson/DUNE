@@ -27,6 +27,7 @@ struct SettingsView: View {
         .navigationTitle("Settings")
         .onChange(of: restSeconds) { _, newValue in
             store.restSeconds = newValue
+            WatchSessionManager.shared.syncWorkoutSettingsToWatch()
         }
         .onChange(of: setCount) { _, newValue in
             store.setCount = newValue
