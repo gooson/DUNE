@@ -28,15 +28,7 @@ struct WaveRefreshIndicator: View {
                 if x == 0 { primary.move(to: CGPoint(x: x, y: y)) }
                 else { primary.addLine(to: CGPoint(x: x, y: y)) }
             }
-            context.stroke(
-                primary,
-                with: .linearGradient(
-                    Gradient(colors: [color, DS.Color.desertDusk]),
-                    startPoint: CGPoint(x: 0, y: midY),
-                    endPoint: CGPoint(x: size.width, y: midY)
-                ),
-                lineWidth: 2.5
-            )
+            context.stroke(primary, with: .color(color.opacity(0.6)), lineWidth: 2.5)
 
             // Secondary wave (thinner, offset phase)
             var secondary = Path()
@@ -47,15 +39,7 @@ struct WaveRefreshIndicator: View {
                 if x == 0 { secondary.move(to: CGPoint(x: x, y: y)) }
                 else { secondary.addLine(to: CGPoint(x: x, y: y)) }
             }
-            context.stroke(
-                secondary,
-                with: .linearGradient(
-                    Gradient(colors: [DS.Color.desertDusk.opacity(0.4), color.opacity(0.3)]),
-                    startPoint: CGPoint(x: 0, y: midY),
-                    endPoint: CGPoint(x: size.width, y: midY)
-                ),
-                lineWidth: 1.5
-            )
+            context.stroke(secondary, with: .color(color.opacity(0.3)), lineWidth: 1.5)
         }
         .frame(width: 80, height: 20)
         .clipShape(Capsule())

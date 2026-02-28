@@ -77,12 +77,6 @@ enum DS {
         static let border: Double = 0.15
         /// Hero card border highlight (0.30)
         static let strong: Double = 0.30
-        /// Chart grid lines (0.06)
-        static let chartGrid: Double = 0.06
-        /// Card warm overlay (0.03)
-        static let cardOverlay: Double = 0.03
-        /// Hint blend for area charts (0.04)
-        static let hintBlend: Double = 0.04
     }
 
     // MARK: - Gradient
@@ -97,13 +91,6 @@ enum DS {
         static let heroRingStart = UnitPoint(x: 0, y: 0)
         static let heroRingEnd = UnitPoint(x: 1, y: 1)
 
-        /// Chart area fade — warmGlow bottom hint for area charts
-        static let chartAreaFade = LinearGradient(
-            colors: [DS.Color.warmGlow.opacity(DS.Opacity.hintBlend), .clear],
-            startPoint: .bottom,
-            endPoint: .top
-        )
-
         /// Hero/metric value text — DesertBronze → WarmGlow horizontal blend
         static let heroText = LinearGradient(
             colors: [DS.Color.desertBronze, DS.Color.warmGlow],
@@ -113,7 +100,7 @@ enum DS {
 
         /// Section title accent bar gradient
         static let sectionAccent = LinearGradient(
-            colors: [DS.Color.warmGlow.opacity(0.3), DS.Color.desertDusk.opacity(0.15)],
+            colors: [DS.Color.warmGlow.opacity(DS.Opacity.strong), DS.Color.desertDusk.opacity(DS.Opacity.border)],
             startPoint: .top,
             endPoint: .bottom
         )
