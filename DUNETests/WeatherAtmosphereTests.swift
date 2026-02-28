@@ -9,7 +9,7 @@ struct WeatherAtmosphereTests {
 
     @Test("Clear daytime produces zero intensity")
     func clearDaytime() {
-        let snapshot = makeSnapshot(condition: .clear, isDaytime: true, windSpeed: 10)
+        let snapshot = makeSnapshot(condition: .clear, windSpeed: 10, isDaytime: true)
         let atmo = WeatherAtmosphere.from(snapshot)
         #expect(atmo.condition == .clear)
         #expect(atmo.isDaytime == true)
