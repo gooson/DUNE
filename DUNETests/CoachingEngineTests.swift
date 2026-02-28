@@ -20,7 +20,8 @@ struct CoachingEngineTests {
         daysSinceLastWorkout: Int? = nil,
         workoutSuggestion: WorkoutSuggestion? = nil,
         recentPRExerciseName: String? = nil,
-        currentStreakMilestone: Int? = nil
+        currentStreakMilestone: Int? = nil,
+        weather: WeatherSnapshot? = nil
     ) -> CoachingInput {
         CoachingInput(
             conditionScore: conditionScore,
@@ -36,7 +37,8 @@ struct CoachingEngineTests {
             daysSinceLastWorkout: daysSinceLastWorkout,
             workoutSuggestion: workoutSuggestion,
             recentPRExerciseName: recentPRExerciseName,
-            currentStreakMilestone: currentStreakMilestone
+            currentStreakMilestone: currentStreakMilestone,
+            weather: weather
         )
     }
 
@@ -189,5 +191,94 @@ struct CoachingEngineTests {
             $0.category == .training || $0.category == .motivation
         }
         #expect(hasRelevant)
+    }
+
+    // MARK: - Weather triggers
+
+    @Test("Extreme heat generates weather insight")
+    func extremeHeatTrigger() {
+        let weather = makeWeather(feelsLike: 38)
+        let input = makeInput(weather: weather)
+        let output = engine.generate(from: input)
+        let allInsights = [output.focusInsight] + output.insightCards
+        let hasWeather = allInsights.contains { $0.category == .weather }
+        #expect(hasWeather)
+    }
+
+    @Test("Freezing generates weather insight")
+    func freezingTrigger() {
+        let weather = makeWeather(feelsLike: -5)
+        let input = makeInput(weather: weather)
+        let output = engine.generate(from: input)
+        let allInsights = [output.focusInsight] + output.insightCards
+        let hasWeather = allInsights.contains { $0.category == .weather }
+        #expect(hasWeather)
+    }
+
+    @Test("High UV generates weather insight")
+    func highUVTrigger() {
+        let weather = makeWeather(uvIndex: 10)
+        let input = makeInput(weather: weather)
+        let output = engine.generate(from: input)
+        let allInsights = [output.focusInsight] + output.insightCards
+        let hasWeather = allInsights.contains { $0.category == .weather }
+        #expect(hasWeather)
+    }
+
+    @Test("Rain generates weather insight")
+    func rainTrigger() {
+        let weather = makeWeather(condition: .rain)
+        let input = makeInput(weather: weather)
+        let output = engine.generate(from: input)
+        let allInsights = [output.focusInsight] + output.insightCards
+        let hasWeather = allInsights.contains { $0.category == .weather }
+        #expect(hasWeather)
+    }
+
+    @Test("Favorable weather generates positive weather insight")
+    func favorableWeatherTrigger() {
+        let weather = makeWeather(
+            condition: .clear,
+            feelsLike: 22,
+            humidity: 0.5,
+            uvIndex: 3,
+            windSpeed: 10,
+            isDaytime: true
+        )
+        let input = makeInput(weather: weather)
+        let output = engine.generate(from: input)
+        let allInsights = [output.focusInsight] + output.insightCards
+        let hasWeather = allInsights.contains { $0.category == .weather }
+        #expect(hasWeather)
+    }
+
+    @Test("Nil weather produces no weather insights")
+    func noWeatherNoInsight() {
+        let input = makeInput(weather: nil)
+        let output = engine.generate(from: input)
+        let allInsights = [output.focusInsight] + output.insightCards
+        let hasWeather = allInsights.contains { $0.category == .weather }
+        #expect(!hasWeather)
+    }
+
+    private func makeWeather(
+        condition: WeatherConditionType = .clear,
+        feelsLike: Double = 22,
+        humidity: Double = 0.5,
+        uvIndex: Int = 3,
+        windSpeed: Double = 10,
+        isDaytime: Bool = true
+    ) -> WeatherSnapshot {
+        WeatherSnapshot(
+            temperature: feelsLike,
+            feelsLike: feelsLike,
+            condition: condition,
+            humidity: humidity,
+            uvIndex: uvIndex,
+            windSpeed: windSpeed,
+            isDaytime: isDaytime,
+            fetchedAt: Date(),
+            hourlyForecast: []
+        )
     }
 }

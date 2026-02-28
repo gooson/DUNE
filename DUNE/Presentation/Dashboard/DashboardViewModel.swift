@@ -22,6 +22,13 @@ final class DashboardViewModel {
     var pinnedCategories: [HealthMetric.Category]
     var baselineDeltasByMetricID: [String: MetricBaselineDelta] = [:]
 
+    // Weather
+    private(set) var weatherSnapshot: WeatherSnapshot?
+    var weatherAtmosphere: WeatherAtmosphere {
+        guard let snapshot = weatherSnapshot else { return .default }
+        return WeatherAtmosphere.from(snapshot)
+    }
+
     private(set) var pinnedMetrics: [HealthMetric] = []
     private(set) var activeDaysThisWeek = 0
     private let weeklyGoalDays = 5
@@ -76,6 +83,7 @@ final class DashboardViewModel {
     private let bodyService: BodyCompositionQuerying
     private let pinnedMetricsStore: TodayPinnedMetricsStore
     private let sharedHealthDataService: SharedHealthDataService?
+    private let weatherProvider: WeatherProviding?
     private let scoreUseCase = CalculateConditionScoreUseCase()
     private let coachingEngine = CoachingEngine()
     private let trendService = TrendAnalysisService()
@@ -89,7 +97,8 @@ final class DashboardViewModel {
         stepsService: StepsQuerying? = nil,
         bodyService: BodyCompositionQuerying? = nil,
         pinnedMetricsStore: TodayPinnedMetricsStore = .shared,
-        sharedHealthDataService: SharedHealthDataService? = nil
+        sharedHealthDataService: SharedHealthDataService? = nil,
+        weatherProvider: WeatherProviding? = nil
     ) {
         self.healthKitManager = healthKitManager
         self.hrvService = hrvService ?? HRVQueryService(manager: healthKitManager)
@@ -99,6 +108,8 @@ final class DashboardViewModel {
         self.bodyService = bodyService ?? BodyCompositionQueryService(manager: healthKitManager)
         self.pinnedMetricsStore = pinnedMetricsStore
         self.sharedHealthDataService = sharedHealthDataService
+        // Create default weather provider if none injected (Correction: @MainActor init is safe for LocationService)
+        self.weatherProvider = weatherProvider ?? WeatherProvider(locationService: LocationService())
         self.pinnedCategories = pinnedMetricsStore.load()
     }
 
@@ -130,6 +141,7 @@ final class DashboardViewModel {
         heroBaselineDetails = []
         baselineDeltasByMetricID = [:]
         activeDaysThisWeek = 0
+        weatherSnapshot = nil
 
         if !authorizationChecked {
             if Self.shouldBypassAuthorizationForTests {
@@ -149,17 +161,20 @@ final class DashboardViewModel {
 
         let sharedSnapshot = await sharedHealthDataService?.fetchSnapshot()
 
-        // Each fetch is independent — one failure should not block others (6 parallel)
+        // Each fetch is independent — one failure should not block others (7 parallel)
         async let hrvTask = safeHRVFetch(snapshot: sharedSnapshot)
         async let sleepTask = safeSleepFetch(snapshot: sharedSnapshot)
         async let exerciseTask = safeExerciseFetch()
         async let stepsTask = safeStepsFetch()
         async let weightTask = safeWeightFetch()
         async let bmiTask = safeBMIFetch()
+        async let weatherTask = safeWeatherFetch()
 
-        let (hrvResult, sleepResult, exerciseResult, stepsResult, weightResult, bmiResult) = await (
-            hrvTask, sleepTask, exerciseTask, stepsTask, weightTask, bmiTask
+        let (hrvResult, sleepResult, exerciseResult, stepsResult, weightResult, bmiResult, weatherResult) = await (
+            hrvTask, sleepTask, exerciseTask, stepsTask, weightTask, bmiTask, weatherTask
         )
+
+        weatherSnapshot = weatherResult
 
         var allMetrics: [HealthMetric] = []
         allMetrics.append(contentsOf: hrvResult.metrics)
@@ -250,6 +265,17 @@ final class DashboardViewModel {
         catch {
             AppLogger.ui.error("BMI fetch failed: \(error.localizedDescription)")
             return (nil, true)
+        }
+    }
+
+    private func safeWeatherFetch() async -> WeatherSnapshot? {
+        guard let weatherProvider else { return nil }
+        do {
+            return try await weatherProvider.fetchCurrentWeather()
+        } catch {
+            // Weather is non-critical — fail silently (graceful degradation)
+            AppLogger.ui.info("Weather fetch skipped: \(error.localizedDescription)")
+            return nil
         }
     }
 
@@ -853,7 +879,8 @@ final class DashboardViewModel {
             daysSinceLastWorkout: nil,
             workoutSuggestion: workoutSuggestion,
             recentPRExerciseName: nil,
-            currentStreakMilestone: nil
+            currentStreakMilestone: nil,
+            weather: weatherSnapshot
         )
 
         let output = coachingEngine.generate(from: input)

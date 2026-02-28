@@ -125,22 +125,46 @@ struct WaveOverlayView: View {
 // MARK: - Tab Background
 
 /// Tab root background: wave motif + warm gradient.
-/// Reads `wavePreset` and `waveColor` from the environment (set by ContentView per tab).
+/// Reads `wavePreset`, `waveColor`, and `weatherAtmosphere` from the environment.
+/// When preset is `.today` and a non-default atmosphere is set, wave color/params
+/// adapt to current weather conditions.
 struct TabWaveBackground: View {
     @Environment(\.wavePreset) private var preset
     @Environment(\.waveColor) private var color
+    @Environment(\.weatherAtmosphere) private var atmosphere
+
+    private var isWeatherActive: Bool {
+        preset == .today && atmosphere != .default
+    }
+
+    private var resolvedColor: Color {
+        isWeatherActive ? atmosphere.waveColor : color
+    }
+
+    private var resolvedAmplitude: CGFloat {
+        isWeatherActive ? atmosphere.waveAmplitude : preset.amplitude
+    }
+
+    private var resolvedFrequency: CGFloat {
+        isWeatherActive ? atmosphere.waveFrequency : preset.frequency
+    }
+
+    private var resolvedOpacity: Double {
+        isWeatherActive ? atmosphere.waveOpacity : preset.opacity
+    }
 
     var body: some View {
-        let gradientTop = color.opacity(DS.Opacity.medium)
-        let gradientMid = DS.Color.warmGlow.opacity(DS.Opacity.subtle)
+        let gradientColors = isWeatherActive
+            ? atmosphere.gradientColors
+            : [color.opacity(DS.Opacity.medium), DS.Color.warmGlow.opacity(DS.Opacity.subtle), .clear]
 
         ZStack(alignment: .top) {
             // Primary wave
             WaveOverlayView(
-                color: color,
-                opacity: preset.opacity,
-                amplitude: preset.amplitude,
-                frequency: preset.frequency,
+                color: resolvedColor,
+                opacity: resolvedOpacity,
+                amplitude: resolvedAmplitude,
+                frequency: resolvedFrequency,
                 verticalOffset: preset.verticalOffset,
                 bottomFade: preset.bottomFade
             )
@@ -160,12 +184,13 @@ struct TabWaveBackground: View {
             }
 
             LinearGradient(
-                colors: [gradientTop, gradientMid, .clear],
+                colors: gradientColors,
                 startPoint: .top,
                 endPoint: DS.Gradient.tabBackgroundEnd
             )
         }
         .ignoresSafeArea()
+        .animation(DS.Animation.atmosphereTransition, value: atmosphere)
     }
 }
 

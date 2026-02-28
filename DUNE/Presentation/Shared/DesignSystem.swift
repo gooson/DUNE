@@ -61,6 +61,12 @@ enum DS {
         static let activityOutdoor   = SwiftUI.Color("ActivityOutdoor")   // Desert Sage
         static let activityOther     = SwiftUI.Color("ActivityOther")     // Warm Stone
 
+        // Weather condition colors — Desert Horizon extensions
+        static let weatherRain   = SwiftUI.Color("WeatherRain")    // Oasis rain — cool teal
+        static let weatherSnow   = SwiftUI.Color("WeatherSnow")    // Frost sand — muted ivory
+        static let weatherCloudy = SwiftUI.Color("WeatherCloudy")  // Cloud shadow — desertDusk family
+        static let weatherNight  = SwiftUI.Color("WeatherNight")   // Desert night — deep indigo
+
         // Tab wave identity — Desert Horizon palette
         static let tabTrain    = SwiftUI.Color("TabTrain")     // Desert Coral
         static let tabWellness = SwiftUI.Color("TabWellness")  // Oasis Teal
@@ -162,6 +168,8 @@ enum DS {
         static let waveDrift = SwiftUI.Animation.linear(duration: 6).repeatForever(autoreverses: false)
         /// Sand shimmer flash (period transition overlay)
         static let shimmer = SwiftUI.Animation.easeInOut(duration: 0.4)
+        /// Weather atmosphere color transition (slow cross-fade)
+        static let atmosphereTransition = SwiftUI.Animation.easeInOut(duration: 1.5)
     }
 
     // MARK: - Typography (Dynamic Type compatible)

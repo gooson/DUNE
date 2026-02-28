@@ -10,6 +10,7 @@ extension InsightCategory {
         case .sleep: DS.Color.sleep
         case .motivation: DS.Color.positive
         case .recap: DS.Color.vitals
+        case .weather: DS.Color.weatherRain
         case .general: DS.Color.warmGlow
         }
     }
