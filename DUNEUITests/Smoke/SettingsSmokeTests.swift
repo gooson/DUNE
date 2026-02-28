@@ -39,6 +39,9 @@ final class SettingsSmokeTests: UITestBaseCase {
         app.swipeUp()
         let iCloudLabel = app.staticTexts["iCloud Sync"]
         XCTAssertTrue(iCloudLabel.waitForExistence(timeout: 5), "iCloud Sync toggle should exist")
+
+        let locationLabel = app.staticTexts["Location Access"]
+        XCTAssertTrue(locationLabel.waitForExistence(timeout: 5), "Location Access row should exist")
     }
 
     func testAboutSectionExists() throws {
