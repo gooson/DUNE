@@ -1,0 +1,209 @@
+import Foundation
+import Testing
+@testable import DUNE
+
+@Suite("OpenMeteoService")
+struct OpenMeteoServiceTests {
+
+    // MARK: - WMO Code Mapping
+
+    @Test("Clear sky codes map to .clear")
+    func clearCodes() {
+        #expect(OpenMeteoService.mapWMOCode(0) == .clear)
+        #expect(OpenMeteoService.mapWMOCode(1) == .clear)
+    }
+
+    @Test("Partly cloudy code maps correctly")
+    func partlyCloudy() {
+        #expect(OpenMeteoService.mapWMOCode(2) == .partlyCloudy)
+    }
+
+    @Test("Overcast maps to .cloudy")
+    func overcast() {
+        #expect(OpenMeteoService.mapWMOCode(3) == .cloudy)
+    }
+
+    @Test("Fog codes map to .fog")
+    func fog() {
+        #expect(OpenMeteoService.mapWMOCode(45) == .fog)
+        #expect(OpenMeteoService.mapWMOCode(48) == .fog)
+    }
+
+    @Test("Drizzle codes map to .rain")
+    func drizzle() {
+        #expect(OpenMeteoService.mapWMOCode(51) == .rain)
+        #expect(OpenMeteoService.mapWMOCode(53) == .rain)
+        #expect(OpenMeteoService.mapWMOCode(55) == .rain)
+    }
+
+    @Test("Freezing drizzle/rain maps to .sleet")
+    func freezingPrecipitation() {
+        #expect(OpenMeteoService.mapWMOCode(56) == .sleet)
+        #expect(OpenMeteoService.mapWMOCode(57) == .sleet)
+        #expect(OpenMeteoService.mapWMOCode(66) == .sleet)
+        #expect(OpenMeteoService.mapWMOCode(67) == .sleet)
+    }
+
+    @Test("Rain codes map correctly")
+    func rain() {
+        #expect(OpenMeteoService.mapWMOCode(61) == .rain)
+        #expect(OpenMeteoService.mapWMOCode(63) == .rain)
+        #expect(OpenMeteoService.mapWMOCode(80) == .rain)
+        #expect(OpenMeteoService.mapWMOCode(81) == .rain)
+    }
+
+    @Test("Heavy rain codes map to .heavyRain")
+    func heavyRain() {
+        #expect(OpenMeteoService.mapWMOCode(65) == .heavyRain)
+        #expect(OpenMeteoService.mapWMOCode(82) == .heavyRain)
+    }
+
+    @Test("Snow codes map to .snow")
+    func snow() {
+        #expect(OpenMeteoService.mapWMOCode(71) == .snow)
+        #expect(OpenMeteoService.mapWMOCode(73) == .snow)
+        #expect(OpenMeteoService.mapWMOCode(75) == .snow)
+        #expect(OpenMeteoService.mapWMOCode(77) == .snow)
+        #expect(OpenMeteoService.mapWMOCode(85) == .snow)
+        #expect(OpenMeteoService.mapWMOCode(86) == .snow)
+    }
+
+    @Test("Thunderstorm codes map to .thunderstorm")
+    func thunderstorm() {
+        #expect(OpenMeteoService.mapWMOCode(95) == .thunderstorm)
+        #expect(OpenMeteoService.mapWMOCode(96) == .thunderstorm)
+        #expect(OpenMeteoService.mapWMOCode(99) == .thunderstorm)
+    }
+
+    @Test("Unknown WMO code defaults to .cloudy")
+    func unknownCode() {
+        #expect(OpenMeteoService.mapWMOCode(-1) == .cloudy)
+        #expect(OpenMeteoService.mapWMOCode(100) == .cloudy)
+        #expect(OpenMeteoService.mapWMOCode(999) == .cloudy)
+    }
+
+    // MARK: - ISO 8601 Parsing
+
+    @Test("Parses standard ISO 8601 with timezone")
+    func parseStandardISO() {
+        let date = OpenMeteoService.parseISO8601("2026-02-28T14:00:00Z")
+        #expect(date != nil)
+    }
+
+    @Test("Parses Open-Meteo hourly format without timezone")
+    func parseOpenMeteoHourly() {
+        let date = OpenMeteoService.parseISO8601("2026-02-28T14:00")
+        #expect(date != nil)
+    }
+
+    @Test("Returns nil for invalid string")
+    func parseInvalid() {
+        #expect(OpenMeteoService.parseISO8601("not-a-date") == nil)
+        #expect(OpenMeteoService.parseISO8601("") == nil)
+    }
+
+    // MARK: - JSON Decoding
+
+    @Test("Decodes valid Open-Meteo response")
+    func decodeValidResponse() throws {
+        let json = """
+        {
+            "current": {
+                "temperature_2m": 15.3,
+                "apparent_temperature": 13.1,
+                "relative_humidity_2m": 72.0,
+                "weather_code": 3,
+                "wind_speed_10m": 12.5,
+                "uv_index": 4.2,
+                "is_day": 1
+            },
+            "hourly": {
+                "time": ["2026-02-28T14:00", "2026-02-28T15:00"],
+                "temperature_2m": [15.3, 14.8],
+                "weather_code": [3, 61]
+            }
+        }
+        """
+        let data = json.data(using: .utf8)!
+        let response = try JSONDecoder().decode(OpenMeteoResponse.self, from: data)
+
+        #expect(response.current.temperature_2m == 15.3)
+        #expect(response.current.apparent_temperature == 13.1)
+        #expect(response.current.relative_humidity_2m == 72.0)
+        #expect(response.current.weather_code == 3)
+        #expect(response.current.wind_speed_10m == 12.5)
+        #expect(response.current.uv_index == 4.2)
+        #expect(response.current.is_day == 1)
+
+        #expect(response.hourly?.time.count == 2)
+        #expect(response.hourly?.temperature_2m.count == 2)
+        #expect(response.hourly?.weather_code.count == 2)
+    }
+
+    @Test("Decodes response without hourly data")
+    func decodeWithoutHourly() throws {
+        let json = """
+        {
+            "current": {
+                "temperature_2m": 20.0,
+                "apparent_temperature": 18.0,
+                "relative_humidity_2m": 50.0,
+                "weather_code": 0,
+                "wind_speed_10m": 5.0,
+                "uv_index": 6.0,
+                "is_day": 1
+            }
+        }
+        """
+        let data = json.data(using: .utf8)!
+        let response = try JSONDecoder().decode(OpenMeteoResponse.self, from: data)
+
+        #expect(response.current.temperature_2m == 20.0)
+        #expect(response.hourly == nil)
+    }
+
+    // MARK: - OpenMeteoError
+
+    @Test("OpenMeteoError cases are distinct")
+    func errorCases() {
+        let invalid = OpenMeteoError.invalidResponse
+        let http = OpenMeteoError.httpError(429)
+
+        #expect(invalid.localizedDescription.isEmpty == false)
+        if case .httpError(let code) = http {
+            #expect(code == 429)
+        } else {
+            Issue.record("Expected httpError case")
+        }
+    }
+
+    // MARK: - WMO Complete Coverage
+
+    @Test("All documented WMO codes are handled")
+    func allWMOCodes() {
+        // Verify every documented WMO code returns a non-cloudy result
+        // (cloudy is only for overcast=3 or unknown)
+        let expectedNonCloudy: [Int: WeatherConditionType] = [
+            0: .clear, 1: .clear,
+            2: .partlyCloudy,
+            45: .fog, 48: .fog,
+            51: .rain, 53: .rain, 55: .rain,
+            56: .sleet, 57: .sleet,
+            61: .rain, 63: .rain,
+            65: .heavyRain,
+            66: .sleet, 67: .sleet,
+            71: .snow, 73: .snow, 75: .snow, 77: .snow,
+            80: .rain, 81: .rain,
+            82: .heavyRain,
+            85: .snow, 86: .snow,
+            95: .thunderstorm, 96: .thunderstorm, 99: .thunderstorm,
+        ]
+
+        for (code, expected) in expectedNonCloudy {
+            #expect(
+                OpenMeteoService.mapWMOCode(code) == expected,
+                "WMO code \(code) should map to \(expected)"
+            )
+        }
+    }
+}

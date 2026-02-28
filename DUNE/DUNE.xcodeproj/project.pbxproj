@@ -64,6 +64,7 @@
 		2589CD6F70EC0C670157E307 /* TrainingVolume.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EA73613D9D05B8BAF30311 /* TrainingVolume.swift */; };
 		25E861EF7ABF00EF311C53B9 /* ExerciseCategory+HealthKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF2986240452D0307456866 /* ExerciseCategory+HealthKit.swift */; };
 		26842EB5F2D12783C48E2FC8 /* ExerciseRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0829D70CAB9526CFDBB4B72 /* ExerciseRecord.swift */; };
+		2716E35A4289A4A43374F568 /* OpenMeteoServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4934F2F7000086E1F923FD77 /* OpenMeteoServiceTests.swift */; };
 		271AE6419B7ACAC8753E4F49 /* MetricDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CBA4F5305CA51EFCF7A3F0 /* MetricDetailView.swift */; };
 		272098B05044F7AD75B8E18D /* ReadinessTrendChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8CE8D7BDF112DDF6F10122 /* ReadinessTrendChartView.swift */; };
 		276A5BC8CA24C5D59539DA75 /* BodyCompositionQueryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6C89073EBF47C5344A9E80 /* BodyCompositionQueryService.swift */; };
@@ -368,6 +369,7 @@
 		D72AAC6C105E010A0C3B55D2 /* ExerciseTypeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB511A64BAECD2399EAE906 /* ExerciseTypeDetailView.swift */; };
 		D7865194E9D021C61CB558FF /* SleepQueryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EABB78A9CEE226278FEEC68 /* SleepQueryService.swift */; };
 		D7A4F451B94E6698C9573C12 /* WorkoutSet+Summary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B32CA89F078768083186AB /* WorkoutSet+Summary.swift */; };
+		D81ABF2B0DF458F6A54E7F57 /* OpenMeteoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46467A35BF8B01F93877EA34 /* OpenMeteoService.swift */; };
 		D87EB6C924EC2D6166587A55 /* InjuryBodyMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1713F43D1C2F0171F5A899B5 /* InjuryBodyMapView.swift */; };
 		D8B25332FBBCD3023A0B5215 /* EffortScoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE85E834B5A437EA85C1D478 /* EffortScoreService.swift */; };
 		D8FF6063C9F8B238D2B7181B /* MetricBaselineDelta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769D4BCBDBE6A1FFE05B5C09 /* MetricBaselineDelta.swift */; };
@@ -591,6 +593,7 @@
 		43CCC0DB1937B6304D21EB31 /* WorkoutSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSessionView.swift; sourceTree = "<group>"; };
 		44A8B9695E041B2FDA423693 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		450D565A5641608A8463B8A9 /* HabitStreakService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitStreakService.swift; sourceTree = "<group>"; };
+		46467A35BF8B01F93877EA34 /* OpenMeteoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenMeteoService.swift; sourceTree = "<group>"; };
 		46722640319C1101B526037E /* WeatherAtmosphere.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherAtmosphere.swift; sourceTree = "<group>"; };
 		468528CBA1A3DC2FBCD2D973 /* WeatherKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WeatherKit.framework; path = System/Library/Frameworks/WeatherKit.framework; sourceTree = SDKROOT; };
 		475E8D347083FC911872B390 /* ConditionCalculationCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionCalculationCard.swift; sourceTree = "<group>"; };
@@ -598,6 +601,7 @@
 		4806A930EF000186A0D39B66 /* WorkoutStreakServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutStreakServiceTests.swift; sourceTree = "<group>"; };
 		482E19473F5668C01345F7D8 /* ExerciseRecord+Volume.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExerciseRecord+Volume.swift"; sourceTree = "<group>"; };
 		491FF703165491C066FC3574 /* VolumeLegendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeLegendView.swift; sourceTree = "<group>"; };
+		4934F2F7000086E1F923FD77 /* OpenMeteoServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenMeteoServiceTests.swift; sourceTree = "<group>"; };
 		498C1D4D0A609F65876292BE /* SleepStageChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepStageChartView.swift; sourceTree = "<group>"; };
 		49A51CB39D34AB8A45BA0EAD /* CalculationRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculationRow.swift; sourceTree = "<group>"; };
 		4A10A17F0E61C704CCB337DF /* GlassCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlassCard.swift; sourceTree = "<group>"; };
@@ -1644,6 +1648,7 @@
 			isa = PBXGroup;
 			children = (
 				3BB611A3E2057DFFE75C6A48 /* LocationService.swift */,
+				46467A35BF8B01F93877EA34 /* OpenMeteoService.swift */,
 				B2240AB91486CFD6826458B0 /* WeatherDataService.swift */,
 			);
 			path = Weather;
@@ -1777,6 +1782,7 @@
 				CB50864805F4D6E860B99E58 /* MuscleMapDetailViewModelTests.swift */,
 				9B2289ED768B51C92A48A699 /* NumberFormattingTests.swift */,
 				A5350D512DD22DCC8FDE5363 /* OneRMEstimationServiceTests.swift */,
+				4934F2F7000086E1F923FD77 /* OpenMeteoServiceTests.swift */,
 				591E5D2B9C33E4EEE5BB73E8 /* PersonalRecordServiceTests.swift */,
 				6CECB8413BB3625F5ADF8A15 /* QuickStartPopularityServiceTests.swift */,
 				D7A871141C8ED67B62FFE500 /* RecoveryModifierServiceTests.swift */,
@@ -2221,6 +2227,7 @@
 				605B2E840CC2F882591BDB6B /* MuscleRecoveryMapView.swift in Sources */,
 				30C9CACE3020851853412E78 /* OneRMAnalysisSection.swift in Sources */,
 				D0118A459F5A43537701F1C5 /* OneRMEstimationService.swift in Sources */,
+				D81ABF2B0DF458F6A54E7F57 /* OpenMeteoService.swift in Sources */,
 				B95C8B4592E8C1B3BEA9B23E /* PeriodComparisonView.swift in Sources */,
 				3AE9CD408B5070447D82BD82 /* PeriodSwipeModifier.swift in Sources */,
 				3757F0602A059304A4EADD9A /* PersonalRecord.swift in Sources */,
@@ -2439,6 +2446,7 @@
 				9FE5E83B6D65AF306947F5EE /* MuscleMapDetailViewModelTests.swift in Sources */,
 				4A8EBB81B8A390BA38030F79 /* NumberFormattingTests.swift in Sources */,
 				788CDC8786A1A668646B9057 /* OneRMEstimationServiceTests.swift in Sources */,
+				2716E35A4289A4A43374F568 /* OpenMeteoServiceTests.swift in Sources */,
 				4F624EF783FACC53E08F636A /* PersonalRecordServiceTests.swift in Sources */,
 				C74CA0C004299D824462435E /* QuickStartPopularityServiceTests.swift in Sources */,
 				3DE53461B880AFA1398A71DC /* RecoveryModifierServiceTests.swift in Sources */,

@@ -145,6 +145,14 @@ struct SettingsView: View {
                 Text(buildNumber)
                     .foregroundStyle(DS.Color.textSecondary)
             }
+
+            HStack {
+                Text("Weather Data")
+                Spacer()
+                Text("Apple WeatherKit, Open-Meteo.com")
+                    .foregroundStyle(DS.Color.textSecondary)
+                    .font(.caption)
+            }
         }
     }
 
