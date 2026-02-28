@@ -1,0 +1,31 @@
+{
+  "configurations" : [
+    {
+      "id" : "D2A6C7E0-0001-0001-0001-000000000001",
+      "name" : "CI Configuration",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:DUNE.xcodeproj",
+      "identifier" : "DUNEUITests",
+      "name" : "DUNEUITests"
+    }
+  },
+  "testTargets" : [
+    {
+      "skippedTests" : [
+        "HealthKitPermissionUITests"
+      ],
+      "target" : {
+        "containerPath" : "container:DUNE.xcodeproj",
+        "identifier" : "DUNEUITests",
+        "name" : "DUNEUITests"
+      }
+    }
+  ],
+  "version" : 1
+}

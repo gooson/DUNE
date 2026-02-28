@@ -19,6 +19,7 @@ DERIVED_DATA_DIR=".deriveddata"
 LOG_DIR=".xcodebuild"
 LOG_FILE="$LOG_DIR/ui-test.log"
 REGENERATE=1
+TEST_PLAN=""
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -30,9 +31,13 @@ while [[ $# -gt 0 ]]; do
             LOG_FILE="$2"
             shift 2
             ;;
+        --test-plan)
+            TEST_PLAN="$2"
+            shift 2
+            ;;
         *)
             echo "Unknown option: $1"
-            echo "Usage: $0 [--no-regen] [--log-file <path>]"
+            echo "Usage: $0 [--no-regen] [--log-file <path>] [--test-plan <name>]"
             exit 2
             ;;
     esac
@@ -76,15 +81,24 @@ else
 fi
 
 echo "Running UI tests with scheme '$SCHEME' for destination '$DESTINATION'..."
+
+# Build test command
+TEST_CMD=(xcodebuild test -project "$PROJECT_FILE"
+    -scheme "$SCHEME"
+    -destination "$DESTINATION"
+    -derivedDataPath "$DERIVED_DATA_DIR"
+    CODE_SIGNING_ALLOWED=NO
+    CODE_SIGNING_REQUIRED=NO)
+
+if [[ -n "$TEST_PLAN" ]]; then
+    TEST_CMD+=(-testPlan "$TEST_PLAN")
+    echo "Using test plan: $TEST_PLAN"
+else
+    TEST_CMD+=(-only-testing DUNEUITests)
+fi
+
 set +e
-xcodebuild test -project "$PROJECT_FILE" \
-    -scheme "$SCHEME" \
-    -destination "$DESTINATION" \
-    -derivedDataPath "$DERIVED_DATA_DIR" \
-    -only-testing DUNEUITests \
-    CODE_SIGNING_ALLOWED=NO \
-    CODE_SIGNING_REQUIRED=NO \
-    >"$LOG_FILE" 2>&1
+"${TEST_CMD[@]}" >"$LOG_FILE" 2>&1
 TEST_EXIT=$?
 set -e
 

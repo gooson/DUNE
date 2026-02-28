@@ -50,6 +50,7 @@ struct LifeView: View {
                     Image(systemName: "plus")
                 }
                 .accessibilityLabel("Add habit")
+                .accessibilityIdentifier("life-toolbar-add")
             }
         }
         .sheet(isPresented: $viewModel.isShowingAddSheet) {
@@ -113,6 +114,7 @@ private struct HabitListQueryView: View {
         } else {
             // Hero: completion rate
             heroSection
+                .accessibilityIdentifier("life-hero-progress")
 
             // Habit rows
             ForEach(viewModel.habitProgresses) { progress in

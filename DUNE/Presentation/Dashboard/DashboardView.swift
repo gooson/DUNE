@@ -59,6 +59,7 @@ struct DashboardView: View {
                                 )
                             }
                             .buttonStyle(.plain)
+                            .accessibilityIdentifier("dashboard-hero-condition")
                         } else if let status = viewModel.baselineStatus, !status.isReady {
                             BaselineProgressView(status: status)
                         }
@@ -178,6 +179,7 @@ struct DashboardView: View {
                     Image(systemName: "gearshape")
                 }
                 .accessibilityLabel("Settings")
+                .accessibilityIdentifier("dashboard-toolbar-settings")
             }
         }
     }
@@ -202,6 +204,7 @@ struct DashboardView: View {
                     isShowingPinnedEditor = true
                 }
                 .font(.subheadline.weight(.medium))
+                .accessibilityIdentifier("dashboard-pinned-edit")
             }
             .padding(.horizontal, DS.Spacing.xs)
 

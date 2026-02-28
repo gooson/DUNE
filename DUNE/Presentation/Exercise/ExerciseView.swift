@@ -113,14 +113,14 @@ struct ExerciseView: View {
                 } label: {
                     Image(systemName: "list.clipboard")
                 }
-                .accessibilityIdentifier("exercise-templates-button")
+                .accessibilityIdentifier("exercise-toolbar-templates")
 
                 NavigationLink {
                     UserCategoryManagementView()
                 } label: {
                     Image(systemName: "tag")
                 }
-                .accessibilityIdentifier("exercise-categories-button")
+                .accessibilityIdentifier("exercise-toolbar-categories")
             }
             ToolbarItem(placement: .primaryAction) {
                 Menu {
@@ -137,7 +137,7 @@ struct ExerciseView: View {
                 } label: {
                     Image(systemName: "plus")
                 }
-                .accessibilityIdentifier("exercise-add-button")
+                .accessibilityIdentifier("exercise-toolbar-add")
             }
         }
         .sheet(isPresented: $showingExercisePicker) {

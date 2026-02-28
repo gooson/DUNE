@@ -57,7 +57,7 @@ struct ActivityView: View {
                                 isCalibrating: viewModel.trainingReadiness?.isCalibrating ?? true
                             )
                         }
-                        .accessibilityIdentifier("activity-readiness-card")
+                        .accessibilityIdentifier("activity-hero-readiness")
                         .buttonStyle(.plain)
 
                         // ② Injury Warning Banner
@@ -152,7 +152,7 @@ struct ActivityView: View {
                 } label: {
                     Image(systemName: "plus")
                 }
-                .accessibilityIdentifier("activity-add-button")
+                .accessibilityIdentifier("activity-toolbar-add")
             }
         }
         .sheet(isPresented: $showingExercisePicker) {

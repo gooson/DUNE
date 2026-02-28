@@ -96,6 +96,7 @@ struct SettingsView: View {
             } label: {
                 Label("Exercise Defaults", systemImage: "dumbbell")
             }
+            .accessibilityIdentifier("settings-row-exercisedefaults")
         } header: {
             Text("Per-Exercise")
         } footer: {

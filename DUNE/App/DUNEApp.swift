@@ -30,6 +30,10 @@ struct DUNEApp: App {
         isRunningXCTest && !isRunningUITests
     }
 
+    private static var shouldSeedMockData: Bool {
+        ProcessInfo.processInfo.arguments.contains("--seed-mock")
+    }
+
     init() {
         let sharedService: SharedHealthDataService = SharedHealthDataServiceImpl(healthKitManager: .shared)
         self.sharedHealthDataService = sharedService
@@ -79,6 +83,12 @@ struct DUNEApp: App {
             Group {
                 if Self.isRunningUnitTests {
                     Color.clear
+                } else if Self.shouldSeedMockData {
+                    // UI test with mock data — seed and skip splash
+                    appContent
+                        .onAppear {
+                            TestDataSeeder.seed(into: modelContainer.mainContext)
+                        }
                 } else {
                     ZStack {
                         if !isShowingLaunchSplash || isResolvingLaunchSplash {

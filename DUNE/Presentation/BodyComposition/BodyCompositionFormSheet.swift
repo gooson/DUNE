@@ -22,14 +22,14 @@ struct BodyCompositionFormSheet: View {
                     in: ...Date(),
                     displayedComponents: [.date, .hourAndMinute]
                 )
-                .accessibilityIdentifier("body-date-picker")
+                .accessibilityIdentifier("body-form-date")
 
                 TextField("Weight (kg)", text: $viewModel.newWeight)
                     .keyboardType(.decimalPad)
-                    .accessibilityIdentifier("body-weight-field")
+                    .accessibilityIdentifier("body-form-weight")
                 TextField("Body Fat (%)", text: $viewModel.newBodyFat)
                     .keyboardType(.decimalPad)
-                    .accessibilityIdentifier("body-fat-field")
+                    .accessibilityIdentifier("body-form-fat")
                 TextField("Muscle Mass (kg)", text: $viewModel.newMuscleMass)
                     .keyboardType(.decimalPad)
                     .accessibilityIdentifier("body-muscle-field")
@@ -41,7 +41,7 @@ struct BodyCompositionFormSheet: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }
-                        .accessibilityIdentifier("body-cancel-button")
+                        .accessibilityIdentifier("body-form-cancel")
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
@@ -49,7 +49,7 @@ struct BodyCompositionFormSheet: View {
                         onSave()
                     }
                     .disabled(viewModel.newWeight.isEmpty && viewModel.newBodyFat.isEmpty && viewModel.newMuscleMass.isEmpty)
-                    .accessibilityIdentifier("body-save-button")
+                    .accessibilityIdentifier("body-form-save")
                 }
             }
         }
