@@ -51,6 +51,21 @@ if [[ "$REGENERATE" -eq 1 || ! -d "$PROJECT_FILE" ]]; then
     PBXPROJ="$PROJECT_FILE/project.pbxproj"
     sed -i '' 's/objectVersion = 77;/objectVersion = 90;/' "$PBXPROJ"
     sed -i '' 's/compatibilityVersion = "Xcode 14.0";/compatibilityVersion = "Xcode 16.3";/' "$PBXPROJ"
+
+    # Post-process xcschemes: xcodegen generates version 1.3 without some attributes
+    # that Xcode 26 adds on open, causing perpetual diffs.
+    for SCHEME_FILE in "$PROJECT_FILE"/xcshareddata/xcschemes/*.xcscheme; do
+        [ -f "$SCHEME_FILE" ] || continue
+        sed -i '' 's/version = "1.3"/version = "1.7"/' "$SCHEME_FILE"
+        if ! grep -q 'runPostActionsOnFailure' "$SCHEME_FILE"; then
+            sed -i '' 's/buildImplicitDependencies = "YES">/buildImplicitDependencies = "YES"\
+      runPostActionsOnFailure = "NO">/' "$SCHEME_FILE"
+        fi
+        if ! grep -q 'onlyGenerateCoverageForSpecifiedTargets' "$SCHEME_FILE"; then
+            sed -i '' 's/shouldUseLaunchSchemeArgsEnv = "YES">/shouldUseLaunchSchemeArgsEnv = "YES"\
+      onlyGenerateCoverageForSpecifiedTargets = "NO">/' "$SCHEME_FILE"
+        fi
+    done
 fi
 
 echo "Building scheme '$SCHEME' for destination '$DESTINATION'..."
