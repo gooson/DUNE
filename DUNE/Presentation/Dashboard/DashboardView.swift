@@ -63,6 +63,11 @@ struct DashboardView: View {
                             BaselineProgressView(status: status)
                         }
 
+                        // Weather
+                        if let weather = viewModel.weatherSnapshot {
+                            WeatherCard(snapshot: weather)
+                        }
+
                         // Coaching
                         if let insight = viewModel.focusInsight {
                             TodayCoachingCard(insight: insight)
@@ -131,6 +136,7 @@ struct DashboardView: View {
                 }
             }
         }
+        .environment(\.weatherAtmosphere, viewModel.weatherAtmosphere)
         .background { TabWaveBackground() }
         .navigationDestination(for: ConditionScore.self) { score in
             ConditionScoreDetailView(score: score)

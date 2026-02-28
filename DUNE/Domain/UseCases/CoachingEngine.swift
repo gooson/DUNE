@@ -16,6 +16,7 @@ struct CoachingInput: Sendable {
     let workoutSuggestion: WorkoutSuggestion?
     let recentPRExerciseName: String?
     let currentStreakMilestone: Int?
+    let weather: WeatherSnapshot?
 }
 
 /// Output from the coaching engine
@@ -36,6 +37,7 @@ struct CoachingEngine: Sendable {
         var allInsights: [CoachingInsight] = []
 
         // Evaluate all trigger categories
+        allInsights.append(contentsOf: evaluateWeatherTriggers(input))
         allInsights.append(contentsOf: evaluateRecoveryTriggers(input))
         allInsights.append(contentsOf: evaluateSleepTriggers(input))
         allInsights.append(contentsOf: evaluateTrainingTriggers(input))
@@ -56,6 +58,103 @@ struct CoachingEngine: Sendable {
         )
 
         return CoachingOutput(focusInsight: focus, insightCards: cards)
+    }
+
+    // MARK: - Weather Triggers (P2-P5)
+
+    private func evaluateWeatherTriggers(_ input: CoachingInput) -> [CoachingInsight] {
+        guard let weather = input.weather else { return [] }
+        var results: [CoachingInsight] = []
+
+        // P2: Extreme heat (feels like 35°C+)
+        if weather.isExtremeHeat {
+            let temp = Int(weather.feelsLike)
+            results.append(CoachingInsight(
+                id: "weather-extreme-heat",
+                priority: .high,
+                category: .weather,
+                title: "극심한 더위 주의",
+                message: "체감 온도 \(temp)°C — 실내 운동이나 이른 아침/저녁 세션을 권합니다. 수분 보충을 충분히 하세요.",
+                iconName: "sun.max.trianglebadge.exclamationmark.fill"
+            ))
+        }
+
+        // P2: Freezing (feels like 0°C or below)
+        if weather.isFreezing {
+            let temp = Int(weather.feelsLike)
+            results.append(CoachingInsight(
+                id: "weather-freezing",
+                priority: .high,
+                category: .weather,
+                title: "한파 주의",
+                message: "체감 온도 \(temp)°C — 워밍업을 충분히 하고 실내 운동을 고려하세요. 추운 날씨는 근육 부상 위험을 높입니다.",
+                iconName: "thermometer.snowflake"
+            ))
+        }
+
+        // P3: Very high UV (8+)
+        if weather.isHighUV {
+            results.append(CoachingInsight(
+                id: "weather-high-uv",
+                priority: .medium,
+                category: .weather,
+                title: "자외선 매우 높음 (UV \(weather.uvIndex))",
+                message: "야외 운동 시 자외선 차단제를 바르고 모자를 착용하세요. 가능하면 그늘에서 운동하세요.",
+                iconName: "sun.max.fill"
+            ))
+        }
+
+        // P4: Rain/Snow — indoor suggestion
+        switch weather.condition {
+        case .rain, .heavyRain, .thunderstorm:
+            results.append(CoachingInsight(
+                id: "weather-rain-indoor",
+                priority: .standard,
+                category: .weather,
+                title: "비 예보 — 실내 운동 추천",
+                message: "오늘은 실내 근력 운동이나 홈트레이닝이 좋은 날입니다.",
+                iconName: "cloud.rain.fill"
+            ))
+        case .snow, .sleet:
+            results.append(CoachingInsight(
+                id: "weather-snow-indoor",
+                priority: .standard,
+                category: .weather,
+                title: "눈/진눈깨비 — 실내 운동 추천",
+                message: "미끄러운 노면에서의 야외 운동은 부상 위험이 있습니다. 실내에서 안전하게 운동하세요.",
+                iconName: "cloud.snow.fill"
+            ))
+        default:
+            break
+        }
+
+        // P4: High humidity (80%+)
+        if weather.isHighHumidity, !weather.isExtremeHeat {
+            let humidityPercent = Int(weather.humidity * 100)
+            results.append(CoachingInsight(
+                id: "weather-high-humidity",
+                priority: .standard,
+                category: .weather,
+                title: "높은 습도 (\(humidityPercent)%)",
+                message: "높은 습도는 체온 조절을 어렵게 합니다. 운동 강도를 낮추고 수분을 자주 보충하세요.",
+                iconName: "humidity.fill"
+            ))
+        }
+
+        // P5: Favorable outdoor weather
+        if weather.isFavorableOutdoor, weather.isDaytime, results.isEmpty {
+            let temp = Int(weather.temperature)
+            results.append(CoachingInsight(
+                id: "weather-outdoor-favorable",
+                priority: .low,
+                category: .weather,
+                title: "야외 운동하기 좋은 날씨",
+                message: "\(temp)°C — 러닝이나 산책을 즐기기에 좋은 날씨입니다.",
+                iconName: "sun.and.horizon.fill"
+            ))
+        }
+
+        return results
     }
 
     // MARK: - Recovery Triggers (P1-P2)

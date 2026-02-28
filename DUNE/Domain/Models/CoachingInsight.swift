@@ -24,6 +24,7 @@ enum InsightCategory: String, Sendable, Hashable {
     case sleep
     case motivation
     case recap
+    case weather
     case general
 }
 

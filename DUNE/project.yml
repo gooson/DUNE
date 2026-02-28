@@ -69,12 +69,14 @@ targets:
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: "UIInterfaceOrientationPortrait"
         INFOPLIST_KEY_NSHealthShareUsageDescription: "DUNE needs access to your health data to calculate condition scores and track your fitness progress."
         INFOPLIST_KEY_NSHealthUpdateUsageDescription: "DUNE may write workout and body composition data to Health."
+        INFOPLIST_KEY_NSLocationWhenInUseUsageDescription: "DUNE uses your location to show current weather conditions for exercise planning."
     entitlements:
       path: Resources/DUNE.entitlements
       properties:
         aps-environment: development
         com.apple.developer.healthkit: true
         com.apple.developer.healthkit.access: []
+        com.apple.developer.weatherkit: true
         com.apple.developer.icloud-container-identifiers:
           - iCloud.com.raftel.dailve
         com.apple.developer.icloud-services:
@@ -82,6 +84,8 @@ targets:
         com.apple.developer.ubiquity-kvstore-identifier: "$(TeamIdentifierPrefix)$(CFBundleIdentifier)"
     dependencies:
       - sdk: HealthKit.framework
+      - sdk: WeatherKit.framework
+      - sdk: CoreLocation.framework
       - target: DUNEWatch
         embed: true
 

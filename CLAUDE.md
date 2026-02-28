@@ -436,3 +436,10 @@
 185. **CloudKit 숫자 필드 저장 시 `isFinite + 범위` 이중 검증**: `autoIntensityRaw`에 `score.isFinite && (0...1).contains(score)` 확인 후 할당. `clamp01` 내부 검증만 신뢰하면 미래 코드 경로에서 범위 이탈 가능
 186. **3곳 이상 동일 duration 기반 signal은 즉시 helper 추출**: cardio/flexibility/rounds가 동일한 `totalValidDuration → history avg → ratio` 블록을 인라인 사용하면 버그 전파 위험. `durationVolumeSignal()` 헬퍼로 통합 (Correction #37 적용)
 187. **View body에서 Color 4회+ 접근 시 `let` 바인딩**: `intensity.level.color`가 switch를 4번 실행. `let levelColor = ...` 한 번 resolve 후 재사용. Correction #83/#105 확장
+
+### 2026-02-28: Weather Display Integration 교정
+
+188. **CheckedContinuation 동시 호출 guard 필수**: `@MainActor`여도 async 함수는 suspension point에서 재진입 가능. `locationContinuation`을 덮어쓰면 첫 번째 continuation이 영구 orphan. `guard continuation == nil else { throw }` 패턴 사용
+189. **@unknown default는 conservative(부정적) 매핑**: 미인식 WeatherCondition을 `.clear`로 매핑하면 심각한 기상에서 "야외 추천" 코칭 발동. `.cloudy`(중립~부정적)로 매핑하여 false-positive 안전 코칭 방지
+190. **단일 소비자 캐시는 inline**: WeatherCache처럼 단일 클래스에서만 사용하는 캐시는 별도 파일/타입으로 분리하지 않음. NSLock + Optional로 소비자 내부에 inline
+191. **Environment key는 관련 View extension 파일에 배치**: `WeatherAtmosphereKey`는 `WavePreset.swift`(무관)가 아닌 `WeatherAtmosphere+View.swift`(관련)에 위치. key + EnvironmentValues extension + view properties를 한 파일에 응집
