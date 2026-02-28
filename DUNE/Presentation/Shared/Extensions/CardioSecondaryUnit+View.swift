@@ -19,7 +19,7 @@ extension CardioSecondaryUnit {
         case .meters: 50
         case .floors: 1
         case .count: 10
-        case .timeOnly: return nil
+        case .timeOnly: 0 // unreachable — guarded above
         }
         return (placeholder.uppercased(), step, range.lowerBound, range.upperBound)
     }

@@ -121,6 +121,8 @@ targets:
         group: Shared/Domain
       - path: Domain/Models/HabitType.swift
         group: Shared/Domain
+      - path: Domain/Models/CardioSecondaryUnit.swift
+        group: Shared/Domain
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.raftel.dailve.watchkitapp
