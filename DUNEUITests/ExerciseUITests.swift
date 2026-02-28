@@ -8,6 +8,7 @@ final class ExerciseUITests: XCTestCase {
         continueAfterFailure = false
         app = XCUIApplication()
         app.launchArguments = ["--uitesting"]
+        addSystemPermissionMonitor()
         app.launch()
     }
 

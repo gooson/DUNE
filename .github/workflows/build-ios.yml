@@ -1,0 +1,45 @@
+name: Build iOS
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'DUNE/**'
+      - 'scripts/**'
+      - '.github/workflows/build-ios.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'DUNE/**'
+      - 'scripts/**'
+      - '.github/workflows/build-ios.yml'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_26.2.app/Contents/Developer
+
+      - name: Install xcodegen
+        run: brew install xcodegen
+
+      - name: Build iOS
+        run: scripts/build-ios.sh
+
+      - name: Upload build log
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log
+          path: .xcodebuild/ios-build.log
+          retention-days: 7

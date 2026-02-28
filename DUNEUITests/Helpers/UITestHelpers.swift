@@ -25,6 +25,53 @@ enum AXID {
     static let bodyMuscleField = "body-muscle-field"
 }
 
+// MARK: - System Permission Alert Handling
+
+extension XCTestCase {
+    /// Registers an interruption monitor that auto-accepts system permission alerts
+    /// (Location, HealthKit, Notifications, etc.).
+    /// Call in `setUpWithError()` before `app.launch()`.
+    nonisolated func addSystemPermissionMonitor() {
+        _ = addUIInterruptionMonitor(withDescription: "System Permission Alert") { alert in
+            // Location: "Allow While Using App" (preferred) or "Allow Once"
+            let allowWhileUsing = alert.buttons["Allow While Using App"]
+            if allowWhileUsing.exists {
+                allowWhileUsing.tap()
+                return true
+            }
+
+            let allowOnce = alert.buttons["Allow Once"]
+            if allowOnce.exists {
+                allowOnce.tap()
+                return true
+            }
+
+            // Generic "Allow" (HealthKit, Notifications with allow, etc.)
+            let allow = alert.buttons["Allow"]
+            if allow.exists {
+                allow.tap()
+                return true
+            }
+
+            // "OK" button
+            let ok = alert.buttons["OK"]
+            if ok.exists {
+                ok.tap()
+                return true
+            }
+
+            // Notifications: "Don't Allow" (we don't need push for UI tests)
+            let dontAllow = alert.buttons["Don't Allow"]
+            if dontAllow.exists {
+                dontAllow.tap()
+                return true
+            }
+
+            return false
+        }
+    }
+}
+
 // MARK: - XCUIApplication Helpers
 
 @MainActor
