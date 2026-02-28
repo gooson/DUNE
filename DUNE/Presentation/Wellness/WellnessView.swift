@@ -7,10 +7,7 @@ struct WellnessView: View {
     @State private var injuryViewModel = InjuryViewModel()
     @Environment(\.modelContext) private var modelContext
     @Environment(\.horizontalSizeClass) private var sizeClass
-    @Query(sort: \BodyCompositionRecord.date, order: .reverse) private var records: [BodyCompositionRecord]
-    @Query(sort: \InjuryRecord.startDate, order: .reverse) private var injuryRecords: [InjuryRecord]
 
-    @State private var cachedActiveInjuries: [InjuryRecord] = []
     private let scrollToTopSignal: Int
 
     private enum ScrollAnchor: Hashable {
@@ -18,11 +15,6 @@ struct WellnessView: View {
     }
 
     private var isRegular: Bool { sizeClass == .regular }
-
-    private let gridColumns: [GridItem] = [
-        GridItem(.flexible(), spacing: DS.Spacing.md),
-        GridItem(.flexible(), spacing: DS.Spacing.md)
-    ]
 
     private let refreshSignal: Int
 
@@ -33,26 +25,93 @@ struct WellnessView: View {
     }
 
     var body: some View {
-        Group {
-            if viewModel.isLoading &&
-                viewModel.physicalCards.isEmpty &&
-                viewModel.activeCards.isEmpty &&
-                viewModel.wellnessScore == nil &&
-                injuryRecords.isEmpty {
-                ProgressView()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else if viewModel.physicalCards.isEmpty &&
+        ScrollViewReader { proxy in
+            ScrollView {
+                Color.clear
+                    .frame(height: 0)
+                    .id(ScrollAnchor.top)
+
+                VStack(spacing: isRegular ? DS.Spacing.xxl : DS.Spacing.xl) {
+                    if viewModel.isLoading &&
+                        viewModel.physicalCards.isEmpty &&
                         viewModel.activeCards.isEmpty &&
-                        viewModel.wellnessScore == nil &&
-                        !viewModel.isLoading &&
-                        injuryRecords.isEmpty {
-                EmptyStateView(
-                    icon: "leaf.fill",
-                    title: "No Wellness Data",
-                    message: "Wear Apple Watch to bed for sleep tracking, or add body composition records to get started."
-                )
-            } else {
-                scrollContent
+                        viewModel.wellnessScore == nil {
+                        ProgressView()
+                            .frame(maxWidth: .infinity, minHeight: 200)
+                    } else if viewModel.physicalCards.isEmpty &&
+                                viewModel.activeCards.isEmpty &&
+                                viewModel.wellnessScore == nil &&
+                                !viewModel.isLoading {
+                        EmptyStateView(
+                            icon: "leaf.fill",
+                            title: "No Wellness Data",
+                            message: "Wear Apple Watch to bed for sleep tracking, or add body composition records to get started."
+                        )
+                    } else {
+                        // Partial failure banner
+                        if let message = viewModel.partialFailureMessage {
+                            partialFailureBanner(message)
+                        }
+
+                        // Hero Card
+                        if viewModel.wellnessScore != nil {
+                            NavigationLink(value: WellnessScoreDestination()) {
+                                WellnessHeroCard(
+                                    score: viewModel.wellnessScore,
+                                    sleepScore: viewModel.sleepScore,
+                                    conditionScore: viewModel.conditionScore,
+                                    bodyScore: viewModel.bodyScore
+                                )
+                            }
+                            .buttonStyle(.plain)
+                        } else {
+                            WellnessHeroCard(
+                                score: viewModel.wellnessScore,
+                                sleepScore: viewModel.sleepScore,
+                                conditionScore: viewModel.conditionScore,
+                                bodyScore: viewModel.bodyScore
+                            )
+                        }
+
+                        // Physical section
+                        if !viewModel.physicalCards.isEmpty {
+                            WellnessSectionGroup(
+                                title: "Physical",
+                                icon: "figure.stand",
+                                iconColor: DS.Color.body
+                            ) {
+                                twoColumnGrid(cards: viewModel.physicalCards)
+                            }
+                        }
+
+                        // Active Indicators section
+                        if !viewModel.activeCards.isEmpty {
+                            WellnessSectionGroup(
+                                title: "Active Indicators",
+                                icon: "heart.text.square",
+                                iconColor: DS.Color.vitals
+                            ) {
+                                twoColumnGrid(cards: viewModel.activeCards)
+                            }
+                        }
+
+                        // Injury Banner (isolated @Query — re-renders independently)
+                        WellnessInjuryBannerView(
+                            onEdit: { record in injuryViewModel.startEditing(record) },
+                            onAdd: { startAddingInjury() }
+                        )
+
+                        // Body History link (isolated @Query — only renders when records exist)
+                        BodyHistoryLinkView()
+                    }
+                }
+                .padding(isRegular ? DS.Spacing.xxl : DS.Spacing.lg)
+            }
+            .scrollBounceBehavior(.basedOnSize)
+            .onChange(of: scrollToTopSignal) { _, _ in
+                withAnimation(DS.Animation.standard) {
+                    proxy.scrollTo(ScrollAnchor.top, anchor: .top)
+                }
             }
         }
         .background { TabWaveBackground() }
@@ -171,176 +230,8 @@ struct WellnessView: View {
         }
         .task(id: refreshSignal) {
             viewModel.loadData()
-            refreshActiveInjuriesCache()
-        }
-        .onChange(of: injuryRecords.count) { _, _ in
-            refreshActiveInjuriesCache()
-        }
-        .onChange(of: injuryRecords.map(\.endDate)) { _, _ in
-            refreshActiveInjuriesCache()
         }
         .navigationTitle("Wellness")
-    }
-
-    // MARK: - Scroll Content
-
-    private var scrollContent: some View {
-        ScrollViewReader { proxy in
-            ScrollView {
-                Color.clear
-                    .frame(height: 0)
-                    .id(ScrollAnchor.top)
-
-                VStack(spacing: isRegular ? DS.Spacing.xxl : DS.Spacing.xl) {
-                    // Partial failure banner
-                    if let message = viewModel.partialFailureMessage {
-                        partialFailureBanner(message)
-                    }
-
-                    // Hero Card
-                    if viewModel.wellnessScore != nil {
-                        NavigationLink(value: WellnessScoreDestination()) {
-                            WellnessHeroCard(
-                                score: viewModel.wellnessScore,
-                                sleepScore: viewModel.sleepScore,
-                                conditionScore: viewModel.conditionScore,
-                                bodyScore: viewModel.bodyScore
-                            )
-                        }
-                        .buttonStyle(.plain)
-                    } else {
-                        WellnessHeroCard(
-                            score: viewModel.wellnessScore,
-                            sleepScore: viewModel.sleepScore,
-                            conditionScore: viewModel.conditionScore,
-                            bodyScore: viewModel.bodyScore
-                        )
-                    }
-
-                    // Physical section
-                    if !viewModel.physicalCards.isEmpty {
-                        WellnessSectionGroup(
-                            title: "Physical",
-                            icon: "figure.stand",
-                            iconColor: DS.Color.body
-                        ) {
-                            LazyVGrid(columns: gridColumns, spacing: DS.Spacing.md) {
-                                ForEach(viewModel.physicalCards) { card in
-                                    NavigationLink(value: card.metric) {
-                                        VitalCard(data: card)
-                                    }
-                                    .buttonStyle(.plain)
-                                }
-                            }
-                        }
-                    }
-
-                    // Active Indicators section
-                    if !viewModel.activeCards.isEmpty {
-                        WellnessSectionGroup(
-                            title: "Active Indicators",
-                            icon: "heart.text.square",
-                            iconColor: DS.Color.vitals
-                        ) {
-                            LazyVGrid(columns: gridColumns, spacing: DS.Spacing.md) {
-                                ForEach(viewModel.activeCards) { card in
-                                    NavigationLink(value: card.metric) {
-                                        VitalCard(data: card)
-                                    }
-                                    .buttonStyle(.plain)
-                                }
-                            }
-                        }
-                    }
-
-                    // Injury Banner
-                    injuryBanner
-
-                    // Body History link
-                    if records.count > 0 {
-                        NavigationLink(value: BodyHistoryDestination()) {
-                            HStack {
-                                Image(systemName: "figure.stand")
-                                    .font(.subheadline)
-                                    .foregroundStyle(DS.Color.body)
-                                Text("Body Composition History")
-                                    .font(.subheadline)
-                                Spacer()
-                                Image(systemName: "chevron.right")
-                                    .font(.caption)
-                                    .foregroundStyle(.tertiary)
-                            }
-                            .padding(DS.Spacing.lg)
-                            .background {
-                                RoundedRectangle(cornerRadius: DS.Radius.md)
-                                    .fill(.thinMaterial)
-                            }
-                        }
-                        .buttonStyle(.plain)
-                    }
-                }
-                .padding(isRegular ? DS.Spacing.xxl : DS.Spacing.lg)
-            }
-            .onChange(of: scrollToTopSignal) { _, _ in
-                withAnimation(DS.Animation.standard) {
-                    proxy.scrollTo(ScrollAnchor.top, anchor: .top)
-                }
-            }
-        }
-    }
-
-    // MARK: - Injury Banner
-
-    private var injuryBanner: some View {
-        StandardCard {
-            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                HStack(spacing: DS.Spacing.xs) {
-                    Image(systemName: "bandage.fill")
-                        .font(.subheadline)
-                        .foregroundStyle(DS.Color.caution)
-
-                    Text("Injuries")
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-
-                    Spacer()
-
-                    if !injuryRecords.isEmpty {
-                        NavigationLink(value: InjuryHistoryDestination()) {
-                            Text("View All")
-                                .font(.caption)
-                                .fontWeight(.medium)
-                        }
-                    }
-                }
-
-                if cachedActiveInjuries.isEmpty {
-                    InlineCard {
-                        HStack(spacing: DS.Spacing.sm) {
-                            Image(systemName: "checkmark.circle")
-                                .foregroundStyle(.secondary)
-
-                            Text("No active injuries")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-
-                            Spacer()
-
-                            Button("Add") {
-                                startAddingInjury()
-                            }
-                            .font(.caption.weight(.medium))
-                        }
-                    }
-                } else {
-                    ForEach(cachedActiveInjuries.prefix(3)) { record in
-                        InjuryCardView(record: record) {
-                            injuryViewModel.startEditing(record)
-                        }
-                    }
-                }
-            }
-        }
     }
 
     // MARK: - Helpers
@@ -367,8 +258,28 @@ struct WellnessView: View {
         }
     }
 
-    private func refreshActiveInjuriesCache() {
-        cachedActiveInjuries = injuryRecords.filter(\.isActive)
+    /// Eager two-column grid — avoids LazyVGrid lazy-loading layout recalculation during scroll bounce.
+    private func twoColumnGrid(cards: [VitalCardData]) -> some View {
+        VStack(spacing: DS.Spacing.md) {
+            ForEach(0..<((cards.count + 1) / 2), id: \.self) { rowIndex in
+                let leftIndex = rowIndex * 2
+                let rightIndex = leftIndex + 1
+                HStack(spacing: DS.Spacing.md) {
+                    NavigationLink(value: cards[leftIndex].metric) {
+                        VitalCard(data: cards[leftIndex])
+                    }
+                    .buttonStyle(.plain)
+                    if rightIndex < cards.count {
+                        NavigationLink(value: cards[rightIndex].metric) {
+                            VitalCard(data: cards[rightIndex])
+                        }
+                        .buttonStyle(.plain)
+                    } else {
+                        Color.clear
+                    }
+                }
+            }
+        }
     }
 
     private func startAddingInjury() {
@@ -382,6 +293,100 @@ struct WellnessView: View {
 struct WellnessScoreDestination: Hashable {}
 struct BodyHistoryDestination: Hashable {}
 struct InjuryHistoryDestination: Hashable {}
+
+// MARK: - Isolated @Query Child Views
+// Extracted to prevent SwiftData observation from triggering parent ScrollView re-layout.
+
+/// Injury banner with its own @Query — re-renders independently of WellnessView body.
+private struct WellnessInjuryBannerView: View {
+    @Query(sort: \InjuryRecord.startDate, order: .reverse) private var injuryRecords: [InjuryRecord]
+
+    let onEdit: (InjuryRecord) -> Void
+    let onAdd: () -> Void
+
+    private var activeInjuries: [InjuryRecord] { injuryRecords.filter(\.isActive) }
+
+    var body: some View {
+        StandardCard {
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                HStack(spacing: DS.Spacing.xs) {
+                    Image(systemName: "bandage.fill")
+                        .font(.subheadline)
+                        .foregroundStyle(DS.Color.caution)
+
+                    Text("Injuries")
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+
+                    Spacer()
+
+                    if !injuryRecords.isEmpty {
+                        NavigationLink(value: InjuryHistoryDestination()) {
+                            Text("View All")
+                                .font(.caption)
+                                .fontWeight(.medium)
+                        }
+                    }
+                }
+
+                if activeInjuries.isEmpty {
+                    InlineCard {
+                        HStack(spacing: DS.Spacing.sm) {
+                            Image(systemName: "checkmark.circle")
+                                .foregroundStyle(.secondary)
+
+                            Text("No active injuries")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+
+                            Spacer()
+
+                            Button("Add") {
+                                onAdd()
+                            }
+                            .font(.caption.weight(.medium))
+                        }
+                    }
+                } else {
+                    ForEach(activeInjuries.prefix(3)) { record in
+                        InjuryCardView(record: record) {
+                            onEdit(record)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/// Body History link with its own @Query — only renders when records exist.
+private struct BodyHistoryLinkView: View {
+    @Query(sort: \BodyCompositionRecord.date, order: .reverse) private var records: [BodyCompositionRecord]
+
+    var body: some View {
+        if !records.isEmpty {
+            NavigationLink(value: BodyHistoryDestination()) {
+                HStack {
+                    Image(systemName: "figure.stand")
+                        .font(.subheadline)
+                        .foregroundStyle(DS.Color.body)
+                    Text("Body Composition History")
+                        .font(.subheadline)
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
+                }
+                .padding(DS.Spacing.lg)
+                .background {
+                    RoundedRectangle(cornerRadius: DS.Radius.md)
+                        .fill(.thinMaterial)
+                }
+            }
+            .buttonStyle(.plain)
+        }
+    }
+}
 
 #Preview {
     NavigationStack {
