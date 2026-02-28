@@ -389,7 +389,8 @@ final class WorkoutSessionViewModel {
                     let trimmed = set.distance.trimmingCharacters(in: .whitespaces)
                     if !trimmed.isEmpty, let range = unit.validationRange {
                         guard let dist = Double(trimmed), range.contains(dist) else {
-                            validationError = "\(unit.placeholder.capitalized) must be between \(Int(range.lowerBound)) and \(Int(range.upperBound))"
+                            let lo = range.lowerBound.formatted(.number.precision(.fractionLength(0...1)))
+                            validationError = "\(unit.placeholder.capitalized) must be between \(lo) and \(Int(range.upperBound))"
                             return nil
                         }
                     }
@@ -402,7 +403,7 @@ final class WorkoutSessionViewModel {
                         }
                     }
                 }
-                // unit == .none → no secondary field validation needed
+                // unit == .timeOnly → no secondary field validation needed
             }
             if exercise.inputType == .durationIntensity {
                 let trimmed = set.intensity.trimmingCharacters(in: .whitespaces)
@@ -479,7 +480,7 @@ final class WorkoutSessionViewModel {
                     distanceKm = nil
                     repsValue = trimmedReps.isEmpty ? nil : Int(trimmedReps)
                 } else {
-                    // .none — no secondary field
+                    // .timeOnly — no secondary field
                     distanceKm = nil
                     repsValue = nil
                 }

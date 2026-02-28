@@ -7,8 +7,6 @@ extension SetType {
         case .working: "Working"
         case .drop: "Drop Set"
         case .failure: "Failure"
-        case .interval: "Interval"
-        case .rest: "Rest"
         }
     }
 
@@ -18,8 +16,6 @@ extension SetType {
         case .working: "dumbbell.fill"
         case .drop: "arrow.down.circle"
         case .failure: "exclamationmark.triangle"
-        case .interval: "timer"
-        case .rest: "pause.circle"
         }
     }
 
@@ -29,8 +25,6 @@ extension SetType {
         case .working: DS.Color.activity
         case .drop: .purple
         case .failure: .red
-        case .interval: DS.Color.activity
-        case .rest: .secondary
         }
     }
 
@@ -40,8 +34,6 @@ extension SetType {
         case .working: "S"
         case .drop: "D"
         case .failure: "F"
-        case .interval: "I"
-        case .rest: "R"
         }
     }
 }

@@ -134,7 +134,8 @@ struct SetRowView: View {
                     .textFieldStyle(.roundedBorder)
                     .frame(maxWidth: 60)
 
-                if let unit = cardioUnit ?? .km, unit != .none {
+                let unit = cardioUnit ?? .km
+                if unit != .timeOnly {
                     if unit.usesDistanceField {
                         TextField(unit.placeholder, text: $editableSet.distance)
                             .keyboardType(unit.keyboardType)

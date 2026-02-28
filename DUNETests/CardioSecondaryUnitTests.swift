@@ -30,7 +30,7 @@ struct CardioSecondaryUnitTests {
 
     @Test("none returns nil")
     func noneToKmNil() {
-        #expect(CardioSecondaryUnit.none.toKm(0) == nil)
+        #expect(CardioSecondaryUnit.timeOnly.toKm(0) == nil)
     }
 
     @Test("meters zero converts to zero km")
@@ -46,7 +46,7 @@ struct CardioSecondaryUnitTests {
         #expect(CardioSecondaryUnit.meters.usesDistanceField == true)
         #expect(CardioSecondaryUnit.floors.usesDistanceField == false)
         #expect(CardioSecondaryUnit.count.usesDistanceField == false)
-        #expect(CardioSecondaryUnit.none.usesDistanceField == false)
+        #expect(CardioSecondaryUnit.timeOnly.usesDistanceField == false)
     }
 
     @Test("usesRepsField is true only for floors and count")
@@ -55,7 +55,7 @@ struct CardioSecondaryUnitTests {
         #expect(CardioSecondaryUnit.meters.usesRepsField == false)
         #expect(CardioSecondaryUnit.floors.usesRepsField == true)
         #expect(CardioSecondaryUnit.count.usesRepsField == true)
-        #expect(CardioSecondaryUnit.none.usesRepsField == false)
+        #expect(CardioSecondaryUnit.timeOnly.usesRepsField == false)
     }
 
     @Test("distance and reps fields are mutually exclusive")
@@ -74,7 +74,7 @@ struct CardioSecondaryUnitTests {
         #expect(CardioSecondaryUnit.meters.placeholder == "m")
         #expect(CardioSecondaryUnit.floors.placeholder == "floors")
         #expect(CardioSecondaryUnit.count.placeholder == "count")
-        #expect(CardioSecondaryUnit.none.placeholder == "")
+        #expect(CardioSecondaryUnit.timeOnly.placeholder == "")
     }
 
     // MARK: - Validation range
@@ -85,7 +85,7 @@ struct CardioSecondaryUnitTests {
         #expect(CardioSecondaryUnit.meters.validationRange != nil)
         #expect(CardioSecondaryUnit.floors.validationRange != nil)
         #expect(CardioSecondaryUnit.count.validationRange != nil)
-        #expect(CardioSecondaryUnit.none.validationRange == nil)
+        #expect(CardioSecondaryUnit.timeOnly.validationRange == nil)
     }
 
     @Test("km range lower bound is 0.1 and upper bound is 500")
@@ -121,6 +121,7 @@ struct CardioSecondaryUnitTests {
         #expect(CardioSecondaryUnit.meters.rawValue == "meters")
         #expect(CardioSecondaryUnit.floors.rawValue == "floors")
         #expect(CardioSecondaryUnit.count.rawValue == "count")
-        #expect(CardioSecondaryUnit.none.rawValue == "none")
+        // rawValue "none" is CloudKit/JSON-persisted — must remain stable
+        #expect(CardioSecondaryUnit.timeOnly.rawValue == "none")
     }
 }

@@ -101,7 +101,7 @@ struct CreateCustomExerciseView: View {
                             Text("Meters").tag(CardioSecondaryUnit.meters)
                             Text("Floors").tag(CardioSecondaryUnit.floors)
                             Text("Count").tag(CardioSecondaryUnit.count)
-                            Text("None (time only)").tag(CardioSecondaryUnit.none)
+                            Text("Time only").tag(CardioSecondaryUnit.timeOnly)
                         }
                     }
                 }

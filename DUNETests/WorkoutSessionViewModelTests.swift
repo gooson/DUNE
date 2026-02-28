@@ -339,9 +339,9 @@ struct WorkoutSessionViewModelTests {
         #expect(record?.completedSets.first?.distance == nil)
     }
 
-    @Test("durationDistance with none unit stores only duration")
-    func noneUnitDurationOnly() {
-        let exercise = makeExercise(inputType: .durationDistance, cardioSecondaryUnit: .none)
+    @Test("durationDistance with timeOnly unit stores only duration")
+    func timeOnlyUnitDurationOnly() {
+        let exercise = makeExercise(inputType: .durationDistance, cardioSecondaryUnit: .timeOnly)
         let vm = WorkoutSessionViewModel(exercise: exercise)
         vm.sets[0].duration = "45"
         vm.sets[0].isCompleted = true

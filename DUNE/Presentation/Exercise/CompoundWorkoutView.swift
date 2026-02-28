@@ -286,7 +286,7 @@ struct CompoundWorkoutView: View {
             let unit = exercise.cardioSecondaryUnit ?? .km
             HStack(spacing: DS.Spacing.xs) {
                 Text("MIN").frame(maxWidth: 60)
-                if unit != .none {
+                if unit != .timeOnly {
                     Text(unit.placeholder.uppercased()).frame(maxWidth: 70)
                 }
             }
