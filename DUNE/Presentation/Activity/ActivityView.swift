@@ -228,9 +228,7 @@ struct ActivityView: View {
             ExerciseStartView(exercise: exercise)
                 .interactiveDismissDisabled()
         }
-        .waveRefreshable(
-            color: DS.Color.activity
-        ) {
+        .waveRefreshable {
             await viewModel.loadActivityData()
         }
         // Correction #78: consolidate .task + .onChange → .task(id:)

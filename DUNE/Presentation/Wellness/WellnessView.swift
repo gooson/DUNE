@@ -166,9 +166,7 @@ struct WellnessView: View {
                 ProgressView()
             }
         }
-        .waveRefreshable(
-            color: DS.Color.fitness
-        ) {
+        .waveRefreshable {
             await viewModel.performRefresh()
         }
         .task(id: refreshSignal) {

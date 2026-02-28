@@ -134,9 +134,7 @@ struct DashboardView: View {
         .navigationDestination(for: AllDataDestination.self) { destination in
             AllDataView(category: destination.category)
         }
-        .waveRefreshable(
-            color: DS.Color.warmGlow
-        ) {
+        .waveRefreshable {
             await viewModel.loadData()
         }
         .task(id: refreshSignal) {
