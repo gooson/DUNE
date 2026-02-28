@@ -105,12 +105,15 @@ struct WeatherAtmosphereTests {
         #expect(!snapshot.isFavorableOutdoor)
     }
 
-    @Test("isStale is true after 15 minutes")
+    @Test("isStale is true after 60 minutes")
     func staleness() {
         let recent = makeSnapshot(fetchedAt: Date())
         #expect(!recent.isStale)
 
-        let old = makeSnapshot(fetchedAt: Date(timeIntervalSinceNow: -16 * 60))
+        let borderline = makeSnapshot(fetchedAt: Date(timeIntervalSinceNow: -59 * 60))
+        #expect(!borderline.isStale)
+
+        let old = makeSnapshot(fetchedAt: Date(timeIntervalSinceNow: -61 * 60))
         #expect(old.isStale)
     }
 

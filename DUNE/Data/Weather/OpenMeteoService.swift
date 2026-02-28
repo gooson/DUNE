@@ -1,15 +1,15 @@
 import CoreLocation
 import Foundation
 
-/// Fetches weather data from Open-Meteo REST API as a fallback for WeatherKit.
-/// Uses the same 15-minute caching pattern as WeatherDataService.
+/// Fetches weather data from Open-Meteo REST API (primary weather source).
+/// Caches results for 60 minutes via WeatherSnapshot.isStale.
 /// Attribution: Open-Meteo.com (CC BY 4.0)
 final class OpenMeteoService: WeatherFetching, @unchecked Sendable {
     private var cached: WeatherSnapshot?
     private let lock = NSLock()
     private let session: URLSession
 
-    // JSONDecoder created per-call: not Sendable, and fetch is max once per 15 min.
+    // JSONDecoder created per-call: not Sendable, and fetch is max once per 60 min.
     private static func makeDecoder() -> JSONDecoder { JSONDecoder() }
 
     init(session: URLSession = .shared) {

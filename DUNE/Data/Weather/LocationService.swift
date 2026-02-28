@@ -32,13 +32,13 @@ final class LocationService: NSObject, CLLocationManagerDelegate, Sendable {
         manager.requestWhenInUseAuthorization()
     }
 
-    /// Requests a single location update. Returns cached location if fresh (< 15min).
+    /// Requests a single location update. Returns cached location if fresh (< 60min).
     /// Throws if a request is already in flight (prevents continuation leak).
     /// Times out after 30 seconds to prevent indefinite hang in poor-signal environments.
     func requestLocation() async throws -> CLLocation {
-        // Return cached if fresh enough
+        // Return cached if fresh enough (aligned with weather cache TTL)
         if let cached = currentLocation,
-           Date().timeIntervalSince(cached.timestamp) < 15 * 60 {
+           Date().timeIntervalSince(cached.timestamp) < 60 * 60 {
             return cached
         }
 
