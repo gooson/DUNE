@@ -39,15 +39,7 @@ struct TodayCoachingCard: View {
     }
 
     private var iconColor: Color {
-        guard let category = insight?.category else { return DS.Color.activity }
-        switch category {
-        case .recovery: return DS.Color.caution
-        case .training: return DS.Color.activity
-        case .sleep: return DS.Color.sleep
-        case .motivation: return DS.Color.positive
-        case .recap: return DS.Color.vitals
-        case .general: return DS.Color.warmGlow
-        }
+        insight?.category.iconColor ?? DS.Color.activity
     }
 
     private var title: String {

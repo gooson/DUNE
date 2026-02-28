@@ -1,0 +1,16 @@
+import SwiftUI
+
+extension InsightCategory {
+    /// Category-aware icon color for coaching insights.
+    /// Single source of truth — used by TodayCoachingCard, InsightCardView, etc.
+    var iconColor: Color {
+        switch self {
+        case .recovery: DS.Color.caution
+        case .training: DS.Color.activity
+        case .sleep: DS.Color.sleep
+        case .motivation: DS.Color.positive
+        case .recap: DS.Color.vitals
+        case .general: DS.Color.warmGlow
+        }
+    }
+}

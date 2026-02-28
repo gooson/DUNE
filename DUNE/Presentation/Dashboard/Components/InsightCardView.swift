@@ -49,19 +49,6 @@ struct InsightCardView: View {
     }
 
     private var iconColor: Color {
-        switch data.category {
-        case .recovery:
-            return DS.Color.caution
-        case .training:
-            return DS.Color.activity
-        case .sleep:
-            return DS.Color.sleep
-        case .motivation:
-            return DS.Color.positive
-        case .recap:
-            return DS.Color.vitals
-        case .general:
-            return DS.Color.warmGlow
-        }
+        data.category.iconColor
     }
 }

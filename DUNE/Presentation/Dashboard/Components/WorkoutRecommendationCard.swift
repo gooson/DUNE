@@ -6,6 +6,10 @@ struct WorkoutRecommendationCard: View {
     let suggestion: WorkoutSuggestion
     let onStartWorkout: (() -> Void)?
 
+    // Pre-computed colors to avoid per-ForEach allocation (Correction #105)
+    private static let tagBackground = DS.Color.activity.opacity(DS.Opacity.subtle)
+    private static let bulletColor = DS.Color.activity.opacity(DS.Opacity.medium)
+
     init(suggestion: WorkoutSuggestion, onStartWorkout: (() -> Void)? = nil) {
         self.suggestion = suggestion
         self.onStartWorkout = onStartWorkout
@@ -27,13 +31,13 @@ struct WorkoutRecommendationCard: View {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: DS.Spacing.xs) {
                             ForEach(suggestion.focusMuscles.prefix(4), id: \.self) { muscle in
-                                Text(muscle.rawValue)
+                                Text(muscle.localizedDisplayName)
                                     .font(.caption2.weight(.medium))
                                     .padding(.horizontal, DS.Spacing.xs)
                                     .padding(.vertical, 2)
                                     .background {
                                         Capsule()
-                                            .fill(DS.Color.activity.opacity(DS.Opacity.subtle))
+                                            .fill(Self.tagBackground)
                                     }
                             }
                         }
@@ -45,7 +49,7 @@ struct WorkoutRecommendationCard: View {
                     ForEach(suggestion.exercises.prefix(3)) { exercise in
                         HStack(spacing: DS.Spacing.xs) {
                             Circle()
-                                .fill(DS.Color.activity.opacity(DS.Opacity.medium))
+                                .fill(Self.bulletColor)
                                 .frame(width: 5, height: 5)
                             Text(exercise.definition.localizedName)
                                 .font(.caption)
@@ -82,5 +86,4 @@ struct WorkoutRecommendationCard: View {
             }
         }
     }
-
 }

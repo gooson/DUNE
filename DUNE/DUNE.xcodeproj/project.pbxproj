@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 90;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -103,6 +103,7 @@
 		4856EEC3E0586E8F74674EB6 /* TrainingVolumeDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C81A17A4FC0D44E9DC309D1 /* TrainingVolumeDestination.swift */; };
 		485753A5DD597614FE54D8FA /* CalorieEstimationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DFD9B29E493DCBFF752237 /* CalorieEstimationService.swift */; };
 		48E6370E98C8E309F0E4505C /* TodayCoachingCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069D4D3EB3387F427F1AB5E2 /* TodayCoachingCard.swift */; };
+		49700FD146822C1BA261A3DD /* InsightCategory+View.swift in Sources */ = {isa = PBXBuildFile; fileRef = B78D06AA5F78403E9900F3CF /* InsightCategory+View.swift */; };
 		4A8EBB81B8A390BA38030F79 /* NumberFormattingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B2289ED768B51C92A48A699 /* NumberFormattingTests.swift */; };
 		4B145F9E3636ED4CD5E173E8 /* WorkoutSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C919A631154EEF365640C7 /* WorkoutSet.swift */; };
 		4CCA8389301A03CFCE0D7F69 /* AllDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8526175C4C64A1255EA2024 /* AllDataView.swift */; };
@@ -700,6 +701,7 @@
 		B5DFD9B29E493DCBFF752237 /* CalorieEstimationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieEstimationService.swift; sourceTree = "<group>"; };
 		B6D4FC67ED3E7E9C6A8B349B /* InsightCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightCardView.swift; sourceTree = "<group>"; };
 		B761D6346ACB47F144210662 /* HealthMetricTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthMetricTests.swift; sourceTree = "<group>"; };
+		B78D06AA5F78403E9900F3CF /* InsightCategory+View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InsightCategory+View.swift"; sourceTree = "<group>"; };
 		B83077DA9F14081BB9CD841F /* WatchSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchSessionManager.swift; sourceTree = "<group>"; };
 		B85A575459959F54B24A81B2 /* SetInputSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetInputSheet.swift; sourceTree = "<group>"; };
 		B9F2A005466DBF4C1B0471C7 /* InjuryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjuryViewModel.swift; sourceTree = "<group>"; };
@@ -968,6 +970,7 @@
 				D779E8F1B6F28F6669F0DA42 /* HealthMetric+View.swift */,
 				A600258E03C24B039FDE1E45 /* InjuryRecord+View.swift */,
 				8E399C69153810111462A300 /* InjurySeverity+View.swift */,
+				B78D06AA5F78403E9900F3CF /* InsightCategory+View.swift */,
 				EA9C19DCB84BF824251CD599 /* MuscleGroup+View.swift */,
 				23E26BE8DAE1677F828EDA75 /* SleepStage+View.swift */,
 				2B3AEE2831B1DABB01025418 /* TimeInterval+Formatting.swift */,
@@ -1829,7 +1832,7 @@
 				};
 			};
 			buildConfigurationList = 72FF33C470E02207EC0B53E4 /* Build configuration list for PBXProject "DUNE" */;
-			compatibilityVersion = "Xcode 16.3";
+			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -2028,6 +2031,7 @@
 				E2E36979F66C93FA48CB9463 /* InsightCardData.swift in Sources */,
 				12DB64C8CB84AE90B294A119 /* InsightCardDismissStore.swift in Sources */,
 				8F8AC39EBC2181888B708BE6 /* InsightCardView.swift in Sources */,
+				49700FD146822C1BA261A3DD /* InsightCategory+View.swift in Sources */,
 				D47F5D83A82543DA2038716B /* JointMarkerView.swift in Sources */,
 				D8FF6063C9F8B238D2B7181B /* MetricBaselineDelta.swift in Sources */,
 				271AE6419B7ACAC8753E4F49 /* MetricDetailView.swift in Sources */,
