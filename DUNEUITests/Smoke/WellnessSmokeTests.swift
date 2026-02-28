@@ -26,7 +26,7 @@ final class WellnessSmokeTests: UITestBaseCase {
     // MARK: - Body Composition Form
 
     func testBodyFormOpens() throws {
-        let addMenu = app.descendants(matching: .any)[AXID.wellnessToolbarAdd]
+        let addMenu = app.descendants(matching: .any)[AXID.wellnessToolbarAdd].firstMatch
         guard addMenu.waitForExistence(timeout: 5) else {
             throw XCTSkip("Add menu not found")
         }
@@ -53,7 +53,7 @@ final class WellnessSmokeTests: UITestBaseCase {
     }
 
     func testBodyFormCancelDismisses() throws {
-        let addMenu = app.descendants(matching: .any)[AXID.wellnessToolbarAdd]
+        let addMenu = app.descendants(matching: .any)[AXID.wellnessToolbarAdd].firstMatch
         guard addMenu.waitForExistence(timeout: 5) else {
             throw XCTSkip("Add menu not found")
         }
@@ -76,7 +76,7 @@ final class WellnessSmokeTests: UITestBaseCase {
     // MARK: - Injury Form
 
     func testInjuryFormOpens() throws {
-        let addMenu = app.descendants(matching: .any)[AXID.wellnessToolbarAdd]
+        let addMenu = app.descendants(matching: .any)[AXID.wellnessToolbarAdd].firstMatch
         guard addMenu.waitForExistence(timeout: 5) else {
             throw XCTSkip("Add menu not found")
         }

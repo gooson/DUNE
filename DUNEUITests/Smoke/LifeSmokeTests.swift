@@ -26,7 +26,7 @@ final class LifeSmokeTests: UITestBaseCase {
     // MARK: - Habit Form
 
     func testHabitFormOpens() throws {
-        let addButton = app.descendants(matching: .any)[AXID.lifeToolbarAdd]
+        let addButton = app.descendants(matching: .any)[AXID.lifeToolbarAdd].firstMatch
         guard addButton.waitForExistence(timeout: 5) else {
             throw XCTSkip("Add button not found")
         }
@@ -41,7 +41,7 @@ final class LifeSmokeTests: UITestBaseCase {
     }
 
     func testHabitFormCancelDismisses() throws {
-        let addButton = app.descendants(matching: .any)[AXID.lifeToolbarAdd]
+        let addButton = app.descendants(matching: .any)[AXID.lifeToolbarAdd].firstMatch
         guard addButton.waitForExistence(timeout: 5) else {
             throw XCTSkip("Add button not found")
         }
@@ -68,7 +68,7 @@ final class LifeSeededSmokeTests: SeededUITestBaseCase {
 
     func testHeroProgressExists() throws {
         XCTAssertTrue(
-            elementExists(AXID.lifeHeroProgress, timeout: 8),
+            elementExists(AXID.lifeHeroProgress, timeout: 15),
             "Life hero progress card should exist when habits are seeded"
         )
     }

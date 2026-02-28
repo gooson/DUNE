@@ -60,7 +60,7 @@ class UITestBaseCase: XCTestCase {
 
     func navigateToSettings() {
         navigateToDashboard()
-        let settingsButton = app.descendants(matching: .any)[AXID.dashboardToolbarSettings]
+        let settingsButton = app.descendants(matching: .any)[AXID.dashboardToolbarSettings].firstMatch
         if settingsButton.waitForExistence(timeout: 5) {
             settingsButton.tap()
         }
@@ -69,14 +69,14 @@ class UITestBaseCase: XCTestCase {
     /// Wait for an element with a given accessibility identifier
     @discardableResult
     func waitForElement(_ identifier: String, timeout: TimeInterval = 5) -> XCUIElement {
-        let element = app.descendants(matching: .any)[identifier]
+        let element = app.descendants(matching: .any)[identifier].firstMatch
         XCTAssertTrue(element.waitForExistence(timeout: timeout), "Element '\(identifier)' should exist")
         return element
     }
 
     /// Assert an element exists without failing the test (for optional sections)
     func elementExists(_ identifier: String, timeout: TimeInterval = 3) -> Bool {
-        app.descendants(matching: .any)[identifier].waitForExistence(timeout: timeout)
+        app.descendants(matching: .any)[identifier].firstMatch.waitForExistence(timeout: timeout)
     }
 }
 
