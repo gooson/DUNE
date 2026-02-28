@@ -84,7 +84,8 @@ struct TrendAnalysisService: Sendable {
             let magnitudes = deltas.map { abs($0) }
             let avgMagnitude = magnitudes.reduce(0, +) / Double(magnitudes.count)
             let avgValue = recent.map(\.value).reduce(0, +) / Double(recent.count)
-            if avgValue > 0, (avgMagnitude / avgValue) > 0.1 {
+            let volatilityRatio = avgValue > 0 ? (avgMagnitude / avgValue) : 0
+            if volatilityRatio.isFinite, volatilityRatio > 0.1 {
                 direction = .volatile
             } else {
                 direction = .stable

@@ -248,8 +248,8 @@ struct CoachingEngine: Sendable {
             ))
         }
 
-        // P4: Weekly goal achieved
-        if remaining == 0, input.activeDaysThisWeek >= input.weeklyGoalDays {
+        // P4: Weekly goal achieved (guard weeklyGoalDays > 0 to avoid false positive)
+        if remaining == 0, input.weeklyGoalDays > 0, input.activeDaysThisWeek >= input.weeklyGoalDays {
             results.append(CoachingInsight(
                 id: "training-goal-achieved",
                 priority: .standard,
@@ -474,8 +474,11 @@ struct CoachingEngine: Sendable {
     // MARK: - Formatting
 
     private func formatHoursMinutes(_ minutes: Double) -> String {
-        let h = Int(minutes) / 60
-        let m = Int(minutes) % 60
+        // Clamp to physical range: 0-1440 minutes (24h) per Correction #84
+        let clamped = Swift.max(0, Swift.min(minutes, 1440))
+        let total = Int(clamped)
+        let h = total / 60
+        let m = total % 60
         if h > 0, m > 0 { return "\(h)시간 \(m)분" }
         if h > 0 { return "\(h)시간" }
         return "\(m)분"

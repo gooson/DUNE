@@ -859,9 +859,10 @@ final class DashboardViewModel {
         let output = coachingEngine.generate(from: input)
         focusInsight = output.focusInsight
 
-        // Filter dismissed cards
+        // Batch load dismissed IDs (single UserDefaults read) then filter
+        let dismissed = dismissStore.dismissedIDs()
         insightCards = output.insightCards
-            .filter { !dismissStore.isDismissed(cardID: $0.id) }
+            .filter { !dismissed.contains($0.id) }
             .map { InsightCardData(from: $0) }
     }
 

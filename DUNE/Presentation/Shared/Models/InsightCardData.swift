@@ -20,16 +20,4 @@ struct InsightCardData: Identifiable, Hashable, Sendable {
         self.actionHint = insight.actionHint
         self.priority = insight.priority
     }
-
-    static func == (lhs: InsightCardData, rhs: InsightCardData) -> Bool {
-        lhs.id == rhs.id
-            && lhs.title == rhs.title
-            && lhs.message == rhs.message
-    }
-
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-        hasher.combine(title)
-        hasher.combine(message)
-    }
 }

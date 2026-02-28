@@ -151,6 +151,30 @@ struct CoachingEngineTests {
         }
     }
 
+    @Test("weeklyGoalDays=0 does not trigger false goal achieved")
+    func zeroGoalDaysNoFalsePositive() {
+        let input = makeInput(
+            activeDaysThisWeek: 0,
+            weeklyGoalDays: 0
+        )
+        let output = engine.generate(from: input)
+        let allInsights = [output.focusInsight] + output.insightCards
+        let hasGoalAchieved = allInsights.contains { $0.id == "training-goal-achieved" }
+        #expect(!hasGoalAchieved)
+    }
+
+    @Test("Negative sleep minutes does not crash or produce negative times")
+    func negativeSleepMinutesSafe() {
+        let input = makeInput(sleepMinutes: -100)
+        let output = engine.generate(from: input)
+        // Should not crash, and focus insight should still be valid
+        #expect(!output.focusInsight.title.isEmpty)
+        // Negative sleep should not trigger sleep insights (< 360 guard requires > 0)
+        let allInsights = [output.focusInsight] + output.insightCards
+        let hasSleep = allInsights.contains { $0.category == .sleep }
+        #expect(!hasSleep)
+    }
+
     @Test("Weekly goal completion triggers motivation insight")
     func weeklyGoalCompletionTrigger() {
         let input = makeInput(
