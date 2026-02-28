@@ -88,7 +88,7 @@ struct ExerciseDefaultsListView: View {
                 if let weight = record?.defaultWeight {
                     Text("\(weight.formatted(.number.precision(.fractionLength(0...1)))) kg")
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                 }
             }
 

@@ -10,7 +10,7 @@ struct HeartRateZoneChartView: View {
             Text("Heart Rate Zones")
                 .font(.subheadline)
                 .fontWeight(.semibold)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
 
             Chart(zones) { zone in
                 BarMark(
@@ -57,7 +57,7 @@ struct HeartRateZoneChartView: View {
                                 .frame(width: 8, height: 8)
                             Text("\(Int(zone.percentage * 100).formattedWithSeparator)%")
                                 .font(.caption2)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(DS.Color.textSecondary)
                         }
                     }
                 }

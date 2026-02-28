@@ -49,6 +49,10 @@ enum DS {
         /// Semantic alias — primary readable text on dark warm backgrounds.
         static let primaryText  = sandMuted
 
+        // Text hierarchy (warm-toned alternatives to system .secondary/.tertiary)
+        static let textSecondary = SwiftUI.Color("TextSecondary")
+        static let textTertiary  = SwiftUI.Color("TextTertiary")
+
         // Activity Category Colors — Desert Horizon Chart Palette
         static let activityCardio    = SwiftUI.Color("ActivityCardio")    // Desert Gold
         static let activityStrength  = SwiftUI.Color("ActivityStrength")  // Copper
@@ -64,13 +68,6 @@ enum DS {
         // Tab wave identity — Desert Horizon palette
         static let tabTrain    = SwiftUI.Color("TabTrain")     // Desert Coral
         static let tabWellness = SwiftUI.Color("TabWellness")  // Oasis Teal
-        /// Type-erased primaryText with hierarchical fallback for ternary expressions.
-        static func primaryTextStyle(
-            active: Bool,
-            fallback: AnyShapeStyle = AnyShapeStyle(.tertiary)
-        ) -> AnyShapeStyle {
-            active ? AnyShapeStyle(primaryText) : fallback
-        }
     }
 
     // MARK: - Opacity
@@ -84,6 +81,10 @@ enum DS {
         static let medium: Double = 0.10
         /// Card border in dark mode (0.15)
         static let border: Double = 0.15
+        /// Overlay tint, warm fill on secondary surfaces (0.20)
+        static let overlay: Double = 0.20
+        /// Card border in dark mode — stronger emphasis (0.25)
+        static let cardBorder: Double = 0.25
         /// Hero card border highlight (0.30)
         static let strong: Double = 0.30
     }
@@ -95,10 +96,6 @@ enum DS {
         static let tabBackgroundEnd = UnitPoint(x: 0.5, y: 0.6)
         /// Sheet/modal gradient fade-out point (center)
         static let sheetBackgroundEnd = UnitPoint(x: 0.5, y: 0.5)
-
-        // Hero card ring gradient direction
-        static let heroRingStart = UnitPoint(x: 0, y: 0)
-        static let heroRingEnd = UnitPoint(x: 1, y: 1)
 
         /// Hero/metric value text — DesertBronze → WarmGlow horizontal blend
         static let heroText = LinearGradient(

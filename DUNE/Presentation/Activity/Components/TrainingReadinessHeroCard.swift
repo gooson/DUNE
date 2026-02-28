@@ -39,7 +39,7 @@ struct TrainingReadinessHeroCard: View {
 
                 Text("Need More Data")
                     .font(.headline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
 
                 Text("Track your workouts and wear Apple Watch to see your training readiness score.")
                     .font(.subheadline)

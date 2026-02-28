@@ -33,19 +33,23 @@ extension FatigueLevel {
         return cache[Int(rawValue)]
     }
 
-    /// Stroke color for muscle map outline.
+    /// Stroke color for muscle map outline (cached — avoids per-render .opacity allocation).
     func strokeColor(for colorScheme: ColorScheme) -> Color {
         if self == .noData { return ColorCache.noDataStrokeColor }
-        return color(for: colorScheme).opacity(0.6)
+        let cache = colorScheme == .dark ? ColorCache.darkStroke : ColorCache.lightStroke
+        return cache[Int(rawValue)]
     }
 
     private enum ColorCache {
-        static let noDataColor = Color.secondary.opacity(0.2)
-        static let noDataStrokeColor = Color.secondary.opacity(0.15)
+        static let noDataColor = Color(DS.Color.textTertiary).opacity(DS.Opacity.overlay)
+        static let noDataStrokeColor = Color(DS.Color.textTertiary).opacity(DS.Opacity.border)
 
         // Index 0 = noData (unused via early return), 1..10 = fullyRecovered..overtrained
         static let dark: [Color] = buildColors(isDark: true)
         static let light: [Color] = buildColors(isDark: false)
+        // Stroke variants cached per Correction #83
+        static let darkStroke: [Color] = buildColors(isDark: true).map { $0.opacity(0.6) }
+        static let lightStroke: [Color] = buildColors(isDark: false).map { $0.opacity(0.6) }
 
         // Desert-toned palette: sage/olive → sand/amber → terracotta/burnt sienna
         private static func buildColors(isDark: Bool) -> [Color] {

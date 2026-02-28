@@ -65,7 +65,7 @@ struct DetailScoreHero: View {
 
             Text(guideMessage)
                 .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
                 .multilineTextAlignment(.center)
 
             if !subScores.isEmpty {

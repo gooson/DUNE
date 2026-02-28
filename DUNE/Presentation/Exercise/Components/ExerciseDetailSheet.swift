@@ -51,18 +51,18 @@ struct ExerciseDetailSheet: View {
                     .font(.title3.weight(.semibold))
                 Text(exercise.name)
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
                 HStack(spacing: DS.Spacing.sm) {
                     Label(exercise.category.displayName, systemImage: categoryIcon)
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                     Label {
                         Text(exercise.equipment.localizedDisplayName)
                     } icon: {
                         exercise.equipment.svgIcon(size: 12)
                     }
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
                 }
             }
         }
@@ -89,7 +89,7 @@ struct ExerciseDetailSheet: View {
                     .font(.headline)
                 Text(desc)
                     .font(.body)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
         }
     }
@@ -112,7 +112,7 @@ struct ExerciseDetailSheet: View {
                             .background(DS.Color.activity, in: Circle())
                         Text(cue)
                             .font(.subheadline)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(DS.Color.textSecondary)
                     }
                 }
             }
@@ -140,7 +140,7 @@ struct ExerciseDetailSheet: View {
                             .frame(width: 12, height: 12)
                         Text("주동근")
                             .font(.caption2)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(DS.Color.textSecondary)
                     }
                     HStack(spacing: DS.Spacing.xs) {
                         RoundedRectangle(cornerRadius: 3)
@@ -148,13 +148,13 @@ struct ExerciseDetailSheet: View {
                             .frame(width: 12, height: 12)
                         Text("보조근")
                             .font(.caption2)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(DS.Color.textSecondary)
                     }
                 }
 
                 Text("주동근은 동작의 핵심 자극 부위이고, 보조근은 함께 보조적으로 활성화되는 부위입니다.")
                     .font(.caption2)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
         }
     }
@@ -176,11 +176,11 @@ struct ExerciseDetailSheet: View {
                             .font(.subheadline.weight(.medium))
                         Text(exercise.equipment.displayName)
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(DS.Color.textSecondary)
                     }
                     Text(exercise.equipment.equipmentDescription)
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                         .fixedSize(horizontal: false, vertical: true)
                 }
             }

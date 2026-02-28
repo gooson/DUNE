@@ -57,7 +57,7 @@ struct ActivityStatCardView: View {
                     Text(stat.title)
                         .font(.caption)
                         .fontWeight(.medium)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
 
                     Spacer(minLength: 0)
                 }
@@ -73,7 +73,7 @@ struct ActivityStatCardView: View {
                     if !stat.unit.isEmpty {
                         Text(stat.unit)
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(DS.Color.textSecondary)
                     }
 
                     Spacer(minLength: 0)

@@ -72,16 +72,7 @@ struct WorkoutShareCard: View {
                 .padding(.bottom, 16)
         }
         .frame(width: 360)
-        .background(
-            LinearGradient(
-                colors: [
-                    Color(red: 0.12, green: 0.12, blue: 0.18),
-                    Color(red: 0.08, green: 0.08, blue: 0.14)
-                ],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-        )
+        .background(ShareCardPalette.backgroundGradient)
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .overlay(
             RoundedRectangle(cornerRadius: 20)
@@ -95,7 +86,7 @@ struct WorkoutShareCard: View {
         HStack(spacing: 12) {
             Image(systemName: data.exerciseIcon)
                 .font(.title2)
-                .foregroundStyle(Color(red: 0.4, green: 0.85, blue: 0.6))
+                .foregroundStyle(ShareCardPalette.accent)
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(data.exerciseName)
@@ -198,7 +189,7 @@ struct WorkoutShareCard: View {
     private func setTypeColor(_ type: SetType) -> Color {
         switch type {
         case .warmup: .yellow
-        case .working: Color(red: 0.4, green: 0.85, blue: 0.6)
+        case .working: ShareCardPalette.accent
         case .drop: .cyan
         case .failure: .red
         }
@@ -264,12 +255,25 @@ struct WorkoutShareCard: View {
         HStack(spacing: 4) {
             Image(systemName: "heart.fill")
                 .font(.system(size: 8))
-                .foregroundStyle(Color(red: 0.4, green: 0.85, blue: 0.6))
+                .foregroundStyle(ShareCardPalette.accent)
             Text("DUNE")
                 .font(.system(size: 10, weight: .semibold))
                 .foregroundStyle(.white.opacity(0.3))
         }
     }
+}
+
+/// Share card-specific colors — standalone dark background for rendered image export.
+private enum ShareCardPalette {
+    static let accent = DS.Color.positive
+    static let backgroundGradient = LinearGradient(
+        colors: [
+            Color(red: 0.12, green: 0.12, blue: 0.18),
+            Color(red: 0.08, green: 0.08, blue: 0.14)
+        ],
+        startPoint: .topLeading,
+        endPoint: .bottomTrailing
+    )
 }
 
 // SetType.shortLabel is defined in ExerciseCategory+View.swift

@@ -50,7 +50,7 @@ struct PersonalRecordsSection: View {
                 Text(record.title)
                     .font(.caption)
                     .fontWeight(.medium)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
                     .lineLimit(1)
 
                 Spacer(minLength: 0)
@@ -76,7 +76,7 @@ struct PersonalRecordsSection: View {
                 if let unit = unitText(for: record) {
                     Text(unit)
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                 }
 
                 Spacer(minLength: 0)
@@ -94,7 +94,7 @@ struct PersonalRecordsSection: View {
             if let context = contextText(for: record) {
                 Text(context)
                     .font(.caption2)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
                     .lineLimit(1)
             }
 

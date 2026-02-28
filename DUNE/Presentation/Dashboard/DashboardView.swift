@@ -184,7 +184,7 @@ struct DashboardView: View {
                 Text("Pinned")
                     .font(.subheadline)
                     .fontWeight(.semibold)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
 
                 Spacer()
 
@@ -273,7 +273,7 @@ struct DashboardView: View {
 
                 Text(message)
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
                     .lineLimit(2)
 
                 Spacer()
@@ -309,7 +309,7 @@ private struct BaselineProgressView: View {
 
                 Text("\(status.daysCollected)/\(status.daysRequired) days")
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
         }
     }

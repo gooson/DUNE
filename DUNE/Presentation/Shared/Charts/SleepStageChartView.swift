@@ -125,7 +125,7 @@ struct SleepStageChartView: View {
                     .font(.caption)
                     .fontWeight(.semibold)
             }
-            .foregroundStyle(.secondary)
+            .foregroundStyle(DS.Color.textSecondary)
             .transition(.opacity)
         }
     }
@@ -141,7 +141,7 @@ struct SleepStageChartView: View {
                         .frame(width: 8, height: 8)
                     Text(stage.label)
                         .font(.caption2)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                 }
             }
         }

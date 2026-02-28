@@ -48,7 +48,7 @@ struct ExerciseTypeBreakdownView: View {
 
             Text(durationLabel(type.totalDuration))
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
 
             Text("\(type.sessionCount)")
                 .font(.caption)

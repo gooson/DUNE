@@ -85,17 +85,17 @@ struct BodyHistoryDetailView: View {
                     if let w = item.weight {
                         Text("\(w.formattedWithSeparator(fractionDigits: 1)) kg")
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(DS.Color.textSecondary)
                     }
                     if let f = item.bodyFatPercentage {
                         Text("\(f.formattedWithSeparator(fractionDigits: 1))%")
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(DS.Color.textSecondary)
                     }
                     if let m = item.muscleMass {
                         Text("\(m.formattedWithSeparator(fractionDigits: 1)) kg")
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(DS.Color.textSecondary)
                     }
                 }
             }
@@ -103,7 +103,7 @@ struct BodyHistoryDetailView: View {
             if item.source == .manual {
                 Image(systemName: "ellipsis")
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
         }
         .padding(DS.Spacing.md)

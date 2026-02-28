@@ -136,7 +136,7 @@ struct CompoundWorkoutView: View {
             // Session elapsed time
             Text(formattedElapsedTime)
                 .font(.caption.weight(.medium).monospacedDigit())
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
                 .contentTransition(.numericText())
         }
         .padding(DS.Spacing.md)
@@ -173,7 +173,7 @@ struct CompoundWorkoutView: View {
                 if completed > 0 {
                     Text("\(completed.formattedWithSeparator) sets")
                         .font(.system(size: 9))
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                 }
             }
             .padding(.horizontal, DS.Spacing.md)
@@ -235,7 +235,7 @@ struct CompoundWorkoutView: View {
                     .frame(width: 28)
             }
             .font(.caption2.weight(.bold))
-            .foregroundStyle(.secondary)
+            .foregroundStyle(DS.Color.textSecondary)
             .padding(.horizontal, DS.Spacing.sm)
             .padding(.bottom, DS.Spacing.xs)
 
@@ -354,7 +354,7 @@ struct CompoundWorkoutView: View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             Text("Summary")
                 .font(.caption.weight(.medium))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
 
             ForEach(config.exercises.indices, id: \.self) { index in
                 let exercise = config.exercises[index]
@@ -365,7 +365,7 @@ struct CompoundWorkoutView: View {
                     Spacer()
                     Text("\(vm.completedSetCount.formattedWithSeparator) sets")
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                 }
             }
         }
@@ -379,7 +379,7 @@ struct CompoundWorkoutView: View {
         VStack(spacing: DS.Spacing.md) {
             Text("Up Next")
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
 
             Text(viewModel.currentExercise.localizedName)
                 .font(.title3.weight(.semibold))

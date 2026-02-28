@@ -7,7 +7,7 @@ struct RestTimerView: View {
         VStack(spacing: DS.Spacing.md) {
             Text("Rest Timer")
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
 
             Text(timer.formattedTime)
                 .font(DS.Typography.cardScore)

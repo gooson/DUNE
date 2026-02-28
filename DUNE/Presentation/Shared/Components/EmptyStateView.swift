@@ -11,7 +11,7 @@ struct EmptyStateView: View {
         VStack(spacing: DS.Spacing.lg) {
             Image(systemName: icon)
                 .font(.system(size: 48))
-                .foregroundStyle(.quaternary)
+                .foregroundStyle(DS.Color.warmGlow.opacity(DS.Opacity.strong))
                 .padding(.bottom, DS.Spacing.sm)
 
             Text(title)
@@ -19,7 +19,7 @@ struct EmptyStateView: View {
 
             Text(message)
                 .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
                 .multilineTextAlignment(.center)
                 .frame(maxWidth: 280)
 
@@ -29,6 +29,7 @@ struct EmptyStateView: View {
                         .font(.subheadline.weight(.medium))
                 }
                 .buttonStyle(.borderedProminent)
+                .tint(DS.Color.warmGlow)
                 .controlSize(.regular)
             }
         }
@@ -42,7 +43,7 @@ struct EmptyStateView: View {
                 WaveShape(amplitude: 0.2, frequency: 2, phase: .pi / 3, verticalOffset: 0.5)
                     .fill(DS.Color.desertDusk.opacity(DS.Opacity.subtle))
             }
-            .frame(height: 60)
+            .frame(height: 100)
             .clipped()
         }
     }

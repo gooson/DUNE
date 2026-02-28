@@ -25,7 +25,7 @@ struct InjuryCardView: View {
                         if let side = record.bodySide {
                             Text("(\(side.abbreviation))")
                                 .font(.caption)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(DS.Color.textSecondary)
                         }
                     }
 
@@ -39,7 +39,7 @@ struct InjuryCardView: View {
 
                         Text(record.durationLabel)
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(DS.Color.textSecondary)
                     }
 
                     Text(record.dateRangeLabel)
@@ -49,7 +49,7 @@ struct InjuryCardView: View {
                     if !record.memo.isEmpty {
                         Text(record.memo)
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(DS.Color.textSecondary)
                             .lineLimit(1)
                     }
                 }

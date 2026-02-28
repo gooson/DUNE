@@ -20,7 +20,7 @@ struct ExerciseTypeSummaryRow: View {
                     .font(.subheadline.weight(.medium))
                 Text("\(exerciseType.sessionCount.formattedWithSeparator) sessions")
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
 
             Spacer()
@@ -34,7 +34,7 @@ struct ExerciseTypeSummaryRow: View {
                 if exerciseType.totalCalories > 0 {
                     Text("\(exerciseType.totalCalories.formattedWithSeparator()) kcal")
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                         .monospacedDigit()
                 }
             }

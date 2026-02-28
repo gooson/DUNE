@@ -68,7 +68,7 @@ struct ConditionHeroView: View {
                     // Guide message
                     Text(score.status.guideMessage)
                         .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
 
                     // 7-day sparkline
                     if !recentScores.isEmpty {
@@ -91,7 +91,7 @@ struct ConditionHeroView: View {
                                 Spacer()
                                 Text("\(weeklyGoalProgress.completedDays)/\(weeklyGoalProgress.goalDays)")
                                     .font(.caption2)
-                                    .foregroundStyle(.secondary)
+                                    .foregroundStyle(DS.Color.textSecondary)
                                     .monospacedDigit()
                             }
                             ProgressView(

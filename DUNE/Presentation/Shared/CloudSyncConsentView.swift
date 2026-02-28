@@ -18,7 +18,7 @@ struct CloudSyncConsentView: View {
                     .font(.title.bold())
                 Text("Sync your health records across devices with iCloud. Your data is stored in your private iCloud container.")
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal)
             }
@@ -66,7 +66,7 @@ struct CloudSyncConsentView: View {
                         .font(.subheadline)
                 }
                 .buttonStyle(.plain)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
             }
             .padding(.horizontal)
             .padding(.bottom, 32)
@@ -93,7 +93,7 @@ private struct InfoRow: View {
                     .font(.subheadline.bold())
                 Text(description)
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
 
             Spacer()

@@ -123,7 +123,7 @@ struct TemplateFormView: View {
                 HStack(spacing: DS.Spacing.xs) {
                     Text("Sets")
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                     Stepper(
                         "\(entry.wrappedValue.defaultSets)",
                         value: entry.defaultSets,
@@ -138,7 +138,7 @@ struct TemplateFormView: View {
                 HStack(spacing: DS.Spacing.xs) {
                     Text("Reps")
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                     Stepper(
                         "\(entry.wrappedValue.defaultReps)",
                         value: entry.defaultReps,
@@ -157,7 +157,7 @@ struct TemplateFormView: View {
                 HStack(spacing: DS.Spacing.xs) {
                     Text("Weight")
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                     TextField(
                         "—",
                         value: entry.defaultWeightKg,
@@ -169,7 +169,7 @@ struct TemplateFormView: View {
                     .textFieldStyle(.roundedBorder)
                     Text("kg")
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                 }
 
                 Spacer()
@@ -178,7 +178,7 @@ struct TemplateFormView: View {
                 HStack(spacing: DS.Spacing.xs) {
                     Text("Rest")
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                     Picker("", selection: restDurationBinding(for: entry)) {
                         Text("Default").tag(nil as TimeInterval?)
                         Text("30s").tag(30.0 as TimeInterval?)

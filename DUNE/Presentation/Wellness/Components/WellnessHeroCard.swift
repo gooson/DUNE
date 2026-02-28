@@ -41,7 +41,7 @@ struct WellnessHeroCard: View {
 
                 Text("Need More Data")
                     .font(.headline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
 
                 Text("Wear your Apple Watch tonight to start tracking your wellness score.")
                     .font(.subheadline)

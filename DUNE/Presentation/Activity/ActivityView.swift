@@ -131,7 +131,7 @@ struct ActivityView: View {
                         if let error = viewModel.errorMessage {
                             Text(error)
                                 .font(.caption)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(DS.Color.textSecondary)
                                 .padding()
                         }
                     }

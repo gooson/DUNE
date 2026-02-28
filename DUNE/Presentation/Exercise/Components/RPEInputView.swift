@@ -19,7 +19,7 @@ struct RPEInputView: View {
                 if rpe != nil {
                     Button("초기화") { rpe = nil }
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                 }
             }
 
@@ -35,7 +35,7 @@ struct RPEInputView: View {
             if let selected = rpe {
                 Text(rpeDescription(selected))
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
                     .transition(.opacity)
             }
         }

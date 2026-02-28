@@ -29,7 +29,7 @@ struct ExerciseMixInfoSheet: View {
                     .font(.headline)
                 Text("Exercise Mix")
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
             Spacer()
         }
@@ -40,7 +40,7 @@ struct ExerciseMixInfoSheet: View {
             InfoSheetHelpers.SectionHeader(icon: "lightbulb.fill", title: "개요")
             Text("어떤 운동을 얼마나 자주 수행하는지 분석합니다. 운동 구성의 균형을 확인하고 부족한 부위를 발견하세요.")
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
         }
     }
 

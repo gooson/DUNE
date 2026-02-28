@@ -28,7 +28,7 @@ struct TodayCoachingCard: View {
 
                 Text(displayMessage)
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
         }

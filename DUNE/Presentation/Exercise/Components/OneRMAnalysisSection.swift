@@ -37,7 +37,7 @@ struct OneRMAnalysisSection: View {
             } else {
                 Text("Complete a set with weight + reps to estimate your 1RM")
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
         }
         .padding(DS.Spacing.md)
@@ -50,7 +50,7 @@ struct OneRMAnalysisSection: View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             Text("By Formula")
                 .font(.caption.weight(.semibold))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
 
             ForEach(analysis.formulaComparison, id: \.formula) { estimate in
                 HStack {
@@ -77,7 +77,7 @@ struct OneRMAnalysisSection: View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             Text("Training Zones")
                 .font(.caption.weight(.semibold))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
                 .padding(.top, DS.Spacing.xs)
 
             ForEach(analysis.trainingZones, id: \.name) { zone in
@@ -88,7 +88,7 @@ struct OneRMAnalysisSection: View {
 
                     Text(zone.repsRange)
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                         .frame(width: 50)
 
                     Spacer()

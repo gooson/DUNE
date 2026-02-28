@@ -45,7 +45,7 @@ struct PeriodComparisonView: View {
         VStack(alignment: .leading, spacing: DS.Spacing.xs) {
             Text(label)
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
             Text(current)
                 .font(.subheadline.weight(.semibold))
                 .monospacedDigit()

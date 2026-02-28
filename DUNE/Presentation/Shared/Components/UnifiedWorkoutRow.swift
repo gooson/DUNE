@@ -35,7 +35,7 @@ struct UnifiedWorkoutRow: View {
                 HStack(spacing: DS.Spacing.sm) {
                     Text(item.date, format: .dateTime.weekday(.wide).hour().minute())
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
 
                     if let hrAvg = item.heartRateAvg {
                         HStack(spacing: 2) {
@@ -150,7 +150,7 @@ struct UnifiedWorkoutRow: View {
         HStack(spacing: DS.Spacing.sm) {
             Text(item.formattedDuration)
                 .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
                 .lineLimit(1)
                 .fixedSize()
 
@@ -212,7 +212,7 @@ struct UnifiedWorkoutRow: View {
             if let cal = item.calories, cal > 0, cal < 5_000 {
                 Text(item.source == .manual ? "~\(Int(cal).formattedWithSeparator) kcal" : "\(Int(cal).formattedWithSeparator) kcal")
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
         }
     }
@@ -226,7 +226,7 @@ struct UnifiedWorkoutRow: View {
             }
             Text(item.date, style: .date)
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
         }
     }
 

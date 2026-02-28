@@ -62,7 +62,7 @@ struct InjuryFormSheet: View {
                                         .foregroundStyle(DS.Color.primaryText)
                                     Text(severity.localizedSeverityDescription)
                                         .font(.caption)
-                                        .foregroundStyle(.secondary)
+                                        .foregroundStyle(DS.Color.textSecondary)
                                 }
 
                                 Spacer()

@@ -67,7 +67,7 @@ struct ExerciseSessionDetailView: View {
                         .font(.title2.weight(.semibold))
                     Text(record.date, style: .date)
                         .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                     Text(record.date, style: .time)
                         .font(.caption)
                         .foregroundStyle(.tertiary)
@@ -84,7 +84,7 @@ struct ExerciseSessionDetailView: View {
                                 .font(.title3.weight(.semibold).monospacedDigit())
                             Text("Duration")
                                 .font(.caption)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(DS.Color.textSecondary)
                         }
                     }
                     if let cal = record.bestCalories, cal > 0, cal < 5000 {
@@ -93,7 +93,7 @@ struct ExerciseSessionDetailView: View {
                                 .font(.title3.weight(.semibold).monospacedDigit())
                             Text("kcal")
                                 .font(.caption)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(DS.Color.textSecondary)
                         }
                     }
                 }
@@ -115,7 +115,7 @@ struct ExerciseSessionDetailView: View {
                     .foregroundStyle(.red)
                 Text("Linked to Apple Health")
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
             .padding(.horizontal, DS.Spacing.sm)
             .padding(.vertical, DS.Spacing.xxs)
@@ -134,7 +134,7 @@ struct ExerciseSessionDetailView: View {
             if sets.isEmpty {
                 Text("No set data recorded")
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             } else {
                 ForEach(sets, id: \.id) { workoutSet in
                     setRow(workoutSet)
@@ -158,7 +158,7 @@ struct ExerciseSessionDetailView: View {
                 if let reps = workoutSet.reps {
                     Text("\(reps.formattedWithSeparator) reps")
                         .font(.subheadline.monospacedDigit())
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                 }
             }
         }
@@ -212,7 +212,7 @@ struct ExerciseSessionDetailView: View {
                 .foregroundStyle(.tertiary)
             Text(title)
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
                 .multilineTextAlignment(.center)
             if let subtitle {
                 Text(subtitle)

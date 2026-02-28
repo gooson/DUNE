@@ -331,7 +331,7 @@ struct ExercisePickerView: View {
             HStack(spacing: DS.Spacing.xs) {
                 Image(systemName: "figure.strengthtraining.traditional")
                     .font(.caption2)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
                 ForEach(MuscleGroup.allCases, id: \.self) { muscle in
                     muscleChip(muscle)
                 }
@@ -346,7 +346,7 @@ struct ExercisePickerView: View {
             HStack(spacing: DS.Spacing.xs) {
                 Image(systemName: "dumbbell")
                     .font(.caption2)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
                 ForEach(Equipment.allCases, id: \.self) { equipment in
                     equipmentChip(equipment)
                 }
@@ -387,7 +387,7 @@ struct ExercisePickerView: View {
                     HStack(spacing: DS.Spacing.xs) {
                         Text(exercise.primaryMuscles.map(\.localizedDisplayName).joined(separator: ", "))
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(DS.Color.textSecondary)
                         Text("\u{00B7}")
                             .foregroundStyle(.tertiary)
                         Label {
@@ -405,7 +405,7 @@ struct ExercisePickerView: View {
                     detailExercise = exercise
                 } label: {
                     Image(systemName: "info.circle")
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                 }
                 .buttonStyle(.plain)
             }

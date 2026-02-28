@@ -33,10 +33,10 @@ struct FatigueLegendView: View {
     private var labelRow: some View {
         HStack {
             Text("Recovered")
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
             Spacer()
             Text("Fatigued")
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
         }
         .font(.caption2)
     }

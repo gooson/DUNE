@@ -31,7 +31,7 @@ struct UserCategoryManagementView: View {
             Section("Custom") {
                 if categories.isEmpty {
                     Text("No custom categories yet")
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                         .font(.subheadline)
                 } else {
                     ForEach(categories) { category in
@@ -48,7 +48,7 @@ struct UserCategoryManagementView: View {
                                         .foregroundStyle(DS.Color.primaryText)
                                     Text(category.defaultInputType.displayLabel)
                                         .font(.caption)
-                                        .foregroundStyle(.secondary)
+                                        .foregroundStyle(DS.Color.textSecondary)
                                 }
                                 Spacer()
                                 Image(systemName: "chevron.right")

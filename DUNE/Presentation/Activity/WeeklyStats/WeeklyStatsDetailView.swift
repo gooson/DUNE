@@ -102,7 +102,7 @@ struct WeeklyStatsDetailView: View {
                 .foregroundStyle(.quaternary)
             Text(message)
                 .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, DS.Spacing.xl)
@@ -117,7 +117,7 @@ struct WeeklyStatsDetailView: View {
                 .foregroundStyle(.quaternary)
             Text("No Workout Data")
                 .font(.headline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
             Text("Complete your first workout to see detailed stats and trends.")
                 .font(.subheadline)
                 .foregroundStyle(.tertiary)

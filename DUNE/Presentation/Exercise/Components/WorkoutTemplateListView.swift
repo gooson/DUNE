@@ -67,7 +67,7 @@ struct WorkoutTemplateListView: View {
                 .font(.headline)
             Text("Create templates for your workout routines")
                 .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
             Button {
                 showingCreateSheet = true
             } label: {
@@ -122,7 +122,7 @@ struct WorkoutTemplateListView: View {
             HStack(spacing: DS.Spacing.xs) {
                 Text("\(template.exerciseEntries.count) exercises")
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
 
                 if !template.exerciseEntries.isEmpty {
                     Text("\u{00B7}")

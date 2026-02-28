@@ -26,7 +26,7 @@ struct WorkoutCompletionSheet: View {
 
                     Text("\(exerciseName) \u{00B7} \(setCount.formattedWithSeparator) sets")
                         .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                 }
                 .padding(.top, DS.Spacing.lg)
 
@@ -72,7 +72,7 @@ struct WorkoutCompletionSheet: View {
                     } label: {
                         Text("Done")
                             .font(.body.weight(.medium))
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(DS.Color.textSecondary)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, DS.Spacing.md)
                     }
@@ -87,7 +87,7 @@ struct WorkoutCompletionSheet: View {
                         onDismiss(rpe)
                     } label: {
                         Image(systemName: "xmark.circle.fill")
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(DS.Color.textSecondary)
                     }
                 }
             }

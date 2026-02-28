@@ -108,7 +108,7 @@ struct StackedVolumeBarChartView: View {
                         .frame(width: 6, height: 6)
                     Text(typeNames[key] ?? key)
                         .font(.caption2)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                         .lineLimit(1)
                 }
             }
@@ -157,7 +157,7 @@ struct StackedVolumeBarChartView: View {
                 .foregroundStyle(.tertiary)
             Text("Daily volume will appear as you exercise")
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
         }
         .frame(maxWidth: .infinity)
         .frame(height: 100)

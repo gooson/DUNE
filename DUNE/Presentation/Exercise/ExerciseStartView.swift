@@ -53,7 +53,7 @@ struct ExerciseStartView: View {
 
                 Text(exercise.categoryDisplayName)
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
 
             Spacer()
@@ -67,7 +67,7 @@ struct ExerciseStartView: View {
             if !exercise.primaryMuscles.isEmpty {
                 Text("Primary Muscles")
                     .font(.caption.weight(.semibold))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
 
                 FlowLayout(spacing: DS.Spacing.xs) {
                     ForEach(exercise.primaryMuscles, id: \.self) { muscle in
@@ -84,7 +84,7 @@ struct ExerciseStartView: View {
             if !exercise.secondaryMuscles.isEmpty {
                 Text("Secondary Muscles")
                     .font(.caption.weight(.semibold))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
                     .padding(.top, DS.Spacing.xs)
 
                 FlowLayout(spacing: DS.Spacing.xs) {
@@ -94,7 +94,7 @@ struct ExerciseStartView: View {
                             .padding(.horizontal, DS.Spacing.sm)
                             .padding(.vertical, DS.Spacing.xxs)
                             .background(Color.secondary.opacity(0.12), in: Capsule())
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(DS.Color.textSecondary)
                     }
                 }
             }
@@ -113,7 +113,7 @@ struct ExerciseStartView: View {
             Label("\(WorkoutDefaults.setCount.formattedWithSeparator) sets", systemImage: "list.number")
         }
         .font(.subheadline)
-        .foregroundStyle(.secondary)
+        .foregroundStyle(DS.Color.textSecondary)
     }
 
     // MARK: - Start Button

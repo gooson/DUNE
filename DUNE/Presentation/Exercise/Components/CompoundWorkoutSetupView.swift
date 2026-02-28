@@ -76,7 +76,7 @@ struct CompoundWorkoutSetupView: View {
                             .font(.body)
                         Text(exercise.primaryMuscles.map(\.displayName).joined(separator: ", "))
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(DS.Color.textSecondary)
                     }
                     Spacer()
                 }

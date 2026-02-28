@@ -153,7 +153,7 @@ struct ExerciseHistoryView: View {
                 .foregroundStyle(.tertiary)
             Text("Record more sessions to see trends")
                 .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
             if let point = viewModel.chartData.first {
                 Text(formattedValue(point.value))
                     .font(.title2.weight(.bold))
@@ -171,7 +171,7 @@ struct ExerciseHistoryView: View {
                 .foregroundStyle(.tertiary)
             Text("No data yet")
                 .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
             Text("Complete workouts to track your progress")
                 .font(.caption)
                 .foregroundStyle(.tertiary)
@@ -226,7 +226,7 @@ struct ExerciseHistoryView: View {
                     .foregroundStyle(color)
                 Text(title)
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
             Text(value)
                 .font(.title3.weight(.semibold))
@@ -273,7 +273,7 @@ struct ExerciseHistoryView: View {
                         }
                     }
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
                 }
 
                 Spacer()

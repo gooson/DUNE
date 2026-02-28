@@ -108,7 +108,7 @@ struct ExerciseTypeDetailView: View {
                 } else {
                     Text("No data")
                         .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                 }
             }
 
@@ -233,7 +233,7 @@ struct ExerciseTypeDetailView: View {
         VStack(alignment: .leading, spacing: DS.Spacing.xs) {
             Text(label)
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
             Text(current)
                 .font(.subheadline.weight(.semibold))
                 .monospacedDigit()
@@ -281,7 +281,7 @@ struct ExerciseTypeDetailView: View {
                     }
                 }
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
             }
 
             Spacer()
@@ -323,7 +323,7 @@ struct ExerciseTypeDetailView: View {
         VStack(alignment: .leading, spacing: 2) {
             Text(label)
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
             Text(value)
                 .font(.subheadline.weight(.semibold))
                 .monospacedDigit()

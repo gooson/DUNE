@@ -24,7 +24,7 @@ struct TrainingVolumeDetailView: View {
                 if let error = viewModel.errorMessage {
                     Text(error)
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                         .padding()
                 }
             }
@@ -94,7 +94,7 @@ struct TrainingVolumeDetailView: View {
                         .foregroundStyle(DS.Gradient.heroText)
                     Text("/ \(viewModel.weeklyGoal)")
                         .font(.caption2)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                 }
             }
 
@@ -131,7 +131,7 @@ struct TrainingVolumeDetailView: View {
         HStack(spacing: DS.Spacing.sm) {
             Text(label)
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
                 .frame(width: 80, alignment: .leading)
             Text(value)
                 .font(.subheadline.weight(.semibold))

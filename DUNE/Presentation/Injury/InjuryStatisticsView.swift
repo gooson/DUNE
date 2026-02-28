@@ -105,7 +105,7 @@ struct InjuryStatisticsView: View {
 
             Text("Workout count before, during, and after injury (14-day windows)")
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
 
             ForEach(volumeComparisons) { comparison in
                 volumeComparisonCard(comparison)
@@ -171,7 +171,7 @@ private struct StatCard: View {
         VStack(alignment: .leading, spacing: DS.Spacing.xs) {
             Text(title)
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
             Text(value)
                 .font(.title2.weight(.bold).monospacedDigit())
                 .foregroundStyle(tintColor)
@@ -196,7 +196,7 @@ private struct VolumeBar: View {
         VStack(spacing: DS.Spacing.xs) {
             Text(isNA ? "—" : "\(count)")
                 .font(.caption.weight(.bold).monospacedDigit())
-                .foregroundStyle(DS.Color.primaryTextStyle(active: !isNA))
+                .foregroundStyle(!isNA ? AnyShapeStyle(DS.Color.primaryText) : AnyShapeStyle(.tertiary))
 
             GeometryReader { geo in
                 let fraction = maxCount > 0 ? CGFloat(count) / CGFloat(maxCount) : 0
@@ -209,7 +209,7 @@ private struct VolumeBar: View {
 
             Text(label)
                 .font(.caption2)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
         }
         .frame(maxWidth: .infinity)
     }

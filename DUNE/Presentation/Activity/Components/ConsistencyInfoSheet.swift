@@ -30,7 +30,7 @@ struct ConsistencyInfoSheet: View {
                     .font(.headline)
                 Text("Workout Consistency")
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
             Spacer()
         }
@@ -41,7 +41,7 @@ struct ConsistencyInfoSheet: View {
             InfoSheetHelpers.SectionHeader(icon: "lightbulb.fill", title: "개요")
             Text("얼마나 꾸준히 운동하는지를 추적합니다. 연속 운동일(Streak)과 월간 진행률을 통해 일관성을 확인하세요.")
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
         }
     }
 

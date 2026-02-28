@@ -170,7 +170,7 @@ struct InjuryHistoryView: View {
                     if let side = record.bodySide {
                         Text("(\(side.abbreviation))")
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(DS.Color.textSecondary)
                     }
                 }
 
@@ -182,7 +182,7 @@ struct InjuryHistoryView: View {
                         .foregroundStyle(.quaternary)
                     Text(record.durationLabel)
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                 }
 
                 Text(record.dateRangeLabel)
@@ -285,7 +285,7 @@ private struct InjuryDetailView: View {
                             if let side = record.bodySide {
                                 Text("(\(side.bilingualDisplayName))")
                                     .font(.subheadline)
-                                    .foregroundStyle(.secondary)
+                                    .foregroundStyle(DS.Color.textSecondary)
                             }
                         }
 
@@ -295,7 +295,7 @@ private struct InjuryDetailView: View {
 
                         Text(record.severity.localizedSeverityDescription)
                             .font(.caption2)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(DS.Color.textSecondary)
                     }
 
                     Spacer()
@@ -334,7 +334,7 @@ private struct InjuryDetailView: View {
                 if record.memo.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                     Text("No memo")
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                 } else {
                     Text(record.memo)
                         .font(.body)
@@ -348,7 +348,7 @@ private struct InjuryDetailView: View {
         HStack {
             Text(title)
                 .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
             Spacer()
             Text(value)
                 .font(.subheadline.weight(.medium))
