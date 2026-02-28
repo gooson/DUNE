@@ -268,8 +268,8 @@ private enum ShareCardPalette {
     static let accent = DS.Color.positive
     static let backgroundGradient = LinearGradient(
         colors: [
-            Color(red: 0.12, green: 0.12, blue: 0.18),
-            Color(red: 0.08, green: 0.08, blue: 0.14)
+            Color("ShareCardGradientStart"),
+            Color("ShareCardGradientEnd")
         ],
         startPoint: .topLeading,
         endPoint: .bottomTrailing
