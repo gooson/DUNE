@@ -1,7 +1,7 @@
 import Foundation
 
 /// Domain representation of current weather conditions.
-/// Created by WeatherDataService from WeatherKit data.
+/// Created by OpenMeteoService from Open-Meteo API data.
 struct WeatherSnapshot: Sendable, Hashable {
     let temperature: Double        // celsius
     let feelsLike: Double          // celsius
@@ -21,7 +21,7 @@ struct WeatherSnapshot: Sendable, Hashable {
     }
 
     var isStale: Bool {
-        Date().timeIntervalSince(fetchedAt) > 15 * 60
+        Date().timeIntervalSince(fetchedAt) > 60 * 60
     }
 
     /// Whether the feels-like temperature is extreme heat (35°C+)

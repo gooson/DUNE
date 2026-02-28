@@ -1,15 +1,15 @@
 import CoreLocation
 import Foundation
 
-/// Fetches weather data from Open-Meteo REST API as a fallback for WeatherKit.
-/// Uses the same 15-minute caching pattern as WeatherDataService.
+/// Fetches weather data from Open-Meteo REST API (primary weather source).
+/// Caches results for 60 minutes via WeatherSnapshot.isStale.
 /// Attribution: Open-Meteo.com (CC BY 4.0)
 final class OpenMeteoService: WeatherFetching, @unchecked Sendable {
     private var cached: WeatherSnapshot?
     private let lock = NSLock()
     private let session: URLSession
 
-    // JSONDecoder created per-call: not Sendable, and fetch is max once per 15 min.
+    // JSONDecoder created per-call: not Sendable, and fetch is max once per 60 min.
     private static func makeDecoder() -> JSONDecoder { JSONDecoder() }
 
     init(session: URLSession = .shared) {
@@ -45,8 +45,8 @@ final class OpenMeteoService: WeatherFetching, @unchecked Sendable {
             throw OpenMeteoError.invalidURL
         }
         components.queryItems = [
-            URLQueryItem(name: "latitude", value: String(format: "%.4f", latitude)),
-            URLQueryItem(name: "longitude", value: String(format: "%.4f", longitude)),
+            URLQueryItem(name: "latitude", value: String(format: "%.2f", latitude)),
+            URLQueryItem(name: "longitude", value: String(format: "%.2f", longitude)),
             URLQueryItem(
                 name: "current",
                 value: "temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,wind_speed_10m,uv_index,is_day"
@@ -91,7 +91,9 @@ final class OpenMeteoService: WeatherFetching, @unchecked Sendable {
             feelsLike: current.apparent_temperature.clampedToPhysicalTemperature(),
             condition: Self.mapWMOCode(current.weather_code),
             humidity: Swift.max(0, Swift.min(1, current.relative_humidity_2m / 100.0)),
-            uvIndex: Swift.max(0, Swift.min(15, Int(current.uv_index.rounded()))),
+            uvIndex: current.uv_index.isFinite
+                ? Swift.max(0, Swift.min(15, Int(current.uv_index.rounded())))
+                : 0,
             windSpeed: Swift.max(0, Swift.min(200, current.wind_speed_10m)),
             isDaytime: current.is_day == 1,
             fetchedAt: Date(),

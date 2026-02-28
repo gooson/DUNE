@@ -181,7 +181,7 @@ struct SettingsView: View {
             HStack {
                 Text("Weather Data")
                 Spacer()
-                Text("Apple WeatherKit, Open-Meteo.com")
+                Text("Open-Meteo.com (CC BY 4.0)")
                     .foregroundStyle(DS.Color.textSecondary)
                     .font(.caption)
             }

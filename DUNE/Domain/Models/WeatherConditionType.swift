@@ -1,7 +1,7 @@
 import Foundation
 
 /// Weather condition classification for domain logic.
-/// Mapped from WeatherKit's WeatherCondition in the Data layer.
+/// Mapped from Open-Meteo WMO weather codes in the Data layer.
 enum WeatherConditionType: String, Sendable, Hashable, CaseIterable {
     case clear
     case partlyCloudy
