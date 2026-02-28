@@ -57,23 +57,30 @@ struct WaveRefreshIndicator: View {
 /// Adds wave-branded pull-to-refresh to any ScrollView.
 /// Replaces the system spinner with `WaveRefreshIndicator`.
 struct WaveRefreshModifier: ViewModifier {
-    let color: Color
+    let colorOverride: Color?
     let action: @Sendable () async -> Void
 
-    /// Minimum display time so the indicator doesn't flash too briefly.
-    private static let minimumDisplaySeconds: UInt64 = 1_200_000_000 // 1.2s
+    @Environment(\.waveColor) private var waveColor
+
+    /// Minimum display time for satisfying animation visibility.
+    private static let minimumDisplayNanoseconds: UInt64 = 1_800_000_000 // 1.8s
 
     @State private var showIndicator = false
+
+    private var resolvedColor: Color { colorOverride ?? waveColor }
 
     func body(content: Content) -> some View {
         content
             .refreshable {
                 showIndicator = true
                 await withTaskGroup(of: Void.self) { group in
-                    group.addTask { try? await Task.sleep(nanoseconds: Self.minimumDisplaySeconds) }
+                    group.addTask { try? await Task.sleep(nanoseconds: Self.minimumDisplayNanoseconds) }
                     group.addTask { await action() }
                     await group.waitForAll()
                 }
+                // Brief settle delay so UIRefreshControl finishes scroll restoration
+                // before we remove our overlay — prevents stuck scroll offset.
+                try? await Task.sleep(nanoseconds: 100_000_000) // 0.1s
                 showIndicator = false
             }
             // Hide only this scroll view's system spinner to avoid overlap.
@@ -83,9 +90,14 @@ struct WaveRefreshModifier: ViewModifier {
             }
             .overlay(alignment: .top) {
                 if showIndicator {
-                    WaveRefreshIndicator(color: color)
+                    WaveRefreshIndicator(color: resolvedColor)
                         .padding(.top, DS.Spacing.sm)
-                        .transition(.move(edge: .top).combined(with: .opacity))
+                        .transition(
+                            .asymmetric(
+                                insertion: .move(edge: .top).combined(with: .opacity).combined(with: .scale(scale: 0.6, anchor: .top)),
+                                removal: .opacity.combined(with: .scale(scale: 0.8, anchor: .top))
+                            )
+                        )
                         .animation(DS.Animation.snappy, value: showIndicator)
                 }
             }
@@ -132,12 +144,14 @@ private extension UIView {
 
 extension View {
     /// Wave-branded pull-to-refresh.
+    /// Color defaults to the tab's `\.waveColor` environment value for automatic consistency.
+    /// Pass an explicit `color` only when an override is needed.
     func waveRefreshable(
-        color: Color = DS.Color.warmGlow,
+        color: Color? = nil,
         action: @escaping @Sendable () async -> Void
     ) -> some View {
         modifier(WaveRefreshModifier(
-            color: color,
+            colorOverride: color,
             action: action
         ))
     }
