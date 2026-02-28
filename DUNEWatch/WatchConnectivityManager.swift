@@ -204,7 +204,8 @@ extension WatchConnectivityManager {
         }
 
         // Immediate rest time update from iPhone settings change
-        if let restSeconds = parsed.globalRestSeconds {
+        if let restSeconds = parsed.globalRestSeconds,
+           restSeconds.isFinite, (15...600).contains(restSeconds) {
             globalRestSeconds = restSeconds
         }
     }
@@ -225,7 +226,8 @@ extension WatchConnectivityManager {
         }
 
         // Global rest time from iPhone settings
-        if let restSeconds = parsed.globalRestSeconds {
+        if let restSeconds = parsed.globalRestSeconds,
+           restSeconds.isFinite, (15...600).contains(restSeconds) {
             globalRestSeconds = restSeconds
         }
     }

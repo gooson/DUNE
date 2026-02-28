@@ -68,7 +68,8 @@ final class WatchSessionManager: NSObject {
     }
 
     /// Send updated workout settings to Watch immediately (if reachable).
-    /// Falls back to applicationContext for delivery when Watch is not reachable.
+    /// Also re-syncs the full exercise library via applicationContext to avoid
+    /// read-modify-write race with `transferExerciseLibrary()`.
     func syncWorkoutSettingsToWatch() {
         let restSeconds = WorkoutSettingsStore.shared.restSeconds
 
@@ -80,15 +81,8 @@ final class WatchSessionManager: NSObject {
             }
         }
 
-        // Also update applicationContext so Watch gets it on next sync
-        guard WCSession.default.activationState == .activated else { return }
-        do {
-            var context = WCSession.default.applicationContext
-            context["globalRestSeconds"] = restSeconds
-            try WCSession.default.updateApplicationContext(context)
-        } catch {
-            AppLogger.ui.error("Failed to update applicationContext with rest settings: \(error.localizedDescription)")
-        }
+        // Re-sync full context (library + settings) to avoid partial overwrite
+        syncExerciseLibraryToWatch()
     }
 
     /// Converts the full exercise library to WatchExerciseInfo and sends via applicationContext.

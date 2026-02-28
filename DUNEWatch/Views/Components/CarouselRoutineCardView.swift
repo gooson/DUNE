@@ -16,7 +16,7 @@ struct CarouselRoutineCardView: View {
 
         // Pre-compute meta at init (Correction #102)
         let totalSets = entries.reduce(0) { $0 + $1.defaultSets }
-        let estimatedMin = Self.estimateMinutes(entries: entries)
+        let estimatedMin = Self.estimateMinutes(entries: entries, globalRestSeconds: WatchConnectivityManager.shared.globalRestSeconds)
         var meta = "\(entries.count) exercise\(entries.count == 1 ? "" : "s") · \(totalSets) sets"
         if let mins = estimatedMin {
             meta += " · ~\(mins)min"
@@ -74,13 +74,13 @@ struct CarouselRoutineCardView: View {
 
     // MARK: - Estimation
 
-    private static func estimateMinutes(entries: [TemplateEntry]) -> Int? {
+    private static func estimateMinutes(entries: [TemplateEntry], globalRestSeconds: TimeInterval) -> Int? {
         guard !entries.isEmpty else { return nil }
         let setExecutionSeconds: Double = 40
         var totalSeconds: Double = 0
         for entry in entries {
             let sets = Double(min(entry.defaultSets, 100))
-            let rest = entry.restDuration ?? WatchConnectivityManager.shared.globalRestSeconds
+            let rest = entry.restDuration ?? globalRestSeconds
             totalSeconds += sets * setExecutionSeconds + Swift.max(sets - 1, 0) * rest
         }
         // Correction #85/#169: guard isFinite + physical upper bound (480min = 8h)

@@ -20,7 +20,7 @@ struct TemplateCardView: View {
 
         // Meta: "4 exercises · 16 sets · ~45min"
         let totalSets = entries.reduce(0) { $0 + $1.defaultSets }
-        let estimatedMin = Self.estimateMinutes(entries: entries)
+        let estimatedMin = Self.estimateMinutes(entries: entries, globalRestSeconds: WatchConnectivityManager.shared.globalRestSeconds)
         var meta = "\(entries.count) exercise\(entries.count == 1 ? "" : "s") · \(totalSets) sets"
         if let mins = estimatedMin {
             meta += " · ~\(mins)min"
@@ -84,14 +84,14 @@ struct TemplateCardView: View {
 
     /// Estimates workout duration in minutes based on set count and rest durations.
     /// Returns nil if no entries exist.
-    private static func estimateMinutes(entries: [TemplateEntry]) -> Int? {
+    private static func estimateMinutes(entries: [TemplateEntry], globalRestSeconds: TimeInterval) -> Int? {
         guard !entries.isEmpty else { return nil }
         // ~40s per set execution + rest between sets
         let setExecutionSeconds: Double = 40
         var totalSeconds: Double = 0
         for entry in entries {
             let sets = Double(entry.defaultSets)
-            let rest = entry.restDuration ?? WatchConnectivityManager.shared.globalRestSeconds
+            let rest = entry.restDuration ?? globalRestSeconds
             // Each set takes ~40s + rest between sets (no rest after last set)
             totalSeconds += sets * setExecutionSeconds + Swift.max(sets - 1, 0) * rest
         }
