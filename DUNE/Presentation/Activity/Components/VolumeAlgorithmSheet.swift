@@ -32,7 +32,7 @@ struct VolumeAlgorithmSheet: View {
                     .font(.headline)
                 Text("Weekly Training Volume")
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
             Spacer()
         }
@@ -45,7 +45,7 @@ struct VolumeAlgorithmSheet: View {
             sectionHeader(icon: "lightbulb.fill", title: "개요")
             Text("최근 7일간 각 근육군에 수행한 세트 수를 집계하여 훈련 볼륨을 시각화합니다. 어떤 근육을 많이 훈련했는지, 어떤 근육이 부족한지 한눈에 파악할 수 있습니다.")
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
         }
     }
 
@@ -99,7 +99,7 @@ struct VolumeAlgorithmSheet: View {
         HStack(spacing: DS.Spacing.xs) {
             Image(systemName: icon)
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
             Text(title)
                 .font(.subheadline.weight(.semibold))
         }
@@ -117,10 +117,10 @@ struct VolumeAlgorithmSheet: View {
         HStack(alignment: .top, spacing: DS.Spacing.xs) {
             Text("·")
                 .font(.caption.weight(.bold))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
             Text(text)
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
         }
     }
 
@@ -140,7 +140,7 @@ struct VolumeAlgorithmSheet: View {
                 .frame(width: 32, alignment: .leading)
             Text(level.description)
                 .font(.caption2)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
             Spacer()
         }
     }

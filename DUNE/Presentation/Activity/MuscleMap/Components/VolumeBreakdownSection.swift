@@ -54,7 +54,7 @@ struct VolumeBreakdownSection: View {
                     .foregroundStyle(color)
                 Text(title)
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
             Text(value)
                 .font(.title2.weight(.bold))
@@ -153,7 +153,7 @@ struct VolumeBreakdownSection: View {
                 ? "Your training is well-balanced across muscle groups."
                 : "Consider adding more work for undertrained muscles.")
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
 
             if !balanceInfo.isBalanced && !balanceInfo.undertrainedMuscles.isEmpty {
                 HStack(spacing: DS.Spacing.xs) {

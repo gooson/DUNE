@@ -38,7 +38,7 @@ struct ScoreContributorsView: View {
 
                     Text(contribution.detail)
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                 }
 
                 GeometryReader { geometry in

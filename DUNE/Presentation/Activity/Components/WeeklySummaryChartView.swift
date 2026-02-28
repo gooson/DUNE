@@ -21,7 +21,7 @@ struct WeeklySummaryChartView: View {
                     VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                         Text("This Week")
                             .font(.subheadline)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(DS.Color.textSecondary)
                         Text(summaryText)
                             .font(.title2)
                             .fontWeight(.bold)

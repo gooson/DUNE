@@ -17,7 +17,7 @@ struct MetricSummaryHeader: View {
                 Image(systemName: category.iconName)
                     .foregroundStyle(category.themeColor)
                 Text(category.displayName)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
             .font(.subheadline)
 
@@ -142,7 +142,7 @@ struct MetricSummaryHeader: View {
                 let direction = change > 0 ? "higher" : "lower"
                 let absChange = abs(change).formattedWithSeparator(fractionDigits: 1)
                 Text("Your average is \(absChange)% \(direction) than last period")
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
                     .transition(.opacity)
             }
         }

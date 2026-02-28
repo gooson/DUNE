@@ -53,7 +53,7 @@ struct WorkoutRecommendationCard: View {
                                 .frame(width: 5, height: 5)
                             Text(exercise.definition.localizedName)
                                 .font(.caption)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(DS.Color.textSecondary)
                             Spacer()
                             if exercise.suggestedSets > 0 {
                                 Text("\(exercise.suggestedSets) sets")

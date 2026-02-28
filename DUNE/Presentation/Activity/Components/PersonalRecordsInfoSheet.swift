@@ -30,7 +30,7 @@ struct PersonalRecordsInfoSheet: View {
                     .font(.headline)
                 Text("Personal Records")
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
             Spacer()
         }
@@ -41,7 +41,7 @@ struct PersonalRecordsInfoSheet: View {
             InfoSheetHelpers.SectionHeader(icon: "lightbulb.fill", title: "개요")
             Text("근력과 유산소 기록을 함께 분석해 개인 최고치를 추적합니다. 운동의 진행 상황을 한 화면에서 확인하고, 훈련 방향을 조정하는 데 활용하세요.")
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
         }
     }
 

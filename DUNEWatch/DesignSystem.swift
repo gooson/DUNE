@@ -26,6 +26,10 @@ enum DS {
         static let vitals    = SwiftUI.Color("WellnessVitals")
         static let fitness   = SwiftUI.Color("WellnessFitness")
 
+        // Text hierarchy (mirrors iOS DS)
+        static let textSecondary = SwiftUI.Color("TextSecondary")
+        static let textTertiary  = SwiftUI.Color("TextTertiary")
+
         // Surface
         // cardBackground intentionally omitted — watchOS uses system material backgrounds
         static let surfacePrimary = SwiftUI.Color("SurfacePrimary")
@@ -47,6 +51,8 @@ enum DS {
         static let light: Double = 0.08
         static let medium: Double = 0.10
         static let border: Double = 0.15
+        static let overlay: Double = 0.20
+        static let cardBorder: Double = 0.25
         static let strong: Double = 0.30
     }
 

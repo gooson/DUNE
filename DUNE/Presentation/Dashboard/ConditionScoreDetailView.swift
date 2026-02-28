@@ -139,7 +139,7 @@ struct ConditionScoreDetailView: View {
             Text("No Data")
                 .font(.subheadline)
                 .fontWeight(.medium)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
 
             Text("No records for this period.")
                 .font(.caption)
@@ -156,7 +156,7 @@ struct ConditionScoreDetailView: View {
             Text(viewModel.visibleRangeLabel)
                 .font(.subheadline)
                 .fontWeight(.medium)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
                 .contentTransition(.numericText())
                 .animation(DS.Animation.snappy, value: viewModel.visibleRangeLabel)
 
@@ -206,7 +206,7 @@ struct ConditionScoreDetailView: View {
             VStack(alignment: .leading, spacing: DS.Spacing.sm) {
                 Text("Period Summary")
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
 
                 HStack(spacing: DS.Spacing.lg) {
                     summaryItem(label: "Avg", value: summary.average.formattedWithSeparator())
@@ -270,7 +270,7 @@ struct ConditionScoreDetailView: View {
                         VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                             Text(highlight.label)
                                 .font(.caption)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(DS.Color.textSecondary)
                             Text(highlight.value.formattedWithSeparator())
                                 .font(.subheadline)
                                 .fontWeight(.medium)

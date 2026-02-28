@@ -41,7 +41,7 @@ struct HealthKitWorkoutDetailView: View {
 
                     Text(workout.date, style: .date)
                         .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
 
                     Text(workout.date, style: .time)
                         .font(.caption)
@@ -81,7 +81,7 @@ struct HealthKitWorkoutDetailView: View {
                 .font(.title3.weight(.semibold).monospacedDigit())
             Text(label)
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
         }
     }
 
@@ -195,7 +195,7 @@ struct HealthKitWorkoutDetailView: View {
                     .foregroundStyle(iconColor)
                 Text(title)
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
             HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xxs) {
                 Text(value)
@@ -203,7 +203,7 @@ struct HealthKitWorkoutDetailView: View {
                 if !unit.isEmpty {
                     Text(unit)
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                 }
             }
         }
@@ -256,7 +256,7 @@ struct HealthKitWorkoutDetailView: View {
                                 .font(.title2.weight(.semibold).monospacedDigit())
                             Text("온도")
                                 .font(.caption)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(DS.Color.textSecondary)
                         }
                     }
                     if let condition = workout.weatherCondition {
@@ -265,7 +265,7 @@ struct HealthKitWorkoutDetailView: View {
                                 .font(.title2)
                             Text("상태")
                                 .font(.caption)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(DS.Color.textSecondary)
                         }
                     }
                     if let humidity = workout.weatherHumidity {
@@ -274,7 +274,7 @@ struct HealthKitWorkoutDetailView: View {
                                 .font(.title2.weight(.semibold).monospacedDigit())
                             Text("습도")
                                 .font(.caption)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(DS.Color.textSecondary)
                         }
                     }
                 }
@@ -294,7 +294,7 @@ struct HealthKitWorkoutDetailView: View {
                 .foregroundStyle(.tertiary)
             Text(title)
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
         }
         .frame(maxWidth: .infinity)
         .frame(height: 100)

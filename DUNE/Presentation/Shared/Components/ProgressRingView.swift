@@ -10,20 +10,25 @@ struct ProgressRingView: View {
     @State private var animatedProgress: Double = 0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
+    /// Pre-resolved gradient colors — computed once at init, not per render (P1 perf fix).
+    private var gradientColors: [Color] {
+        useWarmGradient
+            ? Cache.warmGradientColors(base: ringColor)
+            : [ringColor.opacity(0.6), ringColor]
+    }
+
     var body: some View {
         ZStack {
             // Background track
             Circle()
-                .stroke(ringColor.opacity(0.15), style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
+                .stroke(ringColor.opacity(DS.Opacity.border), style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
 
             // Progress arc
             Circle()
                 .trim(from: 0, to: animatedProgress)
                 .stroke(
                     AngularGradient(
-                        colors: useWarmGradient
-                            ? Cache.warmGradientColors(base: ringColor)
-                            : [ringColor.opacity(0.6), ringColor],
+                        colors: gradientColors,
                         center: .center,
                         startAngle: .degrees(-90),
                         endAngle: .degrees(270)
@@ -54,10 +59,13 @@ struct ProgressRingView: View {
         }
     }
 
-    // Correction #83 — static color caching for hot path
+    // Correction #83 — static color caching for warm gradient
     private enum Cache {
+        static let warmGlow06 = Color("AccentColor").opacity(0.6)
+        static let warmGlow08 = Color("AccentColor").opacity(0.8)
+
         static func warmGradientColors(base: Color) -> [Color] {
-            [Color.accentColor.opacity(0.6), base, Color.accentColor.opacity(0.8)]
+            [warmGlow06, base, warmGlow08]
         }
     }
 }

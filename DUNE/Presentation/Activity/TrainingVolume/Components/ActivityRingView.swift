@@ -70,7 +70,7 @@ struct LabeledActivityRingView<Label: View>: View {
                 .font(.title2.bold())
             Text("/ 5일")
                 .font(.caption2)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
         }
     }
 }

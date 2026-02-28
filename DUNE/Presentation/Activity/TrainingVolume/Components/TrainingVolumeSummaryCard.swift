@@ -50,7 +50,7 @@ struct TrainingVolumeSummaryCard: View {
                     .foregroundStyle(DS.Gradient.heroText)
                 Text(unit)
                     .font(.caption2)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
         }
     }

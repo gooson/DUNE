@@ -38,7 +38,7 @@ struct ExerciseFrequencySection: View {
 
                 Text("\(freq.count)x")
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
                     .monospacedDigit()
             }
 

@@ -46,12 +46,12 @@ struct HeartRateChartView: View {
         HStack(spacing: 4) {
             Text(title)
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
             Text(value)
                 .font(.caption.monospacedDigit().weight(.semibold))
             Text(unit)
                 .font(.caption2)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
         }
     }
 
@@ -84,7 +84,7 @@ struct HeartRateChartView: View {
                     .annotation(position: .top, alignment: .trailing) {
                         Text("avg \(Int(averageBPM).formattedWithSeparator)")
                             .font(.system(size: 9))
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(DS.Color.textSecondary)
                     }
             }
 

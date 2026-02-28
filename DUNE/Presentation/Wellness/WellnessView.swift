@@ -245,7 +245,7 @@ struct WellnessView: View {
 
                 Text(message)
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
                     .lineLimit(2)
 
                 Spacer()
@@ -335,11 +335,11 @@ private struct WellnessInjuryBannerView: View {
                     InlineCard {
                         HStack(spacing: DS.Spacing.sm) {
                             Image(systemName: "checkmark.circle")
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(DS.Color.textSecondary)
 
                             Text("No active injuries")
                                 .font(.caption)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(DS.Color.textSecondary)
 
                             Spacer()
 

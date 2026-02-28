@@ -51,7 +51,7 @@ struct MuscleDetailPopover: View {
                         .font(.headline)
                     Text(muscle.localizedDisplayName)
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                 }
 
                 Spacer()
@@ -82,7 +82,7 @@ struct MuscleDetailPopover: View {
             } else if isInline {
                 Text("No recent activity for this muscle")
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
 
             // Recommended exercises
@@ -102,7 +102,7 @@ struct MuscleDetailPopover: View {
     private func exerciseRow(_ exercise: ExerciseDefinition) -> some View {
         HStack(spacing: DS.Spacing.sm) {
             exercise.equipment.svgIcon(size: 16)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
                 .frame(width: 20)
             Text(exercise.localizedName)
                 .font(.subheadline)
@@ -176,10 +176,10 @@ struct MuscleDetailPopover: View {
             HStack(spacing: DS.Spacing.xxs) {
                 Image(systemName: icon)
                     .font(.caption2)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
                 Text(title)
                     .font(.caption2)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
             Text(value)
                 .font(.subheadline.weight(.medium))

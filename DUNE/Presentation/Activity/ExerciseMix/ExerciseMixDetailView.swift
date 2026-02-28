@@ -57,7 +57,7 @@ struct ExerciseMixDetailView: View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             Text("Distribution")
                 .font(.subheadline.weight(.semibold))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
 
             Chart(Array(displayFrequencies.enumerated()), id: \.element.id) { index, freq in
                 SectorMark(
@@ -88,7 +88,7 @@ struct ExerciseMixDetailView: View {
                         Spacer()
                         Text("\(freq.count)x")
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(DS.Color.textSecondary)
                             .monospacedDigit()
                     }
                 }
@@ -107,7 +107,7 @@ struct ExerciseMixDetailView: View {
                     .lineLimit(1)
                 Text("\(freq.count)x")
                     .font(.caption2)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             } else {
                 let total = viewModel.exerciseFrequencies.reduce(0) { $0 + $1.count }
                 Text(total.formattedWithSeparator)
@@ -115,7 +115,7 @@ struct ExerciseMixDetailView: View {
                     .monospacedDigit()
                 Text("total")
                     .font(.caption2)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
         }
         .animation(.easeInOut(duration: 0.15), value: selectedExercise)
@@ -144,7 +144,7 @@ struct ExerciseMixDetailView: View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             Text("All Exercises")
                 .font(.subheadline.weight(.semibold))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
 
             ForEach(viewModel.exerciseFrequencies) { freq in
                 VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
@@ -156,7 +156,7 @@ struct ExerciseMixDetailView: View {
                         Spacer(minLength: 0)
                         Text("\(freq.count)x")
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(DS.Color.textSecondary)
                             .monospacedDigit()
                     }
 
@@ -187,7 +187,7 @@ struct ExerciseMixDetailView: View {
                 .foregroundStyle(.quaternary)
             Text("No exercise data yet.")
                 .font(.headline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
             Text("Exercise distribution will appear after a few workouts.")
                 .font(.subheadline)
                 .foregroundStyle(.tertiary)

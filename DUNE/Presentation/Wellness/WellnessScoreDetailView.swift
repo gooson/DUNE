@@ -176,7 +176,7 @@ struct WellnessScoreDetailView: View {
                 .font(.caption)
                 .fontWeight(.medium)
                 .monospacedDigit()
-                .foregroundStyle(DS.Color.primaryTextStyle(active: score != nil))
+                .foregroundStyle(score != nil ? AnyShapeStyle(DS.Color.primaryText) : AnyShapeStyle(.tertiary))
                 .frame(width: 32, alignment: .trailing)
         }
         .accessibilityElement(children: .combine)
@@ -198,7 +198,7 @@ struct WellnessScoreDetailView: View {
             VStack(alignment: .leading, spacing: DS.Spacing.md) {
                 HStack(spacing: DS.Spacing.sm) {
                     Image(systemName: "info.circle.fill")
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                     Text("Calculation Method")
                         .font(.subheadline)
                         .fontWeight(.semibold)
@@ -221,7 +221,7 @@ struct WellnessScoreDetailView: View {
 
             Text(text)
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
                 .fixedSize(horizontal: false, vertical: true)
         }
     }

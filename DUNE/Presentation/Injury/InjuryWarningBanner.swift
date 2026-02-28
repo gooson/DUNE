@@ -29,7 +29,7 @@ struct InjuryWarningBanner: View {
                         if !conflict.conflictingMuscles.isEmpty {
                             Text("(\(conflict.conflictingMuscles.map(\.displayName).joined(separator: ", ")))")
                                 .font(.caption)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(DS.Color.textSecondary)
                         }
                     }
                 }

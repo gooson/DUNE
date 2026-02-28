@@ -28,7 +28,7 @@ struct ActiveRecoveryCard: View {
 
             Text(item.duration)
                 .font(.caption2)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
         }
         .frame(width: 90)
         .padding(.vertical, DS.Spacing.sm)

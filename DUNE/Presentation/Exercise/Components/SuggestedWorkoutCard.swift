@@ -45,7 +45,7 @@ struct SuggestedWorkoutCard: View {
 
                         Text("\(exercise.suggestedSets.formattedWithSeparator) sets")
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(DS.Color.textSecondary)
 
                         Image(systemName: "chevron.right")
                             .font(.caption2)
@@ -60,7 +60,7 @@ struct SuggestedWorkoutCard: View {
             if suggestion.exercises.isEmpty {
                 Text(suggestion.reasoning)
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
         }
         .padding(DS.Spacing.md)

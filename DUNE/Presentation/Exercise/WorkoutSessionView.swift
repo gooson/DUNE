@@ -187,13 +187,13 @@ struct WorkoutSessionView: View {
             HStack {
                 Text("Set \(currentSetIndex + 1) of \(totalSets)")
                     .font(.subheadline.weight(.medium))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
 
                 Spacer()
 
                 Text(formattedElapsedTime)
                     .font(.caption.weight(.medium).monospacedDigit())
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
                     .contentTransition(.numericText())
             }
             .padding(.horizontal, DS.Spacing.lg)
@@ -254,7 +254,7 @@ struct WorkoutSessionView: View {
                     .font(.caption)
             }
         }
-        .foregroundStyle(.secondary)
+        .foregroundStyle(DS.Color.textSecondary)
         .padding(.horizontal, DS.Spacing.md)
         .padding(.vertical, DS.Spacing.xs)
         .background(.ultraThinMaterial, in: Capsule())
@@ -443,7 +443,7 @@ struct WorkoutSessionView: View {
         VStack(spacing: DS.Spacing.sm) {
             Text(label)
                 .font(.caption.weight(.bold))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
 
             TextField(placeholder, text: value)
                 .font(.system(size: 48, weight: .bold, design: .rounded))
@@ -498,7 +498,7 @@ struct WorkoutSessionView: View {
 
             Text("Rest")
                 .font(.title3.weight(.medium))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
 
             // Completed set summary
             if viewModel.sets.indices.contains(currentSetIndex),

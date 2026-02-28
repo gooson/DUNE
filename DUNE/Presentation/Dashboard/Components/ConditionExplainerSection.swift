@@ -17,7 +17,7 @@ struct ConditionExplainerSection: View {
             } label: {
                 HStack(spacing: DS.Spacing.sm) {
                     Image(systemName: "info.circle.fill")
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                     Text("점수 계산 원리")
                         .font(.subheadline)
                         .fontWeight(.semibold)
@@ -28,7 +28,7 @@ struct ConditionExplainerSection: View {
                     Image(systemName: "chevron.right")
                         .font(.caption)
                         .fontWeight(.semibold)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                         .rotationEffect(.degrees(isExpanded ? 90 : 0))
                         .animation(DS.Animation.snappy, value: isExpanded)
                 }
@@ -83,7 +83,7 @@ struct ConditionExplainerSection: View {
 
                 Text(description)
                     .font(isRegular ? .subheadline : .caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
         }

@@ -35,7 +35,7 @@ struct FatigueAlgorithmSheet: View {
                     .font(.headline)
                 Text("Compound Fatigue Score")
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
             Spacer()
         }
@@ -48,7 +48,7 @@ struct FatigueAlgorithmSheet: View {
             sectionHeader(icon: "lightbulb.fill", title: "개요")
             Text("최근 14일간의 운동 기록을 분석하여 각 근육의 피로 누적을 10단계로 평가합니다. 운동의 강도, 빈도, 경과 시간, 수면 질, 생체 신호를 종합적으로 반영합니다.")
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
         }
     }
 
@@ -126,7 +126,7 @@ struct FatigueAlgorithmSheet: View {
         HStack(spacing: DS.Spacing.xs) {
             Image(systemName: icon)
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
             Text(title)
                 .font(.subheadline.weight(.semibold))
         }
@@ -144,10 +144,10 @@ struct FatigueAlgorithmSheet: View {
         HStack(alignment: .top, spacing: DS.Spacing.xs) {
             Text("·")
                 .font(.caption.weight(.bold))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
             Text(text)
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
         }
     }
 
@@ -155,7 +155,7 @@ struct FatigueAlgorithmSheet: View {
         HStack {
             Text(label)
                 .font(.caption2)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
             Spacer()
             Text(value)
                 .font(.caption2.weight(.medium).monospacedDigit())
@@ -174,7 +174,7 @@ struct FatigueAlgorithmSheet: View {
                 .frame(width: 24, alignment: .leading)
             Text(description)
                 .font(.caption2)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
             Spacer()
         }
     }

@@ -9,7 +9,7 @@ struct BodyCalculationCard: View {
             VStack(alignment: .leading, spacing: DS.Spacing.md) {
                 HStack(spacing: DS.Spacing.sm) {
                     Image(systemName: "function")
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                     Text("Body Calculation")
                         .font(.subheadline)
                         .fontWeight(.semibold)

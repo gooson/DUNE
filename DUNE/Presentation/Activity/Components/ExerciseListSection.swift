@@ -63,10 +63,10 @@ struct ExerciseListSection: View {
                 InlineCard {
                     HStack {
                         Image(systemName: "figure.run")
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(DS.Color.textSecondary)
                         Text("No recent workouts")
                             .font(.subheadline)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(DS.Color.textSecondary)
                         Spacer()
                     }
                 }

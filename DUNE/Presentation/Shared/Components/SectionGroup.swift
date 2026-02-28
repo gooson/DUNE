@@ -31,7 +31,7 @@ struct SectionGroup<Content: View>: View {
                 Text(title)
                     .font(.subheadline)
                     .fontWeight(.semibold)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
 
                 if let infoAction {
                     Spacer()
@@ -39,7 +39,7 @@ struct SectionGroup<Content: View>: View {
                     Button(action: infoAction) {
                         Image(systemName: "info.circle")
                             .font(.subheadline)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(DS.Color.textSecondary)
                     }
                 }
             }

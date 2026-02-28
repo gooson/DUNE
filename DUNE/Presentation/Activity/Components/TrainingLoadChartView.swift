@@ -20,7 +20,7 @@ struct TrainingLoadChartView: View {
                 if let summary = cachedWeekSummary {
                     Text(summary)
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                 }
             }
 
@@ -126,7 +126,7 @@ struct TrainingLoadChartView: View {
                 .foregroundStyle(.tertiary)
             Text("Training load will appear as you exercise")
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
         }
         .frame(maxWidth: .infinity)
         .frame(height: 100)
@@ -144,7 +144,7 @@ struct TrainingLoadChartView: View {
     private func legendItem(color: Color, label: String) -> some View {
         HStack(spacing: 4) {
             Circle().fill(color).frame(width: 6, height: 6)
-            Text(label).foregroundStyle(.secondary)
+            Text(label).foregroundStyle(DS.Color.textSecondary)
         }
     }
 

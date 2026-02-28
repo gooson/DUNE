@@ -28,7 +28,7 @@ struct ConditionInsightSection: View {
 
                         Text(guidance)
                             .font(isRegular ? .subheadline : .caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(DS.Color.textSecondary)
                             .fixedSize(horizontal: false, vertical: true)
                     }
 

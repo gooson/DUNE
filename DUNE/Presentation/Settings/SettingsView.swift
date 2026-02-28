@@ -41,7 +41,7 @@ struct SettingsView: View {
                 Label("Rest Time", systemImage: "timer")
                 Spacer()
                 Text(restTimeLabel)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
                 Stepper("", value: $restSeconds, in: WorkoutSettingsStore.restSecondsRange, step: 15)
                     .labelsHidden()
             }
@@ -50,7 +50,7 @@ struct SettingsView: View {
                 Label("Default Sets", systemImage: "list.number")
                 Spacer()
                 Text("\(setCount)")
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
                 Stepper("", value: $setCount, in: WorkoutSettingsStore.setCountRange)
                     .labelsHidden()
             }
@@ -59,7 +59,7 @@ struct SettingsView: View {
                 Label("Body Weight", systemImage: "figure.stand")
                 Spacer()
                 Text("\(bodyWeightKg.formatted(.number.precision(.fractionLength(1)))) kg")
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
                 Stepper(
                     "",
                     value: $bodyWeightKg,
@@ -136,14 +136,14 @@ struct SettingsView: View {
                 Text("Version")
                 Spacer()
                 Text(appVersion)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
 
             HStack {
                 Text("Build")
                 Spacer()
                 Text(buildNumber)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
         }
     }

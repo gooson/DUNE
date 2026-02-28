@@ -22,7 +22,7 @@ struct VitalCard: View {
                     Text(data.title)
                         .font(.caption)
                         .fontWeight(.medium)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
 
                     Spacer(minLength: 0)
 
@@ -43,7 +43,7 @@ struct VitalCard: View {
                     if !data.unit.isEmpty {
                         Text(data.unit)
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(DS.Color.textSecondary)
                     }
 
                     Spacer(minLength: 0)

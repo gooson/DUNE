@@ -53,7 +53,7 @@ struct ConsistencyDetailView: View {
                     .foregroundStyle(DS.Gradient.heroText)
                 Text(unit)
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
 
             Text(title)
@@ -71,7 +71,7 @@ struct ConsistencyDetailView: View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             Text("This Month")
                 .font(.subheadline.weight(.semibold))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
 
             // Weekday headers
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 4), count: 7), spacing: 4) {
@@ -114,7 +114,7 @@ struct ConsistencyDetailView: View {
                 HStack {
                     Text("Monthly Progress")
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                     Spacer()
                     Text("\(streak.monthlyCount)/\(streak.monthlyGoal)")
                         .font(.caption)
@@ -146,7 +146,7 @@ struct ConsistencyDetailView: View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             Text("Streak History")
                 .font(.subheadline.weight(.semibold))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
 
             if viewModel.streakHistory.isEmpty {
                 Text("No streak history yet.")
@@ -187,7 +187,7 @@ struct ConsistencyDetailView: View {
                 .foregroundStyle(.quaternary)
             Text("No workout data yet.")
                 .font(.headline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
             Text("Work out regularly to build and track your streaks.")
                 .font(.subheadline)
                 .foregroundStyle(.tertiary)

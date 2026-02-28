@@ -11,7 +11,7 @@ enum InfoSheetHelpers {
             HStack(spacing: DS.Spacing.xs) {
                 Image(systemName: icon)
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
                 Text(title)
                     .font(.subheadline.weight(.semibold))
             }
@@ -26,10 +26,10 @@ enum InfoSheetHelpers {
             HStack(alignment: .top, spacing: DS.Spacing.xs) {
                 Text("·")
                     .font(.caption.weight(.bold))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
                 Text(text)
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
         }
     }

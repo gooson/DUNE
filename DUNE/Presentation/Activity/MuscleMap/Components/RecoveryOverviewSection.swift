@@ -52,11 +52,11 @@ struct RecoveryOverviewSection: View {
                         .font(.subheadline.weight(.medium))
                     Text(recoveredCount == total ? "All muscle groups are recovered" : "\(total - recoveredCount) still recovering")
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                 } else {
                     Text("Start training to track recovery")
                         .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                 }
             }
 
@@ -105,7 +105,7 @@ struct RecoveryOverviewSection: View {
 
             Text("Next ready:")
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
 
             Text(muscle.displayName)
                 .font(.caption.weight(.medium))

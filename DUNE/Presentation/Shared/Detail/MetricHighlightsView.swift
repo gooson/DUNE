@@ -27,7 +27,7 @@ struct MetricHighlightsView: View {
                             VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                                 Text(highlight.label)
                                     .font(isRegular ? .subheadline : .caption)
-                                    .foregroundStyle(.secondary)
+                                    .foregroundStyle(DS.Color.textSecondary)
                                 Text(formattedValue(highlight.value))
                                     .font(isRegular ? .body : .subheadline)
                                     .fontWeight(.medium)

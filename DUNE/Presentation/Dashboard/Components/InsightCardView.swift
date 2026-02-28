@@ -26,7 +26,7 @@ struct InsightCardView: View {
 
                     Text(data.message)
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                         .fixedSize(horizontal: false, vertical: true)
                         .lineLimit(4)
                 }

@@ -143,7 +143,7 @@ struct TrainingReadinessDetailView: View {
             VStack(alignment: .leading, spacing: DS.Spacing.md) {
                 HStack(spacing: DS.Spacing.sm) {
                     Image(systemName: "function")
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                     Text("Calculation Method")
                         .font(.subheadline.weight(.semibold))
                 }
@@ -168,7 +168,7 @@ struct TrainingReadinessDetailView: View {
 
             Text(text)
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
                 .fixedSize(horizontal: false, vertical: true)
         }
     }
@@ -182,7 +182,7 @@ struct TrainingReadinessDetailView: View {
                 .foregroundStyle(.quaternary)
             Text("Need More Data")
                 .font(.headline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
             Text("Track your workouts and wear Apple Watch to see your training readiness breakdown.")
                 .font(.subheadline)
                 .foregroundStyle(.tertiary)

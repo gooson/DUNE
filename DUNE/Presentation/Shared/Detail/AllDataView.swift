@@ -54,7 +54,7 @@ struct AllDataView: View {
         HStack {
             Text(point.date, format: .dateTime.hour().minute())
                 .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
                 .frame(width: 60, alignment: .leading)
 
             Spacer()

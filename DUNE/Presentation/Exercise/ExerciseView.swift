@@ -271,7 +271,7 @@ struct ExerciseView: View {
                     .font(.subheadline.weight(.medium))
                 Text("\(draft.exerciseDefinition.localizedName) - \(draft.sets.filter(\.isCompleted).count.formattedWithSeparator) sets")
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
             Spacer()
             Button("Resume") {
@@ -287,7 +287,7 @@ struct ExerciseView: View {
             } label: {
                 Image(systemName: "xmark")
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
             .buttonStyle(.plain)
         }

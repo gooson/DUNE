@@ -27,7 +27,7 @@ struct ConsistencyCard: View {
                                 .foregroundStyle(DS.Gradient.heroText)
                             Text("days")
                                 .font(.caption)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(DS.Color.textSecondary)
                         }
                         Text("Current Streak")
                             .font(.caption2)
@@ -44,7 +44,7 @@ struct ConsistencyCard: View {
                                 .foregroundStyle(DS.Gradient.heroText)
                             Text("days")
                                 .font(.caption)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(DS.Color.textSecondary)
                         }
                         Text("Best Streak")
                             .font(.caption2)
@@ -64,7 +64,7 @@ struct ConsistencyCard: View {
                     HStack {
                         Text("This Month")
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(DS.Color.textSecondary)
                         Spacer()
                         Text("\(streak.monthlyCount)/\(streak.monthlyGoal)")
                             .font(.caption)

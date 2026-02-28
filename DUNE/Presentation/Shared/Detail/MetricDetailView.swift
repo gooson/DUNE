@@ -159,7 +159,7 @@ struct MetricDetailView: View {
             Text("No Data")
                 .font(.subheadline)
                 .fontWeight(.medium)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
 
             Text("No records for this period.")
                 .font(.caption)
@@ -176,7 +176,7 @@ struct MetricDetailView: View {
             Text(viewModel.visibleRangeLabel)
                 .font(.subheadline)
                 .fontWeight(.medium)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
                 .contentTransition(.numericText())
                 .animation(DS.Animation.snappy, value: viewModel.visibleRangeLabel)
 

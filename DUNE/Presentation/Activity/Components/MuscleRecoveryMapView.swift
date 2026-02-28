@@ -52,7 +52,7 @@ struct MuscleRecoveryMapView: View {
         HStack {
             Text(subtitle)
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
                 .contentTransition(.numericText())
 
             Button {
@@ -63,7 +63,7 @@ struct MuscleRecoveryMapView: View {
             } label: {
                 Image(systemName: "info.circle")
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
 
             Spacer()

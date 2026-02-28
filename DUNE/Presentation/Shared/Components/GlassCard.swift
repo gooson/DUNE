@@ -1,5 +1,40 @@
 import SwiftUI
 
+// P2 perf fix — cached gradients at file scope (static stored properties
+// are not allowed inside generic types like HeroCard<Content>).
+private enum GlassCardGradients {
+    static let heroBorder = LinearGradient(
+        colors: [
+            DS.Color.warmGlow.opacity(DS.Opacity.strong),
+            DS.Color.warmGlow.opacity(DS.Opacity.subtle)
+        ],
+        startPoint: .topLeading,
+        endPoint: .bottomTrailing
+    )
+    static let darkBorder = LinearGradient(
+        colors: [
+            DS.Color.warmGlow.opacity(DS.Opacity.strong),
+            DS.Color.desertDusk.opacity(DS.Opacity.cardBorder)
+        ],
+        startPoint: .topLeading,
+        endPoint: .bottomTrailing
+    )
+    static let clearBorder = LinearGradient(
+        colors: [Color.clear, Color.clear],
+        startPoint: .topLeading,
+        endPoint: .bottomTrailing
+    )
+    static let bottomSeparator = LinearGradient(
+        colors: [
+            DS.Color.warmGlow.opacity(0),
+            DS.Color.warmGlow.opacity(DS.Opacity.cardBorder),
+            DS.Color.warmGlow.opacity(0)
+        ],
+        startPoint: .leading,
+        endPoint: .trailing
+    )
+}
+
 /// Hero card — dashboard hero, sleep score, prominent information.
 struct HeroCard<Content: View>: View {
     let tintColor: Color
@@ -23,7 +58,7 @@ struct HeroCard<Content: View>: View {
                                 LinearGradient(
                                     colors: [
                                         DS.Color.warmGlow.opacity(DS.Opacity.medium),
-                                        tintColor.opacity(0.08)
+                                        tintColor.opacity(DS.Opacity.light)
                                     ],
                                     startPoint: .topLeading,
                                     endPoint: .bottomTrailing
@@ -34,14 +69,7 @@ struct HeroCard<Content: View>: View {
                     .overlay(
                         RoundedRectangle(cornerRadius: cornerRadius)
                             .strokeBorder(
-                                LinearGradient(
-                                    colors: [
-                                        DS.Color.warmGlow.opacity(DS.Opacity.strong),
-                                        DS.Color.warmGlow.opacity(DS.Opacity.subtle)
-                                    ],
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                ),
+                                GlassCardGradients.heroBorder,
                                 lineWidth: 1
                             )
                     )
@@ -72,19 +100,8 @@ struct StandardCard<Content: View>: View {
                         RoundedRectangle(cornerRadius: cornerRadius)
                             .strokeBorder(
                                 colorScheme == .dark
-                                    ? LinearGradient(
-                                        colors: [
-                                            DS.Color.warmGlow.opacity(0.35),
-                                            DS.Color.desertDusk.opacity(0.25)
-                                        ],
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
-                                    )
-                                    : LinearGradient(
-                                        colors: [Color.clear, Color.clear],
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
-                                    ),
+                                    ? GlassCardGradients.darkBorder
+                                    : GlassCardGradients.clearBorder,
                                 lineWidth: 1
                             )
                     )
@@ -116,17 +133,9 @@ struct InlineCard<Content: View>: View {
                     .fill(.ultraThinMaterial)
             }
             .overlay(alignment: .bottom) {
-                LinearGradient(
-                    colors: [
-                        DS.Color.warmGlow.opacity(0),
-                        DS.Color.warmGlow.opacity(0.25),
-                        DS.Color.warmGlow.opacity(0)
-                    ],
-                    startPoint: .leading,
-                    endPoint: .trailing
-                )
-                .frame(height: 0.5)
-                .padding(.horizontal, DS.Spacing.md)
+                GlassCardGradients.bottomSeparator
+                    .frame(height: 0.5)
+                    .padding(.horizontal, DS.Spacing.md)
             }
     }
 }

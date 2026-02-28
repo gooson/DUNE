@@ -29,7 +29,7 @@ struct SubScoreTrendChartView: View {
                 if let avg = averageValue {
                     Text("Avg \(formatValue(avg)) \(unit)")
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                 }
             }
 

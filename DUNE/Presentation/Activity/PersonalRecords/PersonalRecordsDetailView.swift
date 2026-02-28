@@ -80,10 +80,10 @@ struct PersonalRecordsDetailView: View {
     private func noticeBanner(_ text: String) -> some View {
         HStack(spacing: DS.Spacing.sm) {
             Image(systemName: "info.circle")
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
             Text(text)
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
             Spacer(minLength: 0)
         }
         .padding(DS.Spacing.sm)
@@ -94,7 +94,7 @@ struct PersonalRecordsDetailView: View {
         VStack(alignment: .leading, spacing: DS.Spacing.xs) {
             Text("Metric")
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
             Picker("Metric", selection: Binding(
                 get: { selectedKindValue ?? availableKinds.first },
                 set: { selectedKind = $0 }
@@ -111,7 +111,7 @@ struct PersonalRecordsDetailView: View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             Text("PR Timeline")
                 .font(.subheadline.weight(.semibold))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
 
             Chart(chartRecords) { record in
                 PointMark(
@@ -124,7 +124,7 @@ struct PersonalRecordsDetailView: View {
                     if record.isRecent {
                         Text(record.title)
                             .font(.system(size: 8))
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(DS.Color.textSecondary)
                             .lineLimit(1)
                     }
                 }
@@ -161,7 +161,7 @@ struct PersonalRecordsDetailView: View {
             if let selectedKind = selectedKindValue {
                 Text(selectedKind.displayName)
                     .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
 
             LazyVGrid(columns: columns, spacing: DS.Spacing.sm) {
@@ -181,7 +181,7 @@ struct PersonalRecordsDetailView: View {
                 Text(record.title)
                     .font(.caption)
                     .fontWeight(.medium)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
                     .lineLimit(1)
                 Spacer(minLength: 0)
                 if record.isRecent {
@@ -204,14 +204,14 @@ struct PersonalRecordsDetailView: View {
                 if let unit = unitText(for: record) {
                     Text(unit)
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                 }
             }
 
             if let context = contextText(for: record) {
                 Text(context)
                     .font(.caption2)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
                     .lineLimit(1)
             }
 
@@ -230,7 +230,7 @@ struct PersonalRecordsDetailView: View {
                 .foregroundStyle(.quaternary)
             Text("No personal records yet.")
                 .font(.headline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
             Text("운동 기록을 쌓으면 근력과 유산소 PR을 함께 확인할 수 있어요.")
                 .font(.subheadline)
                 .foregroundStyle(.tertiary)

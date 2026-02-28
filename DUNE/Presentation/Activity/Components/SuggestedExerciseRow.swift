@@ -23,7 +23,7 @@ struct SuggestedExerciseRow: View {
 
                     Text("\(exercise.suggestedSets.formattedWithSeparator) sets")
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
 
                     if !exercise.alternatives.isEmpty {
                         Button {
@@ -62,7 +62,7 @@ struct SuggestedExerciseRow: View {
 
                                 Text(alt.localizedName)
                                     .font(.caption)
-                                    .foregroundStyle(.secondary)
+                                    .foregroundStyle(DS.Color.textSecondary)
                                     .lineLimit(1)
 
                                 Spacer()

@@ -58,7 +58,7 @@ struct FatigueInfoSheet: View {
             if score.breakdown.workoutContributions.isEmpty {
                 Text("운동 기록 없음")
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             } else {
                 ForEach(score.breakdown.workoutContributions) { contribution in
                     contributionRow(contribution)
@@ -80,7 +80,7 @@ struct FatigueInfoSheet: View {
         HStack(spacing: DS.Spacing.sm) {
             Text(Self.dateFormatter.string(from: contribution.date))
                 .font(.caption2.monospacedDigit())
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
                 .frame(width: 45, alignment: .leading)
 
             Text(contribution.exerciseName ?? "Unknown")
@@ -92,7 +92,7 @@ struct FatigueInfoSheet: View {
             HStack(spacing: DS.Spacing.xxs) {
                 Text(contribution.rawLoad.formattedWithSeparator(fractionDigits: 1))
                     .font(.caption2.monospacedDigit())
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
                 Image(systemName: "arrow.right")
                     .font(.system(size: 8))
                     .foregroundStyle(.tertiary)
@@ -111,7 +111,7 @@ struct FatigueInfoSheet: View {
             HStack {
                 Text("보정 계수")
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
                 Spacer()
                 Text("×\(score.breakdown.sleepModifier.formattedWithSeparator(fractionDigits: 2))")
                     .font(.caption.weight(.medium).monospacedDigit())
@@ -121,7 +121,7 @@ struct FatigueInfoSheet: View {
             if score.breakdown.sleepModifier == 1.0 {
                 Text("수면 데이터 미수집 — 기본값 적용")
                     .font(.caption2)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
         }
     }
@@ -135,7 +135,7 @@ struct FatigueInfoSheet: View {
             HStack {
                 Text("보정 계수")
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
                 Spacer()
                 Text("×\(score.breakdown.readinessModifier.formattedWithSeparator(fractionDigits: 2))")
                     .font(.caption.weight(.medium).monospacedDigit())
@@ -145,7 +145,7 @@ struct FatigueInfoSheet: View {
             if score.breakdown.readinessModifier == 1.0 {
                 Text("HRV/RHR 데이터 미수집 — 기본값 적용")
                     .font(.caption2)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
         }
     }
@@ -163,7 +163,7 @@ struct FatigueInfoSheet: View {
                         .font(.subheadline.weight(.bold).monospacedDigit())
                     Image(systemName: "arrow.right")
                         .font(.caption2)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                     Text(score.level.displayName)
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(score.level.color(for: colorScheme))
@@ -173,11 +173,11 @@ struct FatigueInfoSheet: View {
             HStack {
                 Text("감쇠 시간 상수 (τ)")
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
                 Spacer()
                 Text("\(score.breakdown.effectiveTau.formattedWithSeparator())h")
                     .font(.caption.monospacedDigit())
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
         }
     }
@@ -188,7 +188,7 @@ struct FatigueInfoSheet: View {
         HStack(spacing: DS.Spacing.xs) {
             Image(systemName: icon)
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
             Text(title)
                 .font(.subheadline.weight(.semibold))
         }

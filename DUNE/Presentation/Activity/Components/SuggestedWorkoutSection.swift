@@ -59,7 +59,7 @@ struct SuggestedWorkoutSection: View {
 
                 Text(suggestion.reasoning)
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
 
                 if let next = suggestion.nextReadyMuscle {
                     nextReadyLabel(muscle: next.muscle, date: next.readyDate)
@@ -87,10 +87,10 @@ struct SuggestedWorkoutSection: View {
         return HStack(spacing: DS.Spacing.xs) {
             Image(systemName: "clock.arrow.circlepath")
                 .font(.caption2)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
             Text("\(muscle.displayName) ready \(timeText)")
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
         }
     }
 }

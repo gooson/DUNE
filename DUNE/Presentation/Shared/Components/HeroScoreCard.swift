@@ -146,7 +146,7 @@ struct HeroScoreCard: View {
 
             Text(guideMessage)
                 .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
                 .fixedSize(horizontal: false, vertical: true)
 
             HStack(spacing: DS.Spacing.md) {
@@ -181,7 +181,7 @@ struct HeroScoreCard: View {
                 Text(item.value.map { "\($0)" } ?? "--")
                     .font(.caption)
                     .fontWeight(.medium)
-                    .foregroundStyle(DS.Color.primaryTextStyle(active: item.value != nil, fallback: AnyShapeStyle(.quaternary)))
+                    .foregroundStyle(item.value != nil ? AnyShapeStyle(DS.Color.primaryText) : AnyShapeStyle(.quaternary))
                     .monospacedDigit()
             }
         }

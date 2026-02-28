@@ -38,7 +38,7 @@ struct VolumeLegendView: View {
             ForEach(VolumeIntensity.allCases, id: \.rawValue) { level in
                 Text(level == .none ? "0 sets" : level.label)
                     .frame(maxWidth: .infinity)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
         }
         .font(.caption2)

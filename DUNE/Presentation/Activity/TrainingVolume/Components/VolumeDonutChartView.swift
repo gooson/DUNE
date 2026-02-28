@@ -89,14 +89,14 @@ struct VolumeDonutChartView: View {
                     .font(.caption.weight(.semibold))
                 Text(formattedMetricValue(for: type))
                     .font(.caption2)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             } else {
                 Text(totalLabel)
                     .font(.title3.weight(.semibold))
                     .monospacedDigit()
                 Text(selectedMetric.unitName)
                     .font(.caption2)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
         }
         .animation(.easeInOut(duration: 0.15), value: selectedTypeKey)
@@ -113,7 +113,7 @@ struct VolumeDonutChartView: View {
                     Spacer()
                     Text(formattedMetricValue(for: type))
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(DS.Color.textSecondary)
                         .monospacedDigit()
                 }
             }
@@ -181,7 +181,7 @@ struct VolumeDonutChartView: View {
                 .foregroundStyle(.tertiary)
             Text("No exercise data")
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
         }
         .frame(maxWidth: .infinity)
         .frame(height: 120)
