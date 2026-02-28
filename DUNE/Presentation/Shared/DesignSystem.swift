@@ -35,6 +35,10 @@ enum DS {
         static let negative = SwiftUI.Color("Negative")
         static let caution  = SwiftUI.Color("Caution")
 
+        // Text
+        static let textSecondary = SwiftUI.Color("TextSecondary")
+        static let textTertiary  = SwiftUI.Color("TextTertiary")
+
         // Surface
         static let cardBackground = SwiftUI.Color("CardBackground")
         static let surfacePrimary = SwiftUI.Color("SurfacePrimary")
@@ -91,6 +95,10 @@ enum DS {
         static let medium: Double = 0.10
         /// Card border in dark mode (0.15)
         static let border: Double = 0.15
+        /// Overlay tint, no-data fills (0.20)
+        static let overlay: Double = 0.20
+        /// Card border in light mode (0.25)
+        static let cardBorder: Double = 0.25
         /// Hero card border highlight (0.30)
         static let strong: Double = 0.30
     }

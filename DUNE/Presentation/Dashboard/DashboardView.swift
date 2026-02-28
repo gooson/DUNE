@@ -66,6 +66,8 @@ struct DashboardView: View {
                         // Weather
                         if let weather = viewModel.weatherSnapshot {
                             WeatherCard(snapshot: weather)
+                        } else {
+                            WeatherCardPlaceholder()
                         }
 
                         // Coaching

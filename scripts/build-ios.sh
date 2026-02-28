@@ -68,11 +68,11 @@ set -e
 if [[ "$BUILD_EXIT" -ne 0 ]]; then
     echo ""
     echo "Build failed. Summary:"
-    rg -n "BUILD (SUCCEEDED|FAILED)|error:" "$LOG_FILE" | tail -n 120 || true
+    grep -n -E "BUILD (SUCCEEDED|FAILED)|error:" "$LOG_FILE" | tail -n 120 || true
     echo ""
     echo "Full log: $LOG_FILE"
     exit "$BUILD_EXIT"
 fi
 
 echo "Build succeeded."
-rg -n "BUILD (SUCCEEDED|FAILED)" "$LOG_FILE" | tail -n 20 || true
+grep -n -E "BUILD (SUCCEEDED|FAILED)" "$LOG_FILE" | tail -n 20 || true

@@ -63,7 +63,16 @@ struct CoachingEngine: Sendable {
     // MARK: - Weather Triggers (P2-P5)
 
     private func evaluateWeatherTriggers(_ input: CoachingInput) -> [CoachingInsight] {
-        guard let weather = input.weather else { return [] }
+        guard let weather = input.weather else {
+            return [CoachingInsight(
+                id: "weather-unavailable-default",
+                priority: .ambient,
+                category: .weather,
+                title: "오늘도 운동하기 좋은 날",
+                message: "날씨 정보를 불러올 수 없지만, 실내 운동은 언제나 좋은 선택입니다.",
+                iconName: "figure.strengthtraining.traditional"
+            )]
+        }
         var results: [CoachingInsight] = []
 
         // P2: Extreme heat (feels like 35°C+)
