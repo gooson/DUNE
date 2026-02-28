@@ -12,8 +12,7 @@ struct DetailScoreHero: View {
     var subScores: [SubScoreBadge] = []
     var badgeText: String? = nil
 
-    struct SubScoreBadge: Identifiable {
-        let id = UUID()
+    struct SubScoreBadge {
         let label: String
         let value: Int?
         let color: Color
@@ -69,7 +68,7 @@ struct DetailScoreHero: View {
 
             if !subScores.isEmpty {
                 HStack(spacing: DS.Spacing.lg) {
-                    ForEach(subScores) { item in
+                    ForEach(subScores, id: \.label) { item in
                         subScoreBadgeView(item)
                     }
                 }
@@ -79,7 +78,7 @@ struct DetailScoreHero: View {
         .padding(DS.Spacing.lg)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(scoreLabel) score \(score), \(statusLabel)")
+        .accessibilityLabel("\(scoreLabel.capitalized) score \(score), \(statusLabel)")
     }
 
     private func subScoreBadgeView(_ item: SubScoreBadge) -> some View {
