@@ -8,11 +8,14 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT_DIR"
+source "$ROOT_DIR/scripts/lib/regen-project.sh"
 
 PROJECT_SPEC="DUNE/project.yml"
 PROJECT_FILE="DUNE/DUNE.xcodeproj"
 SCHEME="DUNE"
-DESTINATION="${DAILVE_IOS_DESTINATION:-platform=iOS Simulator,name=iPhone 17,OS=26.2}"
+SIM_NAME="${DUNE_SIM_NAME:-iPhone 17}"
+SIM_OS="${DUNE_SIM_OS:-26.2}"
+DESTINATION="platform=iOS Simulator,name=${SIM_NAME},OS=${SIM_OS}"
 DERIVED_DATA_DIR=".deriveddata"
 LOG_DIR=".xcodebuild"
 LOG_FILE="$LOG_DIR/ios-build.log"
@@ -37,36 +40,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 mkdir -p "$LOG_DIR" "$DERIVED_DATA_DIR"
-
-if ! command -v xcodegen >/dev/null 2>&1; then
-    echo "error: xcodegen is required. Install with: brew install xcodegen"
-    exit 1
-fi
-
-if [[ "$REGENERATE" -eq 1 || ! -d "$PROJECT_FILE" ]]; then
-    echo "Generating Xcode project from $PROJECT_SPEC..."
-    xcodegen generate --spec "$PROJECT_SPEC" >/tmp/dune-xcodegen.log 2>&1
-
-    # Post-process: xcodegen doesn't support Xcode 16.3 format (objectVersion 90)
-    PBXPROJ="$PROJECT_FILE/project.pbxproj"
-    sed -i '' 's/objectVersion = 77;/objectVersion = 90;/' "$PBXPROJ"
-    sed -i '' 's/compatibilityVersion = "Xcode 14.0";/compatibilityVersion = "Xcode 16.3";/' "$PBXPROJ"
-
-    # Post-process xcschemes: xcodegen generates version 1.3 without some attributes
-    # that Xcode 26 adds on open, causing perpetual diffs.
-    for SCHEME_FILE in "$PROJECT_FILE"/xcshareddata/xcschemes/*.xcscheme; do
-        [ -f "$SCHEME_FILE" ] || continue
-        sed -i '' 's/version = "1.3"/version = "1.7"/' "$SCHEME_FILE"
-        if ! grep -q 'runPostActionsOnFailure' "$SCHEME_FILE"; then
-            sed -i '' 's/buildImplicitDependencies = "YES">/buildImplicitDependencies = "YES"\
-      runPostActionsOnFailure = "NO">/' "$SCHEME_FILE"
-        fi
-        if ! grep -q 'onlyGenerateCoverageForSpecifiedTargets' "$SCHEME_FILE"; then
-            sed -i '' 's/shouldUseLaunchSchemeArgsEnv = "YES">/shouldUseLaunchSchemeArgsEnv = "YES"\
-      onlyGenerateCoverageForSpecifiedTargets = "NO">/' "$SCHEME_FILE"
-        fi
-    done
-fi
+regen_project
 
 echo "Building scheme '$SCHEME' for destination '$DESTINATION'..."
 set +e
