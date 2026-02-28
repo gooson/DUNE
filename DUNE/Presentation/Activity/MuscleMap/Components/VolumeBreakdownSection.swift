@@ -58,6 +58,7 @@ struct VolumeBreakdownSection: View {
             }
             Text(value)
                 .font(.title2.weight(.bold))
+                .foregroundStyle(DS.Gradient.heroText)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(DS.Spacing.md)

@@ -47,6 +47,7 @@ struct TrainingVolumeSummaryCard: View {
                 Text(value)
                     .font(.subheadline.weight(.semibold))
                     .monospacedDigit()
+                    .foregroundStyle(DS.Gradient.heroText)
                 Text(unit)
                     .font(.caption2)
                     .foregroundStyle(.secondary)

@@ -50,6 +50,7 @@ struct ConsistencyDetailView: View {
                 Text(value)
                     .font(.title.weight(.bold))
                     .monospacedDigit()
+                    .foregroundStyle(DS.Gradient.heroText)
                 Text(unit)
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -159,6 +160,7 @@ struct ConsistencyDetailView: View {
                         VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                             Text("\(period.days) days")
                                 .font(.subheadline.weight(.semibold))
+                                .foregroundStyle(DS.Gradient.heroText)
                             Text("\(period.startDate, style: .date) — \(period.endDate, style: .date)")
                                 .font(.caption2)
                                 .foregroundStyle(.tertiary)

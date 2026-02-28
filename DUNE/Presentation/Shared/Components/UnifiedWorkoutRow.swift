@@ -208,6 +208,7 @@ struct UnifiedWorkoutRow: View {
             Text(item.formattedDuration)
                 .font(.subheadline)
                 .fontWeight(.medium)
+                .foregroundStyle(DS.Gradient.heroText)
             if let cal = item.calories, cal > 0, cal < 5_000 {
                 Text(item.source == .manual ? "~\(Int(cal).formattedWithSeparator) kcal" : "\(Int(cal).formattedWithSeparator) kcal")
                     .font(.caption)
@@ -221,6 +222,7 @@ struct UnifiedWorkoutRow: View {
             if let cal = item.calories, cal > 0, cal < 5_000 {
                 Text("\(Int(cal).formattedWithSeparator) kcal")
                     .font(.subheadline)
+                    .foregroundStyle(DS.Gradient.heroText)
             }
             Text(item.date, style: .date)
                 .font(.caption)

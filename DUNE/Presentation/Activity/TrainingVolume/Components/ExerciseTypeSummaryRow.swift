@@ -30,6 +30,7 @@ struct ExerciseTypeSummaryRow: View {
                 Text(exerciseType.totalDuration.formattedDuration())
                     .font(.subheadline.weight(.medium))
                     .monospacedDigit()
+                    .foregroundStyle(DS.Gradient.heroText)
                 if exerciseType.totalCalories > 0 {
                     Text("\(exerciseType.totalCalories.formattedWithSeparator()) kcal")
                         .font(.caption)
