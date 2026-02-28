@@ -18,18 +18,25 @@ struct TodayCoachingCard: View {
 
     var body: some View {
         InlineCard {
-            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                HStack(spacing: DS.Spacing.xs) {
-                    Image(systemName: iconName)
-                        .foregroundStyle(iconColor)
+            HStack(alignment: .top, spacing: DS.Spacing.sm) {
+                Image(systemName: iconName)
+                    .font(.title3)
+                    .foregroundStyle(iconColor)
+                    .frame(width: 28)
+
+                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                     Text(title)
                         .font(.subheadline.weight(.semibold))
+                        .lineLimit(2)
+
+                    Text(displayMessage)
+                        .font(.caption)
+                        .foregroundStyle(DS.Color.textSecondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .lineLimit(4)
                 }
 
-                Text(displayMessage)
-                    .font(.caption)
-                    .foregroundStyle(DS.Color.textSecondary)
-                    .fixedSize(horizontal: false, vertical: true)
+                Spacer(minLength: 0)
             }
         }
     }

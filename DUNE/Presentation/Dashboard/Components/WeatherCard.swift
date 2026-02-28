@@ -71,16 +71,15 @@ struct WeatherCard: View {
                     }
                 }
 
-                // 6-hour forecast
-                if !snapshot.hourlyForecast.isEmpty {
+                // 6-hour forecast (evenly distributed)
+                if snapshot.hourlyForecast.count >= 3 {
                     Divider()
                         .opacity(0.3)
 
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: isRegular ? DS.Spacing.xl : DS.Spacing.lg) {
-                            ForEach(snapshot.hourlyForecast) { hour in
-                                hourCell(hour)
-                            }
+                    HStack(spacing: 0) {
+                        ForEach(snapshot.hourlyForecast.prefix(6)) { hour in
+                            hourCell(hour)
+                                .frame(maxWidth: .infinity)
                         }
                     }
                 }
@@ -104,6 +103,7 @@ struct WeatherCard: View {
             Text(hourLabels[hour.hour] ?? "")
                 .font(.caption2)
                 .foregroundStyle(.tertiary)
+                .minimumScaleFactor(0.7)
 
             Image(systemName: hour.condition.sfSymbol)
                 .font(.caption)
