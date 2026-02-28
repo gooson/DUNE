@@ -123,7 +123,7 @@ struct CarouselHomeView: View {
 
     private var carousel: some View {
         ScrollView(.vertical) {
-            LazyVStack(spacing: 0) {
+            VStack(spacing: 0) {
                 ForEach(cards) { card in
                     cardContent(for: card)
                         .containerRelativeFrame(.vertical)
