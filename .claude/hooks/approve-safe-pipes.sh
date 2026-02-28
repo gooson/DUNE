@@ -6,7 +6,7 @@
 set -euo pipefail
 
 SAFE_COMMANDS=(
-  git gh ls cat head tail grep sort diff mkdir cp mv rm touch chmod
+  cd git gh ls cat head tail grep sort diff mkdir cp mv rm touch chmod
   swift swiftc xcodebuild xcodegen xcode-select xcrun
   brew echo python3 pip3 npm npx node ruby
   wc xargs find sed awk uniq cut tr tee date
