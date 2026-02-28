@@ -75,15 +75,24 @@ enum AppSchemaV5: VersionedSchema {
     }
 }
 
+// MARK: - Schema V6 (Habit Tracking)
+
+enum AppSchemaV6: VersionedSchema {
+    static let versionIdentifier = Schema.Version(6, 0, 0)
+    static var models: [any PersistentModel.Type] {
+        [ExerciseRecord.self, BodyCompositionRecord.self, WorkoutSet.self, CustomExercise.self, WorkoutTemplate.self, InjuryRecord.self, HabitDefinition.self, HabitLog.self]
+    }
+}
+
 // MARK: - Migration Plan
 
 enum AppMigrationPlan: SchemaMigrationPlan {
     static var schemas: [any VersionedSchema.Type] {
-        [AppSchemaV1.self, AppSchemaV2.self, AppSchemaV3.self, AppSchemaV4.self, AppSchemaV5.self]
+        [AppSchemaV1.self, AppSchemaV2.self, AppSchemaV3.self, AppSchemaV4.self, AppSchemaV5.self, AppSchemaV6.self]
     }
 
     static var stages: [MigrationStage] {
-        [migrateV1toV2, migrateV2toV3, migrateV3toV4, migrateV4toV5]
+        [migrateV1toV2, migrateV2toV3, migrateV3toV4, migrateV4toV5, migrateV5toV6]
     }
 
     static let migrateV1toV2 = MigrationStage.lightweight(
@@ -104,5 +113,10 @@ enum AppMigrationPlan: SchemaMigrationPlan {
     static let migrateV4toV5 = MigrationStage.lightweight(
         fromVersion: AppSchemaV4.self,
         toVersion: AppSchemaV5.self
+    )
+
+    static let migrateV5toV6 = MigrationStage.lightweight(
+        fromVersion: AppSchemaV5.self,
+        toVersion: AppSchemaV6.self
     )
 }

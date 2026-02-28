@@ -4,6 +4,7 @@ enum AppSection: String, CaseIterable, Identifiable {
     case today
     case train
     case wellness
+    case life
 
     var id: String { rawValue }
 
@@ -12,6 +13,7 @@ enum AppSection: String, CaseIterable, Identifiable {
         case .today: "Today"
         case .train: "Activity"
         case .wellness: "Wellness"
+        case .life: "Life"
         }
     }
 
@@ -20,6 +22,7 @@ enum AppSection: String, CaseIterable, Identifiable {
         case .today: "heart.text.clipboard"
         case .train: "flame"
         case .wellness: "leaf.fill"
+        case .life: "checklist"
         }
     }
 }
