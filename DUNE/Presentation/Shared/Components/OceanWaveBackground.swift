@@ -28,6 +28,7 @@ struct OceanTabWaveBackground: View {
         }
     }
 
+    /// Arc pattern excluded from .life (lake-like stillness has no wave decoration).
     private var showArcPattern: Bool {
         preset == .train || preset == .today || preset == .wellness
     }
@@ -63,9 +64,11 @@ struct OceanTabWaveBackground: View {
                 crestSharpness: 0.03 * scale,
                 driftDuration: 10,
                 reverseDirection: false,
-                strokeColor: theme.oceanFoamColor,
-                strokeWidth: 0.5,
-                strokeOpacity: 0.12 * scale
+                strokeStyle: WaveStrokeStyle(
+                    color: theme.oceanFoamColor,
+                    width: 0.5,
+                    opacity: 0.12 * scale
+                )
             )
             .frame(height: 200)
 
@@ -83,12 +86,16 @@ struct OceanTabWaveBackground: View {
                 crestSharpness: 0.06 * scale,
                 driftDuration: 7,
                 reverseDirection: true,
-                strokeColor: theme.oceanFoamColor,
-                strokeWidth: 1.0,
-                strokeOpacity: 0.2 * scale,
-                foamColor: theme.oceanFoamColor,
-                foamOpacity: 0.15 * scale,
-                foamDepth: 0.02
+                strokeStyle: WaveStrokeStyle(
+                    color: theme.oceanFoamColor,
+                    width: 1.0,
+                    opacity: 0.2 * scale
+                ),
+                foamStyle: WaveFoamStyle(
+                    color: theme.oceanFoamColor,
+                    opacity: 0.15 * scale,
+                    depth: 0.02
+                )
             )
             .frame(height: 200)
 
@@ -105,12 +112,16 @@ struct OceanTabWaveBackground: View {
                 crestSharpness: 0.1 * scale,
                 driftDuration: 5,
                 reverseDirection: false,
-                strokeColor: theme.oceanFoamColor,
-                strokeWidth: 1.5,
-                strokeOpacity: 0.35 * scale,
-                foamColor: theme.oceanFoamColor,
-                foamOpacity: 0.25 * scale,
-                foamDepth: 0.03
+                strokeStyle: WaveStrokeStyle(
+                    color: theme.oceanFoamColor,
+                    width: 1.5,
+                    opacity: 0.35 * scale
+                ),
+                foamStyle: WaveFoamStyle(
+                    color: theme.oceanFoamColor,
+                    opacity: 0.25 * scale,
+                    depth: 0.03
+                )
             )
             .frame(height: 200)
 
@@ -141,6 +152,8 @@ struct OceanTabWaveBackground: View {
 
 /// Subtler 3-layer ocean wave for push-destination detail screens.
 /// Scaled down: amplitude 50%, opacity 70%, stroke only (no foam gradient).
+/// Arc pattern always visible (simplified 1-row) — Detail is a focused view
+/// where the subtle decoration adds polish without competing with content.
 struct OceanDetailWaveBackground: View {
     @Environment(\.appTheme) private var theme
 
@@ -170,9 +183,11 @@ struct OceanDetailWaveBackground: View {
                 crestHeight: 0.1,
                 crestSharpness: 0.02,
                 driftDuration: 10,
-                strokeColor: theme.oceanFoamColor,
-                strokeWidth: 0.5,
-                strokeOpacity: 0.1
+                strokeStyle: WaveStrokeStyle(
+                    color: theme.oceanFoamColor,
+                    width: 0.5,
+                    opacity: 0.1
+                )
             )
             .frame(height: 150)
 
@@ -189,9 +204,11 @@ struct OceanDetailWaveBackground: View {
                 crestSharpness: 0.04,
                 driftDuration: 7,
                 reverseDirection: true,
-                strokeColor: theme.oceanFoamColor,
-                strokeWidth: 0.8,
-                strokeOpacity: 0.15
+                strokeStyle: WaveStrokeStyle(
+                    color: theme.oceanFoamColor,
+                    width: 0.8,
+                    opacity: 0.15
+                )
             )
             .frame(height: 150)
 
@@ -207,9 +224,11 @@ struct OceanDetailWaveBackground: View {
                 crestHeight: 0.2,
                 crestSharpness: 0.07,
                 driftDuration: 5,
-                strokeColor: theme.oceanFoamColor,
-                strokeWidth: 1.0,
-                strokeOpacity: 0.25
+                strokeStyle: WaveStrokeStyle(
+                    color: theme.oceanFoamColor,
+                    width: 1.0,
+                    opacity: 0.25
+                )
             )
             .frame(height: 150)
 
@@ -245,9 +264,11 @@ struct OceanSheetWaveBackground: View {
                 crestSharpness: 0.02,
                 driftDuration: 7,
                 reverseDirection: true,
-                strokeColor: theme.oceanFoamColor,
-                strokeWidth: 0.5,
-                strokeOpacity: 0.1
+                strokeStyle: WaveStrokeStyle(
+                    color: theme.oceanFoamColor,
+                    width: 0.5,
+                    opacity: 0.1
+                )
             )
             .frame(height: 120)
 
@@ -263,9 +284,11 @@ struct OceanSheetWaveBackground: View {
                 crestHeight: 0.12,
                 crestSharpness: 0.04,
                 driftDuration: 5,
-                strokeColor: theme.oceanFoamColor,
-                strokeWidth: 0.8,
-                strokeOpacity: 0.18
+                strokeStyle: WaveStrokeStyle(
+                    color: theme.oceanFoamColor,
+                    width: 0.8,
+                    opacity: 0.18
+                )
             )
             .frame(height: 120)
 

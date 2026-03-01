@@ -5,8 +5,6 @@ import SwiftUI
 /// Draws groups of concentric semicircles (seigaiha-inspired) arranged
 /// in a repeating grid. Each group has `ringsPerGroup` nested arcs
 /// centered at evenly-spaced positions across the width.
-///
-/// Pre-computes arc positions at init; `path(in:)` only scales to rect.
 struct OceanArcPattern: Shape {
     /// Number of arc groups across one row.
     let columns: Int
@@ -98,7 +96,7 @@ struct OceanArcOverlayView: View {
         .stroke(color.opacity(opacity), lineWidth: lineWidth)
         .allowsHitTesting(false)
         .onAppear {
-            guard !reduceMotion else { return }
+            guard !reduceMotion, driftDuration > 0 else { return }
             withAnimation(.linear(duration: driftDuration).repeatForever(autoreverses: false)) {
                 phase = 2 * .pi
             }

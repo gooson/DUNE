@@ -110,6 +110,8 @@ struct OceanWaveShapeTests {
 
     @Test("Path stays within bounds with all harmonics active")
     func pathBoundsWithAllHarmonics() {
+        // Max theoretical deviation: amp * (1 + steepness + crestHeight + crestSharpness)
+        // = 200 * 0.3 * (1 + 0.4 + 0.4 + 0.15) = 117pt from centerY
         let wave = OceanWaveShape(
             amplitude: 0.3,
             frequency: 3,
@@ -121,9 +123,8 @@ struct OceanWaveShapeTests {
         let bounds = wave.path(in: rect).boundingRect
         #expect(bounds.minX >= rect.minX - 1)
         #expect(bounds.maxX <= rect.maxX + 1)
-        // Y can extend beyond due to increased amplitude from harmonics,
-        // but should stay within reasonable range
-        #expect(bounds.minY >= -rect.height)
+        // Tightened: centerY(100) ± 117pt → minY ~= -17, maxY includes fill to 200
+        #expect(bounds.minY >= rect.minY - 120)
         #expect(bounds.maxY <= rect.maxY + 1)
     }
 

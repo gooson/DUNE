@@ -1,37 +1,84 @@
 import SwiftUI
 
+// MARK: - Shared Wave Computation
+
+/// Pre-computed sample points for wave rendering.
+/// Shared across all wave shape variants to avoid duplication.
+private struct WaveSamples {
+    let points: [(x: CGFloat, angle: CGFloat)]
+    static let sampleCount = 120
+
+    init(frequency: CGFloat) {
+        let count = Self.sampleCount
+        var pts: [(x: CGFloat, angle: CGFloat)] = []
+        pts.reserveCapacity(count + 1)
+        for i in 0...count {
+            let x = CGFloat(i) / CGFloat(count)
+            let angle = x * frequency * 2 * .pi
+            pts.append((x: x, angle: angle))
+        }
+        self.points = pts
+    }
+}
+
+/// Phase-scaling constants for wave harmonics.
+/// - `envelopeDrift`: Slow drift for low-frequency envelope (breaks periodicity)
+/// - `sharpnessDrift`: Faster drift for high-frequency crest detail
+private enum HarmonicPhase {
+    static let envelopeDrift: CGFloat = 0.3
+    static let sharpnessDrift: CGFloat = 1.5
+}
+
+/// Single wave y-value computation shared by all shape variants.
+@inline(__always)
+private func waveY(
+    angle: CGFloat,
+    phase: CGFloat,
+    centerY: CGFloat,
+    amp: CGFloat,
+    steepness: CGFloat,
+    harmonicOffset: CGFloat,
+    crestHeight: CGFloat,
+    crestSharpness: CGFloat
+) -> CGFloat {
+    let primary = sin(angle + phase)
+    let harmonic = steepness * sin(2 * angle + phase + harmonicOffset)
+    let envelope = crestHeight * sin(0.5 * angle + phase * HarmonicPhase.envelopeDrift)
+    let sharpness = crestSharpness * sin(3 * angle + phase * HarmonicPhase.sharpnessDrift)
+    return centerY + amp * (primary + harmonic + envelope + sharpness)
+}
+
+// MARK: - Wave Parameters
+
+/// Shared wave parameters to reduce call-site verbosity.
+struct OceanWaveParams: Sendable {
+    var amplitude: CGFloat = 0.05
+    var frequency: CGFloat = 2
+    var verticalOffset: CGFloat = 0.5
+    var steepness: CGFloat = 0.3
+    var harmonicOffset: CGFloat = .pi / 4
+    var crestHeight: CGFloat = 0
+    var crestSharpness: CGFloat = 0
+}
+
+// MARK: - Fill Shape
+
 /// Asymmetric ocean-wave Shape with harmonic enrichment.
 ///
 /// Combines a primary sine with higher harmonics to create sharp crests,
 /// gentle troughs, and variable wave heights — matching Japanese-style
 /// ocean wave silhouettes.
 ///
-/// Formula:
-/// ```
-/// y = A × [sin(θ + φ)
-///        + steepness × sin(2θ + φ + offset)
-///        + crestHeight × sin(0.5θ + φ × 0.3)
-///        + crestSharpness × sin(3θ + φ × 1.5)]
-/// ```
-///
 /// Pre-computes normalised angles at init; `path(in:)` only evaluates
 /// four `sin()` calls per sample point and scales to rect.
 struct OceanWaveShape: Shape {
-    /// Wave height as a fraction of the rect height (0…1).
     let amplitude: CGFloat
-    /// Number of full sine periods across the rect width.
     let frequency: CGFloat
-    /// Phase offset in radians (0…2π). Animatable for drift effect.
     var phase: CGFloat
-    /// Vertical center of the wave as a fraction of the rect height (0…1).
     let verticalOffset: CGFloat
-    /// Sharpness of wave crests (0 = pure sine, 0.3–0.4 = realistic ocean).
     let steepness: CGFloat
-    /// Phase offset for the second harmonic (radians).
     let harmonicOffset: CGFloat
-    /// Low-frequency envelope: makes some waves taller than others (0…0.4).
     let crestHeight: CGFloat
-    /// High-frequency sharpness at wave peaks (0…0.15).
     let crestSharpness: CGFloat
 
     var animatableData: CGFloat {
@@ -39,8 +86,7 @@ struct OceanWaveShape: Shape {
         set { phase = newValue }
     }
 
-    private let points: [(x: CGFloat, angle: CGFloat)]
-    private static let sampleCount = 120
+    private let samples: WaveSamples
 
     init(
         amplitude: CGFloat = 0.05,
@@ -58,18 +104,9 @@ struct OceanWaveShape: Shape {
         self.verticalOffset = verticalOffset
         self.steepness = steepness
         self.harmonicOffset = harmonicOffset
-        self.crestHeight = crestHeight
-        self.crestSharpness = crestSharpness
-
-        let count = Self.sampleCount
-        var pts: [(x: CGFloat, angle: CGFloat)] = []
-        pts.reserveCapacity(count + 1)
-        for i in 0...count {
-            let x = CGFloat(i) / CGFloat(count)
-            let angle = x * frequency * 2 * .pi
-            pts.append((x: x, angle: angle))
-        }
-        self.points = pts
+        self.crestHeight = Swift.min(crestHeight, 0.4)
+        self.crestSharpness = Swift.min(crestSharpness, 0.15)
+        self.samples = WaveSamples(frequency: frequency)
     }
 
     func path(in rect: CGRect) -> Path {
@@ -79,13 +116,14 @@ struct OceanWaveShape: Shape {
         let centerY = rect.height * verticalOffset
 
         var path = Path()
-        for (i, pt) in points.enumerated() {
-            let primary = sin(pt.angle + phase)
-            let harmonic = steepness * sin(2 * pt.angle + phase + harmonicOffset)
-            let envelope = crestHeight * sin(0.5 * pt.angle + phase * 0.3)
-            let sharpness = crestSharpness * sin(3 * pt.angle + phase * 1.5)
+        for (i, pt) in samples.points.enumerated() {
             let x = pt.x * rect.width
-            let y = centerY + amp * (primary + harmonic + envelope + sharpness)
+            let y = waveY(
+                angle: pt.angle, phase: phase,
+                centerY: centerY, amp: amp,
+                steepness: steepness, harmonicOffset: harmonicOffset,
+                crestHeight: crestHeight, crestSharpness: crestSharpness
+            )
 
             if i == 0 {
                 path.move(to: CGPoint(x: x, y: y))
@@ -103,9 +141,10 @@ struct OceanWaveShape: Shape {
     }
 }
 
-// MARK: - Stroke-only Wave Shape
+// MARK: - Stroke Shape
 
 /// Renders only the wave line (no fill), for crest highlight strokes.
+/// Uses the shared wave formula and sample points.
 struct OceanWaveStrokeShape: Shape {
     let amplitude: CGFloat
     let frequency: CGFloat
@@ -121,8 +160,7 @@ struct OceanWaveStrokeShape: Shape {
         set { phase = newValue }
     }
 
-    private let points: [(x: CGFloat, angle: CGFloat)]
-    private static let sampleCount = 120
+    private let samples: WaveSamples
 
     init(
         amplitude: CGFloat = 0.05,
@@ -140,18 +178,9 @@ struct OceanWaveStrokeShape: Shape {
         self.verticalOffset = verticalOffset
         self.steepness = steepness
         self.harmonicOffset = harmonicOffset
-        self.crestHeight = crestHeight
-        self.crestSharpness = crestSharpness
-
-        let count = Self.sampleCount
-        var pts: [(x: CGFloat, angle: CGFloat)] = []
-        pts.reserveCapacity(count + 1)
-        for i in 0...count {
-            let x = CGFloat(i) / CGFloat(count)
-            let angle = x * frequency * 2 * .pi
-            pts.append((x: x, angle: angle))
-        }
-        self.points = pts
+        self.crestHeight = Swift.min(crestHeight, 0.4)
+        self.crestSharpness = Swift.min(crestSharpness, 0.15)
+        self.samples = WaveSamples(frequency: frequency)
     }
 
     func path(in rect: CGRect) -> Path {
@@ -161,13 +190,14 @@ struct OceanWaveStrokeShape: Shape {
         let centerY = rect.height * verticalOffset
 
         var path = Path()
-        for (i, pt) in points.enumerated() {
-            let primary = sin(pt.angle + phase)
-            let harmonic = steepness * sin(2 * pt.angle + phase + harmonicOffset)
-            let envelope = crestHeight * sin(0.5 * pt.angle + phase * 0.3)
-            let sharpness = crestSharpness * sin(3 * pt.angle + phase * 1.5)
+        for (i, pt) in samples.points.enumerated() {
             let x = pt.x * rect.width
-            let y = centerY + amp * (primary + harmonic + envelope + sharpness)
+            let y = waveY(
+                angle: pt.angle, phase: phase,
+                centerY: centerY, amp: amp,
+                steepness: steepness, harmonicOffset: harmonicOffset,
+                crestHeight: crestHeight, crestSharpness: crestSharpness
+            )
 
             if i == 0 {
                 path.move(to: CGPoint(x: x, y: y))
@@ -183,7 +213,7 @@ struct OceanWaveStrokeShape: Shape {
 // MARK: - Foam Gradient Shape
 
 /// Thin gradient band at wave crests: white fading downward.
-/// Uses the same wave formula to align with the wave top.
+/// Uses the shared wave formula; no intermediate array allocation.
 struct OceanFoamGradientShape: Shape {
     let amplitude: CGFloat
     let frequency: CGFloat
@@ -201,8 +231,7 @@ struct OceanFoamGradientShape: Shape {
         set { phase = newValue }
     }
 
-    private let points: [(x: CGFloat, angle: CGFloat)]
-    private static let sampleCount = 120
+    private let samples: WaveSamples
 
     init(
         amplitude: CGFloat = 0.05,
@@ -221,19 +250,10 @@ struct OceanFoamGradientShape: Shape {
         self.verticalOffset = verticalOffset
         self.steepness = steepness
         self.harmonicOffset = harmonicOffset
-        self.crestHeight = crestHeight
-        self.crestSharpness = crestSharpness
+        self.crestHeight = Swift.min(crestHeight, 0.4)
+        self.crestSharpness = Swift.min(crestSharpness, 0.15)
         self.foamDepth = foamDepth
-
-        let count = Self.sampleCount
-        var pts: [(x: CGFloat, angle: CGFloat)] = []
-        pts.reserveCapacity(count + 1)
-        for i in 0...count {
-            let x = CGFloat(i) / CGFloat(count)
-            let angle = x * frequency * 2 * .pi
-            pts.append((x: x, angle: angle))
-        }
-        self.points = pts
+        self.samples = WaveSamples(frequency: frequency)
     }
 
     func path(in rect: CGRect) -> Path {
@@ -242,32 +262,36 @@ struct OceanFoamGradientShape: Shape {
         let amp = rect.height * amplitude
         let centerY = rect.height * verticalOffset
         let foamH = rect.height * foamDepth
-
-        var topPoints: [CGPoint] = []
-        topPoints.reserveCapacity(points.count)
-
-        for pt in points {
-            let primary = sin(pt.angle + phase)
-            let harmonic = steepness * sin(2 * pt.angle + phase + harmonicOffset)
-            let envelope = crestHeight * sin(0.5 * pt.angle + phase * 0.3)
-            let sharpness = crestSharpness * sin(3 * pt.angle + phase * 1.5)
-            let x = pt.x * rect.width
-            let y = centerY + amp * (primary + harmonic + envelope + sharpness)
-            topPoints.append(CGPoint(x: x, y: y))
-        }
+        let pts = samples.points
 
         var path = Path()
-        // Top edge (wave line)
-        for (i, point) in topPoints.enumerated() {
+
+        // Forward pass: top edge (wave line)
+        for (i, pt) in pts.enumerated() {
+            let x = pt.x * rect.width
+            let y = waveY(
+                angle: pt.angle, phase: phase,
+                centerY: centerY, amp: amp,
+                steepness: steepness, harmonicOffset: harmonicOffset,
+                crestHeight: crestHeight, crestSharpness: crestSharpness
+            )
             if i == 0 {
-                path.move(to: point)
+                path.move(to: CGPoint(x: x, y: y))
             } else {
-                path.addLine(to: point)
+                path.addLine(to: CGPoint(x: x, y: y))
             }
         }
-        // Bottom edge (shifted down by foamDepth)
-        for point in topPoints.reversed() {
-            path.addLine(to: CGPoint(x: point.x, y: point.y + foamH))
+
+        // Reverse pass: bottom edge (shifted down by foamDepth)
+        for pt in pts.reversed() {
+            let x = pt.x * rect.width
+            let y = waveY(
+                angle: pt.angle, phase: phase,
+                centerY: centerY, amp: amp,
+                steepness: steepness, harmonicOffset: harmonicOffset,
+                crestHeight: crestHeight, crestSharpness: crestSharpness
+            ) + foamH
+            path.addLine(to: CGPoint(x: x, y: y))
         }
         path.closeSubpath()
 
@@ -294,13 +318,9 @@ struct OceanWaveOverlayView: View {
     /// Drift direction. Reverse creates cross-current depth effect.
     var reverseDirection: Bool = false
     /// White stroke along wave crest line.
-    var strokeColor: Color? = nil
-    var strokeWidth: CGFloat = 1
-    var strokeOpacity: Double = 0.3
+    var strokeStyle: WaveStrokeStyle? = nil
     /// Foam gradient band below crest.
-    var foamColor: Color? = nil
-    var foamOpacity: Double = 0.25
-    var foamDepth: CGFloat = 0.03
+    var foamStyle: WaveFoamStyle? = nil
 
     @State private var phase: CGFloat = 0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -318,10 +338,10 @@ struct OceanWaveOverlayView: View {
                 crestHeight: crestHeight,
                 crestSharpness: crestSharpness
             )
-            .fill(color.opacity(opacity))
+            .fill(fillColor)
 
             // Foam gradient layer
-            if let foamColor {
+            if let foam = foamStyle {
                 OceanFoamGradientShape(
                     amplitude: amplitude,
                     frequency: frequency,
@@ -331,19 +351,13 @@ struct OceanWaveOverlayView: View {
                     harmonicOffset: harmonicOffset,
                     crestHeight: crestHeight,
                     crestSharpness: crestSharpness,
-                    foamDepth: foamDepth
+                    foamDepth: foam.depth
                 )
-                .fill(
-                    LinearGradient(
-                        colors: [foamColor.opacity(foamOpacity), .clear],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                )
+                .fill(foam.gradient)
             }
 
             // Stroke layer
-            if let strokeColor {
+            if let stroke = strokeStyle {
                 OceanWaveStrokeShape(
                     amplitude: amplitude,
                     frequency: frequency,
@@ -354,9 +368,10 @@ struct OceanWaveOverlayView: View {
                     crestHeight: crestHeight,
                     crestSharpness: crestSharpness
                 )
-                .stroke(strokeColor.opacity(strokeOpacity), lineWidth: strokeWidth)
+                .stroke(stroke.resolvedColor, lineWidth: stroke.width)
             }
         }
+        .clipped()
         .mask {
             if bottomFade > 0 {
                 LinearGradient(
@@ -374,11 +389,42 @@ struct OceanWaveOverlayView: View {
         }
         .allowsHitTesting(false)
         .onAppear {
-            guard !reduceMotion else { return }
+            guard !reduceMotion, driftDuration > 0 else { return }
             let target: CGFloat = reverseDirection ? -(2 * .pi) : (2 * .pi)
             withAnimation(.linear(duration: driftDuration).repeatForever(autoreverses: false)) {
                 phase = target
             }
         }
+    }
+
+    // Pre-compute fill color to avoid allocation in body during animation
+    private var fillColor: Color { color.opacity(opacity) }
+}
+
+// MARK: - Style Types
+
+/// Stroke style for wave crest highlight.
+struct WaveStrokeStyle {
+    let color: Color
+    let width: CGFloat
+    let opacity: Double
+
+    /// Pre-resolved color to avoid per-frame allocation.
+    var resolvedColor: Color { color.opacity(opacity) }
+}
+
+/// Foam gradient style for wave crest band.
+struct WaveFoamStyle {
+    let color: Color
+    let opacity: Double
+    let depth: CGFloat
+
+    /// Pre-built gradient to avoid per-frame allocation.
+    var gradient: LinearGradient {
+        LinearGradient(
+            colors: [color.opacity(opacity), .clear],
+            startPoint: .top,
+            endPoint: .bottom
+        )
     }
 }
