@@ -3,14 +3,11 @@ import SwiftUI
 /// Mountain/forest silhouette Shape for the Forest Green theme.
 ///
 /// Generates a ridge-line profile using:
-/// - Base sine wave for primary mountain contour
-/// - Low-frequency canopy swell for rounded "mongle" silhouettes
-/// - Mid harmonic for irregular forest ridges
-/// - Rounded canopy pulse for treetop clusters
-/// - Pre-computed edge noise for ukiyo-e washi (和紙) edge texture
+/// - Multi-frequency sinusoidal harmonics for organic mountain contours
+/// - Triangle-wave pine canopy clusters for tree silhouettes
+/// - Catmull-Rom → cubic Bezier spline for smooth curves
 ///
 /// Uses shared `WaveSamples` for point pre-computation.
-/// `edgeNoise` is a static constant (depends only on sampleCount).
 struct ForestSilhouetteShape: Shape {
     /// Mountain height as a fraction of the rect height (0…1).
     let amplitude: CGFloat
@@ -20,8 +17,6 @@ struct ForestSilhouetteShape: Shape {
     var phase: CGFloat
     /// Vertical center of the ridge as a fraction of the rect height (0…1).
     let verticalOffset: CGFloat
-    /// Peak irregularity (0 = smooth hills, 1 = rugged mountains).
-    let ruggedness: CGFloat
     /// Tree silhouette density on ridge line (0 = none, 1 = dense).
     let treeDensity: CGFloat
 
@@ -32,27 +27,17 @@ struct ForestSilhouetteShape: Shape {
 
     private let samples: WaveSamples
 
-    /// Deterministic pseudo-random edge noise for washi edge effect.
-    /// Product of two incommensurate sines — repeatable across launches.
-    /// Depends only on sampleCount, so computed once as a static constant.
-    private static let edgeNoise: [CGFloat] = (0...WaveSamples.sampleCount).map { i in
-        let d = Double(i)
-        return CGFloat(sin(d * 7.3 + 2.1) * sin(d * 13.7 + 5.3))
-    }
-
     init(
         amplitude: CGFloat = 0.05,
         frequency: CGFloat = 1.5,
         phase: CGFloat = 0,
         verticalOffset: CGFloat = 0.5,
-        ruggedness: CGFloat = 0.3,
         treeDensity: CGFloat = 0
     ) {
         self.amplitude = amplitude
         self.frequency = frequency
         self.phase = phase
         self.verticalOffset = verticalOffset
-        self.ruggedness = ruggedness
         self.treeDensity = treeDensity
         self.samples = WaveSamples(frequency: frequency)
     }
@@ -62,35 +47,45 @@ struct ForestSilhouetteShape: Shape {
 
         let amp = rect.height * amplitude
         let centerY = rect.height * verticalOffset
-        let edgeScale: CGFloat = 2.1 // larger local noise while keeping base amplitude unchanged
+        let pts = samples.points
 
-        var path = Path()
-        for (i, pt) in samples.points.enumerated() {
-            let x = pt.x * rect.width
+        // Compute all Y values
+        var yValues = [CGFloat]()
+        yValues.reserveCapacity(pts.count)
+        for pt in pts {
             let angle = pt.angle + phase
-
-            // Base ridge contour
-            var y = sin(angle)
-
-            // Broad canopy swell for rounded forest masses.
-            y += (1 - ruggedness) * 0.35 * sin(0.55 * angle + 0.8)
-
-            // Mid harmonic for irregular ridge rhythm (less sharp than dune/ocean crests).
-            y += ruggedness * 0.26 * sin(2.2 * angle + 1.1)
-
-            // Rounded canopy pulse for tree-top silhouettes.
+            var y = ridgeY(angle: angle)
             if treeDensity > 0 {
-                let treePulse = Self.canopyPulse(angle: angle * 0.9)
-                y += treeDensity * 0.32 * treePulse
+                y += treeDensity * Self.pineCanopy(angle: angle)
             }
+            yValues.append(centerY + amp * y)
+        }
 
-            let yPos = centerY + amp * y + Self.edgeNoise[i] * edgeScale
+        // Build smooth Bezier path from computed points
+        var path = Path()
+        let points = zip(pts, yValues).map { CGPoint(x: $0.x * rect.width, y: $1) }
 
-            if i == 0 {
-                path.move(to: CGPoint(x: x, y: yPos))
-            } else {
-                path.addLine(to: CGPoint(x: x, y: yPos))
-            }
+        guard points.count >= 2 else { return Path() }
+
+        path.move(to: points[0])
+
+        // Catmull-Rom to cubic Bezier conversion for smooth curves
+        for i in 0..<(points.count - 1) {
+            let p0 = points[Swift.max(0, i - 1)]
+            let p1 = points[i]
+            let p2 = points[i + 1]
+            let p3 = points[Swift.min(points.count - 1, i + 2)]
+
+            let cp1 = CGPoint(
+                x: p1.x + (p2.x - p0.x) / 6,
+                y: p1.y + (p2.y - p0.y) / 6
+            )
+            let cp2 = CGPoint(
+                x: p2.x - (p3.x - p1.x) / 6,
+                y: p2.y - (p3.y - p1.y) / 6
+            )
+
+            path.addCurve(to: p2, control1: cp1, control2: cp2)
         }
 
         // Close area to bottom of rect for fill
@@ -101,10 +96,55 @@ struct ForestSilhouetteShape: Shape {
         return path
     }
 
-    /// Periodic rounded pulse for clustered tree canopies.
-    private static func canopyPulse(angle: CGFloat) -> CGFloat {
-        let normalized = 0.5 + 0.5 * sin(angle * 2.0)
-        let rounded = pow(normalized, 1.8)
-        return -rounded // Negative = upward (toward top of screen)
+    // MARK: - Ridge Harmonics
+
+    /// Multi-frequency mountain ridge profile.
+    /// Combines primary peaks with secondary hills and subtle tertiary undulation.
+    @inline(__always)
+    private func ridgeY(angle: CGFloat) -> CGFloat {
+        // Primary ridge: large mountain peaks
+        let primary = sin(angle)
+
+        // Secondary hills: medium undulations between peaks
+        let secondary = 0.35 * sin(2.3 * angle + 0.7)
+
+        // Tertiary undulation: gentle organic variation
+        let tertiary = 0.15 * sin(4.7 * angle + 1.4)
+
+        return primary + secondary + tertiary
+    }
+
+    // MARK: - Pine Tree Silhouette
+
+    /// Composite pine canopy profile using multi-frequency triangle waves.
+    /// Produces pointed tree-top silhouettes at varying scales.
+    private static func pineCanopy(angle: CGFloat) -> CGFloat {
+        // Large pines (widely spaced)
+        let large = triangleWave(angle * 3.1 + 0.5) * 0.45
+
+        // Medium pines (intermediate spacing)
+        let medium = triangleWave(angle * 5.7 + 1.2) * 0.32
+
+        // Small pines (dense undergrowth)
+        let small = triangleWave(angle * 8.3 + 2.8) * 0.23
+
+        // Negative = upward (toward top of screen)
+        return -(large + medium + small)
+    }
+
+    /// Asymmetric triangle wave producing pointed peaks like pine tree tips.
+    /// Rise is steeper than fall, mimicking conifer silhouette profile.
+    /// Output range: 0…1
+    @inline(__always)
+    private static func triangleWave(_ x: CGFloat) -> CGFloat {
+        let t = x / (2 * .pi)
+        let frac = t - floor(t)
+        if frac < 0.35 {
+            // Steep rise (windward side of tree)
+            return frac / 0.35
+        } else {
+            // Gradual descent (leeward branches)
+            return (1 - frac) / 0.65
+        }
     }
 }
