@@ -10,9 +10,16 @@ struct WeeklySummaryChartView: View {
 
     @State private var selectedTab: Tab = .exercise
 
-    enum Tab: String, CaseIterable {
-        case exercise = "Exercise"
-        case steps = "Steps"
+    enum Tab: CaseIterable {
+        case exercise
+        case steps
+
+        var displayName: String {
+            switch self {
+            case .exercise: String(localized: "Exercise")
+            case .steps: String(localized: "Steps")
+            }
+        }
     }
 
     var body: some View {
@@ -34,7 +41,7 @@ struct WeeklySummaryChartView: View {
 
                     Picker("Metric", selection: $selectedTab) {
                         ForEach(Tab.allCases, id: \.self) { tab in
-                            Text(tab.rawValue).tag(tab)
+                            Text(tab.displayName).tag(tab)
                         }
                     }
                     .pickerStyle(.segmented)

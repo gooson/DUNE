@@ -183,6 +183,8 @@ private enum Labels {
 - `.strings` / `.stringsdict` 파일 생성 금지 → `.xcstrings` 단일 소스
 - 코드 내 번역 분기 (`if locale == "ko"`) 금지 → xcstrings가 자동 처리
 - 운동 이름(Bench Press 등)은 번역하지 않음 → 국제 표준 영어 유지
+- enum rawValue를 `Text()`에 직접 전달 금지 → `displayName` computed property 경유
+- xcstrings 키에 smart quote(U+2019 등) 사용 금지 → 코드와 동일한 ASCII 문자 사용
 
 ## 새 문자열 추가 프로세스
 
@@ -238,3 +240,10 @@ xcodebuild -exportLocalizations -project DUNE/DUNE.xcodeproj \
 - [ ] watchOS 공유 문자열이 Watch xcstrings에도 반영되었는가
 - [ ] Dynamic Type에서 긴 번역이 레이아웃을 깨뜨리지 않는가
 - [ ] 보간 문자열의 xcstrings 키 형식(%@, %lld 등)이 정확한가
+
+### Orphan 방지 (P1 — Xcode 경고 발생)
+
+- [ ] 코드에서 문자열 삭제/변경 시 xcstrings에서 해당 키도 동시 삭제/변경
+- [ ] xcstrings 키 문자열과 코드 문자열이 정확히 일치 (smart quote, en-dash 등 유니코드 주의)
+- [ ] Watch 전용 문자열은 Watch xcstrings에만 등록 (iOS xcstrings에 중복 등록 금지)
+- [ ] 새 `Text()` 또는 `String(localized:)` 추가 시 xcstrings에 en/ko/ja 3개 언어 동시 등록

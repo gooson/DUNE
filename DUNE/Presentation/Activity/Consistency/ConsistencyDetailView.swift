@@ -41,7 +41,7 @@ struct ConsistencyDetailView: View {
         }
     }
 
-    private func statCard(title: String, value: String, unit: String, icon: String) -> some View {
+    private func statCard(title: LocalizedStringKey, value: String, unit: String, icon: String) -> some View {
         VStack(spacing: DS.Spacing.xs) {
             Image(systemName: icon)
                 .font(.title3)

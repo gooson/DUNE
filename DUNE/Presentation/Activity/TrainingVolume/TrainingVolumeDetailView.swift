@@ -128,7 +128,7 @@ struct TrainingVolumeDetailView: View {
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
     }
 
-    private func statRow(label: String, value: String, change: Double?) -> some View {
+    private func statRow(label: LocalizedStringKey, value: String, change: Double?) -> some View {
         HStack(spacing: DS.Spacing.sm) {
             Text(label)
                 .font(.caption)

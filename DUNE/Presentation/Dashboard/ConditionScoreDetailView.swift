@@ -50,7 +50,7 @@ struct ConditionScoreDetailView: View {
                 // Period picker
                 Picker("Period", selection: $viewModel.selectedPeriod) {
                     ForEach(TimePeriod.allCases, id: \.self) { period in
-                        Text(period.rawValue).tag(period)
+                        Text(period.displayName).tag(period)
                     }
                 }
                 .pickerStyle(.segmented)
@@ -224,7 +224,7 @@ struct ConditionScoreDetailView: View {
         }
     }
 
-    private func summaryItem(label: String, value: String) -> some View {
+    private func summaryItem(label: LocalizedStringKey, value: String) -> some View {
         VStack(spacing: DS.Spacing.xxs) {
             Text(label)
                 .font(.caption2)

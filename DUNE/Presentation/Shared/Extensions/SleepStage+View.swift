@@ -6,7 +6,7 @@ extension SleepStage.Stage {
         case .awake: String(localized: "Awake")
         case .core: String(localized: "Core")
         case .deep: String(localized: "Deep")
-        case .rem: "REM"
+        case .rem: String(localized: "REM")
         case .unspecified: String(localized: "Asleep")
         }
     }

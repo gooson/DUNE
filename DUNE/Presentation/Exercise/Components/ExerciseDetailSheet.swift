@@ -196,7 +196,7 @@ struct ExerciseDetailSheet: View {
         }
     }
 
-    private func infoItem(label: String, value: String) -> some View {
+    private func infoItem(label: LocalizedStringKey, value: String) -> some View {
         VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
             Text(label)
                 .font(.caption)
@@ -208,11 +208,11 @@ struct ExerciseDetailSheet: View {
 
     private var inputTypeLabel: String {
         switch exercise.inputType {
-        case .setsRepsWeight: "Weight + Reps"
-        case .setsReps: "Reps Only"
-        case .durationDistance: "Duration + Distance"
-        case .durationIntensity: "Duration + Intensity"
-        case .roundsBased: "Rounds"
+        case .setsRepsWeight: String(localized: "Weight + Reps")
+        case .setsReps: String(localized: "Reps Only")
+        case .durationDistance: String(localized: "Duration + Distance")
+        case .durationIntensity: String(localized: "Duration + Intensity")
+        case .roundsBased: String(localized: "Rounds")
         }
     }
 }

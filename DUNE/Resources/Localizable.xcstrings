@@ -3071,23 +3071,6 @@
         }
       }
     },
-    "Coming Soon": {
-      "extractionState": "manual",
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "近日公開"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "곧 출시"
-          }
-        }
-      }
-    },
     "Complete Set": {
       "extractionState": "manual",
       "localizations": {
@@ -11518,23 +11501,6 @@
         }
       }
     },
-    "Statistically calculates where today’s HRV falls relative to your baseline, converting it to a 0–100 score.": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "오늘의 HRV가 기준선에서 어디에 위치하는지 통계적으로 계산하여 0~100 점수로 변환합니다."
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "今日のHRVがベースラインに対してどこに位置するかを統計的に計算し、0〜100のスコアに変換します。"
-          }
-        }
-      }
-    },
     "Stay indoors": {
       "extractionState": "manual",
       "localizations": {
@@ -15050,57 +15016,6 @@
         }
       }
     },
-    "Fine Dust": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "초미세먼지"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "微小粒子状物質"
-          }
-        }
-      }
-    },
-    "Coarse Dust": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "미세먼지"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "粒子状物質"
-          }
-        }
-      }
-    },
-    "Ozone": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "오존"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "オゾン"
-          }
-        }
-      }
-    },
     "NO₂": {
       "extractionState": "manual",
       "localizations": {
@@ -15182,6 +15097,519 @@
           "stringUnit": {
             "state": "translated",
             "value": "PM₂.₅"
+          }
+        }
+      }
+    },
+    "Statistically calculates where today's HRV falls relative to your baseline, converting it to a 0–100 score.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "오늘의 HRV가 기준선에서 어디에 위치하는지 통계적으로 계산하여 0~100 점수로 변환합니다."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今日のHRVがベースラインに対してどこに位置するかを統計的に計算し、0〜100のスコアに変換します。"
+          }
+        }
+      }
+    },
+    "Max Weight": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "최대 중량"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最大重量"
+          }
+        }
+      }
+    },
+    "Est. 1RM": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "추정 1RM"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "推定1RM"
+          }
+        }
+      }
+    },
+    "Total Reps": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "총 반복수"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "合計レップ数"
+          }
+        }
+      }
+    },
+    "Weight + Reps": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "중량 + 반복"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "重量 + レップ"
+          }
+        }
+      }
+    },
+    "Reps Only": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "반복만"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レップのみ"
+          }
+        }
+      }
+    },
+    "Resting HR": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "안정시 심박수"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "安静時心拍数"
+          }
+        }
+      }
+    },
+    "Personal Best": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "개인 최고"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "自己ベスト"
+          }
+        }
+      }
+    },
+    "Progress": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "진행"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "進捗"
+          }
+        }
+      }
+    },
+    "Could not load heart rate data": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "심박수 데이터를 불러올 수 없습니다"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "心拍数データを読み込めませんでした"
+          }
+        }
+      }
+    },
+    "Exercise Name": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "운동 이름"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "エクササイズ名"
+          }
+        }
+      }
+    },
+    "Input Type": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "입력 유형"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "入力タイプ"
+          }
+        }
+      }
+    },
+    "Template Name": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "템플릿 이름"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "テンプレート名"
+          }
+        }
+      }
+    },
+    "Recent": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "최근"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最近"
+          }
+        }
+      }
+    },
+    "Popular": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "인기"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "人気"
+          }
+        }
+      }
+    },
+    "Reset": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "초기화"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "リセット"
+          }
+        }
+      }
+    },
+    "Default Input Type": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "기본 입력 유형"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "デフォルト入力タイプ"
+          }
+        }
+      }
+    },
+    "Finish": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "종료"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "終了"
+          }
+        }
+      }
+    },
+    "Body Part": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "부위"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "部位"
+          }
+        }
+      }
+    },
+    "Joints": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "관절"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "関節"
+          }
+        }
+      }
+    },
+    "Muscles": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "근육"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "筋肉"
+          }
+        }
+      }
+    },
+    "Severity": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "심각도"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "重症度"
+          }
+        }
+      }
+    },
+    "Notes": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "메모"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "メモ"
+          }
+        }
+      }
+    },
+    "Type": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "유형"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "タイプ"
+          }
+        }
+      }
+    },
+    "Goal": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "목표"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "目標"
+          }
+        }
+      }
+    },
+    "Frequency": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "빈도"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "頻度"
+          }
+        }
+      }
+    },
+    "Add habit": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "습관 추가"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "習慣を追加"
+          }
+        }
+      }
+    },
+    "Validation Error": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "입력 오류"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "入力エラー"
+          }
+        }
+      }
+    },
+    "D": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "일"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "日"
+          }
+        }
+      }
+    },
+    "W": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "주"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "週"
+          }
+        }
+      }
+    },
+    "M": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "월"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "月"
+          }
+        }
+      }
+    },
+    "Y": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "년"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "年"
           }
         }
       }

@@ -290,7 +290,7 @@ struct ExerciseSessionDetailView: View {
                 isLoadingHR = false
                 return
             }
-            hrError = "Could not load heart rate data"
+            hrError = String(localized: "Could not load heart rate data")
         }
         isLoadingHR = false
     }

@@ -73,7 +73,7 @@ struct ExerciseHistoryView: View {
                     Button {
                         viewModel.selectedMetric = metric
                     } label: {
-                        Text(metric.rawValue)
+                        Text(metric.displayName)
                             .font(.caption.weight(.medium))
                             .padding(.horizontal, DS.Spacing.md)
                             .padding(.vertical, DS.Spacing.sm)
@@ -122,7 +122,7 @@ struct ExerciseHistoryView: View {
 
     private var metricYLabel: String {
         let unit = isWeightMetric ? weightUnit.displayName : viewModel.selectedMetric.unit
-        return "\(viewModel.selectedMetric.rawValue) (\(unit))"
+        return "\(viewModel.selectedMetric.displayName) (\(unit))"
     }
 
     private var isWeightMetric: Bool {
@@ -218,7 +218,7 @@ struct ExerciseHistoryView: View {
         }
     }
 
-    private func statCard(title: String, value: String, icon: String, color: Color) -> some View {
+    private func statCard(title: LocalizedStringKey, value: String, icon: String, color: Color) -> some View {
         VStack(alignment: .leading, spacing: DS.Spacing.xs) {
             HStack(spacing: DS.Spacing.xs) {
                 Image(systemName: icon)

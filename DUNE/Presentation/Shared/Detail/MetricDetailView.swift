@@ -27,7 +27,7 @@ struct MetricDetailView: View {
                 // Period picker
                 Picker("Period", selection: $viewModel.selectedPeriod) {
                     ForEach(TimePeriod.allCases, id: \.self) { period in
-                        Text(period.rawValue).tag(period)
+                        Text(period.displayName).tag(period)
                     }
                 }
                 .pickerStyle(.segmented)

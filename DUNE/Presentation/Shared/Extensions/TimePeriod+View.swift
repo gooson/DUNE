@@ -4,6 +4,17 @@ import Foundation
 /// Separates locale-specific date formatting from the Domain model.
 extension TimePeriod {
 
+    /// Short label for period pickers (D/W/M/6M/Y).
+    var displayName: String {
+        switch self {
+        case .day: String(localized: "D")
+        case .week: String(localized: "W")
+        case .month: String(localized: "M")
+        case .sixMonths: String(localized: "6M")
+        case .year: String(localized: "Y")
+        }
+    }
+
     /// Formatted label for the given offset's date range.
     func rangeLabel(offset: Int) -> String {
         let range = dateRange(offset: offset)

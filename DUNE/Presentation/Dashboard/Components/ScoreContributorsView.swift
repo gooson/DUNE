@@ -88,8 +88,8 @@ struct ScoreContributorsView: View {
 extension ScoreContribution.Factor {
     var displayName: String {
         switch self {
-        case .hrv: "HRV"
-        case .rhr: "Resting HR"
+        case .hrv: String(localized: "HRV")
+        case .rhr: String(localized: "Resting HR")
         }
     }
 

@@ -2,11 +2,20 @@ import Foundation
 import Observation
 
 /// Chart metric for progressive overload visualization
-enum ProgressMetric: String, CaseIterable, Sendable {
-    case maxWeight = "Max Weight"
-    case totalVolume = "Volume"
-    case estimatedOneRM = "Est. 1RM"
-    case totalReps = "Total Reps"
+enum ProgressMetric: CaseIterable, Sendable {
+    case maxWeight
+    case totalVolume
+    case estimatedOneRM
+    case totalReps
+
+    var displayName: String {
+        switch self {
+        case .maxWeight: String(localized: "Max Weight")
+        case .totalVolume: String(localized: "Volume")
+        case .estimatedOneRM: String(localized: "Est. 1RM")
+        case .totalReps: String(localized: "Total Reps")
+        }
+    }
 
     var unit: String {
         switch self {

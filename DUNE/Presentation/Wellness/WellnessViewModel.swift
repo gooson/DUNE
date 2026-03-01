@@ -120,7 +120,7 @@ final class WellnessViewModel {
             let sparkline = results.sleepWeekly.map(\.totalMinutes)
             cards.append(buildCard(
                 category: .sleep,
-                title: "Sleep",
+                title: String(localized: "Sleep"),
                 rawValue: sleep.totalMinutes,
                 formattedValue: Self.formatSleepMinutes(sleep.totalMinutes),
                 unit: "",
@@ -147,7 +147,7 @@ final class WellnessViewModel {
             let sparkline = results.hrvWeekly.map(\.value)
             cards.append(buildCard(
                 category: .hrv,
-                title: "HRV",
+                title: String(localized: "HRV"),
                 rawValue: hrv.value,
                 formattedValue: hrv.value.formattedWithSeparator(),
                 unit: "ms",
@@ -163,7 +163,7 @@ final class WellnessViewModel {
             let sparkline = results.rhrWeekly.map(\.value)
             cards.append(buildCard(
                 category: .rhr,
-                title: "Resting HR",
+                title: String(localized: "Resting HR"),
                 rawValue: rhr.value,
                 formattedValue: rhr.value.formattedWithSeparator(),
                 unit: "bpm",
@@ -180,7 +180,7 @@ final class WellnessViewModel {
             let sparkline = results.weightHistory.map(\.value)
             cards.append(buildCard(
                 category: .weight,
-                title: "Weight",
+                title: String(localized: "Weight"),
                 rawValue: weight.value,
                 formattedValue: weight.value.formattedWithSeparator(fractionDigits: 1),
                 unit: "kg",
@@ -195,7 +195,7 @@ final class WellnessViewModel {
         if let bmi = results.latestBMI {
             cards.append(buildCard(
                 category: .bmi,
-                title: "BMI",
+                title: String(localized: "BMI"),
                 rawValue: bmi.value,
                 formattedValue: bmi.value.formattedWithSeparator(fractionDigits: 1),
                 unit: "",
@@ -211,7 +211,7 @@ final class WellnessViewModel {
             let sparkline = results.bodyFatHistory.map(\.value)
             cards.append(buildCard(
                 category: .bodyFat,
-                title: "Body Fat",
+                title: String(localized: "Body Fat"),
                 rawValue: bf.value,
                 formattedValue: bf.value.formattedWithSeparator(fractionDigits: 1),
                 unit: "%",
@@ -226,7 +226,7 @@ final class WellnessViewModel {
         if let lbm = results.latestLeanBodyMass {
             cards.append(buildCard(
                 category: .leanBodyMass,
-                title: "Lean Body Mass",
+                title: String(localized: "Lean Body Mass"),
                 rawValue: lbm.value,
                 formattedValue: lbm.value.formattedWithSeparator(fractionDigits: 1),
                 unit: "kg",
@@ -242,7 +242,7 @@ final class WellnessViewModel {
             let sparkline = results.heartRateHistory.map(\.value)
             cards.append(buildCard(
                 category: .heartRate,
-                title: "Heart Rate",
+                title: String(localized: "Heart Rate"),
                 rawValue: hr.value,
                 formattedValue: hr.value.formattedWithSeparator(),
                 unit: "bpm",
@@ -259,7 +259,7 @@ final class WellnessViewModel {
             let sparkline = results.spo2History.map { $0.value * 100 }
             cards.append(buildCard(
                 category: .spo2,
-                title: "Blood Oxygen",
+                title: String(localized: "Blood Oxygen"),
                 rawValue: displayValue,
                 formattedValue: displayValue.formattedWithSeparator(),
                 unit: "%",
@@ -275,7 +275,7 @@ final class WellnessViewModel {
             let sparkline = results.respRateHistory.map(\.value)
             cards.append(buildCard(
                 category: .respiratoryRate,
-                title: "Respiratory Rate",
+                title: String(localized: "Respiratory Rate"),
                 rawValue: resp.value,
                 formattedValue: resp.value.formattedWithSeparator(),
                 unit: "breaths/min",
@@ -291,7 +291,7 @@ final class WellnessViewModel {
             let sparkline = results.vo2MaxHistory.map(\.value)
             cards.append(buildCard(
                 category: .vo2Max,
-                title: "VO2 Max",
+                title: String(localized: "VO2 Max"),
                 rawValue: vo2.value,
                 formattedValue: vo2.value.formattedWithSeparator(fractionDigits: 1),
                 unit: "ml/kg/min",
@@ -307,7 +307,7 @@ final class WellnessViewModel {
             let sparkline = results.hrRecoveryHistory.map(\.value)
             cards.append(buildCard(
                 category: .heartRateRecovery,
-                title: "HR Recovery",
+                title: String(localized: "HR Recovery"),
                 rawValue: hrr.value,
                 formattedValue: hrr.value.formattedWithSeparator(),
                 unit: "bpm",
@@ -324,7 +324,7 @@ final class WellnessViewModel {
             let sparkline = results.wristTempHistory.map { $0.value - baseline }
             cards.append(buildCard(
                 category: .wristTemperature,
-                title: "Wrist Temp",
+                title: String(localized: "Wrist Temp"),
                 rawValue: delta,
                 formattedValue: delta.formattedWithSeparator(fractionDigits: 1, alwaysShowSign: true),
                 unit: "°C",

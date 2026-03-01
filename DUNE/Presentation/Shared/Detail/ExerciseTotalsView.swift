@@ -54,7 +54,7 @@ struct ExerciseTotalsView: View {
 
     // MARK: - Subviews
 
-    private func totalItem(icon: String, label: String, value: String) -> some View {
+    private func totalItem(icon: String, label: LocalizedStringKey, value: String) -> some View {
         HStack(spacing: isRegular ? DS.Spacing.md : DS.Spacing.sm) {
             Image(systemName: icon)
                 .font(isRegular ? .subheadline : .caption)

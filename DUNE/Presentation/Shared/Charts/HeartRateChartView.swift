@@ -44,7 +44,7 @@ struct HeartRateChartView: View {
         }
     }
 
-    private func statLabel(title: String, value: String, unit: String) -> some View {
+    private func statLabel(title: LocalizedStringKey, value: String, unit: String) -> some View {
         HStack(spacing: 4) {
             Text(title)
                 .font(.caption)

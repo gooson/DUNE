@@ -230,7 +230,7 @@ struct ExerciseTypeDetailView: View {
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
     }
 
-    private func comparisonItem(label: String, current: String, change: Double?) -> some View {
+    private func comparisonItem(label: LocalizedStringKey, current: String, change: Double?) -> some View {
         VStack(alignment: .leading, spacing: DS.Spacing.xs) {
             Text(label)
                 .font(.caption)
@@ -320,7 +320,7 @@ struct ExerciseTypeDetailView: View {
         }
     }
 
-    private func statItem(label: String, value: String) -> some View {
+    private func statItem(label: LocalizedStringKey, value: String) -> some View {
         VStack(alignment: .leading, spacing: 2) {
             Text(label)
                 .font(.caption)
