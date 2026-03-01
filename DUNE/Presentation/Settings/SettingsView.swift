@@ -152,12 +152,12 @@ struct SettingsView: View {
 
     private var locationStatusText: String {
         switch locationStatus {
-        case .authorizedWhenInUse: "When In Use"
-        case .authorizedAlways: "Always"
-        case .denied: "Denied"
-        case .restricted: "Restricted"
-        case .notDetermined: "Not Set"
-        @unknown default: "Unknown"
+        case .authorizedWhenInUse: String(localized: "When In Use")
+        case .authorizedAlways: String(localized: "Always")
+        case .denied: String(localized: "Denied")
+        case .restricted: String(localized: "Restricted")
+        case .notDetermined: String(localized: "Not Set")
+        @unknown default: String(localized: "Unknown")
         }
     }
 

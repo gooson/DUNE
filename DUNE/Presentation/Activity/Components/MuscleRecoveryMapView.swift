@@ -16,8 +16,8 @@ struct MuscleRecoveryMapView: View {
 
         var label: String {
             switch self {
-            case .recovery: "Recovery"
-            case .volume: "Volume"
+            case .recovery: String(localized: "Recovery")
+            case .volume: String(localized: "Volume")
             }
         }
     }
@@ -88,12 +88,12 @@ struct MuscleRecoveryMapView: View {
         switch mode {
         case .recovery:
             let total = fatigueStates.count
-            guard total > 0 else { return "Start training to track recovery" }
-            if recoveredCount == total { return "All \(total) muscle groups ready" }
-            return "\(recoveredCount)/\(total) muscle groups ready"
+            guard total > 0 else { return String(localized: "Start training to track recovery") }
+            if recoveredCount == total { return String(localized: "All \(total) muscle groups ready") }
+            return String(localized: "\(recoveredCount)/\(total) muscle groups ready")
         case .volume:
-            guard trainedCount > 0 else { return "Start recording workouts to see volume" }
-            return "\(trainedCount) muscles trained this week"
+            guard trainedCount > 0 else { return String(localized: "Start recording workouts to see volume") }
+            return String(localized: "\(trainedCount) muscles trained this week")
         }
     }
 
