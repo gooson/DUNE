@@ -31,8 +31,9 @@ struct ProgressRingView: View {
     }
 
     /// Arc extent in degrees — used as AngularGradient endAngle.
+    /// Uses animatedProgress so gradient tracks the arc during animation.
     private var arcDegrees: Double {
-        max(0.01, progress) * 360
+        max(0.01, min(1.0, animatedProgress)) * 360
     }
 
     var body: some View {
@@ -78,12 +79,10 @@ struct ProgressRingView: View {
     }
 
     // Correction #83 — static color caching for accent gradient (per-theme)
-    // endAngle is scoped to progress, so locations 0–1 map to the visible arc only.
+    // endAngle is scoped to animatedProgress, so locations 0–1 map to the visible arc only.
+    // Note: Gradient.Stop arrays are lightweight value types; per-frame allocation is acceptable
+    // because base/tipColor vary per caller, making full static caching impractical.
     private enum Cache {
-        // Desert Warm — opaque colors to avoid olive tint from warm material blending
-        static let desertAccent06 = Color("ActivityCardio").opacity(0.6)
-        static let desertAccent08 = Color("AccentColor").opacity(0.8)
-        static let desertRingStart = Color("DesertRingDark")
         // Ocean Cool
         static let oceanAccent06 = Color("OceanAccent").opacity(0.6)
 
@@ -167,11 +166,18 @@ struct ProgressRingView: View {
 }
 
 private func nextTierLabel(_ status: ConditionScore.Status) -> String {
-    switch status {
-    case .warning:   "tired"
-    case .tired:     "fair"
-    case .fair:      "good"
-    case .good:      "excellent"
-    case .excellent: "excellent"
+    status.nextTierStatus.rawValue
+}
+
+private extension ConditionScore.Status {
+    /// The status tier this score is heading toward (for preview label derivation).
+    var nextTierStatus: ConditionScore.Status {
+        switch self {
+        case .warning:   .tired
+        case .tired:     .fair
+        case .fair:      .good
+        case .good:      .excellent
+        case .excellent: .excellent
+        }
     }
 }
