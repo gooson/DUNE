@@ -17,10 +17,10 @@ DUNE/
 ├── Data/                # HealthKit services, SwiftData models
 ├── Domain/              # Models, UseCases
 ├── Presentation/        # Views, ViewModels
-└── Resources/           # Info.plist, Entitlements, Assets.xcassets
-
-DUNETests/               # Unit tests (Swift Testing)
-DUNEUITests/             # UI tests (XCTest)
+├── Resources/           # Info.plist, Entitlements, Assets.xcassets
+├── DUNETests/           # Unit tests (Swift Testing)
+├── DUNEUITests/         # UI tests (XCTest)
+└── DUNEWatch/           # watchOS app
 ```
 
 ## Targets
@@ -70,7 +70,7 @@ xcodebuild test -project DUNE.xcodeproj -scheme DUNEUITests \
 
 ## Adding New Test Files
 
-1. `DUNETests/` 에 `{TargetName}Tests.swift` 생성
+1. `DUNE/DUNETests/` 에 `{TargetName}Tests.swift` 생성
 2. `import Foundation`, `import Testing`, `@testable import DUNE` 필수
 3. `@Suite`, `@Test` 매크로 사용 (Swift Testing)
 4. ViewModel 테스트는 `@MainActor` 어노테이션 필요
