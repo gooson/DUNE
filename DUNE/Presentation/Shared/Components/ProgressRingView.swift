@@ -85,6 +85,8 @@ struct ProgressRingView: View {
     private enum Cache {
         // Ocean Cool
         static let oceanAccent06 = Color("OceanAccent").opacity(0.6)
+        // Forest Green
+        static let forestAccent06 = Color("ForestAccent").opacity(0.6)
 
         static func accentGradientStops(base: Color, tipColor: Color, theme: AppTheme) -> [Gradient.Stop] {
             switch theme {
@@ -101,6 +103,12 @@ struct ProgressRingView: View {
             case .oceanCool:
                 return [
                     .init(color: oceanAccent06, location: 0),
+                    .init(color: base, location: 0.82),
+                    .init(color: tipColor, location: 1)
+                ]
+            case .forestGreen:
+                return [
+                    .init(color: forestAccent06, location: 0),
                     .init(color: base, location: 0.82),
                     .init(color: tipColor, location: 1)
                 ]

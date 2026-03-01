@@ -4,7 +4,7 @@ import SwiftUI
 
 /// Pre-computed sample points for wave rendering.
 /// Shared across all wave shape variants to avoid duplication.
-private struct WaveSamples {
+struct WaveSamples {
     let points: [(x: CGFloat, angle: CGFloat)]
     static let sampleCount = 120
 

@@ -125,14 +125,15 @@ struct WaveOverlayView: View {
 // MARK: - Tab Background
 
 /// Tab root background: theme-aware wave motif + gradient.
-/// Dispatches to Desert (sine) or Ocean (4-layer parallax) based on `\.appTheme`.
+/// Dispatches to Desert (sine), Ocean (4-layer parallax), or Forest (3-layer silhouette) based on `\.appTheme`.
 struct TabWaveBackground: View {
     @Environment(\.appTheme) private var theme
 
     var body: some View {
         switch theme {
-        case .desertWarm: DesertTabWaveContent()
-        case .oceanCool:  OceanTabWaveBackground()
+        case .desertWarm:  DesertTabWaveContent()
+        case .oceanCool:   OceanTabWaveBackground()
+        case .forestGreen: ForestTabWaveBackground()
         }
     }
 }
@@ -210,8 +211,9 @@ struct DetailWaveBackground: View {
 
     var body: some View {
         switch theme {
-        case .desertWarm: DesertDetailWaveContent()
-        case .oceanCool:  OceanDetailWaveBackground()
+        case .desertWarm:  DesertDetailWaveContent()
+        case .oceanCool:   OceanDetailWaveBackground()
+        case .forestGreen: ForestDetailWaveBackground()
         }
     }
 }
@@ -253,8 +255,9 @@ struct SheetWaveBackground: View {
 
     var body: some View {
         switch theme {
-        case .desertWarm: DesertSheetWaveContent()
-        case .oceanCool:  OceanSheetWaveBackground()
+        case .desertWarm:  DesertSheetWaveContent()
+        case .oceanCool:   OceanSheetWaveBackground()
+        case .forestGreen: ForestSheetWaveBackground()
         }
     }
 }

@@ -59,6 +59,35 @@ private enum GlassCardGradients {
         endPoint: .trailing
     )
 
+    // Forest Green
+    private static let forestAccent = Color("ForestAccent")
+    private static let forestDusk = Color("ForestDusk")
+    private static let forestHeroBorder = LinearGradient(
+        colors: [
+            forestAccent.opacity(DS.Opacity.strong),
+            forestAccent.opacity(DS.Opacity.subtle)
+        ],
+        startPoint: .topLeading,
+        endPoint: .bottomTrailing
+    )
+    private static let forestDarkBorder = LinearGradient(
+        colors: [
+            forestAccent.opacity(DS.Opacity.strong),
+            forestDusk.opacity(DS.Opacity.cardBorder)
+        ],
+        startPoint: .topLeading,
+        endPoint: .bottomTrailing
+    )
+    private static let forestBottomSeparator = LinearGradient(
+        colors: [
+            forestAccent.opacity(0),
+            forestAccent.opacity(DS.Opacity.cardBorder),
+            forestAccent.opacity(0)
+        ],
+        startPoint: .leading,
+        endPoint: .trailing
+    )
+
     static let clearBorder = LinearGradient(
         colors: [Color.clear, Color.clear],
         startPoint: .topLeading,
@@ -67,20 +96,23 @@ private enum GlassCardGradients {
 
     static func heroBorder(for theme: AppTheme) -> LinearGradient {
         switch theme {
-        case .desertWarm: desertHeroBorder
-        case .oceanCool:  oceanHeroBorder
+        case .desertWarm:  desertHeroBorder
+        case .oceanCool:   oceanHeroBorder
+        case .forestGreen: forestHeroBorder
         }
     }
     static func darkBorder(for theme: AppTheme) -> LinearGradient {
         switch theme {
-        case .desertWarm: desertDarkBorder
-        case .oceanCool:  oceanDarkBorder
+        case .desertWarm:  desertDarkBorder
+        case .oceanCool:   oceanDarkBorder
+        case .forestGreen: forestDarkBorder
         }
     }
     static func bottomSeparator(for theme: AppTheme) -> LinearGradient {
         switch theme {
-        case .desertWarm: desertBottomSeparator
-        case .oceanCool:  oceanBottomSeparator
+        case .desertWarm:  desertBottomSeparator
+        case .oceanCool:   oceanBottomSeparator
+        case .forestGreen: forestBottomSeparator
         }
     }
 }

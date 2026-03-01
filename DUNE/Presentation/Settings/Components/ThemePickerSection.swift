@@ -10,13 +10,6 @@ struct ThemePickerSection: View {
             ForEach(AppTheme.allCases, id: \.self) { appTheme in
                 themeRow(appTheme)
             }
-
-            themeRow(
-                name: "Forest Green",
-                colors: [.green, .mint, .teal],
-                isSelected: false,
-                isAvailable: false
-            )
         }
     }
 
@@ -49,34 +42,6 @@ struct ThemePickerSection: View {
         }
         .buttonStyle(.plain)
     }
-
-    /// Placeholder for future themes (Forest Green etc.)
-    private func themeRow(
-        name: String,
-        colors: [Color],
-        isSelected: Bool,
-        isAvailable: Bool
-    ) -> some View {
-        HStack(spacing: DS.Spacing.md) {
-            HStack(spacing: DS.Spacing.xs) {
-                ForEach(colors.indices, id: \.self) { index in
-                    Circle()
-                        .fill(colors[index])
-                        .frame(width: 20, height: 20)
-                }
-            }
-
-            Text(name)
-                .foregroundStyle(.secondary)
-
-            Spacer()
-
-            Text("Coming Soon")
-                .font(.caption)
-                .foregroundStyle(.tertiary)
-        }
-        .opacity(0.6)
-    }
 }
 
 // MARK: - Swatch Colors
@@ -88,6 +53,8 @@ private extension AppTheme {
             [DS.Color.warmGlow, DS.Color.desertBronze, DS.Color.desertDusk]
         case .oceanCool:
             [Color("OceanSurface"), Color("OceanMid"), Color("OceanDeep")]
+        case .forestGreen:
+            [Color("ForestMid"), Color("ForestDeep"), Color("ForestAccent")]
         }
     }
 }
