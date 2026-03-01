@@ -54,10 +54,16 @@ struct HeroScoreCard: View {
             startPoint: .top,
             endPoint: .bottom
         )
+        static let forestScoreGradient = LinearGradient(
+            colors: [Color("ForestBronze"), Color("ForestDusk")],
+            startPoint: .top,
+            endPoint: .bottom
+        )
         static func scoreGradient(for theme: AppTheme) -> LinearGradient {
             switch theme {
-            case .desertWarm: desertScoreGradient
-            case .oceanCool:  oceanScoreGradient
+            case .desertWarm:  desertScoreGradient
+            case .oceanCool:   oceanScoreGradient
+            case .forestGreen: forestScoreGradient
             }
         }
     }

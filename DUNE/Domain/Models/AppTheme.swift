@@ -7,4 +7,5 @@ import Foundation
 enum AppTheme: String, CaseIterable, Codable, Sendable {
     case desertWarm
     case oceanCool
+    case forestGreen
 }

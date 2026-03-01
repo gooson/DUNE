@@ -19,32 +19,36 @@ extension AppTheme {
     /// Primary accent color (Watch).
     var accentColor: Color {
         switch self {
-        case .desertWarm: DS.Color.warmGlow
-        case .oceanCool:  Color("OceanAccent")
+        case .desertWarm:  DS.Color.warmGlow
+        case .oceanCool:   Color("OceanAccent")
+        case .forestGreen: Color("ForestAccent")
         }
     }
 
     /// Bronze/copper for hero text gradient start (Watch).
     var bronzeColor: Color {
         switch self {
-        case .desertWarm: DS.Color.desertBronze
-        case .oceanCool:  Color("OceanBronze")
+        case .desertWarm:  DS.Color.desertBronze
+        case .oceanCool:   Color("OceanBronze")
+        case .forestGreen: Color("ForestBronze")
         }
     }
 
     /// Cool secondary for gradient end (Watch).
     var duskColor: Color {
         switch self {
-        case .desertWarm: DS.Color.desertDusk
-        case .oceanCool:  Color("OceanDusk")
+        case .desertWarm:  DS.Color.desertDusk
+        case .oceanCool:   Color("OceanDusk")
+        case .forestGreen: Color("ForestDusk")
         }
     }
 
     /// Muted decorative text (Watch).
     var sandColor: Color {
         switch self {
-        case .desertWarm: DS.Color.sandMuted
-        case .oceanCool:  Color("OceanSand")
+        case .desertWarm:  DS.Color.sandMuted
+        case .oceanCool:   Color("OceanSand")
+        case .forestGreen: Color("ForestSand")
         }
     }
 }
@@ -85,15 +89,17 @@ extension AppTheme {
 extension AppTheme {
     var tabTrainColor: Color {
         switch self {
-        case .desertWarm: DS.Color.tabTrain
-        case .oceanCool:  Color("OceanTabTrain")
+        case .desertWarm:  DS.Color.tabTrain
+        case .oceanCool:   Color("OceanTabTrain")
+        case .forestGreen: Color("ForestTabTrain")
         }
     }
 
     var tabWellnessColor: Color {
         switch self {
-        case .desertWarm: DS.Color.tabWellness
-        case .oceanCool:  Color("OceanTabWellness")
+        case .desertWarm:  DS.Color.tabWellness
+        case .oceanCool:   Color("OceanTabWellness")
+        case .forestGreen: Color("ForestTabWellness")
         }
     }
 }
@@ -103,50 +109,57 @@ extension AppTheme {
 extension AppTheme {
     var metricHRV: Color {
         switch self {
-        case .desertWarm: DS.Color.hrv
-        case .oceanCool:  Color("OceanMetricHRV")
+        case .desertWarm:  DS.Color.hrv
+        case .oceanCool:   Color("OceanMetricHRV")
+        case .forestGreen: Color("ForestMetricHRV")
         }
     }
 
     var metricRHR: Color {
         switch self {
-        case .desertWarm: DS.Color.rhr
-        case .oceanCool:  Color("OceanMetricRHR")
+        case .desertWarm:  DS.Color.rhr
+        case .oceanCool:   Color("OceanMetricRHR")
+        case .forestGreen: Color("ForestMetricRHR")
         }
     }
 
     var metricHeartRate: Color {
         switch self {
-        case .desertWarm: DS.Color.heartRate
-        case .oceanCool:  Color("OceanMetricHeartRate")
+        case .desertWarm:  DS.Color.heartRate
+        case .oceanCool:   Color("OceanMetricHeartRate")
+        case .forestGreen: Color("ForestMetricHeartRate")
         }
     }
 
     var metricSleep: Color {
         switch self {
-        case .desertWarm: DS.Color.sleep
-        case .oceanCool:  Color("OceanMetricSleep")
+        case .desertWarm:  DS.Color.sleep
+        case .oceanCool:   Color("OceanMetricSleep")
+        case .forestGreen: Color("ForestMetricSleep")
         }
     }
 
     var metricActivity: Color {
         switch self {
-        case .desertWarm: DS.Color.activity
-        case .oceanCool:  Color("OceanMetricActivity")
+        case .desertWarm:  DS.Color.activity
+        case .oceanCool:   Color("OceanMetricActivity")
+        case .forestGreen: Color("ForestMetricActivity")
         }
     }
 
     var metricSteps: Color {
         switch self {
-        case .desertWarm: DS.Color.steps
-        case .oceanCool:  Color("OceanMetricSteps")
+        case .desertWarm:  DS.Color.steps
+        case .oceanCool:   Color("OceanMetricSteps")
+        case .forestGreen: Color("ForestMetricSteps")
         }
     }
 
     var metricBody: Color {
         switch self {
-        case .desertWarm: DS.Color.body
-        case .oceanCool:  Color("OceanMetricBody")
+        case .desertWarm:  DS.Color.body
+        case .oceanCool:   Color("OceanMetricBody")
+        case .forestGreen: Color("ForestMetricBody")
         }
     }
 }
@@ -156,8 +169,9 @@ extension AppTheme {
 extension AppTheme {
     var displayName: String {
         switch self {
-        case .desertWarm: "Desert Warm"
-        case .oceanCool:  "Ocean Cool"
+        case .desertWarm:  String(localized: "Desert Warm")
+        case .oceanCool:   String(localized: "Ocean Cool")
+        case .forestGreen: String(localized: "Forest Green")
         }
     }
 }
