@@ -76,7 +76,7 @@ struct HealthKitWorkoutDetailView: View {
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
     }
 
-    private func statItem(value: String, label: String) -> some View {
+    private func statItem(value: String, label: LocalizedStringKey) -> some View {
         VStack(spacing: DS.Spacing.xxs) {
             Text(value)
                 .font(.title3.weight(.semibold).monospacedDigit())
@@ -288,7 +288,7 @@ struct HealthKitWorkoutDetailView: View {
 
     // MARK: - Helpers
 
-    private func placeholderView(icon: String, title: String) -> some View {
+    private func placeholderView(icon: String, title: LocalizedStringKey) -> some View {
         VStack(spacing: DS.Spacing.sm) {
             Image(systemName: icon)
                 .font(.title2)

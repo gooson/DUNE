@@ -108,7 +108,7 @@ struct TrainingReadinessDetailView: View {
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
     }
 
-    private func weightRow(label: String, weight: String, score: Int, color: Color) -> some View {
+    private func weightRow(label: LocalizedStringKey, weight: String, score: Int, color: Color) -> some View {
         HStack {
             Text(label)
                 .font(.subheadline)

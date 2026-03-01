@@ -48,7 +48,7 @@ struct VolumeBreakdownSection: View {
         }
     }
 
-    private func summaryCard(title: String, value: String, icon: String, color: Color) -> some View {
+    private func summaryCard(title: LocalizedStringKey, value: String, icon: String, color: Color) -> some View {
         VStack(alignment: .leading, spacing: DS.Spacing.xs) {
             HStack(spacing: DS.Spacing.xs) {
                 Image(systemName: icon)

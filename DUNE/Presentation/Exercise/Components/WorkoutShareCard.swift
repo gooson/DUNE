@@ -235,7 +235,7 @@ struct WorkoutShareCard: View {
         data.sets.compactMap(\.reps).reduce(0, +)
     }
 
-    private func statItem(icon: String, value: String, label: String) -> some View {
+    private func statItem(icon: String, value: String, label: LocalizedStringKey) -> some View {
         VStack(spacing: 4) {
             Image(systemName: icon)
                 .font(.caption2)

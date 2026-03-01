@@ -184,7 +184,7 @@ struct FatigueInfoSheet: View {
 
     // MARK: - Helpers
 
-    private func sectionHeader(icon: String, title: String) -> some View {
+    private func sectionHeader(icon: String, title: LocalizedStringKey) -> some View {
         HStack(spacing: DS.Spacing.xs) {
             Image(systemName: icon)
                 .font(.caption)

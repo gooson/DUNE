@@ -5,11 +5,20 @@ import Charts
 struct DailyVolumeChartView: View {
     let dailyBreakdown: [DailyVolumePoint]
 
-    enum Metric: String, CaseIterable, Identifiable {
-        case duration = "Duration"
-        case sessions = "Sessions"
+    enum Metric: CaseIterable, Identifiable {
+        case duration
+        case sessions
 
-        var id: String { rawValue }
+        var id: Self { self }
+
+        var displayName: String {
+            Self.displayNames[self] ?? ""
+        }
+
+        private static let displayNames: [Metric: String] = [
+            .duration: String(localized: "Duration"),
+            .sessions: String(localized: "Sessions"),
+        ]
     }
 
     @Environment(\.appTheme) private var theme
@@ -33,7 +42,7 @@ struct DailyVolumeChartView: View {
                 Spacer()
                 Picker("Metric", selection: $selectedMetric) {
                     ForEach(Metric.allCases) { metric in
-                        Text(metric.rawValue).tag(metric)
+                        Text(metric.displayName).tag(metric)
                     }
                 }
                 .pickerStyle(.segmented)
@@ -64,7 +73,7 @@ struct DailyVolumeChartView: View {
         Chart(dailyBreakdown) { point in
             BarMark(
                 x: .value("Date", point.date, unit: .day),
-                y: .value(selectedMetric.rawValue, valueFor(point))
+                y: .value(selectedMetric.displayName, valueFor(point))
             )
             .foregroundStyle(Gradients.bar)
             .cornerRadius(4)

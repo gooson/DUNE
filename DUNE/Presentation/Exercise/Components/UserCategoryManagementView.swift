@@ -275,11 +275,11 @@ extension UserCategoryEditView.Mode {
 extension ExerciseInputType {
     var displayLabel: String {
         switch self {
-        case .setsRepsWeight: "Sets × Reps × Weight"
-        case .setsReps: "Sets × Reps"
-        case .durationDistance: "Duration + Distance"
-        case .durationIntensity: "Duration + Intensity"
-        case .roundsBased: "Rounds Based"
+        case .setsRepsWeight: String(localized: "Sets × Reps × Weight")
+        case .setsReps: String(localized: "Sets × Reps")
+        case .durationDistance: String(localized: "Duration + Distance")
+        case .durationIntensity: String(localized: "Duration + Intensity")
+        case .roundsBased: String(localized: "Rounds Based")
         }
     }
 }
