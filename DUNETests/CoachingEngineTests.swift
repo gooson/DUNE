@@ -282,7 +282,8 @@ struct CoachingEngineTests {
             windSpeed: windSpeed,
             isDaytime: isDaytime,
             fetchedAt: Date(),
-            hourlyForecast: []
+            hourlyForecast: [],
+            dailyForecast: []
         )
     }
 }

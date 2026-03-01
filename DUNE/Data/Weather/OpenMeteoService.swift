@@ -53,9 +53,14 @@ final class OpenMeteoService: WeatherFetching, @unchecked Sendable {
             ),
             URLQueryItem(
                 name: "hourly",
-                value: "temperature_2m,weather_code,is_day"
+                value: "temperature_2m,weather_code,is_day,apparent_temperature,relative_humidity_2m,uv_index,wind_speed_10m,precipitation_probability"
             ),
-            URLQueryItem(name: "forecast_hours", value: "6"),
+            URLQueryItem(name: "forecast_hours", value: "24"),
+            URLQueryItem(
+                name: "daily",
+                value: "weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,uv_index_max"
+            ),
+            URLQueryItem(name: "forecast_days", value: "7"),
             URLQueryItem(name: "timezone", value: "auto"),
         ]
         guard let url = components.url else {
@@ -71,19 +76,56 @@ final class OpenMeteoService: WeatherFetching, @unchecked Sendable {
 
         let hourlyItems: [WeatherSnapshot.HourlyWeather]
         if let hourly = response.hourly {
-            hourlyItems = zip(hourly.time, zip(hourly.temperature_2m, hourly.weather_code))
-                .prefix(6)
-                .compactMap { timeString, pair -> WeatherSnapshot.HourlyWeather? in
-                    let (temp, code) = pair
-                    guard let date = Self.parseISO8601(timeString) else { return nil }
-                    return WeatherSnapshot.HourlyWeather(
-                        hour: date,
-                        temperature: temp.clampedToPhysicalTemperature(),
-                        condition: Self.mapWMOCode(code)
-                    )
-                }
+            let count = hourly.time.count
+            hourlyItems = (0..<Swift.min(24, count)).compactMap { i -> WeatherSnapshot.HourlyWeather? in
+                guard let date = Self.parseISO8601(hourly.time[i]) else { return nil }
+                let feelsLikeVal = (i < (hourly.apparent_temperature?.count ?? 0))
+                    ? hourly.apparent_temperature?[i] ?? hourly.temperature_2m[i]
+                    : hourly.temperature_2m[i]
+                let humidityVal = (i < (hourly.relative_humidity_2m?.count ?? 0))
+                    ? (hourly.relative_humidity_2m?[i] ?? 50) / 100.0
+                    : 0.5
+                let uvVal = (i < (hourly.uv_index?.count ?? 0))
+                    ? Int((hourly.uv_index?[i] ?? 0).rounded())
+                    : 0
+                let windVal = (i < (hourly.wind_speed_10m?.count ?? 0))
+                    ? hourly.wind_speed_10m?[i] ?? 0
+                    : 0
+                let precipProb = (i < (hourly.precipitation_probability?.count ?? 0))
+                    ? hourly.precipitation_probability?[i] ?? 0
+                    : 0
+
+                return WeatherSnapshot.HourlyWeather(
+                    hour: date,
+                    temperature: hourly.temperature_2m[i].clampedToPhysicalTemperature(),
+                    condition: Self.mapWMOCode(hourly.weather_code[i]),
+                    feelsLike: feelsLikeVal.clampedToPhysicalTemperature(),
+                    humidity: Swift.max(0, Swift.min(1, humidityVal)),
+                    uvIndex: Swift.max(0, Swift.min(15, uvVal)),
+                    windSpeed: Swift.max(0, Swift.min(200, windVal)),
+                    precipitationProbability: Swift.max(0, Swift.min(100, precipProb))
+                )
+            }
         } else {
             hourlyItems = []
+        }
+
+        let dailyItems: [WeatherSnapshot.DailyForecast]
+        if let daily = response.daily {
+            let count = daily.time.count
+            dailyItems = (0..<Swift.min(7, count)).compactMap { i -> WeatherSnapshot.DailyForecast? in
+                guard let date = Self.parseDateOnly(daily.time[i]) else { return nil }
+                return WeatherSnapshot.DailyForecast(
+                    date: date,
+                    temperatureMax: daily.temperature_2m_max[i].clampedToPhysicalTemperature(),
+                    temperatureMin: daily.temperature_2m_min[i].clampedToPhysicalTemperature(),
+                    condition: Self.mapWMOCode(daily.weather_code[i]),
+                    precipitationProbabilityMax: Swift.max(0, Swift.min(100, daily.precipitation_probability_max?[i] ?? 0)),
+                    uvIndexMax: Swift.max(0, Swift.min(15, Int((daily.uv_index_max?[i] ?? 0).rounded())))
+                )
+            }
+        } else {
+            dailyItems = []
         }
 
         return WeatherSnapshot(
@@ -97,7 +139,8 @@ final class OpenMeteoService: WeatherFetching, @unchecked Sendable {
             windSpeed: Swift.max(0, Swift.min(200, current.wind_speed_10m)),
             isDaytime: current.is_day == 1,
             fetchedAt: Date(),
-            hourlyForecast: hourlyItems
+            hourlyForecast: hourlyItems,
+            dailyForecast: dailyItems
         )
     }
 
@@ -167,6 +210,15 @@ final class OpenMeteoService: WeatherFetching, @unchecked Sendable {
             f.timeZone = TimeZone(identifier: "UTC")
             return f
         }()
+
+        // Open-Meteo daily strings like "2026-02-28" (date only, no time).
+        static let openMeteoDaily: DateFormatter = {
+            let f = DateFormatter()
+            f.dateFormat = "yyyy-MM-dd"
+            f.locale = Locale(identifier: "en_US_POSIX")
+            f.timeZone = TimeZone(identifier: "UTC")
+            return f
+        }()
     }
 
     /// Parses Open-Meteo time strings. Supports full ISO 8601 and the compact "yyyy-MM-ddTHH:mm" format.
@@ -174,6 +226,11 @@ final class OpenMeteoService: WeatherFetching, @unchecked Sendable {
         if let date = DateParsing.isoWithFractional.date(from: string) { return date }
         if let date = DateParsing.isoBasic.date(from: string) { return date }
         return DateParsing.openMeteoHourly.date(from: string)
+    }
+
+    /// Parses Open-Meteo daily date strings ("yyyy-MM-dd" format).
+    static func parseDateOnly(_ string: String) -> Date? {
+        DateParsing.openMeteoDaily.date(from: string)
     }
 }
 
@@ -190,6 +247,7 @@ enum OpenMeteoError: Error, Sendable {
 struct OpenMeteoResponse: Decodable, Sendable {
     let current: CurrentData
     let hourly: HourlyData?
+    let daily: DailyData?
 
     struct CurrentData: Decodable, Sendable {
         let temperature_2m: Double
@@ -205,5 +263,19 @@ struct OpenMeteoResponse: Decodable, Sendable {
         let time: [String]
         let temperature_2m: [Double]
         let weather_code: [Int]
+        let apparent_temperature: [Double]?
+        let relative_humidity_2m: [Double]?
+        let uv_index: [Double]?
+        let wind_speed_10m: [Double]?
+        let precipitation_probability: [Int]?
+    }
+
+    struct DailyData: Decodable, Sendable {
+        let time: [String]
+        let weather_code: [Int]
+        let temperature_2m_max: [Double]
+        let temperature_2m_min: [Double]
+        let precipitation_probability_max: [Int]?
+        let uv_index_max: [Double]?
     }
 }

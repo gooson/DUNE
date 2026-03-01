@@ -255,6 +255,19 @@ extension AppTheme {
     var weatherWindColor: Color { sandColor }
 }
 
+// MARK: - Outdoor Fitness Level Colors
+
+extension AppTheme {
+    func outdoorFitnessColor(for level: OutdoorFitnessLevel) -> Color {
+        switch level {
+        case .great:   scoreExcellent
+        case .okay:    scoreGood
+        case .caution: scoreTired
+        case .indoor:  scoreWarning
+        }
+    }
+}
+
 // MARK: - Card Surface
 
 extension AppTheme {

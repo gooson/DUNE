@@ -173,7 +173,8 @@ struct OpenMeteoServiceTests {
         let snapshot = WeatherSnapshot(
             temperature: 20, feelsLike: 20, condition: .clear,
             humidity: 0.5, uvIndex: 0, windSpeed: 10,
-            isDaytime: true, fetchedAt: Date(), hourlyForecast: []
+            isDaytime: true, fetchedAt: Date(), hourlyForecast: [],
+            dailyForecast: []
         )
         // uvIndex 0 is the fallback value used when isFinite fails
         #expect(snapshot.uvIndex == 0)
@@ -223,5 +224,116 @@ struct OpenMeteoServiceTests {
                 "WMO code \(code) should map to \(expected)"
             )
         }
+    }
+
+    // MARK: - Daily Data Decoding
+
+    @Test("Decodes response with daily data")
+    func decodeDailyData() throws {
+        let json = """
+        {
+            "current": {
+                "temperature_2m": 20.0,
+                "apparent_temperature": 18.0,
+                "relative_humidity_2m": 50.0,
+                "weather_code": 0,
+                "wind_speed_10m": 5.0,
+                "uv_index": 3.0,
+                "is_day": 1
+            },
+            "daily": {
+                "time": ["2026-03-01", "2026-03-02"],
+                "weather_code": [0, 61],
+                "temperature_2m_max": [22.5, 18.0],
+                "temperature_2m_min": [12.0, 10.5],
+                "precipitation_probability_max": [5, 70],
+                "uv_index_max": [6.0, 3.0]
+            }
+        }
+        """
+        let data = json.data(using: .utf8)!
+        let response = try JSONDecoder().decode(OpenMeteoResponse.self, from: data)
+
+        #expect(response.daily != nil)
+        #expect(response.daily?.time.count == 2)
+        #expect(response.daily?.temperature_2m_max[0] == 22.5)
+        #expect(response.daily?.temperature_2m_min[1] == 10.5)
+        #expect(response.daily?.weather_code[1] == 61)
+        #expect(response.daily?.precipitation_probability_max?[0] == 5)
+        #expect(response.daily?.uv_index_max?[0] == 6.0)
+    }
+
+    @Test("Decodes response without daily data")
+    func decodeWithoutDaily() throws {
+        let json = """
+        {
+            "current": {
+                "temperature_2m": 20.0,
+                "apparent_temperature": 18.0,
+                "relative_humidity_2m": 50.0,
+                "weather_code": 0,
+                "wind_speed_10m": 5.0,
+                "uv_index": 6.0,
+                "is_day": 1
+            }
+        }
+        """
+        let data = json.data(using: .utf8)!
+        let response = try JSONDecoder().decode(OpenMeteoResponse.self, from: data)
+        #expect(response.daily == nil)
+    }
+
+    // MARK: - Expanded Hourly Data Decoding
+
+    @Test("Decodes expanded hourly fields")
+    func decodeExpandedHourly() throws {
+        let json = """
+        {
+            "current": {
+                "temperature_2m": 20.0,
+                "apparent_temperature": 18.0,
+                "relative_humidity_2m": 50.0,
+                "weather_code": 0,
+                "wind_speed_10m": 5.0,
+                "uv_index": 3.0,
+                "is_day": 1
+            },
+            "hourly": {
+                "time": ["2026-03-01T12:00", "2026-03-01T13:00"],
+                "temperature_2m": [20.0, 21.5],
+                "weather_code": [0, 2],
+                "apparent_temperature": [18.0, 19.5],
+                "relative_humidity_2m": [50.0, 55.0],
+                "uv_index": [3.0, 5.0],
+                "wind_speed_10m": [10.0, 15.0],
+                "precipitation_probability": [0, 20]
+            }
+        }
+        """
+        let data = json.data(using: .utf8)!
+        let response = try JSONDecoder().decode(OpenMeteoResponse.self, from: data)
+
+        #expect(response.hourly?.apparent_temperature?.count == 2)
+        #expect(response.hourly?.relative_humidity_2m?.count == 2)
+        #expect(response.hourly?.uv_index?.count == 2)
+        #expect(response.hourly?.wind_speed_10m?.count == 2)
+        #expect(response.hourly?.precipitation_probability?.count == 2)
+        #expect(response.hourly?.apparent_temperature?[1] == 19.5)
+        #expect(response.hourly?.precipitation_probability?[1] == 20)
+    }
+
+    // MARK: - Date-Only Parsing
+
+    @Test("Parses date-only format for daily data")
+    func parseDateOnly() {
+        let date = OpenMeteoService.parseDateOnly("2026-03-01")
+        #expect(date != nil)
+    }
+
+    @Test("Returns nil for invalid date-only format")
+    func parseDateOnlyInvalid() {
+        #expect(OpenMeteoService.parseDateOnly("not-a-date") == nil)
+        #expect(OpenMeteoService.parseDateOnly("") == nil)
+        #expect(OpenMeteoService.parseDateOnly("2026-03-01T12:00") == nil)
     }
 }

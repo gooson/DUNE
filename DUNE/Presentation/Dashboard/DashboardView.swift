@@ -66,7 +66,10 @@ struct DashboardView: View {
 
                         // Weather
                         if let weather = viewModel.weatherSnapshot {
-                            WeatherCard(snapshot: weather)
+                            NavigationLink(value: weather) {
+                                WeatherCard(snapshot: weather)
+                            }
+                            .buttonStyle(.plain)
                         } else {
                             WeatherCardPlaceholder {
                                 Task { await viewModel.requestLocationPermission() }
@@ -151,6 +154,9 @@ struct DashboardView: View {
         }
         .navigationDestination(for: AllDataDestination.self) { destination in
             AllDataView(category: destination.category)
+        }
+        .navigationDestination(for: WeatherSnapshot.self) { snapshot in
+            WeatherDetailView(snapshot: snapshot)
         }
         .waveRefreshable {
             await viewModel.loadData()

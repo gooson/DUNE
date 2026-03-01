@@ -151,6 +151,12 @@
         "ko" : { "stringUnit" : { "state" : "translated", "value" : "6개월" } }
       }
     },
+    "7-Day Forecast" : {
+      "localizations" : {
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "週間予報" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "주간 예보" } }
+      }
+    },
     "A good day for exercise" : {
       "localizations" : {
         "ja" : { "stringUnit" : { "state" : "translated", "value" : "運動に良い日です" } },
@@ -373,6 +379,12 @@
         "ko" : { "stringUnit" : { "state" : "translated", "value" : "농구" } }
       }
     },
+    "Best Time" : {
+      "localizations" : {
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ベストタイム" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "베스트 타임" } }
+      }
+    },
     "Below Moderate — Slight effort" : {
       "localizations" : {
         "ja" : { "stringUnit" : { "state" : "translated", "value" : "やや楽〜普通 — わずかな努力" } },
@@ -509,6 +521,12 @@
       "localizations" : {
         "ja" : { "stringUnit" : { "state" : "translated", "value" : "カテゴリ" } },
         "ko" : { "stringUnit" : { "state" : "translated", "value" : "카테고리" } }
+      }
+    },
+    "Caution" : {
+      "localizations" : {
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "注意" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "주의" } }
       }
     },
     "Check" : {
@@ -1027,6 +1045,12 @@
         "ko" : { "stringUnit" : { "state" : "translated", "value" : "피로가 누적되고 있습니다" } }
       }
     },
+    "Feels Like" : {
+      "localizations" : {
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "体感温度" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "체감온도" } }
+      }
+    },
     "Feels like %lld°C — try indoor workouts or early morning/evening sessions. Stay well hydrated." : {
       "localizations" : {
         "ja" : { "stringUnit" : { "state" : "translated", "value" : "体感%lld°C — 室内ワークアウトか早朝・夕方のセッションを試しましょう。水分補給を忘れずに。" } },
@@ -1145,6 +1169,18 @@
       "localizations" : {
         "ja" : { "stringUnit" : { "state" : "translated", "value" : "通常のワークアウトルーティンを維持するのに良い状態です。バランスの取れた活動でコンディションを維持しましょう。" } },
         "ko" : { "stringUnit" : { "state" : "translated", "value" : "평소 운동 루틴을 유지하기 좋은 상태입니다. 균형 잡힌 활동으로 컨디션을 유지하세요." } }
+      }
+    },
+    "Great for outdoor exercise" : {
+      "localizations" : {
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "屋外運動に最適" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "야외운동하기 좋아요" } }
+      }
+    },
+    "Great outdoors" : {
+      "localizations" : {
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "屋外最適" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "야외 좋음" } }
       }
     },
     "Great weather for outdoor exercise" : {
@@ -1345,16 +1381,34 @@
         "ko" : { "stringUnit" : { "state" : "translated", "value" : "하키" } }
       }
     },
+    "Hourly Forecast" : {
+      "localizations" : {
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "時間別予報" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "시간별 예보" } }
+      }
+    },
     "Hunting" : {
       "localizations" : {
         "ja" : { "stringUnit" : { "state" : "translated", "value" : "狩猟" } },
         "ko" : { "stringUnit" : { "state" : "translated", "value" : "사냥" } }
       }
     },
+    "Humidity" : {
+      "localizations" : {
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "湿度" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "습도" } }
+      }
+    },
     "Hydration" : {
       "localizations" : {
         "ja" : { "stringUnit" : { "state" : "translated", "value" : "水分補給" } },
         "ko" : { "stringUnit" : { "state" : "translated", "value" : "수분" } }
+      }
+    },
+    "Indoors" : {
+      "localizations" : {
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "室内推奨" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "실내 추천" } }
       }
     },
     "Injuries you track will appear here." : {
@@ -1843,6 +1897,18 @@
         "ko" : { "stringUnit" : { "state" : "translated", "value" : "확인" } }
       }
     },
+    "Okay for outdoors" : {
+      "localizations" : {
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "屋外運動まずまず" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "야외운동 괜찮아요" } }
+      }
+    },
+    "Okay outdoors" : {
+      "localizations" : {
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "屋外まずまず" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "야외 괜찮음" } }
+      }
+    },
     "Other" : {
       "localizations" : {
         "ja" : { "stringUnit" : { "state" : "translated", "value" : "その他" } },
@@ -1865,6 +1931,12 @@
       "localizations" : {
         "ja" : { "stringUnit" : { "state" : "translated", "value" : "滑りやすい路面での屋外運動は怪我のリスクがあります。安全に室内でトレーニングしましょう。" } },
         "ko" : { "stringUnit" : { "state" : "translated", "value" : "미끄러운 바닥에서의 야외 운동은 부상 위험이 있습니다. 안전하게 실내에서 운동하세요." } }
+      }
+    },
+    "Outdoor Fitness Score" : {
+      "localizations" : {
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "屋外運動スコア" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "야외운동 적합도" } }
       }
     },
     "Over 80%% of monthly goal reached!" : {
@@ -2449,6 +2521,12 @@
         "ko" : { "stringUnit" : { "state" : "translated", "value" : "걸음 수" } }
       }
     },
+    "Stay indoors" : {
+      "localizations" : {
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "室内推奨" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "실내 추천" } }
+      }
+    },
     "Strength" : {
       "localizations" : {
         "ja" : { "stringUnit" : { "state" : "translated", "value" : "筋力" } },
@@ -2605,6 +2683,12 @@
         "ko" : { "stringUnit" : { "state" : "translated", "value" : "오늘의 추천 운동" } }
       }
     },
+    "Tomorrow" : {
+      "localizations" : {
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "明日" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "내일" } }
+      }
+    },
     "Track & Field" : {
       "localizations" : {
         "ja" : { "stringUnit" : { "state" : "translated", "value" : "陸上競技" } },
@@ -2675,6 +2759,18 @@
       "localizations" : {
         "ja" : { "stringUnit" : { "state" : "translated", "value" : "上背部" } },
         "ko" : { "stringUnit" : { "state" : "translated", "value" : "등" } }
+      }
+    },
+    "Use caution outdoors" : {
+      "localizations" : {
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "屋外注意" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "야외 주의 필요" } }
+      }
+    },
+    "UV Index" : {
+      "localizations" : {
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "UV指数" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "자외선 지수" } }
       }
     },
     "VO2 Max" : {
@@ -2783,6 +2879,18 @@
       "localizations" : {
         "ja" : { "stringUnit" : { "state" : "translated", "value" : "数日間Apple Watchを着用してデータを収集すると、パーソナライズされたコーチングを受けられます。" } },
         "ko" : { "stringUnit" : { "state" : "translated", "value" : "며칠간 Apple Watch를 착용하면 데이터가 수집되어 맞춤형 코칭을 받을 수 있습니다." } }
+      }
+    },
+    "Weather" : {
+      "localizations" : {
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "天気" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "날씨" } }
+      }
+    },
+    "Weather data is outdated" : {
+      "localizations" : {
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "天気データが古くなっています" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "날씨 데이터가 오래되었습니다" } }
       }
     },
     "Weather data is unavailable, but indoor exercise is always a great option." : {
