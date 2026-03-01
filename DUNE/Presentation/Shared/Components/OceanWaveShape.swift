@@ -48,19 +48,6 @@ private func waveY(
     return centerY + amp * (primary + harmonic + envelope + sharpness)
 }
 
-// MARK: - Wave Parameters
-
-/// Shared wave parameters to reduce call-site verbosity.
-struct OceanWaveParams: Sendable {
-    var amplitude: CGFloat = 0.05
-    var frequency: CGFloat = 2
-    var verticalOffset: CGFloat = 0.5
-    var steepness: CGFloat = 0.3
-    var harmonicOffset: CGFloat = .pi / 4
-    var crestHeight: CGFloat = 0
-    var crestSharpness: CGFloat = 0
-}
-
 // MARK: - Fill Shape
 
 /// Asymmetric ocean-wave Shape with harmonic enrichment.
@@ -404,24 +391,34 @@ struct OceanWaveOverlayView: View {
 // MARK: - Style Types
 
 /// Stroke style for wave crest highlight.
-struct WaveStrokeStyle {
+struct WaveStrokeStyle: Sendable {
     let color: Color
     let width: CGFloat
     let opacity: Double
-
     /// Pre-resolved color to avoid per-frame allocation.
-    var resolvedColor: Color { color.opacity(opacity) }
+    let resolvedColor: Color
+
+    init(color: Color, width: CGFloat, opacity: Double) {
+        self.color = color
+        self.width = width
+        self.opacity = opacity
+        self.resolvedColor = color.opacity(opacity)
+    }
 }
 
 /// Foam gradient style for wave crest band.
-struct WaveFoamStyle {
+struct WaveFoamStyle: Sendable {
     let color: Color
     let opacity: Double
     let depth: CGFloat
-
     /// Pre-built gradient to avoid per-frame allocation.
-    var gradient: LinearGradient {
-        LinearGradient(
+    let gradient: LinearGradient
+
+    init(color: Color, opacity: Double, depth: CGFloat) {
+        self.color = color
+        self.opacity = opacity
+        self.depth = depth
+        self.gradient = LinearGradient(
             colors: [color.opacity(opacity), .clear],
             startPoint: .top,
             endPoint: .bottom

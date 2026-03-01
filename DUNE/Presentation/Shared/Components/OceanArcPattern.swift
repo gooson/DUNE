@@ -94,6 +94,7 @@ struct OceanArcOverlayView: View {
             phase: phase
         )
         .stroke(color.opacity(opacity), lineWidth: lineWidth)
+        .clipped()
         .allowsHitTesting(false)
         .onAppear {
             guard !reduceMotion, driftDuration > 0 else { return }

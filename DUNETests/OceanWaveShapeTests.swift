@@ -21,7 +21,7 @@ struct OceanWaveShapeTests {
         #expect(wave.path(in: CGRect(x: 0, y: 0, width: 100, height: 0)).isEmpty)
     }
 
-    @Test("Path stays within rect bounds")
+    @Test("Path stays within rect bounds (baseline, no crest harmonics)")
     func pathWithinBounds() {
         let wave = OceanWaveShape(amplitude: 0.3, frequency: 3, steepness: 0.4)
         let rect = CGRect(x: 0, y: 0, width: 300, height: 200)
