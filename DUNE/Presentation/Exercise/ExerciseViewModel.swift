@@ -78,7 +78,7 @@ final class ExerciseViewModel {
             }
         } catch {
             AppLogger.ui.error("Exercise data load failed: \(error.localizedDescription)")
-            errorMessage = "Could not load workout data"
+            errorMessage = String(localized: "Could not load workout data")
         }
         isLoading = false
     }

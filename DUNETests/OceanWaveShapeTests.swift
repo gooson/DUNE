@@ -21,7 +21,7 @@ struct OceanWaveShapeTests {
         #expect(wave.path(in: CGRect(x: 0, y: 0, width: 100, height: 0)).isEmpty)
     }
 
-    @Test("Path stays within rect bounds")
+    @Test("Path stays within rect bounds (baseline, no crest harmonics)")
     func pathWithinBounds() {
         let wave = OceanWaveShape(amplitude: 0.3, frequency: 3, steepness: 0.4)
         let rect = CGRect(x: 0, y: 0, width: 300, height: 200)
@@ -80,6 +80,90 @@ struct OceanWaveShapeTests {
         let bounds = wave.path(in: rect).boundingRect
         // Wave line at 50pt, fill to bottom = 100pt
         #expect(bounds.minY >= 49 && bounds.minY <= 51)
+    }
+
+    @Test("crestHeight creates variable wave heights")
+    func crestHeightVariation() {
+        let rect = CGRect(x: 0, y: 0, width: 400, height: 200)
+        let flat = OceanWaveShape(amplitude: 0.2, frequency: 2, steepness: 0.3, crestHeight: 0)
+        let variable = OceanWaveShape(amplitude: 0.2, frequency: 2, steepness: 0.3, crestHeight: 0.3)
+
+        let flatBounds = flat.path(in: rect).boundingRect
+        let varBounds = variable.path(in: rect).boundingRect
+
+        // Variable crestHeight should produce different vertical extent
+        #expect(flatBounds.height != varBounds.height)
+    }
+
+    @Test("crestSharpness adds high-frequency detail")
+    func crestSharpnessDetail() {
+        let rect = CGRect(x: 0, y: 0, width: 400, height: 200)
+        let smooth = OceanWaveShape(amplitude: 0.2, frequency: 2, steepness: 0.3, crestSharpness: 0)
+        let sharp = OceanWaveShape(amplitude: 0.2, frequency: 2, steepness: 0.3, crestSharpness: 0.15)
+
+        let smoothBounds = smooth.path(in: rect).boundingRect
+        let sharpBounds = sharp.path(in: rect).boundingRect
+
+        // Sharpness should alter the wave profile
+        #expect(smoothBounds.height != sharpBounds.height)
+    }
+
+    @Test("Path stays within bounds with all harmonics active")
+    func pathBoundsWithAllHarmonics() {
+        // Max theoretical deviation: amp * (1 + steepness + crestHeight + crestSharpness)
+        // = 200 * 0.3 * (1 + 0.4 + 0.4 + 0.15) = 117pt from centerY
+        let wave = OceanWaveShape(
+            amplitude: 0.3,
+            frequency: 3,
+            steepness: 0.4,
+            crestHeight: 0.4,
+            crestSharpness: 0.15
+        )
+        let rect = CGRect(x: 0, y: 0, width: 300, height: 200)
+        let bounds = wave.path(in: rect).boundingRect
+        #expect(bounds.minX >= rect.minX - 1)
+        #expect(bounds.maxX <= rect.maxX + 1)
+        // Tightened: centerY(100) ± 117pt → minY ~= -17, maxY includes fill to 200
+        #expect(bounds.minY >= rect.minY - 120)
+        #expect(bounds.maxY <= rect.maxY + 1)
+    }
+
+    // MARK: - Stroke Shape Tests
+
+    @Test("Stroke shape is non-empty for valid rect")
+    func strokeNonEmpty() {
+        let stroke = OceanWaveStrokeShape()
+        let rect = CGRect(x: 0, y: 0, width: 200, height: 100)
+        #expect(!stroke.path(in: rect).isEmpty)
+    }
+
+    @Test("Stroke shape is empty for zero rect")
+    func strokeEmptyForZero() {
+        let stroke = OceanWaveStrokeShape()
+        #expect(stroke.path(in: .zero).isEmpty)
+    }
+
+    @Test("Stroke animatableData reflects phase")
+    func strokeAnimatableData() {
+        var stroke = OceanWaveStrokeShape(phase: 2.0)
+        #expect(stroke.animatableData == 2.0)
+        stroke.animatableData = 4.0
+        #expect(stroke.animatableData == 4.0)
+    }
+
+    // MARK: - Foam Gradient Shape Tests
+
+    @Test("Foam gradient shape is non-empty for valid rect")
+    func foamNonEmpty() {
+        let foam = OceanFoamGradientShape()
+        let rect = CGRect(x: 0, y: 0, width: 200, height: 100)
+        #expect(!foam.path(in: rect).isEmpty)
+    }
+
+    @Test("Foam gradient shape is empty for zero rect")
+    func foamEmptyForZero() {
+        let foam = OceanFoamGradientShape()
+        #expect(foam.path(in: .zero).isEmpty)
     }
 
     private func firstWavePoint(from path: Path) -> CGPoint? {

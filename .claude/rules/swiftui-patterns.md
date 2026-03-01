@@ -19,6 +19,7 @@
 - 관련 `@State` → tuple return 후 동시 할당 (중간 상태 노출 방지)
 - `onAppear` + `onChange` 동일 로직 → `.task(id:)` 통합
 - sheet 이중 트리거 → `pendingSheet` @State + `onChange` 한 프레임 지연
+- `.repeatForever` 애니메이션 시작 → `.task` 사용 (`.onAppear` 금지; 부모 환경 트랜잭션 간섭)
 
 ## List & Collection
 - `modelContext.delete()` → `withAnimation {}` 래핑 필수 (CollectionView crash)

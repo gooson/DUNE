@@ -203,9 +203,9 @@ final class DashboardViewModel {
         ].filter { $0 }.count
 
         if failureCount > 0 && !allMetrics.isEmpty {
-            errorMessage = "Some data could not be loaded (\(failureCount) of 6 sources)"
+            errorMessage = String(localized: "Some data could not be loaded (\(failureCount) of 6 sources)")
         } else if failureCount > 0 && allMetrics.isEmpty {
-            errorMessage = "Failed to load health data"
+            errorMessage = String(localized: "Failed to load health data")
         }
 
         sortedMetrics = allMetrics.sorted { $0.changeSignificance > $1.changeSignificance }
