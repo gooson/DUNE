@@ -21,6 +21,7 @@ struct ForestWaveOverlayView: View {
     var frequency: CGFloat = 1.5
     var verticalOffset: CGFloat = 0.5
     var bottomFade: CGFloat = 0.4
+    var ruggedness: CGFloat = 0.3
     var treeDensity: CGFloat = 0.0
     var driftDuration: Double = 8
     var showGrain: Bool = false
@@ -32,12 +33,6 @@ struct ForestWaveOverlayView: View {
     @State private var phase: CGFloat = 0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-    /// Forest silhouette blends harmonics with phase multipliers (2.3, 4.7, 3.1, 5.7, 8.3).
-    /// 20 turns align loop start/end to remove visible repeat seams.
-    private static let phaseLoopTurns: CGFloat = 20
-    private var phaseTarget: CGFloat { 2 * .pi * Self.phaseLoopTurns }
-    private var phaseDuration: Double { driftDuration * Double(Self.phaseLoopTurns) }
-
     var body: some View {
         ZStack {
             ForestSilhouetteShape(
@@ -45,6 +40,7 @@ struct ForestWaveOverlayView: View {
                 frequency: frequency,
                 phase: phase,
                 verticalOffset: verticalOffset,
+                ruggedness: ruggedness,
                 treeDensity: treeDensity
             )
             .fill(color.opacity(opacity))
@@ -58,6 +54,7 @@ struct ForestWaveOverlayView: View {
                         frequency: frequency,
                         phase: phase,
                         verticalOffset: verticalOffset,
+                        ruggedness: ruggedness,
                         treeDensity: treeDensity
                     )
                     .stroke(
@@ -72,6 +69,7 @@ struct ForestWaveOverlayView: View {
                         frequency: frequency,
                         phase: phase,
                         verticalOffset: verticalOffset,
+                        ruggedness: ruggedness,
                         treeDensity: treeDensity
                     )
                     .stroke(
@@ -97,16 +95,16 @@ struct ForestWaveOverlayView: View {
         .allowsHitTesting(false)
         .task {
             guard !reduceMotion, driftDuration > 0 else { return }
-            withAnimation(.linear(duration: phaseDuration).repeatForever(autoreverses: false)) {
-                phase = phaseTarget
+            withAnimation(.linear(duration: driftDuration).repeatForever(autoreverses: false)) {
+                phase = 2 * .pi
             }
         }
         .onAppear {
             guard !reduceMotion, driftDuration > 0 else { return }
             Task { @MainActor in
                 phase = 0
-                withAnimation(.linear(duration: phaseDuration).repeatForever(autoreverses: false)) {
-                    phase = phaseTarget
+                withAnimation(.linear(duration: driftDuration).repeatForever(autoreverses: false)) {
+                    phase = 2 * .pi
                 }
             }
         }
@@ -164,8 +162,8 @@ private struct UkiyoeGrainView: View {
 ///
 /// Layers (back to front):
 /// 1. **Far** — slowest, misty, smooth hills (distant mountains)
-/// 2. **Mid** — medium speed, moderate tree density (mid-range forest)
-/// 3. **Near** — fastest, dense pine silhouettes (foreground forest)
+/// 2. **Mid** — medium speed, moderate ruggedness (mid-range forest)
+/// 3. **Near** — fastest, rugged with tree silhouettes (foreground forest)
 ///
 /// Includes ukiyo-e grain texture overlay and bokashi gradient.
 struct ForestTabWaveBackground: View {
@@ -180,16 +178,16 @@ struct ForestTabWaveBackground: View {
 
     /// Dark mode needs a small visibility lift for low-contrast forest tones.
     private var visibilityBoost: Double {
-        colorScheme == .dark ? 1.35 : 1.0
+        colorScheme == .dark ? 1.15 : 1.0
     }
 
     /// Scale factor based on tab preset character.
     private var intensityScale: CGFloat {
         switch preset {
-        case .train:    1.2   // Dense forest
-        case .today:    1.0
-        case .wellness: 0.8   // Gentle grove
-        case .life:     0.6   // Misty meadow
+        case .train:    0.95  // Dense forest
+        case .today:    0.88
+        case .wellness: 0.80  // Gentle grove
+        case .life:     0.70  // Misty meadow
         }
     }
 
@@ -201,49 +199,52 @@ struct ForestTabWaveBackground: View {
             // Layer 1: Far — distant misty mountains
             ForestWaveOverlayView(
                 color: theme.forestMistColor,
-                opacity: 0.09 * opacityScale,
-                amplitude: 0.14 * scale,
-                frequency: 0.55,
-                verticalOffset: 0.35,
+                opacity: 0.22 * opacityScale,
+                amplitude: 0.08 * scale,
+                frequency: 0.62,
+                verticalOffset: 0.4,
                 bottomFade: 0.5,
-                treeDensity: 0.15,
+                ruggedness: 0.05,
+                treeDensity: 0.06,
                 driftDuration: 22,
                 crestColor: theme.forestMistColor,
-                crestOpacity: 0.11 * opacityScale,
+                crestOpacity: 0.20 * opacityScale,
                 crestWidth: 1.3
             )
-            .frame(height: 250)
+            .frame(height: 220)
 
             // Layer 2: Mid — middle forest
             ForestWaveOverlayView(
                 color: theme.forestMidColor,
-                opacity: 0.13 * opacityScale,
-                amplitude: 0.22 * scale,
-                frequency: 0.75,
+                opacity: 0.30 * opacityScale,
+                amplitude: 0.12 * scale,
+                frequency: 0.95,
                 verticalOffset: 0.48,
                 bottomFade: 0.4,
-                treeDensity: 0.35,
+                ruggedness: 0.15,
+                treeDensity: 0.12,
                 driftDuration: 18,
                 crestColor: theme.forestMistColor,
-                crestOpacity: 0.14 * opacityScale,
+                crestOpacity: 0.26 * opacityScale,
                 crestWidth: 1.65
             )
-            .frame(height: 260)
+            .frame(height: 240)
 
-            // Layer 3: Near — foreground forest with dense pines
+            // Layer 3: Near — foreground forest with trees
             ForestWaveOverlayView(
                 color: theme.forestDeepColor,
-                opacity: 0.18 * opacityScale,
-                amplitude: 0.32 * scale,
-                frequency: 0.95,
-                verticalOffset: 0.58,
+                opacity: 0.40 * opacityScale,
+                amplitude: 0.16 * scale,
+                frequency: 1.25,
+                verticalOffset: 0.52,
                 bottomFade: 0.4,
-                treeDensity: 0.55,
+                ruggedness: 0.22,
+                treeDensity: 0.18,
                 driftDuration: 14,
                 showGrain: true,
-                grainOpacity: colorScheme == .dark ? 0.014 : 0.03,
+                grainOpacity: colorScheme == .dark ? 0.02 : 0.04,
                 crestColor: theme.forestMistColor,
-                crestOpacity: 0.18 * opacityScale,
+                crestOpacity: 0.30 * opacityScale,
                 crestWidth: 2.0
             )
             .frame(height: 280)
@@ -301,7 +302,7 @@ struct ForestTabWaveBackground: View {
 // MARK: - Forest Detail Background
 
 /// Subtler 2-layer forest silhouette for push-destination detail screens.
-/// Scaled down: amplitude ~55%, opacity ~70%.
+/// Scaled down: amplitude 50%, opacity 70%.
 struct ForestDetailWaveBackground: View {
     @Environment(\.appTheme) private var theme
     @Environment(\.colorScheme) private var colorScheme
@@ -312,35 +313,37 @@ struct ForestDetailWaveBackground: View {
 
     var body: some View {
         ZStack(alignment: .top) {
-            // Far — smooth distant ridgeline
+            // Far — distant treeline
             ForestWaveOverlayView(
                 color: theme.forestMistColor,
-                opacity: 0.06 * visibilityBoost,
-                amplitude: 0.08,
-                frequency: 0.55,
-                verticalOffset: 0.38,
+                opacity: 0.18 * visibilityBoost,
+                amplitude: 0.065,
+                frequency: 0.62,
+                verticalOffset: 0.4,
                 bottomFade: 0.5,
-                treeDensity: 0.1,
-                driftDuration: 20,
+                ruggedness: 0.04,
+                treeDensity: 0.05,
+                driftDuration: 22,
                 crestColor: theme.forestMistColor,
-                crestOpacity: 0.10 * visibilityBoost,
+                crestOpacity: 0.16 * visibilityBoost,
                 crestWidth: 1.2
             )
-            .frame(height: 170)
+            .frame(height: 180)
 
-            // Near — closer forest with moderate pines
+            // Near — closer forest
             ForestWaveOverlayView(
                 color: theme.forestDeepColor,
-                opacity: 0.11 * visibilityBoost,
-                amplitude: 0.16,
-                frequency: 0.8,
-                verticalOffset: 0.52,
-                bottomFade: 0.5,
-                treeDensity: 0.35,
-                driftDuration: 16,
+                opacity: 0.28 * visibilityBoost,
+                amplitude: 0.10,
+                frequency: 1.0,
+                verticalOffset: 0.5,
+                bottomFade: 0.4,
+                ruggedness: 0.14,
+                treeDensity: 0.10,
+                driftDuration: 18,
                 crestColor: theme.forestMistColor,
-                crestOpacity: 0.14 * visibilityBoost,
-                crestWidth: 1.7
+                crestOpacity: 0.22 * visibilityBoost,
+                crestWidth: 1.5
             )
             .frame(height: 180)
 
@@ -360,7 +363,7 @@ struct ForestDetailWaveBackground: View {
 // MARK: - Forest Sheet Background
 
 /// Lightest single-layer forest silhouette for sheet/modal presentations.
-/// Minimal tree density, no grain.
+/// Minimal tree density, positioned at the bottom.
 struct ForestSheetWaveBackground: View {
     @Environment(\.appTheme) private var theme
     @Environment(\.colorScheme) private var colorScheme
@@ -373,18 +376,19 @@ struct ForestSheetWaveBackground: View {
         ZStack(alignment: .top) {
             ForestWaveOverlayView(
                 color: theme.forestMidColor,
-                opacity: 0.09 * visibilityBoost,
-                amplitude: 0.11,
-                frequency: 0.7,
-                verticalOffset: 0.48,
+                opacity: 0.20 * visibilityBoost,
+                amplitude: 0.075,
+                frequency: 0.8,
+                verticalOffset: 0.45,
                 bottomFade: 0.5,
-                treeDensity: 0.25,
-                driftDuration: 18,
+                ruggedness: 0.08,
+                treeDensity: 0.06,
+                driftDuration: 20,
                 crestColor: theme.forestMistColor,
-                crestOpacity: 0.12 * visibilityBoost,
-                crestWidth: 1.45
+                crestOpacity: 0.18 * visibilityBoost,
+                crestWidth: 1.3
             )
-            .frame(height: 140)
+            .frame(height: 170)
 
             LinearGradient(
                 colors: [
