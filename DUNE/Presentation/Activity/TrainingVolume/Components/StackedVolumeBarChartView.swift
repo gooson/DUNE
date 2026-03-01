@@ -8,6 +8,8 @@ struct StackedVolumeBarChartView: View {
     let typeColors: [String: Color]
     let typeNames: [String: String]
 
+    @Environment(\.appTheme) private var theme
+
     @State private var selectedDate: Date?
 
     var body: some View {
@@ -47,16 +49,16 @@ struct StackedVolumeBarChartView: View {
                 Calendar.current.isDate($0.date, inSameDayAs: selectedDate)
             }) {
                 RuleMark(x: .value("Selected", day.date, unit: .day))
-                    .foregroundStyle(DS.Color.warmGlow.opacity(0.35))
+                    .foregroundStyle(theme.accentColor.opacity(0.35))
                     .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
             }
         }
         .chartXAxis {
             AxisMarks(values: .stride(by: .day, count: xAxisStride)) { _ in
                 AxisValueLabel(format: .dateTime.month(.abbreviated).day())
-                    .foregroundStyle(DS.Color.sandMuted)
+                    .foregroundStyle(theme.sandColor)
                 AxisGridLine()
-                    .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
+                    .foregroundStyle(theme.accentColor.opacity(0.30))
             }
         }
         .chartYAxis {
@@ -68,11 +70,11 @@ struct StackedVolumeBarChartView: View {
                             ? "\((mins / 60).formattedWithSeparator())h"
                             : mins.formattedWithSeparator()
                         )
-                        .foregroundStyle(DS.Color.sandMuted)
+                        .foregroundStyle(theme.sandColor)
                     }
                 }
                 AxisGridLine()
-                    .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
+                    .foregroundStyle(theme.accentColor.opacity(0.30))
             }
         }
         .chartYScale(domain: 0...(maxDailyMinutes * 1.15))

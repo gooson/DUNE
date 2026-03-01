@@ -3,6 +3,7 @@ import SwiftData
 
 /// CRUD view for managing user-defined exercise categories
 struct UserCategoryManagementView: View {
+    @Environment(\.appTheme) private var theme
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \UserCategory.sortOrder) private var categories: [UserCategory]
     @State private var showingAddSheet = false
@@ -45,7 +46,7 @@ struct UserCategoryManagementView: View {
                                     .frame(width: 24)
                                 VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                                     Text(category.name)
-                                        .foregroundStyle(DS.Color.primaryText)
+                                        .foregroundStyle(theme.sandColor)
                                     Text(category.defaultInputType.displayLabel)
                                         .font(.caption)
                                         .foregroundStyle(DS.Color.textSecondary)

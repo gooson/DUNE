@@ -3,6 +3,8 @@ import SwiftUI
 struct RestTimerView: View {
     @Bindable var timer: RestTimerViewModel
 
+    @Environment(\.appTheme) private var theme
+
     var body: some View {
         VStack(spacing: DS.Spacing.md) {
             Text("Rest Timer")
@@ -11,7 +13,7 @@ struct RestTimerView: View {
 
             Text(timer.formattedTime)
                 .font(DS.Typography.cardScore)
-                .foregroundStyle(DS.Gradient.heroText)
+                .foregroundStyle(theme.heroTextGradient)
                 .monospacedDigit()
                 .contentTransition(.numericText())
 

@@ -7,6 +7,8 @@ struct ChartSelectionOverlay: View {
     let value: String
     var dateFormat: Date.FormatStyle = .dateTime.month(.abbreviated).day()
 
+    @Environment(\.appTheme) private var theme
+
     var body: some View {
         HStack {
             Text(date, format: dateFormat)
@@ -15,13 +17,13 @@ struct ChartSelectionOverlay: View {
                 .fontWeight(.semibold)
         }
         .font(.caption)
-        .foregroundStyle(DS.Color.primaryText)
+        .foregroundStyle(theme.sandColor)
         .padding(.horizontal, DS.Spacing.sm)
         .padding(.vertical, DS.Spacing.xs)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
         .overlay {
             RoundedRectangle(cornerRadius: DS.Radius.sm)
-                .strokeBorder(DS.Color.warmGlow.opacity(0.25), lineWidth: 1)
+                .strokeBorder(theme.accentColor.opacity(0.25), lineWidth: 1)
         }
         .padding(.horizontal, DS.Spacing.xs)
     }

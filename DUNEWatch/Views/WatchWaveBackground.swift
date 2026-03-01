@@ -81,17 +81,19 @@ private enum WatchWaveDefaults {
 /// Subtle animated wave background for watchOS screens.
 /// Uses watch-optimised parameters (smaller frame, lower opacity).
 struct WatchWaveBackground: View {
-    var color: Color = DS.Color.warmGlow
+    var color: Color? = nil
 
     @State private var phase: CGFloat = 0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.appTheme) private var theme
 
     var body: some View {
-        let gradientTop = color.opacity(DS.Opacity.light)
+        let resolvedColor = color ?? theme.accentColor
+        let gradientTop = resolvedColor.opacity(DS.Opacity.light)
 
         ZStack(alignment: .top) {
             WatchWaveShape(phase: phase)
-                .fill(color.opacity(DS.Opacity.medium))
+                .fill(resolvedColor.opacity(DS.Opacity.medium))
                 .mask {
                     LinearGradient(
                         stops: [

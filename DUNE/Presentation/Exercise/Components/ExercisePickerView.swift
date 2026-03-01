@@ -13,6 +13,7 @@ struct ExercisePickerView: View {
     let mode: ExercisePickerMode
     let onSelect: (ExerciseDefinition) -> Void
 
+    @Environment(\.appTheme) private var theme
     @Environment(\.dismiss) private var dismiss
     @Query(sort: \CustomExercise.createdAt, order: .reverse) private var customExercises: [CustomExercise]
     @Query(sort: \UserCategory.sortOrder) private var userCategories: [UserCategory]
@@ -369,7 +370,7 @@ struct ExercisePickerView: View {
                     HStack(spacing: DS.Spacing.xs) {
                         Text(exercise.localizedName)
                             .font(.body)
-                            .foregroundStyle(DS.Color.primaryText)
+                            .foregroundStyle(theme.sandColor)
                         if exercise.id.hasPrefix("custom-") {
                             Text("Custom")
                                 .font(.system(size: 9, weight: .medium))
@@ -433,7 +434,7 @@ struct ExercisePickerView: View {
                     in: Capsule()
                 )
                 .foregroundStyle(
-                    isSelected ? .white : DS.Color.primaryText
+                    isSelected ? .white : theme.sandColor
                 )
         }
         .buttonStyle(.plain)
@@ -466,7 +467,7 @@ struct ExercisePickerView: View {
                 in: Capsule()
             )
             .foregroundStyle(
-                isSelected ? .white : DS.Color.primaryText
+                isSelected ? .white : theme.sandColor
             )
         }
         .buttonStyle(.plain)
@@ -489,7 +490,7 @@ struct ExercisePickerView: View {
                     in: Capsule()
                 )
                 .foregroundStyle(
-                    selectedMuscle == muscle ? .white : DS.Color.primaryText
+                    selectedMuscle == muscle ? .white : theme.sandColor
                 )
         }
         .buttonStyle(.plain)
@@ -515,7 +516,7 @@ struct ExercisePickerView: View {
                 in: Capsule()
             )
             .foregroundStyle(
-                selectedEquipment == equipment ? .white : DS.Color.primaryText
+                selectedEquipment == equipment ? .white : theme.sandColor
             )
         }
         .buttonStyle(.plain)

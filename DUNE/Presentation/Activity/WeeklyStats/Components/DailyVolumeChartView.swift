@@ -12,6 +12,8 @@ struct DailyVolumeChartView: View {
         var id: String { rawValue }
     }
 
+    @Environment(\.appTheme) private var theme
+
     @State private var selectedMetric: Metric = .duration
     @State private var selectedDate: Date?
 
@@ -70,24 +72,24 @@ struct DailyVolumeChartView: View {
             if let selected = selectedDate,
                Calendar.current.isDate(point.date, inSameDayAs: selected) {
                 RuleMark(x: .value("Date", point.date, unit: .day))
-                    .foregroundStyle(DS.Color.warmGlow.opacity(0.35))
+                    .foregroundStyle(theme.accentColor.opacity(0.35))
                     .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
             }
         }
         .chartXAxis {
             AxisMarks(values: .stride(by: .day)) { _ in
                 AxisGridLine()
-                    .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
+                    .foregroundStyle(theme.accentColor.opacity(0.30))
                 AxisValueLabel(format: .dateTime.weekday(.abbreviated), centered: true)
-                    .foregroundStyle(DS.Color.sandMuted)
+                    .foregroundStyle(theme.sandColor)
             }
         }
         .chartYAxis {
             AxisMarks(position: .leading) { _ in
                 AxisValueLabel()
-                    .foregroundStyle(DS.Color.sandMuted)
+                    .foregroundStyle(theme.sandColor)
                 AxisGridLine()
-                    .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
+                    .foregroundStyle(theme.accentColor.opacity(0.30))
             }
         }
         .chartYScale(domain: 0...(maxY * 1.15))

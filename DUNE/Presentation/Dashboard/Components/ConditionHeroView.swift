@@ -9,6 +9,7 @@ struct ConditionHeroView: View {
 
     @State private var animatedScore: Int = 0
     @State private var isAppeared = false
+    @Environment(\.appTheme) private var theme
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.horizontalSizeClass) private var sizeClass
 
@@ -21,13 +22,23 @@ struct ConditionHeroView: View {
         static let ringLineWidthCompact: CGFloat = 10
         static let sparklineHeightRegular: CGFloat = 56
         static let sparklineHeightCompact: CGFloat = 44
-        // Correction #83 — static gradient for score text
-        // Desert Palette: bronze top → desertDusk bottom (matches HeroScoreCard)
-        static let scoreGradient = LinearGradient(
+        // Correction #83 — per-theme static cached gradients for score text
+        static let desertScoreGradient = LinearGradient(
             colors: [DS.Color.desertBronze, DS.Color.desertDusk],
             startPoint: .top,
             endPoint: .bottom
         )
+        static let oceanScoreGradient = LinearGradient(
+            colors: [Color("OceanBronze"), Color("OceanDusk")],
+            startPoint: .top,
+            endPoint: .bottom
+        )
+        static func scoreGradient(for theme: AppTheme) -> LinearGradient {
+            switch theme {
+            case .desertWarm: desertScoreGradient
+            case .oceanCool:  oceanScoreGradient
+            }
+        }
     }
 
     private var ringSize: CGFloat { isRegular ? Layout.ringSizeRegular : Layout.ringSizeCompact }
@@ -48,7 +59,7 @@ struct ConditionHeroView: View {
 
                     Text("\(animatedScore)")
                         .font(DS.Typography.cardScore)
-                        .foregroundStyle(Layout.scoreGradient)
+                        .foregroundStyle(Layout.scoreGradient(for: theme))
                         .contentTransition(.numericText())
                 }
 

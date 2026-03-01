@@ -5,6 +5,8 @@ struct PersonalRecordsSection: View {
     let records: [ActivityPersonalRecord]
     let notice: String?
 
+    @Environment(\.appTheme) private var theme
+
     private var columns: [GridItem] {
         [GridItem(.flexible(), spacing: DS.Spacing.sm),
          GridItem(.flexible(), spacing: DS.Spacing.sm)]
@@ -69,7 +71,7 @@ struct PersonalRecordsSection: View {
             HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xxs) {
                 Text(primaryValueText(for: record))
                     .font(DS.Typography.cardScore)
-                    .foregroundStyle(DS.Gradient.heroText)
+                    .foregroundStyle(theme.heroTextGradient)
                     .minimumScaleFactor(0.7)
                     .lineLimit(1)
 

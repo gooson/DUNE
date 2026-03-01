@@ -57,9 +57,11 @@ final class WatchSessionManager: NSObject {
 
         do {
             let data = try JSONEncoder().encode(exercises)
+            let themeRawValue = UserDefaults.standard.string(forKey: "com.dune.app.theme") ?? AppTheme.desertWarm.rawValue
             let context: [String: Any] = [
                 "exerciseLibrary": data,
                 "globalRestSeconds": WorkoutSettingsStore.shared.restSeconds,
+                "appTheme": themeRawValue,
             ]
             try WCSession.default.updateApplicationContext(context)
         } catch {
@@ -75,7 +77,8 @@ final class WatchSessionManager: NSObject {
 
         // Immediate message if reachable
         if WCSession.default.isReachable {
-            let message: [String: Any] = ["globalRestSeconds": restSeconds]
+            let themeRawValue = UserDefaults.standard.string(forKey: "com.dune.app.theme") ?? AppTheme.desertWarm.rawValue
+            let message: [String: Any] = ["globalRestSeconds": restSeconds, "appTheme": themeRawValue]
             WCSession.default.sendMessage(message, replyHandler: nil) { error in
                 AppLogger.ui.error("Failed to send workout settings: \(error.localizedDescription)")
             }

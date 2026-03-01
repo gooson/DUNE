@@ -35,36 +35,42 @@ extension WeatherConditionType {
         }
     }
 
-    /// Wave background color for this weather condition.
-    var waveColor: Color {
+    /// Wave background color for this weather condition (theme-aware).
+    func waveColor(for theme: AppTheme) -> Color {
         switch self {
         case .clear, .partlyCloudy:
-            DS.Color.warmGlow
+            theme.weatherClearColor
         case .cloudy, .haze, .fog:
-            DS.Color.weatherCloudy
+            theme.weatherCloudyColor
         case .rain, .heavyRain, .thunderstorm:
-            DS.Color.weatherRain
+            theme.weatherRainColor
         case .snow, .sleet:
-            DS.Color.weatherSnow
+            theme.weatherSnowColor
         case .wind:
-            DS.Color.sandMuted
+            theme.sandColor
         }
     }
 
-    /// Icon tint color for weather card display.
-    var iconColor: Color {
+    /// Legacy non-themed accessor (Desert Warm default).
+    var waveColor: Color { waveColor(for: .desertWarm) }
+
+    /// Icon tint color for weather card display (theme-aware).
+    func iconColor(for theme: AppTheme) -> Color {
         switch self {
-        case .clear:        DS.Color.warmGlow
-        case .partlyCloudy: DS.Color.desertBronze
-        case .cloudy:       DS.Color.weatherCloudy
-        case .rain:         DS.Color.weatherRain
-        case .heavyRain:    DS.Color.weatherRain
-        case .snow:         DS.Color.weatherSnow
-        case .sleet:        DS.Color.weatherSnow
-        case .wind:         DS.Color.desertDusk
-        case .fog:          DS.Color.weatherCloudy
-        case .haze:         DS.Color.sandMuted
+        case .clear:        theme.accentColor
+        case .partlyCloudy: theme.bronzeColor
+        case .cloudy:       theme.weatherCloudyColor
+        case .rain:         theme.weatherRainColor
+        case .heavyRain:    theme.weatherRainColor
+        case .snow:         theme.weatherSnowColor
+        case .sleet:        theme.weatherSnowColor
+        case .wind:         theme.duskColor
+        case .fog:          theme.weatherCloudyColor
+        case .haze:         theme.sandColor
         case .thunderstorm: DS.Color.caution
         }
     }
+
+    /// Legacy non-themed accessor (Desert Warm default).
+    var iconColor: Color { iconColor(for: .desertWarm) }
 }

@@ -9,6 +9,8 @@ struct SubScoreTrendChartView: View {
     let unit: String
     var fractionDigits: Int = 0
 
+    @Environment(\.appTheme) private var theme
+
     @State private var selectedDate: Date?
 
     private enum Cache {
@@ -87,9 +89,9 @@ struct SubScoreTrendChartView: View {
         .chartXAxis {
             AxisMarks(values: .stride(by: .day, count: 3)) { _ in
                 AxisGridLine()
-                    .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
+                    .foregroundStyle(theme.accentColor.opacity(0.30))
                 AxisValueLabel(format: .dateTime.month(.abbreviated).day(), centered: true)
-                    .foregroundStyle(DS.Color.sandMuted)
+                    .foregroundStyle(theme.sandColor)
             }
         }
         .chartYScale(domain: yDomain)

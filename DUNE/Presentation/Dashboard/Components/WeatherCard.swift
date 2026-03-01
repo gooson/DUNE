@@ -5,6 +5,7 @@ import SwiftUI
 struct WeatherCard: View {
     let snapshot: WeatherSnapshot
 
+    @Environment(\.appTheme) private var theme
     @Environment(\.horizontalSizeClass) private var sizeClass
 
     private var isRegular: Bool { sizeClass == .regular }
@@ -129,7 +130,7 @@ struct WeatherCard: View {
     private var uvColor: Color {
         switch snapshot.uvIndex {
         case 0...2: .secondary
-        case 3...5: DS.Color.warmGlow
+        case 3...5: theme.accentColor
         case 6...7: DS.Color.caution
         default:    DS.Color.negative
         }

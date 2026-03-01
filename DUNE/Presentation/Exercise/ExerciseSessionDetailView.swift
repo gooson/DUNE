@@ -15,6 +15,7 @@ struct ExerciseSessionDetailView: View {
         return record.exerciseType
     }
 
+    @Environment(\.appTheme) private var theme
     @State private var heartRateSummary: HeartRateSummary?
     @State private var isLoadingHR = false
     @State private var hrError: String?
@@ -177,7 +178,7 @@ struct ExerciseSessionDetailView: View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             Label("Heart Rate", systemImage: "heart.fill")
                 .font(.headline)
-                .foregroundStyle(DS.Color.primaryText)
+                .foregroundStyle(theme.sandColor)
 
             if !hasHealthKitLink {
                 placeholderView(

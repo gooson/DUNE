@@ -6,6 +6,8 @@ struct InjuryStatisticsView: View {
     let statistics: InjuryStatistics
     let volumeComparisons: [InjuryVolumeComparison]
 
+    @Environment(\.appTheme) private var theme
+
     var body: some View {
         ScrollView {
             VStack(spacing: DS.Spacing.xl) {
@@ -81,9 +83,9 @@ struct InjuryStatisticsView: View {
                 .chartXAxis {
                     AxisMarks(values: .automatic(desiredCount: 4)) { _ in
                         AxisValueLabel()
-                            .foregroundStyle(DS.Color.primaryText)
+                            .foregroundStyle(theme.sandColor)
                         AxisGridLine()
-                            .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
+                            .foregroundStyle(theme.accentColor.opacity(0.30))
                     }
                 }
                 .frame(height: CGFloat(statistics.frequencyByBodyPart.count) * 36)
@@ -192,11 +194,13 @@ private struct VolumeBar: View {
     let color: Color
     var isNA: Bool = false
 
+    @Environment(\.appTheme) private var theme
+
     var body: some View {
         VStack(spacing: DS.Spacing.xs) {
             Text(isNA ? "—" : "\(count)")
                 .font(.caption.weight(.bold).monospacedDigit())
-                .foregroundStyle(!isNA ? AnyShapeStyle(DS.Color.primaryText) : AnyShapeStyle(.tertiary))
+                .foregroundStyle(!isNA ? AnyShapeStyle(theme.sandColor) : AnyShapeStyle(.tertiary))
 
             GeometryReader { geo in
                 let fraction = maxCount > 0 ? CGFloat(count) / CGFloat(maxCount) : 0

@@ -13,6 +13,8 @@ struct ExerciseDefaultsListView: View {
     /// Correction #8/#152: Cache sorted exercises to avoid re-sorting every render
     @State private var cachedAllExercises: [ExerciseDefinition] = []
 
+    @Environment(\.appTheme) private var theme
+
     private let library = ExerciseLibraryService.shared
 
     var body: some View {
@@ -97,7 +99,7 @@ struct ExerciseDefaultsListView: View {
             if record?.isManualOverride == true {
                 Image(systemName: "pin.fill")
                     .font(.caption)
-                    .foregroundStyle(DS.Color.warmGlow)
+                    .foregroundStyle(theme.accentColor)
             }
         }
     }

@@ -9,6 +9,8 @@ struct VolumeBreakdownSection: View {
     let balanceInfo: MuscleBalanceInfo
     @Binding var weeklySetGoal: Int
 
+    @Environment(\.appTheme) private var theme
+
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.lg) {
             // Summary cards
@@ -58,7 +60,7 @@ struct VolumeBreakdownSection: View {
             }
             Text(value)
                 .font(.title2.weight(.bold))
-                .foregroundStyle(DS.Gradient.heroText)
+                .foregroundStyle(theme.heroTextGradient)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(DS.Spacing.md)

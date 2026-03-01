@@ -5,6 +5,7 @@ import SwiftData
 struct ConsistencyDetailView: View {
     @State private var viewModel = ConsistencyDetailViewModel()
     @Query(sort: \ExerciseRecord.date, order: .reverse) private var exerciseRecords: [ExerciseRecord]
+    @Environment(\.appTheme) private var theme
 
     private let weekdayLabels = ["S", "M", "T", "W", "T", "F", "S"]
 
@@ -50,7 +51,7 @@ struct ConsistencyDetailView: View {
                 Text(value)
                     .font(.title.weight(.bold))
                     .monospacedDigit()
-                    .foregroundStyle(DS.Gradient.heroText)
+                    .foregroundStyle(theme.heroTextGradient)
                 Text(unit)
                     .font(.caption)
                     .foregroundStyle(DS.Color.textSecondary)
@@ -160,7 +161,7 @@ struct ConsistencyDetailView: View {
                         VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                             Text("\(period.days) days")
                                 .font(.subheadline.weight(.semibold))
-                                .foregroundStyle(DS.Gradient.heroText)
+                                .foregroundStyle(theme.heroTextGradient)
                             Text("\(period.startDate, style: .date) — \(period.endDate, style: .date)")
                                 .font(.caption2)
                                 .foregroundStyle(.tertiary)

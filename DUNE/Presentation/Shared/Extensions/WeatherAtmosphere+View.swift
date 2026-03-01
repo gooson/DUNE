@@ -16,13 +16,16 @@ extension EnvironmentValues {
 // MARK: - View Properties
 
 extension WeatherAtmosphere {
-    /// Wave color derived from weather condition and time of day.
-    var waveColor: Color {
+    /// Wave color derived from weather condition and time of day (theme-aware).
+    func waveColor(for theme: AppTheme) -> Color {
         if !isDaytime {
-            return DS.Color.weatherNight
+            return theme.weatherNightColor
         }
-        return condition.waveColor
+        return condition.waveColor(for: theme)
     }
+
+    /// Legacy non-themed accessor (Desert Warm default).
+    var waveColor: Color { waveColor(for: .desertWarm) }
 
     /// Wave amplitude varies with weather intensity.
     var waveAmplitude: CGFloat {
@@ -66,20 +69,23 @@ extension WeatherAtmosphere {
         }
     }
 
-    /// Gradient colors for the tab background overlay.
-    var gradientColors: [Color] {
-        let primary = waveColor
+    /// Gradient colors for the tab background overlay (theme-aware).
+    func gradientColors(for theme: AppTheme) -> [Color] {
+        let primary = waveColor(for: theme)
         if !isDaytime {
             return [
                 primary.opacity(DS.Opacity.medium),
-                DS.Color.desertDusk.opacity(DS.Opacity.subtle),
+                theme.duskColor.opacity(DS.Opacity.subtle),
                 .clear
             ]
         }
         return [
             primary.opacity(DS.Opacity.medium),
-            DS.Color.warmGlow.opacity(DS.Opacity.subtle),
+            theme.accentColor.opacity(DS.Opacity.subtle),
             .clear
         ]
     }
+
+    /// Legacy non-themed accessor (Desert Warm default).
+    var gradientColors: [Color] { gradientColors(for: .desertWarm) }
 }

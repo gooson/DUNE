@@ -9,6 +9,8 @@ struct TrainingVolumeSummaryCard: View {
     let lastWorkoutMinutes: Double
     let lastWorkoutCalories: Double
 
+    @Environment(\.appTheme) private var theme
+
     var body: some View {
         NavigationLink(value: TrainingVolumeDestination.overview) {
             StandardCard {
@@ -42,12 +44,12 @@ struct TrainingVolumeSummaryCard: View {
         HStack(spacing: DS.Spacing.xs) {
             Image(systemName: icon)
                 .font(.caption2)
-                .foregroundStyle(DS.Color.warmGlow)
+                .foregroundStyle(theme.accentColor)
             VStack(alignment: .leading, spacing: 0) {
                 Text(value)
                     .font(.subheadline.weight(.semibold))
                     .monospacedDigit()
-                    .foregroundStyle(DS.Gradient.heroText)
+                    .foregroundStyle(theme.heroTextGradient)
                 Text(unit)
                     .font(.caption2)
                     .foregroundStyle(DS.Color.textSecondary)
@@ -63,13 +65,13 @@ struct TrainingVolumeSummaryCard: View {
                 x: .value("Day", point.date, unit: .day),
                 y: .value("Load", point.load)
             )
-            .foregroundStyle(DS.Color.warmGlow.gradient)
+            .foregroundStyle(theme.accentColor.gradient)
             .clipShape(RoundedRectangle(cornerRadius: 2))
         }
         .chartXAxis {
             AxisMarks(values: .stride(by: .day, count: 7)) { _ in
                 AxisValueLabel(format: .dateTime.day())
-                    .foregroundStyle(DS.Color.sandMuted)
+                    .foregroundStyle(theme.sandColor)
             }
         }
         .chartYAxis(.hidden)

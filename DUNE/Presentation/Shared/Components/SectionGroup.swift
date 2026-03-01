@@ -11,6 +11,7 @@ struct SectionGroup<Content: View>: View {
     @ViewBuilder let content: () -> Content
 
     @Environment(\.horizontalSizeClass) private var sizeClass
+    @Environment(\.appTheme) private var theme
 
     private var cornerRadius: CGFloat { sizeClass == .regular ? DS.Radius.lg : DS.Radius.md }
     private var outerPadding: CGFloat { sizeClass == .regular ? DS.Spacing.xl : DS.Spacing.lg }
@@ -19,9 +20,9 @@ struct SectionGroup<Content: View>: View {
         VStack(alignment: .leading, spacing: DS.Spacing.md) {
             // Section header
             HStack(spacing: DS.Spacing.xs) {
-                // Desert accent bar
+                // Theme accent bar
                 RoundedRectangle(cornerRadius: 1)
-                    .fill(DS.Gradient.sectionAccent)
+                    .fill(theme.sectionAccentGradient)
                     .frame(width: 2, height: 14)
 
                 Image(systemName: icon)

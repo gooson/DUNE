@@ -7,6 +7,7 @@ struct SuggestedExerciseRow: View {
     let onStart: () -> Void
     let onAlternativeSelected: (ExerciseDefinition) -> Void
 
+    @Environment(\.appTheme) private var theme
     @State private var showingAlternatives = false
 
     var body: some View {
@@ -16,7 +17,7 @@ struct SuggestedExerciseRow: View {
                 HStack(spacing: DS.Spacing.sm) {
                     Text(exercise.definition.localizedName)
                         .font(.subheadline)
-                        .foregroundStyle(DS.Color.primaryText)
+                        .foregroundStyle(theme.sandColor)
                         .lineLimit(1)
 
                     Spacer()

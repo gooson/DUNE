@@ -6,6 +6,7 @@ import SwiftData
 struct TrainingVolumeDetailView: View {
     @State private var viewModel = TrainingVolumeViewModel()
     @Query(sort: \ExerciseRecord.date, order: .reverse) private var exerciseRecords: [ExerciseRecord]
+    @Environment(\.appTheme) private var theme
 
     var body: some View {
         ScrollView {
@@ -84,14 +85,14 @@ struct TrainingVolumeDetailView: View {
                 progress: viewModel.weeklyGoal > 0
                     ? Double(comparison.current.activeDays) / Double(viewModel.weeklyGoal)
                     : 0,
-                ringColor: DS.Color.warmGlow,
+                ringColor: theme.accentColor,
                 lineWidth: 8,
                 size: 80
             ) {
                 VStack(spacing: 2) {
                     Text("\(comparison.current.activeDays)")
                         .font(.title3.bold())
-                        .foregroundStyle(DS.Gradient.heroText)
+                        .foregroundStyle(theme.heroTextGradient)
                     Text("/ \(viewModel.weeklyGoal)")
                         .font(.caption2)
                         .foregroundStyle(DS.Color.textSecondary)
@@ -136,7 +137,7 @@ struct TrainingVolumeDetailView: View {
             Text(value)
                 .font(.subheadline.weight(.semibold))
                 .monospacedDigit()
-                .foregroundStyle(DS.Gradient.heroText)
+                .foregroundStyle(theme.heroTextGradient)
             ChangeBadge(change: change)
         }
     }

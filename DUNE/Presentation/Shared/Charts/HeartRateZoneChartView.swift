@@ -5,6 +5,8 @@ import Charts
 struct HeartRateZoneChartView: View {
     let zones: [HeartRateZone]
 
+    @Environment(\.appTheme) private var theme
+
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.md) {
             Text("Heart Rate Zones")
@@ -26,11 +28,11 @@ struct HeartRateZoneChartView: View {
                         if let mins = value.as(Double.self) {
                             Text(formatMinutes(mins))
                                 .font(.caption2)
-                                .foregroundStyle(DS.Color.sandMuted)
+                                .foregroundStyle(theme.sandColor)
                         }
                     }
                     AxisGridLine()
-                        .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
+                        .foregroundStyle(theme.accentColor.opacity(0.30))
                 }
             }
             .chartYAxis {
@@ -39,7 +41,7 @@ struct HeartRateZoneChartView: View {
                         if let label = value.as(String.self) {
                             Text(label)
                                 .font(.caption)
-                                .foregroundStyle(DS.Color.sandMuted)
+                                .foregroundStyle(theme.sandColor)
                         }
                     }
                 }

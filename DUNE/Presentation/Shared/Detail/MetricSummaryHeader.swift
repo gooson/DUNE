@@ -9,6 +9,7 @@ struct MetricSummaryHeader: View {
     var unitOverride: String?
 
     @Environment(\.horizontalSizeClass) private var sizeClass
+    @Environment(\.appTheme) private var theme
 
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
@@ -26,11 +27,11 @@ struct MetricSummaryHeader: View {
                 Text(formattedCurrentValue)
                     .font(sizeClass == .regular ? DS.Typography.heroScore : DS.Typography.cardScore)
                     .fontDesign(.rounded)
-                    .foregroundStyle(DS.Gradient.heroText)
+                    .foregroundStyle(theme.heroTextGradient)
 
                 Text(resolvedUnit)
                     .font(sizeClass == .regular ? .title2 : .title3)
-                    .foregroundStyle(DS.Color.sandMuted)
+                    .foregroundStyle(theme.sandColor)
             }
 
             // Period summary stats (always visible — shows "—" placeholders when loading)
@@ -74,7 +75,7 @@ struct MetricSummaryHeader: View {
         return VStack(spacing: DS.Spacing.xxs) {
             Text(label)
                 .font(sizeClass == .regular ? .caption : .caption2)
-                .foregroundStyle(DS.Color.sandMuted)
+                .foregroundStyle(theme.sandColor)
             Text(value)
                 .font(valueFont)
                 .fontWeight(.medium)

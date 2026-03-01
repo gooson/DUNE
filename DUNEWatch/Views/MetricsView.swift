@@ -6,6 +6,7 @@ import WatchKit
 struct MetricsView: View {
     @Environment(WorkoutManager.self) private var workoutManager
     @Environment(\.isLuminanceReduced) private var isLuminanceReduced
+    @Environment(\.appTheme) private var theme
 
     @State private var weight: Double = 0
     @State private var reps: Int = 0
@@ -262,7 +263,7 @@ struct MetricsView: View {
         HStack(spacing: DS.Spacing.xs) {
             Image(systemName: "heart.fill")
                 .font(.caption2)
-                .foregroundStyle(DS.Color.heartRate)
+                .foregroundStyle(theme.metricHeartRate)
 
             if workoutManager.heartRate > 0 {
                 Text("\(Int(workoutManager.heartRate).formattedWithSeparator) bpm")

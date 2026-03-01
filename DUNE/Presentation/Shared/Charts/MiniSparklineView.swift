@@ -5,6 +5,8 @@ struct MiniSparklineView: View {
     let dataPoints: [Double]
     let color: Color
 
+    @Environment(\.appTheme) private var theme
+
     var body: some View {
         GeometryReader { geometry in
             let linePath = linePath(in: geometry.size)
@@ -16,7 +18,7 @@ struct MiniSparklineView: View {
                         colors: [
                             color.opacity(0.12),
                             color.opacity(0.04),
-                            DS.Color.warmGlow.opacity(0.20)
+                            theme.accentColor.opacity(0.20)
                         ],
                         startPoint: .top,
                         endPoint: .bottom

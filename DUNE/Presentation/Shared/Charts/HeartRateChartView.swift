@@ -10,6 +10,8 @@ struct HeartRateChartView: View {
 
     @ScaledMetric(relativeTo: .body) private var chartHeight: CGFloat = 180
 
+    @Environment(\.appTheme) private var theme
+
     @State private var selectedDate: Date?
 
     var body: some View {
@@ -98,7 +100,7 @@ struct HeartRateChartView: View {
                 .symbolSize(48)
 
                 RuleMark(x: .value("Selected", point.date))
-                    .foregroundStyle(DS.Color.warmGlow.opacity(0.35))
+                    .foregroundStyle(theme.accentColor.opacity(0.35))
                     .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
             }
         }
@@ -106,17 +108,17 @@ struct HeartRateChartView: View {
         .chartXAxis {
             AxisMarks(values: .automatic(desiredCount: 4)) { _ in
                 AxisValueLabel(format: .dateTime.hour().minute())
-                    .foregroundStyle(DS.Color.sandMuted)
+                    .foregroundStyle(theme.sandColor)
                 AxisGridLine()
-                    .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
+                    .foregroundStyle(theme.accentColor.opacity(0.30))
             }
         }
         .chartYAxis {
             AxisMarks(position: .leading) { _ in
                 AxisValueLabel()
-                    .foregroundStyle(DS.Color.sandMuted)
+                    .foregroundStyle(theme.sandColor)
                 AxisGridLine()
-                    .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
+                    .foregroundStyle(theme.accentColor.opacity(0.30))
             }
         }
         .chartXSelection(value: $selectedDate)

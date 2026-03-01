@@ -4,6 +4,7 @@ import HealthKit
 
 @main
 struct DUNEApp: App {
+    @AppStorage("com.dune.app.theme") private var selectedTheme: AppTheme = .desertWarm
     @AppStorage("hasShownCloudSyncConsent") private var hasShownConsent = false
     @State private var showConsentSheet = false
     @State private var isShowingLaunchSplash = !DUNEApp.isRunningXCTest
@@ -107,7 +108,7 @@ struct DUNEApp: App {
                     }
                 }
             }
-            .tint(DS.Color.warmGlow)
+            .tint(selectedTheme.accentColor)
         }
         .modelContainer(modelContainer)
     }

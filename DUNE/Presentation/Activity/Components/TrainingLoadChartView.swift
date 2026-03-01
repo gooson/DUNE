@@ -6,6 +6,8 @@ import Charts
 struct TrainingLoadChartView: View {
     let data: [TrainingLoadDataPoint]
 
+    @Environment(\.appTheme) private var theme
+
     @State private var selectedDate: Date?
     @State private var cachedMovingAverage: [ChartDataPoint] = []
     @State private var cachedWeekSummary: String?
@@ -81,24 +83,24 @@ struct TrainingLoadChartView: View {
 
             if selectedDate != nil, let point = selectedPoint {
                 RuleMark(x: .value("Selected", point.date, unit: .day))
-                    .foregroundStyle(DS.Color.warmGlow.opacity(0.35))
+                    .foregroundStyle(theme.accentColor.opacity(0.35))
                     .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
             }
         }
         .chartXAxis {
             AxisMarks(values: .stride(by: .day, count: 7)) { _ in
                 AxisValueLabel(format: .dateTime.month(.abbreviated).day())
-                    .foregroundStyle(DS.Color.sandMuted)
+                    .foregroundStyle(theme.sandColor)
                 AxisGridLine()
-                    .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
+                    .foregroundStyle(theme.accentColor.opacity(0.30))
             }
         }
         .chartYAxis {
             AxisMarks(position: .leading) { _ in
                 AxisValueLabel()
-                    .foregroundStyle(DS.Color.sandMuted)
+                    .foregroundStyle(theme.sandColor)
                 AxisGridLine()
-                    .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
+                    .foregroundStyle(theme.accentColor.opacity(0.30))
             }
         }
         .chartYScale(domain: 0...(maxLoad * 1.15))

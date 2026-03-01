@@ -5,6 +5,7 @@ struct HabitRowView: View {
     let onToggle: () -> Void
     let onUpdateValue: (Double) -> Void
 
+    @Environment(\.appTheme) private var theme
     @State private var inputText: String = ""
     @State private var isEditing = false
 
@@ -57,12 +58,12 @@ struct HabitRowView: View {
                     .font(.caption2)
                     .fontWeight(.semibold)
             }
-            .foregroundStyle(DS.Color.warmGlow)
+            .foregroundStyle(theme.accentColor)
             .padding(.horizontal, DS.Spacing.sm)
             .padding(.vertical, DS.Spacing.xxs)
             .background {
                 Capsule()
-                    .fill(DS.Color.warmGlow.opacity(DS.Opacity.light))
+                    .fill(theme.accentColor.opacity(DS.Opacity.light))
             }
         }
     }

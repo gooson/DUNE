@@ -13,6 +13,7 @@ struct ExerciseTypeDetailView: View {
     @State private var viewModel: ExerciseTypeDetailViewModel
     @Query(sort: \ExerciseRecord.date, order: .reverse) private var exerciseRecords: [ExerciseRecord]
 
+    @Environment(\.appTheme) private var theme
     @State private var selectedDate: Date?
 
     init(typeKey: String, displayName: String, categoryRawValue: String = "", equipmentRawValue: String? = nil) {
@@ -151,17 +152,17 @@ struct ExerciseTypeDetailView: View {
             .chartXAxis {
                 AxisMarks(values: .stride(by: xAxisStride, count: xAxisStrideCount)) { _ in
                     AxisValueLabel(format: .dateTime.month(.abbreviated).day())
-                        .foregroundStyle(DS.Color.sandMuted)
+                        .foregroundStyle(theme.sandColor)
                     AxisGridLine()
-                        .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
+                        .foregroundStyle(theme.accentColor.opacity(0.30))
                 }
             }
             .chartYAxis {
                 AxisMarks(position: .leading) { _ in
                     AxisValueLabel()
-                        .foregroundStyle(DS.Color.sandMuted)
+                        .foregroundStyle(theme.sandColor)
                     AxisGridLine()
-                        .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
+                        .foregroundStyle(theme.accentColor.opacity(0.30))
                 }
             }
             .chartYScale(domain: 0...(maxTrendMinutes * 1.15))

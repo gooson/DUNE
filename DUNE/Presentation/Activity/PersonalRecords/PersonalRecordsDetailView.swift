@@ -8,6 +8,7 @@ struct PersonalRecordsDetailView: View {
 
     @State private var viewModel = PersonalRecordsDetailViewModel()
     @State private var selectedKind: ActivityPersonalRecord.Kind?
+    @Environment(\.appTheme) private var theme
 
     private var columns: [GridItem] {
         [GridItem(.flexible(), spacing: DS.Spacing.sm),
@@ -132,19 +133,19 @@ struct PersonalRecordsDetailView: View {
             .chartXAxis {
                 AxisMarks(values: .stride(by: .month)) { _ in
                     AxisGridLine()
-                        .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
+                        .foregroundStyle(theme.accentColor.opacity(0.30))
                     AxisValueLabel(format: .dateTime.month(.abbreviated))
-                        .foregroundStyle(DS.Color.sandMuted)
+                        .foregroundStyle(theme.sandColor)
                 }
             }
             .chartYAxis {
                 AxisMarks { value in
                     AxisGridLine()
-                        .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
+                        .foregroundStyle(theme.accentColor.opacity(0.30))
                     AxisValueLabel {
                         if let v = value.as(Double.self), let selectedKind = selectedKindValue {
                             Text(chartAxisValue(v, for: selectedKind))
-                                .foregroundStyle(DS.Color.sandMuted)
+                                .foregroundStyle(theme.sandColor)
                         }
                     }
                 }
@@ -197,7 +198,7 @@ struct PersonalRecordsDetailView: View {
             HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xxs) {
                 Text(primaryValueText(for: record))
                     .font(DS.Typography.cardScore)
-                    .foregroundStyle(DS.Gradient.heroText)
+                    .foregroundStyle(theme.heroTextGradient)
                     .minimumScaleFactor(0.7)
                     .lineLimit(1)
 

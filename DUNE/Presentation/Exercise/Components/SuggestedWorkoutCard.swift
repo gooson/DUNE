@@ -4,6 +4,8 @@ struct SuggestedWorkoutCard: View {
     let suggestion: WorkoutSuggestion
     let onStartExercise: (ExerciseDefinition) -> Void
 
+    @Environment(\.appTheme) private var theme
+
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             // Header
@@ -38,7 +40,7 @@ struct SuggestedWorkoutCard: View {
                     HStack(spacing: DS.Spacing.sm) {
                         Text(exercise.definition.localizedName)
                             .font(.subheadline)
-                            .foregroundStyle(DS.Color.primaryText)
+                            .foregroundStyle(theme.sandColor)
                             .lineLimit(1)
 
                         Spacer()

@@ -6,6 +6,7 @@ struct WellnessView: View {
     @State private var bodyViewModel = BodyCompositionViewModel()
     @State private var injuryViewModel = InjuryViewModel()
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.appTheme) private var theme
     @Environment(\.horizontalSizeClass) private var sizeClass
 
     private let scrollToTopSignal: Int
@@ -304,6 +305,7 @@ struct InjuryHistoryDestination: Hashable {}
 /// Injury banner with its own @Query — re-renders independently of WellnessView body.
 private struct WellnessInjuryBannerView: View {
     @Query(sort: \InjuryRecord.startDate, order: .reverse) private var injuryRecords: [InjuryRecord]
+    @Environment(\.appTheme) private var theme
 
     let onEdit: (InjuryRecord) -> Void
     let onAdd: () -> Void
@@ -329,7 +331,7 @@ private struct WellnessInjuryBannerView: View {
                                 .font(.caption)
                                 .fontWeight(.medium)
                         }
-                        .tint(DS.Color.warmGlow)
+                        .tint(theme.accentColor)
                     }
                 }
 
@@ -349,7 +351,7 @@ private struct WellnessInjuryBannerView: View {
                                 onAdd()
                             }
                             .font(.caption.weight(.medium))
-                            .tint(DS.Color.warmGlow)
+                            .tint(theme.accentColor)
                         }
                     }
                 } else {

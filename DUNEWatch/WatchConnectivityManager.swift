@@ -32,6 +32,9 @@ final class WatchConnectivityManager: NSObject {
     /// Fallback to 90s if never synced (matches iOS WorkoutSettingsStore default).
     private(set) var globalRestSeconds: TimeInterval = 90
 
+    /// Theme raw value synced from iPhone. DUNEWatchApp resolves to AppTheme.
+    private(set) var syncedThemeRawValue: String = AppTheme.desertWarm.rawValue
+
     /// Sync status for UI display
     private(set) var syncStatus: SyncStatus = .notConnected
 
@@ -172,10 +175,12 @@ extension WatchConnectivityManager: WCSessionDelegate {
 private struct ParsedWatchMessage: Sendable {
     let workoutStateData: Data?
     let globalRestSeconds: Double?
+    let appTheme: String?
 
     init(from message: [String: Any]) {
         workoutStateData = message["workoutState"] as? Data
         globalRestSeconds = message["globalRestSeconds"] as? Double
+        appTheme = message["appTheme"] as? String
     }
 }
 
@@ -183,10 +188,12 @@ private struct ParsedWatchMessage: Sendable {
 private struct ParsedWatchContext: Sendable {
     let exerciseLibraryData: Data?
     let globalRestSeconds: Double?
+    let appTheme: String?
 
     init(from context: [String: Any]) {
         exerciseLibraryData = context["exerciseLibrary"] as? Data
         globalRestSeconds = context["globalRestSeconds"] as? Double
+        appTheme = context["appTheme"] as? String
     }
 }
 
@@ -207,6 +214,11 @@ extension WatchConnectivityManager {
         if let restSeconds = parsed.globalRestSeconds,
            restSeconds.isFinite, (15...600).contains(restSeconds) {
             globalRestSeconds = restSeconds
+        }
+
+        // Theme from iPhone settings change
+        if let themeRaw = parsed.appTheme, !themeRaw.isEmpty {
+            syncedThemeRawValue = themeRaw
         }
     }
 
@@ -229,6 +241,11 @@ extension WatchConnectivityManager {
         if let restSeconds = parsed.globalRestSeconds,
            restSeconds.isFinite, (15...600).contains(restSeconds) {
             globalRestSeconds = restSeconds
+        }
+
+        // Theme from iPhone settings
+        if let themeRaw = parsed.appTheme, !themeRaw.isEmpty {
+            syncedThemeRawValue = themeRaw
         }
     }
 }

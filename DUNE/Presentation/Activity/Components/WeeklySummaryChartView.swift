@@ -6,6 +6,8 @@ struct WeeklySummaryChartView: View {
     let exerciseData: [ChartDataPoint]
     let stepsData: [ChartDataPoint]
 
+    @Environment(\.appTheme) private var theme
+
     @State private var selectedTab: Tab = .exercise
 
     enum Tab: String, CaseIterable {
@@ -67,15 +69,15 @@ struct WeeklySummaryChartView: View {
         .chartXAxis {
             AxisMarks(values: .stride(by: .day)) { _ in
                 AxisValueLabel(format: .dateTime.weekday(.abbreviated))
-                    .foregroundStyle(DS.Color.sandMuted)
+                    .foregroundStyle(theme.sandColor)
             }
         }
         .chartYAxis {
             AxisMarks(position: .leading) { _ in
                 AxisValueLabel()
-                    .foregroundStyle(DS.Color.sandMuted)
+                    .foregroundStyle(theme.sandColor)
                 AxisGridLine()
-                    .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
+                    .foregroundStyle(theme.accentColor.opacity(0.30))
             }
         }
     }

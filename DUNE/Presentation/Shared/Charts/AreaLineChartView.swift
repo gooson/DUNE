@@ -11,42 +11,31 @@ struct AreaLineChartView: View {
     var trendLine: [ChartDataPoint]?
     @Binding var scrollPosition: Date
 
-    // Correction #105/#165 — pre-computed gradient to avoid per-ForEach allocation
-    private let areaGradient: LinearGradient
+    @ScaledMetric(relativeTo: .body) private var chartHeight: CGFloat = 220
 
-    init(
-        data: [ChartDataPoint],
-        period: TimePeriod,
-        tintColor: Color = DS.Color.body,
-        unitSuffix: String = "kg",
-        trendLine: [ChartDataPoint]? = nil,
-        scrollPosition: Binding<Date>
-    ) {
-        self.data = data
-        self.period = period
-        self.tintColor = tintColor
-        self.unitSuffix = unitSuffix
-        self.trendLine = trendLine
-        self._scrollPosition = scrollPosition
-        self.areaGradient = LinearGradient(
-            colors: [tintColor.opacity(0.22), DS.Color.warmGlow.opacity(DS.Opacity.subtle), .clear],
+    @Environment(\.appTheme) private var theme
+
+    @State private var selectedDate: Date?
+
+    // Correction #105/#165 — computed gradient using theme
+    private var areaGradient: LinearGradient {
+        LinearGradient(
+            colors: [tintColor.opacity(0.22), theme.accentColor.opacity(DS.Opacity.subtle), .clear],
             startPoint: .top,
             endPoint: .bottom
         )
     }
 
-    @ScaledMetric(relativeTo: .body) private var chartHeight: CGFloat = 220
-
-    @State private var selectedDate: Date?
-
     var body: some View {
+        // Correction #105/#165 — capture gradient before ForEach to avoid per-row allocation
+        let resolvedAreaGradient = areaGradient
         Chart {
                 ForEach(data) { point in
                     AreaMark(
                         x: .value("Date", point.date, unit: xUnit),
                         y: .value("Weight", point.value)
                     )
-                    .foregroundStyle(areaGradient)
+                    .foregroundStyle(resolvedAreaGradient)
                     .interpolationMethod(.catmullRom)
 
                     LineMark(
@@ -82,7 +71,7 @@ struct AreaLineChartView: View {
                     .symbolSize(48)
 
                     RuleMark(x: .value("Selected", point.date, unit: xUnit))
-                        .foregroundStyle(DS.Color.warmGlow.opacity(0.35))
+                        .foregroundStyle(theme.accentColor.opacity(0.35))
                         .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
                 }
             }
@@ -93,17 +82,17 @@ struct AreaLineChartView: View {
             .chartXAxis {
                 AxisMarks(values: .stride(by: period.strideComponent, count: period.strideCount)) { _ in
                     AxisValueLabel(format: period.axisLabelFormat)
-                        .foregroundStyle(DS.Color.sandMuted)
+                        .foregroundStyle(theme.sandColor)
                     AxisGridLine()
-                        .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
+                        .foregroundStyle(theme.accentColor.opacity(0.30))
                 }
             }
             .chartYAxis {
                 AxisMarks(position: .leading) { _ in
                     AxisValueLabel()
-                        .foregroundStyle(DS.Color.sandMuted)
+                        .foregroundStyle(theme.sandColor)
                     AxisGridLine()
-                        .foregroundStyle(DS.Color.warmGlow.opacity(0.30))
+                        .foregroundStyle(theme.accentColor.opacity(0.30))
                 }
             }
             .chartXSelection(value: $selectedDate)
