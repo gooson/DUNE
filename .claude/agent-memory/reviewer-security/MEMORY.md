@@ -42,6 +42,15 @@
 - InjuryViewModel.applyUpdate() resets isSaving = false implicitly via early return — but in success path the flag is never reset (isSaving is only set in createValidatedRecord, not applyUpdate). This is an inconsistency but not exploitable since applyUpdate does not set isSaving = true.
 - InjuryCardView.durationLabel creates a new DateFormatter on every render call — performance gap, not security (P3 overlap with Performance Oracle).
 
+### Localization Audit (Commit 842a1bc)
+- **Safe**: 31 new xcstrings keys added (no secrets, no injection patterns, no XSS vectors)
+- **Safe**: Enum rawValue → displayName pattern with String(localized:) is type-safe
+- **Safe**: Helper function parameters changed from String → LocalizedStringKey (compile-time checked)
+- **Safe**: WellnessViewModel card titles wrapped with String(localized:) — no user-provided data interpolation
+- **Safe**: Orphaned keys removed (Coming Soon, Coarse Dust, Fine Dust, Ozone) — no sensitive data in removal
+- **Safe**: Smart quote mismatch fixed (U+2019) — purely Unicode/formatting, no security impact
+- **No injection risk**: All localization strings are compile-time constants, no dynamic/user-input interpolation
+
 ### Recurring Patterns to Watch
 - `errorMessage = error.localizedDescription` — can expose internal error details to UI (P3)
 - `try? modelContext.save()` removed in this diff — was silently swallowing errors

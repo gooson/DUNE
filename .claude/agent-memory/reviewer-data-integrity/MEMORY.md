@@ -25,6 +25,13 @@
 4. Enum rawValue storage without decode fallback
 5. Math operations without NaN/Infinite checks
 
+### Localization & Enum Storage Safety (Correction #189)
+- **Safe**: Removing rawValue from purely UI-display enums (@State, view-local metrics)
+- **Safe**: Using localized displayName in Chart `.value()` labels (accessibility/tooltip only, doesn't affect data identity)
+- **Verify**: Any enum with storage/persistence (UserDefaults, SwiftData, network) must keep rawValue or migrate persistently
+- **Pattern**: Enum → rawValue lookup is safe IFF enum is only used in UI context (e.g., picker selection, chart metric selection)
+- **Risk**: If chart label strings change per locale, ensure chart data grouping still works by enum identity (not string matching)
+
 ## Review Checklist
 - [ ] All user inputs have min/max range validation
 - [ ] String-to-number conversions check bounds
@@ -37,6 +44,7 @@
 - [ ] .task(id:) key covers CONTENT change, not just count change (count-only keys miss same-count mutations)
 - [ ] Stale data: items/@State index rebuilt atomically — buildItems() and rebuildRecordIndex() must stay in sync
 - [ ] Silent navigation sink (EmptyView()) signals item/index desync — count change alone won't catch same-size record replacement
+- [ ] Enum rawValue removal: verify no persistence/serialization in affected enum scopes
 
 ## Patterns: Injury Tracking (@Model with rawValue enums)
 - `InjurySeverity` uses `Int` rawValue — CloudKit can sync arbitrary Int values; decode fallback `.minor` silently accepts invalid server values (e.g., 0, 4, 99). Needs range guard at read site.

@@ -35,3 +35,12 @@
 11. `isSaving` reset belongs in View after `modelContext.insert`, via `didFinishSaving()`. Pattern: ViewModel sets `isSaving = true`, returns record, View inserts, View calls `didFinishSaving()`. `WorkoutSessionViewModel` and `CompoundWorkoutViewModel` do this correctly; new ViewModels sometimes omit it.
 12. Computed properties that invoke UseCases (even pure/synchronous ones) inside SwiftUI body still run on every render. Cache with `@State` + `onChange(of: count)` when the data source is a `@Query` array.
 13. Swift Charts `BarMark`/`AreaMark` with dynamic `.frame(height:)` must add `.clipped()` immediately after — applies even when using `BarMark` (not just `AreaMark`). Correction #70 is not limited to `AreaMark`.
+
+### Localization Audit Patterns (L10n)
+- Comprehensive enum rawValue→displayName conversion systematically covers all UI-visible enums across 24 files
+- Helper function parameter conversions (String→LocalizedStringKey) prevent accidental UI bypass — 13 conversions verified
+- WellnessViewModel card titles wrapped with String(localized:) — 13 metrics total
+- Orphan key removal verified: "Coming Soon", "Coarse Dust", "Fine Dust", "Ozone" (4 keys properly deleted, not orphaned)
+- Smart quote fix rule added (U+2019→ASCII apostrophe) — future-proofs key matching
+- Translation quality: fitness terminology translated appropriately (e.g., "Est. 1RM"→"추정 1RM"/"推定1RM")
+- Watch target xcstrings NOT modified (audit scope limited to iOS; watch audit would be separate task)
