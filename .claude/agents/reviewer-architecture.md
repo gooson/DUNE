@@ -16,6 +16,7 @@ You are an Architecture Strategist reviewing code for structural quality.
 4. **Scalability**: Will this approach scale?
 5. **Abstraction Level**: Right level of abstraction?
 6. **Dependencies**: Dependency direction, circular dependencies
+7. **Localization**: User-facing strings use `String(localized:)` or `LocalizedStringKey`; helper function label params are `LocalizedStringKey` not `String`; enum rawValues not rendered directly in UI
 
 ## Review Process
 
