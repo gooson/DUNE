@@ -125,81 +125,19 @@ struct WaveOverlayView: View {
 // MARK: - Tab Background
 
 /// Tab root background: theme-aware wave motif + gradient.
-/// Dispatches to Desert (sine), Ocean (4-layer parallax), or Forest (3-layer silhouette) based on `\.appTheme`.
+/// Dispatches to Desert (dune parallax), Ocean (4-layer parallax), or Forest (3-layer silhouette) based on `\.appTheme`.
 struct TabWaveBackground: View {
     @Environment(\.appTheme) private var theme
 
     var body: some View {
-        switch theme {
-        case .desertWarm:  DesertTabWaveContent()
-        case .oceanCool:   OceanTabWaveBackground()
-        case .forestGreen: ForestTabWaveBackground()
-        }
-    }
-}
-
-/// Desert Warm tab background: sine wave motif + warm gradient.
-private struct DesertTabWaveContent: View {
-    @Environment(\.wavePreset) private var preset
-    @Environment(\.waveColor) private var color
-    @Environment(\.weatherAtmosphere) private var atmosphere
-
-    private var isWeatherActive: Bool {
-        preset == .today && atmosphere != .default
-    }
-
-    private var resolvedColor: Color {
-        isWeatherActive ? atmosphere.waveColor : color
-    }
-
-    private var resolvedAmplitude: CGFloat {
-        isWeatherActive ? atmosphere.waveAmplitude : preset.amplitude
-    }
-
-    private var resolvedFrequency: CGFloat {
-        isWeatherActive ? atmosphere.waveFrequency : preset.frequency
-    }
-
-    private var resolvedOpacity: Double {
-        isWeatherActive ? atmosphere.waveOpacity : preset.opacity
-    }
-
-    var body: some View {
-        let gradientColors = isWeatherActive
-            ? atmosphere.gradientColors
-            : [color.opacity(DS.Opacity.medium), DS.Color.warmGlow.opacity(DS.Opacity.subtle), .clear]
-
-        ZStack(alignment: .top) {
-            WaveOverlayView(
-                color: resolvedColor,
-                opacity: resolvedOpacity,
-                amplitude: resolvedAmplitude,
-                frequency: resolvedFrequency,
-                verticalOffset: preset.verticalOffset,
-                bottomFade: preset.bottomFade
-            )
-            .frame(height: 200)
-
-            if let secondary = preset.secondaryWave {
-                WaveOverlayView(
-                    color: color,
-                    opacity: secondary.opacity,
-                    amplitude: secondary.amplitude,
-                    frequency: secondary.frequency,
-                    verticalOffset: preset.verticalOffset,
-                    bottomFade: preset.bottomFade
-                )
-                .frame(height: 200)
+        Group {
+            switch theme {
+            case .desertWarm:  DesertTabWaveBackground()
+            case .oceanCool:   OceanTabWaveBackground()
+            case .forestGreen: ForestTabWaveBackground()
             }
-
-            LinearGradient(
-                colors: gradientColors,
-                startPoint: .top,
-                endPoint: DS.Gradient.tabBackgroundEnd
-            )
         }
-        .ignoresSafeArea()
-        .animation(DS.Animation.atmosphereTransition, value: atmosphere)
+        .id(theme)
     }
 }
 
@@ -210,40 +148,14 @@ struct DetailWaveBackground: View {
     @Environment(\.appTheme) private var theme
 
     var body: some View {
-        switch theme {
-        case .desertWarm:  DesertDetailWaveContent()
-        case .oceanCool:   OceanDetailWaveBackground()
-        case .forestGreen: ForestDetailWaveBackground()
+        Group {
+            switch theme {
+            case .desertWarm:  DesertDetailWaveBackground()
+            case .oceanCool:   OceanDetailWaveBackground()
+            case .forestGreen: ForestDetailWaveBackground()
+            }
         }
-    }
-}
-
-/// Desert Warm detail background: single sine, scaled down.
-private struct DesertDetailWaveContent: View {
-    @Environment(\.wavePreset) private var preset
-    @Environment(\.waveColor) private var color
-
-    var body: some View {
-        let gradientTop = color.opacity(DS.Opacity.light)
-
-        ZStack(alignment: .top) {
-            WaveOverlayView(
-                color: color,
-                opacity: preset.opacity * 0.7,
-                amplitude: preset.amplitude * 0.5,
-                frequency: preset.frequency,
-                verticalOffset: preset.verticalOffset,
-                bottomFade: 0.5
-            )
-            .frame(height: 150)
-
-            LinearGradient(
-                colors: [gradientTop, .clear],
-                startPoint: .top,
-                endPoint: DS.Gradient.tabBackgroundEnd
-            )
-        }
-        .ignoresSafeArea()
+        .id(theme)
     }
 }
 
@@ -254,39 +166,14 @@ struct SheetWaveBackground: View {
     @Environment(\.appTheme) private var theme
 
     var body: some View {
-        switch theme {
-        case .desertWarm:  DesertSheetWaveContent()
-        case .oceanCool:   OceanSheetWaveBackground()
-        case .forestGreen: ForestSheetWaveBackground()
+        Group {
+            switch theme {
+            case .desertWarm:  DesertSheetWaveBackground()
+            case .oceanCool:   OceanSheetWaveBackground()
+            case .forestGreen: ForestSheetWaveBackground()
+            }
         }
+        .id(theme)
     }
 }
 
-/// Desert Warm sheet background: single sine, lightest.
-private struct DesertSheetWaveContent: View {
-    @Environment(\.wavePreset) private var preset
-    @Environment(\.waveColor) private var color
-
-    var body: some View {
-        let gradientTop = color.opacity(DS.Opacity.light)
-
-        ZStack(alignment: .top) {
-            WaveOverlayView(
-                color: color,
-                opacity: preset.opacity * 0.6,
-                amplitude: preset.amplitude * 0.4,
-                frequency: preset.frequency,
-                verticalOffset: 0.5,
-                bottomFade: 0.5
-            )
-            .frame(height: 120)
-
-            LinearGradient(
-                colors: [gradientTop, .clear],
-                startPoint: .top,
-                endPoint: DS.Gradient.sheetBackgroundEnd
-            )
-        }
-        .ignoresSafeArea()
-    }
-}
