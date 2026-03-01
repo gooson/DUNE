@@ -128,6 +128,78 @@ struct OceanWaveShapeTests {
         #expect(bounds.maxY <= rect.maxY + 1)
     }
 
+    // MARK: - Curl Tests
+
+    @Test("curlCount 0 produces same path as without curl params")
+    func curlCountZeroNoChange() {
+        let rect = CGRect(x: 0, y: 0, width: 300, height: 200)
+        let noCurl = OceanWaveShape(amplitude: 0.2, frequency: 2, steepness: 0.3)
+        let zeroCurl = OceanWaveShape(amplitude: 0.2, frequency: 2, steepness: 0.3, curlCount: 0)
+        let noCurlBounds = noCurl.path(in: rect).boundingRect
+        let zeroCurlBounds = zeroCurl.path(in: rect).boundingRect
+        #expect(abs(noCurlBounds.minY - zeroCurlBounds.minY) < 0.01)
+        #expect(abs(noCurlBounds.maxY - zeroCurlBounds.maxY) < 0.01)
+    }
+
+    @Test("curlCount > 0 extends path above normal wave")
+    func curlExtendsAboveWave() {
+        let rect = CGRect(x: 0, y: 0, width: 400, height: 200)
+        let noCurl = OceanWaveShape(
+            amplitude: 0.2, frequency: 2, steepness: 0.3,
+            crestHeight: 0.2, crestSharpness: 0.05
+        )
+        let withCurl = OceanWaveShape(
+            amplitude: 0.2, frequency: 2, steepness: 0.3,
+            crestHeight: 0.2, crestSharpness: 0.05,
+            curlCount: 1, curlHeight: 2.0, curlWidth: 0.12
+        )
+        let noCurlBounds = noCurl.path(in: rect).boundingRect
+        let curlBounds = withCurl.path(in: rect).boundingRect
+        // Curl should extend higher (lower Y) than normal wave
+        #expect(curlBounds.minY < noCurlBounds.minY)
+    }
+
+    @Test("curlCount > 0 path is non-empty")
+    func curlPathNonEmpty() {
+        let wave = OceanWaveShape(
+            amplitude: 0.15, frequency: 2, steepness: 0.3,
+            curlCount: 2, curlHeight: 1.5, curlWidth: 0.1
+        )
+        let rect = CGRect(x: 0, y: 0, width: 300, height: 200)
+        #expect(!wave.path(in: rect).isEmpty)
+    }
+
+    @Test("curl with zero amplitude produces no curl")
+    func curlWithZeroAmplitude() {
+        let rect = CGRect(x: 0, y: 0, width: 300, height: 200)
+        let wave = OceanWaveShape(
+            amplitude: 0, curlCount: 1, curlHeight: 2.0
+        )
+        let bounds = wave.path(in: rect).boundingRect
+        // Zero amplitude = flat wave at verticalOffset, no curl
+        #expect(bounds.minY >= 49)
+    }
+
+    @Test("Stroke shape supports curl")
+    func strokeWithCurl() {
+        let stroke = OceanWaveStrokeShape(
+            amplitude: 0.15, frequency: 2, steepness: 0.3,
+            curlCount: 1, curlHeight: 1.5
+        )
+        let rect = CGRect(x: 0, y: 0, width: 300, height: 200)
+        #expect(!stroke.path(in: rect).isEmpty)
+    }
+
+    @Test("Foam shape supports curl")
+    func foamWithCurl() {
+        let foam = OceanFoamGradientShape(
+            amplitude: 0.15, frequency: 2, steepness: 0.3,
+            curlCount: 1, curlHeight: 1.5
+        )
+        let rect = CGRect(x: 0, y: 0, width: 300, height: 200)
+        #expect(!foam.path(in: rect).isEmpty)
+    }
+
     // MARK: - Stroke Shape Tests
 
     @Test("Stroke shape is non-empty for valid rect")

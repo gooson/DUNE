@@ -98,7 +98,6 @@
 		37F9131B76392D617027223C /* SubScoreTrendChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ACBCB122B69E6A13026B077 /* SubScoreTrendChartView.swift */; };
 		39A6888EA98744AD70192D47 /* HealthKitWorkoutDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 365230CF18150B57B0833F1E /* HealthKitWorkoutDetailView.swift */; };
 		39F3F6867AA0ED7DBF24AC7C /* Duration+Formatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B1DF514F4B2559414EB657 /* Duration+Formatting.swift */; };
-		39FC50293993D526EA8201F3 /* OceanBigWaveShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A87CE0623602E6C2F68452 /* OceanBigWaveShape.swift */; };
 		3A619D573EC237580D3B1503 /* CalculateWellnessScoreUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9D6728E3F3C4DA94643D52 /* CalculateWellnessScoreUseCaseTests.swift */; };
 		3AD9813DBE32E8E19B18B7A5 /* InjuryStatisticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169D96449F0CB30898AEE7D2 /* InjuryStatisticsService.swift */; };
 		3AE9CD408B5070447D82BD82 /* PeriodSwipeModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3FC7997E2E3AA8AC4F1091 /* PeriodSwipeModifier.swift */; };
@@ -439,7 +438,6 @@
 		F2935CFE73A520E3C7FB291B /* ThemePickerSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C78C1564ED551570D88E6F8 /* ThemePickerSection.swift */; };
 		F2A66F7B8F3080A37F445F3B /* AllDataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65AB6922A0C2A1F8988874D5 /* AllDataViewModel.swift */; };
 		F2C7945CB07FDA8880723A24 /* ExerciseTypeSummaryRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A40C3070B5E1D41ED6B094 /* ExerciseTypeSummaryRow.swift */; };
-		F3B57B476E74B601CF17B0A6 /* OceanBigWaveShapeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C007E053835551078F3E52 /* OceanBigWaveShapeTests.swift */; };
 		F3CEB88BBF932FF268682790 /* PersonalRecordService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F30B69D94A856E79A1500F /* PersonalRecordService.swift */; };
 		F3FB12A8B3F93C922634CA57 /* WeeklyStatsDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDC73D02792D0DB663F53C6B /* WeeklyStatsDetailViewModel.swift */; };
 		F42E30FE342AC00367440871 /* Date+Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2817FA4B577C2F294054D603 /* Date+Validation.swift */; };
@@ -741,7 +739,6 @@
 		8D9DE93782A81CF5933D7B8A /* WorkoutSummary+Dedup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkoutSummary+Dedup.swift"; sourceTree = "<group>"; };
 		8E399C69153810111462A300 /* InjurySeverity+View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InjurySeverity+View.swift"; sourceTree = "<group>"; };
 		8F4CC3BF3F19F96B2FE0DF1F /* InfoSheetHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoSheetHelpers.swift; sourceTree = "<group>"; };
-		90C007E053835551078F3E52 /* OceanBigWaveShapeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OceanBigWaveShapeTests.swift; sourceTree = "<group>"; };
 		912A60D4E5A7471FABE7BD12 /* ExerciseLibraryQuerying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseLibraryQuerying.swift; sourceTree = "<group>"; };
 		918C8D19BB6651FD5CBEFEE6 /* TrendAnalysisService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendAnalysisService.swift; sourceTree = "<group>"; };
 		92CE04C1590290B3E6A1459D /* ExerciseMixDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseMixDetailView.swift; sourceTree = "<group>"; };
@@ -753,7 +750,6 @@
 		9441173046C70D7C27B512F9 /* ExerciseDefinitionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseDefinitionTests.swift; sourceTree = "<group>"; };
 		9571EAEA2FCFBB9E071CB65A /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
 		95796FA25472146B0B2661AC /* RangeBarChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeBarChartView.swift; sourceTree = "<group>"; };
-		95A87CE0623602E6C2F68452 /* OceanBigWaveShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OceanBigWaveShape.swift; sourceTree = "<group>"; };
 		95D56391A459913CE09C2EB3 /* MuscleBodyShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuscleBodyShape.swift; sourceTree = "<group>"; };
 		969DCB79D2426052AE0D7F77 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		96B1DF514F4B2559414EB657 /* Duration+Formatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Duration+Formatting.swift"; sourceTree = "<group>"; };
@@ -1186,7 +1182,6 @@
 				8F4CC3BF3F19F96B2FE0DF1F /* InfoSheetHelpers.swift */,
 				95D56391A459913CE09C2EB3 /* MuscleBodyShape.swift */,
 				073AB1CEFA78E2ABFBF53785 /* MuscleMapData.swift */,
-				95A87CE0623602E6C2F68452 /* OceanBigWaveShape.swift */,
 				57425EDEE778C96863BDE604 /* OceanWaveBackground.swift */,
 				DC530CCF794C64435C0C5FA7 /* OceanWaveShape.swift */,
 				7A3FC7997E2E3AA8AC4F1091 /* PeriodSwipeModifier.swift */,
@@ -1856,7 +1851,6 @@
 				A06885791FBC1C56C1C866F0 /* MetricDetailViewModelTests.swift */,
 				CB50864805F4D6E860B99E58 /* MuscleMapDetailViewModelTests.swift */,
 				9B2289ED768B51C92A48A699 /* NumberFormattingTests.swift */,
-				90C007E053835551078F3E52 /* OceanBigWaveShapeTests.swift */,
 				E4D11A70794D8B6DA9498B42 /* OceanWaveShapeTests.swift */,
 				A5350D512DD22DCC8FDE5363 /* OneRMEstimationServiceTests.swift */,
 				4934F2F7000086E1F923FD77 /* OpenMeteoServiceTests.swift */,
@@ -2321,7 +2315,6 @@
 				232D67D166F5F6F8E70B6C63 /* MuscleMapDetailView.swift in Sources */,
 				F00068720A9E11F22210A50A /* MuscleMapDetailViewModel.swift in Sources */,
 				605B2E840CC2F882591BDB6B /* MuscleRecoveryMapView.swift in Sources */,
-				39FC50293993D526EA8201F3 /* OceanBigWaveShape.swift in Sources */,
 				935CA6BCCA49AB6B58FD2F41 /* OceanWaveBackground.swift in Sources */,
 				14695EE692906BE7C60BFBFB /* OceanWaveShape.swift in Sources */,
 				30C9CACE3020851853412E78 /* OneRMAnalysisSection.swift in Sources */,
@@ -2550,7 +2543,6 @@
 				ABBF40792A71DFC626A090D1 /* MetricDetailViewModelTests.swift in Sources */,
 				9FE5E83B6D65AF306947F5EE /* MuscleMapDetailViewModelTests.swift in Sources */,
 				4A8EBB81B8A390BA38030F79 /* NumberFormattingTests.swift in Sources */,
-				F3B57B476E74B601CF17B0A6 /* OceanBigWaveShapeTests.swift in Sources */,
 				D3D41D18704ECBA63261B051 /* OceanWaveShapeTests.swift in Sources */,
 				788CDC8786A1A668646B9057 /* OneRMEstimationServiceTests.swift in Sources */,
 				2716E35A4289A4A43374F568 /* OpenMeteoServiceTests.swift in Sources */,
