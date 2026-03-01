@@ -32,8 +32,8 @@ struct WaveSamples {
 }
 
 /// Phase-scaling constants for wave harmonics.
-/// - `envelopeDrift`: Slow drift for low-frequency envelope (breaks periodicity)
-/// - `sharpnessDrift`: Faster drift for high-frequency crest detail
+/// Non-1 multipliers require an extended phase loop in `OceanWaveOverlayView`
+/// to keep animation boundaries seamless.
 private enum HarmonicPhase {
     static let envelopeDrift: CGFloat = 0.3
     static let sharpnessDrift: CGFloat = 1.5
@@ -648,6 +648,16 @@ struct OceanWaveOverlayView: View {
     @State private var phase: CGFloat = 0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
+    /// envelopeDrift(0.3) and sharpnessDrift(1.5) align after 10 turns.
+    private static let phaseLoopTurns: CGFloat = 10
+    private var phaseTarget: CGFloat {
+        let oneTurn: CGFloat = reverseDirection ? -(2 * .pi) : (2 * .pi)
+        return oneTurn * Self.phaseLoopTurns
+    }
+    private var phaseDuration: TimeInterval {
+        driftDuration * TimeInterval(Self.phaseLoopTurns)
+    }
+
     var body: some View {
         ZStack {
             // Fill layer
@@ -708,18 +718,16 @@ struct OceanWaveOverlayView: View {
         .allowsHitTesting(false)
         .task {
             guard !reduceMotion, driftDuration > 0 else { return }
-            let target: CGFloat = reverseDirection ? -(2 * .pi) : (2 * .pi)
-            withAnimation(.linear(duration: driftDuration).repeatForever(autoreverses: false)) {
-                phase = target
+            withAnimation(.linear(duration: phaseDuration).repeatForever(autoreverses: false)) {
+                phase = phaseTarget
             }
         }
         .onAppear {
             guard !reduceMotion, driftDuration > 0 else { return }
             Task { @MainActor in
-                let target: CGFloat = reverseDirection ? -(2 * .pi) : (2 * .pi)
                 phase = 0
-                withAnimation(.linear(duration: driftDuration).repeatForever(autoreverses: false)) {
-                    phase = target
+                withAnimation(.linear(duration: phaseDuration).repeatForever(autoreverses: false)) {
+                    phase = phaseTarget
                 }
             }
         }
