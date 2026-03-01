@@ -132,7 +132,7 @@ struct OceanWaveOverlayView: View {
             }
         }
         .allowsHitTesting(false)
-        .onAppear {
+        .task {
             guard !reduceMotion else { return }
             let target: CGFloat = reverseDirection ? -(2 * .pi) : (2 * .pi)
             withAnimation(.linear(duration: driftDuration).repeatForever(autoreverses: false)) {
