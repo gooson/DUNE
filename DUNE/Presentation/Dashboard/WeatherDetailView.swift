@@ -239,7 +239,7 @@ struct WeatherDetailView: View {
         }
     }
 
-    private func conditionDetailCell(icon: String, label: String, value: String, color: Color) -> some View {
+    private func conditionDetailCell(icon: String, label: LocalizedStringKey, value: String, color: Color) -> some View {
         StandardCard {
             VStack(alignment: .leading, spacing: DS.Spacing.sm) {
                 Image(systemName: icon)
@@ -428,7 +428,7 @@ struct WeatherDetailView: View {
 
     // MARK: - Helpers
 
-    private func sectionHeader(title: String, icon: String) -> some View {
+    private func sectionHeader(title: LocalizedStringKey, icon: String) -> some View {
         HStack(spacing: DS.Spacing.xs) {
             Image(systemName: icon)
                 .font(.subheadline)

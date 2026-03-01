@@ -1,13 +1,19 @@
 import SwiftUI
 
 /// Full-width weather card for the Today tab.
-/// Shows current conditions, temperature, and outdoor fitness badge.
+/// Shows current conditions, temperature, outdoor fitness badge, and optional coaching insight.
 /// Tapping navigates to WeatherDetailView.
 struct WeatherCard: View {
     let snapshot: WeatherSnapshot
+    let weatherInsight: CoachingInsight?
 
     @Environment(\.appTheme) private var theme
     @Environment(\.horizontalSizeClass) private var sizeClass
+
+    init(snapshot: WeatherSnapshot, weatherInsight: CoachingInsight? = nil) {
+        self.snapshot = snapshot
+        self.weatherInsight = weatherInsight
+    }
 
     private var isRegular: Bool { sizeClass == .regular }
 
@@ -15,45 +21,64 @@ struct WeatherCard: View {
         let level = snapshot.outdoorFitnessLevel
 
         InlineCard {
-            HStack(spacing: DS.Spacing.sm) {
-                // Weather icon
-                Image(systemName: snapshot.condition.sfSymbol)
-                    .font(isRegular ? .title2 : .title3)
-                    .foregroundStyle(snapshot.condition.iconColor(for: theme))
-                    .symbolRenderingMode(.multicolor)
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                HStack(spacing: DS.Spacing.sm) {
+                    // Weather icon
+                    Image(systemName: snapshot.condition.sfSymbol)
+                        .font(isRegular ? .title2 : .title3)
+                        .foregroundStyle(snapshot.condition.iconColor(for: theme))
+                        .symbolRenderingMode(.multicolor)
 
-                // Temperature + condition
-                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                    HStack(spacing: DS.Spacing.xs) {
-                        Text(temperatureText)
-                            .font(.title3.weight(.semibold))
-                            .foregroundStyle(theme.accentColor)
-                            .monospacedDigit()
+                    // Temperature + condition
+                    VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                        HStack(spacing: DS.Spacing.xs) {
+                            Text(temperatureText)
+                                .font(.title3.weight(.semibold))
+                                .foregroundStyle(theme.accentColor)
+                                .monospacedDigit()
 
-                        if feelsLikeDiffers {
-                            Text("Feels \(Int(snapshot.feelsLike))°")
-                                .font(.subheadline)
-                                .foregroundStyle(theme.sandColor)
+                            if feelsLikeDiffers {
+                                Text("Feels \(Int(snapshot.feelsLike))°")
+                                    .font(.subheadline)
+                                    .foregroundStyle(theme.sandColor)
+                            }
                         }
+
+                        Text(snapshot.condition.label)
+                            .font(.subheadline)
+                            .foregroundStyle(theme.sandColor)
                     }
 
-                    Text(snapshot.condition.label)
-                        .font(.subheadline)
-                        .foregroundStyle(theme.sandColor)
+                    Spacer()
+
+                    // Outdoor fitness badge
+                    fitnessBadge(level: level)
+
+                    Image(systemName: "chevron.right")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.tertiary)
                 }
 
-                Spacer()
+                // Coaching insight (weather-category only)
+                if let insight = weatherInsight {
+                    Divider().opacity(0.3)
 
-                // Outdoor fitness badge
-                fitnessBadge(level: level)
+                    HStack(alignment: .top, spacing: DS.Spacing.sm) {
+                        Image(systemName: insight.iconName)
+                            .font(.subheadline)
+                            .foregroundStyle(theme.outdoorFitnessColor(for: level))
+                            .frame(width: 20)
 
-                Image(systemName: "chevron.right")
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(.tertiary)
+                        Text(insight.message)
+                            .font(.caption)
+                            .foregroundStyle(DS.Color.textSecondary)
+                            .lineLimit(2)
+                    }
+                }
             }
         }
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("Current weather \(snapshot.condition.label), \(Int(snapshot.temperature)) degrees, \(level.displayName)")
+        .accessibilityLabel(accessibilityDescription(level: level))
     }
 
     // MARK: - Subviews
@@ -79,6 +104,13 @@ struct WeatherCard: View {
 
     private var feelsLikeDiffers: Bool {
         abs(snapshot.temperature - snapshot.feelsLike) >= 3
+    }
+
+    private func accessibilityDescription(level: OutdoorFitnessLevel) -> String {
+        if let insight = weatherInsight {
+            return String(localized: "Current weather \(snapshot.condition.label), \(Int(snapshot.temperature)) degrees, \(level.displayName). \(insight.message)")
+        }
+        return String(localized: "Current weather \(snapshot.condition.label), \(Int(snapshot.temperature)) degrees, \(level.displayName)")
     }
 }
 
@@ -106,7 +138,7 @@ struct WeatherCardPlaceholder: View {
                     .foregroundStyle(.tertiary)
             }
         }
-        .accessibilityLabel("Weather data unavailable")
+        .accessibilityLabel(String(localized: "Weather data unavailable"))
         .onTapGesture {
             onRequestPermission?()
         }
