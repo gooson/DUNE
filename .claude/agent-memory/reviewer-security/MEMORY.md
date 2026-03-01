@@ -25,6 +25,13 @@
 - ExerciseSessionDetailView header calorie display has both lower (> 0) and upper (< 5000) bounds guards
 - calories field passed to ExerciseListItem.calories has no display-time bounds guard — only guarded in ExerciseSessionDetailView, not in UnifiedWorkoutRow compactTrailing/fullTrailing
 
+### Ocean Wave Curl Integration (Commit 8d74326)
+- **P1 Issue**: curlCount parameter lacks upper-bound validation. No max check in init — malicious/extreme curlCount (e.g., 10000) causes excessive array iteration in computeCurlAnchors loop and sorting, potential DoS/hang
+- **P2 Issue**: curlWidth parameter converted to halfWidth without range guards — `Int(curlWidth * CGFloat(count) / 2)` with no min/max on curlWidth input. Negative curlWidth produces negative halfWidth → inverted array indices (startIdx > endIdx)
+- **P1 Issue**: Crest detection loop bounds check insufficient — loop `for i in 2..<(count - 2)` is safe IF count > 4. But if count <= 4 (e.g., very low frequency wave), range is empty and no exception. However, logic assumes samples.points always has 121 items (WaveSamples.sampleCount = 120 + 1 for 0...count), so this is mitigated. No external validation of frequency parameter though.
+- **P2 Issue**: lipIdx calculation `Swift.min(ci + halfWidth * 2 / 3, endIdx)` uses integer division on non-validated halfWidth — if halfWidth is negative (from negative curlWidth), arithmetic is unpredictable
+- **P2 Issue**: curlHeight parameter multiplied unchecked in render pipeline (`curlHeight * amp`). No validation on curlHeight bounds — extreme positive (1e6) or negative (-1e6) values pass through and distort Bezier control points, potential rendering crash
+
 ### Known Gaps (P3 level)
 - WellnessViewModel.formatSleepMinutes() uses Int(minutes) % 60 without guarding minutes >= 0 — negative input (corrupted HealthKit sleep record) produces negative display string like "-1m"
 - VitalsQueryService hrRecoveryRange lower bound is 0.0, not > 0. A 0 bpm HRR sample passes validation and scores as valid data. Physiologically 0 bpm drop = no recovery, arguably a sensor/data error.
