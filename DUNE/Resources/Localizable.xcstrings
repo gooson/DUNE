@@ -3392,36 +3392,50 @@
     "Feels like %@°C" : {
 
     },
-    "Feels like %lld°C — try indoor workouts or early morning/evening sessions. Stay well hydrated." : {
-      "extractionState" : "stale",
+    "Perfect conditions for a run or a walk." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "体感%lld°C — 室内ワークアウトか早朝・夕方のセッションを試しましょう。水分補給を忘れずに。"
+            "value" : "ランニングや散歩に最適な天気です。"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "체감 %lld°C — 실내 운동이나 이른 아침/저녁 운동을 추천합니다. 충분한 수분 섭취를 잊지 마세요."
+            "value" : "러닝이나 산책에 완벽한 조건입니다."
           }
         }
       }
     },
-    "Feels like %lld°C — warm up thoroughly and consider indoor workouts. Cold weather increases the risk of muscle injuries." : {
-      "extractionState" : "stale",
+    "Try indoor workouts or early morning/evening sessions. Stay well hydrated." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "体感%lld°C — 十分にウォーミングアップし、室内ワークアウトを検討しましょう。寒い天気は筋肉の怪我のリスクを高めます。"
+            "value" : "室内ワークアウトか早朝・夕方のセッションを試しましょう。水分補給を忘れずに。"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "체감 %lld°C — 충분한 워밍업 후 실내 운동을 고려하세요. 추운 날씨는 근육 부상 위험을 높입니다."
+            "value" : "실내 운동이나 이른 아침/저녁 운동을 추천합니다. 충분한 수분 섭취를 잊지 마세요."
+          }
+        }
+      }
+    },
+    "Warm up thoroughly and consider indoor workouts. Cold weather increases injury risk." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "十分にウォーミングアップし、室内ワークアウトを検討しましょう。寒い天気は怪我のリスクを高めます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "충분한 워밍업 후 실내 운동을 고려하세요. 추운 날씨는 부상 위험을 높입니다."
           }
         }
       }
@@ -9005,22 +9019,6 @@
     "Weather Data" : {
 
     },
-    "Weather data unavailable" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "天気データなし"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "날씨 데이터 없음"
-          }
-        }
-      }
-    },
     "Weather data is outdated" : {
       "localizations" : {
         "ja" : {
@@ -9050,6 +9048,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "날씨 데이터를 사용할 수 없지만, 실내 운동은 항상 좋은 선택입니다."
+          }
+        }
+      }
+    },
+    "Weather data unavailable" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "天気データなし"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "날씨 데이터 없음"
           }
         }
       }

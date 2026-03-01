@@ -77,26 +77,24 @@ struct CoachingEngine: Sendable {
 
         // P2: Extreme heat (feels like 35°C+)
         if weather.isExtremeHeat {
-            let temp = Int(weather.feelsLike)
             results.append(CoachingInsight(
                 id: "weather-extreme-heat",
                 priority: .high,
                 category: .weather,
                 title: String(localized: "Extreme heat warning"),
-                message: String(localized: "Feels like \(temp)°C — try indoor workouts or early morning/evening sessions. Stay well hydrated."),
+                message: String(localized: "Try indoor workouts or early morning/evening sessions. Stay well hydrated."),
                 iconName: "sun.max.trianglebadge.exclamationmark.fill"
             ))
         }
 
         // P2: Freezing (feels like 0°C or below)
         if weather.isFreezing {
-            let temp = Int(weather.feelsLike)
             results.append(CoachingInsight(
                 id: "weather-freezing",
                 priority: .high,
                 category: .weather,
                 title: String(localized: "Freezing cold warning"),
-                message: String(localized: "Feels like \(temp)°C — warm up thoroughly and consider indoor workouts. Cold weather increases the risk of muscle injuries."),
+                message: String(localized: "Warm up thoroughly and consider indoor workouts. Cold weather increases injury risk."),
                 iconName: "thermometer.snowflake"
             ))
         }
@@ -152,13 +150,12 @@ struct CoachingEngine: Sendable {
 
         // P5: Favorable outdoor weather
         if weather.isFavorableOutdoor, weather.isDaytime, results.isEmpty {
-            let temp = Int(weather.temperature)
             results.append(CoachingInsight(
                 id: "weather-outdoor-favorable",
                 priority: .low,
                 category: .weather,
                 title: String(localized: "Great weather for outdoor exercise"),
-                message: String(localized: "\(temp)°C — perfect conditions for a run or a walk."),
+                message: String(localized: "Perfect conditions for a run or a walk."),
                 iconName: "sun.and.horizon.fill"
             ))
         }
