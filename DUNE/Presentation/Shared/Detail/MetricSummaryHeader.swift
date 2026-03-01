@@ -70,7 +70,7 @@ struct MetricSummaryHeader: View {
             .frame(height: 24)
     }
 
-    private func statItem(label: String, value: String) -> some View {
+    private func statItem(label: LocalizedStringKey, value: String) -> some View {
         let valueFont: Font = sizeClass == .regular ? .subheadline : .caption
         return VStack(spacing: DS.Spacing.xxs) {
             Text(label)
@@ -140,14 +140,16 @@ struct MetricSummaryHeader: View {
     private func comparisonSentence(_ change: Double?) -> some View {
         Group {
             if let change {
-                let direction = change > 0 ? "higher" : "lower"
                 let absChange = abs(change).formattedWithSeparator(fractionDigits: 1)
-                Text("Your average is \(absChange)% \(direction) than last period")
-                    .foregroundStyle(DS.Color.textSecondary)
-                    .transition(.opacity)
+                if change > 0 {
+                    Text("Your average is \(absChange)% higher than last period")
+                } else {
+                    Text("Your average is \(absChange)% lower than last period")
+                }
             }
         }
         .font(.caption)
+        .foregroundStyle(DS.Color.textSecondary)
         .frame(minHeight: 16, alignment: .leading)
     }
 

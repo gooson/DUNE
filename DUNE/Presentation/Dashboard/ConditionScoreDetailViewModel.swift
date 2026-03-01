@@ -205,8 +205,8 @@ final class ConditionScoreDetailViewModel {
         }
         highlights = HighlightBuilder.buildHighlights(
             from: currentValues,
-            highLabel: "Best day",
-            lowLabel: "Lowest day"
+            highLabel: String(localized: "Best day"),
+            lowLabel: String(localized: "Lowest day")
         )
     }
 }
