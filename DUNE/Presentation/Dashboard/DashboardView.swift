@@ -276,10 +276,15 @@ struct DashboardView: View {
     // MARK: - Error States
 
     private var errorSection: some View {
-        EmptyStateView(
+        let message: LocalizedStringKey = if let msg = viewModel.errorMessage {
+            "\(msg)"
+        } else {
+            "An unexpected error occurred."
+        }
+        return EmptyStateView(
             icon: "exclamationmark.triangle",
             title: "Something Went Wrong",
-            message: "\(viewModel.errorMessage ?? String(localized: "An unexpected error occurred."))",
+            message: message,
             actionTitle: "Try Again",
             action: { Task { await viewModel.loadData() } }
         )

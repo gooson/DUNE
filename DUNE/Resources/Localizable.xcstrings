@@ -2347,7 +2347,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ベストタイム"
+            "value" : "最適時間"
           }
         },
         "ko" : {
@@ -7385,6 +7385,22 @@
         }
       }
     },
+    "Keep the session moderate today and focus on consistency." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今日は適度な強度で運動し、継続性を大切にしましょう。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "오늘은 적당한 강도로 운동하고 꾸준함에 집중하세요."
+          }
+        }
+      }
+    },
     "Kettlebell" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -9130,38 +9146,6 @@
         }
       }
     },
-    "No body data" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ボディデータなし"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "신체 데이터 없음"
-          }
-        }
-      }
-    },
-    "No condition data" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "コンディションデータなし"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "컨디션 데이터 없음"
-          }
-        }
-      }
-    },
     "No custom categories yet" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -9339,6 +9323,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "이 기간의 기록이 없어요."
+          }
+        }
+      }
+    },
+    "No score yet. A short workout today helps maintain your weekly goal rhythm." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "まだスコアがありません。今日の短いワークアウトが週間目標のリズム維持に役立ちます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아직 점수가 없어요. 오늘 짧은 운동이 주간 목표 리듬을 유지해 줄 거예요."
           }
         }
       }
@@ -9960,7 +9960,22 @@
         }
       }
     },
-    "PM₂.₅ %@" : {},
+    "PM₂.₅ %lld" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PM₂.₅ %lld"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PM₂.₅ %lld"
+          }
+        }
+      }
+    },
     "PR" : {
       "localizations" : {
         "ja" : {
@@ -10923,6 +10938,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "회복이 시급합니다"
+          }
+        }
+      }
+    },
+    "Recovery is low today. Choose low intensity and prioritize early sleep." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今日は回復が不十分です。低強度で運動し、早めに就寝しましょう。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "오늘은 회복이 부족해요. 낮은 강도로 운동하고 일찍 잠자리에 드세요."
           }
         }
       }
@@ -12286,6 +12317,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "수면이 부족했습니다"
+          }
+        }
+      }
+    },
+    "Sleep was short. Keep today's training easy and protect recovery." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "睡眠が短めでした。今日は軽めのトレーニングで回復を守りましょう。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "수면이 부족했어요. 오늘은 가벼운 운동으로 회복을 지켜주세요."
           }
         }
       }
@@ -15180,6 +15227,22 @@
         }
       }
     },
+    "Weekly goal achieved. Keep the momentum with quality movement." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "週間目標達成！質の高い運動で勢いを維持しましょう。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주간 목표를 달성했어요. 좋은 움직임으로 흐름을 이어가세요."
+          }
+        }
+      }
+    },
     "Weight" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -15866,6 +15929,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "최상의 컨디션입니다"
+          }
+        }
+      }
+    },
+    "You're ready. Complete %lld more active days this week." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "準備万端です。今週あと%lld日アクティブに過ごしましょう。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "준비가 되었어요. 이번 주 %lld일 더 활동해 보세요."
           }
         }
       }

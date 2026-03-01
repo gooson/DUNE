@@ -6,19 +6,26 @@ struct WellnessHeroCard: View {
     let conditionScore: Int?
     let bodyScore: Int?
 
+    private enum Labels {
+        static let wellness = String(localized: "WELLNESS")
+        static let sleep = String(localized: "Sleep")
+        static let condition = String(localized: "Condition")
+        static let body = String(localized: "Body")
+    }
+
     var body: some View {
         if let score {
             HeroScoreCard(
                 score: score.score,
-                scoreLabel: String(localized: "WELLNESS"),
+                scoreLabel: Labels.wellness,
                 statusLabel: score.status.label,
                 statusIcon: score.status.iconName,
                 statusColor: score.status.color,
                 guideMessage: score.guideMessage,
                 subScores: [
-                    .init(label: String(localized: "Sleep"), value: sleepScore, color: DS.Color.sleep),
-                    .init(label: String(localized: "Condition"), value: conditionScore, color: DS.Color.hrv),
-                    .init(label: String(localized: "Body"), value: bodyScore, color: DS.Color.body)
+                    .init(label: Labels.sleep, value: sleepScore, color: DS.Color.sleep),
+                    .init(label: Labels.condition, value: conditionScore, color: DS.Color.hrv),
+                    .init(label: Labels.body, value: bodyScore, color: DS.Color.body)
                 ],
                 badgeText: nil,
                 showsChevron: true,

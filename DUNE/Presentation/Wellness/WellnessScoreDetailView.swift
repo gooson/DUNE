@@ -71,9 +71,9 @@ struct WellnessScoreDetailView: View {
             statusColor: wellnessScore.status.color,
             guideMessage: wellnessScore.guideMessage,
             subScores: [
-                .init(label: String(localized: "Sleep"), value: wellnessScore.sleepScore, color: DS.Color.sleep),
-                .init(label: String(localized: "Condition"), value: wellnessScore.conditionScore, color: DS.Color.hrv),
-                .init(label: String(localized: "Body"), value: wellnessScore.bodyScore, color: DS.Color.body),
+                .init(label: Labels.sleep, value: wellnessScore.sleepScore, color: DS.Color.sleep),
+                .init(label: Labels.condition, value: wellnessScore.conditionScore, color: DS.Color.hrv),
+                .init(label: Labels.body, value: wellnessScore.bodyScore, color: DS.Color.body),
             ]
         )
     }
@@ -117,24 +117,21 @@ struct WellnessScoreDetailView: View {
                 label: "Sleep Quality",
                 weight: "40%",
                 score: wellnessScore.sleepScore,
-                color: DS.Color.sleep,
-                fallbackLabel: String(localized: "No sleep data")
+                color: DS.Color.sleep
             )
 
             weightRow(
                 label: "Condition",
                 weight: "35%",
                 score: wellnessScore.conditionScore,
-                color: DS.Color.hrv,
-                fallbackLabel: String(localized: "No condition data")
+                color: DS.Color.hrv
             )
 
             weightRow(
                 label: "Body Trend",
                 weight: "25%",
                 score: wellnessScore.bodyScore,
-                color: DS.Color.body,
-                fallbackLabel: String(localized: "No body data")
+                color: DS.Color.body
             )
         }
         .padding(DS.Spacing.md)
@@ -145,8 +142,7 @@ struct WellnessScoreDetailView: View {
         label: LocalizedStringKey,
         weight: String,
         score: Int?,
-        color: Color,
-        fallbackLabel: String
+        color: Color
     ) -> some View {
         HStack {
             Text(label)
@@ -224,5 +220,13 @@ struct WellnessScoreDetailView: View {
                 .foregroundStyle(DS.Color.textSecondary)
                 .fixedSize(horizontal: false, vertical: true)
         }
+    }
+
+    // MARK: - Constants
+
+    private enum Labels {
+        static let sleep = String(localized: "Sleep")
+        static let condition = String(localized: "Condition")
+        static let body = String(localized: "Body")
     }
 }

@@ -921,22 +921,22 @@ final class DashboardViewModel {
         if let score = conditionScore {
             switch score.status {
             case .warning, .tired:
-                return "Recovery is low today. Choose low intensity and prioritize early sleep."
+                return String(localized: "Recovery is low today. Choose low intensity and prioritize early sleep.")
             case .fair:
                 if let sleepMinutes, sleepMinutes < 360 {
-                    return "Sleep was short. Keep today's training easy and protect recovery."
+                    return String(localized: "Sleep was short. Keep today's training easy and protect recovery.")
                 }
-                return "Keep the session moderate today and focus on consistency."
+                return String(localized: "Keep the session moderate today and focus on consistency.")
             case .good, .excellent:
                 if remainingDays > 0 {
-                    return "You're ready. Complete \(remainingDays) more active day\(remainingDays == 1 ? "" : "s") this week."
+                    return String(localized: "You're ready. Complete \(remainingDays) more active days this week.")
                 }
-                return "Weekly goal achieved. Keep the momentum with quality movement."
+                return String(localized: "Weekly goal achieved. Keep the momentum with quality movement.")
             }
         }
 
         if remainingDays > 0 {
-            return "No score yet. A short workout today helps maintain your weekly goal rhythm."
+            return String(localized: "No score yet. A short workout today helps maintain your weekly goal rhythm.")
         }
         return String(localized: "No score yet. Keep your routine steady and collect more recovery data.")
     }
