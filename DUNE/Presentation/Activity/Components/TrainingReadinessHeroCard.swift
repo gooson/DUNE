@@ -4,21 +4,29 @@ struct TrainingReadinessHeroCard: View {
     let readiness: TrainingReadiness?
     let isCalibrating: Bool
 
+    private enum Labels {
+        static let scoreLabel = String(localized: "READINESS")
+        static let hrv = String(localized: "HRV")
+        static let sleep = String(localized: "Sleep")
+        static let recovery = String(localized: "Recovery")
+        static let calibrating = String(localized: "Calibrating")
+    }
+
     var body: some View {
         if let readiness {
             HeroScoreCard(
                 score: readiness.score,
-                scoreLabel: String(localized: "READINESS"),
+                scoreLabel: Labels.scoreLabel,
                 statusLabel: readiness.status.label,
                 statusIcon: readiness.status.iconName,
                 statusColor: readiness.status.color,
                 guideMessage: readiness.status.guideMessage,
                 subScores: [
-                    .init(label: String(localized: "HRV"), value: readiness.components.hrvScore, color: DS.Color.hrv),
-                    .init(label: String(localized: "Sleep"), value: readiness.components.sleepScore, color: DS.Color.sleep),
-                    .init(label: String(localized: "Recovery"), value: readiness.components.fatigueScore, color: DS.Color.activity)
+                    .init(label: Labels.hrv, value: readiness.components.hrvScore, color: DS.Color.hrv),
+                    .init(label: Labels.sleep, value: readiness.components.sleepScore, color: DS.Color.sleep),
+                    .init(label: Labels.recovery, value: readiness.components.fatigueScore, color: DS.Color.activity)
                 ],
-                badgeText: isCalibrating ? String(localized: "Calibrating") : nil,
+                badgeText: isCalibrating ? Labels.calibrating : nil,
                 showsChevron: false,
                 accessibilityLabel: String(localized: "Training readiness \(readiness.score), \(readiness.status.label)"),
                 accessibilityHint: nil
