@@ -284,8 +284,8 @@ extension AppTheme {
 extension AppTheme {
     var displayName: String {
         switch self {
-        case .desertWarm: "Desert Warm"
-        case .oceanCool:  "Ocean Cool"
+        case .desertWarm: String(localized: "Desert Warm")
+        case .oceanCool:  String(localized: "Ocean Cool")
         }
     }
 }

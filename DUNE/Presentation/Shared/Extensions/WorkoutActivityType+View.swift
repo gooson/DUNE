@@ -13,7 +13,7 @@ extension WorkoutActivityType {
         case .yoga: String(localized: "Yoga")
         case .traditionalStrengthTraining: String(localized: "Weight Training")
         case .functionalStrengthTraining: String(localized: "Functional Strength")
-        case .highIntensityIntervalTraining: "HIIT"
+        case .highIntensityIntervalTraining: String(localized: "HIIT")
         case .elliptical: String(localized: "Elliptical")
         case .rowing: String(localized: "Rowing")
         case .coreTraining: String(localized: "Core Training")
