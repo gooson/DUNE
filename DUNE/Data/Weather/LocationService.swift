@@ -11,6 +11,7 @@ final class LocationService: NSObject, CLLocationManagerDelegate, Sendable {
     private(set) var currentLocation: CLLocation?
     private(set) var authorizationStatus: CLAuthorizationStatus = .notDetermined
     private var locationContinuation: CheckedContinuation<CLLocation, any Error>?
+    private var geocodeCache: (location: CLLocation, name: String?, cachedAt: Date)?
 
     override init() {
         super.init()
@@ -64,13 +65,23 @@ final class LocationService: NSObject, CLLocationManagerDelegate, Sendable {
     // MARK: - Reverse Geocoding
 
     /// Reverse-geocodes the given location into a locale-aware place name (e.g. "Gangnam-gu, Seoul").
+    /// Returns cached result if location is within 1km and cache is fresh (< 60min).
     /// Returns nil on failure — callers should treat location name as optional.
     func reverseGeocode(_ location: CLLocation) async -> String? {
+        if let cache = geocodeCache,
+           cache.location.distance(from: location) < 1000,
+           Date().timeIntervalSince(cache.cachedAt) < 60 * 60 {
+            return cache.name
+        }
+
         let geocoder = CLGeocoder()
         do {
             let placemarks = try await geocoder.reverseGeocodeLocation(location)
-            guard let place = placemarks.first else { return nil }
-            return Self.formatPlaceName(subLocality: place.subLocality, locality: place.locality)
+            let name = placemarks.first.flatMap {
+                Self.formatPlaceName(subLocality: $0.subLocality, locality: $0.locality)
+            }
+            geocodeCache = (location: location, name: name, cachedAt: Date())
+            return name
         } catch {
             return nil
         }
@@ -78,7 +89,7 @@ final class LocationService: NSObject, CLLocationManagerDelegate, Sendable {
 
     /// Formats place components into "subLocality, locality" (e.g. "Gangnam-gu, Seoul").
     /// Falls back to locality-only if subLocality is unavailable.
-    static func formatPlaceName(subLocality: String?, locality: String?) -> String? {
+    nonisolated static func formatPlaceName(subLocality: String?, locality: String?) -> String? {
         let parts = [subLocality, locality].compactMap { $0 }
         guard !parts.isEmpty else { return nil }
         return parts.joined(separator: ", ")

@@ -3,7 +3,6 @@ import Testing
 @testable import DUNE
 
 @Suite("LocationService Place Name Formatting")
-@MainActor
 struct LocationServiceTests {
 
     @Test("formats subLocality and locality")
