@@ -8,6 +8,7 @@ struct AppThemeTests {
     func rawValuesStable() {
         #expect(AppTheme.desertWarm.rawValue == "desertWarm")
         #expect(AppTheme.oceanCool.rawValue == "oceanCool")
+        #expect(AppTheme.forestGreen.rawValue == "forestGreen")
     }
 
     @Test("Codable round-trip preserves identity")
@@ -19,11 +20,12 @@ struct AppThemeTests {
         }
     }
 
-    @Test("CaseIterable includes both themes")
+    @Test("CaseIterable includes all themes")
     func allCases() {
-        #expect(AppTheme.allCases.count == 2)
+        #expect(AppTheme.allCases.count == 3)
         #expect(AppTheme.allCases.contains(.desertWarm))
         #expect(AppTheme.allCases.contains(.oceanCool))
+        #expect(AppTheme.allCases.contains(.forestGreen))
     }
 
     @Test("Init from unknown rawValue returns nil")
