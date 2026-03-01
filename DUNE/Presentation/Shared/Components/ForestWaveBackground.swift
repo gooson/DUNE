@@ -1,4 +1,119 @@
 import SwiftUI
+import UIKit
+
+// MARK: - Forest Wave-Specific Colors (File-Private)
+
+/// Forest wave layer colors are only consumed by forest backgrounds.
+/// Kept file-private to avoid polluting the shared AppTheme extension.
+private extension AppTheme {
+    var forestDeepColor: Color { Color("ForestDeep") }
+    var forestMidColor: Color { Color("ForestMid") }
+    var forestMistColor: Color { Color("ForestMist") }
+}
+
+// MARK: - Forest Wave Overlay View
+
+/// Single animated forest silhouette layer with bokashi gradient and optional grain.
+struct ForestWaveOverlayView: View {
+    var color: Color
+    var opacity: Double = 0.10
+    var amplitude: CGFloat = 0.05
+    var frequency: CGFloat = 1.5
+    var verticalOffset: CGFloat = 0.5
+    var bottomFade: CGFloat = 0.4
+    var ruggedness: CGFloat = 0.3
+    var treeDensity: CGFloat = 0.0
+    var driftDuration: Double = 8
+    var showGrain: Bool = false
+
+    @State private var phase: CGFloat = 0
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    var body: some View {
+        ZStack {
+            ForestSilhouetteShape(
+                amplitude: amplitude,
+                frequency: frequency,
+                phase: phase,
+                verticalOffset: verticalOffset,
+                ruggedness: ruggedness,
+                treeDensity: treeDensity
+            )
+            .fill(color.opacity(opacity))
+            .mask {
+                if bottomFade > 0 {
+                    LinearGradient(
+                        stops: [
+                            .init(color: .white, location: 0),
+                            .init(color: .white, location: 1.0 - bottomFade),
+                            .init(color: .white.opacity(0), location: 1.0)
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                } else {
+                    Rectangle()
+                }
+            }
+
+            if showGrain {
+                UkiyoeGrainView(opacity: 0.04)
+            }
+        }
+        .allowsHitTesting(false)
+        .task {
+            guard !reduceMotion else { return }
+            withAnimation(.linear(duration: driftDuration).repeatForever(autoreverses: false)) {
+                phase = 2 * .pi
+            }
+        }
+    }
+}
+
+// MARK: - Ukiyo-e Grain Overlay
+
+/// Procedural wood-grain noise overlay pre-rendered to a UIImage.
+/// Simulates ukiyo-e woodblock print texture.
+/// Rendered once as a static constant — zero per-frame computation.
+private struct UkiyoeGrainView: View {
+    let opacity: Double
+
+    /// Pre-rendered grain texture. Computed once at first access.
+    /// Deterministic pseudo-random noise: product of three incommensurate sines.
+    private static let grainImage: UIImage = {
+        let size = CGSize(width: 390, height: 200)
+        let step: CGFloat = 3
+        let cols = Int(size.width / step)
+        let rows = Int(size.height / step)
+
+        let renderer = UIGraphicsImageRenderer(size: size)
+        return renderer.image { ctx in
+            let cgContext = ctx.cgContext
+            for row in 0..<rows {
+                for col in 0..<cols {
+                    let seed = Double(row * 997 + col * 131)
+                    let noise = sin(seed * 0.1) * sin(seed * 0.073) * sin(seed * 0.031)
+                    let alpha = abs(noise) * 0.15
+                    cgContext.setFillColor(UIColor.black.withAlphaComponent(alpha).cgColor)
+                    cgContext.fill(CGRect(
+                        x: CGFloat(col) * step,
+                        y: CGFloat(row) * step,
+                        width: step,
+                        height: step
+                    ))
+                }
+            }
+        }
+    }()
+
+    var body: some View {
+        Image(uiImage: Self.grainImage)
+            .resizable()
+            .interpolation(.none)
+            .opacity(opacity)
+            .allowsHitTesting(false)
+    }
+}
 
 // MARK: - Forest Tab Background
 

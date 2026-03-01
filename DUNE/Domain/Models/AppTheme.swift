@@ -5,7 +5,7 @@ import Foundation
 /// Persisted via `UserDefaults` with key ``UserDefaultsKey/appTheme``.
 /// Propagated to the view hierarchy via `\.appTheme` environment value.
 enum AppTheme: String, CaseIterable, Codable, Sendable {
-    case desertWarm
-    case oceanCool
-    case forestGreen
+    case desertWarm  = "desertWarm"
+    case oceanCool   = "oceanCool"
+    case forestGreen = "forestGreen"
 }

@@ -135,22 +135,6 @@ extension AppTheme {
     var oceanMistColor: Color { Color("OceanMist") }
 }
 
-// MARK: - Forest Wave-Specific Colors
-
-extension AppTheme {
-    /// Foreground forest layer (darkest green).
-    var forestDeepColor: Color { Color("ForestDeep") }
-
-    /// Middle forest layer.
-    var forestMidColor: Color { Color("ForestMid") }
-
-    /// Distant misty mountains.
-    var forestMistColor: Color { Color("ForestMist") }
-
-    /// Light/highlight (ukiyo-e paper cream).
-    var forestFoamColor: Color { Color("ForestFoam") }
-}
-
 // MARK: - Score Colors
 
 extension AppTheme {

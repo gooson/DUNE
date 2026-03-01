@@ -43,29 +43,6 @@ struct HeroScoreCard: View {
         static let ringLineWidthCompact: CGFloat = 12
         static let subScoreBarWidthRegular: CGFloat = 48
         static let subScoreBarWidthCompact: CGFloat = 36
-        // Correction #83 — cached gradients for score text (per-theme)
-        static let desertScoreGradient = LinearGradient(
-            colors: [DS.Color.desertBronze, DS.Color.desertDusk],
-            startPoint: .top,
-            endPoint: .bottom
-        )
-        static let oceanScoreGradient = LinearGradient(
-            colors: [Color("OceanBronze"), Color("OceanDusk")],
-            startPoint: .top,
-            endPoint: .bottom
-        )
-        static let forestScoreGradient = LinearGradient(
-            colors: [Color("ForestBronze"), Color("ForestDusk")],
-            startPoint: .top,
-            endPoint: .bottom
-        )
-        static func scoreGradient(for theme: AppTheme) -> LinearGradient {
-            switch theme {
-            case .desertWarm:  desertScoreGradient
-            case .oceanCool:   oceanScoreGradient
-            case .forestGreen: forestScoreGradient
-            }
-        }
     }
 
     private var ringSize: CGFloat { isRegular ? Layout.ringSizeRegular : Layout.ringSizeCompact }
@@ -129,7 +106,7 @@ struct HeroScoreCard: View {
             VStack(spacing: 2) {
                 Text("\(animatedScore)")
                     .font(DS.Typography.heroScore)
-                    .foregroundStyle(Layout.scoreGradient(for: theme))
+                    .foregroundStyle(theme.detailScoreGradient)
                     .contentTransition(.numericText())
 
                 Text(scoreLabel)
