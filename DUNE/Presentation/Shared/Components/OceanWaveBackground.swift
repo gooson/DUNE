@@ -28,9 +28,13 @@ struct OceanTabWaveBackground: View {
         }
     }
 
-    /// Big wave excluded from .life (lake-like stillness).
-    private var showBigWave: Bool {
-        preset == .train || preset == .today || preset == .wellness
+    /// Curl count: big wave crests on surface layer.
+    /// Excluded from .life (lake-like stillness).
+    private var curlCount: Int {
+        switch preset {
+        case .train, .today, .wellness: 1
+        case .life: 0
+        }
     }
 
     var body: some View {
@@ -85,7 +89,7 @@ struct OceanTabWaveBackground: View {
             )
             .frame(height: 200)
 
-            // Layer 3: Surface (front, fastest, most visible)
+            // Layer 3: Surface (front, fastest, most visible, with curl crests)
             OceanWaveOverlayView(
                 color: theme.oceanSurfaceColor,
                 opacity: 0.15 * scale,
@@ -107,23 +111,12 @@ struct OceanTabWaveBackground: View {
                     color: theme.oceanFoamColor,
                     opacity: 0.25 * scale,
                     depth: 0.03
-                )
+                ),
+                curlCount: curlCount,
+                curlHeight: 1.8 * scale,
+                curlWidth: 0.12
             )
             .frame(height: 200)
-
-            // Layer 4: Big curling wave accent
-            if showBigWave {
-                OceanBigWaveOverlayView(
-                    color: theme.oceanSurfaceColor,
-                    foamColor: theme.oceanFoamColor,
-                    opacity: 0.12 * scale,
-                    foamOpacity: 0.35 * scale,
-                    foamWidth: 1.5,
-                    mirror: true,
-                    swayDuration: 12
-                )
-                .frame(height: 200)
-            }
 
             // Background gradient
             LinearGradient(
