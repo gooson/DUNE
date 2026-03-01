@@ -3,11 +3,11 @@ import SwiftUI
 extension WellnessScore.Status {
     var label: String {
         switch self {
-        case .excellent: "Excellent"
-        case .good:      "Good"
-        case .fair:      "Fair"
-        case .tired:     "Tired"
-        case .warning:   "Warning"
+        case .excellent: String(localized: "Excellent")
+        case .good:      String(localized: "Good")
+        case .fair:      String(localized: "Fair")
+        case .tired:     String(localized: "Tired")
+        case .warning:   String(localized: "Warning")
         }
     }
 

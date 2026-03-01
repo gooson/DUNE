@@ -23,7 +23,7 @@ struct InjuryWarningBanner: View {
                             .fill(conflict.severity.color)
                             .frame(width: 6, height: 6)
 
-                        Text(conflict.injury.bodyPart.bilingualDisplayName)
+                        Text(conflict.injury.bodyPart.displayName)
                             .font(.caption.weight(.medium))
 
                         if !conflict.conflictingMuscles.isEmpty {

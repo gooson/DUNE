@@ -99,13 +99,13 @@ final class LifeViewModel {
             clampedValue = 1.0
         case .duration:
             guard value > 0, value <= maxGoalValue else {
-                validationError = "Duration must be between 1 and \(Int(maxGoalValue)) minutes"
+                validationError = String(localized: "Duration must be between 1 and \(Int(maxGoalValue)) minutes")
                 return nil
             }
             clampedValue = value
         case .count:
             guard value > 0, value <= maxCountGoal else {
-                validationError = "Count must be between 1 and \(Int(maxCountGoal))"
+                validationError = String(localized: "Count must be between 1 and \(Int(maxCountGoal))")
                 return nil
             }
             clampedValue = value
@@ -238,7 +238,7 @@ final class LifeViewModel {
 
         let trimmedName = name.trimmingCharacters(in: .whitespaces)
         guard !trimmedName.isEmpty else {
-            validationError = "Habit name is required"
+            validationError = String(localized: "Habit name is required")
             return nil
         }
 
@@ -251,22 +251,22 @@ final class LifeViewModel {
         case .duration:
             let trimmedGoal = goalValue.trimmingCharacters(in: .whitespaces)
             guard !trimmedGoal.isEmpty, let value = Double(trimmedGoal) else {
-                validationError = "Please enter a valid duration"
+                validationError = String(localized: "Please enter a valid duration")
                 return nil
             }
             guard value > 0, value <= maxGoalValue else {
-                validationError = "Duration must be between 1 and \(Int(maxGoalValue)) minutes"
+                validationError = String(localized: "Duration must be between 1 and \(Int(maxGoalValue)) minutes")
                 return nil
             }
             parsedGoal = value
         case .count:
             let trimmedGoal = goalValue.trimmingCharacters(in: .whitespaces)
             guard !trimmedGoal.isEmpty, let value = Double(trimmedGoal) else {
-                validationError = "Please enter a valid count"
+                validationError = String(localized: "Please enter a valid count")
                 return nil
             }
             guard value > 0, value <= maxCountGoal else {
-                validationError = "Count must be between 1 and \(Int(maxCountGoal))"
+                validationError = String(localized: "Count must be between 1 and \(Int(maxCountGoal))")
                 return nil
             }
             parsedGoal = value

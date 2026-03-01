@@ -31,7 +31,7 @@ struct FatigueAlgorithmSheet: View {
                 .font(.title3)
                 .foregroundStyle(DS.Color.activity)
             VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                Text("피로도 계산 방법")
+                Text("Fatigue Calculation")
                     .font(.headline)
                 Text("Compound Fatigue Score")
                     .font(.caption)
@@ -45,8 +45,8 @@ struct FatigueAlgorithmSheet: View {
 
     private var overviewSection: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            sectionHeader(icon: "lightbulb.fill", title: "개요")
-            Text("최근 14일간의 운동 기록을 분석하여 각 근육의 피로 누적을 10단계로 평가합니다. 운동의 강도, 빈도, 경과 시간, 수면 질, 생체 신호를 종합적으로 반영합니다.")
+            sectionHeader(icon: "lightbulb.fill", title: "Overview")
+            Text("Analyzes the last 14 days of workout data to assess accumulated fatigue for each muscle on a 10-level scale. Factors in intensity, frequency, elapsed time, sleep quality, and biometrics.")
                 .font(.caption)
                 .foregroundStyle(DS.Color.textSecondary)
         }
@@ -56,13 +56,13 @@ struct FatigueAlgorithmSheet: View {
 
     private var decayModelSection: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            sectionHeader(icon: "chart.line.downtrend.xyaxis", title: "지수 감쇠 모델")
+            sectionHeader(icon: "chart.line.downtrend.xyaxis", title: "Exponential Decay Model")
 
             VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-                formulaRow("피로 = Σ (운동 부하 × e^(-경과시간/τ))")
-                bulletPoint("최근 운동일수록 피로 기여도가 높음")
-                bulletPoint("시간이 지나면 자연스럽게 감소 (지수 감쇠)")
-                bulletPoint("τ(타우): 근육 크기별 회복 속도 (대근육 72h, 소근육 36h)")
+                formulaRow("Fatigue = Σ (Load × e^(-elapsed/τ))")
+                bulletPoint("More recent workouts contribute more to fatigue")
+                bulletPoint("Naturally decreases over time (exponential decay)")
+                bulletPoint("τ (tau): Recovery rate by muscle size (large 72h, small 36h)")
             }
         }
     }
@@ -71,14 +71,14 @@ struct FatigueAlgorithmSheet: View {
 
     private var sleepSection: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            sectionHeader(icon: "moon.fill", title: "수면 보정")
+            sectionHeader(icon: "moon.fill", title: "Sleep Adjustment")
 
             VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-                bulletPoint("수면 시간 7-9시간 기준으로 회복 속도 조절")
-                bulletPoint("깊은 수면·REM 비율이 높으면 회복 촉진")
-                bulletPoint("수면 부족 시 피로 감소가 느려짐 (τ 증가)")
-                modifierExampleRow(label: "충분한 수면", value: "×1.15", color: .green)
-                modifierExampleRow(label: "수면 부족", value: "×0.70", color: .orange)
+                bulletPoint("Recovery rate adjusted based on 7–9 hours of sleep")
+                bulletPoint("Higher deep sleep & REM ratio promotes faster recovery")
+                bulletPoint("Sleep deficit slows fatigue recovery (τ increases)")
+                modifierExampleRow(label: "Sufficient sleep", value: "×1.15", color: .green)
+                modifierExampleRow(label: "Sleep deficit", value: "×0.70", color: .orange)
             }
         }
     }
@@ -87,14 +87,14 @@ struct FatigueAlgorithmSheet: View {
 
     private var readinessSection: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            sectionHeader(icon: "heart.fill", title: "생체 보정 (HRV / RHR)")
+            sectionHeader(icon: "heart.fill", title: "Bio Adjustment (HRV / RHR)")
 
             VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-                bulletPoint("HRV(심박변이도) z-score로 자율신경 상태 평가")
-                bulletPoint("RHR(안정시심박수) 상승은 피로/스트레스 신호")
-                bulletPoint("두 지표를 결합하여 회복 속도 보정")
-                modifierExampleRow(label: "HRV 양호", value: "×1.10", color: .green)
-                modifierExampleRow(label: "RHR 상승", value: "×0.85", color: .orange)
+                bulletPoint("HRV z-score evaluates autonomic nervous system state")
+                bulletPoint("Elevated RHR signals fatigue or stress")
+                bulletPoint("Both metrics are combined to adjust recovery rate")
+                modifierExampleRow(label: "Good HRV", value: "×1.10", color: .green)
+                modifierExampleRow(label: "Elevated RHR", value: "×0.85", color: .orange)
             }
         }
     }
@@ -103,19 +103,19 @@ struct FatigueAlgorithmSheet: View {
 
     private var levelExplanationSection: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            sectionHeader(icon: "flame.fill", title: "10단계 피로 레벨")
+            sectionHeader(icon: "flame.fill", title: "10-Level Fatigue Scale")
 
             VStack(spacing: DS.Spacing.xs) {
-                levelRow(.fullyRecovered, description: "완전히 회복됨, 최고 강도 훈련 가능")
-                levelRow(.wellRested, description: "충분히 회복됨, 고강도 훈련 가능")
-                levelRow(.lightFatigue, description: "약간의 피로, 일반 훈련 가능")
-                levelRow(.mildFatigue, description: "경미한 피로, 중강도 훈련 권장")
-                levelRow(.moderateFatigue, description: "보통 피로, 가벼운 훈련 권장")
-                levelRow(.notableFatigue, description: "뚜렷한 피로, 경량 훈련 또는 휴식")
-                levelRow(.highFatigue, description: "높은 피로, 적극적 회복 권장")
-                levelRow(.veryHighFatigue, description: "매우 높은 피로, 휴식 필요")
-                levelRow(.extremeFatigue, description: "극심한 피로, 반드시 휴식")
-                levelRow(.overtrained, description: "과훈련 상태, 회복에 집중")
+                levelRow(.fullyRecovered, description: "Fully recovered, max intensity training possible")
+                levelRow(.wellRested, description: "Well rested, high-intensity training possible")
+                levelRow(.lightFatigue, description: "Light fatigue, normal training possible")
+                levelRow(.mildFatigue, description: "Mild fatigue, moderate training recommended")
+                levelRow(.moderateFatigue, description: "Moderate fatigue, light training recommended")
+                levelRow(.notableFatigue, description: "Notable fatigue, light training or rest")
+                levelRow(.highFatigue, description: "High fatigue, active recovery recommended")
+                levelRow(.veryHighFatigue, description: "Very high fatigue, rest needed")
+                levelRow(.extremeFatigue, description: "Extreme fatigue, rest is essential")
+                levelRow(.overtrained, description: "Overtrained, focus on recovery")
             }
         }
     }

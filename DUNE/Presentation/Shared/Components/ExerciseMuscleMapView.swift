@@ -11,8 +11,8 @@ struct ExerciseMuscleMapView: View {
 
     var body: some View {
         HStack(spacing: DS.Spacing.md) {
-            bodyView(isFront: true, label: "전면")
-            bodyView(isFront: false, label: "후면")
+            bodyView(isFront: true, label: "Front")
+            bodyView(isFront: false, label: "Back")
         }
         .frame(height: 170)
     }

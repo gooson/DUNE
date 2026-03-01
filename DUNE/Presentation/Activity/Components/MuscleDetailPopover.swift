@@ -49,9 +49,6 @@ struct MuscleDetailPopover: View {
                 VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                     Text(muscle.displayName)
                         .font(.headline)
-                    Text(muscle.localizedDisplayName)
-                        .font(.caption)
-                        .foregroundStyle(DS.Color.textSecondary)
                 }
 
                 Spacer()
@@ -70,7 +67,7 @@ struct MuscleDetailPopover: View {
                         HStack(spacing: DS.Spacing.xxs) {
                             Image(systemName: "info.circle")
                                 .font(.caption)
-                            Text("계산 방법 보기")
+                            Text("View Calculation")
                                 .font(.caption)
                         }
                         .foregroundStyle(DS.Color.activity)

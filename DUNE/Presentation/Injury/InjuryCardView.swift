@@ -20,7 +20,7 @@ struct InjuryCardView: View {
 
                 VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                     HStack(spacing: DS.Spacing.xs) {
-                        Text(record.bodyPart.bilingualDisplayName)
+                        Text(record.bodyPart.displayName)
                             .font(.subheadline.weight(.semibold))
                         if let side = record.bodySide {
                             Text("(\(side.abbreviation))")
@@ -30,7 +30,7 @@ struct InjuryCardView: View {
                     }
 
                     HStack(spacing: DS.Spacing.xs) {
-                        Text(record.severity.localizedDisplayName)
+                        Text(record.severity.displayName)
                             .font(.caption2.weight(.medium))
                             .padding(.horizontal, DS.Spacing.sm)
                             .padding(.vertical, DS.Spacing.xxs)

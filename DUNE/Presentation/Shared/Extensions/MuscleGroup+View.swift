@@ -3,37 +3,19 @@ import SwiftUI
 extension MuscleGroup {
     var displayName: String {
         switch self {
-        case .chest: "Chest"
-        case .back: "Back"
-        case .shoulders: "Shoulders"
-        case .biceps: "Biceps"
-        case .triceps: "Triceps"
-        case .quadriceps: "Quads"
-        case .hamstrings: "Hamstrings"
-        case .glutes: "Glutes"
-        case .calves: "Calves"
-        case .core: "Core"
-        case .forearms: "Forearms"
-        case .traps: "Traps"
-        case .lats: "Lats"
-        }
-    }
-
-    var localizedDisplayName: String {
-        switch self {
-        case .chest: "가슴"
-        case .back: "등"
-        case .shoulders: "어깨"
-        case .biceps: "이두"
-        case .triceps: "삼두"
-        case .quadriceps: "대퇴사두"
-        case .hamstrings: "햄스트링"
-        case .glutes: "둔근"
-        case .calves: "종아리"
-        case .core: "코어"
-        case .forearms: "전완"
-        case .traps: "승모"
-        case .lats: "광배"
+        case .chest: String(localized: "Chest")
+        case .back: String(localized: "Back")
+        case .shoulders: String(localized: "Shoulders")
+        case .biceps: String(localized: "Biceps")
+        case .triceps: String(localized: "Triceps")
+        case .quadriceps: String(localized: "Quads")
+        case .hamstrings: String(localized: "Hamstrings")
+        case .glutes: String(localized: "Glutes")
+        case .calves: String(localized: "Calves")
+        case .core: String(localized: "Core")
+        case .forearms: String(localized: "Forearms")
+        case .traps: String(localized: "Traps")
+        case .lats: String(localized: "Lats")
         }
     }
 

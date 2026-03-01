@@ -63,7 +63,7 @@ struct BodyHistoryDetailView: View {
                                 viewModel.editingRecord = nil
                             }
                         } catch {
-                            viewModel.validationError = "Failed to save record changes. Please try again."
+                            viewModel.validationError = String(localized: "Failed to save record changes. Please try again.")
                         }
                     }
                 )

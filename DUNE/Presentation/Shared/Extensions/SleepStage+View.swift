@@ -3,11 +3,11 @@ import SwiftUI
 extension SleepStage.Stage {
     var label: String {
         switch self {
-        case .awake: "Awake"
-        case .core: "Core"
-        case .deep: "Deep"
+        case .awake: String(localized: "Awake")
+        case .core: String(localized: "Core")
+        case .deep: String(localized: "Deep")
         case .rem: "REM"
-        case .unspecified: "Asleep"
+        case .unspecified: String(localized: "Asleep")
         }
     }
 

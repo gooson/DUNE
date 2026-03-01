@@ -2,91 +2,91 @@ import SwiftUI
 
 extension WorkoutActivityType {
 
-    /// Korean display name for the activity type.
+    /// Localized display name for the activity type.
     var displayName: String {
         switch self {
-        case .running: "러닝"
-        case .walking: "걷기"
-        case .cycling: "사이클링"
-        case .swimming: "수영"
-        case .hiking: "하이킹"
-        case .yoga: "요가"
-        case .traditionalStrengthTraining: "웨이트 트레이닝"
-        case .functionalStrengthTraining: "기능성 근력"
+        case .running: String(localized: "Running")
+        case .walking: String(localized: "Walking")
+        case .cycling: String(localized: "Cycling")
+        case .swimming: String(localized: "Swimming")
+        case .hiking: String(localized: "Hiking")
+        case .yoga: String(localized: "Yoga")
+        case .traditionalStrengthTraining: String(localized: "Weight Training")
+        case .functionalStrengthTraining: String(localized: "Functional Strength")
         case .highIntensityIntervalTraining: "HIIT"
-        case .elliptical: "일립티컬"
-        case .rowing: "로잉"
-        case .coreTraining: "코어"
-        case .flexibility: "유연성"
-        case .socialDance: "소셜 댄스"
-        case .cardioDance: "카디오 댄스"
-        case .pilates: "필라테스"
-        case .boxing: "복싱"
-        case .martialArts: "무술"
-        case .wrestling: "레슬링"
-        case .kickboxing: "킥복싱"
-        case .fencing: "펜싱"
-        case .basketball: "농구"
-        case .soccer: "축구"
-        case .tennis: "테니스"
-        case .badminton: "배드민턴"
-        case .tableTennis: "탁구"
-        case .volleyball: "배구"
-        case .baseball: "야구"
-        case .softball: "소프트볼"
-        case .americanFootball: "미식축구"
-        case .rugby: "럭비"
-        case .hockey: "하키"
-        case .lacrosse: "라크로스"
-        case .cricket: "크리켓"
-        case .handball: "핸드볼"
-        case .racquetball: "라켓볼"
-        case .squash: "스쿼시"
-        case .pickleball: "피클볼"
-        case .bowling: "볼링"
-        case .golf: "골프"
-        case .discSports: "디스크"
-        case .australianFootball: "호주식 축구"
-        case .gymnastics: "체조"
-        case .paddleSports: "패들 스포츠"
-        case .surfingSports: "서핑"
-        case .waterFitness: "수중 피트니스"
-        case .waterPolo: "수구"
-        case .waterSports: "수상 스포츠"
-        case .sailing: "세일링"
-        case .downhillSkiing: "스키"
-        case .snowboarding: "스노보드"
-        case .crossCountrySkiing: "크로스컨트리 스키"
-        case .snowSports: "스노 스포츠"
-        case .skating: "스케이팅"
-        case .climbing: "클라이밍"
-        case .mountaineering: "등산"
-        case .equestrianSports: "승마"
-        case .fishing: "낚시"
-        case .hunting: "사냥"
-        case .archery: "양궁"
-        case .trackAndField: "육상"
-        case .curling: "컬링"
-        case .jumpRope: "줄넘기"
-        case .stairClimbing: "계단 오르기"
-        case .stairStepper: "계단 오르기"
-        case .stepTraining: "스텝 트레이닝"
-        case .mixedCardio: "혼합 유산소"
-        case .crossTraining: "크로스 트레이닝"
-        case .handCycling: "핸드 사이클링"
-        case .taiChi: "태극권"
-        case .mindAndBody: "심신 수련"
-        case .barre: "바레"
-        case .cooldown: "쿨다운"
-        case .preparationAndRecovery: "회복"
-        case .swimBikeRun: "트라이애슬론"
-        case .transition: "전환"
-        case .fitnessGaming: "피트니스 게임"
-        case .play: "놀이"
-        case .underwaterDiving: "다이빙"
-        case .wheelchairRunPace: "휠체어 러닝"
-        case .wheelchairWalkPace: "휠체어 걷기"
-        case .other: "운동"
+        case .elliptical: String(localized: "Elliptical")
+        case .rowing: String(localized: "Rowing")
+        case .coreTraining: String(localized: "Core Training")
+        case .flexibility: String(localized: "Flexibility")
+        case .socialDance: String(localized: "Social Dance")
+        case .cardioDance: String(localized: "Cardio Dance")
+        case .pilates: String(localized: "Pilates")
+        case .boxing: String(localized: "Boxing")
+        case .martialArts: String(localized: "Martial Arts")
+        case .wrestling: String(localized: "Wrestling")
+        case .kickboxing: String(localized: "Kickboxing")
+        case .fencing: String(localized: "Fencing")
+        case .basketball: String(localized: "Basketball")
+        case .soccer: String(localized: "Soccer")
+        case .tennis: String(localized: "Tennis")
+        case .badminton: String(localized: "Badminton")
+        case .tableTennis: String(localized: "Table Tennis")
+        case .volleyball: String(localized: "Volleyball")
+        case .baseball: String(localized: "Baseball")
+        case .softball: String(localized: "Softball")
+        case .americanFootball: String(localized: "American Football")
+        case .rugby: String(localized: "Rugby")
+        case .hockey: String(localized: "Hockey")
+        case .lacrosse: String(localized: "Lacrosse")
+        case .cricket: String(localized: "Cricket")
+        case .handball: String(localized: "Handball")
+        case .racquetball: String(localized: "Racquetball")
+        case .squash: String(localized: "Squash")
+        case .pickleball: String(localized: "Pickleball")
+        case .bowling: String(localized: "Bowling")
+        case .golf: String(localized: "Golf")
+        case .discSports: String(localized: "Disc Sports")
+        case .australianFootball: String(localized: "Australian Football")
+        case .gymnastics: String(localized: "Gymnastics")
+        case .paddleSports: String(localized: "Paddle Sports")
+        case .surfingSports: String(localized: "Surfing")
+        case .waterFitness: String(localized: "Water Fitness")
+        case .waterPolo: String(localized: "Water Polo")
+        case .waterSports: String(localized: "Water Sports")
+        case .sailing: String(localized: "Sailing")
+        case .downhillSkiing: String(localized: "Skiing")
+        case .snowboarding: String(localized: "Snowboarding")
+        case .crossCountrySkiing: String(localized: "Cross-Country Skiing")
+        case .snowSports: String(localized: "Snow Sports")
+        case .skating: String(localized: "Skating")
+        case .climbing: String(localized: "Climbing")
+        case .mountaineering: String(localized: "Mountaineering")
+        case .equestrianSports: String(localized: "Equestrian")
+        case .fishing: String(localized: "Fishing")
+        case .hunting: String(localized: "Hunting")
+        case .archery: String(localized: "Archery")
+        case .trackAndField: String(localized: "Track & Field")
+        case .curling: String(localized: "Curling")
+        case .jumpRope: String(localized: "Jump Rope")
+        case .stairClimbing: String(localized: "Stair Climbing")
+        case .stairStepper: String(localized: "Stair Stepper")
+        case .stepTraining: String(localized: "Step Training")
+        case .mixedCardio: String(localized: "Mixed Cardio")
+        case .crossTraining: String(localized: "Cross Training")
+        case .handCycling: String(localized: "Hand Cycling")
+        case .taiChi: String(localized: "Tai Chi")
+        case .mindAndBody: String(localized: "Mind & Body")
+        case .barre: String(localized: "Barre")
+        case .cooldown: String(localized: "Cooldown")
+        case .preparationAndRecovery: String(localized: "Recovery")
+        case .swimBikeRun: String(localized: "Triathlon")
+        case .transition: String(localized: "Transition")
+        case .fitnessGaming: String(localized: "Fitness Gaming")
+        case .play: String(localized: "Play")
+        case .underwaterDiving: String(localized: "Diving")
+        case .wheelchairRunPace: String(localized: "Wheelchair Running")
+        case .wheelchairWalkPace: String(localized: "Wheelchair Walking")
+        case .other: String(localized: "Workout")
         }
     }
 
@@ -199,20 +199,20 @@ extension ActivityCategory {
         }
     }
 
-    /// Korean display name for the category.
+    /// Localized display name for the category.
     var displayName: String {
         switch self {
-        case .cardio: "유산소"
-        case .strength: "근력"
-        case .mindBody: "심신"
-        case .dance: "댄스"
-        case .combat: "격투"
-        case .sports: "스포츠"
-        case .water: "수상"
-        case .winter: "겨울"
-        case .outdoor: "아웃도어"
-        case .multiSport: "멀티"
-        case .other: "기타"
+        case .cardio: String(localized: "Cardio")
+        case .strength: String(localized: "Strength")
+        case .mindBody: String(localized: "Mind & Body")
+        case .dance: String(localized: "Dance")
+        case .combat: String(localized: "Combat")
+        case .sports: String(localized: "Sports")
+        case .water: String(localized: "Water")
+        case .winter: String(localized: "Winter")
+        case .outdoor: String(localized: "Outdoor")
+        case .multiSport: String(localized: "Multi Sport")
+        case .other: String(localized: "Other")
         }
     }
 }
@@ -233,14 +233,14 @@ extension MilestoneDistance {
 }
 
 extension PersonalRecordType {
-    /// Korean display name.
+    /// Localized display name.
     var displayName: String {
         switch self {
-        case .fastestPace: "최고 페이스"
-        case .longestDistance: "최장 거리"
-        case .highestCalories: "최고 칼로리"
-        case .longestDuration: "최장 시간"
-        case .highestElevation: "최고 고도"
+        case .fastestPace: String(localized: "Fastest Pace")
+        case .longestDistance: String(localized: "Longest Distance")
+        case .highestCalories: String(localized: "Highest Calories")
+        case .longestDuration: String(localized: "Longest Duration")
+        case .highestElevation: String(localized: "Highest Elevation")
         }
     }
 
@@ -259,12 +259,12 @@ extension PersonalRecordType {
 extension ActivityPersonalRecord.Kind {
     var displayName: String {
         switch self {
-        case .strengthWeight: "근력 중량"
-        case .fastestPace: "최고 페이스"
-        case .longestDistance: "최장 거리"
-        case .highestCalories: "최고 칼로리"
-        case .longestDuration: "최장 시간"
-        case .highestElevation: "최고 고도"
+        case .strengthWeight: String(localized: "Strength Weight")
+        case .fastestPace: String(localized: "Fastest Pace")
+        case .longestDistance: String(localized: "Longest Distance")
+        case .highestCalories: String(localized: "Highest Calories")
+        case .longestDuration: String(localized: "Longest Duration")
+        case .highestElevation: String(localized: "Highest Elevation")
         }
     }
 

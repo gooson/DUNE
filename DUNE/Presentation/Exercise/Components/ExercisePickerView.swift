@@ -385,13 +385,13 @@ struct ExercisePickerView: View {
                             .foregroundStyle(.tertiary)
                     }
                     HStack(spacing: DS.Spacing.xs) {
-                        Text(exercise.primaryMuscles.map(\.localizedDisplayName).joined(separator: ", "))
+                        Text(exercise.primaryMuscles.map(\.displayName).joined(separator: ", "))
                             .font(.caption)
                             .foregroundStyle(DS.Color.textSecondary)
                         Text("\u{00B7}")
                             .foregroundStyle(.tertiary)
                         Label {
-                            Text(exercise.equipment.localizedDisplayName)
+                            Text(exercise.equipment.displayName)
                         } icon: {
                             exercise.equipment.svgIcon(size: 12)
                         }
@@ -478,7 +478,7 @@ struct ExercisePickerView: View {
                 selectedMuscle = selectedMuscle == muscle ? nil : muscle
             }
         } label: {
-            Text(muscle.localizedDisplayName)
+            Text(muscle.displayName)
                 .font(.system(size: 11, weight: .medium))
                 .padding(.horizontal, DS.Spacing.sm)
                 .padding(.vertical, DS.Spacing.xxs)
@@ -503,7 +503,7 @@ struct ExercisePickerView: View {
         } label: {
             HStack(spacing: DS.Spacing.xxs) {
                 equipment.svgIcon(size: 14)
-                Text(equipment.localizedDisplayName)
+                Text(equipment.displayName)
                     .font(.system(size: 11, weight: .medium))
             }
             .padding(.horizontal, DS.Spacing.sm)

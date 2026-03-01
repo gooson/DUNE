@@ -28,7 +28,7 @@ struct VolumeAlgorithmSheet: View {
                 .font(.title3)
                 .foregroundStyle(DS.Color.activity)
             VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                Text("주간 훈련 볼륨")
+                Text("Weekly Training Volume")
                     .font(.headline)
                 Text("Weekly Training Volume")
                     .font(.caption)
@@ -42,8 +42,8 @@ struct VolumeAlgorithmSheet: View {
 
     private var overviewSection: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            sectionHeader(icon: "lightbulb.fill", title: "개요")
-            Text("최근 7일간 각 근육군에 수행한 세트 수를 집계하여 훈련 볼륨을 시각화합니다. 어떤 근육을 많이 훈련했는지, 어떤 근육이 부족한지 한눈에 파악할 수 있습니다.")
+            sectionHeader(icon: "lightbulb.fill", title: "Overview")
+            Text("Visualizes training volume by tallying sets performed for each muscle group over the last 7 days. Quickly see which muscles are well-trained and which need more work.")
                 .font(.caption)
                 .foregroundStyle(DS.Color.textSecondary)
         }
@@ -53,14 +53,14 @@ struct VolumeAlgorithmSheet: View {
 
     private var calculationSection: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            sectionHeader(icon: "function", title: "계산 방법")
+            sectionHeader(icon: "function", title: "Calculation Method")
 
             VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-                bulletPoint("주동근(Primary): 운동의 전체 세트 수가 해당 근육에 반영")
-                bulletPoint("보조근(Secondary): 세트 수의 절반이 반영 (최소 1세트)")
-                bulletPoint("복합 운동(예: 스쿼트)은 여러 근육에 동시 반영")
+                bulletPoint("Primary: Full set count is credited to the muscle")
+                bulletPoint("Secondary: Half the set count is credited (minimum 1 set)")
+                bulletPoint("Compound exercises (e.g., Squat) credit multiple muscles simultaneously")
 
-                formulaRow("볼륨 = Σ (주동근 세트) + Σ (보조근 세트 ÷ 2)")
+                formulaRow("Volume = Σ (Primary sets) + Σ (Secondary sets ÷ 2)")
             }
         }
     }
@@ -69,7 +69,7 @@ struct VolumeAlgorithmSheet: View {
 
     private var levelSection: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            sectionHeader(icon: "chart.bar.xaxis", title: "5단계 볼륨 레벨")
+            sectionHeader(icon: "chart.bar.xaxis", title: "5-Level Volume Scale")
 
             VStack(spacing: DS.Spacing.xs) {
                 ForEach(VolumeIntensity.allCases, id: \.rawValue) { level in
@@ -83,12 +83,12 @@ struct VolumeAlgorithmSheet: View {
 
     private var tipsSection: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            sectionHeader(icon: "sparkles", title: "활용 팁")
+            sectionHeader(icon: "sparkles", title: "Tips")
 
             VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-                bulletPoint("회색 근육은 이번 주에 훈련하지 않은 부위입니다")
-                bulletPoint("균형 잡힌 훈련을 위해 모든 근육이 색칠되도록 목표하세요")
-                bulletPoint("Recovery 모드와 함께 확인하면 최적의 훈련 계획을 세울 수 있습니다")
+                bulletPoint("Gray muscles have not been trained this week")
+                bulletPoint("Aim to color all muscles for balanced training")
+                bulletPoint("Combine with Recovery mode to plan optimal training")
             }
         }
     }

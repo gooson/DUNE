@@ -20,12 +20,12 @@ struct InjuryFormSheet: View {
                     Picker("Location", selection: $viewModel.selectedBodyPart) {
                         Section("Joints") {
                             ForEach(BodyPart.allCases.filter(\.isJoint), id: \.self) { part in
-                                Text(part.bilingualDisplayName).tag(part)
+                                Text(part.displayName).tag(part)
                             }
                         }
                         Section("Muscles") {
                             ForEach(BodyPart.allCases.filter { !$0.isJoint }, id: \.self) { part in
-                                Text(part.bilingualDisplayName).tag(part)
+                                Text(part.displayName).tag(part)
                             }
                         }
                     }
@@ -37,7 +37,7 @@ struct InjuryFormSheet: View {
                             set: { viewModel.selectedSide = $0 }
                         )) {
                             ForEach(BodySide.allCases, id: \.self) { side in
-                                Text(side.bilingualDisplayName).tag(side)
+                                Text(side.displayName).tag(side)
                             }
                         }
                         .pickerStyle(.segmented)
@@ -57,10 +57,10 @@ struct InjuryFormSheet: View {
                                     .frame(width: 28)
 
                                 VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                                    Text(severity.bilingualDisplayName)
+                                    Text(severity.displayName)
                                         .font(.subheadline.weight(.medium))
                                         .foregroundStyle(DS.Color.primaryText)
-                                    Text(severity.localizedSeverityDescription)
+                                    Text(severity.severityDescription)
                                         .font(.caption)
                                         .foregroundStyle(DS.Color.textSecondary)
                                 }

@@ -216,15 +216,15 @@ struct TemplateFormView: View {
     private func saveTemplate() {
         let trimmed = templateName.trimmingCharacters(in: .whitespaces)
         guard !trimmed.isEmpty else {
-            validationError = "Template name is required"
+            validationError = String(localized: "Template name is required")
             return
         }
         guard trimmed.count <= 100 else {
-            validationError = "Name must be 100 characters or less"
+            validationError = String(localized: "Name must be 100 characters or less")
             return
         }
         guard !entries.isEmpty else {
-            validationError = "Add at least one exercise"
+            validationError = String(localized: "Add at least one exercise")
             return
         }
 

@@ -124,7 +124,7 @@ final class BodyCompositionViewModel {
         guard !isSaving else { return nil }
 
         if selectedDate.isFuture {
-            validationError = "Future dates are not allowed"
+            validationError = String(localized: "Future dates are not allowed")
             return nil
         }
 
@@ -143,7 +143,7 @@ final class BodyCompositionViewModel {
     func applyUpdate(to record: BodyCompositionRecord) -> Bool {
         guard !isSaving else { return false }
         if selectedDate.isFuture {
-            validationError = "Future dates are not allowed"
+            validationError = String(localized: "Future dates are not allowed")
             return false
         }
 
@@ -162,7 +162,7 @@ final class BodyCompositionViewModel {
         let weight: Double? = newWeight.isEmpty ? nil : Double(newWeight)
         if !newWeight.isEmpty {
             guard let w = weight, w > 0, w < maxWeight else {
-                validationError = "Weight must be between 0 and \(Int(maxWeight)) kg"
+                validationError = String(localized: "Weight must be between 0 and \(Int(maxWeight)) kg")
                 return nil
             }
         }
@@ -170,7 +170,7 @@ final class BodyCompositionViewModel {
         let bodyFat: Double? = newBodyFat.isEmpty ? nil : Double(newBodyFat)
         if !newBodyFat.isEmpty {
             guard let bf = bodyFat, bf >= 0, bf <= maxBodyFat else {
-                validationError = "Body fat must be between 0% and \(Int(maxBodyFat))%"
+                validationError = String(localized: "Body fat must be between 0% and \(Int(maxBodyFat))%")
                 return nil
             }
         }
@@ -178,7 +178,7 @@ final class BodyCompositionViewModel {
         let muscleMass: Double? = newMuscleMass.isEmpty ? nil : Double(newMuscleMass)
         if !newMuscleMass.isEmpty {
             guard let mm = muscleMass, mm > 0, mm < maxMuscleMass else {
-                validationError = "Muscle mass must be between 0 and \(Int(maxMuscleMass)) kg"
+                validationError = String(localized: "Muscle mass must be between 0 and \(Int(maxMuscleMass)) kg")
                 return nil
             }
         }

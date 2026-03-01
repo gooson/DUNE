@@ -116,7 +116,7 @@ final class CompoundWorkoutViewModel {
         }
 
         if records.isEmpty {
-            validationError = "Complete at least one set in any exercise"
+            validationError = String(localized: "Complete at least one set in any exercise")
             isSaving = false
         }
         // When records exist, caller (View) must reset isSaving after insert

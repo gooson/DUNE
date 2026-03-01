@@ -179,15 +179,15 @@ struct CreateCustomExerciseView: View {
     private func createExercise() {
         let trimmed = name.trimmingCharacters(in: .whitespaces)
         guard !trimmed.isEmpty else {
-            validationError = "Exercise name is required"
+            validationError = String(localized: "Exercise name is required")
             return
         }
         guard trimmed.count <= 100 else {
-            validationError = "Name must be 100 characters or less"
+            validationError = String(localized: "Name must be 100 characters or less")
             return
         }
         guard !selectedMuscles.isEmpty else {
-            validationError = "Select at least one primary muscle"
+            validationError = String(localized: "Select at least one primary muscle")
             return
         }
 

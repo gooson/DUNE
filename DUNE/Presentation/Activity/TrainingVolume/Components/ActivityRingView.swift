@@ -68,7 +68,7 @@ struct LabeledActivityRingView<Label: View>: View {
         VStack(spacing: 2) {
             Text("6")
                 .font(.title2.bold())
-            Text("/ 5일")
+            Text("/ 5 days")
                 .font(.caption2)
                 .foregroundStyle(DS.Color.textSecondary)
         }

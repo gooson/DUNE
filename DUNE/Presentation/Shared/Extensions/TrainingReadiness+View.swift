@@ -3,10 +3,10 @@ import SwiftUI
 extension TrainingReadiness.Status {
     var label: String {
         switch self {
-        case .ready:    "Ready to Train"
-        case .moderate: "Moderate"
-        case .light:    "Light Activity"
-        case .rest:     "Rest Day"
+        case .ready:    String(localized: "Ready to Train")
+        case .moderate: String(localized: "Moderate")
+        case .light:    String(localized: "Light Activity")
+        case .rest:     String(localized: "Rest Day")
         }
     }
 
@@ -30,10 +30,10 @@ extension TrainingReadiness.Status {
 
     var guideMessage: String {
         switch self {
-        case .ready:    "Full intensity training recommended."
-        case .moderate: "Normal training is fine."
-        case .light:    "Reduce volume. Active recovery."
-        case .rest:     "Rest or very light movement only."
+        case .ready:    String(localized: "Full intensity training recommended.")
+        case .moderate: String(localized: "Normal training is fine.")
+        case .light:    String(localized: "Reduce volume. Active recovery.")
+        case .rest:     String(localized: "Rest or very light movement only.")
         }
     }
 }

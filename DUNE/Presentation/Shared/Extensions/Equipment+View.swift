@@ -3,91 +3,61 @@ import SwiftUI
 extension Equipment {
     var displayName: String {
         switch self {
-        case .barbell: "Barbell"
-        case .dumbbell: "Dumbbell"
-        case .kettlebell: "Kettlebell"
-        case .ezBar: "EZ Bar"
-        case .trapBar: "Trap Bar"
-        case .smithMachine: "Smith Machine"
-        case .legPressMachine: "Leg Press Machine"
-        case .hackSquatMachine: "Hack Squat Machine"
-        case .chestPressMachine: "Chest Press Machine"
-        case .shoulderPressMachine: "Shoulder Press Machine"
-        case .latPulldownMachine: "Lat Pulldown Machine"
-        case .legExtensionMachine: "Leg Extension Machine"
-        case .legCurlMachine: "Leg Curl Machine"
-        case .pecDeckMachine: "Pec Deck Machine"
-        case .cableMachine: "Cable Machine"
-        case .machine: "Machine"
-        case .cable: "Cable"
-        case .bodyweight: "Bodyweight"
-        case .pullUpBar: "Pull-Up Bar"
-        case .dipStation: "Dip Station"
-        case .band: "Band"
+        case .barbell: String(localized: "Barbell")
+        case .dumbbell: String(localized: "Dumbbell")
+        case .kettlebell: String(localized: "Kettlebell")
+        case .ezBar: String(localized: "EZ Bar")
+        case .trapBar: String(localized: "Trap Bar")
+        case .smithMachine: String(localized: "Smith Machine")
+        case .legPressMachine: String(localized: "Leg Press Machine")
+        case .hackSquatMachine: String(localized: "Hack Squat Machine")
+        case .chestPressMachine: String(localized: "Chest Press Machine")
+        case .shoulderPressMachine: String(localized: "Shoulder Press Machine")
+        case .latPulldownMachine: String(localized: "Lat Pulldown Machine")
+        case .legExtensionMachine: String(localized: "Leg Extension Machine")
+        case .legCurlMachine: String(localized: "Leg Curl Machine")
+        case .pecDeckMachine: String(localized: "Pec Deck Machine")
+        case .cableMachine: String(localized: "Cable Machine")
+        case .machine: String(localized: "Machine")
+        case .cable: String(localized: "Cable")
+        case .bodyweight: String(localized: "Bodyweight")
+        case .pullUpBar: String(localized: "Pull-Up Bar")
+        case .dipStation: String(localized: "Dip Station")
+        case .band: String(localized: "Band")
         case .trx: "TRX"
-        case .medicineBall: "Medicine Ball"
-        case .stabilityBall: "Stability Ball"
-        case .other: "Other"
-        }
-    }
-
-    var localizedDisplayName: String {
-        switch self {
-        case .barbell: "바벨"
-        case .dumbbell: "덤벨"
-        case .kettlebell: "케틀벨"
-        case .ezBar: "이지바"
-        case .trapBar: "트랩바"
-        case .smithMachine: "스미스 머신"
-        case .legPressMachine: "레그 프레스 머신"
-        case .hackSquatMachine: "핵 스쿼트 머신"
-        case .chestPressMachine: "체스트 프레스 머신"
-        case .shoulderPressMachine: "숄더 프레스 머신"
-        case .latPulldownMachine: "랫 풀다운 머신"
-        case .legExtensionMachine: "레그 익스텐션 머신"
-        case .legCurlMachine: "레그 컬 머신"
-        case .pecDeckMachine: "펙덱 머신"
-        case .cableMachine: "케이블 머신"
-        case .machine: "머신"
-        case .cable: "케이블"
-        case .bodyweight: "맨몸"
-        case .pullUpBar: "풀업 바"
-        case .dipStation: "딥스 바"
-        case .band: "밴드"
-        case .trx: "TRX"
-        case .medicineBall: "메디신볼"
-        case .stabilityBall: "짐볼"
-        case .other: "기타"
+        case .medicineBall: String(localized: "Medicine Ball")
+        case .stabilityBall: String(localized: "Stability Ball")
+        case .other: String(localized: "Other")
         }
     }
 
     var equipmentDescription: String {
         switch self {
-        case .barbell: "긴 봉에 원판을 끼워 사용하는 프리웨이트 기구. 높은 중량 훈련에 적합"
-        case .dumbbell: "한 손에 하나씩 드는 프리웨이트. 좌우 균형 발달에 효과적"
-        case .kettlebell: "손잡이가 달린 구형 중량 기구. 스윙, 클린 등 동적 운동에 적합"
-        case .ezBar: "W자 형태의 커브드 바. 컬 운동 시 손목 부담을 줄여줌"
-        case .trapBar: "육각형 프레임 안에 서서 사용하는 바. 데드리프트, 슈러그에 적합"
-        case .smithMachine: "수직 가이드 레일에 바벨이 고정된 기구. 안전하게 높은 중량 훈련 가능"
-        case .legPressMachine: "앉거나 누워서 다리로 중량을 미는 기구. 하체 집중 훈련"
-        case .hackSquatMachine: "등을 기대고 스쿼트하는 기구. 대퇴사두근 집중"
-        case .chestPressMachine: "앉아서 가슴 프레스를 수행하는 기구. 가슴 근육 고립"
-        case .shoulderPressMachine: "앉아서 어깨 프레스를 수행하는 기구. 삼각근 집중"
-        case .latPulldownMachine: "위에서 아래로 당기는 기구. 광배근 발달에 효과적"
-        case .legExtensionMachine: "앉아서 다리를 펴는 기구. 대퇴사두근 고립 운동"
-        case .legCurlMachine: "엎드려 다리를 구부리는 기구. 햄스트링 고립 운동"
-        case .pecDeckMachine: "앉아서 팔을 모으는 기구. 가슴 안쪽 근육 발달"
-        case .cableMachine: "도르래와 케이블로 연결된 다목적 기구. 다양한 각도에서 저항 운동"
-        case .machine: "가이드 레일이 있어 궤적이 고정된 기구. 초보자도 안전하게 사용 가능"
-        case .cable: "도르래와 케이블로 연결된 기구. 다양한 각도에서 저항 운동 가능"
-        case .bodyweight: "기구 없이 자기 체중만으로 수행하는 운동"
-        case .pullUpBar: "매달려서 당기기 운동을 수행하는 바. 등, 이두 훈련"
-        case .dipStation: "팔을 짚고 몸을 올리내리는 기구. 가슴, 삼두 훈련"
-        case .band: "탄성 밴드를 이용한 저항 운동. 강도 조절이 쉽고 휴대 가능"
-        case .trx: "천장에 매달린 줄을 이용한 서스펜션 트레이닝. 코어 안정성 강화"
-        case .medicineBall: "무거운 공을 이용한 폭발적 운동. 코어와 전신 파워 훈련"
-        case .stabilityBall: "불안정한 공 위에서 수행하는 운동. 균형감각과 코어 강화"
-        case .other: "기타 보조 기구"
+        case .barbell: String(localized: "Long bar with weight plates. Ideal for heavy lifting")
+        case .dumbbell: String(localized: "Hand-held free weights. Effective for balanced development")
+        case .kettlebell: String(localized: "Ball-shaped weight with handle. Great for dynamic exercises")
+        case .ezBar: String(localized: "Curved bar that reduces wrist strain during curls")
+        case .trapBar: String(localized: "Hexagonal frame bar. Ideal for deadlifts and shrugs")
+        case .smithMachine: String(localized: "Barbell on vertical guide rails. Safe for heavy lifting")
+        case .legPressMachine: String(localized: "Push weight with legs while seated. Lower body focus")
+        case .hackSquatMachine: String(localized: "Back-supported squat machine. Targets quadriceps")
+        case .chestPressMachine: String(localized: "Seated chest press machine. Isolates chest muscles")
+        case .shoulderPressMachine: String(localized: "Seated shoulder press machine. Targets deltoids")
+        case .latPulldownMachine: String(localized: "Pull-down cable machine. Develops lats")
+        case .legExtensionMachine: String(localized: "Seated leg extension. Isolates quadriceps")
+        case .legCurlMachine: String(localized: "Prone leg curl machine. Isolates hamstrings")
+        case .pecDeckMachine: String(localized: "Seated fly machine. Develops inner chest")
+        case .cableMachine: String(localized: "Pulley and cable system for multi-angle resistance")
+        case .machine: String(localized: "Guided-track machine. Safe for beginners")
+        case .cable: String(localized: "Pulley and cable for resistance from various angles")
+        case .bodyweight: String(localized: "Exercises using only your body weight")
+        case .pullUpBar: String(localized: "Bar for pull-up exercises. Targets back and biceps")
+        case .dipStation: String(localized: "Support bars for dips. Targets chest and triceps")
+        case .band: String(localized: "Elastic resistance band. Adjustable intensity, portable")
+        case .trx: String(localized: "Suspension training system. Enhances core stability")
+        case .medicineBall: String(localized: "Heavy ball for explosive full-body power exercises")
+        case .stabilityBall: String(localized: "Exercise ball for balance and core training")
+        case .other: String(localized: "Other exercise equipment")
         }
     }
 

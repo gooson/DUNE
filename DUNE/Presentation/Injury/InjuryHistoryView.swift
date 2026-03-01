@@ -165,7 +165,7 @@ struct InjuryHistoryView: View {
 
             VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                 HStack(spacing: DS.Spacing.xs) {
-                    Text(record.bodyPart.bilingualDisplayName)
+                    Text(record.bodyPart.displayName)
                         .font(.subheadline.weight(.medium))
                     if let side = record.bodySide {
                         Text("(\(side.abbreviation))")
@@ -175,7 +175,7 @@ struct InjuryHistoryView: View {
                 }
 
                 HStack(spacing: DS.Spacing.xs) {
-                    Text(record.severity.bilingualDisplayName)
+                    Text(record.severity.displayName)
                         .font(.caption2)
                         .foregroundStyle(record.severity.color)
                     Text("·")
@@ -280,20 +280,20 @@ private struct InjuryDetailView: View {
 
                     VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                         HStack(spacing: DS.Spacing.xs) {
-                            Text(record.bodyPart.bilingualDisplayName)
+                            Text(record.bodyPart.displayName)
                                 .font(.headline)
                             if let side = record.bodySide {
-                                Text("(\(side.bilingualDisplayName))")
+                                Text("(\(side.displayName))")
                                     .font(.subheadline)
                                     .foregroundStyle(DS.Color.textSecondary)
                             }
                         }
 
-                        Text(record.severity.bilingualDisplayName)
+                        Text(record.severity.displayName)
                             .font(.caption)
                             .foregroundStyle(record.severity.color)
 
-                        Text(record.severity.localizedSeverityDescription)
+                        Text(record.severity.severityDescription)
                             .font(.caption2)
                             .foregroundStyle(DS.Color.textSecondary)
                     }

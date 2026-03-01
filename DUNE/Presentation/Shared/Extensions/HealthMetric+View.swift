@@ -138,21 +138,21 @@ extension HealthMetric.Category {
 
     var displayName: String {
         switch self {
-        case .hrv:                "Heart Rate Variability"
-        case .rhr:                "Resting Heart Rate"
-        case .heartRate:          "Heart Rate"
-        case .sleep:              "Sleep"
-        case .exercise:           "Exercise"
-        case .steps:              "Steps"
-        case .weight:             "Weight"
+        case .hrv:                String(localized: "Heart Rate Variability")
+        case .rhr:                String(localized: "Resting Heart Rate")
+        case .heartRate:          String(localized: "Heart Rate")
+        case .sleep:              String(localized: "Sleep")
+        case .exercise:           String(localized: "Exercise")
+        case .steps:              String(localized: "Steps")
+        case .weight:             String(localized: "Weight")
         case .bmi:                "BMI"
-        case .bodyFat:            "Body Fat"
-        case .leanBodyMass:       "Lean Body Mass"
-        case .spo2:               "Blood Oxygen"
-        case .respiratoryRate:    "Respiratory Rate"
+        case .bodyFat:            String(localized: "Body Fat")
+        case .leanBodyMass:       String(localized: "Lean Body Mass")
+        case .spo2:               String(localized: "Blood Oxygen")
+        case .respiratoryRate:    String(localized: "Respiratory Rate")
         case .vo2Max:             "VO2 Max"
-        case .heartRateRecovery:  "HR Recovery"
-        case .wristTemperature:   "Wrist Temp"
+        case .heartRateRecovery:  String(localized: "HR Recovery")
+        case .wristTemperature:   String(localized: "Wrist Temp")
         }
     }
 

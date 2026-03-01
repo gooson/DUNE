@@ -13,11 +13,11 @@ struct RPEInputView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             HStack {
-                Label("운동 강도", systemImage: "gauge.with.dots.needle.33percent")
+                Label("Workout Intensity", systemImage: "gauge.with.dots.needle.33percent")
                     .font(.subheadline.weight(.medium))
                 Spacer()
                 if rpe != nil {
-                    Button("초기화") { rpe = nil }
+                    Button("Reset") { rpe = nil }
                         .font(.caption)
                         .foregroundStyle(DS.Color.textSecondary)
                 }
@@ -84,16 +84,16 @@ struct RPEInputView: View {
 
     private func rpeDescription(_ value: Int) -> String {
         switch value {
-        case 1: "매우 쉬움 — 거의 느끼지 못함"
-        case 2: "쉬움 — 가벼운 움직임"
-        case 3: "약간 쉬움 — 편안한 운동"
-        case 4: "보통 이하 — 약간의 노력"
-        case 5: "보통 — 적당한 강도"
-        case 6: "보통 이상 — 약간 힘들기 시작"
-        case 7: "힘듦 — 대화하기 어려움"
-        case 8: "매우 힘듦 — 상당한 노력 필요"
-        case 9: "극도로 힘듦 — 거의 한계"
-        case 10: "최대 — 더 이상 불가"
+        case 1: String(localized: "Very Easy — Barely noticeable")
+        case 2: String(localized: "Easy — Light movement")
+        case 3: String(localized: "Slightly Easy — Comfortable exercise")
+        case 4: String(localized: "Below Moderate — Slight effort")
+        case 5: String(localized: "Moderate — Appropriate intensity")
+        case 6: String(localized: "Above Moderate — Starting to get hard")
+        case 7: String(localized: "Hard — Difficult to talk")
+        case 8: String(localized: "Very Hard — Significant effort needed")
+        case 9: String(localized: "Extremely Hard — Near limit")
+        case 10: String(localized: "Maximum — Cannot continue")
         default: ""
         }
     }

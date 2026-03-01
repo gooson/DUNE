@@ -26,7 +26,7 @@ struct ConsistencyInfoSheet: View {
                 .font(.title3)
                 .foregroundStyle(DS.Color.activity)
             VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                Text("운동 일관성")
+                Text("Workout Consistency")
                     .font(.headline)
                 Text("Workout Consistency")
                     .font(.caption)
@@ -38,8 +38,8 @@ struct ConsistencyInfoSheet: View {
 
     private var overviewSection: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            InfoSheetHelpers.SectionHeader(icon: "lightbulb.fill", title: "개요")
-            Text("얼마나 꾸준히 운동하는지를 추적합니다. 연속 운동일(Streak)과 월간 진행률을 통해 일관성을 확인하세요.")
+            InfoSheetHelpers.SectionHeader(icon: "lightbulb.fill", title: "Overview")
+            Text("Tracks how consistently you work out. Check your consistency through workout streaks and monthly progress.")
                 .font(.caption)
                 .foregroundStyle(DS.Color.textSecondary)
         }
@@ -47,36 +47,36 @@ struct ConsistencyInfoSheet: View {
 
     private var currentStreakSection: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            InfoSheetHelpers.SectionHeader(icon: "flame", title: "현재 Streak")
-            InfoSheetHelpers.BulletPoint(text: "오늘 또는 어제를 포함한 연속 운동일 수")
-            InfoSheetHelpers.BulletPoint(text: "20분 이상 운동한 날만 카운트")
-            InfoSheetHelpers.BulletPoint(text: "하루라도 빠지면 Streak이 리셋됩니다")
+            InfoSheetHelpers.SectionHeader(icon: "flame", title: "Current Streak")
+            InfoSheetHelpers.BulletPoint(text: "Consecutive workout days including today or yesterday")
+            InfoSheetHelpers.BulletPoint(text: "Only days with 20+ minutes of exercise count")
+            InfoSheetHelpers.BulletPoint(text: "Missing a single day resets the streak")
         }
     }
 
     private var bestStreakSection: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            InfoSheetHelpers.SectionHeader(icon: "star.fill", title: "최고 Streak")
-            InfoSheetHelpers.BulletPoint(text: "역대 가장 긴 연속 운동 기록")
-            InfoSheetHelpers.BulletPoint(text: "현재 Streak이 최고 기록보다 길면 자동 갱신")
+            InfoSheetHelpers.SectionHeader(icon: "star.fill", title: "Best Streak")
+            InfoSheetHelpers.BulletPoint(text: "Your longest consecutive workout record ever")
+            InfoSheetHelpers.BulletPoint(text: "Automatically updated when the current streak exceeds the record")
         }
     }
 
     private var monthlySection: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            InfoSheetHelpers.SectionHeader(icon: "calendar", title: "월간 진행률")
-            InfoSheetHelpers.BulletPoint(text: "이번 달 운동 횟수를 목표와 비교")
-            InfoSheetHelpers.BulletPoint(text: "기본 목표: 월 16회 (주 4회 기준)")
-            InfoSheetHelpers.BulletPoint(text: "진행 바로 달성률을 시각화")
+            InfoSheetHelpers.SectionHeader(icon: "calendar", title: "Monthly Progress")
+            InfoSheetHelpers.BulletPoint(text: "Compare this month's workout count against your goal")
+            InfoSheetHelpers.BulletPoint(text: "Default goal: 16 sessions per month (4x per week)")
+            InfoSheetHelpers.BulletPoint(text: "Progress bar visualizes your completion rate")
         }
     }
 
     private var tipsSection: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            InfoSheetHelpers.SectionHeader(icon: "lightbulb.max.fill", title: "활용 팁")
-            InfoSheetHelpers.BulletPoint(text: "강도보다 일관성이 장기 성과의 핵심입니다")
-            InfoSheetHelpers.BulletPoint(text: "주 3~5회를 꾸준히 유지하는 것을 목표로 하세요")
-            InfoSheetHelpers.BulletPoint(text: "휴식일도 회복에 중요하므로 매일 운동할 필요는 없습니다")
+            InfoSheetHelpers.SectionHeader(icon: "lightbulb.max.fill", title: "Tips")
+            InfoSheetHelpers.BulletPoint(text: "Consistency matters more than intensity for long-term results")
+            InfoSheetHelpers.BulletPoint(text: "Aim to maintain a steady 3–5 sessions per week")
+            InfoSheetHelpers.BulletPoint(text: "Rest days are essential for recovery — you don't need to train every day")
         }
     }
 }
