@@ -65,7 +65,7 @@ final class WellnessSmokeTests: UITestBaseCase {
         }
         bodyRecordButton.tap()
 
-        let cancelButton = app.descendants(matching: .any)[AXID.bodyFormCancel]
+        let cancelButton = app.descendants(matching: .any)[AXID.bodyFormCancel].firstMatch
         guard cancelButton.waitForExistence(timeout: 3) else { return }
         cancelButton.tap()
 
