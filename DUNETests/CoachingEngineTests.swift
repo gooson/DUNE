@@ -283,7 +283,8 @@ struct CoachingEngineTests {
             isDaytime: isDaytime,
             fetchedAt: Date(),
             hourlyForecast: [],
-            dailyForecast: []
+            dailyForecast: [],
+            airQuality: nil
         )
     }
 }

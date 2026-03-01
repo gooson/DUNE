@@ -52,6 +52,11 @@ struct WeatherCard: View {
 
                     Spacer()
 
+                    // Air quality badge (when available)
+                    if let aq = snapshot.airQuality {
+                        airQualityBadge(aq)
+                    }
+
                     // Outdoor fitness badge
                     fitnessBadge
 
@@ -95,6 +100,24 @@ struct WeatherCard: View {
                 Capsule()
                     .fill(color.opacity(DS.Opacity.subtle))
             }
+    }
+
+    private func airQualityBadge(_ aq: AirQualitySnapshot) -> some View {
+        let aqLevel = aq.overallLevel
+        let color = aqLevel.color(for: theme)
+        return Label {
+            Text("PM₂.₅ \(Int(aq.pm2_5))")
+        } icon: {
+            Image(systemName: aqLevel.sfSymbol)
+        }
+        .font(.caption2.weight(.medium))
+        .foregroundStyle(color)
+        .padding(.horizontal, DS.Spacing.xs)
+        .padding(.vertical, DS.Spacing.xxs)
+        .background {
+            Capsule()
+                .fill(color.opacity(DS.Opacity.subtle))
+        }
     }
 
     // MARK: - Computed

@@ -320,7 +320,8 @@ struct OutdoorFitnessScoreTests {
             isDaytime: true,
             fetchedAt: Date(),
             hourlyForecast: hourlyForecast,
-            dailyForecast: []
+            dailyForecast: [],
+            airQuality: nil
         )
     }
 }

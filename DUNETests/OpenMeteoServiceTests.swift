@@ -174,7 +174,8 @@ struct OpenMeteoServiceTests {
             temperature: 20, feelsLike: 20, condition: .clear,
             humidity: 0.5, uvIndex: 0, windSpeed: 10,
             isDaytime: true, fetchedAt: Date(), hourlyForecast: [],
-            dailyForecast: []
+            dailyForecast: [],
+            airQuality: nil
         )
         // uvIndex 0 is the fallback value used when isFinite fails
         #expect(snapshot.uvIndex == 0)
