@@ -115,8 +115,10 @@ struct WaveOverlayView: View {
         .allowsHitTesting(false)
         .onAppear {
             guard !reduceMotion else { return }
-            withAnimation(DS.Animation.waveDrift) {
-                phase = 2 * .pi
+            DispatchQueue.main.async {
+                withAnimation(DS.Animation.waveDrift) {
+                    phase = 2 * .pi
+                }
             }
         }
     }
