@@ -78,7 +78,9 @@ final class OpenMeteoService: WeatherFetching, @unchecked Sendable {
         if let hourly = response.hourly {
             let count = hourly.time.count
             hourlyItems = (0..<Swift.min(24, count)).compactMap { i -> WeatherSnapshot.HourlyWeather? in
-                guard let date = Self.parseISO8601(hourly.time[i]) else { return nil }
+                guard let date = Self.parseISO8601(hourly.time[i]),
+                      i < hourly.temperature_2m.count,
+                      i < hourly.weather_code.count else { return nil }
                 let feelsLikeVal = (i < (hourly.apparent_temperature?.count ?? 0))
                     ? hourly.apparent_temperature?[i] ?? hourly.temperature_2m[i]
                     : hourly.temperature_2m[i]
@@ -114,7 +116,10 @@ final class OpenMeteoService: WeatherFetching, @unchecked Sendable {
         if let daily = response.daily {
             let count = daily.time.count
             dailyItems = (0..<Swift.min(7, count)).compactMap { i -> WeatherSnapshot.DailyForecast? in
-                guard let date = Self.parseDateOnly(daily.time[i]) else { return nil }
+                guard let date = Self.parseDateOnly(daily.time[i]),
+                      i < daily.temperature_2m_max.count,
+                      i < daily.temperature_2m_min.count,
+                      i < daily.weather_code.count else { return nil }
                 return WeatherSnapshot.DailyForecast(
                     date: date,
                     temperatureMax: daily.temperature_2m_max[i].clampedToPhysicalTemperature(),
@@ -212,11 +217,12 @@ final class OpenMeteoService: WeatherFetching, @unchecked Sendable {
         }()
 
         // Open-Meteo daily strings like "2026-02-28" (date only, no time).
+        // Uses .current timezone: with timezone=auto, API returns local dates matching device timezone.
         static let openMeteoDaily: DateFormatter = {
             let f = DateFormatter()
             f.dateFormat = "yyyy-MM-dd"
             f.locale = Locale(identifier: "en_US_POSIX")
-            f.timeZone = TimeZone(identifier: "UTC")
+            f.timeZone = TimeZone.current
             return f
         }()
     }

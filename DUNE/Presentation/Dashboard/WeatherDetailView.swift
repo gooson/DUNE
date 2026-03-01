@@ -8,15 +8,38 @@ struct WeatherDetailView: View {
     @Environment(\.appTheme) private var theme
     @Environment(\.horizontalSizeClass) private var sizeClass
 
+    // MARK: - Cached DateFormatter (Correction #102 + Performance rule: static let cache)
+
+    private enum Cache {
+        static let weekdayFormatter: DateFormatter = {
+            let f = DateFormatter()
+            f.dateFormat = "EEE"
+            return f
+        }()
+    }
+
     /// Pre-computed hour labels (Correction #102: avoid Calendar in body).
     private let hourLabels: [Date: String]
     /// Pre-computed day labels.
     private let dayLabels: [Date: String]
+    /// Pre-computed daily temp range (P1: avoid O(N²) recomputation per row).
+    private let dailyTempMin: Double
+    private let dailyTempMax: Double
+    /// Pre-computed best outdoor hour data (P1: avoid 48 score calculations in body).
+    private let bestHourData: BestHourInfo?
+
+    struct BestHourInfo {
+        let hour: WeatherSnapshot.HourlyWeather
+        let score: Int
+        let level: OutdoorFitnessLevel
+    }
 
     init(snapshot: WeatherSnapshot) {
         self.snapshot = snapshot
-        var hLabels: [Date: String] = [:]
         let calendar = Calendar.current
+
+        // Hour labels
+        var hLabels: [Date: String] = [:]
         for hourly in snapshot.hourlyForecast {
             let hour = calendar.component(.hour, from: hourly.hour)
             if hour == 0 {
@@ -29,6 +52,7 @@ struct WeatherDetailView: View {
         }
         self.hourLabels = hLabels
 
+        // Day labels
         var dLabels: [Date: String] = [:]
         let today = calendar.startOfDay(for: Date())
         for daily in snapshot.dailyForecast {
@@ -39,12 +63,22 @@ struct WeatherDetailView: View {
                       calendar.isDate(dayStart, inSameDayAs: tomorrow) {
                 dLabels[daily.date] = String(localized: "Tomorrow")
             } else {
-                let formatter = DateFormatter()
-                formatter.dateFormat = "EEE"
-                dLabels[daily.date] = formatter.string(from: daily.date)
+                dLabels[daily.date] = Cache.weekdayFormatter.string(from: daily.date)
             }
         }
         self.dayLabels = dLabels
+
+        // Daily temperature range (pre-computed once, used by all rows)
+        self.dailyTempMin = snapshot.dailyForecast.map(\.temperatureMin).min() ?? 0
+        self.dailyTempMax = snapshot.dailyForecast.map(\.temperatureMax).max() ?? 0
+
+        // Best outdoor hour (pre-computed once)
+        if let best = snapshot.bestOutdoorHour {
+            let score = WeatherSnapshot.calculateOutdoorScore(for: best)
+            self.bestHourData = BestHourInfo(hour: best, score: score, level: OutdoorFitnessLevel(score: score))
+        } else {
+            self.bestHourData = nil
+        }
     }
 
     var body: some View {
@@ -70,8 +104,8 @@ struct WeatherDetailView: View {
                 }
 
                 // Best outdoor hour
-                if let bestHour = snapshot.bestOutdoorHour {
-                    bestTimeSection(bestHour)
+                if let data = bestHourData {
+                    bestTimeSection(data)
                 }
 
                 // Stale indicator
@@ -311,7 +345,7 @@ struct WeatherDetailView: View {
                 Color.clear.frame(width: 32)
             }
 
-            // Temperature range bar
+            // Temperature range bar (uses pre-computed dailyTempMin/Max)
             temperatureBar(min: day.temperatureMin, max: day.temperatureMax)
 
             Text("\(Int(day.temperatureMin))°")
@@ -329,11 +363,11 @@ struct WeatherDetailView: View {
     }
 
     private func temperatureBar(min: Double, max: Double) -> some View {
-        let allMin = snapshot.dailyForecast.map(\.temperatureMin).min() ?? min
-        let allMax = snapshot.dailyForecast.map(\.temperatureMax).max() ?? max
-        let range = allMax - allMin
-        let barStart = range > 0 ? (min - allMin) / range : 0
-        let barEnd = range > 0 ? (max - allMin) / range : 1
+        let range = dailyTempMax - dailyTempMin
+        let safeMin = Swift.min(min, max)
+        let safeMax = Swift.max(min, max)
+        let barStart = range > 0 ? (safeMin - dailyTempMin) / range : 0
+        let barEnd = range > 0 ? (safeMax - dailyTempMin) / range : 1
 
         return GeometryReader { geo in
             ZStack(alignment: .leading) {
@@ -357,10 +391,8 @@ struct WeatherDetailView: View {
 
     // MARK: - Best Time
 
-    private func bestTimeSection(_ bestHour: WeatherSnapshot.HourlyWeather) -> some View {
-        let score = WeatherSnapshot.calculateOutdoorScore(for: bestHour)
-        let level = OutdoorFitnessLevel(score: score)
-        let color = theme.outdoorFitnessColor(for: level)
+    private func bestTimeSection(_ data: BestHourInfo) -> some View {
+        let color = theme.outdoorFitnessColor(for: data.level)
 
         return StandardCard {
             HStack(spacing: DS.Spacing.md) {
@@ -373,7 +405,7 @@ struct WeatherDetailView: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
 
-                    Text(hourLabels[bestHour.hour] ?? bestHour.hour.formatted(date: .omitted, time: .shortened))
+                    Text(hourLabels[data.hour.hour] ?? data.hour.hour.formatted(date: .omitted, time: .shortened))
                         .font(.headline)
                         .foregroundStyle(theme.accentColor)
                 }
@@ -381,12 +413,12 @@ struct WeatherDetailView: View {
                 Spacer()
 
                 VStack(alignment: .trailing, spacing: DS.Spacing.xxs) {
-                    Text("\(score)")
+                    Text("\(data.score)")
                         .font(.title3.weight(.bold))
                         .foregroundStyle(color)
                         .monospacedDigit()
 
-                    Text("\(Int(bestHour.temperature))°C")
+                    Text("\(Int(data.hour.temperature))°C")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }

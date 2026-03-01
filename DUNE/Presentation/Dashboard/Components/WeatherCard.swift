@@ -58,14 +58,15 @@ struct WeatherCard: View {
 
     private var fitnessBadge: some View {
         let level = snapshot.outdoorFitnessLevel
+        let color = theme.outdoorFitnessColor(for: level)
         return Label(level.shortDisplayName, systemImage: level.systemImage)
             .font(.caption.weight(.medium))
-            .foregroundStyle(theme.outdoorFitnessColor(for: level))
+            .foregroundStyle(color)
             .padding(.horizontal, DS.Spacing.sm)
             .padding(.vertical, DS.Spacing.xxs)
             .background {
                 Capsule()
-                    .fill(theme.outdoorFitnessColor(for: level).opacity(DS.Opacity.subtle))
+                    .fill(color.opacity(DS.Opacity.subtle))
             }
     }
 
