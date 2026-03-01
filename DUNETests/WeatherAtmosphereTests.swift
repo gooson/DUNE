@@ -141,7 +141,8 @@ struct WeatherAtmosphereTests {
             windSpeed: windSpeed,
             isDaytime: isDaytime,
             fetchedAt: fetchedAt,
-            hourlyForecast: []
+            hourlyForecast: [],
+            dailyForecast: []
         )
     }
 }

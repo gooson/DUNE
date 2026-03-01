@@ -64,19 +64,23 @@ struct DashboardView: View {
                             BaselineProgressView(status: status)
                         }
 
-                        // Weather
+                        // Weather + coaching (merged when coaching is weather-category)
                         if let weather = viewModel.weatherSnapshot {
-                            WeatherCard(snapshot: weather)
+                            NavigationLink(value: weather) {
+                                WeatherCard(snapshot: weather, insightInfo: viewModel.weatherCardInsight)
+                            }
+                            .buttonStyle(.plain)
                         } else {
                             WeatherCardPlaceholder {
                                 Task { await viewModel.requestLocationPermission() }
                             }
                         }
 
-                        // Coaching
-                        if let insight = viewModel.focusInsight {
+                        // Coaching (standalone when not merged into weather card)
+                        if let insight = viewModel.standaloneCoachingInsight {
                             TodayCoachingCard(insight: insight)
-                        } else if let coachingMessage = viewModel.coachingMessage {
+                        } else if viewModel.focusInsight == nil,
+                                  let coachingMessage = viewModel.coachingMessage {
                             TodayCoachingCard(message: coachingMessage)
                         }
 
@@ -151,6 +155,9 @@ struct DashboardView: View {
         }
         .navigationDestination(for: AllDataDestination.self) { destination in
             AllDataView(category: destination.category)
+        }
+        .navigationDestination(for: WeatherSnapshot.self) { snapshot in
+            WeatherDetailView(snapshot: snapshot)
         }
         .waveRefreshable {
             await viewModel.loadData()

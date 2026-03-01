@@ -1,120 +1,100 @@
 import SwiftUI
 
 /// Full-width weather card for the Today tab.
-/// Shows current conditions, temperature, humidity, UV, and 6-hour forecast.
+/// Shows current conditions, temperature, outdoor fitness badge, and optional coaching insight.
+/// Tapping navigates to WeatherDetailView.
 struct WeatherCard: View {
+    /// Display-ready coaching insight data (decoupled from Domain CoachingInsight).
+    struct InsightInfo {
+        let title: String
+        let message: String
+        let iconName: String
+    }
+
     let snapshot: WeatherSnapshot
+    var insightInfo: InsightInfo?
 
     @Environment(\.appTheme) private var theme
     @Environment(\.horizontalSizeClass) private var sizeClass
 
     private var isRegular: Bool { sizeClass == .regular }
-
-    /// Pre-computed hour labels (Correction #102: avoid Calendar in body).
-    private let hourLabels: [Date: String]
-
-    init(snapshot: WeatherSnapshot) {
-        self.snapshot = snapshot
-        var labels: [Date: String] = [:]
-        let calendar = Calendar.current
-        for hourly in snapshot.hourlyForecast {
-            let hour = calendar.component(.hour, from: hourly.hour)
-            if hour == 0 {
-                labels[hourly.hour] = String(localized: "Midnight")
-            } else if hour == 12 {
-                labels[hourly.hour] = String(localized: "Noon")
-            } else {
-                labels[hourly.hour] = hour < 12 ? "\(hour)AM" : "\(hour - 12)PM"
-            }
-        }
-        self.hourLabels = labels
-    }
+    private var level: OutdoorFitnessLevel { snapshot.outdoorFitnessLevel }
 
     var body: some View {
         InlineCard {
-            VStack(alignment: .leading, spacing: DS.Spacing.md) {
-                // Current conditions row
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
                 HStack(spacing: DS.Spacing.sm) {
+                    // Weather icon
                     Image(systemName: snapshot.condition.sfSymbol)
                         .font(isRegular ? .title2 : .title3)
-                        .foregroundStyle(snapshot.condition.iconColor)
+                        .foregroundStyle(snapshot.condition.iconColor(for: theme))
                         .symbolRenderingMode(.multicolor)
 
+                    // Temperature + condition
                     VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                         HStack(spacing: DS.Spacing.xs) {
                             Text(temperatureText)
                                 .font(.title3.weight(.semibold))
+                                .foregroundStyle(theme.accentColor)
                                 .monospacedDigit()
 
                             if feelsLikeDiffers {
                                 Text("Feels \(Int(snapshot.feelsLike))°")
                                     .font(.subheadline)
-                                    .foregroundStyle(.secondary)
+                                    .foregroundStyle(theme.sandColor)
                             }
                         }
 
                         Text(snapshot.condition.label)
                             .font(.subheadline)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(theme.sandColor)
                     }
 
                     Spacer()
 
-                    // Humidity + UV badges
-                    VStack(alignment: .trailing, spacing: DS.Spacing.xxs) {
-                        Label("\(Int(snapshot.humidity * 100))%", systemImage: "humidity.fill")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                    // Outdoor fitness badge
+                    fitnessBadge
 
-                        Label("UV \(snapshot.uvIndex)", systemImage: "sun.max.fill")
-                            .font(.caption)
-                            .foregroundStyle(uvColor)
-                    }
-                }
-
-                // 6-hour forecast (evenly distributed)
-                if snapshot.hourlyForecast.count >= 3 {
-                    Divider()
-                        .opacity(0.3)
-
-                    HStack(spacing: 0) {
-                        ForEach(snapshot.hourlyForecast.prefix(6)) { hour in
-                            hourCell(hour)
-                                .frame(maxWidth: .infinity)
-                        }
-                    }
-                }
-
-                // Stale indicator
-                if snapshot.isStale {
-                    Text("Weather data is outdated")
-                        .font(.caption2)
+                    Image(systemName: "chevron.right")
+                        .font(.caption.weight(.semibold))
                         .foregroundStyle(.tertiary)
+                }
+
+                // Coaching insight (weather-category only)
+                if let info = insightInfo {
+                    Divider().opacity(0.3)
+
+                    HStack(alignment: .top, spacing: DS.Spacing.sm) {
+                        Image(systemName: info.iconName)
+                            .font(.subheadline)
+                            .foregroundStyle(theme.outdoorFitnessColor(for: level))
+                            .frame(width: 20)
+
+                        Text(info.message)
+                            .font(.caption)
+                            .foregroundStyle(DS.Color.textSecondary)
+                            .lineLimit(2)
+                    }
                 }
             }
         }
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("Current weather \(snapshot.condition.label), \(Int(snapshot.temperature)) degrees")
+        .accessibilityLabel(accessibilityDescription)
     }
 
     // MARK: - Subviews
 
-    private func hourCell(_ hour: WeatherSnapshot.HourlyWeather) -> some View {
-        VStack(spacing: DS.Spacing.xs) {
-            Text(hourLabels[hour.hour] ?? "")
-                .font(.caption2)
-                .foregroundStyle(.tertiary)
-                .minimumScaleFactor(0.7)
-
-            Image(systemName: hour.condition.sfSymbol)
-                .font(.caption)
-                .foregroundStyle(hour.condition.iconColor)
-                .symbolRenderingMode(.multicolor)
-
-            Text("\(Int(hour.temperature))°")
-                .font(.caption.weight(.medium))
-                .monospacedDigit()
-        }
+    private var fitnessBadge: some View {
+        let color = theme.outdoorFitnessColor(for: level)
+        return Label(level.shortDisplayName, systemImage: level.systemImage)
+            .font(.caption.weight(.medium))
+            .foregroundStyle(color)
+            .padding(.horizontal, DS.Spacing.sm)
+            .padding(.vertical, DS.Spacing.xxs)
+            .background {
+                Capsule()
+                    .fill(color.opacity(DS.Opacity.subtle))
+            }
     }
 
     // MARK: - Computed
@@ -127,15 +107,11 @@ struct WeatherCard: View {
         abs(snapshot.temperature - snapshot.feelsLike) >= 3
     }
 
-    private var uvColor: Color {
-        switch snapshot.uvIndex {
-        case 0...2: .secondary
-        case 3...5: theme.accentColor
-        case 6...7: DS.Color.caution
-        default:    DS.Color.negative
-        }
+    private var accessibilityDescription: String {
+        let base = String(localized: "Current weather \(snapshot.condition.label), \(Int(snapshot.temperature)) degrees, \(level.displayName)")
+        guard let info = insightInfo else { return base }
+        return base + ". \(info.title): \(info.message)"
     }
-
 }
 
 // MARK: - Placeholder (weather unavailable)
@@ -162,7 +138,7 @@ struct WeatherCardPlaceholder: View {
                     .foregroundStyle(.tertiary)
             }
         }
-        .accessibilityLabel("Weather data unavailable")
+        .accessibilityLabel(String(localized: "Weather data unavailable"))
         .onTapGesture {
             onRequestPermission?()
         }
