@@ -87,6 +87,9 @@ TEST_CMD=(xcodebuild test -project "$PROJECT_FILE"
     -scheme "$SCHEME"
     -destination "$DESTINATION"
     -derivedDataPath "$DERIVED_DATA_DIR"
+    -test-timeouts-enabled YES
+    -default-test-execution-time-allowance 120
+    -maximum-test-execution-time-allowance 300
     CODE_SIGNING_ALLOWED=NO
     CODE_SIGNING_REQUIRED=NO)
 

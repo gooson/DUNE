@@ -59,8 +59,9 @@ final class DashboardViewModel {
     private static let activityCardCategories: Set<HealthMetric.Category> = [.steps, .exercise]
     private static let bodyCategories: Set<HealthMetric.Category> = [.weight, .bmi, .sleep]
     private static var shouldBypassAuthorizationForTests: Bool {
-        let isRunningXCTest = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
         let arguments = ProcessInfo.processInfo.arguments
+        let isRunningXCTest = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
+            || arguments.contains("--uitesting")
         let isHealthKitPermissionUITest = arguments.contains("--healthkit-permission-uitest")
         return isRunningXCTest && !isHealthKitPermissionUITest
     }
