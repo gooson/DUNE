@@ -9,6 +9,12 @@ class UITestBaseCase: XCTestCase {
     /// Override in subclass to use "--seed-mock" for data-seeded tests
     var shouldSeedMockData: Bool { false }
 
+    override func tearDownWithError() throws {
+        app?.terminate()
+        app = nil
+        try super.tearDownWithError()
+    }
+
     override func setUpWithError() throws {
         continueAfterFailure = false
 
