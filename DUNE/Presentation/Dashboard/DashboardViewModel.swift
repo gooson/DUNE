@@ -938,17 +938,17 @@ final class DashboardViewModel {
         if remainingDays > 0 {
             return "No score yet. A short workout today helps maintain your weekly goal rhythm."
         }
-        return "No score yet. Keep your routine steady and collect more recovery data."
+        return String(localized: "No score yet. Keep your routine steady and collect more recovery data.")
     }
 
     private func buildHeroBaselineDetails() -> [BaselineDetail] {
         guard let hrvDelta = baselineDeltasByMetricID["hrv"] else { return [] }
         var details: [BaselineDetail] = []
         if let yesterday = hrvDelta.yesterdayDelta {
-            details.append(BaselineDetail(label: "HRV vs yesterday", value: yesterday, fractionDigits: 0))
+            details.append(BaselineDetail(label: String(localized: "HRV vs yesterday"), value: yesterday, fractionDigits: 0))
         }
         if let short = hrvDelta.shortTermDelta {
-            details.append(BaselineDetail(label: "HRV vs 14d avg", value: short, fractionDigits: 0))
+            details.append(BaselineDetail(label: String(localized: "HRV vs 14d avg"), value: short, fractionDigits: 0))
         }
         return details
     }

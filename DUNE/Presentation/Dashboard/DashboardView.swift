@@ -232,7 +232,7 @@ struct DashboardView: View {
     }
 
     private func cardSection(
-        title: String,
+        title: LocalizedStringKey,
         icon: String,
         iconColor: Color,
         cards: [VitalCardData]
@@ -279,7 +279,7 @@ struct DashboardView: View {
         EmptyStateView(
             icon: "exclamationmark.triangle",
             title: "Something Went Wrong",
-            message: viewModel.errorMessage ?? "An unexpected error occurred.",
+            message: "\(viewModel.errorMessage ?? String(localized: "An unexpected error occurred."))",
             actionTitle: "Try Again",
             action: { Task { await viewModel.loadData() } }
         )

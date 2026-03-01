@@ -3,7 +3,7 @@ import SwiftUI
 /// Groups content under a labeled section with a rounded material background.
 /// Shared between Activity and Wellness tabs.
 struct SectionGroup<Content: View>: View {
-    let title: String
+    let title: LocalizedStringKey
     let icon: String
     let iconColor: Color
     var infoAction: (() -> Void)? = nil

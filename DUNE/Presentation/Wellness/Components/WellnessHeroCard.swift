@@ -10,15 +10,15 @@ struct WellnessHeroCard: View {
         if let score {
             HeroScoreCard(
                 score: score.score,
-                scoreLabel: "WELLNESS",
+                scoreLabel: String(localized: "WELLNESS"),
                 statusLabel: score.status.label,
                 statusIcon: score.status.iconName,
                 statusColor: score.status.color,
                 guideMessage: score.guideMessage,
                 subScores: [
-                    .init(label: "Sleep", value: sleepScore, color: DS.Color.sleep),
-                    .init(label: "Condition", value: conditionScore, color: DS.Color.hrv),
-                    .init(label: "Body", value: bodyScore, color: DS.Color.body)
+                    .init(label: String(localized: "Sleep"), value: sleepScore, color: DS.Color.sleep),
+                    .init(label: String(localized: "Condition"), value: conditionScore, color: DS.Color.hrv),
+                    .init(label: String(localized: "Body"), value: bodyScore, color: DS.Color.body)
                 ],
                 badgeText: nil,
                 showsChevron: true,

@@ -3,7 +3,7 @@ import Charts
 
 /// Reusable 14-day trend chart for a single sub-score metric (HRV, RHR, Sleep).
 struct SubScoreTrendChartView: View {
-    let title: String
+    let title: LocalizedStringKey
     let data: [ChartDataPoint]
     let color: Color
     let unit: String
