@@ -11,6 +11,17 @@ extension ConditionScore.Status {
         }
     }
 
+    /// The color of the next tier this score is heading toward.
+    var nextTierColor: Color {
+        switch self {
+        case .warning:   DS.Color.scoreTired
+        case .tired:     DS.Color.scoreFair
+        case .fair:      DS.Color.scoreGood
+        case .good:      DS.Color.scoreExcellent
+        case .excellent: DS.Color.scoreExcellent.exposureAdjust(2)
+        }
+    }
+
     var iconName: String {
         switch self {
         case .excellent: "checkmark.circle.fill"

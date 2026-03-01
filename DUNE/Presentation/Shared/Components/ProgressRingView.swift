@@ -6,16 +6,33 @@ struct ProgressRingView: View {
     var lineWidth: CGFloat = 14
     var size: CGFloat = 160
     var useWarmGradient: Bool = false
+    /// Arc tip color — the color at the progress endpoint.
+    /// When nil, defaults to ringColor. Set to "next tier" color
+    /// so the arc visually reaches toward the next level.
+    var gradientTipColor: Color? = nil
 
     @State private var animatedProgress: Double = 0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.appTheme) private var theme
 
-    /// Pre-resolved gradient colors — computed once at init, not per render (P1 perf fix).
-    private var gradientColors: [Color] {
-        useWarmGradient
-            ? Cache.accentGradientColors(base: ringColor, theme: theme)
-            : [ringColor.opacity(0.6), ringColor]
+    /// Gradient stops — location 0 = arc start, location 1 = arc end.
+    /// endAngle is scoped to progress so the gradient maps exactly to the visible arc.
+    private var gradientStops: [Gradient.Stop] {
+        let tip = gradientTipColor ?? ringColor
+        if useWarmGradient {
+            return Cache.accentGradientStops(base: ringColor, tipColor: tip, theme: theme)
+        } else {
+            return [
+                Gradient.Stop(color: ringColor.opacity(0.6), location: 0),
+                Gradient.Stop(color: ringColor, location: 0.82),
+                Gradient.Stop(color: tip, location: 1)
+            ]
+        }
+    }
+
+    /// Arc extent in degrees — used as AngularGradient endAngle.
+    private var arcDegrees: Double {
+        max(0.01, progress) * 360
     }
 
     var body: some View {
@@ -29,10 +46,10 @@ struct ProgressRingView: View {
                 .trim(from: 0, to: animatedProgress)
                 .stroke(
                     AngularGradient(
-                        colors: gradientColors,
+                        stops: gradientStops,
                         center: .center,
-                        startAngle: .degrees(-90),
-                        endAngle: .degrees(270)
+                        startAngle: .degrees(0),
+                        endAngle: .degrees(arcDegrees)
                     ),
                     style: StrokeStyle(lineWidth: lineWidth, lineCap: .round)
                 )
@@ -61,17 +78,100 @@ struct ProgressRingView: View {
     }
 
     // Correction #83 — static color caching for accent gradient (per-theme)
+    // endAngle is scoped to progress, so locations 0–1 map to the visible arc only.
     private enum Cache {
-        static let desertAccent06 = Color("AccentColor").opacity(0.6)
+        // Desert Warm — opaque colors to avoid olive tint from warm material blending
+        static let desertAccent06 = Color("ActivityCardio").opacity(0.6)
         static let desertAccent08 = Color("AccentColor").opacity(0.8)
+        static let desertRingStart = Color("DesertRingDark")
+        // Ocean Cool
         static let oceanAccent06 = Color("OceanAccent").opacity(0.6)
-        static let oceanAccent08 = Color("OceanAccent").opacity(0.8)
 
-        static func accentGradientColors(base: Color, theme: AppTheme) -> [Color] {
+        static func accentGradientStops(base: Color, tipColor: Color, theme: AppTheme) -> [Gradient.Stop] {
             switch theme {
-            case .desertWarm: [desertAccent06, base, desertAccent08]
-            case .oceanCool:  [oceanAccent06, base, oceanAccent08]
+            case .desertWarm:
+                // Dark shadow → status color (desert warmth at arc start)
+                return [
+                    .init(color: base.opacity(0.3), location: 0),
+                    .init(color: base.opacity(0.8), location: 0.2),
+                    .init(color: base, location: 0.78),
+                    .init(color: base.exposureAdjust(1.1), location: 0.88),
+                    .init(color: tipColor.exposureAdjust(1.2), location: 0.93),
+                    .init(color: tipColor.exposureAdjust(0.2), location: 1)
+                ]
+            case .oceanCool:
+                return [
+                    .init(color: oceanAccent06, location: 0),
+                    .init(color: base, location: 0.82),
+                    .init(color: tipColor, location: 1)
+                ]
             }
         }
+    }
+}
+
+// MARK: - All-Levels Preview
+
+#Preview("Ring Gradient — All Levels") {
+    let levels: [(score: Int, status: ConditionScore.Status)] = [
+        (10, .warning),
+        (19, .warning),
+        (20, .tired),
+        (30, .tired),
+        (39, .tired),
+        (40, .fair),
+        (50, .fair),
+        (59, .fair),
+        (60, .good),
+        (70, .good),
+        (79, .good),
+        (80, .excellent),
+        (90, .excellent),
+        (95, .excellent),
+        (100, .excellent)
+    ]
+
+    ScrollView {
+        VStack(spacing: 24) {
+            ForEach(levels, id: \.score) { level in
+                HStack(spacing: 16) {
+                    ProgressRingView(
+                        progress: Double(level.score) / 100.0,
+                        ringColor: level.status.color,
+                        lineWidth: 10,
+                        size: 80,
+                        useWarmGradient: true,
+                        gradientTipColor: level.status.nextTierColor
+                    )
+
+                    VStack(alignment: .leading) {
+                        Text("\(level.score) — \(level.status.label)")
+                            .font(.headline)
+                        Text("ring: \(level.status.rawValue)")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Text("tip: \(nextTierLabel(level.status))")
+                            .font(.caption)
+                            .foregroundStyle(level.status.nextTierColor)
+                    }
+
+                    Spacer()
+                }
+                .padding(.horizontal)
+            }
+        }
+        .padding(.vertical)
+    }
+    .background(Color(white: 0.12))
+    .preferredColorScheme(.dark)
+}
+
+private func nextTierLabel(_ status: ConditionScore.Status) -> String {
+    switch status {
+    case .warning:   "tired"
+    case .tired:     "fair"
+    case .fair:      "good"
+    case .good:      "excellent"
+    case .excellent: "excellent"
     }
 }
