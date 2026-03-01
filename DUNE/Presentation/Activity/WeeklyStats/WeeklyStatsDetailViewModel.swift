@@ -47,6 +47,14 @@ final class WeeklyStatsDetailViewModel {
             case .thisMonth: .month
             }
         }
+
+        var displayName: String {
+            switch self {
+            case .thisWeek: String(localized: "This Week")
+            case .lastWeek: String(localized: "Last Week")
+            case .thisMonth: String(localized: "This Month")
+            }
+        }
     }
 
     // MARK: - Published State
@@ -155,7 +163,7 @@ final class WeeklyStatsDetailViewModel {
                 id: "sessions",
                 icon: "figure.strengthtraining.traditional",
                 iconColor: DS.Color.activity,
-                title: "Sessions",
+                title: String(localized: "Sessions"),
                 value: current.totalSessions.formattedWithSeparator,
                 unit: "",
                 change: result.sessionChange.map { "\($0.formattedWithSeparator(alwaysShowSign: true))%" },

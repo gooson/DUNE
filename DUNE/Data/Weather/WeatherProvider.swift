@@ -22,18 +22,21 @@ enum WeatherError: Error, Sendable {
     case locationTimeout
 }
 
-/// Combines LocationService + OpenMeteoService behind a single async call.
-/// Accepts a WeatherFetching dependency for test injection.
+/// Combines LocationService + OpenMeteoService + AirQualityService behind a single async call.
+/// Accepts WeatherFetching / AirQualityFetching dependencies for test injection.
 final class WeatherProvider: WeatherProviding, Sendable {
     private let locationService: LocationService
     private let weatherService: WeatherFetching
+    private let airQualityService: AirQualityFetching
 
     init(
         locationService: LocationService,
-        weatherService: WeatherFetching = OpenMeteoService()
+        weatherService: WeatherFetching = OpenMeteoService(),
+        airQualityService: AirQualityFetching = OpenMeteoAirQualityService()
     ) {
         self.locationService = locationService
         self.weatherService = weatherService
+        self.airQualityService = airQualityService
     }
 
     func fetchCurrentWeather() async throws -> WeatherSnapshot {
@@ -45,15 +48,30 @@ final class WeatherProvider: WeatherProviding, Sendable {
 
         let location = try await locationService.requestLocation()
 
-        // Parallel: weather fetch + reverse geocoding (independent).
+        // Parallel fetch: weather + air quality + reverse geocoding (all independent).
         // reverseGeocode hops to @MainActor for cache access; the CLGeocoder call itself runs off-main.
         async let weatherTask = weatherService.fetchWeather(for: location)
+        async let airQualityTask = safeAirQualityFetch(for: location)
         async let locationNameTask = locationService.reverseGeocode(location)
 
-        let snapshot = try await weatherTask
+        var snapshot = try await weatherTask
+        let airQuality = await airQualityTask
         let locationName = await locationNameTask
-
+        snapshot = snapshot.withAirQuality(airQuality)
         return snapshot.with(locationName: locationName)
+    }
+
+    /// Air quality fetch with graceful failure — returns nil instead of throwing.
+    /// CancellationError propagation: returns nil (parent is already cancelled).
+    private func safeAirQualityFetch(for location: CLLocation) async -> AirQualitySnapshot? {
+        do {
+            return try await airQualityService.fetchAirQuality(for: location)
+        } catch is CancellationError {
+            return nil
+        } catch {
+            print("[WeatherProvider] Air quality fetch failed: \(error)")
+            return nil
+        }
     }
 
     func requestLocationPermission() async {

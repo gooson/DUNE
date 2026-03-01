@@ -28,7 +28,7 @@ struct WeeklyStatsDetailView: View {
             .padding()
         }
         .background { DetailWaveBackground() }
-        .navigationTitle(viewModel.selectedPeriod.rawValue)
+        .navigationTitle(viewModel.selectedPeriod.displayName)
         .task(id: viewModel.selectedPeriod) {
             let snapshots = recentRecords.map { record in
                 ManualExerciseSnapshot(
@@ -50,7 +50,7 @@ struct WeeklyStatsDetailView: View {
     private var periodPicker: some View {
         Picker("Period", selection: $viewModel.selectedPeriod) {
             ForEach(WeeklyStatsDetailViewModel.StatsPeriod.allCases, id: \.self) { period in
-                Text(period.rawValue).tag(period)
+                Text(period.displayName).tag(period)
             }
         }
         .pickerStyle(.segmented)

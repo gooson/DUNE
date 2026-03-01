@@ -38,17 +38,24 @@ struct WeatherDetailView: View {
         self.snapshot = snapshot
         let calendar = Calendar.current
 
-        // Hour labels
+        // Hour labels (weather + air quality hourly dates)
         var hLabels: [Date: String] = [:]
-        for hourly in snapshot.hourlyForecast {
-            let hour = calendar.component(.hour, from: hourly.hour)
+        func addHourLabel(for date: Date) {
+            guard hLabels[date] == nil else { return }
+            let hour = calendar.component(.hour, from: date)
             if hour == 0 {
-                hLabels[hourly.hour] = String(localized: "Midnight")
+                hLabels[date] = String(localized: "Midnight")
             } else if hour == 12 {
-                hLabels[hourly.hour] = String(localized: "Noon")
+                hLabels[date] = String(localized: "Noon")
             } else {
-                hLabels[hourly.hour] = hour < 12 ? "\(hour)AM" : "\(hour - 12)PM"
+                hLabels[date] = hour < 12 ? "\(hour)AM" : "\(hour - 12)PM"
             }
+        }
+        for hourly in snapshot.hourlyForecast {
+            addHourLabel(for: hourly.hour)
+        }
+        for aqHourly in snapshot.airQuality?.hourlyForecast ?? [] {
+            addHourLabel(for: aqHourly.hour)
         }
         self.hourLabels = hLabels
 
@@ -72,9 +79,12 @@ struct WeatherDetailView: View {
         self.dailyTempMin = snapshot.dailyForecast.map(\.temperatureMin).min() ?? 0
         self.dailyTempMax = snapshot.dailyForecast.map(\.temperatureMax).max() ?? 0
 
-        // Best outdoor hour (pre-computed once)
+        // Best outdoor hour (pre-computed once, includes air quality)
         if let best = snapshot.bestOutdoorHour {
-            let score = WeatherSnapshot.calculateOutdoorScore(for: best)
+            let score = WeatherSnapshot.calculateOutdoorScore(
+                for: best,
+                airQualityHourly: snapshot.airQuality?.hourlyForecast
+            )
             self.bestHourData = BestHourInfo(hour: best, score: score, level: OutdoorFitnessLevel(score: score))
         } else {
             self.bestHourData = nil
@@ -89,6 +99,11 @@ struct WeatherDetailView: View {
 
                 // Outdoor fitness score
                 outdoorFitnessSection
+
+                // Air quality section
+                if let aq = snapshot.airQuality {
+                    airQualitySection(aq)
+                }
 
                 // Condition details grid
                 conditionDetailsGrid
@@ -430,6 +445,173 @@ struct WeatherDetailView: View {
                 }
             }
         }
+    }
+
+    // MARK: - Air Quality
+
+    private func airQualitySection(_ aq: AirQualitySnapshot) -> some View {
+        let level = aq.overallLevel
+        let color = level.color(for: theme)
+
+        return VStack(alignment: .leading, spacing: DS.Spacing.md) {
+            sectionHeader(title: "Air Quality", icon: "aqi.medium")
+
+            StandardCard {
+                VStack(alignment: .leading, spacing: DS.Spacing.md) {
+                    // Overall level + badge
+                    HStack(spacing: DS.Spacing.sm) {
+                        Image(systemName: level.sfSymbol)
+                            .font(.title2)
+                            .foregroundStyle(color)
+
+                        VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                            Text(level.displayName)
+                                .font(.headline)
+                                .foregroundStyle(color)
+
+                            Text("Air Quality")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+
+                        Spacer()
+
+                        // US AQI number
+                        VStack(alignment: .trailing, spacing: DS.Spacing.xxs) {
+                            Text("\(aq.usAQI)")
+                                .font(.system(size: 36, weight: .bold))
+                                .foregroundStyle(color)
+                                .monospacedDigit()
+
+                            Text("US AQI")
+                                .font(.caption2)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+
+                    Divider().opacity(0.3)
+
+                    // PM2.5 / PM10 detail row
+                    HStack(spacing: DS.Spacing.lg) {
+                        pmDetailItem(
+                            label: "PM₂.₅",
+                            value: aq.pm2_5,
+                            level: aq.pm25Level
+                        )
+
+                        pmDetailItem(
+                            label: "PM₁₀",
+                            value: aq.pm10,
+                            level: aq.pm10Level
+                        )
+                    }
+
+                    // Additional pollutants (if available)
+                    if aq.ozone != nil || aq.nitrogenDioxide != nil {
+                        Divider().opacity(0.3)
+
+                        HStack(spacing: DS.Spacing.lg) {
+                            if let ozone = aq.ozone {
+                                pollutantItem(label: "O₃", value: ozone)
+                            }
+                            if let no2 = aq.nitrogenDioxide {
+                                pollutantItem(label: "NO₂", value: no2)
+                            }
+                            if let so2 = aq.sulphurDioxide {
+                                pollutantItem(label: "SO₂", value: so2)
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Hourly PM2.5 forecast
+            if !aq.hourlyForecast.isEmpty {
+                StandardCard {
+                    VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                        Text("Hourly PM₂.₅")
+                            .font(.caption.weight(.medium))
+                            .foregroundStyle(.secondary)
+
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: DS.Spacing.md) {
+                                ForEach(aq.hourlyForecast) { hour in
+                                    hourlyAQCell(hour)
+                                }
+                            }
+                            .padding(.horizontal, DS.Spacing.xxs)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private func pmDetailItem(label: String, value: Double, level: AirQualityLevel) -> some View {
+        let color = level.color(for: theme)
+        return VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+            Text(label)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+            HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xxs) {
+                Text("\(Int(value))")
+                    .font(.title3.weight(.semibold))
+                    .foregroundStyle(color)
+                    .monospacedDigit()
+
+                Text("μg/m³")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+            }
+
+            Text(level.displayName)
+                .font(.caption2)
+                .foregroundStyle(color)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private func pollutantItem(label: String, value: Double) -> some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+            Text(label)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+            HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xxs) {
+                Text("\(Int(value))")
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(theme.accentColor)
+                    .monospacedDigit()
+
+                Text("μg/m³")
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private func hourlyAQCell(_ hour: AirQualitySnapshot.HourlyAirQuality) -> some View {
+        let level = AirQualityLevel.fromPM25(hour.pm2_5)
+        let color = level.color(for: theme)
+
+        return VStack(spacing: DS.Spacing.xs) {
+            Text(hourLabels[hour.hour] ?? "")
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+                .minimumScaleFactor(0.7)
+
+            Image(systemName: level.sfSymbol)
+                .font(.body)
+                .foregroundStyle(color)
+
+            Text("\(Int(hour.pm2_5))")
+                .font(.callout.weight(.medium))
+                .foregroundStyle(color)
+                .monospacedDigit()
+        }
+        .frame(minWidth: 50)
     }
 
     // MARK: - Helpers

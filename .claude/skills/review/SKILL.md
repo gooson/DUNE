@@ -85,6 +85,24 @@ truncation이 발생합니다. 이를 방지하기 위해:
    - 도구 사용 적절성
    - 에러 복구 전략
 
+### Step 2.5: Localization Verification (필수)
+
+6관점 에이전트 리뷰와 별도로, **주 에이전트가 직접** 다음 localization 검증을 수행합니다.
+이 단계는 diff에 UI 문자열 변경이 포함된 경우 항상 실행합니다.
+
+**검증 방법**: diff에서 사용자 대면 문자열을 포함하는 변경을 식별하고, `.claude/rules/localization.md`의 "Localization Leak Detection" 5개 패턴 + "리뷰 체크포인트"를 대조합니다.
+
+**구체적 검증 항목**:
+1. `Text()`, `Label()`, `Button()`, `Section()` 에 전달되는 문자열이 `LocalizedStringKey`로 처리되는가
+2. `String` 타입 변수/프로퍼티에 할당되는 사용자 대면 텍스트에 `String(localized:)` 래핑이 있는가
+3. View helper 함수의 레이블 파라미터가 `LocalizedStringKey` 타입인가 (`String` 아닌지)
+4. 새 문자열이 `Localizable.xcstrings`에 en/ko/ja 3개 언어 번역과 함께 등록되었는가
+5. enum rawValue가 UI에 직접 렌더링되지 않고 `displayName` computed property를 경유하는가
+
+**스킵 조건**: diff에 Presentation/ 하위 파일 변경이 없으면 스킵.
+
+**출력**: 발견사항을 Step 3의 통합 결과에 `[L10N]` 태그로 병합합니다.
+
 ### Step 3: 결과 통합
 
 각 리뷰어의 발견사항을 우선순위별로 정리합니다.

@@ -175,7 +175,8 @@ struct OpenMeteoServiceTests {
             humidity: 0.5, uvIndex: 0, windSpeed: 10,
             isDaytime: true, fetchedAt: Date(), hourlyForecast: [],
             dailyForecast: [],
-            locationName: nil
+            locationName: nil,
+            airQuality: nil
         )
         // uvIndex 0 is the fallback value used when isFinite fails
         #expect(snapshot.uvIndex == 0)
@@ -206,7 +207,8 @@ struct OpenMeteoServiceTests {
             humidity: 0.5, uvIndex: 3, windSpeed: 10,
             isDaytime: true, fetchedAt: Date(), hourlyForecast: [],
             dailyForecast: [],
-            locationName: nil
+            locationName: nil,
+            airQuality: nil
         )
         let updated = original.with(locationName: "Gangnam-gu, Seoul")
 
@@ -223,7 +225,8 @@ struct OpenMeteoServiceTests {
             humidity: 0.5, uvIndex: 3, windSpeed: 10,
             isDaytime: true, fetchedAt: Date(), hourlyForecast: [],
             dailyForecast: [],
-            locationName: "Old Place"
+            locationName: "Old Place",
+            airQuality: nil
         )
         let updated = original.with(locationName: nil)
 

@@ -13,25 +13,25 @@ struct ActivityStat: Identifiable, Sendable {
 
     static func volume(value: String, change: String? = nil, isPositive: Bool? = nil) -> ActivityStat {
         ActivityStat(id: "volume", icon: "scalemass.fill", iconColor: DS.Color.activity,
-                     title: "Volume", value: value, unit: "kg",
+                     title: String(localized: "Volume"), value: value, unit: String(localized: "kg"),
                      change: change, changeIsPositive: isPositive)
     }
 
     static func calories(value: String, change: String? = nil, isPositive: Bool? = nil) -> ActivityStat {
         ActivityStat(id: "calories", icon: "flame.fill", iconColor: .orange,
-                     title: "Calories", value: value, unit: "kcal",
+                     title: String(localized: "Calories"), value: value, unit: String(localized: "kcal"),
                      change: change, changeIsPositive: isPositive)
     }
 
     static func duration(value: String, change: String? = nil, isPositive: Bool? = nil) -> ActivityStat {
         ActivityStat(id: "duration", icon: "clock.fill", iconColor: DS.Color.fitness,
-                     title: "Duration", value: value, unit: "min",
+                     title: String(localized: "Duration"), value: value, unit: String(localized: "min"),
                      change: change, changeIsPositive: isPositive)
     }
 
     static func activeDays(value: String, change: String? = nil, isPositive: Bool? = nil) -> ActivityStat {
         ActivityStat(id: "activeDays", icon: "calendar", iconColor: .green,
-                     title: "Active Days", value: value, unit: "days",
+                     title: String(localized: "Active Days"), value: value, unit: String(localized: "days"),
                      change: change, changeIsPositive: isPositive)
     }
 }
