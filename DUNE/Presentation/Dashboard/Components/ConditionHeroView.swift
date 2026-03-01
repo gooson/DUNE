@@ -7,6 +7,10 @@ struct ConditionHeroView: View {
     var weeklyGoalProgress: (completedDays: Int, goalDays: Int)? = nil
     var trendBadges: [BaselineDetail] = []
 
+    private enum Labels {
+        static let scoreLabel = String(localized: "CONDITION")
+    }
+
     @State private var animatedScore: Int = 0
     @State private var isAppeared = false
     @Environment(\.appTheme) private var theme
@@ -41,10 +45,17 @@ struct ConditionHeroView: View {
                         gradientTipColor: score.status.nextTierColor
                     )
 
-                    Text("\(animatedScore)")
-                        .font(DS.Typography.cardScore)
-                        .foregroundStyle(theme.detailScoreGradient)
-                        .contentTransition(.numericText())
+                    VStack(spacing: 2) {
+                        Text("\(animatedScore)")
+                            .font(DS.Typography.cardScore)
+                            .foregroundStyle(theme.detailScoreGradient)
+                            .contentTransition(.numericText())
+
+                        Text(Labels.scoreLabel)
+                            .font(.system(size: 9, weight: .semibold, design: .rounded))
+                            .foregroundStyle(theme.sandColor)
+                            .tracking(1)
+                    }
                 }
 
                 // Score info + sparkline
