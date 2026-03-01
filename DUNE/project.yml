@@ -50,10 +50,15 @@ targets:
     platform: iOS
     sources:
       - path: App
+        group: DUNE
       - path: Data
+        group: DUNE
       - path: Domain
+        group: DUNE
       - path: Presentation
+        group: DUNE
       - path: Resources
+        group: DUNE
     settings:
       base:
         INFOPLIST_FILE: Resources/Info.plist
