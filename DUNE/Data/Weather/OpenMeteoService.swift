@@ -125,8 +125,12 @@ final class OpenMeteoService: WeatherFetching, @unchecked Sendable {
                     temperatureMax: daily.temperature_2m_max[i].clampedToPhysicalTemperature(),
                     temperatureMin: daily.temperature_2m_min[i].clampedToPhysicalTemperature(),
                     condition: Self.mapWMOCode(daily.weather_code[i]),
-                    precipitationProbabilityMax: Swift.max(0, Swift.min(100, daily.precipitation_probability_max?[i] ?? 0)),
-                    uvIndexMax: Swift.max(0, Swift.min(15, Int((daily.uv_index_max?[i] ?? 0).rounded())))
+                    precipitationProbabilityMax: Swift.max(0, Swift.min(100,
+                        (i < (daily.precipitation_probability_max?.count ?? 0))
+                            ? daily.precipitation_probability_max![i] : 0)),
+                    uvIndexMax: Swift.max(0, Swift.min(15, Int((
+                        (i < (daily.uv_index_max?.count ?? 0))
+                            ? daily.uv_index_max![i] : 0).rounded())))
                 )
             }
         } else {

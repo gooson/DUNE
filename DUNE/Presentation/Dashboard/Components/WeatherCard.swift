@@ -12,6 +12,8 @@ struct WeatherCard: View {
     private var isRegular: Bool { sizeClass == .regular }
 
     var body: some View {
+        let level = snapshot.outdoorFitnessLevel
+
         InlineCard {
             HStack(spacing: DS.Spacing.sm) {
                 // Weather icon
@@ -43,7 +45,7 @@ struct WeatherCard: View {
                 Spacer()
 
                 // Outdoor fitness badge
-                fitnessBadge
+                fitnessBadge(level: level)
 
                 Image(systemName: "chevron.right")
                     .font(.caption.weight(.semibold))
@@ -51,13 +53,12 @@ struct WeatherCard: View {
             }
         }
         .accessibilityElement(children: .combine)
-        .accessibilityLabel(accessibilityDescription)
+        .accessibilityLabel("Current weather \(snapshot.condition.label), \(Int(snapshot.temperature)) degrees, \(level.displayName)")
     }
 
     // MARK: - Subviews
 
-    private var fitnessBadge: some View {
-        let level = snapshot.outdoorFitnessLevel
+    private func fitnessBadge(level: OutdoorFitnessLevel) -> some View {
         let color = theme.outdoorFitnessColor(for: level)
         return Label(level.shortDisplayName, systemImage: level.systemImage)
             .font(.caption.weight(.medium))
@@ -78,10 +79,6 @@ struct WeatherCard: View {
 
     private var feelsLikeDiffers: Bool {
         abs(snapshot.temperature - snapshot.feelsLike) >= 3
-    }
-
-    private var accessibilityDescription: String {
-        "Current weather \(snapshot.condition.label), \(Int(snapshot.temperature)) degrees, \(snapshot.outdoorFitnessLevel.displayName)"
     }
 }
 
