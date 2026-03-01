@@ -11,6 +11,8 @@ class UITestBaseCase: XCTestCase {
 
     override func tearDownWithError() throws {
         app?.terminate()
+        // Allow the app process to fully exit (CI resilience)
+        Thread.sleep(forTimeInterval: 1)
         app = nil
         try super.tearDownWithError()
     }
@@ -36,6 +38,9 @@ class UITestBaseCase: XCTestCase {
             }
             return false
         }
+
+        // Terminate any lingering instance before launch (CI resilience)
+        app.terminate()
 
         app.launch()
 

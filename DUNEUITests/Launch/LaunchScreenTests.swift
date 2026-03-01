@@ -10,10 +10,14 @@ final class DailveUITestsLaunchTests: XCTestCase {
     override func setUpWithError() throws {
         continueAfterFailure = false
         app = XCUIApplication()
+        // Terminate any lingering instance before launch (CI resilience)
+        app.terminate()
     }
 
     override func tearDownWithError() throws {
         app?.terminate()
+        // Allow the app process to fully exit (CI resilience)
+        Thread.sleep(forTimeInterval: 1)
         app = nil
         try super.tearDownWithError()
     }
