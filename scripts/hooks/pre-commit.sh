@@ -58,7 +58,7 @@ if git diff --cached --name-only | grep -Eq "^(DUNE/|DUNETests/|DUNEUITests/|DUN
         echo "Skipping iOS build check (DAILVE_SKIP_PRECOMMIT_BUILD=1)."
     else
         echo "Running iOS build check..."
-        "$ROOT_DIR/scripts/build-ios.sh"
+        "$ROOT_DIR/scripts/build-ios.sh" --no-regen
     fi
 fi
 
