@@ -21,6 +21,7 @@ struct DUNEApp: App {
 
     private static var isRunningXCTest: Bool {
         ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
+        || isRunningUITests
     }
 
     private static var isRunningUITests: Bool {
