@@ -1,20 +1,18 @@
 import CoreLocation
 import Foundation
 
-/// Protocol for air quality data fetching (testable).
-protocol AirQualityFetching: Sendable {
-    func fetchAirQuality(for location: CLLocation) async throws -> AirQualitySnapshot
-}
-
 /// Fetches air quality data from Open-Meteo Air Quality API.
 /// Caches results for 60 minutes via AirQualitySnapshot.isStale.
 /// Attribution: Open-Meteo.com (CC BY 4.0)
+///
+/// `@unchecked Sendable`: mutable `cached` property protected by `NSLock`.
+/// Consistent with `OpenMeteoService` pattern in this project.
 final class OpenMeteoAirQualityService: AirQualityFetching, @unchecked Sendable {
     private var cached: AirQualitySnapshot?
     private let lock = NSLock()
     private let session: URLSession
 
-    private static func makeDecoder() -> JSONDecoder { JSONDecoder() }
+    private static let decoder = JSONDecoder()
 
     init(session: URLSession = .shared) {
         self.session = session
@@ -36,7 +34,7 @@ final class OpenMeteoAirQualityService: AirQualityFetching, @unchecked Sendable 
             throw OpenMeteoAirQualityError.httpError(httpResponse.statusCode)
         }
 
-        let decoded = try Self.makeDecoder().decode(AirQualityResponse.self, from: data)
+        let decoded = try Self.decoder.decode(AirQualityResponse.self, from: data)
         let snapshot = mapToSnapshot(decoded)
         lock.withLock { cached = snapshot }
         return snapshot
@@ -96,10 +94,10 @@ final class OpenMeteoAirQualityService: AirQualityFetching, @unchecked Sendable 
             pm10: clampPM(current.pm10),
             usAQI: clampAQI(current.us_aqi),
             europeanAQI: clampAQI(current.european_aqi),
-            ozone: current.ozone.map(clampConcentration),
-            nitrogenDioxide: current.nitrogen_dioxide.map(clampConcentration),
-            sulphurDioxide: current.sulphur_dioxide.map(clampConcentration),
-            carbonMonoxide: current.carbon_monoxide.map(clampConcentration),
+            ozone: current.ozone.flatMap(clampConcentration),
+            nitrogenDioxide: current.nitrogen_dioxide.flatMap(clampConcentration),
+            sulphurDioxide: current.sulphur_dioxide.flatMap(clampConcentration),
+            carbonMonoxide: current.carbon_monoxide.flatMap(clampConcentration),
             fetchedAt: Date(),
             hourlyForecast: hourlyItems
         )
@@ -117,8 +115,9 @@ final class OpenMeteoAirQualityService: AirQualityFetching, @unchecked Sendable 
     }
 
     /// Clamp general concentration values to physical range (0-100000 μg/m³).
-    private func clampConcentration(_ value: Double) -> Double {
-        guard value.isFinite else { return 0 }
+    /// Returns nil for non-finite values to avoid misleading 0 in UI.
+    private func clampConcentration(_ value: Double) -> Double? {
+        guard value.isFinite else { return nil }
         return Swift.max(0, Swift.min(100_000, value))
     }
 }

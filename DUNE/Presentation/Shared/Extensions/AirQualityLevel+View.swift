@@ -19,12 +19,4 @@ extension AirQualityLevel {
         }
     }
 
-    var shortLabel: String {
-        switch self {
-        case .good:          String(localized: "Good")
-        case .moderate:      String(localized: "Moderate")
-        case .unhealthy:     String(localized: "Unhealthy")
-        case .veryUnhealthy: String(localized: "Very Unhealthy")
-        }
-    }
 }

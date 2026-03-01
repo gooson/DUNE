@@ -117,7 +117,9 @@ struct WeatherSnapshot: Sendable, Hashable {
     ) -> Int {
         let aqLevel: AirQualityLevel?
         if let aqHourly = airQualityHourly,
-           let match = aqHourly.first(where: { $0.hour == hour.hour }) {
+           let match = aqHourly.first(where: {
+               Calendar.current.isDate($0.hour, equalTo: hour.hour, toGranularity: .hour)
+           }) {
             aqLevel = Swift.max(AirQualityLevel.fromPM25(match.pm2_5), AirQualityLevel.fromPM10(match.pm10))
         } else {
             aqLevel = nil

@@ -170,6 +170,23 @@ struct AirQualitySnapshotTests {
         #expect(AirQualityLevel.fromPM10(151) == .veryUnhealthy)
     }
 
+    // MARK: - Fractional Boundary Values
+
+    @Test("PM2.5 fractional values near boundaries classify correctly")
+    func pm25FractionalBoundary() {
+        #expect(AirQualityLevel.fromPM25(15.5) == .good)
+        #expect(AirQualityLevel.fromPM25(15.9) == .good)
+        #expect(AirQualityLevel.fromPM25(35.5) == .moderate)
+        #expect(AirQualityLevel.fromPM25(75.5) == .unhealthy)
+    }
+
+    @Test("PM10 fractional values near boundaries classify correctly")
+    func pm10FractionalBoundary() {
+        #expect(AirQualityLevel.fromPM10(30.5) == .good)
+        #expect(AirQualityLevel.fromPM10(80.5) == .moderate)
+        #expect(AirQualityLevel.fromPM10(150.5) == .unhealthy)
+    }
+
     // MARK: - Zero and Negative
 
     @Test("Zero PM values map to good")

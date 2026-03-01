@@ -13,22 +13,24 @@ enum AirQualityLevel: Int, Sendable, Hashable, Comparable, CaseIterable {
     }
 
     /// Korean grade from PM2.5 concentration (μg/m³).
+    /// Uses half-open ranges to avoid gaps for fractional Double values.
     static func fromPM25(_ value: Double) -> AirQualityLevel {
         switch value {
-        case ...15:    .good
-        case 16...35:  .moderate
-        case 36...75:  .unhealthy
-        default:       .veryUnhealthy
+        case ..<16:   .good           // 0-15
+        case ..<36:   .moderate       // 16-35
+        case ..<76:   .unhealthy      // 36-75
+        default:      .veryUnhealthy  // 76+
         }
     }
 
     /// Korean grade from PM10 concentration (μg/m³).
+    /// Uses half-open ranges to avoid gaps for fractional Double values.
     static func fromPM10(_ value: Double) -> AirQualityLevel {
         switch value {
-        case ...30:    .good
-        case 31...80:  .moderate
-        case 81...150: .unhealthy
-        default:       .veryUnhealthy
+        case ..<31:   .good           // 0-30
+        case ..<81:   .moderate       // 31-80
+        case ..<151:  .unhealthy      // 81-150
+        default:      .veryUnhealthy  // 151+
         }
     }
 

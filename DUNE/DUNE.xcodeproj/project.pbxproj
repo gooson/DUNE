@@ -408,6 +408,7 @@
 		DB4B7B796E3D33C923921827 /* WeeklySummaryChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A32006BDDED8B1640BA94847 /* WeeklySummaryChartView.swift */; };
 		DB85A86CAC38D2D4C32EB44A /* SharedHealthDataServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED962E314233029F50678FB5 /* SharedHealthDataServiceImpl.swift */; };
 		DBE94D8EC43A4E6BE651808A /* AppSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A35754B463C76300B8D5A0B /* AppSection.swift */; };
+		DBF9EDE6A2F58AFB428529D7 /* AirQualityFetching.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F14A69C6193A6D9AF58A94D /* AirQualityFetching.swift */; };
 		DD16A9AA99FB27BDA2F8D64F /* StrengthPRServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A99EF62449DBCF92A69D502 /* StrengthPRServiceTests.swift */; };
 		DD1C9E0C75AE00DD50EB83B4 /* FatigueLevel+View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599843BC1B05C84B5619478E /* FatigueLevel+View.swift */; };
 		DD58A0513FB819D11456A193 /* ExerciseStartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002D3EC7F9062DB3435028AD /* ExerciseStartView.swift */; };
@@ -572,6 +573,7 @@
 		1E351F3EEEA566A369A425F1 /* SharedHealthDataServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedHealthDataServiceTests.swift; sourceTree = "<group>"; };
 		1E93855D28C4D349DC1CCFD8 /* Equipment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Equipment.swift; path = Domain/Models/Equipment.swift; sourceTree = "<group>"; };
 		1EA52F79D1A58E905E3D7491 /* HeartRateQueryServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartRateQueryServiceTests.swift; sourceTree = "<group>"; };
+		1F14A69C6193A6D9AF58A94D /* AirQualityFetching.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirQualityFetching.swift; sourceTree = "<group>"; };
 		214A80561E45E0B5649186E7 /* DashboardSmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardSmokeTests.swift; sourceTree = "<group>"; };
 		21580DFC314C277B6C090025 /* WorkoutRecommendationCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutRecommendationCard.swift; sourceTree = "<group>"; };
 		224A9161BE084584FC62B9B5 /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppTheme.swift; path = Domain/Models/AppTheme.swift; sourceTree = "<group>"; };
@@ -1536,6 +1538,7 @@
 		9E7EF297B530FB456B4EC787 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
+				1F14A69C6193A6D9AF58A94D /* AirQualityFetching.swift */,
 				912A60D4E5A7471FABE7BD12 /* ExerciseLibraryQuerying.swift */,
 			);
 			path = Protocols;
@@ -2171,6 +2174,7 @@
 				5771D24DD281539BA75BD4E4 /* ActivityStat.swift in Sources */,
 				8626AD75967E80028AF1437C /* ActivityView.swift in Sources */,
 				6DD669A0C1BABF8103CD56BD /* ActivityViewModel.swift in Sources */,
+				DBF9EDE6A2F58AFB428529D7 /* AirQualityFetching.swift in Sources */,
 				1170A94FE4C43023CC263C97 /* AirQualityLevel+View.swift in Sources */,
 				900692F3BB5B00AF7E6116F2 /* AirQualityLevel.swift in Sources */,
 				DE42EBA46780DF92228F1FBF /* AirQualitySnapshot.swift in Sources */,

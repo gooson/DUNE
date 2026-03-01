@@ -59,10 +59,14 @@ final class WeatherProvider: WeatherProviding, Sendable {
     }
 
     /// Air quality fetch with graceful failure — returns nil instead of throwing.
+    /// CancellationError propagation: returns nil (parent is already cancelled).
     private func safeAirQualityFetch(for location: CLLocation) async -> AirQualitySnapshot? {
         do {
             return try await airQualityService.fetchAirQuality(for: location)
+        } catch is CancellationError {
+            return nil
         } catch {
+            print("[WeatherProvider] Air quality fetch failed: \(error)")
             return nil
         }
     }

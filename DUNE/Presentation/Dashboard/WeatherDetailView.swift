@@ -38,17 +38,24 @@ struct WeatherDetailView: View {
         self.snapshot = snapshot
         let calendar = Calendar.current
 
-        // Hour labels
+        // Hour labels (weather + air quality hourly dates)
         var hLabels: [Date: String] = [:]
-        for hourly in snapshot.hourlyForecast {
-            let hour = calendar.component(.hour, from: hourly.hour)
+        func addHourLabel(for date: Date) {
+            guard hLabels[date] == nil else { return }
+            let hour = calendar.component(.hour, from: date)
             if hour == 0 {
-                hLabels[hourly.hour] = String(localized: "Midnight")
+                hLabels[date] = String(localized: "Midnight")
             } else if hour == 12 {
-                hLabels[hourly.hour] = String(localized: "Noon")
+                hLabels[date] = String(localized: "Noon")
             } else {
-                hLabels[hourly.hour] = hour < 12 ? "\(hour)AM" : "\(hour - 12)PM"
+                hLabels[date] = hour < 12 ? "\(hour)AM" : "\(hour - 12)PM"
             }
+        }
+        for hourly in snapshot.hourlyForecast {
+            addHourLabel(for: hourly.hour)
+        }
+        for aqHourly in snapshot.airQuality?.hourlyForecast ?? [] {
+            addHourLabel(for: aqHourly.hour)
         }
         self.hourLabels = hLabels
 
@@ -552,7 +559,7 @@ struct WeatherDetailView: View {
                     .foregroundStyle(.secondary)
             }
 
-            Text(level.shortLabel)
+            Text(level.displayName)
                 .font(.caption2)
                 .foregroundStyle(color)
         }
