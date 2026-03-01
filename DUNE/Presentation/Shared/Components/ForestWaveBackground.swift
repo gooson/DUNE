@@ -26,14 +26,6 @@ struct ForestWaveOverlayView: View {
     var driftDuration: Double = 8
     var showGrain: Bool = false
     var grainOpacity: Double = 0.04
-    var inkColor: Color? = nil
-    var inkOpacity: Double = 0.2
-    var inkWidth: CGFloat = 1.0
-    var contourColor: Color? = nil
-    var contourOpacity: Double = 0.16
-    var contourCount: Int = 3
-    var contourGap: CGFloat = 5
-    var contourWidth: CGFloat = 0.75
     var crestColor: Color? = nil
     var crestOpacity: Double = 0.18
     var crestWidth: CGFloat = 1.6
@@ -54,53 +46,6 @@ struct ForestWaveOverlayView: View {
             .fill(color.opacity(opacity))
             .bottomFadeMask(bottomFade)
 
-            if let contourColor {
-                let safeCount = Swift.max(1, contourCount)
-                ZStack {
-                    ForEach(0..<safeCount, id: \.self) { index in
-                        let fade = 1 - (Double(index) / Double(safeCount + 1))
-                        ForestSilhouetteShape(
-                            amplitude: amplitude,
-                            frequency: frequency,
-                            phase: phase,
-                            verticalOffset: verticalOffset,
-                            ruggedness: ruggedness,
-                            treeDensity: treeDensity
-                        )
-                        .stroke(
-                            contourColor.opacity(contourOpacity * fade),
-                            style: StrokeStyle(lineWidth: contourWidth, lineCap: .round, lineJoin: .round)
-                        )
-                        .offset(y: CGFloat(index + 1) * contourGap)
-                    }
-                }
-                .mask(
-                    LinearGradient(
-                        colors: [.white, .white.opacity(0.86), .clear],
-                        startPoint: .top,
-                        endPoint: UnitPoint(x: 0.5, y: 0.77)
-                    )
-                )
-                .blendMode(.overlay)
-            }
-
-            if let inkColor {
-                ForestSilhouetteShape(
-                    amplitude: amplitude,
-                    frequency: frequency,
-                    phase: phase,
-                    verticalOffset: verticalOffset,
-                    ruggedness: ruggedness,
-                    treeDensity: treeDensity
-                )
-                .stroke(
-                    inkColor.opacity(inkOpacity),
-                    style: StrokeStyle(lineWidth: inkWidth, lineCap: .round, lineJoin: .round)
-                )
-                .offset(x: 0.9, y: 0.65)
-                .blendMode(.multiply)
-            }
-
             if let crestColor {
                 ZStack {
                     // Wide translucent crest band.
@@ -113,25 +58,10 @@ struct ForestWaveOverlayView: View {
                         treeDensity: treeDensity
                     )
                     .stroke(
-                        crestColor.opacity(crestOpacity * 0.58),
-                        style: StrokeStyle(lineWidth: crestWidth * 3.4, lineCap: .round, lineJoin: .round)
+                        crestColor.opacity(crestOpacity * 0.48),
+                        style: StrokeStyle(lineWidth: crestWidth * 2.6, lineCap: .round, lineJoin: .round)
                     )
-                    .blur(radius: 1.35)
-
-                    // Mid crest veil.
-                    ForestSilhouetteShape(
-                        amplitude: amplitude,
-                        frequency: frequency,
-                        phase: phase,
-                        verticalOffset: verticalOffset,
-                        ruggedness: ruggedness,
-                        treeDensity: treeDensity
-                    )
-                    .stroke(
-                        crestColor.opacity(crestOpacity * 0.42),
-                        style: StrokeStyle(lineWidth: crestWidth * 1.9, lineCap: .round, lineJoin: .round)
-                    )
-                    .blur(radius: 0.65)
+                    .blur(radius: 1.2)
 
                     // Core crest highlight line.
                     ForestSilhouetteShape(
@@ -144,15 +74,15 @@ struct ForestWaveOverlayView: View {
                     )
                     .stroke(
                         crestColor.opacity(crestOpacity),
-                        style: StrokeStyle(lineWidth: crestWidth * 0.95, lineCap: .round, lineJoin: .round)
+                        style: StrokeStyle(lineWidth: crestWidth, lineCap: .round, lineJoin: .round)
                     )
-                    .blur(radius: 0.22)
+                    .blur(radius: 0.3)
                 }
                 .mask(
                     LinearGradient(
                         colors: [.white, .white.opacity(0.95), .clear],
                         startPoint: .top,
-                        endPoint: UnitPoint(x: 0.5, y: 0.9)
+                        endPoint: UnitPoint(x: 0.5, y: 0.88)
                     )
                 )
                 .blendMode(.screen)
@@ -193,7 +123,7 @@ private struct UkiyoeGrainView: View {
     /// Deterministic pseudo-random noise: product of three incommensurate sines.
     private static let grainImage: UIImage = {
         let size = CGSize(width: UIScreen.main.bounds.width, height: 200)
-        let step: CGFloat = 6
+        let step: CGFloat = 3
         let cols = Int(size.width / step)
         let rows = Int(size.height / step)
 
@@ -203,13 +133,9 @@ private struct UkiyoeGrainView: View {
             for row in 0..<rows {
                 for col in 0..<cols {
                     let seed = Double(row * 997 + col * 131)
-                    let noise = sin(seed * 0.06) * sin(seed * 0.041) * sin(seed * 0.019)
-                    let alpha = abs(noise) * 0.13
-                    cgContext.setFillColor(
-                        UIColor(red: 0.10, green: 0.13, blue: 0.11, alpha: 1)
-                            .withAlphaComponent(alpha)
-                            .cgColor
-                    )
+                    let noise = sin(seed * 0.1) * sin(seed * 0.073) * sin(seed * 0.031)
+                    let alpha = abs(noise) * 0.15
+                    cgContext.setFillColor(UIColor.black.withAlphaComponent(alpha).cgColor)
                     cgContext.fill(CGRect(
                         x: CGFloat(col) * step,
                         y: CGFloat(row) * step,
@@ -226,7 +152,6 @@ private struct UkiyoeGrainView: View {
             .resizable()
             .interpolation(.none)
             .opacity(opacity)
-            .blendMode(.softLight)
             .allowsHitTesting(false)
     }
 }
@@ -274,7 +199,7 @@ struct ForestTabWaveBackground: View {
             // Layer 1: Far — distant misty mountains
             ForestWaveOverlayView(
                 color: theme.forestMistColor,
-                opacity: 0.12 * opacityScale,
+                opacity: 0.09 * opacityScale,
                 amplitude: 0.045 * scale,
                 frequency: 0.62,
                 verticalOffset: 0.4,
@@ -282,21 +207,16 @@ struct ForestTabWaveBackground: View {
                 ruggedness: 0.03,
                 treeDensity: 0.03,
                 driftDuration: 22,
-                contourColor: .white,
-                contourOpacity: 0.16 * opacityScale,
-                contourCount: 2,
-                contourGap: 6,
-                contourWidth: 0.9,
-                crestColor: .white,
-                crestOpacity: 0.2 * opacityScale,
-                crestWidth: 2.0
+                crestColor: theme.forestMistColor,
+                crestOpacity: 0.11 * opacityScale,
+                crestWidth: 1.3
             )
             .frame(height: 200)
 
             // Layer 2: Mid — middle forest
             ForestWaveOverlayView(
                 color: theme.forestMidColor,
-                opacity: 0.17 * opacityScale,
+                opacity: 0.13 * opacityScale,
                 amplitude: 0.075 * scale,
                 frequency: 0.95,
                 verticalOffset: 0.5,
@@ -304,24 +224,16 @@ struct ForestTabWaveBackground: View {
                 ruggedness: 0.12,
                 treeDensity: 0.08,
                 driftDuration: 18,
-                inkColor: theme.forestDeepColor,
-                inkOpacity: colorScheme == .dark ? 0.34 : 0.22,
-                inkWidth: 1.15,
-                contourColor: theme.forestMistColor,
-                contourOpacity: 0.18 * opacityScale,
-                contourCount: 3,
-                contourGap: 6,
-                contourWidth: 0.95,
-                crestColor: .white,
-                crestOpacity: 0.28 * opacityScale,
-                crestWidth: 2.6
+                crestColor: theme.forestMistColor,
+                crestOpacity: 0.14 * opacityScale,
+                crestWidth: 1.65
             )
             .frame(height: 200)
 
             // Layer 3: Near — foreground forest with trees
             ForestWaveOverlayView(
                 color: theme.forestDeepColor,
-                opacity: 0.24 * opacityScale,
+                opacity: 0.18 * opacityScale,
                 amplitude: 0.115 * scale,
                 frequency: 1.25,
                 verticalOffset: 0.55,
@@ -330,18 +242,10 @@ struct ForestTabWaveBackground: View {
                 treeDensity: 0.12,
                 driftDuration: 14,
                 showGrain: true,
-                grainOpacity: colorScheme == .dark ? 0.028 : 0.045,
-                inkColor: theme.forestDeepColor,
-                inkOpacity: colorScheme == .dark ? 0.42 : 0.28,
-                inkWidth: 1.3,
-                contourColor: theme.forestMistColor,
-                contourOpacity: 0.24 * opacityScale,
-                contourCount: 4,
-                contourGap: 6.5,
-                contourWidth: 1.0,
-                crestColor: .white,
-                crestOpacity: 0.36 * opacityScale,
-                crestWidth: 3.6
+                grainOpacity: colorScheme == .dark ? 0.014 : 0.03,
+                crestColor: theme.forestMistColor,
+                crestOpacity: 0.18 * opacityScale,
+                crestWidth: 2.0
             )
             .frame(height: 200)
 
@@ -412,7 +316,7 @@ struct ForestDetailWaveBackground: View {
             // Far
             ForestWaveOverlayView(
                 color: theme.forestMistColor,
-                opacity: 0.08 * visibilityBoost,
+                opacity: 0.06 * visibilityBoost,
                 amplitude: 0.03,
                 frequency: 0.65,
                 verticalOffset: 0.4,
@@ -420,21 +324,16 @@ struct ForestDetailWaveBackground: View {
                 ruggedness: 0.03,
                 treeDensity: 0.02,
                 driftDuration: 20,
-                contourColor: .white,
-                contourOpacity: 0.12 * visibilityBoost,
-                contourCount: 2,
-                contourGap: 5.5,
-                contourWidth: 0.8,
-                crestColor: .white,
-                crestOpacity: 0.16 * visibilityBoost,
-                crestWidth: 1.8
+                crestColor: theme.forestMistColor,
+                crestOpacity: 0.10 * visibilityBoost,
+                crestWidth: 1.2
             )
             .frame(height: 150)
 
             // Near
             ForestWaveOverlayView(
                 color: theme.forestDeepColor,
-                opacity: 0.15 * visibilityBoost,
+                opacity: 0.11 * visibilityBoost,
                 amplitude: 0.06,
                 frequency: 1.0,
                 verticalOffset: 0.55,
@@ -442,17 +341,9 @@ struct ForestDetailWaveBackground: View {
                 ruggedness: 0.14,
                 treeDensity: 0.1,
                 driftDuration: 16,
-                inkColor: theme.forestDeepColor,
-                inkOpacity: colorScheme == .dark ? 0.35 : 0.24,
-                inkWidth: 1.0,
-                contourColor: theme.forestMistColor,
-                contourOpacity: 0.14 * visibilityBoost,
-                contourCount: 3,
-                contourGap: 5.5,
-                contourWidth: 0.8,
-                crestColor: .white,
-                crestOpacity: 0.24 * visibilityBoost,
-                crestWidth: 2.4
+                crestColor: theme.forestMistColor,
+                crestOpacity: 0.14 * visibilityBoost,
+                crestWidth: 1.7
             )
             .frame(height: 150)
 
@@ -485,7 +376,7 @@ struct ForestSheetWaveBackground: View {
         ZStack(alignment: .top) {
             ForestWaveOverlayView(
                 color: theme.forestMidColor,
-                opacity: 0.12 * visibilityBoost,
+                opacity: 0.09 * visibilityBoost,
                 amplitude: 0.045,
                 frequency: 0.9,
                 verticalOffset: 0.5,
@@ -493,14 +384,9 @@ struct ForestSheetWaveBackground: View {
                 ruggedness: 0.1,
                 treeDensity: 0.08,
                 driftDuration: 18,
-                contourColor: theme.forestMistColor,
-                contourOpacity: 0.12 * visibilityBoost,
-                contourCount: 2,
-                contourGap: 5,
-                contourWidth: 0.8,
-                crestColor: .white,
-                crestOpacity: 0.2 * visibilityBoost,
-                crestWidth: 2.0
+                crestColor: theme.forestMistColor,
+                crestOpacity: 0.12 * visibilityBoost,
+                crestWidth: 1.45
             )
             .frame(height: 120)
 

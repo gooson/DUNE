@@ -53,27 +53,10 @@ struct DesertDuneOverlayView: View {
                         rippleFrequency: rippleFrequency
                     )
                     .stroke(
-                        crestColor.opacity(crestOpacity * 0.58),
-                        style: StrokeStyle(lineWidth: crestWidth * 3.2, lineCap: .round, lineJoin: .round)
+                        crestColor.opacity(crestOpacity * 0.48),
+                        style: StrokeStyle(lineWidth: crestWidth * 2.6, lineCap: .round, lineJoin: .round)
                     )
-                    .blur(radius: 1.3)
-
-                    // Mid crest veil.
-                    DesertDuneShape(
-                        amplitude: amplitude,
-                        frequency: frequency,
-                        phase: phase,
-                        verticalOffset: verticalOffset,
-                        skewness: skewness,
-                        skewOffset: skewOffset,
-                        ripple: ripple,
-                        rippleFrequency: rippleFrequency
-                    )
-                    .stroke(
-                        crestColor.opacity(crestOpacity * 0.38),
-                        style: StrokeStyle(lineWidth: crestWidth * 1.8, lineCap: .round, lineJoin: .round)
-                    )
-                    .blur(radius: 0.6)
+                    .blur(radius: 1.1)
 
                     // Core crest highlight line.
                     DesertDuneShape(
@@ -88,9 +71,9 @@ struct DesertDuneOverlayView: View {
                     )
                     .stroke(
                         crestColor.opacity(crestOpacity),
-                        style: StrokeStyle(lineWidth: crestWidth * 0.95, lineCap: .round, lineJoin: .round)
+                        style: StrokeStyle(lineWidth: crestWidth, lineCap: .round, lineJoin: .round)
                     )
-                    .blur(radius: 0.2)
+                    .blur(radius: 0.25)
                 }
                 .mask(
                     LinearGradient(
@@ -210,25 +193,25 @@ struct DesertTabWaveBackground: View {
             // Layer 1: Far — broad, smooth horizon dunes
             DesertDuneOverlayView(
                 color: resolvedColor,
-                opacity: 0.11 * scale,
-                amplitude: 0.062 * scale,
+                opacity: 0.085 * scale,
+                amplitude: 0.05 * scale,
                 frequency: 0.72,
                 verticalOffset: 0.37,
                 bottomFade: 0.5,
                 skewness: 0.2,
                 skewOffset: .pi / 6,
                 driftDuration: 18,
-                crestColor: .white,
-                crestOpacity: 0.22 * Double(scale),
-                crestWidth: 1.2
+                crestColor: theme.sandColor,
+                crestOpacity: 0.12 * Double(scale),
+                crestWidth: 0.9
             )
             .frame(height: 200)
 
             // Layer 2: Near — smooth foreground dune slope
             DesertDuneOverlayView(
                 color: resolvedColor,
-                opacity: 0.2 * scale,
-                amplitude: 0.105 * scale,
+                opacity: 0.15 * scale,
+                amplitude: 0.082 * scale,
                 frequency: 1.35,
                 verticalOffset: 0.57,
                 bottomFade: 0.4,
@@ -238,9 +221,9 @@ struct DesertTabWaveBackground: View {
                 rippleFrequency: 5.2,
                 driftDuration: 13,
                 showShimmer: true,
-                crestColor: .white,
-                crestOpacity: 0.34 * Double(scale),
-                crestWidth: 2.1
+                crestColor: theme.sandColor,
+                crestOpacity: 0.20 * Double(scale),
+                crestWidth: 1.35
             )
             .frame(height: 200)
 
@@ -257,7 +240,7 @@ struct DesertTabWaveBackground: View {
 
     private var desertGradientColors: [Color] {
         if isWeatherActive {
-            return atmosphere.gradientColors(for: theme)
+            return atmosphere.gradientColors
         }
         return [
             color.opacity(DS.Opacity.medium),
@@ -281,16 +264,16 @@ struct DesertDetailWaveBackground: View {
         ZStack(alignment: .top) {
             DesertDuneOverlayView(
                 color: color,
-                opacity: 0.12,
-                amplitude: 0.052,
+                opacity: 0.09,
+                amplitude: 0.042,
                 frequency: 1.0,
                 verticalOffset: 0.5,
                 bottomFade: 0.5,
                 skewness: 0.18,
                 driftDuration: 16,
-                crestColor: .white,
-                crestOpacity: 0.24,
-                crestWidth: 1.6
+                crestColor: theme.sandColor,
+                crestOpacity: 0.16,
+                crestWidth: 1.0
             )
             .frame(height: 150)
 
@@ -317,16 +300,16 @@ struct DesertSheetWaveBackground: View {
         ZStack(alignment: .top) {
             DesertDuneOverlayView(
                 color: color,
-                opacity: 0.085,
-                amplitude: 0.038,
+                opacity: 0.065,
+                amplitude: 0.03,
                 frequency: 0.9,
                 verticalOffset: 0.5,
                 bottomFade: 0.5,
                 skewness: 0.16,
                 driftDuration: 18,
-                crestColor: .white,
-                crestOpacity: 0.2,
-                crestWidth: 1.4
+                crestColor: theme.sandColor,
+                crestOpacity: 0.12,
+                crestWidth: 0.9
             )
             .frame(height: 120)
 
