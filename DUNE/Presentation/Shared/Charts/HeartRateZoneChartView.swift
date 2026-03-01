@@ -85,11 +85,11 @@ struct HeartRateZoneChartView: View {
 extension HeartRateZone.Zone {
     var displayName: String {
         switch self {
-        case .zone1: "Recovery"
-        case .zone2: "Fat Burn"
-        case .zone3: "Cardio"
-        case .zone4: "Hard"
-        case .zone5: "Peak"
+        case .zone1: String(localized: "Recovery")
+        case .zone2: String(localized: "Fat Burn")
+        case .zone3: String(localized: "Cardio")
+        case .zone4: String(localized: "Hard")
+        case .zone5: String(localized: "Peak")
         }
     }
 
