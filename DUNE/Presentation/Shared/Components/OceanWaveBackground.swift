@@ -5,10 +5,10 @@ import SwiftUI
 /// Multi-layer parallax ocean wave background for tab root screens.
 ///
 /// Layers (back to front):
-/// 1. **Arc pattern** — concentric semicircles between wave layers
-/// 2. **Deep** — slowest, dark navy, low amplitude
-/// 3. **Mid** — reverse direction, rich teal, medium amplitude + stroke
-/// 4. **Surface** — fastest, bright cyan, largest amplitude + stroke + foam gradient
+/// 1. **Deep** — slowest, dark navy, low amplitude
+/// 2. **Mid** — reverse direction, rich teal, medium amplitude + stroke
+/// 3. **Surface** — fastest, bright cyan, largest amplitude + stroke + foam gradient
+/// 4. **Big wave** — dramatic curling wave accent (excluded from .life)
 struct OceanTabWaveBackground: View {
     @Environment(\.wavePreset) private var preset
     @Environment(\.appTheme) private var theme
@@ -28,8 +28,8 @@ struct OceanTabWaveBackground: View {
         }
     }
 
-    /// Arc pattern excluded from .life (lake-like stillness has no wave decoration).
-    private var showArcPattern: Bool {
+    /// Big wave excluded from .life (lake-like stillness).
+    private var showBigWave: Bool {
         preset == .train || preset == .today || preset == .wellness
     }
 
@@ -37,20 +37,6 @@ struct OceanTabWaveBackground: View {
         let scale = intensityScale
 
         ZStack(alignment: .top) {
-            // Layer 0: Arc pattern (between waves)
-            if showArcPattern {
-                OceanArcOverlayView(
-                    color: theme.oceanFoamColor,
-                    opacity: 0.08 * scale,
-                    lineWidth: 0.6,
-                    columns: 8,
-                    ringsPerGroup: 3,
-                    rows: 2,
-                    driftDuration: 25
-                )
-                .frame(height: 200)
-            }
-
             // Layer 1: Deep (back)
             OceanWaveOverlayView(
                 color: theme.oceanDeepColor,
@@ -125,6 +111,20 @@ struct OceanTabWaveBackground: View {
             )
             .frame(height: 200)
 
+            // Layer 4: Big curling wave accent
+            if showBigWave {
+                OceanBigWaveOverlayView(
+                    color: theme.oceanSurfaceColor,
+                    foamColor: theme.oceanFoamColor,
+                    opacity: 0.12 * scale,
+                    foamOpacity: 0.35 * scale,
+                    foamWidth: 1.5,
+                    mirror: true,
+                    swayDuration: 12
+                )
+                .frame(height: 200)
+            }
+
             // Background gradient
             LinearGradient(
                 colors: oceanGradientColors,
@@ -152,25 +152,11 @@ struct OceanTabWaveBackground: View {
 
 /// Subtler 3-layer ocean wave for push-destination detail screens.
 /// Scaled down: amplitude 50%, opacity 70%, stroke only (no foam gradient).
-/// Arc pattern always visible (simplified 1-row) — Detail is a focused view
-/// where the subtle decoration adds polish without competing with content.
 struct OceanDetailWaveBackground: View {
     @Environment(\.appTheme) private var theme
 
     var body: some View {
         ZStack(alignment: .top) {
-            // Arc pattern (simplified: 1 row)
-            OceanArcOverlayView(
-                color: theme.oceanFoamColor,
-                opacity: 0.06,
-                lineWidth: 0.5,
-                columns: 6,
-                ringsPerGroup: 2,
-                rows: 1,
-                driftDuration: 25
-            )
-            .frame(height: 150)
-
             // Deep
             OceanWaveOverlayView(
                 color: theme.oceanDeepColor,
@@ -245,7 +231,7 @@ struct OceanDetailWaveBackground: View {
 // MARK: - Ocean Sheet Background
 
 /// Lightest 2-layer ocean wave for sheet/modal presentations.
-/// Scaled down further: amplitude 40%, opacity 60%. Stroke only, no arc pattern.
+/// Scaled down further: amplitude 40%, opacity 60%. Stroke only.
 struct OceanSheetWaveBackground: View {
     @Environment(\.appTheme) private var theme
 
