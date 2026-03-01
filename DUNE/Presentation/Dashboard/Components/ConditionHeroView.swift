@@ -54,7 +54,8 @@ struct ConditionHeroView: View {
                         ringColor: score.status.color,
                         lineWidth: ringLineWidth,
                         size: ringSize,
-                        useWarmGradient: true
+                        useWarmGradient: true,
+                        gradientTipColor: score.status.nextTierColor
                     )
 
                     Text("\(animatedScore)")
