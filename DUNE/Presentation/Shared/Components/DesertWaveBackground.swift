@@ -34,21 +34,7 @@ struct DesertDuneOverlayView: View {
                 rippleFrequency: rippleFrequency
             )
             .fill(color.opacity(opacity))
-            .mask {
-                if bottomFade > 0 {
-                    LinearGradient(
-                        stops: [
-                            .init(color: .white, location: 0),
-                            .init(color: .white, location: 1.0 - bottomFade),
-                            .init(color: .white.opacity(0), location: 1.0)
-                        ],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                } else {
-                    Rectangle()
-                }
-            }
+            .bottomFadeMask(bottomFade)
 
             if showShimmer {
                 HeatShimmerView(opacity: 0.03)
@@ -59,6 +45,15 @@ struct DesertDuneOverlayView: View {
             guard !reduceMotion else { return }
             withAnimation(.linear(duration: driftDuration).repeatForever(autoreverses: false)) {
                 phase = 2 * .pi
+            }
+        }
+        .onAppear {
+            guard !reduceMotion else { return }
+            Task { @MainActor in
+                phase = 0
+                withAnimation(.linear(duration: driftDuration).repeatForever(autoreverses: false)) {
+                    phase = 2 * .pi
+                }
             }
         }
     }
@@ -75,7 +70,7 @@ private struct HeatShimmerView: View {
     /// Pre-rendered shimmer texture. Computed once at first access.
     /// Deterministic pseudo-random noise: product of incommensurate sines.
     private static let shimmerImage: UIImage = {
-        let size = CGSize(width: 390, height: 200)
+        let size = CGSize(width: UIScreen.main.bounds.width, height: 200)
         let step: CGFloat = 4
         let cols = Int(size.width / step)
         let rows = Int(size.height / step)

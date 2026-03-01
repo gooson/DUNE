@@ -96,27 +96,21 @@ struct WaveOverlayView: View {
             verticalOffset: verticalOffset
         )
         .fill(color.opacity(opacity))
-        .mask {
-            if bottomFade > 0 {
-                // Opaque top → fade only at the bottom portion
-                LinearGradient(
-                    stops: [
-                        .init(color: .white, location: 0),
-                        .init(color: .white, location: 1.0 - bottomFade),
-                        .init(color: .white.opacity(0), location: 1.0)
-                    ],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-            } else {
-                Rectangle()
-            }
-        }
+        .bottomFadeMask(bottomFade)
         .allowsHitTesting(false)
         .task {
             guard !reduceMotion else { return }
             withAnimation(DS.Animation.waveDrift) {
                 phase = 2 * .pi
+            }
+        }
+        .onAppear {
+            guard !reduceMotion else { return }
+            Task { @MainActor in
+                phase = 0
+                withAnimation(DS.Animation.waveDrift) {
+                    phase = 2 * .pi
+                }
             }
         }
     }

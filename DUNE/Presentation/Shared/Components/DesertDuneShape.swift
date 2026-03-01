@@ -33,6 +33,8 @@ struct DesertDuneShape: Shape {
     }
 
     private let samples: WaveSamples
+    /// Pre-computed ripple angles (invariant across frames; only populated when ripple > 0).
+    private let rippleAngles: [CGFloat]
 
     /// Deterministic pseudo-random edge noise for organic dune edge.
     /// Product of two incommensurate sines — repeatable across launches.
@@ -43,6 +45,9 @@ struct DesertDuneShape: Shape {
 
     /// Phase-scaling constant for ripple drift (slightly different speed from base).
     private static let rippleDrift: CGFloat = 1.3
+
+    /// Scale factor for edge noise variation on dune silhouette.
+    private static let edgeNoiseScale: CGFloat = 1.5
 
     init(
         amplitude: CGFloat = 0.05,
@@ -63,6 +68,15 @@ struct DesertDuneShape: Shape {
         self.ripple = Swift.min(ripple, 0.3)
         self.rippleFrequency = rippleFrequency
         self.samples = WaveSamples(frequency: frequency)
+
+        // Pre-compute ripple angles (only phase varies per frame)
+        if ripple > 0 {
+            self.rippleAngles = samples.points.map { pt in
+                pt.x * rippleFrequency * frequency * 2 * .pi
+            }
+        } else {
+            self.rippleAngles = []
+        }
     }
 
     func path(in rect: CGRect) -> Path {
@@ -70,7 +84,6 @@ struct DesertDuneShape: Shape {
 
         let amp = rect.height * amplitude
         let centerY = rect.height * verticalOffset
-        let edgeScale: CGFloat = 1.5
 
         var path = Path()
         for (i, pt) in samples.points.enumerated() {
@@ -83,13 +96,12 @@ struct DesertDuneShape: Shape {
             // 2nd harmonic for windward/leeward asymmetry
             y += skewness * sin(2 * angle + skewOffset)
 
-            // High-frequency sand ripple on surface
+            // High-frequency sand ripple on surface (angles pre-computed in init)
             if ripple > 0 {
-                let rippleAngle = pt.x * rippleFrequency * frequency * 2 * .pi
-                y += ripple * 0.15 * sin(rippleAngle + phase * Self.rippleDrift)
+                y += ripple * 0.15 * sin(rippleAngles[i] + phase * Self.rippleDrift)
             }
 
-            let yPos = centerY + amp * y + Self.edgeNoise[i] * edgeScale
+            let yPos = centerY + amp * y + Self.edgeNoise[i] * Self.edgeNoiseScale
 
             if i == 0 {
                 path.move(to: CGPoint(x: x, y: yPos))
