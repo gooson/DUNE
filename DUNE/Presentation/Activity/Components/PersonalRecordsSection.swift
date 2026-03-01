@@ -177,7 +177,7 @@ struct PersonalRecordsSection: View {
             weatherParts.append("Humidity \(Int(humidity).formattedWithSeparator)%")
         }
         if let isIndoor = record.isIndoor {
-            weatherParts.append(isIndoor ? "Indoor" : "Outdoor")
+            weatherParts.append(isIndoor ? String(localized: "Indoor") : String(localized: "Outdoor"))
         }
         if !weatherParts.isEmpty {
             parts.append(weatherParts.joined(separator: " "))

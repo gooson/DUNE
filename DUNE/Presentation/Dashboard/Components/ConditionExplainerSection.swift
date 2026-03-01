@@ -70,7 +70,7 @@ struct ConditionExplainerSection: View {
         }
     }
 
-    private func explainerItem(icon: String, title: String, description: String) -> some View {
+    private func explainerItem(icon: String, title: LocalizedStringKey, description: LocalizedStringKey) -> some View {
         HStack(alignment: .top, spacing: isRegular ? DS.Spacing.lg : DS.Spacing.md) {
             Image(systemName: icon)
                 .font(isRegular ? .title3 : .body)

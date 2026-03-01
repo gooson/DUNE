@@ -13145,7 +13145,8 @@
             "value": "평균이 이전 기간보다 %@%% %@"
           }
         }
-      }
+      },
+      "extractionState": "stale"
     },
     "Your condition is average. Train at a moderate intensity and avoid overexertion.": {
       "extractionState": "manual",
@@ -13279,6 +13280,584 @@
           "stringUnit": {
             "state": "translated",
             "value": "수면 점수가 하락 추세입니다. 취침 1시간 전 화면 사용을 줄이고 카페인은 오후 2시 이전으로 제한해보세요."
+          }
+        }
+      }
+    },
+    "Your average is %@%% higher than last period": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "평균이 지난 기간보다 %@%% 높아요"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "平均は前の期間より%@%%高いです"
+          }
+        }
+      }
+    },
+    "Your average is %@%% lower than last period": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "평균이 지난 기간보다 %@%% 낮아요"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "平均は前の期間より%@%%低いです"
+          }
+        }
+      }
+    },
+    "Highest": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "최고"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最高"
+          }
+        }
+      }
+    },
+    "Lowest": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "최저"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最低"
+          }
+        }
+      }
+    },
+    "Trending up": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "상승 추세"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "上昇傾向"
+          }
+        }
+      }
+    },
+    "Trending down": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "하락 추세"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "下降傾向"
+          }
+        }
+      }
+    },
+    "Best day": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "최고의 날"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ベストの日"
+          }
+        }
+      }
+    },
+    "Lowest day": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "최저의 날"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最低の日"
+          }
+        }
+      }
+    },
+    "Tap to complete": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "탭하여 완료"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "タップして完了"
+          }
+        }
+      }
+    },
+    "Indoor": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "실내"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "屋内"
+          }
+        }
+      }
+    },
+    "Edit Record": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "기록 편집"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "記録を編集"
+          }
+        }
+      }
+    },
+    "Add Record": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "기록 추가"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "記録を追加"
+          }
+        }
+      }
+    },
+    "Edit Injury": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "부상 편집"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "怪我を編集"
+          }
+        }
+      }
+    },
+    "Add Injury": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "부상 추가"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "怪我を追加"
+          }
+        }
+      }
+    },
+    "Edit Habit": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "습관 편집"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "習慣を編集"
+          }
+        }
+      }
+    },
+    "New Habit": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "새 습관"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新しい習慣"
+          }
+        }
+      }
+    },
+    "Edit Template": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "템플릿 편집"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "テンプレートを編集"
+          }
+        }
+      }
+    },
+    "New Template": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "새 템플릿"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新しいテンプレート"
+          }
+        }
+      }
+    },
+    "New Category": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "새 카테고리"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新しいカテゴリ"
+          }
+        }
+      }
+    },
+    "Edit Category": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "카테고리 편집"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カテゴリを編集"
+          }
+        }
+      }
+    },
+    "Quick Start": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "빠른 시작"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "クイックスタート"
+          }
+        }
+      }
+    },
+    "Select Exercise": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "운동 선택"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "エクササイズを選択"
+          }
+        }
+      }
+    },
+    "HRV (Heart Rate Variability)": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HRV (심박변이도)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HRV（心拍変動）"
+          }
+        }
+      }
+    },
+    "Measures the variation between heartbeats. Higher HRV indicates a more flexible autonomic nervous system and better recovery.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "심장 박동 간의 변이를 측정합니다. HRV가 높을수록 자율신경계가 유연하고 회복이 양호함을 나타냅니다."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "心拍間の変動を測定します。HRVが高いほど自律神経系が柔軟で回復が良好であることを示します。"
+          }
+        }
+      }
+    },
+    "Personal Baseline": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "개인 기준선"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "パーソナルベースライン"
+          }
+        }
+      }
+    },
+    "Your baseline is set using 7 days of HRV data. Analysis is based on personal trends, not absolute values.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7일간의 HRV 데이터로 기준선을 설정합니다. 절대값이 아닌 개인 추세를 기반으로 분석합니다."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7日間のHRVデータでベースラインを設定します。絶対値ではなく個人のトレンドに基づいて分析します。"
+          }
+        }
+      }
+    },
+    "Score Calculation": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "점수 계산"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "スコア計算"
+          }
+        }
+      }
+    },
+    "Statistically calculates where today’s HRV falls relative to your baseline, converting it to a 0–100 score.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "오늘의 HRV가 기준선에서 어디에 위치하는지 통계적으로 계산하여 0~100 점수로 변환합니다."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今日のHRVがベースラインに対してどこに位置するかを統計的に計算し、0〜100のスコアに変換します。"
+          }
+        }
+      }
+    },
+    "RHR Adjustment": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RHR 보정"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RHR補正"
+          }
+        }
+      }
+    },
+    "Factors in resting heart rate (RHR) changes. When HRV drops while RHR rises, fatigue signals are amplified.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "안정시 심박수(RHR) 변화를 반영합니다. HRV가 떨어지면서 RHR이 올라가면 피로 신호가 증폭됩니다."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "安静時心拍数（RHR）の変化を反映します。HRVが低下しRHRが上昇すると疲労シグナルが増幅されます。"
+          }
+        }
+      }
+    },
+    "Avg": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "평균"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "平均"
+          }
+        }
+      }
+    },
+    "Min": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "최소"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最小"
+          }
+        }
+      }
+    },
+    "Max": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "최대"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最大"
+          }
+        }
+      }
+    },
+    "Environment": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "환경"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "環境"
           }
         }
       }

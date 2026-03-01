@@ -93,7 +93,7 @@ struct HabitRowView: View {
                     .font(.title2)
                     .foregroundStyle(progress.isCompleted ? AnyShapeStyle(DS.Color.positive) : AnyShapeStyle(.tertiary))
 
-                Text(progress.isCompleted ? "Done" : "Tap to complete")
+                Text(progress.isCompleted ? String(localized: "Done") : String(localized: "Tap to complete"))
                     .font(.caption)
                     .foregroundStyle(progress.isCompleted ? .primary : .secondary)
 
