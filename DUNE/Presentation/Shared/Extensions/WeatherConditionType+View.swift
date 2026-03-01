@@ -1,5 +1,24 @@
 import SwiftUI
 
+// MARK: - WMO Weather Code Label
+
+/// Converts a raw WMO/WeatherKit weather condition code to a localized display label.
+func weatherConditionLabel(for rawValue: Int) -> String {
+    switch rawValue {
+    case 1: return String(localized: "Clear")
+    case 2: return String(localized: "Mostly Clear")
+    case 3, 4, 5: return String(localized: "Cloudy")
+    case 6, 7: return String(localized: "Foggy")
+    case 8, 9: return String(localized: "Windy")
+    case 12, 18, 20: return String(localized: "Snow")
+    case 13, 14, 15, 16, 17, 21, 22, 23: return String(localized: "Rain")
+    case 24: return String(localized: "Thunderstorm")
+    default: return String(localized: "Weather")
+    }
+}
+
+// MARK: - WeatherConditionType View Extension
+
 extension WeatherConditionType {
     /// SF Symbol for this weather condition.
     var sfSymbol: String {

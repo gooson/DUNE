@@ -319,18 +319,4 @@ struct PersonalRecordsDetailView: View {
         guard !parts.isEmpty else { return nil }
         return parts.prefix(3).joined(separator: " · ")
     }
-
-    private func weatherConditionLabel(for rawValue: Int) -> String {
-        switch rawValue {
-        case 1: return "Clear"
-        case 2: return "Mostly Clear"
-        case 3, 4, 5: return "Cloudy"
-        case 6, 7: return "Foggy"
-        case 8, 9: return "Windy"
-        case 12, 18, 20: return "Snow"
-        case 13, 14, 15, 16, 17, 21, 22, 23: return "Rain"
-        case 24: return "Thunderstorm"
-        default: return "Weather"
-        }
-    }
 }

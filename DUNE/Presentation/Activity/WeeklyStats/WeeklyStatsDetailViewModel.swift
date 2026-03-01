@@ -115,7 +115,7 @@ final class WeeklyStatsDetailViewModel {
 
         } catch {
             AppLogger.ui.error("Weekly stats fetch failed: \(error.localizedDescription)")
-            errorMessage = "Unable to load data."
+            errorMessage = String(localized: "Unable to load data.")
         }
 
         isLoading = false
