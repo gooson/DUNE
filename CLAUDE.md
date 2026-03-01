@@ -116,6 +116,7 @@
   - healthkit-patterns.md: #5, #107-110, #130-131
   - swiftdata-cloudkit.md: #32-33, #40, #50, #65, #71, #164, #188
   - watch-navigation.md: #57-61
+  - build-pipeline.md: #95-96, #185
 -->
 
 ### Data & Score 로직
@@ -187,8 +188,8 @@
 
 ### 프로세스
 
-- **빌드 검증은 `scripts/build-ios.sh` 단일 경로** (#95-96)
-- **CI 스크립트 xcodegen 로직은 `scripts/lib/regen-project.sh` 단일 소스** (#185)
+- ~~**빌드 검증은 `scripts/build-ios.sh` 단일 경로** (#95-96)~~ → `build-pipeline.md`로 졸업
+- ~~**CI 스크립트 xcodegen 로직은 `scripts/lib/regen-project.sh` 단일 소스** (#185)~~ → `build-pipeline.md`로 졸업
 - **workflow paths에 `scripts/**` 대신 개별 스크립트 경로 지정** (#186)
 - **새 UI 테스트 파일은 `BaseUITestCase` 상속** (#187)
 - **`/ship` 머지 전략은 `--merge` 기본** (#54)

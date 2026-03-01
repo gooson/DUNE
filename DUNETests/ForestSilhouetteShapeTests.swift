@@ -34,13 +34,11 @@ struct ForestSilhouetteShapeTests {
         let sparse = ForestSilhouetteShape(
             amplitude: 0.1,
             frequency: 1.0,
-            ruggedness: 0.1,
             treeDensity: 0
         )
         let dense = ForestSilhouetteShape(
             amplitude: 0.1,
             frequency: 1.0,
-            ruggedness: 0.1,
             treeDensity: 0.4
         )
 
@@ -50,15 +48,62 @@ struct ForestSilhouetteShapeTests {
         #expect(denseBounds.minY < sparseBounds.minY)
     }
 
-    @Test("Ruggedness changes silhouette profile")
-    func ruggednessChangesProfile() {
-        let rect = CGRect(x: 0, y: 0, width: 320, height: 180)
-        let smooth = ForestSilhouetteShape(amplitude: 0.1, frequency: 1.2, ruggedness: 0.0, treeDensity: 0.08)
-        let rugged = ForestSilhouetteShape(amplitude: 0.1, frequency: 1.2, ruggedness: 0.6, treeDensity: 0.08)
+    @Test("Path stays within reasonable bounds with high amplitude")
+    func pathWithinBoundsHighAmplitude() {
+        let shape = ForestSilhouetteShape(
+            amplitude: 0.4, frequency: 0.95, phase: 0, verticalOffset: 0.5, treeDensity: 0.55
+        )
+        let rect = CGRect(x: 0, y: 0, width: 400, height: 280)
+        let bounds = shape.path(in: rect).boundingRect
 
-        let smoothBounds = smooth.path(in: rect).boundingRect
-        let ruggedBounds = rugged.path(in: rect).boundingRect
+        // X should stay within rect
+        #expect(bounds.minX >= rect.minX - 2)
+        #expect(bounds.maxX <= rect.maxX + 2)
+        // Bottom closes to rect.height
+        #expect(bounds.maxY <= rect.maxY + 2)
+    }
 
-        #expect(smoothBounds.height != ruggedBounds.height)
+    @Test("Different phases produce different paths")
+    func phaseChangesPath() {
+        let rect = CGRect(x: 0, y: 0, width: 300, height: 250)
+        let shape0 = ForestSilhouetteShape(
+            amplitude: 0.3, frequency: 1.5, phase: 0, verticalOffset: 0.5, treeDensity: 0.3
+        )
+        let shapeHalfPi = ForestSilhouetteShape(
+            amplitude: 0.3, frequency: 1.5, phase: .pi, verticalOffset: 0.5, treeDensity: 0.3
+        )
+
+        let path0 = shape0.path(in: rect)
+        let pathPi = shapeHalfPi.path(in: rect)
+
+        // Bezier paths with different phases must differ structurally
+        var points0 = [CGPoint]()
+        path0.cgPath.applyWithBlock { element in
+            let pt = element.pointee.points[0]
+            points0.append(pt)
+        }
+        var pointsPi = [CGPoint]()
+        pathPi.cgPath.applyWithBlock { element in
+            let pt = element.pointee.points[0]
+            pointsPi.append(pt)
+        }
+        // First point Y should differ due to phase shift
+        guard let first0 = points0.first, let firstPi = pointsPi.first else {
+            Issue.record("No path points found")
+            return
+        }
+        #expect(abs(first0.y - firstPi.y) > 0.1)
+    }
+
+    @Test("Zero amplitude produces flat wave")
+    func zeroAmplitude() {
+        let shape = ForestSilhouetteShape(
+            amplitude: 0, frequency: 0.75, phase: 0, verticalOffset: 0.5, treeDensity: 0.5
+        )
+        let rect = CGRect(x: 0, y: 0, width: 300, height: 200)
+        let bounds = shape.path(in: rect).boundingRect
+
+        // With zero amplitude, ridge line is flat at verticalOffset (0.5 * 200 = 100)
+        #expect(bounds.minY >= 98 && bounds.minY <= 102)
     }
 }
