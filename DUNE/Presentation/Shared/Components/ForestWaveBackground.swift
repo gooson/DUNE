@@ -40,21 +40,7 @@ struct ForestWaveOverlayView: View {
                 treeDensity: treeDensity
             )
             .fill(color.opacity(opacity))
-            .mask {
-                if bottomFade > 0 {
-                    LinearGradient(
-                        stops: [
-                            .init(color: .white, location: 0),
-                            .init(color: .white, location: 1.0 - bottomFade),
-                            .init(color: .white.opacity(0), location: 1.0)
-                        ],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                } else {
-                    Rectangle()
-                }
-            }
+            .bottomFadeMask(bottomFade)
 
             if showGrain {
                 UkiyoeGrainView(opacity: 0.04)
@@ -65,6 +51,15 @@ struct ForestWaveOverlayView: View {
             guard !reduceMotion else { return }
             withAnimation(.linear(duration: driftDuration).repeatForever(autoreverses: false)) {
                 phase = 2 * .pi
+            }
+        }
+        .onAppear {
+            guard !reduceMotion else { return }
+            Task { @MainActor in
+                phase = 0
+                withAnimation(.linear(duration: driftDuration).repeatForever(autoreverses: false)) {
+                    phase = 2 * .pi
+                }
             }
         }
     }
@@ -81,7 +76,7 @@ private struct UkiyoeGrainView: View {
     /// Pre-rendered grain texture. Computed once at first access.
     /// Deterministic pseudo-random noise: product of three incommensurate sines.
     private static let grainImage: UIImage = {
-        let size = CGSize(width: 390, height: 200)
+        let size = CGSize(width: UIScreen.main.bounds.width, height: 200)
         let step: CGFloat = 3
         let cols = Int(size.width / step)
         let rows = Int(size.height / step)

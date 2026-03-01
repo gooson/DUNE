@@ -15,9 +15,7 @@ struct ThemePickerSection: View {
 
     private func themeRow(_ appTheme: AppTheme) -> some View {
         Button {
-            withAnimation(DS.Animation.standard) {
-                selectedTheme = appTheme
-            }
+            selectedTheme = appTheme
         } label: {
             HStack(spacing: DS.Spacing.md) {
                 HStack(spacing: DS.Spacing.xs) {

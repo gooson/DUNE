@@ -4,11 +4,20 @@ import SwiftUI
 
 /// Pre-computed sample points for wave rendering.
 /// Shared across all wave shape variants to avoid duplication.
+/// Cached by frequency to eliminate per-body-evaluation allocation.
 struct WaveSamples {
     let points: [(x: CGFloat, angle: CGFloat)]
     static let sampleCount = 120
 
+    /// Static cache keyed by frequency. Only ~7 distinct values across all themes.
+    /// Safe: only written from main thread (SwiftUI view body), idempotent writes.
+    nonisolated(unsafe) private static var cache: [CGFloat: [(x: CGFloat, angle: CGFloat)]] = [:]
+
     init(frequency: CGFloat) {
+        if let cached = Self.cache[frequency] {
+            self.points = cached
+            return
+        }
         let count = Self.sampleCount
         var pts: [(x: CGFloat, angle: CGFloat)] = []
         pts.reserveCapacity(count + 1)
@@ -18,6 +27,7 @@ struct WaveSamples {
             pts.append((x: x, angle: angle))
         }
         self.points = pts
+        Self.cache[frequency] = pts
     }
 }
 
@@ -694,27 +704,23 @@ struct OceanWaveOverlayView: View {
             }
         }
         .clipped()
-        .mask {
-            if bottomFade > 0 {
-                LinearGradient(
-                    stops: [
-                        .init(color: .white, location: 0),
-                        .init(color: .white, location: 1.0 - bottomFade),
-                        .init(color: .white.opacity(0), location: 1.0)
-                    ],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-            } else {
-                Rectangle()
-            }
-        }
+        .bottomFadeMask(bottomFade)
         .allowsHitTesting(false)
         .task {
             guard !reduceMotion, driftDuration > 0 else { return }
             let target: CGFloat = reverseDirection ? -(2 * .pi) : (2 * .pi)
             withAnimation(.linear(duration: driftDuration).repeatForever(autoreverses: false)) {
                 phase = target
+            }
+        }
+        .onAppear {
+            guard !reduceMotion, driftDuration > 0 else { return }
+            Task { @MainActor in
+                let target: CGFloat = reverseDirection ? -(2 * .pi) : (2 * .pi)
+                phase = 0
+                withAnimation(.linear(duration: driftDuration).repeatForever(autoreverses: false)) {
+                    phase = target
+                }
             }
         }
     }

@@ -32,8 +32,9 @@ struct OceanTabWaveBackground: View {
     /// Excluded from .life (lake-like stillness).
     private var curlCount: Int {
         switch preset {
-        case .train, .today, .wellness: 1
-        case .life: 0
+        case .train:              2    // Rougher ocean
+        case .today, .wellness:   1
+        case .life:               0    // Lake-like stillness
         }
     }
 
@@ -97,9 +98,9 @@ struct OceanTabWaveBackground: View {
                 frequency: 2.0,
                 verticalOffset: 0.55,
                 bottomFade: 0.4,
-                steepness: 0.35,
+                steepness: 0.40,
                 crestHeight: 0.3 * scale,
-                crestSharpness: 0.1 * scale,
+                crestSharpness: 0.12 * scale,
                 driftDuration: 5,
                 reverseDirection: false,
                 strokeStyle: WaveStrokeStyle(
@@ -109,12 +110,12 @@ struct OceanTabWaveBackground: View {
                 ),
                 foamStyle: WaveFoamStyle(
                     color: theme.oceanFoamColor,
-                    opacity: 0.25 * scale,
-                    depth: 0.03
+                    opacity: 0.30 * scale,
+                    depth: 0.035
                 ),
                 curlCount: curlCount,
-                curlHeight: 1.8 * scale,
-                curlWidth: 0.12
+                curlHeight: 2.2 * scale,
+                curlWidth: 0.15
             )
             .frame(height: 200)
 
