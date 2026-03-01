@@ -99,9 +99,6 @@ targets:
     platform: watchOS
     sources:
       - path: ../DUNEWatch
-        excludes:
-          - "Resources/**"
-      - path: ../DUNEWatch/Resources
       # Shared SwiftData models
       - path: Data/Persistence/Models
         group: Shared/Models
