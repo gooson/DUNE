@@ -125,7 +125,7 @@ private struct HeatShimmerView: View {
     /// Pre-rendered shimmer texture. Computed once at first access.
     /// Deterministic pseudo-random noise: product of incommensurate sines.
     private static let shimmerImage: UIImage = {
-        let size = CGSize(width: UIScreen.main.bounds.width, height: 200)
+        let size = CGSize(width: 400, height: 200)
         let step: CGFloat = 4
         let cols = Int(size.width / step)
         let rows = Int(size.height / step)

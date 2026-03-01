@@ -49,7 +49,7 @@ final class WeatherProvider: WeatherProviding, Sendable {
         let location = try await locationService.requestLocation()
 
         // Parallel fetch: weather + air quality + reverse geocoding (all independent).
-        // reverseGeocode hops to @MainActor for cache access; the CLGeocoder call itself runs off-main.
+        // reverseGeocode hops to @MainActor for cache access; MKReverseGeocodingRequest runs off-main.
         async let weatherTask = weatherService.fetchWeather(for: location)
         async let airQualityTask = safeAirQualityFetch(for: location)
         async let locationNameTask = locationService.reverseGeocode(location)

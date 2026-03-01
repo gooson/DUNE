@@ -128,7 +128,7 @@ private struct UkiyoeGrainView: View {
     /// Pre-rendered grain texture. Computed once at first access.
     /// Deterministic pseudo-random noise: product of three incommensurate sines.
     private static let grainImage: UIImage = {
-        let size = CGSize(width: UIScreen.main.bounds.width, height: 200)
+        let size = CGSize(width: 400, height: 200)
         let step: CGFloat = 3
         let cols = Int(size.width / step)
         let rows = Int(size.height / step)

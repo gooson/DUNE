@@ -1,5 +1,6 @@
 import Foundation
 import CoreLocation
+@preconcurrency import MapKit
 import Observation
 
 /// Manages device location for weather data fetching.
@@ -74,11 +75,14 @@ final class LocationService: NSObject, CLLocationManagerDelegate, Sendable {
             return cache.name
         }
 
-        let geocoder = CLGeocoder()
+        guard let request = MKReverseGeocodingRequest(location: location) else {
+            geocodeCache = (location: location, name: nil, cachedAt: Date())
+            return nil
+        }
         do {
-            let placemarks = try await geocoder.reverseGeocodeLocation(location)
-            let name = placemarks.first.flatMap {
-                Self.formatPlaceName(subLocality: $0.subLocality, locality: $0.locality)
+            let mapItems = try await request.mapItems
+            let name = mapItems.first.flatMap {
+                Self.formatPlaceName(subLocality: $0.placemark.subLocality, locality: $0.placemark.locality)
             }
             geocodeCache = (location: location, name: name, cachedAt: Date())
             return name
