@@ -20,9 +20,7 @@ struct ForestSilhouetteShape: Shape {
     var phase: CGFloat
     /// Vertical center of the ridge as a fraction of the rect height (0…1).
     let verticalOffset: CGFloat
-    /// Peak irregularity (0 = smooth hills, 1 = rugged mountains).
-    let ruggedness: CGFloat
-    /// Tree silhouette density on ridge line (0 = none, 1 = dense).
+    /// Tree silhouette density (0 = bare hills, higher = denser canopy).
     let treeDensity: CGFloat
 
     var animatableData: CGFloat {
@@ -32,12 +30,16 @@ struct ForestSilhouetteShape: Shape {
 
     private let samples: WaveSamples
 
-    /// Deterministic pseudo-random edge noise for washi edge effect.
-    /// Product of two incommensurate sines — repeatable across launches.
+    /// 3-octave fBm edge noise for washi (和紙) edge texture.
+    /// Layered incommensurate sine products at doubling frequencies / halving amplitudes
+    /// produce self-similar, fractal-like roughness — more organic than single-octave noise.
     /// Depends only on sampleCount, so computed once as a static constant.
     private static let edgeNoise: [CGFloat] = (0...WaveSamples.sampleCount).map { i in
         let d = Double(i)
-        return CGFloat(sin(d * 7.3 + 2.1) * sin(d * 13.7 + 5.3))
+        let octave1 = sin(d * 7.3 + 2.1) * sin(d * 13.7 + 5.3)         // broad contour
+        let octave2 = 0.5 * sin(d * 23.1 + 0.7) * sin(d * 31.9 + 4.1)  // mid detail
+        let octave3 = 0.25 * sin(d * 53.7 + 3.2) * sin(d * 71.3 + 1.8) // fine grain
+        return CGFloat(octave1 + octave2 + octave3) / 1.75
     }
 
     init(
@@ -45,14 +47,12 @@ struct ForestSilhouetteShape: Shape {
         frequency: CGFloat = 1.5,
         phase: CGFloat = 0,
         verticalOffset: CGFloat = 0.5,
-        ruggedness: CGFloat = 0.3,
         treeDensity: CGFloat = 0
     ) {
         self.amplitude = amplitude
         self.frequency = frequency
         self.phase = phase
         self.verticalOffset = verticalOffset
-        self.ruggedness = ruggedness
         self.treeDensity = treeDensity
         self.samples = WaveSamples(frequency: frequency)
     }
@@ -62,7 +62,8 @@ struct ForestSilhouetteShape: Shape {
 
         let amp = rect.height * amplitude
         let centerY = rect.height * verticalOffset
-        let edgeScale: CGFloat = 2.1 // larger local noise while keeping base amplitude unchanged
+        // Edge noise scale — amplifies fBm texture relative to base sine amplitude.
+        let edgeScale: CGFloat = 2.1
 
         var path = Path()
         for (i, pt) in samples.points.enumerated() {
@@ -72,11 +73,11 @@ struct ForestSilhouetteShape: Shape {
             // Base ridge contour
             var y = sin(angle)
 
-            // Broad canopy swell for rounded forest masses.
-            y += (1 - ruggedness) * 0.35 * sin(0.55 * angle + 0.8)
+            // Broad canopy swell for rounded forest masses (0.245 = 0.7 × 0.35).
+            y += 0.245 * sin(0.55 * angle + 0.8)
 
-            // Mid harmonic for irregular ridge rhythm (less sharp than dune/ocean crests).
-            y += ruggedness * 0.26 * sin(2.2 * angle + 1.1)
+            // Mid harmonic for irregular ridge rhythm (0.078 = 0.3 × 0.26).
+            y += 0.078 * sin(2.2 * angle + 1.1)
 
             // Rounded canopy pulse for tree-top silhouettes.
             if treeDensity > 0 {
@@ -84,7 +85,9 @@ struct ForestSilhouetteShape: Shape {
                 y += treeDensity * 0.32 * treePulse
             }
 
-            let yPos = centerY + amp * y + Self.edgeNoise[i] * edgeScale
+            // Tree cluster modulation: 0.6 = roughness depth, 1.3 = cluster spacing frequency.
+            let treeModulation: CGFloat = 1.0 + treeDensity * 0.6 * abs(sin(angle * 1.3))
+            let yPos = centerY + amp * y + Self.edgeNoise[i] * edgeScale * treeModulation
 
             if i == 0 {
                 path.move(to: CGPoint(x: x, y: yPos))

@@ -267,3 +267,40 @@ struct OceanSheetWaveBackground: View {
         .ignoresSafeArea()
     }
 }
+
+// MARK: - Previews
+
+#Preview("OceanTabWaveBackground") {
+    OceanTabWaveBackground()
+        .environment(\.appTheme, .oceanCool)
+}
+
+#Preview("Ocean Tab — All Presets") {
+    TabView {
+        ForEach(
+            [
+                ("Today", WavePreset.today),
+                ("Train", WavePreset.train),
+                ("Wellness", WavePreset.wellness),
+                ("Life", WavePreset.life),
+            ],
+            id: \.0
+        ) { name, preset in
+            OceanTabWaveBackground()
+                .environment(\.wavePreset, preset)
+                .environment(\.appTheme, .oceanCool)
+                .overlay(alignment: .center) {
+                    Text(name)
+                        .font(.title2.bold())
+                        .foregroundStyle(.white)
+                }
+                .tabItem { Text(name) }
+        }
+    }
+}
+
+#Preview("Ocean Tab — Dark") {
+    OceanTabWaveBackground()
+        .environment(\.appTheme, .oceanCool)
+        .preferredColorScheme(.dark)
+}
