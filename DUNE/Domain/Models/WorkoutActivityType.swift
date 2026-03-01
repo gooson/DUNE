@@ -388,10 +388,10 @@ enum MilestoneDistance: String, Codable, Sendable, CaseIterable {
     /// Display label.
     var label: String {
         switch self {
-        case .fiveK: "5K"
-        case .tenK: "10K"
-        case .halfMarathon: "Half"
-        case .marathon: "Marathon"
+        case .fiveK: String(localized: "5K")
+        case .tenK: String(localized: "10K")
+        case .halfMarathon: String(localized: "Half")
+        case .marathon: String(localized: "Marathon")
         }
     }
 

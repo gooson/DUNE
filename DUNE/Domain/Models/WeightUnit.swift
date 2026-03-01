@@ -6,8 +6,8 @@ enum WeightUnit: String, CaseIterable, Sendable {
 
     var displayName: String {
         switch self {
-        case .kg: "kg"
-        case .lb: "lb"
+        case .kg: String(localized: "kg")
+        case .lb: String(localized: "lb")
         }
     }
 

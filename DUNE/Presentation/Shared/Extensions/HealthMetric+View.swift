@@ -145,12 +145,12 @@ extension HealthMetric.Category {
         case .exercise:           String(localized: "Exercise")
         case .steps:              String(localized: "Steps")
         case .weight:             String(localized: "Weight")
-        case .bmi:                "BMI"
+        case .bmi:                String(localized: "BMI")
         case .bodyFat:            String(localized: "Body Fat")
         case .leanBodyMass:       String(localized: "Lean Body Mass")
         case .spo2:               String(localized: "Blood Oxygen")
         case .respiratoryRate:    String(localized: "Respiratory Rate")
-        case .vo2Max:             "VO2 Max"
+        case .vo2Max:             String(localized: "VO2 Max")
         case .heartRateRecovery:  String(localized: "HR Recovery")
         case .wristTemperature:   String(localized: "Wrist Temp")
         }

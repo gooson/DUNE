@@ -24,7 +24,7 @@ extension Equipment {
         case .pullUpBar: String(localized: "Pull-Up Bar")
         case .dipStation: String(localized: "Dip Station")
         case .band: String(localized: "Band")
-        case .trx: "TRX"
+        case .trx: String(localized: "TRX")
         case .medicineBall: String(localized: "Medicine Ball")
         case .stabilityBall: String(localized: "Stability Ball")
         case .other: String(localized: "Other")

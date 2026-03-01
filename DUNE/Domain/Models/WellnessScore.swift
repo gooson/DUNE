@@ -35,11 +35,11 @@ struct WellnessScore: Sendable, Hashable {
 
     private static func message(for status: Status) -> String {
         switch status {
-        case .excellent: "Well recovered. Ready for high intensity."
-        case .good: "Good condition. Normal training is fine."
-        case .fair: "Some recovery needed. Consider lighter work."
-        case .tired: "You need more rest. Low intensity only."
-        case .warning: "Rest is recommended. Skip training today."
+        case .excellent: String(localized: "Well recovered. Ready for high intensity.")
+        case .good: String(localized: "Good condition. Normal training is fine.")
+        case .fair: String(localized: "Some recovery needed. Consider lighter work.")
+        case .tired: String(localized: "You need more rest. Low intensity only.")
+        case .warning: String(localized: "Rest is recommended. Skip training today.")
         }
     }
 }
