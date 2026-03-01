@@ -111,7 +111,12 @@ private struct HabitListQueryView: View {
             EmptyStateView(
                 icon: "checklist",
                 title: "No Habits Yet",
-                message: "Add your first habit to start tracking your daily routine."
+                message: "Add your first habit to start tracking your daily routine.",
+                actionTitle: "Add Habit",
+                action: {
+                    viewModel.resetForm()
+                    viewModel.isShowingAddSheet = true
+                }
             )
         } else {
             // Hero: completion rate

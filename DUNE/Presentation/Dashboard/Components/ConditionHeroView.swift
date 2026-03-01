@@ -61,7 +61,7 @@ struct ConditionHeroView: View {
                     }
 
                     // Guide message
-                    Text(score.status.guideMessage)
+                    Text(score.narrativeMessage)
                         .font(.subheadline)
                         .foregroundStyle(DS.Color.textSecondary)
 

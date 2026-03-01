@@ -20,7 +20,7 @@ struct TrainingReadinessHeroCard: View {
                 statusLabel: readiness.status.label,
                 statusIcon: readiness.status.iconName,
                 statusColor: readiness.status.color,
-                guideMessage: readiness.status.guideMessage,
+                guideMessage: readiness.narrativeMessage,
                 subScores: [
                     .init(label: Labels.hrv, value: readiness.components.hrvScore, color: DS.Color.hrv),
                     .init(label: Labels.sleep, value: readiness.components.sleepScore, color: DS.Color.sleep),

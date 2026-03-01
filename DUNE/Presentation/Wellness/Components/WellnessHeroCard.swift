@@ -21,7 +21,7 @@ struct WellnessHeroCard: View {
                 statusLabel: score.status.label,
                 statusIcon: score.status.iconName,
                 statusColor: score.status.color,
-                guideMessage: score.guideMessage,
+                guideMessage: score.narrativeMessage,
                 subScores: [
                     .init(label: Labels.sleep, value: sleepScore, color: DS.Color.sleep),
                     .init(label: Labels.condition, value: conditionScore, color: DS.Color.hrv),
