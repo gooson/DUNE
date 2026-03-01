@@ -9,7 +9,7 @@ description: "테스트 작성 패턴과 커버리지 기대치. 테스트 관�
 
 - Pattern: Arrange / Act / Assert (AAA)
 - Framework: Swift Testing (`@Suite`, `@Test`, `#expect`)
-- Location: `DUNETests/` (unit), `DUNEUITests/` (UI)
+- Location: `DUNE/DUNETests/` (unit), `DUNE/DUNEUITests/` (UI)
 - File naming: `{TargetType}Tests.swift` (예: `CalculateConditionScoreUseCaseTests.swift`)
 
 ## Required Imports

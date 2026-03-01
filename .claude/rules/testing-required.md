@@ -25,7 +25,7 @@
 
 - Framework: Swift Testing (`@Suite`, `@Test`, `#expect`)
 - Pattern: Arrange / Act / Assert
-- Location: `DUNETests/`
+- Location: `DUNE/DUNETests/`
 - Naming: `{TargetType}Tests.swift`
 - 상세 패턴: `.claude/skills/testing-patterns/SKILL.md` 참조
 

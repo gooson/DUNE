@@ -9,7 +9,7 @@ agent: ui-test-expert
 ## Framework & Location
 
 - **Framework**: XCTest (`XCUIApplication`, `XCUIElement`)
-- **Location**: `DUNEUITests/`
+- **Location**: `DUNE/DUNEUITests/`
 - **File naming**: `{Feature}UITests.swift`
 - **Run command**: `xcodebuild test -project DUNE/DUNE.xcodeproj -scheme DUNEUITests -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.2' -only-testing DUNEUITests -quiet`
 - **iPad command**: `xcodebuild test -project DUNE/DUNE.xcodeproj -scheme DUNEUITests -destination 'platform=iOS Simulator,name=iPad Pro 13-inch (M4),OS=26.2' -only-testing DUNEUITests -quiet`
@@ -116,7 +116,7 @@ var isIPad: Bool {
 
 ## Helpers
 
-`DUNEUITests/Helpers/UITestHelpers.swift`에 공통 유틸리티를 배치합니다:
+`DUNE/DUNEUITests/Helpers/UITestHelpers.swift`에 공통 유틸리티를 배치합니다:
 
 ```swift
 extension XCUIApplication {
