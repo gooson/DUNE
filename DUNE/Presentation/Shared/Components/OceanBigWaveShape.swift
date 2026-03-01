@@ -40,49 +40,28 @@ struct OceanBigWaveShape: Shape {
 
         var path = Path()
 
-        // Start at bottom-left of wave base
-        path.move(to: bigWavePt(0, 1.0, w, h, sway))
+        // Start at bottom-left
+        path.move(to: bigWavePt(0.0, 1.0, w, h, sway))
 
-        // 1. Base slope — gentle rise from bottom
+        // 1. Smooth rise from base to peak
         path.addCurve(
-            to: bigWavePt(0.30, 0.40, w, h, sway),
-            control1: bigWavePt(0.10, 0.95, w, h, sway),
-            control2: bigWavePt(0.25, 0.50, w, h, sway)
+            to: bigWavePt(0.35, 0.04, w, h, sway),
+            control1: bigWavePt(0.08, 0.70, w, h, sway),
+            control2: bigWavePt(0.28, 0.06, w, h, sway)
         )
 
-        // 2. Steep rise to peak
+        // 2. Lip curling forward and down
         path.addCurve(
-            to: bigWavePt(0.42, 0.06, w, h, sway),
-            control1: bigWavePt(0.33, 0.25, w, h, sway),
-            control2: bigWavePt(0.38, 0.08, w, h, sway)
+            to: bigWavePt(0.58, 0.28, w, h, sway),
+            control1: bigWavePt(0.42, 0.0, w, h, sway),
+            control2: bigWavePt(0.56, 0.10, w, h, sway)
         )
 
-        // 3. Lip extending over (crest)
+        // 3. Concave face descending to base
         path.addCurve(
-            to: bigWavePt(0.58, 0.10, w, h, sway),
-            control1: bigWavePt(0.46, 0.02, w, h, sway),
-            control2: bigWavePt(0.53, 0.04, w, h, sway)
-        )
-
-        // 4. Curl descending
-        path.addCurve(
-            to: bigWavePt(0.60, 0.35, w, h, sway),
-            control1: bigWavePt(0.62, 0.12, w, h, sway),
-            control2: bigWavePt(0.63, 0.25, w, h, sway)
-        )
-
-        // 5. Inside curl — going back
-        path.addCurve(
-            to: bigWavePt(0.48, 0.28, w, h, sway),
-            control1: bigWavePt(0.58, 0.38, w, h, sway),
-            control2: bigWavePt(0.52, 0.33, w, h, sway)
-        )
-
-        // 6. Wave face descending to base
-        path.addCurve(
-            to: bigWavePt(0.40, 1.0, w, h, sway),
-            control1: bigWavePt(0.45, 0.45, w, h, sway),
-            control2: bigWavePt(0.42, 0.75, w, h, sway)
+            to: bigWavePt(0.38, 1.0, w, h, sway),
+            control1: bigWavePt(0.55, 0.52, w, h, sway),
+            control2: bigWavePt(0.42, 0.82, w, h, sway)
         )
 
         // Close along bottom
@@ -126,28 +105,21 @@ struct OceanBigWaveCrestShape: Shape {
 
         var path = Path()
 
-        // Start at the steep rise
-        path.move(to: bigWavePt(0.35, 0.15, w, h, sway))
+        // Start partway up the rise
+        path.move(to: bigWavePt(0.25, 0.18, w, h, sway))
 
         // Rise to peak
         path.addCurve(
-            to: bigWavePt(0.42, 0.06, w, h, sway),
-            control1: bigWavePt(0.37, 0.10, w, h, sway),
-            control2: bigWavePt(0.40, 0.07, w, h, sway)
+            to: bigWavePt(0.35, 0.04, w, h, sway),
+            control1: bigWavePt(0.28, 0.10, w, h, sway),
+            control2: bigWavePt(0.32, 0.05, w, h, sway)
         )
 
-        // Lip
+        // Lip curling forward and down
         path.addCurve(
-            to: bigWavePt(0.58, 0.10, w, h, sway),
-            control1: bigWavePt(0.46, 0.02, w, h, sway),
-            control2: bigWavePt(0.53, 0.04, w, h, sway)
-        )
-
-        // Curl
-        path.addCurve(
-            to: bigWavePt(0.60, 0.35, w, h, sway),
-            control1: bigWavePt(0.62, 0.12, w, h, sway),
-            control2: bigWavePt(0.63, 0.25, w, h, sway)
+            to: bigWavePt(0.58, 0.28, w, h, sway),
+            control1: bigWavePt(0.42, 0.0, w, h, sway),
+            control2: bigWavePt(0.56, 0.10, w, h, sway)
         )
 
         if mirror {
