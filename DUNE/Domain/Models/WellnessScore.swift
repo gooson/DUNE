@@ -33,6 +33,25 @@ struct WellnessScore: Sendable, Hashable {
         self.guideMessage = Self.message(for: self.status)
     }
 
+    /// Data-driven narrative using sub-score breakdown.
+    var narrativeMessage: String {
+        let scores: [(String, Int)] = [
+            (String(localized: "sleep"), sleepScore),
+            (String(localized: "condition"), conditionScore),
+            (String(localized: "body"), bodyScore)
+        ].compactMap { name, val in
+            guard let val else { return nil }
+            return (name, val)
+        }
+        guard !scores.isEmpty else { return guideMessage }
+        if let weakest = scores.min(by: { $0.1 < $1.1 }),
+           let strongest = scores.max(by: { $0.1 < $1.1 }),
+           strongest.1 - weakest.1 > 20 {
+            return String(localized: "\(strongest.0.capitalized) is strong — \(weakest.0) needs attention")
+        }
+        return guideMessage
+    }
+
     private static func message(for status: Status) -> String {
         switch status {
         case .excellent: String(localized: "Well recovered. Ready for high intensity.")

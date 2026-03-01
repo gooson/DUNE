@@ -56,6 +56,34 @@ struct ConditionScore: Sendable, Hashable {
         }
     }
 
+    /// Data-driven narrative for hero card display.
+    var narrativeMessage: String {
+        guard let detail else { return status.guideMessage }
+        let hrvAboveBaseline = detail.todayHRV >= detail.baselineHRV
+        let rhrImpact = detail.rhrPenalty > 5
+        switch status {
+        case .excellent:
+            if hrvAboveBaseline {
+                return String(localized: "Top shape — HRV above baseline")
+            }
+            return String(localized: "Excellent recovery today")
+        case .good:
+            if rhrImpact {
+                return String(localized: "Good overall — RHR slightly elevated")
+            }
+            return String(localized: "Solid recovery — HRV looks stable")
+        case .fair:
+            if !hrvAboveBaseline {
+                return String(localized: "HRV below baseline — take it easy")
+            }
+            return String(localized: "Moderate recovery — lighter activity today")
+        case .tired:
+            return String(localized: "HRV significantly low — rest recommended")
+        case .warning:
+            return String(localized: "Recovery very low — prioritize rest")
+        }
+    }
+
     init(score: Int, date: Date = Date(), contributions: [ScoreContribution] = [], detail: ConditionScoreDetail? = nil) {
         self.score = max(0, min(100, score))
         self.date = date

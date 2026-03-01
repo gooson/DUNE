@@ -27,10 +27,8 @@ struct VitalCard: View {
 
                     Spacer(minLength: 0)
 
-                    // Freshness label
-                    if data.isStale {
-                        freshnessLabel
-                    }
+                    // Freshness label — always visible
+                    freshnessLabel
                 }
 
                 // Value row
@@ -71,15 +69,20 @@ struct VitalCard: View {
                 }
             }
         }
-        .opacity(data.isStale ? 0.6 : 1.0)
+        .opacity(data.isStale ? 0.85 : 1.0)
     }
 
     // MARK: - Components
 
+    @ViewBuilder
     private var freshnessLabel: some View {
-        Text(data.lastUpdated.freshnessLabel)
+        let label = Text(data.lastUpdated.freshnessLabel)
             .font(.caption2)
-            .foregroundStyle(.tertiary)
+        if data.isStale {
+            label.foregroundStyle(DS.Color.textSecondary)
+        } else {
+            label.foregroundStyle(.tertiary)
+        }
     }
 
     @ViewBuilder
