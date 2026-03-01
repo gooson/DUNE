@@ -62,4 +62,3 @@ struct ForestSilhouetteShapeTests {
         #expect(smoothBounds.height != ruggedBounds.height)
     }
 }
-

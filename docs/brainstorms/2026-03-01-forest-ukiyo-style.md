@@ -8,7 +8,7 @@ status: draft
 # Brainstorm: Forest Ukiyo Style Theme
 
 ## Problem Statement
-현재 Forest 테마가 존재하지만, 전체 탭 기준으로 봤을 때 "우키요에 숲"의 스타일 정체성이 충분히 강하게 전달되지 않습니다.  
+현재 Forest 테마가 존재하지만, 전체 탭 기준으로 봤을 때 "우키요에 숲"의 스타일 정체성이 충분히 강하게 전달되지 않습니다.
 앱 전체 테마 톤과 충돌하지 않으면서 Forest 주제에 맞는 우키요 스타일을 강화하고, 특히 다크모드에서도 선명하게 보이도록 개선이 필요합니다.
 
 ## Target Users

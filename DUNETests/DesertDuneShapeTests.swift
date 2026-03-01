@@ -53,4 +53,3 @@ struct DesertDuneShapeTests {
         #expect(abs(baseBounds.maxY - rippleBounds.maxY) < 6)
     }
 }
-
