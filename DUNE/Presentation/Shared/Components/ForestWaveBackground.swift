@@ -33,6 +33,12 @@ struct ForestWaveOverlayView: View {
     @State private var phase: CGFloat = 0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
+    /// Forest silhouette blends harmonics with phase multipliers (0.55, 2.2, 1.8).
+    /// 20 turns align loop start/end to remove visible repeat seams.
+    private static let phaseLoopTurns: CGFloat = 20
+    private var phaseTarget: CGFloat { 2 * .pi * Self.phaseLoopTurns }
+    private var phaseDuration: Double { driftDuration * Double(Self.phaseLoopTurns) }
+
     var body: some View {
         ZStack {
             ForestSilhouetteShape(
@@ -94,17 +100,17 @@ struct ForestWaveOverlayView: View {
         }
         .allowsHitTesting(false)
         .task {
-            guard !reduceMotion else { return }
-            withAnimation(.linear(duration: driftDuration).repeatForever(autoreverses: false)) {
-                phase = 2 * .pi
+            guard !reduceMotion, driftDuration > 0 else { return }
+            withAnimation(.linear(duration: phaseDuration).repeatForever(autoreverses: false)) {
+                phase = phaseTarget
             }
         }
         .onAppear {
-            guard !reduceMotion else { return }
+            guard !reduceMotion, driftDuration > 0 else { return }
             Task { @MainActor in
                 phase = 0
-                withAnimation(.linear(duration: driftDuration).repeatForever(autoreverses: false)) {
-                    phase = 2 * .pi
+                withAnimation(.linear(duration: phaseDuration).repeatForever(autoreverses: false)) {
+                    phase = phaseTarget
                 }
             }
         }

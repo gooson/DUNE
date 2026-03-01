@@ -24,6 +24,12 @@ struct DesertDuneOverlayView: View {
     @State private var phase: CGFloat = 0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
+    /// Ensure loop boundary continuity when ripple uses a non-1 phase multiplier (1.3).
+    /// rippleDrift 1.3 (=13/10) needs 10 turns for phase 0 and target to match exactly.
+    private var phaseLoopTurns: CGFloat { ripple > 0 ? 10 : 1 }
+    private var phaseTarget: CGFloat { 2 * .pi * phaseLoopTurns }
+    private var phaseDuration: Double { driftDuration * Double(phaseLoopTurns) }
+
     var body: some View {
         ZStack {
             DesertDuneShape(
@@ -91,17 +97,17 @@ struct DesertDuneOverlayView: View {
         }
         .allowsHitTesting(false)
         .task {
-            guard !reduceMotion else { return }
-            withAnimation(.linear(duration: driftDuration).repeatForever(autoreverses: false)) {
-                phase = 2 * .pi
+            guard !reduceMotion, driftDuration > 0 else { return }
+            withAnimation(.linear(duration: phaseDuration).repeatForever(autoreverses: false)) {
+                phase = phaseTarget
             }
         }
         .onAppear {
-            guard !reduceMotion else { return }
+            guard !reduceMotion, driftDuration > 0 else { return }
             Task { @MainActor in
                 phase = 0
-                withAnimation(.linear(duration: driftDuration).repeatForever(autoreverses: false)) {
-                    phase = 2 * .pi
+                withAnimation(.linear(duration: phaseDuration).repeatForever(autoreverses: false)) {
+                    phase = phaseTarget
                 }
             }
         }
