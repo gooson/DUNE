@@ -142,7 +142,8 @@ struct WeatherAtmosphereTests {
             isDaytime: isDaytime,
             fetchedAt: fetchedAt,
             hourlyForecast: [],
-            dailyForecast: []
+            dailyForecast: [],
+            locationName: nil
         )
     }
 }

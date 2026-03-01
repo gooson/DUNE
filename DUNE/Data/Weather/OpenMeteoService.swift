@@ -147,7 +147,8 @@ final class OpenMeteoService: WeatherFetching, @unchecked Sendable {
             isDaytime: current.is_day == 1,
             fetchedAt: Date(),
             hourlyForecast: hourlyItems,
-            dailyForecast: dailyItems
+            dailyForecast: dailyItems,
+            locationName: nil
         )
     }
 

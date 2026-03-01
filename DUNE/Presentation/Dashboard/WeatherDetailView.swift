@@ -142,6 +142,12 @@ struct WeatherDetailView: View {
                         .font(.title3)
                         .foregroundStyle(theme.sandColor)
 
+                    if let locationName = snapshot.locationName {
+                        Label(locationName, systemImage: "location.fill")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+
                     if abs(snapshot.temperature - snapshot.feelsLike) >= 3 {
                         Text("Feels like \(Int(snapshot.feelsLike))°C")
                             .font(.subheadline)

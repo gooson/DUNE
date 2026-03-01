@@ -44,7 +44,15 @@ final class WeatherProvider: WeatherProviding, Sendable {
         }
 
         let location = try await locationService.requestLocation()
-        return try await weatherService.fetchWeather(for: location)
+
+        // Parallel: weather fetch + reverse geocoding (independent)
+        async let weatherTask = weatherService.fetchWeather(for: location)
+        async let locationNameTask = locationService.reverseGeocode(location)
+
+        let snapshot = try await weatherTask
+        let locationName = await locationNameTask
+
+        return snapshot.with(locationName: locationName)
     }
 
     func requestLocationPermission() async {

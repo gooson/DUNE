@@ -13,6 +13,7 @@ struct WeatherSnapshot: Sendable, Hashable {
     let fetchedAt: Date
     let hourlyForecast: [HourlyWeather]
     let dailyForecast: [DailyForecast]
+    let locationName: String?      // reverse-geocoded place name (locale-aware)
 
     struct HourlyWeather: Sendable, Hashable, Identifiable {
         var id: Date { hour }
@@ -34,6 +35,23 @@ struct WeatherSnapshot: Sendable, Hashable {
         let condition: WeatherConditionType
         let precipitationProbabilityMax: Int  // 0-100
         let uvIndexMax: Int
+    }
+
+    /// Returns a copy with the given location name attached.
+    func with(locationName: String?) -> WeatherSnapshot {
+        WeatherSnapshot(
+            temperature: temperature,
+            feelsLike: feelsLike,
+            condition: condition,
+            humidity: humidity,
+            uvIndex: uvIndex,
+            windSpeed: windSpeed,
+            isDaytime: isDaytime,
+            fetchedAt: fetchedAt,
+            hourlyForecast: hourlyForecast,
+            dailyForecast: dailyForecast,
+            locationName: locationName
+        )
     }
 
     var isStale: Bool {

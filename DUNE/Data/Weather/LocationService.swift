@@ -61,6 +61,29 @@ final class LocationService: NSObject, CLLocationManagerDelegate, Sendable {
         }
     }
 
+    // MARK: - Reverse Geocoding
+
+    /// Reverse-geocodes the given location into a locale-aware place name (e.g. "Gangnam-gu, Seoul").
+    /// Returns nil on failure — callers should treat location name as optional.
+    func reverseGeocode(_ location: CLLocation) async -> String? {
+        let geocoder = CLGeocoder()
+        do {
+            let placemarks = try await geocoder.reverseGeocodeLocation(location)
+            guard let place = placemarks.first else { return nil }
+            return Self.formatPlaceName(subLocality: place.subLocality, locality: place.locality)
+        } catch {
+            return nil
+        }
+    }
+
+    /// Formats place components into "subLocality, locality" (e.g. "Gangnam-gu, Seoul").
+    /// Falls back to locality-only if subLocality is unavailable.
+    static func formatPlaceName(subLocality: String?, locality: String?) -> String? {
+        let parts = [subLocality, locality].compactMap { $0 }
+        guard !parts.isEmpty else { return nil }
+        return parts.joined(separator: ", ")
+    }
+
     // MARK: - CLLocationManagerDelegate
 
     nonisolated func locationManager(
