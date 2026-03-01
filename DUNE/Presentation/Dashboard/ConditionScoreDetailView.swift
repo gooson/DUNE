@@ -5,6 +5,10 @@ import SwiftUI
 struct ConditionScoreDetailView: View {
     let score: ConditionScore
 
+    private enum Labels {
+        static let condition = String(localized: "CONDITION")
+    }
+
     @State private var viewModel = ConditionScoreDetailViewModel()
     @Environment(\.horizontalSizeClass) private var sizeClass
 
@@ -193,7 +197,7 @@ struct ConditionScoreDetailView: View {
     private var scoreHero: some View {
         DetailScoreHero(
             score: score.score,
-            scoreLabel: "CONDITION",
+            scoreLabel: Labels.condition,
             statusLabel: score.status.label,
             statusIcon: score.status.iconName,
             statusColor: score.status.color,
