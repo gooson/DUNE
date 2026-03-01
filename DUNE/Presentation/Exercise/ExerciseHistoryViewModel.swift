@@ -9,13 +9,15 @@ enum ProgressMetric: CaseIterable, Sendable {
     case totalReps
 
     var displayName: String {
-        switch self {
-        case .maxWeight: String(localized: "Max Weight")
-        case .totalVolume: String(localized: "Volume")
-        case .estimatedOneRM: String(localized: "Est. 1RM")
-        case .totalReps: String(localized: "Total Reps")
-        }
+        Self.displayNames[self] ?? ""
     }
+
+    private static let displayNames: [ProgressMetric: String] = [
+        .maxWeight: String(localized: "Max Weight"),
+        .totalVolume: String(localized: "Volume"),
+        .estimatedOneRM: String(localized: "Est. 1RM"),
+        .totalReps: String(localized: "Total Reps"),
+    ]
 
     var unit: String {
         switch self {

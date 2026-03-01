@@ -12,11 +12,13 @@ struct DailyVolumeChartView: View {
         var id: Self { self }
 
         var displayName: String {
-            switch self {
-            case .duration: String(localized: "Duration")
-            case .sessions: String(localized: "Sessions")
-            }
+            Self.displayNames[self] ?? ""
         }
+
+        private static let displayNames: [Metric: String] = [
+            .duration: String(localized: "Duration"),
+            .sessions: String(localized: "Sessions"),
+        ]
     }
 
     @Environment(\.appTheme) private var theme

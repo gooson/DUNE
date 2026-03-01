@@ -15,11 +15,13 @@ struct WeeklySummaryChartView: View {
         case steps
 
         var displayName: String {
-            switch self {
-            case .exercise: String(localized: "Exercise")
-            case .steps: String(localized: "Steps")
-            }
+            Self.displayNames[self] ?? ""
         }
+
+        private static let displayNames: [Tab: String] = [
+            .exercise: String(localized: "Exercise"),
+            .steps: String(localized: "Steps"),
+        ]
     }
 
     var body: some View {

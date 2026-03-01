@@ -247,3 +247,4 @@ xcodebuild -exportLocalizations -project DUNE/DUNE.xcodeproj \
 - [ ] xcstrings 키 문자열과 코드 문자열이 정확히 일치 (smart quote, en-dash 등 유니코드 주의)
 - [ ] Watch 전용 문자열은 Watch xcstrings에만 등록 (iOS xcstrings에 중복 등록 금지)
 - [ ] 새 `Text()` 또는 `String(localized:)` 추가 시 xcstrings에 en/ko/ja 3개 언어 동시 등록
+- [ ] xcstrings에서 키 삭제 시 코드에 해당 `Text()` / `String(localized:)` 참조가 남아있지 않은지 확인

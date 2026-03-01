@@ -6,14 +6,16 @@ extension TimePeriod {
 
     /// Short label for period pickers (D/W/M/6M/Y).
     var displayName: String {
-        switch self {
-        case .day: String(localized: "D")
-        case .week: String(localized: "W")
-        case .month: String(localized: "M")
-        case .sixMonths: String(localized: "6M")
-        case .year: String(localized: "Y")
-        }
+        Self.displayNames[self] ?? ""
     }
+
+    private static let displayNames: [TimePeriod: String] = [
+        .day: String(localized: "D"),
+        .week: String(localized: "W"),
+        .month: String(localized: "M"),
+        .sixMonths: String(localized: "6M"),
+        .year: String(localized: "Y"),
+    ]
 
     /// Formatted label for the given offset's date range.
     func rangeLabel(offset: Int) -> String {
