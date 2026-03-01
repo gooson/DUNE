@@ -83,6 +83,7 @@ final class LocationService: NSObject, CLLocationManagerDelegate, Sendable {
             geocodeCache = (location: location, name: name, cachedAt: Date())
             return name
         } catch {
+            geocodeCache = (location: location, name: nil, cachedAt: Date())
             return nil
         }
     }

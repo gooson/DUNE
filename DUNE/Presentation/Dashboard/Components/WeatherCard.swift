@@ -123,7 +123,7 @@ struct WeatherCard: View {
     private var accessibilityDescription: String {
         var base = String(localized: "Current weather \(snapshot.condition.label), \(Int(snapshot.temperature)) degrees, \(level.displayName)")
         if let locationName = snapshot.locationName {
-            base += ", \(locationName)"
+            base += String(localized: ", \(locationName)")
         }
         guard let info = insightInfo else { return base }
         return base + ". \(info.title): \(info.message)"
