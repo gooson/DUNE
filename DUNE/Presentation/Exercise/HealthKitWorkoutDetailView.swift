@@ -181,14 +181,14 @@ struct HealthKitWorkoutDetailView: View {
                     icon: isIndoor ? "building.fill" : "sun.max.fill",
                     iconColor: isIndoor ? .gray : .yellow,
                     title: "Environment",
-                    value: isIndoor ? "Indoor" : "Outdoor",
+                    value: isIndoor ? String(localized: "Indoor") : String(localized: "Outdoor"),
                     unit: ""
                 )
             }
         }
     }
 
-    private func statCard(icon: String, iconColor: Color, title: String, value: String, unit: String) -> some View {
+    private func statCard(icon: String, iconColor: Color, title: LocalizedStringKey, value: String, unit: String) -> some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             HStack(spacing: DS.Spacing.xs) {
                 Image(systemName: icon)

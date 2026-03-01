@@ -17,7 +17,7 @@ enum HighlightBuilder {
                 type: .high,
                 value: maxPoint.value,
                 date: maxPoint.date,
-                label: "Highest"
+                label: String(localized: "Highest")
             ))
         }
 
@@ -26,7 +26,7 @@ enum HighlightBuilder {
                 type: .low,
                 value: minPoint.value,
                 date: minPoint.date,
-                label: "Lowest"
+                label: String(localized: "Lowest")
             ))
         }
 
@@ -92,7 +92,7 @@ enum HighlightBuilder {
         guard !changePercent.isNaN, !changePercent.isInfinite else { return nil }
         guard abs(changePercent) >= trendSignificanceThreshold else { return nil }
 
-        let direction = changePercent > 0 ? "Trending up" : "Trending down"
+        let direction = changePercent > 0 ? String(localized: "Trending up") : String(localized: "Trending down")
         return Highlight(
             type: .trend,
             value: changePercent,

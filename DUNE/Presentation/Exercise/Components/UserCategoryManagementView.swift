@@ -238,7 +238,7 @@ struct UserCategoryEditView: View {
             }
             .scrollContentBackground(.hidden)
             .background { SheetWaveBackground() }
-            .navigationTitle(mode.isCreate ? "New Category" : "Edit Category")
+            .navigationTitle(mode.isCreate ? String(localized: "New Category") : String(localized: "Edit Category"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

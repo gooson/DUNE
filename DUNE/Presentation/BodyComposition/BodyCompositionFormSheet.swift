@@ -36,7 +36,7 @@ struct BodyCompositionFormSheet: View {
                 TextField("Memo", text: $viewModel.newMemo)
             }
             .scrollContentBackground(.hidden)
-            .navigationTitle(isEdit ? "Edit Record" : "Add Record")
+            .navigationTitle(isEdit ? String(localized: "Edit Record") : String(localized: "Add Record"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

@@ -119,7 +119,7 @@ struct InjuryFormSheet: View {
             }
             .scrollContentBackground(.hidden)
             .background { SheetWaveBackground() }
-            .navigationTitle(isEdit ? "Edit Injury" : "Add Injury")
+            .navigationTitle(isEdit ? String(localized: "Edit Injury") : String(localized: "Add Injury"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

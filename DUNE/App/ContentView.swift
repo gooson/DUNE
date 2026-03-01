@@ -23,7 +23,7 @@ struct ContentView: View {
 
     var body: some View {
         TabView(selection: tabSelection) {
-            Tab(AppSection.today.title, systemImage: AppSection.today.icon, value: AppSection.today) {
+            Tab(value: AppSection.today) {
                 NavigationStack {
                     DashboardView(
                         sharedHealthDataService: sharedHealthDataService,
@@ -33,8 +33,10 @@ struct ContentView: View {
                 }
                 .environment(\.wavePreset, .today)
                 .environment(\.waveColor, selectedTheme.tabTodayColor)
+            } label: {
+                Label { Text(verbatim: AppSection.today.title) } icon: { Image(systemName: AppSection.today.icon) }
             }
-            Tab(AppSection.train.title, systemImage: AppSection.train.icon, value: AppSection.train) {
+            Tab(value: AppSection.train) {
                 NavigationStack {
                     ActivityView(
                         sharedHealthDataService: sharedHealthDataService,
@@ -44,8 +46,10 @@ struct ContentView: View {
                 }
                 .environment(\.wavePreset, .train)
                 .environment(\.waveColor, selectedTheme.tabTrainColor)
+            } label: {
+                Label { Text(verbatim: AppSection.train.title) } icon: { Image(systemName: AppSection.train.icon) }
             }
-            Tab(AppSection.wellness.title, systemImage: AppSection.wellness.icon, value: AppSection.wellness) {
+            Tab(value: AppSection.wellness) {
                 NavigationStack {
                     WellnessView(
                         sharedHealthDataService: sharedHealthDataService,
@@ -55,8 +59,10 @@ struct ContentView: View {
                 }
                 .environment(\.wavePreset, .wellness)
                 .environment(\.waveColor, selectedTheme.tabWellnessColor)
+            } label: {
+                Label { Text(verbatim: AppSection.wellness.title) } icon: { Image(systemName: AppSection.wellness.icon) }
             }
-            Tab(AppSection.life.title, systemImage: AppSection.life.icon, value: AppSection.life) {
+            Tab(value: AppSection.life) {
                 NavigationStack {
                     LifeView(
                         scrollToTopSignal: lifeScrollToTopSignal,
@@ -65,6 +71,8 @@ struct ContentView: View {
                 }
                 .environment(\.wavePreset, .life)
                 .environment(\.waveColor, selectedTheme.tabLifeColor)
+            } label: {
+                Label { Text(verbatim: AppSection.life.title) } icon: { Image(systemName: AppSection.life.icon) }
             }
         }
         .environment(\.appTheme, selectedTheme)

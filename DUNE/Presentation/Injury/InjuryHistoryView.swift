@@ -300,7 +300,7 @@ private struct InjuryDetailView: View {
 
                     Spacer()
 
-                    Text(record.isActive ? "Active" : "Recovered")
+                    Text(record.isActive ? String(localized: "Active") : String(localized: "Recovered"))
                         .font(.caption2.weight(.semibold))
                         .padding(.horizontal, DS.Spacing.sm)
                         .padding(.vertical, DS.Spacing.xxs)
