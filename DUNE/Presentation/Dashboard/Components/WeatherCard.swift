@@ -4,22 +4,23 @@ import SwiftUI
 /// Shows current conditions, temperature, outdoor fitness badge, and optional coaching insight.
 /// Tapping navigates to WeatherDetailView.
 struct WeatherCard: View {
+    /// Display-ready coaching insight data (decoupled from Domain CoachingInsight).
+    struct InsightInfo {
+        let title: String
+        let message: String
+        let iconName: String
+    }
+
     let snapshot: WeatherSnapshot
-    let weatherInsight: CoachingInsight?
+    var insightInfo: InsightInfo?
 
     @Environment(\.appTheme) private var theme
     @Environment(\.horizontalSizeClass) private var sizeClass
 
-    init(snapshot: WeatherSnapshot, weatherInsight: CoachingInsight? = nil) {
-        self.snapshot = snapshot
-        self.weatherInsight = weatherInsight
-    }
-
     private var isRegular: Bool { sizeClass == .regular }
+    private var level: OutdoorFitnessLevel { snapshot.outdoorFitnessLevel }
 
     var body: some View {
-        let level = snapshot.outdoorFitnessLevel
-
         InlineCard {
             VStack(alignment: .leading, spacing: DS.Spacing.sm) {
                 HStack(spacing: DS.Spacing.sm) {
@@ -52,7 +53,7 @@ struct WeatherCard: View {
                     Spacer()
 
                     // Outdoor fitness badge
-                    fitnessBadge(level: level)
+                    fitnessBadge
 
                     Image(systemName: "chevron.right")
                         .font(.caption.weight(.semibold))
@@ -60,16 +61,16 @@ struct WeatherCard: View {
                 }
 
                 // Coaching insight (weather-category only)
-                if let insight = weatherInsight {
+                if let info = insightInfo {
                     Divider().opacity(0.3)
 
                     HStack(alignment: .top, spacing: DS.Spacing.sm) {
-                        Image(systemName: insight.iconName)
+                        Image(systemName: info.iconName)
                             .font(.subheadline)
                             .foregroundStyle(theme.outdoorFitnessColor(for: level))
                             .frame(width: 20)
 
-                        Text(insight.message)
+                        Text(info.message)
                             .font(.caption)
                             .foregroundStyle(DS.Color.textSecondary)
                             .lineLimit(2)
@@ -78,12 +79,12 @@ struct WeatherCard: View {
             }
         }
         .accessibilityElement(children: .combine)
-        .accessibilityLabel(accessibilityDescription(level: level))
+        .accessibilityLabel(accessibilityDescription)
     }
 
     // MARK: - Subviews
 
-    private func fitnessBadge(level: OutdoorFitnessLevel) -> some View {
+    private var fitnessBadge: some View {
         let color = theme.outdoorFitnessColor(for: level)
         return Label(level.shortDisplayName, systemImage: level.systemImage)
             .font(.caption.weight(.medium))
@@ -106,11 +107,10 @@ struct WeatherCard: View {
         abs(snapshot.temperature - snapshot.feelsLike) >= 3
     }
 
-    private func accessibilityDescription(level: OutdoorFitnessLevel) -> String {
-        if let insight = weatherInsight {
-            return String(localized: "Current weather \(snapshot.condition.label), \(Int(snapshot.temperature)) degrees, \(level.displayName). \(insight.message)")
-        }
-        return String(localized: "Current weather \(snapshot.condition.label), \(Int(snapshot.temperature)) degrees, \(level.displayName)")
+    private var accessibilityDescription: String {
+        let base = String(localized: "Current weather \(snapshot.condition.label), \(Int(snapshot.temperature)) degrees, \(level.displayName)")
+        guard let info = insightInfo else { return base }
+        return base + ". \(info.title): \(info.message)"
     }
 }
 

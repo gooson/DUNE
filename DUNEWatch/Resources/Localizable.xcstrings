@@ -1,626 +1,693 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "Start" : {
+    "--" : {
+
+    },
+    "· %.1fkg" : {
+
+    },
+    "%.1f" : {
+
+    },
+    "%.1fkg" : {
+
+    },
+    "%@" : {
+
+    },
+    "%@ bpm" : {
       "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "시작"
-          }
-        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "開始"
+            "value" : "%@ bpm"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ bpm"
           }
         }
       }
     },
-    "End" : {
+    "%@ exercises" : {
+
+    },
+    "%@×%@" : {
       "localizations" : {
-        "ko" : {
+        "en" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "종료"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "終了"
+            "state" : "new",
+            "value" : "%1$@×%2$@"
           }
         }
       }
     },
-    "Skip" : {
+    "%lld exercises" : {
+      "extractionState" : "stale",
       "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "건너뛰기"
-          }
-        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "スキップ"
+            "value" : "%lldエクササイズ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld개 운동"
           }
         }
       }
     },
-    "Rest" : {
+    "+%@" : {
+
+    },
+    "+1 Set" : {
+      "extractionState" : "stale",
       "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "휴식"
-          }
-        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "休憩"
+            "value" : "+1セット"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "+1 세트"
           }
         }
       }
     },
     "+30s" : {
       "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "+30초"
-          }
-        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "+30秒"
           }
-        }
-      }
-    },
-    "kg" : {
-      "localizations" : {
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "kg"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "kg"
+            "value" : "+30초"
           }
         }
       }
     },
-    "reps" : {
-      "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "회"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "回"
-          }
-        }
-      }
+    "×" : {
+
     },
-    "No Exercises" : {
-      "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "운동 없음"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "エクササイズなし"
-          }
-        }
-      }
+    "×%@" : {
+
     },
-    "Workout Complete" : {
+    "Add another set or move on?" : {
       "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "운동 완료"
-          }
-        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ワークアウト完了"
+            "value" : "セットを追加しますか、次に進みますか？"
           }
-        }
-      }
-    },
-    "Complete Set" : {
-      "localizations" : {
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "세트 완료"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "セット完了"
-          }
-        }
-      }
-    },
-    "Next Exercise" : {
-      "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "다음 운동"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "次のエクササイズ"
-          }
-        }
-      }
-    },
-    "BROWSE" : {
-      "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "찾아보기"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ブラウズ"
+            "value" : "세트를 추가할까요, 다음으로 넘어갈까요?"
           }
         }
       }
     },
     "All Exercises" : {
       "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "전체 운동"
-          }
-        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "すべてのエクササイズ"
           }
-        }
-      }
-    },
-    "ROUTINE" : {
-      "localizations" : {
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "루틴"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ルーティン"
+            "value" : "전체 운동"
           }
         }
       }
     },
-    "End Workout" : {
+    "BROWSE" : {
       "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "운동 종료"
-          }
-        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ワークアウト終了"
+            "value" : "ブラウズ"
           }
-        }
-      }
-    },
-    "Cancel" : {
-      "localizations" : {
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "취소"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "キャンセル"
-          }
-        }
-      }
-    },
-    "OK" : {
-      "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "확인"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "OK"
-          }
-        }
-      }
-    },
-    "Done" : {
-      "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "완료"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "完了"
-          }
-        }
-      }
-    },
-    "Finishing..." : {
-      "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "마무리 중..."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "完了処理中..."
-          }
-        }
-      }
-    },
-    "Previous Sets" : {
-      "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "이전 세트"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "前のセット"
-          }
-        }
-      }
-    },
-    "Record Empty" : {
-      "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "빈 세트 기록"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "空のセットを記録"
-          }
-        }
-      }
-    },
-    "+1 Set" : {
-      "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "+1 세트"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "+1セット"
-          }
-        }
-      }
-    },
-    "Finish Exercise" : {
-      "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "운동 마치기"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "エクササイズ終了"
-          }
-        }
-      }
-    },
-    "Dismiss Without Saving" : {
-      "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "저장하지 않고 닫기"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "保存せずに閉じる"
+            "value" : "찾아보기"
           }
         }
       }
     },
     "Browse All" : {
+      "extractionState" : "stale",
       "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "전체 찾아보기"
-          }
-        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "すべて見る"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "전체 찾아보기"
+          }
+        }
+      }
+    },
+    "Cancel" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "キャンセル"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "취소"
+          }
+        }
+      }
+    },
+    "Complete Set" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "セット完了"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "세트 완료"
+          }
+        }
+      }
+    },
+    "Dismiss Without Saving" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保存せずに閉じる"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "저장하지 않고 닫기"
+          }
+        }
+      }
+    },
+    "Done" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完了"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "완료"
+          }
+        }
+      }
+    },
+    "DUNE" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DUNE"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DUNE"
+          }
+        }
+      }
+    },
+    "End" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "終了"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "종료"
+          }
+        }
+      }
+    },
+    "End Workout" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ワークアウト終了"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "운동 종료"
+          }
         }
       }
     },
     "Error" : {
+      "extractionState" : "stale",
       "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "오류"
-          }
-        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "エラー"
           }
-        }
-      }
-    },
-    "Save Error" : {
-      "localizations" : {
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "저장 오류"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "保存エラー"
+            "value" : "오류"
           }
         }
       }
     },
-    "No sets recorded. End without saving?" : {
+    "Finish Exercise" : {
+      "extractionState" : "stale",
       "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "기록된 세트가 없습니다. 저장하지 않고 종료할까요?"
-          }
-        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "セットが記録されていません。保存せずに終了しますか？"
+            "value" : "エクササイズ終了"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "운동 마치기"
           }
         }
       }
     },
-    "Save and finish this workout?" : {
+    "Finishing..." : {
+      "extractionState" : "stale",
       "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "이 운동을 저장하고 종료할까요?"
-          }
-        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "このワークアウトを保存して終了しますか？"
+            "value" : "完了処理中..."
           }
-        }
-      }
-    },
-    "Weight and reps are both 0. Record anyway?" : {
-      "localizations" : {
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "무게와 횟수가 모두 0입니다. 그래도 기록할까요?"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "重量と回数がどちらも0です。それでも記録しますか？"
-          }
-        }
-      }
-    },
-    "Add another set or move on?" : {
-      "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "세트를 추가할까요, 다음으로 넘어갈까요?"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "セットを追加しますか、次に進みますか？"
-          }
-        }
-      }
-    },
-    "Open the DUNE app\non your iPhone to sync" : {
-      "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iPhone에서 DUNE 앱을\n열어 동기화하세요"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iPhoneでDUNEアプリを\n開いて同期してください"
-          }
-        }
-      }
-    },
-    "Syncing..." : {
-      "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "동기화 중..."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "同期中..."
+            "value" : "마무리 중..."
           }
         }
       }
     },
     "iPhone not connected" : {
       "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iPhone 연결 안 됨"
-          }
-        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "iPhoneに未接続"
           }
-        }
-      }
-    },
-    "%lld exercises" : {
-      "localizations" : {
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%lld개 운동"
+            "value" : "iPhone 연결 안 됨"
           }
-        },
+        }
+      }
+    },
+    "kg" : {
+      "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%lldエクササイズ"
+            "value" : "kg"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "kg"
+          }
+        }
+      }
+    },
+    "Next Exercise" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "次のエクササイズ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "다음 운동"
+          }
+        }
+      }
+    },
+    "No Exercises" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "エクササイズなし"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "운동 없음"
+          }
+        }
+      }
+    },
+    "No sets recorded. End without saving?" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "セットが記録されていません。保存せずに終了しますか？"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기록된 세트가 없습니다. 저장하지 않고 종료할까요?"
+          }
+        }
+      }
+    },
+    "OK" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "확인"
+          }
+        }
+      }
+    },
+    "Open the DUNE app\non your iPhone to sync" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iPhoneでDUNEアプリを\n開いて同期してください"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iPhone에서 DUNE 앱을\n열어 동기화하세요"
+          }
+        }
+      }
+    },
+    "Previous Sets" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "前のセット"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이전 세트"
+          }
+        }
+      }
+    },
+    "Record Empty" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "空のセットを記録"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "빈 세트 기록"
+          }
+        }
+      }
+    },
+    "reps" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "回"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "회"
+          }
+        }
+      }
+    },
+    "Rest" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "休憩"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "휴식"
+          }
+        }
+      }
+    },
+    "ROUTINE" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ルーティン"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "루틴"
+          }
+        }
+      }
+    },
+    "Save and finish this workout?" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このワークアウトを保存して終了しますか？"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 운동을 저장하고 종료할까요?"
+          }
+        }
+      }
+    },
+    "Save Error" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保存エラー"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "저장 오류"
+          }
+        }
+      }
+    },
+    "Set %@" : {
+
+    },
+    "Set %@ of %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Set %1$@ of %2$@"
           }
         }
       }
     },
     "Set %lld" : {
+      "extractionState" : "stale",
       "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "세트 %lld"
-          }
-        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "セット%lld"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "세트 %lld"
+          }
         }
       }
     },
     "Set %lld of %lld" : {
+      "extractionState" : "stale",
       "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "세트 %lld / %lld"
-          }
-        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "セット%lld / %lld"
           }
-        }
-      }
-    },
-    "%@ bpm" : {
-      "localizations" : {
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ bpm"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ bpm"
+            "value" : "세트 %lld / %lld"
           }
         }
       }
     },
-    "DUNE" : {
+    "Skip" : {
       "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "DUNE"
-          }
-        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "DUNE"
+            "value" : "スキップ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "건너뛰기"
+          }
+        }
+      }
+    },
+    "Start" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "開始"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "시작"
+          }
+        }
+      }
+    },
+    "Syncing..." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "同期中..."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "동기화 중..."
+          }
+        }
+      }
+    },
+    "Weight and reps are both 0. Record anyway?" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重量と回数がどちらも0です。それでも記録しますか？"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "무게와 횟수가 모두 0입니다. 그래도 기록할까요?"
+          }
+        }
+      }
+    },
+    "Workout Complete" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ワークアウト完了"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "운동 완료"
           }
         }
       }

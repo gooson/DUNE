@@ -66,10 +66,8 @@ struct DashboardView: View {
 
                         // Weather + coaching (merged when coaching is weather-category)
                         if let weather = viewModel.weatherSnapshot {
-                            let weatherInsight = viewModel.focusInsight?.category == .weather
-                                ? viewModel.focusInsight : nil
                             NavigationLink(value: weather) {
-                                WeatherCard(snapshot: weather, weatherInsight: weatherInsight)
+                                WeatherCard(snapshot: weather, insightInfo: viewModel.weatherCardInsight)
                             }
                             .buttonStyle(.plain)
                         } else {
@@ -78,9 +76,8 @@ struct DashboardView: View {
                             }
                         }
 
-                        // Coaching (skip when already merged into weather card)
-                        if let insight = viewModel.focusInsight,
-                           !(insight.category == .weather && viewModel.weatherSnapshot != nil) {
+                        // Coaching (standalone when not merged into weather card)
+                        if let insight = viewModel.standaloneCoachingInsight {
                             TodayCoachingCard(insight: insight)
                         } else if viewModel.focusInsight == nil,
                                   let coachingMessage = viewModel.coachingMessage {
