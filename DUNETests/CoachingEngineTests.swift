@@ -284,6 +284,7 @@ struct CoachingEngineTests {
             fetchedAt: Date(),
             hourlyForecast: [],
             dailyForecast: [],
+            locationName: nil,
             airQuality: nil
         )
     }

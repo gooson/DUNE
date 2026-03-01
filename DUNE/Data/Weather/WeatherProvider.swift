@@ -48,14 +48,17 @@ final class WeatherProvider: WeatherProviding, Sendable {
 
         let location = try await locationService.requestLocation()
 
-        // Parallel fetch: weather + air quality. Air quality failure is non-fatal.
+        // Parallel fetch: weather + air quality + reverse geocoding (all independent).
+        // reverseGeocode hops to @MainActor for cache access; the CLGeocoder call itself runs off-main.
         async let weatherTask = weatherService.fetchWeather(for: location)
         async let airQualityTask = safeAirQualityFetch(for: location)
+        async let locationNameTask = locationService.reverseGeocode(location)
 
         var snapshot = try await weatherTask
         let airQuality = await airQualityTask
+        let locationName = await locationNameTask
         snapshot = snapshot.withAirQuality(airQuality)
-        return snapshot
+        return snapshot.with(locationName: locationName)
     }
 
     /// Air quality fetch with graceful failure — returns nil instead of throwing.

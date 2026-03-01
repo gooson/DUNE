@@ -175,6 +175,7 @@ struct OpenMeteoServiceTests {
             humidity: 0.5, uvIndex: 0, windSpeed: 10,
             isDaytime: true, fetchedAt: Date(), hourlyForecast: [],
             dailyForecast: [],
+            locationName: nil,
             airQuality: nil
         )
         // uvIndex 0 is the fallback value used when isFinite fails
@@ -195,6 +196,41 @@ struct OpenMeteoServiceTests {
         } else {
             Issue.record("Expected httpError case")
         }
+    }
+
+    // MARK: - WeatherSnapshot.with(locationName:)
+
+    @Test("with(locationName:) creates copy with location name attached")
+    func withLocationName() {
+        let original = WeatherSnapshot(
+            temperature: 20, feelsLike: 18, condition: .clear,
+            humidity: 0.5, uvIndex: 3, windSpeed: 10,
+            isDaytime: true, fetchedAt: Date(), hourlyForecast: [],
+            dailyForecast: [],
+            locationName: nil,
+            airQuality: nil
+        )
+        let updated = original.with(locationName: "Gangnam-gu, Seoul")
+
+        #expect(updated.locationName == "Gangnam-gu, Seoul")
+        #expect(updated.temperature == original.temperature)
+        #expect(updated.condition == original.condition)
+        #expect(updated.humidity == original.humidity)
+    }
+
+    @Test("with(locationName: nil) preserves nil")
+    func withNilLocationName() {
+        let original = WeatherSnapshot(
+            temperature: 20, feelsLike: 18, condition: .clear,
+            humidity: 0.5, uvIndex: 3, windSpeed: 10,
+            isDaytime: true, fetchedAt: Date(), hourlyForecast: [],
+            dailyForecast: [],
+            locationName: "Old Place",
+            airQuality: nil
+        )
+        let updated = original.with(locationName: nil)
+
+        #expect(updated.locationName == nil)
     }
 
     // MARK: - WMO Complete Coverage

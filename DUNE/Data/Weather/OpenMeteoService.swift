@@ -148,6 +148,7 @@ final class OpenMeteoService: WeatherFetching, @unchecked Sendable {
             fetchedAt: Date(),
             hourlyForecast: hourlyItems,
             dailyForecast: dailyItems,
+            locationName: nil,
             airQuality: nil
         )
     }

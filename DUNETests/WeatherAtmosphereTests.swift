@@ -143,6 +143,7 @@ struct WeatherAtmosphereTests {
             fetchedAt: fetchedAt,
             hourlyForecast: [],
             dailyForecast: [],
+            locationName: nil,
             airQuality: nil
         )
     }

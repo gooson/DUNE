@@ -30,7 +30,7 @@ struct WeatherCard: View {
                         .foregroundStyle(snapshot.condition.iconColor(for: theme))
                         .symbolRenderingMode(.multicolor)
 
-                    // Temperature + condition
+                    // Temperature + condition + location
                     VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                         HStack(spacing: DS.Spacing.xs) {
                             Text(temperatureText)
@@ -45,9 +45,22 @@ struct WeatherCard: View {
                             }
                         }
 
-                        Text(snapshot.condition.label)
-                            .font(.subheadline)
-                            .foregroundStyle(theme.sandColor)
+                        HStack(spacing: DS.Spacing.xxs) {
+                            Text(snapshot.condition.label)
+                                .font(.subheadline)
+                                .foregroundStyle(theme.sandColor)
+
+                            if let locationName = snapshot.locationName {
+                                Text("·")
+                                    .font(.subheadline)
+                                    .foregroundStyle(.tertiary)
+
+                                Text(locationName)
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
+                                    .lineLimit(1)
+                            }
+                        }
                     }
 
                     Spacer()
@@ -131,7 +144,10 @@ struct WeatherCard: View {
     }
 
     private var accessibilityDescription: String {
-        let base = String(localized: "Current weather \(snapshot.condition.label), \(Int(snapshot.temperature)) degrees, \(level.displayName)")
+        var base = String(localized: "Current weather \(snapshot.condition.label), \(Int(snapshot.temperature)) degrees, \(level.displayName)")
+        if let locationName = snapshot.locationName {
+            base += String(localized: ", \(locationName)")
+        }
         guard let info = insightInfo else { return base }
         return base + ". \(info.title): \(info.message)"
     }

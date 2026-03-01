@@ -321,6 +321,7 @@ struct OutdoorFitnessScoreTests {
             fetchedAt: Date(),
             hourlyForecast: hourlyForecast,
             dailyForecast: [],
+            locationName: nil,
             airQuality: nil
         )
     }
