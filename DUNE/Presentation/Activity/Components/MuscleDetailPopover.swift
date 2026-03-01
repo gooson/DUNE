@@ -168,7 +168,7 @@ struct MuscleDetailPopover: View {
         }
     }
 
-    private func statItem(title: String, value: String, icon: String) -> some View {
+    private func statItem(title: LocalizedStringKey, value: String, icon: String) -> some View {
         VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
             HStack(spacing: DS.Spacing.xxs) {
                 Image(systemName: icon)
@@ -187,10 +187,10 @@ struct MuscleDetailPopover: View {
     }
 
     private func lastTrainedText(state: MuscleFatigueState) -> String {
-        guard let hours = state.hoursSinceLastTrained, hours.isFinite else { return "Never" }
-        if hours < 1 { return "Just now" }
-        if hours < 24 { return "\(Int(hours).formattedWithSeparator)h ago" }
+        guard let hours = state.hoursSinceLastTrained, hours.isFinite else { return String(localized: "Never") }
+        if hours < 1 { return String(localized: "Just now") }
+        if hours < 24 { return String(localized: "\(Int(hours).formattedWithSeparator)h ago") }
         let days = Int(hours / 24)
-        return "\(days.formattedWithSeparator)d ago"
+        return String(localized: "\(days.formattedWithSeparator)d ago")
     }
 }

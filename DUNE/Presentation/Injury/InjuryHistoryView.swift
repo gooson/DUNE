@@ -318,8 +318,8 @@ private struct InjuryDetailView: View {
                     .font(DS.Typography.sectionTitle)
 
                 detailRow("Start", value: record.startDate.formatted(date: .abbreviated, time: .omitted))
-                detailRow("End", value: record.endDate?.formatted(date: .abbreviated, time: .omitted) ?? "Ongoing")
-                detailRow("Duration", value: "\(record.durationDays) days")
+                detailRow("End", value: record.endDate?.formatted(date: .abbreviated, time: .omitted) ?? String(localized: "Ongoing"))
+                detailRow("Duration", value: String(localized: "\(record.durationDays) days"))
                 detailRow("Recorded", value: record.createdAt.formatted(date: .abbreviated, time: .shortened))
             }
         }
@@ -344,7 +344,7 @@ private struct InjuryDetailView: View {
         }
     }
 
-    private func detailRow(_ title: String, value: String) -> some View {
+    private func detailRow(_ title: LocalizedStringKey, value: String) -> some View {
         HStack {
             Text(title)
                 .font(.subheadline)

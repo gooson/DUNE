@@ -41,7 +41,7 @@ struct PeriodComparisonView: View {
 
     // MARK: - Item
 
-    private func comparisonItem(label: String, current: String, change: Double?) -> some View {
+    private func comparisonItem(label: LocalizedStringKey, current: String, change: Double?) -> some View {
         VStack(alignment: .leading, spacing: DS.Spacing.xs) {
             Text(label)
                 .font(.caption)

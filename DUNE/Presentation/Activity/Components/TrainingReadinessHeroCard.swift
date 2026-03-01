@@ -8,19 +8,19 @@ struct TrainingReadinessHeroCard: View {
         if let readiness {
             HeroScoreCard(
                 score: readiness.score,
-                scoreLabel: "READINESS",
+                scoreLabel: String(localized: "READINESS"),
                 statusLabel: readiness.status.label,
                 statusIcon: readiness.status.iconName,
                 statusColor: readiness.status.color,
                 guideMessage: readiness.status.guideMessage,
                 subScores: [
-                    .init(label: "HRV", value: readiness.components.hrvScore, color: DS.Color.hrv),
-                    .init(label: "Sleep", value: readiness.components.sleepScore, color: DS.Color.sleep),
-                    .init(label: "Recovery", value: readiness.components.fatigueScore, color: DS.Color.activity)
+                    .init(label: String(localized: "HRV"), value: readiness.components.hrvScore, color: DS.Color.hrv),
+                    .init(label: String(localized: "Sleep"), value: readiness.components.sleepScore, color: DS.Color.sleep),
+                    .init(label: String(localized: "Recovery"), value: readiness.components.fatigueScore, color: DS.Color.activity)
                 ],
-                badgeText: isCalibrating ? "Calibrating" : nil,
+                badgeText: isCalibrating ? String(localized: "Calibrating") : nil,
                 showsChevron: false,
-                accessibilityLabel: "Training readiness \(readiness.score), \(readiness.status.label)",
+                accessibilityLabel: String(localized: "Training readiness \(readiness.score), \(readiness.status.label)"),
                 accessibilityHint: nil
             )
         } else {
