@@ -83,7 +83,7 @@ struct LifeView: View {
                 )
             }
         }
-        .navigationTitle("Life")
+        .navigationTitle(Text(verbatim: "Life"))
     }
 }
 

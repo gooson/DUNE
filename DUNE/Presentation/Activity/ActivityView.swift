@@ -240,7 +240,7 @@ struct ActivityView: View {
         .onChange(of: activeInjuryRecords.count) { _, _ in
             recomputeInjuryConflicts()
         }
-        .navigationTitle("Activity")
+        .navigationTitle(Text(verbatim: "Activity"))
     }
 
     // MARK: - Extracted Sections

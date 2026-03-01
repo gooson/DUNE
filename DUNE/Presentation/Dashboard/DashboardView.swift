@@ -177,7 +177,7 @@ struct DashboardView: View {
                 allowedCategories: viewModel.availablePinnedCategories
             )
         }
-        .navigationTitle("Today")
+        .navigationTitle(Text(verbatim: "Today"))
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 NavigationLink {
