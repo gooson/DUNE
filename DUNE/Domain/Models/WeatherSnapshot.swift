@@ -13,6 +13,24 @@ struct WeatherSnapshot: Sendable, Hashable {
     let fetchedAt: Date
     let hourlyForecast: [HourlyWeather]
     let dailyForecast: [DailyForecast]
+    let airQuality: AirQualitySnapshot?
+
+    /// Returns a copy with air quality data attached.
+    func withAirQuality(_ airQuality: AirQualitySnapshot?) -> WeatherSnapshot {
+        WeatherSnapshot(
+            temperature: temperature,
+            feelsLike: feelsLike,
+            condition: condition,
+            humidity: humidity,
+            uvIndex: uvIndex,
+            windSpeed: windSpeed,
+            isDaytime: isDaytime,
+            fetchedAt: fetchedAt,
+            hourlyForecast: hourlyForecast,
+            dailyForecast: dailyForecast,
+            airQuality: airQuality
+        )
+    }
 
     struct HourlyWeather: Sendable, Hashable, Identifiable {
         var id: Date { hour }
@@ -59,6 +77,7 @@ struct WeatherSnapshot: Sendable, Hashable {
             && condition != .snow && condition != .sleet
             && condition != .thunderstorm
             && windSpeed < 50
+            && (airQuality?.overallLevel ?? .good) <= .moderate
     }
 
     // MARK: - Outdoor Fitness Score
@@ -70,7 +89,8 @@ struct WeatherSnapshot: Sendable, Hashable {
             uvIndex: uvIndex,
             humidity: humidity,
             windSpeed: windSpeed,
-            condition: condition
+            condition: condition,
+            airQualityLevel: airQuality?.overallLevel
         )
     }
 
@@ -83,19 +103,33 @@ struct WeatherSnapshot: Sendable, Hashable {
     /// Returns nil if no hourly data available.
     var bestOutdoorHour: HourlyWeather? {
         guard !hourlyForecast.isEmpty else { return nil }
+        let aqHourly = airQuality?.hourlyForecast
         return hourlyForecast.max { lhs, rhs in
-            Self.calculateOutdoorScore(for: lhs) < Self.calculateOutdoorScore(for: rhs)
+            Self.calculateOutdoorScore(for: lhs, airQualityHourly: aqHourly)
+                < Self.calculateOutdoorScore(for: rhs, airQualityHourly: aqHourly)
         }
     }
 
     /// Calculate outdoor score for an hourly forecast entry.
-    static func calculateOutdoorScore(for hour: HourlyWeather) -> Int {
-        calculateOutdoorScore(
+    static func calculateOutdoorScore(
+        for hour: HourlyWeather,
+        airQualityHourly: [AirQualitySnapshot.HourlyAirQuality]? = nil
+    ) -> Int {
+        let aqLevel: AirQualityLevel?
+        if let aqHourly = airQualityHourly,
+           let match = aqHourly.first(where: { $0.hour == hour.hour }) {
+            aqLevel = Swift.max(AirQualityLevel.fromPM25(match.pm2_5), AirQualityLevel.fromPM10(match.pm10))
+        } else {
+            aqLevel = nil
+        }
+
+        return calculateOutdoorScore(
             feelsLike: hour.feelsLike,
             uvIndex: hour.uvIndex,
             humidity: hour.humidity,
             windSpeed: hour.windSpeed,
-            condition: hour.condition
+            condition: hour.condition,
+            airQualityLevel: aqLevel
         )
     }
 
@@ -105,7 +139,8 @@ struct WeatherSnapshot: Sendable, Hashable {
         uvIndex: Int,
         humidity: Double,
         windSpeed: Double,
-        condition: WeatherConditionType
+        condition: WeatherConditionType,
+        airQualityLevel: AirQualityLevel? = nil
     ) -> Int {
         var score = 100
 
@@ -150,6 +185,16 @@ struct WeatherSnapshot: Sendable, Hashable {
         case .wind:                  score -= 10
         case .clear, .partlyCloudy, .cloudy:
             break
+        }
+
+        // Air quality penalty (Korean Ministry of Environment standards)
+        if let aq = airQualityLevel {
+            switch aq {
+            case .good:          break
+            case .moderate:      score -= 10
+            case .unhealthy:     score -= 30
+            case .veryUnhealthy: score -= 50
+            }
         }
 
         return Swift.max(0, Swift.min(100, score))

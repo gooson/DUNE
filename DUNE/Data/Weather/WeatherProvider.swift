@@ -22,18 +22,21 @@ enum WeatherError: Error, Sendable {
     case locationTimeout
 }
 
-/// Combines LocationService + OpenMeteoService behind a single async call.
-/// Accepts a WeatherFetching dependency for test injection.
+/// Combines LocationService + OpenMeteoService + AirQualityService behind a single async call.
+/// Accepts WeatherFetching / AirQualityFetching dependencies for test injection.
 final class WeatherProvider: WeatherProviding, Sendable {
     private let locationService: LocationService
     private let weatherService: WeatherFetching
+    private let airQualityService: AirQualityFetching
 
     init(
         locationService: LocationService,
-        weatherService: WeatherFetching = OpenMeteoService()
+        weatherService: WeatherFetching = OpenMeteoService(),
+        airQualityService: AirQualityFetching = OpenMeteoAirQualityService()
     ) {
         self.locationService = locationService
         self.weatherService = weatherService
+        self.airQualityService = airQualityService
     }
 
     func fetchCurrentWeather() async throws -> WeatherSnapshot {
@@ -44,7 +47,24 @@ final class WeatherProvider: WeatherProviding, Sendable {
         }
 
         let location = try await locationService.requestLocation()
-        return try await weatherService.fetchWeather(for: location)
+
+        // Parallel fetch: weather + air quality. Air quality failure is non-fatal.
+        async let weatherTask = weatherService.fetchWeather(for: location)
+        async let airQualityTask = safeAirQualityFetch(for: location)
+
+        var snapshot = try await weatherTask
+        let airQuality = await airQualityTask
+        snapshot = snapshot.withAirQuality(airQuality)
+        return snapshot
+    }
+
+    /// Air quality fetch with graceful failure — returns nil instead of throwing.
+    private func safeAirQualityFetch(for location: CLLocation) async -> AirQualitySnapshot? {
+        do {
+            return try await airQualityService.fetchAirQuality(for: location)
+        } catch {
+            return nil
+        }
     }
 
     func requestLocationPermission() async {
