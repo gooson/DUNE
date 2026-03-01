@@ -48,6 +48,32 @@ private func waveY(
     return centerY + amp * (primary + harmonic + envelope + sharpness)
 }
 
+/// Pre-compute all Y values for sample points.
+/// Used when curl detection is needed to avoid double computation.
+@inline(__always)
+private func computeWaveYValues(
+    samples: WaveSamples,
+    phase: CGFloat,
+    centerY: CGFloat,
+    amp: CGFloat,
+    steepness: CGFloat,
+    harmonicOffset: CGFloat,
+    crestHeight: CGFloat,
+    crestSharpness: CGFloat
+) -> [CGFloat] {
+    var yVals = [CGFloat]()
+    yVals.reserveCapacity(samples.points.count)
+    for pt in samples.points {
+        yVals.append(waveY(
+            angle: pt.angle, phase: phase,
+            centerY: centerY, amp: amp,
+            steepness: steepness, harmonicOffset: harmonicOffset,
+            crestHeight: crestHeight, crestSharpness: crestSharpness
+        ))
+    }
+    return yVals
+}
+
 // MARK: - Curl Computation
 
 /// Anchor points for a single curl drawn above a wave crest.
@@ -63,17 +89,13 @@ private struct CurlAnchor {
 }
 
 /// Finds wave crests and computes curl anchor points.
+/// Accepts pre-computed Y values to avoid redundant trig computation.
 /// Returns up to `curlCount` anchors sorted left-to-right.
 private func computeCurlAnchors(
+    yVals: [CGFloat],
     samples: WaveSamples,
-    phase: CGFloat,
     rect: CGRect,
     amp: CGFloat,
-    centerY: CGFloat,
-    steepness: CGFloat,
-    harmonicOffset: CGFloat,
-    crestHt: CGFloat,
-    crestSharpness: CGFloat,
     curlCount: Int,
     curlHeight: CGFloat,
     curlWidth: CGFloat
@@ -81,23 +103,11 @@ private func computeCurlAnchors(
     let pts = samples.points
     let count = pts.count
 
-    // Compute all Y values
-    var yVals = [CGFloat]()
-    yVals.reserveCapacity(count)
-    for pt in pts {
-        yVals.append(waveY(
-            angle: pt.angle, phase: phase,
-            centerY: centerY, amp: amp,
-            steepness: steepness, harmonicOffset: harmonicOffset,
-            crestHeight: crestHt, crestSharpness: crestSharpness
-        ))
-    }
-
-    // Find local minima in Y (visual peaks) with 2-neighbor check for robustness
+    // Find local minima in Y (visual peaks) with strict 2-neighbor check
     var crests: [(index: Int, y: CGFloat)] = []
     for i in 2..<(count - 2) {
-        if yVals[i] <= yVals[i - 1] && yVals[i] <= yVals[i + 1]
-            && yVals[i] <= yVals[i - 2] && yVals[i] <= yVals[i + 2]
+        if yVals[i] < yVals[i - 1] && yVals[i] < yVals[i + 1]
+            && yVals[i] < yVals[i - 2] && yVals[i] < yVals[i + 2]
         {
             crests.append((i, yVals[i]))
         }
@@ -136,7 +146,42 @@ private func computeCurlAnchors(
     return anchors
 }
 
+/// Shared rise→lip→descent Bezier curve for curl top edge.
+/// Extracted to satisfy DRY (3 callers: fill, stroke, foam).
+@inline(__always)
+private func addCurlTopEdge(
+    to path: inout Path,
+    anchor a: CurlAnchor,
+    curlAmp: CGFloat
+) {
+    // Rise: wave line → peak
+    let riseDx = a.peakX - a.startX
+    path.addCurve(
+        to: CGPoint(x: a.peakX, y: a.curlPeakY),
+        control1: CGPoint(x: a.startX + riseDx * 0.5, y: a.startY),
+        control2: CGPoint(x: a.peakX - riseDx * 0.15, y: a.curlPeakY + curlAmp * 0.15)
+    )
+
+    // Lip: peak → lip end (curling forward)
+    let lipDx = a.lipX - a.peakX
+    path.addCurve(
+        to: CGPoint(x: a.lipX, y: a.lipY),
+        control1: CGPoint(x: a.peakX + lipDx * 0.5, y: a.curlPeakY - curlAmp * 0.03),
+        control2: CGPoint(x: a.lipX - lipDx * 0.2, y: a.lipY - curlAmp * 0.12)
+    )
+
+    // Descent: lip → wave line
+    let descDx = a.endX - a.lipX
+    let descDy = a.endY - a.lipY
+    path.addCurve(
+        to: CGPoint(x: a.endX, y: a.endY),
+        control1: CGPoint(x: a.lipX + descDx * 0.3, y: a.lipY + descDy * 0.5),
+        control2: CGPoint(x: a.endX - descDx * 0.3, y: a.endY)
+    )
+}
+
 /// Adds curl Bezier subpaths to a fill path (closed subpaths).
+@inline(__always)
 private func addCurlFillSubpaths(
     to path: inout Path,
     anchors: [CurlAnchor],
@@ -144,37 +189,13 @@ private func addCurlFillSubpaths(
 ) {
     for a in anchors {
         path.move(to: CGPoint(x: a.startX, y: a.startY))
-
-        // Rise: wave line → peak
-        let riseDx = a.peakX - a.startX
-        path.addCurve(
-            to: CGPoint(x: a.peakX, y: a.curlPeakY),
-            control1: CGPoint(x: a.startX + riseDx * 0.5, y: a.startY),
-            control2: CGPoint(x: a.peakX - riseDx * 0.15, y: a.curlPeakY + curlAmp * 0.15)
-        )
-
-        // Lip: peak → lip end (curling forward)
-        let lipDx = a.lipX - a.peakX
-        path.addCurve(
-            to: CGPoint(x: a.lipX, y: a.lipY),
-            control1: CGPoint(x: a.peakX + lipDx * 0.5, y: a.curlPeakY - curlAmp * 0.03),
-            control2: CGPoint(x: a.lipX - lipDx * 0.2, y: a.lipY - curlAmp * 0.12)
-        )
-
-        // Descent: lip → wave line
-        let descDx = a.endX - a.lipX
-        let descDy = a.endY - a.lipY
-        path.addCurve(
-            to: CGPoint(x: a.endX, y: a.endY),
-            control1: CGPoint(x: a.lipX + descDx * 0.3, y: a.lipY + descDy * 0.5),
-            control2: CGPoint(x: a.endX - descDx * 0.3, y: a.endY)
-        )
-
+        addCurlTopEdge(to: &path, anchor: a, curlAmp: curlAmp)
         path.closeSubpath()
     }
 }
 
 /// Adds curl Bezier subpaths to a stroke path (open subpaths).
+@inline(__always)
 private func addCurlStrokeSubpaths(
     to path: inout Path,
     anchors: [CurlAnchor],
@@ -182,33 +203,12 @@ private func addCurlStrokeSubpaths(
 ) {
     for a in anchors {
         path.move(to: CGPoint(x: a.startX, y: a.startY))
-
-        let riseDx = a.peakX - a.startX
-        path.addCurve(
-            to: CGPoint(x: a.peakX, y: a.curlPeakY),
-            control1: CGPoint(x: a.startX + riseDx * 0.5, y: a.startY),
-            control2: CGPoint(x: a.peakX - riseDx * 0.15, y: a.curlPeakY + curlAmp * 0.15)
-        )
-
-        let lipDx = a.lipX - a.peakX
-        path.addCurve(
-            to: CGPoint(x: a.lipX, y: a.lipY),
-            control1: CGPoint(x: a.peakX + lipDx * 0.5, y: a.curlPeakY - curlAmp * 0.03),
-            control2: CGPoint(x: a.lipX - lipDx * 0.2, y: a.lipY - curlAmp * 0.12)
-        )
-
-        let descDx = a.endX - a.lipX
-        let descDy = a.endY - a.lipY
-        path.addCurve(
-            to: CGPoint(x: a.endX, y: a.endY),
-            control1: CGPoint(x: a.lipX + descDx * 0.3, y: a.lipY + descDy * 0.5),
-            control2: CGPoint(x: a.endX - descDx * 0.3, y: a.endY)
-        )
-        // No closeSubpath — open stroke
+        addCurlTopEdge(to: &path, anchor: a, curlAmp: curlAmp)
     }
 }
 
 /// Adds curl foam band subpaths (closed, with offset bottom edge).
+@inline(__always)
 private func addCurlFoamSubpaths(
     to path: inout Path,
     anchors: [CurlAnchor],
@@ -216,32 +216,16 @@ private func addCurlFoamSubpaths(
     foamH: CGFloat
 ) {
     for a in anchors {
-        // Forward pass: top edge (same as fill curl)
+        // Forward pass: top edge (shared helper)
         path.move(to: CGPoint(x: a.startX, y: a.startY))
-
-        let riseDx = a.peakX - a.startX
-        path.addCurve(
-            to: CGPoint(x: a.peakX, y: a.curlPeakY),
-            control1: CGPoint(x: a.startX + riseDx * 0.5, y: a.startY),
-            control2: CGPoint(x: a.peakX - riseDx * 0.15, y: a.curlPeakY + curlAmp * 0.15)
-        )
-
-        let lipDx = a.lipX - a.peakX
-        path.addCurve(
-            to: CGPoint(x: a.lipX, y: a.lipY),
-            control1: CGPoint(x: a.peakX + lipDx * 0.5, y: a.curlPeakY - curlAmp * 0.03),
-            control2: CGPoint(x: a.lipX - lipDx * 0.2, y: a.lipY - curlAmp * 0.12)
-        )
-
-        let descDx = a.endX - a.lipX
-        let descDy = a.endY - a.lipY
-        path.addCurve(
-            to: CGPoint(x: a.endX, y: a.endY),
-            control1: CGPoint(x: a.lipX + descDx * 0.3, y: a.lipY + descDy * 0.5),
-            control2: CGPoint(x: a.endX - descDx * 0.3, y: a.endY)
-        )
+        addCurlTopEdge(to: &path, anchor: a, curlAmp: curlAmp)
 
         // Reverse pass: bottom edge (offset by foamH)
+        let riseDx = a.peakX - a.startX
+        let lipDx = a.lipX - a.peakX
+        let descDx = a.endX - a.lipX
+        let descDy = a.endY - a.lipY
+
         path.addCurve(
             to: CGPoint(x: a.lipX, y: a.lipY + foamH),
             control1: CGPoint(x: a.endX - descDx * 0.3, y: a.endY + foamH),
@@ -262,22 +246,6 @@ private func addCurlFoamSubpaths(
 
         path.closeSubpath()
     }
-}
-
-// MARK: - Shared Wave Parameters
-
-/// Bundles wave parameters to reduce init repetition across shape variants.
-private struct WaveParams {
-    let amplitude: CGFloat
-    let frequency: CGFloat
-    let verticalOffset: CGFloat
-    let steepness: CGFloat
-    let harmonicOffset: CGFloat
-    let crestHeight: CGFloat
-    let crestSharpness: CGFloat
-    let curlCount: Int
-    let curlHeight: CGFloat
-    let curlWidth: CGFloat
 }
 
 // MARK: - Fill Shape
@@ -334,9 +302,9 @@ struct OceanWaveShape: Shape {
         self.harmonicOffset = harmonicOffset
         self.crestHeight = Swift.min(crestHeight, 0.4)
         self.crestSharpness = Swift.min(crestSharpness, 0.15)
-        self.curlCount = curlCount
-        self.curlHeight = curlHeight
-        self.curlWidth = curlWidth
+        self.curlCount = Swift.max(0, Swift.min(curlCount, 5))
+        self.curlHeight = Swift.max(0, curlHeight)
+        self.curlWidth = Swift.max(0.03, Swift.min(curlWidth, 1.0))
         self.samples = WaveSamples(frequency: frequency)
     }
 
@@ -348,38 +316,53 @@ struct OceanWaveShape: Shape {
 
         var path = Path()
 
-        // Main wave contour
-        for (i, pt) in samples.points.enumerated() {
-            let x = pt.x * rect.width
-            let y = waveY(
-                angle: pt.angle, phase: phase,
-                centerY: centerY, amp: amp,
+        if curlCount > 0, amp > 0 {
+            // Pre-compute Y values once for both contour + curl detection
+            let yVals = computeWaveYValues(
+                samples: samples, phase: phase, centerY: centerY, amp: amp,
                 steepness: steepness, harmonicOffset: harmonicOffset,
                 crestHeight: crestHeight, crestSharpness: crestSharpness
             )
 
-            if i == 0 {
-                path.move(to: CGPoint(x: x, y: y))
-            } else {
-                path.addLine(to: CGPoint(x: x, y: y))
+            for (i, pt) in samples.points.enumerated() {
+                let x = pt.x * rect.width
+                if i == 0 {
+                    path.move(to: CGPoint(x: x, y: yVals[i]))
+                } else {
+                    path.addLine(to: CGPoint(x: x, y: yVals[i]))
+                }
             }
-        }
 
-        // Close area to bottom of rect for fill
-        path.addLine(to: CGPoint(x: rect.width, y: rect.height))
-        path.addLine(to: CGPoint(x: 0, y: rect.height))
-        path.closeSubpath()
+            path.addLine(to: CGPoint(x: rect.width, y: rect.height))
+            path.addLine(to: CGPoint(x: 0, y: rect.height))
+            path.closeSubpath()
 
-        // Add curl subpaths at tallest crests
-        if curlCount > 0, amp > 0 {
             let anchors = computeCurlAnchors(
-                samples: samples, phase: phase, rect: rect,
-                amp: amp, centerY: centerY,
-                steepness: steepness, harmonicOffset: harmonicOffset,
-                crestHt: crestHeight, crestSharpness: crestSharpness,
+                yVals: yVals, samples: samples, rect: rect, amp: amp,
                 curlCount: curlCount, curlHeight: curlHeight, curlWidth: curlWidth
             )
             addCurlFillSubpaths(to: &path, anchors: anchors, curlAmp: curlHeight * amp)
+        } else {
+            // Standard inline computation (no curl, no array allocation)
+            for (i, pt) in samples.points.enumerated() {
+                let x = pt.x * rect.width
+                let y = waveY(
+                    angle: pt.angle, phase: phase,
+                    centerY: centerY, amp: amp,
+                    steepness: steepness, harmonicOffset: harmonicOffset,
+                    crestHeight: crestHeight, crestSharpness: crestSharpness
+                )
+
+                if i == 0 {
+                    path.move(to: CGPoint(x: x, y: y))
+                } else {
+                    path.addLine(to: CGPoint(x: x, y: y))
+                }
+            }
+
+            path.addLine(to: CGPoint(x: rect.width, y: rect.height))
+            path.addLine(to: CGPoint(x: 0, y: rect.height))
+            path.closeSubpath()
         }
 
         return path
@@ -432,9 +415,9 @@ struct OceanWaveStrokeShape: Shape {
         self.harmonicOffset = harmonicOffset
         self.crestHeight = Swift.min(crestHeight, 0.4)
         self.crestSharpness = Swift.min(crestSharpness, 0.15)
-        self.curlCount = curlCount
-        self.curlHeight = curlHeight
-        self.curlWidth = curlWidth
+        self.curlCount = Swift.max(0, Swift.min(curlCount, 5))
+        self.curlHeight = Swift.max(0, curlHeight)
+        self.curlWidth = Swift.max(0.03, Swift.min(curlWidth, 1.0))
         self.samples = WaveSamples(frequency: frequency)
     }
 
@@ -445,32 +428,44 @@ struct OceanWaveStrokeShape: Shape {
         let centerY = rect.height * verticalOffset
 
         var path = Path()
-        for (i, pt) in samples.points.enumerated() {
-            let x = pt.x * rect.width
-            let y = waveY(
-                angle: pt.angle, phase: phase,
-                centerY: centerY, amp: amp,
+
+        if curlCount > 0, amp > 0 {
+            let yVals = computeWaveYValues(
+                samples: samples, phase: phase, centerY: centerY, amp: amp,
                 steepness: steepness, harmonicOffset: harmonicOffset,
                 crestHeight: crestHeight, crestSharpness: crestSharpness
             )
 
-            if i == 0 {
-                path.move(to: CGPoint(x: x, y: y))
-            } else {
-                path.addLine(to: CGPoint(x: x, y: y))
+            for (i, pt) in samples.points.enumerated() {
+                let x = pt.x * rect.width
+                if i == 0 {
+                    path.move(to: CGPoint(x: x, y: yVals[i]))
+                } else {
+                    path.addLine(to: CGPoint(x: x, y: yVals[i]))
+                }
             }
-        }
 
-        // Add curl stroke paths at tallest crests
-        if curlCount > 0, amp > 0 {
             let anchors = computeCurlAnchors(
-                samples: samples, phase: phase, rect: rect,
-                amp: amp, centerY: centerY,
-                steepness: steepness, harmonicOffset: harmonicOffset,
-                crestHt: crestHeight, crestSharpness: crestSharpness,
+                yVals: yVals, samples: samples, rect: rect, amp: amp,
                 curlCount: curlCount, curlHeight: curlHeight, curlWidth: curlWidth
             )
             addCurlStrokeSubpaths(to: &path, anchors: anchors, curlAmp: curlHeight * amp)
+        } else {
+            for (i, pt) in samples.points.enumerated() {
+                let x = pt.x * rect.width
+                let y = waveY(
+                    angle: pt.angle, phase: phase,
+                    centerY: centerY, amp: amp,
+                    steepness: steepness, harmonicOffset: harmonicOffset,
+                    crestHeight: crestHeight, crestSharpness: crestSharpness
+                )
+
+                if i == 0 {
+                    path.move(to: CGPoint(x: x, y: y))
+                } else {
+                    path.addLine(to: CGPoint(x: x, y: y))
+                }
+            }
         }
 
         return path
@@ -527,9 +522,9 @@ struct OceanFoamGradientShape: Shape {
         self.crestHeight = Swift.min(crestHeight, 0.4)
         self.crestSharpness = Swift.min(crestSharpness, 0.15)
         self.foamDepth = foamDepth
-        self.curlCount = curlCount
-        self.curlHeight = curlHeight
-        self.curlWidth = curlWidth
+        self.curlCount = Swift.max(0, Swift.min(curlCount, 5))
+        self.curlHeight = Swift.max(0, curlHeight)
+        self.curlWidth = Swift.max(0.03, Swift.min(curlWidth, 1.0))
         self.samples = WaveSamples(frequency: frequency)
     }
 
@@ -543,48 +538,67 @@ struct OceanFoamGradientShape: Shape {
 
         var path = Path()
 
-        // Forward pass: top edge (wave line)
-        for (i, pt) in pts.enumerated() {
-            let x = pt.x * rect.width
-            let y = waveY(
-                angle: pt.angle, phase: phase,
-                centerY: centerY, amp: amp,
+        if curlCount > 0, amp > 0 {
+            let yVals = computeWaveYValues(
+                samples: samples, phase: phase, centerY: centerY, amp: amp,
                 steepness: steepness, harmonicOffset: harmonicOffset,
                 crestHeight: crestHeight, crestSharpness: crestSharpness
             )
-            if i == 0 {
-                path.move(to: CGPoint(x: x, y: y))
-            } else {
-                path.addLine(to: CGPoint(x: x, y: y))
+
+            // Forward pass: top edge (wave line)
+            for (i, pt) in pts.enumerated() {
+                let x = pt.x * rect.width
+                if i == 0 {
+                    path.move(to: CGPoint(x: x, y: yVals[i]))
+                } else {
+                    path.addLine(to: CGPoint(x: x, y: yVals[i]))
+                }
             }
-        }
 
-        // Reverse pass: bottom edge (shifted down by foamDepth)
-        for pt in pts.reversed() {
-            let x = pt.x * rect.width
-            let y = waveY(
-                angle: pt.angle, phase: phase,
-                centerY: centerY, amp: amp,
-                steepness: steepness, harmonicOffset: harmonicOffset,
-                crestHeight: crestHeight, crestSharpness: crestSharpness
-            ) + foamH
-            path.addLine(to: CGPoint(x: x, y: y))
-        }
-        path.closeSubpath()
+            // Reverse pass: bottom edge (shifted down by foamDepth)
+            for (j, pt) in pts.enumerated().reversed() {
+                let x = pt.x * rect.width
+                path.addLine(to: CGPoint(x: x, y: yVals[j] + foamH))
+            }
+            path.closeSubpath()
 
-        // Add curl foam subpaths at tallest crests
-        if curlCount > 0, amp > 0 {
             let anchors = computeCurlAnchors(
-                samples: samples, phase: phase, rect: rect,
-                amp: amp, centerY: centerY,
-                steepness: steepness, harmonicOffset: harmonicOffset,
-                crestHt: crestHeight, crestSharpness: crestSharpness,
+                yVals: yVals, samples: samples, rect: rect, amp: amp,
                 curlCount: curlCount, curlHeight: curlHeight, curlWidth: curlWidth
             )
             addCurlFoamSubpaths(
                 to: &path, anchors: anchors,
                 curlAmp: curlHeight * amp, foamH: foamH
             )
+        } else {
+            // Forward pass: top edge (wave line)
+            for (i, pt) in pts.enumerated() {
+                let x = pt.x * rect.width
+                let y = waveY(
+                    angle: pt.angle, phase: phase,
+                    centerY: centerY, amp: amp,
+                    steepness: steepness, harmonicOffset: harmonicOffset,
+                    crestHeight: crestHeight, crestSharpness: crestSharpness
+                )
+                if i == 0 {
+                    path.move(to: CGPoint(x: x, y: y))
+                } else {
+                    path.addLine(to: CGPoint(x: x, y: y))
+                }
+            }
+
+            // Reverse pass: bottom edge (shifted down by foamDepth)
+            for pt in pts.reversed() {
+                let x = pt.x * rect.width
+                let y = waveY(
+                    angle: pt.angle, phase: phase,
+                    centerY: centerY, amp: amp,
+                    steepness: steepness, harmonicOffset: harmonicOffset,
+                    crestHeight: crestHeight, crestSharpness: crestSharpness
+                ) + foamH
+                path.addLine(to: CGPoint(x: x, y: y))
+            }
+            path.closeSubpath()
         }
 
         return path
