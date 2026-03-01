@@ -17,6 +17,9 @@ struct DesertDuneOverlayView: View {
     var rippleFrequency: CGFloat = 6.0
     var driftDuration: Double = 8
     var showShimmer: Bool = false
+    var crestColor: Color? = nil
+    var crestOpacity: Double = 0.18
+    var crestWidth: CGFloat = 1.2
 
     @State private var phase: CGFloat = 0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -35,6 +38,52 @@ struct DesertDuneOverlayView: View {
             )
             .fill(color.opacity(opacity))
             .bottomFadeMask(bottomFade)
+
+            if let crestColor {
+                ZStack {
+                    // Wide translucent crest band.
+                    DesertDuneShape(
+                        amplitude: amplitude,
+                        frequency: frequency,
+                        phase: phase,
+                        verticalOffset: verticalOffset,
+                        skewness: skewness,
+                        skewOffset: skewOffset,
+                        ripple: ripple,
+                        rippleFrequency: rippleFrequency
+                    )
+                    .stroke(
+                        crestColor.opacity(crestOpacity * 0.48),
+                        style: StrokeStyle(lineWidth: crestWidth * 2.6, lineCap: .round, lineJoin: .round)
+                    )
+                    .blur(radius: 1.1)
+
+                    // Core crest highlight line.
+                    DesertDuneShape(
+                        amplitude: amplitude,
+                        frequency: frequency,
+                        phase: phase,
+                        verticalOffset: verticalOffset,
+                        skewness: skewness,
+                        skewOffset: skewOffset,
+                        ripple: ripple,
+                        rippleFrequency: rippleFrequency
+                    )
+                    .stroke(
+                        crestColor.opacity(crestOpacity),
+                        style: StrokeStyle(lineWidth: crestWidth, lineCap: .round, lineJoin: .round)
+                    )
+                    .blur(radius: 0.25)
+                }
+                .mask(
+                    LinearGradient(
+                        colors: [.white, .white.opacity(0.95), .clear],
+                        startPoint: .top,
+                        endPoint: UnitPoint(x: 0.5, y: 0.87)
+                    )
+                )
+                .blendMode(.screen)
+            }
 
             if showShimmer {
                 HeatShimmerView(opacity: 0.03)
@@ -116,6 +165,7 @@ private struct HeatShimmerView: View {
 struct DesertTabWaveBackground: View {
     @Environment(\.wavePreset) private var preset
     @Environment(\.waveColor) private var color
+    @Environment(\.appTheme) private var theme
     @Environment(\.weatherAtmosphere) private var atmosphere
 
     private var isWeatherActive: Bool {
@@ -140,34 +190,40 @@ struct DesertTabWaveBackground: View {
         let scale = intensityScale
 
         ZStack(alignment: .top) {
-            // Layer 1: Far — distant large dunes
+            // Layer 1: Far — broad, smooth horizon dunes
             DesertDuneOverlayView(
                 color: resolvedColor,
-                opacity: 0.07 * scale,
-                amplitude: 0.03 * scale,
-                frequency: 0.8,
-                verticalOffset: 0.4,
+                opacity: 0.085 * scale,
+                amplitude: 0.05 * scale,
+                frequency: 0.72,
+                verticalOffset: 0.37,
                 bottomFade: 0.5,
-                skewness: 0.25,
+                skewness: 0.2,
                 skewOffset: .pi / 6,
-                driftDuration: 10
+                driftDuration: 18,
+                crestColor: theme.sandColor,
+                crestOpacity: 0.12 * Double(scale),
+                crestWidth: 0.9
             )
             .frame(height: 200)
 
-            // Layer 2: Near — foreground sand ripples
+            // Layer 2: Near — smooth foreground dune slope
             DesertDuneOverlayView(
                 color: resolvedColor,
-                opacity: 0.13 * scale,
-                amplitude: 0.055 * scale,
-                frequency: 2.0,
-                verticalOffset: 0.55,
+                opacity: 0.15 * scale,
+                amplitude: 0.082 * scale,
+                frequency: 1.35,
+                verticalOffset: 0.57,
                 bottomFade: 0.4,
-                skewness: 0.15,
+                skewness: 0.14,
                 skewOffset: .pi / 4,
-                ripple: 0.2,
-                rippleFrequency: 5.0,
-                driftDuration: 5,
-                showShimmer: true
+                ripple: 0,
+                rippleFrequency: 5.2,
+                driftDuration: 13,
+                showShimmer: true,
+                crestColor: theme.sandColor,
+                crestOpacity: 0.20 * Double(scale),
+                crestWidth: 1.35
             )
             .frame(height: 200)
 
@@ -200,6 +256,7 @@ struct DesertTabWaveBackground: View {
 /// Scaled down: amplitude 50%, opacity 70%.
 struct DesertDetailWaveBackground: View {
     @Environment(\.waveColor) private var color
+    @Environment(\.appTheme) private var theme
 
     var body: some View {
         let gradientTop = color.opacity(DS.Opacity.light)
@@ -207,13 +264,16 @@ struct DesertDetailWaveBackground: View {
         ZStack(alignment: .top) {
             DesertDuneOverlayView(
                 color: color,
-                opacity: 0.08,
-                amplitude: 0.03,
-                frequency: 1.2,
+                opacity: 0.09,
+                amplitude: 0.042,
+                frequency: 1.0,
                 verticalOffset: 0.5,
                 bottomFade: 0.5,
-                skewness: 0.2,
-                driftDuration: 8
+                skewness: 0.18,
+                driftDuration: 16,
+                crestColor: theme.sandColor,
+                crestOpacity: 0.16,
+                crestWidth: 1.0
             )
             .frame(height: 150)
 
@@ -232,6 +292,7 @@ struct DesertDetailWaveBackground: View {
 /// Lightest single-layer desert dune for sheet/modal presentations.
 struct DesertSheetWaveBackground: View {
     @Environment(\.waveColor) private var color
+    @Environment(\.appTheme) private var theme
 
     var body: some View {
         let gradientTop = color.opacity(DS.Opacity.light)
@@ -239,13 +300,16 @@ struct DesertSheetWaveBackground: View {
         ZStack(alignment: .top) {
             DesertDuneOverlayView(
                 color: color,
-                opacity: 0.06,
-                amplitude: 0.02,
-                frequency: 1.0,
+                opacity: 0.065,
+                amplitude: 0.03,
+                frequency: 0.9,
                 verticalOffset: 0.5,
                 bottomFade: 0.5,
-                skewness: 0.2,
-                driftDuration: 8
+                skewness: 0.16,
+                driftDuration: 18,
+                crestColor: theme.sandColor,
+                crestOpacity: 0.12,
+                crestWidth: 0.9
             )
             .frame(height: 120)
 

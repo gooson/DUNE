@@ -173,8 +173,8 @@ enum DS {
         static let slow = SwiftUI.Animation.spring(duration: 1.0, bounce: 0.1)
         /// Numeric value changes (score counters)
         static let numeric = SwiftUI.Animation.easeOut(duration: 0.6)
-        /// Subtle wave drift (background decoration)
-        static let waveDrift = SwiftUI.Animation.linear(duration: 6).repeatForever(autoreverses: false)
+        /// Subtle wave drift (background decoration) tuned for calmer motion.
+        static let waveDrift = SwiftUI.Animation.linear(duration: 12).repeatForever(autoreverses: false)
         /// Sand shimmer flash (period transition overlay)
         static let shimmer = SwiftUI.Animation.easeInOut(duration: 0.4)
         /// Weather atmosphere color transition (slow cross-fade)

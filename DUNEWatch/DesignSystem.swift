@@ -101,7 +101,7 @@ enum DS {
 
     enum Animation {
         /// Slow, infinite drift for wave background decoration.
-        static let waveDrift: SwiftUI.Animation = .linear(duration: 8).repeatForever(autoreverses: false)
+        static let waveDrift: SwiftUI.Animation = .linear(duration: 12).repeatForever(autoreverses: false)
         /// Standard interaction (card tap, state change)
         static let standard: SwiftUI.Animation = .spring(duration: 0.25, bounce: 0.05)
         /// Numeric value transition (weight, reps, timer)

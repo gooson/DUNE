@@ -47,7 +47,12 @@ struct DesertDuneShape: Shape {
     private static let rippleDrift: CGFloat = 1.3
 
     /// Scale factor for edge noise variation on dune silhouette.
-    private static let edgeNoiseScale: CGFloat = 1.5
+    /// Zero keeps the dune ridge perfectly smooth.
+    private static let edgeNoiseScale: CGFloat = 0
+
+    /// Ripple contribution multiplier on the dune contour.
+    /// Kept intentionally low to preserve smooth sand-slope silhouette.
+    private static let rippleContribution: CGFloat = 0.08
 
     init(
         amplitude: CGFloat = 0.05,
@@ -65,7 +70,7 @@ struct DesertDuneShape: Shape {
         self.verticalOffset = verticalOffset
         self.skewness = Swift.min(skewness, 0.5)
         self.skewOffset = skewOffset
-        self.ripple = Swift.min(ripple, 0.3)
+        self.ripple = Swift.min(ripple, 0.2)
         self.rippleFrequency = rippleFrequency
         self.samples = WaveSamples(frequency: frequency)
 
@@ -98,7 +103,7 @@ struct DesertDuneShape: Shape {
 
             // High-frequency sand ripple on surface (angles pre-computed in init)
             if ripple > 0 {
-                y += ripple * 0.15 * sin(rippleAngles[i] + phase * Self.rippleDrift)
+                y += ripple * Self.rippleContribution * sin(rippleAngles[i] + phase * Self.rippleDrift)
             }
 
             let yPos = centerY + amp * y + Self.edgeNoise[i] * Self.edgeNoiseScale

@@ -4,8 +4,9 @@ import SwiftUI
 ///
 /// Generates a ridge-line profile using:
 /// - Base sine wave for primary mountain contour
-/// - 3rd harmonic for rugged peaks
-/// - Triangle pulse for occasional tree-top silhouettes
+/// - Low-frequency canopy swell for rounded "mongle" silhouettes
+/// - Mid harmonic for irregular forest ridges
+/// - Rounded canopy pulse for treetop clusters
 /// - Pre-computed edge noise for ukiyo-e washi (和紙) edge texture
 ///
 /// Uses shared `WaveSamples` for point pre-computation.
@@ -61,7 +62,7 @@ struct ForestSilhouetteShape: Shape {
 
         let amp = rect.height * amplitude
         let centerY = rect.height * verticalOffset
-        let edgeScale: CGFloat = 2.0 // max ±2pt edge roughness
+        let edgeScale: CGFloat = 2.1 // larger local noise while keeping base amplitude unchanged
 
         var path = Path()
         for (i, pt) in samples.points.enumerated() {
@@ -71,13 +72,16 @@ struct ForestSilhouetteShape: Shape {
             // Base ridge contour
             var y = sin(angle)
 
-            // 3rd harmonic for rugged peaks
-            y += ruggedness * 0.4 * sin(3 * angle + 1.2)
+            // Broad canopy swell for rounded forest masses.
+            y += (1 - ruggedness) * 0.35 * sin(0.55 * angle + 0.8)
 
-            // Triangle pulse for tree-top silhouettes
+            // Mid harmonic for irregular ridge rhythm (less sharp than dune/ocean crests).
+            y += ruggedness * 0.26 * sin(2.2 * angle + 1.1)
+
+            // Rounded canopy pulse for tree-top silhouettes.
             if treeDensity > 0 {
-                let treePulse = Self.trianglePulse(angle: angle)
-                y += treeDensity * 0.3 * treePulse
+                let treePulse = Self.canopyPulse(angle: angle * 0.9)
+                y += treeDensity * 0.32 * treePulse
             }
 
             let yPos = centerY + amp * y + Self.edgeNoise[i] * edgeScale
@@ -97,14 +101,10 @@ struct ForestSilhouetteShape: Shape {
         return path
     }
 
-    /// Periodic triangle pulse: sharp upward spikes at regular intervals.
-    /// Simulates tree-top silhouettes on the ridge line.
-    private static func trianglePulse(angle: CGFloat) -> CGFloat {
-        let sharpness: CGFloat = 8.0
-        // Modulo 2π, then create a sharp triangle centered around π
-        let wrapped = angle.truncatingRemainder(dividingBy: 2 * .pi)
-        let normalized = abs(wrapped - .pi) / .pi  // 0 at π, 1 at 0/2π
-        let pulse = Swift.max(0, 1.0 - normalized * sharpness)
-        return -pulse  // Negative = upward (toward top of screen)
+    /// Periodic rounded pulse for clustered tree canopies.
+    private static func canopyPulse(angle: CGFloat) -> CGFloat {
+        let normalized = 0.5 + 0.5 * sin(angle * 2.0)
+        let rounded = pow(normalized, 1.8)
+        return -rounded // Negative = upward (toward top of screen)
     }
 }

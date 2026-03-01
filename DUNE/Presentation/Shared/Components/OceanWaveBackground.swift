@@ -7,8 +7,7 @@ import SwiftUI
 /// Layers (back to front):
 /// 1. **Deep** — slowest, dark navy, low amplitude
 /// 2. **Mid** — reverse direction, rich teal, medium amplitude + stroke
-/// 3. **Surface** — fastest, bright cyan, largest amplitude + stroke + foam gradient
-/// 4. **Big wave** — dramatic curling wave accent (excluded from .life)
+/// 3. **Surface** — bright cyan, largest amplitude + stroke + foam gradient
 struct OceanTabWaveBackground: View {
     @Environment(\.wavePreset) private var preset
     @Environment(\.appTheme) private var theme
@@ -28,16 +27,6 @@ struct OceanTabWaveBackground: View {
         }
     }
 
-    /// Curl count: big wave crests on surface layer.
-    /// Excluded from .life (lake-like stillness).
-    private var curlCount: Int {
-        switch preset {
-        case .train:              2    // Rougher ocean
-        case .today, .wellness:   1
-        case .life:               0    // Lake-like stillness
-        }
-    }
-
     var body: some View {
         let scale = intensityScale
 
@@ -45,20 +34,20 @@ struct OceanTabWaveBackground: View {
             // Layer 1: Deep (back)
             OceanWaveOverlayView(
                 color: theme.oceanDeepColor,
-                opacity: 0.07 * scale,
-                amplitude: 0.025 * scale,
-                frequency: 1.0,
+                opacity: 0.085 * scale,
+                amplitude: 0.032 * scale,
+                frequency: 1.05,
                 verticalOffset: 0.4,
                 bottomFade: 0.5,
-                steepness: 0.1,
-                crestHeight: 0.15 * scale,
-                crestSharpness: 0.03 * scale,
-                driftDuration: 10,
+                steepness: 0.15,
+                crestHeight: 0.22 * scale,
+                crestSharpness: 0.05 * scale,
+                driftDuration: 18,
                 reverseDirection: false,
                 strokeStyle: WaveStrokeStyle(
                     color: theme.oceanFoamColor,
                     width: 0.5,
-                    opacity: 0.12 * scale
+                    opacity: 0.16 * scale
                 )
             )
             .frame(height: 200)
@@ -66,56 +55,53 @@ struct OceanTabWaveBackground: View {
             // Layer 2: Mid (reverse for cross-current)
             OceanWaveOverlayView(
                 color: theme.oceanMidColor,
-                opacity: 0.11 * scale,
-                amplitude: 0.045 * scale,
-                frequency: 1.5,
+                opacity: 0.13 * scale,
+                amplitude: 0.058 * scale,
+                frequency: 1.65,
                 verticalOffset: 0.5,
                 bottomFade: 0.4,
-                steepness: 0.2,
+                steepness: 0.28,
                 harmonicOffset: .pi / 3,
-                crestHeight: 0.25 * scale,
-                crestSharpness: 0.06 * scale,
-                driftDuration: 7,
+                crestHeight: 0.34 * scale,
+                crestSharpness: 0.09 * scale,
+                driftDuration: 15,
                 reverseDirection: true,
                 strokeStyle: WaveStrokeStyle(
                     color: theme.oceanFoamColor,
-                    width: 1.0,
-                    opacity: 0.2 * scale
+                    width: 1.1,
+                    opacity: 0.28 * scale
                 ),
                 foamStyle: WaveFoamStyle(
                     color: theme.oceanFoamColor,
-                    opacity: 0.15 * scale,
-                    depth: 0.02
+                    opacity: 0.22 * scale,
+                    depth: 0.026
                 )
             )
             .frame(height: 200)
 
-            // Layer 3: Surface (front, fastest, most visible, with curl crests)
+            // Layer 3: Surface (front, most visible)
             OceanWaveOverlayView(
                 color: theme.oceanSurfaceColor,
-                opacity: 0.15 * scale,
-                amplitude: 0.07 * scale,
-                frequency: 2.0,
-                verticalOffset: 0.55,
+                opacity: 0.19 * scale,
+                amplitude: 0.095 * scale,
+                frequency: 2.25,
+                verticalOffset: 0.56,
                 bottomFade: 0.4,
-                steepness: 0.40,
-                crestHeight: 0.3 * scale,
+                steepness: 0.44,
+                crestHeight: 0.38 * scale,
                 crestSharpness: 0.12 * scale,
-                driftDuration: 5,
+                driftDuration: 12,
                 reverseDirection: false,
                 strokeStyle: WaveStrokeStyle(
                     color: theme.oceanFoamColor,
-                    width: 1.5,
-                    opacity: 0.35 * scale
+                    width: 1.7,
+                    opacity: 0.45 * scale
                 ),
                 foamStyle: WaveFoamStyle(
                     color: theme.oceanFoamColor,
-                    opacity: 0.30 * scale,
-                    depth: 0.035
-                ),
-                curlCount: curlCount,
-                curlHeight: 2.2 * scale,
-                curlWidth: 0.15
+                    opacity: 0.40 * scale,
+                    depth: 0.045
+                )
             )
             .frame(height: 200)
 
@@ -132,7 +118,7 @@ struct OceanTabWaveBackground: View {
 
     private var oceanGradientColors: [Color] {
         if isWeatherActive {
-            return atmosphere.gradientColors
+            return atmosphere.gradientColors(for: theme)
         }
         return [
             theme.oceanSurfaceColor.opacity(DS.Opacity.medium),
@@ -154,19 +140,19 @@ struct OceanDetailWaveBackground: View {
             // Deep
             OceanWaveOverlayView(
                 color: theme.oceanDeepColor,
-                opacity: 0.05,
-                amplitude: 0.015,
+                opacity: 0.06,
+                amplitude: 0.02,
                 frequency: 1.0,
                 verticalOffset: 0.4,
                 bottomFade: 0.5,
                 steepness: 0.1,
-                crestHeight: 0.1,
-                crestSharpness: 0.02,
-                driftDuration: 10,
+                crestHeight: 0.14,
+                crestSharpness: 0.03,
+                driftDuration: 16,
                 strokeStyle: WaveStrokeStyle(
                     color: theme.oceanFoamColor,
                     width: 0.5,
-                    opacity: 0.1
+                    opacity: 0.12
                 )
             )
             .frame(height: 150)
@@ -174,20 +160,20 @@ struct OceanDetailWaveBackground: View {
             // Mid
             OceanWaveOverlayView(
                 color: theme.oceanMidColor,
-                opacity: 0.08,
-                amplitude: 0.025,
+                opacity: 0.095,
+                amplitude: 0.033,
                 frequency: 1.5,
                 verticalOffset: 0.5,
                 bottomFade: 0.5,
-                steepness: 0.2,
-                crestHeight: 0.17,
-                crestSharpness: 0.04,
-                driftDuration: 7,
+                steepness: 0.25,
+                crestHeight: 0.23,
+                crestSharpness: 0.06,
+                driftDuration: 14,
                 reverseDirection: true,
                 strokeStyle: WaveStrokeStyle(
                     color: theme.oceanFoamColor,
                     width: 0.8,
-                    opacity: 0.15
+                    opacity: 0.18
                 )
             )
             .frame(height: 150)
@@ -195,19 +181,19 @@ struct OceanDetailWaveBackground: View {
             // Surface
             OceanWaveOverlayView(
                 color: theme.oceanSurfaceColor,
-                opacity: 0.10,
-                amplitude: 0.035,
+                opacity: 0.12,
+                amplitude: 0.045,
                 frequency: 2.0,
                 verticalOffset: 0.55,
                 bottomFade: 0.5,
-                steepness: 0.3,
-                crestHeight: 0.2,
-                crestSharpness: 0.07,
-                driftDuration: 5,
+                steepness: 0.36,
+                crestHeight: 0.26,
+                crestSharpness: 0.09,
+                driftDuration: 12,
                 strokeStyle: WaveStrokeStyle(
                     color: theme.oceanFoamColor,
                     width: 1.0,
-                    opacity: 0.25
+                    opacity: 0.30
                 )
             )
             .frame(height: 150)
@@ -234,20 +220,20 @@ struct OceanSheetWaveBackground: View {
             // Mid
             OceanWaveOverlayView(
                 color: theme.oceanMidColor,
-                opacity: 0.06,
-                amplitude: 0.018,
+                opacity: 0.07,
+                amplitude: 0.024,
                 frequency: 1.5,
                 verticalOffset: 0.5,
                 bottomFade: 0.5,
-                steepness: 0.15,
-                crestHeight: 0.08,
-                crestSharpness: 0.02,
-                driftDuration: 7,
+                steepness: 0.2,
+                crestHeight: 0.12,
+                crestSharpness: 0.03,
+                driftDuration: 14,
                 reverseDirection: true,
                 strokeStyle: WaveStrokeStyle(
                     color: theme.oceanFoamColor,
                     width: 0.5,
-                    opacity: 0.1
+                    opacity: 0.12
                 )
             )
             .frame(height: 120)
@@ -255,19 +241,19 @@ struct OceanSheetWaveBackground: View {
             // Surface
             OceanWaveOverlayView(
                 color: theme.oceanSurfaceColor,
-                opacity: 0.09,
-                amplitude: 0.028,
+                opacity: 0.11,
+                amplitude: 0.036,
                 frequency: 2.0,
                 verticalOffset: 0.5,
                 bottomFade: 0.5,
-                steepness: 0.25,
-                crestHeight: 0.12,
-                crestSharpness: 0.04,
-                driftDuration: 5,
+                steepness: 0.3,
+                crestHeight: 0.16,
+                crestSharpness: 0.06,
+                driftDuration: 12,
                 strokeStyle: WaveStrokeStyle(
                     color: theme.oceanFoamColor,
                     width: 0.8,
-                    opacity: 0.18
+                    opacity: 0.22
                 )
             )
             .frame(height: 120)
