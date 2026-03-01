@@ -164,9 +164,9 @@ struct InjuryStatisticsView: View {
 // MARK: - Supporting Views
 
 private struct StatCard: View {
-    let title: String
+    let title: LocalizedStringKey
     let value: String
-    let subtitle: String
+    let subtitle: LocalizedStringKey
     var tintColor: Color = .primary
 
     var body: some View {
@@ -188,7 +188,7 @@ private struct StatCard: View {
 }
 
 private struct VolumeBar: View {
-    let label: String
+    let label: LocalizedStringKey
     let count: Int
     let maxCount: Int
     let color: Color

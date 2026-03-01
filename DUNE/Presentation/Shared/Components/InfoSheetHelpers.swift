@@ -5,7 +5,7 @@ enum InfoSheetHelpers {
     /// Section header with icon + title.
     struct SectionHeader: View {
         let icon: String
-        let title: String
+        let title: LocalizedStringKey
 
         var body: some View {
             HStack(spacing: DS.Spacing.xs) {
@@ -20,7 +20,7 @@ enum InfoSheetHelpers {
 
     /// Bullet point with dot prefix.
     struct BulletPoint: View {
-        let text: String
+        let text: LocalizedStringKey
 
         var body: some View {
             HStack(alignment: .top, spacing: DS.Spacing.xs) {

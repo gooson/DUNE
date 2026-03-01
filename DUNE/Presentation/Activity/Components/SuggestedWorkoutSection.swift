@@ -76,19 +76,19 @@ struct SuggestedWorkoutSection: View {
         let hours = Swift.max(0, date.timeIntervalSince(Date()) / 3600)
         let timeText: String
         if hours < 1 {
-            timeText = "soon"
+            timeText = String(localized: "soon")
         } else if hours < 24 {
-            timeText = "in ~\(Int(hours).formattedWithSeparator)h"
+            timeText = String(localized: "in ~\(Int(hours).formattedWithSeparator)h")
         } else {
             let days = Int(hours / 24)
-            timeText = "in ~\(days.formattedWithSeparator)d"
+            timeText = String(localized: "in ~\(days.formattedWithSeparator)d")
         }
 
         return HStack(spacing: DS.Spacing.xs) {
             Image(systemName: "clock.arrow.circlepath")
                 .font(.caption2)
                 .foregroundStyle(DS.Color.textSecondary)
-            Text("\(muscle.displayName) ready \(timeText)")
+            Text(String(localized: "\(muscle.displayName) ready \(timeText)"))
                 .font(.caption)
                 .foregroundStyle(DS.Color.textSecondary)
         }

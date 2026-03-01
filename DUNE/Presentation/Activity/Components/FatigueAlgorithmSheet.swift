@@ -122,7 +122,7 @@ struct FatigueAlgorithmSheet: View {
 
     // MARK: - Helpers
 
-    private func sectionHeader(icon: String, title: String) -> some View {
+    private func sectionHeader(icon: String, title: LocalizedStringKey) -> some View {
         HStack(spacing: DS.Spacing.xs) {
             Image(systemName: icon)
                 .font(.caption)
@@ -132,7 +132,7 @@ struct FatigueAlgorithmSheet: View {
         }
     }
 
-    private func formulaRow(_ text: String) -> some View {
+    private func formulaRow(_ text: LocalizedStringKey) -> some View {
         Text(text)
             .font(.caption.monospaced())
             .padding(DS.Spacing.sm)
@@ -140,7 +140,7 @@ struct FatigueAlgorithmSheet: View {
             .background(.quaternary.opacity(0.3), in: RoundedRectangle(cornerRadius: DS.Radius.sm))
     }
 
-    private func bulletPoint(_ text: String) -> some View {
+    private func bulletPoint(_ text: LocalizedStringKey) -> some View {
         HStack(alignment: .top, spacing: DS.Spacing.xs) {
             Text("·")
                 .font(.caption.weight(.bold))
@@ -151,7 +151,7 @@ struct FatigueAlgorithmSheet: View {
         }
     }
 
-    private func modifierExampleRow(label: String, value: String, color: Color) -> some View {
+    private func modifierExampleRow(label: LocalizedStringKey, value: String, color: Color) -> some View {
         HStack {
             Text(label)
                 .font(.caption2)
@@ -164,7 +164,7 @@ struct FatigueAlgorithmSheet: View {
         .padding(.horizontal, DS.Spacing.sm)
     }
 
-    private func levelRow(_ level: FatigueLevel, description: String) -> some View {
+    private func levelRow(_ level: FatigueLevel, description: LocalizedStringKey) -> some View {
         HStack(spacing: DS.Spacing.sm) {
             RoundedRectangle(cornerRadius: 2)
                 .fill(level.color(for: colorScheme))

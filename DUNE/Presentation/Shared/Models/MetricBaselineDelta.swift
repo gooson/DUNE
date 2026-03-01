@@ -12,13 +12,13 @@ struct MetricBaselineDelta: Sendable {
 
     var preferredDetail: BaselineDetail? {
         if let yesterdayDelta {
-            return BaselineDetail(label: "vs yesterday", value: yesterdayDelta)
+            return BaselineDetail(label: String(localized: "vs yesterday"), value: yesterdayDelta)
         }
         if let shortTermDelta {
-            return BaselineDetail(label: "vs 14d avg", value: shortTermDelta)
+            return BaselineDetail(label: String(localized: "vs 14d avg"), value: shortTermDelta)
         }
         if let longTermDelta {
-            return BaselineDetail(label: "vs 60d avg", value: longTermDelta)
+            return BaselineDetail(label: String(localized: "vs 60d avg"), value: longTermDelta)
         }
         return nil
     }

@@ -143,7 +143,7 @@ struct TrainingLoadChartView: View {
         }
     }
 
-    private func legendItem(color: Color, label: String) -> some View {
+    private func legendItem(color: Color, label: LocalizedStringKey) -> some View {
         HStack(spacing: 4) {
             Circle().fill(color).frame(width: 6, height: 6)
             Text(label).foregroundStyle(DS.Color.textSecondary)
@@ -188,13 +188,15 @@ struct TrainingLoadChartView: View {
 
         guard thisWeek > 0 else { return nil }
 
+        let formattedTotal = thisWeek.formattedWithSeparator(fractionDigits: 1)
         if lastWeek > 0 {
             let change = ((thisWeek - lastWeek) / lastWeek) * 100
-            guard change.isFinite, !change.isNaN else { return "This week \(thisWeek.formattedWithSeparator(fractionDigits: 1))" }
+            guard change.isFinite, !change.isNaN else { return String(localized: "This week \(formattedTotal)") }
             let arrow = change >= 0 ? "↑" : "↓"
-            return "This week \(thisWeek.formattedWithSeparator(fractionDigits: 1)) (\(arrow)\(abs(change).formattedWithSeparator())%)"
+            let formattedChange = abs(change).formattedWithSeparator()
+            return String(localized: "This week \(formattedTotal) (\(arrow)\(formattedChange)%)")
         }
-        return "This week \(thisWeek.formattedWithSeparator(fractionDigits: 1))"
+        return String(localized: "This week \(formattedTotal)")
     }
 }
 

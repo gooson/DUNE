@@ -91,6 +91,91 @@ var localizedDisplayName: String {
 
 `displayName` 하나로 통합. locale에 따라 자동 반환.
 
+## Localization Leak Detection
+
+코드 변경 시 아래 패턴을 **반드시** 점검하여 미번역 문자열이 누출되지 않도록 한다.
+
+### Leak Pattern 1: Helper 함수 `String` 파라미터
+
+View helper 함수가 `String`을 받아 `Text(string)`에 전달하면 `Text.init(_ content: some StringProtocol)` → 자동 번역 미적용.
+
+```swift
+// LEAK: Text(title)가 localize하지 않음
+private func sectionHeader(title: String) -> some View {
+    Text(title)
+}
+
+// FIX: LocalizedStringKey 사용
+private func sectionHeader(title: LocalizedStringKey) -> some View {
+    Text(title)
+}
+```
+
+### Leak Pattern 2: Sendable struct의 String 프로퍼티
+
+`Sendable` struct는 `LocalizedStringKey` 저장 불가 (Swift 6 non-Sendable). `String(localized:)` 필수.
+
+```swift
+// LEAK: 영어 하드코딩
+struct MyStat: Sendable {
+    let title: String  // "Volume" — 번역 안됨
+}
+
+// FIX: String(localized:) 팩토리
+static func volume() -> MyStat {
+    MyStat(title: String(localized: "Volume"))
+}
+```
+
+### Leak Pattern 3: ViewModel/Model String 할당
+
+ViewModel에서 `String` 프로퍼티에 사용자 대면 텍스트를 할당할 때 `String(localized:)` 누락.
+
+```swift
+// LEAK
+errorMessage = "Unable to load data."
+
+// FIX
+errorMessage = String(localized: "Unable to load data.")
+```
+
+### Leak Pattern 4: Enum rawValue UI 직접 사용
+
+enum rawValue를 `Text()` 또는 Picker에 직접 렌더링하면 번역 불가.
+
+```swift
+// LEAK: rawValue가 그대로 표시됨
+Text(period.rawValue)
+Picker { Text(period.rawValue).tag(period) }
+
+// FIX: displayName computed property 경유
+Text(period.displayName)
+```
+
+### Leak Pattern 5: 상수 레이블 body 내 반복 생성
+
+`String(localized:)` 상수를 body에서 매번 생성하면 불필요한 per-render allocation.
+
+```swift
+// SUBOPTIMAL: body마다 5회 호출
+scoreLabel: String(localized: "READINESS"),
+
+// FIX: private enum으로 호이스트
+private enum Labels {
+    static let scoreLabel = String(localized: "READINESS")
+}
+```
+
+### 번역 면제 대상
+
+다음은 번역하지 않아도 되는 문자열:
+- **네비게이션 타이틀** (각 탭/화면의 `.navigationTitle`)
+- **운동 이름** (Bench Press, Squat 등 — 국제 표준 영어)
+- **로그/디버그 메시지** (AppLogger, print 등)
+- **SF Symbol 이름** (systemName 파라미터)
+- **ID/Key 문자열** (identifier, UserDefaults key 등)
+- **단위 기호** (kg, bpm, ms 등 — 숫자 포매터가 locale 처리)
+
 ## 금지 패턴
 
 - `localizedDisplayName`, `bilingualDisplayName` 별도 프로퍼티 금지 → `displayName`이 locale 처리
@@ -138,8 +223,18 @@ xcodebuild -exportLocalizations -project DUNE/DUNE.xcodeproj \
 
 ## 리뷰 체크포인트
 
-- 새 UI 문자열 추가 시 xcstrings에 3개 언어 모두 포함되었는가
-- `String` 프로퍼티에 사용자 대면 텍스트 할당 시 `String(localized:)`가 사용되었는가
-- 새 enum displayName이 `String(localized:)` 패턴을 따르는가
-- watchOS 공유 문자열이 Watch xcstrings에도 반영되었는가
-- Dynamic Type에서 긴 번역이 레이아웃을 깨뜨리지 않는가
+### 필수 (P1 — 누락 시 번역 불가)
+
+- [ ] 새 UI 문자열 추가 시 xcstrings에 3개 언어(en/ko/ja) 모두 포함되었는가
+- [ ] `String` 프로퍼티에 사용자 대면 텍스트 할당 시 `String(localized:)`가 사용되었는가
+- [ ] 새 enum displayName이 `String(localized:)` 패턴을 따르는가
+- [ ] View helper 함수가 `Text()`에 전달할 레이블을 `String`이 아닌 `LocalizedStringKey`로 받는가
+- [ ] enum rawValue를 UI에 직접 표시하지 않고 `displayName` computed property를 경유하는가
+- [ ] `Sendable` struct의 사용자 대면 `String` 필드가 `String(localized:)` 팩토리로 생성되는가
+
+### 권장 (P2 — 품질/성능)
+
+- [ ] 상수 레이블이 body에서 매번 `String(localized:)`로 생성되지 않고 static let으로 호이스트되었는가
+- [ ] watchOS 공유 문자열이 Watch xcstrings에도 반영되었는가
+- [ ] Dynamic Type에서 긴 번역이 레이아웃을 깨뜨리지 않는가
+- [ ] 보간 문자열의 xcstrings 키 형식(%@, %lld 등)이 정확한가
