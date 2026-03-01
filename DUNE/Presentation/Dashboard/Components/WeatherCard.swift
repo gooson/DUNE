@@ -29,6 +29,7 @@ struct WeatherCard: View {
                         .font(isRegular ? .title2 : .title3)
                         .foregroundStyle(snapshot.condition.iconColor(for: theme))
                         .symbolRenderingMode(.multicolor)
+                        .frame(width: isRegular ? 32 : 28)
 
                     // Temperature + condition + location
                     VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
