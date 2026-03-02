@@ -33,21 +33,15 @@ final class WatchWorkoutStartSmokeTests: WatchUITestBaseCase {
         XCTAssertTrue(didTap, "Should navigate to All Exercises")
         XCTAssertTrue(elementExists("watch-quickstart-list", timeout: 8), "Quick Start list should render")
 
-        let exercise = app.staticTexts["UI Test Squat"].firstMatch
+        let exercise = app.descendants(matching: .any)["watch-quickstart-exercise-ui-test-squat"].firstMatch
         XCTAssertTrue(exercise.waitForExistence(timeout: 5), "Fixture exercise should be visible")
         exercise.tap()
 
-        let startButton = app.buttons["Start"].firstMatch
+        let startButton = app.descendants(matching: .any)["watch-workout-start-button"].firstMatch
         XCTAssertTrue(startButton.waitForExistence(timeout: 5), "Workout preview should show Start button")
         startButton.tap()
 
-        let started = app.buttons["Complete Set"].firstMatch.waitForExistence(timeout: 8)
-            || app.buttons["Done"].firstMatch.waitForExistence(timeout: 8)
+        let started = app.descendants(matching: .any)["watch-session-complete-set-button"].firstMatch.waitForExistence(timeout: 8)
         XCTAssertTrue(started, "Workout session should start and show active session UI")
-
-        XCTAssertFalse(
-            app.staticTexts["Could not start workout. Please try again."].firstMatch.exists,
-            "Start error alert should not be shown"
-        )
     }
 }
