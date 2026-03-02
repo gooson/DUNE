@@ -13,7 +13,7 @@ related_brainstorms: []
 
 ## Context
 
-Watch 루틴 화면은 `WorkoutTemplate`를 CloudKit 경로로만 조회한다.  
+Watch 루틴 화면은 `WorkoutTemplate`를 CloudKit 경로로만 조회한다.
 iPhone에서 템플릿을 생성한 직후 CloudKit 지연/비활성 상태가 겹치면 Watch에서 템플릿이 보이지 않는 공백이 발생한다.
 
 ## Requirements

@@ -28,7 +28,7 @@ related_solutions:
 
 ### Root Cause
 
-Watch 루틴 화면은 SwiftData + CloudKit `@Query(WorkoutTemplate)`를 primary source로 사용하고,  
+Watch 루틴 화면은 SwiftData + CloudKit `@Query(WorkoutTemplate)`를 primary source로 사용하고,
 WatchConnectivity는 `exerciseLibrary`만 전송하고 있었다.
 
 즉, 템플릿은 CloudKit 경로 하나에만 의존했고, iPhone↔Watch 간 즉시 동기화 fallback이 없었다.
