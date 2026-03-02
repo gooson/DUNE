@@ -104,6 +104,39 @@ struct ExerciseViewModelTests {
         #expect(vm.allExercises[0].source == .manual)
     }
 
+    @Test("Filters out strength app workouts when manual set record is time-proximate")
+    func dedupStrengthFallbackWithSetData() {
+        let vm = ExerciseViewModel()
+        let now = Date()
+
+        let record = ExerciseRecord(
+            date: now,
+            exerciseType: "Bench Press",
+            duration: 2400,
+            healthKitWorkoutID: nil
+        )
+        let set = WorkoutSet(setNumber: 1, reps: 10, isCompleted: true)
+        set.exerciseRecord = record
+        record.sets = [set]
+
+        vm.healthKitWorkouts = [
+            WorkoutSummary(
+                id: "HK-WATCH-ORPHAN",
+                type: "Strength",
+                activityType: .traditionalStrengthTraining,
+                duration: 2400,
+                calories: 280,
+                distance: nil,
+                date: now,
+                isFromThisApp: true
+            )
+        ]
+        vm.manualRecords = [record]
+
+        #expect(vm.allExercises.count == 1)
+        #expect(vm.allExercises[0].source == .manual)
+    }
+
     // Edge case: corrupted record with empty string healthKitWorkoutID
     @Test("Ignores empty healthKitWorkoutID during dedup matching")
     func dedupIgnoresEmptyHealthKitWorkoutID() {

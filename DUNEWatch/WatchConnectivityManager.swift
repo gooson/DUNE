@@ -1,4 +1,5 @@
 import Foundation
+import HealthKit
 @preconcurrency import WatchConnectivity
 import Observation
 import OSLog
@@ -163,6 +164,13 @@ extension WatchConnectivityManager: WCSessionDelegate {
         }
     }
 
+    nonisolated func session(_ session: WCSession, didReceiveUserInfo userInfo: [String: Any]) {
+        let parsed = ParsedWatchMessage(from: userInfo)
+        Task { @MainActor in
+            handleParsedMessage(parsed)
+        }
+    }
+
     nonisolated func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String: Any]) {
         let parsed = ParsedWatchContext(from: applicationContext)
         Task { @MainActor in
@@ -178,11 +186,13 @@ private struct ParsedWatchMessage: Sendable {
     let workoutStateData: Data?
     let globalRestSeconds: Double?
     let appTheme: String?
+    let deleteWorkoutUUID: String?
 
     init(from message: [String: Any]) {
         workoutStateData = message["workoutState"] as? Data
         globalRestSeconds = message["globalRestSeconds"] as? Double
         appTheme = message["appTheme"] as? String
+        deleteWorkoutUUID = message["deleteWorkoutUUID"] as? String
     }
 }
 
@@ -222,6 +232,12 @@ extension WatchConnectivityManager {
         if let themeRaw = parsed.appTheme, !themeRaw.isEmpty {
             syncedThemeRawValue = themeRaw
         }
+
+        if let workoutUUID = parsed.deleteWorkoutUUID, !workoutUUID.isEmpty {
+            Task {
+                await deleteWorkoutFromHealthKit(uuidString: workoutUUID)
+            }
+        }
     }
 
     private func handleParsedContext(_ parsed: ParsedWatchContext) {
@@ -248,6 +264,25 @@ extension WatchConnectivityManager {
         // Theme from iPhone settings
         if let themeRaw = parsed.appTheme, !themeRaw.isEmpty {
             syncedThemeRawValue = themeRaw
+        }
+    }
+
+    private func deleteWorkoutFromHealthKit(uuidString: String) async {
+        guard let uuid = UUID(uuidString: uuidString) else { return }
+        let store = HKHealthStore()
+        let predicate = HKQuery.predicateForObject(with: uuid)
+        let descriptor = HKSampleQueryDescriptor(
+            predicates: [.workout(predicate)],
+            sortDescriptors: [],
+            limit: 1
+        )
+
+        do {
+            let workouts = try await descriptor.result(for: store)
+            guard let workout = workouts.first else { return }
+            try await store.delete(workout)
+        } catch {
+            Self.logger.error("Watch workout delete failed: \(error.localizedDescription, privacy: .public)")
         }
     }
 }
