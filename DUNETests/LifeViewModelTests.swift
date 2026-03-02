@@ -38,7 +38,7 @@ struct LifeViewModelTests {
         let habit = vm.createValidatedHabit()
         #expect(habit == nil)
         #expect(vm.validationError != nil)
-        #expect(vm.validationError?.contains("name") == true)
+        #expect(vm.validationError == String(localized: "Habit name is required"))
     }
 
     @Test("createValidatedHabit fails for whitespace-only name")

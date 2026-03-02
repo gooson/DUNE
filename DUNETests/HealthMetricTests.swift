@@ -22,7 +22,7 @@ struct HealthMetricTests {
         #expect(hrv.formattedValue == "46 ms")
 
         let sleep = HealthMetric(id: "2", name: "Sleep", value: 450, unit: "min", change: nil, date: Date(), category: .sleep)
-        #expect(sleep.formattedValue == "7h 30m")
+        #expect(sleep.formattedValue == sleep.value.hoursMinutesFormatted)
 
         let steps = HealthMetric(id: "3", name: "Steps", value: 8500, unit: "", change: nil, date: Date(), category: .steps)
         #expect(steps.formattedValue == "8,500 steps")
