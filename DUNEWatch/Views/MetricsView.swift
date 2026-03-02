@@ -69,7 +69,7 @@ struct MetricsView: View {
             isPresented: $showEndConfirmation,
             titleVisibility: .visible
         ) {
-            Button("End Workout", role: .destructive) {
+            Button("End Workout") {
                 showRestTimer = false
                 showNextExercise = false
                 workoutManager.end()

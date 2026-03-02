@@ -9,7 +9,6 @@ struct EditableSet: Identifiable {
     var reps: String = ""
     var duration: String = ""
     var distance: String = ""
-    var intensity: String = ""
     var isCompleted: Bool = false
     var setType: SetType = .working
 }
@@ -20,7 +19,6 @@ struct PreviousSetInfo: Sendable {
     let reps: Int?
     let duration: TimeInterval?
     let distance: Double?
-    let intensity: Int?
 }
 
 // MARK: - Draft Persistence
@@ -39,7 +37,6 @@ struct WorkoutSessionDraft: Codable {
         let reps: String
         let duration: String
         let distance: String
-        let intensity: String
         let isCompleted: Bool
         let setTypeRaw: String
     }
@@ -78,8 +75,6 @@ final class WorkoutSessionViewModel {
     private let maxWeightKg = 500.0
     private let maxReps = 1000
     private let maxDurationMinutes = 500
-    private let maxDistanceKm = 500.0
-    private let maxIntensity = 10
     private let maxMemoLength = 500
     private let defaultRestSeconds: TimeInterval = WorkoutDefaults.restSeconds
 
@@ -120,9 +115,6 @@ final class WorkoutSessionViewModel {
             if let distance = prev.distance {
                 newSet.distance = distance.formatted(.number.precision(.fractionLength(0...2)))
             }
-            if let intensity = prev.intensity, (1...maxIntensity).contains(intensity) {
-                newSet.intensity = "\(intensity)"
-            }
         }
         // If no previous data, auto-fill from last current set
         else if let lastSet = sets.last {
@@ -144,7 +136,6 @@ final class WorkoutSessionViewModel {
         newSet.reps = lastCompleted.reps
         newSet.duration = lastCompleted.duration
         newSet.distance = lastCompleted.distance
-        newSet.intensity = lastCompleted.intensity
         sets.append(newSet)
     }
 
@@ -205,8 +196,7 @@ final class WorkoutSessionViewModel {
                 weight: set.weight,
                 reps: set.reps,
                 duration: set.duration,
-                distance: set.distance,
-                intensity: set.intensity
+                distance: set.distance
             )
         }
 
@@ -242,9 +232,6 @@ final class WorkoutSessionViewModel {
         }
         if let distance = prev.distance {
             sets[index].distance = distance.formatted(.number.precision(.fractionLength(0...2)))
-        }
-        if let intensity = prev.intensity, (1...maxIntensity).contains(intensity) {
-            sets[index].intensity = "\(intensity)"
         }
     }
 
@@ -316,7 +303,6 @@ final class WorkoutSessionViewModel {
                 reps: set.reps,
                 duration: set.duration,
                 distance: set.distance,
-                intensity: set.intensity,
                 isCompleted: set.isCompleted,
                 setTypeRaw: set.setType.rawValue
             )
@@ -340,7 +326,6 @@ final class WorkoutSessionViewModel {
             editable.reps = draftSet.reps
             editable.duration = draftSet.duration
             editable.distance = draftSet.distance
-            editable.intensity = draftSet.intensity
             editable.isCompleted = draftSet.isCompleted
             editable.setType = SetType(rawValue: draftSet.setTypeRaw) ?? .working
             return editable
@@ -415,13 +400,6 @@ final class WorkoutSessionViewModel {
                 }
                 // unit == .timeOnly → no secondary field validation needed
             }
-            let trimmedIntensity = set.intensity.trimmingCharacters(in: .whitespaces)
-            if !trimmedIntensity.isEmpty {
-                guard let val = Int(trimmedIntensity), val >= 1, val <= maxIntensity else {
-                    validationError = String(localized: "Intensity must be between 1 and \(maxIntensity)")
-                    return nil
-                }
-            }
             if exercise.inputType == .roundsBased {
                 let trimmedReps = set.reps.trimmingCharacters(in: .whitespaces)
                 guard !trimmedReps.isEmpty, let reps = Int(trimmedReps), reps > 0, reps <= maxReps else {
@@ -463,7 +441,6 @@ final class WorkoutSessionViewModel {
             let trimmedReps = editableSet.reps.trimmingCharacters(in: .whitespaces)
             let trimmedDuration = editableSet.duration.trimmingCharacters(in: .whitespaces)
             let trimmedDistance = editableSet.distance.trimmingCharacters(in: .whitespaces)
-            let trimmedIntensity = editableSet.intensity.trimmingCharacters(in: .whitespaces)
 
             // Safe duration conversion with overflow guard
             let durationSeconds: TimeInterval? = Int(trimmedDuration).flatMap { mins in
@@ -504,7 +481,7 @@ final class WorkoutSessionViewModel {
                 reps: repsValue,
                 duration: durationSeconds,
                 distance: distanceKm,
-                intensity: trimmedIntensity.isEmpty ? nil : Int(trimmedIntensity),
+                intensity: nil,
                 isCompleted: true
             )
             // Explicit bidirectional link for CloudKit reliability

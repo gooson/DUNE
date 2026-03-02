@@ -32,6 +32,10 @@ final class WorkoutManager: NSObject {
     private(set) var isSessionEnded = false
     /// True while HKLiveWorkoutBuilder is finishing and workout UUID is being resolved.
     private(set) var isFinalizingWorkout = false
+    /// Timeout watchdog for flaky simulator callback paths.
+    private var finalizationTimeoutTask: Task<Void, Never>?
+    /// Ensures `workoutEnded` signal is sent only once per session.
+    private var didNotifyWorkoutEnded = false
     private(set) var startDate: Date?
 
     /// UUID of the saved HKWorkout, captured after finishWorkout().
@@ -239,6 +243,9 @@ final class WorkoutManager: NSObject {
         self.heartRateSamples = []
         self.isSessionEnded = false
         self.isFinalizingWorkout = false
+        self.finalizationTimeoutTask?.cancel()
+        self.finalizationTimeoutTask = nil
+        self.didNotifyWorkoutEnded = false
         self.healthKitWorkoutUUID = nil
         self.isRecoveredSession = false
         self.isSimulatedSessionActive = false
@@ -326,17 +333,28 @@ final class WorkoutManager: NSObject {
     }
 
     func end() {
-        if let session {
-            session.end()
-            return
-        }
+        guard !isSessionEnded else { return }
+
         if isSimulatedSessionActive {
             isPaused = false
             isSessionEnded = true
             isFinalizingWorkout = false
             isSimulatedSessionActive = false
-            WatchConnectivityManager.shared.sendWorkoutEnded()
+            notifyWorkoutEndedIfNeeded()
+            return
         }
+
+        guard session != nil else { return }
+
+        // Transition UI immediately even when simulator callbacks are delayed.
+        isSessionEnded = true
+        isFinalizingWorkout = session != nil
+        notifyWorkoutEndedIfNeeded()
+
+        if isFinalizingWorkout {
+            startFinalizationTimeoutWatchdog()
+        }
+        session?.end()
     }
 
     /// Wait briefly for HealthKit workout finalization after `.ended` to reduce UUID races.
@@ -392,6 +410,8 @@ final class WorkoutManager: NSObject {
     }
 
     func reset() {
+        finalizationTimeoutTask?.cancel()
+        finalizationTimeoutTask = nil
         session = nil
         builder = nil
         templateSnapshot = nil
@@ -409,6 +429,7 @@ final class WorkoutManager: NSObject {
         isSessionEnded = false
         isFinalizingWorkout = false
         isSimulatedSessionActive = false
+        didNotifyWorkoutEnded = false
         isRecoveredSession = false
         startDate = nil
         healthKitWorkoutUUID = nil
@@ -552,6 +573,23 @@ final class WorkoutManager: NSObject {
             }
         }
     }
+
+    private func notifyWorkoutEndedIfNeeded() {
+        guard !didNotifyWorkoutEnded else { return }
+        didNotifyWorkoutEnded = true
+        WatchConnectivityManager.shared.sendWorkoutEnded()
+    }
+
+    private func startFinalizationTimeoutWatchdog(timeout seconds: TimeInterval = 6) {
+        finalizationTimeoutTask?.cancel()
+        finalizationTimeoutTask = Task { @MainActor [weak self] in
+            try? await Task.sleep(for: .seconds(seconds))
+            guard let self, !Task.isCancelled else { return }
+            guard self.isFinalizingWorkout else { return }
+            Self.logger.error("Workout finalization timed out; allowing summary completion")
+            self.isFinalizingWorkout = false
+        }
+    }
 }
 
 // MARK: - HKWorkoutSessionDelegate
@@ -564,6 +602,7 @@ extension WorkoutManager: HKWorkoutSessionDelegate {
         date: Date
     ) {
         Task { @MainActor in
+            guard let currentSession = session, workoutSession === currentSession else { return }
             switch toState {
             case .running:
                 isPaused = false
@@ -572,8 +611,13 @@ extension WorkoutManager: HKWorkoutSessionDelegate {
             case .ended:
                 isSessionEnded = true
                 isFinalizingWorkout = true
-                WatchConnectivityManager.shared.sendWorkoutEnded()
-                defer { isFinalizingWorkout = false }
+                notifyWorkoutEndedIfNeeded()
+                startFinalizationTimeoutWatchdog()
+                defer {
+                    finalizationTimeoutTask?.cancel()
+                    finalizationTimeoutTask = nil
+                    isFinalizingWorkout = false
+                }
                 do {
                     try await builder?.endCollection(at: date)
                     let workout = try await builder?.finishWorkout()
@@ -593,7 +637,13 @@ extension WorkoutManager: HKWorkoutSessionDelegate {
         _ workoutSession: HKWorkoutSession,
         didFailWithError error: Error
     ) {
-        Self.logger.error("Workout session failed: \(error.localizedDescription, privacy: .public)")
+        Task { @MainActor in
+            guard let currentSession = session, workoutSession === currentSession else { return }
+            Self.logger.error("Workout session failed: \(error.localizedDescription, privacy: .public)")
+            finalizationTimeoutTask?.cancel()
+            finalizationTimeoutTask = nil
+            isFinalizingWorkout = false
+        }
     }
 }
 
