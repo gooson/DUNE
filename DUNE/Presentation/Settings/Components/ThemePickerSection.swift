@@ -53,6 +53,8 @@ private extension AppTheme {
             [Color("OceanSurface"), Color("OceanMid"), Color("OceanDeep")]
         case .forestGreen:
             [Color("ForestMid"), Color("ForestDeep"), Color("ForestAccent")]
+        case .sakuraCalm:
+            [Color("SakuraPetal"), Color("SakuraIvory"), Color("SakuraLeaf")]
         }
     }
 }
