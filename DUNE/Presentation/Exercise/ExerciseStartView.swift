@@ -7,16 +7,6 @@ struct ExerciseStartView: View {
     let exercise: ExerciseDefinition
     @Environment(\.dismiss) private var dismiss
     @State private var showSession = false
-    @State private var showCardioSession = false
-    @State private var cardioIsOutdoor = true
-
-    /// Whether this exercise supports live distance tracking (GPS/sensor).
-    private var isDistanceBased: Bool {
-        WorkoutActivityType.resolveDistanceBased(
-            from: exercise.id,
-            name: exercise.name
-        ) != nil
-    }
 
     /// Whether this exercise should use the cardio live tracking flow.
     private var isCardioLiveTracking: Bool {
@@ -46,11 +36,7 @@ struct ExerciseStartView: View {
                     .padding(.bottom, 100)
                 }
 
-                if isDistanceBased {
-                    cardioStartButtons
-                } else {
-                    startButton
-                }
+                startButton
             }
             .background { SheetWaveBackground() }
             .navigationTitle(exercise.localizedName)
@@ -62,9 +48,6 @@ struct ExerciseStartView: View {
             }
             .navigationDestination(isPresented: $showSession) {
                 WorkoutSessionView(exercise: exercise)
-            }
-            .navigationDestination(isPresented: $showCardioSession) {
-                CardioSessionView(exercise: exercise, isOutdoor: cardioIsOutdoor)
             }
         }
     }
@@ -170,43 +153,4 @@ struct ExerciseStartView: View {
         .background(.ultraThinMaterial)
     }
 
-    // MARK: - Cardio Start Buttons (distance-based exercises)
-
-    private var cardioStartButtons: some View {
-        VStack(spacing: 0) {
-            Divider()
-            VStack(spacing: DS.Spacing.sm) {
-                Button {
-                    cardioIsOutdoor = true
-                    showCardioSession = true
-                } label: {
-                    HStack {
-                        Image(systemName: "location.fill")
-                        Text("Outdoor")
-                            .font(.headline)
-                    }
-                    .frame(maxWidth: .infinity, minHeight: 50)
-                }
-                .buttonStyle(.borderedProminent)
-                .tint(DS.Color.activity)
-
-                Button {
-                    cardioIsOutdoor = false
-                    showCardioSession = true
-                } label: {
-                    HStack {
-                        Image(systemName: "building.fill")
-                        Text("Indoor")
-                            .font(.headline)
-                    }
-                    .frame(maxWidth: .infinity, minHeight: 50)
-                }
-                .buttonStyle(.bordered)
-                .tint(DS.Color.activity)
-            }
-            .padding(.horizontal, DS.Spacing.lg)
-            .padding(.vertical, DS.Spacing.md)
-        }
-        .background(.ultraThinMaterial)
-    }
 }
