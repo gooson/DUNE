@@ -88,6 +88,35 @@ private enum GlassCardGradients {
         endPoint: .trailing
     )
 
+    // Sakura Calm
+    private static let sakuraAccent = Color("SakuraAccent")
+    private static let sakuraDusk = Color("SakuraDusk")
+    private static let sakuraHeroBorder = LinearGradient(
+        colors: [
+            sakuraAccent.opacity(DS.Opacity.strong),
+            sakuraAccent.opacity(DS.Opacity.subtle)
+        ],
+        startPoint: .topLeading,
+        endPoint: .bottomTrailing
+    )
+    private static let sakuraDarkBorder = LinearGradient(
+        colors: [
+            sakuraAccent.opacity(DS.Opacity.strong),
+            sakuraDusk.opacity(DS.Opacity.cardBorder)
+        ],
+        startPoint: .topLeading,
+        endPoint: .bottomTrailing
+    )
+    private static let sakuraBottomSeparator = LinearGradient(
+        colors: [
+            sakuraAccent.opacity(0),
+            sakuraAccent.opacity(DS.Opacity.cardBorder),
+            sakuraAccent.opacity(0)
+        ],
+        startPoint: .leading,
+        endPoint: .trailing
+    )
+
     static let clearBorder = LinearGradient(
         colors: [Color.clear, Color.clear],
         startPoint: .topLeading,
@@ -99,6 +128,7 @@ private enum GlassCardGradients {
         case .desertWarm:  desertHeroBorder
         case .oceanCool:   oceanHeroBorder
         case .forestGreen: forestHeroBorder
+        case .sakuraCalm:  sakuraHeroBorder
         }
     }
     static func darkBorder(for theme: AppTheme) -> LinearGradient {
@@ -106,6 +136,7 @@ private enum GlassCardGradients {
         case .desertWarm:  desertDarkBorder
         case .oceanCool:   oceanDarkBorder
         case .forestGreen: forestDarkBorder
+        case .sakuraCalm:  sakuraDarkBorder
         }
     }
     static func bottomSeparator(for theme: AppTheme) -> LinearGradient {
@@ -113,6 +144,7 @@ private enum GlassCardGradients {
         case .desertWarm:  desertBottomSeparator
         case .oceanCool:   oceanBottomSeparator
         case .forestGreen: forestBottomSeparator
+        case .sakuraCalm:  sakuraBottomSeparator
         }
     }
 }

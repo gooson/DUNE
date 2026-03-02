@@ -147,6 +147,7 @@
 ### Watch/iOS Parity
 
 - **Watch DTO 필드 추가 시 양쪽 target 동기화** (#69, #138)
+- **WatchConnectivity DTO는 `Domain/Models/WatchConnectivityModels.swift` 단일 소스 유지** (#190)
 - **Watch 입력도 iOS 동일 수준 검증** (#72)
 - **Watch `isReachable`은 computed property** (#46)
 - **bodyweight volume=0에서 "0kg" 표시 금지** (#170)

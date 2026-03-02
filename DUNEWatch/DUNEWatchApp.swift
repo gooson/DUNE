@@ -1,35 +1,47 @@
 import SwiftUI
 import SwiftData
+import OSLog
 
 @main
 struct DUNEWatchApp: App {
     @State private var connectivity = WatchConnectivityManager.shared
+    private static let logger = Logger(subsystem: "com.raftel.dailve", category: "WatchApp")
 
     let modelContainer: ModelContainer
+
+    private static func makeModelContainer(configuration: ModelConfiguration) throws -> ModelContainer {
+        try ModelContainer(
+            for: ExerciseRecord.self, BodyCompositionRecord.self, WorkoutSet.self,
+                CustomExercise.self, WorkoutTemplate.self, UserCategory.self,
+            migrationPlan: AppMigrationPlan.self,
+            configurations: configuration
+        )
+    }
+
+    private static func makeInMemoryFallbackContainer() -> ModelContainer {
+        let fallbackConfiguration = ModelConfiguration(isStoredInMemoryOnly: true)
+        do {
+            logger.error("Falling back to in-memory ModelContainer due to persistent store failure")
+            return try makeModelContainer(configuration: fallbackConfiguration)
+        } catch {
+            fatalError("Failed to create fallback in-memory ModelContainer: \(error)")
+        }
+    }
 
     init() {
         let config = ModelConfiguration(
             cloudKitDatabase: .automatic
         )
         do {
-            modelContainer = try ModelContainer(
-                for: ExerciseRecord.self, BodyCompositionRecord.self, WorkoutSet.self,
-                    CustomExercise.self, WorkoutTemplate.self, UserCategory.self,
-                migrationPlan: AppMigrationPlan.self,
-                configurations: config
-            )
+            modelContainer = try Self.makeModelContainer(configuration: config)
         } catch {
             // Schema migration failed — delete store and retry (MVP)
             Self.deleteStoreFiles(at: config.url)
             do {
-                modelContainer = try ModelContainer(
-                    for: ExerciseRecord.self, BodyCompositionRecord.self, WorkoutSet.self,
-                        CustomExercise.self, WorkoutTemplate.self, UserCategory.self,
-                    migrationPlan: AppMigrationPlan.self,
-                    configurations: config
-                )
+                modelContainer = try Self.makeModelContainer(configuration: config)
             } catch {
-                fatalError("Failed to create ModelContainer after reset: \(error)")
+                Self.logger.error("ModelContainer retry failed: \(error.localizedDescription, privacy: .public)")
+                modelContainer = Self.makeInMemoryFallbackContainer()
             }
         }
     }

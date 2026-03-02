@@ -200,28 +200,9 @@ extension WatchSessionManager {
     }
 }
 
-// MARK: - Data Transfer Objects
+// MARK: - Validation extensions
 
-/// Workout state sent from iPhone to Watch
-struct WatchWorkoutState: Codable, Sendable {
-    let exerciseName: String
-    let exerciseID: String
-    let currentSet: Int
-    let totalSets: Int
-    let targetWeight: Double?
-    let targetReps: Int?
-    let isActive: Bool
-}
-
-/// Workout data received from Watch
-struct WatchWorkoutUpdate: Codable, Sendable {
-    let exerciseID: String
-    let exerciseName: String
-    var completedSets: [WatchSetData]
-    let startTime: Date
-    let endTime: Date?
-    var heartRateSamples: [WatchHeartRateSample]
-
+extension WatchWorkoutUpdate {
     /// Returns a copy with invalid heart rate samples and set data filtered out
     func validated() -> WatchWorkoutUpdate {
         var copy = self
@@ -231,13 +212,7 @@ struct WatchWorkoutUpdate: Codable, Sendable {
     }
 }
 
-struct WatchSetData: Codable, Sendable {
-    let setNumber: Int
-    let weight: Double?
-    let reps: Int?
-    let duration: TimeInterval?
-    let isCompleted: Bool
-
+extension WatchSetData {
     var isValid: Bool {
         if let weight, !(0...500).contains(weight) { return false }
         if let reps, !(0...1000).contains(reps) { return false }
@@ -246,28 +221,11 @@ struct WatchSetData: Codable, Sendable {
     }
 }
 
-struct WatchHeartRateSample: Codable, Sendable {
-    let bpm: Double
-    let timestamp: Date
-
+extension WatchHeartRateSample {
     /// Valid physiological heart rate range (bpm)
     static let validRange: ClosedRange<Double> = 20...300
 
     var isValid: Bool {
         Self.validRange.contains(bpm)
     }
-}
-
-/// Compact exercise info for Watch display.
-/// IMPORTANT: Duplicated in DUNEWatch/WatchConnectivityManager.swift — keep both in sync.
-/// TODO: Extract to shared Swift package to eliminate duplication (#69).
-struct WatchExerciseInfo: Codable, Sendable {
-    let id: String
-    let name: String
-    let inputType: String  // rawValue of ExerciseInputType
-    let defaultSets: Int
-    let defaultReps: Int?
-    let defaultWeightKg: Double?
-    let equipment: String?  // rawValue of Equipment — used for tile icon display
-    let cardioSecondaryUnit: String?  // rawValue of CardioSecondaryUnit — nil for non-cardio
 }

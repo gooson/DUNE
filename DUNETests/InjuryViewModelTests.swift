@@ -41,7 +41,7 @@ struct InjuryViewModelTests {
         let record = vm.createValidatedRecord()
         #expect(record == nil)
         #expect(vm.validationError != nil)
-        #expect(vm.validationError?.contains("future") == true)
+        #expect(vm.validationError == String(localized: "Start date cannot be in the future"))
     }
 
     @Test("createValidatedRecord fails when end date before start date")
@@ -54,7 +54,7 @@ struct InjuryViewModelTests {
         let record = vm.createValidatedRecord()
         #expect(record == nil)
         #expect(vm.validationError != nil)
-        #expect(vm.validationError?.contains("after") == true)
+        #expect(vm.validationError == String(localized: "End date must be after start date"))
     }
 
     @Test("createValidatedRecord fails for future end date")
@@ -66,7 +66,7 @@ struct InjuryViewModelTests {
 
         let record = vm.createValidatedRecord()
         #expect(record == nil)
-        #expect(vm.validationError?.contains("future") == true)
+        #expect(vm.validationError == String(localized: "End date cannot be in the future"))
     }
 
     @Test("createValidatedRecord fails for start date too far in the past")
@@ -77,7 +77,7 @@ struct InjuryViewModelTests {
 
         let record = vm.createValidatedRecord()
         #expect(record == nil)
-        #expect(vm.validationError?.contains("past") == true)
+        #expect(vm.validationError == String(localized: "Start date is too far in the past"))
     }
 
     @Test("createValidatedRecord auto-assigns side for lateral body part")

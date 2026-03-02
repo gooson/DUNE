@@ -106,10 +106,12 @@ else
     TEST_CMD+=(-only-testing DUNEUITests)
 fi
 
-for skip in "${SKIP_TESTING[@]}"; do
-    TEST_CMD+=(-skip-testing "$skip")
-    echo "Skipping: $skip"
-done
+if [[ "${#SKIP_TESTING[@]}" -gt 0 ]]; then
+    for skip in "${SKIP_TESTING[@]}"; do
+        TEST_CMD+=(-skip-testing "$skip")
+        echo "Skipping: $skip"
+    done
+fi
 
 set +e
 "${TEST_CMD[@]}" >"$LOG_FILE" 2>&1

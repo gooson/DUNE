@@ -253,3 +253,55 @@ struct ExerciseListItemTests {
         #expect(summary?.contains("-") == false)
     }
 }
+
+@Suite("ExerciseListSection")
+struct ExerciseListSectionTests {
+    @Test("recentListDedupRecords keeps only records with set data")
+    func recentListDedupRecordsFiltersNoSetRecords() {
+        let noSetRecord = ExerciseRecord(
+            date: Date(),
+            exerciseType: "running",
+            duration: 300
+        )
+
+        let setRecord = ExerciseRecord(
+            date: Date(),
+            exerciseType: "squat",
+            duration: 300
+        )
+        let set = WorkoutSet(setNumber: 1, reps: 8, isCompleted: true)
+        set.exerciseRecord = setRecord
+        setRecord.sets = [set]
+
+        let filtered = recentListDedupRecords(from: [noSetRecord, setRecord])
+        #expect(filtered.count == 1)
+        #expect(filtered.first?.id == setRecord.id)
+    }
+
+    @Test("recent dedup does not hide HealthKit cardio when only no-set manual records exist")
+    func recentListDedupDoesNotUseNoSetRecords() {
+        let now = Date()
+        let noSetRunningRecord = ExerciseRecord(
+            date: now,
+            exerciseType: WorkoutActivityType.running.rawValue,
+            duration: 300
+        )
+
+        let workout = WorkoutSummary(
+            id: "HK-WATCH-RUNNING",
+            type: "Running",
+            activityType: .running,
+            duration: 300,
+            calories: 35,
+            distance: 650,
+            date: now,
+            isFromThisApp: true
+        )
+
+        let filteredRecords = recentListDedupRecords(from: [noSetRunningRecord])
+        let deduped = [workout].filteringAppDuplicates(against: filteredRecords)
+
+        #expect(deduped.count == 1)
+        #expect(deduped.first?.id == "HK-WATCH-RUNNING")
+    }
+}

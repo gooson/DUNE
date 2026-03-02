@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  nightly-ui-tests:
+  nightly-ios-ui-tests:
     runs-on: macos-15
     timeout-minutes: 90
 
@@ -28,10 +28,35 @@ jobs:
       - name: Run Full UI Tests
         run: scripts/test-ui.sh --skip-testing DUNEUITests/HealthKitPermissionUITests --log-file .xcodebuild/ui-test-nightly.log
 
-      - name: Upload nightly test log
+      - name: Upload iOS nightly test log
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ui-test-nightly-log
+          name: ios-ui-test-nightly-log
           path: .xcodebuild/ui-test-nightly.log
+          retention-days: 14
+
+  nightly-watch-ui-tests:
+    runs-on: macos-15
+    timeout-minutes: 90
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_26.2.app/Contents/Developer
+
+      - name: Install xcodegen
+        run: brew install xcodegen
+
+      - name: Run watch UI tests
+        run: scripts/test-watch-ui.sh --log-file .xcodebuild/watch-ui-test-nightly.log
+
+      - name: Upload watch nightly test log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: watch-ui-test-nightly-log
+          path: .xcodebuild/watch-ui-test-nightly.log
           retention-days: 14

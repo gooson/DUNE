@@ -40,12 +40,14 @@ struct QuickStartAllExercisesView: View {
                     WatchSyncStatusView()
                 }
                 .padding()
+                .accessibilityIdentifier("watch-quickstart-empty")
             } else if isSearching {
                 List {
                     ForEach(cachedFiltered, id: \.id) { exercise in
                         exerciseRow(exercise)
                     }
                 }
+                .accessibilityIdentifier("watch-quickstart-list")
                 .scrollContentBackground(.hidden)
             } else {
                 List {
@@ -57,6 +59,7 @@ struct QuickStartAllExercisesView: View {
                         }
                     }
                 }
+                .accessibilityIdentifier("watch-quickstart-list")
                 .scrollContentBackground(.hidden)
             }
         }

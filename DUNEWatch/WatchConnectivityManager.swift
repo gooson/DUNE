@@ -1,6 +1,7 @@
 import Foundation
 @preconcurrency import WatchConnectivity
 import Observation
+import OSLog
 
 /// Sync status for exercise library data from iPhone.
 enum SyncStatus: Equatable {
@@ -16,6 +17,7 @@ enum SyncStatus: Equatable {
 @MainActor
 final class WatchConnectivityManager: NSObject {
     static let shared = WatchConnectivityManager()
+    nonisolated private static let logger = Logger(subsystem: "com.raftel.dailve", category: "WatchConnectivity")
 
     /// Reachability state — reads directly from WCSession (per correction #46).
     var isReachable: Bool {
@@ -62,7 +64,7 @@ final class WatchConnectivityManager: NSObject {
         guard WCSession.default.isReachable else { return }
         let message: [String: Any] = ["workoutStarted": templateName]
         WCSession.default.sendMessage(message, replyHandler: nil) { error in
-            print("Failed to send workoutStarted: \(error.localizedDescription)")
+            Self.logger.error("Failed to send workoutStarted: \(error.localizedDescription, privacy: .public)")
         }
     }
 
@@ -71,7 +73,7 @@ final class WatchConnectivityManager: NSObject {
         guard WCSession.default.isReachable else { return }
         let message: [String: Any] = ["workoutEnded": true]
         WCSession.default.sendMessage(message, replyHandler: nil) { error in
-            print("Failed to send workoutEnded: \(error.localizedDescription)")
+            Self.logger.error("Failed to send workoutEnded: \(error.localizedDescription, privacy: .public)")
         }
     }
 
@@ -92,10 +94,10 @@ final class WatchConnectivityManager: NSObject {
             let data = try JSONEncoder().encode(update)
             let message: [String: Any] = ["setCompleted": data]
             WCSession.default.sendMessage(message, replyHandler: nil) { error in
-                print("Failed to send set completion: \(error.localizedDescription)")
+                Self.logger.error("Failed to send set completion: \(error.localizedDescription, privacy: .public)")
             }
         } catch {
-            print("Failed to encode set completion: \(error.localizedDescription)")
+            Self.logger.error("Failed to encode set completion: \(error.localizedDescription, privacy: .public)")
         }
     }
 
@@ -107,10 +109,10 @@ final class WatchConnectivityManager: NSObject {
             let data = try JSONEncoder().encode(update)
             let message: [String: Any] = ["workoutComplete": data]
             WCSession.default.sendMessage(message, replyHandler: nil) { error in
-                print("Failed to send workout completion: \(error.localizedDescription)")
+                Self.logger.error("Failed to send workout completion: \(error.localizedDescription, privacy: .public)")
             }
         } catch {
-            print("Failed to encode workout: \(error.localizedDescription)")
+            Self.logger.error("Failed to encode workout: \(error.localizedDescription, privacy: .public)")
         }
     }
 }
@@ -124,7 +126,7 @@ extension WatchConnectivityManager: WCSessionDelegate {
         error: Error?
     ) {
         if let error {
-            print("WCSession activation failed: \(error.localizedDescription)")
+            Self.logger.error("WCSession activation failed: \(error.localizedDescription, privacy: .public)")
             Task { @MainActor in
                 syncStatus = .failed(error.localizedDescription)
             }
@@ -206,7 +208,7 @@ extension WatchConnectivityManager {
                 let state = try JSONDecoder().decode(WatchWorkoutState.self, from: data)
                 activeWorkout = state.isActive ? state : nil
             } catch {
-                print("Failed to decode workout state: \(error.localizedDescription)")
+                Self.logger.error("Failed to decode workout state: \(error.localizedDescription, privacy: .public)")
             }
         }
 
@@ -228,7 +230,7 @@ extension WatchConnectivityManager {
                 exerciseLibrary = try JSONDecoder().decode([WatchExerciseInfo].self, from: data)
                 syncStatus = .synced(Date())
             } catch {
-                print("Failed to decode exercise library: \(error.localizedDescription)")
+                Self.logger.error("Failed to decode exercise library: \(error.localizedDescription, privacy: .public)")
                 syncStatus = .failed(String(localized: "Decode error"))
             }
         } else {
@@ -250,52 +252,9 @@ extension WatchConnectivityManager {
     }
 }
 
-// MARK: - Shared DTOs (mirrored from iOS app)
+// MARK: - Watch-only extensions
 
-struct WatchWorkoutState: Codable, Sendable {
-    let exerciseName: String
-    let exerciseID: String
-    let currentSet: Int
-    let totalSets: Int
-    let targetWeight: Double?
-    let targetReps: Int?
-    let isActive: Bool
-}
-
-struct WatchWorkoutUpdate: Codable, Sendable {
-    let exerciseID: String
-    let exerciseName: String
-    let completedSets: [WatchSetData]
-    let startTime: Date
-    let endTime: Date?
-    let heartRateSamples: [WatchHeartRateSample]
-}
-
-struct WatchSetData: Codable, Sendable {
-    let setNumber: Int
-    let weight: Double?
-    let reps: Int?
-    let duration: TimeInterval?
-    let isCompleted: Bool
-}
-
-struct WatchHeartRateSample: Codable, Sendable {
-    let bpm: Double
-    let timestamp: Date
-}
-
-/// IMPORTANT: Duplicated in DUNE/Data/WatchConnectivity/WatchSessionManager.swift — keep both in sync.
-/// TODO: Extract to shared Swift package to eliminate duplication (#69).
-struct WatchExerciseInfo: Codable, Sendable, Hashable {
-    let id: String
-    let name: String
-    let inputType: String
-    let defaultSets: Int
-    let defaultReps: Int?
-    let defaultWeightKg: Double?
-    let equipment: String?  // rawValue of Equipment — used for tile icon display
-    let cardioSecondaryUnit: String?  // rawValue of CardioSecondaryUnit — nil for non-cardio
-
+extension WatchExerciseInfo: Hashable {
     // Hashable uses id only to match Identifiable semantics (Correction Log #26)
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)

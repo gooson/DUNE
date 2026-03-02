@@ -7,6 +7,12 @@ import OSLog
 @Observable
 @MainActor
 final class ActivityViewModel {
+    private enum Scheduling {
+        static let suggestionDebounceNanoseconds: UInt64 = 180_000_000
+        static let suggestionYieldInterval = 80
+        static let cardioSeedYieldInterval = 120
+    }
+
     var weeklyExerciseMinutes: [ChartDataPoint] = []
     var weeklySteps: [ChartDataPoint] = []
     var todayExercise: HealthMetric?
@@ -119,45 +125,84 @@ final class ActivityViewModel {
     /// Cached SwiftData snapshots for merging with HealthKit data.
     private var exerciseRecordSnapshots: [ExerciseRecordSnapshot] = []
 
+    /// Immediate update path (no debounce) for explicit callers/tests.
     func updateSuggestion(records: [ExerciseRecord]) {
         manualRecordsCache = records
-        exerciseRecordSnapshots = records.map { record -> ExerciseRecordSnapshot in
-            var primary = record.primaryMuscles
-            var secondary = record.secondaryMuscles
-
-            // Backfill muscles from library for V1-migrated records with empty muscle data
-            let definition: ExerciseDefinition?
-            if primary.isEmpty, let defID = record.exerciseDefinitionID,
-               let def = library.exercise(byID: defID) {
-                primary = def.primaryMuscles
-                secondary = def.secondaryMuscles
-                definition = def
-            } else {
-                definition = record.exerciseDefinitionID.flatMap { library.exercise(byID: $0) }
-            }
-
-            let completedSets = record.completedSets
-            let totalWeight = Swift.min(completedSets.compactMap(\.weight).reduce(0, +), 50_000)
-            let totalReps = Swift.min(completedSets.compactMap(\.reps).reduce(0, +), 10_000)
-            let durationSec = resolveManualDurationSeconds(for: record)
-            let durationMin = durationSec.flatMap { $0 > 0 ? Swift.min($0 / 60.0, 480) : nil }
-            let distKm = resolveManualDistanceMeters(for: record).flatMap { $0 > 0 ? Swift.min($0 / 1000.0, 500) : nil }
-
-            return ExerciseRecordSnapshot(
-                date: record.date,
-                exerciseDefinitionID: record.exerciseDefinitionID,
-                exerciseName: definition?.name ?? record.exerciseType,
-                primaryMuscles: primary,
-                secondaryMuscles: secondary,
-                completedSetCount: completedSets.count,
-                totalWeight: totalWeight > 0 ? totalWeight : nil,
-                totalReps: totalReps > 0 ? totalReps : nil,
-                durationMinutes: durationMin,
-                distanceKm: distKm
-            )
-        }
+        exerciseRecordSnapshots = records.map { buildExerciseRecordSnapshot(from: $0) }
         recomputeFatigueAndSuggestion()
         recomputeDerivedStats()
+    }
+
+    /// Coalesced update path for SwiftData sync bursts.
+    /// Debounces rapid record churn and yields during large loops to keep UI responsive.
+    func refreshSuggestionFromRecords(
+        _ records: [ExerciseRecord],
+        debounceNanoseconds: UInt64 = Scheduling.suggestionDebounceNanoseconds
+    ) async {
+        if debounceNanoseconds > 0 {
+            do {
+                try await Task.sleep(nanoseconds: debounceNanoseconds)
+            } catch is CancellationError {
+                return
+            } catch {
+                return
+            }
+        }
+
+        guard !Task.isCancelled else { return }
+
+        var snapshots: [ExerciseRecordSnapshot] = []
+        snapshots.reserveCapacity(records.count)
+
+        for (index, record) in records.enumerated() {
+            snapshots.append(buildExerciseRecordSnapshot(from: record))
+
+            if index > 0, index.isMultiple(of: Scheduling.suggestionYieldInterval) {
+                await Task.yield()
+                guard !Task.isCancelled else { return }
+            }
+        }
+
+        manualRecordsCache = records
+        exerciseRecordSnapshots = snapshots
+        recomputeFatigueAndSuggestion()
+        recomputeDerivedStats()
+    }
+
+    private func buildExerciseRecordSnapshot(from record: ExerciseRecord) -> ExerciseRecordSnapshot {
+        var primary = record.primaryMuscles
+        var secondary = record.secondaryMuscles
+
+        // Backfill muscles from library for V1-migrated records with empty muscle data
+        let definition: ExerciseDefinition?
+        if primary.isEmpty, let defID = record.exerciseDefinitionID,
+           let def = library.exercise(byID: defID) {
+            primary = def.primaryMuscles
+            secondary = def.secondaryMuscles
+            definition = def
+        } else {
+            definition = record.exerciseDefinitionID.flatMap { library.exercise(byID: $0) }
+        }
+
+        let completedSets = record.completedSets
+        let totalWeight = Swift.min(completedSets.compactMap(\.weight).reduce(0, +), 50_000)
+        let totalReps = Swift.min(completedSets.compactMap(\.reps).reduce(0, +), 10_000)
+        let durationSec = resolveManualDurationSeconds(for: record)
+        let durationMin = durationSec.flatMap { $0 > 0 ? Swift.min($0 / 60.0, 480) : nil }
+        let distKm = resolveManualDistanceMeters(for: record).flatMap { $0 > 0 ? Swift.min($0 / 1000.0, 500) : nil }
+
+        return ExerciseRecordSnapshot(
+            date: record.date,
+            exerciseDefinitionID: record.exerciseDefinitionID,
+            exerciseName: definition?.name ?? record.exerciseType,
+            primaryMuscles: primary,
+            secondaryMuscles: secondary,
+            completedSetCount: completedSets.count,
+            totalWeight: totalWeight > 0 ? totalWeight : nil,
+            totalReps: totalReps > 0 ? totalReps : nil,
+            durationMinutes: durationMin,
+            distanceKm: distKm
+        )
     }
 
     /// Recompute fatigue states and suggestion from both SwiftData records and HealthKit workouts.
@@ -189,6 +234,37 @@ final class ActivityViewModel {
 
     /// Computes PR, Streak, and Frequency from current exercise record snapshots.
     func recomputeDerivedStats() {
+        recomputePersonalRecordsOnly()
+
+        // Workout Streak
+        let streakEntries = exerciseRecordSnapshots.map { snapshot in
+            WorkoutStreakService.WorkoutDay(
+                date: snapshot.date,
+                durationMinutes: snapshot.durationMinutes ?? 0
+            )
+        }
+        // Also include HealthKit workouts
+        let hkStreakEntries = recentWorkouts.map { workout in
+            WorkoutStreakService.WorkoutDay(
+                date: workout.date,
+                durationMinutes: workout.duration / 60.0
+            )
+        }
+        workoutStreak = WorkoutStreakService.calculate(from: streakEntries + hkStreakEntries)
+
+        // Exercise Frequency
+        let freqEntries = exerciseRecordSnapshots.compactMap { snapshot -> ExerciseFrequencyService.WorkoutEntry? in
+            guard let name = snapshot.exerciseName, !name.isEmpty else { return nil }
+            return ExerciseFrequencyService.WorkoutEntry(exerciseName: name, date: snapshot.date)
+        }
+        exerciseFrequencies = ExerciseFrequencyService.analyze(from: freqEntries)
+
+        // Weekly Stats
+        rebuildWeeklyStats()
+    }
+
+    /// Computes strength/manual+HealthKit merged personal records and notice text.
+    private func recomputePersonalRecordsOnly() {
         // Strength PRs: extract max weight per exercise
         let prEntries = exerciseRecordSnapshots.compactMap { snapshot -> StrengthPRService.WorkoutEntry? in
             guard let name = snapshot.exerciseName, !name.isEmpty,
@@ -217,32 +293,6 @@ final class ActivityViewModel {
         } else {
             personalRecordNotice = String(localized: "Cardio PRs will appear automatically as you build your workout history.")
         }
-
-        // Workout Streak
-        let streakEntries = exerciseRecordSnapshots.map { snapshot in
-            WorkoutStreakService.WorkoutDay(
-                date: snapshot.date,
-                durationMinutes: snapshot.durationMinutes ?? 0
-            )
-        }
-        // Also include HealthKit workouts
-        let hkStreakEntries = recentWorkouts.map { workout in
-            WorkoutStreakService.WorkoutDay(
-                date: workout.date,
-                durationMinutes: workout.duration / 60.0
-            )
-        }
-        workoutStreak = WorkoutStreakService.calculate(from: streakEntries + hkStreakEntries)
-
-        // Exercise Frequency
-        let freqEntries = exerciseRecordSnapshots.compactMap { snapshot -> ExerciseFrequencyService.WorkoutEntry? in
-            guard let name = snapshot.exerciseName, !name.isEmpty else { return nil }
-            return ExerciseFrequencyService.WorkoutEntry(exerciseName: name, date: snapshot.date)
-        }
-        exerciseFrequencies = ExerciseFrequencyService.analyze(from: freqEntries)
-
-        // Weekly Stats
-        rebuildWeeklyStats()
     }
 
     private func rebuildWeeklyStats() {
@@ -404,15 +454,26 @@ final class ActivityViewModel {
         }
 
         didAttemptCardioSeed = true
-        cardioSeedTask = Task { [weak self] in
+        cardioSeedTask = Task(priority: .utility) { [weak self] in
             guard let self else { return }
             defer { self.cardioSeedTask = nil }
 
             do {
                 let history = try await self.workoutService.fetchWorkouts(days: 3650)
                 guard !Task.isCancelled else { return }
-                self.refreshCardioPersonalRecords(with: history)
-                self.recomputeDerivedStats()
+                let sortedHistory = history.sorted(by: { $0.date < $1.date })
+
+                for (index, workout) in sortedHistory.enumerated() where self.isCardioCandidate(workout) {
+                    _ = self.personalRecordStore.updateIfNewRecords(workout)
+
+                    if index > 0, index.isMultiple(of: Scheduling.cardioSeedYieldInterval) {
+                        await Task.yield()
+                        guard !Task.isCancelled else { return }
+                    }
+                }
+
+                guard !Task.isCancelled else { return }
+                self.recomputePersonalRecordsOnly()
             } catch {
                 AppLogger.ui.error("Cardio PR seed failed: \(error.localizedDescription)")
             }

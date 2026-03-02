@@ -119,13 +119,25 @@ struct SetRowView: View {
                     .keyboardType(.numberPad)
                     .textFieldStyle(.roundedBorder)
                     .frame(maxWidth: 60)
+
+                TextField("1-10", text: $editableSet.intensity)
+                    .keyboardType(.numberPad)
+                    .textFieldStyle(.roundedBorder)
+                    .frame(maxWidth: 60)
             }
 
         case .setsReps:
-            TextField("reps", text: $editableSet.reps)
-                .keyboardType(.numberPad)
-                .textFieldStyle(.roundedBorder)
-                .frame(maxWidth: 80)
+            HStack(spacing: DS.Spacing.xs) {
+                TextField("reps", text: $editableSet.reps)
+                    .keyboardType(.numberPad)
+                    .textFieldStyle(.roundedBorder)
+                    .frame(maxWidth: 70)
+
+                TextField("1-10", text: $editableSet.intensity)
+                    .keyboardType(.numberPad)
+                    .textFieldStyle(.roundedBorder)
+                    .frame(maxWidth: 60)
+            }
 
         case .durationDistance:
             HStack(spacing: DS.Spacing.xs) {
@@ -148,6 +160,11 @@ struct SetRowView: View {
                             .frame(maxWidth: 70)
                     }
                 }
+
+                TextField("1-10", text: $editableSet.intensity)
+                    .keyboardType(.numberPad)
+                    .textFieldStyle(.roundedBorder)
+                    .frame(maxWidth: 60)
             }
 
         case .durationIntensity:
@@ -171,6 +188,11 @@ struct SetRowView: View {
                     .frame(maxWidth: 60)
 
                 TextField("sec", text: $editableSet.duration)
+                    .keyboardType(.numberPad)
+                    .textFieldStyle(.roundedBorder)
+                    .frame(maxWidth: 60)
+
+                TextField("1-10", text: $editableSet.intensity)
                     .keyboardType(.numberPad)
                     .textFieldStyle(.roundedBorder)
                     .frame(maxWidth: 60)

@@ -24,10 +24,12 @@ schemes:
         DUNE: all
         DUNEWatch: all
         DUNETests: [test]
+        DUNEWatchTests: [test]
         DUNEUITests: [test]
     test:
       targets:
         - DUNETests
+        - DUNEWatchTests
         - DUNEUITests
 
   DUNETests:
@@ -43,6 +45,24 @@ schemes:
     build:
       targets:
         DUNEWatch: all
+
+  DUNEWatchTests:
+    build:
+      targets:
+        DUNEWatch: all
+        DUNEWatchTests: [test]
+    test:
+      targets:
+        - DUNEWatchTests
+
+  DUNEWatchUITests:
+    build:
+      targets:
+        DUNEWatch: all
+        DUNEWatchUITests: [test]
+    test:
+      targets:
+        - DUNEWatchUITests
 
 targets:
   DUNE:
@@ -107,40 +127,25 @@ targets:
         group: Shared/Resources
       # Shared SwiftData models
       - path: Data/Persistence/Models
-        group: Shared/Models
       - path: Data/Persistence/Migration
-        group: Shared/Migration
       # Shared Domain enums (required by @Model files)
       - path: Domain/Models/ExerciseCategory.swift
-        group: Shared/Domain
       - path: Domain/Models/MuscleGroup.swift
-        group: Shared/Domain
       - path: Domain/Models/Equipment.swift
-        group: Shared/Domain
       - path: Domain/Models/ExerciseDefinition.swift
-        group: Shared/Domain
       - path: Domain/Models/WorkoutActivityType.swift
-        group: Shared/Domain
       - path: Domain/Models/BodyPart.swift
-        group: Shared/Domain
       - path: Domain/Models/InjurySeverity.swift
-        group: Shared/Domain
       - path: Domain/Models/InjuryInfo.swift
-        group: Shared/Domain
       - path: Domain/Models/HabitType.swift
-        group: Shared/Domain
       - path: Domain/Models/CardioSecondaryUnit.swift
-        group: Shared/Domain
       - path: Domain/Models/WorkoutMode.swift
-        group: Shared/Domain
       - path: Domain/Models/AppTheme.swift
-        group: Shared/Domain
+      - path: Domain/Models/WatchConnectivityModels.swift
       # Shared HealthKit mapping (needed for cardio workout configuration)
       - path: Data/HealthKit/WorkoutActivityType+HealthKit.swift
-        group: Shared/HealthKit
       # Shared Presentation extension (iconName for cardio metrics views)
       - path: Presentation/Shared/Extensions/WorkoutActivityType+Icon.swift
-        group: Shared/Presentation
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.raftel.dailve.watchkitapp
@@ -188,6 +193,19 @@ targets:
     dependencies:
       - target: DUNE
 
+  DUNEWatchTests:
+    type: bundle.unit-test
+    platform: watchOS
+    sources:
+      - path: ../DUNEWatchTests
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.raftel.dailve.watch.tests
+        GENERATE_INFOPLIST_FILE: true
+        TEST_TARGET_NAME: DUNEWatch
+    dependencies:
+      - target: DUNEWatch
+
   DUNEUITests:
     type: bundle.ui-testing
     platform: iOS
@@ -200,3 +218,16 @@ targets:
         TEST_TARGET_NAME: DUNE
     dependencies:
       - target: DUNE
+
+  DUNEWatchUITests:
+    type: bundle.ui-testing
+    platform: watchOS
+    sources:
+      - path: ../DUNEWatchUITests
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.raftel.dailve.watch.uitests
+        GENERATE_INFOPLIST_FILE: true
+        TEST_TARGET_NAME: DUNEWatch
+    dependencies:
+      - target: DUNEWatch
