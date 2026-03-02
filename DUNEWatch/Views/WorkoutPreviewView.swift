@@ -124,7 +124,7 @@ struct WorkoutPreviewView: View {
                 isStarting = false
             } catch {
                 isStarting = false
-                errorMessage = String(localized: "Could not start workout. Please try again.")
+                presentStartError(error)
                 WKInterfaceDevice.current().play(.failure)
             }
         }
@@ -203,9 +203,19 @@ struct WorkoutPreviewView: View {
                 isStarting = false
             } catch {
                 isStarting = false
-                errorMessage = String(localized: "Could not start workout. Please try again.")
+                presentStartError(error)
                 WKInterfaceDevice.current().play(.failure)
             }
         }
+    }
+
+    private func presentStartError(_ error: Error) {
+        if let startupError = error as? WorkoutStartupError,
+           let description = startupError.errorDescription,
+           !description.isEmpty {
+            errorMessage = description
+            return
+        }
+        errorMessage = String(localized: "Could not start workout. Please try again.")
     }
 }

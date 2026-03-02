@@ -120,7 +120,7 @@ final class WorkoutManager: NSObject {
 
     // MARK: - HealthKit Authorization
 
-    func requestAuthorization() async throws {
+    func requestAuthorization(timeout seconds: TimeInterval = 10) async throws {
         let shareTypes: Set<HKSampleType> = [
             HKQuantityType.workoutType()
         ]
@@ -131,7 +131,19 @@ final class WorkoutManager: NSObject {
             HKQuantityType(.distanceCycling),
             HKQuantityType(.distanceSwimming)
         ]
-        try await healthStore.requestAuthorization(toShare: shareTypes, read: readTypes)
+
+        Self.logger.info("Requesting HealthKit authorization for workout session")
+        try await runWithTimeout(
+            seconds: seconds,
+            timeoutError: WorkoutStartupError.authorizationTimedOut
+        ) {
+            try await self.healthStore.requestAuthorization(toShare: shareTypes, read: readTypes)
+        }
+
+        let workoutType = HKQuantityType.workoutType()
+        guard healthStore.authorizationStatus(for: workoutType) == .sharingAuthorized else {
+            throw WorkoutStartupError.authorizationNotGranted
+        }
     }
 
     // MARK: - Session Lifecycle
@@ -155,6 +167,11 @@ final class WorkoutManager: NSObject {
         let previousMode = workoutMode
         let previousDistance = distance
         let previousPace = currentPace
+        let previousTemplateSnapshot = templateSnapshot
+        let previousExerciseIndex = currentExerciseIndex
+        let previousSetIndex = currentSetIndex
+        let previousCompletedSets = completedSetsData
+        let previousExtraSets = extraSetsPerExercise
 
         self.workoutMode = .cardio(activityType: activityType, isOutdoor: isOutdoor)
         self.distance = 0
@@ -175,6 +192,11 @@ final class WorkoutManager: NSObject {
             workoutMode = previousMode
             distance = previousDistance
             currentPace = previousPace
+            templateSnapshot = previousTemplateSnapshot
+            currentExerciseIndex = previousExerciseIndex
+            currentSetIndex = previousSetIndex
+            completedSetsData = previousCompletedSets
+            extraSetsPerExercise = previousExtraSets
             throw error
         }
     }
@@ -218,17 +240,33 @@ final class WorkoutManager: NSObject {
             workoutConfiguration: config
         )
 
-        newSession.prepare()
-        let now = Date()
-        startDate = now
-        newSession.startActivity(with: now)
-        try await newBuilder.beginCollection(at: now)
+        do {
+            newSession.prepare()
+            let now = Date()
+            startDate = now
+            newSession.startActivity(with: now)
+            try await runWithTimeout(
+                seconds: 10,
+                timeoutError: WorkoutStartupError.beginCollectionTimedOut
+            ) {
+                try await newBuilder.beginCollection(at: now)
+            }
 
-        // Persist recovery state
-        persistRecoveryState()
+            // Persist recovery state
+            persistRecoveryState()
 
-        // Notify iPhone via WatchConnectivity
-        WatchConnectivityManager.shared.sendWorkoutStarted(templateName: templateName)
+            // Notify iPhone via WatchConnectivity
+            WatchConnectivityManager.shared.sendWorkoutStarted(templateName: templateName)
+        } catch {
+            Self.logger.error("Failed to start HK session: \(String(describing: error), privacy: .public)")
+            newSession.end()
+            session = nil
+            builder = nil
+            isPaused = false
+            isSessionEnded = false
+            startDate = nil
+            throw error
+        }
     }
 
     func pause() {
@@ -413,6 +451,48 @@ final class WorkoutManager: NSObject {
     private override init() {
         super.init()
     }
+
+    /// Wraps async startup operations with a timeout to avoid indefinite loading
+    /// when HealthKit callbacks are delayed or missing (common in simulators).
+    private func runWithTimeout(
+        seconds: TimeInterval,
+        timeoutError: Error,
+        operation: @escaping @MainActor () async throws -> Void
+    ) async throws {
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+            var isResolved = false
+            var operationTask: Task<Void, Never>?
+            var timeoutTask: Task<Void, Never>?
+
+            func resolve(_ result: Result<Void, Error>) {
+                guard !isResolved else { return }
+                isResolved = true
+                operationTask?.cancel()
+                timeoutTask?.cancel()
+                switch result {
+                case .success:
+                    continuation.resume()
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
+            }
+
+            operationTask = Task { @MainActor in
+                do {
+                    try await operation()
+                    resolve(.success(()))
+                } catch {
+                    resolve(.failure(error))
+                }
+            }
+
+            timeoutTask = Task { @MainActor in
+                try? await Task.sleep(for: .seconds(seconds))
+                guard !Task.isCancelled else { return }
+                resolve(.failure(timeoutError))
+            }
+        }
+    }
 }
 
 // MARK: - HKWorkoutSessionDelegate
@@ -563,4 +643,14 @@ private struct WorkoutRecoveryState: Codable {
     let completedSets: [[CompletedSetData]]
     let startDate: Date?
     let workoutMode: WorkoutMode?
+}
+
+enum WorkoutStartupError: LocalizedError {
+    case authorizationTimedOut
+    case authorizationNotGranted
+    case beginCollectionTimedOut
+
+    var errorDescription: String? {
+        String(localized: "Could not start workout. Please try again.")
+    }
 }
