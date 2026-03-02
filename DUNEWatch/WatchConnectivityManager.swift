@@ -229,7 +229,7 @@ extension WatchConnectivityManager {
                 syncStatus = .synced(Date())
             } catch {
                 print("Failed to decode exercise library: \(error.localizedDescription)")
-                syncStatus = .failed("Decode error")
+                syncStatus = .failed(String(localized: "Decode error"))
             }
         } else {
             // P3: No exerciseLibrary key — mark synced regardless of library state.
