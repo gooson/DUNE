@@ -5066,6 +5066,40 @@
         }
       }
     },
+    "End Workout?" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ワークアウトを終了しますか？"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "운동을 종료하시겠습니까?"
+          }
+        }
+      }
+    },
+    "Error" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "エラー"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "오류"
+          }
+        }
+      }
+    },
     "Environment" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -9955,6 +9989,23 @@
         }
       }
     },
+    "No workout data to save" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保存するワークアウトデータがありません"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "저장할 운동 데이터가 없습니다"
+          }
+        }
+      }
+    },
     "No workout data for this period." : {
       "localizations" : {
         "ja" : {
@@ -10509,6 +10560,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "구름 조금"
+          }
+        }
+      }
+    },
+    "Pause" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一時停止"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "일시정지"
           }
         }
       }
@@ -15063,6 +15131,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "날씨 데이터를 불러올 수 없습니다"
+          }
+        }
+      }
+    },
+    "Unable to start workout session" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ワークアウトセッションを開始できません"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "운동 세션을 시작할 수 없습니다"
           }
         }
       }
