@@ -155,6 +155,7 @@
 - **SVG body diagram 위 DragGesture 금지** (#147)
 - **undertrained 리스트는 비즈니스 필터 후 prefix/suffix** (#154)
 - **iOS QuickStart popular도 기록 부족 시 library fallback 필수** (Watch personalizedPopular 패턴) (#189)
+- **Watch 운동 종료는 액션 즉시 `isSessionEnded` 전환 + finalize timeout watchdog 적용** (HealthKit delegate 지연/누락 방어) (#192)
 
 ### Design System
 
@@ -181,6 +182,7 @@
 
 - **탭 이름/네비게이션 타이틀은 영어 고정**: `AppSection.title` + `englishNavigationTitle(_:)` 사용, localized title 금지 (#190)
 - **Watch 사용자 라벨 하드코딩 금지**: 캐러셀/퀵스타트/운동시작 라벨은 `String(localized:)` 경유 (#191)
+- **Watch confirmationDialog에서 `.destructive` 사용 시 테마 tint 대비를 실제 디바이스/시뮬레이터에서 검증** (#192)
 - **화면 숫자 표기는 `formattedWithSeparator` 경유** (#97)
 - **`changeFractionDigits` 단일 소스: `HealthMetric+View`** (#98)
 - **rawValue UI 직접 표시 금지 -> `displayName` computed** (#36)

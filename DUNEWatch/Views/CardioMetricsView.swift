@@ -44,7 +44,7 @@ struct CardioMetricsView: View {
             isPresented: $showEndConfirmation,
             titleVisibility: .visible
         ) {
-            Button("End Workout", role: .destructive) {
+            Button("End Workout") {
                 workoutManager.end()
             }
             Button("Cancel", role: .cancel) {}
