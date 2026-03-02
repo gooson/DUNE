@@ -78,6 +78,7 @@ struct QuickStartAllExercisesView: View {
         return NavigationLink(value: WatchRoute.workoutPreview(snapshotFromExercise(exercise))) {
             ExerciseTileView(exercise: exercise, subtitle: subtitle)
         }
+        .accessibilityIdentifier("watch-quickstart-exercise-\(exercise.id)")
     }
 
     private func rebuildLists() {

@@ -88,6 +88,7 @@ struct WorkoutPreviewView: View {
                 .buttonStyle(.borderedProminent)
                 .tint(DS.Color.positive)
                 .disabled(isStarting)
+                .accessibilityIdentifier("watch-workout-cardio-outdoor-button")
 
                 // Indoor option
                 Button {
@@ -98,6 +99,7 @@ struct WorkoutPreviewView: View {
                 }
                 .buttonStyle(.bordered)
                 .disabled(isStarting)
+                .accessibilityIdentifier("watch-workout-cardio-indoor-button")
 
                 if isStarting {
                     ProgressView()
@@ -192,6 +194,7 @@ struct WorkoutPreviewView: View {
             .buttonStyle(.borderedProminent)
             .tint(DS.Color.positive)
             .disabled(isStarting)
+            .accessibilityIdentifier("watch-workout-start-button")
             .padding(.horizontal, DS.Spacing.lg)
             .padding(.bottom, DS.Spacing.xs)
         }
