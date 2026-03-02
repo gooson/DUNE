@@ -102,6 +102,9 @@ struct CarouselHomeView: View {
         .onAppear {
             updateTemplateContentKey()
             rebuildCards()
+            if connectivity.exerciseLibrary.isEmpty {
+                connectivity.requestExerciseLibrarySync()
+            }
         }
         .onChange(of: templateContentKey) { _, _ in rebuildCards() }
         .onChange(of: templates.count) { _, _ in updateTemplateContentKey() }
@@ -206,7 +209,7 @@ struct CarouselHomeView: View {
                 .foregroundStyle(.secondary)
             Text(String(localized: "No Exercises"))
                 .font(DS.Typography.exerciseName)
-            Text(String(localized: "Open the DUNE app\non your iPhone to sync"))
+            Text(emptyStateDescription)
                 .font(DS.Typography.metricLabel)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -224,6 +227,15 @@ struct CarouselHomeView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         .padding()
+    }
+
+    private var emptyStateDescription: String {
+        switch connectivity.syncStatus {
+        case .syncing:
+            return String(localized: "Syncing...")
+        case .synced, .failed, .notConnected:
+            return String(localized: "Open the DUNE app\non your iPhone to sync")
+        }
     }
 
     // MARK: - Rebuild Cards
