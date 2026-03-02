@@ -255,6 +255,7 @@ struct MetricsView: View {
         }
         .buttonStyle(.borderedProminent)
         .tint(DS.Color.positive)
+        .accessibilityIdentifier("watch-session-complete-set-button")
     }
 
     // MARK: - Heart Rate
