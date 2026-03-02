@@ -78,7 +78,7 @@ targets:
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: "UIInterfaceOrientationPortrait"
         INFOPLIST_KEY_NSHealthShareUsageDescription: "DUNE needs access to your health data to calculate condition scores and track your fitness progress."
         INFOPLIST_KEY_NSHealthUpdateUsageDescription: "DUNE may write workout and body composition data to Health."
-        INFOPLIST_KEY_NSLocationWhenInUseUsageDescription: "DUNE uses your location to show current weather conditions for exercise planning."
+        INFOPLIST_KEY_NSLocationWhenInUseUsageDescription: "DUNE uses your location for weather conditions and to track distance during outdoor cardio workouts."
     entitlements:
       path: Resources/DUNE.entitlements
       properties:

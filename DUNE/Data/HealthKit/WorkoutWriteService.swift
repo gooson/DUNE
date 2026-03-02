@@ -9,6 +9,26 @@ struct WorkoutWriteInput: Sendable {
     let exerciseName: String
     let estimatedCalories: Double?
     let isFromHealthKit: Bool
+    /// Total distance in meters (cardio GPS tracking). nil for non-distance workouts.
+    let totalDistanceMeters: Double?
+
+    init(
+        startDate: Date,
+        duration: TimeInterval,
+        category: ExerciseCategory,
+        exerciseName: String,
+        estimatedCalories: Double?,
+        isFromHealthKit: Bool,
+        totalDistanceMeters: Double? = nil
+    ) {
+        self.startDate = startDate
+        self.duration = duration
+        self.category = category
+        self.exerciseName = exerciseName
+        self.estimatedCalories = estimatedCalories
+        self.isFromHealthKit = isFromHealthKit
+        self.totalDistanceMeters = totalDistanceMeters
+    }
 }
 
 /// Protocol for testability.
@@ -61,19 +81,38 @@ struct WorkoutWriteService: WorkoutWriting, Sendable {
 
         try await builder.beginCollection(at: input.startDate)
 
+        var samples: [HKSample] = []
+
         // Add active energy sample if calories are valid
         if let calories = input.estimatedCalories,
            calories > 0, calories < 10000,
            !calories.isNaN, !calories.isInfinite {
             let energyType = HKQuantityType(.activeEnergyBurned)
             let energyQuantity = HKQuantity(unit: .kilocalorie(), doubleValue: calories)
-            let energySample = HKQuantitySample(
+            samples.append(HKQuantitySample(
                 type: energyType,
                 quantity: energyQuantity,
                 start: input.startDate,
                 end: endDate
-            )
-            try await builder.addSamples([energySample])
+            ))
+        }
+
+        // Add distance sample if available (cardio GPS tracking)
+        if let distanceMeters = input.totalDistanceMeters,
+           distanceMeters > 0, distanceMeters < 500_000,
+           !distanceMeters.isNaN, !distanceMeters.isInfinite {
+            let distanceType = HKQuantityType(.distanceWalkingRunning)
+            let distanceQuantity = HKQuantity(unit: .meter(), doubleValue: distanceMeters)
+            samples.append(HKQuantitySample(
+                type: distanceType,
+                quantity: distanceQuantity,
+                start: input.startDate,
+                end: endDate
+            ))
+        }
+
+        if !samples.isEmpty {
+            try await builder.addSamples(samples)
         }
 
         try await builder.endCollection(at: endDate)
