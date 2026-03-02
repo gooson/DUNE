@@ -35,26 +35,14 @@ struct WorkoutPreviewView: View {
     // MARK: - Cardio Type Resolution
 
     /// Returns the WorkoutActivityType if this is a single-exercise cardio workout.
+    /// Uses Domain-level `resolveDistanceBased` for consistent 3-step resolution.
     private var resolvedCardioType: WorkoutActivityType? {
         guard snapshot.entries.count == 1 else { return nil }
         let entry = snapshot.entries[0]
-        // Try direct rawValue match first
-        if let type = WorkoutActivityType(rawValue: entry.exerciseDefinitionID),
-           type.isDistanceBased {
-            return type
-        }
-        // Try stem extraction for variants like "running-treadmill"
-        let stem = entry.exerciseDefinitionID.components(separatedBy: "-").first ?? ""
-        if let type = WorkoutActivityType(rawValue: stem),
-           type.isDistanceBased {
-            return type
-        }
-        // Try name-based inference
-        if let type = WorkoutActivityType.infer(from: entry.exerciseName),
-           type.isDistanceBased {
-            return type
-        }
-        return nil
+        return WorkoutActivityType.resolveDistanceBased(
+            from: entry.exerciseDefinitionID,
+            name: entry.exerciseName
+        )
     }
 
     // MARK: - Cardio Start
@@ -63,7 +51,7 @@ struct WorkoutPreviewView: View {
         VStack(spacing: DS.Spacing.lg) {
             Spacer()
 
-            Image(systemName: cardioIconName(for: activityType))
+            Image(systemName: activityType.iconName)
                 .font(.system(size: 40))
                 .foregroundStyle(DS.Color.activity)
 
@@ -118,7 +106,7 @@ struct WorkoutPreviewView: View {
                 isStarting = false
             } catch {
                 isStarting = false
-                errorMessage = "Failed to start: \(error.localizedDescription)"
+                errorMessage = String(localized: "Could not start workout. Please try again.")
                 WKInterfaceDevice.current().play(.failure)
             }
         }
@@ -148,7 +136,7 @@ struct WorkoutPreviewView: View {
                                 HStack(spacing: DS.Spacing.xs) {
                                     Text("\(entry.defaultSets)\u{00d7}\(entry.defaultReps)")
                                     if let kg = entry.defaultWeightKg, kg > 0 {
-                                        Text("· \(kg, specifier: "%.1f")kg")
+                                        Text("\u{00b7} \(kg, specifier: "%.1f")kg")
                                     }
                                 }
                                 .font(DS.Typography.metricLabel)
@@ -197,29 +185,9 @@ struct WorkoutPreviewView: View {
                 isStarting = false
             } catch {
                 isStarting = false
-                errorMessage = "Failed to start: \(error.localizedDescription)"
+                errorMessage = String(localized: "Could not start workout. Please try again.")
                 WKInterfaceDevice.current().play(.failure)
             }
-        }
-    }
-
-    // MARK: - Icon Helper
-
-    private func cardioIconName(for activityType: WorkoutActivityType) -> String {
-        switch activityType {
-        case .running: "figure.run"
-        case .walking: "figure.walk"
-        case .cycling: "figure.outdoor.cycle"
-        case .swimming: "figure.pool.swim"
-        case .hiking: "figure.hiking"
-        case .elliptical: "figure.elliptical"
-        case .rowing: "figure.rower"
-        case .handCycling: "figure.hand.cycling"
-        case .crossCountrySkiing: "figure.skiing.crosscountry"
-        case .downhillSkiing: "figure.skiing.downhill"
-        case .paddleSports: "oar.2.crossed"
-        case .swimBikeRun: "figure.run"
-        default: "figure.run"
         }
     }
 }

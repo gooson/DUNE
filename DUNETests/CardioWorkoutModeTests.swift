@@ -80,64 +80,72 @@ struct CardioWorkoutModeTests {
         #expect(!WorkoutActivityType.boxing.isDistanceBased)
     }
 
-    // MARK: - Pace Formatting
+    // MARK: - Pace Formatting (verify the formatting logic used by WorkoutManager)
 
-    @Test("formattedPace returns correct format for valid pace")
+    @Test("Pace formatting returns correct format for valid pace")
     func formattedPaceValid() {
         // 5 min 30 sec per km = 330 seconds
-        // We test the string format logic directly
         let pace: Double = 330
+        let result = formatPace(pace)
+        #expect(result == "5:30")
+    }
+
+    @Test("Pace formatting returns dash for zero")
+    func formattedPaceZero() {
+        #expect(formatPace(0) == "--:--")
+    }
+
+    @Test("Pace formatting returns dash for infinity")
+    func formattedPaceInfinity() {
+        #expect(formatPace(.infinity) == "--:--")
+    }
+
+    @Test("Pace formatting returns dash for over 1 hour")
+    func formattedPaceOverHour() {
+        #expect(formatPace(3601) == "--:--")
+    }
+
+    /// Mirrors the formatting logic in WorkoutManager.formattedPace.
+    private func formatPace(_ pace: Double) -> String {
+        guard pace > 0, pace.isFinite, pace < 3600 else { return "--:--" }
         let mins = Int(pace) / 60
         let secs = Int(pace) % 60
-        let formatted = String(format: "%d:%02d", mins, secs)
-        #expect(formatted == "5:30")
+        return String(format: "%d:%02d", mins, secs)
     }
 
-    @Test("formattedPace returns dash for zero")
-    func formattedPaceZero() {
-        let pace: Double = 0
-        let result: String
-        if pace > 0, pace.isFinite, pace < 3600 {
-            let mins = Int(pace) / 60
-            let secs = Int(pace) % 60
-            result = String(format: "%d:%02d", mins, secs)
-        } else {
-            result = "--:--"
-        }
-        #expect(result == "--:--")
-    }
+    // MARK: - resolveDistanceBased
 
-    @Test("formattedPace returns dash for infinity")
-    func formattedPaceInfinity() {
-        let pace: Double = .infinity
-        let result: String
-        if pace > 0, pace.isFinite, pace < 3600 {
-            let mins = Int(pace) / 60
-            let secs = Int(pace) % 60
-            result = String(format: "%d:%02d", mins, secs)
-        } else {
-            result = "--:--"
-        }
-        #expect(result == "--:--")
-    }
-
-    // MARK: - Activity Type Resolution
-
-    @Test("Direct rawValue match resolves correctly")
-    func directRawValueMatch() {
-        let type = WorkoutActivityType(rawValue: "running")
+    @Test("resolveDistanceBased: direct rawValue match")
+    func resolveDirectMatch() {
+        let type = WorkoutActivityType.resolveDistanceBased(from: "running", name: "")
         #expect(type == .running)
-        #expect(type?.isDistanceBased == true)
     }
 
-    @Test("Stem extraction resolves variant IDs")
-    func stemExtractionMatch() {
-        let id = "running-treadmill"
-        let stem = id.components(separatedBy: "-").first ?? ""
-        let type = WorkoutActivityType(rawValue: stem)
+    @Test("resolveDistanceBased: stem extraction for variant IDs")
+    func resolveStemExtraction() {
+        let type = WorkoutActivityType.resolveDistanceBased(from: "running-treadmill", name: "")
         #expect(type == .running)
-        #expect(type?.isDistanceBased == true)
     }
+
+    @Test("resolveDistanceBased: name-based inference fallback")
+    func resolveNameInference() {
+        let type = WorkoutActivityType.resolveDistanceBased(from: "custom-id", name: "Outdoor Running")
+        #expect(type == .running)
+    }
+
+    @Test("resolveDistanceBased: returns nil for non-distance exercise")
+    func resolveNonDistance() {
+        let type = WorkoutActivityType.resolveDistanceBased(from: "bench-press", name: "Bench Press")
+        #expect(type == nil)
+    }
+
+    @Test("resolveDistanceBased: non-distance rawValue returns nil")
+    func resolveNonDistanceRawValue() {
+        let type = WorkoutActivityType.resolveDistanceBased(from: "yoga", name: "Yoga")
+        #expect(type == nil)
+    }
+
+    // MARK: - Name-Based Inference
 
     @Test("Name-based inference resolves exercise names")
     func nameInferenceMatch() {
@@ -148,8 +156,27 @@ struct CardioWorkoutModeTests {
 
     @Test("Non-cardio exercise returns nil for inference")
     func nonCardioInference() {
-        // "Bench Press" should not infer a distance-based type
         let type = WorkoutActivityType.infer(from: "Bench Press")
         #expect(type?.isDistanceBased != true)
+    }
+
+    // MARK: - iconName Coverage
+
+    @Test("All distance-based types have valid iconName", arguments: [
+        WorkoutActivityType.running,
+        .walking,
+        .cycling,
+        .swimming,
+        .hiking,
+        .elliptical,
+        .rowing,
+        .handCycling,
+        .crossCountrySkiing,
+        .downhillSkiing,
+        .paddleSports,
+        .swimBikeRun
+    ])
+    func distanceBasedTypesHaveIcon(type: WorkoutActivityType) {
+        #expect(!type.iconName.isEmpty)
     }
 }

@@ -10,6 +10,12 @@ struct CardioMetricsView: View {
 
     @State private var showEndConfirmation = false
 
+    /// Pre-resolved activity info to avoid per-tick pattern matching.
+    private var cardioInfo: (type: WorkoutActivityType, icon: String, name: String)? {
+        guard case .cardio(let type, _) = workoutManager.workoutMode else { return nil }
+        return (type, type.iconName, type.typeName)
+    }
+
     var body: some View {
         TimelineView(.periodic(every: isLuminanceReduced ? 10 : 1)) { context in
             VStack(spacing: DS.Spacing.md) {
@@ -51,11 +57,15 @@ struct CardioMetricsView: View {
 
     private func headerRow(now: Date) -> some View {
         HStack {
-            activityIcon
+            if let info = cardioInfo {
+                Image(systemName: info.icon)
+                    .font(.caption)
+                    .foregroundStyle(DS.Color.activity)
 
-            Text(activityName)
-                .font(DS.Typography.metricLabel)
-                .foregroundStyle(.secondary)
+                Text(info.name)
+                    .font(DS.Typography.metricLabel)
+                    .foregroundStyle(.secondary)
+            }
 
             Spacer()
 
@@ -64,23 +74,6 @@ struct CardioMetricsView: View {
                 .foregroundStyle(.secondary)
                 .contentTransition(.numericText())
         }
-    }
-
-    private var activityIcon: some View {
-        Group {
-            if case .cardio(let type, _) = workoutManager.workoutMode {
-                Image(systemName: iconName(for: type))
-                    .font(.caption)
-                    .foregroundStyle(DS.Color.activity)
-            }
-        }
-    }
-
-    private var activityName: String {
-        if case .cardio(let type, _) = workoutManager.workoutMode {
-            return type.typeName
-        }
-        return "Cardio"
     }
 
     private func elapsedTime(at now: Date) -> String {
@@ -187,26 +180,6 @@ struct CardioMetricsView: View {
             }
             .buttonStyle(.borderedProminent)
             .tint(DS.Color.negative)
-        }
-    }
-
-    // MARK: - Helpers
-
-    private func iconName(for activityType: WorkoutActivityType) -> String {
-        switch activityType {
-        case .running: "figure.run"
-        case .walking: "figure.walk"
-        case .cycling: "figure.outdoor.cycle"
-        case .swimming: "figure.pool.swim"
-        case .hiking: "figure.hiking"
-        case .elliptical: "figure.elliptical"
-        case .rowing: "figure.rower"
-        case .handCycling: "figure.hand.cycling"
-        case .crossCountrySkiing: "figure.skiing.crosscountry"
-        case .downhillSkiing: "figure.skiing.downhill"
-        case .paddleSports: "oar.2.crossed"
-        case .swimBikeRun: "figure.run"
-        default: "figure.run"
         }
     }
 }

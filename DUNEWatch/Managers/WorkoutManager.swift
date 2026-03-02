@@ -2,20 +2,9 @@ import Foundation
 import HealthKit
 import Observation
 
-/// Workout mode: strength (weight×reps) or cardio (distance+pace).
-enum WorkoutMode: Sendable, Codable {
-    case strength
-    case cardio(activityType: WorkoutActivityType, isOutdoor: Bool)
-
-    var isCardio: Bool {
-        if case .cardio = self { return true }
-        return false
-    }
-}
-
 /// Manages HKWorkoutSession + HKLiveWorkoutBuilder for Watch workout tracking.
 /// Provides real-time heart rate, calorie, and session state.
-/// Supports both strength (weight×reps) and cardio (distance+pace) modes.
+/// Supports both strength (weight x reps) and cardio (distance+pace) modes.
 @Observable
 @MainActor
 final class WorkoutManager: NSObject {
@@ -161,6 +150,10 @@ final class WorkoutManager: NSObject {
 
     /// Start a cardio workout session with appropriate HK activity type.
     func startCardioSession(activityType: WorkoutActivityType, isOutdoor: Bool) async throws {
+        let previousMode = workoutMode
+        let previousDistance = distance
+        let previousPace = currentPace
+
         self.workoutMode = .cardio(activityType: activityType, isOutdoor: isOutdoor)
         self.distance = 0
         self.currentPace = 0
@@ -173,7 +166,15 @@ final class WorkoutManager: NSObject {
         config.activityType = activityType.hkWorkoutActivityType
         config.locationType = isOutdoor ? .outdoor : .indoor
 
-        try await startHKSession(config: config, templateName: activityType.typeName)
+        do {
+            try await startHKSession(config: config, templateName: activityType.typeName)
+        } catch {
+            // Restore state on failure to prevent inconsistent workoutMode
+            workoutMode = previousMode
+            distance = previousDistance
+            currentPace = previousPace
+            throw error
+        }
     }
 
     /// Common strength HK session setup.
@@ -353,12 +354,15 @@ final class WorkoutManager: NSObject {
         let distanceTypes: [HKQuantityType] = [
             HKQuantityType(.distanceWalkingRunning),
             HKQuantityType(.distanceCycling),
-            HKQuantityType(.distanceSwimming)
+            HKQuantityType(.distanceSwimming),
+            HKQuantityType(.distanceWheelchair),
+            HKQuantityType(.distanceCrossCountrySkiing),
+            HKQuantityType(.distanceDownhillSnowSports)
         ]
         for type in distanceTypes {
             if let stats = builder.statistics(for: type),
                let meters = stats.sumQuantity()?.doubleValue(for: .meter()),
-               meters > 0 {
+               meters > 0, meters < 500_000 {
                 distance = meters
                 updatePace()
                 break
@@ -368,7 +372,7 @@ final class WorkoutManager: NSObject {
 
     // MARK: - Recovery State Persistence
 
-    private static let recoveryKey = "com.dailve.workoutRecovery"
+    private static let recoveryKey = "com.raftel.dailve.workoutRecovery"
 
     private func persistRecoveryState() {
         let state = WorkoutRecoveryState(
@@ -379,9 +383,9 @@ final class WorkoutManager: NSObject {
             startDate: startDate,
             workoutMode: workoutMode
         )
-        if let data = try? JSONEncoder().encode(state) {
-            UserDefaults.standard.set(data, forKey: Self.recoveryKey)
-        }
+        guard let data = try? JSONEncoder().encode(state),
+              data.count < 64_000 else { return }
+        UserDefaults.standard.set(data, forKey: Self.recoveryKey)
     }
 
     private func restoreRecoveryState() {
@@ -390,8 +394,10 @@ final class WorkoutManager: NSObject {
             return
         }
         templateSnapshot = state.template
-        currentExerciseIndex = state.exerciseIndex
-        currentSetIndex = state.setIndex
+        // Bounds-check restored indices
+        let maxExercise = Swift.max(state.completedSets.count - 1, 0)
+        currentExerciseIndex = min(state.exerciseIndex, maxExercise)
+        currentSetIndex = Swift.max(state.setIndex, 0)
         completedSetsData = state.completedSets
         startDate = state.startDate
         workoutMode = state.workoutMode ?? .strength
@@ -461,43 +467,65 @@ extension WorkoutManager: HKLiveWorkoutBuilderDelegate {
         _ workoutBuilder: HKLiveWorkoutBuilder,
         didCollectDataOf collectedTypes: Set<HKSampleType>
     ) {
-        Task { @MainActor in
-            for type in collectedTypes {
-                guard let quantityType = type as? HKQuantityType,
-                      let stats = workoutBuilder.statistics(for: quantityType) else { continue }
+        // Extract primitive values on the delegate callback thread (before actor hop)
+        // to avoid cross-actor access of non-Sendable HKLiveWorkoutBuilder.
+        var heartRateValue: Double?
+        var caloriesValue: Double?
+        var distanceValue: Double?
 
-                switch quantityType {
-                case HKQuantityType(.heartRate):
-                    let unit = HKUnit.count().unitDivided(by: .minute())
-                    let bpm = stats.mostRecentQuantity()?.doubleValue(for: unit) ?? 0
-                    if (20...250).contains(bpm) {
-                        heartRate = bpm
-                        heartRateSamples.append(bpm)
-                    }
+        for type in collectedTypes {
+            guard let quantityType = type as? HKQuantityType,
+                  let stats = workoutBuilder.statistics(for: quantityType) else { continue }
 
-                case HKQuantityType(.activeEnergyBurned):
-                    let unit = HKUnit.kilocalorie()
-                    activeCalories = stats.sumQuantity()?.doubleValue(for: unit) ?? 0
-
-                case HKQuantityType(.distanceWalkingRunning),
-                     HKQuantityType(.distanceCycling),
-                     HKQuantityType(.distanceSwimming):
-                    let meters = stats.sumQuantity()?.doubleValue(for: .meter()) ?? 0
-                    if meters >= 0, meters < 500_000 {
-                        distance = meters
-                        updatePace()
-                    }
-
-                default:
-                    break
+            switch quantityType {
+            case HKQuantityType(.heartRate):
+                let unit = HKUnit.count().unitDivided(by: .minute())
+                let bpm = stats.mostRecentQuantity()?.doubleValue(for: unit) ?? 0
+                if (20...250).contains(bpm) {
+                    heartRateValue = bpm
                 }
+
+            case HKQuantityType(.activeEnergyBurned):
+                let unit = HKUnit.kilocalorie()
+                let kcal = stats.sumQuantity()?.doubleValue(for: unit) ?? 0
+                if kcal >= 0, kcal < 10_000 {
+                    caloriesValue = kcal
+                }
+
+            case HKQuantityType(.distanceWalkingRunning),
+                 HKQuantityType(.distanceCycling),
+                 HKQuantityType(.distanceSwimming):
+                let meters = stats.sumQuantity()?.doubleValue(for: .meter()) ?? 0
+                if meters >= 0, meters < 500_000 {
+                    distanceValue = meters
+                }
+
+            default:
+                break
+            }
+        }
+
+        // Dispatch only primitive values to MainActor
+        Task { @MainActor in
+            if let bpm = heartRateValue {
+                heartRate = bpm
+                heartRateSamples.append(bpm)
+            }
+            if let kcal = caloriesValue {
+                activeCalories = kcal
+            }
+            if let meters = distanceValue {
+                distance = meters
+                updatePace()
             }
         }
     }
 
     /// Recalculates current pace (sec/km) from total distance and elapsed time.
+    /// Skips recalculation when paused to avoid inflating pace with paused time.
     @MainActor
     private func updatePace() {
+        guard !isPaused else { return }
         guard let start = startDate else { return }
         let elapsed = Date().timeIntervalSince(start)
         let km = distance / 1000.0
