@@ -2,7 +2,7 @@
 tags: [asset-catalog, colors, shared, watchOS, xcodegen]
 date: 2026-03-02
 category: plan
-status: draft
+status: implemented
 ---
 
 # Shared Colors.xcassets로 iOS/watchOS 색상 통합
