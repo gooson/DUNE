@@ -86,6 +86,7 @@ struct WorkoutPreviewView: View {
             }
             .padding(.horizontal, DS.Spacing.lg)
         }
+        .scrollBounceBehavior(.basedOnSize)
     }
 
     private func startCardio(activityType: WorkoutActivityType, isOutdoor: Bool) {
