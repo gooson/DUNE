@@ -8,6 +8,7 @@ on:
       - 'DUNETests/**'
       - 'DUNEUITests/**'
       - 'scripts/test-ui.sh'
+      - 'scripts/lib/regen-project.sh'
       - '.github/workflows/test-ui.yml'
   pull_request:
     branches: [main]
@@ -16,6 +17,7 @@ on:
       - 'DUNETests/**'
       - 'DUNEUITests/**'
       - 'scripts/test-ui.sh'
+      - 'scripts/lib/regen-project.sh'
       - '.github/workflows/test-ui.yml'
 
 concurrency:
@@ -25,7 +27,7 @@ concurrency:
 jobs:
   ui-tests:
     runs-on: macos-15
-    timeout-minutes: 45
+    timeout-minutes: 60
 
     steps:
       - name: Checkout
