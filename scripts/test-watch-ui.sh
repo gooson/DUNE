@@ -23,11 +23,24 @@ REGENERATE=1
 SKIP_TESTING=()
 ONLY_TESTING=()
 TEST_PLAN=""
+STREAM_LOGS=0
+
+if [[ "${CI:-}" == "true" ]]; then
+    STREAM_LOGS=1
+fi
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
         --no-regen)
             REGENERATE=0
+            shift
+            ;;
+        --stream-log)
+            STREAM_LOGS=1
+            shift
+            ;;
+        --no-stream-log)
+            STREAM_LOGS=0
             shift
             ;;
         --log-file)
@@ -48,7 +61,7 @@ while [[ $# -gt 0 ]]; do
             ;;
         *)
             echo "Unknown option: $1"
-            echo "Usage: $0 [--no-regen] [--log-file <path>] [--skip-testing <target>] [--only-testing <target>] [--test-plan <name>]"
+            echo "Usage: $0 [--no-regen] [--stream-log | --no-stream-log] [--log-file <path>] [--skip-testing <target>] [--only-testing <target>] [--test-plan <name>]"
             exit 2
             ;;
     esac
@@ -111,9 +124,18 @@ if [[ "${#SKIP_TESTING[@]}" -gt 0 ]]; then
     done
 fi
 
+if [[ "$STREAM_LOGS" -eq 1 ]]; then
+    echo "Streaming logs to console and $LOG_FILE"
+fi
+
 set +e
-"${TEST_CMD[@]}" >"$LOG_FILE" 2>&1
-TEST_EXIT=$?
+if [[ "$STREAM_LOGS" -eq 1 ]]; then
+    "${TEST_CMD[@]}" 2>&1 | tee "$LOG_FILE"
+    TEST_EXIT=${PIPESTATUS[0]}
+else
+    "${TEST_CMD[@]}" >"$LOG_FILE" 2>&1
+    TEST_EXIT=$?
+fi
 set -e
 
 if [[ "$TEST_EXIT" -ne 0 ]]; then

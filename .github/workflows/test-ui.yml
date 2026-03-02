@@ -37,7 +37,7 @@ jobs:
         run: brew install xcodegen
 
       - name: Run iOS UI Tests
-        run: scripts/test-ui.sh --skip-testing DUNEUITests/HealthKitPermissionUITests
+        run: scripts/test-ui.sh --stream-log --skip-testing DUNEUITests/HealthKitPermissionUITests
 
       - name: Upload iOS UI test log
         if: always()
@@ -65,7 +65,7 @@ jobs:
         run: brew install xcodegen
 
       - name: Run watch UI Tests
-        run: scripts/test-watch-ui.sh --log-file .xcodebuild/watch-ui-test.log
+        run: scripts/test-watch-ui.sh --stream-log --log-file .xcodebuild/watch-ui-test.log
 
       - name: Upload watch UI test log
         if: always()

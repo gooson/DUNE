@@ -24,11 +24,33 @@ DERIVED_DATA_DIR=".deriveddata"
 LOG_DIR=".xcodebuild"
 LOG_FILE="$LOG_DIR/unit-test.log"
 REGENERATE=1
+MODE="all"
+STREAM_LOGS=0
+
+if [[ "${CI:-}" == "true" ]]; then
+    STREAM_LOGS=1
+fi
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
         --no-regen)
             REGENERATE=0
+            shift
+            ;;
+        --ios-only)
+            MODE="ios"
+            shift
+            ;;
+        --watch-only)
+            MODE="watch"
+            shift
+            ;;
+        --stream-log)
+            STREAM_LOGS=1
+            shift
+            ;;
+        --no-stream-log)
+            STREAM_LOGS=0
             shift
             ;;
         --log-file)
@@ -37,7 +59,7 @@ while [[ $# -gt 0 ]]; do
             ;;
         *)
             echo "Unknown option: $1"
-            echo "Usage: $0 [--no-regen] [--log-file <path>]"
+            echo "Usage: $0 [--no-regen] [--ios-only | --watch-only] [--stream-log | --no-stream-log] [--log-file <path>]"
             exit 2
             ;;
     esac
@@ -80,20 +102,22 @@ sys.exit(1)
     fi
 }
 
-if [[ -z "${DAILVE_IOS_DESTINATION:-}" ]]; then
+if [[ "$MODE" != "watch" && -z "${DAILVE_IOS_DESTINATION:-}" ]]; then
     IOS_DESTINATION="$(resolve_sim_destination "iOS" "iOS-${IOS_SIM_OS//./-}" "$IOS_SIM_NAME" "$IOS_SIM_OS")"
 fi
 
-if [[ -z "${DAILVE_WATCH_DESTINATION:-}" ]]; then
+if [[ "$MODE" != "ios" && -z "${DAILVE_WATCH_DESTINATION:-}" ]]; then
     WATCH_DESTINATION="$(resolve_sim_destination "watchOS" "watchOS-${WATCH_SIM_OS//./-}" "$WATCH_SIM_NAME" "$WATCH_SIM_OS")"
 fi
 
-if [[ "$LOG_FILE" == *.log ]]; then
-    IOS_LOG_FILE="$LOG_FILE"
-    WATCH_LOG_FILE="${LOG_FILE%.log}-watch.log"
-else
-    IOS_LOG_FILE="${LOG_FILE}-ios.log"
-    WATCH_LOG_FILE="${LOG_FILE}-watch.log"
+IOS_LOG_FILE="$LOG_FILE"
+WATCH_LOG_FILE="$LOG_FILE"
+if [[ "$MODE" == "all" ]]; then
+    if [[ "$LOG_FILE" == *.log ]]; then
+        WATCH_LOG_FILE="${LOG_FILE%.log}-watch.log"
+    else
+        WATCH_LOG_FILE="${LOG_FILE}-watch.log"
+    fi
 fi
 
 run_suite() {
@@ -102,18 +126,30 @@ run_suite() {
     local destination="$3"
     local only_testing="$4"
     local log_file="$5"
+    local test_cmd
 
     echo "Running ${suite_name} with scheme '$scheme' for destination '$destination'..."
+
+    test_cmd=(xcodebuild test -project "$PROJECT_FILE"
+        -scheme "$scheme"
+        -destination "$destination"
+        -derivedDataPath "$DERIVED_DATA_DIR"
+        -only-testing "$only_testing"
+        CODE_SIGNING_ALLOWED=NO
+        CODE_SIGNING_REQUIRED=NO)
+
+    if [[ "$STREAM_LOGS" -eq 1 ]]; then
+        echo "Streaming logs to console and $log_file"
+    fi
+
     set +e
-    xcodebuild test -project "$PROJECT_FILE" \
-        -scheme "$scheme" \
-        -destination "$destination" \
-        -derivedDataPath "$DERIVED_DATA_DIR" \
-        -only-testing "$only_testing" \
-        CODE_SIGNING_ALLOWED=NO \
-        CODE_SIGNING_REQUIRED=NO \
-        >"$log_file" 2>&1
-    local test_exit=$?
+    if [[ "$STREAM_LOGS" -eq 1 ]]; then
+        "${test_cmd[@]}" 2>&1 | tee "$log_file"
+        local test_exit=${PIPESTATUS[0]}
+    else
+        "${test_cmd[@]}" >"$log_file" 2>&1
+        local test_exit=$?
+    fi
     set -e
 
     if [[ "$test_exit" -ne 0 ]]; then
@@ -129,5 +165,10 @@ run_suite() {
     grep -n -E "TEST (SUCCEEDED|FAILED)|Executed" "$log_file" | tail -n 20 || true
 }
 
-run_suite "iOS unit tests" "$IOS_SCHEME" "$IOS_DESTINATION" "DUNETests" "$IOS_LOG_FILE"
-run_suite "Watch unit tests" "$WATCH_SCHEME" "$WATCH_DESTINATION" "DUNEWatchTests" "$WATCH_LOG_FILE"
+if [[ "$MODE" == "ios" || "$MODE" == "all" ]]; then
+    run_suite "iOS unit tests" "$IOS_SCHEME" "$IOS_DESTINATION" "DUNETests" "$IOS_LOG_FILE"
+fi
+
+if [[ "$MODE" == "watch" || "$MODE" == "all" ]]; then
+    run_suite "Watch unit tests" "$WATCH_SCHEME" "$WATCH_DESTINATION" "DUNEWatchTests" "$WATCH_LOG_FILE"
+fi

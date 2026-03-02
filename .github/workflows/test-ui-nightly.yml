@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  nightly-unit-tests:
+  nightly-ios-unit-tests:
     runs-on: macos-15
     timeout-minutes: 45
 
@@ -25,15 +25,40 @@ jobs:
       - name: Install xcodegen
         run: brew install xcodegen
 
-      - name: Run Unit Tests
-        run: scripts/test-unit.sh --log-file .xcodebuild/unit-test-nightly.log
+      - name: Run iOS Unit Tests
+        run: scripts/test-unit.sh --stream-log --ios-only --log-file .xcodebuild/unit-test-nightly.log
 
-      - name: Upload nightly unit test log
+      - name: Upload iOS nightly unit test log
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: unit-test-nightly-log
-          path: .xcodebuild/unit-test-nightly*.log
+          name: ios-unit-test-nightly-log
+          path: .xcodebuild/unit-test-nightly.log
+          retention-days: 14
+
+  nightly-watch-unit-tests:
+    runs-on: macos-15
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_26.2.app/Contents/Developer
+
+      - name: Install xcodegen
+        run: brew install xcodegen
+
+      - name: Run watch Unit Tests
+        run: scripts/test-unit.sh --stream-log --watch-only --log-file .xcodebuild/watch-unit-test-nightly.log
+
+      - name: Upload watch nightly unit test log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: watch-unit-test-nightly-log
+          path: .xcodebuild/watch-unit-test-nightly.log
           retention-days: 14
 
   nightly-ios-ui-tests:
@@ -51,7 +76,7 @@ jobs:
         run: brew install xcodegen
 
       - name: Run Full UI Tests
-        run: scripts/test-ui.sh --skip-testing DUNEUITests/HealthKitPermissionUITests --log-file .xcodebuild/ui-test-nightly.log
+        run: scripts/test-ui.sh --stream-log --skip-testing DUNEUITests/HealthKitPermissionUITests --log-file .xcodebuild/ui-test-nightly.log
 
       - name: Upload iOS nightly test log
         if: always()
@@ -76,7 +101,7 @@ jobs:
         run: brew install xcodegen
 
       - name: Run watch UI tests
-        run: scripts/test-watch-ui.sh --log-file .xcodebuild/watch-ui-test-nightly.log
+        run: scripts/test-watch-ui.sh --stream-log --log-file .xcodebuild/watch-ui-test-nightly.log
 
       - name: Upload watch nightly test log
         if: always()
