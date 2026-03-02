@@ -78,6 +78,7 @@ enum EffortCategory: Int, CaseIterable, Sendable, Comparable {
         case 4...6: self = .moderate
         case 7...8: self = .hard
         case 9...: self = .allOut
+        default: self = .moderate
         }
     }
 
