@@ -744,7 +744,55 @@
     },
     "· %.1fkg": {},
     "×": {},
-    "×%@": {}
+    "×%@": {},
+    "Just synced": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "방금 동기화됨"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "同期済み"
+          }
+        }
+      }
+    },
+    "%@ min ago": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@분 전"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@分前"
+          }
+        }
+      }
+    },
+    "%@h ago": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@시간 전"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@時間前"
+          }
+        }
+      }
+    }
   },
   "version": "1.0"
 }

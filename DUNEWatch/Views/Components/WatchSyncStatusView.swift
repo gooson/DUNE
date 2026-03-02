@@ -33,11 +33,13 @@ struct WatchSyncStatusView: View {
     private func syncTimeLabel(from date: Date) -> String {
         let interval = Date().timeIntervalSince(date)
         if interval < 60 {
-            return "Just synced"
+            return String(localized: "Just synced")
         } else if interval < 3600 {
-            return "\(Int(interval / 60).formattedWithSeparator) min ago"
+            let mins = Int(interval / 60).formattedWithSeparator
+            return String(localized: "\(mins) min ago")
         } else {
-            return "\(Int(interval / 3600).formattedWithSeparator)h ago"
+            let hours = Int(interval / 3600).formattedWithSeparator
+            return String(localized: "\(hours)h ago")
         }
     }
 }
