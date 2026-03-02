@@ -48,47 +48,44 @@ struct WorkoutPreviewView: View {
     // MARK: - Cardio Start
 
     private func cardioStartContent(activityType: WorkoutActivityType) -> some View {
-        VStack(spacing: DS.Spacing.lg) {
-            Spacer()
+        ScrollView {
+            VStack(spacing: DS.Spacing.lg) {
+                Image(systemName: activityType.iconName)
+                    .font(.system(size: 40))
+                    .foregroundStyle(DS.Color.activity)
+                    .padding(.top, DS.Spacing.lg)
 
-            Image(systemName: activityType.iconName)
-                .font(.system(size: 40))
-                .foregroundStyle(DS.Color.activity)
+                Text(activityType.typeName)
+                    .font(DS.Typography.exerciseName)
 
-            Text(activityType.typeName)
-                .font(DS.Typography.exerciseName)
+                // Outdoor option
+                Button {
+                    startCardio(activityType: activityType, isOutdoor: true)
+                } label: {
+                    Label("Outdoor", systemImage: "sun.max.fill")
+                        .frame(maxWidth: .infinity, minHeight: 44)
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(DS.Color.positive)
+                .disabled(isStarting)
 
-            Spacer()
+                // Indoor option
+                Button {
+                    startCardio(activityType: activityType, isOutdoor: false)
+                } label: {
+                    Label("Indoor", systemImage: "building.fill")
+                        .frame(maxWidth: .infinity, minHeight: 44)
+                }
+                .buttonStyle(.bordered)
+                .disabled(isStarting)
 
-            // Outdoor option
-            Button {
-                startCardio(activityType: activityType, isOutdoor: true)
-            } label: {
-                Label("Outdoor", systemImage: "sun.max.fill")
-                    .frame(maxWidth: .infinity, minHeight: 44)
+                if isStarting {
+                    ProgressView()
+                        .padding(.top, DS.Spacing.sm)
+                }
             }
-            .buttonStyle(.borderedProminent)
-            .tint(DS.Color.positive)
-            .disabled(isStarting)
-
-            // Indoor option
-            Button {
-                startCardio(activityType: activityType, isOutdoor: false)
-            } label: {
-                Label("Indoor", systemImage: "building.fill")
-                    .frame(maxWidth: .infinity, minHeight: 44)
-            }
-            .buttonStyle(.bordered)
-            .disabled(isStarting)
-
-            if isStarting {
-                ProgressView()
-                    .padding(.top, DS.Spacing.sm)
-            }
-
-            Spacer()
+            .padding(.horizontal, DS.Spacing.lg)
         }
-        .padding(.horizontal, DS.Spacing.lg)
     }
 
     private func startCardio(activityType: WorkoutActivityType, isOutdoor: Bool) {
