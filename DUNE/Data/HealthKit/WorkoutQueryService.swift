@@ -104,7 +104,9 @@ struct WorkoutQueryService: WorkoutQuerying, Sendable {
             calories: calories,
             distance: distance,
             date: workout.startDate,
-            isFromThisApp: workout.sourceRevision.source.bundleIdentifier == Bundle.main.bundleIdentifier,
+            isFromThisApp: WorkoutSourceClassifier.isFromAppFamily(
+                sourceBundleIdentifier: workout.sourceRevision.source.bundleIdentifier
+            ),
             heartRateAvg: hrAvg,
             heartRateMax: hrMax,
             heartRateMin: hrMin,

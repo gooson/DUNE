@@ -11,6 +11,7 @@ struct ExerciseView: View {
     @State private var showingCompoundSetup = false
     @State private var compoundConfig: CompoundWorkoutConfig?
     @State private var recordToDelete: ExerciseRecord?
+    @State private var healthKitWorkoutToDelete: WorkoutSummary?
     @State private var recordsByID: [UUID: ExerciseRecord] = [:]
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \ExerciseRecord.date, order: .reverse) private var manualRecords: [ExerciseRecord]
@@ -75,6 +76,15 @@ struct ExerciseView: View {
                             if item.source == .manual {
                                 Button {
                                     recordToDelete = findRecord(for: item)
+                                } label: {
+                                    Label("Delete", systemImage: "trash")
+                                }
+                                .tint(.red)
+                            } else if item.source == .healthKit,
+                                      let summary = item.workoutSummary,
+                                      summary.isFromThisApp {
+                                Button {
+                                    healthKitWorkoutToDelete = summary
                                 } label: {
                                     Label("Delete", systemImage: "trash")
                                 }
@@ -184,6 +194,23 @@ struct ExerciseView: View {
         }
         .background { TabWaveBackground() }
         .englishNavigationTitle("Exercise")
+        .alert(
+            "Delete Exercise?",
+            isPresented: Binding(
+                get: { healthKitWorkoutToDelete != nil },
+                set: { if !$0 { healthKitWorkoutToDelete = nil } }
+            ),
+            presenting: healthKitWorkoutToDelete
+        ) { workout in
+            Button("Delete", role: .destructive) {
+                deleteHealthKitWorkout(workout)
+            }
+            Button("Cancel", role: .cancel) {
+                healthKitWorkoutToDelete = nil
+            }
+        } message: { workout in
+            Text("\(workout.type) on \(workout.date.formatted(date: .abbreviated, time: .omitted)) will be permanently deleted from all your devices.")
+        }
         .confirmDeleteRecord($recordToDelete, context: modelContext)
     }
 
@@ -260,6 +287,31 @@ struct ExerciseView: View {
             limit: 10,
             canonicalize: QuickStartCanonicalService.canonicalExerciseID(for:)
         )
+    }
+
+    private func deleteHealthKitWorkout(_ workout: WorkoutSummary) {
+        healthKitWorkoutToDelete = nil
+
+        Task { @MainActor in
+            let deleteService = WorkoutDeleteService(manager: .shared)
+            do {
+                try await deleteService.deleteWorkout(uuid: workout.id)
+            } catch {
+                AppLogger.healthKit.error("HealthKit-only workout delete failed: \(error.localizedDescription)")
+                WatchSessionManager.shared.requestWatchWorkoutDeletion(workoutUUID: workout.id)
+            }
+
+            let linkedRecords = manualRecords.filter { $0.healthKitWorkoutID == workout.id }
+            if !linkedRecords.isEmpty {
+                withAnimation {
+                    for record in linkedRecords {
+                        modelContext.delete(record)
+                    }
+                }
+            }
+
+            await viewModel.loadHealthKitWorkouts()
+        }
     }
 
     private func draftBanner(_ draft: WorkoutSessionDraft) -> some View {

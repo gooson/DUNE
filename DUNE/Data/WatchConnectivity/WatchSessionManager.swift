@@ -50,6 +50,27 @@ final class WatchSessionManager: NSObject {
         }
     }
 
+    /// Requests the Watch app to delete a specific HKWorkout UUID.
+    /// Used as a fallback when iPhone-side HealthKit deletion fails.
+    func requestWatchWorkoutDeletion(workoutUUID: String) {
+        guard !workoutUUID.isEmpty else { return }
+        guard WCSession.isSupported() else { return }
+
+        let payload: [String: Any] = ["deleteWorkoutUUID": workoutUUID]
+        let session = WCSession.default
+
+        if session.isReachable {
+            session.sendMessage(payload, replyHandler: nil) { error in
+                AppLogger.ui.error("Failed to request watch workout deletion: \(error.localizedDescription)")
+            }
+        }
+
+        // Queue background delivery when watch is not reachable.
+        if session.activationState == .activated {
+            session.transferUserInfo(payload)
+        }
+    }
+
     /// Send exercise library subset to Watch for offline use.
     /// Also includes global workout settings (rest time) in the same context.
     func transferExerciseLibrary(_ exercises: [WatchExerciseInfo]) {

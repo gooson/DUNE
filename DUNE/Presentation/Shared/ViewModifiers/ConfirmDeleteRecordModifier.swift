@@ -23,6 +23,10 @@ struct ConfirmDeleteRecordModifier: ViewModifier {
                     }
                     // Capture HK ID before SwiftData delete invalidates the record
                     let hkWorkoutID = record.healthKitWorkoutID
+                    let recordDate = record.date
+                    let inferredActivityType =
+                        WorkoutActivityType.infer(from: record.exerciseType)
+                        ?? (record.hasSetData ? .traditionalStrengthTraining : nil)
 
                     // SwiftData delete first (authoritative action).
                     // Wrap in withAnimation so List/ForEach can properly diff the collection change.
@@ -34,10 +38,27 @@ struct ConfirmDeleteRecordModifier: ViewModifier {
                     }
 
                     // HealthKit cleanup as side-effect (fire-and-forget)
-                    if let workoutID = hkWorkoutID, !workoutID.isEmpty {
-                        Task {
-                            let deleteService = WorkoutDeleteService(manager: .shared)
-                            try? await deleteService.deleteWorkout(uuid: workoutID)
+                    Task { @MainActor in
+                        let deleteService = WorkoutDeleteService(manager: .shared)
+                        do {
+                            guard let targetUUID = try await deleteService.resolveDeletionTargetUUID(
+                                linkedUUID: hkWorkoutID,
+                                fallbackStartDate: recordDate,
+                                preferredActivityType: inferredActivityType
+                            ) else {
+                                return
+                            }
+
+                            do {
+                                try await deleteService.deleteWorkout(uuid: targetUUID)
+                            } catch {
+                                AppLogger.healthKit.error(
+                                    "iPhone workout delete failed for \(targetUUID, privacy: .public): \(error.localizedDescription)"
+                                )
+                                WatchSessionManager.shared.requestWatchWorkoutDeletion(workoutUUID: targetUUID)
+                            }
+                        } catch {
+                            AppLogger.healthKit.error("Failed to resolve workout deletion target: \(error.localizedDescription)")
                         }
                     }
                 }
