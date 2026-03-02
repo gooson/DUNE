@@ -53,6 +53,10 @@ struct SetInputSheet: View {
                     Button("Done") { dismiss() }
                 }
             }
+            .onChange(of: weight) { _, newValue in
+                let clamped = min(max(newValue, 0), 500)
+                if clamped != newValue { weight = clamped }
+            }
         }
     }
 
