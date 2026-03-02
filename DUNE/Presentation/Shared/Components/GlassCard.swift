@@ -116,25 +116,6 @@ private enum GlassCardGradients {
         startPoint: .leading,
         endPoint: .trailing
     )
-    private static let sakuraHeroSurface = LinearGradient(
-        colors: [
-            sakuraAccent.opacity(0.20),
-            Color("SakuraIvory").opacity(0.14),
-            Color.clear
-        ],
-        startPoint: .topLeading,
-        endPoint: .bottomTrailing
-    )
-    private static let sakuraStandardSurface = LinearGradient(
-        colors: [
-            Color("SakuraIvory").opacity(0.15),
-            sakuraAccent.opacity(0.08),
-            Color.clear
-        ],
-        startPoint: .topLeading,
-        endPoint: .bottomTrailing
-    )
-
     static let clearBorder = LinearGradient(
         colors: [Color.clear, Color.clear],
         startPoint: .topLeading,
@@ -166,16 +147,84 @@ private enum GlassCardGradients {
         }
     }
 
-    static func heroSurface(for theme: AppTheme) -> LinearGradient {
+    static func heroSurface(for theme: AppTheme, colorScheme: ColorScheme) -> LinearGradient {
         switch theme {
-        case .sakuraCalm: sakuraHeroSurface
+        case .sakuraCalm:
+            LinearGradient(
+                colors: [
+                    sakuraAccent.opacity(colorScheme == .dark ? 0.38 : 0.28),
+                    Color("SakuraIvory").opacity(colorScheme == .dark ? 0.22 : 0.16),
+                    Color("SakuraPetal").opacity(colorScheme == .dark ? 0.18 : 0.12),
+                    Color.clear
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
         case .desertWarm, .oceanCool, .forestGreen: clearBorder
         }
     }
 
-    static func standardSurface(for theme: AppTheme) -> LinearGradient {
+    static func standardSurface(for theme: AppTheme, colorScheme: ColorScheme) -> LinearGradient {
         switch theme {
-        case .sakuraCalm: sakuraStandardSurface
+        case .sakuraCalm:
+            LinearGradient(
+                colors: [
+                    Color("SakuraIvory").opacity(colorScheme == .dark ? 0.22 : 0.16),
+                    sakuraAccent.opacity(colorScheme == .dark ? 0.22 : 0.14),
+                    Color("SakuraPetal").opacity(colorScheme == .dark ? 0.14 : 0.10),
+                    Color.clear
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        case .desertWarm, .oceanCool, .forestGreen: clearBorder
+        }
+    }
+
+    static func inlineSurface(for theme: AppTheme, colorScheme: ColorScheme) -> LinearGradient {
+        switch theme {
+        case .sakuraCalm:
+            LinearGradient(
+                colors: [
+                    Color("SakuraIvory").opacity(colorScheme == .dark ? 0.19 : 0.13),
+                    sakuraAccent.opacity(colorScheme == .dark ? 0.16 : 0.10),
+                    Color.clear
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        case .desertWarm, .oceanCool, .forestGreen: clearBorder
+        }
+    }
+
+    static func topBloom(for theme: AppTheme, colorScheme: ColorScheme) -> LinearGradient {
+        switch theme {
+        case .sakuraCalm:
+            LinearGradient(
+                colors: [
+                    Color("SakuraPetal").opacity(colorScheme == .dark ? 0.30 : 0.20),
+                    Color("SakuraIvory").opacity(colorScheme == .dark ? 0.18 : 0.12),
+                    Color.clear
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+        case .desertWarm, .oceanCool, .forestGreen: clearBorder
+        }
+    }
+
+    static func cardBorder(for theme: AppTheme, colorScheme: ColorScheme) -> LinearGradient {
+        switch theme {
+        case .sakuraCalm:
+            LinearGradient(
+                colors: [
+                    Color("SakuraPetal").opacity(colorScheme == .dark ? 0.52 : 0.30),
+                    sakuraAccent.opacity(colorScheme == .dark ? 0.32 : 0.21),
+                    sakuraDusk.opacity(colorScheme == .dark ? 0.28 : 0.12)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
         case .desertWarm, .oceanCool, .forestGreen: clearBorder
         }
     }
@@ -188,6 +237,7 @@ struct HeroCard<Content: View>: View {
 
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.appTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
 
     private var cornerRadius: CGFloat { sizeClass == .regular ? DS.Radius.xxl : DS.Radius.xl }
     private var cardPadding: CGFloat { sizeClass == .regular ? DS.Spacing.xxxl : DS.Spacing.xxl }
@@ -214,8 +264,13 @@ struct HeroCard<Content: View>: View {
                     )
                     .overlay(
                         RoundedRectangle(cornerRadius: cornerRadius)
-                            .fill(GlassCardGradients.heroSurface(for: theme))
+                            .fill(GlassCardGradients.heroSurface(for: theme, colorScheme: colorScheme))
                     )
+                    .overlay(alignment: .top) {
+                        RoundedRectangle(cornerRadius: cornerRadius)
+                            .fill(GlassCardGradients.topBloom(for: theme, colorScheme: colorScheme))
+                            .frame(height: sizeClass == .regular ? 72 : 58)
+                    }
                     // Accent border — top-leading highlight fades to subtle bottom-trailing
                     .overlay(
                         RoundedRectangle(cornerRadius: cornerRadius)
@@ -250,15 +305,22 @@ struct StandardCard<Content: View>: View {
                     .fill(.thinMaterial)
                     .overlay(
                         RoundedRectangle(cornerRadius: cornerRadius)
-                            .fill(GlassCardGradients.standardSurface(for: theme))
+                            .fill(GlassCardGradients.standardSurface(for: theme, colorScheme: colorScheme))
                     )
+                    .overlay(alignment: .top) {
+                        RoundedRectangle(cornerRadius: cornerRadius)
+                            .fill(GlassCardGradients.topBloom(for: theme, colorScheme: colorScheme))
+                            .frame(height: sizeClass == .regular ? 52 : 42)
+                    }
                     .overlay(
                         RoundedRectangle(cornerRadius: cornerRadius)
                             .strokeBorder(
-                                colorScheme == .dark
-                                    ? GlassCardGradients.darkBorder(for: theme)
-                                    : GlassCardGradients.clearBorder,
-                                lineWidth: 1
+                                theme == .sakuraCalm
+                                    ? GlassCardGradients.cardBorder(for: theme, colorScheme: colorScheme)
+                                    : (colorScheme == .dark
+                                        ? GlassCardGradients.darkBorder(for: theme)
+                                        : GlassCardGradients.clearBorder),
+                                lineWidth: theme == .sakuraCalm ? 1.15 : 1
                             )
                     )
                     .shadow(
@@ -278,6 +340,7 @@ struct InlineCard<Content: View>: View {
 
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.appTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
 
     private var cardPadding: CGFloat { sizeClass == .regular ? DS.Spacing.lg : DS.Spacing.md }
     private var cornerRadius: CGFloat { sizeClass == .regular ? DS.Radius.md : DS.Radius.sm }
@@ -288,6 +351,19 @@ struct InlineCard<Content: View>: View {
             .background {
                 RoundedRectangle(cornerRadius: cornerRadius)
                     .fill(.ultraThinMaterial)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: cornerRadius)
+                            .fill(GlassCardGradients.inlineSurface(for: theme, colorScheme: colorScheme))
+                    )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: cornerRadius)
+                            .strokeBorder(
+                                theme == .sakuraCalm
+                                    ? GlassCardGradients.cardBorder(for: theme, colorScheme: colorScheme)
+                                    : GlassCardGradients.clearBorder,
+                                lineWidth: theme == .sakuraCalm ? 1.0 : 0
+                            )
+                    )
             }
             .overlay(alignment: .bottom) {
                 GlassCardGradients.bottomSeparator(for: theme)

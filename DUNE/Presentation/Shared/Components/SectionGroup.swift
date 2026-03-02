@@ -12,9 +12,74 @@ struct SectionGroup<Content: View>: View {
 
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.appTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
 
     private var cornerRadius: CGFloat { sizeClass == .regular ? DS.Radius.lg : DS.Radius.md }
     private var outerPadding: CGFloat { sizeClass == .regular ? DS.Spacing.xl : DS.Spacing.lg }
+    private var borderWidth: CGFloat { theme == .sakuraCalm ? 1.1 : 0.6 }
+
+    private var sectionSurfaceGradient: LinearGradient {
+        switch theme {
+        case .sakuraCalm:
+            LinearGradient(
+                colors: [
+                    Color("SakuraAccent").opacity(colorScheme == .dark ? 0.24 : 0.14),
+                    Color("SakuraIvory").opacity(colorScheme == .dark ? 0.18 : 0.10),
+                    Color("SakuraPetal").opacity(colorScheme == .dark ? 0.12 : 0.06),
+                    .clear
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        case .desertWarm, .oceanCool, .forestGreen:
+            theme.cardBackgroundGradient
+        }
+    }
+
+    private var sectionTopBloom: LinearGradient {
+        switch theme {
+        case .sakuraCalm:
+            LinearGradient(
+                colors: [
+                    Color("SakuraPetal").opacity(colorScheme == .dark ? 0.24 : 0.14),
+                    Color("SakuraIvory").opacity(colorScheme == .dark ? 0.15 : 0.09),
+                    .clear
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+        case .desertWarm, .oceanCool, .forestGreen:
+            LinearGradient(
+                colors: [theme.accentColor.opacity(0.08), .clear],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+        }
+    }
+
+    private var sectionBorderGradient: LinearGradient {
+        switch theme {
+        case .sakuraCalm:
+            LinearGradient(
+                colors: [
+                    Color("SakuraPetal").opacity(colorScheme == .dark ? 0.46 : 0.24),
+                    Color("SakuraAccent").opacity(colorScheme == .dark ? 0.28 : 0.16),
+                    Color("SakuraDusk").opacity(colorScheme == .dark ? 0.24 : 0.08)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        case .desertWarm, .oceanCool, .forestGreen:
+            LinearGradient(
+                colors: [
+                    theme.accentColor.opacity(colorScheme == .dark ? 0.26 : 0.12),
+                    theme.duskColor.opacity(colorScheme == .dark ? 0.18 : 0.07)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        }
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.md) {
@@ -54,6 +119,19 @@ struct SectionGroup<Content: View>: View {
         .background {
             RoundedRectangle(cornerRadius: cornerRadius)
                 .fill(.thinMaterial)
+                .overlay(
+                    RoundedRectangle(cornerRadius: cornerRadius)
+                        .fill(sectionSurfaceGradient)
+                )
+                .overlay(alignment: .top) {
+                    RoundedRectangle(cornerRadius: cornerRadius)
+                        .fill(sectionTopBloom)
+                        .frame(height: sizeClass == .regular ? 56 : 42)
+                }
+                .overlay(
+                    RoundedRectangle(cornerRadius: cornerRadius)
+                        .strokeBorder(sectionBorderGradient, lineWidth: borderWidth)
+                )
         }
     }
 }
