@@ -1,47 +1,44 @@
 import SwiftUI
 
-/// Compact badge showing auto-calculated workout intensity.
+/// Compact badge showing workout effort (1-10) with category label.
+/// Used in history lists and session detail views.
 struct IntensityBadgeView: View {
-    let intensity: WorkoutIntensityResult
+    let effort: Int
 
     var body: some View {
-        let levelColor = intensity.level.color
-        let displayScore = intensity.rawScore.isFinite ? intensity.rawScore : 0
+        let category = EffortCategory(effort: effort)
+        let categoryColor = category.color
 
         HStack(spacing: DS.Spacing.sm) {
-            Image(systemName: intensity.level.iconName)
-                .foregroundStyle(levelColor)
+            Image(systemName: category.iconName)
+                .foregroundStyle(categoryColor)
                 .font(.body.weight(.semibold))
 
             VStack(alignment: .leading, spacing: 2) {
-                Text(intensity.level.displayName)
+                Text(category.displayName)
                     .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(levelColor)
+                    .foregroundStyle(categoryColor)
 
-                Text("Intensity \u{00B7} \(Int(displayScore * 100))%")
+                Text("Effort \u{00B7} \(effort)/10")
                     .font(.caption2)
                     .foregroundStyle(.secondary)
             }
 
             Spacer()
 
-            // Mini progress bar
-            GeometryReader { geo in
-                ZStack(alignment: .leading) {
-                    Capsule()
-                        .fill(Color.secondary.opacity(0.2))
-
-                    Capsule()
-                        .fill(levelColor)
-                        .frame(width: geo.size.width * displayScore)
+            // Mini effort dots
+            HStack(spacing: 3) {
+                ForEach(1...10, id: \.self) { i in
+                    Circle()
+                        .fill(i <= effort ? categoryColor : Color.secondary.opacity(0.2))
+                        .frame(width: 5, height: 5)
                 }
             }
-            .frame(width: 60, height: 6)
         }
         .padding(DS.Spacing.md)
         .background {
             RoundedRectangle(cornerRadius: DS.Radius.sm)
-                .fill(levelColor.opacity(DS.Opacity.border))
+                .fill(categoryColor.opacity(DS.Opacity.border))
         }
     }
 }

@@ -388,4 +388,127 @@ struct WorkoutIntensityServiceTests {
         #expect(result!.detail.volumeSignal != nil)
         #expect(result!.detail.rpeSignal != nil)
     }
+
+    // MARK: - suggestEffort
+
+    @Test("suggestEffort: 0.0 raw maps to effort 1")
+    func suggestEffortMinimum() {
+        let result = service.suggestEffort(autoIntensityRaw: 0.0, recentEfforts: [])
+        #expect(result != nil)
+        #expect(result!.suggestedEffort == 1)
+        #expect(result!.category == .easy)
+    }
+
+    @Test("suggestEffort: 1.0 raw maps to effort 10")
+    func suggestEffortMaximum() {
+        let result = service.suggestEffort(autoIntensityRaw: 1.0, recentEfforts: [])
+        #expect(result != nil)
+        #expect(result!.suggestedEffort == 10)
+        #expect(result!.category == .allOut)
+    }
+
+    @Test("suggestEffort: 0.5 raw maps to effort 5-6")
+    func suggestEffortMiddle() {
+        let result = service.suggestEffort(autoIntensityRaw: 0.5, recentEfforts: [])
+        #expect(result != nil)
+        #expect(result!.suggestedEffort >= 5)
+        #expect(result!.suggestedEffort <= 6)
+    }
+
+    @Test("suggestEffort: nil raw with history returns last effort")
+    func suggestEffortNilRawWithHistory() {
+        let result = service.suggestEffort(autoIntensityRaw: nil, recentEfforts: [7, 6, 8])
+        #expect(result != nil)
+        #expect(result!.suggestedEffort == 7) // Returns last effort
+        #expect(result!.lastEffort == 7)
+    }
+
+    @Test("suggestEffort: nil raw without history returns nil")
+    func suggestEffortNilRawNoHistory() {
+        let result = service.suggestEffort(autoIntensityRaw: nil, recentEfforts: [])
+        #expect(result == nil)
+    }
+
+    @Test("suggestEffort: history calibration adjusts suggestion upward")
+    func suggestEffortCalibrationUp() {
+        // User consistently rates 8, auto suggests ~5 (raw=0.5)
+        let result = service.suggestEffort(autoIntensityRaw: 0.5, recentEfforts: [8, 8, 8])
+        #expect(result != nil)
+        // Should be higher than uncalibrated 5-6
+        #expect(result!.suggestedEffort >= 6)
+    }
+
+    @Test("suggestEffort: history calibration adjusts suggestion downward")
+    func suggestEffortCalibrationDown() {
+        // User consistently rates 3, auto suggests ~8 (raw=0.8)
+        let result = service.suggestEffort(autoIntensityRaw: 0.8, recentEfforts: [3, 3, 3])
+        #expect(result != nil)
+        // Should be lower than uncalibrated 8
+        #expect(result!.suggestedEffort <= 7)
+    }
+
+    @Test("suggestEffort: averageEffort computed from valid history")
+    func suggestEffortAverageComputed() {
+        let result = service.suggestEffort(autoIntensityRaw: 0.5, recentEfforts: [6, 8, 4])
+        #expect(result != nil)
+        #expect(result!.averageEffort != nil)
+        // (6 + 8 + 4) / 3 = 6.0
+        #expect(result!.averageEffort! >= 5.9)
+        #expect(result!.averageEffort! <= 6.1)
+    }
+
+    @Test("suggestEffort: invalid efforts in history are filtered")
+    func suggestEffortInvalidHistoryFiltered() {
+        let result = service.suggestEffort(autoIntensityRaw: 0.5, recentEfforts: [15, 0, -1, 7])
+        #expect(result != nil)
+        #expect(result!.lastEffort == 7) // Only valid effort
+    }
+
+    @Test("suggestEffort: result clamped to 1-10")
+    func suggestEffortClamped() {
+        // Edge: raw > 1.0 should be rejected (not finite range)
+        let result = service.suggestEffort(autoIntensityRaw: 1.5, recentEfforts: [])
+        #expect(result == nil) // 1.5 outside 0...1
+    }
+
+    @Test("suggestEffort: NaN raw returns nil")
+    func suggestEffortNaN() {
+        let result = service.suggestEffort(autoIntensityRaw: .nan, recentEfforts: [5])
+        #expect(result == nil)
+    }
+
+    // MARK: - EffortCategory
+
+    @Test("EffortCategory: effort 1-3 is easy")
+    func effortCategoryEasy() {
+        #expect(EffortCategory(effort: 1) == .easy)
+        #expect(EffortCategory(effort: 2) == .easy)
+        #expect(EffortCategory(effort: 3) == .easy)
+    }
+
+    @Test("EffortCategory: effort 4-6 is moderate")
+    func effortCategoryModerate() {
+        #expect(EffortCategory(effort: 4) == .moderate)
+        #expect(EffortCategory(effort: 5) == .moderate)
+        #expect(EffortCategory(effort: 6) == .moderate)
+    }
+
+    @Test("EffortCategory: effort 7-8 is hard")
+    func effortCategoryHard() {
+        #expect(EffortCategory(effort: 7) == .hard)
+        #expect(EffortCategory(effort: 8) == .hard)
+    }
+
+    @Test("EffortCategory: effort 9-10 is allOut")
+    func effortCategoryAllOut() {
+        #expect(EffortCategory(effort: 9) == .allOut)
+        #expect(EffortCategory(effort: 10) == .allOut)
+    }
+
+    @Test("EffortCategory: effort 0 or negative is allOut (default)")
+    func effortCategoryEdge() {
+        // Switch default case handles 0, negative, and > 10
+        #expect(EffortCategory(effort: 0) == .allOut)
+        #expect(EffortCategory(effort: 11) == .allOut)
+    }
 }

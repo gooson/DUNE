@@ -55,6 +55,62 @@ struct WorkoutIntensityService: Sendable {
 
     // MARK: - Public API
 
+    /// Suggest an effort value (1-10) based on auto-calculated intensity and history calibration.
+    ///
+    /// - Parameters:
+    ///   - autoIntensityRaw: Normalized intensity (0.0-1.0) from `calculateIntensity()`.
+    ///   - recentEfforts: User-entered efforts from recent sessions (newest first, up to 5).
+    /// - Returns: Effort suggestion with history context, or nil if no data available.
+    func suggestEffort(
+        autoIntensityRaw: Double?,
+        recentEfforts: [Int]
+    ) -> EffortSuggestion? {
+        let validEfforts = recentEfforts.prefix(5).filter { Limits.rpeRange.contains($0) }
+
+        guard let raw = autoIntensityRaw, raw.isFinite, (0...1).contains(raw) else {
+            // No auto intensity — return history-based suggestion if available
+            guard let last = validEfforts.first else { return nil }
+            let avg = Double(validEfforts.reduce(0, +)) / Double(validEfforts.count)
+            return EffortSuggestion(
+                suggestedEffort: last,
+                category: EffortCategory(effort: last),
+                lastEffort: last,
+                averageEffort: avg.isFinite ? avg : nil
+            )
+        }
+
+        // Convert 0.0-1.0 → 1-10
+        var suggested = Int(round(raw * 9.0)) + 1
+        suggested = Swift.max(1, Swift.min(10, suggested))
+
+        // History calibration: if user consistently rates differently, adjust
+        if validEfforts.count >= 3 {
+            let userAvg = Double(validEfforts.reduce(0, +)) / Double(validEfforts.count)
+            guard userAvg.isFinite else {
+                return buildSuggestion(suggested, validEfforts: Array(validEfforts))
+            }
+            let bias = userAvg - Double(suggested)
+            if abs(bias) >= 1.0 {
+                suggested = Swift.max(1, Swift.min(10, suggested + Int(round(bias * 0.5))))
+            }
+        }
+
+        return buildSuggestion(suggested, validEfforts: Array(validEfforts))
+    }
+
+    private func buildSuggestion(_ effort: Int, validEfforts: [Int]) -> EffortSuggestion {
+        let avg: Double? = validEfforts.isEmpty ? nil : {
+            let sum = Double(validEfforts.reduce(0, +)) / Double(validEfforts.count)
+            return sum.isFinite ? sum : nil
+        }()
+        return EffortSuggestion(
+            suggestedEffort: effort,
+            category: EffortCategory(effort: effort),
+            lastEffort: validEfforts.first,
+            averageEffort: avg
+        )
+    }
+
     /// Calculate intensity for the current session relative to historical sessions.
     ///
     /// - Parameters:

@@ -62,3 +62,40 @@ enum IntensityMethod: String, Sendable {
     /// Fallback: only RPE was available
     case rpeOnly
 }
+
+// MARK: - Effort Category (Apple Fitness style)
+
+/// 4-level effort classification aligned with Apple Fitness effort bands.
+enum EffortCategory: Int, CaseIterable, Sendable, Comparable {
+    case easy = 1      // Effort 1-3
+    case moderate = 2  // Effort 4-6
+    case hard = 3      // Effort 7-8
+    case allOut = 4    // Effort 9-10
+
+    init(effort: Int) {
+        switch effort {
+        case 1...3: self = .easy
+        case 4...6: self = .moderate
+        case 7...8: self = .hard
+        default: self = .allOut
+        }
+    }
+
+    static func < (lhs: EffortCategory, rhs: EffortCategory) -> Bool {
+        lhs.rawValue < rhs.rawValue
+    }
+}
+
+// MARK: - Effort Suggestion
+
+/// Auto-suggested effort with history context, returned by `suggestEffort()`.
+struct EffortSuggestion: Sendable {
+    /// Auto-suggested effort value (1-10).
+    let suggestedEffort: Int
+    /// Category derived from suggestedEffort.
+    let category: EffortCategory
+    /// Most recent user-entered effort for this exercise, or nil.
+    let lastEffort: Int?
+    /// Average effort from recent sessions (up to 5), or nil if insufficient data.
+    let averageEffort: Double?
+}
