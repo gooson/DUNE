@@ -44,23 +44,6 @@ GitHub의 PR 머지 API를 통해 머지합니다. **로컬 머지나 자체 스
 
 ### Step 4: 로컬 정리
 
-1. **워크트리 감지**: 현재 디렉토리가 git worktree인지 확인
-   - `git rev-parse --git-common-dir`과 `git rev-parse --git-dir` 비교
-   - 워크트리인 경우 → Step 4a (워크트리 정리)
-   - 일반 브랜치인 경우 → Step 4b (일반 정리)
-
-#### Step 4a: 워크트리 정리
-
-워크트리에서 ship한 경우:
-1. **메인 repo 경로 확인**: `git rev-parse --git-common-dir`에서 `.git` 경로를 얻고, 그 부모 디렉토리가 메인 repo
-2. **리모트 브랜치 삭제**: `gh pr merge`에서 `--delete-branch`로 이미 삭제됨. 안 됐으면 `git push origin --delete {branch}`
-3. **메인 repo로 이동 후 워크트리 제거**: `cd {main_repo_path} && git worktree remove {worktree_path} --force`
-4. **로컬 브랜치 삭제**: `git branch -D {branch}` (이미 메인 repo에 있으므로 `-C` 불필요)
-5. 사용자에게 "워크트리 + 브랜치 정리 완료" 안내
-
-#### Step 4b: 일반 브랜치 정리
-
-일반 브랜치에서 ship한 경우:
 1. `git checkout main` 으로 main 브랜치로 전환
 2. `git pull` 으로 머지된 내용을 로컬에 반영
 3. 로컬 feature 브랜치 삭제: `git branch -d {branch}`
@@ -73,10 +56,7 @@ GitHub의 PR 머지 API를 통해 머지합니다. **로컬 머지나 자체 스
 
 ship 완료 후, **머지 반영된 main 기준**으로 Xcode 프로젝트를 다시 생성합니다.
 
-1. **실행 경로 확인**
-   - Step 4a(워크트리)인 경우: 이미 메인 repo로 `cd` 완료 상태
-   - Step 4b(일반)인 경우: 이미 repo root에 있음
-2. **main 최신 동기화 확인**
+1. **main 최신 동기화 확인**
    - `git checkout main`
    - `git pull --ff-only`
 3. **xcodegen 실행**

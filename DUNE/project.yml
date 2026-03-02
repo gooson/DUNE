@@ -59,6 +59,9 @@ targets:
         group: DUNE
       - path: Resources
         group: DUNE
+      # Shared Colors
+      - path: ../Shared/Resources/Colors.xcassets
+        group: Shared/Resources
     settings:
       base:
         INFOPLIST_FILE: Resources/Info.plist
@@ -99,6 +102,9 @@ targets:
     platform: watchOS
     sources:
       - path: ../DUNEWatch
+      # Shared Colors
+      - path: ../Shared/Resources/Colors.xcassets
+        group: Shared/Resources
       # Shared SwiftData models
       - path: Data/Persistence/Models
         group: Shared/Models
@@ -125,8 +131,16 @@ targets:
         group: Shared/Domain
       - path: Domain/Models/CardioSecondaryUnit.swift
         group: Shared/Domain
+      - path: Domain/Models/WorkoutMode.swift
+        group: Shared/Domain
       - path: Domain/Models/AppTheme.swift
         group: Shared/Domain
+      # Shared HealthKit mapping (needed for cardio workout configuration)
+      - path: Data/HealthKit/WorkoutActivityType+HealthKit.swift
+        group: Shared/HealthKit
+      # Shared Presentation extension (iconName for cardio metrics views)
+      - path: Presentation/Shared/Extensions/WorkoutActivityType+Icon.swift
+        group: Shared/Presentation
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.raftel.dailve.watchkitapp

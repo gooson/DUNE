@@ -153,6 +153,7 @@
 - **검색<->브라우징 모드 전환 시 반대편 캐시 초기화** (#171)
 - **SVG body diagram 위 DragGesture 금지** (#147)
 - **undertrained 리스트는 비즈니스 필터 후 prefix/suffix** (#154)
+- **iOS QuickStart popular도 기록 부족 시 library fallback 필수** (Watch personalizedPopular 패턴) (#189)
 
 ### Design System
 
