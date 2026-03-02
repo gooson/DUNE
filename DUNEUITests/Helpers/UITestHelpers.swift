@@ -148,11 +148,73 @@ extension XCTestCase {
 
 @MainActor
 extension XCUIApplication {
+    private func tabIconID(for tabTitle: String) -> String? {
+        switch tabTitle {
+        case "Today":
+            "heart.text.clipboard"
+        case "Activity":
+            "flame"
+        case "Wellness":
+            "leaf.fill"
+        case "Life":
+            "checklist"
+        default:
+            nil
+        }
+    }
+
+    private func tabAccessibilityID(for tabTitle: String) -> String? {
+        switch tabTitle {
+        case "Today":
+            "tab-today"
+        case "Activity":
+            "tab-activity"
+        case "Wellness":
+            "tab-wellness"
+        case "Life":
+            "tab-life"
+        default:
+            nil
+        }
+    }
+
+    func hasPrimaryNavigation(timeout: TimeInterval = 8) -> Bool {
+        if tabBars.firstMatch.waitForExistence(timeout: timeout) {
+            return true
+        }
+
+        let tabIDs = ["tab-today", "tab-activity", "tab-wellness", "tab-life"]
+        for tabID in tabIDs {
+            if buttons[tabID].waitForExistence(timeout: 1) {
+                return true
+            }
+        }
+
+        return false
+    }
+
     /// Navigate to a tab by its visible title (iPhone)
     func navigateToTab(_ tabTitle: String) {
-        let tab = tabBars.buttons[tabTitle]
-        if tab.waitForExistence(timeout: 5) {
-            tab.tap()
+        if let tabID = tabAccessibilityID(for: tabTitle) {
+            let tabBarButton = tabBars.buttons[tabID].firstMatch
+            if tabBarButton.waitForExistence(timeout: 3) {
+                tabBarButton.tap()
+                return
+            }
+
+            let floatingTabButton = buttons[tabID].firstMatch
+            if floatingTabButton.waitForExistence(timeout: 3) {
+                floatingTabButton.tap()
+                return
+            }
+        }
+
+        if let iconID = tabIconID(for: tabTitle) {
+            let iconPredicate = NSPredicate(format: "identifier == %@ AND hittable == true", iconID)
+            let iconTab = buttons.matching(iconPredicate).firstMatch
+            if iconTab.waitForExistence(timeout: 3) {
+                iconTab.tap()
+            }
         }
     }
 

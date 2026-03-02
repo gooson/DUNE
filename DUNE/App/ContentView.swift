@@ -35,6 +35,7 @@ struct ContentView: View {
                 .environment(\.waveColor, selectedTheme.tabTodayColor)
             } label: {
                 Label { Text(verbatim: AppSection.today.title) } icon: { Image(systemName: AppSection.today.icon) }
+                    .accessibilityIdentifier("tab-today")
             }
             Tab(value: AppSection.train) {
                 NavigationStack {
@@ -48,6 +49,7 @@ struct ContentView: View {
                 .environment(\.waveColor, selectedTheme.tabTrainColor)
             } label: {
                 Label { Text(verbatim: AppSection.train.title) } icon: { Image(systemName: AppSection.train.icon) }
+                    .accessibilityIdentifier("tab-activity")
             }
             Tab(value: AppSection.wellness) {
                 NavigationStack {
@@ -61,6 +63,7 @@ struct ContentView: View {
                 .environment(\.waveColor, selectedTheme.tabWellnessColor)
             } label: {
                 Label { Text(verbatim: AppSection.wellness.title) } icon: { Image(systemName: AppSection.wellness.icon) }
+                    .accessibilityIdentifier("tab-wellness")
             }
             Tab(value: AppSection.life) {
                 NavigationStack {
@@ -73,6 +76,7 @@ struct ContentView: View {
                 .environment(\.waveColor, selectedTheme.tabLifeColor)
             } label: {
                 Label { Text(verbatim: AppSection.life.title) } icon: { Image(systemName: AppSection.life.icon) }
+                    .accessibilityIdentifier("tab-life")
             }
         }
         .environment(\.appTheme, selectedTheme)

@@ -45,10 +45,8 @@ class UITestBaseCase: XCTestCase {
 
         app.launch()
 
-        // Skip iPad layout — CI runs iPhone only
-        let tabBar = app.tabBars.firstMatch
-        guard tabBar.waitForExistence(timeout: 8) else {
-            throw XCTSkip("iPad sidebar layout — skipping iPhone-only UI test")
+        if !app.hasPrimaryNavigation(timeout: 8) {
+            throw XCTSkip("Primary navigation (tab bar/sidebar) not found")
         }
     }
 
