@@ -44,7 +44,7 @@ struct ExerciseTypeDetailView: View {
             .padding()
         }
         .background { DetailWaveBackground() }
-        .navigationTitle(displayName)
+        .englishNavigationTitle(displayName)
         .navigationBarTitleDisplayMode(.large)
         .task(id: viewModel.selectedPeriod) {
             await viewModel.loadData(manualRecords: exerciseRecords)

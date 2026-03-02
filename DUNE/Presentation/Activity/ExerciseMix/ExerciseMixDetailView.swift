@@ -36,7 +36,7 @@ struct ExerciseMixDetailView: View {
             .padding()
         }
         .background { DetailWaveBackground() }
-        .navigationTitle("Exercise Mix")
+        .englishNavigationTitle("Exercise Mix")
         .task(id: exerciseRecords.count) {
             viewModel.loadData(from: exerciseRecords)
         }

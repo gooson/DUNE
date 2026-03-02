@@ -150,7 +150,7 @@ struct ExercisePickerView: View {
     var body: some View {
         NavigationStack {
             pickerContent
-                .navigationTitle(isQuickStartMode ? String(localized: "Quick Start") : String(localized: "Select Exercise"))
+                .englishNavigationTitle(isQuickStartMode ? "Quick Start" : "Select Exercise")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {

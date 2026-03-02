@@ -39,7 +39,7 @@ struct ShareImageSheet: View {
                 .padding(.horizontal, DS.Spacing.lg)
                 .padding(.bottom, DS.Spacing.lg)
             }
-            .navigationTitle("Share Workout")
+            .englishNavigationTitle("Share Workout")
             .navigationBarTitleDisplayMode(.inline)
             .background { SheetWaveBackground() }
         }

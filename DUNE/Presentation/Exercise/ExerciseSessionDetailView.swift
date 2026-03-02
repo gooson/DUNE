@@ -40,7 +40,7 @@ struct ExerciseSessionDetailView: View {
             .padding(.horizontal, DS.Spacing.lg)
         }
         .background { DetailWaveBackground() }
-        .navigationTitle(resolvedTitle)
+        .englishNavigationTitle(record.exerciseType)
         .navigationBarTitleDisplayMode(.inline)
         .task {
             await loadHeartRate()

@@ -34,7 +34,7 @@ struct BodyHistoryDetailView: View {
             }
         }
         .background { DetailWaveBackground() }
-        .navigationTitle("Body Records")
+        .englishNavigationTitle("Body Records")
         .navigationBarTitleDisplayMode(.inline)
         .alert("Delete Record?", isPresented: $isShowingDeleteConfirmation, presenting: recordToDelete) { record in
             Button("Delete", role: .destructive) {

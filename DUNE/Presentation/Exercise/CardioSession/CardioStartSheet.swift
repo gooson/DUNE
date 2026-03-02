@@ -32,7 +32,7 @@ struct CardioStartSheet: View {
             }
             .padding(.horizontal, DS.Spacing.lg)
             .background { SheetWaveBackground() }
-            .navigationTitle(exercise.localizedName)
+            .englishNavigationTitle(exercise.name)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

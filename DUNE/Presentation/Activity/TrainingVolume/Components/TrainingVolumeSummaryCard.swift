@@ -30,12 +30,12 @@ struct TrainingVolumeSummaryCard: View {
             metricItem(
                 icon: "flame.fill",
                 value: lastWorkoutCalories > 0 ? lastWorkoutCalories.formattedWithSeparator() : "—",
-                unit: "kcal"
+                unit: String(localized: "kcal")
             )
             metricItem(
                 icon: "clock.fill",
                 value: lastWorkoutMinutes > 0 ? lastWorkoutMinutes.formattedWithSeparator() : "—",
-                unit: "min"
+                unit: String(localized: "min")
             )
         }
     }

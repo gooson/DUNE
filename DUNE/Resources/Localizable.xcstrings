@@ -1518,6 +1518,23 @@
         }
       }
     },
+    "Active Indicators" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アクティブ指標"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "활동 지표"
+          }
+        }
+      }
+    },
     "Activity" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -11008,6 +11025,23 @@
         }
       }
     },
+    "Physical" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "身体"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "신체"
+          }
+        }
+      }
+    },
     "Play" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -11592,6 +11626,91 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "기록일"
+          }
+        }
+      }
+    },
+    "Routine" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ルーティン"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "루틴"
+          }
+        }
+      }
+    },
+    "Browse" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ブラウズ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "둘러보기"
+          }
+        }
+      }
+    },
+    "Browse All" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "すべて見る"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "전체 보기"
+          }
+        }
+      }
+    },
+    "Search" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "検索"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "검색"
+          }
+        }
+      }
+    },
+    "Open the DUNE app\non your iPhone to sync" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iPhoneでDUNEアプリを開いて\n同期してください"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iPhone에서 DUNE 앱을 열어\n동기화하세요"
           }
         }
       }
@@ -14600,8 +14719,7 @@
             "value" : "오늘"
           }
         }
-      },
-      "shouldTranslate" : false
+      }
     },
     "Today is a great day for indoor strength training or a home workout." : {
       "extractionState" : "manual",
@@ -17273,6 +17391,754 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "수면 점수가 하락 추세입니다. 취침 1시간 전 화면 사용을 줄이고 카페인은 오후 2시 이전으로 제한해보세요."
+          }
+        }
+      }
+    },
+    "Yesterday" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "昨日"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "어제"
+          }
+        }
+      }
+    },
+    "%@ days ago" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@日前"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@일 전"
+          }
+        }
+      }
+    },
+    "%@ min" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@分"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@분"
+          }
+        }
+      }
+    },
+    "Recent Workouts" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最近のワークアウト"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최근 운동"
+          }
+        }
+      }
+    },
+    "Avg Heart Rate" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "平均心拍数"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "평균 심박수"
+          }
+        }
+      }
+    },
+    "Max Heart Rate" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最大心拍数"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최대 심박수"
+          }
+        }
+      }
+    },
+    "How It's Measured" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "測定方法"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "측정 방식"
+          }
+        }
+      }
+    },
+    "HealthKit Integration" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HealthKit連携"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HealthKit 연동"
+          }
+        }
+      }
+    },
+    "NEW Badge" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "NEWバッジ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "NEW 배지"
+          }
+        }
+      }
+    },
+    "Tips" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ヒント"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "팁"
+          }
+        }
+      }
+    },
+    "Strength PR: Based on average weight per set in a session" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "筋力PR: 1セッション内の1セット当たり平均重量に基づく"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "근력 PR: 세션 내 세트당 평균 중량 기준"
+          }
+        }
+      }
+    },
+    "Cardio PR: Based on pace/distance/time/calories/elevation" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "有酸素PR: ペース/距離/時間/カロリー/高度に基づく"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "유산소 PR: 페이스/거리/시간/칼로리/고도 기준"
+          }
+        }
+      }
+    },
+    "Cardio prioritizes HealthKit data, supplemented by manual records when needed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "有酸素はHealthKitデータを優先し、必要時に手動記録で補完します"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "유산소는 HealthKit 데이터를 우선 사용하고 필요 시 수동 기록으로 보완해요"
+          }
+        }
+      }
+    },
+    "Abnormal values are automatically excluded (e.g., 0 or out-of-range values)" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "異常値は自動で除外されます（例: 0 または範囲外の値）"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이상치는 자동으로 제외돼요 (예: 0 또는 범위 밖 값)"
+          }
+        }
+      }
+    },
+    "Displays heart rate, steps, weather, and indoor/outdoor info when available" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "可能な場合、心拍数・歩数・天気・屋内/屋外情報を表示します"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "가능한 경우 심박수, 걸음 수, 날씨, 실내/실외 정보를 표시해요"
+          }
+        }
+      }
+    },
+    "Cards are hidden with a notice when permissions are missing or data is unavailable" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "権限不足またはデータ未取得時は、案内とともにカードを非表示にします"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "권한이 없거나 데이터가 없으면 안내와 함께 카드가 숨겨져요"
+          }
+        }
+      }
+    },
+    "Shown on records updated within the last 7 days" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "直近7日以内に更新された記録に表示されます"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최근 7일 내 갱신된 기록에 표시돼요"
+          }
+        }
+      }
+    },
+    "Visually track your consistent progress" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "継続的な進捗を視覚的に追跡できます"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "꾸준한 진행 상황을 시각적으로 추적해요"
+          }
+        }
+      }
+    },
+    "Review weight trends for strength and pace/distance trends for cardio" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "筋力は重量トレンド、有酸素はペース/距離トレンドを確認しましょう"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "근력은 중량 추세를, 유산소는 페이스/거리 추세를 확인하세요"
+          }
+        }
+      }
+    },
+    "Use the NEW badge to quickly spot recent achievements" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "NEWバッジで最近の達成をすばやく確認しましょう"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "NEW 배지로 최근 성과를 빠르게 확인하세요"
+          }
+        }
+      }
+    },
+    "Consistent repetition beats aggressive intensity for long-term gains" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "長期的な成果には、過度な強度より継続が重要です"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "장기적인 성과를 위해선 과한 강도보다 꾸준함이 더 중요해요"
+          }
+        }
+      }
+    },
+    "Consecutive workout days including today or yesterday" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今日または昨日を含む連続ワークアウト日数"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "오늘 또는 어제를 포함한 연속 운동 일수"
+          }
+        }
+      }
+    },
+    "Only days with 20+ minutes of exercise count" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "運動時間が20分以上の日のみカウントされます"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "운동 20분 이상인 날만 집계돼요"
+          }
+        }
+      }
+    },
+    "Missing a single day resets the streak" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1日でも欠けると連続記録はリセットされます"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "하루만 빠져도 연속 기록이 초기화돼요"
+          }
+        }
+      }
+    },
+    "Your longest consecutive workout record ever" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "これまでの最長連続ワークアウト記録"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "지금까지의 최장 연속 운동 기록"
+          }
+        }
+      }
+    },
+    "Automatically updated when the current streak exceeds the record" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "現在の連続記録が既存記録を超えると自動更新されます"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "현재 연속 기록이 기존 기록을 넘으면 자동 갱신돼요"
+          }
+        }
+      }
+    },
+    "Compare this month's workout count against your goal" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今月のワークアウト回数を目標と比較します"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이번 달 운동 횟수를 목표와 비교해요"
+          }
+        }
+      }
+    },
+    "Default goal: 16 sessions per month (4x per week)" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "既定の目標: 月16回（週4回）"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기본 목표: 월 16회 (주 4회)"
+          }
+        }
+      }
+    },
+    "Progress bar visualizes your completion rate" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "進行バーで達成率を可視化します"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "진행 바가 달성률을 시각화해요"
+          }
+        }
+      }
+    },
+    "Consistency matters more than intensity for long-term results" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "長期的な成果には強度より継続が重要です"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "장기적인 성과에는 강도보다 꾸준함이 더 중요해요"
+          }
+        }
+      }
+    },
+    "Aim to maintain a steady 3–5 sessions per week" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "週3〜5回の一定ペースを目指しましょう"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주 3–5회 페이스를 꾸준히 유지해보세요"
+          }
+        }
+      }
+    },
+    "Rest days are essential for recovery — you don't need to train every day" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "休息日は回復に不可欠です。毎日トレーニングする必要はありません"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "휴식일은 회복에 필수예요. 매일 훈련할 필요는 없어요"
+          }
+        }
+      }
+    },
+    "Balanced Composition" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "バランス構成"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "균형 구성"
+          }
+        }
+      }
+    },
+    "Tallies how many times each exercise was performed across all records" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全記録で各運動が実行された回数を集計します"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "전체 기록에서 각 운동이 수행된 횟수를 집계해요"
+          }
+        }
+      }
+    },
+    "Shows relative frequency as a percentage (%)" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "相対頻度を百分率（%）で表示します"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "상대 빈도를 백분율(%)로 보여줘요"
+          }
+        }
+      }
+    },
+    "Sorted by most frequently performed exercises" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最も頻繁に実行された運動順に並べ替えます"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "가장 자주 수행한 운동 순으로 정렬돼요"
+          }
+        }
+      }
+    },
+    "A push/pull/legs/core balance is recommended" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "プッシュ/プル/下半身/コアのバランスを推奨します"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "푸시/풀/하체/코어 균형을 권장해요"
+          }
+        }
+      }
+    },
+    "Over-reliance on certain exercises increases muscle imbalance and injury risk" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "特定の運動への偏りは筋肉の不均衡とけがリスクを高めます"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "특정 운동에 치우치면 근육 불균형과 부상 위험이 커져요"
+          }
+        }
+      }
+    },
+    "Aim for balanced full-body development with varied exercise patterns" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "多様な運動パターンでバランスの取れた全身発達を目指しましょう"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "다양한 운동 패턴으로 균형 잡힌 전신 발달을 목표로 하세요"
+          }
+        }
+      }
+    },
+    "Identify and address neglected muscle groups" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "見落としている筋群を見つけて補完しましょう"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "소홀한 근육군을 찾아 보완하세요"
+          }
+        }
+      }
+    },
+    "Periodically add new exercises to your routine" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "定期的に新しい運動をルーティンに追加しましょう"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주기적으로 새로운 운동을 루틴에 추가하세요"
+          }
+        }
+      }
+    },
+    "Regularly check your upper/lower body ratio" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上半身/下半身の比率を定期的に確認しましょう"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "상체/하체 비율을 정기적으로 점검하세요"
+          }
+        }
+      }
+    },
+    "Cardiovascular exercise performed outdoors or on a treadmill." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "屋外またはトレッドミルで行う有酸素運動です。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "야외 또는 트레드밀에서 수행하는 유산소 운동이에요."
+          }
+        }
+      }
+    },
+    "steps" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "歩"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "걸음"
           }
         }
       }

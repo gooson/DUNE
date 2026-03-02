@@ -62,7 +62,7 @@ struct CompoundWorkoutView: View {
         .animation(DS.Animation.snappy, value: viewModel.isTransitioning)
         .sensoryFeedback(.success, trigger: saveCount)
         .sensoryFeedback(.success, trigger: setTimer.completionCount)
-        .navigationTitle(config.mode.displayName)
+        .englishNavigationTitle(config.mode.rawValue.capitalized)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {

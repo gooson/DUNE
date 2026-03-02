@@ -332,6 +332,7 @@
 		ADBDDC14494BE557488C8FDB /* WeatherSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = B133F87C97D09195B9E69EC6 /* WeatherSnapshot.swift */; };
 		AE006E4AE75E2509DCA7F9CF /* WatchSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADD369AF5E5E1AA4E1616DA /* WatchSessionManager.swift */; };
 		AE34472D12AC9969DFF5F3F5 /* WorkoutIntensityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF4323917F400A9BBD0C8AC /* WorkoutIntensityService.swift */; };
+		AE4F7C1E2A6519C12097C742 /* View+NavigationTitlePolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483DF874DF90580F4FCC2287 /* View+NavigationTitlePolicy.swift */; };
 		AEED3071DBCA870362C08EA9 /* ExerciseFrequencyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C84FB0E0D0D58AC9E471604 /* ExerciseFrequencyService.swift */; };
 		B009200F6D97A81BD211F4A1 /* ConsistencyCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA283C60DB45272B367105DE /* ConsistencyCard.swift */; };
 		B1D0B4AC85D841B24D21E2EC /* InjurySeverity+View.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0CB29EC52EC584C606D46B2 /* InjurySeverity+View.swift */; };
@@ -703,6 +704,7 @@
 		47AB3ABF6BCF6781AD5DC4F2 /* MuscleBodyShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuscleBodyShape.swift; sourceTree = "<group>"; };
 		47F785633C4455CC0AECD33E /* HabitDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitDefinition.swift; sourceTree = "<group>"; };
 		4806A930EF000186A0D39B66 /* WorkoutStreakServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutStreakServiceTests.swift; sourceTree = "<group>"; };
+		483DF874DF90580F4FCC2287 /* View+NavigationTitlePolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+NavigationTitlePolicy.swift"; sourceTree = "<group>"; };
 		486D277A5644DFF74E92345E /* WorkoutDeleteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDeleteService.swift; sourceTree = "<group>"; };
 		4934F2F7000086E1F923FD77 /* OpenMeteoServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenMeteoServiceTests.swift; sourceTree = "<group>"; };
 		4A53D3C9DB618E1E7EA14258 /* WellnessScore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessScore.swift; sourceTree = "<group>"; };
@@ -1324,6 +1326,7 @@
 				ABD319B52FF0E7BEDD80E8A3 /* TimePeriod+View.swift */,
 				67FD8D7F7DA368FF8FACDBB3 /* TrainingReadiness+View.swift */,
 				9CA8F84D353768F8EFFB01FC /* View+BottomFadeMask.swift */,
+				483DF874DF90580F4FCC2287 /* View+NavigationTitlePolicy.swift */,
 				8B044B0538F537FC7B585375 /* VolumePeriod+View.swift */,
 				56446150ACB8DB68AC31E796 /* WeatherAtmosphere+View.swift */,
 				4745F8682FD155D6CA7635C6 /* WeatherConditionType+View.swift */,
@@ -2624,6 +2627,7 @@
 				F43DE14450658BE8E6F40E3D /* UserCategory.swift in Sources */,
 				FB13AC97683F965EB5B70960 /* UserCategoryManagementView.swift in Sources */,
 				9294E63F49449981FB03B297 /* View+BottomFadeMask.swift in Sources */,
+				AE4F7C1E2A6519C12097C742 /* View+NavigationTitlePolicy.swift in Sources */,
 				D71E8C8B0A298A6E1D22B876 /* VitalCard.swift in Sources */,
 				6929604A19862AC9D5D174AA /* VitalCardData.swift in Sources */,
 				B5BDD0AAD6F9D49D6E5CCA97 /* VitalsQueryService.swift in Sources */,

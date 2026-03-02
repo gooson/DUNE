@@ -18,7 +18,7 @@ struct WorkoutTemplateListView: View {
                 templateList
             }
         }
-        .navigationTitle("Templates")
+        .englishNavigationTitle("Templates")
         .navigationBarTitleDisplayMode(.inline)
         .background { DetailWaveBackground() }
         .toolbar {

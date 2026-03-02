@@ -18,10 +18,10 @@ struct CarouselCard: Identifiable, Hashable {
         /// Section label for display (Correction #93 — exhaustive switch, no default).
         var label: String {
             switch self {
-            case .routine: return "Routine"
-            case .popular: return "Popular"
-            case .recent: return "Recent"
-            case .allExercises: return "Browse"
+            case .routine: return String(localized: "Routine")
+            case .popular: return String(localized: "Popular")
+            case .recent: return String(localized: "Recent")
+            case .allExercises: return String(localized: "Browse")
             }
         }
 
@@ -177,7 +177,7 @@ struct CarouselHomeView: View {
 
     private var allExercisesCard: some View {
         VStack(spacing: DS.Spacing.sm) {
-            Text("BROWSE")
+            Text(String(localized: "Browse").uppercased())
                 .font(DS.Typography.tinyLabel)
                 .foregroundStyle(.secondary)
                 .tracking(0.5)
@@ -188,7 +188,7 @@ struct CarouselHomeView: View {
                 .font(.system(size: 44))
                 .foregroundStyle(DS.Color.positive)
 
-            Text("All Exercises")
+            Text(String(localized: "All Exercises"))
                 .font(.system(.title3, design: .rounded).bold())
 
             Spacer()
@@ -204,15 +204,15 @@ struct CarouselHomeView: View {
             Image(systemName: "iphone.and.arrow.right.inward")
                 .font(.system(size: 28))
                 .foregroundStyle(.secondary)
-            Text("No Exercises")
+            Text(String(localized: "No Exercises"))
                 .font(DS.Typography.exerciseName)
-            Text("Open the DUNE app\non your iPhone to sync")
+            Text(String(localized: "Open the DUNE app\non your iPhone to sync"))
                 .font(DS.Typography.metricLabel)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
 
             NavigationLink(value: WatchRoute.quickStartAll) {
-                Label("Browse All", systemImage: "magnifyingglass")
+                Label(String(localized: "Browse All"), systemImage: "magnifyingglass")
             }
             .accessibilityIdentifier("watch-home-browse-all-link")
             .buttonStyle(.borderedProminent)
@@ -341,8 +341,12 @@ struct CarouselHomeView: View {
         guard !exercise.id.isEmpty,
               let lastDate = RecentExerciseTracker.lastUsed(exerciseID: exercise.id) else { return nil }
         let days = Calendar.current.dateComponents([.day], from: lastDate, to: Date()).day ?? 0
-        if days == 0 { return "Today" }
-        if days == 1 { return "Yesterday" }
-        return "\(days) days ago"
+        if days == 0 { return String(localized: "Today") }
+        if days == 1 { return String(localized: "Yesterday") }
+        return String(
+            format: String(localized: "%@ days ago"),
+            locale: Locale.current,
+            days.formattedWithSeparator
+        )
     }
 }

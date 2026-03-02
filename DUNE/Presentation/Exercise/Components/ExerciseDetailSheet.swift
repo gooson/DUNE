@@ -20,7 +20,7 @@ struct ExerciseDetailSheet: View {
                 .padding(.horizontal, DS.Spacing.lg)
                 .padding(.bottom, DS.Spacing.xl)
             }
-            .navigationTitle(exercise.localizedName)
+            .englishNavigationTitle(exercise.name)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -87,7 +87,7 @@ struct ExerciseDetailSheet: View {
             VStack(alignment: .leading, spacing: DS.Spacing.xs) {
                 Text("About")
                     .font(.headline)
-                Text(desc)
+                Text(NSLocalizedString(desc, comment: "Exercise description"))
                     .font(.body)
                     .foregroundStyle(DS.Color.textSecondary)
             }
@@ -99,6 +99,7 @@ struct ExerciseDetailSheet: View {
     @ViewBuilder
     private var formCuesSection: some View {
         let cues = ExerciseDescriptions.formCues(for: exercise.id)
+            .map { NSLocalizedString($0, comment: "Exercise form cue") }
         if !cues.isEmpty {
             VStack(alignment: .leading, spacing: DS.Spacing.sm) {
                 Text("Form Cues")

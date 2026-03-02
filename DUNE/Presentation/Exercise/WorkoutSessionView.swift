@@ -76,7 +76,7 @@ struct WorkoutSessionView: View {
         .background { DetailWaveBackground() }
         .sensoryFeedback(.success, trigger: setCompleteCount)
         .sensoryFeedback(.success, trigger: restTimerCompleted)
-        .navigationTitle(exercise.localizedName)
+        .englishNavigationTitle(exercise.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {

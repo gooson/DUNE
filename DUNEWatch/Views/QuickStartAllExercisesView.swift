@@ -6,14 +6,14 @@ import SwiftUI
 /// Returns "Other" for unrecognized types to avoid silent miscategorisation (#93).
 private func categoryLabel(for inputType: String) -> String {
     switch inputType {
-    case "setsRepsWeight": return "Strength"
-    case "setsReps": return "Bodyweight"
-    case "durationDistance": return "Cardio"
-    case "durationIntensity": return "Flexibility"
-    case "roundsBased": return "HIIT"
+    case "setsRepsWeight": return String(localized: "Strength")
+    case "setsReps": return String(localized: "Bodyweight")
+    case "durationDistance": return String(localized: "Cardio")
+    case "durationIntensity": return String(localized: "Flexibility")
+    case "roundsBased": return String(localized: "HIIT")
     default:
         assertionFailure("Unknown inputType: \(inputType)")
-        return "Other"
+        return String(localized: "Other")
     }
 }
 
@@ -35,7 +35,7 @@ struct QuickStartAllExercisesView: View {
                     Image(systemName: "text.magnifyingglass")
                         .font(.system(size: 26))
                         .foregroundStyle(.secondary)
-                    Text("No Exercises")
+                    Text(String(localized: "No Exercises"))
                         .font(DS.Typography.exerciseName)
                     WatchSyncStatusView()
                 }
@@ -64,8 +64,8 @@ struct QuickStartAllExercisesView: View {
             }
         }
         .background { WatchWaveBackground() }
-        .navigationTitle("All Exercises")
-        .searchable(text: $searchText, prompt: "Search")
+        .navigationTitle(String(localized: "All Exercises"))
+        .searchable(text: $searchText, prompt: String(localized: "Search"))
         .onAppear { rebuildLists() }
         .onChange(of: searchText) { _, _ in rebuildLists() }
         .onChange(of: connectivity.exerciseLibrary.count) { _, _ in rebuildLists() }
@@ -93,7 +93,14 @@ struct QuickStartAllExercisesView: View {
             let unique = uniqueByCanonical(RecentExerciseTracker.sorted(library))
             let grouped = Dictionary(grouping: unique) { categoryLabel(for: $0.inputType) }
 
-            let order = ["Strength", "Bodyweight", "Cardio", "HIIT", "Flexibility", "Other"]
+            let order = [
+                String(localized: "Strength"),
+                String(localized: "Bodyweight"),
+                String(localized: "Cardio"),
+                String(localized: "HIIT"),
+                String(localized: "Flexibility"),
+                String(localized: "Other")
+            ]
             cachedGrouped = order.compactMap { name in
                 guard let exercises = grouped[name], !exercises.isEmpty else { return nil }
                 return (category: name, exercises: exercises)

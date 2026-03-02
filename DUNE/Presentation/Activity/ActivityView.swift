@@ -281,7 +281,7 @@ struct ActivityView: View {
             syncToastDismissTask?.cancel()
             syncToastDismissTask = nil
         }
-        .navigationTitle(Text(verbatim: "Activity"))
+        .englishNavigationTitle("Activity")
     }
 
     // MARK: - Extracted Sections

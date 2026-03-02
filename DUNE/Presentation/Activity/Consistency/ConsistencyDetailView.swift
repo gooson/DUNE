@@ -26,7 +26,7 @@ struct ConsistencyDetailView: View {
             .padding()
         }
         .background { DetailWaveBackground() }
-        .navigationTitle("Consistency")
+        .englishNavigationTitle("Consistency")
         .task(id: exerciseRecords.count) {
             viewModel.loadData(from: exerciseRecords)
         }
@@ -36,8 +36,8 @@ struct ConsistencyDetailView: View {
 
     private func streakCards(_ streak: WorkoutStreak) -> some View {
         HStack(spacing: DS.Spacing.sm) {
-            statCard(title: "Current Streak", value: "\(streak.currentStreak)", unit: "days", icon: "flame.fill")
-            statCard(title: "Best Streak", value: "\(streak.bestStreak)", unit: "days", icon: "star.fill")
+            statCard(title: "Current Streak", value: "\(streak.currentStreak)", unit: String(localized: "days"), icon: "flame.fill")
+            statCard(title: "Best Streak", value: "\(streak.bestStreak)", unit: String(localized: "days"), icon: "star.fill")
         }
     }
 
@@ -159,7 +159,7 @@ struct ConsistencyDetailView: View {
                 ForEach(viewModel.streakHistory) { period in
                     HStack {
                         VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                            Text("\(period.days) days")
+                            Text(String(localized: "\(period.days.formattedWithSeparator) days"))
                                 .font(.subheadline.weight(.semibold))
                                 .foregroundStyle(theme.heroTextGradient)
                             Text("\(period.startDate, style: .date) — \(period.endDate, style: .date)")

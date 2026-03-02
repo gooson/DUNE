@@ -371,7 +371,7 @@ final class DashboardViewModel {
             let avgPrev = previousAvg.isEmpty ? nil : previousAvg.reduce(0, +) / Double(previousAvg.count)
             metrics.append(HealthMetric(
                 id: "hrv",
-                name: "HRV",
+                name: String(localized: "HRV"),
                 value: latest.value,
                 unit: "ms",
                 change: avgPrev.map { latest.value - $0 },
@@ -395,7 +395,7 @@ final class DashboardViewModel {
         if let rhr = effectiveRHR {
             metrics.append(HealthMetric(
                 id: "rhr",
-                name: "RHR",
+                name: String(localized: "RHR"),
                 value: rhr,
                 unit: "bpm",
                 change: yesterdayRHR.map { rhr - $0 },
@@ -438,7 +438,7 @@ final class DashboardViewModel {
             let avgPrev = previousAvg.isEmpty ? nil : previousAvg.reduce(0, +) / Double(previousAvg.count)
             metrics.append(HealthMetric(
                 id: "hrv",
-                name: "HRV",
+                name: String(localized: "HRV"),
                 value: latest.value,
                 unit: "ms",
                 change: avgPrev.map { latest.value - $0 },
@@ -462,7 +462,7 @@ final class DashboardViewModel {
             let rhr = effectiveRHR.value
             metrics.append(HealthMetric(
                 id: "rhr",
-                name: "RHR",
+                name: String(localized: "RHR"),
                 value: rhr,
                 unit: "bpm",
                 change: snapshot.yesterdayRHR.map { rhr - $0 },
@@ -539,7 +539,7 @@ final class DashboardViewModel {
 
         return HealthMetric(
             id: "sleep",
-            name: "Sleep",
+            name: String(localized: "Sleep"),
             value: output.totalMinutes,
             unit: "min",
             change: change,
@@ -572,7 +572,7 @@ final class DashboardViewModel {
 
         return HealthMetric(
             id: "sleep",
-            name: "Sleep",
+            name: String(localized: "Sleep"),
             value: output.totalMinutes,
             unit: "min",
             change: change,
@@ -620,7 +620,7 @@ final class DashboardViewModel {
             let totalMinutes = todayWorkouts.map(\.duration).reduce(0, +) / 60.0
             metrics.append(HealthMetric(
                 id: "exercise",
-                name: "Exercise",
+                name: String(localized: "Exercise"),
                 value: totalMinutes,
                 unit: "min",
                 change: nil,
@@ -634,7 +634,7 @@ final class DashboardViewModel {
             let totalMinutes = latest.duration / 60.0
             metrics.append(HealthMetric(
                 id: "exercise",
-                name: "Exercise",
+                name: String(localized: "Exercise"),
                 value: totalMinutes,
                 unit: "min",
                 change: nil,
@@ -680,7 +680,7 @@ final class DashboardViewModel {
 
             typeMetrics.append(HealthMetric(
                 id: "exercise-\(type.lowercased())",
-                name: type,
+                name: relevantWorkouts.first?.activityType.displayName ?? type,
                 value: value,
                 unit: unit,
                 change: nil,
@@ -753,7 +753,7 @@ final class DashboardViewModel {
             )
             return HealthMetric(
                 id: "steps",
-                name: "Steps",
+                name: String(localized: "Steps"),
                 value: steps,
                 unit: "",
                 change: yesterdaySteps.map { steps - $0 },
@@ -771,7 +771,7 @@ final class DashboardViewModel {
             )
             return HealthMetric(
                 id: "steps",
-                name: "Steps",
+                name: String(localized: "Steps"),
                 value: latest.value,
                 unit: "",
                 change: nil,
@@ -826,7 +826,7 @@ final class DashboardViewModel {
 
         return HealthMetric(
             id: "weight",
-            name: "Weight",
+            name: String(localized: "Weight"),
             value: effectiveWeight,
             unit: "kg",
             change: change,
@@ -868,7 +868,7 @@ final class DashboardViewModel {
 
         return HealthMetric(
             id: "bmi",
-            name: "BMI",
+            name: String(localized: "BMI"),
             value: effectiveBMI,
             unit: "",
             change: change,

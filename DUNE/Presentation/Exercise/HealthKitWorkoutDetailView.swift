@@ -20,7 +20,7 @@ struct HealthKitWorkoutDetailView: View {
             .padding(.horizontal, DS.Spacing.lg)
         }
         .background { DetailWaveBackground() }
-        .navigationTitle(workout.activityType.displayName)
+        .englishNavigationTitle(workout.activityType.typeName)
         .navigationBarTitleDisplayMode(.inline)
         .task {
             viewModel.loadDetail(workoutID: workout.id)

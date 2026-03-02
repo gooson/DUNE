@@ -41,7 +41,7 @@ struct TrainingReadinessDetailView: View {
             .padding()
         }
         .background { DetailWaveBackground() }
-        .navigationTitle("Training Readiness")
+        .englishNavigationTitle("Training Readiness")
         .task {
             detailVM.loadData(
                 readiness: readiness,

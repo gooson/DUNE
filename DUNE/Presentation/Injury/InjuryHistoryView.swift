@@ -44,7 +44,7 @@ struct InjuryHistoryView: View {
         .scrollContentBackground(.hidden)
         .background { DetailWaveBackground() }
         .environment(\.waveColor, DS.Color.caution)
-        .navigationTitle("Injury History")
+        .englishNavigationTitle("Injury History")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
@@ -232,7 +232,7 @@ private struct InjuryDetailView: View {
                 )
             }
         }
-        .navigationTitle("Injury Detail")
+        .englishNavigationTitle("Injury Detail")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             if let record {

@@ -136,7 +136,7 @@ struct CreateCustomExerciseView: View {
             }
             .scrollContentBackground(.hidden)
             .background { SheetWaveBackground() }
-            .navigationTitle("New Exercise")
+            .englishNavigationTitle("New Exercise")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

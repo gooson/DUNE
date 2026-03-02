@@ -28,7 +28,7 @@ struct CardioSessionSummaryView: View {
         .padding(.horizontal, DS.Spacing.lg)
         .padding(.bottom, DS.Spacing.lg)
         .background { DetailWaveBackground() }
-        .navigationTitle("Summary")
+        .englishNavigationTitle("Summary")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
     }

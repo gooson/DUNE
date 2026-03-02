@@ -26,7 +26,7 @@ struct ConsistencyCard: View {
                             Text("\(streak.currentStreak)")
                                 .font(DS.Typography.cardScore)
                                 .foregroundStyle(theme.heroTextGradient)
-                            Text("days")
+                            Text(String(localized: "days"))
                                 .font(.caption)
                                 .foregroundStyle(DS.Color.textSecondary)
                         }
@@ -43,7 +43,7 @@ struct ConsistencyCard: View {
                             Text("\(streak.bestStreak)")
                                 .font(.headline)
                                 .foregroundStyle(theme.heroTextGradient)
-                            Text("days")
+                            Text(String(localized: "days"))
                                 .font(.caption)
                                 .foregroundStyle(DS.Color.textSecondary)
                         }

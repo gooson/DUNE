@@ -130,7 +130,7 @@ struct MetricDetailView: View {
         }
         .background { DetailWaveBackground() }
         .environment(\.waveColor, metric.category.themeColor)
-        .navigationTitle(metric.name)
+        .englishNavigationTitle(metric.category.englishDisplayName)
         .navigationBarTitleDisplayMode(.large)
         .overlay {
             if viewModel.isLoading && viewModel.chartData.isEmpty {

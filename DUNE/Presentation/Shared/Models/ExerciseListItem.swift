@@ -90,9 +90,9 @@ struct ExerciseListItem: Identifiable {
     }
 
     var formattedDuration: String {
-        guard duration.isFinite, duration >= 0 else { return "0 min" }
-        let minutes = Int(duration / 60)
-        return "\(minutes) min"
+        let safeDuration = (duration.isFinite && duration >= 0) ? duration : 0
+        let minutes = Int(safeDuration / 60)
+        return String(localized: "\(minutes.formattedWithSeparator) min")
     }
 
     var setSummary: String? {

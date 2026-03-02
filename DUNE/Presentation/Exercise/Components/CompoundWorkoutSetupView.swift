@@ -27,7 +27,7 @@ struct CompoundWorkoutSetupView: View {
                 startButton
             }
             .scrollContentBackground(.hidden)
-            .navigationTitle("Compound Workout")
+            .englishNavigationTitle("Compound Workout")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

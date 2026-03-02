@@ -67,7 +67,7 @@ struct PersonalRecordsDetailView: View {
             .padding()
         }
         .background { DetailWaveBackground() }
-        .navigationTitle("Personal Records")
+        .englishNavigationTitle("Personal Records")
         .task(id: recordsUpdateKey) {
             viewModel.load(records: records)
             if selectedKindValue == nil {
@@ -123,7 +123,7 @@ struct PersonalRecordsDetailView: View {
                 .symbolSize(record.isRecent ? 80 : 40)
                 .annotation(position: .top, spacing: 4) {
                     if record.isRecent {
-                        Text(record.title)
+                        Text(record.localizedTitle)
                             .font(.system(size: 8))
                             .foregroundStyle(DS.Color.textSecondary)
                             .lineLimit(1)
@@ -179,7 +179,7 @@ struct PersonalRecordsDetailView: View {
                 Image(systemName: record.kind.iconName)
                     .font(.caption2)
                     .foregroundStyle(record.kind.tintColor)
-                Text(record.title)
+                Text(record.localizedTitle)
                     .font(.caption)
                     .fontWeight(.medium)
                     .foregroundStyle(DS.Color.textSecondary)

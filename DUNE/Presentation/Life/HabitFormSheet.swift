@@ -25,7 +25,7 @@ struct HabitFormSheet: View {
             }
             .scrollContentBackground(.hidden)
             .background { SheetWaveBackground() }
-            .navigationTitle(isEdit ? String(localized: "Edit Habit") : String(localized: "New Habit"))
+            .englishNavigationTitle(isEdit ? "Edit Habit" : "New Habit")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

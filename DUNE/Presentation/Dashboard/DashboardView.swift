@@ -177,7 +177,7 @@ struct DashboardView: View {
                 allowedCategories: viewModel.availablePinnedCategories
             )
         }
-        .navigationTitle(Text(verbatim: "Today"))
+        .englishNavigationTitle("Today")
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 NavigationLink {
@@ -323,6 +323,15 @@ struct DashboardView: View {
 private struct BaselineProgressView: View {
     let status: BaselineStatus
 
+    private var progressText: String {
+        String(
+            format: String(localized: "%@/%@ days"),
+            locale: Locale.current,
+            status.daysCollected.formattedWithSeparator,
+            status.daysRequired.formattedWithSeparator
+        )
+    }
+
     var body: some View {
         StandardCard {
             VStack(spacing: DS.Spacing.md) {
@@ -332,7 +341,7 @@ private struct BaselineProgressView: View {
                 ProgressView(value: status.progress)
                     .tint(DS.Color.hrv)
 
-                Text("\(status.daysCollected)/\(status.daysRequired) days")
+                Text(progressText)
                     .font(.caption)
                     .foregroundStyle(DS.Color.textSecondary)
             }

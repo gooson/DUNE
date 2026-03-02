@@ -32,7 +32,7 @@ struct TrainingVolumeDetailView: View {
             .padding()
         }
         .background { DetailWaveBackground() }
-        .navigationTitle("Training Volume")
+        .englishNavigationTitle("Training Volume")
         .navigationBarTitleDisplayMode(.large)
         .task(id: viewModel.selectedPeriod) {
             await viewModel.loadData(manualRecords: exerciseRecords)
