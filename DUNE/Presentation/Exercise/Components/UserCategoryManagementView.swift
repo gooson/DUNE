@@ -64,7 +64,7 @@ struct UserCategoryManagementView: View {
         }
         .scrollContentBackground(.hidden)
         .background { DetailWaveBackground() }
-        .navigationTitle("Categories")
+        .englishNavigationTitle("Categories")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
@@ -238,7 +238,7 @@ struct UserCategoryEditView: View {
             }
             .scrollContentBackground(.hidden)
             .background { SheetWaveBackground() }
-            .navigationTitle(mode.isCreate ? String(localized: "New Category") : String(localized: "Edit Category"))
+            .englishNavigationTitle(mode.isCreate ? "New Category" : "Edit Category")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

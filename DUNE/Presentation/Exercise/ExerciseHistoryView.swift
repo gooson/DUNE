@@ -41,7 +41,7 @@ struct ExerciseHistoryView: View {
             }
             .padding(.horizontal, DS.Spacing.lg)
         }
-        .navigationTitle(exerciseName)
+        .englishNavigationTitle(exerciseName)
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             rebuildRecordIndex()

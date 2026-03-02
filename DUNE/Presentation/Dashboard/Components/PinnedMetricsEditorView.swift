@@ -43,7 +43,7 @@ struct PinnedMetricsEditorView: View {
             }
             .scrollContentBackground(.hidden)
             .background { SheetWaveBackground() }
-            .navigationTitle("Edit Pinned Metrics")
+            .englishNavigationTitle("Edit Pinned Metrics")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

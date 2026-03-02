@@ -52,8 +52,8 @@ extension HealthMetric {
 
     /// Unit label resolved from override or category default.
     var resolvedUnitLabel: String {
-        if !unit.isEmpty { return unit }
-        return category.unitLabel
+        let rawUnit = unit.isEmpty ? category.unitLabel : unit
+        return Self.localizedUnitLabel(rawUnit)
     }
 
     /// Fraction digits appropriate for change/delta formatting of this metric's category.
@@ -85,6 +85,17 @@ extension HealthMetric {
         guard let change else { return nil }
         let arrow = change > 0 ? "\u{25B2}" : "\u{25BC}"
         return "\(arrow)\(abs(change).formattedWithSeparator(fractionDigits: changeFractionDigits))"
+    }
+
+    private static func localizedUnitLabel(_ unit: String) -> String {
+        switch unit {
+        case "min":
+            return String(localized: "min")
+        case "steps":
+            return String(localized: "steps")
+        default:
+            return unit
+        }
     }
 }
 
@@ -153,6 +164,27 @@ extension HealthMetric.Category {
         case .vo2Max:             String(localized: "VO2 Max")
         case .heartRateRecovery:  String(localized: "HR Recovery")
         case .wristTemperature:   String(localized: "Wrist Temp")
+        }
+    }
+
+    /// Product rule: navigation titles are fixed English.
+    var englishDisplayName: String {
+        switch self {
+        case .hrv:                "Heart Rate Variability"
+        case .rhr:                "Resting Heart Rate"
+        case .heartRate:          "Heart Rate"
+        case .sleep:              "Sleep"
+        case .exercise:           "Exercise"
+        case .steps:              "Steps"
+        case .weight:             "Weight"
+        case .bmi:                "BMI"
+        case .bodyFat:            "Body Fat"
+        case .leanBodyMass:       "Lean Body Mass"
+        case .spo2:               "Blood Oxygen"
+        case .respiratoryRate:    "Respiratory Rate"
+        case .vo2Max:             "VO2 Max"
+        case .heartRateRecovery:  "HR Recovery"
+        case .wristTemperature:   "Wrist Temp"
         }
     }
 

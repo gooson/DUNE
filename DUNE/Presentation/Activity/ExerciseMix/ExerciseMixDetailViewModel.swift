@@ -21,7 +21,7 @@ final class ExerciseMixDetailViewModel {
 
         let entries = exerciseRecords.compactMap { record -> ExerciseFrequencyService.WorkoutEntry? in
             let definition = record.exerciseDefinitionID.flatMap { library.exercise(byID: $0) }
-            let name = definition?.name ?? record.exerciseType
+            let name = resolveDisplayName(record: record, definition: definition)
             guard !name.isEmpty else { return nil }
             return ExerciseFrequencyService.WorkoutEntry(exerciseName: name, date: record.date)
         }
@@ -29,5 +29,21 @@ final class ExerciseMixDetailViewModel {
         exerciseFrequencies = ExerciseFrequencyService.analyze(from: entries)
         frequencyByName = Dictionary(uniqueKeysWithValues: exerciseFrequencies.map { ($0.exerciseName, $0) })
         isLoading = false
+    }
+
+    private func resolveDisplayName(record: ExerciseRecord, definition: ExerciseDefinition?) -> String {
+        if let localizedName = definition?.localizedName, !localizedName.isEmpty {
+            return localizedName
+        }
+
+        if let mapped = WorkoutActivityType.localizedDisplayName(forStoredTitle: record.exerciseType) {
+            return mapped
+        }
+
+        if let inferred = WorkoutActivityType.infer(from: record.exerciseType) {
+            return inferred.displayName
+        }
+
+        return record.exerciseType
     }
 }

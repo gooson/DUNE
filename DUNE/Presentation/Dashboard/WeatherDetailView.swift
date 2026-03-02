@@ -134,7 +134,7 @@ struct WeatherDetailView: View {
             .padding(sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.lg)
         }
         .background { DetailWaveBackground() }
-        .navigationTitle("Weather")
+        .englishNavigationTitle("Weather")
     }
 
     // MARK: - Current Weather Hero

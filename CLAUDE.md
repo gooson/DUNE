@@ -178,6 +178,8 @@
 
 ### UI 표시 규칙
 
+- **탭 이름/네비게이션 타이틀은 영어 고정**: `AppSection.title` + `englishNavigationTitle(_:)` 사용, localized title 금지 (#190)
+- **Watch 사용자 라벨 하드코딩 금지**: 캐러셀/퀵스타트/운동시작 라벨은 `String(localized:)` 경유 (#191)
 - **화면 숫자 표기는 `formattedWithSeparator` 경유** (#97)
 - **`changeFractionDigits` 단일 소스: `HealthMetric+View`** (#98)
 - **rawValue UI 직접 표시 금지 -> `displayName` computed** (#36)

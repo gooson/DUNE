@@ -8,7 +8,8 @@ enum AppSection: String, CaseIterable, Identifiable {
 
     var id: String { rawValue }
 
-    var title: LocalizedStringKey {
+    /// Product rule: tab names stay fixed in English across locales.
+    var title: String {
         switch self {
         case .today: "Today"
         case .train: "Activity"

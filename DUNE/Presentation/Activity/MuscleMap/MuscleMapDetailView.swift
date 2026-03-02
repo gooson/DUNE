@@ -73,7 +73,7 @@ struct MuscleMapDetailView: View {
             .padding(.horizontal, DS.Spacing.lg)
         }
         .background { DetailWaveBackground() }
-        .navigationTitle("Muscle Map")
+        .englishNavigationTitle("Muscle Map")
         .navigationBarTitleDisplayMode(.inline)
         .task {
             viewModel.loadData(fatigueStates: fatigueStates)

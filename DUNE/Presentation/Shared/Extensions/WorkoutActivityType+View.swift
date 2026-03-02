@@ -92,6 +92,21 @@ extension WorkoutActivityType {
 
     /// Category-based color for the activity type (Desert Horizon palette).
     var color: Color { category.color }
+
+    /// Resolves a localized display name when a legacy English type name/raw value is stored.
+    static func localizedDisplayName(forStoredTitle storedTitle: String) -> String? {
+        let normalized = storedTitle.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !normalized.isEmpty else { return nil }
+
+        guard let activityType = allCases.first(where: {
+            $0.typeName.caseInsensitiveCompare(normalized) == .orderedSame ||
+            $0.rawValue.caseInsensitiveCompare(normalized) == .orderedSame
+        }) else {
+            return nil
+        }
+
+        return activityType.displayName
+    }
 }
 
 extension ActivityCategory {
@@ -201,5 +216,13 @@ extension ActivityPersonalRecord.Kind {
         case .longestDuration: DS.Color.fitness
         case .highestElevation: .green
         }
+    }
+}
+
+extension ActivityPersonalRecord {
+    /// Presentation-safe localized title for workout-type records.
+    /// Falls back to the original title for custom/manual exercise names.
+    var localizedTitle: String {
+        WorkoutActivityType.localizedDisplayName(forStoredTitle: title) ?? title
     }
 }

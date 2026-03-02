@@ -82,7 +82,7 @@ struct TemplateFormView: View {
             }
             .scrollContentBackground(.hidden)
             .background { SheetWaveBackground() }
-            .navigationTitle(isEditing ? String(localized: "Edit Template") : String(localized: "New Template"))
+            .englishNavigationTitle(isEditing ? "Edit Template" : "New Template")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

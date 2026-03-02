@@ -40,7 +40,7 @@ struct CardioSessionView: View {
         .padding(.horizontal, DS.Spacing.lg)
         .padding(.bottom, DS.Spacing.lg)
         .background { DetailWaveBackground() }
-        .navigationTitle(exercise.localizedName)
+        .englishNavigationTitle(exercise.name)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .confirmationDialog(

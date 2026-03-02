@@ -49,7 +49,7 @@ struct PersonalRecordsSection: View {
                     .font(.caption2)
                     .foregroundStyle(record.kind.tintColor)
 
-                Text(record.title)
+                Text(record.localizedTitle)
                     .font(.caption)
                     .fontWeight(.medium)
                     .foregroundStyle(DS.Color.textSecondary)

@@ -56,7 +56,7 @@ struct WellnessScoreDetailView: View {
             .padding()
         }
         .background { DetailWaveBackground() }
-        .navigationTitle("Wellness Score")
+        .englishNavigationTitle("Wellness Score")
         .navigationBarTitleDisplayMode(.large)
     }
 

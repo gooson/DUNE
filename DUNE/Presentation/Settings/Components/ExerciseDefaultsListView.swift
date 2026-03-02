@@ -26,7 +26,7 @@ struct ExerciseDefaultsListView: View {
         }
         .scrollContentBackground(.hidden)
         .background { DetailWaveBackground() }
-        .navigationTitle("Exercise Defaults")
+        .englishNavigationTitle("Exercise Defaults")
         .searchable(text: $searchText, prompt: "Search exercises")
         .onAppear {
             rebuildDefaultsIndex()

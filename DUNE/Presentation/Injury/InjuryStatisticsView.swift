@@ -21,7 +21,7 @@ struct InjuryStatisticsView: View {
         }
         .background { DetailWaveBackground() }
         .environment(\.waveColor, DS.Color.caution)
-        .navigationTitle("Injury Statistics")
+        .englishNavigationTitle("Injury Statistics")
         .navigationBarTitleDisplayMode(.inline)
     }
 

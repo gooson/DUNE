@@ -203,8 +203,8 @@ enum VolumeMetric: String, CaseIterable {
 
     var unitName: String {
         switch self {
-        case .duration: "min"
-        case .calories: "kcal"
+        case .duration: String(localized: "min")
+        case .calories: String(localized: "kcal")
         case .sessions: String(localized: "sessions")
         }
     }

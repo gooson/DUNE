@@ -22,11 +22,11 @@ struct WorkoutPreviewView: View {
         }
         .background { WatchWaveBackground() }
         .navigationTitle(snapshot.name)
-        .alert("Error", isPresented: .init(
+        .alert(String(localized: "Error"), isPresented: .init(
             get: { errorMessage != nil },
             set: { if !$0 { errorMessage = nil } }
         )) {
-            Button("OK", role: .cancel) {}
+            Button(String(localized: "OK"), role: .cancel) {}
         } message: {
             Text(errorMessage ?? "")
         }
@@ -55,14 +55,14 @@ struct WorkoutPreviewView: View {
                     .foregroundStyle(DS.Color.activity)
                     .padding(.top, DS.Spacing.lg)
 
-                Text(activityType.typeName)
+                Text(LocalizedStringKey(activityType.typeName))
                     .font(DS.Typography.exerciseName)
 
                 // Outdoor option
                 Button {
                     startCardio(activityType: activityType, isOutdoor: true)
                 } label: {
-                    Label("Outdoor", systemImage: "sun.max.fill")
+                    Label(String(localized: "Outdoor"), systemImage: "sun.max.fill")
                         .frame(maxWidth: .infinity, minHeight: 44)
                 }
                 .buttonStyle(.borderedProminent)
@@ -73,7 +73,7 @@ struct WorkoutPreviewView: View {
                 Button {
                     startCardio(activityType: activityType, isOutdoor: false)
                 } label: {
-                    Label("Indoor", systemImage: "building.fill")
+                    Label(String(localized: "Indoor"), systemImage: "building.fill")
                         .frame(maxWidth: .infinity, minHeight: 44)
                 }
                 .buttonStyle(.bordered)
@@ -143,7 +143,13 @@ struct WorkoutPreviewView: View {
                         }
                     }
                 } header: {
-                    Text("\(snapshot.entries.count) exercises")
+                    Text(
+                        String(
+                            format: String(localized: "%@ exercises"),
+                            locale: Locale.current,
+                            snapshot.entries.count.formattedWithSeparator
+                        )
+                    )
                 }
             }
             .scrollContentBackground(.hidden)
@@ -158,7 +164,7 @@ struct WorkoutPreviewView: View {
                     } else {
                         Image(systemName: "play.fill")
                     }
-                    Text("Start")
+                    Text(String(localized: "Start"))
                         .font(.headline)
                 }
                 .frame(maxWidth: .infinity, minHeight: 44)

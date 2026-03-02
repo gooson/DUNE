@@ -31,7 +31,7 @@ struct AllDataView: View {
         .scrollContentBackground(.hidden)
         .background { DetailWaveBackground() }
         .environment(\.waveColor, category.themeColor)
-        .navigationTitle(category.displayName)
+        .englishNavigationTitle(category.englishDisplayName)
         .navigationBarTitleDisplayMode(.inline)
         .overlay {
             if viewModel.dataPoints.isEmpty && !viewModel.isLoading {

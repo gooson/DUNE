@@ -78,7 +78,7 @@ struct ExerciseDefaultEditView: View {
         }
         .scrollContentBackground(.hidden)
         .background { DetailWaveBackground() }
-        .navigationTitle("Exercise Default")
+        .englishNavigationTitle("Exercise Default")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {

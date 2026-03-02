@@ -237,7 +237,7 @@ struct WellnessView: View {
         .task(id: refreshSignal) {
             viewModel.loadData()
         }
-        .navigationTitle(Text(verbatim: "Wellness"))
+        .englishNavigationTitle("Wellness")
     }
 
     // MARK: - Helpers

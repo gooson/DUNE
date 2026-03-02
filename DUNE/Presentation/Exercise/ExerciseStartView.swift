@@ -39,7 +39,7 @@ struct ExerciseStartView: View {
                 startButton
             }
             .background { SheetWaveBackground() }
-            .navigationTitle(exercise.localizedName)
+            .englishNavigationTitle(exercise.name)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

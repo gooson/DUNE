@@ -183,7 +183,7 @@ struct ExerciseView: View {
             await viewModel.loadHealthKitWorkouts()
         }
         .background { TabWaveBackground() }
-        .navigationTitle("Exercise")
+        .englishNavigationTitle("Exercise")
         .confirmDeleteRecord($recordToDelete, context: modelContext)
     }
 
