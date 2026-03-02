@@ -108,16 +108,20 @@ struct CarouselHomeView: View {
         }
         .onChange(of: templateContentKey) { _, _ in rebuildCards() }
         .onChange(of: templates.count) { _, _ in updateTemplateContentKey() }
+        .onChange(of: templates.map(\.updatedAt)) { _, _ in updateTemplateContentKey() }
+        .onChange(of: connectivity.workoutTemplates.count) { _, _ in updateTemplateContentKey() }
+        .onChange(of: connectivity.workoutTemplates.map(\.updatedAt)) { _, _ in updateTemplateContentKey() }
         .onChange(of: connectivity.exerciseLibrary.count) { _, _ in rebuildCards() }
     }
 
     /// Computes a content-aware hash of all templates (Correction #87).
     private func updateTemplateContentKey() {
         var hasher = Hasher()
-        for t in templates {
+        for t in mergedRoutineTemplates(local: templates, synced: connectivity.workoutTemplates) {
             hasher.combine(t.id)
             hasher.combine(t.name)
             hasher.combine(t.updatedAt)
+            hasher.combine(t.entries.count)
         }
         let newKey = hasher.finalize()
         if newKey != templateContentKey {
@@ -256,8 +260,8 @@ struct CarouselHomeView: View {
         }
 
         // 1. Routine cards (most recently updated first)
-        for template in templates {
-            let entries = Self.enrichedEntries(template.exerciseEntries, equipmentByID: equipmentByID)
+        for template in mergedRoutineTemplates(local: templates, synced: connectivity.workoutTemplates) {
+            let entries = Self.enrichedEntries(template.entries, equipmentByID: equipmentByID)
             result.append(CarouselCard(
                 id: "routine-\(template.id)",
                 section: .routine,

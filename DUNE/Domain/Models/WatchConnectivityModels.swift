@@ -46,3 +46,12 @@ struct WatchExerciseInfo: Codable, Sendable {
     let equipment: String?
     let cardioSecondaryUnit: String?
 }
+
+/// Lightweight workout template payload sent from iPhone to Watch.
+/// Used as a fallback sync path when CloudKit template propagation is delayed/disabled.
+struct WatchWorkoutTemplateInfo: Codable, Sendable {
+    let id: UUID
+    let name: String
+    let entries: [TemplateEntry]
+    let updatedAt: Date
+}

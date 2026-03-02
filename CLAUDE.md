@@ -158,6 +158,7 @@
 - **Watch 운동 종료는 액션 즉시 `isSessionEnded` 전환 + finalize timeout watchdog 적용** (HealthKit delegate 지연/누락 방어) (#192)
 - **Watch exerciseLibrary 미수신 상태를 `synced`로 표시 금지**: missing context key면 `syncing/notConnected` 유지 + 재요청 경로 확보 (#193)
 - **Watch cardio elapsed/pace는 pause 구간을 제외한 active elapsed 기준으로 계산**: wall-clock 기반 계산 금지 (#194)
+- **Watch 루틴 템플릿은 CloudKit-only 의존 금지**: `WorkoutTemplate` primary는 유지하되 WatchConnectivity fallback DTO/병합(local 우선)으로 가시성 공백 방지 (#195)
 
 ### Design System
 

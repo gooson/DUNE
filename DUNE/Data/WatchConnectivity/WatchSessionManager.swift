@@ -1,6 +1,7 @@
 import Foundation
 @preconcurrency import WatchConnectivity
 import Observation
+import SwiftData
 
 /// Manages WatchConnectivity session for syncing workout data with Apple Watch
 @Observable
@@ -20,6 +21,8 @@ final class WatchSessionManager: NSObject {
 
     /// Serializes delegate message handling — cancel-before-spawn
     private var messageHandlerTask: Task<Void, Never>?
+    /// Last template snapshot pushed to Watch (used to respond to pull-requests).
+    private var cachedWorkoutTemplates: [WatchWorkoutTemplateInfo] = []
 
     private override init() {
         super.init()
@@ -78,15 +81,43 @@ final class WatchSessionManager: NSObject {
 
         do {
             let data = try JSONEncoder().encode(exercises)
-            let themeRawValue = UserDefaults.standard.string(forKey: "com.dune.app.theme") ?? AppTheme.desertWarm.rawValue
-            let context: [String: Any] = [
-                "exerciseLibrary": data,
-                "globalRestSeconds": WorkoutSettingsStore.shared.restSeconds,
-                "appTheme": themeRawValue,
-            ]
-            try WCSession.default.updateApplicationContext(context)
+            try updateApplicationContext(exerciseLibraryData: data)
         } catch {
             AppLogger.ui.error("Failed to transfer exercise library: \(error.localizedDescription)")
+        }
+    }
+
+    /// Send workout templates to Watch so routines are available even when CloudKit sync is delayed/disabled.
+    func transferWorkoutTemplates(_ templates: [WatchWorkoutTemplateInfo]) {
+        cachedWorkoutTemplates = templates
+        guard WCSession.default.activationState == .activated else { return }
+
+        do {
+            let data = try JSONEncoder().encode(templates)
+            try updateApplicationContext(workoutTemplatesData: data)
+        } catch {
+            AppLogger.ui.error("Failed to transfer workout templates: \(error.localizedDescription)")
+        }
+    }
+
+    /// Fetches latest templates from SwiftData and transfers them to Watch.
+    func syncWorkoutTemplatesToWatch(using modelContext: ModelContext) {
+        let descriptor = FetchDescriptor<WorkoutTemplate>(
+            sortBy: [SortDescriptor(\.updatedAt, order: .reverse)]
+        )
+        do {
+            let templates = try modelContext.fetch(descriptor)
+            let payload = templates.map { template in
+                WatchWorkoutTemplateInfo(
+                    id: template.id,
+                    name: template.name,
+                    entries: template.exerciseEntries,
+                    updatedAt: template.updatedAt
+                )
+            }
+            transferWorkoutTemplates(payload)
+        } catch {
+            AppLogger.ui.error("Failed to fetch workout templates for Watch sync: \(error.localizedDescription)")
         }
     }
 
@@ -98,8 +129,7 @@ final class WatchSessionManager: NSObject {
 
         // Immediate message if reachable
         if WCSession.default.isReachable {
-            let themeRawValue = UserDefaults.standard.string(forKey: "com.dune.app.theme") ?? AppTheme.desertWarm.rawValue
-            let message: [String: Any] = ["globalRestSeconds": restSeconds, "appTheme": themeRawValue]
+            let message: [String: Any] = ["globalRestSeconds": restSeconds, "appTheme": currentThemeRawValue]
             WCSession.default.sendMessage(message, replyHandler: nil) { error in
                 AppLogger.ui.error("Failed to send workout settings: \(error.localizedDescription)")
             }
@@ -128,6 +158,26 @@ final class WatchSessionManager: NSObject {
         }
         transferExerciseLibrary(watchExercises)
     }
+
+    private var currentThemeRawValue: String {
+        UserDefaults.standard.string(forKey: "com.dune.app.theme") ?? AppTheme.desertWarm.rawValue
+    }
+
+    private func updateApplicationContext(
+        exerciseLibraryData: Data? = nil,
+        workoutTemplatesData: Data? = nil
+    ) throws {
+        var context = WCSession.default.applicationContext
+        if let exerciseLibraryData {
+            context["exerciseLibrary"] = exerciseLibraryData
+        }
+        if let workoutTemplatesData {
+            context["workoutTemplates"] = workoutTemplatesData
+        }
+        context["globalRestSeconds"] = WorkoutSettingsStore.shared.restSeconds
+        context["appTheme"] = currentThemeRawValue
+        try WCSession.default.updateApplicationContext(context)
+    }
 }
 
 // MARK: - WCSessionDelegate
@@ -147,6 +197,7 @@ extension WatchSessionManager: WCSessionDelegate {
             // Auto-sync exercise library to Watch on successful activation
             if activationState == .activated, session.isWatchAppInstalled {
                 syncExerciseLibraryToWatch()
+                transferWorkoutTemplates(cachedWorkoutTemplates)
             }
         }
     }
@@ -209,6 +260,9 @@ extension WatchSessionManager {
         if message.requestExerciseLibrarySync {
             syncExerciseLibraryToWatch()
         }
+        if message.requestWorkoutTemplateSync {
+            transferWorkoutTemplates(cachedWorkoutTemplates)
+        }
 
         // Handle workout completion from Watch
         if let data = message.workoutCompleteData {
@@ -239,11 +293,13 @@ struct ParsedWatchIncomingMessage: Sendable {
     let workoutCompleteData: Data?
     let setCompletedData: Data?
     let requestExerciseLibrarySync: Bool
+    let requestWorkoutTemplateSync: Bool
 
     init(from message: [String: Any]) {
         workoutCompleteData = message["workoutComplete"] as? Data
         setCompletedData = message["setCompleted"] as? Data
         requestExerciseLibrarySync = (message["requestExerciseLibrarySync"] as? Bool) == true
+        requestWorkoutTemplateSync = (message["requestWorkoutTemplateSync"] as? Bool) == true
     }
 }
 
