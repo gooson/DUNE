@@ -69,7 +69,7 @@ final class WeatherProvider: WeatherProviding, Sendable {
         } catch is CancellationError {
             return nil
         } catch {
-            print("[WeatherProvider] Air quality fetch failed: \(error)")
+            AppLogger.ui.error("[WeatherProvider] Air quality fetch failed: \(error.localizedDescription)")
             return nil
         }
     }

@@ -97,7 +97,7 @@ struct SessionSummaryView: View {
         return String(format: "%.2f km", km)
     }
 
-    private func statItem(title: String, value: String) -> some View {
+    private func statItem(title: LocalizedStringKey, value: String) -> some View {
         VStack(spacing: DS.Spacing.xxs) {
             Text(value)
                 .font(DS.Typography.tileSubtitle)

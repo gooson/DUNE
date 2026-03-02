@@ -7,6 +7,7 @@ final class LocationTrackingService: NSObject, LocationTrackingServiceProtocol, 
     private let logger = AppLogger.healthKit
     private let locationManager = CLLocationManager()
     private let lock = NSLock()
+    private let authLock = NSLock()
 
     private var lastLocation: CLLocation?
     private var _totalDistanceMeters: Double = 0
@@ -15,6 +16,20 @@ final class LocationTrackingService: NSObject, LocationTrackingServiceProtocol, 
 
     var totalDistanceMeters: Double {
         lock.withLock { _totalDistanceMeters }
+    }
+
+    private func storeAuthContinuation(_ continuation: CheckedContinuation<CLAuthorizationStatus, Never>) {
+        authLock.withLock {
+            authContinuation = continuation
+        }
+    }
+
+    private func takeAuthContinuation() -> CheckedContinuation<CLAuthorizationStatus, Never>? {
+        authLock.withLock {
+            let pending = authContinuation
+            authContinuation = nil
+            return pending
+        }
     }
 
     override init() {
@@ -31,16 +46,14 @@ final class LocationTrackingService: NSObject, LocationTrackingServiceProtocol, 
             locationManager.requestWhenInUseAuthorization()
             // Wait for the actual authorization callback with 30s timeout
             let grantedStatus: CLAuthorizationStatus = await withCheckedContinuation { continuation in
-                self.authContinuation = continuation
+                self.storeAuthContinuation(continuation)
 
                 // Timeout: resume with .denied after 30s if delegate hasn't fired
                 Task { [weak self] in
                     try? await Task.sleep(for: .seconds(30))
                     guard !Task.isCancelled, let self else { return }
-                    if let pending = self.authContinuation {
-                        self.authContinuation = nil
-                        pending.resume(returning: .denied)
-                    }
+                    let pending = self.takeAuthContinuation()
+                    pending?.resume(returning: .denied)
                 }
             }
             guard grantedStatus == .authorizedWhenInUse || grantedStatus == .authorizedAlways else {
@@ -104,8 +117,7 @@ extension LocationTrackingService: CLLocationManagerDelegate {
         logger.info("[Location] Authorization changed: \(status.rawValue)")
 
         // Resume the pending authorization continuation if waiting
-        if status != .notDetermined, let continuation = authContinuation {
-            authContinuation = nil
+        if status != .notDetermined, let continuation = takeAuthContinuation() {
             continuation.resume(returning: status)
         }
     }

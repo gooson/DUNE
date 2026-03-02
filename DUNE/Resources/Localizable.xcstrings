@@ -13496,6 +13496,23 @@
         }
       }
     },
+    "Some data could not be loaded (%lld of %lld sources)" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一部のデータを読み込めませんでした（%2$lldソース中%1$lld）"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "일부 데이터를 불러올 수 없습니다 (%2$lld개 소스 중 %1$lld개)"
+          }
+        }
+      }
+    },
     "Some data could not be loaded (%lld/4 sources)" : {
       "extractionState" : "manual",
       "localizations" : {

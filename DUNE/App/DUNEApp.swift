@@ -36,6 +36,24 @@ struct DUNEApp: App {
     private static let shouldSeedMockData: Bool =
         isRunningXCTest && ProcessInfo.processInfo.arguments.contains("--seed-mock")
 
+    private static func makeModelContainer(configuration: ModelConfiguration) throws -> ModelContainer {
+        try ModelContainer(
+            for: ExerciseRecord.self, BodyCompositionRecord.self, WorkoutSet.self, CustomExercise.self, WorkoutTemplate.self, UserCategory.self, InjuryRecord.self, ExerciseDefaultRecord.self, HabitDefinition.self, HabitLog.self,
+            migrationPlan: AppMigrationPlan.self,
+            configurations: configuration
+        )
+    }
+
+    private static func makeInMemoryFallbackContainer() -> ModelContainer {
+        let fallbackConfiguration = ModelConfiguration(isStoredInMemoryOnly: true)
+        do {
+            AppLogger.data.error("Falling back to in-memory ModelContainer due to persistent store failure")
+            return try makeModelContainer(configuration: fallbackConfiguration)
+        } catch {
+            fatalError("Failed to create fallback in-memory ModelContainer: \(error)")
+        }
+    }
+
     init() {
         let sharedService: SharedHealthDataService = SharedHealthDataServiceImpl(healthKitManager: .shared)
         self.sharedHealthDataService = sharedService
@@ -50,23 +68,16 @@ struct DUNEApp: App {
             cloudKitDatabase: (cloudSyncEnabled && !Self.isRunningXCTest) ? .automatic : .none
         )
         do {
-            modelContainer = try ModelContainer(
-                for: ExerciseRecord.self, BodyCompositionRecord.self, WorkoutSet.self, CustomExercise.self, WorkoutTemplate.self, UserCategory.self, InjuryRecord.self, ExerciseDefaultRecord.self, HabitDefinition.self, HabitLog.self,
-                migrationPlan: AppMigrationPlan.self,
-                configurations: config
-            )
+            modelContainer = try Self.makeModelContainer(configuration: config)
         } catch {
             // Schema migration failed — delete store and retry (MVP: no user data to preserve)
             AppLogger.data.error("ModelContainer failed: \(error)")
             Self.deleteStoreFiles(at: config.url)
             do {
-                modelContainer = try ModelContainer(
-                    for: ExerciseRecord.self, BodyCompositionRecord.self, WorkoutSet.self, CustomExercise.self, WorkoutTemplate.self, UserCategory.self, InjuryRecord.self, ExerciseDefaultRecord.self, HabitDefinition.self, HabitLog.self,
-                    migrationPlan: AppMigrationPlan.self,
-                    configurations: config
-                )
+                modelContainer = try Self.makeModelContainer(configuration: config)
             } catch {
-                fatalError("Failed to create ModelContainer after reset: \(error)")
+                AppLogger.data.error("ModelContainer retry failed: \(error)")
+                modelContainer = Self.makeInMemoryFallbackContainer()
             }
         }
     }
