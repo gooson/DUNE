@@ -158,11 +158,23 @@ private struct SakuraPetalDriftView: View {
         (0..<petalCount).map { idx in
             let seed = Double(idx * 139 + 17)
             let x = 0.05 + 0.9 * abs(sin(seed * 0.171))
-            let y = 0.08 + 0.72 * abs(sin(seed * 0.137 + 0.7))
+            let y = -0.12 + 0.54 * abs(sin(seed * 0.137 + 0.7))
             let size = 5.0 + 8.0 * abs(sin(seed * 0.293))
             let sway = 6.0 + 14.0 * abs(sin(seed * 0.227 + 1.2))
             let start = 2 * Double.pi * abs(sin(seed * 0.043))
-            return PetalSpec(x: x, y: y, size: size, sway: sway, start: start)
+            let fallDepth = 0.62 + 0.58 * abs(sin(seed * 0.119 + 0.4))
+            let fallRate = 0.65 + 0.9 * abs(sin(seed * 0.083 + 1.0))
+            let spin = 18.0 + 42.0 * abs(sin(seed * 0.057))
+            return PetalSpec(
+                x: x,
+                y: y,
+                size: size,
+                sway: sway,
+                start: start,
+                fallDepth: fallDepth,
+                fallRate: fallRate,
+                spin: spin
+            )
         }
     }
 
@@ -171,14 +183,18 @@ private struct SakuraPetalDriftView: View {
             ZStack {
                 ForEach(Array(petals.enumerated()), id: \.offset) { idx, petal in
                     let phase = driftPhase + CGFloat(petal.start)
+                    let baseLoop = (phase / (2 * .pi)) * CGFloat(petal.fallRate)
+                    let wrappedLoop = baseLoop.truncatingRemainder(dividingBy: 1)
+                    let dropProgress = wrappedLoop < 0 ? wrappedLoop + 1 : wrappedLoop
                     let x = petal.x * proxy.size.width + CGFloat(sin(phase + CGFloat(idx))) * petal.sway
                     let yBase = petal.y * proxy.size.height
-                    let yDrift = reduceMotion ? 0 : CGFloat(cos(phase * 0.7 + CGFloat(idx) * 0.4)) * 10
+                    let yFall = proxy.size.height * CGFloat(petal.fallDepth) * dropProgress
+                    let yDrift = reduceMotion ? 0 : CGFloat(cos(phase * 0.9 + CGFloat(idx) * 0.4)) * 6
                     SakuraPetalGlyph()
                         .fill(petalColor.opacity((0.26 + 0.32 * intensity) * darkModeBoost))
                         .frame(width: petal.size, height: petal.size * 1.35)
-                        .rotationEffect(.degrees(Double((phase * 40).truncatingRemainder(dividingBy: 360))))
-                        .position(x: x, y: yBase + yDrift)
+                        .rotationEffect(.degrees(Double(dropProgress * 160) + Double(phase) * petal.spin))
+                        .position(x: x, y: yBase + yFall + yDrift)
                         .blur(radius: reduceMotion ? 0 : 0.2)
                 }
             }
@@ -214,6 +230,9 @@ private struct PetalSpec {
     let size: Double
     let sway: Double
     let start: Double
+    let fallDepth: Double
+    let fallRate: Double
+    let spin: Double
 }
 
 private struct SakuraPetalGlyph: Shape {
@@ -285,8 +304,8 @@ struct SakuraTabWaveBackground: View {
             // Layer 2: Main blossom ridge
             SakuraWaveOverlayView(
                 color: theme.sakuraPetalColor,
-                opacity: 0.32 * opacityScale,
-                amplitude: 0.34 * scale,
+                opacity: 0.28 * opacityScale,
+                amplitude: 0.24 * scale,
                 frequency: 1.48,
                 verticalOffset: 0.74,
                 bottomFade: 0.42,
@@ -303,20 +322,20 @@ struct SakuraTabWaveBackground: View {
             // Layer 3: Deep branch/leaf anchor
             SakuraWaveOverlayView(
                 color: theme.sakuraLeafColor,
-                opacity: 0.42 * opacityScale,
-                amplitude: 0.22 * scale,
-                frequency: 2.0,
-                verticalOffset: 0.86,
-                bottomFade: 0.38,
+                opacity: 0.30 * opacityScale,
+                amplitude: 0.15 * scale,
+                frequency: 1.75,
+                verticalOffset: 0.88,
+                bottomFade: 0.33,
                 petalDensity: 0.25,
                 driftDuration: 22,
                 crestColor: theme.sakuraPetalColor,
-                crestOpacity: 0.28 * opacityScale,
+                crestOpacity: 0.18 * opacityScale,
                 crestWidth: 1.2
             )
             .frame(height: 190)
 
-            // Layer 4: Branch silhouette accent
+            // Layer 4: Main branch silhouette
             SakuraBranchShape(
                 amplitude: 0.10 * scale,
                 frequency: 1.1,
@@ -331,12 +350,42 @@ struct SakuraTabWaveBackground: View {
             .frame(height: 170)
             .blur(radius: colorScheme == .dark ? 0.2 : 0.35)
 
-            // Layer 5: Drifting petals (identity cue)
+            // Layer 5: Foreground branch stroke
+            SakuraBranchShape(
+                amplitude: 0.12 * scale,
+                frequency: 0.96,
+                phase: CGFloat.pi * 0.22,
+                verticalOffset: 0.66,
+                twigDensity: 0.74
+            )
+            .stroke(
+                theme.sakuraPetalColor.opacity(0.22 * opacityScale),
+                style: StrokeStyle(lineWidth: 1.6, lineCap: .round, lineJoin: .round)
+            )
+            .frame(height: 165)
+            .blur(radius: colorScheme == .dark ? 0.1 : 0.2)
+
+            // Layer 6: Distant branch stroke
+            SakuraBranchShape(
+                amplitude: 0.08 * scale,
+                frequency: 1.42,
+                phase: CGFloat.pi * 0.55,
+                verticalOffset: 0.84,
+                twigDensity: 0.46
+            )
+            .stroke(
+                theme.sakuraLeafColor.opacity(0.20 * opacityScale),
+                style: StrokeStyle(lineWidth: 1.2, lineCap: .round, lineJoin: .round)
+            )
+            .frame(height: 175)
+            .blur(radius: 0.35)
+
+            // Layer 7: Drifting petals (identity cue)
             SakuraPetalDriftView(
                 intensity: Double(scale),
                 darkModeBoost: colorScheme == .dark ? 1.35 : 1.0,
-                petalCount: preset == .life ? 10 : 16,
-                speed: 20,
+                petalCount: preset == .life ? 14 : 24,
+                speed: 14,
                 petalColor: theme.sakuraPetalColor
             )
 
@@ -445,11 +494,25 @@ struct SakuraDetailWaveBackground: View {
             )
             .frame(height: 145)
 
+            SakuraBranchShape(
+                amplitude: 0.07,
+                frequency: 1.36,
+                phase: CGFloat.pi * 0.43,
+                verticalOffset: 0.79,
+                twigDensity: 0.35
+            )
+            .stroke(
+                theme.sakuraPetalColor.opacity(0.15 * visibilityBoost),
+                style: StrokeStyle(lineWidth: 1.2, lineCap: .round, lineJoin: .round)
+            )
+            .frame(height: 145)
+            .blur(radius: 0.2)
+
             SakuraPetalDriftView(
                 intensity: 0.75,
                 darkModeBoost: colorScheme == .dark ? 1.25 : 1.0,
-                petalCount: 10,
-                speed: 22,
+                petalCount: 16,
+                speed: 16,
                 petalColor: theme.sakuraPetalColor
             )
 
@@ -506,6 +569,28 @@ struct SakuraSheetWaveBackground: View {
                 style: StrokeStyle(lineWidth: 1.3, lineCap: .round, lineJoin: .round)
             )
             .frame(height: 130)
+
+            SakuraBranchShape(
+                amplitude: 0.05,
+                frequency: 1.28,
+                phase: CGFloat.pi * 0.38,
+                verticalOffset: 0.78,
+                twigDensity: 0.24
+            )
+            .stroke(
+                theme.sakuraPetalColor.opacity(0.12 * visibilityBoost),
+                style: StrokeStyle(lineWidth: 1.0, lineCap: .round, lineJoin: .round)
+            )
+            .frame(height: 128)
+            .blur(radius: 0.15)
+
+            SakuraPetalDriftView(
+                intensity: 0.48,
+                darkModeBoost: colorScheme == .dark ? 1.2 : 1.0,
+                petalCount: 10,
+                speed: 18,
+                petalColor: theme.sakuraPetalColor
+            )
 
             LinearGradient(
                 colors: [
