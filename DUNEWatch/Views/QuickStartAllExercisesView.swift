@@ -37,6 +37,7 @@ struct QuickStartAllExercisesView: View {
                         .foregroundStyle(.secondary)
                     Text("No Exercises")
                         .font(DS.Typography.exerciseName)
+                    WatchSyncStatusView()
                 }
                 .padding()
             } else if isSearching {
