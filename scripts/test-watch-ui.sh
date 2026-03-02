@@ -1,8 +1,8 @@
 #!/bin/bash
-# Run DUNEUITests on iOS Simulator.
+# Run DUNEWatchUITests on watchOS Simulator.
 # - Regenerates project from xcodegen (unless --no-regen)
-# - Boots simulator beforehand (UI tests require a running simulator)
-# - Runs UI tests with DUNE scheme (defaults to -only-testing DUNEUITests)
+# - Boots watch simulator beforehand
+# - Runs watch UI tests with DUNEWatchUITests scheme
 
 set -euo pipefail
 
@@ -12,13 +12,13 @@ source "$ROOT_DIR/scripts/lib/regen-project.sh"
 
 PROJECT_SPEC="DUNE/project.yml"
 PROJECT_FILE="DUNE/DUNE.xcodeproj"
-SCHEME="DUNE"
-SIMULATOR_NAME="${DAILVE_IOS_SIMULATOR:-iPhone 17}"
-SIMULATOR_OS="${DAILVE_IOS_OS:-26.2}"
-DESTINATION="platform=iOS Simulator,name=${SIMULATOR_NAME},OS=${SIMULATOR_OS}"
+SCHEME="DUNEWatchUITests"
+WATCH_SIM_NAME="${DUNE_WATCH_SIM_NAME:-Apple Watch Series 10 (46mm)}"
+WATCH_SIM_OS="${DUNE_WATCH_SIM_OS:-26.2}"
+DESTINATION="platform=watchOS Simulator,name=${WATCH_SIM_NAME},OS=${WATCH_SIM_OS}"
 DERIVED_DATA_DIR=".deriveddata"
 LOG_DIR=".xcodebuild"
-LOG_FILE="$LOG_DIR/ui-test.log"
+LOG_FILE="$LOG_DIR/watch-ui-test.log"
 REGENERATE=1
 SKIP_TESTING=()
 ONLY_TESTING=()
@@ -57,15 +57,14 @@ done
 mkdir -p "$LOG_DIR" "$DERIVED_DATA_DIR"
 regen_project
 
-# Boot simulator if not already booted (UI tests need it)
-echo "Ensuring simulator '$SIMULATOR_NAME' is booted..."
+echo "Ensuring watch simulator '$WATCH_SIM_NAME' is booted..."
 DEVICE_UDID=$(xcrun simctl list devices available -j \
     | python3 -c "
 import json, sys
 data = json.load(sys.stdin)
 for runtime, devices in data['devices'].items():
     for d in devices:
-        if d['name'] == '${SIMULATOR_NAME}' and '${SIMULATOR_OS}'.replace('.', '-') in runtime.replace('.', '-'):
+        if d['name'] == '${WATCH_SIM_NAME}' and '${WATCH_SIM_OS}'.replace('.', '-') in runtime.replace('.', '-'):
             print(d['udid'])
             sys.exit(0)
 sys.exit(1)
@@ -73,14 +72,13 @@ sys.exit(1)
 
 if [[ -n "$DEVICE_UDID" ]]; then
     xcrun simctl boot "$DEVICE_UDID" 2>/dev/null || true
-    echo "Simulator booted: $DEVICE_UDID"
+    echo "Watch simulator booted: $DEVICE_UDID"
 else
-    echo "Warning: Could not find simulator '$SIMULATOR_NAME' (OS $SIMULATOR_OS). xcodebuild will attempt to boot one."
+    echo "Warning: Could not find watch simulator '$WATCH_SIM_NAME' (OS $WATCH_SIM_OS). xcodebuild will attempt to boot one."
 fi
 
-echo "Running UI tests with scheme '$SCHEME' for destination '$DESTINATION'..."
+echo "Running watch UI tests with scheme '$SCHEME' for destination '$DESTINATION'..."
 
-# Build test command
 TEST_CMD=(xcodebuild test -project "$PROJECT_FILE"
     -scheme "$SCHEME"
     -destination "$DESTINATION"
@@ -103,7 +101,7 @@ if [[ "${#ONLY_TESTING[@]}" -gt 0 ]]; then
         echo "Only testing: $target"
     done
 else
-    TEST_CMD+=(-only-testing DUNEUITests)
+    TEST_CMD+=(-only-testing DUNEWatchUITests)
 fi
 
 if [[ "${#SKIP_TESTING[@]}" -gt 0 ]]; then
@@ -120,12 +118,12 @@ set -e
 
 if [[ "$TEST_EXIT" -ne 0 ]]; then
     echo ""
-    echo "UI tests failed. Summary:"
+    echo "Watch UI tests failed. Summary:"
     grep -n -E "TEST (SUCCEEDED|FAILED)|error:|failed|Executed" "$LOG_FILE" | tail -n 120 || true
     echo ""
     echo "Full log: $LOG_FILE"
     exit "$TEST_EXIT"
 fi
 
-echo "UI tests passed."
+echo "Watch UI tests passed."
 grep -n -E "TEST (SUCCEEDED|FAILED)|Executed" "$LOG_FILE" | tail -n 20 || true

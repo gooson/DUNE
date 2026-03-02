@@ -44,6 +44,15 @@ schemes:
       targets:
         DUNEWatch: all
 
+  DUNEWatchUITests:
+    build:
+      targets:
+        DUNEWatch: all
+        DUNEWatchUITests: [test]
+    test:
+      targets:
+        - DUNEWatchUITests
+
 targets:
   DUNE:
     type: application
@@ -200,3 +209,16 @@ targets:
         TEST_TARGET_NAME: DUNE
     dependencies:
       - target: DUNE
+
+  DUNEWatchUITests:
+    type: bundle.ui-testing
+    platform: watchOS
+    sources:
+      - path: ../DUNEWatchUITests
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.raftel.dailve.watch.uitests
+        GENERATE_INFOPLIST_FILE: true
+        TEST_TARGET_NAME: DUNEWatch
+    dependencies:
+      - target: DUNEWatch

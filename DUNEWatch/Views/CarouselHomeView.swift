@@ -91,8 +91,10 @@ struct CarouselHomeView: View {
         Group {
             if cards.isEmpty {
                 emptyState
+                    .accessibilityIdentifier("watch-home-empty-state")
             } else {
                 carousel
+                    .accessibilityIdentifier("watch-home-carousel")
             }
         }
         .background { WatchWaveBackground() }
@@ -168,6 +170,7 @@ struct CarouselHomeView: View {
             NavigationLink(value: WatchRoute.quickStartAll) {
                 allExercisesCard
             }
+            .accessibilityIdentifier("watch-home-card-all-exercises")
             .buttonStyle(.plain)
         }
     }
@@ -211,6 +214,7 @@ struct CarouselHomeView: View {
             NavigationLink(value: WatchRoute.quickStartAll) {
                 Label("Browse All", systemImage: "magnifyingglass")
             }
+            .accessibilityIdentifier("watch-home-browse-all-link")
             .buttonStyle(.borderedProminent)
             .tint(DS.Color.positive)
             .padding(.top, DS.Spacing.md)
