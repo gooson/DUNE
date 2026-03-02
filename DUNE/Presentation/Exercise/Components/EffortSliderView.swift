@@ -21,6 +21,10 @@ struct EffortSliderView: View {
             // Big number + category
             effortDisplay
 
+            if let suggestion {
+                recommendationBadge(suggestion)
+            }
+
             // Slider
             effortSlider
 
@@ -30,6 +34,10 @@ struct EffortSliderView: View {
             // History context
             if let suggestion, suggestion.lastEffort != nil || suggestion.averageEffort != nil {
                 historyContext(suggestion)
+            }
+
+            if let suggestion, !suggestion.recentEfforts.isEmpty {
+                recentHistory(suggestion)
             }
         }
     }
@@ -123,6 +131,46 @@ struct EffortSliderView: View {
                 contextItem(label: "Average", value: avg.formattedWithSeparator(fractionDigits: 1))
             }
         }
+        .padding(.vertical, DS.Spacing.sm)
+        .padding(.horizontal, DS.Spacing.md)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+    }
+
+    private func recommendationBadge(_ suggestion: EffortSuggestion) -> some View {
+        HStack(spacing: DS.Spacing.xs) {
+            Image(systemName: "sparkles")
+                .font(.caption2)
+            Text("Recommended \(suggestion.suggestedEffort)/10 from your recent history")
+                .font(.caption.weight(.medium))
+                .lineLimit(1)
+        }
+        .foregroundStyle(DS.Color.textSecondary)
+        .padding(.horizontal, DS.Spacing.md)
+        .padding(.vertical, DS.Spacing.xs)
+        .background(.ultraThinMaterial, in: Capsule())
+    }
+
+    private func recentHistory(_ suggestion: EffortSuggestion) -> some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+            Text("Recent")
+                .font(.caption2.weight(.semibold))
+                .foregroundStyle(DS.Color.textSecondary)
+
+            HStack(spacing: DS.Spacing.xs) {
+                ForEach(Array(suggestion.recentEfforts.prefix(5).enumerated()), id: \.offset) { index, value in
+                    let isLatest = index == 0
+                    Text("\(value)")
+                        .font(.caption.weight(.semibold).monospacedDigit())
+                        .foregroundStyle(isLatest ? .white : DS.Color.textSecondary)
+                        .frame(width: 24, height: 24)
+                        .background(
+                            Circle()
+                                .fill(isLatest ? DS.Color.activity : Color.secondary.opacity(0.18))
+                        )
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.vertical, DS.Spacing.sm)
         .padding(.horizontal, DS.Spacing.md)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))

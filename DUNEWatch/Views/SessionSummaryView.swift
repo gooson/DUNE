@@ -6,6 +6,7 @@ import SwiftData
 struct SessionSummaryView: View {
     @Environment(WorkoutManager.self) private var workoutManager
     @Environment(\.modelContext) private var modelContext
+    @Query private var exerciseRecords: [ExerciseRecord]
 
     let startDate: Date
     let endDate: Date
@@ -17,6 +18,8 @@ struct SessionSummaryView: View {
     @State private var hasSaved = false
     @State private var isSaving = false
     @State private var saveError: String?
+    @State private var effort: Int = 5
+    @State private var didInitializeEffort = false
 
     var body: some View {
         ScrollView {
@@ -33,6 +36,10 @@ struct SessionSummaryView: View {
 
                 // Stats grid
                 statsGrid
+
+                Divider()
+
+                effortSection
 
                 if !workoutManager.isCardioMode {
                     Divider()
@@ -67,6 +74,12 @@ struct SessionSummaryView: View {
             }
         } message: {
             Text(saveError ?? "")
+        }
+        .onAppear {
+            initializeSuggestedEffortIfNeeded()
+        }
+        .onChange(of: effortSuggestion?.suggestedEffort) { _, _ in
+            initializeSuggestedEffortIfNeeded()
         }
     }
 
@@ -105,6 +118,64 @@ struct SessionSummaryView: View {
                 .font(DS.Typography.tinyLabel)
                 .foregroundStyle(.secondary)
         }
+    }
+
+    private var effortSection: some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            HStack(spacing: DS.Spacing.xs) {
+                Image(systemName: "flame.fill")
+                    .font(.caption)
+                    .foregroundStyle(DS.Color.positive)
+                Text("Workout Effort")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.secondary)
+            }
+
+            if let suggestion = effortSuggestion {
+                Text("Recommended \(suggestion.suggestedEffort)/10 from recent history")
+                    .font(DS.Typography.tinyLabel)
+                    .foregroundStyle(.secondary)
+            }
+
+            HStack(spacing: DS.Spacing.sm) {
+                Text("\(effort)")
+                    .font(.system(size: 28, weight: .bold, design: .rounded))
+                    .monospacedDigit()
+                Text("/10")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Spacer(minLength: 0)
+            }
+
+            Slider(
+                value: Binding(
+                    get: { Double(effort) },
+                    set: { newValue in
+                        effort = Int(round(newValue))
+                        didInitializeEffort = true
+                    }
+                ),
+                in: 1...10,
+                step: 1
+            )
+            .tint(DS.Color.positive)
+
+            if let suggestion = effortSuggestion, !suggestion.recentEfforts.isEmpty {
+                HStack(spacing: DS.Spacing.xs) {
+                    Text("Recent")
+                        .font(DS.Typography.tinyLabel)
+                        .foregroundStyle(.secondary)
+                    ForEach(Array(suggestion.recentEfforts.prefix(5).enumerated()), id: \.offset) { index, value in
+                        let isLatest = index == 0
+                        Text("\(value)")
+                            .font(.system(size: 9, weight: .semibold, design: .rounded))
+                            .foregroundStyle(isLatest ? DS.Color.positive : .secondary)
+                    }
+                }
+            }
+        }
+        .padding(DS.Spacing.md)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
     }
 
     // MARK: - Exercise Breakdown
@@ -166,6 +237,14 @@ struct SessionSummaryView: View {
         // Cardio sessions: HKWorkout is saved by HKLiveWorkoutBuilder — no SwiftData records to save.
         if workoutManager.isCardioMode {
             await workoutManager.waitForWorkoutFinalization()
+            saveCardioRecord(healthKitWorkoutID: workoutManager.healthKitWorkoutUUID)
+            do {
+                try modelContext.save()
+            } catch {
+                saveError = String(localized: "Failed to save workout data. Please try again.")
+                isSaving = false
+                return
+            }
             hasSaved = true
             isSaving = false
             workoutManager.reset()
@@ -219,7 +298,8 @@ struct SessionSummaryView: View {
                 calories: activeCalories > 0 ? activeCalories / activeExerciseCount : nil,
                 healthKitWorkoutID: healthKitWorkoutID,
                 exerciseDefinitionID: entry.exerciseDefinitionID,
-                calorieSource: activeCalories > 0 ? .healthKit : .manual
+                calorieSource: activeCalories > 0 ? .healthKit : .manual,
+                rpe: effort
             )
 
             modelContext.insert(record)
@@ -239,6 +319,36 @@ struct SessionSummaryView: View {
             }
             record.sets = workoutSets
         }
+    }
+
+    private func saveCardioRecord(healthKitWorkoutID: String?) {
+        let sessionDuration = Swift.max(endDate.timeIntervalSince(startDate), 1)
+        let distanceKm = workoutManager.distanceKm
+
+        var exerciseType = "Cardio"
+        var primaryMuscles: [MuscleGroup] = []
+        var secondaryMuscles: [MuscleGroup] = []
+
+        if case .cardio(let activityType, _) = workoutManager.workoutMode {
+            exerciseType = activityType.typeName
+            primaryMuscles = activityType.primaryMuscles
+            secondaryMuscles = activityType.secondaryMuscles
+        }
+
+        let record = ExerciseRecord(
+            date: startDate,
+            exerciseType: exerciseType,
+            duration: sessionDuration,
+            calories: activeCalories > 0 ? activeCalories : nil,
+            distance: distanceKm > 0 ? distanceKm : nil,
+            isFromHealthKit: true,
+            healthKitWorkoutID: healthKitWorkoutID,
+            primaryMuscles: primaryMuscles,
+            secondaryMuscles: secondaryMuscles,
+            calorieSource: activeCalories > 0 ? .healthKit : .manual,
+            rpe: effort
+        )
+        modelContext.insert(record)
     }
 
     /// Send workout summary to iPhone via WatchConnectivity message.
@@ -266,7 +376,8 @@ struct SessionSummaryView: View {
                 completedSets: watchSets,
                 startTime: startDate,
                 endTime: endDate,
-                heartRateSamples: []
+                heartRateSamples: [],
+                rpe: effort
             )
 
             WatchConnectivityManager.shared.sendWorkoutCompletion(update)
@@ -316,6 +427,65 @@ struct SessionSummaryView: View {
         }
         return "\(Int(volume.rounded()).formattedWithSeparator) kg"
     }
+
+    private var currentExerciseIDs: Set<String> {
+        guard let template = workoutManager.templateSnapshot else { return [] }
+        var ids = Set<String>()
+        for (index, sets) in completedSetsData.enumerated() where !sets.isEmpty {
+            guard index < template.entries.count else { continue }
+            ids.insert(template.entries[index].exerciseDefinitionID)
+        }
+        return ids
+    }
+
+    private var effortSuggestion: WatchEffortSuggestion? {
+        let recentEfforts = recentEffortHistory
+        guard let last = recentEfforts.first else { return nil }
+
+        let average = Double(recentEfforts.reduce(0, +)) / Double(recentEfforts.count)
+        let suggested: Int
+        if recentEfforts.count >= 3, average.isFinite {
+            suggested = Swift.max(1, Swift.min(10, Int(round(average))))
+        } else {
+            suggested = last
+        }
+
+        return WatchEffortSuggestion(
+            suggestedEffort: suggested,
+            recentEfforts: recentEfforts,
+            averageEffort: average.isFinite ? average : nil
+        )
+    }
+
+    private var recentEffortHistory: [Int] {
+        let ids = currentExerciseIDs
+        let scopedRecords = exerciseRecords.filter { record in
+            guard let effort = record.rpe, (1...10).contains(effort) else { return false }
+            // Cardio/quick workouts may not carry exerciseDefinitionID; fallback to global history.
+            if ids.isEmpty { return true }
+            guard let id = record.exerciseDefinitionID else { return false }
+            return ids.contains(id)
+        }
+
+        return Array(
+            scopedRecords
+                .sorted { $0.date > $1.date }
+                .compactMap(\.rpe)
+                .prefix(5)
+        )
+    }
+
+    private func initializeSuggestedEffortIfNeeded() {
+        guard !didInitializeEffort, let suggested = effortSuggestion?.suggestedEffort else { return }
+        effort = suggested
+        didInitializeEffort = true
+    }
+}
+
+private struct WatchEffortSuggestion {
+    let suggestedEffort: Int
+    let recentEfforts: [Int]
+    let averageEffort: Double?
 }
 
 

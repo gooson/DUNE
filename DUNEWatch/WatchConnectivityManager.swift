@@ -87,7 +87,8 @@ final class WatchConnectivityManager: NSObject {
             completedSets: [setData],
             startTime: Date(),
             endTime: nil,
-            heartRateSamples: []
+            heartRateSamples: [],
+            rpe: nil
         )
 
         do {
