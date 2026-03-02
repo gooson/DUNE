@@ -493,13 +493,29 @@ struct CompoundWorkoutView: View {
         // Fire-and-forget HealthKit write per record (non-blocking)
         for record in records where !record.isFromHealthKit {
             let matchedExercise = config.exercises.first { $0.id == record.exerciseDefinitionID }
+            let resolvedActivityType: WorkoutActivityType? = {
+                guard let matchedExercise else { return nil }
+                guard matchedExercise.inputType == .durationDistance else { return nil }
+                return WorkoutActivityType.resolveDistanceBased(
+                    from: matchedExercise.id,
+                    name: matchedExercise.name,
+                    inputTypeRaw: matchedExercise.inputType.rawValue
+                ) ?? matchedExercise.resolvedActivityType
+            }()
+            let totalDistanceKm: Double? = {
+                if let distance = record.distance, distance > 0 { return distance }
+                let setDistance = record.completedSets.compactMap(\.distance).reduce(0, +)
+                return setDistance > 0 ? setDistance : nil
+            }()
             let input = WorkoutWriteInput(
                 startDate: record.date,
                 duration: record.duration,
                 category: matchedExercise?.category ?? .strength,
                 exerciseName: record.exerciseType,
                 estimatedCalories: record.estimatedCalories,
-                isFromHealthKit: record.isFromHealthKit
+                isFromHealthKit: record.isFromHealthKit,
+                distanceKm: totalDistanceKm,
+                activityType: resolvedActivityType
             )
             Task {
                 do {

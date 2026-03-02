@@ -169,7 +169,8 @@ struct CardioSessionSummaryView: View {
             exerciseName: data.exerciseName,
             estimatedCalories: data.estimatedCalories,
             isFromHealthKit: false,
-            distanceKm: data.distanceKm
+            distanceKm: data.distanceKm,
+            activityType: viewModel.activityType
         )
 
         let recordID = record.persistentModelID

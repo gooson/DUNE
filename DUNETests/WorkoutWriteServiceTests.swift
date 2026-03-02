@@ -118,6 +118,24 @@ struct ExerciseCategoryHKMappingTests {
         #expect(result == .cycling)
     }
 
+    @Test("Korean running name overrides category")
+    func koreanRunningOverride() {
+        let result = ExerciseCategory.hkActivityType(category: .cardio, exerciseName: "달리기")
+        #expect(result == .running)
+    }
+
+    @Test("Korean walking name overrides category")
+    func koreanWalkingOverride() {
+        let result = ExerciseCategory.hkActivityType(category: .cardio, exerciseName: "걷기")
+        #expect(result == .walking)
+    }
+
+    @Test("Korean cycling name overrides category")
+    func koreanCyclingOverride() {
+        let result = ExerciseCategory.hkActivityType(category: .cardio, exerciseName: "사이클링")
+        #expect(result == .cycling)
+    }
+
     @Test("Unknown name falls back to category default")
     func unknownNameFallback() {
         let result = ExerciseCategory.hkActivityType(category: .strength, exerciseName: "Custom Exercise XYZ")

@@ -63,9 +63,9 @@ struct HealthKitWorkoutDetailView: View {
                         label: "kcal"
                     )
                 }
-                if let dist = workout.distance, dist > 0 {
+                if workout.activityType.isDistanceBased {
                     statItem(
-                        value: formattedDistance(dist),
+                        value: formattedDistance(max(workout.distance ?? 0, 0)),
                         label: "km"
                     )
                 }
@@ -111,12 +111,16 @@ struct HealthKitWorkoutDetailView: View {
     // MARK: - Stats Grid
 
     private var statsGrid: some View {
-        LazyVGrid(columns: [
+        let hrAvg = viewModel.heartRateAverage(for: workout)
+        let hrMax = viewModel.heartRateMax(for: workout)
+        let showDistanceCoreMetrics = workout.activityType.isDistanceBased
+
+        return LazyVGrid(columns: [
             GridItem(.flexible(), spacing: DS.Spacing.sm),
             GridItem(.flexible(), spacing: DS.Spacing.sm),
         ], spacing: DS.Spacing.sm) {
             // Heart rate avg
-            if let hrAvg = workout.heartRateAvg {
+            if let hrAvg {
                 statCard(
                     icon: "heart.fill",
                     iconColor: .red,
@@ -124,15 +128,27 @@ struct HealthKitWorkoutDetailView: View {
                     value: Int(hrAvg).formattedWithSeparator,
                     unit: "bpm"
                 )
+            } else if showDistanceCoreMetrics {
+                noDataStatCard(
+                    icon: "heart.fill",
+                    iconColor: .red,
+                    title: "Avg Heart Rate"
+                )
             }
             // Heart rate max
-            if let hrMax = workout.heartRateMax {
+            if let hrMax {
                 statCard(
                     icon: "heart.fill",
                     iconColor: .red.opacity(0.7),
                     title: "Max Heart Rate",
                     value: Int(hrMax).formattedWithSeparator,
                     unit: "bpm"
+                )
+            } else if showDistanceCoreMetrics {
+                noDataStatCard(
+                    icon: "heart.fill",
+                    iconColor: .red.opacity(0.7),
+                    title: "Max Heart Rate"
                 )
             }
             // Pace
@@ -143,6 +159,12 @@ struct HealthKitWorkoutDetailView: View {
                     title: "Avg Pace",
                     value: formattedPace(pace),
                     unit: "/km"
+                )
+            } else if showDistanceCoreMetrics {
+                noDataStatCard(
+                    icon: "speedometer",
+                    iconColor: DS.Color.activity,
+                    title: "Avg Pace"
                 )
             }
             // Elevation
@@ -184,6 +206,12 @@ struct HealthKitWorkoutDetailView: View {
                     value: isIndoor ? String(localized: "Indoor") : String(localized: "Outdoor"),
                     unit: ""
                 )
+            } else if showDistanceCoreMetrics {
+                noDataStatCard(
+                    icon: "sun.max.fill",
+                    iconColor: .yellow,
+                    title: "Environment"
+                )
             }
         }
     }
@@ -207,6 +235,25 @@ struct HealthKitWorkoutDetailView: View {
                         .foregroundStyle(DS.Color.textSecondary)
                 }
             }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(DS.Spacing.md)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+    }
+
+    private func noDataStatCard(icon: String, iconColor: Color, title: LocalizedStringKey) -> some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            HStack(spacing: DS.Spacing.xs) {
+                Image(systemName: icon)
+                    .font(.caption)
+                    .foregroundStyle(iconColor)
+                Text(title)
+                    .font(.caption)
+                    .foregroundStyle(DS.Color.textSecondary)
+            }
+            Text("No data")
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(DS.Color.textSecondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(DS.Spacing.md)
