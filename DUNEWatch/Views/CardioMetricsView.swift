@@ -17,7 +17,7 @@ struct CardioMetricsView: View {
     }
 
     var body: some View {
-        TimelineView(.periodic(every: isLuminanceReduced ? 10 : 1)) { context in
+        TimelineView(.periodic(from: .now, by: isLuminanceReduced ? 10 : 1)) { context in
             VStack(spacing: DS.Spacing.md) {
                 // Activity type + elapsed time
                 headerRow(now: context.date)
