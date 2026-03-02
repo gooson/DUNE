@@ -2,8 +2,7 @@ import SwiftUI
 
 /// Soft blossom silhouette Shape for Sakura Calm theme.
 ///
-/// Combines gentle long-wave curves with rounded blossom pulses
-/// to create a calm layered petal ridge profile.
+/// Builds a petal-cluster ridge profile distinct from Forest/Ocean wave language.
 struct SakuraPetalShape: Shape {
     /// Ridge height as fraction of rect height (0...1).
     let amplitude: CGFloat
@@ -26,10 +25,9 @@ struct SakuraPetalShape: Shape {
     /// Soft paper-edge noise for natural hand-drawn silhouette feel.
     private static let edgeNoise: [CGFloat] = (0...WaveSamples.sampleCount).map { i in
         let d = Double(i)
-        let octave1 = sin(d * 6.1 + 1.4) * sin(d * 11.3 + 3.7)
-        let octave2 = 0.45 * sin(d * 18.7 + 0.9) * sin(d * 27.5 + 2.3)
-        let octave3 = 0.20 * sin(d * 39.1 + 2.8) * sin(d * 53.7 + 1.1)
-        return CGFloat(octave1 + octave2 + octave3) / 1.65
+        let octave1 = sin(d * 5.3 + 0.9) * sin(d * 9.7 + 2.5)
+        let octave2 = 0.35 * sin(d * 16.3 + 1.2) * sin(d * 24.1 + 4.1)
+        return CGFloat(octave1 + octave2) / 1.35
     }
 
     init(
@@ -52,22 +50,22 @@ struct SakuraPetalShape: Shape {
 
         let amp = rect.height * amplitude
         let centerY = rect.height * verticalOffset
-        let edgeScale: CGFloat = 1.4
+        let edgeScale: CGFloat = 1.0
 
         var path = Path()
         for (i, pt) in samples.points.enumerated() {
             let x = pt.x * rect.width
             let angle = pt.angle + phase
 
-            var y = sin(angle)
-            y += 0.21 * sin(0.82 * angle + 0.6)
-            y += 0.07 * sin(2.1 * angle + 1.4)
+            var y = 0.78 * sin(angle)
+            y += 0.16 * sin(0.58 * angle + 0.7)
+            y += 0.05 * sin(2.6 * angle + 0.9)
 
             if petalDensity > 0 {
-                y += petalDensity * Self.blossomPulse(angle: angle)
+                y += petalDensity * Self.blossomCluster(angle: angle)
             }
 
-            let roughness = 0.55 + petalDensity * 0.45
+            let roughness = 0.32 + petalDensity * 0.22
             let yPos = centerY + amp * y + Self.edgeNoise[i] * edgeScale * roughness
 
             if i == 0 {
@@ -83,9 +81,10 @@ struct SakuraPetalShape: Shape {
         return path
     }
 
-    private static func blossomPulse(angle: CGFloat) -> CGFloat {
-        let positiveLobe = max(0, sin(angle * 1.7 + 0.25))
-        let roundedLobe = pow(positiveLobe, 2.5)
-        return -0.24 * roundedLobe
+    /// Rounded flower-cluster pulses (upward) with slight secondary cadence.
+    private static func blossomCluster(angle: CGFloat) -> CGFloat {
+        let major = pow(max(0, sin(angle * 1.95 + 0.35)), 2.9)
+        let minor = pow(max(0, sin(angle * 3.4 + 1.15)), 3.2)
+        return (-0.22 * major) - (0.08 * minor)
     }
 }

@@ -141,6 +141,100 @@ private struct WashiTextureView: View {
     }
 }
 
+// MARK: - Petal Drift Overlay
+
+/// Low-count drifting petal overlay to provide explicit sakura identity.
+private struct SakuraPetalDriftView: View {
+    let intensity: Double
+    let darkModeBoost: Double
+    let petalCount: Int
+    let speed: Double
+    let petalColor: Color
+
+    @State private var driftPhase: CGFloat = 0
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    private var petals: [PetalSpec] {
+        (0..<petalCount).map { idx in
+            let seed = Double(idx * 139 + 17)
+            let x = 0.05 + 0.9 * abs(sin(seed * 0.171))
+            let y = 0.08 + 0.72 * abs(sin(seed * 0.137 + 0.7))
+            let size = 5.0 + 8.0 * abs(sin(seed * 0.293))
+            let sway = 6.0 + 14.0 * abs(sin(seed * 0.227 + 1.2))
+            let start = 2 * Double.pi * abs(sin(seed * 0.043))
+            return PetalSpec(x: x, y: y, size: size, sway: sway, start: start)
+        }
+    }
+
+    var body: some View {
+        GeometryReader { proxy in
+            ZStack {
+                ForEach(Array(petals.enumerated()), id: \.offset) { idx, petal in
+                    let phase = driftPhase + CGFloat(petal.start)
+                    let x = petal.x * proxy.size.width + CGFloat(sin(phase + CGFloat(idx))) * petal.sway
+                    let yBase = petal.y * proxy.size.height
+                    let yDrift = reduceMotion ? 0 : CGFloat(cos(phase * 0.7 + CGFloat(idx) * 0.4)) * 10
+                    SakuraPetalGlyph()
+                        .fill(petalColor.opacity((0.26 + 0.32 * intensity) * darkModeBoost))
+                        .frame(width: petal.size, height: petal.size * 1.35)
+                        .rotationEffect(.degrees(Double((phase * 40).truncatingRemainder(dividingBy: 360))))
+                        .position(x: x, y: yBase + yDrift)
+                        .blur(radius: reduceMotion ? 0 : 0.2)
+                }
+            }
+            .onAppear {
+                startDriftIfNeeded()
+            }
+            .onChange(of: reduceMotion) { _, isReduced in
+                if isReduced {
+                    driftPhase = 0
+                } else {
+                    startDriftIfNeeded()
+                }
+            }
+        }
+        .allowsHitTesting(false)
+    }
+
+    private func startDriftIfNeeded() {
+        guard !reduceMotion else {
+            driftPhase = 0
+            return
+        }
+        driftPhase = 0
+        withAnimation(.linear(duration: speed).repeatForever(autoreverses: false)) {
+            driftPhase = 2 * .pi
+        }
+    }
+}
+
+private struct PetalSpec {
+    let x: Double
+    let y: Double
+    let size: Double
+    let sway: Double
+    let start: Double
+}
+
+private struct SakuraPetalGlyph: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        let center = CGPoint(x: rect.midX, y: rect.midY)
+        let top = CGPoint(x: rect.midX, y: rect.minY)
+        let left = CGPoint(x: rect.minX + rect.width * 0.14, y: rect.midY)
+        let right = CGPoint(x: rect.maxX - rect.width * 0.14, y: rect.midY)
+        let bottom = CGPoint(x: rect.midX, y: rect.maxY)
+
+        path.move(to: top)
+        path.addQuadCurve(to: right, control: CGPoint(x: rect.maxX, y: rect.minY + rect.height * 0.2))
+        path.addQuadCurve(to: bottom, control: CGPoint(x: rect.maxX - rect.width * 0.18, y: rect.maxY - rect.height * 0.08))
+        path.addQuadCurve(to: left, control: CGPoint(x: rect.minX + rect.width * 0.18, y: rect.maxY - rect.height * 0.08))
+        path.addQuadCurve(to: top, control: CGPoint(x: rect.minX, y: rect.minY + rect.height * 0.2))
+        path.addEllipse(in: CGRect(x: center.x - rect.width * 0.08, y: center.y - rect.height * 0.05, width: rect.width * 0.16, height: rect.height * 0.12))
+        return path
+    }
+}
+
 // MARK: - Sakura Tab Background
 
 /// Multi-layer parallax blossom background for tab root screens.
@@ -155,7 +249,7 @@ struct SakuraTabWaveBackground: View {
     }
 
     private var visibilityBoost: Double {
-        colorScheme == .dark ? 1.25 : 1.0
+        colorScheme == .dark ? 1.42 : 1.0
     }
 
     private var intensityScale: CGFloat {
@@ -172,55 +266,79 @@ struct SakuraTabWaveBackground: View {
         let opacityScale = Double(scale) * visibilityBoost
 
         ZStack(alignment: .top) {
-            // Layer 1: Soft ivory haze
+            // Layer 1: Soft spring haze
             SakuraWaveOverlayView(
                 color: theme.sakuraIvoryColor,
-                opacity: 0.12 * opacityScale,
-                amplitude: 0.23 * scale,
-                frequency: 0.9,
-                verticalOffset: 0.52,
+                opacity: 0.18 * opacityScale,
+                amplitude: 0.20 * scale,
+                frequency: 0.82,
+                verticalOffset: 0.48,
                 bottomFade: 0.55,
-                petalDensity: 0.22,
-                driftDuration: 34,
+                petalDensity: 0.18,
+                driftDuration: 38,
                 crestColor: theme.sakuraPetalColor,
-                crestOpacity: 0.08 * opacityScale,
+                crestOpacity: 0.10 * opacityScale,
                 crestWidth: 1.0
             )
             .frame(height: 170)
 
-            // Layer 2: Main petal band
+            // Layer 2: Main blossom ridge
             SakuraWaveOverlayView(
                 color: theme.sakuraPetalColor,
-                opacity: 0.24 * opacityScale,
-                amplitude: 0.32 * scale,
-                frequency: 1.55,
-                verticalOffset: 0.78,
+                opacity: 0.32 * opacityScale,
+                amplitude: 0.34 * scale,
+                frequency: 1.48,
+                verticalOffset: 0.74,
                 bottomFade: 0.42,
-                petalDensity: 0.70,
-                driftDuration: 25,
+                petalDensity: 0.92,
+                driftDuration: 28,
                 showTexture: true,
-                textureOpacity: colorScheme == .dark ? 0.012 : 0.026,
+                textureOpacity: colorScheme == .dark ? 0.020 : 0.03,
                 crestColor: theme.sakuraIvoryColor,
-                crestOpacity: 0.15 * opacityScale,
-                crestWidth: 1.1
+                crestOpacity: 0.22 * opacityScale,
+                crestWidth: 1.3
             )
             .frame(height: 185)
 
-            // Layer 3: Deep green anchor
+            // Layer 3: Deep branch/leaf anchor
             SakuraWaveOverlayView(
                 color: theme.sakuraLeafColor,
-                opacity: 0.30 * opacityScale,
-                amplitude: 0.28 * scale,
-                frequency: 2.25,
-                verticalOffset: 0.88,
+                opacity: 0.42 * opacityScale,
+                amplitude: 0.22 * scale,
+                frequency: 2.0,
+                verticalOffset: 0.86,
                 bottomFade: 0.38,
-                petalDensity: 0.42,
-                driftDuration: 18,
+                petalDensity: 0.25,
+                driftDuration: 22,
                 crestColor: theme.sakuraPetalColor,
-                crestOpacity: 0.22 * opacityScale,
+                crestOpacity: 0.28 * opacityScale,
                 crestWidth: 1.2
             )
             .frame(height: 190)
+
+            // Layer 4: Branch silhouette accent
+            SakuraBranchShape(
+                amplitude: 0.10 * scale,
+                frequency: 1.1,
+                phase: 0,
+                verticalOffset: 0.76,
+                twigDensity: 0.55
+            )
+            .stroke(
+                theme.sakuraLeafColor.opacity(0.34 * opacityScale),
+                style: StrokeStyle(lineWidth: 2.0, lineCap: .round, lineJoin: .round)
+            )
+            .frame(height: 170)
+            .blur(radius: colorScheme == .dark ? 0.2 : 0.35)
+
+            // Layer 5: Drifting petals (identity cue)
+            SakuraPetalDriftView(
+                intensity: Double(scale),
+                darkModeBoost: colorScheme == .dark ? 1.35 : 1.0,
+                petalCount: preset == .life ? 10 : 16,
+                speed: 20,
+                petalColor: theme.sakuraPetalColor
+            )
 
             LinearGradient(
                 colors: sakuraGradientColors,
@@ -231,8 +349,8 @@ struct SakuraTabWaveBackground: View {
             if colorScheme == .dark {
                 LinearGradient(
                     colors: [
-                        theme.sakuraIvoryColor.opacity(0.16),
-                        theme.sakuraPetalColor.opacity(0.08),
+                        theme.sakuraIvoryColor.opacity(0.22),
+                        theme.sakuraPetalColor.opacity(0.16),
                         .clear
                     ],
                     startPoint: .top,
@@ -257,15 +375,15 @@ struct SakuraTabWaveBackground: View {
         }
         if colorScheme == .dark {
             return [
-                theme.sakuraIvoryColor.opacity(DS.Opacity.light),
-                theme.sakuraPetalColor.opacity(DS.Opacity.subtle),
-                theme.sakuraLeafColor.opacity(DS.Opacity.subtle),
+                theme.sakuraIvoryColor.opacity(0.24),
+                theme.sakuraPetalColor.opacity(0.22),
+                theme.sakuraLeafColor.opacity(0.16),
                 .clear
             ]
         }
         return [
-            theme.sakuraPetalColor.opacity(DS.Opacity.medium),
-            theme.sakuraIvoryColor.opacity(DS.Opacity.light),
+            theme.sakuraPetalColor.opacity(0.20),
+            theme.sakuraIvoryColor.opacity(0.16),
             .clear
         ]
     }
@@ -279,44 +397,65 @@ struct SakuraDetailWaveBackground: View {
     @Environment(\.colorScheme) private var colorScheme
 
     private var visibilityBoost: Double {
-        colorScheme == .dark ? 1.2 : 1.0
+        colorScheme == .dark ? 1.3 : 1.0
     }
 
     var body: some View {
         ZStack(alignment: .top) {
             SakuraWaveOverlayView(
                 color: theme.sakuraIvoryColor,
-                opacity: 0.08 * visibilityBoost,
-                amplitude: 0.20,
+                opacity: 0.11 * visibilityBoost,
+                amplitude: 0.18,
                 frequency: 1.2,
-                verticalOffset: 0.46,
+                verticalOffset: 0.44,
                 bottomFade: 0.52,
-                petalDensity: 0.24,
-                driftDuration: 24,
+                petalDensity: 0.2,
+                driftDuration: 28,
                 crestColor: theme.sakuraPetalColor,
-                crestOpacity: 0.09 * visibilityBoost,
+                crestOpacity: 0.12 * visibilityBoost,
                 crestWidth: 1.0
             )
             .frame(height: 150)
 
             SakuraWaveOverlayView(
-                color: theme.sakuraLeafColor,
-                opacity: 0.16 * visibilityBoost,
-                amplitude: 0.24,
-                frequency: 1.9,
-                verticalOffset: 0.83,
+                color: theme.sakuraPetalColor,
+                opacity: 0.20 * visibilityBoost,
+                amplitude: 0.2,
+                frequency: 1.65,
+                verticalOffset: 0.78,
                 bottomFade: 0.45,
-                petalDensity: 0.3,
-                driftDuration: 19,
-                crestColor: theme.sakuraPetalColor,
-                crestOpacity: 0.14 * visibilityBoost,
-                crestWidth: 1.0
+                petalDensity: 0.66,
+                driftDuration: 22,
+                crestColor: theme.sakuraIvoryColor,
+                crestOpacity: 0.16 * visibilityBoost,
+                crestWidth: 1.15
             )
             .frame(height: 150)
 
+            SakuraBranchShape(
+                amplitude: 0.08,
+                frequency: 1.05,
+                phase: 0,
+                verticalOffset: 0.74,
+                twigDensity: 0.42
+            )
+            .stroke(
+                theme.sakuraLeafColor.opacity(0.24 * visibilityBoost),
+                style: StrokeStyle(lineWidth: 1.7, lineCap: .round, lineJoin: .round)
+            )
+            .frame(height: 145)
+
+            SakuraPetalDriftView(
+                intensity: 0.75,
+                darkModeBoost: colorScheme == .dark ? 1.25 : 1.0,
+                petalCount: 10,
+                speed: 22,
+                petalColor: theme.sakuraPetalColor
+            )
+
             LinearGradient(
                 colors: [
-                    (colorScheme == .dark ? theme.sakuraIvoryColor : theme.sakuraPetalColor).opacity(DS.Opacity.light),
+                    (colorScheme == .dark ? theme.sakuraIvoryColor : theme.sakuraPetalColor).opacity(0.18),
                     .clear
                 ],
                 startPoint: .top,
@@ -335,30 +474,43 @@ struct SakuraSheetWaveBackground: View {
     @Environment(\.colorScheme) private var colorScheme
 
     private var visibilityBoost: Double {
-        colorScheme == .dark ? 1.15 : 1.0
+        colorScheme == .dark ? 1.25 : 1.0
     }
 
     var body: some View {
         ZStack(alignment: .top) {
             SakuraWaveOverlayView(
                 color: theme.sakuraPetalColor,
-                opacity: 0.11 * visibilityBoost,
-                amplitude: 0.2,
+                opacity: 0.15 * visibilityBoost,
+                amplitude: 0.17,
                 frequency: 1.1,
                 verticalOffset: 0.42,
                 bottomFade: 0.55,
-                petalDensity: 0.25,
-                driftDuration: 20,
+                petalDensity: 0.5,
+                driftDuration: 23,
                 crestColor: theme.sakuraIvoryColor,
-                crestOpacity: 0.12 * visibilityBoost,
+                crestOpacity: 0.16 * visibilityBoost,
                 crestWidth: 1.2
             )
             .frame(height: 140)
 
+            SakuraBranchShape(
+                amplitude: 0.06,
+                frequency: 0.9,
+                phase: 0,
+                verticalOffset: 0.73,
+                twigDensity: 0.3
+            )
+            .stroke(
+                theme.sakuraLeafColor.opacity(0.18 * visibilityBoost),
+                style: StrokeStyle(lineWidth: 1.3, lineCap: .round, lineJoin: .round)
+            )
+            .frame(height: 130)
+
             LinearGradient(
                 colors: [
                     .clear,
-                    (colorScheme == .dark ? theme.sakuraIvoryColor : theme.sakuraPetalColor).opacity(DS.Opacity.light)
+                    (colorScheme == .dark ? theme.sakuraIvoryColor : theme.sakuraPetalColor).opacity(0.16)
                 ],
                 startPoint: .top,
                 endPoint: DS.Gradient.sheetBackgroundEnd

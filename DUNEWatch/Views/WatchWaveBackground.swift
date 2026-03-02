@@ -84,16 +84,20 @@ struct WatchWaveBackground: View {
     var color: Color? = nil
 
     @State private var phase: CGFloat = 0
+    @State private var petalPhase: CGFloat = 0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.appTheme) private var theme
 
+    private var isSakura: Bool { theme == .sakuraCalm }
+
     var body: some View {
         let resolvedColor = color ?? theme.accentColor
-        let gradientTop = resolvedColor.opacity(DS.Opacity.light)
+        let gradientTop = resolvedColor.opacity(isSakura ? 0.22 : DS.Opacity.light)
+        let secondaryTop = isSakura ? Color("SakuraIvory").opacity(0.14) : .clear
 
         ZStack(alignment: .top) {
             WatchWaveShape(phase: phase)
-                .fill(resolvedColor.opacity(DS.Opacity.medium))
+                .fill(resolvedColor.opacity(isSakura ? 0.26 : DS.Opacity.medium))
                 .mask {
                     LinearGradient(
                         stops: [
@@ -108,10 +112,16 @@ struct WatchWaveBackground: View {
                 .frame(height: WatchWaveDefaults.frameHeight)
 
             LinearGradient(
-                colors: [gradientTop, .clear],
+                colors: [gradientTop, secondaryTop, .clear],
                 startPoint: .top,
                 endPoint: UnitPoint(x: 0.5, y: 0.5)
             )
+
+            if isSakura {
+                WatchSakuraPetalDots(phase: petalPhase, opacity: reduceMotion ? 0.14 : 0.2)
+                    .frame(height: WatchWaveDefaults.frameHeight)
+                    .padding(.top, 6)
+            }
         }
         .ignoresSafeArea()
         .allowsHitTesting(false)
@@ -120,6 +130,34 @@ struct WatchWaveBackground: View {
             withAnimation(DS.Animation.waveDrift) {
                 phase = 2 * .pi
             }
+            if isSakura {
+                withAnimation(.linear(duration: 14).repeatForever(autoreverses: false)) {
+                    petalPhase = 2 * .pi
+                }
+            }
         }
+    }
+}
+
+private struct WatchSakuraPetalDots: View {
+    let phase: CGFloat
+    let opacity: Double
+
+    private let seeds: [Double] = [0.12, 0.23, 0.35, 0.48, 0.57, 0.67, 0.79, 0.88]
+
+    var body: some View {
+        GeometryReader { proxy in
+            ForEach(Array(seeds.enumerated()), id: \.offset) { idx, seed in
+                let x = (0.12 + seed * 0.78) * proxy.size.width
+                let y = (0.12 + abs(sin(seed * 9.0)) * 0.45) * proxy.size.height
+                let dx = CGFloat(sin(phase + CGFloat(idx) * 0.7)) * 3.5
+                let dy = CGFloat(cos(phase * 0.7 + CGFloat(idx) * 0.3)) * 2.8
+                Circle()
+                    .fill(Color("SakuraPetal").opacity(opacity))
+                    .frame(width: 2.8 + CGFloat(idx % 3), height: 2.8 + CGFloat(idx % 3))
+                    .position(x: x + dx, y: y + dy)
+            }
+        }
+        .allowsHitTesting(false)
     }
 }
