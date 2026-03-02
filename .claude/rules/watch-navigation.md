@@ -51,6 +51,36 @@ private func finishWorkout() {
 }
 ```
 
+## Sheet 내부 NavigationStack 금지
+
+watchOS sheet는 iOS와 달리 별도 presentation context를 생성하지 않음. sheet 내부에 `NavigationStack`을 사용하면 root `NavigationStack`과 `PUICStackedNavigationBar`가 충돌하여 crash 발생.
+
+```swift
+// BAD: sheet 안 NavigationStack → PUICStackedNavigationBar crash
+.sheet(isPresented: $showSheet) {
+    NavigationStack {
+        FormView()
+        .navigationDestination(isPresented: $showDetail) { DetailView() }
+    }
+}
+
+// GOOD: 조건부 View 전환
+.sheet(isPresented: $showSheet) {
+    if showDetail {
+        DetailView()
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button { showDetail = false } label: {
+                        Image(systemName: "chevron.left")
+                    }
+                }
+            }
+    } else {
+        FormView()
+    }
+}
+```
+
 ## onChange 감시 범위 최소화
 
 `onChange(of:)`는 특정 전환(예: `nil → non-nil`)만 트리거. 모든 변경에 반응하면 의도하지 않은 side effect 유발.
