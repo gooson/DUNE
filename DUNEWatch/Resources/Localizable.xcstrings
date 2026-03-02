@@ -7,6 +7,9 @@
     "· %.1fkg" : {
 
     },
+    "/10" : {
+
+    },
     "%.1f" : {
 
     },
@@ -701,6 +704,43 @@
         }
       }
     },
+    "Recent" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最近"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최근"
+          }
+        }
+      }
+    },
+    "Recommended %@/10 from recent history" : {
+
+    },
+    "Recommended %lld/10 from recent history" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最近の履歴にもとづくおすすめ %lld/10"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최근 기록 기반 추천 %lld/10"
+          }
+        }
+      }
+    },
     "Record Empty" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -765,40 +805,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "루틴"
-          }
-        }
-      }
-    },
-    "Recommended %lld/10 from recent history" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "最近の履歴にもとづくおすすめ %lld/10"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "최근 기록 기반 추천 %lld/10"
-          }
-        }
-      }
-    },
-    "Recent" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "最近"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "최근"
           }
         }
       }
@@ -969,23 +975,6 @@
         }
       }
     },
-    "Workout Effort" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ワークアウト強度"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "운동 강도"
-          }
-        }
-      }
-    },
     "Workout data could not be recovered. Sets cannot be saved." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -999,6 +988,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "운동 데이터를 복구할 수 없습니다. 세트를 저장할 수 없습니다."
+          }
+        }
+      }
+    },
+    "Workout Effort" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ワークアウト強度"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "운동 강도"
           }
         }
       }

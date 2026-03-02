@@ -12179,23 +12179,6 @@
         }
       }
     },
-    "Recommended %lld/10 from your recent history" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "最近の履歴にもとづくおすすめ %lld/10"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "최근 기록 기반 추천 %lld/10"
-          }
-        }
-      }
-    },
     "Recent Workouts" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -12209,6 +12192,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "최근 운동"
+          }
+        }
+      }
+    },
+    "Recommended %@/10 from your recent history" : {
+
+    },
+    "Recommended %lld/10 from your recent history" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最近の履歴にもとづくおすすめ %lld/10"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최근 기록 기반 추천 %lld/10"
           }
         }
       }
