@@ -222,6 +222,7 @@ struct CarouselHomeView: View {
             WatchSyncStatusView()
                 .padding(.top, DS.Spacing.xs)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         .padding()
     }
 

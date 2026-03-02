@@ -39,6 +39,7 @@ struct QuickStartAllExercisesView: View {
                         .font(DS.Typography.exerciseName)
                     WatchSyncStatusView()
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                 .padding()
                 .accessibilityIdentifier("watch-quickstart-empty")
             } else if isSearching {
