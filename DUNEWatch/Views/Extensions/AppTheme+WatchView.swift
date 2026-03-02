@@ -22,6 +22,7 @@ extension AppTheme {
         case .desertWarm:  DS.Color.warmGlow
         case .oceanCool:   Color("OceanAccent")
         case .forestGreen: Color("ForestAccent")
+        case .sakuraCalm: Color("SakuraAccent")
         }
     }
 
@@ -31,6 +32,7 @@ extension AppTheme {
         case .desertWarm:  DS.Color.desertBronze
         case .oceanCool:   Color("OceanBronze")
         case .forestGreen: Color("ForestBronze")
+        case .sakuraCalm: Color("SakuraBronze")
         }
     }
 
@@ -40,6 +42,7 @@ extension AppTheme {
         case .desertWarm:  DS.Color.desertDusk
         case .oceanCool:   Color("OceanDusk")
         case .forestGreen: Color("ForestDusk")
+        case .sakuraCalm: Color("SakuraDusk")
         }
     }
 
@@ -49,6 +52,7 @@ extension AppTheme {
         case .desertWarm:  DS.Color.sandMuted
         case .oceanCool:   Color("OceanSand")
         case .forestGreen: Color("ForestSand")
+        case .sakuraCalm: Color("SakuraSand")
         }
     }
 }
@@ -92,6 +96,7 @@ extension AppTheme {
         case .desertWarm:  DS.Color.tabTrain
         case .oceanCool:   Color("OceanTabTrain")
         case .forestGreen: Color("ForestTabTrain")
+        case .sakuraCalm: Color("SakuraTabTrain")
         }
     }
 
@@ -100,6 +105,7 @@ extension AppTheme {
         case .desertWarm:  DS.Color.tabWellness
         case .oceanCool:   Color("OceanTabWellness")
         case .forestGreen: Color("ForestTabWellness")
+        case .sakuraCalm: Color("SakuraTabWellness")
         }
     }
 }
@@ -112,6 +118,7 @@ extension AppTheme {
         case .desertWarm:  DS.Color.hrv
         case .oceanCool:   Color("OceanMetricHRV")
         case .forestGreen: Color("ForestMetricHRV")
+        case .sakuraCalm: Color("SakuraMetricHRV")
         }
     }
 
@@ -120,6 +127,7 @@ extension AppTheme {
         case .desertWarm:  DS.Color.rhr
         case .oceanCool:   Color("OceanMetricRHR")
         case .forestGreen: Color("ForestMetricRHR")
+        case .sakuraCalm: Color("SakuraMetricRHR")
         }
     }
 
@@ -128,6 +136,7 @@ extension AppTheme {
         case .desertWarm:  DS.Color.heartRate
         case .oceanCool:   Color("OceanMetricHeartRate")
         case .forestGreen: Color("ForestMetricHeartRate")
+        case .sakuraCalm: Color("SakuraMetricHeartRate")
         }
     }
 
@@ -136,6 +145,7 @@ extension AppTheme {
         case .desertWarm:  DS.Color.sleep
         case .oceanCool:   Color("OceanMetricSleep")
         case .forestGreen: Color("ForestMetricSleep")
+        case .sakuraCalm: Color("SakuraMetricSleep")
         }
     }
 
@@ -144,6 +154,7 @@ extension AppTheme {
         case .desertWarm:  DS.Color.activity
         case .oceanCool:   Color("OceanMetricActivity")
         case .forestGreen: Color("ForestMetricActivity")
+        case .sakuraCalm: Color("SakuraMetricActivity")
         }
     }
 
@@ -152,6 +163,7 @@ extension AppTheme {
         case .desertWarm:  DS.Color.steps
         case .oceanCool:   Color("OceanMetricSteps")
         case .forestGreen: Color("ForestMetricSteps")
+        case .sakuraCalm: Color("SakuraMetricSteps")
         }
     }
 
@@ -160,6 +172,7 @@ extension AppTheme {
         case .desertWarm:  DS.Color.body
         case .oceanCool:   Color("OceanMetricBody")
         case .forestGreen: Color("ForestMetricBody")
+        case .sakuraCalm: Color("SakuraMetricBody")
         }
     }
 }
@@ -172,6 +185,7 @@ extension AppTheme {
         case .desertWarm:  String(localized: "Desert Warm")
         case .oceanCool:   String(localized: "Ocean Cool")
         case .forestGreen: String(localized: "Forest Green")
+        case .sakuraCalm:  String(localized: "Sakura Calm")
         }
     }
 }
