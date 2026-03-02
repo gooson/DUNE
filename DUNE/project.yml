@@ -59,6 +59,8 @@ targets:
         group: DUNE
       - path: Resources
         group: DUNE
+      - path: ../Shared/Resources/Colors.xcassets
+        group: Shared/Resources
     settings:
       base:
         INFOPLIST_FILE: Resources/Info.plist
@@ -99,6 +101,9 @@ targets:
     platform: watchOS
     sources:
       - path: ../DUNEWatch
+      # Shared Colors
+      - path: ../Shared/Resources/Colors.xcassets
+        group: Shared/Resources
       # Shared SwiftData models
       - path: Data/Persistence/Models
         group: Shared/Models
