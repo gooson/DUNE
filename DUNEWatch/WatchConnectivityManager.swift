@@ -12,6 +12,26 @@ enum SyncStatus: Equatable {
     case notConnected
 }
 
+/// Pure helpers for watch exercise-library sync state/request policy.
+enum WatchLibrarySyncRequestPolicy {
+    static let minimumInterval: TimeInterval = 8
+
+    static func statusWhenLibraryMissing(isReachable: Bool) -> SyncStatus {
+        isReachable ? .syncing : .notConnected
+    }
+
+    static func shouldRequest(
+        lastRequestAt: Date?,
+        now: Date,
+        force: Bool,
+        minimumInterval: TimeInterval = minimumInterval
+    ) -> Bool {
+        if force { return true }
+        guard let lastRequestAt else { return true }
+        return now.timeIntervalSince(lastRequestAt) >= minimumInterval
+    }
+}
+
 /// Watch-side WatchConnectivity manager.
 /// Receives workout state from iPhone and sends completed sets back.
 @Observable
@@ -41,6 +61,8 @@ final class WatchConnectivityManager: NSObject {
     /// Sync status for UI display
     private(set) var syncStatus: SyncStatus = .notConnected
 
+    private var lastExerciseLibrarySyncRequestAt: Date?
+
     private override init() {
         super.init()
     }
@@ -53,6 +75,11 @@ final class WatchConnectivityManager: NSObject {
         let session = WCSession.default
         session.delegate = self
         session.activate()
+    }
+
+    /// Allows watch UI to trigger exercise-library re-sync explicitly.
+    func requestExerciseLibrarySync(force: Bool = false) {
+        requestExerciseLibrarySyncIfNeeded(force: force)
     }
 
     /// UI-test-only fixture path to make Watch flows deterministic without WC/iPhone dependency.
@@ -164,12 +191,23 @@ extension WatchConnectivityManager: WCSessionDelegate {
             Task { @MainActor in
                 syncStatus = .syncing
                 loadCachedContext()
+                if exerciseLibrary.isEmpty {
+                    requestExerciseLibrarySyncIfNeeded(force: false)
+                }
             }
         }
     }
 
     nonisolated func sessionReachabilityDidChange(_ session: WCSession) {
-        // No cached state to update — isReachable is a computed property (correction #46)
+        Task { @MainActor in
+            guard exerciseLibrary.isEmpty else { return }
+            if session.isReachable {
+                syncStatus = .syncing
+                requestExerciseLibrarySyncIfNeeded(force: false)
+            } else {
+                syncStatus = .notConnected
+            }
+        }
     }
 
     nonisolated func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
@@ -277,9 +315,12 @@ extension WatchConnectivityManager {
                 syncStatus = .failed(String(localized: "Decode error"))
             }
         } else {
-            // P3: No exerciseLibrary key — mark synced regardless of library state.
-            // The context may contain other keys, or be empty on first launch.
-            syncStatus = .synced(Date())
+            if exerciseLibrary.isEmpty {
+                syncStatus = WatchLibrarySyncRequestPolicy.statusWhenLibraryMissing(isReachable: isReachable)
+                requestExerciseLibrarySyncIfNeeded(force: false)
+            } else {
+                syncStatus = .synced(Date())
+            }
         }
 
         // Global rest time from iPhone settings
@@ -292,6 +333,40 @@ extension WatchConnectivityManager {
         if let themeRaw = parsed.appTheme, !themeRaw.isEmpty {
             syncedThemeRawValue = themeRaw
         }
+    }
+
+    private func requestExerciseLibrarySyncIfNeeded(force: Bool) {
+        guard WCSession.isSupported() else { return }
+
+        let now = Date()
+        guard WatchLibrarySyncRequestPolicy.shouldRequest(
+            lastRequestAt: lastExerciseLibrarySyncRequestAt,
+            now: now,
+            force: force
+        ) else {
+            return
+        }
+        lastExerciseLibrarySyncRequestAt = now
+
+        let payload: [String: Any] = ["requestExerciseLibrarySync": true]
+        let session = WCSession.default
+        var requested = false
+
+        if session.isReachable {
+            session.sendMessage(payload, replyHandler: nil) { error in
+                Self.logger.error("Failed to request exercise library sync: \(error.localizedDescription, privacy: .public)")
+            }
+            requested = true
+        }
+
+        if session.activationState == .activated {
+            session.transferUserInfo(payload)
+            requested = true
+        }
+
+        syncStatus = requested
+            ? .syncing
+            : WatchLibrarySyncRequestPolicy.statusWhenLibraryMissing(isReachable: false)
     }
 
     private func deleteWorkoutFromHealthKit(uuidString: String) async {

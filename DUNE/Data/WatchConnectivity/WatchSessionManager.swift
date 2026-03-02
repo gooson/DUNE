@@ -167,7 +167,7 @@ extension WatchSessionManager: WCSessionDelegate {
     }
 
     nonisolated func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
-        let messageCopy = message.compactMapValues { $0 as? Data }
+        let messageCopy = ParsedWatchIncomingMessage(from: message)
         Task { @MainActor in
             messageHandlerTask?.cancel()
             messageHandlerTask = Task { @MainActor in
@@ -181,8 +181,18 @@ extension WatchSessionManager: WCSessionDelegate {
         didReceiveMessage message: [String: Any],
         replyHandler: @escaping ([String: Any]) -> Void
     ) {
-        let messageCopy = message.compactMapValues { $0 as? Data }
+        let messageCopy = ParsedWatchIncomingMessage(from: message)
         replyHandler(["status": "received"])
+        Task { @MainActor in
+            messageHandlerTask?.cancel()
+            messageHandlerTask = Task { @MainActor in
+                handleDecodedMessage(messageCopy)
+            }
+        }
+    }
+
+    nonisolated func session(_ session: WCSession, didReceiveUserInfo userInfo: [String: Any]) {
+        let messageCopy = ParsedWatchIncomingMessage(from: userInfo)
         Task { @MainActor in
             messageHandlerTask?.cancel()
             messageHandlerTask = Task { @MainActor in
@@ -195,9 +205,13 @@ extension WatchSessionManager: WCSessionDelegate {
 // MARK: - Message Handling
 
 extension WatchSessionManager {
-    private func handleDecodedMessage(_ message: [String: Data]) {
+    private func handleDecodedMessage(_ message: ParsedWatchIncomingMessage) {
+        if message.requestExerciseLibrarySync {
+            syncExerciseLibraryToWatch()
+        }
+
         // Handle workout completion from Watch
-        if let data = message["workoutComplete"] {
+        if let data = message.workoutCompleteData {
             do {
                 var update = try JSONDecoder().decode(WatchWorkoutUpdate.self, from: data)
                 update = update.validated()
@@ -209,7 +223,7 @@ extension WatchSessionManager {
         }
 
         // Handle set completion from Watch
-        if let data = message["setCompleted"] {
+        if let data = message.setCompletedData {
             do {
                 var update = try JSONDecoder().decode(WatchWorkoutUpdate.self, from: data)
                 update = update.validated()
@@ -218,6 +232,18 @@ extension WatchSessionManager {
                 AppLogger.ui.error("Failed to decode Watch set update: \(error.localizedDescription)")
             }
         }
+    }
+}
+
+struct ParsedWatchIncomingMessage: Sendable {
+    let workoutCompleteData: Data?
+    let setCompletedData: Data?
+    let requestExerciseLibrarySync: Bool
+
+    init(from message: [String: Any]) {
+        workoutCompleteData = message["workoutComplete"] as? Data
+        setCompletedData = message["setCompleted"] as? Data
+        requestExerciseLibrarySync = (message["requestExerciseLibrarySync"] as? Bool) == true
     }
 }
 

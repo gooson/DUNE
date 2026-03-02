@@ -67,7 +67,12 @@ struct QuickStartAllExercisesView: View {
         .background { WatchWaveBackground() }
         .navigationTitle(String(localized: "All Exercises"))
         .searchable(text: $searchText, prompt: String(localized: "Search"))
-        .onAppear { rebuildLists() }
+        .onAppear {
+            rebuildLists()
+            if connectivity.exerciseLibrary.isEmpty {
+                connectivity.requestExerciseLibrarySync()
+            }
+        }
         .onChange(of: searchText) { _, _ in rebuildLists() }
         .onChange(of: connectivity.exerciseLibrary.count) { _, _ in rebuildLists() }
     }
