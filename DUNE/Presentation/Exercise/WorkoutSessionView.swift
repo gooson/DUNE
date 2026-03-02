@@ -768,7 +768,8 @@ struct WorkoutSessionView: View {
         guard let record = viewModel.createValidatedRecord(weightUnit: weightUnit) else { return }
 
         // Auto intensity — called BEFORE modelContext.insert so @Query history excludes this record
-        let intensityResult = calculateAutoIntensity(for: record)
+        let intensityService = WorkoutIntensityService()
+        let intensityResult = calculateAutoIntensity(for: record, service: intensityService)
         if let score = intensityResult?.rawScore, score.isFinite, (0...1).contains(score) {
             record.autoIntensityRaw = score
         }
@@ -779,7 +780,7 @@ struct WorkoutSessionView: View {
             .sorted { $0.date > $1.date }
             .prefix(5)
             .compactMap(\.rpe)
-        effortSuggestion = WorkoutIntensityService().suggestEffort(
+        effortSuggestion = intensityService.suggestEffort(
             autoIntensityRaw: intensityResult?.rawScore,
             recentEfforts: recentEfforts
         )
@@ -819,9 +820,7 @@ struct WorkoutSessionView: View {
         }
     }
 
-    private func calculateAutoIntensity(for record: ExerciseRecord) -> WorkoutIntensityResult? {
-        let service = WorkoutIntensityService()
-
+    private func calculateAutoIntensity(for record: ExerciseRecord, service: WorkoutIntensityService) -> WorkoutIntensityResult? {
         let currentInput = buildIntensityInput(from: record)
 
         // History: same exercise, last 30 sessions, oldest-first (Correction #156)

@@ -70,13 +70,7 @@ struct WorkoutIntensityService: Sendable {
         guard let raw = autoIntensityRaw, raw.isFinite, (0...1).contains(raw) else {
             // No auto intensity — return history-based suggestion if available
             guard let last = validEfforts.first else { return nil }
-            let avg = Double(validEfforts.reduce(0, +)) / Double(validEfforts.count)
-            return EffortSuggestion(
-                suggestedEffort: last,
-                category: EffortCategory(effort: last),
-                lastEffort: last,
-                averageEffort: avg.isFinite ? avg : nil
-            )
+            return buildSuggestion(last, validEfforts: Array(validEfforts))
         }
 
         // Convert 0.0-1.0 → 1-10

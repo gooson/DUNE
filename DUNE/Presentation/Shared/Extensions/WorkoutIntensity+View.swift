@@ -47,28 +47,6 @@ extension EffortCategory {
     }
 
     var iconName: String {
-        switch self {
-        case .easy: "flame"
-        case .moderate: "flame"
-        case .hard: "flame.fill"
-        case .allOut: "flame.fill"
-        }
+        self >= .hard ? "flame.fill" : "flame"
     }
-}
-
-// MARK: - Effort helpers
-
-enum EffortUI {
-    /// Color for a specific effort value (1-10).
-    static func color(for effort: Int) -> Color {
-        EffortCategory(effort: effort).color
-    }
-
-    /// Interpolated color across the 1-10 range for slider track gradient.
-    static let gradientStops: [Gradient.Stop] = [
-        .init(color: DS.Color.positive, location: 0.0),
-        .init(color: DS.Color.caution, location: 0.33),
-        .init(color: .orange, location: 0.67),
-        .init(color: DS.Color.negative, location: 1.0),
-    ]
 }

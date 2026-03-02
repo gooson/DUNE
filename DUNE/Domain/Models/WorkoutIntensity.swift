@@ -74,10 +74,10 @@ enum EffortCategory: Int, CaseIterable, Sendable, Comparable {
 
     init(effort: Int) {
         switch effort {
-        case 1...3: self = .easy
+        case ...3: self = .easy
         case 4...6: self = .moderate
         case 7...8: self = .hard
-        default: self = .allOut
+        case 9...: self = .allOut
         }
     }
 

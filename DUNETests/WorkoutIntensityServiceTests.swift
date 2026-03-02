@@ -471,9 +471,17 @@ struct WorkoutIntensityServiceTests {
         #expect(result == nil) // 1.5 outside 0...1
     }
 
-    @Test("suggestEffort: NaN raw returns nil")
+    @Test("suggestEffort: NaN raw falls back to history")
     func suggestEffortNaN() {
+        // NaN fails isFinite guard → treated same as nil raw → history fallback
         let result = service.suggestEffort(autoIntensityRaw: .nan, recentEfforts: [5])
+        #expect(result != nil)
+        #expect(result!.suggestedEffort == 5)
+    }
+
+    @Test("suggestEffort: NaN raw without history returns nil")
+    func suggestEffortNaNNoHistory() {
+        let result = service.suggestEffort(autoIntensityRaw: .nan, recentEfforts: [])
         #expect(result == nil)
     }
 
@@ -505,10 +513,11 @@ struct WorkoutIntensityServiceTests {
         #expect(EffortCategory(effort: 10) == .allOut)
     }
 
-    @Test("EffortCategory: effort 0 or negative is allOut (default)")
+    @Test("EffortCategory: edge values — 0/negative maps to easy, 11+ maps to allOut")
     func effortCategoryEdge() {
-        // Switch default case handles 0, negative, and > 10
-        #expect(EffortCategory(effort: 0) == .allOut)
+        // Exhaustive switch: ...3 → easy, 9... → allOut
+        #expect(EffortCategory(effort: 0) == .easy)
+        #expect(EffortCategory(effort: -1) == .easy)
         #expect(EffortCategory(effort: 11) == .allOut)
     }
 }

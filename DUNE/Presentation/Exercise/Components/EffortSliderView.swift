@@ -6,7 +6,10 @@ struct EffortSliderView: View {
     let suggestion: EffortSuggestion?
 
     @State private var sliderValue: Double = 5
-    @State private var hasUserInteracted = false
+    @State private var didInitialize = false
+
+    private var currentEffort: Int { effort ?? suggestion?.suggestedEffort ?? 5 }
+    private var currentCategory: EffortCategory { EffortCategory(effort: currentEffort) }
 
     var body: some View {
         VStack(spacing: DS.Spacing.lg) {
@@ -34,18 +37,15 @@ struct EffortSliderView: View {
     // MARK: - Effort Display
 
     private var effortDisplay: some View {
-        let currentEffort = effort ?? suggestion?.suggestedEffort ?? 5
-        let category = EffortCategory(effort: currentEffort)
-
-        return VStack(spacing: DS.Spacing.xs) {
+        VStack(spacing: DS.Spacing.xs) {
             HStack(spacing: DS.Spacing.sm) {
-                Image(systemName: category.iconName)
+                Image(systemName: currentCategory.iconName)
                     .font(.title2)
-                    .foregroundStyle(category.color)
+                    .foregroundStyle(currentCategory.color)
 
                 Text("\(currentEffort)")
                     .font(.system(size: 48, weight: .bold, design: .rounded))
-                    .foregroundStyle(category.color)
+                    .foregroundStyle(currentCategory.color)
                     .contentTransition(.numericText())
 
                 Text("/ 10")
@@ -53,9 +53,9 @@ struct EffortSliderView: View {
                     .foregroundStyle(DS.Color.textSecondary)
             }
 
-            Text(category.displayName)
+            Text(currentCategory.displayName)
                 .font(.headline)
-                .foregroundStyle(category.color)
+                .foregroundStyle(currentCategory.color)
                 .contentTransition(.interpolate)
         }
         .animation(DS.Animation.snappy, value: currentEffort)
@@ -80,20 +80,18 @@ struct EffortSliderView: View {
                     .font(.caption2.weight(.medium).monospacedDigit())
                     .foregroundStyle(DS.Color.textSecondary)
             }
-            .tint(EffortUI.color(for: Int(sliderValue)))
+            .tint(currentCategory.color)
             .sensoryFeedback(.selection, trigger: Int(sliderValue))
             .onChange(of: sliderValue) { _, newValue in
-                let snapped = Int(round(newValue))
-                effort = snapped
-                hasUserInteracted = true
+                effort = Int(round(newValue))
             }
         }
         .padding(.horizontal, DS.Spacing.sm)
-        .onAppear {
-            if let suggestion {
-                sliderValue = Double(suggestion.suggestedEffort)
-                effort = suggestion.suggestedEffort
-            }
+        .task {
+            guard !didInitialize, let suggestion else { return }
+            sliderValue = Double(suggestion.suggestedEffort)
+            effort = suggestion.suggestedEffort
+            didInitialize = true
         }
     }
 
@@ -104,8 +102,8 @@ struct EffortSliderView: View {
             ForEach(EffortCategory.allCases, id: \.rawValue) { category in
                 Text(category.displayName)
                     .font(.caption2)
-                    .foregroundStyle(isActiveCategory(category) ? category.color : DS.Color.textSecondary)
-                    .fontWeight(isActiveCategory(category) ? .semibold : .regular)
+                    .foregroundStyle(currentCategory == category ? category.color : DS.Color.textSecondary)
+                    .fontWeight(currentCategory == category ? .semibold : .regular)
                 if category != .allOut {
                     Spacer()
                 }
@@ -114,26 +112,15 @@ struct EffortSliderView: View {
         .padding(.horizontal, DS.Spacing.sm)
     }
 
-    private func isActiveCategory(_ category: EffortCategory) -> Bool {
-        let currentEffort = effort ?? suggestion?.suggestedEffort ?? 5
-        return EffortCategory(effort: currentEffort) == category
-    }
-
     // MARK: - History Context
 
     private func historyContext(_ suggestion: EffortSuggestion) -> some View {
         HStack(spacing: DS.Spacing.lg) {
             if let last = suggestion.lastEffort {
-                contextItem(
-                    label: String(localized: "Last time"),
-                    value: "\(last)"
-                )
+                contextItem(label: "Last time", value: "\(last)")
             }
             if let avg = suggestion.averageEffort {
-                contextItem(
-                    label: String(localized: "Average"),
-                    value: avg.formattedWithSeparator(fractionDigits: 1)
-                )
+                contextItem(label: "Average", value: avg.formattedWithSeparator(fractionDigits: 1))
             }
         }
         .padding(.vertical, DS.Spacing.sm)
@@ -141,7 +128,7 @@ struct EffortSliderView: View {
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
     }
 
-    private func contextItem(label: String, value: String) -> some View {
+    private func contextItem(label: LocalizedStringKey, value: String) -> some View {
         VStack(spacing: 2) {
             Text(label)
                 .font(.caption2)
