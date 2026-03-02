@@ -27,9 +27,11 @@ enum AXID {
     static let activitySectionExerciseMix = "activity-section-exercisemix"
     static let activitySectionRecent = "activity-section-recent"
 
-    // MARK: - Wellness Tab (active: hero, toolbar-add)
+    // MARK: - Wellness Tab (active: hero, toolbar-add, add-menu items)
     static let wellnessHeroScore = "wellness-hero-score"
     static let wellnessToolbarAdd = "wellness-toolbar-add"
+    static let wellnessMenuBodyRecord = "wellness-menu-body-record"
+    static let wellnessMenuInjury = "wellness-menu-injury"
     // Planned — identifiers not yet applied to views
     static let wellnessSectionPhysical = "wellness-section-physical"
     static let wellnessSectionActive = "wellness-section-active"
@@ -43,13 +45,13 @@ enum AXID {
     // Planned — identifier not yet applied to view
     static let lifeSectionHabits = "life-section-habits"
 
-    // MARK: - Settings (active: exercise-defaults)
+    // MARK: - Settings (active rows)
     static let settingsRowExerciseDefaults = "settings-row-exercisedefaults"
-    // Planned — identifiers not yet applied to views
-    static let settingsRowWorkoutDefaults = "settings-row-workoutdefaults"
-    static let settingsRowAppearance = "settings-row-appearance"
-    static let settingsRowDataPrivacy = "settings-row-dataprivacy"
-    static let settingsRowAbout = "settings-row-about"
+    static let settingsRowRestTime = "settings-row-resttime"
+    static let settingsSectionAppearance = "settings-section-appearance"
+    static let settingsRowICloudSync = "settings-row-icloud-sync"
+    static let settingsRowLocationAccess = "settings-row-location-access"
+    static let settingsRowVersion = "settings-row-version"
 
     // MARK: - Body Form
     static let bodyFormSave = "body-form-save"
@@ -85,6 +87,8 @@ enum AXID {
 
     // MARK: - Exercise Picker
     static let pickerSearchField = "picker-search-field"
+    static let pickerRootList = "picker-root-list"
+    static let pickerCancelButton = "picker-cancel-button"
     static let pickerSectionRecent = "picker-section-recent"
     static let pickerSectionPopular = "picker-section-popular"
 

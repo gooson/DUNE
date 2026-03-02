@@ -27,15 +27,11 @@ final class WellnessSmokeTests: UITestBaseCase {
 
     func testBodyFormOpens() throws {
         let addMenu = app.descendants(matching: .any)[AXID.wellnessToolbarAdd].firstMatch
-        guard addMenu.waitForExistence(timeout: 5) else {
-            throw XCTSkip("Add menu not found")
-        }
+        XCTAssertTrue(addMenu.waitForExistence(timeout: 5), "Add menu should exist")
         addMenu.tap()
 
-        let bodyRecordButton = app.buttons["Body Record"]
-        guard bodyRecordButton.waitForExistence(timeout: 3) else {
-            throw XCTSkip("Body Record menu item not found")
-        }
+        let bodyRecordButton = app.descendants(matching: .any)[AXID.wellnessMenuBodyRecord].firstMatch
+        XCTAssertTrue(bodyRecordButton.waitForExistence(timeout: 3), "Body Record action should exist")
         bodyRecordButton.tap()
 
         // Verify form fields exist
@@ -54,38 +50,30 @@ final class WellnessSmokeTests: UITestBaseCase {
 
     func testBodyFormCancelDismisses() throws {
         let addMenu = app.descendants(matching: .any)[AXID.wellnessToolbarAdd].firstMatch
-        guard addMenu.waitForExistence(timeout: 5) else {
-            throw XCTSkip("Add menu not found")
-        }
+        XCTAssertTrue(addMenu.waitForExistence(timeout: 5), "Add menu should exist")
         addMenu.tap()
 
-        let bodyRecordButton = app.buttons["Body Record"]
-        guard bodyRecordButton.waitForExistence(timeout: 3) else {
-            throw XCTSkip("Body Record menu item not found")
-        }
+        let bodyRecordButton = app.descendants(matching: .any)[AXID.wellnessMenuBodyRecord].firstMatch
+        XCTAssertTrue(bodyRecordButton.waitForExistence(timeout: 3), "Body Record action should exist")
         bodyRecordButton.tap()
 
         let cancelButton = app.descendants(matching: .any)[AXID.bodyFormCancel].firstMatch
-        guard cancelButton.waitForExistence(timeout: 3) else { return }
+        XCTAssertTrue(cancelButton.waitForExistence(timeout: 3), "Body form cancel button should exist")
         cancelButton.tap()
 
         // Sheet should be dismissed — add menu should be visible again
-        XCTAssertTrue(addMenu.waitForExistence(timeout: 3))
+        XCTAssertTrue(addMenu.waitForExistence(timeout: 3), "Body form should be dismissed")
     }
 
     // MARK: - Injury Form
 
     func testInjuryFormOpens() throws {
         let addMenu = app.descendants(matching: .any)[AXID.wellnessToolbarAdd].firstMatch
-        guard addMenu.waitForExistence(timeout: 5) else {
-            throw XCTSkip("Add menu not found")
-        }
+        XCTAssertTrue(addMenu.waitForExistence(timeout: 5), "Add menu should exist")
         addMenu.tap()
 
-        let injuryButton = app.buttons["Injury"]
-        guard injuryButton.waitForExistence(timeout: 3) else {
-            throw XCTSkip("Injury menu item not found")
-        }
+        let injuryButton = app.descendants(matching: .any)[AXID.wellnessMenuInjury].firstMatch
+        XCTAssertTrue(injuryButton.waitForExistence(timeout: 3), "Injury action should exist")
         injuryButton.tap()
 
         let saveButton = app.descendants(matching: .any)[AXID.injuryFormSave]

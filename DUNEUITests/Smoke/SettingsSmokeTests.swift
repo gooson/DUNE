@@ -17,9 +17,10 @@ final class SettingsSmokeTests: UITestBaseCase {
     }
 
     func testWorkoutDefaultsSectionExists() throws {
-        // Look for the "Rest Time" label within the form
-        let restTimeLabel = app.staticTexts["Rest Time"]
-        XCTAssertTrue(restTimeLabel.waitForExistence(timeout: 5), "Rest Time setting should exist")
+        XCTAssertTrue(
+            elementExists(AXID.settingsRowRestTime, timeout: 5),
+            "Rest Time setting row should exist"
+        )
     }
 
     func testExerciseDefaultsLinkExists() throws {
@@ -30,23 +31,30 @@ final class SettingsSmokeTests: UITestBaseCase {
     }
 
     func testAppearanceSectionExists() throws {
-        let appearanceHeader = app.staticTexts["Appearance"]
-        XCTAssertTrue(appearanceHeader.waitForExistence(timeout: 5), "Appearance section should exist")
+        XCTAssertTrue(
+            elementExists(AXID.settingsSectionAppearance, timeout: 5),
+            "Appearance section should exist"
+        )
     }
 
     func testDataPrivacySectionExists() throws {
         // Scroll down to find the section
         app.swipeUp()
-        let iCloudLabel = app.staticTexts["iCloud Sync"]
-        XCTAssertTrue(iCloudLabel.waitForExistence(timeout: 5), "iCloud Sync toggle should exist")
-
-        let locationLabel = app.staticTexts["Location Access"]
-        XCTAssertTrue(locationLabel.waitForExistence(timeout: 5), "Location Access row should exist")
+        XCTAssertTrue(
+            elementExists(AXID.settingsRowICloudSync, timeout: 5),
+            "iCloud Sync row should exist"
+        )
+        XCTAssertTrue(
+            elementExists(AXID.settingsRowLocationAccess, timeout: 5),
+            "Location Access row should exist"
+        )
     }
 
     func testAboutSectionExists() throws {
         app.swipeUp()
-        let versionLabel = app.staticTexts["Version"]
-        XCTAssertTrue(versionLabel.waitForExistence(timeout: 5), "Version row should exist")
+        XCTAssertTrue(
+            elementExists(AXID.settingsRowVersion, timeout: 5),
+            "Version row should exist"
+        )
     }
 }

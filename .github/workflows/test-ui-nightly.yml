@@ -1,0 +1,37 @@
+name: Nightly Full UI Tests
+
+on:
+  schedule:
+    # GitHub Actions schedule uses UTC. 19:00 UTC = 04:00 KST (next day).
+    - cron: '0 19 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  nightly-ui-tests:
+    runs-on: macos-15
+    timeout-minutes: 90
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_26.2.app/Contents/Developer
+
+      - name: Install xcodegen
+        run: brew install xcodegen
+
+      - name: Run Full UI Tests
+        run: scripts/test-ui.sh --skip-testing DUNEUITests/HealthKitPermissionUITests --log-file .xcodebuild/ui-test-nightly.log
+
+      - name: Upload nightly test log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-test-nightly-log
+          path: .xcodebuild/ui-test-nightly.log
+          retention-days: 14

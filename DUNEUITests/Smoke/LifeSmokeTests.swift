@@ -27,32 +27,28 @@ final class LifeSmokeTests: UITestBaseCase {
 
     func testHabitFormOpens() throws {
         let addButton = app.descendants(matching: .any)[AXID.lifeToolbarAdd].firstMatch
-        guard addButton.waitForExistence(timeout: 5) else {
-            throw XCTSkip("Add button not found")
-        }
+        XCTAssertTrue(addButton.waitForExistence(timeout: 5), "Add button should exist")
         addButton.tap()
 
         // Habit form sheet should appear
         let nameField = app.textFields[AXID.habitFormName]
         XCTAssertTrue(nameField.waitForExistence(timeout: 3), "Habit name field should appear")
 
-        let typePicker = app.descendants(matching: .any)[AXID.habitFormType]
-        XCTAssertTrue(typePicker.exists, "Habit type picker should appear")
+        let typePicker = app.descendants(matching: .any)[AXID.habitFormType].firstMatch
+        XCTAssertTrue(typePicker.waitForExistence(timeout: 3), "Habit type picker should appear")
     }
 
     func testHabitFormCancelDismisses() throws {
         let addButton = app.descendants(matching: .any)[AXID.lifeToolbarAdd].firstMatch
-        guard addButton.waitForExistence(timeout: 5) else {
-            throw XCTSkip("Add button not found")
-        }
+        XCTAssertTrue(addButton.waitForExistence(timeout: 5), "Add button should exist")
         addButton.tap()
 
-        let cancelButton = app.descendants(matching: .any)[AXID.habitFormCancel]
-        guard cancelButton.waitForExistence(timeout: 3) else { return }
+        let cancelButton = app.descendants(matching: .any)[AXID.habitFormCancel].firstMatch
+        XCTAssertTrue(cancelButton.waitForExistence(timeout: 3), "Habit form cancel button should exist")
         cancelButton.tap()
 
         // Sheet should be dismissed — add button should be visible again
-        XCTAssertTrue(addButton.waitForExistence(timeout: 3))
+        XCTAssertTrue(addButton.waitForExistence(timeout: 3), "Habit form should be dismissed")
     }
 }
 
