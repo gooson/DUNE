@@ -28,9 +28,23 @@ struct DUNEWatchApp: App {
         }
     }
 
+    private static var shouldEnableCloudKit: Bool {
+#if targetEnvironment(simulator)
+        logger.info("CloudKit disabled on watch simulator")
+        return false
+#else
+        // Watch has no user-facing cloud sync toggle yet, so gate by account availability.
+        let hasICloudAccount = FileManager.default.ubiquityIdentityToken != nil
+        if !hasICloudAccount {
+            logger.info("CloudKit disabled on watch app due to missing iCloud account")
+        }
+        return hasICloudAccount
+#endif
+    }
+
     init() {
         let config = ModelConfiguration(
-            cloudKitDatabase: .automatic
+            cloudKitDatabase: Self.shouldEnableCloudKit ? .automatic : .none
         )
         do {
             modelContainer = try Self.makeModelContainer(configuration: config)
