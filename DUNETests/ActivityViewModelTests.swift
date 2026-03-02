@@ -336,4 +336,53 @@ struct ActivityViewModelTests {
         #expect(distanceRecord?.source == .healthKit)
         #expect(distanceRecord?.value == 10_000)
     }
+
+    @Test("refreshSuggestionFromRecords updates derived stats when debounce is disabled")
+    func refreshSuggestionFromRecordsImmediate() async {
+        let store = makeIsolatedPRStore()
+        let vm = ActivityViewModel(
+            workoutService: MockWorkoutService(),
+            stepsService: MockStepsService(),
+            personalRecordStore: store
+        )
+
+        let record = ExerciseRecord(
+            date: Date(),
+            exerciseType: "Running",
+            duration: 1_800,
+            calories: 320,
+            distance: 5_000
+        )
+
+        await vm.refreshSuggestionFromRecords([record], debounceNanoseconds: 0)
+
+        #expect(vm.personalRecords.contains { $0.kind == .longestDistance })
+        #expect(vm.personalRecords.contains { $0.kind == .fastestPace })
+    }
+
+    @Test("refreshSuggestionFromRecords does not mutate state when cancelled during debounce")
+    func refreshSuggestionFromRecordsCancellation() async {
+        let store = makeIsolatedPRStore()
+        let vm = ActivityViewModel(
+            workoutService: MockWorkoutService(),
+            stepsService: MockStepsService(),
+            personalRecordStore: store
+        )
+
+        let record = ExerciseRecord(
+            date: Date(),
+            exerciseType: "Running",
+            duration: 1_800,
+            calories: 320,
+            distance: 5_000
+        )
+
+        let task = Task {
+            await vm.refreshSuggestionFromRecords([record], debounceNanoseconds: 1_000_000_000)
+        }
+        task.cancel()
+        await task.value
+
+        #expect(vm.personalRecords.isEmpty)
+    }
 }

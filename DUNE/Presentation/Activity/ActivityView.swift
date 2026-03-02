@@ -11,6 +11,8 @@ struct ActivityView: View {
     @State private var showingPRInfo = false
     @State private var showingConsistencyInfo = false
     @State private var showingExerciseMixInfo = false
+    @State private var syncToastMessage: String?
+    @State private var syncToastDismissTask: Task<Void, Never>?
     @Environment(\.modelContext) private var modelContext
 
     private let library: ExerciseLibraryQuerying = ExerciseLibraryService.shared
@@ -28,9 +30,23 @@ struct ActivityView: View {
         case top
     }
 
+    private struct RecordsUpdateKey: Equatable {
+        let count: Int
+        let newestID: UUID?
+        let newestDate: Date?
+    }
+
     private var isRegular: Bool { sizeClass == .regular }
 
     private let refreshSignal: Int
+
+    private var recordsUpdateKey: RecordsUpdateKey {
+        RecordsUpdateKey(
+            count: recentRecords.count,
+            newestID: recentRecords.first?.id,
+            newestDate: recentRecords.first?.date
+        )
+    }
 
     init(sharedHealthDataService: SharedHealthDataService? = nil, scrollToTopSignal: Int = 0, refreshSignal: Int = 0) {
         _viewModel = State(initialValue: ActivityViewModel(sharedHealthDataService: sharedHealthDataService))
@@ -127,13 +143,6 @@ struct ActivityView: View {
                             }
                             .buttonStyle(.plain)
                         }
-
-                        if let error = viewModel.errorMessage {
-                            Text(error)
-                                .font(.caption)
-                                .foregroundStyle(DS.Color.textSecondary)
-                                .padding()
-                        }
                     }
                 }
                 .padding()
@@ -145,6 +154,22 @@ struct ActivityView: View {
             }
         }
         .background { TabWaveBackground() }
+        .overlay(alignment: .top) {
+            if let syncToastMessage {
+                ActivitySyncToast(message: syncToastMessage) {
+                    Task { await viewModel.loadActivityData() }
+                }
+                .padding(.horizontal, DS.Spacing.md)
+                .padding(.top, DS.Spacing.sm)
+                .transition(
+                    .asymmetric(
+                        insertion: .move(edge: .top).combined(with: .opacity),
+                        removal: .opacity.combined(with: .scale(scale: 0.9, anchor: .top))
+                    )
+                )
+                .animation(DS.Animation.snappy, value: syncToastMessage)
+            }
+        }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button {
@@ -234,16 +259,27 @@ struct ActivityView: View {
         // Keep heavy HealthKit reload tied to coordinator/manual refresh only.
         // SwiftData sync churn should update derived UI state without cancel/restart storms.
         .task(id: refreshSignal) {
-            viewModel.updateSuggestion(records: recentRecords)
             await viewModel.loadActivityData()
             recomputeInjuryConflicts()
         }
-        .onChange(of: recentRecords.count) { _, _ in
-            viewModel.updateSuggestion(records: recentRecords)
+        // Coalesce frequent SwiftData sync updates into a cancellable/debounced derived-state refresh.
+        .task(id: recordsUpdateKey) {
+            await viewModel.refreshSuggestionFromRecords(recentRecords)
             recomputeInjuryConflicts()
         }
         .onChange(of: activeInjuryRecords.count) { _, _ in
             recomputeInjuryConflicts()
+        }
+        .onChange(of: viewModel.errorMessage) { _, newMessage in
+            guard let newMessage, !newMessage.isEmpty else {
+                dismissSyncToast()
+                return
+            }
+            presentSyncToast(message: newMessage)
+        }
+        .onDisappear {
+            syncToastDismissTask?.cancel()
+            syncToastDismissTask = nil
         }
         .navigationTitle(Text(verbatim: "Activity"))
     }
@@ -310,6 +346,41 @@ struct ActivityView: View {
         cachedInjuryConflicts = result.conflicts
     }
 
+    private func presentSyncToast(message: String) {
+        syncToastDismissTask?.cancel()
+
+        withAnimation(DS.Animation.standard) {
+            syncToastMessage = message
+        }
+
+        syncToastDismissTask = Task {
+            do {
+                try await Task.sleep(nanoseconds: 3_500_000_000)
+            } catch is CancellationError {
+                return
+            } catch {
+                return
+            }
+            guard !Task.isCancelled else { return }
+            await MainActor.run {
+                withAnimation(DS.Animation.standard) {
+                    syncToastMessage = nil
+                }
+            }
+        }
+    }
+
+    private func dismissSyncToast() {
+        syncToastDismissTask?.cancel()
+        syncToastDismissTask = nil
+
+        if syncToastMessage != nil {
+            withAnimation(DS.Animation.standard) {
+                syncToastMessage = nil
+            }
+        }
+    }
+
     private var recentExerciseIDs: [String] {
         var seen = Set<String>()
         return recentRecords.compactMap { record in
@@ -340,6 +411,33 @@ struct ActivityView: View {
             .filter { !existing.contains($0) }
             .prefix(limit - ranked.count)
         return ranked + fallback
+    }
+}
+
+private struct ActivitySyncToast: View {
+    let message: String
+    let onRetry: () -> Void
+
+    var body: some View {
+        InlineCard {
+            HStack(spacing: DS.Spacing.sm) {
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .foregroundStyle(DS.Color.caution)
+
+                Text(message)
+                    .font(.caption)
+                    .foregroundStyle(DS.Color.textSecondary)
+                    .lineLimit(2)
+
+                Spacer(minLength: DS.Spacing.xs)
+
+                Button("Retry") {
+                    onRetry()
+                }
+                .font(.caption.weight(.semibold))
+            }
+        }
+        .accessibilityIdentifier("activity-sync-toast")
     }
 }
 
