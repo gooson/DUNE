@@ -100,6 +100,7 @@
 		33B7B25CD4931AE92AD83AAC /* WeatherDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 012362FCF668D48F60793E01 /* WeatherDetailView.swift */; };
 		33C14309ECEEC486D5E51E6D /* WeatherProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93E3DB094ADA63BA91DB144B /* WeatherProvider.swift */; };
 		33CBA666D1BEC318EE33466A /* TrendAnalysisServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9E9A951BB63F499DE9CEF6 /* TrendAnalysisServiceTests.swift */; };
+		341831B22CED501A6090869C /* WatchSyncStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28A4FB04270066E80309BA5 /* WatchSyncStatusView.swift */; };
 		3443D7E4CB14C80FF9CBFBAA /* ActivityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31FF504B9539F2837320D522 /* ActivityViewModel.swift */; };
 		350D9B096069432FC6DD2EAF /* ExerciseRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CAA6A5B259A3FF1E4817D0E /* ExerciseRecord.swift */; };
 		364DF4D01C8C4F5982650784 /* CardioSecondaryUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7200A349B95E024606A43625 /* CardioSecondaryUnit.swift */; };
@@ -850,6 +851,7 @@
 		B133F87C97D09195B9E69EC6 /* WeatherSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherSnapshot.swift; sourceTree = "<group>"; };
 		B18B53A424A5999427210A4C /* AirQualityFetching.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirQualityFetching.swift; sourceTree = "<group>"; };
 		B1CA0948B53F1C5BFD97EA05 /* FatigueLevel+View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FatigueLevel+View.swift"; sourceTree = "<group>"; };
+		B28A4FB04270066E80309BA5 /* WatchSyncStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchSyncStatusView.swift; sourceTree = "<group>"; };
 		B37D110882220C674913F1AE /* ExerciseStartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseStartView.swift; sourceTree = "<group>"; };
 		B53C1171518D1C9CB3C2EAF8 /* RestTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestTimerView.swift; sourceTree = "<group>"; };
 		B558BAFE0B7621F0766FA36C /* WellnessSectionGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessSectionGroup.swift; sourceTree = "<group>"; };
@@ -1549,6 +1551,7 @@
 				9CB6A65B8ED66EC8ACC1666F /* ExerciseCardView.swift */,
 				27A1CCBB6CFE3349ED9F2977 /* ExerciseTileView.swift */,
 				F4CC125AA1C302C661BEE191 /* TemplateCardView.swift */,
+				B28A4FB04270066E80309BA5 /* WatchSyncStatusView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -2610,6 +2613,7 @@
 				667FEF7253B2B5BE8C9739ED /* UserCategory.swift in Sources */,
 				FD87BBA05EF17E493554CF81 /* WatchConnectivityManager.swift in Sources */,
 				21A29D0E4D1E8068F240842C /* WatchExerciseHelpers.swift in Sources */,
+				341831B22CED501A6090869C /* WatchSyncStatusView.swift in Sources */,
 				120D3F5511B60F2304711CCE /* WatchWaveBackground.swift in Sources */,
 				88E9FD0860BA95D4039E2192 /* WorkoutActivityType+HealthKit.swift in Sources */,
 				9C81515C22846B3D497C0FE4 /* WorkoutActivityType+Icon.swift in Sources */,

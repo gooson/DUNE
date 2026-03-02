@@ -215,48 +215,10 @@ struct CarouselHomeView: View {
             .tint(DS.Color.positive)
             .padding(.top, DS.Spacing.md)
 
-            syncStatusView
+            WatchSyncStatusView()
                 .padding(.top, DS.Spacing.xs)
         }
         .padding()
-    }
-
-    // MARK: - Sync Status
-
-    private var syncStatusView: some View {
-        HStack(spacing: 4) {
-            switch connectivity.syncStatus {
-            case .syncing:
-                ProgressView()
-                    .frame(width: 12, height: 12)
-                Text("Syncing...")
-            case .synced(let date):
-                Image(systemName: "checkmark.circle")
-                    .foregroundStyle(DS.Color.positive)
-                Text(syncTimeLabel(from: date))
-            case .failed(let message):
-                Image(systemName: "exclamationmark.triangle")
-                    .foregroundStyle(DS.Color.caution)
-                Text(message)
-            case .notConnected:
-                Image(systemName: "iphone.slash")
-                    .foregroundStyle(.secondary)
-                Text("iPhone not connected")
-            }
-        }
-        .font(.caption2)
-        .foregroundStyle(.secondary)
-    }
-
-    private func syncTimeLabel(from date: Date) -> String {
-        let interval = Date().timeIntervalSince(date)
-        if interval < 60 {
-            return "Just synced"
-        } else if interval < 3600 {
-            return "\(Int(interval / 60).formattedWithSeparator) min ago"
-        } else {
-            return "\(Int(interval / 3600).formattedWithSeparator)h ago"
-        }
     }
 
     // MARK: - Rebuild Cards

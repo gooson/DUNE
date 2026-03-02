@@ -60,7 +60,7 @@ enum EquipmentIcon {
         case "other": kebab = "other"
         default: return nil
         }
-        return "Equipment/equipment.\(kebab)"
+        return "equipment.\(kebab)"
     }
 
     /// SF Symbol name for equipment fallback when no custom asset exists.
