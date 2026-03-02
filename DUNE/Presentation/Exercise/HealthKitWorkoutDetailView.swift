@@ -306,9 +306,9 @@ struct HealthKitWorkoutDetailView: View {
         if totalMinutes >= 60 {
             let hours = totalMinutes / 60
             let mins = totalMinutes % 60
-            return "\(hours):\(String(format: "%02d", mins))"
+            return String(localized: "\(hours)h \(mins)min")
         }
-        return totalMinutes.formattedWithSeparator
+        return String(localized: "\(totalMinutes)min")
     }
 
     private func formattedDistance(_ meters: Double) -> String {
