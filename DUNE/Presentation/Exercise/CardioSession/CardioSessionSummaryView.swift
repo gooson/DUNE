@@ -169,7 +169,7 @@ struct CardioSessionSummaryView: View {
             exerciseName: data.exerciseName,
             estimatedCalories: data.estimatedCalories,
             isFromHealthKit: false,
-            totalDistanceMeters: viewModel.totalDistanceMeters > 0 ? viewModel.totalDistanceMeters : nil
+            distanceKm: data.distanceKm
         )
 
         let recordID = record.persistentModelID

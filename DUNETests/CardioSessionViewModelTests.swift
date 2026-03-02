@@ -10,8 +10,7 @@ struct CardioSessionViewModelTests {
 
     private func makeExercise(
         id: String = "running",
-        name: String = "Running",
-        cardioSecondaryUnit: CardioSecondaryUnit = .km
+        name: String = "Running"
     ) -> ExerciseDefinition {
         ExerciseDefinition(
             id: id,
@@ -21,111 +20,166 @@ struct CardioSessionViewModelTests {
             inputType: .durationDistance,
             primaryMuscles: [.quadriceps, .hamstrings],
             secondaryMuscles: [.calves],
-            equipment: .none,
+            equipment: .bodyweight,
             metValue: 9.8,
-            cardioSecondaryUnit: cardioSecondaryUnit
+            cardioSecondaryUnit: .km
         )
+    }
+
+    private func makeVM(
+        id: String = "running",
+        name: String = "Running",
+        isOutdoor: Bool = true
+    ) -> CardioSessionViewModel {
+        let exercise = makeExercise(id: id, name: name)
+        return CardioSessionViewModel(
+            exercise: exercise,
+            activityType: .running,
+            isOutdoor: isOutdoor
+        )
+    }
+
+    // MARK: - Initial State
+
+    @Test("Initial state is idle")
+    func initialStateIdle() {
+        let vm = makeVM()
+        #expect(vm.state == .idle)
+        #expect(vm.startDate == nil)
+        #expect(vm.elapsedSeconds == 0)
     }
 
     // MARK: - Record Creation
 
-    @Test("createValidatedRecord returns nil when isSaving is true")
-    func preventDuplicateSave() {
-        let vm = CardioSessionViewModel(exercise: makeExercise(), isOutdoor: true)
-        vm.isSaving = true
-        let result = vm.createValidatedRecord()
+    @Test("createExerciseRecord returns nil when state is idle")
+    func noRecordWhenIdle() {
+        let vm = makeVM()
+        let result = vm.createExerciseRecord()
         #expect(result == nil)
     }
 
-    @Test("createValidatedRecord returns nil with zero elapsed time")
-    func noDataToSave() {
-        let vm = CardioSessionViewModel(exercise: makeExercise(), isOutdoor: true)
-        // sessionManager has no startDate → elapsedTime == 0
-        let result = vm.createValidatedRecord()
+    @Test("createExerciseRecord returns nil when state is running")
+    func noRecordWhenRunning() {
+        let vm = makeVM()
+        vm.start()
+        let result = vm.createExerciseRecord()
         #expect(result == nil)
-        #expect(vm.validationError != nil)
     }
 
-    @Test("createValidatedRecord sets isSaving after success")
-    func savingFlagSet() {
-        let vm = CardioSessionViewModel(exercise: makeExercise(), isOutdoor: true)
-        // Manually set startDate on session manager to simulate a session
-        vm.sessionManager.testSetStartDate(Date().addingTimeInterval(-300))
-
-        let record = vm.createValidatedRecord()
-        #expect(record != nil)
-        #expect(vm.isSaving == true)
-    }
-
-    @Test("didFinishSaving resets isSaving flag")
-    func didFinishSavingResetsFlag() {
-        let vm = CardioSessionViewModel(exercise: makeExercise(), isOutdoor: true)
-        vm.isSaving = true
-        vm.didFinishSaving()
-        #expect(vm.isSaving == false)
-    }
-
-    @Test("Record has correct exerciseDefinitionID")
-    func recordExerciseID() {
-        let vm = CardioSessionViewModel(exercise: makeExercise(id: "cycling"), isOutdoor: true)
-        vm.sessionManager.testSetStartDate(Date().addingTimeInterval(-600))
-
-        let record = vm.createValidatedRecord()
-        #expect(record?.exerciseDefinitionID == "cycling")
+    @Test("Record has correct exerciseID")
+    func recordExerciseID() async {
+        let vm = makeVM(id: "cycling", name: "Cycling")
+        vm.start()
+        // Let timer tick
+        try? await Task.sleep(for: .milliseconds(100))
+        await vm.end()
+        let record = vm.createExerciseRecord()
+        #expect(record?.exerciseID == "cycling")
     }
 
     @Test("Record duration matches elapsed time")
-    func recordDuration() {
-        let vm = CardioSessionViewModel(exercise: makeExercise(), isOutdoor: false)
-        let start = Date().addingTimeInterval(-1800) // 30 min ago
-        vm.sessionManager.testSetStartDate(start)
-
-        let record = vm.createValidatedRecord()
+    func recordDuration() async {
+        let vm = makeVM()
+        vm.start()
+        try? await Task.sleep(for: .seconds(2))
+        await vm.end()
+        let record = vm.createExerciseRecord()
         #expect(record != nil)
-        // Duration should be approximately 1800 seconds (allow 2s tolerance)
         let duration = record?.duration ?? 0
-        #expect(duration > 1798)
-        #expect(duration < 1802)
+        // Should be approximately 2 seconds (allow tolerance)
+        #expect(duration >= 1.5)
+        #expect(duration < 4)
     }
 
-    @Test("Record distance is nil when no GPS distance")
-    func zeroDistanceIsNil() {
-        let vm = CardioSessionViewModel(exercise: makeExercise(), isOutdoor: false)
-        vm.sessionManager.testSetStartDate(Date().addingTimeInterval(-60))
-        // distance is 0 by default
-
-        let record = vm.createValidatedRecord()
-        #expect(record?.distance == nil)
+    @Test("Record distanceKm is nil when no GPS distance")
+    func zeroDistanceIsNil() async {
+        let vm = makeVM(isOutdoor: false)
+        vm.start()
+        try? await Task.sleep(for: .milliseconds(100))
+        await vm.end()
+        let record = vm.createExerciseRecord()
+        #expect(record?.distanceKm == nil)
     }
 
-    @Test("Record has single WorkoutSet")
-    func singleWorkoutSet() {
-        let vm = CardioSessionViewModel(exercise: makeExercise(), isOutdoor: true)
-        vm.sessionManager.testSetStartDate(Date().addingTimeInterval(-120))
-
-        let record = vm.createValidatedRecord()
-        let sets = record?.sets ?? []
-        #expect(sets.count == 1)
-        #expect(sets.first?.setNumber == 1)
-        #expect(sets.first?.isCompleted == true)
+    @Test("Record has correct category")
+    func recordCategory() async {
+        let vm = makeVM()
+        vm.start()
+        try? await Task.sleep(for: .milliseconds(100))
+        await vm.end()
+        let record = vm.createExerciseRecord()
+        #expect(record?.category == .cardio)
     }
 
-    @Test("Record preserves primary muscles from exercise")
-    func musclePreservation() {
-        let vm = CardioSessionViewModel(exercise: makeExercise(), isOutdoor: true)
-        vm.sessionManager.testSetStartDate(Date().addingTimeInterval(-60))
+    // MARK: - Formatted Values
 
-        let record = vm.createValidatedRecord()
-        #expect(record?.primaryMuscles.contains(.quadriceps) == true)
-        #expect(record?.secondaryMuscles.contains(.calves) == true)
+    @Test("formattedElapsed shows M:SS format")
+    func formattedElapsedMinutes() {
+        let vm = makeVM()
+        // formattedElapsed reads elapsedSeconds which is 0 initially
+        #expect(vm.formattedElapsed == "0:00")
     }
 
-    @Test("cleanup resets session manager")
-    func cleanupResetsManager() {
-        let vm = CardioSessionViewModel(exercise: makeExercise(), isOutdoor: true)
-        vm.sessionManager.testSetStartDate(Date())
-        vm.cleanup()
-        #expect(vm.sessionManager.state == .idle)
-        #expect(vm.sessionManager.startDate == nil)
+    @Test("formattedPace returns dashes when no distance")
+    func formattedPaceNoDist() {
+        let vm = makeVM()
+        #expect(vm.formattedPace == "--:--")
+    }
+
+    // MARK: - showsDistance
+
+    @Test("showsDistance is true for outdoor distance-based activity")
+    func showsDistanceOutdoor() {
+        let vm = makeVM(isOutdoor: true)
+        #expect(vm.showsDistance == true)
+    }
+
+    @Test("showsDistance is false for indoor")
+    func showsDistanceIndoor() {
+        let vm = makeVM(isOutdoor: false)
+        #expect(vm.showsDistance == false)
+    }
+
+    // MARK: - Pause / Resume
+
+    @Test("Pause changes state from running to paused")
+    func pauseState() {
+        let vm = makeVM()
+        vm.start()
+        vm.pause()
+        #expect(vm.state == .paused)
+    }
+
+    @Test("Resume changes state from paused to running")
+    func resumeState() {
+        let vm = makeVM()
+        vm.start()
+        vm.pause()
+        vm.resume()
+        #expect(vm.state == .running)
+    }
+
+    @Test("Pause is no-op when idle")
+    func pauseWhenIdle() {
+        let vm = makeVM()
+        vm.pause()
+        #expect(vm.state == .idle)
+    }
+
+    @Test("Resume is no-op when idle")
+    func resumeWhenIdle() {
+        let vm = makeVM()
+        vm.resume()
+        #expect(vm.state == .idle)
+    }
+
+    @Test("End from paused state produces finished state")
+    func endFromPaused() async {
+        let vm = makeVM()
+        vm.start()
+        try? await Task.sleep(for: .milliseconds(100))
+        vm.pause()
+        await vm.end()
+        #expect(vm.state == .finished)
     }
 }
