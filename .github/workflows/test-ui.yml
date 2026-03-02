@@ -1,20 +1,11 @@
 name: UI Tests
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'DUNE/**'
-      - 'DUNETests/**'
-      - 'DUNEUITests/**'
-      - 'scripts/test-ui.sh'
-      - 'scripts/lib/regen-project.sh'
-      - '.github/workflows/test-ui.yml'
   pull_request:
+    types: [closed]
     branches: [main]
     paths:
       - 'DUNE/**'
-      - 'DUNETests/**'
       - 'DUNEUITests/**'
       - 'scripts/test-ui.sh'
       - 'scripts/lib/regen-project.sh'
@@ -26,6 +17,7 @@ concurrency:
 
 jobs:
   ui-tests:
+    if: github.event.pull_request.merged == true
     runs-on: macos-15
     timeout-minutes: 60
 
