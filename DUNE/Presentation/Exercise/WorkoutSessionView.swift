@@ -312,20 +312,32 @@ struct WorkoutSessionView: View {
                     ("+1", { adjustIntValue(set.reps, by: 1, min: 0, max: 100) })
                 ]
             )
+
+            Divider()
+                .padding(.horizontal, DS.Spacing.xl)
+
+            intensityInput(set: set)
         }
     }
 
     private func repsOnlyInput(set: Binding<EditableSet>) -> some View {
-        stepperField(
-            label: "REPS",
-            value: set.reps,
-            placeholder: "0",
-            keyboardType: .numberPad,
-            stepButtons: [
-                ("-1", { adjustIntValue(set.reps, by: -1, min: 0, max: 100) }),
-                ("+1", { adjustIntValue(set.reps, by: 1, min: 0, max: 100) })
-            ]
-        )
+        VStack(spacing: DS.Spacing.lg) {
+            stepperField(
+                label: "REPS",
+                value: set.reps,
+                placeholder: "0",
+                keyboardType: .numberPad,
+                stepButtons: [
+                    ("-1", { adjustIntValue(set.reps, by: -1, min: 0, max: 100) }),
+                    ("+1", { adjustIntValue(set.reps, by: 1, min: 0, max: 100) })
+                ]
+            )
+
+            Divider()
+                .padding(.horizontal, DS.Spacing.xl)
+
+            intensityInput(set: set)
+        }
     }
 
     private func durationDistanceInput(set: Binding<EditableSet>) -> some View {
@@ -370,6 +382,11 @@ struct WorkoutSessionView: View {
                     )
                 }
             }
+
+            Divider()
+                .padding(.horizontal, DS.Spacing.xl)
+
+            intensityInput(set: set)
         }
     }
 
@@ -389,16 +406,7 @@ struct WorkoutSessionView: View {
             Divider()
                 .padding(.horizontal, DS.Spacing.xl)
 
-            stepperField(
-                label: "INTENSITY",
-                value: set.intensity,
-                placeholder: "1-10",
-                keyboardType: .numberPad,
-                stepButtons: [
-                    ("-1", { adjustIntValue(set.intensity, by: -1, min: 1, max: 10) }),
-                    ("+1", { adjustIntValue(set.intensity, by: 1, min: 1, max: 10) })
-                ]
-            )
+            intensityInput(set: set)
         }
     }
 
@@ -428,7 +436,25 @@ struct WorkoutSessionView: View {
                     ("+10", { adjustIntValue(set.duration, by: 10, min: 0, max: 3600) })
                 ]
             )
+
+            Divider()
+                .padding(.horizontal, DS.Spacing.xl)
+
+            intensityInput(set: set)
         }
+    }
+
+    private func intensityInput(set: Binding<EditableSet>) -> some View {
+        stepperField(
+            label: "INTENSITY",
+            value: set.intensity,
+            placeholder: "1-10",
+            keyboardType: .numberPad,
+            stepButtons: [
+                ("-1", { adjustIntValue(set.intensity, by: -1, min: 1, max: 10) }),
+                ("+1", { adjustIntValue(set.intensity, by: 1, min: 1, max: 10) })
+            ]
+        )
     }
 
     // MARK: - Stepper Field
@@ -743,7 +769,7 @@ struct WorkoutSessionView: View {
 
         // If set already has values from previous session, keep them
         let set = viewModel.sets[currentSetIndex]
-        if !set.weight.isEmpty || !set.reps.isEmpty { return }
+        if !set.weight.isEmpty || !set.reps.isEmpty || !set.duration.isEmpty || !set.distance.isEmpty || !set.intensity.isEmpty { return }
 
         // Otherwise copy from last completed set
         if let lastCompleted = viewModel.sets.prefix(currentSetIndex).last(where: \.isCompleted) {
