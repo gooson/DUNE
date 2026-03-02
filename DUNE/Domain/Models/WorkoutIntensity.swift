@@ -99,4 +99,6 @@ struct EffortSuggestion: Sendable {
     let lastEffort: Int?
     /// Average effort from recent sessions (up to 5), or nil if insufficient data.
     let averageEffort: Double?
+    /// Most recent effort history used to build recommendation (newest first, up to 5).
+    let recentEfforts: [Int]
 }

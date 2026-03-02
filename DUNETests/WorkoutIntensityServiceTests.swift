@@ -421,6 +421,7 @@ struct WorkoutIntensityServiceTests {
         #expect(result != nil)
         #expect(result!.suggestedEffort == 7) // Returns last effort
         #expect(result!.lastEffort == 7)
+        #expect(result!.recentEfforts == [7, 6, 8])
     }
 
     @Test("suggestEffort: nil raw without history returns nil")
@@ -462,6 +463,14 @@ struct WorkoutIntensityServiceTests {
         let result = service.suggestEffort(autoIntensityRaw: 0.5, recentEfforts: [15, 0, -1, 7])
         #expect(result != nil)
         #expect(result!.lastEffort == 7) // Only valid effort
+        #expect(result!.recentEfforts == [7])
+    }
+
+    @Test("suggestEffort: recent history is capped to latest 5 values")
+    func suggestEffortRecentHistoryCapped() {
+        let result = service.suggestEffort(autoIntensityRaw: 0.5, recentEfforts: [10, 9, 8, 7, 6, 5, 4])
+        #expect(result != nil)
+        #expect(result!.recentEfforts == [10, 9, 8, 7, 6])
     }
 
     @Test("suggestEffort: result clamped to 1-10")

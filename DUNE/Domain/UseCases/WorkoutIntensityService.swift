@@ -17,7 +17,7 @@ struct IntensitySetInput: Sendable {
     let reps: Int?
     let duration: TimeInterval?
     let distance: Double?
-    /// User-provided intensity (1–10) for durationIntensity exercises.
+    /// User-provided intensity (1–10) for this set.
     let manualIntensity: Int?
     let setType: SetType
 }
@@ -101,7 +101,8 @@ struct WorkoutIntensityService: Sendable {
             suggestedEffort: effort,
             category: EffortCategory(effort: effort),
             lastEffort: validEfforts.first,
-            averageEffort: avg
+            averageEffort: avg,
+            recentEfforts: validEfforts
         )
     }
 

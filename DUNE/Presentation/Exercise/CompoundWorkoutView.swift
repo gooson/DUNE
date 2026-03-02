@@ -17,6 +17,7 @@ struct CompoundWorkoutView: View {
     @State private var showingShareSheet = false
     @State private var shareImage: UIImage?
     @State private var savedRecords: [ExerciseRecord] = []
+    @State private var effortSuggestion: EffortSuggestion?
 
     @Query private var exerciseRecords: [ExerciseRecord]
 
@@ -105,7 +106,7 @@ struct CompoundWorkoutView: View {
                 shareImage: shareImage,
                 exerciseName: config.mode.displayName,
                 setCount: viewModel.totalCompletedSets,
-                effortSuggestion: nil,
+                effortSuggestion: effortSuggestion,
                 onDismiss: { effort in
                     if let effort, (1...10).contains(effort) {
                         for record in savedRecords {
@@ -471,6 +472,21 @@ struct CompoundWorkoutView: View {
             modelContext.insert(record)
         }
         savedRecords = records
+
+        let exerciseIDs = Set(records.compactMap(\.exerciseDefinitionID))
+        let recentEfforts = exerciseRecords
+            .filter { record in
+                guard let id = record.exerciseDefinitionID else { return false }
+                return exerciseIDs.contains(id) && record.rpe != nil
+            }
+            .sorted { $0.date > $1.date }
+            .prefix(5)
+            .compactMap(\.rpe)
+        effortSuggestion = WorkoutIntensityService().suggestEffort(
+            autoIntensityRaw: nil,
+            recentEfforts: recentEfforts
+        )
+
         viewModel.didFinishSaving()
         saveCount += 1
 

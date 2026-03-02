@@ -208,6 +208,9 @@ extension WatchWorkoutUpdate {
         var copy = self
         copy.heartRateSamples = heartRateSamples.filter(\.isValid)
         copy.completedSets = completedSets.filter(\.isValid)
+        if let rpe = rpe, !(1...10).contains(rpe) {
+            copy.rpe = nil
+        }
         return copy
     }
 }
