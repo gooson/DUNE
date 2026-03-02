@@ -29,9 +29,19 @@ final class LocationTrackingService: NSObject, LocationTrackingServiceProtocol, 
         let status = locationManager.authorizationStatus
         if status == .notDetermined {
             locationManager.requestWhenInUseAuthorization()
-            // Wait for the actual authorization callback (up to 30s timeout)
-            let grantedStatus = await withCheckedContinuation { continuation in
+            // Wait for the actual authorization callback with 30s timeout
+            let grantedStatus: CLAuthorizationStatus = await withCheckedContinuation { continuation in
                 self.authContinuation = continuation
+
+                // Timeout: resume with .denied after 30s if delegate hasn't fired
+                Task { [weak self] in
+                    try? await Task.sleep(for: .seconds(30))
+                    guard !Task.isCancelled, let self else { return }
+                    if let pending = self.authContinuation {
+                        self.authContinuation = nil
+                        pending.resume(returning: .denied)
+                    }
+                }
             }
             guard grantedStatus == .authorizedWhenInUse || grantedStatus == .authorizedAlways else {
                 throw LocationTrackingError.notAuthorized
