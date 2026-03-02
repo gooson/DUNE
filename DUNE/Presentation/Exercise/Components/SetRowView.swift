@@ -119,11 +119,6 @@ struct SetRowView: View {
                     .keyboardType(.numberPad)
                     .textFieldStyle(.roundedBorder)
                     .frame(maxWidth: 60)
-
-                TextField("1-10", text: $editableSet.intensity)
-                    .keyboardType(.numberPad)
-                    .textFieldStyle(.roundedBorder)
-                    .frame(maxWidth: 60)
             }
 
         case .setsReps:
@@ -132,11 +127,6 @@ struct SetRowView: View {
                     .keyboardType(.numberPad)
                     .textFieldStyle(.roundedBorder)
                     .frame(maxWidth: 70)
-
-                TextField("1-10", text: $editableSet.intensity)
-                    .keyboardType(.numberPad)
-                    .textFieldStyle(.roundedBorder)
-                    .frame(maxWidth: 60)
             }
 
         case .durationDistance:
@@ -160,25 +150,13 @@ struct SetRowView: View {
                             .frame(maxWidth: 70)
                     }
                 }
-
-                TextField("1-10", text: $editableSet.intensity)
-                    .keyboardType(.numberPad)
-                    .textFieldStyle(.roundedBorder)
-                    .frame(maxWidth: 60)
             }
 
         case .durationIntensity:
-            HStack(spacing: DS.Spacing.xs) {
-                TextField("min", text: $editableSet.duration)
-                    .keyboardType(.numberPad)
-                    .textFieldStyle(.roundedBorder)
-                    .frame(maxWidth: 60)
-
-                TextField("1-10", text: $editableSet.intensity)
-                    .keyboardType(.numberPad)
-                    .textFieldStyle(.roundedBorder)
-                    .frame(maxWidth: 60)
-            }
+            TextField("min", text: $editableSet.duration)
+                .keyboardType(.numberPad)
+                .textFieldStyle(.roundedBorder)
+                .frame(maxWidth: 60)
 
         case .roundsBased:
             HStack(spacing: DS.Spacing.xs) {
@@ -188,11 +166,6 @@ struct SetRowView: View {
                     .frame(maxWidth: 60)
 
                 TextField("sec", text: $editableSet.duration)
-                    .keyboardType(.numberPad)
-                    .textFieldStyle(.roundedBorder)
-                    .frame(maxWidth: 60)
-
-                TextField("1-10", text: $editableSet.intensity)
                     .keyboardType(.numberPad)
                     .textFieldStyle(.roundedBorder)
                     .frame(maxWidth: 60)
