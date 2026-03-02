@@ -20,6 +20,7 @@ struct PreviousSetInfo: Sendable {
     let reps: Int?
     let duration: TimeInterval?
     let distance: Double?
+    let intensity: Int?
 }
 
 // MARK: - Draft Persistence
@@ -119,6 +120,9 @@ final class WorkoutSessionViewModel {
             if let distance = prev.distance {
                 newSet.distance = distance.formatted(.number.precision(.fractionLength(0...2)))
             }
+            if let intensity = prev.intensity, (1...maxIntensity).contains(intensity) {
+                newSet.intensity = "\(intensity)"
+            }
         }
         // If no previous data, auto-fill from last current set
         else if let lastSet = sets.last {
@@ -201,7 +205,8 @@ final class WorkoutSessionViewModel {
                 weight: set.weight,
                 reps: set.reps,
                 duration: set.duration,
-                distance: set.distance
+                distance: set.distance,
+                intensity: set.intensity
             )
         }
 
@@ -237,6 +242,9 @@ final class WorkoutSessionViewModel {
         }
         if let distance = prev.distance {
             sets[index].distance = distance.formatted(.number.precision(.fractionLength(0...2)))
+        }
+        if let intensity = prev.intensity, (1...maxIntensity).contains(intensity) {
+            sets[index].intensity = "\(intensity)"
         }
     }
 
@@ -407,13 +415,11 @@ final class WorkoutSessionViewModel {
                 }
                 // unit == .timeOnly → no secondary field validation needed
             }
-            if exercise.inputType == .durationIntensity {
-                let trimmed = set.intensity.trimmingCharacters(in: .whitespaces)
-                if !trimmed.isEmpty {
-                    guard let val = Int(trimmed), val >= 1, val <= maxIntensity else {
-                        validationError = String(localized: "Intensity must be between 1 and \(maxIntensity)")
-                        return nil
-                    }
+            let trimmedIntensity = set.intensity.trimmingCharacters(in: .whitespaces)
+            if !trimmedIntensity.isEmpty {
+                guard let val = Int(trimmedIntensity), val >= 1, val <= maxIntensity else {
+                    validationError = String(localized: "Intensity must be between 1 and \(maxIntensity)")
+                    return nil
                 }
             }
             if exercise.inputType == .roundsBased {
