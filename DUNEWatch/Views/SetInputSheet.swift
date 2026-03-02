@@ -15,7 +15,16 @@ struct SetInputSheet: View {
     @State private var showPreviousSets = false
 
     var body: some View {
-        NavigationStack {
+        if showPreviousSets {
+            previousSetsDetail
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button { showPreviousSets = false } label: {
+                            Image(systemName: "chevron.left")
+                        }
+                    }
+                }
+        } else {
             ScrollView {
                 VStack(spacing: DS.Spacing.lg) {
                     // Weight — large display + crown + ±2.5 buttons
@@ -44,13 +53,6 @@ struct SetInputSheet: View {
                     Button("Done") { dismiss() }
                 }
             }
-            .navigationDestination(isPresented: $showPreviousSets) {
-                previousSetsDetail
-            }
-        }
-        .onChange(of: weight) { _, newValue in
-            let clamped = min(max(newValue, 0), 500)
-            if clamped != newValue { weight = clamped }
         }
     }
 
