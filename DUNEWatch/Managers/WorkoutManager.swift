@@ -10,7 +10,7 @@ import OSLog
 @MainActor
 final class WorkoutManager: NSObject {
     static let shared = WorkoutManager()
-    nonisolated(unsafe) private static let logger = Logger(subsystem: "com.raftel.dailve", category: "WatchWorkout")
+    nonisolated private static let logger = Logger(subsystem: "com.raftel.dailve", category: "WatchWorkout")
 
     let healthStore = HKHealthStore()
 
