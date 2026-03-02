@@ -7,6 +7,6 @@ protocol LocationTrackingServiceProtocol: Sendable {
     func startTracking() async throws
     /// Stop tracking and return final accumulated distance in meters.
     func stopTracking() async -> Double
-    /// Current accumulated distance in meters.
-    var totalDistanceMeters: Double { get async }
+    /// Current accumulated distance in meters (thread-safe, synchronous read).
+    var totalDistanceMeters: Double { get }
 }
