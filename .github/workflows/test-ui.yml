@@ -6,8 +6,11 @@ on:
     branches: [main]
     paths:
       - 'DUNE/**'
+      - 'DUNEWatch/**'
       - 'DUNEUITests/**'
+      - 'DUNEWatchUITests/**'
       - 'scripts/test-ui.sh'
+      - 'scripts/test-watch-ui.sh'
       - 'scripts/lib/regen-project.sh'
       - '.github/workflows/test-ui.yml'
 
@@ -16,7 +19,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  ui-tests:
+  ios-ui-tests:
     if: github.event.pull_request.merged == true
     runs-on: macos-15
     timeout-minutes: 60
@@ -31,13 +34,39 @@ jobs:
       - name: Install xcodegen
         run: brew install xcodegen
 
-      - name: Run UI Tests
+      - name: Run iOS UI Tests
         run: scripts/test-ui.sh --skip-testing DUNEUITests/HealthKitPermissionUITests
 
-      - name: Upload test log
+      - name: Upload iOS UI test log
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ui-test-log
+          name: ios-ui-test-log
           path: .xcodebuild/ui-test.log
+          retention-days: 7
+
+  watch-ui-tests:
+    if: github.event.pull_request.merged == true
+    runs-on: macos-15
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_26.2.app/Contents/Developer
+
+      - name: Install xcodegen
+        run: brew install xcodegen
+
+      - name: Run watch UI Tests
+        run: scripts/test-watch-ui.sh --log-file .xcodebuild/watch-ui-test.log
+
+      - name: Upload watch UI test log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: watch-ui-test-log
+          path: .xcodebuild/watch-ui-test.log
           retention-days: 7
