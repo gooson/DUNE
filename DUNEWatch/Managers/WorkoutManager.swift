@@ -37,6 +37,10 @@ final class WorkoutManager: NSObject {
     /// Ensures `workoutEnded` signal is sent only once per session.
     private var didNotifyWorkoutEnded = false
     private(set) var startDate: Date?
+    /// Total paused time accumulated during current session.
+    private var pausedDuration: TimeInterval = 0
+    /// Pause start timestamp while session is currently paused.
+    private var pauseStart: Date?
 
     /// UUID of the saved HKWorkout, captured after finishWorkout().
     /// Used to link ExerciseRecord.healthKitWorkoutID for HealthKit data retrieval.
@@ -85,6 +89,22 @@ final class WorkoutManager: NSObject {
         let mins = Int(currentPace) / 60
         let secs = Int(currentPace) % 60
         return String(format: "%d:%02d", mins, secs)
+    }
+
+    /// Active elapsed time excluding paused intervals.
+    var activeElapsedTime: TimeInterval {
+        activeElapsedTime(at: Date())
+    }
+
+    /// Active elapsed time using an explicit clock value.
+    func activeElapsedTime(at now: Date) -> TimeInterval {
+        WorkoutElapsedTime.activeElapsedTime(
+            startDate: startDate,
+            pausedDuration: pausedDuration,
+            pauseStart: pauseStart,
+            isPaused: isPaused,
+            now: now
+        )
     }
 
     // MARK: - Workout Data (plain struct snapshot, not @Model reference — M6)
@@ -249,6 +269,8 @@ final class WorkoutManager: NSObject {
         self.healthKitWorkoutUUID = nil
         self.isRecoveredSession = false
         self.isSimulatedSessionActive = false
+        self.pausedDuration = 0
+        self.pauseStart = nil
 
         if Self.isSimulatorRuntime {
             startSimulatedSession(templateName: templateName)
@@ -294,6 +316,8 @@ final class WorkoutManager: NSObject {
             isSessionEnded = false
             startDate = nil
             isSimulatedSessionActive = false
+            pausedDuration = 0
+            pauseStart = nil
             throw error
         }
     }
@@ -308,32 +332,37 @@ final class WorkoutManager: NSObject {
         isSessionEnded = false
         isFinalizingWorkout = false
         startDate = Date()
+        pausedDuration = 0
+        pauseStart = nil
         persistRecoveryState()
         WatchConnectivityManager.shared.sendWorkoutStarted(templateName: templateName)
     }
 
     func pause() {
         if let session {
+            beginPause(at: Date())
             session.pause()
             return
         }
         if isSimulatedSessionActive {
-            isPaused = true
+            beginPause(at: Date())
         }
     }
 
     func resume() {
         if let session {
+            endPause(at: Date())
             session.resume()
             return
         }
         if isSimulatedSessionActive {
-            isPaused = false
+            endPause(at: Date())
         }
     }
 
     func end() {
         guard !isSessionEnded else { return }
+        endPause(at: Date())
 
         if isSimulatedSessionActive {
             isPaused = false
@@ -433,6 +462,8 @@ final class WorkoutManager: NSObject {
         isRecoveredSession = false
         startDate = nil
         healthKitWorkoutUUID = nil
+        pausedDuration = 0
+        pauseStart = nil
         clearRecoveryState()
     }
 
@@ -590,6 +621,26 @@ final class WorkoutManager: NSObject {
             self.isFinalizingWorkout = false
         }
     }
+
+    private func beginPause(at date: Date) {
+        guard pauseStart == nil else {
+            isPaused = true
+            return
+        }
+        pauseStart = date
+        isPaused = true
+    }
+
+    private func endPause(at date: Date) {
+        if let pauseStart {
+            let delta = date.timeIntervalSince(pauseStart)
+            if delta > 0 {
+                pausedDuration += delta
+            }
+            self.pauseStart = nil
+        }
+        isPaused = false
+    }
 }
 
 // MARK: - HKWorkoutSessionDelegate
@@ -605,10 +656,11 @@ extension WorkoutManager: HKWorkoutSessionDelegate {
             guard let currentSession = session, workoutSession === currentSession else { return }
             switch toState {
             case .running:
-                isPaused = false
+                endPause(at: date)
             case .paused:
-                isPaused = true
+                beginPause(at: date)
             case .ended:
+                endPause(at: date)
                 isSessionEnded = true
                 isFinalizingWorkout = true
                 notifyWorkoutEndedIfNeeded()
@@ -712,19 +764,38 @@ extension WorkoutManager: HKLiveWorkoutBuilderDelegate {
         }
     }
 
-    /// Recalculates current pace (sec/km) from total distance and elapsed time.
-    /// Skips recalculation when paused to avoid inflating pace with paused time.
+    /// Recalculates current pace (sec/km) from total distance and active elapsed time.
     @MainActor
     private func updatePace() {
-        guard !isPaused else { return }
-        guard let start = startDate else { return }
-        let elapsed = Date().timeIntervalSince(start)
+        guard startDate != nil else { return }
+        let elapsed = activeElapsedTime(at: Date())
+        guard elapsed > 0 else {
+            currentPace = 0
+            return
+        }
         let km = distance / 1000.0
         guard km > 0.01 else {
             currentPace = 0
             return
         }
         currentPace = elapsed / km
+    }
+}
+
+enum WorkoutElapsedTime {
+    static func activeElapsedTime(
+        startDate: Date?,
+        pausedDuration: TimeInterval,
+        pauseStart: Date?,
+        isPaused: Bool,
+        now: Date
+    ) -> TimeInterval {
+        guard let startDate else { return 0 }
+        var elapsed = now.timeIntervalSince(startDate) - pausedDuration
+        if isPaused, let pauseStart {
+            elapsed -= now.timeIntervalSince(pauseStart)
+        }
+        return Swift.max(elapsed, 0)
     }
 }
 
