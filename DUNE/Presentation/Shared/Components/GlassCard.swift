@@ -152,9 +152,10 @@ private enum GlassCardGradients {
         case .sakuraCalm:
             LinearGradient(
                 colors: [
-                    sakuraAccent.opacity(colorScheme == .dark ? 0.38 : 0.28),
-                    Color("SakuraIvory").opacity(colorScheme == .dark ? 0.22 : 0.16),
-                    Color("SakuraPetal").opacity(colorScheme == .dark ? 0.18 : 0.12),
+                    sakuraAccent.opacity(colorScheme == .dark ? 0.22 : 0.28),
+                    Color("SakuraIvory").opacity(colorScheme == .dark ? 0.12 : 0.16),
+                    Color("SakuraPetal").opacity(colorScheme == .dark ? 0.10 : 0.12),
+                    sakuraDusk.opacity(colorScheme == .dark ? 0.10 : 0.00),
                     Color.clear
                 ],
                 startPoint: .topLeading,
@@ -169,9 +170,10 @@ private enum GlassCardGradients {
         case .sakuraCalm:
             LinearGradient(
                 colors: [
-                    Color("SakuraIvory").opacity(colorScheme == .dark ? 0.22 : 0.16),
-                    sakuraAccent.opacity(colorScheme == .dark ? 0.22 : 0.14),
-                    Color("SakuraPetal").opacity(colorScheme == .dark ? 0.14 : 0.10),
+                    Color("SakuraIvory").opacity(colorScheme == .dark ? 0.14 : 0.16),
+                    sakuraAccent.opacity(colorScheme == .dark ? 0.12 : 0.14),
+                    Color("SakuraPetal").opacity(colorScheme == .dark ? 0.08 : 0.10),
+                    sakuraDusk.opacity(colorScheme == .dark ? 0.10 : 0.00),
                     Color.clear
                 ],
                 startPoint: .topLeading,
@@ -186,8 +188,9 @@ private enum GlassCardGradients {
         case .sakuraCalm:
             LinearGradient(
                 colors: [
-                    Color("SakuraIvory").opacity(colorScheme == .dark ? 0.19 : 0.13),
-                    sakuraAccent.opacity(colorScheme == .dark ? 0.16 : 0.10),
+                    Color("SakuraIvory").opacity(colorScheme == .dark ? 0.12 : 0.13),
+                    sakuraAccent.opacity(colorScheme == .dark ? 0.08 : 0.10),
+                    sakuraDusk.opacity(colorScheme == .dark ? 0.08 : 0.00),
                     Color.clear
                 ],
                 startPoint: .topLeading,
@@ -202,8 +205,8 @@ private enum GlassCardGradients {
         case .sakuraCalm:
             LinearGradient(
                 colors: [
-                    Color("SakuraPetal").opacity(colorScheme == .dark ? 0.30 : 0.20),
-                    Color("SakuraIvory").opacity(colorScheme == .dark ? 0.18 : 0.12),
+                    Color("SakuraPetal").opacity(colorScheme == .dark ? 0.18 : 0.20),
+                    Color("SakuraIvory").opacity(colorScheme == .dark ? 0.10 : 0.12),
                     Color.clear
                 ],
                 startPoint: .top,
@@ -218,9 +221,9 @@ private enum GlassCardGradients {
         case .sakuraCalm:
             LinearGradient(
                 colors: [
-                    Color("SakuraPetal").opacity(colorScheme == .dark ? 0.52 : 0.30),
-                    sakuraAccent.opacity(colorScheme == .dark ? 0.32 : 0.21),
-                    sakuraDusk.opacity(colorScheme == .dark ? 0.28 : 0.12)
+                    Color("SakuraPetal").opacity(colorScheme == .dark ? 0.36 : 0.30),
+                    sakuraAccent.opacity(colorScheme == .dark ? 0.24 : 0.21),
+                    sakuraDusk.opacity(colorScheme == .dark ? 0.18 : 0.12)
                 ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
@@ -320,7 +323,7 @@ struct StandardCard<Content: View>: View {
                                     : (colorScheme == .dark
                                         ? GlassCardGradients.darkBorder(for: theme)
                                         : GlassCardGradients.clearBorder),
-                                lineWidth: theme == .sakuraCalm ? 1.15 : 1
+                                lineWidth: theme == .sakuraCalm ? 1.0 : 1
                             )
                     )
                     .shadow(
@@ -361,7 +364,7 @@ struct InlineCard<Content: View>: View {
                                 theme == .sakuraCalm
                                     ? GlassCardGradients.cardBorder(for: theme, colorScheme: colorScheme)
                                     : GlassCardGradients.clearBorder,
-                                lineWidth: theme == .sakuraCalm ? 1.0 : 0
+                                lineWidth: theme == .sakuraCalm ? 0.9 : 0
                             )
                     )
             }
