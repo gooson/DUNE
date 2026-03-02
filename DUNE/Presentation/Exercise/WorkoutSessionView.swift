@@ -821,13 +821,28 @@ struct WorkoutSessionView: View {
 
         // Fire-and-forget HealthKit write
         if !record.isFromHealthKit {
+            let resolvedActivityType: WorkoutActivityType? = {
+                guard exercise.inputType == .durationDistance else { return nil }
+                return WorkoutActivityType.resolveDistanceBased(
+                    from: exercise.id,
+                    name: exercise.name,
+                    inputTypeRaw: exercise.inputType.rawValue
+                ) ?? exercise.resolvedActivityType
+            }()
+            let totalDistanceKm: Double? = {
+                if let distance = record.distance, distance > 0 { return distance }
+                let setDistance = record.completedSets.compactMap(\.distance).reduce(0, +)
+                return setDistance > 0 ? setDistance : nil
+            }()
             let input = WorkoutWriteInput(
                 startDate: record.date,
                 duration: record.duration,
                 category: exercise.category,
                 exerciseName: exercise.name,
                 estimatedCalories: record.estimatedCalories,
-                isFromHealthKit: record.isFromHealthKit
+                isFromHealthKit: record.isFromHealthKit,
+                distanceKm: totalDistanceKm,
+                activityType: resolvedActivityType
             )
             Task {
                 do {

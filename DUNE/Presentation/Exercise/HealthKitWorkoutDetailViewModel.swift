@@ -40,6 +40,30 @@ final class HealthKitWorkoutDetailViewModel {
         }
     }
 
+    func heartRateAverage(for workout: WorkoutSummary) -> Double? {
+        if let avg = workout.heartRateAvg, avg > 0 {
+            return avg
+        }
+        guard let summary = heartRateSummary,
+              !summary.isEmpty,
+              summary.average > 0 else {
+            return nil
+        }
+        return summary.average
+    }
+
+    func heartRateMax(for workout: WorkoutSummary) -> Double? {
+        if let max = workout.heartRateMax, max > 0 {
+            return max
+        }
+        guard let summary = heartRateSummary,
+              !summary.isEmpty,
+              summary.max > 0 else {
+            return nil
+        }
+        return summary.max
+    }
+
     private func safeHeartRateFetch(workoutID: String) async -> HeartRateSummary? {
         do {
             return try await heartRateService.fetchHeartRateSummary(forWorkoutID: workoutID)
