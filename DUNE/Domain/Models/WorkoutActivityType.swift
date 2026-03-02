@@ -319,7 +319,22 @@ enum WorkoutActivityType: String, Codable, Sendable, CaseIterable {
     /// Resolves a distance-based `WorkoutActivityType` from an exercise definition ID and name.
     /// Uses a 3-step fallback: direct rawValue -> stem extraction -> name inference.
     /// Returns nil if the resolved type is not distance-based.
-    static func resolveDistanceBased(from id: String, name: String) -> WorkoutActivityType? {
+    ///
+    /// - Parameter inputTypeRaw:
+    ///   Optional exercise input type raw value (e.g., `durationDistance`, `setsRepsWeight`).
+    ///   When present, non-cardio input types are rejected early to avoid false positives
+    ///   from stem matching (e.g., `walking-lunge` -> `walking`).
+    static func resolveDistanceBased(
+        from id: String,
+        name: String,
+        inputTypeRaw: String? = nil
+    ) -> WorkoutActivityType? {
+        if let inputTypeRaw,
+           !inputTypeRaw.isEmpty,
+           !cardioInputTypes.contains(inputTypeRaw) {
+            return nil
+        }
+
         // 1. Direct rawValue match
         if let type = WorkoutActivityType(rawValue: id), type.isDistanceBased {
             return type
@@ -335,6 +350,10 @@ enum WorkoutActivityType: String, Codable, Sendable, CaseIterable {
         }
         return nil
     }
+
+    /// Input types that should be treated as cardio workout candidates.
+    /// Current exercise library uses `durationDistance` for cardio sessions.
+    private static let cardioInputTypes: Set<String> = ["durationDistance"]
 
     // MARK: - Name-Based Inference
 

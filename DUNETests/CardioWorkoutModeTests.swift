@@ -146,6 +146,26 @@ struct CardioWorkoutModeTests {
         #expect(type == nil)
     }
 
+    @Test("resolveDistanceBased: respects non-cardio inputType guard")
+    func resolveWithNonCardioInputTypeGuard() {
+        let type = WorkoutActivityType.resolveDistanceBased(
+            from: "walking-lunge",
+            name: "Walking Lunge",
+            inputTypeRaw: "setsRepsWeight"
+        )
+        #expect(type == nil)
+    }
+
+    @Test("resolveDistanceBased: allows cardio inputType")
+    func resolveWithCardioInputType() {
+        let type = WorkoutActivityType.resolveDistanceBased(
+            from: "walking",
+            name: "Walking",
+            inputTypeRaw: "durationDistance"
+        )
+        #expect(type == .walking)
+    }
+
     // MARK: - Name-Based Inference
 
     @Test("Name-based inference resolves exercise names")
