@@ -86,19 +86,20 @@ struct WorkoutWriteService: WorkoutWriting, Sendable {
 
         try await builder.beginCollection(at: input.startDate)
 
+        var samples: [HKSample] = []
+
         // Add active energy sample if calories are valid
         if let calories = input.estimatedCalories,
            calories > 0, calories < 10000,
            !calories.isNaN, !calories.isInfinite {
             let energyType = HKQuantityType(.activeEnergyBurned)
             let energyQuantity = HKQuantity(unit: .kilocalorie(), doubleValue: calories)
-            let energySample = HKQuantitySample(
+            samples.append(HKQuantitySample(
                 type: energyType,
                 quantity: energyQuantity,
                 start: input.startDate,
                 end: endDate
-            )
-            try await builder.addSamples([energySample])
+            ))
         }
 
         // Add distance sample if valid
@@ -108,13 +109,16 @@ struct WorkoutWriteService: WorkoutWriting, Sendable {
             let distanceType = Self.distanceQuantityType(for: activityType)
             let distanceMeters = distanceKm * 1000.0
             let distanceQuantity = HKQuantity(unit: .meter(), doubleValue: distanceMeters)
-            let distanceSample = HKQuantitySample(
+            samples.append(HKQuantitySample(
                 type: distanceType,
                 quantity: distanceQuantity,
                 start: input.startDate,
                 end: endDate
-            )
-            try await builder.addSamples([distanceSample])
+            ))
+        }
+
+        if !samples.isEmpty {
+            try await builder.addSamples(samples)
         }
 
         try await builder.endCollection(at: endDate)

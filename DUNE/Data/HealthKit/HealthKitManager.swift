@@ -49,6 +49,7 @@ actor HealthKitManager {
             try await store.requestAuthorization(
                 toShare: [
                     HKQuantityType(.activeEnergyBurned),
+                    HKQuantityType(.distanceWalkingRunning),
                     HKQuantityType.workoutType(),
                 ],
                 read: readTypes.union([HKObjectType.workoutType()])
