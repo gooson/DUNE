@@ -57,6 +57,7 @@
 		161BB7D358C3F7E11470BDE6 /* ConditionScore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2742476A0F7C7405339DABB8 /* ConditionScore.swift */; };
 		161F9DBD6875A4A7D6C1D866 /* RangeBarChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D51281859439009470EAE05 /* RangeBarChartView.swift */; };
 		16BB4C65D3021918243F35E9 /* DUNEWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE31A0B4E0ADC3A7496AA178 /* DUNEWatchApp.swift */; };
+		1730E2939253AC8AE0AF8FCC /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FC1ABC946AF7D3798A6BB69A /* Colors.xcassets */; };
 		17DAF57781589D20337E69A7 /* ConditionScoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED575155D1B85574E902CC69 /* ConditionScoreTests.swift */; };
 		195B152C660858AF6CC579DB /* SuggestedWorkoutCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2582DDF623B13DA24510AF42 /* SuggestedWorkoutCard.swift */; };
 		1964140177B27B9C65093059 /* WellnessSectionGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = B558BAFE0B7621F0766FA36C /* WellnessSectionGroup.swift */; };
@@ -319,6 +320,7 @@
 		B3EB6390C47F00C870C7735C /* WorkoutStreakServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4806A930EF000186A0D39B66 /* WorkoutStreakServiceTests.swift */; };
 		B436B4B8674090B703AA70A5 /* WellnessViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E380EC98B19E3059C141F1B /* WellnessViewModelTests.swift */; };
 		B43DF330B53C48C8E8862121 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A8B9695E041B2FDA423693 /* ContentView.swift */; };
+		B5343E2B431447DABC66BFAC /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FC1ABC946AF7D3798A6BB69A /* Colors.xcassets */; };
 		B5A224A841FDFDD5FBA67D2D /* CloudSyncConsentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE38415A2416BA59A79AB274 /* CloudSyncConsentView.swift */; };
 		B5BDD0AAD6F9D49D6E5CCA97 /* VitalsQueryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450AD1548598524140E618C9 /* VitalsQueryService.swift */; };
 		B6EC33B84C5783B3FA5765BD /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D2BA9BCC8AF6BFAB39812E7 /* HealthKit.framework */; };
@@ -962,6 +964,7 @@
 		FACDEFEE4872EFA19E3D2EA2 /* PeriodComparisonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeriodComparisonView.swift; sourceTree = "<group>"; };
 		FAECC1B47F0D4072F87ECBFF /* ForestSilhouetteShapeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForestSilhouetteShapeTests.swift; sourceTree = "<group>"; };
 		FB403FD8611D03AA3B2D6047 /* TrainingVolumeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingVolumeViewModel.swift; sourceTree = "<group>"; };
+		FC1ABC946AF7D3798A6BB69A /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Colors.xcassets; path = ../Shared/Resources/Colors.xcassets; sourceTree = "<group>"; };
 		FC70E47DE59D39D2CDF61E6B /* StackedVolumeBarChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedVolumeBarChartView.swift; sourceTree = "<group>"; };
 		FC73397A6C965F90A40C6BB5 /* ConditionScoreDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionScoreDetailViewModel.swift; sourceTree = "<group>"; };
 		FD1F293988ACCA2CC6728759 /* InjuryStatisticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjuryStatisticsService.swift; sourceTree = "<group>"; };
@@ -1018,6 +1021,14 @@
 				FB403FD8611D03AA3B2D6047 /* TrainingVolumeViewModel.swift */,
 			);
 			path = TrainingVolume;
+			sourceTree = "<group>";
+		};
+		091B02B3170FA99560235235 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				FC1ABC946AF7D3798A6BB69A /* Colors.xcassets */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 		0946F370CE677E297BFE3675 /* Data */ = {
@@ -1604,6 +1615,7 @@
 				777EE3B9DA3ECC24570A1E3D /* Domain */,
 				FCAEF5FD92B249B5F2CF51C6 /* Migration */,
 				E4343CDC747BBB8E54734054 /* Models */,
+				091B02B3170FA99560235235 /* Resources */,
 			);
 			name = Shared;
 			sourceTree = "<group>";
@@ -2160,6 +2172,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D95DBEFE4CEC05E6A55412F /* Assets.xcassets in Resources */,
+				1730E2939253AC8AE0AF8FCC /* Colors.xcassets in Resources */,
 				4A19395C1627F75A801CE770 /* Localizable.xcstrings in Resources */,
 				2EADE537C1FE726718F8C5E4 /* exercises.json in Resources */,
 			);
@@ -2170,6 +2183,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FB97BF76F32815882A90294E /* Assets.xcassets in Resources */,
+				B5343E2B431447DABC66BFAC /* Colors.xcassets in Resources */,
 				9CACD02224B41711A2EBFFC4 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
