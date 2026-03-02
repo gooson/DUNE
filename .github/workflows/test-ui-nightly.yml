@@ -1,4 +1,4 @@
-name: Nightly Full UI Tests
+name: Nightly Full Tests (Unit + UI)
 
 on:
   schedule:
@@ -11,6 +11,31 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  nightly-unit-tests:
+    runs-on: macos-15
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_26.2.app/Contents/Developer
+
+      - name: Install xcodegen
+        run: brew install xcodegen
+
+      - name: Run Unit Tests
+        run: scripts/test-unit.sh --log-file .xcodebuild/unit-test-nightly.log
+
+      - name: Upload nightly unit test log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-nightly-log
+          path: .xcodebuild/unit-test-nightly*.log
+          retention-days: 14
+
   nightly-ios-ui-tests:
     runs-on: macos-15
     timeout-minutes: 90
