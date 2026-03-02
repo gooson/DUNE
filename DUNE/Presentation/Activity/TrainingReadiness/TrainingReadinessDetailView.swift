@@ -12,6 +12,16 @@ struct TrainingReadinessDetailView: View {
 
     private var isRegular: Bool { sizeClass == .regular }
 
+    private enum Labels {
+        static let scoreLabel = String(localized: "READINESS")
+        static let hrv = String(localized: "HRV")
+        static let rhr = String(localized: "RHR")
+        static let sleep = String(localized: "Sleep")
+        static let recovery = String(localized: "Recovery")
+        static let trend = String(localized: "Trend")
+        static let calibrating = String(localized: "Calibrating")
+    }
+
     var body: some View {
         ScrollView {
             VStack(spacing: DS.Spacing.lg) {
@@ -47,19 +57,19 @@ struct TrainingReadinessDetailView: View {
     private func scoreHero(_ readiness: TrainingReadiness) -> some View {
         DetailScoreHero(
             score: readiness.score,
-            scoreLabel: "READINESS",
+            scoreLabel: Labels.scoreLabel,
             statusLabel: readiness.status.label,
             statusIcon: readiness.status.iconName,
             statusColor: readiness.status.color,
             guideMessage: readiness.status.guideMessage,
             subScores: [
-                .init(label: "HRV", value: readiness.components.hrvScore, color: DS.Color.hrv),
-                .init(label: "RHR", value: readiness.components.rhrScore, color: DS.Color.heartRate),
-                .init(label: "Sleep", value: readiness.components.sleepScore, color: DS.Color.sleep),
-                .init(label: "Recovery", value: readiness.components.fatigueScore, color: DS.Color.activity),
-                .init(label: "Trend", value: readiness.components.trendBonus, color: DS.Color.fitness),
+                .init(label: Labels.hrv, value: readiness.components.hrvScore, color: DS.Color.hrv),
+                .init(label: Labels.rhr, value: readiness.components.rhrScore, color: DS.Color.heartRate),
+                .init(label: Labels.sleep, value: readiness.components.sleepScore, color: DS.Color.sleep),
+                .init(label: Labels.recovery, value: readiness.components.fatigueScore, color: DS.Color.activity),
+                .init(label: Labels.trend, value: readiness.components.trendBonus, color: DS.Color.fitness),
             ],
-            badgeText: readiness.isCalibrating ? "Calibrating" : nil
+            badgeText: readiness.isCalibrating ? Labels.calibrating : nil
         )
     }
 
@@ -159,7 +169,7 @@ struct TrainingReadinessDetailView: View {
         }
     }
 
-    private func calculationMethodLine(_ text: String) -> some View {
+    private func calculationMethodLine(_ text: LocalizedStringKey) -> some View {
         HStack(alignment: .top, spacing: DS.Spacing.sm) {
             Circle()
                 .fill(.tertiary)

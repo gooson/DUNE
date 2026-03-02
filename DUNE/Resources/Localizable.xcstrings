@@ -17260,6 +17260,142 @@
         }
       }
     },
+    "HRV Variability" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HRV変動性"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HRV 변동성"
+          }
+        }
+      }
+    },
+    "Recovery Status" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "回復状態"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "회복 상태"
+          }
+        }
+      }
+    },
+    "Trend Bonus" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "トレンドボーナス"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "추세 보너스"
+          }
+        }
+      }
+    },
+    "RHR" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RHR"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RHR"
+          }
+        }
+      }
+    },
+    "Final score = HRV(30%) + RHR(20%) + Sleep(25%) + Recovery(15%) + Trend(10%)." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最終スコア = HRV(30%) + RHR(20%) + 睡眠(25%) + 回復(15%) + トレンド(10%)。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최종 점수 = HRV(30%) + RHR(20%) + 수면(25%) + 회복(15%) + 추세(10%)."
+          }
+        }
+      }
+    },
+    "Each component is normalized to 0-100 before weighting." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "各要素は重み付け前に0-100へ正規化されます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "각 구성 요소는 가중치 적용 전에 0-100으로 정규화됩니다."
+          }
+        }
+      }
+    },
+    "HRV/RHR are compared against your personal baseline; positive trend increases score." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HRV/RHRは個人ベースラインと比較され、ポジティブなトレンドはスコアを押し上げます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HRV/RHR은 개인 기준선과 비교되며, 긍정적인 추세는 점수를 높입니다."
+          }
+        }
+      }
+    },
+    "Calibration in progress: more recent data will stabilize the baseline." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "キャリブレーション中: 最新データが増えるほどベースラインが安定します。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "보정 진행 중: 최신 데이터가 쌓일수록 기준선이 안정화됩니다."
+          }
+        }
+      }
+    },
     "μg/m³" : {
 
     },

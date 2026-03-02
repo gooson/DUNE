@@ -1,4 +1,4 @@
-import Foundation
+import SwiftUI
 
 enum AppSection: String, CaseIterable, Identifiable {
     case today
@@ -8,7 +8,7 @@ enum AppSection: String, CaseIterable, Identifiable {
 
     var id: String { rawValue }
 
-    var title: String {
+    var title: LocalizedStringKey {
         switch self {
         case .today: "Today"
         case .train: "Activity"
