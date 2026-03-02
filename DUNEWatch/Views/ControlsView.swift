@@ -40,8 +40,8 @@ struct ControlsView: View {
             }
             .tint(DS.Color.caution)
 
-            // Skip Exercise
-            if !workoutManager.isLastExercise {
+            // Skip Exercise (strength mode only — cardio has no exercise list)
+            if !workoutManager.isCardioMode, !workoutManager.isLastExercise {
                 Button {
                     workoutManager.skipExercise()
                 } label: {
@@ -66,7 +66,9 @@ struct ControlsView: View {
             }
             Button("Cancel", role: .cancel) {}
         } message: {
-            if workoutManager.completedSetsData.flatMap({ $0 }).isEmpty {
+            if workoutManager.isCardioMode {
+                Text("Save and finish this workout?")
+            } else if workoutManager.completedSetsData.flatMap({ $0 }).isEmpty {
                 Text("No sets recorded. End without saving?")
             } else {
                 Text("Save and finish this workout?")

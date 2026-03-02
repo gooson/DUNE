@@ -314,6 +314,28 @@ enum WorkoutActivityType: String, Codable, Sendable, CaseIterable {
         }
     }
 
+    // MARK: - Distance-Based Resolution
+
+    /// Resolves a distance-based `WorkoutActivityType` from an exercise definition ID and name.
+    /// Uses a 3-step fallback: direct rawValue -> stem extraction -> name inference.
+    /// Returns nil if the resolved type is not distance-based.
+    static func resolveDistanceBased(from id: String, name: String) -> WorkoutActivityType? {
+        // 1. Direct rawValue match
+        if let type = WorkoutActivityType(rawValue: id), type.isDistanceBased {
+            return type
+        }
+        // 2. Stem extraction for variants like "running-treadmill"
+        let stem = id.components(separatedBy: "-").first ?? ""
+        if !stem.isEmpty, let type = WorkoutActivityType(rawValue: stem), type.isDistanceBased {
+            return type
+        }
+        // 3. Name-based inference
+        if let type = infer(from: name), type.isDistanceBased {
+            return type
+        }
+        return nil
+    }
+
     // MARK: - Name-Based Inference
 
     /// Infers a `WorkoutActivityType` from an exercise name string.

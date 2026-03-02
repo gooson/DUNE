@@ -2,7 +2,8 @@ import SwiftUI
 import WatchKit
 
 /// 3-Page vertical TabView for active workout session.
-/// Layout: Controls (top) | Metrics (center) | Now Playing (bottom)
+/// Strength: Controls | MetricsView | NowPlaying
+/// Cardio:   Controls | CardioMetricsView | NowPlaying
 struct SessionPagingView: View {
     @Environment(WorkoutManager.self) private var workoutManager
     @Environment(\.isLuminanceReduced) private var isLuminanceReduced
@@ -14,8 +15,13 @@ struct SessionPagingView: View {
             ControlsView()
                 .tag(SessionTab.controls)
 
-            MetricsView()
-                .tag(SessionTab.metrics)
+            if workoutManager.isCardioMode {
+                CardioMetricsView()
+                    .tag(SessionTab.metrics)
+            } else {
+                MetricsView()
+                    .tag(SessionTab.metrics)
+            }
 
             NowPlayingView()
                 .tag(SessionTab.nowPlaying)
