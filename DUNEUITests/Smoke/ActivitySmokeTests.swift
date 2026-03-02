@@ -35,19 +35,16 @@ final class ActivitySmokeTests: UITestBaseCase {
 
     func testExercisePickerOpens() throws {
         let addButton = app.descendants(matching: .any)[AXID.activityToolbarAdd].firstMatch
-        guard addButton.waitForExistence(timeout: 5) else {
-            throw XCTSkip("Add button not found — skipping picker test")
-        }
+        XCTAssertTrue(addButton.waitForExistence(timeout: 5), "Add button should exist")
         addButton.tap()
 
-        // Menu should appear with exercise options
-        let singleExercise = app.buttons["Single Exercise"]
-        if singleExercise.waitForExistence(timeout: 3) {
-            singleExercise.tap()
-            // Exercise picker sheet should appear with Cancel
-            let cancel = app.buttons["Cancel"]
-            XCTAssertTrue(cancel.waitForExistence(timeout: 3), "Exercise picker Cancel should appear")
-            cancel.tap()
-        }
+        let pickerList = app.descendants(matching: .any)[AXID.pickerRootList].firstMatch
+        XCTAssertTrue(pickerList.waitForExistence(timeout: 5), "Exercise picker should appear")
+
+        let cancel = app.buttons[AXID.pickerCancelButton]
+        XCTAssertTrue(cancel.waitForExistence(timeout: 3), "Exercise picker cancel button should appear")
+        cancel.tap()
+
+        XCTAssertTrue(addButton.waitForExistence(timeout: 3), "Picker should dismiss back to Activity screen")
     }
 }

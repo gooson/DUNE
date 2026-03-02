@@ -127,11 +127,13 @@ struct WellnessView: View {
                     } label: {
                         Label("Body Record", systemImage: "figure.stand")
                     }
+                    .accessibilityIdentifier("wellness-menu-body-record")
                     Button {
                         startAddingInjury()
                     } label: {
                         Label("Injury", systemImage: "bandage.fill")
                     }
+                    .accessibilityIdentifier("wellness-menu-injury")
                 } label: {
                     Image(systemName: "plus")
                 }

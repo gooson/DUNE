@@ -54,6 +54,7 @@ struct SettingsView: View {
                 Stepper("", value: $restSeconds, in: WorkoutSettingsStore.restSecondsRange, step: 15)
                     .labelsHidden()
             }
+            .accessibilityIdentifier("settings-row-resttime")
 
             HStack {
                 Label("Default Sets", systemImage: "list.number")
@@ -118,6 +119,7 @@ struct SettingsView: View {
     private var appearanceSection: some View {
         Section("Appearance") {
             ThemePickerSection()
+                .accessibilityIdentifier("settings-section-appearance")
         }
     }
 
@@ -128,6 +130,7 @@ struct SettingsView: View {
             Toggle(isOn: $isCloudSyncEnabled) {
                 Label("iCloud Sync", systemImage: "icloud")
             }
+            .accessibilityIdentifier("settings-row-icloud-sync")
 
             Button {
                 guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
@@ -147,6 +150,7 @@ struct SettingsView: View {
                         .foregroundStyle(DS.Color.textSecondary)
                 }
             }
+            .accessibilityIdentifier("settings-row-location-access")
         }
     }
 
@@ -171,6 +175,7 @@ struct SettingsView: View {
                 Text(appVersion)
                     .foregroundStyle(DS.Color.textSecondary)
             }
+            .accessibilityIdentifier("settings-row-version")
 
             HStack {
                 Text("Build")

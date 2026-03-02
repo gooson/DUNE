@@ -15,9 +15,10 @@ final class DailveUITestsLaunchTests: XCTestCase {
     }
 
     override func tearDownWithError() throws {
-        app?.terminate()
-        // Allow the app process to fully exit (CI resilience)
-        Thread.sleep(forTimeInterval: 1)
+        if let app {
+            app.terminate()
+            _ = app.wait(for: .notRunning, timeout: 2)
+        }
         app = nil
         try super.tearDownWithError()
     }

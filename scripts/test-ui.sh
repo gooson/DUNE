@@ -2,7 +2,7 @@
 # Run DUNEUITests on iOS Simulator.
 # - Regenerates project from xcodegen (unless --no-regen)
 # - Boots simulator beforehand (UI tests require a running simulator)
-# - Runs UI tests with DUNE scheme, only-testing DUNEUITests
+# - Runs UI tests with DUNE scheme (defaults to -only-testing DUNEUITests)
 
 set -euo pipefail
 
@@ -21,6 +21,8 @@ LOG_DIR=".xcodebuild"
 LOG_FILE="$LOG_DIR/ui-test.log"
 REGENERATE=1
 SKIP_TESTING=()
+ONLY_TESTING=()
+TEST_PLAN=""
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -36,9 +38,17 @@ while [[ $# -gt 0 ]]; do
             SKIP_TESTING+=("$2")
             shift 2
             ;;
+        --only-testing)
+            ONLY_TESTING+=("$2")
+            shift 2
+            ;;
+        --test-plan)
+            TEST_PLAN="$2"
+            shift 2
+            ;;
         *)
             echo "Unknown option: $1"
-            echo "Usage: $0 [--no-regen] [--log-file <path>] [--skip-testing <target>]"
+            echo "Usage: $0 [--no-regen] [--log-file <path>] [--skip-testing <target>] [--only-testing <target>] [--test-plan <name>]"
             exit 2
             ;;
     esac
@@ -75,13 +85,26 @@ TEST_CMD=(xcodebuild test -project "$PROJECT_FILE"
     -scheme "$SCHEME"
     -destination "$DESTINATION"
     -derivedDataPath "$DERIVED_DATA_DIR"
+    -parallel-testing-enabled NO
     -test-timeouts-enabled YES
     -default-test-execution-time-allowance 120
     -maximum-test-execution-time-allowance 300
     CODE_SIGNING_ALLOWED=NO
     CODE_SIGNING_REQUIRED=NO)
 
-TEST_CMD+=(-only-testing DUNEUITests)
+if [[ -n "$TEST_PLAN" ]]; then
+    TEST_CMD+=(-testPlan "$TEST_PLAN")
+    echo "Using test plan: $TEST_PLAN"
+fi
+
+if [[ "${#ONLY_TESTING[@]}" -gt 0 ]]; then
+    for target in "${ONLY_TESTING[@]}"; do
+        TEST_CMD+=(-only-testing "$target")
+        echo "Only testing: $target"
+    done
+else
+    TEST_CMD+=(-only-testing DUNEUITests)
+fi
 
 for skip in "${SKIP_TESTING[@]}"; do
     TEST_CMD+=(-skip-testing "$skip")

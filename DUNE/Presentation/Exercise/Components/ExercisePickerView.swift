@@ -155,6 +155,7 @@ struct ExercisePickerView: View {
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
                         Button("Cancel") { dismiss() }
+                            .accessibilityIdentifier("picker-cancel-button")
                     }
 
                     if !isQuickStartMode {
@@ -207,6 +208,7 @@ struct ExercisePickerView: View {
                 fullModeSections
             }
         }
+        .accessibilityIdentifier("picker-root-list")
         .scrollContentBackground(.hidden)
         .background { SheetWaveBackground() }
     }
