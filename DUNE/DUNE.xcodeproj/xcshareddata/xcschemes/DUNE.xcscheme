@@ -63,6 +63,20 @@
                ReferencedContainer = "container:DUNE.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7B503DA239023223B8865093"
+               BuildableName = "DUNEWatchTests.xctest"
+               BlueprintName = "DUNEWatchTests"
+               ReferencedContainer = "container:DUNE.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -89,6 +103,17 @@
                BlueprintIdentifier = "F7CBC4C7F676358AC40B083E"
                BuildableName = "DUNETests.xctest"
                BlueprintName = "DUNETests"
+               ReferencedContainer = "container:DUNE.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7B503DA239023223B8865093"
+               BuildableName = "DUNEWatchTests.xctest"
+               BlueprintName = "DUNEWatchTests"
                ReferencedContainer = "container:DUNE.xcodeproj">
             </BuildableReference>
          </TestableReference>

@@ -5,14 +5,18 @@ on:
     branches: [main]
     paths:
       - 'DUNE/**'
+      - 'DUNEWatch/**'
       - 'DUNETests/**'
+      - 'DUNEWatchTests/**'
       - 'scripts/**'
       - '.github/workflows/test-unit.yml'
   pull_request:
     branches: [main]
     paths:
       - 'DUNE/**'
+      - 'DUNEWatch/**'
       - 'DUNETests/**'
+      - 'DUNEWatchTests/**'
       - 'scripts/**'
       - '.github/workflows/test-unit.yml'
 
@@ -43,5 +47,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: unit-test-log
-          path: .xcodebuild/unit-test.log
+          path: .xcodebuild/unit-test*.log
           retention-days: 7

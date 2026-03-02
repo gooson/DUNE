@@ -1,8 +1,8 @@
 #!/bin/bash
-# Run DUNETests (unit tests) on iOS Simulator.
+# Run unit tests on iOS + watchOS simulators.
 # - Regenerates project from xcodegen (unless --no-regen)
-# - Runs unit tests with DUNETests scheme
-# - Prints concise failure summary
+# - Runs DUNETests and DUNEWatchTests sequentially
+# - Prints concise failure summary per suite
 
 set -euo pipefail
 
@@ -12,8 +12,14 @@ source "$ROOT_DIR/scripts/lib/regen-project.sh"
 
 PROJECT_SPEC="DUNE/project.yml"
 PROJECT_FILE="DUNE/DUNE.xcodeproj"
-SCHEME="DUNETests"
-DESTINATION="${DAILVE_IOS_DESTINATION:-platform=iOS Simulator,name=iPhone 17,OS=26.2}"
+IOS_SCHEME="DUNETests"
+IOS_SIM_NAME="${DUNE_SIM_NAME:-iPhone 17}"
+IOS_SIM_OS="${DUNE_SIM_OS:-26.2}"
+IOS_DESTINATION="${DAILVE_IOS_DESTINATION:-platform=iOS Simulator,name=${IOS_SIM_NAME},OS=${IOS_SIM_OS}}"
+WATCH_SCHEME="DUNEWatchTests"
+WATCH_SIM_NAME="${DUNE_WATCH_SIM_NAME:-Apple Watch Series 10 (46mm)}"
+WATCH_SIM_OS="${DUNE_WATCH_SIM_OS:-26.2}"
+WATCH_DESTINATION="${DAILVE_WATCH_DESTINATION:-platform=watchOS Simulator,name=${WATCH_SIM_NAME},OS=${WATCH_SIM_OS}}"
 DERIVED_DATA_DIR=".deriveddata"
 LOG_DIR=".xcodebuild"
 LOG_FILE="$LOG_DIR/unit-test.log"
@@ -40,27 +46,88 @@ done
 mkdir -p "$LOG_DIR" "$DERIVED_DATA_DIR"
 regen_project
 
-echo "Running unit tests with scheme '$SCHEME' for destination '$DESTINATION'..."
-set +e
-xcodebuild test -project "$PROJECT_FILE" \
-    -scheme "$SCHEME" \
-    -destination "$DESTINATION" \
-    -derivedDataPath "$DERIVED_DATA_DIR" \
-    -only-testing DUNETests \
-    CODE_SIGNING_ALLOWED=NO \
-    CODE_SIGNING_REQUIRED=NO \
-    >"$LOG_FILE" 2>&1
-TEST_EXIT=$?
-set -e
+resolve_sim_destination() {
+    local platform="$1"
+    local runtime_prefix="$2"
+    local sim_name="$3"
+    local sim_os="$4"
+    local requested="platform=${platform} Simulator,name=${sim_name},OS=${sim_os}"
 
-if [[ "$TEST_EXIT" -ne 0 ]]; then
-    echo ""
-    echo "Unit tests failed. Summary:"
-    grep -n -E "TEST (SUCCEEDED|FAILED)|error:|failed|Executed" "$LOG_FILE" | tail -n 120 || true
-    echo ""
-    echo "Full log: $LOG_FILE"
-    exit "$TEST_EXIT"
+    if xcrun simctl list devices available | grep -F "${sim_name}" | grep -F "${sim_os}" >/dev/null 2>&1; then
+        echo "$requested"
+        return
+    fi
+
+    local fallback_id
+    fallback_id=$(xcrun simctl list devices available -j | python3 -c "
+import json, sys
+data = json.load(sys.stdin)
+runtime_prefix = '${runtime_prefix}'
+for runtime, devices in data.get('devices', {}).items():
+    if runtime_prefix not in runtime:
+        continue
+    for device in devices:
+        if device.get('isAvailable', True):
+            print(device['udid'])
+            sys.exit(0)
+sys.exit(1)
+" 2>/dev/null) || true
+
+    if [[ -n "${fallback_id}" ]]; then
+        echo "platform=${platform} Simulator,id=${fallback_id}"
+    else
+        echo "$requested"
+    fi
+}
+
+if [[ -z "${DAILVE_IOS_DESTINATION:-}" ]]; then
+    IOS_DESTINATION="$(resolve_sim_destination "iOS" "iOS-${IOS_SIM_OS//./-}" "$IOS_SIM_NAME" "$IOS_SIM_OS")"
 fi
 
-echo "Unit tests passed."
-grep -n -E "TEST (SUCCEEDED|FAILED)|Executed" "$LOG_FILE" | tail -n 20 || true
+if [[ -z "${DAILVE_WATCH_DESTINATION:-}" ]]; then
+    WATCH_DESTINATION="$(resolve_sim_destination "watchOS" "watchOS-${WATCH_SIM_OS//./-}" "$WATCH_SIM_NAME" "$WATCH_SIM_OS")"
+fi
+
+if [[ "$LOG_FILE" == *.log ]]; then
+    IOS_LOG_FILE="$LOG_FILE"
+    WATCH_LOG_FILE="${LOG_FILE%.log}-watch.log"
+else
+    IOS_LOG_FILE="${LOG_FILE}-ios.log"
+    WATCH_LOG_FILE="${LOG_FILE}-watch.log"
+fi
+
+run_suite() {
+    local suite_name="$1"
+    local scheme="$2"
+    local destination="$3"
+    local only_testing="$4"
+    local log_file="$5"
+
+    echo "Running ${suite_name} with scheme '$scheme' for destination '$destination'..."
+    set +e
+    xcodebuild test -project "$PROJECT_FILE" \
+        -scheme "$scheme" \
+        -destination "$destination" \
+        -derivedDataPath "$DERIVED_DATA_DIR" \
+        -only-testing "$only_testing" \
+        CODE_SIGNING_ALLOWED=NO \
+        CODE_SIGNING_REQUIRED=NO \
+        >"$log_file" 2>&1
+    local test_exit=$?
+    set -e
+
+    if [[ "$test_exit" -ne 0 ]]; then
+        echo ""
+        echo "${suite_name} failed. Summary:"
+        grep -n -E "TEST (SUCCEEDED|FAILED)|error:|failed|Executed" "$log_file" | tail -n 120 || true
+        echo ""
+        echo "Full log: $log_file"
+        exit "$test_exit"
+    fi
+
+    echo "${suite_name} passed."
+    grep -n -E "TEST (SUCCEEDED|FAILED)|Executed" "$log_file" | tail -n 20 || true
+}
+
+run_suite "iOS unit tests" "$IOS_SCHEME" "$IOS_DESTINATION" "DUNETests" "$IOS_LOG_FILE"
+run_suite "Watch unit tests" "$WATCH_SCHEME" "$WATCH_DESTINATION" "DUNEWatchTests" "$WATCH_LOG_FILE"
