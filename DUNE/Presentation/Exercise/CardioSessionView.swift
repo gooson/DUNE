@@ -140,8 +140,8 @@ struct CardioSessionView: View {
     }
 
     private func formattedElapsedTime(at now: Date) -> String {
-        guard let start = viewModel.sessionManager.startDate else { return "0:00" }
-        let elapsed = Swift.max(now.timeIntervalSince(start), 0)
+        let elapsed = viewModel.sessionManager.activeElapsedTime(at: now)
+        guard elapsed > 0 else { return "0:00" }
         let hours = Int(elapsed) / 3600
         let mins = (Int(elapsed) % 3600) / 60
         let secs = Int(elapsed) % 60

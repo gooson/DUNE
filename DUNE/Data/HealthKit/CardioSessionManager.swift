@@ -51,10 +51,19 @@ final class CardioSessionManager: NSObject, Sendable {
         return String(format: "%d:%02d", mins, secs)
     }
 
-    /// Elapsed time since session start (paused time excluded via HK).
+    /// Active elapsed time since session start (excludes paused intervals).
     var elapsedTime: TimeInterval {
+        activeElapsedTime(at: Date())
+    }
+
+    /// Active elapsed time using an external clock (for TimelineView sync).
+    func activeElapsedTime(at now: Date) -> TimeInterval {
         guard let start = startDate, state != .idle else { return 0 }
-        return Date().timeIntervalSince(start)
+        var elapsed = now.timeIntervalSince(start) - pausedDuration
+        if let pauseStart, state == .paused {
+            elapsed -= now.timeIntervalSince(pauseStart)
+        }
+        return Swift.max(elapsed, 0)
     }
 
     /// UUID of the saved HKWorkout after session ends.
@@ -69,8 +78,9 @@ final class CardioSessionManager: NSObject, Sendable {
     private var hkBuilder: HKLiveWorkoutBuilder?
     private let healthStore = HKHealthStore()
 
-    /// Accumulated distance during pause — location updates are ignored while paused.
-    private var distanceAtPause: Double = 0
+    /// Total time spent paused (for accurate elapsed time).
+    private var pausedDuration: TimeInterval = 0
+    private var pauseStart: Date?
 
     // MARK: - Lifecycle
 
@@ -86,13 +96,16 @@ final class CardioSessionManager: NSObject, Sendable {
         self.activeCalories = 0
         self.healthKitWorkoutUUID = nil
         self.lastLocation = nil
-        self.distanceAtPause = 0
+        self.pausedDuration = 0
+        self.pauseStart = nil
 
         let now = Date()
-        self.startDate = now
 
-        // Setup HKWorkoutSession
+        // Setup HKWorkoutSession first — throws on failure
         try await setupHKSession(activityType: activityType, isOutdoor: isOutdoor, startDate: now)
+
+        // Only set startDate after HK session succeeds
+        self.startDate = now
 
         // Setup CLLocationManager for outdoor
         if isOutdoor {
@@ -105,19 +118,29 @@ final class CardioSessionManager: NSObject, Sendable {
     func pause() {
         guard state == .running else { return }
         hkSession?.pause()
-        distanceAtPause = distance
+        pauseStart = Date()
         state = .paused
     }
 
     func resume() {
         guard state == .paused else { return }
         hkSession?.resume()
-        lastLocation = nil // Reset to avoid jump after pause
+        if let pauseStart {
+            pausedDuration += Date().timeIntervalSince(pauseStart)
+        }
+        pauseStart = nil
+        lastLocation = nil // Reset to avoid distance jump after pause
         state = .running
     }
 
     func endSession() async {
         guard state == .running || state == .paused else { return }
+
+        // Finalize paused duration if ending while paused
+        if let pauseStart, state == .paused {
+            pausedDuration += Date().timeIntervalSince(pauseStart)
+            self.pauseStart = nil
+        }
 
         locationManager?.stopUpdatingLocation()
         locationManager = nil
@@ -155,21 +178,22 @@ final class CardioSessionManager: NSObject, Sendable {
         heartRate = 0
         activeCalories = 0
         healthKitWorkoutUUID = nil
-        distanceAtPause = 0
+        pausedDuration = 0
+        pauseStart = nil
     }
 
     // MARK: - Location Authorization
 
-    var locationAuthorizationStatus: CLAuthorizationStatus {
-        locationManager?.authorizationStatus ?? CLLocationManager().authorizationStatus
-    }
+    private(set) var locationAuthorizationStatus: CLAuthorizationStatus = CLLocationManager().authorizationStatus
 
     // MARK: - Test Helpers
 
+    #if DEBUG
     /// Sets startDate directly for unit testing without starting a real HK/GPS session.
     func testSetStartDate(_ date: Date) {
         startDate = date
     }
+    #endif
 
     // MARK: - Private Setup
 
@@ -205,9 +229,21 @@ final class CardioSessionManager: NSObject, Sendable {
         manager.desiredAccuracy = kCLLocationAccuracyBest
         manager.distanceFilter = 5 // Update every 5 meters
         manager.activityType = clActivityType(for: activityType)
-        manager.allowsBackgroundLocationUpdates = true
-        manager.showsBackgroundLocationIndicator = true
-        manager.startUpdatingLocation()
+
+        // Request authorization if not yet determined
+        if manager.authorizationStatus == .notDetermined {
+            manager.requestWhenInUseAuthorization()
+        }
+
+        // Only enable background updates with adequate authorization
+        let authorized = manager.authorizationStatus == .authorizedWhenInUse
+            || manager.authorizationStatus == .authorizedAlways
+        if authorized {
+            manager.allowsBackgroundLocationUpdates = true
+            manager.showsBackgroundLocationIndicator = true
+            manager.startUpdatingLocation()
+        }
+
         locationManager = manager
     }
 
@@ -219,11 +255,10 @@ final class CardioSessionManager: NSObject, Sendable {
         }
     }
 
-    /// Recalculate pace from total distance and elapsed time.
+    /// Recalculate pace from total distance and active elapsed time.
     private func updatePace() {
         guard state == .running else { return }
-        guard let start = startDate else { return }
-        let elapsed = Date().timeIntervalSince(start)
+        let elapsed = elapsedTime
         let km = distance / 1000.0
         guard km > 0.01 else {
             currentPace = 0
@@ -268,7 +303,16 @@ extension CardioSessionManager: CLLocationManagerDelegate {
     }
 
     nonisolated func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        // Authorization changes are handled by the calling view
+        let status = manager.authorizationStatus
+        Task { @MainActor in
+            locationAuthorizationStatus = status
+            guard state == .running else { return }
+            if status == .authorizedWhenInUse || status == .authorizedAlways {
+                manager.allowsBackgroundLocationUpdates = true
+                manager.showsBackgroundLocationIndicator = true
+                manager.startUpdatingLocation()
+            }
+        }
     }
 }
 
@@ -314,7 +358,7 @@ extension CardioSessionManager: HKLiveWorkoutBuilderDelegate {
             case HKQuantityType(.heartRate):
                 let unit = HKUnit.count().unitDivided(by: .minute())
                 let bpm = stats.mostRecentQuantity()?.doubleValue(for: unit) ?? 0
-                if (20...250).contains(bpm) {
+                if (20...300).contains(bpm) {
                     heartRateValue = bpm
                 }
 
