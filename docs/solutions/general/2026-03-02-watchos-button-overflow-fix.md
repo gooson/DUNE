@@ -1,10 +1,8 @@
 ---
 tags: [watchos, swiftui, scrollview, button, layout, touch-target]
-category: general
 date: 2026-03-02
-severity: important
-related_files: [DUNEWatch/Views/WorkoutPreviewView.swift]
-related_solutions: []
+category: general
+status: implemented
 ---
 
 # Solution: watchOS VStack 버튼이 터치에 반응하지 않는 문제
