@@ -123,7 +123,7 @@ struct SleepStageChartView: View {
                 Text(point.date, format: .dateTime.month(.abbreviated).day())
                     .font(.caption)
                 Spacer()
-                Text((point.total / 3600).hoursMinutesFormatted)
+                Text((point.total / 60).hoursMinutesFormatted)
                     .font(.caption)
                     .fontWeight(.semibold)
             }

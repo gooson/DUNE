@@ -295,9 +295,13 @@ struct SessionSummaryView: View {
 
     private var formattedDuration: String {
         let interval = endDate.timeIntervalSince(startDate)
-        let mins = Int(interval) / 60
-        let secs = Int(interval) % 60
-        return String(format: "%d:%02d", mins, secs)
+        let totalMinutes = Int(interval) / 60
+        if totalMinutes >= 60 {
+            let hours = totalMinutes / 60
+            let mins = totalMinutes % 60
+            return String(localized: "\(hours)h \(mins)min")
+        }
+        return String(localized: "\(totalMinutes)min")
     }
 
     private var totalSets: Int {
