@@ -8,6 +8,7 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT_DIR"
+source "$ROOT_DIR/scripts/lib/regen-project.sh"
 
 PROJECT_SPEC="DUNE/project.yml"
 PROJECT_FILE="DUNE/DUNE.xcodeproj"
@@ -37,20 +38,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 mkdir -p "$LOG_DIR" "$DERIVED_DATA_DIR"
-
-if ! command -v xcodegen >/dev/null 2>&1; then
-    echo "error: xcodegen is required. Install with: brew install xcodegen"
-    exit 1
-fi
-
-if [[ "$REGENERATE" -eq 1 || ! -d "$PROJECT_FILE" ]]; then
-    echo "Generating Xcode project from $PROJECT_SPEC..."
-    xcodegen generate --spec "$PROJECT_SPEC" >/tmp/dune-xcodegen.log 2>&1
-
-    PBXPROJ="$PROJECT_FILE/project.pbxproj"
-    sed -i '' 's/objectVersion = 77;/objectVersion = 90;/' "$PBXPROJ"
-    sed -i '' 's/compatibilityVersion = "Xcode 14.0";/compatibilityVersion = "Xcode 16.3";/' "$PBXPROJ"
-fi
+regen_project
 
 echo "Running unit tests with scheme '$SCHEME' for destination '$DESTINATION'..."
 set +e
