@@ -55,6 +55,15 @@ schemes:
       targets:
         - DUNEWatchTests
 
+  DUNEUITests:
+    build:
+      targets:
+        DUNE: all
+        DUNEUITests: [test]
+    test:
+      targets:
+        - DUNEUITests
+
   DUNEWatchUITests:
     build:
       targets:
