@@ -1,15 +1,15 @@
 import SwiftUI
 
-/// Sheet displayed after saving a workout, offering a share option.
+/// Sheet displayed after saving a workout with effort input and share option.
 struct WorkoutCompletionSheet: View {
     let shareImage: UIImage?
     let exerciseName: String
     let setCount: Int
-    let autoIntensity: WorkoutIntensityResult?
+    let effortSuggestion: EffortSuggestion?
     let onDismiss: (Int?) -> Void
 
     @State private var showCelebration = false
-    @State private var rpe: Int?
+    @State private var effort: Int?
 
     var body: some View {
         NavigationStack {
@@ -31,11 +31,14 @@ struct WorkoutCompletionSheet: View {
                 }
                 .padding(.top, DS.Spacing.lg)
 
-                // Auto intensity badge
-                if let intensity = autoIntensity {
-                    IntensityBadgeView(intensity: intensity)
-                        .padding(.horizontal, DS.Spacing.lg)
-                }
+                Spacer()
+
+                // Effort slider (replaces IntensityBadge + RPEInput)
+                EffortSliderView(
+                    effort: $effort,
+                    suggestion: effortSuggestion
+                )
+                .padding(.horizontal, DS.Spacing.lg)
 
                 Spacer()
 
@@ -44,16 +47,10 @@ struct WorkoutCompletionSheet: View {
                     Image(uiImage: image)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(maxHeight: 200)
+                        .frame(maxHeight: 180)
                         .clipShape(RoundedRectangle(cornerRadius: DS.Radius.md))
                         .shadow(color: .black.opacity(0.2), radius: 8, y: 4)
                 }
-
-                Spacer()
-
-                // RPE input
-                RPEInputView(rpe: $rpe)
-                    .padding(.horizontal, DS.Spacing.lg)
 
                 // Action buttons
                 VStack(spacing: DS.Spacing.sm) {
@@ -75,7 +72,7 @@ struct WorkoutCompletionSheet: View {
                     }
 
                     Button {
-                        onDismiss(rpe)
+                        onDismiss(effort)
                     } label: {
                         Text("Done")
                             .font(.body.weight(.medium))
@@ -91,7 +88,7 @@ struct WorkoutCompletionSheet: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button {
-                        onDismiss(rpe)
+                        onDismiss(effort)
                     } label: {
                         Image(systemName: "xmark.circle.fill")
                             .foregroundStyle(DS.Color.textSecondary)

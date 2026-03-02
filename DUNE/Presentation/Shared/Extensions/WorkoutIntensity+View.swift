@@ -24,3 +24,29 @@ extension WorkoutIntensityLevel {
         }
     }
 }
+
+// MARK: - Effort Category UI
+
+extension EffortCategory {
+    var displayName: String {
+        switch self {
+        case .easy: String(localized: "Easy")
+        case .moderate: String(localized: "Moderate")
+        case .hard: String(localized: "Hard")
+        case .allOut: String(localized: "All Out")
+        }
+    }
+
+    var color: Color {
+        switch self {
+        case .easy: DS.Color.positive
+        case .moderate: DS.Color.caution
+        case .hard: .orange
+        case .allOut: DS.Color.negative
+        }
+    }
+
+    var iconName: String {
+        self >= .hard ? "flame.fill" : "flame"
+    }
+}

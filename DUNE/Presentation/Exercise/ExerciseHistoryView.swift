@@ -128,7 +128,7 @@ struct ExerciseHistoryView: View {
     private var isWeightMetric: Bool {
         switch viewModel.selectedMetric {
         case .maxWeight, .totalVolume, .estimatedOneRM: true
-        case .totalReps: false
+        case .totalReps, .effort: false
         }
     }
 
@@ -376,6 +376,7 @@ struct ExerciseHistoryView: View {
         case .totalVolume: session.totalVolume > 0 ? session.totalVolume : nil
         case .estimatedOneRM: session.estimatedOneRM
         case .totalReps: session.totalReps > 0 ? Double(session.totalReps) : nil
+        case .effort: session.effort.map(Double.init)
         }
     }
 }

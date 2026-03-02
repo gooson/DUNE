@@ -15,7 +15,7 @@ struct WorkoutSessionView: View {
     @State private var shareImage: UIImage?
     @State private var showingShareSheet = false
     @State private var savedRecord: ExerciseRecord?
-    @State private var savedIntensity: WorkoutIntensityResult?
+    @State private var effortSuggestion: EffortSuggestion?
     @FocusState private var isInputFieldFocused: Bool
 
     // Set-by-set flow state
@@ -151,10 +151,10 @@ struct WorkoutSessionView: View {
                 shareImage: shareImage,
                 exerciseName: exercise.localizedName,
                 setCount: viewModel.completedSetCount,
-                autoIntensity: savedIntensity,
-                onDismiss: { selectedRPE in
-                    if let rpe = selectedRPE, (1...10).contains(rpe) {
-                        savedRecord?.rpe = rpe
+                effortSuggestion: effortSuggestion,
+                onDismiss: { selectedEffort in
+                    if let effort = selectedEffort, (1...10).contains(effort) {
+                        savedRecord?.rpe = effort
                     }
                     dismiss()
                 }
@@ -768,11 +768,22 @@ struct WorkoutSessionView: View {
         guard let record = viewModel.createValidatedRecord(weightUnit: weightUnit) else { return }
 
         // Auto intensity — called BEFORE modelContext.insert so @Query history excludes this record
-        let intensityResult = calculateAutoIntensity(for: record)
+        let intensityService = WorkoutIntensityService()
+        let intensityResult = calculateAutoIntensity(for: record, service: intensityService)
         if let score = intensityResult?.rawScore, score.isFinite, (0...1).contains(score) {
             record.autoIntensityRaw = score
         }
-        savedIntensity = intensityResult
+
+        // Effort suggestion: convert auto intensity + recent efforts → suggested 1-10
+        let recentEfforts = exerciseRecords
+            .filter { $0.exerciseDefinitionID == exercise.id && $0.rpe != nil }
+            .sorted { $0.date > $1.date }
+            .prefix(5)
+            .compactMap(\.rpe)
+        effortSuggestion = intensityService.suggestEffort(
+            autoIntensityRaw: intensityResult?.rawScore,
+            recentEfforts: recentEfforts
+        )
 
         let shareData = buildShareData(from: record)
         shareImage = WorkoutShareService.renderShareImage(data: shareData, weightUnit: weightUnit)
@@ -809,9 +820,7 @@ struct WorkoutSessionView: View {
         }
     }
 
-    private func calculateAutoIntensity(for record: ExerciseRecord) -> WorkoutIntensityResult? {
-        let service = WorkoutIntensityService()
-
+    private func calculateAutoIntensity(for record: ExerciseRecord, service: WorkoutIntensityService) -> WorkoutIntensityResult? {
         let currentInput = buildIntensityInput(from: record)
 
         // History: same exercise, last 30 sessions, oldest-first (Correction #156)

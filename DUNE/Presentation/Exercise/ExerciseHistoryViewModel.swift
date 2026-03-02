@@ -7,6 +7,7 @@ enum ProgressMetric: CaseIterable, Sendable {
     case totalVolume
     case estimatedOneRM
     case totalReps
+    case effort
 
     var displayName: String {
         Self.displayNames[self] ?? ""
@@ -17,6 +18,7 @@ enum ProgressMetric: CaseIterable, Sendable {
         .totalVolume: String(localized: "Volume"),
         .estimatedOneRM: String(localized: "Est. 1RM"),
         .totalReps: String(localized: "Total Reps"),
+        .effort: String(localized: "Effort"),
     ]
 
     var unit: String {
@@ -25,6 +27,7 @@ enum ProgressMetric: CaseIterable, Sendable {
         case .totalVolume: "kg"
         case .estimatedOneRM: "kg"
         case .totalReps: "reps"
+        case .effort: "/10"
         }
     }
 }
@@ -54,6 +57,7 @@ final class ExerciseHistoryViewModel {
         let estimatedOneRM: Double?
         let duration: TimeInterval
         let autoIntensity: Double?
+        let effort: Int?
     }
 
     init(exerciseDefinitionID: String, exerciseName: String) {
@@ -103,7 +107,8 @@ final class ExerciseHistoryViewModel {
                 totalReps: reps.reduce(0, +),
                 estimatedOneRM: bestOneRM,
                 duration: record.duration,
-                autoIntensity: record.autoIntensityRaw
+                autoIntensity: record.autoIntensityRaw,
+                effort: record.rpe
             )
         }
 
@@ -134,6 +139,9 @@ final class ExerciseHistoryViewModel {
         case .totalReps:
             let reps = session.totalReps
             return reps > 0 ? Double(reps) : nil
+        case .effort:
+            guard let effort = session.effort, (1...10).contains(effort) else { return nil }
+            return Double(effort)
         }
     }
 
