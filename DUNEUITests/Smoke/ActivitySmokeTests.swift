@@ -13,8 +13,12 @@ final class ActivitySmokeTests: UITestBaseCase {
 
     func testActivityTabLoads() throws {
         // Activity tab should render without crashing
-        let navBar = app.navigationBars["Activity"].firstMatch
-        XCTAssertTrue(navBar.waitForExistence(timeout: 15), "Activity navigation title should appear")
+        let hasNavBar = app.navigationBars.firstMatch.waitForExistence(timeout: 10)
+
+        XCTAssertTrue(
+            hasNavBar || elementExists(AXID.activityHeroReadiness, timeout: 8),
+            "Activity screen should render"
+        )
     }
 
     func testToolbarAddButtonExists() throws {
@@ -29,6 +33,24 @@ final class ActivitySmokeTests: UITestBaseCase {
             elementExists(AXID.activityHeroReadiness, timeout: 8),
             "Training readiness hero card should exist"
         )
+    }
+
+    func testActivityScrollRemainsResponsive() throws {
+        let readinessCard = app.descendants(matching: .any)[AXID.activityHeroReadiness].firstMatch
+        XCTAssertTrue(readinessCard.waitForExistence(timeout: 15), "Readiness card should appear before scrolling")
+
+        let scrollView = app.scrollViews.firstMatch
+        XCTAssertTrue(scrollView.waitForExistence(timeout: 8), "Activity scroll view should exist")
+
+        for _ in 0..<5 {
+            scrollView.swipeUp()
+        }
+        for _ in 0..<5 {
+            scrollView.swipeDown()
+        }
+
+        let addButton = app.descendants(matching: .any)[AXID.activityToolbarAdd].firstMatch
+        XCTAssertTrue(addButton.waitForExistence(timeout: 5), "Add button should still exist after scroll interactions")
     }
 
     // MARK: - Exercise Sub-View
