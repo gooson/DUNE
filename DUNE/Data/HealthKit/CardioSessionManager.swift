@@ -308,9 +308,9 @@ extension CardioSessionManager: CLLocationManagerDelegate {
             locationAuthorizationStatus = status
             guard state == .running else { return }
             if status == .authorizedWhenInUse || status == .authorizedAlways {
-                manager.allowsBackgroundLocationUpdates = true
-                manager.showsBackgroundLocationIndicator = true
-                manager.startUpdatingLocation()
+                locationManager?.allowsBackgroundLocationUpdates = true
+                locationManager?.showsBackgroundLocationIndicator = true
+                locationManager?.startUpdatingLocation()
             }
         }
     }

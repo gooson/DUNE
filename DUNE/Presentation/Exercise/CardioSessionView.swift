@@ -23,86 +23,94 @@ struct CardioSessionView: View {
     }
 
     var body: some View {
+        mainContent
+            .background { DetailWaveBackground() }
+            .navigationTitle(exercise.localizedName)
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
+            .toolbar { toolbarContent }
+            .task { await viewModel.startSession() }
+            .onDisappear { viewModel.cleanup() }
+            .confirmationDialog(
+                "End Workout?",
+                isPresented: $showEndConfirmation,
+                titleVisibility: .visible
+            ) {
+                endConfirmationActions
+            } message: {
+                Text("Save and finish this workout?")
+            }
+            .sheet(isPresented: $showingCompletionSheet, onDismiss: { dismiss() }) {
+                completionSheet
+            }
+            .alert("Error", isPresented: errorBinding) {
+                Button("OK") { viewModel.validationError = nil }
+            } message: {
+                Text(viewModel.validationError ?? "")
+            }
+    }
+
+    @ToolbarContentBuilder
+    private var toolbarContent: some ToolbarContent {
+        ToolbarItem(placement: .confirmationAction) {
+            Button("Done") {
+                showEndConfirmation = true
+            }
+            .fontWeight(.semibold)
+            .disabled(viewModel.sessionManager.state == .idle)
+        }
+    }
+
+    @ViewBuilder
+    private var endConfirmationActions: some View {
+        Button("End Workout", role: .destructive) {
+            Task { await endAndSave() }
+        }
+        Button("Cancel", role: .cancel) {}
+    }
+
+    private var completionSheet: some View {
+        WorkoutCompletionSheet(
+            shareImage: nil,
+            exerciseName: exercise.localizedName,
+            setCount: 1,
+            effortSuggestion: nil,
+            onDismiss: { selectedRPE in
+                if let rpe = selectedRPE, (1...10).contains(rpe) {
+                    savedRecord?.rpe = rpe
+                }
+                dismiss()
+            }
+        )
+        .presentationDetents([.large])
+    }
+
+    private var errorBinding: Binding<Bool> {
+        .init(
+            get: { viewModel.validationError != nil },
+            set: { if !$0 { viewModel.validationError = nil } }
+        )
+    }
+
+    private var mainContent: some View {
         TimelineView(.periodic(from: .now, by: 1)) { context in
             VStack(spacing: 0) {
-                // Header: activity type + elapsed time
                 headerSection(now: context.date)
 
                 Divider()
 
-                // Main content
                 ScrollView {
                     VStack(spacing: DS.Spacing.xxl) {
                         Spacer(minLength: DS.Spacing.xl)
-
-                        // Primary metric: Distance
                         distanceSection
-
-                        // Secondary metrics grid
                         secondaryMetricsGrid
-
                         Spacer(minLength: DS.Spacing.xl)
                     }
                     .padding(.horizontal, DS.Spacing.lg)
                 }
 
-                // Bottom controls
                 controlSection
             }
-        }
-        .background { DetailWaveBackground() }
-        .navigationTitle(exercise.localizedName)
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
-                Button("Done") {
-                    showEndConfirmation = true
-                }
-                .fontWeight(.semibold)
-                .disabled(viewModel.sessionManager.state == .idle)
-            }
-        }
-        .task {
-            await viewModel.startSession()
-        }
-        .onDisappear {
-            viewModel.cleanup()
-        }
-        .confirmationDialog(
-            "End Workout?",
-            isPresented: $showEndConfirmation,
-            titleVisibility: .visible
-        ) {
-            Button("End Workout", role: .destructive) {
-                Task { await endAndSave() }
-            }
-            Button("Cancel", role: .cancel) {}
-        } message: {
-            Text("Save and finish this workout?")
-        }
-        .sheet(isPresented: $showingCompletionSheet, onDismiss: { dismiss() }) {
-            WorkoutCompletionSheet(
-                shareImage: nil,
-                exerciseName: exercise.localizedName,
-                setCount: 1,
-                autoIntensity: nil,
-                onDismiss: { selectedRPE in
-                    if let rpe = selectedRPE, (1...10).contains(rpe) {
-                        savedRecord?.rpe = rpe
-                    }
-                    dismiss()
-                }
-            )
-            .presentationDetents([.large])
-        }
-        .alert("Error", isPresented: .init(
-            get: { viewModel.validationError != nil },
-            set: { if !$0 { viewModel.validationError = nil } }
-        )) {
-            Button("OK") { viewModel.validationError = nil }
-        } message: {
-            Text(viewModel.validationError ?? "")
         }
     }
 
