@@ -11,6 +11,13 @@ import OSLog
 final class WorkoutManager: NSObject {
     static let shared = WorkoutManager()
     nonisolated private static let logger = Logger(subsystem: "com.raftel.dailve", category: "WatchWorkout")
+    nonisolated private static var isSimulatorRuntime: Bool {
+#if targetEnvironment(simulator)
+        true
+#else
+        false
+#endif
+    }
 
     let healthStore = HKHealthStore()
 
@@ -18,8 +25,9 @@ final class WorkoutManager: NSObject {
 
     private(set) var session: HKWorkoutSession?
     private(set) var builder: HKLiveWorkoutBuilder?
+    private(set) var isSimulatedSessionActive = false
 
-    var isActive: Bool { session != nil && !isSessionEnded }
+    var isActive: Bool { (session != nil || isSimulatedSessionActive) && !isSessionEnded }
     private(set) var isPaused = false
     private(set) var isSessionEnded = false
     /// True while HKLiveWorkoutBuilder is finishing and workout UUID is being resolved.
@@ -121,6 +129,13 @@ final class WorkoutManager: NSObject {
     // MARK: - HealthKit Authorization
 
     func requestAuthorization(timeout seconds: TimeInterval = 10) async throws {
+        if Self.isSimulatorRuntime {
+            // HealthKit authorization/workout sessions are unreliable on watch simulator.
+            // Use simulator fallback session flow for development and UI verification.
+            Self.logger.info("Skipping HealthKit authorization on watch simulator")
+            return
+        }
+
         let shareTypes: Set<HKSampleType> = [
             HKQuantityType.workoutType()
         ]
@@ -226,6 +241,12 @@ final class WorkoutManager: NSObject {
         self.isFinalizingWorkout = false
         self.healthKitWorkoutUUID = nil
         self.isRecoveredSession = false
+        self.isSimulatedSessionActive = false
+
+        if Self.isSimulatorRuntime {
+            startSimulatedSession(templateName: templateName)
+            return
+        }
 
         let newSession = try HKWorkoutSession(healthStore: healthStore, configuration: config)
         let newBuilder = newSession.associatedWorkoutBuilder()
@@ -265,20 +286,57 @@ final class WorkoutManager: NSObject {
             isPaused = false
             isSessionEnded = false
             startDate = nil
+            isSimulatedSessionActive = false
             throw error
         }
     }
 
+    /// Simulator-only workout path for development when HealthKit session APIs are unavailable.
+    private func startSimulatedSession(templateName: String) {
+        Self.logger.info("Starting simulated workout session")
+        session = nil
+        builder = nil
+        isSimulatedSessionActive = true
+        isPaused = false
+        isSessionEnded = false
+        isFinalizingWorkout = false
+        startDate = Date()
+        persistRecoveryState()
+        WatchConnectivityManager.shared.sendWorkoutStarted(templateName: templateName)
+    }
+
     func pause() {
-        session?.pause()
+        if let session {
+            session.pause()
+            return
+        }
+        if isSimulatedSessionActive {
+            isPaused = true
+        }
     }
 
     func resume() {
-        session?.resume()
+        if let session {
+            session.resume()
+            return
+        }
+        if isSimulatedSessionActive {
+            isPaused = false
+        }
     }
 
     func end() {
-        session?.end()
+        if let session {
+            session.end()
+            return
+        }
+        if isSimulatedSessionActive {
+            isPaused = false
+            isSessionEnded = true
+            isFinalizingWorkout = false
+            isSimulatedSessionActive = false
+            WatchConnectivityManager.shared.sendWorkoutEnded()
+        }
     }
 
     /// Wait briefly for HealthKit workout finalization after `.ended` to reduce UUID races.
@@ -350,6 +408,7 @@ final class WorkoutManager: NSObject {
         isPaused = false
         isSessionEnded = false
         isFinalizingWorkout = false
+        isSimulatedSessionActive = false
         isRecoveredSession = false
         startDate = nil
         healthKitWorkoutUUID = nil

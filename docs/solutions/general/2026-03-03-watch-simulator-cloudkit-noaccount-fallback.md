@@ -4,6 +4,9 @@ category: general
 date: 2026-03-03
 severity: important
 related_files:
+  - DUNEWatch/Managers/WorkoutManager.swift
+  - DUNEWatch/WatchConnectivityManager.swift
+  - DUNEWatchUITests/Smoke/WatchWorkoutStartSmokeTests.swift
   - DUNEWatch/DUNEWatchApp.swift
   - DUNEWatch/Resources/Info.plist
   - docs/plans/2026-03-03-watch-simulator-cloudkit-noaccount-fallback.md
@@ -40,6 +43,9 @@ related_solutions:
 | `DUNEWatch/DUNEWatchApp.swift` | CloudKit 사용 여부를 환경 기반으로 게이팅 (`simulator`는 OFF, 실기기는 iCloud 계정 토큰 기반) | `CKAccountStatusNoAccount` 초기화 실패 경로 차단 |
 | `DUNEWatch/Resources/Info.plist` | `UIBackgroundModes: remote-notification` 추가 | CloudKit push 요구사항 충족 |
 | `DUNEWatch/Resources/Info.plist` | `WKBackgroundModes: workout-processing` 추가 | 워크아웃 세션 백그라운드 처리 요구사항 충족 |
+| `DUNEWatch/Managers/WorkoutManager.swift` | watch simulator에서 HealthKit authorization/session을 우회하는 simulated session fallback 추가 | 시뮬레이터에서 운동 시작 버튼이 전부 실패하는 상태 해소 |
+| `DUNEWatch/WatchConnectivityManager.swift` | UI 테스트 실행 시 fixture exercise library 주입 | watch UI 테스트를 iPhone 동기화 상태와 무관하게 안정화 |
+| `DUNEWatchUITests/Smoke/WatchWorkoutStartSmokeTests.swift` | `Start` 탭까지 포함한 운동 시작 smoke 테스트 추가 | "실행은 되지만 시작이 안 되는" 회귀를 자동 탐지 |
 
 ### Key Code
 
@@ -70,6 +76,7 @@ let config = ModelConfiguration(
 - [ ] watchOS target에서 CloudKit 사용 시 `UIBackgroundModes: remote-notification` 존재 여부 확인
 - [ ] watch workout 앱에서 `WKBackgroundModes: workout-processing` 존재 여부 확인
 - [ ] 시뮬레이터에서 CloudKit no-account 로그 발생 시 CloudKit 게이팅 로직 우선 점검
+- [ ] watch simulator 검증은 반드시 `Start` 탭까지 포함한 UI smoke 테스트로 확인
 
 ### Rule Addition (if applicable)
 

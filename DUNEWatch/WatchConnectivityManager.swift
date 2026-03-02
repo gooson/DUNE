@@ -46,10 +46,36 @@ final class WatchConnectivityManager: NSObject {
     }
 
     func activate() {
+        if applyUITestFixturesIfNeeded() {
+            return
+        }
         guard WCSession.isSupported() else { return }
         let session = WCSession.default
         session.delegate = self
         session.activate()
+    }
+
+    /// UI-test-only fixture path to make Watch flows deterministic without WC/iPhone dependency.
+    @discardableResult
+    private func applyUITestFixturesIfNeeded() -> Bool {
+        guard ProcessInfo.processInfo.arguments.contains("--uitesting-watch") else {
+            return false
+        }
+
+        exerciseLibrary = [
+            WatchExerciseInfo(
+                id: "ui-test-squat",
+                name: "UI Test Squat",
+                inputType: "setsRepsWeight",
+                defaultSets: 3,
+                defaultReps: 8,
+                defaultWeightKg: 40,
+                equipment: "barbell",
+                cardioSecondaryUnit: nil
+            )
+        ]
+        syncStatus = .synced(Date())
+        return true
     }
 
     /// Load any previously-received applicationContext (e.g. exerciseLibrary, globalRestSeconds).
