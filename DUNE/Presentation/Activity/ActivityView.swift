@@ -315,15 +315,26 @@ struct ActivityView: View {
     }
 
     private var popularExerciseIDs: [String] {
+        let limit = 10
         let usages: [QuickStartPopularityService.Usage] = recentRecords.compactMap { record in
             guard let id = record.exerciseDefinitionID else { return nil }
             return .init(exerciseDefinitionID: id, date: record.date)
         }
-        return QuickStartPopularityService.popularExerciseIDs(
+        let ranked = QuickStartPopularityService.popularExerciseIDs(
             from: usages,
-            limit: 10,
+            limit: limit,
             canonicalize: QuickStartCanonicalService.canonicalExerciseID(for:)
         )
+        if ranked.count >= limit { return ranked }
+
+        // Fill remaining slots from library when usage history is insufficient
+        let existing = Set(ranked)
+        let fallback = library.allExercises()
+            .lazy
+            .map(\.id)
+            .filter { !existing.contains($0) }
+            .prefix(limit - ranked.count)
+        return ranked + fallback
     }
 }
 
