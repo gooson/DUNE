@@ -17,7 +17,7 @@ enum SyncStatus: Equatable {
 @MainActor
 final class WatchConnectivityManager: NSObject {
     static let shared = WatchConnectivityManager()
-    nonisolated(unsafe) private static let logger = Logger(subsystem: "com.raftel.dailve", category: "WatchConnectivity")
+    nonisolated private static let logger = Logger(subsystem: "com.raftel.dailve", category: "WatchConnectivity")
 
     /// Reachability state — reads directly from WCSession (per correction #46).
     var isReachable: Bool {
