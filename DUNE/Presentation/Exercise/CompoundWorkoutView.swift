@@ -282,12 +282,10 @@ struct CompoundWorkoutView: View {
             HStack(spacing: DS.Spacing.xs) {
                 Text(weightUnit.displayName.uppercased()).frame(maxWidth: 70)
                 Text("REPS").frame(maxWidth: 60)
-                Text("INT").frame(maxWidth: 60)
             }
         case .setsReps:
             HStack(spacing: DS.Spacing.xs) {
                 Text("REPS").frame(maxWidth: 70)
-                Text("INT").frame(maxWidth: 60)
             }
         case .durationDistance:
             let unit = exercise.cardioSecondaryUnit ?? .km
@@ -296,18 +294,13 @@ struct CompoundWorkoutView: View {
                 if unit != .timeOnly {
                     Text(unit.placeholder.uppercased()).frame(maxWidth: 70)
                 }
-                Text("INT").frame(maxWidth: 60)
             }
         case .durationIntensity:
-            HStack(spacing: DS.Spacing.xs) {
-                Text("MIN").frame(maxWidth: 60)
-                Text("INT").frame(maxWidth: 60)
-            }
+            Text("MIN").frame(maxWidth: 60)
         case .roundsBased:
             HStack(spacing: DS.Spacing.xs) {
                 Text("REPS").frame(maxWidth: 60)
                 Text("SEC").frame(maxWidth: 60)
-                Text("INT").frame(maxWidth: 60)
             }
         }
     }
