@@ -8,6 +8,7 @@ struct CardioSessionSummaryView: View {
 
     let viewModel: CardioSessionViewModel
     let exercise: ExerciseDefinition
+    let onComplete: () -> Void
 
     @State private var isSaving = false
     @State private var hasSaved = false
@@ -116,14 +117,21 @@ struct CardioSessionSummaryView: View {
             saveWorkout()
         } label: {
             HStack {
-                Image(systemName: "square.and.arrow.down")
-                Text("Save Workout")
-                    .font(.headline)
+                if hasSaved {
+                    Image(systemName: "checkmark")
+                    Text("Saved!")
+                        .font(.headline)
+                } else {
+                    Image(systemName: "square.and.arrow.down")
+                    Text("Save Workout")
+                        .font(.headline)
+                }
             }
             .frame(maxWidth: .infinity, minHeight: 50)
+            .animation(DS.Animation.snappy, value: hasSaved)
         }
         .buttonStyle(.borderedProminent)
-        .tint(DS.Color.activity)
+        .tint(hasSaved ? DS.Color.positive : DS.Color.activity)
         .disabled(isSaving || hasSaved)
     }
 
@@ -138,7 +146,7 @@ struct CardioSessionSummaryView: View {
 
         let record = ExerciseRecord(
             date: data.startDate,
-            exerciseType: data.exerciseName,
+            exerciseType: data.exerciseID,
             duration: data.duration,
             distance: data.distanceKm,
             exerciseDefinitionID: data.exerciseID,
@@ -153,7 +161,7 @@ struct CardioSessionSummaryView: View {
         hasSaved = true
         isSaving = false
 
-        // Fire-and-forget HealthKit write
+        // HealthKit write with proper MainActor isolation for SwiftData model
         let input = WorkoutWriteInput(
             startDate: data.startDate,
             duration: data.duration,
@@ -164,19 +172,19 @@ struct CardioSessionSummaryView: View {
             totalDistanceMeters: viewModel.totalDistanceMeters > 0 ? viewModel.totalDistanceMeters : nil
         )
 
-        Task {
+        let recordID = record.persistentModelID
+        Task { @MainActor in
             do {
                 let hkID = try await WorkoutWriteService().saveWorkout(input)
-                record.healthKitWorkoutID = hkID
+                if let liveRecord = modelContext.model(for: recordID) as? ExerciseRecord {
+                    liveRecord.healthKitWorkoutID = hkID
+                }
             } catch {
-                AppLogger.healthKit.error("Failed to write cardio workout to HealthKit: \(error.localizedDescription)")
+                AppLogger.healthKit.error("Failed to write cardio workout to HealthKit: \(error)")
             }
-        }
 
-        // Dismiss back to root after brief delay
-        Task {
-            try? await Task.sleep(for: .milliseconds(500))
-            dismiss()
+            // Dismiss the entire sheet after HK write completes (or fails)
+            onComplete()
         }
     }
 }

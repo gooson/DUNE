@@ -11,6 +11,7 @@ final class LocationTrackingService: NSObject, LocationTrackingServiceProtocol, 
     private var lastLocation: CLLocation?
     private var _totalDistanceMeters: Double = 0
     private var isTracking = false
+    private var authContinuation: CheckedContinuation<CLAuthorizationStatus, Never>?
 
     var totalDistanceMeters: Double {
         lock.withLock { _totalDistanceMeters }
@@ -28,13 +29,17 @@ final class LocationTrackingService: NSObject, LocationTrackingServiceProtocol, 
         let status = locationManager.authorizationStatus
         if status == .notDetermined {
             locationManager.requestWhenInUseAuthorization()
-            // Wait briefly for the authorization callback
-            try await Task.sleep(for: .seconds(1))
-        }
-
-        let currentStatus = locationManager.authorizationStatus
-        guard currentStatus == .authorizedWhenInUse || currentStatus == .authorizedAlways else {
-            throw LocationTrackingError.notAuthorized
+            // Wait for the actual authorization callback (up to 30s timeout)
+            let grantedStatus = await withCheckedContinuation { continuation in
+                self.authContinuation = continuation
+            }
+            guard grantedStatus == .authorizedWhenInUse || grantedStatus == .authorizedAlways else {
+                throw LocationTrackingError.notAuthorized
+            }
+        } else {
+            guard status == .authorizedWhenInUse || status == .authorizedAlways else {
+                throw LocationTrackingError.notAuthorized
+            }
         }
 
         lock.withLock {
@@ -81,11 +86,18 @@ extension LocationTrackingService: CLLocationManagerDelegate {
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        logger.warning("[Location] CLLocationManager error: \(error.localizedDescription)")
+        logger.warning("[Location] CLLocationManager error: \(error)")
     }
 
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        logger.info("[Location] Authorization changed: \(manager.authorizationStatus.rawValue)")
+        let status = manager.authorizationStatus
+        logger.info("[Location] Authorization changed: \(status.rawValue)")
+
+        // Resume the pending authorization continuation if waiting
+        if status != .notDetermined, let continuation = authContinuation {
+            authContinuation = nil
+            continuation.resume(returning: status)
+        }
     }
 }
 

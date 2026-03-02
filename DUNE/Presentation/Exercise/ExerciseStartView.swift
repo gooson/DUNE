@@ -7,7 +7,6 @@ struct ExerciseStartView: View {
     let exercise: ExerciseDefinition
     @Environment(\.dismiss) private var dismiss
     @State private var showSession = false
-    @State private var showCardioStart = false
 
     /// Whether this exercise should use the cardio live tracking flow.
     private var isCardioLiveTracking: Bool {

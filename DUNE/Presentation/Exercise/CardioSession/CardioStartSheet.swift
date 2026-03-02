@@ -5,16 +5,12 @@ import CoreLocation
 struct CardioStartSheet: View {
     let exercise: ExerciseDefinition
     @Environment(\.dismiss) private var dismiss
-    @State private var showSession = false
     @State private var selectedOutdoor: Bool?
+    @State private var locationAuthStatus: CLAuthorizationStatus = CLLocationManager().authorizationStatus
 
     private var activityType: WorkoutActivityType {
         WorkoutActivityType.resolveDistanceBased(from: exercise.id, name: exercise.name)
             ?? exercise.resolvedActivityType
-    }
-
-    private var locationAuthStatus: CLAuthorizationStatus {
-        CLLocationManager().authorizationStatus
     }
 
     var body: some View {
@@ -28,6 +24,8 @@ struct CardioStartSheet: View {
 
                 if locationAuthStatus == .denied || locationAuthStatus == .restricted {
                     locationWarning
+                } else if locationAuthStatus == .notDetermined {
+                    locationNotice
                 }
 
                 Spacer()
@@ -41,14 +39,13 @@ struct CardioStartSheet: View {
                     Button("Cancel") { dismiss() }
                 }
             }
-            .navigationDestination(isPresented: $showSession) {
-                if let isOutdoor = selectedOutdoor {
-                    CardioSessionView(
-                        exercise: exercise,
-                        activityType: activityType,
-                        isOutdoor: isOutdoor
-                    )
-                }
+            .navigationDestination(item: $selectedOutdoor) { isOutdoor in
+                CardioSessionView(
+                    exercise: exercise,
+                    activityType: activityType,
+                    isOutdoor: isOutdoor,
+                    onComplete: { dismiss() }
+                )
             }
         }
     }
@@ -89,7 +86,6 @@ struct CardioStartSheet: View {
     private func modeButton(title: String, subtitle: String, icon: String, isOutdoor: Bool) -> some View {
         Button {
             selectedOutdoor = isOutdoor
-            showSession = true
         } label: {
             HStack(spacing: DS.Spacing.md) {
                 Image(systemName: icon)
@@ -129,5 +125,19 @@ struct CardioStartSheet: View {
         }
         .padding(DS.Spacing.md)
         .background(DS.Color.caution.opacity(0.1), in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+    }
+
+    // MARK: - Location Notice (not yet determined)
+
+    private var locationNotice: some View {
+        HStack(spacing: DS.Spacing.sm) {
+            Image(systemName: "location")
+                .foregroundStyle(DS.Color.activity)
+            Text("Outdoor mode will request location permission.")
+                .font(.caption)
+                .foregroundStyle(DS.Color.textSecondary)
+        }
+        .padding(DS.Spacing.md)
+        .background(DS.Color.activity.opacity(0.08), in: RoundedRectangle(cornerRadius: DS.Radius.sm))
     }
 }

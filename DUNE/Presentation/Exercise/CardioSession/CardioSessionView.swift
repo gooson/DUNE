@@ -1,7 +1,7 @@
 import SwiftUI
 import SwiftData
 
-/// Full-screen cardio session with real-time timer, distance, pace, HR, and calories.
+/// Full-screen cardio session with real-time timer, distance, pace, and calories.
 struct CardioSessionView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
@@ -11,9 +11,11 @@ struct CardioSessionView: View {
     @State private var showSummary = false
 
     let exercise: ExerciseDefinition
+    let onComplete: () -> Void
 
-    init(exercise: ExerciseDefinition, activityType: WorkoutActivityType, isOutdoor: Bool) {
+    init(exercise: ExerciseDefinition, activityType: WorkoutActivityType, isOutdoor: Bool, onComplete: @escaping () -> Void) {
         self.exercise = exercise
+        self.onComplete = onComplete
         self._viewModel = State(initialValue: CardioSessionViewModel(
             exercise: exercise,
             activityType: activityType,
@@ -40,15 +42,7 @@ struct CardioSessionView: View {
         .background { DetailWaveBackground() }
         .navigationTitle(exercise.localizedName)
         .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(viewModel.state != .idle)
-        .toolbar {
-            if viewModel.state != .idle {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") { showEndConfirmation = true }
-                        .fontWeight(.semibold)
-                }
-            }
-        }
+        .navigationBarBackButtonHidden(true)
         .confirmationDialog(
             String(localized: "End Workout?"),
             isPresented: $showEndConfirmation,
@@ -65,7 +59,11 @@ struct CardioSessionView: View {
             Text("Save and finish this workout?")
         }
         .navigationDestination(isPresented: $showSummary) {
-            CardioSessionSummaryView(viewModel: viewModel, exercise: exercise)
+            CardioSessionSummaryView(
+                viewModel: viewModel,
+                exercise: exercise,
+                onComplete: onComplete
+            )
         }
         .task {
             if viewModel.state == .idle {
@@ -79,7 +77,7 @@ struct CardioSessionView: View {
                 set: { if !$0 { viewModel.errorMessage = nil } }
             )
         ) {
-            Button("OK") { viewModel.errorMessage = nil }
+            Button("OK") {}
         } message: {
             if let msg = viewModel.errorMessage {
                 Text(msg)
@@ -109,13 +107,18 @@ struct CardioSessionView: View {
     }
 
     private var statusBadge: some View {
-        HStack(spacing: DS.Spacing.xxs) {
+        let (color, label): (SwiftUI.Color, String) = switch viewModel.state {
+        case .idle: (DS.Color.textTertiary, String(localized: "Ready"))
+        case .running: (DS.Color.positive, String(localized: "Active"))
+        case .paused: (DS.Color.caution, String(localized: "Paused"))
+        case .finished: (DS.Color.textTertiary, String(localized: "Finished"))
+        }
+
+        return HStack(spacing: DS.Spacing.xxs) {
             Circle()
-                .fill(viewModel.state == .paused ? DS.Color.caution : DS.Color.positive)
+                .fill(color)
                 .frame(width: 8, height: 8)
-            Text(viewModel.state == .paused
-                 ? String(localized: "Paused")
-                 : String(localized: "Active"))
+            Text(label)
                 .font(.caption.weight(.medium))
                 .foregroundStyle(DS.Color.textSecondary)
         }
@@ -124,16 +127,15 @@ struct CardioSessionView: View {
     // MARK: - Primary: Elapsed Time
 
     private var primaryMetric: some View {
-        TimelineView(.periodic(from: .now, by: 1)) { _ in
-            VStack(spacing: DS.Spacing.xxs) {
-                Text(viewModel.formattedElapsed)
-                    .font(.system(size: 64, weight: .bold, design: .rounded).monospacedDigit())
-                    .contentTransition(.numericText())
+        VStack(spacing: DS.Spacing.xxs) {
+            Text(viewModel.formattedElapsed)
+                .font(.system(size: 64, weight: .bold, design: .rounded).monospacedDigit())
+                .contentTransition(.numericText())
+                .animation(.default, value: viewModel.formattedElapsed)
 
-                Text("Elapsed Time")
-                    .font(.subheadline)
-                    .foregroundStyle(DS.Color.textSecondary)
-            }
+            Text("Elapsed Time")
+                .font(.subheadline)
+                .foregroundStyle(DS.Color.textSecondary)
         }
     }
 
@@ -146,6 +148,7 @@ struct CardioSessionView: View {
                     .font(.system(.title, design: .rounded).monospacedDigit().bold())
                     .foregroundStyle(DS.Color.positive)
                     .contentTransition(.numericText())
+                    .animation(.default, value: viewModel.formattedDistance)
                 Text("km")
                     .font(.caption)
                     .foregroundStyle(DS.Color.textSecondary)
@@ -156,6 +159,7 @@ struct CardioSessionView: View {
                     .font(.system(.title, design: .rounded).monospacedDigit().bold())
                     .foregroundStyle(DS.Color.activity)
                     .contentTransition(.numericText())
+                    .animation(.default, value: viewModel.formattedPace)
                 Text("/km")
                     .font(.caption)
                     .foregroundStyle(DS.Color.textSecondary)
@@ -167,30 +171,22 @@ struct CardioSessionView: View {
 
     private var secondaryMetrics: some View {
         HStack(spacing: DS.Spacing.xl) {
-            metricColumn(
-                value: viewModel.estimatedCalories > 0
+            VStack(spacing: DS.Spacing.xxs) {
+                Image(systemName: "flame.fill")
+                    .font(.caption)
+                    .foregroundStyle(DS.Color.caution)
+                Text(viewModel.estimatedCalories > 0
                     ? "\(Int(viewModel.estimatedCalories))"
-                    : "--",
-                unit: "kcal",
-                icon: "flame.fill",
-                color: DS.Color.caution
-            )
+                    : "--")
+                    .font(.title3.monospacedDigit().bold())
+                    .contentTransition(.numericText())
+                    .animation(.default, value: Int(viewModel.estimatedCalories))
+                Text("kcal")
+                    .font(.caption2)
+                    .foregroundStyle(DS.Color.textTertiary)
+            }
+            .frame(maxWidth: .infinity)
         }
-    }
-
-    private func metricColumn(value: String, unit: String, icon: String, color: SwiftUI.Color) -> some View {
-        VStack(spacing: DS.Spacing.xxs) {
-            Image(systemName: icon)
-                .font(.caption)
-                .foregroundStyle(color)
-            Text(value)
-                .font(.title3.monospacedDigit().bold())
-                .contentTransition(.numericText())
-            Text(unit)
-                .font(.caption2)
-                .foregroundStyle(DS.Color.textTertiary)
-        }
-        .frame(maxWidth: .infinity)
     }
 
     // MARK: - Controls

@@ -99,7 +99,7 @@ struct WorkoutWriteService: WorkoutWriting, Sendable {
 
         // Add distance sample if available (cardio GPS tracking)
         if let distanceMeters = input.totalDistanceMeters,
-           distanceMeters > 0, distanceMeters < 500_000,
+           distanceMeters > 0, distanceMeters < 250_000,
            !distanceMeters.isNaN, !distanceMeters.isInfinite {
             let distanceType = HKQuantityType(.distanceWalkingRunning)
             let distanceQuantity = HKQuantity(unit: .meter(), doubleValue: distanceMeters)

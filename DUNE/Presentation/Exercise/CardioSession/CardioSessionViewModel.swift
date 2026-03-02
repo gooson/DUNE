@@ -1,6 +1,18 @@
 import Foundation
 import Observation
 
+/// Data produced by a completed cardio session — passed from ViewModel to View for persistence.
+struct CardioSessionRecord: Sendable {
+    let exerciseID: String
+    let exerciseName: String
+    let category: ExerciseCategory
+    let duration: TimeInterval
+    let distanceKm: Double?
+    let estimatedCalories: Double
+    let metValue: Double
+    let startDate: Date
+}
+
 /// Manages state for an iOS cardio live tracking session.
 /// Tracks elapsed time, distance (GPS for outdoor), and calorie estimation.
 @Observable
@@ -104,7 +116,7 @@ final class CardioSessionViewModel {
                     try await locationService.startTracking()
                 } catch {
                     errorMessage = String(localized: "Could not start GPS tracking. Distance will not be recorded.")
-                    AppLogger.healthKit.error("[CardioSession] Location start failed: \(error.localizedDescription)")
+                    AppLogger.healthKit.error("[CardioSession] Location start failed: \(error)")
                 }
             }
         }
@@ -129,15 +141,21 @@ final class CardioSessionViewModel {
 
     func end() async {
         guard state == .running || state == .paused else { return }
+
+        // Cancel timer FIRST to prevent race condition
+        timerTask?.cancel()
+        timerTask = nil
+
+        // Compute final elapsed time
         if state == .running, let resume = lastResumeDate {
             pausedAccumulated += Date().timeIntervalSince(resume)
+            lastResumeDate = nil
         }
         elapsedSeconds = pausedAccumulated
 
-        timerTask?.cancel()
-
+        // Get final distance from GPS
         if let locationService {
-            totalDistanceMeters = await locationService.stopTracking()
+            totalDistanceMeters = Swift.max(0, await locationService.stopTracking())
         }
 
         updateCalories()
@@ -154,7 +172,10 @@ final class CardioSessionViewModel {
                 guard !Task.isCancelled else { break }
                 guard let self else { break }
                 self.updateElapsed()
-                self.updateDistance()
+                // Read distance synchronously (no nested Task)
+                if let locationService = self.locationService {
+                    self.totalDistanceMeters = locationService.totalDistanceMeters
+                }
                 self.updateCalories()
             }
         }
@@ -163,13 +184,6 @@ final class CardioSessionViewModel {
     private func updateElapsed() {
         guard let resume = lastResumeDate else { return }
         elapsedSeconds = pausedAccumulated + Date().timeIntervalSince(resume)
-    }
-
-    private func updateDistance() {
-        guard let locationService else { return }
-        Task {
-            totalDistanceMeters = await locationService.totalDistanceMeters
-        }
     }
 
     private func updateCalories() {
@@ -185,22 +199,13 @@ final class CardioSessionViewModel {
 
     // MARK: - Record Creation
 
-    /// Creates an ExerciseRecord from the completed cardio session.
-    func createExerciseRecord() -> (
-        exerciseID: String,
-        exerciseName: String,
-        category: ExerciseCategory,
-        duration: TimeInterval,
-        distanceKm: Double?,
-        estimatedCalories: Double,
-        metValue: Double,
-        startDate: Date
-    )? {
+    /// Creates a record from the completed cardio session.
+    func createExerciseRecord() -> CardioSessionRecord? {
         guard state == .finished, let startDate, elapsedSeconds > 0 else { return nil }
 
         let distance: Double? = totalDistanceMeters > 0 ? totalDistanceMeters / 1000.0 : nil
 
-        return (
+        return CardioSessionRecord(
             exerciseID: exercise.id,
             exerciseName: exercise.name,
             category: exercise.category,
