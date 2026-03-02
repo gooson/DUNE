@@ -147,28 +147,31 @@ struct SetInputSheet: View {
 
     private var previousSetsDetail: some View {
         List {
-            ForEach(previousSets, id: \.setNumber) { set in
-                HStack(spacing: DS.Spacing.sm) {
-                    Text("Set \(set.setNumber)")
-                        .font(.caption2)
-                        .foregroundStyle(.tertiary)
-                        .frame(width: 36, alignment: .leading)
+            Section {
+                ForEach(previousSets, id: \.setNumber) { set in
+                    HStack(spacing: DS.Spacing.sm) {
+                        Text("Set \(set.setNumber)")
+                            .font(.caption2)
+                            .foregroundStyle(.tertiary)
+                            .frame(width: 36, alignment: .leading)
 
-                    if let w = set.weight, w > 0 {
-                        Text("\(w, specifier: "%.1f")kg")
-                            .font(.caption2.monospacedDigit())
+                        if let w = set.weight, w > 0 {
+                            Text("\(w, specifier: "%.1f")kg")
+                                .font(.caption2.monospacedDigit())
+                        }
+
+                        if let r = set.reps, r > 0 {
+                            Text("\u{00d7}\(r)")
+                                .font(.caption2.monospacedDigit())
+                        }
+
+                        Spacer()
                     }
-
-                    if let r = set.reps, r > 0 {
-                        Text("\u{00d7}\(r)")
-                            .font(.caption2.monospacedDigit())
-                    }
-
-                    Spacer()
                 }
+            } header: {
+                Text("Previous Sets")
             }
         }
-        .navigationTitle("Previous Sets")
     }
 
     // MARK: - Haptic
