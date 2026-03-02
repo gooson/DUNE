@@ -162,6 +162,7 @@ struct DUNEApp: App {
 
         // Skip WC activation during XCTest to reduce startup flakiness.
         if !Self.isRunningXCTest {
+            WatchSessionManager.shared.syncWorkoutTemplatesToWatch(using: modelContainer.mainContext)
             WatchSessionManager.shared.activate()
             observerManager.startObserving()
         }

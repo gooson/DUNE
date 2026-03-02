@@ -56,6 +56,15 @@ struct WorkoutTemplateListView: View {
         } message: {
             Text("This will permanently remove the template from all devices.")
         }
+        .onAppear {
+            syncTemplatesToWatch()
+        }
+        .onChange(of: templates.count) { _, _ in
+            syncTemplatesToWatch()
+        }
+        .onChange(of: templates.map(\.updatedAt)) { _, _ in
+            syncTemplatesToWatch()
+        }
     }
 
     private var emptyState: some View {
@@ -135,5 +144,9 @@ struct WorkoutTemplateListView: View {
             }
         }
         .padding(.vertical, DS.Spacing.xxs)
+    }
+
+    private func syncTemplatesToWatch() {
+        WatchSessionManager.shared.syncWorkoutTemplatesToWatch(using: modelContext)
     }
 }

@@ -46,3 +46,42 @@ func snapshotFromExercise(_ exercise: WatchExerciseInfo) -> WorkoutSessionTempla
         entries: [entry]
     )
 }
+
+/// Lightweight view snapshot used to render routine cards from either SwiftData or WatchConnectivity.
+struct WatchRoutineTemplateSnapshot: Sendable {
+    let id: UUID
+    let name: String
+    let entries: [TemplateEntry]
+    let updatedAt: Date
+}
+
+/// Merges local (CloudKit-backed) templates with WatchConnectivity templates.
+/// Local templates take precedence when IDs overlap.
+func mergedRoutineTemplates(
+    local: [WorkoutTemplate],
+    synced: [WatchWorkoutTemplateInfo]
+) -> [WatchRoutineTemplateSnapshot] {
+    var templatesByID: [UUID: WatchRoutineTemplateSnapshot] = [:]
+
+    for template in synced {
+        templatesByID[template.id] = WatchRoutineTemplateSnapshot(
+            id: template.id,
+            name: template.name,
+            entries: template.entries,
+            updatedAt: template.updatedAt
+        )
+    }
+
+    for template in local {
+        templatesByID[template.id] = WatchRoutineTemplateSnapshot(
+            id: template.id,
+            name: template.name,
+            entries: template.exerciseEntries,
+            updatedAt: template.updatedAt
+        )
+    }
+
+    return templatesByID.values.sorted { lhs, rhs in
+        lhs.updatedAt > rhs.updatedAt
+    }
+}

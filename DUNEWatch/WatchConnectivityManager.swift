@@ -50,6 +50,8 @@ final class WatchConnectivityManager: NSObject {
 
     /// Exercise library transferred from iPhone
     private(set) var exerciseLibrary: [WatchExerciseInfo] = []
+    /// Workout templates transferred from iPhone (fallback path when CloudKit is delayed/disabled).
+    private(set) var workoutTemplates: [WatchWorkoutTemplateInfo] = []
 
     /// Global rest time (seconds) synced from iPhone settings.
     /// Fallback to 90s if never synced (matches iOS WorkoutSettingsStore default).
@@ -62,6 +64,7 @@ final class WatchConnectivityManager: NSObject {
     private(set) var syncStatus: SyncStatus = .notConnected
 
     private var lastExerciseLibrarySyncRequestAt: Date?
+    private var lastWorkoutTemplateSyncRequestAt: Date?
 
     private override init() {
         super.init()
@@ -194,18 +197,30 @@ extension WatchConnectivityManager: WCSessionDelegate {
                 if exerciseLibrary.isEmpty {
                     requestExerciseLibrarySyncIfNeeded(force: false)
                 }
+                if workoutTemplates.isEmpty {
+                    requestWorkoutTemplateSyncIfNeeded(force: false)
+                }
             }
         }
     }
 
     nonisolated func sessionReachabilityDidChange(_ session: WCSession) {
         Task { @MainActor in
-            guard exerciseLibrary.isEmpty else { return }
+            let needsLibrary = exerciseLibrary.isEmpty
+            let needsTemplates = workoutTemplates.isEmpty
+            guard needsLibrary || needsTemplates else { return }
             if session.isReachable {
-                syncStatus = .syncing
-                requestExerciseLibrarySyncIfNeeded(force: false)
+                if needsLibrary {
+                    syncStatus = .syncing
+                    requestExerciseLibrarySyncIfNeeded(force: false)
+                }
+                if needsTemplates {
+                    requestWorkoutTemplateSyncIfNeeded(force: false)
+                }
             } else {
-                syncStatus = .notConnected
+                if needsLibrary {
+                    syncStatus = .notConnected
+                }
             }
         }
     }
@@ -264,11 +279,13 @@ private struct ParsedWatchMessage: Sendable {
 /// Extracts Sendable fields from a WCSession applicationContext in a nonisolated context.
 private struct ParsedWatchContext: Sendable {
     let exerciseLibraryData: Data?
+    let workoutTemplatesData: Data?
     let globalRestSeconds: Double?
     let appTheme: String?
 
     init(from context: [String: Any]) {
         exerciseLibraryData = context["exerciseLibrary"] as? Data
+        workoutTemplatesData = context["workoutTemplates"] as? Data
         globalRestSeconds = context["globalRestSeconds"] as? Double
         appTheme = context["appTheme"] as? String
     }
@@ -323,6 +340,16 @@ extension WatchConnectivityManager {
             }
         }
 
+        if let data = parsed.workoutTemplatesData {
+            do {
+                workoutTemplates = try JSONDecoder().decode([WatchWorkoutTemplateInfo].self, from: data)
+            } catch {
+                Self.logger.error("Failed to decode workout templates: \(error.localizedDescription, privacy: .public)")
+            }
+        } else if workoutTemplates.isEmpty {
+            requestWorkoutTemplateSyncIfNeeded(force: false)
+        }
+
         // Global rest time from iPhone settings
         if let restSeconds = parsed.globalRestSeconds,
            restSeconds.isFinite, (15...600).contains(restSeconds) {
@@ -367,6 +394,33 @@ extension WatchConnectivityManager {
         syncStatus = requested
             ? .syncing
             : WatchLibrarySyncRequestPolicy.statusWhenLibraryMissing(isReachable: false)
+    }
+
+    private func requestWorkoutTemplateSyncIfNeeded(force: Bool) {
+        guard WCSession.isSupported() else { return }
+
+        let now = Date()
+        guard WatchLibrarySyncRequestPolicy.shouldRequest(
+            lastRequestAt: lastWorkoutTemplateSyncRequestAt,
+            now: now,
+            force: force
+        ) else {
+            return
+        }
+        lastWorkoutTemplateSyncRequestAt = now
+
+        let payload: [String: Any] = ["requestWorkoutTemplateSync": true]
+        let session = WCSession.default
+
+        if session.isReachable {
+            session.sendMessage(payload, replyHandler: nil) { error in
+                Self.logger.error("Failed to request workout template sync: \(error.localizedDescription, privacy: .public)")
+            }
+        }
+
+        if session.activationState == .activated {
+            session.transferUserInfo(payload)
+        }
     }
 
     private func deleteWorkoutFromHealthKit(uuidString: String) async {

@@ -23,6 +23,17 @@ struct WatchExerciseHelpersTests {
         )
     }
 
+    private func entry(exerciseID: String = "bench-press", name: String = "Bench Press") -> TemplateEntry {
+        TemplateEntry(
+            exerciseDefinitionID: exerciseID,
+            exerciseName: name,
+            defaultSets: 3,
+            defaultReps: 10,
+            defaultWeightKg: 60,
+            equipment: "barbell"
+        )
+    }
+
     @Test("exerciseSubtitle formats optional weight and applies bounds")
     func exerciseSubtitleFormatting() {
         #expect(exerciseSubtitle(sets: 3, reps: 10, weight: nil) == "3 sets · 10 reps")
@@ -102,5 +113,60 @@ struct WatchExerciseHelpersTests {
         #expect(entry.defaultSets == 4)
         #expect(entry.defaultReps == 3)
         #expect(entry.defaultWeightKg == 130)
+    }
+
+    @Test("mergedRoutineTemplates prefers local template when IDs overlap")
+    func mergedRoutineTemplatesPrefersLocal() {
+        let templateID = UUID()
+        let remote = WatchWorkoutTemplateInfo(
+            id: templateID,
+            name: "Remote Push",
+            entries: [entry()],
+            updatedAt: Date(timeIntervalSince1970: 10)
+        )
+        let local = WorkoutTemplate(name: "Local Push", exerciseEntries: [entry(name: "Local Bench")])
+        local.id = templateID
+        local.updatedAt = Date(timeIntervalSince1970: 20)
+
+        let merged = mergedRoutineTemplates(local: [local], synced: [remote])
+        #expect(merged.count == 1)
+        #expect(merged[0].name == "Local Push")
+        #expect(merged[0].entries.first?.exerciseName == "Local Bench")
+    }
+
+    @Test("mergedRoutineTemplates includes remote template when local store is empty")
+    func mergedRoutineTemplatesIncludesRemoteFallback() {
+        let remote = WatchWorkoutTemplateInfo(
+            id: UUID(),
+            name: "Remote Legs",
+            entries: [entry(exerciseID: "squat", name: "Squat")],
+            updatedAt: Date(timeIntervalSince1970: 100)
+        )
+
+        let merged = mergedRoutineTemplates(local: [], synced: [remote])
+        #expect(merged.count == 1)
+        #expect(merged[0].name == "Remote Legs")
+        #expect(merged[0].entries.first?.exerciseDefinitionID == "squat")
+    }
+
+    @Test("mergedRoutineTemplates sorts by most recent update")
+    func mergedRoutineTemplatesSortsByDateDescending() {
+        let olderRemote = WatchWorkoutTemplateInfo(
+            id: UUID(),
+            name: "Older Remote",
+            entries: [entry(name: "Old")],
+            updatedAt: Date(timeIntervalSince1970: 50)
+        )
+        let newerRemote = WatchWorkoutTemplateInfo(
+            id: UUID(),
+            name: "Newer Remote",
+            entries: [entry(name: "New")],
+            updatedAt: Date(timeIntervalSince1970: 150)
+        )
+
+        let merged = mergedRoutineTemplates(local: [], synced: [olderRemote, newerRemote])
+        #expect(merged.count == 2)
+        #expect(merged[0].name == "Newer Remote")
+        #expect(merged[1].name == "Older Remote")
     }
 }
