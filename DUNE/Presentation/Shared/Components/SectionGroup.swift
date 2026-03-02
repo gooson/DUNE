@@ -16,16 +16,17 @@ struct SectionGroup<Content: View>: View {
 
     private var cornerRadius: CGFloat { sizeClass == .regular ? DS.Radius.lg : DS.Radius.md }
     private var outerPadding: CGFloat { sizeClass == .regular ? DS.Spacing.xl : DS.Spacing.lg }
-    private var borderWidth: CGFloat { theme == .sakuraCalm ? 1.1 : 0.6 }
+    private var borderWidth: CGFloat { theme == .sakuraCalm ? 0.95 : 0.6 }
 
     private var sectionSurfaceGradient: LinearGradient {
         switch theme {
         case .sakuraCalm:
             LinearGradient(
                 colors: [
-                    Color("SakuraAccent").opacity(colorScheme == .dark ? 0.24 : 0.14),
-                    Color("SakuraIvory").opacity(colorScheme == .dark ? 0.18 : 0.10),
-                    Color("SakuraPetal").opacity(colorScheme == .dark ? 0.12 : 0.06),
+                    Color("SakuraAccent").opacity(colorScheme == .dark ? 0.14 : 0.14),
+                    Color("SakuraIvory").opacity(colorScheme == .dark ? 0.12 : 0.10),
+                    Color("SakuraPetal").opacity(colorScheme == .dark ? 0.08 : 0.06),
+                    Color("SakuraDusk").opacity(colorScheme == .dark ? 0.10 : 0.00),
                     .clear
                 ],
                 startPoint: .topLeading,
@@ -41,8 +42,8 @@ struct SectionGroup<Content: View>: View {
         case .sakuraCalm:
             LinearGradient(
                 colors: [
-                    Color("SakuraPetal").opacity(colorScheme == .dark ? 0.24 : 0.14),
-                    Color("SakuraIvory").opacity(colorScheme == .dark ? 0.15 : 0.09),
+                    Color("SakuraPetal").opacity(colorScheme == .dark ? 0.15 : 0.14),
+                    Color("SakuraIvory").opacity(colorScheme == .dark ? 0.08 : 0.09),
                     .clear
                 ],
                 startPoint: .top,
@@ -62,9 +63,9 @@ struct SectionGroup<Content: View>: View {
         case .sakuraCalm:
             LinearGradient(
                 colors: [
-                    Color("SakuraPetal").opacity(colorScheme == .dark ? 0.46 : 0.24),
-                    Color("SakuraAccent").opacity(colorScheme == .dark ? 0.28 : 0.16),
-                    Color("SakuraDusk").opacity(colorScheme == .dark ? 0.24 : 0.08)
+                    Color("SakuraPetal").opacity(colorScheme == .dark ? 0.34 : 0.24),
+                    Color("SakuraAccent").opacity(colorScheme == .dark ? 0.20 : 0.16),
+                    Color("SakuraDusk").opacity(colorScheme == .dark ? 0.16 : 0.08)
                 ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
