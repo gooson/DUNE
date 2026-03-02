@@ -147,6 +147,9 @@ struct ActivityView: View {
                 }
                 .padding()
             }
+            .waveRefreshable {
+                await viewModel.loadActivityData()
+            }
             .onChange(of: scrollToTopSignal) { _, _ in
                 withAnimation(DS.Animation.standard) {
                     proxy.scrollTo(ScrollAnchor.top, anchor: .top)
@@ -252,9 +255,6 @@ struct ActivityView: View {
         .sheet(item: $selectedExercise) { exercise in
             ExerciseStartView(exercise: exercise)
                 .interactiveDismissDisabled()
-        }
-        .waveRefreshable {
-            await viewModel.loadActivityData()
         }
         // Keep heavy HealthKit reload tied to coordinator/manual refresh only.
         // SwiftData sync churn should update derived UI state without cancel/restart storms.

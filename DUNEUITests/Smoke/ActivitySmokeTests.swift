@@ -53,6 +53,19 @@ final class ActivitySmokeTests: UITestBaseCase {
         XCTAssertTrue(addButton.waitForExistence(timeout: 5), "Add button should still exist after scroll interactions")
     }
 
+    func testPullToRefreshShowsWaveIndicator() throws {
+        let readinessCard = app.descendants(matching: .any)[AXID.activityHeroReadiness].firstMatch
+        XCTAssertTrue(readinessCard.waitForExistence(timeout: 15), "Readiness card should appear before refresh gesture")
+
+        let scrollView = app.scrollViews.firstMatch
+        XCTAssertTrue(scrollView.waitForExistence(timeout: 8), "Activity scroll view should exist")
+
+        scrollView.swipeDown()
+
+        let indicator = app.descendants(matching: .any)[AXID.waveRefreshIndicator].firstMatch
+        XCTAssertTrue(indicator.waitForExistence(timeout: 3), "Wave refresh indicator should appear during pull-to-refresh")
+    }
+
     // MARK: - Exercise Sub-View
 
     func testExercisePickerOpens() throws {

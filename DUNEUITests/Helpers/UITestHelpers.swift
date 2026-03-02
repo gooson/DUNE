@@ -18,6 +18,7 @@ enum AXID {
     // MARK: - Activity Tab (active: hero, toolbar-add)
     static let activityHeroReadiness = "activity-hero-readiness"
     static let activityToolbarAdd = "activity-toolbar-add"
+    static let waveRefreshIndicator = "wave-refresh-indicator"
     // Planned — identifiers not yet applied to views
     static let activitySectionMuscleMap = "activity-section-musclemap"
     static let activitySectionWeeklyStats = "activity-section-weeklystats"

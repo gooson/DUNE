@@ -99,6 +99,7 @@ struct WaveRefreshModifier: ViewModifier {
             .overlay(alignment: .top) {
                 if showIndicator {
                     WaveRefreshIndicator(color: resolvedColor)
+                        .accessibilityIdentifier("wave-refresh-indicator")
                         .padding(.top, DS.Spacing.sm)
                         .transition(
                             .asymmetric(
