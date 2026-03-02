@@ -266,6 +266,7 @@
 		8C8576A2131E6BE9B6F7937A /* BodyHistoryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ECD0C7738498A1FC6ED770C /* BodyHistoryDetailView.swift */; };
 		8C9CE9DDDCDD1298692B0ACA /* OpenMeteoAirQualityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 024E7E2FDC099CD98EF04E38 /* OpenMeteoAirQualityService.swift */; };
 		8CCDE878E0A6405A04F565F4 /* WorkoutSessionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E882D53E292E133616B49E7F /* WorkoutSessionViewModel.swift */; };
+		8CEE3730928D8E2A41AA438F /* SakuraBranchShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6F31E1186A8F5ADB9E6AA74 /* SakuraBranchShape.swift */; };
 		8D4DA9B1C2EEB006C56041F7 /* WorkoutMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76CF9FCAF3F58BB28A805F26 /* WorkoutMode.swift */; };
 		8DB4E592778F3866B8A96323 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCE1A4E28D7EBDE8CCE21DC /* SettingsView.swift */; };
 		8DF11125145F337CECC47AAB /* OceanWaveBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = B55B45AB2FE85038325352A1 /* OceanWaveBackground.swift */; };
@@ -460,6 +461,7 @@
 		E79A467C07A6947E9B8BA0BA /* SakuraWaveBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 416EC91A97D7FF65DA53209C /* SakuraWaveBackground.swift */; };
 		E7D855DF16C4309333A2F648 /* MiniSparklineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECE18F8AE1ED22A196DA110E /* MiniSparklineView.swift */; };
 		E86A2C07F6B12A262EF7F12C /* BodyCalculationCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 183F960300B0236B06B73D8F /* BodyCalculationCard.swift */; };
+		E86D6E7BF82BE2F8227AD198 /* SakuraBranchShapeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3E792A39A67B889F4C2E5E /* SakuraBranchShapeTests.swift */; };
 		EAD08235FF95AF7AF4F321F0 /* ForestSilhouetteShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D8DBB9C95058AEFC28F4598 /* ForestSilhouetteShape.swift */; };
 		EC0C968791C143E7D46FD4BE /* WorkoutSummary+Dedup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC5D96C57114EECD0D44BD7 /* WorkoutSummary+Dedup.swift */; };
 		EC7D16A61FC5CDDC46547C29 /* DUNEApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805BE0A77A9483D9EBD405DD /* DUNEApp.swift */; };
@@ -762,6 +764,7 @@
 		684322CCA6A4E82FF60FC670 /* SleepStage+View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SleepStage+View.swift"; sourceTree = "<group>"; };
 		685CF5113B20E70FDED4CA74 /* HeartRateZoneChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartRateZoneChartView.swift; sourceTree = "<group>"; };
 		68CB02BCA16ECDD0580E8B07 /* ExerciseCategory+HealthKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExerciseCategory+HealthKit.swift"; sourceTree = "<group>"; };
+		6A3E792A39A67B889F4C2E5E /* SakuraBranchShapeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SakuraBranchShapeTests.swift; sourceTree = "<group>"; };
 		6BAA54AC14D38D05CF9F91FF /* WeeklyStatsDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyStatsDetailView.swift; sourceTree = "<group>"; };
 		6BFD37A72CB464A172C558C1 /* AppRefreshCoordinatorImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRefreshCoordinatorImpl.swift; sourceTree = "<group>"; };
 		6CECB8413BB3625F5ADF8A15 /* QuickStartPopularityServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickStartPopularityServiceTests.swift; sourceTree = "<group>"; };
@@ -1020,6 +1023,7 @@
 		F4CC125AA1C302C661BEE191 /* TemplateCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateCardView.swift; sourceTree = "<group>"; };
 		F64ECF6E8AC730FCC109ED41 /* InjuryWarningBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjuryWarningBanner.swift; sourceTree = "<group>"; };
 		F6D6B86049B5F9B0D54B37D8 /* InjurySeverity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjurySeverity.swift; sourceTree = "<group>"; };
+		F6F31E1186A8F5ADB9E6AA74 /* SakuraBranchShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SakuraBranchShape.swift; sourceTree = "<group>"; };
 		F735CE9EF78B5ED31C2E053E /* TestDataSeeder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDataSeeder.swift; sourceTree = "<group>"; };
 		F752F88D2EE6A55A44F41B4E /* CardioSessionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardioSessionViewModel.swift; sourceTree = "<group>"; };
 		F7F56436EA9C1B83199F8F58 /* ChartAccessibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartAccessibility.swift; sourceTree = "<group>"; };
@@ -1742,6 +1746,7 @@
 				D03C5272316A429D28DC25CE /* OceanWaveShape.swift */,
 				3B37646C759053B5DDFECC87 /* PeriodSwipeModifier.swift */,
 				AEC9BC58665CC14F50D7739B /* ProgressRingView.swift */,
+				F6F31E1186A8F5ADB9E6AA74 /* SakuraBranchShape.swift */,
 				FF0F0F0EF2DB750558AB6E21 /* SakuraPetalShape.swift */,
 				416EC91A97D7FF65DA53209C /* SakuraWaveBackground.swift */,
 				7C613FA57D44761247B51C86 /* SectionGroup.swift */,
@@ -2070,6 +2075,7 @@
 				6CECB8413BB3625F5ADF8A15 /* QuickStartPopularityServiceTests.swift */,
 				D7A871141C8ED67B62FFE500 /* RecoveryModifierServiceTests.swift */,
 				DB01DF64669A7AB8065B8133 /* RestTimerViewModelTests.swift */,
+				6A3E792A39A67B889F4C2E5E /* SakuraBranchShapeTests.swift */,
 				8A4CF45416930EB61A3E6EBB /* SakuraPetalShapeTests.swift */,
 				1E351F3EEEA566A369A425F1 /* SharedHealthDataServiceTests.swift */,
 				60A8DC34BCE2A2AB53134075 /* SharedHealthSnapshotTests.swift */,
@@ -2574,6 +2580,7 @@
 				6DA940A4876020F09133B584 /* RecoveryOverviewSection.swift in Sources */,
 				CD8A742A7943E90BA129BD7A /* RestTimerView.swift in Sources */,
 				5210F4E0317D40AABD8E90E4 /* RestTimerViewModel.swift in Sources */,
+				8CEE3730928D8E2A41AA438F /* SakuraBranchShape.swift in Sources */,
 				DE1EDD869723F6CC0B68C127 /* SakuraPetalShape.swift in Sources */,
 				E79A467C07A6947E9B8BA0BA /* SakuraWaveBackground.swift in Sources */,
 				8C21AAC03404D9C28BDD0495 /* ScoreContribution.swift in Sources */,
@@ -2816,6 +2823,7 @@
 				C74CA0C004299D824462435E /* QuickStartPopularityServiceTests.swift in Sources */,
 				3DE53461B880AFA1398A71DC /* RecoveryModifierServiceTests.swift in Sources */,
 				7FC6FDC96838412E1F1E52D6 /* RestTimerViewModelTests.swift in Sources */,
+				E86D6E7BF82BE2F8227AD198 /* SakuraBranchShapeTests.swift in Sources */,
 				9CB735BAA1C449E59EC823A0 /* SakuraPetalShapeTests.swift in Sources */,
 				867E38B3FD10A28FE7C729DC /* SharedHealthDataServiceTests.swift in Sources */,
 				0BA777438C201BAB4475EBA1 /* SharedHealthSnapshotTests.swift in Sources */,

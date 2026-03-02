@@ -116,6 +116,24 @@ private enum GlassCardGradients {
         startPoint: .leading,
         endPoint: .trailing
     )
+    private static let sakuraHeroSurface = LinearGradient(
+        colors: [
+            sakuraAccent.opacity(0.20),
+            Color("SakuraIvory").opacity(0.14),
+            Color.clear
+        ],
+        startPoint: .topLeading,
+        endPoint: .bottomTrailing
+    )
+    private static let sakuraStandardSurface = LinearGradient(
+        colors: [
+            Color("SakuraIvory").opacity(0.15),
+            sakuraAccent.opacity(0.08),
+            Color.clear
+        ],
+        startPoint: .topLeading,
+        endPoint: .bottomTrailing
+    )
 
     static let clearBorder = LinearGradient(
         colors: [Color.clear, Color.clear],
@@ -145,6 +163,20 @@ private enum GlassCardGradients {
         case .oceanCool:   oceanBottomSeparator
         case .forestGreen: forestBottomSeparator
         case .sakuraCalm:  sakuraBottomSeparator
+        }
+    }
+
+    static func heroSurface(for theme: AppTheme) -> LinearGradient {
+        switch theme {
+        case .sakuraCalm: sakuraHeroSurface
+        case .desertWarm, .oceanCool, .forestGreen: clearBorder
+        }
+    }
+
+    static func standardSurface(for theme: AppTheme) -> LinearGradient {
+        switch theme {
+        case .sakuraCalm: sakuraStandardSurface
+        case .desertWarm, .oceanCool, .forestGreen: clearBorder
         }
     }
 }
@@ -180,6 +212,10 @@ struct HeroCard<Content: View>: View {
                                 )
                             )
                     )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: cornerRadius)
+                            .fill(GlassCardGradients.heroSurface(for: theme))
+                    )
                     // Accent border — top-leading highlight fades to subtle bottom-trailing
                     .overlay(
                         RoundedRectangle(cornerRadius: cornerRadius)
@@ -212,6 +248,10 @@ struct StandardCard<Content: View>: View {
             .background {
                 RoundedRectangle(cornerRadius: cornerRadius)
                     .fill(.thinMaterial)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: cornerRadius)
+                            .fill(GlassCardGradients.standardSurface(for: theme))
+                    )
                     .overlay(
                         RoundedRectangle(cornerRadius: cornerRadius)
                             .strokeBorder(

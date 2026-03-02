@@ -48,4 +48,15 @@ struct SakuraPetalShapeTests {
         // Higher petal density should push some crests upward (smaller minY).
         #expect(petalBounds.minY < flatBounds.minY)
     }
+
+    @Test("Different phases produce different ridge geometry")
+    func phaseChangesPath() {
+        let rect = CGRect(x: 0, y: 0, width: 320, height: 180)
+        let phase0 = SakuraPetalShape(amplitude: 0.2, frequency: 1.2, phase: 0, petalDensity: 0.8)
+        let phasePi = SakuraPetalShape(amplitude: 0.2, frequency: 1.2, phase: .pi, petalDensity: 0.8)
+
+        let bounds0 = phase0.path(in: rect).boundingRect
+        let boundsPi = phasePi.path(in: rect).boundingRect
+        #expect(abs(bounds0.minY - boundsPi.minY) > 0.05 || abs(bounds0.maxY - boundsPi.maxY) > 0.05)
+    }
 }
