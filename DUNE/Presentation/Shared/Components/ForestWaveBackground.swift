@@ -94,6 +94,15 @@ struct ForestWaveOverlayView: View {
                 phase = phaseTarget
             }
         }
+        .onAppear {
+            guard !reduceMotion, driftDuration > 0 else { return }
+            Task { @MainActor in
+                phase = 0
+                withAnimation(.linear(duration: phaseDuration).repeatForever(autoreverses: false)) {
+                    phase = phaseTarget
+                }
+            }
+        }
     }
 }
 
