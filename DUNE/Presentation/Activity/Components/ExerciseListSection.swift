@@ -1,5 +1,11 @@
 import SwiftUI
 
+/// Manual records eligible for compact recent-list deduplication.
+/// Compact list renders only records with set data, so dedup should use the same subset.
+func recentListDedupRecords(from records: [ExerciseRecord]) -> [ExerciseRecord] {
+    records.filter(\.hasSetData)
+}
+
 /// Compact list of recent workouts with "See All" link.
 /// Merges manual records and HealthKit workouts into a unified, date-sorted list
 /// using ExerciseListItem and UnifiedWorkoutRow.
@@ -105,7 +111,12 @@ struct ExerciseListSection: View {
     // MARK: - Build Items + Index Atomically
 
     private func buildItemsAndIndex() -> ([ExerciseListItem], [UUID: ExerciseRecord]) {
-        let externalWorkouts = workouts.filteringAppDuplicates(against: exerciseRecords)
+        // Keep dedup criteria aligned with rows that are actually rendered in this section.
+        // Compact recent list intentionally shows only manual records with set data.
+        // If we dedup against all manual records, cardio records without sets can hide
+        // HealthKit workouts while not being rendered themselves.
+        let setRecords = recentListDedupRecords(from: exerciseRecords)
+        let externalWorkouts = workouts.filteringAppDuplicates(against: setRecords)
 
         var result: [ExerciseListItem] = []
         result.reserveCapacity(externalWorkouts.count + exerciseRecords.count)
@@ -116,7 +127,6 @@ struct ExerciseListSection: View {
         }
 
         // Manual records (with set data only, matching original behavior)
-        let setRecords = exerciseRecords.filter(\.hasSetData)
         for record in setRecords {
             result.append(.fromManualRecord(record, library: exerciseLibrary))
         }

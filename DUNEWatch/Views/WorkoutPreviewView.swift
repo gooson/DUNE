@@ -7,6 +7,7 @@ import WatchKit
 struct WorkoutPreviewView: View {
     let snapshot: WorkoutSessionTemplate
     @Environment(WorkoutManager.self) private var workoutManager
+    @Environment(WatchConnectivityManager.self) private var connectivity
     @Environment(\.dismiss) private var dismiss
 
     @State private var isStarting = false
@@ -35,14 +36,33 @@ struct WorkoutPreviewView: View {
     // MARK: - Cardio Type Resolution
 
     /// Returns the WorkoutActivityType if this is a single-exercise cardio workout.
-    /// Uses Domain-level `resolveDistanceBased` for consistent 3-step resolution.
+    /// Uses Domain-level `resolveDistanceBased` with inputType guard to avoid
+    /// false positives such as `walking-lunge` being interpreted as walking cardio.
     private var resolvedCardioType: WorkoutActivityType? {
         guard snapshot.entries.count == 1 else { return nil }
         let entry = snapshot.entries[0]
+        let inputType = resolvedInputType(for: entry.exerciseDefinitionID)
         return WorkoutActivityType.resolveDistanceBased(
             from: entry.exerciseDefinitionID,
-            name: entry.exerciseName
+            name: entry.exerciseName,
+            inputTypeRaw: inputType
         )
+    }
+
+    /// Resolves watch-library input type for an exercise ID.
+    /// Uses canonical ID matching so variant IDs share the same lookup behavior
+    /// as the popularity/recent tracker.
+    private func resolvedInputType(for exerciseID: String) -> String? {
+        guard !exerciseID.isEmpty else { return nil }
+
+        if let exact = connectivity.exerciseLibrary.first(where: { $0.id == exerciseID }) {
+            return exact.inputType
+        }
+
+        let canonicalID = RecentExerciseTracker.canonicalExerciseID(exerciseID: exerciseID)
+        return connectivity.exerciseLibrary.first {
+            RecentExerciseTracker.canonicalExerciseID(exerciseID: $0.id) == canonicalID
+        }?.inputType
     }
 
     // MARK: - Cardio Start
