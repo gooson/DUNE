@@ -34,10 +34,12 @@ struct SessionSummaryView: View {
                 // Stats grid
                 statsGrid
 
-                Divider()
+                if !workoutManager.isCardioMode {
+                    Divider()
 
-                // Exercise breakdown
-                exerciseBreakdown
+                    // Exercise breakdown (strength only)
+                    exerciseBreakdown
+                }
 
                 // Done button
                 Button {
@@ -76,10 +78,23 @@ struct SessionSummaryView: View {
             GridItem(.flexible())
         ], spacing: DS.Spacing.md) {
             statItem(title: "Duration", value: formattedDuration)
-            statItem(title: "Volume", value: formattedVolume)
-            statItem(title: "Sets", value: totalSets.formattedWithSeparator)
+
+            if workoutManager.isCardioMode {
+                statItem(title: "Distance", value: formattedDistance)
+                statItem(title: "Avg Pace", value: workoutManager.formattedPace)
+            } else {
+                statItem(title: "Volume", value: formattedVolume)
+                statItem(title: "Sets", value: totalSets.formattedWithSeparator)
+            }
+
             statItem(title: "Avg HR", value: averageHR > 0 ? Int(averageHR).formattedWithSeparator : "--")
         }
+    }
+
+    private var formattedDistance: String {
+        let km = workoutManager.distanceKm
+        guard km > 0 else { return "--" }
+        return String(format: "%.2f km", km)
     }
 
     private func statItem(title: String, value: String) -> some View {

@@ -127,6 +127,9 @@ targets:
         group: Shared/Domain
       - path: Domain/Models/AppTheme.swift
         group: Shared/Domain
+      # Shared HealthKit mapping (needed for cardio workout configuration)
+      - path: Data/HealthKit/WorkoutActivityType+HealthKit.swift
+        group: Shared/HealthKit
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.raftel.dailve.watchkitapp
