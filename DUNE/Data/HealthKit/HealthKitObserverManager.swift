@@ -3,10 +3,12 @@ import HealthKit
 /// Manages HKObserverQuery registrations and HealthKit background delivery.
 ///
 /// Observes 8 HealthKit data types. On change, requests a coordinated refresh
-/// through `AppRefreshCoordinator` (which handles throttling).
+/// through `AppRefreshCoordinator` (which handles throttling) and evaluates
+/// new samples for background notification delivery.
 final class HealthKitObserverManager: Sendable {
     private let store: HKHealthStore
     private let coordinator: AppRefreshCoordinating
+    private let notificationEvaluator: BackgroundNotificationEvaluator?
 
     /// Observer queries are stored here so they remain alive.
     /// Access is serialized through the internal actor.
@@ -28,10 +30,12 @@ final class HealthKitObserverManager: Sendable {
 
     init(
         store: HKHealthStore,
-        coordinator: AppRefreshCoordinating
+        coordinator: AppRefreshCoordinating,
+        notificationEvaluator: BackgroundNotificationEvaluator? = nil
     ) {
         self.store = store
         self.coordinator = coordinator
+        self.notificationEvaluator = notificationEvaluator
     }
 
     /// Registers observer queries for all tracked types and enables background delivery.
@@ -67,7 +71,7 @@ final class HealthKitObserverManager: Sendable {
     private func registerObserver(for sampleType: HKSampleType) {
         let typeName = sampleType.identifier
 
-        let query = HKObserverQuery(sampleType: sampleType, predicate: nil) { [coordinator] _, completionHandler, error in
+        let query = HKObserverQuery(sampleType: sampleType, predicate: nil) { [coordinator, notificationEvaluator] _, completionHandler, error in
             // completionHandler MUST be called to receive future notifications
             defer { completionHandler() }
 
@@ -80,7 +84,13 @@ final class HealthKitObserverManager: Sendable {
             AppLogger.healthKit.info("[ObserverManager] Change detected: \(typeName)")
 
             Task {
-                _ = await coordinator.requestRefresh(source: .healthKitObserver)
+                async let refreshTask: Void = {
+                    _ = await coordinator.requestRefresh(source: .healthKitObserver)
+                }()
+                async let notifyTask: Void = {
+                    await notificationEvaluator?.evaluateAndNotify(sampleType: sampleType)
+                }()
+                _ = await (refreshTask, notifyTask)
             }
         }
 
