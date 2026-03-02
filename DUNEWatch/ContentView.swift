@@ -20,6 +20,11 @@ extension WorkoutSessionTemplate: Hashable {
 
 /// Root view: routes between CarouselHome (idle), SessionPaging (active), and Summary (ended).
 struct ContentView: View {
+    private struct NavigationObserverState: Equatable {
+        let isActive: Bool
+        let isSessionEnded: Bool
+    }
+
     @Environment(WatchConnectivityManager.self) private var connectivity
     @State private var workoutManager = WorkoutManager.shared
 
@@ -29,6 +34,13 @@ struct ContentView: View {
     /// Explicit path so we can pop pushed views when the root switches
     /// to SessionPagingView (correction #57).
     @State private var navigationPath = NavigationPath()
+
+    private var navigationObserverState: NavigationObserverState {
+        NavigationObserverState(
+            isActive: workoutManager.isActive,
+            isSessionEnded: workoutManager.isSessionEnded
+        )
+    }
 
     var body: some View {
         NavigationStack(path: $navigationPath) {
@@ -58,16 +70,22 @@ struct ContentView: View {
             }
         }
         .environment(workoutManager)
-        .onChange(of: workoutManager.isActive) { old, new in
-            // Pop all pushed views when workout starts (correction #57, #60)
-            if !old, new {
-                navigationPath = NavigationPath()
+        .onChange(of: navigationObserverState) { old, new in
+            let startedWorkout = !old.isActive && new.isActive
+            let endedWorkout = !old.isSessionEnded && new.isSessionEnded
+
+            if endedWorkout {
+                sessionEndDate = Date()
             }
+
+            // Avoid repeated NavigationStack updates in the same frame.
+            guard startedWorkout || endedWorkout else { return }
+            guard navigationPath.count > 0 else { return }
+            navigationPath = NavigationPath()
         }
         .onChange(of: workoutManager.isSessionEnded) { _, ended in
-            if ended {
-                sessionEndDate = Date()
-                navigationPath = NavigationPath()
+            if !ended {
+                sessionEndDate = nil
             }
         }
         .task {
