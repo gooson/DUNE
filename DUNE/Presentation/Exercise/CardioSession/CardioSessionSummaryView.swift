@@ -116,17 +116,8 @@ struct CardioSessionSummaryView: View {
         Button {
             saveWorkout()
         } label: {
-            HStack {
-                if hasSaved {
-                    Image(systemName: "checkmark")
-                    Text("Saved!")
-                        .font(.headline)
-                } else {
-                    Image(systemName: "square.and.arrow.down")
-                    Text("Save Workout")
-                        .font(.headline)
-                }
-            }
+            Text(hasSaved ? "Saved!" : "Save Workout")
+                .font(.headline)
             .frame(maxWidth: .infinity, minHeight: 50)
             .animation(DS.Animation.snappy, value: hasSaved)
         }
