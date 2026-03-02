@@ -365,7 +365,9 @@ final class WellnessViewModel {
         let primarySources: Set<FetchKey> = [.sleep, .condition, .weight, .heartRate, .spo2, .respRate, .vo2Max, .hrRecovery, .wristTemp]
         let failedSources = results.errorKeys.intersection(primarySources)
         if !failedSources.isEmpty, failedSources.count < primarySources.count {
-            partialFailureMessage = "Some data could not be loaded (\(failedSources.count) of \(primarySources.count) sources)"
+            partialFailureMessage = String(
+                localized: "Some data could not be loaded (\(failedSources.count) of \(primarySources.count) sources)"
+            )
         }
 
         isLoading = false
@@ -490,7 +492,7 @@ final class WellnessViewModel {
                         let output = stages.isEmpty ? nil : sleepScoreUseCase.execute(input: .init(stages: stages))
                         return (.sleep, .sleepResult(output: output, date: sleepDate, isHistorical: isHistorical))
                     } catch {
-                        print("[Wellness] sleep fetch failed: \(error)")
+                        AppLogger.ui.error("[Wellness] sleep fetch failed: \(error.localizedDescription)")
                         return (.sleep, .fetchError)
                     }
                 }
@@ -519,7 +521,7 @@ final class WellnessViewModel {
                         }
                         return (.sleepWeekly, .sleepWeekly(dailyData.sorted { $0.date < $1.date }))
                     } catch {
-                        print("[Wellness] sleepWeekly fetch failed: \(error)")
+                        AppLogger.ui.error("[Wellness] sleepWeekly fetch failed: \(error.localizedDescription)")
                         return (.sleepWeekly, .fetchError)
                     }
                 }
@@ -550,7 +552,7 @@ final class WellnessViewModel {
 
                         return (.condition, .conditionResult(score: output.score, latestHRV: latestHRV, latestRHR: latestRHRVital))
                     } catch {
-                        print("[Wellness] condition fetch failed: \(error)")
+                        AppLogger.ui.error("[Wellness] condition fetch failed: \(error.localizedDescription)")
                         return (.condition, .fetchError)
                     }
                 }
@@ -567,7 +569,7 @@ final class WellnessViewModel {
                         )
                         return (.hrvWeekly, .hrvWeeklyResult(history.map { VitalSample(value: $0.average, date: $0.date) }))
                     } catch {
-                        print("[Wellness] hrvWeekly fetch failed: \(error)")
+                        AppLogger.ui.error("[Wellness] hrvWeekly fetch failed: \(error.localizedDescription)")
                         return (.hrvWeekly, .fetchError)
                     }
                 }
@@ -584,7 +586,7 @@ final class WellnessViewModel {
                         )
                         return (.rhrWeekly, .rhrWeeklyResult(history.map { VitalSample(value: $0.average, date: $0.date) }))
                     } catch {
-                        print("[Wellness] rhrWeekly fetch failed: \(error)")
+                        AppLogger.ui.error("[Wellness] rhrWeekly fetch failed: \(error.localizedDescription)")
                         return (.rhrWeekly, .fetchError)
                     }
                 }
@@ -599,7 +601,7 @@ final class WellnessViewModel {
                     }
                     return (.weight, .empty)
                 } catch {
-                    print("[Wellness] weight fetch failed: \(error)")
+                    AppLogger.ui.error("[Wellness] weight fetch failed: \(error.localizedDescription)")
                     return (.weight, .fetchError)
                 }
             }
@@ -611,7 +613,7 @@ final class WellnessViewModel {
                     let history = try await bodyService.fetchWeight(days: 14)
                     return (.weightHistory, .weightHistoryResult(history))
                 } catch {
-                    print("[Wellness] weightHistory fetch failed: \(error)")
+                    AppLogger.ui.error("[Wellness] weightHistory fetch failed: \(error.localizedDescription)")
                     return (.weightHistory, .fetchError)
                 }
             }
@@ -625,7 +627,7 @@ final class WellnessViewModel {
                     }
                     return (.bmi, .empty)
                 } catch {
-                    print("[Wellness] bmi fetch failed: \(error)")
+                    AppLogger.ui.error("[Wellness] bmi fetch failed: \(error.localizedDescription)")
                     return (.bmi, .fetchError)
                 }
             }
@@ -640,7 +642,7 @@ final class WellnessViewModel {
                     }
                     return (.bodyFat, .empty)
                 } catch {
-                    print("[Wellness] bodyFat fetch failed: \(error)")
+                    AppLogger.ui.error("[Wellness] bodyFat fetch failed: \(error.localizedDescription)")
                     return (.bodyFat, .fetchError)
                 }
             }
@@ -652,7 +654,7 @@ final class WellnessViewModel {
                     let history = try await bodyService.fetchBodyFat(days: 30)
                     return (.bodyFatHistory, .bodyCompositionHistory(history))
                 } catch {
-                    print("[Wellness] bodyFatHistory fetch failed: \(error)")
+                    AppLogger.ui.error("[Wellness] bodyFatHistory fetch failed: \(error.localizedDescription)")
                     return (.bodyFatHistory, .fetchError)
                 }
             }
@@ -666,7 +668,7 @@ final class WellnessViewModel {
                     }
                     return (.leanBodyMass, .empty)
                 } catch {
-                    print("[Wellness] leanBodyMass fetch failed: \(error)")
+                    AppLogger.ui.error("[Wellness] leanBodyMass fetch failed: \(error.localizedDescription)")
                     return (.leanBodyMass, .fetchError)
                 }
             }
@@ -678,7 +680,7 @@ final class WellnessViewModel {
                     let sample = try await heartRateService.fetchLatestHeartRate(withinDays: 1)
                     return (.heartRate, .vitalSample(sample))
                 } catch {
-                    print("[Wellness] heartRate fetch failed: \(error)")
+                    AppLogger.ui.error("[Wellness] heartRate fetch failed: \(error.localizedDescription)")
                     return (.heartRate, .fetchError)
                 }
             }
@@ -690,7 +692,7 @@ final class WellnessViewModel {
                     let history = try await heartRateService.fetchHeartRateHistory(days: 7)
                     return (.heartRateHistory, .vitalHistory(history))
                 } catch {
-                    print("[Wellness] heartRateHistory fetch failed: \(error)")
+                    AppLogger.ui.error("[Wellness] heartRateHistory fetch failed: \(error.localizedDescription)")
                     return (.heartRateHistory, .fetchError)
                 }
             }
@@ -702,7 +704,7 @@ final class WellnessViewModel {
                     let sample = try await vitalsService.fetchLatestSpO2(withinDays: 7)
                     return (.spo2, .vitalSample(sample))
                 } catch {
-                    print("[Wellness] spo2 fetch failed: \(error)")
+                    AppLogger.ui.error("[Wellness] spo2 fetch failed: \(error.localizedDescription)")
                     return (.spo2, .fetchError)
                 }
             }
@@ -714,7 +716,7 @@ final class WellnessViewModel {
                     let history = try await vitalsService.fetchSpO2Collection(days: 7)
                     return (.spo2History, .vitalHistory(history))
                 } catch {
-                    print("[Wellness] spo2History fetch failed: \(error)")
+                    AppLogger.ui.error("[Wellness] spo2History fetch failed: \(error.localizedDescription)")
                     return (.spo2History, .fetchError)
                 }
             }
@@ -726,7 +728,7 @@ final class WellnessViewModel {
                     let sample = try await vitalsService.fetchLatestRespiratoryRate(withinDays: 7)
                     return (.respRate, .vitalSample(sample))
                 } catch {
-                    print("[Wellness] respRate fetch failed: \(error)")
+                    AppLogger.ui.error("[Wellness] respRate fetch failed: \(error.localizedDescription)")
                     return (.respRate, .fetchError)
                 }
             }
@@ -738,7 +740,7 @@ final class WellnessViewModel {
                     let history = try await vitalsService.fetchRespiratoryRateCollection(days: 7)
                     return (.respRateHistory, .vitalHistory(history))
                 } catch {
-                    print("[Wellness] respRateHistory fetch failed: \(error)")
+                    AppLogger.ui.error("[Wellness] respRateHistory fetch failed: \(error.localizedDescription)")
                     return (.respRateHistory, .fetchError)
                 }
             }
@@ -750,7 +752,7 @@ final class WellnessViewModel {
                     let sample = try await vitalsService.fetchLatestVO2Max(withinDays: 180)
                     return (.vo2Max, .vitalSample(sample))
                 } catch {
-                    print("[Wellness] vo2Max fetch failed: \(error)")
+                    AppLogger.ui.error("[Wellness] vo2Max fetch failed: \(error.localizedDescription)")
                     return (.vo2Max, .fetchError)
                 }
             }
@@ -762,7 +764,7 @@ final class WellnessViewModel {
                     let history = try await vitalsService.fetchVO2MaxHistory(days: 90)
                     return (.vo2MaxHistory, .vitalHistory(history))
                 } catch {
-                    print("[Wellness] vo2MaxHistory fetch failed: \(error)")
+                    AppLogger.ui.error("[Wellness] vo2MaxHistory fetch failed: \(error.localizedDescription)")
                     return (.vo2MaxHistory, .fetchError)
                 }
             }
@@ -774,7 +776,7 @@ final class WellnessViewModel {
                     let sample = try await vitalsService.fetchLatestHeartRateRecovery(withinDays: 30)
                     return (.hrRecovery, .vitalSample(sample))
                 } catch {
-                    print("[Wellness] hrRecovery fetch failed: \(error)")
+                    AppLogger.ui.error("[Wellness] hrRecovery fetch failed: \(error.localizedDescription)")
                     return (.hrRecovery, .fetchError)
                 }
             }
@@ -786,7 +788,7 @@ final class WellnessViewModel {
                     let history = try await vitalsService.fetchHeartRateRecoveryHistory(days: 90)
                     return (.hrRecoveryHistory, .vitalHistory(history))
                 } catch {
-                    print("[Wellness] hrRecoveryHistory fetch failed: \(error)")
+                    AppLogger.ui.error("[Wellness] hrRecoveryHistory fetch failed: \(error.localizedDescription)")
                     return (.hrRecoveryHistory, .fetchError)
                 }
             }
@@ -798,7 +800,7 @@ final class WellnessViewModel {
                     let sample = try await vitalsService.fetchLatestWristTemperature(withinDays: 7)
                     return (.wristTemp, .vitalSample(sample))
                 } catch {
-                    print("[Wellness] wristTemp fetch failed: \(error)")
+                    AppLogger.ui.error("[Wellness] wristTemp fetch failed: \(error.localizedDescription)")
                     return (.wristTemp, .fetchError)
                 }
             }
@@ -810,7 +812,7 @@ final class WellnessViewModel {
                     let baseline = try await vitalsService.fetchWristTemperatureBaseline(days: 14)
                     return (.wristTempBaseline, .baselineResult(baseline))
                 } catch {
-                    print("[Wellness] wristTempBaseline fetch failed: \(error)")
+                    AppLogger.ui.error("[Wellness] wristTempBaseline fetch failed: \(error.localizedDescription)")
                     return (.wristTempBaseline, .fetchError)
                 }
             }
@@ -822,7 +824,7 @@ final class WellnessViewModel {
                     let history = try await vitalsService.fetchWristTemperatureCollection(days: 7)
                     return (.wristTempHistory, .vitalHistory(history))
                 } catch {
-                    print("[Wellness] wristTempHistory fetch failed: \(error)")
+                    AppLogger.ui.error("[Wellness] wristTempHistory fetch failed: \(error.localizedDescription)")
                     return (.wristTempHistory, .fetchError)
                 }
             }

@@ -1,6 +1,7 @@
 import Foundation
 import HealthKit
 import Observation
+import OSLog
 
 /// Manages HKWorkoutSession + HKLiveWorkoutBuilder for Watch workout tracking.
 /// Provides real-time heart rate, calorie, and session state.
@@ -9,6 +10,7 @@ import Observation
 @MainActor
 final class WorkoutManager: NSObject {
     static let shared = WorkoutManager()
+    nonisolated(unsafe) private static let logger = Logger(subsystem: "com.raftel.dailve", category: "WatchWorkout")
 
     let healthStore = HKHealthStore()
 
@@ -440,7 +442,7 @@ extension WorkoutManager: HKWorkoutSessionDelegate {
                         healthKitWorkoutUUID = workoutID
                     }
                 } catch {
-                    print("Failed to finish workout: \(error.localizedDescription)")
+                    Self.logger.error("Failed to finish workout: \(error.localizedDescription, privacy: .public)")
                 }
             default:
                 break
@@ -452,7 +454,7 @@ extension WorkoutManager: HKWorkoutSessionDelegate {
         _ workoutSession: HKWorkoutSession,
         didFailWithError error: Error
     ) {
-        print("Workout session failed: \(error.localizedDescription)")
+        Self.logger.error("Workout session failed: \(error.localizedDescription, privacy: .public)")
     }
 }
 
