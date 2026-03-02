@@ -29,6 +29,33 @@ struct DUNEApp: App {
         return arguments.contains("--uitesting") || arguments.contains("--healthkit-permission-uitest")
     }
 
+    private static func launchArgumentValue(for key: String) -> String? {
+        let arguments = ProcessInfo.processInfo.arguments
+        guard let index = arguments.firstIndex(of: key), arguments.indices.contains(index + 1) else {
+            return nil
+        }
+        return arguments[index + 1]
+    }
+
+    private static var forcedUITestTheme: AppTheme? {
+        guard isRunningUITests else { return nil }
+        guard let rawValue = launchArgumentValue(for: "--ui-test-theme") else { return nil }
+        return AppTheme(rawValue: rawValue)
+    }
+
+    private static var forcedUITestColorScheme: ColorScheme? {
+        guard isRunningUITests else { return nil }
+        guard let style = launchArgumentValue(for: "--ui-test-style")?.lowercased() else { return nil }
+        switch style {
+        case "light":
+            return .light
+        case "dark":
+            return .dark
+        default:
+            return nil
+        }
+    }
+
     private static var isRunningUnitTests: Bool {
         isRunningXCTest && !isRunningUITests
     }
@@ -55,6 +82,11 @@ struct DUNEApp: App {
     }
 
     init() {
+        if let forcedTheme = Self.forcedUITestTheme {
+            UserDefaults.standard.set(forcedTheme.rawValue, forKey: "com.dune.app.theme")
+            _selectedTheme = AppStorage(wrappedValue: forcedTheme, "com.dune.app.theme")
+        }
+
         let sharedService: SharedHealthDataService = SharedHealthDataServiceImpl(healthKitManager: .shared)
         self.sharedHealthDataService = sharedService
         let coordinator = AppRefreshCoordinatorImpl(sharedHealthDataService: sharedService)
@@ -121,6 +153,7 @@ struct DUNEApp: App {
                 }
             }
             .tint(selectedTheme.accentColor)
+            .preferredColorScheme(Self.forcedUITestColorScheme)
         }
         .modelContainer(modelContainer)
     }
