@@ -163,9 +163,18 @@ struct SessionSummaryView: View {
 
     @MainActor
     private func saveAndDismissAsync() async {
+        // Cardio sessions: HKWorkout is saved by HKLiveWorkoutBuilder — no SwiftData records to save.
+        if workoutManager.isCardioMode {
+            await workoutManager.waitForWorkoutFinalization()
+            hasSaved = true
+            isSaving = false
+            workoutManager.reset()
+            return
+        }
+
         guard workoutManager.templateSnapshot != nil else {
             isSaving = false
-            saveError = "Workout data could not be recovered. Sets cannot be saved."
+            saveError = String(localized: "Workout data could not be recovered. Sets cannot be saved.")
             return
         }
 
@@ -178,7 +187,7 @@ struct SessionSummaryView: View {
         do {
             try modelContext.save()
         } catch {
-            saveError = "Failed to save: \(error.localizedDescription)"
+            saveError = String(localized: "Failed to save workout data. Please try again.")
             isSaving = false
             return
         }
