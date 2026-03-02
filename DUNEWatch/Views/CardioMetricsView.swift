@@ -77,8 +77,7 @@ struct CardioMetricsView: View {
     }
 
     private func elapsedTime(at now: Date) -> String {
-        guard let start = workoutManager.startDate else { return "0:00" }
-        let elapsed = Swift.max(now.timeIntervalSince(start), 0)
+        let elapsed = workoutManager.activeElapsedTime(at: now)
         let mins = Int(elapsed) / 60
         let secs = Int(elapsed) % 60
         return String(format: "%d:%02d", mins, secs)
