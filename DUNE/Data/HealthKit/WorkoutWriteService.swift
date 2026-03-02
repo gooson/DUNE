@@ -9,6 +9,30 @@ struct WorkoutWriteInput: Sendable {
     let exerciseName: String
     let estimatedCalories: Double?
     let isFromHealthKit: Bool
+    /// Distance in kilometers (nil for non-distance workouts).
+    let distanceKm: Double?
+    /// Activity type for distance type resolution (nil uses category-based fallback).
+    let activityType: WorkoutActivityType?
+
+    init(
+        startDate: Date,
+        duration: TimeInterval,
+        category: ExerciseCategory,
+        exerciseName: String,
+        estimatedCalories: Double?,
+        isFromHealthKit: Bool,
+        distanceKm: Double? = nil,
+        activityType: WorkoutActivityType? = nil
+    ) {
+        self.startDate = startDate
+        self.duration = duration
+        self.category = category
+        self.exerciseName = exerciseName
+        self.estimatedCalories = estimatedCalories
+        self.isFromHealthKit = isFromHealthKit
+        self.distanceKm = distanceKm
+        self.activityType = activityType
+    }
 }
 
 /// Protocol for testability.
@@ -42,10 +66,11 @@ struct WorkoutWriteService: WorkoutWriting, Sendable {
             throw WorkoutWriteError.notAuthorized
         }
 
-        let activityType = ExerciseCategory.hkActivityType(
-            category: input.category,
-            exerciseName: input.exerciseName
-        )
+        let activityType = input.activityType?.hkWorkoutActivityType
+            ?? ExerciseCategory.hkActivityType(
+                category: input.category,
+                exerciseName: input.exerciseName
+            )
 
         let store = await manager.healthStore
         let endDate = input.startDate.addingTimeInterval(input.duration)
@@ -76,6 +101,22 @@ struct WorkoutWriteService: WorkoutWriting, Sendable {
             try await builder.addSamples([energySample])
         }
 
+        // Add distance sample if valid
+        if let distanceKm = input.distanceKm,
+           distanceKm > 0, distanceKm < 500,
+           !distanceKm.isNaN, !distanceKm.isInfinite {
+            let distanceType = Self.distanceQuantityType(for: activityType)
+            let distanceMeters = distanceKm * 1000.0
+            let distanceQuantity = HKQuantity(unit: .meter(), doubleValue: distanceMeters)
+            let distanceSample = HKQuantitySample(
+                type: distanceType,
+                quantity: distanceQuantity,
+                start: input.startDate,
+                end: endDate
+            )
+            try await builder.addSamples([distanceSample])
+        }
+
         try await builder.endCollection(at: endDate)
 
         guard let workout = try await builder.finishWorkout() else {
@@ -84,6 +125,20 @@ struct WorkoutWriteService: WorkoutWriting, Sendable {
 
         AppLogger.healthKit.info("Saved workout to HealthKit: \(workout.uuid.uuidString)")
         return workout.uuid.uuidString
+    }
+}
+
+private extension WorkoutWriteService {
+    /// Resolves the appropriate HKQuantityType for distance based on workout activity type.
+    static func distanceQuantityType(for activityType: HKWorkoutActivityType) -> HKQuantityType {
+        switch activityType {
+        case .cycling, .handCycling:
+            return HKQuantityType(.distanceCycling)
+        case .swimming:
+            return HKQuantityType(.distanceSwimming)
+        default:
+            return HKQuantityType(.distanceWalkingRunning)
+        }
     }
 }
 
