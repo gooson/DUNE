@@ -231,10 +231,15 @@ struct ActivityView: View {
         .waveRefreshable {
             await viewModel.loadActivityData()
         }
-        // Correction #78: consolidate .task + .onChange → .task(id:)
-        .task(id: "\(recentRecords.count)-\(refreshSignal)") {
+        // Keep heavy HealthKit reload tied to coordinator/manual refresh only.
+        // SwiftData sync churn should update derived UI state without cancel/restart storms.
+        .task(id: refreshSignal) {
             viewModel.updateSuggestion(records: recentRecords)
             await viewModel.loadActivityData()
+            recomputeInjuryConflicts()
+        }
+        .onChange(of: recentRecords.count) { _, _ in
+            viewModel.updateSuggestion(records: recentRecords)
             recomputeInjuryConflicts()
         }
         .onChange(of: activeInjuryRecords.count) { _, _ in
