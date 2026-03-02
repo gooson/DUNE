@@ -18,7 +18,21 @@ struct ExerciseStartView: View {
         ) != nil
     }
 
+    /// Whether this exercise should use the cardio live tracking flow.
+    private var isCardioLiveTracking: Bool {
+        exercise.inputType == .durationDistance
+            && exercise.resolvedActivityType.isDistanceBased
+    }
+
     var body: some View {
+        if isCardioLiveTracking {
+            CardioStartSheet(exercise: exercise)
+        } else {
+            strengthFlow
+        }
+    }
+
+    private var strengthFlow: some View {
         NavigationStack {
             VStack(spacing: 0) {
                 ScrollView {
