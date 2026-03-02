@@ -326,11 +326,13 @@ struct SessionSummaryView: View {
         let distanceKm = workoutManager.distanceKm
 
         var exerciseType = "Cardio"
+        var exerciseDefinitionID: String?
         var primaryMuscles: [MuscleGroup] = []
         var secondaryMuscles: [MuscleGroup] = []
 
         if case .cardio(let activityType, _) = workoutManager.workoutMode {
             exerciseType = activityType.typeName
+            exerciseDefinitionID = activityType.rawValue
             primaryMuscles = activityType.primaryMuscles
             secondaryMuscles = activityType.secondaryMuscles
         }
@@ -343,6 +345,7 @@ struct SessionSummaryView: View {
             distance: distanceKm > 0 ? distanceKm : nil,
             isFromHealthKit: true,
             healthKitWorkoutID: healthKitWorkoutID,
+            exerciseDefinitionID: exerciseDefinitionID,
             primaryMuscles: primaryMuscles,
             secondaryMuscles: secondaryMuscles,
             calorieSource: activeCalories > 0 ? .healthKit : .manual,
@@ -461,8 +464,17 @@ struct SessionSummaryView: View {
         let ids = currentExerciseIDs
         let scopedRecords = exerciseRecords.filter { record in
             guard let effort = record.rpe, (1...10).contains(effort) else { return false }
-            // Cardio/quick workouts may not carry exerciseDefinitionID; fallback to global history.
-            if ids.isEmpty { return true }
+            if ids.isEmpty {
+                // Cardio sessions have no template IDs. Prefer activity-matched history,
+                // then gracefully fallback for recovered/unknown sessions.
+                guard case .cardio(let activityType, _) = workoutManager.workoutMode else { return true }
+                let cardioID = activityType.rawValue
+                let cardioName = activityType.typeName
+                if let definitionID = record.exerciseDefinitionID {
+                    return definitionID == cardioID
+                }
+                return record.exerciseType == cardioID || record.exerciseType == cardioName
+            }
             guard let id = record.exerciseDefinitionID else { return false }
             return ids.contains(id)
         }
