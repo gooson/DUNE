@@ -4857,6 +4857,23 @@
         }
       }
     },
+    "Created Date" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "作成日"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "생성일"
+          }
+        }
+      }
+    },
     "Creative" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -5005,6 +5022,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "사용자 정의"
+          }
+        }
+      }
+    },
+    "Custom Date" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "日付を指定"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "직접 날짜"
           }
         }
       }
@@ -7154,6 +7188,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "운동 완료"
+          }
+        }
+      }
+    },
+    "First Completion" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "初回完了基準"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "첫 완료 기준"
           }
         }
       }
@@ -10905,9 +10956,6 @@
         }
       }
     },
-    "My Habits" : {
-
-    },
     "Name" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -14393,6 +14441,74 @@
         }
       }
     },
+    "Schedule starts after the first completion" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最初の完了後にサイクルが開始されます"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "첫 완료 후 주기가 시작됩니다"
+          }
+        }
+      }
+    },
+    "Scheduled" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "予定"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "예정"
+          }
+        }
+      }
+    },
+    "Scheduled · Starts %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "予定・%@開始"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "예정 · %@ 시작"
+          }
+        }
+      }
+    },
+    "Scheduled · Waiting for first completion" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "予定・初回完了待ち"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "예정 · 첫 완료 대기"
+          }
+        }
+      }
+    },
     "Score Calculation" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -15865,6 +15981,23 @@
         }
       }
     },
+    "Start date" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "開始日"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "시작일"
+          }
+        }
+      }
+    },
     "Start Date" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -15912,6 +16045,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "시작일이 너무 과거입니다"
+          }
+        }
+      }
+    },
+    "Start point" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "開始基準"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "시작 지점"
           }
         }
       }
@@ -15980,6 +16130,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "운동 시작"
+          }
+        }
+      }
+    },
+    "Starts %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@開始"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 시작"
+          }
+        }
+      }
+    },
+    "Starts on first completion" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "初回完了時に開始"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "첫 완료 시 시작"
           }
         }
       }
@@ -19916,193 +20100,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "수면 점수가 하락 추세입니다. 취침 1시간 전 화면 사용을 줄이고 카페인은 오후 2시 이전으로 제한해보세요."
-          }
-        }
-      }
-    },
-    "Created Date" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "作成日"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "생성일"
-          }
-        }
-      }
-    },
-    "Custom Date" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "日付を指定"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "직접 날짜"
-          }
-        }
-      }
-    },
-    "First Completion" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "初回完了基準"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "첫 완료 기준"
-          }
-        }
-      }
-    },
-    "Schedule starts after the first completion" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "最初の完了後にサイクルが開始されます"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "첫 완료 후 주기가 시작됩니다"
-          }
-        }
-      }
-    },
-    "Scheduled" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "予定"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "예정"
-          }
-        }
-      }
-    },
-    "Scheduled · Starts %@" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "予定・%@開始"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "예정 · %@ 시작"
-          }
-        }
-      }
-    },
-    "Scheduled · Waiting for first completion" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "予定・初回完了待ち"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "예정 · 첫 완료 대기"
-          }
-        }
-      }
-    },
-    "Start date" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "開始日"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "시작일"
-          }
-        }
-      }
-    },
-    "Start point" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "開始基準"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "시작 지점"
-          }
-        }
-      }
-    },
-    "Starts %@" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@開始"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ 시작"
-          }
-        }
-      }
-    },
-    "Starts on first completion" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "初回完了時に開始"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "첫 완료 시 시작"
           }
         }
       }
