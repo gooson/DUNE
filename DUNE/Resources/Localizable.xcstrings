@@ -1053,6 +1053,23 @@
         }
       }
     },
+    "%lld selected" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld件選択"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld개 선택"
+          }
+        }
+      }
+    },
     "%lld steps today" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1083,6 +1100,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld/%lld개 근육군 준비 완료"
+          }
+        }
+      }
+    },
+    "%lld/%lld workouts" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld/%lld回"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld/%lld회"
           }
         }
       }
@@ -2176,7 +2210,38 @@
       }
     },
     "Alternative options" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "代替オプション"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "대안 옵션"
+          }
+        }
+      }
+    },
+    "Alternatives" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "代替案"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "대안"
+          }
+        }
+      }
     },
     "Always" : {
       "extractionState" : "manual",
@@ -2368,7 +2433,21 @@
       }
     },
     "At least one equipment is always kept to avoid an empty recommendation." : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "おすすめを空にしないため、器具は最低1つ維持されます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "추천이 비지 않도록 최소 1개 장비는 유지됩니다."
+          }
+        }
+      }
     },
     "Australian Football" : {
       "extractionState" : "manual",
@@ -2420,7 +2499,38 @@
       }
     },
     "Auto Workout Achievements" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自動ワークアウト実績"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "자동 운동 업적"
+          }
+        }
+      }
+    },
+    "Arms 3x / week" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "週3回腕トレ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주 3회 팔 운동"
+          }
+        }
+      }
     },
     "Auto-complete from workouts" : {
       "extractionState" : "manual",
@@ -2944,6 +3054,9 @@
           }
         }
       }
+    },
+    "Best streak %@w" : {
+
     },
     "Best Time" : {
       "localizations" : {
@@ -7610,7 +7723,21 @@
       }
     },
     "Gym" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ジム"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "헬스장"
+          }
+        }
+      }
     },
     "Gymnastics" : {
       "extractionState" : "manual",
@@ -7919,7 +8046,21 @@
       }
     },
     "HealthKit-based weekly goals (Mon-Sun)" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HealthKitベースの週間目標（月-日）"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HealthKit 기반 주간 목표 (월-일)"
+          }
+        }
+      }
     },
     "Heart Rate" : {
       "extractionState" : "manual",
@@ -8328,7 +8469,21 @@
       }
     },
     "Home" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自宅"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "홈트"
+          }
+        }
+      }
     },
     "Hourly Forecast" : {
       "extractionState" : "manual",
@@ -11212,7 +11367,21 @@
       }
     },
     "No HealthKit-linked workouts yet" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HealthKit連携ワークアウトはまだありません"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아직 HealthKit 연동 운동이 없어요"
+          }
+        }
+      }
     },
     "No HRV/RHR data collected — default applied" : {
       "localizations" : {
@@ -11248,7 +11417,21 @@
       }
     },
     "No matching workout suggestions" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一致するおすすめワークアウトがありません"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "조건에 맞는 추천 운동이 없습니다"
+          }
+        }
+      }
     },
     "No memo" : {
       "extractionState" : "manual",
@@ -11263,6 +11446,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "메모 없음"
+          }
+        }
+      }
+    },
+    "Back 3x / week" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "週3回背中トレ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주 3회 등 운동"
+          }
+        }
+      }
+    },
+    "Chest 3x / week" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "週3回胸トレ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주 3회 가슴 운동"
+          }
+        }
+      }
+    },
+    "Lower Body 3x / week" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "週3回下半身トレ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주 3회 하체 운동"
+          }
+        }
+      }
+    },
+    "Running 15km / week" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "週15kmランニング"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주 15km 러닝"
+          }
+        }
+      }
+    },
+    "Shoulders 3x / week" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "週3回肩トレ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주 3회 어깨 운동"
+          }
+        }
+      }
+    },
+    "Strength 3x / week" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "週3回筋力トレーニング"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주 3회 근력 운동"
           }
         }
       }
@@ -11731,6 +12016,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "데이터가 부족해요."
+          }
+        }
+      }
+    },
+    "Not Interested" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "興味なし"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "관심 없음"
           }
         }
       }
@@ -17472,6 +17774,23 @@
         }
       }
     },
+    "Undo" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "元に戻す"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "되돌리기"
+          }
+        }
+      }
+    },
     "Up Next" : {
       "localizations" : {
         "ja" : {
@@ -17503,6 +17822,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ 업데이트됨"
+          }
+        }
+      }
+    },
+    "Update your equipment or remove not-interested exercises." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "器具を更新するか、興味なしの運動を解除してください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "보유 기구를 수정하거나 관심 없음 운동을 해제해 주세요."
           }
         }
       }
@@ -18888,6 +19224,40 @@
         }
       }
     },
+    "Workout 5x / week" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "週5回ワークアウト"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주 5회 운동"
+          }
+        }
+      }
+    },
+    "Workout 7x / week" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "週7回ワークアウト"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주 7회 운동"
+          }
+        }
+      }
+    },
     "Workout Complete" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -18933,6 +19303,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "운동 일관성"
+          }
+        }
+      }
+    },
+    "Workout Context" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ワークアウト環境"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "운동 환경"
           }
         }
       }
@@ -19532,6 +19919,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "수면 점수가 하락 추세입니다. 취침 1시간 전 화면 사용을 줄이고 카페인은 오후 2시 이전으로 제한해보세요."
+          }
+        }
+      }
+    },
+    "workouts" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "回"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "회"
           }
         }
       }

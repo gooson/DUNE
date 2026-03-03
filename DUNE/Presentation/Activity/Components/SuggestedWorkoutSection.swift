@@ -14,6 +14,13 @@ struct SuggestedWorkoutSection: View {
 
     @State private var showingEquipmentSheet = false
 
+    private var columns: [GridItem] {
+        [
+            GridItem(.flexible(), spacing: DS.Spacing.sm),
+            GridItem(.flexible(), spacing: DS.Spacing.sm),
+        ]
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             recommendationControlsCard
@@ -70,9 +77,14 @@ struct SuggestedWorkoutSection: View {
 
                         Spacer(minLength: DS.Spacing.xs)
 
-                        Text("\(availableEquipment.count.formattedWithSeparator) selected")
-                            .font(.caption2)
-                            .foregroundStyle(.tertiary)
+                        Text(
+                            String.localizedStringWithFormat(
+                                String(localized: "%lld selected"),
+                                Int64(availableEquipment.count)
+                            )
+                        )
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
 
                         Image(systemName: "chevron.right")
                             .font(.caption2)
@@ -115,17 +127,21 @@ struct SuggestedWorkoutSection: View {
                     }
                 }
 
-                ForEach(suggestion.exercises) { exercise in
-                    let excluded = isExerciseExcluded(exercise.id)
-                    SuggestedExerciseRow(
-                        exercise: exercise,
-                        isExcluded: excluded,
-                        onStart: { onStartExercise(exercise.definition) },
-                        onToggleInterest: {
-                            onSetExerciseExcluded(!excluded, exercise.id)
-                        },
-                        onAlternativeSelected: { alt in onStartExercise(alt) }
-                    )
+                LazyVGrid(columns: columns, spacing: DS.Spacing.sm) {
+                    ForEach(suggestion.exercises) { exercise in
+                        let excluded = isExerciseExcluded(exercise.id)
+                        SuggestedExerciseRow(
+                            exercise: exercise,
+                            isExcluded: excluded,
+                            onStart: { onStartExercise(exercise.definition) },
+                            onToggleInterest: {
+                                onSetExerciseExcluded(!excluded, exercise.id)
+                            },
+                            onAlternativeSelected: { alt in onStartExercise(alt) }
+                        )
+                        .padding(DS.Spacing.sm)
+                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+                    }
                 }
             }
         }
@@ -165,19 +181,31 @@ struct SuggestedWorkoutSection: View {
         if hours < 1 {
             timeText = String(localized: "soon")
         } else if hours < 24 {
-            timeText = String(localized: "in ~\(Int(hours).formattedWithSeparator)h")
+            timeText = String.localizedStringWithFormat(
+                String(localized: "in ~%@h"),
+                Int(hours).formattedWithSeparator
+            )
         } else {
             let days = Int(hours / 24)
-            timeText = String(localized: "in ~\(days.formattedWithSeparator)d")
+            timeText = String.localizedStringWithFormat(
+                String(localized: "in ~%@d"),
+                days.formattedWithSeparator
+            )
         }
 
         return HStack(spacing: DS.Spacing.xs) {
             Image(systemName: "clock.arrow.circlepath")
                 .font(.caption2)
                 .foregroundStyle(DS.Color.textSecondary)
-            Text(String(localized: "\(muscle.displayName) ready \(timeText)"))
-                .font(.caption)
-                .foregroundStyle(DS.Color.textSecondary)
+            Text(
+                String.localizedStringWithFormat(
+                    String(localized: "%@ ready %@"),
+                    muscle.displayName,
+                    timeText
+                )
+            )
+            .font(.caption)
+            .foregroundStyle(DS.Color.textSecondary)
         }
     }
 }

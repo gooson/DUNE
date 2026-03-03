@@ -24,6 +24,7 @@ SKIP_TESTING=()
 ONLY_TESTING=()
 TEST_PLAN=""
 STREAM_LOGS=0
+SMOKE_MODE=0
 
 if [[ "${CI:-}" == "true" ]]; then
     STREAM_LOGS=1
@@ -59,9 +60,13 @@ while [[ $# -gt 0 ]]; do
             TEST_PLAN="$2"
             shift 2
             ;;
+        --smoke)
+            SMOKE_MODE=1
+            shift
+            ;;
         *)
             echo "Unknown option: $1"
-            echo "Usage: $0 [--no-regen] [--stream-log | --no-stream-log] [--log-file <path>] [--skip-testing <target>] [--only-testing <target>] [--test-plan <name>]"
+            echo "Usage: $0 [--no-regen] [--stream-log | --no-stream-log] [--log-file <path>] [--skip-testing <target>] [--only-testing <target>] [--test-plan <name>] [--smoke]"
             exit 2
             ;;
     esac
@@ -114,7 +119,13 @@ if [[ "${#ONLY_TESTING[@]}" -gt 0 ]]; then
         echo "Only testing: $target"
     done
 else
-    TEST_CMD+=(-only-testing DUNEWatchUITests)
+    if [[ "$SMOKE_MODE" -eq 1 ]]; then
+        TEST_CMD+=(-only-testing DUNEWatchUITests/Smoke/WatchHomeSmokeTests)
+        TEST_CMD+=(-only-testing DUNEWatchUITests/Smoke/WatchWorkoutStartSmokeTests)
+        echo "Smoke mode enabled: running watch smoke suite only"
+    else
+        TEST_CMD+=(-only-testing DUNEWatchUITests)
+    fi
 fi
 
 if [[ "${#SKIP_TESTING[@]}" -gt 0 ]]; then
