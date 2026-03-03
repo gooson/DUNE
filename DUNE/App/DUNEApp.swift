@@ -68,7 +68,7 @@ struct DUNEApp: App {
 
     private static func makeModelContainer(configuration: ModelConfiguration) throws -> ModelContainer {
         try ModelContainer(
-            for: ExerciseRecord.self, BodyCompositionRecord.self, WorkoutSet.self, CustomExercise.self, WorkoutTemplate.self, UserCategory.self, InjuryRecord.self, ExerciseDefaultRecord.self, HabitDefinition.self, HabitLog.self,
+            for: ExerciseRecord.self, BodyCompositionRecord.self, WorkoutSet.self, CustomExercise.self, WorkoutTemplate.self, UserCategory.self, InjuryRecord.self, ExerciseDefaultRecord.self, HabitDefinition.self, HabitLog.self, HealthSnapshotMirrorRecord.self,
             migrationPlan: AppMigrationPlan.self,
             configurations: configuration
         )
@@ -89,26 +89,6 @@ struct DUNEApp: App {
             UserDefaults.standard.set(forcedTheme.rawValue, forKey: "com.dune.app.theme")
             _selectedTheme = AppStorage(wrappedValue: forcedTheme, "com.dune.app.theme")
         }
-
-        let sharedService: SharedHealthDataService = SharedHealthDataServiceImpl(healthKitManager: .shared)
-        self.sharedHealthDataService = sharedService
-        let coordinator = AppRefreshCoordinatorImpl(sharedHealthDataService: sharedService)
-        self.refreshCoordinator = coordinator
-
-        let notifService = NotificationServiceImpl()
-        self.notificationService = notifService
-        self.notificationCenterDelegate = AppNotificationCenterDelegate()
-        UNUserNotificationCenter.current().delegate = notificationCenterDelegate
-        let hkStore = HKHealthStore()
-        let evaluator = BackgroundNotificationEvaluator(
-            store: hkStore,
-            notificationService: notifService
-        )
-        self.observerManager = HealthKitObserverManager(
-            store: hkStore,
-            coordinator: coordinator,
-            notificationEvaluator: evaluator
-        )
         let cloudSyncEnabled = UserDefaults.standard.bool(forKey: "isCloudSyncEnabled")
         let config = ModelConfiguration(
             cloudKitDatabase: (cloudSyncEnabled && !Self.isRunningXCTest) ? .automatic : .none
@@ -126,6 +106,33 @@ struct DUNEApp: App {
                 modelContainer = Self.makeInMemoryFallbackContainer()
             }
         }
+
+        let baseSharedService: SharedHealthDataService = SharedHealthDataServiceImpl(healthKitManager: .shared)
+        let mirrorStore: HealthSnapshotMirroring = HealthSnapshotMirrorStore(modelContainer: modelContainer)
+        let sharedService: SharedHealthDataService = MirroringSharedHealthDataService(
+            baseService: baseSharedService,
+            mirrorStore: mirrorStore
+        )
+        self.sharedHealthDataService = sharedService
+
+        let coordinator = AppRefreshCoordinatorImpl(sharedHealthDataService: sharedService)
+        self.refreshCoordinator = coordinator
+
+        let notifService = NotificationServiceImpl()
+        self.notificationService = notifService
+        self.notificationCenterDelegate = AppNotificationCenterDelegate()
+        UNUserNotificationCenter.current().delegate = notificationCenterDelegate
+
+        let hkStore = HKHealthStore()
+        let evaluator = BackgroundNotificationEvaluator(
+            store: hkStore,
+            notificationService: notifService
+        )
+        self.observerManager = HealthKitObserverManager(
+            store: hkStore,
+            coordinator: coordinator,
+            notificationEvaluator: evaluator
+        )
     }
 
     private static func deleteStoreFiles(at url: URL) {

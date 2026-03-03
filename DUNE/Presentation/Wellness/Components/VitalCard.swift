@@ -16,7 +16,7 @@ struct VitalCard: View {
             VStack(alignment: .leading, spacing: DS.Spacing.sm) {
                 // Header: icon + title
                 HStack(spacing: DS.Spacing.xs) {
-                    Image(systemName: data.category.iconName)
+                    Image(systemName: data.metric.resolvedIconName)
                         .font(.caption)
                         .foregroundStyle(themeColor)
 

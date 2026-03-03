@@ -131,4 +131,48 @@ struct HealthKitWorkoutDetailViewModelTests {
 
         #expect(value == 169)
     }
+
+    @Test("stepCount for workout range prefers WorkoutSummary value")
+    func stepCountPrefersWorkoutSummary() {
+        let viewModel = HealthKitWorkoutDetailViewModel()
+        viewModel.workoutStepCount = 900
+
+        let workout = WorkoutSummary(
+            id: "walk-1",
+            type: "Walking",
+            activityType: .walking,
+            duration: 1800,
+            calories: 160,
+            distance: 2000,
+            date: Date(),
+            stepCount: 1_234
+        )
+
+        let value = viewModel.stepCount(for: workout, range: .workout)
+
+        #expect(value == 1_234)
+    }
+
+    @Test("stepCount returns day and week cached values by range")
+    func stepCountRespectsSelectedRange() {
+        let viewModel = HealthKitWorkoutDetailViewModel()
+        viewModel.workoutStepCount = 1_000
+        viewModel.dayStepCount = 5_500
+        viewModel.weekStepCount = 24_000
+
+        let workout = WorkoutSummary(
+            id: "walk-2",
+            type: "Walking",
+            activityType: .walking,
+            duration: 2100,
+            calories: 170,
+            distance: 2200,
+            date: Date(),
+            stepCount: nil
+        )
+
+        #expect(viewModel.stepCount(for: workout, range: .workout) == 1_000)
+        #expect(viewModel.stepCount(for: workout, range: .day) == 5_500)
+        #expect(viewModel.stepCount(for: workout, range: .week) == 24_000)
+    }
 }

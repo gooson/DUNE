@@ -6613,18 +6613,18 @@
         }
       }
     },
-    "Feels %@°" : {
+    "Feels %lld°" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "体感 %@°"
+            "value" : "体感 %lld°"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "체감 %@°"
+            "value" : "체감 %lld°"
           }
         }
       }
@@ -6646,18 +6646,18 @@
         }
       }
     },
-    "Feels like %@°C" : {
+    "Feels like %lld°C" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "体感 %@°C"
+            "value" : "体感 %lld°C"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "체감 %@°C"
+            "value" : "체감 %lld°C"
           }
         }
       }
@@ -19049,6 +19049,125 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "τ (타우): 근육 크기별 회복 속도 (대근육 72시간, 소근육 36시간)"
+          }
+        }
+      }
+    },
+    "Avg Pace" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "平均ペース"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "평균 페이스"
+          }
+        }
+      }
+    },
+    "Workout Steps" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ワークアウト歩数"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "운동 걸음 수"
+          }
+        }
+      }
+    },
+    "Day Steps" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1日歩数"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "하루 걸음 수"
+          }
+        }
+      }
+    },
+    "Week Steps" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "週間歩数"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주간 걸음 수"
+          }
+        }
+      }
+    },
+    "Step Range" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "歩数範囲"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "걸음 범위"
+          }
+        }
+      }
+    },
+    "Day" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "日"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "하루"
+          }
+        }
+      }
+    },
+    "Week" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "週"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주"
           }
         }
       }
