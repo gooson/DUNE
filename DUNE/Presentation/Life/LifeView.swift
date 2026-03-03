@@ -101,11 +101,14 @@ private struct HabitListQueryView: View {
 
     @Environment(\.modelContext) private var modelContext
     @Environment(\.appTheme) private var theme
+    @Environment(\.horizontalSizeClass) private var sizeClass
 
     // Correction #68: O(1) lookup instead of O(N) per row
     @State private var habitsByID: [UUID: HabitDefinition] = [:]
     // Correction #102: cached today exercise check (avoid body-path Calendar ops)
     @State private var cachedTodayExerciseExists = false
+
+    private var isRegular: Bool { sizeClass == .regular }
 
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.lg) {
@@ -201,10 +204,26 @@ private struct HabitListQueryView: View {
     // MARK: - Auto Achievements
 
     private var autoAchievementsSection: some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            Text("Auto Workout Achievements")
-                .font(.headline)
-                .foregroundStyle(.primary)
+        let groups = autoAchievementGroups
+        let completedGoals = groups.reduce(0) { $0 + $1.completedCount }
+        let totalGoals = groups.reduce(0) { $0 + $1.metrics.count }
+
+        return VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            HStack(alignment: .firstTextBaseline) {
+                Text("Auto Workout Achievements")
+                    .font(.headline)
+                    .foregroundStyle(.primary)
+                Spacer()
+                if totalGoals > 0 {
+                    Label("\(completedGoals)/\(totalGoals) done", systemImage: "checkmark.seal.fill")
+                        .font(.caption2)
+                        .foregroundStyle(DS.Color.positive)
+                        .padding(.horizontal, DS.Spacing.sm)
+                        .padding(.vertical, DS.Spacing.xxs)
+                        .background(.ultraThinMaterial, in: Capsule())
+                }
+            }
+
             Text("HealthKit-based weekly goals (Mon-Sun)")
                 .font(.caption)
                 .foregroundStyle(.secondary)
@@ -215,54 +234,169 @@ private struct HabitListQueryView: View {
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
+            } else if isRegular {
+                LazyVGrid(
+                    columns: [GridItem(.flexible(), spacing: DS.Spacing.md), GridItem(.flexible())],
+                    spacing: DS.Spacing.md
+                ) {
+                    ForEach(groups) { group in
+                        autoAchievementGroupCard(group)
+                    }
+                }
             } else {
-                ForEach(viewModel.autoExerciseProgresses) { progress in
-                    autoAchievementRow(progress)
+                VStack(spacing: DS.Spacing.sm) {
+                    ForEach(groups) { group in
+                        autoAchievementGroupCard(group)
+                    }
+                }
+            }
+        }
+        .frame(maxWidth: isRegular ? 760 : .infinity, alignment: .leading)
+    }
+
+    private func autoAchievementGroupCard(_ group: AutoAchievementGroup) -> some View {
+        StandardCard {
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                HStack(spacing: DS.Spacing.xs) {
+                    Image(systemName: group.icon)
+                        .font(.caption)
+                        .foregroundStyle(theme.accentColor)
+                    Text(group.title)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                    Spacer()
+                    Text("\(group.completedCount)/\(group.metrics.count)")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .monospacedDigit()
+                }
+
+                ForEach(group.visibleMetrics) { metric in
+                    autoAchievementMetricRow(metric)
+                }
+
+                if group.maxStreakWeeks > 0 {
+                    HStack(spacing: DS.Spacing.xxs) {
+                        Image(systemName: "flame.fill")
+                            .font(.caption2)
+                        Text("Best streak \(group.maxStreakWeeks)w")
+                            .font(.caption2)
+                            .fontWeight(.semibold)
+                            .monospacedDigit()
+                    }
+                    .foregroundStyle(theme.accentColor)
                 }
             }
         }
     }
 
-    private func autoAchievementRow(_ progress: LifeAutoAchievementProgress) -> some View {
-        StandardCard {
-            VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-                HStack(spacing: DS.Spacing.sm) {
-                    Text(progress.title)
-                        .font(.subheadline)
-                        .fontWeight(.medium)
-
-                    Spacer()
-
-                    if progress.streakWeeks > 0 {
-                        HStack(spacing: DS.Spacing.xxs) {
-                            Image(systemName: "flame.fill")
-                                .font(.caption2)
-                            Text("\(progress.streakWeeks)")
-                                .font(.caption2)
-                                .fontWeight(.semibold)
-                        }
-                        .foregroundStyle(theme.accentColor)
-                    }
-                }
-
-                ProgressView(value: progress.progressRatio)
-                    .tint(progress.isCompleted ? DS.Color.positive : theme.accentColor)
-
-                HStack(spacing: DS.Spacing.sm) {
-                    Text(progress.progressText)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .monospacedDigit()
-
-                    Spacer()
-
-                    if progress.isCompleted {
-                        Label("Done", systemImage: "checkmark.circle.fill")
-                            .font(.caption2)
-                            .foregroundStyle(DS.Color.positive)
-                    }
+    private func autoAchievementMetricRow(_ metric: LifeAutoAchievementProgress) -> some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+            HStack(spacing: DS.Spacing.xs) {
+                Text(shortMetricTitle(metric.id))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Spacer()
+                Text(metric.progressText)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .monospacedDigit()
+                if metric.isCompleted {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.caption2)
+                        .foregroundStyle(DS.Color.positive)
                 }
             }
+            ProgressView(value: metric.progressRatio)
+                .tint(metric.isCompleted ? DS.Color.positive : theme.accentColor)
+        }
+    }
+
+    private func shortMetricTitle(_ id: String) -> String {
+        switch id {
+        case "weeklyWorkout5":
+            return "Workout 5x"
+        case "weeklyWorkout7":
+            return "Workout 7x"
+        case "weeklyStrength3":
+            return "Strength"
+        case "weeklyChest3":
+            return "Chest"
+        case "weeklyBack3":
+            return "Back"
+        case "weeklyLowerBody3":
+            return "Lower Body"
+        case "weeklyShoulders3":
+            return "Shoulders"
+        case "weeklyArms3":
+            return "Arms"
+        case "weeklyRunning15km":
+            return "Running"
+        default:
+            return "Goal"
+        }
+    }
+
+    private var autoAchievementGroups: [AutoAchievementGroup] {
+        let byID = Dictionary(uniqueKeysWithValues: viewModel.autoExerciseProgresses.map { ($0.id, $0) })
+        let grouped: [AutoAchievementGroup] = [
+            makeAutoGroup(
+                id: "routine",
+                title: "Routine Consistency",
+                icon: "calendar.badge.clock",
+                ruleIDs: ["weeklyWorkout5", "weeklyWorkout7"],
+                byID: byID
+            ),
+            makeAutoGroup(
+                id: "strength",
+                title: "Strength Split",
+                icon: "dumbbell.fill",
+                ruleIDs: ["weeklyStrength3", "weeklyChest3", "weeklyBack3", "weeklyLowerBody3", "weeklyShoulders3", "weeklyArms3"],
+                byID: byID
+            ),
+            makeAutoGroup(
+                id: "running",
+                title: "Running Distance",
+                icon: "figure.run",
+                ruleIDs: ["weeklyRunning15km"],
+                byID: byID
+            )
+        ]
+
+        return grouped.filter { !$0.metrics.isEmpty }
+    }
+
+    private func makeAutoGroup(
+        id: String,
+        title: String,
+        icon: String,
+        ruleIDs: [String],
+        byID: [String: LifeAutoAchievementProgress]
+    ) -> AutoAchievementGroup {
+        let metrics = ruleIDs.compactMap { byID[$0] }
+        return AutoAchievementGroup(id: id, title: title, icon: icon, metrics: metrics)
+    }
+
+    private struct AutoAchievementGroup: Identifiable {
+        let id: String
+        let title: String
+        let icon: String
+        let metrics: [LifeAutoAchievementProgress]
+
+        var completedCount: Int {
+            metrics.filter(\.isCompleted).count
+        }
+
+        var maxStreakWeeks: Int {
+            metrics.map(\.streakWeeks).max() ?? 0
+        }
+
+        var visibleMetrics: [LifeAutoAchievementProgress] {
+            if id == "strength" {
+                let filtered = metrics.filter { $0.id == "weeklyStrength3" || $0.currentValue > 0 || $0.isCompleted }
+                return filtered.isEmpty ? Array(metrics.prefix(1)) : filtered
+            }
+            return metrics
         }
     }
 
