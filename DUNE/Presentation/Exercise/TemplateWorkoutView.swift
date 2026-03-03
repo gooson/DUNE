@@ -1,69 +1,68 @@
 import SwiftUI
 import SwiftData
 
-struct CompoundWorkoutView: View {
+/// Sequential template workout — records each exercise individually.
+/// Flow: Exercise 1 → Save → Exercise 2 → Save → ... → Workout Complete
+struct TemplateWorkoutView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.scenePhase) private var scenePhase
     @Environment(\.appTheme) private var theme
 
     @AppStorage(WeightUnit.storageKey) private var weightUnitRaw = WeightUnit.kg.rawValue
-    @State private var viewModel: CompoundWorkoutViewModel
-    @State private var transitionTimer = RestTimerViewModel()
-    @State private var setTimer = RestTimerViewModel()
-    @State private var saveCount = 0
+    @State private var viewModel: TemplateWorkoutViewModel
+    @State private var restTimer = RestTimerViewModel()
     @State private var elapsedSeconds: TimeInterval = 0
     @State private var sessionTimerTask: Task<Void, Never>?
-    @State private var showingShareSheet = false
+    @State private var showingCompletionSheet = false
     @State private var shareImage: UIImage?
     @State private var savedRecords: [ExerciseRecord] = []
     @State private var effortSuggestion: EffortSuggestion?
+    @State private var saveCount = 0
+    @State private var showTransition = false
 
     @Query private var exerciseRecords: [ExerciseRecord]
+
+    private let intensityService = WorkoutIntensityService()
 
     private var weightUnit: WeightUnit {
         WeightUnit(rawValue: weightUnitRaw) ?? .kg
     }
 
-    let config: CompoundWorkoutConfig
+    let config: TemplateWorkoutConfig
 
-    init(config: CompoundWorkoutConfig) {
+    init(config: TemplateWorkoutConfig) {
         self.config = config
-        self._viewModel = State(initialValue: CompoundWorkoutViewModel(config: config))
+        self._viewModel = State(initialValue: TemplateWorkoutViewModel(config: config))
     }
 
     var body: some View {
         ZStack(alignment: .bottom) {
             ScrollView {
                 VStack(alignment: .leading, spacing: DS.Spacing.lg) {
-                    roundIndicator
-                    exerciseTabs
-                    currentExerciseSection
+                    exerciseProgressHeader
+                    currentExerciseContent
                     actionButtons
-                    workoutSummary
                 }
                 .padding(.horizontal, DS.Spacing.lg)
-                .padding(.bottom, timerVisible ? 140 : 80)
+                .padding(.bottom, restTimer.isRunning ? 140 : 80)
             }
 
-            // Rest timer overlay
-            if setTimer.isRunning {
-                RestTimerView(timer: setTimer)
+            if restTimer.isRunning {
+                RestTimerView(timer: restTimer)
                     .transition(.move(edge: .bottom).combined(with: .opacity))
             }
 
-            // Transition timer overlay (between exercises)
-            if viewModel.isTransitioning {
+            if showTransition {
                 transitionOverlay
                     .transition(.move(edge: .bottom).combined(with: .opacity))
             }
         }
         .background { DetailWaveBackground() }
-        .animation(DS.Animation.snappy, value: setTimer.isRunning)
-        .animation(DS.Animation.snappy, value: viewModel.isTransitioning)
+        .animation(DS.Animation.snappy, value: restTimer.isRunning)
+        .animation(DS.Animation.snappy, value: showTransition)
         .sensoryFeedback(.success, trigger: saveCount)
-        .sensoryFeedback(.success, trigger: setTimer.completionCount)
-        .englishNavigationTitle(config.mode.rawValue.capitalized)
+        .sensoryFeedback(.success, trigger: restTimer.completionCount)
+        .englishNavigationTitle(config.templateName)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
@@ -78,15 +77,16 @@ struct CompoundWorkoutView: View {
                 }
             }
             ToolbarItem(placement: .confirmationAction) {
-                Button("Finish") {
-                    saveAll()
+                if viewModel.isAllDone {
+                    Button("Done") { finishWorkout() }
+                        .fontWeight(.semibold)
+                        .disabled(!viewModel.hasAnyCompleted)
                 }
-                .disabled(viewModel.totalCompletedSets == 0)
-                .fontWeight(.semibold)
             }
         }
         .onAppear {
-            viewModel.loadPreviousSets(from: exerciseRecords)
+            viewModel.prefillFromTemplateDefaults(weightUnit: weightUnit)
+            viewModel.loadPreviousSets(from: exerciseRecords, weightUnit: weightUnit)
             startSessionTimer()
         }
         .onDisappear {
@@ -101,10 +101,10 @@ struct CompoundWorkoutView: View {
         } message: {
             Text(viewModel.validationError ?? "")
         }
-        .sheet(isPresented: $showingShareSheet, onDismiss: { dismiss() }) {
+        .sheet(isPresented: $showingCompletionSheet, onDismiss: { dismiss() }) {
             WorkoutCompletionSheet(
                 shareImage: shareImage,
-                exerciseName: config.mode.displayName,
+                exerciseName: config.templateName,
                 setCount: viewModel.totalCompletedSets,
                 effortSuggestion: effortSuggestion,
                 onDismiss: { effort in
@@ -120,39 +120,33 @@ struct CompoundWorkoutView: View {
         }
     }
 
-    private var timerVisible: Bool {
-        setTimer.isRunning || viewModel.isTransitioning
-    }
+    // MARK: - Exercise Progress Header
 
-    // MARK: - Round Indicator
-
-    private var roundIndicator: some View {
-        HStack(spacing: DS.Spacing.sm) {
-            Image(systemName: config.mode == .superset ? "arrow.triangle.2.circlepath" : "repeat")
-                .foregroundStyle(DS.Color.activity)
-
-            Text("Round \(viewModel.currentRound) / \(config.totalRounds)")
-                .font(.subheadline.weight(.semibold))
-
-            Spacer()
-
-            // Session elapsed time
-            Text(formattedElapsedTime)
-                .font(.caption.weight(.medium).monospacedDigit())
-                .foregroundStyle(DS.Color.textSecondary)
-                .contentTransition(.numericText())
-        }
-        .padding(DS.Spacing.md)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
-    }
-
-    // MARK: - Exercise Tabs
-
-    private var exerciseTabs: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
+    private var exerciseProgressHeader: some View {
+        VStack(spacing: DS.Spacing.sm) {
             HStack(spacing: DS.Spacing.sm) {
-                ForEach(config.exercises.indices, id: \.self) { index in
-                    exerciseTab(index: index)
+                Image(systemName: "list.clipboard")
+                    .foregroundStyle(DS.Color.activity)
+
+                Text(String(localized: "Exercise \(viewModel.currentExerciseIndex + 1) of \(viewModel.totalExercises)"))
+                    .font(.subheadline.weight(.semibold))
+
+                Spacer()
+
+                Text(formattedElapsedTime)
+                    .font(.caption.weight(.medium).monospacedDigit())
+                    .foregroundStyle(DS.Color.textSecondary)
+                    .contentTransition(.numericText())
+            }
+            .padding(DS.Spacing.md)
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+
+            // Exercise tabs
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: DS.Spacing.sm) {
+                    ForEach(config.exercises.indices, id: \.self) { index in
+                        exerciseTab(index: index)
+                    }
                 }
             }
         }
@@ -160,39 +154,72 @@ struct CompoundWorkoutView: View {
 
     private func exerciseTab(index: Int) -> some View {
         let exercise = config.exercises[index]
+        let status = viewModel.exerciseStatuses[index]
         let isCurrent = index == viewModel.currentExerciseIndex
-        let vm = viewModel.exerciseViewModels[index]
-        let completed = vm.completedSetCount
 
         return Button {
             withAnimation(DS.Animation.snappy) {
                 viewModel.goToExercise(at: index)
+                showTransition = false
             }
         } label: {
-            VStack(spacing: DS.Spacing.xxs) {
+            HStack(spacing: DS.Spacing.xs) {
+                statusIcon(for: status)
+                    .font(.caption2)
+
                 Text(exercise.localizedName)
                     .font(.caption.weight(isCurrent ? .bold : .regular))
                     .lineLimit(1)
-                if completed > 0 {
-                    Text("\(completed.formattedWithSeparator) sets")
-                        .font(.system(size: 9))
-                        .foregroundStyle(DS.Color.textSecondary)
-                }
             }
             .padding(.horizontal, DS.Spacing.md)
             .padding(.vertical, DS.Spacing.sm)
             .background(
-                isCurrent ? DS.Color.activity.opacity(0.15) : Color.secondary.opacity(0.08),
+                tabBackground(status: status, isCurrent: isCurrent),
                 in: RoundedRectangle(cornerRadius: DS.Radius.sm)
             )
-            .foregroundStyle(isCurrent ? DS.Color.activity : theme.sandColor)
+            .foregroundStyle(tabForeground(status: status, isCurrent: isCurrent))
         }
         .buttonStyle(.plain)
+        .disabled(status == .completed)
     }
 
-    // MARK: - Current Exercise Section
+    @ViewBuilder
+    private func statusIcon(for status: TemplateExerciseStatus) -> some View {
+        switch status {
+        case .pending:
+            Image(systemName: "circle")
+        case .inProgress:
+            Image(systemName: "circle.fill")
+        case .completed:
+            Image(systemName: "checkmark.circle.fill")
+        case .skipped:
+            Image(systemName: "forward.circle")
+        }
+    }
 
-    private var currentExerciseSection: some View {
+    private func tabBackground(status: TemplateExerciseStatus, isCurrent: Bool) -> Color {
+        switch status {
+        case .completed: DS.Color.activity.opacity(0.15)
+        case .inProgress where isCurrent: DS.Color.activity.opacity(0.15)
+        case .inProgress: Color.secondary.opacity(0.08)
+        case .skipped: Color.secondary.opacity(0.05)
+        case .pending: Color.secondary.opacity(0.08)
+        }
+    }
+
+    private func tabForeground(status: TemplateExerciseStatus, isCurrent: Bool) -> Color {
+        switch status {
+        case .completed: DS.Color.activity
+        case .inProgress where isCurrent: DS.Color.activity
+        case .inProgress: theme.sandColor
+        case .skipped: DS.Color.textSecondary
+        case .pending: theme.sandColor
+        }
+    }
+
+    // MARK: - Current Exercise Content
+
+    private var currentExerciseContent: some View {
         let vm = viewModel.currentViewModel
         let exercise = viewModel.currentExercise
 
@@ -219,12 +246,12 @@ struct CompoundWorkoutView: View {
                 Spacer()
             }
 
-            // Set list for current exercise
-            setListFor(vm: vm, exercise: exercise)
+            // Set list
+            setList(vm: vm, exercise: exercise)
         }
     }
 
-    private func setListFor(vm: WorkoutSessionViewModel, exercise: ExerciseDefinition) -> some View {
+    private func setList(vm: WorkoutSessionViewModel, exercise: ExerciseDefinition) -> some View {
         VStack(spacing: 0) {
             // Column headers
             HStack(spacing: DS.Spacing.sm) {
@@ -255,7 +282,7 @@ struct CompoundWorkoutView: View {
                     onComplete: {
                         let completed = vm.toggleSetCompletion(at: index)
                         if completed {
-                            setTimer.start(seconds: Int(WorkoutSettingsStore.shared.restSeconds))
+                            restTimer.start(seconds: Int(WorkoutSettingsStore.shared.restSeconds))
                         }
                     },
                     onFillFromPrevious: vm.previousSetInfo(for: vm.sets[index].setNumber) != nil ? {
@@ -297,62 +324,44 @@ struct CompoundWorkoutView: View {
             }
             .buttonStyle(.plain)
 
-            // Next exercise button
-            if !viewModel.isComplete {
+            // Complete current exercise
+            Button {
+                completeCurrentExercise()
+            } label: {
+                Label("Complete Exercise", systemImage: "checkmark.circle.fill")
+                    .font(.body.weight(.medium))
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, DS.Spacing.md)
+                    .background(DS.Color.activity, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+            }
+            .buttonStyle(.plain)
+            .disabled(viewModel.currentViewModel.completedSetCount == 0 || viewModel.isSaving)
+
+            // Skip exercise
+            if !viewModel.isAllDone {
                 Button {
-                    withAnimation(DS.Animation.snappy) {
-                        viewModel.advanceToNextExercise()
-                        if config.restBetweenExercises > 0 {
-                            transitionTimer.start(seconds: config.restBetweenExercises)
-                        } else {
-                            viewModel.finishTransition()
-                        }
-                    }
+                    skipCurrentExercise()
                 } label: {
-                    let nextLabel = viewModel.isLastExerciseInRound
-                        ? "Next Round →"
-                        : "Next Exercise →"
-                    Label(nextLabel, systemImage: "arrow.right.circle.fill")
+                    Text("Skip Exercise")
                         .font(.body.weight(.medium))
-                        .foregroundStyle(.white)
+                        .foregroundStyle(DS.Color.textSecondary)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, DS.Spacing.md)
-                        .background(DS.Color.activity, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
                 }
                 .buttonStyle(.plain)
             }
         }
     }
 
-    // MARK: - Workout Summary
-
-    private var workoutSummary: some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            Text("Summary")
-                .font(.caption.weight(.medium))
-                .foregroundStyle(DS.Color.textSecondary)
-
-            ForEach(config.exercises.indices, id: \.self) { index in
-                let exercise = config.exercises[index]
-                let vm = viewModel.exerciseViewModels[index]
-                HStack {
-                    Text(exercise.localizedName)
-                        .font(.subheadline)
-                    Spacer()
-                    Text("\(vm.completedSetCount.formattedWithSeparator) sets")
-                        .font(.caption)
-                        .foregroundStyle(DS.Color.textSecondary)
-                }
-            }
-        }
-        .padding(DS.Spacing.md)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
-    }
-
     // MARK: - Transition Overlay
 
     private var transitionOverlay: some View {
         VStack(spacing: DS.Spacing.md) {
+            Image(systemName: "checkmark.circle.fill")
+                .font(.title)
+                .foregroundStyle(DS.Color.activity)
+
             Text("Up Next")
                 .font(.caption)
                 .foregroundStyle(DS.Color.textSecondary)
@@ -360,39 +369,28 @@ struct CompoundWorkoutView: View {
             Text(viewModel.currentExercise.localizedName)
                 .font(.title3.weight(.semibold))
 
-            if transitionTimer.isRunning {
-                Text(transitionTimer.formattedTime)
-                    .font(DS.Typography.cardScore)
-                    .foregroundStyle(theme.heroTextGradient)
-                    .monospacedDigit()
-                    .contentTransition(.numericText())
-
-                ProgressView(value: transitionTimer.progress)
-                    .tint(DS.Color.activity)
+            HStack(spacing: DS.Spacing.xs) {
+                ForEach(viewModel.currentExercise.primaryMuscles, id: \.self) { muscle in
+                    Text(muscle.displayName)
+                        .font(.caption2.weight(.medium))
+                        .padding(.horizontal, DS.Spacing.sm)
+                        .padding(.vertical, DS.Spacing.xxs)
+                        .background(DS.Color.activity.opacity(0.15), in: Capsule())
+                        .foregroundStyle(DS.Color.activity)
+                }
             }
 
-            HStack(spacing: DS.Spacing.lg) {
-                if transitionTimer.isRunning {
-                    Button {
-                        transitionTimer.addTime(30)
-                    } label: {
-                        Text("+30s")
-                            .font(.caption.weight(.medium))
-                    }
-                    .buttonStyle(.bordered)
-                    .tint(.secondary)
+            Button {
+                withAnimation(DS.Animation.snappy) {
+                    showTransition = false
                 }
-
-                Button {
-                    transitionTimer.stop()
-                    viewModel.finishTransition()
-                } label: {
-                    Text("Start")
-                        .font(.caption.weight(.medium))
-                }
-                .buttonStyle(.borderedProminent)
-                .tint(DS.Color.activity)
+            } label: {
+                Text("Start")
+                    .font(.body.weight(.semibold))
+                    .frame(maxWidth: .infinity, minHeight: 44)
             }
+            .buttonStyle(.borderedProminent)
+            .tint(DS.Color.activity)
         }
         .padding(DS.Spacing.lg)
         .frame(maxWidth: .infinity)
@@ -401,42 +399,71 @@ struct CompoundWorkoutView: View {
         .padding(.bottom, DS.Spacing.sm)
     }
 
-    // MARK: - Save
+    // MARK: - Actions
 
-    private func saveAll() {
-        let records = viewModel.createAllRecords(weightUnit: weightUnit)
-        guard !records.isEmpty else { return }
+    private func completeCurrentExercise() {
+        let exercise = viewModel.currentExercise
+        guard let record = viewModel.createRecordForCurrent(weightUnit: weightUnit) else { return }
 
-        // Build share data from the first (primary) record
-        if let primary = records.first {
+        modelContext.insert(record)
+        WorkoutHealthKitWriter.write(record: record, exercise: exercise)
+        savedRecords.append(record)
+        viewModel.didFinishSaving()
+        saveCount += 1
+
+        if viewModel.isAllDone {
+            finishWorkout()
+        } else {
+            viewModel.advanceToNext()
+            showTransition = true
+        }
+    }
+
+    private func skipCurrentExercise() {
+        withAnimation(DS.Animation.snappy) {
+            viewModel.skipCurrent()
+            if viewModel.isAllDone {
+                if viewModel.hasAnyCompleted {
+                    finishWorkout()
+                }
+            }
+        }
+    }
+
+    private func finishWorkout() {
+        guard !savedRecords.isEmpty else {
+            dismiss()
+            return
+        }
+
+        // Build share data from all saved records
+        let totalCalories = savedRecords.compactMap(\.bestCalories).reduce(0, +)
+        let allSets = savedRecords.flatMap { record in
+            record.completedSets.map { set in
+                ExerciseRecordShareInput.SetInput(
+                    setNumber: set.setNumber,
+                    weight: set.weight,
+                    reps: set.reps,
+                    duration: set.duration,
+                    distance: set.distance,
+                    setType: set.setType
+                )
+            }
+        }
+        if let primary = savedRecords.first {
             let input = ExerciseRecordShareInput(
-                exerciseType: config.mode.displayName,
+                exerciseType: config.templateName,
                 date: primary.date,
                 duration: elapsedSeconds,
-                bestCalories: records.compactMap(\.bestCalories).reduce(0, +),
-                completedSets: records.flatMap { record in
-                    record.completedSets.map { set in
-                        ExerciseRecordShareInput.SetInput(
-                            setNumber: set.setNumber,
-                            weight: set.weight,
-                            reps: set.reps,
-                            duration: set.duration,
-                            distance: set.distance,
-                            setType: set.setType
-                        )
-                    }
-                }
+                bestCalories: totalCalories > 0 ? totalCalories : nil,
+                completedSets: allSets
             )
             let data = WorkoutShareService.buildShareData(from: input)
             shareImage = WorkoutShareService.renderShareImage(data: data, weightUnit: weightUnit)
         }
 
-        for record in records {
-            modelContext.insert(record)
-        }
-        savedRecords = records
-
-        let exerciseIDs = Set(records.compactMap(\.exerciseDefinitionID))
+        // Effort suggestion from recent data
+        let exerciseIDs = Set(savedRecords.compactMap(\.exerciseDefinitionID))
         let recentEfforts = exerciseRecords
             .filter { record in
                 guard let id = record.exerciseDefinitionID else { return false }
@@ -445,26 +472,12 @@ struct CompoundWorkoutView: View {
             .sorted { $0.date > $1.date }
             .prefix(5)
             .compactMap(\.rpe)
-        effortSuggestion = WorkoutIntensityService().suggestEffort(
+        effortSuggestion = intensityService.suggestEffort(
             autoIntensityRaw: nil,
             recentEfforts: recentEfforts
         )
 
-        viewModel.didFinishSaving()
-        saveCount += 1
-
-        // Fire-and-forget HealthKit write per record (non-blocking)
-        for record in records {
-            if let exercise = config.exercises.first(where: { $0.id == record.exerciseDefinitionID }) {
-                WorkoutHealthKitWriter.write(record: record, exercise: exercise)
-            }
-        }
-
-        if shareImage != nil {
-            showingShareSheet = true
-        } else {
-            dismiss()
-        }
+        showingCompletionSheet = true
     }
 
     // MARK: - Timer

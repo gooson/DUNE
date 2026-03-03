@@ -236,8 +236,8 @@ struct ExerciseView: View {
 
         templateConfig = TemplateWorkoutConfig(
             templateName: template.name,
-            entries: entries,
-            exercises: exercises
+            exercises: exercises,
+            templateEntries: entries
         )
     }
 

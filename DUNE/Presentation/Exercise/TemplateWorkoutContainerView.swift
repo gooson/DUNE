@@ -9,14 +9,6 @@ struct TemplateExerciseInfo {
     let templateName: String
 }
 
-/// Configuration for launching a sequential template workout.
-struct TemplateWorkoutConfig: Identifiable {
-    let id = UUID()
-    let templateName: String
-    let entries: [TemplateEntry]
-    let exercises: [ExerciseDefinition]
-}
-
 /// Orchestrates sequential execution of a multi-exercise template workout.
 ///
 /// Flow: Transition → Workout → Transition → Workout → ... → Dismiss
@@ -46,40 +38,7 @@ struct TemplateWorkoutContainerView: View {
 
     var body: some View {
         NavigationStack {
-            Group {
-                if showTransition {
-                    ExerciseTransitionView(
-                        exercise: config.exercises[currentIndex],
-                        entry: config.entries[currentIndex],
-                        exerciseNumber: currentIndex + 1,
-                        totalExercises: config.exercises.count,
-                        onStart: {
-                            withAnimation(.easeInOut(duration: 0.3)) {
-                                showTransition = false
-                            }
-                        }
-                    )
-                    .englishNavigationTitle(config.templateName)
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbar {
-                        ToolbarItem(placement: .cancellationAction) {
-                            Button {
-                                showEndConfirmation = true
-                            } label: {
-                                Image(systemName: "xmark")
-                            }
-                        }
-                    }
-                } else {
-                    WorkoutSessionView(
-                        exercise: config.exercises[currentIndex],
-                        defaultSetCount: config.entries[currentIndex].defaultSets,
-                        templateInfo: currentTemplateInfo,
-                        onExerciseCompleted: isLastExercise ? nil : advanceToNextExercise
-                    )
-                    .id(exerciseViewID)
-                }
-            }
+            content
             .confirmationDialog(
                 "End Template?",
                 isPresented: $showEndConfirmation,
@@ -93,6 +52,52 @@ struct TemplateWorkoutContainerView: View {
                 Text("Completed exercises have been saved.")
             }
         }
+    }
+
+    @ViewBuilder
+    private var content: some View {
+        if showTransition {
+            transitionView
+        } else {
+            workoutView
+        }
+    }
+
+    private var transitionView: some View {
+        ExerciseTransitionView(
+            exercise: config.exercises[currentIndex],
+            entry: config.templateEntries[currentIndex],
+            exerciseNumber: currentIndex + 1,
+            totalExercises: config.exercises.count,
+            onStart: {
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    showTransition = false
+                }
+            }
+        )
+        .englishNavigationTitle(config.templateName)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .cancellationAction) {
+                Button {
+                    showEndConfirmation = true
+                } label: {
+                    Image(systemName: "xmark")
+                }
+            }
+        }
+    }
+
+    private var workoutView: some View {
+        let onExerciseCompleted: (() -> Void)? = isLastExercise ? nil : { advanceToNextExercise() }
+
+        return WorkoutSessionView(
+            exercise: config.exercises[currentIndex],
+            defaultSetCount: config.templateEntries[currentIndex].defaultSets,
+            templateInfo: currentTemplateInfo,
+            onExerciseCompleted: onExerciseCompleted
+        )
+        .id(exerciseViewID)
     }
 
     // MARK: - Exercise Advancement
