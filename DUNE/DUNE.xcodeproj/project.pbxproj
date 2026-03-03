@@ -563,6 +563,8 @@
 		FFA8F6AEE88173FB6D9737C2 /* WatchWorkoutUpdateValidationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B861C83A3B2DEE4C00BAE2F /* WatchWorkoutUpdateValidationTests.swift */; };
 		FFAC226A1BEE11A774F3501F /* HabitDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F785633C4455CC0AECD33E /* HabitDefinition.swift */; };
 		FFB2479A56E1B27F008E117C /* RecoveryModifierService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0786FBA36AD886ABD4F315B /* RecoveryModifierService.swift */; };
+		C1D2E3F405162738495A6B7C /* WorkoutRecommendationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60718293A4B5C /* WorkoutRecommendationContext.swift */; };
+		D1E2F30415263748596A7B8C /* WorkoutRecommendationSettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5061728394A5B6C /* WorkoutRecommendationSettingsStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1153,6 +1155,8 @@
 		FD517D366B81E1A6DFF4225E /* OneRMAnalysisSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneRMAnalysisSection.swift; sourceTree = "<group>"; };
 		FF0F0F0EF2DB750558AB6E21 /* SakuraPetalShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SakuraPetalShape.swift; sourceTree = "<group>"; };
 		FF967E3F8E93D54A406F60D8 /* BodyPart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyPart.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F60718293A4B5C /* WorkoutRecommendationContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutRecommendationContext.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5061728394A5B6C /* WorkoutRecommendationSettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutRecommendationSettingsStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1421,6 +1425,7 @@
 				9FF676D068C0050F96E9EAA7 /* PersonalRecordStore.swift */,
 				3C690F0174B90F16E6C94F39 /* TodayPinnedMetricsStore.swift */,
 				235E5EDDF097C152C7F01545 /* WorkoutSettingsStore.swift */,
+				B1C2D3E4F5061728394A5B6C /* WorkoutRecommendationSettingsStore.swift */,
 			);
 			path = Persistence;
 			sourceTree = "<group>";
@@ -2094,6 +2099,7 @@
 				5CD727EA537A7E6C6BC61DE2 /* WorkoutActivityType.swift */,
 				BEBA17E8F29693BBB036B5AC /* WorkoutIntensity.swift */,
 				76CF9FCAF3F58BB28A805F26 /* WorkoutMode.swift */,
+				A1B2C3D4E5F60718293A4B5C /* WorkoutRecommendationContext.swift */,
 				179B7B1B76AA85C280BD0FE1 /* WorkoutStreak.swift */,
 				AC02C2BBA32E5A341AE19985 /* WorkoutSuggestion.swift */,
 			);
@@ -2900,6 +2906,8 @@
 				1ACA11EF166EEC3393C49166 /* WorkoutQueryService.swift in Sources */,
 				256F63B3236F5090719EE924 /* WorkoutRecommendationCard.swift in Sources */,
 				A7F173F3E148CA176DA19B6A /* WorkoutRecommendationService.swift in Sources */,
+				C1D2E3F405162738495A6B7C /* WorkoutRecommendationContext.swift in Sources */,
+				D1E2F30415263748596A7B8C /* WorkoutRecommendationSettingsStore.swift in Sources */,
 				145163EBE1762AB86EA8E2FA /* WorkoutSessionView.swift in Sources */,
 				8CCDE878E0A6405A04F565F4 /* WorkoutSessionViewModel.swift in Sources */,
 				588480511D4B3993646D9652 /* WorkoutSet+Summary.swift in Sources */,
