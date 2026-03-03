@@ -380,6 +380,9 @@ enum WorkoutActivityType: String, Codable, Sendable, CaseIterable {
         let table: [(keyword: String, type: WorkoutActivityType)] = [
             ("jump rope", .jumpRope), ("jumprope", .jumpRope),
             ("kickbox", .kickboxing),
+            // Stair keywords before generic "climb" to avoid false-positive on "Stair Climber"
+            ("stair stepper", .stairStepper), ("stair", .stairClimbing),
+            ("stepper", .stairStepper), ("스텝밀", .stairClimbing),
             ("running", .running),
             ("walking", .walking),
             ("cycling", .cycling), ("bike", .cycling), ("cycle", .cycling),

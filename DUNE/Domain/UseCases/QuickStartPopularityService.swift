@@ -6,6 +6,19 @@ enum QuickStartPopularityService {
         let date: Date
     }
 
+    /// Curated default popular exercises shown when user has no history.
+    /// Mix of strength + cardio to cover common gym activities.
+    static let defaultPopularExerciseIDs: [String] = [
+        "barbell-squat",
+        "barbell-bench-press",
+        "conventional-deadlift",
+        "pull-up",
+        "overhead-press",
+        "barbell-row",
+        "running",
+        "stair-climber",
+    ]
+
     /// Returns exercise IDs ordered by popularity.
     /// Priority: higher usage count -> more recent last usage -> stable ID sort.
     static func popularExerciseIDs(
