@@ -66,6 +66,9 @@ final class WorkoutManager: NSObject {
     /// Current pace in seconds per kilometer (cardio mode only).
     private(set) var currentPace: Double = 0
 
+    /// Total flights (floors) climbed (stair climber mode only).
+    private(set) var floorsClimbed: Double = 0
+
     /// Running samples for average HR calculation.
     private var heartRateSamples: [Double] = []
 
@@ -168,7 +171,8 @@ final class WorkoutManager: NSObject {
             HKQuantityType(.activeEnergyBurned),
             HKQuantityType(.distanceWalkingRunning),
             HKQuantityType(.distanceCycling),
-            HKQuantityType(.distanceSwimming)
+            HKQuantityType(.distanceSwimming),
+            HKQuantityType(.flightsClimbed)
         ]
 
         Self.logger.info("Requesting HealthKit authorization for workout session")
@@ -206,6 +210,7 @@ final class WorkoutManager: NSObject {
         let previousMode = workoutMode
         let previousDistance = distance
         let previousPace = currentPace
+        let previousFloors = floorsClimbed
         let previousTemplateSnapshot = templateSnapshot
         let previousExerciseIndex = currentExerciseIndex
         let previousSetIndex = currentSetIndex
@@ -215,6 +220,7 @@ final class WorkoutManager: NSObject {
         self.workoutMode = .cardio(activityType: activityType, isOutdoor: isOutdoor)
         self.distance = 0
         self.currentPace = 0
+        self.floorsClimbed = 0
         // templateSnapshot is nil for cardio — no set/exercise tracking needed
         self.templateSnapshot = nil
         self.completedSetsData = []
@@ -231,6 +237,7 @@ final class WorkoutManager: NSObject {
             workoutMode = previousMode
             distance = previousDistance
             currentPace = previousPace
+            floorsClimbed = previousFloors
             templateSnapshot = previousTemplateSnapshot
             currentExerciseIndex = previousExerciseIndex
             currentSetIndex = previousSetIndex
@@ -507,7 +514,7 @@ final class WorkoutManager: NSObject {
         }
     }
 
-    /// Restores distance metric from builder statistics after crash recovery.
+    /// Restores distance and floors metrics from builder statistics after crash recovery.
     @MainActor
     private func restoreDistanceFromBuilder(_ builder: HKLiveWorkoutBuilder) {
         let distanceTypes: [HKQuantityType] = [
@@ -526,6 +533,13 @@ final class WorkoutManager: NSObject {
                 updatePace()
                 break
             }
+        }
+
+        // Restore flights climbed for stair workouts
+        if let stats = builder.statistics(for: HKQuantityType(.flightsClimbed)),
+           let floors = stats.sumQuantity()?.doubleValue(for: .count()),
+           floors > 0, floors.isFinite, floors < 10_000 {
+            floorsClimbed = floors
         }
     }
 
@@ -723,6 +737,7 @@ extension WorkoutManager: HKLiveWorkoutBuilderDelegate {
         var heartRateValue: Double?
         var caloriesValue: Double?
         var distanceValue: Double?
+        var floorsValue: Double?
 
         for type in collectedTypes {
             guard let quantityType = type as? HKQuantityType,
@@ -751,6 +766,12 @@ extension WorkoutManager: HKLiveWorkoutBuilderDelegate {
                     distanceValue = meters
                 }
 
+            case HKQuantityType(.flightsClimbed):
+                let floors = stats.sumQuantity()?.doubleValue(for: .count()) ?? 0
+                if floors >= 0, floors.isFinite, floors < 10_000 {
+                    floorsValue = floors
+                }
+
             default:
                 break
             }
@@ -768,6 +789,9 @@ extension WorkoutManager: HKLiveWorkoutBuilderDelegate {
             if let meters = distanceValue {
                 distance = meters
                 updatePace()
+            }
+            if let floors = floorsValue {
+                floorsClimbed = floors
             }
         }
     }
