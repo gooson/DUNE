@@ -8,6 +8,7 @@ enum AXID {
     static let dashboardToolbarNotifications = "dashboard-toolbar-notifications"
     static let dashboardToolbarSettings = "dashboard-toolbar-settings"
     static let dashboardPinnedEdit = "dashboard-pinned-edit"
+    static let notificationsReadAllButton = "notifications-read-all-button"
     // Planned — identifiers not yet applied to views
     static let dashboardPinnedGrid = "dashboard-pinned-grid"
     static let dashboardWeatherCard = "dashboard-weather-card"
@@ -70,6 +71,7 @@ enum AXID {
     static let injuryFormSide = "injury-form-side"
     static let injuryFormStartDate = "injury-form-startdate"
     static let injuryFormEndDate = "injury-form-enddate"
+    static let injuryFormRecoveredToggle = "injury-form-recovered-toggle"
     static let injuryFormMemo = "injury-form-memo"
     static func injuryFormSeverity(_ name: String) -> String { "injury-form-severity-\(name)" }
 
@@ -81,6 +83,8 @@ enum AXID {
     static let habitFormGoalValue = "habit-form-goalvalue"
     static let habitFormGoalUnit = "habit-form-goalunit"
     static let habitFormFrequency = "habit-form-frequency"
+    static let habitFormFrequencyDaily = "habit-form-frequency-daily"
+    static let habitFormFrequencyWeekly = "habit-form-frequency-weekly"
 
     // MARK: - Exercise (Activity sub-view)
     static let exerciseToolbarTemplates = "exercise-toolbar-templates"

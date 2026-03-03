@@ -113,7 +113,7 @@ final class WellnessSmokeTests: UITestBaseCase {
         XCTAssertTrue(injuryButton.waitForExistence(timeout: 3), "Injury action should exist")
         injuryButton.tap()
 
-        let recoveredToggle = app.switches["Recovered"].firstMatch
+        let recoveredToggle = app.descendants(matching: .any)[AXID.injuryFormRecoveredToggle].firstMatch
         XCTAssertTrue(recoveredToggle.waitForExistence(timeout: 3), "Recovered toggle should exist")
         recoveredToggle.tap()
 

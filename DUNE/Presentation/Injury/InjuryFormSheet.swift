@@ -96,6 +96,7 @@ struct InjuryFormSheet: View {
                             viewModel.endDate = isRecovered ? Date() : nil
                         }
                     ))
+                    .accessibilityIdentifier("injury-form-recovered-toggle")
 
                     if viewModel.endDate != nil {
                         DatePicker(

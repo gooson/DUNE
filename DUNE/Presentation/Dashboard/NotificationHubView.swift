@@ -34,6 +34,7 @@ struct NotificationHubView: View {
                     inboxManager.markAllRead()
                 }
                 .disabled(unreadCount == 0)
+                .accessibilityIdentifier("notifications-read-all-button")
             }
         }
         .task {

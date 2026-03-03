@@ -102,8 +102,12 @@ struct HabitFormSheet: View {
     private var frequencySection: some View {
         Section("Frequency") {
             Picker("Frequency", selection: $viewModel.frequencyType) {
-                Text("Daily").tag("daily")
-                Text("Weekly").tag("weekly")
+                Text("Daily")
+                    .tag("daily")
+                    .accessibilityIdentifier("habit-form-frequency-daily")
+                Text("Weekly")
+                    .tag("weekly")
+                    .accessibilityIdentifier("habit-form-frequency-weekly")
             }
             .pickerStyle(.segmented)
             .accessibilityIdentifier("habit-form-frequency")

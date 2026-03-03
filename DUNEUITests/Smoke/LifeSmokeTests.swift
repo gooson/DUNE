@@ -72,7 +72,9 @@ final class LifeSmokeTests: UITestBaseCase {
 
         let frequencyPicker = app.descendants(matching: .any)[AXID.habitFormFrequency].firstMatch
         XCTAssertTrue(frequencyPicker.waitForExistence(timeout: 3), "Frequency picker should exist")
-        frequencyPicker.buttons["Weekly"].firstMatch.tap()
+        let weeklySegment = app.descendants(matching: .any)[AXID.habitFormFrequencyWeekly].firstMatch
+        XCTAssertTrue(weeklySegment.waitForExistence(timeout: 3), "Weekly segment should exist")
+        weeklySegment.tap()
 
         let weeklyStepper = app.descendants(matching: .any)["habit-weekly-stepper"].firstMatch
         XCTAssertTrue(weeklyStepper.waitForExistence(timeout: 3), "Weekly stepper should appear when frequency is weekly")

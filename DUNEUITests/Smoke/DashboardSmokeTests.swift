@@ -55,7 +55,7 @@ final class DashboardSmokeTests: UITestBaseCase {
         let title = app.navigationBars["Notifications"]
         XCTAssertTrue(title.waitForExistence(timeout: 5), "Notifications navigation title should appear")
 
-        let readAllButton = app.buttons["Read All"].firstMatch
+        let readAllButton = app.descendants(matching: .any)[AXID.notificationsReadAllButton].firstMatch
         XCTAssertTrue(readAllButton.waitForExistence(timeout: 5), "Read All button should exist in notification hub")
     }
 
