@@ -1,6 +1,7 @@
 import SwiftUI
 import SwiftData
 import HealthKit
+import UserNotifications
 
 @main
 struct DUNEApp: App {
@@ -17,6 +18,7 @@ struct DUNEApp: App {
     private let refreshCoordinator: AppRefreshCoordinating
     private let observerManager: HealthKitObserverManager
     private let notificationService: any NotificationService
+    private let notificationCenterDelegate: AppNotificationCenterDelegate
     private static let minimumLaunchSplashDuration: Duration = .seconds(1)
     private static let launchSplashResolveDuration: Duration = .milliseconds(700)
 
@@ -118,6 +120,8 @@ struct DUNEApp: App {
 
         let notifService = NotificationServiceImpl()
         self.notificationService = notifService
+        self.notificationCenterDelegate = AppNotificationCenterDelegate()
+        UNUserNotificationCenter.current().delegate = notificationCenterDelegate
 
         let hkStore = HKHealthStore()
         let evaluator = BackgroundNotificationEvaluator(

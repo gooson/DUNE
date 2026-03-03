@@ -227,9 +227,20 @@ final class BackgroundNotificationEvaluator: Sendable {
         guard !newPRTypes.isEmpty else { return nil }
 
         let typeNames = newPRTypes.map { prDisplayName(for: $0) }
-        return EvaluateHealthInsightUseCase.evaluateWorkoutPR(
+        guard let baseInsight = EvaluateHealthInsightUseCase.evaluateWorkoutPR(
             activityName: activityType.typeName,
             recordTypeNames: typeNames
+        ) else {
+            return nil
+        }
+
+        return HealthInsight(
+            type: baseInsight.type,
+            title: baseInsight.title,
+            body: baseInsight.body,
+            severity: baseInsight.severity,
+            date: baseInsight.date,
+            route: .workoutDetail(workoutID: summary.id)
         )
     }
 
