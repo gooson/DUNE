@@ -11,6 +11,7 @@ struct AppThemeTests {
         #expect(AppTheme.forestGreen.rawValue == "forestGreen")
         #expect(AppTheme.sakuraCalm.rawValue == "sakuraCalm")
         #expect(AppTheme.arcticDawn.rawValue == "arcticDawn")
+        #expect(AppTheme.solarPop.rawValue == "solarPop")
     }
 
     @Test("Codable round-trip preserves identity")
@@ -24,12 +25,13 @@ struct AppThemeTests {
 
     @Test("CaseIterable includes all themes")
     func allCases() {
-        #expect(AppTheme.allCases.count == 5)
+        #expect(AppTheme.allCases.count == 6)
         #expect(AppTheme.allCases.contains(.desertWarm))
         #expect(AppTheme.allCases.contains(.oceanCool))
         #expect(AppTheme.allCases.contains(.forestGreen))
         #expect(AppTheme.allCases.contains(.sakuraCalm))
         #expect(AppTheme.allCases.contains(.arcticDawn))
+        #expect(AppTheme.allCases.contains(.solarPop))
     }
 
     @Test("Init from unknown rawValue returns nil")
@@ -45,6 +47,7 @@ struct AppThemeTests {
         #expect(AppTheme.forestGreen.assetPrefix == "Forest")
         #expect(AppTheme.sakuraCalm.assetPrefix == "Sakura")
         #expect(AppTheme.arcticDawn.assetPrefix == "Arctic")
+        #expect(AppTheme.solarPop.assetPrefix == "Solar")
     }
 
     @Test("Themed asset name resolution follows prefix convention")
@@ -68,6 +71,10 @@ struct AppThemeTests {
         #expect(
             AppTheme.arcticDawn.themedAssetName(defaultAsset: "ScoreWarning", variantSuffix: "ScoreWarning")
                 == "ArcticScoreWarning"
+        )
+        #expect(
+            AppTheme.solarPop.themedAssetName(defaultAsset: "AccentColor", variantSuffix: "Accent")
+                == "SolarAccent"
         )
     }
 }

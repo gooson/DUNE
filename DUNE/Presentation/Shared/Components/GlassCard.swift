@@ -147,6 +147,38 @@ private enum GlassCardGradients {
         startPoint: .leading,
         endPoint: .trailing
     )
+
+    // Solar Pop
+    private static let solarAccent = Color("SolarAccent")
+    private static let solarDusk = Color("SolarDusk")
+    private static let solarCore = Color("SolarCore")
+    private static let solarGlow = Color("SolarGlow")
+    private static let solarEmber = Color("SolarEmber")
+    private static let solarHeroBorder = LinearGradient(
+        colors: [
+            solarGlow.opacity(DS.Opacity.strong),
+            solarAccent.opacity(DS.Opacity.subtle)
+        ],
+        startPoint: .topLeading,
+        endPoint: .bottomTrailing
+    )
+    private static let solarDarkBorder = LinearGradient(
+        colors: [
+            solarGlow.opacity(DS.Opacity.strong),
+            solarDusk.opacity(DS.Opacity.cardBorder)
+        ],
+        startPoint: .topLeading,
+        endPoint: .bottomTrailing
+    )
+    private static let solarBottomSeparator = LinearGradient(
+        colors: [
+            solarGlow.opacity(0),
+            solarGlow.opacity(DS.Opacity.cardBorder),
+            solarGlow.opacity(0)
+        ],
+        startPoint: .leading,
+        endPoint: .trailing
+    )
     static let clearBorder = LinearGradient(
         colors: [Color.clear, Color.clear],
         startPoint: .topLeading,
@@ -160,6 +192,7 @@ private enum GlassCardGradients {
         case .forestGreen: forestHeroBorder
         case .sakuraCalm:  sakuraHeroBorder
         case .arcticDawn:  arcticHeroBorder
+        case .solarPop:    solarHeroBorder
         }
     }
     static func darkBorder(for theme: AppTheme) -> LinearGradient {
@@ -169,6 +202,7 @@ private enum GlassCardGradients {
         case .forestGreen: forestDarkBorder
         case .sakuraCalm:  sakuraDarkBorder
         case .arcticDawn:  arcticDarkBorder
+        case .solarPop:    solarDarkBorder
         }
     }
     static func bottomSeparator(for theme: AppTheme) -> LinearGradient {
@@ -178,6 +212,7 @@ private enum GlassCardGradients {
         case .forestGreen: forestBottomSeparator
         case .sakuraCalm:  sakuraBottomSeparator
         case .arcticDawn:  arcticBottomSeparator
+        case .solarPop:    solarBottomSeparator
         }
     }
 
@@ -201,6 +236,17 @@ private enum GlassCardGradients {
                     arcticAurora.opacity(colorScheme == .dark ? 0.20 : 0.24),
                     arcticFrost.opacity(colorScheme == .dark ? 0.16 : 0.20),
                     arcticDusk.opacity(colorScheme == .dark ? 0.10 : 0.04),
+                    Color.clear
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        case .solarPop:
+            LinearGradient(
+                colors: [
+                    solarGlow.opacity(colorScheme == .dark ? 0.22 : 0.24),
+                    solarCore.opacity(colorScheme == .dark ? 0.16 : 0.18),
+                    solarEmber.opacity(colorScheme == .dark ? 0.10 : 0.04),
                     Color.clear
                 ],
                 startPoint: .topLeading,
@@ -236,6 +282,17 @@ private enum GlassCardGradients {
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
+        case .solarPop:
+            LinearGradient(
+                colors: [
+                    solarGlow.opacity(colorScheme == .dark ? 0.18 : 0.16),
+                    solarCore.opacity(colorScheme == .dark ? 0.14 : 0.12),
+                    solarDusk.opacity(colorScheme == .dark ? 0.10 : 0.03),
+                    Color.clear
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
         case .desertWarm, .oceanCool, .forestGreen:
             clearBorder
         }
@@ -260,6 +317,17 @@ private enum GlassCardGradients {
                     arcticFrost.opacity(colorScheme == .dark ? 0.13 : 0.12),
                     arcticAurora.opacity(colorScheme == .dark ? 0.10 : 0.08),
                     arcticDusk.opacity(colorScheme == .dark ? 0.08 : 0.02),
+                    Color.clear
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        case .solarPop:
+            LinearGradient(
+                colors: [
+                    solarGlow.opacity(colorScheme == .dark ? 0.14 : 0.12),
+                    solarCore.opacity(colorScheme == .dark ? 0.10 : 0.08),
+                    solarDusk.opacity(colorScheme == .dark ? 0.08 : 0.02),
                     Color.clear
                 ],
                 startPoint: .topLeading,
@@ -292,6 +360,16 @@ private enum GlassCardGradients {
                 startPoint: .top,
                 endPoint: .bottom
             )
+        case .solarPop:
+            LinearGradient(
+                colors: [
+                    solarGlow.opacity(colorScheme == .dark ? 0.20 : 0.18),
+                    solarCore.opacity(colorScheme == .dark ? 0.10 : 0.09),
+                    Color.clear
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
         case .desertWarm, .oceanCool, .forestGreen:
             clearBorder
         }
@@ -315,6 +393,16 @@ private enum GlassCardGradients {
                     arcticFrost.opacity(colorScheme == .dark ? 0.36 : 0.30),
                     arcticAccent.opacity(colorScheme == .dark ? 0.24 : 0.21),
                     arcticDusk.opacity(colorScheme == .dark ? 0.16 : 0.10)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        case .solarPop:
+            LinearGradient(
+                colors: [
+                    solarGlow.opacity(colorScheme == .dark ? 0.36 : 0.30),
+                    solarAccent.opacity(colorScheme == .dark ? 0.24 : 0.21),
+                    solarDusk.opacity(colorScheme == .dark ? 0.16 : 0.10)
                 ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
@@ -410,7 +498,7 @@ struct StandardCard<Content: View>: View {
                     .overlay(
                         RoundedRectangle(cornerRadius: cornerRadius)
                             .strokeBorder(
-                                (theme == .sakuraCalm || theme == .arcticDawn)
+                                (theme == .sakuraCalm || theme == .arcticDawn || theme == .solarPop)
                                     ? GlassCardGradients.cardBorder(for: theme, colorScheme: colorScheme)
                                     : (colorScheme == .dark
                                         ? GlassCardGradients.darkBorder(for: theme)
@@ -453,10 +541,10 @@ struct InlineCard<Content: View>: View {
                     .overlay(
                         RoundedRectangle(cornerRadius: cornerRadius)
                             .strokeBorder(
-                                (theme == .sakuraCalm || theme == .arcticDawn)
+                                (theme == .sakuraCalm || theme == .arcticDawn || theme == .solarPop)
                                     ? GlassCardGradients.cardBorder(for: theme, colorScheme: colorScheme)
                                     : GlassCardGradients.clearBorder,
-                                lineWidth: (theme == .sakuraCalm || theme == .arcticDawn) ? 0.9 : 0
+                                lineWidth: (theme == .sakuraCalm || theme == .arcticDawn || theme == .solarPop) ? 0.9 : 0
                             )
                     )
             }

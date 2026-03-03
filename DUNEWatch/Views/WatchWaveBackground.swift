@@ -90,10 +90,11 @@ struct WatchWaveBackground: View {
 
     private var isSakura: Bool { theme == .sakuraCalm }
     private var isArctic: Bool { theme == .arcticDawn }
+    private var isSolar: Bool { theme == .solarPop }
 
     var body: some View {
         let resolvedColor = color ?? theme.accentColor
-        let gradientTop = resolvedColor.opacity(isSakura ? 0.22 : (isArctic ? 0.24 : DS.Opacity.light))
+        let gradientTop = resolvedColor.opacity(isSakura ? 0.22 : (isArctic ? 0.24 : (isSolar ? 0.25 : DS.Opacity.light)))
         let secondaryTop: Color = {
             if isSakura {
                 return Color("SakuraIvory").opacity(0.14)
@@ -101,12 +102,15 @@ struct WatchWaveBackground: View {
             if isArctic {
                 return Color("ArcticFrost").opacity(0.14)
             }
+            if isSolar {
+                return Color("SolarGlow").opacity(0.14)
+            }
             return .clear
         }()
 
         ZStack(alignment: .top) {
             WatchWaveShape(phase: phase)
-                .fill(resolvedColor.opacity(isSakura ? 0.26 : (isArctic ? 0.22 : DS.Opacity.medium)))
+                .fill(resolvedColor.opacity(isSakura ? 0.26 : (isArctic ? 0.22 : (isSolar ? 0.24 : DS.Opacity.medium))))
                 .mask {
                     LinearGradient(
                         stops: [
@@ -137,6 +141,12 @@ struct WatchWaveBackground: View {
                     .frame(height: WatchWaveDefaults.frameHeight)
                     .padding(.top, 5)
             }
+
+            if isSolar {
+                WatchSolarFlareBands(phase: petalPhase, opacity: reduceMotion ? 0.12 : 0.18)
+                    .frame(height: WatchWaveDefaults.frameHeight)
+                    .padding(.top, 5)
+            }
         }
         .ignoresSafeArea()
         .allowsHitTesting(false)
@@ -145,12 +155,48 @@ struct WatchWaveBackground: View {
             withAnimation(DS.Animation.waveDrift) {
                 phase = 2 * .pi
             }
-            if isSakura || isArctic {
+            if isSakura || isArctic || isSolar {
                 withAnimation(.linear(duration: 14).repeatForever(autoreverses: false)) {
                     petalPhase = 2 * .pi
                 }
             }
         }
+    }
+}
+
+private struct WatchSolarFlareBands: View {
+    let phase: CGFloat
+    let opacity: Double
+
+    private let seeds: [Double] = [0.11, 0.23, 0.34, 0.46, 0.58, 0.71, 0.83]
+
+    var body: some View {
+        GeometryReader { proxy in
+            ForEach(Array(seeds.enumerated()), id: \.offset) { idx, seed in
+                let width = proxy.size.width * (0.42 + 0.34 * abs(sin(seed * 8.1)))
+                let x = proxy.size.width * (0.10 + seed * 0.72)
+                let y = proxy.size.height * (0.10 + 0.36 * abs(sin(seed * 5.7)))
+                let dx = CGFloat(sin(phase * 0.9 + CGFloat(idx) * 0.8)) * 4.3
+                let dy = CGFloat(cos(phase * 0.72 + CGFloat(idx) * 0.5)) * 2.4
+                Capsule(style: .continuous)
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                Color("SolarGlow").opacity(opacity),
+                                Color("SolarCore").opacity(opacity * 0.95),
+                                Color("SolarEmber").opacity(opacity * 0.60),
+                                .clear
+                            ],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
+                    .frame(width: width, height: 2.6 + CGFloat(idx % 2))
+                    .rotationEffect(.degrees(-10 + Double(idx) * 3.2))
+                    .position(x: x + dx, y: y + dy)
+            }
+        }
+        .allowsHitTesting(false)
     }
 }
 
