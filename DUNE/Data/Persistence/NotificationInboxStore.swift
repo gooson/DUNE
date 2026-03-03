@@ -78,6 +78,20 @@ final class NotificationInboxStore: @unchecked Sendable {
         }
     }
 
+    @discardableResult
+    func markUnread(id: String) -> NotificationInboxItem? {
+        queue.sync {
+            var items = loadItemsLocked()
+            guard let index = items.firstIndex(where: { $0.id == id }) else { return nil }
+            guard items[index].isRead else { return items[index] }
+            items[index].isRead = false
+            items[index].openedAt = nil
+            let updated = items[index]
+            saveItemsLocked(items)
+            return updated
+        }
+    }
+
     func markAllRead(openedAt: Date = Date()) {
         queue.sync {
             var items = loadItemsLocked()
@@ -90,6 +104,25 @@ final class NotificationInboxStore: @unchecked Sendable {
             if didChange {
                 saveItemsLocked(items)
             }
+        }
+    }
+
+    @discardableResult
+    func delete(id: String) -> NotificationInboxItem? {
+        queue.sync {
+            var items = loadItemsLocked()
+            guard let index = items.firstIndex(where: { $0.id == id }) else { return nil }
+            let removed = items.remove(at: index)
+            saveItemsLocked(items)
+            return removed
+        }
+    }
+
+    func deleteAll() {
+        queue.sync {
+            let items = loadItemsLocked()
+            guard !items.isEmpty else { return }
+            defaults.removeObject(forKey: Keys.inbox)
         }
     }
 
