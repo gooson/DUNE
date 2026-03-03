@@ -354,7 +354,7 @@ private struct HabitListQueryView: View {
                     HStack(spacing: DS.Spacing.xxs) {
                         Image(systemName: "flame.fill")
                             .font(.caption2)
-                        Text("Best streak \(group.maxStreakWeeks)w")
+                        Text(String(localized: "Best streak \(group.maxStreakWeeks)w"))
                             .font(.caption2)
                             .fontWeight(.semibold)
                             .monospacedDigit()
@@ -390,25 +390,25 @@ private struct HabitListQueryView: View {
     private func shortMetricTitle(_ id: String) -> String {
         switch id {
         case "weeklyWorkout5":
-            return "Workout 5x"
+            return String(localized: "Workout 5x")
         case "weeklyWorkout7":
-            return "Workout 7x"
+            return String(localized: "Workout 7x")
         case "weeklyStrength3":
-            return "Strength"
+            return String(localized: "Strength")
         case "weeklyChest3":
-            return "Chest"
+            return String(localized: "Chest")
         case "weeklyBack3":
-            return "Back"
+            return String(localized: "Back")
         case "weeklyLowerBody3":
-            return "Lower Body"
+            return String(localized: "Lower Body")
         case "weeklyShoulders3":
-            return "Shoulders"
+            return String(localized: "Shoulders")
         case "weeklyArms3":
-            return "Arms"
+            return String(localized: "Arms")
         case "weeklyRunning15km":
-            return "Running"
+            return String(localized: "Running")
         default:
-            return "Goal"
+            return String(localized: "Goal")
         }
     }
 
@@ -417,21 +417,21 @@ private struct HabitListQueryView: View {
         let grouped: [AutoAchievementGroup] = [
             makeAutoGroup(
                 id: "routine",
-                title: "Routine Consistency",
+                title: String(localized: "Routine Consistency"),
                 icon: "calendar.badge.clock",
                 ruleIDs: ["weeklyWorkout5", "weeklyWorkout7"],
                 byID: byID
             ),
             makeAutoGroup(
                 id: "strength",
-                title: "Strength Split",
+                title: String(localized: "Strength Split"),
                 icon: "dumbbell.fill",
                 ruleIDs: ["weeklyStrength3", "weeklyChest3", "weeklyBack3", "weeklyLowerBody3", "weeklyShoulders3", "weeklyArms3"],
                 byID: byID
             ),
             makeAutoGroup(
                 id: "running",
-                title: "Running Distance",
+                title: String(localized: "Running Distance"),
                 icon: "figure.run",
                 ruleIDs: ["weeklyRunning15km"],
                 byID: byID
