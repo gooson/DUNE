@@ -26,7 +26,7 @@ final class NotificationServiceImpl: NotificationService, @unchecked Sendable {
         let content = UNMutableNotificationContent()
         content.title = insight.title
         content.body = insight.body
-        content.sound = insight.severity == .celebration ? .defaultCritical : .default
+        content.sound = .default
         content.categoryIdentifier = insight.type.rawValue
 
         let request = UNNotificationRequest(

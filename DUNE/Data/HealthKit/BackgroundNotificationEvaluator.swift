@@ -163,8 +163,12 @@ final class BackgroundNotificationEvaluator: Sendable {
         guard todayTotal > 0 else { return nil }
 
         // Need cumulative total — load cached value + new
-        let cached = loadCachedStepTotal()
+        // Reset cache if day changed (prevents yesterday's total carrying over)
+        let cached = loadCachedStepTotalIfToday()
         let total = cached + todayTotal
+
+        // Persist running total for next background delivery
+        Self.cacheStepTotal(total)
 
         return EvaluateHealthInsightUseCase.evaluateStepGoal(todaySteps: total)
     }
@@ -173,6 +177,10 @@ final class BackgroundNotificationEvaluator: Sendable {
         guard let latest = samples.compactMap({ $0 as? HKQuantitySample }).last else { return nil }
         let value = latest.quantity.doubleValue(for: .gramUnit(with: .kilo))
         let previous = loadCachedPreviousWeight()
+
+        // Cache current weight for next delta comparison
+        Self.cachePreviousWeight(value)
+
         return EvaluateHealthInsightUseCase.evaluateWeight(newValue: value, previousValue: previous)
     }
 
@@ -252,6 +260,7 @@ final class BackgroundNotificationEvaluator: Sendable {
     private enum CacheKeys {
         static let baselinePrefix = (Bundle.main.bundleIdentifier ?? "com.dailve") + ".notificationBaseline."
         static let stepTotal = (Bundle.main.bundleIdentifier ?? "com.dailve") + ".notificationStepTotal"
+        static let stepTotalDate = (Bundle.main.bundleIdentifier ?? "com.dailve") + ".notificationStepTotalDate"
         static let previousWeight = (Bundle.main.bundleIdentifier ?? "com.dailve") + ".notificationPrevWeight"
     }
 
@@ -277,10 +286,16 @@ final class BackgroundNotificationEvaluator: Sendable {
     /// Caches today's cumulative step total for background evaluation.
     static func cacheStepTotal(_ total: Double) {
         UserDefaults.standard.set(total, forKey: CacheKeys.stepTotal)
+        UserDefaults.standard.set(Date(), forKey: CacheKeys.stepTotalDate)
     }
 
-    private func loadCachedStepTotal() -> Double {
-        UserDefaults.standard.double(forKey: CacheKeys.stepTotal)
+    /// Loads cached step total only if it was saved today; returns 0 if stale.
+    private func loadCachedStepTotalIfToday() -> Double {
+        guard let savedDate = UserDefaults.standard.object(forKey: CacheKeys.stepTotalDate) as? Date,
+              Calendar.current.isDateInToday(savedDate) else {
+            return 0
+        }
+        return UserDefaults.standard.double(forKey: CacheKeys.stepTotal)
     }
 
     /// Caches the most recent weight for delta comparison.
