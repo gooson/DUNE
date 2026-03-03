@@ -79,3 +79,23 @@ Solar 전용 wave shape/overlay를 도입해 시각 정체성을 완성했다.
 - prefix resolver 구조 덕분에 색상 토큰 확장은 매우 빠르게 확장 가능하다.
 - 신규 테마의 체감 품질은 토큰보다 배경/카드/링 같은 공통 컴포넌트 분기에서 결정된다.
 - watch parity를 같은 커밋에서 함께 처리해야 테마 경험이 분리되지 않는다.
+
+## Follow-up Fix (2026-03-04): Sun Core Stabilization
+
+### Problem
+
+- Solar SunBurst 중심 코어가 다중 gradient로 구성되어 태양 중심이 "고정된 노란 원"으로 보이지 않았다.
+- ray/ring 애니메이션과 합성될 때 중심 색이 프레임마다 흔들려 보였다.
+
+### Solution
+
+- `SolarSunBurstOverlay`(iOS)와 `WatchSolarSunBurst`(watch) 모두에서 중심 코어를
+  `Color("SolarGlow")` 기반 단색 원으로 분리했다.
+- 기존 다중 gradient는 중심 코어가 아닌 외곽 corona 역할로 축소해 유지했다.
+- 회전/드리프트 애니메이션은 ray/ring 레이어에만 남겨 시각적 움직임은 유지하고,
+  중심 원은 고정 상태를 보장했다.
+
+### Verification
+
+- `xcodebuild test -project DUNE/DUNE.xcodeproj -scheme DUNETests -destination 'platform=iOS Simulator,id=F4DFCC0D-2430-411D-AF07-E50D8B8AD255' -derivedDataPath .deriveddata -only-testing DUNETests/WaveShapeTests CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO`
+- `scripts/test-unit.sh --no-regen --watch-only`
