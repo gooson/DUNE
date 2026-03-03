@@ -16,7 +16,7 @@ struct DUNEApp: App {
     private let sharedHealthDataService: SharedHealthDataService
     private let refreshCoordinator: AppRefreshCoordinating
     private let observerManager: HealthKitObserverManager
-    private let notificationService: NotificationServiceImpl
+    private let notificationService: any NotificationService
     private static let minimumLaunchSplashDuration: Duration = .seconds(1)
     private static let launchSplashResolveDuration: Duration = .milliseconds(700)
 
