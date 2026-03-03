@@ -46,6 +46,19 @@ final class DashboardSmokeTests: UITestBaseCase {
         XCTAssertTrue(title.waitForExistence(timeout: 5), "Settings navigation title should appear")
     }
 
+    func testNavigateToNotificationHub() throws {
+        navigateToDashboard()
+        let notificationsButton = app.descendants(matching: .any)[AXID.dashboardToolbarNotifications].firstMatch
+        XCTAssertTrue(notificationsButton.waitForExistence(timeout: 5), "Notifications toolbar button should exist")
+        notificationsButton.tap()
+
+        let title = app.navigationBars["Notifications"]
+        XCTAssertTrue(title.waitForExistence(timeout: 5), "Notifications navigation title should appear")
+
+        let readAllButton = app.buttons["Read All"].firstMatch
+        XCTAssertTrue(readAllButton.waitForExistence(timeout: 5), "Read All button should exist in notification hub")
+    }
+
     // MARK: - Tab Navigation Round-Trip
 
     func testTabNavigationRoundTrip() throws {

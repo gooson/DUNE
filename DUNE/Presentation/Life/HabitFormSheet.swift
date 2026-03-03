@@ -32,6 +32,7 @@ struct HabitFormSheet: View {
                     Button("Cancel") {
                         dismiss()
                     }
+                    .accessibilityIdentifier("habit-form-cancel")
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
@@ -39,6 +40,7 @@ struct HabitFormSheet: View {
                     }
                     .fontWeight(.semibold)
                     .disabled(viewModel.isSaving)
+                    .accessibilityIdentifier("habit-form-save")
                 }
             }
         }

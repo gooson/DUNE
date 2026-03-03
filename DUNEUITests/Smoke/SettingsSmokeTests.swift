@@ -30,6 +30,15 @@ final class SettingsSmokeTests: UITestBaseCase {
         )
     }
 
+    func testNavigateToExerciseDefaults() throws {
+        let link = app.descendants(matching: .any)[AXID.settingsRowExerciseDefaults].firstMatch
+        XCTAssertTrue(link.waitForExistence(timeout: 5), "Exercise Defaults link should exist")
+        link.tap()
+
+        let title = app.navigationBars["Exercise Defaults"]
+        XCTAssertTrue(title.waitForExistence(timeout: 5), "Exercise Defaults screen should open")
+    }
+
     func testAppearanceSectionExists() throws {
         XCTAssertTrue(
             elementExists(AXID.settingsSectionAppearance, timeout: 5),
