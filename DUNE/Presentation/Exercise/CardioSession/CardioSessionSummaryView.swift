@@ -89,6 +89,36 @@ struct CardioSessionSummaryView: View {
                     color: DS.Color.caution
                 )
             }
+
+            HStack(spacing: DS.Spacing.md) {
+                summaryCard(
+                    title: String(localized: "Steps"),
+                    value: viewModel.formattedStepCount,
+                    icon: "figure.walk",
+                    color: DS.Color.steps
+                )
+
+                summaryCard(
+                    title: String(localized: "Cadence"),
+                    value: viewModel.cadenceStepsPerMinute > 0
+                        ? "\(Int(viewModel.cadenceStepsPerMinute)) spm"
+                        : "--",
+                    icon: "gauge.with.dots.needle.50percent",
+                    color: DS.Color.activity
+                )
+            }
+
+            if viewModel.totalElevationGainMeters > 0 {
+                HStack(spacing: DS.Spacing.md) {
+                    summaryCard(
+                        title: String(localized: "Elevation Gain"),
+                        value: "\(Int(viewModel.totalElevationGainMeters)) m",
+                        icon: "mountain.2.fill",
+                        color: DS.Color.positive
+                    )
+                    Color.clear.frame(maxWidth: .infinity)
+                }
+            }
         }
     }
 
@@ -140,6 +170,11 @@ struct CardioSessionSummaryView: View {
             exerciseType: data.exerciseID,
             duration: data.duration,
             distance: data.distanceKm,
+            stepCount: data.stepCount,
+            averagePaceSecondsPerKm: data.averagePaceSecondsPerKm,
+            averageCadenceStepsPerMinute: data.averageCadenceStepsPerMinute,
+            elevationGainMeters: data.elevationGainMeters,
+            floorsAscended: data.floorsAscended,
             exerciseDefinitionID: data.exerciseID,
             primaryMuscles: exercise.primaryMuscles,
             secondaryMuscles: exercise.secondaryMuscles,
@@ -161,6 +196,11 @@ struct CardioSessionSummaryView: View {
             estimatedCalories: data.estimatedCalories,
             isFromHealthKit: false,
             distanceKm: data.distanceKm,
+            stepCount: data.stepCount,
+            averagePaceSecondsPerKm: data.averagePaceSecondsPerKm,
+            averageCadenceStepsPerMinute: data.averageCadenceStepsPerMinute,
+            elevationGainMeters: data.elevationGainMeters,
+            floorsAscended: data.floorsAscended,
             activityType: viewModel.activityType
         )
 

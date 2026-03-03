@@ -11,11 +11,16 @@ final class LocationTrackingService: NSObject, LocationTrackingServiceProtocol, 
 
     private var lastLocation: CLLocation?
     private var _totalDistanceMeters: Double = 0
+    private var _totalElevationGainMeters: Double = 0
     private var isTracking = false
     private var authContinuation: CheckedContinuation<CLAuthorizationStatus, Never>?
 
     var totalDistanceMeters: Double {
         lock.withLock { _totalDistanceMeters }
+    }
+
+    var totalElevationGainMeters: Double {
+        lock.withLock { _totalElevationGainMeters }
     }
 
     private func storeAuthContinuation(_ continuation: CheckedContinuation<CLAuthorizationStatus, Never>) {
@@ -67,6 +72,7 @@ final class LocationTrackingService: NSObject, LocationTrackingServiceProtocol, 
 
         lock.withLock {
             _totalDistanceMeters = 0
+            _totalElevationGainMeters = 0
             lastLocation = nil
             isTracking = true
         }
@@ -101,6 +107,15 @@ extension LocationTrackingService: CLLocationManagerDelegate {
                     // Ignore impossibly large jumps (> 100m between updates) — GPS glitch
                     if delta >= 0, delta < 100 {
                         _totalDistanceMeters += delta
+                    }
+
+                    let verticalDelta = location.altitude - last.altitude
+                    if verticalDelta > 0,
+                       verticalDelta.isFinite,
+                       verticalDelta < 25,
+                       location.verticalAccuracy >= 0,
+                       location.verticalAccuracy < 20 {
+                        _totalElevationGainMeters += verticalDelta
                     }
                 }
                 lastLocation = location

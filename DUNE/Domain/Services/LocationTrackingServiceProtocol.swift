@@ -9,4 +9,6 @@ protocol LocationTrackingServiceProtocol: Sendable {
     func stopTracking() async -> Double
     /// Current accumulated distance in meters (thread-safe, synchronous read).
     var totalDistanceMeters: Double { get }
+    /// Current accumulated elevation gain in meters (thread-safe, synchronous read).
+    var totalElevationGainMeters: Double { get }
 }
