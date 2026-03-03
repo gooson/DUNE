@@ -664,11 +664,20 @@ final class DashboardViewModel {
             )
         }
 
+        // Walking card (step-based): always include when walking workouts exist.
+        if let walkingMetric = walkingStepsMetric(from: workouts) {
+            metrics.append(walkingMetric)
+        }
+
         // 2. Per-type cards from full 30-day range
         let grouped = Dictionary(grouping: workouts, by: \.type)
 
         var typeMetrics: [HealthMetric] = []
         for (type, typeWorkouts) in grouped {
+            // Walking gets a dedicated step-based card above to avoid duplicate cards.
+            if type.lowercased() == "walking" {
+                continue
+            }
             let todayOnes = typeWorkouts.filter { calendar.isDateInToday($0.date) }
             let relevantWorkouts = todayOnes.isEmpty
                 ? [typeWorkouts.max(by: { $0.date < $1.date })].compactMap { $0 }
@@ -695,6 +704,54 @@ final class DashboardViewModel {
         metrics.append(contentsOf: typeMetrics)
 
         return metrics
+    }
+
+    /// Builds a dedicated walking card using step count as the primary value.
+    /// Priority: latest workout steps -> day total -> week total -> 0 (still show card).
+    private func walkingStepsMetric(from workouts: [WorkoutSummary]) -> HealthMetric? {
+        let calendar = Calendar.current
+        let walkingWorkouts = workouts
+            .filter { $0.activityType == .walking }
+            .sorted { $0.date > $1.date }
+
+        guard let latestWalking = walkingWorkouts.first else { return nil }
+
+        let latestWorkoutSteps = latestWalking.stepCount.flatMap { $0 > 0 ? $0 : nil }
+
+        let dayStart = calendar.startOfDay(for: latestWalking.date)
+        let dayTotal = walkingWorkouts
+            .filter { calendar.isDate($0.date, inSameDayAs: dayStart) }
+            .compactMap(\.stepCount)
+            .filter { $0 > 0 }
+            .reduce(0, +)
+
+        let weekTotal: Double = {
+            guard let interval = calendar.dateInterval(of: .weekOfYear, for: latestWalking.date) else {
+                return 0
+            }
+            return walkingWorkouts
+                .filter { interval.contains($0.date) }
+                .compactMap(\.stepCount)
+                .filter { $0 > 0 }
+                .reduce(0, +)
+        }()
+
+        let resolvedSteps = latestWorkoutSteps
+            ?? (dayTotal > 0 ? dayTotal : nil)
+            ?? (weekTotal > 0 ? weekTotal : nil)
+            ?? 0
+
+        return HealthMetric(
+            id: "exercise-walking-steps",
+            name: String(localized: "Walking"),
+            value: resolvedSteps,
+            unit: "steps",
+            change: nil,
+            date: latestWalking.date,
+            category: .exercise,
+            isHistorical: !calendar.isDateInToday(latestWalking.date),
+            iconOverride: "figure.walk"
+        )
     }
 
     /// Returns the preferred display value and unit for a workout type.

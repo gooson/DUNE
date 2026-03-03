@@ -39,6 +39,7 @@ final class CardioSessionViewModel {
     private(set) var totalDistanceMeters: Double = 0
     private(set) var estimatedCalories: Double = 0
     private(set) var heartRate: Double = 0
+    private(set) var walkingStepCount: Double = 0
     var errorMessage: String?
 
     /// Formatted elapsed time "M:SS" or "H:MM:SS".
@@ -80,9 +81,12 @@ final class CardioSessionViewModel {
 
     private let locationService: LocationTrackingServiceProtocol?
     private let calorieService: CalorieEstimating
+    private let stepsService: StepsQuerying?
     private var timerTask: Task<Void, Never>?
     private var pausedAccumulated: TimeInterval = 0
     private var lastResumeDate: Date?
+    private var baselineDaySteps: Double?
+    private var lastStepRefreshAt: Date?
 
     // MARK: - Init
 
@@ -91,13 +95,17 @@ final class CardioSessionViewModel {
         activityType: WorkoutActivityType,
         isOutdoor: Bool,
         locationService: LocationTrackingServiceProtocol? = nil,
-        calorieService: CalorieEstimating = CalorieEstimationService()
+        calorieService: CalorieEstimating = CalorieEstimationService(),
+        stepsService: StepsQuerying? = nil
     ) {
         self.exercise = exercise
         self.activityType = activityType
         self.isOutdoor = isOutdoor
         self.locationService = isOutdoor ? (locationService ?? LocationTrackingService()) : nil
         self.calorieService = calorieService
+        self.stepsService = activityType == .walking
+            ? (stepsService ?? StepsQueryService(manager: .shared))
+            : nil
     }
 
     // MARK: - Session Lifecycle
@@ -108,7 +116,16 @@ final class CardioSessionViewModel {
         lastResumeDate = startDate
         pausedAccumulated = 0
         state = .running
+        walkingStepCount = 0
+        baselineDaySteps = nil
+        lastStepRefreshAt = nil
         startTimer()
+
+        if activityType == .walking {
+            Task { @MainActor [weak self] in
+                await self?.establishWalkingStepBaseline()
+            }
+        }
 
         if isOutdoor, let locationService {
             Task {
@@ -159,6 +176,9 @@ final class CardioSessionViewModel {
         }
 
         updateCalories()
+        if activityType == .walking {
+            await refreshWalkingSteps(force: true)
+        }
         state = .finished
     }
 
@@ -177,6 +197,11 @@ final class CardioSessionViewModel {
                     self.totalDistanceMeters = locationService.totalDistanceMeters
                 }
                 self.updateCalories()
+                if self.activityType == .walking {
+                    Task { @MainActor [weak self] in
+                        await self?.refreshWalkingSteps()
+                    }
+                }
             }
         }
     }
@@ -195,6 +220,42 @@ final class CardioSessionViewModel {
             restSeconds: 0
         )
         estimatedCalories = calories ?? 0
+    }
+
+    private func establishWalkingStepBaseline() async {
+        guard let stepsService else { return }
+        do {
+            let todaySteps = try await stepsService.fetchSteps(for: Date()) ?? 0
+            baselineDaySteps = max(todaySteps, 0)
+            walkingStepCount = 0
+        } catch {
+            // HealthKit steps are optional during session; keep silent fallback.
+            baselineDaySteps = nil
+            walkingStepCount = 0
+        }
+        await refreshWalkingSteps(force: true)
+    }
+
+    private func refreshWalkingSteps(force: Bool = false) async {
+        guard let stepsService else { return }
+        if !force,
+           let lastStepRefreshAt,
+           Date().timeIntervalSince(lastStepRefreshAt) < 8 {
+            return
+        }
+
+        do {
+            let todaySteps = try await stepsService.fetchSteps(for: Date()) ?? 0
+            let baseline = baselineDaySteps ?? todaySteps
+            baselineDaySteps = baseline
+            let delta = max(0, todaySteps - baseline)
+            if delta.isFinite, delta < 200_000 {
+                walkingStepCount = delta
+            }
+            lastStepRefreshAt = Date()
+        } catch {
+            // Keep previous value on transient query errors.
+        }
     }
 
     // MARK: - Record Creation
