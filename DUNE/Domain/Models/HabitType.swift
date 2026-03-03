@@ -13,6 +13,7 @@ enum HabitType: String, Sendable, CaseIterable {
 enum HabitFrequency: Sendable, Equatable {
     case daily
     case weekly(targetDays: Int)
+    case interval(days: Int)
 
     var isDaily: Bool {
         if case .daily = self { return true }
@@ -21,6 +22,13 @@ enum HabitFrequency: Sendable, Equatable {
 
     var weeklyTarget: Int? {
         if case .weekly(let days) = self { return days }
+        return nil
+    }
+
+    var intervalDays: Int? {
+        if case .interval(let days) = self {
+            return Swift.max(1, days)
+        }
         return nil
     }
 }
@@ -60,6 +68,12 @@ enum HabitIconCategory: String, Sendable, CaseIterable {
     }
 }
 
+enum HabitCycleAction: String, Sendable, Equatable {
+    case complete
+    case skip
+    case snooze
+}
+
 // MARK: - Habit Progress
 
 struct HabitProgress: Sendable, Identifiable {
@@ -75,4 +89,10 @@ struct HabitProgress: Sendable, Identifiable {
     let streak: Int
     let isAutoLinked: Bool
     let isAutoCompleted: Bool
+    let isCycleBased: Bool
+    let nextDueDate: Date?
+    let isDue: Bool
+    let isOverdue: Bool
+    let lastCycleAction: HabitCycleAction?
+    let historyCount: Int
 }

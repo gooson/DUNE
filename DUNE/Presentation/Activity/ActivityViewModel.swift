@@ -23,6 +23,7 @@ final class ActivityViewModel {
     private(set) var isMirroredReadOnlyMode = false
     var workoutSuggestion: WorkoutSuggestion?
     var fatigueStates: [MuscleFatigueState] = []
+    private(set) var recommendationContext: WorkoutRecommendationContext
 
     // New data for redesigned Activity tab
     var trainingReadiness: TrainingReadiness?
@@ -88,6 +89,7 @@ final class ActivityViewModel {
     private let readinessUseCase: TrainingReadinessCalculating
     private let sharedHealthDataService: SharedHealthDataService?
     private let personalRecordStore: PersonalRecordStore
+    private let recommendationSettingsStore: WorkoutRecommendationSettingsStore
 
     /// Cached recovery modifiers from the most recent fetch.
     private var sleepModifier: Double = 1.0
@@ -111,7 +113,8 @@ final class ActivityViewModel {
         library: ExerciseLibraryQuerying? = nil,
         readinessUseCase: TrainingReadinessCalculating = CalculateTrainingReadinessUseCase(),
         sharedHealthDataService: SharedHealthDataService? = nil,
-        personalRecordStore: PersonalRecordStore = .shared
+        personalRecordStore: PersonalRecordStore = .shared,
+        recommendationSettingsStore: WorkoutRecommendationSettingsStore = .shared
     ) {
         self.healthKitManager = healthKitManager
         self.workoutService = workoutService ?? WorkoutQueryService(manager: healthKitManager)
@@ -125,6 +128,8 @@ final class ActivityViewModel {
         self.readinessUseCase = readinessUseCase
         self.sharedHealthDataService = sharedHealthDataService
         self.personalRecordStore = personalRecordStore
+        self.recommendationSettingsStore = recommendationSettingsStore
+        self.recommendationContext = recommendationSettingsStore.context
         self.localizedExerciseNameLookup = buildLocalizedExerciseNameLookup()
     }
 
@@ -132,6 +137,48 @@ final class ActivityViewModel {
 
     /// Cached SwiftData snapshots for merging with HealthKit data.
     private var exerciseRecordSnapshots: [ExerciseRecordSnapshot] = []
+
+    var recommendationAvailableEquipment: [Equipment] {
+        Equipment.allCases.filter { isEquipmentAvailable($0) }
+    }
+
+    func setRecommendationContext(_ context: WorkoutRecommendationContext) {
+        guard recommendationContext != context else { return }
+        recommendationContext = context
+        recommendationSettingsStore.context = context
+        recomputeFatigueAndSuggestion()
+    }
+
+    func isEquipmentAvailable(_ equipment: Equipment) -> Bool {
+        recommendationSettingsStore
+            .availableEquipment(for: recommendationContext)
+            .contains(equipment)
+    }
+
+    func setEquipmentAvailability(_ equipment: Equipment, isAvailable: Bool) {
+        recommendationSettingsStore.setEquipmentAvailable(
+            isAvailable,
+            equipment: equipment,
+            for: recommendationContext
+        )
+        recomputeFatigueAndSuggestion()
+    }
+
+    func isExerciseExcludedFromRecommendation(_ exerciseID: String) -> Bool {
+        recommendationSettingsStore.isExerciseExcluded(exerciseID)
+    }
+
+    func setExerciseExcludedFromRecommendation(_ excluded: Bool, exerciseID: String) {
+        recommendationSettingsStore.setExerciseExcluded(excluded, exerciseID: exerciseID)
+        recomputeFatigueAndSuggestion()
+    }
+
+    private var recommendationConstraints: WorkoutRecommendationConstraints {
+        WorkoutRecommendationConstraints(
+            excludedExerciseIDs: recommendationSettingsStore.excludedExerciseIDs,
+            allowedEquipment: recommendationSettingsStore.availableEquipment(for: recommendationContext)
+        )
+    }
 
     /// Immediate update path (no debounce) for explicit callers/tests.
     func updateSuggestion(records: [ExerciseRecord]) {
@@ -237,7 +284,11 @@ final class ActivityViewModel {
             sleepModifier: sleepModifier,
             readinessModifier: readinessModifier
         )
-        workoutSuggestion = recommendationService.recommend(from: allSnapshots, library: library)
+        workoutSuggestion = recommendationService.recommend(
+            from: allSnapshots,
+            library: library,
+            constraints: recommendationConstraints
+        )
     }
 
     /// Computes PR, Streak, and Frequency from current exercise record snapshots.

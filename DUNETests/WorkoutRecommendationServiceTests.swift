@@ -8,6 +8,27 @@ struct WorkoutRecommendationServiceTests {
     let service = WorkoutRecommendationService()
     let library = ExerciseLibraryService.shared
 
+    private struct TestExerciseLibrary: ExerciseLibraryQuerying {
+        let exercises: [ExerciseDefinition]
+
+        func allExercises() -> [ExerciseDefinition] { exercises }
+        func exercise(byID id: String) -> ExerciseDefinition? {
+            exercises.first { $0.id == id }
+        }
+        func search(query: String) -> [ExerciseDefinition] { exercises }
+        func exercises(forMuscle muscle: MuscleGroup) -> [ExerciseDefinition] {
+            exercises.filter {
+                $0.primaryMuscles.contains(muscle) || $0.secondaryMuscles.contains(muscle)
+            }
+        }
+        func exercises(forCategory category: ExerciseCategory) -> [ExerciseDefinition] {
+            exercises.filter { $0.category == category }
+        }
+        func exercises(forEquipment equipment: Equipment) -> [ExerciseDefinition] {
+            exercises.filter { $0.equipment == equipment }
+        }
+    }
+
     // MARK: - Helper
 
     private func snapshot(
@@ -39,6 +60,24 @@ struct WorkoutRecommendationServiceTests {
             primaryMuscles: primaryMuscles,
             secondaryMuscles: secondaryMuscles,
             completedSetCount: sets
+        )
+    }
+
+    private func testExercise(
+        id: String,
+        equipment: Equipment,
+        muscles: [MuscleGroup] = [.chest]
+    ) -> ExerciseDefinition {
+        ExerciseDefinition(
+            id: id,
+            name: id,
+            localizedName: id,
+            category: .strength,
+            inputType: .setsRepsWeight,
+            primaryMuscles: muscles,
+            secondaryMuscles: [],
+            equipment: equipment,
+            metValue: 6
         )
     }
 
@@ -335,6 +374,45 @@ struct WorkoutRecommendationServiceTests {
         // 40/48 ≈ 0.833 → recovered (>= 0.8)
         #expect(chestState!.isRecovered == true)
         #expect(chestState!.recoveryPercent > 0.8)
+    }
+
+    @Test("constraints exclude unavailable equipment from suggestions")
+    func constraintsFilterUnavailableEquipment() {
+        let testLibrary = TestExerciseLibrary(exercises: [
+            testExercise(id: "bench", equipment: .barbell),
+            testExercise(id: "pushup", equipment: .bodyweight),
+        ])
+
+        let result = service.recommend(
+            from: [],
+            library: testLibrary,
+            constraints: WorkoutRecommendationConstraints(
+                excludedExerciseIDs: [],
+                allowedEquipment: [.bodyweight]
+            )
+        )
+
+        #expect(result != nil)
+        #expect(result?.exercises.isEmpty == false)
+        #expect(result?.exercises.allSatisfy { $0.definition.equipment == .bodyweight } == true)
+    }
+
+    @Test("constraints exclude not interested exercise IDs")
+    func constraintsExcludeNotInterestedExercises() {
+        let testLibrary = TestExerciseLibrary(exercises: [
+            testExercise(id: "pushup", equipment: .bodyweight),
+        ])
+
+        let result = service.recommend(
+            from: [],
+            library: testLibrary,
+            constraints: WorkoutRecommendationConstraints(
+                excludedExerciseIDs: ["pushup"],
+                allowedEquipment: [.bodyweight]
+            )
+        )
+
+        #expect(result == nil)
     }
 
     // MARK: - MuscleFatigueState

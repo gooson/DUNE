@@ -6,7 +6,58 @@ import Testing
 @MainActor
 struct CardioSessionViewModelTests {
 
-    // MARK: - Helpers
+    // MARK: - Test Doubles
+
+    private final class MockLocationTrackingService: LocationTrackingServiceProtocol, @unchecked Sendable {
+        var totalDistanceMeters: Double
+        var totalElevationGainMeters: Double
+        var finalDistanceMeters: Double
+        var shouldThrowStart = false
+
+        init(
+            totalDistanceMeters: Double = 0,
+            totalElevationGainMeters: Double = 0,
+            finalDistanceMeters: Double = 0
+        ) {
+            self.totalDistanceMeters = totalDistanceMeters
+            self.totalElevationGainMeters = totalElevationGainMeters
+            self.finalDistanceMeters = finalDistanceMeters
+        }
+
+        func startTracking() async throws {
+            if shouldThrowStart {
+                throw LocationTrackingError.notAuthorized
+            }
+        }
+
+        func stopTracking() async -> Double {
+            finalDistanceMeters
+        }
+    }
+
+    private final class MockMotionTrackingService: MotionTrackingServiceProtocol, @unchecked Sendable {
+        var latestSnapshot: MotionTrackingSnapshot
+        var finalSnapshot: MotionTrackingSnapshot
+        var shouldThrowStart = false
+
+        init(
+            latestSnapshot: MotionTrackingSnapshot = .empty,
+            finalSnapshot: MotionTrackingSnapshot = .empty
+        ) {
+            self.latestSnapshot = latestSnapshot
+            self.finalSnapshot = finalSnapshot
+        }
+
+        func startTracking(from startDate: Date) async throws {
+            if shouldThrowStart {
+                throw MotionTrackingError.notAuthorized
+            }
+        }
+
+        func stopTracking() async -> MotionTrackingSnapshot {
+            finalSnapshot
+        }
+    }
 
     private actor MockStepsService: StepsQuerying {
         var todaySteps: Double
@@ -23,6 +74,8 @@ struct CardioSessionViewModelTests {
         func fetchLatestSteps(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
         func fetchStepsCollection(start: Date, end: Date, interval: DateComponents) async throws -> [(date: Date, sum: Double)] { [] }
     }
+
+    // MARK: - Helpers
 
     private func makeExercise(
         id: String = "running",
@@ -47,13 +100,19 @@ struct CardioSessionViewModelTests {
         name: String = "Running",
         isOutdoor: Bool = true,
         activityType: WorkoutActivityType = .running,
+        locationService: MockLocationTrackingService? = nil,
+        motionService: MockMotionTrackingService? = nil,
         stepsService: StepsQuerying? = nil
     ) -> CardioSessionViewModel {
         let exercise = makeExercise(id: id, name: name)
+        let location = locationService ?? MockLocationTrackingService()
+        let motion = motionService ?? MockMotionTrackingService()
         return CardioSessionViewModel(
             exercise: exercise,
             activityType: activityType,
             isOutdoor: isOutdoor,
+            locationService: location,
+            motionService: motion,
             stepsService: stepsService
         )
     }
@@ -87,9 +146,8 @@ struct CardioSessionViewModelTests {
 
     @Test("Record has correct exerciseID")
     func recordExerciseID() async {
-        let vm = makeVM(id: "cycling", name: "Cycling")
+        let vm = makeVM(id: "cycling", name: "Cycling", activityType: .cycling)
         vm.start()
-        // Let timer tick
         try? await Task.sleep(for: .milliseconds(100))
         await vm.end()
         let record = vm.createExerciseRecord()
@@ -105,12 +163,11 @@ struct CardioSessionViewModelTests {
         let record = vm.createExerciseRecord()
         #expect(record != nil)
         let duration = record?.duration ?? 0
-        // Should be approximately 2 seconds (allow tolerance)
         #expect(duration >= 1.5)
         #expect(duration < 4)
     }
 
-    @Test("Record distanceKm is nil when no GPS distance")
+    @Test("Record distanceKm is nil when no measured distance")
     func zeroDistanceIsNil() async {
         let vm = makeVM(isOutdoor: false)
         vm.start()
@@ -130,12 +187,86 @@ struct CardioSessionViewModelTests {
         #expect(record?.category == .cardio)
     }
 
+    @Test("Record includes motion step and cadence metrics")
+    func recordIncludesMotionMetrics() async {
+        let motion = MockMotionTrackingService(
+            finalSnapshot: MotionTrackingSnapshot(
+                stepCount: 6_500,
+                distanceMeters: 4_300,
+                currentPaceSecondsPerKm: 330,
+                averagePaceSecondsPerKm: 345,
+                cadenceStepsPerMinute: 168,
+                floorsAscended: 12
+            )
+        )
+
+        let vm = makeVM(isOutdoor: false, motionService: motion)
+        vm.start()
+        try? await Task.sleep(for: .milliseconds(200))
+        await vm.end()
+
+        let record = vm.createExerciseRecord()
+        #expect(record?.stepCount == 6_500)
+        #expect(record?.averageCadenceStepsPerMinute == 168)
+        #expect(record?.averagePaceSecondsPerKm == 345)
+        #expect(record?.floorsAscended == 12)
+        #expect(record?.distanceKm == 4.3)
+    }
+
+    @Test("Uses motion distance fallback when GPS final distance is unavailable")
+    func motionDistanceFallback() async {
+        let location = MockLocationTrackingService(
+            totalDistanceMeters: 0,
+            totalElevationGainMeters: 0,
+            finalDistanceMeters: 0
+        )
+        let motion = MockMotionTrackingService(
+            finalSnapshot: MotionTrackingSnapshot(
+                stepCount: 2_000,
+                distanceMeters: 1_500,
+                currentPaceSecondsPerKm: 420,
+                averagePaceSecondsPerKm: 430,
+                cadenceStepsPerMinute: 140,
+                floorsAscended: 0
+            )
+        )
+
+        let vm = makeVM(isOutdoor: true, locationService: location, motionService: motion)
+        vm.start()
+        try? await Task.sleep(for: .milliseconds(200))
+        await vm.end()
+
+        let record = vm.createExerciseRecord()
+        #expect(record?.distanceKm == 1.5)
+    }
+
+    @Test("Elevation gain falls back to floors when direct elevation is unavailable")
+    func floorsFallbackElevationGain() async {
+        let motion = MockMotionTrackingService(
+            finalSnapshot: MotionTrackingSnapshot(
+                stepCount: 1_000,
+                distanceMeters: 900,
+                currentPaceSecondsPerKm: 500,
+                averagePaceSecondsPerKm: 510,
+                cadenceStepsPerMinute: 120,
+                floorsAscended: 8
+            )
+        )
+
+        let vm = makeVM(isOutdoor: false, motionService: motion)
+        vm.start()
+        try? await Task.sleep(for: .milliseconds(200))
+        await vm.end()
+
+        let record = vm.createExerciseRecord()
+        #expect((record?.elevationGainMeters ?? 0) > 20)
+    }
+
     // MARK: - Formatted Values
 
     @Test("formattedElapsed shows M:SS format")
     func formattedElapsedMinutes() {
         let vm = makeVM()
-        // formattedElapsed reads elapsedSeconds which is 0 initially
         #expect(vm.formattedElapsed == "0:00")
     }
 
@@ -147,16 +278,12 @@ struct CardioSessionViewModelTests {
 
     // MARK: - showsDistance
 
-    @Test("showsDistance is true for outdoor distance-based activity")
-    func showsDistanceOutdoor() {
-        let vm = makeVM(isOutdoor: true)
-        #expect(vm.showsDistance == true)
-    }
-
-    @Test("showsDistance is false for indoor")
-    func showsDistanceIndoor() {
-        let vm = makeVM(isOutdoor: false)
-        #expect(vm.showsDistance == false)
+    @Test("showsDistance is true for running regardless of indoor/outdoor")
+    func showsDistanceForDistanceType() {
+        let outdoor = makeVM(isOutdoor: true)
+        let indoor = makeVM(isOutdoor: false)
+        #expect(outdoor.showsDistance == true)
+        #expect(indoor.showsDistance == true)
     }
 
     // MARK: - Pause / Resume

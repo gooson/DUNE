@@ -37,6 +37,9 @@ final class HabitDefinition {
         if frequencyTypeRaw == "weekly" {
             return .weekly(targetDays: Swift.max(1, Swift.min(weeklyTargetDays, 7)))
         }
+        if frequencyTypeRaw == "interval" {
+            return .interval(days: Swift.max(1, Swift.min(weeklyTargetDays, 365)))
+        }
         return .daily
     }
 
@@ -70,6 +73,9 @@ final class HabitDefinition {
             self.weeklyTargetDays = 7
         case .weekly(let days):
             self.frequencyTypeRaw = "weekly"
+            self.weeklyTargetDays = days
+        case .interval(let days):
+            self.frequencyTypeRaw = "interval"
             self.weeklyTargetDays = days
         }
     }

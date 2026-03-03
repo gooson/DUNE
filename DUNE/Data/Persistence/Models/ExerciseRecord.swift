@@ -9,6 +9,15 @@ final class ExerciseRecord {
     var duration: TimeInterval = 0
     var calories: Double?
     var distance: Double?
+    var stepCount: Int?
+    /// Average pace for cardio sessions (seconds per kilometer).
+    var averagePaceSecondsPerKm: Double?
+    /// Average cadence for cardio sessions (steps per minute).
+    var averageCadenceStepsPerMinute: Double?
+    /// Elevation gain for cardio sessions (meters).
+    var elevationGainMeters: Double?
+    /// Floors ascended reported by motion sensors.
+    var floorsAscended: Double?
     var memo: String = ""
     var isFromHealthKit: Bool = false
     var healthKitWorkoutID: String?
@@ -34,6 +43,11 @@ final class ExerciseRecord {
         duration: TimeInterval = 0,
         calories: Double? = nil,
         distance: Double? = nil,
+        stepCount: Int? = nil,
+        averagePaceSecondsPerKm: Double? = nil,
+        averageCadenceStepsPerMinute: Double? = nil,
+        elevationGainMeters: Double? = nil,
+        floorsAscended: Double? = nil,
         memo: String = "",
         isFromHealthKit: Bool = false,
         healthKitWorkoutID: String? = nil,
@@ -52,6 +66,11 @@ final class ExerciseRecord {
         self.duration = duration
         self.calories = calories
         self.distance = distance
+        self.stepCount = stepCount
+        self.averagePaceSecondsPerKm = averagePaceSecondsPerKm
+        self.averageCadenceStepsPerMinute = averageCadenceStepsPerMinute
+        self.elevationGainMeters = elevationGainMeters
+        self.floorsAscended = floorsAscended
         self.memo = memo
         self.isFromHealthKit = isFromHealthKit
         self.healthKitWorkoutID = healthKitWorkoutID

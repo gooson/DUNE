@@ -90,19 +90,43 @@ struct CardioSessionSummaryView: View {
                 )
             }
 
-            if viewModel.activityType == .walking {
+            HStack(spacing: DS.Spacing.md) {
+                summaryCard(
+                    title: String(localized: "Steps"),
+                    value: summaryStepsValue,
+                    icon: "figure.walk",
+                    color: DS.Color.steps
+                )
+
+                summaryCard(
+                    title: String(localized: "Cadence"),
+                    value: viewModel.cadenceStepsPerMinute > 0
+                        ? "\(Int(viewModel.cadenceStepsPerMinute)) spm"
+                        : "--",
+                    icon: "gauge.with.dots.needle.50percent",
+                    color: DS.Color.activity
+                )
+            }
+
+            if viewModel.totalElevationGainMeters > 0 {
                 HStack(spacing: DS.Spacing.md) {
                     summaryCard(
-                        title: String(localized: "Steps"),
-                        value: viewModel.walkingStepCount > 0
-                            ? "\(Int(viewModel.walkingStepCount).formattedWithSeparator) steps"
-                            : "--",
-                        icon: "figure.walk",
-                        color: DS.Color.steps
+                        title: String(localized: "Elevation Gain"),
+                        value: "\(Int(viewModel.totalElevationGainMeters)) m",
+                        icon: "mountain.2.fill",
+                        color: DS.Color.positive
                     )
+                    Color.clear.frame(maxWidth: .infinity)
                 }
             }
         }
+    }
+
+    private var summaryStepsValue: String {
+        if viewModel.activityType == .walking, viewModel.walkingStepCount > 0 {
+            return "\(Int(viewModel.walkingStepCount).formattedWithSeparator) steps"
+        }
+        return viewModel.formattedStepCount
     }
 
     private func summaryCard(title: String, value: String, icon: String, color: SwiftUI.Color) -> some View {
@@ -153,6 +177,11 @@ struct CardioSessionSummaryView: View {
             exerciseType: data.exerciseID,
             duration: data.duration,
             distance: data.distanceKm,
+            stepCount: data.stepCount,
+            averagePaceSecondsPerKm: data.averagePaceSecondsPerKm,
+            averageCadenceStepsPerMinute: data.averageCadenceStepsPerMinute,
+            elevationGainMeters: data.elevationGainMeters,
+            floorsAscended: data.floorsAscended,
             exerciseDefinitionID: data.exerciseID,
             primaryMuscles: exercise.primaryMuscles,
             secondaryMuscles: exercise.secondaryMuscles,
@@ -174,6 +203,11 @@ struct CardioSessionSummaryView: View {
             estimatedCalories: data.estimatedCalories,
             isFromHealthKit: false,
             distanceKm: data.distanceKm,
+            stepCount: data.stepCount,
+            averagePaceSecondsPerKm: data.averagePaceSecondsPerKm,
+            averageCadenceStepsPerMinute: data.averageCadenceStepsPerMinute,
+            elevationGainMeters: data.elevationGainMeters,
+            floorsAscended: data.floorsAscended,
             activityType: viewModel.activityType
         )
 

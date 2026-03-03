@@ -1,57 +1,79 @@
 import SwiftUI
 
 /// Single exercise row in the suggested workout section.
-/// Supports swipe to reveal alternative exercises.
+/// Separates "start" and "alternatives" actions to reduce interaction ambiguity.
 struct SuggestedExerciseRow: View {
     let exercise: SuggestedExercise
+    let isExcluded: Bool
     let onStart: () -> Void
+    let onToggleInterest: () -> Void
     let onAlternativeSelected: (ExerciseDefinition) -> Void
 
     @Environment(\.appTheme) private var theme
     @State private var showingAlternatives = false
 
     var body: some View {
-        VStack(spacing: 0) {
-            // Main row
-            Button(action: onStart) {
-                HStack(spacing: DS.Spacing.sm) {
+        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.sm) {
+                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                     Text(exercise.definition.localizedName)
-                        .font(.subheadline)
+                        .font(.subheadline.weight(.semibold))
                         .foregroundStyle(theme.sandColor)
-                        .lineLimit(1)
+                        .lineLimit(2)
 
-                    Spacer()
-
-                    Text("\(exercise.suggestedSets.formattedWithSeparator) sets")
-                        .font(.caption)
+                    Text(exercise.reason)
+                        .font(.caption2)
                         .foregroundStyle(DS.Color.textSecondary)
+                        .lineLimit(2)
+                }
 
-                    if !exercise.alternatives.isEmpty {
-                        Button {
-                            withAnimation(DS.Animation.snappy) {
-                                showingAlternatives.toggle()
-                            }
-                        } label: {
-                            Image(systemName: showingAlternatives ? "chevron.up" : "arrow.left.arrow.right")
-                                .font(.caption2)
-                                .foregroundStyle(DS.Color.activity)
-                                .frame(width: 24, height: 24)
-                                .contentShape(Rectangle())
+                Spacer(minLength: DS.Spacing.xs)
+
+                Text("\(exercise.suggestedSets.formattedWithSeparator) sets")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(DS.Color.textSecondary)
+            }
+
+            HStack(spacing: DS.Spacing.xs) {
+                Button("Start Workout", action: onStart)
+                    .buttonStyle(.borderedProminent)
+                    .tint(DS.Color.activity)
+                    .font(.caption.weight(.semibold))
+
+                if !exercise.alternatives.isEmpty {
+                    Button(showingAlternatives ? "Hide" : "Alternatives") {
+                        withAnimation(DS.Animation.snappy) {
+                            showingAlternatives.toggle()
                         }
-                        .buttonStyle(.plain)
-                    } else {
-                        Image(systemName: "chevron.right")
+                    }
+                    .buttonStyle(.bordered)
+                    .font(.caption.weight(.semibold))
+                }
+
+                Spacer(minLength: DS.Spacing.xs)
+
+                Button {
+                    onToggleInterest()
+                } label: {
+                    HStack(spacing: DS.Spacing.xxs) {
+                        Image(systemName: isExcluded ? "eye.slash.fill" : "eye.slash")
                             .font(.caption2)
-                            .foregroundStyle(.tertiary)
+                        Text(isExcluded ? "Undo" : "Not Interested")
+                            .font(.caption2.weight(.semibold))
                     }
                 }
-                .padding(.vertical, DS.Spacing.xs)
+                .buttonStyle(.plain)
+                .foregroundStyle(isExcluded ? DS.Color.activity : DS.Color.textSecondary)
             }
-            .buttonStyle(.plain)
 
             // Alternatives (expandable)
             if showingAlternatives {
-                VStack(spacing: 0) {
+                VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                    Text("Alternative options")
+                        .font(.caption2.weight(.semibold))
+                        .foregroundStyle(.tertiary)
+                        .padding(.leading, DS.Spacing.xs)
+
                     ForEach(exercise.alternatives) { alt in
                         Button {
                             onAlternativeSelected(alt)
@@ -73,13 +95,16 @@ struct SuggestedExerciseRow: View {
                                     .foregroundStyle(.quaternary)
                             }
                             .padding(.vertical, DS.Spacing.xxs)
-                            .padding(.leading, DS.Spacing.lg)
+                            .padding(.leading, DS.Spacing.md)
                         }
                         .buttonStyle(.plain)
                     }
                 }
+                .padding(DS.Spacing.sm)
+                .background(DS.Color.activity.opacity(0.06), in: RoundedRectangle(cornerRadius: DS.Radius.sm))
                 .transition(.opacity.combined(with: .move(edge: .top)))
             }
         }
+        .padding(.vertical, DS.Spacing.xxs)
     }
 }
