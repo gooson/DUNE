@@ -6,7 +6,6 @@ import SwiftData
 struct TemplateWorkoutView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.scenePhase) private var scenePhase
     @Environment(\.appTheme) private var theme
 
     @AppStorage(WeightUnit.storageKey) private var weightUnitRaw = WeightUnit.kg.rawValue
@@ -202,8 +201,9 @@ struct TemplateWorkoutView: View {
         switch status {
         case .completed: DS.Color.activity.opacity(0.15)
         case .inProgress where isCurrent: DS.Color.activity.opacity(0.15)
+        case .inProgress: Color.secondary.opacity(0.08)
         case .skipped: Color.secondary.opacity(0.05)
-        default: Color.secondary.opacity(0.08)
+        case .pending: Color.secondary.opacity(0.08)
         }
     }
 
@@ -211,8 +211,9 @@ struct TemplateWorkoutView: View {
         switch status {
         case .completed: DS.Color.activity
         case .inProgress where isCurrent: DS.Color.activity
+        case .inProgress: theme.sandColor
         case .skipped: DS.Color.textSecondary
-        default: theme.sandColor
+        case .pending: theme.sandColor
         }
     }
 
