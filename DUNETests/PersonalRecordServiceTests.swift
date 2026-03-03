@@ -11,7 +11,8 @@ struct PersonalRecordServiceTests {
         duration: TimeInterval = 1800,
         pace: Double? = nil,
         elevation: Double? = nil,
-        activityType: WorkoutActivityType = .running
+        activityType: WorkoutActivityType = .running,
+        stepCount: Double? = nil
     ) -> WorkoutSummary {
         WorkoutSummary(
             id: UUID().uuidString,
@@ -22,7 +23,8 @@ struct PersonalRecordServiceTests {
             distance: distance,
             date: Date(),
             averagePace: pace,
-            elevationAscended: elevation
+            elevationAscended: elevation,
+            stepCount: stepCount
         )
     }
 
@@ -129,5 +131,99 @@ struct PersonalRecordServiceTests {
         let workout = makeWorkout(pace: 300, activityType: .traditionalStrengthTraining)
         let result = PersonalRecordService.detectNewRecords(workout: workout, existingRecords: [:])
         #expect(!result.contains(.fastestPace))
+    }
+
+    // MARK: - Milestones
+
+    @Test("Milestone: running uses fixed distance tiers")
+    func runningMilestoneTier() {
+        let workout = makeWorkout(distance: 16_000, activityType: .running)
+        let milestone = workout.activityType.milestoneAchievement(
+            distanceMeters: workout.distance,
+            stepCount: workout.stepCount,
+            durationSeconds: workout.duration
+        )
+        #expect(milestone?.metric == .distanceMeters)
+        #expect(milestone?.tier == 3)
+        #expect(milestone?.threshold == 15_000)
+    }
+
+    @Test("Milestone: walking prefers step-count tiers")
+    func walkingStepMilestoneTier() {
+        let workout = makeWorkout(
+            distance: 5_000,
+            duration: 2_400,
+            activityType: .walking,
+            stepCount: 15_500
+        )
+        let milestone = workout.activityType.milestoneAchievement(
+            distanceMeters: workout.distance,
+            stepCount: workout.stepCount,
+            durationSeconds: workout.duration
+        )
+        #expect(milestone?.metric == .stepCount)
+        #expect(milestone?.tier == 2)
+        #expect(milestone?.threshold == 15_000)
+    }
+}
+
+@Suite("WorkoutRewardStore")
+struct WorkoutRewardStoreTests {
+
+    private func makeWorkout(
+        id: String = UUID().uuidString,
+        activityType: WorkoutActivityType = .running,
+        distance: Double? = nil,
+        duration: TimeInterval = 1800,
+        stepCount: Double? = nil
+    ) -> WorkoutSummary {
+        WorkoutSummary(
+            id: id,
+            type: activityType.typeName,
+            activityType: activityType,
+            duration: duration,
+            calories: 400,
+            distance: distance,
+            date: Date(),
+            averagePace: 320,
+            stepCount: stepCount
+        )
+    }
+
+    private func makeRewardStore() -> PersonalRecordStore {
+        let suiteName = "WorkoutRewardStoreTests.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suiteName) ?? .standard
+        defaults.removePersistentDomain(forName: suiteName)
+        return PersonalRecordStore(defaults: defaults)
+    }
+
+    @Test("Reward representative prioritizes level-up over other events")
+    func representativePriorityLevelUp() {
+        let store = makeRewardStore()
+
+        let firstWorkout = makeWorkout(id: "w1", distance: 5_400, duration: 3_000)
+        _ = store.evaluateReward(for: firstWorkout, newPRTypes: [.longestDistance])
+
+        let secondWorkout = makeWorkout(id: "w2", distance: 10_800, duration: 4_200)
+        let outcome = store.evaluateReward(
+            for: secondWorkout,
+            newPRTypes: [.longestDistance, .longestDuration]
+        )
+
+        #expect(outcome.representativeEvent?.kind == .levelUp)
+        #expect(outcome.summary.level >= 2)
+    }
+
+    @Test("Reward evaluation is idempotent for duplicate workout callbacks")
+    func rewardEvaluationIdempotent() {
+        let store = makeRewardStore()
+        let workout = makeWorkout(id: "dup", distance: 6_200, duration: 2_700)
+
+        let first = store.evaluateReward(for: workout, newPRTypes: [.longestDistance])
+        let second = store.evaluateReward(for: workout, newPRTypes: [.longestDistance])
+
+        #expect(!first.events.isEmpty)
+        #expect(second.events.isEmpty)
+        #expect(second.representativeEvent == nil)
     }
 }

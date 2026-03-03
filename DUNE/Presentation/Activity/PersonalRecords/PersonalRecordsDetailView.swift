@@ -5,6 +5,8 @@ import Charts
 struct PersonalRecordsDetailView: View {
     let records: [ActivityPersonalRecord]
     let notice: String?
+    let rewardSummary: WorkoutRewardSummary
+    let rewardHistory: [WorkoutRewardEvent]
 
     @State private var viewModel = PersonalRecordsDetailViewModel()
     @State private var selectedKind: ActivityPersonalRecord.Kind?
@@ -48,6 +50,10 @@ struct PersonalRecordsDetailView: View {
         filteredRecords.sorted { $0.date < $1.date }
     }
 
+    private var recentRewardHistory: [WorkoutRewardEvent] {
+        Array(rewardHistory.prefix(30))
+    }
+
     var body: some View {
         ScrollView {
             VStack(spacing: DS.Spacing.lg) {
@@ -60,8 +66,12 @@ struct PersonalRecordsDetailView: View {
                     if availableKinds.count > 1 {
                         metricPicker
                     }
+                    if rewardSummary.totalPoints > 0 || rewardSummary.badgeCount > 0 {
+                        rewardSummaryCard
+                    }
                     timelineChart
                     prGrid
+                    achievementHistorySection
                 }
             }
             .padding()
@@ -171,6 +181,91 @@ struct PersonalRecordsDetailView: View {
                 }
             }
         }
+    }
+
+    private var rewardSummaryCard: some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            Text("Reward Progress")
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(DS.Color.textSecondary)
+
+            HStack(spacing: DS.Spacing.sm) {
+                Label("Lv \(rewardSummary.level)", systemImage: "star.circle.fill")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 6)
+                    .background(DS.Color.activity, in: Capsule())
+
+                Label("\(rewardSummary.badgeCount.formatted()) badges", systemImage: "medal.fill")
+                    .font(.caption)
+                    .foregroundStyle(DS.Color.textSecondary)
+
+                Spacer(minLength: 0)
+
+                Text("\(rewardSummary.totalPoints.formatted()) pts")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.tertiary)
+            }
+        }
+        .padding(DS.Spacing.md)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+    }
+
+    private var achievementHistorySection: some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            Text("Achievement History")
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(DS.Color.textSecondary)
+
+            if recentRewardHistory.isEmpty {
+                Text("No reward events yet. Complete workouts and hit milestones to build your timeline.")
+                    .font(.caption)
+                    .foregroundStyle(.tertiary)
+                    .padding(.vertical, DS.Spacing.xs)
+            } else {
+                VStack(spacing: DS.Spacing.xs) {
+                    ForEach(recentRewardHistory) { event in
+                        historyRow(event)
+                    }
+                }
+            }
+        }
+        .padding(DS.Spacing.md)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+    }
+
+    private func historyRow(_ event: WorkoutRewardEvent) -> some View {
+        HStack(alignment: .top, spacing: DS.Spacing.sm) {
+            Image(systemName: iconName(for: event.kind))
+                .font(.caption)
+                .foregroundStyle(color(for: event.kind))
+                .frame(width: 18, height: 18)
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(event.title)
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(DS.Color.textSecondary)
+                Text(event.detail)
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+                    .lineLimit(2)
+            }
+
+            Spacer(minLength: 0)
+
+            VStack(alignment: .trailing, spacing: 2) {
+                Text(event.date, style: .date)
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+                if event.pointsAwarded > 0 {
+                    Text("+\(event.pointsAwarded.formatted()) pts")
+                        .font(.caption2.weight(.semibold))
+                        .foregroundStyle(DS.Color.activity)
+                }
+            }
+        }
+        .padding(.vertical, 4)
     }
 
     private func prCard(_ record: ActivityPersonalRecord) -> some View {
@@ -319,5 +414,23 @@ struct PersonalRecordsDetailView: View {
 
         guard !parts.isEmpty else { return nil }
         return parts.prefix(3).joined(separator: " · ")
+    }
+
+    private func iconName(for kind: WorkoutRewardEventKind) -> String {
+        switch kind {
+        case .milestone: "flag.checkered.circle.fill"
+        case .personalRecord: "trophy.fill"
+        case .badgeUnlocked: "medal.fill"
+        case .levelUp: "star.circle.fill"
+        }
+    }
+
+    private func color(for kind: WorkoutRewardEventKind) -> Color {
+        switch kind {
+        case .milestone: DS.Color.activity
+        case .personalRecord: .orange
+        case .badgeUnlocked: .yellow
+        case .levelUp: .mint
+        }
     }
 }

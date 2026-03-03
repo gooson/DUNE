@@ -198,6 +198,39 @@ enum EvaluateHealthInsightUseCase: Sendable {
         )
     }
 
+    /// Creates a representative insight for workout reward events.
+    /// Keeps notification cardinality at one alert per workout.
+    static func evaluateWorkoutReward(
+        activityName: String,
+        representativeEvent: WorkoutRewardEvent
+    ) -> HealthInsight? {
+        guard !activityName.isEmpty else { return nil }
+
+        let title: String
+        switch representativeEvent.kind {
+        case .levelUp:
+            title = String(localized: "Level Up!")
+        case .badgeUnlocked:
+            title = String(localized: "New Badge Unlocked")
+        case .personalRecord:
+            title = String(localized: "New Personal Record!")
+        case .milestone:
+            title = String(localized: "Milestone Reached!")
+        }
+
+        let body = representativeEvent.detail.isEmpty
+            ? activityName
+            : representativeEvent.detail
+
+        return HealthInsight(
+            type: .workoutPR,
+            title: title,
+            body: body,
+            severity: .celebration,
+            date: representativeEvent.date
+        )
+    }
+
     // MARK: - Private
 
     private static func formatPercent(_ value: Double) -> String {

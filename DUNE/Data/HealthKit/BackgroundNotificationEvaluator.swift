@@ -205,31 +205,19 @@ final class BackgroundNotificationEvaluator: Sendable {
     private func evaluateWorkoutSamples(_ samples: [HKSample]) -> HealthInsight? {
         guard let workout = samples.compactMap({ $0 as? HKWorkout }).last else { return nil }
 
-        let activityType = WorkoutActivityType(healthKit: workout.workoutActivityType)
-
-        // Build minimal WorkoutSummary for PR detection
-        let calories = workout.statistics(for: HKQuantityType(.activeEnergyBurned))?
-            .sumQuantity()?.doubleValue(for: .kilocalorie())
-        let distance = workout.statistics(for: HKQuantityType(.distanceWalkingRunning))?
-            .sumQuantity()?.doubleValue(for: .meter())
-
-        let summary = WorkoutSummary(
-            id: workout.uuid.uuidString,
-            type: activityType.typeName,
-            activityType: activityType,
-            duration: workout.duration,
-            calories: calories,
-            distance: distance,
-            date: workout.startDate
-        )
-
+        let summary = buildWorkoutSummary(from: workout)
         let newPRTypes = PersonalRecordStore.shared.updateIfNewRecords(summary)
-        guard !newPRTypes.isEmpty else { return nil }
+        let rewardOutcome = PersonalRecordStore.shared.evaluateReward(
+            for: summary,
+            newPRTypes: newPRTypes
+        )
+        guard let representativeEvent = rewardOutcome.representativeEvent else {
+            return nil
+        }
 
-        let typeNames = newPRTypes.map { prDisplayName(for: $0) }
-        guard let baseInsight = EvaluateHealthInsightUseCase.evaluateWorkoutPR(
-            activityName: activityType.typeName,
-            recordTypeNames: typeNames
+        guard let baseInsight = EvaluateHealthInsightUseCase.evaluateWorkoutReward(
+            activityName: summary.activityType.typeName,
+            representativeEvent: representativeEvent
         ) else {
             return nil
         }
@@ -244,16 +232,119 @@ final class BackgroundNotificationEvaluator: Sendable {
         )
     }
 
-    // MARK: - PR Display Names (Data-layer safe, Foundation String(localized:))
+    // MARK: - Workout Summary Helpers
 
-    private func prDisplayName(for type: PersonalRecordType) -> String {
-        switch type {
-        case .fastestPace: String(localized: "Fastest Pace")
-        case .longestDistance: String(localized: "Longest Distance")
-        case .highestCalories: String(localized: "Highest Calories")
-        case .longestDuration: String(localized: "Longest Duration")
-        case .highestElevation: String(localized: "Highest Elevation")
+    private func buildWorkoutSummary(from workout: HKWorkout) -> WorkoutSummary {
+        let activityType = WorkoutActivityType(healthKit: workout.workoutActivityType)
+        let calories = workout.statistics(for: HKQuantityType(.activeEnergyBurned))?
+            .sumQuantity()?.doubleValue(for: .kilocalorie())
+        let distance = extractDistance(workout)
+        let pace = extractPace(workout, distance: distance, activityType: activityType)
+        let stepCount = workout.statistics(for: HKQuantityType(.stepCount))?
+            .sumQuantity()?.doubleValue(for: .count())
+        let hrStats = workout.statistics(for: HKQuantityType(.heartRate))
+        let hrAvg = validHR(hrStats?.averageQuantity()?.doubleValue(for: .count().unitDivided(by: .minute())))
+        let hrMax = validHR(hrStats?.maximumQuantity()?.doubleValue(for: .count().unitDivided(by: .minute())))
+        let hrMin = validHR(hrStats?.minimumQuantity()?.doubleValue(for: .count().unitDivided(by: .minute())))
+        let elevation = extractElevation(workout.metadata)
+        let milestone = activityType.milestoneAchievement(
+            distanceMeters: distance,
+            stepCount: stepCount,
+            durationSeconds: workout.duration
+        )
+
+        return WorkoutSummary(
+            id: workout.uuid.uuidString,
+            type: activityType.typeName,
+            activityType: activityType,
+            duration: workout.duration,
+            calories: calories,
+            distance: distance,
+            date: workout.startDate,
+            isFromThisApp: WorkoutSourceClassifier.isFromAppFamily(
+                sourceBundleIdentifier: workout.sourceRevision.source.bundleIdentifier
+            ),
+            heartRateAvg: hrAvg,
+            heartRateMax: hrMax,
+            heartRateMin: hrMin,
+            averagePace: pace,
+            elevationAscended: elevation,
+            stepCount: stepCount,
+            milestoneDistance: milestone.flatMap { achievement in
+                guard achievement.metric == .distanceMeters else { return nil }
+                return MilestoneDistance.detect(from: distance)
+            }
+        )
+    }
+
+    private func extractDistance(_ workout: HKWorkout) -> Double? {
+        if let distance = workout.statistics(for: HKQuantityType(.distanceWalkingRunning))?
+            .sumQuantity()?.doubleValue(for: .meter()),
+           distance > 0,
+           distance.isFinite,
+           distance < 500_000 {
+            return distance
         }
+
+        if let distance = workout.statistics(for: HKQuantityType(.distanceCycling))?
+            .sumQuantity()?.doubleValue(for: .meter()),
+           distance > 0,
+           distance.isFinite,
+           distance < 500_000 {
+            return distance
+        }
+
+        if let distance = workout.statistics(for: HKQuantityType(.distanceSwimming))?
+            .sumQuantity()?.doubleValue(for: .meter()),
+           distance > 0,
+           distance.isFinite,
+           distance < 500_000 {
+            return distance
+        }
+
+        return nil
+    }
+
+    private func extractPace(
+        _ workout: HKWorkout,
+        distance: Double?,
+        activityType: WorkoutActivityType
+    ) -> Double? {
+        if let speed = workout.statistics(for: HKQuantityType(.runningSpeed))?
+            .averageQuantity()?.doubleValue(for: .meter().unitDivided(by: .second())),
+           speed > 0,
+           speed.isFinite {
+            let pace = 1000.0 / speed
+            if pace >= 60, pace <= 3600, pace.isFinite {
+                return pace
+            }
+        }
+
+        if activityType.isDistanceBased,
+           let distance,
+           distance > 0,
+           workout.duration > 0,
+           workout.duration.isFinite {
+            let speed = distance / workout.duration
+            guard speed > 0, speed.isFinite else { return nil }
+            let pace = 1000.0 / speed
+            guard pace >= 60, pace <= 3600, pace.isFinite else { return nil }
+            return pace
+        }
+
+        return nil
+    }
+
+    private func extractElevation(_ metadata: [String: Any]?) -> Double? {
+        guard let quantity = metadata?[HKMetadataKeyElevationAscended] as? HKQuantity else { return nil }
+        let elevation = quantity.doubleValue(for: .meter())
+        guard elevation >= 0, elevation <= 10_000, elevation.isFinite else { return nil }
+        return elevation
+    }
+
+    private func validHR(_ value: Double?) -> Double? {
+        guard let value, value >= 20, value <= 300, value.isFinite else { return nil }
+        return value
     }
 
     // MARK: - Type Mapping

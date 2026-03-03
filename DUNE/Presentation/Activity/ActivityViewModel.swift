@@ -32,6 +32,8 @@ final class ActivityViewModel {
     var sleepDailyData: [SleepDailySample] = []
     var personalRecords: [ActivityPersonalRecord] = []
     var personalRecordNotice: String?
+    var workoutRewardSummary: WorkoutRewardSummary = .empty
+    var workoutRewardHistory: [WorkoutRewardEvent] = []
     var workoutStreak: WorkoutStreak?
     var exerciseFrequencies: [ExerciseFrequency] = []
     var weeklyStats: [ActivityStat] = []
@@ -293,6 +295,9 @@ final class ActivityViewModel {
         } else {
             personalRecordNotice = String(localized: "Cardio PRs will appear automatically as you build your workout history.")
         }
+
+        workoutRewardSummary = personalRecordStore.rewardSummary()
+        workoutRewardHistory = personalRecordStore.rewardHistory(limit: 40)
     }
 
     private func rebuildWeeklyStats() {
@@ -434,8 +439,14 @@ final class ActivityViewModel {
 
     /// Updates cardio PR cache from fresh HealthKit workouts.
     private func refreshCardioPersonalRecords(with workouts: [WorkoutSummary]) {
-        for workout in workouts.sorted(by: { $0.date < $1.date }) where isCardioCandidate(workout) {
-            _ = personalRecordStore.updateIfNewRecords(workout)
+        for workout in workouts.sorted(by: { $0.date < $1.date }) {
+            let newPRTypes: [PersonalRecordType]
+            if isCardioCandidate(workout) {
+                newPRTypes = personalRecordStore.updateIfNewRecords(workout)
+            } else {
+                newPRTypes = []
+            }
+            _ = personalRecordStore.evaluateReward(for: workout, newPRTypes: newPRTypes)
         }
     }
 
@@ -463,8 +474,14 @@ final class ActivityViewModel {
                 guard !Task.isCancelled else { return }
                 let sortedHistory = history.sorted(by: { $0.date < $1.date })
 
-                for (index, workout) in sortedHistory.enumerated() where self.isCardioCandidate(workout) {
-                    _ = self.personalRecordStore.updateIfNewRecords(workout)
+                for (index, workout) in sortedHistory.enumerated() {
+                    let newPRTypes: [PersonalRecordType]
+                    if self.isCardioCandidate(workout) {
+                        newPRTypes = self.personalRecordStore.updateIfNewRecords(workout)
+                    } else {
+                        newPRTypes = []
+                    }
+                    _ = self.personalRecordStore.evaluateReward(for: workout, newPRTypes: newPRTypes)
 
                     if index > 0, index.isMultiple(of: Scheduling.cardioSeedYieldInterval) {
                         await Task.yield()
