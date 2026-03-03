@@ -9,6 +9,8 @@ enum AXID {
     static let dashboardToolbarSettings = "dashboard-toolbar-settings"
     static let dashboardPinnedEdit = "dashboard-pinned-edit"
     static let notificationsReadAllButton = "notifications-read-all-button"
+    static let notificationsDeleteAllButton = "notifications-delete-all-button"
+    static let notificationsOpenSettingsButton = "notifications-open-settings-button"
     // Planned — identifiers not yet applied to views
     static let dashboardPinnedGrid = "dashboard-pinned-grid"
     static let dashboardWeatherCard = "dashboard-weather-card"

@@ -63,6 +63,45 @@ struct NotificationInboxStoreTests {
         #expect(store.unreadCount() == 0)
     }
 
+    @Test("markUnread restores unread state and clears openedAt")
+    func markUnread() {
+        let store = makeStore()
+        let item = store.append(insight: sampleInsight(workoutID: "x"))
+
+        _ = store.markRead(id: item.id, openedAt: Date(timeIntervalSince1970: 100))
+        let unread = store.markUnread(id: item.id)
+
+        #expect(unread?.isRead == false)
+        #expect(unread?.openedAt == nil)
+        #expect(store.unreadCount() == 1)
+    }
+
+    @Test("delete removes only matching item")
+    func deleteOne() {
+        let store = makeStore()
+        let first = store.append(insight: sampleInsight(workoutID: "a"))
+        let second = store.append(insight: sampleInsight(workoutID: "b"))
+
+        let removed = store.delete(id: first.id)
+        let items = store.items()
+
+        #expect(removed?.id == first.id)
+        #expect(items.count == 1)
+        #expect(items.first?.id == second.id)
+    }
+
+    @Test("deleteAll clears inbox")
+    func deleteAll() {
+        let store = makeStore()
+        _ = store.append(insight: sampleInsight(workoutID: "x"))
+        _ = store.append(insight: sampleInsight(workoutID: "y"))
+
+        store.deleteAll()
+
+        #expect(store.items().isEmpty)
+        #expect(store.unreadCount() == 0)
+    }
+
     private func makeStore() -> NotificationInboxStore {
         let suiteName = "NotificationInboxStoreTests.\(UUID().uuidString)"
         let defaults = UserDefaults(suiteName: suiteName) ?? .standard

@@ -4,37 +4,61 @@ import SwiftUI
 struct NotificationHubView: View {
     @State private var items: [NotificationInboxItem] = []
     @State private var unreadCount = 0
+    @State private var destination: HubDestination?
+    @State private var showDeleteAllConfirmation = false
+    @State private var animatedIDs: Set<String> = []
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     private let inboxManager = NotificationInboxManager.shared
+
+    private enum HubDestination: Hashable, Identifiable {
+        case metric(HealthMetric.Category, itemID: String)
+        case settings
+        case unavailable(itemID: String)
+
+        var id: String {
+            switch self {
+            case .metric(let category, let itemID):
+                "metric-\(category.rawValue)-\(itemID)"
+            case .settings:
+                "settings"
+            case .unavailable(let itemID):
+                "unavailable-\(itemID)"
+            }
+        }
+    }
 
     var body: some View {
         List {
+            summarySection
+
             if items.isEmpty {
-                ContentUnavailableView(
-                    "No Notifications",
-                    systemImage: "bell.slash",
-                    description: Text("알림이 도착하면 여기에 표시됩니다.")
-                )
+                emptySection
             } else {
-                ForEach(items) { item in
-                    Button {
-                        inboxManager.open(itemID: item.id)
-                    } label: {
-                        notificationRow(for: item)
-                    }
-                    .buttonStyle(.plain)
-                }
+                inboxSection
             }
         }
+        .listStyle(.plain)
+        .scrollContentBackground(.hidden)
+        .background { TabWaveBackground() }
         .navigationBarTitleDisplayMode(.inline)
         .englishNavigationTitle("Notifications")
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button("Read All") {
-                    inboxManager.markAllRead()
-                }
-                .disabled(unreadCount == 0)
-                .accessibilityIdentifier("notifications-read-all-button")
+        .confirmationDialog("Delete all notifications?", isPresented: $showDeleteAllConfirmation, titleVisibility: .visible) {
+            Button("Delete All", role: .destructive) {
+                inboxManager.deleteAll()
+            }
+            Button("Cancel", role: .cancel) { }
+        } message: {
+            Text("This action removes every notification from your inbox.")
+        }
+        .navigationDestination(item: $destination) { target in
+            switch target {
+            case .metric(let category, _):
+                AllDataView(category: category)
+            case .settings:
+                SettingsView()
+            case .unavailable(let itemID):
+                NotificationDestinationUnavailableView(itemID: itemID)
             }
         }
         .task {
@@ -45,44 +69,263 @@ struct NotificationHubView: View {
         }
     }
 
+    private var summarySection: some View {
+        Section {
+            StandardCard {
+                VStack(alignment: .leading, spacing: DS.Spacing.md) {
+                    HStack(spacing: DS.Spacing.sm) {
+                        Image(systemName: unreadCount > 0 ? "bell.badge.fill" : "bell")
+                            .font(.headline)
+                            .foregroundStyle(.tint)
+
+                        Text(unreadCount > 0 ? "\(unreadCount.formatted()) unread notifications" : "Inbox is all caught up")
+                            .font(.subheadline.weight(.semibold))
+
+                        Spacer()
+
+                        NavigationLink {
+                            SettingsView()
+                        } label: {
+                            Image(systemName: "gearshape")
+                        }
+                        .accessibilityLabel("Notification Settings")
+                        .accessibilityIdentifier("notifications-open-settings-button")
+                    }
+
+                    HStack(spacing: DS.Spacing.sm) {
+                        Button("Read All") {
+                            inboxManager.markAllRead()
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .disabled(unreadCount == 0)
+                        .accessibilityIdentifier("notifications-read-all-button")
+
+                        Button("Delete All", role: .destructive) {
+                            showDeleteAllConfirmation = true
+                        }
+                        .buttonStyle(.bordered)
+                        .disabled(items.isEmpty)
+                        .accessibilityIdentifier("notifications-delete-all-button")
+                    }
+                }
+            }
+            .listRowSeparator(.hidden)
+            .listRowBackground(Color.clear)
+            .listRowInsets(EdgeInsets(top: DS.Spacing.sm, leading: DS.Spacing.lg, bottom: DS.Spacing.sm, trailing: DS.Spacing.lg))
+        }
+    }
+
+    private var emptySection: some View {
+        Section {
+            EmptyStateView(
+                icon: "bell.slash",
+                title: "No Notifications",
+                message: "알림이 도착하면 여기에 표시됩니다.",
+                actionTitle: "Open Settings",
+                action: { destination = .settings }
+            )
+            .accessibilityIdentifier("notifications-empty-state")
+            .listRowSeparator(.hidden)
+            .listRowBackground(Color.clear)
+            .listRowInsets(EdgeInsets(top: DS.Spacing.sm, leading: DS.Spacing.lg, bottom: DS.Spacing.sm, trailing: DS.Spacing.lg))
+        }
+    }
+
+    private var inboxSection: some View {
+        Section {
+            ForEach(Array(items.enumerated()), id: \.element.id) { index, item in
+                Button {
+                    handleTap(on: item)
+                } label: {
+                    notificationRow(for: item, index: index)
+                }
+                .buttonStyle(.plain)
+                .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                    Button(item.isRead ? "Unread" : "Read") {
+                        item.isRead ? inboxManager.markUnread(id: item.id) : inboxManager.markRead(id: item.id)
+                    }
+                    .tint(.blue)
+                }
+                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                    Button("Delete", role: .destructive) {
+                        _ = inboxManager.delete(id: item.id)
+                    }
+                }
+                .listRowSeparator(.hidden)
+                .listRowBackground(Color.clear)
+                .listRowInsets(EdgeInsets(top: DS.Spacing.xs, leading: DS.Spacing.lg, bottom: DS.Spacing.xs, trailing: DS.Spacing.lg))
+            }
+        }
+    }
+
     private func reload() {
         items = inboxManager.items()
         unreadCount = inboxManager.unreadCount()
     }
 
-    private func notificationRow(for item: NotificationInboxItem) -> some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-            HStack(spacing: DS.Spacing.xs) {
-                if !item.isRead {
+    private func handleTap(on item: NotificationInboxItem) {
+        guard let opened = inboxManager.open(itemID: item.id) else {
+            destination = .unavailable(itemID: item.id)
+            return
+        }
+
+        guard opened.route == nil else {
+            return
+        }
+
+        if let category = detailCategory(for: opened.insightType) {
+            destination = .metric(category, itemID: opened.id)
+        } else {
+            destination = .unavailable(itemID: opened.id)
+        }
+    }
+
+    private func notificationRow(for item: NotificationInboxItem, index: Int) -> some View {
+        let hint = destinationHint(for: item)
+
+        return InlineCard {
+            HStack(alignment: .top, spacing: DS.Spacing.sm) {
+                ZStack {
                     Circle()
-                        .fill(Color.accentColor)
-                        .frame(width: 8, height: 8)
+                        .fill(iconTint(for: item.insightType).opacity(0.18))
+                        .frame(width: 30, height: 30)
+
+                    Image(systemName: item.insightType.settingsIcon)
+                        .font(.footnote.weight(.semibold))
+                        .foregroundStyle(iconTint(for: item.insightType))
                 }
 
-                Text(item.title)
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.primary)
-                    .lineLimit(2)
+                VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                    HStack(spacing: DS.Spacing.xs) {
+                        Text(item.title)
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(.primary)
+                            .lineLimit(2)
 
-                Spacer()
+                        if !item.isRead {
+                            Circle()
+                                .fill(Color.accentColor)
+                                .frame(width: 7, height: 7)
+                        }
 
-                Text(item.createdAt, format: .relative(presentation: .named))
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-            }
+                        Spacer()
 
-            Text(item.body)
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-                .lineLimit(2)
+                        Text(item.createdAt, format: .relative(presentation: .named))
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                    }
 
-            if item.route?.destination == .workoutDetail {
-                Label("Workout Detail", systemImage: "figure.strengthtraining.traditional")
-                    .font(.caption2)
-                    .foregroundStyle(.tertiary)
+                    Text(item.body)
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(2)
+
+                    Label(hint.title, systemImage: hint.symbol)
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
+                }
             }
         }
-        .padding(.vertical, DS.Spacing.xxs)
+        .overlay {
+            RoundedRectangle(cornerRadius: DS.Radius.sm)
+                .stroke(item.isRead ? Color.clear : Color.accentColor.opacity(0.30), lineWidth: 1)
+        }
+        .opacity(reduceMotion || animatedIDs.contains(item.id) ? 1 : 0)
+        .offset(y: reduceMotion || animatedIDs.contains(item.id) ? 0 : 10)
+        .onAppear {
+            animateRowIfNeeded(itemID: item.id, index: index)
+        }
+    }
+
+    private func animateRowIfNeeded(itemID: String, index: Int) {
+        guard !animatedIDs.contains(itemID) else { return }
+        guard !reduceMotion else {
+            animatedIDs.insert(itemID)
+            return
+        }
+
+        let delay = min(Double(index), 12) * 0.035
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+            withAnimation(DS.Animation.standard) {
+                _ = animatedIDs.insert(itemID)
+            }
+        }
+    }
+
+    private func detailCategory(for insightType: HealthInsight.InsightType) -> HealthMetric.Category? {
+        switch insightType {
+        case .hrvAnomaly:
+            .hrv
+        case .rhrAnomaly:
+            .rhr
+        case .sleepComplete:
+            .sleep
+        case .stepGoal:
+            .steps
+        case .weightUpdate:
+            .weight
+        case .bodyFatUpdate:
+            .bodyFat
+        case .bmiUpdate:
+            .bmi
+        case .workoutPR:
+            .exercise
+        }
+    }
+
+    private func destinationHint(for item: NotificationInboxItem) -> (title: String, symbol: String) {
+        if item.route?.destination == .workoutDetail {
+            return ("Workout Detail", "figure.strengthtraining.traditional")
+        }
+
+        guard let category = detailCategory(for: item.insightType) else {
+            return ("Notification Detail", "arrow.triangle.branch")
+        }
+
+        return ("\(category.englishDisplayName) Detail", category.iconName)
+    }
+
+    private func iconTint(for type: HealthInsight.InsightType) -> Color {
+        switch type {
+        case .hrvAnomaly:
+            DS.Color.hrv
+        case .rhrAnomaly:
+            DS.Color.rhr
+        case .sleepComplete:
+            DS.Color.sleep
+        case .stepGoal:
+            DS.Color.steps
+        case .weightUpdate, .bodyFatUpdate, .bmiUpdate:
+            DS.Color.body
+        case .workoutPR:
+            DS.Color.activity
+        }
+    }
+}
+
+private struct NotificationDestinationUnavailableView: View {
+    let itemID: String
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        EmptyStateView(
+            icon: "arrow.triangle.branch",
+            title: "Destination Unavailable",
+            message: "이 알림의 이동 대상 정보를 찾을 수 없습니다. 설정에서 알림 구성을 확인하세요.",
+            actionTitle: "Back",
+            action: {
+                dismiss()
+            }
+        )
+        .padding(.horizontal, DS.Spacing.lg)
+        .background { DetailWaveBackground() }
+        .overlay(alignment: .bottom) {
+            Text("ID: \(itemID)")
+                .font(.caption2)
+                .foregroundStyle(.tertiary)
+                .padding(.bottom, DS.Spacing.lg)
+        }
+        .englishNavigationTitle("Notification")
     }
 }
 

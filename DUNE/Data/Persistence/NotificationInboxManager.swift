@@ -46,8 +46,27 @@ final class NotificationInboxManager: @unchecked Sendable {
         postInboxDidChange()
     }
 
+    func markUnread(id: String) {
+        _ = store.markUnread(id: id)
+        postInboxDidChange()
+    }
+
     func markAllRead() {
         store.markAllRead()
+        postInboxDidChange()
+    }
+
+    @discardableResult
+    func delete(id: String) -> NotificationInboxItem? {
+        let removed = store.delete(id: id)
+        if removed != nil {
+            postInboxDidChange()
+        }
+        return removed
+    }
+
+    func deleteAll() {
+        store.deleteAll()
         postInboxDidChange()
     }
 
