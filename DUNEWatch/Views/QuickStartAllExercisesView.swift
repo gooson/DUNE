@@ -1,32 +1,17 @@
 import SwiftUI
 
-// MARK: - Category Label
-
-/// Maps ExerciseInputType rawValue to user-facing category label.
-/// Returns "Other" for unrecognized types to avoid silent miscategorisation (#93).
-private func categoryLabel(for inputType: String) -> String {
-    switch inputType {
-    case "setsRepsWeight": return String(localized: "Strength")
-    case "setsReps": return String(localized: "Bodyweight")
-    case "durationDistance": return String(localized: "Cardio")
-    case "durationIntensity": return String(localized: "Flexibility")
-    case "roundsBased": return String(localized: "HIIT")
-    default:
-        assertionFailure("Unknown inputType: \(inputType)")
-        return String(localized: "Other")
-    }
-}
-
 /// Full exercise list for Quick Start, accessible from the carousel's "All Exercises" card.
 /// Groups exercises by category (derived from inputType) when not searching.
 struct QuickStartAllExercisesView: View {
     @Environment(WatchConnectivityManager.self) private var connectivity
 
     @State private var searchText = ""
+    @State private var selectedCategory: WatchExerciseCategory?
     @State private var cachedFiltered: [WatchExerciseInfo] = []
-    @State private var cachedGrouped: [(category: String, exercises: [WatchExerciseInfo])] = []
+    @State private var cachedGrouped: [(category: WatchExerciseCategory, exercises: [WatchExerciseInfo])] = []
 
-    private var isSearching: Bool { !searchText.isEmpty }
+    private var isSearching: Bool { !searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+    private var isFilterActive: Bool { selectedCategory != nil }
 
     var body: some View {
         Group {
@@ -42,20 +27,32 @@ struct QuickStartAllExercisesView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                 .padding()
                 .accessibilityIdentifier("watch-quickstart-empty")
-            } else if isSearching {
-                List {
-                    ForEach(cachedFiltered, id: \.id) { exercise in
-                        exerciseRow(exercise)
-                    }
-                }
-                .accessibilityIdentifier("watch-quickstart-list")
-                .scrollContentBackground(.hidden)
             } else {
                 List {
-                    ForEach(cachedGrouped, id: \.category) { group in
-                        Section(group.category) {
-                            ForEach(group.exercises, id: \.id) { exercise in
-                                exerciseRow(exercise)
+                    Section {
+                        Picker(String(localized: "All Exercises"), selection: $selectedCategory) {
+                            Text(String(localized: "All Exercises"))
+                                .tag(nil as WatchExerciseCategory?)
+                            ForEach(WatchExerciseCategory.ordered, id: \.self) { category in
+                                Text(verbatim: category.displayName)
+                                    .tag(Optional(category))
+                            }
+                        }
+                        .accessibilityIdentifier("watch-quickstart-category-picker")
+                    }
+
+                    if isSearching || isFilterActive {
+                        ForEach(cachedFiltered, id: \.id) { exercise in
+                            exerciseRow(exercise)
+                        }
+                    } else {
+                        ForEach(cachedGrouped, id: \.category) { group in
+                            Section {
+                                ForEach(group.exercises, id: \.id) { exercise in
+                                    exerciseRow(exercise)
+                                }
+                            } header: {
+                                Text(verbatim: group.category.displayName)
                             }
                         }
                     }
@@ -74,6 +71,7 @@ struct QuickStartAllExercisesView: View {
             }
         }
         .onChange(of: searchText) { _, _ in rebuildLists() }
+        .onChange(of: selectedCategory) { _, _ in rebuildLists() }
         .onChange(of: connectivity.exerciseLibrary.count) { _, _ in rebuildLists() }
     }
 
@@ -87,31 +85,18 @@ struct QuickStartAllExercisesView: View {
     }
 
     private func rebuildLists() {
-        let library = connectivity.exerciseLibrary
+        let unique = uniqueByCanonical(RecentExerciseTracker.sorted(connectivity.exerciseLibrary))
 
-        if isSearching {
-            let filtered = library.filter {
-                $0.name.localizedCaseInsensitiveContains(searchText)
-            }
-            cachedFiltered = uniqueByCanonical(RecentExerciseTracker.sorted(filtered))
+        if isSearching || isFilterActive {
+            cachedFiltered = filterWatchExercises(
+                exercises: unique,
+                query: searchText,
+                category: selectedCategory
+            )
             cachedGrouped = []
         } else {
             cachedFiltered = []
-            let unique = uniqueByCanonical(RecentExerciseTracker.sorted(library))
-            let grouped = Dictionary(grouping: unique) { categoryLabel(for: $0.inputType) }
-
-            let order = [
-                String(localized: "Strength"),
-                String(localized: "Bodyweight"),
-                String(localized: "Cardio"),
-                String(localized: "HIIT"),
-                String(localized: "Flexibility"),
-                String(localized: "Other")
-            ]
-            cachedGrouped = order.compactMap { name in
-                guard let exercises = grouped[name], !exercises.isEmpty else { return nil }
-                return (category: name, exercises: exercises)
-            }
+            cachedGrouped = groupedWatchExercisesByCategory(unique)
         }
     }
 }

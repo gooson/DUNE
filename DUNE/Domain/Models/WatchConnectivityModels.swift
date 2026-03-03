@@ -46,6 +46,29 @@ struct WatchExerciseInfo: Codable, Sendable {
     let defaultWeightKg: Double?
     let equipment: String?
     let cardioSecondaryUnit: String?
+    let aliases: [String]?
+
+    init(
+        id: String,
+        name: String,
+        inputType: String,
+        defaultSets: Int,
+        defaultReps: Int?,
+        defaultWeightKg: Double?,
+        equipment: String?,
+        cardioSecondaryUnit: String?,
+        aliases: [String]? = nil
+    ) {
+        self.id = id
+        self.name = name
+        self.inputType = inputType
+        self.defaultSets = defaultSets
+        self.defaultReps = defaultReps
+        self.defaultWeightKg = defaultWeightKg
+        self.equipment = equipment
+        self.cardioSecondaryUnit = cardioSecondaryUnit
+        self.aliases = aliases
+    }
 }
 
 /// Lightweight workout template payload sent from iPhone to Watch.
