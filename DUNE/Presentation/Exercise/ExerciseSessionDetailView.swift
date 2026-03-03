@@ -31,6 +31,7 @@ struct ExerciseSessionDetailView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: DS.Spacing.lg) {
                 sessionHeader
+                cardioMetricsSection
                 healthKitBadge
                 setsList
                 heartRateSection
@@ -106,6 +107,93 @@ struct ExerciseSessionDetailView: View {
     }
 
     // MARK: - HealthKit Badge
+
+    private var hasCardioMetrics: Bool {
+        (record.distance ?? 0) > 0
+            || (record.stepCount ?? 0) > 0
+            || (record.averagePaceSecondsPerKm ?? 0) > 0
+            || (record.averageCadenceStepsPerMinute ?? 0) > 0
+            || (record.elevationGainMeters ?? 0) > 0
+            || (record.floorsAscended ?? 0) > 0
+    }
+
+    @ViewBuilder
+    private var cardioMetricsSection: some View {
+        if hasCardioMetrics {
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                Label("Cardio Metrics", systemImage: "figure.run")
+                    .font(.headline)
+                    .foregroundStyle(theme.sandColor)
+
+                HStack(spacing: DS.Spacing.sm) {
+                    if let distanceKm = normalizedDistanceKm(record.distance) {
+                        cardioMetricCard(
+                            title: "Distance",
+                            value: String(format: "%.2f km", distanceKm),
+                            icon: "location.fill"
+                        )
+                    }
+
+                    if let steps = record.stepCount, steps > 0 {
+                        cardioMetricCard(
+                            title: "Steps",
+                            value: steps.formattedWithSeparator,
+                            icon: "figure.walk"
+                        )
+                    }
+                }
+
+                HStack(spacing: DS.Spacing.sm) {
+                    if let pace = record.averagePaceSecondsPerKm, pace > 0 {
+                        cardioMetricCard(
+                            title: "Avg Pace",
+                            value: "\(formattedPace(pace)) /km",
+                            icon: "speedometer"
+                        )
+                    }
+
+                    if let cadence = record.averageCadenceStepsPerMinute, cadence > 0 {
+                        cardioMetricCard(
+                            title: "Cadence",
+                            value: "\(Int(cadence).formattedWithSeparator) spm",
+                            icon: "gauge.with.dots.needle.50percent"
+                        )
+                    }
+                }
+
+                HStack(spacing: DS.Spacing.sm) {
+                    if let elevation = record.elevationGainMeters, elevation > 0 {
+                        cardioMetricCard(
+                            title: "Elevation Gain",
+                            value: "\(Int(elevation).formattedWithSeparator) m",
+                            icon: "mountain.2.fill"
+                        )
+                    } else if let floors = record.floorsAscended, floors > 0 {
+                        cardioMetricCard(
+                            title: "Floors",
+                            value: "\(Int(floors).formattedWithSeparator)",
+                            icon: "figure.stair.stepper"
+                        )
+                    }
+                }
+            }
+            .padding(DS.Spacing.md)
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        }
+    }
+
+    private func cardioMetricCard(title: String, value: String, icon: String) -> some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+            Label(title, systemImage: icon)
+                .font(.caption)
+                .foregroundStyle(DS.Color.textSecondary)
+            Text(value)
+                .font(.subheadline.weight(.semibold).monospacedDigit())
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(DS.Spacing.sm)
+        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+    }
 
     @ViewBuilder
     private var healthKitBadge: some View {
@@ -309,5 +397,21 @@ struct ExerciseSessionDetailView: View {
             return String(localized: "\(hours)h \(mins)min")
         }
         return String(localized: "\(totalMinutes)min")
+    }
+
+    private func formattedPace(_ pace: Double) -> String {
+        guard pace > 0, pace.isFinite, pace < 3600 else { return "--:--" }
+        let mins = Int(pace) / 60
+        let secs = Int(pace) % 60
+        return String(format: "%d:%02d", mins, secs)
+    }
+
+    /// Legacy records can contain either km or meters. Keep the same heuristic used in ActivityViewModel.
+    private func normalizedDistanceKm(_ rawDistance: Double?) -> Double? {
+        guard let distance = rawDistance, distance > 0, distance.isFinite else { return nil }
+        if distance <= 500 {
+            return distance
+        }
+        return distance / 1000.0
     }
 }

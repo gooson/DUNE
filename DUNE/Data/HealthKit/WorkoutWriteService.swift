@@ -11,6 +11,16 @@ struct WorkoutWriteInput: Sendable {
     let isFromHealthKit: Bool
     /// Distance in kilometers (nil for non-distance workouts).
     let distanceKm: Double?
+    /// Step count collected during the workout.
+    let stepCount: Int?
+    /// Average pace in sec/km.
+    let averagePaceSecondsPerKm: Double?
+    /// Average cadence in steps/min.
+    let averageCadenceStepsPerMinute: Double?
+    /// Elevation gain in meters.
+    let elevationGainMeters: Double?
+    /// Floors ascended from motion sensors.
+    let floorsAscended: Double?
     /// Activity type for distance type resolution (nil uses category-based fallback).
     let activityType: WorkoutActivityType?
 
@@ -22,6 +32,11 @@ struct WorkoutWriteInput: Sendable {
         estimatedCalories: Double?,
         isFromHealthKit: Bool,
         distanceKm: Double? = nil,
+        stepCount: Int? = nil,
+        averagePaceSecondsPerKm: Double? = nil,
+        averageCadenceStepsPerMinute: Double? = nil,
+        elevationGainMeters: Double? = nil,
+        floorsAscended: Double? = nil,
         activityType: WorkoutActivityType? = nil
     ) {
         self.startDate = startDate
@@ -31,6 +46,11 @@ struct WorkoutWriteInput: Sendable {
         self.estimatedCalories = estimatedCalories
         self.isFromHealthKit = isFromHealthKit
         self.distanceKm = distanceKm
+        self.stepCount = stepCount
+        self.averagePaceSecondsPerKm = averagePaceSecondsPerKm
+        self.averageCadenceStepsPerMinute = averageCadenceStepsPerMinute
+        self.elevationGainMeters = elevationGainMeters
+        self.floorsAscended = floorsAscended
         self.activityType = activityType
     }
 }
@@ -117,8 +137,50 @@ struct WorkoutWriteService: WorkoutWriting, Sendable {
             ))
         }
 
+        // Add step sample if valid.
+        if let stepCount = input.stepCount,
+           stepCount > 0, stepCount < 300_000 {
+            let quantity = HKQuantity(unit: .count(), doubleValue: Double(stepCount))
+            samples.append(HKQuantitySample(
+                type: HKQuantityType(.stepCount),
+                quantity: quantity,
+                start: input.startDate,
+                end: endDate
+            ))
+        }
+
         if !samples.isEmpty {
             try await builder.addSamples(samples)
+        }
+
+        var metadata: [String: Any] = [:]
+
+        if let elevation = input.elevationGainMeters,
+           elevation > 0, elevation.isFinite, elevation < 20_000 {
+            metadata[HKMetadataKeyElevationAscended] = HKQuantity(
+                unit: .meter(),
+                doubleValue: elevation
+            )
+        } else if let floors = input.floorsAscended,
+                  floors > 0, floors.isFinite, floors < 20_000 {
+            metadata[HKMetadataKeyElevationAscended] = HKQuantity(
+                unit: .meter(),
+                doubleValue: floors * 3.0
+            )
+        }
+
+        if let pace = input.averagePaceSecondsPerKm,
+           pace > 0, pace.isFinite, pace < 3600 {
+            metadata["com.dune.workout.averagePaceSecPerKm"] = pace
+        }
+
+        if let cadence = input.averageCadenceStepsPerMinute,
+           cadence > 0, cadence.isFinite, cadence < 300 {
+            metadata["com.dune.workout.averageCadenceSPM"] = cadence
+        }
+
+        if !metadata.isEmpty {
+            try await builder.addMetadata(metadata)
         }
 
         try await builder.endCollection(at: endDate)

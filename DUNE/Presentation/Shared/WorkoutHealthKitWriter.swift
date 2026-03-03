@@ -29,6 +29,11 @@ enum WorkoutHealthKitWriter {
             estimatedCalories: record.estimatedCalories,
             isFromHealthKit: record.isFromHealthKit,
             distanceKm: totalDistanceKm,
+            stepCount: record.stepCount,
+            averagePaceSecondsPerKm: record.averagePaceSecondsPerKm,
+            averageCadenceStepsPerMinute: record.averageCadenceStepsPerMinute,
+            elevationGainMeters: record.elevationGainMeters,
+            floorsAscended: record.floorsAscended,
             activityType: resolvedActivityType
         )
         Task {
