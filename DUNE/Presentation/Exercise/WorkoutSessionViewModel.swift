@@ -514,8 +514,8 @@ final class WorkoutSessionViewModel {
                 duration: durationSeconds,
                 distance: distanceKm,
                 intensity: nil,
-                restDuration: editableSet.restDuration,
-                isCompleted: true
+                isCompleted: true,
+                restDuration: editableSet.restDuration
             )
             // Explicit bidirectional link for CloudKit reliability
             workoutSet.exerciseRecord = record
