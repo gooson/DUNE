@@ -98,8 +98,12 @@ struct WorkoutActivityTypeInferTests {
         #expect(WorkoutActivityType.infer(from: "Kickboxing Class") == .kickboxing)
     }
 
-    @Test("Matches climbing")
-    func matchClimbing() {
+    @Test("Matches stair climbing before generic climb")
+    func matchStairClimbing() {
+        #expect(WorkoutActivityType.infer(from: "Stair Climber") == .stairClimbing)
+        #expect(WorkoutActivityType.infer(from: "Stair Climber Intervals") == .stairClimbing)
+        #expect(WorkoutActivityType.infer(from: "Stair Stepper") == .stairStepper)
+        // Generic climbing should still work
         #expect(WorkoutActivityType.infer(from: "Rock Climbing") == .climbing)
     }
 
