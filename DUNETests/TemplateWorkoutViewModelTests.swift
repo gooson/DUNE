@@ -78,27 +78,48 @@ struct TemplateWorkoutViewModelTests {
         #expect(vm.currentExerciseIndex == 0)
     }
 
-    @Test("Init prefills sets from template defaults")
+    @Test("Init adjusts set counts, prefill populates values")
     func initPrefillsDefaults() {
         let vm = TemplateWorkoutViewModel(config: Self.makeConfig())
 
-        // Bench Press: 3 sets, reps=10, weight=80
+        // Init adjusts set counts from template defaults
+        #expect(vm.exerciseViewModels[0].sets.count == 3)
+        #expect(vm.exerciseViewModels[1].sets.count == 3)
+        #expect(vm.exerciseViewModels[2].sets.count == 2)
+
+        // Prefill with kg unit
+        vm.prefillFromTemplateDefaults(weightUnit: .kg)
+
+        // Bench Press: reps=10, weight=80 (kg)
         let benchVM = vm.exerciseViewModels[0]
-        #expect(benchVM.sets.count == 3)
         #expect(benchVM.sets[0].reps == "10")
         #expect(benchVM.sets[0].weight == "80")
 
-        // Shoulder Press: 3 sets, reps=8, weight=40
+        // Shoulder Press: reps=8, weight=40 (kg)
         let ohpVM = vm.exerciseViewModels[1]
-        #expect(ohpVM.sets.count == 3)
         #expect(ohpVM.sets[0].reps == "8")
         #expect(ohpVM.sets[0].weight == "40")
 
-        // Lateral Raise: 2 sets, reps=15, no weight
+        // Lateral Raise: reps=15, no weight
         let raiseVM = vm.exerciseViewModels[2]
-        #expect(raiseVM.sets.count == 2)
         #expect(raiseVM.sets[0].reps == "15")
         #expect(raiseVM.sets[0].weight == "")
+    }
+
+    @Test("Prefill converts weight to display unit (lb)")
+    func prefillConvertsWeightUnit() {
+        let vm = TemplateWorkoutViewModel(config: Self.makeConfig())
+        vm.prefillFromTemplateDefaults(weightUnit: .lb)
+
+        // 80 kg → ~176.4 lb
+        let benchWeight = vm.exerciseViewModels[0].sets[0].weight
+        let parsedWeight = Double(benchWeight) ?? 0
+        #expect(parsedWeight > 175 && parsedWeight < 178)
+
+        // 40 kg → ~88.2 lb
+        let ohpWeight = vm.exerciseViewModels[1].sets[0].weight
+        let parsedOHP = Double(ohpWeight) ?? 0
+        #expect(parsedOHP > 87 && parsedOHP < 90)
     }
 
     // MARK: - Navigation Tests
@@ -222,8 +243,14 @@ struct TemplateWorkoutViewModelTests {
         let record = vm.createRecordForCurrent()
         #expect(record != nil)
         #expect(record?.exerciseType == "Bench Press")
-        #expect(vm.exerciseStatuses[0] == .completed)
+        // Status is NOT .completed yet — deferred until didFinishSaving
+        #expect(vm.isSaving == true)
+        #expect(vm.exerciseStatuses[0] == .inProgress)
+
         vm.didFinishSaving()
+        // NOW it's completed
+        #expect(vm.exerciseStatuses[0] == .completed)
+        #expect(vm.isSaving == false)
     }
 
     @Test("createRecordForCurrent prevents double save")

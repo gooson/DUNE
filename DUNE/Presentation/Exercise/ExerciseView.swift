@@ -219,7 +219,7 @@ struct ExerciseView: View {
     }
 
     private func startFromTemplate(_ template: WorkoutTemplate) {
-        let definitions = resolveTemplateExercises(from: template)
+        let definitions = library.resolveExercises(from: template.exerciseEntries)
         guard !definitions.isEmpty else { return }
 
         if definitions.count == 1 {
@@ -232,27 +232,6 @@ struct ExerciseView: View {
                 exercises: definitions,
                 templateEntries: template.exerciseEntries
             )
-        }
-    }
-
-    private func resolveTemplateExercises(from template: WorkoutTemplate) -> [ExerciseDefinition] {
-        template.exerciseEntries.compactMap { entry in
-            if let definition = library.exercise(byID: entry.exerciseDefinitionID) {
-                return definition
-            } else if entry.exerciseDefinitionID.hasPrefix("custom-") {
-                return ExerciseDefinition(
-                    id: entry.exerciseDefinitionID,
-                    name: entry.exerciseName,
-                    localizedName: entry.exerciseName,
-                    category: .strength,
-                    inputType: .setsRepsWeight,
-                    primaryMuscles: [],
-                    secondaryMuscles: [],
-                    equipment: .bodyweight,
-                    metValue: 5.0
-                )
-            }
-            return nil
         }
     }
 

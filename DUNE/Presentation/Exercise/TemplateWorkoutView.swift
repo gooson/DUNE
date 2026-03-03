@@ -23,6 +23,8 @@ struct TemplateWorkoutView: View {
 
     @Query private var exerciseRecords: [ExerciseRecord]
 
+    private let intensityService = WorkoutIntensityService()
+
     private var weightUnit: WeightUnit {
         WeightUnit(rawValue: weightUnitRaw) ?? .kg
     }
@@ -84,6 +86,7 @@ struct TemplateWorkoutView: View {
             }
         }
         .onAppear {
+            viewModel.prefillFromTemplateDefaults(weightUnit: weightUnit)
             viewModel.loadPreviousSets(from: exerciseRecords, weightUnit: weightUnit)
             startSessionTimer()
         }
@@ -255,7 +258,7 @@ struct TemplateWorkoutView: View {
                     .frame(width: 24)
                 Text("PREV")
                     .frame(width: 56, alignment: .leading)
-                columnHeaders(for: exercise)
+                ExerciseSetColumnHeaders(exercise: exercise, weightUnit: weightUnit)
                 Spacer()
                 Text("")
                     .frame(width: 28)
@@ -298,36 +301,6 @@ struct TemplateWorkoutView: View {
         }
     }
 
-    @ViewBuilder
-    private func columnHeaders(for exercise: ExerciseDefinition) -> some View {
-        switch exercise.inputType {
-        case .setsRepsWeight:
-            HStack(spacing: DS.Spacing.xs) {
-                Text(weightUnit.displayName.uppercased()).frame(maxWidth: 70)
-                Text("REPS").frame(maxWidth: 60)
-            }
-        case .setsReps:
-            HStack(spacing: DS.Spacing.xs) {
-                Text("REPS").frame(maxWidth: 70)
-            }
-        case .durationDistance:
-            let unit = exercise.cardioSecondaryUnit ?? .km
-            HStack(spacing: DS.Spacing.xs) {
-                Text("MIN").frame(maxWidth: 60)
-                if unit != .timeOnly {
-                    Text(unit.placeholder.uppercased()).frame(maxWidth: 70)
-                }
-            }
-        case .durationIntensity:
-            Text("MIN").frame(maxWidth: 60)
-        case .roundsBased:
-            HStack(spacing: DS.Spacing.xs) {
-                Text("REPS").frame(maxWidth: 60)
-                Text("SEC").frame(maxWidth: 60)
-            }
-        }
-    }
-
     // MARK: - Action Buttons
 
     private var actionButtons: some View {
@@ -362,7 +335,7 @@ struct TemplateWorkoutView: View {
                     .background(DS.Color.activity, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
             }
             .buttonStyle(.plain)
-            .disabled(viewModel.currentViewModel.completedSetCount == 0)
+            .disabled(viewModel.currentViewModel.completedSetCount == 0 || viewModel.isSaving)
 
             // Skip exercise
             if !viewModel.isAllDone {
@@ -428,12 +401,11 @@ struct TemplateWorkoutView: View {
     // MARK: - Actions
 
     private func completeCurrentExercise() {
+        let exercise = viewModel.currentExercise
         guard let record = viewModel.createRecordForCurrent(weightUnit: weightUnit) else { return }
 
-        // Write HealthKit
-        writeHealthKit(for: record, exercise: viewModel.currentExercise)
-
         modelContext.insert(record)
+        WorkoutHealthKitWriter.write(record: record, exercise: exercise)
         savedRecords.append(record)
         viewModel.didFinishSaving()
         saveCount += 1
@@ -499,49 +471,12 @@ struct TemplateWorkoutView: View {
             .sorted { $0.date > $1.date }
             .prefix(5)
             .compactMap(\.rpe)
-        effortSuggestion = WorkoutIntensityService().suggestEffort(
+        effortSuggestion = intensityService.suggestEffort(
             autoIntensityRaw: nil,
             recentEfforts: recentEfforts
         )
 
         showingCompletionSheet = true
-    }
-
-    // MARK: - HealthKit Write
-
-    private func writeHealthKit(for record: ExerciseRecord, exercise: ExerciseDefinition) {
-        guard !record.isFromHealthKit else { return }
-        let resolvedActivityType: WorkoutActivityType? = {
-            guard exercise.inputType == .durationDistance else { return nil }
-            return WorkoutActivityType.resolveDistanceBased(
-                from: exercise.id,
-                name: exercise.name,
-                inputTypeRaw: exercise.inputType.rawValue
-            ) ?? exercise.resolvedActivityType
-        }()
-        let totalDistanceKm: Double? = {
-            if let distance = record.distance, distance > 0 { return distance }
-            let setDistance = record.completedSets.compactMap(\.distance).reduce(0, +)
-            return setDistance > 0 ? setDistance : nil
-        }()
-        let input = WorkoutWriteInput(
-            startDate: record.date,
-            duration: record.duration,
-            category: exercise.category,
-            exerciseName: record.exerciseType,
-            estimatedCalories: record.estimatedCalories,
-            isFromHealthKit: record.isFromHealthKit,
-            distanceKm: totalDistanceKm,
-            activityType: resolvedActivityType
-        )
-        Task {
-            do {
-                let hkID = try await WorkoutWriteService().saveWorkout(input)
-                record.healthKitWorkoutID = hkID
-            } catch {
-                AppLogger.healthKit.error("Failed to write template workout to HealthKit: \(error.localizedDescription)")
-            }
-        }
     }
 
     // MARK: - Timer
