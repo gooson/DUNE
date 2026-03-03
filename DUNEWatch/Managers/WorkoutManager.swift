@@ -414,6 +414,14 @@ final class WorkoutManager: NSObject {
         persistRecoveryState()
     }
 
+    /// Record rest duration on the last completed set for the current exercise.
+    func recordRestDuration(_ duration: TimeInterval) {
+        guard currentExerciseIndex < completedSetsData.count else { return }
+        let lastIdx = completedSetsData[currentExerciseIndex].count - 1
+        guard lastIdx >= 0 else { return }
+        completedSetsData[currentExerciseIndex][lastIdx].restDuration = duration
+    }
+
     func advanceToNextSet() {
         if currentSetIndex < effectiveTotalSets - 1 {
             currentSetIndex += 1
@@ -806,6 +814,8 @@ struct CompletedSetData: Codable, Sendable {
     let weight: Double?
     let reps: Int?
     let completedAt: Date
+    /// Rest timer total (including +30s adjustments) used after this set, in seconds.
+    var restDuration: TimeInterval?
 }
 
 /// Plain struct snapshot of WorkoutTemplate data.

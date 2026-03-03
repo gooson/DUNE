@@ -13,6 +13,7 @@ struct ExerciseView: View {
     @State private var recordToDelete: ExerciseRecord?
     @State private var healthKitWorkoutToDelete: WorkoutSummary?
     @State private var recordsByID: [UUID: ExerciseRecord] = [:]
+    @State private var templateRestDuration: TimeInterval?
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \ExerciseRecord.date, order: .reverse) private var manualRecords: [ExerciseRecord]
 
@@ -157,11 +158,12 @@ struct ExerciseView: View {
                 popularExerciseIDs: popularExerciseIDs,
                 mode: .quickStart
             ) { exercise in
+                templateRestDuration = nil
                 selectedExercise = exercise
             }
         }
         .sheet(item: $selectedExercise) { exercise in
-            ExerciseStartView(exercise: exercise)
+            ExerciseStartView(exercise: exercise, templateRestDuration: templateRestDuration)
                 .interactiveDismissDisabled()
         }
         .sheet(isPresented: $showingCompoundSetup) {
@@ -216,6 +218,7 @@ struct ExerciseView: View {
 
     private func startFromTemplate(_ template: WorkoutTemplate) {
         guard let firstEntry = template.exerciseEntries.first else { return }
+        templateRestDuration = firstEntry.restDuration
         // Look up in library first, then custom exercises
         if let definition = library.exercise(byID: firstEntry.exerciseDefinitionID) {
             selectedExercise = definition

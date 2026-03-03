@@ -39,16 +39,22 @@ struct WorkoutSessionView: View {
     /// Max dots before truncating the progress indicator (UI width limit)
     private let maxProgressDots = 12
 
-    init(exercise: ExerciseDefinition) {
+    init(exercise: ExerciseDefinition, templateRestDuration: TimeInterval? = nil) {
         self.exercise = exercise
         let draft = WorkoutSessionDraft.load()
         if let draft, draft.exerciseDefinition.id == exercise.id {
             let vm = WorkoutSessionViewModel(exercise: exercise)
             vm.restoreFromDraft(draft)
+            // Draft restores templateRestDuration; use caller's if draft had none
+            if vm.templateRestDuration == nil {
+                vm.templateRestDuration = templateRestDuration
+            }
             self._viewModel = State(initialValue: vm)
             self.draftToRestore = draft
         } else {
-            self._viewModel = State(initialValue: WorkoutSessionViewModel(exercise: exercise))
+            let vm = WorkoutSessionViewModel(exercise: exercise)
+            vm.templateRestDuration = templateRestDuration
+            self._viewModel = State(initialValue: vm)
             self.draftToRestore = nil
         }
     }
@@ -701,7 +707,7 @@ struct WorkoutSessionView: View {
     }
 
     private func startRest() {
-        let seconds = Int(WorkoutSettingsStore.shared.restSeconds)
+        let seconds = Int(viewModel.resolveRestDuration(forSetAt: currentSetIndex))
         restTotalSeconds = seconds
         restSecondsRemaining = seconds
         showRestTimer = true
@@ -724,10 +730,16 @@ struct WorkoutSessionView: View {
     }
 
     private func finishRest() {
+        let completedSetIndex = currentSetIndex
         restTimerTask?.cancel()
         restTimerTask = nil
         showRestTimer = false
         restTimerCompleted += 1
+
+        // Capture rest timer total for the completed set (before advancing)
+        if viewModel.sets.indices.contains(completedSetIndex) {
+            viewModel.sets[completedSetIndex].restDuration = TimeInterval(restTotalSeconds)
+        }
 
         // Advance to next set
         currentSetIndex += 1
@@ -766,6 +778,8 @@ struct WorkoutSessionView: View {
     // MARK: - Save
 
     private func saveWorkout() {
+        restTimerTask?.cancel()
+        restTimerTask = nil
         isInputFieldFocused = false
         guard let record = viewModel.createValidatedRecord(weightUnit: weightUnit) else { return }
 
