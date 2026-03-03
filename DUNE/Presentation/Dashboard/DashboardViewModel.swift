@@ -303,8 +303,16 @@ final class DashboardViewModel {
     func requestLocationPermission() async {
         guard let weatherProvider else { return }
         await weatherProvider.requestLocationPermission()
-        // Re-fetch weather after permission is granted
-        weatherSnapshot = await safeWeatherFetch()
+        await waitForLocationPermissionResolution(using: weatherProvider)
+
+        // Re-fetch weather after permission state resolves.
+        let refreshedWeather = await safeWeatherFetch()
+        weatherSnapshot = refreshedWeather
+        weatherAtmosphere = refreshedWeather.map { WeatherAtmosphere.from($0) } ?? .default
+
+        // Recompute coaching with refreshed weather context.
+        buildCoachingInsights()
+        coachingMessage = focusInsight?.message ?? buildCoachingMessage()
     }
 
     private func safeWeatherFetch() async -> WeatherSnapshot? {
@@ -315,6 +323,21 @@ final class DashboardViewModel {
             // Weather is non-critical — fail silently (graceful degradation)
             AppLogger.data.info("Weather fetch skipped: \(type(of: error)): \(error.localizedDescription)")
             return nil
+        }
+    }
+
+    /// Wait until the location permission prompt is resolved (authorized or denied),
+    /// then continue weather refresh. Prevents first-tap fetch before user selection.
+    private func waitForLocationPermissionResolution(using weatherProvider: WeatherProviding) async {
+        let timeoutSeconds: TimeInterval = 30
+        let pollIntervalNanoseconds: UInt64 = 200_000_000
+        let deadline = Date().addingTimeInterval(timeoutSeconds)
+
+        while Date() < deadline {
+            if await weatherProvider.isLocationPermissionDetermined {
+                return
+            }
+            try? await Task.sleep(nanoseconds: pollIntervalNanoseconds)
         }
     }
 
