@@ -106,4 +106,49 @@ struct HealthSnapshotMirrorMapperTests {
 
         #expect(decoded == payload)
     }
+
+    @Test("makeSnapshot reconstructs shared snapshot from payload")
+    func makeSnapshotFromPayload() {
+        let fetchedAt = Date(timeIntervalSince1970: 1_700_100_000)
+        let payload = HealthSnapshotMirrorMapper.Payload(
+            fetchedAt: fetchedAt,
+            failedSources: ["todayRHR", "hrvSamples"],
+            todayRHR: 58,
+            yesterdayRHR: 60,
+            latestRHR: .init(date: fetchedAt, value: 58),
+            hrv14Day: [.init(date: fetchedAt.addingTimeInterval(-86_400), value: 55)],
+            rhr14Day: [.init(date: fetchedAt.addingTimeInterval(-86_400), value: 59)],
+            sleep14Day: [
+                .init(
+                    date: fetchedAt,
+                    totalMinutes: 420,
+                    deepMinutes: 90,
+                    remMinutes: 80,
+                    coreMinutes: 230,
+                    awakeMinutes: 20
+                )
+            ],
+            todaySleepMinutes: 400,
+            yesterdaySleepMinutes: 380,
+            conditionScore: 75,
+            conditionStatus: "good",
+            baselineReady: nil,
+            baselineProgress: nil,
+            recentScores: [.init(date: fetchedAt.addingTimeInterval(-86_400), score: 72)]
+        )
+
+        let snapshot = HealthSnapshotMirrorMapper.makeSnapshot(from: payload)
+
+        #expect(snapshot.fetchedAt == fetchedAt)
+        #expect(snapshot.todayRHR == 58)
+        #expect(snapshot.latestRHR?.value == 58)
+        #expect(snapshot.hrvSamples.count == 1)
+        #expect(snapshot.rhrCollection.count == 1)
+        #expect(snapshot.sleepDailyDurations.first?.totalMinutes == 420)
+        #expect(snapshot.todaySleepStages.isEmpty == false)
+        #expect(snapshot.conditionScore?.score == 75)
+        #expect(snapshot.recentConditionScores.map(\.score) == [72])
+        #expect(snapshot.failedSources.contains(.todayRHR))
+        #expect(snapshot.failedSources.contains(.hrvSamples))
+    }
 }

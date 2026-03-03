@@ -158,7 +158,7 @@ final class DashboardViewModel {
         if !authorizationChecked {
             if Self.shouldBypassAuthorizationForTests {
                 authorizationChecked = true
-            } else {
+            } else if await healthKitManager.isAvailable {
                 do {
                     try await healthKitManager.requestAuthorization()
                     authorizationChecked = true
@@ -168,6 +168,9 @@ final class DashboardViewModel {
                     isLoading = false
                     return
                 }
+            } else {
+                authorizationChecked = true
+                AppLogger.ui.info("HealthKit unavailable; skip authorization and rely on mirrored health snapshot data")
             }
         }
 

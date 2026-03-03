@@ -113,9 +113,107 @@ enum HealthSnapshotMirrorMapper {
         return try decoder.decode(Payload.self, from: data)
     }
 
+    static func makeSnapshot(from payload: Payload) -> SharedHealthSnapshot {
+        let hrvSamples = payload.hrv14Day.map { HRVSample(value: $0.value, date: $0.date) }
+        let rhrCollection = payload.rhr14Day.map { point in
+            (date: point.date, min: point.value, max: point.value, average: point.value)
+        }
+
+        let sleepDailyDurations = payload.sleep14Day.map { point in
+            SharedHealthSnapshot.SleepDailyDuration(
+                date: point.date,
+                totalMinutes: point.totalMinutes,
+                stageBreakdown: [
+                    .deep: point.deepMinutes,
+                    .rem: point.remMinutes,
+                    .core: point.coreMinutes,
+                    .awake: point.awakeMinutes
+                ]
+            )
+        }
+
+        let latestSleepPoint = payload.sleep14Day.max(by: { $0.date < $1.date })
+        let latestSleepStages: SharedHealthSnapshot.SleepStagesSample? = latestSleepPoint.map { point in
+            SharedHealthSnapshot.SleepStagesSample(
+                stages: synthesizeSleepStages(from: point),
+                date: point.date
+            )
+        }
+
+        let todayStages = payload.sleep14Day
+            .first(where: { Calendar.current.isDate($0.date, inSameDayAs: payload.fetchedAt) })
+            .map(synthesizeSleepStages(from:))
+            ?? []
+
+        let yesterdayDate = Calendar.current.date(byAdding: .day, value: -1, to: payload.fetchedAt) ?? payload.fetchedAt
+        let yesterdayStages = payload.sleep14Day
+            .first(where: { Calendar.current.isDate($0.date, inSameDayAs: yesterdayDate) })
+            .map(synthesizeSleepStages(from:))
+            ?? []
+
+        let recentScores = payload.recentScores.map { point in
+            ConditionScore(score: point.score, date: point.date)
+        }
+
+        let failedSources: Set<SharedHealthSnapshot.Source> = Set(
+            payload.failedSources.compactMap(SharedHealthSnapshot.Source.init(rawValue:))
+        )
+
+        return SharedHealthSnapshot(
+            hrvSamples: hrvSamples,
+            todayRHR: payload.todayRHR,
+            yesterdayRHR: payload.yesterdayRHR,
+            latestRHR: payload.latestRHR.map {
+                SharedHealthSnapshot.RHRSample(value: $0.value, date: $0.date)
+            },
+            rhrCollection: rhrCollection,
+            todaySleepStages: todayStages,
+            yesterdaySleepStages: yesterdayStages,
+            latestSleepStages: latestSleepStages,
+            sleepDailyDurations: sleepDailyDurations,
+            conditionScore: payload.conditionScore.map {
+                ConditionScore(score: $0, date: payload.fetchedAt)
+            },
+            baselineStatus: nil,
+            recentConditionScores: recentScores,
+            failedSources: failedSources,
+            fetchedAt: payload.fetchedAt
+        )
+    }
+
     private static func sleepTotalMinutes(from stages: [SleepStage]) -> Double {
         stages
             .filter { $0.stage != .awake }
             .reduce(0.0) { $0 + $1.duration / 60.0 }
+    }
+
+    private static func synthesizeSleepStages(from point: Payload.SleepDailyPoint) -> [SleepStage] {
+        let calendar = Calendar.current
+        let dayStart = calendar.startOfDay(for: point.date)
+        var cursor = dayStart
+        var stages: [SleepStage] = []
+
+        func appendStage(_ stage: SleepStage.Stage, minutes: Double) {
+            guard minutes > 0, minutes.isFinite else { return }
+            let duration = minutes * 60.0
+            let startDate = cursor
+            let endDate = startDate.addingTimeInterval(duration)
+            stages.append(
+                SleepStage(
+                    stage: stage,
+                    duration: duration,
+                    startDate: startDate,
+                    endDate: endDate
+                )
+            )
+            cursor = endDate
+        }
+
+        appendStage(.deep, minutes: point.deepMinutes)
+        appendStage(.rem, minutes: point.remMinutes)
+        appendStage(.core, minutes: point.coreMinutes)
+        appendStage(.awake, minutes: point.awakeMinutes)
+
+        return stages
     }
 }
