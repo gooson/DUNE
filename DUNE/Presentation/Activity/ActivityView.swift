@@ -485,7 +485,7 @@ private struct AchievementHistoryPreview: View {
         StandardCard {
             VStack(alignment: .leading, spacing: DS.Spacing.sm) {
                 if previewEvents.isEmpty {
-                    Text("No achievements yet. Complete workouts to unlock milestones, badges, and levels.")
+                    Text(String(localized: "No achievements yet. Complete workouts to unlock milestones, badges, and levels."))
                         .font(.caption)
                         .foregroundStyle(.tertiary)
                 } else {
@@ -501,7 +501,7 @@ private struct AchievementHistoryPreview: View {
                                     .font(.caption.weight(.semibold))
                                     .foregroundStyle(DS.Color.textSecondary)
                                     .lineLimit(1)
-                                Text(event.detail)
+                                Text(eventDetailText(event))
                                     .font(.caption2)
                                     .foregroundStyle(.tertiary)
                                     .lineLimit(1)
@@ -535,6 +535,20 @@ private struct AchievementHistoryPreview: View {
         case .badgeUnlocked: .yellow
         case .levelUp: .mint
         }
+    }
+
+    private func eventDetailText(_ event: WorkoutRewardEvent) -> String {
+        guard let activityType = WorkoutActivityType(rawValue: event.activityTypeRawValue) else {
+            return event.detail
+        }
+        if event.kind == .levelUp {
+            return event.detail
+        }
+        return String.localizedStringWithFormat(
+            String(localized: "%1$@: %2$@"),
+            activityType.displayName,
+            event.detail
+        )
     }
 }
 

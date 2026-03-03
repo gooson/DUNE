@@ -10,9 +10,12 @@ final class ExerciseMixDetailViewModel {
     var isLoading = false
 
     private let library: ExerciseLibraryQuerying
+    @ObservationIgnored
+    private var localizedExerciseNameLookup: [String: String] = [:]
 
     init(library: ExerciseLibraryQuerying = ExerciseLibraryService.shared) {
         self.library = library
+        self.localizedExerciseNameLookup = buildLocalizedExerciseNameLookup()
     }
 
     /// Computes exercise frequency from all exercise records.
@@ -36,6 +39,11 @@ final class ExerciseMixDetailViewModel {
             return localizedName
         }
 
+        let normalizedKey = normalizeExerciseNameLookupKey(record.exerciseType)
+        if let localizedName = localizedExerciseNameLookup[normalizedKey], !localizedName.isEmpty {
+            return localizedName
+        }
+
         if let mapped = WorkoutActivityType.localizedDisplayName(forStoredTitle: record.exerciseType) {
             return mapped
         }
@@ -45,5 +53,34 @@ final class ExerciseMixDetailViewModel {
         }
 
         return record.exerciseType
+    }
+
+    private func buildLocalizedExerciseNameLookup() -> [String: String] {
+        var lookup: [String: String] = [:]
+
+        for exercise in library.allExercises() {
+            let localizedName = exercise.localizedName.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !localizedName.isEmpty else { continue }
+
+            var candidates = [exercise.name, exercise.localizedName]
+            if let aliases = exercise.aliases {
+                candidates.append(contentsOf: aliases)
+            }
+
+            for candidate in candidates {
+                let key = normalizeExerciseNameLookupKey(candidate)
+                guard !key.isEmpty else { continue }
+                lookup[key] = localizedName
+            }
+        }
+
+        return lookup
+    }
+
+    private func normalizeExerciseNameLookupKey(_ name: String) -> String {
+        name
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .folding(options: [.diacriticInsensitive, .widthInsensitive], locale: .current)
+            .lowercased()
     }
 }

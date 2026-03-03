@@ -123,7 +123,6 @@ final class PersonalRecordStore: @unchecked Sendable {
 
         var newEvents: [WorkoutRewardEvent] = []
         var sessionPoints = 0
-        let activityName = workout.activityType.typeName
         let eventDate = workout.date
 
         if let milestone {
@@ -144,7 +143,7 @@ final class PersonalRecordStore: @unchecked Sendable {
                         date: eventDate,
                         kind: .milestone,
                         title: String(localized: "Milestone Reached"),
-                        detail: "\(activityName): \(milestone.thresholdLabel)",
+                        detail: milestone.thresholdLabel,
                         pointsAwarded: milestonePoints,
                         levelAfterEvent: nil
                     )
@@ -161,7 +160,7 @@ final class PersonalRecordStore: @unchecked Sendable {
                             date: eventDate,
                             kind: .badgeUnlocked,
                             title: String(localized: "New Badge Unlocked"),
-                            detail: "\(activityName): \(milestone.thresholdLabel)",
+                            detail: milestone.thresholdLabel,
                             pointsAwarded: 0,
                             levelAfterEvent: nil
                         )
@@ -186,7 +185,7 @@ final class PersonalRecordStore: @unchecked Sendable {
                     date: eventDate,
                     kind: .personalRecord,
                     title: String(localized: "Personal Record Updated"),
-                    detail: "\(activityName): \(prTypeNames)",
+                    detail: prTypeNames,
                     pointsAwarded: prPoints,
                     levelAfterEvent: nil
                 )
@@ -204,7 +203,10 @@ final class PersonalRecordStore: @unchecked Sendable {
             if unlockedPRBadgeCount > 0 {
                 let detail: String = unlockedPRBadgeCount == 1
                     ? String(localized: "1 new PR badge unlocked")
-                    : String(localized: "\(unlockedPRBadgeCount) new PR badges unlocked")
+                    : String.localizedStringWithFormat(
+                        String(localized: "%lld new PR badges unlocked"),
+                        unlockedPRBadgeCount
+                    )
                 newEvents.append(
                     WorkoutRewardEvent(
                         id: "badge-pr-\(workout.id)-\(prTypeSignature)",
@@ -236,7 +238,10 @@ final class PersonalRecordStore: @unchecked Sendable {
                         date: eventDate,
                         kind: .levelUp,
                         title: String(localized: "Level Up!"),
-                        detail: String(localized: "Reached Level \(calculatedLevel)"),
+                        detail: String.localizedStringWithFormat(
+                            String(localized: "Reached Level %lld"),
+                            calculatedLevel
+                        ),
                         pointsAwarded: 0,
                         levelAfterEvent: calculatedLevel
                     )

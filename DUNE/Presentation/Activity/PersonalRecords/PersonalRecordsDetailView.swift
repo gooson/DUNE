@@ -185,25 +185,42 @@ struct PersonalRecordsDetailView: View {
 
     private var rewardSummaryCard: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            Text("Reward Progress")
+            Text(String(localized: "Reward Progress"))
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(DS.Color.textSecondary)
 
             HStack(spacing: DS.Spacing.sm) {
-                Label("Lv \(rewardSummary.level)", systemImage: "star.circle.fill")
+                Label(
+                    String.localizedStringWithFormat(
+                        String(localized: "Lv %lld"),
+                        rewardSummary.level
+                    ),
+                    systemImage: "star.circle.fill"
+                )
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(.white)
                     .padding(.horizontal, 10)
                     .padding(.vertical, 6)
                     .background(DS.Color.activity, in: Capsule())
 
-                Label("\(rewardSummary.badgeCount.formatted()) badges", systemImage: "medal.fill")
+                Label(
+                    String.localizedStringWithFormat(
+                        String(localized: "%lld badges"),
+                        rewardSummary.badgeCount
+                    ),
+                    systemImage: "medal.fill"
+                )
                     .font(.caption)
                     .foregroundStyle(DS.Color.textSecondary)
 
                 Spacer(minLength: 0)
 
-                Text("\(rewardSummary.totalPoints.formatted()) pts")
+                Text(
+                    String.localizedStringWithFormat(
+                        String(localized: "%lld pts"),
+                        rewardSummary.totalPoints
+                    )
+                )
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(.tertiary)
             }
@@ -214,12 +231,12 @@ struct PersonalRecordsDetailView: View {
 
     private var achievementHistorySection: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            Text("Achievement History")
+            Text(String(localized: "Achievement History"))
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(DS.Color.textSecondary)
 
             if recentRewardHistory.isEmpty {
-                Text("No reward events yet. Complete workouts and hit milestones to build your timeline.")
+                Text(String(localized: "No reward events yet. Complete workouts and hit milestones to build your timeline."))
                     .font(.caption)
                     .foregroundStyle(.tertiary)
                     .padding(.vertical, DS.Spacing.xs)
@@ -246,7 +263,7 @@ struct PersonalRecordsDetailView: View {
                 Text(event.title)
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(DS.Color.textSecondary)
-                Text(event.detail)
+                Text(eventDetailText(event))
                     .font(.caption2)
                     .foregroundStyle(.tertiary)
                     .lineLimit(2)
@@ -259,7 +276,12 @@ struct PersonalRecordsDetailView: View {
                     .font(.caption2)
                     .foregroundStyle(.tertiary)
                 if event.pointsAwarded > 0 {
-                    Text("+\(event.pointsAwarded.formatted()) pts")
+                    Text(
+                        String.localizedStringWithFormat(
+                            String(localized: "+%lld pts"),
+                            event.pointsAwarded
+                        )
+                    )
                         .font(.caption2.weight(.semibold))
                         .foregroundStyle(DS.Color.activity)
                 }
@@ -432,5 +454,19 @@ struct PersonalRecordsDetailView: View {
         case .badgeUnlocked: .yellow
         case .levelUp: .mint
         }
+    }
+
+    private func eventDetailText(_ event: WorkoutRewardEvent) -> String {
+        guard let activityType = WorkoutActivityType(rawValue: event.activityTypeRawValue) else {
+            return event.detail
+        }
+        if event.kind == .levelUp {
+            return event.detail
+        }
+        return String.localizedStringWithFormat(
+            String(localized: "%1$@: %2$@"),
+            activityType.displayName,
+            event.detail
+        )
     }
 }

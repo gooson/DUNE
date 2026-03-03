@@ -487,11 +487,11 @@ struct WorkoutMilestoneAchievement: Sendable, Hashable {
             if kilometers == 5 || kilometers == 10 || kilometers == 15 || kilometers == 20 {
                 return "\(Int(kilometers))K"
             }
-            return "\(kilometers.formatted(.number.precision(.fractionLength(1))))km"
+            return "\(kilometers.formatted(.number.precision(.fractionLength(1)))) \(String(localized: "km"))"
         case .stepCount:
-            return "\(Int(threshold).formatted()) steps"
+            return "\(Int(threshold).formatted()) \(String(localized: "steps"))"
         case .durationSeconds:
-            return "\(Int((threshold / 60.0).rounded()).formatted()) min"
+            return "\(Int((threshold / 60.0).rounded()).formatted()) \(String(localized: "min"))"
         }
     }
 }
