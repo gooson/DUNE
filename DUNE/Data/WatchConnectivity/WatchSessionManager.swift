@@ -323,6 +323,7 @@ extension WatchSetData {
         if let weight, !(0...500).contains(weight) { return false }
         if let reps, !(0...1000).contains(reps) { return false }
         if let duration, !(0...28800).contains(duration) { return false }
+        if let restDuration, !(0...3600).contains(restDuration) { return false }
         return true
     }
 }
