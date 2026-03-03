@@ -18,6 +18,7 @@ struct SettingsView: View {
         Form {
             workoutDefaultsSection
             exerciseDefaultsSection
+            NotificationSettingsSection()
             appearanceSection
             dataPrivacySection
             aboutSection

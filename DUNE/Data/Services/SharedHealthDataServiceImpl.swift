@@ -156,6 +156,13 @@ actor SharedHealthDataServiceImpl: SharedHealthDataService {
             referenceDate: referenceDate
         )
 
+        // Cache baselines for background notification evaluation
+        cacheNotificationBaselines(
+            hrvSamples: hrvSamplesResult.value,
+            rhrCollection: rhrCollectionResult.value,
+            referenceDate: referenceDate
+        )
+
         var failedSources: Set<SharedHealthSnapshot.Source> = []
         let failureInputs: [(SharedHealthSnapshot.Source, Bool)] = [
             (.hrvSamples, hrvSamplesResult.failed),
@@ -242,6 +249,40 @@ actor SharedHealthDataServiceImpl: SharedHealthDataService {
         let recentScores = buildRecentScores(from: hrvSamples, referenceDate: referenceDate)
 
         return (score: output.score, baselineStatus: output.baselineStatus, recentScores: recentScores)
+    }
+
+    // MARK: - Notification Baseline Caching
+
+    /// Caches 7-day daily averages for HRV and RHR so the background evaluator
+    /// can compare new values without running expensive queries.
+    private func cacheNotificationBaselines(
+        hrvSamples: [HRVSample],
+        rhrCollection: [(date: Date, min: Double, max: Double, average: Double)],
+        referenceDate: Date
+    ) {
+        let calendar = Calendar.current
+
+        // HRV: compute 7-day daily averages (excluding today)
+        let hrvAverages: [Double] = (1...7).compactMap { dayOffset in
+            guard let dayStart = calendar.date(byAdding: .day, value: -dayOffset, to: calendar.startOfDay(for: referenceDate)),
+                  let dayEnd = calendar.date(byAdding: .day, value: 1, to: dayStart) else { return nil }
+            let daySamples = hrvSamples.filter { $0.date >= dayStart && $0.date < dayEnd }
+            guard !daySamples.isEmpty else { return nil }
+            return daySamples.map(\.value).reduce(0, +) / Double(daySamples.count)
+        }
+        if hrvAverages.count >= 7 {
+            BackgroundNotificationEvaluator.cacheBaseline(for: .hrvAnomaly, values: hrvAverages)
+        }
+
+        // RHR: extract daily averages from rhrCollection (excluding today)
+        let todayStart = calendar.startOfDay(for: referenceDate)
+        let rhrAverages = rhrCollection
+            .filter { calendar.startOfDay(for: $0.date) < todayStart }
+            .suffix(7)
+            .map(\.average)
+        if rhrAverages.count >= 7 {
+            BackgroundNotificationEvaluator.cacheBaseline(for: .rhrAnomaly, values: Array(rhrAverages))
+        }
     }
 
     private func buildRecentScores(from samples: [HRVSample], referenceDate: Date) -> [ConditionScore] {
