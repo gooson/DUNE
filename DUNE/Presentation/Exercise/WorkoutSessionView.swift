@@ -3,6 +3,9 @@ import SwiftData
 
 /// Single-exercise workout session — Watch-style one-set-at-a-time flow.
 /// Flow: Input (weight/reps) → Complete Set → Rest → Input → ... → Finish
+///
+/// In template mode (`onExerciseCompleted` is set), saving advances to
+/// the next exercise instead of showing the share sheet.
 struct WorkoutSessionView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
@@ -35,28 +38,42 @@ struct WorkoutSessionView: View {
     let exercise: ExerciseDefinition
     private let draftToRestore: WorkoutSessionDraft?
 
+    /// Template context — nil when used standalone.
+    let templateInfo: TemplateExerciseInfo?
+    /// Called after saving the current exercise in template mode. nil for last exercise or standalone.
+    let onExerciseCompleted: (() -> Void)?
+
+    /// True when this exercise is an intermediate step in a template workout.
+    private var isTemplateIntermediate: Bool { onExerciseCompleted != nil }
+
     private var totalSets: Int { viewModel.sets.count }
     /// Max dots before truncating the progress indicator (UI width limit)
     private let maxProgressDots = 12
 
-    init(exercise: ExerciseDefinition, templateRestDuration: TimeInterval? = nil) {
+    init(
+        exercise: ExerciseDefinition,
+        defaultSetCount: Int? = nil,
+        templateInfo: TemplateExerciseInfo? = nil,
+        onExerciseCompleted: (() -> Void)? = nil
+    ) {
         self.exercise = exercise
-        let draft = WorkoutSessionDraft.load()
-        if let draft, draft.exerciseDefinition.id == exercise.id {
-            let vm = WorkoutSessionViewModel(exercise: exercise)
-            vm.restoreFromDraft(draft)
-            // Draft restores templateRestDuration; use caller's if draft had none
-            if vm.templateRestDuration == nil {
-                vm.templateRestDuration = templateRestDuration
+        self.templateInfo = templateInfo
+        self.onExerciseCompleted = onExerciseCompleted
+
+        // Draft restoration only in standalone mode
+        if onExerciseCompleted == nil && templateInfo == nil {
+            let draft = WorkoutSessionDraft.load()
+            if let draft, draft.exerciseDefinition.id == exercise.id {
+                let vm = WorkoutSessionViewModel(exercise: exercise)
+                vm.restoreFromDraft(draft)
+                self._viewModel = State(initialValue: vm)
+                self.draftToRestore = draft
+                return
             }
-            self._viewModel = State(initialValue: vm)
-            self.draftToRestore = draft
-        } else {
-            let vm = WorkoutSessionViewModel(exercise: exercise)
-            vm.templateRestDuration = templateRestDuration
-            self._viewModel = State(initialValue: vm)
-            self.draftToRestore = nil
         }
+        let setCount = defaultSetCount ?? WorkoutDefaults.setCount
+        self._viewModel = State(initialValue: WorkoutSessionViewModel(exercise: exercise, defaultSetCount: setCount))
+        self.draftToRestore = nil
     }
 
     var body: some View {
@@ -125,18 +142,24 @@ struct WorkoutSessionView: View {
         }
         .onChange(of: scenePhase) { _, newPhase in
             if newPhase == .background || newPhase == .inactive {
+                // Skip draft saving in template mode — each exercise is ephemeral
+                guard templateInfo == nil else { return }
                 viewModel.saveDraft()
             }
         }
         .confirmationDialog(
-            "End Workout?",
+            isTemplateIntermediate ? "End Exercise?" : "End Workout?",
             isPresented: $showEndConfirmation,
             titleVisibility: .visible
         ) {
-            Button("End Workout", role: .destructive) { saveWorkout() }
+            Button(isTemplateIntermediate ? "End Exercise" : "End Workout", role: .destructive) {
+                saveWorkout()
+            }
             Button("Cancel", role: .cancel) {}
         } message: {
-            Text("Save and finish this workout?")
+            Text(isTemplateIntermediate
+                 ? "Save completed sets and move to next exercise?"
+                 : "Save and finish this workout?")
         }
         .sheet(isPresented: $showLastSetOptions) {
             allSetsDoneSheet
@@ -173,6 +196,26 @@ struct WorkoutSessionView: View {
 
     private var topBar: some View {
         VStack(spacing: DS.Spacing.sm) {
+            // Template exercise progress
+            if let info = templateInfo {
+                HStack(spacing: DS.Spacing.xs) {
+                    Text("Exercise \(info.exerciseNumber) of \(info.totalExercises)")
+                        .font(.caption.weight(.semibold))
+                    Spacer()
+                    // Exercise progress dots
+                    HStack(spacing: 4) {
+                        ForEach(0..<info.totalExercises, id: \.self) { i in
+                            Circle()
+                                .fill(i < info.exerciseNumber ? DS.Color.activity : Color.gray.opacity(0.3))
+                                .frame(width: 6, height: 6)
+                        }
+                    }
+                }
+                .foregroundStyle(DS.Color.textSecondary)
+                .padding(.horizontal, DS.Spacing.lg)
+                .padding(.top, DS.Spacing.sm)
+            }
+
             // Set progress dots
             HStack(spacing: 6) {
                 ForEach(0..<totalSets, id: \.self) { i in
@@ -188,7 +231,7 @@ struct WorkoutSessionView: View {
                         .frame(width: 10, height: 10)
                 }
             }
-            .padding(.top, DS.Spacing.sm)
+            .padding(.top, templateInfo == nil ? DS.Spacing.sm : 0)
 
             HStack {
                 Text("Set \(currentSetIndex + 1) of \(totalSets)")
@@ -672,16 +715,34 @@ struct WorkoutSessionView: View {
                 .buttonStyle(.bordered)
                 .tint(DS.Color.activity)
 
-                Button {
-                    showLastSetOptions = false
-                    saveWorkout()
-                } label: {
-                    Text("Finish Workout")
+                if let info = templateInfo, info.nextExerciseName != nil {
+                    // Template intermediate: advance to next exercise
+                    Button {
+                        showLastSetOptions = false
+                        saveWorkout()
+                    } label: {
+                        HStack {
+                            Text("Next Exercise")
+                            Image(systemName: "arrow.right")
+                        }
                         .font(.body.weight(.semibold))
                         .frame(maxWidth: .infinity, minHeight: 44)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(DS.Color.activity)
+                } else {
+                    // Standalone or last exercise in template
+                    Button {
+                        showLastSetOptions = false
+                        saveWorkout()
+                    } label: {
+                        Text("Finish Workout")
+                            .font(.body.weight(.semibold))
+                            .frame(maxWidth: .infinity, minHeight: 44)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(DS.Color.negative)
                 }
-                .buttonStyle(.borderedProminent)
-                .tint(DS.Color.negative)
             }
             .padding(.horizontal, DS.Spacing.lg)
         }
@@ -790,20 +851,6 @@ struct WorkoutSessionView: View {
             record.autoIntensityRaw = score
         }
 
-        // Effort suggestion: convert auto intensity + recent efforts → suggested 1-10
-        let recentEfforts = exerciseRecords
-            .filter { $0.exerciseDefinitionID == exercise.id && $0.rpe != nil }
-            .sorted { $0.date > $1.date }
-            .prefix(5)
-            .compactMap(\.rpe)
-        effortSuggestion = intensityService.suggestEffort(
-            autoIntensityRaw: intensityResult?.rawScore,
-            recentEfforts: recentEfforts
-        )
-
-        let shareData = buildShareData(from: record)
-        shareImage = WorkoutShareService.renderShareImage(data: shareData, weightUnit: weightUnit)
-
         modelContext.insert(record)
         savedRecord = record
         viewModel.didFinishSaving()
@@ -843,6 +890,26 @@ struct WorkoutSessionView: View {
                 }
             }
         }
+
+        // Template intermediate: advance to next exercise without share sheet
+        if let onComplete = onExerciseCompleted {
+            onComplete()
+            return
+        }
+
+        // Standalone / last exercise: show effort + share sheet
+        let recentEfforts = exerciseRecords
+            .filter { $0.exerciseDefinitionID == exercise.id && $0.rpe != nil }
+            .sorted { $0.date > $1.date }
+            .prefix(5)
+            .compactMap(\.rpe)
+        effortSuggestion = intensityService.suggestEffort(
+            autoIntensityRaw: intensityResult?.rawScore,
+            recentEfforts: recentEfforts
+        )
+
+        let shareData = buildShareData(from: record)
+        shareImage = WorkoutShareService.renderShareImage(data: shareData, weightUnit: weightUnit)
 
         if shareImage != nil {
             showingShareSheet = true

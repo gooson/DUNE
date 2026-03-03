@@ -5,7 +5,6 @@ import SwiftUI
 /// Start button pushes into a full-screen NavigationStack for WorkoutSessionView.
 struct ExerciseStartView: View {
     let exercise: ExerciseDefinition
-    var templateRestDuration: TimeInterval?
     @Environment(\.dismiss) private var dismiss
     @State private var showSession = false
 
@@ -48,7 +47,7 @@ struct ExerciseStartView: View {
                 }
             }
             .navigationDestination(isPresented: $showSession) {
-                WorkoutSessionView(exercise: exercise, templateRestDuration: templateRestDuration)
+                WorkoutSessionView(exercise: exercise)
             }
         }
     }

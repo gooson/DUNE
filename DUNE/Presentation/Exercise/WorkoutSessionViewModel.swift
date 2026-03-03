@@ -91,11 +91,13 @@ final class WorkoutSessionViewModel {
 
     init(
         exercise: ExerciseDefinition,
+        defaultSetCount: Int? = nil,
         calorieService: CalorieEstimating = CalorieEstimationService()
     ) {
         self.exercise = exercise
         self.calorieService = calorieService
-        for _ in 0..<WorkoutDefaults.setCount {
+        let setCount = defaultSetCount ?? WorkoutDefaults.setCount
+        for _ in 0..<setCount {
             addSet()
         }
     }
