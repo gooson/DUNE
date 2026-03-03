@@ -341,13 +341,13 @@ struct MetricsView: View {
         }
     }
 
+    /// Priority: within-session carry-forward → template entry → global default.
+    /// Watch cannot access previous-session SwiftData records inline;
+    /// lastRestTimerTotal serves the same UX purpose as iOS previous-session rest.
     private var currentRestDuration: TimeInterval {
-        // 1. Within-session carry-forward (user adjusted via +30s etc.)
-        if let lastRest = lastRestTimerTotal { return lastRest }
-        // 2. Template entry per-exercise override
-        if let entryRest = workoutManager.currentEntry?.restDuration { return entryRest }
-        // 3. Global default
-        return WatchConnectivityManager.shared.globalRestSeconds
+        lastRestTimerTotal
+            ?? workoutManager.currentEntry?.restDuration
+            ?? WatchConnectivityManager.shared.globalRestSeconds
     }
 
     /// Refresh cached previous sets for the current exercise.
@@ -404,13 +404,7 @@ struct MetricsView: View {
     }
 
     private func handleRestComplete(timerTotal: TimeInterval) {
-        // Record rest duration on the just-completed set
-        let exerciseIdx = workoutManager.currentExerciseIndex
-        let setIdx = workoutManager.currentSetIndex
-        if exerciseIdx < workoutManager.completedSetsData.count,
-           setIdx < workoutManager.completedSetsData[exerciseIdx].count {
-            workoutManager.completedSetsData[exerciseIdx][setIdx].restDuration = timerTotal
-        }
+        workoutManager.recordRestDuration(timerTotal)
         lastRestTimerTotal = timerTotal
 
         showRestTimer = false

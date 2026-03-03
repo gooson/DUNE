@@ -45,7 +45,10 @@ struct WorkoutSessionView: View {
         if let draft, draft.exerciseDefinition.id == exercise.id {
             let vm = WorkoutSessionViewModel(exercise: exercise)
             vm.restoreFromDraft(draft)
-            vm.templateRestDuration = templateRestDuration
+            // Draft restores templateRestDuration; use caller's if draft had none
+            if vm.templateRestDuration == nil {
+                vm.templateRestDuration = templateRestDuration
+            }
             self._viewModel = State(initialValue: vm)
             self.draftToRestore = draft
         } else {
@@ -727,13 +730,16 @@ struct WorkoutSessionView: View {
     }
 
     private func finishRest() {
-        // Capture rest timer total for the completed set (before advancing)
-        viewModel.sets[currentSetIndex].restDuration = TimeInterval(restTotalSeconds)
-
+        let completedSetIndex = currentSetIndex
         restTimerTask?.cancel()
         restTimerTask = nil
         showRestTimer = false
         restTimerCompleted += 1
+
+        // Capture rest timer total for the completed set (before advancing)
+        if viewModel.sets.indices.contains(completedSetIndex) {
+            viewModel.sets[completedSetIndex].restDuration = TimeInterval(restTotalSeconds)
+        }
 
         // Advance to next set
         currentSetIndex += 1
@@ -772,6 +778,8 @@ struct WorkoutSessionView: View {
     // MARK: - Save
 
     private func saveWorkout() {
+        restTimerTask?.cancel()
+        restTimerTask = nil
         isInputFieldFocused = false
         guard let record = viewModel.createValidatedRecord(weightUnit: weightUnit) else { return }
 

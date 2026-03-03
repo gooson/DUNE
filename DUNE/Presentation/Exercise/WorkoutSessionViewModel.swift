@@ -33,6 +33,7 @@ struct WorkoutSessionDraft: Codable {
     let sessionStartTime: Date
     let memo: String
     let savedAt: Date
+    var templateRestDuration: TimeInterval?
 
     struct DraftSet: Codable {
         let setNumber: Int
@@ -227,13 +228,17 @@ final class WorkoutSessionViewModel {
 
     /// Resolves rest timer duration for the set at `index`.
     /// Priority: previous session → template entry → global default.
+    /// Values are clamped to 1...3600 to guard against corrupted data from CloudKit/drafts.
     func resolveRestDuration(forSetAt index: Int) -> TimeInterval {
+        guard sets.indices.contains(index) else { return defaultRestSeconds }
         let setNumber = sets[index].setNumber
-        if let prevRest = previousSetInfo(for: setNumber)?.restDuration {
-            return prevRest
+        if let prevRest = previousSetInfo(for: setNumber)?.restDuration,
+           prevRest.isFinite, prevRest > 0 {
+            return Swift.min(prevRest, 3600)
         }
-        if let templateRest = templateRestDuration {
-            return templateRest
+        if let templateRest = templateRestDuration,
+           templateRest.isFinite, templateRest > 0 {
+            return Swift.min(templateRest, 3600)
         }
         return defaultRestSeconds
     }
@@ -334,7 +339,8 @@ final class WorkoutSessionViewModel {
             sets: draftSets,
             sessionStartTime: sessionStartTime,
             memo: memo,
-            savedAt: Date()
+            savedAt: Date(),
+            templateRestDuration: templateRestDuration
         )
         WorkoutSessionDraft.save(draft)
     }
@@ -342,6 +348,7 @@ final class WorkoutSessionViewModel {
     func restoreFromDraft(_ draft: WorkoutSessionDraft) {
         sessionStartTime = draft.sessionStartTime
         memo = draft.memo
+        templateRestDuration = draft.templateRestDuration
         sets = draft.sets.map { draftSet in
             var editable = EditableSet(setNumber: draftSet.setNumber)
             editable.weight = draftSet.weight
