@@ -131,8 +131,16 @@ struct ActivityView: View {
                             NavigationLink(value: ActivityDetailDestination.personalRecords) {
                                 PersonalRecordsSection(
                                     records: viewModel.personalRecords,
-                                    notice: viewModel.personalRecordNotice
+                                    notice: viewModel.personalRecordNotice,
+                                    rewardSummary: viewModel.workoutRewardSummary
                                 )
+                            }
+                            .buttonStyle(.plain)
+                        }
+
+                        SectionGroup(title: "Achievement History", icon: "medal.fill", iconColor: DS.Color.activity) {
+                            NavigationLink(value: ActivityDetailDestination.personalRecords) {
+                                AchievementHistoryPreview(events: viewModel.workoutRewardHistory)
                             }
                             .buttonStyle(.plain)
                         }
@@ -239,7 +247,9 @@ struct ActivityView: View {
             case .personalRecords:
                 PersonalRecordsDetailView(
                     records: viewModel.personalRecords,
-                    notice: viewModel.personalRecordNotice
+                    notice: viewModel.personalRecordNotice,
+                    rewardSummary: viewModel.workoutRewardSummary,
+                    rewardHistory: viewModel.workoutRewardHistory
                 )
             case .consistency:
                 ConsistencyDetailView()
@@ -461,6 +471,70 @@ struct ActivityView: View {
             .filter { !existing.contains($0) }
             .prefix(limit - ranked.count)
         return ranked + fallback
+    }
+}
+
+private struct AchievementHistoryPreview: View {
+    let events: [WorkoutRewardEvent]
+
+    private var previewEvents: [WorkoutRewardEvent] {
+        Array(events.prefix(3))
+    }
+
+    var body: some View {
+        StandardCard {
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                if previewEvents.isEmpty {
+                    Text("No achievements yet. Complete workouts to unlock milestones, badges, and levels.")
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
+                } else {
+                    ForEach(previewEvents) { event in
+                        HStack(spacing: DS.Spacing.xs) {
+                            Image(systemName: iconName(for: event.kind))
+                                .font(.caption2)
+                                .foregroundStyle(color(for: event.kind))
+                                .frame(width: 16)
+
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(event.title)
+                                    .font(.caption.weight(.semibold))
+                                    .foregroundStyle(DS.Color.textSecondary)
+                                    .lineLimit(1)
+                                Text(event.detail)
+                                    .font(.caption2)
+                                    .foregroundStyle(.tertiary)
+                                    .lineLimit(1)
+                            }
+
+                            Spacer(minLength: 0)
+
+                            Text(event.date, style: .date)
+                                .font(.caption2)
+                                .foregroundStyle(.tertiary)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private func iconName(for kind: WorkoutRewardEventKind) -> String {
+        switch kind {
+        case .milestone: "flag.checkered.circle.fill"
+        case .personalRecord: "trophy.fill"
+        case .badgeUnlocked: "medal.fill"
+        case .levelUp: "star.circle.fill"
+        }
+    }
+
+    private func color(for kind: WorkoutRewardEventKind) -> Color {
+        switch kind {
+        case .milestone: DS.Color.activity
+        case .personalRecord: .orange
+        case .badgeUnlocked: .yellow
+        case .levelUp: .mint
+        }
     }
 }
 

@@ -469,3 +469,128 @@ enum PersonalRecordType: String, Codable, Sendable {
     case longestDuration   // Longest workout duration
     case highestElevation  // Most elevation gained
 }
+
+// MARK: - Workout Milestones
+
+/// Metric used for workout milestone progression.
+enum WorkoutMilestoneMetric: String, Codable, Sendable, Hashable {
+    case distanceMeters
+    case stepCount
+    case durationSeconds
+}
+
+/// Captures the highest milestone reached by a workout for one metric.
+struct WorkoutMilestoneAchievement: Sendable, Hashable {
+    let metric: WorkoutMilestoneMetric
+    let tier: Int
+    let threshold: Double
+    let achievedValue: Double
+
+    var key: String {
+        "\(metric.rawValue)-tier-\(tier)"
+    }
+
+    var thresholdLabel: String {
+        switch metric {
+        case .distanceMeters:
+            let kilometers = threshold / 1000.0
+            if kilometers == 5 || kilometers == 10 || kilometers == 15 || kilometers == 20 {
+                return "\(Int(kilometers))K"
+            }
+            return "\(kilometers.formatted(.number.precision(.fractionLength(1))))km"
+        case .stepCount:
+            return "\(Int(threshold).formatted()) steps"
+        case .durationSeconds:
+            return "\(Int((threshold / 60.0).rounded()).formatted()) min"
+        }
+    }
+}
+
+extension WorkoutActivityType {
+    /// Fixed milestone thresholds for every workout category.
+    /// - Distance workouts: 5K / 10K / 15K / 20K
+    /// - Walking: 10k / 15k / 20k steps (distance fallback)
+    /// - Others: 30 / 45 / 60 / 90 minutes
+    private static let milestoneThresholdsByMetric: [WorkoutMilestoneMetric: [Double]] = [
+        .distanceMeters: [5_000, 10_000, 15_000, 20_000],
+        .stepCount: [10_000, 15_000, 20_000],
+        .durationSeconds: [1_800, 2_700, 3_600, 5_400],
+    ]
+
+    private var primaryMilestoneMetric: WorkoutMilestoneMetric {
+        if self == .walking {
+            return .stepCount
+        }
+        if isDistanceBased {
+            return .distanceMeters
+        }
+        return .durationSeconds
+    }
+
+    private var milestoneMetricCandidates: [WorkoutMilestoneMetric] {
+        switch primaryMilestoneMetric {
+        case .stepCount:
+            return [.stepCount, .distanceMeters, .durationSeconds]
+        case .distanceMeters:
+            return [.distanceMeters, .durationSeconds]
+        case .durationSeconds:
+            return [.durationSeconds, .distanceMeters]
+        }
+    }
+
+    /// Returns the highest fixed milestone reached by this workout payload.
+    /// Falls back across metrics when the primary metric is missing.
+    func milestoneAchievement(
+        distanceMeters: Double?,
+        stepCount: Double?,
+        durationSeconds: TimeInterval
+    ) -> WorkoutMilestoneAchievement? {
+        for metric in milestoneMetricCandidates {
+            guard let value = metricValue(
+                for: metric,
+                distanceMeters: distanceMeters,
+                stepCount: stepCount,
+                durationSeconds: durationSeconds
+            ),
+                  value > 0,
+                  value.isFinite,
+                  let thresholds = Self.milestoneThresholdsByMetric[metric] else {
+                continue
+            }
+
+            var achievedTier = 0
+            var achievedThreshold = 0.0
+
+            for (index, threshold) in thresholds.enumerated() where value >= threshold {
+                achievedTier = index + 1
+                achievedThreshold = threshold
+            }
+
+            if achievedTier > 0 {
+                return WorkoutMilestoneAchievement(
+                    metric: metric,
+                    tier: achievedTier,
+                    threshold: achievedThreshold,
+                    achievedValue: value
+                )
+            }
+        }
+        return nil
+    }
+
+    private func metricValue(
+        for metric: WorkoutMilestoneMetric,
+        distanceMeters: Double?,
+        stepCount: Double?,
+        durationSeconds: TimeInterval
+    ) -> Double? {
+        switch metric {
+        case .distanceMeters:
+            return distanceMeters
+        case .stepCount:
+            return stepCount
+        case .durationSeconds:
+            return durationSeconds
+        }
+    }
+}
