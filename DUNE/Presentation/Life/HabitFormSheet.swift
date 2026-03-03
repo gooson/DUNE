@@ -73,7 +73,7 @@ struct HabitFormSheet: View {
         Section("Goal") {
             switch viewModel.selectedType {
             case .check:
-                Text("Complete once per day")
+                Text(viewModel.frequencyType == "interval" ? "Complete once per cycle" : "Complete once per day")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             case .duration:
@@ -108,6 +108,9 @@ struct HabitFormSheet: View {
                 Text("Weekly")
                     .tag("weekly")
                     .accessibilityIdentifier("habit-form-frequency-weekly")
+                Text("Recurring")
+                    .tag("interval")
+                    .accessibilityIdentifier("habit-form-frequency-interval")
             }
             .pickerStyle(.segmented)
             .accessibilityIdentifier("habit-form-frequency")
@@ -119,6 +122,17 @@ struct HabitFormSheet: View {
                     in: 1...7
                 )
                 .accessibilityIdentifier("habit-weekly-stepper")
+            } else if viewModel.frequencyType == "interval" {
+                Stepper(
+                    viewModel.intervalDays == 1 ? "Every day" : "Every \(viewModel.intervalDays) days",
+                    value: $viewModel.intervalDays,
+                    in: 1...365
+                )
+                .accessibilityIdentifier("habit-interval-stepper")
+
+                Text("Examples: 7 days (weekly), 30 days (monthly), 90 days (quarterly)")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
         }
     }

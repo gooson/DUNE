@@ -16,6 +16,8 @@ extension AppTheme {
             "Sakura"
         case .arcticDawn:
             "Arctic"
+        case .solarPop:
+            "Solar"
         }
     }
 
@@ -151,6 +153,19 @@ extension AppTheme {
     var arcticFrostColor: Color { Color("ArcticFrost") }
 }
 
+// MARK: - Solar Wave-Specific Colors
+
+extension AppTheme {
+    /// Deep ember layer (back).
+    var solarEmberColor: Color { Color("SolarEmber") }
+
+    /// Warm core layer (mid).
+    var solarCoreColor: Color { Color("SolarCore") }
+
+    /// Bright glow layer (front).
+    var solarGlowColor: Color { Color("SolarGlow") }
+}
+
 // MARK: - Score Colors
 
 extension AppTheme {
@@ -264,6 +279,7 @@ extension AppTheme {
         case .forestGreen: String(localized: "Forest Green")
         case .sakuraCalm:  String(localized: "Sakura Calm")
         case .arcticDawn:  String(localized: "Arctic Dawn")
+        case .solarPop:    String(localized: "Solar Pop")
         }
     }
 }

@@ -193,3 +193,45 @@ struct ArcticAuroraLODTests {
         #expect(scaled == 0)
     }
 }
+
+@Suite("SolarFlareShape Geometry")
+struct SolarFlareShapeTests {
+    @Test("Path is non-empty for valid rect")
+    func pathNonEmpty() {
+        let shape = SolarFlareShape()
+        let rect = CGRect(x: 0, y: 0, width: 240, height: 140)
+        #expect(!shape.path(in: rect).isEmpty)
+    }
+
+    @Test("Path is empty for zero-size rect")
+    func pathEmptyForZeroRect() {
+        let shape = SolarFlareShape()
+        #expect(shape.path(in: .zero).isEmpty)
+        #expect(shape.path(in: CGRect(x: 0, y: 0, width: 0, height: 120)).isEmpty)
+        #expect(shape.path(in: CGRect(x: 0, y: 0, width: 120, height: 0)).isEmpty)
+    }
+
+    @Test("animatableData reflects phase")
+    func animatableData() {
+        var shape = SolarFlareShape(phase: 1.4)
+        #expect(shape.animatableData == 1.4)
+        shape.animatableData = 2.8
+        #expect(shape.animatableData == 2.8)
+    }
+
+    @Test("Different phases produce different paths")
+    func phaseChangesPath() {
+        let rect = CGRect(x: 0, y: 0, width: 300, height: 180)
+        let shape0 = SolarFlareShape(amplitude: 0.08, frequency: 2.0, phase: 0, verticalOffset: 0.54, pulse: 0.24)
+        let shapePi = SolarFlareShape(
+            amplitude: 0.08,
+            frequency: 2.0,
+            phase: .pi,
+            verticalOffset: 0.54,
+            pulse: 0.24
+        )
+        let bounds0 = shape0.path(in: rect).boundingRect
+        let boundsPi = shapePi.path(in: rect).boundingRect
+        #expect(abs(bounds0.minY - boundsPi.minY) > 0.1 || abs(bounds0.maxY - boundsPi.maxY) > 0.1)
+    }
+}

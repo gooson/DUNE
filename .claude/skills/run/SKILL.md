@@ -80,19 +80,32 @@ Phase 1: Plan ──> Phase 2: Work ──> Phase 3: Review ──> Phase 4: Res
 - CLAUDE.md Correction Log 업데이트 (필요시)
 - 새 규칙 추가 제안 (필요시)
 
+## Phase 5.5: Pre-Ship Finalization (Ship 진입 게이트)
+
+`/run`이 `ship`에서 멈추지 않도록, Phase 6 진입 전에 아래를 강제합니다:
+
+1. **Clean Worktree 보장**: `git status --short`가 비어 있지 않으면 자동 정리
+   - 변경사항이 코드/테스트/문서면 자동 커밋: `chore(run): finalize pipeline outputs`
+   - 커밋이 불가하면 `git stash push -u -m "run-pre-ship-{timestamp}"`
+   - 커밋과 stash 모두 실패하면 Phase 6으로 넘어가지 않고 사용자에게 실패 원인 보고
+2. **브랜치 가드**: 현재 브랜치가 `main`이면 즉시 feature 브랜치 생성 후 진행
+3. **Remote/권한 확인**:
+   - upstream이 없으면 `git push -u origin {branch}` 실행
+   - `gh auth status` 실패 시 인증 이슈를 먼저 해결하고 재시도
+4. **Diff 존재 확인**: `main...HEAD` diff가 0이면 ship 생략하고 사용자에게 종료 보고
+
 ## Phase 6: Ship (배포)
 
-1. 최종 커밋 정리
-2. `pr-reviewer` 에이전트로 최종 PR 리뷰 실행:
+1. `pr-reviewer` 에이전트로 최종 PR 리뷰 실행:
    - git diff 기반 변경사항 분석
    - `.claude/rules/` 코딩 룰 준수 검증
    - HealthKit/SwiftData 안전성 확인
    - 크래시 위험 코드 검출
-3. PR 생성:
-   ```
-   gh pr create --title "{title}" --body "{body}"
-   ```
-4. PR 링크를 사용자에게 전달
+2. `/ship` 스킬을 **비대화형(non-interactive) 모드**로 실행:
+   - 사용자 선택 질문 없이 자동 정책으로 진행
+   - 기존 PR이 있으면 재사용, 없으면 생성
+   - merge 성공 후 main 동기화 + 로컬 브랜치 정리 + xcodegen 후처리 수행
+3. PR 링크 및 최종 merge 결과를 사용자에게 전달
 
 ## Pipeline Control
 
@@ -121,4 +134,6 @@ Phase별 실패 처리:
 - **Work 실패**: `git stash`로 변경 보존, 에러 수정 후 재시도
 - **Review 실패**: 개별 리뷰어 실패는 나머지 결과로 진행, 전체 실패 시 재실행
 - **Resolve 실패**: 수정 건별로 커밋하여 부분 진행 보존
-- **Ship 실패**: PR 생성 실패 시 수동 명령어 제공
+- **Ship 실패**:
+  - 기존 PR 조회 실패/생성 실패 시 `gh pr view`, `gh pr create --base main ...` 수동 명령어 제공
+  - merge 대기(checks pending)는 재시도 후 실패 로그를 첨부해 보고

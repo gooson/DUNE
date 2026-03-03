@@ -136,4 +136,42 @@ struct HabitStreakServiceTests {
         )
         #expect(result == 0)
     }
+
+    // MARK: - Interval Streak
+
+    @Test("interval streak counts consecutive completions within interval days")
+    func intervalStreak() {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let dates = [
+            today,
+            calendar.date(byAdding: .day, value: -6, to: today)!,
+            calendar.date(byAdding: .day, value: -12, to: today)!
+        ]
+
+        let result = HabitStreakService.calculateStreak(
+            completedDates: dates,
+            frequency: .interval(days: 7),
+            referenceDate: today
+        )
+        #expect(result == 3)
+    }
+
+    @Test("interval streak breaks when completion gap exceeds interval")
+    func intervalGapBreaksStreak() {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let dates = [
+            today,
+            calendar.date(byAdding: .day, value: -8, to: today)!,
+            calendar.date(byAdding: .day, value: -16, to: today)!
+        ]
+
+        let result = HabitStreakService.calculateStreak(
+            completedDates: dates,
+            frequency: .interval(days: 7),
+            referenceDate: today
+        )
+        #expect(result == 1)
+    }
 }

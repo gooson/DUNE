@@ -347,7 +347,24 @@ struct ActivityView: View {
         SectionGroup(title: "Suggested Workout", icon: "sparkles", iconColor: DS.Color.activity, fillHeight: fillHeight) {
             SuggestedWorkoutSection(
                 suggestion: viewModel.workoutSuggestion,
-                onStartExercise: { exercise in selectedExercise = exercise }
+                recommendationContext: viewModel.recommendationContext,
+                availableEquipment: viewModel.recommendationAvailableEquipment,
+                onStartExercise: { exercise in selectedExercise = exercise },
+                onContextChanged: { context in
+                    viewModel.setRecommendationContext(context)
+                },
+                isEquipmentAvailable: { equipment in
+                    viewModel.isEquipmentAvailable(equipment)
+                },
+                onSetEquipmentAvailability: { equipment, isAvailable in
+                    viewModel.setEquipmentAvailability(equipment, isAvailable: isAvailable)
+                },
+                isExerciseExcluded: { exerciseID in
+                    viewModel.isExerciseExcludedFromRecommendation(exerciseID)
+                },
+                onSetExerciseExcluded: { excluded, exerciseID in
+                    viewModel.setExerciseExcludedFromRecommendation(excluded, exerciseID: exerciseID)
+                }
             )
         }
     }
