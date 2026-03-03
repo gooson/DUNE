@@ -66,6 +66,29 @@ private actor MockSharedHealthDataService: SharedHealthDataService {
     func invalidateCache() async {}
 }
 
+private final class MockRecommendationService: WorkoutRecommending, @unchecked Sendable {
+    private(set) var callCount = 0
+    private(set) var lastConstraints: WorkoutRecommendationConstraints = .none
+
+    func recommend(
+        from records: [ExerciseRecordSnapshot],
+        library: ExerciseLibraryQuerying,
+        constraints: WorkoutRecommendationConstraints
+    ) -> WorkoutSuggestion? {
+        callCount += 1
+        lastConstraints = constraints
+        return nil
+    }
+
+    func computeFatigueStates(
+        from records: [ExerciseRecordSnapshot],
+        sleepModifier: Double,
+        readinessModifier: Double
+    ) -> [MuscleFatigueState] {
+        []
+    }
+}
+
 private enum TestError: Error {
     case mockFailure
 }
@@ -83,6 +106,13 @@ struct ActivityViewModelTests {
         let defaults = UserDefaults(suiteName: suiteName)!
         defaults.removePersistentDomain(forName: suiteName)
         return PersonalRecordStore(defaults: defaults)
+    }
+
+    private func makeIsolatedRecommendationStore() -> WorkoutRecommendationSettingsStore {
+        let suiteName = "ActivityViewModelTests.Recommendation.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suiteName)!
+        defaults.removePersistentDomain(forName: suiteName)
+        return WorkoutRecommendationSettingsStore(defaults: defaults)
     }
 
     // MARK: - Parallel Loading
@@ -384,5 +414,45 @@ struct ActivityViewModelTests {
         await task.value
 
         #expect(vm.personalRecords.isEmpty)
+    }
+
+    @Test("recommendation exclusion persists and updates constraints")
+    func recommendationExclusionPersists() {
+        let store = makeIsolatedRecommendationStore()
+        let recommendationService = MockRecommendationService()
+        let vm = ActivityViewModel(
+            workoutService: MockWorkoutService(),
+            stepsService: MockStepsService(),
+            recommendationService: recommendationService,
+            recommendationSettingsStore: store
+        )
+
+        vm.updateSuggestion(records: [])
+        let baselineCallCount = recommendationService.callCount
+
+        vm.setExerciseExcludedFromRecommendation(true, exerciseID: "pushup")
+
+        #expect(vm.isExerciseExcludedFromRecommendation("pushup") == true)
+        #expect(recommendationService.callCount == baselineCallCount + 1)
+        #expect(recommendationService.lastConstraints.excludedExerciseIDs.contains("pushup"))
+    }
+
+    @Test("equipment and context updates are reflected in recommendation constraints")
+    func equipmentAndContextUpdatesConstraints() {
+        let store = makeIsolatedRecommendationStore()
+        let recommendationService = MockRecommendationService()
+        let vm = ActivityViewModel(
+            workoutService: MockWorkoutService(),
+            stepsService: MockStepsService(),
+            recommendationService: recommendationService,
+            recommendationSettingsStore: store
+        )
+
+        vm.updateSuggestion(records: [])
+        vm.setRecommendationContext(.home)
+        vm.setEquipmentAvailability(.dumbbell, isAvailable: false)
+
+        #expect(vm.recommendationContext == .home)
+        #expect(recommendationService.lastConstraints.allowedEquipment?.contains(.dumbbell) == false)
     }
 }

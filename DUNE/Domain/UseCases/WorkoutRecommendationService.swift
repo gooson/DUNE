@@ -4,7 +4,8 @@ import Foundation
 protocol WorkoutRecommending: Sendable {
     func recommend(
         from records: [ExerciseRecordSnapshot],
-        library: ExerciseLibraryQuerying
+        library: ExerciseLibraryQuerying,
+        constraints: WorkoutRecommendationConstraints
     ) -> WorkoutSuggestion?
 
     func computeFatigueStates(
@@ -12,6 +13,15 @@ protocol WorkoutRecommending: Sendable {
         sleepModifier: Double,
         readinessModifier: Double
     ) -> [MuscleFatigueState]
+}
+
+extension WorkoutRecommending {
+    func recommend(
+        from records: [ExerciseRecordSnapshot],
+        library: ExerciseLibraryQuerying
+    ) -> WorkoutSuggestion? {
+        recommend(from: records, library: library, constraints: .none)
+    }
 }
 
 /// Lightweight snapshot of ExerciseRecord for recommendation (avoids SwiftData dependency)
@@ -84,7 +94,8 @@ struct WorkoutRecommendationService: WorkoutRecommending {
 
     func recommend(
         from records: [ExerciseRecordSnapshot],
-        library: ExerciseLibraryQuerying
+        library: ExerciseLibraryQuerying,
+        constraints: WorkoutRecommendationConstraints
     ) -> WorkoutSuggestion? {
         let fatigueStates = computeFatigueStates(from: records, sleepModifier: 1.0, readinessModifier: 1.0)
         let weekdayBonusMuscles = computeWeekdayPatterns(from: records)
@@ -118,6 +129,7 @@ struct WorkoutRecommendationService: WorkoutRecommending {
         for muscle in focusMuscles {
             let allForMuscle = library.exercises(forMuscle: muscle)
                 .filter { $0.category == .strength || $0.category == .bodyweight }
+                .filter { constraints.allows($0) }
                 .filter { !usedIDs.contains($0.id) }
 
             // Prefer least-recently performed exercise for variety
@@ -150,6 +162,7 @@ struct WorkoutRecommendationService: WorkoutRecommending {
             let compounds = library.allExercises()
                 .filter { $0.primaryMuscles.count >= 2 || !$0.secondaryMuscles.isEmpty }
                 .filter { $0.category == .strength }
+                .filter { constraints.allows($0) }
                 .filter { !usedIDs.contains($0.id) }
                 .filter { exercise in
                     // All primary muscles must be recovered
@@ -167,6 +180,27 @@ struct WorkoutRecommendationService: WorkoutRecommending {
                     definition: exercise,
                     suggestedSets: 3,
                     reason: "Compound movement for overall development"
+                ))
+            }
+        }
+
+        if selectedExercises.isEmpty {
+            let fallbackPool = library.allExercises()
+                .filter { $0.category == .strength || $0.category == .bodyweight }
+                .filter { constraints.allows($0) }
+
+            let sortedFallbacks = sortByLeastRecent(
+                exercises: Array(fallbackPool),
+                records: records
+            )
+
+            for exercise in sortedFallbacks.prefix(targetExerciseCount) {
+                usedIDs.insert(exercise.id)
+                selectedExercises.append(SuggestedExercise(
+                    id: exercise.id,
+                    definition: exercise,
+                    suggestedSets: 3,
+                    reason: "Matches your current equipment and preferences"
                 ))
             }
         }
