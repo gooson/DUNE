@@ -1,86 +1,79 @@
 import SwiftUI
 
+extension AppTheme {
+    /// Prefix for themed assets.
+    ///
+    /// Desert is the default/base theme and uses unprefixed asset names.
+    var assetPrefix: String? {
+        switch self {
+        case .desertWarm:
+            nil
+        case .oceanCool:
+            "Ocean"
+        case .forestGreen:
+            "Forest"
+        case .sakuraCalm:
+            "Sakura"
+        }
+    }
+
+    /// Resolves an asset name using theme prefix conventions.
+    ///
+    /// - Parameters:
+    ///   - defaultAsset: Asset name used by the default Desert theme.
+    ///   - variantSuffix: Suffix appended to theme prefix for non-default themes.
+    /// - Returns: Resolved asset name for the current theme.
+    func themedAssetName(defaultAsset: String, variantSuffix: String) -> String {
+        guard let prefix = assetPrefix else { return defaultAsset }
+        return "\(prefix)\(variantSuffix)"
+    }
+}
+
+private extension AppTheme {
+    func themedColor(defaultAsset: String, variantSuffix: String) -> Color {
+        Color(themedAssetName(defaultAsset: defaultAsset, variantSuffix: variantSuffix))
+    }
+}
+
 // MARK: - Primary Accent & Brand Colors
 
 extension AppTheme {
     /// Primary accent color (replaces warmGlow / OceanAccent / ForestAccent).
     var accentColor: Color {
-        switch self {
-        case .desertWarm:  DS.Color.warmGlow
-        case .oceanCool:   Color("OceanAccent")
-        case .forestGreen: Color("ForestAccent")
-        case .sakuraCalm: Color("SakuraAccent")
-        }
+        themedColor(defaultAsset: "AccentColor", variantSuffix: "Accent")
     }
 
     /// Bronze/copper for hero text gradient start.
     var bronzeColor: Color {
-        switch self {
-        case .desertWarm:  DS.Color.desertBronze
-        case .oceanCool:   Color("OceanBronze")
-        case .forestGreen: Color("ForestBronze")
-        case .sakuraCalm: Color("SakuraBronze")
-        }
+        themedColor(defaultAsset: "DesertBronze", variantSuffix: "Bronze")
     }
 
     /// Cool secondary for ring bottom, gradient end.
     var duskColor: Color {
-        switch self {
-        case .desertWarm:  DS.Color.desertDusk
-        case .oceanCool:   Color("OceanDusk")
-        case .forestGreen: Color("ForestDusk")
-        case .sakuraCalm: Color("SakuraDusk")
-        }
+        themedColor(defaultAsset: "DesertDusk", variantSuffix: "Dusk")
     }
 
     /// Muted decorative text.
     var sandColor: Color {
-        switch self {
-        case .desertWarm:  DS.Color.sandMuted
-        case .oceanCool:   Color("OceanSand")
-        case .forestGreen: Color("ForestSand")
-        case .sakuraCalm: Color("SakuraSand")
-        }
+        themedColor(defaultAsset: "SandMuted", variantSuffix: "Sand")
     }
 }
 
 // MARK: - Tab Wave Colors
 
 extension AppTheme {
-    var tabTodayColor: Color {
-        switch self {
-        case .desertWarm:  DS.Color.warmGlow
-        case .oceanCool:   Color("OceanAccent")
-        case .forestGreen: Color("ForestAccent")
-        case .sakuraCalm: Color("SakuraAccent")
-        }
-    }
+    var tabTodayColor: Color { accentColor }
 
     var tabTrainColor: Color {
-        switch self {
-        case .desertWarm:  DS.Color.tabTrain
-        case .oceanCool:   Color("OceanTabTrain")
-        case .forestGreen: Color("ForestTabTrain")
-        case .sakuraCalm: Color("SakuraTabTrain")
-        }
+        themedColor(defaultAsset: "TabTrain", variantSuffix: "TabTrain")
     }
 
     var tabWellnessColor: Color {
-        switch self {
-        case .desertWarm:  DS.Color.tabWellness
-        case .oceanCool:   Color("OceanTabWellness")
-        case .forestGreen: Color("ForestTabWellness")
-        case .sakuraCalm: Color("SakuraTabWellness")
-        }
+        themedColor(defaultAsset: "TabWellness", variantSuffix: "TabWellness")
     }
 
     var tabLifeColor: Color {
-        switch self {
-        case .desertWarm:  DS.Color.tabLife
-        case .oceanCool:   Color("OceanTabLife")
-        case .forestGreen: Color("ForestTabLife")
-        case .sakuraCalm: Color("SakuraTabLife")
-        }
+        themedColor(defaultAsset: "TabLife", variantSuffix: "TabLife")
     }
 }
 
@@ -147,48 +140,23 @@ extension AppTheme {
 
 extension AppTheme {
     var scoreExcellent: Color {
-        switch self {
-        case .desertWarm:  DS.Color.scoreExcellent
-        case .oceanCool:   Color("OceanScoreExcellent")
-        case .forestGreen: Color("ForestScoreExcellent")
-        case .sakuraCalm: Color("SakuraScoreExcellent")
-        }
+        themedColor(defaultAsset: "ScoreExcellent", variantSuffix: "ScoreExcellent")
     }
 
     var scoreGood: Color {
-        switch self {
-        case .desertWarm:  DS.Color.scoreGood
-        case .oceanCool:   Color("OceanScoreGood")
-        case .forestGreen: Color("ForestScoreGood")
-        case .sakuraCalm: Color("SakuraScoreGood")
-        }
+        themedColor(defaultAsset: "ScoreGood", variantSuffix: "ScoreGood")
     }
 
     var scoreFair: Color {
-        switch self {
-        case .desertWarm:  DS.Color.scoreFair
-        case .oceanCool:   Color("OceanScoreFair")
-        case .forestGreen: Color("ForestScoreFair")
-        case .sakuraCalm: Color("SakuraScoreFair")
-        }
+        themedColor(defaultAsset: "ScoreFair", variantSuffix: "ScoreFair")
     }
 
     var scoreTired: Color {
-        switch self {
-        case .desertWarm:  DS.Color.scoreTired
-        case .oceanCool:   Color("OceanScoreTired")
-        case .forestGreen: Color("ForestScoreTired")
-        case .sakuraCalm: Color("SakuraScoreTired")
-        }
+        themedColor(defaultAsset: "ScoreTired", variantSuffix: "ScoreTired")
     }
 
     var scoreWarning: Color {
-        switch self {
-        case .desertWarm:  DS.Color.scoreWarning
-        case .oceanCool:   Color("OceanScoreWarning")
-        case .forestGreen: Color("ForestScoreWarning")
-        case .sakuraCalm: Color("SakuraScoreWarning")
-        }
+        themedColor(defaultAsset: "ScoreWarning", variantSuffix: "ScoreWarning")
     }
 }
 
@@ -196,66 +164,31 @@ extension AppTheme {
 
 extension AppTheme {
     var metricHRV: Color {
-        switch self {
-        case .desertWarm:  DS.Color.hrv
-        case .oceanCool:   Color("OceanMetricHRV")
-        case .forestGreen: Color("ForestMetricHRV")
-        case .sakuraCalm: Color("SakuraMetricHRV")
-        }
+        themedColor(defaultAsset: "MetricHRV", variantSuffix: "MetricHRV")
     }
 
     var metricRHR: Color {
-        switch self {
-        case .desertWarm:  DS.Color.rhr
-        case .oceanCool:   Color("OceanMetricRHR")
-        case .forestGreen: Color("ForestMetricRHR")
-        case .sakuraCalm: Color("SakuraMetricRHR")
-        }
+        themedColor(defaultAsset: "MetricRHR", variantSuffix: "MetricRHR")
     }
 
     var metricHeartRate: Color {
-        switch self {
-        case .desertWarm:  DS.Color.heartRate
-        case .oceanCool:   Color("OceanMetricHeartRate")
-        case .forestGreen: Color("ForestMetricHeartRate")
-        case .sakuraCalm: Color("SakuraMetricHeartRate")
-        }
+        themedColor(defaultAsset: "MetricHeartRate", variantSuffix: "MetricHeartRate")
     }
 
     var metricSleep: Color {
-        switch self {
-        case .desertWarm:  DS.Color.sleep
-        case .oceanCool:   Color("OceanMetricSleep")
-        case .forestGreen: Color("ForestMetricSleep")
-        case .sakuraCalm: Color("SakuraMetricSleep")
-        }
+        themedColor(defaultAsset: "MetricSleep", variantSuffix: "MetricSleep")
     }
 
     var metricActivity: Color {
-        switch self {
-        case .desertWarm:  DS.Color.activity
-        case .oceanCool:   Color("OceanMetricActivity")
-        case .forestGreen: Color("ForestMetricActivity")
-        case .sakuraCalm: Color("SakuraMetricActivity")
-        }
+        themedColor(defaultAsset: "MetricActivity", variantSuffix: "MetricActivity")
     }
 
     var metricSteps: Color {
-        switch self {
-        case .desertWarm:  DS.Color.steps
-        case .oceanCool:   Color("OceanMetricSteps")
-        case .forestGreen: Color("ForestMetricSteps")
-        case .sakuraCalm: Color("SakuraMetricSteps")
-        }
+        themedColor(defaultAsset: "MetricSteps", variantSuffix: "MetricSteps")
     }
 
     var metricBody: Color {
-        switch self {
-        case .desertWarm:  DS.Color.body
-        case .oceanCool:   Color("OceanMetricBody")
-        case .forestGreen: Color("ForestMetricBody")
-        case .sakuraCalm: Color("SakuraMetricBody")
-        }
+        themedColor(defaultAsset: "MetricBody", variantSuffix: "MetricBody")
     }
 }
 
@@ -265,44 +198,25 @@ extension AppTheme {
     var weatherClearColor: Color { accentColor }
 
     var weatherRainColor: Color {
-        switch self {
-        case .desertWarm:  DS.Color.weatherRain
-        case .oceanCool:   Color("OceanWeatherRain")
-        case .forestGreen: Color("ForestWeatherRain")
-        case .sakuraCalm: Color("SakuraWeatherRain")
-        }
+        themedColor(defaultAsset: "WeatherRain", variantSuffix: "WeatherRain")
     }
 
     var weatherSnowColor: Color {
-        switch self {
-        case .desertWarm:  DS.Color.weatherSnow
-        case .oceanCool:   Color("OceanWeatherSnow")
-        case .forestGreen: Color("ForestWeatherSnow")
-        case .sakuraCalm: Color("SakuraWeatherSnow")
-        }
+        themedColor(defaultAsset: "WeatherSnow", variantSuffix: "WeatherSnow")
     }
 
     var weatherCloudyColor: Color {
-        switch self {
-        case .desertWarm:  DS.Color.weatherCloudy
-        case .oceanCool:   Color("OceanWeatherCloudy")
-        case .forestGreen: Color("ForestWeatherCloudy")
-        case .sakuraCalm: Color("SakuraWeatherCloudy")
-        }
+        themedColor(defaultAsset: "WeatherCloudy", variantSuffix: "WeatherCloudy")
     }
 
     var weatherNightColor: Color {
-        switch self {
-        case .desertWarm:  DS.Color.weatherNight
-        case .oceanCool:   Color("OceanWeatherNight")
-        case .forestGreen: Color("ForestWeatherNight")
-        case .sakuraCalm: Color("SakuraWeatherNight")
-        }
+        themedColor(defaultAsset: "WeatherNight", variantSuffix: "WeatherNight")
     }
 
     var weatherWindColor: Color { sandColor }
 }
 
+#if os(iOS)
 // MARK: - Outdoor Fitness Level Colors
 
 extension AppTheme {
@@ -315,17 +229,13 @@ extension AppTheme {
         }
     }
 }
+#endif
 
 // MARK: - Card Surface
 
 extension AppTheme {
     var cardBackground: Color {
-        switch self {
-        case .desertWarm:  DS.Color.cardBackground
-        case .oceanCool:   Color("OceanCardBackground")
-        case .forestGreen: Color("ForestCardBackground")
-        case .sakuraCalm: Color("SakuraCardBackground")
-        }
+        themedColor(defaultAsset: "CardBackground", variantSuffix: "CardBackground")
     }
 }
 
