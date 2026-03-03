@@ -177,6 +177,16 @@ struct HealthKitWorkoutDetailView: View {
                     unit: "m"
                 )
             }
+            // Flights climbed
+            if let flights = workout.flightsClimbed, flights > 0 {
+                statCard(
+                    icon: "figure.stairs",
+                    iconColor: DS.Color.activity,
+                    title: "Floors Climbed",
+                    value: Int(flights).formattedWithSeparator,
+                    unit: "floors"
+                )
+            }
             // Step count
             if let steps = workout.stepCount, steps > 0 {
                 statCard(
