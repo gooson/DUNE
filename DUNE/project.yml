@@ -151,6 +151,8 @@ targets:
       - path: Domain/Models/WorkoutMode.swift
       - path: Domain/Models/AppTheme.swift
       - path: Domain/Models/WatchConnectivityModels.swift
+      - path: Domain/Models/HealthMetric.swift
+      - path: Domain/Models/HeartRateZone.swift
       # Shared HealthKit mapping (needed for cardio workout configuration)
       - path: Data/HealthKit/WorkoutActivityType+HealthKit.swift
       # Shared Presentation extension (iconName for cardio metrics views)

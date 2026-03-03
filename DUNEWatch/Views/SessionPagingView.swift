@@ -1,9 +1,9 @@
 import SwiftUI
 import WatchKit
 
-/// 3-Page vertical TabView for active workout session.
-/// Strength: Controls | MetricsView | NowPlaying
-/// Cardio:   Controls | CardioMetricsView | NowPlaying
+/// Vertical TabView for active workout session.
+/// Strength: Controls | MetricsView | NowPlaying (3 pages)
+/// Cardio:   MainMetrics | HRZone | Secondary | Controls | NowPlaying (5 pages)
 struct SessionPagingView: View {
     @Environment(WorkoutManager.self) private var workoutManager
     @Environment(\.isLuminanceReduced) private var isLuminanceReduced
@@ -12,16 +12,22 @@ struct SessionPagingView: View {
 
     var body: some View {
         TabView(selection: $selectedTab) {
-            ControlsView()
-                .tag(SessionTab.controls)
-
             if workoutManager.isCardioMode {
-                CardioMetricsView()
-                    .tag(SessionTab.metrics)
+                CardioMainMetricsPage()
+                    .tag(SessionTab.cardioMain)
+
+                CardioHRZonePage()
+                    .tag(SessionTab.hrZone)
+
+                CardioSecondaryPage()
+                    .tag(SessionTab.cardioSecondary)
             } else {
                 MetricsView()
                     .tag(SessionTab.metrics)
             }
+
+            ControlsView()
+                .tag(SessionTab.controls)
 
             NowPlayingView()
                 .tag(SessionTab.nowPlaying)
@@ -29,7 +35,7 @@ struct SessionPagingView: View {
         .tabViewStyle(.verticalPage(transitionStyle: .blur))
         .onChange(of: isLuminanceReduced) { _, reduced in
             if reduced {
-                selectedTab = .metrics
+                selectedTab = workoutManager.isCardioMode ? .cardioMain : .metrics
             }
         }
     }
@@ -38,5 +44,9 @@ struct SessionPagingView: View {
 enum SessionTab {
     case controls
     case metrics
+    // Cardio-specific pages
+    case cardioMain
+    case hrZone
+    case cardioSecondary
     case nowPlaying
 }
