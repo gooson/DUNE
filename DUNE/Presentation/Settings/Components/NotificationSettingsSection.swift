@@ -19,7 +19,7 @@ struct NotificationSettingsSection: View {
         } header: {
             Text("Notifications")
         } footer: {
-            Text("Health alerts are sent at most once per day. Workout records notify every time.")
+            Text("Health alerts are sent at most once per day, duplicates are suppressed for one hour, and informational alerts use a daily budget.")
         }
     }
 
