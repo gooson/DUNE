@@ -768,7 +768,7 @@ extension WorkoutManager: HKLiveWorkoutBuilderDelegate {
 
             case HKQuantityType(.flightsClimbed):
                 let floors = stats.sumQuantity()?.doubleValue(for: .count()) ?? 0
-                if floors >= 0, floors.isFinite, floors < 10_000 {
+                if floors > 0, floors.isFinite, floors < 10_000 {
                     floorsValue = floors
                 }
 

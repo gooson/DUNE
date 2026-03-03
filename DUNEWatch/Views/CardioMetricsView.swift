@@ -18,11 +18,7 @@ struct CardioMetricsView: View {
 
     /// Whether the current activity uses floors instead of distance as primary metric.
     private var isStairType: Bool {
-        guard let info = cardioInfo else { return false }
-        switch info.type {
-        case .stairClimbing, .stairStepper: return true
-        default: return false
-        }
+        cardioInfo?.type.isStairBased ?? false
     }
 
     var body: some View {
