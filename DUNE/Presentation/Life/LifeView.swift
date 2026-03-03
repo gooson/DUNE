@@ -3,6 +3,7 @@ import SwiftData
 
 struct LifeView: View {
     @State private var viewModel = LifeViewModel()
+    @State private var localRefreshSignal = 0
     @Environment(\.modelContext) private var modelContext
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.appTheme) private var theme
@@ -30,11 +31,19 @@ struct LifeView: View {
 
                 VStack(spacing: isRegular ? DS.Spacing.xxl : DS.Spacing.xl) {
                     // Isolated @Query child — prevents parent re-layout (Correction #179)
-                    HabitListQueryView(viewModel: viewModel)
+                    HabitListQueryView(
+                        viewModel: viewModel,
+                        refreshSignal: refreshSignal + localRefreshSignal
+                    )
                 }
                 .padding(isRegular ? DS.Spacing.xxl : DS.Spacing.lg)
             }
             .scrollBounceBehavior(.basedOnSize)
+            .waveRefreshable {
+                await MainActor.run {
+                    localRefreshSignal += 1
+                }
+            }
             .onChange(of: scrollToTopSignal) { _, _ in
                 withAnimation(DS.Animation.standard) {
                     proxy.scrollTo(ScrollAnchor.top, anchor: .top)
@@ -100,6 +109,7 @@ private struct HabitListQueryView: View {
     @Query(sort: \ExerciseRecord.date, order: .reverse) private var exerciseRecords: [ExerciseRecord]
 
     @Bindable var viewModel: LifeViewModel
+    let refreshSignal: Int
 
     @Environment(\.modelContext) private var modelContext
     @Environment(\.appTheme) private var theme
@@ -119,74 +129,18 @@ private struct HabitListQueryView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.lg) {
-            autoAchievementsSection
+            // Hero: completion rate
+            heroSection
+                .accessibilityIdentifier("life-hero-progress")
 
-            if habits.isEmpty {
-                EmptyStateView(
-                    icon: "checklist",
-                    title: "No Habits Yet",
-                    message: "Add your first habit to start tracking your daily routine.",
-                    actionTitle: "Add Habit",
-                    action: {
-                        viewModel.resetForm()
-                        viewModel.isShowingAddSheet = true
-                    }
-                )
-            } else {
-                // Hero: completion rate
-                heroSection
-                    .accessibilityIdentifier("life-hero-progress")
-
-                Text("My Habits")
-                    .font(.headline)
-                    .foregroundStyle(.primary)
-
-                // Habit rows
-                ForEach(viewModel.habitProgresses) { progress in
-                    HabitRowView(
-                        progress: progress,
-                        onToggle: { toggleCheck(habitId: progress.id) },
-                        onUpdateValue: { value in updateValue(habitId: progress.id, value: value) }
-                    )
-                    .contextMenu {
-                        Button {
-                            if let habit = habitsByID[progress.id] {
-                                viewModel.startEditing(habit)
-                            }
-                        } label: {
-                            Label("Edit", systemImage: "pencil")
-                        }
-                        Button(role: .destructive) {
-                            if let habit = habitsByID[progress.id] {
-                                withAnimation {
-                                    habit.isArchived = true
-                                }
-                            }
-                        } label: {
-                            Label("Archive", systemImage: "archivebox")
-                        }
-                    }
-
-                    if progress.isCycleBased {
-                        Button {
-                            snoozeCycle(habitId: progress.id, days: 1)
-                        } label: {
-                            Label("Snooze 1 Day", systemImage: "clock.arrow.trianglehead.2.counterclockwise.rotate.90")
-                        }
-
-                        Button {
-                            skipCycle(habitId: progress.id)
-                        } label: {
-                            Label("Skip Cycle", systemImage: "forward.end")
-                        }
-
-                        Button {
-                            historySelection = HabitHistorySelection(id: progress.id)
-                        } label: {
-                            Label("History", systemImage: "clock.badge.checkmark")
-                        }
-                    }
+            if isRegular {
+                HStack(alignment: .top, spacing: DS.Spacing.md) {
+                    habitsSection(fillHeight: true)
+                    autoAchievementsSection(fillHeight: true)
                 }
+            } else {
+                habitsSection()
+                autoAchievementsSection()
             }
         }
 
@@ -199,6 +153,9 @@ private struct HabitListQueryView: View {
                 recalculate()
             }
             .onChange(of: autoAchievementInputSignature) { _, _ in
+                recalculate()
+            }
+            .onChange(of: refreshSignal) { _, _ in
                 recalculate()
             }
             .onChange(of: viewModel.isShowingEditSheet) { old, new in
@@ -236,57 +193,140 @@ private struct HabitListQueryView: View {
         return hasher.finalize()
     }
 
-    // MARK: - Auto Achievements
+    // MARK: - Sections
 
-    private var autoAchievementsSection: some View {
-        let groups = autoAchievementGroups
-        let completedGoals = groups.reduce(0) { $0 + $1.completedCount }
-        let totalGoals = groups.reduce(0) { $0 + $1.metrics.count }
-
-        return VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            HStack(alignment: .firstTextBaseline) {
-                Text("Auto Workout Achievements")
-                    .font(.headline)
-                    .foregroundStyle(.primary)
-                Spacer()
-                if totalGoals > 0 {
-                    Label("\(completedGoals)/\(totalGoals) done", systemImage: "checkmark.seal.fill")
-                        .font(.caption2)
-                        .foregroundStyle(DS.Color.positive)
-                        .padding(.horizontal, DS.Spacing.sm)
-                        .padding(.vertical, DS.Spacing.xxs)
-                        .background(.ultraThinMaterial, in: Capsule())
-                }
-            }
-
-            Text("HealthKit-based weekly goals (Mon-Sun)")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-
-            if viewModel.autoExerciseProgresses.isEmpty {
-                StandardCard {
-                    Text("No HealthKit-linked workouts yet")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                }
-            } else if isRegular {
-                LazyVGrid(
-                    columns: [GridItem(.flexible(), spacing: DS.Spacing.md), GridItem(.flexible())],
-                    spacing: DS.Spacing.md
-                ) {
-                    ForEach(groups) { group in
-                        autoAchievementGroupCard(group)
+    private func habitsSection(fillHeight: Bool = false) -> some View {
+        SectionGroup(
+            title: "My Habits",
+            icon: "checklist",
+            iconColor: DS.Color.tabLife,
+            fillHeight: fillHeight
+        ) {
+            if habits.isEmpty {
+                EmptyStateView(
+                    icon: "checklist",
+                    title: "No Habits Yet",
+                    message: "Add your first habit to start tracking your daily routine.",
+                    actionTitle: "Add Habit",
+                    action: {
+                        viewModel.resetForm()
+                        viewModel.isShowingAddSheet = true
                     }
-                }
+                )
             } else {
                 VStack(spacing: DS.Spacing.sm) {
-                    ForEach(groups) { group in
-                        autoAchievementGroupCard(group)
+                    ForEach(viewModel.habitProgresses) { progress in
+                        HabitRowView(
+                            progress: progress,
+                            onToggle: { toggleCheck(habitId: progress.id) },
+                            onUpdateValue: { value in updateValue(habitId: progress.id, value: value) }
+                        )
+                        .contextMenu {
+                            habitContextMenu(for: progress)
+                        }
                     }
                 }
             }
         }
-        .frame(maxWidth: isRegular ? 760 : .infinity, alignment: .leading)
+    }
+
+    @ViewBuilder
+    private func habitContextMenu(for progress: HabitProgress) -> some View {
+        Button {
+            if let habit = habitsByID[progress.id] {
+                viewModel.startEditing(habit)
+            }
+        } label: {
+            Label("Edit", systemImage: "pencil")
+        }
+
+        if progress.isCycleBased {
+            Button {
+                snoozeCycle(habitId: progress.id, days: 1)
+            } label: {
+                Label("Snooze 1 Day", systemImage: "clock.arrow.trianglehead.2.counterclockwise.rotate.90")
+            }
+            .disabled(!progress.isDue)
+
+            Button {
+                skipCycle(habitId: progress.id)
+            } label: {
+                Label("Skip Cycle", systemImage: "forward.end")
+            }
+            .disabled(!progress.isDue)
+
+            Button {
+                historySelection = HabitHistorySelection(id: progress.id)
+            } label: {
+                Label("History", systemImage: "clock.badge.checkmark")
+            }
+        }
+
+        Button(role: .destructive) {
+            if let habit = habitsByID[progress.id] {
+                withAnimation {
+                    habit.isArchived = true
+                }
+            }
+        } label: {
+            Label("Archive", systemImage: "archivebox")
+        }
+    }
+
+    // MARK: - Auto Achievements
+
+    private func autoAchievementsSection(fillHeight: Bool = false) -> some View {
+        let groups = autoAchievementGroups
+        let completedGoals = groups.reduce(0) { $0 + $1.completedCount }
+        let totalGoals = groups.reduce(0) { $0 + $1.metrics.count }
+        let useTwoColumnCards = isRegular && !fillHeight
+
+        return SectionGroup(
+            title: "Auto Workout Achievements",
+            icon: "figure.run",
+            iconColor: DS.Color.activity,
+            fillHeight: fillHeight
+        ) {
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                HStack(alignment: .firstTextBaseline) {
+                    Text("HealthKit-based weekly goals (Mon-Sun)")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                    if totalGoals > 0 {
+                        Label("\(completedGoals)/\(totalGoals) done", systemImage: "checkmark.seal.fill")
+                            .font(.caption2)
+                            .foregroundStyle(DS.Color.positive)
+                            .padding(.horizontal, DS.Spacing.sm)
+                            .padding(.vertical, DS.Spacing.xxs)
+                            .background(.ultraThinMaterial, in: Capsule())
+                    }
+                }
+
+                if viewModel.autoExerciseProgresses.isEmpty {
+                    StandardCard {
+                        Text("No HealthKit-linked workouts yet")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+                } else if useTwoColumnCards {
+                    LazyVGrid(
+                        columns: [GridItem(.flexible(), spacing: DS.Spacing.md), GridItem(.flexible())],
+                        spacing: DS.Spacing.md
+                    ) {
+                        ForEach(groups) { group in
+                            autoAchievementGroupCard(group)
+                        }
+                    }
+                } else {
+                    VStack(spacing: DS.Spacing.sm) {
+                        ForEach(groups) { group in
+                            autoAchievementGroupCard(group)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private func autoAchievementGroupCard(_ group: AutoAchievementGroup) -> some View {
