@@ -10,6 +10,9 @@
     "/10" : {
 
     },
+    "/km" : {
+
+    },
     "%.1f" : {
 
     },
@@ -225,6 +228,94 @@
         }
       }
     },
+    "Arctic Dawn" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アークティックドーン"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아틱 던"
+          }
+        }
+      }
+    },
+    "Avg /100m" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "平均/100m"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "평균/100m"
+          }
+        }
+      }
+    },
+    "Avg HR" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "平均心拍"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "평균 심박"
+          }
+        }
+      }
+    },
+    "Avg Pace" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "平均ペース"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "평균 페이스"
+          }
+        }
+      }
+    },
+    "Avg Speed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "平均速度"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "평균 속도"
+          }
+        }
+      }
+    },
+    "bpm" : {
+
+    },
     "BROWSE" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -272,6 +363,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "취소"
+          }
+        }
+      }
+    },
+    "Cardio" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "有酸素"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "유산소"
           }
         }
       }
@@ -344,19 +452,19 @@
         }
       }
     },
-    "Arctic Dawn" : {
+    "Details" : {
       "extractionState" : "manual",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アークティックドーン"
+            "value" : "詳細"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "아틱 던"
+            "value" : "상세"
           }
         }
       }
@@ -374,6 +482,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "저장하지 않고 닫기"
+          }
+        }
+      }
+    },
+    "Distance" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "距離"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "거리"
           }
         }
       }
@@ -429,6 +554,23 @@
         }
       }
     },
+    "Elapsed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "経過時間"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "경과 시간"
+          }
+        }
+      }
+    },
     "End" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -480,40 +622,6 @@
         }
       }
     },
-    "floors" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "階"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "층"
-          }
-        }
-      }
-    },
-    "Floors Climbed" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "上った階数"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "오른 층수"
-          }
-        }
-      }
-    },
     "Failed to save workout data. Please try again." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -527,6 +635,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "운동 데이터를 저장하지 못했습니다. 다시 시도해 주세요."
+          }
+        }
+      }
+    },
+    "Fat Burn" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "脂肪燃焼"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "지방 연소"
           }
         }
       }
@@ -565,6 +690,40 @@
         }
       }
     },
+    "floors" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "階"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "층"
+          }
+        }
+      }
+    },
+    "Floors Climbed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上った階数"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "오른 층수"
+          }
+        }
+      }
+    },
     "Forest Green" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -578,6 +737,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "포레스트 그린"
+          }
+        }
+      }
+    },
+    "Hard" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ハード"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "힘듦"
           }
         }
       }
@@ -616,6 +792,9 @@
         }
       }
     },
+    "kcal" : {
+
+    },
     "kg" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -634,6 +813,12 @@
       }
     },
     "km" : {
+
+    },
+    "km/h" : {
+
+    },
+    "m" : {
 
     },
     "Next Exercise" : {
@@ -738,6 +923,40 @@
         }
       }
     },
+    "Pace" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ペース"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "페이스"
+          }
+        }
+      }
+    },
+    "Peak" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ピーク"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최대"
+          }
+        }
+      }
+    },
     "Previous Sets" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -805,6 +1024,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "빈 세트 기록"
+          }
+        }
+      }
+    },
+    "Recovery" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "リカバリー"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "회복"
           }
         }
       }
@@ -958,6 +1194,23 @@
         }
       }
     },
+    "Speed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "速度"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "속도"
+          }
+        }
+      }
+    },
     "Start" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -971,6 +1224,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "시작"
+          }
+        }
+      }
+    },
+    "Steps" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "歩数"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "걸음 수"
+          }
+        }
+      }
+    },
+    "Swim" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "スイム"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "수영"
           }
         }
       }
@@ -1060,277 +1347,8 @@
         }
       }
     },
-    "Avg /100m" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "平均/100m"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "평균/100m"
-          }
-        }
-      }
-    },
-    "Avg HR" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "平均心拍"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "평균 심박"
-          }
-        }
-      }
-    },
-    "Avg Pace" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "平均ペース"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "평균 페이스"
-          }
-        }
-      }
-    },
-    "Avg Speed" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "平均速度"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "평균 속도"
-          }
-        }
-      }
-    },
-    "Steps" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "歩数"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "걸음 수"
-          }
-        }
-      }
-    },
-    "Cardio" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "有酸素"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "유산소"
-          }
-        }
-      }
-    },
-    "Details" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "詳細"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "상세"
-          }
-        }
-      }
-    },
-    "Distance" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "距離"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "거리"
-          }
-        }
-      }
-    },
-    "Elapsed" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "経過時間"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "경과 시간"
-          }
-        }
-      }
-    },
-    "Fat Burn" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "脂肪燃焼"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "지방 연소"
-          }
-        }
-      }
-    },
-    "Hard" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ハード"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "힘듦"
-          }
-        }
-      }
-    },
-    "Pace" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ペース"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "페이스"
-          }
-        }
-      }
-    },
-    "Peak" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ピーク"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "최대"
-          }
-        }
-      }
-    },
-    "Recovery" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "リカバリー"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "회복"
-          }
-        }
-      }
-    },
-    "Speed" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "速度"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "속도"
-          }
-        }
-      }
-    },
-    "Swim" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "スイム"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "수영"
-          }
-        }
-      }
+    "Zone %@" : {
+
     },
     "Zone %lld" : {
       "extractionState" : "manual",
