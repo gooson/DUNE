@@ -1,7 +1,7 @@
 import SwiftUI
 import SwiftData
 
-/// Full-screen cardio session with real-time timer, distance, pace, and calories.
+/// Full-screen cardio session with real-time timer and measured cardio metrics.
 struct CardioSessionView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
@@ -170,41 +170,60 @@ struct CardioSessionView: View {
     // MARK: - Secondary Metrics
 
     private var secondaryMetrics: some View {
-        HStack(spacing: DS.Spacing.xl) {
-            if viewModel.activityType == .walking {
-                VStack(spacing: DS.Spacing.xxs) {
-                    Image(systemName: "figure.walk")
-                        .font(.caption)
-                        .foregroundStyle(DS.Color.steps)
-                    Text(viewModel.walkingStepCount > 0
-                        ? "\(Int(viewModel.walkingStepCount))"
-                        : "--")
-                        .font(.title3.monospacedDigit().bold())
-                        .contentTransition(.numericText())
-                        .animation(.default, value: Int(viewModel.walkingStepCount))
-                    Text("steps")
-                        .font(.caption2)
-                        .foregroundStyle(DS.Color.textTertiary)
-                }
-                .frame(maxWidth: .infinity)
-            }
+        HStack(spacing: DS.Spacing.md) {
+            metricTile(
+                icon: "figure.walk",
+                iconColor: DS.Color.steps,
+                value: displayedSteps,
+                unit: String(localized: "steps")
+            )
 
-            VStack(spacing: DS.Spacing.xxs) {
-                Image(systemName: "flame.fill")
-                    .font(.caption)
-                    .foregroundStyle(DS.Color.caution)
-                Text(viewModel.estimatedCalories > 0
+            metricTile(
+                icon: "gauge.with.dots.needle.50percent",
+                iconColor: DS.Color.activity,
+                value: viewModel.formattedCadence,
+                unit: "spm"
+            )
+
+            metricTile(
+                icon: "mountain.2.fill",
+                iconColor: DS.Color.positive,
+                value: viewModel.formattedElevationGain,
+                unit: "m"
+            )
+
+            metricTile(
+                icon: "flame.fill",
+                iconColor: DS.Color.caution,
+                value: viewModel.estimatedCalories > 0
                     ? "\(Int(viewModel.estimatedCalories))"
-                    : "--")
-                    .font(.title3.monospacedDigit().bold())
-                    .contentTransition(.numericText())
-                    .animation(.default, value: Int(viewModel.estimatedCalories))
-                Text("kcal")
-                    .font(.caption2)
-                    .foregroundStyle(DS.Color.textTertiary)
-            }
-            .frame(maxWidth: .infinity)
+                    : "--",
+                unit: "kcal"
+            )
         }
+    }
+
+    private var displayedSteps: String {
+        if viewModel.activityType == .walking, viewModel.walkingStepCount > 0 {
+            return Int(viewModel.walkingStepCount).formattedWithSeparator
+        }
+        return viewModel.formattedStepCount
+    }
+
+    private func metricTile(icon: String, iconColor: SwiftUI.Color, value: String, unit: String) -> some View {
+        VStack(spacing: DS.Spacing.xxs) {
+            Image(systemName: icon)
+                .font(.caption)
+                .foregroundStyle(iconColor)
+            Text(value)
+                .font(.title3.monospacedDigit().bold())
+                .contentTransition(.numericText())
+                .animation(.default, value: value)
+            Text(unit)
+                .font(.caption2)
+                .foregroundStyle(DS.Color.textTertiary)
+        }
+        .frame(maxWidth: .infinity)
     }
 
     // MARK: - Controls

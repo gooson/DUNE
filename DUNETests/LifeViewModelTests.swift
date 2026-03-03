@@ -322,4 +322,24 @@ struct LifeViewModelTests {
         #expect(entries.count == 3)
         #expect(entries.map(\.action) == [.snooze, .skip, .complete])
     }
+
+    @Test("calculateAutoExerciseProgresses updates auto achievement list")
+    func autoAchievementCalculation() {
+        let vm = LifeViewModel()
+        let record = ExerciseRecord(
+            date: Date(),
+            exerciseType: "running",
+            duration: 1200,
+            distance: 5,
+            isFromHealthKit: true,
+            healthKitWorkoutID: "hk-auto-1",
+            exerciseDefinitionID: "running"
+        )
+
+        vm.calculateAutoExerciseProgresses(exerciseRecords: [record])
+
+        #expect(vm.autoExerciseProgresses.isEmpty == false)
+        let weekly5 = vm.autoExerciseProgresses.first { $0.id == "weeklyWorkout5" }
+        #expect(weekly5?.currentValue == 1)
+    }
 }
