@@ -47,7 +47,7 @@ final class BackgroundNotificationEvaluator: Sendable {
         let insight = evaluate(samples: samples, sampleType: sampleType, insightType: insightType)
         guard let insight else { return }
 
-        throttleStore.recordSent(for: insightType)
+        guard throttleStore.shouldSendAndRecord(insight: insight) else { return }
         await notificationService.send(insight)
     }
 
