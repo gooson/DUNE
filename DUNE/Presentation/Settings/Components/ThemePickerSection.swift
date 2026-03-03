@@ -46,16 +46,7 @@ struct ThemePickerSection: View {
 
 private extension AppTheme {
     var swatchColors: [Color] {
-        switch self {
-        case .desertWarm:
-            [DS.Color.warmGlow, DS.Color.desertBronze, DS.Color.desertDusk]
-        case .oceanCool:
-            [Color("OceanSurface"), Color("OceanMid"), Color("OceanDeep")]
-        case .forestGreen:
-            [Color("ForestMid"), Color("ForestDeep"), Color("ForestAccent")]
-        case .sakuraCalm:
-            [Color("SakuraPetal"), Color("SakuraIvory"), Color("SakuraLeaf")]
-        }
+        [accentColor, bronzeColor, duskColor]
     }
 }
 

@@ -35,4 +35,32 @@ struct AppThemeTests {
         #expect(AppTheme(rawValue: "neonPunk") == nil)
         #expect(AppTheme(rawValue: "") == nil)
     }
+
+    @Test("Asset prefix mapping is stable for each theme")
+    func assetPrefixMapping() {
+        #expect(AppTheme.desertWarm.assetPrefix == nil)
+        #expect(AppTheme.oceanCool.assetPrefix == "Ocean")
+        #expect(AppTheme.forestGreen.assetPrefix == "Forest")
+        #expect(AppTheme.sakuraCalm.assetPrefix == "Sakura")
+    }
+
+    @Test("Themed asset name resolution follows prefix convention")
+    func themedAssetNameResolution() {
+        #expect(
+            AppTheme.desertWarm.themedAssetName(defaultAsset: "ScoreGood", variantSuffix: "ScoreGood")
+                == "ScoreGood"
+        )
+        #expect(
+            AppTheme.oceanCool.themedAssetName(defaultAsset: "ScoreGood", variantSuffix: "ScoreGood")
+                == "OceanScoreGood"
+        )
+        #expect(
+            AppTheme.forestGreen.themedAssetName(defaultAsset: "MetricHRV", variantSuffix: "MetricHRV")
+                == "ForestMetricHRV"
+        )
+        #expect(
+            AppTheme.sakuraCalm.themedAssetName(defaultAsset: "CardBackground", variantSuffix: "CardBackground")
+                == "SakuraCardBackground"
+        )
+    }
 }

@@ -78,6 +78,7 @@
 		1E7E5F36C42E4AF5A79F38A3 /* LaunchScreenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F472C640972FF274B8229F5 /* LaunchScreenTests.swift */; };
 		1F57C5722EC1FF9FBF02499B /* HealthSnapshotMirroring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64B929FD810C16E46A874B5E /* HealthSnapshotMirroring.swift */; };
 		1FC0FA2B496EC5A681472928 /* CardioSessionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F752F88D2EE6A55A44F41B4E /* CardioSessionViewModel.swift */; };
+		1FF414CB22F3FF5D948BE707 /* AppTheme+View.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3DDB31A0243DFD8BEA530BE /* AppTheme+View.swift */; };
 		20338D03016354F54E5CECCD /* ExerciseLibraryQuerying.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ABA7524835155B2BC690B31 /* ExerciseLibraryQuerying.swift */; };
 		20A88B1D27157864A3ED2E70 /* VolumeDonutChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273C1DE8BC48E942B1DF704B /* VolumeDonutChartView.swift */; };
 		20BA312107CD67E1CE92E963 /* ExerciseFrequencyServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE8F91B7C40220F1D202474 /* ExerciseFrequencyServiceTests.swift */; };
@@ -2846,6 +2847,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				279E47BE3A0E139AECB7347D /* AppSchemaVersions.swift in Sources */,
+				1FF414CB22F3FF5D948BE707 /* AppTheme+View.swift in Sources */,
 				A161B831DC16A3946EC309E0 /* AppTheme+WatchView.swift in Sources */,
 				056F19F1E5016628AC892F38 /* AppTheme.swift in Sources */,
 				9D8E30D7CBFB9DB889E9D9D2 /* BodyCompositionRecord.swift in Sources */,
