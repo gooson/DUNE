@@ -69,6 +69,22 @@ final class WorkoutManager: NSObject {
     /// Current pace in seconds per kilometer (cardio mode only).
     private(set) var currentPace: Double = 0
 
+    /// Estimated max HR based on HealthKit dateOfBirth (220-age formula).
+    /// Defaults to 190 (HeartRateZoneCalculator.defaultMaxHR) when age is unavailable.
+    private(set) var estimatedMaxHR: Double = HeartRateZoneCalculator.defaultMaxHR
+
+    /// Current heart rate zone based on live HR and estimated maxHR.
+    var currentZone: HeartRateZone.Zone? {
+        guard heartRate > 0, estimatedMaxHR > 0 else { return nil }
+        return HeartRateZone.Zone.zone(forFraction: heartRate / estimatedMaxHR)
+    }
+
+    /// Current HR as a fraction of estimated maxHR (0.0–1.0, clamped).
+    var hrFraction: Double {
+        guard estimatedMaxHR > 0 else { return 0 }
+        return min(heartRate / estimatedMaxHR, 1.0)
+    }
+
     /// Total flights (floors) climbed (stair climber mode only).
     private(set) var floorsClimbed: Double = 0
 
@@ -176,6 +192,7 @@ final class WorkoutManager: NSObject {
             HKQuantityType(.distanceWalkingRunning),
             HKQuantityType(.distanceCycling),
             HKQuantityType(.distanceSwimming),
+            HKCharacteristicType(.dateOfBirth),
             HKQuantityType(.flightsClimbed)
         ]
 
@@ -190,6 +207,23 @@ final class WorkoutManager: NSObject {
         let workoutType = HKQuantityType.workoutType()
         guard healthStore.authorizationStatus(for: workoutType) == .sharingAuthorized else {
             throw WorkoutStartupError.authorizationNotGranted
+        }
+    }
+
+    // MARK: - Max HR Estimation
+
+    /// Fetches the user's estimated max HR from HealthKit dateOfBirth (220-age formula).
+    /// Falls back to `HeartRateZoneCalculator.defaultMaxHR` (190) on any failure.
+    private func fetchEstimatedMaxHR() {
+        do {
+            let dob = try healthStore.dateOfBirthComponents()
+            if let year = dob.year {
+                let age = Calendar.current.component(.year, from: Date()) - year
+                estimatedMaxHR = HeartRateZoneCalculator.estimateMaxHR(age: age)
+                Self.logger.info("Estimated maxHR=\(self.estimatedMaxHR) from age=\(age)")
+            }
+        } catch {
+            Self.logger.info("dateOfBirth unavailable, using default maxHR=\(self.estimatedMaxHR)")
         }
     }
 
@@ -231,6 +265,8 @@ final class WorkoutManager: NSObject {
         self.templateSnapshot = nil
         self.completedSetsData = []
         self.extraSetsPerExercise = [:]
+
+        fetchEstimatedMaxHR()
 
         let config = HKWorkoutConfiguration()
         config.activityType = activityType.hkWorkoutActivityType
@@ -478,6 +514,7 @@ final class WorkoutManager: NSObject {
         distance = 0
         steps = 0
         currentPace = 0
+        estimatedMaxHR = HeartRateZoneCalculator.defaultMaxHR
         heartRateSamples = []
         isPaused = false
         isSessionEnded = false

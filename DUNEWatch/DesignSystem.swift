@@ -42,6 +42,13 @@ enum DS {
         // Tab wave identity — Desert Horizon palette (mirrors iOS DS)
         static let tabTrain    = SwiftUI.Color("TabTrain")     // Desert Coral
         static let tabWellness = SwiftUI.Color("TabWellness")  // Oasis Teal
+
+        // Heart Rate Zones (mirrors iOS DS — from Shared/Resources/Colors.xcassets)
+        static let zone1 = SwiftUI.Color("HRZone1") // Recovery (blue-gray)
+        static let zone2 = SwiftUI.Color("HRZone2") // Fat Burn (warm tan)
+        static let zone3 = SwiftUI.Color("HRZone3") // Cardio (yellow-gold)
+        static let zone4 = SwiftUI.Color("HRZone4") // Hard (orange)
+        static let zone5 = SwiftUI.Color("HRZone5") // Peak (red)
     }
 
     // MARK: - Opacity (mirrors iOS DS.Opacity)
@@ -95,6 +102,10 @@ enum DS {
         static let sectionTitle = Font.headline.weight(.semibold)
         /// Smallest label (9pt — summary breakdowns, stat labels)
         static let tinyLabel = Font.system(size: 9)
+        /// Cardio primary metric (42pt — large elapsed/distance display)
+        static let primaryMetric = Font.system(size: 42, weight: .bold, design: .rounded).monospacedDigit()
+        /// Cardio secondary metric (title3 — pace, HR, speed)
+        static let secondaryMetric = Font.system(.title3, design: .rounded).monospacedDigit().bold()
     }
 
     // MARK: - Animation
