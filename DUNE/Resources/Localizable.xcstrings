@@ -1053,6 +1053,23 @@
         }
       }
     },
+    "%lld selected" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld件選択"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld개 선택"
+          }
+        }
+      }
+    },
     "%lld steps today" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2193,7 +2210,38 @@
       }
     },
     "Alternative options" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "代替オプション"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "대안 옵션"
+          }
+        }
+      }
+    },
+    "Alternatives" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "代替案"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "대안"
+          }
+        }
+      }
     },
     "Always" : {
       "extractionState" : "manual",
@@ -2385,7 +2433,21 @@
       }
     },
     "At least one equipment is always kept to avoid an empty recommendation." : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "おすすめを空にしないため、器具は最低1つ維持されます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "추천이 비지 않도록 최소 1개 장비는 유지됩니다."
+          }
+        }
+      }
     },
     "Australian Football" : {
       "extractionState" : "manual",
@@ -7661,7 +7723,21 @@
       }
     },
     "Gym" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ジム"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "헬스장"
+          }
+        }
+      }
     },
     "Gymnastics" : {
       "extractionState" : "manual",
@@ -8393,7 +8469,21 @@
       }
     },
     "Home" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自宅"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "홈트"
+          }
+        }
+      }
     },
     "Hourly Forecast" : {
       "extractionState" : "manual",
@@ -11327,7 +11417,21 @@
       }
     },
     "No matching workout suggestions" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一致するおすすめワークアウトがありません"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "조건에 맞는 추천 운동이 없습니다"
+          }
+        }
+      }
     },
     "No memo" : {
       "extractionState" : "manual",
@@ -11912,6 +12016,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "데이터가 부족해요."
+          }
+        }
+      }
+    },
+    "Not Interested" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "興味なし"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "관심 없음"
           }
         }
       }
@@ -17653,6 +17774,23 @@
         }
       }
     },
+    "Undo" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "元に戻す"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "되돌리기"
+          }
+        }
+      }
+    },
     "Up Next" : {
       "localizations" : {
         "ja" : {
@@ -17684,6 +17822,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ 업데이트됨"
+          }
+        }
+      }
+    },
+    "Update your equipment or remove not-interested exercises." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "器具を更新するか、興味なしの運動を解除してください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "보유 기구를 수정하거나 관심 없음 운동을 해제해 주세요."
           }
         }
       }
@@ -19148,6 +19303,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "운동 일관성"
+          }
+        }
+      }
+    },
+    "Workout Context" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ワークアウト環境"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "운동 환경"
           }
         }
       }
