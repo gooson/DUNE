@@ -1,14 +1,6 @@
 import SwiftUI
 import SwiftData
 
-/// Context for displaying template progress in the workout session.
-struct TemplateExerciseInfo {
-    let exerciseNumber: Int
-    let totalExercises: Int
-    let nextExerciseName: String?
-    let templateName: String
-}
-
 /// Single-exercise workout session — Watch-style one-set-at-a-time flow.
 /// Flow: Input (weight/reps) → Complete Set → Rest → Input → ... → Finish
 ///

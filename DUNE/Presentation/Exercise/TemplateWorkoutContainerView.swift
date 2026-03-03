@@ -1,6 +1,14 @@
 import SwiftUI
 import SwiftData
 
+/// Context for displaying template progress in the workout session.
+struct TemplateExerciseInfo {
+    let exerciseNumber: Int
+    let totalExercises: Int
+    let nextExerciseName: String?
+    let templateName: String
+}
+
 /// Configuration for launching a sequential template workout.
 struct TemplateWorkoutConfig: Identifiable {
     let id = UUID()
@@ -91,10 +99,10 @@ struct TemplateWorkoutContainerView: View {
 
     private func advanceToNextExercise() {
         guard currentIndex < config.exercises.count - 1 else { return }
+        exerciseViewID = UUID()
         withAnimation(.easeInOut(duration: 0.3)) {
             currentIndex += 1
             showTransition = true
-            exerciseViewID = UUID()
         }
     }
 }
