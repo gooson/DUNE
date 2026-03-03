@@ -41,6 +41,15 @@ struct HabitTypeTests {
         let freq = HabitFrequency.weekly(targetDays: 3)
         #expect(freq.isDaily == false)
         #expect(freq.weeklyTarget == 3)
+        #expect(freq.intervalDays == nil)
+    }
+
+    @Test("HabitFrequency.interval returns correct interval days")
+    func intervalDays() {
+        let freq = HabitFrequency.interval(days: 30)
+        #expect(freq.isDaily == false)
+        #expect(freq.weeklyTarget == nil)
+        #expect(freq.intervalDays == 30)
     }
 
     @Test("HabitFrequency equality")
@@ -48,6 +57,8 @@ struct HabitTypeTests {
         #expect(HabitFrequency.daily == HabitFrequency.daily)
         #expect(HabitFrequency.weekly(targetDays: 3) == HabitFrequency.weekly(targetDays: 3))
         #expect(HabitFrequency.weekly(targetDays: 3) != HabitFrequency.weekly(targetDays: 5))
+        #expect(HabitFrequency.interval(days: 7) == HabitFrequency.interval(days: 7))
+        #expect(HabitFrequency.interval(days: 7) != HabitFrequency.interval(days: 30))
         #expect(HabitFrequency.daily != HabitFrequency.weekly(targetDays: 7))
     }
 
