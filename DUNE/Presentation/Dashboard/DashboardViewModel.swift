@@ -41,6 +41,7 @@ final class DashboardViewModel {
 
     private(set) var pinnedMetrics: [HealthMetric] = []
     private(set) var activeDaysThisWeek = 0
+    private(set) var isMirroredReadOnlyMode = false
     private let weeklyGoalDays = 5
     var weeklyGoalProgress: (completedDays: Int, goalDays: Int) {
         (completedDays: min(activeDaysThisWeek, weeklyGoalDays), goalDays: weeklyGoalDays)
@@ -142,6 +143,8 @@ final class DashboardViewModel {
     func loadData() async {
         guard !isLoading else { return }
         isLoading = true
+        let healthKitAvailable = await healthKitManager.isAvailable
+        isMirroredReadOnlyMode = !healthKitAvailable
         errorMessage = nil
         conditionScore = nil
         baselineStatus = nil
@@ -158,7 +161,7 @@ final class DashboardViewModel {
         if !authorizationChecked {
             if Self.shouldBypassAuthorizationForTests {
                 authorizationChecked = true
-            } else if await healthKitManager.isAvailable {
+            } else if healthKitAvailable {
                 do {
                     try await healthKitManager.requestAuthorization()
                     authorizationChecked = true
@@ -177,12 +180,12 @@ final class DashboardViewModel {
         let sharedSnapshot = await sharedHealthDataService?.fetchSnapshot()
 
         // Each fetch is independent — one failure should not block others (7 parallel)
-        async let hrvTask = safeHRVFetch(snapshot: sharedSnapshot)
-        async let sleepTask = safeSleepFetch(snapshot: sharedSnapshot)
-        async let exerciseTask = safeExerciseFetch()
-        async let stepsTask = safeStepsFetch()
-        async let weightTask = safeWeightFetch()
-        async let bmiTask = safeBMIFetch()
+        async let hrvTask = safeHRVFetch(snapshot: sharedSnapshot, canQueryHealthKit: healthKitAvailable)
+        async let sleepTask = safeSleepFetch(snapshot: sharedSnapshot, canQueryHealthKit: healthKitAvailable)
+        async let exerciseTask = safeExerciseFetch(canQueryHealthKit: healthKitAvailable)
+        async let stepsTask = safeStepsFetch(canQueryHealthKit: healthKitAvailable)
+        async let weightTask = safeWeightFetch(canQueryHealthKit: healthKitAvailable)
+        async let bmiTask = safeBMIFetch(canQueryHealthKit: healthKitAvailable)
         async let weatherTask = safeWeatherFetch()
 
         let (hrvResult, sleepResult, exerciseResult, stepsResult, weightResult, bmiResult, weatherResult) = await (
@@ -220,7 +223,10 @@ final class DashboardViewModel {
         isLoading = false
     }
 
-    private func safeHRVFetch(snapshot: SharedHealthSnapshot?) async -> (metrics: [HealthMetric], failed: Bool) {
+    private func safeHRVFetch(
+        snapshot: SharedHealthSnapshot?,
+        canQueryHealthKit: Bool
+    ) async -> (metrics: [HealthMetric], failed: Bool) {
         if let snapshot {
             let hrvRelatedSources: Set<SharedHealthSnapshot.Source> = [
                 .hrvSamples, .todayRHR, .yesterdayRHR, .latestRHR, .rhrCollection
@@ -228,6 +234,7 @@ final class DashboardViewModel {
             let failed = !snapshot.failedSources.isDisjoint(with: hrvRelatedSources)
             return (fetchHRVData(from: snapshot), failed)
         }
+        guard canQueryHealthKit else { return ([], false) }
 
         do { return (try await fetchHRVData(), false) }
         catch {
@@ -236,7 +243,10 @@ final class DashboardViewModel {
         }
     }
 
-    private func safeSleepFetch(snapshot: SharedHealthSnapshot?) async -> (metric: HealthMetric?, failed: Bool) {
+    private func safeSleepFetch(
+        snapshot: SharedHealthSnapshot?,
+        canQueryHealthKit: Bool
+    ) async -> (metric: HealthMetric?, failed: Bool) {
         if let snapshot {
             let sleepRelatedSources: Set<SharedHealthSnapshot.Source> = [
                 .todaySleepStages, .yesterdaySleepStages, .latestSleepStages, .sleepDailyDurations
@@ -244,6 +254,7 @@ final class DashboardViewModel {
             let failed = !snapshot.failedSources.isDisjoint(with: sleepRelatedSources)
             return (fetchSleepData(from: snapshot), failed)
         }
+        guard canQueryHealthKit else { return (nil, false) }
 
         do { return (try await fetchSleepData(), false) }
         catch {
@@ -252,7 +263,8 @@ final class DashboardViewModel {
         }
     }
 
-    private func safeExerciseFetch() async -> (metrics: [HealthMetric], failed: Bool) {
+    private func safeExerciseFetch(canQueryHealthKit: Bool) async -> (metrics: [HealthMetric], failed: Bool) {
+        guard canQueryHealthKit else { return ([], false) }
         do { return (try await fetchExerciseData(), false) }
         catch {
             AppLogger.ui.error("Exercise fetch failed: \(error.localizedDescription)")
@@ -260,7 +272,8 @@ final class DashboardViewModel {
         }
     }
 
-    private func safeStepsFetch() async -> (metric: HealthMetric?, failed: Bool) {
+    private func safeStepsFetch(canQueryHealthKit: Bool) async -> (metric: HealthMetric?, failed: Bool) {
+        guard canQueryHealthKit else { return (nil, false) }
         do { return (try await fetchStepsData(), false) }
         catch {
             AppLogger.ui.error("Steps fetch failed: \(error.localizedDescription)")
@@ -268,7 +281,8 @@ final class DashboardViewModel {
         }
     }
 
-    private func safeWeightFetch() async -> (metric: HealthMetric?, failed: Bool) {
+    private func safeWeightFetch(canQueryHealthKit: Bool) async -> (metric: HealthMetric?, failed: Bool) {
+        guard canQueryHealthKit else { return (nil, false) }
         do { return (try await fetchWeightData(), false) }
         catch {
             AppLogger.ui.error("Weight fetch failed: \(error.localizedDescription)")
@@ -276,7 +290,8 @@ final class DashboardViewModel {
         }
     }
 
-    private func safeBMIFetch() async -> (metric: HealthMetric?, failed: Bool) {
+    private func safeBMIFetch(canQueryHealthKit: Bool) async -> (metric: HealthMetric?, failed: Bool) {
+        guard canQueryHealthKit else { return (nil, false) }
         do { return (try await fetchBMIData(), false) }
         catch {
             AppLogger.ui.error("BMI fetch failed: \(error.localizedDescription)")
