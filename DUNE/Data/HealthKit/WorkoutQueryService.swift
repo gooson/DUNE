@@ -93,6 +93,9 @@ struct WorkoutQueryService: WorkoutQuerying, Sendable {
         let stepCount = workout.statistics(for: HKQuantityType(.stepCount))?
             .sumQuantity()?.doubleValue(for: .count())
 
+        // Flights climbed (barometric altimeter, 1 flight ≈ 3m)
+        let flightsClimbed = extractFlightsClimbed(workout)
+
         // Milestone detection
         let milestone = MilestoneDistance.detect(from: distance)
 
@@ -118,6 +121,7 @@ struct WorkoutQueryService: WorkoutQuerying, Sendable {
             weatherHumidity: humidity,
             isIndoor: isIndoor,
             stepCount: stepCount,
+            flightsClimbed: flightsClimbed,
             milestoneDistance: milestone
         )
     }
@@ -198,6 +202,13 @@ struct WorkoutQueryService: WorkoutQuerying, Sendable {
         }()
 
         return (temp, condition, humidity)
+    }
+
+    private func extractFlightsClimbed(_ workout: HKWorkout) -> Double? {
+        guard let flights = workout.statistics(for: HKQuantityType(.flightsClimbed))?
+            .sumQuantity()?.doubleValue(for: .count()),
+              flights > 0, flights.isFinite, flights < 10_000 else { return nil }
+        return flights
     }
 
     /// Validates heart rate is within physiological range (20-300 bpm).

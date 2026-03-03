@@ -11,6 +11,9 @@ struct ActivityView: View {
     @State private var showingPRInfo = false
     @State private var showingConsistencyInfo = false
     @State private var showingExerciseMixInfo = false
+    @State private var notificationWorkoutDestinationID: String?
+    @State private var notificationWorkoutLookup: [String: WorkoutSummary] = [:]
+    @State private var missingNotificationWorkoutID: String?
     @State private var syncToastMessage: String?
     @State private var syncToastDismissTask: Task<Void, Never>?
     @Environment(\.modelContext) private var modelContext
@@ -25,6 +28,8 @@ struct ActivityView: View {
     @State private var cachedInjuryConflicts: [InjuryConflict] = []
     private let conflictUseCase = CheckInjuryConflictUseCase()
     private let scrollToTopSignal: Int
+    private let notificationWorkoutID: String?
+    private let notificationRouteSignal: Int
 
     private enum ScrollAnchor: Hashable {
         case top
@@ -48,10 +53,18 @@ struct ActivityView: View {
         )
     }
 
-    init(sharedHealthDataService: SharedHealthDataService? = nil, scrollToTopSignal: Int = 0, refreshSignal: Int = 0) {
+    init(
+        sharedHealthDataService: SharedHealthDataService? = nil,
+        scrollToTopSignal: Int = 0,
+        refreshSignal: Int = 0,
+        notificationWorkoutID: String? = nil,
+        notificationRouteSignal: Int = 0
+    ) {
         _viewModel = State(initialValue: ActivityViewModel(sharedHealthDataService: sharedHealthDataService))
         self.scrollToTopSignal = scrollToTopSignal
         self.refreshSignal = refreshSignal
+        self.notificationWorkoutID = notificationWorkoutID
+        self.notificationRouteSignal = notificationRouteSignal
     }
 
     var body: some View {
@@ -118,8 +131,16 @@ struct ActivityView: View {
                             NavigationLink(value: ActivityDetailDestination.personalRecords) {
                                 PersonalRecordsSection(
                                     records: viewModel.personalRecords,
-                                    notice: viewModel.personalRecordNotice
+                                    notice: viewModel.personalRecordNotice,
+                                    rewardSummary: viewModel.workoutRewardSummary
                                 )
+                            }
+                            .buttonStyle(.plain)
+                        }
+
+                        SectionGroup(title: "Achievement History", icon: "medal.fill", iconColor: DS.Color.activity) {
+                            NavigationLink(value: ActivityDetailDestination.personalRecords) {
+                                AchievementHistoryPreview(events: viewModel.workoutRewardHistory)
                             }
                             .buttonStyle(.plain)
                         }
@@ -226,7 +247,9 @@ struct ActivityView: View {
             case .personalRecords:
                 PersonalRecordsDetailView(
                     records: viewModel.personalRecords,
-                    notice: viewModel.personalRecordNotice
+                    notice: viewModel.personalRecordNotice,
+                    rewardSummary: viewModel.workoutRewardSummary,
+                    rewardHistory: viewModel.workoutRewardHistory
                 )
             case .consistency:
                 ConsistencyDetailView()
@@ -242,6 +265,16 @@ struct ActivityView: View {
             case .weeklyStats:
                 WeeklyStatsDetailView()
             }
+        }
+        .navigationDestination(item: $notificationWorkoutDestinationID) { workoutID in
+            if let workout = notificationWorkoutLookup[workoutID] {
+                HealthKitWorkoutDetailView(workout: workout)
+            } else {
+                NotificationTargetNotFoundView(workoutID: workoutID)
+            }
+        }
+        .navigationDestination(item: $missingNotificationWorkoutID) { workoutID in
+            NotificationTargetNotFoundView(workoutID: workoutID)
         }
         .sheet(isPresented: $showingPRInfo) {
             PersonalRecordsInfoSheet()
@@ -261,6 +294,9 @@ struct ActivityView: View {
         .task(id: refreshSignal) {
             await viewModel.loadActivityData()
             recomputeInjuryConflicts()
+        }
+        .task(id: notificationRouteSignal) {
+            await handleExternalNotificationRoute()
         }
         // Coalesce frequent SwiftData sync updates into a cancellable/debounced derived-state refresh.
         .task(id: recordsUpdateKey) {
@@ -381,6 +417,30 @@ struct ActivityView: View {
         }
     }
 
+    private func handleExternalNotificationRoute() async {
+        guard notificationRouteSignal > 0,
+              let targetWorkoutID = notificationWorkoutID,
+              !targetWorkoutID.isEmpty else {
+            return
+        }
+
+        if let current = viewModel.recentWorkouts.first(where: { $0.id == targetWorkoutID }) {
+            notificationWorkoutLookup[targetWorkoutID] = current
+            notificationWorkoutDestinationID = targetWorkoutID
+            return
+        }
+
+        // Retry once after forcing a refresh to absorb timing gaps on cold launch.
+        await viewModel.loadActivityData()
+
+        if let refreshed = viewModel.recentWorkouts.first(where: { $0.id == targetWorkoutID }) {
+            notificationWorkoutLookup[targetWorkoutID] = refreshed
+            notificationWorkoutDestinationID = targetWorkoutID
+        } else {
+            missingNotificationWorkoutID = targetWorkoutID
+        }
+    }
+
     private var recentExerciseIDs: [String] {
         var seen = Set<String>()
         return recentRecords.compactMap { record in
@@ -411,6 +471,70 @@ struct ActivityView: View {
             .filter { !existing.contains($0) }
             .prefix(limit - ranked.count)
         return ranked + fallback
+    }
+}
+
+private struct AchievementHistoryPreview: View {
+    let events: [WorkoutRewardEvent]
+
+    private var previewEvents: [WorkoutRewardEvent] {
+        Array(events.prefix(3))
+    }
+
+    var body: some View {
+        StandardCard {
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                if previewEvents.isEmpty {
+                    Text("No achievements yet. Complete workouts to unlock milestones, badges, and levels.")
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
+                } else {
+                    ForEach(previewEvents) { event in
+                        HStack(spacing: DS.Spacing.xs) {
+                            Image(systemName: iconName(for: event.kind))
+                                .font(.caption2)
+                                .foregroundStyle(color(for: event.kind))
+                                .frame(width: 16)
+
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(event.title)
+                                    .font(.caption.weight(.semibold))
+                                    .foregroundStyle(DS.Color.textSecondary)
+                                    .lineLimit(1)
+                                Text(event.detail)
+                                    .font(.caption2)
+                                    .foregroundStyle(.tertiary)
+                                    .lineLimit(1)
+                            }
+
+                            Spacer(minLength: 0)
+
+                            Text(event.date, style: .date)
+                                .font(.caption2)
+                                .foregroundStyle(.tertiary)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private func iconName(for kind: WorkoutRewardEventKind) -> String {
+        switch kind {
+        case .milestone: "flag.checkered.circle.fill"
+        case .personalRecord: "trophy.fill"
+        case .badgeUnlocked: "medal.fill"
+        case .levelUp: "star.circle.fill"
+        }
+    }
+
+    private func color(for kind: WorkoutRewardEventKind) -> Color {
+        switch kind {
+        case .milestone: DS.Color.activity
+        case .personalRecord: .orange
+        case .badgeUnlocked: .yellow
+        case .levelUp: .mint
+        }
     }
 }
 

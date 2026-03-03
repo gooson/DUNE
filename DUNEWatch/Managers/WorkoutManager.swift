@@ -63,6 +63,9 @@ final class WorkoutManager: NSObject {
     /// Total distance in meters (cardio mode only).
     private(set) var distance: Double = 0
 
+    /// Total steps in current session.
+    private(set) var steps: Double = 0
+
     /// Current pace in seconds per kilometer (cardio mode only).
     private(set) var currentPace: Double = 0
 
@@ -81,6 +84,9 @@ final class WorkoutManager: NSObject {
         guard estimatedMaxHR > 0 else { return 0 }
         return min(heartRate / estimatedMaxHR, 1.0)
     }
+
+    /// Total flights (floors) climbed (stair climber mode only).
+    private(set) var floorsClimbed: Double = 0
 
     /// Running samples for average HR calculation.
     private var heartRateSamples: [Double] = []
@@ -182,10 +188,12 @@ final class WorkoutManager: NSObject {
         let readTypes: Set<HKObjectType> = [
             HKQuantityType(.heartRate),
             HKQuantityType(.activeEnergyBurned),
+            HKQuantityType(.stepCount),
             HKQuantityType(.distanceWalkingRunning),
             HKQuantityType(.distanceCycling),
             HKQuantityType(.distanceSwimming),
-            HKCharacteristicType(.dateOfBirth)
+            HKCharacteristicType(.dateOfBirth),
+            HKQuantityType(.flightsClimbed)
         ]
 
         Self.logger.info("Requesting HealthKit authorization for workout session")
@@ -239,7 +247,9 @@ final class WorkoutManager: NSObject {
     func startCardioSession(activityType: WorkoutActivityType, isOutdoor: Bool) async throws {
         let previousMode = workoutMode
         let previousDistance = distance
+        let previousSteps = steps
         let previousPace = currentPace
+        let previousFloors = floorsClimbed
         let previousTemplateSnapshot = templateSnapshot
         let previousExerciseIndex = currentExerciseIndex
         let previousSetIndex = currentSetIndex
@@ -248,7 +258,9 @@ final class WorkoutManager: NSObject {
 
         self.workoutMode = .cardio(activityType: activityType, isOutdoor: isOutdoor)
         self.distance = 0
+        self.steps = 0
         self.currentPace = 0
+        self.floorsClimbed = 0
         // templateSnapshot is nil for cardio — no set/exercise tracking needed
         self.templateSnapshot = nil
         self.completedSetsData = []
@@ -266,7 +278,9 @@ final class WorkoutManager: NSObject {
             // Restore state on failure to prevent inconsistent workoutMode
             workoutMode = previousMode
             distance = previousDistance
+            steps = previousSteps
             currentPace = previousPace
+            floorsClimbed = previousFloors
             templateSnapshot = previousTemplateSnapshot
             currentExerciseIndex = previousExerciseIndex
             currentSetIndex = previousSetIndex
@@ -285,6 +299,7 @@ final class WorkoutManager: NSObject {
         self.completedSetsData = Array(repeating: [], count: snapshot.entries.count)
         self.extraSetsPerExercise = [:]
         self.distance = 0
+        self.steps = 0
         self.currentPace = 0
 
         let config = HKWorkoutConfiguration()
@@ -297,6 +312,7 @@ final class WorkoutManager: NSObject {
     /// Common HK session setup shared by strength and cardio flows.
     private func startHKSession(config: HKWorkoutConfiguration, templateName: String) async throws {
         self.heartRateSamples = []
+        self.steps = 0
         self.isSessionEnded = false
         self.isFinalizingWorkout = false
         self.finalizationTimeoutTask?.cancel()
@@ -496,6 +512,7 @@ final class WorkoutManager: NSObject {
         heartRate = 0
         activeCalories = 0
         distance = 0
+        steps = 0
         currentPace = 0
         estimatedMaxHR = HeartRateZoneCalculator.defaultMaxHR
         heartRateSamples = []
@@ -544,7 +561,7 @@ final class WorkoutManager: NSObject {
         }
     }
 
-    /// Restores distance metric from builder statistics after crash recovery.
+    /// Restores distance and floors metrics from builder statistics after crash recovery.
     @MainActor
     private func restoreDistanceFromBuilder(_ builder: HKLiveWorkoutBuilder) {
         let distanceTypes: [HKQuantityType] = [
@@ -563,6 +580,13 @@ final class WorkoutManager: NSObject {
                 updatePace()
                 break
             }
+        }
+
+        // Restore flights climbed for stair workouts
+        if let stats = builder.statistics(for: HKQuantityType(.flightsClimbed)),
+           let floors = stats.sumQuantity()?.doubleValue(for: .count()),
+           floors > 0, floors.isFinite, floors < 10_000 {
+            floorsClimbed = floors
         }
     }
 
@@ -760,6 +784,8 @@ extension WorkoutManager: HKLiveWorkoutBuilderDelegate {
         var heartRateValue: Double?
         var caloriesValue: Double?
         var distanceValue: Double?
+        var floorsValue: Double?
+        var stepValue: Double?
 
         for type in collectedTypes {
             guard let quantityType = type as? HKQuantityType,
@@ -788,6 +814,18 @@ extension WorkoutManager: HKLiveWorkoutBuilderDelegate {
                     distanceValue = meters
                 }
 
+            case HKQuantityType(.flightsClimbed):
+                let floors = stats.sumQuantity()?.doubleValue(for: .count()) ?? 0
+                if floors > 0, floors.isFinite, floors < 10_000 {
+                    floorsValue = floors
+                }
+
+            case HKQuantityType(.stepCount):
+                let totalSteps = stats.sumQuantity()?.doubleValue(for: .count()) ?? 0
+                if totalSteps >= 0, totalSteps < 200_000 {
+                    stepValue = totalSteps
+                }
+
             default:
                 break
             }
@@ -805,6 +843,12 @@ extension WorkoutManager: HKLiveWorkoutBuilderDelegate {
             if let meters = distanceValue {
                 distance = meters
                 updatePace()
+            }
+            if let floors = floorsValue {
+                floorsClimbed = floors
+            }
+            if let totalSteps = stepValue {
+                steps = totalSteps
             }
         }
     }

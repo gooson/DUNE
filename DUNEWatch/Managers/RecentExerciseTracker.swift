@@ -13,6 +13,19 @@ enum RecentExerciseTracker {
     private static let latestSetByCanonicalKey = "\(baseKey).latestSetByCanonical"
     private static let maxEntries = 50
 
+    /// Curated default popular exercises shown when user has no history.
+    /// Mirror of QuickStartPopularityService.defaultPopularExerciseIDs (iOS-only file).
+    static let defaultPopularExerciseIDs: [String] = [
+        "barbell-squat",
+        "barbell-bench-press",
+        "conventional-deadlift",
+        "pull-up",
+        "overhead-press",
+        "barbell-row",
+        "running",
+        "stair-climber",
+    ]
+
     private static let leadingPrefixes = [
         "tempo-",
         "paused-",
@@ -253,10 +266,22 @@ enum RecentExerciseTracker {
         var results = Array(ranked.prefix(limit))
         if results.count < limit {
             let existingCanonical = Set(results.map { canonicalExerciseID(exerciseID: $0.id) })
-            let fallback = sorted(exercises).filter {
-                !existingCanonical.contains(canonicalExerciseID(exerciseID: $0.id))
+            let exerciseByID = Dictionary(
+                exercises.map { ($0.id, $0) },
+                uniquingKeysWith: { first, _ in first }
+            )
+            // Prefer curated defaults over alphabetical fallback
+            let curatedFallback = defaultPopularExerciseIDs.compactMap { exerciseByID[$0] }
+                .filter { !existingCanonical.contains(canonicalExerciseID(exerciseID: $0.id)) }
+            results.append(contentsOf: curatedFallback.prefix(limit - results.count))
+            // Fill remaining with alphabetical if still not enough
+            if results.count < limit {
+                let updatedCanonical = Set(results.map { canonicalExerciseID(exerciseID: $0.id) })
+                let alphabetical = sorted(exercises).filter {
+                    !updatedCanonical.contains(canonicalExerciseID(exerciseID: $0.id))
+                }
+                results.append(contentsOf: alphabetical.prefix(limit - results.count))
             }
-            results.append(contentsOf: fallback.prefix(limit - results.count))
         }
         return results
     }

@@ -306,11 +306,16 @@ struct ExerciseView: View {
             guard let id = record.exerciseDefinitionID else { return nil }
             return .init(exerciseDefinitionID: id, date: record.date)
         }
-        return QuickStartPopularityService.popularExerciseIDs(
+        let historyBased = QuickStartPopularityService.popularExerciseIDs(
             from: usages,
             limit: 10,
             canonicalize: QuickStartCanonicalService.canonicalExerciseID(for:)
         )
+        // Correction #189: fallback to curated defaults when history is insufficient
+        guard !historyBased.isEmpty else {
+            return QuickStartPopularityService.defaultPopularExerciseIDs
+        }
+        return historyBased
     }
 
     private func deleteHealthKitWorkout(_ workout: WorkoutSummary) {

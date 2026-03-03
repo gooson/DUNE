@@ -1,6 +1,7 @@
 import SwiftUI
 import SwiftData
 import HealthKit
+import UserNotifications
 
 @main
 struct DUNEApp: App {
@@ -15,8 +16,9 @@ struct DUNEApp: App {
     let modelContainer: ModelContainer
     private let sharedHealthDataService: SharedHealthDataService
     private let refreshCoordinator: AppRefreshCoordinating
-    private let observerManager: HealthKitObserverManager
+    private let observerManager: HealthKitObserverManager?
     private let notificationService: any NotificationService
+    private let notificationCenterDelegate: AppNotificationCenterDelegate
     private static let minimumLaunchSplashDuration: Duration = .seconds(1)
     private static let launchSplashResolveDuration: Duration = .milliseconds(700)
 
@@ -66,7 +68,7 @@ struct DUNEApp: App {
 
     private static func makeModelContainer(configuration: ModelConfiguration) throws -> ModelContainer {
         try ModelContainer(
-            for: ExerciseRecord.self, BodyCompositionRecord.self, WorkoutSet.self, CustomExercise.self, WorkoutTemplate.self, UserCategory.self, InjuryRecord.self, ExerciseDefaultRecord.self, HabitDefinition.self, HabitLog.self,
+            for: ExerciseRecord.self, BodyCompositionRecord.self, WorkoutSet.self, CustomExercise.self, WorkoutTemplate.self, UserCategory.self, InjuryRecord.self, ExerciseDefaultRecord.self, HabitDefinition.self, HabitLog.self, HealthSnapshotMirrorRecord.self,
             migrationPlan: AppMigrationPlan.self,
             configurations: configuration
         )
@@ -87,24 +89,6 @@ struct DUNEApp: App {
             UserDefaults.standard.set(forcedTheme.rawValue, forKey: "com.dune.app.theme")
             _selectedTheme = AppStorage(wrappedValue: forcedTheme, "com.dune.app.theme")
         }
-
-        let sharedService: SharedHealthDataService = SharedHealthDataServiceImpl(healthKitManager: .shared)
-        self.sharedHealthDataService = sharedService
-        let coordinator = AppRefreshCoordinatorImpl(sharedHealthDataService: sharedService)
-        self.refreshCoordinator = coordinator
-
-        let notifService = NotificationServiceImpl()
-        self.notificationService = notifService
-        let hkStore = HKHealthStore()
-        let evaluator = BackgroundNotificationEvaluator(
-            store: hkStore,
-            notificationService: notifService
-        )
-        self.observerManager = HealthKitObserverManager(
-            store: hkStore,
-            coordinator: coordinator,
-            notificationEvaluator: evaluator
-        )
         let cloudSyncEnabled = UserDefaults.standard.bool(forKey: "isCloudSyncEnabled")
         let config = ModelConfiguration(
             cloudKitDatabase: (cloudSyncEnabled && !Self.isRunningXCTest) ? .automatic : .none
@@ -121,6 +105,44 @@ struct DUNEApp: App {
                 AppLogger.data.error("ModelContainer retry failed: \(error)")
                 modelContainer = Self.makeInMemoryFallbackContainer()
             }
+        }
+
+        let healthKitAvailable = HKHealthStore.isHealthDataAvailable()
+        let sharedService: SharedHealthDataService
+        if healthKitAvailable {
+            let baseSharedService: SharedHealthDataService = SharedHealthDataServiceImpl(healthKitManager: .shared)
+            let mirrorStore: HealthSnapshotMirroring = HealthSnapshotMirrorStore(modelContainer: modelContainer)
+            sharedService = MirroringSharedHealthDataService(
+                baseService: baseSharedService,
+                mirrorStore: mirrorStore
+            )
+        } else {
+            AppLogger.healthKit.info("HealthKit unavailable. Falling back to cloud mirrored snapshot service.")
+            sharedService = CloudMirroredSharedHealthDataService(modelContainer: modelContainer)
+        }
+        self.sharedHealthDataService = sharedService
+
+        let coordinator = AppRefreshCoordinatorImpl(sharedHealthDataService: sharedService)
+        self.refreshCoordinator = coordinator
+
+        let notifService = NotificationServiceImpl()
+        self.notificationService = notifService
+        self.notificationCenterDelegate = AppNotificationCenterDelegate()
+        UNUserNotificationCenter.current().delegate = notificationCenterDelegate
+
+        if healthKitAvailable {
+            let hkStore = HKHealthStore()
+            let evaluator = BackgroundNotificationEvaluator(
+                store: hkStore,
+                notificationService: notifService
+            )
+            self.observerManager = HealthKitObserverManager(
+                store: hkStore,
+                coordinator: coordinator,
+                notificationEvaluator: evaluator
+            )
+        } else {
+            self.observerManager = nil
         }
     }
 
@@ -207,7 +229,7 @@ struct DUNEApp: App {
         if !Self.isRunningXCTest {
             WatchSessionManager.shared.syncWorkoutTemplatesToWatch(using: modelContainer.mainContext)
             WatchSessionManager.shared.activate()
-            observerManager.startObserving()
+            observerManager?.startObserving()
 
             // Request notification authorization (non-blocking)
             Task {

@@ -4,6 +4,7 @@ import SwiftUI
 struct PersonalRecordsSection: View {
     let records: [ActivityPersonalRecord]
     let notice: String?
+    let rewardSummary: WorkoutRewardSummary?
 
     @Environment(\.appTheme) private var theme
 
@@ -18,6 +19,10 @@ struct PersonalRecordsSection: View {
         } else {
             StandardCard {
                 VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                    if let rewardSummary, rewardSummary.totalPoints > 0 || rewardSummary.badgeCount > 0 {
+                        rewardSummaryRow(rewardSummary)
+                    }
+
                     LazyVGrid(columns: columns, spacing: DS.Spacing.sm) {
                         ForEach(records.prefix(8)) { record in
                             prCard(record)
@@ -39,6 +44,27 @@ struct PersonalRecordsSection: View {
                     }
                 }
             }
+        }
+    }
+
+    private func rewardSummaryRow(_ summary: WorkoutRewardSummary) -> some View {
+        HStack(spacing: DS.Spacing.xs) {
+            Label("Lv \(summary.level)", systemImage: "star.circle.fill")
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(.white)
+                .padding(.horizontal, 8)
+                .padding(.vertical, 4)
+                .background(DS.Color.activity, in: Capsule())
+
+            Label("\(summary.badgeCount.formatted()) badges", systemImage: "medal.fill")
+                .font(.caption2)
+                .foregroundStyle(DS.Color.textSecondary)
+
+            Spacer(minLength: 0)
+
+            Text("\(summary.totalPoints.formatted()) pts")
+                .font(.caption2.weight(.semibold))
+                .foregroundStyle(.tertiary)
         }
     }
 

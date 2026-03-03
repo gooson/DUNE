@@ -32,6 +32,14 @@ final class DashboardSmokeTests: UITestBaseCase {
         )
     }
 
+    func testNotificationButtonExists() throws {
+        navigateToDashboard()
+        XCTAssertTrue(
+            elementExists(AXID.dashboardToolbarNotifications),
+            "Notification toolbar button should exist"
+        )
+    }
+
     func testNavigateToSettings() throws {
         navigateToSettings()
         let title = app.navigationBars["Settings"]

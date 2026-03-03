@@ -12,6 +12,9 @@ struct ContentView: View {
     @State private var lifeScrollToTopSignal = 0
     @State private var refreshSignal = 0
     @State private var foregroundTask: Task<Void, Never>?
+    @State private var notificationOpenWorkoutID: String?
+    @State private var notificationRouteSignal = 0
+    private let notificationInboxManager = NotificationInboxManager.shared
 
     init(
         sharedHealthDataService: SharedHealthDataService? = nil,
@@ -42,7 +45,9 @@ struct ContentView: View {
                     ActivityView(
                         sharedHealthDataService: sharedHealthDataService,
                         scrollToTopSignal: activityScrollToTopSignal,
-                        refreshSignal: refreshSignal
+                        refreshSignal: refreshSignal,
+                        notificationWorkoutID: notificationOpenWorkoutID,
+                        notificationRouteSignal: notificationRouteSignal
                     )
                 }
                 .environment(\.wavePreset, .train)
@@ -91,11 +96,21 @@ struct ContentView: View {
                 }
             }
         }
+        .onReceive(NotificationCenter.default.publisher(for: NotificationInboxManager.routeRequestedNotification)) { notification in
+            guard let request = NotificationInboxManager.navigationRequest(from: notification) else { return }
+            handleNotificationNavigationRequest(request)
+            notificationInboxManager.clearPendingNavigationRequest(ifMatching: request)
+        }
         // Listen for refresh signals from coordinator (foreground + HK observer triggers)
         .task {
             guard let coordinator = refreshCoordinator else { return }
             for await _ in coordinator.refreshNeededStream {
                 refreshSignal += 1
+            }
+        }
+        .task {
+            if let request = notificationInboxManager.consumePendingNavigationRequest() {
+                handleNotificationNavigationRequest(request)
             }
         }
     }
@@ -119,6 +134,16 @@ struct ContentView: View {
                 selectedSection = newValue
             }
         )
+    }
+
+    private func handleNotificationNavigationRequest(_ request: NotificationNavigationRequest) {
+        switch request.route.destination {
+        case .workoutDetail:
+            guard let workoutID = request.route.workoutID, !workoutID.isEmpty else { return }
+            selectedSection = .train
+            notificationOpenWorkoutID = workoutID
+            notificationRouteSignal += 1
+        }
     }
 }
 

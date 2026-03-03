@@ -171,6 +171,24 @@ struct CardioSessionView: View {
 
     private var secondaryMetrics: some View {
         HStack(spacing: DS.Spacing.xl) {
+            if viewModel.activityType == .walking {
+                VStack(spacing: DS.Spacing.xxs) {
+                    Image(systemName: "figure.walk")
+                        .font(.caption)
+                        .foregroundStyle(DS.Color.steps)
+                    Text(viewModel.walkingStepCount > 0
+                        ? "\(Int(viewModel.walkingStepCount))"
+                        : "--")
+                        .font(.title3.monospacedDigit().bold())
+                        .contentTransition(.numericText())
+                        .animation(.default, value: Int(viewModel.walkingStepCount))
+                    Text("steps")
+                        .font(.caption2)
+                        .foregroundStyle(DS.Color.textTertiary)
+                }
+                .frame(maxWidth: .infinity)
+            }
+
             VStack(spacing: DS.Spacing.xxs) {
                 Image(systemName: "flame.fill")
                     .font(.caption)

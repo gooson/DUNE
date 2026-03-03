@@ -591,6 +591,40 @@ struct DashboardViewModelVitalCardTests {
         #expect(categories.contains(.exercise))
     }
 
+    @Test("Walking step card is added when walking workout exists")
+    func walkingStepCardAdded() async {
+        let now = Date()
+        let workout = MockWorkoutService(workouts: [
+            WorkoutSummary(
+                id: "w-walking",
+                type: "Walking",
+                activityType: .walking,
+                duration: 2400,
+                calories: 180,
+                distance: 2_100,
+                date: now,
+                stepCount: 3_245
+            )
+        ])
+
+        let vm = DashboardViewModel(
+            hrvService: MockHRVService(),
+            sleepService: MockSleepService(),
+            workoutService: workout,
+            stepsService: MockStepsService(),
+            bodyService: MockBodyService(),
+            pinnedMetricsStore: makePinnedStore([])
+        )
+
+        await vm.loadData()
+
+        let walkingCard = vm.activityCards.first { $0.id == "exercise-walking-steps" }
+        #expect(walkingCard != nil)
+        #expect(walkingCard?.title == "Walking")
+        #expect(walkingCard?.unit == "steps")
+        #expect(walkingCard?.value == "3,245")
+    }
+
     @Test("Body cards contain weight and BMI")
     func bodyCardsContainWeightAndBMI() async {
         let today = Date()
