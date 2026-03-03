@@ -245,20 +245,20 @@ struct DashboardView: View {
     }
 
     private var notificationBellIcon: some View {
-        ZStack(alignment: .topTrailing) {
-            Image(systemName: "bell")
-
-            if unreadNotificationCount > 0 {
-                Text(unreadBadgeLabel)
-                    .font(.system(size: 9, weight: .bold))
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, 5)
-                    .padding(.vertical, 2)
-                    .background(Color.red, in: Capsule())
-                    .offset(x: 8, y: -8)
-                    .accessibilityLabel("\(unreadNotificationCount.formatted()) unread notifications")
+        Image(systemName: "bell")
+            .frame(width: 22, height: 22)
+            .overlay(alignment: .topTrailing) {
+                if unreadNotificationCount > 0 {
+                    Text(unreadBadgeLabel)
+                        .font(.system(size: 9, weight: .bold))
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 5)
+                        .padding(.vertical, 2)
+                        .background(Color.red, in: Capsule())
+                        .offset(x: 6)
+                        .accessibilityLabel("\(unreadNotificationCount.formatted()) unread notifications")
+                }
             }
-        }
     }
 
     private var unreadBadgeLabel: String {

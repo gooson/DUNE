@@ -5,6 +5,7 @@ import XCTest
 enum AXID {
     // MARK: - Dashboard Tab (active: hero, settings, pinned-edit)
     static let dashboardHeroCondition = "dashboard-hero-condition"
+    static let dashboardToolbarNotifications = "dashboard-toolbar-notifications"
     static let dashboardToolbarSettings = "dashboard-toolbar-settings"
     static let dashboardPinnedEdit = "dashboard-pinned-edit"
     // Planned — identifiers not yet applied to views
