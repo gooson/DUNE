@@ -95,6 +95,7 @@ private struct HabitListQueryView: View {
         filter: #Predicate<HabitDefinition> { !$0.isArchived },
         sort: \HabitDefinition.sortOrder
     ) private var habits: [HabitDefinition]
+    @Query(sort: \ExerciseRecord.date, order: .reverse) private var exerciseRecords: [ExerciseRecord]
 
     @Bindable var viewModel: LifeViewModel
 
@@ -107,45 +108,53 @@ private struct HabitListQueryView: View {
     @State private var cachedTodayExerciseExists = false
 
     var body: some View {
-        if habits.isEmpty {
-            EmptyStateView(
-                icon: "checklist",
-                title: "No Habits Yet",
-                message: "Add your first habit to start tracking your daily routine.",
-                actionTitle: "Add Habit",
-                action: {
-                    viewModel.resetForm()
-                    viewModel.isShowingAddSheet = true
-                }
-            )
-        } else {
-            // Hero: completion rate
-            heroSection
-                .accessibilityIdentifier("life-hero-progress")
+        VStack(alignment: .leading, spacing: DS.Spacing.lg) {
+            autoAchievementsSection
 
-            // Habit rows
-            ForEach(viewModel.habitProgresses) { progress in
-                HabitRowView(
-                    progress: progress,
-                    onToggle: { toggleCheck(habitId: progress.id) },
-                    onUpdateValue: { value in updateValue(habitId: progress.id, value: value) }
-                )
-                .contextMenu {
-                    Button {
-                        if let habit = habitsByID[progress.id] {
-                            viewModel.startEditing(habit)
-                        }
-                    } label: {
-                        Label("Edit", systemImage: "pencil")
+            if habits.isEmpty {
+                EmptyStateView(
+                    icon: "checklist",
+                    title: "No Habits Yet",
+                    message: "Add your first habit to start tracking your daily routine.",
+                    actionTitle: "Add Habit",
+                    action: {
+                        viewModel.resetForm()
+                        viewModel.isShowingAddSheet = true
                     }
-                    Button(role: .destructive) {
-                        if let habit = habitsByID[progress.id] {
-                            withAnimation {
-                                habit.isArchived = true
+                )
+            } else {
+                // Hero: completion rate
+                heroSection
+                    .accessibilityIdentifier("life-hero-progress")
+
+                Text("My Habits")
+                    .font(.headline)
+                    .foregroundStyle(.primary)
+
+                // Habit rows
+                ForEach(viewModel.habitProgresses) { progress in
+                    HabitRowView(
+                        progress: progress,
+                        onToggle: { toggleCheck(habitId: progress.id) },
+                        onUpdateValue: { value in updateValue(habitId: progress.id, value: value) }
+                    )
+                    .contextMenu {
+                        Button {
+                            if let habit = habitsByID[progress.id] {
+                                viewModel.startEditing(habit)
                             }
+                        } label: {
+                            Label("Edit", systemImage: "pencil")
                         }
-                    } label: {
-                        Label("Archive", systemImage: "archivebox")
+                        Button(role: .destructive) {
+                            if let habit = habitsByID[progress.id] {
+                                withAnimation {
+                                    habit.isArchived = true
+                                }
+                            }
+                        } label: {
+                            Label("Archive", systemImage: "archivebox")
+                        }
                     }
                 }
             }
@@ -159,6 +168,9 @@ private struct HabitListQueryView: View {
             .onChange(of: habits.count) { _, _ in
                 recalculate()
             }
+            .onChange(of: autoAchievementInputSignature) { _, _ in
+                recalculate()
+            }
             .onChange(of: viewModel.isShowingEditSheet) { old, new in
                 // Recalculate when edit sheet dismisses (habit properties may have changed)
                 if old, !new { recalculate() }
@@ -169,6 +181,89 @@ private struct HabitListQueryView: View {
             .onAppear {
                 recalculate()
             }
+    }
+
+    private var autoAchievementInputSignature: Int {
+        var hasher = Hasher()
+        hasher.combine(exerciseRecords.count)
+        for record in exerciseRecords.prefix(200) {
+            hasher.combine(record.id)
+            hasher.combine(record.healthKitWorkoutID ?? "")
+            hasher.combine(record.isFromHealthKit)
+            hasher.combine(record.exerciseDefinitionID ?? "")
+            hasher.combine(record.exerciseType)
+            hasher.combine(record.distance ?? -1)
+            hasher.combine(record.hasSetData)
+        }
+        return hasher.finalize()
+    }
+
+    // MARK: - Auto Achievements
+
+    private var autoAchievementsSection: some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            Text("Auto Workout Achievements")
+                .font(.headline)
+                .foregroundStyle(.primary)
+            Text("HealthKit-based weekly goals (Mon-Sun)")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+            if viewModel.autoExerciseProgresses.isEmpty {
+                StandardCard {
+                    Text("No HealthKit-linked workouts yet")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+            } else {
+                ForEach(viewModel.autoExerciseProgresses) { progress in
+                    autoAchievementRow(progress)
+                }
+            }
+        }
+    }
+
+    private func autoAchievementRow(_ progress: LifeAutoAchievementProgress) -> some View {
+        StandardCard {
+            VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                HStack(spacing: DS.Spacing.sm) {
+                    Text(progress.title)
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+
+                    Spacer()
+
+                    if progress.streakWeeks > 0 {
+                        HStack(spacing: DS.Spacing.xxs) {
+                            Image(systemName: "flame.fill")
+                                .font(.caption2)
+                            Text("\(progress.streakWeeks)")
+                                .font(.caption2)
+                                .fontWeight(.semibold)
+                        }
+                        .foregroundStyle(theme.accentColor)
+                    }
+                }
+
+                ProgressView(value: progress.progressRatio)
+                    .tint(progress.isCompleted ? DS.Color.positive : theme.accentColor)
+
+                HStack(spacing: DS.Spacing.sm) {
+                    Text(progress.progressText)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .monospacedDigit()
+
+                    Spacer()
+
+                    if progress.isCompleted {
+                        Label("Done", systemImage: "checkmark.circle.fill")
+                            .font(.caption2)
+                            .foregroundStyle(DS.Color.positive)
+                    }
+                }
+            }
+        }
     }
 
     // MARK: - Hero
@@ -274,6 +369,9 @@ private struct HabitListQueryView: View {
         viewModel.calculateProgresses(
             habits: habits,
             todayExerciseExists: cachedTodayExerciseExists
+        )
+        viewModel.calculateAutoExerciseProgresses(
+            exerciseRecords: exerciseRecords
         )
     }
 }
