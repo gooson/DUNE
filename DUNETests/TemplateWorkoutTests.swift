@@ -47,20 +47,20 @@ struct TemplateWorkoutConfigTests {
         ]
         let config = TemplateWorkoutConfig(
             templateName: "Push Day",
-            entries: entries,
-            exercises: exercises
+            exercises: exercises,
+            templateEntries: entries
         )
         #expect(config.templateName == "Push Day")
         #expect(config.exercises.count == 2)
-        #expect(config.entries.count == 2)
+        #expect(config.templateEntries.count == 2)
     }
 
     @Test("Config has unique ID")
     func configHasUniqueID() {
         let exercises = [makeExercise()]
         let entries = [makeEntry()]
-        let config1 = TemplateWorkoutConfig(templateName: "A", entries: entries, exercises: exercises)
-        let config2 = TemplateWorkoutConfig(templateName: "A", entries: entries, exercises: exercises)
+        let config1 = TemplateWorkoutConfig(templateName: "A", exercises: exercises, templateEntries: entries)
+        let config2 = TemplateWorkoutConfig(templateName: "A", exercises: exercises, templateEntries: entries)
         #expect(config1.id != config2.id)
     }
 }
