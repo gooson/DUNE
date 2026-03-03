@@ -316,6 +316,57 @@
         }
       }
     },
+    "%@ is due in %lld days" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ は%lld日後が期限です"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@이(가) %lld일 후 예정입니다"
+          }
+        }
+      }
+    },
+    "%@ is due in 1 day" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ は1日後が期限です"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@이(가) 1일 후 예정입니다"
+          }
+        }
+      }
+    },
+    "%@ is due today" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ は今日が期限です"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@이(가) 오늘 예정입니다"
+          }
+        }
+      }
+    },
     "%@ is strong — %@ needs attention" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -914,6 +965,23 @@
         }
       }
     },
+    "%lld days per week" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "週%lld日"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주 %lld일"
+          }
+        }
+      }
+    },
     "%lld days since your last workout" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1080,6 +1148,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "오늘 %lld걸음"
+          }
+        }
+      }
+    },
+    "%lld/%lld done" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld/%lld 完了"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld/%lld 완료"
           }
         }
       }
@@ -2412,6 +2497,23 @@
       "extractionState" : "manual",
       "shouldTranslate" : false
     },
+    "Arms" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "腕"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "팔"
+          }
+        }
+      }
+    },
     "Arms 3x / week" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3070,6 +3172,7 @@
       }
     },
     "Best streak %@w" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -3086,6 +3189,7 @@
       }
     },
     "Best streak %lldw" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -4383,6 +4487,23 @@
         }
       }
     },
+    "Complete once per cycle" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "サイクルごとに1回達成"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주기마다 1회 완료"
+          }
+        }
+      }
+    },
     "Complete once per day" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -4461,6 +4582,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "첫 운동을 완료하면 통계를 확인할 수 있어요."
+          }
+        }
+      }
+    },
+    "Completed" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完了"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "완료됨"
           }
         }
       }
@@ -5628,6 +5766,23 @@
         }
       }
     },
+    "Done · Next %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完了 · 次回 %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "완료 · 다음 %@"
+          }
+        }
+      }
+    },
     "Done or not done" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -5674,6 +5829,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "기한"
+          }
+        }
+      }
+    },
+    "Due today · Tap to complete" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今日が期限 · タップで完了"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "오늘 기한 · 탭하여 완료"
           }
         }
       }
@@ -6411,6 +6583,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "추정 1RM"
+          }
+        }
+      }
+    },
+    "Every %lld days" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld日ごと"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "매 %lld일마다"
+          }
+        }
+      }
+    },
+    "Every day" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "毎日"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "매일"
           }
         }
       }
@@ -8131,6 +8337,9 @@
         }
       }
     },
+    "Health alerts are sent at most once per day, duplicates are suppressed for one hour, and informational alerts use a daily budget." : {
+
+    },
     "Health alerts are sent at most once per day. Workout records notify every time." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -8588,6 +8797,23 @@
         }
       }
     },
+    "History" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "履歴"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기록"
+          }
+        }
+      }
+    },
     "Hockey" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -8995,6 +9221,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "iCloud 동기화"
+          }
+        }
+      }
+    },
+    "Icon" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アイコン"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아이콘"
           }
         }
       }
@@ -9808,6 +10051,23 @@
       },
       "shouldTranslate" : false
     },
+    "Life Checklist" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ライフチェックリスト"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "라이프 체크리스트"
+          }
+        }
+      }
+    },
     "Light" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -10061,6 +10321,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "허리"
+          }
+        }
+      }
+    },
+    "Lower Body" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "下半身"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "하체"
           }
         }
       }
@@ -11012,6 +11289,7 @@
       }
     },
     "My Habits" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -11397,6 +11675,23 @@
         }
       }
     },
+    "No cycle actions recorded yet." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "まだサイクル操作の記録がありません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아직 주기 액션 기록이 없어요."
+          }
+        }
+      }
+    },
     "No data" : {
       "localizations" : {
         "ja" : {
@@ -11559,6 +11854,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "아직 HealthKit 연동 운동이 없어요"
+          }
+        }
+      }
+    },
+    "No History" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "履歴なし"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기록 없음"
           }
         }
       }
@@ -12473,6 +12785,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "특정 운동에 치우치면 근육 불균형과 부상 위험이 커져요"
+          }
+        }
+      }
+    },
+    "Overdue · Tap to complete" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "期限超過 · タップで完了"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기한 지남 · 탭하여 완료"
           }
         }
       }
@@ -14402,6 +14731,23 @@
         }
       }
     },
+    "Routine Consistency" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ルーティンの継続性"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "루틴 일관성"
+          }
+        }
+      }
+    },
     "Rowing" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -14466,6 +14812,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "주 15km 러닝"
+          }
+        }
+      }
+    },
+    "Running Distance" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ランニング距離"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "러닝 거리"
           }
         }
       }
@@ -15328,6 +15691,23 @@
         }
       }
     },
+    "Skip Cycle" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "サイクルをスキップ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주기 건너뛰기"
+          }
+        }
+      }
+    },
     "Skip Exercise" : {
       "localizations" : {
         "ja" : {
@@ -15340,6 +15720,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "운동 건너뛰기"
+          }
+        }
+      }
+    },
+    "Skipped" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "スキップ済み"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "건너뜀"
+          }
+        }
+      }
+    },
+    "Skipped · Next %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "スキップ · 次回 %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "건너뜀 · 다음 %@"
           }
         }
       }
@@ -15663,6 +16077,57 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "스미스 머신"
+          }
+        }
+      }
+    },
+    "Snooze 1 Day" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1日延期"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1일 미루기"
+          }
+        }
+      }
+    },
+    "Snoozed" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "延期済み"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "미룸"
+          }
+        }
+      }
+    },
+    "Snoozed · Next %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "延期 · 次回 %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "미룸 · 다음 %@"
           }
         }
       }
@@ -16464,6 +16929,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "근력 PR: 세션 내 세트당 평균 중량 기준"
+          }
+        }
+      }
+    },
+    "Strength Split" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "筋力分割"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "근력 분할"
           }
         }
       }
@@ -19485,6 +19967,23 @@
         }
       }
     },
+    "Workout 5x" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ワークアウト5回"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "운동 5회"
+          }
+        }
+      }
+    },
     "Workout 5x / week" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -19498,6 +19997,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "주 5회 운동"
+          }
+        }
+      }
+    },
+    "Workout 7x" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ワークアウト7回"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "운동 7회"
           }
         }
       }
@@ -20197,486 +20713,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "수면 점수가 하락 추세입니다. 취침 1시간 전 화면 사용을 줄이고 카페인은 오후 2시 이전으로 제한해보세요."
-          }
-        }
-      }
-    },
-    "%@ is due in %lld days" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ は%lld日後が期限です"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@이(가) %lld일 후 예정입니다"
-          }
-        }
-      }
-    },
-    "%@ is due in 1 day" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ は1日後が期限です"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@이(가) 1일 후 예정입니다"
-          }
-        }
-      }
-    },
-    "%@ is due today" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ は今日が期限です"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@이(가) 오늘 예정입니다"
-          }
-        }
-      }
-    },
-    "%lld days per week" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "週%lld日"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "주 %lld일"
-          }
-        }
-      }
-    },
-    "%lld/%lld done" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld/%lld 完了"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld/%lld 완료"
-          }
-        }
-      }
-    },
-    "Arms" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "腕"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "팔"
-          }
-        }
-      }
-    },
-    "Complete once per cycle" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "サイクルごとに1回達成"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "주기마다 1회 완료"
-          }
-        }
-      }
-    },
-    "Completed" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "完了"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "완료됨"
-          }
-        }
-      }
-    },
-    "Done · Next %@" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "完了 · 次回 %@"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "완료 · 다음 %@"
-          }
-        }
-      }
-    },
-    "Due today · Tap to complete" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "今日が期限 · タップで完了"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "오늘 기한 · 탭하여 완료"
-          }
-        }
-      }
-    },
-    "Every %lld days" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld日ごと"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "매 %lld일마다"
-          }
-        }
-      }
-    },
-    "Every day" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "毎日"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "매일"
-          }
-        }
-      }
-    },
-    "History" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "履歴"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "기록"
-          }
-        }
-      }
-    },
-    "Icon" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "アイコン"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "아이콘"
-          }
-        }
-      }
-    },
-    "Life Checklist" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ライフチェックリスト"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "라이프 체크리스트"
-          }
-        }
-      }
-    },
-    "Lower Body" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "下半身"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "하체"
-          }
-        }
-      }
-    },
-    "No History" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "履歴なし"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "기록 없음"
-          }
-        }
-      }
-    },
-    "No cycle actions recorded yet." : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "まだサイクル操作の記録がありません。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "아직 주기 액션 기록이 없어요."
-          }
-        }
-      }
-    },
-    "Overdue · Tap to complete" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "期限超過 · タップで完了"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "기한 지남 · 탭하여 완료"
-          }
-        }
-      }
-    },
-    "Routine Consistency" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ルーティンの継続性"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "루틴 일관성"
-          }
-        }
-      }
-    },
-    "Running Distance" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ランニング距離"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "러닝 거리"
-          }
-        }
-      }
-    },
-    "Skip Cycle" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "サイクルをスキップ"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "주기 건너뛰기"
-          }
-        }
-      }
-    },
-    "Skipped" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "スキップ済み"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "건너뜀"
-          }
-        }
-      }
-    },
-    "Skipped · Next %@" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "スキップ · 次回 %@"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "건너뜀 · 다음 %@"
-          }
-        }
-      }
-    },
-    "Snooze 1 Day" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1日延期"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1일 미루기"
-          }
-        }
-      }
-    },
-    "Snoozed" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "延期済み"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "미룸"
-          }
-        }
-      }
-    },
-    "Snoozed · Next %@" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "延期 · 次回 %@"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "미룸 · 다음 %@"
-          }
-        }
-      }
-    },
-    "Strength Split" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "筋力分割"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "근력 분할"
-          }
-        }
-      }
-    },
-    "Workout 5x" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ワークアウト5回"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "운동 5회"
-          }
-        }
-      }
-    },
-    "Workout 7x" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ワークアウト7回"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "운동 7회"
           }
         }
       }
