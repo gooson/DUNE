@@ -5,8 +5,8 @@ import WatchKit
 /// Plays `.notification` haptic when complete.
 struct RestTimerView: View {
     let duration: TimeInterval
-    let onComplete: () -> Void
-    let onSkip: () -> Void
+    let onComplete: (_ timerTotal: TimeInterval) -> Void
+    let onSkip: (_ timerTotal: TimeInterval) -> Void
     let onEnd: () -> Void
 
     @Environment(WorkoutManager.self) private var workoutManager
@@ -82,8 +82,9 @@ struct RestTimerView: View {
                 .tint(.secondary)
 
                 Button {
+                    let total = TimeInterval(totalSeconds)
                     cancelCountdown()
-                    onSkip()
+                    onSkip(total)
                 } label: {
                     Text("Skip")
                         .font(.caption.weight(.semibold))
@@ -183,8 +184,9 @@ struct RestTimerView: View {
     }
 
     private func timerFinished() {
+        let total = TimeInterval(totalSeconds)
         cancelCountdown()
         WKInterfaceDevice.current().play(.notification)
-        onComplete()
+        onComplete(total)
     }
 }
