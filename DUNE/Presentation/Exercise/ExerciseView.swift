@@ -10,6 +10,7 @@ struct ExerciseView: View {
     @State private var workoutSuggestion: WorkoutSuggestion?
     @State private var showingCompoundSetup = false
     @State private var compoundConfig: CompoundWorkoutConfig?
+    @State private var templateWorkoutConfig: TemplateWorkoutConfig?
     @State private var recordToDelete: ExerciseRecord?
     @State private var healthKitWorkoutToDelete: WorkoutSummary?
     @State private var recordsByID: [UUID: ExerciseRecord] = [:]
@@ -175,6 +176,9 @@ struct ExerciseView: View {
         .navigationDestination(item: $compoundConfig) { config in
             CompoundWorkoutView(config: config)
         }
+        .navigationDestination(item: $templateWorkoutConfig) { config in
+            TemplateWorkoutView(config: config)
+        }
         .task {
             pendingDraft = WorkoutSessionDraft.load()
             rebuildRecordIndex()
@@ -215,24 +219,40 @@ struct ExerciseView: View {
     }
 
     private func startFromTemplate(_ template: WorkoutTemplate) {
-        guard let firstEntry = template.exerciseEntries.first else { return }
-        // Look up in library first, then custom exercises
-        if let definition = library.exercise(byID: firstEntry.exerciseDefinitionID) {
-            selectedExercise = definition
-        } else if firstEntry.exerciseDefinitionID.hasPrefix("custom-") {
-            // Custom exercise — build definition from entry name
-            let definition = ExerciseDefinition(
-                id: firstEntry.exerciseDefinitionID,
-                name: firstEntry.exerciseName,
-                localizedName: firstEntry.exerciseName,
-                category: .strength,
-                inputType: .setsRepsWeight,
-                primaryMuscles: [],
-                secondaryMuscles: [],
-                equipment: .bodyweight,
-                metValue: 5.0
+        let definitions = resolveTemplateExercises(from: template)
+        guard !definitions.isEmpty else { return }
+
+        if definitions.count == 1 {
+            // Single exercise — use existing single exercise flow
+            selectedExercise = definitions[0]
+        } else {
+            // Multiple exercises — sequential template workout
+            templateWorkoutConfig = TemplateWorkoutConfig(
+                templateName: template.name,
+                exercises: definitions,
+                templateEntries: template.exerciseEntries
             )
-            selectedExercise = definition
+        }
+    }
+
+    private func resolveTemplateExercises(from template: WorkoutTemplate) -> [ExerciseDefinition] {
+        template.exerciseEntries.compactMap { entry in
+            if let definition = library.exercise(byID: entry.exerciseDefinitionID) {
+                return definition
+            } else if entry.exerciseDefinitionID.hasPrefix("custom-") {
+                return ExerciseDefinition(
+                    id: entry.exerciseDefinitionID,
+                    name: entry.exerciseName,
+                    localizedName: entry.exerciseName,
+                    category: .strength,
+                    inputType: .setsRepsWeight,
+                    primaryMuscles: [],
+                    secondaryMuscles: [],
+                    equipment: .bodyweight,
+                    metValue: 5.0
+                )
+            }
+            return nil
         }
     }
 
