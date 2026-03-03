@@ -40,6 +40,14 @@ struct AppThemeTests {
         #expect(AppTheme(rawValue: "") == nil)
     }
 
+    @Test("Persisted rawValue resolver normalizes legacy artic aliases")
+    func persistedRawValueResolver() {
+        #expect(AppTheme.resolvedTheme(fromPersistedRawValue: "artic") == .arcticDawn)
+        #expect(AppTheme.resolvedTheme(fromPersistedRawValue: "articDawn") == .arcticDawn)
+        #expect(AppTheme.resolvedTheme(fromPersistedRawValue: " arcticDawn ") == .arcticDawn)
+        #expect(AppTheme.normalizedRawValue(fromPersistedRawValue: "articDawn") == AppTheme.arcticDawn.rawValue)
+    }
+
     @Test("Asset prefix mapping is stable for each theme")
     func assetPrefixMapping() {
         #expect(AppTheme.desertWarm.assetPrefix == nil)

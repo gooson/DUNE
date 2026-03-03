@@ -312,7 +312,7 @@ extension WatchConnectivityManager {
 
         // Theme from iPhone settings change
         if let themeRaw = parsed.appTheme, !themeRaw.isEmpty {
-            syncedThemeRawValue = themeRaw
+            syncedThemeRawValue = AppTheme.normalizedRawValue(fromPersistedRawValue: themeRaw) ?? themeRaw
         }
 
         if let workoutUUID = parsed.deleteWorkoutUUID, !workoutUUID.isEmpty {
@@ -358,7 +358,7 @@ extension WatchConnectivityManager {
 
         // Theme from iPhone settings
         if let themeRaw = parsed.appTheme, !themeRaw.isEmpty {
-            syncedThemeRawValue = themeRaw
+            syncedThemeRawValue = AppTheme.normalizedRawValue(fromPersistedRawValue: themeRaw) ?? themeRaw
         }
     }
 
