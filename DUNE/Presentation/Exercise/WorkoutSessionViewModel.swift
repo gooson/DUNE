@@ -11,6 +11,8 @@ struct EditableSet: Identifiable {
     var distance: String = ""
     var isCompleted: Bool = false
     var setType: SetType = .working
+    /// Rest timer total (including +30s adjustments) used after this set, in seconds.
+    var restDuration: TimeInterval?
 }
 
 /// Previous session data for inline display
@@ -19,6 +21,7 @@ struct PreviousSetInfo: Sendable {
     let reps: Int?
     let duration: TimeInterval?
     let distance: Double?
+    let restDuration: TimeInterval?
 }
 
 // MARK: - Draft Persistence
@@ -39,6 +42,7 @@ struct WorkoutSessionDraft: Codable {
         let distance: String
         let isCompleted: Bool
         let setTypeRaw: String
+        let restDuration: TimeInterval?
     }
 
     private static let userDefaultsKey = "com.raftel.dailve.workoutDraft"
@@ -80,6 +84,9 @@ final class WorkoutSessionViewModel {
 
     /// Body weight for calorie estimation (fetched externally, uses store default)
     var bodyWeightKg: Double = WorkoutDefaults.bodyWeightKg
+
+    /// Per-exercise rest duration override from the template entry (nil = use global).
+    var templateRestDuration: TimeInterval?
 
     init(
         exercise: ExerciseDefinition,
@@ -196,7 +203,8 @@ final class WorkoutSessionViewModel {
                 weight: set.weight,
                 reps: set.reps,
                 duration: set.duration,
-                distance: set.distance
+                distance: set.distance,
+                restDuration: set.restDuration
             )
         }
 
@@ -215,6 +223,19 @@ final class WorkoutSessionViewModel {
         let index = setNumber - 1
         guard index >= 0, index < previousSets.count else { return nil }
         return previousSets[index]
+    }
+
+    /// Resolves rest timer duration for the set at `index`.
+    /// Priority: previous session → template entry → global default.
+    func resolveRestDuration(forSetAt index: Int) -> TimeInterval {
+        let setNumber = sets[index].setNumber
+        if let prevRest = previousSetInfo(for: setNumber)?.restDuration {
+            return prevRest
+        }
+        if let templateRest = templateRestDuration {
+            return templateRest
+        }
+        return defaultRestSeconds
     }
 
     func fillSetFromPrevious(at index: Int, weightUnit: WeightUnit = .kg) {
@@ -304,7 +325,8 @@ final class WorkoutSessionViewModel {
                 duration: set.duration,
                 distance: set.distance,
                 isCompleted: set.isCompleted,
-                setTypeRaw: set.setType.rawValue
+                setTypeRaw: set.setType.rawValue,
+                restDuration: set.restDuration
             )
         }
         let draft = WorkoutSessionDraft(
@@ -328,6 +350,7 @@ final class WorkoutSessionViewModel {
             editable.distance = draftSet.distance
             editable.isCompleted = draftSet.isCompleted
             editable.setType = SetType(rawValue: draftSet.setTypeRaw) ?? .working
+            editable.restDuration = draftSet.restDuration
             return editable
         }
     }
@@ -482,6 +505,7 @@ final class WorkoutSessionViewModel {
                 duration: durationSeconds,
                 distance: distanceKm,
                 intensity: nil,
+                restDuration: editableSet.restDuration,
                 isCompleted: true
             )
             // Explicit bidirectional link for CloudKit reliability

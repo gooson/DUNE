@@ -39,16 +39,19 @@ struct WorkoutSessionView: View {
     /// Max dots before truncating the progress indicator (UI width limit)
     private let maxProgressDots = 12
 
-    init(exercise: ExerciseDefinition) {
+    init(exercise: ExerciseDefinition, templateRestDuration: TimeInterval? = nil) {
         self.exercise = exercise
         let draft = WorkoutSessionDraft.load()
         if let draft, draft.exerciseDefinition.id == exercise.id {
             let vm = WorkoutSessionViewModel(exercise: exercise)
             vm.restoreFromDraft(draft)
+            vm.templateRestDuration = templateRestDuration
             self._viewModel = State(initialValue: vm)
             self.draftToRestore = draft
         } else {
-            self._viewModel = State(initialValue: WorkoutSessionViewModel(exercise: exercise))
+            let vm = WorkoutSessionViewModel(exercise: exercise)
+            vm.templateRestDuration = templateRestDuration
+            self._viewModel = State(initialValue: vm)
             self.draftToRestore = nil
         }
     }
@@ -701,7 +704,7 @@ struct WorkoutSessionView: View {
     }
 
     private func startRest() {
-        let seconds = Int(WorkoutSettingsStore.shared.restSeconds)
+        let seconds = Int(viewModel.resolveRestDuration(forSetAt: currentSetIndex))
         restTotalSeconds = seconds
         restSecondsRemaining = seconds
         showRestTimer = true
@@ -724,6 +727,9 @@ struct WorkoutSessionView: View {
     }
 
     private func finishRest() {
+        // Capture rest timer total for the completed set (before advancing)
+        viewModel.sets[currentSetIndex].restDuration = TimeInterval(restTotalSeconds)
+
         restTimerTask?.cancel()
         restTimerTask = nil
         showRestTimer = false

@@ -806,6 +806,8 @@ struct CompletedSetData: Codable, Sendable {
     let weight: Double?
     let reps: Int?
     let completedAt: Date
+    /// Rest timer total (including +30s adjustments) used after this set, in seconds.
+    var restDuration: TimeInterval?
 }
 
 /// Plain struct snapshot of WorkoutTemplate data.

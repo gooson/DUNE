@@ -22,14 +22,16 @@ struct MetricsView: View {
     @State private var pendingInputSheet = false
     /// Cached previous sets for current exercise (avoids recompute per render)
     @State private var cachedPreviousSets: [CompletedSetData] = []
+    /// Last rest timer total used within this exercise (for carry-forward)
+    @State private var lastRestTimerTotal: TimeInterval?
 
     var body: some View {
         Group {
             if showRestTimer {
                 RestTimerView(
                     duration: currentRestDuration,
-                    onComplete: handleRestComplete,
-                    onSkip: handleRestComplete,
+                    onComplete: { total in handleRestComplete(timerTotal: total) },
+                    onSkip: { total in handleRestComplete(timerTotal: total) },
                     onEnd: { showEndConfirmation = true }
                 )
             } else if showNextExercise {
@@ -39,6 +41,7 @@ struct MetricsView: View {
             }
         }
         .onChange(of: workoutManager.currentExerciseIndex) { _, _ in
+            lastRestTimerTotal = nil
             prefillFromEntry()
             refreshPreviousSetsCache()
         }
@@ -339,8 +342,12 @@ struct MetricsView: View {
     }
 
     private var currentRestDuration: TimeInterval {
-        workoutManager.currentEntry?.restDuration
-            ?? WatchConnectivityManager.shared.globalRestSeconds
+        // 1. Within-session carry-forward (user adjusted via +30s etc.)
+        if let lastRest = lastRestTimerTotal { return lastRest }
+        // 2. Template entry per-exercise override
+        if let entryRest = workoutManager.currentEntry?.restDuration { return entryRest }
+        // 3. Global default
+        return WatchConnectivityManager.shared.globalRestSeconds
     }
 
     /// Refresh cached previous sets for the current exercise.
@@ -396,7 +403,16 @@ struct MetricsView: View {
         showRestTimer = true
     }
 
-    private func handleRestComplete() {
+    private func handleRestComplete(timerTotal: TimeInterval) {
+        // Record rest duration on the just-completed set
+        let exerciseIdx = workoutManager.currentExerciseIndex
+        let setIdx = workoutManager.currentSetIndex
+        if exerciseIdx < workoutManager.completedSetsData.count,
+           setIdx < workoutManager.completedSetsData[exerciseIdx].count {
+            workoutManager.completedSetsData[exerciseIdx][setIdx].restDuration = timerTotal
+        }
+        lastRestTimerTotal = timerTotal
+
         showRestTimer = false
         workoutManager.advanceToNextSet()
         prefillFromEntry()

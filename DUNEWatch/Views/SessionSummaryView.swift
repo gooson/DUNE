@@ -369,6 +369,7 @@ struct SessionSummaryView: View {
                     weight: set.weight,
                     reps: set.reps,
                     duration: nil,
+                    restDuration: set.restDuration,
                     isCompleted: true
                 )
             }
