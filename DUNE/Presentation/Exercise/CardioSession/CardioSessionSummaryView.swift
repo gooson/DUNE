@@ -93,7 +93,7 @@ struct CardioSessionSummaryView: View {
             HStack(spacing: DS.Spacing.md) {
                 summaryCard(
                     title: String(localized: "Steps"),
-                    value: viewModel.formattedStepCount,
+                    value: summaryStepsValue,
                     icon: "figure.walk",
                     color: DS.Color.steps
                 )
@@ -120,6 +120,13 @@ struct CardioSessionSummaryView: View {
                 }
             }
         }
+    }
+
+    private var summaryStepsValue: String {
+        if viewModel.activityType == .walking, viewModel.walkingStepCount > 0 {
+            return "\(Int(viewModel.walkingStepCount).formattedWithSeparator) steps"
+        }
+        return viewModel.formattedStepCount
     }
 
     private func summaryCard(title: String, value: String, icon: String, color: SwiftUI.Color) -> some View {

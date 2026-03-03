@@ -268,6 +268,329 @@ struct OceanSheetWaveBackground: View {
     }
 }
 
+// MARK: - Arctic Ribbon Shape
+
+/// Layered ribbon wave used by Arctic Dawn backgrounds.
+struct ArcticRibbonShape: Shape {
+    let amplitude: CGFloat
+    let frequency: CGFloat
+    var phase: CGFloat
+    let verticalOffset: CGFloat
+    let ridge: CGFloat
+
+    var animatableData: CGFloat {
+        get { phase }
+        set { phase = newValue }
+    }
+
+    private let points: [(x: CGFloat, angle: CGFloat)]
+    private static let sampleCount = 120
+
+    init(
+        amplitude: CGFloat = 0.05,
+        frequency: CGFloat = 1.8,
+        phase: CGFloat = 0,
+        verticalOffset: CGFloat = 0.52,
+        ridge: CGFloat = 0.22
+    ) {
+        self.amplitude = amplitude
+        self.frequency = frequency
+        self.phase = phase
+        self.verticalOffset = verticalOffset
+        self.ridge = ridge
+
+        let count = Self.sampleCount
+        var pts: [(x: CGFloat, angle: CGFloat)] = []
+        pts.reserveCapacity(count + 1)
+        for i in 0...count {
+            let x = CGFloat(i) / CGFloat(count)
+            let angle = x * frequency * 2 * .pi
+            pts.append((x: x, angle: angle))
+        }
+        self.points = pts
+    }
+
+    func path(in rect: CGRect) -> Path {
+        guard rect.width > 0, rect.height > 0 else { return Path() }
+
+        let amp = rect.height * amplitude
+        let centerY = rect.height * verticalOffset
+
+        var path = Path()
+        for (idx, pt) in points.enumerated() {
+            let base = sin(pt.angle + phase)
+            let harmonic = sin(pt.angle * 2.15 + phase * 0.84)
+            let shimmer = cos(pt.angle * 0.72 + phase * 0.33)
+            let y = centerY + amp * (base * 0.72 + harmonic * ridge + shimmer * 0.08)
+            let x = pt.x * rect.width
+
+            if idx == 0 {
+                path.move(to: CGPoint(x: x, y: y))
+            } else {
+                path.addLine(to: CGPoint(x: x, y: y))
+            }
+        }
+
+        path.addLine(to: CGPoint(x: rect.width, y: rect.height))
+        path.addLine(to: CGPoint(x: 0, y: rect.height))
+        path.closeSubpath()
+        return path
+    }
+}
+
+// MARK: - Arctic Ribbon Overlay
+
+struct ArcticRibbonOverlayView: View {
+    var color: Color
+    var opacity: Double = 0.13
+    var amplitude: CGFloat = 0.06
+    var frequency: CGFloat = 1.6
+    var verticalOffset: CGFloat = 0.52
+    var bottomFade: CGFloat = 0.48
+    var ridge: CGFloat = 0.22
+    var driftDuration: Double = 12
+    var reverseDirection: Bool = false
+    var strokeColor: Color? = nil
+    var strokeOpacity: Double = 0.2
+    var strokeWidth: CGFloat = 1.0
+
+    @State private var phase: CGFloat = 0
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    private var targetPhase: CGFloat {
+        (reverseDirection ? -1 : 1) * 2 * .pi
+    }
+
+    var body: some View {
+        let ribbon = ArcticRibbonShape(
+            amplitude: amplitude,
+            frequency: frequency,
+            phase: phase,
+            verticalOffset: verticalOffset,
+            ridge: ridge
+        )
+
+        ZStack {
+            ribbon
+                .fill(color.opacity(opacity))
+                .bottomFadeMask(bottomFade)
+
+            if let strokeColor {
+                ribbon
+                    .stroke(
+                        strokeColor.opacity(strokeOpacity),
+                        style: StrokeStyle(lineWidth: strokeWidth, lineCap: .round, lineJoin: .round)
+                    )
+                    .bottomFadeMask(bottomFade)
+                    .blendMode(.screen)
+            }
+        }
+        .allowsHitTesting(false)
+        .task {
+            guard !reduceMotion, driftDuration > 0 else { return }
+            withAnimation(.linear(duration: driftDuration).repeatForever(autoreverses: false)) {
+                phase = targetPhase
+            }
+        }
+        .onAppear {
+            guard !reduceMotion, driftDuration > 0 else { return }
+            Task { @MainActor in
+                phase = 0
+                withAnimation(.linear(duration: driftDuration).repeatForever(autoreverses: false)) {
+                    phase = targetPhase
+                }
+            }
+        }
+    }
+}
+
+// MARK: - Arctic Dawn Backgrounds
+
+struct ArcticTabWaveBackground: View {
+    @Environment(\.wavePreset) private var preset
+    @Environment(\.appTheme) private var theme
+
+    private var intensityScale: CGFloat {
+        switch preset {
+        case .train:    1.15
+        case .today:    1.0
+        case .wellness: 0.82
+        case .life:     0.68
+        }
+    }
+
+    var body: some View {
+        let scale = intensityScale
+
+        ZStack(alignment: .top) {
+            ArcticRibbonOverlayView(
+                color: theme.arcticDeepColor,
+                opacity: 0.08 * scale,
+                amplitude: 0.034 * scale,
+                frequency: 0.95,
+                verticalOffset: 0.40,
+                bottomFade: 0.52,
+                ridge: 0.16,
+                driftDuration: 18,
+                strokeColor: theme.arcticFrostColor,
+                strokeOpacity: 0.12 * scale,
+                strokeWidth: 0.8
+            )
+            .frame(height: 200)
+
+            ArcticRibbonOverlayView(
+                color: theme.arcticAuroraColor,
+                opacity: 0.17 * scale,
+                amplitude: 0.074 * scale,
+                frequency: 1.68,
+                verticalOffset: 0.50,
+                bottomFade: 0.46,
+                ridge: 0.24,
+                driftDuration: 14,
+                reverseDirection: true,
+                strokeColor: theme.arcticFrostColor,
+                strokeOpacity: 0.24 * scale,
+                strokeWidth: 1.4
+            )
+            .frame(height: 200)
+
+            ArcticRibbonOverlayView(
+                color: theme.arcticFrostColor,
+                opacity: 0.20 * scale,
+                amplitude: 0.096 * scale,
+                frequency: 2.28,
+                verticalOffset: 0.57,
+                bottomFade: 0.42,
+                ridge: 0.30,
+                driftDuration: 11,
+                strokeColor: theme.arcticAuroraColor,
+                strokeOpacity: 0.30 * scale,
+                strokeWidth: 1.9
+            )
+            .frame(height: 200)
+
+            LinearGradient(
+                colors: [
+                    theme.arcticFrostColor.opacity(0.22),
+                    theme.arcticAuroraColor.opacity(0.12),
+                    theme.arcticDeepColor.opacity(0.08),
+                    .clear
+                ],
+                startPoint: .top,
+                endPoint: DS.Gradient.tabBackgroundEnd
+            )
+        }
+        .ignoresSafeArea()
+    }
+}
+
+struct ArcticDetailWaveBackground: View {
+    @Environment(\.appTheme) private var theme
+
+    var body: some View {
+        ZStack(alignment: .top) {
+            ArcticRibbonOverlayView(
+                color: theme.arcticDeepColor,
+                opacity: 0.07,
+                amplitude: 0.024,
+                frequency: 1.0,
+                verticalOffset: 0.42,
+                bottomFade: 0.56,
+                ridge: 0.15,
+                driftDuration: 16,
+                strokeColor: theme.arcticFrostColor,
+                strokeOpacity: 0.10,
+                strokeWidth: 0.7
+            )
+            .frame(height: 150)
+
+            ArcticRibbonOverlayView(
+                color: theme.arcticAuroraColor,
+                opacity: 0.12,
+                amplitude: 0.045,
+                frequency: 1.62,
+                verticalOffset: 0.52,
+                bottomFade: 0.52,
+                ridge: 0.21,
+                driftDuration: 13,
+                reverseDirection: true,
+                strokeColor: theme.arcticFrostColor,
+                strokeOpacity: 0.18,
+                strokeWidth: 1.1
+            )
+            .frame(height: 150)
+
+            ArcticRibbonOverlayView(
+                color: theme.arcticFrostColor,
+                opacity: 0.16,
+                amplitude: 0.06,
+                frequency: 2.05,
+                verticalOffset: 0.56,
+                bottomFade: 0.50,
+                ridge: 0.27,
+                driftDuration: 11,
+                strokeColor: theme.arcticAuroraColor,
+                strokeOpacity: 0.22,
+                strokeWidth: 1.3
+            )
+            .frame(height: 150)
+
+            LinearGradient(
+                colors: [theme.arcticFrostColor.opacity(DS.Opacity.light), .clear],
+                startPoint: .top,
+                endPoint: DS.Gradient.tabBackgroundEnd
+            )
+        }
+        .ignoresSafeArea()
+    }
+}
+
+struct ArcticSheetWaveBackground: View {
+    @Environment(\.appTheme) private var theme
+
+    var body: some View {
+        ZStack(alignment: .top) {
+            ArcticRibbonOverlayView(
+                color: theme.arcticAuroraColor,
+                opacity: 0.10,
+                amplitude: 0.032,
+                frequency: 1.52,
+                verticalOffset: 0.50,
+                bottomFade: 0.55,
+                ridge: 0.20,
+                driftDuration: 13,
+                reverseDirection: true,
+                strokeColor: theme.arcticFrostColor,
+                strokeOpacity: 0.16,
+                strokeWidth: 0.9
+            )
+            .frame(height: 120)
+
+            ArcticRibbonOverlayView(
+                color: theme.arcticFrostColor,
+                opacity: 0.13,
+                amplitude: 0.048,
+                frequency: 1.92,
+                verticalOffset: 0.54,
+                bottomFade: 0.52,
+                ridge: 0.24,
+                driftDuration: 11,
+                strokeColor: theme.arcticAuroraColor,
+                strokeOpacity: 0.20,
+                strokeWidth: 1.1
+            )
+            .frame(height: 120)
+
+            LinearGradient(
+                colors: [theme.arcticFrostColor.opacity(DS.Opacity.light), .clear],
+                startPoint: .top,
+                endPoint: DS.Gradient.sheetBackgroundEnd
+            )
+        }
+        .ignoresSafeArea()
+    }
+}
+
 // MARK: - Previews
 
 #Preview("OceanTabWaveBackground") {
@@ -302,5 +625,11 @@ struct OceanSheetWaveBackground: View {
 #Preview("Ocean Tab — Dark") {
     OceanTabWaveBackground()
         .environment(\.appTheme, .oceanCool)
+        .preferredColorScheme(.dark)
+}
+
+#Preview("Arctic Tab — Dark") {
+    ArcticTabWaveBackground()
+        .environment(\.appTheme, .arcticDawn)
         .preferredColorScheme(.dark)
 }

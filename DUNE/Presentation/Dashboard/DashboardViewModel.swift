@@ -41,6 +41,7 @@ final class DashboardViewModel {
 
     private(set) var pinnedMetrics: [HealthMetric] = []
     private(set) var activeDaysThisWeek = 0
+    private(set) var isMirroredReadOnlyMode = false
     private let weeklyGoalDays = 5
     var weeklyGoalProgress: (completedDays: Int, goalDays: Int) {
         (completedDays: min(activeDaysThisWeek, weeklyGoalDays), goalDays: weeklyGoalDays)
@@ -142,6 +143,8 @@ final class DashboardViewModel {
     func loadData() async {
         guard !isLoading else { return }
         isLoading = true
+        let healthKitAvailable = await healthKitManager.isAvailable
+        isMirroredReadOnlyMode = !healthKitAvailable
         errorMessage = nil
         conditionScore = nil
         baselineStatus = nil
@@ -158,7 +161,7 @@ final class DashboardViewModel {
         if !authorizationChecked {
             if Self.shouldBypassAuthorizationForTests {
                 authorizationChecked = true
-            } else {
+            } else if healthKitAvailable {
                 do {
                     try await healthKitManager.requestAuthorization()
                     authorizationChecked = true
@@ -168,18 +171,21 @@ final class DashboardViewModel {
                     isLoading = false
                     return
                 }
+            } else {
+                authorizationChecked = true
+                AppLogger.ui.info("HealthKit unavailable; skip authorization and rely on mirrored health snapshot data")
             }
         }
 
         let sharedSnapshot = await sharedHealthDataService?.fetchSnapshot()
 
         // Each fetch is independent — one failure should not block others (7 parallel)
-        async let hrvTask = safeHRVFetch(snapshot: sharedSnapshot)
-        async let sleepTask = safeSleepFetch(snapshot: sharedSnapshot)
-        async let exerciseTask = safeExerciseFetch()
-        async let stepsTask = safeStepsFetch()
-        async let weightTask = safeWeightFetch()
-        async let bmiTask = safeBMIFetch()
+        async let hrvTask = safeHRVFetch(snapshot: sharedSnapshot, canQueryHealthKit: healthKitAvailable)
+        async let sleepTask = safeSleepFetch(snapshot: sharedSnapshot, canQueryHealthKit: healthKitAvailable)
+        async let exerciseTask = safeExerciseFetch(canQueryHealthKit: healthKitAvailable)
+        async let stepsTask = safeStepsFetch(canQueryHealthKit: healthKitAvailable)
+        async let weightTask = safeWeightFetch(canQueryHealthKit: healthKitAvailable)
+        async let bmiTask = safeBMIFetch(canQueryHealthKit: healthKitAvailable)
         async let weatherTask = safeWeatherFetch()
 
         let (hrvResult, sleepResult, exerciseResult, stepsResult, weightResult, bmiResult, weatherResult) = await (
@@ -217,7 +223,10 @@ final class DashboardViewModel {
         isLoading = false
     }
 
-    private func safeHRVFetch(snapshot: SharedHealthSnapshot?) async -> (metrics: [HealthMetric], failed: Bool) {
+    private func safeHRVFetch(
+        snapshot: SharedHealthSnapshot?,
+        canQueryHealthKit: Bool
+    ) async -> (metrics: [HealthMetric], failed: Bool) {
         if let snapshot {
             let hrvRelatedSources: Set<SharedHealthSnapshot.Source> = [
                 .hrvSamples, .todayRHR, .yesterdayRHR, .latestRHR, .rhrCollection
@@ -225,6 +234,7 @@ final class DashboardViewModel {
             let failed = !snapshot.failedSources.isDisjoint(with: hrvRelatedSources)
             return (fetchHRVData(from: snapshot), failed)
         }
+        guard canQueryHealthKit else { return ([], false) }
 
         do { return (try await fetchHRVData(), false) }
         catch {
@@ -233,7 +243,10 @@ final class DashboardViewModel {
         }
     }
 
-    private func safeSleepFetch(snapshot: SharedHealthSnapshot?) async -> (metric: HealthMetric?, failed: Bool) {
+    private func safeSleepFetch(
+        snapshot: SharedHealthSnapshot?,
+        canQueryHealthKit: Bool
+    ) async -> (metric: HealthMetric?, failed: Bool) {
         if let snapshot {
             let sleepRelatedSources: Set<SharedHealthSnapshot.Source> = [
                 .todaySleepStages, .yesterdaySleepStages, .latestSleepStages, .sleepDailyDurations
@@ -241,6 +254,7 @@ final class DashboardViewModel {
             let failed = !snapshot.failedSources.isDisjoint(with: sleepRelatedSources)
             return (fetchSleepData(from: snapshot), failed)
         }
+        guard canQueryHealthKit else { return (nil, false) }
 
         do { return (try await fetchSleepData(), false) }
         catch {
@@ -249,7 +263,8 @@ final class DashboardViewModel {
         }
     }
 
-    private func safeExerciseFetch() async -> (metrics: [HealthMetric], failed: Bool) {
+    private func safeExerciseFetch(canQueryHealthKit: Bool) async -> (metrics: [HealthMetric], failed: Bool) {
+        guard canQueryHealthKit else { return ([], false) }
         do { return (try await fetchExerciseData(), false) }
         catch {
             AppLogger.ui.error("Exercise fetch failed: \(error.localizedDescription)")
@@ -257,7 +272,8 @@ final class DashboardViewModel {
         }
     }
 
-    private func safeStepsFetch() async -> (metric: HealthMetric?, failed: Bool) {
+    private func safeStepsFetch(canQueryHealthKit: Bool) async -> (metric: HealthMetric?, failed: Bool) {
+        guard canQueryHealthKit else { return (nil, false) }
         do { return (try await fetchStepsData(), false) }
         catch {
             AppLogger.ui.error("Steps fetch failed: \(error.localizedDescription)")
@@ -265,7 +281,8 @@ final class DashboardViewModel {
         }
     }
 
-    private func safeWeightFetch() async -> (metric: HealthMetric?, failed: Bool) {
+    private func safeWeightFetch(canQueryHealthKit: Bool) async -> (metric: HealthMetric?, failed: Bool) {
+        guard canQueryHealthKit else { return (nil, false) }
         do { return (try await fetchWeightData(), false) }
         catch {
             AppLogger.ui.error("Weight fetch failed: \(error.localizedDescription)")
@@ -273,7 +290,8 @@ final class DashboardViewModel {
         }
     }
 
-    private func safeBMIFetch() async -> (metric: HealthMetric?, failed: Bool) {
+    private func safeBMIFetch(canQueryHealthKit: Bool) async -> (metric: HealthMetric?, failed: Bool) {
+        guard canQueryHealthKit else { return (nil, false) }
         do { return (try await fetchBMIData(), false) }
         catch {
             AppLogger.ui.error("BMI fetch failed: \(error.localizedDescription)")
@@ -285,8 +303,16 @@ final class DashboardViewModel {
     func requestLocationPermission() async {
         guard let weatherProvider else { return }
         await weatherProvider.requestLocationPermission()
-        // Re-fetch weather after permission is granted
-        weatherSnapshot = await safeWeatherFetch()
+        await waitForLocationPermissionResolution(using: weatherProvider)
+
+        // Re-fetch weather after permission state resolves.
+        let refreshedWeather = await safeWeatherFetch()
+        weatherSnapshot = refreshedWeather
+        weatherAtmosphere = refreshedWeather.map { WeatherAtmosphere.from($0) } ?? .default
+
+        // Recompute coaching with refreshed weather context.
+        buildCoachingInsights()
+        coachingMessage = focusInsight?.message ?? buildCoachingMessage()
     }
 
     private func safeWeatherFetch() async -> WeatherSnapshot? {
@@ -297,6 +323,21 @@ final class DashboardViewModel {
             // Weather is non-critical — fail silently (graceful degradation)
             AppLogger.data.info("Weather fetch skipped: \(type(of: error)): \(error.localizedDescription)")
             return nil
+        }
+    }
+
+    /// Wait until the location permission prompt is resolved (authorized or denied),
+    /// then continue weather refresh. Prevents first-tap fetch before user selection.
+    private func waitForLocationPermissionResolution(using weatherProvider: WeatherProviding) async {
+        let timeoutSeconds: TimeInterval = 30
+        let pollIntervalNanoseconds: UInt64 = 200_000_000
+        let deadline = Date().addingTimeInterval(timeoutSeconds)
+
+        while Date() < deadline {
+            if await weatherProvider.isLocationPermissionDetermined {
+                return
+            }
+            try? await Task.sleep(nanoseconds: pollIntervalNanoseconds)
         }
     }
 
@@ -664,11 +705,20 @@ final class DashboardViewModel {
             )
         }
 
+        // Walking card (step-based): always include when walking workouts exist.
+        if let walkingMetric = walkingStepsMetric(from: workouts) {
+            metrics.append(walkingMetric)
+        }
+
         // 2. Per-type cards from full 30-day range
         let grouped = Dictionary(grouping: workouts, by: \.type)
 
         var typeMetrics: [HealthMetric] = []
         for (type, typeWorkouts) in grouped {
+            // Walking gets a dedicated step-based card above to avoid duplicate cards.
+            if type.lowercased() == "walking" {
+                continue
+            }
             let todayOnes = typeWorkouts.filter { calendar.isDateInToday($0.date) }
             let relevantWorkouts = todayOnes.isEmpty
                 ? [typeWorkouts.max(by: { $0.date < $1.date })].compactMap { $0 }
@@ -695,6 +745,54 @@ final class DashboardViewModel {
         metrics.append(contentsOf: typeMetrics)
 
         return metrics
+    }
+
+    /// Builds a dedicated walking card using step count as the primary value.
+    /// Priority: latest workout steps -> day total -> week total -> 0 (still show card).
+    private func walkingStepsMetric(from workouts: [WorkoutSummary]) -> HealthMetric? {
+        let calendar = Calendar.current
+        let walkingWorkouts = workouts
+            .filter { $0.activityType == .walking }
+            .sorted { $0.date > $1.date }
+
+        guard let latestWalking = walkingWorkouts.first else { return nil }
+
+        let latestWorkoutSteps = latestWalking.stepCount.flatMap { $0 > 0 ? $0 : nil }
+
+        let dayStart = calendar.startOfDay(for: latestWalking.date)
+        let dayTotal = walkingWorkouts
+            .filter { calendar.isDate($0.date, inSameDayAs: dayStart) }
+            .compactMap(\.stepCount)
+            .filter { $0 > 0 }
+            .reduce(0, +)
+
+        let weekTotal: Double = {
+            guard let interval = calendar.dateInterval(of: .weekOfYear, for: latestWalking.date) else {
+                return 0
+            }
+            return walkingWorkouts
+                .filter { interval.contains($0.date) }
+                .compactMap(\.stepCount)
+                .filter { $0 > 0 }
+                .reduce(0, +)
+        }()
+
+        let resolvedSteps = latestWorkoutSteps
+            ?? (dayTotal > 0 ? dayTotal : nil)
+            ?? (weekTotal > 0 ? weekTotal : nil)
+            ?? 0
+
+        return HealthMetric(
+            id: "exercise-walking-steps",
+            name: String(localized: "Walking"),
+            value: resolvedSteps,
+            unit: "steps",
+            change: nil,
+            date: latestWalking.date,
+            category: .exercise,
+            isHistorical: !calendar.isDateInToday(latestWalking.date),
+            iconOverride: "figure.walk"
+        )
     }
 
     /// Returns the preferred display value and unit for a workout type.

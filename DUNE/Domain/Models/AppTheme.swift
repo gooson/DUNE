@@ -9,4 +9,5 @@ enum AppTheme: String, CaseIterable, Codable, Sendable {
     case oceanCool   = "oceanCool"
     case forestGreen = "forestGreen"
     case sakuraCalm  = "sakuraCalm"
+    case arcticDawn  = "arcticDawn"
 }

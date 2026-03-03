@@ -812,6 +812,40 @@
         }
       }
     },
+    "%1$@: %2$@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@: %2$@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@: %2$@"
+          }
+        }
+      }
+    },
+    "%lld badges" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld バッジ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld개 배지"
+          }
+        }
+      }
+    },
     "%lld consecutive days of exercise. Incredible consistency! Keep the habit going." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -944,6 +978,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "이번 주 %lld개 근육 훈련 완료"
+          }
+        }
+      }
+    },
+    "%lld new PR badges unlocked" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新しいPRバッジを%lld個獲得"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "새 PR 배지 %lld개 획득"
+          }
+        }
+      }
+    },
+    "%lld pts" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld pt"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld 포인트"
           }
         }
       }
@@ -1116,6 +1184,23 @@
         }
       }
     },
+    "+%lld pts" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "+%lld pt"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "+%lld 포인트"
+          }
+        }
+      }
+    },
     "+1 Set" : {
       "localizations" : {
         "ja" : {
@@ -1180,6 +1265,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "1개월"
+          }
+        }
+      }
+    },
+    "1 new PR badge unlocked" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新しいPRバッジを1個獲得"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "새 PR 배지 1개 획득"
           }
         }
       }
@@ -1635,6 +1737,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "약간 힘듦 — 힘들어지기 시작"
+          }
+        }
+      }
+    },
+    "Achievement History" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "達成履歴"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "달성 히스토리"
           }
         }
       }
@@ -2221,6 +2340,10 @@
         }
       }
     },
+    "Arctic Dawn" : {
+      "extractionState" : "manual",
+      "shouldTranslate" : false
+    },
     "Asleep" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2286,6 +2409,9 @@
           }
         }
       }
+    },
+    "Auto Workout Achievements" : {
+
     },
     "Auto-complete from workouts" : {
       "extractionState" : "manual",
@@ -2428,6 +2554,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "평균 심박수"
+          }
+        }
+      }
+    },
+    "Avg Pace" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "平均ペース"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "평균 페이스"
           }
         }
       }
@@ -4878,6 +5021,40 @@
         }
       }
     },
+    "Day" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "日"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "하루"
+          }
+        }
+      }
+    },
+    "Day Steps" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1日歩数"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "하루 걸음 수"
+          }
+        }
+      }
+    },
     "days" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -6614,17 +6791,21 @@
       }
     },
     "Feels %@°" : {
+
+    },
+    "Feels %lld°" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "体感 %@°"
+            "value" : "体感 %lld°"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "체감 %@°"
+            "value" : "체감 %lld°"
           }
         }
       }
@@ -6647,17 +6828,21 @@
       }
     },
     "Feels like %@°C" : {
+
+    },
+    "Feels like %lld°C" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "体感 %@°C"
+            "value" : "体感 %lld°C"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "체감 %@°C"
+            "value" : "체감 %lld°C"
           }
         }
       }
@@ -6881,6 +7066,23 @@
         }
       }
     },
+    "floors" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "階"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "층"
+          }
+        }
+      }
+    },
     "Floors" : {
       "localizations" : {
         "ja" : {
@@ -6893,6 +7095,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "층"
+          }
+        }
+      }
+    },
+    "Floors Climbed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上った階数"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "오른 층수"
           }
         }
       }
@@ -7680,6 +7899,9 @@
         }
       }
     },
+    "HealthKit-based weekly goals (Mon-Sun)" : {
+
+    },
     "Heart Rate" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -8463,6 +8685,9 @@
         }
       }
     },
+    "ID: %@" : {
+
+    },
     "Identify and address neglected muscle groups" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -9234,6 +9459,23 @@
         }
       }
     },
+    "Level Up!" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "レベルアップ！"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "레벨 업!"
+          }
+        }
+      }
+    },
     "Life" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -9560,6 +9802,23 @@
         }
       }
     },
+    "Lv %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lv %lld"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lv %lld"
+          }
+        }
+      }
+    },
     "M" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -9877,6 +10136,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "약한 피로, 중강도 훈련 권장"
+          }
+        }
+      }
+    },
+    "Milestone Reached" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "マイルストーン達成"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "마일스톤 달성"
+          }
+        }
+      }
+    },
+    "Milestone Reached!" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "マイルストーン達成！"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "마일스톤 달성!"
           }
         }
       }
@@ -10387,6 +10680,9 @@
         }
       }
     },
+    "My Habits" : {
+
+    },
     "Name" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -10517,6 +10813,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "NEW 배지"
+          }
+        }
+      }
+    },
+    "New Badge Unlocked" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新しいバッジを獲得"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "새 배지 획득"
           }
         }
       }
@@ -10669,6 +10982,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ 데이터가 아직 없어요."
+          }
+        }
+      }
+    },
+    "No achievements yet. Complete workouts to unlock milestones, badges, and levels." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "まだ達成履歴がありません。ワークアウトを完了してマイルストーン、バッジ、レベルを解放しましょう。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아직 달성 내역이 없어요. 운동을 완료해 마일스톤, 배지, 레벨을 잠금 해제하세요."
           }
         }
       }
@@ -10856,6 +11186,9 @@
         }
       }
     },
+    "No HealthKit-linked workouts yet" : {
+
+    },
     "No HRV/RHR data collected — default applied" : {
       "localizations" : {
         "ja" : {
@@ -10985,6 +11318,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "이 기간의 기록이 없어요."
+          }
+        }
+      }
+    },
+    "No reward events yet. Complete workouts and hit milestones to build your timeline." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "まだ報酬イベントがありません。ワークアウトを完了してマイルストーンを達成し、タイムラインを作成しましょう。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아직 보상 이벤트가 없어요. 운동을 완료하고 마일스톤을 달성해 타임라인을 채워보세요."
           }
         }
       }
@@ -12037,6 +12387,23 @@
         }
       }
     },
+    "Personal Record Updated" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自己ベスト更新"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "개인 기록 갱신"
+          }
+        }
+      }
+    },
     "Personal Records" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -12572,6 +12939,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "비 예보 — 실내 운동 추천"
+          }
+        }
+      }
+    },
+    "Reached Level %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "レベル%lld達成"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "레벨 %lld 달성"
           }
         }
       }
@@ -13416,6 +13800,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "근력은 중량 추세를, 유산소는 페이스/거리 추세를 확인하세요"
+          }
+        }
+      }
+    },
+    "Reward Progress" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "報酬進捗"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "보상 진행도"
           }
         }
       }
@@ -15334,6 +15735,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "걸음 수 목표 달성!"
+          }
+        }
+      }
+    },
+    "Step Range" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "歩数範囲"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "걸음 범위"
           }
         }
       }
@@ -17830,6 +18248,40 @@
         }
       }
     },
+    "Week" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "週"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주"
+          }
+        }
+      }
+    },
+    "Week Steps" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "週間歩数"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주간 걸음 수"
+          }
+        }
+      }
+    },
     "Weekly" : {
       "localizations" : {
         "ja" : {
@@ -18500,6 +18952,23 @@
         }
       }
     },
+    "Workout Steps" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ワークアウト歩数"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "운동 걸음 수"
+          }
+        }
+      }
+    },
     "Wrestling" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -19052,6 +19521,15 @@
           }
         }
       }
+    },
+    "알림 대상이 삭제되었거나 동기화되지 않았습니다." : {
+
+    },
+    "알림이 도착하면 여기에 표시됩니다." : {
+
+    },
+    "해당 운동을 찾을 수 없습니다" : {
+
     }
   },
   "version" : "1.0"

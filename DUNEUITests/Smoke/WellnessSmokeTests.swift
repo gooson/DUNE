@@ -65,6 +65,27 @@ final class WellnessSmokeTests: UITestBaseCase {
         XCTAssertTrue(addMenu.waitForExistence(timeout: 3), "Body form should be dismissed")
     }
 
+    func testBodyFormSaveEnablesAfterInput() throws {
+        let addMenu = app.descendants(matching: .any)[AXID.wellnessToolbarAdd].firstMatch
+        XCTAssertTrue(addMenu.waitForExistence(timeout: 5), "Add menu should exist")
+        addMenu.tap()
+
+        let bodyRecordButton = app.descendants(matching: .any)[AXID.wellnessMenuBodyRecord].firstMatch
+        XCTAssertTrue(bodyRecordButton.waitForExistence(timeout: 3), "Body Record action should exist")
+        bodyRecordButton.tap()
+
+        let saveButton = app.descendants(matching: .any)[AXID.bodyFormSave].firstMatch
+        XCTAssertTrue(saveButton.waitForExistence(timeout: 3), "Body form save button should appear")
+        XCTAssertFalse(saveButton.isEnabled, "Save should be disabled when all inputs are empty")
+
+        let weightField = app.textFields[AXID.bodyFormWeight]
+        XCTAssertTrue(weightField.waitForExistence(timeout: 3), "Weight field should exist")
+        weightField.tap()
+        weightField.typeText("72.5")
+
+        XCTAssertTrue(saveButton.isEnabled, "Save should be enabled after weight input")
+    }
+
     // MARK: - Injury Form
 
     func testInjuryFormOpens() throws {
@@ -81,5 +102,22 @@ final class WellnessSmokeTests: UITestBaseCase {
 
         let cancelButton = app.descendants(matching: .any)[AXID.injuryFormCancel]
         XCTAssertTrue(cancelButton.exists, "Injury form cancel button should appear")
+    }
+
+    func testInjuryRecoveredToggleShowsEndDate() throws {
+        let addMenu = app.descendants(matching: .any)[AXID.wellnessToolbarAdd].firstMatch
+        XCTAssertTrue(addMenu.waitForExistence(timeout: 5), "Add menu should exist")
+        addMenu.tap()
+
+        let injuryButton = app.descendants(matching: .any)[AXID.wellnessMenuInjury].firstMatch
+        XCTAssertTrue(injuryButton.waitForExistence(timeout: 3), "Injury action should exist")
+        injuryButton.tap()
+
+        let recoveredToggle = app.descendants(matching: .any)[AXID.injuryFormRecoveredToggle].firstMatch
+        XCTAssertTrue(recoveredToggle.waitForExistence(timeout: 3), "Recovered toggle should exist")
+        recoveredToggle.tap()
+
+        let endDate = app.descendants(matching: .any)[AXID.injuryFormEndDate].firstMatch
+        XCTAssertTrue(endDate.waitForExistence(timeout: 3), "End date picker should appear after enabling recovered toggle")
     }
 }

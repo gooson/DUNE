@@ -7,19 +7,23 @@ struct WatchExerciseHelpersTests {
     private func exercise(
         id: String,
         name: String = "Bench Press",
+        inputType: String = "weight_reps",
         defaultSets: Int = 3,
         defaultReps: Int? = 10,
-        defaultWeightKg: Double? = 50
+        defaultWeightKg: Double? = 50,
+        equipment: String? = "barbell",
+        aliases: [String]? = nil
     ) -> WatchExerciseInfo {
         WatchExerciseInfo(
             id: id,
             name: name,
-            inputType: "weight_reps",
+            inputType: inputType,
             defaultSets: defaultSets,
             defaultReps: defaultReps,
             defaultWeightKg: defaultWeightKg,
-            equipment: "barbell",
-            cardioSecondaryUnit: nil
+            equipment: equipment,
+            cardioSecondaryUnit: nil,
+            aliases: aliases
         )
     }
 
@@ -168,5 +172,86 @@ struct WatchExerciseHelpersTests {
         #expect(merged.count == 2)
         #expect(merged[0].name == "Newer Remote")
         #expect(merged[1].name == "Older Remote")
+    }
+
+    @Test("WatchExerciseCategory maps known inputType values")
+    func watchExerciseCategoryMapping() {
+        #expect(WatchExerciseCategory(inputTypeRaw: "setsRepsWeight") == .strength)
+        #expect(WatchExerciseCategory(inputTypeRaw: "setsReps") == .bodyweight)
+        #expect(WatchExerciseCategory(inputTypeRaw: "durationDistance") == .cardio)
+        #expect(WatchExerciseCategory(inputTypeRaw: "roundsBased") == .hiit)
+        #expect(WatchExerciseCategory(inputTypeRaw: "durationIntensity") == .flexibility)
+        #expect(WatchExerciseCategory(inputTypeRaw: "unknown-type") == .other)
+    }
+
+    @Test("filterWatchExercises matches aliases and equipment keywords")
+    func filterWatchExercisesAliasAndEquipment() {
+        let bench = exercise(
+            id: "bench",
+            name: "Bench Press",
+            equipment: "barbell",
+            aliases: ["Flat Bench Press"]
+        )
+        let squat = exercise(
+            id: "squat",
+            name: "Squat",
+            equipment: "smithMachine",
+            aliases: ["Back Squat"]
+        )
+
+        let aliasResults = filterWatchExercises(
+            exercises: [bench, squat],
+            query: "flat bench",
+            category: nil
+        )
+        #expect(aliasResults.map(\.id) == ["bench"])
+
+        let equipmentResults = filterWatchExercises(
+            exercises: [bench, squat],
+            query: "스미스",
+            category: nil
+        )
+        #expect(equipmentResults.map(\.id) == ["squat"])
+    }
+
+    @Test("filterWatchExercises combines category filter and query terms")
+    func filterWatchExercisesWithCategory() {
+        let run = exercise(
+            id: "run",
+            name: "Interval Running",
+            inputType: "durationDistance",
+            equipment: nil
+        )
+        let bike = exercise(
+            id: "bike",
+            name: "Bike Sprint",
+            inputType: "durationDistance",
+            equipment: "machine"
+        )
+        let burpee = exercise(
+            id: "burpee",
+            name: "Burpee",
+            inputType: "roundsBased",
+            equipment: nil
+        )
+
+        let cardioOnly = filterWatchExercises(
+            exercises: [run, bike, burpee],
+            query: "bike",
+            category: .cardio
+        )
+        #expect(cardioOnly.map(\.id) == ["bike"])
+    }
+
+    @Test("groupedWatchExercisesByCategory follows fixed category order")
+    func groupedWatchExercisesOrdering() {
+        let exercises = [
+            exercise(id: "flex", name: "Stretch", inputType: "durationIntensity"),
+            exercise(id: "strength", name: "Bench", inputType: "setsRepsWeight"),
+            exercise(id: "cardio", name: "Run", inputType: "durationDistance")
+        ]
+
+        let grouped = groupedWatchExercisesByCategory(exercises)
+        #expect(grouped.map(\.category) == [.strength, .cardio, .flexibility])
     }
 }

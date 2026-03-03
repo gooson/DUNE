@@ -197,13 +197,13 @@ final class TemplateWorkoutViewModel {
     private func findNextPendingIndex(after index: Int) -> Int? {
         // Search forward from current index
         for i in (index + 1)..<config.exercises.count {
-            if exerciseStatuses[i] == .pending || exerciseStatuses[i] == .skipped {
+            if exerciseStatuses[i] == .pending {
                 return i
             }
         }
         // Wrap around and search from beginning
         for i in 0..<index {
-            if exerciseStatuses[i] == .pending || exerciseStatuses[i] == .skipped {
+            if exerciseStatuses[i] == .pending {
                 return i
             }
         }

@@ -37,6 +37,8 @@ final class LifeViewModel {
     private(set) var habitProgresses: [HabitProgress] = []
     private(set) var completedCount: Int = 0
     private(set) var totalActiveCount: Int = 0
+    private(set) var autoExerciseProgresses: [LifeAutoAchievementProgress] =
+        LifeAutoAchievementService.calculateProgresses(from: [])
 
     // MARK: - Habit CRUD
 
@@ -173,6 +175,33 @@ final class LifeViewModel {
         habitProgresses = progresses
         completedCount = completed
         totalActiveCount = progresses.count
+    }
+
+    func calculateAutoExerciseProgresses(
+        exerciseRecords: [ExerciseRecord],
+        referenceDate: Date = Date()
+    ) {
+        let entries: [LifeAutoWorkoutEntry] = exerciseRecords.map { record in
+            let linkedWorkoutID = record.healthKitWorkoutID?
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+            return LifeAutoWorkoutEntry(
+                sourceWorkoutID: linkedWorkoutID?.isEmpty == true ? nil : linkedWorkoutID,
+                date: record.date,
+                activityID: record.exerciseDefinitionID,
+                exerciseType: record.exerciseType,
+                distance: record.distance,
+                hasSetData: record.hasSetData,
+                primaryMuscles: record.primaryMuscles,
+                secondaryMuscles: record.secondaryMuscles,
+                isFromHealthKit: record.isFromHealthKit,
+                hasHealthKitLink: linkedWorkoutID?.isEmpty == false
+            )
+        }
+
+        autoExerciseProgresses = LifeAutoAchievementService.calculateProgresses(
+            from: entries,
+            referenceDate: referenceDate
+        )
     }
 
     // MARK: - Form Helpers

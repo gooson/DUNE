@@ -153,7 +153,8 @@ final class WatchSessionManager: NSObject {
                 // Map generic catch-all Equipment cases to nil so Watch shows SF Symbol fallback
                 // instead of treating them identically to unknown/corrupted rawValues.
                 equipment: def.equipment == .other ? nil : def.equipment.rawValue,
-                cardioSecondaryUnit: def.cardioSecondaryUnit?.rawValue
+                cardioSecondaryUnit: def.cardioSecondaryUnit?.rawValue,
+                aliases: def.aliases
             )
         }
         transferExerciseLibrary(watchExercises)

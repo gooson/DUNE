@@ -82,4 +82,20 @@ final class ActivitySmokeTests: UITestBaseCase {
 
         XCTAssertTrue(addButton.waitForExistence(timeout: 3), "Picker should dismiss back to Activity screen")
     }
+
+    func testExercisePickerSearchAvailable() throws {
+        let addButton = app.descendants(matching: .any)[AXID.activityToolbarAdd].firstMatch
+        XCTAssertTrue(addButton.waitForExistence(timeout: 5), "Add button should exist")
+        addButton.tap()
+
+        let pickerList = app.descendants(matching: .any)[AXID.pickerRootList].firstMatch
+        XCTAssertTrue(pickerList.waitForExistence(timeout: 5), "Exercise picker should appear")
+
+        let searchField = app.searchFields.firstMatch
+        XCTAssertTrue(searchField.waitForExistence(timeout: 5), "Exercise picker search field should exist")
+
+        let cancel = app.buttons[AXID.pickerCancelButton]
+        XCTAssertTrue(cancel.waitForExistence(timeout: 3), "Exercise picker cancel button should appear")
+        cancel.tap()
+    }
 }

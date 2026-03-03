@@ -44,11 +44,19 @@ struct WellnessView: View {
                                 viewModel.activeCards.isEmpty &&
                                 viewModel.wellnessScore == nil &&
                                 !viewModel.isLoading {
-                        EmptyStateView(
-                            icon: "leaf.fill",
-                            title: "No Wellness Data",
-                            message: "Wear Apple Watch to bed for sleep tracking, or add body composition records to get started."
-                        )
+                        if viewModel.isMirroredReadOnlyMode {
+                            EmptyStateView(
+                                icon: "leaf.fill",
+                                title: "No Synced Wellness Data",
+                                message: "Open DUNE on your iPhone once to sync HealthKit data, then refresh on Mac."
+                            )
+                        } else {
+                            EmptyStateView(
+                                icon: "leaf.fill",
+                                title: "No Wellness Data",
+                                message: "Wear Apple Watch to bed for sleep tracking, or add body composition records to get started."
+                            )
+                        }
                     } else {
                         // Partial failure banner
                         if let message = viewModel.partialFailureMessage {

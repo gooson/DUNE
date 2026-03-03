@@ -157,8 +157,9 @@ targets:
       - path: Domain/Models/HeartRateZone.swift
       # Shared HealthKit mapping (needed for cardio workout configuration)
       - path: Data/HealthKit/WorkoutActivityType+HealthKit.swift
-      # Shared Presentation extension (iconName for cardio metrics views)
+      # Shared Presentation extensions
       - path: Presentation/Shared/Extensions/WorkoutActivityType+Icon.swift
+      - path: Presentation/Shared/Extensions/AppTheme+View.swift
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.raftel.dailve.watchkitapp

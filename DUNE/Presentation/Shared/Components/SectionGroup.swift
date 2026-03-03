@@ -16,7 +16,13 @@ struct SectionGroup<Content: View>: View {
 
     private var cornerRadius: CGFloat { sizeClass == .regular ? DS.Radius.lg : DS.Radius.md }
     private var outerPadding: CGFloat { sizeClass == .regular ? DS.Spacing.xl : DS.Spacing.lg }
-    private var borderWidth: CGFloat { theme == .sakuraCalm ? 0.95 : 0.6 }
+    private var borderWidth: CGFloat {
+        switch theme {
+        case .sakuraCalm: 0.95
+        case .arcticDawn: 0.85
+        case .desertWarm, .oceanCool, .forestGreen: 0.6
+        }
+    }
 
     private var sectionSurfaceGradient: LinearGradient {
         switch theme {
@@ -27,6 +33,17 @@ struct SectionGroup<Content: View>: View {
                     Color("SakuraIvory").opacity(colorScheme == .dark ? 0.12 : 0.10),
                     Color("SakuraPetal").opacity(colorScheme == .dark ? 0.08 : 0.06),
                     Color("SakuraDusk").opacity(colorScheme == .dark ? 0.10 : 0.00),
+                    .clear
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        case .arcticDawn:
+            LinearGradient(
+                colors: [
+                    Color("ArcticAurora").opacity(colorScheme == .dark ? 0.18 : 0.16),
+                    Color("ArcticFrost").opacity(colorScheme == .dark ? 0.14 : 0.12),
+                    Color("ArcticDeep").opacity(colorScheme == .dark ? 0.11 : 0.06),
                     .clear
                 ],
                 startPoint: .topLeading,
@@ -49,6 +66,16 @@ struct SectionGroup<Content: View>: View {
                 startPoint: .top,
                 endPoint: .bottom
             )
+        case .arcticDawn:
+            LinearGradient(
+                colors: [
+                    Color("ArcticFrost").opacity(colorScheme == .dark ? 0.18 : 0.14),
+                    Color("ArcticAurora").opacity(colorScheme == .dark ? 0.10 : 0.08),
+                    .clear
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
         case .desertWarm, .oceanCool, .forestGreen:
             LinearGradient(
                 colors: [theme.accentColor.opacity(0.08), .clear],
@@ -66,6 +93,16 @@ struct SectionGroup<Content: View>: View {
                     Color("SakuraPetal").opacity(colorScheme == .dark ? 0.34 : 0.24),
                     Color("SakuraAccent").opacity(colorScheme == .dark ? 0.20 : 0.16),
                     Color("SakuraDusk").opacity(colorScheme == .dark ? 0.16 : 0.08)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        case .arcticDawn:
+            LinearGradient(
+                colors: [
+                    Color("ArcticFrost").opacity(colorScheme == .dark ? 0.34 : 0.26),
+                    Color("ArcticAccent").opacity(colorScheme == .dark ? 0.22 : 0.16),
+                    Color("ArcticDusk").opacity(colorScheme == .dark ? 0.16 : 0.10)
                 ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing

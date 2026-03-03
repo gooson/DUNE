@@ -145,6 +145,81 @@ private struct MockBodyService: BodyCompositionQuerying {
     func fetchLatestLeanBodyMass(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
 }
 
+private actor MockWeatherProvider: WeatherProviding {
+    enum TestError: Error {
+        case fetchFailed
+    }
+
+    private var snapshot: WeatherSnapshot?
+    private var shouldFailFetch: Bool
+    private var permissionDetermined: Bool
+    private var determinationDelayNanoseconds: UInt64?
+    private(set) var permissionRequestCount = 0
+    private(set) var fetchCount = 0
+
+    init(
+        snapshot: WeatherSnapshot? = nil,
+        shouldFailFetch: Bool = false,
+        permissionDetermined: Bool = true,
+        determinationDelayNanoseconds: UInt64? = nil
+    ) {
+        self.snapshot = snapshot
+        self.shouldFailFetch = shouldFailFetch
+        self.permissionDetermined = permissionDetermined
+        self.determinationDelayNanoseconds = determinationDelayNanoseconds
+    }
+
+    func fetchCurrentWeather() async throws -> WeatherSnapshot {
+        fetchCount += 1
+        if shouldFailFetch || snapshot == nil {
+            throw TestError.fetchFailed
+        }
+        return snapshot!
+    }
+
+    func requestLocationPermission() async {
+        permissionRequestCount += 1
+
+        guard !permissionDetermined else { return }
+
+        if let delay = determinationDelayNanoseconds {
+            Task {
+                try? await Task.sleep(nanoseconds: delay)
+                permissionDetermined = true
+            }
+        } else {
+            permissionDetermined = true
+        }
+    }
+
+    var isLocationPermissionDetermined: Bool {
+        get async { permissionDetermined }
+    }
+
+    func callCounts() -> (permissionRequests: Int, fetches: Int) {
+        (permissionRequestCount, fetchCount)
+    }
+}
+
+private func makeTestWeatherSnapshot(
+    condition: WeatherConditionType = .rain
+) -> WeatherSnapshot {
+    WeatherSnapshot(
+        temperature: 21,
+        feelsLike: 22,
+        condition: condition,
+        humidity: 0.6,
+        uvIndex: 4,
+        windSpeed: 12,
+        isDaytime: true,
+        fetchedAt: Date(),
+        hourlyForecast: [],
+        dailyForecast: [],
+        locationName: "Seoul",
+        airQuality: nil
+    )
+}
+
 // MARK: - Tests
 
 @Suite("DashboardViewModel Fallback")
@@ -529,6 +604,59 @@ struct DashboardViewModelTests {
         #expect(vm.baselineDeltasByMetricID["rhr"]?.shortTermDelta == 10.0)
     }
 
+    @Test("Location permission waits for resolution before weather fetch")
+    func locationPermissionWaitsBeforeWeatherFetch() async {
+        let weatherProvider = MockWeatherProvider(
+            snapshot: makeTestWeatherSnapshot(condition: .rain),
+            permissionDetermined: false,
+            determinationDelayNanoseconds: 150_000_000
+        )
+        let vm = DashboardViewModel(
+            hrvService: MockHRVService(),
+            sleepService: MockSleepService(),
+            workoutService: MockWorkoutService(),
+            stepsService: MockStepsService(),
+            bodyService: MockBodyService(),
+            weatherProvider: weatherProvider
+        )
+
+        await vm.requestLocationPermission()
+
+        #expect(vm.weatherSnapshot != nil)
+        #expect(vm.weatherSnapshot?.condition == .rain)
+        if let snapshot = vm.weatherSnapshot {
+            #expect(vm.weatherAtmosphere == WeatherAtmosphere.from(snapshot))
+        } else {
+            Issue.record("Expected weather snapshot to be populated after permission resolution")
+        }
+        let counts = await weatherProvider.callCounts()
+        #expect(counts.permissionRequests == 1)
+        #expect(counts.fetches == 1)
+    }
+
+    @Test("Location permission refresh works when already determined")
+    func locationPermissionRefreshWhenAlreadyDetermined() async {
+        let weatherProvider = MockWeatherProvider(
+            snapshot: makeTestWeatherSnapshot(condition: .clear),
+            permissionDetermined: true
+        )
+        let vm = DashboardViewModel(
+            hrvService: MockHRVService(),
+            sleepService: MockSleepService(),
+            workoutService: MockWorkoutService(),
+            stepsService: MockStepsService(),
+            bodyService: MockBodyService(),
+            weatherProvider: weatherProvider
+        )
+
+        await vm.requestLocationPermission()
+
+        #expect(vm.weatherSnapshot?.condition == .clear)
+        let counts = await weatherProvider.callCounts()
+        #expect(counts.permissionRequests == 1)
+        #expect(counts.fetches == 1)
+    }
+
     private func makePinnedStore(_ categories: [HealthMetric.Category]) -> TodayPinnedMetricsStore {
         let suiteName = "DashboardPinnedStore.\(UUID().uuidString)"
         let defaults = UserDefaults(suiteName: suiteName) ?? .standard
@@ -589,6 +717,40 @@ struct DashboardViewModelVitalCardTests {
         let categories = Set(vm.activityCards.map(\.category))
         #expect(categories.contains(.steps))
         #expect(categories.contains(.exercise))
+    }
+
+    @Test("Walking step card is added when walking workout exists")
+    func walkingStepCardAdded() async {
+        let now = Date()
+        let workout = MockWorkoutService(workouts: [
+            WorkoutSummary(
+                id: "w-walking",
+                type: "Walking",
+                activityType: .walking,
+                duration: 2400,
+                calories: 180,
+                distance: 2_100,
+                date: now,
+                stepCount: 3_245
+            )
+        ])
+
+        let vm = DashboardViewModel(
+            hrvService: MockHRVService(),
+            sleepService: MockSleepService(),
+            workoutService: workout,
+            stepsService: MockStepsService(),
+            bodyService: MockBodyService(),
+            pinnedMetricsStore: makePinnedStore([])
+        )
+
+        await vm.loadData()
+
+        let walkingCard = vm.activityCards.first { $0.id == "exercise-walking-steps" }
+        #expect(walkingCard != nil)
+        #expect(walkingCard?.title == String(localized: "Walking"))
+        #expect(walkingCard?.unit == String(localized: "steps"))
+        #expect(walkingCard?.value == "3,245")
     }
 
     @Test("Body cards contain weight and BMI")

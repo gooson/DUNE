@@ -89,15 +89,24 @@ struct WatchWaveBackground: View {
     @Environment(\.appTheme) private var theme
 
     private var isSakura: Bool { theme == .sakuraCalm }
+    private var isArctic: Bool { theme == .arcticDawn }
 
     var body: some View {
         let resolvedColor = color ?? theme.accentColor
-        let gradientTop = resolvedColor.opacity(isSakura ? 0.22 : DS.Opacity.light)
-        let secondaryTop = isSakura ? Color("SakuraIvory").opacity(0.14) : .clear
+        let gradientTop = resolvedColor.opacity(isSakura ? 0.22 : (isArctic ? 0.24 : DS.Opacity.light))
+        let secondaryTop: Color = {
+            if isSakura {
+                return Color("SakuraIvory").opacity(0.14)
+            }
+            if isArctic {
+                return Color("ArcticFrost").opacity(0.14)
+            }
+            return .clear
+        }()
 
         ZStack(alignment: .top) {
             WatchWaveShape(phase: phase)
-                .fill(resolvedColor.opacity(isSakura ? 0.26 : DS.Opacity.medium))
+                .fill(resolvedColor.opacity(isSakura ? 0.26 : (isArctic ? 0.22 : DS.Opacity.medium)))
                 .mask {
                     LinearGradient(
                         stops: [
@@ -122,6 +131,12 @@ struct WatchWaveBackground: View {
                     .frame(height: WatchWaveDefaults.frameHeight)
                     .padding(.top, 6)
             }
+
+            if isArctic {
+                WatchArcticAuroraBands(phase: petalPhase, opacity: reduceMotion ? 0.12 : 0.18)
+                    .frame(height: WatchWaveDefaults.frameHeight)
+                    .padding(.top, 5)
+            }
         }
         .ignoresSafeArea()
         .allowsHitTesting(false)
@@ -130,12 +145,47 @@ struct WatchWaveBackground: View {
             withAnimation(DS.Animation.waveDrift) {
                 phase = 2 * .pi
             }
-            if isSakura {
+            if isSakura || isArctic {
                 withAnimation(.linear(duration: 14).repeatForever(autoreverses: false)) {
                     petalPhase = 2 * .pi
                 }
             }
         }
+    }
+}
+
+private struct WatchArcticAuroraBands: View {
+    let phase: CGFloat
+    let opacity: Double
+
+    private let seeds: [Double] = [0.14, 0.26, 0.37, 0.51, 0.64, 0.77]
+
+    var body: some View {
+        GeometryReader { proxy in
+            ForEach(Array(seeds.enumerated()), id: \.offset) { idx, seed in
+                let width = proxy.size.width * (0.46 + 0.28 * abs(sin(seed * 7.3)))
+                let x = proxy.size.width * (0.12 + seed * 0.68)
+                let y = proxy.size.height * (0.11 + 0.34 * abs(sin(seed * 5.1)))
+                let dx = CGFloat(sin(phase * 0.85 + CGFloat(idx) * 0.9)) * 4.0
+                let dy = CGFloat(cos(phase * 0.65 + CGFloat(idx) * 0.4)) * 2.5
+                Capsule(style: .continuous)
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                Color("ArcticAurora").opacity(opacity),
+                                Color("ArcticFrost").opacity(opacity * 0.9),
+                                .clear
+                            ],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
+                    .frame(width: width, height: 2.8 + CGFloat(idx % 2))
+                    .rotationEffect(.degrees(-8 + Double(idx) * 3))
+                    .position(x: x + dx, y: y + dy)
+            }
+        }
+        .allowsHitTesting(false)
     }
 }
 

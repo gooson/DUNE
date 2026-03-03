@@ -29,7 +29,7 @@ struct ExerciseFrequencySection: View {
     private func frequencyRow(_ freq: ExerciseFrequency) -> some View {
         VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
             HStack {
-                Text(freq.exerciseName)
+                Text(localizedExerciseName(freq.exerciseName))
                     .font(.caption)
                     .fontWeight(.medium)
                     .lineLimit(1)
@@ -63,7 +63,7 @@ struct ExerciseFrequencySection: View {
                 Image(systemName: "chart.bar")
                     .font(.title3)
                     .foregroundStyle(.quaternary)
-                Text("Exercise distribution will appear after a few workouts.")
+                Text(String(localized: "Exercise distribution will appear after a few workouts."))
                     .font(.caption)
                     .foregroundStyle(.tertiary)
                     .multilineTextAlignment(.center)
@@ -71,5 +71,9 @@ struct ExerciseFrequencySection: View {
             .frame(maxWidth: .infinity)
             .padding(.vertical, DS.Spacing.md)
         }
+    }
+
+    private func localizedExerciseName(_ name: String) -> String {
+        WorkoutActivityType.localizedDisplayName(forStoredTitle: name) ?? name
     }
 }

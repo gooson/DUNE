@@ -243,4 +243,29 @@ struct EvaluateHealthInsightUseCaseTests {
         )
         #expect(result == nil)
     }
+
+    @Test("WorkoutReward: creates insight from representative reward event")
+    func workoutRewardRepresentativeEvent() {
+        let event = WorkoutRewardEvent(
+            id: "reward-1",
+            workoutID: "workout-1",
+            activityTypeRawValue: WorkoutActivityType.running.rawValue,
+            date: Date(),
+            kind: .badgeUnlocked,
+            title: "New Badge Unlocked",
+            detail: "Running: 10K",
+            pointsAwarded: 0,
+            levelAfterEvent: nil
+        )
+
+        let result = EvaluateHealthInsightUseCase.evaluateWorkoutReward(
+            activityName: "Running",
+            representativeEvent: event
+        )
+
+        #expect(result != nil)
+        #expect(result?.type == .workoutPR)
+        #expect(result?.severity == .celebration)
+        #expect(result?.title == "New Badge Unlocked")
+    }
 }

@@ -5,6 +5,11 @@ import UserNotifications
 final class NotificationServiceImpl: NotificationService, @unchecked Sendable {
 
     private let center = UNUserNotificationCenter.current()
+    private let inboxManager: NotificationInboxManager
+
+    init(inboxManager: NotificationInboxManager = .shared) {
+        self.inboxManager = inboxManager
+    }
 
     func requestAuthorization() async -> Bool {
         do {
@@ -23,14 +28,18 @@ final class NotificationServiceImpl: NotificationService, @unchecked Sendable {
     func send(_ insight: HealthInsight) async {
         guard await isAuthorized() else { return }
 
+        let inboxItem = inboxManager.recordSentInsight(insight)
+
         let content = UNMutableNotificationContent()
         content.title = insight.title
         content.body = insight.body
         content.sound = .default
         content.categoryIdentifier = insight.type.rawValue
+        content.badge = NSNumber(value: inboxManager.unreadCount())
+        content.userInfo = inboxManager.notificationUserInfo(for: inboxItem)
 
         let request = UNNotificationRequest(
-            identifier: "\(insight.type.rawValue)-\(insight.date.timeIntervalSince1970)",
+            identifier: inboxItem.id,
             content: content,
             trigger: nil  // Deliver immediately
         )

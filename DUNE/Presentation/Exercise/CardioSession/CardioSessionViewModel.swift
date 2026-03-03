@@ -50,6 +50,7 @@ final class CardioSessionViewModel {
     private(set) var averagePaceSecondsPerKm: Double = 0
     private(set) var estimatedCalories: Double = 0
     private(set) var heartRate: Double = 0
+    private(set) var walkingStepCount: Double = 0
     var errorMessage: String?
 
     /// Formatted elapsed time "M:SS" or "H:MM:SS".
@@ -104,9 +105,12 @@ final class CardioSessionViewModel {
     private let locationService: LocationTrackingServiceProtocol?
     private let motionService: MotionTrackingServiceProtocol
     private let calorieService: CalorieEstimating
+    private let stepsService: StepsQuerying?
     private var timerTask: Task<Void, Never>?
     private var pausedAccumulated: TimeInterval = 0
     private var lastResumeDate: Date?
+    private var baselineDaySteps: Double?
+    private var lastStepRefreshAt: Date?
 
     private var usesGPSDistance: Bool {
         isOutdoor && locationService != nil
@@ -120,7 +124,8 @@ final class CardioSessionViewModel {
         isOutdoor: Bool,
         locationService: LocationTrackingServiceProtocol? = nil,
         motionService: MotionTrackingServiceProtocol? = nil,
-        calorieService: CalorieEstimating = CalorieEstimationService()
+        calorieService: CalorieEstimating = CalorieEstimationService(),
+        stepsService: StepsQuerying? = nil
     ) {
         self.exercise = exercise
         self.activityType = activityType
@@ -128,6 +133,9 @@ final class CardioSessionViewModel {
         self.locationService = isOutdoor ? (locationService ?? LocationTrackingService()) : nil
         self.motionService = motionService ?? MotionTrackingService()
         self.calorieService = calorieService
+        self.stepsService = activityType == .walking
+            ? (stepsService ?? StepsQueryService(manager: .shared))
+            : nil
     }
 
     // MARK: - Session Lifecycle
@@ -140,6 +148,8 @@ final class CardioSessionViewModel {
         pausedAccumulated = 0
         resetLiveMetrics()
         state = .running
+        baselineDaySteps = nil
+        lastStepRefreshAt = nil
         startTimer()
 
         if let startDate {
@@ -150,6 +160,12 @@ final class CardioSessionViewModel {
                     errorMessage = String(localized: "Could not start motion tracking. Steps may be incomplete.")
                     AppLogger.healthKit.error("[CardioSession] Motion start failed: \(error)")
                 }
+            }
+        }
+
+        if activityType == .walking {
+            Task { @MainActor [weak self] in
+                await self?.establishWalkingStepBaseline()
             }
         }
 
@@ -209,6 +225,9 @@ final class CardioSessionViewModel {
         updateCurrentPace()
         updateAveragePace()
         updateCalories()
+        if activityType == .walking {
+            await refreshWalkingSteps(force: true)
+        }
         state = .finished
     }
 
@@ -232,6 +251,11 @@ final class CardioSessionViewModel {
                 self.updateCurrentPace()
                 self.updateAveragePace()
                 self.updateCalories()
+                if self.activityType == .walking {
+                    Task { @MainActor [weak self] in
+                        await self?.refreshWalkingSteps()
+                    }
+                }
             }
         }
     }
@@ -338,6 +362,43 @@ final class CardioSessionViewModel {
         averagePaceSecondsPerKm = 0
         estimatedCalories = 0
         heartRate = 0
+        walkingStepCount = 0
+    }
+
+    private func establishWalkingStepBaseline() async {
+        guard let stepsService else { return }
+        do {
+            let todaySteps = try await stepsService.fetchSteps(for: Date()) ?? 0
+            baselineDaySteps = max(todaySteps, 0)
+            walkingStepCount = 0
+        } catch {
+            // HealthKit steps are optional during session; keep silent fallback.
+            baselineDaySteps = nil
+            walkingStepCount = 0
+        }
+        await refreshWalkingSteps(force: true)
+    }
+
+    private func refreshWalkingSteps(force: Bool = false) async {
+        guard let stepsService else { return }
+        if !force,
+           let lastStepRefreshAt,
+           Date().timeIntervalSince(lastStepRefreshAt) < 8 {
+            return
+        }
+
+        do {
+            let todaySteps = try await stepsService.fetchSteps(for: Date()) ?? 0
+            let baseline = baselineDaySteps ?? todaySteps
+            baselineDaySteps = baseline
+            let delta = max(0, todaySteps - baseline)
+            if delta.isFinite, delta < 200_000 {
+                walkingStepCount = delta
+            }
+            lastStepRefreshAt = Date()
+        } catch {
+            // Keep previous value on transient query errors.
+        }
     }
 
     // MARK: - Record Creation
@@ -357,6 +418,7 @@ final class CardioSessionViewModel {
         let safeFloors = (floorsAscended > 0 && floorsAscended.isFinite && floorsAscended < 20_000)
             ? floorsAscended
             : nil
+        let combinedSteps = max(stepCount, Int(walkingStepCount.rounded()))
 
         return CardioSessionRecord(
             exerciseID: exercise.id,
@@ -364,7 +426,7 @@ final class CardioSessionViewModel {
             category: exercise.category,
             duration: elapsedSeconds,
             distanceKm: distance,
-            stepCount: stepCount > 0 ? stepCount : nil,
+            stepCount: combinedSteps > 0 ? combinedSteps : nil,
             averagePaceSecondsPerKm: safePace,
             averageCadenceStepsPerMinute: safeCadence,
             elevationGainMeters: safeElevation,

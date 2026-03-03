@@ -174,7 +174,7 @@ struct CardioSessionView: View {
             metricTile(
                 icon: "figure.walk",
                 iconColor: DS.Color.steps,
-                value: viewModel.formattedStepCount,
+                value: displayedSteps,
                 unit: String(localized: "steps")
             )
 
@@ -201,6 +201,13 @@ struct CardioSessionView: View {
                 unit: "kcal"
             )
         }
+    }
+
+    private var displayedSteps: String {
+        if viewModel.activityType == .walking, viewModel.walkingStepCount > 0 {
+            return Int(viewModel.walkingStepCount).formattedWithSeparator
+        }
+        return viewModel.formattedStepCount
     }
 
     private func metricTile(icon: String, iconColor: SwiftUI.Color, value: String, unit: String) -> some View {

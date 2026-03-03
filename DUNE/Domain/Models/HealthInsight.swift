@@ -27,4 +27,21 @@ struct HealthInsight: Sendable {
     let body: String
     let severity: Severity
     let date: Date
+    let route: NotificationRoute?
+
+    init(
+        type: InsightType,
+        title: String,
+        body: String,
+        severity: Severity,
+        date: Date = Date(),
+        route: NotificationRoute? = nil
+    ) {
+        self.type = type
+        self.title = title
+        self.body = body
+        self.severity = severity
+        self.date = date
+        self.route = route
+    }
 }

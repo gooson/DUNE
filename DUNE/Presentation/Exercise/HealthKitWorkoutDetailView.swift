@@ -114,105 +114,151 @@ struct HealthKitWorkoutDetailView: View {
         let hrAvg = viewModel.heartRateAverage(for: workout)
         let hrMax = viewModel.heartRateMax(for: workout)
         let showDistanceCoreMetrics = workout.activityType.isDistanceBased
+        let isWalkingWorkout = workout.activityType == .walking
 
-        return LazyVGrid(columns: [
-            GridItem(.flexible(), spacing: DS.Spacing.sm),
-            GridItem(.flexible(), spacing: DS.Spacing.sm),
-        ], spacing: DS.Spacing.sm) {
-            // Heart rate avg
-            if let hrAvg {
-                statCard(
-                    icon: "heart.fill",
-                    iconColor: .red,
-                    title: "Avg Heart Rate",
-                    value: Int(hrAvg).formattedWithSeparator,
-                    unit: "bpm"
-                )
-            } else if showDistanceCoreMetrics {
-                noDataStatCard(
-                    icon: "heart.fill",
-                    iconColor: .red,
-                    title: "Avg Heart Rate"
-                )
+        return VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            LazyVGrid(columns: [
+                GridItem(.flexible(), spacing: DS.Spacing.sm),
+                GridItem(.flexible(), spacing: DS.Spacing.sm),
+            ], spacing: DS.Spacing.sm) {
+                // Heart rate avg
+                if let hrAvg {
+                    statCard(
+                        icon: "heart.fill",
+                        iconColor: .red,
+                        title: "Avg Heart Rate",
+                        value: Int(hrAvg).formattedWithSeparator,
+                        unit: "bpm"
+                    )
+                } else if showDistanceCoreMetrics {
+                    noDataStatCard(
+                        icon: "heart.fill",
+                        iconColor: .red,
+                        title: "Avg Heart Rate"
+                    )
+                }
+                // Heart rate max
+                if let hrMax {
+                    statCard(
+                        icon: "heart.fill",
+                        iconColor: .red.opacity(0.7),
+                        title: "Max Heart Rate",
+                        value: Int(hrMax).formattedWithSeparator,
+                        unit: "bpm"
+                    )
+                } else if showDistanceCoreMetrics {
+                    noDataStatCard(
+                        icon: "heart.fill",
+                        iconColor: .red.opacity(0.7),
+                        title: "Max Heart Rate"
+                    )
+                }
+                // Pace
+                if let pace = workout.averagePace {
+                    statCard(
+                        icon: "speedometer",
+                        iconColor: DS.Color.activity,
+                        title: "Avg Pace",
+                        value: formattedPace(pace),
+                        unit: "/km"
+                    )
+                } else if showDistanceCoreMetrics {
+                    noDataStatCard(
+                        icon: "speedometer",
+                        iconColor: DS.Color.activity,
+                        title: "Avg Pace"
+                    )
+                }
+                // Elevation
+                if let elevation = workout.elevationAscended, elevation > 0 {
+                    statCard(
+                        icon: "mountain.2.fill",
+                        iconColor: .green,
+                        title: "Elevation Gain",
+                        value: Int(elevation).formattedWithSeparator,
+                        unit: "m"
+                    )
+                }
+                // Flights climbed
+                if let flights = workout.flightsClimbed, flights > 0 {
+                    statCard(
+                        icon: "figure.stairs",
+                        iconColor: DS.Color.activity,
+                        title: "Floors Climbed",
+                        value: Int(flights).formattedWithSeparator,
+                        unit: "floors"
+                    )
+                }
+                // Step count (walking: always show with selected range)
+                if isWalkingWorkout {
+                    if let steps = viewModel.stepCount(for: workout, range: viewModel.selectedStepRange), steps > 0 {
+                        statCard(
+                            icon: "figure.walk",
+                            iconColor: DS.Color.steps,
+                            title: selectedStepTitle,
+                            value: Int(steps).formattedWithSeparator,
+                            unit: "steps"
+                        )
+                    } else {
+                        noDataStatCard(
+                            icon: "figure.walk",
+                            iconColor: DS.Color.steps,
+                            title: selectedStepTitle
+                        )
+                    }
+                } else if let steps = workout.stepCount, steps > 0 {
+                    statCard(
+                        icon: "figure.walk",
+                        iconColor: DS.Color.steps,
+                        title: "Steps",
+                        value: Int(steps).formattedWithSeparator,
+                        unit: "steps"
+                    )
+                }
+                // Effort score
+                if let effort = viewModel.effortScore ?? workout.effortScore {
+                    statCard(
+                        icon: "flame.fill",
+                        iconColor: .orange,
+                        title: "Effort",
+                        value: effort.formattedWithSeparator(fractionDigits: 1),
+                        unit: "/10"
+                    )
+                }
+                // Indoor/Outdoor
+                if let isIndoor = workout.isIndoor {
+                    statCard(
+                        icon: isIndoor ? "building.fill" : "sun.max.fill",
+                        iconColor: isIndoor ? .gray : .yellow,
+                        title: "Environment",
+                        value: isIndoor ? String(localized: "Indoor") : String(localized: "Outdoor"),
+                        unit: ""
+                    )
+                } else if showDistanceCoreMetrics {
+                    noDataStatCard(
+                        icon: "sun.max.fill",
+                        iconColor: .yellow,
+                        title: "Environment"
+                    )
+                }
             }
-            // Heart rate max
-            if let hrMax {
-                statCard(
-                    icon: "heart.fill",
-                    iconColor: .red.opacity(0.7),
-                    title: "Max Heart Rate",
-                    value: Int(hrMax).formattedWithSeparator,
-                    unit: "bpm"
-                )
-            } else if showDistanceCoreMetrics {
-                noDataStatCard(
-                    icon: "heart.fill",
-                    iconColor: .red.opacity(0.7),
-                    title: "Max Heart Rate"
-                )
+
+            if isWalkingWorkout {
+                Picker("Step Range", selection: $viewModel.selectedStepRange) {
+                    ForEach(HealthKitWorkoutDetailViewModel.StepRange.allCases) { range in
+                        Text(range.title).tag(range)
+                    }
+                }
+                .pickerStyle(.segmented)
             }
-            // Pace
-            if let pace = workout.averagePace {
-                statCard(
-                    icon: "speedometer",
-                    iconColor: DS.Color.activity,
-                    title: "Avg Pace",
-                    value: formattedPace(pace),
-                    unit: "/km"
-                )
-            } else if showDistanceCoreMetrics {
-                noDataStatCard(
-                    icon: "speedometer",
-                    iconColor: DS.Color.activity,
-                    title: "Avg Pace"
-                )
-            }
-            // Elevation
-            if let elevation = workout.elevationAscended, elevation > 0 {
-                statCard(
-                    icon: "mountain.2.fill",
-                    iconColor: .green,
-                    title: "Elevation Gain",
-                    value: Int(elevation).formattedWithSeparator,
-                    unit: "m"
-                )
-            }
-            // Step count
-            if let steps = workout.stepCount, steps > 0 {
-                statCard(
-                    icon: "figure.walk",
-                    iconColor: DS.Color.steps,
-                    title: "Steps",
-                    value: Int(steps).formattedWithSeparator,
-                    unit: "steps"
-                )
-            }
-            // Effort score
-            if let effort = viewModel.effortScore ?? workout.effortScore {
-                statCard(
-                    icon: "flame.fill",
-                    iconColor: .orange,
-                    title: "Effort",
-                    value: effort.formattedWithSeparator(fractionDigits: 1),
-                    unit: "/10"
-                )
-            }
-            // Indoor/Outdoor
-            if let isIndoor = workout.isIndoor {
-                statCard(
-                    icon: isIndoor ? "building.fill" : "sun.max.fill",
-                    iconColor: isIndoor ? .gray : .yellow,
-                    title: "Environment",
-                    value: isIndoor ? String(localized: "Indoor") : String(localized: "Outdoor"),
-                    unit: ""
-                )
-            } else if showDistanceCoreMetrics {
-                noDataStatCard(
-                    icon: "sun.max.fill",
-                    iconColor: .yellow,
-                    title: "Environment"
-                )
-            }
+        }
+    }
+
+    private var selectedStepTitle: LocalizedStringKey {
+        switch viewModel.selectedStepRange {
+        case .workout: "Workout Steps"
+        case .day: "Day Steps"
+        case .week: "Week Steps"
         }
     }
 

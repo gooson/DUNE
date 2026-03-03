@@ -108,6 +108,7 @@ struct WorkoutSummary: Identifiable, Sendable {
     let isIndoor: Bool?
     let effortScore: Double?        // 1-10 (user-rated or estimated)
     let stepCount: Double?
+    let flightsClimbed: Double?     // floors (from barometric altimeter)
 
     // MARK: - Achievement flags (set by PR/milestone detection)
 
@@ -128,6 +129,7 @@ struct WorkoutSummary: Identifiable, Sendable {
         isIndoor: Bool? = nil,
         effortScore: Double? = nil,
         stepCount: Double? = nil,
+        flightsClimbed: Double? = nil,
         milestoneDistance: MilestoneDistance? = nil,
         isPersonalRecord: Bool = false,
         personalRecordTypes: [PersonalRecordType] = []
@@ -152,6 +154,7 @@ struct WorkoutSummary: Identifiable, Sendable {
         self.isIndoor = isIndoor
         self.effortScore = effortScore
         self.stepCount = stepCount
+        self.flightsClimbed = flightsClimbed
         self.milestoneDistance = milestoneDistance
         self.isPersonalRecord = isPersonalRecord
         self.personalRecordTypes = personalRecordTypes
