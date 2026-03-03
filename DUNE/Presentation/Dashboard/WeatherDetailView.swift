@@ -97,6 +97,11 @@ struct WeatherDetailView: View {
                 // Hero: current weather
                 currentWeatherHero
 
+                // Best outdoor hour
+                if let data = bestHourData {
+                    bestTimeSection(data)
+                }
+
                 // Outdoor fitness score
                 outdoorFitnessSection
 
@@ -116,11 +121,6 @@ struct WeatherDetailView: View {
                 // 7-day forecast
                 if !snapshot.dailyForecast.isEmpty {
                     dailyForecastSection
-                }
-
-                // Best outdoor hour
-                if let data = bestHourData {
-                    bestTimeSection(data)
                 }
 
                 // Stale indicator
