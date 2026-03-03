@@ -133,6 +133,67 @@ struct ArcticRibbonShapeTests {
     }
 }
 
+@Suite("Arctic Aurora LOD")
+struct ArcticAuroraLODTests {
+    @Test("Quality mode is conserve when low power mode is enabled")
+    func lowPowerForcesConserve() {
+        let mode = ArcticAuroraLOD.qualityMode(
+            isLowPowerModeEnabled: true,
+            reduceMotion: false
+        )
+        #expect(mode == .conserve)
+    }
+
+    @Test("Quality mode is conserve when reduce motion is enabled")
+    func reduceMotionForcesConserve() {
+        let mode = ArcticAuroraLOD.qualityMode(
+            isLowPowerModeEnabled: false,
+            reduceMotion: true
+        )
+        #expect(mode == .conserve)
+    }
+
+    @Test("Quality mode is normal when low power and reduce motion are both off")
+    func defaultsToNormal() {
+        let mode = ArcticAuroraLOD.qualityMode(
+            isLowPowerModeEnabled: false,
+            reduceMotion: false
+        )
+        #expect(mode == .normal)
+    }
+
+    @Test("Scaled count preserves base in normal mode")
+    func scaledCountNormal() {
+        let scaled = ArcticAuroraLOD.scaledCount(
+            baseCount: 11,
+            mode: .normal,
+            conserveScale: 0.5
+        )
+        #expect(scaled == 11)
+    }
+
+    @Test("Scaled count reduces repeats in conserve mode with minimum bound")
+    func scaledCountConserveBounded() {
+        let scaled = ArcticAuroraLOD.scaledCount(
+            baseCount: 5,
+            mode: .conserve,
+            conserveScale: 0.2,
+            minimum: 2
+        )
+        #expect(scaled == 2)
+    }
+
+    @Test("Scaled count returns zero when base is zero")
+    func scaledCountZeroBase() {
+        let scaled = ArcticAuroraLOD.scaledCount(
+            baseCount: 0,
+            mode: .conserve,
+            conserveScale: 0.5
+        )
+        #expect(scaled == 0)
+    }
+}
+
 @Suite("SolarFlareShape Geometry")
 struct SolarFlareShapeTests {
     @Test("Path is non-empty for valid rect")

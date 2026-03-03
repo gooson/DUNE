@@ -474,6 +474,33 @@ private struct ArcticAuroraCurtainSpec {
     let tilt: Double
 }
 
+enum ArcticAuroraQualityMode: Sendable {
+    case normal
+    case conserve
+}
+
+enum ArcticAuroraLOD {
+    static func qualityMode(isLowPowerModeEnabled: Bool, reduceMotion: Bool) -> ArcticAuroraQualityMode {
+        if reduceMotion || isLowPowerModeEnabled {
+            return .conserve
+        }
+        return .normal
+    }
+
+    static func scaledCount(
+        baseCount: Int,
+        mode: ArcticAuroraQualityMode,
+        normalScale: Double = 1.0,
+        conserveScale: Double,
+        minimum: Int = 1
+    ) -> Int {
+        guard baseCount > 0 else { return 0 }
+        let rawScale = (mode == .normal) ? normalScale : conserveScale
+        let scaled = Int((Double(baseCount) * rawScale).rounded(.down))
+        return max(minimum, scaled)
+    }
+}
+
 struct ArcticAuroraCurtainOverlayView: View {
     var primaryColor: Color
     var secondaryColor: Color
@@ -489,6 +516,7 @@ struct ArcticAuroraCurtainOverlayView: View {
     var filamentOpacity: Double = 0.0
     var filamentWidth: CGFloat = 0.36
     var filamentSpread: CGFloat = 0.010
+    var qualityMode: ArcticAuroraQualityMode = .normal
 
     @State private var phase: CGFloat = 0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -506,9 +534,38 @@ struct ArcticAuroraCurtainOverlayView: View {
         (reverseDirection ? -1 : 1) * 2 * .pi
     }
 
+    private var activeCurtainSpecs: ArraySlice<ArcticAuroraCurtainSpec> {
+        let count = ArcticAuroraLOD.scaledCount(
+            baseCount: Self.curtainSpecs.count,
+            mode: qualityMode,
+            conserveScale: 0.72
+        )
+        return Self.curtainSpecs.prefix(count)
+    }
+
+    private var activeFilamentLines: Int {
+        ArcticAuroraLOD.scaledCount(
+            baseCount: filamentLines,
+            mode: qualityMode,
+            conserveScale: 0.58
+        )
+    }
+
+    private var blurScale: CGFloat {
+        qualityMode == .normal ? 1.0 : 0.82
+    }
+
+    private var highlightOpacityScale: Double {
+        qualityMode == .normal ? 1.0 : 0.78
+    }
+
+    private var filamentOpacityScale: Double {
+        qualityMode == .normal ? 1.0 : 0.74
+    }
+
     var body: some View {
         ZStack {
-            ForEach(Array(Self.curtainSpecs.enumerated()), id: \.offset) { idx, spec in
+            ForEach(Array(activeCurtainSpecs.enumerated()), id: \.offset) { idx, spec in
                 let localPhase = phase + CGFloat(idx) * 0.26
                 let bandOpacity = opacity * (0.82 + Double((idx + 1) % 3) * 0.12)
                 let shape = ArcticAuroraCurtainShape(
@@ -535,27 +592,27 @@ struct ArcticAuroraCurtainOverlayView: View {
                     .hueRotation(.degrees(hueShift))
                     .saturation(saturationBoost)
                     .rotationEffect(.degrees(spec.tilt))
-                    .blur(radius: blurRadius + CGFloat(idx % 2) * 0.45)
+                    .blur(radius: (blurRadius + CGFloat(idx % 2) * 0.45) * blurScale)
                     .blendMode(.screen)
                     .bottomFadeMask(bottomFade)
 
                 if highlights {
                     shape
                         .stroke(
-                            secondaryColor.opacity(bandOpacity * 0.28),
+                            secondaryColor.opacity(bandOpacity * 0.28 * highlightOpacityScale),
                             style: StrokeStyle(lineWidth: 1.1, lineCap: .round, lineJoin: .round)
                         )
                         .hueRotation(.degrees(hueShift * 0.6))
                         .saturation(saturationBoost + 0.06)
                         .rotationEffect(.degrees(spec.tilt))
-                        .blur(radius: 0.9)
+                        .blur(radius: 0.9 * blurScale)
                         .blendMode(.plusLighter)
                         .bottomFadeMask(bottomFade)
                 }
 
-                if filamentLines > 0, filamentOpacity > 0 {
-                    ForEach(0..<filamentLines, id: \.self) { strand in
-                        let center = CGFloat(filamentLines - 1) / 2
+                if activeFilamentLines > 0, filamentOpacity > 0 {
+                    ForEach(0..<activeFilamentLines, id: \.self) { strand in
+                        let center = CGFloat(activeFilamentLines - 1) / 2
                         let offset = CGFloat(strand) - center
                         let strandShape = ArcticAuroraCurtainShape(
                             centerX: spec.centerX + offset * filamentSpread,
@@ -570,9 +627,9 @@ struct ArcticAuroraCurtainOverlayView: View {
                             .stroke(
                                 LinearGradient(
                                     colors: [
-                                        primaryColor.opacity(bandOpacity * filamentOpacity * 0.48),
-                                        secondaryColor.opacity(bandOpacity * filamentOpacity),
-                                        Color.white.opacity(bandOpacity * filamentOpacity * 0.34),
+                                        primaryColor.opacity(bandOpacity * filamentOpacity * filamentOpacityScale * 0.48),
+                                        secondaryColor.opacity(bandOpacity * filamentOpacity * filamentOpacityScale),
+                                        Color.white.opacity(bandOpacity * filamentOpacity * filamentOpacityScale * 0.34),
                                     ],
                                     startPoint: .top,
                                     endPoint: .bottom
@@ -586,7 +643,7 @@ struct ArcticAuroraCurtainOverlayView: View {
                             .hueRotation(.degrees(hueShift * 0.5 + Double(offset) * 0.7))
                             .saturation(saturationBoost + 0.08)
                             .rotationEffect(.degrees(spec.tilt))
-                            .blur(radius: 0.32 + CGFloat(strand % 3) * 0.10)
+                            .blur(radius: (0.32 + CGFloat(strand % 3) * 0.10) * blurScale)
                             .blendMode(.plusLighter)
                             .bottomFadeMask(bottomFade)
                     }
@@ -685,6 +742,7 @@ private struct ArcticAuroraEdgeTextureOverlayView: View {
     var highlightColor: Color
     var opacity: Double = 0.20
     var driftDuration: Double = 16
+    var qualityMode: ArcticAuroraQualityMode = .normal
 
     @State private var phase: CGFloat = 0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -695,6 +753,16 @@ private struct ArcticAuroraEdgeTextureOverlayView: View {
     ]
 
     private var targetPhase: CGFloat { 2 * .pi }
+    private var blurScale: CGFloat { qualityMode == .normal ? 1.0 : 0.84 }
+    private var sparkleOpacityScale: Double { qualityMode == .normal ? 1.0 : 0.76 }
+    private var activeSparkleSeeds: ArraySlice<Double> {
+        let count = ArcticAuroraLOD.scaledCount(
+            baseCount: Self.sparkleSeeds.count,
+            mode: qualityMode,
+            conserveScale: 0.64
+        )
+        return Self.sparkleSeeds.prefix(count)
+    }
 
     var body: some View {
         GeometryReader { proxy in
@@ -717,7 +785,7 @@ private struct ArcticAuroraEdgeTextureOverlayView: View {
                         endPoint: .bottom
                     )
                 )
-                .blur(radius: 2.6)
+                .blur(radius: 2.6 * blurScale)
                 .blendMode(.screen)
 
                 ArcticAuroraEdgeGlowShape(
@@ -737,19 +805,19 @@ private struct ArcticAuroraEdgeTextureOverlayView: View {
                         endPoint: .bottom
                     )
                 )
-                .blur(radius: 3.2)
+                .blur(radius: 3.2 * blurScale)
                 .blendMode(.screen)
 
-                ForEach(Array(Self.sparkleSeeds.enumerated()), id: \.offset) { idx, seed in
+                ForEach(Array(activeSparkleSeeds.enumerated()), id: \.offset) { idx, seed in
                     let x = proxy.size.width * CGFloat(seed)
                     let yBase = proxy.size.height * (0.31 + 0.09 * abs(sin(seed * 14.0)))
                     let yDrift = sin(phase * 0.9 + CGFloat(idx) * 0.52) * proxy.size.height * 0.02
                     let size = 1.0 + CGFloat(idx % 3) * 0.7
                     Circle()
-                        .fill(highlightColor.opacity(opacity * (0.32 + Double(idx % 4) * 0.08)))
+                        .fill(highlightColor.opacity(opacity * sparkleOpacityScale * (0.32 + Double(idx % 4) * 0.08)))
                         .frame(width: size, height: size)
                         .position(x: x, y: yBase + yDrift)
-                        .blur(radius: idx.isMultiple(of: 2) ? 0.2 : 0.5)
+                        .blur(radius: (idx.isMultiple(of: 2) ? 0.2 : 0.5) * blurScale)
                         .blendMode(.plusLighter)
                 }
             }
@@ -778,6 +846,7 @@ private struct ArcticAuroraMicroDetailOverlayView: View {
     var opacity: Double = 0.16
     var driftDuration: Double = 18
     var leftClusterBoost: Double = 1.25
+    var qualityMode: ArcticAuroraQualityMode = .normal
 
     @State private var phase: CGFloat = 0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -817,6 +886,39 @@ private struct ArcticAuroraMicroDetailOverlayView: View {
     ]
 
     private var targetPhase: CGFloat { 2 * .pi }
+    private var activeStrandSpecs: ArraySlice<ArcticAuroraMicroStrandSpec> {
+        let count = ArcticAuroraLOD.scaledCount(
+            baseCount: Self.strandSpecs.count,
+            mode: qualityMode,
+            conserveScale: 0.62
+        )
+        return Self.strandSpecs.prefix(count)
+    }
+
+    private var activeCrestSeeds: ArraySlice<Double> {
+        let count = ArcticAuroraLOD.scaledCount(
+            baseCount: Self.crestSeeds.count,
+            mode: qualityMode,
+            conserveScale: 0.66
+        )
+        return Self.crestSeeds.prefix(count)
+    }
+
+    private var activeSparkleSeeds: ArraySlice<Double> {
+        let count = ArcticAuroraLOD.scaledCount(
+            baseCount: Self.sparkleSeeds.count,
+            mode: qualityMode,
+            conserveScale: 0.58
+        )
+        return Self.sparkleSeeds.prefix(count)
+    }
+
+    private var blurScale: CGFloat { qualityMode == .normal ? 1.0 : 0.82 }
+    private var sparkleOpacityScale: Double { qualityMode == .normal ? 1.0 : 0.72 }
+    private var effectiveLeftClusterBoost: Double {
+        guard qualityMode == .conserve else { return leftClusterBoost }
+        return max(1.0, leftClusterBoost * 0.88)
+    }
 
     var body: some View {
         GeometryReader { proxy in
@@ -831,9 +933,9 @@ private struct ArcticAuroraMicroDetailOverlayView: View {
             ]
 
             ZStack {
-                ForEach(Array(Self.strandSpecs.enumerated()), id: \.offset) { idx, spec in
+                ForEach(Array(activeStrandSpecs.enumerated()), id: \.offset) { idx, spec in
                     let isLeftCluster = spec.x < 0.30
-                    let clusterScale = isLeftCluster ? leftClusterBoost : 1.0
+                    let clusterScale = isLeftCluster ? effectiveLeftClusterBoost : 1.0
                     let localOpacity = opacity * spec.intensity * clusterScale
                     let xDrift = sin(phase * 0.68 + CGFloat(idx) * 0.57) * proxy.size.width * (isLeftCluster ? 0.007 : 0.004)
                     let y = proxy.size.height * spec.topInset
@@ -857,7 +959,7 @@ private struct ArcticAuroraMicroDetailOverlayView: View {
                         .frame(width: max(proxy.size.width * spec.width, 0.75), height: h)
                         .rotationEffect(.degrees(spec.tilt))
                         .position(x: proxy.size.width * spec.x + xDrift, y: y + h / 2)
-                        .blur(radius: isLeftCluster ? 0.22 : 0.36)
+                        .blur(radius: (isLeftCluster ? 0.22 : 0.36) * blurScale)
                         .blendMode(.screen)
 
                     Capsule(style: .continuous)
@@ -868,13 +970,13 @@ private struct ArcticAuroraMicroDetailOverlayView: View {
                         .frame(width: max(proxy.size.width * spec.width * 0.48, 0.38), height: h * 0.95)
                         .rotationEffect(.degrees(spec.tilt * 0.8))
                         .position(x: proxy.size.width * spec.x + xDrift * 0.9, y: y + h / 2)
-                        .blur(radius: 0.12)
+                        .blur(radius: 0.12 * blurScale)
                         .blendMode(.plusLighter)
                 }
 
-                ForEach(Array(Self.crestSeeds.enumerated()), id: \.offset) { idx, seed in
+                ForEach(Array(activeCrestSeeds.enumerated()), id: \.offset) { idx, seed in
                     let isLeftCluster = seed < 0.30
-                    let clusterScale = isLeftCluster ? leftClusterBoost : 1.0
+                    let clusterScale = isLeftCluster ? effectiveLeftClusterBoost : 1.0
                     let x = proxy.size.width * CGFloat(seed)
                         + sin(phase * 0.55 + CGFloat(idx) * 0.44) * proxy.size.width * 0.004
                     let crest = proxy.size.height
@@ -899,20 +1001,20 @@ private struct ArcticAuroraMicroDetailOverlayView: View {
                         )
                         .frame(width: spikeWidth, height: spikeHeight)
                         .position(x: x, y: crest - spikeHeight * 0.42)
-                        .blur(radius: isLeftCluster ? 0.24 : 0.32)
+                        .blur(radius: (isLeftCluster ? 0.24 : 0.32) * blurScale)
                         .blendMode(.screen)
 
                     Circle()
                         .fill(ArcticAuroraPalette.lime.opacity(opacity * 0.22 * lowerGlow * clusterScale))
                         .frame(width: 1.0 + CGFloat(idx % 2) * 0.4, height: 1.0 + CGFloat(idx % 2) * 0.4)
                         .position(x: x, y: crest + spikeHeight * 0.02)
-                        .blur(radius: 0.18)
+                        .blur(radius: 0.18 * blurScale)
                         .blendMode(.plusLighter)
                 }
 
-                ForEach(Array(Self.sparkleSeeds.enumerated()), id: \.offset) { idx, seed in
+                ForEach(Array(activeSparkleSeeds.enumerated()), id: \.offset) { idx, seed in
                     let isLeftCluster = seed < 0.30
-                    let clusterScale = isLeftCluster ? leftClusterBoost : 1.0
+                    let clusterScale = isLeftCluster ? effectiveLeftClusterBoost : 1.0
                     let x = proxy.size.width * CGFloat(seed)
                         + sin(phase * 0.82 + CGFloat(idx) * 0.41) * proxy.size.width * 0.0032
                     let y = proxy.size.height * (0.12 + 0.76 * abs(cos(seed * 9.7 + Double(phase) * 0.22)))
@@ -920,10 +1022,10 @@ private struct ArcticAuroraMicroDetailOverlayView: View {
                     let color = palette[(idx * 2 + 1) % palette.count]
 
                     Circle()
-                        .fill(color.opacity(opacity * clusterScale * (0.18 + Double(idx % 3) * 0.08)))
+                        .fill(color.opacity(opacity * sparkleOpacityScale * clusterScale * (0.18 + Double(idx % 3) * 0.08)))
                         .frame(width: size, height: size)
                         .position(x: x, y: y)
-                        .blur(radius: idx.isMultiple(of: 2) ? 0.08 : 0.24)
+                        .blur(radius: (idx.isMultiple(of: 2) ? 0.08 : 0.24) * blurScale)
                         .blendMode(.plusLighter)
                 }
             }
@@ -960,6 +1062,8 @@ private enum ArcticAuroraPalette {
 struct ArcticTabWaveBackground: View {
     @Environment(\.wavePreset) private var preset
     @Environment(\.appTheme) private var theme
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var isLowPowerModeEnabled = ProcessInfo.processInfo.isLowPowerModeEnabled
 
     private var intensityScale: CGFloat {
         switch preset {
@@ -970,8 +1074,16 @@ struct ArcticTabWaveBackground: View {
         }
     }
 
+    private var qualityMode: ArcticAuroraQualityMode {
+        ArcticAuroraLOD.qualityMode(
+            isLowPowerModeEnabled: isLowPowerModeEnabled,
+            reduceMotion: reduceMotion
+        )
+    }
+
     var body: some View {
         let scale = intensityScale
+        let mode = qualityMode
 
         ZStack(alignment: .top) {
             LinearGradient(
@@ -1059,7 +1171,8 @@ struct ArcticTabWaveBackground: View {
                 filamentLines: 11,
                 filamentOpacity: 0.26,
                 filamentWidth: 0.32,
-                filamentSpread: 0.008
+                filamentSpread: 0.008,
+                qualityMode: mode
             )
             .frame(height: 300)
 
@@ -1077,7 +1190,8 @@ struct ArcticTabWaveBackground: View {
                 filamentLines: 9,
                 filamentOpacity: 0.23,
                 filamentWidth: 0.30,
-                filamentSpread: 0.007
+                filamentSpread: 0.007,
+                qualityMode: mode
             )
             .frame(height: 300)
 
@@ -1095,7 +1209,8 @@ struct ArcticTabWaveBackground: View {
                 filamentLines: 7,
                 filamentOpacity: 0.16,
                 filamentWidth: 0.28,
-                filamentSpread: 0.006
+                filamentSpread: 0.006,
+                qualityMode: mode
             )
             .frame(height: 320)
 
@@ -1113,14 +1228,16 @@ struct ArcticTabWaveBackground: View {
                 filamentLines: 5,
                 filamentOpacity: 0.12,
                 filamentWidth: 0.26,
-                filamentSpread: 0.006
+                filamentSpread: 0.006,
+                qualityMode: mode
             )
             .frame(height: 330)
 
             ArcticAuroraMicroDetailOverlayView(
                 opacity: 0.23 * scale,
                 driftDuration: 18,
-                leftClusterBoost: 1.55
+                leftClusterBoost: 1.55,
+                qualityMode: mode
             )
             .frame(height: 332)
             .blendMode(.screen)
@@ -1130,7 +1247,8 @@ struct ArcticTabWaveBackground: View {
                 secondaryColor: ArcticAuroraPalette.neonMint,
                 highlightColor: ArcticAuroraPalette.lime,
                 opacity: 0.22 * scale,
-                driftDuration: 16
+                driftDuration: 16,
+                qualityMode: mode
             )
             .frame(height: 118)
             .offset(y: 132)
@@ -1166,13 +1284,27 @@ struct ArcticTabWaveBackground: View {
             )
         }
         .ignoresSafeArea()
+        .onReceive(NotificationCenter.default.publisher(for: .NSProcessInfoPowerStateDidChange)) { _ in
+            isLowPowerModeEnabled = ProcessInfo.processInfo.isLowPowerModeEnabled
+        }
     }
 }
 
 struct ArcticDetailWaveBackground: View {
     @Environment(\.appTheme) private var theme
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var isLowPowerModeEnabled = ProcessInfo.processInfo.isLowPowerModeEnabled
+
+    private var qualityMode: ArcticAuroraQualityMode {
+        ArcticAuroraLOD.qualityMode(
+            isLowPowerModeEnabled: isLowPowerModeEnabled,
+            reduceMotion: reduceMotion
+        )
+    }
 
     var body: some View {
+        let mode = qualityMode
+
         ZStack(alignment: .top) {
             LinearGradient(
                 colors: [
@@ -1257,7 +1389,8 @@ struct ArcticDetailWaveBackground: View {
                 filamentLines: 8,
                 filamentOpacity: 0.18,
                 filamentWidth: 0.27,
-                filamentSpread: 0.007
+                filamentSpread: 0.007,
+                qualityMode: mode
             )
             .frame(height: 210)
 
@@ -1274,7 +1407,8 @@ struct ArcticDetailWaveBackground: View {
                 filamentLines: 7,
                 filamentOpacity: 0.16,
                 filamentWidth: 0.26,
-                filamentSpread: 0.006
+                filamentSpread: 0.006,
+                qualityMode: mode
             )
             .frame(height: 210)
 
@@ -1292,14 +1426,16 @@ struct ArcticDetailWaveBackground: View {
                 filamentLines: 5,
                 filamentOpacity: 0.11,
                 filamentWidth: 0.24,
-                filamentSpread: 0.006
+                filamentSpread: 0.006,
+                qualityMode: mode
             )
             .frame(height: 220)
 
             ArcticAuroraMicroDetailOverlayView(
                 opacity: 0.15,
                 driftDuration: 17,
-                leftClusterBoost: 1.45
+                leftClusterBoost: 1.45,
+                qualityMode: mode
             )
             .frame(height: 224)
             .blendMode(.screen)
@@ -1309,7 +1445,8 @@ struct ArcticDetailWaveBackground: View {
                 secondaryColor: ArcticAuroraPalette.neonMint,
                 highlightColor: ArcticAuroraPalette.lime,
                 opacity: 0.16,
-                driftDuration: 14
+                driftDuration: 14,
+                qualityMode: mode
             )
             .frame(height: 86)
             .offset(y: 96)
@@ -1345,13 +1482,27 @@ struct ArcticDetailWaveBackground: View {
             )
         }
         .ignoresSafeArea()
+        .onReceive(NotificationCenter.default.publisher(for: .NSProcessInfoPowerStateDidChange)) { _ in
+            isLowPowerModeEnabled = ProcessInfo.processInfo.isLowPowerModeEnabled
+        }
     }
 }
 
 struct ArcticSheetWaveBackground: View {
     @Environment(\.appTheme) private var theme
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var isLowPowerModeEnabled = ProcessInfo.processInfo.isLowPowerModeEnabled
+
+    private var qualityMode: ArcticAuroraQualityMode {
+        ArcticAuroraLOD.qualityMode(
+            isLowPowerModeEnabled: isLowPowerModeEnabled,
+            reduceMotion: reduceMotion
+        )
+    }
 
     var body: some View {
+        let mode = qualityMode
+
         ZStack(alignment: .top) {
             LinearGradient(
                 colors: [
@@ -1422,7 +1573,8 @@ struct ArcticSheetWaveBackground: View {
                 filamentLines: 6,
                 filamentOpacity: 0.14,
                 filamentWidth: 0.22,
-                filamentSpread: 0.006
+                filamentSpread: 0.006,
+                qualityMode: mode
             )
             .frame(height: 150)
 
@@ -1439,14 +1591,16 @@ struct ArcticSheetWaveBackground: View {
                 filamentLines: 5,
                 filamentOpacity: 0.11,
                 filamentWidth: 0.21,
-                filamentSpread: 0.005
+                filamentSpread: 0.005,
+                qualityMode: mode
             )
             .frame(height: 150)
 
             ArcticAuroraMicroDetailOverlayView(
                 opacity: 0.11,
                 driftDuration: 16,
-                leftClusterBoost: 1.32
+                leftClusterBoost: 1.32,
+                qualityMode: mode
             )
             .frame(height: 154)
             .blendMode(.screen)
@@ -1456,7 +1610,8 @@ struct ArcticSheetWaveBackground: View {
                 secondaryColor: ArcticAuroraPalette.neonMint,
                 highlightColor: ArcticAuroraPalette.lime,
                 opacity: 0.13,
-                driftDuration: 13
+                driftDuration: 13,
+                qualityMode: mode
             )
             .frame(height: 62)
             .offset(y: 66)
@@ -1492,6 +1647,9 @@ struct ArcticSheetWaveBackground: View {
             )
         }
         .ignoresSafeArea()
+        .onReceive(NotificationCenter.default.publisher(for: .NSProcessInfoPowerStateDidChange)) { _ in
+            isLowPowerModeEnabled = ProcessInfo.processInfo.isLowPowerModeEnabled
+        }
     }
 }
 
