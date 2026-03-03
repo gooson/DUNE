@@ -477,9 +477,6 @@
         }
       }
     },
-    "%@ selected" : {
-
-    },
     "%@ sessions" : {
       "localizations" : {
         "ja" : {
@@ -1036,23 +1033,6 @@
         }
       }
     },
-    "%lld sets" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lldセット"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld세트"
-          }
-        }
-      }
-    },
     "%lld selected" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1066,6 +1046,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld개 선택"
+          }
+        }
+      }
+    },
+    "%lld sets" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lldセット"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld세트"
           }
         }
       }
@@ -2415,6 +2412,23 @@
       "extractionState" : "manual",
       "shouldTranslate" : false
     },
+    "Arms 3x / week" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "週3回腕トレ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주 3회 팔 운동"
+          }
+        }
+      }
+    },
     "Asleep" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2511,23 +2525,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "자동 운동 업적"
-          }
-        }
-      }
-    },
-    "Arms 3x / week" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "週3回腕トレ"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "주 3회 팔 운동"
           }
         }
       }
@@ -2758,6 +2755,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "등"
+          }
+        }
+      }
+    },
+    "Back 3x / week" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "週3回背中トレ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주 3회 등 운동"
           }
         }
       }
@@ -4031,6 +4045,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "가슴"
+          }
+        }
+      }
+    },
+    "Chest 3x / week" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "週3回胸トレ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주 3회 가슴 운동"
           }
         }
       }
@@ -9928,6 +9959,23 @@
         }
       }
     },
+    "Lower Body 3x / week" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "週3回下半身トレ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주 3회 하체 운동"
+          }
+        }
+      }
+    },
     "lower than usual" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -11446,108 +11494,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "메모 없음"
-          }
-        }
-      }
-    },
-    "Back 3x / week" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "週3回背中トレ"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "주 3회 등 운동"
-          }
-        }
-      }
-    },
-    "Chest 3x / week" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "週3回胸トレ"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "주 3회 가슴 운동"
-          }
-        }
-      }
-    },
-    "Lower Body 3x / week" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "週3回下半身トレ"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "주 3회 하체 운동"
-          }
-        }
-      }
-    },
-    "Running 15km / week" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "週15kmランニング"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "주 15km 러닝"
-          }
-        }
-      }
-    },
-    "Shoulders 3x / week" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "週3回肩トレ"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "주 3회 어깨 운동"
-          }
-        }
-      }
-    },
-    "Strength 3x / week" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "週3回筋力トレーニング"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "주 3회 근력 운동"
           }
         }
       }
@@ -14362,6 +14308,23 @@
         }
       }
     },
+    "Running 15km / week" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "週15kmランニング"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주 15km 러닝"
+          }
+        }
+      }
+    },
     "Sailing" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -14978,6 +14941,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "어깨"
+          }
+        }
+      }
+    },
+    "Shoulders 3x / week" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "週3回肩トレ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주 3회 어깨 운동"
           }
         }
       }
@@ -16169,6 +16149,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "근력"
+          }
+        }
+      }
+    },
+    "Strength 3x / week" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "週3回筋力トレーニング"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주 3회 근력 운동"
           }
         }
       }
@@ -17690,6 +17687,23 @@
         }
       }
     },
+    "Undo" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "元に戻す"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "되돌리기"
+          }
+        }
+      }
+    },
     "Unfinished Workout" : {
       "localizations" : {
         "ja" : {
@@ -17774,23 +17788,6 @@
         }
       }
     },
-    "Undo" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "元に戻す"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "되돌리기"
-          }
-        }
-      }
-    },
     "Up Next" : {
       "localizations" : {
         "ja" : {
@@ -17822,23 +17819,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ 업데이트됨"
-          }
-        }
-      }
-    },
-    "Update your equipment or remove not-interested exercises." : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "器具を更新するか、興味なしの運動を解除してください。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "보유 기구를 수정하거나 관심 없음 운동을 해제해 주세요."
           }
         }
       }
@@ -19390,6 +19370,23 @@
         }
       }
     },
+    "workouts" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "回"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "회"
+          }
+        }
+      }
+    },
     "Wrestling" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -19919,23 +19916,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "수면 점수가 하락 추세입니다. 취침 1시간 전 화면 사용을 줄이고 카페인은 오후 2시 이전으로 제한해보세요."
-          }
-        }
-      }
-    },
-    "workouts" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "回"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "회"
           }
         }
       }
