@@ -29,41 +29,54 @@ struct SuggestedExerciseRow: View {
 
                 Spacer(minLength: DS.Spacing.xs)
 
-                Text("\(exercise.suggestedSets.formattedWithSeparator) sets")
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(DS.Color.textSecondary)
+                Text(
+                    String.localizedStringWithFormat(
+                        String(localized: "%lld sets"),
+                        Int64(exercise.suggestedSets)
+                    )
+                )
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(DS.Color.textSecondary)
             }
 
-            HStack(spacing: DS.Spacing.xs) {
-                Button("Start Workout", action: onStart)
-                    .buttonStyle(.borderedProminent)
-                    .tint(DS.Color.activity)
-                    .font(.caption.weight(.semibold))
+            VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                HStack(spacing: DS.Spacing.xs) {
+                    Button("Start", action: onStart)
+                        .buttonStyle(.borderedProminent)
+                        .tint(DS.Color.activity)
+                        .font(.caption.weight(.semibold))
+                        .controlSize(.small)
 
-                if !exercise.alternatives.isEmpty {
-                    Button(showingAlternatives ? "Hide" : "Alternatives") {
-                        withAnimation(DS.Animation.snappy) {
-                            showingAlternatives.toggle()
+                    if !exercise.alternatives.isEmpty {
+                        Button(showingAlternatives ? String(localized: "Hide") : String(localized: "Alternatives")) {
+                            withAnimation(DS.Animation.snappy) {
+                                showingAlternatives.toggle()
+                            }
+                        }
+                        .buttonStyle(.bordered)
+                        .font(.caption.weight(.semibold))
+                        .controlSize(.small)
+                    }
+
+                    Spacer(minLength: DS.Spacing.xs)
+                }
+
+                HStack(spacing: DS.Spacing.xs) {
+                    Spacer(minLength: 0)
+
+                    Button {
+                        onToggleInterest()
+                    } label: {
+                        HStack(spacing: DS.Spacing.xxs) {
+                            Image(systemName: isExcluded ? "eye.slash.fill" : "eye.slash")
+                                .font(.caption2)
+                            Text(isExcluded ? String(localized: "Undo") : String(localized: "Not Interested"))
+                                .font(.caption2.weight(.semibold))
                         }
                     }
-                    .buttonStyle(.bordered)
-                    .font(.caption.weight(.semibold))
+                    .buttonStyle(.plain)
+                    .foregroundStyle(isExcluded ? DS.Color.activity : DS.Color.textSecondary)
                 }
-
-                Spacer(minLength: DS.Spacing.xs)
-
-                Button {
-                    onToggleInterest()
-                } label: {
-                    HStack(spacing: DS.Spacing.xxs) {
-                        Image(systemName: isExcluded ? "eye.slash.fill" : "eye.slash")
-                            .font(.caption2)
-                        Text(isExcluded ? "Undo" : "Not Interested")
-                            .font(.caption2.weight(.semibold))
-                    }
-                }
-                .buttonStyle(.plain)
-                .foregroundStyle(isExcluded ? DS.Color.activity : DS.Color.textSecondary)
             }
 
             // Alternatives (expandable)
