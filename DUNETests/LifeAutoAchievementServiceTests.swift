@@ -25,6 +25,9 @@ struct LifeAutoAchievementServiceTests {
         #expect(weekly5.isCompleted == true)
         #expect(weekly7.currentValue == 5)
         #expect(weekly7.isCompleted == false)
+        #expect(weekly5.title == String(localized: "Workout 5x / week"))
+        #expect(weekly5.unit == String(localized: "workouts"))
+        #expect(weekly5.progressText == String(localized: "\(Int(weekly5.currentValue))/\(Int(weekly5.targetValue)) workouts"))
     }
 
     @Test("Week boundary follows Monday start")

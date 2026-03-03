@@ -1084,6 +1084,23 @@
         }
       }
     },
+    "%lld/%lld workouts" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld/%lld回"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld/%lld회"
+          }
+        }
+      }
+    },
     "%lld°C — perfect conditions for a run or a walk." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2411,7 +2428,38 @@
       }
     },
     "Auto Workout Achievements" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自動ワークアウト実績"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "자동 운동 업적"
+          }
+        }
+      }
+    },
+    "Arms 3x / week" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "週3回腕トレ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주 3회 팔 운동"
+          }
+        }
+      }
     },
     "Auto-complete from workouts" : {
       "extractionState" : "manual",
@@ -7900,7 +7948,21 @@
       }
     },
     "HealthKit-based weekly goals (Mon-Sun)" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HealthKitベースの週間目標（月-日）"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HealthKit 기반 주간 목표 (월-일)"
+          }
+        }
+      }
     },
     "Heart Rate" : {
       "extractionState" : "manual",
@@ -11187,7 +11249,21 @@
       }
     },
     "No HealthKit-linked workouts yet" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HealthKit連携ワークアウトはまだありません"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아직 HealthKit 연동 운동이 없어요"
+          }
+        }
+      }
     },
     "No HRV/RHR data collected — default applied" : {
       "localizations" : {
@@ -11235,6 +11311,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "메모 없음"
+          }
+        }
+      }
+    },
+    "Back 3x / week" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "週3回背中トレ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주 3회 등 운동"
+          }
+        }
+      }
+    },
+    "Chest 3x / week" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "週3回胸トレ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주 3회 가슴 운동"
+          }
+        }
+      }
+    },
+    "Lower Body 3x / week" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "週3回下半身トレ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주 3회 하체 운동"
+          }
+        }
+      }
+    },
+    "Running 15km / week" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "週15kmランニング"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주 15km 러닝"
+          }
+        }
+      }
+    },
+    "Shoulders 3x / week" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "週3回肩トレ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주 3회 어깨 운동"
+          }
+        }
+      }
+    },
+    "Strength 3x / week" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "週3回筋力トレーニング"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주 3회 근력 운동"
           }
         }
       }
@@ -18854,6 +19032,40 @@
         }
       }
     },
+    "Workout 5x / week" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "週5回ワークアウト"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주 5회 운동"
+          }
+        }
+      }
+    },
+    "Workout 7x / week" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "週7回ワークアウト"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주 7회 운동"
+          }
+        }
+      }
+    },
     "Workout Complete" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -19498,6 +19710,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "수면 점수가 하락 추세입니다. 취침 1시간 전 화면 사용을 줄이고 카페인은 오후 2시 이전으로 제한해보세요."
+          }
+        }
+      }
+    },
+    "workouts" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "回"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "회"
           }
         }
       }

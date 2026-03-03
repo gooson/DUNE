@@ -33,6 +33,9 @@ struct LifeAutoAchievementProgress: Identifiable, Sendable {
             let target = targetValue.formatted(.number.precision(.fractionLength(0...1)))
             return "\(current) / \(target) km"
         }
+        if unit == String(localized: "workouts") {
+            return String(localized: "\(Int(currentValue))/\(Int(targetValue)) workouts")
+        }
         return "\(Int(currentValue))/\(Int(targetValue)) \(unit)"
     }
 }
@@ -51,15 +54,15 @@ enum LifeAutoAchievementService {
 
         var title: String {
             switch self {
-            case .weeklyWorkout5: "Workout 5x / week"
-            case .weeklyWorkout7: "Workout 7x / week"
-            case .weeklyStrength3: "Strength 3x / week"
-            case .weeklyChest3: "Chest 3x / week"
-            case .weeklyBack3: "Back 3x / week"
-            case .weeklyLowerBody3: "Lower Body 3x / week"
-            case .weeklyShoulders3: "Shoulders 3x / week"
-            case .weeklyArms3: "Arms 3x / week"
-            case .weeklyRunning15km: "Running 15km / week"
+            case .weeklyWorkout5: String(localized: "Workout 5x / week")
+            case .weeklyWorkout7: String(localized: "Workout 7x / week")
+            case .weeklyStrength3: String(localized: "Strength 3x / week")
+            case .weeklyChest3: String(localized: "Chest 3x / week")
+            case .weeklyBack3: String(localized: "Back 3x / week")
+            case .weeklyLowerBody3: String(localized: "Lower Body 3x / week")
+            case .weeklyShoulders3: String(localized: "Shoulders 3x / week")
+            case .weeklyArms3: String(localized: "Arms 3x / week")
+            case .weeklyRunning15km: String(localized: "Running 15km / week")
             }
         }
 
@@ -81,7 +84,7 @@ enum LifeAutoAchievementService {
             case .weeklyRunning15km:
                 return "km"
             default:
-                return "workouts"
+                return String(localized: "workouts")
             }
         }
 
