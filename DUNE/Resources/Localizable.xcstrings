@@ -2432,6 +2432,23 @@
         }
       }
     },
+    "Avg Pace" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "平均ペース"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "평균 페이스"
+          }
+        }
+      }
+    },
     "Avg Recovery" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -4878,6 +4895,40 @@
         }
       }
     },
+    "Day" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "日"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "하루"
+          }
+        }
+      }
+    },
+    "Day Steps" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1日歩数"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "하루 걸음 수"
+          }
+        }
+      }
+    },
     "days" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -6614,17 +6665,21 @@
       }
     },
     "Feels %@°" : {
+
+    },
+    "Feels %lld°" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "体感 %@°"
+            "value" : "体感 %lld°"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "체감 %@°"
+            "value" : "체감 %lld°"
           }
         }
       }
@@ -6647,17 +6702,21 @@
       }
     },
     "Feels like %@°C" : {
+
+    },
+    "Feels like %lld°C" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "体感 %@°C"
+            "value" : "体感 %lld°C"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "체감 %@°C"
+            "value" : "체감 %lld°C"
           }
         }
       }
@@ -8496,6 +8555,9 @@
           }
         }
       }
+    },
+    "ID: %@" : {
+
     },
     "Identify and address neglected muscle groups" : {
       "extractionState" : "manual",
@@ -15372,6 +15434,23 @@
         }
       }
     },
+    "Step Range" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "歩数範囲"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "걸음 범위"
+          }
+        }
+      }
+    },
     "Step Training" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -17864,6 +17943,40 @@
         }
       }
     },
+    "Week" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "週"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주"
+          }
+        }
+      }
+    },
+    "Week Steps" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "週間歩数"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주간 걸음 수"
+          }
+        }
+      }
+    },
     "Weekly" : {
       "localizations" : {
         "ja" : {
@@ -18534,6 +18647,23 @@
         }
       }
     },
+    "Workout Steps" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ワークアウト歩数"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "운동 걸음 수"
+          }
+        }
+      }
+    },
     "Wrestling" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -19086,6 +19216,15 @@
           }
         }
       }
+    },
+    "알림 대상이 삭제되었거나 동기화되지 않았습니다." : {
+
+    },
+    "알림이 도착하면 여기에 표시됩니다." : {
+
+    },
+    "해당 운동을 찾을 수 없습니다" : {
+
     }
   },
   "version" : "1.0"

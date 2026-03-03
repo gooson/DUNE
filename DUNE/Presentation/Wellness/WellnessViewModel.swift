@@ -14,6 +14,7 @@ final class WellnessViewModel {
 
     var isLoading = false
     var partialFailureMessage: String?
+    private(set) var isMirroredReadOnlyMode = false
 
     // Sleep sub-state (consumed by hero card)
     var sleepScore: Int?
@@ -31,6 +32,7 @@ final class WellnessViewModel {
 
     // MARK: - Dependencies
 
+    private let healthKitManager: HealthKitManager
     private let sleepService: SleepQuerying
     private let bodyService: BodyCompositionQuerying
     private let hrvService: HRVQuerying
@@ -54,17 +56,18 @@ final class WellnessViewModel {
         hrvService: HRVQuerying? = nil,
         vitalsService: VitalsQuerying? = nil,
         heartRateService: HeartRateQuerying? = nil,
+        healthKitManager: HealthKitManager = .shared,
         wellnessScoreUseCase: WellnessScoreCalculating? = nil,
         sleepScoreUseCase: SleepScoreCalculating? = nil,
         conditionScoreUseCase: ConditionScoreCalculating? = nil,
         sharedHealthDataService: SharedHealthDataService? = nil
     ) {
-        let manager = HealthKitManager.shared
-        self.sleepService = sleepService ?? SleepQueryService(manager: manager)
-        self.bodyService = bodyService ?? BodyCompositionQueryService(manager: manager)
-        self.hrvService = hrvService ?? HRVQueryService(manager: manager)
-        self.vitalsService = vitalsService ?? VitalsQueryService(manager: manager)
-        self.heartRateService = heartRateService ?? HeartRateQueryService(manager: manager)
+        self.healthKitManager = healthKitManager
+        self.sleepService = sleepService ?? SleepQueryService(manager: healthKitManager)
+        self.bodyService = bodyService ?? BodyCompositionQueryService(manager: healthKitManager)
+        self.hrvService = hrvService ?? HRVQueryService(manager: healthKitManager)
+        self.vitalsService = vitalsService ?? VitalsQueryService(manager: healthKitManager)
+        self.heartRateService = heartRateService ?? HeartRateQueryService(manager: healthKitManager)
         self.wellnessScoreUseCase = wellnessScoreUseCase ?? CalculateWellnessScoreUseCase()
         self.sleepScoreUseCase = sleepScoreUseCase ?? CalculateSleepScoreUseCase()
         self.conditionScoreUseCase = conditionScoreUseCase ?? CalculateConditionScoreUseCase()
@@ -92,9 +95,11 @@ final class WellnessViewModel {
     private func performLoad() async {
         isLoading = true
         partialFailureMessage = nil
+        let healthKitAvailable = await healthKitManager.isAvailable
+        isMirroredReadOnlyMode = !healthKitAvailable
 
         // Collect results using TaskGroup for 10+ parallel queries (Correction #5)
-        let results = await fetchAllData()
+        let results = await fetchAllData(canQueryHealthKit: healthKitAvailable)
 
         guard !Task.isCancelled else { // Correction #17
             isLoading = false
@@ -457,11 +462,15 @@ final class WellnessViewModel {
         case fetchError
     }
 
-    private func fetchAllData() async -> FetchResults {
+    private func fetchAllData(canQueryHealthKit: Bool) async -> FetchResults {
         var results = FetchResults()
         let sharedSnapshot = await sharedHealthDataService?.fetchSnapshot()
         if let sharedSnapshot {
             applySharedSnapshot(sharedSnapshot, to: &results)
+        }
+
+        guard canQueryHealthKit else {
+            return results
         }
 
         await withTaskGroup(of: (FetchKey, FetchValue).self) { [

@@ -20,6 +20,7 @@ final class ActivityViewModel {
     var trainingLoadData: [TrainingLoadDataPoint] = []
     var isLoading = false
     var errorMessage: String?
+    private(set) var isMirroredReadOnlyMode = false
     var workoutSuggestion: WorkoutSuggestion?
     var fatigueStates: [MuscleFatigueState] = []
 
@@ -73,6 +74,7 @@ final class ActivityViewModel {
         activeDays = Set(recentWorkouts.map { calendar.startOfDay(for: $0.date) }).count
     }
 
+    private let healthKitManager: HealthKitManager
     private let workoutService: WorkoutQuerying
     private let stepsService: StepsQuerying
     private let hrvService: HRVQuerying
@@ -107,6 +109,7 @@ final class ActivityViewModel {
         sharedHealthDataService: SharedHealthDataService? = nil,
         personalRecordStore: PersonalRecordStore = .shared
     ) {
+        self.healthKitManager = healthKitManager
         self.workoutService = workoutService ?? WorkoutQueryService(manager: healthKitManager)
         self.stepsService = stepsService ?? StepsQueryService(manager: healthKitManager)
         self.hrvService = hrvService ?? HRVQueryService(manager: healthKitManager)
@@ -354,16 +357,18 @@ final class ActivityViewModel {
         // permanently blocking future loads. Safe for Void async functions.
         defer { isLoading = false }
 
+        let healthKitAvailable = await healthKitManager.isAvailable
+        isMirroredReadOnlyMode = !healthKitAvailable
         let sharedSnapshot = await sharedHealthDataService?.fetchSnapshot()
 
         // 7 independent queries — parallel via async let
-        async let exerciseTask = safeExerciseFetch()
-        async let stepsTask = safeStepsFetch()
-        async let workoutsTask = safeWorkoutsFetch()
-        async let trainingLoadTask = safeTrainingLoadFetch(snapshot: sharedSnapshot)
-        async let sleepTask = safeSleepFetch(snapshot: sharedSnapshot)
-        async let readinessTask = safeReadinessFetch(snapshot: sharedSnapshot)
-        async let sleepDailyTask = safeSleepDailyFetch(snapshot: sharedSnapshot)
+        async let exerciseTask = safeExerciseFetch(canQueryHealthKit: healthKitAvailable)
+        async let stepsTask = safeStepsFetch(canQueryHealthKit: healthKitAvailable)
+        async let workoutsTask = safeWorkoutsFetch(canQueryHealthKit: healthKitAvailable)
+        async let trainingLoadTask = safeTrainingLoadFetch(snapshot: sharedSnapshot, canQueryHealthKit: healthKitAvailable)
+        async let sleepTask = safeSleepFetch(snapshot: sharedSnapshot, canQueryHealthKit: healthKitAvailable)
+        async let readinessTask = safeReadinessFetch(snapshot: sharedSnapshot, canQueryHealthKit: healthKitAvailable)
+        async let sleepDailyTask = safeSleepDailyFetch(snapshot: sharedSnapshot, canQueryHealthKit: healthKitAvailable)
 
         let (exerciseResult, stepsResult, workoutsResult, loadResult, sleepResult, readinessResult, sleepDailyResult) = await (
             exerciseTask, stepsTask, workoutsTask, trainingLoadTask, sleepTask, readinessTask, sleepDailyTask
@@ -392,16 +397,18 @@ final class ActivityViewModel {
         )
 
         // Report partial failures (Correction #25)
-        let failedCount = [
-            exerciseResult.weeklyData.isEmpty && exerciseResult.todayMetric == nil,
-            stepsResult.weeklyData.isEmpty && stepsResult.todayMetric == nil,
-            workoutsResult.isEmpty,
-            loadResult.isEmpty
-        ].filter(\.self).count
-        if failedCount > 0, failedCount < 4 {
-            errorMessage = String(localized: "Some data could not be loaded (\(failedCount)/4 sources)")
-        } else if failedCount == 4 {
-            errorMessage = String(localized: "Unable to load data. Please check HealthKit permissions.")
+        if healthKitAvailable {
+            let failedCount = [
+                exerciseResult.weeklyData.isEmpty && exerciseResult.todayMetric == nil,
+                stepsResult.weeklyData.isEmpty && stepsResult.todayMetric == nil,
+                workoutsResult.isEmpty,
+                loadResult.isEmpty
+            ].filter(\.self).count
+            if failedCount > 0, failedCount < 4 {
+                errorMessage = String(localized: "Some data could not be loaded (\(failedCount)/4 sources)")
+            } else if failedCount == 4 {
+                errorMessage = String(localized: "Unable to load data. Please check HealthKit permissions.")
+            }
         }
 
         // Recompute fatigue with newly fetched HealthKit workouts + recovery modifiers
@@ -546,7 +553,10 @@ final class ActivityViewModel {
         let todayMetric: HealthMetric?
     }
 
-    private func safeExerciseFetch() async -> ExerciseResult {
+    private func safeExerciseFetch(canQueryHealthKit: Bool) async -> ExerciseResult {
+        guard canQueryHealthKit else {
+            return ExerciseResult(weeklyData: [], todayMetric: nil)
+        }
         do {
             let calendar = Calendar.current
             let today = calendar.startOfDay(for: Date())
@@ -599,7 +609,10 @@ final class ActivityViewModel {
         let todayMetric: HealthMetric?
     }
 
-    private func safeStepsFetch() async -> StepsResult {
+    private func safeStepsFetch(canQueryHealthKit: Bool) async -> StepsResult {
+        guard canQueryHealthKit else {
+            return StepsResult(weeklyData: [], todayMetric: nil)
+        }
         do {
             let calendar = Calendar.current
             let today = calendar.startOfDay(for: Date())
@@ -647,7 +660,8 @@ final class ActivityViewModel {
 
     // MARK: - Recent Workouts
 
-    private func safeWorkoutsFetch() async -> [WorkoutSummary] {
+    private func safeWorkoutsFetch(canQueryHealthKit: Bool) async -> [WorkoutSummary] {
+        guard canQueryHealthKit else { return [] }
         do {
             return try await workoutService.fetchWorkouts(days: 7)
         } catch {
@@ -658,7 +672,11 @@ final class ActivityViewModel {
 
     // MARK: - Training Load (28-day)
 
-    private func safeTrainingLoadFetch(snapshot: SharedHealthSnapshot?) async -> [TrainingLoadDataPoint] {
+    private func safeTrainingLoadFetch(
+        snapshot: SharedHealthSnapshot?,
+        canQueryHealthKit: Bool
+    ) async -> [TrainingLoadDataPoint] {
+        guard canQueryHealthKit else { return [] }
         do {
             let calendar = Calendar.current
             let today = calendar.startOfDay(for: Date())
@@ -741,10 +759,11 @@ final class ActivityViewModel {
 
     // MARK: - Sleep Fetch (for recovery modifier)
 
-    private func safeSleepFetch(snapshot: SharedHealthSnapshot?) async -> SleepSummary? {
+    private func safeSleepFetch(snapshot: SharedHealthSnapshot?, canQueryHealthKit: Bool) async -> SleepSummary? {
         if let snapshot {
             return snapshot.sleepSummaryForRecovery
         }
+        guard canQueryHealthKit else { return nil }
         do {
             return try await sleepService.fetchLastNightSleepSummary(for: Date())
         } catch {
@@ -755,7 +774,10 @@ final class ActivityViewModel {
 
     // MARK: - Sleep Daily Fetch (14-day)
 
-    private func safeSleepDailyFetch(snapshot: SharedHealthSnapshot?) async -> [SleepDailySample] {
+    private func safeSleepDailyFetch(
+        snapshot: SharedHealthSnapshot?,
+        canQueryHealthKit: Bool
+    ) async -> [SleepDailySample] {
         if let snapshot {
             return snapshot.sleepDailyDurations
                 .sorted { $0.date < $1.date }
@@ -767,6 +789,7 @@ final class ActivityViewModel {
                     )
                 }
         }
+        guard canQueryHealthKit else { return [] }
         do {
             let twoWeeksAgo = Calendar.current.date(byAdding: .day, value: -14, to: Date()) ?? Date()
             let results = try await sleepService.fetchDailySleepDurations(start: twoWeeksAgo, end: Date())
@@ -801,7 +824,10 @@ final class ActivityViewModel {
         let rhrCollection: [(date: Date, average: Double)]
     }
 
-    private func safeReadinessFetch(snapshot: SharedHealthSnapshot?) async -> ReadinessResult {
+    private func safeReadinessFetch(
+        snapshot: SharedHealthSnapshot?,
+        canQueryHealthKit: Bool
+    ) async -> ReadinessResult {
         if let snapshot {
             let hrvSamples = snapshot.hrvSamples14Day
             let todayRHR = snapshot.todayRHR
@@ -830,6 +856,10 @@ final class ActivityViewModel {
                 rhrBaseline: rhrBaseline,
                 rhrCollection: validRHRCollection
             )
+        }
+
+        guard canQueryHealthKit else {
+            return ReadinessResult(hrvZScore: nil, rhrDelta: nil, hrvSamples: [], todayRHR: nil, rhrBaseline: [], rhrCollection: [])
         }
 
         do {

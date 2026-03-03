@@ -63,6 +63,9 @@ final class WorkoutManager: NSObject {
     /// Total distance in meters (cardio mode only).
     private(set) var distance: Double = 0
 
+    /// Total steps in current session.
+    private(set) var steps: Double = 0
+
     /// Current pace in seconds per kilometer (cardio mode only).
     private(set) var currentPace: Double = 0
 
@@ -169,6 +172,7 @@ final class WorkoutManager: NSObject {
         let readTypes: Set<HKObjectType> = [
             HKQuantityType(.heartRate),
             HKQuantityType(.activeEnergyBurned),
+            HKQuantityType(.stepCount),
             HKQuantityType(.distanceWalkingRunning),
             HKQuantityType(.distanceCycling),
             HKQuantityType(.distanceSwimming),
@@ -209,6 +213,7 @@ final class WorkoutManager: NSObject {
     func startCardioSession(activityType: WorkoutActivityType, isOutdoor: Bool) async throws {
         let previousMode = workoutMode
         let previousDistance = distance
+        let previousSteps = steps
         let previousPace = currentPace
         let previousFloors = floorsClimbed
         let previousTemplateSnapshot = templateSnapshot
@@ -219,6 +224,7 @@ final class WorkoutManager: NSObject {
 
         self.workoutMode = .cardio(activityType: activityType, isOutdoor: isOutdoor)
         self.distance = 0
+        self.steps = 0
         self.currentPace = 0
         self.floorsClimbed = 0
         // templateSnapshot is nil for cardio — no set/exercise tracking needed
@@ -236,6 +242,7 @@ final class WorkoutManager: NSObject {
             // Restore state on failure to prevent inconsistent workoutMode
             workoutMode = previousMode
             distance = previousDistance
+            steps = previousSteps
             currentPace = previousPace
             floorsClimbed = previousFloors
             templateSnapshot = previousTemplateSnapshot
@@ -256,6 +263,7 @@ final class WorkoutManager: NSObject {
         self.completedSetsData = Array(repeating: [], count: snapshot.entries.count)
         self.extraSetsPerExercise = [:]
         self.distance = 0
+        self.steps = 0
         self.currentPace = 0
 
         let config = HKWorkoutConfiguration()
@@ -268,6 +276,7 @@ final class WorkoutManager: NSObject {
     /// Common HK session setup shared by strength and cardio flows.
     private func startHKSession(config: HKWorkoutConfiguration, templateName: String) async throws {
         self.heartRateSamples = []
+        self.steps = 0
         self.isSessionEnded = false
         self.isFinalizingWorkout = false
         self.finalizationTimeoutTask?.cancel()
@@ -467,6 +476,7 @@ final class WorkoutManager: NSObject {
         heartRate = 0
         activeCalories = 0
         distance = 0
+        steps = 0
         currentPace = 0
         heartRateSamples = []
         isPaused = false
@@ -738,6 +748,7 @@ extension WorkoutManager: HKLiveWorkoutBuilderDelegate {
         var caloriesValue: Double?
         var distanceValue: Double?
         var floorsValue: Double?
+        var stepValue: Double?
 
         for type in collectedTypes {
             guard let quantityType = type as? HKQuantityType,
@@ -772,6 +783,12 @@ extension WorkoutManager: HKLiveWorkoutBuilderDelegate {
                     floorsValue = floors
                 }
 
+            case HKQuantityType(.stepCount):
+                let totalSteps = stats.sumQuantity()?.doubleValue(for: .count()) ?? 0
+                if totalSteps >= 0, totalSteps < 200_000 {
+                    stepValue = totalSteps
+                }
+
             default:
                 break
             }
@@ -792,6 +809,9 @@ extension WorkoutManager: HKLiveWorkoutBuilderDelegate {
             }
             if let floors = floorsValue {
                 floorsClimbed = floors
+            }
+            if let totalSteps = stepValue {
+                steps = totalSteps
             }
         }
     }

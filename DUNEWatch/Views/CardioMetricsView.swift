@@ -142,6 +142,17 @@ struct CardioMetricsView: View {
                 color: theme.metricHeartRate
             )
 
+            if cardioInfo?.type == .walking {
+                metricColumn(
+                    value: workoutManager.steps > 0
+                        ? "\(Int(workoutManager.steps))"
+                        : "--",
+                    unit: "steps",
+                    icon: "figure.walk",
+                    color: DS.Color.steps
+                )
+            }
+
             // Calories
             metricColumn(
                 value: workoutManager.activeCalories > 0

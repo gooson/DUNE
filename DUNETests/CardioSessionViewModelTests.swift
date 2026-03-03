@@ -8,6 +8,22 @@ struct CardioSessionViewModelTests {
 
     // MARK: - Helpers
 
+    private actor MockStepsService: StepsQuerying {
+        var todaySteps: Double
+
+        init(todaySteps: Double) {
+            self.todaySteps = todaySteps
+        }
+
+        func setTodaySteps(_ value: Double) {
+            todaySteps = value
+        }
+
+        func fetchSteps(for date: Date) async throws -> Double? { todaySteps }
+        func fetchLatestSteps(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
+        func fetchStepsCollection(start: Date, end: Date, interval: DateComponents) async throws -> [(date: Date, sum: Double)] { [] }
+    }
+
     private func makeExercise(
         id: String = "running",
         name: String = "Running"
@@ -29,13 +45,16 @@ struct CardioSessionViewModelTests {
     private func makeVM(
         id: String = "running",
         name: String = "Running",
-        isOutdoor: Bool = true
+        isOutdoor: Bool = true,
+        activityType: WorkoutActivityType = .running,
+        stepsService: StepsQuerying? = nil
     ) -> CardioSessionViewModel {
         let exercise = makeExercise(id: id, name: name)
         return CardioSessionViewModel(
             exercise: exercise,
-            activityType: .running,
-            isOutdoor: isOutdoor
+            activityType: activityType,
+            isOutdoor: isOutdoor,
+            stepsService: stepsService
         )
     }
 
@@ -181,5 +200,27 @@ struct CardioSessionViewModelTests {
         vm.pause()
         await vm.end()
         #expect(vm.state == .finished)
+    }
+
+    @Test("Walking session computes step delta from session baseline")
+    func walkingSessionStepDelta() async {
+        let steps = MockStepsService(todaySteps: 1_200)
+        let vm = makeVM(
+            id: "walking",
+            name: "Walking",
+            isOutdoor: false,
+            activityType: .walking,
+            stepsService: steps
+        )
+
+        vm.start()
+        try? await Task.sleep(for: .milliseconds(200))
+        #expect(vm.walkingStepCount == 0)
+
+        await steps.setTodaySteps(1_450)
+        try? await Task.sleep(for: .milliseconds(150))
+        await vm.end()
+
+        #expect(vm.walkingStepCount == 250)
     }
 }
