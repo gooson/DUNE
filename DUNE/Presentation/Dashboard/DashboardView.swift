@@ -40,6 +40,12 @@ struct DashboardView: View {
                     } else if viewModel.sortedMetrics.isEmpty && !viewModel.isLoading {
                         if viewModel.errorMessage != nil {
                             errorSection
+                        } else if viewModel.isMirroredReadOnlyMode {
+                            EmptyStateView(
+                                icon: "heart.text.clipboard",
+                                title: "No Synced Data",
+                                message: "Open DUNE on your iPhone once to sync HealthKit data, then refresh on Mac."
+                            )
                         } else {
                             EmptyStateView(
                                 icon: "heart.text.clipboard",
