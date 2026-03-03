@@ -233,6 +233,16 @@ struct HabitRowView: View {
     }
 
     private var cycleStatusText: String {
+        if progress.isScheduled {
+            if progress.cycleStartPoint == .firstCompletion, progress.cycleStartDate == nil {
+                return String(localized: "Scheduled · Waiting for first completion")
+            }
+            if let startDate = progress.cycleStartDate {
+                return String(localized: "Scheduled · Starts \(startDate.formatted(date: .abbreviated, time: .omitted))")
+            }
+            return String(localized: "Scheduled")
+        }
+
         guard let nextDueDate = progress.nextDueDate else {
             return String(localized: "Tap to complete")
         }
@@ -259,7 +269,27 @@ struct HabitRowView: View {
 
     @ViewBuilder
     private var cycleMetadata: some View {
-        if let nextDueDate = progress.nextDueDate {
+        if progress.isScheduled {
+            if let startDate = progress.cycleStartDate {
+                HStack(spacing: DS.Spacing.xs) {
+                    Image(systemName: "calendar.badge.clock")
+                        .font(.caption2)
+                    Text("Starts \(startDate.formatted(date: .abbreviated, time: .omitted))")
+                        .font(.caption2)
+                        .lineLimit(1)
+                }
+                .foregroundStyle(.secondary)
+            } else if progress.cycleStartPoint == .firstCompletion {
+                HStack(spacing: DS.Spacing.xs) {
+                    Image(systemName: "calendar.badge.clock")
+                        .font(.caption2)
+                    Text("Starts on first completion")
+                        .font(.caption2)
+                        .lineLimit(1)
+                }
+                .foregroundStyle(.secondary)
+            }
+        } else if let nextDueDate = progress.nextDueDate {
             HStack(spacing: DS.Spacing.xs) {
                 Image(systemName: "calendar")
                     .font(.caption2)

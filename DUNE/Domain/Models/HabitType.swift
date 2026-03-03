@@ -74,6 +74,13 @@ enum HabitCycleAction: String, Sendable, Equatable {
     case snooze
 }
 
+enum HabitRecurringStartPoint: String, Sendable, Equatable, CaseIterable {
+    case createdAt
+    case today
+    case customDate
+    case firstCompletion
+}
+
 // MARK: - Habit Progress
 
 struct HabitProgress: Sendable, Identifiable {
@@ -91,6 +98,9 @@ struct HabitProgress: Sendable, Identifiable {
     let isAutoCompleted: Bool
     let isCycleBased: Bool
     let nextDueDate: Date?
+    let cycleStartDate: Date?
+    let cycleStartPoint: HabitRecurringStartPoint?
+    let isScheduled: Bool
     let isDue: Bool
     let isOverdue: Bool
     let lastCycleAction: HabitCycleAction?

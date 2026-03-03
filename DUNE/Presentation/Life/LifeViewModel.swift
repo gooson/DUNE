@@ -30,6 +30,8 @@ final class LifeViewModel {
     var frequencyType: String = "daily"
     var weeklyTargetDays: Int = 3
     var intervalDays: Int = 7
+    var intervalStartPoint: HabitRecurringStartPoint = .createdAt
+    var intervalCustomStartDate: Date = Calendar.current.startOfDay(for: Date())
     var isAutoLinked: Bool = false
     var validationError: String?
     var isSaving = false
@@ -47,7 +49,10 @@ final class LifeViewModel {
         LifeAutoAchievementService.calculateProgresses(from: [])
 
     struct HabitCycleSnapshot: Sendable {
-        let nextDueDate: Date
+        let nextDueDate: Date?
+        let startDate: Date?
+        let startPoint: HabitRecurringStartPoint
+        let isScheduled: Bool
         let isDue: Bool
         let isOverdue: Bool
         let lastAction: HabitCycleAction?
@@ -76,6 +81,9 @@ final class LifeViewModel {
             goalValue: validated.goalValue,
             goalUnit: validated.goalUnit,
             frequency: validated.frequency,
+            recurringStartPoint: validated.recurringStartPoint,
+            recurringCustomStartDate: validated.recurringCustomStartDate,
+            recurringStartConfiguredAt: validated.recurringStartConfiguredAt,
             isAutoLinked: validated.isAutoLinked,
             autoLinkSource: validated.isAutoLinked ? "exercise" : nil
         )
@@ -94,6 +102,14 @@ final class LifeViewModel {
         habit.isAutoLinked = validated.isAutoLinked
         habit.autoLinkSourceRaw = validated.isAutoLinked ? "exercise" : nil
 
+        let calendar = Calendar.current
+        let previousStartPoint = habit.recurringStartPoint
+        let previousCustomDate = habit.recurringCustomStartDate.map { calendar.startOfDay(for: $0) }
+        let nextCustomDate = validated.recurringCustomStartDate.map { calendar.startOfDay(for: $0) }
+        let wasInterval = habit.frequency.intervalDays != nil
+        let recurringStartPointChanged = previousStartPoint != validated.recurringStartPoint
+            || previousCustomDate != nextCustomDate
+
         switch validated.frequency {
         case .daily:
             habit.frequencyTypeRaw = "daily"
@@ -104,6 +120,11 @@ final class LifeViewModel {
         case .interval(let days):
             habit.frequencyTypeRaw = "interval"
             habit.weeklyTargetDays = days
+            habit.recurringStartPointRaw = validated.recurringStartPoint.rawValue
+            habit.recurringCustomStartDate = nextCustomDate
+            if !wasInterval || recurringStartPointChanged {
+                habit.recurringStartConfiguredAt = validated.recurringStartConfiguredAt
+            }
         }
 
         // Caller (View) must call didFinishSaving() after SwiftData auto-save (Correction #43)
@@ -190,10 +211,11 @@ final class LifeViewModel {
 
     func suggestedSnoozeDate(for habit: HabitDefinition, days: Int = 1, referenceDate: Date = Date()) -> Date? {
         guard let snapshot = cycleSnapshot(for: habit, referenceDate: referenceDate) else { return nil }
+        guard let nextDueDate = snapshot.nextDueDate else { return nil }
         return Calendar.current.date(
             byAdding: .day,
             value: Swift.max(1, days),
-            to: snapshot.nextDueDate
+            to: nextDueDate
         )
     }
 
@@ -244,6 +266,9 @@ final class LifeViewModel {
                     isAutoCompleted: false,
                     isCycleBased: true,
                     nextDueDate: cycleSnapshot.nextDueDate,
+                    cycleStartDate: cycleSnapshot.startDate,
+                    cycleStartPoint: cycleSnapshot.startPoint,
+                    isScheduled: cycleSnapshot.isScheduled,
                     isDue: cycleSnapshot.isDue,
                     isOverdue: cycleSnapshot.isOverdue,
                     lastCycleAction: cycleSnapshot.lastAction,
@@ -292,6 +317,9 @@ final class LifeViewModel {
                 isAutoCompleted: isAutoCompleted,
                 isCycleBased: false,
                 nextDueDate: nil,
+                cycleStartDate: nil,
+                cycleStartPoint: nil,
+                isScheduled: false,
                 isDue: false,
                 isOverdue: false,
                 lastCycleAction: nil,
@@ -348,14 +376,20 @@ final class LifeViewModel {
             frequencyType = "daily"
             weeklyTargetDays = 7
             intervalDays = 7
+            intervalStartPoint = .createdAt
+            intervalCustomStartDate = calendarStartOfDay(Date())
         case .weekly(let days):
             frequencyType = "weekly"
             weeklyTargetDays = days
             intervalDays = 7
+            intervalStartPoint = .createdAt
+            intervalCustomStartDate = calendarStartOfDay(Date())
         case .interval(let days):
             frequencyType = "interval"
             intervalDays = days
             weeklyTargetDays = 3
+            intervalStartPoint = habit.recurringStartPoint
+            intervalCustomStartDate = calendarStartOfDay(habit.recurringCustomStartDate ?? Date())
         }
 
         isShowingEditSheet = true
@@ -370,6 +404,8 @@ final class LifeViewModel {
         frequencyType = "daily"
         weeklyTargetDays = 3
         intervalDays = 7
+        intervalStartPoint = .createdAt
+        intervalCustomStartDate = calendarStartOfDay(Date())
         isAutoLinked = false
         validationError = nil
         editingHabit = nil
@@ -377,6 +413,10 @@ final class LifeViewModel {
     }
 
     // MARK: - Private
+
+    private func calendarStartOfDay(_ date: Date) -> Date {
+        Calendar.current.startOfDay(for: date)
+    }
 
     private func streakDates(habit: HabitDefinition, todayCompleted: Bool, today: Date) -> [Date] {
         var dates = (habit.logs ?? [])
@@ -396,15 +436,63 @@ final class LifeViewModel {
     ) -> HabitCycleSnapshot? {
         guard let intervalDays = habit.frequency.intervalDays else { return nil }
 
-        let logs = (habit.logs ?? []).sorted { $0.date < $1.date }
-        var anchorDate = calendar.startOfDay(for: habit.createdAt)
+        let allLogs = (habit.logs ?? []).sorted { $0.date < $1.date }
+        let configuredAt = calendarStartOfDay(habit.recurringStartConfiguredAt ?? habit.createdAt)
+        let logs = allLogs.filter { calendarStartOfDay($0.date) >= configuredAt }
+        let startPoint = habit.recurringStartPoint
+        let today = calendarStartOfDay(referenceDate)
+
+        let startDate: Date?
+        switch startPoint {
+        case .createdAt:
+            startDate = calendarStartOfDay(habit.createdAt)
+        case .today:
+            startDate = configuredAt
+        case .customDate:
+            startDate = calendarStartOfDay(habit.recurringCustomStartDate ?? configuredAt)
+        case .firstCompletion:
+            startDate = logs.first(where: { action(for: $0) == .complete })
+                .map { calendarStartOfDay($0.date) }
+        }
+
+        guard let startDate else {
+            return HabitCycleSnapshot(
+                nextDueDate: nil,
+                startDate: nil,
+                startPoint: startPoint,
+                isScheduled: true,
+                isDue: false,
+                isOverdue: false,
+                lastAction: nil,
+                lastCompletedAt: nil,
+                historyCount: logs.count
+            )
+        }
+
+        if today < startDate {
+            let firstDueDate = calendar.date(byAdding: .day, value: intervalDays, to: startDate)
+            return HabitCycleSnapshot(
+                nextDueDate: firstDueDate,
+                startDate: startDate,
+                startPoint: startPoint,
+                isScheduled: true,
+                isDue: false,
+                isOverdue: false,
+                lastAction: nil,
+                lastCompletedAt: nil,
+                historyCount: logs.count
+            )
+        }
+
+        var anchorDate = startDate
         var latestSnoozeDate: Date?
         var lastAction: HabitCycleAction?
         var lastCompletedAt: Date?
 
         for log in logs {
             let action = action(for: log)
-            let logDate = calendar.startOfDay(for: log.date)
+            let logDate = calendarStartOfDay(log.date)
+            guard logDate >= startDate else { continue }
 
             switch action {
             case .complete:
@@ -431,12 +519,14 @@ final class LifeViewModel {
             dueDate = latestSnoozeDate
         }
 
-        let today = calendar.startOfDay(for: referenceDate)
         let isDue = today >= dueDate
         let isOverdue = today > dueDate
 
         return HabitCycleSnapshot(
             nextDueDate: dueDate,
+            startDate: startDate,
+            startPoint: startPoint,
+            isScheduled: false,
             isDue: isDue,
             isOverdue: isOverdue,
             lastAction: lastAction,
@@ -462,6 +552,9 @@ final class LifeViewModel {
         let goalValue: Double
         let goalUnit: String?
         let frequency: HabitFrequency
+        let recurringStartPoint: HabitRecurringStartPoint
+        let recurringCustomStartDate: Date?
+        let recurringStartConfiguredAt: Date?
         let isAutoLinked: Bool
     }
 
@@ -508,14 +601,28 @@ final class LifeViewModel {
         let safeUnit: String? = trimmedUnit.isEmpty ? nil : String(trimmedUnit.prefix(20))
 
         let frequency: HabitFrequency
+        let recurringStartPoint: HabitRecurringStartPoint
+        let recurringCustomStartDate: Date?
+        let recurringStartConfiguredAt: Date?
         if frequencyType == "weekly" {
             let clampedDays = Swift.max(1, Swift.min(weeklyTargetDays, 7))
             frequency = .weekly(targetDays: clampedDays)
+            recurringStartPoint = .createdAt
+            recurringCustomStartDate = nil
+            recurringStartConfiguredAt = nil
         } else if frequencyType == "interval" {
             let clampedDays = Swift.max(1, Swift.min(intervalDays, maxIntervalDays))
             frequency = .interval(days: clampedDays)
+            recurringStartPoint = intervalStartPoint
+            recurringCustomStartDate = intervalStartPoint == .customDate
+                ? calendarStartOfDay(intervalCustomStartDate)
+                : nil
+            recurringStartConfiguredAt = calendarStartOfDay(Date())
         } else {
             frequency = .daily
+            recurringStartPoint = .createdAt
+            recurringCustomStartDate = nil
+            recurringStartConfiguredAt = nil
         }
 
         return ValidatedHabitInput(
@@ -525,6 +632,9 @@ final class LifeViewModel {
             goalValue: parsedGoal,
             goalUnit: safeUnit,
             frequency: frequency,
+            recurringStartPoint: recurringStartPoint,
+            recurringCustomStartDate: recurringCustomStartDate,
+            recurringStartConfiguredAt: recurringStartConfiguredAt,
             isAutoLinked: isAutoLinked
         )
     }

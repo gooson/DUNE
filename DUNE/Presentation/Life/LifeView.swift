@@ -566,7 +566,8 @@ private struct HabitListQueryView: View {
         guard habit.frequency.intervalDays != nil else { return }
         guard let snapshot = viewModel.cycleSnapshot(for: habit), snapshot.isDue else { return }
         guard let snoozeDate = viewModel.suggestedSnoozeDate(for: habit, days: days) else { return }
-        guard snoozeDate > snapshot.nextDueDate else { return }
+        guard let nextDueDate = snapshot.nextDueDate else { return }
+        guard snoozeDate > nextDueDate else { return }
 
         if let log = viewModel.createCycleActionLog(for: habit, action: .snooze, date: snoozeDate) {
             log.habitDefinition = habit

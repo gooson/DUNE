@@ -28,6 +28,23 @@ extension HabitType {
     }
 }
 
+// MARK: - HabitRecurringStartPoint Display
+
+extension HabitRecurringStartPoint {
+    var displayName: String {
+        switch self {
+        case .createdAt:
+            String(localized: "Created Date")
+        case .today:
+            String(localized: "Today")
+        case .customDate:
+            String(localized: "Custom Date")
+        case .firstCompletion:
+            String(localized: "First Completion")
+        }
+    }
+}
+
 // MARK: - HabitIconCategory Display
 
 extension HabitIconCategory {
