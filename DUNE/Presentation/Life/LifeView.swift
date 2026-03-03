@@ -61,6 +61,7 @@ struct LifeView: View {
                 onSave: {
                     if let habit = viewModel.createValidatedHabit() {
                         modelContext.insert(habit)
+                        viewModel.refreshReminderSchedule(for: habit)
                         viewModel.didFinishSaving()
                         viewModel.resetForm()
                         viewModel.isShowingAddSheet = false
@@ -75,6 +76,7 @@ struct LifeView: View {
                     isEdit: true,
                     onSave: {
                         if let habit = viewModel.editingHabit, viewModel.applyUpdate(to: habit) {
+                            viewModel.refreshReminderSchedule(for: habit)
                             viewModel.didFinishSaving()
                             viewModel.isShowingEditSheet = false
                             viewModel.resetForm()
@@ -105,6 +107,11 @@ private struct HabitListQueryView: View {
     @State private var habitsByID: [UUID: HabitDefinition] = [:]
     // Correction #102: cached today exercise check (avoid body-path Calendar ops)
     @State private var cachedTodayExerciseExists = false
+    @State private var historySelection: HabitHistorySelection?
+
+    private struct HabitHistorySelection: Identifiable {
+        let id: UUID
+    }
 
     var body: some View {
         if habits.isEmpty {
@@ -147,6 +154,26 @@ private struct HabitListQueryView: View {
                     } label: {
                         Label("Archive", systemImage: "archivebox")
                     }
+
+                    if progress.isCycleBased {
+                        Button {
+                            snoozeCycle(habitId: progress.id, days: 1)
+                        } label: {
+                            Label("Snooze 1 Day", systemImage: "clock.arrow.trianglehead.2.counterclockwise.rotate.90")
+                        }
+
+                        Button {
+                            skipCycle(habitId: progress.id)
+                        } label: {
+                            Label("Skip Cycle", systemImage: "forward.end")
+                        }
+
+                        Button {
+                            historySelection = HabitHistorySelection(id: progress.id)
+                        } label: {
+                            Label("History", systemImage: "clock.badge.checkmark")
+                        }
+                    }
                 }
             }
         }
@@ -168,6 +195,14 @@ private struct HabitListQueryView: View {
             }
             .onAppear {
                 recalculate()
+            }
+            .sheet(item: $historySelection) { selection in
+                if let habit = habitsByID[selection.id] {
+                    HabitHistorySheet(
+                        habitName: habit.name,
+                        entries: viewModel.historyEntries(for: habit)
+                    )
+                }
             }
     }
 
@@ -225,6 +260,19 @@ private struct HabitListQueryView: View {
 
     private func toggleCheck(habitId: UUID) {
         guard let habit = habitsByID[habitId] else { return }
+
+        if let progress = viewModel.habitProgresses.first(where: { $0.id == habitId }), progress.isCycleBased {
+            guard progress.isDue else { return }
+            if let log = viewModel.createCycleActionLog(for: habit, action: .complete) {
+                log.habitDefinition = habit
+                modelContext.insert(log)
+                viewModel.didFinishSaving()
+                viewModel.refreshReminderSchedule(for: habit)
+            }
+            recalculate()
+            return
+        }
+
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
         let existingLog = (habit.logs ?? []).first { calendar.isDate($0.date, inSameDayAs: today) }
@@ -234,12 +282,14 @@ private struct HabitListQueryView: View {
             withAnimation {
                 modelContext.delete(log)
             }
+            viewModel.refreshReminderSchedule(for: habit)
         } else {
             // Toggle on: add log
             if let log = viewModel.createValidatedLog(for: habit, value: 1.0) {
                 log.habitDefinition = habit
                 modelContext.insert(log)
                 viewModel.didFinishSaving()
+                viewModel.refreshReminderSchedule(for: habit)
             }
         }
         recalculate()
@@ -262,9 +312,40 @@ private struct HabitListQueryView: View {
                 log.habitDefinition = habit
                 modelContext.insert(log)
                 viewModel.didFinishSaving()
+                viewModel.refreshReminderSchedule(for: habit)
             }
         }
         recalculate()
+    }
+
+    private func skipCycle(habitId: UUID) {
+        guard let habit = habitsByID[habitId] else { return }
+        guard habit.frequency.intervalDays != nil else { return }
+        guard let snapshot = viewModel.cycleSnapshot(for: habit), snapshot.isDue else { return }
+
+        if let log = viewModel.createCycleActionLog(for: habit, action: .skip) {
+            log.habitDefinition = habit
+            modelContext.insert(log)
+            viewModel.didFinishSaving()
+            viewModel.refreshReminderSchedule(for: habit)
+            recalculate()
+        }
+    }
+
+    private func snoozeCycle(habitId: UUID, days: Int) {
+        guard let habit = habitsByID[habitId] else { return }
+        guard habit.frequency.intervalDays != nil else { return }
+        guard let snapshot = viewModel.cycleSnapshot(for: habit), snapshot.isDue else { return }
+        guard let snoozeDate = viewModel.suggestedSnoozeDate(for: habit, days: days) else { return }
+        guard snoozeDate > snapshot.nextDueDate else { return }
+
+        if let log = viewModel.createCycleActionLog(for: habit, action: .snooze, date: snoozeDate) {
+            log.habitDefinition = habit
+            modelContext.insert(log)
+            viewModel.didFinishSaving()
+            viewModel.refreshReminderSchedule(for: habit)
+            recalculate()
+        }
     }
 
     private func recalculate() {
@@ -275,6 +356,80 @@ private struct HabitListQueryView: View {
             habits: habits,
             todayExerciseExists: cachedTodayExerciseExists
         )
+    }
+}
+
+private struct HabitHistorySheet: View {
+    let habitName: String
+    let entries: [LifeViewModel.HabitHistoryEntry]
+
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            Group {
+                Text(habitName)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .padding(.horizontal, DS.Spacing.lg)
+                    .padding(.top, DS.Spacing.sm)
+
+                if entries.isEmpty {
+                    EmptyStateView(
+                        icon: "clock.badge.questionmark",
+                        title: "No History",
+                        message: "No cycle actions recorded yet.",
+                        actionTitle: "Close",
+                        action: { dismiss() }
+                    )
+                } else {
+                    List(entries) { entry in
+                        HStack(spacing: DS.Spacing.sm) {
+                            Image(systemName: iconName(for: entry.action))
+                                .foregroundStyle(color(for: entry.action))
+                                .frame(width: 20)
+                            Text(title(for: entry.action))
+                                .font(.subheadline)
+                            Spacer()
+                            Text(entry.date.formatted(date: .abbreviated, time: .omitted))
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    .listStyle(.plain)
+                }
+            }
+            .englishNavigationTitle("History")
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Close") { dismiss() }
+                }
+            }
+        }
+    }
+
+    private func title(for action: HabitCycleAction) -> String {
+        switch action {
+        case .complete: String(localized: "Completed")
+        case .skip: String(localized: "Skipped")
+        case .snooze: String(localized: "Snoozed")
+        }
+    }
+
+    private func iconName(for action: HabitCycleAction) -> String {
+        switch action {
+        case .complete: "checkmark.circle.fill"
+        case .skip: "forward.end.fill"
+        case .snooze: "clock.arrow.trianglehead.2.counterclockwise.rotate.90"
+        }
+    }
+
+    private func color(for action: HabitCycleAction) -> Color {
+        switch action {
+        case .complete: DS.Color.positive
+        case .skip: DS.Color.negative
+        case .snooze: DS.Color.tabWellness
+        }
     }
 }
 

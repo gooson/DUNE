@@ -1,13 +1,18 @@
 import Foundation
 import Observation
+import UserNotifications
 
 @Observable
 @MainActor
 final class LifeViewModel {
     private let maxNameLength = 50
-    private let maxMemoLength = 200
     private let maxGoalValue: Double = 1440 // 24 hours in minutes
     private let maxCountGoal: Double = 999
+    private let maxIntervalDays = 365
+    private let reminderOffsetsInDays = [3, 1, 0]
+
+    private let skipMemoMarker = "[dune-life-cycle-skip]"
+    private let snoozeMemoMarker = "[dune-life-cycle-snooze]"
 
     // MARK: - Sheet State
 
@@ -24,6 +29,7 @@ final class LifeViewModel {
     var goalUnit: String = ""
     var frequencyType: String = "daily"
     var weeklyTargetDays: Int = 3
+    var intervalDays: Int = 7
     var isAutoLinked: Bool = false
     var validationError: String?
     var isSaving = false
@@ -37,6 +43,22 @@ final class LifeViewModel {
     private(set) var habitProgresses: [HabitProgress] = []
     private(set) var completedCount: Int = 0
     private(set) var totalActiveCount: Int = 0
+
+    struct HabitCycleSnapshot: Sendable {
+        let nextDueDate: Date
+        let isDue: Bool
+        let isOverdue: Bool
+        let lastAction: HabitCycleAction?
+        let lastCompletedAt: Date?
+        let historyCount: Int
+    }
+
+    struct HabitHistoryEntry: Identifiable, Sendable {
+        let id: UUID
+        let action: HabitCycleAction
+        let date: Date
+        let value: Double
+    }
 
     // MARK: - Habit CRUD
 
@@ -77,6 +99,9 @@ final class LifeViewModel {
         case .weekly(let days):
             habit.frequencyTypeRaw = "weekly"
             habit.weeklyTargetDays = days
+        case .interval(let days):
+            habit.frequencyTypeRaw = "interval"
+            habit.weeklyTargetDays = days
         }
 
         // Caller (View) must call didFinishSaving() after SwiftData auto-save (Correction #43)
@@ -115,6 +140,73 @@ final class LifeViewModel {
         return HabitLog(date: date, value: clampedValue)
     }
 
+    func createCycleActionLog(
+        for habit: HabitDefinition,
+        action: HabitCycleAction,
+        date: Date = Date()
+    ) -> HabitLog? {
+        guard !isSaving else { return nil }
+        guard habit.frequency.intervalDays != nil else { return nil }
+
+        let normalizedDate = Calendar.current.startOfDay(for: date)
+        let value: Double
+        let memo: String?
+
+        switch action {
+        case .complete:
+            value = 1
+            memo = nil
+        case .skip:
+            value = 0
+            memo = skipMemoMarker
+        case .snooze:
+            value = 0
+            memo = snoozeMemoMarker
+        }
+
+        isSaving = true
+        return HabitLog(date: normalizedDate, value: value, memo: memo)
+    }
+
+    // MARK: - Cycle Snapshot / History
+
+    func cycleSnapshot(for habit: HabitDefinition, referenceDate: Date = Date()) -> HabitCycleSnapshot? {
+        makeCycleSnapshot(for: habit, referenceDate: referenceDate, calendar: Calendar.current)
+    }
+
+    func historyEntries(for habit: HabitDefinition) -> [HabitHistoryEntry] {
+        let logs = (habit.logs ?? []).sorted { $0.date > $1.date }
+        return logs.map { log in
+            HabitHistoryEntry(
+                id: log.id,
+                action: action(for: log),
+                date: log.date,
+                value: log.value
+            )
+        }
+    }
+
+    func suggestedSnoozeDate(for habit: HabitDefinition, days: Int = 1, referenceDate: Date = Date()) -> Date? {
+        guard let snapshot = cycleSnapshot(for: habit, referenceDate: referenceDate) else { return nil }
+        return Calendar.current.date(
+            byAdding: .day,
+            value: Swift.max(1, days),
+            to: snapshot.nextDueDate
+        )
+    }
+
+    func refreshReminderSchedule(for habit: HabitDefinition, referenceDate: Date = Date()) {
+        let snapshot = cycleSnapshot(for: habit, referenceDate: referenceDate)
+        Task {
+            await HabitReminderScheduler.reschedule(
+                habitID: habit.id,
+                habitName: habit.name,
+                nextDueDate: snapshot?.nextDueDate,
+                reminderOffsetsInDays: reminderOffsetsInDays
+            )
+        }
+    }
+
     // MARK: - Progress Calculation
 
     func calculateProgresses(
@@ -129,6 +221,35 @@ final class LifeViewModel {
         var completed = 0
 
         for habit in habits where !habit.isArchived {
+            if let cycleSnapshot = makeCycleSnapshot(for: habit, referenceDate: referenceDate, calendar: calendar) {
+                let isCompleted = cycleSnapshot.lastAction == .complete && !cycleSnapshot.isDue
+                let effectiveValue = isCompleted ? habit.goalValue : 0
+
+                if isCompleted { completed += 1 }
+
+                progresses.append(HabitProgress(
+                    id: habit.id,
+                    name: habit.name,
+                    iconCategory: habit.iconCategory,
+                    type: habit.habitType,
+                    goalValue: habit.goalValue,
+                    goalUnit: habit.goalUnit,
+                    frequency: habit.frequency,
+                    todayValue: effectiveValue,
+                    isCompleted: isCompleted,
+                    streak: 0,
+                    isAutoLinked: habit.isAutoLinked,
+                    isAutoCompleted: false,
+                    isCycleBased: true,
+                    nextDueDate: cycleSnapshot.nextDueDate,
+                    isDue: cycleSnapshot.isDue,
+                    isOverdue: cycleSnapshot.isOverdue,
+                    lastCycleAction: cycleSnapshot.lastAction,
+                    historyCount: cycleSnapshot.historyCount
+                ))
+                continue
+            }
+
             let logs = (habit.logs ?? [])
             let todayLogs = logs.filter { calendar.isDate($0.date, inSameDayAs: today) }
             let todayValue = todayLogs.reduce(0.0) { $0 + $1.value }
@@ -166,7 +287,13 @@ final class LifeViewModel {
                 isCompleted: isCompleted,
                 streak: streak,
                 isAutoLinked: habit.isAutoLinked,
-                isAutoCompleted: isAutoCompleted
+                isAutoCompleted: isAutoCompleted,
+                isCycleBased: false,
+                nextDueDate: nil,
+                isDue: false,
+                isOverdue: false,
+                lastCycleAction: nil,
+                historyCount: logs.count
             ))
         }
 
@@ -191,9 +318,15 @@ final class LifeViewModel {
         case .daily:
             frequencyType = "daily"
             weeklyTargetDays = 7
+            intervalDays = 7
         case .weekly(let days):
             frequencyType = "weekly"
             weeklyTargetDays = days
+            intervalDays = 7
+        case .interval(let days):
+            frequencyType = "interval"
+            intervalDays = days
+            weeklyTargetDays = 3
         }
 
         isShowingEditSheet = true
@@ -207,6 +340,7 @@ final class LifeViewModel {
         goalUnit = ""
         frequencyType = "daily"
         weeklyTargetDays = 3
+        intervalDays = 7
         isAutoLinked = false
         validationError = nil
         editingHabit = nil
@@ -216,11 +350,80 @@ final class LifeViewModel {
     // MARK: - Private
 
     private func streakDates(habit: HabitDefinition, todayCompleted: Bool, today: Date) -> [Date] {
-        var dates = (habit.logs ?? []).map(\.date)
+        var dates = (habit.logs ?? [])
+            .filter { action(for: $0) == .complete }
+            .map(\.date)
+
         if todayCompleted, !dates.contains(where: { Calendar.current.isDate($0, inSameDayAs: today) }) {
             dates.append(today)
         }
         return dates
+    }
+
+    private func makeCycleSnapshot(
+        for habit: HabitDefinition,
+        referenceDate: Date,
+        calendar: Calendar
+    ) -> HabitCycleSnapshot? {
+        guard let intervalDays = habit.frequency.intervalDays else { return nil }
+
+        let logs = (habit.logs ?? []).sorted { $0.date < $1.date }
+        var anchorDate = calendar.startOfDay(for: habit.createdAt)
+        var latestSnoozeDate: Date?
+        var lastAction: HabitCycleAction?
+        var lastCompletedAt: Date?
+
+        for log in logs {
+            let action = action(for: log)
+            let logDate = calendar.startOfDay(for: log.date)
+
+            switch action {
+            case .complete:
+                anchorDate = logDate
+                lastAction = .complete
+                lastCompletedAt = logDate
+                latestSnoozeDate = nil
+            case .skip:
+                anchorDate = logDate
+                lastAction = .skip
+                latestSnoozeDate = nil
+            case .snooze:
+                guard logDate >= anchorDate else { continue }
+                if let existing = latestSnoozeDate {
+                    latestSnoozeDate = logDate > existing ? logDate : existing
+                } else {
+                    latestSnoozeDate = logDate
+                }
+            }
+        }
+
+        var dueDate = calendar.date(byAdding: .day, value: intervalDays, to: anchorDate) ?? anchorDate
+        if let latestSnoozeDate, latestSnoozeDate > dueDate {
+            dueDate = latestSnoozeDate
+        }
+
+        let today = calendar.startOfDay(for: referenceDate)
+        let isDue = today >= dueDate
+        let isOverdue = today > dueDate
+
+        return HabitCycleSnapshot(
+            nextDueDate: dueDate,
+            isDue: isDue,
+            isOverdue: isOverdue,
+            lastAction: lastAction,
+            lastCompletedAt: lastCompletedAt,
+            historyCount: logs.count
+        )
+    }
+
+    private func action(for log: HabitLog) -> HabitCycleAction {
+        if log.memo == skipMemoMarker {
+            return .skip
+        }
+        if log.memo == snoozeMemoMarker {
+            return .snooze
+        }
+        return .complete
     }
 
     private struct ValidatedHabitInput {
@@ -279,6 +482,9 @@ final class LifeViewModel {
         if frequencyType == "weekly" {
             let clampedDays = Swift.max(1, Swift.min(weeklyTargetDays, 7))
             frequency = .weekly(targetDays: clampedDays)
+        } else if frequencyType == "interval" {
+            let clampedDays = Swift.max(1, Swift.min(intervalDays, maxIntervalDays))
+            frequency = .interval(days: clampedDays)
         } else {
             frequency = .daily
         }
@@ -292,5 +498,70 @@ final class LifeViewModel {
             frequency: frequency,
             isAutoLinked: isAutoLinked
         )
+    }
+}
+
+private enum HabitReminderScheduler {
+    static func reschedule(
+        habitID: UUID,
+        habitName: String,
+        nextDueDate: Date?,
+        reminderOffsetsInDays: [Int]
+    ) async {
+        let center = UNUserNotificationCenter.current()
+        let identifiers = reminderOffsetsInDays.map { notificationID(for: habitID, offsetInDays: $0) }
+        center.removePendingNotificationRequests(withIdentifiers: identifiers)
+
+        guard let nextDueDate else { return }
+
+        let calendar = Calendar.current
+        let now = Date()
+
+        for offset in reminderOffsetsInDays {
+            guard let candidateDate = calendar.date(byAdding: .day, value: -offset, to: nextDueDate) else {
+                continue
+            }
+
+            let triggerDate = scheduledTriggerDate(from: candidateDate, calendar: calendar)
+            guard triggerDate > now else { continue }
+
+            var components = calendar.dateComponents([.year, .month, .day], from: triggerDate)
+            components.hour = 9
+            components.minute = 0
+
+            let content = UNMutableNotificationContent()
+            content.title = String(localized: "Life Checklist")
+            if offset == 0 {
+                content.body = String(localized: "\(habitName) is due today")
+            } else if offset == 1 {
+                content.body = String(localized: "\(habitName) is due in 1 day")
+            } else {
+                content.body = String(localized: "\(habitName) is due in \(offset) days")
+            }
+            content.sound = .default
+
+            let request = UNNotificationRequest(
+                identifier: notificationID(for: habitID, offsetInDays: offset),
+                content: content,
+                trigger: UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+            )
+
+            do {
+                try await center.add(request)
+            } catch {
+                AppLogger.notification.error("[LifeReminder] Failed to schedule habit reminder: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    private static func notificationID(for habitID: UUID, offsetInDays: Int) -> String {
+        "dune.life.habit.\(habitID.uuidString).\(offsetInDays)d"
+    }
+
+    private static func scheduledTriggerDate(from date: Date, calendar: Calendar) -> Date {
+        var components = calendar.dateComponents([.year, .month, .day], from: date)
+        components.hour = 9
+        components.minute = 0
+        return calendar.date(from: components) ?? date
     }
 }
