@@ -438,6 +438,9 @@
         }
       }
     },
+    "%@ pts" : {
+
+    },
     "%@ ready %@" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1116,6 +1119,9 @@
         }
       }
     },
+    "+%@ pts" : {
+
+    },
     "+1 Set" : {
       "localizations" : {
         "ja" : {
@@ -1638,6 +1644,9 @@
           }
         }
       }
+    },
+    "Achievement History" : {
+
     },
     "Active" : {
       "extractionState" : "manual",
@@ -2220,6 +2229,10 @@
           }
         }
       }
+    },
+    "Arctic Dawn" : {
+      "extractionState" : "manual",
+      "shouldTranslate" : false
     },
     "Asleep" : {
       "extractionState" : "manual",
@@ -5135,10 +5148,6 @@
       "extractionState" : "manual",
       "shouldTranslate" : false
     },
-    "Arctic Dawn" : {
-      "extractionState" : "manual",
-      "shouldTranslate" : false
-    },
     "Details" : {
       "localizations" : {
         "ja" : {
@@ -6944,6 +6953,23 @@
         }
       }
     },
+    "floors" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "階"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "층"
+          }
+        }
+      }
+    },
     "Floors" : {
       "localizations" : {
         "ja" : {
@@ -6973,23 +6999,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "오른 층수"
-          }
-        }
-      }
-    },
-    "floors" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "階"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "층"
           }
         }
       }
@@ -10773,6 +10782,9 @@
         }
       }
     },
+    "No achievements yet. Complete workouts to unlock milestones, badges, and levels." : {
+
+    },
     "No active injuries" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -11088,6 +11100,9 @@
           }
         }
       }
+    },
+    "No reward events yet. Complete workouts and hit milestones to build your timeline." : {
+
     },
     "No score yet. A short workout today helps maintain your weekly goal rhythm." : {
       "extractionState" : "manual",
@@ -13519,6 +13534,9 @@
           }
         }
       }
+    },
+    "Reward Progress" : {
+
     },
     "RHR" : {
       "extractionState" : "manual",
