@@ -1632,6 +1632,134 @@ struct SolarFlareOverlayView: View {
     }
 }
 
+private struct SolarSunBurstOverlay: View {
+    var intensity: CGFloat = 1.0
+    var anchorX: CGFloat = 0.82
+    var anchorY: CGFloat = 0.08
+    var rayCount: Int = 14
+    var coreScale: CGFloat = 1.0
+
+    @State private var phase: CGFloat = 0
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.appTheme) private var theme
+
+    private var intensityValue: Double {
+        Double(Swift.max(0.45, intensity))
+    }
+
+    var body: some View {
+        GeometryReader { proxy in
+            let minSide = min(proxy.size.width, proxy.size.height)
+            let radius = minSide * (0.24 * coreScale)
+            let center = CGPoint(
+                x: proxy.size.width * anchorX,
+                y: proxy.size.height * anchorY + radius * 0.92
+            )
+
+            ZStack {
+                ForEach(0..<rayCount, id: \.self) { idx in
+                    let progress = Double(idx) / Double(max(rayCount, 1))
+                    let angle = progress * 360 + Double(phase) * 14
+                    let pulse = 1.14 + 0.36 * abs(sin(Double(phase) * 0.9 + progress * 8.4))
+                    let beamLength = radius * CGFloat(pulse)
+                    let beamHeight = max(1.8, radius * 0.11 - CGFloat(idx % 3) * 0.55)
+
+                    Capsule(style: .continuous)
+                        .fill(
+                            LinearGradient(
+                                colors: [
+                                    Color("SolarAccent").opacity(0.52 * intensityValue),
+                                    theme.solarGlowColor.opacity(0.34 * intensityValue),
+                                    .clear
+                                ],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
+                        .frame(width: beamLength, height: beamHeight)
+                        .position(x: center.x, y: center.y)
+                        .rotationEffect(.degrees(angle))
+                        .offset(x: beamLength * 0.44)
+                        .blendMode(.screen)
+                }
+
+                Circle()
+                    .fill(
+                        RadialGradient(
+                            colors: [
+                                Color("SolarAccent").opacity(0.98 * intensityValue),
+                                theme.solarGlowColor.opacity(0.88 * intensityValue),
+                                theme.solarCoreColor.opacity(0.74 * intensityValue),
+                                theme.solarEmberColor.opacity(0.32 * intensityValue),
+                                .clear
+                            ],
+                            center: .center,
+                            startRadius: 0,
+                            endRadius: radius * 1.18
+                        )
+                    )
+                    .frame(width: radius * 2.2, height: radius * 2.2)
+                    .position(x: center.x, y: center.y)
+                    .blur(radius: reduceMotion ? 0.8 : 1.6)
+                    .blendMode(.screen)
+
+                Circle()
+                    .stroke(
+                        AngularGradient(
+                            colors: [
+                                Color("SolarAccent").opacity(0.66 * intensityValue),
+                                theme.solarGlowColor.opacity(0.62 * intensityValue),
+                                theme.solarCoreColor.opacity(0.50 * intensityValue),
+                                Color("SolarDusk").opacity(0.32 * intensityValue),
+                                Color("SolarAccent").opacity(0.66 * intensityValue),
+                            ],
+                            center: .center
+                        ),
+                        lineWidth: radius * 0.16
+                    )
+                    .frame(width: radius * 2.8, height: radius * 2.8)
+                    .position(x: center.x, y: center.y)
+                    .blur(radius: reduceMotion ? 1.8 : 2.8)
+                    .rotationEffect(.degrees(Double(phase) * 24))
+                    .blendMode(.screen)
+
+                Ellipse()
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                theme.solarGlowColor.opacity(0.20 * intensityValue),
+                                theme.solarCoreColor.opacity(0.13 * intensityValue),
+                                .clear
+                            ],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+                    .frame(width: radius * 3.8, height: radius * 1.9)
+                    .position(x: center.x, y: center.y + radius * 1.1)
+                    .blur(radius: 10)
+                    .blendMode(.screen)
+            }
+        }
+        .allowsHitTesting(false)
+        .task {
+            guard !reduceMotion else { return }
+            withAnimation(.linear(duration: 16).repeatForever(autoreverses: false)) {
+                phase = 2 * .pi
+            }
+        }
+        .onAppear {
+            guard !reduceMotion else { return }
+            Task { @MainActor in
+                phase = 0
+                withAnimation(.linear(duration: 16).repeatForever(autoreverses: false)) {
+                    phase = 2 * .pi
+                }
+            }
+        }
+    }
+}
+
 // MARK: - Solar Pop Backgrounds
 
 struct SolarTabWaveBackground: View {
@@ -1657,25 +1785,34 @@ struct SolarTabWaveBackground: View {
         let opacityScale = Double(scale) * darkBoost
 
         ZStack(alignment: .top) {
+            SolarSunBurstOverlay(
+                intensity: 1.02 * scale,
+                anchorX: 0.84,
+                anchorY: 0.02,
+                rayCount: 16,
+                coreScale: 1.08
+            )
+            .frame(height: 230)
+
             SolarFlareOverlayView(
                 color: theme.solarEmberColor,
-                opacity: 0.08 * opacityScale,
-                amplitude: 0.028 * scale,
+                opacity: 0.10 * opacityScale,
+                amplitude: 0.036 * scale,
                 frequency: 1.0,
                 verticalOffset: 0.40,
                 bottomFade: 0.54,
                 pulse: 0.10,
                 driftDuration: 18,
                 strokeColor: theme.solarCoreColor,
-                strokeOpacity: 0.12 * opacityScale,
+                strokeOpacity: 0.16 * opacityScale,
                 strokeWidth: 0.8
             )
             .frame(height: 200)
 
             SolarFlareOverlayView(
                 color: theme.solarCoreColor,
-                opacity: 0.17 * opacityScale,
-                amplitude: 0.072 * scale,
+                opacity: 0.20 * opacityScale,
+                amplitude: 0.084 * scale,
                 frequency: 1.7,
                 verticalOffset: 0.50,
                 bottomFade: 0.48,
@@ -1683,31 +1820,32 @@ struct SolarTabWaveBackground: View {
                 driftDuration: 13,
                 reverseDirection: true,
                 strokeColor: theme.solarGlowColor,
-                strokeOpacity: 0.25 * opacityScale,
-                strokeWidth: 1.3
+                strokeOpacity: 0.30 * opacityScale,
+                strokeWidth: 1.45
             )
             .frame(height: 200)
 
             SolarFlareOverlayView(
                 color: theme.solarGlowColor,
-                opacity: 0.22 * opacityScale,
-                amplitude: 0.102 * scale,
+                opacity: 0.27 * opacityScale,
+                amplitude: 0.118 * scale,
                 frequency: 2.3,
                 verticalOffset: 0.58,
                 bottomFade: 0.44,
-                pulse: 0.28,
+                pulse: 0.32,
                 driftDuration: 10,
                 strokeColor: theme.solarCoreColor,
-                strokeOpacity: 0.32 * opacityScale,
-                strokeWidth: 1.8
+                strokeOpacity: 0.38 * opacityScale,
+                strokeWidth: 1.95
             )
             .frame(height: 200)
 
             LinearGradient(
                 colors: [
-                    theme.solarGlowColor.opacity(colorScheme == .dark ? 0.26 : 0.20),
-                    theme.solarCoreColor.opacity(colorScheme == .dark ? 0.16 : 0.12),
-                    theme.solarEmberColor.opacity(colorScheme == .dark ? 0.10 : 0.07),
+                    Color("SolarAccent").opacity(colorScheme == .dark ? 0.34 : 0.28),
+                    theme.solarGlowColor.opacity(colorScheme == .dark ? 0.28 : 0.22),
+                    theme.solarCoreColor.opacity(colorScheme == .dark ? 0.18 : 0.14),
+                    theme.solarEmberColor.opacity(colorScheme == .dark ? 0.11 : 0.08),
                     .clear
                 ],
                 startPoint: .top,
@@ -1723,10 +1861,19 @@ struct SolarDetailWaveBackground: View {
 
     var body: some View {
         ZStack(alignment: .top) {
+            SolarSunBurstOverlay(
+                intensity: 0.78,
+                anchorX: 0.82,
+                anchorY: 0.03,
+                rayCount: 14,
+                coreScale: 0.90
+            )
+            .frame(height: 165)
+
             SolarFlareOverlayView(
                 color: theme.solarEmberColor,
-                opacity: 0.08,
-                amplitude: 0.024,
+                opacity: 0.10,
+                amplitude: 0.030,
                 frequency: 1.0,
                 verticalOffset: 0.42,
                 bottomFade: 0.58,
@@ -1740,8 +1887,8 @@ struct SolarDetailWaveBackground: View {
 
             SolarFlareOverlayView(
                 color: theme.solarCoreColor,
-                opacity: 0.13,
-                amplitude: 0.046,
+                opacity: 0.16,
+                amplitude: 0.056,
                 frequency: 1.58,
                 verticalOffset: 0.52,
                 bottomFade: 0.52,
@@ -1749,28 +1896,32 @@ struct SolarDetailWaveBackground: View {
                 driftDuration: 12,
                 reverseDirection: true,
                 strokeColor: theme.solarGlowColor,
-                strokeOpacity: 0.18,
-                strokeWidth: 1.0
+                strokeOpacity: 0.22,
+                strokeWidth: 1.1
             )
             .frame(height: 150)
 
             SolarFlareOverlayView(
                 color: theme.solarGlowColor,
-                opacity: 0.17,
-                amplitude: 0.062,
+                opacity: 0.22,
+                amplitude: 0.072,
                 frequency: 2.0,
                 verticalOffset: 0.56,
                 bottomFade: 0.50,
-                pulse: 0.22,
+                pulse: 0.27,
                 driftDuration: 10,
                 strokeColor: theme.solarCoreColor,
-                strokeOpacity: 0.22,
-                strokeWidth: 1.2
+                strokeOpacity: 0.28,
+                strokeWidth: 1.35
             )
             .frame(height: 150)
 
             LinearGradient(
-                colors: [theme.solarGlowColor.opacity(DS.Opacity.light), .clear],
+                colors: [
+                    Color("SolarAccent").opacity(0.20),
+                    theme.solarGlowColor.opacity(0.16),
+                    .clear
+                ],
                 startPoint: .top,
                 endPoint: DS.Gradient.tabBackgroundEnd
             )
@@ -1784,10 +1935,19 @@ struct SolarSheetWaveBackground: View {
 
     var body: some View {
         ZStack(alignment: .top) {
+            SolarSunBurstOverlay(
+                intensity: 0.62,
+                anchorX: 0.80,
+                anchorY: 0.05,
+                rayCount: 12,
+                coreScale: 0.78
+            )
+            .frame(height: 140)
+
             SolarFlareOverlayView(
                 color: theme.solarCoreColor,
-                opacity: 0.10,
-                amplitude: 0.034,
+                opacity: 0.12,
+                amplitude: 0.040,
                 frequency: 1.52,
                 verticalOffset: 0.50,
                 bottomFade: 0.56,
@@ -1795,28 +1955,32 @@ struct SolarSheetWaveBackground: View {
                 driftDuration: 12,
                 reverseDirection: true,
                 strokeColor: theme.solarGlowColor,
-                strokeOpacity: 0.16,
-                strokeWidth: 0.9
+                strokeOpacity: 0.19,
+                strokeWidth: 1.0
             )
             .frame(height: 120)
 
             SolarFlareOverlayView(
                 color: theme.solarGlowColor,
-                opacity: 0.14,
-                amplitude: 0.050,
+                opacity: 0.18,
+                amplitude: 0.058,
                 frequency: 1.92,
                 verticalOffset: 0.55,
                 bottomFade: 0.52,
-                pulse: 0.19,
+                pulse: 0.24,
                 driftDuration: 10,
                 strokeColor: theme.solarCoreColor,
-                strokeOpacity: 0.20,
-                strokeWidth: 1.1
+                strokeOpacity: 0.25,
+                strokeWidth: 1.25
             )
             .frame(height: 120)
 
             LinearGradient(
-                colors: [theme.solarGlowColor.opacity(DS.Opacity.light), .clear],
+                colors: [
+                    Color("SolarAccent").opacity(0.18),
+                    theme.solarGlowColor.opacity(0.13),
+                    .clear
+                ],
                 startPoint: .top,
                 endPoint: DS.Gradient.sheetBackgroundEnd
             )

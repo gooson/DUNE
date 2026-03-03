@@ -107,7 +107,7 @@ struct WatchWaveBackground: View {
         let resolvedColor = color ?? theme.accentColor
         let baseWaveColor: Color = isArctic ? Color("ArcticDeep") : resolvedColor
         let gradientTop = (isArctic ? Color("ArcticDeep") : resolvedColor)
-            .opacity(isSakura ? 0.22 : (isArctic ? 0.30 : (isSolar ? 0.25 : DS.Opacity.light)))
+            .opacity(isSakura ? 0.22 : (isArctic ? 0.30 : (isSolar ? 0.34 : DS.Opacity.light)))
         let secondaryTop: Color = {
             if isSakura {
                 return Color("SakuraIvory").opacity(0.14)
@@ -116,12 +116,28 @@ struct WatchWaveBackground: View {
                 return WatchArcticAuroraPalette.neonMint.opacity(0.26)
             }
             if isSolar {
-                return Color("SolarGlow").opacity(0.14)
+                return Color("SolarAccent").opacity(0.18)
             }
             return .clear
         }()
-        let tertiaryTop: Color = isArctic ? WatchArcticAuroraPalette.violet.opacity(0.18) : .clear
-        let quaternaryTop: Color = isArctic ? WatchArcticAuroraPalette.magenta.opacity(0.14) : .clear
+        let tertiaryTop: Color = {
+            if isArctic {
+                return WatchArcticAuroraPalette.violet.opacity(0.18)
+            }
+            if isSolar {
+                return Color("SolarCore").opacity(0.13)
+            }
+            return .clear
+        }()
+        let quaternaryTop: Color = {
+            if isArctic {
+                return WatchArcticAuroraPalette.magenta.opacity(0.14)
+            }
+            if isSolar {
+                return Color("SolarEmber").opacity(0.09)
+            }
+            return .clear
+        }()
 
         ZStack(alignment: .top) {
             WatchWaveShape(
@@ -130,7 +146,7 @@ struct WatchWaveBackground: View {
                 phase: phase,
                 verticalOffset: isArctic ? 0.62 : WatchWaveDefaults.verticalOffset
             )
-            .fill(baseWaveColor.opacity(isSakura ? 0.26 : (isArctic ? 0.30 : (isSolar ? 0.24 : DS.Opacity.medium))))
+            .fill(baseWaveColor.opacity(isSakura ? 0.26 : (isArctic ? 0.30 : (isSolar ? 0.30 : DS.Opacity.medium))))
             .mask {
                 LinearGradient(
                     stops: [
@@ -205,7 +221,13 @@ struct WatchWaveBackground: View {
             }
 
             if isSolar {
-                WatchSolarFlareBands(phase: petalPhase, opacity: reduceMotion ? 0.12 : 0.18)
+                WatchSolarSunBurst(phase: petalPhase, opacity: reduceMotion ? 0.18 : 0.34)
+                    .frame(height: WatchWaveDefaults.frameHeight + 10)
+                    .padding(.top, -3)
+            }
+
+            if isSolar {
+                WatchSolarFlareBands(phase: petalPhase, opacity: reduceMotion ? 0.14 : 0.22)
                     .frame(height: WatchWaveDefaults.frameHeight)
                     .padding(.top, 5)
             }
@@ -233,6 +255,105 @@ struct WatchWaveBackground: View {
                 }
             }
         }
+    }
+}
+
+private struct WatchSolarSunBurst: View {
+    let phase: CGFloat
+    let opacity: Double
+
+    var body: some View {
+        GeometryReader { proxy in
+            let minSide = min(proxy.size.width, proxy.size.height)
+            let radius = minSide * 0.16
+            let center = CGPoint(x: proxy.size.width * 0.80, y: proxy.size.height * 0.20)
+
+            ZStack {
+                ForEach(0..<10, id: \.self) { idx in
+                    let seed = Double(idx) / 10.0
+                    let angle = seed * 360 + Double(phase) * 18
+                    let pulse = 1.08 + 0.30 * abs(sin(Double(phase) * 0.92 + seed * 8.0))
+                    let beamLength = radius * CGFloat(pulse)
+                    let beamHeight = 1.7 + CGFloat(idx % 2) * 0.5
+
+                    Capsule(style: .continuous)
+                        .fill(
+                            LinearGradient(
+                                colors: [
+                                    Color("SolarAccent").opacity(opacity * 0.90),
+                                    Color("SolarGlow").opacity(opacity * 0.60),
+                                    .clear
+                                ],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
+                        .frame(width: beamLength, height: beamHeight)
+                        .position(x: center.x, y: center.y)
+                        .rotationEffect(.degrees(angle))
+                        .offset(x: beamLength * 0.44)
+                        .blendMode(.screen)
+                }
+
+                Circle()
+                    .fill(
+                        RadialGradient(
+                            colors: [
+                                Color("SolarAccent").opacity(opacity * 1.15),
+                                Color("SolarGlow").opacity(opacity),
+                                Color("SolarCore").opacity(opacity * 0.82),
+                                Color("SolarEmber").opacity(opacity * 0.36),
+                                .clear
+                            ],
+                            center: .center,
+                            startRadius: 0,
+                            endRadius: radius * 1.2
+                        )
+                    )
+                    .frame(width: radius * 2.2, height: radius * 2.2)
+                    .position(x: center.x, y: center.y)
+                    .blur(radius: 1.4)
+                    .blendMode(.screen)
+
+                Circle()
+                    .stroke(
+                        AngularGradient(
+                            colors: [
+                                Color("SolarAccent").opacity(opacity * 0.82),
+                                Color("SolarGlow").opacity(opacity * 0.66),
+                                Color("SolarCore").opacity(opacity * 0.52),
+                                Color("SolarDusk").opacity(opacity * 0.36),
+                                Color("SolarAccent").opacity(opacity * 0.82),
+                            ],
+                            center: .center
+                        ),
+                        lineWidth: 2.1
+                    )
+                    .frame(width: radius * 2.7, height: radius * 2.7)
+                    .position(x: center.x, y: center.y)
+                    .blur(radius: 2.0)
+                    .rotationEffect(.degrees(Double(phase) * 20))
+                    .blendMode(.screen)
+
+                Ellipse()
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                Color("SolarGlow").opacity(opacity * 0.38),
+                                Color("SolarCore").opacity(opacity * 0.24),
+                                .clear
+                            ],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+                    .frame(width: radius * 3.6, height: radius * 1.9)
+                    .position(x: center.x, y: center.y + radius * 1.04)
+                    .blur(radius: 5.2)
+                    .blendMode(.screen)
+            }
+        }
+        .allowsHitTesting(false)
     }
 }
 
