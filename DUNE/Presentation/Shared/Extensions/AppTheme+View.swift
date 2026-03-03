@@ -14,6 +14,8 @@ extension AppTheme {
             "Forest"
         case .sakuraCalm:
             "Sakura"
+        case .arcticDawn:
+            "Arctic"
         }
     }
 
@@ -136,6 +138,19 @@ extension AppTheme {
     var oceanMistColor: Color { Color("OceanMist") }
 }
 
+// MARK: - Arctic Wave-Specific Colors
+
+extension AppTheme {
+    /// Deep arctic haze layer (back).
+    var arcticDeepColor: Color { Color("ArcticDeep") }
+
+    /// Aurora ribbon glow layer (mid).
+    var arcticAuroraColor: Color { Color("ArcticAurora") }
+
+    /// Frost highlight layer (front).
+    var arcticFrostColor: Color { Color("ArcticFrost") }
+}
+
 // MARK: - Score Colors
 
 extension AppTheme {
@@ -248,6 +263,7 @@ extension AppTheme {
         case .oceanCool:   String(localized: "Ocean Cool")
         case .forestGreen: String(localized: "Forest Green")
         case .sakuraCalm:  String(localized: "Sakura Calm")
+        case .arcticDawn:  String(localized: "Arctic Dawn")
         }
     }
 }

@@ -90,3 +90,45 @@ struct WaveShapeTests {
         return point
     }
 }
+
+@Suite("ArcticRibbonShape Geometry")
+struct ArcticRibbonShapeTests {
+    @Test("Path is non-empty for valid rect")
+    func pathNonEmpty() {
+        let shape = ArcticRibbonShape()
+        let rect = CGRect(x: 0, y: 0, width: 240, height: 140)
+        #expect(!shape.path(in: rect).isEmpty)
+    }
+
+    @Test("Path is empty for zero-size rect")
+    func pathEmptyForZeroRect() {
+        let shape = ArcticRibbonShape()
+        #expect(shape.path(in: .zero).isEmpty)
+        #expect(shape.path(in: CGRect(x: 0, y: 0, width: 0, height: 120)).isEmpty)
+        #expect(shape.path(in: CGRect(x: 0, y: 0, width: 120, height: 0)).isEmpty)
+    }
+
+    @Test("animatableData reflects phase")
+    func animatableData() {
+        var shape = ArcticRibbonShape(phase: 1.2)
+        #expect(shape.animatableData == 1.2)
+        shape.animatableData = 2.4
+        #expect(shape.animatableData == 2.4)
+    }
+
+    @Test("Different phases produce different paths")
+    func phaseChangesPath() {
+        let rect = CGRect(x: 0, y: 0, width: 300, height: 180)
+        let shape0 = ArcticRibbonShape(amplitude: 0.08, frequency: 1.9, phase: 0, verticalOffset: 0.52, ridge: 0.24)
+        let shapePi = ArcticRibbonShape(
+            amplitude: 0.08,
+            frequency: 1.9,
+            phase: .pi,
+            verticalOffset: 0.52,
+            ridge: 0.24
+        )
+        let bounds0 = shape0.path(in: rect).boundingRect
+        let boundsPi = shapePi.path(in: rect).boundingRect
+        #expect(abs(bounds0.minY - boundsPi.minY) > 0.1 || abs(bounds0.maxY - boundsPi.maxY) > 0.1)
+    }
+}
