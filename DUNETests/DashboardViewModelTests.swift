@@ -620,8 +620,8 @@ struct DashboardViewModelVitalCardTests {
 
         let walkingCard = vm.activityCards.first { $0.id == "exercise-walking-steps" }
         #expect(walkingCard != nil)
-        #expect(walkingCard?.title == "Walking")
-        #expect(walkingCard?.unit == "steps")
+        #expect(walkingCard?.title == String(localized: "Walking"))
+        #expect(walkingCard?.unit == String(localized: "steps"))
         #expect(walkingCard?.value == "3,245")
     }
 

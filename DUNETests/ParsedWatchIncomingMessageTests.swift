@@ -8,6 +8,16 @@ struct ParsedWatchIncomingMessageTests {
     func parsesRequestFlag() {
         let parsed = ParsedWatchIncomingMessage(from: ["requestExerciseLibrarySync": true])
         #expect(parsed.requestExerciseLibrarySync)
+        #expect(!parsed.requestWorkoutTemplateSync)
+        #expect(parsed.workoutCompleteData == nil)
+        #expect(parsed.setCompletedData == nil)
+    }
+
+    @Test("Parses requestWorkoutTemplateSync flag")
+    func parsesTemplateRequestFlag() {
+        let parsed = ParsedWatchIncomingMessage(from: ["requestWorkoutTemplateSync": true])
+        #expect(parsed.requestWorkoutTemplateSync)
+        #expect(!parsed.requestExerciseLibrarySync)
         #expect(parsed.workoutCompleteData == nil)
         #expect(parsed.setCompletedData == nil)
     }
@@ -20,6 +30,7 @@ struct ParsedWatchIncomingMessageTests {
         #expect(parsed.workoutCompleteData == payload)
         #expect(parsed.setCompletedData == nil)
         #expect(!parsed.requestExerciseLibrarySync)
+        #expect(!parsed.requestWorkoutTemplateSync)
     }
 
     @Test("Parses setCompleted payload")
@@ -30,6 +41,7 @@ struct ParsedWatchIncomingMessageTests {
         #expect(parsed.setCompletedData == payload)
         #expect(parsed.workoutCompleteData == nil)
         #expect(!parsed.requestExerciseLibrarySync)
+        #expect(!parsed.requestWorkoutTemplateSync)
     }
 
     @Test("Ignores unrelated keys")
@@ -38,5 +50,6 @@ struct ParsedWatchIncomingMessageTests {
         #expect(parsed.workoutCompleteData == nil)
         #expect(parsed.setCompletedData == nil)
         #expect(!parsed.requestExerciseLibrarySync)
+        #expect(!parsed.requestWorkoutTemplateSync)
     }
 }
