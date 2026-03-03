@@ -1850,21 +1850,33 @@ private struct SolarSunBurstOverlay: View {
                     .fill(
                         RadialGradient(
                             colors: [
-                                Color("SolarAccent").opacity(0.98 * intensityValue),
-                                theme.solarGlowColor.opacity(0.88 * intensityValue),
-                                theme.solarCoreColor.opacity(0.74 * intensityValue),
-                                theme.solarEmberColor.opacity(0.32 * intensityValue),
+                                theme.solarGlowColor.opacity(0.62 * intensityValue),
+                                theme.solarCoreColor.opacity(0.34 * intensityValue),
+                                theme.solarEmberColor.opacity(0.16 * intensityValue),
                                 .clear
                             ],
                             center: .center,
-                            startRadius: 0,
-                            endRadius: radius * 1.18
+                            startRadius: radius * 0.22,
+                            endRadius: radius * 1.22
                         )
                     )
-                    .frame(width: radius * 2.2, height: radius * 2.2)
+                    .frame(width: radius * 2.3, height: radius * 2.3)
                     .position(x: center.x, y: center.y)
                     .blur(radius: reduceMotion ? 0.8 : 1.6)
                     .blendMode(.screen)
+
+                Circle()
+                    .fill(Color("SolarGlow").opacity(0.98 * intensityValue))
+                    .overlay {
+                        Circle()
+                            .stroke(
+                                Color("SolarAccent").opacity(0.26 * intensityValue),
+                                lineWidth: max(1.0, radius * 0.04)
+                            )
+                    }
+                    .frame(width: radius * 1.02, height: radius * 1.02)
+                    .position(x: center.x, y: center.y)
+                    .shadow(color: Color("SolarAccent").opacity(0.28 * intensityValue), radius: radius * 0.20)
 
                 Circle()
                     .stroke(

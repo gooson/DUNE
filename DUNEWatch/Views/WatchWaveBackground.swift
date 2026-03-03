@@ -299,21 +299,30 @@ private struct WatchSolarSunBurst: View {
                     .fill(
                         RadialGradient(
                             colors: [
-                                Color("SolarAccent").opacity(opacity * 1.15),
-                                Color("SolarGlow").opacity(opacity),
-                                Color("SolarCore").opacity(opacity * 0.82),
-                                Color("SolarEmber").opacity(opacity * 0.36),
+                                Color("SolarGlow").opacity(opacity * 0.78),
+                                Color("SolarCore").opacity(opacity * 0.40),
+                                Color("SolarEmber").opacity(opacity * 0.20),
                                 .clear
                             ],
                             center: .center,
-                            startRadius: 0,
-                            endRadius: radius * 1.2
+                            startRadius: radius * 0.20,
+                            endRadius: radius * 1.24
                         )
                     )
-                    .frame(width: radius * 2.2, height: radius * 2.2)
+                    .frame(width: radius * 2.3, height: radius * 2.3)
                     .position(x: center.x, y: center.y)
                     .blur(radius: 1.4)
                     .blendMode(.screen)
+
+                Circle()
+                    .fill(Color("SolarGlow").opacity(opacity))
+                    .overlay {
+                        Circle()
+                            .stroke(Color("SolarAccent").opacity(opacity * 0.34), lineWidth: max(0.8, radius * 0.05))
+                    }
+                    .frame(width: radius * 1.04, height: radius * 1.04)
+                    .position(x: center.x, y: center.y)
+                    .shadow(color: Color("SolarAccent").opacity(opacity * 0.24), radius: radius * 0.22)
 
                 Circle()
                     .stroke(
