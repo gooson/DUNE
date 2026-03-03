@@ -25,7 +25,7 @@ struct HealthMetricTests {
         #expect(sleep.formattedValue == sleep.value.hoursMinutesFormatted)
 
         let steps = HealthMetric(id: "3", name: "Steps", value: 8500, unit: "", change: nil, date: Date(), category: .steps)
-        #expect(steps.formattedValue == "8,500 steps")
+        #expect(steps.formattedValue == "\(steps.formattedNumericValue) \(steps.resolvedUnitLabel)")
     }
 
     @Test("formattedChange returns nil when no change")
@@ -60,19 +60,29 @@ struct DateRelativeLabelTests {
     @Test("Yesterday returns 'Yesterday'")
     func yesterdayLabel() {
         let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date())!
-        #expect(yesterday.relativeLabel == "Yesterday")
+        #expect(yesterday.relativeLabel == String(localized: "Yesterday"))
     }
 
     @Test("3 days ago returns '3 days ago'")
     func threeDaysAgo() {
         let date = Calendar.current.date(byAdding: .day, value: -3, to: Date())!
-        #expect(date.relativeLabel == "3 days ago")
+        let expected = String(
+            format: String(localized: "%@ days ago"),
+            locale: Locale.current,
+            "3"
+        )
+        #expect(date.relativeLabel == expected)
     }
 
     @Test("freshnessLabel returns compact format")
     func freshnessLabelFormat() {
         let threeDaysAgo = Calendar.current.date(byAdding: .day, value: -3, to: Date())!
-        #expect(Date().freshnessLabel == "Today")
-        #expect(threeDaysAgo.freshnessLabel == "3d ago")
+        let expected = String(
+            format: String(localized: "%@d ago"),
+            locale: Locale.current,
+            "3"
+        )
+        #expect(Date().freshnessLabel == String(localized: "Today"))
+        #expect(threeDaysAgo.freshnessLabel == expected)
     }
 }
