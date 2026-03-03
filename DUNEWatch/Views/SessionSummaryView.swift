@@ -95,6 +95,15 @@ struct SessionSummaryView: View {
             if workoutManager.isCardioMode {
                 statItem(title: "Distance", value: formattedDistance)
                 statItem(title: "Avg Pace", value: workoutManager.formattedPace)
+                if case .cardio(let activityType, _) = workoutManager.workoutMode,
+                   activityType == .walking {
+                    statItem(
+                        title: "Steps",
+                        value: workoutManager.steps > 0
+                            ? Int(workoutManager.steps).formattedWithSeparator
+                            : "--"
+                    )
+                }
             } else {
                 statItem(title: "Volume", value: formattedVolume)
                 statItem(title: "Sets", value: totalSets.formattedWithSeparator)

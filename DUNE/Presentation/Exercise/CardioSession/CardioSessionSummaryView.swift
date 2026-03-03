@@ -89,6 +89,19 @@ struct CardioSessionSummaryView: View {
                     color: DS.Color.caution
                 )
             }
+
+            if viewModel.activityType == .walking {
+                HStack(spacing: DS.Spacing.md) {
+                    summaryCard(
+                        title: String(localized: "Steps"),
+                        value: viewModel.walkingStepCount > 0
+                            ? "\(Int(viewModel.walkingStepCount).formattedWithSeparator) steps"
+                            : "--",
+                        icon: "figure.walk",
+                        color: DS.Color.steps
+                    )
+                }
+            }
         }
     }
 
