@@ -4,8 +4,10 @@ struct DashboardView: View {
     @State private var viewModel: DashboardViewModel
     @State private var isShowingPinnedEditor = false
     @State private var hasAppeared = false
+    @State private var unreadNotificationCount = 0
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.openURL) private var openURL
+    private let inboxManager = NotificationInboxManager.shared
     private let scrollToTopSignal: Int
 
     private enum ScrollAnchor: Hashable {
@@ -167,6 +169,13 @@ struct DashboardView: View {
             withAnimation(.easeOut(duration: 0.3)) {
                 hasAppeared = true
             }
+            reloadUnreadCount()
+        }
+        .task {
+            reloadUnreadCount()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: NotificationInboxManager.inboxDidChangeNotification)) { _ in
+            reloadUnreadCount()
         }
         .sheet(isPresented: $isShowingPinnedEditor) {
             PinnedMetricsEditorView(
@@ -179,6 +188,16 @@ struct DashboardView: View {
         }
         .englishNavigationTitle("Today")
         .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                NavigationLink {
+                    NotificationHubView()
+                } label: {
+                    notificationBellIcon
+                }
+                .accessibilityLabel("Notifications")
+                .accessibilityIdentifier("dashboard-toolbar-notifications")
+            }
+
             ToolbarItem(placement: .topBarTrailing) {
                 NavigationLink {
                     SettingsView()
@@ -217,6 +236,31 @@ struct DashboardView: View {
 
             cardGrid(cards: viewModel.pinnedCards)
         }
+    }
+
+    private var notificationBellIcon: some View {
+        ZStack(alignment: .topTrailing) {
+            Image(systemName: "bell")
+
+            if unreadNotificationCount > 0 {
+                Text(unreadBadgeLabel)
+                    .font(.system(size: 9, weight: .bold))
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 5)
+                    .padding(.vertical, 2)
+                    .background(Color.red, in: Capsule())
+                    .offset(x: 8, y: -8)
+                    .accessibilityLabel("\(unreadNotificationCount.formatted()) unread notifications")
+            }
+        }
+    }
+
+    private var unreadBadgeLabel: String {
+        unreadNotificationCount > 99 ? "99+" : unreadNotificationCount.formatted()
+    }
+
+    private func reloadUnreadCount() {
+        unreadNotificationCount = inboxManager.unreadCount()
     }
 
     private var insightCardsSection: some View {

@@ -11,6 +11,9 @@ struct ActivityView: View {
     @State private var showingPRInfo = false
     @State private var showingConsistencyInfo = false
     @State private var showingExerciseMixInfo = false
+    @State private var notificationWorkoutDestinationID: String?
+    @State private var notificationWorkoutLookup: [String: WorkoutSummary] = [:]
+    @State private var missingNotificationWorkoutID: String?
     @State private var syncToastMessage: String?
     @State private var syncToastDismissTask: Task<Void, Never>?
     @Environment(\.modelContext) private var modelContext
@@ -25,6 +28,8 @@ struct ActivityView: View {
     @State private var cachedInjuryConflicts: [InjuryConflict] = []
     private let conflictUseCase = CheckInjuryConflictUseCase()
     private let scrollToTopSignal: Int
+    private let notificationWorkoutID: String?
+    private let notificationRouteSignal: Int
 
     private enum ScrollAnchor: Hashable {
         case top
@@ -48,10 +53,18 @@ struct ActivityView: View {
         )
     }
 
-    init(sharedHealthDataService: SharedHealthDataService? = nil, scrollToTopSignal: Int = 0, refreshSignal: Int = 0) {
+    init(
+        sharedHealthDataService: SharedHealthDataService? = nil,
+        scrollToTopSignal: Int = 0,
+        refreshSignal: Int = 0,
+        notificationWorkoutID: String? = nil,
+        notificationRouteSignal: Int = 0
+    ) {
         _viewModel = State(initialValue: ActivityViewModel(sharedHealthDataService: sharedHealthDataService))
         self.scrollToTopSignal = scrollToTopSignal
         self.refreshSignal = refreshSignal
+        self.notificationWorkoutID = notificationWorkoutID
+        self.notificationRouteSignal = notificationRouteSignal
     }
 
     var body: some View {
@@ -243,6 +256,16 @@ struct ActivityView: View {
                 WeeklyStatsDetailView()
             }
         }
+        .navigationDestination(item: $notificationWorkoutDestinationID) { workoutID in
+            if let workout = notificationWorkoutLookup[workoutID] {
+                HealthKitWorkoutDetailView(workout: workout)
+            } else {
+                NotificationTargetNotFoundView(workoutID: workoutID)
+            }
+        }
+        .navigationDestination(item: $missingNotificationWorkoutID) { workoutID in
+            NotificationTargetNotFoundView(workoutID: workoutID)
+        }
         .sheet(isPresented: $showingPRInfo) {
             PersonalRecordsInfoSheet()
         }
@@ -261,6 +284,9 @@ struct ActivityView: View {
         .task(id: refreshSignal) {
             await viewModel.loadActivityData()
             recomputeInjuryConflicts()
+        }
+        .task(id: notificationRouteSignal) {
+            await handleExternalNotificationRoute()
         }
         // Coalesce frequent SwiftData sync updates into a cancellable/debounced derived-state refresh.
         .task(id: recordsUpdateKey) {
@@ -378,6 +404,30 @@ struct ActivityView: View {
             withAnimation(DS.Animation.standard) {
                 syncToastMessage = nil
             }
+        }
+    }
+
+    private func handleExternalNotificationRoute() async {
+        guard notificationRouteSignal > 0,
+              let targetWorkoutID = notificationWorkoutID,
+              !targetWorkoutID.isEmpty else {
+            return
+        }
+
+        if let current = viewModel.recentWorkouts.first(where: { $0.id == targetWorkoutID }) {
+            notificationWorkoutLookup[targetWorkoutID] = current
+            notificationWorkoutDestinationID = targetWorkoutID
+            return
+        }
+
+        // Retry once after forcing a refresh to absorb timing gaps on cold launch.
+        await viewModel.loadActivityData()
+
+        if let refreshed = viewModel.recentWorkouts.first(where: { $0.id == targetWorkoutID }) {
+            notificationWorkoutLookup[targetWorkoutID] = refreshed
+            notificationWorkoutDestinationID = targetWorkoutID
+        } else {
+            missingNotificationWorkoutID = targetWorkoutID
         }
     }
 
