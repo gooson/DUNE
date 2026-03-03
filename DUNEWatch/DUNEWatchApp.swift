@@ -12,7 +12,7 @@ struct DUNEWatchApp: App {
     private static func makeModelContainer(configuration: ModelConfiguration) throws -> ModelContainer {
         try ModelContainer(
             for: ExerciseRecord.self, BodyCompositionRecord.self, WorkoutSet.self,
-                CustomExercise.self, WorkoutTemplate.self, UserCategory.self,
+                CustomExercise.self, WorkoutTemplate.self, UserCategory.self, HealthSnapshotMirrorRecord.self,
             migrationPlan: AppMigrationPlan.self,
             configurations: configuration
         )
