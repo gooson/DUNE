@@ -20,6 +20,7 @@ struct SectionGroup<Content: View>: View {
         switch theme {
         case .sakuraCalm: 0.95
         case .arcticDawn: 0.85
+        case .solarPop:   0.9
         case .desertWarm, .oceanCool, .forestGreen: 0.6
         }
     }
@@ -44,6 +45,17 @@ struct SectionGroup<Content: View>: View {
                     Color("ArcticAurora").opacity(colorScheme == .dark ? 0.18 : 0.16),
                     Color("ArcticFrost").opacity(colorScheme == .dark ? 0.14 : 0.12),
                     Color("ArcticDeep").opacity(colorScheme == .dark ? 0.11 : 0.06),
+                    .clear
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        case .solarPop:
+            LinearGradient(
+                colors: [
+                    Color("SolarGlow").opacity(colorScheme == .dark ? 0.18 : 0.16),
+                    Color("SolarCore").opacity(colorScheme == .dark ? 0.15 : 0.12),
+                    Color("SolarEmber").opacity(colorScheme == .dark ? 0.11 : 0.06),
                     .clear
                 ],
                 startPoint: .topLeading,
@@ -76,6 +88,16 @@ struct SectionGroup<Content: View>: View {
                 startPoint: .top,
                 endPoint: .bottom
             )
+        case .solarPop:
+            LinearGradient(
+                colors: [
+                    Color("SolarGlow").opacity(colorScheme == .dark ? 0.20 : 0.16),
+                    Color("SolarCore").opacity(colorScheme == .dark ? 0.10 : 0.08),
+                    .clear
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
         case .desertWarm, .oceanCool, .forestGreen:
             LinearGradient(
                 colors: [theme.accentColor.opacity(0.08), .clear],
@@ -103,6 +125,16 @@ struct SectionGroup<Content: View>: View {
                     Color("ArcticFrost").opacity(colorScheme == .dark ? 0.34 : 0.26),
                     Color("ArcticAccent").opacity(colorScheme == .dark ? 0.22 : 0.16),
                     Color("ArcticDusk").opacity(colorScheme == .dark ? 0.16 : 0.10)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        case .solarPop:
+            LinearGradient(
+                colors: [
+                    Color("SolarGlow").opacity(colorScheme == .dark ? 0.34 : 0.28),
+                    Color("SolarAccent").opacity(colorScheme == .dark ? 0.24 : 0.18),
+                    Color("SolarDusk").opacity(colorScheme == .dark ? 0.16 : 0.10)
                 ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
