@@ -13,6 +13,10 @@ final class HabitDefinition {
     // WARNING: rawValue is persisted in CloudKit. Do NOT rename. (Correction #164)
     var frequencyTypeRaw: String = "daily"
     var weeklyTargetDays: Int = 3
+    // WARNING: rawValue is persisted in CloudKit. Do NOT rename. (Correction #164)
+    var recurringStartPointRaw: String = "createdAt"
+    var recurringCustomStartDate: Date?
+    var recurringStartConfiguredAt: Date?
     var isAutoLinked: Bool = false
     var autoLinkSourceRaw: String?
     var sortOrder: Int = 0
@@ -43,6 +47,10 @@ final class HabitDefinition {
         return .daily
     }
 
+    var recurringStartPoint: HabitRecurringStartPoint {
+        HabitRecurringStartPoint(rawValue: recurringStartPointRaw) ?? .createdAt
+    }
+
     // MARK: - Init
 
     init(
@@ -52,6 +60,9 @@ final class HabitDefinition {
         goalValue: Double,
         goalUnit: String?,
         frequency: HabitFrequency,
+        recurringStartPoint: HabitRecurringStartPoint = .createdAt,
+        recurringCustomStartDate: Date? = nil,
+        recurringStartConfiguredAt: Date? = nil,
         isAutoLinked: Bool = false,
         autoLinkSource: String? = nil,
         sortOrder: Int = 0
@@ -67,16 +78,29 @@ final class HabitDefinition {
         self.sortOrder = sortOrder
         self.createdAt = Date()
 
+        let calendar = Calendar.current
+        let normalizedConfiguredAt = calendar.startOfDay(for: recurringStartConfiguredAt ?? Date())
+        let normalizedCustomStartDate = recurringCustomStartDate.map { calendar.startOfDay(for: $0) }
+
         switch frequency {
         case .daily:
             self.frequencyTypeRaw = "daily"
             self.weeklyTargetDays = 7
+            self.recurringStartPointRaw = HabitRecurringStartPoint.createdAt.rawValue
+            self.recurringCustomStartDate = nil
+            self.recurringStartConfiguredAt = nil
         case .weekly(let days):
             self.frequencyTypeRaw = "weekly"
             self.weeklyTargetDays = days
+            self.recurringStartPointRaw = HabitRecurringStartPoint.createdAt.rawValue
+            self.recurringCustomStartDate = nil
+            self.recurringStartConfiguredAt = nil
         case .interval(let days):
             self.frequencyTypeRaw = "interval"
             self.weeklyTargetDays = days
+            self.recurringStartPointRaw = recurringStartPoint.rawValue
+            self.recurringCustomStartDate = recurringStartPoint == .customDate ? normalizedCustomStartDate : nil
+            self.recurringStartConfiguredAt = normalizedConfiguredAt
         }
     }
 }

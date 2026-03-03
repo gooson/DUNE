@@ -62,6 +62,21 @@ struct HabitTypeTests {
         #expect(HabitFrequency.daily != HabitFrequency.weekly(targetDays: 7))
     }
 
+    // MARK: - HabitRecurringStartPoint
+
+    @Test("HabitRecurringStartPoint has all 4 cases")
+    func recurringStartPointCaseCount() {
+        #expect(HabitRecurringStartPoint.allCases.count == 4)
+    }
+
+    @Test("HabitRecurringStartPoint rawValue round-trip")
+    func recurringStartPointRoundTrip() {
+        for point in HabitRecurringStartPoint.allCases {
+            let restored = HabitRecurringStartPoint(rawValue: point.rawValue)
+            #expect(restored == point)
+        }
+    }
+
     // MARK: - HabitIconCategory
 
     @Test("HabitIconCategory has all 12 categories")

@@ -100,17 +100,61 @@ enum AppSchemaV8: VersionedSchema {
     static var models: [any PersistentModel.Type] {
         [ExerciseRecord.self, BodyCompositionRecord.self, WorkoutSet.self, CustomExercise.self, WorkoutTemplate.self, InjuryRecord.self, HabitDefinition.self, HabitLog.self, UserCategory.self, ExerciseDefaultRecord.self, HealthSnapshotMirrorRecord.self]
     }
+
+    @Model
+    final class HabitDefinition {
+        var id: UUID = UUID()
+        var name: String = ""
+        var iconCategoryRaw: String = "health"
+        var habitTypeRaw: String = "check"
+        var goalValue: Double = 1.0
+        var goalUnit: String?
+        var frequencyTypeRaw: String = "daily"
+        var weeklyTargetDays: Int = 3
+        var isAutoLinked: Bool = false
+        var autoLinkSourceRaw: String?
+        var sortOrder: Int = 0
+        var isArchived: Bool = false
+        var createdAt: Date = Date()
+
+        @Relationship(deleteRule: .cascade, inverse: \HabitLog.habitDefinition)
+        var logs: [HabitLog]? = []
+
+        init() {}
+    }
+
+    @Model
+    final class HabitLog {
+        var id: UUID = UUID()
+        var date: Date = Date()
+        var value: Double = 0
+        var isAutoCompleted: Bool = false
+        var completedAt: Date?
+        var memo: String?
+        var habitDefinition: HabitDefinition?
+
+        init() {}
+    }
+}
+
+// MARK: - Schema V9 (Recurring Start Point)
+
+enum AppSchemaV9: VersionedSchema {
+    static let versionIdentifier = Schema.Version(9, 0, 0)
+    static var models: [any PersistentModel.Type] {
+        [ExerciseRecord.self, BodyCompositionRecord.self, WorkoutSet.self, CustomExercise.self, WorkoutTemplate.self, InjuryRecord.self, HabitDefinition.self, HabitLog.self, UserCategory.self, ExerciseDefaultRecord.self, HealthSnapshotMirrorRecord.self]
+    }
 }
 
 // MARK: - Migration Plan
 
 enum AppMigrationPlan: SchemaMigrationPlan {
     static var schemas: [any VersionedSchema.Type] {
-        [AppSchemaV1.self, AppSchemaV2.self, AppSchemaV3.self, AppSchemaV4.self, AppSchemaV5.self, AppSchemaV6.self, AppSchemaV7.self, AppSchemaV8.self]
+        [AppSchemaV1.self, AppSchemaV2.self, AppSchemaV3.self, AppSchemaV4.self, AppSchemaV5.self, AppSchemaV6.self, AppSchemaV7.self, AppSchemaV8.self, AppSchemaV9.self]
     }
 
     static var stages: [MigrationStage] {
-        [migrateV1toV2, migrateV2toV3, migrateV3toV4, migrateV4toV5, migrateV5toV6, migrateV6toV7, migrateV7toV8]
+        [migrateV1toV2, migrateV2toV3, migrateV3toV4, migrateV4toV5, migrateV5toV6, migrateV6toV7, migrateV7toV8, migrateV8toV9]
     }
 
     static let migrateV1toV2 = MigrationStage.lightweight(
@@ -146,5 +190,10 @@ enum AppMigrationPlan: SchemaMigrationPlan {
     static let migrateV7toV8 = MigrationStage.lightweight(
         fromVersion: AppSchemaV7.self,
         toVersion: AppSchemaV8.self
+    )
+
+    static let migrateV8toV9 = MigrationStage.lightweight(
+        fromVersion: AppSchemaV8.self,
+        toVersion: AppSchemaV9.self
     )
 }

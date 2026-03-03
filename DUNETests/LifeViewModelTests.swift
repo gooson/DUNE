@@ -145,6 +145,28 @@ struct LifeViewModelTests {
         let habit = vm.createValidatedHabit()
         #expect(habit != nil)
         #expect(habit?.frequency == .interval(days: 90))
+        #expect(habit?.recurringStartPoint == .createdAt)
+        #expect(habit?.recurringCustomStartDate == nil)
+        vm.didFinishSaving()
+    }
+
+    @Test("createValidatedHabit stores custom recurring start date")
+    func intervalCustomStartDate() {
+        let vm = LifeViewModel()
+        let calendar = Calendar.current
+        let customStart = calendar.startOfDay(for: Date(timeIntervalSince1970: 1_712_966_400)) // 2024-04-12
+
+        vm.name = "Seasonal maintenance"
+        vm.selectedType = .check
+        vm.frequencyType = "interval"
+        vm.intervalDays = 30
+        vm.intervalStartPoint = .customDate
+        vm.intervalCustomStartDate = customStart
+
+        let habit = vm.createValidatedHabit()
+        #expect(habit != nil)
+        #expect(habit?.recurringStartPoint == .customDate)
+        #expect(habit?.recurringCustomStartDate == customStart)
         vm.didFinishSaving()
     }
 
@@ -214,6 +236,7 @@ struct LifeViewModelTests {
         #expect(vm.frequencyType == "daily")
         #expect(vm.weeklyTargetDays == 3)
         #expect(vm.intervalDays == 7)
+        #expect(vm.intervalStartPoint == .createdAt)
         #expect(vm.isAutoLinked == false)
         #expect(vm.validationError == nil)
     }
@@ -262,6 +285,7 @@ struct LifeViewModelTests {
             frequency: .interval(days: 7)
         )
         habit.createdAt = createdAt
+        habit.recurringStartConfiguredAt = createdAt
 
         let completion = vm.createCycleActionLog(for: habit, action: .complete, date: completedAt)
         #expect(completion != nil)
@@ -300,6 +324,7 @@ struct LifeViewModelTests {
             frequency: .interval(days: 7)
         )
         habit.createdAt = createdAt
+        habit.recurringStartConfiguredAt = createdAt
 
         let complete = vm.createCycleActionLog(for: habit, action: .complete, date: completeDate)
         #expect(complete != nil)
@@ -321,6 +346,93 @@ struct LifeViewModelTests {
         let entries = vm.historyEntries(for: habit)
         #expect(entries.count == 3)
         #expect(entries.map(\.action) == [.snooze, .skip, .complete])
+    }
+
+    @Test("cycle snapshot is scheduled when custom start date is in the future")
+    func cycleSnapshotFutureCustomStart() {
+        let vm = LifeViewModel()
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let futureStart = calendar.date(byAdding: .day, value: 5, to: today)!
+        let expectedDue = calendar.date(byAdding: .day, value: 7, to: futureStart)!
+
+        let habit = HabitDefinition(
+            name: "Window cleaning",
+            iconCategory: .chores,
+            habitType: .check,
+            goalValue: 1,
+            goalUnit: nil,
+            frequency: .interval(days: 7),
+            recurringStartPoint: .customDate,
+            recurringCustomStartDate: futureStart,
+            recurringStartConfiguredAt: today
+        )
+
+        let snapshot = vm.cycleSnapshot(for: habit, referenceDate: today)
+        #expect(snapshot != nil)
+        #expect(snapshot?.isScheduled == true)
+        #expect(snapshot?.startDate == futureStart)
+        #expect(snapshot?.nextDueDate == expectedDue)
+        #expect(snapshot?.isDue == false)
+    }
+
+    @Test("cycle snapshot waits for first completion when start point is first completion")
+    func cycleSnapshotFirstCompletionWaits() {
+        let vm = LifeViewModel()
+
+        let habit = HabitDefinition(
+            name: "Haircut",
+            iconCategory: .chores,
+            habitType: .check,
+            goalValue: 1,
+            goalUnit: nil,
+            frequency: .interval(days: 30),
+            recurringStartPoint: .firstCompletion
+        )
+
+        let snapshot = vm.cycleSnapshot(for: habit)
+        #expect(snapshot != nil)
+        #expect(snapshot?.isScheduled == true)
+        #expect(snapshot?.startPoint == .firstCompletion)
+        #expect(snapshot?.startDate == nil)
+        #expect(snapshot?.nextDueDate == nil)
+    }
+
+    @Test("applyUpdate changes recurring start point forward only")
+    func applyUpdateRecurringStartPointForwardOnly() {
+        let vm = LifeViewModel()
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let oldCompletionDate = calendar.date(byAdding: .day, value: -20, to: today)!
+        let customStart = calendar.date(byAdding: .day, value: 2, to: today)!
+
+        let habit = HabitDefinition(
+            name: "Filter",
+            iconCategory: .chores,
+            habitType: .check,
+            goalValue: 1,
+            goalUnit: nil,
+            frequency: .interval(days: 7)
+        )
+
+        let oldLog = HabitLog(date: oldCompletionDate, value: 1)
+        oldLog.habitDefinition = habit
+        habit.logs = [oldLog]
+
+        vm.startEditing(habit)
+        vm.frequencyType = "interval"
+        vm.intervalStartPoint = .customDate
+        vm.intervalCustomStartDate = customStart
+
+        let updated = vm.applyUpdate(to: habit)
+        #expect(updated == true)
+        vm.didFinishSaving()
+
+        let snapshot = vm.cycleSnapshot(for: habit, referenceDate: today)
+        #expect(snapshot != nil)
+        #expect(snapshot?.isScheduled == true)
+        #expect(snapshot?.startDate == customStart)
+        #expect(snapshot?.historyCount == 0)
     }
 
     @Test("calculateAutoExerciseProgresses updates auto achievement list")

@@ -130,9 +130,32 @@ struct HabitFormSheet: View {
                 )
                 .accessibilityIdentifier("habit-interval-stepper")
 
+                Picker("Start point", selection: $viewModel.intervalStartPoint) {
+                    ForEach(HabitRecurringStartPoint.allCases, id: \.self) { startPoint in
+                        Text(startPoint.displayName)
+                            .tag(startPoint)
+                    }
+                }
+                .accessibilityIdentifier("habit-interval-start-point")
+
+                if viewModel.intervalStartPoint == .customDate {
+                    DatePicker(
+                        "Start date",
+                        selection: $viewModel.intervalCustomStartDate,
+                        displayedComponents: .date
+                    )
+                    .accessibilityIdentifier("habit-interval-start-date")
+                }
+
                 Text("Examples: 7 days (weekly), 30 days (monthly), 90 days (quarterly)")
                     .font(.caption)
                     .foregroundStyle(.secondary)
+
+                if viewModel.intervalStartPoint == .firstCompletion {
+                    Text("Schedule starts after the first completion")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
             }
         }
     }
