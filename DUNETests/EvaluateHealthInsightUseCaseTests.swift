@@ -266,6 +266,6 @@ struct EvaluateHealthInsightUseCaseTests {
         #expect(result != nil)
         #expect(result?.type == .workoutPR)
         #expect(result?.severity == .celebration)
-        #expect(result?.title == "New Badge Unlocked")
+        #expect(result?.title == String(localized: "New Badge Unlocked"))
     }
 }

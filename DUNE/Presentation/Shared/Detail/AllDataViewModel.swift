@@ -133,7 +133,10 @@ final class AllDataViewModel {
                     guard let date = calendar.date(byAdding: .day, value: -dayOffset, to: Date()) else { continue }
                     group.addTask { [sleepService] in
                         let stages = try await sleepService.fetchSleepStages(for: date)
-                        let total = stages.reduce(0.0) { $0 + $1.duration } / 60.0
+                        // Align with SleepSummary/score policy: sleep duration excludes awake stage.
+                        let total = stages
+                            .filter { $0.stage != .awake }
+                            .reduce(0.0) { $0 + $1.duration } / 60.0
                         return (date, total)
                     }
                 }
