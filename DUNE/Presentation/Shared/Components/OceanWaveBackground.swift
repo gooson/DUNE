@@ -564,8 +564,12 @@ struct ArcticAuroraCurtainOverlayView: View {
     }
 
     var body: some View {
+        let curtainSpecs = activeCurtainSpecs
+        let filamentLineCount = activeFilamentLines
+
         ZStack {
-            ForEach(Array(activeCurtainSpecs.enumerated()), id: \.offset) { idx, spec in
+            ForEach(curtainSpecs.indices, id: \.self) { idx in
+                let spec = curtainSpecs[idx]
                 let localPhase = phase + CGFloat(idx) * 0.26
                 let bandOpacity = opacity * (0.82 + Double((idx + 1) % 3) * 0.12)
                 let shape = ArcticAuroraCurtainShape(
@@ -610,9 +614,9 @@ struct ArcticAuroraCurtainOverlayView: View {
                         .bottomFadeMask(bottomFade)
                 }
 
-                if activeFilamentLines > 0, filamentOpacity > 0 {
-                    ForEach(0..<activeFilamentLines, id: \.self) { strand in
-                        let center = CGFloat(activeFilamentLines - 1) / 2
+                if filamentLineCount > 0, filamentOpacity > 0 {
+                    ForEach(0..<filamentLineCount, id: \.self) { strand in
+                        let center = CGFloat(filamentLineCount - 1) / 2
                         let offset = CGFloat(strand) - center
                         let strandShape = ArcticAuroraCurtainShape(
                             centerX: spec.centerX + offset * filamentSpread,
@@ -655,15 +659,6 @@ struct ArcticAuroraCurtainOverlayView: View {
             guard !reduceMotion, driftDuration > 0 else { return }
             withAnimation(.linear(duration: driftDuration).repeatForever(autoreverses: false)) {
                 phase = targetPhase
-            }
-        }
-        .onAppear {
-            guard !reduceMotion, driftDuration > 0 else { return }
-            Task { @MainActor in
-                phase = 0
-                withAnimation(.linear(duration: driftDuration).repeatForever(autoreverses: false)) {
-                    phase = targetPhase
-                }
             }
         }
     }
@@ -766,6 +761,8 @@ private struct ArcticAuroraEdgeTextureOverlayView: View {
 
     var body: some View {
         GeometryReader { proxy in
+            let sparkleSeeds = activeSparkleSeeds
+
             ZStack {
                 ArcticAuroraEdgeGlowShape(
                     crestY: 0.34,
@@ -808,7 +805,8 @@ private struct ArcticAuroraEdgeTextureOverlayView: View {
                 .blur(radius: 3.2 * blurScale)
                 .blendMode(.screen)
 
-                ForEach(Array(activeSparkleSeeds.enumerated()), id: \.offset) { idx, seed in
+                ForEach(sparkleSeeds.indices, id: \.self) { idx in
+                    let seed = sparkleSeeds[idx]
                     let x = proxy.size.width * CGFloat(seed)
                     let yBase = proxy.size.height * (0.31 + 0.09 * abs(sin(seed * 14.0)))
                     let yDrift = sin(phase * 0.9 + CGFloat(idx) * 0.52) * proxy.size.height * 0.02
@@ -884,6 +882,15 @@ private struct ArcticAuroraMicroDetailOverlayView: View {
         0.34, 0.38, 0.42, 0.46, 0.50, 0.54, 0.58, 0.62, 0.66, 0.70,
         0.74, 0.78, 0.82, 0.86, 0.90, 0.94, 0.97
     ]
+    private static let palette: [Color] = [
+        ArcticAuroraPalette.neonMint,
+        ArcticAuroraPalette.emerald,
+        ArcticAuroraPalette.lime,
+        ArcticAuroraPalette.cyan,
+        ArcticAuroraPalette.violet,
+        ArcticAuroraPalette.magenta,
+        ArcticAuroraPalette.pearl
+    ]
 
     private var targetPhase: CGFloat { 2 * .pi }
     private var activeStrandSpecs: ArraySlice<ArcticAuroraMicroStrandSpec> {
@@ -922,18 +929,14 @@ private struct ArcticAuroraMicroDetailOverlayView: View {
 
     var body: some View {
         GeometryReader { proxy in
-            let palette: [Color] = [
-                ArcticAuroraPalette.neonMint,
-                ArcticAuroraPalette.emerald,
-                ArcticAuroraPalette.lime,
-                ArcticAuroraPalette.cyan,
-                ArcticAuroraPalette.violet,
-                ArcticAuroraPalette.magenta,
-                ArcticAuroraPalette.pearl
-            ]
+            let palette = Self.palette
+            let strandSpecs = activeStrandSpecs
+            let crestSeeds = activeCrestSeeds
+            let sparkleSeeds = activeSparkleSeeds
 
             ZStack {
-                ForEach(Array(activeStrandSpecs.enumerated()), id: \.offset) { idx, spec in
+                ForEach(strandSpecs.indices, id: \.self) { idx in
+                    let spec = strandSpecs[idx]
                     let isLeftCluster = spec.x < 0.30
                     let clusterScale = isLeftCluster ? effectiveLeftClusterBoost : 1.0
                     let localOpacity = opacity * spec.intensity * clusterScale
@@ -974,7 +977,8 @@ private struct ArcticAuroraMicroDetailOverlayView: View {
                         .blendMode(.plusLighter)
                 }
 
-                ForEach(Array(activeCrestSeeds.enumerated()), id: \.offset) { idx, seed in
+                ForEach(crestSeeds.indices, id: \.self) { idx in
+                    let seed = crestSeeds[idx]
                     let isLeftCluster = seed < 0.30
                     let clusterScale = isLeftCluster ? effectiveLeftClusterBoost : 1.0
                     let x = proxy.size.width * CGFloat(seed)
@@ -1012,7 +1016,8 @@ private struct ArcticAuroraMicroDetailOverlayView: View {
                         .blendMode(.plusLighter)
                 }
 
-                ForEach(Array(activeSparkleSeeds.enumerated()), id: \.offset) { idx, seed in
+                ForEach(sparkleSeeds.indices, id: \.self) { idx in
+                    let seed = sparkleSeeds[idx]
                     let isLeftCluster = seed < 0.30
                     let clusterScale = isLeftCluster ? effectiveLeftClusterBoost : 1.0
                     let x = proxy.size.width * CGFloat(seed)

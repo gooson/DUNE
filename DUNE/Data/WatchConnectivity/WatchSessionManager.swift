@@ -161,7 +161,14 @@ final class WatchSessionManager: NSObject {
     }
 
     private var currentThemeRawValue: String {
-        UserDefaults.standard.string(forKey: "com.dune.app.theme") ?? AppTheme.desertWarm.rawValue
+        let persistedRawValue = UserDefaults.standard.string(forKey: AppTheme.storageKey)
+        if let normalized = AppTheme.normalizedRawValue(fromPersistedRawValue: persistedRawValue) {
+            return normalized
+        }
+        if let persistedRawValue, !persistedRawValue.isEmpty {
+            return persistedRawValue
+        }
+        return AppTheme.desertWarm.rawValue
     }
 
     private func updateApplicationContext(

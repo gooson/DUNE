@@ -5,7 +5,7 @@ import UserNotifications
 
 @main
 struct DUNEApp: App {
-    @AppStorage("com.dune.app.theme") private var selectedTheme: AppTheme = .desertWarm
+    @AppStorage(AppTheme.storageKey) private var selectedTheme: AppTheme = .desertWarm
     @AppStorage("hasShownCloudSyncConsent") private var hasShownConsent = false
     @State private var showConsentSheet = false
     @State private var isShowingLaunchSplash = !DUNEApp.isRunningXCTest
@@ -85,9 +85,17 @@ struct DUNEApp: App {
     }
 
     init() {
+        let persistedThemeRawValue = UserDefaults.standard.string(forKey: AppTheme.storageKey)
+        if let normalizedTheme = AppTheme.resolvedTheme(fromPersistedRawValue: persistedThemeRawValue) {
+            if persistedThemeRawValue != normalizedTheme.rawValue {
+                UserDefaults.standard.set(normalizedTheme.rawValue, forKey: AppTheme.storageKey)
+            }
+            _selectedTheme = AppStorage(wrappedValue: normalizedTheme, AppTheme.storageKey)
+        }
+
         if let forcedTheme = Self.forcedUITestTheme {
-            UserDefaults.standard.set(forcedTheme.rawValue, forKey: "com.dune.app.theme")
-            _selectedTheme = AppStorage(wrappedValue: forcedTheme, "com.dune.app.theme")
+            UserDefaults.standard.set(forcedTheme.rawValue, forKey: AppTheme.storageKey)
+            _selectedTheme = AppStorage(wrappedValue: forcedTheme, AppTheme.storageKey)
         }
         let cloudSyncEnabled = UserDefaults.standard.bool(forKey: "isCloudSyncEnabled")
         let config = ModelConfiguration(

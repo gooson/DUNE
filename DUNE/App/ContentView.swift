@@ -4,7 +4,7 @@ struct ContentView: View {
     private let sharedHealthDataService: SharedHealthDataService?
     private let refreshCoordinator: AppRefreshCoordinating?
     @Environment(\.scenePhase) private var scenePhase
-    @AppStorage("com.dune.app.theme") private var selectedTheme: AppTheme = .desertWarm
+    @AppStorage(AppTheme.storageKey) private var selectedTheme: AppTheme = .desertWarm
     @State private var selectedSection: AppSection = .today
     @State private var todayScrollToTopSignal = 0
     @State private var activityScrollToTopSignal = 0

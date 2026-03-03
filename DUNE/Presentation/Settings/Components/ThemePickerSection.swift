@@ -2,7 +2,7 @@ import SwiftUI
 
 /// Theme selection UI with functional theme switching.
 struct ThemePickerSection: View {
-    @AppStorage("com.dune.app.theme") private var selectedTheme: AppTheme = .desertWarm
+    @AppStorage(AppTheme.storageKey) private var selectedTheme: AppTheme = .desertWarm
     @Environment(\.appTheme) private var theme
 
     var body: some View {

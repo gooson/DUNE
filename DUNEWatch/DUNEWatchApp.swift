@@ -71,7 +71,7 @@ struct DUNEWatchApp: App {
     /// Theme synced from iPhone via WatchConnectivity.
     /// Falls back to desertWarm if never synced.
     private var resolvedTheme: AppTheme {
-        AppTheme(rawValue: connectivity.syncedThemeRawValue) ?? .desertWarm
+        AppTheme.resolvedTheme(fromPersistedRawValue: connectivity.syncedThemeRawValue) ?? .desertWarm
     }
 
     var body: some Scene {
