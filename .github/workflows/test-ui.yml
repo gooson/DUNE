@@ -2,7 +2,7 @@ name: UI Tests
 
 on:
   pull_request:
-    types: [closed]
+    types: [opened, synchronize, reopened, ready_for_review]
     branches: [main]
     paths:
       - 'DUNE/**'
@@ -20,15 +20,13 @@ concurrency:
 
 jobs:
   ios-ui-tests:
-    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.draft == false
     runs-on: macos-15
     timeout-minutes: 60
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.merge_commit_sha || github.sha }}
 
       - name: Select Xcode
         run: sudo xcode-select -s /Applications/Xcode_26.2.app/Contents/Developer
@@ -37,7 +35,7 @@ jobs:
         run: brew install xcodegen
 
       - name: Run iOS UI Tests
-        run: scripts/test-ui.sh --stream-log --skip-testing DUNEUITests/HealthKitPermissionUITests
+        run: scripts/test-ui.sh --stream-log --smoke --skip-testing DUNEUITests/HealthKitPermissionUITests
 
       - name: Upload iOS UI test log
         if: always()
@@ -48,15 +46,13 @@ jobs:
           retention-days: 7
 
   watch-ui-tests:
-    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.draft == false
     runs-on: macos-15
     timeout-minutes: 60
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.merge_commit_sha || github.sha }}
 
       - name: Select Xcode
         run: sudo xcode-select -s /Applications/Xcode_26.2.app/Contents/Developer
@@ -65,7 +61,7 @@ jobs:
         run: brew install xcodegen
 
       - name: Run watch UI Tests
-        run: scripts/test-watch-ui.sh --stream-log --log-file .xcodebuild/watch-ui-test.log
+        run: scripts/test-watch-ui.sh --stream-log --smoke --log-file .xcodebuild/watch-ui-test.log
 
       - name: Upload watch UI test log
         if: always()

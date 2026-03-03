@@ -1,12 +1,6 @@
 name: Build iOS
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'DUNE/**'
-      - 'scripts/**'
-      - '.github/workflows/build-ios.yml'
   pull_request:
     branches: [main]
     paths:

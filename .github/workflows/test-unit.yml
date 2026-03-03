@@ -1,15 +1,6 @@
 name: Unit Tests
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'DUNE/**'
-      - 'DUNEWatch/**'
-      - 'DUNETests/**'
-      - 'DUNEWatchTests/**'
-      - 'scripts/**'
-      - '.github/workflows/test-unit.yml'
   pull_request:
     branches: [main]
     paths:
