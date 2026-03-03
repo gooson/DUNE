@@ -132,3 +132,106 @@ struct ArcticRibbonShapeTests {
         #expect(abs(bounds0.minY - boundsPi.minY) > 0.1 || abs(bounds0.maxY - boundsPi.maxY) > 0.1)
     }
 }
+
+@Suite("Arctic Aurora LOD")
+struct ArcticAuroraLODTests {
+    @Test("Quality mode is conserve when low power mode is enabled")
+    func lowPowerForcesConserve() {
+        let mode = ArcticAuroraLOD.qualityMode(
+            isLowPowerModeEnabled: true,
+            reduceMotion: false
+        )
+        #expect(mode == .conserve)
+    }
+
+    @Test("Quality mode is conserve when reduce motion is enabled")
+    func reduceMotionForcesConserve() {
+        let mode = ArcticAuroraLOD.qualityMode(
+            isLowPowerModeEnabled: false,
+            reduceMotion: true
+        )
+        #expect(mode == .conserve)
+    }
+
+    @Test("Quality mode is normal when low power and reduce motion are both off")
+    func defaultsToNormal() {
+        let mode = ArcticAuroraLOD.qualityMode(
+            isLowPowerModeEnabled: false,
+            reduceMotion: false
+        )
+        #expect(mode == .normal)
+    }
+
+    @Test("Scaled count preserves base in normal mode")
+    func scaledCountNormal() {
+        let scaled = ArcticAuroraLOD.scaledCount(
+            baseCount: 11,
+            mode: .normal,
+            conserveScale: 0.5
+        )
+        #expect(scaled == 11)
+    }
+
+    @Test("Scaled count reduces repeats in conserve mode with minimum bound")
+    func scaledCountConserveBounded() {
+        let scaled = ArcticAuroraLOD.scaledCount(
+            baseCount: 5,
+            mode: .conserve,
+            conserveScale: 0.2,
+            minimum: 2
+        )
+        #expect(scaled == 2)
+    }
+
+    @Test("Scaled count returns zero when base is zero")
+    func scaledCountZeroBase() {
+        let scaled = ArcticAuroraLOD.scaledCount(
+            baseCount: 0,
+            mode: .conserve,
+            conserveScale: 0.5
+        )
+        #expect(scaled == 0)
+    }
+}
+
+@Suite("SolarFlareShape Geometry")
+struct SolarFlareShapeTests {
+    @Test("Path is non-empty for valid rect")
+    func pathNonEmpty() {
+        let shape = SolarFlareShape()
+        let rect = CGRect(x: 0, y: 0, width: 240, height: 140)
+        #expect(!shape.path(in: rect).isEmpty)
+    }
+
+    @Test("Path is empty for zero-size rect")
+    func pathEmptyForZeroRect() {
+        let shape = SolarFlareShape()
+        #expect(shape.path(in: .zero).isEmpty)
+        #expect(shape.path(in: CGRect(x: 0, y: 0, width: 0, height: 120)).isEmpty)
+        #expect(shape.path(in: CGRect(x: 0, y: 0, width: 120, height: 0)).isEmpty)
+    }
+
+    @Test("animatableData reflects phase")
+    func animatableData() {
+        var shape = SolarFlareShape(phase: 1.4)
+        #expect(shape.animatableData == 1.4)
+        shape.animatableData = 2.8
+        #expect(shape.animatableData == 2.8)
+    }
+
+    @Test("Different phases produce different paths")
+    func phaseChangesPath() {
+        let rect = CGRect(x: 0, y: 0, width: 300, height: 180)
+        let shape0 = SolarFlareShape(amplitude: 0.08, frequency: 2.0, phase: 0, verticalOffset: 0.54, pulse: 0.24)
+        let shapePi = SolarFlareShape(
+            amplitude: 0.08,
+            frequency: 2.0,
+            phase: .pi,
+            verticalOffset: 0.54,
+            pulse: 0.24
+        )
+        let bounds0 = shape0.path(in: rect).boundingRect
+        let boundsPi = shapePi.path(in: rect).boundingRect
+        #expect(abs(bounds0.minY - boundsPi.minY) > 0.1 || abs(bounds0.maxY - boundsPi.maxY) > 0.1)
+    }
+}

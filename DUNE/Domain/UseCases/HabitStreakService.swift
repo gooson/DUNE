@@ -31,6 +31,13 @@ enum HabitStreakService {
                 referenceDate: referenceDate,
                 calendar: calendar
             )
+        case .interval(let days):
+            return calculateIntervalStreak(
+                completedDates: completedDates,
+                intervalDays: days,
+                referenceDate: referenceDate,
+                calendar: calendar
+            )
         }
     }
 
@@ -93,6 +100,40 @@ enum HabitStreakService {
 
             if daysInWeek >= targetDays {
                 streak += 1
+            } else {
+                break
+            }
+        }
+
+        return streak
+    }
+
+    // MARK: - Interval Streak
+
+    private static func calculateIntervalStreak(
+        completedDates: [Date],
+        intervalDays: Int,
+        referenceDate: Date,
+        calendar: Calendar
+    ) -> Int {
+        guard intervalDays > 0 else { return 0 }
+
+        let referenceDay = calendar.startOfDay(for: referenceDate)
+        let uniqueDays = Set(completedDates.map { calendar.startOfDay(for: $0) })
+        let sorted = uniqueDays.sorted(by: >)
+        guard let latest = sorted.first else { return 0 }
+
+        let latestOffset = dayOffset(from: referenceDay, to: latest, calendar: calendar)
+        if latestOffset > 0 { return 0 }
+
+        var streak = 1
+        var previous = latest
+
+        for date in sorted.dropFirst() {
+            let gap = calendar.dateComponents([.day], from: date, to: previous).day ?? .max
+            if gap <= intervalDays {
+                streak += 1
+                previous = date
             } else {
                 break
             }

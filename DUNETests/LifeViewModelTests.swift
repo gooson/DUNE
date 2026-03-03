@@ -134,6 +134,34 @@ struct LifeViewModelTests {
         vm.didFinishSaving()
     }
 
+    @Test("createValidatedHabit creates interval habit correctly")
+    func validIntervalHabit() {
+        let vm = LifeViewModel()
+        vm.name = "Filter replacement"
+        vm.selectedType = .check
+        vm.frequencyType = "interval"
+        vm.intervalDays = 90
+
+        let habit = vm.createValidatedHabit()
+        #expect(habit != nil)
+        #expect(habit?.frequency == .interval(days: 90))
+        vm.didFinishSaving()
+    }
+
+    @Test("createValidatedHabit clamps interval days to max")
+    func intervalClampedToMax() {
+        let vm = LifeViewModel()
+        vm.name = "Long cycle"
+        vm.selectedType = .check
+        vm.frequencyType = "interval"
+        vm.intervalDays = 999
+
+        let habit = vm.createValidatedHabit()
+        #expect(habit != nil)
+        #expect(habit?.frequency == .interval(days: 365))
+        vm.didFinishSaving()
+    }
+
     @Test("createValidatedHabit creates auto-linked habit")
     func autoLinkedHabit() {
         let vm = LifeViewModel()
@@ -185,6 +213,7 @@ struct LifeViewModelTests {
         #expect(vm.goalUnit == "")
         #expect(vm.frequencyType == "daily")
         #expect(vm.weeklyTargetDays == 3)
+        #expect(vm.intervalDays == 7)
         #expect(vm.isAutoLinked == false)
         #expect(vm.validationError == nil)
     }
@@ -211,5 +240,106 @@ struct LifeViewModelTests {
         #expect(habit != nil)
         #expect(habit!.name.count == 50)
         vm.didFinishSaving()
+    }
+
+    // MARK: - Cycle Snapshot / History
+
+    @Test("cycle snapshot uses completion date and snooze override")
+    func cycleSnapshotWithSnooze() {
+        let vm = LifeViewModel()
+        let calendar = Calendar.current
+        let createdAt = calendar.startOfDay(for: Date(timeIntervalSince1970: 1_704_067_200)) // 2024-01-01
+        let completedAt = calendar.date(byAdding: .day, value: 2, to: createdAt)!
+        let snoozedTo = calendar.date(byAdding: .day, value: 15, to: createdAt)!
+        let referenceDate = calendar.date(byAdding: .day, value: 10, to: createdAt)!
+
+        let habit = HabitDefinition(
+            name: "Water filter",
+            iconCategory: .chores,
+            habitType: .check,
+            goalValue: 1,
+            goalUnit: nil,
+            frequency: .interval(days: 7)
+        )
+        habit.createdAt = createdAt
+
+        let completion = vm.createCycleActionLog(for: habit, action: .complete, date: completedAt)
+        #expect(completion != nil)
+        vm.didFinishSaving()
+
+        let snooze = vm.createCycleActionLog(for: habit, action: .snooze, date: snoozedTo)
+        #expect(snooze != nil)
+        vm.didFinishSaving()
+
+        completion?.habitDefinition = habit
+        snooze?.habitDefinition = habit
+        habit.logs = [completion, snooze].compactMap { $0 }
+
+        let snapshot = vm.cycleSnapshot(for: habit, referenceDate: referenceDate)
+        #expect(snapshot != nil)
+        #expect(snapshot?.nextDueDate == calendar.startOfDay(for: snoozedTo))
+        #expect(snapshot?.isDue == false)
+        #expect(snapshot?.lastAction == .complete)
+    }
+
+    @Test("history entries are sorted newest first with cycle action parsing")
+    func historyEntriesSortedAndParsed() {
+        let vm = LifeViewModel()
+        let calendar = Calendar.current
+        let createdAt = calendar.startOfDay(for: Date(timeIntervalSince1970: 1_704_067_200)) // 2024-01-01
+        let completeDate = calendar.date(byAdding: .day, value: 1, to: createdAt)!
+        let skipDate = calendar.date(byAdding: .day, value: 2, to: createdAt)!
+        let snoozeDate = calendar.date(byAdding: .day, value: 3, to: createdAt)!
+
+        let habit = HabitDefinition(
+            name: "Recycling",
+            iconCategory: .chores,
+            habitType: .check,
+            goalValue: 1,
+            goalUnit: nil,
+            frequency: .interval(days: 7)
+        )
+        habit.createdAt = createdAt
+
+        let complete = vm.createCycleActionLog(for: habit, action: .complete, date: completeDate)
+        #expect(complete != nil)
+        vm.didFinishSaving()
+
+        let skip = vm.createCycleActionLog(for: habit, action: .skip, date: skipDate)
+        #expect(skip != nil)
+        vm.didFinishSaving()
+
+        let snooze = vm.createCycleActionLog(for: habit, action: .snooze, date: snoozeDate)
+        #expect(snooze != nil)
+        vm.didFinishSaving()
+
+        complete?.habitDefinition = habit
+        skip?.habitDefinition = habit
+        snooze?.habitDefinition = habit
+        habit.logs = [complete, skip, snooze].compactMap { $0 }
+
+        let entries = vm.historyEntries(for: habit)
+        #expect(entries.count == 3)
+        #expect(entries.map(\.action) == [.snooze, .skip, .complete])
+    }
+
+    @Test("calculateAutoExerciseProgresses updates auto achievement list")
+    func autoAchievementCalculation() {
+        let vm = LifeViewModel()
+        let record = ExerciseRecord(
+            date: Date(),
+            exerciseType: "running",
+            duration: 1200,
+            distance: 5,
+            isFromHealthKit: true,
+            healthKitWorkoutID: "hk-auto-1",
+            exerciseDefinitionID: "running"
+        )
+
+        vm.calculateAutoExerciseProgresses(exerciseRecords: [record])
+
+        #expect(vm.autoExerciseProgresses.isEmpty == false)
+        let weekly5 = vm.autoExerciseProgresses.first { $0.id == "weeklyWorkout5" }
+        #expect(weekly5?.currentValue == 1)
     }
 }

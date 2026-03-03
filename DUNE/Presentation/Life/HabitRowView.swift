@@ -28,6 +28,10 @@ struct HabitRowView: View {
                     }
 
                     habitInput
+
+                    if progress.isCycleBased {
+                        cycleMetadata
+                    }
                 }
             }
         }
@@ -72,13 +76,17 @@ struct HabitRowView: View {
 
     @ViewBuilder
     private var habitInput: some View {
-        switch progress.type {
-        case .check:
-            checkInput
-        case .duration:
-            valueInput(unit: progress.goalUnit ?? "min")
-        case .count:
-            countInput
+        if progress.isCycleBased {
+            cycleCheckInput
+        } else {
+            switch progress.type {
+            case .check:
+                checkInput
+            case .duration:
+                valueInput(unit: progress.goalUnit ?? "min")
+            case .count:
+                countInput
+            }
         }
     }
 
@@ -111,6 +119,35 @@ struct HabitRowView: View {
         }
         .buttonStyle(.plain)
         .disabled(progress.isAutoCompleted)
+    }
+
+    private var cycleCheckInput: some View {
+        Button {
+            onToggle()
+        } label: {
+            HStack(spacing: DS.Spacing.sm) {
+                Image(systemName: progress.isCompleted ? "checkmark.circle.fill" : "circle")
+                    .font(.title2)
+                    .foregroundStyle(progress.isCompleted ? AnyShapeStyle(DS.Color.positive) : AnyShapeStyle(.tertiary))
+
+                Text(cycleStatusText)
+                    .font(.caption)
+                    .foregroundStyle((progress.isDue || progress.isOverdue) ? AnyShapeStyle(DS.Color.negative) : AnyShapeStyle(.secondary))
+
+                if progress.isDue {
+                    Text("Due")
+                        .font(.caption2)
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, DS.Spacing.xs)
+                        .padding(.vertical, 1)
+                        .background {
+                            Capsule().fill(progress.isOverdue ? DS.Color.negative : progress.iconCategory.themeColor)
+                        }
+                }
+            }
+        }
+        .buttonStyle(.plain)
+        .disabled(!progress.isDue)
     }
 
     // MARK: - Duration/Value Type
@@ -192,6 +229,45 @@ struct HabitRowView: View {
                 }
                 .buttonStyle(.plain)
             }
+        }
+    }
+
+    private var cycleStatusText: String {
+        guard let nextDueDate = progress.nextDueDate else {
+            return String(localized: "Tap to complete")
+        }
+
+        if progress.isOverdue {
+            return String(localized: "Overdue · Tap to complete")
+        }
+        if progress.isDue {
+            return String(localized: "Due today · Tap to complete")
+        }
+
+        let dueText = nextDueDate.formatted(date: .abbreviated, time: .omitted)
+        switch progress.lastCycleAction {
+        case .complete:
+            return String(localized: "Done · Next \(dueText)")
+        case .skip:
+            return String(localized: "Skipped · Next \(dueText)")
+        case .snooze:
+            return String(localized: "Snoozed · Next \(dueText)")
+        case .none:
+            return String(localized: "Next due \(dueText)")
+        }
+    }
+
+    @ViewBuilder
+    private var cycleMetadata: some View {
+        if let nextDueDate = progress.nextDueDate {
+            HStack(spacing: DS.Spacing.xs) {
+                Image(systemName: "calendar")
+                    .font(.caption2)
+                Text("Next due \(nextDueDate.formatted(date: .abbreviated, time: .omitted))")
+                    .font(.caption2)
+                    .lineLimit(1)
+            }
+            .foregroundStyle(.secondary)
         }
     }
 }
