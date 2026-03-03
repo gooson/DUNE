@@ -95,7 +95,8 @@ struct WorkoutSessionViewModelTests {
                 weight: 60,
                 reps: 10,
                 duration: nil,
-                distance: nil
+                distance: nil,
+                restDuration: nil
             )
         ]
 
@@ -113,7 +114,8 @@ struct WorkoutSessionViewModelTests {
                 weight: nil,
                 reps: nil,
                 duration: 1800,
-                distance: 5.5
+                distance: 5.5,
+                restDuration: nil
             )
         ]
 
@@ -413,5 +415,85 @@ struct WorkoutSessionViewModelTests {
         let record = vm.createValidatedRecord()
         #expect(record != nil)
         #expect(record?.completedSets.first?.distance == 5.0)
+    }
+
+    // MARK: - Rest Duration Prefill Tests
+
+    @Test("resolveRestDuration returns previous session rest when available")
+    func resolveRestFromPreviousSession() {
+        let exercise = makeExercise()
+        let vm = WorkoutSessionViewModel(exercise: exercise)
+        vm.previousSets = [
+            PreviousSetInfo(weight: 60, reps: 10, duration: nil, distance: nil, restDuration: 90)
+        ]
+
+        let resolved = vm.resolveRestDuration(forSetAt: 0)
+        #expect(resolved == 90)
+    }
+
+    @Test("resolveRestDuration falls back to template when no previous rest")
+    func resolveRestFromTemplate() {
+        let exercise = makeExercise()
+        let vm = WorkoutSessionViewModel(exercise: exercise)
+        vm.templateRestDuration = 120
+        vm.previousSets = [
+            PreviousSetInfo(weight: 60, reps: 10, duration: nil, distance: nil, restDuration: nil)
+        ]
+
+        let resolved = vm.resolveRestDuration(forSetAt: 0)
+        #expect(resolved == 120)
+    }
+
+    @Test("resolveRestDuration falls back to global default when no previous or template")
+    func resolveRestFromGlobalDefault() {
+        let exercise = makeExercise()
+        let vm = WorkoutSessionViewModel(exercise: exercise)
+        vm.previousSets = [
+            PreviousSetInfo(weight: 60, reps: 10, duration: nil, distance: nil, restDuration: nil)
+        ]
+
+        let resolved = vm.resolveRestDuration(forSetAt: 0)
+        #expect(resolved == WorkoutDefaults.restSeconds)
+    }
+
+    @Test("resolveRestDuration previous rest takes priority over template")
+    func resolveRestPreviousOverTemplate() {
+        let exercise = makeExercise()
+        let vm = WorkoutSessionViewModel(exercise: exercise)
+        vm.templateRestDuration = 120
+        vm.previousSets = [
+            PreviousSetInfo(weight: 60, reps: 10, duration: nil, distance: nil, restDuration: 45)
+        ]
+
+        let resolved = vm.resolveRestDuration(forSetAt: 0)
+        #expect(resolved == 45)
+    }
+
+    @Test("createValidatedRecord stores restDuration from editable set")
+    func restDurationStoredInRecord() {
+        let exercise = makeExercise()
+        let vm = WorkoutSessionViewModel(exercise: exercise)
+        vm.sets[0].weight = "60"
+        vm.sets[0].reps = "10"
+        vm.sets[0].isCompleted = true
+        vm.sets[0].restDuration = 90
+
+        let record = vm.createValidatedRecord()
+        #expect(record != nil)
+        #expect(record?.completedSets.first?.restDuration == 90)
+    }
+
+    @Test("createValidatedRecord preserves nil restDuration")
+    func nilRestDurationPreserved() {
+        let exercise = makeExercise()
+        let vm = WorkoutSessionViewModel(exercise: exercise)
+        vm.sets[0].weight = "60"
+        vm.sets[0].reps = "10"
+        vm.sets[0].isCompleted = true
+        // restDuration not set (nil)
+
+        let record = vm.createValidatedRecord()
+        #expect(record != nil)
+        #expect(record?.completedSets.first?.restDuration == nil)
     }
 }

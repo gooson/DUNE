@@ -768,7 +768,7 @@ struct WorkoutSessionView: View {
     }
 
     private func startRest() {
-        let seconds = Int(WorkoutSettingsStore.shared.restSeconds)
+        let seconds = Int(viewModel.resolveRestDuration(forSetAt: currentSetIndex))
         restTotalSeconds = seconds
         restSecondsRemaining = seconds
         showRestTimer = true
@@ -791,10 +791,16 @@ struct WorkoutSessionView: View {
     }
 
     private func finishRest() {
+        let completedSetIndex = currentSetIndex
         restTimerTask?.cancel()
         restTimerTask = nil
         showRestTimer = false
         restTimerCompleted += 1
+
+        // Capture rest timer total for the completed set (before advancing)
+        if viewModel.sets.indices.contains(completedSetIndex) {
+            viewModel.sets[completedSetIndex].restDuration = TimeInterval(restTotalSeconds)
+        }
 
         // Advance to next set
         currentSetIndex += 1
@@ -833,6 +839,8 @@ struct WorkoutSessionView: View {
     // MARK: - Save
 
     private func saveWorkout() {
+        restTimerTask?.cancel()
+        restTimerTask = nil
         isInputFieldFocused = false
         guard let record = viewModel.createValidatedRecord(weightUnit: weightUnit) else { return }
 

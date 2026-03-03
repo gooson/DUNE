@@ -27,7 +27,7 @@ struct CloudKitDateRoundtripTests {
             exerciseID: "bench_press",
             exerciseName: "Bench Press",
             completedSets: [
-                WatchSetData(setNumber: 1, weight: 60, reps: 10, duration: nil, isCompleted: true)
+                WatchSetData(setNumber: 1, weight: 60, reps: 10, duration: nil, restDuration: nil, isCompleted: true)
             ],
             startTime: start,
             endTime: end,

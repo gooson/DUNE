@@ -10,9 +10,9 @@ struct WatchWorkoutUpdateValidationTests {
             exerciseID: "squat",
             exerciseName: "Back Squat",
             completedSets: [
-                WatchSetData(setNumber: 1, weight: 100, reps: 5, duration: nil, isCompleted: true),
-                WatchSetData(setNumber: 2, weight: 999, reps: 5, duration: nil, isCompleted: true),
-                WatchSetData(setNumber: 3, weight: 80, reps: 5000, duration: nil, isCompleted: true),
+                WatchSetData(setNumber: 1, weight: 100, reps: 5, duration: nil, restDuration: nil, isCompleted: true),
+                WatchSetData(setNumber: 2, weight: 999, reps: 5, duration: nil, restDuration: nil, isCompleted: true),
+                WatchSetData(setNumber: 3, weight: 80, reps: 5000, duration: nil, restDuration: nil, isCompleted: true),
             ],
             startTime: Date(timeIntervalSince1970: 1_738_000_000),
             endTime: Date(timeIntervalSince1970: 1_738_000_300),
@@ -36,8 +36,8 @@ struct WatchWorkoutUpdateValidationTests {
             exerciseID: "run",
             exerciseName: "Running",
             completedSets: [
-                WatchSetData(setNumber: 1, weight: 0, reps: 0, duration: 0, isCompleted: true),
-                WatchSetData(setNumber: 2, weight: 500, reps: 1000, duration: 28_800, isCompleted: true),
+                WatchSetData(setNumber: 1, weight: 0, reps: 0, duration: 0, restDuration: nil, isCompleted: true),
+                WatchSetData(setNumber: 2, weight: 500, reps: 1000, duration: 28_800, restDuration: nil, isCompleted: true),
             ],
             startTime: Date(timeIntervalSince1970: 1_738_100_000),
             endTime: nil,

@@ -11,6 +11,8 @@ struct EditableSet: Identifiable {
     var distance: String = ""
     var isCompleted: Bool = false
     var setType: SetType = .working
+    /// Rest timer total (including +30s adjustments) used after this set, in seconds.
+    var restDuration: TimeInterval?
 }
 
 /// Previous session data for inline display
@@ -19,6 +21,7 @@ struct PreviousSetInfo: Sendable {
     let reps: Int?
     let duration: TimeInterval?
     let distance: Double?
+    let restDuration: TimeInterval?
 }
 
 // MARK: - Draft Persistence
@@ -30,6 +33,7 @@ struct WorkoutSessionDraft: Codable {
     let sessionStartTime: Date
     let memo: String
     let savedAt: Date
+    var templateRestDuration: TimeInterval?
 
     struct DraftSet: Codable {
         let setNumber: Int
@@ -39,6 +43,7 @@ struct WorkoutSessionDraft: Codable {
         let distance: String
         let isCompleted: Bool
         let setTypeRaw: String
+        let restDuration: TimeInterval?
     }
 
     private static let userDefaultsKey = "com.raftel.dailve.workoutDraft"
@@ -80,6 +85,9 @@ final class WorkoutSessionViewModel {
 
     /// Body weight for calorie estimation (fetched externally, uses store default)
     var bodyWeightKg: Double = WorkoutDefaults.bodyWeightKg
+
+    /// Per-exercise rest duration override from the template entry (nil = use global).
+    var templateRestDuration: TimeInterval?
 
     init(
         exercise: ExerciseDefinition,
@@ -198,7 +206,8 @@ final class WorkoutSessionViewModel {
                 weight: set.weight,
                 reps: set.reps,
                 duration: set.duration,
-                distance: set.distance
+                distance: set.distance,
+                restDuration: set.restDuration
             )
         }
 
@@ -217,6 +226,23 @@ final class WorkoutSessionViewModel {
         let index = setNumber - 1
         guard index >= 0, index < previousSets.count else { return nil }
         return previousSets[index]
+    }
+
+    /// Resolves rest timer duration for the set at `index`.
+    /// Priority: previous session → template entry → global default.
+    /// Values are clamped to 1...3600 to guard against corrupted data from CloudKit/drafts.
+    func resolveRestDuration(forSetAt index: Int) -> TimeInterval {
+        guard sets.indices.contains(index) else { return defaultRestSeconds }
+        let setNumber = sets[index].setNumber
+        if let prevRest = previousSetInfo(for: setNumber)?.restDuration,
+           prevRest.isFinite, prevRest > 0 {
+            return Swift.min(prevRest, 3600)
+        }
+        if let templateRest = templateRestDuration,
+           templateRest.isFinite, templateRest > 0 {
+            return Swift.min(templateRest, 3600)
+        }
+        return defaultRestSeconds
     }
 
     func fillSetFromPrevious(at index: Int, weightUnit: WeightUnit = .kg) {
@@ -306,7 +332,8 @@ final class WorkoutSessionViewModel {
                 duration: set.duration,
                 distance: set.distance,
                 isCompleted: set.isCompleted,
-                setTypeRaw: set.setType.rawValue
+                setTypeRaw: set.setType.rawValue,
+                restDuration: set.restDuration
             )
         }
         let draft = WorkoutSessionDraft(
@@ -314,7 +341,8 @@ final class WorkoutSessionViewModel {
             sets: draftSets,
             sessionStartTime: sessionStartTime,
             memo: memo,
-            savedAt: Date()
+            savedAt: Date(),
+            templateRestDuration: templateRestDuration
         )
         WorkoutSessionDraft.save(draft)
     }
@@ -322,6 +350,7 @@ final class WorkoutSessionViewModel {
     func restoreFromDraft(_ draft: WorkoutSessionDraft) {
         sessionStartTime = draft.sessionStartTime
         memo = draft.memo
+        templateRestDuration = draft.templateRestDuration
         sets = draft.sets.map { draftSet in
             var editable = EditableSet(setNumber: draftSet.setNumber)
             editable.weight = draftSet.weight
@@ -330,6 +359,7 @@ final class WorkoutSessionViewModel {
             editable.distance = draftSet.distance
             editable.isCompleted = draftSet.isCompleted
             editable.setType = SetType(rawValue: draftSet.setTypeRaw) ?? .working
+            editable.restDuration = draftSet.restDuration
             return editable
         }
     }
@@ -484,6 +514,7 @@ final class WorkoutSessionViewModel {
                 duration: durationSeconds,
                 distance: distanceKm,
                 intensity: nil,
+                restDuration: editableSet.restDuration,
                 isCompleted: true
             )
             // Explicit bidirectional link for CloudKit reliability

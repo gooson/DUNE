@@ -27,6 +27,7 @@ struct WatchSetData: Codable, Sendable {
     let weight: Double?
     let reps: Int?
     let duration: TimeInterval?
+    var restDuration: TimeInterval?
     let isCompleted: Bool
 }
 
