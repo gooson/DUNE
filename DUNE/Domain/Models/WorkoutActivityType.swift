@@ -190,6 +190,16 @@ enum WorkoutActivityType: String, Codable, Sendable, CaseIterable {
         }
     }
 
+    /// Whether this activity primarily measures floors/flights climbed (stair machines).
+    var isStairBased: Bool {
+        switch self {
+        case .stairClimbing, .stairStepper:
+            return true
+        default:
+            return false
+        }
+    }
+
     /// High-level category for grouping and coloring.
     var category: ActivityCategory {
         switch self {

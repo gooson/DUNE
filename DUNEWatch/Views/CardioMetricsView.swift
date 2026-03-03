@@ -16,6 +16,11 @@ struct CardioMetricsView: View {
         return (type, type.iconName, type.typeName)
     }
 
+    /// Whether the current activity uses floors instead of distance as primary metric.
+    private var isStairType: Bool {
+        cardioInfo?.type.isStairBased ?? false
+    }
+
     var body: some View {
         TimelineView(.periodic(from: .now, by: isLuminanceReduced ? 10 : 1)) { context in
             VStack(spacing: DS.Spacing.md) {
@@ -24,8 +29,12 @@ struct CardioMetricsView: View {
 
                 Spacer(minLength: 0)
 
-                // Primary metric: Distance
-                distanceDisplay
+                // Primary metric: Floors (stair) or Distance (other)
+                if isStairType {
+                    floorsDisplay
+                } else {
+                    distanceDisplay
+                }
 
                 Spacer(minLength: 0)
 
@@ -83,7 +92,20 @@ struct CardioMetricsView: View {
         return String(format: "%d:%02d", mins, secs)
     }
 
-    // MARK: - Distance (Primary)
+    // MARK: - Primary Metric
+
+    private var floorsDisplay: some View {
+        VStack(spacing: DS.Spacing.xxs) {
+            Text("\(Int(workoutManager.floorsClimbed))")
+                .font(.system(.largeTitle, design: .rounded).monospacedDigit().bold())
+                .foregroundStyle(DS.Color.positive)
+                .contentTransition(.numericText())
+
+            Text("floors")
+                .font(DS.Typography.metricLabel)
+                .foregroundStyle(.secondary)
+        }
+    }
 
     private var distanceDisplay: some View {
         VStack(spacing: DS.Spacing.xxs) {
