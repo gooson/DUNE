@@ -97,6 +97,8 @@ final class ActivityViewModel {
 
     /// Cached manual records for manual-cardio fallback PR calculations.
     private var manualRecordsCache: [ExerciseRecord] = []
+    @ObservationIgnored
+    private var localizedExerciseNameLookup: [String: String] = [:]
 
     init(
         workoutService: WorkoutQuerying? = nil,
@@ -123,6 +125,7 @@ final class ActivityViewModel {
         self.readinessUseCase = readinessUseCase
         self.sharedHealthDataService = sharedHealthDataService
         self.personalRecordStore = personalRecordStore
+        self.localizedExerciseNameLookup = buildLocalizedExerciseNameLookup()
     }
 
     // MARK: - Workout Suggestion
@@ -199,7 +202,7 @@ final class ActivityViewModel {
         return ExerciseRecordSnapshot(
             date: record.date,
             exerciseDefinitionID: record.exerciseDefinitionID,
-            exerciseName: definition?.name ?? record.exerciseType,
+            exerciseName: definition?.localizedName ?? definition?.name ?? localizedExerciseName(record.exerciseType),
             primaryMuscles: primary,
             secondaryMuscles: secondary,
             completedSetCount: completedSets.count,
@@ -260,7 +263,10 @@ final class ActivityViewModel {
         // Exercise Frequency
         let freqEntries = exerciseRecordSnapshots.compactMap { snapshot -> ExerciseFrequencyService.WorkoutEntry? in
             guard let name = snapshot.exerciseName, !name.isEmpty else { return nil }
-            return ExerciseFrequencyService.WorkoutEntry(exerciseName: name, date: snapshot.date)
+            return ExerciseFrequencyService.WorkoutEntry(
+                exerciseName: localizedExerciseName(name),
+                date: snapshot.date
+            )
         }
         exerciseFrequencies = ExerciseFrequencyService.analyze(from: freqEntries)
 
@@ -530,13 +536,53 @@ final class ActivityViewModel {
             guard distanceMeters != nil || duration != nil || calories != nil else { return nil }
 
             return ActivityPersonalRecordService.ManualCardioEntry(
-                title: definition?.name ?? record.exerciseType,
+                title: definition?.localizedName ?? definition?.name ?? localizedExerciseName(record.exerciseType),
                 date: record.date,
                 duration: duration ?? 0,
                 distanceMeters: distanceMeters,
                 calories: calories
             )
         }
+    }
+
+    private func localizedExerciseName(_ rawName: String) -> String {
+        let trimmed = rawName.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return rawName }
+        let key = normalizeExerciseNameLookupKey(trimmed)
+        if let localizedName = localizedExerciseNameLookup[key], !localizedName.isEmpty {
+            return localizedName
+        }
+        return WorkoutActivityType.localizedDisplayName(forStoredTitle: trimmed) ?? trimmed
+    }
+
+    private func buildLocalizedExerciseNameLookup() -> [String: String] {
+        var lookup: [String: String] = [:]
+        let exercises = library.allExercises()
+
+        for exercise in exercises {
+            let localizedName = exercise.localizedName.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !localizedName.isEmpty else { continue }
+
+            var candidates = [exercise.name, exercise.localizedName]
+            if let aliases = exercise.aliases {
+                candidates.append(contentsOf: aliases)
+            }
+
+            for candidate in candidates {
+                let key = normalizeExerciseNameLookupKey(candidate)
+                guard !key.isEmpty else { continue }
+                lookup[key] = localizedName
+            }
+        }
+
+        return lookup
+    }
+
+    private func normalizeExerciseNameLookupKey(_ name: String) -> String {
+        name
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .folding(options: [.diacriticInsensitive, .widthInsensitive], locale: .current)
+            .lowercased()
     }
 
     private func resolveManualDurationSeconds(for record: ExerciseRecord) -> TimeInterval? {

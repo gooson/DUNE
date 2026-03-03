@@ -83,7 +83,7 @@ struct ExerciseMixDetailView: View {
                 ForEach(Array(displayFrequencies.enumerated()), id: \.element.id) { index, freq in
                     HStack(spacing: DS.Spacing.xs) {
                         Circle().fill(colorFor(index: index)).frame(width: 8, height: 8)
-                        Text(freq.exerciseName)
+                        Text(localizedExerciseName(freq.exerciseName))
                             .font(.caption)
                             .lineLimit(1)
                         Spacer()
@@ -103,7 +103,7 @@ struct ExerciseMixDetailView: View {
         VStack(spacing: DS.Spacing.xxs) {
             if let name = selectedExercise,
                let freq = viewModel.frequencyByName[name] {
-                Text(name)
+                Text(localizedExerciseName(name))
                     .font(.caption.weight(.semibold))
                     .lineLimit(1)
                 Text("\(freq.count)x")
@@ -150,7 +150,7 @@ struct ExerciseMixDetailView: View {
             ForEach(viewModel.exerciseFrequencies) { freq in
                 VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                     HStack {
-                        Text(freq.exerciseName)
+                        Text(localizedExerciseName(freq.exerciseName))
                             .font(.caption)
                             .fontWeight(.medium)
                             .lineLimit(1)
@@ -196,5 +196,9 @@ struct ExerciseMixDetailView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, DS.Spacing.xl)
+    }
+
+    private func localizedExerciseName(_ name: String) -> String {
+        WorkoutActivityType.localizedDisplayName(forStoredTitle: name) ?? name
     }
 }

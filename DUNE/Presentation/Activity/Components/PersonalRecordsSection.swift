@@ -49,20 +49,37 @@ struct PersonalRecordsSection: View {
 
     private func rewardSummaryRow(_ summary: WorkoutRewardSummary) -> some View {
         HStack(spacing: DS.Spacing.xs) {
-            Label("Lv \(summary.level)", systemImage: "star.circle.fill")
+            Label(
+                String.localizedStringWithFormat(
+                    String(localized: "Lv %lld"),
+                    summary.level
+                ),
+                systemImage: "star.circle.fill"
+            )
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(.white)
                 .padding(.horizontal, 8)
                 .padding(.vertical, 4)
                 .background(DS.Color.activity, in: Capsule())
 
-            Label("\(summary.badgeCount.formatted()) badges", systemImage: "medal.fill")
+            Label(
+                String.localizedStringWithFormat(
+                    String(localized: "%lld badges"),
+                    summary.badgeCount
+                ),
+                systemImage: "medal.fill"
+            )
                 .font(.caption2)
                 .foregroundStyle(DS.Color.textSecondary)
 
             Spacer(minLength: 0)
 
-            Text("\(summary.totalPoints.formatted()) pts")
+            Text(
+                String.localizedStringWithFormat(
+                    String(localized: "%lld pts"),
+                    summary.totalPoints
+                )
+            )
                 .font(.caption2.weight(.semibold))
                 .foregroundStyle(.tertiary)
         }
