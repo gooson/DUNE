@@ -2,7 +2,7 @@
 tags: [theme, arctic-dawn, aurora, performance, swiftui, animation, frame-stability, drawingGroup, canvas]
 date: 2026-03-04
 category: brainstorm
-status: draft
+status: reviewed
 ---
 
 # Brainstorm: Arctic Theme 성능 개선 Phase 2

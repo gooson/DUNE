@@ -91,8 +91,9 @@ Arctic Dawn 배경에서 **탭 전환 시 끊김**과 **스크롤 시 버벅임*
   ```
 - **Verification**: 빌드 성공 + animation이 이전과 동일 속도/방향으로 동작
 
-### Step 3: Curtain ForEach 평탄화
+### Step 3: Curtain ForEach 평탄화 *(Deferred)*
 
+- **Status**: Deferred — perf-optimizer 분석 결과, `drawingGroup()`이 composition hierarchy를 이미 collapse하므로 nested ForEach는 유의미한 병목이 아님. 실측 프로파일에서 병목 재확인 시 별도 작업으로 진행.
 - **Files**: `OceanWaveBackground.swift`
 - **Changes**:
   - `ArcticFlatCurtainElement` struct 추가: curtain + filament 정보를 사전 결합

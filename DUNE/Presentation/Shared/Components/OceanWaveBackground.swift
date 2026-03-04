@@ -278,11 +278,6 @@ struct ArcticRibbonShape: Shape {
     let verticalOffset: CGFloat
     let ridge: CGFloat
 
-    var animatableData: CGFloat {
-        get { phase }
-        set { phase = newValue }
-    }
-
     private let points: [(x: CGFloat, angle: CGFloat)]
     private static let sampleCount = 120
 
@@ -409,11 +404,6 @@ struct ArcticAuroraCurtainShape: Shape {
     let depth: CGFloat
     let sway: CGFloat
     var phase: CGFloat
-
-    var animatableData: CGFloat {
-        get { phase }
-        set { phase = newValue }
-    }
 
     private static let sampleCount = 88
 
@@ -677,11 +667,6 @@ private struct ArcticAuroraEdgeGlowShape: Shape {
     let amplitude: CGFloat
     let frequency: CGFloat
     var phase: CGFloat
-
-    var animatableData: CGFloat {
-        get { phase }
-        set { phase = newValue }
-    }
 
     private static let sampleCount = 84
 
@@ -1054,7 +1039,7 @@ struct ArcticTabWaveBackground: View {
         let scale = intensityScale
         let mode = qualityMode
 
-        TimelineView(.animation(minimumInterval: nil, paused: reduceMotion)) { context in
+        TimelineView(.animation(minimumInterval: 1.0 / 60.0, paused: reduceMotion)) { context in
             let elapsed = context.date.timeIntervalSinceReferenceDate
 
             ZStack(alignment: .top) {
@@ -1272,7 +1257,7 @@ struct ArcticDetailWaveBackground: View {
     var body: some View {
         let mode = qualityMode
 
-        TimelineView(.animation(minimumInterval: nil, paused: reduceMotion)) { context in
+        TimelineView(.animation(minimumInterval: 1.0 / 60.0, paused: reduceMotion)) { context in
             let elapsed = context.date.timeIntervalSinceReferenceDate
 
             ZStack(alignment: .top) {
@@ -1471,18 +1456,18 @@ struct ArcticSheetWaveBackground: View {
     var body: some View {
         let mode = qualityMode
 
-        TimelineView(.animation(minimumInterval: nil, paused: reduceMotion)) { context in
+        TimelineView(.animation(minimumInterval: 1.0 / 60.0, paused: reduceMotion)) { context in
             let elapsed = context.date.timeIntervalSinceReferenceDate
 
             ZStack(alignment: .top) {
                 LinearGradient(
                     colors: [
                         ArcticAuroraPalette.deepNavy.opacity(0.76),
-                    ArcticAuroraPalette.ultraviolet.opacity(0.27),
-                    theme.arcticDeepColor.opacity(0.34),
-                    theme.arcticDeepColor.opacity(0.12),
-                    theme.arcticFrostColor.opacity(0.03)
-                ],
+                        ArcticAuroraPalette.ultraviolet.opacity(0.27),
+                        theme.arcticDeepColor.opacity(0.34),
+                        theme.arcticDeepColor.opacity(0.12),
+                        theme.arcticFrostColor.opacity(0.03)
+                    ],
                 startPoint: .top,
                 endPoint: .bottom
             )
