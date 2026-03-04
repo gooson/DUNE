@@ -55,7 +55,7 @@ struct ContentView: View {
                         activeCalories: workoutManager.activeCalories
                     )
                 } else if workoutManager.isActive {
-                    SessionPagingView()
+                    SessionPagingView(isCardioMode: workoutManager.isCardioMode)
                 } else {
                     CarouselHomeView()
                 }

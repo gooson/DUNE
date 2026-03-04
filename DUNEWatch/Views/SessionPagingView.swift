@@ -2,15 +2,14 @@ import SwiftUI
 import WatchKit
 
 /// Active workout session paging.
-/// Strength: Vertical pages — Controls | MetricsView | NowPlaying (3 pages)
-/// Cardio:   Horizontal pages — CardioControls (left) ←→ Vertical metrics (right, default)
-///           Vertical metrics: MainMetrics | HRZone | Secondary | NowPlaying (4 pages)
+/// Strength: Vertical pages — Controls | MetricsView | NowPlaying (3 pages, Digital Crown)
+/// Cardio:   Horizontal pages — Controls | MainMetrics | HRZone | Secondary | NowPlaying (5 pages, swipe)
+///           Controls accessible via single right swipe from default MainMetrics page.
 struct SessionPagingView: View {
-    @Environment(WorkoutManager.self) private var workoutManager
-    @Environment(\.isLuminanceReduced) private var isLuminanceReduced
+    let isCardioMode: Bool
 
     var body: some View {
-        if workoutManager.isCardioMode {
+        if isCardioMode {
             CardioSessionPagingView()
         } else {
             StrengthSessionPagingView()
@@ -18,63 +17,63 @@ struct SessionPagingView: View {
     }
 }
 
-// MARK: - Cardio: Horizontal swipe for controls + vertical metric pages
+// MARK: - Cardio: Flat horizontal paging (Apple Fitness pattern)
 
 private struct CardioSessionPagingView: View {
-    @Environment(WorkoutManager.self) private var workoutManager
     @Environment(\.isLuminanceReduced) private var isLuminanceReduced
 
-    @State private var horizontalPage: CardioHorizontalPage = .metrics
-    @State private var selectedTab: SessionTab = .cardioMain
+    @State private var selectedTab: CardioTab = .mainMetrics
 
     var body: some View {
-        TabView(selection: $horizontalPage) {
-            CardioControlsView()
-                .tag(CardioHorizontalPage.controls)
+        TabView(selection: $selectedTab) {
+            ControlsView(showSkip: false)
+                .tag(CardioTab.controls)
 
-            TabView(selection: $selectedTab) {
-                CardioMainMetricsPage()
-                    .tag(SessionTab.cardioMain)
+            CardioMainMetricsPage()
+                .tag(CardioTab.mainMetrics)
 
-                CardioHRZonePage()
-                    .tag(SessionTab.hrZone)
+            CardioHRZonePage()
+                .tag(CardioTab.hrZone)
 
-                CardioSecondaryPage()
-                    .tag(SessionTab.cardioSecondary)
+            CardioSecondaryPage()
+                .tag(CardioTab.secondary)
 
-                NowPlayingView()
-                    .tag(SessionTab.nowPlaying)
-            }
-            .tabViewStyle(.verticalPage(transitionStyle: .blur))
-            .tag(CardioHorizontalPage.metrics)
+            NowPlayingView()
+                .tag(CardioTab.nowPlaying)
         }
         .onChange(of: isLuminanceReduced) { _, reduced in
             if reduced {
-                horizontalPage = .metrics
-                selectedTab = .cardioMain
+                selectedTab = .mainMetrics
             }
         }
     }
+
+    private enum CardioTab {
+        case controls
+        case mainMetrics
+        case hrZone
+        case secondary
+        case nowPlaying
+    }
 }
 
-// MARK: - Strength: Original vertical paging (unchanged)
+// MARK: - Strength: Vertical paging (unchanged)
 
 private struct StrengthSessionPagingView: View {
-    @Environment(WorkoutManager.self) private var workoutManager
     @Environment(\.isLuminanceReduced) private var isLuminanceReduced
 
-    @State private var selectedTab: SessionTab = .metrics
+    @State private var selectedTab: StrengthTab = .metrics
 
     var body: some View {
         TabView(selection: $selectedTab) {
             ControlsView()
-                .tag(SessionTab.controls)
+                .tag(StrengthTab.controls)
 
             MetricsView()
-                .tag(SessionTab.metrics)
+                .tag(StrengthTab.metrics)
 
             NowPlayingView()
-                .tag(SessionTab.nowPlaying)
+                .tag(StrengthTab.nowPlaying)
         }
         .tabViewStyle(.verticalPage(transitionStyle: .blur))
         .onChange(of: isLuminanceReduced) { _, reduced in
@@ -83,20 +82,10 @@ private struct StrengthSessionPagingView: View {
             }
         }
     }
-}
 
-// MARK: - Tab Enums
-
-private enum CardioHorizontalPage {
-    case controls
-    case metrics
-}
-
-enum SessionTab {
-    case controls
-    case metrics
-    case cardioMain
-    case hrZone
-    case cardioSecondary
-    case nowPlaying
+    private enum StrengthTab {
+        case controls
+        case metrics
+        case nowPlaying
+    }
 }
