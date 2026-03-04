@@ -70,7 +70,8 @@ ScrollView(.vertical) {
     }
     .scrollTargetLayout()
 }
-.scrollTargetBehavior(.paging)
+// .viewAligned snaps to card views; .paging drifts when nav title collapses
+.scrollTargetBehavior(.viewAligned)
 ```
 
 ### Key Pattern: Pre-compute in rebuildCards()
@@ -142,7 +143,7 @@ Routines (SwiftData @Query, updatedAt desc)
 
 ## Lessons Learned
 
-1. **ScrollView paging > TabView for animated transitions**: watchOS에서 scroll transition 효과가 필요하면 `ScrollView + .scrollTargetBehavior(.paging)` 조합 사용. `TabView(.verticalPage)`는 `.scrollTransition`을 지원하지 않음.
+1. **ScrollView `.viewAligned` > `.paging` on watchOS**: watchOS navigation title이 스크롤 시 collapse/expand되면 visible height가 변하여 `.paging`의 snap offset이 카드 경계에서 drift. `.viewAligned`는 실제 카드 뷰에 snap하므로 visible area 변화에 면역. `TabView(.verticalPage)`는 `.scrollTransition`을 지원하지 않으므로 ScrollView 유지.
 
 2. **Pre-compute at data layer, not view layer**: carousel처럼 스크롤 중 모든 카드의 body가 재평가되는 UI에서는 UserDefaults, Calendar, Service 호출을 반드시 데이터 빌드 시점(`rebuildCards()`)에 pre-compute.
 
