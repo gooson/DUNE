@@ -99,7 +99,7 @@ struct SessionSummaryView: View {
                     statItem(title: "Distance", value: formattedDistance)
                     statItem(title: "Avg Pace", value: workoutManager.formattedPace)
                     if case .cardio(let activityType, _) = workoutManager.workoutMode,
-                       activityType == .walking {
+                       activityType.isStepCountRelevant {
                         statItem(
                             title: "Steps",
                             value: workoutManager.steps > 0
@@ -361,12 +361,14 @@ struct SessionSummaryView: View {
             secondaryMuscles = activityType.secondaryMuscles
         }
 
+        let steps = workoutManager.steps
         let record = ExerciseRecord(
             date: startDate,
             exerciseType: exerciseType,
             duration: sessionDuration,
             calories: activeCalories > 0 ? activeCalories : nil,
             distance: distanceKm > 0 ? distanceKm : nil,
+            stepCount: steps > 0 ? Int(steps) : nil,
             isFromHealthKit: true,
             healthKitWorkoutID: healthKitWorkoutID,
             exerciseDefinitionID: exerciseDefinitionID,

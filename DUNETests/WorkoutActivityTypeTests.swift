@@ -30,6 +30,22 @@ struct WorkoutActivityTypeTests {
         #expect(WorkoutActivityType.boxing.category == .combat)
     }
 
+    @Test("Step count relevant activities")
+    func stepCountRelevant() {
+        #expect(WorkoutActivityType.walking.isStepCountRelevant)
+        #expect(WorkoutActivityType.running.isStepCountRelevant)
+        #expect(WorkoutActivityType.hiking.isStepCountRelevant)
+        #expect(WorkoutActivityType.stepTraining.isStepCountRelevant)
+    }
+
+    @Test("Non-step activities are not step count relevant")
+    func nonStepNotRelevant() {
+        #expect(!WorkoutActivityType.cycling.isStepCountRelevant)
+        #expect(!WorkoutActivityType.swimming.isStepCountRelevant)
+        #expect(!WorkoutActivityType.stairClimbing.isStepCountRelevant)
+        #expect(!WorkoutActivityType.yoga.isStepCountRelevant)
+    }
+
     @Test("typeName returns readable name")
     func typeNameReadable() {
         #expect(WorkoutActivityType.running.typeName == "Running")
