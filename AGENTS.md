@@ -92,6 +92,7 @@ A skill is a set of local instructions to follow that is stored in a `SKILL.md` 
 - /Users/shanks/work/Health/.claude/rules/documentation-standards.md
 - /Users/shanks/work/Health/.claude/rules/healthkit-patterns.md
 - /Users/shanks/work/Health/.claude/rules/input-validation.md
+- /Users/shanks/work/Health/.claude/rules/localization.md
 - /Users/shanks/work/Health/.claude/rules/swift-layer-boundaries.md
 - /Users/shanks/work/Health/.claude/rules/swiftdata-cloudkit.md
 - /Users/shanks/work/Health/.claude/rules/testing-required.md
@@ -104,6 +105,7 @@ A skill is a set of local instructions to follow that is stored in a `SKILL.md` 
 - 사용자가 특정 agent 이름(예: `reviewer-security`, `swift-ui-expert`)을 직접 언급하면 해당 `.claude/agents/{name}.md`를 우선 적용합니다.
 - "리뷰해줘/품질 검토/출시 전 점검" 요청은 `review` + `app-quality-gate` 조합을 기본으로 사용합니다.
 - UI 변경 작업은 `ui-testing`과 `swift-ui-expert`를 자동 후보로 평가합니다.
+- 다국어/i18n/localization/번역 문자열 변경 요청은 `.claude/rules/localization.md`를 반드시 참조합니다.
 - 테스트 추가/수정 요청은 `testing-patterns`를 반드시 참조합니다.
 
 ## Claude Metadata Compatibility
