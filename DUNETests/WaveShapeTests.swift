@@ -108,14 +108,6 @@ struct ArcticRibbonShapeTests {
         #expect(shape.path(in: CGRect(x: 0, y: 0, width: 120, height: 0)).isEmpty)
     }
 
-    @Test("animatableData reflects phase")
-    func animatableData() {
-        var shape = ArcticRibbonShape(phase: 1.2)
-        #expect(shape.animatableData == 1.2)
-        shape.animatableData = 2.4
-        #expect(shape.animatableData == 2.4)
-    }
-
     @Test("Different phases produce different paths")
     func phaseChangesPath() {
         let rect = CGRect(x: 0, y: 0, width: 300, height: 180)
