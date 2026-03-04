@@ -46,6 +46,16 @@ final class NotificationInboxManager: @unchecked Sendable {
         store.unreadCount()
     }
 
+    /// Synchronizes the system app-icon badge with the current unread count
+    /// and removes delivered notifications when the inbox is fully read.
+    func syncBadge() {
+        let unreadCount = store.unreadCount()
+        badgeUpdater(unreadCount)
+        if unreadCount == 0 {
+            UNUserNotificationCenter.current().removeAllDeliveredNotifications()
+        }
+    }
+
     @discardableResult
     func recordSentInsight(_ insight: HealthInsight) -> NotificationInboxItem {
         let item = store.append(insight: insight)
