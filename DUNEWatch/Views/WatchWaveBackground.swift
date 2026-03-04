@@ -102,12 +102,13 @@ struct WatchWaveBackground: View {
     private var isSakura: Bool { theme == .sakuraCalm }
     private var isArctic: Bool { theme == .arcticDawn }
     private var isSolar: Bool { theme == .solarPop }
+    private var isShanks: Bool { theme == .shanksRed }
 
     var body: some View {
         let resolvedColor = color ?? theme.accentColor
-        let baseWaveColor: Color = isArctic ? Color("ArcticDeep") : resolvedColor
-        let gradientTop = (isArctic ? Color("ArcticDeep") : resolvedColor)
-            .opacity(isSakura ? 0.22 : (isArctic ? 0.30 : (isSolar ? 0.34 : DS.Opacity.light)))
+        let baseWaveColor: Color = isArctic ? Color("ArcticDeep") : (isShanks ? Color("ShanksDeep") : resolvedColor)
+        let gradientTop = (isArctic ? Color("ArcticDeep") : (isShanks ? Color("ShanksDeep") : resolvedColor))
+            .opacity(isSakura ? 0.22 : (isArctic ? 0.30 : (isSolar ? 0.34 : (isShanks ? 0.32 : DS.Opacity.light))))
         let secondaryTop: Color = {
             if isSakura {
                 return Color("SakuraIvory").opacity(0.14)
@@ -118,6 +119,9 @@ struct WatchWaveBackground: View {
             if isSolar {
                 return Color("SolarAccent").opacity(0.18)
             }
+            if isShanks {
+                return Color("ShanksCore").opacity(0.20)
+            }
             return .clear
         }()
         let tertiaryTop: Color = {
@@ -127,6 +131,9 @@ struct WatchWaveBackground: View {
             if isSolar {
                 return Color("SolarCore").opacity(0.13)
             }
+            if isShanks {
+                return Color("ShanksGlow").opacity(0.14)
+            }
             return .clear
         }()
         let quaternaryTop: Color = {
@@ -135,6 +142,9 @@ struct WatchWaveBackground: View {
             }
             if isSolar {
                 return Color("SolarEmber").opacity(0.09)
+            }
+            if isShanks {
+                return Color("ShanksBronze").opacity(0.08)
             }
             return .clear
         }()
@@ -146,7 +156,7 @@ struct WatchWaveBackground: View {
                 phase: phase,
                 verticalOffset: isArctic ? 0.62 : WatchWaveDefaults.verticalOffset
             )
-            .fill(baseWaveColor.opacity(isSakura ? 0.26 : (isArctic ? 0.30 : (isSolar ? 0.30 : DS.Opacity.medium))))
+            .fill(baseWaveColor.opacity(isSakura ? 0.26 : (isArctic ? 0.30 : (isSolar ? 0.30 : (isShanks ? 0.28 : DS.Opacity.medium)))))
             .mask {
                 LinearGradient(
                     stops: [

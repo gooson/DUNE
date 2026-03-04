@@ -132,6 +132,7 @@ struct TabWaveBackground: View {
             case .sakuraCalm:  SakuraTabWaveBackground()
             case .arcticDawn:  ArcticTabWaveBackground()
             case .solarPop:    SolarTabWaveBackground()
+            case .shanksRed:   ShanksTabWaveBackground()
             case .hanok:       HanokTabWaveBackground()
             }
         }
@@ -154,6 +155,7 @@ struct DetailWaveBackground: View {
             case .sakuraCalm:  SakuraDetailWaveBackground()
             case .arcticDawn:  ArcticDetailWaveBackground()
             case .solarPop:    SolarDetailWaveBackground()
+            case .shanksRed:   ShanksDetailWaveBackground()
             case .hanok:       HanokDetailWaveBackground()
             }
         }
@@ -176,6 +178,7 @@ struct SheetWaveBackground: View {
             case .sakuraCalm:  SakuraSheetWaveBackground()
             case .arcticDawn:  ArcticSheetWaveBackground()
             case .solarPop:    SolarSheetWaveBackground()
+            case .shanksRed:   ShanksSheetWaveBackground()
             case .hanok:       HanokSheetWaveBackground()
             }
         }

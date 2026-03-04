@@ -18,6 +18,8 @@ extension AppTheme {
             "Arctic"
         case .solarPop:
             "Solar"
+        case .shanksRed:
+            "Shanks"
         case .hanok:
             "Hanok"
         }
@@ -168,6 +170,19 @@ extension AppTheme {
     var solarGlowColor: Color { Color("SolarGlow") }
 }
 
+// MARK: - Shanks Wave-Specific Colors
+
+extension AppTheme {
+    /// Deep dark layer (back) — pirate flag black.
+    var shanksDeepColor: Color { Color("ShanksDeep") }
+
+    /// Core crimson layer (mid) — blood red.
+    var shanksCoreColor: Color { Color("ShanksCore") }
+
+    /// Bright scarlet layer (front) — red hair glow.
+    var shanksGlowColor: Color { Color("ShanksGlow") }
+}
+
 // MARK: - Hanok Wave-Specific Colors
 
 extension AppTheme {
@@ -282,7 +297,7 @@ extension AppTheme {
     /// Whether this theme uses a glass-style card border with custom surface gradients.
     var usesGlassBorder: Bool {
         switch self {
-        case .sakuraCalm, .arcticDawn, .solarPop, .hanok: true
+        case .sakuraCalm, .arcticDawn, .solarPop, .hanok, .shanksRed: true
         case .desertWarm, .oceanCool, .forestGreen: false
         }
     }
@@ -307,6 +322,7 @@ extension AppTheme {
         case .sakuraCalm:  String(localized: "Sakura Calm")
         case .arcticDawn:  String(localized: "Arctic Dawn")
         case .solarPop:    String(localized: "Solar Pop")
+        case .shanksRed:   String(localized: "Shanks Red")
         case .hanok:       String(localized: "Hanok")
         }
     }
