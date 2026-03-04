@@ -75,6 +75,35 @@ struct CardioSessionViewModelTests {
         func fetchStepsCollection(start: Date, end: Date, interval: DateComponents) async throws -> [(date: Date, sum: Double)] { [] }
     }
 
+    private actor MockVitalsService: VitalsQuerying {
+        var vo2MaxValue: Double?
+        var shouldThrow = false
+
+        init(vo2MaxValue: Double? = nil) {
+            self.vo2MaxValue = vo2MaxValue
+        }
+
+        func setThrow(_ value: Bool) {
+            shouldThrow = value
+        }
+
+        func fetchLatestSpO2(withinDays days: Int) async throws -> VitalSample? { nil }
+        func fetchLatestRespiratoryRate(withinDays days: Int) async throws -> VitalSample? { nil }
+        func fetchLatestVO2Max(withinDays days: Int) async throws -> VitalSample? {
+            if shouldThrow { throw HealthKitError.queryFailed("mock") }
+            guard let value = vo2MaxValue else { return nil }
+            return VitalSample(value: value, date: Date())
+        }
+        func fetchLatestHeartRateRecovery(withinDays days: Int) async throws -> VitalSample? { nil }
+        func fetchLatestWristTemperature(withinDays days: Int) async throws -> VitalSample? { nil }
+        func fetchSpO2Collection(days: Int) async throws -> [VitalSample] { [] }
+        func fetchRespiratoryRateCollection(days: Int) async throws -> [VitalSample] { [] }
+        func fetchVO2MaxHistory(days: Int) async throws -> [VitalSample] { [] }
+        func fetchHeartRateRecoveryHistory(days: Int) async throws -> [VitalSample] { [] }
+        func fetchWristTemperatureCollection(days: Int) async throws -> [VitalSample] { [] }
+        func fetchWristTemperatureBaseline(days: Int) async throws -> Double? { nil }
+    }
+
     // MARK: - Helpers
 
     private func makeExercise(
@@ -102,7 +131,8 @@ struct CardioSessionViewModelTests {
         activityType: WorkoutActivityType = .running,
         locationService: MockLocationTrackingService? = nil,
         motionService: MockMotionTrackingService? = nil,
-        stepsService: StepsQuerying? = nil
+        stepsService: StepsQuerying? = nil,
+        vitalsService: VitalsQuerying? = nil
     ) -> CardioSessionViewModel {
         let exercise = makeExercise(id: id, name: name)
         let location = locationService ?? MockLocationTrackingService()
@@ -113,7 +143,8 @@ struct CardioSessionViewModelTests {
             isOutdoor: isOutdoor,
             locationService: location,
             motionService: motion,
-            stepsService: stepsService
+            stepsService: stepsService,
+            vitalsService: vitalsService
         )
     }
 
@@ -349,5 +380,46 @@ struct CardioSessionViewModelTests {
         await vm.end()
 
         #expect(vm.walkingStepCount == 250)
+    }
+
+    // MARK: - Cardio Fitness (VO2 Max)
+
+    @Test("Record includes cardioFitnessVO2Max when available")
+    func recordIncludesVO2Max() async {
+        let vitals = MockVitalsService(vo2MaxValue: 42.5)
+        let vm = makeVM(isOutdoor: false, vitalsService: vitals)
+        vm.start()
+        try? await Task.sleep(for: .milliseconds(200))
+        await vm.end()
+
+        #expect(vm.cardioFitnessVO2Max == 42.5)
+        let record = vm.createExerciseRecord()
+        #expect(record?.cardioFitnessVO2Max == 42.5)
+    }
+
+    @Test("Record cardioFitnessVO2Max is nil when not available")
+    func recordVO2MaxNilWhenUnavailable() async {
+        let vitals = MockVitalsService(vo2MaxValue: nil)
+        let vm = makeVM(isOutdoor: false, vitalsService: vitals)
+        vm.start()
+        try? await Task.sleep(for: .milliseconds(200))
+        await vm.end()
+
+        #expect(vm.cardioFitnessVO2Max == nil)
+        let record = vm.createExerciseRecord()
+        #expect(record?.cardioFitnessVO2Max == nil)
+    }
+
+    @Test("VO2Max fetch failure does not block session end")
+    func vo2MaxFetchFailureNonBlocking() async {
+        let vitals = MockVitalsService()
+        await vitals.setThrow(true)
+        let vm = makeVM(isOutdoor: false, vitalsService: vitals)
+        vm.start()
+        try? await Task.sleep(for: .milliseconds(200))
+        await vm.end()
+
+        #expect(vm.state == .finished)
+        #expect(vm.cardioFitnessVO2Max == nil)
     }
 }

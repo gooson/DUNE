@@ -16,6 +16,8 @@ struct CardioSessionRecord: Sendable {
     let estimatedCalories: Double
     let metValue: Double
     let startDate: Date
+    /// VO2 Max (cardio fitness) from HealthKit at workout time (ml/kg/min).
+    let cardioFitnessVO2Max: Double?
 }
 
 /// Manages state for an iOS cardio live tracking session.
@@ -51,6 +53,8 @@ final class CardioSessionViewModel {
     private(set) var estimatedCalories: Double = 0
     private(set) var heartRate: Double = 0
     private(set) var walkingStepCount: Double = 0
+    /// Latest VO2 Max (cardio fitness) fetched from HealthKit (ml/kg/min).
+    private(set) var cardioFitnessVO2Max: Double?
     var errorMessage: String?
 
     /// Formatted elapsed time "M:SS" or "H:MM:SS".
@@ -106,6 +110,7 @@ final class CardioSessionViewModel {
     private let motionService: MotionTrackingServiceProtocol
     private let calorieService: CalorieEstimating
     private let stepsService: StepsQuerying?
+    private let vitalsService: VitalsQuerying?
     private var timerTask: Task<Void, Never>?
     private var pausedAccumulated: TimeInterval = 0
     private var lastResumeDate: Date?
@@ -125,7 +130,8 @@ final class CardioSessionViewModel {
         locationService: LocationTrackingServiceProtocol? = nil,
         motionService: MotionTrackingServiceProtocol? = nil,
         calorieService: CalorieEstimating = CalorieEstimationService(),
-        stepsService: StepsQuerying? = nil
+        stepsService: StepsQuerying? = nil,
+        vitalsService: VitalsQuerying? = nil
     ) {
         self.exercise = exercise
         self.activityType = activityType
@@ -136,6 +142,7 @@ final class CardioSessionViewModel {
         self.stepsService = activityType == .walking
             ? (stepsService ?? StepsQueryService(manager: .shared))
             : nil
+        self.vitalsService = vitalsService ?? VitalsQueryService(manager: .shared)
     }
 
     // MARK: - Session Lifecycle
@@ -228,6 +235,7 @@ final class CardioSessionViewModel {
         if activityType == .walking {
             await refreshWalkingSteps(force: true)
         }
+        await fetchCardioFitness()
         state = .finished
     }
 
@@ -351,6 +359,19 @@ final class CardioSessionViewModel {
         estimatedCalories = calories ?? 0
     }
 
+    private func fetchCardioFitness() async {
+        guard let vitalsService else { return }
+        do {
+            let sample = try await vitalsService.fetchLatestVO2Max(withinDays: 30)
+            if let sample {
+                cardioFitnessVO2Max = sample.value
+            }
+        } catch {
+            // VO2Max is optional — keep nil on failure.
+            AppLogger.healthKit.warning("[CardioSession] VO2Max fetch failed: \(error)")
+        }
+    }
+
     private func resetLiveMetrics() {
         elapsedSeconds = 0
         totalDistanceMeters = 0
@@ -363,6 +384,7 @@ final class CardioSessionViewModel {
         estimatedCalories = 0
         heartRate = 0
         walkingStepCount = 0
+        cardioFitnessVO2Max = nil
     }
 
     private func establishWalkingStepBaseline() async {
@@ -433,7 +455,8 @@ final class CardioSessionViewModel {
             floorsAscended: safeFloors,
             estimatedCalories: estimatedCalories,
             metValue: exercise.metValue,
-            startDate: startDate
+            startDate: startDate,
+            cardioFitnessVO2Max: cardioFitnessVO2Max
         )
     }
 }

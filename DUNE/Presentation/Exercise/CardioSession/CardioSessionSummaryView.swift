@@ -108,15 +108,29 @@ struct CardioSessionSummaryView: View {
                 )
             }
 
-            if viewModel.totalElevationGainMeters > 0 {
+            if viewModel.totalElevationGainMeters > 0 || viewModel.cardioFitnessVO2Max != nil {
                 HStack(spacing: DS.Spacing.md) {
-                    summaryCard(
-                        title: String(localized: "Elevation Gain"),
-                        value: "\(Int(viewModel.totalElevationGainMeters)) m",
-                        icon: "mountain.2.fill",
-                        color: DS.Color.positive
-                    )
-                    Color.clear.frame(maxWidth: .infinity)
+                    if viewModel.totalElevationGainMeters > 0 {
+                        summaryCard(
+                            title: String(localized: "Elevation Gain"),
+                            value: "\(Int(viewModel.totalElevationGainMeters)) m",
+                            icon: "mountain.2.fill",
+                            color: DS.Color.positive
+                        )
+                    }
+
+                    if let vo2Max = viewModel.cardioFitnessVO2Max {
+                        summaryCard(
+                            title: String(localized: "Cardio Fitness"),
+                            value: String(format: "%.1f", vo2Max),
+                            icon: "heart.circle.fill",
+                            color: DS.Color.heartRate
+                        )
+                    }
+
+                    if viewModel.totalElevationGainMeters <= 0 || viewModel.cardioFitnessVO2Max == nil {
+                        Color.clear.frame(maxWidth: .infinity)
+                    }
                 }
             }
         }
@@ -187,7 +201,8 @@ struct CardioSessionSummaryView: View {
             secondaryMuscles: exercise.secondaryMuscles,
             equipment: exercise.equipment,
             estimatedCalories: data.estimatedCalories,
-            calorieSource: .met
+            calorieSource: .met,
+            cardioFitnessVO2Max: data.cardioFitnessVO2Max
         )
 
         modelContext.insert(record)
