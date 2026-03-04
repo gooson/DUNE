@@ -25,7 +25,14 @@ enum WatchWorkoutWriter {
         calories: Double?
     ) async -> String? {
         guard duration > 0, duration <= 28800 else {
-            logger.warning("Invalid duration \(duration) for \(exerciseName)")
+            logger.warning("Invalid duration \(duration, privacy: .private) for exercise")
+            return nil
+        }
+
+        // Verify HealthKit write authorization (mirrors WorkoutWriteService guard)
+        let authStatus = healthStore.authorizationStatus(for: HKObjectType.workoutType())
+        guard authStatus == .sharingAuthorized else {
+            logger.warning("HealthKit workout write not authorized")
             return nil
         }
 
@@ -63,14 +70,14 @@ enum WatchWorkoutWriter {
             try await builder.endCollection(at: endDate)
 
             guard let workout = try await builder.finishWorkout() else {
-                logger.error("Builder returned nil for \(exerciseName)")
+                logger.error("Builder returned nil for exercise")
                 return nil
             }
 
-            logger.info("Saved individual workout '\(exerciseName)' → \(workout.uuid.uuidString)")
+            logger.info("Saved individual workout → \(workout.uuid.uuidString, privacy: .private)")
             return workout.uuid.uuidString
         } catch {
-            logger.error("Failed to save workout '\(exerciseName)': \(error.localizedDescription)")
+            logger.error("Failed to save workout: \(error.localizedDescription, privacy: .private)")
             return nil
         }
     }
