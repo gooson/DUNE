@@ -21,6 +21,7 @@ struct SectionGroup<Content: View>: View {
         case .sakuraCalm: 0.95
         case .arcticDawn: 0.85
         case .solarPop:   0.9
+        case .hanok:      0.85
         case .desertWarm, .oceanCool, .forestGreen: 0.6
         }
     }
@@ -56,6 +57,17 @@ struct SectionGroup<Content: View>: View {
                     Color("SolarGlow").opacity(colorScheme == .dark ? 0.18 : 0.16),
                     Color("SolarCore").opacity(colorScheme == .dark ? 0.15 : 0.12),
                     Color("SolarEmber").opacity(colorScheme == .dark ? 0.11 : 0.06),
+                    .clear
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        case .hanok:
+            LinearGradient(
+                colors: [
+                    Color("HanokAccent").opacity(colorScheme == .dark ? 0.16 : 0.14),
+                    Color("HanokMid").opacity(colorScheme == .dark ? 0.12 : 0.10),
+                    Color("HanokDusk").opacity(colorScheme == .dark ? 0.10 : 0.04),
                     .clear
                 ],
                 startPoint: .topLeading,
@@ -98,6 +110,16 @@ struct SectionGroup<Content: View>: View {
                 startPoint: .top,
                 endPoint: .bottom
             )
+        case .hanok:
+            LinearGradient(
+                colors: [
+                    Color("HanokMist").opacity(colorScheme == .dark ? 0.16 : 0.13),
+                    Color("HanokAccent").opacity(colorScheme == .dark ? 0.09 : 0.08),
+                    .clear
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
         case .desertWarm, .oceanCool, .forestGreen:
             LinearGradient(
                 colors: [theme.accentColor.opacity(0.08), .clear],
@@ -135,6 +157,16 @@ struct SectionGroup<Content: View>: View {
                     Color("SolarGlow").opacity(colorScheme == .dark ? 0.34 : 0.28),
                     Color("SolarAccent").opacity(colorScheme == .dark ? 0.24 : 0.18),
                     Color("SolarDusk").opacity(colorScheme == .dark ? 0.16 : 0.10)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        case .hanok:
+            LinearGradient(
+                colors: [
+                    Color("HanokMist").opacity(colorScheme == .dark ? 0.30 : 0.22),
+                    Color("HanokAccent").opacity(colorScheme == .dark ? 0.20 : 0.14),
+                    Color("HanokDusk").opacity(colorScheme == .dark ? 0.14 : 0.08)
                 ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing

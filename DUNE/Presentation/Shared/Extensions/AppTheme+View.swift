@@ -18,6 +18,8 @@ extension AppTheme {
             "Arctic"
         case .solarPop:
             "Solar"
+        case .hanok:
+            "Hanok"
         }
     }
 
@@ -166,6 +168,19 @@ extension AppTheme {
     var solarGlowColor: Color { Color("SolarGlow") }
 }
 
+// MARK: - Hanok Wave-Specific Colors
+
+extension AppTheme {
+    /// Deep giwa (기와) layer color (back).
+    var hanokDeepColor: Color { Color("HanokDeep") }
+
+    /// Mid changho (창호) layer color.
+    var hanokMidColor: Color { Color("HanokMid") }
+
+    /// Light hanji (한지) mist layer color (front).
+    var hanokMistColor: Color { Color("HanokMist") }
+}
+
 // MARK: - Score Colors
 
 extension AppTheme {
@@ -261,6 +276,18 @@ extension AppTheme {
 }
 #endif
 
+// MARK: - Glass Border Classification
+
+extension AppTheme {
+    /// Whether this theme uses a glass-style card border with custom surface gradients.
+    var usesGlassBorder: Bool {
+        switch self {
+        case .sakuraCalm, .arcticDawn, .solarPop, .hanok: true
+        case .desertWarm, .oceanCool, .forestGreen: false
+        }
+    }
+}
+
 // MARK: - Card Surface
 
 extension AppTheme {
@@ -280,6 +307,7 @@ extension AppTheme {
         case .sakuraCalm:  String(localized: "Sakura Calm")
         case .arcticDawn:  String(localized: "Arctic Dawn")
         case .solarPop:    String(localized: "Solar Pop")
+        case .hanok:       String(localized: "Hanok")
         }
     }
 }

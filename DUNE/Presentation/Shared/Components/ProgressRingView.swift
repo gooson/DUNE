@@ -93,6 +93,8 @@ struct ProgressRingView: View {
         static let arcticAccent06 = Color("ArcticAccent").opacity(0.6)
         // Solar Pop
         static let solarAccent06 = Color("SolarAccent").opacity(0.6)
+        // Hanok
+        static let hanokAccent06 = Color("HanokAccent").opacity(0.6)
 
         static func accentGradientStops(base: Color, tipColor: Color, theme: AppTheme) -> [Gradient.Stop] {
             switch theme {
@@ -133,6 +135,12 @@ struct ProgressRingView: View {
             case .solarPop:
                 return [
                     .init(color: solarAccent06, location: 0),
+                    .init(color: base, location: 0.82),
+                    .init(color: tipColor, location: 1)
+                ]
+            case .hanok:
+                return [
+                    .init(color: hanokAccent06, location: 0),
                     .init(color: base, location: 0.82),
                     .init(color: tipColor, location: 1)
                 ]
