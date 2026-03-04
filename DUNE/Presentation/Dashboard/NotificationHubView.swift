@@ -1,4 +1,148 @@
+import Foundation
 import SwiftUI
+
+enum NotificationHubMetricResolver {
+    private static let firstNumberRegex = try! NSRegularExpression(pattern: #"[-+]?\d+(?:[.,]\d+)*"#)
+    private static let sleepHourMinuteRegex = [
+        try! NSRegularExpression(pattern: #"(\d+)\s*h\s*(\d+)\s*m"#, options: [.caseInsensitive]),
+        try! NSRegularExpression(pattern: #"(\d+)\s*시간\s*(\d+)\s*분"#)
+    ]
+    private static let sleepHourRegex = [
+        try! NSRegularExpression(pattern: #"(\d+)\s*h"#, options: [.caseInsensitive]),
+        try! NSRegularExpression(pattern: #"(\d+)\s*시간"#)
+    ]
+    private static let sleepMinuteRegex = [
+        try! NSRegularExpression(pattern: #"(\d+)\s*m"#, options: [.caseInsensitive]),
+        try! NSRegularExpression(pattern: #"(\d+)\s*분"#)
+    ]
+
+    static func category(for insightType: HealthInsight.InsightType) -> HealthMetric.Category? {
+        switch insightType {
+        case .hrvAnomaly:
+            .hrv
+        case .rhrAnomaly:
+            .rhr
+        case .sleepComplete:
+            .sleep
+        case .stepGoal:
+            .steps
+        case .weightUpdate:
+            .weight
+        case .bodyFatUpdate:
+            .bodyFat
+        case .bmiUpdate:
+            .bmi
+        case .workoutPR:
+            .exercise
+        }
+    }
+
+    static func metric(for item: NotificationInboxItem) -> HealthMetric? {
+        guard let category = category(for: item.insightType) else { return nil }
+
+        let parsedValue = metricValue(for: item)
+        let unit = switch category {
+        case .sleep, .bmi:
+            ""
+        default:
+            category.unitLabel
+        }
+
+        return HealthMetric(
+            id: "notification-\(item.id)",
+            name: category.displayName,
+            value: parsedValue ?? 0,
+            unit: unit,
+            change: nil,
+            date: item.createdAt,
+            category: category,
+            isHistorical: true
+        )
+    }
+
+    private static func metricValue(for item: NotificationInboxItem) -> Double? {
+        switch item.insightType {
+        case .sleepComplete:
+            parseSleepMinutes(in: item.body)
+        case .workoutPR:
+            // Legacy workout notifications might not have route payload.
+            // Keep destination available without guessing a potentially wrong value.
+            nil
+        default:
+            firstNumber(in: item.body)
+        }
+    }
+
+    private static func parseSleepMinutes(in text: String) -> Double? {
+        for regex in sleepHourMinuteRegex {
+            if let pair = integerPair(in: text, with: regex) {
+                return Double(pair.0 * 60 + pair.1)
+            }
+        }
+
+        for regex in sleepHourRegex {
+            if let hours = firstInteger(in: text, with: regex) {
+                return Double(hours * 60)
+            }
+        }
+
+        for regex in sleepMinuteRegex {
+            if let minutes = firstInteger(in: text, with: regex) {
+                return Double(minutes)
+            }
+        }
+
+        return firstNumber(in: text)
+    }
+
+    private static func firstNumber(in text: String) -> Double? {
+        let range = NSRange(text.startIndex..<text.endIndex, in: text)
+        guard let match = firstNumberRegex.firstMatch(in: text, range: range),
+              let numberRange = Range(match.range(at: 0), in: text) else {
+            return nil
+        }
+        return parseNormalizedNumber(String(text[numberRange]))
+    }
+
+    private static func parseNormalizedNumber(_ numberText: String) -> Double? {
+        let normalizedNumberText = numberText.replacingOccurrences(of: " ", with: "")
+
+        if normalizedNumberText.contains("."), normalizedNumberText.contains(",") {
+            return Double(normalizedNumberText.replacingOccurrences(of: ",", with: ""))
+        }
+
+        if normalizedNumberText.contains(",") {
+            let components = normalizedNumberText.split(separator: ",")
+            if components.count == 2, components[1].count <= 2 {
+                return Double(normalizedNumberText.replacingOccurrences(of: ",", with: "."))
+            }
+            return Double(normalizedNumberText.replacingOccurrences(of: ",", with: ""))
+        }
+
+        return Double(normalizedNumberText)
+    }
+
+    private static func integerPair(in text: String, with regex: NSRegularExpression) -> (Int, Int)? {
+        let range = NSRange(text.startIndex..<text.endIndex, in: text)
+        guard let match = regex.firstMatch(in: text, range: range),
+              let firstRange = Range(match.range(at: 1), in: text),
+              let secondRange = Range(match.range(at: 2), in: text),
+              let firstValue = Int(text[firstRange]),
+              let secondValue = Int(text[secondRange]) else {
+            return nil
+        }
+        return (firstValue, secondValue)
+    }
+
+    private static func firstInteger(in text: String, with regex: NSRegularExpression) -> Int? {
+        let range = NSRange(text.startIndex..<text.endIndex, in: text)
+        guard let match = regex.firstMatch(in: text, range: range),
+              let valueRange = Range(match.range(at: 1), in: text) else {
+            return nil
+        }
+        return Int(text[valueRange])
+    }
+}
 
 /// Latest-first notification inbox accessed from the Today tab toolbar.
 struct NotificationHubView: View {
@@ -12,18 +156,19 @@ struct NotificationHubView: View {
     private let inboxManager = NotificationInboxManager.shared
 
     private enum HubDestination: Hashable, Identifiable {
-        case metric(HealthMetric.Category, itemID: String)
+        case metric(HealthMetric, itemID: String)
         case settings
         case unavailable(itemID: String)
 
         var id: String {
             switch self {
-            case .metric(let category, let itemID):
-                "metric-\(category.rawValue)-\(itemID)"
+            case .metric(let metric, let itemID):
+                let category = metric.category
+                return "metric-\(category.rawValue)-\(itemID)"
             case .settings:
-                "settings"
+                return "settings"
             case .unavailable(let itemID):
-                "unavailable-\(itemID)"
+                return "unavailable-\(itemID)"
             }
         }
     }
@@ -53,8 +198,8 @@ struct NotificationHubView: View {
         }
         .navigationDestination(item: $destination) { target in
             switch target {
-            case .metric(let category, _):
-                AllDataView(category: category)
+            case .metric(let metric, _):
+                MetricDetailView(metric: metric)
             case .settings:
                 SettingsView()
             case .unavailable(let itemID):
@@ -78,8 +223,13 @@ struct NotificationHubView: View {
                             .font(.headline)
                             .foregroundStyle(.tint)
 
-                        Text(unreadCount > 0 ? "\(unreadCount.formatted()) unread notifications" : "Inbox is all caught up")
-                            .font(.subheadline.weight(.semibold))
+                        if unreadCount > 0 {
+                            Text("\(unreadCount) unread notifications")
+                                .font(.subheadline.weight(.semibold))
+                        } else {
+                            Text("Inbox is all caught up")
+                                .font(.subheadline.weight(.semibold))
+                        }
 
                         Spacer()
 
@@ -120,7 +270,7 @@ struct NotificationHubView: View {
             EmptyStateView(
                 icon: "bell.slash",
                 title: "No Notifications",
-                message: "알림이 도착하면 여기에 표시됩니다.",
+                message: "Notifications will appear here when they arrive.",
                 actionTitle: "Open Settings",
                 action: { destination = .settings }
             )
@@ -173,8 +323,8 @@ struct NotificationHubView: View {
             return
         }
 
-        if let category = detailCategory(for: opened.insightType) {
-            destination = .metric(category, itemID: opened.id)
+        if let metric = NotificationHubMetricResolver.metric(for: opened) {
+            destination = .metric(metric, itemID: opened.id)
         } else {
             destination = .unavailable(itemID: opened.id)
         }
@@ -252,37 +402,16 @@ struct NotificationHubView: View {
         }
     }
 
-    private func detailCategory(for insightType: HealthInsight.InsightType) -> HealthMetric.Category? {
-        switch insightType {
-        case .hrvAnomaly:
-            .hrv
-        case .rhrAnomaly:
-            .rhr
-        case .sleepComplete:
-            .sleep
-        case .stepGoal:
-            .steps
-        case .weightUpdate:
-            .weight
-        case .bodyFatUpdate:
-            .bodyFat
-        case .bmiUpdate:
-            .bmi
-        case .workoutPR:
-            .exercise
-        }
-    }
-
     private func destinationHint(for item: NotificationInboxItem) -> (title: String, symbol: String) {
         if item.route?.destination == .workoutDetail {
-            return ("Workout Detail", "figure.strengthtraining.traditional")
+            return (String(localized: "Workout Detail"), "figure.strengthtraining.traditional")
         }
 
-        guard let category = detailCategory(for: item.insightType) else {
-            return ("Notification Detail", "arrow.triangle.branch")
+        guard let category = NotificationHubMetricResolver.category(for: item.insightType) else {
+            return (String(localized: "Notification Detail"), "arrow.triangle.branch")
         }
 
-        return ("\(category.englishDisplayName) Detail", category.iconName)
+        return (String(localized: "\(category.displayName) Detail"), category.iconName)
     }
 
     private func iconTint(for type: HealthInsight.InsightType) -> Color {
@@ -311,8 +440,8 @@ private struct NotificationDestinationUnavailableView: View {
         EmptyStateView(
             icon: "arrow.triangle.branch",
             title: "Destination Unavailable",
-            message: "이 알림의 이동 대상 정보를 찾을 수 없습니다. 설정에서 알림 구성을 확인하세요.",
-            actionTitle: "Back",
+            message: "Could not find where this notification should open. Check your notification settings.",
+            actionTitle: "Go Back",
             action: {
                 dismiss()
             }

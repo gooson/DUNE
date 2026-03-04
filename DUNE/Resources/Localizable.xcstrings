@@ -876,6 +876,22 @@
         }
       }
     },
+    "%@ Detail": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ 詳細"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ 상세"
+          }
+        }
+      }
+    },
     "%lld badges": {
       "extractionState": "manual",
       "localizations": {
@@ -923,6 +939,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "주간 목표까지 %lld일 남았습니다. 짧은 운동도 좋으니 마무리 잘 해보세요!"
+          }
+        }
+      }
+    },
+    "%lld unread notifications": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未読の通知%lld件"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "읽지 않은 알림 %lld개"
           }
         }
       }
@@ -4949,6 +4981,22 @@
         }
       }
     },
+    "Could not find where this notification should open. Check your notification settings.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この通知の遷移先が見つかりません。通知設定を確認してください。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 알림을 열 위치를 찾을 수 없습니다. 알림 설정을 확인하세요."
+          }
+        }
+      }
+    },
     "Count": {
       "extractionState": "manual",
       "localizations": {
@@ -5570,6 +5618,38 @@
         }
       }
     },
+    "Delete All": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "すべて削除"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "전체 삭제"
+          }
+        }
+      }
+    },
+    "Delete all notifications?": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "すべての通知を削除しますか？"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "모든 알림을 삭제할까요?"
+          }
+        }
+      }
+    },
     "Delete Record?": {
       "extractionState": "manual",
       "localizations": {
@@ -5583,6 +5663,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "기록을 삭제할까요?"
+          }
+        }
+      }
+    },
+    "Destination Unavailable": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "移動先なし"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이동 대상 없음"
           }
         }
       }
@@ -7847,6 +7943,22 @@
         }
       }
     },
+    "Go Back": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "戻る"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "돌아가기"
+          }
+        }
+      }
+    },
     "Goal": {
       "extractionState": "manual",
       "localizations": {
@@ -9325,6 +9437,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "실내 추천"
+          }
+        }
+      }
+    },
+    "Inbox is all caught up": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "受信トレイはすべて確認済みです"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "받은 알림을 모두 확인했어요"
           }
         }
       }
@@ -12473,6 +12601,70 @@
         }
       }
     },
+    "No Notifications": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "通知なし"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "알림 없음"
+          }
+        }
+      }
+    },
+    "Notification Detail": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "通知詳細"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "알림 상세"
+          }
+        }
+      }
+    },
+    "Notification Settings": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "通知設定"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "알림 설정"
+          }
+        }
+      }
+    },
+    "Notifications will appear here when they arrive.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "通知が届くとここに表示されます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "알림이 도착하면 여기에 표시됩니다."
+          }
+        }
+      }
+    },
     "Notifications": {
       "extractionState": "manual",
       "localizations": {
@@ -13684,6 +13876,38 @@
           "stringUnit": {
             "state": "translated",
             "value": "준비도"
+          }
+        }
+      }
+    },
+    "Read": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "既読"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "읽음"
+          }
+        }
+      }
+    },
+    "Read All": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "すべて既読"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "모두 읽음"
           }
         }
       }
@@ -17372,7 +17596,22 @@
         }
       }
     },
-    "This action removes every notification from your inbox.": {},
+    "This action removes every notification from your inbox.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この操作を行うと受信トレイ内の通知がすべて削除されます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 작업을 하면 받은 알림이 모두 삭제돼요."
+          }
+        }
+      }
+    },
     "This injury may have been deleted.": {
       "localizations": {
         "ja": {
@@ -18434,6 +18673,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "되돌리기"
+          }
+        }
+      }
+    },
+    "Unread": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未読"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "읽지 않음"
           }
         }
       }
@@ -19936,6 +20191,22 @@
         }
       }
     },
+    "Workout Detail": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ワークアウト詳細"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "운동 상세"
+          }
+        }
+      }
+    },
     "Workout 5x": {
       "extractionState": "stale",
       "localizations": {
@@ -20746,7 +21017,7 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "深刻な不足"
+            "value": "深刻な負債"
           }
         },
         "ko": {
