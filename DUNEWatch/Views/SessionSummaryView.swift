@@ -281,9 +281,12 @@ struct SessionSummaryView: View {
             return
         }
 
-        // Wait for HKWorkout finalization to reduce `healthKitWorkoutID = nil` race on Watch saves.
+        // Wait for HKWorkout finalization (builder discard for strength).
         await workoutManager.waitForWorkoutFinalization()
-        saveWorkoutRecords(healthKitWorkoutID: workoutManager.healthKitWorkoutUUID)
+
+        // Save individual HKWorkout per exercise and collect UUIDs.
+        let perExerciseIDs = await saveIndividualHealthKitWorkouts()
+        saveWorkoutRecords(perExerciseHealthKitIDs: perExerciseIDs)
 
         // Explicit save before reset — reset() triggers view transition
         // which can prevent SwiftData auto-save from flushing.
@@ -304,8 +307,34 @@ struct SessionSummaryView: View {
         workoutManager.reset()
     }
 
+    /// Creates individual HKWorkout per exercise via non-live HKWorkoutBuilder.
+    /// Returns a dictionary mapping exercise index → HealthKit workout UUID.
+    private func saveIndividualHealthKitWorkouts() async -> [Int: String] {
+        guard let template = workoutManager.templateSnapshot else { return [:] }
+        let activeCount = Double(Swift.max(completedSetsData.filter { !$0.isEmpty }.count, 1))
+        let sessionDuration = Swift.max(endDate.timeIntervalSince(startDate), 1)
+        let durationPerExercise = sessionDuration / activeCount
+        let caloriesPerExercise = activeCalories > 0 ? activeCalories / activeCount : nil
+
+        var ids: [Int: String] = [:]
+        for (index, setsData) in completedSetsData.enumerated() {
+            guard index < template.entries.count, !setsData.isEmpty else { continue }
+            let entry = template.entries[index]
+            if let uuid = await WatchWorkoutWriter.saveIndividualWorkout(
+                healthStore: workoutManager.healthStore,
+                exerciseName: entry.exerciseName,
+                startDate: startDate,
+                duration: durationPerExercise,
+                calories: caloriesPerExercise
+            ) {
+                ids[index] = uuid
+            }
+        }
+        return ids
+    }
+
     /// Persist ExerciseRecord + WorkoutSet to SwiftData for each exercise in the session.
-    private func saveWorkoutRecords(healthKitWorkoutID: String?) {
+    private func saveWorkoutRecords(perExerciseHealthKitIDs: [Int: String]) {
         guard let template = workoutManager.templateSnapshot else { return }
         let sessionDuration = Swift.max(endDate.timeIntervalSince(startDate), 1)
         let activeExerciseCount = Double(Swift.max(completedSetsData.filter { !$0.isEmpty }.count, 1))
@@ -320,7 +349,7 @@ struct SessionSummaryView: View {
                 exerciseType: entry.exerciseName,
                 duration: sessionDuration / activeExerciseCount,
                 calories: activeCalories > 0 ? activeCalories / activeExerciseCount : nil,
-                healthKitWorkoutID: healthKitWorkoutID,
+                healthKitWorkoutID: perExerciseHealthKitIDs[exerciseIndex],
                 exerciseDefinitionID: entry.exerciseDefinitionID,
                 calorieSource: activeCalories > 0 ? .healthKit : .manual,
                 rpe: effort
