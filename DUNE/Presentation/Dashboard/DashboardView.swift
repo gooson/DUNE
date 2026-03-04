@@ -180,6 +180,9 @@ struct DashboardView: View {
         .task {
             reloadUnreadCount()
         }
+        .onAppear {
+            reloadUnreadCount()
+        }
         .onReceive(NotificationCenter.default.publisher(for: NotificationInboxManager.inboxDidChangeNotification)) { _ in
             reloadUnreadCount()
         }

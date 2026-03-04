@@ -1,4 +1,5 @@
 import Foundation
+import UserNotifications
 
 struct NotificationNavigationRequest: Sendable, Equatable {
     let itemID: String
@@ -19,11 +20,22 @@ final class NotificationInboxManager: @unchecked Sendable {
     }
 
     private let store: NotificationInboxStore
+    private let badgeUpdater: @Sendable (Int) -> Void
     private let queue = DispatchQueue(label: "com.dune.notification-inbox-manager")
     private var pendingNavigationRequest: NotificationNavigationRequest?
 
-    init(store: NotificationInboxStore = .shared) {
+    init(
+        store: NotificationInboxStore = .shared,
+        badgeUpdater: @escaping @Sendable (Int) -> Void = { count in
+            UNUserNotificationCenter.current().setBadgeCount(count) { error in
+                if let error {
+                    AppLogger.notification.error("[NotificationInboxManager] Failed to sync badge count: \(error.localizedDescription)")
+                }
+            }
+        }
+    ) {
         self.store = store
+        self.badgeUpdater = badgeUpdater
     }
 
     func items() -> [NotificationInboxItem] {
@@ -145,8 +157,10 @@ final class NotificationInboxManager: @unchecked Sendable {
     }
 
     private func postInboxDidChange() {
+        let unreadCount = store.unreadCount()
         Task { @MainActor in
             NotificationCenter.default.post(name: Self.inboxDidChangeNotification, object: nil)
+            badgeUpdater(unreadCount)
         }
     }
 
