@@ -159,6 +159,7 @@ final class BackgroundNotificationEvaluator: Sendable {
         let totalMinutes = asleepSamples.reduce(0.0) {
             $0 + $1.endDate.timeIntervalSince($1.startDate) / 60.0
         }
+        guard totalMinutes > 0 else { return nil }
         return EvaluateHealthInsightUseCase.evaluateSleepComplete(totalMinutes: totalMinutes)
     }
 
