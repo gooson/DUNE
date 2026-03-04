@@ -4,6 +4,7 @@ import Foundation
 struct NotificationRoute: Codable, Sendable, Hashable {
     enum Destination: String, Codable, Sendable {
         case workoutDetail
+        case notificationHub
     }
 
     let destination: Destination
@@ -12,6 +13,8 @@ struct NotificationRoute: Codable, Sendable, Hashable {
     static func workoutDetail(workoutID: String) -> NotificationRoute {
         NotificationRoute(destination: .workoutDetail, workoutID: workoutID)
     }
+
+    static let notificationHub = NotificationRoute(destination: .notificationHub, workoutID: nil)
 }
 
 /// Persisted alert item shown in NotificationHubView.

@@ -20,11 +20,14 @@ struct DashboardView: View {
     ]
 
     private let refreshSignal: Int
+    private let notificationHubSignal: Int
+    @State private var showNotificationHub = false
 
-    init(sharedHealthDataService: SharedHealthDataService? = nil, scrollToTopSignal: Int = 0, refreshSignal: Int = 0) {
+    init(sharedHealthDataService: SharedHealthDataService? = nil, scrollToTopSignal: Int = 0, refreshSignal: Int = 0, notificationHubSignal: Int = 0) {
         _viewModel = State(initialValue: DashboardViewModel(sharedHealthDataService: sharedHealthDataService))
         self.scrollToTopSignal = scrollToTopSignal
         self.refreshSignal = refreshSignal
+        self.notificationHubSignal = notificationHubSignal
     }
 
     var body: some View {
@@ -219,6 +222,13 @@ struct DashboardView: View {
                 .accessibilityLabel("Settings")
                 .accessibilityIdentifier("dashboard-toolbar-settings")
             }
+        }
+        .navigationDestination(isPresented: $showNotificationHub) {
+            NotificationHubView()
+        }
+        .onChange(of: notificationHubSignal) { _, newValue in
+            guard newValue > 0 else { return }
+            showNotificationHub = true
         }
     }
 

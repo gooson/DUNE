@@ -114,6 +114,9 @@ final class NotificationInboxManager: @unchecked Sendable {
                 emitNavigationRequest(.init(itemID: itemID, route: route))
                 return
             }
+            // Non-routed notification (sleep, HRV, etc.) — navigate to hub
+            emitNavigationRequest(.init(itemID: itemID, route: .notificationHub))
+            return
         }
 
         guard let route = parseRoute(userInfo: userInfo) else { return }
@@ -134,6 +137,8 @@ final class NotificationInboxManager: @unchecked Sendable {
             if let workoutID = route.workoutID, !workoutID.isEmpty {
                 userInfo[UserInfoKeys.workoutID] = workoutID
             }
+        case .notificationHub:
+            break // Hub route is resolved at navigation time; no payload needed in userInfo
         }
         return userInfo
     }
