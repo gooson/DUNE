@@ -5,6 +5,7 @@ struct SleepDeficitGaugeView: View {
     let analysis: SleepDeficitAnalysis
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var animatedProgress: Double = 0
 
     // Max deficit for gauge scale (10 hours in minutes)
@@ -12,6 +13,10 @@ struct SleepDeficitGaugeView: View {
 
     private var progress: Double {
         min(analysis.weeklyDeficit / maxDeficitMinutes, 1.0)
+    }
+
+    private var gaugeWidth: CGFloat {
+        sizeClass == .regular ? 260 : 200
     }
 
     var body: some View {
@@ -49,12 +54,14 @@ struct SleepDeficitGaugeView: View {
                     }
                     .offset(y: 8)
                 }
-                .frame(width: 160, height: 90)
+                .frame(width: gaugeWidth, height: gaugeWidth * 0.56)
+                .frame(maxWidth: .infinity)
 
                 // Averages comparison
                 averagesRow
             }
             .padding(.vertical, DS.Spacing.sm)
+            .frame(maxWidth: .infinity)
         }
         .task {
             if reduceMotion {
