@@ -44,15 +44,16 @@ struct HanokWaveOverlayView: View {
     }
 
     var body: some View {
+        let shape = eaveShape
         ZStack {
-            eaveShape
+            shape
                 .fill(color.opacity(opacity))
                 .bottomFadeMask(bottomFade)
 
             if let crestColor {
                 ZStack {
                     // Wide translucent crest band.
-                    eaveShape
+                    shape
                         .stroke(
                             crestColor.opacity(crestOpacity * 0.48),
                             style: StrokeStyle(lineWidth: crestWidth * 2.6, lineCap: .round, lineJoin: .round)
@@ -60,7 +61,7 @@ struct HanokWaveOverlayView: View {
                         .blur(radius: 1.1)
 
                     // Core crest highlight line.
-                    eaveShape
+                    shape
                         .stroke(
                             crestColor.opacity(crestOpacity),
                             style: StrokeStyle(lineWidth: crestWidth, lineCap: .round, lineJoin: .round)
@@ -86,15 +87,6 @@ struct HanokWaveOverlayView: View {
             guard !reduceMotion, driftDuration > 0 else { return }
             withAnimation(.linear(duration: phaseDuration).repeatForever(autoreverses: false)) {
                 phase = phaseTarget
-            }
-        }
-        .onAppear {
-            guard !reduceMotion, driftDuration > 0 else { return }
-            Task { @MainActor in
-                phase = 0
-                withAnimation(.linear(duration: phaseDuration).repeatForever(autoreverses: false)) {
-                    phase = phaseTarget
-                }
             }
         }
     }

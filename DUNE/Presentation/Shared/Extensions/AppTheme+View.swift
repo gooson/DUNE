@@ -276,6 +276,18 @@ extension AppTheme {
 }
 #endif
 
+// MARK: - Glass Border Classification
+
+extension AppTheme {
+    /// Whether this theme uses a glass-style card border with custom surface gradients.
+    var usesGlassBorder: Bool {
+        switch self {
+        case .sakuraCalm, .arcticDawn, .solarPop, .hanok: true
+        case .desertWarm, .oceanCool, .forestGreen: false
+        }
+    }
+}
+
 // MARK: - Card Surface
 
 extension AppTheme {

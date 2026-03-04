@@ -585,7 +585,7 @@ struct StandardCard<Content: View>: View {
                     .overlay(
                         RoundedRectangle(cornerRadius: cornerRadius)
                             .strokeBorder(
-                                (theme == .sakuraCalm || theme == .arcticDawn || theme == .solarPop || theme == .hanok)
+                                theme.usesGlassBorder
                                     ? GlassCardGradients.cardBorder(for: theme, colorScheme: colorScheme)
                                     : (colorScheme == .dark
                                         ? GlassCardGradients.darkBorder(for: theme)
@@ -628,10 +628,10 @@ struct InlineCard<Content: View>: View {
                     .overlay(
                         RoundedRectangle(cornerRadius: cornerRadius)
                             .strokeBorder(
-                                (theme == .sakuraCalm || theme == .arcticDawn || theme == .solarPop || theme == .hanok)
+                                theme.usesGlassBorder
                                     ? GlassCardGradients.cardBorder(for: theme, colorScheme: colorScheme)
                                     : GlassCardGradients.clearBorder,
-                                lineWidth: (theme == .sakuraCalm || theme == .arcticDawn || theme == .solarPop || theme == .hanok) ? 0.9 : 0
+                                lineWidth: theme.usesGlassBorder ? 0.9 : 0
                             )
                     )
             }
