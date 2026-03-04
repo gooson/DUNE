@@ -194,6 +194,53 @@ struct ArcticAuroraLODTests {
     }
 }
 
+@Suite("ArcticAnimationPhase")
+struct ArcticAnimationPhaseTests {
+    @Test("Phase is zero when duration is zero")
+    func zeroDuration() {
+        let result = ArcticAnimationPhase.phase(elapsed: 10, duration: 0)
+        #expect(result == 0)
+    }
+
+    @Test("Phase is zero at elapsed zero")
+    func elapsedZero() {
+        let result = ArcticAnimationPhase.phase(elapsed: 0, duration: 14)
+        #expect(result == 0)
+    }
+
+    @Test("Phase completes full cycle at duration boundary")
+    func fullCycle() {
+        let duration = 14.0
+        // At elapsed == duration, truncatingRemainder wraps to 0
+        let atBoundary = ArcticAnimationPhase.phase(elapsed: duration, duration: duration)
+        #expect(abs(atBoundary) < 0.001)
+    }
+
+    @Test("Phase at half duration is approximately pi")
+    func halfCycle() {
+        let duration = 18.0
+        let result = ArcticAnimationPhase.phase(elapsed: duration / 2, duration: duration)
+        #expect(abs(result - .pi) < 0.001)
+    }
+
+    @Test("Reverse produces negative phase")
+    func reverseDirection() {
+        let result = ArcticAnimationPhase.phase(elapsed: 5, duration: 20, reverse: true)
+        #expect(result < 0)
+        let forward = ArcticAnimationPhase.phase(elapsed: 5, duration: 20, reverse: false)
+        #expect(abs(result + forward) < 0.001)
+    }
+
+    @Test("Phase stays within [0, 2π) for forward direction")
+    func phaseRange() {
+        for elapsed in stride(from: 0.0, through: 100.0, by: 3.7) {
+            let p = ArcticAnimationPhase.phase(elapsed: elapsed, duration: 14)
+            #expect(p >= 0)
+            #expect(p < 2 * .pi + 0.001)
+        }
+    }
+}
+
 @Suite("SolarFlareShape Geometry")
 struct SolarFlareShapeTests {
     @Test("Path is non-empty for valid rect")
