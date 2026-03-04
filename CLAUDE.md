@@ -161,6 +161,7 @@
 - **Watch 루틴 템플릿은 CloudKit-only 의존 금지**: `WorkoutTemplate` primary는 유지하되 WatchConnectivity fallback DTO/병합(local 우선)으로 가시성 공백 방지 (#195)
 - **watchOS nested TabView 금지**: horizontal(outer)+vertical(inner) 중첩은 제스처 충돌/Crown 라우팅 미정의. flat 수평 TabView 사용 (#197)
 - **Watch saveCardioRecord에 수집된 모든 metric 전달 확인**: `WorkoutManager`가 수집하는 값(steps, floors 등)이 `ExerciseRecord` init에 빠짐없이 전달되는지 점검 (#198)
+- **Watch strength 템플릿: `discardWorkout()` + 개별 HKWorkout 생성**: HKLiveWorkoutBuilder는 단일 HKWorkout만 생성하므로, strength 세션 종료 시 `discardWorkout()` 후 `WatchWorkoutWriter`로 운동별 개별 HKWorkout 저장. 시간 겹침 방지를 위해 순차 오프셋 적용 (#199)
 
 ### Design System
 

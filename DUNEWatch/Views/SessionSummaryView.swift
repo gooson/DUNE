@@ -281,9 +281,20 @@ struct SessionSummaryView: View {
             return
         }
 
-        // Wait for HKWorkout finalization to reduce `healthKitWorkoutID = nil` race on Watch saves.
+        // Wait for HKWorkout finalization (builder discard for strength).
         await workoutManager.waitForWorkoutFinalization()
-        saveWorkoutRecords(healthKitWorkoutID: workoutManager.healthKitWorkoutUUID)
+
+        // Compute per-exercise allocation once (DRY — Correction #37, #148).
+        let allocation = perExerciseAllocation()
+
+        // Save individual HKWorkout per exercise and collect UUIDs (strength only).
+        let perExerciseIDs: [Int: String]
+        if workoutManager.workoutMode == .strength {
+            perExerciseIDs = await saveIndividualHealthKitWorkouts(allocation: allocation)
+        } else {
+            perExerciseIDs = [:]
+        }
+        saveWorkoutRecords(perExerciseHealthKitIDs: perExerciseIDs, allocation: allocation)
 
         // Explicit save before reset — reset() triggers view transition
         // which can prevent SwiftData auto-save from flushing.
@@ -304,11 +315,60 @@ struct SessionSummaryView: View {
         workoutManager.reset()
     }
 
-    /// Persist ExerciseRecord + WorkoutSet to SwiftData for each exercise in the session.
-    private func saveWorkoutRecords(healthKitWorkoutID: String?) {
-        guard let template = workoutManager.templateSnapshot else { return }
+    /// Per-exercise time/calorie allocation (single source of truth — Correction #37, #148).
+    private func perExerciseAllocation() -> (duration: TimeInterval, calories: Double?) {
+        let activeCount = Double(Swift.max(completedSetsData.filter { !$0.isEmpty }.count, 1))
         let sessionDuration = Swift.max(endDate.timeIntervalSince(startDate), 1)
-        let activeExerciseCount = Double(Swift.max(completedSetsData.filter { !$0.isEmpty }.count, 1))
+        return (sessionDuration / activeCount, activeCalories > 0 ? activeCalories / activeCount : nil)
+    }
+
+    /// Creates individual HKWorkout per exercise via non-live HKWorkoutBuilder (parallel).
+    /// Each exercise gets a sequential, non-overlapping time window to avoid HealthKit dedup.
+    /// Returns a dictionary mapping exercise index → HealthKit workout UUID.
+    private func saveIndividualHealthKitWorkouts(
+        allocation: (duration: TimeInterval, calories: Double?)
+    ) async -> [Int: String] {
+        guard let template = workoutManager.templateSnapshot else { return [:] }
+        let healthStore = workoutManager.healthStore
+
+        // Build exercise entries with sequential offsets so time windows don't overlap.
+        var activeIndex = 0
+        var exerciseInputs: [(index: Int, name: String, start: Date)] = []
+        for (index, setsData) in completedSetsData.enumerated() {
+            guard index < template.entries.count, !setsData.isEmpty else { continue }
+            let offsetStart = startDate.addingTimeInterval(allocation.duration * Double(activeIndex))
+            exerciseInputs.append((index, template.entries[index].exerciseName, offsetStart))
+            activeIndex += 1
+        }
+
+        // Parallel save via TaskGroup (avoids sequential N+1 round-trips).
+        return await withTaskGroup(of: (Int, String?).self) { group in
+            for input in exerciseInputs {
+                group.addTask {
+                    let uuid = await WatchWorkoutWriter.saveIndividualWorkout(
+                        healthStore: healthStore,
+                        exerciseName: input.name,
+                        startDate: input.start,
+                        duration: allocation.duration,
+                        calories: allocation.calories
+                    )
+                    return (input.index, uuid)
+                }
+            }
+            var ids: [Int: String] = [:]
+            for await (index, uuid) in group {
+                if let uuid { ids[index] = uuid }
+            }
+            return ids
+        }
+    }
+
+    /// Persist ExerciseRecord + WorkoutSet to SwiftData for each exercise in the session.
+    private func saveWorkoutRecords(
+        perExerciseHealthKitIDs: [Int: String],
+        allocation: (duration: TimeInterval, calories: Double?)
+    ) {
+        guard let template = workoutManager.templateSnapshot else { return }
 
         for (exerciseIndex, setsData) in completedSetsData.enumerated() {
             guard exerciseIndex < template.entries.count, !setsData.isEmpty else { continue }
@@ -318,9 +378,9 @@ struct SessionSummaryView: View {
             let record = ExerciseRecord(
                 date: startDate,
                 exerciseType: entry.exerciseName,
-                duration: sessionDuration / activeExerciseCount,
-                calories: activeCalories > 0 ? activeCalories / activeExerciseCount : nil,
-                healthKitWorkoutID: healthKitWorkoutID,
+                duration: allocation.duration,
+                calories: allocation.calories,
+                healthKitWorkoutID: perExerciseHealthKitIDs[exerciseIndex],
                 exerciseDefinitionID: entry.exerciseDefinitionID,
                 calorieSource: activeCalories > 0 ? .healthKit : .manual,
                 rpe: effort

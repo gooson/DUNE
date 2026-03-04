@@ -741,9 +741,18 @@ extension WorkoutManager: HKWorkoutSessionDelegate {
                 }
                 do {
                     try await builder?.endCollection(at: date)
-                    let workout = try await builder?.finishWorkout()
-                    if let workoutID = workout?.uuid.uuidString, !workoutID.isEmpty {
-                        healthKitWorkoutUUID = workoutID
+                    if workoutMode == .strength {
+                        // Strength template: discard the merged workout so individual
+                        // per-exercise HKWorkouts can be created in SessionSummaryView.
+                        await builder?.discardWorkout()
+                        // Log after discard completes to confirm success.
+                        Self.logger.info("Discarded merged builder workout for strength session")
+                    } else {
+                        // Cardio: keep the single live-builder workout as-is.
+                        let workout = try await builder?.finishWorkout()
+                        if let workoutID = workout?.uuid.uuidString, !workoutID.isEmpty {
+                            healthKitWorkoutUUID = workoutID
+                        }
                     }
                 } catch {
                     Self.logger.error("Failed to finish workout: \(error.localizedDescription, privacy: .public)")

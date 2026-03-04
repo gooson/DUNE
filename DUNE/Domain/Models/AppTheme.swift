@@ -12,6 +12,7 @@ enum AppTheme: String, CaseIterable, Codable, Sendable {
     case arcticDawn  = "arcticDawn"
     case solarPop    = "solarPop"
     case shanksRed   = "shanksRed"
+    case hanok       = "hanok"
 }
 
 extension AppTheme {

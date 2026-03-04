@@ -20,6 +20,8 @@ extension AppTheme {
             "Solar"
         case .shanksRed:
             "Shanks"
+        case .hanok:
+            "Hanok"
         }
     }
 
@@ -181,6 +183,19 @@ extension AppTheme {
     var shanksGlowColor: Color { Color("ShanksGlow") }
 }
 
+// MARK: - Hanok Wave-Specific Colors
+
+extension AppTheme {
+    /// Deep giwa (기와) layer color (back).
+    var hanokDeepColor: Color { Color("HanokDeep") }
+
+    /// Mid changho (창호) layer color.
+    var hanokMidColor: Color { Color("HanokMid") }
+
+    /// Light hanji (한지) mist layer color (front).
+    var hanokMistColor: Color { Color("HanokMist") }
+}
+
 // MARK: - Score Colors
 
 extension AppTheme {
@@ -276,23 +291,23 @@ extension AppTheme {
 }
 #endif
 
+// MARK: - Glass Border Classification
+
+extension AppTheme {
+    /// Whether this theme uses a glass-style card border with custom surface gradients.
+    var usesGlassBorder: Bool {
+        switch self {
+        case .sakuraCalm, .arcticDawn, .solarPop, .hanok, .shanksRed: true
+        case .desertWarm, .oceanCool, .forestGreen: false
+        }
+    }
+}
+
 // MARK: - Card Surface
 
 extension AppTheme {
     var cardBackground: Color {
         themedColor(defaultAsset: "CardBackground", variantSuffix: "CardBackground")
-    }
-}
-
-// MARK: - Glass Border Capability
-
-extension AppTheme {
-    /// Whether this theme uses gradient glass borders on cards (StandardCard, InlineCard).
-    var usesGradientBorder: Bool {
-        switch self {
-        case .sakuraCalm, .arcticDawn, .solarPop, .shanksRed: true
-        case .desertWarm, .oceanCool, .forestGreen: false
-        }
     }
 }
 
@@ -308,6 +323,7 @@ extension AppTheme {
         case .arcticDawn:  String(localized: "Arctic Dawn")
         case .solarPop:    String(localized: "Solar Pop")
         case .shanksRed:   String(localized: "Shanks Red")
+        case .hanok:       String(localized: "Hanok")
         }
     }
 }
