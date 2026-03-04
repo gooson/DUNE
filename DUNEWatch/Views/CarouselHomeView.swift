@@ -146,7 +146,7 @@ struct CarouselHomeView: View {
             }
             .scrollTargetLayout()
         }
-        .scrollTargetBehavior(.paging)
+        .scrollTargetBehavior(.viewAligned)
     }
 
     // MARK: - Card Content
