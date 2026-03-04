@@ -61,6 +61,18 @@ struct AppThemeTests {
         #expect(AppTheme.shanksRed.assetPrefix == "Shanks")
     }
 
+    @Test("usesGradientBorder returns true for gradient-border themes")
+    func gradientBorderThemes() {
+        let gradientThemes: [AppTheme] = [.sakuraCalm, .arcticDawn, .solarPop, .shanksRed]
+        let plainThemes: [AppTheme] = [.desertWarm, .oceanCool, .forestGreen]
+        for theme in gradientThemes {
+            #expect(theme.usesGradientBorder == true)
+        }
+        for theme in plainThemes {
+            #expect(theme.usesGradientBorder == false)
+        }
+    }
+
     @Test("Themed asset name resolution follows prefix convention")
     func themedAssetNameResolution() {
         #expect(
