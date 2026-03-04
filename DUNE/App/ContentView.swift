@@ -89,6 +89,9 @@ struct ContentView: View {
         .tabViewStyle(.sidebarAdaptable)
         // Foreground refresh: scenePhase .background → .active (Correction #16/#60)
         .onChange(of: scenePhase) { oldPhase, newPhase in
+            if newPhase == .active {
+                notificationInboxManager.syncBadge()
+            }
             if oldPhase == .background, newPhase == .active {
                 foregroundTask?.cancel()
                 foregroundTask = Task {

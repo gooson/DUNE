@@ -45,6 +45,30 @@ struct NotificationInboxManagerTests {
         #expect(recorder.lastValue() == 0)
     }
 
+    @Test("syncBadge synchronizes badge count without state mutation")
+    func syncBadgeSynchronizesBadgeCount() {
+        let store = makeStore()
+        let recorder = BadgeRecorder()
+        let manager = NotificationInboxManager(
+            store: store,
+            badgeUpdater: { recorder.record($0) }
+        )
+
+        _ = manager.recordSentInsight(sampleInsight(workoutID: "workout-1"))
+        _ = manager.recordSentInsight(sampleInsight(workoutID: "workout-2"))
+        recorder.reset()
+
+        // syncBadge should report current unread count synchronously
+        manager.syncBadge()
+        #expect(recorder.lastValue() == 2)
+
+        manager.markAllRead()
+        recorder.reset()
+
+        manager.syncBadge()
+        #expect(recorder.lastValue() == 0)
+    }
+
     private func makeStore() -> NotificationInboxStore {
         let suiteName = "NotificationInboxManagerTests.\(UUID().uuidString)"
         let defaults = UserDefaults(suiteName: suiteName) ?? .standard
@@ -84,6 +108,12 @@ private final class BadgeRecorder: @unchecked Sendable {
     func record(_ value: Int) {
         lock.lock()
         values.append(value)
+        lock.unlock()
+    }
+
+    func reset() {
+        lock.lock()
+        values.removeAll()
         lock.unlock()
     }
 
