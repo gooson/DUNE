@@ -56,7 +56,7 @@ struct CardioSessionSummaryView: View {
         VStack(spacing: DS.Spacing.md) {
             HStack(spacing: DS.Spacing.md) {
                 summaryCard(
-                    title: String(localized: "Duration"),
+                    title: "Duration",
                     value: viewModel.formattedElapsed,
                     icon: "timer",
                     color: DS.Color.activity
@@ -64,7 +64,7 @@ struct CardioSessionSummaryView: View {
 
                 if viewModel.showsDistance {
                     summaryCard(
-                        title: String(localized: "Distance"),
+                        title: "Distance",
                         value: "\(viewModel.formattedDistance) km",
                         icon: "location.fill",
                         color: DS.Color.positive
@@ -75,7 +75,7 @@ struct CardioSessionSummaryView: View {
             HStack(spacing: DS.Spacing.md) {
                 if viewModel.showsDistance {
                     summaryCard(
-                        title: String(localized: "Avg Pace"),
+                        title: "Avg Pace",
                         value: "\(viewModel.formattedPace) /km",
                         icon: "speedometer",
                         color: DS.Color.activity
@@ -83,7 +83,7 @@ struct CardioSessionSummaryView: View {
                 }
 
                 summaryCard(
-                    title: String(localized: "Calories"),
+                    title: "Calories",
                     value: "\(Int(viewModel.estimatedCalories)) kcal",
                     icon: "flame.fill",
                     color: DS.Color.caution
@@ -92,14 +92,14 @@ struct CardioSessionSummaryView: View {
 
             HStack(spacing: DS.Spacing.md) {
                 summaryCard(
-                    title: String(localized: "Steps"),
+                    title: "Steps",
                     value: summaryStepsValue,
                     icon: "figure.walk",
                     color: DS.Color.steps
                 )
 
                 summaryCard(
-                    title: String(localized: "Cadence"),
+                    title: "Cadence",
                     value: viewModel.cadenceStepsPerMinute > 0
                         ? "\(Int(viewModel.cadenceStepsPerMinute)) spm"
                         : "--",
@@ -108,15 +108,32 @@ struct CardioSessionSummaryView: View {
                 )
             }
 
-            if viewModel.totalElevationGainMeters > 0 {
+            let hasElevation = viewModel.totalElevationGainMeters > 0
+            let hasVO2Max = viewModel.cardioFitnessVO2Max != nil
+
+            if hasElevation || hasVO2Max {
                 HStack(spacing: DS.Spacing.md) {
-                    summaryCard(
-                        title: String(localized: "Elevation Gain"),
-                        value: "\(Int(viewModel.totalElevationGainMeters)) m",
-                        icon: "mountain.2.fill",
-                        color: DS.Color.positive
-                    )
-                    Color.clear.frame(maxWidth: .infinity)
+                    if hasElevation {
+                        summaryCard(
+                            title: "Elevation Gain",
+                            value: "\(Int(viewModel.totalElevationGainMeters)) m",
+                            icon: "mountain.2.fill",
+                            color: DS.Color.positive
+                        )
+                    }
+
+                    if let vo2Max = viewModel.cardioFitnessVO2Max {
+                        summaryCard(
+                            title: "Cardio Fitness",
+                            value: "\(String(format: "%.1f", vo2Max)) ml/kg/min",
+                            icon: "heart.circle.fill",
+                            color: DS.Color.heartRate
+                        )
+                    }
+
+                    if !(hasElevation && hasVO2Max) {
+                        Color.clear.frame(maxWidth: .infinity)
+                    }
                 }
             }
         }
@@ -129,7 +146,7 @@ struct CardioSessionSummaryView: View {
         return viewModel.formattedStepCount
     }
 
-    private func summaryCard(title: String, value: String, icon: String, color: SwiftUI.Color) -> some View {
+    private func summaryCard(title: LocalizedStringKey, value: String, icon: String, color: SwiftUI.Color) -> some View {
         VStack(spacing: DS.Spacing.sm) {
             Image(systemName: icon)
                 .font(.title3)
@@ -187,7 +204,8 @@ struct CardioSessionSummaryView: View {
             secondaryMuscles: exercise.secondaryMuscles,
             equipment: exercise.equipment,
             estimatedCalories: data.estimatedCalories,
-            calorieSource: .met
+            calorieSource: .met,
+            cardioFitnessVO2Max: data.cardioFitnessVO2Max.flatMap { (10.0...90.0).contains($0) ? $0 : nil }
         )
 
         modelContext.insert(record)

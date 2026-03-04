@@ -36,6 +36,8 @@ final class ExerciseRecord {
     var rpe: Int?
     /// Auto-calculated workout intensity (0.0–1.0). nil means not computed.
     var autoIntensityRaw: Double?
+    /// VO2 Max (cardio fitness) captured at workout time (ml/kg/min). nil if unavailable.
+    var cardioFitnessVO2Max: Double?
 
     init(
         date: Date = Date(),
@@ -58,7 +60,8 @@ final class ExerciseRecord {
         estimatedCalories: Double? = nil,
         calorieSource: CalorieSource = .manual,
         rpe: Int? = nil,
-        autoIntensityRaw: Double? = nil
+        autoIntensityRaw: Double? = nil,
+        cardioFitnessVO2Max: Double? = nil
     ) {
         self.id = UUID()
         self.date = date
@@ -83,6 +86,7 @@ final class ExerciseRecord {
         self.calorieSourceRaw = calorieSource.rawValue
         self.rpe = rpe
         self.autoIntensityRaw = autoIntensityRaw
+        self.cardioFitnessVO2Max = cardioFitnessVO2Max
     }
 
     // MARK: - Computed Accessors
