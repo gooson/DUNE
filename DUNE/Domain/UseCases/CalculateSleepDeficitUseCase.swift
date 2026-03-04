@@ -27,6 +27,16 @@ struct CalculateSleepDeficitUseCase: SleepDeficitCalculating, Sendable {
         struct DayDuration: Sendable {
             let date: Date
             let totalMinutes: Double
+
+            /// Convenience init from SleepQuerying tuple (drops stageBreakdown).
+            init(date: Date, totalMinutes: Double) {
+                self.date = date
+                self.totalMinutes = totalMinutes
+            }
+
+            init(from raw: (date: Date, totalMinutes: Double, stageBreakdown: [SleepStage.Stage: Double])) {
+                self.init(date: raw.date, totalMinutes: raw.totalMinutes)
+            }
         }
     }
 
@@ -106,7 +116,7 @@ struct CalculateSleepDeficitUseCase: SleepDeficitCalculating, Sendable {
             return .mild
         case deficitMild..<deficitModerate:
             return .moderate
-        default:
+        default: // >= deficitModerate (600+ minutes)
             return .severe
         }
     }

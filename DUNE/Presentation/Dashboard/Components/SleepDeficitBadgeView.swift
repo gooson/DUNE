@@ -58,32 +58,7 @@ struct SleepDeficitBadgeView: View {
 
     // MARK: - Computed
 
-    private var deficitText: String {
-        let hours = Int(analysis.weeklyDeficit) / 60
-        let mins = Int(analysis.weeklyDeficit) % 60
-        if hours > 0 {
-            return "\(hours)h \(mins)m"
-        }
-        return "\(mins)m"
-    }
-
-    private var levelColor: Color {
-        switch analysis.level {
-        case .good: DS.Color.scoreGood
-        case .mild: DS.Color.scoreFair
-        case .moderate: DS.Color.scoreTired
-        case .severe: DS.Color.scoreWarning
-        case .insufficient: DS.Color.textTertiary
-        }
-    }
-
-    private var levelLabel: String {
-        switch analysis.level {
-        case .good: String(localized: "Well Rested")
-        case .mild: String(localized: "Slightly Short")
-        case .moderate: String(localized: "Sleep Debt")
-        case .severe: String(localized: "Severe Debt")
-        case .insufficient: String(localized: "Collecting Data")
-        }
-    }
+    private var deficitText: String { analysis.formattedWeeklyDeficit }
+    private var levelColor: Color { analysis.level.color }
+    private var levelLabel: String { analysis.level.label }
 }

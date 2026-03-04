@@ -81,20 +81,20 @@ struct SleepDeficitGaugeView: View {
     private var averagesRow: some View {
         HStack(spacing: DS.Spacing.xl) {
             averageItem(
-                label: String(localized: "14d avg"),
+                label: "14d avg",
                 minutes: analysis.shortTermAverage
             )
             if let longTerm = analysis.longTermAverage {
                 Divider().frame(height: 32)
                 averageItem(
-                    label: String(localized: "90d avg"),
+                    label: "90d avg",
                     minutes: longTerm
                 )
             }
         }
     }
 
-    private func averageItem(label: String, minutes: Double) -> some View {
+    private func averageItem(label: LocalizedStringKey, minutes: Double) -> some View {
         VStack(spacing: DS.Spacing.xxs) {
             Text(formatHoursMinutes(minutes))
                 .font(.subheadline.monospacedDigit())
@@ -106,29 +106,9 @@ struct SleepDeficitGaugeView: View {
 
     // MARK: - Computed
 
-    private var deficitText: String {
-        formatHoursMinutes(analysis.weeklyDeficit)
-    }
-
-    private var levelColor: Color {
-        switch analysis.level {
-        case .good: DS.Color.scoreGood
-        case .mild: DS.Color.scoreFair
-        case .moderate: DS.Color.scoreTired
-        case .severe: DS.Color.scoreWarning
-        case .insufficient: DS.Color.textTertiary
-        }
-    }
-
-    private var levelLabel: String {
-        switch analysis.level {
-        case .good: String(localized: "Well Rested")
-        case .mild: String(localized: "Slightly Short")
-        case .moderate: String(localized: "Sleep Debt")
-        case .severe: String(localized: "Severe Debt")
-        case .insufficient: String(localized: "Collecting Data")
-        }
-    }
+    private var deficitText: String { analysis.formattedWeeklyDeficit }
+    private var levelColor: Color { analysis.level.color }
+    private var levelLabel: String { analysis.level.label }
 
     private func formatHoursMinutes(_ totalMinutes: Double) -> String {
         let hours = Int(totalMinutes) / 60

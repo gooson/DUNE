@@ -338,12 +338,8 @@ final class MetricDetailViewModel {
             let durations = try await sleepService.fetchDailySleepDurations(start: start, end: end)
             let fourteenDaysAgo = calendar.date(byAdding: .day, value: -14, to: today) ?? today
 
-            let toDayDuration: ((date: Date, totalMinutes: Double, stageBreakdown: [SleepStage.Stage: Double])) -> CalculateSleepDeficitUseCase.Input.DayDuration = { item in
-                .init(date: item.date, totalMinutes: item.totalMinutes)
-            }
-
-            let recent14 = durations.filter { $0.date >= fourteenDaysAgo }.map(toDayDuration)
-            let longTerm90 = durations.map(toDayDuration)
+            let recent14 = durations.filter { $0.date >= fourteenDaysAgo }.map(CalculateSleepDeficitUseCase.Input.DayDuration.init(from:))
+            let longTerm90 = durations.map(CalculateSleepDeficitUseCase.Input.DayDuration.init(from:))
 
             deficitAnalysis = deficitUseCase.execute(input: .init(
                 recentDurations: recent14,

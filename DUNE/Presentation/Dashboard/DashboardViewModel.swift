@@ -588,12 +588,9 @@ final class DashboardViewModel {
         )
 
         // Deficit analysis
-        let toDayDuration: ((date: Date, totalMinutes: Double, stageBreakdown: [SleepStage.Stage: Double])) -> CalculateSleepDeficitUseCase.Input.DayDuration = { item in
-            .init(date: item.date, totalMinutes: item.totalMinutes)
-        }
         sleepDeficitAnalysis = sleepDeficitUseCase.execute(input: .init(
-            recentDurations: recent14.map(toDayDuration),
-            longTermDurations: dailySleep.map(toDayDuration)
+            recentDurations: recent14.map(CalculateSleepDeficitUseCase.Input.DayDuration.init(from:)),
+            longTermDurations: dailySleep.map(CalculateSleepDeficitUseCase.Input.DayDuration.init(from:))
         ))
 
         return HealthMetric(
@@ -635,12 +632,9 @@ final class DashboardViewModel {
         )
 
         // Deficit analysis from snapshot data
-        let toDayDuration: (SharedHealthSnapshot.SleepDailyDuration) -> CalculateSleepDeficitUseCase.Input.DayDuration = { item in
-            .init(date: item.date, totalMinutes: item.totalMinutes)
-        }
         sleepDeficitAnalysis = sleepDeficitUseCase.execute(input: .init(
-            recentDurations: recent14.map(toDayDuration),
-            longTermDurations: snapshot.sleepDailyDurations.map(toDayDuration)
+            recentDurations: recent14.map { .init(date: $0.date, totalMinutes: $0.totalMinutes) },
+            longTermDurations: snapshot.sleepDailyDurations.map { .init(date: $0.date, totalMinutes: $0.totalMinutes) }
         ))
 
         return HealthMetric(
