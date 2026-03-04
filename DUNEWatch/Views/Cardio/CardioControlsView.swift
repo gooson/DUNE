@@ -1,8 +1,8 @@
 import SwiftUI
 
-/// Strength workout controls page: End, Pause/Resume, Skip.
-/// For cardio, see CardioControlsView (accessed via horizontal swipe).
-struct ControlsView: View {
+/// Cardio workout controls accessible via right swipe (left page of horizontal paging).
+/// Contains End and Pause/Resume buttons with confirmation dialog.
+struct CardioControlsView: View {
     @Environment(WorkoutManager.self) private var workoutManager
 
     @State private var showEndConfirmation = false
@@ -40,22 +40,6 @@ struct ControlsView: View {
                 .frame(maxWidth: .infinity)
             }
             .tint(DS.Color.caution)
-
-            // Skip Exercise
-            if !workoutManager.isLastExercise {
-                Button {
-                    workoutManager.skipExercise()
-                } label: {
-                    VStack(spacing: DS.Spacing.xxs) {
-                        Image(systemName: "forward.fill")
-                            .font(.title3)
-                        Text("Skip")
-                            .font(DS.Typography.metricLabel)
-                    }
-                    .frame(maxWidth: .infinity)
-                }
-                .tint(.secondary)
-            }
         }
         .confirmationDialog(
             "End Workout?",
@@ -67,11 +51,7 @@ struct ControlsView: View {
             }
             Button("Cancel", role: .cancel) {}
         } message: {
-            if workoutManager.completedSetsData.flatMap({ $0 }).isEmpty {
-                Text("No sets recorded. End without saving?")
-            } else {
-                Text("Save and finish this workout?")
-            }
+            Text("Save and finish this workout?")
         }
     }
 }
