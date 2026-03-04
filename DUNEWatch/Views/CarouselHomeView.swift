@@ -146,7 +146,8 @@ struct CarouselHomeView: View {
             }
             .scrollTargetLayout()
         }
-        .scrollTargetBehavior(.paging)
+        // .viewAligned snaps to card views; .paging drifts when nav title collapses
+        .scrollTargetBehavior(.viewAligned)
     }
 
     // MARK: - Card Content

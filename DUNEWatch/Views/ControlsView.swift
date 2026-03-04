@@ -1,7 +1,10 @@
 import SwiftUI
 
-/// Left page of SessionPagingView: End, Pause/Resume, Skip controls.
+/// Workout controls page: End, Pause/Resume, and optionally Skip.
+/// Used by both strength (vertical paging) and cardio (horizontal paging).
 struct ControlsView: View {
+    var showSkip: Bool = true
+
     @Environment(WorkoutManager.self) private var workoutManager
 
     @State private var showEndConfirmation = false
@@ -40,8 +43,8 @@ struct ControlsView: View {
             }
             .tint(DS.Color.caution)
 
-            // Skip Exercise (strength mode only — cardio has no exercise list)
-            if !workoutManager.isCardioMode, !workoutManager.isLastExercise {
+            // Skip Exercise (strength only)
+            if showSkip, !workoutManager.isCardioMode, !workoutManager.isLastExercise {
                 Button {
                     workoutManager.skipExercise()
                 } label: {
@@ -61,7 +64,7 @@ struct ControlsView: View {
             isPresented: $showEndConfirmation,
             titleVisibility: .visible
         ) {
-            Button("End Workout") {
+            Button("End Workout", role: .destructive) {
                 workoutManager.end()
             }
             Button("Cancel", role: .cancel) {}

@@ -159,6 +159,8 @@
 - **Watch exerciseLibrary 미수신 상태를 `synced`로 표시 금지**: missing context key면 `syncing/notConnected` 유지 + 재요청 경로 확보 (#193)
 - **Watch cardio elapsed/pace는 pause 구간을 제외한 active elapsed 기준으로 계산**: wall-clock 기반 계산 금지 (#194)
 - **Watch 루틴 템플릿은 CloudKit-only 의존 금지**: `WorkoutTemplate` primary는 유지하되 WatchConnectivity fallback DTO/병합(local 우선)으로 가시성 공백 방지 (#195)
+- **watchOS nested TabView 금지**: horizontal(outer)+vertical(inner) 중첩은 제스처 충돌/Crown 라우팅 미정의. flat 수평 TabView 사용 (#197)
+- **Watch saveCardioRecord에 수집된 모든 metric 전달 확인**: `WorkoutManager`가 수집하는 값(steps, floors 등)이 `ExerciseRecord` init에 빠짐없이 전달되는지 점검 (#198)
 
 ### Design System
 
