@@ -9,8 +9,9 @@ struct NotificationRoute: Codable, Sendable, Hashable {
     let destination: Destination
     let workoutID: String?
 
-    static func workoutDetail(workoutID: String) -> NotificationRoute {
-        NotificationRoute(destination: .workoutDetail, workoutID: workoutID)
+    static func workoutDetail(workoutID: String) -> NotificationRoute? {
+        guard !workoutID.isEmpty else { return nil }
+        return NotificationRoute(destination: .workoutDetail, workoutID: workoutID)
     }
 }
 

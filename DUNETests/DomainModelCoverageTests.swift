@@ -134,8 +134,8 @@ struct NotificationInboxItemModelTests {
     @Test("workoutDetail route factory sets destination and workoutID")
     func routeFactory() {
         let route = NotificationRoute.workoutDetail(workoutID: "workout-123")
-        #expect(route.destination == .workoutDetail)
-        #expect(route.workoutID == "workout-123")
+        #expect(route?.destination == .workoutDetail)
+        #expect(route?.workoutID == "workout-123")
     }
 
     @Test("Codable round trip preserves all persisted fields")
