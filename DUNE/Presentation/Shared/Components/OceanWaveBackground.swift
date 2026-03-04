@@ -278,11 +278,6 @@ struct ArcticRibbonShape: Shape {
     let verticalOffset: CGFloat
     let ridge: CGFloat
 
-    var animatableData: CGFloat {
-        get { phase }
-        set { phase = newValue }
-    }
-
     private let points: [(x: CGFloat, angle: CGFloat)]
     private static let sampleCount = 120
 
@@ -338,6 +333,24 @@ struct ArcticRibbonShape: Shape {
     }
 }
 
+// MARK: - Arctic Animation Utilities
+
+/// Derives continuous phase values from elapsed time for TimelineView-driven Arctic backgrounds.
+enum ArcticAnimationPhase {
+    /// Returns a phase in [0, 2π) (or [−2π, 0) when reversed) from elapsed time and cycle duration.
+    static func phase(elapsed: TimeInterval, duration: Double, reverse: Bool = false) -> CGFloat {
+        guard duration > 0 else { return 0 }
+        let normalizedTime = elapsed.truncatingRemainder(dividingBy: duration) / duration
+        let p = CGFloat(normalizedTime) * 2 * .pi
+        return reverse ? -p : p
+    }
+}
+
+/// Convenience shorthand used inside Arctic background bodies.
+private func arcticPhase(elapsed: TimeInterval, duration: Double, reverse: Bool = false) -> CGFloat {
+    ArcticAnimationPhase.phase(elapsed: elapsed, duration: duration, reverse: reverse)
+}
+
 // MARK: - Arctic Ribbon Overlay
 
 struct ArcticRibbonOverlayView: View {
@@ -348,18 +361,10 @@ struct ArcticRibbonOverlayView: View {
     var verticalOffset: CGFloat = 0.52
     var bottomFade: CGFloat = 0.48
     var ridge: CGFloat = 0.22
-    var driftDuration: Double = 12
-    var reverseDirection: Bool = false
+    var phase: CGFloat = 0
     var strokeColor: Color? = nil
     var strokeOpacity: Double = 0.2
     var strokeWidth: CGFloat = 1.0
-
-    @State private var phase: CGFloat = 0
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
-
-    private var targetPhase: CGFloat {
-        (reverseDirection ? -1 : 1) * 2 * .pi
-    }
 
     var body: some View {
         let ribbon = ArcticRibbonShape(
@@ -386,21 +391,6 @@ struct ArcticRibbonOverlayView: View {
             }
         }
         .allowsHitTesting(false)
-        .task {
-            guard !reduceMotion, driftDuration > 0 else { return }
-            withAnimation(.linear(duration: driftDuration).repeatForever(autoreverses: false)) {
-                phase = targetPhase
-            }
-        }
-        .onAppear {
-            guard !reduceMotion, driftDuration > 0 else { return }
-            Task { @MainActor in
-                phase = 0
-                withAnimation(.linear(duration: driftDuration).repeatForever(autoreverses: false)) {
-                    phase = targetPhase
-                }
-            }
-        }
     }
 }
 
@@ -414,11 +404,6 @@ struct ArcticAuroraCurtainShape: Shape {
     let depth: CGFloat
     let sway: CGFloat
     var phase: CGFloat
-
-    var animatableData: CGFloat {
-        get { phase }
-        set { phase = newValue }
-    }
 
     private static let sampleCount = 88
 
@@ -506,8 +491,7 @@ struct ArcticAuroraCurtainOverlayView: View {
     var secondaryColor: Color
     var opacity: Double = 0.16
     var bottomFade: CGFloat = 0.5
-    var driftDuration: Double = 14
-    var reverseDirection: Bool = false
+    var phase: CGFloat = 0
     var blurRadius: CGFloat = 1.6
     var highlights: Bool = true
     var saturationBoost: Double = 1.16
@@ -518,9 +502,6 @@ struct ArcticAuroraCurtainOverlayView: View {
     var filamentSpread: CGFloat = 0.010
     var qualityMode: ArcticAuroraQualityMode = .normal
 
-    @State private var phase: CGFloat = 0
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
-
     private static let curtainSpecs: [ArcticAuroraCurtainSpec] = [
         .init(centerX: 0.12, bandWidth: 0.14, topInset: -0.07, depth: 0.98, sway: 0.08, tilt: -2),
         .init(centerX: 0.26, bandWidth: 0.15, topInset: -0.06, depth: 0.97, sway: 0.07, tilt: -1),
@@ -529,10 +510,6 @@ struct ArcticAuroraCurtainOverlayView: View {
         .init(centerX: 0.68, bandWidth: 0.14, topInset: -0.08, depth: 0.98, sway: 0.08, tilt: 2),
         .init(centerX: 0.82, bandWidth: 0.13, topInset: -0.06, depth: 0.95, sway: 0.06, tilt: 1),
     ]
-
-    private var targetPhase: CGFloat {
-        (reverseDirection ? -1 : 1) * 2 * .pi
-    }
 
     private var activeCurtainSpecs: ArraySlice<ArcticAuroraCurtainSpec> {
         let count = ArcticAuroraLOD.scaledCount(
@@ -654,13 +631,8 @@ struct ArcticAuroraCurtainOverlayView: View {
                 }
             }
         }
+        .drawingGroup()
         .allowsHitTesting(false)
-        .task {
-            guard !reduceMotion, driftDuration > 0 else { return }
-            withAnimation(.linear(duration: driftDuration).repeatForever(autoreverses: false)) {
-                phase = targetPhase
-            }
-        }
     }
 }
 
@@ -695,11 +667,6 @@ private struct ArcticAuroraEdgeGlowShape: Shape {
     let amplitude: CGFloat
     let frequency: CGFloat
     var phase: CGFloat
-
-    var animatableData: CGFloat {
-        get { phase }
-        set { phase = newValue }
-    }
 
     private static let sampleCount = 84
 
@@ -736,18 +703,14 @@ private struct ArcticAuroraEdgeTextureOverlayView: View {
     var secondaryColor: Color
     var highlightColor: Color
     var opacity: Double = 0.20
-    var driftDuration: Double = 16
+    var phase: CGFloat = 0
     var qualityMode: ArcticAuroraQualityMode = .normal
-
-    @State private var phase: CGFloat = 0
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private static let sparkleSeeds: [Double] = [
         0.04, 0.09, 0.13, 0.18, 0.24, 0.31, 0.37, 0.42,
         0.49, 0.55, 0.61, 0.66, 0.73, 0.79, 0.84, 0.90, 0.95
     ]
 
-    private var targetPhase: CGFloat { 2 * .pi }
     private var blurScale: CGFloat { qualityMode == .normal ? 1.0 : 0.84 }
     private var sparkleOpacityScale: Double { qualityMode == .normal ? 1.0 : 0.76 }
     private var activeSparkleSeeds: ArraySlice<Double> {
@@ -819,14 +782,9 @@ private struct ArcticAuroraEdgeTextureOverlayView: View {
                         .blendMode(.plusLighter)
                 }
             }
+            .drawingGroup()
         }
         .allowsHitTesting(false)
-        .task {
-            guard !reduceMotion, driftDuration > 0 else { return }
-            withAnimation(.linear(duration: driftDuration).repeatForever(autoreverses: false)) {
-                phase = targetPhase
-            }
-        }
     }
 }
 
@@ -842,12 +800,9 @@ private struct ArcticAuroraMicroStrandSpec {
 
 private struct ArcticAuroraMicroDetailOverlayView: View {
     var opacity: Double = 0.16
-    var driftDuration: Double = 18
+    var phase: CGFloat = 0
     var leftClusterBoost: Double = 1.25
     var qualityMode: ArcticAuroraQualityMode = .normal
-
-    @State private var phase: CGFloat = 0
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private static let strandSpecs: [ArcticAuroraMicroStrandSpec] = [
         .init(x: 0.03, width: 0.0036, topInset: -0.05, depth: 0.98, tilt: -1.5, intensity: 1.00, colorOffset: 0),
@@ -892,7 +847,6 @@ private struct ArcticAuroraMicroDetailOverlayView: View {
         ArcticAuroraPalette.pearl
     ]
 
-    private var targetPhase: CGFloat { 2 * .pi }
     private var activeStrandSpecs: ArraySlice<ArcticAuroraMicroStrandSpec> {
         let count = ArcticAuroraLOD.scaledCount(
             baseCount: Self.strandSpecs.count,
@@ -1034,14 +988,9 @@ private struct ArcticAuroraMicroDetailOverlayView: View {
                         .blendMode(.plusLighter)
                 }
             }
+            .drawingGroup()
         }
         .allowsHitTesting(false)
-        .task {
-            guard !reduceMotion, driftDuration > 0 else { return }
-            withAnimation(.linear(duration: driftDuration).repeatForever(autoreverses: false)) {
-                phase = targetPhase
-            }
-        }
     }
 }
 
@@ -1090,203 +1039,201 @@ struct ArcticTabWaveBackground: View {
         let scale = intensityScale
         let mode = qualityMode
 
-        ZStack(alignment: .top) {
-            LinearGradient(
-                colors: [
-                    ArcticAuroraPalette.deepNavy.opacity(0.92),
-                    ArcticAuroraPalette.ultraviolet.opacity(0.55 * scale),
-                    theme.arcticDeepColor.opacity(0.62 * scale),
-                    theme.arcticDeepColor.opacity(0.26),
-                    theme.arcticFrostColor.opacity(0.10)
-                ],
-                startPoint: .top,
-                endPoint: .bottom
-            )
+        TimelineView(.animation(minimumInterval: 1.0 / 60.0, paused: reduceMotion)) { context in
+            let elapsed = context.date.timeIntervalSinceReferenceDate
 
-            // Pre-change Arctic sea silhouette (ribbon-wave base)
-            ArcticRibbonOverlayView(
-                color: theme.arcticDeepColor,
-                opacity: 0.14 * scale,
-                amplitude: 0.035 * scale,
-                frequency: 0.98,
-                verticalOffset: 0.40,
-                bottomFade: 0.42,
-                ridge: 0.17,
-                driftDuration: 18,
-                strokeColor: theme.arcticFrostColor,
-                strokeOpacity: 0.14 * scale,
-                strokeWidth: 0.9
-            )
-            .frame(height: 280)
+            ZStack(alignment: .top) {
+                LinearGradient(
+                    colors: [
+                        ArcticAuroraPalette.deepNavy.opacity(0.92),
+                        ArcticAuroraPalette.ultraviolet.opacity(0.55 * scale),
+                        theme.arcticDeepColor.opacity(0.62 * scale),
+                        theme.arcticDeepColor.opacity(0.26),
+                        theme.arcticFrostColor.opacity(0.10)
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
 
-            ArcticRibbonOverlayView(
-                color: theme.arcticAuroraColor,
-                opacity: 0.22 * scale,
-                amplitude: 0.072 * scale,
-                frequency: 1.66,
-                verticalOffset: 0.50,
-                bottomFade: 0.34,
-                ridge: 0.24,
-                driftDuration: 14,
-                reverseDirection: true,
-                strokeColor: ArcticAuroraPalette.neonMint,
-                strokeOpacity: 0.26 * scale,
-                strokeWidth: 1.4
-            )
-            .frame(height: 280)
+                ArcticRibbonOverlayView(
+                    color: theme.arcticDeepColor,
+                    opacity: 0.14 * scale,
+                    amplitude: 0.035 * scale,
+                    frequency: 0.98,
+                    verticalOffset: 0.40,
+                    bottomFade: 0.42,
+                    ridge: 0.17,
+                    phase: arcticPhase(elapsed: elapsed, duration: 18),
+                    strokeColor: theme.arcticFrostColor,
+                    strokeOpacity: 0.14 * scale,
+                    strokeWidth: 0.9
+                )
+                .frame(height: 280)
 
-            ArcticRibbonOverlayView(
-                color: theme.arcticFrostColor,
-                opacity: 0.26 * scale,
-                amplitude: 0.096 * scale,
-                frequency: 2.24,
-                verticalOffset: 0.57,
-                bottomFade: 0.30,
-                ridge: 0.30,
-                driftDuration: 11,
-                strokeColor: ArcticAuroraPalette.violet,
-                strokeOpacity: 0.30 * scale,
-                strokeWidth: 1.9
-            )
-            .frame(height: 280)
+                ArcticRibbonOverlayView(
+                    color: theme.arcticAuroraColor,
+                    opacity: 0.22 * scale,
+                    amplitude: 0.072 * scale,
+                    frequency: 1.66,
+                    verticalOffset: 0.50,
+                    bottomFade: 0.34,
+                    ridge: 0.24,
+                    phase: arcticPhase(elapsed: elapsed, duration: 14, reverse: true),
+                    strokeColor: ArcticAuroraPalette.neonMint,
+                    strokeOpacity: 0.26 * scale,
+                    strokeWidth: 1.4
+                )
+                .frame(height: 280)
 
-            ArcticAuroraSkyGlow(
-                primaryColor: ArcticAuroraPalette.neonMint,
-                secondaryColor: ArcticAuroraPalette.violet,
-                opacity: 0.34 * scale
-            )
+                ArcticRibbonOverlayView(
+                    color: theme.arcticFrostColor,
+                    opacity: 0.26 * scale,
+                    amplitude: 0.096 * scale,
+                    frequency: 2.24,
+                    verticalOffset: 0.57,
+                    bottomFade: 0.30,
+                    ridge: 0.30,
+                    phase: arcticPhase(elapsed: elapsed, duration: 11),
+                    strokeColor: ArcticAuroraPalette.violet,
+                    strokeOpacity: 0.30 * scale,
+                    strokeWidth: 1.9
+                )
+                .frame(height: 280)
 
-            ArcticAuroraSkyGlow(
-                primaryColor: ArcticAuroraPalette.magenta,
-                secondaryColor: ArcticAuroraPalette.champagne,
-                opacity: 0.20 * scale
-            )
+                ArcticAuroraSkyGlow(
+                    primaryColor: ArcticAuroraPalette.neonMint,
+                    secondaryColor: ArcticAuroraPalette.violet,
+                    opacity: 0.34 * scale
+                )
 
-            ArcticAuroraCurtainOverlayView(
-                primaryColor: ArcticAuroraPalette.neonMint,
-                secondaryColor: ArcticAuroraPalette.emerald,
-                opacity: 0.34 * scale,
-                bottomFade: 0.28,
-                driftDuration: 14,
-                reverseDirection: true,
-                blurRadius: 1.9,
-                highlights: true,
-                saturationBoost: 1.26,
-                hueShift: -4,
-                filamentLines: 11,
-                filamentOpacity: 0.26,
-                filamentWidth: 0.32,
-                filamentSpread: 0.008,
-                qualityMode: mode
-            )
-            .frame(height: 300)
+                ArcticAuroraSkyGlow(
+                    primaryColor: ArcticAuroraPalette.magenta,
+                    secondaryColor: ArcticAuroraPalette.champagne,
+                    opacity: 0.20 * scale
+                )
 
-            ArcticAuroraCurtainOverlayView(
-                primaryColor: ArcticAuroraPalette.violet,
-                secondaryColor: ArcticAuroraPalette.magenta,
-                opacity: 0.27 * scale,
-                bottomFade: 0.26,
-                driftDuration: 18,
-                reverseDirection: false,
-                blurRadius: 1.6,
-                highlights: true,
-                saturationBoost: 1.21,
-                hueShift: 4,
-                filamentLines: 9,
-                filamentOpacity: 0.23,
-                filamentWidth: 0.30,
-                filamentSpread: 0.007,
-                qualityMode: mode
-            )
-            .frame(height: 300)
+                ArcticAuroraCurtainOverlayView(
+                    primaryColor: ArcticAuroraPalette.neonMint,
+                    secondaryColor: ArcticAuroraPalette.emerald,
+                    opacity: 0.34 * scale,
+                    bottomFade: 0.28,
+                    phase: arcticPhase(elapsed: elapsed, duration: 14, reverse: true),
+                    blurRadius: 1.9,
+                    highlights: true,
+                    saturationBoost: 1.26,
+                    hueShift: -4,
+                    filamentLines: 11,
+                    filamentOpacity: 0.26,
+                    filamentWidth: 0.32,
+                    filamentSpread: 0.008,
+                    qualityMode: mode
+                )
+                .frame(height: 300)
 
-            ArcticAuroraCurtainOverlayView(
-                primaryColor: ArcticAuroraPalette.aqua,
-                secondaryColor: ArcticAuroraPalette.amethyst,
-                opacity: 0.19 * scale,
-                bottomFade: 0.30,
-                driftDuration: 20,
-                reverseDirection: true,
-                blurRadius: 2.2,
-                highlights: false,
-                saturationBoost: 1.18,
-                hueShift: 1,
-                filamentLines: 7,
-                filamentOpacity: 0.16,
-                filamentWidth: 0.28,
-                filamentSpread: 0.006,
-                qualityMode: mode
-            )
-            .frame(height: 320)
+                ArcticAuroraCurtainOverlayView(
+                    primaryColor: ArcticAuroraPalette.violet,
+                    secondaryColor: ArcticAuroraPalette.magenta,
+                    opacity: 0.27 * scale,
+                    bottomFade: 0.26,
+                    phase: arcticPhase(elapsed: elapsed, duration: 18),
+                    blurRadius: 1.6,
+                    highlights: true,
+                    saturationBoost: 1.21,
+                    hueShift: 4,
+                    filamentLines: 9,
+                    filamentOpacity: 0.23,
+                    filamentWidth: 0.30,
+                    filamentSpread: 0.007,
+                    qualityMode: mode
+                )
+                .frame(height: 300)
 
-            ArcticAuroraCurtainOverlayView(
-                primaryColor: ArcticAuroraPalette.rose,
-                secondaryColor: ArcticAuroraPalette.champagne,
-                opacity: 0.12 * scale,
-                bottomFade: 0.31,
-                driftDuration: 24,
-                reverseDirection: false,
-                blurRadius: 2.9,
-                highlights: false,
-                saturationBoost: 1.13,
-                hueShift: -2,
-                filamentLines: 5,
-                filamentOpacity: 0.12,
-                filamentWidth: 0.26,
-                filamentSpread: 0.006,
-                qualityMode: mode
-            )
-            .frame(height: 330)
+                ArcticAuroraCurtainOverlayView(
+                    primaryColor: ArcticAuroraPalette.aqua,
+                    secondaryColor: ArcticAuroraPalette.amethyst,
+                    opacity: 0.19 * scale,
+                    bottomFade: 0.30,
+                    phase: arcticPhase(elapsed: elapsed, duration: 20, reverse: true),
+                    blurRadius: 2.2,
+                    highlights: false,
+                    saturationBoost: 1.18,
+                    hueShift: 1,
+                    filamentLines: 7,
+                    filamentOpacity: 0.16,
+                    filamentWidth: 0.28,
+                    filamentSpread: 0.006,
+                    qualityMode: mode
+                )
+                .frame(height: 320)
 
-            ArcticAuroraMicroDetailOverlayView(
-                opacity: 0.23 * scale,
-                driftDuration: 18,
-                leftClusterBoost: 1.55,
-                qualityMode: mode
-            )
-            .frame(height: 332)
-            .blendMode(.screen)
+                ArcticAuroraCurtainOverlayView(
+                    primaryColor: ArcticAuroraPalette.rose,
+                    secondaryColor: ArcticAuroraPalette.champagne,
+                    opacity: 0.12 * scale,
+                    bottomFade: 0.31,
+                    phase: arcticPhase(elapsed: elapsed, duration: 24),
+                    blurRadius: 2.9,
+                    highlights: false,
+                    saturationBoost: 1.13,
+                    hueShift: -2,
+                    filamentLines: 5,
+                    filamentOpacity: 0.12,
+                    filamentWidth: 0.26,
+                    filamentSpread: 0.006,
+                    qualityMode: mode
+                )
+                .frame(height: 330)
 
-            ArcticAuroraEdgeTextureOverlayView(
-                primaryColor: ArcticAuroraPalette.emerald,
-                secondaryColor: ArcticAuroraPalette.neonMint,
-                highlightColor: ArcticAuroraPalette.lime,
-                opacity: 0.22 * scale,
-                driftDuration: 16,
-                qualityMode: mode
-            )
-            .frame(height: 118)
-            .offset(y: 132)
-            .blendMode(.screen)
+                ArcticAuroraMicroDetailOverlayView(
+                    opacity: 0.23 * scale,
+                    phase: arcticPhase(elapsed: elapsed, duration: 18),
+                    leftClusterBoost: 1.55,
+                    qualityMode: mode
+                )
+                .frame(height: 332)
+                .blendMode(.screen)
 
-            LinearGradient(
-                colors: [
-                    .clear,
-                    ArcticAuroraPalette.pearl.opacity(0.24 * scale),
-                    ArcticAuroraPalette.lime.opacity(0.22 * scale),
-                    ArcticAuroraPalette.cyan.opacity(0.17 * scale),
-                    .clear
-                ],
-                startPoint: .leading,
-                endPoint: .trailing
-            )
-            .frame(height: 104)
-            .blur(radius: 9)
-            .offset(y: 128)
-            .blendMode(.screen)
+                ArcticAuroraEdgeTextureOverlayView(
+                    primaryColor: ArcticAuroraPalette.emerald,
+                    secondaryColor: ArcticAuroraPalette.neonMint,
+                    highlightColor: ArcticAuroraPalette.lime,
+                    opacity: 0.22 * scale,
+                    phase: arcticPhase(elapsed: elapsed, duration: 16),
+                    qualityMode: mode
+                )
+                .frame(height: 118)
+                .offset(y: 132)
+                .blendMode(.screen)
 
-            LinearGradient(
-                colors: [
-                    theme.arcticFrostColor.opacity(0.21 * scale),
-                    ArcticAuroraPalette.neonMint.opacity(0.16 * scale),
-                    ArcticAuroraPalette.violet.opacity(0.15 * scale),
-                    ArcticAuroraPalette.magenta.opacity(0.13 * scale),
-                    ArcticAuroraPalette.champagne.opacity(0.10 * scale),
-                    .clear
-                ],
-                startPoint: .top,
-                endPoint: DS.Gradient.tabBackgroundEnd
-            )
+                LinearGradient(
+                    colors: [
+                        .clear,
+                        ArcticAuroraPalette.pearl.opacity(0.24 * scale),
+                        ArcticAuroraPalette.lime.opacity(0.22 * scale),
+                        ArcticAuroraPalette.cyan.opacity(0.17 * scale),
+                        .clear
+                    ],
+                    startPoint: .leading,
+                    endPoint: .trailing
+                )
+                .frame(height: 104)
+                .blur(radius: 9)
+                .offset(y: 128)
+                .blendMode(.screen)
+
+                LinearGradient(
+                    colors: [
+                        theme.arcticFrostColor.opacity(0.21 * scale),
+                        ArcticAuroraPalette.neonMint.opacity(0.16 * scale),
+                        ArcticAuroraPalette.violet.opacity(0.15 * scale),
+                        ArcticAuroraPalette.magenta.opacity(0.13 * scale),
+                        ArcticAuroraPalette.champagne.opacity(0.10 * scale),
+                        .clear
+                    ],
+                    startPoint: .top,
+                    endPoint: DS.Gradient.tabBackgroundEnd
+                )
+            }
         }
         .ignoresSafeArea()
         .onReceive(NotificationCenter.default.publisher(for: .NSProcessInfoPowerStateDidChange)) { _ in
@@ -1310,181 +1257,182 @@ struct ArcticDetailWaveBackground: View {
     var body: some View {
         let mode = qualityMode
 
-        ZStack(alignment: .top) {
-            LinearGradient(
-                colors: [
-                    ArcticAuroraPalette.deepNavy.opacity(0.84),
-                    ArcticAuroraPalette.ultraviolet.opacity(0.34),
-                    theme.arcticDeepColor.opacity(0.44),
-                    theme.arcticDeepColor.opacity(0.16),
-                    theme.arcticFrostColor.opacity(0.05)
-                ],
-                startPoint: .top,
-                endPoint: .bottom
-            )
+        TimelineView(.animation(minimumInterval: 1.0 / 60.0, paused: reduceMotion)) { context in
+            let elapsed = context.date.timeIntervalSinceReferenceDate
 
-            ArcticRibbonOverlayView(
-                color: theme.arcticDeepColor,
-                opacity: 0.11,
-                amplitude: 0.025,
-                frequency: 1.02,
-                verticalOffset: 0.42,
-                bottomFade: 0.42,
-                ridge: 0.15,
-                driftDuration: 16,
-                strokeColor: theme.arcticFrostColor,
-                strokeOpacity: 0.10,
-                strokeWidth: 0.7
-            )
-            .frame(height: 200)
+            ZStack(alignment: .top) {
+                LinearGradient(
+                    colors: [
+                        ArcticAuroraPalette.deepNavy.opacity(0.84),
+                        ArcticAuroraPalette.ultraviolet.opacity(0.34),
+                        theme.arcticDeepColor.opacity(0.44),
+                        theme.arcticDeepColor.opacity(0.16),
+                        theme.arcticFrostColor.opacity(0.05)
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
 
-            ArcticRibbonOverlayView(
-                color: theme.arcticAuroraColor,
-                opacity: 0.15,
-                amplitude: 0.048,
-                frequency: 1.62,
-                verticalOffset: 0.52,
-                bottomFade: 0.40,
-                ridge: 0.21,
-                driftDuration: 13,
-                reverseDirection: true,
-                strokeColor: ArcticAuroraPalette.neonMint,
-                strokeOpacity: 0.20,
-                strokeWidth: 1.1
-            )
-            .frame(height: 200)
+                ArcticRibbonOverlayView(
+                    color: theme.arcticDeepColor,
+                    opacity: 0.11,
+                    amplitude: 0.025,
+                    frequency: 1.02,
+                    verticalOffset: 0.42,
+                    bottomFade: 0.42,
+                    ridge: 0.15,
+                    phase: arcticPhase(elapsed: elapsed, duration: 16),
+                    strokeColor: theme.arcticFrostColor,
+                    strokeOpacity: 0.10,
+                    strokeWidth: 0.7
+                )
+                .frame(height: 200)
 
-            ArcticRibbonOverlayView(
-                color: theme.arcticFrostColor,
-                opacity: 0.18,
-                amplitude: 0.064,
-                frequency: 2.02,
-                verticalOffset: 0.56,
-                bottomFade: 0.36,
-                ridge: 0.27,
-                driftDuration: 11,
-                strokeColor: ArcticAuroraPalette.violet,
-                strokeOpacity: 0.22,
-                strokeWidth: 1.3
-            )
-            .frame(height: 200)
+                ArcticRibbonOverlayView(
+                    color: theme.arcticAuroraColor,
+                    opacity: 0.15,
+                    amplitude: 0.048,
+                    frequency: 1.62,
+                    verticalOffset: 0.52,
+                    bottomFade: 0.40,
+                    ridge: 0.21,
+                    phase: arcticPhase(elapsed: elapsed, duration: 13, reverse: true),
+                    strokeColor: ArcticAuroraPalette.neonMint,
+                    strokeOpacity: 0.20,
+                    strokeWidth: 1.1
+                )
+                .frame(height: 200)
 
-            ArcticAuroraSkyGlow(
-                primaryColor: ArcticAuroraPalette.neonMint,
-                secondaryColor: ArcticAuroraPalette.violet,
-                opacity: 0.24
-            )
+                ArcticRibbonOverlayView(
+                    color: theme.arcticFrostColor,
+                    opacity: 0.18,
+                    amplitude: 0.064,
+                    frequency: 2.02,
+                    verticalOffset: 0.56,
+                    bottomFade: 0.36,
+                    ridge: 0.27,
+                    phase: arcticPhase(elapsed: elapsed, duration: 11),
+                    strokeColor: ArcticAuroraPalette.violet,
+                    strokeOpacity: 0.22,
+                    strokeWidth: 1.3
+                )
+                .frame(height: 200)
 
-            ArcticAuroraSkyGlow(
-                primaryColor: ArcticAuroraPalette.magenta,
-                secondaryColor: ArcticAuroraPalette.champagne,
-                opacity: 0.13
-            )
+                ArcticAuroraSkyGlow(
+                    primaryColor: ArcticAuroraPalette.neonMint,
+                    secondaryColor: ArcticAuroraPalette.violet,
+                    opacity: 0.24
+                )
 
-            ArcticAuroraCurtainOverlayView(
-                primaryColor: ArcticAuroraPalette.neonMint,
-                secondaryColor: ArcticAuroraPalette.emerald,
-                opacity: 0.20,
-                bottomFade: 0.32,
-                driftDuration: 13,
-                reverseDirection: true,
-                blurRadius: 1.4,
-                saturationBoost: 1.2,
-                hueShift: -3,
-                filamentLines: 8,
-                filamentOpacity: 0.18,
-                filamentWidth: 0.27,
-                filamentSpread: 0.007,
-                qualityMode: mode
-            )
-            .frame(height: 210)
+                ArcticAuroraSkyGlow(
+                    primaryColor: ArcticAuroraPalette.magenta,
+                    secondaryColor: ArcticAuroraPalette.champagne,
+                    opacity: 0.13
+                )
 
-            ArcticAuroraCurtainOverlayView(
-                primaryColor: ArcticAuroraPalette.violet,
-                secondaryColor: ArcticAuroraPalette.magenta,
-                opacity: 0.14,
-                bottomFade: 0.31,
-                driftDuration: 17,
-                blurRadius: 1.3,
-                highlights: true,
-                saturationBoost: 1.15,
-                hueShift: 3,
-                filamentLines: 7,
-                filamentOpacity: 0.16,
-                filamentWidth: 0.26,
-                filamentSpread: 0.006,
-                qualityMode: mode
-            )
-            .frame(height: 210)
+                ArcticAuroraCurtainOverlayView(
+                    primaryColor: ArcticAuroraPalette.neonMint,
+                    secondaryColor: ArcticAuroraPalette.emerald,
+                    opacity: 0.20,
+                    bottomFade: 0.32,
+                    phase: arcticPhase(elapsed: elapsed, duration: 13, reverse: true),
+                    blurRadius: 1.4,
+                    saturationBoost: 1.2,
+                    hueShift: -3,
+                    filamentLines: 8,
+                    filamentOpacity: 0.18,
+                    filamentWidth: 0.27,
+                    filamentSpread: 0.007,
+                    qualityMode: mode
+                )
+                .frame(height: 210)
 
-            ArcticAuroraCurtainOverlayView(
-                primaryColor: ArcticAuroraPalette.aqua,
-                secondaryColor: ArcticAuroraPalette.amethyst,
-                opacity: 0.10,
-                bottomFade: 0.35,
-                driftDuration: 19,
-                reverseDirection: true,
-                blurRadius: 1.8,
-                highlights: false,
-                saturationBoost: 1.12,
-                hueShift: 1,
-                filamentLines: 5,
-                filamentOpacity: 0.11,
-                filamentWidth: 0.24,
-                filamentSpread: 0.006,
-                qualityMode: mode
-            )
-            .frame(height: 220)
+                ArcticAuroraCurtainOverlayView(
+                    primaryColor: ArcticAuroraPalette.violet,
+                    secondaryColor: ArcticAuroraPalette.magenta,
+                    opacity: 0.14,
+                    bottomFade: 0.31,
+                    phase: arcticPhase(elapsed: elapsed, duration: 17),
+                    blurRadius: 1.3,
+                    highlights: true,
+                    saturationBoost: 1.15,
+                    hueShift: 3,
+                    filamentLines: 7,
+                    filamentOpacity: 0.16,
+                    filamentWidth: 0.26,
+                    filamentSpread: 0.006,
+                    qualityMode: mode
+                )
+                .frame(height: 210)
 
-            ArcticAuroraMicroDetailOverlayView(
-                opacity: 0.15,
-                driftDuration: 17,
-                leftClusterBoost: 1.45,
-                qualityMode: mode
-            )
-            .frame(height: 224)
-            .blendMode(.screen)
+                ArcticAuroraCurtainOverlayView(
+                    primaryColor: ArcticAuroraPalette.aqua,
+                    secondaryColor: ArcticAuroraPalette.amethyst,
+                    opacity: 0.10,
+                    bottomFade: 0.35,
+                    phase: arcticPhase(elapsed: elapsed, duration: 19, reverse: true),
+                    blurRadius: 1.8,
+                    highlights: false,
+                    saturationBoost: 1.12,
+                    hueShift: 1,
+                    filamentLines: 5,
+                    filamentOpacity: 0.11,
+                    filamentWidth: 0.24,
+                    filamentSpread: 0.006,
+                    qualityMode: mode
+                )
+                .frame(height: 220)
 
-            ArcticAuroraEdgeTextureOverlayView(
-                primaryColor: ArcticAuroraPalette.emerald,
-                secondaryColor: ArcticAuroraPalette.neonMint,
-                highlightColor: ArcticAuroraPalette.lime,
-                opacity: 0.16,
-                driftDuration: 14,
-                qualityMode: mode
-            )
-            .frame(height: 86)
-            .offset(y: 96)
-            .blendMode(.screen)
+                ArcticAuroraMicroDetailOverlayView(
+                    opacity: 0.15,
+                    phase: arcticPhase(elapsed: elapsed, duration: 17),
+                    leftClusterBoost: 1.45,
+                    qualityMode: mode
+                )
+                .frame(height: 224)
+                .blendMode(.screen)
 
-            LinearGradient(
-                colors: [
-                    .clear,
-                    ArcticAuroraPalette.pearl.opacity(0.16),
-                    ArcticAuroraPalette.lime.opacity(0.14),
-                    ArcticAuroraPalette.cyan.opacity(0.10),
-                    .clear
-                ],
-                startPoint: .leading,
-                endPoint: .trailing
-            )
-            .frame(height: 72)
-            .blur(radius: 6)
-            .offset(y: 84)
-            .blendMode(.screen)
+                ArcticAuroraEdgeTextureOverlayView(
+                    primaryColor: ArcticAuroraPalette.emerald,
+                    secondaryColor: ArcticAuroraPalette.neonMint,
+                    highlightColor: ArcticAuroraPalette.lime,
+                    opacity: 0.16,
+                    phase: arcticPhase(elapsed: elapsed, duration: 14),
+                    qualityMode: mode
+                )
+                .frame(height: 86)
+                .offset(y: 96)
+                .blendMode(.screen)
 
-            LinearGradient(
-                colors: [
-                    theme.arcticFrostColor.opacity(0.17),
-                    ArcticAuroraPalette.neonMint.opacity(0.11),
-                    ArcticAuroraPalette.violet.opacity(0.10),
-                    ArcticAuroraPalette.magenta.opacity(0.08),
-                    ArcticAuroraPalette.champagne.opacity(0.06),
-                    .clear
-                ],
-                startPoint: .top,
-                endPoint: DS.Gradient.tabBackgroundEnd
-            )
+                LinearGradient(
+                    colors: [
+                        .clear,
+                        ArcticAuroraPalette.pearl.opacity(0.16),
+                        ArcticAuroraPalette.lime.opacity(0.14),
+                        ArcticAuroraPalette.cyan.opacity(0.10),
+                        .clear
+                    ],
+                    startPoint: .leading,
+                    endPoint: .trailing
+                )
+                .frame(height: 72)
+                .blur(radius: 6)
+                .offset(y: 84)
+                .blendMode(.screen)
+
+                LinearGradient(
+                    colors: [
+                        theme.arcticFrostColor.opacity(0.17),
+                        ArcticAuroraPalette.neonMint.opacity(0.11),
+                        ArcticAuroraPalette.violet.opacity(0.10),
+                        ArcticAuroraPalette.magenta.opacity(0.08),
+                        ArcticAuroraPalette.champagne.opacity(0.06),
+                        .clear
+                    ],
+                    startPoint: .top,
+                    endPoint: DS.Gradient.tabBackgroundEnd
+                )
+            }
         }
         .ignoresSafeArea()
         .onReceive(NotificationCenter.default.publisher(for: .NSProcessInfoPowerStateDidChange)) { _ in
@@ -1508,148 +1456,150 @@ struct ArcticSheetWaveBackground: View {
     var body: some View {
         let mode = qualityMode
 
-        ZStack(alignment: .top) {
-            LinearGradient(
-                colors: [
-                    ArcticAuroraPalette.deepNavy.opacity(0.76),
-                    ArcticAuroraPalette.ultraviolet.opacity(0.27),
-                    theme.arcticDeepColor.opacity(0.34),
-                    theme.arcticDeepColor.opacity(0.12),
-                    theme.arcticFrostColor.opacity(0.03)
-                ],
+        TimelineView(.animation(minimumInterval: 1.0 / 60.0, paused: reduceMotion)) { context in
+            let elapsed = context.date.timeIntervalSinceReferenceDate
+
+            ZStack(alignment: .top) {
+                LinearGradient(
+                    colors: [
+                        ArcticAuroraPalette.deepNavy.opacity(0.76),
+                        ArcticAuroraPalette.ultraviolet.opacity(0.27),
+                        theme.arcticDeepColor.opacity(0.34),
+                        theme.arcticDeepColor.opacity(0.12),
+                        theme.arcticFrostColor.opacity(0.03)
+                    ],
                 startPoint: .top,
                 endPoint: .bottom
             )
 
-            ArcticRibbonOverlayView(
-                color: theme.arcticAuroraColor,
-                opacity: 0.12,
-                amplitude: 0.034,
-                frequency: 1.54,
-                verticalOffset: 0.50,
-                bottomFade: 0.44,
-                ridge: 0.20,
-                driftDuration: 13,
-                reverseDirection: true,
-                strokeColor: ArcticAuroraPalette.neonMint,
-                strokeOpacity: 0.16,
-                strokeWidth: 0.9
-            )
-            .frame(height: 150)
+                ArcticRibbonOverlayView(
+                    color: theme.arcticAuroraColor,
+                    opacity: 0.12,
+                    amplitude: 0.034,
+                    frequency: 1.54,
+                    verticalOffset: 0.50,
+                    bottomFade: 0.44,
+                    ridge: 0.20,
+                    phase: arcticPhase(elapsed: elapsed, duration: 13, reverse: true),
+                    strokeColor: ArcticAuroraPalette.neonMint,
+                    strokeOpacity: 0.16,
+                    strokeWidth: 0.9
+                )
+                .frame(height: 150)
 
-            ArcticRibbonOverlayView(
-                color: theme.arcticFrostColor,
-                opacity: 0.14,
-                amplitude: 0.05,
-                frequency: 1.92,
-                verticalOffset: 0.54,
-                bottomFade: 0.40,
-                ridge: 0.24,
-                driftDuration: 11,
-                strokeColor: ArcticAuroraPalette.violet,
-                strokeOpacity: 0.18,
-                strokeWidth: 1.1
-            )
-            .frame(height: 150)
+                ArcticRibbonOverlayView(
+                    color: theme.arcticFrostColor,
+                    opacity: 0.14,
+                    amplitude: 0.05,
+                    frequency: 1.92,
+                    verticalOffset: 0.54,
+                    bottomFade: 0.40,
+                    ridge: 0.24,
+                    phase: arcticPhase(elapsed: elapsed, duration: 11),
+                    strokeColor: ArcticAuroraPalette.violet,
+                    strokeOpacity: 0.18,
+                    strokeWidth: 1.1
+                )
+                .frame(height: 150)
 
-            ArcticAuroraSkyGlow(
-                primaryColor: ArcticAuroraPalette.neonMint,
-                secondaryColor: ArcticAuroraPalette.violet,
-                opacity: 0.19
-            )
+                ArcticAuroraSkyGlow(
+                    primaryColor: ArcticAuroraPalette.neonMint,
+                    secondaryColor: ArcticAuroraPalette.violet,
+                    opacity: 0.19
+                )
 
-            ArcticAuroraSkyGlow(
-                primaryColor: ArcticAuroraPalette.magenta,
-                secondaryColor: ArcticAuroraPalette.champagne,
-                opacity: 0.10
-            )
+                ArcticAuroraSkyGlow(
+                    primaryColor: ArcticAuroraPalette.magenta,
+                    secondaryColor: ArcticAuroraPalette.champagne,
+                    opacity: 0.10
+                )
 
-            ArcticAuroraCurtainOverlayView(
-                primaryColor: ArcticAuroraPalette.neonMint,
-                secondaryColor: ArcticAuroraPalette.emerald,
-                opacity: 0.14,
-                bottomFade: 0.35,
-                driftDuration: 12,
-                reverseDirection: true,
-                blurRadius: 1.2,
-                highlights: false,
-                saturationBoost: 1.15,
-                hueShift: -2,
-                filamentLines: 6,
-                filamentOpacity: 0.14,
-                filamentWidth: 0.22,
-                filamentSpread: 0.006,
-                qualityMode: mode
-            )
-            .frame(height: 150)
+                ArcticAuroraCurtainOverlayView(
+                    primaryColor: ArcticAuroraPalette.neonMint,
+                    secondaryColor: ArcticAuroraPalette.emerald,
+                    opacity: 0.14,
+                    bottomFade: 0.35,
+                    phase: arcticPhase(elapsed: elapsed, duration: 12, reverse: true),
+                    blurRadius: 1.2,
+                    highlights: false,
+                    saturationBoost: 1.15,
+                    hueShift: -2,
+                    filamentLines: 6,
+                    filamentOpacity: 0.14,
+                    filamentWidth: 0.22,
+                    filamentSpread: 0.006,
+                    qualityMode: mode
+                )
+                .frame(height: 150)
 
-            ArcticAuroraCurtainOverlayView(
-                primaryColor: ArcticAuroraPalette.violet,
-                secondaryColor: ArcticAuroraPalette.magenta,
-                opacity: 0.09,
-                bottomFade: 0.32,
-                driftDuration: 16,
-                blurRadius: 1.1,
-                highlights: false,
-                saturationBoost: 1.12,
-                hueShift: 2,
-                filamentLines: 5,
-                filamentOpacity: 0.11,
-                filamentWidth: 0.21,
-                filamentSpread: 0.005,
-                qualityMode: mode
-            )
-            .frame(height: 150)
+                ArcticAuroraCurtainOverlayView(
+                    primaryColor: ArcticAuroraPalette.violet,
+                    secondaryColor: ArcticAuroraPalette.magenta,
+                    opacity: 0.09,
+                    bottomFade: 0.32,
+                    phase: arcticPhase(elapsed: elapsed, duration: 16),
+                    blurRadius: 1.1,
+                    highlights: false,
+                    saturationBoost: 1.12,
+                    hueShift: 2,
+                    filamentLines: 5,
+                    filamentOpacity: 0.11,
+                    filamentWidth: 0.21,
+                    filamentSpread: 0.005,
+                    qualityMode: mode
+                )
+                .frame(height: 150)
 
-            ArcticAuroraMicroDetailOverlayView(
-                opacity: 0.11,
-                driftDuration: 16,
-                leftClusterBoost: 1.32,
-                qualityMode: mode
-            )
-            .frame(height: 154)
-            .blendMode(.screen)
+                ArcticAuroraMicroDetailOverlayView(
+                    opacity: 0.11,
+                    phase: arcticPhase(elapsed: elapsed, duration: 16),
+                    leftClusterBoost: 1.32,
+                    qualityMode: mode
+                )
+                .frame(height: 154)
+                .blendMode(.screen)
 
-            ArcticAuroraEdgeTextureOverlayView(
-                primaryColor: ArcticAuroraPalette.emerald,
-                secondaryColor: ArcticAuroraPalette.neonMint,
-                highlightColor: ArcticAuroraPalette.lime,
-                opacity: 0.13,
-                driftDuration: 13,
-                qualityMode: mode
-            )
-            .frame(height: 62)
-            .offset(y: 66)
-            .blendMode(.screen)
+                ArcticAuroraEdgeTextureOverlayView(
+                    primaryColor: ArcticAuroraPalette.emerald,
+                    secondaryColor: ArcticAuroraPalette.neonMint,
+                    highlightColor: ArcticAuroraPalette.lime,
+                    opacity: 0.13,
+                    phase: arcticPhase(elapsed: elapsed, duration: 13),
+                    qualityMode: mode
+                )
+                .frame(height: 62)
+                .offset(y: 66)
+                .blendMode(.screen)
 
-            LinearGradient(
-                colors: [
-                    .clear,
-                    ArcticAuroraPalette.pearl.opacity(0.12),
-                    ArcticAuroraPalette.lime.opacity(0.10),
-                    ArcticAuroraPalette.cyan.opacity(0.07),
-                    .clear
-                ],
-                startPoint: .leading,
-                endPoint: .trailing
-            )
-            .frame(height: 52)
-            .blur(radius: 5)
-            .offset(y: 58)
-            .blendMode(.screen)
+                LinearGradient(
+                    colors: [
+                        .clear,
+                        ArcticAuroraPalette.pearl.opacity(0.12),
+                        ArcticAuroraPalette.lime.opacity(0.10),
+                        ArcticAuroraPalette.cyan.opacity(0.07),
+                        .clear
+                    ],
+                    startPoint: .leading,
+                    endPoint: .trailing
+                )
+                .frame(height: 52)
+                .blur(radius: 5)
+                .offset(y: 58)
+                .blendMode(.screen)
 
-            LinearGradient(
-                colors: [
-                    theme.arcticFrostColor.opacity(0.15),
-                    ArcticAuroraPalette.neonMint.opacity(0.09),
-                    ArcticAuroraPalette.violet.opacity(0.07),
-                    ArcticAuroraPalette.magenta.opacity(0.06),
-                    ArcticAuroraPalette.champagne.opacity(0.05),
-                    .clear
-                ],
-                startPoint: .top,
-                endPoint: DS.Gradient.sheetBackgroundEnd
-            )
+                LinearGradient(
+                    colors: [
+                        theme.arcticFrostColor.opacity(0.15),
+                        ArcticAuroraPalette.neonMint.opacity(0.09),
+                        ArcticAuroraPalette.violet.opacity(0.07),
+                        ArcticAuroraPalette.magenta.opacity(0.06),
+                        ArcticAuroraPalette.champagne.opacity(0.05),
+                        .clear
+                    ],
+                    startPoint: .top,
+                    endPoint: DS.Gradient.sheetBackgroundEnd
+                )
+            }
         }
         .ignoresSafeArea()
         .onReceive(NotificationCenter.default.publisher(for: .NSProcessInfoPowerStateDidChange)) { _ in
