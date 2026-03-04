@@ -143,6 +143,9 @@ struct DashboardView: View {
                                 cards: viewModel.bodyCards
                             )
                         }
+
+                        // Sleep deficit badge
+                        sleepDeficitSection
                     }
                 }
                 .padding(sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.lg)
@@ -244,6 +247,18 @@ struct DashboardView: View {
             .padding(.horizontal, DS.Spacing.xs)
 
             cardGrid(cards: viewModel.pinnedCards)
+        }
+    }
+
+    @ViewBuilder
+    private var sleepDeficitSection: some View {
+        if let deficit = viewModel.sleepDeficitAnalysis,
+           deficit.level != .insufficient,
+           let sleepMetric = viewModel.sortedMetrics.first(where: { $0.category == .sleep }) {
+            NavigationLink(value: sleepMetric) {
+                SleepDeficitBadgeView(analysis: deficit)
+            }
+            .buttonStyle(.plain)
         }
     }
 

@@ -130,6 +130,9 @@ final class MetricDetailViewModel {
     /// Exercise totals for the currently visible scroll range.
     private(set) var exerciseTotals: ExerciseTotals?
 
+    /// Sleep deficit analysis (only populated for sleep category).
+    private(set) var deficitAnalysis: SleepDeficitAnalysis?
+
     /// Trend line data points (linear regression) for the visible chart data.
     private(set) var cachedTrendLine: [ChartDataPoint]?
 
@@ -252,8 +255,15 @@ final class MetricDetailViewModel {
 
     // MARK: - Sleep
 
+    private let deficitUseCase = CalculateSleepDeficitUseCase()
+
     private func loadSleepData() async throws {
         let range = extendedRange
+
+        // Load deficit analysis once (independent of selected period)
+        if deficitAnalysis == nil {
+            await loadDeficitAnalysis()
+        }
 
         if selectedPeriod == .day {
             // Day mode: show raw sleep stages
@@ -315,6 +325,32 @@ final class MetricDetailViewModel {
             chartData = HealthDataAggregator.fillDateGaps(
                 chartData, period: selectedPeriod, start: range.start, end: range.end
             )
+        }
+    }
+
+    private func loadDeficitAnalysis() async {
+        let calendar = Calendar.current
+        let today = Date()
+        let start = calendar.date(byAdding: .day, value: -90, to: today) ?? today
+        let end = calendar.date(byAdding: .day, value: 1, to: today) ?? today
+
+        do {
+            let durations = try await sleepService.fetchDailySleepDurations(start: start, end: end)
+            let fourteenDaysAgo = calendar.date(byAdding: .day, value: -14, to: today) ?? today
+
+            let toDayDuration: ((date: Date, totalMinutes: Double, stageBreakdown: [SleepStage.Stage: Double])) -> CalculateSleepDeficitUseCase.Input.DayDuration = { item in
+                .init(date: item.date, totalMinutes: item.totalMinutes)
+            }
+
+            let recent14 = durations.filter { $0.date >= fourteenDaysAgo }.map(toDayDuration)
+            let longTerm90 = durations.map(toDayDuration)
+
+            deficitAnalysis = deficitUseCase.execute(input: .init(
+                recentDurations: recent14,
+                longTermDurations: longTerm90
+            ))
+        } catch {
+            AppLogger.ui.error("[Sleep] Deficit analysis failed: \(error.localizedDescription)")
         }
     }
 

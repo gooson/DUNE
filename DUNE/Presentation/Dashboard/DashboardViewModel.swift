@@ -21,6 +21,7 @@ final class DashboardViewModel {
     var heroBaselineDetails: [BaselineDetail] = []
     var pinnedCategories: [HealthMetric.Category]
     var baselineDeltasByMetricID: [String: MetricBaselineDelta] = [:]
+    private(set) var sleepDeficitAnalysis: SleepDeficitAnalysis?
 
     // Weather (Correction #8/#52: cached, not computed — accessed in SwiftUI body)
     private(set) var weatherSnapshot: WeatherSnapshot?
@@ -531,6 +532,7 @@ final class DashboardViewModel {
     }
 
     private let sleepScoreUseCase = CalculateSleepScoreUseCase()
+    private let sleepDeficitUseCase = CalculateSleepDeficitUseCase()
 
     private func fetchSleepData() async throws -> HealthMetric? {
         let calendar = Calendar.current
@@ -565,18 +567,34 @@ final class DashboardViewModel {
             ? output.totalMinutes - yesterdayOutput.totalMinutes
             : nil
 
-        let baselineStart = calendar.date(byAdding: .day, value: -14, to: today) ?? today
+        // Fetch 90 days for both baseline delta and deficit analysis
+        let deficitStart = calendar.date(byAdding: .day, value: -90, to: today) ?? today
         let baselineEnd = calendar.date(byAdding: .day, value: 1, to: today) ?? today
-        let dailySleep = try await sleepService.fetchDailySleepDurations(start: baselineStart, end: baselineEnd)
-        let baselineValues = dailySleep
+        let dailySleep = try await sleepService.fetchDailySleepDurations(start: deficitStart, end: baselineEnd)
+
+        // Baseline delta (existing: 14-day window, excluding current day)
+        let fourteenDaysAgo = calendar.date(byAdding: .day, value: -14, to: today) ?? today
+        let recent14 = dailySleep.filter { $0.date >= fourteenDaysAgo }
+        let baselineValues = recent14
             .filter { !calendar.isDate($0.date, inSameDayAs: sleepDate) }
             .map(\.totalMinutes)
         let shortTermAvg = average(baselineValues)
+        let longTermValues = dailySleep.map(\.totalMinutes)
+        let longTermAvg = average(longTermValues)
         baselineDeltasByMetricID["sleep"] = MetricBaselineDelta(
             yesterdayDelta: change,
             shortTermDelta: shortTermAvg.map { output.totalMinutes - $0 },
-            longTermDelta: nil
+            longTermDelta: longTermAvg.map { output.totalMinutes - $0 }
         )
+
+        // Deficit analysis
+        let toDayDuration: ((date: Date, totalMinutes: Double, stageBreakdown: [SleepStage.Stage: Double])) -> CalculateSleepDeficitUseCase.Input.DayDuration = { item in
+            .init(date: item.date, totalMinutes: item.totalMinutes)
+        }
+        sleepDeficitAnalysis = sleepDeficitUseCase.execute(input: .init(
+            recentDurations: recent14.map(toDayDuration),
+            longTermDurations: dailySleep.map(toDayDuration)
+        ))
 
         return HealthMetric(
             id: "sleep",
@@ -601,15 +619,29 @@ final class DashboardViewModel {
             ? output.totalMinutes - yesterdayOutput.totalMinutes
             : nil
 
-        let baselineValues = snapshot.sleepDailyDurations
+        let today = Date()
+        let fourteenDaysAgo = calendar.date(byAdding: .day, value: -14, to: today) ?? today
+        let recent14 = snapshot.sleepDailyDurations.filter { $0.date >= fourteenDaysAgo }
+        let baselineValues = recent14
             .filter { !calendar.isDate($0.date, inSameDayAs: sleepInput.date) }
             .map(\.totalMinutes)
         let shortTermAvg = average(baselineValues)
+        let longTermValues = snapshot.sleepDailyDurations.map(\.totalMinutes)
+        let longTermAvg = average(longTermValues)
         baselineDeltasByMetricID["sleep"] = MetricBaselineDelta(
             yesterdayDelta: change,
             shortTermDelta: shortTermAvg.map { output.totalMinutes - $0 },
-            longTermDelta: nil
+            longTermDelta: longTermAvg.map { output.totalMinutes - $0 }
         )
+
+        // Deficit analysis from snapshot data
+        let toDayDuration: (SharedHealthSnapshot.SleepDailyDuration) -> CalculateSleepDeficitUseCase.Input.DayDuration = { item in
+            .init(date: item.date, totalMinutes: item.totalMinutes)
+        }
+        sleepDeficitAnalysis = sleepDeficitUseCase.execute(input: .init(
+            recentDurations: recent14.map(toDayDuration),
+            longTermDurations: snapshot.sleepDailyDurations.map(toDayDuration)
+        ))
 
         return HealthMetric(
             id: "sleep",

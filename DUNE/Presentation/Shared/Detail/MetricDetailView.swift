@@ -84,6 +84,12 @@ struct MetricDetailView: View {
                     shimmerTask = nil
                 }
 
+                // Sleep deficit gauge
+                if metric.category == .sleep, let deficit = viewModel.deficitAnalysis,
+                   deficit.level != .insufficient {
+                    SleepDeficitGaugeView(analysis: deficit)
+                }
+
                 // Exercise totals + Highlights
                 if sizeClass == .regular {
                     HStack(alignment: .top, spacing: DS.Spacing.lg) {

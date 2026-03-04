@@ -13,9 +13,11 @@ final class SleepViewModel {
     // Cached outputs (rebuilt in loadData — not recomputed per render)
     private(set) var cachedOutput = CalculateSleepScoreUseCase.Output(score: 0, totalMinutes: 0, efficiency: 0)
     private(set) var stageBreakdown: [(stage: SleepStage.Stage, minutes: Double)] = []
+    private(set) var deficitAnalysis: SleepDeficitAnalysis?
 
     private let sleepService: SleepQuerying
     private let sleepScoreUseCase = CalculateSleepScoreUseCase()
+    private let deficitUseCase = CalculateSleepDeficitUseCase()
 
     init(sleepService: SleepQuerying? = nil) {
         self.sleepService = sleepService ?? SleepQueryService(manager: .shared)
@@ -57,7 +59,12 @@ final class SleepViewModel {
             // Cache stage breakdown (single-pass dictionary instead of 5×O(N) per render)
             rebuildStageBreakdown()
 
-            weeklyData = try await withThrowingTaskGroup(of: DailySleep?.self) { group in
+            // Fetch weekly data and deficit data in parallel
+            // Correction #115: Fetch window >= filter threshold x 2
+            let deficitEnd = calendar.date(byAdding: .day, value: 1, to: today) ?? today
+            let deficitStart = calendar.date(byAdding: .day, value: -90, to: today) ?? today
+
+            async let weeklyTask: [DailySleep] = withThrowingTaskGroup(of: DailySleep?.self) { group in
                 for dayOffset in 0..<7 {
                     group.addTask { [sleepService] in
                         guard let date = calendar.date(byAdding: .day, value: -dayOffset, to: today) else { return nil }
@@ -72,11 +79,36 @@ final class SleepViewModel {
                 }
                 return results.sorted { $0.date < $1.date }
             }
+            async let deficitTask = sleepService.fetchDailySleepDurations(start: deficitStart, end: deficitEnd)
+
+            weeklyData = try await weeklyTask
+            let allDurations = try await deficitTask
+            computeDeficitAnalysis(from: allDurations, today: today)
         } catch {
             AppLogger.ui.error("Sleep data load failed: \(error.localizedDescription)")
             errorMessage = error.localizedDescription
         }
         isLoading = false
+    }
+
+    private func computeDeficitAnalysis(
+        from durations: [(date: Date, totalMinutes: Double, stageBreakdown: [SleepStage.Stage: Double])],
+        today: Date
+    ) {
+        let calendar = Calendar.current
+        let fourteenDaysAgo = calendar.date(byAdding: .day, value: -14, to: today) ?? today
+
+        let toDayDuration: ((date: Date, totalMinutes: Double, stageBreakdown: [SleepStage.Stage: Double])) -> CalculateSleepDeficitUseCase.Input.DayDuration = { item in
+            .init(date: item.date, totalMinutes: item.totalMinutes)
+        }
+
+        let recent14 = durations.filter { $0.date >= fourteenDaysAgo }.map(toDayDuration)
+        let longTerm90 = durations.map(toDayDuration)
+
+        deficitAnalysis = deficitUseCase.execute(input: .init(
+            recentDurations: recent14,
+            longTermDurations: longTerm90
+        ))
     }
 
     private func rebuildStageBreakdown() {
