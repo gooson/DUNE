@@ -223,8 +223,13 @@ struct NotificationHubView: View {
                             .font(.headline)
                             .foregroundStyle(.tint)
 
-                        Text(unreadCount > 0 ? "\(unreadCount.formatted()) unread notifications" : "Inbox is all caught up")
-                            .font(.subheadline.weight(.semibold))
+                        if unreadCount > 0 {
+                            Text("\(unreadCount) unread notifications")
+                                .font(.subheadline.weight(.semibold))
+                        } else {
+                            Text("Inbox is all caught up")
+                                .font(.subheadline.weight(.semibold))
+                        }
 
                         Spacer()
 
@@ -265,7 +270,7 @@ struct NotificationHubView: View {
             EmptyStateView(
                 icon: "bell.slash",
                 title: "No Notifications",
-                message: "알림이 도착하면 여기에 표시됩니다.",
+                message: "Notifications will appear here when they arrive.",
                 actionTitle: "Open Settings",
                 action: { destination = .settings }
             )
@@ -399,14 +404,14 @@ struct NotificationHubView: View {
 
     private func destinationHint(for item: NotificationInboxItem) -> (title: String, symbol: String) {
         if item.route?.destination == .workoutDetail {
-            return ("Workout Detail", "figure.strengthtraining.traditional")
+            return (String(localized: "Workout Detail"), "figure.strengthtraining.traditional")
         }
 
         guard let category = NotificationHubMetricResolver.category(for: item.insightType) else {
-            return ("Notification Detail", "arrow.triangle.branch")
+            return (String(localized: "Notification Detail"), "arrow.triangle.branch")
         }
 
-        return ("\(category.englishDisplayName) Detail", category.iconName)
+        return (String(localized: "\(category.displayName) Detail"), category.iconName)
     }
 
     private func iconTint(for type: HealthInsight.InsightType) -> Color {
@@ -435,8 +440,8 @@ private struct NotificationDestinationUnavailableView: View {
         EmptyStateView(
             icon: "arrow.triangle.branch",
             title: "Destination Unavailable",
-            message: "이 알림의 이동 대상 정보를 찾을 수 없습니다. 설정에서 알림 구성을 확인하세요.",
-            actionTitle: "Back",
+            message: "Could not find where this notification should open. Check your notification settings.",
+            actionTitle: "Go Back",
             action: {
                 dismiss()
             }
