@@ -145,19 +145,21 @@ final class BackgroundNotificationEvaluator: Sendable {
 
     private func evaluateSleepSamples(_ samples: [HKSample]) -> HealthInsight? {
         let categorySamples = samples.compactMap { $0 as? HKCategorySample }
-        // Accept inBed (iPhone) and all asleep stages (Watch) to detect sleep sessions.
-        // Correction #110: Sleep stage classification consistency.
-        let sleepSessionSamples = categorySamples.filter {
+        // Sum all asleep stage durations (exclude inBed to avoid double-counting).
+        // Matches SleepQueryService.fetchLastNightSleepSummary pattern.
+        let asleepSamples = categorySamples.filter {
             let v = $0.value
-            return v == HKCategoryValueSleepAnalysis.inBed.rawValue
-                || v == HKCategoryValueSleepAnalysis.asleepUnspecified.rawValue
+            return v == HKCategoryValueSleepAnalysis.asleepUnspecified.rawValue
                 || v == HKCategoryValueSleepAnalysis.asleepCore.rawValue
                 || v == HKCategoryValueSleepAnalysis.asleepDeep.rawValue
                 || v == HKCategoryValueSleepAnalysis.asleepREM.rawValue
         }
-        guard let latest = sleepSessionSamples.last else { return nil }
+        guard !asleepSamples.isEmpty else { return nil }
 
-        let totalMinutes = latest.endDate.timeIntervalSince(latest.startDate) / 60.0
+        let totalMinutes = asleepSamples.reduce(0.0) {
+            $0 + $1.endDate.timeIntervalSince($1.startDate) / 60.0
+        }
+        guard totalMinutes > 0 else { return nil }
         return EvaluateHealthInsightUseCase.evaluateSleepComplete(totalMinutes: totalMinutes)
     }
 
