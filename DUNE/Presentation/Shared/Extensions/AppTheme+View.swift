@@ -284,6 +284,18 @@ extension AppTheme {
     }
 }
 
+// MARK: - Glass Border Capability
+
+extension AppTheme {
+    /// Whether this theme uses gradient glass borders on cards (StandardCard, InlineCard).
+    var usesGradientBorder: Bool {
+        switch self {
+        case .sakuraCalm, .arcticDawn, .solarPop, .shanksRed: true
+        case .desertWarm, .oceanCool, .forestGreen: false
+        }
+    }
+}
+
 // MARK: - Display Name
 
 extension AppTheme {
