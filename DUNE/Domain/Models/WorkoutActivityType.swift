@@ -200,6 +200,16 @@ enum WorkoutActivityType: String, Codable, Sendable, CaseIterable {
         }
     }
 
+    /// Whether step count is a meaningful metric for this activity.
+    var isStepCountRelevant: Bool {
+        switch self {
+        case .walking, .running, .hiking, .stepTraining:
+            return true
+        default:
+            return false
+        }
+    }
+
     /// High-level category for grouping and coloring.
     var category: ActivityCategory {
         switch self {
