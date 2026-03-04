@@ -53,6 +53,7 @@ struct SleepDeficitBadgeView: View {
 
                 Spacer(minLength: 0)
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 
