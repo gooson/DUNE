@@ -160,6 +160,87 @@ struct NotificationInboxItemModelTests {
     }
 }
 
+@Suite("NotificationHubMetricResolver")
+struct NotificationHubMetricResolverTests {
+    @Test("Category mapping covers supported insight types")
+    func categoryMapping() {
+        #expect(NotificationHubMetricResolver.category(for: .hrvAnomaly) == .hrv)
+        #expect(NotificationHubMetricResolver.category(for: .rhrAnomaly) == .rhr)
+        #expect(NotificationHubMetricResolver.category(for: .sleepComplete) == .sleep)
+        #expect(NotificationHubMetricResolver.category(for: .stepGoal) == .steps)
+        #expect(NotificationHubMetricResolver.category(for: .weightUpdate) == .weight)
+        #expect(NotificationHubMetricResolver.category(for: .bodyFatUpdate) == .bodyFat)
+        #expect(NotificationHubMetricResolver.category(for: .bmiUpdate) == .bmi)
+        #expect(NotificationHubMetricResolver.category(for: .workoutPR) == .exercise)
+    }
+
+    @Test("Metric parsing reads first numeric signal for HRV")
+    func parseHRVValue() {
+        let item = makeItem(
+            insightType: .hrvAnomaly,
+            body: "Today's HRV 37ms — 25% lower than usual"
+        )
+
+        let metric = NotificationHubMetricResolver.metric(for: item)
+
+        #expect(metric?.category == .hrv)
+        #expect(metric?.value == 37)
+    }
+
+    @Test("Metric parsing supports comma decimal for weight")
+    func parseWeightDecimalComma() {
+        let item = makeItem(
+            insightType: .weightUpdate,
+            body: "Weight: 70,5kg (+0,3)"
+        )
+
+        let metric = NotificationHubMetricResolver.metric(for: item)
+
+        #expect(metric?.category == .weight)
+        #expect(metric?.value == 70.5)
+    }
+
+    @Test("Sleep parsing supports Korean hour-minute format")
+    func parseSleepKoreanHourMinute() {
+        let item = makeItem(
+            insightType: .sleepComplete,
+            body: "지난밤: 7시간 20분 수면"
+        )
+
+        let metric = NotificationHubMetricResolver.metric(for: item)
+
+        #expect(metric?.category == .sleep)
+        #expect(metric?.value == 440)
+    }
+
+    @Test("Workout PR without route falls back to exercise metric with safe default value")
+    func workoutPRFallbackMetric() {
+        let item = makeItem(
+            insightType: .workoutPR,
+            body: "Running: New milestone"
+        )
+
+        let metric = NotificationHubMetricResolver.metric(for: item)
+
+        #expect(metric?.category == .exercise)
+        #expect(metric?.value == 0)
+    }
+
+    private func makeItem(insightType: HealthInsight.InsightType, body: String) -> NotificationInboxItem {
+        NotificationInboxItem(
+            id: UUID().uuidString,
+            insightType: insightType,
+            title: "Title",
+            body: body,
+            createdAt: Date(timeIntervalSince1970: 1_700_000_000),
+            isRead: false,
+            openedAt: nil,
+            route: nil,
+            source: .localNotification
+        )
+    }
+}
+
 @Suite("ScoreContribution")
 struct ScoreContributionModelTests {
     @Test("id is derived from factor rawValue")
