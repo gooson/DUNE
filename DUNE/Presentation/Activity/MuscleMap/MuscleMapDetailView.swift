@@ -7,6 +7,8 @@ struct MuscleMapDetailView: View {
     let library: ExerciseLibraryQuerying
 
     @State private var viewModel = MuscleMapDetailViewModel()
+    @State private var showing3DMap = false
+    @State private var selected3DMuscle: MuscleGroup?
 
     init(fatigueStates: [MuscleFatigueState], library: ExerciseLibraryQuerying = ExerciseLibraryService.shared) {
         self.fatigueStates = fatigueStates
@@ -24,6 +26,8 @@ struct MuscleMapDetailView: View {
                         withAnimation(DS.Animation.snappy) {
                             viewModel.selectedMuscle = viewModel.selectedMuscle == muscle ? nil : muscle
                         }
+                        selected3DMuscle = muscle
+                        showing3DMap = true
                     }
                 )
 
@@ -75,6 +79,12 @@ struct MuscleMapDetailView: View {
         .background { DetailWaveBackground() }
         .englishNavigationTitle("Muscle Map")
         .navigationBarTitleDisplayMode(.inline)
+        .navigationDestination(isPresented: $showing3DMap) {
+            MuscleMap3DView(
+                fatigueStates: fatigueStates,
+                highlightedMuscle: selected3DMuscle
+            )
+        }
         .task {
             viewModel.loadData(fatigueStates: fatigueStates)
         }
