@@ -226,7 +226,6 @@ targets:
         SWIFT_STRICT_CONCURRENCY: complete
         DEVELOPMENT_TEAM: "4GWU9QB2JZ"
         CODE_SIGN_IDENTITY: "iPhone Developer"
-        CODE_SIGN_ENTITLEMENTS: ../DUNEWidget/Resources/DUNEWidget.entitlements
         IPHONEOS_DEPLOYMENT_TARGET: "26.0"
     entitlements:
       path: ../DUNEWidget/Resources/DUNEWidget.entitlements

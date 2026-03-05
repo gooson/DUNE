@@ -3,6 +3,12 @@ import SwiftUI
 struct SmallWidgetView: View {
     let entry: WellnessDashboardEntry
 
+    private enum Labels {
+        static let condition = String(localized: "C")
+        static let readiness = String(localized: "R")
+        static let wellness  = String(localized: "W")
+    }
+
     var body: some View {
         if entry.hasAnyScore {
             VStack(alignment: .leading, spacing: 6) {
@@ -13,13 +19,13 @@ struct SmallWidgetView: View {
 
                 VStack(alignment: .leading, spacing: 4) {
                     if let score = entry.conditionScore {
-                        scoreRow(label: "C", score: score, color: WidgetDS.colorForConditionStatus(entry.conditionStatusRaw))
+                        scoreRow(label: Labels.condition, score: score, color: WidgetDS.colorForConditionStatus(entry.conditionStatusRaw))
                     }
                     if let score = entry.readinessScore {
-                        scoreRow(label: "R", score: score, color: WidgetDS.colorForReadinessStatus(entry.readinessStatusRaw))
+                        scoreRow(label: Labels.readiness, score: score, color: WidgetDS.colorForReadinessStatus(entry.readinessStatusRaw))
                     }
                     if let score = entry.wellnessScore {
-                        scoreRow(label: "W", score: score, color: WidgetDS.colorForWellnessStatus(entry.wellnessStatusRaw))
+                        scoreRow(label: Labels.wellness, score: score, color: WidgetDS.colorForWellnessStatus(entry.wellnessStatusRaw))
                     }
                 }
 

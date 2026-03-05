@@ -16,6 +16,6 @@ struct WidgetScoreData: Codable, Sendable {
 
     var updatedAt: Date
 
-    static let userDefaultsKey = "widget_score_data"
+    static let userDefaultsKey = "com.raftel.dailve.widget_score_data"
     static let appGroupID = "group.com.raftel.dailve"
 }
