@@ -40,10 +40,14 @@ struct SleepSummaryProvider: TimelineProvider {
             sleepScore: 82,
             stages: SleepStageBreakdown(awake: 0.05, core: 0.45, deep: 0.25, rem: 0.25)
         )
-        // Refresh at 10 AM (after sleep data is typically available)
-        var refreshComponents = Calendar.current.dateComponents([.year, .month, .day], from: .now)
+        // Refresh at next 10 AM (after sleep data is typically available)
+        let now = Date.now
+        var refreshComponents = Calendar.current.dateComponents([.year, .month, .day], from: now)
         refreshComponents.hour = 10
-        let nextUpdate = Calendar.current.date(from: refreshComponents) ?? Calendar.current.date(byAdding: .hour, value: 2, to: .now)!
+        var nextUpdate = Calendar.current.date(from: refreshComponents) ?? now
+        if nextUpdate <= now {
+            nextUpdate = Calendar.current.date(byAdding: .day, value: 1, to: nextUpdate) ?? Calendar.current.date(byAdding: .hour, value: 2, to: now)!
+        }
         let timeline = Timeline(entries: [entry], policy: .after(nextUpdate))
         completion(timeline)
     }
@@ -78,7 +82,7 @@ struct SleepSummaryWidgetView: View {
             smallView
         case .systemMedium:
             mediumView
-        default:
+        @unknown default:
             smallView
         }
     }

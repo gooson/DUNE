@@ -11,6 +11,17 @@ struct DUNEVisionApp: App {
     private let refreshCoordinator: AppRefreshCoordinating
     private let observerManager: HealthKitObserverManager?
 
+    private static func makeModelContainer(configuration: ModelConfiguration) throws -> ModelContainer {
+        try ModelContainer(
+            for: ExerciseRecord.self, BodyCompositionRecord.self, WorkoutSet.self,
+            CustomExercise.self, WorkoutTemplate.self, UserCategory.self,
+            InjuryRecord.self, ExerciseDefaultRecord.self,
+            HabitDefinition.self, HabitLog.self, HealthSnapshotMirrorRecord.self,
+            migrationPlan: AppMigrationPlan.self,
+            configurations: configuration
+        )
+    }
+
     init() {
         let persistedThemeRawValue = UserDefaults.standard.string(forKey: AppTheme.storageKey)
         if let normalizedTheme = AppTheme.resolvedTheme(fromPersistedRawValue: persistedThemeRawValue) {
@@ -25,38 +36,17 @@ struct DUNEVisionApp: App {
             cloudKitDatabase: cloudSyncEnabled ? .automatic : .none
         )
         do {
-            modelContainer = try ModelContainer(
-                for: ExerciseRecord.self, BodyCompositionRecord.self, WorkoutSet.self,
-                CustomExercise.self, WorkoutTemplate.self, UserCategory.self,
-                InjuryRecord.self, ExerciseDefaultRecord.self,
-                HabitDefinition.self, HabitLog.self, HealthSnapshotMirrorRecord.self,
-                migrationPlan: AppMigrationPlan.self,
-                configurations: config
-            )
+            modelContainer = try Self.makeModelContainer(configuration: config)
         } catch {
             AppLogger.data.error("ModelContainer failed: \(error)")
             Self.deleteStoreFiles(at: config.url)
             do {
-                modelContainer = try ModelContainer(
-                    for: ExerciseRecord.self, BodyCompositionRecord.self, WorkoutSet.self,
-                    CustomExercise.self, WorkoutTemplate.self, UserCategory.self,
-                    InjuryRecord.self, ExerciseDefaultRecord.self,
-                    HabitDefinition.self, HabitLog.self, HealthSnapshotMirrorRecord.self,
-                    migrationPlan: AppMigrationPlan.self,
-                    configurations: config
-                )
+                modelContainer = try Self.makeModelContainer(configuration: config)
             } catch {
                 AppLogger.data.error("ModelContainer retry failed: \(error)")
                 let fallbackConfig = ModelConfiguration(isStoredInMemoryOnly: true)
                 do {
-                    modelContainer = try ModelContainer(
-                        for: ExerciseRecord.self, BodyCompositionRecord.self, WorkoutSet.self,
-                        CustomExercise.self, WorkoutTemplate.self, UserCategory.self,
-                        InjuryRecord.self, ExerciseDefaultRecord.self,
-                        HabitDefinition.self, HabitLog.self, HealthSnapshotMirrorRecord.self,
-                        migrationPlan: AppMigrationPlan.self,
-                        configurations: fallbackConfig
-                    )
+                    modelContainer = try Self.makeModelContainer(configuration: fallbackConfig)
                 } catch {
                     fatalError("Failed to create fallback in-memory ModelContainer: \(error)")
                 }

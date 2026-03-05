@@ -9,8 +9,9 @@ import Charts
 /// - Z axis: Week number
 /// - Color: Muscle group identity
 struct TrainingVolume3DView: View {
-    @State private var sampleData = TrainingVolume3DView.generateSampleData()
+    @State private var sampleData = TrainingVolume3DView.generateSampleData(weeks: 8)
     @State private var weekRange: Int = 8
+    @State private var sortedMuscleVolumes: [(key: String, value: Double)] = []
 
     var body: some View {
         VStack(spacing: 16) {
@@ -34,8 +35,14 @@ struct TrainingVolume3DView: View {
             volumeSummary
         }
         .padding()
-        .onChange(of: weekRange) { _, _ in
-            sampleData = Self.generateSampleData()
+        .onChange(of: weekRange) { _, newWeeks in
+            sampleData = Self.generateSampleData(weeks: newWeeks)
+        }
+        .onChange(of: sampleData.count) { _, _ in
+            sortedMuscleVolumes = Self.computeMuscleVolumes(from: sampleData)
+        }
+        .onAppear {
+            sortedMuscleVolumes = Self.computeMuscleVolumes(from: sampleData)
         }
     }
 
@@ -51,14 +58,8 @@ struct TrainingVolume3DView: View {
     }
 
     private var volumeSummary: some View {
-        let grouped = Dictionary(grouping: sampleData, by: \.muscleGroup)
-        let totalByMuscle = grouped.mapValues { points in
-            points.reduce(0) { $0 + $1.volume }
-        }
-        let sorted = totalByMuscle.sorted { $0.value > $1.value }
-
-        return HStack(spacing: 16) {
-            ForEach(sorted.prefix(4), id: \.key) { muscle, total in
+        HStack(spacing: 16) {
+            ForEach(sortedMuscleVolumes.prefix(4), id: \.key) { muscle, total in
                 VStack(spacing: 4) {
                     Text(muscle)
                         .font(.caption.bold())
@@ -70,16 +71,22 @@ struct TrainingVolume3DView: View {
         }
     }
 
+    private static func computeMuscleVolumes(from data: [TrainingVolumePoint]) -> [(key: String, value: Double)] {
+        Dictionary(grouping: data, by: \.muscleGroup)
+            .mapValues { points in points.reduce(0) { $0 + $1.volume } }
+            .sorted { $0.value > $1.value }
+    }
+
     // MARK: - Sample Data
 
     /// Generate sample training volume data.
     /// In production, this will aggregate ExerciseRecord data by MuscleGroup and week.
-    private static func generateSampleData() -> [TrainingVolumePoint] {
+    private static func generateSampleData(weeks: Int) -> [TrainingVolumePoint] {
         let muscleGroups = ["Chest", "Back", "Legs", "Shoulders", "Arms", "Core", "Glutes"]
         var points: [TrainingVolumePoint] = []
         var id = 0
 
-        for week in 1...8 {
+        for week in 1...weeks {
             for muscle in muscleGroups {
                 let baseVolume: Double
                 switch muscle {

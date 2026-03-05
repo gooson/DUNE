@@ -103,7 +103,7 @@ struct TrainingReadinessWidgetView: View {
             smallView
         case .systemMedium:
             mediumView
-        default:
+        @unknown default:
             smallView
         }
     }

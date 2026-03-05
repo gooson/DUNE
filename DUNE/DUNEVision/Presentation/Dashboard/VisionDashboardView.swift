@@ -64,21 +64,23 @@ struct VisionDashboardView: View {
                 onOpen3DCharts()
             }
 
+            // TODO: Connect to workout logging navigation
             quickActionCard(
                 title: "Log Workout",
                 icon: "figure.strengthtraining.traditional",
                 description: "Record your training session"
-            ) {
-                // Navigate to workout logging
-            }
+            ) {}
+                .disabled(true)
+                .opacity(0.5)
 
+            // TODO: Connect to body composition navigation
             quickActionCard(
                 title: "Body Stats",
                 icon: "figure.stand",
                 description: "View body composition trends"
-            ) {
-                // Navigate to body composition
-            }
+            ) {}
+                .disabled(true)
+                .opacity(0.5)
         }
     }
 

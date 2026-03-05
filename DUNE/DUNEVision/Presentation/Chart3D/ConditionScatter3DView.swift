@@ -12,7 +12,7 @@ import Charts
 /// - Color: Condition grade (green = good, red = poor)
 /// - Size: Training volume for that day
 struct ConditionScatter3DView: View {
-    @State private var sampleData = ConditionScatter3DView.generateSampleData()
+    @State private var sampleData = ConditionScatter3DView.generateSampleData(days: 30)
     @State private var selectedPeriod: ScatterPeriod = .thirtyDays
 
     var body: some View {
@@ -38,8 +38,8 @@ struct ConditionScatter3DView: View {
             legend
         }
         .padding()
-        .onChange(of: selectedPeriod) { _, _ in
-            sampleData = Self.generateSampleData()
+        .onChange(of: selectedPeriod) { _, newPeriod in
+            sampleData = Self.generateSampleData(days: newPeriod.dayCount)
         }
     }
 
@@ -79,8 +79,8 @@ struct ConditionScatter3DView: View {
     /// Generate sample data for preview and development.
     /// In production, this will be replaced by actual HealthKit data
     /// from ConditionScore, HRVSample, HeartRateSummary, and SleepSummary.
-    private static func generateSampleData() -> [ConditionDataPoint] {
-        (0..<30).map { day in
+    private static func generateSampleData(days: Int) -> [ConditionDataPoint] {
+        (0..<days).map { day in
             let baseCondition = Double.random(in: 35...95)
             let hrv = 20 + baseCondition * 0.8 + Double.random(in: -10...10)
             let rhr = 80 - baseCondition * 0.3 + Double.random(in: -5...5)
@@ -133,6 +133,14 @@ enum ScatterPeriod: String, CaseIterable, Identifiable {
         case .thirtyDays: "30 Days"
         case .sixtyDays: "60 Days"
         case .ninetyDays: "90 Days"
+        }
+    }
+
+    var dayCount: Int {
+        switch self {
+        case .thirtyDays: 30
+        case .sixtyDays: 60
+        case .ninetyDays: 90
         }
     }
 }

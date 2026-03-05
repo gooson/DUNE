@@ -108,7 +108,7 @@ struct ConditionScoreWidgetView: View {
             smallView
         case .systemMedium:
             mediumView
-        default:
+        @unknown default:
             smallView
         }
     }
