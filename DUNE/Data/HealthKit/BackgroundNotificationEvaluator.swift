@@ -97,7 +97,7 @@ final class BackgroundNotificationEvaluator: Sendable {
             return evaluateHRVSamples(samples)
         case .rhrAnomaly:
             return evaluateRHRSamples(samples)
-        case .sleepComplete:
+        case .sleepComplete, .sleepDebt:
             return evaluateSleepSamples(samples)
         case .stepGoal:
             return evaluateStepSamples(samples)
@@ -160,7 +160,46 @@ final class BackgroundNotificationEvaluator: Sendable {
             $0 + $1.endDate.timeIntervalSince($1.startDate) / 60.0
         }
         guard totalMinutes > 0 else { return nil }
+
+        if let sleepDebtInsight = evaluateSleepDebtIfNeeded(latestSleepMinutes: totalMinutes) {
+            return sleepDebtInsight
+        }
+
         return EvaluateHealthInsightUseCase.evaluateSleepComplete(totalMinutes: totalMinutes)
+    }
+
+    private func evaluateSleepDebtIfNeeded(latestSleepMinutes: Double) -> HealthInsight? {
+        let cachedDurations = loadCachedSleepDurations()
+        guard !cachedDurations.isEmpty else { return nil }
+
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let mergedDurations = mergeSleepDurations(
+            cachedDurations,
+            with: .init(date: today, totalMinutes: latestSleepMinutes)
+        )
+
+        let fourteenDaysAgo = calendar.date(byAdding: .day, value: -14, to: today) ?? today
+        let recentDurations = mergedDurations.filter { $0.date >= fourteenDaysAgo }
+
+        let analysis = CalculateSleepDeficitUseCase().execute(input: .init(
+            recentDurations: recentDurations,
+            longTermDurations: mergedDurations
+        ))
+
+        return EvaluateHealthInsightUseCase.evaluateSleepDebt(
+            weeklyDeficitMinutes: analysis.weeklyDeficit,
+            level: analysis.level
+        )
+    }
+
+    private func mergeSleepDurations(
+        _ existing: [CalculateSleepDeficitUseCase.Input.DayDuration],
+        with latest: CalculateSleepDeficitUseCase.Input.DayDuration
+    ) -> [CalculateSleepDeficitUseCase.Input.DayDuration] {
+        var map = Dictionary(uniqueKeysWithValues: existing.map { (Calendar.current.startOfDay(for: $0.date), $0) })
+        map[Calendar.current.startOfDay(for: latest.date)] = latest
+        return map.values.sorted { $0.date < $1.date }
     }
 
     private func evaluateStepSamples(_ samples: [HKSample]) -> HealthInsight? {
@@ -363,7 +402,7 @@ final class BackgroundNotificationEvaluator: Sendable {
         switch sampleType {
         case HKQuantityType(.heartRateVariabilitySDNN): .hrvAnomaly
         case HKQuantityType(.restingHeartRate): .rhrAnomaly
-        case HKCategoryType(.sleepAnalysis): .sleepComplete
+        case HKCategoryType(.sleepAnalysis): .sleepDebt
         case HKQuantityType(.stepCount): .stepGoal
         case HKQuantityType(.bodyMass): .weightUpdate
         case HKQuantityType(.bodyFatPercentage): .bodyFatUpdate
@@ -380,6 +419,7 @@ final class BackgroundNotificationEvaluator: Sendable {
         static let stepTotal = (Bundle.main.bundleIdentifier ?? "com.dailve") + ".notificationStepTotal"
         static let stepTotalDate = (Bundle.main.bundleIdentifier ?? "com.dailve") + ".notificationStepTotalDate"
         static let previousWeight = (Bundle.main.bundleIdentifier ?? "com.dailve") + ".notificationPrevWeight"
+        static let sleepDurations = (Bundle.main.bundleIdentifier ?? "com.dailve") + ".notificationSleepDurations"
     }
 
     /// Loads cached 7-day daily averages for HRV or RHR baseline comparison.
@@ -425,4 +465,36 @@ final class BackgroundNotificationEvaluator: Sendable {
         let value = UserDefaults.standard.double(forKey: CacheKeys.previousWeight)
         return value > 0 ? value : nil
     }
+
+    static func cacheSleepDurations(_ durations: [CalculateSleepDeficitUseCase.Input.DayDuration]) {
+        let payload = durations
+            .sorted { $0.date < $1.date }
+            .suffix(90)
+            .map(SleepDurationCacheEntry.init)
+        guard let data = try? JSONEncoder().encode(payload) else { return }
+        UserDefaults.standard.set(data, forKey: CacheKeys.sleepDurations)
+    }
+
+    private func loadCachedSleepDurations() -> [CalculateSleepDeficitUseCase.Input.DayDuration] {
+        guard let data = UserDefaults.standard.data(forKey: CacheKeys.sleepDurations),
+              let payload = try? JSONDecoder().decode([SleepDurationCacheEntry].self, from: data) else {
+            return []
+        }
+        return payload.map { .init(date: $0.date, totalMinutes: $0.totalMinutes) }
+    }
+
+    private struct SleepDurationCacheEntry: Codable {
+        let date: Date
+        let totalMinutes: Double
+
+        init(date: Date, totalMinutes: Double) {
+            self.date = date
+            self.totalMinutes = totalMinutes
+        }
+
+        init(from raw: CalculateSleepDeficitUseCase.Input.DayDuration) {
+            self.init(date: raw.date, totalMinutes: raw.totalMinutes)
+        }
+    }
+
 }

@@ -174,6 +174,7 @@ struct NotificationHubMetricResolverTests {
         #expect(NotificationHubMetricResolver.category(for: .hrvAnomaly) == .hrv)
         #expect(NotificationHubMetricResolver.category(for: .rhrAnomaly) == .rhr)
         #expect(NotificationHubMetricResolver.category(for: .sleepComplete) == .sleep)
+        #expect(NotificationHubMetricResolver.category(for: .sleepDebt) == .sleep)
         #expect(NotificationHubMetricResolver.category(for: .stepGoal) == .steps)
         #expect(NotificationHubMetricResolver.category(for: .weightUpdate) == .weight)
         #expect(NotificationHubMetricResolver.category(for: .bodyFatUpdate) == .bodyFat)

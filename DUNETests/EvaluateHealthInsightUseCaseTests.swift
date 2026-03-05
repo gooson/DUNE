@@ -124,6 +124,28 @@ struct EvaluateHealthInsightUseCaseTests {
         #expect(result == nil)
     }
 
+
+
+    @Test("SleepDebt: creates attention insight when debt is present")
+    func sleepDebtDetected() {
+        let result = EvaluateHealthInsightUseCase.evaluateSleepDebt(
+            weeklyDeficitMinutes: 210,
+            level: .mild
+        )
+        #expect(result != nil)
+        #expect(result?.type == .sleepDebt)
+        #expect(result?.severity == .attention)
+    }
+
+    @Test("SleepDebt: returns nil for good level")
+    func sleepDebtGoodLevel() {
+        let result = EvaluateHealthInsightUseCase.evaluateSleepDebt(
+            weeklyDeficitMinutes: 90,
+            level: .good
+        )
+        #expect(result == nil)
+    }
+
     // MARK: - Step Goal
 
     @Test("Steps: triggers at goal threshold")

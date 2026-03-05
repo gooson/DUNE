@@ -97,6 +97,28 @@ enum EvaluateHealthInsightUseCase: Sendable {
         )
     }
 
+
+
+    /// Creates an insight when accumulated weekly sleep deficit indicates sleep debt.
+    static func evaluateSleepDebt(
+        weeklyDeficitMinutes: Double,
+        level: SleepDeficitAnalysis.DeficitLevel
+    ) -> HealthInsight? {
+        guard weeklyDeficitMinutes.isFinite, weeklyDeficitMinutes > 0 else { return nil }
+        guard level != .good, level != .insufficient else { return nil }
+
+        let hours = Int(weeklyDeficitMinutes) / 60
+        let mins = Int(weeklyDeficitMinutes) % 60
+
+        return HealthInsight(
+            type: .sleepDebt,
+            title: String(localized: "Sleep Debt Alert"),
+            body: String(localized: "Weekly sleep debt: \(hours)h \(mins)m"),
+            severity: .attention,
+            date: Date()
+        )
+    }
+
     // MARK: - Step Goal
 
     /// Creates an insight when the step count goal is reached.

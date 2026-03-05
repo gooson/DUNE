@@ -6,7 +6,7 @@ struct NotificationSettingsSection: View {
 
     /// Grouped insight types for display.
     private static let healthTypes: [HealthInsight.InsightType] = [
-        .hrvAnomaly, .rhrAnomaly, .sleepComplete, .stepGoal,
+        .hrvAnomaly, .rhrAnomaly, .sleepComplete, .sleepDebt, .stepGoal,
         .weightUpdate, .bodyFatUpdate, .bmiUpdate
     ]
 
@@ -42,6 +42,7 @@ extension HealthInsight.InsightType {
         case .hrvAnomaly: "HRV Anomaly"
         case .rhrAnomaly: "Resting HR Alert"
         case .sleepComplete: "Sleep Recorded"
+        case .sleepDebt: "Sleep Debt"
         case .stepGoal: "Step Goal"
         case .weightUpdate: "Weight Update"
         case .bodyFatUpdate: "Body Fat Update"
@@ -56,6 +57,7 @@ extension HealthInsight.InsightType {
         case .hrvAnomaly: "waveform.path.ecg"
         case .rhrAnomaly: "heart.fill"
         case .sleepComplete: "moon.fill"
+        case .sleepDebt: "moon.zzz.fill"
         case .stepGoal: "figure.walk"
         case .weightUpdate: "scalemass"
         case .bodyFatUpdate: "percent"

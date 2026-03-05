@@ -8,6 +8,7 @@ struct HealthInsight: Sendable {
         case hrvAnomaly
         case rhrAnomaly
         case sleepComplete
+        case sleepDebt
         case stepGoal
         case weightUpdate
         case bodyFatUpdate
