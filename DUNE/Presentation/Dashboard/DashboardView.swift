@@ -100,6 +100,9 @@ struct DashboardView: View {
                             insightCardsSection
                         }
 
+                        // Sleep deficit badge
+                        sleepDeficitSection
+
                         // Pinned Metrics
                         if !viewModel.pinnedCards.isEmpty {
                             pinnedSection
@@ -147,8 +150,6 @@ struct DashboardView: View {
                             )
                         }
 
-                        // Sleep deficit badge
-                        sleepDeficitSection
                     }
                 }
                 .padding(sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.lg)
