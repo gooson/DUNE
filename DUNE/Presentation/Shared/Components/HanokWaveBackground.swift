@@ -3,7 +3,8 @@ import UIKit
 
 // MARK: - Hanok Wave Overlay View
 
-/// Single animated hanok eave layer with gradient fade and optional hanji texture.
+/// Single animated hanok eave layer with gradient fade, optional hanji texture,
+/// and wind-sway breath modulation for organic movement.
 struct HanokWaveOverlayView: View {
     var color: Color
     var opacity: Double = 0.10
@@ -20,8 +21,12 @@ struct HanokWaveOverlayView: View {
     var crestColor: Color? = nil
     var crestOpacity: Double = 0.18
     var crestWidth: CGFloat = 1.2
+    /// Wind-sway breath intensity (0 = none, 0.15 = strong).
+    /// Modulates amplitude sinusoidally for organic wind feel.
+    var breathIntensity: CGFloat = 0
 
     @State private var phase: CGFloat = 0
+    @State private var breathPhase: CGFloat = 0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     /// Harmonic multipliers (uplift uses 2nd harmonic + 0.5 swell) need
@@ -30,10 +35,19 @@ struct HanokWaveOverlayView: View {
     private var phaseTarget: CGFloat { 2 * .pi * Self.phaseLoopTurns }
     private var phaseDuration: Double { driftDuration * Double(Self.phaseLoopTurns) }
 
+    /// Breath cycle duration — slightly offset from drift for organic feel.
+    private var breathDuration: Double { driftDuration * 1.3 }
+
+    /// Current amplitude with breath modulation applied.
+    private var modulatedAmplitude: CGFloat {
+        guard breathIntensity > 0 else { return amplitude }
+        return amplitude * (1 + breathIntensity * sin(breathPhase))
+    }
+
     /// Shared shape instance for fill and crest strokes.
     private var eaveShape: HanokEaveShape {
         HanokEaveShape(
-            amplitude: amplitude,
+            amplitude: modulatedAmplitude,
             frequency: frequency,
             phase: phase,
             verticalOffset: verticalOffset,
@@ -89,6 +103,12 @@ struct HanokWaveOverlayView: View {
                 phase = phaseTarget
             }
         }
+        .task(id: "breath") {
+            guard !reduceMotion, breathIntensity > 0 else { return }
+            withAnimation(.easeInOut(duration: breathDuration).repeatForever(autoreverses: true)) {
+                breathPhase = .pi
+            }
+        }
     }
 }
 
@@ -97,6 +117,7 @@ struct HanokWaveOverlayView: View {
 /// Procedural hanji (한지) paper fiber texture pre-rendered to a UIImage.
 /// Simulates the subtle fiber patterns of traditional Korean paper.
 /// Rendered once as a static constant — zero per-frame computation.
+/// Uses jade-tinted fibers to match the dancheong palette.
 private struct HanjiTextureView: View {
     let opacity: Double
 
@@ -119,9 +140,9 @@ private struct HanjiTextureView: View {
                     let vertical = sin(seed * 0.043) * sin(seed * 0.029) * 0.4
                     let noise = horizontal + vertical
                     let alpha = abs(noise) * 0.10
-                    // Warm-tinted fiber (subtle cream tone)
+                    // Jade-tinted fiber (subtle celadon tone)
                     cgContext.setFillColor(
-                        UIColor(red: 0.95, green: 0.90, blue: 0.82, alpha: alpha).cgColor
+                        UIColor(red: 0.82, green: 0.92, blue: 0.88, alpha: alpha).cgColor
                     )
                     cgContext.fill(CGRect(
                         x: CGFloat(col) * step,
@@ -148,10 +169,11 @@ private struct HanjiTextureView: View {
 /// Multi-layer parallax hanok rooftop background for tab root screens.
 ///
 /// Layers (back to front):
-/// 1. **Far** — distant giwa rooftops (기와), lightest, slow drift
-/// 2. **Mid** — cheoma eave curves (처마), moderate density
-/// 3. **Near** — foreground eave with tile texture, darkest
+/// 1. **Far** — distant giwa rooftops (기와), lightest, slow drift + gentle sway
+/// 2. **Mid** — cheoma eave curves (처마), moderate density + medium sway
+/// 3. **Near** — foreground eave with tile texture, darkest + strongest sway
 ///
+/// Wind-sway breath modulation creates organic wind feel across layers.
 /// Includes hanji paper texture overlay on near layer.
 struct HanokTabWaveBackground: View {
     @Environment(\.wavePreset) private var preset
@@ -163,7 +185,7 @@ struct HanokTabWaveBackground: View {
         preset == .today && atmosphere != .default
     }
 
-    /// Dark mode needs a small visibility lift for warm tones.
+    /// Dark mode needs a small visibility lift for jade tones.
     private var visibilityBoost: Double {
         colorScheme == .dark ? 1.3 : 1.0
     }
@@ -183,7 +205,7 @@ struct HanokTabWaveBackground: View {
         let opacityScale = Double(scale) * visibilityBoost
 
         ZStack(alignment: .top) {
-            // Layer 1: Far — distant giwa rooftops
+            // Layer 1: Far — distant giwa rooftops (gentle sway)
             HanokWaveOverlayView(
                 color: theme.hanokMistColor,
                 opacity: 0.09 * opacityScale,
@@ -195,11 +217,12 @@ struct HanokTabWaveBackground: View {
                 driftDuration: 25,
                 crestColor: theme.hanokMistColor,
                 crestOpacity: 0.10 * opacityScale,
-                crestWidth: 0.9
+                crestWidth: 0.9,
+                breathIntensity: 0.05
             )
             .frame(height: 160)
 
-            // Layer 2: Mid — cheoma eave curves
+            // Layer 2: Mid — cheoma eave curves (medium sway)
             HanokWaveOverlayView(
                 color: theme.hanokMidColor,
                 opacity: 0.22 * opacityScale,
@@ -212,11 +235,12 @@ struct HanokTabWaveBackground: View {
                 driftDuration: 20,
                 crestColor: theme.hanokMistColor,
                 crestOpacity: 0.12 * opacityScale,
-                crestWidth: 1.0
+                crestWidth: 1.0,
+                breathIntensity: 0.08
             )
             .frame(height: 170)
 
-            // Layer 3: Near — foreground eave with tile texture
+            // Layer 3: Near — foreground eave with tile texture (strong sway, jade crest)
             HanokWaveOverlayView(
                 color: theme.hanokDeepColor,
                 opacity: 0.65 * opacityScale,
@@ -232,7 +256,8 @@ struct HanokTabWaveBackground: View {
                 hanjiOpacity: colorScheme == .dark ? 0.012 : 0.025,
                 crestColor: theme.hanokMidColor,
                 crestOpacity: 0.45 * opacityScale,
-                crestWidth: 1.1
+                crestWidth: 1.1,
+                breathIntensity: 0.12
             )
             .frame(height: 180)
 
@@ -312,7 +337,8 @@ struct HanokDetailWaveBackground: View {
                 driftDuration: 22,
                 crestColor: theme.hanokMistColor,
                 crestOpacity: 0.09 * visibilityBoost,
-                crestWidth: 0.9
+                crestWidth: 0.9,
+                breathIntensity: 0.04
             )
             .frame(height: 150)
 
@@ -329,7 +355,8 @@ struct HanokDetailWaveBackground: View {
                 driftDuration: 18,
                 crestColor: theme.hanokMistColor,
                 crestOpacity: 0.12 * visibilityBoost,
-                crestWidth: 1.0
+                crestWidth: 1.0,
+                breathIntensity: 0.08
             )
             .frame(height: 150)
 
@@ -371,7 +398,8 @@ struct HanokSheetWaveBackground: View {
                 driftDuration: 20,
                 crestColor: theme.hanokMistColor,
                 crestOpacity: 0.10 * visibilityBoost,
-                crestWidth: 1.0
+                crestWidth: 1.0,
+                breathIntensity: 0.04
             )
             .frame(height: 150)
 
