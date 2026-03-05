@@ -337,10 +337,15 @@ final class WorkoutManager: NSObject {
 
         newSession.delegate = self
         newBuilder.delegate = self
-        newBuilder.dataSource = HKLiveWorkoutDataSource(
+        let dataSource = HKLiveWorkoutDataSource(
             healthStore: healthStore,
             workoutConfiguration: config
         )
+        // stepCount and flightsClimbed are not auto-collected by HKLiveWorkoutDataSource;
+        // enable explicitly so workoutBuilder(_:didCollectDataOf:) receives updates.
+        dataSource.enableCollection(for: HKQuantityType(.stepCount), predicate: nil)
+        dataSource.enableCollection(for: HKQuantityType(.flightsClimbed), predicate: nil)
+        newBuilder.dataSource = dataSource
 
         do {
             newSession.prepare()
@@ -587,6 +592,13 @@ final class WorkoutManager: NSObject {
            let floors = stats.sumQuantity()?.doubleValue(for: .count()),
            floors > 0, floors.isFinite, floors < 10_000 {
             floorsClimbed = floors
+        }
+
+        // Restore step count
+        if let stats = builder.statistics(for: HKQuantityType(.stepCount)),
+           let totalSteps = stats.sumQuantity()?.doubleValue(for: .count()),
+           totalSteps >= 0, totalSteps < 200_000 {
+            steps = totalSteps
         }
     }
 
