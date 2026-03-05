@@ -492,6 +492,7 @@ final class ActivityViewModel {
             fatigueStates: fatigueStates
         )
         trainingReadiness = readinessUseCase.execute(input: readinessInput)
+        WidgetDataWriter.writeReadinessScore(trainingReadiness)
 
         // Compute derived stats (PRs, streak, frequency, weekly stats)
         recomputeDerivedStats()

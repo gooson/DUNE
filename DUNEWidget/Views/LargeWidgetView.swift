@@ -1,0 +1,121 @@
+import SwiftUI
+import WidgetKit
+
+struct LargeWidgetView: View {
+    let entry: WellnessDashboardEntry
+
+    private enum Labels {
+        static let condition = String(localized: "Condition")
+        static let readiness = String(localized: "Readiness")
+        static let wellness  = String(localized: "Wellness")
+    }
+
+    var body: some View {
+        if entry.hasAnyScore {
+            VStack(alignment: .leading, spacing: 8) {
+                headerRow
+
+                VStack(spacing: 6) {
+                    if let score = entry.conditionScore {
+                        scoreRow(
+                            title: Labels.condition,
+                            score: score,
+                            statusLabel: WidgetDS.labelForConditionStatus(entry.conditionStatusRaw),
+                            message: entry.conditionMessage,
+                            color: WidgetDS.colorForConditionStatus(entry.conditionStatusRaw),
+                            icon: WidgetDS.iconForConditionStatus(entry.conditionStatusRaw)
+                        )
+                    }
+                    if let score = entry.readinessScore {
+                        scoreRow(
+                            title: Labels.readiness,
+                            score: score,
+                            statusLabel: WidgetDS.labelForReadinessStatus(entry.readinessStatusRaw),
+                            message: entry.readinessMessage,
+                            color: WidgetDS.colorForReadinessStatus(entry.readinessStatusRaw),
+                            icon: WidgetDS.iconForReadinessStatus(entry.readinessStatusRaw)
+                        )
+                    }
+                    if let score = entry.wellnessScore {
+                        scoreRow(
+                            title: Labels.wellness,
+                            score: score,
+                            statusLabel: WidgetDS.labelForWellnessStatus(entry.wellnessStatusRaw),
+                            message: entry.wellnessMessage,
+                            color: WidgetDS.colorForWellnessStatus(entry.wellnessStatusRaw),
+                            icon: WidgetDS.iconForWellnessStatus(entry.wellnessStatusRaw)
+                        )
+                    }
+                }
+
+                Spacer(minLength: 0)
+
+                updatedAtRow
+            }
+            .containerBackground(.fill.tertiary, for: .widget)
+        } else {
+            placeholderView
+                .containerBackground(.fill.tertiary, for: .widget)
+        }
+    }
+
+    private var headerRow: some View {
+        HStack {
+            Text("DUNE")
+                .font(.headline)
+                .fontWeight(.bold)
+            Spacer()
+            Text("Today")
+                .font(.caption)
+                .foregroundStyle(WidgetDS.Color.textSecondary)
+        }
+    }
+
+    private func scoreRow(title: String, score: Int, statusLabel: String, message: String?, color: Color, icon: String) -> some View {
+        HStack(spacing: 12) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(.caption)
+                    .foregroundStyle(WidgetDS.Color.textSecondary)
+
+                if let message {
+                    Text(message)
+                        .font(.caption2)
+                        .foregroundStyle(WidgetDS.Color.textTertiary)
+                        .lineLimit(1)
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+
+            HStack(spacing: 6) {
+                Text("\(score)")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .foregroundStyle(color)
+                    .monospacedDigit()
+
+                Image(systemName: icon)
+                    .font(.caption)
+                    .foregroundStyle(color)
+            }
+        }
+        .padding(.vertical, 6)
+        .padding(.horizontal, 10)
+        .background(color.opacity(0.08), in: RoundedRectangle(cornerRadius: 8))
+    }
+
+    private var updatedAtRow: some View {
+        HStack {
+            Spacer()
+            if let updatedAt = entry.scoreUpdatedAt {
+                Text("Updated \(updatedAt.formatted(date: .omitted, time: .shortened))")
+                    .font(.caption2)
+                    .foregroundStyle(WidgetDS.Color.textTertiary)
+            }
+        }
+    }
+
+    private var placeholderView: some View {
+        WidgetPlaceholderView(message: "Open DUNE to see your health scores", iconFont: .largeTitle)
+    }
+}

@@ -23,6 +23,7 @@ schemes:
       targets:
         DUNE: all
         DUNEWatch: all
+        DUNEWidget: all
         DUNETests: [test]
         DUNEWatchTests: [test]
         DUNEUITests: [test]
@@ -91,6 +92,9 @@ targets:
       # Shared Colors
       - path: ../Shared/Resources/Colors.xcassets
         group: Shared/Resources
+      # Shared Widget Data
+      - path: ../Shared/WidgetScoreData.swift
+        group: Shared
     settings:
       base:
         INFOPLIST_FILE: Resources/Info.plist
@@ -121,11 +125,15 @@ targets:
         com.apple.developer.icloud-services:
           - CloudKit
         com.apple.developer.ubiquity-kvstore-identifier: "$(TeamIdentifierPrefix)$(CFBundleIdentifier)"
+        com.apple.security.application-groups:
+          - group.com.raftel.dailve
     dependencies:
       - sdk: HealthKit.framework
       - sdk: CoreLocation.framework
       - sdk: CoreMotion.framework
       - target: DUNEWatch
+        embed: true
+      - target: DUNEWidget
         embed: true
 
   DUNEWatch:
@@ -193,6 +201,40 @@ targets:
     dependencies:
       - sdk: HealthKit.framework
       - sdk: WatchConnectivity.framework
+
+  DUNEWidget:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: ../DUNEWidget
+      # Shared Colors
+      - path: ../Shared/Resources/Colors.xcassets
+        group: Shared/Resources
+      # Shared Widget Data
+      - path: ../Shared/WidgetScoreData.swift
+        group: Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.raftel.dailve.widget
+        PRODUCT_NAME: DUNEWidget
+        CURRENT_PROJECT_VERSION: "1"
+        MARKETING_VERSION: "0.2.0"
+        GENERATE_INFOPLIST_FILE: true
+        INFOPLIST_KEY_CFBundleDisplayName: DUNE Widget
+        INFOPLIST_KEY_NSExtension_NSExtensionPointIdentifier: com.apple.widgetkit-extension
+        SWIFT_VERSION: "6.0"
+        SWIFT_STRICT_CONCURRENCY: complete
+        DEVELOPMENT_TEAM: "4GWU9QB2JZ"
+        CODE_SIGN_IDENTITY: "iPhone Developer"
+        IPHONEOS_DEPLOYMENT_TARGET: "26.0"
+    entitlements:
+      path: ../DUNEWidget/Resources/DUNEWidget.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.raftel.dailve
+    dependencies:
+      - sdk: WidgetKit.framework
+      - sdk: SwiftUI.framework
 
   DUNETests:
     type: bundle.unit-test
