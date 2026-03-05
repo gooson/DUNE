@@ -69,6 +69,89 @@ struct NotificationInboxManagerTests {
         #expect(recorder.lastValue() == 0)
     }
 
+    @Test("handleNotificationResponse emits notificationHub for non-routed notification")
+    func handleNotificationResponseNonRouted() async {
+        let store = makeStore()
+        let recorder = BadgeRecorder()
+        let manager = NotificationInboxManager(
+            store: store,
+            badgeUpdater: { recorder.record($0) }
+        )
+
+        // Record a sleep insight (no route)
+        let sleepInsight = HealthInsight(
+            type: .sleepComplete,
+            title: "Sleep Recorded",
+            body: "Last night: 7h 30m of sleep",
+            severity: .informational
+        )
+        let item = manager.recordSentInsight(sleepInsight)
+
+        // Build userInfo as the notification system would
+        let userInfo = manager.notificationUserInfo(for: item)
+
+        // Simulate notification tap
+        manager.handleNotificationResponse(userInfo: userInfo)
+
+        // Should have a pending navigation request to notificationHub
+        let pending = manager.consumePendingNavigationRequest()
+        #expect(pending != nil)
+        #expect(pending?.route.destination == .notificationHub)
+        #expect(pending?.itemID == item.id)
+    }
+
+    @Test("handleNotificationResponse routes workout notifications to workoutDetail")
+    func handleNotificationResponseRouted() async {
+        let store = makeStore()
+        let recorder = BadgeRecorder()
+        let manager = NotificationInboxManager(
+            store: store,
+            badgeUpdater: { recorder.record($0) }
+        )
+
+        // Record a workout PR insight (with route)
+        let item = manager.recordSentInsight(sampleInsight(workoutID: "workout-123"))
+
+        // Build userInfo
+        let userInfo = manager.notificationUserInfo(for: item)
+
+        // Simulate notification tap
+        manager.handleNotificationResponse(userInfo: userInfo)
+
+        // Should have a pending navigation request to workoutDetail
+        let pending = manager.consumePendingNavigationRequest()
+        #expect(pending != nil)
+        #expect(pending?.route.destination == .workoutDetail)
+        #expect(pending?.route.workoutID == "workout-123")
+    }
+
+    @Test("handleNotificationResponse marks non-routed notification as read")
+    func handleNotificationResponseMarksRead() async {
+        let store = makeStore()
+        let recorder = BadgeRecorder()
+        let manager = NotificationInboxManager(
+            store: store,
+            badgeUpdater: { recorder.record($0) }
+        )
+
+        let sleepInsight = HealthInsight(
+            type: .sleepComplete,
+            title: "Sleep Recorded",
+            body: "Last night: 7h 30m of sleep",
+            severity: .informational
+        )
+        let item = manager.recordSentInsight(sleepInsight)
+        #expect(!item.isRead)
+
+        let userInfo = manager.notificationUserInfo(for: item)
+        manager.handleNotificationResponse(userInfo: userInfo)
+
+        // Item should be marked as read
+        let items = manager.items()
+        let updated = items.first { $0.id == item.id }
+        #expect(updated?.isRead == true)
+    }
+
     private func makeStore() -> NotificationInboxStore {
         let suiteName = "NotificationInboxManagerTests.\(UUID().uuidString)"
         let defaults = UserDefaults(suiteName: suiteName) ?? .standard

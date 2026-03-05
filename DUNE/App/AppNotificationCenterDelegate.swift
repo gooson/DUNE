@@ -20,8 +20,12 @@ final class AppNotificationCenterDelegate: NSObject, UNUserNotificationCenterDel
         _ center: UNUserNotificationCenter,
         didReceive response: UNNotificationResponse
     ) async {
-        inboxManager.handleNotificationResponse(
-            userInfo: response.notification.request.content.userInfo
-        )
+        // Run on MainActor to avoid blocking cooperative threads with DispatchQueue.sync
+        // calls inside handleNotificationResponse during cold start.
+        await MainActor.run {
+            inboxManager.handleNotificationResponse(
+                userInfo: response.notification.request.content.userInfo
+            )
+        }
     }
 }

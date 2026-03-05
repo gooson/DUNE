@@ -14,6 +14,7 @@ struct ContentView: View {
     @State private var foregroundTask: Task<Void, Never>?
     @State private var notificationOpenWorkoutID: String?
     @State private var notificationRouteSignal = 0
+    @State private var notificationHubSignal = 0
     private let notificationInboxManager = NotificationInboxManager.shared
 
     init(
@@ -31,7 +32,8 @@ struct ContentView: View {
                     DashboardView(
                         sharedHealthDataService: sharedHealthDataService,
                         scrollToTopSignal: todayScrollToTopSignal,
-                        refreshSignal: refreshSignal
+                        refreshSignal: refreshSignal,
+                        notificationHubSignal: notificationHubSignal
                     )
                 }
                 .environment(\.wavePreset, .today)
@@ -146,6 +148,9 @@ struct ContentView: View {
             selectedSection = .train
             notificationOpenWorkoutID = workoutID
             notificationRouteSignal += 1
+        case .notificationHub:
+            selectedSection = .today
+            notificationHubSignal += 1
         }
     }
 }

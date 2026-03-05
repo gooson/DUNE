@@ -133,6 +133,8 @@ final class NotificationThrottleStore: @unchecked Sendable {
             switch route.destination {
             case .workoutDetail:
                 routeKey = "workout:\(route.workoutID ?? "-")"
+            case .notificationHub:
+                routeKey = "hub"
             }
         } else {
             routeKey = "none"
