@@ -22,7 +22,7 @@ enum NotificationHubMetricResolver {
             .hrv
         case .rhrAnomaly:
             .rhr
-        case .sleepComplete:
+        case .sleepComplete, .sleepDebt:
             .sleep
         case .stepGoal:
             .steps
@@ -62,7 +62,7 @@ enum NotificationHubMetricResolver {
 
     private static func metricValue(for item: NotificationInboxItem) -> Double? {
         switch item.insightType {
-        case .sleepComplete:
+        case .sleepComplete, .sleepDebt:
             parseSleepMinutes(in: item.body)
         case .workoutPR:
             // Legacy workout notifications might not have route payload.
@@ -428,7 +428,7 @@ struct NotificationHubView: View {
             DS.Color.hrv
         case .rhrAnomaly:
             DS.Color.rhr
-        case .sleepComplete:
+        case .sleepComplete, .sleepDebt:
             DS.Color.sleep
         case .stepGoal:
             DS.Color.steps

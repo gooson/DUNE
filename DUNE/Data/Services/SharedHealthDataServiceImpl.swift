@@ -160,6 +160,7 @@ actor SharedHealthDataServiceImpl: SharedHealthDataService {
         cacheNotificationBaselines(
             hrvSamples: hrvSamplesResult.value,
             rhrCollection: rhrCollectionResult.value,
+            sleepDailyDurations: sleepDailyDurationsResult.value,
             referenceDate: referenceDate
         )
 
@@ -258,6 +259,7 @@ actor SharedHealthDataServiceImpl: SharedHealthDataService {
     private func cacheNotificationBaselines(
         hrvSamples: [HRVSample],
         rhrCollection: [(date: Date, min: Double, max: Double, average: Double)],
+        sleepDailyDurations: [(date: Date, totalMinutes: Double, stageBreakdown: [SleepStage.Stage: Double])],
         referenceDate: Date
     ) {
         let calendar = Calendar.current
@@ -282,6 +284,11 @@ actor SharedHealthDataServiceImpl: SharedHealthDataService {
             .map(\.average)
         if rhrAverages.count >= 7 {
             BackgroundNotificationEvaluator.cacheBaseline(for: .rhrAnomaly, values: Array(rhrAverages))
+        }
+
+        let sleepDurations = sleepDailyDurations.map(CalculateSleepDeficitUseCase.Input.DayDuration.init(from:))
+        if !sleepDurations.isEmpty {
+            BackgroundNotificationEvaluator.cacheSleepDurations(sleepDurations)
         }
     }
 
