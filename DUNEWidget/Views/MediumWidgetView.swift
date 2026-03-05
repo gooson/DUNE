@@ -1,5 +1,4 @@
 import SwiftUI
-import WidgetKit
 
 struct MediumWidgetView: View {
     let entry: WellnessDashboardEntry
@@ -95,14 +94,6 @@ struct MediumWidgetView: View {
     }
 
     private var placeholderView: some View {
-        VStack(spacing: 8) {
-            Image(systemName: "heart.text.clipboard")
-                .font(.title2)
-                .foregroundStyle(WidgetDS.Color.textTertiary)
-            Text("Open DUNE to see your scores")
-                .font(.caption)
-                .foregroundStyle(WidgetDS.Color.textSecondary)
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        WidgetPlaceholderView(message: "Open DUNE to see your scores", iconFont: .title2)
     }
 }

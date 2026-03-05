@@ -116,15 +116,6 @@ struct LargeWidgetView: View {
     }
 
     private var placeholderView: some View {
-        VStack(spacing: 12) {
-            Image(systemName: "heart.text.clipboard")
-                .font(.largeTitle)
-                .foregroundStyle(WidgetDS.Color.textTertiary)
-            Text("Open DUNE to see your health scores")
-                .font(.callout)
-                .foregroundStyle(WidgetDS.Color.textSecondary)
-                .multilineTextAlignment(.center)
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        WidgetPlaceholderView(message: "Open DUNE to see your health scores", iconFont: .largeTitle)
     }
 }

@@ -45,54 +45,39 @@ enum WidgetDataWriter {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: item)
     }
 
-    static func writeConditionScore(_ score: ConditionScore?) {
-        let existing = loadExisting()
-        let updated = WidgetScoreData(
-            conditionScore: score?.score,
-            conditionStatusRaw: score?.status.rawValue,
-            conditionMessage: score?.narrativeMessage,
-            readinessScore: existing?.readinessScore,
-            readinessStatusRaw: existing?.readinessStatusRaw,
-            readinessMessage: existing?.readinessMessage,
-            wellnessScore: existing?.wellnessScore,
-            wellnessStatusRaw: existing?.wellnessStatusRaw,
-            wellnessMessage: existing?.wellnessMessage,
+    private static func update(_ mutation: (inout WidgetScoreData) -> Void) {
+        var data = loadExisting() ?? WidgetScoreData(
+            conditionScore: nil, conditionStatusRaw: nil, conditionMessage: nil,
+            readinessScore: nil, readinessStatusRaw: nil, readinessMessage: nil,
+            wellnessScore: nil, wellnessStatusRaw: nil, wellnessMessage: nil,
             updatedAt: Date()
         )
-        save(updated)
+        mutation(&data)
+        data.updatedAt = Date()
+        save(data)
+    }
+
+    static func writeConditionScore(_ score: ConditionScore?) {
+        update { data in
+            data.conditionScore = score?.score
+            data.conditionStatusRaw = score?.status.rawValue
+            data.conditionMessage = score?.narrativeMessage
+        }
     }
 
     static func writeReadinessScore(_ score: TrainingReadiness?) {
-        let existing = loadExisting()
-        let updated = WidgetScoreData(
-            conditionScore: existing?.conditionScore,
-            conditionStatusRaw: existing?.conditionStatusRaw,
-            conditionMessage: existing?.conditionMessage,
-            readinessScore: score?.score,
-            readinessStatusRaw: score?.status.rawValue,
-            readinessMessage: score?.narrativeMessage,
-            wellnessScore: existing?.wellnessScore,
-            wellnessStatusRaw: existing?.wellnessStatusRaw,
-            wellnessMessage: existing?.wellnessMessage,
-            updatedAt: Date()
-        )
-        save(updated)
+        update { data in
+            data.readinessScore = score?.score
+            data.readinessStatusRaw = score?.status.rawValue
+            data.readinessMessage = score?.narrativeMessage
+        }
     }
 
     static func writeWellnessScore(_ score: WellnessScore?) {
-        let existing = loadExisting()
-        let updated = WidgetScoreData(
-            conditionScore: existing?.conditionScore,
-            conditionStatusRaw: existing?.conditionStatusRaw,
-            conditionMessage: existing?.conditionMessage,
-            readinessScore: existing?.readinessScore,
-            readinessStatusRaw: existing?.readinessStatusRaw,
-            readinessMessage: existing?.readinessMessage,
-            wellnessScore: score?.score,
-            wellnessStatusRaw: score?.status.rawValue,
-            wellnessMessage: score?.narrativeMessage,
-            updatedAt: Date()
-        )
-        save(updated)
+        update { data in
+            data.wellnessScore = score?.score
+            data.wellnessStatusRaw = score?.status.rawValue
+            data.wellnessMessage = score?.narrativeMessage
+        }
     }
 }

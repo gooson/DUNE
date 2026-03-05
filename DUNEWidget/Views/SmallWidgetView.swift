@@ -1,5 +1,4 @@
 import SwiftUI
-import WidgetKit
 
 struct SmallWidgetView: View {
     let entry: WellnessDashboardEntry
@@ -55,14 +54,6 @@ struct SmallWidgetView: View {
     }
 
     private var placeholderView: some View {
-        VStack(spacing: 8) {
-            Image(systemName: "heart.text.clipboard")
-                .font(.title2)
-                .foregroundStyle(WidgetDS.Color.textTertiary)
-            Text("Open DUNE")
-                .font(.caption2)
-                .foregroundStyle(WidgetDS.Color.textSecondary)
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        WidgetPlaceholderView(message: "Open DUNE", iconFont: .title2)
     }
 }
