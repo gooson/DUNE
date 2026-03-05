@@ -98,7 +98,7 @@ final class NotificationInboxManager: @unchecked Sendable {
         _ = store.markRead(id: itemID)
         postInboxDidChange()
 
-        guard let route = existing.route else { return existing }
+        guard let route = preferredRoute(for: existing) else { return existing }
         emitNavigationRequest(.init(itemID: itemID, route: route))
         return existing
     }
@@ -107,7 +107,7 @@ final class NotificationInboxManager: @unchecked Sendable {
         let itemID = userInfo[UserInfoKeys.itemID] as? String
         if let itemID {
             let openedItem = open(itemID: itemID)
-            if openedItem?.route != nil {
+            if let openedItem, preferredRoute(for: openedItem) != nil {
                 return
             }
             if openedItem?.insightType == .workoutPR {
@@ -207,5 +207,30 @@ final class NotificationInboxManager: @unchecked Sendable {
         case .notificationHub:
             return .notificationHub
         }
+    }
+
+    private func preferredRoute(for item: NotificationInboxItem) -> NotificationRoute? {
+        guard let route = item.route else { return nil }
+
+        guard item.insightType == .workoutPR else {
+            return route
+        }
+
+        if route.destination == .workoutDetail, isLikelyLevelUpNotification(item.title) {
+            return .activityPersonalRecords
+        }
+
+        return route
+    }
+
+    private func isLikelyLevelUpNotification(_ title: String) -> Bool {
+        let normalized = normalizeRouteToken(title)
+        return normalized.contains("levelup") || normalized.contains("레벨업")
+    }
+
+    private func normalizeRouteToken(_ value: String) -> String {
+        value
+            .lowercased()
+            .replacingOccurrences(of: #"[[:space:][:punct:]]+"#, with: "", options: .regularExpression)
     }
 }
