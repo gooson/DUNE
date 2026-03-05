@@ -182,7 +182,8 @@ private struct ShanksPirateFlagOverlay: View {
             .frame(width: width, height: width)
             .rotationEffect(.degrees(-14 + Double(sway) * 8))
             .padding(.top, topPadding)
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            .padding(.leading, 16)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             .allowsHitTesting(false)
             .task {
                 guard !reduceMotion else { return }
@@ -377,7 +378,8 @@ private struct ShanksKamusariEffectOverlay: View {
         }
         .blur(radius: reduceMotion ? 0.0 : 0.10)
         .padding(.top, topPadding)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .padding(.trailing, 12)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
         .allowsHitTesting(false)
         .task {
             guard !reduceMotion else { return }
@@ -509,7 +511,7 @@ struct ShanksTabWaveBackground: View {
 
             ShanksFlagTextureView(opacity: colorScheme == .dark ? 0.16 : 0.12)
             ShanksPirateFlagOverlay(
-                opacity: colorScheme == .dark ? 0.14 : 0.10,
+                opacity: colorScheme == .dark ? 0.32 : 0.24,
                 width: 170,
                 topPadding: 64
             )
@@ -522,9 +524,9 @@ struct ShanksTabWaveBackground: View {
             ShanksKamusariEffectOverlay(
                 intensity: colorScheme == .dark ? 0.86 : 0.76,
                 width: 300,
-                topPadding: 64
+                topPadding: 52
             )
-            .offset(x: 118, y: 8)
+            .offset(x: -8, y: 0)
         }
         .ignoresSafeArea()
         .animation(DS.Animation.atmosphereTransition, value: atmosphere)
@@ -598,7 +600,7 @@ struct ShanksDetailWaveBackground: View {
 
             ShanksFlagTextureView(opacity: colorScheme == .dark ? 0.10 : 0.07)
             ShanksPirateFlagOverlay(
-                opacity: colorScheme == .dark ? 0.08 : 0.06,
+                opacity: colorScheme == .dark ? 0.22 : 0.16,
                 width: 132,
                 topPadding: 36
             )
@@ -611,9 +613,9 @@ struct ShanksDetailWaveBackground: View {
             ShanksKamusariEffectOverlay(
                 intensity: colorScheme == .dark ? 0.62 : 0.52,
                 width: 220,
-                topPadding: 36
+                topPadding: 28
             )
-            .offset(x: 88, y: 6)
+            .offset(x: -6, y: 0)
         }
         .ignoresSafeArea()
     }
@@ -654,16 +656,16 @@ struct ShanksSheetWaveBackground: View {
 
             ShanksFlagTextureView(opacity: colorScheme == .dark ? 0.08 : 0.05)
             ShanksPirateFlagOverlay(
-                opacity: colorScheme == .dark ? 0.06 : 0.04,
+                opacity: colorScheme == .dark ? 0.18 : 0.12,
                 width: 110,
                 topPadding: 20
             )
             ShanksKamusariEffectOverlay(
                 intensity: colorScheme == .dark ? 0.40 : 0.32,
                 width: 164,
-                topPadding: 20
+                topPadding: 16
             )
-            .offset(x: 64, y: 4)
+            .offset(x: -4, y: 0)
         }
         .ignoresSafeArea()
     }
