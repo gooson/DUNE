@@ -224,13 +224,21 @@ final class BackgroundNotificationEvaluator: Sendable {
             return nil
         }
 
+        let route: NotificationRoute?
+        switch representativeEvent.kind {
+        case .levelUp:
+            route = .activityPersonalRecords
+        case .badgeUnlocked, .personalRecord, .milestone:
+            route = .workoutDetail(workoutID: summary.id)
+        }
+
         return HealthInsight(
             type: baseInsight.type,
             title: baseInsight.title,
             body: baseInsight.body,
             severity: baseInsight.severity,
             date: baseInsight.date,
-            route: .workoutDetail(workoutID: summary.id)
+            route: route
         )
     }
 

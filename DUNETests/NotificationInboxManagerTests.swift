@@ -100,6 +100,32 @@ struct NotificationInboxManagerTests {
         #expect(pending?.itemID == item.id)
     }
 
+    @Test("handleNotificationResponse emits activityPersonalRecords for non-routed workoutPR notification")
+    func handleNotificationResponseNonRoutedWorkoutPR() async {
+        let store = makeStore()
+        let recorder = BadgeRecorder()
+        let manager = NotificationInboxManager(
+            store: store,
+            badgeUpdater: { recorder.record($0) }
+        )
+
+        let workoutInsight = HealthInsight(
+            type: .workoutPR,
+            title: "Level Up!",
+            body: "You reached level 4",
+            severity: .celebration
+        )
+        let item = manager.recordSentInsight(workoutInsight)
+        let userInfo = manager.notificationUserInfo(for: item)
+
+        manager.handleNotificationResponse(userInfo: userInfo)
+
+        let pending = manager.consumePendingNavigationRequest()
+        #expect(pending != nil)
+        #expect(pending?.route.destination == .activityPersonalRecords)
+        #expect(pending?.itemID == item.id)
+    }
+
     @Test("handleNotificationResponse routes workout notifications to workoutDetail")
     func handleNotificationResponseRouted() async {
         let store = makeStore()

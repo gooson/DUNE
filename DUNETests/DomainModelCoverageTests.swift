@@ -138,6 +138,13 @@ struct NotificationInboxItemModelTests {
         #expect(route?.workoutID == "workout-123")
     }
 
+    @Test("activityPersonalRecords route has fixed destination")
+    func activityPersonalRecordsRouteFactory() {
+        let route = NotificationRoute.activityPersonalRecords
+        #expect(route.destination == .activityPersonalRecords)
+        #expect(route.workoutID == nil)
+    }
+
     @Test("Codable round trip preserves all persisted fields")
     func codableRoundTrip() throws {
         let createdAt = Date(timeIntervalSince1970: 1_700_000_000)

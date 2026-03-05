@@ -323,6 +323,11 @@ struct NotificationHubView: View {
             return
         }
 
+        if opened.insightType == .workoutPR {
+            inboxManager.requestNavigation(itemID: opened.id, route: .activityPersonalRecords)
+            return
+        }
+
         if let metric = NotificationHubMetricResolver.metric(for: opened) {
             destination = .metric(metric, itemID: opened.id)
         } else {
@@ -405,6 +410,9 @@ struct NotificationHubView: View {
     private func destinationHint(for item: NotificationInboxItem) -> (title: String, symbol: String) {
         if item.route?.destination == .workoutDetail {
             return (String(localized: "Workout Detail"), "figure.strengthtraining.traditional")
+        }
+        if item.route?.destination == .activityPersonalRecords || item.insightType == .workoutPR {
+            return (String(localized: "Personal Records"), "trophy.fill")
         }
 
         guard let category = NotificationHubMetricResolver.category(for: item.insightType) else {
