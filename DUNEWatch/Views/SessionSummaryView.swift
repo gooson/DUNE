@@ -422,6 +422,8 @@ struct SessionSummaryView: View {
         }
 
         let steps = workoutManager.steps
+        let pace = workoutManager.currentPace
+        let floors = workoutManager.floorsClimbed
         let record = ExerciseRecord(
             date: startDate,
             exerciseType: exerciseType,
@@ -429,6 +431,8 @@ struct SessionSummaryView: View {
             calories: activeCalories > 0 ? activeCalories : nil,
             distance: distanceKm > 0 ? distanceKm : nil,
             stepCount: steps > 0 ? Int(steps) : nil,
+            averagePaceSecondsPerKm: pace > 0 ? pace : nil,
+            floorsAscended: floors > 0 ? floors : nil,
             isFromHealthKit: true,
             healthKitWorkoutID: healthKitWorkoutID,
             exerciseDefinitionID: exerciseDefinitionID,

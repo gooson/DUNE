@@ -211,10 +211,15 @@ final class CardioSessionManager: NSObject, Sendable {
 
         session.delegate = self
         builder.delegate = self
-        builder.dataSource = HKLiveWorkoutDataSource(
+        let dataSource = HKLiveWorkoutDataSource(
             healthStore: healthStore,
             workoutConfiguration: config
         )
+        // stepCount and flightsClimbed are not auto-collected by HKLiveWorkoutDataSource;
+        // enable explicitly so workoutBuilder(_:didCollectDataOf:) receives updates.
+        dataSource.enableCollection(for: HKQuantityType(.stepCount), predicate: nil)
+        dataSource.enableCollection(for: HKQuantityType(.flightsClimbed), predicate: nil)
+        builder.dataSource = dataSource
 
         hkSession = session
         hkBuilder = builder
