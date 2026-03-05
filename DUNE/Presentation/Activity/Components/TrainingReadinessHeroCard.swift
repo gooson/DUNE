@@ -5,7 +5,7 @@ struct TrainingReadinessHeroCard: View {
     let isCalibrating: Bool
 
     private enum Labels {
-        static let scoreLabel = String(localized: "READINESS")
+        static let scoreLabel = "READINESS"
         static let hrv = String(localized: "HRV")
         static let sleep = String(localized: "Sleep")
         static let recovery = String(localized: "Recovery")

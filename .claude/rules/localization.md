@@ -175,6 +175,7 @@ private enum Labels {
 - **SF Symbol 이름** (systemName 파라미터)
 - **ID/Key 문자열** (identifier, UserDefaults key 등)
 - **단위 기호** (kg, bpm, ms 등 — 숫자 포매터가 locale 처리)
+- **히어로 카드 링 점수 라벨** (`CONDITION`, `READINESS`, `WELLNESS`는 브랜드 용어로 영어 고정)
 
 ## 금지 패턴
 
