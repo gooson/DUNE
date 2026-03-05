@@ -1,5 +1,7 @@
 import SwiftUI
+#if canImport(UIKit)
 import UIKit
+#endif
 
 /// Compact wave animation shown during pull-to-refresh loading.
 /// Uses a dedicated sine-curve path (not WaveShape) for a small pill-shaped indicator.
