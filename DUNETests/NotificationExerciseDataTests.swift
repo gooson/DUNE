@@ -47,6 +47,13 @@ struct NotificationRouteValidationTests {
         let b = try #require(NotificationRoute.workoutDetail(workoutID: "id-2"))
         #expect(a != b)
     }
+
+    @Test("activityPersonalRecords route has expected destination and no workoutID")
+    func activityPersonalRecordsRoute() {
+        let route = NotificationRoute.activityPersonalRecords
+        #expect(route.destination == .activityPersonalRecords)
+        #expect(route.workoutID == nil)
+    }
 }
 
 // MARK: - UserInfo Round Trip
@@ -149,6 +156,28 @@ struct NotificationUserInfoRoundTripTests {
         ]
         let parsedRoute = parseRouteFromUserInfo(manager: manager, userInfo: userInfo)
         #expect(parsedRoute == nil)
+    }
+
+    @Test("activityPersonalRecords route survives encode → decode via userInfo")
+    func activityPersonalRecordsRoundTrip() {
+        let manager = makeManager()
+        let insight = HealthInsight(
+            type: .workoutPR,
+            title: "Level Up!",
+            body: "Reached level 3",
+            severity: .celebration,
+            route: .activityPersonalRecords
+        )
+        let item = manager.recordSentInsight(insight)
+
+        let userInfo = manager.notificationUserInfo(for: item)
+        #expect(userInfo["notificationItemID"] as? String == item.id)
+        #expect(userInfo["notificationRouteKind"] as? String == "activityPersonalRecords")
+        #expect(userInfo["notificationWorkoutID"] == nil)
+
+        let parsedRoute = parseRouteFromUserInfo(manager: manager, userInfo: userInfo)
+        #expect(parsedRoute?.destination == .activityPersonalRecords)
+        #expect(parsedRoute?.workoutID == nil)
     }
 }
 
@@ -262,7 +291,7 @@ struct HandleNotificationResponseTests {
         #expect(pending == nil)
     }
 
-    @Test("userInfo with itemID but no route marks read without navigation")
+    @Test("userInfo with itemID but no route marks read and routes to notificationHub")
     func itemIDOnlyNoRoute() async {
         let manager = makeManager()
         let insight = HealthInsight(
@@ -285,9 +314,32 @@ struct HandleNotificationResponseTests {
         let found = items.first { $0.id == item.id }
         #expect(found?.isRead == true)
 
-        // No pending navigation (no route)
+        // Non-routed non-workout alerts should go to notification hub.
         let pending = manager.consumePendingNavigationRequest()
-        #expect(pending == nil)
+        #expect(pending?.route.destination == .notificationHub)
+    }
+
+    @Test("userInfo with itemID and route-less workoutPR routes to activityPersonalRecords")
+    func itemIDOnlyNoRouteWorkoutPR() async {
+        let manager = makeManager()
+        let insight = HealthInsight(
+            type: .workoutPR,
+            title: "Level Up!",
+            body: "Reached level 4",
+            severity: .celebration
+        )
+        let item = manager.recordSentInsight(insight)
+
+        let userInfo: [AnyHashable: Any] = [
+            "notificationItemID": item.id
+        ]
+        manager.handleNotificationResponse(userInfo: userInfo)
+
+        try? await Task.sleep(nanoseconds: 50_000_000)
+
+        let pending = manager.consumePendingNavigationRequest()
+        #expect(pending?.route.destination == .activityPersonalRecords)
+        #expect(pending?.itemID == item.id)
     }
 }
 

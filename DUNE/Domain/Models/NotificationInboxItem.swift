@@ -4,6 +4,7 @@ import Foundation
 struct NotificationRoute: Codable, Sendable, Hashable {
     enum Destination: String, Codable, Sendable {
         case workoutDetail
+        case activityPersonalRecords
         case notificationHub
     }
 
@@ -14,6 +15,11 @@ struct NotificationRoute: Codable, Sendable, Hashable {
         guard !workoutID.isEmpty else { return nil }
         return NotificationRoute(destination: .workoutDetail, workoutID: workoutID)
     }
+
+    static let activityPersonalRecords = NotificationRoute(
+        destination: .activityPersonalRecords,
+        workoutID: nil
+    )
 
     static let notificationHub = NotificationRoute(destination: .notificationHub, workoutID: nil)
 }

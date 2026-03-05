@@ -110,6 +110,10 @@ final class NotificationInboxManager: @unchecked Sendable {
             if openedItem?.route != nil {
                 return
             }
+            if openedItem?.insightType == .workoutPR {
+                emitNavigationRequest(.init(itemID: itemID, route: .activityPersonalRecords))
+                return
+            }
             if let route = parseRoute(userInfo: userInfo) {
                 emitNavigationRequest(.init(itemID: itemID, route: route))
                 return
@@ -137,10 +141,16 @@ final class NotificationInboxManager: @unchecked Sendable {
             if let workoutID = route.workoutID, !workoutID.isEmpty {
                 userInfo[UserInfoKeys.workoutID] = workoutID
             }
+        case .activityPersonalRecords:
+            userInfo[UserInfoKeys.routeKind] = route.destination.rawValue
         case .notificationHub:
             break // Hub route is resolved at navigation time; no payload needed in userInfo
         }
         return userInfo
+    }
+
+    func requestNavigation(itemID: String, route: NotificationRoute) {
+        emitNavigationRequest(.init(itemID: itemID, route: route))
     }
 
     func consumePendingNavigationRequest() -> NotificationNavigationRequest? {
@@ -181,11 +191,21 @@ final class NotificationInboxManager: @unchecked Sendable {
 
     private func parseRoute(userInfo: [AnyHashable: Any]) -> NotificationRoute? {
         guard let rawKind = userInfo[UserInfoKeys.routeKind] as? String,
-              rawKind == NotificationRoute.Destination.workoutDetail.rawValue,
-              let workoutID = userInfo[UserInfoKeys.workoutID] as? String,
-              !workoutID.isEmpty else {
+              let destination = NotificationRoute.Destination(rawValue: rawKind) else {
             return nil
         }
-        return .workoutDetail(workoutID: workoutID)
+
+        switch destination {
+        case .workoutDetail:
+            guard let workoutID = userInfo[UserInfoKeys.workoutID] as? String,
+                  !workoutID.isEmpty else {
+                return nil
+            }
+            return .workoutDetail(workoutID: workoutID)
+        case .activityPersonalRecords:
+            return .activityPersonalRecords
+        case .notificationHub:
+            return .notificationHub
+        }
     }
 }
