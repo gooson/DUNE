@@ -214,6 +214,24 @@ struct WorkoutRewardStoreTests {
         #expect(outcome.summary.level >= 2)
     }
 
+
+    @Test("Unlocked badge lookup returns true when activity milestone badge exists")
+    func unlockedBadgeLookupByActivity() {
+        let store = makeRewardStore()
+        let walkingWorkout = makeWorkout(
+            id: "walk-badge",
+            activityType: .walking,
+            distance: 5_000,
+            duration: 2_400,
+            stepCount: 15_500
+        )
+
+        _ = store.evaluateReward(for: walkingWorkout, newPRTypes: [])
+
+        #expect(store.hasUnlockedBadge(for: WorkoutActivityType.walking.rawValue))
+        #expect(!store.hasUnlockedBadge(for: WorkoutActivityType.running.rawValue))
+    }
+
     @Test("Reward evaluation is idempotent for duplicate workout callbacks")
     func rewardEvaluationIdempotent() {
         let store = makeRewardStore()

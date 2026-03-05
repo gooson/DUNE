@@ -226,9 +226,9 @@ final class BackgroundNotificationEvaluator: Sendable {
 
         let route: NotificationRoute?
         switch representativeEvent.kind {
-        case .levelUp:
+        case .levelUp, .badgeUnlocked:
             route = .activityPersonalRecords
-        case .badgeUnlocked, .personalRecord, .milestone:
+        case .personalRecord, .milestone:
             route = .workoutDetail(workoutID: summary.id)
         }
 

@@ -218,9 +218,12 @@ enum EvaluateHealthInsightUseCase: Sendable {
             title = String(localized: "Milestone Reached!")
         }
 
-        let body = representativeEvent.detail.isEmpty
-            ? activityName
-            : representativeEvent.detail
+        let body: String
+        if representativeEvent.detail.isEmpty {
+            body = activityName
+        } else {
+            body = String(localized: "\(activityName): \(representativeEvent.detail)")
+        }
 
         return HealthInsight(
             type: .workoutPR,
