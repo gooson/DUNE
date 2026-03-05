@@ -103,7 +103,7 @@ struct HanokWaveOverlayView: View {
                 phase = phaseTarget
             }
         }
-        .task(id: "breath") {
+        .task(id: breathIntensity) {
             guard !reduceMotion, breathIntensity > 0 else { return }
             withAnimation(.easeInOut(duration: breathDuration).repeatForever(autoreverses: true)) {
                 breathPhase = .pi
