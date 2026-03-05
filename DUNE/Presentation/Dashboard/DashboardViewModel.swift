@@ -221,6 +221,7 @@ final class DashboardViewModel {
         coachingMessage = focusInsight?.message ?? buildCoachingMessage()
         heroBaselineDetails = buildHeroBaselineDetails()
         lastUpdated = Date()
+        WidgetDataWriter.writeConditionScore(conditionScore)
         isLoading = false
     }
 

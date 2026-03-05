@@ -357,6 +357,7 @@ final class WellnessViewModel {
             conditionScore: conditionScore,
             bodyTrend: bodyTrend
         ))
+        WidgetDataWriter.writeWellnessScore(wellnessScore)
 
         // Sort and split into sections (Correction #88: atomic update)
         let sortedCards = cards.sorted { a, b in
