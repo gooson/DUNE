@@ -253,7 +253,7 @@ struct EvaluateHealthInsightUseCaseTests {
             date: Date(),
             kind: .badgeUnlocked,
             title: "New Badge Unlocked",
-            detail: "Running: 10K",
+            detail: "10K",
             pointsAwarded: 0,
             levelAfterEvent: nil
         )
@@ -267,5 +267,29 @@ struct EvaluateHealthInsightUseCaseTests {
         #expect(result?.type == .workoutPR)
         #expect(result?.severity == .celebration)
         #expect(result?.title == String(localized: "New Badge Unlocked"))
+        #expect(result?.body == String(localized: "Running: 10K"))
     }
+
+    @Test("WorkoutReward: falls back to activity name when detail is empty")
+    func workoutRewardEmptyDetailUsesActivityName() {
+        let event = WorkoutRewardEvent(
+            id: "reward-2",
+            workoutID: "workout-2",
+            activityTypeRawValue: WorkoutActivityType.running.rawValue,
+            date: Date(),
+            kind: .badgeUnlocked,
+            title: "New Badge Unlocked",
+            detail: "",
+            pointsAwarded: 0,
+            levelAfterEvent: nil
+        )
+
+        let result = EvaluateHealthInsightUseCase.evaluateWorkoutReward(
+            activityName: "Running",
+            representativeEvent: event
+        )
+
+        #expect(result?.body == "Running")
+    }
+
 }

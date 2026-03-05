@@ -6,6 +6,7 @@ struct ExerciseTypeSummaryRow: View {
     let exerciseType: ExerciseTypeVolume
 
     @Environment(\.appTheme) private var theme
+    private let personalRecordStore = PersonalRecordStore.shared
 
     var body: some View {
         HStack(spacing: DS.Spacing.md) {
@@ -18,8 +19,19 @@ struct ExerciseTypeSummaryRow: View {
 
             // Name + sessions
             VStack(alignment: .leading, spacing: 2) {
-                Text(exerciseType.displayName)
-                    .font(.subheadline.weight(.medium))
+                HStack(spacing: DS.Spacing.xs) {
+                    Text(exerciseType.displayName)
+                        .font(.subheadline.weight(.medium))
+
+                    if hasUnlockedBadge {
+                        Label(String(localized: "Badge"), systemImage: "medal.fill")
+                            .font(.caption2.weight(.semibold))
+                            .labelStyle(.iconOnly)
+                            .foregroundStyle(.yellow)
+                            .accessibilityLabel(String(localized: "Badge unlocked"))
+                    }
+                }
+
                 Text("\(exerciseType.sessionCount.formattedWithSeparator) sessions")
                     .font(.caption)
                     .foregroundStyle(DS.Color.textSecondary)
@@ -46,6 +58,13 @@ struct ExerciseTypeSummaryRow: View {
                 .foregroundStyle(.tertiary)
         }
         .padding(.vertical, DS.Spacing.xs)
+    }
+
+    private var hasUnlockedBadge: Bool {
+        guard let activityType = WorkoutActivityType(rawValue: exerciseType.typeKey) else {
+            return false
+        }
+        return personalRecordStore.hasUnlockedBadge(for: activityType.rawValue)
     }
 
     @ViewBuilder

@@ -85,6 +85,19 @@ final class PersonalRecordStore: @unchecked Sendable {
         summary(from: loadRewardState())
     }
 
+    /// Returns whether any reward badge has been unlocked for the given activity type.
+    func hasUnlockedBadge(for activityTypeRawValue: String) -> Bool {
+        guard !activityTypeRawValue.isEmpty else { return false }
+
+        let state = loadRewardState()
+        let milestonePrefix = "milestone-\(activityTypeRawValue)-"
+        let prPrefix = "pr-\(activityTypeRawValue)-"
+
+        return state.unlockedBadges.contains(where: {
+            $0.hasPrefix(milestonePrefix) || $0.hasPrefix(prPrefix)
+        })
+    }
+
     /// Returns latest reward history events.
     func rewardHistory(limit: Int = 50) -> [WorkoutRewardEvent] {
         let state = loadRewardState()
