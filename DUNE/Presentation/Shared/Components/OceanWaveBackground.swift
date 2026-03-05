@@ -1013,7 +1013,7 @@ private enum ArcticAuroraPalette {
 
 // MARK: - Arctic Dawn Backgrounds
 
-struct ArcticTabWaveBackground: View {
+struct OceanLegacyArcticTabWaveBackground: View {
     @Environment(\.wavePreset) private var preset
     @Environment(\.appTheme) private var theme
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -1242,7 +1242,7 @@ struct ArcticTabWaveBackground: View {
     }
 }
 
-struct ArcticDetailWaveBackground: View {
+struct OceanLegacyArcticDetailWaveBackground: View {
     @Environment(\.appTheme) private var theme
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var isLowPowerModeEnabled = ProcessInfo.processInfo.isLowPowerModeEnabled
@@ -1441,7 +1441,7 @@ struct ArcticDetailWaveBackground: View {
     }
 }
 
-struct ArcticSheetWaveBackground: View {
+struct OceanLegacyArcticSheetWaveBackground: View {
     @Environment(\.appTheme) private var theme
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var isLowPowerModeEnabled = ProcessInfo.processInfo.isLowPowerModeEnabled
@@ -1887,7 +1887,7 @@ private struct SolarSunBurstOverlay: View {
 
 // MARK: - Solar Pop Backgrounds
 
-struct SolarTabWaveBackground: View {
+struct OceanLegacySolarTabWaveBackground: View {
     @Environment(\.wavePreset) private var preset
     @Environment(\.appTheme) private var theme
     @Environment(\.colorScheme) private var colorScheme
@@ -1981,7 +1981,7 @@ struct SolarTabWaveBackground: View {
     }
 }
 
-struct SolarDetailWaveBackground: View {
+struct OceanLegacySolarDetailWaveBackground: View {
     @Environment(\.appTheme) private var theme
 
     var body: some View {
@@ -2055,7 +2055,7 @@ struct SolarDetailWaveBackground: View {
     }
 }
 
-struct SolarSheetWaveBackground: View {
+struct OceanLegacySolarSheetWaveBackground: View {
     @Environment(\.appTheme) private var theme
 
     var body: some View {

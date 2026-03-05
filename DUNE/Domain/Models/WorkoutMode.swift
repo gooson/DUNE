@@ -2,7 +2,7 @@ import Foundation
 
 /// Workout mode: strength (weight x reps) or cardio (distance+pace).
 /// Referenced by WorkoutManager, WorkoutRecoveryState, and test targets.
-enum WorkoutMode: Sendable, Codable {
+enum WorkoutMode: Sendable, Codable, Equatable {
     case strength
     case cardio(activityType: WorkoutActivityType, isOutdoor: Bool)
 
