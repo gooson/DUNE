@@ -8,7 +8,7 @@ struct ConditionHeroView: View {
     var trendBadges: [BaselineDetail] = []
 
     private enum Labels {
-        static let scoreLabel = String(localized: "CONDITION")
+        static let scoreLabel = "CONDITION"
     }
 
     @State private var animatedScore: Int = 0

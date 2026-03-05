@@ -7,7 +7,7 @@ struct WellnessHeroCard: View {
     let bodyScore: Int?
 
     private enum Labels {
-        static let wellness = String(localized: "WELLNESS")
+        static let wellness = "WELLNESS"
         static let sleep = String(localized: "Sleep")
         static let condition = String(localized: "Condition")
         static let body = String(localized: "Body")
