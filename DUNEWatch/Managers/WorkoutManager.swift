@@ -597,7 +597,7 @@ final class WorkoutManager: NSObject {
         // Restore step count
         if let stats = builder.statistics(for: HKQuantityType(.stepCount)),
            let totalSteps = stats.sumQuantity()?.doubleValue(for: .count()),
-           totalSteps >= 0, totalSteps < 200_000 {
+           totalSteps > 0, totalSteps < 200_000 {
             steps = totalSteps
         }
     }
@@ -843,7 +843,7 @@ extension WorkoutManager: HKLiveWorkoutBuilderDelegate {
 
             case HKQuantityType(.stepCount):
                 let totalSteps = stats.sumQuantity()?.doubleValue(for: .count()) ?? 0
-                if totalSteps >= 0, totalSteps < 200_000 {
+                if totalSteps > 0, totalSteps < 200_000 {
                     stepValue = totalSteps
                 }
 
