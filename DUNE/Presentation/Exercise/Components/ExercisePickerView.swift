@@ -53,10 +53,9 @@ struct ExercisePickerView: View {
         var customResults: [ExerciseDefinition]
 
         if !searchText.isEmpty {
-            libraryResults = library.search(query: searchText)
-            let query = searchText.lowercased()
+            libraryResults = mergedSearchResults(for: searchText)
             customResults = customDefinitions.filter {
-                $0.localizedName.localizedCaseInsensitiveContains(query)
+                matchesSearchQuery(searchText, in: $0)
             }
         } else if let userCatName = selectedUserCategoryName {
             // User-defined category filter — only applies to custom exercises
@@ -95,12 +94,10 @@ struct ExercisePickerView: View {
         if searchText.isEmpty {
             definitions = customDefinitions + library.allExercises()
         } else {
-            let query = searchText.lowercased()
             let customResults = customDefinitions.filter {
-                $0.localizedName.localizedCaseInsensitiveContains(query)
-                    || $0.name.localizedCaseInsensitiveContains(query)
+                matchesSearchQuery(searchText, in: $0)
             }
-            definitions = customResults + library.search(query: searchText)
+            definitions = customResults + mergedSearchResults(for: searchText)
         }
 
         let sorted = sortQuickStartExercises(uniqueByID(definitions))
@@ -575,5 +572,71 @@ struct ExercisePickerView: View {
 
             return lhs.localizedName.localizedCaseInsensitiveCompare(rhs.localizedName) == .orderedAscending
         }
+    }
+
+    private func mergedSearchResults(for query: String) -> [ExerciseDefinition] {
+        let baseResults = library.search(query: query)
+        let initialConsonantResults = library.allExercises().filter {
+            matchesInitialConsonantQuery(query, in: $0)
+        }
+        return uniqueByID(baseResults + initialConsonantResults)
+    }
+
+    private func matchesSearchQuery(_ query: String, in exercise: ExerciseDefinition) -> Bool {
+        exercise.localizedName.localizedCaseInsensitiveContains(query)
+            || exercise.name.localizedCaseInsensitiveContains(query)
+            || matchesInitialConsonantQuery(query, in: exercise)
+    }
+
+    private func matchesInitialConsonantQuery(_ query: String, in exercise: ExerciseDefinition) -> Bool {
+        let normalizedQuery = query.replacingOccurrences(of: " ", with: "")
+        guard !normalizedQuery.isEmpty, normalizedQuery.allSatisfy(\.isHangulInitialConsonant) else {
+            return false
+        }
+
+        let localizedInitials = exercise.localizedName.hangulInitialConsonants
+        let englishInitials = exercise.name.hangulInitialConsonants
+        return localizedInitials.contains(normalizedQuery) || englishInitials.contains(normalizedQuery)
+    }
+}
+
+private extension Character {
+    var isHangulInitialConsonant: Bool {
+        guard let scalar = unicodeScalars.first, unicodeScalars.count == 1 else { return false }
+        return HangulInitialConsonantMatcher.initialConsonants.contains(scalar)
+    }
+}
+
+private enum HangulInitialConsonantMatcher {
+    static let initialConsonants = Set("ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ".unicodeScalars)
+    static let table: [Character] = ["ㄱ", "ㄲ", "ㄴ", "ㄷ", "ㄸ", "ㄹ", "ㅁ", "ㅂ", "ㅃ", "ㅅ", "ㅆ", "ㅇ", "ㅈ", "ㅉ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"]
+    static let hangulSyllableStart: UInt32 = 0xAC00
+    static let hangulSyllableEnd: UInt32 = 0xD7A3
+    static let choseongCycle: UInt32 = 588
+}
+
+private extension String {
+    var hangulInitialConsonants: String {
+        var result = String()
+
+        for scalar in unicodeScalars {
+            let value = scalar.value
+            if HangulInitialConsonantMatcher.initialConsonants.contains(scalar) {
+                result.append(Character(scalar))
+                continue
+            }
+
+            guard value >= HangulInitialConsonantMatcher.hangulSyllableStart,
+                  value <= HangulInitialConsonantMatcher.hangulSyllableEnd else {
+                continue
+            }
+
+            let offset = value - HangulInitialConsonantMatcher.hangulSyllableStart
+            let initialIndex = Int(offset / HangulInitialConsonantMatcher.choseongCycle)
+            guard HangulInitialConsonantMatcher.table.indices.contains(initialIndex) else { continue }
+            result.append(HangulInitialConsonantMatcher.table[initialIndex])
+        }
+
+        return result
     }
 }
