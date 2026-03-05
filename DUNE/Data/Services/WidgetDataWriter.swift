@@ -24,7 +24,13 @@ enum WidgetDataWriter {
 
     private static func loadExisting() -> WidgetScoreData? {
         guard let jsonData = defaults?.data(forKey: WidgetScoreData.userDefaultsKey) else { return nil }
-        return try? decoder.decode(WidgetScoreData.self, from: jsonData)
+        do {
+            return try decoder.decode(WidgetScoreData.self, from: jsonData)
+        } catch {
+            AppLogger.data.error("[WidgetDataWriter] Corrupt widget blob, removing: \(error)")
+            defaults?.removeObject(forKey: WidgetScoreData.userDefaultsKey)
+            return nil
+        }
     }
 
     private static func save(_ data: WidgetScoreData) {
