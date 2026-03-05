@@ -151,6 +151,32 @@ struct NotificationInboxManagerTests {
         #expect(pending?.route.workoutID == "workout-123")
     }
 
+    @Test("legacy level-up workout route is redirected to personal records")
+    func handleNotificationResponseLegacyLevelUpRedirect() async {
+        let store = makeStore()
+        let recorder = BadgeRecorder()
+        let manager = NotificationInboxManager(
+            store: store,
+            badgeUpdater: { recorder.record($0) }
+        )
+
+        let item = manager.recordSentInsight(HealthInsight(
+            type: .workoutPR,
+            title: "레벨 업!",
+            body: "축하합니다",
+            severity: .celebration,
+            date: Date(),
+            route: .workoutDetail(workoutID: "workout-legacy")
+        ))
+
+        let userInfo = manager.notificationUserInfo(for: item)
+        manager.handleNotificationResponse(userInfo: userInfo)
+
+        let pending = manager.consumePendingNavigationRequest()
+        #expect(pending != nil)
+        #expect(pending?.route.destination == .activityPersonalRecords)
+    }
+
     @Test("handleNotificationResponse marks non-routed notification as read")
     func handleNotificationResponseMarksRead() async {
         let store = makeStore()
