@@ -101,9 +101,11 @@ struct LargeWidgetView: View {
     private var updatedAtRow: some View {
         HStack {
             Spacer()
-            Text("Updated \(entry.date.formatted(date: .omitted, time: .shortened))")
-                .font(.caption2)
-                .foregroundStyle(WidgetDS.Color.textTertiary)
+            if let updatedAt = entry.scoreUpdatedAt {
+                Text("Updated \(updatedAt.formatted(date: .omitted, time: .shortened))")
+                    .font(.caption2)
+                    .foregroundStyle(WidgetDS.Color.textTertiary)
+            }
         }
     }
 

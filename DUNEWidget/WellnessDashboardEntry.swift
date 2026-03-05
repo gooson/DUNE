@@ -15,6 +15,9 @@ struct WellnessDashboardEntry: TimelineEntry {
     let wellnessStatusRaw: String?
     let wellnessMessage: String?
 
+    /// When the scores were last computed by the main app.
+    let scoreUpdatedAt: Date?
+
     var hasAnyScore: Bool {
         conditionScore != nil || readinessScore != nil || wellnessScore != nil
     }
@@ -29,6 +32,7 @@ struct WellnessDashboardEntry: TimelineEntry {
         readinessMessage: "Normal training is fine",
         wellnessScore: 65,
         wellnessStatusRaw: "good",
-        wellnessMessage: "Good condition. Normal training is fine."
+        wellnessMessage: "Good condition. Normal training is fine.",
+        scoreUpdatedAt: .now
     )
 }

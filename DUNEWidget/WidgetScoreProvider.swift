@@ -44,7 +44,8 @@ struct WidgetScoreProvider: TimelineProvider {
                 date: .now,
                 conditionScore: nil, conditionStatusRaw: nil, conditionMessage: nil,
                 readinessScore: nil, readinessStatusRaw: nil, readinessMessage: nil,
-                wellnessScore: nil, wellnessStatusRaw: nil, wellnessMessage: nil
+                wellnessScore: nil, wellnessStatusRaw: nil, wellnessMessage: nil,
+                scoreUpdatedAt: nil
             )
         }
 
@@ -58,7 +59,8 @@ struct WidgetScoreProvider: TimelineProvider {
             readinessMessage: data.readinessMessage,
             wellnessScore: data.wellnessScore,
             wellnessStatusRaw: data.wellnessStatusRaw,
-            wellnessMessage: data.wellnessMessage
+            wellnessMessage: data.wellnessMessage,
+            scoreUpdatedAt: data.updatedAt
         )
     }
 }
