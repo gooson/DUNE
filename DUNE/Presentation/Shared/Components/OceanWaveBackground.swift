@@ -2152,7 +2152,7 @@ struct OceanLegacySolarSheetWaveBackground: View {
 }
 
 #Preview("Arctic Tab — Dark") {
-    ArcticTabWaveBackground()
+    OceanLegacyArcticTabWaveBackground()
         .environment(\.appTheme, .arcticDawn)
         .preferredColorScheme(.dark)
 }
