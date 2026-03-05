@@ -520,11 +520,11 @@ struct ShanksTabWaveBackground: View {
                 topPadding: 22
             )
             ShanksKamusariEffectOverlay(
-                intensity: colorScheme == .dark ? 0.78 : 0.68,
-                width: 320,
-                topPadding: 56
+                intensity: colorScheme == .dark ? 0.86 : 0.76,
+                width: 300,
+                topPadding: 64
             )
-            .offset(x: 150, y: -18)
+            .offset(x: 118, y: 8)
         }
         .ignoresSafeArea()
         .animation(DS.Animation.atmosphereTransition, value: atmosphere)
@@ -609,11 +609,11 @@ struct ShanksDetailWaveBackground: View {
                 topPadding: 20
             )
             ShanksKamusariEffectOverlay(
-                intensity: colorScheme == .dark ? 0.52 : 0.44,
-                width: 240,
-                topPadding: 34
+                intensity: colorScheme == .dark ? 0.62 : 0.52,
+                width: 220,
+                topPadding: 36
             )
-            .offset(x: 102, y: -10)
+            .offset(x: 88, y: 6)
         }
         .ignoresSafeArea()
     }
@@ -659,11 +659,11 @@ struct ShanksSheetWaveBackground: View {
                 topPadding: 20
             )
             ShanksKamusariEffectOverlay(
-                intensity: colorScheme == .dark ? 0.30 : 0.24,
-                width: 180,
-                topPadding: 18
+                intensity: colorScheme == .dark ? 0.40 : 0.32,
+                width: 164,
+                topPadding: 20
             )
-            .offset(x: 74, y: -6)
+            .offset(x: 64, y: 4)
         }
         .ignoresSafeArea()
     }
