@@ -142,7 +142,69 @@ enum AppSchemaV8: VersionedSchema {
 enum AppSchemaV9: VersionedSchema {
     static let versionIdentifier = Schema.Version(9, 0, 0)
     static var models: [any PersistentModel.Type] {
-        [ExerciseRecord.self, BodyCompositionRecord.self, WorkoutSet.self, CustomExercise.self, WorkoutTemplate.self, InjuryRecord.self, HabitDefinition.self, HabitLog.self, UserCategory.self, ExerciseDefaultRecord.self, HealthSnapshotMirrorRecord.self]
+        [
+            ExerciseRecord.self,
+            BodyCompositionRecord.self,
+            WorkoutSet.self,
+            CustomExercise.self,
+            WorkoutTemplate.self,
+            InjuryRecord.self,
+            HabitDefinition.self,
+            HabitLog.self,
+            UserCategory.self,
+            ExerciseDefaultRecord.self,
+            HealthSnapshotMirrorRecord.self,
+        ]
+    }
+
+    // Snapshot model to preserve pre-VO2Max checksum for V9.
+    @Model
+    final class ExerciseRecord {
+        var id: UUID = UUID()
+        var date: Date = Date()
+        var exerciseType: String = ""
+        var duration: TimeInterval = 0
+        var calories: Double?
+        var distance: Double?
+        var stepCount: Int?
+        var averagePaceSecondsPerKm: Double?
+        var averageCadenceStepsPerMinute: Double?
+        var elevationGainMeters: Double?
+        var floorsAscended: Double?
+        var memo: String = ""
+        var isFromHealthKit: Bool = false
+        var healthKitWorkoutID: String?
+        var createdAt: Date = Date()
+
+        @Relationship(deleteRule: .cascade, inverse: \WorkoutSet.exerciseRecord)
+        var sets: [WorkoutSet]? = []
+        var exerciseDefinitionID: String?
+        var primaryMusclesRaw: [String] = []
+        var secondaryMusclesRaw: [String] = []
+        var equipmentRaw: String?
+        var estimatedCalories: Double?
+        var calorieSourceRaw: String = CalorieSource.manual.rawValue
+        var rpe: Int?
+        var autoIntensityRaw: Double?
+
+        init() {}
+    }
+
+    @Model
+    final class WorkoutSet {
+        var id: UUID = UUID()
+        var exerciseRecord: ExerciseRecord?
+        var setNumber: Int = 0
+        var setTypeRaw: String = SetType.working.rawValue
+        var weight: Double?
+        var reps: Int?
+        var duration: TimeInterval?
+        var distance: Double?
+        var intensity: Int? = nil
+        var isCompleted: Bool = false
+        var restDuration: TimeInterval?
+
+        init() {}
     }
 }
 
