@@ -57,6 +57,21 @@ struct SetInputSheet: View {
                 let clamped = min(max(newValue, 0), 500)
                 if clamped != newValue { weight = clamped }
             }
+            .onChange(of: reps) { _, newValue in
+                let clamped = min(
+                    max(newValue, WatchSetInputPolicy.minimumReps),
+                    WatchSetInputPolicy.maximumEditableReps
+                )
+                if clamped != newValue {
+                    reps = clamped
+                }
+            }
+            .onAppear {
+                reps = WatchSetInputPolicy.resolvedInitialReps(
+                    lastSetReps: reps,
+                    entryDefaultReps: WatchSetInputPolicy.defaultReps
+                )
+            }
         }
     }
 
@@ -102,7 +117,7 @@ struct SetInputSheet: View {
     private var repsSection: some View {
         HStack {
             Button {
-                if reps > 0 {
+                if reps > WatchSetInputPolicy.minimumReps {
                     reps -= 1
                     playDebouncedHaptic()
                 }

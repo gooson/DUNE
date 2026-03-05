@@ -9,12 +9,11 @@ struct MetricsView: View {
     @Environment(\.appTheme) private var theme
 
     @State private var weight: Double = 0
-    @State private var reps: Int = 0
+    @State private var reps: Int = WatchSetInputPolicy.defaultReps
     @State private var showInputSheet = false
     @State private var showRestTimer = false
     @State private var showNextExercise = false
     @State private var showEndConfirmation = false
-    @State private var showEmptySetConfirmation = false
     @State private var showLastSetOptions = false
     @State private var transitionTask: Task<Void, Never>?
     @State private var didInitialAppear = false
@@ -84,19 +83,6 @@ struct MetricsView: View {
             } else {
                 Text("Save and finish this workout?")
             }
-        }
-        // P2: Empty set confirmation
-        .confirmationDialog(
-            "Empty Set",
-            isPresented: $showEmptySetConfirmation,
-            titleVisibility: .visible
-        ) {
-            Button("Record Empty") {
-                executeCompleteSet()
-            }
-            Button("Cancel", role: .cancel) {}
-        } message: {
-            Text("Weight and reps are both 0. Record anyway?")
         }
         // Last set options: +1 Set or Finish Exercise
         .confirmationDialog(
@@ -330,14 +316,21 @@ struct MetricsView: View {
 
     private func prefillFromEntry() {
         guard let entry = workoutManager.currentEntry else { return }
+        let fallbackReps = WatchSetInputPolicy.resolvedInitialReps(
+            lastSetReps: nil,
+            entryDefaultReps: entry.defaultReps
+        )
 
         // Use previous set's weight/reps if available, otherwise fall back to template default
         if let lastSet = workoutManager.lastCompletedSetForCurrentExercise {
             weight = lastSet.weight ?? entry.defaultWeightKg ?? 0
-            reps = lastSet.reps ?? entry.defaultReps
+            reps = WatchSetInputPolicy.resolvedInitialReps(
+                lastSetReps: lastSet.reps,
+                entryDefaultReps: entry.defaultReps
+            )
         } else {
             weight = entry.defaultWeightKg ?? 0
-            reps = entry.defaultReps
+            reps = fallbackReps
         }
     }
 
@@ -361,9 +354,10 @@ struct MetricsView: View {
     }
 
     private func completeSet() {
-        // P2: Validate empty set
-        if weight <= 0, reps <= 0 {
-            showEmptySetConfirmation = true
+        guard WatchSetInputPolicy.isValidForCompletion(reps: reps) else {
+            reps = WatchSetInputPolicy.defaultReps
+            showInputSheet = true
+            WKInterfaceDevice.current().play(.failure)
             return
         }
         executeCompleteSet()
