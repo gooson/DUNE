@@ -111,6 +111,22 @@ struct ShanksPirateFlagSigil: Shape {
     }
 }
 
+/// Uses a raster asset if available, otherwise falls back to procedural sigil.
+///
+/// Asset name: `ShanksPirateFlagMark`
+struct ShanksPirateFlagMark: View {
+    var body: some View {
+        if let image = UIImage(named: "ShanksPirateFlagMark") {
+            Image(uiImage: image)
+                .resizable()
+                .scaledToFit()
+        } else {
+            ShanksPirateFlagSigil()
+                .fill(.white, style: FillStyle(eoFill: true))
+        }
+    }
+}
+
 private struct ShanksFlagTextureView: View {
     let opacity: Double
 
@@ -158,31 +174,13 @@ private struct ShanksPirateFlagOverlay: View {
     var topPadding: CGFloat
 
     @State private var sway: CGFloat = -0.08
-    @Environment(\.appTheme) private var theme
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @Environment(\.colorScheme) private var colorScheme
-
-    private var darkBoost: Double {
-        colorScheme == .dark ? 1.18 : 1.0
-    }
 
     var body: some View {
-        ShanksPirateFlagSigil()
-            .fill(
-                theme.sandColor.opacity(opacity * darkBoost),
-                style: FillStyle(eoFill: true)
-            )
+        ShanksPirateFlagMark()
+            .opacity(opacity)
             .frame(width: width, height: width)
             .rotationEffect(.degrees(-14 + Double(sway) * 8))
-            .overlay {
-                ShanksPirateFlagSigil()
-                    .stroke(
-                        theme.bronzeColor.opacity(opacity * 0.52 * darkBoost),
-                        lineWidth: 0.9
-                    )
-                    .frame(width: width, height: width)
-                    .rotationEffect(.degrees(-14 + Double(sway) * 8))
-            }
             .padding(.top, topPadding)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .allowsHitTesting(false)
@@ -248,6 +246,161 @@ private struct ShanksHakiStreakOverlay: View {
         .padding(.top, topPadding)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
         .allowsHitTesting(false)
+    }
+}
+
+private struct ShanksKamusariEffectOverlay: View {
+    var intensity: Double
+    var width: CGFloat
+    var topPadding: CGFloat
+
+    @State private var surge: CGFloat = 0
+    @State private var flicker: CGFloat = 0
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.appTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
+
+    private let crackSpecs: [(angle: Double, length: CGFloat, thickness: CGFloat)] = [
+        (-82, 74, 2.2),
+        (-58, 92, 2.3),
+        (-38, 108, 2.4),
+        (-20, 120, 2.6),
+        (-4, 128, 2.7),
+        (12, 112, 2.4),
+        (26, 102, 2.2),
+        (38, 94, 2.1),
+        (52, 82, 2.0),
+        (68, 72, 1.9),
+    ]
+
+    private var darkBoost: Double {
+        colorScheme == .dark ? 1.12 : 1.0
+    }
+
+    private var impactX: CGFloat { -width * 0.02 }
+    private var impactY: CGFloat { width * 0.02 }
+
+    private func crackOffset(angle: Double, length: CGFloat) -> CGSize {
+        let radians = angle * .pi / 180
+        let reach = length * (0.5 + 0.05 * surge)
+        return CGSize(
+            width: impactX + cos(radians) * reach,
+            height: impactY + sin(radians) * reach
+        )
+    }
+
+    var body: some View {
+        ZStack {
+            Rectangle()
+                .fill(theme.shanksDeepColor.opacity(intensity * darkBoost * 0.22))
+                .blendMode(.multiply)
+
+            ForEach(Array(crackSpecs.enumerated()), id: \.offset) { _, spec in
+                Capsule()
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                .clear,
+                                theme.shanksGlowColor.opacity(intensity * darkBoost * (0.92 + 0.08 * flicker)),
+                                theme.shanksCoreColor.opacity(intensity * darkBoost * (0.86 + 0.10 * flicker)),
+                                theme.shanksDeepColor.opacity(intensity * darkBoost * 0.76),
+                                .clear,
+                            ],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
+                    .frame(
+                        width: spec.length * (1 + surge * 0.06),
+                        height: spec.thickness
+                    )
+                    .rotationEffect(.degrees(spec.angle + Double(surge) * 1.8))
+                    .offset(crackOffset(angle: spec.angle, length: spec.length))
+                    .blendMode(.screen)
+                    .overlay {
+                        Capsule()
+                            .fill(theme.shanksDeepColor.opacity(intensity * darkBoost * 0.84))
+                            .frame(
+                                width: spec.length * (1 + surge * 0.03),
+                                height: max(0.9, spec.thickness * 0.44)
+                            )
+                            .rotationEffect(.degrees(spec.angle + Double(surge) * 1.3))
+                            .offset(crackOffset(angle: spec.angle, length: spec.length))
+                    }
+            }
+
+            Circle()
+                .fill(
+                    RadialGradient(
+                        colors: [
+                            theme.shanksDeepColor.opacity(intensity * darkBoost * 1.0),
+                            theme.shanksCoreColor.opacity(intensity * darkBoost * (0.68 + 0.12 * flicker)),
+                            theme.shanksGlowColor.opacity(intensity * darkBoost * (0.56 + 0.12 * flicker)),
+                            .clear,
+                        ],
+                        center: .center,
+                        startRadius: 0,
+                        endRadius: width * 0.34
+                    )
+                )
+                .frame(
+                    width: width * 0.64 * (1 + surge * 0.05),
+                    height: width * 0.64 * (1 + surge * 0.05)
+                )
+                .offset(x: impactX, y: impactY)
+                .blur(radius: reduceMotion ? 0.4 : 1.2)
+                .blendMode(.screen)
+
+            Circle()
+                .trim(from: 0.06, to: 0.46)
+                .stroke(
+                    LinearGradient(
+                        colors: [
+                            theme.shanksGlowColor.opacity(intensity * darkBoost * (0.62 + 0.10 * flicker)),
+                            theme.shanksCoreColor.opacity(intensity * darkBoost * 0.44),
+                            theme.shanksDeepColor.opacity(intensity * darkBoost * 0.58),
+                            .clear,
+                        ],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    ),
+                    style: StrokeStyle(lineWidth: 2.2, lineCap: .round)
+                )
+                .frame(
+                    width: width * 0.78 * (1 + surge * 0.04),
+                    height: width * 0.78 * (1 + surge * 0.04)
+                )
+                .rotationEffect(.degrees(-30 + Double(surge) * 3.0))
+                .offset(x: impactX + width * 0.03, y: impactY - 6)
+                .blur(radius: reduceMotion ? 0.4 : 0.55)
+                .blendMode(.screen)
+        }
+        .blur(radius: reduceMotion ? 0.0 : 0.10)
+        .padding(.top, topPadding)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .allowsHitTesting(false)
+        .task {
+            guard !reduceMotion else { return }
+            withAnimation(.easeOut(duration: 0.42).repeatForever(autoreverses: true)) {
+                flicker = 1
+            }
+            withAnimation(.easeInOut(duration: 0.88).repeatForever(autoreverses: true)) {
+                surge = 1
+            }
+        }
+        .onAppear {
+            guard !reduceMotion else { return }
+            Task { @MainActor in
+                surge = 0
+                flicker = 0
+                withAnimation(.easeOut(duration: 0.42).repeatForever(autoreverses: true)) {
+                    flicker = 1
+                }
+                withAnimation(.easeInOut(duration: 0.88).repeatForever(autoreverses: true)) {
+                    surge = 1
+                }
+            }
+        }
     }
 }
 
@@ -358,7 +511,7 @@ struct ShanksTabWaveBackground: View {
             ShanksPirateFlagOverlay(
                 opacity: colorScheme == .dark ? 0.14 : 0.10,
                 width: 170,
-                topPadding: 10
+                topPadding: 64
             )
             ShanksHakiStreakOverlay(
                 opacity: colorScheme == .dark ? 0.36 : 0.28,
@@ -366,6 +519,12 @@ struct ShanksTabWaveBackground: View {
                 width: 160,
                 topPadding: 22
             )
+            ShanksKamusariEffectOverlay(
+                intensity: colorScheme == .dark ? 0.78 : 0.68,
+                width: 320,
+                topPadding: 56
+            )
+            .offset(x: 150, y: -18)
         }
         .ignoresSafeArea()
         .animation(DS.Animation.atmosphereTransition, value: atmosphere)
@@ -441,7 +600,7 @@ struct ShanksDetailWaveBackground: View {
             ShanksPirateFlagOverlay(
                 opacity: colorScheme == .dark ? 0.08 : 0.06,
                 width: 132,
-                topPadding: 8
+                topPadding: 36
             )
             ShanksHakiStreakOverlay(
                 opacity: colorScheme == .dark ? 0.24 : 0.18,
@@ -449,6 +608,12 @@ struct ShanksDetailWaveBackground: View {
                 width: 122,
                 topPadding: 20
             )
+            ShanksKamusariEffectOverlay(
+                intensity: colorScheme == .dark ? 0.52 : 0.44,
+                width: 240,
+                topPadding: 34
+            )
+            .offset(x: 102, y: -10)
         }
         .ignoresSafeArea()
     }
@@ -491,8 +656,14 @@ struct ShanksSheetWaveBackground: View {
             ShanksPirateFlagOverlay(
                 opacity: colorScheme == .dark ? 0.06 : 0.04,
                 width: 110,
-                topPadding: 6
+                topPadding: 20
             )
+            ShanksKamusariEffectOverlay(
+                intensity: colorScheme == .dark ? 0.30 : 0.24,
+                width: 180,
+                topPadding: 18
+            )
+            .offset(x: 74, y: -6)
         }
         .ignoresSafeArea()
     }

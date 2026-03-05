@@ -42,8 +42,7 @@ struct ThemePickerSection: View {
                 Spacer()
 
                 if appTheme == .shanksRed {
-                    ShanksPirateFlagSigil()
-                        .fill(theme.sandColor.opacity(0.85), style: FillStyle(eoFill: true))
+                    ShanksPirateFlagMark()
                         .frame(width: 18, height: 18)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 5)
