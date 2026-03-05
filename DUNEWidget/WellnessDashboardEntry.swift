@@ -22,6 +22,15 @@ struct WellnessDashboardEntry: TimelineEntry {
         conditionScore != nil || readinessScore != nil || wellnessScore != nil
     }
 
+    /// Status raw value for the lowest score (used in Small widget).
+    var worstStatusRaw: String? {
+        [(conditionScore, conditionStatusRaw),
+         (readinessScore, readinessStatusRaw),
+         (wellnessScore, wellnessStatusRaw)]
+            .compactMap { score, raw in score.map { ($0, raw) } }
+            .min { $0.0 < $1.0 }?.1
+    }
+
     static let placeholder = WellnessDashboardEntry(
         date: .now,
         conditionScore: 78,

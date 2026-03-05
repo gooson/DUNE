@@ -20,12 +20,13 @@ struct WidgetScoreProvider: TimelineProvider {
         }
     }
 
+    private static let calendar = Calendar.autoupdatingCurrent
+
     func getTimeline(in context: Context, completion: @escaping (Timeline<WellnessDashboardEntry>) -> Void) {
         let entry = loadCurrentEntry()
 
         // Refresh at the next hour boundary
-        let calendar = Calendar.current
-        let nextHour = calendar.nextDate(
+        let nextHour = Self.calendar.nextDate(
             after: entry.date,
             matching: DateComponents(minute: 0),
             matchingPolicy: .nextTime

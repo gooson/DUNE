@@ -4,12 +4,18 @@ import WidgetKit
 struct MediumWidgetView: View {
     let entry: WellnessDashboardEntry
 
+    private enum Labels {
+        static let condition = String(localized: "Condition")
+        static let readiness = String(localized: "Readiness")
+        static let wellness  = String(localized: "Wellness")
+    }
+
     var body: some View {
         if entry.hasAnyScore {
             HStack(spacing: 0) {
                 if let score = entry.conditionScore {
                     scoreColumn(
-                        title: String(localized: "Condition"),
+                        title: Labels.condition,
                         score: score,
                         statusLabel: WidgetDS.labelForConditionStatus(entry.conditionStatusRaw),
                         color: WidgetDS.colorForConditionStatus(entry.conditionStatusRaw),
@@ -18,7 +24,7 @@ struct MediumWidgetView: View {
                 }
                 if let score = entry.readinessScore {
                     scoreColumn(
-                        title: String(localized: "Readiness"),
+                        title: Labels.readiness,
                         score: score,
                         statusLabel: WidgetDS.labelForReadinessStatus(entry.readinessStatusRaw),
                         color: WidgetDS.colorForReadinessStatus(entry.readinessStatusRaw),
@@ -27,7 +33,7 @@ struct MediumWidgetView: View {
                 }
                 if let score = entry.wellnessScore {
                     scoreColumn(
-                        title: String(localized: "Wellness"),
+                        title: Labels.wellness,
                         score: score,
                         statusLabel: WidgetDS.labelForWellnessStatus(entry.wellnessStatusRaw),
                         color: WidgetDS.colorForWellnessStatus(entry.wellnessStatusRaw),

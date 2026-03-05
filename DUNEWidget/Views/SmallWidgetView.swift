@@ -4,15 +4,6 @@ import WidgetKit
 struct SmallWidgetView: View {
     let entry: WellnessDashboardEntry
 
-    private var worstStatusRaw: String? {
-        let scores: [(Int, String?)] = [
-            (entry.conditionScore ?? Int.max, entry.conditionStatusRaw),
-            (entry.readinessScore ?? Int.max, entry.readinessStatusRaw),
-            (entry.wellnessScore ?? Int.max, entry.wellnessStatusRaw)
-        ].filter { $0.0 != Int.max }
-        return scores.min(by: { $0.0 < $1.0 })?.1
-    }
-
     var body: some View {
         if entry.hasAnyScore {
             VStack(alignment: .leading, spacing: 6) {
@@ -35,7 +26,7 @@ struct SmallWidgetView: View {
 
                 Spacer(minLength: 0)
 
-                if let statusRaw = worstStatusRaw {
+                if let statusRaw = entry.worstStatusRaw {
                     Text(WidgetDS.labelForConditionStatus(statusRaw))
                         .font(.caption2)
                         .foregroundStyle(WidgetDS.colorForConditionStatus(statusRaw))

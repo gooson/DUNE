@@ -3,6 +3,7 @@ import WidgetKit
 
 /// Writes score data to App Group UserDefaults for the widget extension to read.
 /// Each ViewModel updates its own score fields, preserving the others.
+/// All callers are @MainActor, so read-modify-write is serialized.
 enum WidgetDataWriter {
     private static let encoder: JSONEncoder = {
         let encoder = JSONEncoder()
@@ -16,28 +17,36 @@ enum WidgetDataWriter {
         return decoder
     }()
 
-    private static func sharedDefaults() -> UserDefaults? {
-        UserDefaults(suiteName: WidgetScoreData.appGroupID)
-    }
+    private static let defaults = UserDefaults(suiteName: WidgetScoreData.appGroupID)
 
-    private static func loadExisting(from defaults: UserDefaults) -> WidgetScoreData? {
-        guard let jsonData = defaults.data(forKey: WidgetScoreData.userDefaultsKey) else { return nil }
+    // Debounce reloadAllTimelines to coalesce rapid writes from multiple VMs.
+    private static var reloadWorkItem: DispatchWorkItem?
+
+    private static func loadExisting() -> WidgetScoreData? {
+        guard let jsonData = defaults?.data(forKey: WidgetScoreData.userDefaultsKey) else { return nil }
         return try? decoder.decode(WidgetScoreData.self, from: jsonData)
     }
 
-    private static func save(_ data: WidgetScoreData, to defaults: UserDefaults) {
+    private static func save(_ data: WidgetScoreData) {
+        guard let defaults else { return }
         do {
             let jsonData = try encoder.encode(data)
             defaults.set(jsonData, forKey: WidgetScoreData.userDefaultsKey)
-            WidgetCenter.shared.reloadAllTimelines()
+            scheduleReload()
         } catch {
             AppLogger.data.error("[WidgetDataWriter] Failed to encode widget data: \(error)")
         }
     }
 
+    private static func scheduleReload() {
+        reloadWorkItem?.cancel()
+        let item = DispatchWorkItem { WidgetCenter.shared.reloadAllTimelines() }
+        reloadWorkItem = item
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: item)
+    }
+
     static func writeConditionScore(_ score: ConditionScore?) {
-        guard let defaults = sharedDefaults() else { return }
-        let existing = loadExisting(from: defaults)
+        let existing = loadExisting()
         let updated = WidgetScoreData(
             conditionScore: score?.score,
             conditionStatusRaw: score?.status.rawValue,
@@ -50,12 +59,11 @@ enum WidgetDataWriter {
             wellnessMessage: existing?.wellnessMessage,
             updatedAt: Date()
         )
-        save(updated, to: defaults)
+        save(updated)
     }
 
     static func writeReadinessScore(_ score: TrainingReadiness?) {
-        guard let defaults = sharedDefaults() else { return }
-        let existing = loadExisting(from: defaults)
+        let existing = loadExisting()
         let updated = WidgetScoreData(
             conditionScore: existing?.conditionScore,
             conditionStatusRaw: existing?.conditionStatusRaw,
@@ -68,12 +76,11 @@ enum WidgetDataWriter {
             wellnessMessage: existing?.wellnessMessage,
             updatedAt: Date()
         )
-        save(updated, to: defaults)
+        save(updated)
     }
 
     static func writeWellnessScore(_ score: WellnessScore?) {
-        guard let defaults = sharedDefaults() else { return }
-        let existing = loadExisting(from: defaults)
+        let existing = loadExisting()
         let updated = WidgetScoreData(
             conditionScore: existing?.conditionScore,
             conditionStatusRaw: existing?.conditionStatusRaw,
@@ -86,6 +93,6 @@ enum WidgetDataWriter {
             wellnessMessage: score?.narrativeMessage,
             updatedAt: Date()
         )
-        save(updated, to: defaults)
+        save(updated)
     }
 }
