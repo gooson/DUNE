@@ -4,6 +4,9 @@ import Foundation
 /// Reads user-configured values from WorkoutSettingsStore with sensible fallbacks.
 /// Prevents cross-ViewModel coupling for common workout parameters (Correction #73).
 enum WorkoutDefaults {
+    /// Default reps for reps-based workout inputs.
+    static let defaultReps: Int = 10
+
     /// Default number of sets for a new workout session
     static var setCount: Int {
         WorkoutSettingsStore.shared.setCount

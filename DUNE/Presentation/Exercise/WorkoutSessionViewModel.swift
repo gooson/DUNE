@@ -107,6 +107,9 @@ final class WorkoutSessionViewModel {
     func addSet(weightUnit: WeightUnit = .kg) {
         let newSetNumber = sets.count + 1
         var newSet = EditableSet(setNumber: newSetNumber)
+        if usesDefaultReps {
+            newSet.reps = "\(WorkoutDefaults.defaultReps)"
+        }
 
         // Auto-fill from previous session if available
         let previousIndex = newSetNumber - 1
@@ -116,8 +119,8 @@ final class WorkoutSessionViewModel {
                 let displayWeight = weightUnit.fromKg(weight)
                 newSet.weight = displayWeight.formatted(.number.precision(.fractionLength(0...1)))
             }
-            if let reps = prev.reps {
-                newSet.reps = "\(reps)"
+            if let normalizedReps = normalizedRepsValue(from: prev.reps) {
+                newSet.reps = "\(normalizedReps)"
             }
             if let duration = prev.duration {
                 newSet.duration = "\(Int(duration / 60))"
@@ -129,7 +132,12 @@ final class WorkoutSessionViewModel {
         // If no previous data, auto-fill from last current set
         else if let lastSet = sets.last {
             newSet.weight = lastSet.weight
-            newSet.reps = lastSet.reps
+            if usesDefaultReps {
+                let normalized = normalizedRepsString(from: lastSet.reps)
+                newSet.reps = normalized ?? "\(WorkoutDefaults.defaultReps)"
+            } else {
+                newSet.reps = lastSet.reps
+            }
             newSet.duration = lastSet.duration
             newSet.distance = lastSet.distance
         }
@@ -252,8 +260,10 @@ final class WorkoutSessionViewModel {
             let displayWeight = weightUnit.fromKg(weight)
             sets[index].weight = displayWeight.formatted(.number.precision(.fractionLength(0...1)))
         }
-        if let reps = prev.reps {
-            sets[index].reps = "\(reps)"
+        if let normalizedReps = normalizedRepsValue(from: prev.reps) {
+            sets[index].reps = "\(normalizedReps)"
+        } else if usesDefaultReps {
+            sets[index].reps = "\(WorkoutDefaults.defaultReps)"
         }
         if let duration = prev.duration {
             sets[index].duration = "\(Int(duration / 60))"
@@ -261,6 +271,32 @@ final class WorkoutSessionViewModel {
         if let distance = prev.distance {
             sets[index].distance = distance.formatted(.number.precision(.fractionLength(0...2)))
         }
+    }
+
+    // MARK: - Per-Set Validation
+
+    func validateSetForCompletion(at index: Int) -> Bool {
+        guard sets.indices.contains(index) else { return false }
+
+        let set = sets[index]
+        if exercise.inputType == .setsRepsWeight || exercise.inputType == .setsReps {
+            let trimmed = set.reps.trimmingCharacters(in: .whitespaces)
+            guard !trimmed.isEmpty, let reps = Int(trimmed), reps > 0, reps <= maxReps else {
+                validationError = String(localized: "Reps must be between 1 and \(maxReps)")
+                return false
+            }
+        }
+
+        if exercise.inputType == .roundsBased {
+            let trimmedReps = set.reps.trimmingCharacters(in: .whitespaces)
+            guard !trimmedReps.isEmpty, let rounds = Int(trimmedReps), rounds > 0, rounds <= maxReps else {
+                validationError = String(localized: "Rounds must be between 1 and \(maxReps)")
+                return false
+            }
+        }
+
+        validationError = nil
+        return true
     }
 
     // MARK: - Calorie Estimation
@@ -530,5 +566,20 @@ final class WorkoutSessionViewModel {
     /// Call from View after successfully inserting record into ModelContext
     func didFinishSaving() {
         isSaving = false
+    }
+
+    private var usesDefaultReps: Bool {
+        exercise.inputType == .setsRepsWeight || exercise.inputType == .setsReps
+    }
+
+    private func normalizedRepsValue(from value: Int?) -> Int? {
+        guard let value, value > 0, value <= maxReps else { return nil }
+        return value
+    }
+
+    private func normalizedRepsString(from value: String) -> String? {
+        let trimmed = value.trimmingCharacters(in: .whitespaces)
+        guard !trimmed.isEmpty, let reps = Int(trimmed), reps > 0, reps <= maxReps else { return nil }
+        return "\(reps)"
     }
 }

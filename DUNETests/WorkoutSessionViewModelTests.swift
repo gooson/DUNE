@@ -33,8 +33,17 @@ struct WorkoutSessionViewModelTests {
         #expect(vm.sets.count == WorkoutDefaults.setCount)
         #expect(vm.sets[0].setNumber == 1)
         #expect(vm.sets[0].weight.isEmpty)
-        #expect(vm.sets[0].reps.isEmpty)
+        #expect(vm.sets[0].reps == "\(WorkoutDefaults.defaultReps)")
         #expect(vm.sets.last?.setNumber == WorkoutDefaults.setCount)
+    }
+
+    @Test("Initial state keeps reps empty for non-reps inputs")
+    func initialStateForDurationInput() {
+        let exercise = makeExercise(inputType: .durationDistance)
+        let vm = WorkoutSessionViewModel(exercise: exercise)
+
+        #expect(vm.sets.count == WorkoutDefaults.setCount)
+        #expect(vm.sets[0].reps.isEmpty)
     }
 
     @Test("addSet increments set number")
@@ -305,6 +314,28 @@ struct WorkoutSessionViewModelTests {
         let record = vm.createValidatedRecord()
         #expect(record == nil)
         #expect(vm.validationError != nil)
+    }
+
+    @Test("validateSetForCompletion rejects zero reps for reps-based input")
+    func validateSetForCompletionRejectsZeroReps() {
+        let exercise = makeExercise(inputType: .setsRepsWeight)
+        let vm = WorkoutSessionViewModel(exercise: exercise)
+        vm.sets[0].reps = "0"
+
+        let valid = vm.validateSetForCompletion(at: 0)
+        #expect(!valid)
+        #expect(vm.validationError != nil)
+    }
+
+    @Test("validateSetForCompletion accepts valid reps for reps-based input")
+    func validateSetForCompletionAcceptsPositiveReps() {
+        let exercise = makeExercise(inputType: .setsRepsWeight)
+        let vm = WorkoutSessionViewModel(exercise: exercise)
+        vm.sets[0].reps = "10"
+
+        let valid = vm.validateSetForCompletion(at: 0)
+        #expect(valid)
+        #expect(vm.validationError == nil)
     }
 
     // MARK: - Cardio Secondary Unit Tests

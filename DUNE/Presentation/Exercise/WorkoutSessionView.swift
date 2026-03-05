@@ -357,8 +357,8 @@ struct WorkoutSessionView: View {
                 placeholder: "0",
                 keyboardType: .numberPad,
                 stepButtons: [
-                    ("-1", { adjustIntValue(set.reps, by: -1, min: 0, max: 100) }),
-                    ("+1", { adjustIntValue(set.reps, by: 1, min: 0, max: 100) })
+                    ("-1", { adjustIntValue(set.reps, by: -1, min: 1, max: 100) }),
+                    ("+1", { adjustIntValue(set.reps, by: 1, min: 1, max: 100) })
                 ]
             )
 
@@ -375,8 +375,8 @@ struct WorkoutSessionView: View {
                 placeholder: "0",
                 keyboardType: .numberPad,
                 stepButtons: [
-                    ("-1", { adjustIntValue(set.reps, by: -1, min: 0, max: 100) }),
-                    ("+1", { adjustIntValue(set.reps, by: 1, min: 0, max: 100) })
+                    ("-1", { adjustIntValue(set.reps, by: -1, min: 1, max: 100) }),
+                    ("+1", { adjustIntValue(set.reps, by: 1, min: 1, max: 100) })
                 ]
             )
 
@@ -459,8 +459,8 @@ struct WorkoutSessionView: View {
                 placeholder: "0",
                 keyboardType: .numberPad,
                 stepButtons: [
-                    ("-1", { adjustIntValue(set.reps, by: -1, min: 0, max: 100) }),
-                    ("+1", { adjustIntValue(set.reps, by: 1, min: 0, max: 100) })
+                    ("-1", { adjustIntValue(set.reps, by: -1, min: 1, max: 100) }),
+                    ("+1", { adjustIntValue(set.reps, by: 1, min: 1, max: 100) })
                 ]
             )
 
@@ -753,6 +753,7 @@ struct WorkoutSessionView: View {
     private func completeCurrentSet() {
         isInputFieldFocused = false
         guard viewModel.sets.indices.contains(currentSetIndex) else { return }
+        guard viewModel.validateSetForCompletion(at: currentSetIndex) else { return }
 
         // Mark set as completed
         viewModel.sets[currentSetIndex].isCompleted = true
