@@ -514,7 +514,7 @@ private struct HabitListQueryView: View {
             }
         }
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("Life progress \(viewModel.completedCount) of \(viewModel.totalActiveCount)")
+        .accessibilityLabel(Text("Life progress \(viewModel.completedCount) of \(viewModel.totalActiveCount)"))
         .sensoryFeedback(.impact(weight: .light), trigger: heroAppeared)
         .onAppear {
             guard !heroAppeared else { return }
