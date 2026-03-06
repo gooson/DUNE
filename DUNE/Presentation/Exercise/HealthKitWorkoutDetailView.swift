@@ -7,6 +7,9 @@ struct HealthKitWorkoutDetailView: View {
 
     @Environment(\.appTheme) private var theme
     @State private var viewModel = HealthKitWorkoutDetailViewModel()
+    @State private var isShowingTitleEditor = false
+    @State private var editedTitle = ""
+    @State private var correctedTitle: String?
 
     var body: some View {
         ScrollView {
@@ -20,11 +23,60 @@ struct HealthKitWorkoutDetailView: View {
             .padding(.horizontal, DS.Spacing.lg)
         }
         .background { DetailWaveBackground() }
-        .englishNavigationTitle(workout.activityType.typeName)
+        .englishNavigationTitle(resolvedTitle)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    editedTitle = correctedTitle ?? workout.activityType.displayName
+                    isShowingTitleEditor = true
+                } label: {
+                    Label("Edit Title", systemImage: "pencil")
+                }
+                .accessibilityIdentifier("healthkit-workout-edit-title")
+            }
+        }
+        .sheet(isPresented: $isShowingTitleEditor) {
+            titleEditorSheet
+        }
         .task {
+            correctedTitle = WorkoutTypeCorrectionStore.shared.correctedTitle(for: workout.id)
             viewModel.loadDetail(workoutID: workout.id)
         }
+    }
+
+
+    private var resolvedTitle: String {
+        if let correctedTitle, !correctedTitle.isEmpty {
+            return correctedTitle
+        }
+        return workout.activityType.displayName
+    }
+
+    private var titleEditorSheet: some View {
+        NavigationStack {
+            Form {
+                TextField("Workout Name", text: $editedTitle)
+                    .textInputAutocapitalization(.words)
+            }
+            .englishNavigationTitle("Edit Workout Name")
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") {
+                        isShowingTitleEditor = false
+                    }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save") {
+                        let trimmed = editedTitle.trimmingCharacters(in: .whitespacesAndNewlines)
+                        WorkoutTypeCorrectionStore.shared.setCorrectedTitle(trimmed, for: workout.id)
+                        correctedTitle = WorkoutTypeCorrectionStore.shared.correctedTitle(for: workout.id)
+                        isShowingTitleEditor = false
+                    }
+                }
+            }
+        }
+        .presentationDetents([.fraction(0.25)])
     }
 
     // MARK: - Header
@@ -37,7 +89,7 @@ struct HealthKitWorkoutDetailView: View {
                     .foregroundStyle(workout.activityType.color)
 
                 VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                    Text(workout.activityType.displayName)
+                    Text(resolvedTitle)
                         .font(.title2.weight(.semibold))
 
                     Text(workout.date, style: .date)
