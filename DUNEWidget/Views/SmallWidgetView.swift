@@ -3,59 +3,56 @@ import SwiftUI
 struct SmallWidgetView: View {
     let entry: WellnessDashboardEntry
 
-    private enum Labels {
-        static let condition = String(localized: "C")
-        static let readiness = String(localized: "R")
-        static let wellness  = String(localized: "W")
-    }
-
     var body: some View {
         if entry.hasAnyScore {
-            VStack(alignment: .leading, spacing: 6) {
-                Text("DUNE")
-                    .font(.caption2)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(WidgetDS.Color.textSecondary)
+            VStack(alignment: .leading, spacing: WidgetDS.Layout.headerSpacing) {
+                HStack(spacing: 6) {
+                    Text("DUNE")
+                        .font(.caption2)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(WidgetDS.Color.textSecondary)
 
-                VStack(alignment: .leading, spacing: 4) {
-                    if let score = entry.conditionScore {
-                        scoreRow(label: Labels.condition, score: score, color: WidgetDS.colorForConditionStatus(entry.conditionStatusRaw))
-                    }
-                    if let score = entry.readinessScore {
-                        scoreRow(label: Labels.readiness, score: score, color: WidgetDS.colorForReadinessStatus(entry.readinessStatusRaw))
-                    }
-                    if let score = entry.wellnessScore {
-                        scoreRow(label: Labels.wellness, score: score, color: WidgetDS.colorForWellnessStatus(entry.wellnessStatusRaw))
+                    Spacer(minLength: 0)
+
+                    Text(WidgetMetricText.today)
+                        .font(.caption2)
+                        .foregroundStyle(WidgetDS.Color.textTertiary)
+                }
+
+                HStack(spacing: 6) {
+                    ForEach(entry.metrics) { metric in
+                        WidgetCompactMetricView(metric: metric)
                     }
                 }
 
                 Spacer(minLength: 0)
 
-                if let statusRaw = entry.worstStatusRaw {
-                    Text(WidgetDS.labelForConditionStatus(statusRaw))
+                if let lowestMetric = entry.lowestMetric {
+                    HStack(spacing: 4) {
+                        Image(systemName: lowestMetric.icon)
+                            .font(.caption2)
+
+                        Text(lowestMetric.title)
+                            .fontWeight(.medium)
+
+                        Text(lowestMetric.statusLabel)
+                            .fontWeight(.semibold)
+                    }
+                    .font(.caption2)
+                    .foregroundStyle(lowestMetric.tintColor)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
+                } else {
+                    Text(WidgetMetricText.openDune)
                         .font(.caption2)
-                        .foregroundStyle(WidgetDS.colorForConditionStatus(statusRaw))
+                        .foregroundStyle(WidgetDS.Color.textTertiary)
                 }
             }
+            .padding(WidgetDS.Layout.edgePadding)
             .containerBackground(.fill.tertiary, for: .widget)
         } else {
             placeholderView
                 .containerBackground(.fill.tertiary, for: .widget)
-        }
-    }
-
-    private func scoreRow(label: String, score: Int, color: Color) -> some View {
-        HStack(spacing: 4) {
-            Text(label)
-                .font(.caption2)
-                .fontWeight(.medium)
-                .foregroundStyle(WidgetDS.Color.textSecondary)
-                .frame(width: 14, alignment: .leading)
-            Text("\(score)")
-                .font(.title3)
-                .fontWeight(.bold)
-                .foregroundStyle(color)
-                .monospacedDigit()
         }
     }
 

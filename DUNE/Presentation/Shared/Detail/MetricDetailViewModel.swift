@@ -45,6 +45,7 @@ final class MetricDetailViewModel {
 
     private(set) var category: HealthMetric.Category = .hrv
     private(set) var currentValue: Double = 0
+    private(set) var hasConfiguredValue = false
     private(set) var lastUpdated: Date?
     private(set) var workoutTypeName: String?
 
@@ -84,6 +85,7 @@ final class MetricDetailViewModel {
     ) {
         self.category = category
         self.currentValue = currentValue
+        self.hasConfiguredValue = true
         self.lastUpdated = lastUpdated
         self.workoutTypeName = workoutTypeName
         self.metricUnit = metricUnit ?? ""
@@ -388,6 +390,23 @@ final class MetricDetailViewModel {
         chartData = HealthDataAggregator.fillDateGaps(
             chartData, period: selectedPeriod, start: range.start, end: range.end
         )
+        updateStepsCurrentValue(from: raw)
+    }
+
+    private func updateStepsCurrentValue(from raw: [ChartDataPoint]) {
+        let currentRange = selectedPeriod.dateRange(offset: 0)
+
+        let resolvedValue: Double
+        switch selectedPeriod {
+        case .day:
+            let currentPoints = raw.filter { $0.date >= currentRange.start && $0.date <= currentRange.end }
+            resolvedValue = currentPoints.map(\.value).reduce(0, +)
+        case .week, .month, .sixMonths, .year:
+            let currentPoints = chartData.filter { $0.date >= currentRange.start && $0.date <= currentRange.end }
+            resolvedValue = currentPoints.last?.value ?? 0
+        }
+
+        currentValue = resolvedValue
     }
 
     // MARK: - Exercise

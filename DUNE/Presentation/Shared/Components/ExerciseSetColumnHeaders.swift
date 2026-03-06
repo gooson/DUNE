@@ -23,6 +23,9 @@ struct ExerciseSetColumnHeaders: View {
                 Text("MIN").frame(maxWidth: 60)
                 if unit != .timeOnly {
                     Text(unit.placeholder.uppercased()).frame(maxWidth: 70)
+                    if unit == .floors {
+                        Text("LVL").frame(maxWidth: 56)
+                    }
                 }
             }
         case .durationIntensity:

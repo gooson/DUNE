@@ -79,7 +79,11 @@ struct SetRowView: View {
                 let suffix = unit.previousSuffix
                 let secondary: String = {
                     if unit.usesRepsField {
-                        return prev.reps.map { "\($0)\(suffix)" } ?? ""
+                        let base = prev.reps.map { "\($0)\(suffix)" } ?? ""
+                        if unit == .floors, let level = prev.intensity {
+                            return base.isEmpty ? "L\(level)" : "\(base) L\(level)"
+                        }
+                        return base
                     } else if unit.usesDistanceField {
                         // Convert stored km back to display unit
                         let displayValue: Double? = switch unit {
@@ -148,6 +152,13 @@ struct SetRowView: View {
                             .keyboardType(.numberPad)
                             .textFieldStyle(.roundedBorder)
                             .frame(maxWidth: 70)
+
+                        if unit == .floors {
+                            TextField("lvl", text: $editableSet.level)
+                                .keyboardType(.numberPad)
+                                .textFieldStyle(.roundedBorder)
+                                .frame(maxWidth: 56)
+                        }
                     }
                 }
             }

@@ -18,7 +18,7 @@ struct MetricDetailView: View {
                 // Summary header
                 MetricSummaryHeader(
                     category: metric.category,
-                    currentValue: metric.value,
+                    currentValue: resolvedCurrentValue,
                     summary: viewModel.summaryStats,
                     lastUpdated: viewModel.lastUpdated,
                     unitOverride: viewModel.metricUnit.isEmpty ? nil : viewModel.metricUnit
@@ -153,6 +153,13 @@ struct MetricDetailView: View {
             )
             await viewModel.loadData()
         }
+    }
+
+    private var resolvedCurrentValue: Double {
+        if metric.category == .steps, viewModel.hasConfiguredValue {
+            return viewModel.currentValue
+        }
+        return metric.value
     }
 
     // MARK: - Empty State

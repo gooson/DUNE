@@ -1,0 +1,11 @@
+# Suggested commands
+- Build iOS app: `scripts/build-ios.sh`
+- Run all unit tests: `scripts/test-unit.sh`
+- Run iOS unit tests only: `scripts/test-unit.sh --ios-only`
+- Run watch unit tests only: `scripts/test-unit.sh --watch-only`
+- Run iOS UI tests: `scripts/test-ui.sh`
+- Run iOS UI smoke tests: `scripts/test-ui.sh --smoke`
+- Run watch UI tests: `scripts/test-watch-ui.sh`
+- Run watch UI smoke tests: `scripts/test-watch-ui.sh --smoke`
+- Regenerate Xcode project from XcodeGen: `scripts/lib/regen-project.sh` (normally sourced by scripts)
+- Search code fast: `rg <pattern>` / `rg --files`

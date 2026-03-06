@@ -290,7 +290,7 @@ struct ExerciseSessionDetailView: View {
             }
         }
         .padding(DS.Spacing.md)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        .chartSurface(cornerRadius: DS.Radius.md, topBloomHeight: 34)
     }
 
     /// Reusable placeholder view for empty/error states in the heart rate section.

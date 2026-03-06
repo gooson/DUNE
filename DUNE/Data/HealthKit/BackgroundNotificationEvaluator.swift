@@ -1,6 +1,27 @@
 import Foundation
 import HealthKit
 
+struct StepGoalResolver {
+    let stepsService: StepsQuerying
+
+    func evaluate(from samples: [HKSample], now: Date = Date()) async -> HealthInsight? {
+        let hasNewSteps = samples
+            .compactMap { $0 as? HKQuantitySample }
+            .contains { $0.quantity.doubleValue(for: .count()) > 0 }
+        guard hasNewSteps else { return nil }
+
+        do {
+            guard let total = try await stepsService.fetchSteps(for: now), total > 0 else {
+                return nil
+            }
+            return EvaluateHealthInsightUseCase.evaluateStepGoal(todaySteps: total)
+        } catch {
+            AppLogger.notification.error("[BGEvaluator] Failed to resolve today's step total: \(error.localizedDescription)")
+            return nil
+        }
+    }
+}
+
 /// Bridges HealthKit observer callbacks to the notification system.
 /// When an HKObserverQuery fires, fetches new samples via anchored query,
 /// evaluates them for insights, and sends local notifications if criteria are met.
@@ -13,19 +34,25 @@ final class BackgroundNotificationEvaluator: Sendable {
     private let settingsStore: NotificationSettingsStore
     private let throttleStore: NotificationThrottleStore
     private let anchorStore: HealthKitAnchorStore
+    private let stepGoalResolver: StepGoalResolver
 
     init(
         store: HKHealthStore,
         notificationService: NotificationService,
         settingsStore: NotificationSettingsStore = .shared,
         throttleStore: NotificationThrottleStore = .shared,
-        anchorStore: HealthKitAnchorStore = .shared
+        anchorStore: HealthKitAnchorStore = .shared,
+        stepsService: StepsQuerying? = nil,
+        healthKitManager: HealthKitManager = .shared
     ) {
         self.store = store
         self.notificationService = notificationService
         self.settingsStore = settingsStore
         self.throttleStore = throttleStore
         self.anchorStore = anchorStore
+        self.stepGoalResolver = StepGoalResolver(
+            stepsService: stepsService ?? StepsQueryService(manager: healthKitManager)
+        )
     }
 
     /// Called from HKObserverQuery callback. Fetches new samples and evaluates for notifications.
@@ -44,7 +71,7 @@ final class BackgroundNotificationEvaluator: Sendable {
         guard !samples.isEmpty else { return }
 
         // Evaluate and send
-        let insight = evaluate(samples: samples, sampleType: sampleType, insightType: insightType)
+        let insight = await evaluate(samples: samples, sampleType: sampleType, insightType: insightType)
         guard let insight else { return }
 
         guard throttleStore.shouldSendAndRecord(insight: insight) else { return }
@@ -91,7 +118,7 @@ final class BackgroundNotificationEvaluator: Sendable {
         samples: [HKSample],
         sampleType: HKSampleType,
         insightType: HealthInsight.InsightType
-    ) -> HealthInsight? {
+    ) async -> HealthInsight? {
         switch insightType {
         case .hrvAnomaly:
             return evaluateHRVSamples(samples)
@@ -100,7 +127,7 @@ final class BackgroundNotificationEvaluator: Sendable {
         case .sleepComplete, .sleepDebt:
             return evaluateSleepSamples(samples)
         case .stepGoal:
-            return evaluateStepSamples(samples)
+            return await stepGoalResolver.evaluate(from: samples)
         case .weightUpdate:
             return evaluateWeightSamples(samples)
         case .bodyFatUpdate:
@@ -200,24 +227,6 @@ final class BackgroundNotificationEvaluator: Sendable {
         var map = Dictionary(uniqueKeysWithValues: existing.map { (Calendar.current.startOfDay(for: $0.date), $0) })
         map[Calendar.current.startOfDay(for: latest.date)] = latest
         return map.values.sorted { $0.date < $1.date }
-    }
-
-    private func evaluateStepSamples(_ samples: [HKSample]) -> HealthInsight? {
-        // Sum all step samples for today
-        let todayTotal = samples
-            .compactMap { $0 as? HKQuantitySample }
-            .reduce(0.0) { $0 + $1.quantity.doubleValue(for: .count()) }
-        guard todayTotal > 0 else { return nil }
-
-        // Need cumulative total — load cached value + new
-        // Reset cache if day changed (prevents yesterday's total carrying over)
-        let cached = loadCachedStepTotalIfToday()
-        let total = cached + todayTotal
-
-        // Persist running total for next background delivery
-        Self.cacheStepTotal(total)
-
-        return EvaluateHealthInsightUseCase.evaluateStepGoal(todaySteps: total)
     }
 
     private func evaluateWeightSamples(_ samples: [HKSample]) -> HealthInsight? {
@@ -416,8 +425,6 @@ final class BackgroundNotificationEvaluator: Sendable {
 
     private enum CacheKeys {
         static let baselinePrefix = (Bundle.main.bundleIdentifier ?? "com.dailve") + ".notificationBaseline."
-        static let stepTotal = (Bundle.main.bundleIdentifier ?? "com.dailve") + ".notificationStepTotal"
-        static let stepTotalDate = (Bundle.main.bundleIdentifier ?? "com.dailve") + ".notificationStepTotalDate"
         static let previousWeight = (Bundle.main.bundleIdentifier ?? "com.dailve") + ".notificationPrevWeight"
         static let sleepDurations = (Bundle.main.bundleIdentifier ?? "com.dailve") + ".notificationSleepDurations"
     }
@@ -439,21 +446,6 @@ final class BackgroundNotificationEvaluator: Sendable {
         let key = CacheKeys.baselinePrefix + type.rawValue
         guard let data = try? JSONEncoder().encode(values) else { return }
         UserDefaults.standard.set(data, forKey: key)
-    }
-
-    /// Caches today's cumulative step total for background evaluation.
-    static func cacheStepTotal(_ total: Double) {
-        UserDefaults.standard.set(total, forKey: CacheKeys.stepTotal)
-        UserDefaults.standard.set(Date(), forKey: CacheKeys.stepTotalDate)
-    }
-
-    /// Loads cached step total only if it was saved today; returns 0 if stale.
-    private func loadCachedStepTotalIfToday() -> Double {
-        guard let savedDate = UserDefaults.standard.object(forKey: CacheKeys.stepTotalDate) as? Date,
-              Calendar.current.isDateInToday(savedDate) else {
-            return 0
-        }
-        return UserDefaults.standard.double(forKey: CacheKeys.stepTotal)
     }
 
     /// Caches the most recent weight for delta comparison.

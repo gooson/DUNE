@@ -7,7 +7,29 @@
 #   PROJECT_FILE  — path to .xcodeproj
 #   REGENERATE    — 1 to regenerate, 0 to skip
 
+ensure_tooling_path() {
+    local candidates=(
+        "/opt/homebrew/bin"
+        "/usr/local/bin"
+        "$HOME/.homebrew/bin"
+    )
+
+    for candidate in "${candidates[@]}"; do
+        if [[ -d "$candidate" && ":$PATH:" != *":$candidate:"* ]]; then
+            PATH="$candidate:$PATH"
+        fi
+    done
+    export PATH
+}
+
+if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+    ROOT_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
+    exec "$ROOT_DIR/scripts/build-ios.sh" "$@"
+fi
+
 regen_project() {
+    ensure_tooling_path
+
     if ! command -v xcodegen >/dev/null 2>&1; then
         echo "error: xcodegen is required. Install with: brew install xcodegen"
         exit 1
