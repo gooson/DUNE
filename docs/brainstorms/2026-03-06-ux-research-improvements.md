@@ -27,14 +27,25 @@ DUNE 앱은 3/2 UX 종합 리뷰 이후 다수의 개선이 이루어졌으나(n
 - [x] Widget (3 sizes)
 - [x] Cardio fitness (VO2 Max) tracking
 
-**미구현 또는 부분 구현 항목**:
-- [ ] Hero CTA 버튼 (Start Workout / Log Weight) — 없음
-- [ ] Wellness 메트릭 계층화 (3단계) — 동일 무게 유지
-- [ ] Life 탭 depth (stats, streaks, detail) — 여전히 flat list
-- [ ] Error toast/banner 시스템 — inline 에러만 존재
+**부분 구현 항목**:
+- [~] Error toast — Activity 탭에 `ActivitySyncToast` 존재 (overlay + auto-dismiss), 다른 탭은 미적용
+- [~] Life 탭 — empty state CTA("Add Habit") 구현, `SectionGroup` 적용, streak badges 존재. 단 weekly stats/detail 미구현
+- [~] Activity Injury warning — position ②로 이동 완료
+- [~] Coaching card — dismissal 존재, "View Details" CTA 미연결
+
+**미구현 항목**:
+- [ ] Hero CTA 버튼 (Start Workout / Log Weight) — 전 탭 없음
+- [ ] Wellness 메트릭 계층화 (3단계) — "Physical" / "Active Indicators" 2개 섹션 유지
+- [ ] Wellness 섹션 재분류 (Sleep/Cardio/Body/Recovery) — 미구현
+- [ ] 코칭 통합 ("Today's Focus" 단일 섹션) — 여전히 3곳 분산
+- [ ] Life 탭 depth (weekly stats, trends, detail pages) — shallow
+- [ ] Life Hero가 `StandardCard` 사용 (HeroCard 아닌)
+- [ ] 글로벌 에러 토스트 시스템 — Activity만 토스트 보유, 나머지 탭 없음
 - [ ] 접근성 라벨 — 120+ 파일 중 15개만 보유
 - [ ] iPad Split View — sizeClass 분기만 있음
-- [ ] Progressive onboarding — Dashboard만 기본 empty state
+- [ ] Progressive onboarding — 부분적 empty state만
+- [ ] Stale 데이터 명시적 날짜 표시 — 미구현
+- [ ] 차트 baseline 오버레이 — 미구현
 
 ---
 
@@ -106,7 +117,7 @@ Activity 탭 → (+) 또는 WorkoutRecommendationCard → ExerciseStartView
 | W2 | **Suggested Workout이 Hero 바로 아래가 아님** | P2 | Muscle Map, Weekly Stats 아래에 위치할 수 있음 |
 | W3 | **운동 완료 후 피드백이 약함** | P2 | 성공 햅틱만, 요약 화면이나 celebration 없음 |
 | W4 | **세트 입력 중 이전 기록 참조 어려움** | P2 | 같은 운동의 지난 기록을 보려면 별도 탐색 필요 |
-| W5 | **Injury 경고가 운동 선택 단계에서 보이지 않음** | P2 | Activity 탭에서는 보이지만, 운동 시작 화면에서는 없음 |
+| W5 | **Injury 경고가 운동 선택 단계에서 보이지 않음** | P2 | Activity 탭에서는 position ②에 표시되지만, ExerciseStartView에서는 없음 |
 
 ### 개선 방향
 
@@ -262,14 +273,17 @@ Layer 5: UI Rendering (InsightCard, ChartAnnotation, HeroBadge)
 ### 에러 처리 UX 현황
 
 ```
-현재: 에러 → AppLogger.error() → (대부분 무시)
-       ↓ 일부
-      errorMessage 프로퍼티 → inline Text
+현재:
+  Activity 탭: ActivitySyncToast (overlay, auto-dismiss 3.5초) ← 좋은 패턴
+  Wellness 탭: InlineCard partialFailureBanner
+  Dashboard 탭: errorBanner (inline text)
+  Life 탭: 없음
 
-제안: 에러 → 분류 (fatal/recoverable/info)
+제안: ActivitySyncToast 패턴을 전역 토스트로 추출
+  에러 → 분류 (fatal/recoverable/info)
        ↓
       fatal → EmptyStateView + retry
-      recoverable → Toast banner (자동 dismiss, 3초)
+      recoverable → 전역 Toast (ActivitySyncToast 패턴, auto-dismiss 3.5초)
       info → "N of M" 상태 표시
 ```
 
@@ -284,7 +298,7 @@ Layer 5: UI Rendering (InsightCard, ChartAnnotation, HeroBadge)
 | P1-1 | 전 탭 Hero에 CTA 버튼 추가 | Actionability ↑↑ | 4개 Hero 수정 |
 | P1-2 | 코칭 카드 통합 ("Today's Focus") | 인지 부하 ↓ | Dashboard 리팩토링 |
 | P1-3 | 메트릭 카드에 변화율(▲/▼/●) 표시 | 즉시 이해 가능 | VitalCard 수정 |
-| P1-4 | Life 탭 empty state에 CTA 추가 | 첫 사용 경험 ↑ | 1파일 수정 |
+| ~~P1-4~~ | ~~Life 탭 empty state에 CTA 추가~~ | ~~첫 사용 경험 ↑~~ | ✅ 구현 완료 |
 | P1-5 | Stale 데이터에 "N일 전" 명시 | 데이터 신뢰도 ↑ | VitalCard 수정 |
 
 ### Phase 2: 인사이트 강화 (Medium Effort)
@@ -295,7 +309,7 @@ Layer 5: UI Rendering (InsightCard, ChartAnnotation, HeroBadge)
 | P2-2 | 차트 baseline 오버레이 | 맥락 제공 ↑ | Chart 컴포넌트 |
 | P2-3 | 운동 완료 요약 화면 | 만족감 ↑ | 새 View |
 | P2-4 | 세트 입력 시 이전 기록 인라인 표시 | 효율 ↑ | 운동 기록 View |
-| P2-5 | Error toast 시스템 구축 | 에러 가시성 ↑ | 공통 컴포넌트 |
+| P2-5 | Error toast 시스템 전역 확장 | 에러 가시성 ↑ | Activity `ActivitySyncToast` 패턴을 전 탭에 적용 |
 
 ### Phase 3: 시스템 확장 (Major Effort)
 
@@ -354,10 +368,14 @@ Layer 5: UI Rendering (InsightCard, ChartAnnotation, HeroBadge)
 | 3D Muscle map | 2D | Rotatable 3D flow | ✅ 구현 |
 | 테마 | 4개 | 7개 (Shanks, Hanok, Arctic 추가) | ✅ 확장 |
 | Widget | 없음 | 3-size WidgetKit | ✅ 구현 |
+| Injury warning 위치 | 하단 | position ② (hero 바로 아래) | ✅ 구현 |
+| Life empty state CTA | 없음 | "Add Habit" 버튼 | ✅ 구현 |
+| Life SectionGroup | 없음 | habits + achievements 섹션 | ✅ 구현 |
+| Error toast | 없음 | Activity 탭 `ActivitySyncToast` | ⚠️ 부분 (1탭만) |
 | Hero CTA | 없음 | 없음 | ❌ 미구현 |
 | Coaching 통합 | 3곳 분산 | 여전히 분산 | ❌ 미구현 |
-| Life 탭 depth | Flat list | Flat list | ❌ 미구현 |
-| Error toast | 없음 | 없음 | ❌ 미구현 |
+| Life 탭 depth | Flat list | 약간 개선 (streak badges) | ⚠️ 부분 |
+| Wellness 계층화 | 없음 | 없음 | ❌ 미구현 |
 | 접근성 | 28 labels | 약간 증가 추정 | ⚠️ 부분 |
 
 ---
