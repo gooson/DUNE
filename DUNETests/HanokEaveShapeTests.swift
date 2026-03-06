@@ -99,4 +99,28 @@ struct HanokEaveShapeTests {
         let name = AppTheme.hanok.themedAssetName(defaultAsset: "ScoreExcellent", variantSuffix: "ScoreExcellent")
         #expect(name == "HanokScoreExcellent")
     }
+
+    @Test("Roof tile seal path is generated for square rect")
+    func roofTileSealPathSquare() {
+        let seal = HanokRoofTileSealShape()
+        let path = seal.path(in: CGRect(x: 0, y: 0, width: 96, height: 96))
+
+        #expect(path.isEmpty == false)
+    }
+
+    @Test("Roof tile seal path is generated for wide rect")
+    func roofTileSealPathWide() {
+        let seal = HanokRoofTileSealShape()
+        let path = seal.path(in: CGRect(x: 0, y: 0, width: 140, height: 88))
+
+        #expect(path.isEmpty == false)
+    }
+
+    @Test("Roof tile seal path is empty for zero-size rect")
+    func roofTileSealPathZeroSize() {
+        let seal = HanokRoofTileSealShape()
+        let path = seal.path(in: .zero)
+
+        #expect(path.isEmpty == true)
+    }
 }
