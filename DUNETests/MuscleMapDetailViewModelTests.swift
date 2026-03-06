@@ -195,3 +195,113 @@ struct MuscleMapDetailViewModelTests {
         #expect(vm.fatigueByMuscle[.biceps] == nil)
     }
 }
+
+@Suite("MuscleMap3DState")
+struct MuscleMap3DStateTests {
+
+    private func makeFatigueState(
+        muscle: MuscleGroup,
+        weeklyVolume: Int = 0,
+        recoveryPercent: Double = 1.0,
+        lastTrainedDate: Date? = nil
+    ) -> MuscleFatigueState {
+        MuscleFatigueState(
+            muscle: muscle,
+            lastTrainedDate: lastTrainedDate,
+            hoursSinceLastTrained: lastTrainedDate.map { Date().timeIntervalSince($0) / 3600 },
+            weeklyVolume: weeklyVolume,
+            recoveryPercent: recoveryPercent,
+            compoundScore: nil
+        )
+    }
+
+    @Test("Default selection prefers highlighted muscle")
+    func defaultSelectionPrefersHighlight() {
+        let selection = MuscleMap3DState.defaultSelectedMuscle(
+            highlighted: .traps,
+            fatigueStates: [
+                makeFatigueState(muscle: .chest, weeklyVolume: 16),
+                makeFatigueState(muscle: .back, weeklyVolume: 8),
+            ]
+        )
+
+        #expect(selection == .traps)
+    }
+
+    @Test("Default selection falls back to the highest weekly volume")
+    func defaultSelectionPrefersHighestVolume() {
+        let selection = MuscleMap3DState.defaultSelectedMuscle(
+            highlighted: nil,
+            fatigueStates: [
+                makeFatigueState(muscle: .chest, weeklyVolume: 8),
+                makeFatigueState(muscle: .quadriceps, weeklyVolume: 18),
+                makeFatigueState(muscle: .back, weeklyVolume: 12),
+            ]
+        )
+
+        #expect(selection == .quadriceps)
+    }
+
+    @Test("Display state uses fatigue level in recovery mode")
+    func recoveryDisplayState() {
+        let fatigueByMuscle = [
+            MuscleGroup.chest: makeFatigueState(
+                muscle: .chest,
+                weeklyVolume: 6,
+                recoveryPercent: 0.55,
+                lastTrainedDate: Date().addingTimeInterval(-3600 * 8)
+            )
+        ]
+
+        let state = MuscleMap3DState.displayState(
+            for: .chest,
+            fatigueByMuscle: fatigueByMuscle,
+            mode: .recovery
+        )
+
+        #expect(state == .recovery(.moderateFatigue))
+    }
+
+    @Test("Display state uses volume intensity in volume mode")
+    func volumeDisplayState() {
+        let fatigueByMuscle = [
+            MuscleGroup.back: makeFatigueState(muscle: .back, weeklyVolume: 14)
+        ]
+
+        let state = MuscleMap3DState.displayState(
+            for: .back,
+            fatigueByMuscle: fatigueByMuscle,
+            mode: .volume
+        )
+
+        #expect(state == .volume(.high))
+    }
+
+    @Test("Zoom scale is clamped to viewer bounds")
+    func zoomScaleClamped() {
+        #expect(MuscleMap3DState.clampedZoomScale(0.2) == MuscleMap3DState.minZoomScale)
+        #expect(MuscleMap3DState.clampedZoomScale(2.4) == MuscleMap3DState.maxZoomScale)
+    }
+
+    @Test("Yaw normalization keeps angles in 0 to 360 degrees")
+    func yawNormalized() {
+        #expect(abs(MuscleMap3DState.normalizedYaw(-.pi / 2) - 270) < 0.001)
+        #expect(abs(MuscleMap3DState.normalizedYaw(.pi * 3) - 180) < 0.001)
+    }
+
+    @Test("Back muscles prefer a rear-facing camera angle")
+    func preferredYawForRearMuscles() {
+        let chestYaw = MuscleMap3DState.preferredYaw(for: .chest)
+        let backYaw = MuscleMap3DState.preferredYaw(for: .back)
+
+        #expect(chestYaw == MuscleMap3DState.defaultYaw)
+        #expect(backYaw > .pi)
+    }
+
+    @Test("Procedural 3D rig covers all muscle groups")
+    @MainActor
+    func rigCoversAllMuscles() {
+        let coveredMuscles = Set(MuscleMap3DScene.partBlueprints.map(\.muscle))
+        #expect(coveredMuscles == Set(MuscleGroup.allCases))
+    }
+}

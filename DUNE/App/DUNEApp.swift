@@ -110,15 +110,8 @@ struct DUNEApp: App {
         do {
             modelContainer = try Self.makeModelContainer(configuration: config)
         } catch {
-            // Schema migration failed — delete store and retry (MVP: no user data to preserve)
             AppLogger.data.error("ModelContainer failed: \(error)")
-            Self.deleteStoreFiles(at: config.url)
-            do {
-                modelContainer = try Self.makeModelContainer(configuration: config)
-            } catch {
-                AppLogger.data.error("ModelContainer retry failed: \(error)")
-                modelContainer = Self.makeInMemoryFallbackContainer()
-            }
+            modelContainer = Self.recoverModelContainer(after: error, configuration: config)
         }
 
         let healthKitAvailable = HKHealthStore.isHealthDataAvailable()
@@ -166,6 +159,23 @@ struct DUNEApp: App {
         for suffix in ["", "-wal", "-shm"] {
             let fileURL = URL(fileURLWithPath: url.path + suffix)
             try? fm.removeItem(at: fileURL)
+        }
+    }
+
+    private static func recoverModelContainer(after error: Error, configuration: ModelConfiguration) -> ModelContainer {
+        guard PersistentStoreRecovery.shouldDeleteStore(after: error) else {
+            AppLogger.data.error("Skipping store deletion for non-migration container error")
+            return makeInMemoryFallbackContainer()
+        }
+
+        AppLogger.data.error("Deleting persistent store after migration compatibility failure")
+        deleteStoreFiles(at: configuration.url)
+
+        do {
+            return try makeModelContainer(configuration: configuration)
+        } catch {
+            AppLogger.data.error("ModelContainer retry failed: \(error)")
+            return makeInMemoryFallbackContainer()
         }
     }
 

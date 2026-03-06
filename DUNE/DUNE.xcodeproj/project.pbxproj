@@ -126,6 +126,11 @@
 		271BDF2562D5891B8A1C8A89 /* WorkoutSuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC02C2BBA32E5A341AE19985 /* WorkoutSuggestion.swift */; };
 		271DC2AD68798AFCD9906F57 /* WatchLibrarySyncRequestPolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817CA990C629A95CC2FDA761 /* WatchLibrarySyncRequestPolicyTests.swift */; };
 		279E47BE3A0E139AECB7347D /* AppSchemaVersions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58514E1E986A1EEBF81E6549 /* AppSchemaVersions.swift */; };
+		0AB1C2D3E4F5061728395010 /* PersistentStoreRecovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB1C2D3E4F5061728394050 /* PersistentStoreRecovery.swift */; };
+		0AB1C2D3E4F5061728395020 /* PersistentStoreRecovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB1C2D3E4F5061728394050 /* PersistentStoreRecovery.swift */; };
+		0AB1C2D3E4F5061728395030 /* OpenMeteoRequestLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB1C2D3E4F5061728394060 /* OpenMeteoRequestLocation.swift */; };
+		0AB1C2D3E4F5061728395040 /* URLProtocolStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB1C2D3E4F5061728394070 /* URLProtocolStub.swift */; };
+		0AB1C2D3E4F5061728395050 /* PersistentStoreRecoveryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB1C2D3E4F5061728394080 /* PersistentStoreRecoveryTests.swift */; };
 		283877D1823947D0F1488673 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7483B0DEF534D4B2732250 /* ContentView.swift */; };
 		2850CDE867B19510CEE69E78 /* WellnessScore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A53D3C9DB618E1E7EA14258 /* WellnessScore.swift */; };
 		2929AE54801029332A24E9C4 /* CloudMirroredSharedHealthDataServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791722B9EE0B8158AF9BE9C1 /* CloudMirroredSharedHealthDataServiceTests.swift */; };
@@ -846,6 +851,10 @@
 		0185066E2B99B6620E4EEF06 /* ConditionHeroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionHeroView.swift; sourceTree = "<group>"; };
 		0238CEC74AD7BCBFBDB72EEB /* TodayCoachingCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayCoachingCard.swift; sourceTree = "<group>"; };
 		024E7E2FDC099CD98EF04E38 /* OpenMeteoAirQualityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenMeteoAirQualityService.swift; sourceTree = "<group>"; };
+		0AB1C2D3E4F5061728394050 /* PersistentStoreRecovery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentStoreRecovery.swift; sourceTree = "<group>"; };
+		0AB1C2D3E4F5061728394060 /* OpenMeteoRequestLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenMeteoRequestLocation.swift; sourceTree = "<group>"; };
+		0AB1C2D3E4F5061728394070 /* URLProtocolStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Helpers/URLProtocolStub.swift"; sourceTree = "<group>"; };
+		0AB1C2D3E4F5061728394080 /* PersistentStoreRecoveryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentStoreRecoveryTests.swift; sourceTree = "<group>"; };
 		0254B1635943629A3099D949 /* BodyPart+View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BodyPart+View.swift"; sourceTree = "<group>"; };
 		02591BC92210A67137B6E0B7 /* HeartRateChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartRateChartView.swift; sourceTree = "<group>"; };
 		02CBCE3C28E07A44605422B2 /* CheckInjuryConflictUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckInjuryConflictUseCase.swift; sourceTree = "<group>"; };
@@ -1860,6 +1869,7 @@
 			isa = PBXGroup;
 			children = (
 				58514E1E986A1EEBF81E6549 /* AppSchemaVersions.swift */,
+				0AB1C2D3E4F5061728394050 /* PersistentStoreRecovery.swift */,
 			);
 			path = Migration;
 			sourceTree = "<group>";
@@ -2319,6 +2329,7 @@
 				A3D1E6AB54A4F0DE230AF5A9 /* Double+TemperatureClamping.swift */,
 				C840374858D967CFFB10BE4D /* LocationService.swift */,
 				024E7E2FDC099CD98EF04E38 /* OpenMeteoAirQualityService.swift */,
+				0AB1C2D3E4F5061728394060 /* OpenMeteoRequestLocation.swift */,
 				3BC9C8CA380772ECFFA7FB65 /* OpenMeteoService.swift */,
 				93E3DB094ADA63BA91DB144B /* WeatherProvider.swift */,
 			);
@@ -2748,6 +2759,7 @@
 				B054D0228CF89DC87F1BB95E /* AirQualitySnapshotTests.swift */,
 				0F24C96476FF43C7EB0B8F20 /* AllDataViewModelTests.swift */,
 				AD5F17FA77FFC37027EBB97A /* AppMigrationPlanTests.swift */,
+				0AB1C2D3E4F5061728394080 /* PersistentStoreRecoveryTests.swift */,
 				30EF0F73E853034311E3C4EF /* AppRefreshCoordinatorTests.swift */,
 				D2A2433FC0E7DC8D148BF7DE /* AppThemeTests.swift */,
 				8230BE0D49BE057D15850FF6 /* BackgroundNotificationEvaluatorTests.swift */,
@@ -2810,6 +2822,7 @@
 				A5350D512DD22DCC8FDE5363 /* OneRMEstimationServiceTests.swift */,
 				6CF970884ED29227973915AE /* OpenMeteoAirQualityServiceTests.swift */,
 				4934F2F7000086E1F923FD77 /* OpenMeteoServiceTests.swift */,
+				0AB1C2D3E4F5061728394070 /* URLProtocolStub.swift */,
 				6CFDA670F81810314CD34C04 /* OutdoorFitnessScoreAirQualityTests.swift */,
 				455C44C62CD9C8DC750FC889 /* OutdoorFitnessScoreTests.swift */,
 				6CE2F01A3DAE682CB43919CE /* ParsedWatchIncomingMessageTests.swift */,
@@ -3231,6 +3244,7 @@
 				4849F78131DD92D2D12420FE /* AppRefreshCoordinator.swift in Sources */,
 				2F101FE5E3801B86E27010FA /* AppRefreshCoordinatorImpl.swift in Sources */,
 				B7BDAE4185073979EDE45DCB /* AppSchemaVersions.swift in Sources */,
+				0AB1C2D3E4F5061728395010 /* PersistentStoreRecovery.swift in Sources */,
 				01C15FD78CA5246581F6776F /* AppSection.swift in Sources */,
 				D8A861114E116D0BC305C703 /* AppTheme+View.swift in Sources */,
 				0E4907C8744D6A9166FF0A0C /* AppTheme.swift in Sources */,
@@ -3450,6 +3464,7 @@
 				DE57C099D59F6C70ED18B736 /* OneRMAnalysisSection.swift in Sources */,
 				6AE33CC68171B44C73D232C9 /* OneRMEstimationService.swift in Sources */,
 				8C9CE9DDDCDD1298692B0ACA /* OpenMeteoAirQualityService.swift in Sources */,
+				0AB1C2D3E4F5061728395030 /* OpenMeteoRequestLocation.swift in Sources */,
 				7133F03FA44885B0CB3F5EB1 /* OpenMeteoService.swift in Sources */,
 				EEAD47271525912BE9C6A51C /* OutdoorFitnessLevel.swift in Sources */,
 				8147BA9DA86B8803CDD20847 /* PeriodComparisonView.swift in Sources */,
@@ -3733,6 +3748,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				279E47BE3A0E139AECB7347D /* AppSchemaVersions.swift in Sources */,
+				0AB1C2D3E4F5061728395020 /* PersistentStoreRecovery.swift in Sources */,
 				1FF414CB22F3FF5D948BE707 /* AppTheme+View.swift in Sources */,
 				A161B831DC16A3946EC309E0 /* AppTheme+WatchView.swift in Sources */,
 				056F19F1E5016628AC892F38 /* AppTheme.swift in Sources */,
@@ -3826,6 +3842,7 @@
 				56B3C9F9358F5C8401D5C51E /* AirQualitySnapshotTests.swift in Sources */,
 				94B74B843C5FBB963AE27E69 /* AllDataViewModelTests.swift in Sources */,
 				FBE11C5A26E10B91389D5042 /* AppMigrationPlanTests.swift in Sources */,
+				0AB1C2D3E4F5061728395050 /* PersistentStoreRecoveryTests.swift in Sources */,
 				5C2C28DAD8CBEE56B32F43F5 /* AppRefreshCoordinatorTests.swift in Sources */,
 				9C5BFF3E842F339C15EB8C01 /* AppThemeTests.swift in Sources */,
 				069DCACE3798C28797D84D28 /* BackgroundNotificationEvaluatorTests.swift in Sources */,
@@ -3888,6 +3905,7 @@
 				788CDC8786A1A668646B9057 /* OneRMEstimationServiceTests.swift in Sources */,
 				71841950064B7CF558B00578 /* OpenMeteoAirQualityServiceTests.swift in Sources */,
 				2716E35A4289A4A43374F568 /* OpenMeteoServiceTests.swift in Sources */,
+				0AB1C2D3E4F5061728395040 /* URLProtocolStub.swift in Sources */,
 				676CCDA5E86BAD2F9CFA2A7D /* OutdoorFitnessScoreAirQualityTests.swift in Sources */,
 				4698BB3903CD370D2966CBEB /* OutdoorFitnessScoreTests.swift in Sources */,
 				326B72E89F4EC5FCA56E992A /* ParsedWatchIncomingMessageTests.swift in Sources */,
