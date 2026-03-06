@@ -95,6 +95,6 @@ struct WidgetScoreDataTests {
 
     @Test("UserDefaults key is stable")
     func userDefaultsKey() {
-        #expect(WidgetScoreData.userDefaultsKey == "widget_score_data")
+        #expect(WidgetScoreData.userDefaultsKey == "com.raftel.dailve.widget_score_data")
     }
 }

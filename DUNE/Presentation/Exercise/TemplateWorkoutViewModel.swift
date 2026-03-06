@@ -25,6 +25,7 @@ final class TemplateWorkoutViewModel {
 
     /// Tracks which exercise index is being saved (for deferred .completed)
     private var savingExerciseIndex: Int?
+    private var didPrefillTemplateDefaults = false
 
     // MARK: - Computed Properties
 
@@ -97,6 +98,9 @@ final class TemplateWorkoutViewModel {
     /// Pre-fills weight and reps from template defaults, converting weight to display unit.
     /// Called from View's `.onAppear` with the user's preferred weight unit.
     func prefillFromTemplateDefaults(weightUnit: WeightUnit) {
+        guard !didPrefillTemplateDefaults else { return }
+        didPrefillTemplateDefaults = true
+
         for (index, entry) in config.templateEntries.enumerated() {
             guard index < exerciseViewModels.count else { break }
             let vm = exerciseViewModels[index]
@@ -106,16 +110,14 @@ final class TemplateWorkoutViewModel {
                 let displayWeight = weightUnit.fromKg(defaultWeightKg)
                 let weightStr = displayWeight.formatted(.number.precision(.fractionLength(0...1)))
                 for i in vm.sets.indices {
-                    if vm.sets[i].weight.isEmpty {
-                        vm.sets[i].weight = weightStr
-                    }
+                    vm.sets[i].weight = weightStr
                 }
             }
+
+            // Template defaults should replace the generic starter reps created by WorkoutSessionViewModel.
             let defaultReps = entry.defaultReps
             for i in vm.sets.indices {
-                if vm.sets[i].reps.isEmpty {
-                    vm.sets[i].reps = "\(defaultReps)"
-                }
+                vm.sets[i].reps = "\(defaultReps)"
             }
         }
     }

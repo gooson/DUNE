@@ -122,6 +122,20 @@ struct TemplateWorkoutViewModelTests {
         #expect(parsedOHP > 87 && parsedOHP < 90)
     }
 
+    @Test("Prefill only applies once so repeated onAppear does not overwrite edits")
+    func prefillOnlyOnce() {
+        let vm = TemplateWorkoutViewModel(config: Self.makeConfig())
+        vm.prefillFromTemplateDefaults(weightUnit: .kg)
+
+        vm.exerciseViewModels[1].sets[0].reps = "12"
+        vm.exerciseViewModels[1].sets[0].weight = "42.5"
+
+        vm.prefillFromTemplateDefaults(weightUnit: .lb)
+
+        #expect(vm.exerciseViewModels[1].sets[0].reps == "12")
+        #expect(vm.exerciseViewModels[1].sets[0].weight == "42.5")
+    }
+
     // MARK: - Navigation Tests
 
     @Test("advanceToNext moves to next pending exercise")
