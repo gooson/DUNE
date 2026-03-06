@@ -114,17 +114,14 @@ struct OpenMeteoAirQualityServiceTests {
     func cacheScopedToNormalizedLocation() async throws {
         let session = URLSession.stubbedSession()
         let service = OpenMeteoAirQualityService(session: session)
-        let lock = NSLock()
-        var requestedURLs: [URL] = []
+        let requestedURLs = URLRequestRecorder()
         let data = try #require(responseJSON.data(using: .utf8))
 
         URLProtocolStub.setHandler { request in
             guard let url = request.url else {
                 throw URLError(.badURL)
             }
-            lock.withLock {
-                requestedURLs.append(url)
-            }
+            requestedURLs.append(url)
             let response = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil)!
             return (response, data)
         }
@@ -138,7 +135,7 @@ struct OpenMeteoAirQualityServiceTests {
         _ = try await service.fetchAirQuality(for: nearbySameRoundedCell)
         _ = try await service.fetchAirQuality(for: busan)
 
-        let calls = lock.withLock { requestedURLs }
+        let calls = requestedURLs.snapshot()
         #expect(calls.count == 2)
         guard calls.count == 2 else { return }
         #expect(calls[0].query?.contains("latitude=37.57") == true)

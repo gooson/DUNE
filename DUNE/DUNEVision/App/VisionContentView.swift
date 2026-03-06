@@ -39,10 +39,8 @@ struct VisionContentView: View {
             }
             Tab(value: AppSection.train) {
                 NavigationStack {
-                    VisionPlaceholderView(
-                        title: AppSection.train.title,
-                        systemImage: AppSection.train.icon,
-                        message: "Spatial Activity views are not connected yet in the visionOS target."
+                    VisionTrainView(
+                        onOpen3DCharts: { openWindow(id: "chart3d") }
                     )
                 }
             } label: {

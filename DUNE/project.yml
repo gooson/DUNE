@@ -338,6 +338,14 @@ targets:
           - "MirroringSharedHealthDataService.swift"
           - "NotificationServiceImpl.swift"
           - "WidgetDataWriter.swift"
+      - path: Resources/Localizable.xcstrings
+        group: Shared/Resources
+      - path: Presentation/Shared/Components/MuscleBodyShape.swift
+        group: DUNEVision/Presentation/Shared/Components
+      - path: Presentation/Shared/Components/MuscleMapData.swift
+        group: DUNEVision/Presentation/Shared/Components
+      - path: Presentation/Shared/Components/MuscleMap3DScene.swift
+        group: DUNEVision/Presentation/Shared/Components
       - path: Presentation/Shared/Extensions/ExerciseRecord+WeeklyVolume.swift
         group: DUNEVision/Presentation/Shared/Extensions
       # Shared Colors

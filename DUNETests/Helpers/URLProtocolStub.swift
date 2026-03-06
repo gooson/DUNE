@@ -4,7 +4,8 @@ final class URLProtocolStub: URLProtocol, @unchecked Sendable {
     typealias Handler = @Sendable (URLRequest) throws -> (HTTPURLResponse, Data)
 
     private static let lock = NSLock()
-    private static var handler: Handler?
+    // Access is serialized through `lock`; mark the shared test stub state explicitly.
+    private static nonisolated(unsafe) var handler: Handler?
 
     static func setHandler(_ handler: @escaping Handler) {
         lock.withLock {
@@ -50,6 +51,23 @@ extension URLSession {
         let configuration = URLSessionConfiguration.ephemeral
         configuration.protocolClasses = [URLProtocolStub.self]
         return URLSession(configuration: configuration)
+    }
+}
+
+final class URLRequestRecorder: @unchecked Sendable {
+    private let lock = NSLock()
+    private var urls: [URL] = []
+
+    func append(_ url: URL) {
+        lock.withLock {
+            urls.append(url)
+        }
+    }
+
+    func snapshot() -> [URL] {
+        lock.withLock {
+            urls
+        }
     }
 }
 
