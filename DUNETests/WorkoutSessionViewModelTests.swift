@@ -218,6 +218,49 @@ struct WorkoutSessionViewModelTests {
         #expect(record?.estimatedCalories == 250.0)
     }
 
+    @Test("Stair level adjusts MET and persists as set intensity")
+    func stairLevelAdjustsMETAndPersistsIntensity() {
+        struct CapturingCalorieService: CalorieEstimating {
+            let onEstimate: @Sendable (Double) -> Void
+
+            func estimate(metValue: Double, bodyWeightKg: Double, durationSeconds: TimeInterval, restSeconds: TimeInterval) -> Double? {
+                onEstimate(metValue)
+                return 111
+            }
+        }
+
+        var capturedMET: Double = 0
+        let exercise = ExerciseDefinition(
+            id: "stair-climber",
+            name: "Stair Climber",
+            localizedName: "천국의 계단",
+            category: .cardio,
+            inputType: .durationDistance,
+            primaryMuscles: [.quadriceps],
+            secondaryMuscles: [.glutes],
+            equipment: .machine,
+            metValue: 9.0,
+            cardioSecondaryUnit: .floors
+        )
+
+        let vm = WorkoutSessionViewModel(
+            exercise: exercise,
+            calorieService: CapturingCalorieService { met in
+                capturedMET = met
+            }
+        )
+
+        vm.sets[0].duration = "20"
+        vm.sets[0].reps = "60"
+        vm.sets[0].level = "8"
+        vm.sets[0].isCompleted = true
+
+        let record = vm.createValidatedRecord()
+        #expect(record != nil)
+        #expect(record?.completedSets.first?.intensity == 8)
+        #expect(abs(capturedMET - 14.4) < 0.0001)
+    }
+
     @Test("Exercise input type is passed through")
     func inputType() {
         let exercise = makeExercise(inputType: .setsReps)

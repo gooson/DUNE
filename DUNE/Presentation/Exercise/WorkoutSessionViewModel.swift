@@ -9,6 +9,7 @@ struct EditableSet: Identifiable {
     var reps: String = ""
     var duration: String = ""
     var distance: String = ""
+    var level: String = ""
     var isCompleted: Bool = false
     var setType: SetType = .working
     /// Rest timer total (including +30s adjustments) used after this set, in seconds.
@@ -21,7 +22,24 @@ struct PreviousSetInfo: Sendable {
     let reps: Int?
     let duration: TimeInterval?
     let distance: Double?
+    let intensity: Int?
     let restDuration: TimeInterval?
+
+    init(
+        weight: Double?,
+        reps: Int?,
+        duration: TimeInterval?,
+        distance: Double?,
+        intensity: Int? = nil,
+        restDuration: TimeInterval?
+    ) {
+        self.weight = weight
+        self.reps = reps
+        self.duration = duration
+        self.distance = distance
+        self.intensity = intensity
+        self.restDuration = restDuration
+    }
 }
 
 // MARK: - Draft Persistence
@@ -41,6 +59,7 @@ struct WorkoutSessionDraft: Codable {
         let reps: String
         let duration: String
         let distance: String
+        let level: String?
         let isCompleted: Bool
         let setTypeRaw: String
         let restDuration: TimeInterval?
@@ -80,6 +99,7 @@ final class WorkoutSessionViewModel {
     private let maxWeightKg = 500.0
     private let maxReps = 1000
     private let maxDurationMinutes = 500
+    private let maxStairLevel = 30
     private let maxMemoLength = 500
     private let defaultRestSeconds: TimeInterval = WorkoutDefaults.restSeconds
 
@@ -128,6 +148,9 @@ final class WorkoutSessionViewModel {
             if let distance = prev.distance {
                 newSet.distance = distance.formatted(.number.precision(.fractionLength(0...2)))
             }
+            if let intensity = prev.intensity {
+                newSet.level = "\(intensity)"
+            }
         }
         // If no previous data, auto-fill from last current set
         else if let lastSet = sets.last {
@@ -154,6 +177,7 @@ final class WorkoutSessionViewModel {
         newSet.reps = lastCompleted.reps
         newSet.duration = lastCompleted.duration
         newSet.distance = lastCompleted.distance
+        newSet.level = lastCompleted.level
         sets.append(newSet)
     }
 
@@ -215,6 +239,7 @@ final class WorkoutSessionViewModel {
                 reps: set.reps,
                 duration: set.duration,
                 distance: set.distance,
+                intensity: set.intensity,
                 restDuration: set.restDuration
             )
         }
@@ -271,6 +296,9 @@ final class WorkoutSessionViewModel {
         if let distance = prev.distance {
             sets[index].distance = distance.formatted(.number.precision(.fractionLength(0...2)))
         }
+        if let intensity = prev.intensity {
+            sets[index].level = "\(intensity)"
+        }
     }
 
     // MARK: - Per-Set Validation
@@ -305,7 +333,7 @@ final class WorkoutSessionViewModel {
         let totalDuration = sessionDurationSeconds
         let totalRest = totalRestSeconds
         return calorieService.estimate(
-            metValue: exercise.metValue,
+            metValue: adjustedMETForStairLevel,
             bodyWeightKg: bodyWeightKg,
             durationSeconds: totalDuration,
             restSeconds: totalRest
@@ -367,6 +395,7 @@ final class WorkoutSessionViewModel {
                 reps: set.reps,
                 duration: set.duration,
                 distance: set.distance,
+                level: set.level,
                 isCompleted: set.isCompleted,
                 setTypeRaw: set.setType.rawValue,
                 restDuration: set.restDuration
@@ -393,6 +422,7 @@ final class WorkoutSessionViewModel {
             editable.reps = draftSet.reps
             editable.duration = draftSet.duration
             editable.distance = draftSet.distance
+            editable.level = draftSet.level ?? ""
             editable.isCompleted = draftSet.isCompleted
             editable.setType = SetType(rawValue: draftSet.setTypeRaw) ?? .working
             editable.restDuration = draftSet.restDuration
@@ -466,6 +496,15 @@ final class WorkoutSessionViewModel {
                         }
                     }
                 }
+                if unit == .floors {
+                    let trimmedLevel = set.level.trimmingCharacters(in: .whitespaces)
+                    if !trimmedLevel.isEmpty {
+                        guard let level = Int(trimmedLevel), (1...maxStairLevel).contains(level) else {
+                            validationError = String(localized: "Level must be between 1 and \(maxStairLevel)")
+                            return nil
+                        }
+                    }
+                }
                 // unit == .timeOnly → no secondary field validation needed
             }
             if exercise.inputType == .roundsBased {
@@ -523,6 +562,7 @@ final class WorkoutSessionViewModel {
             // Convert distance based on cardio secondary unit
             let distanceKm: Double?
             let repsValue: Int?
+            let levelValue: Int?
 
             if exercise.inputType == .durationDistance {
                 let unit = exercise.cardioSecondaryUnit ?? .km
@@ -537,9 +577,11 @@ final class WorkoutSessionViewModel {
                     distanceKm = nil
                     repsValue = nil
                 }
+                levelValue = unit == .floors ? Int(editableSet.level.trimmingCharacters(in: .whitespaces)) : nil
             } else {
                 distanceKm = trimmedDistance.isEmpty ? nil : Double(trimmedDistance)
                 repsValue = trimmedReps.isEmpty ? nil : Int(trimmedReps)
+                levelValue = nil
             }
 
             let workoutSet = WorkoutSet(
@@ -549,7 +591,7 @@ final class WorkoutSessionViewModel {
                 reps: repsValue,
                 duration: durationSeconds,
                 distance: distanceKm,
-                intensity: nil,
+                intensity: levelValue,
                 isCompleted: true,
                 restDuration: editableSet.restDuration
             )
@@ -570,6 +612,19 @@ final class WorkoutSessionViewModel {
 
     private var usesDefaultReps: Bool {
         exercise.inputType == .setsRepsWeight || exercise.inputType == .setsReps
+    }
+
+    private var adjustedMETForStairLevel: Double {
+        guard exercise.cardioSecondaryUnit == .floors else { return exercise.metValue }
+        let levels = sets.compactMap { set -> Int? in
+            let trimmed = set.level.trimmingCharacters(in: .whitespaces)
+            guard let level = Int(trimmed), (1...maxStairLevel).contains(level) else { return nil }
+            return level
+        }
+        guard !levels.isEmpty else { return exercise.metValue }
+        let averageLevel = Double(levels.reduce(0, +)) / Double(levels.count)
+        let multiplier = min(max(averageLevel / 5.0, 0.5), 2.0)
+        return exercise.metValue * multiplier
     }
 
     private func normalizedRepsValue(from value: Int?) -> Int? {
