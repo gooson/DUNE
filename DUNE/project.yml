@@ -150,7 +150,7 @@ targets:
       # Shared Colors
       - path: ../Shared/Resources/Colors.xcassets
         group: Shared/Resources
-      # Shared SwiftData models
+      # Shared persistence stores
       - path: Data/Persistence/Models
       - path: Data/Persistence/Migration
       # Shared Domain enums (required by @Model files)
@@ -303,15 +303,27 @@ targets:
     platform: visionOS
     sources:
       - path: DUNEVision
-        group: DUNEVision
+      - path: App/AppLogger.swift
+        group: DUNEVision/App
+      - path: App/AppSection.swift
+        group: DUNEVision/App
       # Shared Domain layer (100% reusable)
       - path: Domain
         group: DUNEVision/Domain
-      # Shared SwiftData models
-      - path: Data/Persistence/Models
-        group: DUNEVision/Data/Persistence/Models
-      - path: Data/Persistence/Migration
-        group: DUNEVision/Data/Persistence/Migration
+        excludes:
+          - "Models/TemplateWorkoutConfig.swift"
+          - "Models/WatchConnectivityModels.swift"
+          - "Protocols/ExerciseLibraryQuerying.swift"
+          - "UseCases/FatigueCalculationService.swift"
+          - "UseCases/HealthDataAggregator.swift"
+          - "UseCases/WorkoutRecommendationService.swift"
+      # Shared persistence stores
+      - path: Data/Persistence/NotificationSettingsStore.swift
+        group: DUNEVision/Data/Persistence
+      - path: Data/Persistence/NotificationThrottleStore.swift
+        group: DUNEVision/Data/Persistence
+      - path: Data/Persistence/PersonalRecordStore.swift
+        group: DUNEVision/Data/Persistence
       # Shared HealthKit services
       - path: Data/HealthKit
         group: DUNEVision/Data/HealthKit
@@ -320,6 +332,14 @@ targets:
       # Shared services
       - path: Data/Services
         group: DUNEVision/Data/Services
+        excludes:
+          - "CloudMirroredSharedHealthDataService.swift"
+          - "HealthSnapshotMirrorStore.swift"
+          - "MirroringSharedHealthDataService.swift"
+          - "NotificationServiceImpl.swift"
+          - "WidgetDataWriter.swift"
+      - path: Presentation/Shared/Extensions/ExerciseRecord+WeeklyVolume.swift
+        group: DUNEVision/Presentation/Shared/Extensions
       # Shared Colors
       - path: ../Shared/Resources/Colors.xcassets
         group: Shared/Resources
@@ -360,12 +380,6 @@ targets:
     platform: visionOS
     sources:
       - path: DUNEVisionWidgets
-        group: DUNEVisionWidgets
-      # Shared Domain models for widget data
-      - path: Domain/Models/HealthMetric.swift
-        group: DUNEVisionWidgets/Domain
-      - path: Domain/Models/MuscleGroup.swift
-        group: DUNEVisionWidgets/Domain
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.raftel.dailve.vision.widgets
