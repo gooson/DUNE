@@ -3,7 +3,6 @@ import SwiftUI
 /// Theme selection UI with functional theme switching.
 struct ThemePickerSection: View {
     @AppStorage(AppTheme.storageKey) private var selectedTheme: AppTheme = .desertWarm
-    @Environment(\.appTheme) private var theme
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var shanksPulse: Bool = false
     @State private var shanksPulseTask: Task<Void, Never>?
@@ -48,11 +47,11 @@ struct ThemePickerSection: View {
                         .padding(.vertical, 5)
                         .background(
                             Capsule()
-                                .fill(theme.shanksDeepColor.opacity(0.44))
+                                .fill(appTheme.shanksDeepColor.opacity(0.44))
                         )
                         .overlay(
                             Capsule()
-                                .stroke(theme.bronzeColor.opacity(0.42), lineWidth: 1)
+                                .stroke(appTheme.bronzeColor.opacity(0.42), lineWidth: 1)
                         )
                         .scaleEffect(
                             selectedTheme == .shanksRed && shanksPulse ? 1.14 : 1.0
@@ -65,9 +64,36 @@ struct ThemePickerSection: View {
                         )
                 }
 
+                if appTheme == .hanok {
+                    HanokRoofTileSealShape()
+                        .stroke(
+                            LinearGradient(
+                                colors: [
+                                    appTheme.sandColor.opacity(0.88),
+                                    appTheme.scoreExcellent.opacity(0.56),
+                                    appTheme.hanokDeepColor.opacity(0.78),
+                                ],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ),
+                            style: StrokeStyle(lineWidth: 1.25, lineCap: .round, lineJoin: .round)
+                        )
+                        .frame(width: 18, height: 18)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 5)
+                        .background(
+                            Circle()
+                                .fill(appTheme.cardBackground.opacity(0.72))
+                        )
+                        .overlay(
+                            Circle()
+                                .stroke(appTheme.hanokMidColor.opacity(0.34), lineWidth: 1)
+                        )
+                }
+
                 if selectedTheme == appTheme {
                     Image(systemName: "checkmark")
-                        .foregroundStyle(theme.accentColor)
+                        .foregroundStyle(appTheme.accentColor)
                         .fontWeight(.semibold)
                 }
             }
