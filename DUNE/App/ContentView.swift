@@ -17,8 +17,13 @@ struct ContentView: View {
     @State private var notificationPersonalRecordsSignal = 0
     @State private var notificationHubSignal = 0
     @State private var whatsNewConditionSignal = 0
+    @State private var whatsNewWeatherSignal = 0
+    @State private var whatsNewSleepDebtSignal = 0
+    @State private var whatsNewMuscleMapSignal = 0
     @State private var whatsNewTrainingReadinessSignal = 0
     @State private var whatsNewWellnessScoreSignal = 0
+    @State private var whatsNewSettingsSignal = 0
+    @State private var whatsNewAppearanceSignal = 0
     private let notificationInboxManager = NotificationInboxManager.shared
     private let whatsNewManager = WhatsNewManager.shared
 
@@ -39,7 +44,12 @@ struct ContentView: View {
                         scrollToTopSignal: todayScrollToTopSignal,
                         refreshSignal: refreshSignal,
                         notificationHubSignal: notificationHubSignal,
-                        whatsNewConditionSignal: whatsNewConditionSignal
+                        whatsNewConditionSignal: whatsNewConditionSignal,
+                        whatsNewWeatherSignal: whatsNewWeatherSignal,
+                        whatsNewSleepDebtSignal: whatsNewSleepDebtSignal,
+                        whatsNewMuscleMapSignal: whatsNewMuscleMapSignal,
+                        settingsSignal: whatsNewSettingsSignal,
+                        appearanceFocusSignal: whatsNewAppearanceSignal
                     )
                 }
                 .environment(\.wavePreset, .today)
@@ -178,12 +188,23 @@ struct ContentView: View {
 
     private func handleWhatsNewNavigationRequest(_ destination: WhatsNewDestination) {
         switch destination {
+        case .todayOverview:
+            selectedSection = .today
         case .conditionScore:
             selectedSection = .today
             whatsNewConditionSignal += 1
+        case .weatherDetail:
+            selectedSection = .today
+            whatsNewWeatherSignal += 1
+        case .sleepDetail:
+            selectedSection = .today
+            whatsNewSleepDebtSignal += 1
         case .notificationHub:
             selectedSection = .today
             notificationHubSignal += 1
+        case .muscleMap:
+            selectedSection = .train
+            whatsNewMuscleMapSignal += 1
         case .trainingReadiness:
             selectedSection = .train
             whatsNewTrainingReadinessSignal += 1
@@ -194,6 +215,10 @@ struct ContentView: View {
             selectedSection = .train
         case .lifeOverview:
             selectedSection = .life
+        case .appearanceSettings:
+            selectedSection = .today
+            whatsNewAppearanceSignal += 1
+            whatsNewSettingsSignal += 1
         }
     }
 }

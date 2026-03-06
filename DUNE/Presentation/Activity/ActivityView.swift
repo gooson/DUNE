@@ -18,6 +18,7 @@ struct ActivityView: View {
     @State private var syncToastMessage: String?
     @State private var syncToastDismissTask: Task<Void, Never>?
     @State private var showWhatsNewTrainingReadinessDetail = false
+    @State private var showWhatsNewMuscleMapDetail = false
     @Environment(\.modelContext) private var modelContext
 
     private let library: ExerciseLibraryQuerying = ExerciseLibraryService.shared
@@ -33,6 +34,7 @@ struct ActivityView: View {
     private let notificationWorkoutID: String?
     private let notificationRouteSignal: Int
     private let notificationPersonalRecordsSignal: Int
+    private let whatsNewMuscleMapSignal: Int
     private let whatsNewTrainingReadinessSignal: Int
 
     private enum ScrollAnchor: Hashable {
@@ -85,6 +87,7 @@ struct ActivityView: View {
         notificationWorkoutID: String? = nil,
         notificationRouteSignal: Int = 0,
         notificationPersonalRecordsSignal: Int = 0,
+        whatsNewMuscleMapSignal: Int = 0,
         whatsNewTrainingReadinessSignal: Int = 0
     ) {
         _viewModel = State(initialValue: ActivityViewModel(sharedHealthDataService: sharedHealthDataService))
@@ -93,6 +96,7 @@ struct ActivityView: View {
         self.notificationWorkoutID = notificationWorkoutID
         self.notificationRouteSignal = notificationRouteSignal
         self.notificationPersonalRecordsSignal = notificationPersonalRecordsSignal
+        self.whatsNewMuscleMapSignal = whatsNewMuscleMapSignal
         self.whatsNewTrainingReadinessSignal = whatsNewTrainingReadinessSignal
     }
 
@@ -303,6 +307,9 @@ struct ActivityView: View {
                 sleepDailyData: viewModel.sleepDailyData
             )
         }
+        .navigationDestination(isPresented: $showWhatsNewMuscleMapDetail) {
+            MuscleMapDetailView(fatigueStates: viewModel.fatigueStates)
+        }
         .navigationDestination(item: $notificationActivityDestination) { destination in
             activityDetailView(for: destination.destination)
         }
@@ -340,6 +347,9 @@ struct ActivityView: View {
         }
         .task(id: notificationPersonalRecordsSignal) {
             await handleExternalPersonalRecordsRoute()
+        }
+        .task(id: whatsNewMuscleMapSignal) {
+            await handleWhatsNewMuscleMapRoute()
         }
         .task(id: whatsNewTrainingReadinessSignal) {
             await handleWhatsNewTrainingReadinessRoute()
@@ -537,6 +547,16 @@ struct ActivityView: View {
 
         notificationActivityDestination = nil
         notificationActivityDestination = NotificationActivityDestination(destination: .personalRecords)
+    }
+
+    private func handleWhatsNewMuscleMapRoute() async {
+        guard whatsNewMuscleMapSignal > 0 else { return }
+
+        if viewModel.fatigueStates.isEmpty {
+            await viewModel.loadActivityData()
+        }
+
+        showWhatsNewMuscleMapDetail = true
     }
 
     private func handleWhatsNewTrainingReadinessRoute() async {

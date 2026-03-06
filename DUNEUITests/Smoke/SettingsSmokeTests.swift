@@ -97,11 +97,18 @@ final class SettingsSmokeTests: UITestBaseCase {
         let screen = app.descendants(matching: .any)[AXID.whatsNewScreen].firstMatch
         XCTAssertTrue(screen.waitForExistence(timeout: 5), "What's New screen should open")
 
-        scrollToElementIfNeeded(AXID.whatsNewOpenButton("notifications"))
+        scrollToElementIfNeeded(AXID.whatsNewRow("notifications"))
+        let notificationsRow = app.descendants(matching: .any)[AXID.whatsNewRow("notifications")].firstMatch
+        XCTAssertTrue(
+            notificationsRow.waitForExistence(timeout: 5),
+            "Notifications row should exist in What's New"
+        )
+        notificationsRow.tap()
+
         let openNotificationsButton = app.descendants(matching: .any)[AXID.whatsNewOpenButton("notifications")].firstMatch
         XCTAssertTrue(
             openNotificationsButton.waitForExistence(timeout: 5),
-            "Notifications open button should exist in What's New"
+            "Notifications open button should exist in What's New detail"
         )
         openNotificationsButton.tap()
 
@@ -109,6 +116,81 @@ final class SettingsSmokeTests: UITestBaseCase {
         XCTAssertTrue(
             notificationsTitle.waitForExistence(timeout: 5),
             "Notifications destination should open after leaving Settings"
+        )
+    }
+
+    func testWhatsNewSleepDebtDetailExists() throws {
+        scrollToElementIfNeeded(AXID.settingsRowWhatsNew)
+
+        let link = app.descendants(matching: .any)[AXID.settingsRowWhatsNew].firstMatch
+        XCTAssertTrue(link.waitForExistence(timeout: 5), "What's New link should exist")
+        link.tap()
+
+        let screen = app.descendants(matching: .any)[AXID.whatsNewScreen].firstMatch
+        XCTAssertTrue(screen.waitForExistence(timeout: 5), "What's New screen should open")
+
+        scrollToElementIfNeeded(AXID.whatsNewRow("sleepDebt"))
+        let sleepDebtRow = app.descendants(matching: .any)[AXID.whatsNewRow("sleepDebt")].firstMatch
+        XCTAssertTrue(
+            sleepDebtRow.waitForExistence(timeout: 5),
+            "Sleep Debt row should exist in What's New"
+        )
+        sleepDebtRow.tap()
+
+        let openSleepDebtButton = app.descendants(matching: .any)[AXID.whatsNewOpenButton("sleepDebt")].firstMatch
+        XCTAssertTrue(
+            openSleepDebtButton.waitForExistence(timeout: 5),
+            "Sleep Debt open button should exist in What's New detail"
+        )
+    }
+
+    func testWhatsNewWidgetDetailExists() throws {
+        scrollToElementIfNeeded(AXID.settingsRowWhatsNew)
+
+        let link = app.descendants(matching: .any)[AXID.settingsRowWhatsNew].firstMatch
+        XCTAssertTrue(link.waitForExistence(timeout: 5), "What's New link should exist")
+        link.tap()
+
+        let screen = app.descendants(matching: .any)[AXID.whatsNewScreen].firstMatch
+        XCTAssertTrue(screen.waitForExistence(timeout: 5), "What's New screen should open")
+
+        scrollToElementIfNeeded(AXID.whatsNewRow("widgets"))
+        let widgetsRow = app.descendants(matching: .any)[AXID.whatsNewRow("widgets")].firstMatch
+        XCTAssertTrue(
+            widgetsRow.waitForExistence(timeout: 5),
+            "Widgets row should exist in What's New"
+        )
+        widgetsRow.tap()
+
+        let openWidgetsButton = app.descendants(matching: .any)[AXID.whatsNewOpenButton("widgets")].firstMatch
+        XCTAssertTrue(
+            openWidgetsButton.waitForExistence(timeout: 5),
+            "Widgets open button should exist in What's New detail"
+        )
+    }
+
+    func testWhatsNewMuscleMapDetailExists() throws {
+        scrollToElementIfNeeded(AXID.settingsRowWhatsNew)
+
+        let link = app.descendants(matching: .any)[AXID.settingsRowWhatsNew].firstMatch
+        XCTAssertTrue(link.waitForExistence(timeout: 5), "What's New link should exist")
+        link.tap()
+
+        let screen = app.descendants(matching: .any)[AXID.whatsNewScreen].firstMatch
+        XCTAssertTrue(screen.waitForExistence(timeout: 5), "What's New screen should open")
+
+        scrollToElementIfNeeded(AXID.whatsNewRow("muscleMap"))
+        let muscleMapRow = app.descendants(matching: .any)[AXID.whatsNewRow("muscleMap")].firstMatch
+        XCTAssertTrue(
+            muscleMapRow.waitForExistence(timeout: 5),
+            "Muscle Map row should exist in What's New"
+        )
+        muscleMapRow.tap()
+
+        let openMuscleMapButton = app.descendants(matching: .any)[AXID.whatsNewOpenButton("muscleMap")].firstMatch
+        XCTAssertTrue(
+            openMuscleMapButton.waitForExistence(timeout: 5),
+            "Muscle Map open button should exist in What's New detail"
         )
     }
 
