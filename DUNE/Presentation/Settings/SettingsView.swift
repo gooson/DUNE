@@ -4,6 +4,7 @@ import CoreLocation
 
 struct SettingsView: View {
     @AppStorage("isCloudSyncEnabled") private var isCloudSyncEnabled = false
+    @Environment(\.dismiss) private var dismiss
     @Environment(\.openURL) private var openURL
     @Environment(\.scenePhase) private var scenePhase
 
@@ -13,6 +14,7 @@ struct SettingsView: View {
     @State private var bodyWeightKg: Double = WorkoutSettingsStore.shared.bodyWeightKg
 
     private let store = WorkoutSettingsStore.shared
+    private let whatsNewManager = WhatsNewManager.shared
 
     var body: some View {
         Form {
@@ -170,12 +172,31 @@ struct SettingsView: View {
 
     private var aboutSection: some View {
         Section("About") {
+            if !whatsNewReleases.isEmpty {
+                NavigationLink {
+                    WhatsNewView(
+                        releases: whatsNewReleases,
+                        mode: .manual
+                    ) { destination in
+                        dismiss()
+                        Task { @MainActor in
+                            await Task.yield()
+                            whatsNewManager.requestNavigation(destination)
+                        }
+                    }
+                } label: {
+                    Label("What's New", systemImage: "sparkles")
+                        .accessibilityIdentifier("settings-row-whatsnew")
+                }
+            }
+
             HStack {
                 Text("Version")
                 Spacer()
                 Text(appVersion)
                     .foregroundStyle(DS.Color.textSecondary)
             }
+            .accessibilityElement(children: .combine)
             .accessibilityIdentifier("settings-row-version")
 
             HStack {
@@ -203,6 +224,10 @@ struct SettingsView: View {
 
     private var buildNumber: String {
         Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "—"
+    }
+
+    private var whatsNewReleases: [WhatsNewRelease] {
+        whatsNewManager.orderedReleases(preferredVersion: appVersion)
     }
 }
 

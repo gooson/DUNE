@@ -16,7 +16,11 @@ struct ContentView: View {
     @State private var notificationRouteSignal = 0
     @State private var notificationPersonalRecordsSignal = 0
     @State private var notificationHubSignal = 0
+    @State private var whatsNewConditionSignal = 0
+    @State private var whatsNewTrainingReadinessSignal = 0
+    @State private var whatsNewWellnessScoreSignal = 0
     private let notificationInboxManager = NotificationInboxManager.shared
+    private let whatsNewManager = WhatsNewManager.shared
 
     init(
         sharedHealthDataService: SharedHealthDataService? = nil,
@@ -34,7 +38,8 @@ struct ContentView: View {
                         sharedHealthDataService: sharedHealthDataService,
                         scrollToTopSignal: todayScrollToTopSignal,
                         refreshSignal: refreshSignal,
-                        notificationHubSignal: notificationHubSignal
+                        notificationHubSignal: notificationHubSignal,
+                        whatsNewConditionSignal: whatsNewConditionSignal
                     )
                 }
                 .environment(\.wavePreset, .today)
@@ -51,7 +56,8 @@ struct ContentView: View {
                         refreshSignal: refreshSignal,
                         notificationWorkoutID: notificationOpenWorkoutID,
                         notificationRouteSignal: notificationRouteSignal,
-                        notificationPersonalRecordsSignal: notificationPersonalRecordsSignal
+                        notificationPersonalRecordsSignal: notificationPersonalRecordsSignal,
+                        whatsNewTrainingReadinessSignal: whatsNewTrainingReadinessSignal
                     )
                 }
                 .environment(\.wavePreset, .train)
@@ -65,7 +71,8 @@ struct ContentView: View {
                     WellnessView(
                         sharedHealthDataService: sharedHealthDataService,
                         scrollToTopSignal: wellnessScrollToTopSignal,
-                        refreshSignal: refreshSignal
+                        refreshSignal: refreshSignal,
+                        whatsNewWellnessScoreSignal: whatsNewWellnessScoreSignal
                     )
                 }
                 .environment(\.wavePreset, .wellness)
@@ -108,6 +115,11 @@ struct ContentView: View {
             handleNotificationNavigationRequest(request)
             notificationInboxManager.clearPendingNavigationRequest(ifMatching: request)
         }
+        .onReceive(NotificationCenter.default.publisher(for: WhatsNewManager.routeRequestedNotification)) { notification in
+            guard let destination = WhatsNewManager.destination(from: notification) else { return }
+            handleWhatsNewNavigationRequest(destination)
+            whatsNewManager.clearPendingNavigationDestination(ifMatching: destination)
+        }
         // Listen for refresh signals from coordinator (foreground + HK observer triggers)
         .task {
             guard let coordinator = refreshCoordinator else { return }
@@ -118,6 +130,11 @@ struct ContentView: View {
         .task {
             if let request = notificationInboxManager.consumePendingNavigationRequest() {
                 handleNotificationNavigationRequest(request)
+            }
+        }
+        .task {
+            if let destination = whatsNewManager.consumePendingNavigationDestination() {
+                handleWhatsNewNavigationRequest(destination)
             }
         }
     }
@@ -156,6 +173,27 @@ struct ContentView: View {
         case .notificationHub:
             selectedSection = .today
             notificationHubSignal += 1
+        }
+    }
+
+    private func handleWhatsNewNavigationRequest(_ destination: WhatsNewDestination) {
+        switch destination {
+        case .conditionScore:
+            selectedSection = .today
+            whatsNewConditionSignal += 1
+        case .notificationHub:
+            selectedSection = .today
+            notificationHubSignal += 1
+        case .trainingReadiness:
+            selectedSection = .train
+            whatsNewTrainingReadinessSignal += 1
+        case .wellnessScore:
+            selectedSection = .wellness
+            whatsNewWellnessScoreSignal += 1
+        case .activityOverview:
+            selectedSection = .train
+        case .lifeOverview:
+            selectedSection = .life
         }
     }
 }

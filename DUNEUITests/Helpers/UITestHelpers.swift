@@ -56,7 +56,12 @@ enum AXID {
     static let settingsSectionAppearance = "settings-section-appearance"
     static let settingsRowICloudSync = "settings-row-icloud-sync"
     static let settingsRowLocationAccess = "settings-row-location-access"
+    static let settingsRowWhatsNew = "settings-row-whatsnew"
     static let settingsRowVersion = "settings-row-version"
+
+    // MARK: - What's New
+    static let whatsNewScreen = "whatsnew-screen"
+    static func whatsNewOpenButton(_ feature: String) -> String { "whatsnew-open-\(feature)" }
 
     // MARK: - Body Form
     static let bodyFormSave = "body-form-save"
@@ -218,7 +223,7 @@ extension XCUIApplication {
         }
 
         if let iconID = tabIconID(for: tabTitle) {
-            let iconPredicate = NSPredicate(format: "identifier == %@ AND hittable == true", iconID)
+            let iconPredicate = NSPredicate(format: "identifier == %@", iconID)
             let iconTab = buttons.matching(iconPredicate).firstMatch
             if iconTab.waitForExistence(timeout: 3) {
                 iconTab.tap()

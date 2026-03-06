@@ -21,13 +21,22 @@ struct DashboardView: View {
 
     private let refreshSignal: Int
     private let notificationHubSignal: Int
+    private let whatsNewConditionSignal: Int
     @State private var showNotificationHub = false
+    @State private var showWhatsNewConditionDetail = false
 
-    init(sharedHealthDataService: SharedHealthDataService? = nil, scrollToTopSignal: Int = 0, refreshSignal: Int = 0, notificationHubSignal: Int = 0) {
+    init(
+        sharedHealthDataService: SharedHealthDataService? = nil,
+        scrollToTopSignal: Int = 0,
+        refreshSignal: Int = 0,
+        notificationHubSignal: Int = 0,
+        whatsNewConditionSignal: Int = 0
+    ) {
         _viewModel = State(initialValue: DashboardViewModel(sharedHealthDataService: sharedHealthDataService))
         self.scrollToTopSignal = scrollToTopSignal
         self.refreshSignal = refreshSignal
         self.notificationHubSignal = notificationHubSignal
+        self.whatsNewConditionSignal = whatsNewConditionSignal
     }
 
     var body: some View {
@@ -165,6 +174,13 @@ struct DashboardView: View {
         .navigationDestination(for: ConditionScore.self) { score in
             ConditionScoreDetailView(score: score)
         }
+        .navigationDestination(isPresented: $showWhatsNewConditionDetail) {
+            if let score = viewModel.conditionScore {
+                ConditionScoreDetailView(score: score)
+            } else {
+                ProgressView()
+            }
+        }
         .navigationDestination(for: HealthMetric.self) { metric in
             MetricDetailView(metric: metric)
         }
@@ -230,6 +246,13 @@ struct DashboardView: View {
         .onChange(of: notificationHubSignal) { _, newValue in
             guard newValue > 0 else { return }
             showNotificationHub = true
+        }
+        .task(id: whatsNewConditionSignal) {
+            guard whatsNewConditionSignal > 0 else { return }
+            if viewModel.conditionScore == nil {
+                await viewModel.loadData()
+            }
+            showWhatsNewConditionDetail = viewModel.conditionScore != nil
         }
     }
 
