@@ -8,6 +8,7 @@ struct DashboardView: View {
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.openURL) private var openURL
     private let inboxManager = NotificationInboxManager.shared
+    private let whatsNewManager = WhatsNewManager.shared
     private let scrollToTopSignal: Int
 
     private enum ScrollAnchor: Hashable {
@@ -22,21 +23,38 @@ struct DashboardView: View {
     private let refreshSignal: Int
     private let notificationHubSignal: Int
     private let whatsNewConditionSignal: Int
+    private let whatsNewWeatherSignal: Int
+    private let whatsNewSleepDebtSignal: Int
+    private let settingsSignal: Int
+    private let appearanceFocusSignal: Int
     @State private var showNotificationHub = false
     @State private var showWhatsNewConditionDetail = false
+    @State private var showWhatsNewWeatherDetail = false
+    @State private var showWhatsNewSleepDetail = false
+    @State private var whatsNewWeatherSnapshot: WeatherSnapshot?
+    @State private var whatsNewSleepMetric: HealthMetric?
+    @State private var showSettings = false
 
     init(
         sharedHealthDataService: SharedHealthDataService? = nil,
         scrollToTopSignal: Int = 0,
         refreshSignal: Int = 0,
         notificationHubSignal: Int = 0,
-        whatsNewConditionSignal: Int = 0
+        whatsNewConditionSignal: Int = 0,
+        whatsNewWeatherSignal: Int = 0,
+        whatsNewSleepDebtSignal: Int = 0,
+        settingsSignal: Int = 0,
+        appearanceFocusSignal: Int = 0
     ) {
         _viewModel = State(initialValue: DashboardViewModel(sharedHealthDataService: sharedHealthDataService))
         self.scrollToTopSignal = scrollToTopSignal
         self.refreshSignal = refreshSignal
         self.notificationHubSignal = notificationHubSignal
         self.whatsNewConditionSignal = whatsNewConditionSignal
+        self.whatsNewWeatherSignal = whatsNewWeatherSignal
+        self.whatsNewSleepDebtSignal = whatsNewSleepDebtSignal
+        self.settingsSignal = settingsSignal
+        self.appearanceFocusSignal = appearanceFocusSignal
     }
 
     var body: some View {
@@ -47,6 +65,8 @@ struct DashboardView: View {
                     .id(ScrollAnchor.top)
 
                 VStack(spacing: sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.xl) {
+                    whatsNewEntryCard
+
                     if viewModel.isLoading && viewModel.sortedMetrics.isEmpty {
                         DashboardSkeletonView()
                     } else if viewModel.sortedMetrics.isEmpty && !viewModel.isLoading {
@@ -181,6 +201,20 @@ struct DashboardView: View {
                 ProgressView()
             }
         }
+        .navigationDestination(isPresented: $showWhatsNewWeatherDetail) {
+            if let snapshot = whatsNewWeatherSnapshot {
+                WeatherDetailView(snapshot: snapshot)
+            } else {
+                ProgressView()
+            }
+        }
+        .navigationDestination(isPresented: $showWhatsNewSleepDetail) {
+            if let metric = whatsNewSleepMetric {
+                MetricDetailView(metric: metric)
+            } else {
+                ProgressView()
+            }
+        }
         .navigationDestination(for: HealthMetric.self) { metric in
             MetricDetailView(metric: metric)
         }
@@ -243,9 +277,16 @@ struct DashboardView: View {
         .navigationDestination(isPresented: $showNotificationHub) {
             NotificationHubView()
         }
+        .navigationDestination(isPresented: $showSettings) {
+            SettingsView(focusAppearanceSignal: appearanceFocusSignal)
+        }
         .onChange(of: notificationHubSignal) { _, newValue in
             guard newValue > 0 else { return }
             showNotificationHub = true
+        }
+        .onChange(of: settingsSignal) { _, newValue in
+            guard newValue > 0 else { return }
+            showSettings = true
         }
         .task(id: whatsNewConditionSignal) {
             guard whatsNewConditionSignal > 0 else { return }
@@ -253,6 +294,22 @@ struct DashboardView: View {
                 await viewModel.loadData()
             }
             showWhatsNewConditionDetail = viewModel.conditionScore != nil
+        }
+        .task(id: whatsNewWeatherSignal) {
+            guard whatsNewWeatherSignal > 0 else { return }
+            if viewModel.weatherSnapshot == nil {
+                await viewModel.loadData()
+            }
+            whatsNewWeatherSnapshot = viewModel.weatherSnapshot
+            showWhatsNewWeatherDetail = whatsNewWeatherSnapshot != nil
+        }
+        .task(id: whatsNewSleepDebtSignal) {
+            guard whatsNewSleepDebtSignal > 0 else { return }
+            if viewModel.sleepDeficitAnalysis == nil || !viewModel.sortedMetrics.contains(where: { $0.category == .sleep }) {
+                await viewModel.loadData()
+            }
+            whatsNewSleepMetric = viewModel.sortedMetrics.first(where: { $0.category == .sleep })
+            showWhatsNewSleepDetail = whatsNewSleepMetric != nil
         }
     }
 
@@ -319,6 +376,68 @@ struct DashboardView: View {
 
     private func reloadUnreadCount() {
         unreadNotificationCount = inboxManager.unreadCount()
+    }
+
+    @ViewBuilder
+    private var whatsNewEntryCard: some View {
+        let releases = whatsNewManager.orderedReleases(preferredVersion: whatsNewManager.currentAppVersion())
+        if let currentRelease = releases.first {
+            NavigationLink {
+                WhatsNewView(
+                    releases: releases,
+                    mode: .manual
+                ) { destination in
+                    whatsNewManager.requestNavigation(destination)
+                }
+            } label: {
+                StandardCard {
+                    HStack(alignment: .top, spacing: DS.Spacing.md) {
+                        ZStack {
+                            Circle()
+                                .fill(DS.Color.activity.opacity(0.14))
+                                .frame(width: 42, height: 42)
+
+                            Image(systemName: "sparkles")
+                                .font(.headline.weight(.semibold))
+                                .foregroundStyle(DS.Color.activity)
+                        }
+
+                        VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                            HStack(spacing: DS.Spacing.sm) {
+                                Text("What's New")
+                                    .font(DS.Typography.sectionTitle)
+
+                                Text(verbatim: currentRelease.version)
+                                    .font(.caption.monospacedDigit())
+                                    .padding(.horizontal, DS.Spacing.sm)
+                                    .padding(.vertical, DS.Spacing.xs)
+                                    .background(DS.Color.activity.opacity(0.12), in: Capsule())
+                                    .foregroundStyle(DS.Color.activity)
+                            }
+
+                            Text(currentRelease.intro)
+                                .font(.subheadline)
+                                .foregroundStyle(DS.Color.textSecondary)
+                                .lineLimit(2)
+
+                            Text(currentRelease.features.map(\.title).joined(separator: " · "))
+                                .font(.caption)
+                                .foregroundStyle(DS.Color.textTertiary)
+                                .lineLimit(1)
+                        }
+
+                        Spacer(minLength: 0)
+
+                        Image(systemName: "chevron.right")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(DS.Color.textTertiary)
+                            .padding(.top, 2)
+                    }
+                }
+            }
+            .buttonStyle(.plain)
+            .accessibilityIdentifier("dashboard-link-whatsnew")
+        }
     }
 
     private var insightCardsSection: some View {

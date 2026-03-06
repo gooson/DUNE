@@ -63,13 +63,18 @@ final class WhatsNewManager: @unchecked Sendable {
         [
             WhatsNewRelease(
                 version: "0.2.0",
-                intro: String(localized: "Start with condition, notifications, training, wellness, habits, and Apple Watch workouts in one flow."),
+                intro: String(localized: "Start with condition, weather, sleep debt, notifications, widgets, muscle map, training, wellness, habits, themes, and Apple Watch workouts in one flow."),
                 features: [
+                    .widgets,
                     .conditionScore,
+                    .weather,
+                    .sleepDebt,
                     .notifications,
+                    .muscleMap,
                     .trainingReadiness,
                     .wellness,
                     .habits,
+                    .themes,
                     .watchQuickStart
                 ]
             )

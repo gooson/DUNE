@@ -6,37 +6,50 @@ enum WhatsNewArea: String, Hashable, Sendable {
     case wellness
     case life
     case watch
+    case settings
 }
 
 enum WhatsNewDestination: String, Hashable, Sendable {
+    case todayOverview
     case conditionScore
+    case weatherDetail
+    case sleepDetail
     case notificationHub
+    case muscleMap
     case trainingReadiness
     case wellnessScore
     case activityOverview
     case lifeOverview
+    case appearanceSettings
 }
 
 enum WhatsNewFeature: String, CaseIterable, Identifiable, Hashable, Sendable {
+    case widgets
     case conditionScore
+    case weather
+    case sleepDebt
     case notifications
+    case muscleMap
     case trainingReadiness
     case wellness
     case habits
+    case themes
     case watchQuickStart
 
     var id: String { rawValue }
 
     var area: WhatsNewArea {
         switch self {
-        case .conditionScore, .notifications:
+        case .widgets, .conditionScore, .weather, .sleepDebt, .notifications:
             .today
-        case .trainingReadiness:
+        case .muscleMap, .trainingReadiness:
             .activity
         case .wellness:
             .wellness
         case .habits:
             .life
+        case .themes:
+            .settings
         case .watchQuickStart:
             .watch
         }
@@ -44,16 +57,26 @@ enum WhatsNewFeature: String, CaseIterable, Identifiable, Hashable, Sendable {
 
     var destination: WhatsNewDestination? {
         switch self {
+        case .widgets:
+            .todayOverview
         case .conditionScore:
             .conditionScore
+        case .weather:
+            .weatherDetail
+        case .sleepDebt:
+            .sleepDetail
         case .notifications:
             .notificationHub
+        case .muscleMap:
+            .muscleMap
         case .trainingReadiness:
             .trainingReadiness
         case .wellness:
             .wellnessScore
         case .habits:
             .lifeOverview
+        case .themes:
+            .appearanceSettings
         case .watchQuickStart:
             .activityOverview
         }
@@ -61,16 +84,26 @@ enum WhatsNewFeature: String, CaseIterable, Identifiable, Hashable, Sendable {
 
     var title: String {
         switch self {
+        case .widgets:
+            String(localized: "Widgets")
         case .conditionScore:
             String(localized: "Condition Score")
+        case .weather:
+            String(localized: "Weather Guidance")
+        case .sleepDebt:
+            String(localized: "Sleep Debt")
         case .notifications:
             String(localized: "Notifications")
+        case .muscleMap:
+            String(localized: "Muscle Map")
         case .trainingReadiness:
             String(localized: "Training Readiness")
         case .wellness:
             String(localized: "Wellness")
         case .habits:
             String(localized: "My Habits")
+        case .themes:
+            String(localized: "Themes")
         case .watchQuickStart:
             String(localized: "Quick Start")
         }
@@ -78,16 +111,26 @@ enum WhatsNewFeature: String, CaseIterable, Identifiable, Hashable, Sendable {
 
     var summary: String {
         switch self {
+        case .widgets:
+            String(localized: "Add DUNE widgets to your Home Screen and glance at your key scores without opening the app.")
         case .conditionScore:
             String(localized: "Check your condition score, coaching, and weather from the Today tab.")
+        case .weather:
+            String(localized: "Check live weather, outdoor fitness guidance, and hourly conditions before you head out.")
+        case .sleepDebt:
+            String(localized: "Spot your weekly sleep debt and open the sleep detail to compare recent rest against your baseline.")
         case .notifications:
             String(localized: "Review unread insights and jump back into important updates any time.")
+        case .muscleMap:
+            String(localized: "Open the muscle map to check which areas are recovered, overloaded, or ready for the next session.")
         case .trainingReadiness:
             String(localized: "Open recovery details, weekly stats, and suggestions built around your recent training.")
         case .wellness:
             String(localized: "See sleep, body, and active indicators together in one score-driven view.")
         case .habits:
             String(localized: "Track daily habits and keep auto achievements moving with your routine.")
+        case .themes:
+            String(localized: "Switch between eight visual themes from Settings and make the app feel more like yours.")
         case .watchQuickStart:
             String(localized: "Start workouts faster on Apple Watch and sync completed sessions back to iPhone.")
         }
@@ -96,15 +139,17 @@ enum WhatsNewFeature: String, CaseIterable, Identifiable, Hashable, Sendable {
     var badgeTitle: String {
         switch area {
         case .today:
-            "Today"
+            String(localized: "Today")
         case .activity:
-            "Activity"
+            String(localized: "Activity")
         case .wellness:
-            "Wellness"
+            String(localized: "Wellness")
         case .life:
-            "Life"
+            String(localized: "Life")
         case .watch:
-            "Apple Watch"
+            String(localized: "Apple Watch")
+        case .settings:
+            String(localized: "Appearance")
         }
     }
 
@@ -114,16 +159,26 @@ enum WhatsNewFeature: String, CaseIterable, Identifiable, Hashable, Sendable {
 
     var symbolName: String {
         switch self {
+        case .widgets:
+            "square.grid.2x2.fill"
         case .conditionScore:
             "heart.text.square.fill"
+        case .weather:
+            "cloud.sun.fill"
+        case .sleepDebt:
+            "moon.zzz.fill"
         case .notifications:
             "bell.badge.fill"
+        case .muscleMap:
+            "figure.stand"
         case .trainingReadiness:
             "figure.strengthtraining.traditional"
         case .wellness:
             "leaf.fill"
         case .habits:
             "checklist.checked"
+        case .themes:
+            "paintpalette.fill"
         case .watchQuickStart:
             "applewatch.watchface"
         }
