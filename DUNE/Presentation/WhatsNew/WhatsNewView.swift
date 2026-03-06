@@ -9,7 +9,6 @@ enum WhatsNewPresentationMode: Equatable {
 struct WhatsNewView: View {
     let releases: [WhatsNewRelease]
     let mode: WhatsNewPresentationMode
-    let onOpenDestination: (WhatsNewDestination) -> Void
 
     @Environment(\.dismiss) private var dismiss
 
@@ -22,8 +21,7 @@ struct WhatsNewView: View {
                             WhatsNewFeatureDetailView(
                                 release: release,
                                 feature: feature,
-                                mode: mode,
-                                onOpenDestination: onOpenDestination
+                                mode: mode
                             )
                         } label: {
                             WhatsNewFeatureRow(feature: feature)
@@ -94,34 +92,38 @@ private struct WhatsNewFeatureRow: View {
     }
 
     var body: some View {
-        HStack(spacing: DS.Spacing.md) {
-            ZStack {
-                Circle()
-                    .fill(tintColor.opacity(0.14))
-                    .frame(width: 44, height: 44)
+        VStack(alignment: .leading, spacing: DS.Spacing.md) {
+            HStack(alignment: .top, spacing: DS.Spacing.md) {
+                VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                    HStack(spacing: DS.Spacing.sm) {
+                        WhatsNewBadge(title: feature.badgeTitle, tint: tintColor)
 
-                Image(systemName: feature.symbolName)
-                    .font(.headline.weight(.semibold))
-                    .foregroundStyle(tintColor)
-            }
+                        Image(systemName: feature.symbolName)
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(tintColor)
+                    }
 
-            VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-                HStack(spacing: DS.Spacing.sm) {
                     Text(feature.title)
                         .font(DS.Typography.sectionTitle)
 
-                    Spacer(minLength: 0)
-
-                    WhatsNewBadge(title: feature.badgeTitle, tint: tintColor)
+                    Text(feature.summary)
+                        .font(.subheadline)
+                        .foregroundStyle(DS.Color.textSecondary)
+                        .lineLimit(3)
                 }
-
-                Text(feature.summary)
-                    .font(.subheadline)
-                    .foregroundStyle(DS.Color.textSecondary)
-                    .lineLimit(2)
             }
+
+            WhatsNewArtwork(feature: feature, style: .thumbnail)
+                .frame(maxWidth: .infinity)
+                .frame(height: 138)
+                .clipShape(RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous))
         }
-        .padding(.vertical, DS.Spacing.xs)
+        .padding(DS.Spacing.md)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous)
+                .strokeBorder(.white.opacity(0.08))
+        )
     }
 }
 
@@ -129,9 +131,6 @@ private struct WhatsNewFeatureDetailView: View {
     let release: WhatsNewRelease
     let feature: WhatsNewFeature
     let mode: WhatsNewPresentationMode
-    let onOpenDestination: (WhatsNewDestination) -> Void
-
-    @Environment(\.dismiss) private var dismiss
 
     private var tintColor: Color {
         WhatsNewStyle.tintColor(for: feature)
@@ -140,8 +139,8 @@ private struct WhatsNewFeatureDetailView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: DS.Spacing.xl) {
-                WhatsNewArtwork(feature: feature)
-                    .frame(height: 220)
+                WhatsNewArtwork(feature: feature, style: .hero)
+                    .frame(height: 260)
                     .clipShape(RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous))
 
                 VStack(alignment: .leading, spacing: DS.Spacing.md) {
@@ -170,18 +169,6 @@ private struct WhatsNewFeatureDetailView: View {
                         .foregroundStyle(DS.Color.textSecondary)
                         .fixedSize(horizontal: false, vertical: true)
                 }
-
-                if let destination = feature.destination {
-                    Button {
-                        openDestination(destination)
-                    } label: {
-                        Label("Open Feature", systemImage: "arrow.right.circle.fill")
-                            .frame(maxWidth: .infinity)
-                            .accessibilityIdentifier("whatsnew-open-\(feature.rawValue)")
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .tint(tintColor)
-                }
             }
             .padding(DS.Spacing.lg)
         }
@@ -198,30 +185,26 @@ private struct WhatsNewFeatureDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .accessibilityIdentifier("whatsnew-detail-\(feature.rawValue)")
     }
+}
 
-    private func openDestination(_ destination: WhatsNewDestination) {
-        switch mode {
-        case .automatic:
-            onOpenDestination(destination)
-        case .manual:
-            dismiss()
-            Task { @MainActor in
-                onOpenDestination(destination)
-            }
-        }
-    }
+private enum WhatsNewArtworkStyle: String {
+    case thumbnail
+    case hero
 }
 
 private struct WhatsNewArtwork: View {
     let feature: WhatsNewFeature
+    let style: WhatsNewArtworkStyle
 
     var body: some View {
         if let image = UIImage(named: feature.imageAssetName) {
             Image(uiImage: image)
                 .resizable()
                 .scaledToFill()
+                .accessibilityIdentifier("whatsnew-artwork-\(feature.rawValue)-\(style.rawValue)")
         } else {
             WhatsNewFeatureArtwork(feature: feature)
+                .accessibilityIdentifier("whatsnew-fallback-\(feature.rawValue)-\(style.rawValue)")
         }
     }
 }
@@ -565,8 +548,7 @@ private struct WhatsNewFeatureArtwork: View {
     NavigationStack {
         WhatsNewView(
             releases: WhatsNewManager.shared.orderedReleases(preferredVersion: "0.2.0"),
-            mode: .manual,
-            onOpenDestination: { _ in }
+            mode: .manual
         )
     }
 }
