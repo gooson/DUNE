@@ -1,29 +1,36 @@
 ---
-tags: [muscle-map, 3d, realitykit, usdz, engagement, brand, activity]
+tags: [muscle-map, 3d, svg, realitykit, usdz, visionos, asset-pipeline, activity]
 date: 2026-03-07
 category: brainstorm
 status: draft
 ---
 
-# Brainstorm: Muscle Map 실제 3D 전환
+# Brainstorm: SVG 기반 Muscle Map 3D 자산 고도화
 
 ## Problem Statement
 
-현재 Muscle Map 흐름은 2D SVG body diagram을 중심으로 구성되어 있고, `MuscleMap3DView`도 front/back SVG를 `rotation3DEffect`로 회전시키는 pseudo-3D에 가깝다. 이 방식은 다음 한계가 있다.
+현재 Muscle Map은 두 가지 자산 수준이 어긋나 있다.
 
-- **실제 입체감 부족**: 몸통 두께, 측면 실루엣, 근육의 겹침(occlusion)이 표현되지 않음
-- **고숙련자 관점의 해상도 부족**: 등/광배/승모, 둔근/햄스트링, 전완/상완 같은 부위의 공간적 이해가 제한됨
-- **브랜드 차별화 한계**: 현재 경험은 "잘 만든 2D" 수준이며, 프리미엄 피트니스 앱으로서의 wow factor가 부족함
-- **체류시간 확장 여지**: 사용자가 한 번 보고 지나가는 정보형 화면에 머무르기 쉬움
+- 2D 쪽은 `MuscleMapData.swift` 기준으로 SVG 경계 데이터가 비교적 정교하다.
+- 3D 쪽은 `MuscleMap3DView.swift` 기준으로 RealityKit procedural rig가 들어가 있지만, primitive 조합 중심이라 해부학 정밀도와 자산 재사용성이 낮다.
 
-목표는 단순히 2D를 돌려 보이게 하는 것이 아니라, **실제 3D 인체/근육 모델 위에 Recovery/Volume 데이터를 입혀서** 몰입감, 근육 이해도, 브랜드 차별화를 동시에 끌어올리는 것이다.
+즉, 지금 상태는 "2D 데이터는 아깝고, 3D 데이터는 아직 제품 자산으로 보기 어려운 중간 상태"에 가깝다.
+
+이번 고도화의 목표는 단순 렌더링 개선이 아니라, **현재 SVG를 reference/segmentation source로 활용해 새로운 3D muscle dataset을 만들고**, 그 dataset을 iPhone/iPad와 visionOS에서 함께 재사용 가능한 형태로 정리하는 것이다.
+
+결과물은 화면 하나가 아니라 아래 3개여야 한다.
+
+- **3D source asset**: anatomy/base mesh, submesh, material slot, naming 규칙을 갖춘 원본 자산
+- **runtime-ready package**: RealityKit / USD / USDZ 기반 런타임 자산
+- **mapping contract**: `MuscleGroup`과 3D entity/submesh를 연결하는 안정적인 데이터 계약
 
 ## Target Users
 
 - **주 사용자**: 운동 고숙련자, 근비대/퍼포먼스 중심 사용자
+- **확장 사용자**: visionOS에서 spatial fitness experience를 기대하는 얼리어답터
 - **사용자 기대**:
   - 근육 위치를 실제 공간감으로 이해하고 싶음
-  - 전면/후면뿐 아니라 측면과 비스듬한 각도에서도 균형을 보고 싶음
+  - 전면/후면뿐 아니라 측면과 사선 각도에서도 균형을 보고 싶음
   - 앱이 "초보자용 체크리스트"가 아니라 고급 트레이닝 도구처럼 느껴지길 원함
 - **필수 인터랙션**:
   - 회전
@@ -38,20 +45,36 @@ status: draft
 - **권장 목표치**: 출시 후 4주 내 평균 체류시간 **+25% 이상**
 - **정성 목표**:
   - 사용자가 "실제 3D"라고 인지할 것
-  - 근육 위치/균형 이해가 기존 대비 더 직관적일 것
+  - 측면/사선 시점에서도 근육 위치와 균형을 이해할 수 있을 것
+  - 같은 dataset을 iPhone/iPad와 visionOS에서 재사용할 수 있을 것
   - DUNE의 시그니처 경험으로 기억될 것
 
 ## Proposed Approach
 
-### 권장안: RealityKit + 세그먼트된 USDZ 인체 모델
+### 권장안: SVG를 직접 3D로 extrude하지 말고, SVG를 3D segmentation atlas로 사용
 
-실제 3D 전환의 기본안은 **`RealityView` 기반의 RealityKit 렌더링 + 근육군별로 분리된 USDZ 모델**이다.
+가장 현실적인 방향은 **고품질 anatomical base mesh를 먼저 확보하고**, 현재 SVG를 아래 용도로 사용하는 hybrid pipeline이다.
 
-- `MuscleGroup` 13개(`chest`, `back`, `shoulders`, `biceps`, `triceps`, `quadriceps`, `hamstrings`, `glutes`, `calves`, `core`, `forearms`, `traps`, `lats`)를 기준으로 색상 매핑
-- 모델 내부는 근육군별 submesh 또는 named entity로 분리
-- 좌/우 메시가 분리되더라도 현재 도메인 데이터는 좌우 비대칭을 표현하지 않으므로, **동일 MuscleGroup 색상을 양쪽에 동시에 적용**
-- 데이터 없는 근육은 사용자 요청대로 **회색(gray)** 처리
-- 기존 Recovery/Volume 로직은 재사용하고, 표현 레이어만 3D로 교체
+1. **SVG as reference**
+   - front/back SVG path를 근육 경계 reference로 사용
+   - 현재 `MuscleGroup` 13개와 2D path를 canonical label source로 유지
+2. **Base mesh authoring**
+   - neutral athletic body를 기준으로 3D anatomy mesh 제작 또는 도입
+   - 깊이감, 겹침, silhouette, side volume은 DCC 툴에서 설계
+3. **3D segmentation**
+   - 3D mesh를 `MuscleGroup` 기준의 submesh 또는 named entity로 분리
+   - 좌/우는 메시 레벨에서 분리 가능하되, runtime에서는 현재 symmetric data 모델에 맞게 동일 그룹으로 묶음
+4. **Runtime packaging**
+   - USD/USDZ로 export
+   - Reality Composer Pro / RealityKit에서 scene, material, collision proxy, LOD 구성
+5. **App mapping**
+   - `MuscleGroup -> Entity[]` manifest 고정
+   - Recovery / Volume / No Data / Selected state를 동일 contract 위에 입힘
+
+핵심 판단은 이것이다.
+
+- **SVG는 final 3D geometry source가 아니라 segmentation/reference source로 써야 한다**
+- **Vision Pro 수준 자산은 topology, depth, material, hit-test, LOD까지 포함한 3D asset pipeline이 필요하다**
 
 ### 시각 방향
 
@@ -83,47 +106,58 @@ status: draft
 
 ## Technical Direction
 
-### 추천 스택
+### 추천 스택과 제작 파이프라인
 
 | 옵션 | 판단 | 이유 |
 |------|------|------|
-| **RealityKit + USDZ segmented model** | **채택** | 실제 3D, hit-testing, SwiftUI 통합, 향후 visionOS 재사용 가능 |
-| SceneKit + procedural mesh | 보류/비추천 | SVG 기반에서 "진짜 3D 근육" 품질을 만들기 어렵고 유지비가 큼 |
-| 현재 pseudo-3D 유지 | 기각 | 목표인 실제 3D, 몰입감, 브랜드 차별화를 충족하지 못함 |
+| **DCC base mesh + SVG-guided segmentation + USD/USDZ + RealityKit** | **채택** | 실제 3D 자산 품질, hit-testing, visionOS 재사용성까지 확보 가능 |
+| SVG direct extrusion / lofting | 비추천 | 측면 볼륨, 겹침, topology, deformations 품질이 visionOS 기준에 못 미칠 가능성 큼 |
+| procedural primitive rig 유지 | 기각 | prototype으로는 충분하지만 premium asset으로는 한계 명확 |
 
-### 권장 구조
+### 권장 산출물
 
-- `MuscleMap3DSceneView`
-  - `RealityView` 래퍼
-  - 모델 로드, 카메라 설정, gesture 연결
-- `MuscleMap3DRenderer`
-  - `MuscleGroup -> Entity[]` 매핑 관리
-  - mode별 material 업데이트
-- `MuscleMap3DSelectionController`
-  - hit-test 결과를 `MuscleGroup`으로 변환
-  - selection / focus / reset 관리
-- `MuscleMap3DStyle`
-  - recovery / volume / no-data / selected 색상 및 emission 값 정의
+- `muscle-body-master.blend` 또는 동급 source scene
+- `muscle-body-runtime.usd` / `usdz`
+- `muscle-group-map.json`
+  - entity name
+  - muscle group
+  - optional left/right flag
+  - optional collision proxy name
+- material preset
+  - neutral shell
+  - recovery overlay
+  - volume overlay
+  - selected highlight
+- LOD / collision 정책
 
-### 자산 요구사항
+### Apple 플랫폼 정합성
+
+Apple 공식 문서 기준으로 visionOS/RealityKit 자산 파이프라인은 `RealityView` + `ModelEntity` + USD 계열 자산을 중심으로 잡는 편이 맞다. `Reality Composer Pro`는 scene authoring과 asset organization 역할을 하고, USD는 Apple 쪽 3D 표준 경로다.
+
+## Asset Requirements
 
 - athlete-neutral 포즈의 3D body model 1종
 - 근육군별 분리된 mesh/entity
-- iPhone/iPad용 경량화된 polygon budget
+- shell / muscle / highlight layer 구분
+- iPhone/iPad용 LOD와 visionOS용 LOD 분리 가능 구조
 - material slot 정리
 - entity naming 규칙 확정
+- collision proxy 또는 enlarged hit area 전략
+- source-of-truth 문서화
 
-핵심은 코드보다 **모델 asset 구조를 먼저 맞추는 것**이다. 모델이 근육군별로 잘 나뉘지 않으면, 이후의 탭/색상/선택 경험이 전부 불안정해진다.
+핵심은 코드보다 **모델 asset 구조를 먼저 맞추는 것**이다. 모델이 근육군별로 잘 나뉘지 않으면, 이후의 탭/색상/선택/LOD/visionOS 확장이 전부 불안정해진다.
 
 ## Constraints
 
-- **플랫폼 우선순위**: iPhone / iPad 중심
-- **성능 우선순위**: 최우선은 아니지만, 상호작용 중 끊김이 체감되면 안 됨
+- **플랫폼 우선순위**: iPhone / iPad + visionOS 재사용 가능 구조
+- **성능 우선순위**: 상호작용 중 frame drop이 체감되면 안 됨
 - **도메인 제약**: 현재 데이터 모델은 13 muscle groups만 지원하며 좌우 비대칭 데이터가 없음
 - **구현 리스크**:
   - 3D 자산 제작/정리 비용이 큼
+  - SVG와 3D mesh 경계가 1:1로 맞지 않을 수 있음
   - 작은 근육의 탭 정확도 확보가 필요
   - Recovery/Volume를 3D material에 자연스럽게 입히는 스타일 가이드가 필요
+  - asset licensing / source ownership 정리가 필요
 - **호환성 요구**: 기존 상세 패널, Recovery/Volume 설명 sheet, muscle selection 흐름과 충돌 없이 붙어야 함
 
 ## Edge Cases
@@ -134,20 +168,23 @@ status: draft
 - **Model Load Failure**: 3D asset 로드 실패 시 현재 expanded 2D map으로 fallback
 - **Mode Switch During Selection**: 선택 근육은 유지하되 색상 체계만 변경
 - **iPad Layout**: 큰 화면에서는 3D viewer와 detail panel을 동시 배치하는 split layout 고려 가능
+- **visionOS Volume/Window 전환**: 같은 asset이라도 UI attachment와 camera defaults는 별도 튜닝 필요
+- **Future asymmetry**: 좌/우 데이터가 생기면 현재 그룹 contract를 깨지 않고 확장 가능해야 함
 
 ## Scope
 
 ### MVP (Must-have)
 
-- 실제 3D 인체/근육 모델 1종
-- `MuscleGroup` 13개 대응
+- high-fidelity 3D body/muscle source asset 1종
+- `MuscleGroup` 13개 대응 submesh/entity mapping
+- iPhone/iPad에서 동작하는 RealityKit viewer
+- visionOS에서 재사용 가능한 USD asset package
 - 360도 회전 + pinch zoom + reset
 - 근육 탭 선택
 - Recovery / Volume 모드 전환
 - 데이터 없는 근육 회색 처리
 - 선택 근육 강조 애니메이션
 - 기존 muscle detail 정보와 연동
-- iPhone / iPad 대응 레이아웃
 - DUNE다운 프리미엄 모션과 비주얼 톤
 
 ### Nice-to-have (Future)
@@ -158,16 +195,20 @@ status: draft
 - guided workout suggestion overlay
 - 좌우 비대칭 데이터 지원
 - female / neutral body variants
-- visionOS volumetric viewer 재사용
+- visionOS volumetric viewer 고도화
+- skeletal animation / breathing idle / onboarding sequence
 
 ## Open Questions
 
-- 3D 바디 모델을 내부 제작할지, 외부 anatomical base asset을 도입해 경량화할지
+- 3D 바디 모델을 내부 제작할지, 외부 anatomical base asset을 도입할지
+- SVG를 어디까지 source-of-truth로 둘지: label/mask 기준인지, shape generation 기준인지
 - DUNE 브랜드에 맞는 realism level을 어느 정도로 가져갈지
 - 3D viewer를 detail 전용 경험으로 둘지, Activity 메인 카드 preview까지 확장할지
 - side view 전용 camera preset을 MVP에 포함할지, 자유 회전만으로 충분할지
-- muscle entity naming 규칙을 asset 단계에서 어떻게 고정할지
+- muscle entity naming 규칙과 source ownership을 asset 단계에서 어떻게 고정할지
+- visionOS를 `same asset, different scene` 수준으로 볼지, 별도 spatial interaction을 포함할지
 
 ## Next Steps
 
-- [ ] `/plan muscle-map-real-3d` 로 RealityKit 구조, asset pipeline, 기존 `MuscleRecoveryMapView`/`MuscleMap3DView` 대체 전략을 세부 계획으로 분해
+- [ ] 사용자 답변으로 realism level, asset source, Vision Pro scope 확정
+- [ ] `/plan muscle-map-real-3d` 로 asset pipeline, RealityKit integration, visionOS reuse 전략을 세부 계획으로 분해

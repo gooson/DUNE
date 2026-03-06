@@ -298,10 +298,25 @@ struct MuscleMap3DStateTests {
         #expect(backYaw > .pi)
     }
 
-    @Test("Procedural 3D rig covers all muscle groups")
-    @MainActor
-    func rigCoversAllMuscles() {
-        let coveredMuscles = Set(MuscleMap3DScene.partBlueprints.map(\.muscle))
+    @Test("SVG-derived 3D geometry covers all muscle groups")
+    func geometryCoversAllMuscles() {
+        let coveredMuscles = Set(MuscleMap3DGeometry.allEntries.map(\.descriptor.muscle))
         #expect(coveredMuscles == Set(MuscleGroup.allCases))
+    }
+
+    @Test("Front and back SVG parts map to the expected planes")
+    func partPlanesMatchExpectedSides() {
+        let frontChest = MuscleMap3DGeometry.descriptor(for: "front-chest")
+        let backGlutes = MuscleMap3DGeometry.descriptor(for: "back-glutes")
+
+        #expect(frontChest?.plane == .front)
+        #expect(backGlutes?.plane == .back)
+    }
+
+    @Test("Backside muscles use a negative z offset")
+    func backsideOffsetsAreNegative() {
+        let descriptor = MuscleMap3DGeometry.descriptor(for: "back-hamstrings")
+        #expect(descriptor?.zOffset == MuscleMap3DGeometry.backLayerZ)
+        #expect(descriptor?.zOffset ?? 0 < 0)
     }
 }
