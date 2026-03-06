@@ -47,7 +47,6 @@ struct ContentView: View {
                         whatsNewConditionSignal: whatsNewConditionSignal,
                         whatsNewWeatherSignal: whatsNewWeatherSignal,
                         whatsNewSleepDebtSignal: whatsNewSleepDebtSignal,
-                        whatsNewMuscleMapSignal: whatsNewMuscleMapSignal,
                         settingsSignal: whatsNewSettingsSignal,
                         appearanceFocusSignal: whatsNewAppearanceSignal
                     )
@@ -67,6 +66,7 @@ struct ContentView: View {
                         notificationWorkoutID: notificationOpenWorkoutID,
                         notificationRouteSignal: notificationRouteSignal,
                         notificationPersonalRecordsSignal: notificationPersonalRecordsSignal,
+                        whatsNewMuscleMapSignal: whatsNewMuscleMapSignal,
                         whatsNewTrainingReadinessSignal: whatsNewTrainingReadinessSignal
                     )
                 }
