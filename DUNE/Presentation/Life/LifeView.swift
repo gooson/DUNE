@@ -512,6 +512,8 @@ private struct HabitListQueryView: View {
                 Spacer(minLength: 0)
             }
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Life progress \(viewModel.completedCount) of \(viewModel.totalActiveCount)")
     }
 
     private var completionStatusIcon: String {
@@ -545,6 +547,7 @@ private struct HabitListQueryView: View {
                 .fontWeight(.semibold)
                 .monospacedDigit()
                 .foregroundStyle(theme.sandColor)
+                .contentTransition(.numericText())
         }
     }
 

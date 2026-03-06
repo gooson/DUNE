@@ -115,7 +115,7 @@ struct ActivityView: View {
                             .accessibilityIdentifier("activity-hero-readiness")
                             .buttonStyle(.plain)
 
-                            if viewModel.trainingReadiness != nil {
+                            if let readiness = viewModel.trainingReadiness {
                                 Button {
                                     showingExercisePicker = true
                                 } label: {
@@ -130,7 +130,7 @@ struct ActivityView: View {
                                 }
                                 .buttonStyle(.borderedProminent)
                                 .buttonBorderShape(.capsule)
-                                .tint(viewModel.trainingReadiness?.status.color ?? DS.Color.activity)
+                                .tint(readiness.status.color)
                                 .accessibilityIdentifier("activity-hero-start-workout")
                             }
                         }
