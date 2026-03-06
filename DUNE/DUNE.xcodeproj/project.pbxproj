@@ -1195,6 +1195,7 @@
 		DB01DF64669A7AB8065B8133 /* RestTimerViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestTimerViewModelTests.swift; sourceTree = "<group>"; };
 		DBE203BE9C95468F8260A935 /* ExerciseRecord+WeeklyVolume.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExerciseRecord+WeeklyVolume.swift"; sourceTree = "<group>"; };
 		DBF53E8253ED06857A445371 /* CardioHRZonePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardioHRZonePage.swift; sourceTree = "<group>"; };
+		DCC640E75B0CE551DE225178 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		DD716AF5EEB04AC8E6DDD5B2 /* WeeklyStatsDetailViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyStatsDetailViewModelTests.swift; sourceTree = "<group>"; };
 		DDEE16B5E0F3639BD2C2DF24 /* HealthMetric.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthMetric.swift; sourceTree = "<group>"; };
 		DE0004DFBD06B2F29047BCBB /* BarChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarChartView.swift; sourceTree = "<group>"; };
@@ -2299,6 +2300,7 @@
 			isa = PBXGroup;
 			children = (
 				F43559878197F4AC8DFFC627 /* DUNEWidget.entitlements */,
+				DCC640E75B0CE551DE225178 /* Info.plist */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -3471,6 +3473,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 4GWU9QB2JZ;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ../DUNEWidget/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "DUNE Widget";
 				INFOPLIST_KEY_NSExtension_NSExtensionPointIdentifier = "com.apple.widgetkit-extension";
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
@@ -3828,6 +3831,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 4GWU9QB2JZ;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ../DUNEWidget/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "DUNE Widget";
 				INFOPLIST_KEY_NSExtension_NSExtensionPointIdentifier = "com.apple.widgetkit-extension";
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;

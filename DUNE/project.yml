@@ -220,6 +220,7 @@ targets:
         CURRENT_PROJECT_VERSION: "1"
         MARKETING_VERSION: "0.2.0"
         GENERATE_INFOPLIST_FILE: true
+        INFOPLIST_FILE: ../DUNEWidget/Resources/Info.plist
         INFOPLIST_KEY_CFBundleDisplayName: DUNE Widget
         INFOPLIST_KEY_NSExtension_NSExtensionPointIdentifier: com.apple.widgetkit-extension
         SWIFT_VERSION: "6.0"
