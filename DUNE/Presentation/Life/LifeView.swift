@@ -120,6 +120,7 @@ private struct HabitListQueryView: View {
     // Correction #102: cached today exercise check (avoid body-path Calendar ops)
     @State private var cachedTodayExerciseExists = false
     @State private var historySelection: HabitHistorySelection?
+    @State private var heroAppeared = false
 
     private struct HabitHistorySelection: Identifiable {
         let id: UUID
@@ -514,6 +515,11 @@ private struct HabitListQueryView: View {
         }
         .accessibilityElement(children: .combine)
         .accessibilityLabel("Life progress \(viewModel.completedCount) of \(viewModel.totalActiveCount)")
+        .sensoryFeedback(.impact(weight: .light), trigger: heroAppeared)
+        .onAppear {
+            guard !heroAppeared else { return }
+            heroAppeared = true
+        }
     }
 
     private var completionStatusIcon: String {

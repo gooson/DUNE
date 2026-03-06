@@ -132,6 +132,8 @@ struct ActivityView: View {
                                 .buttonBorderShape(.capsule)
                                 .tint(readiness.status.color)
                                 .accessibilityIdentifier("activity-hero-start-workout")
+                                .accessibilityLabel("Start Workout — Training readiness \(readiness.status.label)")
+                                .accessibilityHint("Opens exercise picker to begin a workout")
                             }
                         }
 
