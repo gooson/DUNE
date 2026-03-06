@@ -104,15 +104,36 @@ struct ActivityView: View {
                         ProgressView()
                             .frame(maxWidth: .infinity, minHeight: 200)
                     } else {
-                        // ① Training Readiness Hero Card
-                        NavigationLink(value: ActivityDetailDestination.trainingReadiness) {
-                            TrainingReadinessHeroCard(
-                                readiness: viewModel.trainingReadiness,
-                                isCalibrating: viewModel.trainingReadiness?.isCalibrating ?? true
-                            )
+                        // ① Training Readiness Hero Card + Start Workout CTA
+                        VStack(spacing: DS.Spacing.sm) {
+                            NavigationLink(value: ActivityDetailDestination.trainingReadiness) {
+                                TrainingReadinessHeroCard(
+                                    readiness: viewModel.trainingReadiness,
+                                    isCalibrating: viewModel.trainingReadiness?.isCalibrating ?? true
+                                )
+                            }
+                            .accessibilityIdentifier("activity-hero-readiness")
+                            .buttonStyle(.plain)
+
+                            if viewModel.trainingReadiness != nil {
+                                Button {
+                                    showingExercisePicker = true
+                                } label: {
+                                    Label {
+                                        Text("Start Workout")
+                                    } icon: {
+                                        Image(systemName: "play.fill")
+                                    }
+                                    .font(.subheadline)
+                                    .fontWeight(.semibold)
+                                    .frame(maxWidth: .infinity)
+                                }
+                                .buttonStyle(.borderedProminent)
+                                .buttonBorderShape(.capsule)
+                                .tint(viewModel.trainingReadiness?.status.color ?? DS.Color.activity)
+                                .accessibilityIdentifier("activity-hero-start-workout")
+                            }
                         }
-                        .accessibilityIdentifier("activity-hero-readiness")
-                        .buttonStyle(.plain)
 
                         // ② Injury Warning Banner
                         if !cachedInjuryConflicts.isEmpty {
