@@ -5,13 +5,11 @@ struct WellnessView: View {
     @State private var viewModel: WellnessViewModel
     @State private var bodyViewModel = BodyCompositionViewModel()
     @State private var injuryViewModel = InjuryViewModel()
-    @State private var showWhatsNewWellnessScoreDetail = false
     @Environment(\.modelContext) private var modelContext
     @Environment(\.appTheme) private var theme
     @Environment(\.horizontalSizeClass) private var sizeClass
 
     private let scrollToTopSignal: Int
-    private let whatsNewWellnessScoreSignal: Int
 
     private enum ScrollAnchor: Hashable {
         case top
@@ -24,13 +22,11 @@ struct WellnessView: View {
     init(
         sharedHealthDataService: SharedHealthDataService? = nil,
         scrollToTopSignal: Int = 0,
-        refreshSignal: Int = 0,
-        whatsNewWellnessScoreSignal: Int = 0
+        refreshSignal: Int = 0
     ) {
         _viewModel = State(initialValue: WellnessViewModel(sharedHealthDataService: sharedHealthDataService))
         self.scrollToTopSignal = scrollToTopSignal
         self.refreshSignal = refreshSignal
-        self.whatsNewWellnessScoreSignal = whatsNewWellnessScoreSignal
     }
 
     var body: some View {
@@ -247,32 +243,11 @@ struct WellnessView: View {
                 ProgressView()
             }
         }
-        .navigationDestination(isPresented: $showWhatsNewWellnessScoreDetail) {
-            if let score = viewModel.wellnessScore {
-                WellnessScoreDetailView(
-                    wellnessScore: score,
-                    conditionScore: viewModel.conditionScoreFull,
-                    bodyScoreDetail: viewModel.bodyScoreDetail,
-                    sleepDailyData: viewModel.sleepDetailTrend,
-                    hrvDailyData: viewModel.hrvDetailTrend,
-                    rhrDailyData: viewModel.rhrDetailTrend
-                )
-            } else {
-                ProgressView()
-            }
-        }
         .waveRefreshable {
             await viewModel.performRefresh()
         }
         .task(id: refreshSignal) {
             viewModel.loadData()
-        }
-        .task(id: whatsNewWellnessScoreSignal) {
-            guard whatsNewWellnessScoreSignal > 0 else { return }
-            if viewModel.wellnessScore == nil {
-                viewModel.loadData()
-            }
-            showWhatsNewWellnessScoreDetail = viewModel.wellnessScore != nil
         }
         .englishNavigationTitle("Wellness")
     }

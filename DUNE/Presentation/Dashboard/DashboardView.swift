@@ -22,39 +22,18 @@ struct DashboardView: View {
 
     private let refreshSignal: Int
     private let notificationHubSignal: Int
-    private let whatsNewConditionSignal: Int
-    private let whatsNewWeatherSignal: Int
-    private let whatsNewSleepDebtSignal: Int
-    private let settingsSignal: Int
-    private let appearanceFocusSignal: Int
     @State private var showNotificationHub = false
-    @State private var showWhatsNewConditionDetail = false
-    @State private var showWhatsNewWeatherDetail = false
-    @State private var showWhatsNewSleepDetail = false
-    @State private var whatsNewWeatherSnapshot: WeatherSnapshot?
-    @State private var whatsNewSleepMetric: HealthMetric?
-    @State private var showSettings = false
 
     init(
         sharedHealthDataService: SharedHealthDataService? = nil,
         scrollToTopSignal: Int = 0,
         refreshSignal: Int = 0,
-        notificationHubSignal: Int = 0,
-        whatsNewConditionSignal: Int = 0,
-        whatsNewWeatherSignal: Int = 0,
-        whatsNewSleepDebtSignal: Int = 0,
-        settingsSignal: Int = 0,
-        appearanceFocusSignal: Int = 0
+        notificationHubSignal: Int = 0
     ) {
         _viewModel = State(initialValue: DashboardViewModel(sharedHealthDataService: sharedHealthDataService))
         self.scrollToTopSignal = scrollToTopSignal
         self.refreshSignal = refreshSignal
         self.notificationHubSignal = notificationHubSignal
-        self.whatsNewConditionSignal = whatsNewConditionSignal
-        self.whatsNewWeatherSignal = whatsNewWeatherSignal
-        self.whatsNewSleepDebtSignal = whatsNewSleepDebtSignal
-        self.settingsSignal = settingsSignal
-        self.appearanceFocusSignal = appearanceFocusSignal
     }
 
     var body: some View {
@@ -194,27 +173,6 @@ struct DashboardView: View {
         .navigationDestination(for: ConditionScore.self) { score in
             ConditionScoreDetailView(score: score)
         }
-        .navigationDestination(isPresented: $showWhatsNewConditionDetail) {
-            if let score = viewModel.conditionScore {
-                ConditionScoreDetailView(score: score)
-            } else {
-                ProgressView()
-            }
-        }
-        .navigationDestination(isPresented: $showWhatsNewWeatherDetail) {
-            if let snapshot = whatsNewWeatherSnapshot {
-                WeatherDetailView(snapshot: snapshot)
-            } else {
-                ProgressView()
-            }
-        }
-        .navigationDestination(isPresented: $showWhatsNewSleepDetail) {
-            if let metric = whatsNewSleepMetric {
-                MetricDetailView(metric: metric)
-            } else {
-                ProgressView()
-            }
-        }
         .navigationDestination(for: HealthMetric.self) { metric in
             MetricDetailView(metric: metric)
         }
@@ -277,39 +235,9 @@ struct DashboardView: View {
         .navigationDestination(isPresented: $showNotificationHub) {
             NotificationHubView()
         }
-        .navigationDestination(isPresented: $showSettings) {
-            SettingsView(focusAppearanceSignal: appearanceFocusSignal)
-        }
         .onChange(of: notificationHubSignal) { _, newValue in
             guard newValue > 0 else { return }
             showNotificationHub = true
-        }
-        .onChange(of: settingsSignal) { _, newValue in
-            guard newValue > 0 else { return }
-            showSettings = true
-        }
-        .task(id: whatsNewConditionSignal) {
-            guard whatsNewConditionSignal > 0 else { return }
-            if viewModel.conditionScore == nil {
-                await viewModel.loadData()
-            }
-            showWhatsNewConditionDetail = viewModel.conditionScore != nil
-        }
-        .task(id: whatsNewWeatherSignal) {
-            guard whatsNewWeatherSignal > 0 else { return }
-            if viewModel.weatherSnapshot == nil {
-                await viewModel.loadData()
-            }
-            whatsNewWeatherSnapshot = viewModel.weatherSnapshot
-            showWhatsNewWeatherDetail = whatsNewWeatherSnapshot != nil
-        }
-        .task(id: whatsNewSleepDebtSignal) {
-            guard whatsNewSleepDebtSignal > 0 else { return }
-            if viewModel.sleepDeficitAnalysis == nil || !viewModel.sortedMetrics.contains(where: { $0.category == .sleep }) {
-                await viewModel.loadData()
-            }
-            whatsNewSleepMetric = viewModel.sortedMetrics.first(where: { $0.category == .sleep })
-            showWhatsNewSleepDetail = whatsNewSleepMetric != nil
         }
     }
 
@@ -386,9 +314,7 @@ struct DashboardView: View {
                 WhatsNewView(
                     releases: releases,
                     mode: .manual
-                ) { destination in
-                    whatsNewManager.requestNavigation(destination)
-                }
+                )
             } label: {
                 StandardCard {
                     HStack(alignment: .top, spacing: DS.Spacing.md) {

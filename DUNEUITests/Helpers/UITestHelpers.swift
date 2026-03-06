@@ -63,7 +63,9 @@ enum AXID {
     // MARK: - What's New
     static let whatsNewScreen = "whatsnew-screen"
     static func whatsNewRow(_ feature: String) -> String { "whatsnew-row-\(feature)" }
-    static func whatsNewOpenButton(_ feature: String) -> String { "whatsnew-open-\(feature)" }
+    static func whatsNewArtwork(_ feature: String, style: String) -> String {
+        "whatsnew-artwork-\(feature)-\(style)"
+    }
 
     // MARK: - Body Form
     static let bodyFormSave = "body-form-save"

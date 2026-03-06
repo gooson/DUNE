@@ -4,8 +4,7 @@ final class URLProtocolStub: URLProtocol, @unchecked Sendable {
     typealias Handler = @Sendable (URLRequest) throws -> (HTTPURLResponse, Data)
 
     private static let lock = NSLock()
-    // Access is serialized through `lock`; mark the shared test stub state explicitly.
-    private static nonisolated(unsafe) var handler: Handler?
+    nonisolated(unsafe) private static var handler: Handler?
 
     static func setHandler(_ handler: @escaping Handler) {
         lock.withLock {
@@ -54,20 +53,22 @@ extension URLSession {
     }
 }
 
-final class URLRequestRecorder: @unchecked Sendable {
+final class LockedValue<Value>: @unchecked Sendable {
     private let lock = NSLock()
-    private var urls: [URL] = []
+    private var value: Value
 
-    func append(_ url: URL) {
+    init(_ value: Value) {
+        self.value = value
+    }
+
+    func withValue<T>(_ body: (inout Value) -> T) -> T {
         lock.withLock {
-            urls.append(url)
+            body(&value)
         }
     }
 
-    func snapshot() -> [URL] {
-        lock.withLock {
-            urls
-        }
+    func read() -> Value {
+        lock.withLock { value }
     }
 }
 

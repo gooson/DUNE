@@ -3,12 +3,7 @@ import SwiftData
 import CoreLocation
 
 struct SettingsView: View {
-    private enum ScrollTarget: Hashable {
-        case appearance
-    }
-
     @AppStorage("isCloudSyncEnabled") private var isCloudSyncEnabled = false
-    @Environment(\.dismiss) private var dismiss
     @Environment(\.openURL) private var openURL
     @Environment(\.scenePhase) private var scenePhase
 
@@ -19,46 +14,32 @@ struct SettingsView: View {
 
     private let store = WorkoutSettingsStore.shared
     private let whatsNewManager = WhatsNewManager.shared
-    private let focusAppearanceSignal: Int
-
-    init(focusAppearanceSignal: Int = 0) {
-        self.focusAppearanceSignal = focusAppearanceSignal
-    }
 
     var body: some View {
-        ScrollViewReader { proxy in
-            Form {
-                workoutDefaultsSection
-                exerciseDefaultsSection
-                NotificationSettingsSection()
-                appearanceSection
-                dataPrivacySection
-                aboutSection
-            }
-            .scrollContentBackground(.hidden)
-            .background { DetailWaveBackground() }
-            .englishNavigationTitle("Settings")
-            .onChange(of: restSeconds) { _, newValue in
-                store.restSeconds = newValue
-                WatchSessionManager.shared.syncWorkoutSettingsToWatch()
-            }
-            .onChange(of: setCount) { _, newValue in
-                store.setCount = newValue
-            }
-            .onChange(of: bodyWeightKg) { _, newValue in
-                store.bodyWeightKg = newValue
-            }
-            .onChange(of: scenePhase) { _, newPhase in
-                if newPhase == .active {
-                    locationStatus = CLLocationManager().authorizationStatus
-                }
-            }
-            .task(id: focusAppearanceSignal) {
-                guard focusAppearanceSignal > 0 else { return }
-                await Task.yield()
-                withAnimation(DS.Animation.standard) {
-                    proxy.scrollTo(ScrollTarget.appearance, anchor: .top)
-                }
+        Form {
+            workoutDefaultsSection
+            exerciseDefaultsSection
+            NotificationSettingsSection()
+            appearanceSection
+            dataPrivacySection
+            aboutSection
+        }
+        .scrollContentBackground(.hidden)
+        .background { DetailWaveBackground() }
+        .englishNavigationTitle("Settings")
+        .onChange(of: restSeconds) { _, newValue in
+            store.restSeconds = newValue
+            WatchSessionManager.shared.syncWorkoutSettingsToWatch()
+        }
+        .onChange(of: setCount) { _, newValue in
+            store.setCount = newValue
+        }
+        .onChange(of: bodyWeightKg) { _, newValue in
+            store.bodyWeightKg = newValue
+        }
+        .onChange(of: scenePhase) { _, newPhase in
+            if newPhase == .active {
+                locationStatus = CLLocationManager().authorizationStatus
             }
         }
     }
@@ -142,7 +123,6 @@ struct SettingsView: View {
             ThemePickerSection()
                 .accessibilityIdentifier("settings-section-appearance")
         }
-        .id(ScrollTarget.appearance)
     }
 
     // MARK: - Data & Privacy
@@ -196,13 +176,7 @@ struct SettingsView: View {
                     WhatsNewView(
                         releases: whatsNewReleases,
                         mode: .manual
-                    ) { destination in
-                        dismiss()
-                        Task { @MainActor in
-                            await Task.yield()
-                            whatsNewManager.requestNavigation(destination)
-                        }
-                    }
+                    )
                 } label: {
                     Label("What's New", systemImage: "sparkles")
                         .accessibilityIdentifier("settings-row-whatsnew")

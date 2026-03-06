@@ -87,7 +87,7 @@ final class SettingsSmokeTests: UITestBaseCase {
         XCTAssertTrue(screen.waitForExistence(timeout: 5), "What's New screen should open")
     }
 
-    func testWhatsNewNotificationRouteReturnsToTodayFlow() throws {
+    func testWhatsNewNotificationsDetailShowsArtwork() throws {
         scrollToElementIfNeeded(AXID.settingsRowWhatsNew)
 
         let link = app.descendants(matching: .any)[AXID.settingsRowWhatsNew].firstMatch
@@ -105,17 +105,16 @@ final class SettingsSmokeTests: UITestBaseCase {
         )
         notificationsRow.tap()
 
-        let openNotificationsButton = app.descendants(matching: .any)[AXID.whatsNewOpenButton("notifications")].firstMatch
+        let notificationsDetail = app.descendants(matching: .any)["whatsnew-detail-notifications"].firstMatch
         XCTAssertTrue(
-            openNotificationsButton.waitForExistence(timeout: 5),
-            "Notifications open button should exist in What's New detail"
+            notificationsDetail.waitForExistence(timeout: 5),
+            "Notifications detail should open from What's New"
         )
-        openNotificationsButton.tap()
 
-        let notificationsTitle = app.navigationBars["Notifications"]
+        let artwork = app.descendants(matching: .any)[AXID.whatsNewArtwork("notifications", style: "hero")].firstMatch
         XCTAssertTrue(
-            notificationsTitle.waitForExistence(timeout: 5),
-            "Notifications destination should open after leaving Settings"
+            artwork.waitForExistence(timeout: 5),
+            "Notifications detail should show hero artwork"
         )
     }
 
@@ -137,10 +136,16 @@ final class SettingsSmokeTests: UITestBaseCase {
         )
         sleepDebtRow.tap()
 
-        let openSleepDebtButton = app.descendants(matching: .any)[AXID.whatsNewOpenButton("sleepDebt")].firstMatch
+        let sleepDebtDetail = app.descendants(matching: .any)["whatsnew-detail-sleepDebt"].firstMatch
         XCTAssertTrue(
-            openSleepDebtButton.waitForExistence(timeout: 5),
-            "Sleep Debt open button should exist in What's New detail"
+            sleepDebtDetail.waitForExistence(timeout: 5),
+            "Sleep Debt detail should open from What's New"
+        )
+
+        let artwork = app.descendants(matching: .any)[AXID.whatsNewArtwork("sleepDebt", style: "hero")].firstMatch
+        XCTAssertTrue(
+            artwork.waitForExistence(timeout: 5),
+            "Sleep Debt detail should show hero artwork"
         )
     }
 
@@ -162,10 +167,16 @@ final class SettingsSmokeTests: UITestBaseCase {
         )
         widgetsRow.tap()
 
-        let openWidgetsButton = app.descendants(matching: .any)[AXID.whatsNewOpenButton("widgets")].firstMatch
+        let widgetsDetail = app.descendants(matching: .any)["whatsnew-detail-widgets"].firstMatch
         XCTAssertTrue(
-            openWidgetsButton.waitForExistence(timeout: 5),
-            "Widgets open button should exist in What's New detail"
+            widgetsDetail.waitForExistence(timeout: 5),
+            "Widgets detail should open from What's New"
+        )
+
+        let artwork = app.descendants(matching: .any)[AXID.whatsNewArtwork("widgets", style: "hero")].firstMatch
+        XCTAssertTrue(
+            artwork.waitForExistence(timeout: 5),
+            "Widgets detail should show hero artwork"
         )
     }
 
@@ -187,10 +198,16 @@ final class SettingsSmokeTests: UITestBaseCase {
         )
         muscleMapRow.tap()
 
-        let openMuscleMapButton = app.descendants(matching: .any)[AXID.whatsNewOpenButton("muscleMap")].firstMatch
+        let muscleMapDetail = app.descendants(matching: .any)["whatsnew-detail-muscleMap"].firstMatch
         XCTAssertTrue(
-            openMuscleMapButton.waitForExistence(timeout: 5),
-            "Muscle Map open button should exist in What's New detail"
+            muscleMapDetail.waitForExistence(timeout: 5),
+            "Muscle Map detail should open from What's New"
+        )
+
+        let artwork = app.descendants(matching: .any)[AXID.whatsNewArtwork("muscleMap", style: "hero")].firstMatch
+        XCTAssertTrue(
+            artwork.waitForExistence(timeout: 5),
+            "Muscle Map detail should show hero artwork"
         )
     }
 
