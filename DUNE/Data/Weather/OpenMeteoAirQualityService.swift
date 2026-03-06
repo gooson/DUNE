@@ -8,23 +8,31 @@ import Foundation
 /// `@unchecked Sendable`: mutable `cached` property protected by `NSLock`.
 /// Consistent with `OpenMeteoService` pattern in this project.
 final class OpenMeteoAirQualityService: AirQualityFetching, @unchecked Sendable {
-    private var cached: AirQualitySnapshot?
+    private struct CacheEntry: Sendable {
+        let location: OpenMeteoRequestLocation
+        let snapshot: AirQualitySnapshot
+    }
+
+    private var cached: CacheEntry?
     private let lock = NSLock()
     private let session: URLSession
 
-    private static let decoder = JSONDecoder()
+    private static func makeDecoder() -> JSONDecoder { JSONDecoder() }
 
     init(session: URLSession = .shared) {
         self.session = session
     }
 
     func fetchAirQuality(for location: CLLocation) async throws -> AirQualitySnapshot {
-        if let snapshot = lock.withLock({ cached }), !snapshot.isStale {
-            return snapshot
+        let requestLocation = OpenMeteoRequestLocation(location: location)
+
+        if let cached = lock.withLock({ cached }),
+           cached.location == requestLocation,
+           !cached.snapshot.isStale {
+            return cached.snapshot
         }
 
-        let url = try buildURL(latitude: location.coordinate.latitude,
-                               longitude: location.coordinate.longitude)
+        let url = try buildURL(for: requestLocation)
         let (data, response) = try await session.data(from: url)
 
         guard let httpResponse = response as? HTTPURLResponse else {
@@ -34,21 +42,23 @@ final class OpenMeteoAirQualityService: AirQualityFetching, @unchecked Sendable 
             throw OpenMeteoAirQualityError.httpError(httpResponse.statusCode)
         }
 
-        let decoded = try Self.decoder.decode(AirQualityResponse.self, from: data)
+        let decoded = try Self.makeDecoder().decode(AirQualityResponse.self, from: data)
         let snapshot = mapToSnapshot(decoded)
-        lock.withLock { cached = snapshot }
+        lock.withLock {
+            cached = CacheEntry(location: requestLocation, snapshot: snapshot)
+        }
         return snapshot
     }
 
     // MARK: - URL
 
-    private func buildURL(latitude: Double, longitude: Double) throws -> URL {
+    private func buildURL(for location: OpenMeteoRequestLocation) throws -> URL {
         guard var components = URLComponents(string: "https://air-quality-api.open-meteo.com/v1/air-quality") else {
             throw OpenMeteoAirQualityError.invalidURL
         }
         components.queryItems = [
-            URLQueryItem(name: "latitude", value: String(format: "%.2f", latitude)),
-            URLQueryItem(name: "longitude", value: String(format: "%.2f", longitude)),
+            URLQueryItem(name: "latitude", value: String(format: "%.2f", location.latitude)),
+            URLQueryItem(name: "longitude", value: String(format: "%.2f", location.longitude)),
             URLQueryItem(
                 name: "current",
                 value: "pm10,pm2_5,us_aqi,european_aqi,ozone,nitrogen_dioxide,sulphur_dioxide,carbon_monoxide"
@@ -70,12 +80,13 @@ final class OpenMeteoAirQualityService: AirQualityFetching, @unchecked Sendable 
 
     private func mapToSnapshot(_ response: AirQualityResponse) -> AirQualitySnapshot {
         let current = response.current
+        let parser = OpenMeteoDateParser()
 
         let hourlyItems: [AirQualitySnapshot.HourlyAirQuality]
         if let hourly = response.hourly {
             let count = hourly.time.count
             hourlyItems = (0..<Swift.min(24, count)).compactMap { i -> AirQualitySnapshot.HourlyAirQuality? in
-                guard let date = OpenMeteoService.parseISO8601(hourly.time[i]),
+                guard let date = parser.parseISO8601(hourly.time[i]),
                       i < hourly.pm2_5.count,
                       i < hourly.pm10.count else { return nil }
                 return AirQualitySnapshot.HourlyAirQuality(
