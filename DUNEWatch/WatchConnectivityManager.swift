@@ -32,6 +32,30 @@ enum WatchLibrarySyncRequestPolicy {
     }
 }
 
+/// Pure helpers for delete-workout command deduplication to avoid accidental repeated deletes.
+enum WatchDeleteRequestPolicy {
+    static let dedupeWindow: TimeInterval = 30
+
+    static func shouldProcess(
+        workoutUUID: UUID,
+        at now: Date,
+        processedAtByWorkoutID: inout [UUID: Date],
+        dedupeWindow: TimeInterval = dedupeWindow
+    ) -> Bool {
+        processedAtByWorkoutID = processedAtByWorkoutID.filter {
+            now.timeIntervalSince($0.value) <= dedupeWindow
+        }
+
+        if let processedAt = processedAtByWorkoutID[workoutUUID],
+           now.timeIntervalSince(processedAt) < dedupeWindow {
+            return false
+        }
+
+        processedAtByWorkoutID[workoutUUID] = now
+        return true
+    }
+}
+
 /// Watch-side WatchConnectivity manager.
 /// Receives workout state from iPhone and sends completed sets back.
 @Observable
@@ -65,6 +89,7 @@ final class WatchConnectivityManager: NSObject {
 
     private var lastExerciseLibrarySyncRequestAt: Date?
     private var lastWorkoutTemplateSyncRequestAt: Date?
+    private var deleteRequestProcessedAtByWorkoutID: [UUID: Date] = [:]
 
     private override init() {
         super.init()
@@ -315,10 +340,23 @@ extension WatchConnectivityManager {
             syncedThemeRawValue = AppTheme.normalizedRawValue(fromPersistedRawValue: themeRaw) ?? themeRaw
         }
 
-        if let workoutUUID = parsed.deleteWorkoutUUID, !workoutUUID.isEmpty {
-            Task {
-                await deleteWorkoutFromHealthKit(uuidString: workoutUUID)
+        if let workoutUUIDString = parsed.deleteWorkoutUUID,
+           let workoutUUID = UUID(uuidString: workoutUUIDString) {
+            let now = Date()
+            guard WatchDeleteRequestPolicy.shouldProcess(
+                workoutUUID: workoutUUID,
+                at: now,
+                processedAtByWorkoutID: &deleteRequestProcessedAtByWorkoutID
+            ) else {
+                Self.logger.info("Ignored duplicated delete request for workout UUID: \(workoutUUIDString, privacy: .public)")
+                return
             }
+
+            Task {
+                await deleteWorkoutFromHealthKit(uuid: workoutUUID)
+            }
+        } else if let workoutUUIDString = parsed.deleteWorkoutUUID, !workoutUUIDString.isEmpty {
+            Self.logger.error("Ignored invalid deleteWorkoutUUID payload: \(workoutUUIDString, privacy: .public)")
         }
     }
 
@@ -423,8 +461,7 @@ extension WatchConnectivityManager {
         }
     }
 
-    private func deleteWorkoutFromHealthKit(uuidString: String) async {
-        guard let uuid = UUID(uuidString: uuidString) else { return }
+    private func deleteWorkoutFromHealthKit(uuid: UUID) async {
         let store = HKHealthStore()
         let predicate = HKQuery.predicateForObject(with: uuid)
         let descriptor = HKSampleQueryDescriptor(
