@@ -1991,31 +1991,39 @@ private struct SolarSunBurstOverlay: View {
             )
 
             ZStack {
-                ForEach(0..<rayCount, id: \.self) { idx in
-                    let progress = Double(idx) / Double(max(rayCount, 1))
-                    let angle = progress * 360 + Double(phase) * 14
-                    let pulse = 1.14 + 0.36 * abs(sin(Double(phase) * 0.9 + progress * 8.4))
-                    let beamLength = radius * CGFloat(pulse)
-                    let beamHeight = max(1.8, radius * 0.11 - CGFloat(idx % 3) * 0.55)
+                // Rays — clipped within glow halo boundary
+                Group {
+                    ForEach(0..<rayCount, id: \.self) { idx in
+                        let progress = Double(idx) / Double(max(rayCount, 1))
+                        let angle = progress * 360 + Double(phase) * 14
+                        let pulse = 1.14 + 0.36 * abs(sin(Double(phase) * 0.9 + progress * 8.4))
+                        let beamLength = radius * CGFloat(pulse)
+                        let beamHeight = max(1.8, radius * 0.11 - CGFloat(idx % 3) * 0.55)
 
-                    Capsule(style: .continuous)
-                        .fill(
-                            LinearGradient(
-                                colors: [
-                                    Color("SolarAccent").opacity(0.52 * intensityValue),
-                                    theme.solarGlowColor.opacity(0.34 * intensityValue),
-                                    .clear
-                                ],
-                                startPoint: .leading,
-                                endPoint: .trailing
+                        Capsule(style: .continuous)
+                            .fill(
+                                LinearGradient(
+                                    colors: [
+                                        Color("SolarAccent").opacity(0.52 * intensityValue),
+                                        theme.solarGlowColor.opacity(0.34 * intensityValue),
+                                        .clear
+                                    ],
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
                             )
-                        )
-                        .frame(width: beamLength, height: beamHeight)
-                        .position(x: center.x, y: center.y)
-                        .rotationEffect(.degrees(angle))
-                        .offset(x: beamLength * 0.44)
-                        .blendMode(.screen)
+                            .frame(width: beamLength, height: beamHeight)
+                            .position(x: center.x, y: center.y)
+                            .rotationEffect(.degrees(angle))
+                            .offset(x: beamLength * 0.44)
+                            .blendMode(.screen)
+                    }
                 }
+                .mask(
+                    Circle()
+                        .frame(width: radius * 2.3, height: radius * 2.3)
+                        .position(x: center.x, y: center.y)
+                )
 
                 Circle()
                     .fill(
@@ -2049,6 +2057,7 @@ private struct SolarSunBurstOverlay: View {
                     .position(x: center.x, y: center.y)
                     .shadow(color: Color("SolarAccent").opacity(0.28 * intensityValue), radius: radius * 0.20)
 
+                // Rotating ring — fits within glow halo
                 Circle()
                     .stroke(
                         AngularGradient(
@@ -2063,7 +2072,7 @@ private struct SolarSunBurstOverlay: View {
                         ),
                         lineWidth: radius * 0.16
                     )
-                    .frame(width: radius * 2.8, height: radius * 2.8)
+                    .frame(width: radius * 2.1, height: radius * 2.1)
                     .position(x: center.x, y: center.y)
                     .blur(radius: reduceMotion ? 1.8 : 2.8)
                     .rotationEffect(.degrees(Double(phase) * 24))
