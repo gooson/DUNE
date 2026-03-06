@@ -220,6 +220,21 @@ struct WorkoutSessionViewModelTests {
 
     @Test("Stair level adjusts MET and persists as set intensity")
     func stairLevelAdjustsMETAndPersistsIntensity() {
+        final class LockedDoubleBox: @unchecked Sendable {
+            private let lock = NSLock()
+            private var storage: Double = 0
+
+            func set(_ value: Double) {
+                lock.withLock {
+                    storage = value
+                }
+            }
+
+            func get() -> Double {
+                lock.withLock { storage }
+            }
+        }
+
         struct CapturingCalorieService: CalorieEstimating {
             let onEstimate: @Sendable (Double) -> Void
 
@@ -229,7 +244,7 @@ struct WorkoutSessionViewModelTests {
             }
         }
 
-        var capturedMET: Double = 0
+        let capturedMET = LockedDoubleBox()
         let exercise = ExerciseDefinition(
             id: "stair-climber",
             name: "Stair Climber",
@@ -246,7 +261,7 @@ struct WorkoutSessionViewModelTests {
         let vm = WorkoutSessionViewModel(
             exercise: exercise,
             calorieService: CapturingCalorieService { met in
-                capturedMET = met
+                capturedMET.set(met)
             }
         )
 
@@ -258,7 +273,7 @@ struct WorkoutSessionViewModelTests {
         let record = vm.createValidatedRecord()
         #expect(record != nil)
         #expect(record?.completedSets.first?.intensity == 8)
-        #expect(abs(capturedMET - 14.4) < 0.0001)
+        #expect(abs(capturedMET.get() - 14.4) < 0.0001)
     }
 
     @Test("Exercise input type is passed through")

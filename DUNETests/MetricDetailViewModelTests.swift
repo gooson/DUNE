@@ -129,10 +129,10 @@ struct MetricDetailViewModelTests {
         let today = calendar.startOfDay(for: Date())
         let steps = StubStepsService(stepsCollection: [
             (date: calendar.date(byAdding: .day, value: -1, to: today)!, sum: 8000),
-            (date: today, sum: 10000),
+            (date: today, sum: 6321),
         ])
         let vm = makeVM(steps: steps)
-        vm.configure(category: .steps, currentValue: 10000, lastUpdated: Date())
+        vm.configure(category: .steps, currentValue: 10049, lastUpdated: Date())
 
         await vm.loadData()
 
@@ -141,7 +141,8 @@ struct MetricDetailViewModelTests {
         // Verify actual data points are present
         let nonZero = vm.chartData.filter { $0.value > 0 }
         #expect(nonZero.count == 2)
-        #expect(vm.summaryStats!.sum == 18000.0)
+        #expect(vm.summaryStats!.sum == 14321.0)
+        #expect(vm.currentValue == 6321.0)
     }
 
     // MARK: - Exercise
