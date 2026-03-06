@@ -9,20 +9,6 @@ enum WhatsNewArea: String, Hashable, Sendable {
     case settings
 }
 
-enum WhatsNewDestination: String, Hashable, Sendable {
-    case todayOverview
-    case conditionScore
-    case weatherDetail
-    case sleepDetail
-    case notificationHub
-    case muscleMap
-    case trainingReadiness
-    case wellnessScore
-    case activityOverview
-    case lifeOverview
-    case appearanceSettings
-}
-
 enum WhatsNewFeature: String, CaseIterable, Identifiable, Hashable, Sendable {
     case widgets
     case conditionScore
@@ -52,33 +38,6 @@ enum WhatsNewFeature: String, CaseIterable, Identifiable, Hashable, Sendable {
             .settings
         case .watchQuickStart:
             .watch
-        }
-    }
-
-    var destination: WhatsNewDestination? {
-        switch self {
-        case .widgets:
-            .todayOverview
-        case .conditionScore:
-            .conditionScore
-        case .weather:
-            .weatherDetail
-        case .sleepDebt:
-            .sleepDetail
-        case .notifications:
-            .notificationHub
-        case .muscleMap:
-            .muscleMap
-        case .trainingReadiness:
-            .trainingReadiness
-        case .wellness:
-            .wellnessScore
-        case .habits:
-            .lifeOverview
-        case .themes:
-            .appearanceSettings
-        case .watchQuickStart:
-            .activityOverview
         }
     }
 

@@ -11,6 +11,8 @@ status: draft
 
 현재 앱은 Today, Activity, Wellness, Life, Apple Watch 연동까지 기능 폭이 넓지만, 사용자가 첫 배포 후 또는 업데이트 후 "무엇이 새로워졌는지" 한 번에 이해할 수 있는 공간이 없다.
 또한 출시 공지에 활용할 수 있는 기능 설명과 스크린샷 자산이 앱 내부 구조와 분리되어 있어, 버전별 변경점을 누적 관리하고 재사용하기 어렵다.
+현재 구현 기준으로는 실제 캡처 자산 없이 추상적인 mock artwork에 의존하고 있어, 기능 이해를 돕기보다 장식 요소에 가깝다.
+또한 detail 화면의 `기능 열기` CTA는 라우팅 안정성이 기대만큼 높지 않고, 공지/소개 맥락에서 필수 효용도 낮아 제품 신뢰감을 해칠 수 있다.
 
 필요한 것은 다음 조건을 모두 만족하는 `What's New` 공간이다.
 
@@ -33,12 +35,13 @@ status: draft
 ## Success Criteria
 
 1. 첫 설치 또는 새 버전 업데이트 후 앱 진입 시 `What's New`가 자동으로 노출된다.
-2. 3-5개 핵심 업데이트를 스크린샷과 짧은 설명으로 직관적으로 이해할 수 있다.
+2. 3-5개 핵심 업데이트를 실제 화면에 가까운 캡처 수준 스크린샷과 짧은 설명으로 직관적으로 이해할 수 있다.
 3. iPhone 기능과 Apple Watch 기능을 한 공간에서 구분감 있게 보여줄 수 있다.
 4. 사용자가 `Settings > About`에서 언제든 다시 열 수 있다.
 5. 서버 없이 앱 번들만으로 버전별 내용을 누적 관리할 수 있다.
 6. `en / ko / ja` 다국어를 지원한다.
 7. 출시 직전 텍스트/스크린샷 교체 작업이 단순해야 한다.
+8. 공지 화면이 "읽고 이해하는 용도"에 집중되고, 불안정한 탐색 CTA 없이도 전달력이 유지된다.
 
 ## Current Feature Inventory
 
@@ -137,9 +140,10 @@ status: draft
   - Wellness
   - Life
   - Apple Watch
-- CTA
-  - 관련 탭으로 이동
-  - 또는 "앱에서 직접 확인해보기" 안내
+- Navigation
+  - 상세 카드는 읽기 중심으로 유지
+  - MVP에서는 별도 `기능 열기` CTA를 두지 않음
+  - 재진입 경로는 `Settings > About > What's New` 하나로 단순화
 
 #### 누적 히스토리 섹션
 
@@ -148,6 +152,24 @@ status: draft
 - "이번 버전"과 "이전 버전"의 위계를 분명히 유지
 
 이 구조면 배포 공지에도 같은 내용을 재활용하기 쉽고, 앱 안에서도 버전 히스토리 역할을 함께 수행할 수 있다.
+
+### 2.5. Screenshot Strategy
+
+이번 피드백 기준으로 screenshot 정책은 다음처럼 고정하는 것이 적절하다.
+
+- 실제 사용 화면과 유사한 "캡처 수준" 이미지를 사용한다.
+- 빈 상태나 추상 일러스트 대신, 목 데이터로 채운 대표 시나리오를 준비한 뒤 캡처한다.
+- 카드 1장당 메시지 1개만 전달한다. 한 장에 여러 기능을 합성한 장식형 이미지는 피한다.
+- 텍스트는 이미지 안에 최소만 남기고, 설명은 카드 caption으로 분리한다.
+- iPhone / Apple Watch는 각각 실제 디바이스 프레임 또는 거의 그에 준하는 비율로 정리한다.
+
+권장 캡처 흐름:
+
+1. demo/mock 데이터 세트 준비
+2. 강조할 상태가 분명한 화면까지 이동
+3. 불필요한 시스템 잡음 제거 후 캡처
+4. asset name 규칙에 맞춰 등록
+5. 설명 문구와 화면 내용이 정확히 일치하는지 출시 전 점검
 
 ### 3. Content Model (No Server)
 
@@ -190,6 +212,7 @@ struct WhatsNewItem: Identifiable, Hashable {
 - 버전별 릴리스 엔트리를 한 파일에서 관리
 - 스크린샷은 안정적인 asset name 규칙으로 등록
 - 텍스트는 `.xcstrings` 기반으로 관리
+- mock 데이터 주입 방법과 캡처 체크리스트를 함께 문서화
 
 편집 포인트:
 
@@ -197,6 +220,7 @@ struct WhatsNewItem: Identifiable, Hashable {
 - 카드 순서 조정
 - 강조 기능 추가/제거
 - 스크린샷 asset 교체
+- 캡처용 목 데이터 갱신
 
 즉, "개발 완료 후 마지막 순간에도 문구를 손보기 쉬운 구조"가 중요하다.
 
@@ -230,7 +254,7 @@ struct WhatsNewItem: Identifiable, Hashable {
 1. 사용자가 새 버전 앱 실행
 2. 루트 로딩 이후 `What's New` 자동 표시
 3. 핵심 카드 3-5개 확인
-4. 닫기 또는 CTA 탭
+4. 닫기
 5. 이후에는 `Settings > About > What's New`에서 재진입
 
 이 흐름이 가장 단순하고, 출시 공지용 자산과도 동일한 서사를 유지할 수 있다.
@@ -243,12 +267,14 @@ struct WhatsNewItem: Identifiable, Hashable {
 - 자동 표시 로직은 기존 onboarding, permission prompt, sheet 표시와 충돌하지 않도록 조정 필요
 - Watch 기능을 포함하되, 실제 표시 공간은 우선 iPhone 앱 안에서 해결하는 것이 단순함
 - 다국어 지원 시 텍스트뿐 아니라 스크린샷 전략도 같이 설계해야 함
+- 현재는 fallback artwork만 존재하고 screenshot asset 파이프라인이 없어, 목 데이터와 캡처 절차를 먼저 정의해야 함
 
 ### 운영 제약
 
 - 버전이 쌓일수록 이미지 자산과 텍스트 유지보수 비용이 증가
 - 화면이 자주 바뀌면 스크린샷이 빠르게 낡을 수 있음
 - 출시 직전 수정이 가능해야 하므로 콘텐츠 구조가 지나치게 복잡하면 안 됨
+- 동작 불안정한 CTA는 공지 품질 전체를 떨어뜨리므로, 소개 맥락에서는 제거가 더 안전함
 
 ## Edge Cases
 
@@ -266,11 +292,13 @@ struct WhatsNewItem: Identifiable, Hashable {
 - [ ] 첫 설치/업데이트 후 자동 표시되는 `What's New` 화면
 - [ ] `Settings > About` 재진입 포인트
 - [ ] 현재 버전용 highlights 3-5개
-- [ ] 스크린샷 + 짧은 설명 카드 레이아웃
+- [ ] 캡처 수준 스크린샷 + 짧은 설명 카드 레이아웃
 - [ ] `Today / Activity / Wellness / Life / Apple Watch` 기준 분류
 - [ ] 버전별 정적 데이터 구조
 - [ ] `en / ko / ja` 다국어 지원
 - [ ] last seen version 저장
+- [ ] 목 데이터 기반 캡처 자산 준비
+- [ ] detail 화면의 `기능 열기` CTA 제거
 
 ### Nice-to-have (Future)
 
@@ -286,7 +314,7 @@ struct WhatsNewItem: Identifiable, Hashable {
 
 1. 자동 표시 대상은 `첫 설치 + 업데이트` 모두인지, 아니면 `업데이트`만인지?
 2. 사용자가 닫으면 같은 버전에서는 다시 자동 표시하지 않을지?
-3. MVP에서 CTA는 탭 이동까지만 할지, 상세 화면 deep link까지 포함할지?
+3. 스크린샷 자산을 앱 내 `What's New` 전용으로 쓸지, App Store/SNS 공지까지 같은 소스로 재사용할지?
 4. 스크린샷은 공통 이미지를 우선 쓸지, locale별 별도 이미지를 운영할지?
 
 ## Next Steps
@@ -295,4 +323,5 @@ struct WhatsNewItem: Identifiable, Hashable {
 - [ ] 진입 방식 확정: sheet vs full-screen cover
 - [ ] 콘텐츠 소스 확정: Swift catalog vs bundled JSON
 - [ ] MVP에 포함할 대표 카드 3-5개 선정
-- [ ] 스크린샷 캡처 가이드 정의
+- [ ] 목 데이터 세트 정의 및 캡처 체크리스트 작성
+- [ ] `기능 열기` 제거 후 detail 화면 하단 액션 영역 정리

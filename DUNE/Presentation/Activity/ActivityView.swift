@@ -17,8 +17,6 @@ struct ActivityView: View {
     @State private var missingNotificationWorkoutID: String?
     @State private var syncToastMessage: String?
     @State private var syncToastDismissTask: Task<Void, Never>?
-    @State private var showWhatsNewTrainingReadinessDetail = false
-    @State private var showWhatsNewMuscleMapDetail = false
     @Environment(\.modelContext) private var modelContext
 
     private let library: ExerciseLibraryQuerying = ExerciseLibraryService.shared
@@ -34,8 +32,6 @@ struct ActivityView: View {
     private let notificationWorkoutID: String?
     private let notificationRouteSignal: Int
     private let notificationPersonalRecordsSignal: Int
-    private let whatsNewMuscleMapSignal: Int
-    private let whatsNewTrainingReadinessSignal: Int
 
     private enum ScrollAnchor: Hashable {
         case top
@@ -86,9 +82,7 @@ struct ActivityView: View {
         refreshSignal: Int = 0,
         notificationWorkoutID: String? = nil,
         notificationRouteSignal: Int = 0,
-        notificationPersonalRecordsSignal: Int = 0,
-        whatsNewMuscleMapSignal: Int = 0,
-        whatsNewTrainingReadinessSignal: Int = 0
+        notificationPersonalRecordsSignal: Int = 0
     ) {
         _viewModel = State(initialValue: ActivityViewModel(sharedHealthDataService: sharedHealthDataService))
         self.scrollToTopSignal = scrollToTopSignal
@@ -96,8 +90,6 @@ struct ActivityView: View {
         self.notificationWorkoutID = notificationWorkoutID
         self.notificationRouteSignal = notificationRouteSignal
         self.notificationPersonalRecordsSignal = notificationPersonalRecordsSignal
-        self.whatsNewMuscleMapSignal = whatsNewMuscleMapSignal
-        self.whatsNewTrainingReadinessSignal = whatsNewTrainingReadinessSignal
     }
 
     var body: some View {
@@ -299,17 +291,6 @@ struct ActivityView: View {
         .navigationDestination(for: ActivityDetailDestination.self) { destination in
             activityDetailView(for: destination)
         }
-        .navigationDestination(isPresented: $showWhatsNewTrainingReadinessDetail) {
-            TrainingReadinessDetailView(
-                readiness: viewModel.trainingReadiness,
-                hrvDailyAverages: viewModel.hrvDailyAverages,
-                rhrDailyData: viewModel.rhrDailyData,
-                sleepDailyData: viewModel.sleepDailyData
-            )
-        }
-        .navigationDestination(isPresented: $showWhatsNewMuscleMapDetail) {
-            MuscleMapDetailView(fatigueStates: viewModel.fatigueStates)
-        }
         .navigationDestination(item: $notificationActivityDestination) { destination in
             activityDetailView(for: destination.destination)
         }
@@ -347,12 +328,6 @@ struct ActivityView: View {
         }
         .task(id: notificationPersonalRecordsSignal) {
             await handleExternalPersonalRecordsRoute()
-        }
-        .task(id: whatsNewMuscleMapSignal) {
-            await handleWhatsNewMuscleMapRoute()
-        }
-        .task(id: whatsNewTrainingReadinessSignal) {
-            await handleWhatsNewTrainingReadinessRoute()
         }
         // Coalesce frequent SwiftData sync updates into a cancellable/debounced derived-state refresh.
         .task(id: recordsUpdateKey) {
@@ -547,26 +522,6 @@ struct ActivityView: View {
 
         notificationActivityDestination = nil
         notificationActivityDestination = NotificationActivityDestination(destination: .personalRecords)
-    }
-
-    private func handleWhatsNewMuscleMapRoute() async {
-        guard whatsNewMuscleMapSignal > 0 else { return }
-
-        if viewModel.fatigueStates.isEmpty {
-            await viewModel.loadActivityData()
-        }
-
-        showWhatsNewMuscleMapDetail = true
-    }
-
-    private func handleWhatsNewTrainingReadinessRoute() async {
-        guard whatsNewTrainingReadinessSignal > 0 else { return }
-
-        if viewModel.trainingReadiness == nil {
-            await viewModel.loadActivityData()
-        }
-
-        showWhatsNewTrainingReadinessDetail = viewModel.trainingReadiness != nil
     }
 
     private var recentExerciseIDs: [String] {

@@ -15,7 +15,6 @@ struct DUNEApp: App {
     @State private var hasSeededMockData = false
     @State private var whatsNewReleases: [WhatsNewRelease] = []
     @State private var activeWhatsNewVersion: String?
-    @State private var pendingWhatsNewDestination: WhatsNewDestination?
 
     let modelContainer: ModelContainer
     private let sharedHealthDataService: SharedHealthDataService
@@ -227,7 +226,6 @@ struct DUNEApp: App {
             CloudSyncConsentView(isPresented: $showConsentSheet)
         }
         .fullScreenCover(isPresented: $showWhatsNewSheet, onDismiss: {
-            handlePendingWhatsNewDestinationIfNeeded()
             markActiveWhatsNewVersionAsPresentedIfNeeded()
         }) {
             NavigationStack {
@@ -237,10 +235,7 @@ struct DUNEApp: App {
                     WhatsNewView(
                         releases: whatsNewReleases,
                         mode: .automatic
-                    ) { destination in
-                        pendingWhatsNewDestination = destination
-                        showWhatsNewSheet = false
-                    }
+                    )
                 }
             }
         }
@@ -338,13 +333,6 @@ struct DUNEApp: App {
         whatsNewReleases = whatsNewManager.orderedReleases(preferredVersion: currentRelease.version)
         activeWhatsNewVersion = currentRelease.version
         showWhatsNewSheet = !whatsNewReleases.isEmpty
-    }
-
-    @MainActor
-    private func handlePendingWhatsNewDestinationIfNeeded() {
-        guard let destination = pendingWhatsNewDestination else { return }
-        pendingWhatsNewDestination = nil
-        whatsNewManager.requestNavigation(destination)
     }
 
     @MainActor
