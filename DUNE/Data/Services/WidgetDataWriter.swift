@@ -4,6 +4,7 @@ import WidgetKit
 /// Writes score data to App Group UserDefaults for the widget extension to read.
 /// Each ViewModel updates its own score fields, preserving the others.
 /// All callers are @MainActor, so read-modify-write is serialized.
+@MainActor
 enum WidgetDataWriter {
     private static let encoder: JSONEncoder = {
         let encoder = JSONEncoder()
