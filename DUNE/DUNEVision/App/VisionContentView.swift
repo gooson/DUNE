@@ -27,7 +27,8 @@ struct VisionContentView: View {
                     VisionDashboardView(
                         sharedHealthDataService: sharedHealthDataService,
                         refreshSignal: refreshSignal,
-                        onOpen3DCharts: { openWindow(id: "chart3d") }
+                        onOpen3DCharts: { openWindow(id: "chart3d") },
+                        onOpenVolumetric: { openWindow(id: "spatial-volume") }
                     )
                 }
             } label: {
