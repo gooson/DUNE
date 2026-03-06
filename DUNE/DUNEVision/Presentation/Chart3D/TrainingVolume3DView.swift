@@ -1,8 +1,8 @@
 import SwiftUI
 import Charts
 
-/// 3D bar chart visualizing training volume across muscle groups and weeks.
-/// Uses Chart3D + BarMark to show a spatial representation of training distribution.
+/// 3D bar-style chart visualizing training volume across muscle groups and weeks.
+/// Uses Chart3D + RectangleMark to show a spatial representation of training distribution.
 ///
 /// - X axis: Muscle Group
 /// - Y axis: Volume (kg)
@@ -17,20 +17,7 @@ struct TrainingVolume3DView: View {
         VStack(spacing: 16) {
             weekRangePicker
 
-            Chart3D {
-                ForEach(sampleData) { point in
-                    BarMark(
-                        x: .value("Muscle", point.muscleGroup),
-                        y: .value("Volume", point.volume),
-                        z: .value("Week", point.week)
-                    )
-                    .foregroundStyle(by: .value("Muscle", point.muscleGroup))
-                }
-            }
-            .chart3DXAxisLabel("Muscle Group")
-            .chart3DYAxisLabel("Volume (kg)")
-            .chart3DZAxisLabel("Week")
-            .frame(minHeight: 400)
+            trainingVolumeChart
 
             volumeSummary
         }
@@ -48,6 +35,21 @@ struct TrainingVolume3DView: View {
 
     // MARK: - Components
 
+    private var trainingVolumeChart: some View {
+        Chart3D(sampleData) { point in
+            RectangleMark(
+                x: .value("Muscle", point.muscleGroup),
+                y: .value("Volume", point.volume),
+                z: .value("Week", point.week)
+            )
+            .foregroundStyle(by: .value("Muscle", point.muscleGroup))
+        }
+        .chartXAxisLabel("Muscle Group")
+        .chartYAxisLabel("Volume (kg)")
+        .chartZAxisLabel("Week")
+        .frame(minHeight: 400)
+    }
+
     private var weekRangePicker: some View {
         Picker("Weeks", selection: $weekRange) {
             Text("4 Weeks").tag(4)
@@ -59,16 +61,20 @@ struct TrainingVolume3DView: View {
 
     private var volumeSummary: some View {
         HStack(spacing: 16) {
-            ForEach(sortedMuscleVolumes.prefix(4), id: \.key) { muscle, total in
+            ForEach(topMuscleVolumes, id: \.key) { entry in
                 VStack(spacing: 4) {
-                    Text(muscle)
+                    Text(entry.key)
                         .font(.caption.bold())
-                    Text("\(Int(total)) kg")
+                    Text("\(Int(entry.value)) kg")
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                 }
             }
         }
+    }
+
+    private var topMuscleVolumes: [(key: String, value: Double)] {
+        Array(sortedMuscleVolumes.prefix(4))
     }
 
     private static func computeMuscleVolumes(from data: [TrainingVolumePoint]) -> [(key: String, value: Double)] {

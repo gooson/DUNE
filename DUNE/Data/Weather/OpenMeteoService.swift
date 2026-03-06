@@ -5,7 +5,12 @@ import Foundation
 /// Caches results for 60 minutes via WeatherSnapshot.isStale.
 /// Attribution: Open-Meteo.com (CC BY 4.0)
 final class OpenMeteoService: WeatherFetching, @unchecked Sendable {
-    private var cached: WeatherSnapshot?
+    private struct CacheEntry: Sendable {
+        let location: OpenMeteoRequestLocation
+        let snapshot: WeatherSnapshot
+    }
+
+    private var cached: CacheEntry?
     private let lock = NSLock()
     private let session: URLSession
 
@@ -17,12 +22,15 @@ final class OpenMeteoService: WeatherFetching, @unchecked Sendable {
     }
 
     func fetchWeather(for location: CLLocation) async throws -> WeatherSnapshot {
-        if let snapshot = lock.withLock({ cached }), !snapshot.isStale {
-            return snapshot
+        let requestLocation = OpenMeteoRequestLocation(location: location)
+
+        if let cached = lock.withLock({ cached }),
+           cached.location == requestLocation,
+           !cached.snapshot.isStale {
+            return cached.snapshot
         }
 
-        let url = try buildURL(latitude: location.coordinate.latitude,
-                               longitude: location.coordinate.longitude)
+        let url = try buildURL(for: requestLocation)
         let (data, response) = try await session.data(from: url)
 
         guard let httpResponse = response as? HTTPURLResponse else {
@@ -34,19 +42,21 @@ final class OpenMeteoService: WeatherFetching, @unchecked Sendable {
 
         let decoded = try Self.makeDecoder().decode(OpenMeteoResponse.self, from: data)
         let snapshot = mapToSnapshot(decoded)
-        lock.withLock { cached = snapshot }
+        lock.withLock {
+            cached = CacheEntry(location: requestLocation, snapshot: snapshot)
+        }
         return snapshot
     }
 
     // MARK: - URL
 
-    private func buildURL(latitude: Double, longitude: Double) throws -> URL {
+    private func buildURL(for location: OpenMeteoRequestLocation) throws -> URL {
         guard var components = URLComponents(string: "https://api.open-meteo.com/v1/forecast") else {
             throw OpenMeteoError.invalidURL
         }
         components.queryItems = [
-            URLQueryItem(name: "latitude", value: String(format: "%.2f", latitude)),
-            URLQueryItem(name: "longitude", value: String(format: "%.2f", longitude)),
+            URLQueryItem(name: "latitude", value: String(format: "%.2f", location.latitude)),
+            URLQueryItem(name: "longitude", value: String(format: "%.2f", location.longitude)),
             URLQueryItem(
                 name: "current",
                 value: "temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,wind_speed_10m,uv_index,is_day"
@@ -73,12 +83,13 @@ final class OpenMeteoService: WeatherFetching, @unchecked Sendable {
 
     private func mapToSnapshot(_ response: OpenMeteoResponse) -> WeatherSnapshot {
         let current = response.current
+        let parser = OpenMeteoDateParser()
 
         let hourlyItems: [WeatherSnapshot.HourlyWeather]
         if let hourly = response.hourly {
             let count = hourly.time.count
             hourlyItems = (0..<Swift.min(24, count)).compactMap { i -> WeatherSnapshot.HourlyWeather? in
-                guard let date = Self.parseISO8601(hourly.time[i]),
+                guard let date = parser.parseISO8601(hourly.time[i]),
                       i < hourly.temperature_2m.count,
                       i < hourly.weather_code.count else { return nil }
                 let feelsLikeVal = (i < (hourly.apparent_temperature?.count ?? 0))
@@ -116,7 +127,7 @@ final class OpenMeteoService: WeatherFetching, @unchecked Sendable {
         if let daily = response.daily {
             let count = daily.time.count
             dailyItems = (0..<Swift.min(7, count)).compactMap { i -> WeatherSnapshot.DailyForecast? in
-                guard let date = Self.parseDateOnly(daily.time[i]),
+                guard let date = parser.parseDateOnly(daily.time[i]),
                       i < daily.temperature_2m_max.count,
                       i < daily.temperature_2m_min.count,
                       i < daily.weather_code.count else { return nil }
@@ -192,55 +203,14 @@ final class OpenMeteoService: WeatherFetching, @unchecked Sendable {
         }
     }
 
-    // MARK: - ISO 8601 Parsing
-
-    private enum DateParsing {
-        // nonisolated(unsafe): ISO8601DateFormatter/DateFormatter are NSObject-based and not Sendable,
-        // but these are only read after initialization (immutable in practice).
-        nonisolated(unsafe) static let isoWithFractional: ISO8601DateFormatter = {
-            let f = ISO8601DateFormatter()
-            f.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-            return f
-        }()
-
-        nonisolated(unsafe) static let isoBasic: ISO8601DateFormatter = {
-            let f = ISO8601DateFormatter()
-            f.formatOptions = [.withInternetDateTime]
-            return f
-        }()
-
-        // Open-Meteo hourly strings like "2026-02-28T14:00" lack timezone info.
-        // With timezone=auto, these represent local time at the requested location.
-        // We treat them as UTC-relative for display consistency.
-        static let openMeteoHourly: DateFormatter = {
-            let f = DateFormatter()
-            f.dateFormat = "yyyy-MM-dd'T'HH:mm"
-            f.locale = Locale(identifier: "en_US_POSIX")
-            f.timeZone = TimeZone(identifier: "UTC")
-            return f
-        }()
-
-        // Open-Meteo daily strings like "2026-02-28" (date only, no time).
-        // Uses .current timezone: with timezone=auto, API returns local dates matching device timezone.
-        static let openMeteoDaily: DateFormatter = {
-            let f = DateFormatter()
-            f.dateFormat = "yyyy-MM-dd"
-            f.locale = Locale(identifier: "en_US_POSIX")
-            f.timeZone = TimeZone.current
-            return f
-        }()
-    }
-
     /// Parses Open-Meteo time strings. Supports full ISO 8601 and the compact "yyyy-MM-ddTHH:mm" format.
     static func parseISO8601(_ string: String) -> Date? {
-        if let date = DateParsing.isoWithFractional.date(from: string) { return date }
-        if let date = DateParsing.isoBasic.date(from: string) { return date }
-        return DateParsing.openMeteoHourly.date(from: string)
+        OpenMeteoDateParser().parseISO8601(string)
     }
 
     /// Parses Open-Meteo daily date strings ("yyyy-MM-dd" format).
     static func parseDateOnly(_ string: String) -> Date? {
-        DateParsing.openMeteoDaily.date(from: string)
+        OpenMeteoDateParser().parseDateOnly(string)
     }
 }
 
