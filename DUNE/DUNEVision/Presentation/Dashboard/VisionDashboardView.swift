@@ -6,6 +6,7 @@ struct VisionDashboardView: View {
     let sharedHealthDataService: SharedHealthDataService?
     let refreshSignal: Int
     let onOpen3DCharts: () -> Void
+    let onOpenVolumetric: () -> Void
 
     var body: some View {
         ScrollView {
@@ -18,7 +19,13 @@ struct VisionDashboardView: View {
         }
         .navigationTitle("Today")
         .toolbar {
-            ToolbarItem(placement: .primaryAction) {
+            ToolbarItemGroup(placement: .primaryAction) {
+                Button {
+                    onOpenVolumetric()
+                } label: {
+                    Label("Spatial Volume", systemImage: "cube.transparent")
+                }
+
                 Button {
                     onOpen3DCharts()
                 } label: {
@@ -56,6 +63,14 @@ struct VisionDashboardView: View {
     @ViewBuilder
     private var quickActionsSection: some View {
         HStack(spacing: 16) {
+            quickActionCard(
+                title: "Spatial Volume",
+                icon: "cube.transparent",
+                description: "Open the volumetric recovery scene"
+            ) {
+                onOpenVolumetric()
+            }
+
             quickActionCard(
                 title: "3D Health Data",
                 icon: "cube.fill",
@@ -110,9 +125,9 @@ struct VisionDashboardView: View {
 
     @ViewBuilder
     private func quickActionCard(
-        title: String,
+        title: LocalizedStringKey,
         icon: String,
-        description: String,
+        description: LocalizedStringKey,
         action: @escaping () -> Void
     ) -> some View {
         Button(action: action) {

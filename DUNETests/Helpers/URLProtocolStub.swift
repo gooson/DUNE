@@ -4,7 +4,7 @@ final class URLProtocolStub: URLProtocol, @unchecked Sendable {
     typealias Handler = @Sendable (URLRequest) throws -> (HTTPURLResponse, Data)
 
     private static let lock = NSLock()
-    private static var handler: Handler?
+    nonisolated(unsafe) private static var handler: Handler?
 
     static func setHandler(_ handler: @escaping Handler) {
         lock.withLock {
@@ -50,6 +50,25 @@ extension URLSession {
         let configuration = URLSessionConfiguration.ephemeral
         configuration.protocolClasses = [URLProtocolStub.self]
         return URLSession(configuration: configuration)
+    }
+}
+
+final class LockedValue<Value>: @unchecked Sendable {
+    private let lock = NSLock()
+    private var value: Value
+
+    init(_ value: Value) {
+        self.value = value
+    }
+
+    func withValue<T>(_ body: (inout Value) -> T) -> T {
+        lock.withLock {
+            body(&value)
+        }
+    }
+
+    func read() -> Value {
+        lock.withLock { value }
     }
 }
 
