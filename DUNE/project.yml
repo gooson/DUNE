@@ -5,6 +5,7 @@ options:
   deploymentTarget:
     iOS: "26.0"
     watchOS: "26.0"
+    visionOS: "26.0"
   xcodeVersion: "26.2"
   generateEmptyDirectories: true
   groupSortPosition: top
@@ -73,6 +74,11 @@ schemes:
     test:
       targets:
         - DUNEWatchUITests
+
+  DUNEVision:
+    build:
+      targets:
+        DUNEVision: all
 
 targets:
   DUNE:
@@ -291,3 +297,88 @@ targets:
         TEST_TARGET_NAME: DUNEWatch
     dependencies:
       - target: DUNEWatch
+
+  DUNEVision:
+    type: application
+    platform: visionOS
+    sources:
+      - path: DUNEVision
+        group: DUNEVision
+      # Shared Domain layer (100% reusable)
+      - path: Domain
+        group: DUNEVision/Domain
+      # Shared SwiftData models
+      - path: Data/Persistence/Models
+        group: DUNEVision/Data/Persistence/Models
+      - path: Data/Persistence/Migration
+        group: DUNEVision/Data/Persistence/Migration
+      # Shared HealthKit services
+      - path: Data/HealthKit
+        group: DUNEVision/Data/HealthKit
+        excludes:
+          - "CardioSessionManager.swift"
+      # Shared services
+      - path: Data/Services
+        group: DUNEVision/Data/Services
+      # Shared Colors
+      - path: ../Shared/Resources/Colors.xcassets
+        group: Shared/Resources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.raftel.dailve.vision
+        PRODUCT_NAME: DUNEVision
+        CURRENT_PROJECT_VERSION: "1"
+        MARKETING_VERSION: "0.2.0"
+        GENERATE_INFOPLIST_FILE: true
+        INFOPLIST_FILE: DUNEVision/Resources/Info.plist
+        INFOPLIST_KEY_CFBundleDisplayName: DUNE
+        XROS_DEPLOYMENT_TARGET: "26.0"
+        SWIFT_VERSION: "6.0"
+        SWIFT_STRICT_CONCURRENCY: complete
+        DEVELOPMENT_TEAM: "4GWU9QB2JZ"
+        CODE_SIGN_IDENTITY: "Apple Development"
+        CODE_SIGN_ENTITLEMENTS: DUNEVision/Resources/DUNEVision.entitlements
+        INFOPLIST_KEY_NSHealthShareUsageDescription: "DUNE needs access to your health data to display condition scores, workout history, and health trends."
+        INFOPLIST_KEY_NSHealthUpdateUsageDescription: "DUNE may write workout and body composition data to Health."
+    entitlements:
+      path: DUNEVision/Resources/DUNEVision.entitlements
+      properties:
+        com.apple.developer.healthkit: true
+        com.apple.developer.healthkit.access: []
+        com.apple.developer.icloud-container-identifiers:
+          - iCloud.com.raftel.dailve
+        com.apple.developer.icloud-services:
+          - CloudKit
+        com.apple.developer.ubiquity-kvstore-identifier: "$(TeamIdentifierPrefix)$(CFBundleIdentifier)"
+    dependencies:
+      - sdk: HealthKit.framework
+      - target: DUNEVisionWidgets
+        embed: true
+
+  DUNEVisionWidgets:
+    type: app-extension
+    platform: visionOS
+    sources:
+      - path: DUNEVisionWidgets
+        group: DUNEVisionWidgets
+      # Shared Domain models for widget data
+      - path: Domain/Models/HealthMetric.swift
+        group: DUNEVisionWidgets/Domain
+      - path: Domain/Models/MuscleGroup.swift
+        group: DUNEVisionWidgets/Domain
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.raftel.dailve.vision.widgets
+        PRODUCT_NAME: DUNEVisionWidgets
+        CURRENT_PROJECT_VERSION: "1"
+        MARKETING_VERSION: "0.2.0"
+        GENERATE_INFOPLIST_FILE: true
+        INFOPLIST_FILE: DUNEVisionWidgets/Resources/Info.plist
+        XROS_DEPLOYMENT_TARGET: "26.0"
+        SWIFT_VERSION: "6.0"
+        SWIFT_STRICT_CONCURRENCY: complete
+        DEVELOPMENT_TEAM: "4GWU9QB2JZ"
+        CODE_SIGN_IDENTITY: "Apple Development"
+    dependencies:
+      - sdk: WidgetKit.framework
+      - sdk: SwiftUI.framework
