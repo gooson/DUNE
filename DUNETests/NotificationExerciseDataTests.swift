@@ -73,14 +73,17 @@ struct NotificationUserInfoRoundTripTests {
         #expect(userInfo["notificationRouteKind"] as? String == "workoutDetail")
         #expect(userInfo["notificationWorkoutID"] as? String == "workout-abc-123")
 
-        // Simulate notification tap: feed userInfo back through parseRoute
-        let parsedRoute = parseRouteFromUserInfo(manager: manager, userInfo: userInfo)
+        // Exercise only the route payload to validate encode → decode parity.
+        let parsedRoute = parseRouteFromUserInfo(
+            manager: manager,
+            userInfo: routePayload(from: userInfo)
+        )
         #expect(parsedRoute != nil)
         #expect(parsedRoute?.destination == .workoutDetail)
         #expect(parsedRoute?.workoutID == "workout-abc-123")
     }
 
-    @Test("insight without route produces userInfo with itemID only")
+    @Test("insight without route produces userInfo with itemID only and opens notificationHub")
     func noRouteInsight() {
         let manager = makeManager()
         let insight = HealthInsight(
@@ -96,15 +99,16 @@ struct NotificationUserInfoRoundTripTests {
         #expect(userInfo["notificationRouteKind"] == nil)
         #expect(userInfo["notificationWorkoutID"] == nil)
 
-        let parsedRoute = parseRouteFromUserInfo(manager: manager, userInfo: userInfo)
-        #expect(parsedRoute == nil)
+        manager.handleNotificationResponse(userInfo: userInfo)
+
+        let parsedRoute = manager.consumePendingNavigationRequest()?.route
+        #expect(parsedRoute?.destination == .notificationHub)
     }
 
     @Test("corrupted userInfo with missing routeKind returns nil route")
     func missingRouteKind() {
         let manager = makeManager()
         let userInfo: [AnyHashable: Any] = [
-            "notificationItemID": "item-1",
             "notificationWorkoutID": "workout-123"
         ]
         let parsedRoute = parseRouteFromUserInfo(manager: manager, userInfo: userInfo)
@@ -115,7 +119,6 @@ struct NotificationUserInfoRoundTripTests {
     func missingWorkoutID() {
         let manager = makeManager()
         let userInfo: [AnyHashable: Any] = [
-            "notificationItemID": "item-1",
             "notificationRouteKind": "workoutDetail"
         ]
         let parsedRoute = parseRouteFromUserInfo(manager: manager, userInfo: userInfo)
@@ -126,7 +129,6 @@ struct NotificationUserInfoRoundTripTests {
     func emptyWorkoutID() {
         let manager = makeManager()
         let userInfo: [AnyHashable: Any] = [
-            "notificationItemID": "item-1",
             "notificationRouteKind": "workoutDetail",
             "notificationWorkoutID": ""
         ]
@@ -138,7 +140,6 @@ struct NotificationUserInfoRoundTripTests {
     func nonStringWorkoutID() {
         let manager = makeManager()
         let userInfo: [AnyHashable: Any] = [
-            "notificationItemID": "item-1",
             "notificationRouteKind": "workoutDetail",
             "notificationWorkoutID": 12345
         ]
@@ -150,7 +151,6 @@ struct NotificationUserInfoRoundTripTests {
     func unknownRouteKind() {
         let manager = makeManager()
         let userInfo: [AnyHashable: Any] = [
-            "notificationItemID": "item-1",
             "notificationRouteKind": "unknownDestination",
             "notificationWorkoutID": "workout-123"
         ]
@@ -175,7 +175,10 @@ struct NotificationUserInfoRoundTripTests {
         #expect(userInfo["notificationRouteKind"] as? String == "activityPersonalRecords")
         #expect(userInfo["notificationWorkoutID"] == nil)
 
-        let parsedRoute = parseRouteFromUserInfo(manager: manager, userInfo: userInfo)
+        let parsedRoute = parseRouteFromUserInfo(
+            manager: manager,
+            userInfo: routePayload(from: userInfo)
+        )
         #expect(parsedRoute?.destination == .activityPersonalRecords)
         #expect(parsedRoute?.workoutID == nil)
     }
@@ -365,17 +368,17 @@ private func makeInsight(workoutID: String) -> HealthInsight {
 }
 
 /// Exercises `parseRoute` indirectly via `handleNotificationResponse` + `consumePendingNavigationRequest`.
-/// When there's no matching inbox item, the manager falls through to `parseRoute`.
+/// Callers should omit `notificationItemID` when they want pure route parsing without hub fallback.
 private func parseRouteFromUserInfo(
     manager: NotificationInboxManager,
     userInfo: [AnyHashable: Any]
 ) -> NotificationRoute? {
-    // handleNotificationResponse internally calls parseRoute when itemID lookup fails.
-    // We construct userInfo with a non-existent itemID to force the parseRoute path.
-    var testInfo = userInfo
-    testInfo["notificationItemID"] = "force-parse-route-\(UUID().uuidString)"
-    manager.handleNotificationResponse(userInfo: testInfo)
-
-    // parseRoute result is captured in pendingNavigationRequest
+    manager.handleNotificationResponse(userInfo: userInfo)
     return manager.consumePendingNavigationRequest()?.route
+}
+
+private func routePayload(from userInfo: [AnyHashable: Any]) -> [AnyHashable: Any] {
+    var payload = userInfo
+    payload.removeValue(forKey: "notificationItemID")
+    return payload
 }
