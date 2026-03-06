@@ -123,4 +123,44 @@ struct HanokEaveShapeTests {
 
         #expect(path.isEmpty == true)
     }
+
+    @Test("Pavilion silhouette path is generated")
+    func pavilionSilhouettePath() {
+        let pavilion = HanokPavilionSilhouetteShape()
+        let rect = CGRect(x: 0, y: 0, width: 220, height: 160)
+        let path = pavilion.path(in: rect)
+
+        #expect(path.isEmpty == false)
+        let bounds = path.boundingRect
+        #expect(bounds.minX >= rect.minX - 1)
+        #expect(bounds.maxX <= rect.maxX + 1)
+        #expect(bounds.minY >= rect.minY - 1)
+        #expect(bounds.maxY <= rect.maxY + 1)
+    }
+
+    @Test("Pavilion silhouette path is empty for zero-size rect")
+    func pavilionSilhouettePathZeroSize() {
+        let pavilion = HanokPavilionSilhouetteShape()
+
+        #expect(pavilion.path(in: .zero).isEmpty == true)
+    }
+
+    @Test("Mountain backdrop animatableData reflects ridge shift")
+    func mountainBackdropAnimatableData() {
+        var mountain = HanokMountainBackdropShape(ridgeShift: -0.03)
+
+        #expect(mountain.animatableData == -0.03)
+
+        mountain.animatableData = 0.04
+        #expect(mountain.animatableData == 0.04)
+    }
+
+    @Test("Mountain backdrop path changes with ridge shift")
+    func mountainBackdropShiftChangesPath() {
+        let rect = CGRect(x: 0, y: 0, width: 260, height: 160)
+        let still = HanokMountainBackdropShape(ridgeShift: 0)
+        let shifted = HanokMountainBackdropShape(ridgeShift: 0.05)
+
+        #expect(still.path(in: rect) != shifted.path(in: rect))
+    }
 }

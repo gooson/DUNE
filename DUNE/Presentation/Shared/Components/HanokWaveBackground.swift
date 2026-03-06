@@ -59,6 +59,187 @@ struct HanokRoofTileSealShape: Shape {
     }
 }
 
+/// Broad mountain ridge silhouette placed behind the pavilion motif.
+/// A gentle animated ridge shift keeps the scene from feeling static.
+struct HanokMountainBackdropShape: Shape {
+    var ridgeShift: CGFloat = 0
+
+    var animatableData: CGFloat {
+        get { ridgeShift }
+        set { ridgeShift = newValue }
+    }
+
+    func path(in rect: CGRect) -> Path {
+        guard rect.width > 0, rect.height > 0 else { return Path() }
+
+        let shift = ridgeShift * rect.width
+        let baseY = rect.height * 0.94
+
+        var path = Path()
+        path.move(to: CGPoint(x: 0, y: baseY))
+        path.addCurve(
+            to: CGPoint(x: rect.width * 0.22, y: rect.height * 0.54),
+            control1: CGPoint(x: rect.width * 0.05 + shift * 0.10, y: rect.height * 0.78),
+            control2: CGPoint(x: rect.width * 0.13 + shift * 0.16, y: rect.height * 0.42)
+        )
+        path.addCurve(
+            to: CGPoint(x: rect.width * 0.52, y: rect.height * 0.22),
+            control1: CGPoint(x: rect.width * 0.30 + shift * 0.18, y: rect.height * 0.44),
+            control2: CGPoint(x: rect.width * 0.42 + shift * 0.22, y: rect.height * 0.14)
+        )
+        path.addCurve(
+            to: CGPoint(x: rect.width * 0.78, y: rect.height * 0.48),
+            control1: CGPoint(x: rect.width * 0.61 + shift * 0.18, y: rect.height * 0.26),
+            control2: CGPoint(x: rect.width * 0.71 + shift * 0.12, y: rect.height * 0.36)
+        )
+        path.addCurve(
+            to: CGPoint(x: rect.width, y: rect.height * 0.70),
+            control1: CGPoint(x: rect.width * 0.85 + shift * 0.08, y: rect.height * 0.56),
+            control2: CGPoint(x: rect.width * 0.93 + shift * 0.08, y: rect.height * 0.62)
+        )
+        path.addLine(to: CGPoint(x: rect.width, y: rect.height))
+        path.addLine(to: CGPoint(x: 0, y: rect.height))
+        path.closeSubpath()
+
+        return path
+    }
+}
+
+/// Gyeonghoeru-inspired pavilion silhouette with raised platform and layered rooflines.
+/// The goal is recognizability, not literal architectural reconstruction.
+struct HanokPavilionSilhouetteShape: Shape {
+    func path(in rect: CGRect) -> Path {
+        guard rect.width > 0, rect.height > 0 else { return Path() }
+
+        var path = Path()
+        let corner = CGSize(width: rect.height * 0.02, height: rect.height * 0.02)
+
+        let platformRect = CGRect(
+            x: rect.minX + rect.width * 0.08,
+            y: rect.minY + rect.height * 0.82,
+            width: rect.width * 0.84,
+            height: rect.height * 0.10
+        )
+        path.addRoundedRect(in: platformRect, cornerSize: corner, style: .continuous)
+
+        let terraceRect = CGRect(
+            x: rect.minX + rect.width * 0.12,
+            y: rect.minY + rect.height * 0.74,
+            width: rect.width * 0.76,
+            height: rect.height * 0.05
+        )
+        path.addRoundedRect(in: terraceRect, cornerSize: corner, style: .continuous)
+
+        let balustradeRect = CGRect(
+            x: rect.minX + rect.width * 0.14,
+            y: rect.minY + rect.height * 0.58,
+            width: rect.width * 0.72,
+            height: rect.height * 0.04
+        )
+        path.addRoundedRect(in: balustradeRect, cornerSize: corner, style: .continuous)
+
+        let beamRect = CGRect(
+            x: rect.minX + rect.width * 0.12,
+            y: rect.minY + rect.height * 0.44,
+            width: rect.width * 0.76,
+            height: rect.height * 0.04
+        )
+        path.addRoundedRect(in: beamRect, cornerSize: corner, style: .continuous)
+
+        let columnWidth = rect.width * 0.052
+        let columnHeight = rect.height * 0.29
+        for anchor in [0.18, 0.32, 0.46, 0.60, 0.74, 0.86] {
+            let columnRect = CGRect(
+                x: rect.minX + rect.width * anchor - columnWidth / 2,
+                y: rect.minY + rect.height * 0.48,
+                width: columnWidth,
+                height: columnHeight
+            )
+            path.addRoundedRect(in: columnRect, cornerSize: corner, style: .continuous)
+        }
+
+        let stairRect = CGRect(
+            x: rect.minX + rect.width * 0.44,
+            y: rect.minY + rect.height * 0.78,
+            width: rect.width * 0.12,
+            height: rect.height * 0.08
+        )
+        path.addRoundedRect(in: stairRect, cornerSize: corner, style: .continuous)
+
+        var lowerRoof = Path()
+        lowerRoof.move(to: CGPoint(x: rect.minX + rect.width * 0.04, y: rect.minY + rect.height * 0.40))
+        lowerRoof.addQuadCurve(
+            to: CGPoint(x: rect.minX + rect.width * 0.50, y: rect.minY + rect.height * 0.22),
+            control: CGPoint(x: rect.minX + rect.width * 0.24, y: rect.minY + rect.height * 0.17)
+        )
+        lowerRoof.addQuadCurve(
+            to: CGPoint(x: rect.minX + rect.width * 0.96, y: rect.minY + rect.height * 0.40),
+            control: CGPoint(x: rect.minX + rect.width * 0.76, y: rect.minY + rect.height * 0.17)
+        )
+        lowerRoof.addQuadCurve(
+            to: CGPoint(x: rect.minX + rect.width * 0.86, y: rect.minY + rect.height * 0.47),
+            control: CGPoint(x: rect.minX + rect.width * 0.93, y: rect.minY + rect.height * 0.46)
+        )
+        lowerRoof.addQuadCurve(
+            to: CGPoint(x: rect.minX + rect.width * 0.50, y: rect.minY + rect.height * 0.31),
+            control: CGPoint(x: rect.minX + rect.width * 0.73, y: rect.minY + rect.height * 0.31)
+        )
+        lowerRoof.addQuadCurve(
+            to: CGPoint(x: rect.minX + rect.width * 0.14, y: rect.minY + rect.height * 0.47),
+            control: CGPoint(x: rect.minX + rect.width * 0.27, y: rect.minY + rect.height * 0.31)
+        )
+        lowerRoof.addQuadCurve(
+            to: CGPoint(x: rect.minX + rect.width * 0.04, y: rect.minY + rect.height * 0.40),
+            control: CGPoint(x: rect.minX + rect.width * 0.07, y: rect.minY + rect.height * 0.46)
+        )
+        lowerRoof.closeSubpath()
+        path.addPath(lowerRoof)
+
+        let upperHallRect = CGRect(
+            x: rect.minX + rect.width * 0.42,
+            y: rect.minY + rect.height * 0.27,
+            width: rect.width * 0.16,
+            height: rect.height * 0.12
+        )
+        path.addRoundedRect(in: upperHallRect, cornerSize: corner, style: .continuous)
+
+        var upperRoof = Path()
+        upperRoof.move(to: CGPoint(x: rect.minX + rect.width * 0.28, y: rect.minY + rect.height * 0.28))
+        upperRoof.addQuadCurve(
+            to: CGPoint(x: rect.minX + rect.width * 0.50, y: rect.minY + rect.height * 0.12),
+            control: CGPoint(x: rect.minX + rect.width * 0.39, y: rect.minY + rect.height * 0.11)
+        )
+        upperRoof.addQuadCurve(
+            to: CGPoint(x: rect.minX + rect.width * 0.72, y: rect.minY + rect.height * 0.28),
+            control: CGPoint(x: rect.minX + rect.width * 0.61, y: rect.minY + rect.height * 0.11)
+        )
+        upperRoof.addQuadCurve(
+            to: CGPoint(x: rect.minX + rect.width * 0.64, y: rect.minY + rect.height * 0.33),
+            control: CGPoint(x: rect.minX + rect.width * 0.69, y: rect.minY + rect.height * 0.32)
+        )
+        upperRoof.addQuadCurve(
+            to: CGPoint(x: rect.minX + rect.width * 0.36, y: rect.minY + rect.height * 0.33),
+            control: CGPoint(x: rect.minX + rect.width * 0.55, y: rect.minY + rect.height * 0.23)
+        )
+        upperRoof.addQuadCurve(
+            to: CGPoint(x: rect.minX + rect.width * 0.28, y: rect.minY + rect.height * 0.28),
+            control: CGPoint(x: rect.minX + rect.width * 0.31, y: rect.minY + rect.height * 0.32)
+        )
+        upperRoof.closeSubpath()
+        path.addPath(upperRoof)
+
+        let finialRect = CGRect(
+            x: rect.minX + rect.width * 0.485,
+            y: rect.minY + rect.height * 0.08,
+            width: rect.width * 0.03,
+            height: rect.height * 0.08
+        )
+        path.addRoundedRect(in: finialRect, cornerSize: corner, style: .continuous)
+
+        return path
+    }
+}
+
 private struct HanokRoofSealOverlay: View {
     var opacity: Double
     var size: CGFloat
@@ -155,6 +336,115 @@ private struct HanokRoofSealOverlay: View {
 
             withAnimation(.easeInOut(duration: 6.4).repeatForever(autoreverses: true)) {
                 drift = 0.06
+            }
+        }
+    }
+}
+
+private struct HanokPavilionLandscapeOverlay: View {
+    var opacity: Double
+    var width: CGFloat
+    var topPadding: CGFloat
+    var leadingPadding: CGFloat
+
+    @State private var ridgeShift: CGFloat = -0.035
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.appTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var mountainGradient: LinearGradient {
+        LinearGradient(
+            colors: [
+                theme.hanokMistColor.opacity(opacity * (colorScheme == .dark ? 0.18 : 0.26)),
+                theme.hanokMidColor.opacity(opacity * (colorScheme == .dark ? 0.30 : 0.40)),
+                theme.hanokDeepColor.opacity(opacity * (colorScheme == .dark ? 0.26 : 0.34))
+            ],
+            startPoint: .top,
+            endPoint: .bottom
+        )
+    }
+
+    private var pavilionGradient: LinearGradient {
+        LinearGradient(
+            colors: [
+                theme.hanokDeepColor.opacity(opacity * (colorScheme == .dark ? 0.74 : 0.82)),
+                theme.hanokMidColor.opacity(opacity * (colorScheme == .dark ? 0.60 : 0.68))
+            ],
+            startPoint: .top,
+            endPoint: .bottom
+        )
+    }
+
+    var body: some View {
+        ZStack(alignment: .bottomLeading) {
+            HanokMountainBackdropShape(ridgeShift: ridgeShift)
+                .fill(mountainGradient)
+                .frame(width: width * 1.24, height: width * 0.58)
+                .offset(x: width * 0.02, y: width * 0.02)
+
+            HanokMountainBackdropShape(ridgeShift: -ridgeShift * 0.55)
+                .fill(
+                    LinearGradient(
+                        colors: [
+                            theme.hanokMistColor.opacity(opacity * (colorScheme == .dark ? 0.10 : 0.16)),
+                            .clear
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
+                .frame(width: width * 0.98, height: width * 0.38)
+                .offset(x: width * 0.20, y: width * 0.11)
+                .blur(radius: width * 0.014)
+
+            Ellipse()
+                .fill(
+                    LinearGradient(
+                        colors: [
+                            theme.sandColor.opacity(opacity * (colorScheme == .dark ? 0.04 : 0.10)),
+                            .clear
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
+                .frame(width: width * 0.84, height: width * 0.14)
+                .offset(x: width * 0.26, y: width * 0.22)
+                .blur(radius: width * 0.025)
+
+            HanokPavilionSilhouetteShape()
+                .fill(pavilionGradient)
+                .overlay {
+                    HanokPavilionSilhouetteShape()
+                        .stroke(
+                            theme.sandColor.opacity(opacity * (colorScheme == .dark ? 0.10 : 0.18)),
+                            style: StrokeStyle(
+                                lineWidth: max(0.8, width * 0.008),
+                                lineCap: .round,
+                                lineJoin: .round
+                            )
+                        )
+                        .blendMode(.screen)
+                }
+                .frame(width: width, height: width * 0.82)
+                .offset(x: width * 0.16, y: width * 0.12)
+                .shadow(
+                    color: theme.hanokDeepColor.opacity(opacity * 0.18),
+                    radius: width * 0.04,
+                    y: width * 0.02
+                )
+        }
+        .frame(width: width * 1.42, height: width * 0.84, alignment: .bottomLeading)
+        .padding(.top, topPadding)
+        .padding(.leading, leadingPadding)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .allowsHitTesting(false)
+        .task(id: reduceMotion) {
+            ridgeShift = -0.035
+            guard !reduceMotion else { return }
+
+            withAnimation(.easeInOut(duration: 9.2).repeatForever(autoreverses: true)) {
+                ridgeShift = 0.035
             }
         }
     }
@@ -466,6 +756,13 @@ struct HanokTabWaveBackground: View {
                 )
             }
 
+            HanokPavilionLandscapeOverlay(
+                opacity: colorScheme == .dark ? 0.64 : 0.76,
+                width: 170 + (26 * scale),
+                topPadding: 34,
+                leadingPadding: 14
+            )
+
             HanokRoofSealOverlay(
                 opacity: colorScheme == .dark ? 0.50 : 0.62,
                 size: 54,
@@ -569,6 +866,13 @@ struct HanokDetailWaveBackground: View {
                 endPoint: DS.Gradient.tabBackgroundEnd
             )
 
+            HanokPavilionLandscapeOverlay(
+                opacity: colorScheme == .dark ? 0.42 : 0.54,
+                width: 146,
+                topPadding: 28,
+                leadingPadding: 14
+            )
+
             HanokRoofSealOverlay(
                 opacity: colorScheme == .dark ? 0.34 : 0.42,
                 size: 44,
@@ -620,6 +924,13 @@ struct HanokSheetWaveBackground: View {
                 ],
                 startPoint: .top,
                 endPoint: DS.Gradient.sheetBackgroundEnd
+            )
+
+            HanokPavilionLandscapeOverlay(
+                opacity: colorScheme == .dark ? 0.24 : 0.34,
+                width: 126,
+                topPadding: 30,
+                leadingPadding: 14
             )
 
             HanokRoofSealOverlay(
