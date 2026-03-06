@@ -1,12 +1,20 @@
 ---
 source: brainstorm/vision-pro-features
 priority: p2
-status: ready
+status: done
 created: 2026-03-05
-updated: 2026-03-05
+updated: 2026-03-07
 ---
 
 # Vision Pro Phase 2: RealityKit Volumetric 모델
+
+## 완료 메모
+
+- `DUNEVisionApp`에 volumetric `WindowGroup(id: "spatial-volume")`를 추가했다.
+- Heart Rate Orb, Training Volume Blocks, Body Heatmap 3개 RealityKit 장면을 구현했다.
+- 운동 데이터는 `SpatialTrainingAnalyzer`가 HealthKit workout summary를 pseudo load + fatigue summary로 변환해 공급한다.
+- 3D body heatmap은 외부 USDZ 자산 대신 procedural RealityKit body rig로 구현해 target 의존성을 줄였다.
+- `SpatialTrainingAnalyzerTests`와 Swift 6 동시성 테스트 헬퍼 보강으로 테스트 게이트를 복구했다.
 
 ## 목표
 RealityKit을 활용한 3D 오브젝트 뷰 구현.

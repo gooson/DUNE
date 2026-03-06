@@ -314,7 +314,6 @@ targets:
           - "Models/TemplateWorkoutConfig.swift"
           - "Models/WatchConnectivityModels.swift"
           - "Protocols/ExerciseLibraryQuerying.swift"
-          - "UseCases/FatigueCalculationService.swift"
           - "UseCases/HealthDataAggregator.swift"
           - "UseCases/WorkoutRecommendationService.swift"
       # Shared persistence stores
@@ -340,6 +339,8 @@ targets:
           - "WidgetDataWriter.swift"
       - path: Presentation/Shared/Extensions/ExerciseRecord+WeeklyVolume.swift
         group: DUNEVision/Presentation/Shared/Extensions
+      - path: Resources/Localizable.xcstrings
+        group: DUNEVision/Resources
       # Shared Colors
       - path: ../Shared/Resources/Colors.xcassets
         group: Shared/Resources

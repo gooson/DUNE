@@ -45,3 +45,10 @@ extension ExerciseRecord: ExerciseRecordVolumeProviding {
     var volumeSecondaryMuscles: [MuscleGroup] { secondaryMuscles }
 }
 #endif
+
+extension ExerciseRecordSnapshot: ExerciseRecordVolumeProviding {
+    var volumeDate: Date { date }
+    var volumeSetCount: Int { completedSetCount }
+    var volumePrimaryMuscles: [MuscleGroup] { primaryMuscles }
+    var volumeSecondaryMuscles: [MuscleGroup] { secondaryMuscles }
+}

@@ -58,6 +58,13 @@ struct DUNEVisionApp: App {
                 .tint(.accentColor)
         }
         .defaultSize(width: 800, height: 600, depth: 400)
+
+        WindowGroup(id: "spatial-volume") {
+            VisionVolumetricExperienceView(sharedHealthDataService: sharedHealthDataService)
+                .tint(.accentColor)
+        }
+        .windowStyle(.volumetric)
+        .defaultSize(width: 1.4, height: 0.95, depth: 0.85, in: .meters)
     }
 }
 

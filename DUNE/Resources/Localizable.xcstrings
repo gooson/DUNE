@@ -20,6 +20,694 @@
         }
       }
     },
+    "%@ bpm from baseline" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ベースライン比 %@bpm"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기준 대비 %@bpm"
+          }
+        }
+      }
+    },
+    "%@%% recovered" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@%% 回復"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@%% 회복"
+          }
+        }
+      }
+    },
+    "3D Charts" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3Dチャート"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3D 차트"
+          }
+        }
+      }
+    },
+    "3D Health Data" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3Dヘルスデータ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3D 건강 데이터"
+          }
+        }
+      }
+    },
+    "Baseline RHR" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ベースラインRHR"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기준 RHR"
+          }
+        }
+      }
+    },
+    "Baseline fallback" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ベースライン代替"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기준 심박 대체값"
+          }
+        }
+      }
+    },
+    "Body Heatmap" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ボディヒートマップ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "바디 히트맵"
+          }
+        }
+      }
+    },
+    "Body Stats" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ボディ指標"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "신체 지표"
+          }
+        }
+      }
+    },
+    "Drag to rotate. Highlighted muscles reflect recent recovery strain." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ドラッグして回転します。強調された筋群は最近の回復負荷を示します。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "드래그하여 회전하세요. 강조된 근육은 최근 회복 부담을 반영합니다."
+          }
+        }
+      }
+    },
+    "Explore your health metrics in 3D" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ヘルス指標を3Dで確認します"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "건강 지표를 3D로 살펴보세요"
+          }
+        }
+      }
+    },
+    "Fetching recent workouts, baseline heart rate, and live pulse." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最近のワークアウト、ベースライン心拍数、ライブ脈拍を取得しています。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최근 운동, 기준 심박수, 실시간 맥박을 가져오는 중입니다."
+          }
+        }
+      }
+    },
+    "Focus Muscle" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "注目筋群"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "집중 근육"
+          }
+        }
+      }
+    },
+    "Health Metrics" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ヘルス指標"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "건강 지표"
+          }
+        }
+      }
+    },
+    "Health data isn't available in this environment." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "この環境ではヘルスデータを利用できません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 환경에서는 건강 데이터를 사용할 수 없습니다."
+          }
+        }
+      }
+    },
+    "HealthKit-derived muscle workload as stacked blocks." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HealthKit由来の筋負荷を積み上げブロックで表示します。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HealthKit 기반 근육 부하를 적층 블록으로 표시합니다."
+          }
+        }
+      }
+    },
+    "Heart Orb" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ハートオーブ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "심박 오브"
+          }
+        }
+      }
+    },
+    "Heart Rate Orb" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "心拍オーブ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "심박 오브"
+          }
+        }
+      }
+    },
+    "Latest heart rate" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最新心拍数"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최신 심박수"
+          }
+        }
+      }
+    },
+    "Latest heart rate is unavailable right now." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "現在、最新心拍数を利用できません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "현재 최신 심박수를 사용할 수 없습니다."
+          }
+        }
+      }
+    },
+    "Latest sample: %@" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最新サンプル: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최근 샘플: %@"
+          }
+        }
+      }
+    },
+    "Live BPM" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ライブBPM"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "실시간 BPM"
+          }
+        }
+      }
+    },
+    "Load Blocks" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "負荷ブロック"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "부하 블록"
+          }
+        }
+      }
+    },
+    "Load units are estimated from HealthKit workout duration and distance." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "負荷単位はHealthKitのワークアウト時間と距離から推定されます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "부하 단위는 HealthKit 운동 시간과 거리로 추정합니다."
+          }
+        }
+      }
+    },
+    "Loading spatial health data" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "空間ヘルスデータを読み込み中"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "공간 건강 데이터를 불러오는 중"
+          }
+        }
+      }
+    },
+    "Log Workout" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ワークアウト記録"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "운동 기록"
+          }
+        }
+      }
+    },
+    "No delta available" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "差分なし"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "변화량 없음"
+          }
+        }
+      }
+    },
+    "No load detected" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "負荷は検出されていません"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "감지된 부하 없음"
+          }
+        }
+      }
+    },
+    "No recent load" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最近の負荷なし"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최근 부하 없음"
+          }
+        }
+      }
+    },
+    "No recent spatial health data is available yet." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最近の空間ヘルスデータはまだありません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아직 최근 공간 건강 데이터가 없습니다."
+          }
+        }
+      }
+    },
+    "Open the volumetric recovery scene" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ボリュメトリック回復シーンを開く"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "볼류메트릭 회복 장면 열기"
+          }
+        }
+      }
+    },
+    "Procedural body rig colored by recent fatigue." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最近の疲労度に応じてプロシージャルなボディリグを色分けします。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최근 피로도에 따라 절차적으로 생성한 바디 리그를 색상으로 표시합니다."
+          }
+        }
+      }
+    },
+    "Pulsing sphere driven by your latest heart rate." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最新の心拍数に合わせて球体が脈動します。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최신 심박수에 따라 구가 맥동합니다."
+          }
+        }
+      }
+    },
+    "Recent workouts could not be loaded." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最近のワークアウトを読み込めません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최근 운동을 불러올 수 없습니다."
+          }
+        }
+      }
+    },
+    "Record your training session" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "トレーニングセッションを記録"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "운동 세션 기록"
+          }
+        }
+      }
+    },
+    "Refresh" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "再読み込み"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "새로고침"
+          }
+        }
+      }
+    },
+    "Scene" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "シーン"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "장면"
+          }
+        }
+      }
+    },
+    "Shared snapshot service is not connected." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "共有スナップショットサービスに接続されていません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "공유 스냅샷 서비스가 연결되지 않았습니다."
+          }
+        }
+      }
+    },
+    "Spatial Recovery Volume" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "空間リカバリーボリューム"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "공간 회복 볼륨"
+          }
+        }
+      }
+    },
+    "Spatial Volume" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "空間ボリューム"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "공간 볼륨"
+          }
+        }
+      }
+    },
+    "Spatial data could not be loaded." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "空間データを読み込めませんでした。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "공간 데이터를 불러올 수 없습니다."
+          }
+        }
+      }
+    },
+    "Training Volume Blocks" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "トレーニングボリュームブロック"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "훈련 볼륨 블록"
+          }
+        }
+      }
+    },
+    "Using baseline RHR when live heart rate is unavailable." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ライブ心拍数を利用できない場合はベースラインRHRを使用します。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "실시간 심박수를 사용할 수 없을 때는 기준 RHR를 사용합니다."
+          }
+        }
+      }
+    },
+    "View body composition trends" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "体組成の推移を見る"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "체성분 추세 보기"
+          }
+        }
+      }
+    },
     "— No previous data" : {
       "localizations" : {
         "ja" : {
