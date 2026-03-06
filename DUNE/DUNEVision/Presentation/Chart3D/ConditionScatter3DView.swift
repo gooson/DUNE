@@ -30,9 +30,9 @@ struct ConditionScatter3DView: View {
                     .symbolSize(point.trainingVolume > 0 ? 80 : 40)
                 }
             }
-            .chart3DXAxisLabel("HRV (ms)")
-            .chart3DYAxisLabel("RHR (bpm)")
-            .chart3DZAxisLabel("Sleep (%)")
+            .chartXAxisLabel("HRV (ms)")
+            .chartYAxisLabel("RHR (bpm)")
+            .chartZAxisLabel("Sleep (%)")
             .frame(minHeight: 400)
 
             legend

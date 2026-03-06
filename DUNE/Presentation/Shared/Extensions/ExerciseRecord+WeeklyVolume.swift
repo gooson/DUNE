@@ -37,9 +37,11 @@ protocol ExerciseRecordVolumeProviding {
 
 // MARK: - ExerciseRecord Conformance
 
+#if !os(visionOS)
 extension ExerciseRecord: ExerciseRecordVolumeProviding {
     var volumeDate: Date { date }
     var volumeSetCount: Int { completedSets.count }
     var volumePrimaryMuscles: [MuscleGroup] { primaryMuscles }
     var volumeSecondaryMuscles: [MuscleGroup] { secondaryMuscles }
 }
+#endif
