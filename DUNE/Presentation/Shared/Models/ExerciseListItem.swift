@@ -80,6 +80,10 @@ struct ExerciseListItem: Identifiable {
     /// 2. activityType.displayName (WorkoutActivityType Korean name) — unless `.other`
     /// 3. type (raw string) — final fallback
     var displayName: String {
+        if source == .healthKit,
+           let corrected = WorkoutTypeCorrectionStore.shared.correctedTitle(for: id) {
+            return corrected
+        }
         if let localized = localizedType, !localized.isEmpty {
             return localized
         }
