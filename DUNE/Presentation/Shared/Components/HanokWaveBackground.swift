@@ -57,6 +57,25 @@ struct HanokWaveOverlayView: View {
         )
     }
 
+    private func restartAnimations() {
+        phase = 0
+        breathPhase = 0
+
+        guard !reduceMotion else { return }
+
+        if driftDuration > 0 {
+            withAnimation(.linear(duration: phaseDuration).repeatForever(autoreverses: false)) {
+                phase = phaseTarget
+            }
+        }
+
+        if breathIntensity > 0 {
+            withAnimation(.easeInOut(duration: breathDuration).repeatForever(autoreverses: true)) {
+                breathPhase = .pi
+            }
+        }
+    }
+
     var body: some View {
         let shape = eaveShape
         ZStack {
@@ -97,17 +116,14 @@ struct HanokWaveOverlayView: View {
             }
         }
         .allowsHitTesting(false)
-        .task {
-            guard !reduceMotion, driftDuration > 0 else { return }
-            withAnimation(.linear(duration: phaseDuration).repeatForever(autoreverses: false)) {
-                phase = phaseTarget
-            }
+        .onAppear {
+            restartAnimations()
         }
-        .task(id: breathIntensity) {
-            guard !reduceMotion, breathIntensity > 0 else { return }
-            withAnimation(.easeInOut(duration: breathDuration).repeatForever(autoreverses: true)) {
-                breathPhase = .pi
-            }
+        .onChange(of: breathIntensity) { _, _ in
+            restartAnimations()
+        }
+        .onChange(of: reduceMotion) { _, _ in
+            restartAnimations()
         }
     }
 }
