@@ -207,6 +207,8 @@ targets:
     platform: iOS
     sources:
       - path: ../DUNEWidget
+      - path: Resources/Localizable.xcstrings
+        group: Shared/Resources
       # Shared Colors
       - path: ../Shared/Resources/Colors.xcassets
         group: Shared/Resources
