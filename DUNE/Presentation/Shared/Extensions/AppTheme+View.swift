@@ -323,7 +323,7 @@ extension AppTheme {
         case .arcticDawn:  String(localized: "Arctic Dawn")
         case .solarPop:    String(localized: "Solar Pop")
         case .shanksRed:   String(localized: "Shanks Red")
-        case .hanok:       String(localized: "Hanok")
+        case .hanok:       "Hanok"
         }
     }
 }
