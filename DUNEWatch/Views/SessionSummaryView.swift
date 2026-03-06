@@ -1,6 +1,7 @@
 import Foundation
 import SwiftUI
 import SwiftData
+import WatchKit
 
 /// Post-workout summary showing total time, volume, sets, and HR.
 struct SessionSummaryView: View {
@@ -18,8 +19,11 @@ struct SessionSummaryView: View {
     @State private var hasSaved = false
     @State private var isSaving = false
     @State private var saveError: String?
-    @State private var effort: Int = 5
+    @State private var effort: Int = WatchEffortInputPolicy.defaultEffort
     @State private var didInitializeEffort = false
+    @State private var lastEffortHapticDate: Date = .distantPast
+    @State private var showEffortInput = false
+    @State private var didPresentEffortInput = false
 
     var body: some View {
         ScrollView {
@@ -39,7 +43,12 @@ struct SessionSummaryView: View {
 
                 Divider()
 
-                effortSection
+                Button {
+                    showEffortInput = true
+                } label: {
+                    effortSummaryRow
+                }
+                .buttonStyle(.plain)
 
                 if !workoutManager.isCardioMode {
                     Divider()
@@ -75,8 +84,15 @@ struct SessionSummaryView: View {
         } message: {
             Text(saveError ?? "")
         }
+        .sheet(isPresented: $showEffortInput) {
+            effortInputView
+        }
         .onAppear {
             initializeSuggestedEffortIfNeeded()
+            if !didPresentEffortInput {
+                didPresentEffortInput = true
+                showEffortInput = true
+            }
         }
         .onChange(of: effortSuggestion?.suggestedEffort) { _, _ in
             initializeSuggestedEffortIfNeeded()
@@ -144,62 +160,131 @@ struct SessionSummaryView: View {
         }
     }
 
-    private var effortSection: some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            HStack(spacing: DS.Spacing.xs) {
-                Image(systemName: "flame.fill")
-                    .font(.caption)
-                    .foregroundStyle(DS.Color.positive)
-                Text("Workout Effort")
+    private var effortSummaryRow: some View {
+        HStack(spacing: DS.Spacing.xs) {
+            VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                Text("Workout Intensity")
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(.secondary)
-            }
-
-            if let suggestion = effortSuggestion {
-                Text("Recommended \(suggestion.suggestedEffort)/10 from recent history")
+                Text("\(effort)/10 · \(WatchEffortInputPolicy.descriptor(for: effort))")
                     .font(DS.Typography.tinyLabel)
                     .foregroundStyle(.secondary)
             }
 
-            HStack(spacing: DS.Spacing.sm) {
-                Text("\(effort)")
-                    .font(.system(size: 28, weight: .bold, design: .rounded))
-                    .monospacedDigit()
-                Text("/10")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                Spacer(minLength: 0)
-            }
+            Spacer(minLength: 0)
 
-            Slider(
-                value: Binding(
-                    get: { Double(effort) },
-                    set: { newValue in
-                        effort = Int(round(newValue))
-                        didInitializeEffort = true
-                    }
-                ),
-                in: 1...10,
-                step: 1
-            )
-            .tint(DS.Color.positive)
+            Text("\(effort)")
+                .font(.system(size: 28, weight: .bold, design: .rounded))
+                .monospacedDigit()
+                .foregroundStyle(DS.Color.positive)
 
-            if let suggestion = effortSuggestion, !suggestion.recentEfforts.isEmpty {
-                HStack(spacing: DS.Spacing.xs) {
-                    Text("Recent")
-                        .font(DS.Typography.tinyLabel)
-                        .foregroundStyle(.secondary)
-                    ForEach(Array(suggestion.recentEfforts.prefix(5).enumerated()), id: \.offset) { index, value in
-                        let isLatest = index == 0
-                        Text("\(value)")
-                            .font(.system(size: 9, weight: .semibold, design: .rounded))
-                            .foregroundStyle(isLatest ? DS.Color.positive : .secondary)
-                    }
-                }
-            }
+            Image(systemName: "chevron.right")
+                .font(.caption2.weight(.semibold))
+                .foregroundStyle(.tertiary)
         }
         .padding(DS.Spacing.md)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+    }
+
+    private var effortInputView: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                HStack(spacing: DS.Spacing.xs) {
+                    Image(systemName: "flame.fill")
+                        .font(.caption)
+                        .foregroundStyle(DS.Color.positive)
+                    Text("Workout Intensity")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.secondary)
+                }
+
+                if let suggestion = effortSuggestion {
+                    Text("Recommended \(suggestion.suggestedEffort)/10 from recent history")
+                        .font(DS.Typography.tinyLabel)
+                        .foregroundStyle(.secondary)
+                }
+
+                HStack(spacing: DS.Spacing.sm) {
+                    Text("\(effort)")
+                        .font(.system(size: 30, weight: .bold, design: .rounded))
+                        .monospacedDigit()
+                    Text("/10")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Spacer(minLength: 0)
+                    Text(WatchEffortInputPolicy.descriptor(for: effort))
+                        .font(.caption2.weight(.semibold))
+                        .foregroundStyle(.secondary)
+                }
+
+                Slider(
+                    value: Binding(
+                        get: { Double(effort) },
+                        set: { newValue in
+                            let clamped = WatchEffortInputPolicy.clampedEffort(Int(round(newValue)))
+                            updateEffort(clamped)
+                        }
+                    ),
+                    in: Double(WatchEffortInputPolicy.minimumEffort)...Double(WatchEffortInputPolicy.maximumEffort),
+                    step: 1
+                )
+                .tint(DS.Color.positive)
+                .focusable()
+                .digitalCrownRotation(
+                    Binding(
+                        get: { Double(effort) },
+                        set: { newValue in
+                            let clamped = WatchEffortInputPolicy.clampedEffort(Int(round(newValue)))
+                            updateEffort(clamped)
+                        }
+                    ),
+                    from: Double(WatchEffortInputPolicy.minimumEffort),
+                    through: Double(WatchEffortInputPolicy.maximumEffort),
+                    by: 1,
+                    sensitivity: .medium,
+                    isContinuous: false,
+                    isHapticFeedbackEnabled: false
+                )
+
+                if let suggestion = effortSuggestion, !suggestion.recentEfforts.isEmpty {
+                    HStack(spacing: DS.Spacing.xs) {
+                        Text("Recent")
+                            .font(DS.Typography.tinyLabel)
+                            .foregroundStyle(.secondary)
+                        ForEach(Array(suggestion.recentEfforts.prefix(5).enumerated()), id: \.offset) { index, value in
+                            let isLatest = index == 0
+                            Text("\(value)")
+                                .font(.system(size: 9, weight: .semibold, design: .rounded))
+                                .foregroundStyle(isLatest ? DS.Color.positive : .secondary)
+                        }
+                    }
+                }
+            }
+            .padding(.horizontal, DS.Spacing.md)
+        }
+        .toolbar {
+            ToolbarItem(placement: .confirmationAction) {
+                Button("Done") {
+                    showEffortInput = false
+                }
+            }
+        }
+    }
+
+    private func updateEffort(_ newEffort: Int) {
+        guard newEffort != effort else { return }
+        effort = newEffort
+        didInitializeEffort = true
+        playEffortHapticIfNeeded()
+    }
+
+    private func playEffortHapticIfNeeded() {
+        let now = Date()
+        guard WatchEffortInputPolicy.shouldPlayHaptic(lastHapticDate: lastEffortHapticDate, now: now) else {
+            return
+        }
+        lastEffortHapticDate = now
+        WKInterfaceDevice.current().play(.click)
     }
 
     // MARK: - Exercise Breakdown
@@ -580,7 +665,7 @@ struct SessionSummaryView: View {
 
     private func initializeSuggestedEffortIfNeeded() {
         guard !didInitializeEffort, let suggested = effortSuggestion?.suggestedEffort else { return }
-        effort = suggested
+        effort = WatchEffortInputPolicy.clampedEffort(suggested)
         didInitializeEffort = true
     }
 }
