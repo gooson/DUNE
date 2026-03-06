@@ -76,6 +76,11 @@ Arctic Dawn는 이미 프레임 안정성 중심 최적화(LOD, render trim, Tim
 - Energy Log: sustained CPU/GPU cost
 - Memory Graph / Allocations: 텍스처, seed 배열, gradient/color 재할당 여부
 
+의미:
+
+- 스크롤 문제만 보고 CPU를 줄였는데 GPU가 남아 발열이 유지되는 상황을 피할 수 있다
+- 메모리 문제를 "누수"와 "정상 캐시 증가"로 구분할 수 있다
+
 ### 2. Arctic 전용 최적화는 "무회귀 구조 정리"에 집중
 
 디자인 100% 유지 조건이므로, 아래 방식이 우선이다.
@@ -84,6 +89,17 @@ Arctic Dawn는 이미 프레임 안정성 중심 최적화(LOD, render trim, Tim
 - 동일 phase/seed/palette의 재계산 제거
 - 동일 overlay subtree의 불필요한 재합성 제거
 - path 계산용 sample/lookup 값을 init-time 또는 static cache로 이동
+
+구체 후보:
+
+| 후보 | 기대 효과 | 디자인 리스크 | 공통화 가능성 |
+|------|-----------|---------------|---------------|
+| off-screen background pause/gate | 배터리, 발열, 스크롤 | 없음 | 높음 |
+| shape sampling lookup/static cache | CPU, 스크롤 | 없음 | 높음 |
+| gradient/color/palette static hoist | 메모리, 미세 할당 | 없음 | 높음 |
+| drawingGroup 경계 재점검 | GPU, 발열 | 낮음 | 중간 |
+| overlay visibility clipping 강화 | GPU, 배터리 | 낮음 | 중간 |
+| interaction 중 background cadence shaping | 스크롤, 발열 | 낮음~중간 | 높음 |
 
 ### 3. 공통 wave background 성능 레이어 도입 검토
 
@@ -97,15 +113,38 @@ Arctic만 고치고 끝내면, 유사한 문제는 다른 테마에서 반복될
 - `WaveRenderCache`: gradient, palette, seed, sampling table의 공통 cache 계층
 - `WavePerformanceProfile`: 테마별 허용 cadence / compositing / clipping 정책 정의
 
+효과:
+
+- Arctic 해결책을 Solar/Forest/Hanok 같은 다른 배경에도 재사용 가능
+- "body 안에서 매번 생성 금지", "고밀도 overlay는 캐시/합성 경계 필수" 같은 규칙을 코드 레벨로 강제 가능
+
 ### 4. 스크롤 순간의 체감 개선을 따로 본다
 
 지속 발열과 별개로, 사용자가 가장 먼저 느끼는 것은 스크롤 hitch다.
 따라서 스크롤 중에는 background가 main content를 방해하지 않도록 우선순위를 재조정할 필요가 있다.
 
+후보:
+
+- 스크롤 중 background cadence를 낮추고 idle 시 원복
+- 스크롤 중 보이지 않는 overlay 업데이트 지연
+- detail/sheet overlay를 실제 표시 크기 기준으로만 렌더
+
+단, 이 축은 **시각 인상이 바뀌지 않는 범위**에서만 허용한다.
+즉, 레이어 삭제가 아니라 "사용자 시선이 콘텐츠에 있을 때 백그라운드 연산을 덜 하는 방식"이어야 한다.
+
 ### 5. 메모리 안정성은 texture lifecycle 관점으로 점검
 
 Arctic는 `drawingGroup()`과 다수의 overlay를 사용하므로,
 문제가 있다면 단순 Swift 객체보다 **래스터 텍스처 lifecycle** 쪽에서 나타날 가능성이 높다.
+
+확인 포인트:
+
+- 탭 전환 후 `drawingGroup()` texture가 즉시 해제되는가
+- Detail/Sheet 반복 진입 시 overlay seed/spec 배열이 재생성만 되고 재사용되지 않는가
+- theme 전환 후 inactive background가 메모리에 남아 있지 않은가
+
+이 영역은 스크롤 개선보다 체감이 약하지만,
+발열과 배터리 소모의 "누적형 원인"을 끊기 위해 필수다.
 
 ## Constraints
 

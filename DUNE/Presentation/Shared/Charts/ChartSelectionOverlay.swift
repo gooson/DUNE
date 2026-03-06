@@ -1,7 +1,7 @@
 import SwiftUI
 
 /// Shared selection overlay shown on chart interaction.
-/// Displays date and value in a material-backed capsule at the top of the chart.
+/// Displays date and value in a themed capsule at the top of the chart.
 struct ChartSelectionOverlay: View {
     let date: Date
     let value: String
@@ -20,11 +20,66 @@ struct ChartSelectionOverlay: View {
         .foregroundStyle(theme.sandColor)
         .padding(.horizontal, DS.Spacing.sm)
         .padding(.vertical, DS.Spacing.xs)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
-        .overlay {
-            RoundedRectangle(cornerRadius: DS.Radius.sm)
-                .strokeBorder(theme.accentColor.opacity(0.25), lineWidth: 1)
-        }
+        .chartSurface(cornerRadius: DS.Radius.sm, topBloomHeight: 18)
         .padding(.horizontal, DS.Spacing.xs)
+    }
+}
+
+extension View {
+    func chartSurface(cornerRadius: CGFloat, topBloomHeight: CGFloat? = nil) -> some View {
+        modifier(ChartSurfaceModifier(cornerRadius: cornerRadius, topBloomHeight: topBloomHeight))
+    }
+}
+
+private struct ChartSurfaceModifier: ViewModifier {
+    let cornerRadius: CGFloat
+    let topBloomHeight: CGFloat?
+
+    @Environment(\.appTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var borderOpacity: Double {
+        colorScheme == .dark ? 0.26 : 0.16
+    }
+
+    private var fillOpacity: Double {
+        colorScheme == .dark ? 0.34 : 0.22
+    }
+
+    private var bloomOpacity: Double {
+        colorScheme == .dark ? 0.18 : 0.12
+    }
+
+    func body(content: Content) -> some View {
+        content
+            .background {
+                RoundedRectangle(cornerRadius: cornerRadius)
+                    .fill(theme.cardBackground)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: cornerRadius)
+                            .fill(theme.cardBackgroundGradient)
+                            .opacity(fillOpacity)
+                    }
+                    .overlay(alignment: .top) {
+                        if let topBloomHeight {
+                            RoundedRectangle(cornerRadius: cornerRadius)
+                                .fill(
+                                    LinearGradient(
+                                        colors: [
+                                            theme.accentColor.opacity(bloomOpacity),
+                                            .clear,
+                                        ],
+                                        startPoint: .top,
+                                        endPoint: .bottom
+                                    )
+                                )
+                                .frame(height: topBloomHeight)
+                        }
+                    }
+                    .overlay {
+                        RoundedRectangle(cornerRadius: cornerRadius)
+                            .strokeBorder(theme.accentColor.opacity(borderOpacity), lineWidth: 1)
+                    }
+            }
     }
 }
