@@ -1,9 +1,28 @@
+import CoreLocation
 import Foundation
 import Testing
 @testable import DUNE
 
 @Suite("OpenMeteoService")
 struct OpenMeteoServiceTests {
+    private let responseJSON = """
+    {
+        "current": {
+            "temperature_2m": 15.3,
+            "apparent_temperature": 13.1,
+            "relative_humidity_2m": 72.0,
+            "weather_code": 3,
+            "wind_speed_10m": 12.5,
+            "uv_index": 4.2,
+            "is_day": 1
+        },
+        "hourly": {
+            "time": ["2026-02-28T14:00", "2026-02-28T15:00"],
+            "temperature_2m": [15.3, 14.8],
+            "weather_code": [3, 61]
+        }
+    }
+    """
 
     // MARK: - WMO Code Mapping
 
@@ -102,29 +121,32 @@ struct OpenMeteoServiceTests {
         #expect(OpenMeteoService.parseISO8601("") == nil)
     }
 
+    @Test("Concurrent ISO parsing returns stable results")
+    func parseISO8601Concurrently() async {
+        let inputs = Array(repeating: "2026-02-28T14:00", count: 32)
+        let results = await withTaskGroup(of: Date?.self, returning: [Date?].self) { group in
+            for input in inputs {
+                group.addTask {
+                    OpenMeteoService.parseISO8601(input)
+                }
+            }
+
+            var dates: [Date?] = []
+            for await value in group {
+                dates.append(value)
+            }
+            return dates
+        }
+
+        #expect(results.count == inputs.count)
+        #expect(results.allSatisfy { $0 != nil })
+    }
+
     // MARK: - JSON Decoding
 
     @Test("Decodes valid Open-Meteo response")
     func decodeValidResponse() throws {
-        let json = """
-        {
-            "current": {
-                "temperature_2m": 15.3,
-                "apparent_temperature": 13.1,
-                "relative_humidity_2m": 72.0,
-                "weather_code": 3,
-                "wind_speed_10m": 12.5,
-                "uv_index": 4.2,
-                "is_day": 1
-            },
-            "hourly": {
-                "time": ["2026-02-28T14:00", "2026-02-28T15:00"],
-                "temperature_2m": [15.3, 14.8],
-                "weather_code": [3, 61]
-            }
-        }
-        """
-        let data = json.data(using: .utf8)!
+        let data = responseJSON.data(using: .utf8)!
         let response = try JSONDecoder().decode(OpenMeteoResponse.self, from: data)
 
         #expect(response.current.temperature_2m == 15.3)
@@ -372,5 +394,42 @@ struct OpenMeteoServiceTests {
         #expect(OpenMeteoService.parseDateOnly("not-a-date") == nil)
         #expect(OpenMeteoService.parseDateOnly("") == nil)
         #expect(OpenMeteoService.parseDateOnly("2026-03-01T12:00") == nil)
+    }
+
+    @Test("Weather cache hit is scoped to normalized request location")
+    func cacheScopedToNormalizedLocation() async throws {
+        let session = URLSession.stubbedSession()
+        let service = OpenMeteoService(session: session)
+        let lock = NSLock()
+        var requestedURLs: [URL] = []
+        let data = try #require(responseJSON.data(using: .utf8))
+
+        URLProtocolStub.setHandler { request in
+            guard let url = request.url else {
+                throw URLError(.badURL)
+            }
+            lock.withLock {
+                requestedURLs.append(url)
+            }
+            let response = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil)!
+            return (response, data)
+        }
+        defer { URLProtocolStub.reset() }
+
+        let seoul = CLLocation(latitude: 37.5665, longitude: 126.9780)
+        let nearbySameRoundedCell = CLLocation(latitude: 37.5664, longitude: 126.9783)
+        let busan = CLLocation(latitude: 35.1796, longitude: 129.0756)
+
+        _ = try await service.fetchWeather(for: seoul)
+        _ = try await service.fetchWeather(for: nearbySameRoundedCell)
+        _ = try await service.fetchWeather(for: busan)
+
+        let calls = lock.withLock { requestedURLs }
+        #expect(calls.count == 2)
+        guard calls.count == 2 else { return }
+        #expect(calls[0].query?.contains("latitude=37.57") == true)
+        #expect(calls[0].query?.contains("longitude=126.98") == true)
+        #expect(calls[1].query?.contains("latitude=35.18") == true)
+        #expect(calls[1].query?.contains("longitude=129.08") == true)
     }
 }

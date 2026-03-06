@@ -14,10 +14,10 @@ PROJECT_SPEC="DUNE/project.yml"
 PROJECT_FILE="DUNE/DUNE.xcodeproj"
 IOS_SCHEME="DUNETests"
 IOS_SIM_NAME="${DUNE_SIM_NAME:-iPhone 17}"
-IOS_SIM_OS="${DUNE_SIM_OS:-26.2}"
+IOS_SIM_OS="${DUNE_SIM_OS:-26.0}"
 IOS_DESTINATION="${DAILVE_IOS_DESTINATION:-platform=iOS Simulator,name=${IOS_SIM_NAME},OS=${IOS_SIM_OS}}"
 WATCH_SCHEME="DUNEWatchTests"
-WATCH_SIM_NAME="${DUNE_WATCH_SIM_NAME:-Apple Watch Series 10 (46mm)}"
+WATCH_SIM_NAME="${DUNE_WATCH_SIM_NAME:-Apple Watch Series 11 (46mm)}"
 WATCH_SIM_OS="${DUNE_WATCH_SIM_OS:-26.2}"
 WATCH_DESTINATION="${DAILVE_WATCH_DESTINATION:-platform=watchOS Simulator,name=${WATCH_SIM_NAME},OS=${WATCH_SIM_OS}}"
 DERIVED_DATA_DIR=".deriveddata"
@@ -73,41 +73,107 @@ resolve_sim_destination() {
     local runtime_prefix="$2"
     local sim_name="$3"
     local sim_os="$4"
+    local minimum_major="$5"
     local requested="platform=${platform} Simulator,name=${sim_name},OS=${sim_os}"
+    local available_json
+    available_json="$(xcrun simctl list devices available -j 2>/dev/null || true)"
 
-    if xcrun simctl list devices available | grep -F "${sim_name}" | grep -F "${sim_os}" >/dev/null 2>&1; then
+    if [[ -z "${available_json}" ]]; then
         echo "$requested"
         return
     fi
 
     local fallback_id
-    fallback_id=$(xcrun simctl list devices available -j | python3 -c "
-import json, sys
+    fallback_id=$(PLATFORM="$platform" \
+        RUNTIME_PREFIX="$runtime_prefix" \
+        SIM_NAME="$sim_name" \
+        MINIMUM_MAJOR="$minimum_major" \
+        python3 -c "
+import json, os, re, sys
+
+platform = os.environ['PLATFORM']
+runtime_prefix = os.environ['RUNTIME_PREFIX']
+sim_name = os.environ['SIM_NAME']
+minimum_major = int(os.environ['MINIMUM_MAJOR'])
 data = json.load(sys.stdin)
-runtime_prefix = '${runtime_prefix}'
+
+pattern = re.compile(rf'{re.escape(platform)}-(\\d+)-(\\d+)(?:-(\\d+))?')
+candidates = []
 for runtime, devices in data.get('devices', {}).items():
-    if runtime_prefix not in runtime:
+    match = pattern.search(runtime)
+    if not match:
         continue
+    version = tuple(int(part or 0) for part in match.groups())
     for device in devices:
-        if device.get('isAvailable', True):
-            print(device['udid'])
-            sys.exit(0)
+        if not device.get('isAvailable', True):
+            continue
+        candidates.append({
+            'runtime': runtime,
+            'version': version,
+            'name': device.get('name'),
+            'udid': device.get('udid'),
+        })
+
+def select(entries):
+    if not entries:
+        return None
+    entries.sort(key=lambda entry: (entry['version'], entry['name'] or ''), reverse=True)
+    return entries[0]['udid']
+
+exact = select([
+    entry for entry in candidates
+    if entry['name'] == sim_name and runtime_prefix in entry['runtime']
+])
+if exact:
+    print(exact)
+    sys.exit(0)
+
+same_name_compatible = select([
+    entry for entry in candidates
+    if entry['name'] == sim_name and entry['version'][0] >= minimum_major
+])
+if same_name_compatible:
+    print(same_name_compatible)
+    sys.exit(0)
+
+compatible = select([
+    entry for entry in candidates
+    if entry['version'][0] >= minimum_major
+])
+if compatible:
+    print(compatible)
+    sys.exit(0)
+
+same_runtime = select([
+    entry for entry in candidates
+    if runtime_prefix in entry['runtime']
+])
+if same_runtime:
+    print(same_runtime)
+    sys.exit(0)
+
+any_runtime = select(candidates)
+if any_runtime:
+    print(any_runtime)
+    sys.exit(0)
+
 sys.exit(1)
-" 2>/dev/null) || true
+" <<<"${available_json}" 2>/dev/null) || true
 
     if [[ -n "${fallback_id}" ]]; then
         echo "platform=${platform} Simulator,id=${fallback_id}"
-    else
-        echo "$requested"
+        return
     fi
+
+    echo "$requested"
 }
 
 if [[ "$MODE" != "watch" && -z "${DAILVE_IOS_DESTINATION:-}" ]]; then
-    IOS_DESTINATION="$(resolve_sim_destination "iOS" "iOS-${IOS_SIM_OS//./-}" "$IOS_SIM_NAME" "$IOS_SIM_OS")"
+    IOS_DESTINATION="$(resolve_sim_destination "iOS" "iOS-${IOS_SIM_OS//./-}" "$IOS_SIM_NAME" "$IOS_SIM_OS" "26")"
 fi
 
 if [[ "$MODE" != "ios" && -z "${DAILVE_WATCH_DESTINATION:-}" ]]; then
-    WATCH_DESTINATION="$(resolve_sim_destination "watchOS" "watchOS-${WATCH_SIM_OS//./-}" "$WATCH_SIM_NAME" "$WATCH_SIM_OS")"
+    WATCH_DESTINATION="$(resolve_sim_destination "watchOS" "watchOS-${WATCH_SIM_OS//./-}" "$WATCH_SIM_NAME" "$WATCH_SIM_OS" "26")"
 fi
 
 IOS_LOG_FILE="$LOG_FILE"
