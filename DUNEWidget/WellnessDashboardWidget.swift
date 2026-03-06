@@ -8,8 +8,8 @@ struct WellnessDashboardWidget: Widget {
         StaticConfiguration(kind: kind, provider: WidgetScoreProvider()) { entry in
             WellnessDashboardWidgetEntryView(entry: entry)
         }
-        .configurationDisplayName("DUNE Today")
-        .description("Condition, Readiness, and Wellness scores at a glance.")
+        .configurationDisplayName(String(localized: "DUNE Today"))
+        .description(String(localized: "Condition, Readiness, and Wellness scores at a glance."))
         .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
     }
 }

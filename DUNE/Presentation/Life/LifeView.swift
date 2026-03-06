@@ -120,6 +120,7 @@ private struct HabitListQueryView: View {
     // Correction #102: cached today exercise check (avoid body-path Calendar ops)
     @State private var cachedTodayExerciseExists = false
     @State private var historySelection: HabitHistorySelection?
+    @State private var heroAppeared = false
 
     private struct HabitHistorySelection: Identifiable {
         let id: UUID
@@ -478,51 +479,82 @@ private struct HabitListQueryView: View {
     // MARK: - Hero
 
     private var heroSection: some View {
-        StandardCard {
-            VStack(spacing: DS.Spacing.sm) {
-                HStack {
-                    VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+        HeroCard(tintColor: DS.Color.tabLife) {
+            HStack(spacing: isRegular ? DS.Spacing.xxl : DS.Spacing.xl) {
+                completionRing
+
+                VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                    HStack(spacing: DS.Spacing.xs) {
                         Text("Today's Progress")
+                            .font(isRegular ? .title3 : .headline)
+                            .fontWeight(.semibold)
+
+                        Image(systemName: completionStatusIcon)
                             .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                        HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xs) {
-                            Text("\(viewModel.completedCount)")
-                                .font(DS.Typography.cardScore)
-                                .foregroundStyle(theme.heroTextGradient)
-                            Text("/ \(viewModel.totalActiveCount)")
-                                .font(.title3)
-                                .foregroundStyle(.secondary)
-                        }
+                            .foregroundStyle(completionStatusColor)
                     }
 
-                    Spacer()
+                    Text(viewModel.heroNarrative)
+                        .font(.subheadline)
+                        .foregroundStyle(DS.Color.textSecondary)
+                        .fixedSize(horizontal: false, vertical: true)
 
-                    completionRing
+                    HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xs) {
+                        Text("\(viewModel.completedCount)")
+                            .font(DS.Typography.cardScore)
+                            .foregroundStyle(theme.heroTextGradient)
+                            .contentTransition(.numericText())
+                        Text("/ \(viewModel.totalActiveCount)")
+                            .font(.title3)
+                            .foregroundStyle(.secondary)
+                    }
                 }
+
+                Spacer(minLength: 0)
             }
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(Text("Life progress \(viewModel.completedCount) of \(viewModel.totalActiveCount)"))
+        .sensoryFeedback(.impact(weight: .light), trigger: heroAppeared)
+        .onAppear {
+            guard !heroAppeared else { return }
+            heroAppeared = true
+        }
+    }
+
+    private var completionStatusIcon: String {
+        let total = viewModel.totalActiveCount
+        if total == 0 { return "circle.dashed" }
+        if viewModel.completedCount >= total { return "checkmark.circle.fill" }
+        if viewModel.completedCount > 0 { return "circle.lefthalf.filled" }
+        return "circle"
+    }
+
+    private var completionStatusColor: Color {
+        let total = viewModel.totalActiveCount
+        if total == 0 { return .secondary }
+        if viewModel.completedCount >= total { return DS.Color.positive }
+        if viewModel.completedCount > 0 { return DS.Color.tabLife }
+        return .secondary
     }
 
     private var completionRing: some View {
         let total = Swift.max(viewModel.totalActiveCount, 1)
         let progress = Double(viewModel.completedCount) / Double(total)
-        return ZStack {
-            Circle()
-                .stroke(.quaternary, lineWidth: 4)
-            Circle()
-                .trim(from: 0, to: progress)
-                .stroke(
-                    DS.Color.positive,
-                    style: StrokeStyle(lineWidth: 4, lineCap: .round)
-                )
-                .rotationEffect(.degrees(-90))
+        return ProgressRingView(
+            progress: progress,
+            ringColor: DS.Color.tabLife,
+            lineWidth: isRegular ? 10 : 8,
+            size: isRegular ? 80 : 64
+        )
+        .overlay {
             Text("\(Int(progress * 100))%")
-                .font(.caption2)
+                .font(.caption)
                 .fontWeight(.semibold)
                 .monospacedDigit()
+                .foregroundStyle(theme.sandColor)
+                .contentTransition(.numericText())
         }
-        .frame(width: 48, height: 48)
-        .animation(DS.Animation.standard, value: viewModel.completedCount)
     }
 
     // MARK: - Actions

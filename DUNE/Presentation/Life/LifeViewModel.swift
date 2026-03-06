@@ -48,6 +48,20 @@ final class LifeViewModel {
     private(set) var autoExerciseProgresses: [LifeAutoAchievementProgress] =
         LifeAutoAchievementService.calculateProgresses(from: [])
 
+    /// Context-aware narrative for the Life hero card.
+    var heroNarrative: String {
+        if totalActiveCount == 0 {
+            return String(localized: "Add habits to start tracking your daily routine")
+        }
+        if completedCount == 0 {
+            return String(localized: "\(totalActiveCount) habits waiting — start your day!")
+        }
+        if completedCount >= totalActiveCount {
+            return String(localized: "All done! Great consistency today")
+        }
+        return String(localized: "\(completedCount) of \(totalActiveCount) habits done — keep going!")
+    }
+
     struct HabitCycleSnapshot: Sendable {
         let nextDueDate: Date?
         let startDate: Date?

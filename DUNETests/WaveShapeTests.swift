@@ -164,6 +164,17 @@ struct ArcticAuroraLODTests {
         #expect(scaled == 11)
     }
 
+    @Test("Scaled count respects normal scale override")
+    func scaledCountNormalScaleOverride() {
+        let scaled = ArcticAuroraLOD.scaledCount(
+            baseCount: 10,
+            mode: .normal,
+            normalScale: 0.6,
+            conserveScale: 0.5
+        )
+        #expect(scaled == 6)
+    }
+
     @Test("Scaled count reduces repeats in conserve mode with minimum bound")
     func scaledCountConserveBounded() {
         let scaled = ArcticAuroraLOD.scaledCount(
@@ -230,6 +241,52 @@ struct ArcticAnimationPhaseTests {
             #expect(p >= 0)
             #expect(p < 2 * .pi + 0.001)
         }
+    }
+}
+
+@Suite("ArcticPerformanceProfile")
+struct ArcticPerformanceProfileTests {
+    @Test("Profiles get more aggressive as surfaces shrink")
+    func surfaceOrdering() {
+        let tab = ArcticPerformanceProfile.profile(for: .tab)
+        let detail = ArcticPerformanceProfile.profile(for: .detail)
+        let sheet = ArcticPerformanceProfile.profile(for: .sheet)
+
+        #expect(tab.microPhaseStep < detail.microPhaseStep)
+        #expect(detail.microPhaseStep < sheet.microPhaseStep)
+        #expect(tab.edgePhaseStep < detail.edgePhaseStep)
+        #expect(detail.edgePhaseStep < sheet.edgePhaseStep)
+
+        #expect(tab.filamentNormalScale > detail.filamentNormalScale)
+        #expect(detail.filamentNormalScale > sheet.filamentNormalScale)
+        #expect(tab.microSparkleNormalScale > detail.microSparkleNormalScale)
+        #expect(detail.microSparkleNormalScale > sheet.microSparkleNormalScale)
+    }
+}
+
+@Suite("ArcticPhaseQuantizer")
+struct ArcticPhaseQuantizerTests {
+    @Test("Non-positive step preserves elapsed time")
+    func nonPositiveStep() {
+        #expect(ArcticPhaseQuantizer.quantizedElapsed(12.34, step: 0) == 12.34)
+        #expect(ArcticPhaseQuantizer.quantizedElapsed(12.34, step: -1) == 12.34)
+    }
+
+    @Test("Elapsed snaps down to nearest phase step")
+    func quantizesDown() {
+        let step = 1.0 / 30.0
+        let elapsed = 1.09
+        let quantized = ArcticPhaseQuantizer.quantizedElapsed(elapsed, step: step)
+
+        #expect(quantized <= elapsed)
+        #expect(elapsed - quantized < step + 0.000_001)
+    }
+
+    @Test("Elapsed already on boundary stays unchanged")
+    func boundaryPreserved() {
+        let step = 0.05
+        let elapsed = 1.25
+        #expect(abs(ArcticPhaseQuantizer.quantizedElapsed(elapsed, step: step) - elapsed) < 0.000_001)
     }
 }
 

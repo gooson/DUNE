@@ -435,6 +435,66 @@ struct LifeViewModelTests {
         #expect(snapshot?.historyCount == 0)
     }
 
+    // MARK: - heroNarrative
+
+    @Test("heroNarrative shows waiting message when none completed")
+    func heroNarrativeNoneCompleted() {
+        let vm = LifeViewModel()
+        let habits = [
+            HabitDefinition(name: "A", iconCategory: .health, habitType: .check, goalValue: 1, goalUnit: nil, frequency: .daily),
+            HabitDefinition(name: "B", iconCategory: .health, habitType: .check, goalValue: 1, goalUnit: nil, frequency: .daily)
+        ]
+        vm.calculateProgresses(habits: habits, todayExerciseExists: false)
+        #expect(vm.completedCount == 0)
+        #expect(!vm.heroNarrative.isEmpty)
+        #expect(vm.heroNarrative.contains("2"))
+    }
+
+    @Test("heroNarrative shows partial completion message")
+    func heroNarrativePartial() {
+        let vm = LifeViewModel()
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+
+        let habit1 = HabitDefinition(name: "A", iconCategory: .health, habitType: .check, goalValue: 1, goalUnit: nil, frequency: .daily)
+        let habit2 = HabitDefinition(name: "B", iconCategory: .health, habitType: .check, goalValue: 1, goalUnit: nil, frequency: .daily)
+        let log = HabitLog(date: today, value: 1)
+        log.habitDefinition = habit1
+        habit1.logs = [log]
+
+        vm.calculateProgresses(habits: [habit1, habit2], todayExerciseExists: false)
+        #expect(vm.completedCount == 1)
+        #expect(vm.totalActiveCount == 2)
+        #expect(vm.heroNarrative.contains("1") && vm.heroNarrative.contains("2"))
+    }
+
+    @Test("heroNarrative shows all done message")
+    func heroNarrativeAllDone() {
+        let vm = LifeViewModel()
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+
+        let habit = HabitDefinition(name: "A", iconCategory: .health, habitType: .check, goalValue: 1, goalUnit: nil, frequency: .daily)
+        let log = HabitLog(date: today, value: 1)
+        log.habitDefinition = habit
+        habit.logs = [log]
+
+        vm.calculateProgresses(habits: [habit], todayExerciseExists: false)
+        #expect(vm.completedCount == 1)
+        #expect(vm.totalActiveCount == 1)
+        #expect(!vm.heroNarrative.isEmpty)
+    }
+
+    @Test("heroNarrative shows add habits message when no habits")
+    func heroNarrativeNoHabits() {
+        let vm = LifeViewModel()
+        vm.calculateProgresses(habits: [], todayExerciseExists: false)
+        #expect(vm.totalActiveCount == 0)
+        #expect(!vm.heroNarrative.isEmpty)
+    }
+
+    // MARK: - Auto Achievements
+
     @Test("calculateAutoExerciseProgresses updates auto achievement list")
     func autoAchievementCalculation() {
         let vm = LifeViewModel()

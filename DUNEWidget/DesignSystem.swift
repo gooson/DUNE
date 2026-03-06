@@ -11,6 +11,17 @@ enum WidgetDS {
         static let textSecondary  = SwiftUI.Color("TextSecondary")
         static let textTertiary   = SwiftUI.Color("TextTertiary")
         static let cardBackground = SwiftUI.Color("CardBackground")
+        static let ringTrack      = SwiftUI.Color.white.opacity(0.10)
+        static let cardStroke     = SwiftUI.Color.white.opacity(0.08)
+        static let placeholderFill = SwiftUI.Color.white.opacity(0.04)
+    }
+
+    enum Layout {
+        static let edgePadding: CGFloat = 14
+        static let headerSpacing: CGFloat = 8
+        static let columnSpacing: CGFloat = 8
+        static let rowSpacing: CGFloat = 8
+        static let rowCornerRadius: CGFloat = 16
     }
 
     // MARK: - Status Color Mapping
@@ -92,5 +103,13 @@ enum WidgetDS {
 
     static func labelForWellnessStatus(_ rawValue: String?) -> String {
         labelForConditionStatus(rawValue)
+    }
+
+    static func ringGradient(for color: SwiftUI.Color) -> [SwiftUI.Color] {
+        [
+            color.opacity(0.24),
+            color.opacity(0.92),
+            color
+        ]
     }
 }
