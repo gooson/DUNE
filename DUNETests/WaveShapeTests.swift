@@ -233,6 +233,56 @@ struct ArcticAnimationPhaseTests {
     }
 }
 
+@Suite("ArcticPlaybackPolicy")
+struct ArcticPlaybackPolicyTests {
+    @Test("Playback pauses when reduce motion is enabled")
+    func reduceMotionPauses() {
+        #expect(ArcticPlaybackPolicy.isPaused(scenePhase: .active, reduceMotion: true))
+    }
+
+    @Test("Playback pauses when scene is inactive")
+    func inactiveScenePauses() {
+        #expect(ArcticPlaybackPolicy.isPaused(scenePhase: .inactive, reduceMotion: false))
+    }
+
+    @Test("Playback pauses when scene is backgrounded")
+    func backgroundScenePauses() {
+        #expect(ArcticPlaybackPolicy.isPaused(scenePhase: .background, reduceMotion: false))
+    }
+
+    @Test("Playback stays active only for active scene without reduce motion")
+    func activeSceneContinues() {
+        #expect(!ArcticPlaybackPolicy.isPaused(scenePhase: .active, reduceMotion: false))
+    }
+}
+
+@Suite("ArcticNormalizedSamples")
+struct ArcticNormalizedSamplesTests {
+    @Test("Known caches return inclusive sample counts")
+    func inclusiveCounts() {
+        #expect(ArcticNormalizedSamples.ribbon.count == 121)
+        #expect(ArcticNormalizedSamples.curtain.count == 89)
+        #expect(ArcticNormalizedSamples.edgeGlow.count == 85)
+    }
+
+    @Test("Fallback count zero returns origin sample")
+    func zeroFallback() {
+        #expect(ArcticNormalizedSamples.values(count: 0) == [0])
+    }
+
+    @Test("Samples are normalized from zero to one")
+    func normalizedRange() {
+        let samples = ArcticNormalizedSamples.values(count: 8)
+        #expect(samples.first == 0)
+        #expect(samples.last == 1)
+        #expect(samples.count == 9)
+
+        for idx in 1..<samples.count {
+            #expect(samples[idx] > samples[idx - 1])
+        }
+    }
+}
+
 @Suite("SolarFlareShape Geometry")
 struct SolarFlareShapeTests {
     @Test("Path is non-empty for valid rect")

@@ -278,8 +278,8 @@ struct ArcticRibbonShape: Shape {
     let verticalOffset: CGFloat
     let ridge: CGFloat
 
-    private let points: [(x: CGFloat, angle: CGFloat)]
     private static let sampleCount = 120
+    private static let normalizedSamples = ArcticNormalizedSamples.values(count: sampleCount)
 
     init(
         amplitude: CGFloat = 0.05,
@@ -293,16 +293,6 @@ struct ArcticRibbonShape: Shape {
         self.phase = phase
         self.verticalOffset = verticalOffset
         self.ridge = ridge
-
-        let count = Self.sampleCount
-        var pts: [(x: CGFloat, angle: CGFloat)] = []
-        pts.reserveCapacity(count + 1)
-        for i in 0...count {
-            let x = CGFloat(i) / CGFloat(count)
-            let angle = x * frequency * 2 * .pi
-            pts.append((x: x, angle: angle))
-        }
-        self.points = pts
     }
 
     func path(in rect: CGRect) -> Path {
@@ -312,12 +302,13 @@ struct ArcticRibbonShape: Shape {
         let centerY = rect.height * verticalOffset
 
         var path = Path()
-        for (idx, pt) in points.enumerated() {
-            let base = sin(pt.angle + phase)
-            let harmonic = sin(pt.angle * 2.15 + phase * 0.84)
-            let shimmer = cos(pt.angle * 0.72 + phase * 0.33)
+        for (idx, sample) in Self.normalizedSamples.enumerated() {
+            let angle = sample * frequency * 2 * .pi
+            let base = sin(angle + phase)
+            let harmonic = sin(angle * 2.15 + phase * 0.84)
+            let shimmer = cos(angle * 0.72 + phase * 0.33)
             let y = centerY + amp * (base * 0.72 + harmonic * ridge + shimmer * 0.08)
-            let x = pt.x * rect.width
+            let x = sample * rect.width
 
             if idx == 0 {
                 path.move(to: CGPoint(x: x, y: y))
@@ -349,6 +340,36 @@ enum ArcticAnimationPhase {
 /// Convenience shorthand used inside Arctic background bodies.
 private func arcticPhase(elapsed: TimeInterval, duration: Double, reverse: Bool = false) -> CGFloat {
     ArcticAnimationPhase.phase(elapsed: elapsed, duration: duration, reverse: reverse)
+}
+
+enum ArcticPlaybackPolicy {
+    static func isPaused(scenePhase: ScenePhase, reduceMotion: Bool) -> Bool {
+        reduceMotion || scenePhase != .active
+    }
+}
+
+enum ArcticNormalizedSamples {
+    static let ribbon = build(count: 120)
+    static let curtain = build(count: 88)
+    static let edgeGlow = build(count: 84)
+
+    static func values(count: Int) -> [CGFloat] {
+        switch count {
+        case 120:
+            ribbon
+        case 88:
+            curtain
+        case 84:
+            edgeGlow
+        default:
+            build(count: count)
+        }
+    }
+
+    private static func build(count: Int) -> [CGFloat] {
+        guard count > 0 else { return [0] }
+        return (0...count).map { CGFloat($0) / CGFloat(count) }
+    }
 }
 
 // MARK: - Arctic Ribbon Overlay
@@ -406,6 +427,7 @@ struct ArcticAuroraCurtainShape: Shape {
     var phase: CGFloat
 
     private static let sampleCount = 88
+    private static let normalizedSamples = ArcticNormalizedSamples.values(count: sampleCount)
 
     func path(in rect: CGRect) -> Path {
         guard rect.width > 0, rect.height > 0 else { return Path() }
@@ -415,14 +437,13 @@ struct ArcticAuroraCurtainShape: Shape {
         let startY = rect.height * topInset
         let height = rect.height * depth
 
-        let count = Self.sampleCount
+        let samples = Self.normalizedSamples
         var leftEdge: [CGPoint] = []
         var rightEdge: [CGPoint] = []
-        leftEdge.reserveCapacity(count + 1)
-        rightEdge.reserveCapacity(count + 1)
+        leftEdge.reserveCapacity(samples.count)
+        rightEdge.reserveCapacity(samples.count)
 
-        for i in 0...count {
-            let t = CGFloat(i) / CGFloat(count)
+        for t in samples {
             let y = startY + height * t
             // Keep curtains mostly vertical so layers read as parallel aurora drapes.
             let drift = sin(t * 2.4 + phase + centerX * 0.6) * width * sway
@@ -669,6 +690,7 @@ private struct ArcticAuroraEdgeGlowShape: Shape {
     var phase: CGFloat
 
     private static let sampleCount = 84
+    private static let normalizedSamples = ArcticNormalizedSamples.values(count: sampleCount)
 
     func path(in rect: CGRect) -> Path {
         guard rect.width > 0, rect.height > 0 else { return Path() }
@@ -677,14 +699,13 @@ private struct ArcticAuroraEdgeGlowShape: Shape {
         let amp = rect.height * amplitude
 
         var path = Path()
-        for i in 0...Self.sampleCount {
-            let t = CGFloat(i) / CGFloat(Self.sampleCount)
+        for (idx, t) in Self.normalizedSamples.enumerated() {
             let x = rect.width * t
             let y = centerY
                 + sin(t * frequency * 2 * .pi + phase) * amp
                 + cos(t * (frequency * 0.57) * 2 * .pi + phase * 0.7) * amp * 0.34
 
-            if i == 0 {
+            if idx == 0 {
                 path.move(to: CGPoint(x: x, y: y))
             } else {
                 path.addLine(to: CGPoint(x: x, y: y))
@@ -1017,6 +1038,7 @@ struct OceanLegacyArcticTabWaveBackground: View {
     @Environment(\.wavePreset) private var preset
     @Environment(\.appTheme) private var theme
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.scenePhase) private var scenePhase
     @State private var isLowPowerModeEnabled = ProcessInfo.processInfo.isLowPowerModeEnabled
 
     private var intensityScale: CGFloat {
@@ -1035,11 +1057,15 @@ struct OceanLegacyArcticTabWaveBackground: View {
         )
     }
 
+    private var isPlaybackPaused: Bool {
+        ArcticPlaybackPolicy.isPaused(scenePhase: scenePhase, reduceMotion: reduceMotion)
+    }
+
     var body: some View {
         let scale = intensityScale
         let mode = qualityMode
 
-        TimelineView(.animation(minimumInterval: 1.0 / 60.0, paused: reduceMotion)) { context in
+        TimelineView(.animation(minimumInterval: 1.0 / 60.0, paused: isPlaybackPaused)) { context in
             let elapsed = context.date.timeIntervalSinceReferenceDate
 
             ZStack(alignment: .top) {
@@ -1245,6 +1271,7 @@ struct OceanLegacyArcticTabWaveBackground: View {
 struct OceanLegacyArcticDetailWaveBackground: View {
     @Environment(\.appTheme) private var theme
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.scenePhase) private var scenePhase
     @State private var isLowPowerModeEnabled = ProcessInfo.processInfo.isLowPowerModeEnabled
 
     private var qualityMode: ArcticAuroraQualityMode {
@@ -1254,10 +1281,14 @@ struct OceanLegacyArcticDetailWaveBackground: View {
         )
     }
 
+    private var isPlaybackPaused: Bool {
+        ArcticPlaybackPolicy.isPaused(scenePhase: scenePhase, reduceMotion: reduceMotion)
+    }
+
     var body: some View {
         let mode = qualityMode
 
-        TimelineView(.animation(minimumInterval: 1.0 / 60.0, paused: reduceMotion)) { context in
+        TimelineView(.animation(minimumInterval: 1.0 / 60.0, paused: isPlaybackPaused)) { context in
             let elapsed = context.date.timeIntervalSinceReferenceDate
 
             ZStack(alignment: .top) {
@@ -1444,6 +1475,7 @@ struct OceanLegacyArcticDetailWaveBackground: View {
 struct OceanLegacyArcticSheetWaveBackground: View {
     @Environment(\.appTheme) private var theme
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.scenePhase) private var scenePhase
     @State private var isLowPowerModeEnabled = ProcessInfo.processInfo.isLowPowerModeEnabled
 
     private var qualityMode: ArcticAuroraQualityMode {
@@ -1453,10 +1485,14 @@ struct OceanLegacyArcticSheetWaveBackground: View {
         )
     }
 
+    private var isPlaybackPaused: Bool {
+        ArcticPlaybackPolicy.isPaused(scenePhase: scenePhase, reduceMotion: reduceMotion)
+    }
+
     var body: some View {
         let mode = qualityMode
 
-        TimelineView(.animation(minimumInterval: 1.0 / 60.0, paused: reduceMotion)) { context in
+        TimelineView(.animation(minimumInterval: 1.0 / 60.0, paused: isPlaybackPaused)) { context in
             let elapsed = context.date.timeIntervalSinceReferenceDate
 
             ZStack(alignment: .top) {
