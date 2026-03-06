@@ -5,25 +5,13 @@ struct SmallWidgetView: View {
 
     var body: some View {
         if entry.hasAnyScore {
-            VStack(alignment: .leading, spacing: WidgetDS.Layout.headerSpacing) {
-                HStack(spacing: 6) {
-                    Text("DUNE")
-                        .font(.caption2)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(WidgetDS.Color.textSecondary)
-
-                    Spacer(minLength: 0)
-
-                    Text(WidgetMetricText.today)
-                        .font(.caption2)
-                        .foregroundStyle(WidgetDS.Color.textTertiary)
-                }
-
-                HStack(spacing: 6) {
+            VStack(alignment: .leading, spacing: 10) {
+                HStack(spacing: 8) {
                     ForEach(entry.metrics) { metric in
                         WidgetCompactMetricView(metric: metric)
                     }
                 }
+                .frame(maxWidth: .infinity)
 
                 Spacer(minLength: 0)
 
@@ -48,6 +36,7 @@ struct SmallWidgetView: View {
                         .foregroundStyle(WidgetDS.Color.textTertiary)
                 }
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             .padding(WidgetDS.Layout.edgePadding)
             .containerBackground(.fill.tertiary, for: .widget)
         } else {

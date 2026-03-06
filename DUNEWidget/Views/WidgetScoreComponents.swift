@@ -129,14 +129,14 @@ struct WidgetCompactMetricView: View {
     let metric: WidgetMetric
 
     var body: some View {
-        VStack(spacing: 5) {
-            WidgetRingView(metric: metric, size: 34, lineWidth: 4.5)
+        VStack(spacing: 6) {
+            WidgetRingView(metric: metric, size: 38, lineWidth: 4.75)
 
             Text(metric.compactTitle)
-                .font(.system(size: 10, weight: .semibold, design: .rounded))
+                .font(.system(size: 11, weight: .semibold, design: .rounded))
                 .foregroundStyle(WidgetDS.Color.textSecondary)
         }
-        .frame(maxWidth: .infinity)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
     }
 }
 
@@ -144,14 +144,16 @@ struct WidgetMetricTileView: View {
     let metric: WidgetMetric
 
     var body: some View {
-        VStack(spacing: 7) {
+        VStack(spacing: 8) {
             Text(metric.title)
-                .font(.system(size: 11, weight: .medium, design: .rounded))
+                .font(.system(size: 11, weight: .semibold, design: .rounded))
                 .foregroundStyle(WidgetDS.Color.textSecondary)
                 .lineLimit(1)
                 .minimumScaleFactor(0.8)
 
-            WidgetRingView(metric: metric, size: 48, lineWidth: 5.5)
+            Spacer(minLength: 0)
+
+            WidgetRingView(metric: metric, size: 52, lineWidth: 5.5)
 
             if metric.hasScore {
                 HStack(spacing: 3) {
@@ -171,9 +173,20 @@ struct WidgetMetricTileView: View {
                     .minimumScaleFactor(0.75)
             }
         }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, 8)
-        .padding(.horizontal, 4)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .padding(.top, 10)
+        .padding(.horizontal, 6)
+        .padding(.bottom, 14)
+        .background(tileBackground)
+    }
+
+    private var tileBackground: some View {
+        RoundedRectangle(cornerRadius: WidgetDS.Layout.rowCornerRadius, style: .continuous)
+            .fill(metric.hasScore ? metric.tintColor.opacity(0.10) : WidgetDS.Color.placeholderFill)
+            .overlay {
+                RoundedRectangle(cornerRadius: WidgetDS.Layout.rowCornerRadius, style: .continuous)
+                    .stroke(metric.hasScore ? metric.tintColor.opacity(0.18) : WidgetDS.Color.cardStroke, lineWidth: 1)
+            }
     }
 }
 
@@ -220,6 +233,7 @@ struct WidgetMetricRowView: View {
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 10)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         .background(backgroundShape)
     }
 

@@ -6,7 +6,7 @@ struct ConditionScoreDetailView: View {
     let score: ConditionScore
 
     private enum Labels {
-        static let scoreLabel = String(localized: "CONDITION")
+        static let scoreLabel = "CONDITION"
     }
 
     @State private var viewModel = ConditionScoreDetailViewModel()

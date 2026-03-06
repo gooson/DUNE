@@ -7,44 +7,16 @@ struct LargeWidgetView: View {
     var body: some View {
         if entry.hasAnyScore {
             VStack(alignment: .leading, spacing: WidgetDS.Layout.rowSpacing) {
-                headerRow
-
-                VStack(spacing: WidgetDS.Layout.rowSpacing) {
-                    ForEach(entry.metrics) { metric in
-                        WidgetMetricRowView(metric: metric)
-                    }
-                }
-
-                Spacer(minLength: 0)
+                metricRows
 
                 footerRow
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             .padding(WidgetDS.Layout.edgePadding)
             .containerBackground(.fill.tertiary, for: .widget)
         } else {
             placeholderView
                 .containerBackground(.fill.tertiary, for: .widget)
-        }
-    }
-
-    private var headerRow: some View {
-        HStack(spacing: 8) {
-            Text("DUNE")
-                .font(.headline)
-                .fontWeight(.bold)
-
-            Spacer()
-
-            if let updatedAt = entry.scoreUpdatedAt {
-                Text(updatedAt, style: .time)
-                    .font(.caption)
-                    .foregroundStyle(WidgetDS.Color.textTertiary)
-                    .monospacedDigit()
-            } else {
-                Text(WidgetMetricText.today)
-                    .font(.caption)
-                    .foregroundStyle(WidgetDS.Color.textTertiary)
-            }
         }
     }
 
@@ -67,11 +39,36 @@ struct LargeWidgetView: View {
             }
 
             Spacer(minLength: 0)
+
+            if let updatedAt = entry.scoreUpdatedAt {
+                Text(updatedAt, style: .time)
+                    .foregroundStyle(WidgetDS.Color.textTertiary)
+                    .monospacedDigit()
+            } else {
+                Text(WidgetMetricText.today)
+                    .foregroundStyle(WidgetDS.Color.textTertiary)
+            }
         }
         .font(.caption2)
         .foregroundStyle(WidgetDS.Color.textSecondary)
         .lineLimit(1)
         .minimumScaleFactor(0.8)
+    }
+
+    private var metricRows: some View {
+        GeometryReader { proxy in
+            let metricCount = max(entry.metrics.count, 1)
+            let totalSpacing = WidgetDS.Layout.rowSpacing * CGFloat(metricCount - 1)
+            let rowHeight = max(0, (proxy.size.height - totalSpacing) / CGFloat(metricCount))
+
+            VStack(spacing: WidgetDS.Layout.rowSpacing) {
+                ForEach(entry.metrics) { metric in
+                    WidgetMetricRowView(metric: metric)
+                        .frame(height: rowHeight)
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        }
     }
 
     private var placeholderView: some View {

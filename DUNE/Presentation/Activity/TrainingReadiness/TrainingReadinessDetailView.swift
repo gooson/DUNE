@@ -13,7 +13,7 @@ struct TrainingReadinessDetailView: View {
     private var isRegular: Bool { sizeClass == .regular }
 
     private enum Labels {
-        static let scoreLabel = String(localized: "READINESS")
+        static let scoreLabel = "READINESS"
         static let hrv = String(localized: "HRV")
         static let rhr = String(localized: "RHR")
         static let sleep = String(localized: "Sleep")
