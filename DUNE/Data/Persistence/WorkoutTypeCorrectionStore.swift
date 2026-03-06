@@ -1,7 +1,9 @@
 import Foundation
 
 /// Persists user-corrected display titles for HealthKit workout entries.
-final class WorkoutTypeCorrectionStore {
+///
+/// Backed entirely by `UserDefaults`, so instances do not hold mutable in-memory state.
+final class WorkoutTypeCorrectionStore: @unchecked Sendable {
     static let shared = WorkoutTypeCorrectionStore()
 
     private let userDefaults: UserDefaults
