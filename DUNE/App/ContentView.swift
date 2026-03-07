@@ -33,65 +33,6 @@ enum NotificationPresentationPlanner {
     }
 }
 
-struct NotificationPresentationPaths {
-    var today = NavigationPath()
-    var train = NavigationPath()
-    var wellness = NavigationPath()
-    var life = NavigationPath()
-
-    func path(for section: AppSection) -> NavigationPath {
-        switch section {
-        case .today:
-            today
-        case .train:
-            train
-        case .wellness:
-            wellness
-        case .life:
-            life
-        }
-    }
-
-    mutating func setPath(_ destinations: [NotificationPresentationDestination], for section: AppSection) {
-        clearAll()
-        var path = NavigationPath()
-        for destination in destinations {
-            path.append(destination)
-        }
-
-        switch section {
-        case .today:
-            today = path
-        case .train:
-            train = path
-        case .wellness:
-            wellness = path
-        case .life:
-            life = path
-        }
-    }
-
-    mutating func updatePath(_ path: NavigationPath, for section: AppSection) {
-        switch section {
-        case .today:
-            today = path
-        case .train:
-            train = path
-        case .wellness:
-            wellness = path
-        case .life:
-            life = path
-        }
-    }
-
-    mutating func clearAll() {
-        today = NavigationPath()
-        train = NavigationPath()
-        wellness = NavigationPath()
-        life = NavigationPath()
-    }
-}
-
 struct ContentView: View {
     private let sharedHealthDataService: SharedHealthDataService?
     private let refreshCoordinator: AppRefreshCoordinating?
@@ -107,7 +48,10 @@ struct ContentView: View {
     @State private var refreshSignal = 0
     @State private var foregroundTask: Task<Void, Never>?
     @State private var notificationOpenWorkoutID: String?
-    @State private var notificationPresentationPaths = NotificationPresentationPaths()
+    @State private var todayNavPath = NavigationPath()
+    @State private var trainNavPath = NavigationPath()
+    @State private var wellnessNavPath = NavigationPath()
+    @State private var lifeNavPath = NavigationPath()
     @State private var notificationPresentationRequestID = 0
     @State private var notificationRouteSignal = 0
     @State private var notificationHubSignal = 0
@@ -129,7 +73,7 @@ struct ContentView: View {
     var body: some View {
         TabView(selection: tabSelection) {
             Tab(value: AppSection.today) {
-                NavigationStack(path: notificationPathBinding(for: .today)) {
+                NavigationStack(path: $todayNavPath) {
                     DashboardView(
                         sharedHealthDataService: sharedHealthDataService,
                         scrollToTopSignal: todayScrollToTopSignal,
@@ -149,7 +93,7 @@ struct ContentView: View {
                     .accessibilityIdentifier("tab-today")
             }
             Tab(value: AppSection.train) {
-                NavigationStack(path: notificationPathBinding(for: .train)) {
+                NavigationStack(path: $trainNavPath) {
                     ActivityView(
                         sharedHealthDataService: sharedHealthDataService,
                         scrollToTopSignal: activityScrollToTopSignal,
@@ -168,7 +112,7 @@ struct ContentView: View {
                     .accessibilityIdentifier("tab-activity")
             }
             Tab(value: AppSection.wellness) {
-                NavigationStack(path: notificationPathBinding(for: .wellness)) {
+                NavigationStack(path: $wellnessNavPath) {
                     WellnessView(
                         sharedHealthDataService: sharedHealthDataService,
                         scrollToTopSignal: wellnessScrollToTopSignal,
@@ -185,7 +129,7 @@ struct ContentView: View {
                     .accessibilityIdentifier("tab-wellness")
             }
             Tab(value: AppSection.life) {
-                NavigationStack(path: notificationPathBinding(for: .life)) {
+                NavigationStack(path: $lifeNavPath) {
                     LifeView(
                         scrollToTopSignal: lifeScrollToTopSignal,
                         refreshSignal: refreshSignal
@@ -271,17 +215,6 @@ struct ContentView: View {
         )
     }
 
-    private func notificationPathBinding(for section: AppSection) -> Binding<NavigationPath> {
-        Binding(
-            get: {
-                notificationPresentationPaths.path(for: section)
-            },
-            set: { newValue in
-                notificationPresentationPaths.updatePath(newValue, for: section)
-            }
-        )
-    }
-
     @ViewBuilder
     private func notificationDestinationView(for destination: NotificationPresentationDestination) -> some View {
         switch destination {
@@ -289,6 +222,22 @@ struct ContentView: View {
             NotificationPersonalRecordsPushView(
                 sharedHealthDataService: sharedHealthDataService
             )
+        }
+    }
+
+    private func clearAllNavPaths() {
+        todayNavPath = NavigationPath()
+        trainNavPath = NavigationPath()
+        wellnessNavPath = NavigationPath()
+        lifeNavPath = NavigationPath()
+    }
+
+    private func setNavPath(_ path: NavigationPath, for section: AppSection) {
+        switch section {
+        case .today: todayNavPath = path
+        case .train: trainNavPath = path
+        case .wellness: wellnessNavPath = path
+        case .life: lifeNavPath = path
         }
     }
 
@@ -304,17 +253,20 @@ struct ContentView: View {
 
         switch plan {
         case .push:
-            notificationPresentationPaths.setPath(
-                NotificationPresentationPlanner.rootPath(for: plan),
-                for: selectedSection
-            )
+            clearAllNavPaths()
+            let destinations = NotificationPresentationPlanner.rootPath(for: plan)
+            var path = NavigationPath()
+            for destination in destinations {
+                path.append(destination)
+            }
+            setNavPath(path, for: selectedSection)
         case .openWorkoutInActivity(let workoutID):
-            notificationPresentationPaths.clearAll()
+            clearAllNavPaths()
             selectedSection = .train
             notificationOpenWorkoutID = workoutID
             notificationRouteSignal += 1
         case .openNotificationHub:
-            notificationPresentationPaths.clearAll()
+            clearAllNavPaths()
             selectedSection = .today
             notificationHubSignal += 1
         }

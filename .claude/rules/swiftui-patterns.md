@@ -12,6 +12,7 @@
 - Push 자식 sheet → 독립 `@State` (부모 VM bind 금지)
 - sizeClass View 분기 → `@State`로 초기값 캡처 (iPad multitasking 안정)
 - iPad HStack → 섹션을 computed property로 추출
+- `NavigationStack(path:)` → 직접 `$stateVar` 바인딩만 허용 (computed Binding, struct 래퍼 금지 — 자식 view @State 리셋 유발)
 
 ## State Management
 - `.onChange(of: array)` 대신 `.onChange(of: array.count)` (O(1))
