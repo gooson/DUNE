@@ -80,6 +80,7 @@
 		138B0E90977631524BFBCED7 /* CoachingEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 971DC9F7C9192F07FD1A7D19 /* CoachingEngine.swift */; };
 		139FC4DFE1D70475D0212C43 /* EffortSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 399281894B67FFEDF248FC6A /* EffortSliderView.swift */; };
 		13C4EB7A1155B126237F5D34 /* WeeklySummaryChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B2F82623F5CDF56149931E /* WeeklySummaryChartView.swift */; };
+		14260DDB0F9F1E0C89610CB1 /* NotificationPersonalRecordsPushView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC6C11400A9CE1FFF328015 /* NotificationPersonalRecordsPushView.swift */; };
 		145163EBE1762AB86EA8E2FA /* WorkoutSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A3002AC391150B107AEF40 /* WorkoutSessionView.swift */; };
 		146F7C6D47E5CC482FF9E90C /* LifeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D321C9FD4ACCEAC91CF2FA0 /* LifeViewModel.swift */; };
 		1492DD3E52ADF5786348C6AE /* BodyCompositionViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D843DE1D4098676C47A9B23 /* BodyCompositionViewModelTests.swift */; };
@@ -1018,6 +1019,7 @@
 		1BE8F91B7C40220F1D202474 /* ExerciseFrequencyServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseFrequencyServiceTests.swift; sourceTree = "<group>"; };
 		1C7D2F9B9998008E5FCC798B /* FatigueAlgorithmSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FatigueAlgorithmSheet.swift; sourceTree = "<group>"; };
 		1C91EFBA7AAF6D4D92BBDF78 /* HabitStreakService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitStreakService.swift; sourceTree = "<group>"; };
+		1CC6C11400A9CE1FFF328015 /* NotificationPersonalRecordsPushView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPersonalRecordsPushView.swift; sourceTree = "<group>"; };
 		1D25D0EE55C39FAFEF11AC4B /* ExerciseMixDetailViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseMixDetailViewModelTests.swift; sourceTree = "<group>"; };
 		1D49441B0B1762A905127BD5 /* TemplateWorkoutConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateWorkoutConfig.swift; sourceTree = "<group>"; };
 		1D78294462431799CDD5ECAB /* ExerciseTypeSummaryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTypeSummaryRow.swift; sourceTree = "<group>"; };
@@ -2121,6 +2123,7 @@
 				CE38415A2416BA59A79AB274 /* CloudSyncConsentView.swift */,
 				3180147EC66E8D552C5950FF /* DesignSystem.swift */,
 				DE78DB2AC6F8003138FD0A69 /* HighlightBuilder.swift */,
+				1CC6C11400A9CE1FFF328015 /* NotificationPersonalRecordsPushView.swift */,
 				EA68323F1801CB4BA5DD8D9E /* NotificationTargetNotFoundView.swift */,
 				52E27EDBFCD2CF81BAC3A30B /* WorkoutDefaults.swift */,
 				ED3FF372133CBA526091CC1C /* WorkoutHealthKitWriter.swift */,
@@ -3751,6 +3754,7 @@
 				F496FE4A75632C19E77F2227 /* NotificationInboxItem.swift in Sources */,
 				9D4AA6D7FC54502B53A6E38C /* NotificationInboxManager.swift in Sources */,
 				0CF3E17D3E3921D33007ECA7 /* NotificationInboxStore.swift in Sources */,
+				14260DDB0F9F1E0C89610CB1 /* NotificationPersonalRecordsPushView.swift in Sources */,
 				A522C329214D146C448BA29D /* NotificationService.swift in Sources */,
 				042C2EFB2D0C0FB1FB90D7A6 /* NotificationServiceImpl.swift in Sources */,
 				5D38430586B656275B363FF1 /* NotificationSettingsSection.swift in Sources */,
