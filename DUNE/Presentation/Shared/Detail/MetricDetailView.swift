@@ -139,7 +139,7 @@ struct MetricDetailView: View {
         .accessibilityIdentifier("metric-detail-screen-\(metric.category.rawValue)")
         .background { DetailWaveBackground() }
         .environment(\.waveColor, metric.category.themeColor)
-        .englishNavigationTitle(metric.category.englishDisplayName)
+        .englishNavigationTitle(metric.workoutTypeKey ?? metric.category.englishDisplayName)
         .navigationBarTitleDisplayMode(.large)
         .overlay {
             if viewModel.isLoading && viewModel.chartData.isEmpty {
