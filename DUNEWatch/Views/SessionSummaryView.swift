@@ -24,6 +24,10 @@ struct SessionSummaryView: View {
     @State private var lastEffortHapticDate: Date = .distantPast
     @State private var showEffortInput = false
     @State private var didPresentEffortInput = false
+    @State private var effortInputAutoCloseTask: Task<Void, Never>?
+
+    /// Auto-dismiss effort input after a short period of inactivity.
+    private let effortInputAutoCloseDelay: Duration = .seconds(12)
 
     var body: some View {
         ScrollView {
@@ -96,6 +100,16 @@ struct SessionSummaryView: View {
         }
         .onChange(of: effortSuggestion?.suggestedEffort) { _, _ in
             initializeSuggestedEffortIfNeeded()
+        }
+        .onChange(of: showEffortInput) { _, isPresented in
+            if isPresented {
+                startEffortInputAutoCloseTimer()
+            } else {
+                cancelEffortInputAutoCloseTimer()
+            }
+        }
+        .onDisappear {
+            cancelEffortInputAutoCloseTimer()
         }
     }
 
@@ -271,6 +285,7 @@ struct SessionSummaryView: View {
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Done") {
+                    cancelEffortInputAutoCloseTimer()
                     showEffortInput = false
                 }
             }
@@ -278,10 +293,30 @@ struct SessionSummaryView: View {
     }
 
     private func updateEffort(_ newEffort: Int) {
+        restartEffortInputAutoCloseTimerIfNeeded()
         guard newEffort != effort else { return }
         effort = newEffort
         didInitializeEffort = true
         playEffortHapticIfNeeded()
+    }
+
+    private func restartEffortInputAutoCloseTimerIfNeeded() {
+        guard showEffortInput else { return }
+        startEffortInputAutoCloseTimer()
+    }
+
+    private func startEffortInputAutoCloseTimer() {
+        cancelEffortInputAutoCloseTimer()
+        effortInputAutoCloseTask = Task { @MainActor in
+            try? await Task.sleep(for: effortInputAutoCloseDelay)
+            guard !Task.isCancelled, showEffortInput else { return }
+            showEffortInput = false
+        }
+    }
+
+    private func cancelEffortInputAutoCloseTimer() {
+        effortInputAutoCloseTask?.cancel()
+        effortInputAutoCloseTask = nil
     }
 
     private func playEffortHapticIfNeeded() {

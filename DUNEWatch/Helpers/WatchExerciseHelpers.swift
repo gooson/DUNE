@@ -13,12 +13,120 @@ func exerciseSubtitle(sets: Int, reps: Int, weight: Double?) -> String {
     return parts
 }
 
+func exerciseSubtitle(for exercise: WatchExerciseInfo) -> String {
+    let profile = watchExerciseProfile(for: exercise)
+    guard profile.showsStrengthDefaultsEditor else {
+        return cardioSummary(for: profile)
+    }
+
+    let defaults = resolvedDefaults(for: exercise)
+    return exerciseSubtitle(
+        sets: exercise.defaultSets,
+        reps: defaults.reps,
+        weight: defaults.weight
+    )
+}
+
 /// Deduplicates exercises by canonical ID, keeping first occurrence.
 func uniqueByCanonical(_ exercises: [WatchExerciseInfo]) -> [WatchExerciseInfo] {
     var seen = Set<String>()
     return exercises.filter { exercise in
         let canonical = RecentExerciseTracker.canonicalExerciseID(exerciseID: exercise.id)
         return seen.insert(canonical).inserted
+    }
+}
+
+func recentWatchExercises(
+    from exercises: [WatchExerciseInfo],
+    limit: Int,
+    lastUsedTimestamps: [String: Double] = RecentExerciseTracker.lastUsedTimestamps()
+) -> [WatchExerciseInfo] {
+    guard limit > 0 else { return [] }
+
+    return Array(
+        uniqueByCanonical(
+            exercises
+                .filter { lastUsedTimestamps[$0.id] != nil }
+                .sorted {
+                    let lhs = lastUsedTimestamps[$0.id] ?? Date.distantPast.timeIntervalSince1970
+                    let rhs = lastUsedTimestamps[$1.id] ?? Date.distantPast.timeIntervalSince1970
+                    return lhs > rhs
+                }
+        )
+        .prefix(limit)
+    )
+}
+
+func preferredWatchExercises(
+    from exercises: [WatchExerciseInfo],
+    excludingCanonical excludedCanonical: Set<String> = [],
+    lastUsedTimestamps: [String: Double] = RecentExerciseTracker.lastUsedTimestamps()
+) -> [WatchExerciseInfo] {
+    uniqueByCanonical(
+        exercises
+            .filter { $0.isPreferred }
+            .sorted { lhs, rhs in
+                let lhsTime = lastUsedTimestamps[lhs.id] ?? Date.distantPast.timeIntervalSince1970
+                let rhsTime = lastUsedTimestamps[rhs.id] ?? Date.distantPast.timeIntervalSince1970
+                if lhsTime != rhsTime { return lhsTime > rhsTime }
+                return lhs.name.localizedCaseInsensitiveCompare(rhs.name) == .orderedAscending
+            }
+    )
+    .filter { exercise in
+        !excludedCanonical.contains(RecentExerciseTracker.canonicalExerciseID(exerciseID: exercise.id))
+    }
+}
+
+func popularWatchExercises(
+    from exercises: [WatchExerciseInfo],
+    limit: Int,
+    excludingCanonical excludedCanonical: Set<String> = []
+) -> [WatchExerciseInfo] {
+    guard limit > 0 else { return [] }
+
+    return Array(
+        uniqueByCanonical(
+            RecentExerciseTracker.personalizedPopular(from: exercises, limit: limit)
+        )
+        .filter { exercise in
+            !excludedCanonical.contains(RecentExerciseTracker.canonicalExerciseID(exerciseID: exercise.id))
+        }
+        .prefix(limit)
+    )
+}
+
+func prioritizedWatchExercises(
+    _ exercises: [WatchExerciseInfo],
+    recent: [WatchExerciseInfo],
+    preferred: [WatchExerciseInfo],
+    popular: [WatchExerciseInfo]
+) -> [WatchExerciseInfo] {
+    let orderedCanonicalIDs = (recent + preferred + popular).map {
+        RecentExerciseTracker.canonicalExerciseID(exerciseID: $0.id)
+    }
+    let priorityByCanonicalID = Dictionary(
+        orderedCanonicalIDs.enumerated().map { ($1, $0) },
+        uniquingKeysWith: { first, _ in first }
+    )
+
+    return exercises.sorted { lhs, rhs in
+        let lhsKey = RecentExerciseTracker.canonicalExerciseID(exerciseID: lhs.id)
+        let rhsKey = RecentExerciseTracker.canonicalExerciseID(exerciseID: rhs.id)
+        let lhsPriority = priorityByCanonicalID[lhsKey]
+        let rhsPriority = priorityByCanonicalID[rhsKey]
+
+        switch (lhsPriority, rhsPriority) {
+        case let (.some(l), .some(r)):
+            if l != r { return l < r }
+        case (.some, .none):
+            return true
+        case (.none, .some):
+            return false
+        case (.none, .none):
+            break
+        }
+
+        return lhs.name.localizedCaseInsensitiveCompare(rhs.name) == .orderedAscending
     }
 }
 
@@ -30,6 +138,27 @@ func resolvedDefaults(for exercise: WatchExerciseInfo) -> (weight: Double?, reps
     return (weight: weight, reps: reps)
 }
 
+func routineMetaLabel(
+    entries: [TemplateEntry],
+    exerciseLibraryByID: [String: WatchExerciseInfo],
+    globalRestSeconds: TimeInterval
+) -> String {
+    let base = "\(entries.count) exercise\(entries.count == 1 ? "" : "s")"
+    guard !entries.isEmpty else { return base }
+
+    let profiles = entries.map { templateEntryProfile(for: $0, exerciseLibraryByID: exerciseLibraryByID) }
+    guard profiles.allSatisfy(\.showsStrengthDefaultsEditor) else {
+        return base
+    }
+
+    let totalSets = entries.reduce(0) { $0 + $1.defaultSets }
+    var meta = "\(base) · \(totalSets) sets"
+    if let mins = estimateStrengthRoutineMinutes(entries: entries, globalRestSeconds: globalRestSeconds) {
+        meta += " · ~\(mins)min"
+    }
+    return meta
+}
+
 /// Creates a single-exercise template snapshot for navigation.
 func snapshotFromExercise(_ exercise: WatchExerciseInfo) -> WorkoutSessionTemplate {
     let defaults = resolvedDefaults(for: exercise)
@@ -39,7 +168,9 @@ func snapshotFromExercise(_ exercise: WatchExerciseInfo) -> WorkoutSessionTempla
         defaultSets: exercise.defaultSets,
         defaultReps: defaults.reps,
         defaultWeightKg: defaults.weight,
-        equipment: exercise.equipment
+        equipment: exercise.equipment,
+        inputTypeRaw: exercise.inputType,
+        cardioSecondaryUnitRaw: exercise.cardioSecondaryUnit
     )
     return WorkoutSessionTemplate(
         name: exercise.name,
@@ -84,6 +215,48 @@ func mergedRoutineTemplates(
     return templatesByID.values.sorted { lhs, rhs in
         lhs.updatedAt > rhs.updatedAt
     }
+}
+
+func watchExerciseProfile(for exercise: WatchExerciseInfo) -> TemplateExerciseProfile {
+    TemplateExerciseProfile(
+        inputTypeRaw: exercise.inputType,
+        cardioSecondaryUnitRaw: exercise.cardioSecondaryUnit
+    )
+}
+
+private func cardioSummary(for profile: TemplateExerciseProfile) -> String {
+    if let secondary = profile.secondarySummaryLabel {
+        return "\(profile.primarySummaryLabel) · \(secondary)"
+    }
+    return profile.primarySummaryLabel
+}
+
+private func templateEntryProfile(
+    for entry: TemplateEntry,
+    exerciseLibraryByID: [String: WatchExerciseInfo]
+) -> TemplateExerciseProfile {
+    let exercise = exerciseLibraryByID[entry.exerciseDefinitionID]
+    return TemplateExerciseProfile(
+        inputTypeRaw: exercise?.inputType ?? entry.inputTypeRaw,
+        cardioSecondaryUnitRaw: exercise?.cardioSecondaryUnit ?? entry.cardioSecondaryUnitRaw
+    )
+}
+
+private func estimateStrengthRoutineMinutes(
+    entries: [TemplateEntry],
+    globalRestSeconds: TimeInterval
+) -> Int? {
+    guard !entries.isEmpty else { return nil }
+    let setExecutionSeconds: Double = 40
+    var totalSeconds: Double = 0
+    for entry in entries {
+        let sets = Double(min(entry.defaultSets, 100))
+        let rest = entry.restDuration ?? globalRestSeconds
+        totalSeconds += sets * setExecutionSeconds + Swift.max(sets - 1, 0) * rest
+    }
+    guard totalSeconds.isFinite else { return nil }
+    let minutes = min(Int((totalSeconds / 60).rounded()), 480)
+    return minutes > 0 ? minutes : nil
 }
 
 // MARK: - Quick Start Search/Filter Helpers

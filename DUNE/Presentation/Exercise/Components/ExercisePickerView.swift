@@ -9,6 +9,7 @@ enum ExercisePickerMode {
 struct ExercisePickerView: View {
     let library: ExerciseLibraryQuerying
     let recentExerciseIDs: [String]
+    let preferredExerciseIDs: [String]
     let popularExerciseIDs: [String]
     let mode: ExercisePickerMode
     let onStartTemplate: ((WorkoutTemplate) -> Void)?
@@ -31,6 +32,7 @@ struct ExercisePickerView: View {
     init(
         library: ExerciseLibraryQuerying,
         recentExerciseIDs: [String],
+        preferredExerciseIDs: [String] = [],
         popularExerciseIDs: [String] = [],
         mode: ExercisePickerMode = .full,
         onStartTemplate: ((WorkoutTemplate) -> Void)? = nil,
@@ -38,6 +40,7 @@ struct ExercisePickerView: View {
     ) {
         self.library = library
         self.recentExerciseIDs = recentExerciseIDs
+        self.preferredExerciseIDs = preferredExerciseIDs
         self.popularExerciseIDs = popularExerciseIDs
         self.mode = mode
         self.onStartTemplate = onStartTemplate
@@ -113,7 +116,7 @@ struct ExercisePickerView: View {
 
         let sorted = QuickStartSupport.sortQuickStartExercises(
             QuickStartSupport.uniqueByID(definitions),
-            priorityIDs: popularExerciseIDs + recentExerciseIDs
+            priorityIDs: quickStartPriorityIDs
         )
         return QuickStartSupport.uniqueByCanonical(sorted)
     }
@@ -123,26 +126,41 @@ struct ExercisePickerView: View {
     }
 
     private var recentExercises: [ExerciseDefinition] {
-        QuickStartSupport.uniqueByCanonical(
-            recentExerciseIDs.compactMap {
-                QuickStartSupport.resolveExerciseDefinition(
-                    by: $0,
-                    library: library,
-                    customDefinitions: customDefinitions
-                )
-            }
-        )
+        quickStartOrdering.recentIDs.compactMap {
+            QuickStartSupport.resolveExerciseDefinition(
+                by: $0,
+                library: library,
+                customDefinitions: customDefinitions
+            )
+        }
+    }
+
+    private var preferredExercises: [ExerciseDefinition] {
+        quickStartOrdering.preferredIDs.compactMap {
+            QuickStartSupport.resolveExerciseDefinition(
+                by: $0,
+                library: library,
+                customDefinitions: customDefinitions
+            )
+        }
     }
 
     private var popularExercises: [ExerciseDefinition] {
-        QuickStartSupport.uniqueByCanonical(
-            popularExerciseIDs.compactMap {
-                QuickStartSupport.resolveExerciseDefinition(
-                    by: $0,
-                    library: library,
-                    customDefinitions: customDefinitions
-                )
-            }
+        quickStartOrdering.popularIDs.compactMap {
+            QuickStartSupport.resolveExerciseDefinition(
+                by: $0,
+                library: library,
+                customDefinitions: customDefinitions
+            )
+        }
+    }
+
+    private var quickStartOrdering: QuickStartSectionOrdering {
+        QuickStartSectionOrderingService.make(
+            recentIDs: recentExerciseIDs,
+            preferredIDs: preferredExerciseIDs,
+            popularIDs: popularExerciseIDs,
+            canonicalize: QuickStartCanonicalService.canonicalExerciseID(for:)
         )
     }
 
@@ -154,11 +172,17 @@ struct ExercisePickerView: View {
         isQuickStartMode && !showingAllQuickStartExercises && trimmedSearchText.isEmpty
     }
 
-    private var quickStartRecentExercises: [ExerciseDefinition] {
-        let popularCanonical = Set(popularExercises.map(QuickStartSupport.canonicalKey(for:)))
-        return recentExercises.filter { exercise in
-            !popularCanonical.contains(QuickStartSupport.canonicalKey(for: exercise))
+    private var quickStartPriorityIDs: [String] {
+        var seen = Set<String>()
+        return quickStartOrdering.priorityIDs.compactMap { id in
+            let representativeID = library.representativeExercise(byID: id)?.id ?? id
+            guard !representativeID.isEmpty else { return nil }
+            return seen.insert(representativeID).inserted ? representativeID : nil
         }
+    }
+
+    private var quickStartAllSectionTitle: LocalizedStringKey {
+        searchText.isEmpty ? "All Exercises" : "Results"
     }
 
     var body: some View {
@@ -268,17 +292,25 @@ struct ExercisePickerView: View {
 
     @ViewBuilder
     private var quickStartHubSections: some View {
-        if !popularExercises.isEmpty {
-            Section("Popular") {
-                ForEach(popularExercises) { exercise in
+        if !recentExercises.isEmpty {
+            Section("Recent") {
+                ForEach(recentExercises) { exercise in
                     exerciseRow(exercise)
                 }
             }
         }
 
-        if !quickStartRecentExercises.isEmpty {
-            Section("Recent") {
-                ForEach(quickStartRecentExercises) { exercise in
+        if !preferredExercises.isEmpty {
+            Section("Preferred") {
+                ForEach(preferredExercises) { exercise in
+                    exerciseRow(exercise)
+                }
+            }
+        }
+
+        if !popularExercises.isEmpty {
+            Section("Popular") {
+                ForEach(popularExercises) { exercise in
                     exerciseRow(exercise)
                 }
             }
@@ -352,7 +384,7 @@ struct ExercisePickerView: View {
             }
         } header: {
             HStack {
-                Text("All Exercises")
+                Text(quickStartAllSectionTitle)
                 Spacer()
                 if showingAllQuickStartExercises && trimmedSearchText.isEmpty {
                     Button("Hide") {

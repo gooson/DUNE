@@ -52,6 +52,7 @@ status: approved
 ### Launch & Permissions
 
 - **launch permission 완료 플래그는 요청 전에 영구 저장 금지**: cross-launch persisted state와 same-launch attempt state를 분리하고, system request가 정상 반환된 뒤에만 completion 저장 (#201)
+- **secondary CloudKit consumer도 `isCloudSyncEnabled` 우회 금지**: watch/vision/mac mirror reader가 별도 `ModelContainer`를 만들더라도 iOS sync opt-in 계약을 그대로 재사용 (#205)
 
 ### UI 표시 규칙
 

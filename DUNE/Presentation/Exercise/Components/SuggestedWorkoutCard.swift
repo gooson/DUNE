@@ -5,6 +5,7 @@ struct SuggestedWorkoutCard: View {
     let onStartExercise: (ExerciseDefinition) -> Void
 
     @Environment(\.appTheme) private var theme
+    @State private var selectedExercise: ExerciseDefinition?
 
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
@@ -35,7 +36,7 @@ struct SuggestedWorkoutCard: View {
             // Exercises
             ForEach(suggestion.exercises) { exercise in
                 Button {
-                    onStartExercise(exercise.definition)
+                    selectedExercise = exercise.definition
                 } label: {
                     HStack(spacing: DS.Spacing.sm) {
                         Text(exercise.definition.localizedName)
@@ -66,5 +67,10 @@ struct SuggestedWorkoutCard: View {
             }
         }
         .padding(DS.Spacing.md)
+        .sheet(item: $selectedExercise) { exercise in
+            ExerciseDetailSheet(exercise: exercise) {
+                onStartExercise(exercise)
+            }
+        }
     }
 }

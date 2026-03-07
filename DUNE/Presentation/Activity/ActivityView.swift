@@ -23,6 +23,7 @@ struct ActivityView: View {
     private let library: ExerciseLibraryQuerying = ExerciseLibraryService.shared
 
     @Query(sort: \ExerciseRecord.date, order: .reverse) private var recentRecords: [ExerciseRecord]
+    @Query(sort: \ExerciseDefaultRecord.lastUsedDate, order: .reverse) private var exerciseDefaults: [ExerciseDefaultRecord]
     @Query(filter: #Predicate<InjuryRecord> { $0.endDate == nil },
            sort: \InjuryRecord.startDate, order: .reverse) private var activeInjuryRecords: [InjuryRecord]
 
@@ -229,6 +230,7 @@ struct ActivityView: View {
             ExercisePickerView(
                 library: library,
                 recentExerciseIDs: recentExerciseIDs,
+                preferredExerciseIDs: preferredExerciseIDs,
                 popularExerciseIDs: popularExerciseIDs,
                 mode: .quickStart,
                 onStartTemplate: startFromTemplate
@@ -577,6 +579,19 @@ struct ActivityView: View {
             .filter { !existing.contains($0) }
             .prefix(limit - ranked.count)
         return ranked + fallback
+    }
+
+    private var preferredExerciseIDs: [String] {
+        var seen = Set<String>()
+        return exerciseDefaults.compactMap { record in
+            guard record.isPreferred else { return nil }
+            let representativeID = library.representativeExercise(byID: record.exerciseDefinitionID)?.id
+                ?? record.exerciseDefinitionID
+            guard !representativeID.isEmpty else { return nil }
+            let canonicalID = QuickStartCanonicalService.canonicalExerciseID(for: representativeID)
+            guard seen.insert(canonicalID).inserted else { return nil }
+            return representativeID
+        }
     }
 }
 

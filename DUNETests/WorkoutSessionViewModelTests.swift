@@ -46,6 +46,62 @@ struct WorkoutSessionViewModelTests {
         #expect(vm.sets[0].reps.isEmpty)
     }
 
+    @Test("applyTemplateDefaults pre-fills reps, weight, and rest for strength templates")
+    func applyTemplateDefaultsForStrength() {
+        let exercise = makeExercise()
+        let vm = WorkoutSessionViewModel(exercise: exercise, defaultSetCount: 2)
+        let entry = TemplateEntry(
+            exerciseDefinitionID: exercise.id,
+            exerciseName: exercise.localizedName,
+            defaultSets: 2,
+            defaultReps: 8,
+            defaultWeightKg: 80,
+            restDuration: 120,
+            equipment: exercise.equipment.rawValue
+        )
+
+        vm.applyTemplateDefaults(entry, weightUnit: .kg)
+
+        #expect(vm.templateRestDuration == 120)
+        #expect(vm.sets.count == 2)
+        #expect(vm.sets[0].reps == "8")
+        #expect(vm.sets[1].reps == "8")
+        #expect(vm.sets[0].weight == "80")
+        #expect(vm.sets[1].weight == "80")
+    }
+
+    @Test("applyTemplateDefaults ignores strength defaults for cardio templates")
+    func applyTemplateDefaultsForCardio() {
+        let exercise = ExerciseDefinition(
+            id: "stair-climber",
+            name: "Stair Climber",
+            localizedName: "천국의 계단",
+            category: .cardio,
+            inputType: .durationDistance,
+            primaryMuscles: [.quadriceps],
+            secondaryMuscles: [.glutes],
+            equipment: .machine,
+            metValue: 9.0,
+            cardioSecondaryUnit: .floors
+        )
+        let vm = WorkoutSessionViewModel(exercise: exercise, defaultSetCount: 1)
+        let entry = TemplateEntry(
+            exerciseDefinitionID: exercise.id,
+            exerciseName: exercise.localizedName,
+            defaultSets: 1,
+            defaultReps: 30,
+            defaultWeightKg: 50,
+            restDuration: 90,
+            equipment: exercise.equipment.rawValue
+        )
+
+        vm.applyTemplateDefaults(entry, weightUnit: .kg)
+
+        #expect(vm.templateRestDuration == nil)
+        #expect(vm.sets[0].reps.isEmpty)
+        #expect(vm.sets[0].weight.isEmpty)
+    }
+
     @Test("addSet increments set number")
     func addSet() {
         let exercise = makeExercise()
@@ -131,6 +187,87 @@ struct WorkoutSessionViewModelTests {
         vm.fillSetFromPrevious(at: 0)
         #expect(vm.sets[0].duration == "30")
         #expect(vm.sets[0].distance == "5.5")
+    }
+
+    @Test("applyProgressiveOverloadForNextSet increases by equipment policy when target reps met")
+    func progressiveOverloadIncreasesWeight() {
+        let exercise = makeExercise()
+        let vm = WorkoutSessionViewModel(exercise: exercise, defaultSetCount: 2)
+        vm.sets[0].weight = "60"
+        vm.sets[0].reps = "10"
+        vm.previousSets = [
+            PreviousSetInfo(weight: 57.5, reps: 10, duration: nil, distance: nil, restDuration: nil)
+        ]
+
+        let updated = vm.applyProgressiveOverloadForNextSet(afterCompletingSetAt: 0, weightUnit: .kg)
+
+        #expect(updated)
+        #expect(vm.sets[1].weight == "62.5")
+    }
+
+
+
+    @Test("applyProgressiveOverloadForNextSet caps jump to 10 percent for light weights")
+    func progressiveOverloadCapsLargeJump() {
+        let exercise = makeExercise()
+        let vm = WorkoutSessionViewModel(exercise: exercise, defaultSetCount: 2)
+        vm.sets[0].weight = "10"
+        vm.sets[0].reps = "12"
+        vm.previousSets = [
+            PreviousSetInfo(weight: 10, reps: 12, duration: nil, distance: nil, restDuration: nil)
+        ]
+
+        let updated = vm.applyProgressiveOverloadForNextSet(afterCompletingSetAt: 0, weightUnit: .kg)
+
+        #expect(updated)
+        #expect(vm.sets[1].weight == "11")
+    }
+
+    @Test("applyProgressiveOverloadForNextSet keeps next set unchanged when reps are below target")
+    func progressiveOverloadBlockedOnFailure() {
+        let exercise = makeExercise()
+        let vm = WorkoutSessionViewModel(exercise: exercise, defaultSetCount: 2)
+        vm.sets[0].weight = "60"
+        vm.sets[0].reps = "7"
+        vm.sets[1].weight = "60"
+        vm.previousSets = [
+            PreviousSetInfo(weight: 60, reps: 10, duration: nil, distance: nil, restDuration: nil)
+        ]
+
+        let updated = vm.applyProgressiveOverloadForNextSet(afterCompletingSetAt: 0, weightUnit: .kg)
+
+        #expect(!updated)
+        #expect(vm.sets[1].weight == "60")
+    }
+
+    @Test("shouldSuggestLevelUp returns true when all planned sets meet target reps")
+    func levelUpSuggestionWhenAllTargetsMet() {
+        let exercise = makeExercise()
+        let vm = WorkoutSessionViewModel(exercise: exercise, defaultSetCount: 3)
+        vm.previousSets = [
+            PreviousSetInfo(weight: 60, reps: 10, duration: nil, distance: nil, restDuration: nil),
+            PreviousSetInfo(weight: 60, reps: 10, duration: nil, distance: nil, restDuration: nil),
+            PreviousSetInfo(weight: 60, reps: 10, duration: nil, distance: nil, restDuration: nil)
+        ]
+
+        for idx in 0..<3 {
+            vm.sets[idx].reps = "10"
+            vm.sets[idx].isCompleted = true
+        }
+
+        #expect(vm.shouldSuggestLevelUp())
+    }
+
+    @Test("shouldSuggestLevelUp returns false when completion is partial")
+    func levelUpSuggestionRequiresAllSetsCompleted() {
+        let exercise = makeExercise()
+        let vm = WorkoutSessionViewModel(exercise: exercise, defaultSetCount: 3)
+        for idx in 0..<2 {
+            vm.sets[idx].reps = "10"
+            vm.sets[idx].isCompleted = true
+        }
+
+        #expect(!vm.shouldSuggestLevelUp())
     }
 
     @Test("createValidatedRecord returns nil with no completed sets")

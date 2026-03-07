@@ -77,7 +77,7 @@ struct VisionDashboardView: View {
             GridItem(.flexible(), spacing: 16)
         ]
 
-        return LazyVGrid(columns: columns, spacing: 16) {
+        LazyVGrid(columns: columns, spacing: 16) {
             quickActionCard(
                 title: "Condition",
                 icon: VisionDashboardWindowKind.condition.systemImage

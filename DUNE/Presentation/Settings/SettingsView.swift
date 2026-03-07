@@ -110,10 +110,17 @@ struct SettingsView: View {
                 Label("Exercise Defaults", systemImage: "dumbbell")
             }
             .accessibilityIdentifier("settings-row-exercisedefaults")
+
+            NavigationLink {
+                PreferredExercisesListView()
+            } label: {
+                Label("Preferred Exercises", systemImage: "star")
+            }
+            .accessibilityIdentifier("settings-row-preferredexercises")
         } header: {
             Text("Per-Exercise")
         } footer: {
-            Text("Set default weight for each exercise. Last used weight is remembered automatically.")
+            Text("Set default values and choose exercises that should stay near the top of Quick Start.")
         }
     }
 

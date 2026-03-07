@@ -16,7 +16,7 @@ SCHEME="DUNE"
 SIMULATOR_NAME="${DAILVE_IOS_SIMULATOR:-iPhone 17}"
 SIMULATOR_OS="${DAILVE_IOS_OS:-26.2}"
 DESTINATION="platform=iOS Simulator,name=${SIMULATOR_NAME},OS=${SIMULATOR_OS}"
-DERIVED_DATA_DIR=".deriveddata"
+DERIVED_DATA_DIR="${DAILVE_UI_TEST_DERIVED_DATA_DIR:-.deriveddata/ui-tests}"
 LOG_DIR=".xcodebuild"
 LOG_FILE="$LOG_DIR/ui-test.log"
 REGENERATE=1
@@ -157,11 +157,11 @@ set -e
 if [[ "$TEST_EXIT" -ne 0 ]]; then
     echo ""
     echo "UI tests failed. Summary:"
-    grep -n -E "TEST (SUCCEEDED|FAILED)|error:|failed|Executed" "$LOG_FILE" | tail -n 120 || true
+    grep -a -n -E "TEST (SUCCEEDED|FAILED)|error:|failed|Executed" "$LOG_FILE" | tail -n 120 || true
     echo ""
     echo "Full log: $LOG_FILE"
     exit "$TEST_EXIT"
 fi
 
 echo "UI tests passed."
-grep -n -E "TEST (SUCCEEDED|FAILED)|Executed" "$LOG_FILE" | tail -n 20 || true
+grep -a -n -E "TEST (SUCCEEDED|FAILED)|Executed" "$LOG_FILE" | tail -n 20 || true

@@ -1,10 +1,16 @@
 import SwiftUI
 import SwiftData
 
+private struct ExerciseStartConfig: Identifiable {
+    let id = UUID()
+    let exercise: ExerciseDefinition
+    let templateEntry: TemplateEntry?
+}
+
 struct ExerciseView: View {
     @State private var viewModel = ExerciseViewModel()
     @State private var showingExercisePicker = false
-    @State private var selectedExercise: ExerciseDefinition?
+    @State private var exerciseStartConfig: ExerciseStartConfig?
     @State private var pendingDraft: WorkoutSessionDraft?
     @State private var showingTemplates = false
     @State private var workoutSuggestion: WorkoutSuggestion?
@@ -16,11 +22,134 @@ struct ExerciseView: View {
     @State private var recordsByID: [UUID: ExerciseRecord] = [:]
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \ExerciseRecord.date, order: .reverse) private var manualRecords: [ExerciseRecord]
+    @Query(sort: \CustomExercise.createdAt, order: .reverse) private var customExercises: [CustomExercise]
+    @Query(sort: \ExerciseDefaultRecord.lastUsedDate, order: .reverse) private var exerciseDefaults: [ExerciseDefaultRecord]
 
     private let library: ExerciseLibraryQuerying = ExerciseLibraryService.shared
     private let recommendationService: WorkoutRecommending = WorkoutRecommendationService()
 
     var body: some View {
+        let base = contentView
+
+        return base
+            .toolbar { toolbarContent }
+            .sheet(isPresented: $showingExercisePicker) { exercisePickerSheet }
+            .sheet(item: $exerciseStartConfig, content: exerciseStartSheet)
+            .sheet(isPresented: $showingCompoundSetup) {
+                CompoundWorkoutSetupView(
+                    library: library,
+                    recentExerciseIDs: recentExerciseIDs
+                ) { config in
+                    compoundConfig = config
+                }
+            }
+            .navigationDestination(item: $compoundConfig) { config in
+                CompoundWorkoutView(config: config)
+            }
+            .fullScreenCover(item: $templateConfig) { config in
+                TemplateWorkoutContainerView(config: config)
+            }
+            .task {
+                pendingDraft = WorkoutSessionDraft.load()
+                rebuildRecordIndex()
+                WorkoutTypeCorrectionStore.shared.backfillTitles(from: manualRecords)
+                viewModel.manualRecords = manualRecords
+                updateSuggestion()
+                await viewModel.loadHealthKitWorkouts()
+            }
+            .onChange(of: manualRecords) { _, newValue in
+                rebuildRecordIndex()
+                WorkoutTypeCorrectionStore.shared.backfillTitles(from: newValue)
+                viewModel.manualRecords = newValue
+                updateSuggestion()
+            }
+            .waveRefreshable(
+                color: DS.Color.activity
+            ) {
+                await viewModel.loadHealthKitWorkouts()
+            }
+            .background { TabWaveBackground() }
+            .englishNavigationTitle("Exercise")
+            .alert(
+                "Delete Exercise?",
+                isPresented: Binding(
+                    get: { healthKitWorkoutToDelete != nil },
+                    set: { if !$0 { healthKitWorkoutToDelete = nil } }
+                ),
+                presenting: healthKitWorkoutToDelete
+            ) { workout in
+                Button("Delete", role: .destructive) {
+                    deleteHealthKitWorkout(workout)
+                }
+                Button("Cancel", role: .cancel) {
+                    healthKitWorkoutToDelete = nil
+                }
+            } message: { workout in
+                Text("\(workout.localizedTitle) on \(workout.date.formatted(date: .abbreviated, time: .omitted)) will be permanently deleted from all your devices.")
+            }
+            .confirmDeleteRecord($recordToDelete, context: modelContext)
+    }
+
+    @ToolbarContentBuilder
+    private var toolbarContent: some ToolbarContent {
+        ToolbarItemGroup(placement: .topBarLeading) {
+            NavigationLink {
+                WorkoutTemplateListView { template in
+                    startFromTemplate(template)
+                }
+            } label: {
+                Image(systemName: "list.clipboard")
+            }
+            .accessibilityIdentifier("exercise-toolbar-templates")
+
+            NavigationLink {
+                UserCategoryManagementView()
+            } label: {
+                Image(systemName: "tag")
+            }
+            .accessibilityIdentifier("exercise-toolbar-categories")
+        }
+
+        ToolbarItem(placement: .primaryAction) {
+            Menu {
+                Button {
+                    showingExercisePicker = true
+                } label: {
+                    Label("Single Exercise", systemImage: "figure.run")
+                }
+                Button {
+                    showingCompoundSetup = true
+                } label: {
+                    Label("Superset / Circuit", systemImage: "arrow.triangle.2.circlepath")
+                }
+            } label: {
+                Image(systemName: "plus")
+            }
+            .accessibilityIdentifier("exercise-toolbar-add")
+        }
+    }
+
+    private var exercisePickerSheet: some View {
+        ExercisePickerView(
+            library: library,
+            recentExerciseIDs: recentExerciseIDs,
+            popularExerciseIDs: popularExerciseIDs,
+            mode: .quickStart
+        ) { exercise in
+            presentExerciseStart(exercise)
+        }
+    }
+
+    private func exerciseStartSheet(config: ExerciseStartConfig) -> some View {
+        ExerciseStartView(
+            exercise: config.exercise,
+            templateEntry: config.templateEntry
+        )
+        .interactiveDismissDisabled()
+    }
+
+    @ViewBuilder
+    private var contentView: some View {
         Group {
             if viewModel.isLoading && viewModel.allExercises.isEmpty {
                 ProgressView()
@@ -44,7 +173,7 @@ struct ExerciseView: View {
                     if let suggestion = workoutSuggestion, !suggestion.exercises.isEmpty {
                         Section {
                             SuggestedWorkoutCard(suggestion: suggestion) { exercise in
-                                selectedExercise = exercise
+                                presentExerciseStart(exercise)
                             }
                             .listRowInsets(EdgeInsets())
                         }
@@ -115,110 +244,6 @@ struct ExerciseView: View {
                 .scrollContentBackground(.hidden)
             }
         }
-        .toolbar {
-            ToolbarItemGroup(placement: .topBarLeading) {
-                NavigationLink {
-                    WorkoutTemplateListView { template in
-                        startFromTemplate(template)
-                    }
-                } label: {
-                    Image(systemName: "list.clipboard")
-                }
-                .accessibilityIdentifier("exercise-toolbar-templates")
-
-                NavigationLink {
-                    UserCategoryManagementView()
-                } label: {
-                    Image(systemName: "tag")
-                }
-                .accessibilityIdentifier("exercise-toolbar-categories")
-            }
-            ToolbarItem(placement: .primaryAction) {
-                Menu {
-                    Button {
-                        showingExercisePicker = true
-                    } label: {
-                        Label("Single Exercise", systemImage: "figure.run")
-                    }
-                    Button {
-                        showingCompoundSetup = true
-                    } label: {
-                        Label("Superset / Circuit", systemImage: "arrow.triangle.2.circlepath")
-                    }
-                } label: {
-                    Image(systemName: "plus")
-                }
-                .accessibilityIdentifier("exercise-toolbar-add")
-            }
-        }
-        .sheet(isPresented: $showingExercisePicker) {
-            ExercisePickerView(
-                library: library,
-                recentExerciseIDs: recentExerciseIDs,
-                popularExerciseIDs: popularExerciseIDs,
-                mode: .quickStart,
-                onStartTemplate: startFromTemplate
-            ) { exercise in
-                selectedExercise = exercise
-            }
-        }
-        .sheet(item: $selectedExercise) { exercise in
-            ExerciseStartView(exercise: exercise)
-                .interactiveDismissDisabled()
-        }
-        .sheet(isPresented: $showingCompoundSetup) {
-            CompoundWorkoutSetupView(
-                library: library,
-                recentExerciseIDs: recentExerciseIDs
-            ) { config in
-                compoundConfig = config
-            }
-        }
-        .navigationDestination(item: $compoundConfig) { config in
-            CompoundWorkoutView(config: config)
-        }
-        .fullScreenCover(item: $templateConfig) { config in
-            TemplateWorkoutContainerView(config: config)
-        }
-        .task {
-            pendingDraft = WorkoutSessionDraft.load()
-            rebuildRecordIndex()
-            WorkoutTypeCorrectionStore.shared.backfillTitles(from: manualRecords)
-            viewModel.manualRecords = manualRecords
-            updateSuggestion()
-            await viewModel.loadHealthKitWorkouts()
-        }
-        .onChange(of: manualRecords) { _, newValue in
-            rebuildRecordIndex()
-            WorkoutTypeCorrectionStore.shared.backfillTitles(from: newValue)
-            viewModel.manualRecords = newValue
-            updateSuggestion()
-        }
-        .waveRefreshable(
-            color: DS.Color.activity
-        ) {
-            await viewModel.loadHealthKitWorkouts()
-        }
-        .background { TabWaveBackground() }
-        .englishNavigationTitle("Exercise")
-        .alert(
-            "Delete Exercise?",
-            isPresented: Binding(
-                get: { healthKitWorkoutToDelete != nil },
-                set: { if !$0 { healthKitWorkoutToDelete = nil } }
-            ),
-            presenting: healthKitWorkoutToDelete
-        ) { workout in
-            Button("Delete", role: .destructive) {
-                deleteHealthKitWorkout(workout)
-            }
-            Button("Cancel", role: .cancel) {
-                healthKitWorkoutToDelete = nil
-            }
-        } message: { workout in
-            Text("\(workout.localizedTitle) on \(workout.date.formatted(date: .abbreviated, time: .omitted)) will be permanently deleted from all your devices.")
-        }
-        .confirmDeleteRecord($recordToDelete, context: modelContext)
     }
 
     private func startFromTemplate(_ template: WorkoutTemplate) {
@@ -227,8 +252,8 @@ struct ExerciseView: View {
 
         // Single exercise: use existing single-exercise flow
         if entries.count == 1 {
-            if let def = resolveExercise(from: entries[0]) {
-                selectedExercise = def
+            if let definition = resolveExercise(from: entries[0]) {
+                presentExerciseStart(definition, templateEntry: entries[0])
             }
             return
         }
@@ -245,22 +270,11 @@ struct ExerciseView: View {
     }
 
     private func resolveExercise(from entry: TemplateEntry) -> ExerciseDefinition? {
-        if let definition = library.exercise(byID: entry.exerciseDefinitionID) {
-            return definition
-        } else if entry.exerciseDefinitionID.hasPrefix("custom-") {
-            return ExerciseDefinition(
-                id: entry.exerciseDefinitionID,
-                name: entry.exerciseName,
-                localizedName: entry.exerciseName,
-                category: .strength,
-                inputType: .setsRepsWeight,
-                primaryMuscles: [],
-                secondaryMuscles: [],
-                equipment: Equipment(rawValue: entry.equipment ?? "") ?? .bodyweight,
-                metValue: 5.0
-            )
-        }
-        return nil
+        TemplateExerciseResolver.resolveExercise(
+            for: entry,
+            library: library,
+            customExercises: customExercises
+        )
     }
 
     private func updateSuggestion() {
@@ -295,6 +309,16 @@ struct ExerciseView: View {
         return recordsByID[uuid]
     }
 
+    private func presentExerciseStart(
+        _ exercise: ExerciseDefinition,
+        templateEntry: TemplateEntry? = nil
+    ) {
+        exerciseStartConfig = ExerciseStartConfig(
+            exercise: exercise,
+            templateEntry: templateEntry
+        )
+    }
+
     private var recentExerciseIDs: [String] {
         var seen = Set<String>()
         return manualRecords.compactMap { record in
@@ -319,6 +343,19 @@ struct ExerciseView: View {
             return QuickStartPopularityService.defaultPopularExerciseIDs
         }
         return historyBased
+    }
+
+    private var preferredExerciseIDs: [String] {
+        var seen = Set<String>()
+        return exerciseDefaults.compactMap { record in
+            guard record.isPreferred else { return nil }
+            let representativeID = library.representativeExercise(byID: record.exerciseDefinitionID)?.id
+                ?? record.exerciseDefinitionID
+            guard !representativeID.isEmpty else { return nil }
+            let canonicalID = QuickStartCanonicalService.canonicalExerciseID(for: representativeID)
+            guard seen.insert(canonicalID).inserted else { return nil }
+            return representativeID
+        }
     }
 
     private func deleteHealthKitWorkout(_ workout: WorkoutSummary) {
@@ -359,7 +396,7 @@ struct ExerciseView: View {
             }
             Spacer()
             Button("Resume") {
-                selectedExercise = draft.exerciseDefinition
+                presentExerciseStart(draft.exerciseDefinition)
             }
             .font(.caption.weight(.semibold))
             .buttonStyle(.borderedProminent)

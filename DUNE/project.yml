@@ -318,7 +318,10 @@ targets:
       - path: Data/ExerciseLibraryService.swift
       - path: Data/ExerciseDescriptions.swift
       - path: Data/Resources/exercises.json
-      # Shared persistence stores
+      # Shared persistence for mirrored snapshot fallback
+      - path: Data/Persistence/HealthSnapshotMirrorContainerFactory.swift
+      - path: Data/Persistence/Models/HealthSnapshotMirrorRecord.swift
+      - path: Data/Persistence/Migration/PersistentStoreRecovery.swift
       - path: Data/Persistence/NotificationSettingsStore.swift
       - path: Data/Persistence/NotificationThrottleStore.swift
       - path: Data/Persistence/PersonalRecordStore.swift
@@ -329,7 +332,7 @@ targets:
       # Shared services
       - path: Data/Services
         excludes:
-          - "CloudMirroredSharedHealthDataService.swift"
+          - "BedtimeWatchReminderScheduler.swift"
           - "HealthSnapshotMirrorStore.swift"
           - "MirroringSharedHealthDataService.swift"
           - "NotificationServiceImpl.swift"

@@ -23,19 +23,19 @@ final class VisionSpatialViewModel {
     private let heartRateService: HeartRateQuerying
     private let workoutService: WorkoutQuerying
     private let analyzer: SpatialTrainingAnalyzing
-    private let healthKitManager: HealthKitManager
+    private let healthKitManager: any HealthKitManaging
 
     init(
         sharedHealthDataService: SharedHealthDataService?,
-        healthKitManager: HealthKitManager = .shared,
+        healthKitManager: any HealthKitManaging = HealthKitManager.shared,
         heartRateService: HeartRateQuerying? = nil,
         workoutService: WorkoutQuerying? = nil,
         analyzer: SpatialTrainingAnalyzing = SpatialTrainingAnalyzer()
     ) {
         self.sharedHealthDataService = sharedHealthDataService
         self.healthKitManager = healthKitManager
-        self.heartRateService = heartRateService ?? HeartRateQueryService(manager: healthKitManager)
-        self.workoutService = workoutService ?? WorkoutQueryService(manager: healthKitManager)
+        self.heartRateService = heartRateService ?? HeartRateQueryService(manager: .shared)
+        self.workoutService = workoutService ?? WorkoutQueryService(manager: .shared)
         self.analyzer = analyzer
     }
 
@@ -49,7 +49,8 @@ final class VisionSpatialViewModel {
         loadState = .loading
         message = nil
 
-        guard await healthKitManager.isAvailable else {
+        let healthKitAvailable = healthKitManager.isAvailable
+        guard healthKitAvailable || sharedHealthDataService != nil else {
             summary = analyzer.buildSummary(
                 workouts: [],
                 latestHeartRateBPM: nil,
@@ -61,17 +62,27 @@ final class VisionSpatialViewModel {
             return
         }
 
-        do {
-            try await healthKitManager.requestAuthorization()
-        } catch {
-            AppLogger.healthKit.error("Vision spatial authorization failed: \(error.localizedDescription)")
+        if healthKitAvailable {
+            do {
+                try await healthKitManager.requestAuthorization()
+            } catch {
+                AppLogger.healthKit.error("Vision spatial authorization failed: \(error.localizedDescription)")
+            }
         }
 
-        async let snapshotTask = fetchSnapshot()
-        async let heartRateTask = fetchLatestHeartRate()
-        async let workoutsTask = fetchRecentWorkouts()
+        let snapshotTask = Task { await fetchSnapshot() }
+        let heartRateTask = healthKitAvailable ? Task { await fetchLatestHeartRate() } : nil
+        let workoutsTask = healthKitAvailable ? Task { await fetchRecentWorkouts() } : nil
 
-        let (snapshotResult, heartRateResult, workoutsResult) = await (snapshotTask, heartRateTask, workoutsTask)
+        let snapshotResult = await snapshotTask.value
+        let heartRateResult = await heartRateTask?.value ?? FetchResult<VitalSample?>(
+            value: nil,
+            message: nil
+        )
+        let workoutsResult = await workoutsTask?.value ?? FetchResult<[WorkoutSummary]>(
+            value: [],
+            message: nil
+        )
 
         let snapshot = snapshotResult.value
         let baselineRHR = snapshot?.effectiveRHR?.value

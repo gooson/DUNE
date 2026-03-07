@@ -5,13 +5,34 @@ set -euo pipefail
 
 ROOT_DIR="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 
+KEEP_DERIVEDDATA=0
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --keep-deriveddata)
+      KEEP_DERIVEDDATA=1
+      shift
+      ;;
+    *)
+      echo "Unknown option: $1"
+      echo "Usage: $0 [--keep-deriveddata]"
+      exit 2
+      ;;
+  esac
+done
+
 CANDIDATES=(
   ".xcodebuild"
-  ".deriveddata"
   "DerivedData"
   "DUNE/.xcodebuild"
-  "DUNE/.deriveddata"
 )
+
+if [ "$KEEP_DERIVEDDATA" -eq 0 ]; then
+  CANDIDATES+=(
+    ".deriveddata"
+    "DUNE/.deriveddata"
+  )
+fi
 
 removed=0
 

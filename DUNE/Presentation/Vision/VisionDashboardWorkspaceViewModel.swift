@@ -164,7 +164,7 @@ final class VisionDashboardWorkspaceViewModel {
         loadState = .loading
         message = nil
 
-        let healthKitAvailable = await healthKitManager.isAvailable
+        let healthKitAvailable = healthKitManager.isAvailable
         if !healthKitAvailable, sharedHealthDataService == nil {
             let emptySummary = Self.buildSummary(
                 snapshot: nil,

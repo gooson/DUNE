@@ -390,7 +390,7 @@ enum WorkoutActivityType: String, Codable, Sendable, CaseIterable {
 
     /// Input types that should be treated as cardio workout candidates.
     /// Current exercise library uses `durationDistance` for cardio sessions.
-    private static let cardioInputTypes: Set<String> = ["durationDistance"]
+    private static let cardioInputTypes: Set<String> = ["duration", "durationDistance"]
 
     // MARK: - Name-Based Inference
 
