@@ -596,10 +596,15 @@ private struct HabitListQueryView: View {
 
     // MARK: - Actions
 
-    private func todayLogs(for habitId: UUID, date: Date = Date()) -> [HabitLog] {
+    private func todayLogs(for habit: HabitDefinition, date: Date = Date()) -> [HabitLog] {
         let calendar = Calendar.current
+        let relationshipLogs = (habit.logs ?? []).filter { calendar.isDate($0.date, inSameDayAs: date) }
+        if !relationshipLogs.isEmpty {
+            return relationshipLogs
+        }
+
         return habitLogs.filter {
-            $0.habitDefinition?.id == habitId && calendar.isDate($0.date, inSameDayAs: date)
+            $0.habitDefinition?.id == habit.id && calendar.isDate($0.date, inSameDayAs: date)
         }
     }
 
@@ -632,7 +637,7 @@ private struct HabitListQueryView: View {
             return
         }
 
-        let existingLogs = todayLogs(for: habitId)
+        let existingLogs = todayLogs(for: habit)
 
         if !existingLogs.isEmpty {
             // Toggle off: remove log
@@ -655,7 +660,7 @@ private struct HabitListQueryView: View {
         guard let habit = habitsByID[habitId] else { return }
 
         // Remove existing today logs
-        deleteLogs(todayLogs(for: habitId), from: habit)
+        deleteLogs(todayLogs(for: habit), from: habit)
 
         // Add new log with updated value
         if value > 0 {
