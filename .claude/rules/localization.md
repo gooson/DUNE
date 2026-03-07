@@ -6,8 +6,8 @@
 
 | 타겟 | 파일 위치 |
 |------|----------|
-| iOS (DUNE) | `DUNE/Resources/Localizable.xcstrings` |
-| watchOS (DUNEWatch) | `DUNE/DUNEWatch/Resources/Localizable.xcstrings` |
+| iOS (DUNE), Widget, visionOS | `Shared/Resources/Localizable.xcstrings` |
+| watchOS (DUNEWatch) | `DUNEWatch/Resources/Localizable.xcstrings` |
 
 ## 지원 언어
 

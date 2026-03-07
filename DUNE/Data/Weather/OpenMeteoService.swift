@@ -83,7 +83,7 @@ final class OpenMeteoService: WeatherFetching, @unchecked Sendable {
 
     private func mapToSnapshot(_ response: OpenMeteoResponse) -> WeatherSnapshot {
         let current = response.current
-        let parser = OpenMeteoDateParser()
+        let parser = OpenMeteoDateParser.shared
 
         let hourlyItems: [WeatherSnapshot.HourlyWeather]
         if let hourly = response.hourly {
@@ -205,12 +205,12 @@ final class OpenMeteoService: WeatherFetching, @unchecked Sendable {
 
     /// Parses Open-Meteo time strings. Supports full ISO 8601 and the compact "yyyy-MM-ddTHH:mm" format.
     static func parseISO8601(_ string: String) -> Date? {
-        OpenMeteoDateParser().parseISO8601(string)
+        OpenMeteoDateParser.shared.parseISO8601(string)
     }
 
     /// Parses Open-Meteo daily date strings ("yyyy-MM-dd" format).
     static func parseDateOnly(_ string: String) -> Date? {
-        OpenMeteoDateParser().parseDateOnly(string)
+        OpenMeteoDateParser.shared.parseDateOnly(string)
     }
 }
 

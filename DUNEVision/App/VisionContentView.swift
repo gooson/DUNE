@@ -8,6 +8,7 @@ struct VisionContentView: View {
     private let refreshCoordinator: AppRefreshCoordinating?
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.openWindow) private var openWindow
+    @Environment(\.openImmersiveSpace) private var openImmersiveSpace
     @Environment(\.supportsMultipleWindows) private var supportsMultipleWindows
     @State private var selectedSection: AppSection = .today
     @State private var refreshSignal = 0
@@ -35,6 +36,14 @@ struct VisionContentView: View {
                         onOpenVolumetric: {
                             guard supportsMultipleWindows else { return }
                             openWindow(id: "spatial-volume")
+                        },
+                        onOpenImmersive: {
+                            Task {
+                                let result = await openImmersiveSpace(id: "immersive-recovery")
+                                if result == .error {
+                                    AppLogger.ui.error("Immersive space failed to open")
+                                }
+                            }
                         }
                     )
                 }

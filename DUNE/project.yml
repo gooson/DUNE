@@ -95,6 +95,9 @@ targets:
         group: DUNE
       - path: Resources
         group: DUNE
+      # Shared Localization
+      - path: ../Shared/Resources/Localizable.xcstrings
+        group: Shared
       # Shared Colors
       - path: ../Shared/Resources/Colors.xcassets
         group: Shared/Resources
@@ -333,6 +336,9 @@ targets:
       - path: Presentation/Shared/Components/MuscleMapData.swift
       - path: Presentation/Shared/Components/MuscleMap3DScene.swift
       - path: Presentation/Shared/Extensions/ExerciseRecord+WeeklyVolume.swift
+        group: DUNEVision/Presentation/Shared/Extensions
+      - path: Presentation/Immersive/VisionImmersiveExperienceViewModel.swift
+        group: DUNEVision/Presentation/Immersive
       - path: ../Shared/Resources/Localizable.xcstrings
         group: Shared
       # Shared Colors
@@ -377,6 +383,9 @@ targets:
     platform: visionOS
     sources:
       - path: ../DUNEVisionWidgets
+      # Shared Colors
+      - path: ../Shared/Resources/Colors.xcassets
+        group: Shared/Resources
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.raftel.dailve.vision.widgets

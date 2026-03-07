@@ -106,11 +106,3 @@ final class MuscleMapDetailViewModel {
         return MuscleBalanceInfo(isBalanced: isBalanced, ratio: ratio, undertrainedMuscles: undertrained)
     }
 }
-
-// MARK: - Helpers
-
-private extension Int {
-    func clamped(to range: ClosedRange<Int>) -> Int {
-        Swift.max(range.lowerBound, Swift.min(self, range.upperBound))
-    }
-}

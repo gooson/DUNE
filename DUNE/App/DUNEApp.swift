@@ -1,7 +1,6 @@
 import SwiftUI
 import SwiftData
 import HealthKit
-import TipKit
 import UserNotifications
 
 @main
@@ -151,14 +150,6 @@ struct DUNEApp: App {
         self.notificationService = notifService
         self.notificationCenterDelegate = AppNotificationCenterDelegate()
         UNUserNotificationCenter.current().delegate = notificationCenterDelegate
-        do {
-            try Tips.configure()
-            if Self.isRunningUITests {
-                Tips.hideAllTipsForTesting()
-            }
-        } catch {
-            AppLogger.ui.error("TipKit configuration failed: \(error.localizedDescription)")
-        }
 
         if healthKitAvailable {
             let hkStore = HKHealthStore()
@@ -417,6 +408,21 @@ struct DUNEApp: App {
         WatchSessionManager.shared.syncWorkoutTemplatesToWatch(using: modelContainer)
         WatchSessionManager.shared.activate()
         observerManager?.startObserving()
+        scheduleWorkoutTitleBackfill()
+    }
+
+    @MainActor
+    private func scheduleWorkoutTitleBackfill() {
+        let container = modelContainer
+        Task(priority: .utility) {
+            do {
+                let context = ModelContext(container)
+                let records = try context.fetch(FetchDescriptor<ExerciseRecord>())
+                WorkoutTypeCorrectionStore.shared.backfillTitles(from: records)
+            } catch {
+                AppLogger.data.error("Workout title backfill failed: \(error.localizedDescription)")
+            }
+        }
     }
 
     @MainActor

@@ -226,3 +226,18 @@ extension ActivityPersonalRecord {
         WorkoutActivityType.localizedDisplayName(forStoredTitle: title) ?? title
     }
 }
+
+extension WorkoutSummary {
+    /// Presentation-safe title for HealthKit workouts.
+    /// Legacy activity names are localized, while custom metadata titles are preserved.
+    var localizedTitle: String {
+        localizedTitle(using: .shared)
+    }
+
+    func localizedTitle(using correctionStore: WorkoutTypeCorrectionStore = .shared) -> String {
+        if let corrected = correctionStore.correctedTitle(for: id) {
+            return corrected
+        }
+        return WorkoutActivityType.localizedDisplayName(forStoredTitle: type) ?? type
+    }
+}

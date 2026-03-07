@@ -80,7 +80,7 @@ final class OpenMeteoAirQualityService: AirQualityFetching, @unchecked Sendable 
 
     private func mapToSnapshot(_ response: AirQualityResponse) -> AirQualitySnapshot {
         let current = response.current
-        let parser = OpenMeteoDateParser()
+        let parser = OpenMeteoDateParser.shared
 
         let hourlyItems: [AirQualitySnapshot.HourlyAirQuality]
         if let hourly = response.hourly {

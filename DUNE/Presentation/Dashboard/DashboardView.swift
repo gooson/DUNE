@@ -1,5 +1,4 @@
 import SwiftUI
-import TipKit
 
 struct DashboardView: View {
     @State private var viewModel: DashboardViewModel
@@ -7,6 +6,9 @@ struct DashboardView: View {
     @State private var hasAppeared = false
     @State private var unreadNotificationCount = 0
     @State private var showWhatsNewBadge = false
+    @State private var cachedWhatsNewReleases: [WhatsNewRelease] = []
+    @State private var cachedCurrentRelease: WhatsNewRelease?
+    @State private var cachedBuildNumber: String = ""
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.openURL) private var openURL
     private let inboxManager = NotificationInboxManager.shared
@@ -200,6 +202,7 @@ struct DashboardView: View {
             await loadDashboard()
         }
         .task {
+            loadWhatsNewCache()
             reloadUnreadCount()
             reloadWhatsNewBadge()
         }
@@ -312,18 +315,11 @@ struct DashboardView: View {
         unreadNotificationCount = inboxManager.unreadCount()
     }
 
-    private var whatsNewReleases: [WhatsNewRelease] {
-        whatsNewManager.orderedReleases(preferredVersion: whatsNewManager.currentAppVersion())
-    }
-
-    private var currentWhatsNewRelease: WhatsNewRelease? {
+    private func loadWhatsNewCache() {
         let version = whatsNewManager.currentAppVersion()
-        guard !version.isEmpty else { return nil }
-        return whatsNewManager.currentRelease(for: version)
-    }
-
-    private var currentWhatsNewBuild: String {
-        whatsNewManager.currentBuildNumber()
+        cachedWhatsNewReleases = whatsNewManager.orderedReleases(preferredVersion: version)
+        cachedCurrentRelease = version.isEmpty ? nil : whatsNewManager.currentRelease(for: version)
+        cachedBuildNumber = whatsNewManager.currentBuildNumber()
     }
 
     @ToolbarContentBuilder
@@ -341,18 +337,17 @@ struct DashboardView: View {
 
     @ToolbarContentBuilder
     private var whatsNewToolbarItem: some ToolbarContent {
-        if !whatsNewReleases.isEmpty {
+        if !cachedWhatsNewReleases.isEmpty {
             ToolbarItem(placement: .topBarTrailing) {
                 NavigationLink {
                     WhatsNewView(
-                        releases: whatsNewReleases,
+                        releases: cachedWhatsNewReleases,
                         mode: .manual,
                         onPresented: markWhatsNewOpened
                     )
                 } label: {
                     whatsNewToolbarIcon
                 }
-                .popoverTip(whatsNewToolbarTip, arrowEdge: .top)
                 .accessibilityLabel("What's New")
                 .accessibilityIdentifier("dashboard-toolbar-whatsnew")
             }
@@ -370,19 +365,6 @@ struct DashboardView: View {
             .accessibilityLabel("Settings")
             .accessibilityIdentifier("dashboard-toolbar-settings")
         }
-    }
-
-    private var whatsNewToolbarTip: WhatsNewToolbarTip? {
-        guard showWhatsNewBadge,
-              let currentRelease = currentWhatsNewRelease,
-              !currentWhatsNewBuild.isEmpty else {
-            return nil
-        }
-
-        return WhatsNewToolbarTip(
-            buildNumber: currentWhatsNewBuild,
-            bodyMessage: currentRelease.intro
-        )
     }
 
     private var whatsNewToolbarIcon: some View {
@@ -403,23 +385,18 @@ struct DashboardView: View {
     }
 
     private func reloadWhatsNewBadge() {
-        guard currentWhatsNewRelease != nil else {
+        guard cachedCurrentRelease != nil else {
             showWhatsNewBadge = false
             return
         }
 
-        showWhatsNewBadge = whatsNewStore.shouldShowBadge(build: currentWhatsNewBuild)
+        showWhatsNewBadge = whatsNewStore.shouldShowBadge(build: cachedBuildNumber)
     }
 
     private func markWhatsNewOpened() {
-        guard !currentWhatsNewBuild.isEmpty else { return }
-        let tip = whatsNewToolbarTip
-        whatsNewStore.markOpened(build: currentWhatsNewBuild)
+        guard !cachedBuildNumber.isEmpty else { return }
+        whatsNewStore.markOpened(build: cachedBuildNumber)
         showWhatsNewBadge = false
-
-        if let tip {
-            tip.invalidate(reason: .actionPerformed)
-        }
     }
 
     private var insightCardsSection: some View {
@@ -518,32 +495,6 @@ struct DashboardView: View {
     private func openSettings() {
         guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
         openURL(url)
-    }
-}
-
-private struct WhatsNewToolbarTip: Tip {
-    let buildNumber: String
-    let bodyMessage: String
-
-    var id: String {
-        "whats-new-toolbar-tip-\(buildNumber)"
-    }
-
-    var title: Text {
-        Text("What's New")
-    }
-
-    var message: Text? {
-        Text(bodyMessage)
-    }
-
-    var image: Image? {
-        Image(systemName: "sparkles")
-    }
-
-    var options: [any TipOption] {
-        Tips.IgnoresDisplayFrequency(true)
-        Tips.MaxDisplayCount(1)
     }
 }
 

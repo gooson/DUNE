@@ -219,3 +219,36 @@ struct WorkoutWriteInputValidationTests {
         #expect(input.isFromHealthKit == false)
     }
 }
+
+@Suite("HealthKitWorkoutTitle")
+struct HealthKitWorkoutTitleTests {
+    @Test("Metadata stores trimmed exercise title")
+    func metadataStoresTrimmedExerciseTitle() {
+        let metadata = HealthKitWorkoutTitle.metadata(exerciseName: "  Bench Press  ")
+        #expect(metadata[HealthKitWorkoutTitle.metadataKey] as? String == "Bench Press")
+    }
+
+    @Test("Metadata omits empty exercise title")
+    func metadataOmitsEmptyExerciseTitle() {
+        let metadata = HealthKitWorkoutTitle.metadata(exerciseName: "   ")
+        #expect(metadata.isEmpty)
+    }
+
+    @Test("Resolve title prefers stored exercise metadata")
+    func resolveTitlePrefersStoredMetadata() {
+        let title = HealthKitWorkoutTitle.resolveTitle(
+            metadata: [HealthKitWorkoutTitle.metadataKey: "Incline Dumbbell Press"],
+            activityType: .traditionalStrengthTraining
+        )
+        #expect(title == "Incline Dumbbell Press")
+    }
+
+    @Test("Resolve title falls back to activity type when metadata missing")
+    func resolveTitleFallsBackToActivityType() {
+        let title = HealthKitWorkoutTitle.resolveTitle(
+            metadata: nil,
+            activityType: .traditionalStrengthTraining
+        )
+        #expect(title == WorkoutActivityType.traditionalStrengthTraining.typeName)
+    }
+}
