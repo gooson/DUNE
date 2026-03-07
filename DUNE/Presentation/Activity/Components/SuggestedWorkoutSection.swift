@@ -21,55 +21,23 @@ struct SuggestedWorkoutSection: View {
     @Environment(\.appTheme) private var theme
     @State private var showingEquipmentSheet = false
     @State private var searchText = ""
+    @State private var cachedFilteredExercises: [ExerciseDefinition] = []
 
     @Query(sort: \CustomExercise.createdAt, order: .reverse) private var customExercises: [CustomExercise]
     @Query(sort: \WorkoutTemplate.updatedAt, order: .reverse) private var templates: [WorkoutTemplate]
 
-    private var trimmedSearchText: String {
-        searchText.trimmingCharacters(in: .whitespacesAndNewlines)
-    }
+    private static let columns: [GridItem] = [
+        GridItem(.flexible(), spacing: DS.Spacing.sm),
+        GridItem(.flexible(), spacing: DS.Spacing.sm),
+    ]
 
-    private var customDefinitions: [ExerciseDefinition] {
-        customExercises.map { $0.toDefinition() }
-    }
-
-    private var filteredExercises: [ExerciseDefinition] {
-        let definitions: [ExerciseDefinition]
-        if trimmedSearchText.isEmpty {
-            definitions = customDefinitions + library.allExercises()
-        } else {
-            let customResults = customDefinitions.filter {
-                QuickStartSupport.matchesSearchQuery(trimmedSearchText, in: $0)
-            }
-            definitions = customResults + QuickStartSupport.mergedSearchResults(
-                for: trimmedSearchText,
-                library: library
-            )
-        }
-
-        let sorted = QuickStartSupport.sortQuickStartExercises(
-            QuickStartSupport.uniqueByID(definitions),
-            priorityIDs: popularExerciseIDs + recentExerciseIDs
-        )
-        return QuickStartSupport.uniqueByCanonical(sorted)
-    }
-
-    private var isSearching: Bool {
-        !trimmedSearchText.isEmpty
-    }
-
-    private var columns: [GridItem] {
-        [
-            GridItem(.flexible(), spacing: DS.Spacing.sm),
-            GridItem(.flexible(), spacing: DS.Spacing.sm),
-        ]
-    }
+    private static let searchBorderColor = Color.secondary.opacity(0.15)
 
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             searchField
 
-            if isSearching {
+            if !searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                 searchResultsSection
             } else {
                 recommendationControlsCard
@@ -88,14 +56,14 @@ struct SuggestedWorkoutSection: View {
                     templateStrip
                 }
 
-                Button("All Exercises") {
-                    onBrowseAll()
-                }
-                .font(.caption.weight(.semibold))
-                .foregroundStyle(DS.Color.activity)
-                .buttonStyle(.plain)
+                Button("All Exercises", action: onBrowseAll)
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(DS.Color.activity)
+                    .buttonStyle(.plain)
             }
         }
+        .onChange(of: searchText) { _, _ in rebuildFilteredExercises() }
+        .onChange(of: customExercises.count) { _, _ in rebuildFilteredExercises() }
         .sheet(isPresented: $showingEquipmentSheet) {
             RecommendationEquipmentSheet(
                 context: recommendationContext,
@@ -103,6 +71,27 @@ struct SuggestedWorkoutSection: View {
                 onSetEquipmentAvailability: onSetEquipmentAvailability
             )
         }
+    }
+
+    private func rebuildFilteredExercises() {
+        let trimmed = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else {
+            cachedFilteredExercises = []
+            return
+        }
+        let customDefs = customExercises.map { $0.toDefinition() }
+        let customResults = customDefs.filter {
+            QuickStartSupport.matchesSearchQuery(trimmed, in: $0)
+        }
+        let definitions = customResults + QuickStartSupport.mergedSearchResults(
+            for: trimmed,
+            library: library
+        )
+        let sorted = QuickStartSupport.sortQuickStartExercises(
+            QuickStartSupport.uniqueByID(definitions),
+            priorityIDs: popularExerciseIDs + recentExerciseIDs
+        )
+        cachedFilteredExercises = QuickStartSupport.uniqueByCanonical(sorted)
     }
 
     // MARK: - Search
@@ -136,14 +125,14 @@ struct SuggestedWorkoutSection: View {
                 .fill(.ultraThinMaterial)
                 .overlay(
                     RoundedRectangle(cornerRadius: DS.Radius.md)
-                        .strokeBorder(Color.secondary.opacity(0.15), lineWidth: 0.75)
+                        .strokeBorder(Self.searchBorderColor, lineWidth: 0.75)
                 )
         }
     }
 
     @ViewBuilder
     private var searchResultsSection: some View {
-        if filteredExercises.isEmpty {
+        if cachedFilteredExercises.isEmpty {
             InlineCard {
                 HStack(spacing: DS.Spacing.xs) {
                     Image(systemName: "figure.run")
@@ -155,7 +144,7 @@ struct SuggestedWorkoutSection: View {
                 }
             }
         } else {
-            searchExerciseList(exercises: filteredExercises)
+            searchExerciseList(exercises: cachedFilteredExercises)
         }
     }
 
@@ -257,7 +246,7 @@ struct SuggestedWorkoutSection: View {
                     }
                 }
 
-                LazyVGrid(columns: columns, spacing: DS.Spacing.sm) {
+                LazyVGrid(columns: Self.columns, spacing: DS.Spacing.sm) {
                     ForEach(suggestion.exercises) { exercise in
                         let excluded = isExerciseExcluded(exercise.id)
                         SuggestedExerciseRow(
