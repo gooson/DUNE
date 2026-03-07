@@ -27,7 +27,7 @@ struct VisionMuscleMapExperienceView: View {
     }
 
     private var fatigueByMuscle: [MuscleGroup: MuscleFatigueState] {
-        Dictionary(uniqueKeysWithValues: fatigueStates.map { ($0.muscle, $0) })
+        Dictionary(fatigueStates.map { ($0.muscle, $0) }, uniquingKeysWith: { _, latest in latest })
     }
 
     private var selectedState: MuscleMap3DDisplayState {

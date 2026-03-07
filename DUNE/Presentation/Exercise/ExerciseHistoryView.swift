@@ -337,7 +337,7 @@ struct ExerciseHistoryView: View {
     // MARK: - Record Index
 
     private func rebuildRecordIndex() {
-        recordByID = Dictionary(uniqueKeysWithValues: exerciseRecords.map { ($0.id, $0) })
+        recordByID = Dictionary(exerciseRecords.map { ($0.id, $0) }, uniquingKeysWith: { _, latest in latest })
     }
 
     // MARK: - 1RM

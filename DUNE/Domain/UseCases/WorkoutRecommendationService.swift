@@ -107,7 +107,8 @@ struct WorkoutRecommendationService: WorkoutRecommending {
         // Fill remaining slots with compound movements — recovery-verified
         if selectedExercises.count < targetExerciseCount {
             let fatigueByMuscle = Dictionary(
-                uniqueKeysWithValues: fatigueStates.map { ($0.muscle, $0) }
+                fatigueStates.map { ($0.muscle, $0) },
+                uniquingKeysWith: { _, latest in latest }
             )
 
             let compounds = library.allExercises()
@@ -188,7 +189,8 @@ struct WorkoutRecommendationService: WorkoutRecommending {
             referenceDate: now
         )
         let scoreByMuscle = Dictionary(
-            uniqueKeysWithValues: compoundScores.map { ($0.muscle, $0) }
+            compoundScores.map { ($0.muscle, $0) },
+            uniquingKeysWith: { _, latest in latest }
         )
 
         return allMuscles.map { muscle in

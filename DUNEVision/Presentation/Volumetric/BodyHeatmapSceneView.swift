@@ -9,7 +9,7 @@ struct BodyHeatmapSceneView: View {
     @State private var pitch: Float = -0.16
 
     private var muscleLookup: [MuscleGroup: SpatialTrainingSummary.MuscleLoad] {
-        Dictionary(uniqueKeysWithValues: muscleLoads.map { ($0.muscle, $0) })
+        Dictionary(muscleLoads.map { ($0.muscle, $0) }, uniquingKeysWith: { _, latest in latest })
     }
 
     var body: some View {
