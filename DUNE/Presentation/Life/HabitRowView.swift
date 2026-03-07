@@ -10,6 +10,34 @@ struct HabitRowView: View {
     @State private var isEditing = false
 
     var body: some View {
+        Group {
+            if isWholeRowToggle {
+                Button {
+                    onToggle()
+                } label: {
+                    cardContent
+                }
+                .buttonStyle(.plain)
+                .disabled(isToggleDisabled)
+                .accessibilityIdentifier("life-habit-toggle")
+            } else {
+                cardContent
+            }
+        }
+    }
+
+    private var isWholeRowToggle: Bool {
+        progress.isCycleBased || progress.type == .check
+    }
+
+    private var isToggleDisabled: Bool {
+        if progress.isCycleBased {
+            return !progress.isDue
+        }
+        return progress.isAutoCompleted
+    }
+
+    private var cardContent: some View {
         StandardCard {
             HStack(spacing: DS.Spacing.md) {
                 // Icon
@@ -93,63 +121,55 @@ struct HabitRowView: View {
     // MARK: - Check Type
 
     private var checkInput: some View {
-        Button {
-            onToggle()
-        } label: {
-            HStack(spacing: DS.Spacing.sm) {
-                Image(systemName: progress.isCompleted ? "checkmark.circle.fill" : "circle")
-                    .font(.title2)
-                    .foregroundStyle(progress.isCompleted ? AnyShapeStyle(DS.Color.positive) : AnyShapeStyle(.tertiary))
+        HStack(spacing: DS.Spacing.sm) {
+            Image(systemName: progress.isCompleted ? "checkmark.circle.fill" : "circle")
+                .font(.title2)
+                .foregroundStyle(progress.isCompleted ? AnyShapeStyle(DS.Color.positive) : AnyShapeStyle(.tertiary))
 
-                Text(progress.isCompleted ? String(localized: "Done") : String(localized: "Tap to complete"))
-                    .font(.caption)
-                    .foregroundStyle(progress.isCompleted ? .primary : .secondary)
+            Text(progress.isCompleted ? String(localized: "Done") : String(localized: "Tap to complete"))
+                .font(.caption)
+                .foregroundStyle(progress.isCompleted ? .primary : .secondary)
 
-                if progress.isAutoCompleted {
-                    Text("Auto")
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
-                        .padding(.horizontal, DS.Spacing.xs)
-                        .padding(.vertical, 1)
-                        .background {
-                            Capsule().fill(.quaternary)
-                        }
-                }
+            if progress.isAutoCompleted {
+                Text("Auto")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                    .padding(.horizontal, DS.Spacing.xs)
+                    .padding(.vertical, 1)
+                    .background {
+                        Capsule().fill(.quaternary)
+                    }
             }
+
+            Spacer(minLength: 0)
         }
-        .buttonStyle(.plain)
-        .disabled(progress.isAutoCompleted)
-        .accessibilityIdentifier("life-habit-toggle")
+        .contentShape(Rectangle())
     }
 
     private var cycleCheckInput: some View {
-        Button {
-            onToggle()
-        } label: {
-            HStack(spacing: DS.Spacing.sm) {
-                Image(systemName: progress.isCompleted ? "checkmark.circle.fill" : "circle")
-                    .font(.title2)
-                    .foregroundStyle(progress.isCompleted ? AnyShapeStyle(DS.Color.positive) : AnyShapeStyle(.tertiary))
+        HStack(spacing: DS.Spacing.sm) {
+            Image(systemName: progress.isCompleted ? "checkmark.circle.fill" : "circle")
+                .font(.title2)
+                .foregroundStyle(progress.isCompleted ? AnyShapeStyle(DS.Color.positive) : AnyShapeStyle(.tertiary))
 
-                Text(cycleStatusText)
-                    .font(.caption)
-                    .foregroundStyle((progress.isDue || progress.isOverdue) ? AnyShapeStyle(DS.Color.negative) : AnyShapeStyle(.secondary))
+            Text(cycleStatusText)
+                .font(.caption)
+                .foregroundStyle((progress.isDue || progress.isOverdue) ? AnyShapeStyle(DS.Color.negative) : AnyShapeStyle(.secondary))
 
-                if progress.isDue {
-                    Text("Due")
-                        .font(.caption2)
-                        .foregroundStyle(.white)
-                        .padding(.horizontal, DS.Spacing.xs)
-                        .padding(.vertical, 1)
-                        .background {
-                            Capsule().fill(progress.isOverdue ? DS.Color.negative : progress.iconCategory.themeColor)
-                        }
-                }
+            if progress.isDue {
+                Text("Due")
+                    .font(.caption2)
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, DS.Spacing.xs)
+                    .padding(.vertical, 1)
+                    .background {
+                        Capsule().fill(progress.isOverdue ? DS.Color.negative : progress.iconCategory.themeColor)
+                    }
             }
+
+            Spacer(minLength: 0)
         }
-        .buttonStyle(.plain)
-        .disabled(!progress.isDue)
-        .accessibilityIdentifier("life-habit-toggle")
+        .contentShape(Rectangle())
     }
 
     // MARK: - Duration/Value Type
