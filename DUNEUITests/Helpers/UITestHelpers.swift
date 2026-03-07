@@ -46,11 +46,11 @@ enum AXID {
     static let wellnessLinkBodyHistory = "wellness-link-bodyhistory"
     static let wellnessLinkInjuryHistory = "wellness-link-injuryhistory"
 
-    // MARK: - Life Tab (active: hero, toolbar-add)
+    // MARK: - Life Tab (active: hero, toolbar-add, habits section, habit toggle)
     static let lifeHeroProgress = "life-hero-progress"
     static let lifeToolbarAdd = "life-toolbar-add"
-    // Planned — identifier not yet applied to view
     static let lifeSectionHabits = "life-section-habits"
+    static let lifeHabitToggle = "life-habit-toggle"
 
     // MARK: - Settings (active rows)
     static let settingsRowExerciseDefaults = "settings-row-exercisedefaults"
@@ -226,6 +226,18 @@ extension XCUIApplication {
                 floatingTabButton.tap()
                 return
             }
+        }
+
+        let titledTabBarButton = tabBars.buttons[tabTitle].firstMatch
+        if titledTabBarButton.waitForExistence(timeout: 3) {
+            titledTabBarButton.tap()
+            return
+        }
+
+        let titledFloatingButton = buttons[tabTitle].firstMatch
+        if titledFloatingButton.waitForExistence(timeout: 3) {
+            titledFloatingButton.tap()
+            return
         }
 
         if let iconID = tabIconID(for: tabTitle) {

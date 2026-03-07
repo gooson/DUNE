@@ -514,4 +514,45 @@ struct LifeViewModelTests {
         let weekly5 = vm.autoExerciseProgresses.first { $0.id == "weeklyWorkout5" }
         #expect(weekly5?.currentValue == 1)
     }
+
+    @Test("LifeHabitLogSync insert updates relationship immediately")
+    func lifeHabitLogSyncInsert() {
+        let habit = HabitDefinition(
+            name: "Morning Stretch",
+            iconCategory: .fitness,
+            habitType: .check,
+            goalValue: 1,
+            goalUnit: nil,
+            frequency: .daily
+        )
+        let log = HabitLog(date: Date(), value: 1)
+
+        LifeHabitLogSync.insert(log, into: habit)
+
+        #expect(log.habitDefinition === habit)
+        #expect(habit.logs?.count == 1)
+        #expect(habit.logs?.first?.id == log.id)
+    }
+
+    @Test("LifeHabitLogSync delete removes matching logs from relationship")
+    func lifeHabitLogSyncDelete() {
+        let habit = HabitDefinition(
+            name: "Morning Stretch",
+            iconCategory: .fitness,
+            habitType: .check,
+            goalValue: 1,
+            goalUnit: nil,
+            frequency: .daily
+        )
+        let keep = HabitLog(date: Date(), value: 1)
+        let remove = HabitLog(date: Date(), value: 1)
+
+        LifeHabitLogSync.insert(keep, into: habit)
+        LifeHabitLogSync.insert(remove, into: habit)
+
+        LifeHabitLogSync.delete([remove], from: habit)
+
+        #expect(habit.logs?.count == 1)
+        #expect(habit.logs?.first?.id == keep.id)
+    }
 }

@@ -119,6 +119,7 @@ struct HabitRowView: View {
         }
         .buttonStyle(.plain)
         .disabled(progress.isAutoCompleted)
+        .accessibilityIdentifier("life-habit-toggle")
     }
 
     private var cycleCheckInput: some View {
@@ -148,6 +149,7 @@ struct HabitRowView: View {
         }
         .buttonStyle(.plain)
         .disabled(!progress.isDue)
+        .accessibilityIdentifier("life-habit-toggle")
     }
 
     // MARK: - Duration/Value Type
