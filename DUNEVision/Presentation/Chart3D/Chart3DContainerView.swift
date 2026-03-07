@@ -21,9 +21,9 @@ struct Chart3DContainerView: View {
 
                 switch selectedChart {
                 case .conditionScatter:
-                    ConditionScatter3DView()
+                    ConditionScatter3DView(sharedHealthDataService: sharedHealthDataService)
                 case .trainingVolume:
-                    TrainingVolume3DView()
+                    TrainingVolume3DView(sharedHealthDataService: sharedHealthDataService)
                 }
             }
             .navigationTitle("3D Health Charts")
@@ -39,8 +39,8 @@ enum Chart3DType: String, CaseIterable, Identifiable {
 
     var displayName: String {
         switch self {
-        case .conditionScatter: "Condition"
-        case .trainingVolume: "Training"
+        case .conditionScatter: String(localized: "Condition")
+        case .trainingVolume: String(localized: "Training")
         }
     }
 }

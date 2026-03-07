@@ -28,6 +28,13 @@ final class ActivitySmokeTests: UITestBaseCase {
         )
     }
 
+    func testInlineQuickStartSearchExists() throws {
+        XCTAssertTrue(
+            elementExists(AXID.activityQuickStartSearch, timeout: 5),
+            "Activity quick start search should exist without opening the picker"
+        )
+    }
+
     func testHeroReadinessCardExists() throws {
         XCTAssertTrue(
             elementExists(AXID.activityHeroReadiness, timeout: 8),
@@ -91,7 +98,7 @@ final class ActivitySmokeTests: UITestBaseCase {
         let pickerList = app.descendants(matching: .any)[AXID.pickerRootList].firstMatch
         XCTAssertTrue(pickerList.waitForExistence(timeout: 5), "Exercise picker should appear")
 
-        let searchField = app.searchFields.firstMatch
+        let searchField = app.descendants(matching: .any)[AXID.pickerSearchField].firstMatch
         XCTAssertTrue(searchField.waitForExistence(timeout: 5), "Exercise picker search field should exist")
 
         let cancel = app.buttons[AXID.pickerCancelButton]
