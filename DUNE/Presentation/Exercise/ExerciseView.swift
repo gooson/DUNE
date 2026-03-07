@@ -182,12 +182,14 @@ struct ExerciseView: View {
         .task {
             pendingDraft = WorkoutSessionDraft.load()
             rebuildRecordIndex()
+            WorkoutTypeCorrectionStore.shared.backfillTitles(from: manualRecords)
             viewModel.manualRecords = manualRecords
             updateSuggestion()
             await viewModel.loadHealthKitWorkouts()
         }
         .onChange(of: manualRecords) { _, newValue in
             rebuildRecordIndex()
+            WorkoutTypeCorrectionStore.shared.backfillTitles(from: newValue)
             viewModel.manualRecords = newValue
             updateSuggestion()
         }

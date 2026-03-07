@@ -331,6 +331,7 @@ struct ActivityView: View {
         }
         // Coalesce frequent SwiftData sync updates into a cancellable/debounced derived-state refresh.
         .task(id: recordsUpdateKey) {
+            WorkoutTypeCorrectionStore.shared.backfillTitles(from: recentRecords)
             await viewModel.refreshSuggestionFromRecords(recentRecords)
             recomputeInjuryConflicts()
         }
