@@ -63,6 +63,11 @@ schemes:
         DUNE: all
         DUNEUITests: [test]
     test:
+      testPlans:
+        - path: ../DUNEUITests/DUNEUITests-PR.xctestplan
+          defaultPlan: true
+        - path: ../DUNEUITests/DUNEUITests-Full.xctestplan
+        - path: ../DUNEUITests/UITests-CI.xctestplan
       targets:
         - DUNEUITests
 
@@ -72,6 +77,11 @@ schemes:
         DUNEWatch: all
         DUNEWatchUITests: [test]
     test:
+      testPlans:
+        - path: ../DUNEWatchUITests/DUNEWatchUITests-PR.xctestplan
+          defaultPlan: true
+        - path: ../DUNEWatchUITests/DUNEWatchUITests-Full.xctestplan
+        - path: ../DUNEWatchUITests/WatchUITests-CI.xctestplan
       targets:
         - DUNEWatchUITests
 

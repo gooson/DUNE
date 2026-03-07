@@ -2,16 +2,75 @@ import XCTest
 
 /// Base class for all UI tests providing shared setup, interruption handling,
 /// and convenience navigation helpers.
-@MainActor
 class UITestBaseCase: XCTestCase {
+    enum LaunchScenario: String {
+        case empty = "empty"
+        case defaultSeeded = "default-seeded"
+    }
+
+    struct LaunchConfiguration {
+        var resetState = true
+        var shouldSeedMockData = false
+        var scenario: LaunchScenario?
+        var initialTabSelectionArgument: String?
+        var additionalArguments: [String] = []
+        var additionalEnvironment: [String: String] = [:]
+
+        var launchArguments: [String] {
+            var args = ["--uitesting"]
+            if resetState {
+                args.append("--ui-reset")
+            }
+            if shouldSeedMockData {
+                args.append("--seed-mock")
+            }
+            if let scenario {
+                args.append(contentsOf: ["--ui-scenario", scenario.rawValue])
+            }
+            if let initialTabSelectionArgument {
+                args.append(contentsOf: ["--uitest-initial-tab", initialTabSelectionArgument])
+            }
+            args.append(contentsOf: additionalArguments)
+            return args
+        }
+    }
+
     var app: XCUIApplication!
 
-    /// Override in subclass to use "--seed-mock" for data-seeded tests
+    /// Override in subclass to opt into an isolated in-memory launch.
+    var shouldResetState: Bool { true }
+
+    /// Override in subclass to use "--seed-mock" for data-seeded tests.
     var shouldSeedMockData: Bool { false }
     var initialTabSelectionArgument: String? { nil }
 
+    /// Override in subclass for scenario-specific seeded states.
+    var uiScenario: LaunchScenario? {
+        shouldSeedMockData ? .defaultSeeded : .empty
+    }
+
+    /// Override in subclass for extra launch arguments.
+    var additionalLaunchArguments: [String] { [] }
+
+    /// Override in subclass for extra launch environment.
+    var additionalLaunchEnvironment: [String: String] { [:] }
+
+    var launchConfiguration: LaunchConfiguration {
+        LaunchConfiguration(
+            resetState: shouldResetState,
+            shouldSeedMockData: shouldSeedMockData,
+            scenario: uiScenario,
+            initialTabSelectionArgument: initialTabSelectionArgument,
+            additionalArguments: additionalLaunchArguments,
+            additionalEnvironment: additionalLaunchEnvironment
+        )
+    }
+
     override func tearDownWithError() throws {
         if let app {
+            if let failureCount = testRun?.failureCount, failureCount > 0 {
+                addScreenshotAttachment(named: defaultArtifactName(suffix: "failure"))
+            }
             app.terminate()
             _ = app.wait(for: .notRunning, timeout: 2)
         }
@@ -22,36 +81,24 @@ class UITestBaseCase: XCTestCase {
     override func setUpWithError() throws {
         continueAfterFailure = false
 
-        app = XCUIApplication()
-        var args = ["--uitesting"]
-        if shouldSeedMockData {
-            args.append("--seed-mock")
-        }
-        if let initialTabSelectionArgument {
-            args.append(contentsOf: ["--uitest-initial-tab", initialTabSelectionArgument])
-        }
-        app.launchArguments = args
-
-        // Auto-dismiss any system permission dialogs
-        addUIInterruptionMonitor(withDescription: "System Alert") { alert in
-            for label in ["Allow", "OK", "Don't Allow"] {
-                let button = alert.buttons[label]
-                if button.exists {
-                    button.tap()
-                    return true
-                }
-            }
-            return false
-        }
-
-        // Terminate any lingering instance before launch (CI resilience)
-        app.terminate()
-
-        app.launch()
+        launchApp()
 
         if !app.hasPrimaryNavigation(timeout: 8) {
             throw XCTSkip("Primary navigation (tab bar/sidebar) not found")
         }
+    }
+
+    func launchApp(with configuration: LaunchConfiguration? = nil) {
+        app = XCUIApplication()
+        let resolvedConfiguration = configuration ?? launchConfiguration
+        app.launchArguments = resolvedConfiguration.launchArguments
+        app.launchEnvironment.merge(resolvedConfiguration.additionalEnvironment) { _, new in new }
+
+        addSystemPermissionMonitor()
+
+        // Terminate any lingering instance before launch (CI resilience)
+        app.terminate()
+        app.launch()
     }
 
     // MARK: - Navigation Helpers
@@ -92,12 +139,25 @@ class UITestBaseCase: XCTestCase {
     func elementExists(_ identifier: String, timeout: TimeInterval = 3) -> Bool {
         app.descendants(matching: .any)[identifier].firstMatch.waitForExistence(timeout: timeout)
     }
+
+    func defaultArtifactName(suffix: String) -> String {
+        let rawTestName = name.split(separator: " ").last.map(String.init) ?? "UITest"
+        let sanitizedTestName = rawTestName.replacingOccurrences(of: "[^A-Za-z0-9_-]", with: "-", options: .regularExpression)
+        return "\(type(of: self))-\(sanitizedTestName)-\(suffix)"
+    }
+
+    func addScreenshotAttachment(named name: String, lifetime: XCTAttachment.Lifetime = .keepAlways) {
+        guard let app else { return }
+        let attachment = XCTAttachment(screenshot: app.screenshot())
+        attachment.name = name
+        attachment.lifetime = lifetime
+        add(attachment)
+    }
 }
 
 // MARK: - Seeded Base (with mock data)
 
 /// Base class for tests that require mock data to be seeded
-@MainActor
 class SeededUITestBaseCase: UITestBaseCase {
     override var shouldSeedMockData: Bool { true }
 }

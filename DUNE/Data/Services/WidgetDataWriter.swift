@@ -1,44 +1,21 @@
 import Foundation
 import WidgetKit
 
-/// Writes score data to App Group UserDefaults for the widget extension to read.
+/// Writes score data to an App Group file for the widget extension to read.
 /// Each ViewModel updates its own score fields, preserving the others.
 /// All callers are @MainActor, so read-modify-write is serialized.
 @MainActor
 enum WidgetDataWriter {
-    private static let encoder: JSONEncoder = {
-        let encoder = JSONEncoder()
-        encoder.dateEncodingStrategy = .secondsSince1970
-        return encoder
-    }()
-
-    private static let decoder: JSONDecoder = {
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .secondsSince1970
-        return decoder
-    }()
-
-    private static let defaults = WidgetScoreData.sharedDefaults()
-
     // Debounce reloadAllTimelines to coalesce rapid writes from multiple VMs.
     private static var reloadWorkItem: DispatchWorkItem?
 
     private static func loadExisting() -> WidgetScoreData? {
-        guard let jsonData = defaults?.data(forKey: WidgetScoreData.userDefaultsKey) else { return nil }
-        do {
-            return try decoder.decode(WidgetScoreData.self, from: jsonData)
-        } catch {
-            AppLogger.data.error("[WidgetDataWriter] Corrupt widget blob, removing: \(error)")
-            defaults?.removeObject(forKey: WidgetScoreData.userDefaultsKey)
-            return nil
-        }
+        WidgetScoreData.loadSharedData()
     }
 
     private static func save(_ data: WidgetScoreData) {
-        guard let defaults else { return }
         do {
-            let jsonData = try encoder.encode(data)
-            defaults.set(jsonData, forKey: WidgetScoreData.userDefaultsKey)
+            try WidgetScoreData.saveSharedData(data)
             scheduleReload()
         } catch {
             AppLogger.data.error("[WidgetDataWriter] Failed to encode widget data: \(error)")

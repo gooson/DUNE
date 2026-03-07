@@ -1,0 +1,32 @@
+{
+  "configurations" : [
+    {
+      "id" : "D2A6C7E0-0001-0001-0001-000000000101",
+      "name" : "PR Configuration",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:DUNE.xcodeproj",
+      "identifier" : "DUNEUITests",
+      "name" : "DUNEUITests"
+    }
+  },
+  "testTargets" : [
+    {
+      "skippedTests" : [
+        "HealthKitPermissionUITests",
+        "SakuraThemeSnapshotTests"
+      ],
+      "target" : {
+        "containerPath" : "container:DUNE.xcodeproj",
+        "identifier" : "DUNEUITests",
+        "name" : "DUNEUITests"
+      }
+    }
+  ],
+  "version" : 1
+}

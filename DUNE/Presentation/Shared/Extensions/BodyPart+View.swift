@@ -34,7 +34,7 @@ extension BodyPart {
 #if os(visionOS)
             return "dumbbell.fill"
 #else
-            return "figure.rowing"
+            return "figure.rower"
 #endif
         case .biceps, .triceps, .forearms: return "dumbbell.fill"
         case .core: return "figure.core.training"

@@ -2,6 +2,11 @@ import XCTest
 
 // MARK: - Accessibility Identifier Constants (3-tier: {tab}-{section}-{element})
 
+enum ScrollDirection {
+    case up
+    case down
+}
+
 enum AXID {
     // MARK: - Dashboard Tab (active: hero, settings, pinned-edit)
     static let dashboardHeroCondition = "dashboard-hero-condition"
@@ -23,7 +28,7 @@ enum AXID {
     // MARK: - Activity Tab (active: hero, toolbar-add)
     static let activityHeroReadiness = "activity-hero-readiness"
     static let activityToolbarAdd = "activity-toolbar-add"
-    static let activityQuickStartSearch = "activity-quickstart-search"
+    static let activityQuickStartSearch = "activity-exercise-search"
     static let waveRefreshIndicator = "wave-refresh-indicator"
     static let activitySectionMuscleMap = "activity-section-musclemap"
     static let activitySectionWeeklyStats = "activity-section-weeklystats"
@@ -46,11 +51,11 @@ enum AXID {
     static let wellnessLinkBodyHistory = "wellness-link-bodyhistory"
     static let wellnessLinkInjuryHistory = "wellness-link-injuryhistory"
 
-    // MARK: - Life Tab (active: hero, toolbar-add)
+    // MARK: - Life Tab (active: hero, toolbar-add, habits section, habit toggle)
     static let lifeHeroProgress = "life-hero-progress"
     static let lifeToolbarAdd = "life-toolbar-add"
-    // Planned — identifier not yet applied to view
     static let lifeSectionHabits = "life-section-habits"
+    static let lifeHabitToggle = "life-habit-toggle"
 
     // MARK: - Settings (active rows)
     static let settingsRowExerciseDefaults = "settings-row-exercisedefaults"
@@ -133,48 +138,49 @@ extension XCTestCase {
     /// Call in `setUpWithError()` before `app.launch()`.
     nonisolated func addSystemPermissionMonitor() {
         _ = addUIInterruptionMonitor(withDescription: "System Permission Alert") { alert in
-            // Location: "Allow While Using App" (preferred) or "Allow Once"
-            let allowWhileUsing = alert.buttons["Allow While Using App"]
-            if allowWhileUsing.exists {
-                allowWhileUsing.tap()
-                return true
-            }
+            MainActor.assumeIsolated {
+                // Location: "Allow While Using App" (preferred) or "Allow Once"
+                let allowWhileUsing = alert.buttons["Allow While Using App"]
+                if allowWhileUsing.exists {
+                    allowWhileUsing.tap()
+                    return true
+                }
 
-            let allowOnce = alert.buttons["Allow Once"]
-            if allowOnce.exists {
-                allowOnce.tap()
-                return true
-            }
+                let allowOnce = alert.buttons["Allow Once"]
+                if allowOnce.exists {
+                    allowOnce.tap()
+                    return true
+                }
 
-            // Generic "Allow" (HealthKit, Notifications with allow, etc.)
-            let allow = alert.buttons["Allow"]
-            if allow.exists {
-                allow.tap()
-                return true
-            }
+                // Generic "Allow" (HealthKit, Notifications with allow, etc.)
+                let allow = alert.buttons["Allow"]
+                if allow.exists {
+                    allow.tap()
+                    return true
+                }
 
-            // "OK" button
-            let ok = alert.buttons["OK"]
-            if ok.exists {
-                ok.tap()
-                return true
-            }
+                // "OK" button
+                let ok = alert.buttons["OK"]
+                if ok.exists {
+                    ok.tap()
+                    return true
+                }
 
-            // Notifications: "Don't Allow" (we don't need push for UI tests)
-            let dontAllow = alert.buttons["Don't Allow"]
-            if dontAllow.exists {
-                dontAllow.tap()
-                return true
-            }
+                // Notifications: "Don't Allow" (we don't need push for UI tests)
+                let dontAllow = alert.buttons["Don't Allow"]
+                if dontAllow.exists {
+                    dontAllow.tap()
+                    return true
+                }
 
-            return false
+                return false
+            }
         }
     }
 }
 
 // MARK: - XCUIApplication Helpers
 
-@MainActor
 extension XCUIApplication {
     private func tabIconID(for tabTitle: String) -> String? {
         switch tabTitle {
@@ -223,6 +229,12 @@ extension XCUIApplication {
 
     /// Navigate to a tab by its visible title (iPhone)
     func navigateToTab(_ tabTitle: String) {
+        let titledTabButton = tabBars.buttons[tabTitle].firstMatch
+        if titledTabButton.exists || titledTabButton.waitForExistence(timeout: 1) {
+            titledTabButton.tap()
+            return
+        }
+
         if let tabID = tabAccessibilityID(for: tabTitle) {
             let identifiedTab = descendants(matching: .any)[tabID].firstMatch
             if identifiedTab.waitForExistence(timeout: 3) {
@@ -231,28 +243,34 @@ extension XCUIApplication {
             }
 
             let tabBarButton = tabBars.buttons[tabID].firstMatch
-            if tabBarButton.waitForExistence(timeout: 3) {
+            if tabBarButton.exists || tabBarButton.waitForExistence(timeout: 1) {
                 tabBarButton.tap()
                 return
             }
 
             let floatingTabButton = buttons[tabID].firstMatch
-            if floatingTabButton.waitForExistence(timeout: 3) {
+            if floatingTabButton.exists || floatingTabButton.waitForExistence(timeout: 1) {
                 floatingTabButton.tap()
                 return
             }
         }
 
-        let titledTab = tabBars.buttons[tabTitle].firstMatch
-        if titledTab.waitForExistence(timeout: 3) {
-            titledTab.tap()
+        let titledTabBarButton = tabBars.buttons[tabTitle].firstMatch
+        if titledTabBarButton.waitForExistence(timeout: 3) {
+            titledTabBarButton.tap()
+            return
+        }
+
+        let titledFloatingButton = buttons[tabTitle].firstMatch
+        if titledFloatingButton.waitForExistence(timeout: 3) {
+            titledFloatingButton.tap()
             return
         }
 
         if let iconID = tabIconID(for: tabTitle) {
             let iconPredicate = NSPredicate(format: "identifier == %@", iconID)
             let iconTab = buttons.matching(iconPredicate).firstMatch
-            if iconTab.waitForExistence(timeout: 3) {
+            if iconTab.exists || iconTab.waitForExistence(timeout: 1) {
                 iconTab.tap()
                 return
             }
@@ -260,15 +278,121 @@ extension XCUIApplication {
     }
 
     /// Navigate via sidebar selection (iPad)
-    func navigateViaSidebar(_ sectionId: String) {
-        let item = buttons[sectionId]
+    @discardableResult
+    func navigateViaSidebar(_ sectionId: String, maxSwipes: Int = 6) -> Bool {
+        scrollToElementIfNeeded(sectionId, maxSwipes: maxSwipes)
+
+        let item = descendants(matching: .any)[sectionId].firstMatch
         if item.waitForExistence(timeout: 3) {
             item.tap()
+            return true
         }
+
+        return false
     }
 
     /// Whether the app is running on iPad (has sidebar instead of tab bar)
     var isIPadLayout: Bool {
         !tabBars.firstMatch.exists
+    }
+
+    @discardableResult
+    func scrollToElementIfNeeded(
+        _ identifier: String,
+        maxSwipes: Int = 8,
+        direction: ScrollDirection = .up,
+        timeoutPerCheck: TimeInterval = 1
+    ) -> Bool {
+        let element = descendants(matching: .any)[identifier].firstMatch
+        for _ in 0..<maxSwipes where !element.waitForExistence(timeout: timeoutPerCheck) {
+            let scrollContainer = preferredScrollContainer()
+            switch direction {
+            case .up:
+                scrollContainer.swipeUp()
+            case .down:
+                scrollContainer.swipeDown()
+            }
+        }
+        return element.exists
+    }
+
+    @discardableResult
+    func dismissModalIfPresent(
+        cancelIdentifiers: [String] = [],
+        timeout: TimeInterval = 2
+    ) -> Bool {
+        for identifier in cancelIdentifiers {
+            let button = descendants(matching: .any)[identifier].firstMatch
+            if button.waitForExistence(timeout: timeout) {
+                button.tap()
+                return true
+            }
+        }
+
+        for label in ["Cancel", "Done", "Close"] {
+            let button = buttons[label].firstMatch
+            if button.waitForExistence(timeout: 1) {
+                button.tap()
+                return true
+            }
+        }
+
+        let visibleSheet = sheets.firstMatch
+        if visibleSheet.waitForExistence(timeout: 1) {
+            visibleSheet.swipeDown()
+            return true
+        }
+
+        return false
+    }
+
+    @discardableResult
+    func fillTextInput(
+        _ identifier: String,
+        with value: String,
+        clearExisting: Bool = true,
+        timeout: TimeInterval = 5
+    ) -> Bool {
+        let textField = textFields[identifier].firstMatch
+        if textField.waitForExistence(timeout: timeout) {
+            clearAndType(in: textField, value: value, clearExisting: clearExisting)
+            return true
+        }
+
+        let textView = textViews[identifier].firstMatch
+        if textView.waitForExistence(timeout: timeout) {
+            clearAndType(in: textView, value: value, clearExisting: clearExisting)
+            return true
+        }
+
+        return false
+    }
+
+    private func clearAndType(in element: XCUIElement, value: String, clearExisting: Bool) {
+        element.tap()
+
+        if clearExisting {
+            let existingValue = (element.value as? String) ?? ""
+            if !existingValue.isEmpty, !existingValue.hasPrefix("Optional(") {
+                let deleteText = String(repeating: XCUIKeyboardKey.delete.rawValue, count: existingValue.count)
+                element.typeText(deleteText)
+            }
+        }
+
+        element.typeText(value)
+    }
+
+    private func preferredScrollContainer() -> XCUIElement {
+        let containers = [
+            scrollViews.firstMatch,
+            tables.firstMatch,
+            collectionViews.firstMatch
+        ]
+
+        for container in containers where container.waitForExistence(timeout: 1) {
+            return container
+        }
+
+        return self
     }
 }

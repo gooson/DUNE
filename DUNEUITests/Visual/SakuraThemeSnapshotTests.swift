@@ -33,6 +33,7 @@ final class SakuraThemeSnapshotTests: XCTestCase {
         let app = XCUIApplication()
         app.launchArguments = [
             "--uitesting",
+            "--ui-reset",
             "--ui-test-theme", "sakuraCalm",
             "--ui-test-style", style.rawValue
         ]
