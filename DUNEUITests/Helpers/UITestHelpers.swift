@@ -6,8 +6,8 @@ enum AXID {
     // MARK: - Dashboard Tab (active: hero, settings, pinned-edit)
     static let dashboardHeroCondition = "dashboard-hero-condition"
     static let dashboardToolbarNotifications = "dashboard-toolbar-notifications"
+    static let dashboardToolbarWhatsNew = "dashboard-toolbar-whatsnew"
     static let dashboardToolbarSettings = "dashboard-toolbar-settings"
-    static let dashboardLinkWhatsNew = "dashboard-link-whatsnew"
     static let dashboardPinnedEdit = "dashboard-pinned-edit"
     static let notificationsReadAllButton = "notifications-read-all-button"
     static let notificationsDeleteAllButton = "notifications-delete-all-button"

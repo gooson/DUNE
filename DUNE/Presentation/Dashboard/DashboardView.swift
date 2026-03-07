@@ -1,13 +1,16 @@
 import SwiftUI
+import TipKit
 
 struct DashboardView: View {
     @State private var viewModel: DashboardViewModel
     @State private var isShowingPinnedEditor = false
     @State private var hasAppeared = false
     @State private var unreadNotificationCount = 0
+    @State private var showWhatsNewBadge = false
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.openURL) private var openURL
     private let inboxManager = NotificationInboxManager.shared
+    private let whatsNewStore = WhatsNewStore.shared
     private let whatsNewManager = WhatsNewManager.shared
     private let scrollToTopSignal: Int
 
@@ -44,8 +47,6 @@ struct DashboardView: View {
                     .id(ScrollAnchor.top)
 
                 VStack(spacing: sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.xl) {
-                    whatsNewEntryCard
-
                     if viewModel.isLoading && viewModel.sortedMetrics.isEmpty {
                         DashboardSkeletonView()
                     } else if viewModel.sortedMetrics.isEmpty && !viewModel.isLoading {
@@ -191,12 +192,15 @@ struct DashboardView: View {
                 hasAppeared = true
             }
             reloadUnreadCount()
+            reloadWhatsNewBadge()
         }
         .task {
             reloadUnreadCount()
+            reloadWhatsNewBadge()
         }
         .onAppear {
             reloadUnreadCount()
+            reloadWhatsNewBadge()
         }
         .onReceive(NotificationCenter.default.publisher(for: NotificationInboxManager.inboxDidChangeNotification)) { _ in
             reloadUnreadCount()
@@ -220,6 +224,26 @@ struct DashboardView: View {
                 }
                 .accessibilityLabel("Notifications")
                 .accessibilityIdentifier("dashboard-toolbar-notifications")
+            }
+
+            if !whatsNewReleases.isEmpty {
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink {
+                        WhatsNewView(
+                            releases: whatsNewReleases,
+                            mode: .manual,
+                            onOpenDestination: { destination in
+                                whatsNewManager.requestNavigation(destination)
+                            },
+                            onPresented: markWhatsNewOpened
+                        )
+                    } label: {
+                        whatsNewToolbarIcon
+                    }
+                    .popoverTip(whatsNewToolbarTip, arrowEdge: .top)
+                    .accessibilityLabel("What's New")
+                    .accessibilityIdentifier("dashboard-toolbar-whatsnew")
+                }
             }
 
             ToolbarItem(placement: .topBarTrailing) {
@@ -306,63 +330,67 @@ struct DashboardView: View {
         unreadNotificationCount = inboxManager.unreadCount()
     }
 
-    @ViewBuilder
-    private var whatsNewEntryCard: some View {
-        let releases = whatsNewManager.orderedReleases(preferredVersion: whatsNewManager.currentAppVersion())
-        if let currentRelease = releases.first {
-            NavigationLink {
-                WhatsNewView(
-                    releases: releases,
-                    mode: .manual
-                )
-            } label: {
-                StandardCard {
-                    HStack(alignment: .top, spacing: DS.Spacing.md) {
-                        ZStack {
+    private var whatsNewReleases: [WhatsNewRelease] {
+        whatsNewManager.orderedReleases(preferredVersion: whatsNewManager.currentAppVersion())
+    }
+
+    private var currentWhatsNewRelease: WhatsNewRelease? {
+        let version = whatsNewManager.currentAppVersion()
+        guard !version.isEmpty else { return nil }
+        return whatsNewManager.currentRelease(for: version)
+    }
+
+    private var currentWhatsNewBuild: String {
+        whatsNewManager.currentBuildNumber()
+    }
+
+    private var whatsNewToolbarTip: (any Tip)? {
+        guard showWhatsNewBadge,
+              let currentRelease = currentWhatsNewRelease,
+              !currentWhatsNewBuild.isEmpty else {
+            return nil
+        }
+
+        return WhatsNewToolbarTip(
+            buildNumber: currentWhatsNewBuild,
+            bodyMessage: currentRelease.intro
+        )
+    }
+
+    private var whatsNewToolbarIcon: some View {
+        Image(systemName: "sparkles")
+            .frame(width: 22, height: 22)
+            .overlay(alignment: .topTrailing) {
+                if showWhatsNewBadge {
+                    Circle()
+                        .fill(DS.Color.activity)
+                        .frame(width: 9, height: 9)
+                        .overlay {
                             Circle()
-                                .fill(DS.Color.activity.opacity(0.14))
-                                .frame(width: 42, height: 42)
-
-                            Image(systemName: "sparkles")
-                                .font(.headline.weight(.semibold))
-                                .foregroundStyle(DS.Color.activity)
+                                .stroke(Color(uiColor: .systemBackground), lineWidth: 1.5)
                         }
-
-                        VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-                            HStack(spacing: DS.Spacing.sm) {
-                                Text("What's New")
-                                    .font(DS.Typography.sectionTitle)
-
-                                Text(verbatim: currentRelease.version)
-                                    .font(.caption.monospacedDigit())
-                                    .padding(.horizontal, DS.Spacing.sm)
-                                    .padding(.vertical, DS.Spacing.xs)
-                                    .background(DS.Color.activity.opacity(0.12), in: Capsule())
-                                    .foregroundStyle(DS.Color.activity)
-                            }
-
-                            Text(currentRelease.intro)
-                                .font(.subheadline)
-                                .foregroundStyle(DS.Color.textSecondary)
-                                .lineLimit(2)
-
-                            Text(currentRelease.features.map(\.title).joined(separator: " · "))
-                                .font(.caption)
-                                .foregroundStyle(DS.Color.textTertiary)
-                                .lineLimit(1)
-                        }
-
-                        Spacer(minLength: 0)
-
-                        Image(systemName: "chevron.right")
-                            .font(.caption.weight(.semibold))
-                            .foregroundStyle(DS.Color.textTertiary)
-                            .padding(.top, 2)
-                    }
+                        .offset(x: 4, y: -1)
                 }
             }
-            .buttonStyle(.plain)
-            .accessibilityIdentifier("dashboard-link-whatsnew")
+    }
+
+    private func reloadWhatsNewBadge() {
+        guard currentWhatsNewRelease != nil else {
+            showWhatsNewBadge = false
+            return
+        }
+
+        showWhatsNewBadge = whatsNewStore.shouldShowBadge(build: currentWhatsNewBuild)
+    }
+
+    private func markWhatsNewOpened() {
+        guard !currentWhatsNewBuild.isEmpty else { return }
+        let tip = whatsNewToolbarTip
+        whatsNewStore.markOpened(build: currentWhatsNewBuild)
+        showWhatsNewBadge = false
+
+        if let tip {
+            tip.invalidate(reason: .actionPerformed)
         }
     }
 
@@ -462,6 +490,32 @@ struct DashboardView: View {
     private func openSettings() {
         guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
         openURL(url)
+    }
+}
+
+private struct WhatsNewToolbarTip: Tip {
+    let buildNumber: String
+    let bodyMessage: String
+
+    var id: String {
+        "whats-new-toolbar-tip-\(buildNumber)"
+    }
+
+    var title: Text {
+        Text("What's New")
+    }
+
+    var message: Text? {
+        Text(bodyMessage)
+    }
+
+    var image: Image? {
+        Image(systemName: "sparkles")
+    }
+
+    var options: [any TipOption] {
+        Tips.IgnoresDisplayFrequency(true)
+        Tips.MaxDisplayCount(1)
     }
 }
 

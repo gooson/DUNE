@@ -4,46 +4,46 @@ import Testing
 
 @Suite("WhatsNewStore")
 struct WhatsNewStoreTests {
-    @Test("Presents when no version has been marked yet")
-    func presentsWhenVersionIsNew() {
+    @Test("Shows a badge when no build has been opened yet")
+    func showsBadgeWhenBuildIsNew() {
         let defaults = makeDefaults(suffix: #function)
         let store = WhatsNewStore(defaults: defaults)
 
-        #expect(store.shouldPresent(version: "0.2.0"))
-        #expect(store.lastPresentedVersion() == nil)
+        #expect(store.shouldShowBadge(build: "42"))
+        #expect(store.lastOpenedBuild() == nil)
     }
 
-    @Test("Does not present again for the same version")
-    func skipsAlreadyPresentedVersion() {
+    @Test("Hides the badge after the same build is opened")
+    func hidesBadgeForOpenedBuild() {
         let defaults = makeDefaults(suffix: #function)
         let store = WhatsNewStore(defaults: defaults)
 
-        store.markPresented(version: "0.2.0")
+        store.markOpened(build: "42")
 
-        #expect(store.shouldPresent(version: "0.2.0") == false)
-        #expect(store.lastPresentedVersion() == "0.2.0")
+        #expect(store.shouldShowBadge(build: "42") == false)
+        #expect(store.lastOpenedBuild() == "42")
     }
 
-    @Test("Presents again when the app version changes")
-    func presentsUpdatedVersion() {
+    @Test("Shows the badge again when the build changes")
+    func showsBadgeForUpdatedBuild() {
         let defaults = makeDefaults(suffix: #function)
         let store = WhatsNewStore(defaults: defaults)
 
-        store.markPresented(version: "0.2.0")
+        store.markOpened(build: "42")
 
-        #expect(store.shouldPresent(version: "0.3.0"))
+        #expect(store.shouldShowBadge(build: "43"))
     }
 
-    @Test("Ignores empty version strings")
-    func ignoresEmptyVersion() {
+    @Test("Ignores empty build strings")
+    func ignoresEmptyBuild() {
         let defaults = makeDefaults(suffix: #function)
         let store = WhatsNewStore(defaults: defaults)
 
-        #expect(store.shouldPresent(version: "") == false)
+        #expect(store.shouldShowBadge(build: "") == false)
 
-        store.markPresented(version: "")
+        store.markOpened(build: "")
 
-        #expect(store.lastPresentedVersion() == nil)
+        #expect(store.lastOpenedBuild() == nil)
     }
 
     private func makeDefaults(suffix: String) -> UserDefaults {

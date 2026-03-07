@@ -13,6 +13,7 @@ struct SettingsView: View {
     @State private var bodyWeightKg: Double = WorkoutSettingsStore.shared.bodyWeightKg
 
     private let store = WorkoutSettingsStore.shared
+    private let whatsNewStore = WhatsNewStore.shared
     private let whatsNewManager = WhatsNewManager.shared
 
     var body: some View {
@@ -175,7 +176,8 @@ struct SettingsView: View {
                 NavigationLink {
                     WhatsNewView(
                         releases: whatsNewReleases,
-                        mode: .manual
+                        mode: .manual,
+                        onPresented: markWhatsNewOpened
                     )
                 } label: {
                     Label("What's New", systemImage: "sparkles")
@@ -221,6 +223,12 @@ struct SettingsView: View {
 
     private var whatsNewReleases: [WhatsNewRelease] {
         whatsNewManager.orderedReleases(preferredVersion: appVersion)
+    }
+
+    private func markWhatsNewOpened() {
+        let build = whatsNewManager.currentBuildNumber()
+        guard !build.isEmpty else { return }
+        whatsNewStore.markOpened(build: build)
     }
 }
 

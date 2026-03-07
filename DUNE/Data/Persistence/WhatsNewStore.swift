@@ -1,11 +1,11 @@
 import Foundation
 
-/// Persists the most recent app version that already surfaced the What's New entry point.
+/// Persists the most recent build that the user already opened from the What's New entry point.
 final class WhatsNewStore: @unchecked Sendable {
     static let shared = WhatsNewStore()
 
     private enum Keys {
-        static let lastPresentedVersion = (Bundle.main.bundleIdentifier ?? "com.dailve") + ".whatsNew.lastPresentedVersion"
+        static let lastOpenedBuild = (Bundle.main.bundleIdentifier ?? "com.dailve") + ".whatsNew.lastOpenedBuild"
     }
 
     private let defaults: UserDefaults
@@ -19,23 +19,23 @@ final class WhatsNewStore: @unchecked Sendable {
         self.queue = queue
     }
 
-    func lastPresentedVersion() -> String? {
+    func lastOpenedBuild() -> String? {
         queue.sync {
-            defaults.string(forKey: Keys.lastPresentedVersion)
+            defaults.string(forKey: Keys.lastOpenedBuild)
         }
     }
 
-    func shouldPresent(version: String) -> Bool {
-        guard !version.isEmpty else { return false }
+    func shouldShowBadge(build: String) -> Bool {
+        guard !build.isEmpty else { return false }
         return queue.sync {
-            defaults.string(forKey: Keys.lastPresentedVersion) != version
+            defaults.string(forKey: Keys.lastOpenedBuild) != build
         }
     }
 
-    func markPresented(version: String) {
-        guard !version.isEmpty else { return }
+    func markOpened(build: String) {
+        guard !build.isEmpty else { return }
         queue.sync {
-            defaults.set(version, forKey: Keys.lastPresentedVersion)
+            defaults.set(build, forKey: Keys.lastOpenedBuild)
         }
     }
 }
