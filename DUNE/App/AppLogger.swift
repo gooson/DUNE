@@ -5,4 +5,5 @@ enum AppLogger {
     static let data = Logger(subsystem: "com.raftel.dailve", category: "Data")
     static let ui = Logger(subsystem: "com.raftel.dailve", category: "UI")
     static let notification = Logger(subsystem: "com.raftel.dailve", category: "Notification")
+    static let exercise = Logger(subsystem: "com.raftel.dailve", category: "Exercise")
 }

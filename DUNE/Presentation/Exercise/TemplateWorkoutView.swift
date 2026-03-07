@@ -438,11 +438,12 @@ struct TemplateWorkoutView: View {
     }
 
     private func finishWorkout() {
-        TemplateWorkoutViewModel.clearDraft()
         guard !savedRecords.isEmpty else {
+            TemplateWorkoutViewModel.clearDraft()
             dismiss()
             return
         }
+        TemplateWorkoutViewModel.clearDraft()
 
         // Build share data from all saved records
         let totalCalories = savedRecords.compactMap(\.bestCalories).reduce(0, +)
@@ -498,12 +499,10 @@ struct TemplateWorkoutView: View {
 
     private func restoreFromDraftIfNeeded() {
         guard let draft = TemplateWorkoutDraft.load() else { return }
-        let configIDs = config.exercises.map(\.id)
-        guard draft.exerciseIDs == configIDs else {
+        guard viewModel.restoreFromDraft(draft) else {
             TemplateWorkoutDraft.clear()
             return
         }
-        viewModel.restoreFromDraft(draft)
     }
 
     private func startSessionTimer() {

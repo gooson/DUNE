@@ -26,14 +26,22 @@ struct CompoundWorkoutDraft: Codable {
 
     private static let userDefaultsKey = "com.raftel.dailve.compound_workout_draft"
 
+    /// Encode failure preserves previous draft (if any) to avoid data loss.
     static func save(_ draft: CompoundWorkoutDraft) {
-        guard let data = try? JSONEncoder().encode(draft) else { return }
+        guard let data = try? JSONEncoder().encode(draft) else {
+            AppLogger.exercise.error("Failed to encode compound workout draft")
+            return
+        }
         UserDefaults.standard.set(data, forKey: userDefaultsKey)
     }
 
     static func load() -> CompoundWorkoutDraft? {
         guard let data = UserDefaults.standard.data(forKey: userDefaultsKey) else { return nil }
-        return try? JSONDecoder().decode(CompoundWorkoutDraft.self, from: data)
+        guard let draft = try? JSONDecoder().decode(CompoundWorkoutDraft.self, from: data) else {
+            AppLogger.exercise.error("Failed to decode compound workout draft")
+            return nil
+        }
+        return draft
     }
 
     static func clear() {
@@ -205,10 +213,11 @@ final class CompoundWorkoutViewModel {
         CompoundWorkoutDraft.save(draft)
     }
 
-    func restoreFromDraft(_ draft: CompoundWorkoutDraft) {
+    @discardableResult
+    func restoreFromDraft(_ draft: CompoundWorkoutDraft) -> Bool {
         let configIDs = config.exercises.map(\.id)
-        guard draft.exerciseIDs == configIDs else { return }
-        guard draft.exerciseSets.count == exerciseViewModels.count else { return }
+        guard draft.exerciseIDs == configIDs else { return false }
+        guard draft.exerciseSets.count == exerciseViewModels.count else { return false }
 
         currentExerciseIndex = min(draft.currentExerciseIndex, config.exercises.count - 1)
         currentRound = draft.currentRound
@@ -228,6 +237,7 @@ final class CompoundWorkoutViewModel {
                 return editable
             }
         }
+        return true
     }
 
     static func clearDraft() {

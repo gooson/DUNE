@@ -26,14 +26,22 @@ struct TemplateWorkoutDraft: Codable {
 
     private static let userDefaultsKey = "com.raftel.dailve.template_workout_draft"
 
+    /// Encode failure preserves previous draft (if any) to avoid data loss.
     static func save(_ draft: TemplateWorkoutDraft) {
-        guard let data = try? JSONEncoder().encode(draft) else { return }
+        guard let data = try? JSONEncoder().encode(draft) else {
+            AppLogger.exercise.error("Failed to encode template workout draft")
+            return
+        }
         UserDefaults.standard.set(data, forKey: userDefaultsKey)
     }
 
     static func load() -> TemplateWorkoutDraft? {
         guard let data = UserDefaults.standard.data(forKey: userDefaultsKey) else { return nil }
-        return try? JSONDecoder().decode(TemplateWorkoutDraft.self, from: data)
+        guard let draft = try? JSONDecoder().decode(TemplateWorkoutDraft.self, from: data) else {
+            AppLogger.exercise.error("Failed to decode template workout draft")
+            return nil
+        }
+        return draft
     }
 
     static func clear() {
@@ -294,11 +302,12 @@ final class TemplateWorkoutViewModel {
         TemplateWorkoutDraft.save(draft)
     }
 
-    func restoreFromDraft(_ draft: TemplateWorkoutDraft) {
+    @discardableResult
+    func restoreFromDraft(_ draft: TemplateWorkoutDraft) -> Bool {
         let configIDs = config.exercises.map(\.id)
-        guard draft.exerciseIDs == configIDs else { return }
-        guard draft.exerciseSets.count == exerciseViewModels.count else { return }
-        guard draft.exerciseStatusRaws.count == exerciseStatuses.count else { return }
+        guard draft.exerciseIDs == configIDs else { return false }
+        guard draft.exerciseSets.count == exerciseViewModels.count else { return false }
+        guard draft.exerciseStatusRaws.count == exerciseStatuses.count else { return false }
 
         currentExerciseIndex = min(draft.currentExerciseIndex, config.exercises.count - 1)
 
@@ -329,6 +338,7 @@ final class TemplateWorkoutViewModel {
                 return editable
             }
         }
+        return true
     }
 
     static func clearDraft() {

@@ -484,12 +484,10 @@ struct CompoundWorkoutView: View {
 
     private func restoreFromDraftIfNeeded() {
         guard let draft = CompoundWorkoutDraft.load() else { return }
-        let configIDs = config.exercises.map(\.id)
-        guard draft.exerciseIDs == configIDs else {
+        guard viewModel.restoreFromDraft(draft) else {
             CompoundWorkoutDraft.clear()
             return
         }
-        viewModel.restoreFromDraft(draft)
     }
 
     private func startSessionTimer() {
