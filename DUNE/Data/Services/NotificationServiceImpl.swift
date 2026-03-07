@@ -11,12 +11,12 @@ final class NotificationServiceImpl: NotificationService, @unchecked Sendable {
         self.inboxManager = inboxManager
     }
 
-    func requestAuthorization() async -> Bool {
+    func requestAuthorization() async throws -> Bool {
         do {
             return try await center.requestAuthorization(options: [.alert, .sound, .badge])
         } catch {
             AppLogger.notification.error("[NotificationService] Authorization request failed: \(error.localizedDescription)")
-            return false
+            throw error
         }
     }
 

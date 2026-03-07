@@ -144,6 +144,10 @@
 - **`Dictionary(uniqueKeysWithValues:)` 사용 금지 -> `uniquingKeysWith`** (#104)
 - **iPad HStack layout은 섹션을 computed property로 추출** (#106)
 
+### Launch & Permissions
+
+- **launch permission 완료 플래그는 요청 전에 영구 저장 금지**: cross-launch persisted state와 same-launch attempt state를 분리하고, system request가 정상 반환된 뒤에만 completion 저장 (#201)
+
 ### Watch/iOS Parity
 
 - **Watch DTO 필드 추가 시 양쪽 target 동기화** (#69, #138)

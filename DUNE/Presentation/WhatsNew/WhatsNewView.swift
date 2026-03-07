@@ -60,6 +60,7 @@ struct WhatsNewView: View {
                     Button("Close") {
                         dismiss()
                     }
+                    .accessibilityIdentifier("whatsnew-close-button")
                 }
             }
         }

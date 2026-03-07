@@ -141,7 +141,7 @@ final class DashboardViewModel {
         }
     }
 
-    func loadData() async {
+    func loadData(shouldAutoRequestHealthKitAuthorization: Bool = true) async {
         guard !isLoading else { return }
         isLoading = true
         let healthKitAvailable = await healthKitManager.isAvailable
@@ -162,7 +162,7 @@ final class DashboardViewModel {
         if !authorizationChecked {
             if Self.shouldBypassAuthorizationForTests {
                 authorizationChecked = true
-            } else if healthKitAvailable {
+            } else if healthKitAvailable, shouldAutoRequestHealthKitAuthorization {
                 do {
                     try await healthKitManager.requestAuthorization()
                     authorizationChecked = true
@@ -174,7 +174,11 @@ final class DashboardViewModel {
                 }
             } else {
                 authorizationChecked = true
-                AppLogger.ui.info("HealthKit unavailable; skip authorization and rely on mirrored health snapshot data")
+                if healthKitAvailable {
+                    AppLogger.ui.info("Launch orchestration already handled HealthKit authorization; skip dashboard auto-request")
+                } else {
+                    AppLogger.ui.info("HealthKit unavailable; skip authorization and rely on mirrored health snapshot data")
+                }
             }
         }
 

@@ -63,38 +63,19 @@ final class HealthKitPermissionUITests: XCTestCase {
             return false
         }
 
-        navigateToTrainTabIfPresent()
+        handleCloudSyncConsentIfNeeded()
         handleHealthKitSheetIfNeeded()
-
-        navigateToTodayTabIfPresent()
-        handleHealthKitSheetIfNeeded()
+        dismissNotificationAlertIfNeeded()
+        handleAutomaticWhatsNewIfNeeded()
 
         // Verify app is still running
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: 5))
     }
 
-    private func navigateToTrainTabIfPresent() {
-        let tabBar = app.tabBars.firstMatch
-        guard tabBar.waitForExistence(timeout: 10) else { return }
-
-        let trainTab = tabBar.buttons["Train"]
-        if trainTab.exists {
-            trainTab.tap()
-            return
-        }
-
-        let activityTab = tabBar.buttons["Activity"]
-        if activityTab.exists {
-            activityTab.tap()
-        }
-    }
-
-    private func navigateToTodayTabIfPresent() {
-        let tabBar = app.tabBars.firstMatch
-        guard tabBar.waitForExistence(timeout: 5) else { return }
-        let todayTab = tabBar.buttons["Today"]
-        if todayTab.exists {
-            todayTab.tap()
+    private func handleCloudSyncConsentIfNeeded() {
+        let keepLocalOnlyButton = app.buttons["cloud-sync-consent-local-button"]
+        if keepLocalOnlyButton.waitForExistence(timeout: 5) {
+            keepLocalOnlyButton.tap()
         }
     }
 
@@ -112,6 +93,29 @@ final class HealthKitPermissionUITests: XCTestCase {
         let allow = app.buttons["Allow"]
         if allow.waitForExistence(timeout: 3) {
             allow.tap()
+        }
+    }
+
+    private func dismissNotificationAlertIfNeeded() {
+        app.tap() // Trigger interruption monitor delivery.
+
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        for label in ["Allow", "Don't Allow", "OK"] {
+            let button = springboard.buttons[label]
+            if button.waitForExistence(timeout: 2) {
+                button.tap()
+                return
+            }
+        }
+    }
+
+    private func handleAutomaticWhatsNewIfNeeded() {
+        let whatsNewScreen = app.descendants(matching: .any)["whatsnew-screen"].firstMatch
+        guard whatsNewScreen.waitForExistence(timeout: 5) else { return }
+
+        let closeButton = app.buttons["whatsnew-close-button"].firstMatch
+        if closeButton.waitForExistence(timeout: 3) {
+            closeButton.tap()
         }
     }
 }

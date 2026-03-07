@@ -25,18 +25,24 @@ struct DashboardView: View {
 
     private let refreshSignal: Int
     private let notificationHubSignal: Int
+    private let launchExperienceReady: Bool
+    private let shouldAutoRequestHealthKitAuthorization: Bool
     @State private var showNotificationHub = false
 
     init(
         sharedHealthDataService: SharedHealthDataService? = nil,
         scrollToTopSignal: Int = 0,
         refreshSignal: Int = 0,
-        notificationHubSignal: Int = 0
+        notificationHubSignal: Int = 0,
+        launchExperienceReady: Bool = true,
+        shouldAutoRequestHealthKitAuthorization: Bool = true
     ) {
         _viewModel = State(initialValue: DashboardViewModel(sharedHealthDataService: sharedHealthDataService))
         self.scrollToTopSignal = scrollToTopSignal
         self.refreshSignal = refreshSignal
         self.notificationHubSignal = notificationHubSignal
+        self.launchExperienceReady = launchExperienceReady
+        self.shouldAutoRequestHealthKitAuthorization = shouldAutoRequestHealthKitAuthorization
     }
 
     var body: some View {
@@ -47,7 +53,9 @@ struct DashboardView: View {
                     .id(ScrollAnchor.top)
 
                 VStack(spacing: sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.xl) {
-                    if viewModel.isLoading && viewModel.sortedMetrics.isEmpty {
+                    if !launchExperienceReady {
+                        DashboardSkeletonView()
+                    } else if viewModel.isLoading && viewModel.sortedMetrics.isEmpty {
                         DashboardSkeletonView()
                     } else if viewModel.sortedMetrics.isEmpty && !viewModel.isLoading {
                         if viewModel.errorMessage != nil {
@@ -184,15 +192,12 @@ struct DashboardView: View {
             WeatherDetailView(snapshot: snapshot)
         }
         .waveRefreshable {
-            await viewModel.loadData()
+            guard launchExperienceReady else { return }
+            await loadDashboard()
         }
-        .task(id: refreshSignal) {
-            await viewModel.loadData()
-            withAnimation(.easeOut(duration: 0.3)) {
-                hasAppeared = true
-            }
-            reloadUnreadCount()
-            reloadWhatsNewBadge()
+        .task(id: launchReadyRefreshSignal) {
+            guard launchExperienceReady else { return }
+            await loadDashboard()
         }
         .task {
             reloadUnreadCount()
@@ -255,6 +260,19 @@ struct DashboardView: View {
 
             cardGrid(cards: viewModel.pinnedCards)
         }
+    }
+
+    private var launchReadyRefreshSignal: Int {
+        launchExperienceReady ? refreshSignal : -1
+    }
+
+    private func loadDashboard() async {
+        await viewModel.loadData(shouldAutoRequestHealthKitAuthorization: shouldAutoRequestHealthKitAuthorization)
+        withAnimation(.easeOut(duration: 0.3)) {
+            hasAppeared = true
+        }
+        reloadUnreadCount()
+        reloadWhatsNewBadge()
     }
 
     @ViewBuilder

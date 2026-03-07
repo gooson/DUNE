@@ -8,11 +8,21 @@ import UserNotifications
 struct DUNEApp: App {
     @AppStorage(AppTheme.storageKey) private var selectedTheme: AppTheme = .desertWarm
     @AppStorage("hasShownCloudSyncConsent") private var hasShownConsent = false
+    @AppStorage("hasRequestedHealthKitAuthorization") private var hasRequestedHealthKitAuthorization = false
+    @AppStorage("hasRequestedNotificationAuthorization") private var hasRequestedNotificationAuthorization = false
     @State private var showConsentSheet = false
     @State private var isShowingLaunchSplash = !DUNEApp.isRunningXCTest
     @State private var isResolvingLaunchSplash = false
     @State private var hasCompletedPostSplashSetup = false
     @State private var hasSeededMockData = false
+    @State private var isLaunchExperienceReady = DUNEApp.shouldBypassLaunchExperienceForTests || DUNEApp.shouldSeedMockData
+    @State private var isAdvancingLaunchExperience = false
+    @State private var hasAttemptedHealthKitAuthorizationThisLaunch = false
+    @State private var hasAttemptedNotificationAuthorizationThisLaunch = false
+    @State private var hasStartedRuntimeServices = false
+    @State private var showWhatsNewSheet = false
+    @State private var automaticWhatsNewReleases: [WhatsNewRelease] = []
+    @State private var automaticWhatsNewBuild = ""
 
     let modelContainer: ModelContainer
     private let sharedHealthDataService: SharedHealthDataService
@@ -20,6 +30,8 @@ struct DUNEApp: App {
     private let observerManager: HealthKitObserverManager?
     private let notificationService: any NotificationService
     private let notificationCenterDelegate: AppNotificationCenterDelegate
+    private let whatsNewManager = WhatsNewManager.shared
+    private let whatsNewStore = WhatsNewStore.shared
     private static let minimumLaunchSplashDuration: Duration = .seconds(1)
     private static let launchSplashResolveDuration: Duration = .milliseconds(700)
 
@@ -31,6 +43,14 @@ struct DUNEApp: App {
     private static var isRunningUITests: Bool {
         let arguments = ProcessInfo.processInfo.arguments
         return arguments.contains("--uitesting") || arguments.contains("--healthkit-permission-uitest")
+    }
+
+    private static var isRunningLaunchPermissionUITest: Bool {
+        ProcessInfo.processInfo.arguments.contains("--healthkit-permission-uitest")
+    }
+
+    private static var shouldBypassLaunchExperienceForTests: Bool {
+        isRunningXCTest && !isRunningLaunchPermissionUITest
     }
 
     private static func launchArgumentValue(for key: String) -> String? {
@@ -213,6 +233,10 @@ struct DUNEApp: App {
             }
             .tint(selectedTheme.accentColor)
             .preferredColorScheme(Self.forcedUITestColorScheme)
+            .onChange(of: showConsentSheet) { oldValue, newValue in
+                guard oldValue, !newValue else { return }
+                Task { await advanceLaunchExperienceFlowIfNeeded() }
+            }
         }
         .modelContainer(modelContainer)
     }
@@ -220,10 +244,20 @@ struct DUNEApp: App {
     private var appContent: some View {
         ContentView(
             sharedHealthDataService: sharedHealthDataService,
-            refreshCoordinator: refreshCoordinator
+            refreshCoordinator: refreshCoordinator,
+            launchExperienceReady: isLaunchExperienceReady,
+            shouldAutoRequestHealthKitAuthorization: shouldRequestHealthKitAuthorizationOnLaunch
         )
         .sheet(isPresented: $showConsentSheet) {
             CloudSyncConsentView(isPresented: $showConsentSheet)
+        }
+        .sheet(isPresented: $showWhatsNewSheet, onDismiss: handleAutomaticWhatsNewDismissed) {
+            NavigationStack {
+                WhatsNewView(
+                    releases: automaticWhatsNewReleases,
+                    mode: .automatic
+                )
+            }
         }
     }
 
@@ -247,22 +281,142 @@ struct DUNEApp: App {
     private func runPostSplashSetupIfNeeded() {
         guard !hasCompletedPostSplashSetup else { return }
         hasCompletedPostSplashSetup = true
+        Task { await advanceLaunchExperienceFlowIfNeeded() }
+    }
 
-        if !hasShownConsent && !Self.isRunningXCTest {
-            showConsentSheet = true
+    private var shouldRequestHealthKitAuthorizationOnLaunch: Bool {
+        LaunchExperiencePlanner.shouldRequestAuthorization(
+            for: LaunchAuthorizationRequestState(
+                isEligible: HKHealthStore.isHealthDataAvailable(),
+                hasCompletedRequest: hasRequestedHealthKitAuthorization,
+                hasAttemptedThisLaunch: hasAttemptedHealthKitAuthorizationThisLaunch,
+                shouldBypassLaunchExperience: Self.shouldBypassLaunchExperienceForTests
+            )
+        )
+    }
+
+    private var shouldRequestNotificationAuthorizationOnLaunch: Bool {
+        LaunchExperiencePlanner.shouldRequestAuthorization(
+            for: LaunchAuthorizationRequestState(
+                isEligible: true,
+                hasCompletedRequest: hasRequestedNotificationAuthorization,
+                hasAttemptedThisLaunch: hasAttemptedNotificationAuthorizationThisLaunch,
+                shouldBypassLaunchExperience: Self.shouldBypassLaunchExperienceForTests
+            )
+        )
+    }
+
+    private var shouldPresentAutomaticWhatsNew: Bool {
+        guard !Self.shouldBypassLaunchExperienceForTests else { return false }
+
+        let version = whatsNewManager.currentAppVersion()
+        let build = whatsNewManager.currentBuildNumber()
+        guard !build.isEmpty,
+              whatsNewManager.currentRelease(for: version) != nil else {
+            return false
         }
 
-        // Skip WC activation during XCTest to reduce startup flakiness.
-        if !Self.isRunningXCTest {
-            WatchSessionManager.shared.syncWorkoutTemplatesToWatch(using: modelContainer)
-            WatchSessionManager.shared.activate()
-            observerManager?.startObserving()
+        return whatsNewStore.shouldShowBadge(build: build)
+    }
 
-            // Request notification authorization (non-blocking)
-            Task {
-                _ = await notificationService.requestAuthorization()
+    private var nextLaunchExperienceStep: LaunchExperienceStep {
+        LaunchExperiencePlanner.nextStep(
+            for: LaunchExperienceState(
+                shouldBypassLaunchExperience: Self.shouldBypassLaunchExperienceForTests,
+                hasShownCloudSyncConsent: hasShownConsent,
+                shouldRequestHealthKitAuthorization: shouldRequestHealthKitAuthorizationOnLaunch,
+                shouldRequestNotificationAuthorization: shouldRequestNotificationAuthorizationOnLaunch,
+                shouldPresentWhatsNew: shouldPresentAutomaticWhatsNew
+            )
+        )
+    }
+
+    @MainActor
+    private func advanceLaunchExperienceFlowIfNeeded() async {
+        guard hasCompletedPostSplashSetup else { return }
+        guard !isAdvancingLaunchExperience else { return }
+        guard !showConsentSheet, !showWhatsNewSheet else { return }
+
+        isAdvancingLaunchExperience = true
+        defer { isAdvancingLaunchExperience = false }
+
+        while hasCompletedPostSplashSetup, !showConsentSheet, !showWhatsNewSheet {
+            switch nextLaunchExperienceStep {
+            case .cloudSyncConsent:
+                showConsentSheet = true
+                return
+            case .healthKitAuthorization:
+                hasAttemptedHealthKitAuthorizationThisLaunch = true
+                do {
+                    try await HealthKitManager.shared.requestAuthorization()
+                    hasRequestedHealthKitAuthorization = true
+                } catch {
+                    AppLogger.healthKit.error("Launch HealthKit authorization failed: \(error.localizedDescription)")
+                }
+            case .notificationAuthorization:
+                hasAttemptedNotificationAuthorizationThisLaunch = true
+                do {
+                    _ = try await notificationService.requestAuthorization()
+                    hasRequestedNotificationAuthorization = true
+                } catch {
+                    AppLogger.notification.error("Launch notification authorization failed: \(error.localizedDescription)")
+                }
+            case .whatsNew:
+                presentAutomaticWhatsNewIfNeeded()
+                return
+            case .ready:
+                finishLaunchExperienceIfNeeded()
+                return
             }
         }
+    }
+
+    @MainActor
+    private func presentAutomaticWhatsNewIfNeeded() {
+        let version = whatsNewManager.currentAppVersion()
+        let build = whatsNewManager.currentBuildNumber()
+
+        guard !build.isEmpty,
+              let currentRelease = whatsNewManager.currentRelease(for: version),
+              whatsNewStore.shouldShowBadge(build: build) else {
+            finishLaunchExperienceIfNeeded()
+            return
+        }
+
+        automaticWhatsNewBuild = build
+        automaticWhatsNewReleases = whatsNewManager.orderedReleases(preferredVersion: currentRelease.version)
+        showWhatsNewSheet = true
+    }
+
+    @MainActor
+    private func handleAutomaticWhatsNewDismissed() {
+        if !automaticWhatsNewBuild.isEmpty {
+            whatsNewStore.markOpened(build: automaticWhatsNewBuild)
+        }
+
+        automaticWhatsNewBuild = ""
+        automaticWhatsNewReleases = []
+
+        Task { await advanceLaunchExperienceFlowIfNeeded() }
+    }
+
+    @MainActor
+    private func finishLaunchExperienceIfNeeded() {
+        guard !isLaunchExperienceReady else { return }
+
+        isLaunchExperienceReady = true
+        startRuntimeServicesIfNeeded()
+    }
+
+    @MainActor
+    private func startRuntimeServicesIfNeeded() {
+        guard !hasStartedRuntimeServices else { return }
+        guard !Self.shouldBypassLaunchExperienceForTests else { return }
+
+        hasStartedRuntimeServices = true
+        WatchSessionManager.shared.syncWorkoutTemplatesToWatch(using: modelContainer)
+        WatchSessionManager.shared.activate()
+        observerManager?.startObserving()
     }
 
     @MainActor
