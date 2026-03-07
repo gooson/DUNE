@@ -26,6 +26,7 @@ struct SessionSummaryView: View {
     @State private var didPresentEffortInput = false
     @State private var effortInputAutoCloseTask: Task<Void, Never>?
 
+    /// Auto-dismiss effort input after a short period of inactivity.
     private let effortInputAutoCloseDelay: Duration = .seconds(12)
 
     var body: some View {
@@ -284,6 +285,7 @@ struct SessionSummaryView: View {
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Done") {
+                    cancelEffortInputAutoCloseTimer()
                     showEffortInput = false
                 }
             }
@@ -291,10 +293,16 @@ struct SessionSummaryView: View {
     }
 
     private func updateEffort(_ newEffort: Int) {
+        restartEffortInputAutoCloseTimerIfNeeded()
         guard newEffort != effort else { return }
         effort = newEffort
         didInitializeEffort = true
         playEffortHapticIfNeeded()
+    }
+
+    private func restartEffortInputAutoCloseTimerIfNeeded() {
+        guard showEffortInput else { return }
+        startEffortInputAutoCloseTimer()
     }
 
     private func startEffortInputAutoCloseTimer() {
