@@ -1,4 +1,5 @@
 import Foundation
+import OSLog
 
 /// Shared release catalog for the What's New surface.
 final class WhatsNewManager: Sendable {
@@ -7,14 +8,19 @@ final class WhatsNewManager: Sendable {
     private let releases: [WhatsNewReleaseData]
 
     init(bundle: Bundle = .main) {
-        guard let url = bundle.url(forResource: "whats-new", withExtension: "json"),
-              let data = try? Data(contentsOf: url),
-              let catalog = try? JSONDecoder().decode(WhatsNewCatalog.self, from: data)
-        else {
+        guard let url = bundle.url(forResource: "whats-new", withExtension: "json") else {
+            AppLogger.data.error("[WhatsNew] whats-new.json not found in bundle")
             releases = []
             return
         }
-        releases = catalog.releases
+        do {
+            let data = try Data(contentsOf: url)
+            let catalog = try JSONDecoder().decode(WhatsNewCatalog.self, from: data)
+            releases = catalog.releases
+        } catch {
+            AppLogger.data.error("[WhatsNew] Failed to decode whats-new.json: \(error)")
+            releases = []
+        }
     }
 
     /// Test-only initializer with pre-built releases.

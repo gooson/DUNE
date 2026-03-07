@@ -56,7 +56,7 @@ struct WhatsNewView: View {
         .toolbar {
             if mode == .automatic {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Close") {
+                    Button("Done") {
                         dismiss()
                     }
                     .accessibilityIdentifier("whatsnew-close-button")
@@ -95,37 +95,37 @@ private struct WhatsNewFeatureRow: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.md) {
-            HStack(alignment: .top, spacing: DS.Spacing.md) {
-                VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                    HStack(spacing: DS.Spacing.sm) {
-                        WhatsNewBadge(title: feature.badgeTitle, tint: tintColor)
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                HStack(spacing: DS.Spacing.sm) {
+                    WhatsNewBadge(title: feature.area.badgeTitle, tint: tintColor)
 
-                        Image(systemName: feature.symbolName)
-                            .font(.caption.weight(.semibold))
-                            .foregroundStyle(tintColor)
-                    }
-
-                    Text(feature.title)
-                        .font(DS.Typography.sectionTitle)
-
-                    Text(feature.summary)
-                        .font(.subheadline)
-                        .foregroundStyle(DS.Color.textSecondary)
-                        .lineLimit(3)
+                    Image(systemName: feature.symbolName)
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(tintColor)
                 }
+
+                Text(feature.title)
+                    .font(DS.Typography.sectionTitle)
+
+                Text(feature.summary)
+                    .font(.subheadline)
+                    .foregroundStyle(DS.Color.textSecondary)
+                    .lineLimit(3)
             }
 
             WhatsNewFeatureCard(feature: feature, style: .thumbnail)
                 .frame(maxWidth: .infinity)
                 .frame(height: 138)
-                .clipShape(RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous))
+                .clipShape(RoundedRectangle(cornerRadius: DS.Radius.lg, style: .continuous))
+                .accessibilityHidden(true)
         }
         .padding(DS.Spacing.md)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous))
         .overlay(
             RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous)
-                .strokeBorder(.white.opacity(0.08))
+                .strokeBorder(.white.opacity(DS.Opacity.light))
         )
+        .accessibilityElement(children: .combine)
     }
 }
 
@@ -144,11 +144,12 @@ private struct WhatsNewFeatureDetailView: View {
                 WhatsNewFeatureCard(feature: feature, style: .hero)
                     .frame(height: 260)
                     .clipShape(RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous))
+                    .accessibilityHidden(true)
 
                 VStack(alignment: .leading, spacing: DS.Spacing.md) {
                     HStack(alignment: .top, spacing: DS.Spacing.md) {
                         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                            WhatsNewBadge(title: feature.badgeTitle, tint: tintColor)
+                            WhatsNewBadge(title: feature.area.badgeTitle, tint: tintColor)
 
                             Text(feature.title)
                                 .font(.system(.title2, design: .rounded, weight: .bold))
@@ -198,40 +199,34 @@ private struct WhatsNewFeatureCard: View {
     enum CardStyle {
         case thumbnail
         case hero
-    }
 
-    private var primarySize: CGFloat {
-        style == .hero ? 64 : 36
-    }
-
-    private var secondarySize: CGFloat {
-        style == .hero ? 32 : 20
-    }
-
-    var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: style == .hero ? DS.Radius.xl : DS.Radius.lg, style: .continuous)
-                .fill(areaGradient)
-
-            RoundedRectangle(cornerRadius: style == .hero ? DS.Radius.xl : DS.Radius.lg, style: .continuous)
-                .strokeBorder(.white.opacity(0.12))
-
-            ZStack {
-                // Decorative secondary symbol
-                if let secondary = WhatsNewStyle.secondarySymbol(for: feature.area) {
-                    Image(systemName: secondary)
-                        .font(.system(size: secondarySize, weight: .semibold))
-                        .foregroundStyle(.white.opacity(0.18))
-                        .offset(x: style == .hero ? 60 : 36, y: style == .hero ? -40 : -24)
-                }
-
-                // Primary symbol
-                Image(systemName: feature.symbolName)
-                    .font(.system(size: primarySize, weight: .semibold))
-                    .foregroundStyle(.white)
+        var cornerRadius: CGFloat {
+            switch self {
+            case .hero: DS.Radius.xl
+            case .thumbnail: DS.Radius.lg
             }
         }
-        .accessibilityIdentifier("whatsnew-card-\(feature.id)-\(style == .hero ? "hero" : "thumbnail")")
+
+        var primarySize: CGFloat {
+            switch self {
+            case .hero: 64
+            case .thumbnail: 36
+            }
+        }
+
+        var secondarySize: CGFloat {
+            switch self {
+            case .hero: 32
+            case .thumbnail: 20
+            }
+        }
+
+        var secondaryOffset: CGSize {
+            switch self {
+            case .hero: CGSize(width: 60, height: -40)
+            case .thumbnail: CGSize(width: 36, height: -24)
+            }
+        }
     }
 
     private var areaGradient: LinearGradient {
@@ -241,6 +236,32 @@ private struct WhatsNewFeatureCard: View {
             startPoint: .topLeading,
             endPoint: .bottomTrailing
         )
+    }
+
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: style.cornerRadius, style: .continuous)
+                .fill(areaGradient)
+
+            RoundedRectangle(cornerRadius: style.cornerRadius, style: .continuous)
+                .strokeBorder(.white.opacity(DS.Opacity.border))
+
+            ZStack {
+                // Decorative secondary symbol
+                if let secondary = WhatsNewStyle.secondarySymbol(for: feature.area) {
+                    Image(systemName: secondary)
+                        .font(.system(size: style.secondarySize, weight: .semibold))
+                        .foregroundStyle(.white.opacity(DS.Opacity.overlay))
+                        .offset(style.secondaryOffset)
+                }
+
+                // Primary symbol
+                Image(systemName: feature.symbolName)
+                    .font(.system(size: style.primarySize, weight: .semibold))
+                    .foregroundStyle(.white)
+            }
+        }
+        .accessibilityIdentifier("whatsnew-card-\(feature.id)-\(style == .hero ? "hero" : "thumbnail")")
     }
 }
 
