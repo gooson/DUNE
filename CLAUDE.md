@@ -179,6 +179,7 @@
 
 - **xcodegen 후 objectVersion/compatibilityVersion 후처리** (#121)
 - **watchOS: `INFOPLIST_KEY_CFBundleIconName` 명시 + platform 소문자** (#123-125)
+- **native visionOS app icon은 전용 `.imagestack` asset 필요**: iOS `AppIcon.appiconset`의 `visionos` child 추가로 해결되지 않음. `project.yml`에 `Resources/Assets.xcassets` 포함 + `ASSETCATALOG_COMPILER_APPICON_NAME`를 visionOS 전용 stack asset(`VisionAppIcon`)으로 지정 (#201)
 - **Asset catalog 폴더에 `"provides-namespace": true`** (#159)
 - **AI 생성 아이콘 투명 배경 확인** / 제네릭 장비는 SF Symbol (#160, #161)
 - **Equipment.other -> nil ("없음" vs "미인식" 구분)** (#166)
