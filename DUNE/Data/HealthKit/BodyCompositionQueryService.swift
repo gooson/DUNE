@@ -141,7 +141,8 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
             unit: .percent(),
             start: start,
             end: end,
-            valueTransform: { $0 * 100 }
+            valueTransform: { $0 * 100 },
+            validRange: 0...100
         )
     }
 
@@ -150,7 +151,8 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
             type: HKQuantityType(.leanBodyMass),
             unit: .gramUnit(with: .kilo),
             start: start,
-            end: end
+            end: end,
+            validRange: 0...300
         )
     }
 

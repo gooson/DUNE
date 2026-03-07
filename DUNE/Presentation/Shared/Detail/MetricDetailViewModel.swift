@@ -465,14 +465,16 @@ final class MetricDetailViewModel {
         loadedWorkouts = current
     }
 
-    // MARK: - Weight
+    // MARK: - Body Composition (Weight, BMI, Body Fat, Lean Body Mass)
 
-    private func loadWeightData() async throws {
+    private func loadBodyCompositionData(
+        fetch: @Sendable (Date, Date) async throws -> [BodyCompositionSample]
+    ) async throws {
         let range = extendedRange
-
-        async let currentSamples = bodyService.fetchWeight(start: range.start, end: range.end)
         let prevRange = HealthDataAggregator.previousPeriodRange(for: selectedPeriod, offset: 0)
-        async let prevSamples = bodyService.fetchWeight(start: prevRange.start, end: prevRange.end)
+
+        async let currentSamples = fetch(range.start, range.end)
+        async let prevSamples = fetch(prevRange.start, prevRange.end)
 
         let current = try await currentSamples
         let previous = try await prevSamples
@@ -483,43 +485,31 @@ final class MetricDetailViewModel {
 
         // Aggregate by day (or larger) to avoid duplicate points on the same day
         // causing Catmull-Rom interpolation spikes
-        chartData = HealthDataAggregator.aggregateByAverage(
+        let aggregated = HealthDataAggregator.aggregateByAverage(
             raw, unit: selectedPeriod == .sixMonths || selectedPeriod == .year
                 ? selectedPeriod.aggregationUnit : .day
         )
 
+        // Compute summary from aggregated data before assigning to chartData
+        // to avoid race with concurrent reloads reading self.chartData
+        let currentRange = selectedPeriod.dateRange(offset: 0)
+        let currentValues = aggregated
+            .filter { $0.date >= currentRange.start && $0.date <= currentRange.end }
+            .map(\.value)
+
+        chartData = aggregated
         summaryStats = HealthDataAggregator.computeSummary(
-            from: currentPeriodValues(),
+            from: currentValues,
             previousPeriodValues: previous.map(\.value)
         )
     }
 
-    // MARK: - BMI
+    private func loadWeightData() async throws {
+        try await loadBodyCompositionData(fetch: bodyService.fetchWeight)
+    }
 
     private func loadBMIData() async throws {
-        let range = extendedRange
-
-        async let currentSamples = bodyService.fetchBMI(start: range.start, end: range.end)
-        let prevRange = HealthDataAggregator.previousPeriodRange(for: selectedPeriod, offset: 0)
-        async let prevSamples = bodyService.fetchBMI(start: prevRange.start, end: prevRange.end)
-
-        let current = try await currentSamples
-        let previous = try await prevSamples
-
-        let raw = current
-            .map { ChartDataPoint(date: $0.date, value: $0.value) }
-            .sorted { $0.date < $1.date }
-
-        // Aggregate by day (or larger) to avoid duplicate points on the same day
-        chartData = HealthDataAggregator.aggregateByAverage(
-            raw, unit: selectedPeriod == .sixMonths || selectedPeriod == .year
-                ? selectedPeriod.aggregationUnit : .day
-        )
-
-        summaryStats = HealthDataAggregator.computeSummary(
-            from: currentPeriodValues(),
-            previousPeriodValues: previous.map(\.value)
-        )
+        try await loadBodyCompositionData(fetch: bodyService.fetchBMI)
     }
 
     // MARK: - Vitals (SpO2, Respiratory Rate, VO2 Max, HR Recovery, Wrist Temp)
@@ -549,49 +539,11 @@ final class MetricDetailViewModel {
     }
 
     private func loadBodyFatData() async throws {
-        let range = extendedRange
-
-        async let currentSamples = bodyService.fetchBodyFat(start: range.start, end: range.end)
-        let prevRange = HealthDataAggregator.previousPeriodRange(for: selectedPeriod, offset: 0)
-        async let prevSamples = bodyService.fetchBodyFat(start: prevRange.start, end: prevRange.end)
-
-        let current = try await currentSamples
-        let previous = try await prevSamples
-
-        let raw = current
-            .map { ChartDataPoint(date: $0.date, value: $0.value) }
-            .sorted { $0.date < $1.date }
-        chartData = HealthDataAggregator.aggregateByAverage(
-            raw, unit: selectedPeriod == .sixMonths || selectedPeriod == .year
-                ? selectedPeriod.aggregationUnit : .day
-        )
-        summaryStats = HealthDataAggregator.computeSummary(
-            from: currentPeriodValues(),
-            previousPeriodValues: previous.map(\.value)
-        )
+        try await loadBodyCompositionData(fetch: bodyService.fetchBodyFat)
     }
 
     private func loadLeanBodyMassData() async throws {
-        let range = extendedRange
-
-        async let currentSamples = bodyService.fetchLeanBodyMass(start: range.start, end: range.end)
-        let prevRange = HealthDataAggregator.previousPeriodRange(for: selectedPeriod, offset: 0)
-        async let prevSamples = bodyService.fetchLeanBodyMass(start: prevRange.start, end: prevRange.end)
-
-        let current = try await currentSamples
-        let previous = try await prevSamples
-
-        let raw = current
-            .map { ChartDataPoint(date: $0.date, value: $0.value) }
-            .sorted { $0.date < $1.date }
-        chartData = HealthDataAggregator.aggregateByAverage(
-            raw, unit: selectedPeriod == .sixMonths || selectedPeriod == .year
-                ? selectedPeriod.aggregationUnit : .day
-        )
-        summaryStats = HealthDataAggregator.computeSummary(
-            from: currentPeriodValues(),
-            previousPeriodValues: previous.map(\.value)
-        )
+        try await loadBodyCompositionData(fetch: bodyService.fetchLeanBodyMass)
     }
 
     // MARK: - Helpers
