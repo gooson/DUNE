@@ -82,7 +82,7 @@ struct DUNEApp: App {
         }
     }
 
-    private static func launchArgumentValue(for key: String) -> String? {
+    nonisolated private static func launchArgumentValue(for key: String) -> String? {
         let arguments = ProcessInfo.processInfo.arguments
         guard let index = arguments.firstIndex(of: key), arguments.indices.contains(index + 1) else {
             return nil
