@@ -22,13 +22,23 @@ extension MuscleGroup {
     var iconName: String {
         switch self {
         case .chest: "figure.strengthtraining.traditional"
-        case .back: "figure.rowing"
+        case .back:
+#if os(visionOS)
+            "dumbbell.fill"
+#else
+            "figure.rowing"
+#endif
         case .shoulders: "figure.arms.open"
         case .biceps, .triceps, .forearms: "dumbbell.fill"
         case .quadriceps, .hamstrings, .glutes, .calves: "figure.walk"
         case .core: "figure.core.training"
         case .traps: "figure.arms.open"
-        case .lats: "figure.rowing"
+        case .lats:
+#if os(visionOS)
+            "dumbbell.fill"
+#else
+            "figure.rowing"
+#endif
         }
     }
 }

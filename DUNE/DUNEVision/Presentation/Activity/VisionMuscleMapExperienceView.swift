@@ -294,13 +294,13 @@ struct VisionMuscleMapExperienceView: View {
     private func iconName(for muscle: MuscleGroup) -> String {
         switch muscle {
         case .chest: "figure.strengthtraining.traditional"
-        case .back: "figure.rowing"
+        case .back: "dumbbell.fill"
         case .shoulders: "figure.arms.open"
         case .biceps, .triceps, .forearms: "dumbbell.fill"
         case .quadriceps, .hamstrings, .glutes, .calves: "figure.walk"
         case .core: "figure.core.training"
         case .traps: "figure.arms.open"
-        case .lats: "figure.rowing"
+        case .lats: "dumbbell.fill"
         }
     }
 

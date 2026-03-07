@@ -40,7 +40,7 @@ struct VisionTrainView: View {
                 Button {
                     onOpen3DCharts()
                 } label: {
-                    Label("Open 3D Charts", systemImage: "chart.bar.3d.grouped")
+                    Label("Open 3D Charts", systemImage: "chart.bar.fill")
                 }
 
                 Label("SVG → Volumetric Mesh", systemImage: "cube.transparent")

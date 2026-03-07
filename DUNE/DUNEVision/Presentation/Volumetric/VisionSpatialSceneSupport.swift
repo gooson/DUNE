@@ -54,7 +54,7 @@ extension MuscleGroup {
     var spatialIconName: String {
         switch self {
         case .chest: "figure.strengthtraining.traditional"
-        case .back, .lats: "figure.rowing"
+        case .back, .lats: "dumbbell.fill"
         case .shoulders, .traps: "figure.arms.open"
         case .biceps, .triceps, .forearms: "dumbbell.fill"
         case .quadriceps, .hamstrings, .glutes, .calves: "figure.walk"

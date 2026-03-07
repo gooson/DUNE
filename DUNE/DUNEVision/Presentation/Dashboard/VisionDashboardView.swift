@@ -29,7 +29,7 @@ struct VisionDashboardView: View {
                 Button {
                     onOpen3DCharts()
                 } label: {
-                    Label("3D Charts", systemImage: "chart.bar.3d.grouped")
+                    Label("3D Charts", systemImage: "chart.bar.fill")
                 }
             }
         }

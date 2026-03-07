@@ -8,6 +8,7 @@ struct VisionContentView: View {
     private let refreshCoordinator: AppRefreshCoordinating?
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.openWindow) private var openWindow
+    @Environment(\.supportsMultipleWindows) private var supportsMultipleWindows
     @State private var selectedSection: AppSection = .today
     @State private var refreshSignal = 0
     @State private var foregroundTask: Task<Void, Never>?
@@ -27,8 +28,14 @@ struct VisionContentView: View {
                     VisionDashboardView(
                         sharedHealthDataService: sharedHealthDataService,
                         refreshSignal: refreshSignal,
-                        onOpen3DCharts: { openWindow(id: "chart3d") },
-                        onOpenVolumetric: { openWindow(id: "spatial-volume") }
+                        onOpen3DCharts: {
+                            guard supportsMultipleWindows else { return }
+                            openWindow(id: "chart3d")
+                        },
+                        onOpenVolumetric: {
+                            guard supportsMultipleWindows else { return }
+                            openWindow(id: "spatial-volume")
+                        }
                     )
                 }
             } label: {
@@ -41,7 +48,10 @@ struct VisionContentView: View {
             Tab(value: AppSection.train) {
                 NavigationStack {
                     VisionTrainView(
-                        onOpen3DCharts: { openWindow(id: "chart3d") }
+                        onOpen3DCharts: {
+                            guard supportsMultipleWindows else { return }
+                            openWindow(id: "chart3d")
+                        }
                     )
                 }
             } label: {

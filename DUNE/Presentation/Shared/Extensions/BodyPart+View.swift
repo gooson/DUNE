@@ -30,7 +30,12 @@ extension BodyPart {
         }
         switch self {
         case .chest: return "figure.strengthtraining.traditional"
-        case .upperBack: return "figure.rowing"
+        case .upperBack:
+#if os(visionOS)
+            return "dumbbell.fill"
+#else
+            return "figure.rowing"
+#endif
         case .biceps, .triceps, .forearms: return "dumbbell.fill"
         case .core: return "figure.core.training"
         case .quadriceps, .hamstrings, .glutes, .calves: return "figure.walk"

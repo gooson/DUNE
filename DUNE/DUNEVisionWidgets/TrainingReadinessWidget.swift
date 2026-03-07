@@ -98,13 +98,10 @@ struct TrainingReadinessWidgetView: View {
     @Environment(\.widgetFamily) private var family
 
     var body: some View {
-        switch family {
-        case .systemSmall:
+        if family == .systemSmall {
             smallView
-        case .systemMedium:
+        } else {
             mediumView
-        @unknown default:
-            smallView
         }
     }
 
