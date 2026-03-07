@@ -1,6 +1,25 @@
 import SwiftUI
 import SwiftData
 
+enum LifeHabitLogSync {
+    static func insert(_ log: HabitLog, into habit: HabitDefinition) {
+        if habit.logs == nil {
+            habit.logs = []
+        }
+        log.habitDefinition = habit
+        if habit.logs?.contains(where: { $0.id == log.id }) != true {
+            habit.logs?.append(log)
+        }
+    }
+
+    static func delete(_ logs: [HabitLog], from habit: HabitDefinition) {
+        guard !logs.isEmpty else { return }
+
+        let ids = Set(logs.map(\.id))
+        habit.logs?.removeAll { ids.contains($0.id) }
+    }
+}
+
 struct LifeView: View {
     @State private var viewModel = LifeViewModel()
     @State private var localRefreshSignal = 0
@@ -106,6 +125,7 @@ private struct HabitListQueryView: View {
         filter: #Predicate<HabitDefinition> { !$0.isArchived },
         sort: \HabitDefinition.sortOrder
     ) private var habits: [HabitDefinition]
+    @Query(sort: \HabitLog.date, order: .reverse) private var habitLogs: [HabitLog]
     @Query(sort: \ExerciseRecord.date, order: .reverse) private var exerciseRecords: [ExerciseRecord]
 
     @Bindable var viewModel: LifeViewModel
@@ -153,6 +173,9 @@ private struct HabitListQueryView: View {
             .onChange(of: habits.count) { _, _ in
                 recalculate()
             }
+            .onChange(of: habitLogSignature) { _, _ in
+                recalculate()
+            }
             .onChange(of: autoAchievementInputSignature) { _, _ in
                 recalculate()
             }
@@ -194,6 +217,19 @@ private struct HabitListQueryView: View {
         return hasher.finalize()
     }
 
+    private var habitLogSignature: Int {
+        var hasher = Hasher()
+        hasher.combine(habitLogs.count)
+        for log in habitLogs {
+            hasher.combine(log.id)
+            hasher.combine(log.habitDefinition?.id)
+            hasher.combine(log.date)
+            hasher.combine(log.value)
+            hasher.combine(log.memo ?? "")
+        }
+        return hasher.finalize()
+    }
+
     // MARK: - Sections
 
     private func habitsSection(fillHeight: Bool = false) -> some View {
@@ -229,6 +265,7 @@ private struct HabitListQueryView: View {
                 }
             }
         }
+        .accessibilityIdentifier("life-section-habits")
     }
 
     @ViewBuilder
@@ -559,14 +596,35 @@ private struct HabitListQueryView: View {
 
     // MARK: - Actions
 
+    private func todayLogs(for habitId: UUID, date: Date = Date()) -> [HabitLog] {
+        let calendar = Calendar.current
+        return habitLogs.filter {
+            $0.habitDefinition?.id == habitId && calendar.isDate($0.date, inSameDayAs: date)
+        }
+    }
+
+    private func insertLog(_ log: HabitLog, into habit: HabitDefinition) {
+        LifeHabitLogSync.insert(log, into: habit)
+        modelContext.insert(log)
+    }
+
+    private func deleteLogs(_ logs: [HabitLog], from habit: HabitDefinition) {
+        guard !logs.isEmpty else { return }
+
+        LifeHabitLogSync.delete(logs, from: habit)
+
+        for log in logs {
+            modelContext.delete(log)
+        }
+    }
+
     private func toggleCheck(habitId: UUID) {
         guard let habit = habitsByID[habitId] else { return }
 
         if let progress = viewModel.habitProgresses.first(where: { $0.id == habitId }), progress.isCycleBased {
             guard progress.isDue else { return }
             if let log = viewModel.createCycleActionLog(for: habit, action: .complete) {
-                log.habitDefinition = habit
-                modelContext.insert(log)
+                insertLog(log, into: habit)
                 viewModel.didFinishSaving()
                 viewModel.refreshReminderSchedule(for: habit)
             }
@@ -574,21 +632,18 @@ private struct HabitListQueryView: View {
             return
         }
 
-        let calendar = Calendar.current
-        let today = calendar.startOfDay(for: Date())
-        let existingLog = (habit.logs ?? []).first { calendar.isDate($0.date, inSameDayAs: today) }
+        let existingLogs = todayLogs(for: habitId)
 
-        if let log = existingLog {
+        if !existingLogs.isEmpty {
             // Toggle off: remove log
             withAnimation {
-                modelContext.delete(log)
+                deleteLogs(existingLogs, from: habit)
             }
             viewModel.refreshReminderSchedule(for: habit)
         } else {
             // Toggle on: add log
             if let log = viewModel.createValidatedLog(for: habit, value: 1.0) {
-                log.habitDefinition = habit
-                modelContext.insert(log)
+                insertLog(log, into: habit)
                 viewModel.didFinishSaving()
                 viewModel.refreshReminderSchedule(for: habit)
             }
@@ -598,20 +653,14 @@ private struct HabitListQueryView: View {
 
     private func updateValue(habitId: UUID, value: Double) {
         guard let habit = habitsByID[habitId] else { return }
-        let calendar = Calendar.current
-        let today = calendar.startOfDay(for: Date())
 
         // Remove existing today logs
-        let existingLogs = (habit.logs ?? []).filter { calendar.isDate($0.date, inSameDayAs: today) }
-        for log in existingLogs {
-            modelContext.delete(log)
-        }
+        deleteLogs(todayLogs(for: habitId), from: habit)
 
         // Add new log with updated value
         if value > 0 {
             if let log = viewModel.createValidatedLog(for: habit, value: value) {
-                log.habitDefinition = habit
-                modelContext.insert(log)
+                insertLog(log, into: habit)
                 viewModel.didFinishSaving()
                 viewModel.refreshReminderSchedule(for: habit)
             }
@@ -625,8 +674,7 @@ private struct HabitListQueryView: View {
         guard let snapshot = viewModel.cycleSnapshot(for: habit), snapshot.isDue else { return }
 
         if let log = viewModel.createCycleActionLog(for: habit, action: .skip) {
-            log.habitDefinition = habit
-            modelContext.insert(log)
+            insertLog(log, into: habit)
             viewModel.didFinishSaving()
             viewModel.refreshReminderSchedule(for: habit)
             recalculate()
@@ -642,8 +690,7 @@ private struct HabitListQueryView: View {
         guard snoozeDate > nextDueDate else { return }
 
         if let log = viewModel.createCycleActionLog(for: habit, action: .snooze, date: snoozeDate) {
-            log.habitDefinition = habit
-            modelContext.insert(log)
+            insertLog(log, into: habit)
             viewModel.didFinishSaving()
             viewModel.refreshReminderSchedule(for: habit)
             recalculate()
