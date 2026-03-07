@@ -44,6 +44,8 @@ private struct NoopVitalsService: VitalsQuerying {
     func fetchWristTemperatureBaseline(days: Int) async throws -> Double? { nil }
 }
 
+
+
 private struct NoopHeartRateService: HeartRateQuerying {
     func fetchHeartRateSamples(forWorkoutID workoutID: String) async throws -> [HeartRateSample] { [] }
     func fetchHeartRateSummary(forWorkoutID workoutID: String) async throws -> HeartRateSummary {
@@ -292,4 +294,6 @@ struct WellnessViewModelTests {
         await sharedService.resumeFetch()
         await loadTask.value
     }
+
+
 }
