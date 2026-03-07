@@ -49,7 +49,8 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
         try await fetchQuantitySamples(
             type: HKQuantityType(.leanBodyMass),
             unit: .gramUnit(with: .kilo),
-            days: days
+            days: days,
+            validRange: 0...300
         )
     }
 

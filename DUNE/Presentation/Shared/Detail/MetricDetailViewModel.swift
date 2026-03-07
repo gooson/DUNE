@@ -490,8 +490,8 @@ final class MetricDetailViewModel {
                 ? selectedPeriod.aggregationUnit : .day
         )
 
-        // Compute summary from aggregated data before assigning to chartData
-        // to avoid race with concurrent reloads reading self.chartData
+        // Compute from local `aggregated` rather than `self.chartData` to use
+        // consistent data within this load cycle
         let currentRange = selectedPeriod.dateRange(offset: 0)
         let currentValues = aggregated
             .filter { $0.date >= currentRange.start && $0.date <= currentRange.end }
