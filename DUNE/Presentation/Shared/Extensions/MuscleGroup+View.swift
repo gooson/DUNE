@@ -26,7 +26,7 @@ extension MuscleGroup {
 #if os(visionOS)
             "dumbbell.fill"
 #else
-            "figure.rowing"
+            "figure.rower"
 #endif
         case .shoulders: "figure.arms.open"
         case .biceps, .triceps, .forearms: "dumbbell.fill"
@@ -37,7 +37,7 @@ extension MuscleGroup {
 #if os(visionOS)
             "dumbbell.fill"
 #else
-            "figure.rowing"
+            "figure.rower"
 #endif
         }
     }

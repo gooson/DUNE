@@ -1,13 +1,24 @@
 import SwiftUI
 import SwiftData
 
+struct ConsistencyWeekdayHeader: Identifiable, Equatable, Sendable {
+    let index: Int
+    let label: String
+
+    var id: Int { index }
+
+    static let defaults: [ConsistencyWeekdayHeader] = ["S", "M", "T", "W", "T", "F", "S"].enumerated().map {
+        ConsistencyWeekdayHeader(index: $0.offset, label: $0.element)
+    }
+}
+
 /// Detail view for workout consistency: streak cards, monthly calendar, and history.
 struct ConsistencyDetailView: View {
     @State private var viewModel = ConsistencyDetailViewModel()
     @Query(sort: \ExerciseRecord.date, order: .reverse) private var exerciseRecords: [ExerciseRecord]
     @Environment(\.appTheme) private var theme
 
-    private let weekdayLabels = ["S", "M", "T", "W", "T", "F", "S"]
+    private let weekdayHeaders = ConsistencyWeekdayHeader.defaults
 
     var body: some View {
         ScrollView {
@@ -28,7 +39,7 @@ struct ConsistencyDetailView: View {
         .background { DetailWaveBackground() }
         .englishNavigationTitle("Consistency")
         .task(id: exerciseRecords.count) {
-            viewModel.loadData(from: exerciseRecords)
+            await viewModel.loadData(from: exerciseRecords)
         }
     }
 
@@ -76,8 +87,8 @@ struct ConsistencyDetailView: View {
 
             // Weekday headers
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 4), count: 7), spacing: 4) {
-                ForEach(weekdayLabels, id: \.self) { label in
-                    Text(label)
+                ForEach(weekdayHeaders) { header in
+                    Text(header.label)
                         .font(.caption2)
                         .foregroundStyle(.tertiary)
                         .frame(maxWidth: .infinity)
