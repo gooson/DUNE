@@ -637,7 +637,8 @@ private struct HabitListQueryView: View {
         guard let habit = habitsByID[habitId] else { return }
 
         if let progress = viewModel.habitProgresses.first(where: { $0.id == habitId }), progress.isCycleBased {
-            guard progress.isDue else { return }
+            guard progress.canCompleteCycle else { return }
+            deleteLogs(todayLogs(for: habit), from: habit)
             if let log = viewModel.createCycleActionLog(for: habit, action: .complete) {
                 insertLog(log, into: habit)
                 viewModel.didFinishSaving()
