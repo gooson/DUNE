@@ -55,6 +55,8 @@ final class BackgroundNotificationEvaluator: Sendable {
         )
     }
 
+    private static let mergedBodyCompositionNotificationID = "com.dune.bodyComposition.merged"
+
     /// Called from HKObserverQuery callback. Fetches new samples and evaluates for notifications.
     func evaluateAndNotify(sampleType: HKSampleType) async {
         let insightType = mapToInsightType(sampleType)
@@ -74,8 +76,41 @@ final class BackgroundNotificationEvaluator: Sendable {
         let insight = await evaluate(samples: samples, sampleType: sampleType, insightType: insightType)
         guard let insight else { return }
 
+        // Body composition types: atomically buffer + build merged notification
+        if isBodyCompositionType(insightType) {
+            await sendMergedBodyCompositionNotification(latestInsight: insight)
+            return
+        }
+
         guard throttleStore.shouldSendAndRecord(insight: insight) else { return }
         await notificationService.send(insight)
+    }
+
+    private func isBodyCompositionType(_ type: HealthInsight.InsightType) -> Bool {
+        switch type {
+        case .weightUpdate, .bodyFatUpdate, .bmiUpdate: true
+        default: false
+        }
+    }
+
+    private func sendMergedBodyCompositionNotification(latestInsight: HealthInsight) async {
+        // Atomically buffer value, collect pending, and record throttle
+        let mergedBody = throttleStore.bufferAndBuildMergedBody(
+            type: latestInsight.type,
+            formattedValue: latestInsight.body
+        )
+        guard let mergedBody else { return }
+
+        let mergedInsight = HealthInsight(
+            type: latestInsight.type,
+            title: String(localized: "Body Composition Update"),
+            body: mergedBody,
+            severity: latestInsight.severity,
+            date: latestInsight.date,
+            route: latestInsight.route
+        )
+
+        await notificationService.send(mergedInsight, replacingIdentifier: Self.mergedBodyCompositionNotificationID)
     }
 
     // MARK: - Anchored Query

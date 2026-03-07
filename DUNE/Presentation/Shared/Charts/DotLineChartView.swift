@@ -17,6 +17,7 @@ struct DotLineChartView: View {
 
     @State private var selectedDate: Date?
     @State private var internalScrollPosition: Date = .now
+    @State private var selectionGestureState = ChartSelectionGestureState()
 
     enum Period: String, CaseIterable {
         case week = "7D"
@@ -88,7 +89,7 @@ struct DotLineChartView: View {
                         .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
                 }
             }
-            .chartScrollableAxes(timePeriod != nil ? .horizontal : [])
+            .chartScrollableAxes(timePeriod != nil && selectedDate == nil ? .horizontal : [])
             .modifier(DotLineScrollModifier(
                 timePeriod: timePeriod,
                 scrollPosition: scrollPosition ?? $internalScrollPosition
@@ -110,20 +111,34 @@ struct DotLineChartView: View {
                         .foregroundStyle(theme.accentColor.opacity(0.30))
                 }
             }
-            .chartXSelection(value: $selectedDate)
-            .sensoryFeedback(.selection, trigger: selectedDate)
-            .frame(height: chartHeight)
-            .accessibilityChartDescriptor(chartDescriptor)
-            .overlay(alignment: .top) {
-                if let selected = selectedPoint {
-                    ChartSelectionOverlay(
-                        date: selected.date,
-                        value: selected.value.formattedWithSeparator(fractionDigits: 1)
-                    )
-                    .transition(.opacity)
-                    .animation(.easeInOut(duration: 0.15), value: selectedDate)
+            .chartOverlay { proxy in
+                GeometryReader { geometry in
+                    if let plotFrame = proxy.plotFrame.map({ geometry[$0] }) {
+                        ZStack(alignment: .topLeading) {
+                            Rectangle()
+                                .fill(.clear)
+                                .contentShape(Rectangle())
+                                .simultaneousGesture(selectionGesture(proxy: proxy, plotFrame: plotFrame))
+
+                            if let selected = selectedPoint,
+                               let anchor = selectedAnchor(for: selected, proxy: proxy, plotFrame: plotFrame) {
+                                FloatingChartSelectionOverlay(
+                                    date: selected.date,
+                                    value: selected.value.formattedWithSeparator(fractionDigits: 1),
+                                    anchor: anchor,
+                                    chartSize: geometry.size,
+                                    plotFrame: plotFrame
+                                )
+                                .transition(.opacity)
+                            }
+                        }
+                        .animation(.easeInOut(duration: 0.15), value: selectedDate)
+                    }
                 }
             }
+            .sensoryFeedback(.selection, trigger: selectedPoint?.date)
+            .frame(height: chartHeight)
+            .accessibilityChartDescriptor(chartDescriptor)
     }
 
     private var chartDescriptor: StandardChartAccessibility {
@@ -177,11 +192,40 @@ struct DotLineChartView: View {
 
     private var selectedPoint: ChartDataPoint? {
         guard let selectedDate else { return nil }
-        return data.min(by: {
-            abs($0.date.timeIntervalSince(selectedDate)) < abs($1.date.timeIntervalSince(selectedDate))
-        })
+        return ChartSelectionInteraction.nearestPoint(to: selectedDate, in: data, date: \.date)
     }
 
+    private func selectedAnchor(
+        for point: ChartDataPoint,
+        proxy: ChartProxy,
+        plotFrame: CGRect
+    ) -> CGPoint? {
+        ChartSelectionInteraction.anchor(
+            xPosition: proxy.position(forX: point.date),
+            yPosition: proxy.position(forY: point.value),
+            plotFrame: plotFrame
+        )
+    }
+
+    private func selectionGesture(proxy: ChartProxy, plotFrame: CGRect) -> some Gesture {
+        DragGesture(minimumDistance: 0, coordinateSpace: .local)
+            .onChanged { value in
+                guard selectionGestureState.registerChange(
+                    at: value.time,
+                    translation: value.translation
+                ) else { return }
+
+                selectedDate = ChartSelectionInteraction.resolvedDate(
+                    at: value.location,
+                    proxy: proxy,
+                    plotFrame: plotFrame
+                )
+            }
+            .onEnded { _ in
+                selectionGestureState.reset()
+                selectedDate = nil
+            }
+    }
 }
 
 /// Applies chartXVisibleDomain + chartScrollPosition only when timePeriod is set.

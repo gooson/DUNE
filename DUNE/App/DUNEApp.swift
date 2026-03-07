@@ -20,7 +20,7 @@ struct DUNEApp: App {
     @State private var hasAttemptedNotificationAuthorizationThisLaunch = false
     @State private var hasStartedRuntimeServices = false
     @State private var showWhatsNewSheet = false
-    @State private var automaticWhatsNewReleases: [WhatsNewRelease] = []
+    @State private var automaticWhatsNewReleases: [WhatsNewReleaseData] = []
     @State private var automaticWhatsNewBuild = ""
 
     let modelContainer: ModelContainer
