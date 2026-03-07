@@ -16,6 +16,7 @@ struct ExerciseTypeDetailView: View {
     @Environment(\.appTheme) private var theme
     @State private var selectedDate: Date?
     @State private var selectionGestureState = ChartSelectionGestureState()
+    @State private var activationTask: Task<Void, Never>?
 
     init(typeKey: String, displayName: String, categoryRawValue: String = "", equipmentRawValue: String? = nil) {
         self.typeKey = typeKey
@@ -275,13 +276,31 @@ struct ExerciseTypeDetailView: View {
     private func selectionGesture(proxy: ChartProxy, plotFrame: CGRect) -> some Gesture {
         DragGesture(minimumDistance: 0, coordinateSpace: .local)
             .onChanged { value in
-                switch selectionGestureState.registerChange(
+                let update = selectionGestureState.registerChange(
                     at: value.time,
                     translation: value.translation
-                ) {
+                )
+                switch update {
                 case .inactive:
+                    if selectionGestureState.phase == .pendingActivation, activationTask == nil {
+                        let location = value.location
+                        activationTask = Task { @MainActor in
+                            try? await Task.sleep(for: .seconds(ChartSelectionInteraction.holdDuration))
+                            guard !Task.isCancelled else { return }
+                            let result = selectionGestureState.forceActivate()
+                            if case .activated = result {
+                                selectedDate = ChartSelectionInteraction.resolvedDate(
+                                    at: location,
+                                    proxy: proxy,
+                                    plotFrame: plotFrame
+                                )
+                            }
+                        }
+                    }
                     return
                 case .activated, .updating:
+                    activationTask?.cancel()
+                    activationTask = nil
                     selectedDate = ChartSelectionInteraction.resolvedDate(
                         at: value.location,
                         proxy: proxy,
@@ -290,6 +309,8 @@ struct ExerciseTypeDetailView: View {
                 }
             }
             .onEnded { _ in
+                activationTask?.cancel()
+                activationTask = nil
                 selectionGestureState.reset()
                 selectedDate = nil
             }
