@@ -66,7 +66,8 @@ struct RangeBarChartView: View {
                         .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
                 }
             }
-            .chartScrollableAxes(selectionGestureState.allowsScroll ? .horizontal : [])
+            .chartScrollableAxes(.horizontal)
+            .scrollDisabled(!selectionGestureState.allowsScroll)
             .chartXVisibleDomain(length: period.visibleDomainSeconds)
             .chartScrollPosition(x: $scrollPosition)
             .chartYScale(domain: yDomain)
@@ -195,6 +196,9 @@ struct RangeBarChartView: View {
                     }
                     fallthrough
                 case .updating:
+                    if let restore = selectionGestureState.initialScrollPosition {
+                        scrollPosition = restore
+                    }
                     selectedDate = ChartSelectionInteraction.resolvedDate(
                         at: value.location,
                         proxy: proxy,
