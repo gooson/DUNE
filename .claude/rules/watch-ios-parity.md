@@ -1,0 +1,27 @@
+# Watch/iOS Parity Rules
+
+## DTO & 데이터 동기화
+
+- Watch DTO 필드 추가 시 양쪽 target 동기화
+- WatchConnectivity DTO는 `Domain/Models/WatchConnectivityModels.swift` 단일 소스 유지
+- Watch 입력도 iOS 동일 수준 검증
+- Watch `isReachable`은 computed property
+
+## UI 표시
+
+- bodyweight volume=0에서 "0kg" 표시 금지
+- 검색<->브라우징 모드 전환 시 반대편 캐시 초기화
+- SVG body diagram 위 DragGesture 금지
+- undertrained 리스트는 비즈니스 필터 후 prefix/suffix
+- iOS QuickStart popular도 기록 부족 시 library fallback 필수 (Watch personalizedPopular 패턴)
+
+## Watch 운동 세션
+
+- 운동 종료는 액션 즉시 `isSessionEnded` 전환 + finalize timeout watchdog 적용 (HealthKit delegate 지연/누락 방어)
+- exerciseLibrary 미수신 상태를 `synced`로 표시 금지: missing context key면 `syncing/notConnected` 유지 + 재요청 경로 확보
+- cardio elapsed/pace는 pause 구간을 제외한 active elapsed 기준으로 계산: wall-clock 기반 계산 금지
+- 루틴 템플릿은 CloudKit-only 의존 금지: `WorkoutTemplate` primary 유지 + WatchConnectivity fallback DTO/병합(local 우선)
+- watchOS nested TabView 금지: horizontal+vertical 중첩은 제스처 충돌/Crown 라우팅 미정의. flat 수평 TabView 사용
+- saveCardioRecord에 수집된 모든 metric 전달 확인: `WorkoutManager` 수집 값(steps, floors 등)이 `ExerciseRecord` init에 빠짐없이 전달
+- strength 템플릿: `discardWorkout()` + 개별 HKWorkout 생성. HKLiveWorkoutBuilder는 단일 HKWorkout만 생성하므로, strength 세션 종료 시 `discardWorkout()` 후 `WatchWorkoutWriter`로 운동별 개별 HKWorkout 저장. 시간 겹침 방지를 위해 순차 오프셋 적용
+- `HKLiveWorkoutDataSource`는 stepCount/flightsClimbed 자동 수집 안 함: `enableCollection(for: HKQuantityType(.stepCount), predicate: nil)` 명시 호출 필수

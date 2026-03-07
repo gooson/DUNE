@@ -244,13 +244,21 @@ Phase 1: Plan ──> Phase 2: Work ──> Phase 3: Review ──> Phase 4: Res
 
 ## Pipeline Control
 
-각 Phase 완료 시 진행 상황을 보고합니다:
+각 Phase **시작 시** 아래 형식으로 시작 표시를 출력합니다:
+
+```
+━━━ Phase {N}: {Name} Start ━━━
+```
+
+각 Phase **완료 시** 진행 상황을 보고합니다:
 
 ```
 ━━━ Phase {N}: {Name} Complete ━━━
 {summary}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+시작 표시는 실제 작업 수행 **직전에** 반드시 출력합니다. 이를 통해 사용자가 추후 로그에서 각 Phase의 시작점을 식별할 수 있습니다.
 
 승인 없이 자동 진행합니다. 사용자가 중단하면 즉시 멈춥니다.
 
