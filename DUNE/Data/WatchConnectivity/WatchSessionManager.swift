@@ -102,12 +102,30 @@ final class WatchSessionManager: NSObject {
 
     /// Fetches latest templates from SwiftData and transfers them to Watch.
     func syncWorkoutTemplatesToWatch(using modelContext: ModelContext) {
+        transferWorkoutTemplates(Self.makeWorkoutTemplatePayload(using: modelContext))
+    }
+
+    /// Fetches latest templates off the main actor and transfers them to Watch.
+    func syncWorkoutTemplatesToWatch(using modelContainer: ModelContainer) {
+        Task(priority: .utility) {
+            let payload = await Self.makeWorkoutTemplatePayload(using: modelContainer)
+            guard !Task.isCancelled else { return }
+            transferWorkoutTemplates(payload)
+        }
+    }
+
+    private nonisolated static func makeWorkoutTemplatePayload(using modelContainer: ModelContainer) async -> [WatchWorkoutTemplateInfo] {
+        let context = ModelContext(modelContainer)
+        return makeWorkoutTemplatePayload(using: context)
+    }
+
+    private nonisolated static func makeWorkoutTemplatePayload(using modelContext: ModelContext) -> [WatchWorkoutTemplateInfo] {
         let descriptor = FetchDescriptor<WorkoutTemplate>(
             sortBy: [SortDescriptor(\.updatedAt, order: .reverse)]
         )
         do {
             let templates = try modelContext.fetch(descriptor)
-            let payload = templates.map { template in
+            return templates.map { template in
                 WatchWorkoutTemplateInfo(
                     id: template.id,
                     name: template.name,
@@ -115,9 +133,9 @@ final class WatchSessionManager: NSObject {
                     updatedAt: template.updatedAt
                 )
             }
-            transferWorkoutTemplates(payload)
         } catch {
             AppLogger.ui.error("Failed to fetch workout templates for Watch sync: \(error.localizedDescription)")
+            return []
         }
     }
 

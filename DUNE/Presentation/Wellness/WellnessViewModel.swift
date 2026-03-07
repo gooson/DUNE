@@ -465,143 +465,22 @@ final class WellnessViewModel {
 
     private func fetchAllData(canQueryHealthKit: Bool) async -> FetchResults {
         var results = FetchResults()
-        let sharedSnapshot = await sharedHealthDataService?.fetchSnapshot()
-        if let sharedSnapshot {
-            applySharedSnapshot(sharedSnapshot, to: &results)
+        let sharedSnapshotTask = Task { [sharedHealthDataService] in
+            await sharedHealthDataService?.fetchSnapshot()
         }
+        defer { sharedSnapshotTask.cancel() }
 
         guard canQueryHealthKit else {
+            if let sharedSnapshot = await sharedSnapshotTask.value {
+                applySharedSnapshot(sharedSnapshot, to: &results)
+            }
             return results
         }
 
         await withTaskGroup(of: (FetchKey, FetchValue).self) { [
             sleepService, bodyService, hrvService, vitalsService, heartRateService,
-            sleepScoreUseCase, conditionScoreUseCase, sharedSnapshot
+            sleepScoreUseCase, conditionScoreUseCase
         ] group in
-
-            if sharedSnapshot == nil {
-                // --- Sleep ---
-                group.addTask {
-                    guard !Task.isCancelled else { return (.sleep, .empty) }
-                    do {
-                        let today = Date()
-                        var stages = try await sleepService.fetchSleepStages(for: today)
-                        var sleepDate: Date? = today
-                        var isHistorical = false
-
-                        if stages.isEmpty {
-                            if let latest = try await sleepService.fetchLatestSleepStages(withinDays: 7) {
-                                stages = latest.stages
-                                sleepDate = latest.date
-                                isHistorical = true
-                            } else {
-                                sleepDate = nil
-                            }
-                        }
-
-                        let output = stages.isEmpty ? nil : sleepScoreUseCase.execute(input: .init(stages: stages))
-                        return (.sleep, .sleepResult(output: output, date: sleepDate, isHistorical: isHistorical))
-                    } catch {
-                        AppLogger.ui.error("[Wellness] sleep fetch failed: \(error.localizedDescription)")
-                        return (.sleep, .fetchError)
-                    }
-                }
-
-                // --- Sleep Weekly ---
-                group.addTask {
-                    guard !Task.isCancelled else { return (.sleepWeekly, .empty) }
-                    do {
-                        let calendar = Calendar.current
-                        let today = Date()
-
-                        let dailyData = try await withThrowingTaskGroup(of: DailySleep?.self) { inner in
-                            for dayOffset in 0..<7 {
-                                inner.addTask { [sleepService] in
-                                    guard let date = calendar.date(byAdding: .day, value: -dayOffset, to: today) else { return nil }
-                                    let stages = try await sleepService.fetchSleepStages(for: date)
-                                    let totalMinutes = stages.filter { $0.stage != .awake }.map(\.duration).reduce(0, +) / 60.0
-                                    return DailySleep(date: date, totalMinutes: totalMinutes)
-                                }
-                            }
-                            var collected: [DailySleep] = []
-                            for try await item in inner {
-                                if let item { collected.append(item) }
-                            }
-                            return collected
-                        }
-                        return (.sleepWeekly, .sleepWeekly(dailyData.sorted { $0.date < $1.date }))
-                    } catch {
-                        AppLogger.ui.error("[Wellness] sleepWeekly fetch failed: \(error.localizedDescription)")
-                        return (.sleepWeekly, .fetchError)
-                    }
-                }
-
-                // --- Condition (HRV + RHR) ---
-                group.addTask {
-                    guard !Task.isCancelled else { return (.condition, .empty) }
-                    do {
-                        let hrvSamples = try await hrvService.fetchHRVSamples(days: 14)
-                        let latestRHRSample = try await hrvService.fetchLatestRestingHeartRate(withinDays: 1)
-                        let todayRHR: Double? = latestRHRSample?.value
-                        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date()) ?? Date()
-                        let yesterdayRHR = try await hrvService.fetchRestingHeartRate(for: yesterday)
-
-                        let output = conditionScoreUseCase.execute(input: .init(
-                            hrvSamples: hrvSamples,
-                            todayRHR: todayRHR,
-                            yesterdayRHR: yesterdayRHR
-                        ))
-
-                        // Extract latest HRV/RHR raw values for individual cards (Correction #22: range validation)
-                        let latestHRV: VitalSample? = hrvSamples.first.flatMap { sample in
-                            sample.value > 0 && sample.value <= 500 ? VitalSample(value: sample.value, date: sample.date) : nil
-                        }
-                        let latestRHRVital: VitalSample? = latestRHRSample.flatMap { sample in
-                            sample.value >= 20 && sample.value <= 300 ? VitalSample(value: sample.value, date: sample.date) : nil
-                        }
-
-                        return (.condition, .conditionResult(score: output.score, latestHRV: latestHRV, latestRHR: latestRHRVital))
-                    } catch {
-                        AppLogger.ui.error("[Wellness] condition fetch failed: \(error.localizedDescription)")
-                        return (.condition, .fetchError)
-                    }
-                }
-
-                // --- HRV Weekly (sparkline) ---
-                group.addTask {
-                    guard !Task.isCancelled else { return (.hrvWeekly, .empty) }
-                    do {
-                        let calendar = Calendar.current
-                        let end = Date()
-                        let start = calendar.date(byAdding: .day, value: -7, to: end) ?? end
-                        let history = try await hrvService.fetchHRVCollection(
-                            start: start, end: end, interval: DateComponents(day: 1)
-                        )
-                        return (.hrvWeekly, .hrvWeeklyResult(history.map { VitalSample(value: $0.average, date: $0.date) }))
-                    } catch {
-                        AppLogger.ui.error("[Wellness] hrvWeekly fetch failed: \(error.localizedDescription)")
-                        return (.hrvWeekly, .fetchError)
-                    }
-                }
-
-                // --- RHR Weekly (sparkline) ---
-                group.addTask {
-                    guard !Task.isCancelled else { return (.rhrWeekly, .empty) }
-                    do {
-                        let calendar = Calendar.current
-                        let end = Date()
-                        let start = calendar.date(byAdding: .day, value: -7, to: end) ?? end
-                        let history = try await hrvService.fetchRHRCollection(
-                            start: start, end: end, interval: DateComponents(day: 1)
-                        )
-                        return (.rhrWeekly, .rhrWeeklyResult(history.map { VitalSample(value: $0.average, date: $0.date) }))
-                    } catch {
-                        AppLogger.ui.error("[Wellness] rhrWeekly fetch failed: \(error.localizedDescription)")
-                        return (.rhrWeekly, .fetchError)
-                    }
-                }
-            }
-
             // --- Weight ---
             group.addTask {
                 guard !Task.isCancelled else { return (.weight, .empty) }
@@ -836,6 +715,132 @@ final class WellnessViewModel {
                 } catch {
                     AppLogger.ui.error("[Wellness] wristTempHistory fetch failed: \(error.localizedDescription)")
                     return (.wristTempHistory, .fetchError)
+                }
+            }
+
+            let sharedSnapshot = await sharedSnapshotTask.value
+            if let sharedSnapshot {
+                applySharedSnapshot(sharedSnapshot, to: &results)
+            } else {
+                // --- Sleep ---
+                group.addTask {
+                    guard !Task.isCancelled else { return (.sleep, .empty) }
+                    do {
+                        let today = Date()
+                        var stages = try await sleepService.fetchSleepStages(for: today)
+                        var sleepDate: Date? = today
+                        var isHistorical = false
+
+                        if stages.isEmpty {
+                            if let latest = try await sleepService.fetchLatestSleepStages(withinDays: 7) {
+                                stages = latest.stages
+                                sleepDate = latest.date
+                                isHistorical = true
+                            } else {
+                                sleepDate = nil
+                            }
+                        }
+
+                        let output = stages.isEmpty ? nil : sleepScoreUseCase.execute(input: .init(stages: stages))
+                        return (.sleep, .sleepResult(output: output, date: sleepDate, isHistorical: isHistorical))
+                    } catch {
+                        AppLogger.ui.error("[Wellness] sleep fetch failed: \(error.localizedDescription)")
+                        return (.sleep, .fetchError)
+                    }
+                }
+
+                // --- Sleep Weekly ---
+                group.addTask {
+                    guard !Task.isCancelled else { return (.sleepWeekly, .empty) }
+                    do {
+                        let calendar = Calendar.current
+                        let today = Date()
+
+                        let dailyData = try await withThrowingTaskGroup(of: DailySleep?.self) { inner in
+                            for dayOffset in 0..<7 {
+                                inner.addTask { [sleepService] in
+                                    guard let date = calendar.date(byAdding: .day, value: -dayOffset, to: today) else { return nil }
+                                    let stages = try await sleepService.fetchSleepStages(for: date)
+                                    let totalMinutes = stages.filter { $0.stage != .awake }.map(\.duration).reduce(0, +) / 60.0
+                                    return DailySleep(date: date, totalMinutes: totalMinutes)
+                                }
+                            }
+                            var collected: [DailySleep] = []
+                            for try await item in inner {
+                                if let item { collected.append(item) }
+                            }
+                            return collected
+                        }
+                        return (.sleepWeekly, .sleepWeekly(dailyData.sorted { $0.date < $1.date }))
+                    } catch {
+                        AppLogger.ui.error("[Wellness] sleepWeekly fetch failed: \(error.localizedDescription)")
+                        return (.sleepWeekly, .fetchError)
+                    }
+                }
+
+                // --- Condition (HRV + RHR) ---
+                group.addTask {
+                    guard !Task.isCancelled else { return (.condition, .empty) }
+                    do {
+                        let hrvSamples = try await hrvService.fetchHRVSamples(days: 14)
+                        let latestRHRSample = try await hrvService.fetchLatestRestingHeartRate(withinDays: 1)
+                        let todayRHR: Double? = latestRHRSample?.value
+                        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date()) ?? Date()
+                        let yesterdayRHR = try await hrvService.fetchRestingHeartRate(for: yesterday)
+
+                        let output = conditionScoreUseCase.execute(input: .init(
+                            hrvSamples: hrvSamples,
+                            todayRHR: todayRHR,
+                            yesterdayRHR: yesterdayRHR
+                        ))
+
+                        // Extract latest HRV/RHR raw values for individual cards (Correction #22: range validation)
+                        let latestHRV: VitalSample? = hrvSamples.first.flatMap { sample in
+                            sample.value > 0 && sample.value <= 500 ? VitalSample(value: sample.value, date: sample.date) : nil
+                        }
+                        let latestRHRVital: VitalSample? = latestRHRSample.flatMap { sample in
+                            sample.value >= 20 && sample.value <= 300 ? VitalSample(value: sample.value, date: sample.date) : nil
+                        }
+
+                        return (.condition, .conditionResult(score: output.score, latestHRV: latestHRV, latestRHR: latestRHRVital))
+                    } catch {
+                        AppLogger.ui.error("[Wellness] condition fetch failed: \(error.localizedDescription)")
+                        return (.condition, .fetchError)
+                    }
+                }
+
+                // --- HRV Weekly (sparkline) ---
+                group.addTask {
+                    guard !Task.isCancelled else { return (.hrvWeekly, .empty) }
+                    do {
+                        let calendar = Calendar.current
+                        let end = Date()
+                        let start = calendar.date(byAdding: .day, value: -7, to: end) ?? end
+                        let history = try await hrvService.fetchHRVCollection(
+                            start: start, end: end, interval: DateComponents(day: 1)
+                        )
+                        return (.hrvWeekly, .hrvWeeklyResult(history.map { VitalSample(value: $0.average, date: $0.date) }))
+                    } catch {
+                        AppLogger.ui.error("[Wellness] hrvWeekly fetch failed: \(error.localizedDescription)")
+                        return (.hrvWeekly, .fetchError)
+                    }
+                }
+
+                // --- RHR Weekly (sparkline) ---
+                group.addTask {
+                    guard !Task.isCancelled else { return (.rhrWeekly, .empty) }
+                    do {
+                        let calendar = Calendar.current
+                        let end = Date()
+                        let start = calendar.date(byAdding: .day, value: -7, to: end) ?? end
+                        let history = try await hrvService.fetchRHRCollection(
+                            start: start, end: end, interval: DateComponents(day: 1)
+                        )
+                        return (.rhrWeekly, .rhrWeeklyResult(history.map { VitalSample(value: $0.average, date: $0.date) }))
+                    } catch {
+                        AppLogger.ui.error("[Wellness] rhrWeekly fetch failed: \(error.localizedDescription)")
+                        return (.rhrWeekly, .fetchError)
+                    }
                 }
             }
 
