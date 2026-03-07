@@ -29,6 +29,10 @@ struct VisionContentView: View {
                     VisionDashboardView(
                         sharedHealthDataService: sharedHealthDataService,
                         refreshSignal: refreshSignal,
+                        onOpenDashboardWindow: { windowKind in
+                            guard supportsMultipleWindows else { return }
+                            openWindow(id: windowKind.windowID)
+                        },
                         onOpen3DCharts: {
                             guard supportsMultipleWindows else { return }
                             openWindow(id: "chart3d")

@@ -23,6 +23,7 @@ struct ExerciseView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \ExerciseRecord.date, order: .reverse) private var manualRecords: [ExerciseRecord]
     @Query(sort: \CustomExercise.createdAt, order: .reverse) private var customExercises: [CustomExercise]
+    @Query(sort: \ExerciseDefaultRecord.lastUsedDate, order: .reverse) private var exerciseDefaults: [ExerciseDefaultRecord]
 
     private let library: ExerciseLibraryQuerying = ExerciseLibraryService.shared
     private let recommendationService: WorkoutRecommending = WorkoutRecommendationService()
@@ -342,6 +343,19 @@ struct ExerciseView: View {
             return QuickStartPopularityService.defaultPopularExerciseIDs
         }
         return historyBased
+    }
+
+    private var preferredExerciseIDs: [String] {
+        var seen = Set<String>()
+        return exerciseDefaults.compactMap { record in
+            guard record.isPreferred else { return nil }
+            let representativeID = library.representativeExercise(byID: record.exerciseDefinitionID)?.id
+                ?? record.exerciseDefinitionID
+            guard !representativeID.isEmpty else { return nil }
+            let canonicalID = QuickStartCanonicalService.canonicalExerciseID(for: representativeID)
+            guard seen.insert(canonicalID).inserted else { return nil }
+            return representativeID
+        }
     }
 
     private func deleteHealthKitWorkout(_ workout: WorkoutSummary) {

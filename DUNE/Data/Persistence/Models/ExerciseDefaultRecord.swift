@@ -14,6 +14,8 @@ final class ExerciseDefaultRecord {
     var defaultReps: Int?
     /// true when user explicitly set the value in Settings
     var isManualOverride: Bool = false
+    /// true when user wants this exercise surfaced near the top of Quick Start
+    var isPreferred: Bool = false
     /// Last time this exercise was used (for sorting in Settings list)
     var lastUsedDate: Date = Date()
 
@@ -22,6 +24,7 @@ final class ExerciseDefaultRecord {
         defaultWeight: Double? = nil,
         defaultReps: Int? = nil,
         isManualOverride: Bool = false,
+        isPreferred: Bool = false,
         lastUsedDate: Date = Date()
     ) {
         precondition(!exerciseDefinitionID.isEmpty, "exerciseDefinitionID must not be empty")
@@ -30,6 +33,7 @@ final class ExerciseDefaultRecord {
         self.defaultWeight = defaultWeight.flatMap { $0.isFinite && (0...500).contains($0) ? $0 : nil }
         self.defaultReps = defaultReps.flatMap { (0...9999).contains($0) ? $0 : nil }
         self.isManualOverride = isManualOverride
+        self.isPreferred = isPreferred
         self.lastUsedDate = lastUsedDate
     }
 }

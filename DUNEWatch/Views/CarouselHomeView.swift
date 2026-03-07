@@ -11,16 +11,18 @@ struct CarouselCard: Identifiable, Hashable {
 
     enum Section: String {
         case routine
-        case popular
         case recent
+        case preferred
+        case popular
         case allExercises
 
         /// Section label for display (Correction #93 — exhaustive switch, no default).
         var label: String {
             switch self {
             case .routine: return String(localized: "Routine")
-            case .popular: return String(localized: "Popular")
             case .recent: return String(localized: "Recent")
+            case .preferred: return String(localized: "Preferred")
+            case .popular: return String(localized: "Popular")
             case .allExercises: return String(localized: "Browse")
             }
         }
@@ -29,8 +31,9 @@ struct CarouselCard: Identifiable, Hashable {
         func color(for theme: AppTheme) -> Color {
             switch self {
             case .routine: return theme.accentColor
-            case .popular: return DS.Color.positive
             case .recent: return .secondary
+            case .preferred: return DS.Color.activity
+            case .popular: return DS.Color.positive
             case .allExercises: return .secondary
             }
         }
@@ -83,6 +86,14 @@ struct CarouselHomeView: View {
     @State private var cards: [CarouselCard] = []
     /// Content-aware invalidation key (Correction #87).
     @State private var templateContentKey: Int = 0
+    private var exerciseLibrarySnapshot: [String] {
+        connectivity.exerciseLibrary.map { exercise in
+            let weight = exercise.defaultWeightKg?.description ?? "nil"
+            let reps = exercise.defaultReps.map(String.init) ?? "nil"
+            let equipment = exercise.equipment ?? "nil"
+            return "\(exercise.id)-\(exercise.inputType)-\(exercise.defaultSets)-\(reps)-\(weight)-\(equipment)-\(exercise.isPreferred)"
+        }
+    }
 
     private let popularLimit = 20
     private let recentLimit = 20
@@ -111,7 +122,7 @@ struct CarouselHomeView: View {
         .onChange(of: templates.map(\.updatedAt)) { _, _ in updateTemplateContentKey() }
         .onChange(of: connectivity.workoutTemplates.count) { _, _ in updateTemplateContentKey() }
         .onChange(of: connectivity.workoutTemplates.map(\.updatedAt)) { _, _ in updateTemplateContentKey() }
-        .onChange(of: connectivity.exerciseLibrary.count) { _, _ in rebuildCards() }
+        .onChange(of: exerciseLibrarySnapshot) { _, _ in rebuildCards() }
     }
 
     /// Computes a content-aware hash of all templates (Correction #87).
@@ -245,7 +256,7 @@ struct CarouselHomeView: View {
 
     // MARK: - Rebuild Cards
 
-    /// Builds carousel card array: Routines → Popular → Recent → All Exercises.
+    /// Builds carousel card array: Routines → Recent → Preferred → Popular → All Exercises.
     /// Pre-computes snapshots and daysAgo to avoid UserDefaults reads in body (P1 #2, P2 #5).
     /// @State caching with onChange invalidation (Correction #47, #87).
     private func rebuildCards() {
@@ -270,7 +281,7 @@ struct CarouselHomeView: View {
             ))
         }
 
-        // 2. Popular exercises
+        // 2. Recent exercises
         guard !library.isEmpty else {
             // No library synced — show routines (if any) + all exercises card
             result.append(CarouselCard(
@@ -282,42 +293,46 @@ struct CarouselHomeView: View {
             return
         }
 
-        let popular = Array(
-            uniqueByCanonical(
-                RecentExerciseTracker.personalizedPopular(from: library, limit: popularLimit)
-            )
-            .prefix(popularLimit)
-        )
-
-        let popularCanonical = Set(
-            popular.map { RecentExerciseTracker.canonicalExerciseID(exerciseID: $0.id) }
-        )
-
-        for exercise in popular {
-            result.append(exerciseCard(exercise, section: .popular))
-        }
-
-        // 3. Recent exercises (excluding Popular)
         let lastUsed = RecentExerciseTracker.lastUsedTimestamps()
-        let recent = Array(
-            uniqueByCanonical(
-                library
-                    .filter { lastUsed[$0.id] != nil }
-                    .sorted {
-                        let a = lastUsed[$0.id] ?? Date.distantPast.timeIntervalSince1970
-                        let b = lastUsed[$1.id] ?? Date.distantPast.timeIntervalSince1970
-                        return a > b
-                    }
-            )
-            .filter { !popularCanonical.contains(RecentExerciseTracker.canonicalExerciseID(exerciseID: $0.id)) }
-            .prefix(recentLimit)
+        let recent = recentWatchExercises(
+            from: library,
+            limit: recentLimit,
+            lastUsedTimestamps: lastUsed
+        )
+        let recentCanonical = Set(
+            recent.map { RecentExerciseTracker.canonicalExerciseID(exerciseID: $0.id) }
         )
 
         for exercise in recent {
             result.append(exerciseCard(exercise, section: .recent))
         }
 
-        // 4. All Exercises card (always last)
+        // 3. Preferred exercises
+        let preferred = preferredWatchExercises(
+            from: library,
+            excludingCanonical: recentCanonical,
+            lastUsedTimestamps: lastUsed
+        )
+        let preferredCanonical = Set(
+            preferred.map { RecentExerciseTracker.canonicalExerciseID(exerciseID: $0.id) }
+        )
+
+        for exercise in preferred {
+            result.append(exerciseCard(exercise, section: .preferred))
+        }
+
+        // 4. Popular exercises
+        let popular = popularWatchExercises(
+            from: library,
+            limit: popularLimit,
+            excludingCanonical: recentCanonical.union(preferredCanonical)
+        )
+
+        for exercise in popular {
+            result.append(exerciseCard(exercise, section: .popular))
+        }
+
+        // 5. All Exercises card (always last)
         result.append(CarouselCard(
             id: "all-exercises",
             section: .allExercises,

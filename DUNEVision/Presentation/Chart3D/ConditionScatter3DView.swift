@@ -12,6 +12,8 @@ import Charts
 /// - Color: Condition grade (green = good, red = poor)
 /// - Size: Training volume for that day
 struct ConditionScatter3DView: View {
+    let sharedHealthDataService: SharedHealthDataService?
+
     @State private var sampleData = ConditionScatter3DView.generateSampleData(days: 30)
     @State private var selectedPeriod: ScatterPeriod = .thirtyDays
 

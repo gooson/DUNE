@@ -31,6 +31,7 @@ enum ExerciseDescriptions {
         "seated-cable-row": "Horizontal pulling exercise targeting mid-back muscles.",
         "dumbbell-row": "Single-arm back exercise allowing focused unilateral training.",
         "deadlift": "Full-body compound lift picking a barbell from the floor. Targets posterior chain.",
+        "conventional-deadlift": "Full-body compound lift picking a barbell from the floor. Targets posterior chain.",
         "t-bar-row": "Heavy compound row using a landmine or T-bar setup.",
 
         // Shoulders
@@ -92,6 +93,12 @@ enum ExerciseDescriptions {
             "Descend until thighs are parallel or below"
         ],
         "deadlift": [
+            "Bar over mid-foot, hip-width stance",
+            "Hinge at hips, grip just outside knees",
+            "Keep back flat and chest up",
+            "Drive through heels, lock out hips at top"
+        ],
+        "conventional-deadlift": [
             "Bar over mid-foot, hip-width stance",
             "Hinge at hips, grip just outside knees",
             "Keep back flat and chest up",

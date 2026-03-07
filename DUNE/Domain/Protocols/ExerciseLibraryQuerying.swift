@@ -30,6 +30,7 @@ extension ExerciseLibraryQuerying {
         } ?? exact
     }
 
+    #if !os(visionOS)
     /// Resolves template entries to exercise definitions via library lookup + custom fallback.
     func resolveExercises(from entries: [TemplateEntry]) -> [ExerciseDefinition] {
         entries.compactMap { entry in
@@ -51,4 +52,5 @@ extension ExerciseLibraryQuerying {
             return nil
         }
     }
+    #endif
 }

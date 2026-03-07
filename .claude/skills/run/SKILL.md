@@ -244,13 +244,21 @@ Phase 1: Plan ──> Phase 2: Work ──> Phase 3: Review ──> Phase 4: Res
 
 ## Pipeline Control
 
-각 Phase 완료 시 진행 상황을 보고합니다:
+각 Phase **시작 시** 아래 형식으로 시작 표시를 출력합니다:
+
+```
+━━━ Phase {N}: {Name} Start ━━━
+```
+
+각 Phase **완료 시** 진행 상황을 보고합니다:
 
 ```
 ━━━ Phase {N}: {Name} Complete ━━━
 {summary}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+시작 표시는 실제 작업 수행 **직전에** 반드시 출력합니다. 이를 통해 사용자가 추후 로그에서 각 Phase의 시작점을 식별할 수 있습니다.
 
 승인 없이 자동 진행합니다. 사용자가 중단하면 즉시 멈춥니다.
 
@@ -292,3 +300,59 @@ Phase별 실패 처리:
 5. Ship: PR URL, ship 생략 이유, 또는 실패 사유
 
 어떤 항목이든 **산출물 또는 명시적 사유** 중 하나가 비어 있으면 `/run`을 끝내지 않습니다.
+
+## Execution Summary Report
+
+`/run` 종료 시 위의 Final Output Contract 이후에 **Execution Summary Report**를 출력합니다. 이 보고서는 전체 파이프라인에서 수행한 작업을 한눈에 파악할 수 있게 합니다.
+
+### 출력 형식
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 /run Execution Summary
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 Task: {사용자 요청 한 줄 요약}
+🌿 Branch: {브랜치명}
+⏱️ Phases: {완료 N} / {전체 N}
+
+──── Phase Results ────
+
+| Phase | Status | Summary |
+|-------|--------|---------|
+| 0. Init | ✅ | {한 줄 요약} |
+| 1. Plan | ✅/⏭️/❌ | {계획서 경로 또는 사유} |
+| 2. Work | ✅/⏭️/❌ | {구현 파일 수, 테스트 수} |
+| 3. Review | ✅/⏭️/❌ | {P1/P2/P3 건수} |
+| 3.5 Quality | ✅/⏭️/❌ | {실행 에이전트 목록} |
+| 4. Resolve | ✅/⏭️/❌ | {수정 건수, 재리뷰 결과} |
+| 5. Compound | ✅/⏭️/❌ | {문서 경로 또는 사유} |
+| 5.5 Pre-Ship | ✅/⏭️/❌ | {상태} |
+| 6. Ship | ✅/⏭️/❌ | {PR URL 또는 사유} |
+
+──── Artifacts ────
+
+- 📄 Plan: {경로}
+- 🔧 Changed Files: {파일 목록 (최대 10개, 초과 시 +N more)}
+- 🧪 Tests: {추가/수정된 테스트 파일}
+- 📝 Solution Doc: {경로}
+- 🔗 PR: {URL}
+
+──── Review Findings ────
+
+- P1 (Critical): {N}건 → {해결/미해결}
+- P2 (Important): {N}건 → {해결/미해결}
+- P3 (Minor): {N}건 → {해결/미해결}
+- Quality Agents: {실행된 에이전트 → 주요 발견}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+### 규칙
+
+1. **Status 아이콘**: ✅ completed, ⏭️ skipped, ❌ failed
+2. **Changed Files**: `git diff --name-only main...HEAD`에서 추출. 10개 초과 시 `+N more` 표시
+3. **Review Findings**: 초기 리뷰와 재리뷰를 합산하여 최종 상태만 표시
+4. **Quality Agents**: 실행한 에이전트명과 주요 발견 1줄씩. 스킵한 에이전트는 이유를 괄호로 표시
+5. **Artifacts 섹션**: 생성되지 않은 산출물은 `—` 또는 스킵 사유 표시. 빈 줄로 두지 않음
+6. 이 보고서 없이 `/run`을 종료하지 않음

@@ -110,3 +110,35 @@ struct QuickStartPopularityServiceTests {
         #expect(QuickStartCanonicalService.canonicalExerciseName(for: "Yoga Recovery Flow") == "yoga")
     }
 }
+
+@Suite("QuickStartSectionOrderingService")
+struct QuickStartSectionOrderingServiceTests {
+    @Test("Earlier sections win when canonical duplicates overlap")
+    func canonicalDedupAcrossSections() {
+        let ordering = QuickStartSectionOrderingService.make(
+            recentIDs: ["bench-press-paused", "running"],
+            preferredIDs: ["bench-press", "barbell-squat"],
+            popularIDs: ["barbell-squat", "running-intervals", "pull-up"],
+            canonicalize: QuickStartCanonicalService.canonicalExerciseID(for:)
+        )
+
+        #expect(ordering.recentIDs == ["bench-press-paused", "running"])
+        #expect(ordering.preferredIDs == ["barbell-squat"])
+        #expect(ordering.popularIDs == ["pull-up"])
+        #expect(ordering.priorityIDs == ["bench-press-paused", "running", "barbell-squat", "pull-up"])
+    }
+
+    @Test("Empty and repeated IDs are removed before priority ordering")
+    func ignoresInvalidAndRepeatedIDs() {
+        let ordering = QuickStartSectionOrderingService.make(
+            recentIDs: ["", "bench-press", "bench-press"],
+            preferredIDs: ["bench-press-paused", "pull-up"],
+            popularIDs: ["", "pull-up", "running"],
+            canonicalize: QuickStartCanonicalService.canonicalExerciseID(for:)
+        )
+
+        #expect(ordering.recentIDs == ["bench-press"])
+        #expect(ordering.preferredIDs == ["pull-up"])
+        #expect(ordering.popularIDs == ["running"])
+    }
+}

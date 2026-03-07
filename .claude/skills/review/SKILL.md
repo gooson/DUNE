@@ -121,3 +121,19 @@ P3 - MINOR (nice to fix): N건
 - P1이 있으면 즉시 수정을 권장합니다
 - `/triage` 로 각 발견사항을 하나씩 처리할 수 있습니다
 - `/compound` 로 학습한 내용을 문서화할 수 있습니다
+
+## Progress Markers
+
+각 Step **시작 시** 아래 형식으로 시작 표시를 출력합니다:
+
+```
+━━━ Review Step {N}: {Name} Start ━━━
+```
+
+각 Step **완료 시** 완료 표시를 출력합니다:
+
+```
+━━━ Review Step {N}: {Name} Complete ━━━
+```
+
+시작 표시는 실제 작업 수행 **직전에** 반드시 출력합니다. 이를 통해 사용자가 추후 로그에서 각 Step의 시작점을 식별할 수 있습니다.
