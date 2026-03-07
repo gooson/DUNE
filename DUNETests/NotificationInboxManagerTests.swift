@@ -151,6 +151,45 @@ struct NotificationInboxManagerTests {
         #expect(pending?.route.workoutID == "workout-123")
     }
 
+    @Test("matching consume clears active pending request exactly once")
+    func consumePendingNavigationRequestIfMatchingClearsPendingRequest() {
+        let store = makeStore()
+        let recorder = BadgeRecorder()
+        let manager = NotificationInboxManager(
+            store: store,
+            badgeUpdater: { recorder.record($0) }
+        )
+        let request = NotificationNavigationRequest(
+            itemID: "item-1",
+            route: .activityPersonalRecords
+        )
+
+        manager.requestNavigation(itemID: request.itemID, route: request.route)
+
+        #expect(manager.consumePendingNavigationRequest(ifMatching: request))
+        #expect(manager.consumePendingNavigationRequest() == nil)
+    }
+
+    @Test("matching consume ignores request already taken by startup consumer")
+    func consumePendingNavigationRequestIfMatchingIgnoresConsumedRequest() {
+        let store = makeStore()
+        let recorder = BadgeRecorder()
+        let manager = NotificationInboxManager(
+            store: store,
+            badgeUpdater: { recorder.record($0) }
+        )
+        let request = NotificationNavigationRequest(
+            itemID: "item-2",
+            route: .notificationHub
+        )
+
+        manager.requestNavigation(itemID: request.itemID, route: request.route)
+
+        let pending = manager.consumePendingNavigationRequest()
+        #expect(pending == request)
+        #expect(!manager.consumePendingNavigationRequest(ifMatching: request))
+    }
+
     @Test("legacy level-up workout route is redirected to personal records")
     func handleNotificationResponseLegacyLevelUpRedirect() async {
         let store = makeStore()

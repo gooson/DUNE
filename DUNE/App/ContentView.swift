@@ -221,8 +221,9 @@ struct ContentView: View {
         }
         .onReceive(NotificationCenter.default.publisher(for: NotificationInboxManager.routeRequestedNotification)) { notification in
             guard let request = NotificationInboxManager.navigationRequest(from: notification) else { return }
+            // Cold launch can surface the same request via startup pending state and the delayed notification post.
+            guard notificationInboxManager.consumePendingNavigationRequest(ifMatching: request) else { return }
             handleNotificationNavigationRequest(request)
-            notificationInboxManager.clearPendingNavigationRequest(ifMatching: request)
         }
         // Listen for refresh signals from coordinator (foreground + HK observer triggers)
         .task {
