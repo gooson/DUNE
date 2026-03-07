@@ -180,6 +180,11 @@ struct ExercisePickerView: View {
             return seen.insert(representativeID).inserted ? representativeID : nil
         }
     }
+
+    private var quickStartAllSectionTitle: LocalizedStringKey {
+        searchText.isEmpty ? "All Exercises" : "Results"
+    }
+
     var body: some View {
         NavigationStack {
             exerciseList
@@ -379,7 +384,7 @@ struct ExercisePickerView: View {
             }
         } header: {
             HStack {
-                Text(searchText.isEmpty ? "All Exercises" : "Results")
+                Text(quickStartAllSectionTitle)
                 Spacer()
                 if showingAllQuickStartExercises && trimmedSearchText.isEmpty {
                     Button("Hide") {

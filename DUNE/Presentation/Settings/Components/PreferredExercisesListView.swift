@@ -20,6 +20,10 @@ struct PreferredExercisesListView: View {
         }
     }
 
+    private var allExercisesSectionTitle: LocalizedStringKey {
+        searchText.isEmpty ? "All Exercises" : "Results"
+    }
+
     var body: some View {
         List {
             if searchText.isEmpty, !preferredExercises.isEmpty {
@@ -30,7 +34,7 @@ struct PreferredExercisesListView: View {
                 }
             }
 
-            Section(searchText.isEmpty ? "All Exercises" : "Results") {
+            Section(allExercisesSectionTitle) {
                 ForEach(filteredExercises) { exercise in
                     preferredToggleRow(for: exercise)
                 }
