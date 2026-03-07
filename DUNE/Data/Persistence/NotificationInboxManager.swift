@@ -103,6 +103,16 @@ final class NotificationInboxManager: @unchecked Sendable {
         return existing
     }
 
+    /// Marks the item as read and returns it without emitting a navigation request.
+    /// Use this when the caller handles navigation locally (e.g., NotificationHubView push).
+    @discardableResult
+    func openLocally(itemID: String) -> NotificationInboxItem? {
+        guard let existing = store.item(withID: itemID) else { return nil }
+        _ = store.markRead(id: itemID)
+        postInboxDidChange()
+        return existing
+    }
+
     func handleNotificationResponse(userInfo: [AnyHashable: Any]) {
         let itemID = userInfo[UserInfoKeys.itemID] as? String
         if let itemID {
