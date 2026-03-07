@@ -327,6 +327,7 @@ struct MetricDetailView: View {
                 timePeriod: viewModel.selectedPeriod,
                 tintColor: DS.Color.vitals,
                 trendLine: trend,
+                scrollDomain: viewModel.scrollDomain,
                 scrollPosition: $viewModel.scrollPosition
             )
 
@@ -337,6 +338,7 @@ struct MetricDetailView: View {
                 tintColor: DS.Color.vitals,
                 unitSuffix: " breaths/min",
                 trendLine: trend,
+                scrollDomain: viewModel.scrollDomain,
                 scrollPosition: $viewModel.scrollPosition
             )
 
@@ -348,6 +350,7 @@ struct MetricDetailView: View {
                 timePeriod: viewModel.selectedPeriod,
                 tintColor: DS.Color.fitness,
                 trendLine: trend,
+                scrollDomain: viewModel.scrollDomain,
                 scrollPosition: $viewModel.scrollPosition
             )
 
@@ -359,6 +362,7 @@ struct MetricDetailView: View {
                 timePeriod: viewModel.selectedPeriod,
                 tintColor: DS.Color.fitness,
                 trendLine: trend,
+                scrollDomain: viewModel.scrollDomain,
                 scrollPosition: $viewModel.scrollPosition
             )
 
@@ -369,6 +373,7 @@ struct MetricDetailView: View {
                     period: viewModel.selectedPeriod,
                     tintColor: DS.Color.heartRate,
                     trendLine: trend,
+                    scrollDomain: viewModel.scrollDomain,
                     scrollPosition: $viewModel.scrollPosition
                 )
             } else {
@@ -379,6 +384,7 @@ struct MetricDetailView: View {
                     timePeriod: viewModel.selectedPeriod,
                     tintColor: DS.Color.heartRate,
                     trendLine: trend,
+                    scrollDomain: viewModel.scrollDomain,
                     scrollPosition: $viewModel.scrollPosition
                 )
             }
@@ -412,6 +418,7 @@ struct MetricDetailView: View {
                 tintColor: DS.Color.vitals,
                 unitSuffix: "°C",
                 trendLine: trend,
+                scrollDomain: viewModel.scrollDomain,
                 scrollPosition: $viewModel.scrollPosition
             )
         }

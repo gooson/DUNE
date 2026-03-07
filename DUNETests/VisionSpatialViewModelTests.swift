@@ -62,6 +62,10 @@ private actor MockSpatialHeartRateService: HeartRateQuerying {
         []
     }
 
+    func fetchHeartRateHistory(start: Date, end: Date) async throws -> [VitalSample] {
+        []
+    }
+
     func fetchHeartRateZones(
         forWorkoutID workoutID: String,
         maxHR: Double

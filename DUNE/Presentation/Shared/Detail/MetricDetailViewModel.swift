@@ -108,11 +108,11 @@ final class MetricDetailViewModel {
             case .bmi:               try await loadBMIData()
             case .bodyFat:           try await loadBodyFatData()
             case .leanBodyMass:      try await loadLeanBodyMassData()
-            case .spo2:              try await loadVitalsData(.oxygenSaturation, days: 30)
-            case .respiratoryRate:   try await loadVitalsData(.respiratoryRate, days: 30)
-            case .vo2Max:            try await loadVitalsData(.vo2Max, days: 180)
-            case .heartRateRecovery: try await loadVitalsData(.heartRateRecovery, days: 90)
-            case .wristTemperature:  try await loadVitalsData(.wristTemperature, days: 30)
+            case .spo2:              try await loadVitalsData(.oxygenSaturation)
+            case .respiratoryRate:   try await loadVitalsData(.respiratoryRate)
+            case .vo2Max:            try await loadVitalsData(.vo2Max)
+            case .heartRateRecovery: try await loadVitalsData(.heartRateRecovery)
+            case .wristTemperature:  try await loadVitalsData(.wristTemperature)
             }
             guard !Task.isCancelled else {
                 isLoading = false
@@ -518,24 +518,26 @@ final class MetricDetailViewModel {
         case oxygenSaturation, respiratoryRate, vo2Max, heartRateRecovery, wristTemperature
     }
 
-    private func loadVitalsData(_ type: VitalType, days: Int) async throws {
+    private func loadVitalsData(_ type: VitalType) async throws {
+        let range = extendedRange
         let samples: [VitalSample]
         switch type {
-        case .oxygenSaturation:  samples = try await vitalsService.fetchSpO2Collection(days: days)
-        case .respiratoryRate:   samples = try await vitalsService.fetchRespiratoryRateCollection(days: days)
-        case .vo2Max:            samples = try await vitalsService.fetchVO2MaxHistory(days: days)
-        case .heartRateRecovery: samples = try await vitalsService.fetchHeartRateRecoveryHistory(days: days)
-        case .wristTemperature:  samples = try await vitalsService.fetchWristTemperatureCollection(days: days)
+        case .oxygenSaturation:  samples = try await vitalsService.fetchSpO2Collection(start: range.start, end: range.end)
+        case .respiratoryRate:   samples = try await vitalsService.fetchRespiratoryRateCollection(start: range.start, end: range.end)
+        case .vo2Max:            samples = try await vitalsService.fetchVO2MaxHistory(start: range.start, end: range.end)
+        case .heartRateRecovery: samples = try await vitalsService.fetchHeartRateRecoveryHistory(start: range.start, end: range.end)
+        case .wristTemperature:  samples = try await vitalsService.fetchWristTemperatureCollection(start: range.start, end: range.end)
         }
 
         chartData = samples.map { ChartDataPoint(date: $0.date, value: $0.value) }
-        summaryStats = HealthDataAggregator.computeSummary(from: samples.map(\.value))
+        summaryStats = HealthDataAggregator.computeSummary(from: currentPeriodValues())
     }
 
     private func loadHeartRateData() async throws {
-        let samples = try await heartRateService.fetchHeartRateHistory(days: 30)
+        let range = extendedRange
+        let samples = try await heartRateService.fetchHeartRateHistory(start: range.start, end: range.end)
         chartData = samples.map { ChartDataPoint(date: $0.date, value: $0.value) }
-        summaryStats = HealthDataAggregator.computeSummary(from: samples.map(\.value))
+        summaryStats = HealthDataAggregator.computeSummary(from: currentPeriodValues())
     }
 
     private func loadBodyFatData() async throws {

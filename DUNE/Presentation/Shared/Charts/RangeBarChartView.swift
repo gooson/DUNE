@@ -8,6 +8,7 @@ struct RangeBarChartView: View {
     let period: TimePeriod
     var tintColor: Color = DS.Color.rhr
     var trendLine: [ChartDataPoint]?
+    var scrollDomain: ClosedRange<Date>?
     @Binding var scrollPosition: Date
 
     @ScaledMetric(relativeTo: .body) private var chartHeight: CGFloat = 220
@@ -72,6 +73,7 @@ struct RangeBarChartView: View {
             .chartXVisibleDomain(length: period.visibleDomainSeconds)
             .chartScrollPosition(x: $scrollPosition)
             .chartYScale(domain: yDomain)
+            .chartXScale(domain: effectiveXDomain)
             .chartXAxis {
                 AxisMarks(values: .stride(by: period.strideComponent, count: period.strideCount)) { _ in
                     AxisValueLabel(format: period.axisLabelFormat)
@@ -144,6 +146,10 @@ struct RangeBarChartView: View {
         case .sixMonths:  .fixed(8)
         case .year:       .fixed(16)
         }
+    }
+
+    private var effectiveXDomain: ClosedRange<Date> {
+        resolvedXDomain(scrollDomain: scrollDomain, dates: data.map(\.date))
     }
 
     /// Y-axis domain with padding to prevent clipping.
