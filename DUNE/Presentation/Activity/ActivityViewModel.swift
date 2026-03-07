@@ -421,12 +421,13 @@ final class ActivityViewModel {
 
         let healthKitAvailable = await healthKitManager.isAvailable
         isMirroredReadOnlyMode = !healthKitAvailable
-        let sharedSnapshot = await sharedHealthDataService?.fetchSnapshot()
+        async let sharedSnapshotTask: SharedHealthSnapshot? = sharedHealthDataService?.fetchSnapshot()
 
-        // 7 independent queries — parallel via async let
+        // Independent queries start immediately while the shared snapshot resolves.
         async let exerciseTask = safeExerciseFetch(canQueryHealthKit: healthKitAvailable)
         async let stepsTask = safeStepsFetch(canQueryHealthKit: healthKitAvailable)
         async let workoutsTask = safeWorkoutsFetch(canQueryHealthKit: healthKitAvailable)
+        let sharedSnapshot = await sharedSnapshotTask
         async let trainingLoadTask = safeTrainingLoadFetch(snapshot: sharedSnapshot, canQueryHealthKit: healthKitAvailable)
         async let sleepTask = safeSleepFetch(snapshot: sharedSnapshot, canQueryHealthKit: healthKitAvailable)
         async let readinessTask = safeReadinessFetch(snapshot: sharedSnapshot, canQueryHealthKit: healthKitAvailable)

@@ -216,6 +216,7 @@
 - **UI 구조 변경 시 UI 테스트 동시 갱신** (#158)
 - **문자열 키워드 매칭 false-positive 테스트 필수** (#89, #157)
 - **Launch Splash 최소 노출: CancellationError 명시 처리** (#141-142)
+- **앱 시작 fetch는 값 반환과 persist/sync side effect를 분리**: shared snapshot 비의존 쿼리는 먼저 시작하고, launch-time SwiftData fetch/mapping은 메인 경로에 직접 두지 않는다 (#202)
 - **`throws` 함수에서 silent `guard...return` 금지** (#77)
 - **새 필드 추가 시 전체 파이프라인 점검** (#34)
 - **방어 코드도 비즈니스 로직 고려 + 테스트 검증** (#44)

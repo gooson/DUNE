@@ -65,6 +65,117 @@ private actor MockSharedHealthDataService: SharedHealthDataService {
     func invalidateCache() async {}
 }
 
+private actor SuspendingWellnessSharedHealthDataService: SharedHealthDataService {
+    private let snapshot: SharedHealthSnapshot
+    private var didStartFetch = false
+    private var fetchStartedContinuation: CheckedContinuation<Void, Never>?
+    private var fetchReleaseContinuation: CheckedContinuation<Void, Never>?
+
+    init(snapshot: SharedHealthSnapshot) {
+        self.snapshot = snapshot
+    }
+
+    func fetchSnapshot() async -> SharedHealthSnapshot {
+        didStartFetch = true
+        fetchStartedContinuation?.resume()
+        fetchStartedContinuation = nil
+
+        await withCheckedContinuation { continuation in
+            fetchReleaseContinuation = continuation
+        }
+        return snapshot
+    }
+
+    func invalidateCache() async {}
+
+    func waitUntilFetchStarts() async {
+        if didStartFetch {
+            return
+        }
+        await withCheckedContinuation { continuation in
+            fetchStartedContinuation = continuation
+        }
+    }
+
+    func resumeFetch() {
+        fetchReleaseContinuation?.resume()
+        fetchReleaseContinuation = nil
+    }
+}
+
+private actor StartupTrackingBodyService: BodyCompositionQuerying {
+    private(set) var fetchCallCount = 0
+
+    func fetchWeight(days: Int) async throws -> [BodyCompositionSample] {
+        fetchCallCount += 1
+        return []
+    }
+
+    func fetchBodyFat(days: Int) async throws -> [BodyCompositionSample] {
+        fetchCallCount += 1
+        return []
+    }
+
+    func fetchLeanBodyMass(days: Int) async throws -> [BodyCompositionSample] {
+        fetchCallCount += 1
+        return []
+    }
+
+    func fetchWeight(start: Date, end: Date) async throws -> [BodyCompositionSample] {
+        fetchCallCount += 1
+        return []
+    }
+
+    func fetchLatestWeight(withinDays days: Int) async throws -> (value: Double, date: Date)? {
+        fetchCallCount += 1
+        return nil
+    }
+
+    func fetchBMI(for date: Date) async throws -> Double? {
+        fetchCallCount += 1
+        return nil
+    }
+
+    func fetchLatestBMI(withinDays days: Int) async throws -> (value: Double, date: Date)? {
+        fetchCallCount += 1
+        return nil
+    }
+
+    func fetchBMI(start: Date, end: Date) async throws -> [BodyCompositionSample] {
+        fetchCallCount += 1
+        return []
+    }
+
+    func fetchLatestBodyFat(withinDays days: Int) async throws -> (value: Double, date: Date)? {
+        fetchCallCount += 1
+        return nil
+    }
+
+    func fetchLatestLeanBodyMass(withinDays days: Int) async throws -> (value: Double, date: Date)? {
+        fetchCallCount += 1
+        return nil
+    }
+}
+
+private func makeEmptyWellnessSharedSnapshot(fetchedAt: Date = Date()) -> SharedHealthSnapshot {
+    SharedHealthSnapshot(
+        hrvSamples: [],
+        todayRHR: nil,
+        yesterdayRHR: nil,
+        latestRHR: nil,
+        rhrCollection: [],
+        todaySleepStages: [],
+        yesterdaySleepStages: [],
+        latestSleepStages: nil,
+        sleepDailyDurations: [],
+        conditionScore: nil,
+        baselineStatus: nil,
+        recentConditionScores: [],
+        failedSources: [],
+        fetchedAt: fetchedAt
+    )
+}
+
 @Suite("WellnessViewModel")
 @MainActor
 struct WellnessViewModelTests {
@@ -152,5 +263,33 @@ struct WellnessViewModelTests {
 
         #expect(vm.conditionScore == sharedCondition.score)
         #expect(vm.conditionScoreFull?.score == sharedCondition.score)
+    }
+
+    @Test("Body fetch starts before shared snapshot resolves")
+    func bodyFetchStartsBeforeSharedSnapshotCompletes() async {
+        let sharedService = SuspendingWellnessSharedHealthDataService(
+            snapshot: makeEmptyWellnessSharedSnapshot()
+        )
+        let bodyService = StartupTrackingBodyService()
+        let vm = WellnessViewModel(
+            sleepService: NoopSleepService(),
+            bodyService: bodyService,
+            hrvService: NoopHRVService(),
+            vitalsService: NoopVitalsService(),
+            heartRateService: NoopHeartRateService(),
+            sharedHealthDataService: sharedService
+        )
+
+        let loadTask = Task {
+            await vm.performRefresh()
+        }
+
+        await sharedService.waitUntilFetchStarts()
+        try? await Task.sleep(for: .milliseconds(20))
+
+        #expect(await bodyService.fetchCallCount > 0)
+
+        await sharedService.resumeFetch()
+        await loadTask.value
     }
 }

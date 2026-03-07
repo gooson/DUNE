@@ -25,32 +25,82 @@ private actor MockBaseSharedHealthDataService: SharedHealthDataService {
 private actor MockHealthSnapshotMirrorStore: HealthSnapshotMirroring {
     var persistCallCount = 0
     var persistedFetchedAts: [Date] = []
+    private var blocksPersist = false
+    private var didStartPersist = false
+    private var persistStartedContinuation: CheckedContinuation<Void, Never>?
+    private var persistReleaseContinuation: CheckedContinuation<Void, Never>?
+
+    func blockPersist() {
+        blocksPersist = true
+    }
+
+    func waitUntilPersistStarts() async {
+        if didStartPersist {
+            return
+        }
+        await withCheckedContinuation { continuation in
+            persistStartedContinuation = continuation
+        }
+    }
+
+    func releasePersist() {
+        blocksPersist = false
+        persistReleaseContinuation?.resume()
+        persistReleaseContinuation = nil
+    }
 
     func persist(snapshot: SharedHealthSnapshot) async {
         persistCallCount += 1
         persistedFetchedAts.append(snapshot.fetchedAt)
+        didStartPersist = true
+        persistStartedContinuation?.resume()
+        persistStartedContinuation = nil
+
+        guard blocksPersist else { return }
+        await withCheckedContinuation { continuation in
+            persistReleaseContinuation = continuation
+        }
+    }
+}
+
+private actor FetchCompletionTracker {
+    private(set) var completedFetchedAt: Date?
+
+    func markCompleted(with fetchedAt: Date) {
+        completedFetchedAt = fetchedAt
     }
 }
 
 @Suite("MirroringSharedHealthDataService")
 struct MirroringSharedHealthDataServiceTests {
-    @Test("fetchSnapshot forwards to base and persists snapshot")
-    func fetchSnapshotPersistsSnapshot() async {
+    @Test("fetchSnapshot returns before background persist completes")
+    func fetchSnapshotDoesNotAwaitPersist() async {
         let fetchedAt = Date(timeIntervalSince1970: 1_700_000_100)
         let snapshot = makeSnapshot(fetchedAt: fetchedAt)
         let base = MockBaseSharedHealthDataService(snapshot: snapshot)
         let mirror = MockHealthSnapshotMirrorStore()
+        let completionTracker = FetchCompletionTracker()
         let service = MirroringSharedHealthDataService(
             baseService: base,
             mirrorStore: mirror
         )
 
-        let result = await service.fetchSnapshot()
+        await mirror.blockPersist()
+        let fetchTask = Task {
+            let result = await service.fetchSnapshot()
+            await completionTracker.markCompleted(with: result.fetchedAt)
+        }
 
-        #expect(result.fetchedAt == fetchedAt)
+        await mirror.waitUntilPersistStarts()
+        try? await Task.sleep(for: .milliseconds(20))
+
         #expect(await base.fetchSnapshotCallCount == 1)
+        #expect(await completionTracker.completedFetchedAt == fetchedAt)
         #expect(await mirror.persistCallCount == 1)
         #expect(await mirror.persistedFetchedAts == [fetchedAt])
+
+        await mirror.releasePersist()
+        await fetchTask.value
     }
 
     @Test("invalidateCache is delegated to base service")

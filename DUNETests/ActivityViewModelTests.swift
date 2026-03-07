@@ -66,6 +66,77 @@ private actor MockSharedHealthDataService: SharedHealthDataService {
     func invalidateCache() async {}
 }
 
+private actor SuspendingActivitySharedHealthDataService: SharedHealthDataService {
+    private let snapshot: SharedHealthSnapshot
+    private var didStartFetch = false
+    private var fetchStartedContinuation: CheckedContinuation<Void, Never>?
+    private var fetchReleaseContinuation: CheckedContinuation<Void, Never>?
+
+    init(snapshot: SharedHealthSnapshot) {
+        self.snapshot = snapshot
+    }
+
+    func fetchSnapshot() async -> SharedHealthSnapshot {
+        didStartFetch = true
+        fetchStartedContinuation?.resume()
+        fetchStartedContinuation = nil
+
+        await withCheckedContinuation { continuation in
+            fetchReleaseContinuation = continuation
+        }
+        return snapshot
+    }
+
+    func invalidateCache() async {}
+
+    func waitUntilFetchStarts() async {
+        if didStartFetch {
+            return
+        }
+        await withCheckedContinuation { continuation in
+            fetchStartedContinuation = continuation
+        }
+    }
+
+    func resumeFetch() {
+        fetchReleaseContinuation?.resume()
+        fetchReleaseContinuation = nil
+    }
+}
+
+private actor StartupTrackingWorkoutService: WorkoutQuerying {
+    private(set) var fetchCallCount = 0
+
+    func fetchWorkouts(days: Int) async throws -> [WorkoutSummary] {
+        fetchCallCount += 1
+        return []
+    }
+
+    func fetchWorkouts(start: Date, end: Date) async throws -> [WorkoutSummary] {
+        fetchCallCount += 1
+        return []
+    }
+}
+
+private func makeEmptyActivitySharedSnapshot(fetchedAt: Date = Date()) -> SharedHealthSnapshot {
+    SharedHealthSnapshot(
+        hrvSamples: [],
+        todayRHR: nil,
+        yesterdayRHR: nil,
+        latestRHR: nil,
+        rhrCollection: [],
+        todaySleepStages: [],
+        yesterdaySleepStages: [],
+        latestSleepStages: nil,
+        sleepDailyDurations: [],
+        conditionScore: nil,
+        baselineStatus: nil,
+        recentConditionScores: [],
+        failedSources: [],
+        fetchedAt: fetchedAt
+    )
+}
+
 private final class MockRecommendationService: WorkoutRecommending, @unchecked Sendable {
     private(set) var callCount = 0
     private(set) var lastConstraints: WorkoutRecommendationConstraints = .none
@@ -137,6 +208,46 @@ struct ActivityViewModelTests {
         #expect(vm.todaySteps!.value == 8500.0)
         #expect(vm.recentWorkouts.count == 1)
         #expect(vm.isLoading == false)
+    }
+
+    @Test("Workout fetch starts before shared snapshot resolves")
+    func workoutFetchStartsBeforeSharedSnapshotCompletes() async {
+        let sharedService = SuspendingActivitySharedHealthDataService(
+            snapshot: makeEmptyActivitySharedSnapshot()
+        )
+        let workoutService = StartupTrackingWorkoutService()
+        let recordStore = makeIsolatedPRStore()
+        _ = recordStore.updateIfNewRecords(
+            WorkoutSummary(
+                id: "seed",
+                type: "Running",
+                duration: 1_800,
+                calories: 220,
+                distance: 5_000,
+                date: Date()
+            )
+        )
+        let vm = ActivityViewModel(
+            workoutService: workoutService,
+            stepsService: MockStepsService(),
+            hrvService: MockHRVService(),
+            sleepService: MockSleepService(),
+            sharedHealthDataService: sharedService,
+            personalRecordStore: recordStore,
+            recommendationSettingsStore: makeIsolatedRecommendationStore()
+        )
+
+        let loadTask = Task {
+            await vm.loadActivityData()
+        }
+
+        await sharedService.waitUntilFetchStarts()
+        try? await Task.sleep(for: .milliseconds(20))
+
+        #expect(await workoutService.fetchCallCount > 0)
+
+        await sharedService.resumeFetch()
+        await loadTask.value
     }
 
     // MARK: - Weekly Data Gap Fill
