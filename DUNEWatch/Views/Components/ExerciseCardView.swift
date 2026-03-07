@@ -18,13 +18,7 @@ struct ExerciseCardView: View {
         self.sectionColor = sectionColor
         self.daysAgo = daysAgo
         self.resolvedIcon = EquipmentIcon.resolve(for: exercise.equipment)
-
-        // Build subtitle from exercise defaults (no UserDefaults access)
-        self.subtitle = exerciseSubtitle(
-            sets: exercise.defaultSets,
-            reps: exercise.defaultReps ?? 10,
-            weight: exercise.defaultWeightKg
-        )
+        self.subtitle = exerciseSubtitle(for: exercise)
     }
 
     @Environment(\.appTheme) private var theme

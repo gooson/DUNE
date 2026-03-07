@@ -57,4 +57,25 @@ struct WatchExerciseInfoHashableTests {
         #expect(lhs != rhs)
         #expect(Set([lhs, rhs]).count == 2)
     }
+
+    @Test("Decoding older payload defaults preferred flag to false")
+    func decodeWithoutPreferredFlagDefaultsFalse() throws {
+        let data = Data(
+            """
+            {
+              "id": "bench-press",
+              "name": "Bench Press",
+              "inputType": "weight_reps",
+              "defaultSets": 3,
+              "defaultReps": 10,
+              "defaultWeightKg": 60,
+              "equipment": "barbell",
+              "cardioSecondaryUnit": null
+            }
+            """.utf8
+        )
+
+        let decoded = try JSONDecoder().decode(WatchExerciseInfo.self, from: data)
+        #expect(decoded.isPreferred == false)
+    }
 }

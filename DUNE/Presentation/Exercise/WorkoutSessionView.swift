@@ -37,6 +37,7 @@ struct WorkoutSessionView: View {
 
     let exercise: ExerciseDefinition
     private let draftToRestore: WorkoutSessionDraft?
+    let templateEntry: TemplateEntry?
 
     /// Template context — nil when used standalone.
     let templateInfo: TemplateExerciseInfo?
@@ -53,10 +54,12 @@ struct WorkoutSessionView: View {
     init(
         exercise: ExerciseDefinition,
         defaultSetCount: Int? = nil,
+        templateEntry: TemplateEntry? = nil,
         templateInfo: TemplateExerciseInfo? = nil,
         onExerciseCompleted: (() -> Void)? = nil
     ) {
         self.exercise = exercise
+        self.templateEntry = templateEntry
         self.templateInfo = templateInfo
         self.onExerciseCompleted = onExerciseCompleted
 
@@ -129,6 +132,9 @@ struct WorkoutSessionView: View {
         }
         .onAppear {
             viewModel.loadPreviousSets(from: exerciseRecords, weightUnit: weightUnit)
+            if let templateEntry {
+                viewModel.applyTemplateDefaults(templateEntry, weightUnit: weightUnit)
+            }
             if draftToRestore != nil {
                 WorkoutSessionViewModel.clearDraft()
             }

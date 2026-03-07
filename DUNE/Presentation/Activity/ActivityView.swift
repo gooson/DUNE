@@ -1,8 +1,8 @@
 import SwiftUI
 import SwiftData
 
-/// Activity tab — redesigned recovery-centered dashboard.
-/// Layout: Hero → Muscle Map → Weekly Stats → Suggestion → Volume → Workouts → PRs → Consistency → Frequency.
+/// Activity tab — Hero-first layout.
+/// Layout: Hero → Muscle Map → Weekly Stats → Search+Suggestion+Templates → Volume → Workouts → PRs → Consistency → Frequency.
 struct ActivityView: View {
     @State private var viewModel: ActivityViewModel
     @State private var showingExercisePicker = false
@@ -23,6 +23,7 @@ struct ActivityView: View {
     private let library: ExerciseLibraryQuerying = ExerciseLibraryService.shared
 
     @Query(sort: \ExerciseRecord.date, order: .reverse) private var recentRecords: [ExerciseRecord]
+    @Query(sort: \ExerciseDefaultRecord.lastUsedDate, order: .reverse) private var exerciseDefaults: [ExerciseDefaultRecord]
     @Query(filter: #Predicate<InjuryRecord> { $0.endDate == nil },
            sort: \InjuryRecord.startDate, order: .reverse) private var activeInjuryRecords: [InjuryRecord]
 
@@ -101,67 +102,21 @@ struct ActivityView: View {
                     .id(ScrollAnchor.top)
 
                 VStack(spacing: DS.Spacing.lg) {
-                    // ① Quick Start
-                    SectionGroup(title: "Quick Start", icon: "bolt.fill", iconColor: DS.Color.activity) {
-                        ActivityQuickStartSection(
-                            library: library,
-                            recentExerciseIDs: recentExerciseIDs,
-                            popularExerciseIDs: popularExerciseIDs,
-                            onStartExercise: { exercise in
-                                selectedExercise = exercise
-                            },
-                            onStartTemplate: { template in
-                                startFromTemplate(template)
-                            },
-                            onBrowseAll: {
-                                showingExercisePicker = true
-                            }
-                        )
-                    }
-
                     if viewModel.isLoading && viewModel.weeklyExerciseMinutes.isEmpty {
                         ProgressView()
                             .frame(maxWidth: .infinity, minHeight: 200)
                     } else {
-                        // ② Training Readiness Hero Card + Start Workout CTA
-                        VStack(spacing: DS.Spacing.sm) {
-                            NavigationLink(value: ActivityDetailDestination.trainingReadiness) {
-                                TrainingReadinessHeroCard(
-                                    readiness: viewModel.trainingReadiness,
-                                    isCalibrating: viewModel.trainingReadiness?.isCalibrating ?? true
-                                )
-                            }
-                            .accessibilityIdentifier("activity-hero-readiness")
-                            .buttonStyle(.plain)
-
-                            if let readiness = viewModel.trainingReadiness {
-                                Button {
-                                    showingExercisePicker = true
-                                } label: {
-                                    Label {
-                                        Text("Start Workout")
-                                    } icon: {
-                                        Image(systemName: "play.fill")
-                                    }
-                                    .font(.subheadline)
-                                    .fontWeight(.semibold)
-                                    .frame(maxWidth: .infinity)
-                                }
-                                .buttonStyle(.borderedProminent)
-                                .buttonBorderShape(.capsule)
-                                .tint(readiness.status.color)
-                                .accessibilityIdentifier("activity-hero-start-workout")
-                                .accessibilityLabel(Text("Start Workout — Training readiness \(readiness.status.label)"))
-                                .accessibilityHint(Text("Opens exercise picker to begin a workout"))
-                            }
+                        // ① Training Readiness Hero Card
+                        NavigationLink(value: ActivityDetailDestination.trainingReadiness) {
+                            TrainingReadinessHeroCard(
+                                readiness: viewModel.trainingReadiness,
+                                isCalibrating: viewModel.trainingReadiness?.isCalibrating ?? true
+                            )
                         }
+                        .accessibilityIdentifier("activity-hero-readiness")
+                        .buttonStyle(.plain)
 
-                        // ③ Injury Warning Banner
-                        if !cachedInjuryConflicts.isEmpty {
-                            InjuryWarningBanner(conflicts: cachedInjuryConflicts)
-                        }
-
-                        // ④⑤ Recovery Map + Weekly Stats (side-by-side on iPad)
+                        // ② Recovery Map + Weekly Stats (side-by-side on iPad)
                         if isRegular {
                             HStack(alignment: .top, spacing: DS.Spacing.md) {
                                 recoveryMapSection(fillHeight: true)
@@ -172,16 +127,16 @@ struct ActivityView: View {
                             weeklyStatsSection()
                         }
 
-                        // ⑥⑦ Suggested Workout + Training Volume (side-by-side on iPad)
-                        if isRegular {
-                            HStack(alignment: .top, spacing: DS.Spacing.md) {
-                                suggestedWorkoutSection(fillHeight: true)
-                                trainingVolumeSection(fillHeight: true)
-                            }
-                        } else {
-                            suggestedWorkoutSection()
-                            trainingVolumeSection()
+                        // ③ Injury Warning Banner
+                        if !cachedInjuryConflicts.isEmpty {
+                            InjuryWarningBanner(conflicts: cachedInjuryConflicts)
                         }
+
+                        // ④ Suggested Workout (with search + templates)
+                        suggestedWorkoutSection()
+
+                        // ⑤ Training Volume
+                        trainingVolumeSection()
 
                         // ⑧ Recent Workouts
                         SectionGroup(title: "Recent Workouts", icon: "clock.arrow.circlepath", iconColor: DS.Color.activity) {
@@ -275,6 +230,7 @@ struct ActivityView: View {
             ExercisePickerView(
                 library: library,
                 recentExerciseIDs: recentExerciseIDs,
+                preferredExerciseIDs: preferredExerciseIDs,
                 popularExerciseIDs: popularExerciseIDs,
                 mode: .quickStart,
                 onStartTemplate: startFromTemplate
@@ -444,7 +400,11 @@ struct ActivityView: View {
                 suggestion: viewModel.workoutSuggestion,
                 recommendationContext: viewModel.recommendationContext,
                 availableEquipment: viewModel.recommendationAvailableEquipment,
+                library: library,
+                recentExerciseIDs: recentExerciseIDs,
+                popularExerciseIDs: popularExerciseIDs,
                 onStartExercise: { exercise in selectedExercise = exercise },
+                onStartTemplate: startFromTemplate,
                 onContextChanged: { context in
                     viewModel.setRecommendationContext(context)
                 },
@@ -459,7 +419,8 @@ struct ActivityView: View {
                 },
                 onSetExerciseExcluded: { excluded, exerciseID in
                     viewModel.setExerciseExcludedFromRecommendation(excluded, exerciseID: exerciseID)
-                }
+                },
+                onBrowseAll: { showingExercisePicker = true }
             )
         }
     }
@@ -618,6 +579,19 @@ struct ActivityView: View {
             .filter { !existing.contains($0) }
             .prefix(limit - ranked.count)
         return ranked + fallback
+    }
+
+    private var preferredExerciseIDs: [String] {
+        var seen = Set<String>()
+        return exerciseDefaults.compactMap { record in
+            guard record.isPreferred else { return nil }
+            let representativeID = library.representativeExercise(byID: record.exerciseDefinitionID)?.id
+                ?? record.exerciseDefinitionID
+            guard !representativeID.isEmpty else { return nil }
+            let canonicalID = QuickStartCanonicalService.canonicalExerciseID(for: representativeID)
+            guard seen.insert(canonicalID).inserted else { return nil }
+            return representativeID
+        }
     }
 }
 

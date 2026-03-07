@@ -88,11 +88,20 @@ struct ExerciseTransitionView: View {
     // MARK: - Template Defaults
 
     private var templateDefaultsRow: some View {
-        HStack(spacing: DS.Spacing.lg) {
-            Label("\(entry.defaultSets) sets", systemImage: "list.number")
-            Label("\(entry.defaultReps) reps", systemImage: "repeat")
-            if let weight = entry.defaultWeightKg, weight > 0 {
-                Label("\(Int(weight)) kg", systemImage: "scalemass")
+        let profile = TemplateExerciseProfile(exercise: exercise)
+
+        return HStack(spacing: DS.Spacing.lg) {
+            if profile.showsStrengthDefaultsEditor {
+                Label("\(entry.defaultSets) sets", systemImage: "list.number")
+                Label("\(entry.defaultReps) reps", systemImage: "repeat")
+                if let weight = entry.defaultWeightKg, weight > 0 {
+                    Label("\(Int(weight)) kg", systemImage: "scalemass")
+                }
+            } else {
+                Label(profile.primarySummaryLabel, systemImage: exercise.resolvedActivityType.iconName)
+                if let secondary = profile.secondarySummaryLabel {
+                    Label(secondary, systemImage: "ruler")
+                }
             }
         }
         .font(.subheadline)

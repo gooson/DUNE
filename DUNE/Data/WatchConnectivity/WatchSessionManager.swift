@@ -23,6 +23,8 @@ final class WatchSessionManager: NSObject {
     private var messageHandlerTask: Task<Void, Never>?
     /// Last template snapshot pushed to Watch (used to respond to pull-requests).
     private var cachedWorkoutTemplates: [WatchWorkoutTemplateInfo] = []
+    /// Preferred exercise IDs already normalized to visible representative IDs.
+    private var cachedPreferredExerciseIDs: Set<String> = []
 
     private override init() {
         super.init()
@@ -125,11 +127,30 @@ final class WatchSessionManager: NSObject {
         )
         do {
             let templates = try modelContext.fetch(descriptor)
+            let customExercises = (try? modelContext.fetch(FetchDescriptor<CustomExercise>())) ?? []
+            let exerciseLibrary = ExerciseLibraryService.shared
+            let customExercisesByID = Dictionary(
+                customExercises.map { ("custom-\($0.id.uuidString)", $0) },
+                uniquingKeysWith: { first, _ in first }
+            )
+
             return templates.map { template in
-                WatchWorkoutTemplateInfo(
+                let entries = template.exerciseEntries.map { entry in
+                    var hydratedEntry = entry
+                    if let exercise = exerciseLibrary.exercise(byID: entry.exerciseDefinitionID) {
+                        hydratedEntry.applyExerciseMetadata(from: exercise)
+                    } else if let customExercise = customExercisesByID[entry.exerciseDefinitionID] {
+                        hydratedEntry.applyExerciseMetadata(from: customExercise.toDefinition())
+                    } else {
+                        hydratedEntry.normalizeStoredMetadata()
+                    }
+                    return hydratedEntry
+                }
+
+                return WatchWorkoutTemplateInfo(
                     id: template.id,
                     name: template.name,
-                    entries: template.exerciseEntries,
+                    entries: entries,
                     updatedAt: template.updatedAt
                 )
             }
@@ -157,8 +178,25 @@ final class WatchSessionManager: NSObject {
         syncExerciseLibraryToWatch()
     }
 
+    /// Refreshes preferred exercise snapshot from SwiftData, then syncs full exercise library.
+    func syncExerciseLibraryToWatch(using modelContext: ModelContext) {
+        cachedPreferredExerciseIDs = Self.preferredExerciseIDs(using: modelContext)
+        syncExerciseLibraryToWatch()
+    }
+
+    /// Refreshes preferred exercise snapshot off the main actor, then syncs full exercise library.
+    func syncExerciseLibraryToWatch(using modelContainer: ModelContainer) {
+        Task(priority: .utility) {
+            let preferredExerciseIDs = await Self.preferredExerciseIDs(using: modelContainer)
+            guard !Task.isCancelled else { return }
+            cachedPreferredExerciseIDs = preferredExerciseIDs
+            syncExerciseLibraryToWatch()
+        }
+    }
+
     /// Converts the full exercise library to WatchExerciseInfo and sends via applicationContext.
     func syncExerciseLibraryToWatch() {
+        let preferredExerciseIDs = cachedPreferredExerciseIDs
         let definitions = ExerciseLibraryService.shared.allExercises()
         let watchExercises = definitions.map { def in
             WatchExerciseInfo(
@@ -168,6 +206,7 @@ final class WatchSessionManager: NSObject {
                 defaultSets: WorkoutDefaults.setCount,
                 defaultReps: (def.inputType == .setsRepsWeight || def.inputType == .setsReps) ? 10 : nil,
                 defaultWeightKg: nil,
+                isPreferred: preferredExerciseIDs.contains(def.id),
                 // Map generic catch-all Equipment cases to nil so Watch shows SF Symbol fallback
                 // instead of treating them identically to unknown/corrupted rawValues.
                 equipment: def.equipment == .other ? nil : def.equipment.rawValue,
@@ -176,6 +215,28 @@ final class WatchSessionManager: NSObject {
             )
         }
         transferExerciseLibrary(watchExercises)
+    }
+
+    private nonisolated static func preferredExerciseIDs(using modelContainer: ModelContainer) async -> Set<String> {
+        let context = ModelContext(modelContainer)
+        return preferredExerciseIDs(using: context)
+    }
+
+    private nonisolated static func preferredExerciseIDs(using modelContext: ModelContext) -> Set<String> {
+        let descriptor = FetchDescriptor<ExerciseDefaultRecord>()
+        do {
+            let library = ExerciseLibraryService.shared
+            let records = try modelContext.fetch(descriptor)
+            return Set(records.compactMap { record in
+                guard record.isPreferred else { return nil }
+                let representativeID = library.representativeExercise(byID: record.exerciseDefinitionID)?.id
+                    ?? record.exerciseDefinitionID
+                return representativeID.isEmpty ? nil : representativeID
+            })
+        } catch {
+            AppLogger.ui.error("Failed to fetch preferred exercises for Watch sync: \(error.localizedDescription)")
+            return []
+        }
     }
 
     private var currentThemeRawValue: String {

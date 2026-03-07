@@ -94,6 +94,7 @@ struct TemplateWorkoutContainerView: View {
         return WorkoutSessionView(
             exercise: config.exercises[currentIndex],
             defaultSetCount: config.templateEntries[currentIndex].defaultSets,
+            templateEntry: config.templateEntries[currentIndex],
             templateInfo: currentTemplateInfo,
             onExerciseCompleted: onExerciseCompleted
         )

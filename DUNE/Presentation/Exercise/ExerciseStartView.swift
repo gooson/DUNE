@@ -5,8 +5,14 @@ import SwiftUI
 /// Start button pushes into a full-screen NavigationStack for WorkoutSessionView.
 struct ExerciseStartView: View {
     let exercise: ExerciseDefinition
+    let templateEntry: TemplateEntry?
     @Environment(\.dismiss) private var dismiss
     @State private var showSession = false
+
+    init(exercise: ExerciseDefinition, templateEntry: TemplateEntry? = nil) {
+        self.exercise = exercise
+        self.templateEntry = templateEntry
+    }
 
     /// Whether this exercise should use the cardio live tracking flow.
     private var isCardioLiveTracking: Bool {
@@ -50,7 +56,11 @@ struct ExerciseStartView: View {
                 }
             }
             .navigationDestination(isPresented: $showSession) {
-                WorkoutSessionView(exercise: exercise)
+                WorkoutSessionView(
+                    exercise: exercise,
+                    defaultSetCount: templateEntry?.defaultSets,
+                    templateEntry: templateEntry
+                )
             }
         }
     }
@@ -121,13 +131,26 @@ struct ExerciseStartView: View {
     // MARK: - Detail Row
 
     private var detailRow: some View {
-        HStack(spacing: DS.Spacing.lg) {
+        let profile = TemplateExerciseProfile(exercise: exercise)
+
+        return HStack(spacing: DS.Spacing.lg) {
             Label {
                 Text(exercise.equipment.displayName)
             } icon: {
                 exercise.equipment.svgIcon(size: 14)
             }
-            Label("\(WorkoutDefaults.setCount.formattedWithSeparator) sets", systemImage: "list.number")
+
+            if profile.showsStrengthDefaultsEditor {
+                Label(
+                    "\((templateEntry?.defaultSets ?? WorkoutDefaults.setCount).formattedWithSeparator) sets",
+                    systemImage: "list.number"
+                )
+            } else {
+                Label(profile.primarySummaryLabel, systemImage: exercise.resolvedActivityType.iconName)
+                if let secondary = profile.secondarySummaryLabel {
+                    Label(secondary, systemImage: "ruler")
+                }
+            }
         }
         .font(.subheadline)
         .foregroundStyle(DS.Color.textSecondary)
