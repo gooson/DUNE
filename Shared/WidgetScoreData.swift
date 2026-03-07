@@ -25,4 +25,16 @@ struct WidgetScoreData: Codable, Sendable {
 
     static let userDefaultsKey = "com.raftel.dailve.widget_score_data"
     static let appGroupID = "group.com.raftel.dailve"
+
+    static func sharedDefaults(
+        containerURLProvider: (String) -> URL? = {
+            FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: $0)
+        },
+        userDefaultsProvider: (String) -> UserDefaults? = {
+            UserDefaults(suiteName: $0)
+        }
+    ) -> UserDefaults? {
+        guard containerURLProvider(appGroupID) != nil else { return nil }
+        return userDefaultsProvider(appGroupID)
+    }
 }

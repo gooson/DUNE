@@ -37,7 +37,7 @@ struct WidgetScoreProvider: TimelineProvider {
     }
 
     private func loadCurrentEntry() -> WellnessDashboardEntry {
-        guard let defaults = UserDefaults(suiteName: WidgetScoreData.appGroupID),
+        guard let defaults = WidgetScoreData.sharedDefaults(),
               let jsonData = defaults.data(forKey: WidgetScoreData.userDefaultsKey),
               let data = try? Self.decoder.decode(WidgetScoreData.self, from: jsonData)
         else {

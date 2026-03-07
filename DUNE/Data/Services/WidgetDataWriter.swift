@@ -18,7 +18,7 @@ enum WidgetDataWriter {
         return decoder
     }()
 
-    private static let defaults = UserDefaults(suiteName: WidgetScoreData.appGroupID)
+    private static let defaults = WidgetScoreData.sharedDefaults()
 
     // Debounce reloadAllTimelines to coalesce rapid writes from multiple VMs.
     private static var reloadWorkItem: DispatchWorkItem?

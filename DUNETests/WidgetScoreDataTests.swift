@@ -97,4 +97,35 @@ struct WidgetScoreDataTests {
     func userDefaultsKey() {
         #expect(WidgetScoreData.userDefaultsKey == "com.raftel.dailve.widget_score_data")
     }
+
+    @Test("Shared defaults skip suite access when app group container is unavailable")
+    func sharedDefaultsRequiresContainer() {
+        var suiteFactoryCalled = false
+
+        let defaults = WidgetScoreData.sharedDefaults(
+            containerURLProvider: { _ in nil },
+            userDefaultsProvider: { _ in
+                suiteFactoryCalled = true
+                return UserDefaults(suiteName: UUID().uuidString)
+            }
+        )
+
+        #expect(defaults == nil)
+        #expect(suiteFactoryCalled == false)
+    }
+
+    @Test("Shared defaults return suite when app group container exists")
+    func sharedDefaultsReturnsSuite() {
+        let suiteName = "test.widget-score.\(UUID().uuidString)"
+
+        let defaults = WidgetScoreData.sharedDefaults(
+            containerURLProvider: { _ in URL(fileURLWithPath: "/tmp/widget-group") },
+            userDefaultsProvider: { _ in UserDefaults(suiteName: suiteName) }
+        )
+
+        #expect(defaults != nil)
+        defaults?.set(42, forKey: "sentinel")
+        #expect(defaults?.integer(forKey: "sentinel") == 42)
+        defaults?.removeObject(forKey: "sentinel")
+    }
 }

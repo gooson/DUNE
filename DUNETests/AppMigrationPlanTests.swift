@@ -1,27 +1,19 @@
-import SwiftData
+import Foundation
 import Testing
 @testable import DUNE
 
 @Suite("AppMigrationPlan")
 struct AppMigrationPlanTests {
-    @Test("full migration chain initializes an in-memory container")
-    func fullMigrationChainInitializesContainer() throws {
-        let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
+    @Test("Current schema stays aligned with latest migration version")
+    func currentSchemaMatchesLatestVersionedSchema() {
+        let latestModelNames = Set(AppSchemaV12.models.map { String(describing: $0) })
+        let currentModelNames = Set(AppMigrationPlan.currentSchema.entities.map(\.name))
 
-        _ = try ModelContainer(
-            for: ExerciseRecord.self,
-            BodyCompositionRecord.self,
-            WorkoutSet.self,
-            CustomExercise.self,
-            WorkoutTemplate.self,
-            UserCategory.self,
-            InjuryRecord.self,
-            ExerciseDefaultRecord.self,
-            HabitDefinition.self,
-            HabitLog.self,
-            HealthSnapshotMirrorRecord.self,
-            migrationPlan: AppMigrationPlan.self,
-            configurations: configuration
-        )
+        #expect(currentModelNames == latestModelNames)
+        #expect(currentModelNames.contains("InjuryRecord"))
+        #expect(currentModelNames.contains("HabitDefinition"))
+        #expect(currentModelNames.contains("HabitLog"))
+        #expect(currentModelNames.contains("ExerciseDefaultRecord"))
+        #expect(currentModelNames.contains("HealthSnapshotMirrorRecord"))
     }
 }

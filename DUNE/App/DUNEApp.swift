@@ -88,7 +88,7 @@ struct DUNEApp: App {
 
     private static func makeModelContainer(configuration: ModelConfiguration) throws -> ModelContainer {
         try ModelContainer(
-            for: ExerciseRecord.self, BodyCompositionRecord.self, WorkoutSet.self, CustomExercise.self, WorkoutTemplate.self, UserCategory.self, InjuryRecord.self, ExerciseDefaultRecord.self, HabitDefinition.self, HabitLog.self, HealthSnapshotMirrorRecord.self,
+            for: AppMigrationPlan.currentSchema,
             migrationPlan: AppMigrationPlan.self,
             configurations: configuration
         )

@@ -348,6 +348,8 @@ enum AppSchemaV12: VersionedSchema {
 // MARK: - Migration Plan
 
 enum AppMigrationPlan: SchemaMigrationPlan {
+    static let currentSchema = Schema(AppSchemaV12.models)
+
     static var schemas: [any VersionedSchema.Type] {
         [AppSchemaV1.self, AppSchemaV2.self, AppSchemaV3.self, AppSchemaV4.self, AppSchemaV5.self, AppSchemaV6.self, AppSchemaV7.self, AppSchemaV8.self, AppSchemaV9.self, AppSchemaV10.self, AppSchemaV11.self, AppSchemaV12.self]
     }
