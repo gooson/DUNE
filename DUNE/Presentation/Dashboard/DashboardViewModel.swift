@@ -182,16 +182,18 @@ final class DashboardViewModel {
             }
         }
 
-        let sharedSnapshot = await sharedHealthDataService?.fetchSnapshot()
+        async let sharedSnapshotTask: SharedHealthSnapshot? = sharedHealthDataService?.fetchSnapshot()
 
-        // Each fetch is independent — one failure should not block others (7 parallel)
-        async let hrvTask = safeHRVFetch(snapshot: sharedSnapshot, canQueryHealthKit: healthKitAvailable)
-        async let sleepTask = safeSleepFetch(snapshot: sharedSnapshot, canQueryHealthKit: healthKitAvailable)
         async let exerciseTask = safeExerciseFetch(canQueryHealthKit: healthKitAvailable)
         async let stepsTask = safeStepsFetch(canQueryHealthKit: healthKitAvailable)
         async let weightTask = safeWeightFetch(canQueryHealthKit: healthKitAvailable)
         async let bmiTask = safeBMIFetch(canQueryHealthKit: healthKitAvailable)
         async let weatherTask = safeWeatherFetch()
+        let sharedSnapshot = await sharedSnapshotTask
+
+        // Each fetch is independent — one failure should not block others.
+        async let hrvTask = safeHRVFetch(snapshot: sharedSnapshot, canQueryHealthKit: healthKitAvailable)
+        async let sleepTask = safeSleepFetch(snapshot: sharedSnapshot, canQueryHealthKit: healthKitAvailable)
 
         let (hrvResult, sleepResult, exerciseResult, stepsResult, weightResult, bmiResult, weatherResult) = await (
             hrvTask, sleepTask, exerciseTask, stepsTask, weightTask, bmiTask, weatherTask

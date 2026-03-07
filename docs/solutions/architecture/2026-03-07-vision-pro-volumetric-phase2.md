@@ -6,9 +6,9 @@ severity: important
 related_files:
   - DUNE/Domain/UseCases/SpatialTrainingAnalyzer.swift
   - DUNE/Domain/Models/ExerciseRecordSnapshot.swift
-  - DUNE/DUNEVision/Presentation/Volumetric/VisionSpatialViewModel.swift
-  - DUNE/DUNEVision/Presentation/Volumetric/VisionVolumetricExperienceView.swift
-  - DUNE/DUNEVision/App/DUNEVisionApp.swift
+  - DUNEVision/Presentation/Volumetric/VisionSpatialViewModel.swift
+  - DUNEVision/Presentation/Volumetric/VisionVolumetricExperienceView.swift
+  - DUNEVision/App/DUNEVisionApp.swift
   - DUNETests/SpatialTrainingAnalyzerTests.swift
 related_solutions:
   - docs/solutions/architecture/visionos-multi-target-setup.md
@@ -40,8 +40,8 @@ HealthKit `WorkoutSummary`를 shared domain analyzer에서 `ExerciseRecordSnapsh
 |------|--------|--------|
 | `DUNE/Domain/Models/ExerciseRecordSnapshot.swift` | Added snapshot model | SwiftData 없이 shared analyzer 입력을 만들기 위해 |
 | `DUNE/Domain/UseCases/SpatialTrainingAnalyzer.swift` | Added analyzer and summary model | HealthKit workout를 muscle load/fatigue/heart-rate summary로 변환하기 위해 |
-| `DUNE/DUNEVision/App/DUNEVisionApp.swift` | Added volumetric `WindowGroup` | Vision Pro에서 별도 spatial window를 열기 위해 |
-| `DUNE/DUNEVision/Presentation/Volumetric/*` | Added 3 RealityKit scenes and view model | Heart orb, load blocks, body heatmap 경험을 제공하기 위해 |
+| `DUNEVision/App/DUNEVisionApp.swift` | Added volumetric `WindowGroup` | Vision Pro에서 별도 spatial window를 열기 위해 |
+| `DUNEVision/Presentation/Volumetric/*` | Added 3 RealityKit scenes and view model | Heart orb, load blocks, body heatmap 경험을 제공하기 위해 |
 | `DUNE/Resources/Localizable.xcstrings` | Added en/ko/ja strings | 새 Vision Pro copy의 localization leak를 막기 위해 |
 | `DUNETests/Helpers/URLProtocolStub.swift` | Added `LockedValue`, marked shared handler as `nonisolated(unsafe)` | Swift 6 concurrency-safe test helper로 정리하기 위해 |
 | `DUNETests/OpenMeteo*.swift` | Replaced captured mutable arrays with `LockedValue` | `@Sendable` handler inside tests를 안전하게 만들기 위해 |

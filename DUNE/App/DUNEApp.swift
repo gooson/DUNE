@@ -414,7 +414,7 @@ struct DUNEApp: App {
         guard !Self.shouldBypassLaunchExperienceForTests else { return }
 
         hasStartedRuntimeServices = true
-        WatchSessionManager.shared.syncWorkoutTemplatesToWatch(using: modelContainer.mainContext)
+        WatchSessionManager.shared.syncWorkoutTemplatesToWatch(using: modelContainer)
         WatchSessionManager.shared.activate()
         observerManager?.startObserving()
     }

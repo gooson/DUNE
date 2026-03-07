@@ -51,14 +51,14 @@ HealthKit `WorkoutSummary`와 `VitalSample`을 spatial-friendly 요약 모델로
 | `docs/plans/2026-03-07-vision-pro-phase2-volumetric.md` | new | Phase 2 구현 계획 문서 |
 | `DUNE/project.yml` | modify | DUNEVision target에서 fatigue/shared protocol 파일을 포함하도록 조정 |
 | `DUNE/Domain/UseCases/SpatialTrainingAnalyzer.swift` | new | WorkoutSummary -> spatial summary/fatigue state 변환 |
-| `DUNE/DUNEVision/App/DUNEVisionApp.swift` | modify | volumetric window scene 추가 |
-| `DUNE/DUNEVision/App/VisionContentView.swift` | modify | volumetric 창 열기 action 연결 |
-| `DUNE/DUNEVision/Presentation/Dashboard/VisionDashboardView.swift` | modify | volumetric quick action 추가 |
-| `DUNE/DUNEVision/Presentation/Volumetric/VisionSpatialViewModel.swift` | new | HealthKit fetch + analyzer orchestration |
-| `DUNE/DUNEVision/Presentation/Volumetric/VisionVolumetricExperienceView.swift` | new | volumetric picker/container |
-| `DUNE/DUNEVision/Presentation/Volumetric/HeartRateOrbSceneView.swift` | new | 최신 심박수 orb scene |
-| `DUNE/DUNEVision/Presentation/Volumetric/TrainingVolumeBlocksSceneView.swift` | new | 근육별 block scene |
-| `DUNE/DUNEVision/Presentation/Volumetric/BodyHeatmapSceneView.swift` | new | 근육별 body heatmap scene |
+| `DUNEVision/App/DUNEVisionApp.swift` | modify | volumetric window scene 추가 |
+| `DUNEVision/App/VisionContentView.swift` | modify | volumetric 창 열기 action 연결 |
+| `DUNEVision/Presentation/Dashboard/VisionDashboardView.swift` | modify | volumetric quick action 추가 |
+| `DUNEVision/Presentation/Volumetric/VisionSpatialViewModel.swift` | new | HealthKit fetch + analyzer orchestration |
+| `DUNEVision/Presentation/Volumetric/VisionVolumetricExperienceView.swift` | new | volumetric picker/container |
+| `DUNEVision/Presentation/Volumetric/HeartRateOrbSceneView.swift` | new | 최신 심박수 orb scene |
+| `DUNEVision/Presentation/Volumetric/TrainingVolumeBlocksSceneView.swift` | new | 근육별 block scene |
+| `DUNEVision/Presentation/Volumetric/BodyHeatmapSceneView.swift` | new | 근육별 body heatmap scene |
 | `DUNETests/SpatialTrainingAnalyzerTests.swift` | new | pseudo-volume/fatigue summary unit tests |
 | `todos/018-done-p2-vision-pro-phase2-realitykit-volumetric.md` | modify | TODO 상태 갱신 |
 | `docs/solutions/architecture/2026-03-07-vision-pro-volumetric-phase2.md` | new | 구현 후 해결책 문서 |
@@ -77,7 +77,7 @@ HealthKit `WorkoutSummary`와 `VitalSample`을 spatial-friendly 요약 모델로
 
 ### Step 2: visionOS volumetric window와 view model 구현
 
-- **Files**: `DUNE/DUNEVision/App/DUNEVisionApp.swift`, `DUNE/DUNEVision/Presentation/Volumetric/VisionSpatialViewModel.swift`, `DUNE/project.yml`
+- **Files**: `DUNEVision/App/DUNEVisionApp.swift`, `DUNEVision/Presentation/Volumetric/VisionSpatialViewModel.swift`, `DUNE/project.yml`
 - **Changes**:
   - volumetric `WindowGroup(id:)` 추가
   - `HeartRateQueryService`, `WorkoutQueryService`, `SharedHealthDataService`를 병렬 호출하는 view model 구현
@@ -88,7 +88,7 @@ HealthKit `WorkoutSummary`와 `VitalSample`을 spatial-friendly 요약 모델로
 
 ### Step 3: RealityKit scene 3종 구현
 
-- **Files**: `DUNE/DUNEVision/Presentation/Volumetric/HeartRateOrbSceneView.swift`, `DUNE/DUNEVision/Presentation/Volumetric/TrainingVolumeBlocksSceneView.swift`, `DUNE/DUNEVision/Presentation/Volumetric/BodyHeatmapSceneView.swift`, `DUNE/DUNEVision/Presentation/Volumetric/VisionVolumetricExperienceView.swift`
+- **Files**: `DUNEVision/Presentation/Volumetric/HeartRateOrbSceneView.swift`, `DUNEVision/Presentation/Volumetric/TrainingVolumeBlocksSceneView.swift`, `DUNEVision/Presentation/Volumetric/BodyHeatmapSceneView.swift`, `DUNEVision/Presentation/Volumetric/VisionVolumetricExperienceView.swift`
 - **Changes**:
   - Heart Rate Orb: BPM 기반 pulse/scale/color
   - Training Volume Blocks: 근육별 block height/color
@@ -100,7 +100,7 @@ HealthKit `WorkoutSummary`와 `VitalSample`을 spatial-friendly 요약 모델로
 
 ### Step 4: App entry/dashboard 연결 및 문서화
 
-- **Files**: `DUNE/DUNEVision/App/VisionContentView.swift`, `DUNE/DUNEVision/Presentation/Dashboard/VisionDashboardView.swift`, `todos/018-done-p2-vision-pro-phase2-realitykit-volumetric.md`
+- **Files**: `DUNEVision/App/VisionContentView.swift`, `DUNEVision/Presentation/Dashboard/VisionDashboardView.swift`, `todos/018-done-p2-vision-pro-phase2-realitykit-volumetric.md`
 - **Changes**:
   - dashboard quick action + toolbar에서 volumetric 창 오픈
   - TODO 상태 `done` 갱신

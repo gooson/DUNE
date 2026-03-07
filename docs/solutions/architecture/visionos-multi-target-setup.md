@@ -25,7 +25,7 @@ DUNEVision:
   type: application
   platform: visionOS
   sources:
-    - path: DUNEVision          # visionOS 전용 코드
+    - path: ../DUNEVision       # visionOS 전용 코드
     - path: Domain              # 100% 공유
     - path: Data/Persistence    # SwiftData 공유
     - path: Data/HealthKit      # HealthKit 공유
@@ -36,7 +36,7 @@ DUNEVisionWidgets:
   type: app-extension
   platform: visionOS
   sources:
-    - path: DUNEVisionWidgets
+    - path: ../DUNEVisionWidgets
     - path: Domain/Models/HealthMetric.swift  # 필요한 모델만 선택적 공유
 ```
 

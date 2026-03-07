@@ -201,6 +201,63 @@ private actor MockWeatherProvider: WeatherProviding {
     }
 }
 
+private actor SuspendingDashboardSharedHealthDataService: SharedHealthDataService {
+    private let snapshot: SharedHealthSnapshot
+    private var didStartFetch = false
+    private var fetchStartedContinuation: CheckedContinuation<Void, Never>?
+    private var fetchReleaseContinuation: CheckedContinuation<Void, Never>?
+
+    init(snapshot: SharedHealthSnapshot) {
+        self.snapshot = snapshot
+    }
+
+    func fetchSnapshot() async -> SharedHealthSnapshot {
+        didStartFetch = true
+        fetchStartedContinuation?.resume()
+        fetchStartedContinuation = nil
+
+        await withCheckedContinuation { continuation in
+            fetchReleaseContinuation = continuation
+        }
+        return snapshot
+    }
+
+    func invalidateCache() async {}
+
+    func waitUntilFetchStarts() async {
+        if didStartFetch {
+            return
+        }
+        await withCheckedContinuation { continuation in
+            fetchStartedContinuation = continuation
+        }
+    }
+
+    func resumeFetch() {
+        fetchReleaseContinuation?.resume()
+        fetchReleaseContinuation = nil
+    }
+}
+
+private func makeEmptySharedSnapshot(fetchedAt: Date = Date()) -> SharedHealthSnapshot {
+    SharedHealthSnapshot(
+        hrvSamples: [],
+        todayRHR: nil,
+        yesterdayRHR: nil,
+        latestRHR: nil,
+        rhrCollection: [],
+        todaySleepStages: [],
+        yesterdaySleepStages: [],
+        latestSleepStages: nil,
+        sleepDailyDurations: [],
+        conditionScore: nil,
+        baselineStatus: nil,
+        recentConditionScores: [],
+        failedSources: [],
+        fetchedAt: fetchedAt
+    )
+}
+
 private func makeTestWeatherSnapshot(
     condition: WeatherConditionType = .rain
 ) -> WeatherSnapshot {
@@ -655,6 +712,36 @@ struct DashboardViewModelTests {
         let counts = await weatherProvider.callCounts()
         #expect(counts.permissionRequests == 1)
         #expect(counts.fetches == 1)
+    }
+
+    @Test("Weather fetch starts before shared snapshot resolves")
+    func weatherStartsBeforeSharedSnapshotCompletes() async {
+        let sharedService = SuspendingDashboardSharedHealthDataService(
+            snapshot: makeEmptySharedSnapshot()
+        )
+        let weatherProvider = MockWeatherProvider(snapshot: makeTestWeatherSnapshot(condition: .clear))
+        let vm = DashboardViewModel(
+            hrvService: MockHRVService(),
+            sleepService: MockSleepService(),
+            workoutService: MockWorkoutService(),
+            stepsService: MockStepsService(),
+            bodyService: MockBodyService(),
+            sharedHealthDataService: sharedService,
+            weatherProvider: weatherProvider
+        )
+
+        let loadTask = Task {
+            await vm.loadData()
+        }
+
+        await sharedService.waitUntilFetchStarts()
+        try? await Task.sleep(for: .milliseconds(20))
+
+        let counts = await weatherProvider.callCounts()
+        #expect(counts.fetches == 1)
+
+        await sharedService.resumeFetch()
+        _ = await loadTask.result
     }
 
     private func makePinnedStore(_ categories: [HealthMetric.Category]) -> TodayPinnedMetricsStore {

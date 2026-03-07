@@ -16,7 +16,9 @@ actor MirroringSharedHealthDataService: SharedHealthDataService {
 
     func fetchSnapshot() async -> SharedHealthSnapshot {
         let snapshot = await baseService.fetchSnapshot()
-        await mirrorStore.persist(snapshot: snapshot)
+        Task(priority: .utility) { [mirrorStore] in
+            await mirrorStore.persist(snapshot: snapshot)
+        }
         return snapshot
     }
 

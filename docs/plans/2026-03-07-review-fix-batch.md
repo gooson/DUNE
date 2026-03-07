@@ -50,7 +50,7 @@ related_brainstorms: []
 |------|-------------|-------------|
 | `DUNE/App/DUNEApp.swift` | update | 저장소 복구 정책 분기 |
 | `DUNEWatch/DUNEWatchApp.swift` | update | 저장소 복구 정책 분기 |
-| `DUNE/DUNEVision/App/DUNEVisionApp.swift` | update | 저장소 복구 정책 분기 |
+| `DUNEVision/App/DUNEVisionApp.swift` | update | 저장소 복구 정책 분기 |
 | `DUNE/Data/Weather/OpenMeteoService.swift` | update | 위치별 캐시 + per-request parser |
 | `DUNE/Data/Weather/OpenMeteoAirQualityService.swift` | update | 위치별 캐시 + per-request decoder/parser |
 | `DUNE/Data/Weather/OpenMeteoRequestLocation.swift` | add | 좌표 정규화/캐시 키 helper |
@@ -65,7 +65,7 @@ related_brainstorms: []
 
 ### Step 1: 저장소 복구 정책 정교화
 
-- **Files**: `DUNE/App/DUNEApp.swift`, `DUNEWatch/DUNEWatchApp.swift`, `DUNE/DUNEVision/App/DUNEVisionApp.swift`
+- **Files**: `DUNE/App/DUNEApp.swift`, `DUNEWatch/DUNEWatchApp.swift`, `DUNEVision/App/DUNEVisionApp.swift`
 - **Changes**: 오류 분류 helper 추가, migration/모델 버전 불일치 케이스만 삭제 재시도, 나머지는 in-memory fallback
 - **Verification**: 오류 분류 유닛 테스트 추가, 앱 코드에서 `deleteStoreFiles` 호출 조건이 명시적으로 제한됨
 
