@@ -11,11 +11,13 @@ struct ExercisePickerView: View {
     let recentExerciseIDs: [String]
     let popularExerciseIDs: [String]
     let mode: ExercisePickerMode
+    let onStartTemplate: ((WorkoutTemplate) -> Void)?
     let onSelect: (ExerciseDefinition) -> Void
 
     @Environment(\.appTheme) private var theme
     @Environment(\.dismiss) private var dismiss
     @Query(sort: \CustomExercise.createdAt, order: .reverse) private var customExercises: [CustomExercise]
+    @Query(sort: \WorkoutTemplate.updatedAt, order: .reverse) private var templates: [WorkoutTemplate]
     @Query(sort: \UserCategory.sortOrder) private var userCategories: [UserCategory]
     @State private var searchText = ""
     @State private var selectedCategory: ExerciseCategory?
@@ -31,12 +33,14 @@ struct ExercisePickerView: View {
         recentExerciseIDs: [String],
         popularExerciseIDs: [String] = [],
         mode: ExercisePickerMode = .full,
+        onStartTemplate: ((WorkoutTemplate) -> Void)? = nil,
         onSelect: @escaping (ExerciseDefinition) -> Void
     ) {
         self.library = library
         self.recentExerciseIDs = recentExerciseIDs
         self.popularExerciseIDs = popularExerciseIDs
         self.mode = mode
+        self.onStartTemplate = onStartTemplate
         self.onSelect = onSelect
     }
 
@@ -48,14 +52,18 @@ struct ExercisePickerView: View {
         mode == .quickStart
     }
 
+    private var trimmedSearchText: String {
+        searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
     private var fullModeFilteredExercises: [ExerciseDefinition] {
         var libraryResults: [ExerciseDefinition]
         var customResults: [ExerciseDefinition]
 
-        if !searchText.isEmpty {
-            libraryResults = mergedSearchResults(for: searchText)
+        if !trimmedSearchText.isEmpty {
+            libraryResults = QuickStartSupport.mergedSearchResults(for: trimmedSearchText, library: library)
             customResults = customDefinitions.filter {
-                matchesSearchQuery(searchText, in: $0)
+                QuickStartSupport.matchesSearchQuery(trimmedSearchText, in: $0)
             }
         } else if let userCatName = selectedUserCategoryName {
             // User-defined category filter — only applies to custom exercises
@@ -91,17 +99,23 @@ struct ExercisePickerView: View {
 
     private var quickStartFilteredExercises: [ExerciseDefinition] {
         let definitions: [ExerciseDefinition]
-        if searchText.isEmpty {
+        if trimmedSearchText.isEmpty {
             definitions = customDefinitions + library.allExercises()
         } else {
             let customResults = customDefinitions.filter {
-                matchesSearchQuery(searchText, in: $0)
+                QuickStartSupport.matchesSearchQuery(trimmedSearchText, in: $0)
             }
-            definitions = customResults + mergedSearchResults(for: searchText)
+            definitions = customResults + QuickStartSupport.mergedSearchResults(
+                for: trimmedSearchText,
+                library: library
+            )
         }
 
-        let sorted = sortQuickStartExercises(uniqueByID(definitions))
-        return uniqueByCanonical(sorted)
+        let sorted = QuickStartSupport.sortQuickStartExercises(
+            QuickStartSupport.uniqueByID(definitions),
+            priorityIDs: popularExerciseIDs + recentExerciseIDs
+        )
+        return QuickStartSupport.uniqueByCanonical(sorted)
     }
 
     private var filteredExercises: [ExerciseDefinition] {
@@ -109,14 +123,26 @@ struct ExercisePickerView: View {
     }
 
     private var recentExercises: [ExerciseDefinition] {
-        uniqueByCanonical(
-            recentExerciseIDs.compactMap { resolveExerciseDefinition(by: $0) }
+        QuickStartSupport.uniqueByCanonical(
+            recentExerciseIDs.compactMap {
+                QuickStartSupport.resolveExerciseDefinition(
+                    by: $0,
+                    library: library,
+                    customDefinitions: customDefinitions
+                )
+            }
         )
     }
 
     private var popularExercises: [ExerciseDefinition] {
-        uniqueByCanonical(
-            popularExerciseIDs.compactMap { resolveExerciseDefinition(by: $0) }
+        QuickStartSupport.uniqueByCanonical(
+            popularExerciseIDs.compactMap {
+                QuickStartSupport.resolveExerciseDefinition(
+                    by: $0,
+                    library: library,
+                    customDefinitions: customDefinitions
+                )
+            }
         )
     }
 
@@ -125,28 +151,19 @@ struct ExercisePickerView: View {
     }
 
     private var shouldShowQuickStartHub: Bool {
-        isQuickStartMode && !showingAllQuickStartExercises
-    }
-
-    private var shouldShowSearchBar: Bool {
-        !isQuickStartMode || showingAllQuickStartExercises
+        isQuickStartMode && !showingAllQuickStartExercises && trimmedSearchText.isEmpty
     }
 
     private var quickStartRecentExercises: [ExerciseDefinition] {
-        let popularCanonical = Set(popularExercises.map(canonicalKey(for:)))
+        let popularCanonical = Set(popularExercises.map(QuickStartSupport.canonicalKey(for:)))
         return recentExercises.filter { exercise in
-            !popularCanonical.contains(canonicalKey(for: exercise))
+            !popularCanonical.contains(QuickStartSupport.canonicalKey(for: exercise))
         }
-    }
-
-    private var quickStartPriorityIndexByID: [String: Int] {
-        let ids = dedupedIDs(popularExerciseIDs + recentExerciseIDs)
-        return Dictionary(uniqueKeysWithValues: ids.enumerated().map { ($1, $0) })
     }
 
     var body: some View {
         NavigationStack {
-            pickerContent
+            exerciseList
                 .englishNavigationTitle(isQuickStartMode ? "Quick Start" : "Select Exercise")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
@@ -185,18 +202,16 @@ struct ExercisePickerView: View {
     }
 
     @ViewBuilder
-    private var pickerContent: some View {
-        if shouldShowSearchBar {
-            exerciseList
-                .searchable(text: $searchText, prompt: "Search exercises")
-        } else {
-            exerciseList
-        }
-    }
-
-    @ViewBuilder
     private var exerciseList: some View {
         List {
+            if isQuickStartMode {
+                quickStartSearchSection
+            }
+
+            if isQuickStartMode, trimmedSearchText.isEmpty, let onStartTemplate, !templates.isEmpty {
+                quickStartTemplateSection(onStartTemplate: onStartTemplate)
+            }
+
             if shouldShowQuickStartHub {
                 quickStartHubSections
             } else if isQuickStartMode {
@@ -208,12 +223,13 @@ struct ExercisePickerView: View {
         .accessibilityIdentifier("picker-root-list")
         .scrollContentBackground(.hidden)
         .background { SheetWaveBackground() }
+        .modifier(FullModeSearchModifier(isQuickStartMode: isQuickStartMode, searchText: $searchText))
     }
 
     @ViewBuilder
     private var fullModeSections: some View {
         // Recent exercises section
-        if searchText.isEmpty && !hasActiveFilters && !recentExercises.isEmpty {
+        if trimmedSearchText.isEmpty && !hasActiveFilters && !recentExercises.isEmpty {
             Section("Recent") {
                 ForEach(recentExercises) { exercise in
                     exerciseRow(exercise)
@@ -222,7 +238,7 @@ struct ExercisePickerView: View {
         }
 
         // Filters
-        if searchText.isEmpty {
+        if trimmedSearchText.isEmpty {
             filtersSection
         }
 
@@ -285,6 +301,50 @@ struct ExercisePickerView: View {
     }
 
     @ViewBuilder
+    private var quickStartSearchSection: some View {
+        Section {
+            HStack(spacing: DS.Spacing.sm) {
+                Image(systemName: "magnifyingglass")
+                    .foregroundStyle(DS.Color.textSecondary)
+
+                TextField("Search exercises", text: $searchText)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+                    .submitLabel(.search)
+                    .accessibilityIdentifier("picker-search-field")
+
+                if !searchText.isEmpty {
+                    Button {
+                        searchText = ""
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundStyle(.tertiary)
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .font(.subheadline)
+        }
+    }
+
+    @ViewBuilder
+    private func quickStartTemplateSection(
+        onStartTemplate: @escaping (WorkoutTemplate) -> Void
+    ) -> some View {
+        Section("Templates") {
+            ForEach(templates) { template in
+                Button {
+                    onStartTemplate(template)
+                    dismiss()
+                } label: {
+                    templateRow(template)
+                }
+                .buttonStyle(.plain)
+            }
+        }
+    }
+
+    @ViewBuilder
     private var quickStartAllSection: some View {
         Section {
             ForEach(filteredExercises) { exercise in
@@ -294,7 +354,7 @@ struct ExercisePickerView: View {
             HStack {
                 Text("All Exercises")
                 Spacer()
-                if showingAllQuickStartExercises && searchText.isEmpty {
+                if showingAllQuickStartExercises && trimmedSearchText.isEmpty {
                     Button("Hide") {
                         searchText = ""
                         showingAllQuickStartExercises = false
@@ -358,6 +418,38 @@ struct ExercisePickerView: View {
     }
 
     // MARK: - Rows
+
+    private func templateRow(_ template: WorkoutTemplate) -> some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+            HStack(spacing: DS.Spacing.xs) {
+                Image(systemName: "list.clipboard.fill")
+                    .foregroundStyle(DS.Color.activity)
+                Text(template.name)
+                    .font(.headline)
+                    .foregroundStyle(theme.sandColor)
+                Spacer()
+                Image(systemName: "play.circle.fill")
+                    .font(.title3)
+                    .foregroundStyle(DS.Color.activity)
+            }
+
+            HStack(spacing: DS.Spacing.xs) {
+                Text("\(template.exerciseEntries.count.formattedWithSeparator) exercises")
+                    .font(.caption)
+                    .foregroundStyle(DS.Color.textSecondary)
+
+                if !template.exerciseEntries.isEmpty {
+                    Text("\u{00B7}")
+                        .foregroundStyle(.tertiary)
+                    Text(template.exerciseEntries.map(\.exerciseName).prefix(3).joined(separator: ", "))
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
+                        .lineLimit(1)
+                }
+            }
+        }
+        .padding(.vertical, DS.Spacing.xxs)
+    }
 
     private func exerciseRow(_ exercise: ExerciseDefinition) -> some View {
         Button {
@@ -521,122 +613,18 @@ struct ExercisePickerView: View {
         .buttonStyle(.plain)
     }
 
-    // MARK: - Helpers
-
-    private func resolveExerciseDefinition(by id: String) -> ExerciseDefinition? {
-        library.representativeExercise(byID: id)
-            ?? customDefinitions.first { $0.id == id }
-    }
-
-    private func dedupedIDs(_ ids: [String]) -> [String] {
-        var seen = Set<String>()
-        return ids.filter { seen.insert($0).inserted }
-    }
-
-    private func uniqueByID(_ exercises: [ExerciseDefinition]) -> [ExerciseDefinition] {
-        var seen = Set<String>()
-        return exercises.filter { seen.insert($0.id).inserted }
-    }
-
-    private func uniqueByCanonical(_ exercises: [ExerciseDefinition]) -> [ExerciseDefinition] {
-        var seen = Set<String>()
-        return exercises.filter { exercise in
-            let key = canonicalKey(for: exercise)
-            return seen.insert(key).inserted
-        }
-    }
-
-    private func canonicalKey(for exercise: ExerciseDefinition) -> String {
-        QuickStartCanonicalService.canonicalKey(
-            exerciseID: exercise.id,
-            exerciseName: exercise.localizedName
-        ) ?? exercise.id
-    }
-
-    private func sortQuickStartExercises(_ exercises: [ExerciseDefinition]) -> [ExerciseDefinition] {
-        let priority = quickStartPriorityIndexByID
-        return exercises.sorted { lhs, rhs in
-            let lhsPriority = priority[lhs.id]
-            let rhsPriority = priority[rhs.id]
-
-            switch (lhsPriority, rhsPriority) {
-            case let (.some(l), .some(r)):
-                if l != r { return l < r }
-            case (.some, .none):
-                return true
-            case (.none, .some):
-                return false
-            case (.none, .none):
-                break
-            }
-
-            return lhs.localizedName.localizedCaseInsensitiveCompare(rhs.localizedName) == .orderedAscending
-        }
-    }
-
-    private func mergedSearchResults(for query: String) -> [ExerciseDefinition] {
-        let baseResults = library.search(query: query)
-        let initialConsonantResults = library.allExercises().filter {
-            matchesInitialConsonantQuery(query, in: $0)
-        }
-        return uniqueByID(baseResults + initialConsonantResults)
-    }
-
-    private func matchesSearchQuery(_ query: String, in exercise: ExerciseDefinition) -> Bool {
-        exercise.localizedName.localizedCaseInsensitiveContains(query)
-            || exercise.name.localizedCaseInsensitiveContains(query)
-            || matchesInitialConsonantQuery(query, in: exercise)
-    }
-
-    private func matchesInitialConsonantQuery(_ query: String, in exercise: ExerciseDefinition) -> Bool {
-        let normalizedQuery = query.replacingOccurrences(of: " ", with: "")
-        guard !normalizedQuery.isEmpty, normalizedQuery.allSatisfy(\.isHangulInitialConsonant) else {
-            return false
-        }
-
-        let localizedInitials = exercise.localizedName.hangulInitialConsonants
-        let englishInitials = exercise.name.hangulInitialConsonants
-        return localizedInitials.contains(normalizedQuery) || englishInitials.contains(normalizedQuery)
-    }
 }
 
-private extension Character {
-    var isHangulInitialConsonant: Bool {
-        guard let scalar = unicodeScalars.first, unicodeScalars.count == 1 else { return false }
-        return HangulInitialConsonantMatcher.initialConsonants.contains(scalar)
-    }
-}
+private struct FullModeSearchModifier: ViewModifier {
+    let isQuickStartMode: Bool
+    @Binding var searchText: String
 
-private enum HangulInitialConsonantMatcher {
-    static let initialConsonants = Set("ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ".unicodeScalars)
-    static let table: [Character] = ["ㄱ", "ㄲ", "ㄴ", "ㄷ", "ㄸ", "ㄹ", "ㅁ", "ㅂ", "ㅃ", "ㅅ", "ㅆ", "ㅇ", "ㅈ", "ㅉ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"]
-    static let hangulSyllableStart: UInt32 = 0xAC00
-    static let hangulSyllableEnd: UInt32 = 0xD7A3
-    static let choseongCycle: UInt32 = 588
-}
-
-private extension String {
-    var hangulInitialConsonants: String {
-        var result = String()
-
-        for scalar in unicodeScalars {
-            let value = scalar.value
-            if HangulInitialConsonantMatcher.initialConsonants.contains(scalar) {
-                result.append(Character(scalar))
-                continue
-            }
-
-            guard value >= HangulInitialConsonantMatcher.hangulSyllableStart,
-                  value <= HangulInitialConsonantMatcher.hangulSyllableEnd else {
-                continue
-            }
-
-            let offset = value - HangulInitialConsonantMatcher.hangulSyllableStart
-            let initialIndex = Int(offset / HangulInitialConsonantMatcher.choseongCycle)
-            guard HangulInitialConsonantMatcher.table.indices.contains(initialIndex) else { continue }
-            result.append(HangulInitialConsonantMatcher.table[initialIndex])
+    @ViewBuilder
+    func body(content: Content) -> some View {
+        if isQuickStartMode {
+            content
+        } else {
+            content.searchable(text: $searchText, prompt: "Search exercises")
         }
-
-        return result
     }
 }
