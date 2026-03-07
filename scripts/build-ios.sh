@@ -18,6 +18,17 @@ DERIVED_DATA_DIR=".deriveddata"
 LOG_DIR=".xcodebuild"
 LOG_FILE="$LOG_DIR/ios-build.log"
 REGENERATE=1
+XCODEBUILD_SETTINGS=(
+    CODE_SIGNING_ALLOWED=NO
+    CODE_SIGNING_REQUIRED=NO
+)
+
+if [[ "${DAILVE_FAST_LOCAL_BUILD:-0}" == "1" ]]; then
+    XCODEBUILD_SETTINGS+=(
+        ONLY_ACTIVE_ARCH=YES
+        COMPILER_INDEX_STORE_ENABLE=NO
+    )
+fi
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -46,8 +57,7 @@ xcodebuild -project "$PROJECT_FILE" \
     -scheme "$SCHEME" \
     -destination "$DESTINATION" \
     -derivedDataPath "$DERIVED_DATA_DIR" \
-    CODE_SIGNING_ALLOWED=NO \
-    CODE_SIGNING_REQUIRED=NO \
+    "${XCODEBUILD_SETTINGS[@]}" \
     build >"$LOG_FILE" 2>&1
 BUILD_EXIT=$?
 set -e
