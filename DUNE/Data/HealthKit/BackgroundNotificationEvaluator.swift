@@ -55,6 +55,10 @@ final class BackgroundNotificationEvaluator: Sendable {
         )
     }
 
+    private enum BodyCompositionConstants {
+        static let mergedNotificationIdentifier = "com.dune.bodyComposition.merged"
+    }
+
     /// Called from HKObserverQuery callback. Fetches new samples and evaluates for notifications.
     func evaluateAndNotify(sampleType: HKSampleType) async {
         let insightType = mapToInsightType(sampleType)
@@ -74,8 +78,50 @@ final class BackgroundNotificationEvaluator: Sendable {
         let insight = await evaluate(samples: samples, sampleType: sampleType, insightType: insightType)
         guard let insight else { return }
 
+        // Body composition types: merge into a single replacing notification
+        if isBodyCompositionType(insightType) {
+            await sendMergedBodyCompositionNotification(latestInsight: insight)
+            return
+        }
+
         guard throttleStore.shouldSendAndRecord(insight: insight) else { return }
         await notificationService.send(insight)
+    }
+
+    private func isBodyCompositionType(_ type: HealthInsight.InsightType) -> Bool {
+        switch type {
+        case .weightUpdate, .bodyFatUpdate, .bmiUpdate: true
+        default: false
+        }
+    }
+
+    private func sendMergedBodyCompositionNotification(latestInsight: HealthInsight) async {
+        // Buffer the current value
+        throttleStore.recordBodyCompositionValue(
+            type: latestInsight.type,
+            formattedValue: latestInsight.body
+        )
+
+        // Collect all buffered values within the merge window
+        let pending = throttleStore.pendingBodyCompositionValues()
+        guard !pending.isEmpty else { return }
+
+        // Build merged notification content
+        let mergedBody = pending.map(\.formattedValue).joined(separator: "\n")
+        let mergedInsight = HealthInsight(
+            type: latestInsight.type,
+            title: String(localized: "Body Composition Update"),
+            body: mergedBody,
+            severity: latestInsight.severity,
+            date: latestInsight.date,
+            route: latestInsight.route
+        )
+
+        // Record type-level throttle for dedup
+        throttleStore.recordSent(for: latestInsight.type)
+
+        // Send with fixed identifier to replace previous body composition notification
+        await notificationService.send(mergedInsight, replacingIdentifier: BodyCompositionConstants.mergedNotificationIdentifier)
     }
 
     // MARK: - Anchored Query

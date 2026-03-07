@@ -19,6 +19,7 @@ final class NotificationThrottleStore: @unchecked Sendable {
         static let dailyCountSuffix = "dailyCount"
         static let dedupPrefix = "dedup."
         static let bodyCompositionLastSentSuffix = "bodyCompositionLastSent"
+        static let bodyCompositionBufferSuffix = "bodyCompositionBuffer"
     }
 
     init(
@@ -142,6 +143,59 @@ final class NotificationThrottleStore: @unchecked Sendable {
         default:
             return false
         }
+    }
+
+    // MARK: - Body Composition Merge Buffer
+
+    /// Records a body composition value for later merge into a single notification.
+    func recordBodyCompositionValue(type: HealthInsight.InsightType, formattedValue: String) {
+        queue.sync {
+            var buffer = loadBodyCompositionBufferLocked()
+            buffer[type.rawValue] = BodyCompositionBufferEntry(
+                formattedValue: formattedValue,
+                timestamp: Date()
+            )
+            saveBodyCompositionBufferLocked(buffer)
+        }
+    }
+
+    /// Returns all body composition values recorded within the merge window.
+    func pendingBodyCompositionValues(now: Date = Date()) -> [(type: String, formattedValue: String)] {
+        queue.sync {
+            let buffer = loadBodyCompositionBufferLocked()
+            return buffer
+                .filter { now.timeIntervalSince($0.value.timestamp) < bodyCompositionMergeWindowSeconds }
+                .sorted { $0.key < $1.key }
+                .map { (type: $0.key, formattedValue: $0.value.formattedValue) }
+        }
+    }
+
+    /// Clears the body composition buffer.
+    func clearBodyCompositionBuffer() {
+        queue.sync {
+            let key = keyPrefix + Keys.bodyCompositionBufferSuffix
+            defaults.removeObject(forKey: key)
+        }
+    }
+
+    private struct BodyCompositionBufferEntry: Codable {
+        let formattedValue: String
+        let timestamp: Date
+    }
+
+    private func loadBodyCompositionBufferLocked() -> [String: BodyCompositionBufferEntry] {
+        let key = keyPrefix + Keys.bodyCompositionBufferSuffix
+        guard let data = defaults.data(forKey: key),
+              let buffer = try? JSONDecoder().decode([String: BodyCompositionBufferEntry].self, from: data) else {
+            return [:]
+        }
+        return buffer
+    }
+
+    private func saveBodyCompositionBufferLocked(_ buffer: [String: BodyCompositionBufferEntry]) {
+        let key = keyPrefix + Keys.bodyCompositionBufferSuffix
+        guard let data = try? JSONEncoder().encode(buffer) else { return }
+        defaults.set(data, forKey: key)
     }
 
     // MARK: - Dedup

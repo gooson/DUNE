@@ -39,6 +39,7 @@ final class ActivityViewModel {
     var workoutStreak: WorkoutStreak?
     var exerciseFrequencies: [ExerciseFrequency] = []
     var weeklyStats: [ActivityStat] = []
+    var templateRecommendations: [WorkoutTemplateRecommendation] = []
 
     /// Weekly training goal in active days.
     let weeklyGoal: Int = 5
@@ -90,6 +91,7 @@ final class ActivityViewModel {
     private let sharedHealthDataService: SharedHealthDataService?
     private let personalRecordStore: PersonalRecordStore
     private let recommendationSettingsStore: WorkoutRecommendationSettingsStore
+    private let templateRecommendationService: any WorkoutTemplateRecommending
 
     /// Cached recovery modifiers from the most recent fetch.
     private var sleepModifier: Double = 1.0
@@ -129,6 +131,7 @@ final class ActivityViewModel {
         self.sharedHealthDataService = sharedHealthDataService
         self.personalRecordStore = personalRecordStore
         self.recommendationSettingsStore = recommendationSettingsStore
+        self.templateRecommendationService = WorkoutTemplateRecommendationService()
         self.recommendationContext = recommendationSettingsStore.context
         self.localizedExerciseNameLookup = buildLocalizedExerciseNameLookup()
     }
@@ -444,6 +447,11 @@ final class ActivityViewModel {
         weeklySteps = stepsResult.weeklyData
         todaySteps = stepsResult.todayMetric
         recentWorkouts = workoutsResult
+        templateRecommendations = templateRecommendationService.recommendTemplates(
+            from: workoutsResult,
+            config: .default,
+            referenceDate: Date()
+        )
         refreshCardioPersonalRecords(with: workoutsResult)
         triggerCardioPersonalRecordSeedIfNeeded()
         trainingLoadData = loadResult

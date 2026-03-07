@@ -278,6 +278,34 @@ final class WorkoutSessionViewModel {
         for i in sets.indices where !sets[i].isCompleted {
             fillSetFromPrevious(at: i, weightUnit: weightUnit)
         }
+
+        // Inter-session progressive overload: if all previous sets met target reps,
+        // increment the first set's weight for the new session
+        applyInterSessionOverload(weightUnit: weightUnit)
+    }
+
+    /// Applies progressive overload across sessions by incrementing the first set's weight
+    /// when all previous session sets achieved their target reps.
+    private func applyInterSessionOverload(weightUnit: WeightUnit) {
+        guard !previousSets.isEmpty else { return }
+
+        // Check if all previous sets had reps >= target
+        let allMet = previousSets.enumerated().allSatisfy { index, prev in
+            guard let reps = prev.reps else { return false }
+            let target = targetRepsForSet(at: index)
+            return reps >= target
+        }
+        guard allMet else { return }
+
+        // Apply increment to first set only
+        guard let firstWeight = previousSets.first?.weight, firstWeight > 0 else { return }
+        let incrementKg = progressionIncrementKg
+        let maxIncreaseKg = firstWeight * maxProgressiveIncreaseRatio
+        let clampedIncreaseKg = min(incrementKg, max(maxIncreaseKg, 0))
+        let proposedWeightKg = firstWeight + clampedIncreaseKg
+        let roundedWeightKg = roundToPlateStepKg(proposedWeightKg)
+        let displayWeight = weightUnit.fromKg(roundedWeightKg)
+        sets[0].weight = displayWeight.formatted(.number.precision(.fractionLength(0...1)))
     }
 
     func previousSetInfo(for setNumber: Int) -> PreviousSetInfo? {
@@ -358,6 +386,26 @@ final class WorkoutSessionViewModel {
             return true
         }
         return false
+    }
+
+    // MARK: - Level-Up Suggestion
+
+    private let levelUpMinimumRepsAchievementRate = 0.9
+
+    /// Returns true when all sets are completed and at least 90% of them met their target reps.
+    func shouldSuggestLevelUp() -> Bool {
+        guard !sets.isEmpty else { return false }
+        guard completedSetCount == sets.count else { return false }
+        let completed = sets.filter(\.isCompleted)
+        guard !completed.isEmpty else { return false }
+        var achievedCount = 0
+        for (index, set) in completed.enumerated() {
+            guard let reps = normalizedRepsString(from: set.reps).flatMap(Int.init) else { continue }
+            let target = targetRepsForSet(at: index)
+            if reps >= target { achievedCount += 1 }
+        }
+        let rate = Double(achievedCount) / Double(completed.count)
+        return rate >= levelUpMinimumRepsAchievementRate
     }
 
     // MARK: - Per-Set Validation

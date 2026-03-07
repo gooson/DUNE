@@ -1,28 +1,34 @@
 import Foundation
+import HealthKit
 import UserNotifications
 
 /// Schedules a daily bedtime reminder for users who track sleep with Apple Watch.
 @MainActor
 final class BedtimeWatchReminderScheduler {
     static let shared = BedtimeWatchReminderScheduler()
+    static let settingsKey = "isBedtimeWatchReminderEnabled"
 
     private enum Constants {
         static let notificationIdentifier = "com.raftel.dune.bedtime-watch-reminder"
         static let lookbackDays = 7
         static let leadMinutes = 30
+        static let wristTempLookbackDays = 2
     }
 
     private let sleepService: SleepQuerying
+    private let vitalsService: VitalsQuerying
     private let notificationCenter: UNUserNotificationCenter
     private let bedtimeCalculator: CalculateAverageBedtimeUseCase
     private var lastRefreshDate: Date?
 
     init(
         sleepService: SleepQuerying = SleepQueryService(manager: .shared),
+        vitalsService: VitalsQuerying = VitalsQueryService(manager: .shared),
         notificationCenter: UNUserNotificationCenter = .current(),
         bedtimeCalculator: CalculateAverageBedtimeUseCase = .init()
     ) {
         self.sleepService = sleepService
+        self.vitalsService = vitalsService
         self.notificationCenter = notificationCenter
         self.bedtimeCalculator = bedtimeCalculator
     }
@@ -30,6 +36,13 @@ final class BedtimeWatchReminderScheduler {
     func refreshSchedule() async {
         if let last = lastRefreshDate, Date().timeIntervalSince(last) < 30 * 60 { return }
         lastRefreshDate = Date()
+
+        // Check user preference
+        let isEnabled = UserDefaults.standard.object(forKey: Self.settingsKey) as? Bool ?? true
+        guard isEnabled else {
+            await removePendingReminder()
+            return
+        }
 
         guard WatchSessionManager.shared.isPaired,
               WatchSessionManager.shared.isWatchAppInstalled else {
@@ -40,6 +53,13 @@ final class BedtimeWatchReminderScheduler {
         let settings = await notificationCenter.notificationSettings()
         guard settings.authorizationStatus == .authorized else {
             await removePendingReminder()
+            return
+        }
+
+        // If recent wrist temperature exists, watch was worn during sleep → skip reminder
+        if let _ = try? await vitalsService.fetchLatestWristTemperature(withinDays: Constants.wristTempLookbackDays) {
+            await removePendingReminder()
+            AppLogger.notification.info("[BedtimeReminder] Wrist temperature detected — watch worn, skipping reminder")
             return
         }
 

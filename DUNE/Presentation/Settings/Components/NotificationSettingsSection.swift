@@ -3,6 +3,7 @@ import SwiftUI
 /// Per-type notification toggles for the Settings screen.
 struct NotificationSettingsSection: View {
     @State private var settingsStore = NotificationSettingsStore.shared
+    @AppStorage(BedtimeWatchReminderScheduler.settingsKey) private var isBedtimeReminderEnabled = true
 
     /// Grouped insight types for display.
     private static let healthTypes: [HealthInsight.InsightType] = [
@@ -16,6 +17,9 @@ struct NotificationSettingsSection: View {
                 notificationToggle(for: type)
             }
             notificationToggle(for: .workoutPR)
+            Toggle(isOn: $isBedtimeReminderEnabled) {
+                Label("Bedtime Watch Reminder", systemImage: "applewatch")
+            }
         } header: {
             Text("Notifications")
         } footer: {
