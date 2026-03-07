@@ -97,6 +97,7 @@ struct HabitProgress: Sendable, Identifiable {
     let isAutoLinked: Bool
     let isAutoCompleted: Bool
     let isCycleBased: Bool
+    let canCompleteCycle: Bool
     let nextDueDate: Date?
     let cycleStartDate: Date?
     let cycleStartPoint: HabitRecurringStartPoint?

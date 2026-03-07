@@ -302,6 +302,7 @@ struct LifeViewModelTests {
         let snapshot = vm.cycleSnapshot(for: habit, referenceDate: referenceDate)
         #expect(snapshot != nil)
         #expect(snapshot?.nextDueDate == calendar.startOfDay(for: snoozedTo))
+        #expect(snapshot?.canComplete == false)
         #expect(snapshot?.isDue == false)
         #expect(snapshot?.lastAction == .complete)
     }
@@ -373,6 +374,7 @@ struct LifeViewModelTests {
         #expect(snapshot?.isScheduled == true)
         #expect(snapshot?.startDate == futureStart)
         #expect(snapshot?.nextDueDate == expectedDue)
+        #expect(snapshot?.canComplete == false)
         #expect(snapshot?.isDue == false)
     }
 
@@ -396,6 +398,68 @@ struct LifeViewModelTests {
         #expect(snapshot?.startPoint == .firstCompletion)
         #expect(snapshot?.startDate == nil)
         #expect(snapshot?.nextDueDate == nil)
+        #expect(snapshot?.canComplete == true)
+    }
+
+    @Test("cycle snapshot allows completion before due date")
+    func cycleSnapshotCanCompleteBeforeDue() {
+        let vm = LifeViewModel()
+        let calendar = Calendar.current
+        let createdAt = calendar.startOfDay(for: Date(timeIntervalSince1970: 1_704_067_200)) // 2024-01-01
+        let referenceDate = calendar.date(byAdding: .day, value: 3, to: createdAt)!
+        let expectedDue = calendar.date(byAdding: .day, value: 7, to: createdAt)!
+
+        let habit = HabitDefinition(
+            name: "Laundry",
+            iconCategory: .chores,
+            habitType: .check,
+            goalValue: 1,
+            goalUnit: nil,
+            frequency: .interval(days: 7)
+        )
+        habit.createdAt = createdAt
+        habit.recurringStartConfiguredAt = createdAt
+
+        let snapshot = vm.cycleSnapshot(for: habit, referenceDate: referenceDate)
+        #expect(snapshot != nil)
+        #expect(snapshot?.nextDueDate == expectedDue)
+        #expect(snapshot?.canComplete == true)
+        #expect(snapshot?.isDue == false)
+    }
+
+    @Test("cycle snapshot blocks repeat completion before next due after completion")
+    func cycleSnapshotBlocksRepeatCompletionBeforeDue() {
+        let vm = LifeViewModel()
+        let calendar = Calendar.current
+        let createdAt = calendar.startOfDay(for: Date(timeIntervalSince1970: 1_704_067_200)) // 2024-01-01
+        let completedAt = calendar.date(byAdding: .day, value: 2, to: createdAt)!
+        let referenceDate = calendar.date(byAdding: .day, value: 3, to: createdAt)!
+        let expectedDue = calendar.date(byAdding: .day, value: 9, to: createdAt)!
+
+        let habit = HabitDefinition(
+            name: "Filter",
+            iconCategory: .chores,
+            habitType: .check,
+            goalValue: 1,
+            goalUnit: nil,
+            frequency: .interval(days: 7)
+        )
+        habit.createdAt = createdAt
+        habit.recurringStartConfiguredAt = createdAt
+
+        let completion = vm.createCycleActionLog(for: habit, action: .complete, date: completedAt)
+        #expect(completion != nil)
+        vm.didFinishSaving()
+
+        completion?.habitDefinition = habit
+        habit.logs = [completion].compactMap { $0 }
+
+        let snapshot = vm.cycleSnapshot(for: habit, referenceDate: referenceDate)
+        #expect(snapshot != nil)
+        #expect(snapshot?.nextDueDate == expectedDue)
+        #expect(snapshot?.canComplete == false)
+        #expect(snapshot?.isDue == false)
+        #expect(snapshot?.lastAction == .complete)
     }
 
     @Test("applyUpdate changes recurring start point forward only")

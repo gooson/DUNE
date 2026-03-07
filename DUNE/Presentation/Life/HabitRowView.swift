@@ -12,14 +12,18 @@ struct HabitRowView: View {
     var body: some View {
         Group {
             if isWholeRowToggle {
-                Button {
-                    onToggle()
-                } label: {
-                    cardContent
-                }
-                .buttonStyle(.plain)
-                .disabled(isToggleDisabled)
-                .accessibilityIdentifier("life-habit-toggle")
+                cardContent
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        guard !isToggleDisabled else { return }
+                        onToggle()
+                    }
+                    .accessibilityAddTraits(.isButton)
+                    .accessibilityAction {
+                        guard !isToggleDisabled else { return }
+                        onToggle()
+                    }
+                    .accessibilityIdentifier("life-habit-toggle")
             } else {
                 cardContent
             }
@@ -32,7 +36,7 @@ struct HabitRowView: View {
 
     private var isToggleDisabled: Bool {
         if progress.isCycleBased {
-            return !progress.isDue
+            return !progress.canCompleteCycle
         }
         return progress.isAutoCompleted
     }

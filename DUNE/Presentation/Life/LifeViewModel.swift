@@ -67,6 +67,7 @@ final class LifeViewModel {
         let startDate: Date?
         let startPoint: HabitRecurringStartPoint
         let isScheduled: Bool
+        let canComplete: Bool
         let isDue: Bool
         let isOverdue: Bool
         let lastAction: HabitCycleAction?
@@ -279,6 +280,7 @@ final class LifeViewModel {
                     isAutoLinked: habit.isAutoLinked,
                     isAutoCompleted: false,
                     isCycleBased: true,
+                    canCompleteCycle: cycleSnapshot.canComplete,
                     nextDueDate: cycleSnapshot.nextDueDate,
                     cycleStartDate: cycleSnapshot.startDate,
                     cycleStartPoint: cycleSnapshot.startPoint,
@@ -330,6 +332,7 @@ final class LifeViewModel {
                 isAutoLinked: habit.isAutoLinked,
                 isAutoCompleted: isAutoCompleted,
                 isCycleBased: false,
+                canCompleteCycle: false,
                 nextDueDate: nil,
                 cycleStartDate: nil,
                 cycleStartPoint: nil,
@@ -475,6 +478,7 @@ final class LifeViewModel {
                 startDate: nil,
                 startPoint: startPoint,
                 isScheduled: true,
+                canComplete: startPoint == .firstCompletion,
                 isDue: false,
                 isOverdue: false,
                 lastAction: nil,
@@ -490,6 +494,7 @@ final class LifeViewModel {
                 startDate: startDate,
                 startPoint: startPoint,
                 isScheduled: true,
+                canComplete: false,
                 isDue: false,
                 isOverdue: false,
                 lastAction: nil,
@@ -535,12 +540,14 @@ final class LifeViewModel {
 
         let isDue = today >= dueDate
         let isOverdue = today > dueDate
+        let canComplete = isDue || lastAction == nil
 
         return HabitCycleSnapshot(
             nextDueDate: dueDate,
             startDate: startDate,
             startPoint: startPoint,
             isScheduled: false,
+            canComplete: canComplete,
             isDue: isDue,
             isOverdue: isOverdue,
             lastAction: lastAction,
