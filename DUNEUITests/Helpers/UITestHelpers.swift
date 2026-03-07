@@ -115,6 +115,7 @@ enum AXID {
     static let detailChartSurface = "detail-chart-surface"
     static let detailChartVisibleRange = "detail-chart-visible-range"
     static let chartSelectionOverlay = "chart-selection-overlay"
+    static let chartSelectionProbe = "chart-selection-probe"
     static let weeklyStatsChartDailyVolume = "weeklystats-chart-daily-volume"
     static let weeklyStatsPeriodPicker = "weeklystats-period-picker"
     static let trainingReadinessChartTrend = "trainingreadiness-chart-trend"

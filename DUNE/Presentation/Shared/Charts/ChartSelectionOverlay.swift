@@ -66,6 +66,10 @@ extension View {
     func chartSurface(cornerRadius: CGFloat, topBloomHeight: CGFloat? = nil) -> some View {
         modifier(ChartSurfaceModifier(cornerRadius: cornerRadius, topBloomHeight: topBloomHeight))
     }
+
+    func chartSelectionUITestProbe(_ label: String) -> some View {
+        modifier(ChartSelectionUITestProbeModifier(label: label))
+    }
 }
 
 private struct ChartSurfaceModifier: ViewModifier {
@@ -118,5 +122,25 @@ private struct ChartSurfaceModifier: ViewModifier {
                             .strokeBorder(theme.accentColor.opacity(borderOpacity), lineWidth: 1)
                     }
             }
+    }
+}
+
+private struct ChartSelectionUITestProbeModifier: ViewModifier {
+    let label: String
+
+    private static let isEnabled = ProcessInfo.processInfo.arguments.contains("--uitesting")
+
+    func body(content: Content) -> some View {
+        content.overlay(alignment: .bottomTrailing) {
+            if Self.isEnabled {
+                Rectangle()
+                    .fill(Color.black.opacity(0.001))
+                    .frame(width: 12, height: 12)
+                    .allowsHitTesting(false)
+                    .accessibilityElement()
+                    .accessibilityIdentifier("chart-selection-probe")
+                    .accessibilityLabel(label)
+            }
+        }
     }
 }

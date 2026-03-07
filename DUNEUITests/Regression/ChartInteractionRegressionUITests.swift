@@ -1,31 +1,41 @@
 import XCTest
 
-/// Regression coverage for chart long-press vs visible-range/scroll interaction.
+/// Regression coverage for chart long-press vs period/selection interaction.
 @MainActor
 final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
-    override var initialTabSelectionArgument: String? { "wellness" }
+    @MainActor
+    override func setUpWithError() throws {
+        try super.setUpWithError()
+        navigateToActivity()
+    }
 
-    func testWeightDetailChartLongPressKeepsVisibleRange() throws {
-        let weightCard = app.descendants(matching: .any)[AXID.wellnessCardWeight].firstMatch
-        guard weightCard.waitForExistence(timeout: 15) else {
-            throw XCTSkip("Mock seed does not currently expose a stable weight detail chart path for gesture UI coverage.")
-        }
-        weightCard.tap()
+    func testWeeklyStatsLongPressKeepsPeriodAndActivatesSelection() throws {
+        let readinessHero = waitForElement(AXID.activityHeroReadiness, timeout: 15)
+        XCTAssertTrue(readinessHero.exists, "Activity tab should be visible before opening weekly stats")
+        let weeklyStatsSection = waitForElement(AXID.activitySectionWeeklyStats, timeout: 15)
+        weeklyStatsSection.tap()
 
-        let chart = waitForElement(AXID.detailChartSurface, timeout: 15)
-        let visibleRange = waitForElement(AXID.detailChartVisibleRange, timeout: 10)
-        let initialRange = visibleRange.label
+        let periodPicker = waitForElement(AXID.weeklyStatsPeriodPicker, timeout: 15)
+        let initialPeriod = periodPicker.value as? String
+
+        let chart = waitForElement(AXID.weeklyStatsChartDailyVolume, timeout: 15)
+        let selectionProbe = waitForElement(AXID.chartSelectionProbe, timeout: 10)
+        XCTAssertEqual(selectionProbe.label, "none", "Selection probe should be empty before the gesture")
 
         let start = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.45, dy: 0.55))
-        let end = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.62, dy: 0.55))
+        let end = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.58, dy: 0.55))
         start.press(forDuration: 0.45, thenDragTo: end)
 
-        let currentRange = visibleRange.label
         XCTAssertEqual(
-            currentRange,
-            initialRange,
-            "Long press selection should not change the chart visible range"
+            periodPicker.value as? String,
+            initialPeriod,
+            "Long press selection should not change the weekly stats period"
         )
-        XCTAssertTrue(chart.exists, "Detail chart should remain visible after long press selection")
+        XCTAssertNotEqual(
+            selectionProbe.label,
+            "none",
+            "Long press selection should update the chart selection probe"
+        )
+        XCTAssertTrue(chart.exists, "Weekly stats chart should remain visible after long press selection")
     }
 }

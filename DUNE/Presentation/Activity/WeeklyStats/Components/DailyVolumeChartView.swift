@@ -26,6 +26,7 @@ struct DailyVolumeChartView: View {
     @State private var selectedMetric: Metric = .duration
     @State private var selectedDate: Date?
     @State private var selectionGestureState = ChartSelectionGestureState()
+    @State private var lastSelectionProbeLabel = "none"
 
     private enum Gradients {
         static let bar = LinearGradient(
@@ -131,6 +132,11 @@ struct DailyVolumeChartView: View {
             }
         }
         .sensoryFeedback(.selection, trigger: selectedPoint?.date)
+        .onChange(of: selectedPoint?.date) { _, newValue in
+            guard let newValue else { return }
+            lastSelectionProbeLabel = newValue.formatted(date: .abbreviated, time: .omitted)
+        }
+        .chartSelectionUITestProbe(lastSelectionProbeLabel)
     }
 
     // MARK: - Helpers
