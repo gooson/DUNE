@@ -420,6 +420,7 @@ struct ActivityView: View {
                 onSetExerciseExcluded: { excluded, exerciseID in
                     viewModel.setExerciseExcludedFromRecommendation(excluded, exerciseID: exerciseID)
                 },
+                templateRecommendations: viewModel.templateRecommendations,
                 onBrowseAll: { showingExercisePicker = true }
             )
         }

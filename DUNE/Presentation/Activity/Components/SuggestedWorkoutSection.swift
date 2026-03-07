@@ -16,6 +16,7 @@ struct SuggestedWorkoutSection: View {
     let onSetEquipmentAvailability: (Equipment, Bool) -> Void
     let isExerciseExcluded: (String) -> Bool
     let onSetExerciseExcluded: (Bool, String) -> Void
+    let templateRecommendations: [WorkoutTemplateRecommendation]
     let onBrowseAll: () -> Void
 
     @Environment(\.appTheme) private var theme
@@ -51,6 +52,10 @@ struct SuggestedWorkoutSection: View {
                     }
                 } else {
                     noSuggestionContent
+                }
+
+                if !templateRecommendations.isEmpty {
+                    recommendationStrip
                 }
 
                 if !templates.isEmpty {
@@ -340,6 +345,68 @@ struct SuggestedWorkoutSection: View {
             )
             .font(.caption)
             .foregroundStyle(DS.Color.textSecondary)
+        }
+    }
+
+    // MARK: - Recommendations
+
+    private var recommendationStrip: some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            sectionHeader("Suggested Routines")
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: DS.Spacing.sm) {
+                    ForEach(templateRecommendations) { recommendation in
+                        recommendationCard(recommendation)
+                    }
+                }
+                .padding(.vertical, 1)
+            }
+        }
+    }
+
+    private func recommendationCard(_ recommendation: WorkoutTemplateRecommendation) -> some View {
+        InlineCard {
+            VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                HStack(spacing: DS.Spacing.xs) {
+                    Image(systemName: "sparkles")
+                        .foregroundStyle(DS.Color.activity)
+                    Text(recommendation.title)
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(theme.sandColor)
+                        .lineLimit(1)
+                    Spacer(minLength: 0)
+                }
+
+                HStack(spacing: DS.Spacing.sm) {
+                    Label(
+                        String.localizedStringWithFormat(
+                            String(localized: "%lldx"),
+                            Int64(recommendation.frequency)
+                        ),
+                        systemImage: "repeat"
+                    )
+                    .font(.caption)
+                    .foregroundStyle(DS.Color.textSecondary)
+
+                    Label(
+                        String.localizedStringWithFormat(
+                            String(localized: "~%lldmin"),
+                            Int64(recommendation.averageDurationMinutes)
+                        ),
+                        systemImage: "clock"
+                    )
+                    .font(.caption)
+                    .foregroundStyle(DS.Color.textSecondary)
+                }
+
+                Text(recommendation.sequenceLabels.joined(separator: " → "))
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+                    .lineLimit(2)
+                    .multilineTextAlignment(.leading)
+            }
+            .frame(width: 220, alignment: .leading)
         }
     }
 
