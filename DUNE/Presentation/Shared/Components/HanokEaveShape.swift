@@ -1,29 +1,28 @@
 import SwiftUI
 
-/// Korean traditional eave (처마) Shape for the Hanok theme.
+/// Dalhangari (달항아리) moon jar asymmetric wave Shape for the Hanok theme.
 ///
-/// Generates a giwa (기와) rooftop profile using:
-/// - Base sine wave for primary eave contour
-/// - 2nd harmonic for the characteristic eave-tip uplift (추녀)
-/// - Optional tile ripple for giwa (기와) surface texture
-/// - Pre-computed edge noise for organic clay-tile variation
+/// Generates an organic, imperfect curve inspired by the asymmetric beauty
+/// of Korean moon jars using:
+/// - Base sine wave for primary contour
+/// - Asymmetric modulation for left/right amplitude difference
+/// - 3rd harmonic for organic imperfection
+/// - Wide swell for the jar's broad body feel
 ///
 /// Uses shared `WaveSamples` for point pre-computation.
-struct HanokEaveShape: Shape {
-    /// Eave height as a fraction of the rect height (0…1).
+struct DalhangariWaveShape: Shape {
+    /// Wave height as a fraction of the rect height (0…1).
     let amplitude: CGFloat
-    /// Number of full eave periods across the rect width.
+    /// Number of full wave periods across the rect width.
     let frequency: CGFloat
     /// Phase offset in radians (0…2π). Animatable for drift effect.
     var phase: CGFloat
-    /// Vertical center of the eave as a fraction of the rect height (0…1).
+    /// Vertical center of the wave as a fraction of the rect height (0…1).
     let verticalOffset: CGFloat
-    /// Eave-tip uplift intensity (0 = flat, 0.4 = pronounced Korean eave curve).
-    let uplift: CGFloat
-    /// Tile ripple intensity (0 = smooth, 1 = visible giwa texture).
-    let tileRipple: CGFloat
-    /// Tile ripple frequency multiplier.
-    let tileFrequency: CGFloat
+    /// Asymmetry intensity (0 = symmetric, 0.5 = strongly asymmetric).
+    let asymmetry: CGFloat
+    /// Organic 3rd harmonic blend (0 = pure sine, 0.3 = visible imperfection).
+    let organicBlend: CGFloat
 
     var animatableData: CGFloat {
         get { phase }
@@ -32,29 +31,20 @@ struct HanokEaveShape: Shape {
 
     private let samples: WaveSamples
 
-    /// Deterministic pseudo-random edge noise for organic giwa edge.
-    /// Gentler than desert/forest — clay tiles have smoother edges.
-    private static let edgeNoise: [CGFloat] = (0...WaveSamples.sampleCount).map { i in
-        let d = Double(i)
-        return CGFloat(sin(d * 4.3 + 1.7) * sin(d * 9.1 + 2.9)) * 0.6
-    }
-
     init(
         amplitude: CGFloat = 0.05,
         frequency: CGFloat = 1.5,
         phase: CGFloat = 0,
         verticalOffset: CGFloat = 0.5,
-        uplift: CGFloat = 0.2,
-        tileRipple: CGFloat = 0,
-        tileFrequency: CGFloat = 8.0
+        asymmetry: CGFloat = 0.3,
+        organicBlend: CGFloat = 0.15
     ) {
         self.amplitude = amplitude
         self.frequency = frequency
         self.phase = phase
         self.verticalOffset = verticalOffset
-        self.uplift = Swift.min(uplift, 0.4)
-        self.tileRipple = Swift.min(tileRipple, 0.15)
-        self.tileFrequency = tileFrequency
+        self.asymmetry = Swift.min(asymmetry, 0.5)
+        self.organicBlend = Swift.min(organicBlend, 0.3)
         self.samples = WaveSamples(frequency: frequency)
     }
 
@@ -69,23 +59,19 @@ struct HanokEaveShape: Shape {
             let x = pt.x * rect.width
             let angle = pt.angle + phase
 
-            // Base eave contour
+            // Base sine contour
             var y = sin(angle)
 
-            // 2nd harmonic for eave-tip uplift (추녀 곡선)
-            // Negative contribution lifts the curve upward at periodic intervals
-            y -= uplift * sin(2 * angle + .pi / 3)
+            // Asymmetric modulation — left/right amplitude difference
+            y *= (1 + asymmetry * sin(angle / 3))
 
-            // Broad swell for rounded roof mass
-            y += 0.15 * sin(0.5 * angle + 0.6)
+            // Organic 3rd harmonic — imperfect, handmade curve
+            y += organicBlend * sin(3 * angle + phase)
 
-            // High-frequency tile ripple on surface (기와 골)
-            if tileRipple > 0 {
-                let tileAngle = pt.x * tileFrequency * frequency * 2 * .pi
-                y += tileRipple * 0.1 * sin(tileAngle + phase * 1.2)
-            }
+            // Wide swell — moon jar's broad body
+            y += 0.15 * sin(0.5 * angle + phase / 3)
 
-            let yPos = centerY + amp * y + Self.edgeNoise[i] * 1.5
+            let yPos = centerY + amp * y
 
             if i == 0 {
                 path.move(to: CGPoint(x: x, y: yPos))
