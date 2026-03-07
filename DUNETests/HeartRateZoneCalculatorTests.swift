@@ -78,8 +78,8 @@ struct HeartRateZoneCalculatorTests {
 
     // MARK: - Gap Handling
 
-    @Test("Intervals >= 300s are skipped")
-    func largeGapSkipped() {
+    @Test("Interval of exactly 300s is skipped")
+    func gapExactly300Skipped() {
         let now = Date()
         let samples = [
             HeartRateSample(bpm: 140, date: now),                          // zone3
@@ -90,6 +90,21 @@ struct HeartRateZoneCalculatorTests {
         let zone3 = zones.first { $0.zone == .zone3 }
         // Only the second interval (60s) counts
         #expect(zone3?.durationSeconds == 60)
+        #expect(zone3?.percentage == 1.0)
+    }
+
+    @Test("Interval of 299s is included")
+    func gapJustBelow300Included() {
+        let now = Date()
+        let samples = [
+            HeartRateSample(bpm: 140, date: now),                          // zone3, 299s
+            HeartRateSample(bpm: 140, date: now.addingTimeInterval(299)),   // gap=299, included
+            HeartRateSample(bpm: 140, date: now.addingTimeInterval(359))    // zone3 for 60s
+        ]
+        let zones = HeartRateZoneCalculator.computeZones(samples: samples, maxHR: 190)
+        let zone3 = zones.first { $0.zone == .zone3 }
+        // Both intervals count: 299 + 60 = 359
+        #expect(zone3?.durationSeconds == 359)
         #expect(zone3?.percentage == 1.0)
     }
 

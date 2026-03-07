@@ -104,13 +104,23 @@ struct WeatherSnapshotThresholdTests {
 
     @Test("isStale is false when recently fetched")
     func notStale() {
-        let snapshot = makeSnapshot(fetchedAt: Date())
+        let now = Date()
+        let snapshot = makeSnapshot(fetchedAt: now)
+        #expect(snapshot.isStale == false)
+    }
+
+    @Test("isStale boundary: 59 minutes ago is not stale")
+    func notStaleJustBeforeThreshold() {
+        let now = Date()
+        let fiftyNineMinAgo = now.addingTimeInterval(-3540)
+        let snapshot = makeSnapshot(fetchedAt: fiftyNineMinAgo)
         #expect(snapshot.isStale == false)
     }
 
     @Test("isStale is true when fetched over 1 hour ago")
     func staleAfterOneHour() {
-        let twoHoursAgo = Date().addingTimeInterval(-7200)
+        let now = Date()
+        let twoHoursAgo = now.addingTimeInterval(-7200)
         let snapshot = makeSnapshot(fetchedAt: twoHoursAgo)
         #expect(snapshot.isStale == true)
     }

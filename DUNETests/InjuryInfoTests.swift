@@ -5,32 +5,40 @@ import Testing
 @Suite("InjuryInfo")
 struct InjuryInfoTests {
 
+    // MARK: - Helpers
+
+    private func makeInjury(
+        bodyPart: BodyPart = .knee,
+        bodySide: BodySide? = .left,
+        severity: InjurySeverity = .moderate,
+        startDate: Date = Date(),
+        endDate: Date? = nil,
+        memo: String = ""
+    ) -> InjuryInfo {
+        InjuryInfo(
+            id: UUID(),
+            bodyPart: bodyPart,
+            bodySide: bodySide,
+            severity: severity,
+            startDate: startDate,
+            endDate: endDate,
+            memo: memo
+        )
+    }
+
     // MARK: - isActive
 
     @Test("isActive is true when endDate is nil")
     func activeWhenNoEndDate() {
-        let injury = InjuryInfo(
-            id: UUID(),
-            bodyPart: .knee,
-            bodySide: .left,
-            severity: .moderate,
-            startDate: Date(),
-            endDate: nil,
-            memo: ""
-        )
+        let injury = makeInjury(endDate: nil)
         #expect(injury.isActive == true)
     }
 
     @Test("isActive is false when endDate is set")
     func inactiveWhenEndDateSet() {
-        let injury = InjuryInfo(
-            id: UUID(),
-            bodyPart: .knee,
-            bodySide: .left,
-            severity: .moderate,
+        let injury = makeInjury(
             startDate: Date().addingTimeInterval(-86400),
-            endDate: Date(),
-            memo: ""
+            endDate: Date()
         )
         #expect(injury.isActive == false)
     }
@@ -40,14 +48,12 @@ struct InjuryInfoTests {
     @Test("durationDays is 0 for same-day injury")
     func sameDayDuration() {
         let today = Calendar.current.startOfDay(for: Date())
-        let injury = InjuryInfo(
-            id: UUID(),
+        let injury = makeInjury(
             bodyPart: .shoulder,
             bodySide: nil,
             severity: .minor,
             startDate: today,
-            endDate: today,
-            memo: ""
+            endDate: today
         )
         #expect(injury.durationDays == 0)
     }
@@ -56,46 +62,36 @@ struct InjuryInfoTests {
     func multiDayDuration() {
         let start = Calendar.current.startOfDay(for: Date())
         let end = Calendar.current.date(byAdding: .day, value: 5, to: start)!
-        let injury = InjuryInfo(
-            id: UUID(),
+        let injury = makeInjury(
             bodyPart: .lowerBack,
             bodySide: nil,
             severity: .severe,
             startDate: start,
-            endDate: end,
-            memo: ""
+            endDate: end
         )
         #expect(injury.durationDays == 5)
     }
 
     @Test("durationDays for active injury counts days since start")
     func activeInjuryDuration() {
-        let threeDaysAgo = Calendar.current.date(byAdding: .day, value: -3, to: Calendar.current.startOfDay(for: Date()))!
-        let injury = InjuryInfo(
-            id: UUID(),
+        let threeDaysAgo = Calendar.current.date(
+            byAdding: .day, value: -3,
+            to: Calendar.current.startOfDay(for: Date())
+        )!
+        let injury = makeInjury(
             bodyPart: .ankle,
             bodySide: .right,
-            severity: .moderate,
             startDate: threeDaysAgo,
-            endDate: nil,
-            memo: ""
+            endDate: nil
         )
-        #expect(injury.durationDays >= 3)
+        #expect(injury.durationDays == 3)
     }
 
     // MARK: - affectedMuscleGroups
 
     @Test("affectedMuscleGroups delegates to bodyPart")
     func affectedMuscleGroupsDelegation() {
-        let injury = InjuryInfo(
-            id: UUID(),
-            bodyPart: .chest,
-            bodySide: nil,
-            severity: .minor,
-            startDate: Date(),
-            endDate: nil,
-            memo: ""
-        )
+        let injury = makeInjury(bodyPart: .chest, bodySide: nil, severity: .minor)
         #expect(injury.affectedMuscleGroups == injury.bodyPart.affectedMuscleGroups)
     }
 }

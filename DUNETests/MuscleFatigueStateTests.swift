@@ -134,19 +134,17 @@ struct MuscleFatigueStateTests {
     }
 
     @Test("nextReadyDate returns future date when recovery pending")
-    func nextReadyDateFuture() {
+    func nextReadyDateFuture() throws {
         let oneHourAgo = Date().addingTimeInterval(-3600)
         let state = MuscleFatigueState(
-            muscle: .chest, // recoveryHours > 1
+            muscle: .chest, // chest recoveryHours is ~48h, well above 1h
             lastTrainedDate: oneHourAgo,
             hoursSinceLastTrained: 1,
             weeklyVolume: 10,
             recoveryPercent: 0.1,
             compoundScore: nil
         )
-        if let readyDate = state.nextReadyDate {
-            #expect(readyDate > Date())
-        }
-        // If muscle.recoveryHours is large enough, nextReadyDate should exist
+        let readyDate = try #require(state.nextReadyDate)
+        #expect(readyDate > Date())
     }
 }

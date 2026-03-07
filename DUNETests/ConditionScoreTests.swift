@@ -4,6 +4,31 @@ import Testing
 
 @Suite("ConditionScore Model")
 struct ConditionScoreTests {
+
+    // MARK: - Helpers
+
+    private static let fixedDate = Date(timeIntervalSinceReferenceDate: 700_000_000)
+
+    private func makeDetail(
+        todayHRV: Double = 50,
+        baselineHRV: Double = 45,
+        rhrPenalty: Double = 0
+    ) -> ConditionScoreDetail {
+        ConditionScoreDetail(
+            todayHRV: todayHRV,
+            baselineHRV: baselineHRV,
+            zScore: 0.5,
+            stdDev: 0.2,
+            effectiveStdDev: 0.2,
+            daysInBaseline: 14,
+            todayDate: Self.fixedDate,
+            rawScore: 75,
+            rhrPenalty: rhrPenalty
+        )
+    }
+
+    // MARK: - Score Clamping
+
     @Test("Score is clamped between 0 and 100", arguments: [-10, 0, 50, 100, 150])
     func scoreClamping(input: Int) {
         let score = ConditionScore(score: input)
@@ -24,6 +49,8 @@ struct ConditionScoreTests {
         #expect(ConditionScore(score: 0).status == .warning)
     }
 
+    // MARK: - BaselineStatus
+
     @Test("BaselineStatus readiness")
     func baselineStatus() {
         let notReady = BaselineStatus(daysCollected: 3, daysRequired: 7)
@@ -42,24 +69,6 @@ struct ConditionScoreTests {
     }
 
     // MARK: - narrativeMessage
-
-    private func makeDetail(
-        todayHRV: Double = 50,
-        baselineHRV: Double = 45,
-        rhrPenalty: Double = 0
-    ) -> ConditionScoreDetail {
-        ConditionScoreDetail(
-            todayHRV: todayHRV,
-            baselineHRV: baselineHRV,
-            zScore: 0.5,
-            stdDev: 0.2,
-            effectiveStdDev: 0.2,
-            daysInBaseline: 14,
-            todayDate: Date(),
-            rawScore: 75,
-            rhrPenalty: rhrPenalty
-        )
-    }
 
     @Test("narrativeMessage falls back to guideMessage when detail is nil")
     func narrativeNoDetail() {
@@ -94,18 +103,22 @@ struct ConditionScoreTests {
         #expect(below.narrativeMessage != above.narrativeMessage)
     }
 
-    @Test("narrativeMessage: tired has non-empty message")
+    @Test("narrativeMessage: tired differs from other statuses")
     func narrativeTired() {
-        let score = ConditionScore(score: 30, detail: makeDetail())
-        #expect(!score.narrativeMessage.isEmpty)
-        #expect(score.narrativeMessage != score.status.guideMessage)
+        let tired = ConditionScore(score: 30, detail: makeDetail())
+        let excellent = ConditionScore(score: 90, detail: makeDetail())
+        #expect(!tired.narrativeMessage.isEmpty)
+        #expect(tired.narrativeMessage != tired.status.guideMessage)
+        #expect(tired.narrativeMessage != excellent.narrativeMessage)
     }
 
-    @Test("narrativeMessage: warning has non-empty message")
+    @Test("narrativeMessage: warning differs from other statuses")
     func narrativeWarning() {
-        let score = ConditionScore(score: 10, detail: makeDetail())
-        #expect(!score.narrativeMessage.isEmpty)
-        #expect(score.narrativeMessage != score.status.guideMessage)
+        let warning = ConditionScore(score: 10, detail: makeDetail())
+        let tired = ConditionScore(score: 30, detail: makeDetail())
+        #expect(!warning.narrativeMessage.isEmpty)
+        #expect(warning.narrativeMessage != warning.status.guideMessage)
+        #expect(warning.narrativeMessage != tired.narrativeMessage)
     }
 
     @Test("narrativeMessage: different statuses produce different messages")

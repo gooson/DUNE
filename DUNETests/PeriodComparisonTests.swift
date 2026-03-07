@@ -7,6 +7,8 @@ struct PeriodComparisonTests {
 
     // MARK: - Helpers
 
+    private static let fixedDate = Date(timeIntervalSinceReferenceDate: 700_000_000)
+
     private func makeSummary(
         duration: TimeInterval = 3600,
         calories: Double = 500,
@@ -15,8 +17,8 @@ struct PeriodComparisonTests {
     ) -> VolumePeriodSummary {
         VolumePeriodSummary(
             period: .week,
-            startDate: Date(),
-            endDate: Date(),
+            startDate: Self.fixedDate,
+            endDate: Self.fixedDate,
             totalDuration: duration,
             totalCalories: calories,
             totalSessions: sessions,
