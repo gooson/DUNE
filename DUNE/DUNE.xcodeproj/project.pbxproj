@@ -810,6 +810,7 @@
 		F70100140490551F52FD18B2 /* DashboardViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACB04D8D96C72679E7664716 /* DashboardViewModelTests.swift */; };
 		F72E09D26852BE8A73315989 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05A0D5258A848BDA2E54050D /* WidgetKit.framework */; };
 		F7A8A082D822B3391E7231D4 /* HeartRateZoneChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 685CF5113B20E70FDED4CA74 /* HeartRateZoneChartView.swift */; };
+		F85B4DEA861F0849991E4038 /* ChartInteractionRegressionUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8211E9F9F2DE92D2281920E2 /* ChartInteractionRegressionUITests.swift */; };
 		F867748EE551F528B0FE3708 /* InjuryInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B095A1810EBAAE41473515C /* InjuryInfo.swift */; };
 		F943094564F4745116347826 /* Chart3DContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2205826417DC48C24878F37 /* Chart3DContainerView.swift */; };
 		F95ADD3221D8C40A865D979E /* FatigueInfoSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A715BE6750B6CD2CC873CD6E /* FatigueInfoSheet.swift */; };
@@ -1274,6 +1275,7 @@
 		817CA990C629A95CC2FDA761 /* WatchLibrarySyncRequestPolicyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchLibrarySyncRequestPolicyTests.swift; sourceTree = "<group>"; };
 		81DC50D026AAB2A8B7A9DD4D /* FatigueLegendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FatigueLegendView.swift; sourceTree = "<group>"; };
 		8200C20962601FEA8887E374 /* DUNEWidget.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = DUNEWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		8211E9F9F2DE92D2281920E2 /* ChartInteractionRegressionUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartInteractionRegressionUITests.swift; sourceTree = "<group>"; };
 		8230BE0D49BE057D15850FF6 /* BackgroundNotificationEvaluatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundNotificationEvaluatorTests.swift; sourceTree = "<group>"; };
 		8257DA6FE89D18ED202170D3 /* HealthDataAggregatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthDataAggregatorTests.swift; sourceTree = "<group>"; };
 		8272A895980A27A3A1634EC4 /* NotificationInboxStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationInboxStore.swift; sourceTree = "<group>"; };
@@ -1983,6 +1985,14 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		3530371A9F6491C90A47E610 /* Regression */ = {
+			isa = PBXGroup;
+			children = (
+				8211E9F9F2DE92D2281920E2 /* ChartInteractionRegressionUITests.swift */,
+			);
+			path = Regression;
+			sourceTree = "<group>";
+		};
 		36698F81967C58D0464399E5 /* DUNEVision */ = {
 			isa = PBXGroup;
 			children = (
@@ -2364,6 +2374,7 @@
 				79DFC0A4BAEA5A9BB2EDFE66 /* Helpers */,
 				04606796B5E13E681CF277B4 /* Launch */,
 				5ABB1F98DE05CBAFE8D1991C /* Manual */,
+				3530371A9F6491C90A47E610 /* Regression */,
 				FDD203ED43D376D9A5820BBC /* Smoke */,
 				C81273BD23227C3341E4B6DC /* Visual */,
 				52E60731B8382113F60DBEBA /* UITests-CI.xctestplan */,
@@ -4290,6 +4301,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				32304909E7D2D914B326CA33 /* ActivitySmokeTests.swift in Sources */,
+				F85B4DEA861F0849991E4038 /* ChartInteractionRegressionUITests.swift in Sources */,
 				5D423AC0730146F4887C4201 /* DashboardSmokeTests.swift in Sources */,
 				7669E80C3515AFE2478A1EB9 /* HealthKitPermissionUITests.swift in Sources */,
 				1E7E5F36C42E4AF5A79F38A3 /* LaunchScreenTests.swift in Sources */,

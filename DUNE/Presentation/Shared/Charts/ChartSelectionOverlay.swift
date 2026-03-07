@@ -22,6 +22,7 @@ struct ChartSelectionOverlay: View {
         .padding(.vertical, DS.Spacing.xs)
         .chartSurface(cornerRadius: DS.Radius.sm, topBloomHeight: 18)
         .padding(.horizontal, DS.Spacing.xs)
+        .accessibilityIdentifier("chart-selection-overlay")
     }
 }
 

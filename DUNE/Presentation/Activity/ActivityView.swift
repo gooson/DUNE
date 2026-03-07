@@ -391,6 +391,7 @@ struct ActivityView: View {
                 WeeklyStatsGrid(stats: viewModel.weeklyStats)
             }
             .buttonStyle(.plain)
+            .accessibilityIdentifier("activity-section-weeklystats")
         }
     }
 

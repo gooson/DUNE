@@ -25,7 +25,6 @@ enum AXID {
     static let activityToolbarAdd = "activity-toolbar-add"
     static let activityQuickStartSearch = "activity-quickstart-search"
     static let waveRefreshIndicator = "wave-refresh-indicator"
-    // Planned — identifiers not yet applied to views
     static let activitySectionMuscleMap = "activity-section-musclemap"
     static let activitySectionWeeklyStats = "activity-section-weeklystats"
     static let activitySectionVolume = "activity-section-volume"
@@ -37,6 +36,7 @@ enum AXID {
     // MARK: - Wellness Tab (active: hero, toolbar-add, add-menu items)
     static let wellnessHeroScore = "wellness-hero-score"
     static let wellnessToolbarAdd = "wellness-toolbar-add"
+    static let wellnessCardWeight = "wellness-card-weight"
     static let wellnessMenuBodyRecord = "wellness-menu-body-record"
     static let wellnessMenuInjury = "wellness-menu-injury"
     // Planned — identifiers not yet applied to views
@@ -110,6 +110,14 @@ enum AXID {
     static let pickerCancelButton = "picker-cancel-button"
     static let pickerSectionRecent = "picker-section-recent"
     static let pickerSectionPopular = "picker-section-popular"
+
+    // MARK: - Chart Detail
+    static let detailChartSurface = "detail-chart-surface"
+    static let detailChartVisibleRange = "detail-chart-visible-range"
+    static let chartSelectionOverlay = "chart-selection-overlay"
+    static let weeklyStatsChartDailyVolume = "weeklystats-chart-daily-volume"
+    static let weeklyStatsPeriodPicker = "weeklystats-period-picker"
+    static let trainingReadinessChartTrend = "trainingreadiness-chart-trend"
 
     // MARK: - Sidebar (iPad)
     static let sidebarNavList = "sidebar-nav-list"
@@ -215,6 +223,12 @@ extension XCUIApplication {
     /// Navigate to a tab by its visible title (iPhone)
     func navigateToTab(_ tabTitle: String) {
         if let tabID = tabAccessibilityID(for: tabTitle) {
+            let identifiedTab = descendants(matching: .any)[tabID].firstMatch
+            if identifiedTab.waitForExistence(timeout: 3) {
+                identifiedTab.tap()
+                return
+            }
+
             let tabBarButton = tabBars.buttons[tabID].firstMatch
             if tabBarButton.waitForExistence(timeout: 3) {
                 tabBarButton.tap()
@@ -228,11 +242,18 @@ extension XCUIApplication {
             }
         }
 
+        let titledTab = tabBars.buttons[tabTitle].firstMatch
+        if titledTab.waitForExistence(timeout: 3) {
+            titledTab.tap()
+            return
+        }
+
         if let iconID = tabIconID(for: tabTitle) {
             let iconPredicate = NSPredicate(format: "identifier == %@", iconID)
             let iconTab = buttons.matching(iconPredicate).firstMatch
             if iconTab.waitForExistence(timeout: 3) {
                 iconTab.tap()
+                return
             }
         }
     }

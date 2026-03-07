@@ -11,6 +11,7 @@ struct TrainingLoadChartView: View {
     @State private var selectedDate: Date?
     @State private var cachedMovingAverage: [ChartDataPoint] = []
     @State private var cachedWeekSummary: String?
+    @State private var selectionGestureState = ChartSelectionGestureState()
 
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
@@ -104,19 +105,36 @@ struct TrainingLoadChartView: View {
             }
         }
         .chartYScale(domain: 0...(maxLoad * 1.15))
-        .chartXSelection(value: $selectedDate)
-        .sensoryFeedback(.selection, trigger: selectedDate)
-        .overlay(alignment: .top) {
-            if let point = selectedPoint {
-                ChartSelectionOverlay(
-                    date: point.date,
-                    value: point.load.formattedWithSeparator(fractionDigits: 1),
-                    dateFormat: .dateTime.month(.abbreviated).day()
-                )
-                .transition(.opacity)
-                .animation(.easeInOut(duration: 0.15), value: selectedDate)
+        .chartOverlay { proxy in
+            GeometryReader { geometry in
+                if let plotFrame = proxy.plotFrame.map({ geometry[$0] }) {
+                    ZStack(alignment: .topLeading) {
+                        Rectangle()
+                            .fill(.clear)
+                            .contentShape(Rectangle())
+                            .simultaneousGesture(
+                                selectionGesture(proxy: proxy, plotFrame: plotFrame),
+                                including: .subviews
+                            )
+
+                        if let point = selectedPoint,
+                           let anchor = selectedAnchor(for: point, proxy: proxy, plotFrame: plotFrame) {
+                            FloatingChartSelectionOverlay(
+                                date: point.date,
+                                value: point.load.formattedWithSeparator(fractionDigits: 1),
+                                anchor: anchor,
+                                chartSize: geometry.size,
+                                plotFrame: plotFrame,
+                                dateFormat: .dateTime.month(.abbreviated).day()
+                            )
+                            .transition(.opacity)
+                        }
+                    }
+                    .animation(.easeInOut(duration: 0.15), value: selectedDate)
+                }
             }
         }
+        .sensoryFeedback(.selection, trigger: selectedPoint?.date)
     }
 
     // MARK: - Helpers
@@ -160,6 +178,41 @@ struct TrainingLoadChartView: View {
         return data.min(by: {
             abs($0.date.timeIntervalSince(selectedDate)) < abs($1.date.timeIntervalSince(selectedDate))
         })
+    }
+
+    private func selectedAnchor(
+        for point: TrainingLoadDataPoint,
+        proxy: ChartProxy,
+        plotFrame: CGRect
+    ) -> CGPoint? {
+        ChartSelectionInteraction.anchor(
+            xPosition: proxy.position(forX: point.date),
+            yPosition: proxy.position(forY: point.load),
+            plotFrame: plotFrame
+        )
+    }
+
+    private func selectionGesture(proxy: ChartProxy, plotFrame: CGRect) -> some Gesture {
+        DragGesture(minimumDistance: 0, coordinateSpace: .local)
+            .onChanged { value in
+                switch selectionGestureState.registerChange(
+                    at: value.time,
+                    translation: value.translation
+                ) {
+                case .inactive:
+                    return
+                case .activated, .updating:
+                    selectedDate = ChartSelectionInteraction.resolvedDate(
+                        at: value.location,
+                        proxy: proxy,
+                        plotFrame: plotFrame
+                    )
+                }
+            }
+            .onEnded { _ in
+                selectionGestureState.reset()
+                selectedDate = nil
+            }
     }
 
     /// 7-day rolling average

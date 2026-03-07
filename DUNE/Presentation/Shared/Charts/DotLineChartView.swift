@@ -89,7 +89,7 @@ struct DotLineChartView: View {
                         .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
                 }
             }
-            .chartScrollableAxes(timePeriod != nil && selectedDate == nil ? .horizontal : [])
+            .chartScrollableAxes(timePeriod != nil && selectionGestureState.allowsScroll ? .horizontal : [])
             .modifier(DotLineScrollModifier(
                 timePeriod: timePeriod,
                 scrollPosition: scrollPosition ?? $internalScrollPosition
@@ -118,7 +118,10 @@ struct DotLineChartView: View {
                             Rectangle()
                                 .fill(.clear)
                                 .contentShape(Rectangle())
-                                .simultaneousGesture(selectionGesture(proxy: proxy, plotFrame: plotFrame))
+                                .simultaneousGesture(
+                                    selectionGesture(proxy: proxy, plotFrame: plotFrame),
+                                    including: .subviews
+                                )
 
                             if let selected = selectedPoint,
                                let anchor = selectedAnchor(for: selected, proxy: proxy, plotFrame: plotFrame) {
@@ -210,16 +213,25 @@ struct DotLineChartView: View {
     private func selectionGesture(proxy: ChartProxy, plotFrame: CGRect) -> some Gesture {
         DragGesture(minimumDistance: 0, coordinateSpace: .local)
             .onChanged { value in
-                guard selectionGestureState.registerChange(
+                switch selectionGestureState.registerChange(
                     at: value.time,
-                    translation: value.translation
-                ) else { return }
-
-                selectedDate = ChartSelectionInteraction.resolvedDate(
-                    at: value.location,
-                    proxy: proxy,
-                    plotFrame: plotFrame
-                )
+                    translation: value.translation,
+                    currentScrollPosition: scrollPosition?.wrappedValue
+                ) {
+                case .inactive:
+                    return
+                case .activated(let restoreScrollPosition):
+                    if let restoreScrollPosition {
+                        scrollPosition?.wrappedValue = restoreScrollPosition
+                    }
+                    fallthrough
+                case .updating:
+                    selectedDate = ChartSelectionInteraction.resolvedDate(
+                        at: value.location,
+                        proxy: proxy,
+                        plotFrame: plotFrame
+                    )
+                }
             }
             .onEnded { _ in
                 selectionGestureState.reset()

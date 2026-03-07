@@ -25,6 +25,7 @@ struct DailyVolumeChartView: View {
 
     @State private var selectedMetric: Metric = .duration
     @State private var selectedDate: Date?
+    @State private var selectionGestureState = ChartSelectionGestureState()
 
     private enum Gradients {
         static let bar = LinearGradient(
@@ -78,8 +79,7 @@ struct DailyVolumeChartView: View {
             .foregroundStyle(Gradients.bar)
             .cornerRadius(4)
 
-            if let selected = selectedDate,
-               Calendar.current.isDate(point.date, inSameDayAs: selected) {
+            if point.id == selectedPoint?.id {
                 RuleMark(x: .value("Date", point.date, unit: .day))
                     .foregroundStyle(theme.accentColor.opacity(0.35))
                     .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
@@ -102,22 +102,55 @@ struct DailyVolumeChartView: View {
             }
         }
         .chartYScale(domain: 0...(maxY * 1.15))
-        .chartXSelection(value: $selectedDate)
-        .sensoryFeedback(.selection, trigger: selectedDate)
-        .overlay(alignment: .top) {
-            if let selected = selectedDate,
-               let point = dailyBreakdown.first(where: { Calendar.current.isDate($0.date, inSameDayAs: selected) }) {
-                ChartSelectionOverlay(
-                    date: point.date,
-                    value: formattedValue(point)
-                )
-                .transition(.opacity)
-                .animation(.easeInOut(duration: 0.15), value: selectedDate)
+        .chartOverlay { proxy in
+            GeometryReader { geometry in
+                if let plotFrame = proxy.plotFrame.map({ geometry[$0] }) {
+                    ZStack(alignment: .topLeading) {
+                        Rectangle()
+                            .fill(.clear)
+                            .contentShape(Rectangle())
+                            .simultaneousGesture(
+                                selectionGesture(proxy: proxy, plotFrame: plotFrame),
+                                including: .subviews
+                            )
+
+                        if let point = selectedPoint,
+                           let anchor = selectedAnchor(for: point, proxy: proxy, plotFrame: plotFrame) {
+                            FloatingChartSelectionOverlay(
+                                date: point.date,
+                                value: formattedValue(point),
+                                anchor: anchor,
+                                chartSize: geometry.size,
+                                plotFrame: plotFrame
+                            )
+                            .transition(.opacity)
+                        }
+                    }
+                    .animation(.easeInOut(duration: 0.15), value: selectedDate)
+                }
             }
         }
+        .sensoryFeedback(.selection, trigger: selectedPoint?.date)
     }
 
     // MARK: - Helpers
+
+    private var selectedPoint: DailyVolumePoint? {
+        guard let selectedDate else { return nil }
+        return ChartSelectionInteraction.nearestPoint(to: selectedDate, in: dailyBreakdown, date: \.date)
+    }
+
+    private func selectedAnchor(
+        for point: DailyVolumePoint,
+        proxy: ChartProxy,
+        plotFrame: CGRect
+    ) -> CGPoint? {
+        ChartSelectionInteraction.anchor(
+            xPosition: proxy.position(forX: point.date),
+            yPosition: proxy.position(forY: valueFor(point)),
+            plotFrame: plotFrame
+        )
+    }
 
     private func valueFor(_ point: DailyVolumePoint) -> Double {
         switch selectedMetric {
@@ -139,5 +172,28 @@ struct DailyVolumeChartView: View {
         case .sessions:
             return "\(point.segments.count) sessions"
         }
+    }
+
+    private func selectionGesture(proxy: ChartProxy, plotFrame: CGRect) -> some Gesture {
+        DragGesture(minimumDistance: 0, coordinateSpace: .local)
+            .onChanged { value in
+                switch selectionGestureState.registerChange(
+                    at: value.time,
+                    translation: value.translation
+                ) {
+                case .inactive:
+                    return
+                case .activated, .updating:
+                    selectedDate = ChartSelectionInteraction.resolvedDate(
+                        at: value.location,
+                        proxy: proxy,
+                        plotFrame: plotFrame
+                    )
+                }
+            }
+            .onEnded { _ in
+                selectionGestureState.reset()
+                selectedDate = nil
+            }
     }
 }

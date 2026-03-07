@@ -54,6 +54,8 @@ struct WeeklyStatsDetailView: View {
             }
         }
         .pickerStyle(.segmented)
+        .accessibilityIdentifier("weeklystats-period-picker")
+        .accessibilityValue(viewModel.selectedPeriod.rawValue)
     }
 
     // MARK: - Content
@@ -67,6 +69,7 @@ struct WeeklyStatsDetailView: View {
 
             // Daily volume chart
             DailyVolumeChartView(dailyBreakdown: comparison.current.dailyBreakdown)
+                .accessibilityIdentifier("weeklystats-chart-daily-volume")
                 .id(viewModel.selectedPeriod)
                 .transition(.opacity)
                 .animation(.easeInOut(duration: 0.2), value: viewModel.selectedPeriod)

@@ -51,7 +51,7 @@ struct BarChartView: View {
                         .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
                 }
             }
-            .chartScrollableAxes(selectedDate == nil ? .horizontal : [])
+            .chartScrollableAxes(selectionGestureState.allowsScroll ? .horizontal : [])
             .chartXVisibleDomain(length: period.visibleDomainSeconds)
             .chartScrollPosition(x: $scrollPosition)
             .chartYScale(domain: yDomain)
@@ -78,7 +78,10 @@ struct BarChartView: View {
                             Rectangle()
                                 .fill(.clear)
                                 .contentShape(Rectangle())
-                                .simultaneousGesture(selectionGesture(proxy: proxy, plotFrame: plotFrame))
+                                .simultaneousGesture(
+                                    selectionGesture(proxy: proxy, plotFrame: plotFrame),
+                                    including: .subviews
+                                )
 
                             if let point = selectedPoint,
                                let anchor = selectedAnchor(for: point, proxy: proxy, plotFrame: plotFrame) {
@@ -167,16 +170,25 @@ struct BarChartView: View {
     private func selectionGesture(proxy: ChartProxy, plotFrame: CGRect) -> some Gesture {
         DragGesture(minimumDistance: 0, coordinateSpace: .local)
             .onChanged { value in
-                guard selectionGestureState.registerChange(
+                switch selectionGestureState.registerChange(
                     at: value.time,
-                    translation: value.translation
-                ) else { return }
-
-                selectedDate = ChartSelectionInteraction.resolvedDate(
-                    at: value.location,
-                    proxy: proxy,
-                    plotFrame: plotFrame
-                )
+                    translation: value.translation,
+                    currentScrollPosition: scrollPosition
+                ) {
+                case .inactive:
+                    return
+                case .activated(let restoreScrollPosition):
+                    if let restoreScrollPosition {
+                        scrollPosition = restoreScrollPosition
+                    }
+                    fallthrough
+                case .updating:
+                    selectedDate = ChartSelectionInteraction.resolvedDate(
+                        at: value.location,
+                        proxy: proxy,
+                        plotFrame: plotFrame
+                    )
+                }
             }
             .onEnded { _ in
                 selectionGestureState.reset()

@@ -11,6 +11,7 @@ struct StackedVolumeBarChartView: View {
     @Environment(\.appTheme) private var theme
 
     @State private var selectedDate: Date?
+    @State private var selectionGestureState = ChartSelectionGestureState()
 
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
@@ -45,9 +46,7 @@ struct StackedVolumeBarChartView: View {
                 }
             }
 
-            if let selectedDate, let day = dailyBreakdown.first(where: {
-                Calendar.current.isDate($0.date, inSameDayAs: selectedDate)
-            }) {
+            if let day = selectedPoint {
                 RuleMark(x: .value("Selected", day.date, unit: .day))
                     .foregroundStyle(theme.accentColor.opacity(0.35))
                     .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
@@ -78,25 +77,39 @@ struct StackedVolumeBarChartView: View {
             }
         }
         .chartYScale(domain: 0...(maxDailyMinutes * 1.15))
-        .chartXSelection(value: $selectedDate)
-        .sensoryFeedback(.selection, trigger: selectedDate)
-        .overlay(alignment: .top) {
-            if let selectedDate,
-               let day = dailyBreakdown.first(where: {
-                   Calendar.current.isDate($0.date, inSameDayAs: selectedDate)
-               }) {
-                let totalMins = day.totalDuration / 60.0
-                ChartSelectionOverlay(
-                    date: day.date,
-                    value: totalMins >= 60
-                        ? "\((totalMins / 60).formattedWithSeparator(fractionDigits: 1))h"
-                        : "\(totalMins.formattedWithSeparator())m",
-                    dateFormat: .dateTime.month(.abbreviated).day()
-                )
-                .transition(.opacity)
-                .animation(.easeInOut(duration: 0.15), value: selectedDate)
+        .chartOverlay { proxy in
+            GeometryReader { geometry in
+                if let plotFrame = proxy.plotFrame.map({ geometry[$0] }) {
+                    ZStack(alignment: .topLeading) {
+                        Rectangle()
+                            .fill(.clear)
+                            .contentShape(Rectangle())
+                            .simultaneousGesture(
+                                selectionGesture(proxy: proxy, plotFrame: plotFrame),
+                                including: .subviews
+                            )
+
+                        if let day = selectedPoint,
+                           let anchor = selectedAnchor(for: day, proxy: proxy, plotFrame: plotFrame) {
+                            let totalMins = day.totalDuration / 60.0
+                            FloatingChartSelectionOverlay(
+                                date: day.date,
+                                value: totalMins >= 60
+                                    ? "\((totalMins / 60).formattedWithSeparator(fractionDigits: 1))h"
+                                    : "\(totalMins.formattedWithSeparator())m",
+                                anchor: anchor,
+                                chartSize: geometry.size,
+                                plotFrame: plotFrame,
+                                dateFormat: .dateTime.month(.abbreviated).day()
+                            )
+                            .transition(.opacity)
+                        }
+                    }
+                    .animation(.easeInOut(duration: 0.15), value: selectedDate)
+                }
             }
         }
+        .sensoryFeedback(.selection, trigger: selectedPoint?.date)
     }
 
     // MARK: - Legend
@@ -139,6 +152,23 @@ struct StackedVolumeBarChartView: View {
         typeColors[typeKey] ?? .gray.opacity(0.5)
     }
 
+    private var selectedPoint: DailyVolumePoint? {
+        guard let selectedDate else { return nil }
+        return ChartSelectionInteraction.nearestPoint(to: selectedDate, in: dailyBreakdown, date: \.date)
+    }
+
+    private func selectedAnchor(
+        for point: DailyVolumePoint,
+        proxy: ChartProxy,
+        plotFrame: CGRect
+    ) -> CGPoint? {
+        ChartSelectionInteraction.anchor(
+            xPosition: proxy.position(forX: point.date),
+            yPosition: proxy.position(forY: point.totalDuration / 60.0),
+            plotFrame: plotFrame
+        )
+    }
+
     private var maxDailyMinutes: Double {
         let maxVal = dailyBreakdown.map { $0.totalDuration / 60.0 }.max() ?? 0
         return Swift.max(maxVal, 1)
@@ -163,5 +193,28 @@ struct StackedVolumeBarChartView: View {
         }
         .frame(maxWidth: .infinity)
         .frame(height: 100)
+    }
+
+    private func selectionGesture(proxy: ChartProxy, plotFrame: CGRect) -> some Gesture {
+        DragGesture(minimumDistance: 0, coordinateSpace: .local)
+            .onChanged { value in
+                switch selectionGestureState.registerChange(
+                    at: value.time,
+                    translation: value.translation
+                ) {
+                case .inactive:
+                    return
+                case .activated, .updating:
+                    selectedDate = ChartSelectionInteraction.resolvedDate(
+                        at: value.location,
+                        proxy: proxy,
+                        plotFrame: plotFrame
+                    )
+                }
+            }
+            .onEnded { _ in
+                selectionGestureState.reset()
+                selectedDate = nil
+            }
     }
 }

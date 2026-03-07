@@ -69,6 +69,7 @@ struct VitalCard: View {
                 }
             }
         }
+        .accessibilityIdentifier("wellness-card-\(data.category.rawValue)")
         .opacity(data.isStale ? 0.85 : 1.0)
     }
 

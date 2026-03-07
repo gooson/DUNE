@@ -8,6 +8,7 @@ class UITestBaseCase: XCTestCase {
 
     /// Override in subclass to use "--seed-mock" for data-seeded tests
     var shouldSeedMockData: Bool { false }
+    var initialTabSelectionArgument: String? { nil }
 
     override func tearDownWithError() throws {
         if let app {
@@ -25,6 +26,9 @@ class UITestBaseCase: XCTestCase {
         var args = ["--uitesting"]
         if shouldSeedMockData {
             args.append("--seed-mock")
+        }
+        if let initialTabSelectionArgument {
+            args.append(contentsOf: ["--uitest-initial-tab", initialTabSelectionArgument])
         }
         app.launchArguments = args
 
