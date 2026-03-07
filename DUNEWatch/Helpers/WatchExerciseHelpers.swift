@@ -22,6 +22,100 @@ func uniqueByCanonical(_ exercises: [WatchExerciseInfo]) -> [WatchExerciseInfo] 
     }
 }
 
+func recentWatchExercises(
+    from exercises: [WatchExerciseInfo],
+    limit: Int,
+    lastUsedTimestamps: [String: Double] = RecentExerciseTracker.lastUsedTimestamps()
+) -> [WatchExerciseInfo] {
+    guard limit > 0 else { return [] }
+
+    return Array(
+        uniqueByCanonical(
+            exercises
+                .filter { lastUsedTimestamps[$0.id] != nil }
+                .sorted {
+                    let lhs = lastUsedTimestamps[$0.id] ?? Date.distantPast.timeIntervalSince1970
+                    let rhs = lastUsedTimestamps[$1.id] ?? Date.distantPast.timeIntervalSince1970
+                    return lhs > rhs
+                }
+        )
+        .prefix(limit)
+    )
+}
+
+func preferredWatchExercises(
+    from exercises: [WatchExerciseInfo],
+    excludingCanonical excludedCanonical: Set<String> = [],
+    lastUsedTimestamps: [String: Double] = RecentExerciseTracker.lastUsedTimestamps()
+) -> [WatchExerciseInfo] {
+    uniqueByCanonical(
+        exercises
+            .filter { $0.isPreferred }
+            .sorted { lhs, rhs in
+                let lhsTime = lastUsedTimestamps[lhs.id] ?? Date.distantPast.timeIntervalSince1970
+                let rhsTime = lastUsedTimestamps[rhs.id] ?? Date.distantPast.timeIntervalSince1970
+                if lhsTime != rhsTime { return lhsTime > rhsTime }
+                return lhs.name.localizedCaseInsensitiveCompare(rhs.name) == .orderedAscending
+            }
+    )
+    .filter { exercise in
+        !excludedCanonical.contains(RecentExerciseTracker.canonicalExerciseID(exerciseID: exercise.id))
+    }
+}
+
+func popularWatchExercises(
+    from exercises: [WatchExerciseInfo],
+    limit: Int,
+    excludingCanonical excludedCanonical: Set<String> = []
+) -> [WatchExerciseInfo] {
+    guard limit > 0 else { return [] }
+
+    return Array(
+        uniqueByCanonical(
+            RecentExerciseTracker.personalizedPopular(from: exercises, limit: limit)
+        )
+        .filter { exercise in
+            !excludedCanonical.contains(RecentExerciseTracker.canonicalExerciseID(exerciseID: exercise.id))
+        }
+        .prefix(limit)
+    )
+}
+
+func prioritizedWatchExercises(
+    _ exercises: [WatchExerciseInfo],
+    recent: [WatchExerciseInfo],
+    preferred: [WatchExerciseInfo],
+    popular: [WatchExerciseInfo]
+) -> [WatchExerciseInfo] {
+    let orderedCanonicalIDs = (recent + preferred + popular).map {
+        RecentExerciseTracker.canonicalExerciseID(exerciseID: $0.id)
+    }
+    let priorityByCanonicalID = Dictionary(
+        orderedCanonicalIDs.enumerated().map { ($1, $0) },
+        uniquingKeysWith: { first, _ in first }
+    )
+
+    return exercises.sorted { lhs, rhs in
+        let lhsKey = RecentExerciseTracker.canonicalExerciseID(exerciseID: lhs.id)
+        let rhsKey = RecentExerciseTracker.canonicalExerciseID(exerciseID: rhs.id)
+        let lhsPriority = priorityByCanonicalID[lhsKey]
+        let rhsPriority = priorityByCanonicalID[rhsKey]
+
+        switch (lhsPriority, rhsPriority) {
+        case let (.some(l), .some(r)):
+            if l != r { return l < r }
+        case (.some, .none):
+            return true
+        case (.none, .some):
+            return false
+        case (.none, .none):
+            break
+        }
+
+        return lhs.name.localizedCaseInsensitiveCompare(rhs.name) == .orderedAscending
+    }
+}
+
 /// Resolves weight/reps defaults from latest set or exercise defaults.
 func resolvedDefaults(for exercise: WatchExerciseInfo) -> (weight: Double?, reps: Int) {
     let latest = RecentExerciseTracker.latestSet(exerciseID: exercise.id)

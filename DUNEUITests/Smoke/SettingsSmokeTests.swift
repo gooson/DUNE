@@ -30,6 +30,13 @@ final class SettingsSmokeTests: UITestBaseCase {
         )
     }
 
+    func testPreferredExercisesLinkExists() throws {
+        XCTAssertTrue(
+            elementExists(AXID.settingsRowPreferredExercises, timeout: 5),
+            "Preferred Exercises navigation link should exist"
+        )
+    }
+
     func testNavigateToExerciseDefaults() throws {
         let link = app.descendants(matching: .any)[AXID.settingsRowExerciseDefaults].firstMatch
         XCTAssertTrue(link.waitForExistence(timeout: 5), "Exercise Defaults link should exist")
@@ -37,6 +44,15 @@ final class SettingsSmokeTests: UITestBaseCase {
 
         let title = app.navigationBars["Exercise Defaults"]
         XCTAssertTrue(title.waitForExistence(timeout: 5), "Exercise Defaults screen should open")
+    }
+
+    func testNavigateToPreferredExercises() throws {
+        let link = app.descendants(matching: .any)[AXID.settingsRowPreferredExercises].firstMatch
+        XCTAssertTrue(link.waitForExistence(timeout: 5), "Preferred Exercises link should exist")
+        link.tap()
+
+        let title = app.navigationBars["Preferred Exercises"]
+        XCTAssertTrue(title.waitForExistence(timeout: 5), "Preferred Exercises screen should open")
     }
 
     func testAppearanceSectionExists() throws {

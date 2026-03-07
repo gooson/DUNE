@@ -9,11 +9,13 @@ struct ExerciseDefaultEditView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
 
-    @Query private var allDefaults: [ExerciseDefaultRecord]
+    @Query(sort: \ExerciseDefaultRecord.lastUsedDate, order: .reverse)
+    private var allDefaults: [ExerciseDefaultRecord]
 
     @State private var weightText: String = ""
     @State private var repsText: String = ""
     @State private var isManualOverride: Bool = false
+    @State private var isPreferred: Bool = false
     /// Correction #6/#11: Prevent duplicate saves on double-tap
     @State private var isSaving: Bool = false
     /// Correction #50: Confirmation before CloudKit delete
@@ -21,19 +23,14 @@ struct ExerciseDefaultEditView: View {
 
     private let maxWeightKg = 500.0
     private let maxReps = 1000
-
-    init(exercise: ExerciseDefinition) {
-        self.exercise = exercise
-        let exerciseID = exercise.id
-        _allDefaults = Query(
-            filter: #Predicate<ExerciseDefaultRecord> {
-                $0.exerciseDefinitionID == exerciseID
-            }
-        )
-    }
+    private let library = ExerciseLibraryService.shared
 
     private var existingRecord: ExerciseDefaultRecord? {
-        allDefaults.first
+        allDefaults.first { record in
+            let representativeID = library.representativeExercise(byID: record.exerciseDefinitionID)?.id
+                ?? record.exerciseDefinitionID
+            return representativeID == exercise.id
+        }
     }
 
     var body: some View {
@@ -62,15 +59,19 @@ struct ExerciseDefaultEditView: View {
                 Toggle(isOn: $isManualOverride) {
                     Label("Manual Override", systemImage: "pin")
                 }
+
+                Toggle(isOn: $isPreferred) {
+                    Label("Preferred Exercise", systemImage: "star")
+                }
             } header: {
                 Text(exercise.localizedName)
             } footer: {
-                Text("When enabled, this weight is always used instead of the last-used weight.")
+                Text("Manual override keeps your saved defaults. Preferred exercises stay near the top of Quick Start on iPhone and Apple Watch.")
             }
 
             if existingRecord != nil {
                 Section {
-                    Button("Clear Defaults", role: .destructive) {
+                    Button("Clear Exercise Settings", role: .destructive) {
                         showClearConfirmation = true
                     }
                 }
@@ -93,15 +94,15 @@ struct ExerciseDefaultEditView: View {
             loadExistingValues()
         }
         .confirmationDialog(
-            "Clear exercise defaults?",
+            "Clear saved exercise settings?",
             isPresented: $showClearConfirmation,
             titleVisibility: .visible
         ) {
-            Button("Clear Defaults", role: .destructive) {
+            Button("Clear Exercise Settings", role: .destructive) {
                 clearDefaults()
             }
         } message: {
-            Text("This will remove the saved default weight and reps for \(exercise.localizedName). This change syncs across all your devices.")
+            Text("This will remove the saved defaults and preferred status for \(exercise.localizedName). This change syncs across all your devices.")
         }
     }
 
@@ -116,6 +117,7 @@ struct ExerciseDefaultEditView: View {
             repsText = "\(reps)"
         }
         isManualOverride = record.isManualOverride
+        isPreferred = record.isPreferred
     }
 
     private func saveDefaults() {
@@ -139,19 +141,22 @@ struct ExerciseDefaultEditView: View {
         }
 
         // Skip save if both are nil and no manual override
-        guard weight != nil || reps != nil || isManualOverride else {
+        guard weight != nil || reps != nil || isManualOverride || isPreferred else {
             // Nothing to save; clear if existing
             if let record = existingRecord {
                 withAnimation { modelContext.delete(record) }
             }
+            WatchSessionManager.shared.syncExerciseLibraryToWatch(using: modelContext)
             isSaving = false
             return
         }
 
         if let record = existingRecord {
+            record.exerciseDefinitionID = exercise.id
             record.defaultWeight = weight
             record.defaultReps = reps
             record.isManualOverride = isManualOverride
+            record.isPreferred = isPreferred
             record.lastUsedDate = Date()
         } else {
             let record = ExerciseDefaultRecord(
@@ -159,10 +164,12 @@ struct ExerciseDefaultEditView: View {
                 defaultWeight: weight,
                 defaultReps: reps,
                 isManualOverride: isManualOverride,
+                isPreferred: isPreferred,
                 lastUsedDate: Date()
             )
             modelContext.insert(record)
         }
+        WatchSessionManager.shared.syncExerciseLibraryToWatch(using: modelContext)
         isSaving = false
     }
 
@@ -170,6 +177,7 @@ struct ExerciseDefaultEditView: View {
         if let record = existingRecord {
             withAnimation { modelContext.delete(record) }
         }
+        WatchSessionManager.shared.syncExerciseLibraryToWatch(using: modelContext)
         dismiss()
     }
 }

@@ -11,6 +11,7 @@ struct WatchExerciseHelpersTests {
         defaultSets: Int = 3,
         defaultReps: Int? = 10,
         defaultWeightKg: Double? = 50,
+        isPreferred: Bool = false,
         equipment: String? = "barbell",
         aliases: [String]? = nil
     ) -> WatchExerciseInfo {
@@ -21,6 +22,7 @@ struct WatchExerciseHelpersTests {
             defaultSets: defaultSets,
             defaultReps: defaultReps,
             defaultWeightKg: defaultWeightKg,
+            isPreferred: isPreferred,
             equipment: equipment,
             cardioSecondaryUnit: nil,
             aliases: aliases
@@ -253,5 +255,37 @@ struct WatchExerciseHelpersTests {
 
         let grouped = groupedWatchExercisesByCategory(exercises)
         #expect(grouped.map(\.category) == [.strength, .cardio, .flexibility])
+    }
+
+    @Test("preferredWatchExercises sorts preferred items and excludes higher-priority canonicals")
+    func preferredWatchExercisesOrdering() {
+        let bench = exercise(id: "bench", name: "Bench", isPreferred: true)
+        let squat = exercise(id: "squat", name: "Squat", isPreferred: true)
+        let run = exercise(id: "run", name: "Run", isPreferred: false)
+
+        let result = preferredWatchExercises(
+            from: [bench, squat, run],
+            excludingCanonical: ["bench"],
+            lastUsedTimestamps: [squat.id: 200, bench.id: 100]
+        )
+
+        #expect(result.map(\.id) == ["squat"])
+    }
+
+    @Test("prioritizedWatchExercises keeps recent before preferred before popular")
+    func prioritizedWatchExercisesOrdering() {
+        let recent = exercise(id: "recent", name: "Recent")
+        let preferred = exercise(id: "preferred", name: "Preferred", isPreferred: true)
+        let popular = exercise(id: "popular", name: "Popular")
+        let other = exercise(id: "other", name: "Other")
+
+        let ordered = prioritizedWatchExercises(
+            [other, popular, preferred, recent],
+            recent: [recent],
+            preferred: [preferred],
+            popular: [popular]
+        )
+
+        #expect(ordered.map(\.id) == ["recent", "preferred", "popular", "other"])
     }
 }
