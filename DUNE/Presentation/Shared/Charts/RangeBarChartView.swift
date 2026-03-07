@@ -84,6 +84,7 @@ struct RangeBarChartView: View {
             .chartXSelection(value: $selectedDate)
             .sensoryFeedback(.selection, trigger: selectedDate)
             .frame(height: chartHeight)
+            .clipped()
             .accessibilityChartDescriptor(chartDescriptor)
             .overlay(alignment: .top) {
                 if let point = selectedPoint {

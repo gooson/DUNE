@@ -12,12 +12,12 @@ private func formatWeightRange(_ weights: [Double]) -> String? {
 }
 
 private func formatSetSummary(count: Int, weights: [Double], totalReps: Int) -> String {
-    var parts: [String] = ["\(count.formattedWithSeparator) sets"]
+    var parts: [String] = [String(localized: "\(count.formattedWithSeparator) sets")]
     if let weightStr = formatWeightRange(weights) {
         parts.append(weightStr)
     }
     if totalReps > 0 {
-        parts.append("\(totalReps.formattedWithSeparator) reps")
+        parts.append(String(localized: "\(totalReps.formattedWithSeparator) reps"))
     }
     return parts.joined(separator: " \u{00B7} ")
 }

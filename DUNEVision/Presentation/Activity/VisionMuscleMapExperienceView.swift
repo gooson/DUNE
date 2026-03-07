@@ -17,6 +17,8 @@ struct VisionMuscleMapExperienceView: View {
     @State private var hasLoadedScene = false
     @State private var scene = MuscleMap3DScene()
 
+    @State private var fatigueByMuscle: [MuscleGroup: MuscleFatigueState] = [:]
+
     init(
         fatigueStates: [MuscleFatigueState],
         initialMuscle: MuscleGroup? = nil
@@ -24,10 +26,9 @@ struct VisionMuscleMapExperienceView: View {
         self.fatigueStates = fatigueStates
         self.initialMuscle = initialMuscle
         _selectedMuscle = State(initialValue: initialMuscle)
-    }
-
-    private var fatigueByMuscle: [MuscleGroup: MuscleFatigueState] {
-        Dictionary(fatigueStates.map { ($0.muscle, $0) }, uniquingKeysWith: { _, latest in latest })
+        _fatigueByMuscle = State(
+            initialValue: Dictionary(fatigueStates.map { ($0.muscle, $0) }, uniquingKeysWith: { _, latest in latest })
+        )
     }
 
     private var selectedState: MuscleMap3DDisplayState {
@@ -130,9 +131,9 @@ struct VisionMuscleMapExperienceView: View {
                             focus(on: muscle)
                         } label: {
                             HStack(spacing: 8) {
-                                Image(systemName: iconName(for: muscle))
+                                Image(systemName: muscle.iconName)
                                     .font(.caption)
-                                Text(title(for: muscle))
+                                Text(muscle.displayName)
                                     .font(.caption.weight(.medium))
                             }
                             .padding(.horizontal, 12)
@@ -271,37 +272,6 @@ struct VisionMuscleMapExperienceView: View {
         dragStartYaw = yaw
         dragStartPitch = pitch
         applySceneState()
-    }
-
-    private func title(for muscle: MuscleGroup) -> String {
-        switch muscle {
-        case .chest: String(localized: "Chest")
-        case .back: String(localized: "Back")
-        case .shoulders: String(localized: "Shoulders")
-        case .biceps: String(localized: "Biceps")
-        case .triceps: String(localized: "Triceps")
-        case .quadriceps: String(localized: "Quads")
-        case .hamstrings: String(localized: "Hamstrings")
-        case .glutes: String(localized: "Glutes")
-        case .calves: String(localized: "Calves")
-        case .core: String(localized: "Core")
-        case .forearms: String(localized: "Forearms")
-        case .traps: String(localized: "Traps")
-        case .lats: String(localized: "Lats")
-        }
-    }
-
-    private func iconName(for muscle: MuscleGroup) -> String {
-        switch muscle {
-        case .chest: "figure.strengthtraining.traditional"
-        case .back: "dumbbell.fill"
-        case .shoulders: "figure.arms.open"
-        case .biceps, .triceps, .forearms: "dumbbell.fill"
-        case .quadriceps, .hamstrings, .glutes, .calves: "figure.walk"
-        case .core: "figure.core.training"
-        case .traps: "figure.arms.open"
-        case .lats: "dumbbell.fill"
-        }
     }
 
 }

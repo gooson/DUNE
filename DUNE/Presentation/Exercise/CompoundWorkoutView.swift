@@ -86,12 +86,18 @@ struct CompoundWorkoutView: View {
             }
         }
         .onAppear {
+            restoreFromDraftIfNeeded()
             viewModel.loadPreviousSets(from: exerciseRecords)
             startSessionTimer()
         }
         .onDisappear {
             sessionTimerTask?.cancel()
             sessionTimerTask = nil
+        }
+        .onChange(of: scenePhase) { _, newPhase in
+            if newPhase == .background {
+                viewModel.saveDraft()
+            }
         }
         .alert("Validation Error", isPresented: .init(
             get: { viewModel.validationError != nil },
@@ -435,6 +441,7 @@ struct CompoundWorkoutView: View {
             modelContext.insert(record)
         }
         savedRecords = records
+        CompoundWorkoutViewModel.clearDraft()
 
         let exerciseIDs = Set(records.compactMap(\.exerciseDefinitionID))
         let recentEfforts = exerciseRecords
@@ -473,6 +480,16 @@ struct CompoundWorkoutView: View {
         let mins = Int(elapsedSeconds) / 60
         let secs = Int(elapsedSeconds) % 60
         return String(format: "%d:%02d", mins, secs)
+    }
+
+    private func restoreFromDraftIfNeeded() {
+        guard let draft = CompoundWorkoutDraft.load() else { return }
+        let configIDs = config.exercises.map(\.id)
+        guard draft.exerciseIDs == configIDs else {
+            CompoundWorkoutDraft.clear()
+            return
+        }
+        viewModel.restoreFromDraft(draft)
     }
 
     private func startSessionTimer() {

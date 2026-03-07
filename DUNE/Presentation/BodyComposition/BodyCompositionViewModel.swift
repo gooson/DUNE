@@ -130,14 +130,15 @@ final class BodyCompositionViewModel {
 
         guard let validated = validateInputs() else { return nil }
         isSaving = true
-        defer { isSaving = false }
-        return BodyCompositionRecord(
+        let record = BodyCompositionRecord(
             date: selectedDate,
             weight: validated.weight,
             bodyFatPercentage: validated.bodyFat,
             muscleMass: validated.muscleMass,
             memo: String(newMemo.prefix(maxMemoLength))
         )
+        isSaving = false
+        return record
     }
 
     func applyUpdate(to record: BodyCompositionRecord) -> Bool {

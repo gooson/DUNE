@@ -603,8 +603,10 @@ private struct HabitListQueryView: View {
 
         // Remove existing today logs
         let existingLogs = (habit.logs ?? []).filter { calendar.isDate($0.date, inSameDayAs: today) }
-        for log in existingLogs {
-            modelContext.delete(log)
+        withAnimation {
+            for log in existingLogs {
+                modelContext.delete(log)
+            }
         }
 
         // Add new log with updated value

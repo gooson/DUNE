@@ -200,9 +200,9 @@ enum ScatterPeriod: String, CaseIterable, Identifiable {
 
     var displayName: String {
         switch self {
-        case .thirtyDays: "30 Days"
-        case .sixtyDays: "60 Days"
-        case .ninetyDays: "90 Days"
+        case .thirtyDays: String(localized: "30 Days")
+        case .sixtyDays: String(localized: "60 Days")
+        case .ninetyDays: String(localized: "90 Days")
         }
     }
 

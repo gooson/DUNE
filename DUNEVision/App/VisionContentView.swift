@@ -11,6 +11,7 @@ struct VisionContentView: View {
     @Environment(\.openImmersiveSpace) private var openImmersiveSpace
     @Environment(\.supportsMultipleWindows) private var supportsMultipleWindows
     @State private var selectedSection: AppSection = .today
+    // Phase 4: refreshSignal will propagate live-data updates to child views
     @State private var refreshSignal = 0
     @State private var foregroundTask: Task<Void, Never>?
 
@@ -100,6 +101,7 @@ struct VisionContentView: View {
                 }
             }
         }
+        .onDisappear { foregroundTask?.cancel() }
         .onChange(of: scenePhase) { oldPhase, newPhase in
             if oldPhase == .background, newPhase == .active {
                 foregroundTask?.cancel()

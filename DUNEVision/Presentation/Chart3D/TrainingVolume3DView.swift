@@ -50,7 +50,7 @@ struct TrainingVolume3DView: View {
                     if let rawIndex = value.as(Double.self) {
                         let index = Int(rawIndex.rounded())
                         if Self.muscleGroups.indices.contains(index) {
-                            Text(Self.muscleGroups[index])
+                            Text(Self.localizedMuscleName(Self.muscleGroups[index]))
                         }
                     }
                 }
@@ -75,7 +75,7 @@ struct TrainingVolume3DView: View {
         HStack(spacing: 16) {
             ForEach(topMuscleVolumes, id: \.key) { entry in
                 VStack(spacing: 4) {
-                    Text(entry.key)
+                    Text(Self.localizedMuscleName(entry.key))
                         .font(.caption.bold())
                     Text("\(Int(entry.value)) kg")
                         .font(.caption2)
@@ -100,6 +100,19 @@ struct TrainingVolume3DView: View {
     private var volumeDomain: ClosedRange<Double> {
         let maxVolume = plottableSampleData.map(\.volume).max() ?? 1
         return 0...Swift.max(maxVolume * 1.1, 1)
+    }
+
+    private static func localizedMuscleName(_ name: String) -> String {
+        switch name {
+        case "Chest": String(localized: "Chest")
+        case "Back": String(localized: "Back")
+        case "Legs": String(localized: "Legs")
+        case "Shoulders": String(localized: "Shoulders")
+        case "Arms": String(localized: "Arms")
+        case "Core": String(localized: "Core")
+        case "Glutes": String(localized: "Glutes")
+        default: name
+        }
     }
 
     private static func computeMuscleVolumes(from data: [TrainingVolumePoint]) -> [(key: String, value: Double)] {

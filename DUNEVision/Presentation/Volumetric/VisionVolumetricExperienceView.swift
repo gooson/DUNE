@@ -142,10 +142,10 @@ struct VisionVolumetricExperienceView: View {
             )
 
             metricCard(
-                title: Text(verbatim: selected?.muscle.spatialDisplayName ?? String(localized: "Focus Muscle")),
+                title: Text(verbatim: selected?.muscle.displayName ?? String(localized: "Focus Muscle")),
                 value: selected?.loadLabel ?? "--",
                 detail: Text(verbatim: selected?.fatigueLabel ?? String(localized: "No load detected")),
-                icon: selected?.muscle.spatialIconName ?? "figure.strengthtraining.traditional"
+                icon: selected?.muscle.iconName ?? "figure.strengthtraining.traditional"
             )
         }
     }
@@ -186,9 +186,9 @@ struct VisionVolumetricExperienceView: View {
                     } label: {
                         VStack(alignment: .leading, spacing: 6) {
                             HStack(spacing: 8) {
-                                Image(systemName: muscleLoad.muscle.spatialIconName)
+                                Image(systemName: muscleLoad.muscle.iconName)
                                     .font(.caption)
-                                Text(muscleLoad.muscle.spatialDisplayName)
+                                Text(muscleLoad.muscle.displayName)
                                     .font(.caption.weight(.semibold))
                             }
 

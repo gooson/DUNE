@@ -29,7 +29,8 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
         try await fetchQuantitySamples(
             type: HKQuantityType(.bodyMass),
             unit: .gramUnit(with: .kilo),
-            days: days
+            days: days,
+            validRange: 0...500
         )
     }
 
@@ -55,7 +56,8 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
             type: HKQuantityType(.bodyMass),
             unit: .gramUnit(with: .kilo),
             start: start,
-            end: end
+            end: end,
+            validRange: 0...500
         )
     }
 
@@ -69,7 +71,8 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
             type: HKQuantityType(.bodyMass),
             unit: .gramUnit(with: .kilo),
             start: start,
-            end: end
+            end: end,
+            validRange: 0...500
         )
         // samples are sorted by date descending (most recent first)
         guard let latest = samples.first else { return nil }
@@ -96,7 +99,7 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
         )
         let statistics = try await manager.executeStatistics(descriptor)
         guard let value = statistics?.mostRecentQuantity()?.doubleValue(for: .count()),
-              value > 0 else {
+              value > 0, value <= 100 else {
             return nil
         }
         return value
@@ -112,7 +115,8 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
             type: HKQuantityType(.bodyMassIndex),
             unit: .count(),
             start: start,
-            end: end
+            end: end,
+            validRange: 0...100
         )
         // samples are sorted by date descending (most recent first)
         guard let latest = samples.first, latest.value > 0 else { return nil }
@@ -124,7 +128,8 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
             type: HKQuantityType(.bodyMassIndex),
             unit: .count(),
             start: start,
-            end: end
+            end: end,
+            validRange: 0...100
         )
     }
 
@@ -150,7 +155,8 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
         type: HKQuantityType,
         unit: HKUnit,
         days: Int,
-        valueTransform: @Sendable (Double) -> Double = { $0 }
+        valueTransform: @Sendable (Double) -> Double = { $0 },
+        validRange: ClosedRange<Double>? = nil
     ) async throws -> [BodyCompositionSample] {
         let calendar = Calendar.current
         let endDate = Date()
@@ -158,7 +164,8 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
             return []
         }
         return try await fetchQuantitySamples(
-            type: type, unit: unit, start: startDate, end: endDate, valueTransform: valueTransform
+            type: type, unit: unit, start: startDate, end: endDate,
+            valueTransform: valueTransform, validRange: validRange
         )
     }
 
@@ -167,7 +174,8 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
         unit: HKUnit,
         start: Date,
         end: Date,
-        valueTransform: @Sendable (Double) -> Double = { $0 }
+        valueTransform: @Sendable (Double) -> Double = { $0 },
+        validRange: ClosedRange<Double>? = nil
     ) async throws -> [BodyCompositionSample] {
         try await manager.ensureNotDenied(for: type)
 
@@ -184,11 +192,10 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
 
         let samples = try await manager.execute(descriptor)
 
-        return samples.map { sample in
-            BodyCompositionSample(
-                value: valueTransform(sample.quantity.doubleValue(for: unit)),
-                date: sample.startDate
-            )
+        return samples.compactMap { sample in
+            let value = valueTransform(sample.quantity.doubleValue(for: unit))
+            if let range = validRange, !range.contains(value) { return nil }
+            return BodyCompositionSample(value: value, date: sample.startDate)
         }
     }
 }

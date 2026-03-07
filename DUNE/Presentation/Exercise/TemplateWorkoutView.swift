@@ -6,6 +6,7 @@ import SwiftData
 struct TemplateWorkoutView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.scenePhase) private var scenePhase
     @Environment(\.appTheme) private var theme
 
     @AppStorage(WeightUnit.storageKey) private var weightUnitRaw = WeightUnit.kg.rawValue
@@ -85,6 +86,7 @@ struct TemplateWorkoutView: View {
             }
         }
         .onAppear {
+            restoreFromDraftIfNeeded()
             viewModel.prefillFromTemplateDefaults(weightUnit: weightUnit)
             viewModel.loadPreviousSets(from: exerciseRecords, weightUnit: weightUnit)
             startSessionTimer()
@@ -92,6 +94,11 @@ struct TemplateWorkoutView: View {
         .onDisappear {
             sessionTimerTask?.cancel()
             sessionTimerTask = nil
+        }
+        .onChange(of: scenePhase) { _, newPhase in
+            if newPhase == .background {
+                viewModel.saveDraft()
+            }
         }
         .alert("Validation Error", isPresented: .init(
             get: { viewModel.validationError != nil },
@@ -431,6 +438,7 @@ struct TemplateWorkoutView: View {
     }
 
     private func finishWorkout() {
+        TemplateWorkoutViewModel.clearDraft()
         guard !savedRecords.isEmpty else {
             dismiss()
             return
@@ -486,6 +494,16 @@ struct TemplateWorkoutView: View {
         let mins = Int(elapsedSeconds) / 60
         let secs = Int(elapsedSeconds) % 60
         return String(format: "%d:%02d", mins, secs)
+    }
+
+    private func restoreFromDraftIfNeeded() {
+        guard let draft = TemplateWorkoutDraft.load() else { return }
+        let configIDs = config.exercises.map(\.id)
+        guard draft.exerciseIDs == configIDs else {
+            TemplateWorkoutDraft.clear()
+            return
+        }
+        viewModel.restoreFromDraft(draft)
     }
 
     private func startSessionTimer() {

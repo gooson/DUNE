@@ -12,7 +12,11 @@ struct VisionDashboardView: View {
     let onOpenImmersive: () -> Void
 
     var body: some View {
-        ScrollView {
+        // Phase 4: sharedHealthDataService and refreshSignal will drive live metrics
+        _ = sharedHealthDataService
+        _ = refreshSignal
+
+        return ScrollView {
             VStack(spacing: 24) {
                 conditionSection
                 quickActionsSection
@@ -65,6 +69,15 @@ struct VisionDashboardView: View {
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                     }
+                }
+                .overlay(alignment: .topTrailing) {
+                    Text("Coming Soon")
+                        .font(.caption2.weight(.semibold))
+                        .foregroundStyle(.secondary)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 5)
+                        .background(.thinMaterial, in: Capsule())
+                        .padding(12)
                 }
         }
     }
@@ -135,9 +148,18 @@ struct VisionDashboardView: View {
     @ViewBuilder
     private var healthMetricsSection: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Health Metrics")
-                .font(.headline)
-                .foregroundStyle(.secondary)
+            HStack(spacing: 8) {
+                Text("Health Metrics")
+                    .font(.headline)
+                    .foregroundStyle(.secondary)
+
+                Text("Coming Soon")
+                    .font(.caption2.weight(.semibold))
+                    .foregroundStyle(.secondary)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 5)
+                    .background(.thinMaterial, in: Capsule())
+            }
 
             LazyVGrid(columns: [
                 GridItem(.flexible()),

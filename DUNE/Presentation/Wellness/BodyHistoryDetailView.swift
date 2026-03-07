@@ -38,7 +38,9 @@ struct BodyHistoryDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .alert("Delete Record?", isPresented: $isShowingDeleteConfirmation, presenting: recordToDelete) { record in
             Button("Delete", role: .destructive) {
-                modelContext.delete(record)
+                withAnimation {
+                    modelContext.delete(record)
+                }
                 recordToDelete = nil
             }
             Button("Cancel", role: .cancel) {
