@@ -1,28 +1,34 @@
 ---
-tags: [swiftui, navigation, navigationstack, navigationpath, warning, performance, multi-update]
+tags: [swiftui, navigation, navigationstack, navigationpath, navigationlink, warning, performance, multi-update, toolbar, destination-form]
 date: 2026-03-08
 category: solution
 status: implemented
 ---
 
-# NavigationRequestObserver: clearAllNavPaths isEmpty Guard
+# NavigationRequestObserver: Multi-Update Per Frame 경고 해결
 
 ## Problem
 
-`handleNotificationNavigationRequest()`가 실행될 때마다 "NavigationRequestObserver tried to update multiple times per frame" 경고 발생.
+"NavigationRequestObserver tried to update multiple times per frame" 경고가 두 가지 경로에서 발생.
 
-### 근본 원인
+### 근본 원인 1: clearAllNavPaths 무조건 초기화
 
-`clearAllNavPaths()`가 4개의 `NavigationPath` `@State`를 **무조건** 초기화. 각 path는 `NavigationStack(path:)` 바인딩에 연결되어 있어, 이미 비어있는 path에 새 `NavigationPath()`를 할당해도 SwiftUI가 state change로 간주. 한 프레임에 4개의 navigation 상태 변경 + `selectedSection` + signal = 최대 6개 동시 mutation.
+`clearAllNavPaths()`가 4개의 `NavigationPath` `@State`를 **무조건** 초기화. 이미 비어있는 path에 새 `NavigationPath()`를 할당해도 SwiftUI가 state change로 간주. 한 프레임에 최대 6개 동시 mutation.
+
+### 근본 원인 2: Destination-form NavigationLink 과다 observer
+
+DashboardView 툴바에서 3개의 destination-form `NavigationLink { View() }`가 각각 **implicit navigation observer**를 생성. explicit `navigationDestination` 5개 + ContentView 1개 + implicit 3개 = 총 9개 observer. 히어로 카드 탭 시 모든 observer가 한 프레임에 평가되어 경고 발생.
 
 ### 증상
 
-- Xcode console에 반복적으로 경고 메시지 출력
-- notification tap 시 특히 빈번
+- notification tap 시 경고 (근본 원인 1)
+- **히어로 카드 탭 시 경고** (근본 원인 2) — Dashboard, Activity 탭 모두
 
 ## Solution
 
-`clearNavPaths(except:)` 단일 함수로 통합하고, `isEmpty` guard를 추가하여 이미 비어있는 path는 skip:
+### Fix 1: clearNavPaths isEmpty guard (ContentView)
+
+`clearNavPaths(except:)` 단일 함수로 통합하고, `isEmpty` guard를 추가:
 
 ```swift
 private func clearNavPaths(except excluded: AppSection? = nil) {
@@ -33,20 +39,47 @@ private func clearNavPaths(except excluded: AppSection? = nil) {
 }
 ```
 
-`.push` case에서는 `clearNavPaths(except: selectedSection)` 사용하여 대상 탭의 path 이중 write 방지.
+### Fix 2: Destination-form → Button + isPresented (DashboardView)
+
+3개의 toolbar destination-form NavigationLink를 `Button` + `navigationDestination(isPresented:)`로 변환:
+
+```swift
+// BEFORE: implicit observer 생성
+NavigationLink {
+    SettingsView()
+} label: {
+    Image(systemName: "gearshape")
+}
+
+// AFTER: explicit isPresented observer만 사용
+Button {
+    showSettings = true
+} label: {
+    Image(systemName: "gearshape")
+}
+// ... 별도 위치에:
+.navigationDestination(isPresented: $showSettings) {
+    SettingsView()
+}
+```
+
+Notifications는 기존 `$showNotificationHub` 재사용하여 이중 navigation 경로도 제거.
 
 ### 변경 파일
 
-- `DUNE/App/ContentView.swift`
+- `DUNE/App/ContentView.swift` (Fix 1)
+- `DUNE/Presentation/Dashboard/DashboardView.swift` (Fix 2)
 
 ## Prevention
 
-- NavigationPath를 여러 개 소유하는 View에서는 비어있는 path에 대한 불필요한 reset을 피한다
-- 한 synchronous call에서 navigation-related @State를 2개 이상 변경할 때는 isEmpty guard 적용
-- 이 패턴은 기존 해결책 (`2026-03-02-watch-navigation-request-observer-update-loop.md`)과 동일한 원칙: **불필요한 navigation state write를 최소화**
+- **Destination-form `NavigationLink { View() }` 사용 금지** — implicit observer를 생성하여 NavigationStack의 observer 수를 불필요하게 증가시킴
+- 대신 `Button` + `navigationDestination(isPresented:)` 또는 value-form `NavigationLink(value:)` 사용
+- 하나의 NavigationStack에 `navigationDestination` modifier가 6개 이상이면 observer 과다 가능성 점검
+- NavigationPath 초기화 시 isEmpty guard 적용
 
 ## Lessons Learned
 
-- `NavigationPath`에 빈 `NavigationPath()`를 할당해도 SwiftUI는 이를 state change로 처리하여 re-render를 유발함
-- Tab 기반 앱에서 모든 탭의 path를 일괄 초기화하는 것은 대부분의 경우 불필요 (한 번에 1개 탭만 active path 보유)
-- `clearAll` + `set` 패턴보다 `clear(except:)` + `set` 패턴이 navigation mutation 수를 최소화
+- Destination-form `NavigationLink { View() }`는 value-form과 달리 **자체적으로 implicit navigation observer를 등록**함
+- 동일 NavigationStack에 observer가 많을수록 모든 navigation event에서 평가 비용 증가
+- Toolbar 내 NavigationLink는 Button으로 대체해도 시각적 차이가 없음 (`.topBarTrailing` placement에서 동일 렌더링)
+- 같은 destination(NotificationHubView)에 대해 두 가지 navigation 경로(destination-form NavigationLink + `isPresented`)가 있으면 observer 중복 + 혼란의 원인
