@@ -18,6 +18,10 @@ final class ExerciseRecord {
     var elevationGainMeters: Double?
     /// Floors ascended reported by motion sensors.
     var floorsAscended: Double?
+    /// Average machine level for non-distance machine cardio sessions.
+    var cardioMachineLevelAverage: Double?
+    /// Max machine level reached during non-distance machine cardio sessions.
+    var cardioMachineLevelMax: Int?
     var memo: String = ""
     var isFromHealthKit: Bool = false
     var healthKitWorkoutID: String?
@@ -50,6 +54,8 @@ final class ExerciseRecord {
         averageCadenceStepsPerMinute: Double? = nil,
         elevationGainMeters: Double? = nil,
         floorsAscended: Double? = nil,
+        cardioMachineLevelAverage: Double? = nil,
+        cardioMachineLevelMax: Int? = nil,
         memo: String = "",
         isFromHealthKit: Bool = false,
         healthKitWorkoutID: String? = nil,
@@ -74,6 +80,8 @@ final class ExerciseRecord {
         self.averageCadenceStepsPerMinute = averageCadenceStepsPerMinute
         self.elevationGainMeters = elevationGainMeters
         self.floorsAscended = floorsAscended
+        self.cardioMachineLevelAverage = cardioMachineLevelAverage
+        self.cardioMachineLevelMax = cardioMachineLevelMax.flatMap { (1...99).contains($0) ? $0 : nil }
         self.memo = memo
         self.isFromHealthKit = isFromHealthKit
         self.healthKitWorkoutID = healthKitWorkoutID

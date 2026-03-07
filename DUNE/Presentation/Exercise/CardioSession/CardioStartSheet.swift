@@ -9,8 +9,20 @@ struct CardioStartSheet: View {
     @State private var locationAuthStatus: CLAuthorizationStatus = CLLocationManager().authorizationStatus
 
     private var activityType: WorkoutActivityType {
-        WorkoutActivityType.resolveDistanceBased(from: exercise.id, name: exercise.name)
+        WorkoutActivityType.resolveCardioActivity(
+            from: exercise.id,
+            name: exercise.name,
+            inputTypeRaw: exercise.inputType.rawValue
+        )
             ?? exercise.resolvedActivityType
+    }
+
+    private var cardioUnit: CardioSecondaryUnit {
+        exercise.cardioSecondaryUnit ?? .km
+    }
+
+    private var supportsOutdoorSelection: Bool {
+        cardioUnit.usesDistanceField && !cardioUnit.isIndoorOnly
     }
 
     var body: some View {
@@ -22,9 +34,10 @@ struct CardioStartSheet: View {
 
                 modeButtons
 
-                if locationAuthStatus == .denied || locationAuthStatus == .restricted {
+                if supportsOutdoorSelection,
+                   locationAuthStatus == .denied || locationAuthStatus == .restricted {
                     locationWarning
-                } else if locationAuthStatus == .notDetermined {
+                } else if supportsOutdoorSelection, locationAuthStatus == .notDetermined {
                     locationNotice
                 }
 
@@ -68,18 +81,22 @@ struct CardioStartSheet: View {
     private var modeButtons: some View {
         VStack(spacing: DS.Spacing.md) {
             modeButton(
-                title: String(localized: "Outdoor"),
-                subtitle: String(localized: "GPS distance tracking"),
-                icon: "sun.max.fill",
-                isOutdoor: true
-            )
-
-            modeButton(
                 title: String(localized: "Indoor"),
-                subtitle: String(localized: "Timer and calories only"),
+                subtitle: supportsOutdoorSelection
+                    ? String(localized: "Timer and calories only")
+                    : String(localized: "Live machine cardio tracking"),
                 icon: "house.fill",
                 isOutdoor: false
             )
+
+            if supportsOutdoorSelection {
+                modeButton(
+                    title: String(localized: "Outdoor"),
+                    subtitle: String(localized: "GPS distance tracking"),
+                    icon: "sun.max.fill",
+                    isOutdoor: true
+                )
+            }
         }
     }
 

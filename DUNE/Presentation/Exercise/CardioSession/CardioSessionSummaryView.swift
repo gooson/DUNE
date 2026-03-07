@@ -80,6 +80,13 @@ struct CardioSessionSummaryView: View {
                         icon: "speedometer",
                         color: DS.Color.activity
                     )
+                } else if viewModel.supportsMachineLevel {
+                    summaryCard(
+                        title: "Avg Level",
+                        value: viewModel.formattedAverageMachineLevel,
+                        icon: "sum",
+                        color: DS.Color.activity
+                    )
                 }
 
                 summaryCard(
@@ -98,14 +105,23 @@ struct CardioSessionSummaryView: View {
                     color: DS.Color.steps
                 )
 
-                summaryCard(
-                    title: "Cadence",
-                    value: viewModel.cadenceStepsPerMinute > 0
-                        ? "\(Int(viewModel.cadenceStepsPerMinute)) spm"
-                        : "--",
-                    icon: "gauge.with.dots.needle.50percent",
-                    color: DS.Color.activity
-                )
+                if viewModel.supportsMachineLevel {
+                    summaryCard(
+                        title: "Max Level",
+                        value: viewModel.formattedMaxMachineLevel,
+                        icon: "arrow.up.circle.fill",
+                        color: DS.Color.activity
+                    )
+                } else {
+                    summaryCard(
+                        title: "Cadence",
+                        value: viewModel.cadenceStepsPerMinute > 0
+                            ? "\(Int(viewModel.cadenceStepsPerMinute)) spm"
+                            : "--",
+                        icon: "gauge.with.dots.needle.50percent",
+                        color: DS.Color.activity
+                    )
+                }
             }
 
             let hasElevation = viewModel.totalElevationGainMeters > 0
@@ -199,12 +215,15 @@ struct CardioSessionSummaryView: View {
             averageCadenceStepsPerMinute: data.averageCadenceStepsPerMinute,
             elevationGainMeters: data.elevationGainMeters,
             floorsAscended: data.floorsAscended,
+            cardioMachineLevelAverage: data.cardioMachineLevelAverage,
+            cardioMachineLevelMax: data.cardioMachineLevelMax,
             exerciseDefinitionID: data.exerciseID,
             primaryMuscles: exercise.primaryMuscles,
             secondaryMuscles: exercise.secondaryMuscles,
             equipment: exercise.equipment,
             estimatedCalories: data.estimatedCalories,
             calorieSource: .met,
+            autoIntensityRaw: data.autoIntensityRaw,
             cardioFitnessVO2Max: data.cardioFitnessVO2Max.flatMap { (10.0...90.0).contains($0) ? $0 : nil }
         )
 

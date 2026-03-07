@@ -10,8 +10,11 @@ struct ExerciseStartView: View {
 
     /// Whether this exercise should use the cardio live tracking flow.
     private var isCardioLiveTracking: Bool {
-        exercise.inputType == .durationDistance
-            && exercise.resolvedActivityType.isDistanceBased
+        WorkoutActivityType.resolveCardioActivity(
+            from: exercise.id,
+            name: exercise.name,
+            inputTypeRaw: exercise.inputType.rawValue
+        ) != nil
     }
 
     var body: some View {

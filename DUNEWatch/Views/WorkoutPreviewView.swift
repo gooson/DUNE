@@ -3,7 +3,7 @@ import WatchKit
 
 /// Pre-workout confirmation screen.
 /// Strength: shows exercise list + Start button.
-/// Cardio (single isDistanceBased exercise): shows Outdoor/Indoor choice.
+/// Cardio (single durationDistance exercise): shows cardio session start choices.
 struct WorkoutPreviewView: View {
     let snapshot: WorkoutSessionTemplate
     @Environment(WorkoutManager.self) private var workoutManager
@@ -36,17 +36,26 @@ struct WorkoutPreviewView: View {
     // MARK: - Cardio Type Resolution
 
     /// Returns the WorkoutActivityType if this is a single-exercise cardio workout.
-    /// Uses Domain-level `resolveDistanceBased` with inputType guard to avoid
+    /// Uses Domain-level `resolveCardioActivity` with inputType guard to avoid
     /// false positives such as `walking-lunge` being interpreted as walking cardio.
     private var resolvedCardioType: WorkoutActivityType? {
         guard snapshot.entries.count == 1 else { return nil }
         let entry = snapshot.entries[0]
         let inputType = resolvedInputType(for: entry.exerciseDefinitionID)
-        return WorkoutActivityType.resolveDistanceBased(
+        return WorkoutActivityType.resolveCardioActivity(
             from: entry.exerciseDefinitionID,
             name: entry.exerciseName,
             inputTypeRaw: inputType
         )
+    }
+
+    private var resolvedCardioSecondaryUnit: CardioSecondaryUnit? {
+        guard snapshot.entries.count == 1 else { return nil }
+        let entry = snapshot.entries[0]
+        guard let rawValue = resolvedCardioSecondaryUnitRaw(for: entry.exerciseDefinitionID) else {
+            return nil
+        }
+        return CardioSecondaryUnit(rawValue: rawValue)
     }
 
     /// Resolves watch-library input type for an exercise ID.
@@ -65,10 +74,26 @@ struct WorkoutPreviewView: View {
         }?.inputType
     }
 
+    private func resolvedCardioSecondaryUnitRaw(for exerciseID: String) -> String? {
+        guard !exerciseID.isEmpty else { return nil }
+
+        if let exact = connectivity.exerciseLibrary.first(where: { $0.id == exerciseID }) {
+            return exact.cardioSecondaryUnit
+        }
+
+        let canonicalID = RecentExerciseTracker.canonicalExerciseID(exerciseID: exerciseID)
+        return connectivity.exerciseLibrary.first {
+            RecentExerciseTracker.canonicalExerciseID(exerciseID: $0.id) == canonicalID
+        }?.cardioSecondaryUnit
+    }
+
     // MARK: - Cardio Start
 
     private func cardioStartContent(activityType: WorkoutActivityType) -> some View {
-        ScrollView {
+        let cardioUnit = resolvedCardioSecondaryUnit ?? fallbackCardioSecondaryUnit(for: activityType)
+        let supportsOutdoor = cardioUnit?.usesDistanceField == true && cardioUnit?.isIndoorOnly != true
+
+        return ScrollView {
             VStack(spacing: DS.Spacing.lg) {
                 Image(systemName: activityType.iconName)
                     .font(.system(size: 40))
@@ -78,28 +103,53 @@ struct WorkoutPreviewView: View {
                 Text(LocalizedStringKey(activityType.typeName))
                     .font(DS.Typography.exerciseName)
 
-                // Outdoor option
-                Button {
-                    startCardio(activityType: activityType, isOutdoor: true)
-                } label: {
-                    Label(String(localized: "Outdoor"), systemImage: "sun.max.fill")
-                        .frame(maxWidth: .infinity, minHeight: 44)
+                if supportsOutdoor {
+                    Button {
+                        startCardio(
+                            activityType: activityType,
+                            isOutdoor: false,
+                            secondaryUnit: cardioUnit
+                        )
+                    } label: {
+                        Label(String(localized: "Indoor"), systemImage: "building.fill")
+                            .frame(maxWidth: .infinity, minHeight: 44)
+                    }
+                    .buttonStyle(.bordered)
+                    .disabled(isStarting)
+                    .accessibilityIdentifier("watch-workout-cardio-indoor-button")
+                } else {
+                    Button {
+                        startCardio(
+                            activityType: activityType,
+                            isOutdoor: false,
+                            secondaryUnit: cardioUnit
+                        )
+                    } label: {
+                        Label(String(localized: "Indoor"), systemImage: "building.fill")
+                            .frame(maxWidth: .infinity, minHeight: 44)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(DS.Color.activity)
+                    .disabled(isStarting)
+                    .accessibilityIdentifier("watch-workout-cardio-indoor-button")
                 }
-                .buttonStyle(.borderedProminent)
-                .tint(DS.Color.positive)
-                .disabled(isStarting)
-                .accessibilityIdentifier("watch-workout-cardio-outdoor-button")
 
-                // Indoor option
-                Button {
-                    startCardio(activityType: activityType, isOutdoor: false)
-                } label: {
-                    Label(String(localized: "Indoor"), systemImage: "building.fill")
-                        .frame(maxWidth: .infinity, minHeight: 44)
+                if supportsOutdoor {
+                    Button {
+                        startCardio(
+                            activityType: activityType,
+                            isOutdoor: true,
+                            secondaryUnit: cardioUnit
+                        )
+                    } label: {
+                        Label(String(localized: "Outdoor"), systemImage: "sun.max.fill")
+                            .frame(maxWidth: .infinity, minHeight: 44)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(DS.Color.positive)
+                    .disabled(isStarting)
+                    .accessibilityIdentifier("watch-workout-cardio-outdoor-button")
                 }
-                .buttonStyle(.bordered)
-                .disabled(isStarting)
-                .accessibilityIdentifier("watch-workout-cardio-indoor-button")
 
                 if isStarting {
                     ProgressView()
@@ -111,7 +161,11 @@ struct WorkoutPreviewView: View {
         .scrollBounceBehavior(.basedOnSize)
     }
 
-    private func startCardio(activityType: WorkoutActivityType, isOutdoor: Bool) {
+    private func startCardio(
+        activityType: WorkoutActivityType,
+        isOutdoor: Bool,
+        secondaryUnit: CardioSecondaryUnit?
+    ) {
         guard !isStarting else { return }
         isStarting = true
 
@@ -120,7 +174,8 @@ struct WorkoutPreviewView: View {
                 try await workoutManager.requestAuthorization()
                 try await workoutManager.startCardioSession(
                     activityType: activityType,
-                    isOutdoor: isOutdoor
+                    isOutdoor: isOutdoor,
+                    secondaryUnit: secondaryUnit
                 )
                 WKInterfaceDevice.current().play(.success)
                 isStarting = false
@@ -129,6 +184,21 @@ struct WorkoutPreviewView: View {
                 presentStartError(error)
                 WKInterfaceDevice.current().play(.failure)
             }
+        }
+    }
+
+    private func fallbackCardioSecondaryUnit(for activityType: WorkoutActivityType) -> CardioSecondaryUnit? {
+        switch activityType {
+        case .swimming, .rowing:
+            return .meters
+        case .stairClimbing, .stairStepper:
+            return .floors
+        case .jumpRope:
+            return .count
+        case .elliptical, .stepTraining, .mixedCardio, .crossTraining, .highIntensityIntervalTraining:
+            return .timeOnly
+        default:
+            return activityType.isDistanceBased ? .km : nil
         }
     }
 

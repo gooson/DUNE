@@ -215,17 +215,76 @@ enum AppSchemaV10: VersionedSchema {
     static var models: [any PersistentModel.Type] {
         [ExerciseRecord.self, BodyCompositionRecord.self, WorkoutSet.self, CustomExercise.self, WorkoutTemplate.self, InjuryRecord.self, HabitDefinition.self, HabitLog.self, UserCategory.self, ExerciseDefaultRecord.self, HealthSnapshotMirrorRecord.self]
     }
+
+    @Model
+    final class ExerciseRecord {
+        var id: UUID = UUID()
+        var date: Date = Date()
+        var exerciseType: String = ""
+        var duration: TimeInterval = 0
+        var calories: Double?
+        var distance: Double?
+        var stepCount: Int?
+        var averagePaceSecondsPerKm: Double?
+        var averageCadenceStepsPerMinute: Double?
+        var elevationGainMeters: Double?
+        var floorsAscended: Double?
+        var memo: String = ""
+        var isFromHealthKit: Bool = false
+        var healthKitWorkoutID: String?
+        var createdAt: Date = Date()
+
+        @Relationship(deleteRule: .cascade, inverse: \WorkoutSet.exerciseRecord)
+        var sets: [WorkoutSet]? = []
+        var exerciseDefinitionID: String?
+        var primaryMusclesRaw: [String] = []
+        var secondaryMusclesRaw: [String] = []
+        var equipmentRaw: String?
+        var estimatedCalories: Double?
+        var calorieSourceRaw: String = CalorieSource.manual.rawValue
+        var rpe: Int?
+        var autoIntensityRaw: Double?
+        var cardioFitnessVO2Max: Double?
+
+        init() {}
+    }
+
+    @Model
+    final class WorkoutSet {
+        var id: UUID = UUID()
+        var exerciseRecord: ExerciseRecord?
+        var setNumber: Int = 0
+        var setTypeRaw: String = SetType.working.rawValue
+        var weight: Double?
+        var reps: Int?
+        var duration: TimeInterval?
+        var distance: Double?
+        var intensity: Int? = nil
+        var isCompleted: Bool = false
+        var restDuration: TimeInterval?
+
+        init() {}
+    }
+}
+
+// MARK: - Schema V11 (Cardio Machine Level Summary)
+
+enum AppSchemaV11: VersionedSchema {
+    static let versionIdentifier = Schema.Version(11, 0, 0)
+    static var models: [any PersistentModel.Type] {
+        [ExerciseRecord.self, BodyCompositionRecord.self, WorkoutSet.self, CustomExercise.self, WorkoutTemplate.self, InjuryRecord.self, HabitDefinition.self, HabitLog.self, UserCategory.self, ExerciseDefaultRecord.self, HealthSnapshotMirrorRecord.self]
+    }
 }
 
 // MARK: - Migration Plan
 
 enum AppMigrationPlan: SchemaMigrationPlan {
     static var schemas: [any VersionedSchema.Type] {
-        [AppSchemaV1.self, AppSchemaV2.self, AppSchemaV3.self, AppSchemaV4.self, AppSchemaV5.self, AppSchemaV6.self, AppSchemaV7.self, AppSchemaV8.self, AppSchemaV9.self, AppSchemaV10.self]
+        [AppSchemaV1.self, AppSchemaV2.self, AppSchemaV3.self, AppSchemaV4.self, AppSchemaV5.self, AppSchemaV6.self, AppSchemaV7.self, AppSchemaV8.self, AppSchemaV9.self, AppSchemaV10.self, AppSchemaV11.self]
     }
 
     static var stages: [MigrationStage] {
-        [migrateV1toV2, migrateV2toV3, migrateV3toV4, migrateV4toV5, migrateV5toV6, migrateV6toV7, migrateV7toV8, migrateV8toV9, migrateV9toV10]
+        [migrateV1toV2, migrateV2toV3, migrateV3toV4, migrateV4toV5, migrateV5toV6, migrateV6toV7, migrateV7toV8, migrateV8toV9, migrateV9toV10, migrateV10toV11]
     }
 
     static let migrateV1toV2 = MigrationStage.lightweight(
@@ -271,5 +330,10 @@ enum AppMigrationPlan: SchemaMigrationPlan {
     static let migrateV9toV10 = MigrationStage.lightweight(
         fromVersion: AppSchemaV9.self,
         toVersion: AppSchemaV10.self
+    )
+
+    static let migrateV10toV11 = MigrationStage.lightweight(
+        fromVersion: AppSchemaV10.self,
+        toVersion: AppSchemaV11.self
     )
 }

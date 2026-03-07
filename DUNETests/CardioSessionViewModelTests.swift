@@ -104,23 +104,41 @@ struct CardioSessionViewModelTests {
         func fetchWristTemperatureBaseline(days: Int) async throws -> Double? { nil }
     }
 
+    private final class MockCalorieService: CalorieEstimating, @unchecked Sendable {
+        private(set) var lastMetValue: Double?
+
+        func estimate(
+            metValue: Double,
+            bodyWeightKg: Double,
+            durationSeconds: TimeInterval,
+            restSeconds: TimeInterval
+        ) -> Double? {
+            lastMetValue = metValue
+            return metValue * bodyWeightKg * (max(durationSeconds - restSeconds, 0) / 3600.0)
+        }
+    }
+
     // MARK: - Helpers
 
     private func makeExercise(
         id: String = "running",
-        name: String = "Running"
+        name: String = "Running",
+        inputType: ExerciseInputType = .durationDistance,
+        equipment: Equipment = .bodyweight,
+        metValue: Double = 9.8,
+        cardioSecondaryUnit: CardioSecondaryUnit? = .km
     ) -> ExerciseDefinition {
         ExerciseDefinition(
             id: id,
             name: name,
             localizedName: "러닝",
             category: .cardio,
-            inputType: .durationDistance,
+            inputType: inputType,
             primaryMuscles: [.quadriceps, .hamstrings],
             secondaryMuscles: [.calves],
-            equipment: .bodyweight,
-            metValue: 9.8,
-            cardioSecondaryUnit: .km
+            equipment: equipment,
+            metValue: metValue,
+            cardioSecondaryUnit: cardioSecondaryUnit
         )
     }
 
@@ -129,12 +147,24 @@ struct CardioSessionViewModelTests {
         name: String = "Running",
         isOutdoor: Bool = true,
         activityType: WorkoutActivityType = .running,
+        inputType: ExerciseInputType = .durationDistance,
+        equipment: Equipment = .bodyweight,
+        metValue: Double = 9.8,
+        cardioSecondaryUnit: CardioSecondaryUnit? = .km,
         locationService: MockLocationTrackingService? = nil,
         motionService: MockMotionTrackingService? = nil,
+        calorieService: CalorieEstimating = CalorieEstimationService(),
         stepsService: StepsQuerying? = nil,
         vitalsService: VitalsQuerying? = nil
     ) -> CardioSessionViewModel {
-        let exercise = makeExercise(id: id, name: name)
+        let exercise = makeExercise(
+            id: id,
+            name: name,
+            inputType: inputType,
+            equipment: equipment,
+            metValue: metValue,
+            cardioSecondaryUnit: cardioSecondaryUnit
+        )
         let location = locationService ?? MockLocationTrackingService()
         let motion = motionService ?? MockMotionTrackingService()
         return CardioSessionViewModel(
@@ -143,6 +173,7 @@ struct CardioSessionViewModelTests {
             isOutdoor: isOutdoor,
             locationService: location,
             motionService: motion,
+            calorieService: calorieService,
             stepsService: stepsService,
             vitalsService: vitalsService
         )
@@ -317,6 +348,19 @@ struct CardioSessionViewModelTests {
         #expect(indoor.showsDistance == true)
     }
 
+    @Test("showsDistance is false for time-only machine cardio")
+    func hidesDistanceForTimeOnlyMachineCardio() {
+        let vm = makeVM(
+            id: "elliptical",
+            name: "Elliptical",
+            isOutdoor: false,
+            activityType: .elliptical,
+            cardioSecondaryUnit: .timeOnly
+        )
+        #expect(vm.showsDistance == false)
+        #expect(vm.supportsMachineLevel == true)
+    }
+
     // MARK: - Pause / Resume
 
     @Test("Pause changes state from running to paused")
@@ -380,6 +424,37 @@ struct CardioSessionViewModelTests {
         await vm.end()
 
         #expect(vm.walkingStepCount == 250)
+    }
+
+    @Test("Machine cardio session records level summary and MET-adjusted intensity")
+    func machineCardioLevelSummary() async {
+        let calorieService = MockCalorieService()
+        let vm = makeVM(
+            id: "stair-climber",
+            name: "Stair Climber",
+            isOutdoor: false,
+            activityType: .stairClimbing,
+            metValue: 8.0,
+            cardioSecondaryUnit: .floors,
+            calorieService: calorieService
+        )
+
+        vm.start()
+        vm.setMachineLevel(5)
+        try? await Task.sleep(for: .milliseconds(1200))
+        vm.setMachineLevel(10)
+        try? await Task.sleep(for: .milliseconds(1200))
+        await vm.end()
+
+        let record = vm.createExerciseRecord()
+        #expect(record != nil)
+        #expect(vm.currentMachineLevel == 10)
+        #expect((record?.cardioMachineLevelAverage ?? 0) > 5)
+        #expect((record?.cardioMachineLevelAverage ?? 0) < 10.5)
+        #expect(record?.cardioMachineLevelMax == 10)
+        #expect((record?.autoIntensityRaw ?? 0) > 0)
+        #expect((record?.metValue ?? 0) > 8.0)
+        #expect((calorieService.lastMetValue ?? 0) > 8.0)
     }
 
     // MARK: - Cardio Fitness (VO2 Max)

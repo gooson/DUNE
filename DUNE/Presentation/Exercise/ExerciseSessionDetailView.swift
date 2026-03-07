@@ -115,6 +115,8 @@ struct ExerciseSessionDetailView: View {
             || (record.averageCadenceStepsPerMinute ?? 0) > 0
             || (record.elevationGainMeters ?? 0) > 0
             || (record.floorsAscended ?? 0) > 0
+            || (record.cardioMachineLevelAverage ?? 0) > 0
+            || (record.cardioMachineLevelMax ?? 0) > 0
     }
 
     @ViewBuilder
@@ -157,6 +159,24 @@ struct ExerciseSessionDetailView: View {
                             title: "Cadence",
                             value: "\(Int(cadence).formattedWithSeparator) spm",
                             icon: "gauge.with.dots.needle.50percent"
+                        )
+                    }
+                }
+
+                HStack(spacing: DS.Spacing.sm) {
+                    if let averageLevel = record.cardioMachineLevelAverage, averageLevel > 0 {
+                        cardioMetricCard(
+                            title: "Avg Level",
+                            value: averageLevel.formatted(.number.precision(.fractionLength(1))),
+                            icon: "sum"
+                        )
+                    }
+
+                    if let maxLevel = record.cardioMachineLevelMax, maxLevel > 0 {
+                        cardioMetricCard(
+                            title: "Max Level",
+                            value: maxLevel.formattedWithSeparator,
+                            icon: "arrow.up.circle.fill"
                         )
                     }
                 }

@@ -20,7 +20,9 @@ struct CardioMainMetricsPage: View {
                 Spacer(minLength: 0)
 
                 // Distance + Pace/Speed (medium 2-col)
-                if profile.showsDistance {
+                if workoutManager.supportsMachineLevel {
+                    currentLevelRow
+                } else if profile.showsDistance {
                     distanceRow
                 }
 
@@ -128,6 +130,19 @@ struct CardioMainMetricsPage: View {
     }
 
     // MARK: - Bottom Row (HR + Calories)
+
+    private var currentLevelRow: some View {
+        VStack(spacing: DS.Spacing.xxs) {
+            Text(workoutManager.formattedCurrentMachineLevel)
+                .font(DS.Typography.secondaryMetric)
+                .foregroundStyle(DS.Color.activity)
+                .contentTransition(.numericText())
+
+            Text("Level")
+                .font(DS.Typography.metricLabel)
+                .foregroundStyle(.tertiary)
+        }
+    }
 
     private var bottomRow: some View {
         HStack(spacing: DS.Spacing.lg) {
