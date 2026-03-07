@@ -61,6 +61,11 @@ enum WatchDeleteRequestPolicy {
 @Observable
 @MainActor
 final class WatchConnectivityManager: NSObject {
+    private enum UITestScenario: String {
+        case empty = "empty"
+        case defaultSeeded = "default-seeded"
+    }
+
     static let shared = WatchConnectivityManager()
     nonisolated private static let logger = Logger(subsystem: "com.raftel.dailve", category: "WatchConnectivity")
     nonisolated private static func makeWCErrorHandler(_ message: String) -> @Sendable (Error) -> Void {
@@ -125,20 +130,42 @@ final class WatchConnectivityManager: NSObject {
             return false
         }
 
-        setExerciseLibrary([
-            WatchExerciseInfo(
-                id: "ui-test-squat",
-                name: "UI Test Squat",
-                inputType: "setsRepsWeight",
-                defaultSets: 3,
-                defaultReps: 8,
-                defaultWeightKg: 40,
-                equipment: "barbell",
-                cardioSecondaryUnit: nil
-            )
-        ])
+        switch resolvedUITestScenario {
+        case .empty:
+            setExerciseLibrary([])
+            workoutTemplates = []
+            activeWorkout = nil
+        case .defaultSeeded:
+            setExerciseLibrary([
+                WatchExerciseInfo(
+                    id: "ui-test-squat",
+                    name: "UI Test Squat",
+                    inputType: "setsRepsWeight",
+                    defaultSets: 3,
+                    defaultReps: 8,
+                    defaultWeightKg: 40,
+                    equipment: "barbell",
+                    cardioSecondaryUnit: nil
+                )
+            ])
+            activeWorkout = nil
+        }
+
         syncStatus = .synced(Date())
         return true
+    }
+
+    private var resolvedUITestScenario: UITestScenario {
+        let arguments = ProcessInfo.processInfo.arguments
+        let shouldSeedMockData = arguments.contains("--seed-mock")
+
+        guard let index = arguments.firstIndex(of: "--ui-scenario"),
+              arguments.indices.contains(index + 1),
+              let scenario = UITestScenario(rawValue: arguments[index + 1]) else {
+            return shouldSeedMockData ? .defaultSeeded : .empty
+        }
+
+        return scenario
     }
 
     /// Load any previously-received applicationContext (e.g. exerciseLibrary, globalRestSeconds).

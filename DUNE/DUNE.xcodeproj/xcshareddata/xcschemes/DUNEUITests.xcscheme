@@ -43,6 +43,18 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
       onlyGenerateCoverageForSpecifiedTargets = "NO">
+      <TestPlans>
+         <TestPlanReference
+            default = "YES"
+            reference = "container:../DUNEUITests/DUNEUITests-PR.xctestplan">
+         </TestPlanReference>
+         <TestPlanReference
+            reference = "container:../DUNEUITests/DUNEUITests-Full.xctestplan">
+         </TestPlanReference>
+         <TestPlanReference
+            reference = "container:../DUNEUITests/UITests-CI.xctestplan">
+         </TestPlanReference>
+      </TestPlans>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"

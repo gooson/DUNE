@@ -45,7 +45,7 @@ final class LifeSmokeTests: UITestBaseCase {
 
         let cancelButton = app.descendants(matching: .any)[AXID.habitFormCancel].firstMatch
         XCTAssertTrue(cancelButton.waitForExistence(timeout: 3), "Habit form cancel button should exist")
-        cancelButton.tap()
+        XCTAssertTrue(app.dismissModalIfPresent(cancelIdentifiers: [AXID.habitFormCancel]), "Habit form should dismiss via shared helper")
 
         // Sheet should be dismissed — add button should be visible again
         XCTAssertTrue(addButton.waitForExistence(timeout: 3), "Habit form should be dismissed")

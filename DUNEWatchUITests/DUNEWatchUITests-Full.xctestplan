@@ -1,8 +1,8 @@
 {
   "configurations" : [
     {
-      "id" : "D2A6C7E0-0001-0001-0001-000000000001",
-      "name" : "CI Configuration",
+      "id" : "4E6F3366-0001-0001-0001-000000000102",
+      "name" : "Full Configuration",
       "options" : {
 
       }
@@ -11,20 +11,16 @@
   "defaultOptions" : {
     "targetForVariableExpansion" : {
       "containerPath" : "container:DUNE.xcodeproj",
-      "identifier" : "DUNEUITests",
-      "name" : "DUNEUITests"
+      "identifier" : "DUNEWatchUITests",
+      "name" : "DUNEWatchUITests"
     }
   },
   "testTargets" : [
     {
-      "skippedTests" : [
-        "HealthKitPermissionUITests",
-        "SakuraThemeSnapshotTests"
-      ],
       "target" : {
         "containerPath" : "container:DUNE.xcodeproj",
-        "identifier" : "DUNEUITests",
-        "name" : "DUNEUITests"
+        "identifier" : "DUNEWatchUITests",
+        "name" : "DUNEWatchUITests"
       }
     }
   ],
