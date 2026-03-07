@@ -1,0 +1,87 @@
+{
+  "releases": [
+    {
+      "version": "0.2.0",
+      "introKey": "Start with condition, weather, sleep debt, notifications, widgets, muscle map, training, wellness, habits, themes, and Apple Watch workouts in one flow.",
+      "features": [
+        {
+          "id": "widgets",
+          "titleKey": "Widgets",
+          "summaryKey": "Add DUNE widgets to your Home Screen and glance at your key scores without opening the app.",
+          "symbolName": "square.grid.2x2.fill",
+          "area": "today"
+        },
+        {
+          "id": "conditionScore",
+          "titleKey": "Condition Score",
+          "summaryKey": "Check your condition score, coaching, and weather from the Today tab.",
+          "symbolName": "heart.text.square.fill",
+          "area": "today"
+        },
+        {
+          "id": "weather",
+          "titleKey": "Weather Guidance",
+          "summaryKey": "Check live weather, outdoor fitness guidance, and hourly conditions before you head out.",
+          "symbolName": "cloud.sun.fill",
+          "area": "today"
+        },
+        {
+          "id": "sleepDebt",
+          "titleKey": "Sleep Debt",
+          "summaryKey": "Spot your weekly sleep debt and open the sleep detail to compare recent rest against your baseline.",
+          "symbolName": "moon.zzz.fill",
+          "area": "today"
+        },
+        {
+          "id": "notifications",
+          "titleKey": "Notifications",
+          "summaryKey": "Review unread insights and jump back into important updates any time.",
+          "symbolName": "bell.badge.fill",
+          "area": "today"
+        },
+        {
+          "id": "muscleMap",
+          "titleKey": "Muscle Map",
+          "summaryKey": "Open the muscle map to check which areas are recovered, overloaded, or ready for the next session.",
+          "symbolName": "figure.stand",
+          "area": "activity"
+        },
+        {
+          "id": "trainingReadiness",
+          "titleKey": "Training Readiness",
+          "summaryKey": "Open recovery details, weekly stats, and suggestions built around your recent training.",
+          "symbolName": "figure.strengthtraining.traditional",
+          "area": "activity"
+        },
+        {
+          "id": "wellness",
+          "titleKey": "Wellness",
+          "summaryKey": "See sleep, body, and active indicators together in one score-driven view.",
+          "symbolName": "leaf.fill",
+          "area": "wellness"
+        },
+        {
+          "id": "habits",
+          "titleKey": "My Habits",
+          "summaryKey": "Track daily habits and keep auto achievements moving with your routine.",
+          "symbolName": "checklist.checked",
+          "area": "life"
+        },
+        {
+          "id": "themes",
+          "titleKey": "Themes",
+          "summaryKey": "Switch between eight visual themes from Settings and make the app feel more like yours.",
+          "symbolName": "paintpalette.fill",
+          "area": "settings"
+        },
+        {
+          "id": "watchQuickStart",
+          "titleKey": "Quick Start",
+          "summaryKey": "Start workouts faster on Apple Watch and sync completed sessions back to iPhone.",
+          "symbolName": "applewatch.watchface",
+          "area": "watch"
+        }
+      ]
+    }
+  ]
+}
