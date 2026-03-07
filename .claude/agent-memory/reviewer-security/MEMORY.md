@@ -51,6 +51,15 @@
 - **Safe**: Smart quote mismatch fixed (U+2019) — purely Unicode/formatting, no security impact
 - **No injection risk**: All localization strings are compile-time constants, no dynamic/user-input interpolation
 
+### Notification & Bedtime Reminder Audit (Commit claude/determined-proskuriakova)
+- **P2**: `BedtimeWatchReminderScheduler.settingsKey` is a public `static let` string used raw with `@AppStorage` — consistent, no injection risk, but public exposure of raw UserDefaults key means external code or future test could collide. Acceptable as-is since it's still within the same module.
+- **P2**: `formattedValue` strings from HealthKit are joined with `\n` and written into notification body without length capping. A large number of body composition updates in a single merge window could produce an arbitrarily long notification body string. UNNotificationContent does not enforce a limit programmatically but OS will truncate display. Not exploitable but a DoS-style degraded UX vector.
+- **Safe**: Body composition buffer in UserDefaults uses JSONEncoder/JSONDecoder round-trip with a private `BodyCompositionBufferEntry` Codable struct — no injection risk, type-safe deserialization.
+- **Safe**: `replacingIdentifier` in NotificationServiceImpl is passed as a constant `"com.dune.bodyComposition.merged"` from a private enum — not user-controlled.
+- **Safe**: VitalsQueryService.fetchLatestWristTemperature already applies validRange (30-42°C guard) per confirmed safe pattern in memory — wrist temp gate in BedtimeWatchReminderScheduler does not bypass HealthKit validation.
+- **Safe**: `shouldSuggestLevelUp()` and `applyInterSessionOverload()` operate only on local `sets`/`previousSets` state (no network, no persistence writes). `clampedIncreaseKg = min(incrementKg, max(maxIncreaseKg, 0))` has a logic bug (inverted max clamp) but not a security issue.
+- **P3**: `settingsKey` for bedtime reminder uses `UserDefaults.standard` (not a suite) — consistent with existing throttle store pattern in this codebase, low risk.
+
 ### Recurring Patterns to Watch
 - `errorMessage = error.localizedDescription` — can expose internal error details to UI (P3)
 - `try? modelContext.save()` removed in this diff — was silently swallowing errors

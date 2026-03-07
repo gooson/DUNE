@@ -20,7 +20,7 @@ struct DUNEApp: App {
     @State private var hasAttemptedNotificationAuthorizationThisLaunch = false
     @State private var hasStartedRuntimeServices = false
     @State private var showWhatsNewSheet = false
-    @State private var automaticWhatsNewReleases: [WhatsNewRelease] = []
+    @State private var automaticWhatsNewReleases: [WhatsNewReleaseData] = []
     @State private var automaticWhatsNewBuild = ""
 
     let modelContainer: ModelContainer
@@ -50,6 +50,36 @@ struct DUNEApp: App {
 
     private static var shouldBypassLaunchExperienceForTests: Bool {
         isRunningXCTest && !isRunningLaunchPermissionUITest
+    }
+
+    private struct UITestLaunchConfiguration {
+        let shouldResetState: Bool
+        let shouldSeedMockData: Bool
+        let scenario: UITestSeedScenario
+
+        static func current(isRunningUITests: Bool, isRunningXCTest: Bool) -> Self {
+            guard isRunningUITests else {
+                return Self(
+                    shouldResetState: false,
+                    shouldSeedMockData: false,
+                    scenario: .empty
+                )
+            }
+
+            let arguments = ProcessInfo.processInfo.arguments
+            let shouldSeedMockData = isRunningXCTest && arguments.contains("--seed-mock")
+            let shouldResetState = arguments.contains("--ui-reset")
+
+            let scenario = DUNEApp.launchArgumentValue(for: "--ui-scenario")
+                .flatMap(UITestSeedScenario.init(rawValue:))
+                ?? (shouldSeedMockData ? .defaultSeeded : .empty)
+
+            return Self(
+                shouldResetState: shouldResetState,
+                shouldSeedMockData: shouldSeedMockData,
+                scenario: scenario
+            )
+        }
     }
 
     private static func launchArgumentValue(for key: String) -> String? {
@@ -83,8 +113,14 @@ struct DUNEApp: App {
         isRunningXCTest && !isRunningUITests
     }
 
-    private static let shouldSeedMockData: Bool =
-        isRunningXCTest && ProcessInfo.processInfo.arguments.contains("--seed-mock")
+    private static let uiTestLaunchConfiguration = UITestLaunchConfiguration.current(
+        isRunningUITests: isRunningUITests,
+        isRunningXCTest: isRunningXCTest
+    )
+
+    private static let shouldSeedMockData = uiTestLaunchConfiguration.shouldSeedMockData
+
+    private static let shouldResetUITestState = uiTestLaunchConfiguration.shouldResetState
 
     private static func makeModelContainer(configuration: ModelConfiguration) throws -> ModelContainer {
         try ModelContainer(
@@ -121,6 +157,7 @@ struct DUNEApp: App {
             ? false
             : CloudSyncPreferenceStore.resolvedValue()
         let config = ModelConfiguration(
+            isStoredInMemoryOnly: Self.shouldResetUITestState,
             cloudKitDatabase: (cloudSyncEnabled && !Self.isRunningXCTest) ? .automatic : .none
         )
         do {
@@ -261,7 +298,10 @@ struct DUNEApp: App {
             .task {
                 guard !hasSeededMockData else { return }
                 hasSeededMockData = true
-                TestDataSeeder.seed(into: modelContainer.mainContext)
+                TestDataSeeder.seed(
+                    into: modelContainer.mainContext,
+                    scenario: Self.uiTestLaunchConfiguration.scenario
+                )
             }
     }
     #else

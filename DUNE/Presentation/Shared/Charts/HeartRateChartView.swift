@@ -13,6 +13,7 @@ struct HeartRateChartView: View {
     @Environment(\.appTheme) private var theme
 
     @State private var selectedDate: Date?
+    @State private var selectionGestureState = ChartSelectionGestureState()
 
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
@@ -21,17 +22,6 @@ struct HeartRateChartView: View {
             chart
                 .frame(height: chartHeight)
                 .clipped()
-                .overlay(alignment: .top) {
-                    if let point = selectedPoint {
-                        ChartSelectionOverlay(
-                            date: point.date,
-                            value: "\(Int(point.bpm).formattedWithSeparator) bpm",
-                            dateFormat: .dateTime.hour().minute()
-                        )
-                        .transition(.opacity)
-                        .animation(.easeInOut(duration: 0.15), value: selectedDate)
-                    }
-                }
         }
     }
 
@@ -121,8 +111,33 @@ struct HeartRateChartView: View {
                     .foregroundStyle(theme.accentColor.opacity(0.30))
             }
         }
-        .chartXSelection(value: $selectedDate)
-        .sensoryFeedback(.selection, trigger: selectedDate)
+        .chartOverlay { proxy in
+            GeometryReader { geometry in
+                if let plotFrame = proxy.plotFrame.map({ geometry[$0] }) {
+                    ZStack(alignment: .topLeading) {
+                        Rectangle()
+                            .fill(.clear)
+                            .contentShape(Rectangle())
+                            .simultaneousGesture(selectionGesture(proxy: proxy, plotFrame: plotFrame))
+
+                        if let point = selectedPoint,
+                           let anchor = selectedAnchor(for: point, proxy: proxy, plotFrame: plotFrame) {
+                            FloatingChartSelectionOverlay(
+                                date: point.date,
+                                value: "\(Int(point.bpm).formattedWithSeparator) bpm",
+                                anchor: anchor,
+                                chartSize: geometry.size,
+                                plotFrame: plotFrame,
+                                dateFormat: .dateTime.hour().minute()
+                            )
+                            .transition(.opacity)
+                        }
+                    }
+                    .animation(.easeInOut(duration: 0.15), value: selectedDate)
+                }
+            }
+        }
+        .sensoryFeedback(.selection, trigger: selectedPoint?.date)
     }
 
     // MARK: - Helpers
@@ -146,8 +161,38 @@ struct HeartRateChartView: View {
 
     private var selectedPoint: HeartRateSample? {
         guard let selectedDate else { return nil }
-        return samples.min(by: {
-            abs($0.date.timeIntervalSince(selectedDate)) < abs($1.date.timeIntervalSince(selectedDate))
-        })
+        return ChartSelectionInteraction.nearestPoint(to: selectedDate, in: samples, date: \.date)
+    }
+
+    private func selectedAnchor(
+        for point: HeartRateSample,
+        proxy: ChartProxy,
+        plotFrame: CGRect
+    ) -> CGPoint? {
+        ChartSelectionInteraction.anchor(
+            xPosition: proxy.position(forX: point.date),
+            yPosition: proxy.position(forY: point.bpm),
+            plotFrame: plotFrame
+        )
+    }
+
+    private func selectionGesture(proxy: ChartProxy, plotFrame: CGRect) -> some Gesture {
+        DragGesture(minimumDistance: 0, coordinateSpace: .local)
+            .onChanged { value in
+                guard selectionGestureState.registerChange(
+                    at: value.time,
+                    translation: value.translation
+                ) else { return }
+
+                selectedDate = ChartSelectionInteraction.resolvedDate(
+                    at: value.location,
+                    proxy: proxy,
+                    plotFrame: plotFrame
+                )
+            }
+            .onEnded { _ in
+                selectionGestureState.reset()
+                selectedDate = nil
+            }
     }
 }

@@ -1,8 +1,10 @@
-import XCTest
+import Testing
 @testable import DUNEWatch
 
-final class CardioInactivityPolicyTests: XCTestCase {
-    func testEvaluateReturnsNoneBeforeSoftThreshold() {
+@Suite("CardioInactivityPolicy")
+struct CardioInactivityPolicyTests {
+    @Test("Returns none before soft threshold")
+    func evaluateReturnsNoneBeforeSoftThreshold() {
         let now = Date()
 
         let result = CardioInactivityPolicy.evaluate(
@@ -11,10 +13,11 @@ final class CardioInactivityPolicyTests: XCTestCase {
             now: now
         )
 
-        XCTAssertEqual(result, .none)
+        #expect(result == .none)
     }
 
-    func testEvaluateReturnsSoftNudgeBetweenThresholds() {
+    @Test("Returns softNudge between thresholds")
+    func evaluateReturnsSoftNudgeBetweenThresholds() {
         let now = Date()
 
         let result = CardioInactivityPolicy.evaluate(
@@ -23,10 +26,11 @@ final class CardioInactivityPolicyTests: XCTestCase {
             now: now
         )
 
-        XCTAssertEqual(result, .softNudge)
+        #expect(result == .softNudge)
     }
 
-    func testEvaluateReturnsConfirmationAtConfirmationThreshold() {
+    @Test("Returns confirmation at confirmation threshold")
+    func evaluateReturnsConfirmationAtConfirmationThreshold() {
         let now = Date()
 
         let result = CardioInactivityPolicy.evaluate(
@@ -36,18 +40,17 @@ final class CardioInactivityPolicyTests: XCTestCase {
         )
 
         guard case .confirmation(let deadline) = result else {
-            XCTFail("Expected confirmation state")
+            Issue.record("Expected confirmation state")
             return
         }
 
-        XCTAssertEqual(
-            deadline.timeIntervalSince(now),
-            CardioInactivityPolicy.countdownDuration,
-            accuracy: 0.001
+        #expect(
+            abs(deadline.timeIntervalSince(now) - CardioInactivityPolicy.countdownDuration) < 0.001
         )
     }
 
-    func testEvaluateRespectsExistingDeadlineUntilAutoEnd() {
+    @Test("Respects existing deadline until autoEnd")
+    func evaluateRespectsExistingDeadlineUntilAutoEnd() {
         let now = Date()
         let futureDeadline = now.addingTimeInterval(4)
 
@@ -56,13 +59,13 @@ final class CardioInactivityPolicyTests: XCTestCase {
             autoEndDeadline: futureDeadline,
             now: now
         )
-        XCTAssertEqual(beforeDeadline, .confirmation(deadline: futureDeadline))
+        #expect(beforeDeadline == .confirmation(deadline: futureDeadline))
 
         let afterDeadline = CardioInactivityPolicy.evaluate(
             inactivityDuration: 999,
             autoEndDeadline: futureDeadline,
             now: futureDeadline
         )
-        XCTAssertEqual(afterDeadline, .autoEnd)
+        #expect(afterDeadline == .autoEnd)
     }
 }

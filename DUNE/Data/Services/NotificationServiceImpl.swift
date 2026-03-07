@@ -26,6 +26,14 @@ final class NotificationServiceImpl: NotificationService, @unchecked Sendable {
     }
 
     func send(_ insight: HealthInsight) async {
+        await send(insight, identifier: nil)
+    }
+
+    func send(_ insight: HealthInsight, replacingIdentifier: String) async {
+        await send(insight, identifier: replacingIdentifier)
+    }
+
+    private func send(_ insight: HealthInsight, identifier: String?) async {
         guard await isAuthorized() else { return }
 
         let inboxItem = inboxManager.recordSentInsight(insight)
@@ -39,7 +47,7 @@ final class NotificationServiceImpl: NotificationService, @unchecked Sendable {
         content.userInfo = inboxManager.notificationUserInfo(for: inboxItem)
 
         let request = UNNotificationRequest(
-            identifier: inboxItem.id,
+            identifier: identifier ?? inboxItem.id,
             content: content,
             trigger: nil  // Deliver immediately
         )
