@@ -216,7 +216,7 @@ struct VisionMuscleMapExperienceView: View {
     private var primaryMetricValue: String {
         switch selectedState {
         case .noData:
-            String(localized: "No Data")
+            String(localized: "No data available")
         case .recovery(let fatigueLevel):
             fatigueLevel.displayName
         case .volume:
@@ -225,7 +225,7 @@ struct VisionMuscleMapExperienceView: View {
     }
 
     private var secondaryMetricValue: String {
-        guard let selectedFatigueState else { return String(localized: "No Data") }
+        guard let selectedFatigueState else { return String(localized: "No data available") }
 
         switch mode {
         case .recovery:
@@ -238,7 +238,7 @@ struct VisionMuscleMapExperienceView: View {
     private func summaryValue(for state: MuscleMap3DDisplayState) -> String {
         switch state {
         case .noData:
-            String(localized: "No Data")
+            String(localized: "No data available")
         case .recovery(let fatigueLevel):
             fatigueLevel.displayName
         case .volume(let intensity):

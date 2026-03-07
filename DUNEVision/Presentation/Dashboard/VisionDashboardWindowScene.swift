@@ -270,12 +270,16 @@ struct VisionDashboardWindowScene: View {
                     .font(.headline)
 
                 if activity.recentWorkouts.isEmpty {
-                    Text("No data")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                        .padding(18)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+                    VStack(spacing: 8) {
+                        Text("No data available")
+                            .font(.subheadline)
+                        Text("Start tracking on iPhone or Apple Watch.")
+                            .font(.callout)
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding(18)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
                 } else {
                     ForEach(activity.recentWorkouts) { workout in
                         HStack(spacing: 14) {

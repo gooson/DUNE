@@ -93,7 +93,7 @@ struct TrainingVolume3DView: View {
                 .font(.system(size: 48))
                 .foregroundStyle(.secondary)
 
-            Text("No Training Volume Data")
+            Text("No training volume data")
                 .font(.title3.weight(.semibold))
 
             Text("Complete workouts on your iPhone or Apple Watch to see training volume distribution.")
