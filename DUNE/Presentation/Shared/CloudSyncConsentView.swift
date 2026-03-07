@@ -56,6 +56,7 @@ struct CloudSyncConsentView: View {
                         .padding(.vertical, 14)
                 }
                 .buttonStyle(.borderedProminent)
+                .accessibilityIdentifier("cloud-sync-consent-enable-button")
 
                 Button {
                     isCloudSyncEnabled = false
@@ -67,12 +68,14 @@ struct CloudSyncConsentView: View {
                 }
                 .buttonStyle(.plain)
                 .foregroundStyle(DS.Color.textSecondary)
+                .accessibilityIdentifier("cloud-sync-consent-local-button")
             }
             .padding(.horizontal)
             .padding(.bottom, 32)
         }
         .background { SheetWaveBackground() }
         .interactiveDismissDisabled()
+        .accessibilityIdentifier("cloud-sync-consent-view")
     }
 }
 

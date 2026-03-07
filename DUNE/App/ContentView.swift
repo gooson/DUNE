@@ -3,6 +3,8 @@ import SwiftUI
 struct ContentView: View {
     private let sharedHealthDataService: SharedHealthDataService?
     private let refreshCoordinator: AppRefreshCoordinating?
+    private let launchExperienceReady: Bool
+    private let shouldAutoRequestHealthKitAuthorization: Bool
     @Environment(\.scenePhase) private var scenePhase
     @AppStorage(AppTheme.storageKey) private var selectedTheme: AppTheme = .desertWarm
     @State private var selectedSection: AppSection = .today
@@ -20,10 +22,14 @@ struct ContentView: View {
 
     init(
         sharedHealthDataService: SharedHealthDataService? = nil,
-        refreshCoordinator: AppRefreshCoordinating? = nil
+        refreshCoordinator: AppRefreshCoordinating? = nil,
+        launchExperienceReady: Bool = true,
+        shouldAutoRequestHealthKitAuthorization: Bool = true
     ) {
         self.sharedHealthDataService = sharedHealthDataService
         self.refreshCoordinator = refreshCoordinator
+        self.launchExperienceReady = launchExperienceReady
+        self.shouldAutoRequestHealthKitAuthorization = shouldAutoRequestHealthKitAuthorization
     }
 
     var body: some View {
@@ -34,7 +40,9 @@ struct ContentView: View {
                         sharedHealthDataService: sharedHealthDataService,
                         scrollToTopSignal: todayScrollToTopSignal,
                         refreshSignal: refreshSignal,
-                        notificationHubSignal: notificationHubSignal
+                        notificationHubSignal: notificationHubSignal,
+                        launchExperienceReady: launchExperienceReady,
+                        shouldAutoRequestHealthKitAuthorization: shouldAutoRequestHealthKitAuthorization
                     )
                 }
                 .environment(\.wavePreset, .today)
