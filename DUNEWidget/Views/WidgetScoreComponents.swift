@@ -144,7 +144,7 @@ struct WidgetMetricTileView: View {
     let metric: WidgetMetric
 
     var body: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: WidgetDS.Layout.rowSpacing) {
             Text(metric.title)
                 .font(.system(size: 11, weight: .semibold, design: .rounded))
                 .foregroundStyle(WidgetDS.Color.textSecondary)
@@ -153,7 +153,7 @@ struct WidgetMetricTileView: View {
 
             Spacer(minLength: 0)
 
-            WidgetRingView(metric: metric, size: 52, lineWidth: 5.5)
+            WidgetRingView(metric: metric, size: 56, lineWidth: 5.5)
 
             if metric.hasScore {
                 HStack(spacing: 3) {
@@ -174,9 +174,9 @@ struct WidgetMetricTileView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-        .padding(.top, 10)
-        .padding(.horizontal, 6)
-        .padding(.bottom, 14)
+        .padding(.top, 6)
+        .padding(.horizontal, 4)
+        .padding(.bottom, 10)
         .background(tileBackground)
     }
 
