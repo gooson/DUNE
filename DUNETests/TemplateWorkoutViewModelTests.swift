@@ -10,7 +10,8 @@ struct TemplateWorkoutViewModelTests {
     private static func makeExercise(
         id: String = "bench-press",
         name: String = "Bench Press",
-        inputType: ExerciseInputType = .setsRepsWeight
+        inputType: ExerciseInputType = .setsRepsWeight,
+        cardioSecondaryUnit: CardioSecondaryUnit? = nil
     ) -> ExerciseDefinition {
         ExerciseDefinition(
             id: id,
@@ -21,7 +22,8 @@ struct TemplateWorkoutViewModelTests {
             primaryMuscles: [.chest],
             secondaryMuscles: [.triceps],
             equipment: .barbell,
-            metValue: 5.0
+            metValue: 5.0,
+            cardioSecondaryUnit: cardioSecondaryUnit
         )
     }
 
@@ -134,6 +136,34 @@ struct TemplateWorkoutViewModelTests {
 
         #expect(vm.exerciseViewModels[1].sets[0].reps == "12")
         #expect(vm.exerciseViewModels[1].sets[0].weight == "42.5")
+    }
+
+    @Test("Prefill ignores strength defaults for cardio template exercises")
+    func prefillSkipsCardioTemplates() {
+        let exercise = Self.makeExercise(
+            id: "stair-climber",
+            name: "Stair Climber",
+            inputType: .durationDistance,
+            cardioSecondaryUnit: .floors
+        )
+        let entry = Self.makeEntry(
+            exerciseID: "stair-climber",
+            name: "Stair Climber",
+            sets: 1,
+            reps: 10,
+            weight: 60
+        )
+        let config = TemplateWorkoutConfig(
+            templateName: "Cardio",
+            exercises: [exercise],
+            templateEntries: [entry]
+        )
+
+        let vm = TemplateWorkoutViewModel(config: config)
+        vm.prefillFromTemplateDefaults(weightUnit: .kg)
+
+        #expect(vm.exerciseViewModels[0].sets[0].reps == "")
+        #expect(vm.exerciseViewModels[0].sets[0].weight == "")
     }
 
     // MARK: - Navigation Tests

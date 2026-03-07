@@ -74,6 +74,8 @@ final class WatchConnectivityManager: NSObject {
 
     /// Exercise library transferred from iPhone
     private(set) var exerciseLibrary: [WatchExerciseInfo] = []
+    /// Cached exact-ID lookup for routine cards and preview resolution.
+    private(set) var exerciseLibraryByID: [String: WatchExerciseInfo] = [:]
     /// Workout templates transferred from iPhone (fallback path when CloudKit is delayed/disabled).
     private(set) var workoutTemplates: [WatchWorkoutTemplateInfo] = []
 
@@ -90,6 +92,7 @@ final class WatchConnectivityManager: NSObject {
     private var lastExerciseLibrarySyncRequestAt: Date?
     private var lastWorkoutTemplateSyncRequestAt: Date?
     private var deleteRequestProcessedAtByWorkoutID: [UUID: Date] = [:]
+    private var exerciseLibraryByCanonicalID: [String: WatchExerciseInfo] = [:]
 
     private override init() {
         super.init()
@@ -117,7 +120,7 @@ final class WatchConnectivityManager: NSObject {
             return false
         }
 
-        exerciseLibrary = [
+        setExerciseLibrary([
             WatchExerciseInfo(
                 id: "ui-test-squat",
                 name: "UI Test Squat",
@@ -128,7 +131,7 @@ final class WatchConnectivityManager: NSObject {
                 equipment: "barbell",
                 cardioSecondaryUnit: nil
             )
-        ]
+        ])
         syncStatus = .synced(Date())
         return true
     }
@@ -319,6 +322,30 @@ private struct ParsedWatchContext: Sendable {
 // MARK: - Message Handling
 
 extension WatchConnectivityManager {
+    func exerciseInfo(for exerciseID: String) -> WatchExerciseInfo? {
+        guard !exerciseID.isEmpty else { return nil }
+        if let exact = exerciseLibraryByID[exerciseID] {
+            return exact
+        }
+        let canonicalID = RecentExerciseTracker.canonicalExerciseID(exerciseID: exerciseID)
+        return exerciseLibraryByCanonicalID[canonicalID]
+    }
+
+    private func setExerciseLibrary(_ exercises: [WatchExerciseInfo]) {
+        exerciseLibrary = exercises
+        exerciseLibraryByID = Dictionary(
+            exercises.map { ($0.id, $0) },
+            uniquingKeysWith: { first, _ in first }
+        )
+
+        var canonicalLookup: [String: WatchExerciseInfo] = [:]
+        for exercise in exercises {
+            let canonicalID = RecentExerciseTracker.canonicalExerciseID(exerciseID: exercise.id)
+            canonicalLookup[canonicalID] = canonicalLookup[canonicalID] ?? exercise
+        }
+        exerciseLibraryByCanonicalID = canonicalLookup
+    }
+
     private func handleParsedMessage(_ parsed: ParsedWatchMessage) {
         if let data = parsed.workoutStateData {
             do {
@@ -363,7 +390,7 @@ extension WatchConnectivityManager {
     private func handleParsedContext(_ parsed: ParsedWatchContext) {
         if let data = parsed.exerciseLibraryData {
             do {
-                exerciseLibrary = try JSONDecoder().decode([WatchExerciseInfo].self, from: data)
+                setExerciseLibrary(try JSONDecoder().decode([WatchExerciseInfo].self, from: data))
                 syncStatus = .synced(Date())
             } catch {
                 Self.logger.error("Failed to decode exercise library: \(error.localizedDescription, privacy: .public)")

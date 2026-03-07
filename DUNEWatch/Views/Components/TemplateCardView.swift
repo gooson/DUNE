@@ -10,31 +10,23 @@ struct TemplateCardView: View {
     /// Maximum number of exercise icons to preview
     private let maxIconPreview = 4
 
-    /// Pre-computed labels (entries is immutable let — no per-render recomputation)
-    private let metaLabel: String
-    private let exercisePreview: String
+    @Environment(WatchConnectivityManager.self) private var connectivity
 
-    init(name: String, entries: [TemplateEntry]) {
-        self.name = name
-        self.entries = entries
+    private var metaLabel: String {
+        routineMetaLabel(
+            entries: entries,
+            exerciseLibraryByID: connectivity.exerciseLibraryByID,
+            globalRestSeconds: connectivity.globalRestSeconds
+        )
+    }
 
-        // Meta: "4 exercises · 16 sets · ~45min"
-        let totalSets = entries.reduce(0) { $0 + $1.defaultSets }
-        let estimatedMin = Self.estimateMinutes(entries: entries, globalRestSeconds: WatchConnectivityManager.shared.globalRestSeconds)
-        var meta = "\(entries.count) exercise\(entries.count == 1 ? "" : "s") · \(totalSets) sets"
-        if let mins = estimatedMin {
-            meta += " · ~\(mins)min"
-        }
-        self.metaLabel = meta
-
-        // Exercise name preview: first 3 names, truncated
+    private var exercisePreview: String {
         let names = entries.prefix(3).map(\.exerciseName)
         let preview = names.joined(separator: ", ")
         if entries.count > 3 {
-            self.exercisePreview = preview + " +\(entries.count - 3)"
-        } else {
-            self.exercisePreview = preview
+            return preview + " +\(entries.count - 3)"
         }
+        return preview
     }
 
     var body: some View {
@@ -78,24 +70,5 @@ struct TemplateCardView: View {
                     .foregroundStyle(.secondary)
             }
         }
-    }
-
-    // MARK: - Estimation
-
-    /// Estimates workout duration in minutes based on set count and rest durations.
-    /// Returns nil if no entries exist.
-    private static func estimateMinutes(entries: [TemplateEntry], globalRestSeconds: TimeInterval) -> Int? {
-        guard !entries.isEmpty else { return nil }
-        // ~40s per set execution + rest between sets
-        let setExecutionSeconds: Double = 40
-        var totalSeconds: Double = 0
-        for entry in entries {
-            let sets = Double(entry.defaultSets)
-            let rest = entry.restDuration ?? globalRestSeconds
-            // Each set takes ~40s + rest between sets (no rest after last set)
-            totalSeconds += sets * setExecutionSeconds + Swift.max(sets - 1, 0) * rest
-        }
-        let minutes = Int((totalSeconds / 60).rounded())
-        return minutes > 0 ? minutes : nil
     }
 }

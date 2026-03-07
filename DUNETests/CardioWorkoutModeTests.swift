@@ -176,6 +176,16 @@ struct CardioWorkoutModeTests {
         #expect(type == .stairClimbing)
     }
 
+    @Test("resolveCardioActivity: legacy duration alias resolves to cardio type")
+    func resolveMachineCardioTypeFromLegacyAlias() {
+        let type = WorkoutActivityType.resolveCardioActivity(
+            from: "stair-climber",
+            name: "Stair Climber",
+            inputTypeRaw: "duration"
+        )
+        #expect(type == .stairClimbing)
+    }
+
     @Test("resolveCardioActivity: unknown cardio falls back to mixedCardio")
     func resolveUnknownCardioFallback() {
         let type = WorkoutActivityType.resolveCardioActivity(

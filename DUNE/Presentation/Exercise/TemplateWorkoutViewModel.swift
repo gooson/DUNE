@@ -104,6 +104,11 @@ final class TemplateWorkoutViewModel {
         for (index, entry) in config.templateEntries.enumerated() {
             guard index < exerciseViewModels.count else { break }
             let vm = exerciseViewModels[index]
+            let profile = TemplateExerciseProfile(exercise: config.exercises[index])
+
+            guard profile.showsStrengthDefaultsEditor else {
+                continue
+            }
 
             // Pre-fill weight (convert from stored kg to display unit)
             if let defaultWeightKg = entry.defaultWeightKg {

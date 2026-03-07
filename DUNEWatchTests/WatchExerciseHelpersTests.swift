@@ -12,6 +12,7 @@ struct WatchExerciseHelpersTests {
         defaultReps: Int? = 10,
         defaultWeightKg: Double? = 50,
         equipment: String? = "barbell",
+        cardioSecondaryUnit: String? = nil,
         aliases: [String]? = nil
     ) -> WatchExerciseInfo {
         WatchExerciseInfo(
@@ -22,7 +23,7 @@ struct WatchExerciseHelpersTests {
             defaultReps: defaultReps,
             defaultWeightKg: defaultWeightKg,
             equipment: equipment,
-            cardioSecondaryUnit: nil,
+            cardioSecondaryUnit: cardioSecondaryUnit,
             aliases: aliases
         )
     }
@@ -34,7 +35,8 @@ struct WatchExerciseHelpersTests {
             defaultSets: 3,
             defaultReps: 10,
             defaultWeightKg: 60,
-            equipment: "barbell"
+            equipment: "barbell",
+            inputTypeRaw: "weight_reps"
         )
     }
 
@@ -44,6 +46,22 @@ struct WatchExerciseHelpersTests {
         #expect(exerciseSubtitle(sets: 3, reps: 10, weight: 80) == "3 sets · 10 reps · 80.0kg")
         #expect(exerciseSubtitle(sets: 3, reps: 10, weight: 0) == "3 sets · 10 reps")
         #expect(exerciseSubtitle(sets: 3, reps: 10, weight: 501) == "3 sets · 10 reps")
+    }
+
+    @Test("exerciseSubtitle adapts cardio exercises to duration summary")
+    func exerciseSubtitleForCardio() {
+        let stair = exercise(
+            id: "stair-climber",
+            name: "Stair Climber",
+            inputType: "duration",
+            defaultSets: 1,
+            defaultReps: nil,
+            defaultWeightKg: nil,
+            equipment: "machine",
+            cardioSecondaryUnit: "floors"
+        )
+
+        #expect(exerciseSubtitle(for: stair) == "Duration · Floors")
     }
 
     @Test("uniqueByCanonical keeps first exercise for canonical duplicates")
@@ -117,6 +135,28 @@ struct WatchExerciseHelpersTests {
         #expect(entry.defaultSets == 4)
         #expect(entry.defaultReps == 3)
         #expect(entry.defaultWeightKg == 130)
+        #expect(entry.inputTypeRaw == exerciseInfo.inputType)
+        #expect(entry.cardioSecondaryUnitRaw == exerciseInfo.cardioSecondaryUnit)
+    }
+
+    @Test("snapshotFromExercise preserves cardio metadata")
+    func snapshotFromExercisePreservesCardioMetadata() {
+        let cardioExercise = exercise(
+            id: "custom-stair-cardio",
+            name: "Custom Stair",
+            inputType: "duration",
+            defaultSets: 1,
+            defaultReps: nil,
+            defaultWeightKg: nil,
+            equipment: "machine",
+            cardioSecondaryUnit: "floors"
+        )
+
+        let snapshot = snapshotFromExercise(cardioExercise)
+        let entry = try! #require(snapshot.entries.first)
+
+        #expect(entry.inputTypeRaw == "duration")
+        #expect(entry.cardioSecondaryUnitRaw == "floors")
     }
 
     @Test("mergedRoutineTemplates prefers local template when IDs overlap")
@@ -172,6 +212,58 @@ struct WatchExerciseHelpersTests {
         #expect(merged.count == 2)
         #expect(merged[0].name == "Newer Remote")
         #expect(merged[1].name == "Older Remote")
+    }
+
+    @Test("routineMetaLabel omits strength set summary for cardio entries")
+    func routineMetaLabelSkipsCardioStrengthMeta() {
+        let stairEntry = TemplateEntry(
+            exerciseDefinitionID: "stair-climber",
+            exerciseName: "Stair Climber",
+            defaultSets: 1,
+            defaultReps: 10,
+            defaultWeightKg: nil,
+            equipment: "machine"
+        )
+        let stairInfo = exercise(
+            id: "stair-climber",
+            name: "Stair Climber",
+            inputType: "duration",
+            defaultSets: 1,
+            defaultReps: nil,
+            defaultWeightKg: nil,
+            equipment: "machine",
+            cardioSecondaryUnit: "floors"
+        )
+
+        let meta = routineMetaLabel(
+            entries: [stairEntry],
+            exerciseLibraryByID: [stairInfo.id: stairInfo],
+            globalRestSeconds: 90
+        )
+
+        #expect(meta == "1 exercise")
+    }
+
+    @Test("routineMetaLabel falls back to persisted cardio metadata when library is missing")
+    func routineMetaLabelUsesEntryMetadataFallback() {
+        let stairEntry = TemplateEntry(
+            exerciseDefinitionID: "custom-stair-cardio",
+            exerciseName: "Custom Stair",
+            defaultSets: 1,
+            defaultReps: 10,
+            defaultWeightKg: nil,
+            equipment: "machine",
+            inputTypeRaw: "duration",
+            cardioSecondaryUnitRaw: "floors"
+        )
+
+        let meta = routineMetaLabel(
+            entries: [stairEntry],
+            exerciseLibraryByID: [:],
+            globalRestSeconds: 90
+        )
+
+        #expect(meta == "1 exercise")
     }
 
     @Test("WatchExerciseCategory maps known inputType values")

@@ -41,7 +41,7 @@ struct WorkoutPreviewView: View {
     private var resolvedCardioType: WorkoutActivityType? {
         guard snapshot.entries.count == 1 else { return nil }
         let entry = snapshot.entries[0]
-        let inputType = resolvedInputType(for: entry.exerciseDefinitionID)
+        let inputType = resolvedInputType(for: entry)
         return WorkoutActivityType.resolveCardioActivity(
             from: entry.exerciseDefinitionID,
             name: entry.exerciseName,
@@ -52,39 +52,23 @@ struct WorkoutPreviewView: View {
     private var resolvedCardioSecondaryUnit: CardioSecondaryUnit? {
         guard snapshot.entries.count == 1 else { return nil }
         let entry = snapshot.entries[0]
-        guard let rawValue = resolvedCardioSecondaryUnitRaw(for: entry.exerciseDefinitionID) else {
+        guard let rawValue = resolvedCardioSecondaryUnitRaw(for: entry) else {
             return nil
         }
         return CardioSecondaryUnit(rawValue: rawValue)
     }
 
-    /// Resolves watch-library input type for an exercise ID.
-    /// Uses canonical ID matching so variant IDs share the same lookup behavior
-    /// as the popularity/recent tracker.
-    private func resolvedInputType(for exerciseID: String) -> String? {
-        guard !exerciseID.isEmpty else { return nil }
-
-        if let exact = connectivity.exerciseLibrary.first(where: { $0.id == exerciseID }) {
-            return exact.inputType
-        }
-
-        let canonicalID = RecentExerciseTracker.canonicalExerciseID(exerciseID: exerciseID)
-        return connectivity.exerciseLibrary.first {
-            RecentExerciseTracker.canonicalExerciseID(exerciseID: $0.id) == canonicalID
-        }?.inputType
+    /// Resolves input type from the synced watch library, then falls back to
+    /// persisted template metadata so custom cardio still launches correctly.
+    private func resolvedInputType(for entry: TemplateEntry) -> String? {
+        TemplateExerciseProfile.normalizedInputTypeRaw(
+            connectivity.exerciseInfo(for: entry.exerciseDefinitionID)?.inputType ?? entry.inputTypeRaw
+        )
     }
 
-    private func resolvedCardioSecondaryUnitRaw(for exerciseID: String) -> String? {
-        guard !exerciseID.isEmpty else { return nil }
-
-        if let exact = connectivity.exerciseLibrary.first(where: { $0.id == exerciseID }) {
-            return exact.cardioSecondaryUnit
-        }
-
-        let canonicalID = RecentExerciseTracker.canonicalExerciseID(exerciseID: exerciseID)
-        return connectivity.exerciseLibrary.first {
-            RecentExerciseTracker.canonicalExerciseID(exerciseID: $0.id) == canonicalID
-        }?.cardioSecondaryUnit
+    private func resolvedCardioSecondaryUnitRaw(for entry: TemplateEntry) -> String? {
+        connectivity.exerciseInfo(for: entry.exerciseDefinitionID)?.cardioSecondaryUnit
+            ?? entry.cardioSecondaryUnitRaw
     }
 
     // MARK: - Cardio Start
@@ -223,10 +207,22 @@ struct WorkoutPreviewView: View {
                                     .font(DS.Typography.tileSubtitle)
                                     .lineLimit(1)
 
+                                let profile = TemplateExerciseProfile(
+                                    inputTypeRaw: resolvedInputType(for: entry),
+                                    cardioSecondaryUnitRaw: resolvedCardioSecondaryUnitRaw(for: entry)
+                                )
+
                                 HStack(spacing: DS.Spacing.xs) {
-                                    Text("\(entry.defaultSets)\u{00d7}\(entry.defaultReps)")
-                                    if let kg = entry.defaultWeightKg, kg > 0 {
-                                        Text("\u{00b7} \(kg, specifier: "%.1f")kg")
+                                    if profile.showsStrengthDefaultsEditor {
+                                        Text("\(entry.defaultSets)\u{00d7}\(entry.defaultReps)")
+                                        if let kg = entry.defaultWeightKg, kg > 0 {
+                                            Text("\u{00b7} \(kg, specifier: "%.1f")kg")
+                                        }
+                                    } else {
+                                        Text(profile.primarySummaryLabel)
+                                        if let secondary = profile.secondarySummaryLabel {
+                                            Text("\u{00b7} \(secondary)")
+                                        }
                                     }
                                 }
                                 .font(DS.Typography.metricLabel)

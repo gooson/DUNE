@@ -46,6 +46,62 @@ struct WorkoutSessionViewModelTests {
         #expect(vm.sets[0].reps.isEmpty)
     }
 
+    @Test("applyTemplateDefaults pre-fills reps, weight, and rest for strength templates")
+    func applyTemplateDefaultsForStrength() {
+        let exercise = makeExercise()
+        let vm = WorkoutSessionViewModel(exercise: exercise, defaultSetCount: 2)
+        let entry = TemplateEntry(
+            exerciseDefinitionID: exercise.id,
+            exerciseName: exercise.localizedName,
+            defaultSets: 2,
+            defaultReps: 8,
+            defaultWeightKg: 80,
+            restDuration: 120,
+            equipment: exercise.equipment.rawValue
+        )
+
+        vm.applyTemplateDefaults(entry, weightUnit: .kg)
+
+        #expect(vm.templateRestDuration == 120)
+        #expect(vm.sets.count == 2)
+        #expect(vm.sets[0].reps == "8")
+        #expect(vm.sets[1].reps == "8")
+        #expect(vm.sets[0].weight == "80")
+        #expect(vm.sets[1].weight == "80")
+    }
+
+    @Test("applyTemplateDefaults ignores strength defaults for cardio templates")
+    func applyTemplateDefaultsForCardio() {
+        let exercise = ExerciseDefinition(
+            id: "stair-climber",
+            name: "Stair Climber",
+            localizedName: "천국의 계단",
+            category: .cardio,
+            inputType: .durationDistance,
+            primaryMuscles: [.quadriceps],
+            secondaryMuscles: [.glutes],
+            equipment: .machine,
+            metValue: 9.0,
+            cardioSecondaryUnit: .floors
+        )
+        let vm = WorkoutSessionViewModel(exercise: exercise, defaultSetCount: 1)
+        let entry = TemplateEntry(
+            exerciseDefinitionID: exercise.id,
+            exerciseName: exercise.localizedName,
+            defaultSets: 1,
+            defaultReps: 30,
+            defaultWeightKg: 50,
+            restDuration: 90,
+            equipment: exercise.equipment.rawValue
+        )
+
+        vm.applyTemplateDefaults(entry, weightUnit: .kg)
+
+        #expect(vm.templateRestDuration == nil)
+        #expect(vm.sets[0].reps.isEmpty)
+        #expect(vm.sets[0].weight.isEmpty)
+    }
+
     @Test("addSet increments set number")
     func addSet() {
         let exercise = makeExercise()

@@ -125,11 +125,30 @@ final class WatchSessionManager: NSObject {
         )
         do {
             let templates = try modelContext.fetch(descriptor)
+            let customExercises = (try? modelContext.fetch(FetchDescriptor<CustomExercise>())) ?? []
+            let exerciseLibrary = ExerciseLibraryService.shared
+            let customExercisesByID = Dictionary(
+                customExercises.map { ("custom-\($0.id.uuidString)", $0) },
+                uniquingKeysWith: { first, _ in first }
+            )
+
             return templates.map { template in
-                WatchWorkoutTemplateInfo(
+                let entries = template.exerciseEntries.map { entry in
+                    var hydratedEntry = entry
+                    if let exercise = exerciseLibrary.exercise(byID: entry.exerciseDefinitionID) {
+                        hydratedEntry.applyExerciseMetadata(from: exercise)
+                    } else if let customExercise = customExercisesByID[entry.exerciseDefinitionID] {
+                        hydratedEntry.applyExerciseMetadata(from: customExercise.toDefinition())
+                    } else {
+                        hydratedEntry.normalizeStoredMetadata()
+                    }
+                    return hydratedEntry
+                }
+
+                return WatchWorkoutTemplateInfo(
                     id: template.id,
                     name: template.name,
-                    entries: template.exerciseEntries,
+                    entries: entries,
                     updatedAt: template.updatedAt
                 )
             }
