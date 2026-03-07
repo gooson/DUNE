@@ -24,6 +24,10 @@ struct ExerciseDefaultsListView: View {
         }
     }
 
+    private var allExercisesSectionTitle: LocalizedStringKey {
+        searchText.isEmpty ? "All Exercises" : "Results"
+    }
+
     var body: some View {
         List {
             if searchText.isEmpty {
@@ -68,7 +72,7 @@ struct ExerciseDefaultsListView: View {
     // MARK: - All Exercises
 
     private var allExercisesSection: some View {
-        Section(searchText.isEmpty ? "All Exercises" : "Results") {
+        Section(allExercisesSectionTitle) {
             ForEach(filteredExercises) { exercise in
                 NavigationLink {
                     ExerciseDefaultEditView(exercise: exercise)
