@@ -52,4 +52,29 @@ struct ParsedWatchIncomingMessageTests {
         #expect(!parsed.requestExerciseLibrarySync)
         #expect(!parsed.requestWorkoutTemplateSync)
     }
+
+    @Test("Parses active watch workout context")
+    func parsesActiveWatchWorkoutContext() {
+        let parsed = ParsedWatchIncomingContext(
+            from: [
+                "watchWorkoutActive": true,
+                "watchWorkoutTemplateName": "Leg Day"
+            ]
+        )
+
+        #expect(parsed.watchWorkoutActive == true)
+        #expect(parsed.watchWorkoutTemplateName == "Leg Day")
+    }
+
+    @Test("Parses ended watch workout context")
+    func parsesEndedWatchWorkoutContext() {
+        let parsed = ParsedWatchIncomingContext(
+            from: [
+                "watchWorkoutActive": false
+            ]
+        )
+
+        #expect(parsed.watchWorkoutActive == false)
+        #expect(parsed.watchWorkoutTemplateName == nil)
+    }
 }

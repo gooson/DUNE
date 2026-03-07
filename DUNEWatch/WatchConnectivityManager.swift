@@ -151,24 +151,12 @@ final class WatchConnectivityManager: NSObject {
 
     /// Notify iPhone that a workout has started on Watch.
     func sendWorkoutStarted(templateName: String) {
-        guard WCSession.default.isReachable else { return }
-        let message: [String: Any] = ["workoutStarted": templateName]
-        WCSession.default.sendMessage(
-            message,
-            replyHandler: nil,
-            errorHandler: Self.makeWCErrorHandler("Failed to send workoutStarted")
-        )
+        updatePhoneWorkoutLifecycleContext(isActive: true, templateName: templateName)
     }
 
     /// Notify iPhone that a workout has ended on Watch.
     func sendWorkoutEnded() {
-        guard WCSession.default.isReachable else { return }
-        let message: [String: Any] = ["workoutEnded": true]
-        WCSession.default.sendMessage(
-            message,
-            replyHandler: nil,
-            errorHandler: Self.makeWCErrorHandler("Failed to send workoutEnded")
-        )
+        updatePhoneWorkoutLifecycleContext(isActive: false, templateName: nil)
     }
 
     /// Send completed set data back to iPhone
@@ -212,6 +200,27 @@ final class WatchConnectivityManager: NSObject {
             )
         } catch {
             Self.logger.error("Failed to encode workout: \(error.localizedDescription, privacy: .public)")
+        }
+    }
+
+    private func updatePhoneWorkoutLifecycleContext(isActive: Bool, templateName: String?) {
+        guard WCSession.isSupported() else { return }
+        let session = WCSession.default
+        guard session.activationState == .activated else { return }
+
+        var context = session.applicationContext
+        context["watchWorkoutActive"] = isActive
+
+        if let templateName, !templateName.isEmpty {
+            context["watchWorkoutTemplateName"] = templateName
+        } else {
+            context.removeValue(forKey: "watchWorkoutTemplateName")
+        }
+
+        do {
+            try session.updateApplicationContext(context)
+        } catch {
+            Self.logger.error("Failed to update watch workout lifecycle context: \(error.localizedDescription, privacy: .public)")
         }
     }
 }

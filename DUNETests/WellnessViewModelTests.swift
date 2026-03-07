@@ -354,7 +354,7 @@ struct WellnessViewModelTests {
 
         await vm.performRefresh()
       
-        let vo2Card = vm.physicalCards.first { $0.category == .vo2Max }
+        let vo2Card = vm.activeCards.first { $0.category == .vo2Max }
         #expect(vo2Card != nil)
         #expect(vo2Card?.metric.value == 43.7)
         #expect(vo2Card?.lastUpdated == newer)

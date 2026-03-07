@@ -1,6 +1,6 @@
 ---
 tags: [corrections, active, project-specific]
-date: 2026-03-07
+date: 2026-03-08
 category: general
 status: approved
 ---
@@ -53,12 +53,16 @@ status: approved
 
 - **launch permission 완료 플래그는 요청 전에 영구 저장 금지**: cross-launch persisted state와 same-launch attempt state를 분리하고, system request가 정상 반환된 뒤에만 completion 저장 (#201)
 - **secondary CloudKit consumer도 `isCloudSyncEnabled` 우회 금지**: watch/vision/mac mirror reader가 별도 `ModelContainer`를 만들더라도 iOS sync opt-in 계약을 그대로 재사용 (#205)
+- **XCTest host app init에서 iCloud KVS 조회 금지**: `App.init`/container bootstrap이 `NSUbiquitousKeyValueStore` 같은 외부 sync 상태를 만지면 CI에서 test start 전 launch가 멈출 수 있으므로 `isRunningXCTest`로 우회하고 local-only bootstrap으로 시작 (#206)
 
 ### UI 표시 규칙
 
 - **탭 이름/네비게이션 타이틀은 영어 고정**: `AppSection.title` + `englishNavigationTitle(_:)` 사용 (#190)
 - **Watch 사용자 라벨 하드코딩 금지**: 캐러셀/퀵스타트/운동시작 라벨은 `String(localized:)` 경유 (#191)
 - **Watch confirmationDialog `.destructive` 테마 tint 대비 실기기 검증** (#192)
+- **`navigationDestination(item:)` 재트리거는 nil trampoline 금지**: 같은 frame에 `destination = nil` 후 다시 값 대입하지 말고 request token 기반 `Identifiable`로 단일 write 처리 (#208)
+- **`ImageRenderer` export/share 경로는 explicit size 필수**: offscreen SwiftUI 렌더링에서 intrinsic height가 0으로 풀릴 수 있으므로 `sizeThatFits`로 먼저 측정하고 `frame` + `proposedSize`를 함께 고정 (#209)
+- **알림 보상 상세는 탭 전환보다 root push 우선**: `activityPersonalRecords` 같은 reward route는 `selectedSection`를 바꾸지 말고 root `NavigationStack` 위로 push해서 현재 화면 컨텍스트를 유지 (#210)
 - **화면 숫자 표기는 `formattedWithSeparator` 경유** (#97)
 - **`changeFractionDigits` 단일 소스: `HealthMetric+View`** (#98)
 - **`HealthMetric.Category` 추가 시 10+ 파일 수정 체크리스트** (#94)
@@ -70,6 +74,7 @@ status: approved
 
 - **workflow paths에 `scripts/**` 대신 개별 스크립트 경로 지정** (#186)
 - **새 UI 테스트 파일은 `BaseUITestCase` 상속** (#187)
+- **locale/raw normalization 테스트는 영문 literal/legacy alias 기대 금지**: watch/helper/unit tests는 `String(localized:)` 결과 또는 canonical enum `rawValue`를 기준으로 검증 (#207)
 - **`/ship` 머지 전략은 `--merge` 기본** (#54)
 - **`/run`에서 `/ship` 호출 전 Pre-Ship 게이트 강제** (#196)
 - **`.claude/settings.local.json`은 기본적으로 `{}` 유지** (#203)

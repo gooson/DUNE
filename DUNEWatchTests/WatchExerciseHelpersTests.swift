@@ -44,10 +44,11 @@ struct WatchExerciseHelpersTests {
 
     @Test("exerciseSubtitle formats optional weight and applies bounds")
     func exerciseSubtitleFormatting() {
-        #expect(exerciseSubtitle(sets: 3, reps: 10, weight: nil) == "3 sets · 10 reps")
-        #expect(exerciseSubtitle(sets: 3, reps: 10, weight: 80) == "3 sets · 10 reps · 80.0kg")
-        #expect(exerciseSubtitle(sets: 3, reps: 10, weight: 0) == "3 sets · 10 reps")
-        #expect(exerciseSubtitle(sets: 3, reps: 10, weight: 501) == "3 sets · 10 reps")
+        let expectedBase = String(localized: "\(3) sets · \(10) reps")
+        #expect(exerciseSubtitle(sets: 3, reps: 10, weight: nil) == expectedBase)
+        #expect(exerciseSubtitle(sets: 3, reps: 10, weight: 80) == "\(expectedBase) · 80.0kg")
+        #expect(exerciseSubtitle(sets: 3, reps: 10, weight: 0) == expectedBase)
+        #expect(exerciseSubtitle(sets: 3, reps: 10, weight: 501) == expectedBase)
     }
 
     @Test("exerciseSubtitle adapts cardio exercises to duration summary")
@@ -63,7 +64,8 @@ struct WatchExerciseHelpersTests {
             cardioSecondaryUnit: "floors"
         )
 
-        #expect(exerciseSubtitle(for: stair) == "Duration · Floors")
+        let expectedSummary = "\(String(localized: "Duration")) · \(String(localized: "Floors"))"
+        #expect(exerciseSubtitle(for: stair) == expectedSummary)
     }
 
     @Test("uniqueByCanonical keeps first exercise for canonical duplicates")
@@ -137,7 +139,7 @@ struct WatchExerciseHelpersTests {
         #expect(entry.defaultSets == 4)
         #expect(entry.defaultReps == 3)
         #expect(entry.defaultWeightKg == 130)
-        #expect(entry.inputTypeRaw == exerciseInfo.inputType)
+        #expect(entry.inputTypeRaw == ExerciseInputType.setsRepsWeight.rawValue)
         #expect(entry.cardioSecondaryUnitRaw == exerciseInfo.cardioSecondaryUnit)
     }
 
@@ -157,7 +159,7 @@ struct WatchExerciseHelpersTests {
         let snapshot = snapshotFromExercise(cardioExercise)
         let entry = try! #require(snapshot.entries.first)
 
-        #expect(entry.inputTypeRaw == "duration")
+        #expect(entry.inputTypeRaw == ExerciseInputType.durationDistance.rawValue)
         #expect(entry.cardioSecondaryUnitRaw == "floors")
     }
 
@@ -243,7 +245,7 @@ struct WatchExerciseHelpersTests {
             globalRestSeconds: 90
         )
 
-        #expect(meta == "1 exercise")
+        #expect(meta == String(localized: "\(1) exercise"))
     }
 
     @Test("routineMetaLabel falls back to persisted cardio metadata when library is missing")
@@ -255,7 +257,7 @@ struct WatchExerciseHelpersTests {
             defaultReps: 10,
             defaultWeightKg: nil,
             equipment: "machine",
-            inputTypeRaw: "duration",
+            inputTypeRaw: ExerciseInputType.durationDistance.rawValue,
             cardioSecondaryUnitRaw: "floors"
         )
 
@@ -265,7 +267,7 @@ struct WatchExerciseHelpersTests {
             globalRestSeconds: 90
         )
 
-        #expect(meta == "1 exercise")
+        #expect(meta == String(localized: "\(1) exercise"))
     }
 
     @Test("WatchExerciseCategory maps known inputType values")

@@ -56,6 +56,43 @@ struct NotificationRouteValidationTests {
     }
 }
 
+@Suite("NotificationPresentationPlanner")
+struct NotificationPresentationPlannerTests {
+
+    @Test("activityPersonalRecords pushes personal records from current screen")
+    func activityPersonalRecordsUsesRootPush() {
+        let plan = NotificationPresentationPlanner.plan(
+            for: .activityPersonalRecords,
+            requestID: 7
+        )
+
+        #expect(plan == .push(.personalRecords(requestID: 7)))
+    }
+
+    @Test("workoutDetail keeps activity tab routing for workout detail")
+    func workoutDetailKeepsActivityTabRouting() throws {
+        let route = try #require(NotificationRoute.workoutDetail(workoutID: "workout-123"))
+        let plan = NotificationPresentationPlanner.plan(for: route, requestID: 3)
+
+        #expect(plan == .openWorkoutInActivity(workoutID: "workout-123"))
+    }
+
+    @Test("notificationHub keeps today tab routing")
+    func notificationHubKeepsTodayTabRouting() {
+        let plan = NotificationPresentationPlanner.plan(for: .notificationHub, requestID: 2)
+
+        #expect(plan == .openNotificationHub)
+    }
+
+    @Test("invalid workoutDetail route does not produce a plan")
+    func invalidWorkoutRouteReturnsNil() {
+        let route = NotificationRoute(destination: .workoutDetail, workoutID: nil)
+        let plan = NotificationPresentationPlanner.plan(for: route, requestID: 1)
+
+        #expect(plan == nil)
+    }
+}
+
 // MARK: - UserInfo Round Trip
 
 @Suite("NotificationInboxManager – exercise data userInfo round trip")
