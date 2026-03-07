@@ -216,45 +216,9 @@ struct DashboardView: View {
         }
         .englishNavigationTitle("Today")
         .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                NavigationLink {
-                    NotificationHubView()
-                } label: {
-                    notificationBellIcon
-                }
-                .accessibilityLabel("Notifications")
-                .accessibilityIdentifier("dashboard-toolbar-notifications")
-            }
-
-            if !whatsNewReleases.isEmpty {
-                ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink {
-                        WhatsNewView(
-                            releases: whatsNewReleases,
-                            mode: .manual,
-                            onOpenDestination: { destination in
-                                whatsNewManager.requestNavigation(destination)
-                            },
-                            onPresented: markWhatsNewOpened
-                        )
-                    } label: {
-                        whatsNewToolbarIcon
-                    }
-                    .popoverTip(whatsNewToolbarTip, arrowEdge: .top)
-                    .accessibilityLabel("What's New")
-                    .accessibilityIdentifier("dashboard-toolbar-whatsnew")
-                }
-            }
-
-            ToolbarItem(placement: .topBarTrailing) {
-                NavigationLink {
-                    SettingsView()
-                } label: {
-                    Image(systemName: "gearshape")
-                }
-                .accessibilityLabel("Settings")
-                .accessibilityIdentifier("dashboard-toolbar-settings")
-            }
+            notificationsToolbarItem
+            whatsNewToolbarItem
+            settingsToolbarItem
         }
         .navigationDestination(isPresented: $showNotificationHub) {
             NotificationHubView()
@@ -344,7 +308,53 @@ struct DashboardView: View {
         whatsNewManager.currentBuildNumber()
     }
 
-    private var whatsNewToolbarTip: (any Tip)? {
+    @ToolbarContentBuilder
+    private var notificationsToolbarItem: some ToolbarContent {
+        ToolbarItem(placement: .topBarTrailing) {
+            NavigationLink {
+                NotificationHubView()
+            } label: {
+                notificationBellIcon
+            }
+            .accessibilityLabel("Notifications")
+            .accessibilityIdentifier("dashboard-toolbar-notifications")
+        }
+    }
+
+    @ToolbarContentBuilder
+    private var whatsNewToolbarItem: some ToolbarContent {
+        if !whatsNewReleases.isEmpty {
+            ToolbarItem(placement: .topBarTrailing) {
+                NavigationLink {
+                    WhatsNewView(
+                        releases: whatsNewReleases,
+                        mode: .manual,
+                        onPresented: markWhatsNewOpened
+                    )
+                } label: {
+                    whatsNewToolbarIcon
+                }
+                .popoverTip(whatsNewToolbarTip, arrowEdge: .top)
+                .accessibilityLabel("What's New")
+                .accessibilityIdentifier("dashboard-toolbar-whatsnew")
+            }
+        }
+    }
+
+    @ToolbarContentBuilder
+    private var settingsToolbarItem: some ToolbarContent {
+        ToolbarItem(placement: .topBarTrailing) {
+            NavigationLink {
+                SettingsView()
+            } label: {
+                Image(systemName: "gearshape")
+            }
+            .accessibilityLabel("Settings")
+            .accessibilityIdentifier("dashboard-toolbar-settings")
+        }
+    }
+
+    private var whatsNewToolbarTip: WhatsNewToolbarTip? {
         guard showWhatsNewBadge,
               let currentRelease = currentWhatsNewRelease,
               !currentWhatsNewBuild.isEmpty else {
