@@ -15,26 +15,38 @@ struct SmallWidgetView: View {
 
                 Spacer(minLength: 0)
 
-                if let lowestMetric = entry.lowestMetric {
-                    HStack(spacing: 4) {
-                        Image(systemName: lowestMetric.icon)
-                            .font(.caption2)
+                HStack {
+                    if let lowestMetric = entry.lowestMetric {
+                        HStack(spacing: 4) {
+                            Image(systemName: lowestMetric.icon)
+                                .font(.caption2)
 
-                        Text(lowestMetric.title)
-                            .fontWeight(.medium)
+                            Text(lowestMetric.title)
+                                .fontWeight(.medium)
 
-                        Text(lowestMetric.statusLabel)
-                            .fontWeight(.semibold)
+                            Text(lowestMetric.statusLabel)
+                                .fontWeight(.semibold)
+                        }
+                        .foregroundStyle(lowestMetric.tintColor)
+                    } else {
+                        Text(WidgetMetricText.openDune)
+                            .foregroundStyle(WidgetDS.Color.textTertiary)
                     }
-                    .font(.caption2)
-                    .foregroundStyle(lowestMetric.tintColor)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.8)
-                } else {
-                    Text(WidgetMetricText.openDune)
-                        .font(.caption2)
-                        .foregroundStyle(WidgetDS.Color.textTertiary)
+
+                    Spacer(minLength: 0)
+
+                    if let updatedAt = entry.scoreUpdatedAt {
+                        Text(updatedAt, style: .time)
+                            .foregroundStyle(WidgetDS.Color.textTertiary)
+                            .monospacedDigit()
+                    } else {
+                        Text(WidgetMetricText.today)
+                            .foregroundStyle(WidgetDS.Color.textTertiary)
+                    }
                 }
+                .font(.caption2)
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             .padding(WidgetDS.Layout.edgePadding)

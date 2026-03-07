@@ -17,10 +17,10 @@ enum WidgetDS {
     }
 
     enum Layout {
-        static let edgePadding: CGFloat = 14
+        static let edgePadding: CGFloat = 12
         static let headerSpacing: CGFloat = 8
-        static let columnSpacing: CGFloat = 8
-        static let rowSpacing: CGFloat = 8
+        static let columnSpacing: CGFloat = 6
+        static let rowSpacing: CGFloat = 6
         static let rowCornerRadius: CGFloat = 16
     }
 
