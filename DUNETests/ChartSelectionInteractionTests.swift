@@ -110,6 +110,96 @@ struct ChartSelectionInteractionTests {
         #expect(layout.center.y > 28)
     }
 
+    // MARK: - forceActivate
+
+    @Test("forceActivate transitions from pendingActivation to selecting")
+    func forceActivateFromPending() {
+        var state = ChartSelectionGestureState()
+        let start = Date(timeIntervalSinceReferenceDate: 300)
+        let initialScroll = Date(timeIntervalSinceReferenceDate: 280)
+
+        _ = state.registerChange(
+            at: start,
+            translation: .zero,
+            currentScrollPosition: initialScroll
+        )
+
+        #expect(state.phase == .pendingActivation)
+
+        let result = state.forceActivate()
+
+        #expect(result == .activated(restoreScrollPosition: initialScroll))
+        #expect(state.phase == .selecting)
+        #expect(state.isSelecting == true)
+    }
+
+    @Test("forceActivate returns inactive from idle state")
+    func forceActivateFromIdle() {
+        var state = ChartSelectionGestureState()
+
+        #expect(state.phase == .idle)
+
+        let result = state.forceActivate()
+
+        #expect(result == .inactive)
+        #expect(state.phase == .idle)
+    }
+
+    @Test("forceActivate returns inactive when cancelled")
+    func forceActivateFromCancelled() {
+        var state = ChartSelectionGestureState()
+        let start = Date(timeIntervalSinceReferenceDate: 400)
+
+        _ = state.registerChange(at: start, translation: .zero)
+        _ = state.registerChange(
+            at: start.addingTimeInterval(0.05),
+            translation: CGSize(width: ChartSelectionInteraction.activationDistance + 5, height: 0)
+        )
+
+        #expect(state.isCancelled == true)
+
+        let result = state.forceActivate()
+
+        #expect(result == .inactive)
+    }
+
+    @Test("forceActivate returns inactive when already selecting")
+    func forceActivateFromSelecting() {
+        var state = ChartSelectionGestureState()
+        let start = Date(timeIntervalSinceReferenceDate: 500)
+
+        _ = state.registerChange(at: start, translation: .zero)
+        _ = state.registerChange(
+            at: start.addingTimeInterval(ChartSelectionInteraction.holdDuration + 0.01),
+            translation: CGSize(width: 2, height: 1)
+        )
+
+        #expect(state.phase == .selecting)
+
+        let result = state.forceActivate()
+
+        #expect(result == .inactive)
+        #expect(state.phase == .selecting)
+    }
+
+    @Test("registerChange returns updating after forceActivate")
+    func registerChangeAfterForceActivate() {
+        var state = ChartSelectionGestureState()
+        let start = Date(timeIntervalSinceReferenceDate: 600)
+
+        _ = state.registerChange(at: start, translation: .zero)
+        _ = state.forceActivate()
+
+        #expect(state.isSelecting == true)
+
+        let update = state.registerChange(
+            at: start.addingTimeInterval(0.5),
+            translation: CGSize(width: 5, height: 3)
+        )
+
+        #expect(update == .updating)
+    }
+
     @Test("Overlay stays above and clamps vertically when bottom space is limited")
     func overlayAboveClampNearBottom() {
         let layout = ChartSelectionInteraction.overlayLayout(
