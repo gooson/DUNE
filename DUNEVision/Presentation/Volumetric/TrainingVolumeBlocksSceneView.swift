@@ -97,9 +97,3 @@ struct TrainingVolumeBlocksSceneView: View {
         return normalized
     }
 }
-
-private extension Float {
-    func clamped(to range: ClosedRange<Float>) -> Float {
-        min(max(self, range.lowerBound), range.upperBound)
-    }
-}

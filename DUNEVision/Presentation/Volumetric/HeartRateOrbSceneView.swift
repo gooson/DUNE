@@ -90,9 +90,3 @@ private struct PulseState {
     let haloScale: Float
     let floatY: Float
 }
-
-private extension Float {
-    func clamped(to range: ClosedRange<Float>) -> Float {
-        min(max(self, range.lowerBound), range.upperBound)
-    }
-}
