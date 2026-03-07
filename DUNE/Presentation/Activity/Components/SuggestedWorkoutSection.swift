@@ -22,6 +22,7 @@ struct SuggestedWorkoutSection: View {
     @State private var showingEquipmentSheet = false
     @State private var searchText = ""
     @State private var cachedFilteredExercises: [ExerciseDefinition] = []
+    @State private var detailExercise: ExerciseDefinition?
 
     @Query(sort: \CustomExercise.createdAt, order: .reverse) private var customExercises: [CustomExercise]
     @Query(sort: \WorkoutTemplate.updatedAt, order: .reverse) private var templates: [WorkoutTemplate]
@@ -71,6 +72,13 @@ struct SuggestedWorkoutSection: View {
                 onSetEquipmentAvailability: onSetEquipmentAvailability
             )
         }
+        .sheet(item: $detailExercise) { exercise in
+            let freshExercise = resolvedExercise(for: exercise)
+            ExerciseDetailSheet(exercise: freshExercise) {
+                onStartExercise(freshExercise)
+            }
+            .presentationDetents([.medium, .large])
+        }
     }
 
     private func rebuildFilteredExercises() {
@@ -92,6 +100,12 @@ struct SuggestedWorkoutSection: View {
             priorityIDs: popularExerciseIDs + recentExerciseIDs
         )
         cachedFilteredExercises = QuickStartSupport.uniqueByCanonical(sorted)
+    }
+
+    private func resolvedExercise(for exercise: ExerciseDefinition) -> ExerciseDefinition {
+        library.exercise(byID: exercise.id)
+            ?? customExercises.first(where: { "custom-\($0.id.uuidString)" == exercise.id })?.toDefinition()
+            ?? exercise
     }
 
     // MARK: - Search
@@ -252,11 +266,12 @@ struct SuggestedWorkoutSection: View {
                         SuggestedExerciseRow(
                             exercise: exercise,
                             isExcluded: excluded,
+                            onShowDetails: { detailExercise = exercise.definition },
                             onStart: { onStartExercise(exercise.definition) },
                             onToggleInterest: {
                                 onSetExerciseExcluded(!excluded, exercise.id)
                             },
-                            onAlternativeSelected: { alt in onStartExercise(alt) }
+                            onAlternativeSelected: { alt in detailExercise = alt }
                         )
                         .padding(DS.Spacing.sm)
                         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))

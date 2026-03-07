@@ -63,6 +63,11 @@ enum WatchDeleteRequestPolicy {
 final class WatchConnectivityManager: NSObject {
     static let shared = WatchConnectivityManager()
     nonisolated private static let logger = Logger(subsystem: "com.raftel.dailve", category: "WatchConnectivity")
+    nonisolated private static func makeWCErrorHandler(_ message: String) -> @Sendable (Error) -> Void {
+        { error in
+            logger.error("\(message, privacy: .public): \(error.localizedDescription, privacy: .public)")
+        }
+    }
 
     /// Reachability state — reads directly from WCSession (per correction #46).
     var isReachable: Bool {
@@ -148,18 +153,22 @@ final class WatchConnectivityManager: NSObject {
     func sendWorkoutStarted(templateName: String) {
         guard WCSession.default.isReachable else { return }
         let message: [String: Any] = ["workoutStarted": templateName]
-        WCSession.default.sendMessage(message, replyHandler: nil) { error in
-            Self.logger.error("Failed to send workoutStarted: \(error.localizedDescription, privacy: .public)")
-        }
+        WCSession.default.sendMessage(
+            message,
+            replyHandler: nil,
+            errorHandler: Self.makeWCErrorHandler("Failed to send workoutStarted")
+        )
     }
 
     /// Notify iPhone that a workout has ended on Watch.
     func sendWorkoutEnded() {
         guard WCSession.default.isReachable else { return }
         let message: [String: Any] = ["workoutEnded": true]
-        WCSession.default.sendMessage(message, replyHandler: nil) { error in
-            Self.logger.error("Failed to send workoutEnded: \(error.localizedDescription, privacy: .public)")
-        }
+        WCSession.default.sendMessage(
+            message,
+            replyHandler: nil,
+            errorHandler: Self.makeWCErrorHandler("Failed to send workoutEnded")
+        )
     }
 
     /// Send completed set data back to iPhone
@@ -179,9 +188,11 @@ final class WatchConnectivityManager: NSObject {
         do {
             let data = try JSONEncoder().encode(update)
             let message: [String: Any] = ["setCompleted": data]
-            WCSession.default.sendMessage(message, replyHandler: nil) { error in
-                Self.logger.error("Failed to send set completion: \(error.localizedDescription, privacy: .public)")
-            }
+            WCSession.default.sendMessage(
+                message,
+                replyHandler: nil,
+                errorHandler: Self.makeWCErrorHandler("Failed to send set completion")
+            )
         } catch {
             Self.logger.error("Failed to encode set completion: \(error.localizedDescription, privacy: .public)")
         }
@@ -194,9 +205,11 @@ final class WatchConnectivityManager: NSObject {
         do {
             let data = try JSONEncoder().encode(update)
             let message: [String: Any] = ["workoutComplete": data]
-            WCSession.default.sendMessage(message, replyHandler: nil) { error in
-                Self.logger.error("Failed to send workout completion: \(error.localizedDescription, privacy: .public)")
-            }
+            WCSession.default.sendMessage(
+                message,
+                replyHandler: nil,
+                errorHandler: Self.makeWCErrorHandler("Failed to send workout completion")
+            )
         } catch {
             Self.logger.error("Failed to encode workout: \(error.localizedDescription, privacy: .public)")
         }
@@ -445,9 +458,11 @@ extension WatchConnectivityManager {
         var requested = false
 
         if session.isReachable {
-            session.sendMessage(payload, replyHandler: nil) { error in
-                Self.logger.error("Failed to request exercise library sync: \(error.localizedDescription, privacy: .public)")
-            }
+            session.sendMessage(
+                payload,
+                replyHandler: nil,
+                errorHandler: Self.makeWCErrorHandler("Failed to request exercise library sync")
+            )
             requested = true
         }
 
@@ -478,9 +493,11 @@ extension WatchConnectivityManager {
         let session = WCSession.default
 
         if session.isReachable {
-            session.sendMessage(payload, replyHandler: nil) { error in
-                Self.logger.error("Failed to request workout template sync: \(error.localizedDescription, privacy: .public)")
-            }
+            session.sendMessage(
+                payload,
+                replyHandler: nil,
+                errorHandler: Self.makeWCErrorHandler("Failed to request workout template sync")
+            )
         }
 
         if session.activationState == .activated {

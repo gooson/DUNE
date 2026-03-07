@@ -5,6 +5,7 @@ import SwiftUI
 struct SuggestedExerciseRow: View {
     let exercise: SuggestedExercise
     let isExcluded: Bool
+    let onShowDetails: () -> Void
     let onStart: () -> Void
     let onToggleInterest: () -> Void
     let onAlternativeSelected: (ExerciseDefinition) -> Void
@@ -14,30 +15,40 @@ struct SuggestedExerciseRow: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.sm) {
-                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                    Text(exercise.definition.localizedName)
-                        .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(theme.sandColor)
-                        .lineLimit(2)
+            Button(action: onShowDetails) {
+                HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.sm) {
+                    VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                        Text(exercise.definition.localizedName)
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(theme.sandColor)
+                            .lineLimit(2)
 
-                    Text(exercise.reason)
-                        .font(.caption2)
+                        Text(exercise.reason)
+                            .font(.caption2)
+                            .foregroundStyle(DS.Color.textSecondary)
+                            .lineLimit(2)
+                    }
+
+                    Spacer(minLength: DS.Spacing.xs)
+
+                    HStack(spacing: DS.Spacing.xs) {
+                        Text(
+                            String.localizedStringWithFormat(
+                                String(localized: "%lld sets"),
+                                Int64(exercise.suggestedSets)
+                            )
+                        )
+                        .font(.caption.weight(.semibold))
                         .foregroundStyle(DS.Color.textSecondary)
-                        .lineLimit(2)
+
+                        Image(systemName: "chevron.right")
+                            .font(.caption2)
+                            .foregroundStyle(.tertiary)
+                    }
                 }
-
-                Spacer(minLength: DS.Spacing.xs)
-
-                Text(
-                    String.localizedStringWithFormat(
-                        String(localized: "%lld sets"),
-                        Int64(exercise.suggestedSets)
-                    )
-                )
-                .font(.caption.weight(.semibold))
-                .foregroundStyle(DS.Color.textSecondary)
+                .contentShape(Rectangle())
             }
+            .buttonStyle(.plain)
 
             VStack(alignment: .leading, spacing: DS.Spacing.xs) {
                 HStack(spacing: DS.Spacing.xs) {

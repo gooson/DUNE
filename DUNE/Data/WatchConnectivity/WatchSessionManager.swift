@@ -8,6 +8,11 @@ import SwiftData
 @MainActor
 final class WatchSessionManager: NSObject {
     static let shared = WatchSessionManager()
+    nonisolated private static func makeWCErrorHandler(_ message: String) -> @Sendable (Error) -> Void {
+        { error in
+            AppLogger.ui.error("\(message): \(error.localizedDescription)")
+        }
+    }
 
     private(set) var isReachable = false
     private(set) var isPaired = false
@@ -47,9 +52,11 @@ final class WatchSessionManager: NSObject {
         do {
             let data = try JSONEncoder().encode(state)
             let message: [String: Any] = ["workoutState": data]
-            WCSession.default.sendMessage(message, replyHandler: nil) { error in
-                AppLogger.ui.error("Failed to send workout state to Watch: \(error.localizedDescription)")
-            }
+            WCSession.default.sendMessage(
+                message,
+                replyHandler: nil,
+                errorHandler: Self.makeWCErrorHandler("Failed to send workout state to Watch")
+            )
         } catch {
             AppLogger.ui.error("Failed to encode workout state: \(error.localizedDescription)")
         }
@@ -65,9 +72,11 @@ final class WatchSessionManager: NSObject {
         let session = WCSession.default
 
         if session.isReachable {
-            session.sendMessage(payload, replyHandler: nil) { error in
-                AppLogger.ui.error("Failed to request watch workout deletion: \(error.localizedDescription)")
-            }
+            session.sendMessage(
+                payload,
+                replyHandler: nil,
+                errorHandler: Self.makeWCErrorHandler("Failed to request watch workout deletion")
+            )
         }
 
         // Queue background delivery when watch is not reachable.
@@ -169,9 +178,11 @@ final class WatchSessionManager: NSObject {
         // Immediate message if reachable
         if WCSession.default.isReachable {
             let message: [String: Any] = ["globalRestSeconds": restSeconds, "appTheme": currentThemeRawValue]
-            WCSession.default.sendMessage(message, replyHandler: nil) { error in
-                AppLogger.ui.error("Failed to send workout settings: \(error.localizedDescription)")
-            }
+            WCSession.default.sendMessage(
+                message,
+                replyHandler: nil,
+                errorHandler: Self.makeWCErrorHandler("Failed to send workout settings")
+            )
         }
 
         // Re-sync full context (library + settings) to avoid partial overwrite
