@@ -29,6 +29,7 @@ struct DashboardView: View {
     private let notificationHubSignal: Int
     private let launchExperienceReady: Bool
     private let shouldAutoRequestHealthKitAuthorization: Bool
+    private let sharedHealthDataService: SharedHealthDataService?
     @State private var showNotificationHub = false
 
     init(
@@ -39,6 +40,7 @@ struct DashboardView: View {
         launchExperienceReady: Bool = true,
         shouldAutoRequestHealthKitAuthorization: Bool = true
     ) {
+        self.sharedHealthDataService = sharedHealthDataService
         _viewModel = State(initialValue: DashboardViewModel(sharedHealthDataService: sharedHealthDataService))
         self.scrollToTopSignal = scrollToTopSignal
         self.refreshSignal = refreshSignal
@@ -233,7 +235,7 @@ struct DashboardView: View {
             settingsToolbarItem
         }
         .navigationDestination(isPresented: $showNotificationHub) {
-            NotificationHubView()
+            NotificationHubView(sharedHealthDataService: sharedHealthDataService)
         }
         .onChange(of: notificationHubSignal) { _, newValue in
             guard newValue > 0 else { return }
@@ -333,7 +335,7 @@ struct DashboardView: View {
     private var notificationsToolbarItem: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
             NavigationLink {
-                NotificationHubView()
+                NotificationHubView(sharedHealthDataService: sharedHealthDataService)
             } label: {
                 notificationBellIcon
             }

@@ -95,9 +95,9 @@ private func handleTap(on item: NotificationInboxItem) {
         return
     }
 
-    // route-less workoutPR fallback
+    // route-less workoutPR fallback → also push locally
     if opened.insightType == .workoutPR {
-        inboxManager.requestNavigation(itemID: opened.id, route: .activityPersonalRecords)
+        destination = .personalRecords(itemID: opened.id)
         return
     }
 
@@ -130,7 +130,7 @@ private func handleTap(on item: NotificationInboxItem) {
 |--------|------|
 | 뱃지/레벨업 알림 탭 → `.personalRecords` destination 설정 | 로컬 push 경로 동작 |
 | `.workoutDetail` route 알림 → ContentView 위임 유지 | 기존 동작 보존 |
-| route-less workoutPR → ContentView requestNavigation 유지 | 기존 fallback 보존 |
+| route-less workoutPR → 로컬 push (openLocally 사용) | 허브 내 일관된 로컬 처리 |
 | 시스템 알림 탭 → ContentView 경유 PersonalRecords push | 외부 진입 보존 |
 
 ## Risks

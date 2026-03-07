@@ -413,8 +413,8 @@ struct HandleNotificationResponseTests {
 @Suite("NotificationInboxManager – hub local push for activityPersonalRecords")
 struct HubLocalPushTests {
 
-    @Test("open() with activityPersonalRecords route emits request that can be consumed locally")
-    func openWithPersonalRecordsRouteCanBeConsumedLocally() {
+    @Test("openLocally() with activityPersonalRecords route does NOT emit navigation request")
+    func openLocallyWithPersonalRecordsRouteDoesNotEmit() {
         let manager = makeManager()
         let insight = HealthInsight(
             type: .workoutPR,
@@ -425,21 +425,17 @@ struct HubLocalPushTests {
         )
         let item = manager.recordSentInsight(insight)
 
-        let opened = manager.open(itemID: item.id)
+        let opened = manager.openLocally(itemID: item.id)
+        #expect(opened != nil)
         #expect(opened?.route?.destination == .activityPersonalRecords)
 
-        // Hub consumes the pending request to prevent ContentView from also handling it
-        let consumed = manager.consumePendingNavigationRequest()
-        #expect(consumed != nil)
-        #expect(consumed?.route.destination == .activityPersonalRecords)
-
-        // No pending request remains for ContentView
-        let remaining = manager.consumePendingNavigationRequest()
-        #expect(remaining == nil)
+        // No navigation request emitted — ContentView will not react
+        let pending = manager.consumePendingNavigationRequest()
+        #expect(pending == nil)
     }
 
-    @Test("open() with workoutDetail route is NOT consumed by hub — ContentView handles it")
-    func openWithWorkoutDetailRouteRemainsForContentView() {
+    @Test("open() with workoutDetail route emits request for ContentView")
+    func openWithWorkoutDetailRouteEmitsForContentView() {
         let manager = makeManager()
         let insight = makeInsight(workoutID: "detail-workout")
         let item = manager.recordSentInsight(insight)
@@ -447,14 +443,14 @@ struct HubLocalPushTests {
         let opened = manager.open(itemID: item.id)
         #expect(opened?.route?.destination == .workoutDetail)
 
-        // Hub does NOT consume — request stays pending for ContentView
+        // ContentView consumes the emitted request
         let pending = manager.consumePendingNavigationRequest()
         #expect(pending != nil)
         #expect(pending?.route.destination == .workoutDetail)
     }
 
-    @Test("open() with route-less workoutPR does not emit navigation request")
-    func openWithRoutelessWorkoutPRDoesNotEmit() {
+    @Test("openLocally() with route-less workoutPR marks read without emitting")
+    func openLocallyWithRoutelessWorkoutPRDoesNotEmit() {
         let manager = makeManager()
         let insight = HealthInsight(
             type: .workoutPR,
@@ -464,10 +460,11 @@ struct HubLocalPushTests {
         )
         let item = manager.recordSentInsight(insight)
 
-        let opened = manager.open(itemID: item.id)
+        let opened = manager.openLocally(itemID: item.id)
+        #expect(opened != nil)
         #expect(opened?.route == nil)
 
-        // No route → no navigation request emitted
+        // No navigation request emitted
         let pending = manager.consumePendingNavigationRequest()
         #expect(pending == nil)
     }

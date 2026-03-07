@@ -145,6 +145,8 @@ enum NotificationHubMetricResolver {
 
 /// Latest-first notification inbox accessed from the Today tab toolbar.
 struct NotificationHubView: View {
+    let sharedHealthDataService: SharedHealthDataService?
+
     @State private var items: [NotificationInboxItem] = []
     @State private var unreadCount = 0
     @State private var destination: HubDestination?
@@ -153,6 +155,10 @@ struct NotificationHubView: View {
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     private let inboxManager = NotificationInboxManager.shared
+
+    init(sharedHealthDataService: SharedHealthDataService? = nil) {
+        self.sharedHealthDataService = sharedHealthDataService
+    }
 
     private enum HubDestination: Hashable, Identifiable {
         case metric(HealthMetric, itemID: String)
@@ -208,7 +214,7 @@ struct NotificationHubView: View {
             case .unavailable(let itemID):
                 NotificationDestinationUnavailableView(itemID: itemID)
             case .personalRecords:
-                NotificationPersonalRecordsPushView(sharedHealthDataService: nil)
+                NotificationPersonalRecordsPushView(sharedHealthDataService: sharedHealthDataService)
             }
         }
         .task {
@@ -323,26 +329,27 @@ struct NotificationHubView: View {
     }
 
     private func handleTap(on item: NotificationInboxItem) {
+        // Routes that need tab switch (workoutDetail) use open() → ContentView handles via notification
+        // Routes that can be handled locally use openLocally() → no navigation request emitted
+        let isLocalRoute = item.route?.destination == .activityPersonalRecords
+            || (item.route == nil && item.insightType == .workoutPR)
+
+        if isLocalRoute {
+            guard let opened = inboxManager.openLocally(itemID: item.id) else {
+                destination = .unavailable(itemID: item.id)
+                return
+            }
+            destination = .personalRecords(itemID: opened.id)
+            return
+        }
+
         guard let opened = inboxManager.open(itemID: item.id) else {
             destination = .unavailable(itemID: item.id)
             return
         }
 
-        // Badge/level-up with explicit route → push PersonalRecords locally
-        if opened.route?.destination == .activityPersonalRecords {
-            _ = inboxManager.consumePendingNavigationRequest()
-            destination = .personalRecords(itemID: opened.id)
-            return
-        }
-
         // Other routes (workoutDetail) → delegate to ContentView for tab switch
         guard opened.route == nil else {
-            return
-        }
-
-        // Route-less workoutPR → also push PersonalRecords locally
-        if opened.insightType == .workoutPR {
-            destination = .personalRecords(itemID: opened.id)
             return
         }
 
