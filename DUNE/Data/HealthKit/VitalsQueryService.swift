@@ -278,6 +278,7 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
         end: Date,
         validRange: ClosedRange<Double>
     ) async throws -> [VitalSample] {
+        guard start < end else { return [] }
         let quantityType = HKQuantityType(identifier)
         try await manager.ensureNotDenied(for: quantityType)
 

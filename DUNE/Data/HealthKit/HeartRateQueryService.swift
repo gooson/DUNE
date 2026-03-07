@@ -121,6 +121,7 @@ struct HeartRateQueryService: HeartRateQuerying, Sendable {
     }
 
     func fetchHeartRateHistory(start: Date, end: Date) async throws -> [VitalSample] {
+        guard start < end else { return [] }
         let quantityType = HKQuantityType(.heartRate)
         try await manager.ensureNotDenied(for: quantityType)
 

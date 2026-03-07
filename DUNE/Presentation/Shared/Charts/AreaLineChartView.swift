@@ -148,16 +148,8 @@ struct AreaLineChartView: View {
     }
 
 
-    /// X-axis domain: explicit scroll domain if provided, otherwise derived from data points.
     private var effectiveXDomain: ClosedRange<Date> {
-        if let scrollDomain { return scrollDomain }
-        guard let first = data.min(by: { $0.date < $1.date })?.date,
-              let last = data.max(by: { $0.date < $1.date })?.date,
-              first < last else {
-            let now = Date()
-            return now...now.addingTimeInterval(1)
-        }
-        return first...last
+        resolvedXDomain(scrollDomain: scrollDomain, dates: data.map(\.date))
     }
 
     /// Y-axis domain with padding around min/max values.
