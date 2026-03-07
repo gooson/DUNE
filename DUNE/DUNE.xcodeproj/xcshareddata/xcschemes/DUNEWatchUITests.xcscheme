@@ -43,18 +43,6 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
       onlyGenerateCoverageForSpecifiedTargets = "NO">
-      <TestPlans>
-         <TestPlanReference
-            default = "YES"
-            reference = "container:../DUNEWatchUITests/DUNEWatchUITests-PR.xctestplan">
-         </TestPlanReference>
-         <TestPlanReference
-            reference = "container:../DUNEWatchUITests/DUNEWatchUITests-Full.xctestplan">
-         </TestPlanReference>
-         <TestPlanReference
-            reference = "container:../DUNEWatchUITests/WatchUITests-CI.xctestplan">
-         </TestPlanReference>
-      </TestPlans>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
@@ -64,6 +52,18 @@
             ReferencedContainer = "container:DUNE.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
+      <TestPlans>
+         <TestPlanReference
+            reference = "container:../DUNEWatchUITests/DUNEWatchUITests-PR.xctestplan"
+            default = "YES">
+         </TestPlanReference>
+         <TestPlanReference
+            reference = "container:../DUNEWatchUITests/DUNEWatchUITests-Full.xctestplan">
+         </TestPlanReference>
+         <TestPlanReference
+            reference = "container:../DUNEWatchUITests/WatchUITests-CI.xctestplan">
+         </TestPlanReference>
+      </TestPlans>
       <Testables>
          <TestableReference
             skipped = "NO"
