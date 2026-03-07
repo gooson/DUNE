@@ -524,7 +524,7 @@ struct ExercisePickerView: View {
     // MARK: - Helpers
 
     private func resolveExerciseDefinition(by id: String) -> ExerciseDefinition? {
-        library.exercise(byID: id)
+        library.representativeExercise(byID: id)
             ?? customDefinitions.first { $0.id == id }
     }
 

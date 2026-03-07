@@ -3,8 +3,15 @@ import Foundation
 struct ExerciseLibraryService: ExerciseLibraryQuerying {
     static let shared = ExerciseLibraryService()
 
+    private struct CanonicalIndex {
+        let visibleExercises: [ExerciseDefinition]
+        let representativeByCanonicalKey: [String: ExerciseDefinition]
+    }
+
     private let exercises: [ExerciseDefinition]
     private let exerciseByID: [String: ExerciseDefinition]
+    private let visibleExercises: [ExerciseDefinition]
+    private let representativeByCanonicalKey: [String: ExerciseDefinition]
 
     init(bundle: Bundle = .main) {
         guard let url = bundle.url(forResource: "exercises", withExtension: "json"),
@@ -13,27 +20,37 @@ struct ExerciseLibraryService: ExerciseLibraryQuerying {
             AppLogger.data.error("Exercise library JSON not found in bundle")
             self.exercises = []
             self.exerciseByID = [:]
+            self.visibleExercises = []
+            self.representativeByCanonicalKey = [:]
             return
         }
         do {
             let decoded = try JSONDecoder().decode([ExerciseDefinition].self, from: data)
+            let canonicalIndex = Self.buildCanonicalIndex(from: decoded)
             self.exercises = decoded
-            self.exerciseByID = Dictionary(uniqueKeysWithValues: decoded.map { ($0.id, $0) })
+            self.exerciseByID = Dictionary(decoded.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
+            self.visibleExercises = canonicalIndex.visibleExercises
+            self.representativeByCanonicalKey = canonicalIndex.representativeByCanonicalKey
         } catch {
             AppLogger.data.error("Exercise library JSON decode failed: \(error.localizedDescription)")
             self.exercises = []
             self.exerciseByID = [:]
+            self.visibleExercises = []
+            self.representativeByCanonicalKey = [:]
         }
     }
 
     /// For testing: initialize with an explicit array
     init(exercises: [ExerciseDefinition]) {
+        let canonicalIndex = Self.buildCanonicalIndex(from: exercises)
         self.exercises = exercises
-        self.exerciseByID = Dictionary(uniqueKeysWithValues: exercises.map { ($0.id, $0) })
+        self.exerciseByID = Dictionary(exercises.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
+        self.visibleExercises = canonicalIndex.visibleExercises
+        self.representativeByCanonicalKey = canonicalIndex.representativeByCanonicalKey
     }
 
     func allExercises() -> [ExerciseDefinition] {
-        exercises
+        visibleExercises
     }
 
     func exercise(byID id: String) -> ExerciseDefinition? {
@@ -41,26 +58,94 @@ struct ExerciseLibraryService: ExerciseLibraryQuerying {
     }
 
     func search(query: String) -> [ExerciseDefinition] {
-        guard !query.isEmpty else { return exercises }
-        return exercises.filter { exercise in
-            exercise.localizedName.localizedCaseInsensitiveContains(query)
-                || exercise.name.localizedCaseInsensitiveContains(query)
-                || (exercise.aliases ?? []).contains { $0.localizedCaseInsensitiveContains(query) }
+        guard !query.isEmpty else { return visibleExercises }
+
+        var seenCanonicalKeys = Set<String>()
+        var results: [ExerciseDefinition] = []
+
+        for exercise in exercises where Self.matchesSearchQuery(query, exercise: exercise) {
+            let canonicalKey = Self.canonicalKey(for: exercise)
+            guard seenCanonicalKeys.insert(canonicalKey).inserted else { continue }
+            results.append(representativeByCanonicalKey[canonicalKey] ?? exercise)
         }
+
+        return results
     }
 
     func exercises(forMuscle muscle: MuscleGroup) -> [ExerciseDefinition] {
-        exercises.filter { exercise in
+        visibleExercises.filter { exercise in
             exercise.primaryMuscles.contains(muscle)
                 || exercise.secondaryMuscles.contains(muscle)
         }
     }
 
     func exercises(forCategory category: ExerciseCategory) -> [ExerciseDefinition] {
-        exercises.filter { $0.category == category }
+        visibleExercises.filter { $0.category == category }
     }
 
     func exercises(forEquipment equipment: Equipment) -> [ExerciseDefinition] {
-        exercises.filter { $0.equipment == equipment }
+        visibleExercises.filter { $0.equipment == equipment }
+    }
+
+    private static func buildCanonicalIndex(from exercises: [ExerciseDefinition]) -> CanonicalIndex {
+        var representativeByCanonicalKey: [String: ExerciseDefinition] = [:]
+
+        for exercise in exercises {
+            let canonicalKey = canonicalKey(for: exercise)
+            guard let existing = representativeByCanonicalKey[canonicalKey] else {
+                representativeByCanonicalKey[canonicalKey] = exercise
+                continue
+            }
+
+            if shouldPreferRepresentative(exercise, over: existing, canonicalKey: canonicalKey) {
+                representativeByCanonicalKey[canonicalKey] = exercise
+            }
+        }
+
+        var emittedCanonicalKeys = Set<String>()
+        let visibleExercises = exercises.filter { exercise in
+            let canonicalKey = canonicalKey(for: exercise)
+            guard representativeByCanonicalKey[canonicalKey]?.id == exercise.id else { return false }
+            return emittedCanonicalKeys.insert(canonicalKey).inserted
+        }
+
+        return CanonicalIndex(
+            visibleExercises: visibleExercises,
+            representativeByCanonicalKey: representativeByCanonicalKey
+        )
+    }
+
+    private static func canonicalKey(for exercise: ExerciseDefinition) -> String {
+        QuickStartCanonicalService.canonicalKey(
+            exerciseID: exercise.id,
+            exerciseName: exercise.localizedName
+        ) ?? exercise.id
+    }
+
+    private static func shouldPreferRepresentative(
+        _ candidate: ExerciseDefinition,
+        over existing: ExerciseDefinition,
+        canonicalKey: String
+    ) -> Bool {
+        representativeSortKey(for: candidate, canonicalKey: canonicalKey)
+            < representativeSortKey(for: existing, canonicalKey: canonicalKey)
+    }
+
+    private static func representativeSortKey(
+        for exercise: ExerciseDefinition,
+        canonicalKey: String
+    ) -> (Int, Int, Int, String) {
+        (
+            exercise.id == canonicalKey ? 0 : 1,
+            exercise.id.count,
+            exercise.localizedName.count,
+            exercise.id
+        )
+    }
+
+    private static func matchesSearchQuery(_ query: String, exercise: ExerciseDefinition) -> Bool {
+        exercise.localizedName.localizedCaseInsensitiveContains(query)
+            || exercise.name.localizedCaseInsensitiveContains(query)
+            || (exercise.aliases ?? []).contains { $0.localizedCaseInsensitiveContains(query) }
     }
 }

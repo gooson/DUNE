@@ -12,6 +12,24 @@ protocol ExerciseLibraryQuerying: Sendable {
 }
 
 extension ExerciseLibraryQuerying {
+    /// Resolves a stored exercise ID to the visible canonical representative when available.
+    func representativeExercise(byID id: String) -> ExerciseDefinition? {
+        guard let exact = exercise(byID: id) else { return nil }
+        let canonicalKey = QuickStartCanonicalService.canonicalKey(
+            exerciseID: exact.id,
+            exerciseName: exact.localizedName
+        )
+
+        guard let canonicalKey else { return exact }
+
+        return allExercises().first {
+            QuickStartCanonicalService.canonicalKey(
+                exerciseID: $0.id,
+                exerciseName: $0.localizedName
+            ) == canonicalKey
+        } ?? exact
+    }
+
     /// Resolves template entries to exercise definitions via library lookup + custom fallback.
     func resolveExercises(from entries: [TemplateEntry]) -> [ExerciseDefinition] {
         entries.compactMap { entry in
