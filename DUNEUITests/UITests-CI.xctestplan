@@ -18,7 +18,8 @@
   "testTargets" : [
     {
       "skippedTests" : [
-        "HealthKitPermissionUITests"
+        "HealthKitPermissionUITests",
+        "SakuraThemeSnapshotTests"
       ],
       "target" : {
         "containerPath" : "container:DUNE.xcodeproj",

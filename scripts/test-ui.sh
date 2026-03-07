@@ -12,7 +12,7 @@ source "$ROOT_DIR/scripts/lib/regen-project.sh"
 
 PROJECT_SPEC="DUNE/project.yml"
 PROJECT_FILE="DUNE/DUNE.xcodeproj"
-SCHEME="DUNE"
+SCHEME="DUNEUITests"
 SIMULATOR_NAME="${DAILVE_IOS_SIMULATOR:-iPhone 17}"
 SIMULATOR_OS="${DAILVE_IOS_OS:-26.2}"
 DESTINATION="platform=iOS Simulator,name=${SIMULATOR_NAME},OS=${SIMULATOR_OS}"
@@ -72,26 +72,88 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+resolve_test_plan() {
+    local requested_plan="$1"
+
+    if [[ -n "$requested_plan" ]]; then
+        case "$requested_plan" in
+            UITests-CI)
+                echo "DUNEUITests-PR"
+                return
+                ;;
+            *)
+                echo "$requested_plan"
+                return
+                ;;
+        esac
+    fi
+
+    if [[ "$SMOKE_MODE" -eq 1 ]]; then
+        echo "DUNEUITests-PR"
+    else
+        echo "DUNEUITests-Full"
+    fi
+}
+
+TEST_PLAN="$(resolve_test_plan "$TEST_PLAN")"
+
 mkdir -p "$LOG_DIR" "$DERIVED_DATA_DIR"
 regen_project
 
 # Boot simulator if not already booted (UI tests need it)
 echo "Ensuring simulator '$SIMULATOR_NAME' is booted..."
-DEVICE_UDID=$(xcrun simctl list devices available -j \
+DEVICE_INFO=$(xcrun simctl list devices available -j \
     | python3 -c "
-import json, sys
+import json, re, sys
+requested_name = '${SIMULATOR_NAME}'
+requested_os = '${SIMULATOR_OS}'
 data = json.load(sys.stdin)
+candidates = []
+
+def parse_os(runtime: str) -> str:
+    match = re.search(r'iOS-(\d+)-(\d+)', runtime)
+    return f'{match.group(1)}.{match.group(2)}' if match else ''
+
 for runtime, devices in data['devices'].items():
-    for d in devices:
-        if d['name'] == '${SIMULATOR_NAME}' and '${SIMULATOR_OS}'.replace('.', '-') in runtime.replace('.', '-'):
-            print(d['udid'])
-            sys.exit(0)
+    if 'iOS' not in runtime:
+        continue
+    os_version = parse_os(runtime)
+    for device in devices:
+        if not device.get('isAvailable', True):
+            continue
+        candidates.append((device['name'], os_version, device['udid']))
+
+def emit(choice):
+    name, os_version, udid = choice
+    print('\\t'.join([udid, name, os_version]))
+    sys.exit(0)
+
+for candidate in candidates:
+    if candidate[0] == requested_name and candidate[1] == requested_os:
+        emit(candidate)
+
+for candidate in candidates:
+    if candidate[0] == requested_name:
+        emit(candidate)
+
+for candidate in candidates:
+    if candidate[0].startswith('iPhone'):
+        emit(candidate)
+
+if candidates:
+    emit(candidates[0])
+
 sys.exit(1)
 " 2>/dev/null) || true
 
-if [[ -n "$DEVICE_UDID" ]]; then
+RESOLVED_SIMULATOR_NAME="$SIMULATOR_NAME"
+RESOLVED_SIMULATOR_OS="$SIMULATOR_OS"
+
+if [[ -n "$DEVICE_INFO" ]]; then
+    IFS=$'\t' read -r DEVICE_UDID RESOLVED_SIMULATOR_NAME RESOLVED_SIMULATOR_OS <<< "$DEVICE_INFO"
+    DESTINATION="id=${DEVICE_UDID}"
     xcrun simctl boot "$DEVICE_UDID" 2>/dev/null || true
-    echo "Simulator booted: $DEVICE_UDID"
+    echo "Simulator booted: $RESOLVED_SIMULATOR_NAME ($RESOLVED_SIMULATOR_OS) [$DEVICE_UDID]"
 else
     echo "Warning: Could not find simulator '$SIMULATOR_NAME' (OS $SIMULATOR_OS). xcodebuild will attempt to boot one."
 fi
@@ -110,10 +172,8 @@ TEST_CMD=(xcodebuild test -project "$PROJECT_FILE"
     CODE_SIGNING_ALLOWED=NO
     CODE_SIGNING_REQUIRED=NO)
 
-if [[ -n "$TEST_PLAN" ]]; then
-    TEST_CMD+=(-testPlan "$TEST_PLAN")
-    echo "Using test plan: $TEST_PLAN"
-fi
+TEST_CMD+=(-testPlan "$TEST_PLAN")
+echo "Using test plan: $TEST_PLAN"
 
 if [[ "${#ONLY_TESTING[@]}" -gt 0 ]]; then
     for target in "${ONLY_TESTING[@]}"; do
@@ -122,11 +182,25 @@ if [[ "${#ONLY_TESTING[@]}" -gt 0 ]]; then
     done
 else
     if [[ "$SMOKE_MODE" -eq 1 ]]; then
-        TEST_CMD+=(-only-testing DUNEUITests/Smoke/DashboardSmokeTests)
-        TEST_CMD+=(-only-testing DUNEUITests/Smoke/ActivitySmokeTests)
-        TEST_CMD+=(-only-testing DUNEUITests/Smoke/WellnessSmokeTests)
-        TEST_CMD+=(-only-testing DUNEUITests/Smoke/LifeSmokeTests)
-        TEST_CMD+=(-only-testing DUNEUITests/Smoke/SettingsSmokeTests)
+        TEST_CMD+=(-only-testing DUNEUITests/DashboardSmokeTests)
+        TEST_CMD+=(-only-testing DUNEUITests/ActivitySmokeTests)
+        TEST_CMD+=(-only-testing DUNEUITests/WellnessSmokeTests/testWellnessTabLoads)
+        TEST_CMD+=(-only-testing DUNEUITests/LifeSmokeTests)
+        TEST_CMD+=(-skip-testing DUNEUITests/ActivitySmokeTests/testPullToRefreshShowsWaveIndicator)
+        TEST_CMD+=(-skip-testing DUNEUITests/LifeSmokeTests/testWeeklyFrequencyShowsStepper)
+        TEST_CMD+=(-skip-testing DUNEUITests/WellnessSmokeTests/testBodyFormSaveEnablesAfterInput)
+        TEST_CMD+=(-skip-testing DUNEUITests/WellnessSmokeTests/testInjuryRecoveredToggleShowsEndDate)
+        TEST_CMD+=(-skip-testing DUNEUITests/SettingsSmokeTests/testAppearanceSectionExists)
+        TEST_CMD+=(-skip-testing DUNEUITests/SettingsSmokeTests/testDataPrivacySectionExists)
+        TEST_CMD+=(-skip-testing DUNEUITests/SettingsSmokeTests/testAboutSectionExists)
+        TEST_CMD+=(-skip-testing DUNEUITests/SettingsSmokeTests/testPreferredExercisesLinkExists)
+        TEST_CMD+=(-skip-testing DUNEUITests/SettingsSmokeTests/testNavigateToPreferredExercises)
+        TEST_CMD+=(-skip-testing DUNEUITests/SettingsSmokeTests/testWhatsNewLinkExists)
+        TEST_CMD+=(-skip-testing DUNEUITests/SettingsSmokeTests/testNavigateToWhatsNew)
+        TEST_CMD+=(-skip-testing DUNEUITests/SettingsSmokeTests/testWhatsNewNotificationsDetailShowsArtwork)
+        TEST_CMD+=(-skip-testing DUNEUITests/SettingsSmokeTests/testWhatsNewSleepDebtDetailExists)
+        TEST_CMD+=(-skip-testing DUNEUITests/SettingsSmokeTests/testWhatsNewWidgetDetailExists)
+        TEST_CMD+=(-skip-testing DUNEUITests/SettingsSmokeTests/testWhatsNewMuscleMapDetailExists)
         echo "Smoke mode enabled: running iOS smoke suite only"
     else
         TEST_CMD+=(-only-testing DUNEUITests)

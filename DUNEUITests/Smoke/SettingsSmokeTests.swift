@@ -56,7 +56,7 @@ final class SettingsSmokeTests: UITestBaseCase {
     }
 
     func testAppearanceSectionExists() throws {
-        scrollToElementIfNeeded(AXID.settingsSectionAppearance)
+        _ = app.scrollToElementIfNeeded(AXID.settingsSectionAppearance)
         XCTAssertTrue(
             elementExists(AXID.settingsSectionAppearance, timeout: 5),
             "Appearance section should exist"
@@ -64,12 +64,12 @@ final class SettingsSmokeTests: UITestBaseCase {
     }
 
     func testDataPrivacySectionExists() throws {
-        scrollToElementIfNeeded(AXID.settingsRowICloudSync)
+        _ = app.scrollToElementIfNeeded(AXID.settingsRowICloudSync)
         XCTAssertTrue(
             elementExists(AXID.settingsRowICloudSync, timeout: 5),
             "iCloud Sync row should exist"
         )
-        scrollToElementIfNeeded(AXID.settingsRowLocationAccess, maxSwipes: 8)
+        _ = app.scrollToElementIfNeeded(AXID.settingsRowLocationAccess, maxSwipes: 8)
         XCTAssertTrue(
             elementExists(AXID.settingsRowLocationAccess, timeout: 5),
             "Location Access row should exist"
@@ -77,7 +77,7 @@ final class SettingsSmokeTests: UITestBaseCase {
     }
 
     func testAboutSectionExists() throws {
-        scrollToElementIfNeeded(AXID.settingsRowVersion)
+        _ = app.scrollToElementIfNeeded(AXID.settingsRowVersion)
         XCTAssertTrue(
             elementExists(AXID.settingsRowVersion, timeout: 5),
             "Version row should exist"
@@ -85,7 +85,7 @@ final class SettingsSmokeTests: UITestBaseCase {
     }
 
     func testWhatsNewLinkExists() throws {
-        scrollToElementIfNeeded(AXID.settingsRowWhatsNew)
+        _ = app.scrollToElementIfNeeded(AXID.settingsRowWhatsNew)
         XCTAssertTrue(
             elementExists(AXID.settingsRowWhatsNew, timeout: 5),
             "What's New navigation link should exist"
@@ -93,7 +93,7 @@ final class SettingsSmokeTests: UITestBaseCase {
     }
 
     func testNavigateToWhatsNew() throws {
-        scrollToElementIfNeeded(AXID.settingsRowWhatsNew)
+        _ = app.scrollToElementIfNeeded(AXID.settingsRowWhatsNew)
 
         let link = app.descendants(matching: .any)[AXID.settingsRowWhatsNew].firstMatch
         XCTAssertTrue(link.waitForExistence(timeout: 5), "What's New link should exist")
@@ -104,7 +104,7 @@ final class SettingsSmokeTests: UITestBaseCase {
     }
 
     func testWhatsNewNotificationsDetailShowsArtwork() throws {
-        scrollToElementIfNeeded(AXID.settingsRowWhatsNew)
+        _ = app.scrollToElementIfNeeded(AXID.settingsRowWhatsNew)
 
         let link = app.descendants(matching: .any)[AXID.settingsRowWhatsNew].firstMatch
         XCTAssertTrue(link.waitForExistence(timeout: 5), "What's New link should exist")
@@ -113,7 +113,7 @@ final class SettingsSmokeTests: UITestBaseCase {
         let screen = app.descendants(matching: .any)[AXID.whatsNewScreen].firstMatch
         XCTAssertTrue(screen.waitForExistence(timeout: 5), "What's New screen should open")
 
-        scrollToElementIfNeeded(AXID.whatsNewRow("notifications"))
+        _ = app.scrollToElementIfNeeded(AXID.whatsNewRow("notifications"))
         let notificationsRow = app.descendants(matching: .any)[AXID.whatsNewRow("notifications")].firstMatch
         XCTAssertTrue(
             notificationsRow.waitForExistence(timeout: 5),
@@ -135,7 +135,7 @@ final class SettingsSmokeTests: UITestBaseCase {
     }
 
     func testWhatsNewSleepDebtDetailExists() throws {
-        scrollToElementIfNeeded(AXID.settingsRowWhatsNew)
+        _ = app.scrollToElementIfNeeded(AXID.settingsRowWhatsNew)
 
         let link = app.descendants(matching: .any)[AXID.settingsRowWhatsNew].firstMatch
         XCTAssertTrue(link.waitForExistence(timeout: 5), "What's New link should exist")
@@ -144,7 +144,7 @@ final class SettingsSmokeTests: UITestBaseCase {
         let screen = app.descendants(matching: .any)[AXID.whatsNewScreen].firstMatch
         XCTAssertTrue(screen.waitForExistence(timeout: 5), "What's New screen should open")
 
-        scrollToElementIfNeeded(AXID.whatsNewRow("sleepDebt"))
+        _ = app.scrollToElementIfNeeded(AXID.whatsNewRow("sleepDebt"))
         let sleepDebtRow = app.descendants(matching: .any)[AXID.whatsNewRow("sleepDebt")].firstMatch
         XCTAssertTrue(
             sleepDebtRow.waitForExistence(timeout: 5),
@@ -166,7 +166,7 @@ final class SettingsSmokeTests: UITestBaseCase {
     }
 
     func testWhatsNewWidgetDetailExists() throws {
-        scrollToElementIfNeeded(AXID.settingsRowWhatsNew)
+        _ = app.scrollToElementIfNeeded(AXID.settingsRowWhatsNew)
 
         let link = app.descendants(matching: .any)[AXID.settingsRowWhatsNew].firstMatch
         XCTAssertTrue(link.waitForExistence(timeout: 5), "What's New link should exist")
@@ -175,7 +175,7 @@ final class SettingsSmokeTests: UITestBaseCase {
         let screen = app.descendants(matching: .any)[AXID.whatsNewScreen].firstMatch
         XCTAssertTrue(screen.waitForExistence(timeout: 5), "What's New screen should open")
 
-        scrollToElementIfNeeded(AXID.whatsNewRow("widgets"))
+        _ = app.scrollToElementIfNeeded(AXID.whatsNewRow("widgets"))
         let widgetsRow = app.descendants(matching: .any)[AXID.whatsNewRow("widgets")].firstMatch
         XCTAssertTrue(
             widgetsRow.waitForExistence(timeout: 5),
@@ -197,7 +197,7 @@ final class SettingsSmokeTests: UITestBaseCase {
     }
 
     func testWhatsNewMuscleMapDetailExists() throws {
-        scrollToElementIfNeeded(AXID.settingsRowWhatsNew)
+        _ = app.scrollToElementIfNeeded(AXID.settingsRowWhatsNew)
 
         let link = app.descendants(matching: .any)[AXID.settingsRowWhatsNew].firstMatch
         XCTAssertTrue(link.waitForExistence(timeout: 5), "What's New link should exist")
@@ -206,7 +206,7 @@ final class SettingsSmokeTests: UITestBaseCase {
         let screen = app.descendants(matching: .any)[AXID.whatsNewScreen].firstMatch
         XCTAssertTrue(screen.waitForExistence(timeout: 5), "What's New screen should open")
 
-        scrollToElementIfNeeded(AXID.whatsNewRow("muscleMap"))
+        _ = app.scrollToElementIfNeeded(AXID.whatsNewRow("muscleMap"))
         let muscleMapRow = app.descendants(matching: .any)[AXID.whatsNewRow("muscleMap")].firstMatch
         XCTAssertTrue(
             muscleMapRow.waitForExistence(timeout: 5),
@@ -225,11 +225,5 @@ final class SettingsSmokeTests: UITestBaseCase {
             artwork.waitForExistence(timeout: 5),
             "Muscle Map detail should show hero artwork"
         )
-    }
-
-    private func scrollToElementIfNeeded(_ identifier: String, maxSwipes: Int = 8) {
-        for _ in 0..<maxSwipes where !elementExists(identifier, timeout: 1) {
-            app.swipeUp()
-        }
     }
 }

@@ -1202,17 +1202,18 @@
       }
     },
     "%lld sets": {
+      "extractionState": "manual",
       "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld세트"
-          }
-        },
         "ja": {
           "stringUnit": {
             "state": "translated",
             "value": "%lldセット"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld세트"
           }
         }
       }
@@ -3552,6 +3553,23 @@
         }
       }
     },
+    "Bedtime Watch Reminder": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "就寝時ウォッチリマインダー"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "취침 시 워치 알림"
+          }
+        }
+      }
+    },
     "Best day": {
       "extractionState": "manual",
       "localizations": {
@@ -3901,6 +3919,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "체지방 업데이트"
+          }
+        }
+      }
+    },
+    "Body Composition Update": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "体組成の更新"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "체성분 업데이트"
           }
         }
       }
@@ -23306,6 +23341,23 @@
         }
       }
     },
+    "Watch": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Watch"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Watch"
+          }
+        }
+      }
+    },
     "Wellness": {
       "extractionState": "manual",
       "localizations": {
@@ -24346,130 +24398,102 @@
     },
     "알림 대상이 삭제되었거나 동기화되지 않았습니다.": {},
     "해당 운동을 찾을 수 없습니다": {},
-    "Last Night": {
+    "Suggested Routines": {
+      "extractionState": "manual",
       "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "지난 밤"
-          }
-        },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "昨夜"
+            "value": "おすすめルーティン"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "추천 루틴"
           }
         }
       }
     },
-    "hours": {
+    "Great progress! Consider increasing weight next time.": {
+      "extractionState": "manual",
       "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "시간"
-          }
-        },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "時間"
+            "value": "素晴らしい進歩です！次回は重量アップを検討してみてください。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "잘하셨습니다! 다음에는 무게를 늘려보세요."
           }
         }
       }
     },
-    "No Sleep Data": {
+    "%lldx": {
+      "extractionState": "manual",
       "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "수면 데이터 없음"
-          }
-        },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "睡眠データなし"
+            "value": "%lld回"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld회"
           }
         }
       }
     },
-    "Wear your Apple Watch to bed to track sleep.": {
+    "~%lldmin": {
+      "extractionState": "manual",
       "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "수면을 추적하려면 Apple Watch를 착용하고 주무세요."
-          }
-        },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "睡眠を記録するには、Apple Watchを着けて就寝してください。"
+            "value": "約%lld分"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "약%lld분"
           }
         }
       }
     },
-    "Body Composition": {
+    "%@ hours per night": {
       "localizations": {
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "신체 구성"
+            "value": "1박 평균 %@시간"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "体組成"
+            "value": "1晩あたり%@時間"
           }
         }
       }
     },
-    "Body composition data is available on your iPhone.": {
+    "%lld-Day Average": {
       "localizations": {
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "신체 구성 데이터는 iPhone에서 확인할 수 있습니다."
+            "value": "%lld일 평균"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "体組成データはiPhoneで確認できます。"
-          }
-        }
-      }
-    },
-    "Habits": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "습관"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "習慣"
-          }
-        }
-      }
-    },
-    "Your habits are tracked on your iPhone. Open DUNE on your iPhone to view, create, and complete habits.": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "습관은 iPhone에서 추적됩니다. iPhone에서 DUNE을 열어 습관을 확인하고 관리하세요."
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "習慣はiPhoneで記録されます。iPhoneでDUNEを開いて習慣を確認・管理してください。"
+            "value": "%lld日間の平均"
           }
         }
       }
@@ -24522,114 +24546,34 @@
         }
       }
     },
-    "No Condition Data": {
+    "Body Composition": {
       "localizations": {
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "컨디션 데이터 없음"
+            "value": "신체 구성"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "コンディションデータなし"
+            "value": "体組成"
           }
         }
       }
     },
-    "Condition scores, HRV, and sleep data will appear here after a few days of tracking.": {
+    "Body composition data is available on your iPhone.": {
       "localizations": {
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "며칠간 추적하면 컨디션 점수, HRV, 수면 데이터가 여기에 표시됩니다."
+            "value": "신체 구성 데이터는 iPhone에서 확인할 수 있습니다."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "数日間トラッキングすると、コンディションスコア、HRV、睡眠データがここに表示されます。"
-          }
-        }
-      }
-    },
-    "Good (80+)": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "좋음 (80+)"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "良好 (80+)"
-          }
-        }
-      }
-    },
-    "Moderate (60-79)": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "보통 (60-79)"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "普通 (60-79)"
-          }
-        }
-      }
-    },
-    "Fair (40-59)": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "보통 이하 (40-59)"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "やや低い (40-59)"
-          }
-        }
-      }
-    },
-    "Poor (<40)": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "나쁨 (<40)"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "低い (<40)"
-          }
-        }
-      }
-    },
-    "No Training Volume Data": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "훈련 볼륨 데이터 없음"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "トレーニングボリュームデータなし"
+            "value": "体組成データはiPhoneで確認できます。"
           }
         }
       }
@@ -24650,66 +24594,82 @@
         }
       }
     },
-    "View your muscle fatigue and recovery status in spatial 3D. Data is synced from your workouts on iPhone and Apple Watch.": {
+    "Condition scores, HRV, and sleep data will appear here after a few days of tracking.": {
       "localizations": {
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "공간 3D로 근육 피로도와 회복 상태를 확인하세요. iPhone과 Apple Watch의 운동 데이터가 동기화됩니다."
+            "value": "며칠간 추적하면 컨디션 점수, HRV, 수면 데이터가 여기에 표시됩니다."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "空間3Dで筋肉の疲労度と回復状態を確認できます。iPhoneとApple Watchのワークアウトデータが同期されます。"
+            "value": "数日間トラッキングすると、コンディションスコア、HRV、睡眠データがここに表示されます。"
           }
         }
       }
     },
-    "Open 3D Charts": {
+    "Fair (40-59)": {
       "localizations": {
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "3D 차트 열기"
+            "value": "보통 이하 (40-59)"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "3Dチャートを開く"
+            "value": "やや低い (40-59)"
           }
         }
       }
     },
-    "Loading training data...": {
+    "Good (80+)": {
       "localizations": {
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "훈련 데이터 로딩 중..."
+            "value": "좋음 (80+)"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "トレーニングデータを読み込み中..."
+            "value": "良好 (80+)"
           }
         }
       }
     },
-    "No Training Data": {
+    "HRV (ms)": {
       "localizations": {
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "훈련 데이터 없음"
+            "value": "HRV (ms)"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "トレーニングデータなし"
+            "value": "HRV (ms)"
+          }
+        }
+      }
+    },
+    "Habits": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "습관"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "習慣"
           }
         }
       }
@@ -24730,18 +24690,50 @@
         }
       }
     },
-    "No recent training data found. Start a workout on your iPhone or Apple Watch.": {
+    "Last Night": {
       "localizations": {
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "최근 훈련 데이터가 없습니다. iPhone 또는 Apple Watch에서 운동을 시작하세요."
+            "value": "지난 밤"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "最近のトレーニングデータが見つかりません。iPhoneまたはApple Watchでワークアウトを開始してください。"
+            "value": "昨夜"
+          }
+        }
+      }
+    },
+    "Loading training data...": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "훈련 데이터 로딩 중..."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "トレーニングデータを読み込み中..."
+          }
+        }
+      }
+    },
+    "Moderate (60-79)": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "보통 (60-79)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "普通 (60-79)"
           }
         }
       }
@@ -24762,34 +24754,114 @@
         }
       }
     },
-    "Volume (sets)": {
+    "No Condition Data": {
       "localizations": {
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "볼륨 (세트)"
+            "value": "컨디션 데이터 없음"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "ボリューム（セット）"
+            "value": "コンディションデータなし"
           }
         }
       }
     },
-    "HRV (ms)": {
+    "No Sleep Data": {
       "localizations": {
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "HRV (ms)"
+            "value": "수면 데이터 없음"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "HRV (ms)"
+            "value": "睡眠データなし"
+          }
+        }
+      }
+    },
+    "No Training Data": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "훈련 데이터 없음"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "トレーニングデータなし"
+          }
+        }
+      }
+    },
+    "No Training Volume Data": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "훈련 볼륨 데이터 없음"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "トレーニングボリュームデータなし"
+          }
+        }
+      }
+    },
+    "No recent training data found. Start a workout on your iPhone or Apple Watch.": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "최근 훈련 데이터가 없습니다. iPhone 또는 Apple Watch에서 운동을 시작하세요."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最近のトレーニングデータが見つかりません。iPhoneまたはApple Watchでワークアウトを開始してください。"
+          }
+        }
+      }
+    },
+    "Open 3D Charts": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3D 차트 열기"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3Dチャートを開く"
+          }
+        }
+      }
+    },
+    "Poor (<40)": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "나쁨 (<40)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "低い (<40)"
           }
         }
       }
@@ -24826,34 +24898,82 @@
         }
       }
     },
-    "%lld-Day Average": {
+    "View your muscle fatigue and recovery status in spatial 3D. Data is synced from your workouts on iPhone and Apple Watch.": {
       "localizations": {
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld일 평균"
+            "value": "공간 3D로 근육 피로도와 회복 상태를 확인하세요. iPhone과 Apple Watch의 운동 데이터가 동기화됩니다."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld日間の平均"
+            "value": "空間3Dで筋肉の疲労度と回復状態を確認できます。iPhoneとApple Watchのワークアウトデータが同期されます。"
           }
         }
       }
     },
-    "%@ hours per night": {
+    "Volume (sets)": {
       "localizations": {
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "1박 평균 %@시간"
+            "value": "볼륨 (세트)"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "1晩あたり%@時間"
+            "value": "ボリューム（セット）"
+          }
+        }
+      }
+    },
+    "Wear your Apple Watch to bed to track sleep.": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "수면을 추적하려면 Apple Watch를 착용하고 주무세요."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "睡眠を記録するには、Apple Watchを着けて就寝してください。"
+          }
+        }
+      }
+    },
+    "Your habits are tracked on your iPhone. Open DUNE on your iPhone to view, create, and complete habits.": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "습관은 iPhone에서 추적됩니다. iPhone에서 DUNE을 열어 습관을 확인하고 관리하세요."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "習慣はiPhoneで記録されます。iPhoneでDUNEを開いて習慣を確認・管理してください。"
+          }
+        }
+      }
+    },
+    "hours": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "시간"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "時間"
           }
         }
       }

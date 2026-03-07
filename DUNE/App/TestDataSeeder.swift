@@ -1,15 +1,25 @@
-#if DEBUG
-import SwiftData
 import Foundation
+import SwiftData
 
+enum UITestSeedScenario: String {
+    case empty = "empty"
+    case defaultSeeded = "default-seeded"
+}
+
+#if DEBUG
 /// Seeds mock SwiftData records for UI testing when launched with "--seed-mock".
 enum TestDataSeeder {
     @MainActor
-    static func seed(into context: ModelContext) {
-        seedExerciseRecords(into: context)
-        seedBodyCompositionRecords(into: context)
-        seedInjuryRecords(into: context)
-        seedHabitDefinitions(into: context)
+    static func seed(into context: ModelContext, scenario: UITestSeedScenario = .defaultSeeded) {
+        switch scenario {
+        case .empty:
+            return
+        case .defaultSeeded:
+            seedExerciseRecords(into: context)
+            seedBodyCompositionRecords(into: context)
+            seedInjuryRecords(into: context)
+            seedHabitDefinitions(into: context)
+        }
     }
 
     // MARK: - Exercise Records

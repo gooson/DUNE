@@ -15,6 +15,11 @@ struct RangeBarChartView: View {
     @Environment(\.appTheme) private var theme
 
     @State private var selectedDate: Date?
+    @State private var selectionGestureState = ChartSelectionGestureState()
+
+    private enum Labels {
+        static let average = String(localized: "Avg")
+    }
 
     var body: some View {
         Chart {
@@ -61,7 +66,7 @@ struct RangeBarChartView: View {
                         .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
                 }
             }
-            .chartScrollableAxes(.horizontal)
+            .chartScrollableAxes(selectedDate == nil ? .horizontal : [])
             .chartXVisibleDomain(length: period.visibleDomainSeconds)
             .chartScrollPosition(x: $scrollPosition)
             .chartYScale(domain: yDomain)
@@ -81,20 +86,34 @@ struct RangeBarChartView: View {
                         .foregroundStyle(theme.accentColor.opacity(0.30))
                 }
             }
-            .chartXSelection(value: $selectedDate)
-            .sensoryFeedback(.selection, trigger: selectedDate)
-            .frame(height: chartHeight)
-            .accessibilityChartDescriptor(chartDescriptor)
-            .overlay(alignment: .top) {
-                if let point = selectedPoint {
-                    ChartSelectionOverlay(
-                        date: point.date,
-                        value: "\(Int(point.min).formattedWithSeparator)–\(Int(point.max).formattedWithSeparator) bpm (avg \(Int(point.average).formattedWithSeparator))"
-                    )
-                    .transition(.opacity)
-                    .animation(.easeInOut(duration: 0.15), value: selectedDate)
+            .chartOverlay { proxy in
+                GeometryReader { geometry in
+                    if let plotFrame = proxy.plotFrame.map({ geometry[$0] }) {
+                        ZStack(alignment: .topLeading) {
+                            Rectangle()
+                                .fill(.clear)
+                                .contentShape(Rectangle())
+                                .simultaneousGesture(selectionGesture(proxy: proxy, plotFrame: plotFrame))
+
+                            if let point = selectedPoint,
+                               let anchor = selectedAnchor(for: point, proxy: proxy, plotFrame: plotFrame) {
+                                FloatingChartSelectionOverlay(
+                                    date: point.date,
+                                    value: "\(Int(point.min).formattedWithSeparator)–\(Int(point.max).formattedWithSeparator) bpm (\(Labels.average) \(Int(point.average).formattedWithSeparator))",
+                                    anchor: anchor,
+                                    chartSize: geometry.size,
+                                    plotFrame: plotFrame
+                                )
+                                .transition(.opacity)
+                            }
+                        }
+                        .animation(.easeInOut(duration: 0.15), value: selectedDate)
+                    }
                 }
             }
+            .sensoryFeedback(.selection, trigger: selectedPoint?.date)
+            .frame(height: chartHeight)
+            .accessibilityChartDescriptor(chartDescriptor)
     }
 
     private var chartDescriptor: RangeChartAccessibility {
@@ -135,9 +154,7 @@ struct RangeBarChartView: View {
 
     private var selectedPoint: RangeDataPoint? {
         guard let selectedDate else { return nil }
-        return data.min(by: {
-            abs($0.date.timeIntervalSince(selectedDate)) < abs($1.date.timeIntervalSince(selectedDate))
-        })
+        return ChartSelectionInteraction.nearestPoint(to: selectedDate, in: data, date: \.date)
     }
 
     private func barColor(for point: RangeDataPoint) -> Color {
@@ -145,6 +162,38 @@ struct RangeBarChartView: View {
             return point.id == selectedPoint?.id ? tintColor : tintColor.opacity(0.3)
         }
         return tintColor
+    }
+
+    private func selectedAnchor(
+        for point: RangeDataPoint,
+        proxy: ChartProxy,
+        plotFrame: CGRect
+    ) -> CGPoint? {
+        ChartSelectionInteraction.anchor(
+            xPosition: proxy.position(forX: point.date),
+            yPosition: proxy.position(forY: point.average),
+            plotFrame: plotFrame
+        )
+    }
+
+    private func selectionGesture(proxy: ChartProxy, plotFrame: CGRect) -> some Gesture {
+        DragGesture(minimumDistance: 0, coordinateSpace: .local)
+            .onChanged { value in
+                guard selectionGestureState.registerChange(
+                    at: value.time,
+                    translation: value.translation
+                ) else { return }
+
+                selectedDate = ChartSelectionInteraction.resolvedDate(
+                    at: value.location,
+                    proxy: proxy,
+                    plotFrame: plotFrame
+                )
+            }
+            .onEnded { _ in
+                selectionGestureState.reset()
+                selectedDate = nil
+            }
     }
 
 }

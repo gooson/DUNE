@@ -14,6 +14,7 @@ struct TrainingVolume3DView: View {
     @State private var volumeData: [TrainingVolumePoint] = []
     @State private var plottableData: [TrainingVolumePoint] = []
     @State private var weekRange: Int = 8
+    @State private var cachedMuscleVolumes: [(key: String, value: Double)] = []
 
     private static let muscleCategories: [(name: String, muscles: [MuscleGroup])] = [
         ("Chest", [.chest]),
@@ -122,11 +123,7 @@ struct TrainingVolume3DView: View {
     }
 
     private var topMuscleVolumes: [(key: String, value: Double)] {
-        Array(sortedMuscleVolumes.prefix(4))
-    }
-
-    private var sortedMuscleVolumes: [(key: String, value: Double)] {
-        Self.computeMuscleVolumes(from: plottableData)
+        Array(cachedMuscleVolumes.prefix(4))
     }
 
     private var volumeDomain: ClosedRange<Double> {
@@ -145,6 +142,7 @@ struct TrainingVolume3DView: View {
     private func loadData() async {
         guard let service = workoutService else {
             (volumeData, plottableData) = ([], [])
+            cachedMuscleVolumes = []
             return
         }
 
@@ -189,11 +187,13 @@ struct TrainingVolume3DView: View {
 
             let filtered = points.filter(\.isPlottable)
             (volumeData, plottableData) = (points, filtered)
+            cachedMuscleVolumes = Self.computeMuscleVolumes(from: filtered)
         } catch {
             AppLogger.healthKit.error(
                 "Vision training volume fetch failed: \(error.localizedDescription)"
             )
             (volumeData, plottableData) = ([], [])
+            cachedMuscleVolumes = []
         }
     }
 }

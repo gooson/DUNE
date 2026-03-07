@@ -6,8 +6,8 @@ struct DashboardView: View {
     @State private var hasAppeared = false
     @State private var unreadNotificationCount = 0
     @State private var showWhatsNewBadge = false
-    @State private var cachedWhatsNewReleases: [WhatsNewRelease] = []
-    @State private var cachedCurrentRelease: WhatsNewRelease?
+    @State private var cachedWhatsNewReleases: [WhatsNewReleaseData] = []
+    @State private var cachedCurrentRelease: WhatsNewReleaseData?
     @State private var cachedBuildNumber: String = ""
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.openURL) private var openURL
