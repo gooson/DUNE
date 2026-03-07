@@ -216,6 +216,7 @@
 		439F4321E5F0800737EE34F7 /* CalculateSleepScoreUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B0173DFB78590F4E2A67B43 /* CalculateSleepScoreUseCaseTests.swift */; };
 		4404EACB64D9EA0EF0680DAC /* CalculateSleepScoreUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B108D756A1C141141A1C523C /* CalculateSleepScoreUseCase.swift */; };
 		44152CFF5733CB416293DA28 /* VolumeIntensity.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8815B7EE0E03F982CA0013 /* VolumeIntensity.swift */; };
+		449FB42987FB3EDE565F397D /* FatigueLevel+DisplayName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 984BD0C0339D2BF4C1F6BA2A /* FatigueLevel+DisplayName.swift */; };
 		450C0EA26A88F0FC75197764 /* TrainingReadinessHeroCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BD23B1BCEE1EAD42D1D802 /* TrainingReadinessHeroCard.swift */; };
 		453C5F3E21FF2CDA2FA17A37 /* ExerciseCategory+HealthKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CB02BCA16ECDD0580E8B07 /* ExerciseCategory+HealthKit.swift */; };
 		45C87A53DCD3FE057E4FEBD1 /* HabitType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D118CEB3CEB568A3E682BD9 /* HabitType.swift */; };
@@ -497,6 +498,7 @@
 		A47D017E07DD2589CB6D2BD4 /* TrainingVolumeAnalysisService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CFE27CB18DC8E8A21F79E8 /* TrainingVolumeAnalysisService.swift */; };
 		A489C4B183B68A89EB23632B /* WorkoutStreak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179B7B1B76AA85C280BD0FE1 /* WorkoutStreak.swift */; };
 		A48F98017C99428302225863 /* WorkoutIntensityServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749DA6EDFECBC4881B062A54 /* WorkoutIntensityServiceTests.swift */; };
+		A4CF5D2802D393C8366B9938 /* FatigueLevel+DisplayName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 984BD0C0339D2BF4C1F6BA2A /* FatigueLevel+DisplayName.swift */; };
 		A50E53C911338ED02BE66AE7 /* CoachingEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B42EB9CDCBEAE86A5456EE2 /* CoachingEngineTests.swift */; };
 		A51A8298EA69E155F1226C59 /* ActivityPersonalRecordServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DAE8454B5D1D12BDB12E4C7 /* ActivityPersonalRecordServiceTests.swift */; };
 		A522C329214D146C448BA29D /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF85B6CE5DBEE6DF97FC4DFC /* NotificationService.swift */; };
@@ -1264,6 +1266,7 @@
 		96AC167E30499872332AC1C2 /* WorkoutRecommendationCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutRecommendationCard.swift; sourceTree = "<group>"; };
 		971DC9F7C9192F07FD1A7D19 /* CoachingEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachingEngine.swift; sourceTree = "<group>"; };
 		97F10CF5DEF2E6CF17562962 /* MuscleMapDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuscleMapDetailViewModel.swift; sourceTree = "<group>"; };
+		984BD0C0339D2BF4C1F6BA2A /* FatigueLevel+DisplayName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FatigueLevel+DisplayName.swift"; path = "Presentation/Shared/Extensions/FatigueLevel+DisplayName.swift"; sourceTree = "<group>"; };
 		985922DC24E5CE8B7199ADF2 /* WorkoutSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSet.swift; sourceTree = "<group>"; };
 		98DF021A7EE434D65FC5B824 /* WorkoutActivityType+View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkoutActivityType+View.swift"; sourceTree = "<group>"; };
 		98F9477B2A74305ECA2D5A8D /* OpenMeteoRequestLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenMeteoRequestLocation.swift; sourceTree = "<group>"; };
@@ -1441,7 +1444,7 @@
 		DAD0E7A177147EB46D77A595 /* LifeAutoAchievementService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifeAutoAchievementService.swift; sourceTree = "<group>"; };
 		DADC53DB0E5463F8D9434B20 /* PersonalRecordsDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalRecordsDetailView.swift; sourceTree = "<group>"; };
 		DB01DF64669A7AB8065B8133 /* RestTimerViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestTimerViewModelTests.swift; sourceTree = "<group>"; };
-		DBE203BE9C95468F8260A935 /* ExerciseRecord+WeeklyVolume.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExerciseRecord+WeeklyVolume.swift"; sourceTree = "<group>"; };
+		DBE203BE9C95468F8260A935 /* ExerciseRecord+WeeklyVolume.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ExerciseRecord+WeeklyVolume.swift"; path = "Presentation/Shared/Extensions/ExerciseRecord+WeeklyVolume.swift"; sourceTree = "<group>"; };
 		DBF53E8253ED06857A445371 /* CardioHRZonePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardioHRZonePage.swift; sourceTree = "<group>"; };
 		DCC640E75B0CE551DE225178 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		DD716AF5EEB04AC8E6DDD5B2 /* WeeklyStatsDetailViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyStatsDetailViewModelTests.swift; sourceTree = "<group>"; };
@@ -1759,6 +1762,14 @@
 			path = Exercise;
 			sourceTree = "<group>";
 		};
+		2801569E2046EA43B0A422A5 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				77619CA7356EE5A05110B7CE /* Extensions */,
+			);
+			name = Shared;
+			sourceTree = "<group>";
+		};
 		29AFD1D7938E8F7A7BF4874A /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -1869,6 +1880,7 @@
 				1BE8F7FC037B67EA401DF4B2 /* ExerciseRecord+Volume.swift */,
 				DBE203BE9C95468F8260A935 /* ExerciseRecord+WeeklyVolume.swift */,
 				8CFCA0F538BFECB1E2D7236A /* ExerciseTypeVolume+View.swift */,
+				984BD0C0339D2BF4C1F6BA2A /* FatigueLevel+DisplayName.swift */,
 				B1CA0948B53F1C5BFD97EA05 /* FatigueLevel+View.swift */,
 				553A95B6E1E6441784C5ADE1 /* HabitType+View.swift */,
 				9E3FF4FBF465FF22C40C6ABC /* HealthMetric+View.swift */,
@@ -1900,12 +1912,9 @@
 		36698F81967C58D0464399E5 /* DUNEVision */ = {
 			isa = PBXGroup;
 			children = (
-				F11978CCFC4AB77E8C8AA014 /* App */,
 				7FD3A678EDE1D9AC92103880 /* Presentation */,
-				B52F5BAF6E762EA15202A26E /* Resources */,
 			);
 			name = DUNEVision;
-			path = ../DUNEVision;
 			sourceTree = "<group>";
 		};
 		395CCEDF9133816B9202A46F /* Migration */ = {
@@ -1926,6 +1935,18 @@
 				97F10CF5DEF2E6CF17562962 /* MuscleMapDetailViewModel.swift */,
 			);
 			path = MuscleMap;
+			sourceTree = "<group>";
+		};
+		3DE142252F063695B32585FA /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				3F070EC18FEBAA4756A1019B /* Activity */,
+				651BB42B1782D7944C5A1BF1 /* Chart3D */,
+				472BB223CDCA544B4E0173E9 /* Dashboard */,
+				D775BC7E8DE767BDF6BDAB4F /* Immersive */,
+				5ABC3E716FAD61FAD712FF83 /* Volumetric */,
+			);
+			path = Presentation;
 			sourceTree = "<group>";
 		};
 		3F070EC18FEBAA4756A1019B /* Activity */ = {
@@ -2234,6 +2255,15 @@
 			path = ../DUNEWatch;
 			sourceTree = "<group>";
 		};
+		77619CA7356EE5A05110B7CE /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				DBE203BE9C95468F8260A935 /* ExerciseRecord+WeeklyVolume.swift */,
+				984BD0C0339D2BF4C1F6BA2A /* FatigueLevel+DisplayName.swift */,
+			);
+			name = Extensions;
+			sourceTree = "<group>";
+		};
 		78AE55B340EB70106D95A460 /* Immersive */ = {
 			isa = PBXGroup;
 			children = (
@@ -2315,13 +2345,9 @@
 		7FD3A678EDE1D9AC92103880 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
-				3F070EC18FEBAA4756A1019B /* Activity */,
-				651BB42B1782D7944C5A1BF1 /* Chart3D */,
-				472BB223CDCA544B4E0173E9 /* Dashboard */,
-				D775BC7E8DE767BDF6BDAB4F /* Immersive */,
-				5ABC3E716FAD61FAD712FF83 /* Volumetric */,
+				2801569E2046EA43B0A422A5 /* Shared */,
 			);
-			path = Presentation;
+			name = Presentation;
 			sourceTree = "<group>";
 		};
 		85936410CD3765325329BC2D /* Services */ = {
@@ -2367,6 +2393,17 @@
 				9E591AC2FCC90616BA47AF3F /* PersonalRecordsDetailViewModel.swift */,
 			);
 			path = PersonalRecords;
+			sourceTree = "<group>";
+		};
+		99E1954183C26693ED6A14D0 /* DUNEVision */ = {
+			isa = PBXGroup;
+			children = (
+				F11978CCFC4AB77E8C8AA014 /* App */,
+				3DE142252F063695B32585FA /* Presentation */,
+				B52F5BAF6E762EA15202A26E /* Resources */,
+			);
+			name = DUNEVision;
+			path = ../DUNEVision;
 			sourceTree = "<group>";
 		};
 		A1A08DEA2C643B30C1896638 /* Models */ = {
@@ -2988,6 +3025,7 @@
 				EFBFEF5E1A7FA3AD9AAB2614 /* DUNETests */,
 				7B65B56B86D4CD67C7FFC8A1 /* DUNEUITests */,
 				36698F81967C58D0464399E5 /* DUNEVision */,
+				99E1954183C26693ED6A14D0 /* DUNEVision */,
 				CFC1B543867BD54E8A3398FE /* DUNEVisionWidgets */,
 				75B8587760A2355B6E730718 /* DUNEWatch */,
 				0C894EB8F6C393EF09F3BE80 /* DUNEWatchTests */,
@@ -3467,6 +3505,7 @@
 				432BE0C0F10E91C7428AB25D /* FatigueCalculationService.swift in Sources */,
 				F95ADD3221D8C40A865D979E /* FatigueInfoSheet.swift in Sources */,
 				124A09CF363DA1A056DFFA37 /* FatigueLegendView.swift in Sources */,
+				449FB42987FB3EDE565F397D /* FatigueLevel+DisplayName.swift in Sources */,
 				BE4D77D5C41E50CEFE554A18 /* FatigueLevel+View.swift in Sources */,
 				F6F4D998FBA1E00D0A83C915 /* FatigueLevel.swift in Sources */,
 				7AC2FF009ED00C260D2EDCE2 /* FlowLayout.swift in Sources */,
@@ -3779,6 +3818,7 @@
 				A1A31220D0B8B96F2D8943ED /* ExerciseRecord+WeeklyVolume.swift in Sources */,
 				DE82CCC97DD0EA7C681D616A /* ExerciseRecordSnapshot.swift in Sources */,
 				298A9C03B1702506266B9AE1 /* FatigueCalculationService.swift in Sources */,
+				A4CF5D2802D393C8366B9938 /* FatigueLevel+DisplayName.swift in Sources */,
 				16EAD101264E6874BFC6A884 /* FatigueLevel.swift in Sources */,
 				F68591DF0CD8E7DA6A6A0C4C /* HRVQueryService.swift in Sources */,
 				1265D6E3546085A165B4DB20 /* HabitStreakService.swift in Sources */,

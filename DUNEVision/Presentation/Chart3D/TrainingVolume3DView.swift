@@ -9,6 +9,8 @@ import Charts
 /// - Z axis: Week number
 /// - Color: Muscle group identity
 struct TrainingVolume3DView: View {
+    let sharedHealthDataService: SharedHealthDataService?
+
     @State private var sampleData = TrainingVolume3DView.generateSampleData(weeks: 8)
     @State private var weekRange: Int = 8
     @State private var sortedMuscleVolumes: [(key: String, value: Double)] = []

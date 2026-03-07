@@ -3,6 +3,7 @@ import SwiftUI
 /// visionOS-optimized dashboard with glass material background.
 /// Provides a spatial entry point to condition data, health metrics, and 3D charts.
 struct VisionDashboardView: View {
+    // TODO: Wire to condition/metrics display when Phase 4 (live data) lands
     let sharedHealthDataService: SharedHealthDataService?
     let refreshSignal: Int
     let onOpenDashboardWindow: (VisionDashboardWindowKind) -> Void
@@ -185,7 +186,7 @@ struct VisionDashboardView: View {
     }
 
     @ViewBuilder
-    private func metricCard(title: String, value: String, unit: String, icon: String) -> some View {
+    private func metricCard(title: LocalizedStringKey, value: String, unit: String, icon: String) -> some View {
         VStack(spacing: 8) {
             Image(systemName: icon)
                 .font(.title2)
