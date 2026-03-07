@@ -103,6 +103,9 @@ struct ContentView: View {
         .onChange(of: scenePhase) { oldPhase, newPhase in
             if newPhase == .active {
                 notificationInboxManager.syncBadge()
+                Task {
+                    await BedtimeWatchReminderScheduler.shared.refreshSchedule()
+                }
             }
             if oldPhase == .background, newPhase == .active {
                 foregroundTask?.cancel()
