@@ -6,6 +6,7 @@
 - 데이터 종속 UI → 항상 placeholder 렌더 + `.frame(minHeight:)`
 - Swift Charts → `.clipped()` 필수; Chart closure 내 allocation 금지
 - gradient/color → `private enum Gradients { static let }` 로 호이스트
+- `.simultaneousGesture` → `including:` 파라미터 금지. `.subviews`는 추가된 제스처를 비활성화함. 제스처 충돌은 `ChartSelectionGestureState` 상태 머신으로 해결
 
 ## Navigation & Routing
 - `.navigationDestination(for:)` → 조건 블록 밖 (body 최상위)
