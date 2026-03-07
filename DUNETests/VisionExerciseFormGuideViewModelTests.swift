@@ -146,6 +146,39 @@ struct VisionExerciseFormGuideViewModelTests {
         #expect(viewModel.selectedGuide?.formCueKeys.isEmpty == true)
     }
 
+    @Test("guide titles use English outside Korean locale")
+    func guideTitlesUseEnglishOutsideKoreanLocale() {
+        let guide = VisionExerciseGuide(
+            exercise: makeExercise(
+                id: "barbell-bench-press",
+                name: "Barbell Bench Press",
+                localizedName: "바벨 벤치프레스"
+            ),
+            descriptionKey: "Exercise Form Guide",
+            formCueKeys: []
+        )
+
+        #expect(guide.primaryDisplayName(locale: Locale(identifier: "en_US")) == "Barbell Bench Press")
+        #expect(guide.secondaryDisplayName(locale: Locale(identifier: "en_US")) == nil)
+        #expect(guide.primaryDisplayName(locale: Locale(identifier: "ja_JP")) == "Barbell Bench Press")
+    }
+
+    @Test("guide titles keep localized Korean name only for Korean locale")
+    func guideTitlesUseKoreanForKoreanLocale() {
+        let guide = VisionExerciseGuide(
+            exercise: makeExercise(
+                id: "barbell-bench-press",
+                name: "Barbell Bench Press",
+                localizedName: "바벨 벤치프레스"
+            ),
+            descriptionKey: "Exercise Form Guide",
+            formCueKeys: []
+        )
+
+        #expect(guide.primaryDisplayName(locale: Locale(identifier: "ko_KR")) == "바벨 벤치프레스")
+        #expect(guide.secondaryDisplayName(locale: Locale(identifier: "ko_KR")) == "Barbell Bench Press")
+    }
+
     private func makeExercise(
         id: String,
         name: String,
