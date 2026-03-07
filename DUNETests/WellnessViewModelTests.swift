@@ -44,6 +44,24 @@ private struct NoopVitalsService: VitalsQuerying {
     func fetchWristTemperatureBaseline(days: Int) async throws -> Double? { nil }
 }
 
+
+private struct VO2FreshnessVitalsService: VitalsQuerying {
+    let latest: VitalSample?
+    let history: [VitalSample]
+
+    func fetchLatestSpO2(withinDays days: Int) async throws -> VitalSample? { nil }
+    func fetchLatestRespiratoryRate(withinDays days: Int) async throws -> VitalSample? { nil }
+    func fetchLatestVO2Max(withinDays days: Int) async throws -> VitalSample? { latest }
+    func fetchLatestHeartRateRecovery(withinDays days: Int) async throws -> VitalSample? { nil }
+    func fetchLatestWristTemperature(withinDays days: Int) async throws -> VitalSample? { nil }
+    func fetchSpO2Collection(days: Int) async throws -> [VitalSample] { [] }
+    func fetchRespiratoryRateCollection(days: Int) async throws -> [VitalSample] { [] }
+    func fetchVO2MaxHistory(days: Int) async throws -> [VitalSample] { history }
+    func fetchHeartRateRecoveryHistory(days: Int) async throws -> [VitalSample] { [] }
+    func fetchWristTemperatureCollection(days: Int) async throws -> [VitalSample] { [] }
+    func fetchWristTemperatureBaseline(days: Int) async throws -> Double? { nil }
+}
+
 private struct NoopHeartRateService: HeartRateQuerying {
     func fetchHeartRateSamples(forWorkoutID workoutID: String) async throws -> [HeartRateSample] { [] }
     func fetchHeartRateSummary(forWorkoutID workoutID: String) async throws -> HeartRateSummary {
@@ -312,6 +330,35 @@ struct WellnessViewModelTests {
 
         await sharedService.resumeFetch()
         await loadTask.value
+    }
+
+    @Test("VO2 card prefers freshest history sample when latest query is older")
+    func vo2CardUsesFreshestSampleAcrossQueries() async {
+        let now = Date()
+        let older = Calendar.current.date(byAdding: .day, value: -7, to: now) ?? now
+        let newer = Calendar.current.date(byAdding: .hour, value: -2, to: now) ?? now
+
+        let vm = WellnessViewModel(
+            sleepService: NoopSleepService(),
+            bodyService: NoopBodyService(),
+            hrvService: NoopHRVService(),
+            vitalsService: VO2FreshnessVitalsService(
+                latest: VitalSample(value: 41.2, date: older),
+                history: [
+                    VitalSample(value: 41.2, date: older),
+                    VitalSample(value: 43.7, date: newer)
+                ]
+            ),
+            heartRateService: NoopHeartRateService(),
+            sharedHealthDataService: MockSharedHealthDataService(snapshot: makeEmptyWellnessSharedSnapshot())
+        }
+      
+        await vm.performRefresh()
+      
+        let vo2Card = vm.physicalCards.first { $0.category == .vo2Max }
+        #expect(vo2Card != nil)
+        #expect(vo2Card?.metric.value == 43.7)
+        #expect(vo2Card?.lastUpdated == newer)
     }
 
     @Test("BMI card prefers today's measurement over older latest sample")

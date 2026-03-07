@@ -292,7 +292,7 @@ final class WellnessViewModel {
         }
 
         // --- VO2 Max ---
-        if let vo2 = results.latestVO2Max {
+        if let vo2 = selectFreshestSample(primary: results.latestVO2Max, from: results.vo2MaxHistory) {
             let sparkline = results.vo2MaxHistory.map(\.value)
             cards.append(buildCard(
                 category: .vo2Max,
@@ -1088,5 +1088,17 @@ final class WellnessViewModel {
             return "\(hours)h \(mins)m"
         }
         return "\(mins)m"
+    }
+
+    private func selectFreshestSample(primary: VitalSample?, from history: [VitalSample]) -> VitalSample? {
+        guard let newestFromHistory = history.max(by: { $0.date < $1.date }) else {
+            return primary
+        }
+
+        guard let primary else {
+            return newestFromHistory
+        }
+
+        return newestFromHistory.date > primary.date ? newestFromHistory : primary
     }
 }
