@@ -12,13 +12,9 @@ final class ActivitySmokeTests: UITestBaseCase {
     // MARK: - Elements
 
     func testActivityTabLoads() throws {
-        // Activity tab should render without crashing
-        let hasNavBar = app.navigationBars.firstMatch.waitForExistence(timeout: 10)
-
-        XCTAssertTrue(
-            hasNavBar || elementExists(AXID.activityHeroReadiness, timeout: 8),
-            "Activity screen should render"
-        )
+        let title = app.navigationBars["Activity"]
+        XCTAssertTrue(title.waitForExistence(timeout: 10), "Activity navigation bar should exist")
+        XCTAssertTrue(elementExists(AXID.activityHeroReadiness, timeout: 8), "Activity screen should render")
     }
 
     func testToolbarAddButtonExists() throws {
