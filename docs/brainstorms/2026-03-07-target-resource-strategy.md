@@ -2,7 +2,7 @@
 tags: [resources, xcassets, xcstrings, multi-target, shared, equipment, localization]
 date: 2026-03-07
 category: brainstorm
-status: draft
+status: implemented
 ---
 
 # Brainstorm: 타겟별 리소스 관리 전략

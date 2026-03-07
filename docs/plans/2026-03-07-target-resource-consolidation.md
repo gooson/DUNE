@@ -2,7 +2,7 @@
 tags: [resources, xcstrings, xcassets, multi-target, shared, localization, visionos]
 date: 2026-03-07
 category: plan
-status: draft
+status: implemented
 ---
 
 # Plan: 타겟별 리소스 통합 및 관리 원칙 수립
