@@ -175,8 +175,7 @@ struct ExerciseTypeDetailView: View {
                                 .fill(.clear)
                                 .contentShape(Rectangle())
                                 .simultaneousGesture(
-                                    selectionGesture(proxy: proxy, plotFrame: plotFrame),
-                                    including: .subviews
+                                    selectionGesture(proxy: proxy, plotFrame: plotFrame)
                                 )
 
                             if let point = selectedTrendPoint,
