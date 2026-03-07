@@ -38,8 +38,8 @@ struct DalhangariWaveShapeTests {
         #expect(!path.isEmpty)
     }
 
-    @Test("Asymmetry zero produces symmetric wave")
-    func symmetricWhenNoAsymmetry() {
+    @Test("Zero asymmetry produces valid path")
+    func zeroAsymmetryProducesValidPath() {
         let rect = CGRect(x: 0, y: 0, width: 300, height: 200)
         let shape = DalhangariWaveShape(asymmetry: 0, organicBlend: 0)
         let path = shape.path(in: rect)

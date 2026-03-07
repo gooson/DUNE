@@ -18,25 +18,24 @@ struct HanokWaveOverlayView: View {
     var crestOpacity: Double = 0.18
     var crestWidth: CGFloat = 1.2
     /// Wind-sway breath intensity (0 = none, 0.15 = strong).
-    /// Modulates amplitude sinusoidally for organic wind feel.
+    /// Modulates amplitude as a function of phase for organic wind feel.
     var breathIntensity: CGFloat = 0
 
     @State private var phase: CGFloat = 0
-    @State private var breathPhase: CGFloat = 0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-    /// LCM = 6 turns for seamless loop with base + 1/3 + 3rd + 1/2 harmonics.
+    /// 6 turns ensures all sub-harmonic phase dependencies (lowest: phase/3)
+    /// complete full cycles for seamless looping.
     private static let phaseLoopTurns: CGFloat = 6
     private var phaseTarget: CGFloat { 2 * .pi * Self.phaseLoopTurns }
     private var phaseDuration: Double { driftDuration * Double(Self.phaseLoopTurns) }
 
-    /// Breath cycle duration — slightly offset from drift for organic feel.
-    private var breathDuration: Double { driftDuration * 1.3 }
-
-    /// Current amplitude with breath modulation applied.
+    /// Current amplitude with breath modulation derived from drift phase.
+    /// Uses an irrational-ratio multiplier (0.13) to avoid periodic alignment
+    /// with the base wave, producing organic variation without a separate @State.
     private var modulatedAmplitude: CGFloat {
         guard breathIntensity > 0 else { return amplitude }
-        return amplitude * (1 + breathIntensity * sin(breathPhase))
+        return amplitude * (1 + breathIntensity * sin(phase * 0.13))
     }
 
     /// Shared shape instance for fill and crest strokes.
@@ -52,26 +51,17 @@ struct HanokWaveOverlayView: View {
     }
 
     private struct AnimationKey: Hashable {
-        let breathIntensity: CGFloat
+        let driftDuration: Double
         let reduceMotion: Bool
     }
 
     private func restartAnimations() {
         phase = 0
-        breathPhase = 0
 
-        guard !reduceMotion else { return }
+        guard !reduceMotion, driftDuration > 0 else { return }
 
-        if driftDuration > 0 {
-            withAnimation(.linear(duration: phaseDuration).repeatForever(autoreverses: false)) {
-                phase = phaseTarget
-            }
-        }
-
-        if breathIntensity > 0 {
-            withAnimation(.easeInOut(duration: breathDuration).repeatForever(autoreverses: true)) {
-                breathPhase = .pi
-            }
+        withAnimation(.linear(duration: phaseDuration).repeatForever(autoreverses: false)) {
+            phase = phaseTarget
         }
     }
 
@@ -100,6 +90,7 @@ struct HanokWaveOverlayView: View {
                         )
                         .blur(radius: 0.25)
                 }
+                .drawingGroup()
                 .mask(
                     LinearGradient(
                         colors: [.white, .white.opacity(0.95), .clear],
@@ -111,7 +102,7 @@ struct HanokWaveOverlayView: View {
             }
         }
         .allowsHitTesting(false)
-        .task(id: AnimationKey(breathIntensity: breathIntensity, reduceMotion: reduceMotion)) {
+        .task(id: AnimationKey(driftDuration: driftDuration, reduceMotion: reduceMotion)) {
             restartAnimations()
         }
     }
