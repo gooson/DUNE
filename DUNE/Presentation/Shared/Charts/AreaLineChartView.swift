@@ -9,6 +9,7 @@ struct AreaLineChartView: View {
     var tintColor: Color = DS.Color.body
     var unitSuffix: String = "kg"
     var trendLine: [ChartDataPoint]?
+    var scrollDomain: ClosedRange<Date>?
     @Binding var scrollPosition: Date
 
     @ScaledMetric(relativeTo: .body) private var chartHeight: CGFloat = 220
@@ -80,6 +81,7 @@ struct AreaLineChartView: View {
             .scrollDisabled(!selectionGestureState.allowsScroll)
             .chartXVisibleDomain(length: period.visibleDomainSeconds)
             .chartScrollPosition(x: $scrollPosition)
+            .chartXScale(domain: effectiveXDomain)
             .chartYScale(domain: yDomain)
             .chartXAxis {
                 AxisMarks(values: .stride(by: period.strideComponent, count: period.strideCount)) { _ in
@@ -145,6 +147,18 @@ struct AreaLineChartView: View {
         }
     }
 
+
+    /// X-axis domain: explicit scroll domain if provided, otherwise derived from data points.
+    private var effectiveXDomain: ClosedRange<Date> {
+        if let scrollDomain { return scrollDomain }
+        guard let first = data.min(by: { $0.date < $1.date })?.date,
+              let last = data.max(by: { $0.date < $1.date })?.date,
+              first < last else {
+            let now = Date()
+            return now...now.addingTimeInterval(1)
+        }
+        return first...last
+    }
 
     /// Y-axis domain with padding around min/max values.
     private var yDomain: ClosedRange<Double> {

@@ -116,6 +116,16 @@ private struct MockVisionWorkspaceBodyService: BodyCompositionQuerying {
         return []
     }
 
+    func fetchBodyFat(start: Date, end: Date) async throws -> [BodyCompositionSample] {
+        if let error { throw error }
+        return []
+    }
+
+    func fetchLeanBodyMass(start: Date, end: Date) async throws -> [BodyCompositionSample] {
+        if let error { throw error }
+        return []
+    }
+
     func fetchLatestBodyFat(withinDays days: Int) async throws -> (value: Double, date: Date)? {
         if let error { throw error }
         guard let first = bodyFatSamples.first else { return nil }

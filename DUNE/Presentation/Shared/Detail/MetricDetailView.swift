@@ -304,6 +304,7 @@ struct MetricDetailView: View {
                 tintColor: DS.Color.body,
                 unitSuffix: "kg",
                 trendLine: trend,
+                scrollDomain: viewModel.scrollDomain,
                 scrollPosition: $viewModel.scrollPosition
             )
 
@@ -314,6 +315,7 @@ struct MetricDetailView: View {
                 tintColor: DS.Color.body,
                 unitSuffix: "",
                 trendLine: trend,
+                scrollDomain: viewModel.scrollDomain,
                 scrollPosition: $viewModel.scrollPosition
             )
 
@@ -388,6 +390,7 @@ struct MetricDetailView: View {
                 tintColor: DS.Color.body,
                 unitSuffix: "%",
                 trendLine: trend,
+                scrollDomain: viewModel.scrollDomain,
                 scrollPosition: $viewModel.scrollPosition
             )
 
@@ -398,6 +401,7 @@ struct MetricDetailView: View {
                 tintColor: DS.Color.body,
                 unitSuffix: "kg",
                 trendLine: trend,
+                scrollDomain: viewModel.scrollDomain,
                 scrollPosition: $viewModel.scrollPosition
             )
 

@@ -14,6 +14,8 @@ protocol BodyCompositionQuerying: Sendable {
     func fetchBMI(for date: Date) async throws -> Double?
     func fetchLatestBMI(withinDays days: Int) async throws -> (value: Double, date: Date)?
     func fetchBMI(start: Date, end: Date) async throws -> [BodyCompositionSample]
+    func fetchBodyFat(start: Date, end: Date) async throws -> [BodyCompositionSample]
+    func fetchLeanBodyMass(start: Date, end: Date) async throws -> [BodyCompositionSample]
     func fetchLatestBodyFat(withinDays days: Int) async throws -> (value: Double, date: Date)?
     func fetchLatestLeanBodyMass(withinDays days: Int) async throws -> (value: Double, date: Date)?
 }
@@ -47,7 +49,8 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
         try await fetchQuantitySamples(
             type: HKQuantityType(.leanBodyMass),
             unit: .gramUnit(with: .kilo),
-            days: days
+            days: days,
+            validRange: 0...300
         )
     }
 
@@ -130,6 +133,27 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
             start: start,
             end: end,
             validRange: 0...100
+        )
+    }
+
+    func fetchBodyFat(start: Date, end: Date) async throws -> [BodyCompositionSample] {
+        try await fetchQuantitySamples(
+            type: HKQuantityType(.bodyFatPercentage),
+            unit: .percent(),
+            start: start,
+            end: end,
+            valueTransform: { $0 * 100 },
+            validRange: 0...100
+        )
+    }
+
+    func fetchLeanBodyMass(start: Date, end: Date) async throws -> [BodyCompositionSample] {
+        try await fetchQuantitySamples(
+            type: HKQuantityType(.leanBodyMass),
+            unit: .gramUnit(with: .kilo),
+            start: start,
+            end: end,
+            validRange: 0...300
         )
     }
 
