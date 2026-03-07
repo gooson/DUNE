@@ -228,7 +228,7 @@ struct SettingsView: View {
         Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "—"
     }
 
-    private var whatsNewReleases: [WhatsNewRelease] {
+    private var whatsNewReleases: [WhatsNewReleaseData] {
         whatsNewManager.orderedReleases(preferredVersion: appVersion)
     }
 
