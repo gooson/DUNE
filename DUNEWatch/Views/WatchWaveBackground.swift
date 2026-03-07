@@ -301,7 +301,7 @@ struct WatchWaveBackground: View {
         }
         .ignoresSafeArea()
         .allowsHitTesting(false)
-        .onAppear {
+        .task {
             guard !reduceMotion else { return }
             if isArctic {
                 withAnimation(.linear(duration: 20).repeatForever(autoreverses: false)) {

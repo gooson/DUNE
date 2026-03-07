@@ -1,6 +1,54 @@
 import Foundation
 import Observation
 
+// MARK: - Draft Persistence
+
+/// Codable snapshot of a template workout session for background/crash recovery
+struct TemplateWorkoutDraft: Codable {
+    let exerciseIDs: [String]
+    let exerciseSets: [[DraftSet]]
+    let exerciseStatusRaws: [String]
+    let currentExerciseIndex: Int
+    let sessionStartTime: Date
+    let savedAt: Date
+
+    struct DraftSet: Codable {
+        let setNumber: Int
+        let weight: String
+        let reps: String
+        let duration: String
+        let distance: String
+        let level: String?
+        let isCompleted: Bool
+        let setTypeRaw: String
+        let restDuration: TimeInterval?
+    }
+
+    private static let userDefaultsKey = "com.raftel.dailve.template_workout_draft"
+
+    /// Encode failure preserves previous draft (if any) to avoid data loss.
+    static func save(_ draft: TemplateWorkoutDraft) {
+        guard let data = try? JSONEncoder().encode(draft) else {
+            AppLogger.exercise.error("Failed to encode template workout draft")
+            return
+        }
+        UserDefaults.standard.set(data, forKey: userDefaultsKey)
+    }
+
+    static func load() -> TemplateWorkoutDraft? {
+        guard let data = UserDefaults.standard.data(forKey: userDefaultsKey) else { return nil }
+        guard let draft = try? JSONDecoder().decode(TemplateWorkoutDraft.self, from: data) else {
+            AppLogger.exercise.error("Failed to decode template workout draft")
+            return nil
+        }
+        return draft
+    }
+
+    static func clear() {
+        UserDefaults.standard.removeObject(forKey: userDefaultsKey)
+    }
+}
+
 /// Orchestrates a sequential template workout where each exercise
 /// is recorded individually and saved immediately upon completion.
 @Observable
@@ -215,5 +263,85 @@ final class TemplateWorkoutViewModel {
             }
         }
         return nil
+    }
+
+    // MARK: - Draft Persistence
+
+    func saveDraft() {
+        let exerciseSets = exerciseViewModels.map { vm in
+            vm.sets.map { set in
+                TemplateWorkoutDraft.DraftSet(
+                    setNumber: set.setNumber,
+                    weight: set.weight,
+                    reps: set.reps,
+                    duration: set.duration,
+                    distance: set.distance,
+                    level: set.level,
+                    isCompleted: set.isCompleted,
+                    setTypeRaw: set.setType.rawValue,
+                    restDuration: set.restDuration
+                )
+            }
+        }
+        let statusRaws = exerciseStatuses.map { status -> String in
+            switch status {
+            case .pending: "pending"
+            case .inProgress: "inProgress"
+            case .completed: "completed"
+            case .skipped: "skipped"
+            }
+        }
+        let draft = TemplateWorkoutDraft(
+            exerciseIDs: config.exercises.map(\.id),
+            exerciseSets: exerciseSets,
+            exerciseStatusRaws: statusRaws,
+            currentExerciseIndex: currentExerciseIndex,
+            sessionStartTime: sessionStartTime,
+            savedAt: Date()
+        )
+        TemplateWorkoutDraft.save(draft)
+    }
+
+    @discardableResult
+    func restoreFromDraft(_ draft: TemplateWorkoutDraft) -> Bool {
+        let configIDs = config.exercises.map(\.id)
+        guard draft.exerciseIDs == configIDs else { return false }
+        guard draft.exerciseSets.count == exerciseViewModels.count else { return false }
+        guard draft.exerciseStatusRaws.count == exerciseStatuses.count else { return false }
+
+        currentExerciseIndex = min(draft.currentExerciseIndex, config.exercises.count - 1)
+
+        // Restore statuses
+        for (i, raw) in draft.exerciseStatusRaws.enumerated() {
+            switch raw {
+            case "pending": exerciseStatuses[i] = .pending
+            case "inProgress": exerciseStatuses[i] = .inProgress
+            case "completed": exerciseStatuses[i] = .completed
+            case "skipped": exerciseStatuses[i] = .skipped
+            default: break
+            }
+        }
+
+        // Restore sets
+        for (vmIndex, draftSets) in draft.exerciseSets.enumerated() {
+            let vm = exerciseViewModels[vmIndex]
+            vm.sets = draftSets.map { draftSet in
+                var editable = EditableSet(setNumber: draftSet.setNumber)
+                editable.weight = draftSet.weight
+                editable.reps = draftSet.reps
+                editable.duration = draftSet.duration
+                editable.distance = draftSet.distance
+                editable.level = draftSet.level ?? ""
+                editable.isCompleted = draftSet.isCompleted
+                editable.setType = SetType(rawValue: draftSet.setTypeRaw) ?? .working
+                editable.restDuration = draftSet.restDuration
+                return editable
+            }
+        }
+        return true
+    }
+
+    static func clearDraft() {
+        TemplateWorkoutDraft.clear()
     }
 }

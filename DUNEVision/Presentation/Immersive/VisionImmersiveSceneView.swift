@@ -346,28 +346,6 @@ private enum VisionImmersivePalette {
         }
 
         guard active else { return base }
-        return blended(base, with: .white, ratio: 0.18)
-    }
-
-    private static func blended(_ lhs: UIColor, with rhs: UIColor, ratio: CGFloat) -> UIColor {
-        let clampedRatio = max(0, min(1, ratio))
-        var lhsRed: CGFloat = 0
-        var lhsGreen: CGFloat = 0
-        var lhsBlue: CGFloat = 0
-        var lhsAlpha: CGFloat = 0
-        var rhsRed: CGFloat = 0
-        var rhsGreen: CGFloat = 0
-        var rhsBlue: CGFloat = 0
-        var rhsAlpha: CGFloat = 0
-
-        lhs.getRed(&lhsRed, green: &lhsGreen, blue: &lhsBlue, alpha: &lhsAlpha)
-        rhs.getRed(&rhsRed, green: &rhsGreen, blue: &rhsBlue, alpha: &rhsAlpha)
-
-        return UIColor(
-            red: lhsRed + ((rhsRed - lhsRed) * clampedRatio),
-            green: lhsGreen + ((rhsGreen - lhsGreen) * clampedRatio),
-            blue: lhsBlue + ((rhsBlue - lhsBlue) * clampedRatio),
-            alpha: lhsAlpha + ((rhsAlpha - lhsAlpha) * clampedRatio)
-        )
+        return base.blended(with: .white, ratio: 0.18)
     }
 }

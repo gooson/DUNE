@@ -210,13 +210,13 @@ struct VisionDashboardWindowScene: View {
             statCard(
                 title: activity.topWorkoutTitle ?? String(localized: "Workout"),
                 value: activity.topWorkoutMinutes.map { durationString(minutes: $0) } ?? "--",
-                detail: activity.featuredMuscle.map { localizedMuscleName($0) }
+                detail: activity.featuredMuscle.map { $0.displayName }
             )
 
             if let featuredMuscle = activity.featuredMuscle,
                let loadUnits = activity.featuredMuscleLoadUnits {
                 statCard(
-                    title: localizedMuscleName(featuredMuscle),
+                    title: featuredMuscle.displayName,
                     value: loadUnits.formatted(),
                     detail: activity.featuredMuscleRecoveryPercent.map {
                         $0.formatted(.percent.precision(.fractionLength(0)))
@@ -398,24 +398,6 @@ struct VisionDashboardWindowScene: View {
             return "--"
         }
         return "\(collected.formatted()) / \(required.formatted())"
-    }
-
-    private func localizedMuscleName(_ muscle: MuscleGroup) -> String {
-        switch muscle {
-        case .chest: String(localized: "Chest")
-        case .back: String(localized: "Back")
-        case .shoulders: String(localized: "Shoulders")
-        case .biceps: String(localized: "Biceps")
-        case .triceps: String(localized: "Triceps")
-        case .quadriceps: String(localized: "Quads")
-        case .hamstrings: String(localized: "Hamstrings")
-        case .glutes: String(localized: "Glutes")
-        case .calves: String(localized: "Calves")
-        case .core: String(localized: "Core")
-        case .forearms: String(localized: "Forearms")
-        case .traps: String(localized: "Traps")
-        case .lats: String(localized: "Lats")
-        }
     }
 
     private func numberString(_ value: Double, digits: Int) -> String {

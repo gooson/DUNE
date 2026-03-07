@@ -53,6 +53,7 @@ struct WeeklySummaryChartView: View {
                 // Chart
                 chart
                     .frame(height: 140)
+                    .clipped()
                     .animation(DS.Animation.standard, value: selectedTab)
             }
         }

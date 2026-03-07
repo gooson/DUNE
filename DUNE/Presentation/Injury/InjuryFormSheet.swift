@@ -136,6 +136,7 @@ struct InjuryFormSheet: View {
                             saveCount += 1
                         }
                     }
+                    .disabled(viewModel.isSaving)
                     .accessibilityIdentifier("injury-form-save")
                 }
             }

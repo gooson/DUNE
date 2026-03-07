@@ -2,37 +2,6 @@ import RealityKit
 import SwiftUI
 import UIKit
 
-extension MuscleGroup {
-    var spatialDisplayName: String {
-        switch self {
-        case .chest: String(localized: "Chest")
-        case .back: String(localized: "Back")
-        case .shoulders: String(localized: "Shoulders")
-        case .biceps: String(localized: "Biceps")
-        case .triceps: String(localized: "Triceps")
-        case .quadriceps: String(localized: "Quads")
-        case .hamstrings: String(localized: "Hamstrings")
-        case .glutes: String(localized: "Glutes")
-        case .calves: String(localized: "Calves")
-        case .core: String(localized: "Core")
-        case .forearms: String(localized: "Forearms")
-        case .traps: String(localized: "Traps")
-        case .lats: String(localized: "Lats")
-        }
-    }
-
-    var spatialIconName: String {
-        switch self {
-        case .chest: "figure.strengthtraining.traditional"
-        case .back, .lats: "dumbbell.fill"
-        case .shoulders, .traps: "figure.arms.open"
-        case .biceps, .triceps, .forearms: "dumbbell.fill"
-        case .quadriceps, .hamstrings, .glutes, .calves: "figure.walk"
-        case .core: "figure.core.training"
-        }
-    }
-}
-
 extension SpatialTrainingSummary.MuscleLoad {
     var recoveryLabel: String {
         guard hasRecentLoad else { return String(localized: "No recent load") }
@@ -94,7 +63,7 @@ enum VisionSpatialPalette {
         )
 
         guard isSelected else { return base }
-        return blended(base, with: .white, ratio: 0.22)
+        return base.blended(with: .white, ratio: 0.22)
     }
 
     static func blockColor(
@@ -103,29 +72,7 @@ enum VisionSpatialPalette {
     ) -> UIColor {
         let base = muscleColor(for: muscle, alpha: selected ? 1.0 : 0.86)
         guard selected else { return base }
-        return blended(base, with: .white, ratio: 0.16)
-    }
-
-    private static func blended(_ lhs: UIColor, with rhs: UIColor, ratio: CGFloat) -> UIColor {
-        let clamped = max(0, min(1, ratio))
-        var lhsRed: CGFloat = 0
-        var lhsGreen: CGFloat = 0
-        var lhsBlue: CGFloat = 0
-        var lhsAlpha: CGFloat = 0
-        var rhsRed: CGFloat = 0
-        var rhsGreen: CGFloat = 0
-        var rhsBlue: CGFloat = 0
-        var rhsAlpha: CGFloat = 0
-
-        lhs.getRed(&lhsRed, green: &lhsGreen, blue: &lhsBlue, alpha: &lhsAlpha)
-        rhs.getRed(&rhsRed, green: &rhsGreen, blue: &rhsBlue, alpha: &rhsAlpha)
-
-        return UIColor(
-            red: lhsRed + ((rhsRed - lhsRed) * clamped),
-            green: lhsGreen + ((rhsGreen - lhsGreen) * clamped),
-            blue: lhsBlue + ((rhsBlue - lhsBlue) * clamped),
-            alpha: lhsAlpha + ((rhsAlpha - lhsAlpha) * clamped)
-        )
+        return base.blended(with: .white, ratio: 0.16)
     }
 }
 

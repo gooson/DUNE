@@ -45,10 +45,10 @@ struct BodyCompositionFormSheet: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
-                        saveCount += 1
                         onSave()
+                        saveCount += 1
                     }
-                    .disabled(viewModel.newWeight.isEmpty && viewModel.newBodyFat.isEmpty && viewModel.newMuscleMass.isEmpty)
+                    .disabled(viewModel.isSaving || (viewModel.newWeight.isEmpty && viewModel.newBodyFat.isEmpty && viewModel.newMuscleMass.isEmpty))
                     .accessibilityIdentifier("body-form-save")
                 }
             }

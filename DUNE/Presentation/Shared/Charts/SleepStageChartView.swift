@@ -62,6 +62,7 @@ struct SleepStageChartView: View {
             }
         }
         .frame(height: chartHeight)
+            .clipped()
         .drawingGroup()
         .accessibilityElement(children: .combine)
         .accessibilityLabel("Sleep stages timeline, \(stages.count) stages")
@@ -137,6 +138,7 @@ struct SleepStageChartView: View {
         }
         .sensoryFeedback(.selection, trigger: selectedDailyPoint?.date)
         .frame(height: chartHeight)
+            .clipped()
         .accessibilityChartDescriptor(stackedChartDescriptor)
     }
 

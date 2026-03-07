@@ -47,11 +47,11 @@ struct InjuryWarningBanner: View {
     private func headerText(maxSeverity: InjurySeverity) -> String {
         switch maxSeverity {
         case .severe:
-            return "Injury Warning — Avoid These Muscles"
+            return String(localized: "Injury Warning — Avoid These Muscles")
         case .moderate:
-            return "Caution — Injured Area Involved"
+            return String(localized: "Caution — Injured Area Involved")
         case .minor:
-            return "Note — Minor Injury in This Area"
+            return String(localized: "Note — Minor Injury in This Area")
         }
     }
 }

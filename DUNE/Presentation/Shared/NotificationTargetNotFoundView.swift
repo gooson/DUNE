@@ -10,11 +10,11 @@ struct NotificationTargetNotFoundView: View {
                 .font(.system(size: 40))
                 .foregroundStyle(.secondary)
 
-            Text("해당 운동을 찾을 수 없습니다")
+            Text("Exercise not found")
                 .font(.headline)
                 .multilineTextAlignment(.center)
 
-            Text("알림 대상이 삭제되었거나 동기화되지 않았습니다.")
+            Text("The notification target has been deleted or is not synced.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)

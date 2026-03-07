@@ -212,7 +212,7 @@ struct VisionExerciseFormGuideView: View {
         VStack(alignment: .leading, spacing: 8) {
             Text("About")
                 .font(.headline)
-            Text(NSLocalizedString(guide.descriptionKey, comment: "Vision exercise guide description"))
+            Text(String(localized: String.LocalizationValue(guide.descriptionKey)))
                 .font(.body)
                 .foregroundStyle(.secondary)
         }
@@ -231,7 +231,7 @@ struct VisionExerciseFormGuideView: View {
                         .frame(width: 22, height: 22)
                         .background(.tint, in: Circle())
 
-                    Text(NSLocalizedString(cue, comment: "Vision exercise guide cue"))
+                    Text(String(localized: String.LocalizationValue(cue)))
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }

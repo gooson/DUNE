@@ -38,7 +38,7 @@ struct HRVQueryService: HRVQuerying, Sendable {
 
         return samples.compactMap { sample in
             let value = sample.quantity.doubleValue(for: HKUnit.secondUnit(with: .milli))
-            guard value >= 1 else { return nil } // Filter out invalid SDNN < 1ms
+            guard value >= 1, value <= 500 else { return nil } // Filter out invalid SDNN values
             return HRVSample(value: value, date: sample.startDate)
         }
     }
@@ -64,7 +64,11 @@ struct HRVQueryService: HRVQuerying, Sendable {
         )
 
         let samples = try await manager.execute(descriptor)
-        return samples.first?.quantity.doubleValue(for: HKUnit.count().unitDivided(by: .minute()))
+        guard let value = samples.first?.quantity.doubleValue(for: HKUnit.count().unitDivided(by: .minute())),
+              value >= 20, value <= 300 else {
+            return nil
+        }
+        return value
     }
 
     func fetchLatestRestingHeartRate(withinDays days: Int) async throws -> (value: Double, date: Date)? {
@@ -90,6 +94,7 @@ struct HRVQueryService: HRVQuerying, Sendable {
         let samples = try await manager.execute(descriptor)
         guard let sample = samples.first else { return nil }
         let value = sample.quantity.doubleValue(for: HKUnit.count().unitDivided(by: .minute()))
+        guard value >= 20, value <= 300 else { return nil }
         return (value: value, date: sample.startDate)
     }
 
@@ -113,7 +118,7 @@ struct HRVQueryService: HRVQuerying, Sendable {
 
         var results: [(date: Date, average: Double)] = []
         collection.enumerateStatistics(from: start, to: end) { statistics, _ in
-            if let avg = statistics.averageQuantity()?.doubleValue(for: unit), avg >= 1 {
+            if let avg = statistics.averageQuantity()?.doubleValue(for: unit), avg >= 1, avg <= 500 {
                 results.append((date: statistics.startDate, average: avg))
             }
         }
@@ -140,9 +145,10 @@ struct HRVQueryService: HRVQuerying, Sendable {
 
         var results: [(date: Date, min: Double, max: Double, average: Double)] = []
         collection.enumerateStatistics(from: start, to: end) { statistics, _ in
-            guard let avg = statistics.averageQuantity()?.doubleValue(for: unit) else { return }
-            let minVal = statistics.minimumQuantity()?.doubleValue(for: unit) ?? avg
-            let maxVal = statistics.maximumQuantity()?.doubleValue(for: unit) ?? avg
+            guard let avg = statistics.averageQuantity()?.doubleValue(for: unit),
+                  avg >= 20, avg <= 300 else { return }
+            let minVal = max(20, statistics.minimumQuantity()?.doubleValue(for: unit) ?? avg)
+            let maxVal = min(300, statistics.maximumQuantity()?.doubleValue(for: unit) ?? avg)
             results.append((date: statistics.startDate, min: minVal, max: maxVal, average: avg))
         }
         return results

@@ -141,6 +141,7 @@ struct DotLineChartView: View {
             }
             .sensoryFeedback(.selection, trigger: selectedPoint?.date)
             .frame(height: chartHeight)
+            .clipped()
             .accessibilityChartDescriptor(chartDescriptor)
     }
 
