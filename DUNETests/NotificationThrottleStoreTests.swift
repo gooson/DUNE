@@ -9,13 +9,15 @@ struct NotificationThrottleStoreTests {
 
     private func makeStore(
         dailyBudgetLimit: Int = 6,
-        dedupWindowSeconds: TimeInterval = 60 * 60
+        dedupWindowSeconds: TimeInterval = 60 * 60,
+        bodyCompositionMergeWindowSeconds: TimeInterval = 60 * 5
     ) -> NotificationThrottleStore {
         let defaults = UserDefaults(suiteName: "test.throttle.\(UUID().uuidString)")!
         return NotificationThrottleStore(
             defaults: defaults,
             dailyBudgetLimit: dailyBudgetLimit,
-            dedupWindowSeconds: dedupWindowSeconds
+            dedupWindowSeconds: dedupWindowSeconds,
+            bodyCompositionMergeWindowSeconds: bodyCompositionMergeWindowSeconds
         )
     }
 
@@ -164,5 +166,49 @@ struct NotificationThrottleStoreTests {
 
         #expect(store.shouldSendAndRecord(insight: insight, now: base) == true)
         #expect(store.shouldSendAndRecord(insight: insight, now: base.addingTimeInterval(60)) == false)
+    }
+
+    @Test("Body composition updates inside merge window are collapsed into one alert")
+    func bodyCompositionUpdatesAreCollapsedWithinMergeWindow() {
+        let store = makeStore(dedupWindowSeconds: 0, bodyCompositionMergeWindowSeconds: 60 * 5)
+        let base = Date(timeIntervalSince1970: 40_000)
+
+        let weight = makeInsight(
+            type: .weightUpdate,
+            title: "Weight Recorded",
+            body: "73.2kg",
+            severity: .informational
+        )
+        let bodyFat = makeInsight(
+            type: .bodyFatUpdate,
+            title: "Body Fat Recorded",
+            body: "18.4%",
+            severity: .informational
+        )
+
+        #expect(store.shouldSendAndRecord(insight: weight, now: base) == true)
+        #expect(store.shouldSendAndRecord(insight: bodyFat, now: base.addingTimeInterval(60)) == false)
+    }
+
+    @Test("Body composition updates can be sent again after merge window")
+    func bodyCompositionUpdatesCanSendAfterMergeWindow() {
+        let store = makeStore(dedupWindowSeconds: 0, bodyCompositionMergeWindowSeconds: 60 * 5)
+        let base = Date(timeIntervalSince1970: 50_000)
+
+        let weight = makeInsight(
+            type: .weightUpdate,
+            title: "Weight Recorded",
+            body: "73.2kg",
+            severity: .informational
+        )
+        let bmi = makeInsight(
+            type: .bmiUpdate,
+            title: "BMI Updated",
+            body: "22.1",
+            severity: .informational
+        )
+
+        #expect(store.shouldSendAndRecord(insight: weight, now: base) == true)
+        #expect(store.shouldSendAndRecord(insight: bmi, now: base.addingTimeInterval(60 * 6)) == true)
     }
 }
