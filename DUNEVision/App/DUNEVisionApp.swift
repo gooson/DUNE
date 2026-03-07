@@ -10,6 +10,7 @@ struct DUNEVisionApp: App {
     private let sharedHealthDataService: SharedHealthDataService
     private let refreshCoordinator: AppRefreshCoordinating
     private let observerManager: HealthKitObserverManager?
+    private let workoutService: WorkoutQuerying?
 
     private static func makeInMemoryFallbackContainer() -> ModelContainer {
         do {
@@ -85,6 +86,9 @@ struct DUNEVisionApp: App {
             sharedService = VisionUnavailableSharedHealthDataService()
         }
         self.sharedHealthDataService = sharedService
+        self.workoutService = healthKitAvailable
+            ? WorkoutQueryService(manager: .shared)
+            : nil
 
         let coordinator = AppRefreshCoordinatorImpl(sharedHealthDataService: sharedService)
         self.refreshCoordinator = coordinator
@@ -105,7 +109,8 @@ struct DUNEVisionApp: App {
         WindowGroup {
             VisionContentView(
                 sharedHealthDataService: sharedHealthDataService,
-                refreshCoordinator: refreshCoordinator
+                refreshCoordinator: refreshCoordinator,
+                workoutService: workoutService
             )
             .tint(.accentColor)
         }
@@ -148,7 +153,7 @@ struct DUNEVisionApp: App {
 
         // 3D Charts window — opened via openWindow(id:)
         WindowGroup(id: "chart3d") {
-            Chart3DContainerView(sharedHealthDataService: sharedHealthDataService)
+            Chart3DContainerView(sharedHealthDataService: sharedHealthDataService, workoutService: workoutService)
                 .tint(.accentColor)
         }
         .defaultSize(width: 800, height: 600, depth: 400)

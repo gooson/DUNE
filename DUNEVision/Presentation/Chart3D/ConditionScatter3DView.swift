@@ -14,63 +14,64 @@ import Charts
 struct ConditionScatter3DView: View {
     let sharedHealthDataService: SharedHealthDataService?
 
-    @State private var sampleData = ConditionScatter3DView.generateSampleData(days: 30)
+    @State private var dataPoints: [ConditionDataPoint] = []
+    @State private var plottableDataPoints: [ConditionDataPoint] = []
     @State private var selectedPeriod: ScatterPeriod = .thirtyDays
 
     var body: some View {
         VStack(spacing: 16) {
             periodPicker
 
-            Chart3D {
-                ForEach(plottableSampleData) { point in
-                    PointMark(
-                        x: .value("HRV", point.hrv),
-                        y: .value("RHR", point.rhr),
-                        z: .value("Sleep", point.sleepQuality)
-                    )
-                    .foregroundStyle(point.conditionColor)
-                    .symbolSize(point.trainingVolume > 0 ? 80 : 40)
+            if plottableDataPoints.isEmpty {
+                emptyChartPlaceholder
+            } else {
+                Chart3D {
+                    ForEach(plottableDataPoints) { point in
+                        PointMark(
+                            x: .value("HRV", point.hrv),
+                            y: .value("RHR", point.rhr),
+                            z: .value("Sleep", point.sleepQuality)
+                        )
+                        .foregroundStyle(point.conditionColor)
+                        .symbolSize(point.trainingVolume > 0 ? 80 : 40)
+                    }
                 }
+                .chartXScale(domain: hrvDomain)
+                .chartYScale(domain: rhrDomain)
+                .chartZScale(domain: sleepDomain)
+                .chartXAxisLabel("HRV (ms)")
+                .chartYAxisLabel("RHR (bpm)")
+                .chartZAxisLabel("Sleep (%)")
+                .frame(minHeight: 400)
             }
-            .chartXScale(domain: hrvDomain)
-            .chartYScale(domain: rhrDomain)
-            .chartZScale(domain: sleepDomain)
-            .chartXAxisLabel("HRV (ms)")
-            .chartYAxisLabel("RHR (bpm)")
-            .chartZAxisLabel("Sleep (%)")
-            .frame(minHeight: 400)
 
             legend
         }
         .padding()
-        .onChange(of: selectedPeriod) { _, newPeriod in
-            sampleData = Self.generateSampleData(days: newPeriod.dayCount)
+        .task(id: selectedPeriod) {
+            await loadData()
         }
     }
 
     // MARK: - Components
 
-    private var plottableSampleData: [ConditionDataPoint] {
-        sampleData.filter(\.isPlottable)
-    }
-
     private var hrvDomain: ClosedRange<Double> {
         Self.paddedDomain(
-            for: plottableSampleData.map(\.hrv),
+            for: plottableDataPoints.map(\.hrv),
             fallback: 20...100
         )
     }
 
     private var rhrDomain: ClosedRange<Double> {
         Self.paddedDomain(
-            for: plottableSampleData.map(\.rhr),
+            for: plottableDataPoints.map(\.rhr),
             fallback: 45...90
         )
     }
 
     private var sleepDomain: ClosedRange<Double> {
         Self.paddedDomain(
-            for: plottableSampleData.map(\.sleepQuality),
+            for: plottableDataPoints.map(\.sleepQuality),
             fallback: 0...100,
             clampTo: 0...100
         )
@@ -83,6 +84,27 @@ struct ConditionScatter3DView: View {
             }
         }
         .pickerStyle(.segmented)
+    }
+
+    private var emptyChartPlaceholder: some View {
+        VStack(spacing: 16) {
+            Image(systemName: "chart.dots.scatter")
+                .font(.system(size: 48))
+                .foregroundStyle(.secondary)
+
+            Text("No Condition Data")
+                .font(.title3.weight(.semibold))
+
+            Text("Condition scores, HRV, and sleep data will appear here after a few days of tracking.")
+                .font(.callout)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: 400)
+        }
+        .frame(maxWidth: .infinity)
+        .frame(minHeight: 400)
+        .padding(24)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 24, style: .continuous))
     }
 
     private var legend: some View {
@@ -105,30 +127,71 @@ struct ConditionScatter3DView: View {
         }
     }
 
-    // MARK: - Sample Data
+    // MARK: - Data Loading
 
-    /// Generate sample data for preview and development.
-    /// In production, this will be replaced by actual HealthKit data
-    /// from ConditionScore, HRVSample, HeartRateSummary, and SleepSummary.
-    private static func generateSampleData(days: Int) -> [ConditionDataPoint] {
-        (0..<days).map { day in
-            let baseCondition = Double.random(in: 35...95)
-            let hrv = 20 + baseCondition * 0.8 + Double.random(in: -10...10)
-            let rhr = 80 - baseCondition * 0.3 + Double.random(in: -5...5)
-            let sleepQuality = Swift.max(0, Swift.min(100, baseCondition + Double.random(in: -15...15)))
-            let trainingVolume = Double.random(in: 0...15000)
+    private func loadData() async {
+        guard let service = sharedHealthDataService else {
+            (dataPoints, plottableDataPoints) = ([], [])
+            return
+        }
 
-            return ConditionDataPoint(
-                id: day,
-                date: Calendar.current.date(byAdding: .day, value: -day, to: .now) ?? .now,
+        let snapshot = await service.fetchSnapshot()
+        let calendar = Calendar.current
+        let cutoff = calendar.date(
+            byAdding: .day,
+            value: -selectedPeriod.dayCount,
+            to: snapshot.fetchedAt
+        ) ?? snapshot.fetchedAt
+
+        // Build daily lookups
+        let hrvByDay = Dictionary(
+            grouping: snapshot.hrvSamples.filter { $0.date >= cutoff },
+            by: { calendar.startOfDay(for: $0.date) }
+        ).mapValues { samples in
+            samples.map(\.value).reduce(0, +) / Double(samples.count)
+        }
+
+        let rhrByDay = Dictionary(
+            snapshot.rhrCollection.filter { $0.date >= cutoff }
+                .map { (calendar.startOfDay(for: $0.date), $0.average) },
+            uniquingKeysWith: { _, latest in latest }
+        )
+
+        let sleepByDay = Dictionary(
+            snapshot.sleepDailyDurations.filter { $0.date >= cutoff }
+                .map { (calendar.startOfDay(for: $0.date), $0.totalMinutes) },
+            uniquingKeysWith: { _, latest in latest }
+        )
+
+        let scores = snapshot.recentConditionScores.filter { $0.date >= cutoff }
+
+        var points: [ConditionDataPoint] = []
+        for (index, score) in scores.enumerated() {
+            let day = calendar.startOfDay(for: score.date)
+            guard let hrv = hrvByDay[day], let rhr = rhrByDay[day] else { continue }
+
+            let sleepMinutes = sleepByDay[day] ?? 0
+            // Sleep quality: 8h (480min) = 100%
+            let sleepQuality = sleepMinutes > 0
+                ? Swift.min(100, sleepMinutes / 480.0 * 100.0)
+                : 0
+
+            points.append(ConditionDataPoint(
+                id: index,
+                date: score.date,
                 hrv: hrv,
                 rhr: rhr,
                 sleepQuality: sleepQuality,
-                conditionScore: baseCondition,
-                trainingVolume: trainingVolume
-            )
+                conditionScore: Double(score.score),
+                trainingVolume: 0
+            ))
         }
+
+        let filtered = points.filter(\.isPlottable)
+        (dataPoints, plottableDataPoints) = (points, filtered)
     }
+
+    // MARK: - Helpers
 
     private static func paddedDomain(
         for values: [Double],
@@ -200,9 +263,9 @@ enum ScatterPeriod: String, CaseIterable, Identifiable {
 
     var displayName: String {
         switch self {
-        case .thirtyDays: "30 Days"
-        case .sixtyDays: "60 Days"
-        case .ninetyDays: "90 Days"
+        case .thirtyDays: String(localized: "30 Days")
+        case .sixtyDays: String(localized: "60 Days")
+        case .ninetyDays: String(localized: "90 Days")
         }
     }
 

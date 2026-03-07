@@ -5,6 +5,7 @@ import Charts
 /// Provides a picker to switch between different 3D chart types.
 struct Chart3DContainerView: View {
     let sharedHealthDataService: SharedHealthDataService?
+    var workoutService: WorkoutQuerying?
 
     @State private var selectedChart: Chart3DType = .conditionScatter
 
@@ -23,7 +24,7 @@ struct Chart3DContainerView: View {
                 case .conditionScatter:
                     ConditionScatter3DView(sharedHealthDataService: sharedHealthDataService)
                 case .trainingVolume:
-                    TrainingVolume3DView(sharedHealthDataService: sharedHealthDataService)
+                    TrainingVolume3DView(workoutService: workoutService)
                 }
             }
             .navigationTitle("3D Health Charts")

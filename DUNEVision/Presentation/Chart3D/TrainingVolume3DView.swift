@@ -5,41 +5,51 @@ import Charts
 /// Uses Chart3D + RectangleMark to show a spatial representation of training distribution.
 ///
 /// - X axis: Muscle Group
-/// - Y axis: Volume (kg)
+/// - Y axis: Volume (sets)
 /// - Z axis: Week number
 /// - Color: Muscle group identity
 struct TrainingVolume3DView: View {
-    let sharedHealthDataService: SharedHealthDataService?
+    let workoutService: WorkoutQuerying?
 
-    @State private var sampleData = TrainingVolume3DView.generateSampleData(weeks: 8)
+    @State private var volumeData: [TrainingVolumePoint] = []
+    @State private var plottableData: [TrainingVolumePoint] = []
     @State private var weekRange: Int = 8
-    @State private var cachedMuscleVolumes: [(key: String, value: Double)] = Self.computeMuscleVolumes(
-        from: generateSampleData(weeks: 8).filter(\.isPlottable)
-    )
+    @State private var cachedMuscleVolumes: [(key: String, value: Double)] = []
 
-    private static let muscleGroups = ["Chest", "Back", "Legs", "Shoulders", "Arms", "Core", "Glutes"]
+    private static let muscleCategories: [(name: String, muscles: [MuscleGroup])] = [
+        ("Chest", [.chest]),
+        ("Back", [.back, .lats, .traps]),
+        ("Legs", [.quadriceps, .hamstrings, .calves]),
+        ("Shoulders", [.shoulders]),
+        ("Arms", [.biceps, .triceps, .forearms]),
+        ("Core", [.core]),
+        ("Glutes", [.glutes])
+    ]
+
+    private static let categoryNames: [String] = muscleCategories.map(\.name)
 
     var body: some View {
         VStack(spacing: 16) {
             weekRangePicker
 
-            trainingVolumeChart
+            if plottableData.isEmpty {
+                emptyChartPlaceholder
+            } else {
+                trainingVolumeChart
+            }
 
             volumeSummary
         }
         .padding()
-        .onChange(of: weekRange) { _, newWeeks in
-            sampleData = Self.generateSampleData(weeks: newWeeks)
-        }
-        .onChange(of: sampleData.count) { _, _ in
-            cachedMuscleVolumes = Self.computeMuscleVolumes(from: sampleData.filter(\.isPlottable))
+        .task(id: weekRange) {
+            await loadData()
         }
     }
 
     // MARK: - Components
 
     private var trainingVolumeChart: some View {
-        Chart3D(plottableSampleData) { point in
+        Chart3D(plottableData) { point in
             RectangleMark(
                 x: .value("Muscle", point.muscleIndex),
                 y: .value("Volume", point.volume),
@@ -47,23 +57,23 @@ struct TrainingVolume3DView: View {
             )
             .foregroundStyle(by: .value("Muscle", point.muscleGroup))
         }
-        .chartXScale(domain: 0...Double(Self.muscleGroups.count - 1))
+        .chartXScale(domain: 0...Double(Self.categoryNames.count - 1))
         .chartYScale(domain: volumeDomain)
         .chartZScale(domain: 1...Double(weekRange))
         .chartXAxis {
-            AxisMarks(values: Self.muscleGroups.indices.map(Double.init)) { value in
+            AxisMarks(values: Self.categoryNames.indices.map(Double.init)) { value in
                 AxisValueLabel {
                     if let rawIndex = value.as(Double.self) {
                         let index = Int(rawIndex.rounded())
-                        if Self.muscleGroups.indices.contains(index) {
-                            Text(Self.muscleGroups[index])
+                        if Self.categoryNames.indices.contains(index) {
+                            Text(Self.categoryNames[index])
                         }
                     }
                 }
             }
         }
         .chartXAxisLabel("Muscle Group")
-        .chartYAxisLabel("Volume (kg)")
+        .chartYAxisLabel("Volume (sets)")
         .chartZAxisLabel("Week")
         .frame(minHeight: 400)
     }
@@ -77,13 +87,34 @@ struct TrainingVolume3DView: View {
         .pickerStyle(.segmented)
     }
 
+    private var emptyChartPlaceholder: some View {
+        VStack(spacing: 16) {
+            Image(systemName: "chart.bar.fill")
+                .font(.system(size: 48))
+                .foregroundStyle(.secondary)
+
+            Text("No Training Volume Data")
+                .font(.title3.weight(.semibold))
+
+            Text("Complete workouts on your iPhone or Apple Watch to see training volume distribution.")
+                .font(.callout)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: 400)
+        }
+        .frame(maxWidth: .infinity)
+        .frame(minHeight: 400)
+        .padding(24)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 24, style: .continuous))
+    }
+
     private var volumeSummary: some View {
         HStack(spacing: 16) {
             ForEach(topMuscleVolumes, id: \.key) { entry in
                 VStack(spacing: 4) {
                     Text(entry.key)
                         .font(.caption.bold())
-                    Text("\(Int(entry.value)) kg")
+                    Text("\(Int(entry.value)) sets")
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                 }
@@ -95,12 +126,8 @@ struct TrainingVolume3DView: View {
         Array(cachedMuscleVolumes.prefix(4))
     }
 
-    private var plottableSampleData: [TrainingVolumePoint] {
-        sampleData.filter(\.isPlottable)
-    }
-
     private var volumeDomain: ClosedRange<Double> {
-        let maxVolume = plottableSampleData.map(\.volume).max() ?? 1
+        let maxVolume = plottableData.map(\.volume).max() ?? 1
         return 0...Swift.max(maxVolume * 1.1, 1)
     }
 
@@ -110,44 +137,64 @@ struct TrainingVolume3DView: View {
             .sorted { $0.value > $1.value }
     }
 
-    // MARK: - Sample Data
+    // MARK: - Data Loading
 
-    /// Generate sample training volume data.
-    /// In production, this will aggregate ExerciseRecord data by MuscleGroup and week.
-    private static func generateSampleData(weeks: Int) -> [TrainingVolumePoint] {
-        var points: [TrainingVolumePoint] = []
-        var id = 0
-
-        for week in 1...weeks {
-            for (muscleIndex, muscle) in Self.muscleGroups.enumerated() {
-                let baseVolume: Double
-                switch muscle {
-                case "Legs": baseVolume = Double.random(in: 3000...8000)
-                case "Back": baseVolume = Double.random(in: 2000...6000)
-                case "Chest": baseVolume = Double.random(in: 2000...5500)
-                case "Shoulders": baseVolume = Double.random(in: 1000...3500)
-                case "Arms": baseVolume = Double.random(in: 800...2500)
-                case "Core": baseVolume = Double.random(in: 500...2000)
-                case "Glutes": baseVolume = Double.random(in: 1500...4000)
-                default: baseVolume = Double.random(in: 1000...3000)
-                }
-
-                // Progressive overload trend
-                let progressionMultiplier = 1.0 + Double(week) * 0.02
-                let volume = baseVolume * progressionMultiplier
-
-                points.append(TrainingVolumePoint(
-                    id: id,
-                    muscleGroup: muscle,
-                    muscleIndex: Double(muscleIndex),
-                    week: Double(week),
-                    volume: volume
-                ))
-                id += 1
-            }
+    private func loadData() async {
+        guard let service = workoutService else {
+            (volumeData, plottableData) = ([], [])
+            cachedMuscleVolumes = []
+            return
         }
 
-        return points
+        let totalDays = weekRange * 7
+        do {
+            let workouts = try await service.fetchWorkouts(days: totalDays)
+            let snapshots = workouts.compactMap(SpatialTrainingAnalyzer.snapshot(from:))
+
+            let calendar = Calendar.current
+            let now = Date()
+            var points: [TrainingVolumePoint] = []
+            var pointId = 0
+
+            for weekOffset in 1...weekRange {
+                let weekEnd = calendar.date(byAdding: .day, value: -(weekOffset - 1) * 7, to: now) ?? now
+                let weekStart = calendar.date(byAdding: .day, value: -7, to: weekEnd) ?? weekEnd
+
+                let weekSnapshots = snapshots.filter { $0.date >= weekStart && $0.date < weekEnd }
+
+                for (categoryIndex, category) in Self.muscleCategories.enumerated() {
+                    var categoryVolume = 0
+                    for snapshot in weekSnapshots {
+                        for muscle in category.muscles {
+                            if snapshot.primaryMuscles.contains(muscle) {
+                                categoryVolume += snapshot.completedSetCount
+                            } else if snapshot.secondaryMuscles.contains(muscle) {
+                                categoryVolume += max(1, snapshot.completedSetCount / 2)
+                            }
+                        }
+                    }
+
+                    points.append(TrainingVolumePoint(
+                        id: pointId,
+                        muscleGroup: category.name,
+                        muscleIndex: Double(categoryIndex),
+                        week: Double(weekRange - weekOffset + 1),
+                        volume: Double(categoryVolume)
+                    ))
+                    pointId += 1
+                }
+            }
+
+            let filtered = points.filter(\.isPlottable)
+            (volumeData, plottableData) = (points, filtered)
+            cachedMuscleVolumes = Self.computeMuscleVolumes(from: filtered)
+        } catch {
+            AppLogger.healthKit.error(
+                "Vision training volume fetch failed: \(error.localizedDescription)"
+            )
+            (volumeData, plottableData) = ([], [])
+            cachedMuscleVolumes = []
+        }
     }
 }
 
