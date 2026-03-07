@@ -30,7 +30,7 @@ struct StepGoalResolver {
 final class BackgroundNotificationEvaluator: Sendable {
 
     private let store: HKHealthStore
-    private let notificationService: NotificationServiceImpl
+    private let notificationService: NotificationService
     private let settingsStore: NotificationSettingsStore
     private let throttleStore: NotificationThrottleStore
     private let anchorStore: HealthKitAnchorStore
@@ -38,7 +38,7 @@ final class BackgroundNotificationEvaluator: Sendable {
 
     init(
         store: HKHealthStore,
-        notificationService: NotificationServiceImpl,
+        notificationService: NotificationService,
         settingsStore: NotificationSettingsStore = .shared,
         throttleStore: NotificationThrottleStore = .shared,
         anchorStore: HealthKitAnchorStore = .shared,

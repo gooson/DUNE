@@ -173,9 +173,18 @@ final class NotificationThrottleStore: @unchecked Sendable {
                 .map(\.value.formattedValue)
             guard !pending.isEmpty else { return nil }
 
+            // Check daily budget before sending
+            let count = dailyCountLocked(now: now)
+            guard count < dailyBudgetLimit else { return nil }
+
             // Record throttle for all body composition types atomically
             recordBodyCompositionSentLocked(for: type, now: now)
             recordSentTypeLocked(for: type, now: now)
+
+            // Increment daily informational count (body comp is always informational)
+            let key = keyPrefix + Keys.dailyCountSuffix
+            defaults.set(count + 1, forKey: key)
+            defaults.set(now, forKey: keyPrefix + Keys.dailyCountDateSuffix)
 
             return pending.joined(separator: "\n")
         }
@@ -197,7 +206,10 @@ final class NotificationThrottleStore: @unchecked Sendable {
 
     private func saveBodyCompositionBufferLocked(_ buffer: [String: BodyCompositionBufferEntry]) {
         let key = keyPrefix + Keys.bodyCompositionBufferSuffix
-        guard let data = try? Self.bufferEncoder.encode(buffer) else { return }
+        guard let data = try? Self.bufferEncoder.encode(buffer) else {
+            AppLogger.notification.error("[ThrottleStore] Failed to encode body composition buffer")
+            return
+        }
         defaults.set(data, forKey: key)
     }
 
