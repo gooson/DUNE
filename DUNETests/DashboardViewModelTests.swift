@@ -141,6 +141,8 @@ private struct MockBodyService: BodyCompositionQuerying {
     }
     func fetchLatestBMI(withinDays days: Int) async throws -> (value: Double, date: Date)? { latestBMI }
     func fetchBMI(start: Date, end: Date) async throws -> [BodyCompositionSample] { bmiSamples }
+    func fetchBodyFat(start: Date, end: Date) async throws -> [BodyCompositionSample] { [] }
+    func fetchLeanBodyMass(start: Date, end: Date) async throws -> [BodyCompositionSample] { [] }
     func fetchLatestBodyFat(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
     func fetchLatestLeanBodyMass(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
 }

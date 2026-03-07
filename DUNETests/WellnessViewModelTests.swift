@@ -26,6 +26,8 @@ private struct NoopBodyService: BodyCompositionQuerying {
     func fetchBMI(for date: Date) async throws -> Double? { nil }
     func fetchLatestBMI(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
     func fetchBMI(start: Date, end: Date) async throws -> [BodyCompositionSample] { [] }
+    func fetchBodyFat(start: Date, end: Date) async throws -> [BodyCompositionSample] { [] }
+    func fetchLeanBodyMass(start: Date, end: Date) async throws -> [BodyCompositionSample] { [] }
     func fetchLatestBodyFat(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
     func fetchLatestLeanBodyMass(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
 }
@@ -163,6 +165,16 @@ private actor StartupTrackingBodyService: BodyCompositionQuerying {
         return []
     }
 
+    func fetchBodyFat(start: Date, end: Date) async throws -> [BodyCompositionSample] {
+        fetchCallCount += 1
+        return []
+    }
+
+    func fetchLeanBodyMass(start: Date, end: Date) async throws -> [BodyCompositionSample] {
+        fetchCallCount += 1
+        return []
+    }
+
     func fetchLatestBodyFat(withinDays days: Int) async throws -> (value: Double, date: Date)? {
         fetchCallCount += 1
         return nil
@@ -191,6 +203,8 @@ private actor TodayPreferredBMIBodyService: BodyCompositionQuerying {
     func fetchBMI(for date: Date) async throws -> Double? { todayBMI }
     func fetchLatestBMI(withinDays days: Int) async throws -> (value: Double, date: Date)? { latestBMI }
     func fetchBMI(start: Date, end: Date) async throws -> [BodyCompositionSample] { [] }
+    func fetchBodyFat(start: Date, end: Date) async throws -> [BodyCompositionSample] { [] }
+    func fetchLeanBodyMass(start: Date, end: Date) async throws -> [BodyCompositionSample] { [] }
     func fetchLatestBodyFat(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
     func fetchLatestLeanBodyMass(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
 }
