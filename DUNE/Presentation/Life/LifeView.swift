@@ -234,8 +234,10 @@ private struct HabitListQueryView: View {
     @ViewBuilder
     private func habitContextMenu(for progress: HabitProgress) -> some View {
         Button {
-            if let habit = habitsByID[progress.id] {
-                viewModel.startEditing(habit)
+            performDeferredContextMenuAction {
+                if let habit = habitsByID[progress.id] {
+                    viewModel.startEditing(habit)
+                }
             }
         } label: {
             Label("Edit", systemImage: "pencil")
@@ -243,30 +245,38 @@ private struct HabitListQueryView: View {
 
         if progress.isCycleBased {
             Button {
-                snoozeCycle(habitId: progress.id, days: 1)
+                performDeferredContextMenuAction {
+                    snoozeCycle(habitId: progress.id, days: 1)
+                }
             } label: {
                 Label("Snooze 1 Day", systemImage: "clock.arrow.trianglehead.2.counterclockwise.rotate.90")
             }
             .disabled(!progress.isDue)
 
             Button {
-                skipCycle(habitId: progress.id)
+                performDeferredContextMenuAction {
+                    skipCycle(habitId: progress.id)
+                }
             } label: {
                 Label("Skip Cycle", systemImage: "forward.end")
             }
             .disabled(!progress.isDue)
 
             Button {
-                historySelection = HabitHistorySelection(id: progress.id)
+                performDeferredContextMenuAction {
+                    historySelection = HabitHistorySelection(id: progress.id)
+                }
             } label: {
                 Label("History", systemImage: "clock.badge.checkmark")
             }
         }
 
         Button(role: .destructive) {
-            if let habit = habitsByID[progress.id] {
-                withAnimation {
-                    habit.isArchived = true
+            performDeferredContextMenuAction {
+                if let habit = habitsByID[progress.id] {
+                    withAnimation {
+                        habit.isArchived = true
+                    }
                 }
             }
         } label: {
@@ -661,6 +671,14 @@ private struct HabitListQueryView: View {
         viewModel.calculateAutoExerciseProgresses(
             exerciseRecords: exerciseRecords
         )
+    }
+
+    private func performDeferredContextMenuAction(_ action: @escaping @MainActor () -> Void) {
+        Task { @MainActor in
+            // Let UIKit finish dismissing the visible context menu before mutating the host row.
+            await Task.yield()
+            action()
+        }
     }
 }
 
