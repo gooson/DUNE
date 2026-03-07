@@ -208,6 +208,8 @@
 - **새 UI 테스트 파일은 `BaseUITestCase` 상속** (#187)
 - **`/ship` 머지 전략은 `--merge` 기본** (#54)
 - **`/run`에서 `/ship` 호출 전 Pre-Ship 게이트 강제**: clean worktree + upstream/`gh auth` 확인 + `main...HEAD` diff 0이면 ship 생략 (#196)
+- **`.claude/settings.local.json`은 기본적으로 `{}` 유지**: local allow/deny/hook 복제 금지, `settings.json` 상속으로 permission drift 방지 (#203)
+- **`/run` 최종 출력 계약은 상태 기반으로 작성**: 각 phase는 `completed/skipped/failed`와 산출물 경로 또는 명시적 사유를 함께 보고 (#204)
 - **리뷰 적용은 파일별 batch, dead code는 같은 커밋에서 삭제** (#27, #55, #133)
 - **리뷰 에이전트 output 크기 제어: max_turns 6, diff 2000줄+은 직접 리뷰** (#91)
 - **에이전트 리서치 3개 이하, 80% 품질 + 빠른 전달** (#13-15)
