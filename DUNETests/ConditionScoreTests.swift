@@ -34,4 +34,88 @@ struct ConditionScoreTests {
         #expect(ready.isReady)
         #expect(ready.progress == 1.0)
     }
+
+    @Test("BaselineStatus progress is 0 when daysRequired is 0")
+    func baselineZeroDaysRequired() {
+        let status = BaselineStatus(daysCollected: 5, daysRequired: 0)
+        #expect(status.progress == 0)
+    }
+
+    // MARK: - narrativeMessage
+
+    private func makeDetail(
+        todayHRV: Double = 50,
+        baselineHRV: Double = 45,
+        rhrPenalty: Double = 0
+    ) -> ConditionScoreDetail {
+        ConditionScoreDetail(
+            todayHRV: todayHRV,
+            baselineHRV: baselineHRV,
+            zScore: 0.5,
+            stdDev: 0.2,
+            effectiveStdDev: 0.2,
+            daysInBaseline: 14,
+            todayDate: Date(),
+            rawScore: 75,
+            rhrPenalty: rhrPenalty
+        )
+    }
+
+    @Test("narrativeMessage falls back to guideMessage when detail is nil")
+    func narrativeNoDetail() {
+        let score = ConditionScore(score: 90, detail: nil)
+        #expect(score.narrativeMessage == score.status.guideMessage)
+    }
+
+    @Test("narrativeMessage: excellent with detail differs from guideMessage")
+    func narrativeExcellentWithDetail() {
+        let score = ConditionScore(score: 90, detail: makeDetail(todayHRV: 60, baselineHRV: 50))
+        #expect(score.narrativeMessage != score.status.guideMessage)
+    }
+
+    @Test("narrativeMessage: excellent HRV above vs below produces different messages")
+    func narrativeExcellentBranch() {
+        let above = ConditionScore(score: 90, detail: makeDetail(todayHRV: 60, baselineHRV: 50))
+        let below = ConditionScore(score: 90, detail: makeDetail(todayHRV: 40, baselineHRV: 50))
+        #expect(above.narrativeMessage != below.narrativeMessage)
+    }
+
+    @Test("narrativeMessage: good + high rhrPenalty differs from low rhrPenalty")
+    func narrativeGoodRHRBranch() {
+        let highRHR = ConditionScore(score: 70, detail: makeDetail(rhrPenalty: 10))
+        let lowRHR = ConditionScore(score: 70, detail: makeDetail(rhrPenalty: 3))
+        #expect(highRHR.narrativeMessage != lowRHR.narrativeMessage)
+    }
+
+    @Test("narrativeMessage: fair HRV below vs above produces different messages")
+    func narrativeFairBranch() {
+        let below = ConditionScore(score: 50, detail: makeDetail(todayHRV: 30, baselineHRV: 50))
+        let above = ConditionScore(score: 50, detail: makeDetail(todayHRV: 60, baselineHRV: 50))
+        #expect(below.narrativeMessage != above.narrativeMessage)
+    }
+
+    @Test("narrativeMessage: tired has non-empty message")
+    func narrativeTired() {
+        let score = ConditionScore(score: 30, detail: makeDetail())
+        #expect(!score.narrativeMessage.isEmpty)
+        #expect(score.narrativeMessage != score.status.guideMessage)
+    }
+
+    @Test("narrativeMessage: warning has non-empty message")
+    func narrativeWarning() {
+        let score = ConditionScore(score: 10, detail: makeDetail())
+        #expect(!score.narrativeMessage.isEmpty)
+        #expect(score.narrativeMessage != score.status.guideMessage)
+    }
+
+    @Test("narrativeMessage: different statuses produce different messages")
+    func narrativeDifferentStatuses() {
+        let excellent = ConditionScore(score: 90, detail: makeDetail()).narrativeMessage
+        let good = ConditionScore(score: 70, detail: makeDetail()).narrativeMessage
+        let fair = ConditionScore(score: 50, detail: makeDetail()).narrativeMessage
+        let tired = ConditionScore(score: 30, detail: makeDetail()).narrativeMessage
+        let warning = ConditionScore(score: 10, detail: makeDetail()).narrativeMessage
+        let messages = Set([excellent, good, fair, tired, warning])
+        #expect(messages.count == 5)
+    }
 }
