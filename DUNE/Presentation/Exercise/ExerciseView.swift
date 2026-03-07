@@ -158,7 +158,8 @@ struct ExerciseView: View {
                 recentExerciseIDs: recentExerciseIDs,
                 preferredExerciseIDs: preferredExerciseIDs,
                 popularExerciseIDs: popularExerciseIDs,
-                mode: .quickStart
+                mode: .quickStart,
+                onStartTemplate: startFromTemplate
             ) { exercise in
                 selectedExercise = exercise
             }

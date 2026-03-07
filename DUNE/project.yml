@@ -337,8 +337,10 @@ targets:
       - path: Presentation/Shared/Components/MuscleMap3DScene.swift
       - path: Presentation/Shared/Extensions/ExerciseRecord+WeeklyVolume.swift
         group: DUNEVision/Presentation/Shared/Extensions
+      - path: Presentation/Shared/Extensions/FatigueLevel+DisplayName.swift
+        group: DUNEVision/Presentation/Shared/Extensions
       - path: Presentation/Immersive/VisionImmersiveExperienceViewModel.swift
-        group: DUNEVision/Presentation/Immersive
+      - path: Presentation/Vision
       - path: ../Shared/Resources/Localizable.xcstrings
         group: Shared
       # Shared Colors
