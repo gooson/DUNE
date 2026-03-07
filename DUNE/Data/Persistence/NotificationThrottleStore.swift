@@ -11,25 +11,29 @@ final class NotificationThrottleStore: @unchecked Sendable {
     private let calendar: Calendar
     private let dailyBudgetLimit: Int
     private let dedupWindowSeconds: TimeInterval
+    private let bodyCompositionMergeWindowSeconds: TimeInterval
     private let queue = DispatchQueue(label: "com.dune.notification-throttle-store")
 
     private enum Keys {
         static let dailyCountDateSuffix = "dailyCountDate"
         static let dailyCountSuffix = "dailyCount"
         static let dedupPrefix = "dedup."
+        static let bodyCompositionLastSentSuffix = "bodyCompositionLastSent"
     }
 
     init(
         defaults: UserDefaults = .standard,
         calendar: Calendar = .current,
         dailyBudgetLimit: Int = 6,
-        dedupWindowSeconds: TimeInterval = 60 * 60
+        dedupWindowSeconds: TimeInterval = 60 * 60,
+        bodyCompositionMergeWindowSeconds: TimeInterval = 60 * 5
     ) {
         self.defaults = defaults
         self.keyPrefix = (Bundle.main.bundleIdentifier ?? "com.dailve") + ".notificationThrottle."
         self.calendar = calendar
         self.dailyBudgetLimit = max(dailyBudgetLimit, 1)
         self.dedupWindowSeconds = max(dedupWindowSeconds, 0)
+        self.bodyCompositionMergeWindowSeconds = max(bodyCompositionMergeWindowSeconds, 0)
     }
 
     /// Returns true if a notification of this type can be sent now.
@@ -101,6 +105,7 @@ final class NotificationThrottleStore: @unchecked Sendable {
     }
 
     private func canSendInsightLocked(insight: HealthInsight, now: Date) -> Bool {
+        guard canSendBodyCompositionGroupLocked(for: insight.type, now: now) else { return false }
         guard canSendTypeLocked(for: insight.type, now: now) else { return false }
         guard !isRecentDuplicateLocked(of: insight, now: now) else { return false }
         guard hasRemainingDailyBudgetLocked(for: insight, now: now) else { return false }
@@ -109,8 +114,34 @@ final class NotificationThrottleStore: @unchecked Sendable {
 
     private func recordSentInsightLocked(insight: HealthInsight, now: Date) {
         recordSentTypeLocked(for: insight.type, now: now)
+        recordBodyCompositionSentLocked(for: insight.type, now: now)
         recordDedupSentLocked(insight: insight, now: now)
         incrementDailyCountIfNeededLocked(for: insight, now: now)
+    }
+
+    private func canSendBodyCompositionGroupLocked(for type: HealthInsight.InsightType, now: Date) -> Bool {
+        guard isBodyCompositionInsight(type) else { return true }
+        guard bodyCompositionMergeWindowSeconds > 0 else { return true }
+
+        let key = keyPrefix + Keys.bodyCompositionLastSentSuffix
+        guard let lastDate = defaults.object(forKey: key) as? Date else { return true }
+
+        return now.timeIntervalSince(lastDate) >= bodyCompositionMergeWindowSeconds
+    }
+
+    private func recordBodyCompositionSentLocked(for type: HealthInsight.InsightType, now: Date) {
+        guard isBodyCompositionInsight(type) else { return }
+        let key = keyPrefix + Keys.bodyCompositionLastSentSuffix
+        defaults.set(now, forKey: key)
+    }
+
+    private func isBodyCompositionInsight(_ type: HealthInsight.InsightType) -> Bool {
+        switch type {
+        case .weightUpdate, .bodyFatUpdate, .bmiUpdate:
+            return true
+        default:
+            return false
+        }
     }
 
     // MARK: - Dedup
