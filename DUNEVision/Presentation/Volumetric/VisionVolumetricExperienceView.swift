@@ -8,15 +8,7 @@ struct VisionVolumetricExperienceView: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            header
-            Picker("Scene", selection: $viewModel.selectedScene) {
-                ForEach(VisionSpatialSceneKind.allCases) { scene in
-                    Text(scene.title).tag(scene)
-                }
-            }
-            .pickerStyle(.segmented)
-
+        Group {
             switch viewModel.loadState {
             case .idle, .loading:
                 loadingState
@@ -28,47 +20,61 @@ struct VisionVolumetricExperienceView: View {
                 readyContent
             }
         }
-        .padding(28)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .background(background)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .ornament(attachmentAnchor: .scene(.bottom)) {
+            scenePickerOrnament
+        }
+        .ornament(attachmentAnchor: .scene(.trailing)) {
+            trailingOrnament
+        }
         .task {
             await viewModel.loadIfNeeded()
         }
     }
 
-    private var header: some View {
-        HStack(alignment: .top, spacing: 16) {
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Spatial Recovery Volume")
-                    .font(.title2.weight(.semibold))
-                Text(viewModel.selectedScene.description)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-            }
+    // MARK: - Ornaments
 
-            Spacer()
-
-            Button {
-                Task {
-                    await viewModel.reload()
+    private var scenePickerOrnament: some View {
+        VStack(spacing: 12) {
+            Picker("Scene", selection: $viewModel.selectedScene) {
+                ForEach(VisionSpatialSceneKind.allCases) { scene in
+                    Text(scene.title).tag(scene)
                 }
-            } label: {
-                Label("Refresh", systemImage: "arrow.clockwise")
             }
-            .buttonStyle(.borderedProminent)
+            .pickerStyle(.segmented)
+            .frame(maxWidth: 400)
+
+            Text(viewModel.selectedScene.description)
+                .font(.callout)
+                .foregroundStyle(.secondary)
+        }
+        .padding(16)
+        .glassBackgroundEffect()
+    }
+
+    @ViewBuilder
+    private var trailingOrnament: some View {
+        if viewModel.loadState == .ready, let summary = viewModel.summary {
+            VStack(alignment: .leading, spacing: 14) {
+                metricStrip(summary)
+
+                if viewModel.selectedScene != .heartRateOrb, !summary.featuredMuscles.isEmpty {
+                    muscleStrip(summary.featuredMuscles)
+                }
+            }
+            .padding(16)
+            .frame(maxWidth: 340)
+            .glassBackgroundEffect()
         }
     }
+
+    // MARK: - Main Content
 
     private var readyContent: some View {
         Group {
             if let summary = viewModel.summary {
                 VStack(alignment: .leading, spacing: 18) {
                     sceneStage(summary)
-                    metricStrip(summary)
-
-                    if viewModel.selectedScene != .heartRateOrb, !summary.featuredMuscles.isEmpty {
-                        muscleStrip(summary.featuredMuscles)
-                    }
 
                     if let message = viewModel.message {
                         Text(message)
@@ -121,10 +127,12 @@ struct VisionVolumetricExperienceView: View {
         }
     }
 
+    // MARK: - Metric & Muscle Strips (in ornament)
+
     private func metricStrip(_ summary: SpatialTrainingSummary) -> some View {
         let selected = selectedMuscleLoad(in: summary)
 
-        return HStack(spacing: 14) {
+        return VStack(alignment: .leading, spacing: 10) {
             metricCard(
                 title: Text("Live BPM"),
                 value: summary.heartRateOrb.displayBPM.map(String.init) ?? "--",
@@ -178,44 +186,43 @@ struct VisionVolumetricExperienceView: View {
     }
 
     private func muscleStrip(_ muscles: [SpatialTrainingSummary.MuscleLoad]) -> some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 12) {
+        ScrollView(.vertical, showsIndicators: false) {
+            VStack(spacing: 10) {
                 ForEach(muscles) { muscleLoad in
                     Button {
                         viewModel.selectMuscle(muscleLoad.muscle)
                     } label: {
-                        VStack(alignment: .leading, spacing: 6) {
-                            HStack(spacing: 8) {
-                                Image(systemName: muscleLoad.muscle.iconName)
-                                    .font(.caption)
+                        HStack(spacing: 8) {
+                            Image(systemName: muscleLoad.muscle.iconName)
+                                .font(.callout)
+                            VStack(alignment: .leading, spacing: 2) {
                                 Text(muscleLoad.muscle.displayName)
-                                    .font(.caption.weight(.semibold))
+                                    .font(.callout.weight(.semibold))
+                                Text(muscleLoad.loadLabel)
+                                    .font(.callout)
+                                    .foregroundStyle(.secondary)
                             }
-
-                            Text(muscleLoad.loadLabel)
-                                .font(.headline)
-
-                            Text(muscleLoad.recoveryLabel)
-                                .font(.caption2)
-                                .foregroundStyle(.secondary)
+                            Spacer()
                         }
-                        .padding(14)
+                        .padding(12)
                         .background(
-                            background(for: muscleLoad),
-                            in: RoundedRectangle(cornerRadius: 18)
+                            muscleCardBackground(for: muscleLoad),
+                            in: RoundedRectangle(cornerRadius: 14)
                         )
                     }
                     .buttonStyle(.plain)
                 }
             }
-            .padding(.vertical, 2)
         }
+        .frame(maxHeight: 240)
     }
 
-    private func background(for muscleLoad: SpatialTrainingSummary.MuscleLoad) -> some ShapeStyle {
+    private func muscleCardBackground(for muscleLoad: SpatialTrainingSummary.MuscleLoad) -> some ShapeStyle {
         let isSelected = viewModel.selectedMuscle == muscleLoad.muscle
         return isSelected ? AnyShapeStyle(.regularMaterial) : AnyShapeStyle(.ultraThinMaterial)
     }
+
+    // MARK: - State Views
 
     private var loadingState: some View {
         VStack(spacing: 14) {
@@ -252,6 +259,8 @@ struct VisionVolumetricExperienceView: View {
         .frame(maxWidth: .infinity, minHeight: 320)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 28))
     }
+
+    // MARK: - Helpers
 
     private var sceneTitle: String {
         switch viewModel.selectedScene {
@@ -292,17 +301,5 @@ struct VisionVolumetricExperienceView: View {
 
     private var selectedMuscle: MuscleGroup? {
         viewModel.selectedMuscle
-    }
-
-    private var background: some View {
-        LinearGradient(
-            colors: [
-                Color.black.opacity(0.18),
-                Color.blue.opacity(0.14),
-                Color.orange.opacity(0.10),
-            ],
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        )
     }
 }

@@ -13,11 +13,7 @@ struct VisionDashboardView: View {
     @State private var snapshot: SharedHealthSnapshot?
 
     var body: some View {
-        // Phase 4: sharedHealthDataService and refreshSignal will drive live metrics
-        _ = sharedHealthDataService
-        _ = refreshSignal
-
-        return ScrollView {
+        ScrollView {
             VStack(spacing: 24) {
                 conditionSection
                 quickActionsSection
@@ -80,22 +76,12 @@ struct VisionDashboardView: View {
                             .foregroundStyle(.secondary)
                     }
                 }
-                .overlay(alignment: .topTrailing) {
-                    Text("Coming Soon")
-                        .font(.caption2.weight(.semibold))
-                        .foregroundStyle(.secondary)
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 5)
-                        .background(.thinMaterial, in: Capsule())
-                        .padding(12)
-                }
         }
     }
 
     @ViewBuilder
     private var quickActionsSection: some View {
         let columns = [
-            GridItem(.flexible(), spacing: 16),
             GridItem(.flexible(), spacing: 16),
             GridItem(.flexible(), spacing: 16)
         ]
@@ -128,48 +114,15 @@ struct VisionDashboardView: View {
             ) {
                 onOpenDashboardWindow(.body)
             }
-
-            quickActionCard(
-                title: "Immersive Space",
-                icon: "sparkles",
-                description: "Open the condition, recovery, and sleep space"
-            ) {
-                onOpenImmersive()
-            }
-
-            quickActionCard(
-                title: "Spatial Volume",
-                icon: "cube.transparent",
-                description: "Open the volumetric recovery scene"
-            ) {
-                onOpenVolumetric()
-            }
-
-            quickActionCard(
-                title: "3D Health Data",
-                icon: "cube.fill",
-                description: "Explore your health metrics in 3D"
-            ) {
-                onOpen3DCharts()
-            }
         }
     }
 
     @ViewBuilder
     private var healthMetricsSection: some View {
         VStack(alignment: .leading, spacing: 16) {
-            HStack(spacing: 8) {
-                Text("Health Metrics")
-                    .font(.headline)
-                    .foregroundStyle(.secondary)
-
-                Text("Coming Soon")
-                    .font(.caption2.weight(.semibold))
-                    .foregroundStyle(.secondary)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 5)
-                    .background(.thinMaterial, in: Capsule())
-            }
+            Text("Health Metrics")
+                .font(.headline)
+                .foregroundStyle(.secondary)
 
             LazyVGrid(columns: [
                 GridItem(.flexible()),
@@ -212,7 +165,6 @@ struct VisionDashboardView: View {
     private func quickActionCard(
         title: LocalizedStringKey,
         icon: String,
-        description: LocalizedStringKey? = nil,
         action: @escaping () -> Void
     ) -> some View {
         Button(action: action) {
@@ -222,15 +174,9 @@ struct VisionDashboardView: View {
                     .foregroundStyle(.tint)
                 Text(title)
                     .font(.headline)
-                if let description {
-                    Text(description)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.center)
-                }
             }
             .frame(maxWidth: .infinity)
-            .frame(minHeight: 132)
+            .frame(minHeight: 160)
             .padding(20)
             .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
         }
@@ -251,7 +197,7 @@ struct VisionDashboardView: View {
                     Text(unit)
                 }
             }
-            .font(.caption)
+            .font(.callout)
             .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity)

@@ -132,9 +132,9 @@ struct VisionMuscleMapExperienceView: View {
                         } label: {
                             HStack(spacing: 8) {
                                 Image(systemName: muscle.iconName)
-                                    .font(.caption)
+                                    .font(.callout)
                                 Text(muscle.displayName)
-                                    .font(.caption.weight(.medium))
+                                    .font(.callout.weight(.medium))
                             }
                             .padding(.horizontal, 12)
                             .padding(.vertical, 10)
@@ -197,7 +197,7 @@ struct VisionMuscleMapExperienceView: View {
     private func metricValue(title: LocalizedStringKey, value: String) -> some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(title)
-                .font(.caption)
+                .font(.callout)
                 .foregroundStyle(.secondary)
             Text(value)
                 .font(.headline.weight(.semibold))
@@ -216,7 +216,7 @@ struct VisionMuscleMapExperienceView: View {
     private var primaryMetricValue: String {
         switch selectedState {
         case .noData:
-            String(localized: "No Data")
+            String(localized: "No data available")
         case .recovery(let fatigueLevel):
             fatigueLevel.displayName
         case .volume:
@@ -225,7 +225,7 @@ struct VisionMuscleMapExperienceView: View {
     }
 
     private var secondaryMetricValue: String {
-        guard let selectedFatigueState else { return String(localized: "No Data") }
+        guard let selectedFatigueState else { return String(localized: "No data available") }
 
         switch mode {
         case .recovery:
@@ -238,7 +238,7 @@ struct VisionMuscleMapExperienceView: View {
     private func summaryValue(for state: MuscleMap3DDisplayState) -> String {
         switch state {
         case .noData:
-            String(localized: "No Data")
+            String(localized: "No data available")
         case .recovery(let fatigueLevel):
             fatigueLevel.displayName
         case .volume(let intensity):
