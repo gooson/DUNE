@@ -15,6 +15,7 @@ struct ExerciseTypeDetailView: View {
 
     @Environment(\.appTheme) private var theme
     @State private var selectedDate: Date?
+    @State private var selectionGestureState = ChartSelectionGestureState()
 
     init(typeKey: String, displayName: String, categoryRawValue: String = "", equipmentRawValue: String? = nil) {
         self.typeKey = typeKey
@@ -166,21 +167,38 @@ struct ExerciseTypeDetailView: View {
                 }
             }
             .chartYScale(domain: 0...(maxTrendMinutes * 1.15))
-            .chartXSelection(value: $selectedDate)
-            .sensoryFeedback(.selection, trigger: selectedDate)
-            .frame(height: 180)
-            .clipped()
-            .overlay(alignment: .top) {
-                if let point = selectedTrendPoint {
-                    ChartSelectionOverlay(
-                        date: point.date,
-                        value: "\(point.value.formattedWithSeparator())m",
-                        dateFormat: .dateTime.month(.abbreviated).day()
-                    )
-                    .transition(.opacity)
-                    .animation(.easeInOut(duration: 0.15), value: selectedDate)
+            .chartOverlay { proxy in
+                GeometryReader { geometry in
+                    if let plotFrame = proxy.plotFrame.map({ geometry[$0] }) {
+                        ZStack(alignment: .topLeading) {
+                            Rectangle()
+                                .fill(.clear)
+                                .contentShape(Rectangle())
+                                .simultaneousGesture(
+                                    selectionGesture(proxy: proxy, plotFrame: plotFrame),
+                                    including: .subviews
+                                )
+
+                            if let point = selectedTrendPoint,
+                               let anchor = selectedAnchor(for: point, proxy: proxy, plotFrame: plotFrame) {
+                                FloatingChartSelectionOverlay(
+                                    date: point.date,
+                                    value: "\(point.value.formattedWithSeparator())m",
+                                    anchor: anchor,
+                                    chartSize: geometry.size,
+                                    plotFrame: plotFrame,
+                                    dateFormat: .dateTime.month(.abbreviated).day()
+                                )
+                                .transition(.opacity)
+                            }
+                        }
+                        .animation(.easeInOut(duration: 0.15), value: selectedDate)
+                    }
                 }
             }
+            .sensoryFeedback(.selection, trigger: selectedTrendPoint?.date)
+            .frame(height: 180)
+            .clipped()
         }
         .padding(DS.Spacing.md)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
@@ -241,6 +259,41 @@ struct ExerciseTypeDetailView: View {
             ChangeBadge(change: change)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private func selectedAnchor(
+        for point: ChartDataPoint,
+        proxy: ChartProxy,
+        plotFrame: CGRect
+    ) -> CGPoint? {
+        ChartSelectionInteraction.anchor(
+            xPosition: proxy.position(forX: point.date),
+            yPosition: proxy.position(forY: point.value),
+            plotFrame: plotFrame
+        )
+    }
+
+    private func selectionGesture(proxy: ChartProxy, plotFrame: CGRect) -> some Gesture {
+        DragGesture(minimumDistance: 0, coordinateSpace: .local)
+            .onChanged { value in
+                switch selectionGestureState.registerChange(
+                    at: value.time,
+                    translation: value.translation
+                ) {
+                case .inactive:
+                    return
+                case .activated, .updating:
+                    selectedDate = ChartSelectionInteraction.resolvedDate(
+                        at: value.location,
+                        proxy: proxy,
+                        plotFrame: plotFrame
+                    )
+                }
+            }
+            .onEnded { _ in
+                selectionGestureState.reset()
+                selectedDate = nil
+            }
     }
 
     // MARK: - Recent Sessions

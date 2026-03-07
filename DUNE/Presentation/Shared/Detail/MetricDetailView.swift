@@ -46,6 +46,7 @@ struct MetricDetailView: View {
                         } else {
                             chart
                                 .frame(height: chartHeight)
+                                .accessibilityIdentifier("detail-chart-surface")
                         }
                     }
                     .id(viewModel.selectedPeriod)
@@ -193,6 +194,7 @@ struct MetricDetailView: View {
                 .foregroundStyle(DS.Color.textSecondary)
                 .contentTransition(.numericText())
                 .animation(DS.Animation.snappy, value: viewModel.visibleRangeLabel)
+                .accessibilityIdentifier("detail-chart-visible-range")
 
             Spacer()
 

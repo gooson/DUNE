@@ -118,7 +118,10 @@ struct HeartRateChartView: View {
                         Rectangle()
                             .fill(.clear)
                             .contentShape(Rectangle())
-                            .simultaneousGesture(selectionGesture(proxy: proxy, plotFrame: plotFrame))
+                            .simultaneousGesture(
+                                selectionGesture(proxy: proxy, plotFrame: plotFrame),
+                                including: .subviews
+                            )
 
                         if let point = selectedPoint,
                            let anchor = selectedAnchor(for: point, proxy: proxy, plotFrame: plotFrame) {
@@ -179,16 +182,19 @@ struct HeartRateChartView: View {
     private func selectionGesture(proxy: ChartProxy, plotFrame: CGRect) -> some Gesture {
         DragGesture(minimumDistance: 0, coordinateSpace: .local)
             .onChanged { value in
-                guard selectionGestureState.registerChange(
+                switch selectionGestureState.registerChange(
                     at: value.time,
                     translation: value.translation
-                ) else { return }
-
-                selectedDate = ChartSelectionInteraction.resolvedDate(
-                    at: value.location,
-                    proxy: proxy,
-                    plotFrame: plotFrame
-                )
+                ) {
+                case .inactive:
+                    return
+                case .activated, .updating:
+                    selectedDate = ChartSelectionInteraction.resolvedDate(
+                        at: value.location,
+                        proxy: proxy,
+                        plotFrame: plotFrame
+                    )
+                }
             }
             .onEnded { _ in
                 selectionGestureState.reset()

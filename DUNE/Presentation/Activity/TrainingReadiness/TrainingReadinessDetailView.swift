@@ -31,6 +31,7 @@ struct TrainingReadinessDetailView: View {
                 } else if let readiness = detailVM.readiness {
                     scoreHero(readiness)
                     ReadinessTrendChartView(data: detailVM.readinessTrend)
+                        .accessibilityIdentifier("trainingreadiness-chart-trend")
                     subScoreCharts
                     componentWeights(readiness)
                     calculationMethodSection(readiness)

@@ -12,6 +12,7 @@ class UITestBaseCase: XCTestCase {
         var resetState = true
         var shouldSeedMockData = false
         var scenario: LaunchScenario?
+        var initialTabSelectionArgument: String?
         var additionalArguments: [String] = []
         var additionalEnvironment: [String: String] = [:]
 
@@ -26,6 +27,9 @@ class UITestBaseCase: XCTestCase {
             if let scenario {
                 args.append(contentsOf: ["--ui-scenario", scenario.rawValue])
             }
+            if let initialTabSelectionArgument {
+                args.append(contentsOf: ["--uitest-initial-tab", initialTabSelectionArgument])
+            }
             args.append(contentsOf: additionalArguments)
             return args
         }
@@ -38,6 +42,7 @@ class UITestBaseCase: XCTestCase {
 
     /// Override in subclass to use "--seed-mock" for data-seeded tests.
     var shouldSeedMockData: Bool { false }
+    var initialTabSelectionArgument: String? { nil }
 
     /// Override in subclass for scenario-specific seeded states.
     var uiScenario: LaunchScenario? {
@@ -55,6 +60,7 @@ class UITestBaseCase: XCTestCase {
             resetState: shouldResetState,
             shouldSeedMockData: shouldSeedMockData,
             scenario: uiScenario,
+            initialTabSelectionArgument: initialTabSelectionArgument,
             additionalArguments: additionalLaunchArguments,
             additionalEnvironment: additionalLaunchEnvironment
         )

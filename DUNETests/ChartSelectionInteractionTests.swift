@@ -5,27 +5,54 @@ import Testing
 
 @Suite("ChartSelectionInteraction")
 struct ChartSelectionInteractionTests {
-    @Test("Selection activates after hold duration within movement slop")
-    func activatesAfterHoldDuration() {
+    @Test("Selection enters pending phase before activation and keeps scroll enabled")
+    func pendingPhaseKeepsScrollEnabled() {
         var state = ChartSelectionGestureState()
         let start = Date(timeIntervalSinceReferenceDate: 100)
+        let initialScroll = Date(timeIntervalSinceReferenceDate: 80)
 
-        let initial = state.registerChange(at: start, translation: .zero)
-        let activated = state.registerChange(
-            at: start.addingTimeInterval(ChartSelectionInteraction.holdDuration + 0.02),
-            translation: CGSize(width: 4, height: 3)
+        let initial = state.registerChange(
+            at: start,
+            translation: .zero,
+            currentScrollPosition: initialScroll
         )
 
-        #expect(initial == false)
-        #expect(activated == true)
-        #expect(state.isActive == true)
+        #expect(initial == .inactive)
+        #expect(state.phase == .pendingActivation)
+        #expect(state.startTime == start)
+        #expect(state.initialScrollPosition == initialScroll)
+        #expect(state.allowsScroll == true)
+        #expect(state.isCancelled == false)
+    }
+
+    @Test("Selection activates after hold duration and restores initial scroll position")
+    func activatesAfterHoldDuration() {
+        var state = ChartSelectionGestureState()
+        let start = Date(timeIntervalSinceReferenceDate: 200)
+        let initialScroll = Date(timeIntervalSinceReferenceDate: 180)
+
+        _ = state.registerChange(
+            at: start,
+            translation: .zero,
+            currentScrollPosition: initialScroll
+        )
+        let activated = state.registerChange(
+            at: start.addingTimeInterval(ChartSelectionInteraction.holdDuration + 0.02),
+            translation: CGSize(width: 4, height: 3),
+            currentScrollPosition: Date(timeIntervalSinceReferenceDate: 195)
+        )
+
+        #expect(activated == .activated(restoreScrollPosition: initialScroll))
+        #expect(state.phase == .selecting)
+        #expect(state.isSelecting == true)
+        #expect(state.allowsScroll == false)
         #expect(state.isCancelled == false)
     }
 
     @Test("Selection is cancelled when movement exceeds slop before activation")
     func cancelsWhenMovementExceedsSlop() {
         var state = ChartSelectionGestureState()
-        let start = Date(timeIntervalSinceReferenceDate: 200)
+        let start = Date(timeIntervalSinceReferenceDate: 240)
 
         _ = state.registerChange(at: start, translation: .zero)
         let activated = state.registerChange(
@@ -33,8 +60,10 @@ struct ChartSelectionInteractionTests {
             translation: CGSize(width: ChartSelectionInteraction.activationDistance + 2, height: 0)
         )
 
-        #expect(activated == false)
-        #expect(state.isActive == false)
+        #expect(activated == .inactive)
+        #expect(state.phase == .idle)
+        #expect(state.isSelecting == false)
+        #expect(state.allowsScroll == true)
         #expect(state.isCancelled == true)
     }
 

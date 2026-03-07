@@ -40,7 +40,7 @@ struct ContentView: View {
     private let shouldAutoRequestHealthKitAuthorization: Bool
     @Environment(\.scenePhase) private var scenePhase
     @AppStorage(AppTheme.storageKey) private var selectedTheme: AppTheme = .desertWarm
-    @State private var selectedSection: AppSection = .today
+    @State private var selectedSection: AppSection
     @State private var todayScrollToTopSignal = 0
     @State private var activityScrollToTopSignal = 0
     @State private var wellnessScrollToTopSignal = 0
@@ -64,6 +64,7 @@ struct ContentView: View {
         self.refreshCoordinator = refreshCoordinator
         self.launchExperienceReady = launchExperienceReady
         self.shouldAutoRequestHealthKitAuthorization = shouldAutoRequestHealthKitAuthorization
+        _selectedSection = State(initialValue: Self.initialSectionForUITests())
     }
 
     var body: some View {
@@ -174,6 +175,17 @@ struct ContentView: View {
                 }
             }
         }
+    }
+
+    private static func initialSectionForUITests() -> AppSection {
+        let args = ProcessInfo.processInfo.arguments
+        guard args.contains("--uitesting"),
+              let index = args.firstIndex(of: "--uitest-initial-tab"),
+              args.indices.contains(index + 1) else {
+            return .today
+        }
+
+        return AppSection(rawValue: args[index + 1]) ?? .today
     }
 
     private var tabSelection: Binding<AppSection> {

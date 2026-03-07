@@ -7,42 +7,70 @@ enum ChartSelectionOverlayEdge: Sendable {
     case below
 }
 
+enum ChartSelectionGesturePhase: Equatable, Sendable {
+    case idle
+    case pendingActivation
+    case selecting
+}
+
+enum ChartSelectionGestureUpdate: Equatable, Sendable {
+    case inactive
+    case activated(restoreScrollPosition: Date?)
+    case updating
+}
+
 struct ChartSelectionOverlayLayout: Equatable, Sendable {
     let center: CGPoint
     let edge: ChartSelectionOverlayEdge
 }
 
 struct ChartSelectionGestureState: Sendable {
+    private(set) var phase: ChartSelectionGesturePhase = .idle
     private(set) var startTime: Date?
-    private(set) var isActive = false
+    private(set) var initialScrollPosition: Date?
     private(set) var isCancelled = false
+
+    var allowsScroll: Bool {
+        phase != .selecting
+    }
+
+    var isSelecting: Bool {
+        phase == .selecting
+    }
 
     mutating func registerChange(
         at time: Date,
         translation: CGSize,
+        currentScrollPosition: Date? = nil,
         holdDuration: TimeInterval = ChartSelectionInteraction.holdDuration,
         activationDistance: CGFloat = ChartSelectionInteraction.activationDistance
-    ) -> Bool {
+    ) -> ChartSelectionGestureUpdate {
         if startTime == nil {
             startTime = time
+            initialScrollPosition = currentScrollPosition
+            phase = .pendingActivation
         }
 
         guard isCancelled == false, let startTime else {
-            return false
+            return .inactive
         }
 
-        if isActive == false {
+        if isSelecting == false {
             if translation.magnitude > activationDistance {
                 isCancelled = true
-                return false
+                phase = .idle
+                return .inactive
             }
 
             if time.timeIntervalSince(startTime) >= holdDuration {
-                isActive = true
+                phase = .selecting
+                return .activated(restoreScrollPosition: initialScrollPosition)
             }
+
+            return .inactive
         }
 
-        return isActive
+        return .updating
     }
 
     mutating func reset() {
