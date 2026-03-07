@@ -37,20 +37,20 @@ brainstorm 문서(`docs/brainstorms/2026-03-05-vision-pro-features.md`)의 Phase
 
 | 파일 | 목적 |
 |------|------|
-| `DUNE/DUNEVision/App/DUNEVisionApp.swift` | visionOS 전용 앱 진입점 |
-| `DUNE/DUNEVision/App/VisionContentView.swift` | visionOS 메인 뷰 (TabView + glass) |
-| `DUNE/DUNEVision/Resources/Info.plist` | visionOS Info.plist |
-| `DUNE/DUNEVision/Resources/DUNEVision.entitlements` | visionOS entitlements |
-| `DUNE/DUNEVision/Presentation/Chart3D/ConditionScatter3DView.swift` | HRV×RHR×Sleep 3D 산점도 |
-| `DUNE/DUNEVision/Presentation/Chart3D/TrainingVolume3DView.swift` | 근육그룹×주차×볼륨 3D 차트 |
-| `DUNE/DUNEVision/Presentation/Chart3D/Chart3DContainerView.swift` | 3D 차트 네비게이션 컨테이너 |
-| `DUNE/DUNEVision/Presentation/Dashboard/VisionDashboardView.swift` | visionOS 대시보드 (glass material) |
-| `DUNE/DUNEVisionWidgets/DUNEVisionWidgets.swift` | Widget Bundle 진입점 |
-| `DUNE/DUNEVisionWidgets/ConditionScoreWidget.swift` | 컨디션 점수 Spatial Widget |
-| `DUNE/DUNEVisionWidgets/TrainingReadinessWidget.swift` | 훈련 준비도 Spatial Widget |
-| `DUNE/DUNEVisionWidgets/SleepSummaryWidget.swift` | 수면 요약 Spatial Widget |
-| `DUNE/DUNEVisionWidgets/Shared/WidgetDataProvider.swift` | Widget 데이터 공급 (HealthKit + SwiftData) |
-| `DUNE/DUNEVisionWidgets/Resources/Info.plist` | Widget Extension Info.plist |
+| `DUNEVision/App/DUNEVisionApp.swift` | visionOS 전용 앱 진입점 |
+| `DUNEVision/App/VisionContentView.swift` | visionOS 메인 뷰 (TabView + glass) |
+| `DUNEVision/Resources/Info.plist` | visionOS Info.plist |
+| `DUNEVision/Resources/DUNEVision.entitlements` | visionOS entitlements |
+| `DUNEVision/Presentation/Chart3D/ConditionScatter3DView.swift` | HRV×RHR×Sleep 3D 산점도 |
+| `DUNEVision/Presentation/Chart3D/TrainingVolume3DView.swift` | 근육그룹×주차×볼륨 3D 차트 |
+| `DUNEVision/Presentation/Chart3D/Chart3DContainerView.swift` | 3D 차트 네비게이션 컨테이너 |
+| `DUNEVision/Presentation/Dashboard/VisionDashboardView.swift` | visionOS 대시보드 (glass material) |
+| `DUNEVisionWidgets/DUNEVisionWidgets.swift` | Widget Bundle 진입점 |
+| `DUNEVisionWidgets/ConditionScoreWidget.swift` | 컨디션 점수 Spatial Widget |
+| `DUNEVisionWidgets/TrainingReadinessWidget.swift` | 훈련 준비도 Spatial Widget |
+| `DUNEVisionWidgets/SleepSummaryWidget.swift` | 수면 요약 Spatial Widget |
+| `DUNEVisionWidgets/Shared/WidgetDataProvider.swift` | Widget 데이터 공급 (HealthKit + SwiftData) |
+| `DUNEVisionWidgets/Resources/Info.plist` | Widget Extension Info.plist |
 | `todos/XXX-ready-p2-vision-pro-phase2-volumetric.md` | Phase 2 TODO |
 | `todos/XXX-ready-p2-vision-pro-phase3-immersive.md` | Phase 3 TODO |
 | `todos/XXX-ready-p3-vision-pro-phase4-social.md` | Phase 4 TODO |
@@ -89,7 +89,7 @@ targets:
     type: application
     platform: visionOS
     sources:
-      - path: DUNEVision
+      - path: ../DUNEVision
       - path: Domain      # 100% 공유
       - path: Data/Persistence  # SwiftData 공유
       - path: Data/HealthKit    # HealthKit 공유
@@ -108,7 +108,7 @@ targets:
     type: app-extension
     platform: visionOS
     sources:
-      - path: DUNEVisionWidgets
+      - path: ../DUNEVisionWidgets
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: com.raftel.dailve.vision.widgets
     dependencies:
