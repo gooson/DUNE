@@ -17,6 +17,35 @@ struct VisionExerciseGuide: Identifiable, Sendable, Hashable {
     }
 }
 
+extension VisionExerciseGuide {
+    func primaryDisplayName(locale: Locale = .autoupdatingCurrent) -> String {
+        let localized = exercise.localizedName.trimmingCharacters(in: .whitespacesAndNewlines)
+        let english = exercise.name.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        if locale.prefersKoreanExerciseNames, !localized.isEmpty {
+            return localized
+        }
+
+        return english.isEmpty ? localized : english
+    }
+
+    func secondaryDisplayName(locale: Locale = .autoupdatingCurrent) -> String? {
+        guard locale.prefersKoreanExerciseNames else { return nil }
+
+        let localized = exercise.localizedName.trimmingCharacters(in: .whitespacesAndNewlines)
+        let english = exercise.name.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        guard !localized.isEmpty, !english.isEmpty, localized != english else { return nil }
+        return english
+    }
+}
+
+private extension Locale {
+    var prefersKoreanExerciseNames: Bool {
+        identifier.lowercased().hasPrefix("ko")
+    }
+}
+
 @Observable
 @MainActor
 final class VisionExerciseFormGuideViewModel {

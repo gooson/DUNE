@@ -105,14 +105,16 @@ struct VisionExerciseFormGuideView: View {
         return VStack(alignment: .leading, spacing: 12) {
             HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(guide.exercise.localizedName)
+                    Text(verbatim: guide.primaryDisplayName())
                         .font(.headline)
                         .foregroundStyle(.primary)
                         .multilineTextAlignment(.leading)
 
-                    Text(verbatim: guide.exercise.name)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                    if let secondaryName = guide.secondaryDisplayName() {
+                        Text(verbatim: secondaryName)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
                 }
 
                 Spacer(minLength: 12)
@@ -168,11 +170,13 @@ struct VisionExerciseFormGuideView: View {
     private func guideDetailsHeader(_ guide: VisionExerciseGuide) -> some View {
         VStack(alignment: .leading, spacing: 14) {
             VStack(alignment: .leading, spacing: 4) {
-                Text(guide.exercise.localizedName)
+                Text(verbatim: guide.primaryDisplayName())
                     .font(.title3.weight(.semibold))
-                Text(verbatim: guide.exercise.name)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                if let secondaryName = guide.secondaryDisplayName() {
+                    Text(verbatim: secondaryName)
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
             }
 
             HStack(spacing: 12) {

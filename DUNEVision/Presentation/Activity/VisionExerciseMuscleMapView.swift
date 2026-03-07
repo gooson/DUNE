@@ -11,7 +11,7 @@ struct VisionExerciseMuscleMapView: View {
         VStack(alignment: .leading, spacing: 16) {
             HStack(spacing: 20) {
                 bodyView(isFront: true, label: "Front")
-                bodyView(isFront: false, label: "Back")
+                bodyView(isFront: false, label: "Rear")
             }
 
             HStack(spacing: 16) {
