@@ -225,18 +225,11 @@ struct ContentView: View {
         }
     }
 
-    private func clearAllNavPaths() {
-        if !todayNavPath.isEmpty { todayNavPath = NavigationPath() }
-        if !trainNavPath.isEmpty { trainNavPath = NavigationPath() }
-        if !wellnessNavPath.isEmpty { wellnessNavPath = NavigationPath() }
-        if !lifeNavPath.isEmpty { lifeNavPath = NavigationPath() }
-    }
-
-    private func clearNavPathsExcept(_ section: AppSection) {
-        if section != .today && !todayNavPath.isEmpty { todayNavPath = NavigationPath() }
-        if section != .train && !trainNavPath.isEmpty { trainNavPath = NavigationPath() }
-        if section != .wellness && !wellnessNavPath.isEmpty { wellnessNavPath = NavigationPath() }
-        if section != .life && !lifeNavPath.isEmpty { lifeNavPath = NavigationPath() }
+    private func clearNavPaths(except excluded: AppSection? = nil) {
+        if excluded != .today && !todayNavPath.isEmpty { todayNavPath = NavigationPath() }
+        if excluded != .train && !trainNavPath.isEmpty { trainNavPath = NavigationPath() }
+        if excluded != .wellness && !wellnessNavPath.isEmpty { wellnessNavPath = NavigationPath() }
+        if excluded != .life && !lifeNavPath.isEmpty { lifeNavPath = NavigationPath() }
     }
 
     private func setNavPath(_ path: NavigationPath, for section: AppSection) {
@@ -260,7 +253,7 @@ struct ContentView: View {
 
         switch plan {
         case .push:
-            clearNavPathsExcept(selectedSection)
+            clearNavPaths(except: selectedSection)
             let destinations = NotificationPresentationPlanner.rootPath(for: plan)
             var path = NavigationPath()
             for destination in destinations {
@@ -268,12 +261,12 @@ struct ContentView: View {
             }
             setNavPath(path, for: selectedSection)
         case .openWorkoutInActivity(let workoutID):
-            clearAllNavPaths()
+            clearNavPaths()
             selectedSection = .train
             notificationOpenWorkoutID = workoutID
             notificationRouteSignal += 1
         case .openNotificationHub:
-            clearAllNavPaths()
+            clearNavPaths()
             selectedSection = .today
             notificationHubSignal += 1
         }
