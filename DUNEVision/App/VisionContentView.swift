@@ -31,23 +31,18 @@ struct VisionContentView: View {
                         refreshSignal: refreshSignal,
                         onOpenDashboardWindow: { windowKind in
                             guard supportsMultipleWindows else { return }
-                            openWindow(id: windowKind.windowID)
+                            scheduleWindowOpen(windowKind.windowID)
                         },
                         onOpen3DCharts: {
                             guard supportsMultipleWindows else { return }
-                            openWindow(id: "chart3d")
+                            scheduleWindowOpen("chart3d")
                         },
                         onOpenVolumetric: {
                             guard supportsMultipleWindows else { return }
-                            openWindow(id: "spatial-volume")
+                            scheduleWindowOpen("spatial-volume")
                         },
                         onOpenImmersive: {
-                            Task {
-                                let result = await openImmersiveSpace(id: "immersive-recovery")
-                                if result == .error {
-                                    AppLogger.ui.error("Immersive space failed to open")
-                                }
-                            }
+                            scheduleImmersiveOpen()
                         }
                     )
                 }
@@ -63,7 +58,7 @@ struct VisionContentView: View {
                     VisionTrainView(
                         onOpen3DCharts: {
                             guard supportsMultipleWindows else { return }
-                            openWindow(id: "chart3d")
+                            scheduleWindowOpen("chart3d")
                         }
                     )
                 }
@@ -117,6 +112,23 @@ struct VisionContentView: View {
             guard let coordinator = refreshCoordinator else { return }
             for await _ in coordinator.refreshNeededStream {
                 refreshSignal += 1
+            }
+        }
+    }
+
+    private func scheduleWindowOpen(_ id: String) {
+        Task { @MainActor in
+            await Task.yield()
+            openWindow(id: id)
+        }
+    }
+
+    private func scheduleImmersiveOpen() {
+        Task { @MainActor in
+            await Task.yield()
+            let result = await openImmersiveSpace(id: "immersive-recovery")
+            if result == .error {
+                AppLogger.ui.error("Immersive space failed to open")
             }
         }
     }

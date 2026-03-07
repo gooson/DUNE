@@ -22,7 +22,7 @@ struct ConditionScatter3DView: View {
             periodPicker
 
             Chart3D {
-                ForEach(sampleData) { point in
+                ForEach(plottableSampleData) { point in
                     PointMark(
                         x: .value("HRV", point.hrv),
                         y: .value("RHR", point.rhr),
@@ -32,6 +32,9 @@ struct ConditionScatter3DView: View {
                     .symbolSize(point.trainingVolume > 0 ? 80 : 40)
                 }
             }
+            .chartXScale(domain: hrvDomain)
+            .chartYScale(domain: rhrDomain)
+            .chartZScale(domain: sleepDomain)
             .chartXAxisLabel("HRV (ms)")
             .chartYAxisLabel("RHR (bpm)")
             .chartZAxisLabel("Sleep (%)")
@@ -46,6 +49,32 @@ struct ConditionScatter3DView: View {
     }
 
     // MARK: - Components
+
+    private var plottableSampleData: [ConditionDataPoint] {
+        sampleData.filter(\.isPlottable)
+    }
+
+    private var hrvDomain: ClosedRange<Double> {
+        Self.paddedDomain(
+            for: plottableSampleData.map(\.hrv),
+            fallback: 20...100
+        )
+    }
+
+    private var rhrDomain: ClosedRange<Double> {
+        Self.paddedDomain(
+            for: plottableSampleData.map(\.rhr),
+            fallback: 45...90
+        )
+    }
+
+    private var sleepDomain: ClosedRange<Double> {
+        Self.paddedDomain(
+            for: plottableSampleData.map(\.sleepQuality),
+            fallback: 0...100,
+            clampTo: 0...100
+        )
+    }
 
     private var periodPicker: some View {
         Picker("Period", selection: $selectedPeriod) {
@@ -100,6 +129,37 @@ struct ConditionScatter3DView: View {
             )
         }
     }
+
+    private static func paddedDomain(
+        for values: [Double],
+        fallback: ClosedRange<Double>,
+        minimumSpan: Double = 1,
+        paddingRatio: Double = 0.1,
+        clampTo: ClosedRange<Double>? = nil
+    ) -> ClosedRange<Double> {
+        let finiteValues = values.filter(\.isFinite)
+        guard let minValue = finiteValues.min(),
+              let maxValue = finiteValues.max() else {
+            return fallback
+        }
+
+        let span = Swift.max(maxValue - minValue, minimumSpan)
+        var lowerBound = minValue - span * paddingRatio
+        var upperBound = maxValue + span * paddingRatio
+
+        if let clampTo {
+            lowerBound = Swift.max(clampTo.lowerBound, lowerBound)
+            upperBound = Swift.min(clampTo.upperBound, upperBound)
+        }
+
+        if lowerBound >= upperBound {
+            let midpoint = (minValue + maxValue) / 2
+            lowerBound = midpoint - (minimumSpan / 2)
+            upperBound = midpoint + (minimumSpan / 2)
+        }
+
+        return lowerBound...upperBound
+    }
 }
 
 // MARK: - Models
@@ -112,6 +172,14 @@ struct ConditionDataPoint: Identifiable {
     let sleepQuality: Double
     let conditionScore: Double
     let trainingVolume: Double
+
+    var isPlottable: Bool {
+        hrv.isFinite
+            && rhr.isFinite
+            && sleepQuality.isFinite
+            && conditionScore.isFinite
+            && trainingVolume.isFinite
+    }
 
     var conditionColor: Color {
         switch conditionScore {
