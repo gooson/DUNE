@@ -15,7 +15,7 @@ struct SmallWidgetView: View {
 
                 Spacer(minLength: 0)
 
-                HStack {
+                HStack(spacing: 0) {
                     if let lowestMetric = entry.lowestMetric {
                         HStack(spacing: 4) {
                             Image(systemName: lowestMetric.icon)

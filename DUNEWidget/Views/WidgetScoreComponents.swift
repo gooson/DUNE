@@ -144,7 +144,7 @@ struct WidgetMetricTileView: View {
     let metric: WidgetMetric
 
     var body: some View {
-        VStack(spacing: 6) {
+        VStack(spacing: WidgetDS.Layout.rowSpacing) {
             Text(metric.title)
                 .font(.system(size: 11, weight: .semibold, design: .rounded))
                 .foregroundStyle(WidgetDS.Color.textSecondary)
