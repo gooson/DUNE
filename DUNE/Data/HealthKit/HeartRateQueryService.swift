@@ -9,6 +9,8 @@ protocol HeartRateQuerying: Sendable {
     func fetchLatestHeartRate(withinDays days: Int) async throws -> VitalSample?
     /// Fetch daily average heart rate samples for sparkline display.
     func fetchHeartRateHistory(days: Int) async throws -> [VitalSample]
+    /// Fetch daily average heart rate samples within a date range (for scrollable detail charts).
+    func fetchHeartRateHistory(start: Date, end: Date) async throws -> [VitalSample]
     /// Compute heart rate zone distribution for a workout.
     func fetchHeartRateZones(forWorkoutID workoutID: String, maxHR: Double) async throws -> [HeartRateZone]
 }
@@ -110,19 +112,24 @@ struct HeartRateQueryService: HeartRateQuerying, Sendable {
     }
 
     func fetchHeartRateHistory(days: Int) async throws -> [VitalSample] {
-        let quantityType = HKQuantityType(.heartRate)
-        try await manager.ensureNotDenied(for: quantityType)
-
         let calendar = Calendar.current
         let endDate = Date()
         guard let startDate = calendar.date(byAdding: .day, value: -days, to: endDate) else {
             return []
         }
+        return try await fetchHeartRateHistory(start: startDate, end: endDate)
+    }
+
+    func fetchHeartRateHistory(start: Date, end: Date) async throws -> [VitalSample] {
+        let quantityType = HKQuantityType(.heartRate)
+        try await manager.ensureNotDenied(for: quantityType)
+
+        let calendar = Calendar.current
 
         // Use statistics collection for daily averages (auto-dedup)
         let predicate = HKQuery.predicateForSamples(
-            withStart: startDate,
-            end: endDate,
+            withStart: start,
+            end: end,
             options: .strictStartDate
         )
 
@@ -130,14 +137,14 @@ struct HeartRateQueryService: HeartRateQuerying, Sendable {
         let query = HKStatisticsCollectionQueryDescriptor(
             predicate: .quantitySample(type: quantityType, predicate: predicate),
             options: .discreteAverage,
-            anchorDate: calendar.startOfDay(for: startDate),
+            anchorDate: calendar.startOfDay(for: start),
             intervalComponents: interval
         )
 
         let collection = try await manager.executeStatisticsCollection(query)
         var results: [VitalSample] = []
 
-        collection.enumerateStatistics(from: startDate, to: endDate) { stats, _ in
+        collection.enumerateStatistics(from: start, to: end) { stats, _ in
             if let avg = stats.averageQuantity()?.doubleValue(for: Self.bpmUnit),
                Self.hrValidRange.contains(avg) {
                 results.append(VitalSample(value: avg, date: stats.startDate))

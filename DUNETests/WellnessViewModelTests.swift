@@ -43,6 +43,11 @@ private struct NoopVitalsService: VitalsQuerying {
     func fetchVO2MaxHistory(days: Int) async throws -> [VitalSample] { [] }
     func fetchHeartRateRecoveryHistory(days: Int) async throws -> [VitalSample] { [] }
     func fetchWristTemperatureCollection(days: Int) async throws -> [VitalSample] { [] }
+    func fetchSpO2Collection(start: Date, end: Date) async throws -> [VitalSample] { [] }
+    func fetchRespiratoryRateCollection(start: Date, end: Date) async throws -> [VitalSample] { [] }
+    func fetchVO2MaxHistory(start: Date, end: Date) async throws -> [VitalSample] { [] }
+    func fetchHeartRateRecoveryHistory(start: Date, end: Date) async throws -> [VitalSample] { [] }
+    func fetchWristTemperatureCollection(start: Date, end: Date) async throws -> [VitalSample] { [] }
     func fetchWristTemperatureBaseline(days: Int) async throws -> Double? { nil }
 }
 
@@ -60,6 +65,11 @@ private struct VO2FreshnessVitalsService: VitalsQuerying {
     func fetchVO2MaxHistory(days: Int) async throws -> [VitalSample] { history }
     func fetchHeartRateRecoveryHistory(days: Int) async throws -> [VitalSample] { [] }
     func fetchWristTemperatureCollection(days: Int) async throws -> [VitalSample] { [] }
+    func fetchSpO2Collection(start: Date, end: Date) async throws -> [VitalSample] { [] }
+    func fetchRespiratoryRateCollection(start: Date, end: Date) async throws -> [VitalSample] { [] }
+    func fetchVO2MaxHistory(start: Date, end: Date) async throws -> [VitalSample] { history }
+    func fetchHeartRateRecoveryHistory(start: Date, end: Date) async throws -> [VitalSample] { [] }
+    func fetchWristTemperatureCollection(start: Date, end: Date) async throws -> [VitalSample] { [] }
     func fetchWristTemperatureBaseline(days: Int) async throws -> Double? { nil }
 }
 
@@ -70,6 +80,7 @@ private struct NoopHeartRateService: HeartRateQuerying {
     }
     func fetchLatestHeartRate(withinDays days: Int) async throws -> VitalSample? { nil }
     func fetchHeartRateHistory(days: Int) async throws -> [VitalSample] { [] }
+    func fetchHeartRateHistory(start: Date, end: Date) async throws -> [VitalSample] { [] }
     func fetchHeartRateZones(forWorkoutID workoutID: String, maxHR: Double) async throws -> [HeartRateZone] { [] }
 }
 

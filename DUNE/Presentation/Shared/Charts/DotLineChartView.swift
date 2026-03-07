@@ -9,6 +9,7 @@ struct DotLineChartView: View {
     var timePeriod: TimePeriod?
     var tintColor: Color = DS.Color.hrv
     var trendLine: [ChartDataPoint]?
+    var scrollDomain: ClosedRange<Date>?
     var scrollPosition: Binding<Date>?
 
     @ScaledMetric(relativeTo: .body) private var chartHeight: CGFloat = 220
@@ -96,6 +97,7 @@ struct DotLineChartView: View {
                 scrollPosition: scrollPosition ?? $internalScrollPosition
             ))
             .chartYScale(domain: yDomain)
+            .chartXScale(domain: effectiveXDomain)
             .chartXAxis {
                 AxisMarks(values: .stride(by: xStrideComponent, count: xStrideCount)) { _ in
                     AxisValueLabel(format: axisFormat)
@@ -182,6 +184,18 @@ struct DotLineChartView: View {
             return timePeriod.axisLabelFormat
         }
         return .dateTime.day().month(.abbreviated)
+    }
+
+    /// X-axis domain: explicit scroll domain if provided, otherwise derived from data points.
+    private var effectiveXDomain: ClosedRange<Date> {
+        if let scrollDomain { return scrollDomain }
+        guard let first = data.min(by: { $0.date < $1.date })?.date,
+              let last = data.max(by: { $0.date < $1.date })?.date,
+              first < last else {
+            let now = Date()
+            return now...now.addingTimeInterval(1)
+        }
+        return first...last
     }
 
     /// Y-axis domain with padding to prevent top/bottom clipping.

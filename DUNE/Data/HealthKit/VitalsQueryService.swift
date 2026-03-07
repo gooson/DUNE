@@ -22,6 +22,14 @@ protocol VitalsQuerying: Sendable {
     func fetchHeartRateRecoveryHistory(days: Int) async throws -> [VitalSample]
     func fetchWristTemperatureCollection(days: Int) async throws -> [VitalSample]
 
+    // MARK: - Range-based collections (for scrollable detail charts)
+
+    func fetchSpO2Collection(start: Date, end: Date) async throws -> [VitalSample]
+    func fetchRespiratoryRateCollection(start: Date, end: Date) async throws -> [VitalSample]
+    func fetchVO2MaxHistory(start: Date, end: Date) async throws -> [VitalSample]
+    func fetchHeartRateRecoveryHistory(start: Date, end: Date) async throws -> [VitalSample]
+    func fetchWristTemperatureCollection(start: Date, end: Date) async throws -> [VitalSample]
+
     // MARK: - Computed
 
     func fetchWristTemperatureBaseline(days: Int) async throws -> Double?
@@ -146,6 +154,53 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
         )
     }
 
+    // MARK: - Range-based collections
+
+    func fetchSpO2Collection(start: Date, end: Date) async throws -> [VitalSample] {
+        try await fetchCollection(
+            type: .oxygenSaturation,
+            unit: Self.percentUnit,
+            start: start, end: end,
+            validRange: Self.spo2Range
+        )
+    }
+
+    func fetchRespiratoryRateCollection(start: Date, end: Date) async throws -> [VitalSample] {
+        try await fetchCollection(
+            type: .respiratoryRate,
+            unit: Self.breathsPerMinUnit,
+            start: start, end: end,
+            validRange: Self.respRateRange
+        )
+    }
+
+    func fetchVO2MaxHistory(start: Date, end: Date) async throws -> [VitalSample] {
+        try await fetchCollection(
+            type: .vo2Max,
+            unit: Self.vo2MaxUnit,
+            start: start, end: end,
+            validRange: Self.vo2MaxRange
+        )
+    }
+
+    func fetchHeartRateRecoveryHistory(start: Date, end: Date) async throws -> [VitalSample] {
+        try await fetchCollection(
+            type: .heartRateRecoveryOneMinute,
+            unit: Self.bpmUnit,
+            start: start, end: end,
+            validRange: Self.hrRecoveryRange
+        )
+    }
+
+    func fetchWristTemperatureCollection(start: Date, end: Date) async throws -> [VitalSample] {
+        try await fetchCollection(
+            type: .appleSleepingWristTemperature,
+            unit: Self.celsiusUnit,
+            start: start, end: end,
+            validRange: Self.wristTempRange
+        )
+    }
+
     // MARK: - Computed
 
     func fetchWristTemperatureBaseline(days: Int = 14) async throws -> Double? {
@@ -204,18 +259,31 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
         days: Int,
         validRange: ClosedRange<Double>
     ) async throws -> [VitalSample] {
-        let quantityType = HKQuantityType(identifier)
-        try await manager.ensureNotDenied(for: quantityType)
-
         let calendar = Calendar.current
         let endDate = Date()
         guard let startDate = calendar.date(byAdding: .day, value: -days, to: endDate) else {
             return []
         }
+        return try await fetchCollection(
+            type: identifier, unit: unit,
+            start: startDate, end: endDate,
+            validRange: validRange
+        )
+    }
+
+    private func fetchCollection(
+        type identifier: HKQuantityTypeIdentifier,
+        unit: HKUnit,
+        start: Date,
+        end: Date,
+        validRange: ClosedRange<Double>
+    ) async throws -> [VitalSample] {
+        let quantityType = HKQuantityType(identifier)
+        try await manager.ensureNotDenied(for: quantityType)
 
         let predicate = HKQuery.predicateForSamples(
-            withStart: startDate,
-            end: endDate,
+            withStart: start,
+            end: end,
             options: .strictStartDate
         )
 
