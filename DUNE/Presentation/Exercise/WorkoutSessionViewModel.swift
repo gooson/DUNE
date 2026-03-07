@@ -102,6 +102,8 @@ final class WorkoutSessionViewModel {
     private let maxStairLevel = 30
     private let maxMemoLength = 500
     private let defaultRestSeconds: TimeInterval = WorkoutDefaults.restSeconds
+    private let maxProgressiveIncreaseRatio = 0.10
+    private let levelUpMinimumRepsAchievementRate = 0.9
 
     /// Body weight for calorie estimation (fetched externally, uses store default)
     var bodyWeightKg: Double = WorkoutDefaults.bodyWeightKg
@@ -323,6 +325,62 @@ final class WorkoutSessionViewModel {
         if let intensity = prev.intensity {
             sets[index].level = "\(intensity)"
         }
+    }
+
+    /// Applies conservative progressive overload from the completed set to the next set.
+    /// - Returns: true when the next-set weight was updated.
+    @discardableResult
+    func applyProgressiveOverloadForNextSet(afterCompletingSetAt index: Int, weightUnit: WeightUnit = .kg) -> Bool {
+        let nextIndex = index + 1
+        guard sets.indices.contains(index), sets.indices.contains(nextIndex) else { return false }
+
+        let completed = sets[index]
+        let completedWeightDisplay = Double(completed.weight.trimmingCharacters(in: .whitespaces))
+        guard let completedWeightDisplay, completedWeightDisplay > 0 else { return false }
+
+        let completedReps = normalizedRepsString(from: completed.reps).flatMap(Int.init)
+        guard let completedReps else { return false }
+
+        let targetReps = targetRepsForSet(at: index)
+        guard completedReps >= targetReps else { return false }
+
+        let currentWeightKg = weightUnit.toKg(completedWeightDisplay)
+        let incrementKg = progressionIncrementKg
+        let maxIncreaseKg = currentWeightKg * maxProgressiveIncreaseRatio
+        let clampedIncreaseKg = min(incrementKg, max(maxIncreaseKg, 0))
+        let proposedWeightKg = currentWeightKg + clampedIncreaseKg
+        let roundedWeightKg = roundToPlateStepKg(proposedWeightKg)
+        let nextDisplayWeight = weightUnit.fromKg(roundedWeightKg)
+        let formatted = nextDisplayWeight.formatted(.number.precision(.fractionLength(0...1)))
+
+        let isNextWeightEmpty = sets[nextIndex].weight.trimmingCharacters(in: .whitespaces).isEmpty
+        if isNextWeightEmpty || sets[nextIndex].weight == completed.weight {
+            sets[nextIndex].weight = formatted
+            return true
+        }
+        return false
+    }
+
+    /// Level-up is suggested when all planned sets are completed and rep achievement rate reaches threshold.
+    func shouldSuggestLevelUp() -> Bool {
+        guard !sets.isEmpty else { return false }
+        guard completedSetCount == sets.count else { return false }
+
+        let completed = sets.filter(\.isCompleted)
+        guard !completed.isEmpty else { return false }
+
+        var achievedCount = 0
+        for set in completed {
+            let index = max(set.setNumber - 1, 0)
+            guard let reps = normalizedRepsString(from: set.reps).flatMap(Int.init) else { continue }
+            let target = targetRepsForSet(at: index)
+            if reps >= target {
+                achievedCount += 1
+            }
+        }
+
+        let rate = Double(achievedCount) / Double(completed.count)
+        return rate >= levelUpMinimumRepsAchievementRate
     }
 
     // MARK: - Per-Set Validation
@@ -660,5 +718,40 @@ final class WorkoutSessionViewModel {
         let trimmed = value.trimmingCharacters(in: .whitespaces)
         guard !trimmed.isEmpty, let reps = Int(trimmed), reps > 0, reps <= maxReps else { return nil }
         return "\(reps)"
+    }
+
+    private var progressionIncrementKg: Double {
+        if isLowerBodyCompound {
+            return 5.0
+        }
+        switch exercise.equipment {
+        case .dumbbell:
+            return 1.0
+        case .kettlebell, .band, .trx, .medicineBall, .stabilityBall, .bodyweight, .other:
+            return 1.0
+        default:
+            return 2.5
+        }
+    }
+
+    private var isLowerBodyCompound: Bool {
+        let lowerMuscles: Set<MuscleGroup> = [.quadriceps, .hamstrings, .glutes]
+        return !Set(exercise.primaryMuscles).intersection(lowerMuscles).isEmpty
+    }
+
+    private func roundToPlateStepKg(_ value: Double) -> Double {
+        let step = progressionIncrementKg <= 1.0 ? 1.0 : 2.5
+        guard step > 0 else { return value }
+        return (value / step).rounded() * step
+    }
+
+    private func targetRepsForSet(at index: Int) -> Int {
+        if previousSets.indices.contains(index), let previousReps = normalizedRepsValue(from: previousSets[index].reps) {
+            return previousReps
+        }
+        if sets.indices.contains(index), let currentReps = normalizedRepsString(from: sets[index].reps).flatMap(Int.init) {
+            return currentReps
+        }
+        return WorkoutDefaults.defaultReps
     }
 }
