@@ -7,6 +7,7 @@ struct VisionDashboardView: View {
     let refreshSignal: Int
     let onOpen3DCharts: () -> Void
     let onOpenVolumetric: () -> Void
+    let onOpenImmersive: () -> Void
 
     var body: some View {
         ScrollView {
@@ -20,6 +21,12 @@ struct VisionDashboardView: View {
         .navigationTitle("Today")
         .toolbar {
             ToolbarItemGroup(placement: .primaryAction) {
+                Button {
+                    onOpenImmersive()
+                } label: {
+                    Label("Immersive Space", systemImage: "sparkles")
+                }
+
                 Button {
                     onOpenVolumetric()
                 } label: {
@@ -63,6 +70,14 @@ struct VisionDashboardView: View {
     @ViewBuilder
     private var quickActionsSection: some View {
         HStack(spacing: 16) {
+            quickActionCard(
+                title: "Immersive Space",
+                icon: "sparkles",
+                description: "Open the condition, recovery, and sleep space"
+            ) {
+                onOpenImmersive()
+            }
+
             quickActionCard(
                 title: "Spatial Volume",
                 icon: "cube.transparent",
