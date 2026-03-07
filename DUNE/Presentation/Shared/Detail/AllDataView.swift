@@ -27,6 +27,7 @@ struct AllDataView: View {
                     }
             }
         }
+        .accessibilityIdentifier("all-data-screen-\(category.rawValue)")
         .listStyle(.insetGrouped)
         .scrollContentBackground(.hidden)
         .background { DetailWaveBackground() }
@@ -40,6 +41,7 @@ struct AllDataView: View {
                     title: "No Data",
                     message: "No \(category.displayName.lowercased()) data available yet."
                 )
+                .accessibilityIdentifier("all-data-empty-state")
             }
         }
         .task {

@@ -68,6 +68,10 @@ final class DashboardViewModel {
         return isRunningXCTest && !isHealthKitPermissionUITest
     }
 
+    private static var shouldUseSeededUITestFixtures: Bool {
+        ProcessInfo.processInfo.arguments.contains("--seed-mock")
+    }
+
     private func invalidateFilteredMetrics() {
         updatePinnedMetrics()
         let pinnedIDs = Set(pinnedMetrics.map(\.id))
@@ -144,7 +148,7 @@ final class DashboardViewModel {
     func loadData(shouldAutoRequestHealthKitAuthorization: Bool = true) async {
         guard !isLoading else { return }
         isLoading = true
-        let healthKitAvailable = healthKitManager.isAvailable
+        let healthKitAvailable = healthKitManager.isAvailable && !Self.shouldUseSeededUITestFixtures
         isMirroredReadOnlyMode = !healthKitAvailable
         errorMessage = nil
         conditionScore = nil
@@ -182,14 +186,21 @@ final class DashboardViewModel {
             }
         }
 
-        async let sharedSnapshotTask: SharedHealthSnapshot? = sharedHealthDataService?.fetchSnapshot()
-
         async let exerciseTask = safeExerciseFetch(canQueryHealthKit: healthKitAvailable)
         async let stepsTask = safeStepsFetch(canQueryHealthKit: healthKitAvailable)
         async let weightTask = safeWeightFetch(canQueryHealthKit: healthKitAvailable)
         async let bmiTask = safeBMIFetch(canQueryHealthKit: healthKitAvailable)
         async let weatherTask = safeWeatherFetch()
-        let sharedSnapshot = await sharedSnapshotTask
+        let sharedSnapshot: SharedHealthSnapshot?
+#if DEBUG
+        if Self.shouldUseSeededUITestFixtures {
+            sharedSnapshot = TestDataSeeder.sharedHealthSnapshot(for: UITestSeedScenario.current())
+        } else {
+            sharedSnapshot = await sharedHealthDataService?.fetchSnapshot()
+        }
+#else
+        sharedSnapshot = await sharedHealthDataService?.fetchSnapshot()
+#endif
 
         // Each fetch is independent — one failure should not block others.
         async let hrvTask = safeHRVFetch(snapshot: sharedSnapshot, canQueryHealthKit: healthKitAvailable)
@@ -324,6 +335,11 @@ final class DashboardViewModel {
     }
 
     private func safeWeatherFetch() async -> WeatherSnapshot? {
+#if DEBUG
+        if Self.shouldUseSeededUITestFixtures {
+            return TestDataSeeder.weatherSnapshot(for: UITestSeedScenario.current())
+        }
+#endif
         guard let weatherProvider else { return nil }
         do {
             return try await weatherProvider.fetchCurrentWeather()

@@ -17,13 +17,13 @@ enum AXID {
     static let notificationsReadAllButton = "notifications-read-all-button"
     static let notificationsDeleteAllButton = "notifications-delete-all-button"
     static let notificationsOpenSettingsButton = "notifications-open-settings-button"
-    // Planned — identifiers not yet applied to views
     static let dashboardPinnedGrid = "dashboard-pinned-grid"
     static let dashboardWeatherCard = "dashboard-weather-card"
     static let dashboardCoachingCard = "dashboard-coaching-card"
     static let dashboardSectionCondition = "dashboard-section-condition"
     static let dashboardSectionActivity = "dashboard-section-activity"
     static let dashboardSectionBody = "dashboard-section-body"
+    static func dashboardMetricCard(_ category: String) -> String { "dashboard-metric-\(category)" }
 
     // MARK: - Activity Tab (active: hero, toolbar-add)
     static let activityHeroReadiness = "activity-hero-readiness"
@@ -76,6 +76,22 @@ enum AXID {
     static func whatsNewArtwork(_ feature: String, style: String) -> String {
         "whatsnew-artwork-\(feature)-\(style)"
     }
+
+    // MARK: - Today Detail Surfaces
+    static let conditionScoreDetailScreen = "condition-score-detail-screen"
+    static func metricDetailScreen(_ category: String) -> String { "metric-detail-screen-\(category)" }
+    static let metricDetailShowAllData = "metric-detail-show-all-data"
+    static func allDataScreen(_ category: String) -> String { "all-data-screen-\(category)" }
+    static let allDataEmptyState = "all-data-empty-state"
+    static let weatherDetailScreen = "weather-detail-screen"
+    static let notificationHubScreen = "notification-hub-screen"
+    static let notificationsEmptyState = "notifications-empty-state"
+    static let pinnedMetricsEditorScreen = "pinned-metrics-editor-screen"
+    static let pinnedMetricsEditorCancel = "pinned-metrics-editor-cancel"
+    static let pinnedMetricsEditorDone = "pinned-metrics-editor-done"
+    static let cloudSyncConsentView = "cloud-sync-consent-view"
+    static let cloudSyncConsentEnable = "cloud-sync-consent-enable-button"
+    static let cloudSyncConsentLocalOnly = "cloud-sync-consent-local-button"
 
     // MARK: - Body Form
     static let bodyFormSave = "body-form-save"
