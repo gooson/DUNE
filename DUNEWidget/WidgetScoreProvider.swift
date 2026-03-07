@@ -37,8 +37,8 @@ struct WidgetScoreProvider: TimelineProvider {
     }
 
     private func loadCurrentEntry() -> WellnessDashboardEntry {
-        guard let defaults = WidgetScoreData.sharedDefaults(),
-              let jsonData = defaults.data(forKey: WidgetScoreData.userDefaultsKey),
+        guard let fileURL = WidgetScoreData.sharedFileURL(),
+              let jsonData = try? Data(contentsOf: fileURL),
               let data = try? Self.decoder.decode(WidgetScoreData.self, from: jsonData)
         else {
             return WellnessDashboardEntry(

@@ -98,34 +98,24 @@ struct WidgetScoreDataTests {
         #expect(WidgetScoreData.userDefaultsKey == "com.raftel.dailve.widget_score_data")
     }
 
-    @Test("Shared defaults skip suite access when app group container is unavailable")
-    func sharedDefaultsRequiresContainer() {
-        var suiteFactoryCalled = false
-
-        let defaults = WidgetScoreData.sharedDefaults(
-            containerURLProvider: { _ in nil },
-            userDefaultsProvider: { _ in
-                suiteFactoryCalled = true
-                return UserDefaults(suiteName: UUID().uuidString)
-            }
+    @Test("Shared file URL is nil when app group container is unavailable")
+    func sharedFileURLRequiresContainer() {
+        let fileURL = WidgetScoreData.sharedFileURL(
+            containerURLProvider: { _ in nil }
         )
 
-        #expect(defaults == nil)
-        #expect(suiteFactoryCalled == false)
+        #expect(fileURL == nil)
     }
 
-    @Test("Shared defaults return suite when app group container exists")
-    func sharedDefaultsReturnsSuite() {
-        let suiteName = "test.widget-score.\(UUID().uuidString)"
-
-        let defaults = WidgetScoreData.sharedDefaults(
-            containerURLProvider: { _ in URL(fileURLWithPath: "/tmp/widget-group") },
-            userDefaultsProvider: { _ in UserDefaults(suiteName: suiteName) }
+    @Test("Shared file URL resolves inside app group container")
+    func sharedFileURLResolvesInsideContainer() {
+        let containerURL = URL(fileURLWithPath: "/tmp/widget-group", isDirectory: true)
+        let fileURL = WidgetScoreData.sharedFileURL(
+            containerURLProvider: { _ in containerURL }
         )
 
-        #expect(defaults != nil)
-        defaults?.set(42, forKey: "sentinel")
-        #expect(defaults?.integer(forKey: "sentinel") == 42)
-        defaults?.removeObject(forKey: "sentinel")
+        #expect(fileURL != nil)
+        #expect(fileURL?.deletingLastPathComponent() == containerURL)
+        #expect(fileURL?.lastPathComponent == WidgetScoreData.fileName)
     }
 }

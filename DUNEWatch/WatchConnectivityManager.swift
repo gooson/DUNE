@@ -14,10 +14,24 @@ enum SyncStatus: Equatable {
 
 /// Pure helpers for watch exercise-library sync state/request policy.
 enum WatchLibrarySyncRequestPolicy {
+    enum RequestKind {
+        case exerciseLibrary
+        case workoutTemplates
+    }
+
     static let minimumInterval: TimeInterval = 8
 
     static func statusWhenLibraryMissing(isReachable: Bool) -> SyncStatus {
         isReachable ? .syncing : .notConnected
+    }
+
+    static func shouldUseInteractiveMessage(for requestKind: RequestKind) -> Bool {
+        switch requestKind {
+        case .exerciseLibrary:
+            true
+        case .workoutTemplates:
+            false
+        }
     }
 
     static func shouldRequest(
@@ -466,7 +480,8 @@ extension WatchConnectivityManager {
         let session = WCSession.default
         var requested = false
 
-        if session.isReachable {
+        if session.isReachable,
+           WatchLibrarySyncRequestPolicy.shouldUseInteractiveMessage(for: .exerciseLibrary) {
             session.sendMessage(
                 payload,
                 replyHandler: nil,
@@ -500,14 +515,6 @@ extension WatchConnectivityManager {
 
         let payload: [String: Any] = ["requestWorkoutTemplateSync": true]
         let session = WCSession.default
-
-        if session.isReachable {
-            session.sendMessage(
-                payload,
-                replyHandler: nil,
-                errorHandler: Self.makeWCErrorHandler("Failed to request workout template sync")
-            )
-        }
 
         if session.activationState == .activated {
             session.transferUserInfo(payload)

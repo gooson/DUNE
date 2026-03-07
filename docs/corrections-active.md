@@ -70,6 +70,8 @@ status: approved
 - **정적 announcement sheet는 `List`보다 `ScrollView + LazyVStack` 우선**: launch 시점 `What's New` 같은 read-only surface에서 `List`는 simulator에서 본문이 통째로 비는 간헐 렌더링 이슈를 만들 수 있으므로 section chrome/편집이 필요 없으면 stack 기반 컨테이너를 쓴다 (#215)
 - **watch crown input sheet는 `ScrollView` 위에 직접 올리지 않는다**: `digitalCrownRotation`이 필요한 watchOS sheet는 단일 `VStack` focus host에 붙이고 `@FocusState`로 진입 시 포커스를 주어 `Crown Sequencer ... without a view property` warning을 피한다 (#216)
 - **watch custom card button은 full-width hit area를 명시하고, auto sheet crown focus는 한 프레임 defer한다**: `.buttonStyle(.plain)` 카드 버튼은 `frame(maxWidth: .infinity)`와 `contentShape`를 같이 쓰고, 자동 표시되는 watch sheet의 `digitalCrownRotation` focus는 `Task.yield()` 뒤에 활성화해 조기 dismiss를 피한다 (#217)
+- **background WatchConnectivity 요청은 `transferUserInfo` 우선**: workout template sync처럼 즉시 응답이 필요 없는 watch->phone 요청은 `sendMessage`를 섞지 말고 `transferUserInfo`만 사용해 paired-device session 접근 오류 로그를 피한다 (#218)
+- **App Group 단일 JSON blob은 file storage 우선**: widget shared data처럼 한 덩어리 Codable payload를 공유할 때는 `UserDefaults(suiteName:)` 대신 App Group container file을 써서 simulator CFPreferences noise와 정적 suite access를 피한다 (#219)
 - **화면 숫자 표기는 `formattedWithSeparator` 경유** (#97)
 - **`changeFractionDigits` 단일 소스: `HealthMetric+View`** (#98)
 - **`HealthMetric.Category` 추가 시 10+ 파일 수정 체크리스트** (#94)
@@ -105,3 +107,4 @@ status: approved
 - **Cross-VM static 프로퍼티 참조 금지 -> 중립 enum** (#73)
 - **UserDefaults: bundle prefix + garbage collection** (#75-76)
 - **`personalizedPopular(limit:)`에 실제 필요 수량 전달** (#174)
+- **카드 내부 단일 아이콘 설정 이동은 `NavigationLink` 대신 명시적 버튼 라우팅 우선**: `List`/card 안의 inline `NavigationLink`는 row-style disclosure를 끌어와 레이아웃 폭을 먹고 localized summary title을 비정상 줄바꿈시킬 수 있으므로, 작은 설정 아이콘은 `destination` state를 여는 plain button으로 처리한다 (#220)

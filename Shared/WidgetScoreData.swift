@@ -1,6 +1,6 @@
 import Foundation
 
-/// Data shared between the main app and the widget extension via App Group UserDefaults.
+/// Data shared between the main app and the widget extension via an App Group file.
 struct WidgetScoreData: Codable, Sendable {
     var conditionScore: Int?
     var conditionStatusRaw: String?
@@ -25,16 +25,22 @@ struct WidgetScoreData: Codable, Sendable {
 
     static let userDefaultsKey = "com.raftel.dailve.widget_score_data"
     static let appGroupID = "group.com.raftel.dailve"
+    static let fileName = "widget-score-data.json"
 
-    static func sharedDefaults(
+    static func sharedContainerURL(
         containerURLProvider: (String) -> URL? = {
             FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: $0)
-        },
-        userDefaultsProvider: (String) -> UserDefaults? = {
-            UserDefaults(suiteName: $0)
         }
-    ) -> UserDefaults? {
-        guard containerURLProvider(appGroupID) != nil else { return nil }
-        return userDefaultsProvider(appGroupID)
+    ) -> URL? {
+        containerURLProvider(appGroupID)
+    }
+
+    static func sharedFileURL(
+        containerURLProvider: (String) -> URL? = {
+            FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: $0)
+        }
+    ) -> URL? {
+        sharedContainerURL(containerURLProvider: containerURLProvider)?
+            .appendingPathComponent(fileName, isDirectory: false)
     }
 }

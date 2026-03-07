@@ -62,4 +62,20 @@ struct WatchLibrarySyncRequestPolicyTests {
         )
         #expect(shouldRequest)
     }
+
+    @Test("Exercise library sync uses interactive message transport")
+    func exerciseLibraryUsesInteractiveMessage() {
+        let shouldUseInteractiveMessage = WatchLibrarySyncRequestPolicy.shouldUseInteractiveMessage(
+            for: .exerciseLibrary
+        )
+        #expect(shouldUseInteractiveMessage)
+    }
+
+    @Test("Workout template sync avoids interactive message transport")
+    func workoutTemplateSyncAvoidsInteractiveMessage() {
+        let shouldUseInteractiveMessage = WatchLibrarySyncRequestPolicy.shouldUseInteractiveMessage(
+            for: .workoutTemplates
+        )
+        #expect(!shouldUseInteractiveMessage)
+    }
 }

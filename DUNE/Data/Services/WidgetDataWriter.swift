@@ -1,7 +1,7 @@
 import Foundation
 import WidgetKit
 
-/// Writes score data to App Group UserDefaults for the widget extension to read.
+/// Writes score data to an App Group file for the widget extension to read.
 /// Each ViewModel updates its own score fields, preserving the others.
 /// All callers are @MainActor, so read-modify-write is serialized.
 @MainActor
@@ -18,27 +18,28 @@ enum WidgetDataWriter {
         return decoder
     }()
 
-    private static let defaults = WidgetScoreData.sharedDefaults()
+    private static let fileURL = WidgetScoreData.sharedFileURL()
 
     // Debounce reloadAllTimelines to coalesce rapid writes from multiple VMs.
     private static var reloadWorkItem: DispatchWorkItem?
 
     private static func loadExisting() -> WidgetScoreData? {
-        guard let jsonData = defaults?.data(forKey: WidgetScoreData.userDefaultsKey) else { return nil }
+        guard let fileURL else { return nil }
+        guard let jsonData = try? Data(contentsOf: fileURL) else { return nil }
         do {
             return try decoder.decode(WidgetScoreData.self, from: jsonData)
         } catch {
             AppLogger.data.error("[WidgetDataWriter] Corrupt widget blob, removing: \(error)")
-            defaults?.removeObject(forKey: WidgetScoreData.userDefaultsKey)
+            try? FileManager.default.removeItem(at: fileURL)
             return nil
         }
     }
 
     private static func save(_ data: WidgetScoreData) {
-        guard let defaults else { return }
+        guard let fileURL else { return }
         do {
             let jsonData = try encoder.encode(data)
-            defaults.set(jsonData, forKey: WidgetScoreData.userDefaultsKey)
+            try jsonData.write(to: fileURL, options: .atomic)
             scheduleReload()
         } catch {
             AppLogger.data.error("[WidgetDataWriter] Failed to encode widget data: \(error)")

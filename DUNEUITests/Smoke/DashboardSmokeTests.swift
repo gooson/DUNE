@@ -70,6 +70,9 @@ final class DashboardSmokeTests: UITestBaseCase {
 
         let deleteAllButton = app.descendants(matching: .any)[AXID.notificationsDeleteAllButton].firstMatch
         XCTAssertTrue(deleteAllButton.waitForExistence(timeout: 5), "Delete All button should exist in notification hub")
+
+        let settingsButton = app.descendants(matching: .any)[AXID.notificationsOpenSettingsButton].firstMatch
+        XCTAssertTrue(settingsButton.waitForExistence(timeout: 5), "Notification settings button should exist in notification hub summary")
     }
 
     // MARK: - Tab Navigation Round-Trip
