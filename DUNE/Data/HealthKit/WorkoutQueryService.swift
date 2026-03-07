@@ -101,7 +101,10 @@ struct WorkoutQueryService: WorkoutQuerying, Sendable {
 
         return WorkoutSummary(
             id: workout.uuid.uuidString,
-            type: activityType.typeName,
+            type: HealthKitWorkoutTitle.resolveTitle(
+                metadata: workout.metadata,
+                activityType: activityType
+            ),
             activityType: activityType,
             duration: workout.duration,
             calories: calories,

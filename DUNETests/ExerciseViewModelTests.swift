@@ -285,6 +285,38 @@ struct ExerciseListItemTests {
         #expect(summary?.contains("60") == true)
         #expect(summary?.contains("-") == false)
     }
+
+    @Test("HealthKit displayName prefers stored workout title")
+    func healthKitDisplayNamePrefersStoredWorkoutTitle() {
+        let workout = WorkoutSummary(
+            id: "HK-BENCH",
+            type: "Bench Press",
+            activityType: .traditionalStrengthTraining,
+            duration: 1800,
+            calories: 220,
+            distance: nil,
+            date: Date()
+        )
+
+        let item = ExerciseListItem.fromWorkoutSummary(workout)
+        #expect(item.displayName == "Bench Press")
+    }
+
+    @Test("HealthKit displayName localizes legacy activity title")
+    func healthKitDisplayNameLocalizesLegacyActivityTitle() {
+        let workout = WorkoutSummary(
+            id: "HK-STRENGTH",
+            type: "Strength",
+            activityType: .traditionalStrengthTraining,
+            duration: 1800,
+            calories: 220,
+            distance: nil,
+            date: Date()
+        )
+
+        let item = ExerciseListItem.fromWorkoutSummary(workout)
+        #expect(item.displayName == WorkoutActivityType.traditionalStrengthTraining.displayName)
+    }
 }
 
 @Suite("ExerciseListSection")
