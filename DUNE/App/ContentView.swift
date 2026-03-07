@@ -1,5 +1,97 @@
 import SwiftUI
 
+enum NotificationPresentationDestination: Hashable {
+    case personalRecords(requestID: Int)
+}
+
+enum NotificationPresentationPlan: Equatable {
+    case push(NotificationPresentationDestination)
+    case openWorkoutInActivity(workoutID: String)
+    case openNotificationHub
+}
+
+enum NotificationPresentationPlanner {
+    static func plan(for route: NotificationRoute, requestID: Int) -> NotificationPresentationPlan? {
+        switch route.destination {
+        case .workoutDetail:
+            guard let workoutID = route.workoutID, !workoutID.isEmpty else { return nil }
+            return .openWorkoutInActivity(workoutID: workoutID)
+        case .activityPersonalRecords:
+            return .push(.personalRecords(requestID: requestID))
+        case .notificationHub:
+            return .openNotificationHub
+        }
+    }
+
+    static func rootPath(for plan: NotificationPresentationPlan) -> [NotificationPresentationDestination] {
+        switch plan {
+        case .push(let destination):
+            [destination]
+        case .openWorkoutInActivity, .openNotificationHub:
+            []
+        }
+    }
+}
+
+struct NotificationPresentationPaths {
+    var today = NavigationPath()
+    var train = NavigationPath()
+    var wellness = NavigationPath()
+    var life = NavigationPath()
+
+    func path(for section: AppSection) -> NavigationPath {
+        switch section {
+        case .today:
+            today
+        case .train:
+            train
+        case .wellness:
+            wellness
+        case .life:
+            life
+        }
+    }
+
+    mutating func setPath(_ destinations: [NotificationPresentationDestination], for section: AppSection) {
+        clearAll()
+        var path = NavigationPath()
+        for destination in destinations {
+            path.append(destination)
+        }
+
+        switch section {
+        case .today:
+            today = path
+        case .train:
+            train = path
+        case .wellness:
+            wellness = path
+        case .life:
+            life = path
+        }
+    }
+
+    mutating func updatePath(_ path: NavigationPath, for section: AppSection) {
+        switch section {
+        case .today:
+            today = path
+        case .train:
+            train = path
+        case .wellness:
+            wellness = path
+        case .life:
+            life = path
+        }
+    }
+
+    mutating func clearAll() {
+        today = NavigationPath()
+        train = NavigationPath()
+        wellness = NavigationPath()
+        life = NavigationPath()
+    }
+}
+
 struct ContentView: View {
     private let sharedHealthDataService: SharedHealthDataService?
     private let refreshCoordinator: AppRefreshCoordinating?
@@ -7,7 +99,7 @@ struct ContentView: View {
     private let shouldAutoRequestHealthKitAuthorization: Bool
     @Environment(\.scenePhase) private var scenePhase
     @AppStorage(AppTheme.storageKey) private var selectedTheme: AppTheme = .desertWarm
-    @State private var selectedSection: AppSection = .today
+    @State private var selectedSection: AppSection
     @State private var todayScrollToTopSignal = 0
     @State private var activityScrollToTopSignal = 0
     @State private var wellnessScrollToTopSignal = 0
@@ -15,8 +107,9 @@ struct ContentView: View {
     @State private var refreshSignal = 0
     @State private var foregroundTask: Task<Void, Never>?
     @State private var notificationOpenWorkoutID: String?
+    @State private var notificationPresentationPaths = NotificationPresentationPaths()
+    @State private var notificationPresentationRequestID = 0
     @State private var notificationRouteSignal = 0
-    @State private var notificationPersonalRecordsSignal = 0
     @State private var notificationHubSignal = 0
     private let notificationInboxManager = NotificationInboxManager.shared
 
@@ -30,12 +123,13 @@ struct ContentView: View {
         self.refreshCoordinator = refreshCoordinator
         self.launchExperienceReady = launchExperienceReady
         self.shouldAutoRequestHealthKitAuthorization = shouldAutoRequestHealthKitAuthorization
+        _selectedSection = State(initialValue: Self.initialSectionForUITests())
     }
 
     var body: some View {
         TabView(selection: tabSelection) {
             Tab(value: AppSection.today) {
-                NavigationStack {
+                NavigationStack(path: notificationPathBinding(for: .today)) {
                     DashboardView(
                         sharedHealthDataService: sharedHealthDataService,
                         scrollToTopSignal: todayScrollToTopSignal,
@@ -44,6 +138,9 @@ struct ContentView: View {
                         launchExperienceReady: launchExperienceReady,
                         shouldAutoRequestHealthKitAuthorization: shouldAutoRequestHealthKitAuthorization
                     )
+                    .navigationDestination(for: NotificationPresentationDestination.self) { destination in
+                        notificationDestinationView(for: destination)
+                    }
                 }
                 .environment(\.wavePreset, .today)
                 .environment(\.waveColor, selectedTheme.tabTodayColor)
@@ -52,15 +149,17 @@ struct ContentView: View {
                     .accessibilityIdentifier("tab-today")
             }
             Tab(value: AppSection.train) {
-                NavigationStack {
+                NavigationStack(path: notificationPathBinding(for: .train)) {
                     ActivityView(
                         sharedHealthDataService: sharedHealthDataService,
                         scrollToTopSignal: activityScrollToTopSignal,
                         refreshSignal: refreshSignal,
                         notificationWorkoutID: notificationOpenWorkoutID,
-                        notificationRouteSignal: notificationRouteSignal,
-                        notificationPersonalRecordsSignal: notificationPersonalRecordsSignal
+                        notificationRouteSignal: notificationRouteSignal
                     )
+                    .navigationDestination(for: NotificationPresentationDestination.self) { destination in
+                        notificationDestinationView(for: destination)
+                    }
                 }
                 .environment(\.wavePreset, .train)
                 .environment(\.waveColor, selectedTheme.tabTrainColor)
@@ -69,12 +168,15 @@ struct ContentView: View {
                     .accessibilityIdentifier("tab-activity")
             }
             Tab(value: AppSection.wellness) {
-                NavigationStack {
+                NavigationStack(path: notificationPathBinding(for: .wellness)) {
                     WellnessView(
                         sharedHealthDataService: sharedHealthDataService,
                         scrollToTopSignal: wellnessScrollToTopSignal,
                         refreshSignal: refreshSignal
                     )
+                    .navigationDestination(for: NotificationPresentationDestination.self) { destination in
+                        notificationDestinationView(for: destination)
+                    }
                 }
                 .environment(\.wavePreset, .wellness)
                 .environment(\.waveColor, selectedTheme.tabWellnessColor)
@@ -83,11 +185,14 @@ struct ContentView: View {
                     .accessibilityIdentifier("tab-wellness")
             }
             Tab(value: AppSection.life) {
-                NavigationStack {
+                NavigationStack(path: notificationPathBinding(for: .life)) {
                     LifeView(
                         scrollToTopSignal: lifeScrollToTopSignal,
                         refreshSignal: refreshSignal
                     )
+                    .navigationDestination(for: NotificationPresentationDestination.self) { destination in
+                        notificationDestinationView(for: destination)
+                    }
                 }
                 .environment(\.wavePreset, .life)
                 .environment(\.waveColor, selectedTheme.tabLifeColor)
@@ -116,8 +221,9 @@ struct ContentView: View {
         }
         .onReceive(NotificationCenter.default.publisher(for: NotificationInboxManager.routeRequestedNotification)) { notification in
             guard let request = NotificationInboxManager.navigationRequest(from: notification) else { return }
+            // Cold launch can surface the same request via startup pending state and the delayed notification post.
+            guard notificationInboxManager.consumePendingNavigationRequest(ifMatching: request) else { return }
             handleNotificationNavigationRequest(request)
-            notificationInboxManager.clearPendingNavigationRequest(ifMatching: request)
         }
         // Listen for refresh signals from coordinator (foreground + HK observer triggers)
         .task {
@@ -131,6 +237,17 @@ struct ContentView: View {
                 handleNotificationNavigationRequest(request)
             }
         }
+    }
+
+    private static func initialSectionForUITests() -> AppSection {
+        let args = ProcessInfo.processInfo.arguments
+        guard args.contains("--uitesting"),
+              let index = args.firstIndex(of: "--uitest-initial-tab"),
+              args.indices.contains(index + 1) else {
+            return .today
+        }
+
+        return AppSection(rawValue: args[index + 1]) ?? .today
     }
 
     private var tabSelection: Binding<AppSection> {
@@ -154,19 +271,81 @@ struct ContentView: View {
         )
     }
 
+    private func notificationPathBinding(for section: AppSection) -> Binding<NavigationPath> {
+        Binding(
+            get: {
+                notificationPresentationPaths.path(for: section)
+            },
+            set: { newValue in
+                notificationPresentationPaths.updatePath(newValue, for: section)
+            }
+        )
+    }
+
+    @ViewBuilder
+    private func notificationDestinationView(for destination: NotificationPresentationDestination) -> some View {
+        switch destination {
+        case .personalRecords:
+            NotificationPersonalRecordsPushView(
+                sharedHealthDataService: sharedHealthDataService
+            )
+        }
+    }
+
     private func handleNotificationNavigationRequest(_ request: NotificationNavigationRequest) {
-        switch request.route.destination {
-        case .workoutDetail:
-            guard let workoutID = request.route.workoutID, !workoutID.isEmpty else { return }
+        notificationPresentationRequestID += 1
+
+        guard let plan = NotificationPresentationPlanner.plan(
+            for: request.route,
+            requestID: notificationPresentationRequestID
+        ) else {
+            return
+        }
+
+        switch plan {
+        case .push:
+            notificationPresentationPaths.setPath(
+                NotificationPresentationPlanner.rootPath(for: plan),
+                for: selectedSection
+            )
+        case .openWorkoutInActivity(let workoutID):
+            notificationPresentationPaths.clearAll()
             selectedSection = .train
             notificationOpenWorkoutID = workoutID
             notificationRouteSignal += 1
-        case .activityPersonalRecords:
-            selectedSection = .train
-            notificationPersonalRecordsSignal += 1
-        case .notificationHub:
+        case .openNotificationHub:
+            notificationPresentationPaths.clearAll()
             selectedSection = .today
             notificationHubSignal += 1
+        }
+    }
+}
+
+private struct NotificationPersonalRecordsPushView: View {
+    @State private var viewModel: ActivityViewModel
+
+    init(sharedHealthDataService: SharedHealthDataService?) {
+        _viewModel = State(initialValue: ActivityViewModel(sharedHealthDataService: sharedHealthDataService))
+    }
+
+    var body: some View {
+        Group {
+            if viewModel.isLoading && viewModel.personalRecords.isEmpty {
+                ProgressView()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background { DetailWaveBackground() }
+                    .englishNavigationTitle("Personal Records")
+            } else {
+                PersonalRecordsDetailView(
+                    records: viewModel.personalRecords,
+                    notice: viewModel.personalRecordNotice,
+                    rewardSummary: viewModel.workoutRewardSummary,
+                    rewardHistory: viewModel.workoutRewardHistory
+                )
+            }
+        }
+        .task {
+            await viewModel.loadActivityData()
         }
     }
 }

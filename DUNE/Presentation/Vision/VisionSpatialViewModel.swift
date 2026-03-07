@@ -75,11 +75,11 @@ final class VisionSpatialViewModel {
         let workoutsTask = healthKitAvailable ? Task { await fetchRecentWorkouts() } : nil
 
         let snapshotResult = await snapshotTask.value
-        let heartRateResult = await heartRateTask?.value ?? FetchResult<VitalSample?>(
+        let heartRateResult = await heartRateTask?.value ?? VisionFetchResult<VitalSample?>(
             value: nil,
             message: nil
         )
-        let workoutsResult = await workoutsTask?.value ?? FetchResult<[WorkoutSummary]>(
+        let workoutsResult = await workoutsTask?.value ?? VisionFetchResult<[WorkoutSummary]>(
             value: [],
             message: nil
         )
@@ -122,38 +122,38 @@ final class VisionSpatialViewModel {
         selectedMuscle = muscle
     }
 
-    private func fetchSnapshot() async -> FetchResult<SharedHealthSnapshot?> {
+    private func fetchSnapshot() async -> VisionFetchResult<SharedHealthSnapshot?> {
         guard let sharedHealthDataService else {
-            return FetchResult(
+            return VisionFetchResult(
                 value: nil,
                 message: String(localized: "Shared snapshot service is not connected.")
             )
         }
 
         let snapshot = await sharedHealthDataService.fetchSnapshot()
-        return FetchResult(value: snapshot, message: nil)
+        return VisionFetchResult(value: snapshot, message: nil)
     }
 
-    private func fetchLatestHeartRate() async -> FetchResult<VitalSample?> {
+    private func fetchLatestHeartRate() async -> VisionFetchResult<VitalSample?> {
         do {
             let sample = try await heartRateService.fetchLatestHeartRate(withinDays: 3)
-            return FetchResult(value: sample, message: nil)
+            return VisionFetchResult(value: sample, message: nil)
         } catch {
             AppLogger.healthKit.error("Vision spatial HR fetch failed: \(error.localizedDescription)")
-            return FetchResult(
+            return VisionFetchResult(
                 value: nil,
                 message: String(localized: "Latest heart rate is unavailable right now.")
             )
         }
     }
 
-    private func fetchRecentWorkouts() async -> FetchResult<[WorkoutSummary]> {
+    private func fetchRecentWorkouts() async -> VisionFetchResult<[WorkoutSummary]> {
         do {
             let workouts = try await workoutService.fetchWorkouts(days: 14)
-            return FetchResult(value: workouts, message: nil)
+            return VisionFetchResult(value: workouts, message: nil)
         } catch {
             AppLogger.healthKit.error("Vision spatial workout fetch failed: \(error.localizedDescription)")
-            return FetchResult(
+            return VisionFetchResult(
                 value: [],
                 message: String(localized: "Recent workouts could not be loaded.")
             )
@@ -161,7 +161,3 @@ final class VisionSpatialViewModel {
     }
 }
 
-private struct FetchResult<Value: Sendable>: Sendable {
-    let value: Value
-    let message: String?
-}

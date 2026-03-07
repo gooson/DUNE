@@ -8,6 +8,7 @@ struct ReadinessTrendChartView: View {
     @Environment(\.appTheme) private var theme
 
     @State private var selectedDate: Date?
+    @State private var selectionGestureState = ChartSelectionGestureState()
 
     private enum Gradients {
         static let area = LinearGradient(
@@ -40,24 +41,25 @@ struct ReadinessTrendChartView: View {
     // MARK: - Chart
 
     private var chartView: some View {
-        Chart(data) { point in
-            LineMark(
-                x: .value("Date", point.date, unit: .day),
-                y: .value("Score", point.value)
-            )
-            .foregroundStyle(colorForScore(point.value))
-            .interpolationMethod(.catmullRom)
-            .lineStyle(StrokeStyle(lineWidth: 2.5))
+        Chart {
+            ForEach(data) { point in
+                LineMark(
+                    x: .value("Date", point.date, unit: .day),
+                    y: .value("Score", point.value)
+                )
+                .foregroundStyle(colorForScore(point.value))
+                .interpolationMethod(.catmullRom)
+                .lineStyle(StrokeStyle(lineWidth: 2.5))
 
-            AreaMark(
-                x: .value("Date", point.date, unit: .day),
-                y: .value("Score", point.value)
-            )
-            .foregroundStyle(Gradients.area)
-            .interpolationMethod(.catmullRom)
+                AreaMark(
+                    x: .value("Date", point.date, unit: .day),
+                    y: .value("Score", point.value)
+                )
+                .foregroundStyle(Gradients.area)
+                .interpolationMethod(.catmullRom)
+            }
 
-            if let selected = selectedDate,
-               Calendar.current.isDate(point.date, inSameDayAs: selected) {
+            if let point = selectedPoint {
                 PointMark(
                     x: .value("Date", point.date, unit: .day),
                     y: .value("Score", point.value)
@@ -91,19 +93,35 @@ struct ReadinessTrendChartView: View {
                 }
             }
         }
-        .chartXSelection(value: $selectedDate)
-        .sensoryFeedback(.selection, trigger: selectedDate)
-        .overlay(alignment: .top) {
-            if let selected = selectedDate,
-               let point = data.first(where: { Calendar.current.isDate($0.date, inSameDayAs: selected) }) {
-                ChartSelectionOverlay(
-                    date: point.date,
-                    value: "\(Int(point.value))"
-                )
-                .transition(.opacity)
-                .animation(.easeInOut(duration: 0.15), value: selectedDate)
+        .chartOverlay { proxy in
+            GeometryReader { geometry in
+                if let plotFrame = proxy.plotFrame.map({ geometry[$0] }) {
+                    ZStack(alignment: .topLeading) {
+                        Rectangle()
+                            .fill(.clear)
+                            .contentShape(Rectangle())
+                            .simultaneousGesture(
+                                selectionGesture(proxy: proxy, plotFrame: plotFrame),
+                                including: .subviews
+                            )
+
+                        if let point = selectedPoint,
+                           let anchor = selectedAnchor(for: point, proxy: proxy, plotFrame: plotFrame) {
+                            FloatingChartSelectionOverlay(
+                                date: point.date,
+                                value: "\(Int(point.value))",
+                                anchor: anchor,
+                                chartSize: geometry.size,
+                                plotFrame: plotFrame
+                            )
+                            .transition(.opacity)
+                        }
+                    }
+                    .animation(.easeInOut(duration: 0.15), value: selectedDate)
+                }
             }
         }
+        .sensoryFeedback(.selection, trigger: selectedPoint?.date)
     }
 
     // MARK: - Color
@@ -115,5 +133,45 @@ struct ReadinessTrendChartView: View {
         case 40..<60: DS.Color.scoreFair
         default: DS.Color.scoreWarning
         }
+    }
+
+    private var selectedPoint: ChartDataPoint? {
+        guard let selectedDate else { return nil }
+        return ChartSelectionInteraction.nearestPoint(to: selectedDate, in: data, date: \.date)
+    }
+
+    private func selectedAnchor(
+        for point: ChartDataPoint,
+        proxy: ChartProxy,
+        plotFrame: CGRect
+    ) -> CGPoint? {
+        ChartSelectionInteraction.anchor(
+            xPosition: proxy.position(forX: point.date),
+            yPosition: proxy.position(forY: point.value),
+            plotFrame: plotFrame
+        )
+    }
+
+    private func selectionGesture(proxy: ChartProxy, plotFrame: CGRect) -> some Gesture {
+        DragGesture(minimumDistance: 0, coordinateSpace: .local)
+            .onChanged { value in
+                switch selectionGestureState.registerChange(
+                    at: value.time,
+                    translation: value.translation
+                ) {
+                case .inactive:
+                    return
+                case .activated, .updating:
+                    selectedDate = ChartSelectionInteraction.resolvedDate(
+                        at: value.location,
+                        proxy: proxy,
+                        plotFrame: plotFrame
+                    )
+                }
+            }
+            .onEnded { _ in
+                selectionGestureState.reset()
+                selectedDate = nil
+            }
     }
 }

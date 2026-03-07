@@ -43,6 +43,18 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
       onlyGenerateCoverageForSpecifiedTargets = "NO">
+      <TestPlans>
+         <TestPlanReference
+            default = "YES"
+            reference = "container:../DUNEWatchUITests/DUNEWatchUITests-PR.xctestplan">
+         </TestPlanReference>
+         <TestPlanReference
+            reference = "container:../DUNEWatchUITests/DUNEWatchUITests-Full.xctestplan">
+         </TestPlanReference>
+         <TestPlanReference
+            reference = "container:../DUNEWatchUITests/WatchUITests-CI.xctestplan">
+         </TestPlanReference>
+      </TestPlans>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"

@@ -3,13 +3,14 @@ import SwiftUI
 /// visionOS-optimized dashboard with glass material background.
 /// Provides a spatial entry point to condition data, health metrics, and 3D charts.
 struct VisionDashboardView: View {
-    // TODO: Wire to condition/metrics display when Phase 4 (live data) lands
     let sharedHealthDataService: SharedHealthDataService?
     let refreshSignal: Int
     let onOpenDashboardWindow: (VisionDashboardWindowKind) -> Void
     let onOpen3DCharts: () -> Void
     let onOpenVolumetric: () -> Void
     let onOpenImmersive: () -> Void
+
+    @State private var snapshot: SharedHealthSnapshot?
 
     var body: some View {
         // Phase 4: sharedHealthDataService and refreshSignal will drive live metrics
@@ -46,6 +47,16 @@ struct VisionDashboardView: View {
                 }
             }
         }
+        .task(id: refreshSignal) {
+            await loadData()
+        }
+    }
+
+    // MARK: - Data Loading
+
+    private func loadData() async {
+        guard let service = sharedHealthDataService else { return }
+        snapshot = await service.fetchSnapshot()
     }
 
     // MARK: - Sections
@@ -57,13 +68,12 @@ struct VisionDashboardView: View {
                 .font(.headline)
                 .foregroundStyle(.secondary)
 
-            // Placeholder — will be connected to ConditionScore UseCase
             RoundedRectangle(cornerRadius: 20)
                 .fill(.ultraThinMaterial)
                 .frame(height: 200)
                 .overlay {
                     VStack(spacing: 8) {
-                        Text("--")
+                        Text(conditionScoreText)
                             .font(.system(size: 64, weight: .bold, design: .rounded))
                         Text("Condition Score")
                             .font(.subheadline)
@@ -166,14 +176,34 @@ struct VisionDashboardView: View {
                 GridItem(.flexible()),
                 GridItem(.flexible()),
             ], spacing: 16) {
-                metricCard(title: "HRV", value: "--", unit: "ms", icon: "waveform.path.ecg")
-                metricCard(title: "RHR", value: "--", unit: "bpm", icon: "heart.fill")
-                metricCard(title: "Sleep", value: "--", unit: "hrs", icon: "moon.fill")
-                metricCard(title: "Steps", value: "--", unit: "", icon: "figure.walk")
-                metricCard(title: "Weight", value: "--", unit: "kg", icon: "scalemass.fill")
-                metricCard(title: "Body Fat", value: "--", unit: "%", icon: "percent")
+                metricCard(title: "HRV", value: hrvText, unit: "ms", icon: "waveform.path.ecg")
+                metricCard(title: "RHR", value: rhrText, unit: "bpm", icon: "heart.fill")
+                metricCard(title: "Sleep", value: sleepText, unit: "hrs", icon: "moon.fill")
             }
         }
+    }
+
+    // MARK: - Computed Display Values
+
+    private var conditionScoreText: String {
+        guard let score = snapshot?.conditionScore?.score else { return "--" }
+        return "\(score)"
+    }
+
+    private var hrvText: String {
+        guard let latest = snapshot?.hrvSamples14Day.first else { return "--" }
+        return String(format: "%.0f", latest.value)
+    }
+
+    private var rhrText: String {
+        guard let rhr = snapshot?.effectiveRHR else { return "--" }
+        return String(format: "%.0f", rhr.value)
+    }
+
+    private var sleepText: String {
+        guard let summary = snapshot?.sleepSummaryForRecovery else { return "--" }
+        let hours = summary.totalSleepMinutes / 60.0
+        return String(format: "%.1f", hours)
     }
 
     // MARK: - Components

@@ -182,6 +182,7 @@ struct NotificationHubView: View {
                 inboxSection
             }
         }
+        .accessibilityIdentifier("notification-hub-screen")
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
         .background { TabWaveBackground() }
@@ -228,15 +229,19 @@ struct NotificationHubView: View {
                         } else {
                             Text("Inbox is all caught up")
                                 .font(.subheadline.weight(.semibold))
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.85)
+                                .layoutPriority(1)
                         }
 
                         Spacer()
 
-                        NavigationLink {
-                            SettingsView()
+                        Button {
+                            destination = .settings
                         } label: {
                             Image(systemName: "gearshape")
                         }
+                        .buttonStyle(.plain)
                         .accessibilityLabel("Notification Settings")
                         .accessibilityIdentifier("notifications-open-settings-button")
                     }

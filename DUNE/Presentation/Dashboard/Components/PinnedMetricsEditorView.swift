@@ -45,17 +45,20 @@ struct PinnedMetricsEditorView: View {
             .background { SheetWaveBackground() }
             .englishNavigationTitle("Edit Pinned Metrics")
             .navigationBarTitleDisplayMode(.inline)
+            .accessibilityIdentifier("pinned-metrics-editor-screen")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
                         dismiss()
                     }
+                    .accessibilityIdentifier("pinned-metrics-editor-cancel")
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") {
                         selection = workingSelection
                         dismiss()
                     }
+                    .accessibilityIdentifier("pinned-metrics-editor-done")
                 }
             }
         }

@@ -20,8 +20,9 @@ struct DUNEApp: App {
     @State private var hasAttemptedNotificationAuthorizationThisLaunch = false
     @State private var hasStartedRuntimeServices = false
     @State private var showWhatsNewSheet = false
-    @State private var automaticWhatsNewReleases: [WhatsNewRelease] = []
+    @State private var automaticWhatsNewReleases: [WhatsNewReleaseData] = []
     @State private var automaticWhatsNewBuild = ""
+    @State private var hasForcedConsentPresentation = false
 
     let modelContainer: ModelContainer
     private let sharedHealthDataService: SharedHealthDataService
@@ -48,11 +49,49 @@ struct DUNEApp: App {
         ProcessInfo.processInfo.arguments.contains("--healthkit-permission-uitest")
     }
 
+    private static var isForceCloudSyncConsentUITest: Bool {
+#if DEBUG
+        TestDataSeeder.shouldForceCloudSyncConsent()
+#else
+        false
+#endif
+    }
+
     private static var shouldBypassLaunchExperienceForTests: Bool {
         isRunningXCTest && !isRunningLaunchPermissionUITest
     }
 
-    private static func launchArgumentValue(for key: String) -> String? {
+    private struct UITestLaunchConfiguration {
+        let shouldResetState: Bool
+        let shouldSeedMockData: Bool
+        let scenario: UITestSeedScenario
+
+        static func current(isRunningUITests: Bool, isRunningXCTest: Bool) -> Self {
+            guard isRunningUITests else {
+                return Self(
+                    shouldResetState: false,
+                    shouldSeedMockData: false,
+                    scenario: .empty
+                )
+            }
+
+            let arguments = ProcessInfo.processInfo.arguments
+            let shouldSeedMockData = isRunningXCTest && arguments.contains("--seed-mock")
+            let shouldResetState = arguments.contains("--ui-reset")
+
+            let scenario = DUNEApp.launchArgumentValue(for: "--ui-scenario")
+                .flatMap(UITestSeedScenario.init(rawValue:))
+                ?? (shouldSeedMockData ? .defaultSeeded : .empty)
+
+            return Self(
+                shouldResetState: shouldResetState,
+                shouldSeedMockData: shouldSeedMockData,
+                scenario: scenario
+            )
+        }
+    }
+
+    nonisolated private static func launchArgumentValue(for key: String) -> String? {
         let arguments = ProcessInfo.processInfo.arguments
         guard let index = arguments.firstIndex(of: key), arguments.indices.contains(index + 1) else {
             return nil
@@ -83,8 +122,15 @@ struct DUNEApp: App {
         isRunningXCTest && !isRunningUITests
     }
 
-    private static let shouldSeedMockData: Bool =
-        isRunningXCTest && ProcessInfo.processInfo.arguments.contains("--seed-mock")
+    private static let uiTestLaunchConfiguration = UITestLaunchConfiguration.current(
+        isRunningUITests: isRunningUITests,
+        isRunningXCTest: isRunningXCTest
+    )
+
+    private static let shouldSeedMockData = uiTestLaunchConfiguration.shouldSeedMockData
+    private static let shouldUseMirroredSnapshotServiceForUITests = uiTestLaunchConfiguration.shouldSeedMockData
+
+    private static let shouldResetUITestState = uiTestLaunchConfiguration.shouldResetState
 
     private static func makeModelContainer(configuration: ModelConfiguration) throws -> ModelContainer {
         try ModelContainer(
@@ -105,6 +151,12 @@ struct DUNEApp: App {
     }
 
     init() {
+#if DEBUG
+        if Self.shouldResetUITestState {
+            TestDataSeeder.resetUserDefaults()
+        }
+#endif
+
         let persistedThemeRawValue = UserDefaults.standard.string(forKey: AppTheme.storageKey)
         if let normalizedTheme = AppTheme.resolvedTheme(fromPersistedRawValue: persistedThemeRawValue) {
             if persistedThemeRawValue != normalizedTheme.rawValue {
@@ -117,8 +169,11 @@ struct DUNEApp: App {
             UserDefaults.standard.set(forcedTheme.rawValue, forKey: AppTheme.storageKey)
             _selectedTheme = AppStorage(wrappedValue: forcedTheme, AppTheme.storageKey)
         }
-        let cloudSyncEnabled = UserDefaults.standard.bool(forKey: "isCloudSyncEnabled")
+        let cloudSyncEnabled = Self.isRunningXCTest
+            ? false
+            : CloudSyncPreferenceStore.resolvedValue()
         let config = ModelConfiguration(
+            isStoredInMemoryOnly: Self.shouldResetUITestState,
             cloudKitDatabase: (cloudSyncEnabled && !Self.isRunningXCTest) ? .automatic : .none
         )
         do {
@@ -130,7 +185,9 @@ struct DUNEApp: App {
 
         let healthKitAvailable = HKHealthStore.isHealthDataAvailable()
         let sharedService: SharedHealthDataService
-        if healthKitAvailable {
+        if Self.shouldUseMirroredSnapshotServiceForUITests {
+            sharedService = CloudMirroredSharedHealthDataService(modelContainer: modelContainer)
+        } else if healthKitAvailable {
             let baseSharedService: SharedHealthDataService = SharedHealthDataServiceImpl(healthKitManager: .shared)
             let mirrorStore: HealthSnapshotMirroring = HealthSnapshotMirrorStore(modelContainer: modelContainer)
             sharedService = MirroringSharedHealthDataService(
@@ -250,17 +307,31 @@ struct DUNEApp: App {
                 )
             }
         }
+        .task {
+            guard Self.isForceCloudSyncConsentUITest else { return }
+            guard !hasForcedConsentPresentation else { return }
+            guard !showConsentSheet else { return }
+            hasForcedConsentPresentation = true
+            showConsentSheet = true
+        }
     }
 
     #if DEBUG
     @ViewBuilder
     private var seedableAppContent: some View {
-        appContent
-            .task {
-                guard !hasSeededMockData else { return }
-                hasSeededMockData = true
-                TestDataSeeder.seed(into: modelContainer.mainContext)
-            }
+        if hasSeededMockData {
+            appContent
+        } else {
+            Color.clear
+                .task {
+                    guard !hasSeededMockData else { return }
+                    TestDataSeeder.seed(
+                        into: modelContainer.mainContext,
+                        scenario: Self.uiTestLaunchConfiguration.scenario
+                    )
+                    hasSeededMockData = true
+                }
+        }
     }
     #else
     // Stub to keep the `else if` branch compiling in Release builds.

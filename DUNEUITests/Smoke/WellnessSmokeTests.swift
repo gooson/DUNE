@@ -18,7 +18,7 @@ final class WellnessSmokeTests: UITestBaseCase {
 
     func testToolbarAddMenuExists() throws {
         XCTAssertTrue(
-            elementExists(AXID.wellnessToolbarAdd, timeout: 5),
+            wellnessAddMenu().waitForExistence(timeout: 5),
             "Wellness add menu button should exist in toolbar"
         )
     }
@@ -26,7 +26,7 @@ final class WellnessSmokeTests: UITestBaseCase {
     // MARK: - Body Composition Form
 
     func testBodyFormOpens() throws {
-        let addMenu = app.descendants(matching: .any)[AXID.wellnessToolbarAdd].firstMatch
+        let addMenu = wellnessAddMenu()
         XCTAssertTrue(addMenu.waitForExistence(timeout: 5), "Add menu should exist")
         addMenu.tap()
 
@@ -49,7 +49,7 @@ final class WellnessSmokeTests: UITestBaseCase {
     }
 
     func testBodyFormCancelDismisses() throws {
-        let addMenu = app.descendants(matching: .any)[AXID.wellnessToolbarAdd].firstMatch
+        let addMenu = wellnessAddMenu()
         XCTAssertTrue(addMenu.waitForExistence(timeout: 5), "Add menu should exist")
         addMenu.tap()
 
@@ -59,14 +59,14 @@ final class WellnessSmokeTests: UITestBaseCase {
 
         let cancelButton = app.descendants(matching: .any)[AXID.bodyFormCancel].firstMatch
         XCTAssertTrue(cancelButton.waitForExistence(timeout: 3), "Body form cancel button should exist")
-        cancelButton.tap()
+        XCTAssertTrue(app.dismissModalIfPresent(cancelIdentifiers: [AXID.bodyFormCancel]), "Body form should dismiss via shared helper")
 
         // Sheet should be dismissed — add menu should be visible again
         XCTAssertTrue(addMenu.waitForExistence(timeout: 3), "Body form should be dismissed")
     }
 
     func testBodyFormSaveEnablesAfterInput() throws {
-        let addMenu = app.descendants(matching: .any)[AXID.wellnessToolbarAdd].firstMatch
+        let addMenu = wellnessAddMenu()
         XCTAssertTrue(addMenu.waitForExistence(timeout: 5), "Add menu should exist")
         addMenu.tap()
 
@@ -78,10 +78,7 @@ final class WellnessSmokeTests: UITestBaseCase {
         XCTAssertTrue(saveButton.waitForExistence(timeout: 3), "Body form save button should appear")
         XCTAssertFalse(saveButton.isEnabled, "Save should be disabled when all inputs are empty")
 
-        let weightField = app.textFields[AXID.bodyFormWeight]
-        XCTAssertTrue(weightField.waitForExistence(timeout: 3), "Weight field should exist")
-        weightField.tap()
-        weightField.typeText("72.5")
+        XCTAssertTrue(app.fillTextInput(AXID.bodyFormWeight, with: "72.5"), "Weight field should accept shared helper input")
 
         XCTAssertTrue(saveButton.isEnabled, "Save should be enabled after weight input")
     }
@@ -89,7 +86,7 @@ final class WellnessSmokeTests: UITestBaseCase {
     // MARK: - Injury Form
 
     func testInjuryFormOpens() throws {
-        let addMenu = app.descendants(matching: .any)[AXID.wellnessToolbarAdd].firstMatch
+        let addMenu = wellnessAddMenu()
         XCTAssertTrue(addMenu.waitForExistence(timeout: 5), "Add menu should exist")
         addMenu.tap()
 
@@ -105,7 +102,7 @@ final class WellnessSmokeTests: UITestBaseCase {
     }
 
     func testInjuryRecoveredToggleShowsEndDate() throws {
-        let addMenu = app.descendants(matching: .any)[AXID.wellnessToolbarAdd].firstMatch
+        let addMenu = wellnessAddMenu()
         XCTAssertTrue(addMenu.waitForExistence(timeout: 5), "Add menu should exist")
         addMenu.tap()
 
@@ -119,5 +116,19 @@ final class WellnessSmokeTests: UITestBaseCase {
 
         let endDate = app.descendants(matching: .any)[AXID.injuryFormEndDate].firstMatch
         XCTAssertTrue(endDate.waitForExistence(timeout: 3), "End date picker should appear after enabling recovered toggle")
+    }
+
+    private func wellnessAddMenu() -> XCUIElement {
+        let addMenuByIdentifier = app.descendants(matching: .any)[AXID.wellnessToolbarAdd].firstMatch
+        if addMenuByIdentifier.exists {
+            return addMenuByIdentifier
+        }
+
+        let addMenuByLabel = app.buttons["Add record"].firstMatch
+        if addMenuByLabel.exists {
+            return addMenuByLabel
+        }
+
+        return addMenuByIdentifier
     }
 }

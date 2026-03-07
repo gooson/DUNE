@@ -9,6 +9,28 @@ struct DUNEWatchApp: App {
 
     let modelContainer: ModelContainer
 
+    private static var isRunningUITests: Bool {
+        ProcessInfo.processInfo.arguments.contains("--uitesting-watch")
+    }
+
+    private struct UITestLaunchConfiguration {
+        let shouldResetState: Bool
+
+        static func current(isRunningUITests: Bool) -> Self {
+            guard isRunningUITests else {
+                return Self(shouldResetState: false)
+            }
+
+            return Self(
+                shouldResetState: ProcessInfo.processInfo.arguments.contains("--ui-reset")
+            )
+        }
+    }
+
+    private static let uiTestLaunchConfiguration = UITestLaunchConfiguration.current(
+        isRunningUITests: isRunningUITests
+    )
+
     private static func makeModelContainer(configuration: ModelConfiguration) throws -> ModelContainer {
         try ModelContainer(
             for: AppMigrationPlan.currentSchema,
@@ -43,6 +65,7 @@ struct DUNEWatchApp: App {
 
     init() {
         let config = ModelConfiguration(
+            isStoredInMemoryOnly: Self.uiTestLaunchConfiguration.shouldResetState,
             cloudKitDatabase: Self.shouldEnableCloudKit ? .automatic : .none
         )
         do {

@@ -19,6 +19,7 @@ final class NotificationThrottleStore: @unchecked Sendable {
         static let dailyCountSuffix = "dailyCount"
         static let dedupPrefix = "dedup."
         static let bodyCompositionLastSentSuffix = "bodyCompositionLastSent"
+        static let bodyCompositionBufferSuffix = "bodyCompositionBuffer"
     }
 
     init(
@@ -142,6 +143,74 @@ final class NotificationThrottleStore: @unchecked Sendable {
         default:
             return false
         }
+    }
+
+    // MARK: - Body Composition Merge Buffer
+
+    private static let bufferEncoder = JSONEncoder()
+    private static let bufferDecoder = JSONDecoder()
+
+    /// Atomically buffers the value, collects pending entries, records throttle, and returns
+    /// the merged body string. Returns nil if no pending entries exist.
+    func bufferAndBuildMergedBody(
+        type: HealthInsight.InsightType,
+        formattedValue: String,
+        now: Date = Date()
+    ) -> String? {
+        queue.sync {
+            // Buffer the new value
+            var buffer = loadBodyCompositionBufferLocked()
+            buffer[type.rawValue] = BodyCompositionBufferEntry(
+                formattedValue: formattedValue,
+                timestamp: now
+            )
+            saveBodyCompositionBufferLocked(buffer)
+
+            // Collect pending within merge window
+            let pending = buffer
+                .filter { now.timeIntervalSince($0.value.timestamp) < bodyCompositionMergeWindowSeconds }
+                .sorted { $0.key < $1.key }
+                .map(\.value.formattedValue)
+            guard !pending.isEmpty else { return nil }
+
+            // Check daily budget before sending
+            let count = dailyCountLocked(now: now)
+            guard count < dailyBudgetLimit else { return nil }
+
+            // Record throttle for all body composition types atomically
+            recordBodyCompositionSentLocked(for: type, now: now)
+            recordSentTypeLocked(for: type, now: now)
+
+            // Increment daily informational count (body comp is always informational)
+            let key = keyPrefix + Keys.dailyCountSuffix
+            defaults.set(count + 1, forKey: key)
+            defaults.set(now, forKey: keyPrefix + Keys.dailyCountDateSuffix)
+
+            return pending.joined(separator: "\n")
+        }
+    }
+
+    private struct BodyCompositionBufferEntry: Codable {
+        let formattedValue: String
+        let timestamp: Date
+    }
+
+    private func loadBodyCompositionBufferLocked() -> [String: BodyCompositionBufferEntry] {
+        let key = keyPrefix + Keys.bodyCompositionBufferSuffix
+        guard let data = defaults.data(forKey: key),
+              let buffer = try? Self.bufferDecoder.decode([String: BodyCompositionBufferEntry].self, from: data) else {
+            return [:]
+        }
+        return buffer
+    }
+
+    private func saveBodyCompositionBufferLocked(_ buffer: [String: BodyCompositionBufferEntry]) {
+        let key = keyPrefix + Keys.bodyCompositionBufferSuffix
+        guard let data = try? Self.bufferEncoder.encode(buffer) else {
+            AppLogger.notification.error("[ThrottleStore] Failed to encode body composition buffer")
+            return
+        }
+        defaults.set(data, forKey: key)
     }
 
     // MARK: - Dedup

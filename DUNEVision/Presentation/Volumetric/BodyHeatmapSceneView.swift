@@ -7,6 +7,8 @@ struct BodyHeatmapSceneView: View {
 
     @State private var yaw: Float = 0.28
     @State private var pitch: Float = -0.16
+    @State private var dragStartYaw: Float = 0.28
+    @State private var dragStartPitch: Float = -0.16
 
     private var muscleLookup: [MuscleGroup: SpatialTrainingSummary.MuscleLoad] {
         Dictionary(muscleLoads.map { ($0.muscle, $0) }, uniquingKeysWith: { _, latest in latest })
@@ -35,8 +37,13 @@ struct BodyHeatmapSceneView: View {
     private var rotationGesture: some Gesture {
         DragGesture(minimumDistance: 2)
             .onChanged { value in
-                yaw = 0.28 + Float(value.translation.width * 0.01)
-                pitch = (-0.16 + Float(value.translation.height * 0.004)).clamped(to: -0.48...0.18)
+                yaw = dragStartYaw + Float(value.translation.width) * 0.008
+                pitch = (dragStartPitch + Float(value.translation.height) * 0.004)
+                    .clamped(to: -0.48...0.18)
+            }
+            .onEnded { _ in
+                dragStartYaw = yaw
+                dragStartPitch = pitch
             }
     }
 }

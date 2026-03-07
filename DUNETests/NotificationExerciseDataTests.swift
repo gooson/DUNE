@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 import Testing
 @testable import DUNE
 
@@ -53,6 +54,113 @@ struct NotificationRouteValidationTests {
         let route = NotificationRoute.activityPersonalRecords
         #expect(route.destination == .activityPersonalRecords)
         #expect(route.workoutID == nil)
+    }
+}
+
+@Suite("NotificationPresentationPlanner")
+struct NotificationPresentationPlannerTests {
+
+    @Test("activityPersonalRecords pushes personal records from current tab context")
+    func activityPersonalRecordsUsesCurrentTabPush() {
+        let plan = NotificationPresentationPlanner.plan(
+            for: .activityPersonalRecords,
+            requestID: 7
+        )
+
+        #expect(plan == .push(.personalRecords(requestID: 7)))
+    }
+
+    @Test("personal records push replaces any existing notification path")
+    func personalRecordsPushReplacesExistingNotificationPath() {
+        let path = NotificationPresentationPlanner.rootPath(
+            for: .push(.personalRecords(requestID: 9))
+        )
+
+        #expect(path == [.personalRecords(requestID: 9)])
+    }
+
+    @Test("workoutDetail keeps activity tab routing for workout detail")
+    func workoutDetailKeepsActivityTabRouting() throws {
+        let route = try #require(NotificationRoute.workoutDetail(workoutID: "workout-123"))
+        let plan = NotificationPresentationPlanner.plan(for: route, requestID: 3)
+
+        #expect(plan == .openWorkoutInActivity(workoutID: "workout-123"))
+    }
+
+    @Test("notificationHub keeps today tab routing")
+    func notificationHubKeepsTodayTabRouting() {
+        let plan = NotificationPresentationPlanner.plan(for: .notificationHub, requestID: 2)
+
+        #expect(plan == .openNotificationHub)
+    }
+
+    @Test("workoutDetail clears any existing notification path")
+    func workoutDetailClearsExistingNotificationPath() throws {
+        let route = try #require(NotificationRoute.workoutDetail(workoutID: "workout-123"))
+        let plan = try #require(NotificationPresentationPlanner.plan(for: route, requestID: 3))
+
+        #expect(NotificationPresentationPlanner.rootPath(for: plan).isEmpty)
+    }
+
+    @Test("notificationHub clears any existing notification path")
+    func notificationHubClearsExistingNotificationPath() throws {
+        let plan = try #require(NotificationPresentationPlanner.plan(for: .notificationHub, requestID: 2))
+
+        #expect(NotificationPresentationPlanner.rootPath(for: plan).isEmpty)
+    }
+
+    @Test("invalid workoutDetail route does not produce a plan")
+    func invalidWorkoutRouteReturnsNil() {
+        let route = NotificationRoute(destination: .workoutDetail, workoutID: nil)
+        let plan = NotificationPresentationPlanner.plan(for: route, requestID: 1)
+
+        #expect(plan == nil)
+    }
+}
+
+@Suite("NotificationPresentationPaths")
+struct NotificationPresentationPathsTests {
+
+    @Test("push path is isolated to the selected tab")
+    func setPathStoresDestinationOnlyForSelectedTab() {
+        var paths = NotificationPresentationPaths(
+            today: notificationPath([.personalRecords(requestID: 1)]),
+            train: notificationPath([.personalRecords(requestID: 2)]),
+            wellness: NavigationPath(),
+            life: notificationPath([.personalRecords(requestID: 3)])
+        )
+
+        paths.setPath([.personalRecords(requestID: 9)], for: .wellness)
+
+        #expect(paths.today.isEmpty)
+        #expect(paths.train.isEmpty)
+        #expect(paths.wellness.count == 1)
+        #expect(paths.life.isEmpty)
+    }
+
+    @Test("clearAll removes every tab path")
+    func clearAllEmptiesAllTabs() {
+        var paths = NotificationPresentationPaths(
+            today: notificationPath([.personalRecords(requestID: 1)]),
+            train: notificationPath([.personalRecords(requestID: 2)]),
+            wellness: notificationPath([.personalRecords(requestID: 3)]),
+            life: notificationPath([.personalRecords(requestID: 4)])
+        )
+
+        paths.clearAll()
+
+        #expect(paths.today.isEmpty)
+        #expect(paths.train.isEmpty)
+        #expect(paths.wellness.isEmpty)
+        #expect(paths.life.isEmpty)
+    }
+
+    private func notificationPath(_ destinations: [NotificationPresentationDestination]) -> NavigationPath {
+        var path = NavigationPath()
+        for destination in destinations {
+            path.append(destination)
+        }
+        return path
     }
 }
 

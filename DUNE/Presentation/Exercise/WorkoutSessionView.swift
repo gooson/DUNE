@@ -121,13 +121,10 @@ struct WorkoutSessionView: View {
                     .disabled(viewModel.completedSetCount == 0)
                     .fontWeight(.semibold)
             }
-            ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
-                Button("Done") {
-                    isInputFieldFocused = false
-                }
-                .fontWeight(.semibold)
-                .accessibilityIdentifier("workout-keyboard-done-button")
+        }
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            if isInputFieldFocused {
+                keyboardDismissBar
             }
         }
         .onAppear {
@@ -692,6 +689,24 @@ struct WorkoutSessionView: View {
         }
     }
 
+    private var keyboardDismissBar: some View {
+        HStack {
+            Spacer()
+            Button("Done") {
+                isInputFieldFocused = false
+            }
+            .font(.body.weight(.semibold))
+            .accessibilityIdentifier("workout-keyboard-done-button")
+        }
+        .padding(.horizontal, DS.Spacing.lg)
+        .padding(.top, DS.Spacing.sm)
+        .padding(.bottom, DS.Spacing.sm)
+        .background(.ultraThinMaterial)
+        .overlay(alignment: .top) {
+            Divider()
+        }
+    }
+
     // MARK: - All Sets Done Sheet
 
     private var allSetsDoneSheet: some View {
@@ -705,6 +720,25 @@ struct WorkoutSessionView: View {
                     .font(.headline)
             }
             .padding(.top, DS.Spacing.md)
+
+            if viewModel.shouldSuggestLevelUp {
+                HStack(spacing: DS.Spacing.sm) {
+                    Image(systemName: "star.circle.fill")
+                        .font(.title3)
+                        .foregroundStyle(.mint)
+                    VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                        Text("Level Up!")
+                            .font(.subheadline.weight(.semibold))
+                        Text("Great progress! Consider increasing weight next time.")
+                            .font(.caption)
+                            .foregroundStyle(DS.Color.textSecondary)
+                    }
+                }
+                .padding(DS.Spacing.md)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(.mint.opacity(0.1), in: RoundedRectangle(cornerRadius: DS.Radius.md))
+                .padding(.horizontal, DS.Spacing.lg)
+            }
 
             VStack(spacing: DS.Spacing.sm) {
                 Button {

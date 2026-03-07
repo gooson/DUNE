@@ -6,8 +6,8 @@ struct DashboardView: View {
     @State private var hasAppeared = false
     @State private var unreadNotificationCount = 0
     @State private var showWhatsNewBadge = false
-    @State private var cachedWhatsNewReleases: [WhatsNewRelease] = []
-    @State private var cachedCurrentRelease: WhatsNewRelease?
+    @State private var cachedWhatsNewReleases: [WhatsNewReleaseData] = []
+    @State private var cachedCurrentRelease: WhatsNewReleaseData?
     @State private var cachedBuildNumber: String = ""
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.openURL) private var openURL
@@ -100,6 +100,7 @@ struct DashboardView: View {
                                 WeatherCard(snapshot: weather, insightInfo: viewModel.weatherCardInsight)
                             }
                             .buttonStyle(.plain)
+                            .accessibilityIdentifier("dashboard-weather-card")
                         } else {
                             WeatherCardPlaceholder {
                                 Task { await viewModel.requestLocationPermission() }
@@ -145,6 +146,7 @@ struct DashboardView: View {
                                 title: "Condition",
                                 icon: "heart.fill",
                                 iconColor: DS.Color.vitals,
+                                accessibilityIdentifier: "dashboard-section-condition",
                                 cards: viewModel.conditionCards
                             )
                         }
@@ -155,6 +157,7 @@ struct DashboardView: View {
                                 title: "Activity",
                                 icon: "figure.run",
                                 iconColor: DS.Color.activity,
+                                accessibilityIdentifier: "dashboard-section-activity",
                                 cards: viewModel.activityCards
                             )
                         }
@@ -165,6 +168,7 @@ struct DashboardView: View {
                                 title: "Body",
                                 icon: "bed.double.fill",
                                 iconColor: DS.Color.body,
+                                accessibilityIdentifier: "dashboard-section-body",
                                 cards: viewModel.bodyCards
                             )
                         }
@@ -253,15 +257,18 @@ struct DashboardView: View {
 
                 Spacer()
 
-                Button("Edit") {
+                Button {
                     isShowingPinnedEditor = true
+                } label: {
+                    Text("Edit")
+                        .font(.subheadline.weight(.medium))
+                        .accessibilityIdentifier("dashboard-pinned-edit")
                 }
-                .font(.subheadline.weight(.medium))
-                .accessibilityIdentifier("dashboard-pinned-edit")
             }
             .padding(.horizontal, DS.Spacing.xs)
 
             cardGrid(cards: viewModel.pinnedCards)
+                .accessibilityIdentifier("dashboard-pinned-grid")
         }
     }
 
@@ -415,11 +422,13 @@ struct DashboardView: View {
         title: LocalizedStringKey,
         icon: String,
         iconColor: Color,
+        accessibilityIdentifier: String,
         cards: [VitalCardData]
     ) -> some View {
         SectionGroup(title: title, icon: icon, iconColor: iconColor) {
             cardGrid(cards: cards)
         }
+        .accessibilityIdentifier(accessibilityIdentifier)
     }
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -433,6 +442,7 @@ struct DashboardView: View {
                 }
                 .buttonStyle(.plain)
                 .hoverEffect(.highlight)
+                .accessibilityIdentifier(metricCardIdentifier(for: card.metric.category))
                 .contextMenu {
                     NavigationLink(value: card.metric) {
                         Label("View Trend", systemImage: "chart.line.uptrend.xyaxis")
@@ -495,6 +505,10 @@ struct DashboardView: View {
     private func openSettings() {
         guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
         openURL(url)
+    }
+
+    private func metricCardIdentifier(for category: HealthMetric.Category) -> String {
+        "dashboard-metric-\(category.rawValue)"
     }
 }
 

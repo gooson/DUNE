@@ -22,12 +22,53 @@ struct ChartSelectionOverlay: View {
         .padding(.vertical, DS.Spacing.xs)
         .chartSurface(cornerRadius: DS.Radius.sm, topBloomHeight: 18)
         .padding(.horizontal, DS.Spacing.xs)
+        .accessibilityIdentifier("chart-selection-overlay")
+    }
+}
+
+struct FloatingChartSelectionOverlay: View {
+    let date: Date
+    let value: String
+    let anchor: CGPoint
+    let chartSize: CGSize
+    let plotFrame: CGRect
+    var dateFormat: Date.FormatStyle = .dateTime.month(.abbreviated).day()
+
+    @State private var overlaySize = ChartSelectionInteraction.defaultOverlaySize
+
+    private var layout: ChartSelectionOverlayLayout {
+        ChartSelectionInteraction.overlayLayout(
+            anchor: anchor,
+            overlaySize: overlaySize,
+            chartSize: chartSize,
+            plotFrame: plotFrame
+        )
+    }
+
+    var body: some View {
+        ChartSelectionOverlay(
+            date: date,
+            value: value,
+            dateFormat: dateFormat
+        )
+        .fixedSize()
+        .onGeometryChange(for: CGSize.self) { geometry in
+            geometry.size
+        } action: { newSize in
+            overlaySize = newSize
+        }
+        .position(layout.center)
+        .allowsHitTesting(false)
     }
 }
 
 extension View {
     func chartSurface(cornerRadius: CGFloat, topBloomHeight: CGFloat? = nil) -> some View {
         modifier(ChartSurfaceModifier(cornerRadius: cornerRadius, topBloomHeight: topBloomHeight))
+    }
+
+    func chartSelectionUITestProbe(_ label: String) -> some View {
+        modifier(ChartSelectionUITestProbeModifier(label: label))
     }
 }
 
@@ -81,5 +122,25 @@ private struct ChartSurfaceModifier: ViewModifier {
                             .strokeBorder(theme.accentColor.opacity(borderOpacity), lineWidth: 1)
                     }
             }
+    }
+}
+
+private struct ChartSelectionUITestProbeModifier: ViewModifier {
+    let label: String
+
+    private static let isEnabled = ProcessInfo.processInfo.arguments.contains("--uitesting")
+
+    func body(content: Content) -> some View {
+        content.overlay(alignment: .bottomTrailing) {
+            if Self.isEnabled {
+                Rectangle()
+                    .fill(Color.black.opacity(0.001))
+                    .frame(width: 12, height: 12)
+                    .allowsHitTesting(false)
+                    .accessibilityElement()
+                    .accessibilityIdentifier("chart-selection-probe")
+                    .accessibilityLabel(label)
+            }
+        }
     }
 }

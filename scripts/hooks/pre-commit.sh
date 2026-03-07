@@ -28,6 +28,12 @@ append_unique_target() {
 
 echo "Running pre-commit checks..."
 
+# Ensure xcscheme clean filter is configured (idempotent, fast).
+if [[ "$(git config --get filter.xcscheme.clean 2>/dev/null)" != "scripts/lib/xcscheme-clean-filter.sh" ]]; then
+    git config filter.xcscheme.clean 'scripts/lib/xcscheme-clean-filter.sh'
+    git config filter.xcscheme.smudge cat
+fi
+
 # Always clean local build artifacts before validating commit state.
 cleanup_args=()
 if [ "${DAILVE_PRECOMMIT_CLEAN_DERIVEDDATA:-0}" != "1" ]; then

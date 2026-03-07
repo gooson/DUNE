@@ -232,58 +232,58 @@ final class VisionDashboardWorkspaceViewModel {
         }
     }
 
-    private func fetchSnapshot() async -> FetchResult<SharedHealthSnapshot?> {
+    private func fetchSnapshot() async -> VisionFetchResult<SharedHealthSnapshot?> {
         guard let sharedHealthDataService else {
-            return FetchResult(
+            return VisionFetchResult(
                 value: nil,
                 message: String(localized: "Shared snapshot service is not connected.")
             )
         }
 
         let snapshot = await sharedHealthDataService.fetchSnapshot()
-        return FetchResult(value: snapshot, message: nil)
+        return VisionFetchResult(value: snapshot, message: nil)
     }
 
-    private func fetchRecentWorkouts() async -> FetchResult<[WorkoutSummary]> {
+    private func fetchRecentWorkouts() async -> VisionFetchResult<[WorkoutSummary]> {
         do {
             let workouts = try await workoutService.fetchWorkouts(days: 14)
-            return FetchResult(value: workouts, message: nil)
+            return VisionFetchResult(value: workouts, message: nil)
         } catch {
             AppLogger.healthKit.error("Vision workspace workouts failed: \(error.localizedDescription)")
-            return FetchResult(
+            return VisionFetchResult(
                 value: [],
                 message: String(localized: "Recent workouts could not be loaded.")
             )
         }
     }
 
-    private func fetchWeightSamples() async -> FetchResult<[BodyCompositionSample]> {
+    private func fetchWeightSamples() async -> VisionFetchResult<[BodyCompositionSample]> {
         do {
             let samples = try await bodyCompositionService.fetchWeight(days: 30)
-            return FetchResult(value: samples, message: nil)
+            return VisionFetchResult(value: samples, message: nil)
         } catch {
             AppLogger.healthKit.error("Vision workspace weight failed: \(error.localizedDescription)")
-            return FetchResult(value: [], message: nil)
+            return VisionFetchResult(value: [], message: nil)
         }
     }
 
-    private func fetchBodyFatSamples() async -> FetchResult<[BodyCompositionSample]> {
+    private func fetchBodyFatSamples() async -> VisionFetchResult<[BodyCompositionSample]> {
         do {
             let samples = try await bodyCompositionService.fetchBodyFat(days: 30)
-            return FetchResult(value: samples, message: nil)
+            return VisionFetchResult(value: samples, message: nil)
         } catch {
             AppLogger.healthKit.error("Vision workspace body fat failed: \(error.localizedDescription)")
-            return FetchResult(value: [], message: nil)
+            return VisionFetchResult(value: [], message: nil)
         }
     }
 
-    private func fetchLeanMassSamples() async -> FetchResult<[BodyCompositionSample]> {
+    private func fetchLeanMassSamples() async -> VisionFetchResult<[BodyCompositionSample]> {
         do {
             let samples = try await bodyCompositionService.fetchLeanBodyMass(days: 30)
-            return FetchResult(value: samples, message: nil)
+            return VisionFetchResult(value: samples, message: nil)
         } catch {
             AppLogger.healthKit.error("Vision workspace lean mass failed: \(error.localizedDescription)")
-            return FetchResult(value: [], message: nil)
+            return VisionFetchResult(value: [], message: nil)
         }
     }
 
@@ -450,7 +450,3 @@ final class VisionDashboardWorkspaceViewModel {
     }
 }
 
-private struct FetchResult<Value: Sendable>: Sendable {
-    let value: Value
-    let message: String?
-}

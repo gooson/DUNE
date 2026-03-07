@@ -16,6 +16,7 @@ struct SleepStageChartView: View {
     @Environment(\.appTheme) private var theme
 
     @State private var selectedDate: Date?
+    @State private var selectionGestureState = ChartSelectionGestureState()
 
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
@@ -61,7 +62,7 @@ struct SleepStageChartView: View {
             }
         }
         .frame(height: chartHeight)
-        .clipped()
+            .clipped()
         .drawingGroup()
         .accessibilityElement(children: .combine)
         .accessibilityLabel("Sleep stages timeline, \(stages.count) stages")
@@ -70,68 +71,75 @@ struct SleepStageChartView: View {
     // MARK: - Stacked Bar Chart
 
     private var stackedBarChart: some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            stackedSelectionHeader
+        Chart {
+            ForEach(dailyData) { dataPoint in
+                ForEach(dataPoint.segments, id: \.category) { segment in
+                    BarMark(
+                        x: .value("Date", dataPoint.date, unit: barXUnit),
+                        y: .value("Hours", segment.value / 3600)
+                    )
+                    .foregroundStyle(segmentColor(segment.category))
+                }
+            }
 
-            Chart {
-                ForEach(dailyData) { dataPoint in
-                    ForEach(dataPoint.segments, id: \.category) { segment in
-                        BarMark(
-                            x: .value("Date", dataPoint.date, unit: barXUnit),
-                            y: .value("Hours", segment.value / 3600)
-                        )
-                        .foregroundStyle(segmentColor(segment.category))
+            if let point = selectedDailyPoint {
+                RuleMark(x: .value("Selected", point.date, unit: barXUnit))
+                    .foregroundStyle(theme.accentColor.opacity(0.35))
+                    .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
+            }
+        }
+        .chartScrollableAxes(selectionGestureState.allowsScroll ? .horizontal : [])
+        .chartXVisibleDomain(length: period.visibleDomainSeconds)
+        .chartScrollPosition(x: $scrollPosition)
+        .chartYScale(domain: yDomain)
+        .chartXAxis {
+            AxisMarks(values: .stride(by: period.strideComponent, count: period.strideCount)) { _ in
+                AxisValueLabel(format: period.axisLabelFormat)
+                    .foregroundStyle(theme.sandColor)
+                AxisGridLine()
+                    .foregroundStyle(theme.accentColor.opacity(0.30))
+            }
+        }
+        .chartYAxis {
+            AxisMarks(position: .leading) { _ in
+                AxisValueLabel()
+                    .foregroundStyle(theme.sandColor)
+                AxisGridLine()
+                    .foregroundStyle(theme.accentColor.opacity(0.30))
+            }
+        }
+        .chartOverlay { proxy in
+            GeometryReader { geometry in
+                if let plotFrame = proxy.plotFrame.map({ geometry[$0] }) {
+                    ZStack(alignment: .topLeading) {
+                        Rectangle()
+                            .fill(.clear)
+                            .contentShape(Rectangle())
+                            .simultaneousGesture(
+                                selectionGesture(proxy: proxy, plotFrame: plotFrame),
+                                including: .subviews
+                            )
+
+                        if let point = selectedDailyPoint,
+                           let anchor = selectedAnchor(for: point, proxy: proxy, plotFrame: plotFrame) {
+                            FloatingChartSelectionOverlay(
+                                date: point.date,
+                                value: (point.total / 60).hoursMinutesFormatted,
+                                anchor: anchor,
+                                chartSize: geometry.size,
+                                plotFrame: plotFrame
+                            )
+                            .transition(.opacity)
+                        }
                     }
-                }
-
-                if let point = selectedDailyPoint {
-                    RuleMark(x: .value("Selected", point.date, unit: barXUnit))
-                        .foregroundStyle(theme.accentColor.opacity(0.35))
-                        .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
+                    .animation(.easeInOut(duration: 0.15), value: selectedDate)
                 }
             }
-            .chartScrollableAxes(.horizontal)
-            .chartXVisibleDomain(length: period.visibleDomainSeconds)
-            .chartScrollPosition(x: $scrollPosition)
-            .chartYScale(domain: yDomain)
-            .chartXAxis {
-                AxisMarks(values: .stride(by: period.strideComponent, count: period.strideCount)) { _ in
-                    AxisValueLabel(format: period.axisLabelFormat)
-                        .foregroundStyle(theme.sandColor)
-                    AxisGridLine()
-                        .foregroundStyle(theme.accentColor.opacity(0.30))
-                }
-            }
-            .chartYAxis {
-                AxisMarks(position: .leading) { _ in
-                    AxisValueLabel()
-                        .foregroundStyle(theme.sandColor)
-                    AxisGridLine()
-                        .foregroundStyle(theme.accentColor.opacity(0.30))
-                }
-            }
-            .chartXSelection(value: $selectedDate)
-            .sensoryFeedback(.selection, trigger: selectedDate)
-            .frame(height: chartHeight)
+        }
+        .sensoryFeedback(.selection, trigger: selectedDailyPoint?.date)
+        .frame(height: chartHeight)
             .clipped()
-            .accessibilityChartDescriptor(stackedChartDescriptor)
-        }
-    }
-
-    @ViewBuilder
-    private var stackedSelectionHeader: some View {
-        if let point = selectedDailyPoint {
-            HStack {
-                Text(point.date, format: .dateTime.month(.abbreviated).day())
-                    .font(.caption)
-                Spacer()
-                Text((point.total / 60).hoursMinutesFormatted)
-                    .font(.caption)
-                    .fontWeight(.semibold)
-            }
-            .foregroundStyle(DS.Color.textSecondary)
-            .transition(.opacity)
-        }
+        .accessibilityChartDescriptor(stackedChartDescriptor)
     }
 
     // MARK: - Legend
@@ -186,8 +194,47 @@ struct SleepStageChartView: View {
 
     private var selectedDailyPoint: StackedDataPoint? {
         guard let selectedDate else { return nil }
-        return dailyData.min(by: {
-            abs($0.date.timeIntervalSince(selectedDate)) < abs($1.date.timeIntervalSince(selectedDate))
-        })
+        return ChartSelectionInteraction.nearestPoint(to: selectedDate, in: dailyData, date: \.date)
+    }
+
+    private func selectedAnchor(
+        for point: StackedDataPoint,
+        proxy: ChartProxy,
+        plotFrame: CGRect
+    ) -> CGPoint? {
+        ChartSelectionInteraction.anchor(
+            xPosition: proxy.position(forX: point.date),
+            yPosition: proxy.position(forY: point.total / 3600),
+            plotFrame: plotFrame
+        )
+    }
+
+    private func selectionGesture(proxy: ChartProxy, plotFrame: CGRect) -> some Gesture {
+        DragGesture(minimumDistance: 0, coordinateSpace: .local)
+            .onChanged { value in
+                switch selectionGestureState.registerChange(
+                    at: value.time,
+                    translation: value.translation,
+                    currentScrollPosition: scrollPosition
+                ) {
+                case .inactive:
+                    return
+                case .activated(let restoreScrollPosition):
+                    if let restoreScrollPosition {
+                        scrollPosition = restoreScrollPosition
+                    }
+                    fallthrough
+                case .updating:
+                    selectedDate = ChartSelectionInteraction.resolvedDate(
+                        at: value.location,
+                        proxy: proxy,
+                        plotFrame: plotFrame
+                    )
+                }
+            }
+            .onEnded { _ in
+                selectionGestureState.reset()
+                selectedDate = nil
+            }
     }
 }

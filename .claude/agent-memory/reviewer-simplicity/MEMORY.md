@@ -87,6 +87,13 @@
 - **`subScoreCard` vs `subScoreRow` duplication (P2)**: iPad card and iPhone row render the same data (label/weight/score/color/icon/description) with only visual density differences. Content is 3 fixed items; could share a model array + unified renderer. 2 renderers for 2 layouts is acceptable, but the 6-parameter signature is repeated 3 times each = 6 call sites. Consider a `SubScoreItem` value type.
 - **`bodyFatWeekAgo` in `FetchResults` is always nil (P3 dead)**: `FetchResults.bodyFatWeekAgo` is declared but never assigned — `weightWeekAgo` is computed post-fetch but the analogous `bodyFatWeekAgo` computation was never added.
 
+### 2026-03-08: visionOS Real Data Pipeline Review
+- **`private struct FetchResult<Value: Sendable>` (P1 DRY)**: 3rd occurrence added in `VisionTrainViewModel.swift`; already exists in `VisionDashboardWorkspaceViewModel.swift` and `VisionSpatialViewModel.swift`. Must extract to shared Vision-layer file.
+- **`private extension Double { func clamped(...) }` (P1 dead duplicate)**: Added in `VisionTrainViewModel.swift`; `Comparable+Clamped.swift` already provides this for all `Comparable` types including `Double`. Delete the private extension.
+- **`isLoaded` flag never read (P2 dead)**: `@State private var isLoaded = false` declared and set in `VisionWellnessView`, `ConditionScatter3DView`, and `TrainingVolume3DView` but never read or observed anywhere in those views.
+- **Card container modifier chain repeated 3x (P2 DRY)**: `.frame(maxWidth: .infinity).frame(minHeight: 200).padding(24).background(.ultraThinMaterial, in: RoundedRectangle(...))` repeated in `loadingView`, `emptyStateView`, and `errorView` inside `VisionTrainView.swift`. Extract to a `View` modifier or ViewModifier.
+- **`workoutService` passthrough stored property (P3)**: `VisionContentView` stores `private let workoutService: WorkoutQuerying?` only to pass it to `VisionTrainViewModel` in `init`. After init, the property is never referenced again. Can pass inline without storing.
+
 ### 2026-02-17: Prior Findings
 - Muscle Volume Calculation extracted to shared extension (resolved)
 - Formula/Metric rawValue display: acceptable for technical context

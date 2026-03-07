@@ -5,6 +5,33 @@ import Testing
 
 @Suite("HealthSnapshotMirrorContainerFactory")
 struct HealthSnapshotMirrorContainerFactoryTests {
+    @Test("prefers cloud sync opt-in when cloud state exists")
+    func prefersCloudValueWhenPresent() {
+        let resolved = CloudSyncPreferenceStore.resolve(localValue: true, cloudValue: false)
+
+        #expect(resolved == false)
+    }
+
+    @Test("falls back to local sync opt-in when cloud state is missing")
+    func fallsBackToLocalValueWhenCloudMissing() {
+        let resolved = CloudSyncPreferenceStore.resolve(localValue: true, cloudValue: nil)
+
+        #expect(resolved == true)
+    }
+
+    @Test("seeds cloud state only for explicit local opt-in when cloud state is missing")
+    func seedsCloudStateOnlyForLocalOptIn() {
+        let optInSeed = CloudSyncPreferenceStore.cloudSeedValue(localValue: true, cloudValue: nil)
+        let optOutSeed = CloudSyncPreferenceStore.cloudSeedValue(localValue: false, cloudValue: nil)
+        let unsetSeed = CloudSyncPreferenceStore.cloudSeedValue(localValue: nil, cloudValue: nil)
+        let existingCloudSeed = CloudSyncPreferenceStore.cloudSeedValue(localValue: true, cloudValue: false)
+
+        #expect(optInSeed == true)
+        #expect(optOutSeed == nil)
+        #expect(unsetSeed == nil)
+        #expect(existingCloudSeed == nil)
+    }
+
     @Test("disables CloudKit when sync is off")
     func disablesCloudKitWhenSyncIsOff() {
         let url = FileManager.default.temporaryDirectory

@@ -1,5 +1,6 @@
 import Foundation
 import Testing
+import UIKit
 @testable import DUNE
 
 @Suite("ActiveRecoverySuggestion")
@@ -246,6 +247,21 @@ struct NotificationHubMetricResolverTests {
             route: nil,
             source: .localNotification
         )
+    }
+}
+
+@Suite("Body and Muscle Icons")
+struct BodyAndMuscleIconTests {
+    @Test("Rowing-related icon names resolve to valid SF Symbols")
+    func rowingIconsResolve() {
+        let iconNames = [
+            MuscleGroup.back.iconName,
+            MuscleGroup.lats.iconName,
+            BodyPart.upperBack.iconName,
+            WorkoutActivityType.rowing.iconName
+        ]
+
+        #expect(iconNames.allSatisfy { UIImage(systemName: $0) != nil })
     }
 }
 

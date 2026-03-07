@@ -73,7 +73,7 @@ final class HealthKitPermissionUITests: XCTestCase {
     }
 
     private func handleCloudSyncConsentIfNeeded() {
-        let keepLocalOnlyButton = app.buttons["cloud-sync-consent-local-button"]
+        let keepLocalOnlyButton = app.descendants(matching: .any)["cloud-sync-consent-local-button"].firstMatch
         if keepLocalOnlyButton.waitForExistence(timeout: 5) {
             keepLocalOnlyButton.tap()
         }

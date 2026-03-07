@@ -81,6 +81,7 @@ struct ConditionScoreDetailView: View {
                                 scrollPosition: $viewModel.scrollPosition
                             )
                             .frame(height: chartHeight)
+                            .accessibilityIdentifier("detail-chart-surface")
                         }
                     }
                     .id(viewModel.selectedPeriod)
@@ -118,6 +119,7 @@ struct ConditionScoreDetailView: View {
             }
             .padding(sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.lg)
         }
+        .accessibilityIdentifier("condition-score-detail-screen")
         .background { DetailWaveBackground() }
         .englishNavigationTitle("Condition Score")
         .navigationBarTitleDisplayMode(.large)
@@ -163,6 +165,7 @@ struct ConditionScoreDetailView: View {
                 .foregroundStyle(DS.Color.textSecondary)
                 .contentTransition(.numericText())
                 .animation(DS.Animation.snappy, value: viewModel.visibleRangeLabel)
+                .accessibilityIdentifier("detail-chart-visible-range")
 
             Spacer()
 

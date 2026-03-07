@@ -17,6 +17,8 @@ final class WatchSessionManager: NSObject {
     private(set) var isReachable = false
     private(set) var isPaired = false
     private(set) var isWatchAppInstalled = false
+    private(set) var isWatchWorkoutActive = false
+    private(set) var activeWatchWorkoutTemplateName: String?
 
     /// Latest workout data received from Watch
     private(set) var receivedWorkoutUpdate: WatchWorkoutUpdate?
@@ -60,6 +62,11 @@ final class WatchSessionManager: NSObject {
         } catch {
             AppLogger.ui.error("Failed to encode workout state: \(error.localizedDescription)")
         }
+    }
+
+    private func loadCachedWatchContext() {
+        let parsed = ParsedWatchIncomingContext(from: WCSession.default.receivedApplicationContext)
+        handleDecodedContext(parsed)
     }
 
     /// Requests the Watch app to delete a specific HKWorkout UUID.
@@ -294,6 +301,7 @@ extension WatchSessionManager: WCSessionDelegate {
             }
             // Auto-sync exercise library to Watch on successful activation
             if activationState == .activated, session.isWatchAppInstalled {
+                loadCachedWatchContext()
                 syncExerciseLibraryToWatch()
                 transferWorkoutTemplates(cachedWorkoutTemplates)
             }
@@ -349,11 +357,34 @@ extension WatchSessionManager: WCSessionDelegate {
             }
         }
     }
+
+    nonisolated func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String: Any]) {
+        let contextCopy = ParsedWatchIncomingContext(from: applicationContext)
+        Task { @MainActor in
+            handleDecodedContext(contextCopy)
+        }
+    }
 }
 
 // MARK: - Message Handling
 
 extension WatchSessionManager {
+    private func handleDecodedContext(_ context: ParsedWatchIncomingContext) {
+        if let isActive = context.watchWorkoutActive {
+            isWatchWorkoutActive = isActive
+            if isActive {
+                activeWatchWorkoutTemplateName = context.watchWorkoutTemplateName
+            } else {
+                activeWatchWorkoutTemplateName = nil
+            }
+            return
+        }
+
+        if let templateName = context.watchWorkoutTemplateName, !templateName.isEmpty {
+            activeWatchWorkoutTemplateName = templateName
+        }
+    }
+
     private func handleDecodedMessage(_ message: ParsedWatchIncomingMessage) {
         if message.requestExerciseLibrarySync {
             syncExerciseLibraryToWatch()
@@ -398,6 +429,16 @@ struct ParsedWatchIncomingMessage: Sendable {
         setCompletedData = message["setCompleted"] as? Data
         requestExerciseLibrarySync = (message["requestExerciseLibrarySync"] as? Bool) == true
         requestWorkoutTemplateSync = (message["requestWorkoutTemplateSync"] as? Bool) == true
+    }
+}
+
+struct ParsedWatchIncomingContext: Sendable {
+    let watchWorkoutActive: Bool?
+    let watchWorkoutTemplateName: String?
+
+    init(from context: [String: Any]) {
+        watchWorkoutActive = context["watchWorkoutActive"] as? Bool
+        watchWorkoutTemplateName = context["watchWorkoutTemplateName"] as? String
     }
 }
 

@@ -160,11 +160,12 @@ final class NotificationInboxManager: @unchecked Sendable {
         }
     }
 
-    func clearPendingNavigationRequest(ifMatching request: NotificationNavigationRequest) {
+    @discardableResult
+    func consumePendingNavigationRequest(ifMatching request: NotificationNavigationRequest) -> Bool {
         queue.sync {
-            if pendingNavigationRequest == request {
-                pendingNavigationRequest = nil
-            }
+            guard pendingNavigationRequest == request else { return false }
+            pendingNavigationRequest = nil
+            return true
         }
     }
 

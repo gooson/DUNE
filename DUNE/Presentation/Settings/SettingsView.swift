@@ -3,7 +3,7 @@ import SwiftData
 import CoreLocation
 
 struct SettingsView: View {
-    @AppStorage("isCloudSyncEnabled") private var isCloudSyncEnabled = false
+    @AppStorage(CloudSyncPreferenceStore.storageKey) private var isCloudSyncEnabled = false
     @Environment(\.openURL) private var openURL
     @Environment(\.scenePhase) private var scenePhase
 
@@ -137,7 +137,7 @@ struct SettingsView: View {
 
     private var dataPrivacySection: some View {
         Section("Data & Privacy") {
-            Toggle(isOn: $isCloudSyncEnabled) {
+            Toggle(isOn: cloudSyncBinding) {
                 Label("iCloud Sync", systemImage: "icloud")
             }
             .accessibilityIdentifier("settings-row-icloud-sync")
@@ -173,6 +173,16 @@ struct SettingsView: View {
         case .notDetermined: String(localized: "Not Set")
         @unknown default: String(localized: "Unknown")
         }
+    }
+
+    private var cloudSyncBinding: Binding<Bool> {
+        Binding(
+            get: { isCloudSyncEnabled },
+            set: { newValue in
+                CloudSyncPreferenceStore.setEnabled(newValue)
+                isCloudSyncEnabled = newValue
+            }
+        )
     }
 
     // MARK: - About
@@ -228,7 +238,7 @@ struct SettingsView: View {
         Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "—"
     }
 
-    private var whatsNewReleases: [WhatsNewRelease] {
+    private var whatsNewReleases: [WhatsNewReleaseData] {
         whatsNewManager.orderedReleases(preferredVersion: appVersion)
     }
 

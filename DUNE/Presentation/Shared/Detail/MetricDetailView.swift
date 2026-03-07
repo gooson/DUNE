@@ -46,6 +46,7 @@ struct MetricDetailView: View {
                         } else {
                             chart
                                 .frame(height: chartHeight)
+                                .accessibilityIdentifier("detail-chart-surface")
                         }
                     }
                     .id(viewModel.selectedPeriod)
@@ -131,9 +132,11 @@ struct MetricDetailView: View {
                     }
                 }
                 .buttonStyle(.plain)
+                .accessibilityIdentifier("metric-detail-show-all-data")
             }
             .padding(sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.lg)
         }
+        .accessibilityIdentifier("metric-detail-screen-\(metric.category.rawValue)")
         .background { DetailWaveBackground() }
         .environment(\.waveColor, metric.category.themeColor)
         .englishNavigationTitle(metric.category.englishDisplayName)
@@ -193,6 +196,7 @@ struct MetricDetailView: View {
                 .foregroundStyle(DS.Color.textSecondary)
                 .contentTransition(.numericText())
                 .animation(DS.Animation.snappy, value: viewModel.visibleRangeLabel)
+                .accessibilityIdentifier("detail-chart-visible-range")
 
             Spacer()
 

@@ -16,6 +16,7 @@ struct AreaLineChartView: View {
     @Environment(\.appTheme) private var theme
 
     @State private var selectedDate: Date?
+    @State private var selectionGestureState = ChartSelectionGestureState()
 
     // Correction #105/#165 — computed gradient using theme
     private var areaGradient: LinearGradient {
@@ -75,7 +76,7 @@ struct AreaLineChartView: View {
                         .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
                 }
             }
-            .chartScrollableAxes(.horizontal)
+            .chartScrollableAxes(selectionGestureState.allowsScroll ? .horizontal : [])
             .chartXVisibleDomain(length: period.visibleDomainSeconds)
             .chartScrollPosition(x: $scrollPosition)
             .chartYScale(domain: yDomain)
@@ -95,21 +96,38 @@ struct AreaLineChartView: View {
                         .foregroundStyle(theme.accentColor.opacity(0.30))
                 }
             }
-            .chartXSelection(value: $selectedDate)
-            .sensoryFeedback(.selection, trigger: selectedDate)
+            .chartOverlay { proxy in
+                GeometryReader { geometry in
+                    if let plotFrame = proxy.plotFrame.map({ geometry[$0] }) {
+                        ZStack(alignment: .topLeading) {
+                            Rectangle()
+                                .fill(.clear)
+                                .contentShape(Rectangle())
+                                .simultaneousGesture(
+                                    selectionGesture(proxy: proxy, plotFrame: plotFrame),
+                                    including: .subviews
+                                )
+
+                            if let point = selectedPoint,
+                               let anchor = selectedAnchor(for: point, proxy: proxy, plotFrame: plotFrame) {
+                                FloatingChartSelectionOverlay(
+                                    date: point.date,
+                                    value: "\(point.value.formattedWithSeparator(fractionDigits: 1)) \(unitSuffix)",
+                                    anchor: anchor,
+                                    chartSize: geometry.size,
+                                    plotFrame: plotFrame
+                                )
+                                .transition(.opacity)
+                            }
+                        }
+                        .animation(.easeInOut(duration: 0.15), value: selectedDate)
+                    }
+                }
+            }
+            .sensoryFeedback(.selection, trigger: selectedPoint?.date)
             .frame(height: chartHeight)
             .clipped()
             .accessibilityChartDescriptor(chartDescriptor)
-            .overlay(alignment: .top) {
-                if let point = selectedPoint {
-                    ChartSelectionOverlay(
-                        date: point.date,
-                        value: "\(point.value.formattedWithSeparator(fractionDigits: 1)) \(unitSuffix)"
-                    )
-                    .transition(.opacity)
-                    .animation(.easeInOut(duration: 0.15), value: selectedDate)
-                }
-            }
     }
 
     private var chartDescriptor: StandardChartAccessibility {
@@ -140,9 +158,47 @@ struct AreaLineChartView: View {
 
     private var selectedPoint: ChartDataPoint? {
         guard let selectedDate else { return nil }
-        return data.min(by: {
-            abs($0.date.timeIntervalSince(selectedDate)) < abs($1.date.timeIntervalSince(selectedDate))
-        })
+        return ChartSelectionInteraction.nearestPoint(to: selectedDate, in: data, date: \.date)
     }
 
+    private func selectedAnchor(
+        for point: ChartDataPoint,
+        proxy: ChartProxy,
+        plotFrame: CGRect
+    ) -> CGPoint? {
+        ChartSelectionInteraction.anchor(
+            xPosition: proxy.position(forX: point.date),
+            yPosition: proxy.position(forY: point.value),
+            plotFrame: plotFrame
+        )
+    }
+
+    private func selectionGesture(proxy: ChartProxy, plotFrame: CGRect) -> some Gesture {
+        DragGesture(minimumDistance: 0, coordinateSpace: .local)
+            .onChanged { value in
+                switch selectionGestureState.registerChange(
+                    at: value.time,
+                    translation: value.translation,
+                    currentScrollPosition: scrollPosition
+                ) {
+                case .inactive:
+                    return
+                case .activated(let restoreScrollPosition):
+                    if let restoreScrollPosition {
+                        scrollPosition = restoreScrollPosition
+                    }
+                    fallthrough
+                case .updating:
+                    selectedDate = ChartSelectionInteraction.resolvedDate(
+                        at: value.location,
+                        proxy: proxy,
+                        plotFrame: plotFrame
+                    )
+                }
+            }
+            .onEnded { _ in
+                selectionGestureState.reset()
+                selectedDate = nil
+            }
+    }
 }
