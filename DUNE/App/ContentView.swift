@@ -273,7 +273,7 @@ struct ContentView: View {
     }
 }
 
-private struct NotificationPersonalRecordsPushView: View {
+struct NotificationPersonalRecordsPushView: View {
     @State private var viewModel: ActivityViewModel
 
     init(sharedHealthDataService: SharedHealthDataService?) {

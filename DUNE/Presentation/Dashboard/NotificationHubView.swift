@@ -158,6 +158,7 @@ struct NotificationHubView: View {
         case metric(HealthMetric, itemID: String)
         case settings
         case unavailable(itemID: String)
+        case personalRecords(itemID: String)
 
         var id: String {
             switch self {
@@ -168,6 +169,8 @@ struct NotificationHubView: View {
                 return "settings"
             case .unavailable(let itemID):
                 return "unavailable-\(itemID)"
+            case .personalRecords(let itemID):
+                return "personal-records-\(itemID)"
             }
         }
     }
@@ -204,6 +207,8 @@ struct NotificationHubView: View {
                 SettingsView()
             case .unavailable(let itemID):
                 NotificationDestinationUnavailableView(itemID: itemID)
+            case .personalRecords:
+                NotificationPersonalRecordsPushView(sharedHealthDataService: nil)
             }
         }
         .task {
@@ -323,12 +328,21 @@ struct NotificationHubView: View {
             return
         }
 
+        // Badge/level-up with explicit route → push PersonalRecords locally
+        if opened.route?.destination == .activityPersonalRecords {
+            _ = inboxManager.consumePendingNavigationRequest()
+            destination = .personalRecords(itemID: opened.id)
+            return
+        }
+
+        // Other routes (workoutDetail) → delegate to ContentView for tab switch
         guard opened.route == nil else {
             return
         }
 
+        // Route-less workoutPR → also push PersonalRecords locally
         if opened.insightType == .workoutPR {
-            inboxManager.requestNavigation(itemID: opened.id, route: .activityPersonalRecords)
+            destination = .personalRecords(itemID: opened.id)
             return
         }
 

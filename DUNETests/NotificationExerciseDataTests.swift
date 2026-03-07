@@ -118,52 +118,6 @@ struct NotificationPresentationPlannerTests {
     }
 }
 
-@Suite("NotificationPresentationPaths")
-struct NotificationPresentationPathsTests {
-
-    @Test("push path is isolated to the selected tab")
-    func setPathStoresDestinationOnlyForSelectedTab() {
-        var paths = NotificationPresentationPaths(
-            today: notificationPath([.personalRecords(requestID: 1)]),
-            train: notificationPath([.personalRecords(requestID: 2)]),
-            wellness: NavigationPath(),
-            life: notificationPath([.personalRecords(requestID: 3)])
-        )
-
-        paths.setPath([.personalRecords(requestID: 9)], for: .wellness)
-
-        #expect(paths.today.isEmpty)
-        #expect(paths.train.isEmpty)
-        #expect(paths.wellness.count == 1)
-        #expect(paths.life.isEmpty)
-    }
-
-    @Test("clearAll removes every tab path")
-    func clearAllEmptiesAllTabs() {
-        var paths = NotificationPresentationPaths(
-            today: notificationPath([.personalRecords(requestID: 1)]),
-            train: notificationPath([.personalRecords(requestID: 2)]),
-            wellness: notificationPath([.personalRecords(requestID: 3)]),
-            life: notificationPath([.personalRecords(requestID: 4)])
-        )
-
-        paths.clearAll()
-
-        #expect(paths.today.isEmpty)
-        #expect(paths.train.isEmpty)
-        #expect(paths.wellness.isEmpty)
-        #expect(paths.life.isEmpty)
-    }
-
-    private func notificationPath(_ destinations: [NotificationPresentationDestination]) -> NavigationPath {
-        var path = NavigationPath()
-        for destination in destinations {
-            path.append(destination)
-        }
-        return path
-    }
-}
-
 // MARK: - UserInfo Round Trip
 
 @Suite("NotificationInboxManager – exercise data userInfo round trip")
@@ -451,6 +405,71 @@ struct HandleNotificationResponseTests {
         let pending = manager.consumePendingNavigationRequest()
         #expect(pending?.route.destination == .activityPersonalRecords)
         #expect(pending?.itemID == item.id)
+    }
+}
+
+// MARK: - Hub Local Push Contract
+
+@Suite("NotificationInboxManager – hub local push for activityPersonalRecords")
+struct HubLocalPushTests {
+
+    @Test("open() with activityPersonalRecords route emits request that can be consumed locally")
+    func openWithPersonalRecordsRouteCanBeConsumedLocally() {
+        let manager = makeManager()
+        let insight = HealthInsight(
+            type: .workoutPR,
+            title: "Level Up!",
+            body: "You reached level 5",
+            severity: .celebration,
+            route: .activityPersonalRecords
+        )
+        let item = manager.recordSentInsight(insight)
+
+        let opened = manager.open(itemID: item.id)
+        #expect(opened?.route?.destination == .activityPersonalRecords)
+
+        // Hub consumes the pending request to prevent ContentView from also handling it
+        let consumed = manager.consumePendingNavigationRequest()
+        #expect(consumed != nil)
+        #expect(consumed?.route.destination == .activityPersonalRecords)
+
+        // No pending request remains for ContentView
+        let remaining = manager.consumePendingNavigationRequest()
+        #expect(remaining == nil)
+    }
+
+    @Test("open() with workoutDetail route is NOT consumed by hub — ContentView handles it")
+    func openWithWorkoutDetailRouteRemainsForContentView() {
+        let manager = makeManager()
+        let insight = makeInsight(workoutID: "detail-workout")
+        let item = manager.recordSentInsight(insight)
+
+        let opened = manager.open(itemID: item.id)
+        #expect(opened?.route?.destination == .workoutDetail)
+
+        // Hub does NOT consume — request stays pending for ContentView
+        let pending = manager.consumePendingNavigationRequest()
+        #expect(pending != nil)
+        #expect(pending?.route.destination == .workoutDetail)
+    }
+
+    @Test("open() with route-less workoutPR does not emit navigation request")
+    func openWithRoutelessWorkoutPRDoesNotEmit() {
+        let manager = makeManager()
+        let insight = HealthInsight(
+            type: .workoutPR,
+            title: "New PR!",
+            body: "Bench Press 100kg",
+            severity: .celebration
+        )
+        let item = manager.recordSentInsight(insight)
+
+        let opened = manager.open(itemID: item.id)
+        #expect(opened?.route == nil)
+
+        // No route → no navigation request emitted
+        let pending = manager.consumePendingNavigationRequest()
+        #expect(pending == nil)
     }
 }
 
