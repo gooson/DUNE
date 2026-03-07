@@ -28,7 +28,7 @@ struct HealthKitWorkoutDetailView: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
-                    editedTitle = correctedTitle ?? workout.activityType.displayName
+                    editedTitle = correctedTitle ?? workout.localizedTitle
                     isShowingTitleEditor = true
                 } label: {
                     Label("Edit Title", systemImage: "pencil")
@@ -50,7 +50,7 @@ struct HealthKitWorkoutDetailView: View {
         if let correctedTitle, !correctedTitle.isEmpty {
             return correctedTitle
         }
-        return workout.activityType.displayName
+        return workout.localizedTitle
     }
 
     private var titleEditorSheet: some View {

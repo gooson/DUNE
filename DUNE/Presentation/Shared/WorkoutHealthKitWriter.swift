@@ -21,11 +21,14 @@ enum WorkoutHealthKitWriter {
             let setDistance = record.completedSets.compactMap(\.distance).reduce(0, +)
             return setDistance > 0 ? setDistance : nil
         }()
+        let healthKitTitle = exercise.localizedName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            ? record.exerciseType
+            : exercise.localizedName
         let input = WorkoutWriteInput(
             startDate: record.date,
             duration: record.duration,
             category: exercise.category,
-            exerciseName: record.exerciseType,
+            exerciseName: healthKitTitle,
             estimatedCalories: record.estimatedCalories,
             isFromHealthKit: record.isFromHealthKit,
             distanceKm: totalDistanceKm,

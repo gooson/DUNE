@@ -213,7 +213,7 @@ struct ExerciseView: View {
                 healthKitWorkoutToDelete = nil
             }
         } message: { workout in
-            Text("\(workout.type) on \(workout.date.formatted(date: .abbreviated, time: .omitted)) will be permanently deleted from all your devices.")
+            Text("\(workout.localizedTitle) on \(workout.date.formatted(date: .abbreviated, time: .omitted)) will be permanently deleted from all your devices.")
         }
         .confirmDeleteRecord($recordToDelete, context: modelContext)
     }

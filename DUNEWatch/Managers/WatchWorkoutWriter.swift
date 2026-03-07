@@ -67,6 +67,11 @@ enum WatchWorkoutWriter {
                 try await builder.addSamples([sample])
             }
 
+            let metadata = HealthKitWorkoutTitle.metadata(exerciseName: exerciseName)
+            if !metadata.isEmpty {
+                try await builder.addMetadata(metadata)
+            }
+
             try await builder.endCollection(at: endDate)
 
             guard let workout = try await builder.finishWorkout() else {
