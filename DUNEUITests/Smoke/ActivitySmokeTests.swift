@@ -83,9 +83,7 @@ final class ActivitySmokeTests: UITestBaseCase {
         let pickerList = app.descendants(matching: .any)[AXID.pickerRootList].firstMatch
         XCTAssertTrue(pickerList.waitForExistence(timeout: 5), "Exercise picker should appear")
 
-        let cancel = app.buttons[AXID.pickerCancelButton]
-        XCTAssertTrue(cancel.waitForExistence(timeout: 3), "Exercise picker cancel button should appear")
-        cancel.tap()
+        XCTAssertTrue(app.dismissModalIfPresent(cancelIdentifiers: [AXID.pickerCancelButton]), "Exercise picker should dismiss via shared helper")
 
         XCTAssertTrue(addButton.waitForExistence(timeout: 3), "Picker should dismiss back to Activity screen")
     }
@@ -101,8 +99,6 @@ final class ActivitySmokeTests: UITestBaseCase {
         let searchField = app.descendants(matching: .any)[AXID.pickerSearchField].firstMatch
         XCTAssertTrue(searchField.waitForExistence(timeout: 5), "Exercise picker search field should exist")
 
-        let cancel = app.buttons[AXID.pickerCancelButton]
-        XCTAssertTrue(cancel.waitForExistence(timeout: 3), "Exercise picker cancel button should appear")
-        cancel.tap()
+        XCTAssertTrue(app.dismissModalIfPresent(cancelIdentifiers: [AXID.pickerCancelButton]), "Exercise picker should dismiss via shared helper")
     }
 }

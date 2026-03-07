@@ -72,25 +72,87 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+resolve_test_plan() {
+    local requested_plan="$1"
+
+    if [[ -n "$requested_plan" ]]; then
+        case "$requested_plan" in
+            WatchUITests-CI)
+                echo "DUNEWatchUITests-PR"
+                return
+                ;;
+            *)
+                echo "$requested_plan"
+                return
+                ;;
+        esac
+    fi
+
+    if [[ "$SMOKE_MODE" -eq 1 ]]; then
+        echo "DUNEWatchUITests-PR"
+    else
+        echo "DUNEWatchUITests-Full"
+    fi
+}
+
+TEST_PLAN="$(resolve_test_plan "$TEST_PLAN")"
+
 mkdir -p "$LOG_DIR" "$DERIVED_DATA_DIR"
 regen_project
 
 echo "Ensuring watch simulator '$WATCH_SIM_NAME' is booted..."
-DEVICE_UDID=$(xcrun simctl list devices available -j \
+DEVICE_INFO=$(xcrun simctl list devices available -j \
     | python3 -c "
-import json, sys
+import json, re, sys
+requested_name = '${WATCH_SIM_NAME}'
+requested_os = '${WATCH_SIM_OS}'
 data = json.load(sys.stdin)
+candidates = []
+
+def parse_os(runtime: str) -> str:
+    match = re.search(r'watchOS-(\d+)-(\d+)', runtime)
+    return f'{match.group(1)}.{match.group(2)}' if match else ''
+
 for runtime, devices in data['devices'].items():
-    for d in devices:
-        if d['name'] == '${WATCH_SIM_NAME}' and '${WATCH_SIM_OS}'.replace('.', '-') in runtime.replace('.', '-'):
-            print(d['udid'])
-            sys.exit(0)
+    if 'watchOS' not in runtime:
+        continue
+    os_version = parse_os(runtime)
+    for device in devices:
+        if not device.get('isAvailable', True):
+            continue
+        candidates.append((device['name'], os_version, device['udid']))
+
+def emit(choice):
+    name, os_version, udid = choice
+    print('\\t'.join([udid, name, os_version]))
+    sys.exit(0)
+
+for candidate in candidates:
+    if candidate[0] == requested_name and candidate[1] == requested_os:
+        emit(candidate)
+
+for candidate in candidates:
+    if candidate[0] == requested_name:
+        emit(candidate)
+
+for candidate in candidates:
+    if candidate[0].startswith('Apple Watch'):
+        emit(candidate)
+
+if candidates:
+    emit(candidates[0])
+
 sys.exit(1)
 " 2>/dev/null) || true
 
-if [[ -n "$DEVICE_UDID" ]]; then
+RESOLVED_WATCH_SIM_NAME="$WATCH_SIM_NAME"
+RESOLVED_WATCH_SIM_OS="$WATCH_SIM_OS"
+
+if [[ -n "$DEVICE_INFO" ]]; then
+    IFS=$'\t' read -r DEVICE_UDID RESOLVED_WATCH_SIM_NAME RESOLVED_WATCH_SIM_OS <<< "$DEVICE_INFO"
+    DESTINATION="id=${DEVICE_UDID}"
     xcrun simctl boot "$DEVICE_UDID" 2>/dev/null || true
-    echo "Watch simulator booted: $DEVICE_UDID"
+    echo "Watch simulator booted: $RESOLVED_WATCH_SIM_NAME ($RESOLVED_WATCH_SIM_OS) [$DEVICE_UDID]"
 else
     echo "Warning: Could not find watch simulator '$WATCH_SIM_NAME' (OS $WATCH_SIM_OS). xcodebuild will attempt to boot one."
 fi
@@ -108,10 +170,8 @@ TEST_CMD=(xcodebuild test -project "$PROJECT_FILE"
     CODE_SIGNING_ALLOWED=NO
     CODE_SIGNING_REQUIRED=NO)
 
-if [[ -n "$TEST_PLAN" ]]; then
-    TEST_CMD+=(-testPlan "$TEST_PLAN")
-    echo "Using test plan: $TEST_PLAN"
-fi
+TEST_CMD+=(-testPlan "$TEST_PLAN")
+echo "Using test plan: $TEST_PLAN"
 
 if [[ "${#ONLY_TESTING[@]}" -gt 0 ]]; then
     for target in "${ONLY_TESTING[@]}"; do
@@ -120,8 +180,8 @@ if [[ "${#ONLY_TESTING[@]}" -gt 0 ]]; then
     done
 else
     if [[ "$SMOKE_MODE" -eq 1 ]]; then
-        TEST_CMD+=(-only-testing DUNEWatchUITests/Smoke/WatchHomeSmokeTests)
-        TEST_CMD+=(-only-testing DUNEWatchUITests/Smoke/WatchWorkoutStartSmokeTests)
+        TEST_CMD+=(-only-testing DUNEWatchUITests/WatchHomeSmokeTests)
+        TEST_CMD+=(-only-testing DUNEWatchUITests/WatchWorkoutStartSmokeTests)
         echo "Smoke mode enabled: running watch smoke suite only"
     else
         TEST_CMD+=(-only-testing DUNEWatchUITests)
