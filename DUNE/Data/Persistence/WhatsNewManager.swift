@@ -4,6 +4,24 @@ import Foundation
 final class WhatsNewManager: Sendable {
     static let shared = WhatsNewManager()
 
+    private let releases: [WhatsNewReleaseData]
+
+    init(bundle: Bundle = .main) {
+        guard let url = bundle.url(forResource: "whats-new", withExtension: "json"),
+              let data = try? Data(contentsOf: url),
+              let catalog = try? JSONDecoder().decode(WhatsNewCatalog.self, from: data)
+        else {
+            releases = []
+            return
+        }
+        releases = catalog.releases
+    }
+
+    /// Test-only initializer with pre-built releases.
+    init(releases: [WhatsNewReleaseData]) {
+        self.releases = releases
+    }
+
     func currentAppVersion(bundle: Bundle = .main) -> String {
         bundle.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
     }
@@ -12,8 +30,7 @@ final class WhatsNewManager: Sendable {
         bundle.infoDictionary?["CFBundleVersion"] as? String ?? ""
     }
 
-    func orderedReleases(preferredVersion: String? = nil) -> [WhatsNewRelease] {
-        let releases = releaseCatalog
+    func orderedReleases(preferredVersion: String? = nil) -> [WhatsNewReleaseData] {
         guard let preferredVersion,
               let preferredIndex = releases.firstIndex(where: { $0.version == preferredVersion }) else {
             return releases
@@ -26,29 +43,7 @@ final class WhatsNewManager: Sendable {
         return [preferred] + archive
     }
 
-    func currentRelease(for version: String) -> WhatsNewRelease? {
-        releaseCatalog.first { $0.version == version }
-    }
-
-    private var releaseCatalog: [WhatsNewRelease] {
-        [
-            WhatsNewRelease(
-                version: "0.2.0",
-                intro: String(localized: "Start with condition, weather, sleep debt, notifications, widgets, muscle map, training, wellness, habits, themes, and Apple Watch workouts in one flow."),
-                features: [
-                    .widgets,
-                    .conditionScore,
-                    .weather,
-                    .sleepDebt,
-                    .notifications,
-                    .muscleMap,
-                    .trainingReadiness,
-                    .wellness,
-                    .habits,
-                    .themes,
-                    .watchQuickStart
-                ]
-            )
-        ]
+    func currentRelease(for version: String) -> WhatsNewReleaseData? {
+        releases.first { $0.version == version }
     }
 }
