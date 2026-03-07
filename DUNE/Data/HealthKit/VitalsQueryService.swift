@@ -185,7 +185,7 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
 
         let descriptor = HKSampleQueryDescriptor(
             predicates: [.quantitySample(type: quantityType, predicate: predicate)],
-            sortDescriptors: [SortDescriptor(\.startDate, order: .reverse)],
+            sortDescriptors: [SortDescriptor(\.endDate, order: .reverse)],
             limit: 1
         )
 
@@ -195,7 +195,7 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
         let value = sample.quantity.doubleValue(for: unit)
         guard validRange.contains(value) else { return nil }
 
-        return VitalSample(value: value, date: sample.startDate)
+        return VitalSample(value: value, date: sample.endDate)
     }
 
     private func fetchCollection(
@@ -221,7 +221,7 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
 
         let descriptor = HKSampleQueryDescriptor(
             predicates: [.quantitySample(type: quantityType, predicate: predicate)],
-            sortDescriptors: [SortDescriptor(\.startDate, order: .forward)]
+            sortDescriptors: [SortDescriptor(\.endDate, order: .forward)]
         )
 
         let samples = try await manager.execute(descriptor)
@@ -229,7 +229,7 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
         return samples.compactMap { sample in
             let value = sample.quantity.doubleValue(for: unit)
             guard validRange.contains(value) else { return nil }
-            return VitalSample(value: value, date: sample.startDate)
+            return VitalSample(value: value, date: sample.endDate)
         }
     }
 }
