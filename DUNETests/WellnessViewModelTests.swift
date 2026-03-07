@@ -350,8 +350,8 @@ struct WellnessViewModelTests {
             ),
             heartRateService: NoopHeartRateService(),
             sharedHealthDataService: MockSharedHealthDataService(snapshot: makeEmptyWellnessSharedSnapshot())
-        }
-      
+        )
+
         await vm.performRefresh()
       
         let vo2Card = vm.physicalCards.first { $0.category == .vo2Max }

@@ -41,19 +41,28 @@ final class BedtimeWatchReminderScheduler {
 
         let calendar = Calendar.current
         let today = Date()
-        var recentStages: [[SleepStage]] = []
-        recentStages.reserveCapacity(Constants.lookbackDays)
 
-        for offset in 1...Constants.lookbackDays {
-            guard let date = calendar.date(byAdding: .day, value: -offset, to: today) else { continue }
-            do {
-                let stages = try await sleepService.fetchSleepStages(for: date)
-                if !stages.isEmpty {
-                    recentStages.append(stages)
+        let recentStages: [[SleepStage]] = await withTaskGroup(
+            of: (Int, [SleepStage])?.self
+        ) { [sleepService] group in
+            for offset in 1...Constants.lookbackDays {
+                guard let date = calendar.date(byAdding: .day, value: -offset, to: today) else { continue }
+                group.addTask {
+                    do {
+                        let stages = try await sleepService.fetchSleepStages(for: date)
+                        return stages.isEmpty ? nil : (offset, stages)
+                    } catch {
+                        AppLogger.notification.error("[BedtimeReminder] Failed to fetch sleep for day offset \(offset): \(error.localizedDescription)")
+                        return nil
+                    }
                 }
-            } catch {
-                AppLogger.notification.error("[BedtimeReminder] Failed to fetch sleep for day offset \(offset): \(error.localizedDescription)")
             }
+
+            var results: [(Int, [SleepStage])] = []
+            for await result in group {
+                if let result { results.append(result) }
+            }
+            return results.sorted { $0.0 < $1.0 }.map(\.1)
         }
 
         guard let bedtime = bedtimeCalculator.execute(

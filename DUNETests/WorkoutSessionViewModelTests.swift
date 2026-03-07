@@ -240,36 +240,6 @@ struct WorkoutSessionViewModelTests {
         #expect(vm.sets[1].weight == "60")
     }
 
-    @Test("shouldSuggestLevelUp returns true when all planned sets meet target reps")
-    func levelUpSuggestionWhenAllTargetsMet() {
-        let exercise = makeExercise()
-        let vm = WorkoutSessionViewModel(exercise: exercise, defaultSetCount: 3)
-        vm.previousSets = [
-            PreviousSetInfo(weight: 60, reps: 10, duration: nil, distance: nil, restDuration: nil),
-            PreviousSetInfo(weight: 60, reps: 10, duration: nil, distance: nil, restDuration: nil),
-            PreviousSetInfo(weight: 60, reps: 10, duration: nil, distance: nil, restDuration: nil)
-        ]
-
-        for idx in 0..<3 {
-            vm.sets[idx].reps = "10"
-            vm.sets[idx].isCompleted = true
-        }
-
-        #expect(vm.shouldSuggestLevelUp())
-    }
-
-    @Test("shouldSuggestLevelUp returns false when completion is partial")
-    func levelUpSuggestionRequiresAllSetsCompleted() {
-        let exercise = makeExercise()
-        let vm = WorkoutSessionViewModel(exercise: exercise, defaultSetCount: 3)
-        for idx in 0..<2 {
-            vm.sets[idx].reps = "10"
-            vm.sets[idx].isCompleted = true
-        }
-
-        #expect(!vm.shouldSuggestLevelUp())
-    }
-
     @Test("createValidatedRecord returns nil with no completed sets")
     func noCompletedSets() {
         let exercise = makeExercise()

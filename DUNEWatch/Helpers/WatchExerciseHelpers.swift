@@ -6,7 +6,7 @@ import Foundation
 
 /// Builds subtitle: "3 sets · 10 reps" or "3 sets · 10 reps · 80.0kg"
 func exerciseSubtitle(sets: Int, reps: Int, weight: Double?) -> String {
-    var parts = "\(sets) sets · \(reps) reps"
+    var parts = String(localized: "\(sets) sets · \(reps) reps")
     if let w = weight, w > 0, w <= 500 {
         parts += " · \(w.formattedWeight)kg"
     }
@@ -143,7 +143,10 @@ func routineMetaLabel(
     exerciseLibraryByID: [String: WatchExerciseInfo],
     globalRestSeconds: TimeInterval
 ) -> String {
-    let base = "\(entries.count) exercise\(entries.count == 1 ? "" : "s")"
+    let count = entries.count
+    let base = count == 1
+        ? String(localized: "\(count) exercise")
+        : String(localized: "\(count) exercises")
     guard !entries.isEmpty else { return base }
 
     let profiles = entries.map { templateEntryProfile(for: $0, exerciseLibraryByID: exerciseLibraryByID) }
@@ -152,7 +155,7 @@ func routineMetaLabel(
     }
 
     let totalSets = entries.reduce(0) { $0 + $1.defaultSets }
-    var meta = "\(base) · \(totalSets) sets"
+    var meta = String(localized: "\(base) · \(totalSets) sets")
     if let mins = estimateStrengthRoutineMinutes(entries: entries, globalRestSeconds: globalRestSeconds) {
         meta += " · ~\(mins)min"
     }

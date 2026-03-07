@@ -106,9 +106,9 @@ private struct CardioSessionPagingView: View {
     private var cardioAlertTitle: String {
         switch workoutManager.cardioInactivityPrompt {
         case .softNudge:
-            return "No movement detected"
+            return String(localized: "No movement detected")
         case .confirmation:
-            return "End workout soon?"
+            return String(localized: "End workout soon?")
         case nil:
             return ""
         }
@@ -117,10 +117,10 @@ private struct CardioSessionPagingView: View {
     private var cardioAlertMessage: String {
         switch workoutManager.cardioInactivityPrompt {
         case .softNudge:
-            return "We haven't detected movement for a while. Are you still working out?"
+            return String(localized: "We haven't detected movement for a while. Are you still working out?")
         case .confirmation:
             let countdown = workoutManager.cardioAutoEndCountdown ?? 0
-            return "Ending in \(countdown)s unless you continue."
+            return String(localized: "Ending in \(countdown)s unless you continue.")
         case nil:
             return ""
         }

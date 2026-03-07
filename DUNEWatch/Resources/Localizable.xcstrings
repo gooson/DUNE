@@ -4,6 +4,74 @@
     "--" : {
 
     },
+    "%lld exercise" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld種目"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld종목"
+          }
+        }
+      }
+    },
+    "%lld exercises" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld種目"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld종목"
+          }
+        }
+      }
+    },
+    "%@ · %lld sets" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · %lldセット"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · %lld세트"
+          }
+        }
+      }
+    },
+    "%lld sets · %lld reps" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lldセット · %lldレップ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld세트 · %lld회"
+          }
+        }
+      }
+    },
     "· %.1fkg" : {
 
     },
@@ -669,6 +737,57 @@
         }
       }
     },
+    "End workout soon?" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "まもなくワークアウトを終了しますか？"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "운동을 곧 종료할까요?"
+          }
+        }
+      }
+    },
+    "Ending in %llds unless you continue." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "続行しない場合、%lld秒後に終了します。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "계속하지 않으면 %lld초 후 종료됩니다."
+          }
+        }
+      }
+    },
+    "End Now" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今すぐ終了"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "지금 종료"
+          }
+        }
+      }
+    },
     "Error" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -910,6 +1029,23 @@
         }
       }
     },
+    "Keep Running" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "続ける"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "계속 운동"
+          }
+        }
+      }
+    },
     "Kilometers" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1004,6 +1140,23 @@
         }
       }
     },
+    "No movement detected" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "動きが検出されません"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "움직임이 감지되지 않음"
+          }
+        }
+      }
+    },
     "No Exercises" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1085,6 +1238,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "iPhone에서 DUNE 앱을\n열어 동기화하세요"
+          }
+        }
+      }
+    },
+    "Pause" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一時停止"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "일시정지"
           }
         }
       }
@@ -1479,6 +1649,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "시간만"
+          }
+        }
+      }
+    },
+    "We haven't detected movement for a while. Are you still working out?" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "しばらく動きが検出されていません。まだワークアウト中ですか？"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "한동안 움직임이 감지되지 않았어요. 아직 운동 중인가요?"
           }
         }
       }
