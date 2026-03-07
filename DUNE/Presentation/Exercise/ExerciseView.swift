@@ -284,7 +284,7 @@ struct ExerciseView: View {
     }
 
     private func rebuildRecordIndex() {
-        recordsByID = Dictionary(uniqueKeysWithValues: manualRecords.map { ($0.id, $0) })
+        recordsByID = Dictionary(manualRecords.map { ($0.id, $0) }, uniquingKeysWith: { _, latest in latest })
     }
 
     private func findRecord(for item: ExerciseListItem) -> ExerciseRecord? {

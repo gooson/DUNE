@@ -203,7 +203,8 @@ struct SpatialTrainingAnalyzer: SpatialTrainingAnalyzing, Sendable {
             referenceDate: referenceDate
         )
         let scoreByMuscle = Dictionary(
-            uniqueKeysWithValues: compoundScores.map { ($0.muscle, $0) }
+            compoundScores.map { ($0.muscle, $0) },
+            uniquingKeysWith: { _, latest in latest }
         )
 
         return MuscleGroup.allCases.map { muscle in
@@ -237,11 +238,5 @@ struct SpatialTrainingAnalyzer: SpatialTrainingAnalyzing, Sendable {
         let raw = state.compoundScore?.normalizedScore ?? (1.0 - state.recoveryPercent)
         guard raw.isFinite else { return 0 }
         return raw.clamped(to: 0...1)
-    }
-}
-
-private extension Comparable {
-    func clamped(to range: ClosedRange<Self>) -> Self {
-        min(max(self, range.lowerBound), range.upperBound)
     }
 }

@@ -6,6 +6,9 @@ struct DashboardView: View {
     @State private var hasAppeared = false
     @State private var unreadNotificationCount = 0
     @State private var showWhatsNewBadge = false
+    @State private var cachedWhatsNewReleases: [WhatsNewRelease] = []
+    @State private var cachedCurrentRelease: WhatsNewRelease?
+    @State private var cachedBuildNumber: String = ""
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.openURL) private var openURL
     private let inboxManager = NotificationInboxManager.shared
@@ -199,6 +202,7 @@ struct DashboardView: View {
             await loadDashboard()
         }
         .task {
+            loadWhatsNewCache()
             reloadUnreadCount()
             reloadWhatsNewBadge()
         }
@@ -311,18 +315,11 @@ struct DashboardView: View {
         unreadNotificationCount = inboxManager.unreadCount()
     }
 
-    private var whatsNewReleases: [WhatsNewRelease] {
-        whatsNewManager.orderedReleases(preferredVersion: whatsNewManager.currentAppVersion())
-    }
-
-    private var currentWhatsNewRelease: WhatsNewRelease? {
+    private func loadWhatsNewCache() {
         let version = whatsNewManager.currentAppVersion()
-        guard !version.isEmpty else { return nil }
-        return whatsNewManager.currentRelease(for: version)
-    }
-
-    private var currentWhatsNewBuild: String {
-        whatsNewManager.currentBuildNumber()
+        cachedWhatsNewReleases = whatsNewManager.orderedReleases(preferredVersion: version)
+        cachedCurrentRelease = version.isEmpty ? nil : whatsNewManager.currentRelease(for: version)
+        cachedBuildNumber = whatsNewManager.currentBuildNumber()
     }
 
     @ToolbarContentBuilder
@@ -340,11 +337,11 @@ struct DashboardView: View {
 
     @ToolbarContentBuilder
     private var whatsNewToolbarItem: some ToolbarContent {
-        if !whatsNewReleases.isEmpty {
+        if !cachedWhatsNewReleases.isEmpty {
             ToolbarItem(placement: .topBarTrailing) {
                 NavigationLink {
                     WhatsNewView(
-                        releases: whatsNewReleases,
+                        releases: cachedWhatsNewReleases,
                         mode: .manual,
                         onPresented: markWhatsNewOpened
                     )
@@ -388,17 +385,17 @@ struct DashboardView: View {
     }
 
     private func reloadWhatsNewBadge() {
-        guard currentWhatsNewRelease != nil else {
+        guard cachedCurrentRelease != nil else {
             showWhatsNewBadge = false
             return
         }
 
-        showWhatsNewBadge = whatsNewStore.shouldShowBadge(build: currentWhatsNewBuild)
+        showWhatsNewBadge = whatsNewStore.shouldShowBadge(build: cachedBuildNumber)
     }
 
     private func markWhatsNewOpened() {
-        guard !currentWhatsNewBuild.isEmpty else { return }
-        whatsNewStore.markOpened(build: currentWhatsNewBuild)
+        guard !cachedBuildNumber.isEmpty else { return }
+        whatsNewStore.markOpened(build: cachedBuildNumber)
         showWhatsNewBadge = false
     }
 
