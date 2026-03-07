@@ -12,8 +12,8 @@ struct TrainingVolume3DView: View {
     let workoutService: WorkoutQuerying?
 
     @State private var volumeData: [TrainingVolumePoint] = []
+    @State private var plottableData: [TrainingVolumePoint] = []
     @State private var weekRange: Int = 8
-    @State private var isLoaded = false
 
     private static let muscleCategories: [(name: String, muscles: [MuscleGroup])] = [
         ("Chest", [.chest]),
@@ -40,11 +40,8 @@ struct TrainingVolume3DView: View {
             volumeSummary
         }
         .padding()
-        .task {
+        .task(id: weekRange) {
             await loadData()
-        }
-        .onChange(of: weekRange) { _, _ in
-            Task { await loadData() }
         }
     }
 
@@ -128,10 +125,6 @@ struct TrainingVolume3DView: View {
         Array(sortedMuscleVolumes.prefix(4))
     }
 
-    private var plottableData: [TrainingVolumePoint] {
-        volumeData.filter(\.isPlottable)
-    }
-
     private var sortedMuscleVolumes: [(key: String, value: Double)] {
         Self.computeMuscleVolumes(from: plottableData)
     }
@@ -151,8 +144,7 @@ struct TrainingVolume3DView: View {
 
     private func loadData() async {
         guard let service = workoutService else {
-            volumeData = []
-            isLoaded = true
+            (volumeData, plottableData) = ([], [])
             return
         }
 
@@ -195,14 +187,14 @@ struct TrainingVolume3DView: View {
                 }
             }
 
-            volumeData = points
+            let filtered = points.filter(\.isPlottable)
+            (volumeData, plottableData) = (points, filtered)
         } catch {
             AppLogger.healthKit.error(
                 "Vision training volume fetch failed: \(error.localizedDescription)"
             )
-            volumeData = []
+            (volumeData, plottableData) = ([], [])
         }
-        isLoaded = true
     }
 }
 

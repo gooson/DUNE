@@ -15,8 +15,8 @@ struct ConditionScatter3DView: View {
     let sharedHealthDataService: SharedHealthDataService?
 
     @State private var dataPoints: [ConditionDataPoint] = []
+    @State private var plottableDataPoints: [ConditionDataPoint] = []
     @State private var selectedPeriod: ScatterPeriod = .thirtyDays
-    @State private var isLoaded = false
 
     var body: some View {
         VStack(spacing: 16) {
@@ -48,19 +48,12 @@ struct ConditionScatter3DView: View {
             legend
         }
         .padding()
-        .task {
+        .task(id: selectedPeriod) {
             await loadData()
-        }
-        .onChange(of: selectedPeriod) { _, _ in
-            Task { await loadData() }
         }
     }
 
     // MARK: - Components
-
-    private var plottableDataPoints: [ConditionDataPoint] {
-        dataPoints.filter(\.isPlottable)
-    }
 
     private var hrvDomain: ClosedRange<Double> {
         Self.paddedDomain(
@@ -138,8 +131,7 @@ struct ConditionScatter3DView: View {
 
     private func loadData() async {
         guard let service = sharedHealthDataService else {
-            dataPoints = []
-            isLoaded = true
+            (dataPoints, plottableDataPoints) = ([], [])
             return
         }
 
@@ -195,8 +187,8 @@ struct ConditionScatter3DView: View {
             ))
         }
 
-        dataPoints = points
-        isLoaded = true
+        let filtered = points.filter(\.isPlottable)
+        (dataPoints, plottableDataPoints) = (points, filtered)
     }
 
     // MARK: - Helpers

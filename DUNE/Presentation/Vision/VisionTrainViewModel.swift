@@ -1,5 +1,5 @@
+import Foundation
 import Observation
-import SwiftUI
 
 /// ViewModel for the visionOS Train tab.
 /// Fetches real workout data from HealthKit and computes per-muscle fatigue states.
@@ -64,16 +64,15 @@ final class VisionTrainViewModel {
             }
         }
 
-        let snapshotTask = Task { await fetchSnapshot() }
-        let workoutsTask = healthKitAvailable
-            ? Task { await fetchWorkouts() }
-            : nil
+        async let snapshotResult = fetchSnapshot()
+        async let workoutsResult = healthKitAvailable
+            ? fetchWorkouts()
+            : VisionFetchResult(value: [], message: nil)
 
-        let snapshotResult = await snapshotTask.value
-        let workoutsResult = await workoutsTask?.value ?? FetchResult(value: [], message: nil)
-        let snapshot = snapshotResult.value
+        let (snapResult, wktsResult) = await (snapshotResult, workoutsResult)
+        let snapshot = snapResult.value
 
-        let snapshots = workoutsResult.value.compactMap(SpatialTrainingAnalyzer.snapshot(from:))
+        let snapshots = wktsResult.value.compactMap(SpatialTrainingAnalyzer.snapshot(from:))
 
         let sleepModifier = computeSleepModifier(from: snapshot)
         let readinessModifier = computeReadinessModifier(from: snapshot)
@@ -118,7 +117,7 @@ final class VisionTrainViewModel {
             )
         }
 
-        let messages = [snapshotResult.message, workoutsResult.message].compactMap { $0 }
+        let messages = [snapResult.message, wktsResult.message].compactMap { $0 }
         message = messages.isEmpty ? nil : messages.joined(separator: "\n")
 
         let hasTrainingData = fatigueStates.contains { $0.lastTrainedDate != nil }
@@ -133,23 +132,23 @@ final class VisionTrainViewModel {
 
     // MARK: - Private
 
-    private func fetchSnapshot() async -> FetchResult<SharedHealthSnapshot?> {
+    private func fetchSnapshot() async -> VisionFetchResult<SharedHealthSnapshot?> {
         guard let sharedHealthDataService else {
-            return FetchResult(value: nil, message: nil)
+            return VisionFetchResult(value: nil, message: nil)
         }
         let snapshot = await sharedHealthDataService.fetchSnapshot()
-        return FetchResult(value: snapshot, message: nil)
+        return VisionFetchResult(value: snapshot, message: nil)
     }
 
-    private func fetchWorkouts() async -> FetchResult<[WorkoutSummary]> {
+    private func fetchWorkouts() async -> VisionFetchResult<[WorkoutSummary]> {
         do {
             let workouts = try await workoutService.fetchWorkouts(days: 14)
-            return FetchResult(value: workouts, message: nil)
+            return VisionFetchResult(value: workouts, message: nil)
         } catch {
             AppLogger.healthKit.error(
                 "Vision train workout fetch failed: \(error.localizedDescription)"
             )
-            return FetchResult(
+            return VisionFetchResult(
                 value: [],
                 message: String(localized: "Recent workouts could not be loaded.")
             )
@@ -165,19 +164,8 @@ final class VisionTrainViewModel {
     }
 
     private func computeReadinessModifier(from snapshot: SharedHealthSnapshot?) -> Double {
-        guard let score = snapshot?.conditionScore?.score else { return 1.0 }
+        guard let score = snapshot?.conditionScore?.score, score > 0 else { return 1.0 }
         // 70-point baseline: lower condition score = slower recovery
         return (Double(score) / 70.0).clamped(to: 0.6...1.2)
-    }
-}
-
-private struct FetchResult<Value: Sendable>: Sendable {
-    let value: Value
-    let message: String?
-}
-
-private extension Double {
-    func clamped(to range: ClosedRange<Double>) -> Double {
-        min(max(self, range.lowerBound), range.upperBound)
     }
 }

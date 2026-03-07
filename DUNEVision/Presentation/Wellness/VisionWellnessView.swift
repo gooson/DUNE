@@ -6,7 +6,6 @@ struct VisionWellnessView: View {
     let sharedHealthDataService: SharedHealthDataService?
 
     @State private var snapshot: SharedHealthSnapshot?
-    @State private var isLoaded = false
 
     var body: some View {
         ScrollView {
@@ -167,11 +166,7 @@ struct VisionWellnessView: View {
     // MARK: - Data
 
     private func loadData() async {
-        guard let service = sharedHealthDataService else {
-            isLoaded = true
-            return
-        }
+        guard let service = sharedHealthDataService else { return }
         snapshot = await service.fetchSnapshot()
-        isLoaded = true
     }
 }
