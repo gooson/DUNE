@@ -8,7 +8,7 @@ struct SuggestedExerciseRow: View {
     let onShowDetails: () -> Void
     let onStart: () -> Void
     let onToggleInterest: () -> Void
-    let onAlternativeSelected: (ExerciseDefinition) -> Void
+    let onShowAlternativeDetails: (ExerciseDefinition) -> Void
 
     @Environment(\.appTheme) private var theme
     @State private var showingAlternatives = false
@@ -100,7 +100,7 @@ struct SuggestedExerciseRow: View {
 
                     ForEach(exercise.alternatives) { alt in
                         Button {
-                            onAlternativeSelected(alt)
+                            onShowAlternativeDetails(alt)
                         } label: {
                             HStack(spacing: DS.Spacing.sm) {
                                 Image(systemName: "arrow.turn.down.right")
