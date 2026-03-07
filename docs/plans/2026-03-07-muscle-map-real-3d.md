@@ -61,9 +61,9 @@ related_brainstorms:
 | `docs/plans/2026-03-07-muscle-map-real-3d.md` | modify | SVG extrusion + visionOS spatial scope 반영 |
 | `DUNE/Presentation/Shared/Components/MuscleMap3DScene.swift` | new | 공용 scene core, SVG descriptor, mesh cache |
 | `DUNE/Presentation/Activity/MuscleMap/MuscleMap3DView.swift` | modify | iOS viewer를 shared SVG scene 기반으로 교체 |
-| `DUNE/DUNEVision/Presentation/Activity/VisionTrainView.swift` | new | visionOS Train surface |
-| `DUNE/DUNEVision/Presentation/Activity/VisionMuscleMapExperienceView.swift` | new | RealityView 기반 spatial muscle viewer |
-| `DUNE/DUNEVision/App/VisionContentView.swift` | modify | Train tab placeholder 제거, visionOS train view 연결 |
+| `DUNEVision/Presentation/Activity/VisionTrainView.swift` | new | visionOS Train surface |
+| `DUNEVision/Presentation/Activity/VisionMuscleMapExperienceView.swift` | new | RealityView 기반 spatial muscle viewer |
+| `DUNEVision/App/VisionContentView.swift` | modify | Train tab placeholder 제거, visionOS train view 연결 |
 | `DUNE/project.yml` | modify | visionOS target에 shared muscle-map files 포함 |
 | `DUNETests/MuscleMapDetailViewModelTests.swift` | modify | 3D state/geometry manifest 테스트 갱신 |
 | `docs/solutions/architecture/2026-03-07-muscle-map-svg-extrusion-pipeline.md` | new | 해결책 문서 |

@@ -5,7 +5,7 @@ date: 2026-03-07
 severity: important
 related_files:
   - DUNE/App/DUNEApp.swift
-  - DUNE/DUNEVision/App/DUNEVisionApp.swift
+  - DUNEVision/App/DUNEVisionApp.swift
   - DUNEWatch/DUNEWatchApp.swift
   - DUNE/Data/Persistence/Migration/PersistentStoreRecovery.swift
   - DUNE/Data/Weather/OpenMeteoService.swift
@@ -51,7 +51,7 @@ related_solutions: []
 | `DUNE/Data/Persistence/Migration/PersistentStoreRecovery.swift` | migration 시그니처 기반 store 삭제 판단 헬퍼 추가 | 비마이그레이션 오류에서 사용자 데이터 삭제 방지 |
 | `DUNE/App/DUNEApp.swift` | 초기화 실패 시 선택적 복구 경로 사용 | iOS 앱에서 무조건 store 삭제 제거 |
 | `DUNEWatch/DUNEWatchApp.swift` | 동일한 선택적 복구 경로 적용 | watch 앱도 동일 위험 제거 |
-| `DUNE/DUNEVision/App/DUNEVisionApp.swift` | 동일한 선택적 복구 경로 적용 | vision 앱도 동일 위험 제거 |
+| `DUNEVision/App/DUNEVisionApp.swift` | 동일한 선택적 복구 경로 적용 | vision 앱도 동일 위험 제거 |
 | `DUNE/Data/Weather/OpenMeteoRequestLocation.swift` | 위치 정규화 키와 로컬 date parser 추가 | 위치 기반 캐시 키 분리 + formatter 공유 제거 |
 | `DUNE/Data/Weather/OpenMeteoService.swift` | 위치별 캐시 엔트리, 로컬 parser 사용 | 잘못된 날씨 재사용 및 formatter 경쟁 상태 제거 |
 | `DUNE/Data/Weather/OpenMeteoAirQualityService.swift` | 위치별 캐시 엔트리, decoder/ parser 인스턴스화 | 잘못된 AQI 재사용 및 decoder 경쟁 상태 제거 |

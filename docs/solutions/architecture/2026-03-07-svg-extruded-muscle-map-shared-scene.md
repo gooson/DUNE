@@ -6,8 +6,8 @@ severity: important
 related_files:
   - DUNE/Presentation/Shared/Components/MuscleMap3DScene.swift
   - DUNE/Presentation/Activity/MuscleMap/MuscleMap3DView.swift
-  - DUNE/DUNEVision/Presentation/Activity/VisionMuscleMapExperienceView.swift
-  - DUNE/DUNEVision/Presentation/Activity/VisionTrainView.swift
+  - DUNEVision/Presentation/Activity/VisionMuscleMapExperienceView.swift
+  - DUNEVision/Presentation/Activity/VisionTrainView.swift
   - DUNE/project.yml
 related_solutions: []
 ---
@@ -38,8 +38,8 @@ related_solutions: []
 |------|--------|--------|
 | `DUNE/Presentation/Shared/Components/MuscleMap3DScene.swift` | SVG part descriptor, extrusion cache, shared scene, front/back plane handling 추가 | 2D muscle atlas를 실제 3D geometry로 승격하고 플랫폼 간 공유 |
 | `DUNE/Presentation/Activity/MuscleMap/MuscleMap3DView.swift` | 기존 procedural rig 제거, shared scene 래퍼로 교체 | iOS와 visionOS가 같은 geometry/rendering 로직 사용 |
-| `DUNE/DUNEVision/Presentation/Activity/VisionMuscleMapExperienceView.swift` | RealityView 기반 spatial muscle map 추가 | spatial tap, orbit, zoom 포함 Vision Pro용 인터랙션 제공 |
-| `DUNE/DUNEVision/Presentation/Activity/VisionTrainView.swift` | Train 탭 placeholder를 muscle map experience로 교체 | visionOS에서 실제 3D 근육맵 진입점 제공 |
+| `DUNEVision/Presentation/Activity/VisionMuscleMapExperienceView.swift` | RealityView 기반 spatial muscle map 추가 | spatial tap, orbit, zoom 포함 Vision Pro용 인터랙션 제공 |
+| `DUNEVision/Presentation/Activity/VisionTrainView.swift` | Train 탭 placeholder를 muscle map experience로 교체 | visionOS에서 실제 3D 근육맵 진입점 제공 |
 | `DUNE/project.yml` | visionOS target에 shared muscle map sources 추가 | shared scene/geometry를 visionOS 빌드에 포함 |
 | `DUNETests/MuscleMapDetailViewModelTests.swift` | procedural rig 테스트를 SVG geometry coverage 테스트로 교체 | 새 자산 파이프라인의 coverage와 front/back mapping 검증 |
 | `DUNETests/Helpers/URLProtocolStub.swift` 외 2개 테스트 | Swift 6 동시성 안전한 테스트 헬퍼로 정리 | 전체 `DUNETests` 빌드 회복 |
