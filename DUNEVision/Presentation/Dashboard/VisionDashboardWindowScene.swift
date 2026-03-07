@@ -308,7 +308,7 @@ struct VisionDashboardWindowScene: View {
     ) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(verbatim: title)
-                .font(.caption)
+                .font(.callout)
                 .foregroundStyle(.secondary)
 
             Text(verbatim: value)

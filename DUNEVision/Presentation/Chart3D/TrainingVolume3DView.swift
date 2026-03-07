@@ -113,9 +113,9 @@ struct TrainingVolume3DView: View {
             ForEach(topMuscleVolumes, id: \.key) { entry in
                 VStack(spacing: 4) {
                     Text(entry.key)
-                        .font(.caption.bold())
+                        .font(.callout.bold())
                     Text("\(Int(entry.value)) sets")
-                        .font(.caption2)
+                        .font(.callout)
                         .foregroundStyle(.secondary)
                 }
             }

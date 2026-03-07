@@ -132,9 +132,9 @@ struct VisionMuscleMapExperienceView: View {
                         } label: {
                             HStack(spacing: 8) {
                                 Image(systemName: muscle.iconName)
-                                    .font(.caption)
+                                    .font(.callout)
                                 Text(muscle.displayName)
-                                    .font(.caption.weight(.medium))
+                                    .font(.callout.weight(.medium))
                             }
                             .padding(.horizontal, 12)
                             .padding(.vertical, 10)
@@ -197,7 +197,7 @@ struct VisionMuscleMapExperienceView: View {
     private func metricValue(title: LocalizedStringKey, value: String) -> some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(title)
-                .font(.caption)
+                .font(.callout)
                 .foregroundStyle(.secondary)
             Text(value)
                 .font(.headline.weight(.semibold))

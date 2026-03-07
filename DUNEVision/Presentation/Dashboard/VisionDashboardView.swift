@@ -197,7 +197,7 @@ struct VisionDashboardView: View {
                     Text(unit)
                 }
             }
-            .font(.caption)
+            .font(.callout)
             .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity)

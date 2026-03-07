@@ -187,16 +187,16 @@ struct VisionVolumetricExperienceView: View {
                         VStack(alignment: .leading, spacing: 6) {
                             HStack(spacing: 8) {
                                 Image(systemName: muscleLoad.muscle.iconName)
-                                    .font(.caption)
+                                    .font(.callout)
                                 Text(muscleLoad.muscle.displayName)
-                                    .font(.caption.weight(.semibold))
+                                    .font(.callout.weight(.semibold))
                             }
 
                             Text(muscleLoad.loadLabel)
                                 .font(.headline)
 
                             Text(muscleLoad.recoveryLabel)
-                                .font(.caption2)
+                                .font(.callout)
                                 .foregroundStyle(.secondary)
                         }
                         .padding(14)
