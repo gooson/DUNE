@@ -144,7 +144,9 @@ func routineMetaLabel(
     globalRestSeconds: TimeInterval
 ) -> String {
     let count = entries.count
-    let base = String(localized: "\(count) exercises")
+    let base = count == 1
+        ? String(localized: "\(count) exercise")
+        : String(localized: "\(count) exercises")
     guard !entries.isEmpty else { return base }
 
     let profiles = entries.map { templateEntryProfile(for: $0, exerciseLibraryByID: exerciseLibraryByID) }
