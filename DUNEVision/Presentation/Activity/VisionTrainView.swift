@@ -16,6 +16,7 @@ struct VisionTrainView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
                 heroCard
+                VisionExerciseFormGuideView()
                 VisionMuscleMapExperienceView(
                     fatigueStates: fatigueStates,
                     initialMuscle: .back

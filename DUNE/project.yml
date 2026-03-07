@@ -313,9 +313,11 @@ targets:
         excludes:
           - "Models/TemplateWorkoutConfig.swift"
           - "Models/WatchConnectivityModels.swift"
-          - "Protocols/ExerciseLibraryQuerying.swift"
           - "UseCases/HealthDataAggregator.swift"
           - "UseCases/WorkoutRecommendationService.swift"
+      - path: Data/ExerciseLibraryService.swift
+      - path: Data/ExerciseDescriptions.swift
+      - path: Data/Resources/exercises.json
       # Shared persistence stores
       - path: Data/Persistence/NotificationSettingsStore.swift
       - path: Data/Persistence/NotificationThrottleStore.swift
@@ -335,7 +337,9 @@ targets:
       - path: Presentation/Shared/Components/MuscleBodyShape.swift
       - path: Presentation/Shared/Components/MuscleMapData.swift
       - path: Presentation/Shared/Components/MuscleMap3DScene.swift
+      - path: Presentation/Shared/Extensions/Equipment+View.swift
       - path: Presentation/Shared/Extensions/ExerciseRecord+WeeklyVolume.swift
+      - path: Presentation/Shared/Extensions/MuscleGroup+View.swift
       - path: Presentation/Immersive/VisionImmersiveExperienceViewModel.swift
       - path: Presentation/Vision
       - path: ../Shared/Resources/Localizable.xcstrings
