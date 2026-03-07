@@ -2,12 +2,6 @@ import Foundation
 import WidgetKit
 
 struct WidgetScoreProvider: TimelineProvider {
-    private static let decoder: JSONDecoder = {
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .secondsSince1970
-        return decoder
-    }()
-
     func placeholder(in context: Context) -> WellnessDashboardEntry {
         .placeholder
     }
@@ -37,10 +31,7 @@ struct WidgetScoreProvider: TimelineProvider {
     }
 
     private func loadCurrentEntry() -> WellnessDashboardEntry {
-        guard let defaults = WidgetScoreData.sharedDefaults(),
-              let jsonData = defaults.data(forKey: WidgetScoreData.userDefaultsKey),
-              let data = try? Self.decoder.decode(WidgetScoreData.self, from: jsonData)
-        else {
+        guard let data = WidgetScoreData.loadSharedData() else {
             return WellnessDashboardEntry(
                 date: .now,
                 conditionScore: nil, conditionStatusRaw: nil, conditionMessage: nil,

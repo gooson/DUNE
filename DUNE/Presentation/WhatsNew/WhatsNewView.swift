@@ -13,35 +13,34 @@ struct WhatsNewView: View {
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
-        List {
-            ForEach(releases) { release in
-                Section {
-                    ForEach(release.features) { feature in
-                        NavigationLink {
-                            WhatsNewFeatureDetailView(
-                                release: release,
-                                feature: feature,
-                                mode: mode
-                            )
-                        } label: {
-                            WhatsNewFeatureRow(feature: feature)
+        ScrollView {
+            LazyVStack(alignment: .leading, spacing: DS.Spacing.xl) {
+                ForEach(releases) { release in
+                    VStack(alignment: .leading, spacing: DS.Spacing.lg) {
+                        releaseHeader(release: release)
+
+                        VStack(spacing: DS.Spacing.md) {
+                            ForEach(release.features) { feature in
+                                NavigationLink {
+                                    WhatsNewFeatureDetailView(
+                                        release: release,
+                                        feature: feature,
+                                        mode: mode
+                                    )
+                                } label: {
+                                    WhatsNewFeatureRow(feature: feature)
+                                }
+                                .buttonStyle(.plain)
+                                .accessibilityIdentifier("whatsnew-row-\(feature.id)")
+                            }
                         }
-                        .accessibilityIdentifier("whatsnew-row-\(feature.id)")
-                        .listRowInsets(EdgeInsets(
-                            top: DS.Spacing.sm,
-                            leading: DS.Spacing.lg,
-                            bottom: DS.Spacing.sm,
-                            trailing: DS.Spacing.lg
-                        ))
-                        .listRowBackground(Color.clear)
+                        .padding(.horizontal, DS.Spacing.lg)
                     }
-                } header: {
-                    releaseHeader(release: release)
                 }
             }
+            .padding(.vertical, DS.Spacing.md)
         }
-        .listStyle(.plain)
-        .scrollContentBackground(.hidden)
+        .scrollIndicators(.hidden)
         .background {
             switch mode {
             case .automatic:

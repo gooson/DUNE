@@ -2,7 +2,7 @@ import SwiftUI
 
 struct CloudSyncConsentView: View {
     @AppStorage("hasShownCloudSyncConsent") private var hasShownConsent = false
-    @AppStorage("isCloudSyncEnabled") private var isCloudSyncEnabled = false
+    @AppStorage(CloudSyncPreferenceStore.storageKey) private var isCloudSyncEnabled = false
     @Binding var isPresented: Bool
 
     var body: some View {
@@ -46,9 +46,7 @@ struct CloudSyncConsentView: View {
 
             VStack(spacing: 12) {
                 Button {
-                    isCloudSyncEnabled = true
-                    hasShownConsent = true
-                    isPresented = false
+                    updateCloudSyncPreference(true)
                 } label: {
                     Text("Enable iCloud Sync")
                         .font(.headline)
@@ -59,9 +57,7 @@ struct CloudSyncConsentView: View {
                 .accessibilityIdentifier("cloud-sync-consent-enable-button")
 
                 Button {
-                    isCloudSyncEnabled = false
-                    hasShownConsent = true
-                    isPresented = false
+                    updateCloudSyncPreference(false)
                 } label: {
                     Text("Keep Local Only")
                         .font(.subheadline)
@@ -76,6 +72,13 @@ struct CloudSyncConsentView: View {
         .background { SheetWaveBackground() }
         .interactiveDismissDisabled()
         .accessibilityIdentifier("cloud-sync-consent-view")
+    }
+
+    private func updateCloudSyncPreference(_ isEnabled: Bool) {
+        CloudSyncPreferenceStore.setEnabled(isEnabled)
+        isCloudSyncEnabled = isEnabled
+        hasShownConsent = true
+        isPresented = false
     }
 }
 

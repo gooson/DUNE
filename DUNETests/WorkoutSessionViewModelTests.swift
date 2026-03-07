@@ -9,7 +9,8 @@ struct WorkoutSessionViewModelTests {
     private func makeExercise(
         inputType: ExerciseInputType = .setsRepsWeight,
         metValue: Double = 6.0,
-        cardioSecondaryUnit: CardioSecondaryUnit? = nil
+        cardioSecondaryUnit: CardioSecondaryUnit? = nil,
+        equipment: Equipment = .barbell
     ) -> ExerciseDefinition {
         ExerciseDefinition(
             id: "test-bench-press",
@@ -19,7 +20,7 @@ struct WorkoutSessionViewModelTests {
             inputType: inputType,
             primaryMuscles: [.chest],
             secondaryMuscles: [.triceps, .shoulders],
-            equipment: .barbell,
+            equipment: equipment,
             metValue: metValue,
             cardioSecondaryUnit: cardioSecondaryUnit
         )
@@ -209,7 +210,7 @@ struct WorkoutSessionViewModelTests {
 
     @Test("applyProgressiveOverloadForNextSet caps jump to 10 percent for light weights")
     func progressiveOverloadCapsLargeJump() {
-        let exercise = makeExercise()
+        let exercise = makeExercise(equipment: .dumbbell)
         let vm = WorkoutSessionViewModel(exercise: exercise, defaultSetCount: 2)
         vm.sets[0].weight = "10"
         vm.sets[0].reps = "12"

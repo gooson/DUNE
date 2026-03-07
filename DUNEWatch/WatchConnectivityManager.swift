@@ -14,10 +14,24 @@ enum SyncStatus: Equatable {
 
 /// Pure helpers for watch exercise-library sync state/request policy.
 enum WatchLibrarySyncRequestPolicy {
+    enum RequestKind {
+        case exerciseLibrary
+        case workoutTemplates
+    }
+
     static let minimumInterval: TimeInterval = 8
 
     static func statusWhenLibraryMissing(isReachable: Bool) -> SyncStatus {
         isReachable ? .syncing : .notConnected
+    }
+
+    static func shouldUseInteractiveMessage(for requestKind: RequestKind) -> Bool {
+        switch requestKind {
+        case .exerciseLibrary:
+            true
+        case .workoutTemplates:
+            false
+        }
     }
 
     static func shouldRequest(
@@ -178,24 +192,12 @@ final class WatchConnectivityManager: NSObject {
 
     /// Notify iPhone that a workout has started on Watch.
     func sendWorkoutStarted(templateName: String) {
-        guard WCSession.default.isReachable else { return }
-        let message: [String: Any] = ["workoutStarted": templateName]
-        WCSession.default.sendMessage(
-            message,
-            replyHandler: nil,
-            errorHandler: Self.makeWCErrorHandler("Failed to send workoutStarted")
-        )
+        updatePhoneWorkoutLifecycleContext(isActive: true, templateName: templateName)
     }
 
     /// Notify iPhone that a workout has ended on Watch.
     func sendWorkoutEnded() {
-        guard WCSession.default.isReachable else { return }
-        let message: [String: Any] = ["workoutEnded": true]
-        WCSession.default.sendMessage(
-            message,
-            replyHandler: nil,
-            errorHandler: Self.makeWCErrorHandler("Failed to send workoutEnded")
-        )
+        updatePhoneWorkoutLifecycleContext(isActive: false, templateName: nil)
     }
 
     /// Send completed set data back to iPhone
@@ -239,6 +241,27 @@ final class WatchConnectivityManager: NSObject {
             )
         } catch {
             Self.logger.error("Failed to encode workout: \(error.localizedDescription, privacy: .public)")
+        }
+    }
+
+    private func updatePhoneWorkoutLifecycleContext(isActive: Bool, templateName: String?) {
+        guard WCSession.isSupported() else { return }
+        let session = WCSession.default
+        guard session.activationState == .activated else { return }
+
+        var context = session.applicationContext
+        context["watchWorkoutActive"] = isActive
+
+        if let templateName, !templateName.isEmpty {
+            context["watchWorkoutTemplateName"] = templateName
+        } else {
+            context.removeValue(forKey: "watchWorkoutTemplateName")
+        }
+
+        do {
+            try session.updateApplicationContext(context)
+        } catch {
+            Self.logger.error("Failed to update watch workout lifecycle context: \(error.localizedDescription, privacy: .public)")
         }
     }
 }
@@ -484,7 +507,8 @@ extension WatchConnectivityManager {
         let session = WCSession.default
         var requested = false
 
-        if session.isReachable {
+        if session.isReachable,
+           WatchLibrarySyncRequestPolicy.shouldUseInteractiveMessage(for: .exerciseLibrary) {
             session.sendMessage(
                 payload,
                 replyHandler: nil,
@@ -518,14 +542,6 @@ extension WatchConnectivityManager {
 
         let payload: [String: Any] = ["requestWorkoutTemplateSync": true]
         let session = WCSession.default
-
-        if session.isReachable {
-            session.sendMessage(
-                payload,
-                replyHandler: nil,
-                errorHandler: Self.makeWCErrorHandler("Failed to request workout template sync")
-            )
-        }
 
         if session.activationState == .activated {
             session.transferUserInfo(payload)

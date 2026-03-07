@@ -153,7 +153,9 @@ struct DUNEApp: App {
             UserDefaults.standard.set(forcedTheme.rawValue, forKey: AppTheme.storageKey)
             _selectedTheme = AppStorage(wrappedValue: forcedTheme, AppTheme.storageKey)
         }
-        let cloudSyncEnabled = UserDefaults.standard.bool(forKey: "isCloudSyncEnabled")
+        let cloudSyncEnabled = Self.isRunningXCTest
+            ? false
+            : CloudSyncPreferenceStore.resolvedValue()
         let config = ModelConfiguration(
             isStoredInMemoryOnly: Self.shouldResetUITestState,
             cloudKitDatabase: (cloudSyncEnabled && !Self.isRunningXCTest) ? .automatic : .none

@@ -1,6 +1,6 @@
 ---
 tags: [corrections, active, project-specific]
-date: 2026-03-07
+date: 2026-03-08
 category: general
 status: approved
 ---
@@ -53,12 +53,28 @@ status: approved
 
 - **launch permission 완료 플래그는 요청 전에 영구 저장 금지**: cross-launch persisted state와 same-launch attempt state를 분리하고, system request가 정상 반환된 뒤에만 completion 저장 (#201)
 - **secondary CloudKit consumer도 `isCloudSyncEnabled` 우회 금지**: watch/vision/mac mirror reader가 별도 `ModelContainer`를 만들더라도 iOS sync opt-in 계약을 그대로 재사용 (#205)
+- **XCTest host app init에서 iCloud KVS 조회 금지**: `App.init`/container bootstrap이 `NSUbiquitousKeyValueStore` 같은 외부 sync 상태를 만지면 CI에서 test start 전 launch가 멈출 수 있으므로 `isRunningXCTest`로 우회하고 local-only bootstrap으로 시작 (#206)
 
 ### UI 표시 규칙
 
 - **탭 이름/네비게이션 타이틀은 영어 고정**: `AppSection.title` + `englishNavigationTitle(_:)` 사용 (#190)
 - **Watch 사용자 라벨 하드코딩 금지**: 캐러셀/퀵스타트/운동시작 라벨은 `String(localized:)` 경유 (#191)
 - **Watch confirmationDialog `.destructive` 테마 tint 대비 실기기 검증** (#192)
+- **`navigationDestination(item:)` 재트리거는 nil trampoline 금지**: 같은 frame에 `destination = nil` 후 다시 값 대입하지 말고 request token 기반 `Identifiable`로 단일 write 처리 (#208)
+- **`ImageRenderer` export/share 경로는 explicit size 필수**: offscreen SwiftUI 렌더링에서 intrinsic height가 0으로 풀릴 수 있으므로 `sizeThatFits`로 먼저 측정하고 `frame` + `proposedSize`를 함께 고정 (#209)
+- **알림 보상 상세는 탭 전환보다 root push 우선**: `activityPersonalRecords` 같은 reward route는 `selectedSection`를 바꾸지 말고 root `NavigationStack` 위로 push해서 현재 화면 컨텍스트를 유지 (#210)
+- **SF Symbol literal 변경 시 `UIImage(systemName:)` 해상도 테스트 추가**: `iconName` 문자열은 컴파일 타임 검증이 없으므로 공용 enum/icon mapping 변경 때 실제 system symbol set에서 resolve되는지 unit test로 고정 (#211)
+- **중복 가능 label 배열에 `ForEach(id: \\.self)` 금지**: 요일 이니셜처럼 표시값이 반복될 수 있는 collection은 `Identifiable` wrapper나 index-based stable ID를 써서 SwiftUI child identity를 분리 (#212)
+- **summary/detail metric은 데이터 소스 parity 필수**: Activity card가 manual+HealthKit merged input으로 계산한 값을 detail이 local SwiftData만으로 다시 계산하면 불일치가 나므로, 동일 metric은 동일 merge contract 또는 동등한 history fetch를 사용 (#213)
+- **context menu 액션이 host row를 바꾸면 deferred execution 사용**: `Archive`/`Skip`처럼 menu 선택 직후 row state, sheet, navigation을 바꾸는 액션은 `Task.yield()` 등으로 dismissal 이후 실행해 `UIContextMenuInteraction updateVisibleMenuWithBlock` warning을 피한다 (#214)
+- **정적 announcement sheet는 `List`보다 `ScrollView + LazyVStack` 우선**: launch 시점 `What's New` 같은 read-only surface에서 `List`는 simulator에서 본문이 통째로 비는 간헐 렌더링 이슈를 만들 수 있으므로 section chrome/편집이 필요 없으면 stack 기반 컨테이너를 쓴다 (#215)
+- **watch crown input sheet는 `ScrollView` 위에 직접 올리지 않는다**: `digitalCrownRotation`이 필요한 watchOS sheet는 단일 `VStack` focus host에 붙이고 `@FocusState`로 진입 시 포커스를 주어 `Crown Sequencer ... without a view property` warning을 피한다 (#216)
+- **watch custom card button은 full-width hit area를 명시하고, auto sheet crown focus는 한 프레임 defer한다**: `.buttonStyle(.plain)` 카드 버튼은 `frame(maxWidth: .infinity)`와 `contentShape`를 같이 쓰고, 자동 표시되는 watch sheet의 `digitalCrownRotation` focus는 `Task.yield()` 뒤에 활성화해 조기 dismiss를 피한다 (#217)
+- **background WatchConnectivity 요청은 `transferUserInfo` 우선**: workout template sync처럼 즉시 응답이 필요 없는 watch->phone 요청은 `sendMessage`를 섞지 말고 `transferUserInfo`만 사용해 paired-device session 접근 오류 로그를 피한다 (#218)
+- **App Group 단일 JSON blob은 file storage 우선**: widget shared data처럼 한 덩어리 Codable payload를 공유할 때는 `UserDefaults(suiteName:)` 대신 App Group container file을 써서 simulator CFPreferences noise와 정적 suite access를 피한다 (#219)
+- **storage backend 교체 시 legacy read/migration 경로를 남긴다**: App Group `UserDefaults` -> file storage 같은 저장소 전환은 새 경로만 읽으면 업그레이드 직후 기존 데이터가 사라질 수 있으므로, file miss 시 legacy payload를 읽어 새 저장소로 즉시 승격하는 one-time migration을 포함한다 (#223)
+- **cross-device opt-in seed는 positive intent만 동기화한다**: iCloud/KVS 초기 seed는 "명시적 활성화(true)"만 cloud에 올리고 default/implicit false는 퍼뜨리지 않아, 오래된 로컬 기본값이 다른 기기의 활성 상태를 덮지 않게 한다 (#224)
+- **root push 라우터와 tab 라우터를 섞을 때 non-push 요청은 root path를 먼저 비운다**: 전역 `NavigationStack` 위에 overlay push를 쓰는 알림 라우팅은 다른 탭/허브로 전환하기 전에 기존 root path를 clear해서, 이전 push 화면이 새 route를 가리지 않게 한다 (#225)
 - **화면 숫자 표기는 `formattedWithSeparator` 경유** (#97)
 - **`changeFractionDigits` 단일 소스: `HealthMetric+View`** (#98)
 - **`HealthMetric.Category` 추가 시 10+ 파일 수정 체크리스트** (#94)
@@ -70,6 +86,7 @@ status: approved
 
 - **workflow paths에 `scripts/**` 대신 개별 스크립트 경로 지정** (#186)
 - **새 UI 테스트 파일은 `BaseUITestCase` 상속** (#187)
+- **locale/raw normalization 테스트는 영문 literal/legacy alias 기대 금지**: watch/helper/unit tests는 `String(localized:)` 결과 또는 canonical enum `rawValue`를 기준으로 검증 (#207)
 - **`/ship` 머지 전략은 `--merge` 기본** (#54)
 - **`/run`에서 `/ship` 호출 전 Pre-Ship 게이트 강제** (#196)
 - **`.claude/settings.local.json`은 기본적으로 `{}` 유지** (#203)
@@ -93,3 +110,6 @@ status: approved
 - **Cross-VM static 프로퍼티 참조 금지 -> 중립 enum** (#73)
 - **UserDefaults: bundle prefix + garbage collection** (#75-76)
 - **`personalizedPopular(limit:)`에 실제 필요 수량 전달** (#174)
+- **카드 내부 단일 아이콘 설정 이동은 `NavigationLink` 대신 명시적 버튼 라우팅 우선**: `List`/card 안의 inline `NavigationLink`는 row-style disclosure를 끌어와 레이아웃 폭을 먹고 localized summary title을 비정상 줄바꿈시킬 수 있으므로, 작은 설정 아이콘은 `destination` state를 여는 plain button으로 처리한다 (#220)
+- **밝은/반투명 카드의 본문 제목은 decorative theme text 금지**: 추천운동 카드처럼 light material surface 위의 핵심 제목은 `theme.sandColor` 같은 장식용 theme text가 아니라 `.primary` 또는 surface-aware semantic text를 써서 Sakura 같은 밝은 테마에서도 대비를 유지한다 (#221)
+- **numeric input dismiss는 keyboard accessory toolbar보다 inset bar 우선**: SwiftUI `ToolbarItemGroup(placement: .keyboard)`는 iOS simulator/runtime에서 placeholder keyboard constraint warning을 유발할 수 있으므로, numberPad/decimalPad dismiss는 `safeAreaInset(edge: .bottom)` 기반 dismiss bar로 우선 구현한다 (#222)

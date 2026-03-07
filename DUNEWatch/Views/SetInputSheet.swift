@@ -13,6 +13,7 @@ struct SetInputSheet: View {
 
     @State private var lastHapticDate: Date = .distantPast
     @State private var showPreviousSets = false
+    @FocusState private var isWeightCrownFocused: Bool
 
     var body: some View {
         if showPreviousSets {
@@ -25,19 +26,19 @@ struct SetInputSheet: View {
                     }
                 }
         } else {
-            ScrollView {
-                VStack(spacing: DS.Spacing.lg) {
-                    // Weight — large display + crown + ±2.5 buttons
-                    weightSection
+            VStack(spacing: DS.Spacing.lg) {
+                // Weight — large display + crown + ±2.5 buttons
+                weightSection
 
-                    Divider()
+                Divider()
 
-                    // Reps — inline ± row
-                    repsSection
-                }
-                .padding(.horizontal, DS.Spacing.md)
+                // Reps — inline ± row
+                repsSection
             }
-            .focusable()
+            .padding(.horizontal, DS.Spacing.md)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            .focusable(true)
+            .focused($isWeightCrownFocused)
             .digitalCrownRotation($weight, from: 0, through: 500, by: 2.5, sensitivity: .medium)
             .toolbar {
                 if !previousSets.isEmpty {
@@ -67,10 +68,14 @@ struct SetInputSheet: View {
                 }
             }
             .onAppear {
+                isWeightCrownFocused = true
                 reps = WatchSetInputPolicy.resolvedInitialReps(
                     lastSetReps: reps,
                     entryDefaultReps: WatchSetInputPolicy.defaultReps
                 )
+            }
+            .onDisappear {
+                isWeightCrownFocused = false
             }
         }
     }

@@ -1,6 +1,28 @@
 import SwiftUI
 import SwiftData
 
+struct NotificationActivityDestination: Identifiable, Hashable {
+    let destination: ActivityDetailDestination
+    let requestID: Int
+
+    var id: String {
+        switch destination {
+        case .muscleMap:
+            "muscle-map-\(requestID)"
+        case .personalRecords:
+            "personal-records-\(requestID)"
+        case .consistency:
+            "consistency-\(requestID)"
+        case .exerciseMix:
+            "exercise-mix-\(requestID)"
+        case .trainingReadiness:
+            "training-readiness-\(requestID)"
+        case .weeklyStats:
+            "weekly-stats-\(requestID)"
+        }
+    }
+}
+
 /// Activity tab — Hero-first layout.
 /// Layout: Hero → Muscle Map → Weekly Stats → Search+Suggestion+Templates → Volume → Workouts → PRs → Consistency → Frequency.
 struct ActivityView: View {
@@ -43,27 +65,6 @@ struct ActivityView: View {
         let count: Int
         let newestID: UUID?
         let newestDate: Date?
-    }
-
-    private struct NotificationActivityDestination: Identifiable, Hashable {
-        let destination: ActivityDetailDestination
-
-        var id: String {
-            switch destination {
-            case .muscleMap:
-                "muscle-map"
-            case .personalRecords:
-                "personal-records"
-            case .consistency:
-                "consistency"
-            case .exerciseMix:
-                "exercise-mix"
-            case .trainingReadiness:
-                "training-readiness"
-            case .weeklyStats:
-                "weekly-stats"
-            }
-        }
     }
 
     private var isRegular: Bool { sizeClass == .regular }
@@ -546,8 +547,10 @@ struct ActivityView: View {
     private func handleExternalPersonalRecordsRoute() async {
         guard notificationPersonalRecordsSignal > 0 else { return }
 
-        notificationActivityDestination = nil
-        notificationActivityDestination = NotificationActivityDestination(destination: .personalRecords)
+        notificationActivityDestination = NotificationActivityDestination(
+            destination: .personalRecords,
+            requestID: notificationPersonalRecordsSignal
+        )
     }
 
     private var recentExerciseIDs: [String] {

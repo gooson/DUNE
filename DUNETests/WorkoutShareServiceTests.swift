@@ -111,6 +111,8 @@ struct WorkoutShareServiceTests {
         let data = WorkoutShareService.buildShareData(from: input)
         let image = WorkoutShareService.renderShareImage(data: data, weightUnit: .kg)
         #expect(image != nil)
+        #expect(image?.size.width ?? 0 > 0)
+        #expect(image?.size.height ?? 0 > 0)
     }
 
     @Test("renderShareImage respects weight unit (lb)")
@@ -125,6 +127,34 @@ struct WorkoutShareServiceTests {
         let image = WorkoutShareService.renderShareImage(data: data, weightUnit: .lb)
         // Just verify it produces an image — content validation would require pixel inspection
         #expect(image != nil)
+        #expect(image?.size.height ?? 0 > 0)
+    }
+
+    @Test("measuredRenderSize returns positive height for empty sets")
+    func measuredRenderSizeEmptySets() {
+        let input = makeInput(completedSets: [])
+        let data = WorkoutShareService.buildShareData(from: input)
+
+        let size = WorkoutShareService.measuredRenderSize(data: data, weightUnit: .kg)
+
+        #expect(size.width == WorkoutShareService.renderWidth)
+        #expect(size.height > 0)
+    }
+
+    @Test("measuredRenderSize grows for more content")
+    func measuredRenderSizeGrowsForMoreContent() {
+        let minimal = WorkoutShareService.buildShareData(from: makeInput(completedSets: []))
+        let populated = WorkoutShareService.buildShareData(from: makeInput(completedSets: [
+            ExerciseRecordShareInput.SetInput(setNumber: 1, weight: 60, reps: 10, duration: nil, distance: nil, setType: .working),
+            ExerciseRecordShareInput.SetInput(setNumber: 2, weight: 70, reps: 8, duration: nil, distance: nil, setType: .working),
+            ExerciseRecordShareInput.SetInput(setNumber: 3, weight: 80, reps: 6, duration: nil, distance: nil, setType: .failure)
+        ]))
+
+        let minimalSize = WorkoutShareService.measuredRenderSize(data: minimal, weightUnit: .kg)
+        let populatedSize = WorkoutShareService.measuredRenderSize(data: populated, weightUnit: .kg)
+
+        #expect(minimalSize.height > 0)
+        #expect(populatedSize.height > minimalSize.height)
     }
 
     // MARK: - Helpers
