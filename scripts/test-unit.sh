@@ -20,7 +20,7 @@ WATCH_SCHEME="DUNEWatchTests"
 WATCH_SIM_NAME="${DUNE_WATCH_SIM_NAME:-Apple Watch Series 11 (46mm)}"
 WATCH_SIM_OS="${DUNE_WATCH_SIM_OS:-26.2}"
 WATCH_DESTINATION="${DAILVE_WATCH_DESTINATION:-platform=watchOS Simulator,name=${WATCH_SIM_NAME},OS=${WATCH_SIM_OS}}"
-DERIVED_DATA_DIR=".deriveddata"
+DERIVED_DATA_DIR="${DAILVE_UNIT_TEST_DERIVED_DATA_DIR:-.deriveddata/unit-tests}"
 LOG_DIR=".xcodebuild"
 LOG_FILE="$LOG_DIR/unit-test.log"
 REGENERATE=1
@@ -221,14 +221,14 @@ run_suite() {
     if [[ "$test_exit" -ne 0 ]]; then
         echo ""
         echo "${suite_name} failed. Summary:"
-        grep -n -E "TEST (SUCCEEDED|FAILED)|error:|failed|Executed" "$log_file" | tail -n 120 || true
+        grep -a -n -E "TEST (SUCCEEDED|FAILED)|error:|failed|Executed" "$log_file" | tail -n 120 || true
         echo ""
         echo "Full log: $log_file"
         exit "$test_exit"
     fi
 
     echo "${suite_name} passed."
-    grep -n -E "TEST (SUCCEEDED|FAILED)|Executed" "$log_file" | tail -n 20 || true
+    grep -a -n -E "TEST (SUCCEEDED|FAILED)|Executed" "$log_file" | tail -n 20 || true
 }
 
 if [[ "$MODE" == "ios" || "$MODE" == "all" ]]; then
