@@ -226,10 +226,17 @@ struct ContentView: View {
     }
 
     private func clearAllNavPaths() {
-        todayNavPath = NavigationPath()
-        trainNavPath = NavigationPath()
-        wellnessNavPath = NavigationPath()
-        lifeNavPath = NavigationPath()
+        if !todayNavPath.isEmpty { todayNavPath = NavigationPath() }
+        if !trainNavPath.isEmpty { trainNavPath = NavigationPath() }
+        if !wellnessNavPath.isEmpty { wellnessNavPath = NavigationPath() }
+        if !lifeNavPath.isEmpty { lifeNavPath = NavigationPath() }
+    }
+
+    private func clearNavPathsExcept(_ section: AppSection) {
+        if section != .today && !todayNavPath.isEmpty { todayNavPath = NavigationPath() }
+        if section != .train && !trainNavPath.isEmpty { trainNavPath = NavigationPath() }
+        if section != .wellness && !wellnessNavPath.isEmpty { wellnessNavPath = NavigationPath() }
+        if section != .life && !lifeNavPath.isEmpty { lifeNavPath = NavigationPath() }
     }
 
     private func setNavPath(_ path: NavigationPath, for section: AppSection) {
@@ -253,7 +260,7 @@ struct ContentView: View {
 
         switch plan {
         case .push:
-            clearAllNavPaths()
+            clearNavPathsExcept(selectedSection)
             let destinations = NotificationPresentationPlanner.rootPath(for: plan)
             var path = NavigationPath()
             for destination in destinations {
