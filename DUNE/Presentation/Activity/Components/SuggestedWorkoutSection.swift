@@ -1,18 +1,62 @@
 import SwiftUI
+import SwiftData
 
-/// Standalone suggested workout section, extracted from MuscleRecoveryMapView.
+/// Suggested workout section with integrated exercise search and template strip.
 struct SuggestedWorkoutSection: View {
     let suggestion: WorkoutSuggestion?
     let recommendationContext: WorkoutRecommendationContext
     let availableEquipment: [Equipment]
+    let library: ExerciseLibraryQuerying
+    let recentExerciseIDs: [String]
+    let popularExerciseIDs: [String]
     let onStartExercise: (ExerciseDefinition) -> Void
+    let onStartTemplate: (WorkoutTemplate) -> Void
     let onContextChanged: (WorkoutRecommendationContext) -> Void
     let isEquipmentAvailable: (Equipment) -> Bool
     let onSetEquipmentAvailability: (Equipment, Bool) -> Void
     let isExerciseExcluded: (String) -> Bool
     let onSetExerciseExcluded: (Bool, String) -> Void
+    let onBrowseAll: () -> Void
 
+    @Environment(\.appTheme) private var theme
     @State private var showingEquipmentSheet = false
+    @State private var searchText = ""
+
+    @Query(sort: \CustomExercise.createdAt, order: .reverse) private var customExercises: [CustomExercise]
+    @Query(sort: \WorkoutTemplate.updatedAt, order: .reverse) private var templates: [WorkoutTemplate]
+
+    private var trimmedSearchText: String {
+        searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    private var customDefinitions: [ExerciseDefinition] {
+        customExercises.map { $0.toDefinition() }
+    }
+
+    private var filteredExercises: [ExerciseDefinition] {
+        let definitions: [ExerciseDefinition]
+        if trimmedSearchText.isEmpty {
+            definitions = customDefinitions + library.allExercises()
+        } else {
+            let customResults = customDefinitions.filter {
+                QuickStartSupport.matchesSearchQuery(trimmedSearchText, in: $0)
+            }
+            definitions = customResults + QuickStartSupport.mergedSearchResults(
+                for: trimmedSearchText,
+                library: library
+            )
+        }
+
+        let sorted = QuickStartSupport.sortQuickStartExercises(
+            QuickStartSupport.uniqueByID(definitions),
+            priorityIDs: popularExerciseIDs + recentExerciseIDs
+        )
+        return QuickStartSupport.uniqueByCanonical(sorted)
+    }
+
+    private var isSearching: Bool {
+        !trimmedSearchText.isEmpty
+    }
 
     private var columns: [GridItem] {
         [
@@ -23,16 +67,33 @@ struct SuggestedWorkoutSection: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            recommendationControlsCard
+            searchField
 
-            if let suggestion {
-                if suggestion.isRestDay {
-                    restDayContent(suggestion: suggestion)
-                } else {
-                    workoutContent(suggestion: suggestion)
-                }
+            if isSearching {
+                searchResultsSection
             } else {
-                noSuggestionContent
+                recommendationControlsCard
+
+                if let suggestion {
+                    if suggestion.isRestDay {
+                        restDayContent(suggestion: suggestion)
+                    } else {
+                        workoutContent(suggestion: suggestion)
+                    }
+                } else {
+                    noSuggestionContent
+                }
+
+                if !templates.isEmpty {
+                    templateStrip
+                }
+
+                Button("All Exercises") {
+                    onBrowseAll()
+                }
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(DS.Color.activity)
+                .buttonStyle(.plain)
             }
         }
         .sheet(isPresented: $showingEquipmentSheet) {
@@ -41,6 +102,75 @@ struct SuggestedWorkoutSection: View {
                 isEquipmentAvailable: isEquipmentAvailable,
                 onSetEquipmentAvailability: onSetEquipmentAvailability
             )
+        }
+    }
+
+    // MARK: - Search
+
+    private var searchField: some View {
+        HStack(spacing: DS.Spacing.sm) {
+            Image(systemName: "magnifyingglass")
+                .foregroundStyle(DS.Color.textSecondary)
+
+            TextField("Search exercises", text: $searchText)
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
+                .submitLabel(.search)
+                .accessibilityIdentifier("activity-exercise-search")
+
+            if !searchText.isEmpty {
+                Button {
+                    searchText = ""
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundStyle(.tertiary)
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .font(.subheadline)
+        .padding(.horizontal, DS.Spacing.md)
+        .padding(.vertical, DS.Spacing.sm)
+        .background {
+            RoundedRectangle(cornerRadius: DS.Radius.md)
+                .fill(.ultraThinMaterial)
+                .overlay(
+                    RoundedRectangle(cornerRadius: DS.Radius.md)
+                        .strokeBorder(Color.secondary.opacity(0.15), lineWidth: 0.75)
+                )
+        }
+    }
+
+    @ViewBuilder
+    private var searchResultsSection: some View {
+        if filteredExercises.isEmpty {
+            InlineCard {
+                HStack(spacing: DS.Spacing.xs) {
+                    Image(systemName: "figure.run")
+                        .foregroundStyle(.tertiary)
+                    Text("No Exercises")
+                        .font(.subheadline)
+                        .foregroundStyle(DS.Color.textSecondary)
+                    Spacer()
+                }
+            }
+        } else {
+            searchExerciseList(exercises: filteredExercises)
+        }
+    }
+
+    private func searchExerciseList(exercises: [ExerciseDefinition]) -> some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            sectionHeader("All Exercises")
+
+            ForEach(exercises) { exercise in
+                Button {
+                    onStartExercise(exercise)
+                } label: {
+                    exerciseRow(exercise)
+                }
+                .buttonStyle(.plain)
+            }
         }
     }
 
@@ -206,6 +336,121 @@ struct SuggestedWorkoutSection: View {
             )
             .font(.caption)
             .foregroundStyle(DS.Color.textSecondary)
+        }
+    }
+
+    // MARK: - Templates
+
+    private var templateStrip: some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            sectionHeader("Templates")
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: DS.Spacing.sm) {
+                    ForEach(templates) { template in
+                        Button {
+                            onStartTemplate(template)
+                        } label: {
+                            templateCard(template)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+                .padding(.vertical, 1)
+            }
+        }
+    }
+
+    // MARK: - Shared Components
+
+    private func sectionHeader(_ title: LocalizedStringKey) -> some View {
+        Text(title)
+            .font(.caption.weight(.semibold))
+            .foregroundStyle(DS.Color.textSecondary)
+    }
+
+    private func templateCard(_ template: WorkoutTemplate) -> some View {
+        InlineCard {
+            VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                HStack(spacing: DS.Spacing.xs) {
+                    Image(systemName: "list.clipboard.fill")
+                        .foregroundStyle(DS.Color.activity)
+                    Text(template.name)
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(theme.sandColor)
+                        .lineLimit(1)
+                    Spacer(minLength: 0)
+                    Image(systemName: "play.fill")
+                        .font(.caption.weight(.bold))
+                        .foregroundStyle(DS.Color.activity)
+                }
+
+                Text("\(template.exerciseEntries.count.formattedWithSeparator) exercises")
+                    .font(.caption)
+                    .foregroundStyle(DS.Color.textSecondary)
+
+                if !template.exerciseEntries.isEmpty {
+                    Text(template.exerciseEntries.map(\.exerciseName).prefix(2).joined(separator: ", "))
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
+                        .lineLimit(2)
+                        .multilineTextAlignment(.leading)
+                }
+            }
+            .frame(width: 220, alignment: .leading)
+        }
+    }
+
+    private func exerciseRow(_ exercise: ExerciseDefinition) -> some View {
+        InlineCard {
+            HStack(spacing: DS.Spacing.sm) {
+                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                    HStack(spacing: DS.Spacing.xs) {
+                        Text(exercise.localizedName)
+                            .font(.subheadline.weight(.medium))
+                            .foregroundStyle(theme.sandColor)
+                            .lineLimit(1)
+
+                        if exercise.id.hasPrefix("custom-") {
+                            Text("Custom")
+                                .font(.system(size: 9, weight: .medium))
+                                .padding(.horizontal, DS.Spacing.xs)
+                                .padding(.vertical, 1)
+                                .background(DS.Color.activity.opacity(0.15), in: Capsule())
+                                .foregroundStyle(DS.Color.activity)
+                        }
+                    }
+
+                    if exercise.localizedName != exercise.name {
+                        Text(exercise.name)
+                            .font(.caption2)
+                            .foregroundStyle(.tertiary)
+                            .lineLimit(1)
+                    }
+
+                    HStack(spacing: DS.Spacing.xs) {
+                        Text(exercise.primaryMuscles.map(\.displayName).joined(separator: ", "))
+                            .font(.caption)
+                            .foregroundStyle(DS.Color.textSecondary)
+                            .lineLimit(1)
+                        Text("\u{00B7}")
+                            .foregroundStyle(.tertiary)
+                        Label {
+                            Text(exercise.equipment.displayName)
+                        } icon: {
+                            exercise.equipment.svgIcon(size: 12)
+                        }
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
+                    }
+                }
+
+                Spacer(minLength: 0)
+
+                Image(systemName: "play.circle.fill")
+                    .font(.title3)
+                    .foregroundStyle(DS.Color.activity)
+            }
         }
     }
 }
