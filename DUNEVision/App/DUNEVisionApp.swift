@@ -53,6 +53,42 @@ struct DUNEVisionApp: App {
             .tint(.accentColor)
         }
 
+        WindowGroup(id: VisionDashboardWindowKind.condition.windowID) {
+            VisionDashboardWindowScene(
+                kind: .condition,
+                sharedHealthDataService: sharedHealthDataService
+            )
+            .tint(.accentColor)
+        }
+        .defaultSize(width: 760, height: 560)
+
+        WindowGroup(id: VisionDashboardWindowKind.activity.windowID) {
+            VisionDashboardWindowScene(
+                kind: .activity,
+                sharedHealthDataService: sharedHealthDataService
+            )
+            .tint(.accentColor)
+        }
+        .defaultSize(width: 860, height: 620)
+
+        WindowGroup(id: VisionDashboardWindowKind.sleep.windowID) {
+            VisionDashboardWindowScene(
+                kind: .sleep,
+                sharedHealthDataService: sharedHealthDataService
+            )
+            .tint(.accentColor)
+        }
+        .defaultSize(width: 760, height: 560)
+
+        WindowGroup(id: VisionDashboardWindowKind.body.windowID) {
+            VisionDashboardWindowScene(
+                kind: .body,
+                sharedHealthDataService: sharedHealthDataService
+            )
+            .tint(.accentColor)
+        }
+        .defaultSize(width: 760, height: 560)
+
         // 3D Charts window — opened via openWindow(id:)
         WindowGroup(id: "chart3d") {
             Chart3DContainerView(sharedHealthDataService: sharedHealthDataService)
