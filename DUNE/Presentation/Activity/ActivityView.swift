@@ -7,6 +7,7 @@ struct ActivityView: View {
     @State private var viewModel: ActivityViewModel
     @State private var showingExercisePicker = false
     @State private var selectedExercise: ExerciseDefinition?
+    @State private var templateConfig: TemplateWorkoutConfig?
     @State private var selectedMuscle: MuscleGroup?
     @State private var showingPRInfo = false
     @State private var showingConsistencyInfo = false
@@ -100,11 +101,29 @@ struct ActivityView: View {
                     .id(ScrollAnchor.top)
 
                 VStack(spacing: DS.Spacing.lg) {
+                    // ① Quick Start
+                    SectionGroup(title: "Quick Start", icon: "bolt.fill", iconColor: DS.Color.activity) {
+                        ActivityQuickStartSection(
+                            library: library,
+                            recentExerciseIDs: recentExerciseIDs,
+                            popularExerciseIDs: popularExerciseIDs,
+                            onStartExercise: { exercise in
+                                selectedExercise = exercise
+                            },
+                            onStartTemplate: { template in
+                                startFromTemplate(template)
+                            },
+                            onBrowseAll: {
+                                showingExercisePicker = true
+                            }
+                        )
+                    }
+
                     if viewModel.isLoading && viewModel.weeklyExerciseMinutes.isEmpty {
                         ProgressView()
                             .frame(maxWidth: .infinity, minHeight: 200)
                     } else {
-                        // ① Training Readiness Hero Card + Start Workout CTA
+                        // ② Training Readiness Hero Card + Start Workout CTA
                         VStack(spacing: DS.Spacing.sm) {
                             NavigationLink(value: ActivityDetailDestination.trainingReadiness) {
                                 TrainingReadinessHeroCard(
@@ -137,12 +156,12 @@ struct ActivityView: View {
                             }
                         }
 
-                        // ② Injury Warning Banner
+                        // ③ Injury Warning Banner
                         if !cachedInjuryConflicts.isEmpty {
                             InjuryWarningBanner(conflicts: cachedInjuryConflicts)
                         }
 
-                        // ③④ Recovery Map + Weekly Stats (side-by-side on iPad)
+                        // ④⑤ Recovery Map + Weekly Stats (side-by-side on iPad)
                         if isRegular {
                             HStack(alignment: .top, spacing: DS.Spacing.md) {
                                 recoveryMapSection(fillHeight: true)
@@ -153,7 +172,7 @@ struct ActivityView: View {
                             weeklyStatsSection()
                         }
 
-                        // ⑤⑥ Suggested Workout + Training Volume (side-by-side on iPad)
+                        // ⑥⑦ Suggested Workout + Training Volume (side-by-side on iPad)
                         if isRegular {
                             HStack(alignment: .top, spacing: DS.Spacing.md) {
                                 suggestedWorkoutSection(fillHeight: true)
@@ -164,7 +183,7 @@ struct ActivityView: View {
                             trainingVolumeSection()
                         }
 
-                        // ⑦ Recent Workouts
+                        // ⑧ Recent Workouts
                         SectionGroup(title: "Recent Workouts", icon: "clock.arrow.circlepath", iconColor: DS.Color.activity) {
                             ExerciseListSection(
                                 workouts: viewModel.recentWorkouts,
@@ -172,7 +191,7 @@ struct ActivityView: View {
                             )
                         }
 
-                        // ⑧ Personal Records
+                        // ⑨ Personal Records
                         SectionGroup(title: "Personal Records", icon: "trophy.fill",
                                      iconColor: DS.Color.activity,
                                      infoAction: { showingPRInfo = true }) {
@@ -193,7 +212,7 @@ struct ActivityView: View {
                             .buttonStyle(.plain)
                         }
 
-                        // ⑨ Consistency
+                        // ⑩ Consistency
                         SectionGroup(title: "Consistency", icon: "flame.fill",
                                      iconColor: DS.Color.activity,
                                      infoAction: { showingConsistencyInfo = true }) {
@@ -203,7 +222,7 @@ struct ActivityView: View {
                             .buttonStyle(.plain)
                         }
 
-                        // ⑩ Exercise Mix
+                        // ⑪ Exercise Mix
                         SectionGroup(title: "Exercise Mix", icon: "chart.bar.xaxis",
                                      iconColor: DS.Color.activity,
                                      infoAction: { showingExerciseMixInfo = true }) {
@@ -257,7 +276,8 @@ struct ActivityView: View {
                 library: library,
                 recentExerciseIDs: recentExerciseIDs,
                 popularExerciseIDs: popularExerciseIDs,
-                mode: .quickStart
+                mode: .quickStart,
+                onStartTemplate: startFromTemplate
             ) { exercise in
                 selectedExercise = exercise
             }
@@ -317,6 +337,9 @@ struct ActivityView: View {
             ExerciseStartView(exercise: exercise)
                 .interactiveDismissDisabled()
         }
+        .fullScreenCover(item: $templateConfig) { config in
+            TemplateWorkoutContainerView(config: config)
+        }
         // Keep heavy HealthKit reload tied to coordinator/manual refresh only.
         // SwiftData sync churn should update derived UI state without cancel/restart storms.
         .task(id: refreshSignal) {
@@ -353,6 +376,46 @@ struct ActivityView: View {
     }
 
     // MARK: - Extracted Sections
+
+    private func startFromTemplate(_ template: WorkoutTemplate) {
+        let entries = template.exerciseEntries
+        guard !entries.isEmpty else { return }
+
+        if entries.count == 1 {
+            if let definition = resolveExercise(from: entries[0]) {
+                selectedExercise = definition
+            }
+            return
+        }
+
+        let exercises = entries.compactMap { resolveExercise(from: $0) }
+        guard !exercises.isEmpty else { return }
+
+        templateConfig = TemplateWorkoutConfig(
+            templateName: template.name,
+            exercises: exercises,
+            templateEntries: entries
+        )
+    }
+
+    private func resolveExercise(from entry: TemplateEntry) -> ExerciseDefinition? {
+        if let definition = library.exercise(byID: entry.exerciseDefinitionID) {
+            return definition
+        } else if entry.exerciseDefinitionID.hasPrefix("custom-") {
+            return ExerciseDefinition(
+                id: entry.exerciseDefinitionID,
+                name: entry.exerciseName,
+                localizedName: entry.exerciseName,
+                category: .strength,
+                inputType: .setsRepsWeight,
+                primaryMuscles: [],
+                secondaryMuscles: [],
+                equipment: Equipment(rawValue: entry.equipment ?? "") ?? .bodyweight,
+                metValue: 5.0
+            )
+        }
+        return nil
+    }
 
     private func recoveryMapSection(fillHeight: Bool = false) -> some View {
         NavigationLink(value: ActivityDetailDestination.muscleMap) {
