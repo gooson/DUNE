@@ -18,6 +18,7 @@ struct BarChartView: View {
 
     @State private var selectedDate: Date?
     @State private var selectionGestureState = ChartSelectionGestureState()
+    @State private var activationTask: Task<Void, Never>?
 
     var body: some View {
         Chart {
@@ -171,14 +172,28 @@ struct BarChartView: View {
     private func selectionGesture(proxy: ChartProxy, plotFrame: CGRect) -> some Gesture {
         DragGesture(minimumDistance: 0, coordinateSpace: .local)
             .onChanged { value in
-                switch selectionGestureState.registerChange(
+                let update = selectionGestureState.registerChange(
                     at: value.time,
                     translation: value.translation,
                     currentScrollPosition: scrollPosition
-                ) {
+                )
+                switch update {
                 case .inactive:
+                    if selectionGestureState.phase == .pendingActivation, activationTask == nil {
+                        let location = value.location
+                        activationTask = ChartSelectionInteraction.makeActivationTask(
+                            location: location, proxy: proxy, plotFrame: plotFrame,
+                            activate: { selectionGestureState.forceActivate() },
+                            onActivated: { date, restoreScroll in
+                                if let restoreScroll { scrollPosition = restoreScroll }
+                                selectedDate = date
+                            }
+                        )
+                    }
                     return
                 case .activated(let restoreScrollPosition):
+                    activationTask?.cancel()
+                    activationTask = nil
                     if let restoreScrollPosition {
                         scrollPosition = restoreScrollPosition
                     }
@@ -196,6 +211,8 @@ struct BarChartView: View {
                 }
             }
             .onEnded { _ in
+                activationTask?.cancel()
+                activationTask = nil
                 selectionGestureState.reset()
                 selectedDate = nil
             }

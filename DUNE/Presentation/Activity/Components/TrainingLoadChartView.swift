@@ -12,6 +12,7 @@ struct TrainingLoadChartView: View {
     @State private var cachedMovingAverage: [ChartDataPoint] = []
     @State private var cachedWeekSummary: String?
     @State private var selectionGestureState = ChartSelectionGestureState()
+    @State private var activationTask: Task<Void, Never>?
 
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
@@ -194,13 +195,24 @@ struct TrainingLoadChartView: View {
     private func selectionGesture(proxy: ChartProxy, plotFrame: CGRect) -> some Gesture {
         DragGesture(minimumDistance: 0, coordinateSpace: .local)
             .onChanged { value in
-                switch selectionGestureState.registerChange(
+                let update = selectionGestureState.registerChange(
                     at: value.time,
                     translation: value.translation
-                ) {
+                )
+                switch update {
                 case .inactive:
+                    if selectionGestureState.phase == .pendingActivation, activationTask == nil {
+                        let location = value.location
+                        activationTask = ChartSelectionInteraction.makeActivationTask(
+                            location: location, proxy: proxy, plotFrame: plotFrame,
+                            activate: { selectionGestureState.forceActivate() },
+                            onActivated: { date, _ in selectedDate = date }
+                        )
+                    }
                     return
                 case .activated, .updating:
+                    activationTask?.cancel()
+                    activationTask = nil
                     selectedDate = ChartSelectionInteraction.resolvedDate(
                         at: value.location,
                         proxy: proxy,
@@ -209,6 +221,8 @@ struct TrainingLoadChartView: View {
                 }
             }
             .onEnded { _ in
+                activationTask?.cancel()
+                activationTask = nil
                 selectionGestureState.reset()
                 selectedDate = nil
             }

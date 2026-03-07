@@ -18,6 +18,7 @@ struct DotLineChartView: View {
     @State private var selectedDate: Date?
     @State private var internalScrollPosition: Date = .now
     @State private var selectionGestureState = ChartSelectionGestureState()
+    @State private var activationTask: Task<Void, Never>?
 
     enum Period: String, CaseIterable {
         case week = "7D"
@@ -214,14 +215,28 @@ struct DotLineChartView: View {
     private func selectionGesture(proxy: ChartProxy, plotFrame: CGRect) -> some Gesture {
         DragGesture(minimumDistance: 0, coordinateSpace: .local)
             .onChanged { value in
-                switch selectionGestureState.registerChange(
+                let update = selectionGestureState.registerChange(
                     at: value.time,
                     translation: value.translation,
                     currentScrollPosition: scrollPosition?.wrappedValue
-                ) {
+                )
+                switch update {
                 case .inactive:
+                    if selectionGestureState.phase == .pendingActivation, activationTask == nil {
+                        let location = value.location
+                        activationTask = ChartSelectionInteraction.makeActivationTask(
+                            location: location, proxy: proxy, plotFrame: plotFrame,
+                            activate: { selectionGestureState.forceActivate() },
+                            onActivated: { date, restoreScroll in
+                                if let restoreScroll { scrollPosition?.wrappedValue = restoreScroll }
+                                selectedDate = date
+                            }
+                        )
+                    }
                     return
                 case .activated(let restoreScrollPosition):
+                    activationTask?.cancel()
+                    activationTask = nil
                     if let restoreScrollPosition {
                         scrollPosition?.wrappedValue = restoreScrollPosition
                     }
@@ -239,6 +254,8 @@ struct DotLineChartView: View {
                 }
             }
             .onEnded { _ in
+                activationTask?.cancel()
+                activationTask = nil
                 selectionGestureState.reset()
                 selectedDate = nil
             }
