@@ -1,6 +1,7 @@
 import SwiftUI
 import SwiftData
 import HealthKit
+import TipKit
 import UserNotifications
 
 @main
@@ -8,13 +9,10 @@ struct DUNEApp: App {
     @AppStorage(AppTheme.storageKey) private var selectedTheme: AppTheme = .desertWarm
     @AppStorage("hasShownCloudSyncConsent") private var hasShownConsent = false
     @State private var showConsentSheet = false
-    @State private var showWhatsNewSheet = false
     @State private var isShowingLaunchSplash = !DUNEApp.isRunningXCTest
     @State private var isResolvingLaunchSplash = false
     @State private var hasCompletedPostSplashSetup = false
     @State private var hasSeededMockData = false
-    @State private var whatsNewReleases: [WhatsNewRelease] = []
-    @State private var activeWhatsNewVersion: String?
 
     let modelContainer: ModelContainer
     private let sharedHealthDataService: SharedHealthDataService
@@ -22,8 +20,6 @@ struct DUNEApp: App {
     private let observerManager: HealthKitObserverManager?
     private let notificationService: any NotificationService
     private let notificationCenterDelegate: AppNotificationCenterDelegate
-    private let whatsNewStore = WhatsNewStore.shared
-    private let whatsNewManager = WhatsNewManager.shared
     private static let minimumLaunchSplashDuration: Duration = .seconds(1)
     private static let launchSplashResolveDuration: Duration = .milliseconds(700)
 
@@ -135,6 +131,14 @@ struct DUNEApp: App {
         self.notificationService = notifService
         self.notificationCenterDelegate = AppNotificationCenterDelegate()
         UNUserNotificationCenter.current().delegate = notificationCenterDelegate
+        do {
+            try Tips.configure()
+            if Self.isRunningUITests {
+                Tips.hideAllTipsForTesting()
+            }
+        } catch {
+            AppLogger.ui.error("TipKit configuration failed: \(error.localizedDescription)")
+        }
 
         if healthKitAvailable {
             let hkStore = HKHealthStore()
@@ -209,10 +213,6 @@ struct DUNEApp: App {
             }
             .tint(selectedTheme.accentColor)
             .preferredColorScheme(Self.forcedUITestColorScheme)
-            .onChange(of: showConsentSheet) { oldValue, newValue in
-                guard oldValue, !newValue else { return }
-                presentWhatsNewIfNeeded()
-            }
         }
         .modelContainer(modelContainer)
     }
@@ -224,20 +224,6 @@ struct DUNEApp: App {
         )
         .sheet(isPresented: $showConsentSheet) {
             CloudSyncConsentView(isPresented: $showConsentSheet)
-        }
-        .fullScreenCover(isPresented: $showWhatsNewSheet, onDismiss: {
-            markActiveWhatsNewVersionAsPresentedIfNeeded()
-        }) {
-            NavigationStack {
-                if whatsNewReleases.isEmpty {
-                    Color.clear
-                } else {
-                    WhatsNewView(
-                        releases: whatsNewReleases,
-                        mode: .automatic
-                    )
-                }
-            }
         }
     }
 
@@ -264,8 +250,6 @@ struct DUNEApp: App {
 
         if !hasShownConsent && !Self.isRunningXCTest {
             showConsentSheet = true
-        } else {
-            presentWhatsNewIfNeeded()
         }
 
         // Skip WC activation during XCTest to reduce startup flakiness.
@@ -313,33 +297,6 @@ struct DUNEApp: App {
         guard !Task.isCancelled, isShowingLaunchSplash else { return }
         isShowingLaunchSplash = false
         isResolvingLaunchSplash = false
-    }
-
-    @MainActor
-    private func presentWhatsNewIfNeeded() {
-        guard !Self.isRunningXCTest,
-              !showConsentSheet,
-              !showWhatsNewSheet else {
-            return
-        }
-
-        let currentVersion = whatsNewManager.currentAppVersion()
-        guard !currentVersion.isEmpty,
-              let currentRelease = whatsNewManager.currentRelease(for: currentVersion),
-              whatsNewStore.shouldPresent(version: currentVersion) else {
-            return
-        }
-
-        whatsNewReleases = whatsNewManager.orderedReleases(preferredVersion: currentRelease.version)
-        activeWhatsNewVersion = currentRelease.version
-        showWhatsNewSheet = !whatsNewReleases.isEmpty
-    }
-
-    @MainActor
-    private func markActiveWhatsNewVersionAsPresentedIfNeeded() {
-        guard let version = activeWhatsNewVersion else { return }
-        activeWhatsNewVersion = nil
-        whatsNewStore.markPresented(version: version)
     }
 }
 

@@ -8,6 +8,10 @@ final class WhatsNewManager: Sendable {
         bundle.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
     }
 
+    func currentBuildNumber(bundle: Bundle = .main) -> String {
+        bundle.infoDictionary?["CFBundleVersion"] as? String ?? ""
+    }
+
     func orderedReleases(preferredVersion: String? = nil) -> [WhatsNewRelease] {
         let releases = releaseCatalog
         guard let preferredVersion,

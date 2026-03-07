@@ -42,12 +42,12 @@ final class DashboardSmokeTests: UITestBaseCase {
 
     func testNavigateToWhatsNew() throws {
         navigateToDashboard()
-        let whatsNewLink = app.descendants(matching: .any)[AXID.dashboardLinkWhatsNew].firstMatch
-        XCTAssertTrue(whatsNewLink.waitForExistence(timeout: 5), "What's New entry point should exist on Today")
-        whatsNewLink.tap()
+        let whatsNewButton = app.descendants(matching: .any)[AXID.dashboardToolbarWhatsNew].firstMatch
+        XCTAssertTrue(whatsNewButton.waitForExistence(timeout: 5), "What's New toolbar button should exist on Today")
+        whatsNewButton.tap()
 
         let screen = app.descendants(matching: .any)[AXID.whatsNewScreen].firstMatch
-        XCTAssertTrue(screen.waitForExistence(timeout: 5), "What's New screen should open from Today")
+        XCTAssertTrue(screen.waitForExistence(timeout: 5), "What's New screen should open from the Today toolbar")
     }
 
     func testNavigateToSettings() throws {

@@ -9,6 +9,7 @@ enum WhatsNewPresentationMode: Equatable {
 struct WhatsNewView: View {
     let releases: [WhatsNewRelease]
     let mode: WhatsNewPresentationMode
+    var onPresented: () -> Void = {}
 
     @Environment(\.dismiss) private var dismiss
 
@@ -52,6 +53,7 @@ struct WhatsNewView: View {
         }
         .navigationTitle("What's New")
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear(perform: onPresented)
         .toolbar {
             if mode == .automatic {
                 ToolbarItem(placement: .topBarTrailing) {
