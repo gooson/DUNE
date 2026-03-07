@@ -95,3 +95,5 @@ status: approved
 - **`personalizedPopular(limit:)`에 실제 필요 수량 전달** (#174)
 - **장시간 입력 화면에 scenePhase 드래프트 저장 필수** (#206)
 - **새 타겟에서 Domain 프로퍼티를 로컬 헬퍼로 재구현 금지 → 기존 displayName/iconName 사용** (#207)
+- **`guard` 이전에 파괴적 side effect(delete/clear) 배치 금지 → guard 통과 후 수행** (#208)
+- **`try?`로 에러를 삼킬 때 최소한 AppLogger로 기록** (#209)
