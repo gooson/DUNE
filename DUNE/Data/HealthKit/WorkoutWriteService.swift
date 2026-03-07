@@ -179,6 +179,11 @@ struct WorkoutWriteService: WorkoutWriting, Sendable {
             metadata["com.dune.workout.averageCadenceSPM"] = cadence
         }
 
+        metadata.merge(
+            HealthKitWorkoutTitle.metadata(exerciseName: input.exerciseName),
+            uniquingKeysWith: { _, new in new }
+        )
+
         if !metadata.isEmpty {
             try await builder.addMetadata(metadata)
         }

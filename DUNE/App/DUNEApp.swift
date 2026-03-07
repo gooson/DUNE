@@ -1,7 +1,6 @@
 import SwiftUI
 import SwiftData
 import HealthKit
-import TipKit
 import UserNotifications
 
 @main
@@ -151,14 +150,6 @@ struct DUNEApp: App {
         self.notificationService = notifService
         self.notificationCenterDelegate = AppNotificationCenterDelegate()
         UNUserNotificationCenter.current().delegate = notificationCenterDelegate
-        do {
-            try Tips.configure()
-            if Self.isRunningUITests {
-                Tips.hideAllTipsForTesting()
-            }
-        } catch {
-            AppLogger.ui.error("TipKit configuration failed: \(error.localizedDescription)")
-        }
 
         if healthKitAvailable {
             let hkStore = HKHealthStore()

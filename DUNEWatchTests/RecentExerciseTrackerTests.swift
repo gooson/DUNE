@@ -30,6 +30,9 @@ struct RecentExerciseTrackerTests {
                 exerciseID: " tempo-barbell-row-isometric-hold "
             ) == "barbell-row"
         )
+        #expect(RecentExerciseTracker.canonicalExerciseID(exerciseID: "running-intervals") == "running")
+        #expect(RecentExerciseTracker.canonicalExerciseID(exerciseID: "cycling-recovery") == "cycling")
+        #expect(RecentExerciseTracker.canonicalExerciseID(exerciseID: "yoga-recovery-flow") == "yoga")
         #expect(RecentExerciseTracker.canonicalExerciseID(exerciseID: "") == "")
     }
 

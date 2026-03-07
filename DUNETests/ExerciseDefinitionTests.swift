@@ -6,10 +6,16 @@ import Testing
 struct ExerciseDefinitionTests {
     let library = ExerciseLibraryService()
 
-    @Test("Library loads 500+ exercises")
-    func loadsAll() {
+    @Test("Library exposes canonical visible exercises")
+    func loadsCanonicalVisibleExercises() {
         let all = library.allExercises()
-        #expect(all.count >= 500)
+        #expect(all.count >= 250)
+        #expect(all.contains { $0.id == "running" })
+        #expect(!all.contains { $0.id == "running-intervals" })
+        #expect(!all.contains { $0.id == "running-endurance" })
+        #expect(!all.contains { $0.id == "running-recovery" })
+        #expect(all.contains { $0.id == "yoga" })
+        #expect(!all.contains { $0.id == "yoga-recovery-flow" })
     }
 
     @Test("Each exercise has a non-empty name")
@@ -59,6 +65,22 @@ struct ExerciseDefinitionTests {
         #expect(found == nil)
     }
 
+    @Test("Variant exercise lookup remains available by exact ID")
+    func variantLookupByID() {
+        let found = library.exercise(byID: "running-recovery")
+        #expect(found?.id == "running-recovery")
+        #expect(found?.name == "Running Recovery")
+    }
+
+    @Test("Representative lookup resolves variants to canonical visible exercise")
+    func representativeLookupUsesCanonicalExercise() {
+        let running = library.representativeExercise(byID: "running-recovery")
+        #expect(running?.id == "running")
+
+        let yoga = library.representativeExercise(byID: "yoga-recovery-flow")
+        #expect(yoga?.id == "yoga")
+    }
+
     @Test("Search finds exercises by name")
     func searchByName() {
         let results = library.search(query: "bench")
@@ -98,6 +120,20 @@ struct ExerciseDefinitionTests {
     func searchNoMatch() {
         let results = library.search(query: "zzzznonexistent")
         #expect(results.isEmpty)
+    }
+
+    @Test("Search collapses interval and recovery variants to canonical results")
+    func searchCollapsesVariants() {
+        let intervalResults = library.search(query: "interval")
+        #expect(intervalResults.contains { $0.id == "running" })
+        #expect(intervalResults.contains { $0.id == "cycling" })
+        #expect(!intervalResults.contains { $0.id == "running-intervals" })
+
+        let recoveryResults = library.search(query: "회복")
+        #expect(recoveryResults.contains { $0.id == "running" })
+        #expect(recoveryResults.contains { $0.id == "yoga" })
+        #expect(!recoveryResults.contains { $0.id == "running-recovery" })
+        #expect(!recoveryResults.contains { $0.id == "yoga-recovery-flow" })
     }
 
     @Test("Filter by muscle group returns results")

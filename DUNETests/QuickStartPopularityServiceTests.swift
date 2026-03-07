@@ -95,6 +95,9 @@ struct QuickStartPopularityServiceTests {
         #expect(QuickStartCanonicalService.canonicalExerciseID(for: "pec-deck-tempo") == "pec-deck")
         #expect(QuickStartCanonicalService.canonicalExerciseID(for: "tempo-leg-extension-machine") == "leg-extension-machine")
         #expect(QuickStartCanonicalService.canonicalExerciseID(for: "bench-press-paused") == "bench-press")
+        #expect(QuickStartCanonicalService.canonicalExerciseID(for: "running-intervals") == "running")
+        #expect(QuickStartCanonicalService.canonicalExerciseID(for: "cycling-recovery") == "cycling")
+        #expect(QuickStartCanonicalService.canonicalExerciseID(for: "yoga-recovery-flow") == "yoga")
     }
 
     @Test("Canonical service trims localized name variants")
@@ -102,5 +105,8 @@ struct QuickStartPopularityServiceTests {
         #expect(QuickStartCanonicalService.canonicalExerciseName(for: "펙덱 플라이 템포") == "펙덱 플라이")
         #expect(QuickStartCanonicalService.canonicalExerciseName(for: "Pec Deck Endurance Sets") == "pec deck")
         #expect(QuickStartCanonicalService.canonicalExerciseName(for: "벤치프레스 일시정지") == "벤치프레스")
+        #expect(QuickStartCanonicalService.canonicalExerciseName(for: "Running Intervals") == "running")
+        #expect(QuickStartCanonicalService.canonicalExerciseName(for: "러닝 회복") == "러닝")
+        #expect(QuickStartCanonicalService.canonicalExerciseName(for: "Yoga Recovery Flow") == "yoga")
     }
 }

@@ -95,6 +95,9 @@ targets:
         group: DUNE
       - path: Resources
         group: DUNE
+      # Shared Localization
+      - path: ../Shared/Resources/Localizable.xcstrings
+        group: Shared
       # Shared Colors
       - path: ../Shared/Resources/Colors.xcassets
         group: Shared/Resources
@@ -213,8 +216,8 @@ targets:
     platform: iOS
     sources:
       - path: ../DUNEWidget
-      - path: Resources/Localizable.xcstrings
-        group: Shared/Resources
+      - path: ../Shared/Resources/Localizable.xcstrings
+        group: Shared
       # Shared Colors
       - path: ../Shared/Resources/Colors.xcassets
         group: Shared/Resources
@@ -304,12 +307,9 @@ targets:
     sources:
       - path: ../DUNEVision
       - path: App/AppLogger.swift
-        group: DUNEVision/App
       - path: App/AppSection.swift
-        group: DUNEVision/App
       # Shared Domain layer (100% reusable)
       - path: Domain
-        group: DUNEVision/Domain
         excludes:
           - "Models/TemplateWorkoutConfig.swift"
           - "Models/WatchConnectivityModels.swift"
@@ -318,19 +318,14 @@ targets:
           - "UseCases/WorkoutRecommendationService.swift"
       # Shared persistence stores
       - path: Data/Persistence/NotificationSettingsStore.swift
-        group: DUNEVision/Data/Persistence
       - path: Data/Persistence/NotificationThrottleStore.swift
-        group: DUNEVision/Data/Persistence
       - path: Data/Persistence/PersonalRecordStore.swift
-        group: DUNEVision/Data/Persistence
       # Shared HealthKit services
       - path: Data/HealthKit
-        group: DUNEVision/Data/HealthKit
         excludes:
           - "CardioSessionManager.swift"
       # Shared services
       - path: Data/Services
-        group: DUNEVision/Data/Services
         excludes:
           - "CloudMirroredSharedHealthDataService.swift"
           - "HealthSnapshotMirrorStore.swift"
@@ -338,17 +333,14 @@ targets:
           - "NotificationServiceImpl.swift"
           - "WidgetDataWriter.swift"
       - path: Presentation/Shared/Components/MuscleBodyShape.swift
-        group: DUNEVision/Presentation/Shared/Components
       - path: Presentation/Shared/Components/MuscleMapData.swift
-        group: DUNEVision/Presentation/Shared/Components
       - path: Presentation/Shared/Components/MuscleMap3DScene.swift
-        group: DUNEVision/Presentation/Shared/Components
       - path: Presentation/Shared/Extensions/ExerciseRecord+WeeklyVolume.swift
         group: DUNEVision/Presentation/Shared/Extensions
       - path: Presentation/Immersive/VisionImmersiveExperienceViewModel.swift
         group: DUNEVision/Presentation/Immersive
-      - path: Resources/Localizable.xcstrings
-        group: Resources
+      - path: ../Shared/Resources/Localizable.xcstrings
+        group: Shared
       # Shared Colors
       - path: ../Shared/Resources/Colors.xcassets
         group: Shared/Resources
@@ -391,6 +383,9 @@ targets:
     platform: visionOS
     sources:
       - path: ../DUNEVisionWidgets
+      # Shared Colors
+      - path: ../Shared/Resources/Colors.xcassets
+        group: Shared/Resources
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.raftel.dailve.vision.widgets

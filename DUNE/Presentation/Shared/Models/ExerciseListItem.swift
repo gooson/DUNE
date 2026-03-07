@@ -76,7 +76,7 @@ struct ExerciseListItem: Identifiable {
     }
 
     /// Resolved display name with localization priority:
-    /// 1. localizedType (exercise library Korean name) — manual records only
+    /// 1. localizedType (exercise library/custom HealthKit title)
     /// 2. activityType.displayName (WorkoutActivityType Korean name) — unless `.other`
     /// 3. type (raw string) — final fallback
     var displayName: String {
@@ -142,6 +142,7 @@ struct ExerciseListItem: Identifiable {
         ExerciseListItem(
             id: workout.id,
             type: workout.type,
+            localizedType: workout.localizedTitle,
             activityType: workout.activityType,
             duration: workout.duration,
             calories: workout.calories,

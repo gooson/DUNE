@@ -1,5 +1,28 @@
 import HealthKit
 
+enum HealthKitWorkoutTitle {
+    static let metadataKey = "com.dune.workout.exerciseName"
+
+    static func metadata(exerciseName: String) -> [String: Any] {
+        let trimmed = exerciseName.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return [:] }
+        return [metadataKey: String(trimmed.prefix(100))]
+    }
+
+    static func resolveTitle(
+        metadata: [String: Any]?,
+        activityType: WorkoutActivityType
+    ) -> String {
+        guard let metadata,
+              let rawTitle = metadata[metadataKey] as? String else {
+            return activityType.typeName
+        }
+
+        let trimmed = rawTitle.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmed.isEmpty ? activityType.typeName : trimmed
+    }
+}
+
 extension WorkoutActivityType {
 
     /// Maps from HKWorkoutActivityType to the domain enum.
@@ -181,4 +204,3 @@ extension WorkoutActivityType {
         }
     }
 }
-

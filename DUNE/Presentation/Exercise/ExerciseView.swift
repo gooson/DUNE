@@ -213,7 +213,7 @@ struct ExerciseView: View {
                 healthKitWorkoutToDelete = nil
             }
         } message: { workout in
-            Text("\(workout.type) on \(workout.date.formatted(date: .abbreviated, time: .omitted)) will be permanently deleted from all your devices.")
+            Text("\(workout.localizedTitle) on \(workout.date.formatted(date: .abbreviated, time: .omitted)) will be permanently deleted from all your devices.")
         }
         .confirmDeleteRecord($recordToDelete, context: modelContext)
     }
@@ -284,7 +284,7 @@ struct ExerciseView: View {
     }
 
     private func rebuildRecordIndex() {
-        recordsByID = Dictionary(uniqueKeysWithValues: manualRecords.map { ($0.id, $0) })
+        recordsByID = Dictionary(manualRecords.map { ($0.id, $0) }, uniquingKeysWith: { _, latest in latest })
     }
 
     private func findRecord(for item: ExerciseListItem) -> ExerciseRecord? {
