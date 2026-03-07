@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct VisionImmersiveExperienceView: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.dismissImmersiveSpace) private var dismissImmersiveSpace
     @State private var viewModel: VisionImmersiveExperienceViewModel
     @State private var breathPhase = 0.18
@@ -38,6 +39,9 @@ struct VisionImmersiveExperienceView: View {
         .task {
             await viewModel.loadIfNeeded()
             startAnimationsIfNeeded()
+        }
+        .onChange(of: reduceMotion) { _, _ in
+            startAnimationsIfNeeded(restartTimeline: true)
         }
         .onChange(of: viewModel.selectedMode) { _, _ in
             startAnimationsIfNeeded(restartTimeline: true)
@@ -346,6 +350,13 @@ struct VisionImmersiveExperienceView: View {
     }
 
     private func startAnimationsIfNeeded(restartTimeline: Bool = false) {
+        if reduceMotion {
+            hasStartedAnimations = false
+            breathPhase = 0.58
+            journeyProgress = activeSleepSegment?.startProgress ?? 0.0
+            return
+        }
+
         if !hasStartedAnimations {
             hasStartedAnimations = true
 
