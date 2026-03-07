@@ -1,5 +1,4 @@
 import SwiftUI
-import TipKit
 
 struct DashboardView: View {
     @State private var viewModel: DashboardViewModel
@@ -352,7 +351,6 @@ struct DashboardView: View {
                 } label: {
                     whatsNewToolbarIcon
                 }
-                .popoverTip(whatsNewToolbarTip, arrowEdge: .top)
                 .accessibilityLabel("What's New")
                 .accessibilityIdentifier("dashboard-toolbar-whatsnew")
             }
@@ -370,19 +368,6 @@ struct DashboardView: View {
             .accessibilityLabel("Settings")
             .accessibilityIdentifier("dashboard-toolbar-settings")
         }
-    }
-
-    private var whatsNewToolbarTip: WhatsNewToolbarTip? {
-        guard showWhatsNewBadge,
-              let currentRelease = currentWhatsNewRelease,
-              !currentWhatsNewBuild.isEmpty else {
-            return nil
-        }
-
-        return WhatsNewToolbarTip(
-            buildNumber: currentWhatsNewBuild,
-            bodyMessage: currentRelease.intro
-        )
     }
 
     private var whatsNewToolbarIcon: some View {
@@ -413,13 +398,8 @@ struct DashboardView: View {
 
     private func markWhatsNewOpened() {
         guard !currentWhatsNewBuild.isEmpty else { return }
-        let tip = whatsNewToolbarTip
         whatsNewStore.markOpened(build: currentWhatsNewBuild)
         showWhatsNewBadge = false
-
-        if let tip {
-            tip.invalidate(reason: .actionPerformed)
-        }
     }
 
     private var insightCardsSection: some View {
@@ -518,32 +498,6 @@ struct DashboardView: View {
     private func openSettings() {
         guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
         openURL(url)
-    }
-}
-
-private struct WhatsNewToolbarTip: Tip {
-    let buildNumber: String
-    let bodyMessage: String
-
-    var id: String {
-        "whats-new-toolbar-tip-\(buildNumber)"
-    }
-
-    var title: Text {
-        Text("What's New")
-    }
-
-    var message: Text? {
-        Text(bodyMessage)
-    }
-
-    var image: Image? {
-        Image(systemName: "sparkles")
-    }
-
-    var options: [any TipOption] {
-        Tips.IgnoresDisplayFrequency(true)
-        Tips.MaxDisplayCount(1)
     }
 }
 
