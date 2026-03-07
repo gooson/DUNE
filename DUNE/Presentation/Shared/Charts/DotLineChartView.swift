@@ -89,7 +89,8 @@ struct DotLineChartView: View {
                         .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
                 }
             }
-            .chartScrollableAxes(timePeriod != nil && selectionGestureState.allowsScroll ? .horizontal : [])
+            .chartScrollableAxes(timePeriod != nil ? .horizontal : [])
+            .scrollDisabled(!selectionGestureState.allowsScroll)
             .modifier(DotLineScrollModifier(
                 timePeriod: timePeriod,
                 scrollPosition: scrollPosition ?? $internalScrollPosition
@@ -226,6 +227,10 @@ struct DotLineChartView: View {
                     }
                     fallthrough
                 case .updating:
+                    if let restore = selectionGestureState.initialScrollPosition,
+                       scrollPosition?.wrappedValue != restore {
+                        scrollPosition?.wrappedValue = restore
+                    }
                     selectedDate = ChartSelectionInteraction.resolvedDate(
                         at: value.location,
                         proxy: proxy,
