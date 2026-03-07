@@ -37,6 +37,8 @@ struct TemplateEntry: Codable, Identifiable, Sendable {
         case defaultWeightKg
         case restDuration
         case equipment
+        case inputTypeRaw
+        case cardioSecondaryUnitRaw
     }
 
     var id: UUID = UUID()
@@ -50,6 +52,10 @@ struct TemplateEntry: Codable, Identifiable, Sendable {
     /// Equipment rawValue for icon display (nil for legacy entries before this field was added).
     /// WARNING: rawValue renames in Equipment enum silently break icon display for existing records.
     var equipment: String?
+    /// Persisted input type fallback for template rendering on watch when the exercise library is unavailable.
+    var inputTypeRaw: String?
+    /// Persisted cardio secondary unit fallback for template rendering on watch when the exercise library is unavailable.
+    var cardioSecondaryUnitRaw: String?
 
     init(
         exerciseDefinitionID: String,
@@ -58,7 +64,9 @@ struct TemplateEntry: Codable, Identifiable, Sendable {
         defaultReps: Int = 10,
         defaultWeightKg: Double? = nil,
         restDuration: TimeInterval? = nil,
-        equipment: String? = nil
+        equipment: String? = nil,
+        inputTypeRaw: String? = nil,
+        cardioSecondaryUnitRaw: String? = nil
     ) {
         self.id = UUID()
         self.exerciseDefinitionID = exerciseDefinitionID
@@ -76,5 +84,113 @@ struct TemplateEntry: Codable, Identifiable, Sendable {
             self.restDuration = nil
         }
         self.equipment = equipment
+        self.inputTypeRaw = TemplateExerciseProfile.normalizedInputTypeRaw(inputTypeRaw)
+        self.cardioSecondaryUnitRaw = cardioSecondaryUnitRaw
+    }
+
+    mutating func applyExerciseMetadata(from exercise: ExerciseDefinition) {
+        inputTypeRaw = exercise.inputType.rawValue
+        cardioSecondaryUnitRaw = exercise.cardioSecondaryUnit?.rawValue
+    }
+
+    mutating func normalizeStoredMetadata() {
+        inputTypeRaw = TemplateExerciseProfile.normalizedInputTypeRaw(inputTypeRaw)
+    }
+}
+
+enum TemplateExerciseProfile: Sendable, Equatable {
+    case strengthLike
+    case cardio(CardioSecondaryUnit?)
+    case unresolved
+
+    init(exercise: ExerciseDefinition?) {
+        self.init(
+            inputType: exercise?.inputType,
+            cardioSecondaryUnit: exercise?.cardioSecondaryUnit
+        )
+    }
+
+    init(inputType: ExerciseInputType?, cardioSecondaryUnit: CardioSecondaryUnit?) {
+        switch inputType {
+        case .durationDistance:
+            self = .cardio(cardioSecondaryUnit)
+        case .none:
+            self = .unresolved
+        default:
+            self = .strengthLike
+        }
+    }
+
+    init(inputTypeRaw: String?, cardioSecondaryUnitRaw: String?) {
+        self.init(
+            inputType: Self.normalizedInputTypeRaw(inputTypeRaw).flatMap(ExerciseInputType.init(rawValue:)),
+            cardioSecondaryUnit: cardioSecondaryUnitRaw.flatMap(CardioSecondaryUnit.init(rawValue:))
+        )
+    }
+
+    static func normalizedInputTypeRaw(_ inputTypeRaw: String?) -> String? {
+        switch inputTypeRaw {
+        case "weight_reps":
+            ExerciseInputType.setsRepsWeight.rawValue
+        case "bodyweight_reps":
+            ExerciseInputType.setsReps.rawValue
+        case "duration":
+            ExerciseInputType.durationDistance.rawValue
+        default:
+            inputTypeRaw
+        }
+    }
+
+    var showsStrengthDefaultsEditor: Bool {
+        switch self {
+        case .strengthLike, .unresolved:
+            true
+        case .cardio:
+            false
+        }
+    }
+
+    var primarySummaryLabel: String {
+        switch self {
+        case .strengthLike, .unresolved:
+            ""
+        case .cardio:
+            String(localized: "Duration")
+        }
+    }
+
+    var secondarySummaryLabel: String? {
+        switch self {
+        case .cardio(let unit):
+            switch unit {
+            case .floors:
+                String(localized: "Floors")
+            case .count:
+                String(localized: "Count")
+            case .timeOnly:
+                nil
+            case .km, .meters, .none:
+                String(localized: "Distance")
+            }
+        case .strengthLike, .unresolved:
+            nil
+        }
+    }
+}
+
+extension CardioSecondaryUnit {
+    var displayName: String {
+        switch self {
+        case .km:
+            String(localized: "Kilometers")
+        case .meters:
+            String(localized: "Meters")
+        case .floors:
+            String(localized: "Floors")
+        case .count:
+            String(localized: "Count")
+        case .timeOnly:
+            String(localized: "Time only")
+        }
     }
 }

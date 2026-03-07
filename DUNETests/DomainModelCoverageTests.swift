@@ -344,7 +344,8 @@ struct WatchConnectivityModelsTests {
             defaultReps: 8,
             defaultWeightKg: 80,
             restDuration: 90,
-            equipment: "barbell"
+            equipment: "barbell",
+            inputTypeRaw: ExerciseInputType.setsRepsWeight.rawValue
         )
     }
 
@@ -433,5 +434,6 @@ struct WatchConnectivityModelsTests {
         #expect(decoded.name == "Push Day")
         #expect(decoded.entries.count == 1)
         #expect(decoded.entries[0].exerciseName == "Bench Press")
+        #expect(decoded.entries[0].inputTypeRaw == ExerciseInputType.setsRepsWeight.rawValue)
     }
 }

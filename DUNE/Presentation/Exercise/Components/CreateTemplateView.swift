@@ -100,12 +100,7 @@ struct TemplateFormView: View {
                     recentExerciseIDs: [],
                     mode: .full
                 ) { exercise in
-                    let entry = TemplateEntry(
-                        exerciseDefinitionID: exercise.id,
-                        exerciseName: exercise.localizedName,
-                        equipment: exercise.equipment.rawValue
-                    )
-                    entries.append(entry)
+                    entries.append(TemplateExerciseResolver.defaultEntry(for: exercise))
                 }
             }
         }
@@ -114,11 +109,27 @@ struct TemplateFormView: View {
     // MARK: - Entry Row
 
     private func entryRow(entry: Binding<TemplateEntry>) -> some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+        let profile = TemplateExerciseResolver.profile(
+            for: entry.wrappedValue,
+            library: library,
+            customExercises: customExercises
+        )
+
+        return VStack(alignment: .leading, spacing: DS.Spacing.xs) {
             Text(entry.wrappedValue.exerciseName)
                 .font(.subheadline.weight(.medium))
 
-            // Sets / Reps row
+            if profile.showsStrengthDefaultsEditor {
+                strengthDefaultsEditor(entry: entry)
+            } else {
+                sessionDrivenSummary(profile: profile)
+            }
+        }
+        .padding(.vertical, DS.Spacing.xxs)
+    }
+
+    private func strengthDefaultsEditor(entry: Binding<TemplateEntry>) -> some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.xs) {
             HStack(spacing: DS.Spacing.md) {
                 HStack(spacing: DS.Spacing.xs) {
                     Text("Sets")
@@ -151,9 +162,7 @@ struct TemplateFormView: View {
                 }
             }
 
-            // Weight / Rest row
             HStack(spacing: DS.Spacing.md) {
-                // Weight input
                 HStack(spacing: DS.Spacing.xs) {
                     Text("Weight")
                         .font(.caption)
@@ -174,7 +183,6 @@ struct TemplateFormView: View {
 
                 Spacer()
 
-                // Rest duration picker
                 HStack(spacing: DS.Spacing.xs) {
                     Text("Rest")
                         .font(.caption)
@@ -192,7 +200,25 @@ struct TemplateFormView: View {
                 }
             }
         }
-        .padding(.vertical, DS.Spacing.xxs)
+    }
+
+    private func sessionDrivenSummary(profile: TemplateExerciseProfile) -> some View {
+        HStack(spacing: DS.Spacing.sm) {
+            Text(profile.primarySummaryLabel)
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(DS.Color.textSecondary)
+
+            if let secondary = profile.secondarySummaryLabel {
+                Text("\u{00B7}")
+                    .font(.caption)
+                    .foregroundStyle(.tertiary)
+                Text(secondary)
+                    .font(.caption)
+                    .foregroundStyle(.tertiary)
+            }
+
+            Spacer()
+        }
     }
 
     // MARK: - Helpers
@@ -230,7 +256,21 @@ struct TemplateFormView: View {
 
         // Clamp weight values (correction #3: user input range validation)
         let clampedEntries = entries.map { entry in
-            var clamped = entry
+            var clamped = TemplateExerciseResolver.entryWithResolvedMetadata(
+                from: entry,
+                library: library,
+                customExercises: customExercises
+            )
+            let profile = TemplateExerciseResolver.profile(
+                for: clamped,
+                library: library,
+                customExercises: customExercises
+            )
+            if case .cardio = profile {
+                clamped.defaultSets = 1
+                clamped.defaultWeightKg = nil
+                clamped.restDuration = nil
+            }
             if let weight = clamped.defaultWeightKg {
                 let trimmedWeight = min(max(weight, 0), 500)
                 clamped.defaultWeightKg = trimmedWeight > 0 ? trimmedWeight : nil

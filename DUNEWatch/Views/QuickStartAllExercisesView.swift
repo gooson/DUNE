@@ -111,8 +111,7 @@ struct QuickStartAllExercisesView: View {
     }
 
     private func exerciseRow(_ exercise: WatchExerciseInfo) -> some View {
-        let defaults = resolvedDefaults(for: exercise)
-        let subtitle = exerciseSubtitle(sets: exercise.defaultSets, reps: defaults.reps, weight: defaults.weight)
+        let subtitle = exerciseSubtitle(for: exercise)
         return NavigationLink(value: WatchRoute.workoutPreview(snapshotFromExercise(exercise))) {
             ExerciseTileView(exercise: exercise, subtitle: subtitle)
         }

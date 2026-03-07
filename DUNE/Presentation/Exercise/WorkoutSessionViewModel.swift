@@ -122,6 +122,30 @@ final class WorkoutSessionViewModel {
         }
     }
 
+    func applyTemplateDefaults(_ entry: TemplateEntry, weightUnit: WeightUnit = .kg) {
+        let profile = TemplateExerciseProfile(exercise: exercise)
+        guard profile.showsStrengthDefaultsEditor else {
+            templateRestDuration = nil
+            return
+        }
+
+        templateRestDuration = entry.restDuration
+
+        if let defaultWeightKg = entry.defaultWeightKg {
+            let displayWeight = weightUnit.fromKg(defaultWeightKg)
+            let weightString = displayWeight.formatted(.number.precision(.fractionLength(0...1)))
+            for index in sets.indices {
+                sets[index].weight = weightString
+            }
+        }
+
+        guard usesDefaultReps else { return }
+        let repsString = "\(entry.defaultReps)"
+        for index in sets.indices {
+            sets[index].reps = repsString
+        }
+    }
+
     // MARK: - Set Management
 
     func addSet(weightUnit: WeightUnit = .kg) {
