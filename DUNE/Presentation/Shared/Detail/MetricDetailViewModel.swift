@@ -186,6 +186,12 @@ final class MetricDetailViewModel {
         return (start: bufferRange.start, end: currentRange.end)
     }
 
+    /// The full scrollable date domain for charts with sparse data (weight, BMI, body fat, lean body mass).
+    var scrollDomain: ClosedRange<Date> {
+        let range = extendedRange
+        return range.start...range.end
+    }
+
     // MARK: - Private Reload Trigger
 
     private var scrollDebounceTask: Task<Void, Never>?
@@ -543,27 +549,49 @@ final class MetricDetailViewModel {
     }
 
     private func loadBodyFatData() async throws {
-        let samples = try await bodyService.fetchBodyFat(days: 90)
-        let raw = samples
+        let range = extendedRange
+
+        async let currentSamples = bodyService.fetchBodyFat(start: range.start, end: range.end)
+        let prevRange = HealthDataAggregator.previousPeriodRange(for: selectedPeriod, offset: 0)
+        async let prevSamples = bodyService.fetchBodyFat(start: prevRange.start, end: prevRange.end)
+
+        let current = try await currentSamples
+        let previous = try await prevSamples
+
+        let raw = current
             .map { ChartDataPoint(date: $0.date, value: $0.value) }
             .sorted { $0.date < $1.date }
         chartData = HealthDataAggregator.aggregateByAverage(
             raw, unit: selectedPeriod == .sixMonths || selectedPeriod == .year
                 ? selectedPeriod.aggregationUnit : .day
         )
-        summaryStats = HealthDataAggregator.computeSummary(from: raw.map(\.value))
+        summaryStats = HealthDataAggregator.computeSummary(
+            from: currentPeriodValues(),
+            previousPeriodValues: previous.map(\.value)
+        )
     }
 
     private func loadLeanBodyMassData() async throws {
-        let samples = try await bodyService.fetchLeanBodyMass(days: 90)
-        let raw = samples
+        let range = extendedRange
+
+        async let currentSamples = bodyService.fetchLeanBodyMass(start: range.start, end: range.end)
+        let prevRange = HealthDataAggregator.previousPeriodRange(for: selectedPeriod, offset: 0)
+        async let prevSamples = bodyService.fetchLeanBodyMass(start: prevRange.start, end: prevRange.end)
+
+        let current = try await currentSamples
+        let previous = try await prevSamples
+
+        let raw = current
             .map { ChartDataPoint(date: $0.date, value: $0.value) }
             .sorted { $0.date < $1.date }
         chartData = HealthDataAggregator.aggregateByAverage(
             raw, unit: selectedPeriod == .sixMonths || selectedPeriod == .year
                 ? selectedPeriod.aggregationUnit : .day
         )
-        summaryStats = HealthDataAggregator.computeSummary(from: raw.map(\.value))
+        summaryStats = HealthDataAggregator.computeSummary(
+            from: currentPeriodValues(),
+            previousPeriodValues: previous.map(\.value)
+        )
     }
 
     // MARK: - Helpers
