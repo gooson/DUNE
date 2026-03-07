@@ -69,6 +69,7 @@ status: approved
 - **context menu 액션이 host row를 바꾸면 deferred execution 사용**: `Archive`/`Skip`처럼 menu 선택 직후 row state, sheet, navigation을 바꾸는 액션은 `Task.yield()` 등으로 dismissal 이후 실행해 `UIContextMenuInteraction updateVisibleMenuWithBlock` warning을 피한다 (#214)
 - **정적 announcement sheet는 `List`보다 `ScrollView + LazyVStack` 우선**: launch 시점 `What's New` 같은 read-only surface에서 `List`는 simulator에서 본문이 통째로 비는 간헐 렌더링 이슈를 만들 수 있으므로 section chrome/편집이 필요 없으면 stack 기반 컨테이너를 쓴다 (#215)
 - **watch crown input sheet는 `ScrollView` 위에 직접 올리지 않는다**: `digitalCrownRotation`이 필요한 watchOS sheet는 단일 `VStack` focus host에 붙이고 `@FocusState`로 진입 시 포커스를 주어 `Crown Sequencer ... without a view property` warning을 피한다 (#216)
+- **watch custom card button은 full-width hit area를 명시하고, auto sheet crown focus는 한 프레임 defer한다**: `.buttonStyle(.plain)` 카드 버튼은 `frame(maxWidth: .infinity)`와 `contentShape`를 같이 쓰고, 자동 표시되는 watch sheet의 `digitalCrownRotation` focus는 `Task.yield()` 뒤에 활성화해 조기 dismiss를 피한다 (#217)
 - **화면 숫자 표기는 `formattedWithSeparator` 경유** (#97)
 - **`changeFractionDigits` 단일 소스: `HealthMetric+View`** (#98)
 - **`HealthMetric.Category` 추가 시 10+ 파일 수정 체크리스트** (#94)
