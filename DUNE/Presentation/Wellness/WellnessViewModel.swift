@@ -95,7 +95,7 @@ final class WellnessViewModel {
     private func performLoad() async {
         isLoading = true
         partialFailureMessage = nil
-        let healthKitAvailable = await healthKitManager.isAvailable
+        let healthKitAvailable = healthKitManager.isAvailable
         isMirroredReadOnlyMode = !healthKitAvailable
 
         // Collect results using TaskGroup for 10+ parallel queries (Correction #5)
