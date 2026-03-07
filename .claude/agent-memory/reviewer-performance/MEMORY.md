@@ -155,3 +155,12 @@ Call recalculate in .task and .onChange, not in body
   }
   ```
 - Alternative: Use Canvas symbols for GPU-side caching
+
+### @Binding Assignment in Hot Gesture Path (Chart Selection)
+- Pattern: DragGesture `.onChanged { case .updating: scrollPosition = restore }` fires 60+ Hz
+- `scrollPosition` is `@Binding var`, so every assignment triggers setter closure
+- Parent view marked dirty even if value hasn't changed (no value short-circuit)
+- Issue: `initialScrollPosition` captured once at gesture start, then restored 60+ times/second
+- Impact: Chart re-renders per gesture update even though scroll position stabilized
+- Fix: Guard assignment on value change: `if scrollPosition != restore { scrollPosition = restore }`
+- Pattern locations: AreaLineChartView, BarChartView, DotLineChartView, RangeBarChartView, SleepStageChartView

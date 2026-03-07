@@ -786,7 +786,8 @@ final class DashboardViewModel {
                 date: latestDate,
                 category: .exercise,
                 isHistorical: !isToday,
-                iconOverride: relevantWorkouts.first?.activityType.iconName ?? "figure.mixed.cardio"
+                iconOverride: relevantWorkouts.first?.activityType.iconName ?? "figure.mixed.cardio",
+                workoutTypeKey: type
             ))
         }
 

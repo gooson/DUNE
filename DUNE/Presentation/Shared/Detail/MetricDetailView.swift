@@ -139,7 +139,7 @@ struct MetricDetailView: View {
         .accessibilityIdentifier("metric-detail-screen-\(metric.category.rawValue)")
         .background { DetailWaveBackground() }
         .environment(\.waveColor, metric.category.themeColor)
-        .englishNavigationTitle(metric.category.englishDisplayName)
+        .englishNavigationTitle(metric.workoutTypeKey ?? metric.category.englishDisplayName)
         .navigationBarTitleDisplayMode(.large)
         .overlay {
             if viewModel.isLoading && viewModel.chartData.isEmpty {
@@ -151,7 +151,7 @@ struct MetricDetailView: View {
                 category: metric.category,
                 currentValue: metric.value,
                 lastUpdated: metric.date,
-                workoutTypeName: metric.iconOverride != nil ? metric.name : nil,
+                workoutTypeName: metric.workoutTypeKey,
                 metricUnit: metric.unit
             )
             await viewModel.loadData()

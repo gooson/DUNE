@@ -31,6 +31,8 @@ struct DashboardView: View {
     private let shouldAutoRequestHealthKitAuthorization: Bool
     private let sharedHealthDataService: SharedHealthDataService?
     @State private var showNotificationHub = false
+    @State private var showWhatsNew = false
+    @State private var showSettings = false
 
     init(
         sharedHealthDataService: SharedHealthDataService? = nil,
@@ -237,6 +239,16 @@ struct DashboardView: View {
         .navigationDestination(isPresented: $showNotificationHub) {
             NotificationHubView(sharedHealthDataService: sharedHealthDataService)
         }
+        .navigationDestination(isPresented: $showWhatsNew) {
+            WhatsNewView(
+                releases: cachedWhatsNewReleases,
+                mode: .manual,
+                onPresented: markWhatsNewOpened
+            )
+        }
+        .navigationDestination(isPresented: $showSettings) {
+            SettingsView()
+        }
         .onChange(of: notificationHubSignal) { _, newValue in
             guard newValue > 0 else { return }
             showNotificationHub = true
@@ -334,8 +346,8 @@ struct DashboardView: View {
     @ToolbarContentBuilder
     private var notificationsToolbarItem: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
-            NavigationLink {
-                NotificationHubView(sharedHealthDataService: sharedHealthDataService)
+            Button {
+                showNotificationHub = true
             } label: {
                 notificationBellIcon
             }
@@ -348,12 +360,8 @@ struct DashboardView: View {
     private var whatsNewToolbarItem: some ToolbarContent {
         if !cachedWhatsNewReleases.isEmpty {
             ToolbarItem(placement: .topBarTrailing) {
-                NavigationLink {
-                    WhatsNewView(
-                        releases: cachedWhatsNewReleases,
-                        mode: .manual,
-                        onPresented: markWhatsNewOpened
-                    )
+                Button {
+                    showWhatsNew = true
                 } label: {
                     whatsNewToolbarIcon
                 }
@@ -366,8 +374,8 @@ struct DashboardView: View {
     @ToolbarContentBuilder
     private var settingsToolbarItem: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
-            NavigationLink {
-                SettingsView()
+            Button {
+                showSettings = true
             } label: {
                 Image(systemName: "gearshape")
             }
