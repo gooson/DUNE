@@ -120,16 +120,16 @@ struct MuscleFatigueStateTests {
 
     @Test("nextReadyDate is nil when already fully recovered (readyDate in past)")
     func nextReadyDateNilWhenRecovered() {
-        let twoDaysAgo = Calendar.current.date(byAdding: .day, value: -2, to: Date())!
+        // Use seconds arithmetic to avoid DST flakiness (calendar days can be 23h on spring-forward)
+        let pastRecovery = Date().addingTimeInterval(-(49 * 3600)) // 49h ago → safely past 48h recovery
         let state = MuscleFatigueState(
             muscle: .chest, // chest recoveryHours is ~48h
-            lastTrainedDate: twoDaysAgo,
-            hoursSinceLastTrained: 48,
+            lastTrainedDate: pastRecovery,
+            hoursSinceLastTrained: 49,
             weeklyVolume: 5,
             recoveryPercent: 1.0,
             compoundScore: nil
         )
-        // readyDate = twoDaysAgo + recoveryHours * 3600 ≈ now or past → nil
         #expect(state.nextReadyDate == nil)
     }
 

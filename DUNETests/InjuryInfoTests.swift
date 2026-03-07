@@ -59,9 +59,9 @@ struct InjuryInfoTests {
     }
 
     @Test("durationDays calculates multi-day span correctly")
-    func multiDayDuration() {
+    func multiDayDuration() throws {
         let start = Calendar.current.startOfDay(for: Date())
-        let end = Calendar.current.date(byAdding: .day, value: 5, to: start)!
+        let end = try #require(Calendar.current.date(byAdding: .day, value: 5, to: start))
         let injury = makeInjury(
             bodyPart: .lowerBack,
             bodySide: nil,
@@ -73,11 +73,11 @@ struct InjuryInfoTests {
     }
 
     @Test("durationDays for active injury counts days since start")
-    func activeInjuryDuration() {
-        let threeDaysAgo = Calendar.current.date(
+    func activeInjuryDuration() throws {
+        let threeDaysAgo = try #require(Calendar.current.date(
             byAdding: .day, value: -3,
             to: Calendar.current.startOfDay(for: Date())
-        )!
+        ))
         let injury = makeInjury(
             bodyPart: .ankle,
             bodySide: .right,

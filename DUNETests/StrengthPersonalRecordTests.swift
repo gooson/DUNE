@@ -41,17 +41,17 @@ struct StrengthPersonalRecordTests {
     }
 
     @Test("7 days ago is recent (boundary)")
-    func sevenDaysAgoIsRecent() {
+    func sevenDaysAgoIsRecent() throws {
         let now = Date()
-        let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: now)!
+        let sevenDaysAgo = try #require(Calendar.current.date(byAdding: .day, value: -7, to: now))
         let record = StrengthPersonalRecord(exerciseName: "Squat", maxWeight: 100, date: sevenDaysAgo, referenceDateForRecent: now)
         #expect(record.isRecent == true)
     }
 
     @Test("8 days ago is not recent")
-    func eightDaysAgoIsNotRecent() {
+    func eightDaysAgoIsNotRecent() throws {
         let now = Date()
-        let eightDaysAgo = Calendar.current.date(byAdding: .day, value: -8, to: now)!
+        let eightDaysAgo = try #require(Calendar.current.date(byAdding: .day, value: -8, to: now))
         let record = StrengthPersonalRecord(exerciseName: "Squat", maxWeight: 100, date: eightDaysAgo, referenceDateForRecent: now)
         #expect(record.isRecent == false)
     }
