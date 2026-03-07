@@ -4,6 +4,7 @@ import HealthKit
 @main
 struct DUNEVisionApp: App {
     @AppStorage(AppTheme.storageKey) private var selectedTheme: AppTheme = .desertWarm
+    @State private var immersionStyle: ImmersionStyle = .progressive
 
     private let sharedHealthDataService: SharedHealthDataService
     private let refreshCoordinator: AppRefreshCoordinating
@@ -65,6 +66,12 @@ struct DUNEVisionApp: App {
         }
         .windowStyle(.volumetric)
         .defaultSize(width: 1.4, height: 0.95, depth: 0.85, in: .meters)
+
+        ImmersiveSpace(id: "immersive-recovery") {
+            VisionImmersiveExperienceView(sharedHealthDataService: sharedHealthDataService)
+                .tint(.accentColor)
+        }
+        .immersionStyle(selection: $immersionStyle, in: .mixed, .progressive, .full)
     }
 }
 

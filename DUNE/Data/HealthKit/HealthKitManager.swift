@@ -1,7 +1,13 @@
 import HealthKit
 import OSLog
 
-actor HealthKitManager {
+protocol HealthKitManaging: Sendable {
+    var isAvailable: Bool { get }
+    func requestAuthorization() async throws
+    func saveMindfulSession(start: Date, end: Date) async throws
+}
+
+actor HealthKitManager: HealthKitManaging {
     static let shared = HealthKitManager()
 
     private let store = HKHealthStore()
@@ -36,7 +42,7 @@ actor HealthKitManager {
     /// Exposed for `HKWorkoutBuilder` which requires a store reference at init.
     var healthStore: HKHealthStore { store }
 
-    var isAvailable: Bool {
+    nonisolated var isAvailable: Bool {
         HKHealthStore.isHealthDataAvailable()
     }
 
@@ -51,6 +57,7 @@ actor HealthKitManager {
                     HKQuantityType(.activeEnergyBurned),
                     HKQuantityType(.distanceWalkingRunning),
                     HKQuantityType.workoutType(),
+                    HKCategoryType(.mindfulSession),
                 ],
                 read: readTypes.union([HKObjectType.workoutType()])
             )
@@ -99,6 +106,29 @@ actor HealthKitManager {
             return try await query.result(for: store)
         } catch {
             logger.error("HK statistics collection query failed: \(error.localizedDescription)")
+            throw HealthKitError.queryFailed(error.localizedDescription)
+        }
+    }
+
+    func saveMindfulSession(start: Date, end: Date) async throws {
+        guard isAvailable else {
+            logger.error("HealthKit not available while saving mindful session")
+            throw HealthKitError.notAvailable
+        }
+
+        let resolvedEnd = max(end, start.addingTimeInterval(60))
+        let sample = HKCategorySample(
+            type: HKCategoryType(.mindfulSession),
+            value: 0,
+            start: start,
+            end: resolvedEnd
+        )
+
+        do {
+            try await store.save(sample)
+            logger.info("Saved mindful session to HealthKit")
+        } catch {
+            logger.error("Saving mindful session failed: \(error.localizedDescription)")
             throw HealthKitError.queryFailed(error.localizedDescription)
         }
     }

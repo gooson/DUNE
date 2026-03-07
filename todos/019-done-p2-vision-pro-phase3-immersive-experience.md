@@ -1,9 +1,9 @@
 ---
 source: brainstorm/vision-pro-features
 priority: p2
-status: ready
+status: done
 created: 2026-03-05
-updated: 2026-03-05
+updated: 2026-03-07
 ---
 
 # Vision Pro Phase 3: Immersive Space 경험
