@@ -172,10 +172,10 @@ struct WorkoutTemplateRecommendationService: WorkoutTemplateRecommending {
     private func timeBucketPrefix(for date: Date) -> String {
         let hour = Calendar.current.component(.hour, from: date)
         switch hour {
-        case 5..<11: return "Morning"
-        case 11..<17: return "Day"
-        case 17..<22: return "Evening"
-        default: return "Night"
+        case 5..<11: return String(localized: "Morning")
+        case 11..<17: return String(localized: "Day")
+        case 17..<22: return String(localized: "Evening")
+        default: return String(localized: "Night")
         }
     }
 }

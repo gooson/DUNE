@@ -103,7 +103,6 @@ final class WorkoutSessionViewModel {
     private let maxMemoLength = 500
     private let defaultRestSeconds: TimeInterval = WorkoutDefaults.restSeconds
     private let maxProgressiveIncreaseRatio = 0.10
-    private let levelUpMinimumRepsAchievementRate = 0.9
 
     /// Body weight for calorie estimation (fetched externally, uses store default)
     var bodyWeightKg: Double = WorkoutDefaults.bodyWeightKg
@@ -359,28 +358,6 @@ final class WorkoutSessionViewModel {
             return true
         }
         return false
-    }
-
-    /// Level-up is suggested when all planned sets are completed and rep achievement rate reaches threshold.
-    func shouldSuggestLevelUp() -> Bool {
-        guard !sets.isEmpty else { return false }
-        guard completedSetCount == sets.count else { return false }
-
-        let completed = sets.filter(\.isCompleted)
-        guard !completed.isEmpty else { return false }
-
-        var achievedCount = 0
-        for set in completed {
-            let index = max(set.setNumber - 1, 0)
-            guard let reps = normalizedRepsString(from: set.reps).flatMap(Int.init) else { continue }
-            let target = targetRepsForSet(at: index)
-            if reps >= target {
-                achievedCount += 1
-            }
-        }
-
-        let rate = Double(achievedCount) / Double(completed.count)
-        return rate >= levelUpMinimumRepsAchievementRate
     }
 
     // MARK: - Per-Set Validation
