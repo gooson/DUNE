@@ -151,7 +151,7 @@ struct MetricDetailView: View {
                 category: metric.category,
                 currentValue: metric.value,
                 lastUpdated: metric.date,
-                workoutTypeName: metric.iconOverride != nil ? metric.name : nil,
+                workoutTypeName: metric.workoutTypeKey,
                 metricUnit: metric.unit
             )
             await viewModel.loadData()
