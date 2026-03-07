@@ -17,6 +17,7 @@ struct SleepStageChartView: View {
 
     @State private var selectedDate: Date?
     @State private var selectionGestureState = ChartSelectionGestureState()
+    @State private var activationTask: Task<Void, Never>?
 
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
@@ -212,14 +213,35 @@ struct SleepStageChartView: View {
     private func selectionGesture(proxy: ChartProxy, plotFrame: CGRect) -> some Gesture {
         DragGesture(minimumDistance: 0, coordinateSpace: .local)
             .onChanged { value in
-                switch selectionGestureState.registerChange(
+                let update = selectionGestureState.registerChange(
                     at: value.time,
                     translation: value.translation,
                     currentScrollPosition: scrollPosition
-                ) {
+                )
+                switch update {
                 case .inactive:
+                    if selectionGestureState.phase == .pendingActivation, activationTask == nil {
+                        let location = value.location
+                        activationTask = Task { @MainActor in
+                            try? await Task.sleep(for: .seconds(ChartSelectionInteraction.holdDuration))
+                            guard !Task.isCancelled else { return }
+                            let result = selectionGestureState.forceActivate()
+                            if case .activated(let restoreScrollPosition) = result {
+                                if let restoreScrollPosition {
+                                    scrollPosition = restoreScrollPosition
+                                }
+                                selectedDate = ChartSelectionInteraction.resolvedDate(
+                                    at: location,
+                                    proxy: proxy,
+                                    plotFrame: plotFrame
+                                )
+                            }
+                        }
+                    }
                     return
                 case .activated(let restoreScrollPosition):
+                    activationTask?.cancel()
+                    activationTask = nil
                     if let restoreScrollPosition {
                         scrollPosition = restoreScrollPosition
                     }
@@ -237,6 +259,8 @@ struct SleepStageChartView: View {
                 }
             }
             .onEnded { _ in
+                activationTask?.cancel()
+                activationTask = nil
                 selectionGestureState.reset()
                 selectedDate = nil
             }
