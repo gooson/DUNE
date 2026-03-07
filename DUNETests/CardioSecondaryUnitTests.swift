@@ -102,6 +102,41 @@ struct CardioSecondaryUnitTests {
         #expect(range.upperBound == 50_000)
     }
 
+    // MARK: - Machine Level
+
+    @Test("supportsMachineLevel is enabled only for machine cardio units")
+    func supportsMachineLevel() {
+        #expect(CardioSecondaryUnit.floors.supportsMachineLevel == true)
+        #expect(CardioSecondaryUnit.timeOnly.supportsMachineLevel == true)
+        #expect(CardioSecondaryUnit.km.supportsMachineLevel == false)
+        #expect(CardioSecondaryUnit.meters.supportsMachineLevel == false)
+        #expect(CardioSecondaryUnit.count.supportsMachineLevel == false)
+    }
+
+    @Test("machineLevelRange is 1 through 20 for supported units")
+    func machineLevelRange() {
+        #expect(CardioSecondaryUnit.floors.machineLevelRange == 1...20)
+        #expect(CardioSecondaryUnit.timeOnly.machineLevelRange == 1...20)
+        #expect(CardioSecondaryUnit.km.machineLevelRange == nil)
+    }
+
+    @Test("normalizedMachineLevel clamps to supported bounds")
+    func normalizedMachineLevel() {
+        #expect(CardioSecondaryUnit.timeOnly.normalizedMachineLevel(-3) == 1)
+        #expect(CardioSecondaryUnit.timeOnly.normalizedMachineLevel(8) == 8)
+        #expect(CardioSecondaryUnit.timeOnly.normalizedMachineLevel(99) == 20)
+        #expect(CardioSecondaryUnit.km.normalizedMachineLevel(8) == nil)
+    }
+
+    @Test("normalizedMachineLevelScore maps averages into 0 to 1 range")
+    func normalizedMachineLevelScore() {
+        #expect(CardioSecondaryUnit.floors.normalizedMachineLevelScore(1) == 0)
+        #expect(CardioSecondaryUnit.floors.normalizedMachineLevelScore(20) == 1)
+        #expect(CardioSecondaryUnit.floors.normalizedMachineLevelScore(10.5) == 0.5)
+        #expect(CardioSecondaryUnit.floors.normalizedMachineLevelScore(30) == 1)
+        #expect(CardioSecondaryUnit.count.normalizedMachineLevelScore(5) == nil)
+    }
+
     // MARK: - Codable roundtrip
 
     @Test("Codable roundtrip preserves all cases")

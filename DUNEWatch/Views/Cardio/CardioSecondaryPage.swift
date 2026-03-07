@@ -14,7 +14,7 @@ struct CardioSecondaryPage: View {
             VStack(spacing: DS.Spacing.md) {
                 // Page title
                 HStack {
-                    Text(profile.secondaryPageTitle)
+                    Text(workoutManager.supportsMachineLevel ? "Level" : profile.secondaryPageTitle)
                         .font(DS.Typography.metricLabel)
                         .foregroundStyle(.secondary)
                     Spacer()
@@ -44,15 +44,79 @@ struct CardioSecondaryPage: View {
 
     @ViewBuilder
     private func profileContent(now: Date) -> some View {
-        switch profile {
-        case .running:
-            runningContent(now: now)
-        case .cycling:
-            cyclingContent(now: now)
-        case .swimming:
-            swimmingContent
-        case .generic:
-            genericContent(now: now)
+        if workoutManager.supportsMachineLevel {
+            machineLevelContent
+        } else {
+            switch profile {
+            case .running:
+                runningContent(now: now)
+            case .cycling:
+                cyclingContent(now: now)
+            case .swimming:
+                swimmingContent
+            case .generic:
+                genericContent(now: now)
+            }
+        }
+    }
+
+    private var machineLevelContent: some View {
+        VStack(spacing: DS.Spacing.lg) {
+            VStack(spacing: DS.Spacing.xxs) {
+                Text(workoutManager.formattedCurrentMachineLevel)
+                    .font(DS.Typography.primaryMetric)
+                    .foregroundStyle(DS.Color.activity)
+                    .contentTransition(.numericText())
+
+                Text("Current")
+                    .font(DS.Typography.metricLabel)
+                    .foregroundStyle(.secondary)
+            }
+
+            HStack(spacing: DS.Spacing.lg) {
+                Button {
+                    workoutManager.adjustMachineLevel(by: -1)
+                } label: {
+                    Image(systemName: "minus")
+                        .font(.title3.weight(.bold))
+                        .frame(maxWidth: .infinity, minHeight: 40)
+                }
+                .buttonStyle(.bordered)
+
+                Button {
+                    workoutManager.adjustMachineLevel(by: 1)
+                } label: {
+                    Image(systemName: "plus")
+                        .font(.title3.weight(.bold))
+                        .frame(maxWidth: .infinity, minHeight: 40)
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(DS.Color.activity)
+            }
+
+            HStack(spacing: DS.Spacing.lg) {
+                VStack(spacing: DS.Spacing.xxs) {
+                    Text(workoutManager.formattedAverageMachineLevel)
+                        .font(DS.Typography.secondaryMetric)
+                        .contentTransition(.numericText())
+
+                    Text("Avg Level")
+                        .font(DS.Typography.metricLabel)
+                        .foregroundStyle(.tertiary)
+                }
+                .frame(maxWidth: .infinity)
+
+                VStack(spacing: DS.Spacing.xxs) {
+                    Text(workoutManager.formattedMaxMachineLevel)
+                        .font(DS.Typography.secondaryMetric)
+                        .contentTransition(.numericText())
+
+                    Text("Max Level")
+                        .font(DS.Typography.metricLabel)
+                        .foregroundStyle(.tertiary)
+                }
+                .frame(maxWidth: .infinity)
+            }
         }
     }
 

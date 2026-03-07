@@ -166,6 +166,26 @@ struct CardioWorkoutModeTests {
         #expect(type == .walking)
     }
 
+    @Test("resolveCardioActivity: stair climber resolves to cardio type")
+    func resolveMachineCardioType() {
+        let type = WorkoutActivityType.resolveCardioActivity(
+            from: "stair-climber",
+            name: "Stair Climber",
+            inputTypeRaw: "durationDistance"
+        )
+        #expect(type == .stairClimbing)
+    }
+
+    @Test("resolveCardioActivity: unknown cardio falls back to mixedCardio")
+    func resolveUnknownCardioFallback() {
+        let type = WorkoutActivityType.resolveCardioActivity(
+            from: "custom-machine-cardio",
+            name: "Custom Machine Cardio",
+            inputTypeRaw: "durationDistance"
+        )
+        #expect(type == .mixedCardio)
+    }
+
     // MARK: - Name-Based Inference
 
     @Test("Name-based inference resolves exercise names")
