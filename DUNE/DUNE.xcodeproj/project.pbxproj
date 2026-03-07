@@ -68,6 +68,7 @@
 		120D3F5511B60F2304711CCE /* WatchWaveBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A971FA2C5A6F7B790EA4C9 /* WatchWaveBackground.swift */; };
 		124A09CF363DA1A056DFFA37 /* FatigueLegendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DC50D026AAB2A8B7A9DD4D /* FatigueLegendView.swift */; };
 		1265D6E3546085A165B4DB20 /* HabitStreakService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C91EFBA7AAF6D4D92BBDF78 /* HabitStreakService.swift */; };
+		12B7CC5C9237A51478D8EC2F /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = FAC416DCBD78B50CBA1F7BC2 /* Localizable.xcstrings */; };
 		12CC1D8F9A4FCB2A81187458 /* ExerciseDefaultsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D651BE98D8006F6CC5D229E3 /* ExerciseDefaultsListView.swift */; };
 		131FB33EF7B5EDACE22D0618 /* TrainingVolumeBlocksSceneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C3B92639721EAE64DA567F /* TrainingVolumeBlocksSceneView.swift */; };
 		134C1827FB88F96CBF64916C /* Duration+Formatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792BF35FF542370E56D074BA /* Duration+Formatting.swift */; };
@@ -224,7 +225,6 @@
 		48DE836DA322881D4FADE46D /* ScoreContributorsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF579A9A174455A12FC98E4E /* ScoreContributorsView.swift */; };
 		494BC0DB8DBDA569E28C5AD6 /* BackgroundNotificationEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8145B825EB89E83F3FF7278D /* BackgroundNotificationEvaluator.swift */; };
 		49B148EB1B7172FA7F182196 /* ChangeBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD368331A74E7D7C21FE142B /* ChangeBadge.swift */; };
-		4A19395C1627F75A801CE770 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 79C3408FCFB3987C00C9D9FB /* Localizable.xcstrings */; };
 		4A8216B2673C14143DA44BCA /* ExerciseSetColumnHeaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEDD0DB2BC47A9C78218FC8 /* ExerciseSetColumnHeaders.swift */; };
 		4A8EBB81B8A390BA38030F79 /* NumberFormattingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B2289ED768B51C92A48A699 /* NumberFormattingTests.swift */; };
 		4A95C303373BAC24FE06CED9 /* AppLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = F467B610ADF2DCFFB1F4AA1A /* AppLogger.swift */; };
@@ -340,6 +340,7 @@
 		75CE622DAB3E44AC9F04F02E /* SectionGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C613FA57D44761247B51C86 /* SectionGroup.swift */; };
 		7669E80C3515AFE2478A1EB9 /* HealthKitPermissionUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78E1A2C208E398C448562F1 /* HealthKitPermissionUITests.swift */; };
 		7751D442DE2F6049131721B6 /* MuscleGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74345F22E69EDACD4D70A82 /* MuscleGroup.swift */; };
+		776402B94CF5DE7AF70E93D6 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FC1ABC946AF7D3798A6BB69A /* Colors.xcassets */; };
 		78854C55AA44801DB342BEF6 /* CompoundWorkoutViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED31F1292D8B7C32E304DC8 /* CompoundWorkoutViewModelTests.swift */; };
 		788CDC8786A1A668646B9057 /* OneRMEstimationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5350D512DD22DCC8FDE5363 /* OneRMEstimationServiceTests.swift */; };
 		78B37533AB93243EE9D5C9CF /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D2BA9BCC8AF6BFAB39812E7 /* HealthKit.framework */; };
@@ -1159,7 +1160,6 @@
 		793C30F25A62BBA20F7A4468 /* ActivitySmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivitySmokeTests.swift; sourceTree = "<group>"; };
 		79761F7F114A558AD359404A /* FatigueLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FatigueLevel.swift; sourceTree = "<group>"; };
 		79AD098309B3B85A5D7B8F2E /* DUNETests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = DUNETests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		79C3408FCFB3987C00C9D9FB /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		79EC2795A27FF15203C7399C /* ChartModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartModels.swift; sourceTree = "<group>"; };
 		7A2510385B772323D5C13668 /* SuggestedWorkoutSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestedWorkoutSection.swift; sourceTree = "<group>"; };
 		7A4CD6DCD94BDF983B47167D /* VisionContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionContentView.swift; sourceTree = "<group>"; };
@@ -2128,7 +2128,6 @@
 				63765429B77F16BB36CD8D6D /* Assets.xcassets */,
 				784FEB5BF718A90FAD1E4318 /* DUNE.entitlements */,
 				36F945536ED672B490649FB8 /* Info.plist */,
-				79C3408FCFB3987C00C9D9FB /* Localizable.xcstrings */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -2971,6 +2970,7 @@
 			buildConfigurationList = 0444573C6C188CCED3D7E630 /* Build configuration list for PBXNativeTarget "DUNEVisionWidgets" */;
 			buildPhases = (
 				6D2E3747E15A4E31D0252766 /* Sources */,
+				F8DF460811919AB9BF41E5DE /* Resources */,
 				E9F8F2FB76227AFE48B997DD /* Frameworks */,
 			);
 			buildRules = (
@@ -3196,7 +3196,7 @@
 			files = (
 				3D95DBEFE4CEC05E6A55412F /* Assets.xcassets in Resources */,
 				1730E2939253AC8AE0AF8FCC /* Colors.xcassets in Resources */,
-				4A19395C1627F75A801CE770 /* Localizable.xcstrings in Resources */,
+				12B7CC5C9237A51478D8EC2F /* Localizable.xcstrings in Resources */,
 				2EADE537C1FE726718F8C5E4 /* exercises.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3226,6 +3226,14 @@
 			files = (
 				C78F43ABFD45B1EBF297D0BB /* Colors.xcassets in Resources */,
 				821765CB07EB1B0966C9F2A2 /* Localizable.xcstrings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F8DF460811919AB9BF41E5DE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				776402B94CF5DE7AF70E93D6 /* Colors.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

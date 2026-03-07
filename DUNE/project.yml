@@ -95,6 +95,9 @@ targets:
         group: DUNE
       - path: Resources
         group: DUNE
+      # Shared Localization
+      - path: ../Shared/Resources/Localizable.xcstrings
+        group: Shared
       # Shared Colors
       - path: ../Shared/Resources/Colors.xcassets
         group: Shared/Resources
@@ -377,6 +380,9 @@ targets:
     platform: visionOS
     sources:
       - path: ../DUNEVisionWidgets
+      # Shared Colors
+      - path: ../Shared/Resources/Colors.xcassets
+        group: Shared/Resources
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.raftel.dailve.vision.widgets
