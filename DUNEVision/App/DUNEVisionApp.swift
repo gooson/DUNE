@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 import HealthKit
 
 @main
@@ -10,6 +11,56 @@ struct DUNEVisionApp: App {
     private let refreshCoordinator: AppRefreshCoordinating
     private let observerManager: HealthKitObserverManager?
 
+    private static func makeInMemoryFallbackContainer() -> ModelContainer {
+        do {
+            AppLogger.data.error("visionOS: Falling back to in-memory ModelContainer")
+            return try HealthSnapshotMirrorContainerFactory.makeInMemoryContainer()
+        } catch {
+            fatalError("Failed to create fallback in-memory ModelContainer: \(error)")
+        }
+    }
+
+    private static func recoverModelContainer(
+        after error: Error,
+        cloudSyncEnabled: Bool
+    ) -> ModelContainer {
+        guard PersistentStoreRecovery.shouldDeleteStore(after: error) else {
+            AppLogger.data.error("visionOS: Skipping store deletion for non-migration error")
+            return makeInMemoryFallbackContainer()
+        }
+
+        AppLogger.data.error("visionOS: Deleting persistent store after migration failure")
+        HealthSnapshotMirrorContainerFactory.deleteStoreFiles()
+
+        do {
+            return try HealthSnapshotMirrorContainerFactory.makeContainer(
+                cloudSyncEnabled: cloudSyncEnabled
+            )
+        } catch {
+            AppLogger.data.error("visionOS: ModelContainer retry failed: \(error)")
+            return makeInMemoryFallbackContainer()
+        }
+    }
+
+    private static func makeMirroredSnapshotService(
+        cloudSyncEnabled: Bool
+    ) -> SharedHealthDataService {
+        let modelContainer: ModelContainer
+        do {
+            modelContainer = try HealthSnapshotMirrorContainerFactory.makeContainer(
+                cloudSyncEnabled: cloudSyncEnabled
+            )
+        } catch {
+            AppLogger.data.error("visionOS ModelContainer failed: \(error)")
+            modelContainer = recoverModelContainer(
+                after: error,
+                cloudSyncEnabled: cloudSyncEnabled
+            )
+        }
+
+        return CloudMirroredSharedHealthDataService(modelContainer: modelContainer)
+    }
+
     init() {
         let persistedThemeRawValue = UserDefaults.standard.string(forKey: AppTheme.storageKey)
         if let normalizedTheme = AppTheme.resolvedTheme(fromPersistedRawValue: persistedThemeRawValue) {
@@ -19,12 +70,18 @@ struct DUNEVisionApp: App {
             _selectedTheme = AppStorage(wrappedValue: normalizedTheme, AppTheme.storageKey)
         }
 
+        let cloudSyncEnabled = UserDefaults.standard.bool(forKey: "isCloudSyncEnabled")
         let healthKitAvailable = HKHealthStore.isHealthDataAvailable()
         let sharedService: SharedHealthDataService
         if healthKitAvailable {
             sharedService = SharedHealthDataServiceImpl(healthKitManager: .shared)
+        } else if cloudSyncEnabled {
+            AppLogger.healthKit.info("HealthKit unavailable on visionOS. Using CloudKit-mirrored snapshot service.")
+            sharedService = Self.makeMirroredSnapshotService(
+                cloudSyncEnabled: cloudSyncEnabled
+            )
         } else {
-            AppLogger.healthKit.info("HealthKit unavailable on visionOS. Using empty snapshot service.")
+            AppLogger.healthKit.info("HealthKit unavailable on visionOS and cloud sync is disabled. Using empty snapshot service.")
             sharedService = VisionUnavailableSharedHealthDataService()
         }
         self.sharedHealthDataService = sharedService

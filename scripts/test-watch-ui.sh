@@ -16,7 +16,7 @@ SCHEME="DUNEWatchUITests"
 WATCH_SIM_NAME="${DUNE_WATCH_SIM_NAME:-Apple Watch Series 10 (46mm)}"
 WATCH_SIM_OS="${DUNE_WATCH_SIM_OS:-26.2}"
 DESTINATION="platform=watchOS Simulator,name=${WATCH_SIM_NAME},OS=${WATCH_SIM_OS}"
-DERIVED_DATA_DIR=".deriveddata"
+DERIVED_DATA_DIR="${DAILVE_WATCH_UI_TEST_DERIVED_DATA_DIR:-.deriveddata/watch-ui-tests}"
 LOG_DIR=".xcodebuild"
 LOG_FILE="$LOG_DIR/watch-ui-test.log"
 REGENERATE=1
@@ -152,11 +152,11 @@ set -e
 if [[ "$TEST_EXIT" -ne 0 ]]; then
     echo ""
     echo "Watch UI tests failed. Summary:"
-    grep -n -E "TEST (SUCCEEDED|FAILED)|error:|failed|Executed" "$LOG_FILE" | tail -n 120 || true
+    grep -a -n -E "TEST (SUCCEEDED|FAILED)|error:|failed|Executed" "$LOG_FILE" | tail -n 120 || true
     echo ""
     echo "Full log: $LOG_FILE"
     exit "$TEST_EXIT"
 fi
 
 echo "Watch UI tests passed."
-grep -n -E "TEST (SUCCEEDED|FAILED)|Executed" "$LOG_FILE" | tail -n 20 || true
+grep -a -n -E "TEST (SUCCEEDED|FAILED)|Executed" "$LOG_FILE" | tail -n 20 || true

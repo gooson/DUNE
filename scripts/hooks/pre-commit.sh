@@ -28,6 +28,12 @@ append_unique_target() {
 
 echo "Running pre-commit checks..."
 
+# Always clean local build artifacts before validating commit state.
+cleanup_args=()
+if [ "${DAILVE_PRECOMMIT_CLEAN_DERIVEDDATA:-0}" != "1" ]; then
+    cleanup_args+=(--keep-deriveddata)
+fi
+"$ROOT_DIR/scripts/hooks/cleanup-artifacts.sh" "${cleanup_args[@]}"
 # Check for secrets/credentials in staged files
 if git diff --cached --diff-filter=ACM -U0 | grep -iE "(api_key|api_secret|secret_key|password|token|credential|private_key)\s*[:=]" | grep -v "test" | grep -v ".md" | grep -v "#"; then
     echo ""
