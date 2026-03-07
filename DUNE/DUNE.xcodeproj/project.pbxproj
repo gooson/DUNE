@@ -819,6 +819,7 @@
 		FA5E55560DEDE1440BAB4727 /* EffortScoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A45A83B73D17F3E3C4C1BD94 /* EffortScoreService.swift */; };
 		FA699E81305C528AA20C24FF /* MuscleMapData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648C33B3A9C3F0BCB860C89 /* MuscleMapData.swift */; };
 		FA6EBF2BE47BB0911F648141 /* CustomExercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A026475D4B838795DE2CD49 /* CustomExercise.swift */; };
+		FA7CE00D1D369E8641FAAD13 /* WhatsNewArea+View.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC269A9F7C1E4EFD4B865F4D /* WhatsNewArea+View.swift */; };
 		FB13AC97683F965EB5B70960 /* UserCategoryManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF6E70B961691AE5A4D3B6C9 /* UserCategoryManagementView.swift */; };
 		FB13F30C57406598DCE42AF4 /* HealthKitObserverManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2391A0362E602D6624E35550 /* HealthKitObserverManager.swift */; };
 		FB14C8C2909D495FCF6DFC58 /* StreakPeriod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007E8BC8965A9788AD76932D /* StreakPeriod.swift */; };
@@ -1598,6 +1599,7 @@
 		FB6B25A21E60E2FB1D50C223 /* WatchEffortInputPolicyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchEffortInputPolicyTests.swift; sourceTree = "<group>"; };
 		FBA3F8E612E305CA1A3BB344 /* CardioMainMetricsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardioMainMetricsPage.swift; sourceTree = "<group>"; };
 		FC1ABC946AF7D3798A6BB69A /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Colors.xcassets; path = ../Shared/Resources/Colors.xcassets; sourceTree = "<group>"; };
+		FC269A9F7C1E4EFD4B865F4D /* WhatsNewArea+View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WhatsNewArea+View.swift"; sourceTree = "<group>"; };
 		FC70E47DE59D39D2CDF61E6B /* StackedVolumeBarChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedVolumeBarChartView.swift; sourceTree = "<group>"; };
 		FC73397A6C965F90A40C6BB5 /* ConditionScoreDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionScoreDetailViewModel.swift; sourceTree = "<group>"; };
 		FC77291CE5DF4997B8008345 /* WidgetScoreProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetScoreProvider.swift; sourceTree = "<group>"; };
@@ -1967,6 +1969,7 @@
 				4745F8682FD155D6CA7635C6 /* WeatherConditionType+View.swift */,
 				CCCB69435B1E57DFA93590D4 /* WeightUnit+View.swift */,
 				C0968CD4A6C3CE457CF16287 /* WellnessScore+View.swift */,
+				FC269A9F7C1E4EFD4B865F4D /* WhatsNewArea+View.swift */,
 				3DD5049F6C8C4A81929217AF /* WorkoutActivityType+Icon.swift */,
 				98DF021A7EE434D65FC5B824 /* WorkoutActivityType+View.swift */,
 				D66471A63D181BEE96EACD01 /* WorkoutIntensity+View.swift */,
@@ -3805,6 +3808,7 @@
 				C2DAF030CAB1F0883E3E43B7 /* WellnessView.swift in Sources */,
 				F0F45CA8E1E095A1F8A688EC /* WellnessViewModel.swift in Sources */,
 				46EC42347BC6F8631CC8EBD3 /* WhatsNew.swift in Sources */,
+				FA7CE00D1D369E8641FAAD13 /* WhatsNewArea+View.swift in Sources */,
 				865C3B2CD801D89D1267BFD1 /* WhatsNewManager.swift in Sources */,
 				CC81A1CFBF7EC13EB5532AF0 /* WhatsNewStore.swift in Sources */,
 				6274F4AC845246C891B88E39 /* WhatsNewView.swift in Sources */,
