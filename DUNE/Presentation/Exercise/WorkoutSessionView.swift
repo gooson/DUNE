@@ -763,6 +763,7 @@ struct WorkoutSessionView: View {
 
         // Mark set as completed
         viewModel.sets[currentSetIndex].isCompleted = true
+        _ = viewModel.applyProgressiveOverloadForNextSet(afterCompletingSetAt: currentSetIndex, weightUnit: weightUnit)
         setCompleteCount += 1
 
         let isLast = currentSetIndex >= totalSets - 1
