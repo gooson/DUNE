@@ -419,7 +419,7 @@ final class ActivityViewModel {
         // permanently blocking future loads. Safe for Void async functions.
         defer { isLoading = false }
 
-        let healthKitAvailable = await healthKitManager.isAvailable
+        let healthKitAvailable = healthKitManager.isAvailable
         isMirroredReadOnlyMode = !healthKitAvailable
         async let sharedSnapshotTask: SharedHealthSnapshot? = sharedHealthDataService?.fetchSnapshot()
 

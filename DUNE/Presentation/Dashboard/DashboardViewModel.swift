@@ -144,7 +144,7 @@ final class DashboardViewModel {
     func loadData(shouldAutoRequestHealthKitAuthorization: Bool = true) async {
         guard !isLoading else { return }
         isLoading = true
-        let healthKitAvailable = await healthKitManager.isAvailable
+        let healthKitAvailable = healthKitManager.isAvailable
         isMirroredReadOnlyMode = !healthKitAvailable
         errorMessage = nil
         conditionScore = nil
