@@ -271,7 +271,7 @@ struct SuggestedWorkoutSection: View {
                             onToggleInterest: {
                                 onSetExerciseExcluded(!excluded, exercise.id)
                             },
-                            onAlternativeSelected: { alt in detailExercise = alt }
+                            onShowAlternativeDetails: { alt in detailExercise = alt }
                         )
                         .padding(DS.Spacing.sm)
                         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))

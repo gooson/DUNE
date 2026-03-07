@@ -13,6 +13,9 @@ struct TrainingVolume3DView: View {
 
     @State private var sampleData = TrainingVolume3DView.generateSampleData(weeks: 8)
     @State private var weekRange: Int = 8
+    @State private var cachedMuscleVolumes: [(key: String, value: Double)] = Self.computeMuscleVolumes(
+        from: generateSampleData(weeks: 8).filter(\.isPlottable)
+    )
 
     private static let muscleGroups = ["Chest", "Back", "Legs", "Shoulders", "Arms", "Core", "Glutes"]
 
@@ -27,6 +30,9 @@ struct TrainingVolume3DView: View {
         .padding()
         .onChange(of: weekRange) { _, newWeeks in
             sampleData = Self.generateSampleData(weeks: newWeeks)
+        }
+        .onChange(of: sampleData.count) { _, _ in
+            cachedMuscleVolumes = Self.computeMuscleVolumes(from: sampleData.filter(\.isPlottable))
         }
     }
 
@@ -86,15 +92,11 @@ struct TrainingVolume3DView: View {
     }
 
     private var topMuscleVolumes: [(key: String, value: Double)] {
-        Array(sortedMuscleVolumes.prefix(4))
+        Array(cachedMuscleVolumes.prefix(4))
     }
 
     private var plottableSampleData: [TrainingVolumePoint] {
         sampleData.filter(\.isPlottable)
-    }
-
-    private var sortedMuscleVolumes: [(key: String, value: Double)] {
-        Self.computeMuscleVolumes(from: plottableSampleData)
     }
 
     private var volumeDomain: ClosedRange<Double> {

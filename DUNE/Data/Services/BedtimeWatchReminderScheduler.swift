@@ -15,6 +15,7 @@ final class BedtimeWatchReminderScheduler {
     private let sleepService: SleepQuerying
     private let notificationCenter: UNUserNotificationCenter
     private let bedtimeCalculator: CalculateAverageBedtimeUseCase
+    private var lastRefreshDate: Date?
 
     init(
         sleepService: SleepQuerying = SleepQueryService(manager: .shared),
@@ -27,6 +28,9 @@ final class BedtimeWatchReminderScheduler {
     }
 
     func refreshSchedule() async {
+        if let last = lastRefreshDate, Date().timeIntervalSince(last) < 30 * 60 { return }
+        lastRefreshDate = Date()
+
         guard WatchSessionManager.shared.isPaired,
               WatchSessionManager.shared.isWatchAppInstalled else {
             await removePendingReminder()
