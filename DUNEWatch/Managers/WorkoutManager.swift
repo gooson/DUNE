@@ -51,6 +51,8 @@ final class WorkoutManager: NSObject {
 
     /// Current workout mode — determines which metrics view is shown.
     private(set) var workoutMode: WorkoutMode = .strength
+    /// Session-level cardio unit metadata used by Watch cardio UI.
+    private(set) var cardioSecondaryUnit: CardioSecondaryUnit?
 
     /// Whether the current session is a cardio workout.
     var isCardioMode: Bool { workoutMode.isCardio }
@@ -87,9 +89,18 @@ final class WorkoutManager: NSObject {
 
     /// Total flights (floors) climbed (stair climber mode only).
     private(set) var floorsClimbed: Double = 0
+    /// Current machine level for non-distance machine cardio sessions.
+    private(set) var currentMachineLevel: Int?
+    /// Time-weighted average machine level across the active cardio session.
+    private(set) var averageMachineLevel: Double?
+    /// Highest machine level reached during the session.
+    private(set) var maxMachineLevel: Int?
 
     /// Running samples for average HR calculation.
     private var heartRateSamples: [Double] = []
+    private var machineLevelWeightedSeconds: TimeInterval = 0
+    private var machineLevelWeightedSum: Double = 0
+    private var lastMachineLevelSampleDate: Date?
 
     /// Average heart rate across the entire session.
     var averageHeartRate: Double {
@@ -116,6 +127,27 @@ final class WorkoutManager: NSObject {
     /// Active elapsed time excluding paused intervals.
     var activeElapsedTime: TimeInterval {
         activeElapsedTime(at: Date())
+    }
+
+    var supportsMachineLevel: Bool {
+        cardioSecondaryUnit?.supportsMachineLevel == true
+    }
+
+    var formattedCurrentMachineLevel: String {
+        currentMachineLevel.map { $0.formattedWithSeparator } ?? "--"
+    }
+
+    var formattedAverageMachineLevel: String {
+        guard let averageMachineLevel, averageMachineLevel.isFinite else { return "--" }
+        return averageMachineLevel.formatted(.number.precision(.fractionLength(1)))
+    }
+
+    var formattedMaxMachineLevel: String {
+        maxMachineLevel.map { $0.formattedWithSeparator } ?? "--"
+    }
+
+    var cardioMachineAutoIntensityRaw: Double? {
+        cardioSecondaryUnit?.normalizedMachineLevelScore(averageMachineLevel)
     }
 
     /// Active elapsed time using an explicit clock value.
@@ -244,8 +276,13 @@ final class WorkoutManager: NSObject {
     }
 
     /// Start a cardio workout session with appropriate HK activity type.
-    func startCardioSession(activityType: WorkoutActivityType, isOutdoor: Bool) async throws {
+    func startCardioSession(
+        activityType: WorkoutActivityType,
+        isOutdoor: Bool,
+        secondaryUnit: CardioSecondaryUnit? = nil
+    ) async throws {
         let previousMode = workoutMode
+        let previousCardioSecondaryUnit = cardioSecondaryUnit
         let previousDistance = distance
         let previousSteps = steps
         let previousPace = currentPace
@@ -257,10 +294,17 @@ final class WorkoutManager: NSObject {
         let previousExtraSets = extraSetsPerExercise
 
         self.workoutMode = .cardio(activityType: activityType, isOutdoor: isOutdoor)
+        self.cardioSecondaryUnit = secondaryUnit
         self.distance = 0
         self.steps = 0
         self.currentPace = 0
         self.floorsClimbed = 0
+        self.currentMachineLevel = nil
+        self.averageMachineLevel = nil
+        self.maxMachineLevel = nil
+        self.machineLevelWeightedSeconds = 0
+        self.machineLevelWeightedSum = 0
+        self.lastMachineLevelSampleDate = nil
         // templateSnapshot is nil for cardio — no set/exercise tracking needed
         self.templateSnapshot = nil
         self.completedSetsData = []
@@ -277,6 +321,7 @@ final class WorkoutManager: NSObject {
         } catch {
             // Restore state on failure to prevent inconsistent workoutMode
             workoutMode = previousMode
+            cardioSecondaryUnit = previousCardioSecondaryUnit
             distance = previousDistance
             steps = previousSteps
             currentPace = previousPace
@@ -293,6 +338,7 @@ final class WorkoutManager: NSObject {
     /// Common strength HK session setup.
     private func startStrengthSession(with snapshot: WorkoutSessionTemplate) async throws {
         self.workoutMode = .strength
+        self.cardioSecondaryUnit = nil
         self.templateSnapshot = snapshot
         self.currentExerciseIndex = 0
         self.currentSetIndex = 0
@@ -301,6 +347,12 @@ final class WorkoutManager: NSObject {
         self.distance = 0
         self.steps = 0
         self.currentPace = 0
+        self.currentMachineLevel = nil
+        self.averageMachineLevel = nil
+        self.maxMachineLevel = nil
+        self.machineLevelWeightedSeconds = 0
+        self.machineLevelWeightedSum = 0
+        self.lastMachineLevelSampleDate = nil
 
         let config = HKWorkoutConfiguration()
         config.activityType = .traditionalStrengthTraining
@@ -351,6 +403,7 @@ final class WorkoutManager: NSObject {
             newSession.prepare()
             let now = Date()
             startDate = now
+            lastMachineLevelSampleDate = supportsMachineLevel ? now : nil
             newSession.startActivity(with: now)
             try await runWithTimeout(
                 seconds: 10,
@@ -389,10 +442,27 @@ final class WorkoutManager: NSObject {
         isSessionEnded = false
         isFinalizingWorkout = false
         startDate = Date()
+        lastMachineLevelSampleDate = supportsMachineLevel ? startDate : nil
         pausedDuration = 0
         pauseStart = nil
         persistRecoveryState()
         WatchConnectivityManager.shared.sendWorkoutStarted(templateName: templateName)
+    }
+
+    func setMachineLevel(_ level: Int) {
+        guard let cardioSecondaryUnit,
+              let normalized = cardioSecondaryUnit.normalizedMachineLevel(level) else { return }
+        let now = Date()
+        captureMachineLevelSegment(until: now)
+        currentMachineLevel = normalized
+        maxMachineLevel = max(maxMachineLevel ?? normalized, normalized)
+        persistRecoveryState()
+    }
+
+    func adjustMachineLevel(by delta: Int) {
+        guard let range = cardioSecondaryUnit?.machineLevelRange else { return }
+        let baseline = currentMachineLevel ?? range.lowerBound
+        setMachineLevel(baseline + delta)
     }
 
     func pause() {
@@ -419,6 +489,7 @@ final class WorkoutManager: NSObject {
 
     func end() {
         guard !isSessionEnded else { return }
+        captureMachineLevelSegment(until: Date())
         endPause(at: Date())
 
         if isSimulatedSessionActive {
@@ -510,6 +581,7 @@ final class WorkoutManager: NSObject {
         builder = nil
         templateSnapshot = nil
         workoutMode = .strength
+        cardioSecondaryUnit = nil
         currentExerciseIndex = 0
         currentSetIndex = 0
         completedSetsData = []
@@ -521,6 +593,12 @@ final class WorkoutManager: NSObject {
         currentPace = 0
         estimatedMaxHR = HeartRateZoneCalculator.defaultMaxHR
         heartRateSamples = []
+        currentMachineLevel = nil
+        averageMachineLevel = nil
+        maxMachineLevel = nil
+        machineLevelWeightedSeconds = 0
+        machineLevelWeightedSum = 0
+        lastMachineLevelSampleDate = nil
         isPaused = false
         isSessionEnded = false
         isFinalizingWorkout = false
@@ -613,7 +691,14 @@ final class WorkoutManager: NSObject {
             setIndex: currentSetIndex,
             completedSets: completedSetsData,
             startDate: startDate,
-            workoutMode: workoutMode
+            workoutMode: workoutMode,
+            cardioSecondaryUnit: cardioSecondaryUnit,
+            currentMachineLevel: currentMachineLevel,
+            averageMachineLevel: averageMachineLevel,
+            maxMachineLevel: maxMachineLevel,
+            machineLevelWeightedSeconds: machineLevelWeightedSeconds,
+            machineLevelWeightedSum: machineLevelWeightedSum,
+            lastMachineLevelSampleDate: lastMachineLevelSampleDate
         )
         guard let data = try? JSONEncoder().encode(state),
               data.count < 64_000 else { return }
@@ -633,6 +718,13 @@ final class WorkoutManager: NSObject {
         completedSetsData = state.completedSets
         startDate = state.startDate
         workoutMode = state.workoutMode ?? .strength
+        cardioSecondaryUnit = state.cardioSecondaryUnit
+        currentMachineLevel = state.currentMachineLevel
+        averageMachineLevel = state.averageMachineLevel
+        maxMachineLevel = state.maxMachineLevel
+        machineLevelWeightedSeconds = state.machineLevelWeightedSeconds
+        machineLevelWeightedSum = state.machineLevelWeightedSum
+        lastMachineLevelSampleDate = state.lastMachineLevelSampleDate
         isRecoveredSession = false
     }
 
@@ -708,6 +800,8 @@ final class WorkoutManager: NSObject {
             isPaused = true
             return
         }
+        captureMachineLevelSegment(until: date)
+        lastMachineLevelSampleDate = nil
         pauseStart = date
         isPaused = true
     }
@@ -720,7 +814,28 @@ final class WorkoutManager: NSObject {
             }
             self.pauseStart = nil
         }
+        if supportsMachineLevel {
+            lastMachineLevelSampleDate = date
+        }
         isPaused = false
+    }
+
+    private func captureMachineLevelSegment(until date: Date) {
+        guard supportsMachineLevel else { return }
+        guard let lastMachineLevelSampleDate else {
+            self.lastMachineLevelSampleDate = date
+            return
+        }
+        let delta = max(date.timeIntervalSince(lastMachineLevelSampleDate), 0)
+        guard delta > 0 else { return }
+
+        if let currentMachineLevel {
+            machineLevelWeightedSeconds += delta
+            machineLevelWeightedSum += Double(currentMachineLevel) * delta
+            averageMachineLevel = machineLevelWeightedSum / machineLevelWeightedSeconds
+        }
+
+        self.lastMachineLevelSampleDate = date
     }
 }
 
@@ -935,6 +1050,13 @@ private struct WorkoutRecoveryState: Codable {
     let completedSets: [[CompletedSetData]]
     let startDate: Date?
     let workoutMode: WorkoutMode?
+    let cardioSecondaryUnit: CardioSecondaryUnit?
+    let currentMachineLevel: Int?
+    let averageMachineLevel: Double?
+    let maxMachineLevel: Int?
+    let machineLevelWeightedSeconds: TimeInterval
+    let machineLevelWeightedSum: Double
+    let lastMachineLevelSampleDate: Date?
 }
 
 enum WorkoutStartupError: LocalizedError {

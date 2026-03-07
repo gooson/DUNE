@@ -349,8 +349,10 @@
 		75CBC24EA7D4E353E6EFB6E4 /* LaunchExperiencePlanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70958B798BE16A2F43E97F94 /* LaunchExperiencePlanner.swift */; };
 		75CE622DAB3E44AC9F04F02E /* SectionGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C613FA57D44761247B51C86 /* SectionGroup.swift */; };
 		7669E80C3515AFE2478A1EB9 /* HealthKitPermissionUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78E1A2C208E398C448562F1 /* HealthKitPermissionUITests.swift */; };
+		7745EBA42EB20C03815B25A6 /* VisionDashboardWorkspaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE1138ACB6D34EE763AB704 /* VisionDashboardWorkspaceViewModel.swift */; };
 		7751D442DE2F6049131721B6 /* MuscleGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74345F22E69EDACD4D70A82 /* MuscleGroup.swift */; };
 		776402B94CF5DE7AF70E93D6 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FC1ABC946AF7D3798A6BB69A /* Colors.xcassets */; };
+		77B505B1A1DE988204EF9597 /* VisionDashboardWindowScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F5B4F715EAF1F4ED8C87357 /* VisionDashboardWindowScene.swift */; };
 		78854C55AA44801DB342BEF6 /* CompoundWorkoutViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED31F1292D8B7C32E304DC8 /* CompoundWorkoutViewModelTests.swift */; };
 		788CDC8786A1A668646B9057 /* OneRMEstimationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5350D512DD22DCC8FDE5363 /* OneRMEstimationServiceTests.swift */; };
 		78B37533AB93243EE9D5C9CF /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D2BA9BCC8AF6BFAB39812E7 /* HealthKit.framework */; };
@@ -431,6 +433,7 @@
 		8F1500DE218EF44E8FFCAED8 /* WeatherConditionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF9927162185CBAC3C4142B4 /* WeatherConditionType.swift */; };
 		8F6E549AC386259FBEAECABB /* SharedHealthSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04120B442C2BD6A036BFBE1 /* SharedHealthSnapshot.swift */; };
 		8F8C204968FE5FDD3CAB5617 /* Equipment.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF8D278CDCA5771799475612 /* Equipment.swift */; };
+		906A3160F62CC56F55A3F7AA /* VisionDashboardWorkspaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE1138ACB6D34EE763AB704 /* VisionDashboardWorkspaceViewModel.swift */; };
 		9091B1107B7A93463B4A1B13 /* TimePeriod.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA79F0748918EBFC2FA60D72 /* TimePeriod.swift */; };
 		90F601E50C6DDD8E837C01C6 /* TemplateCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4CC125AA1C302C661BEE191 /* TemplateCardView.swift */; };
 		9156C5FA140B92D073ED1173 /* PersonalRecordsDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADC53DB0E5463F8D9434B20 /* PersonalRecordsDetailView.swift */; };
@@ -657,6 +660,7 @@
 		D6DB0BC4FB08DD70DE12C9A1 /* SessionPagingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC633D24FFCE79E199762DA7 /* SessionPagingView.swift */; };
 		D71E8C8B0A298A6E1D22B876 /* VitalCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8F9BE2A26652A4127A1448 /* VitalCard.swift */; };
 		D72E816E13428B4171275767 /* CardioMetricProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4087B1E4B9E03A54843804F3 /* CardioMetricProfile.swift */; };
+		D74EC171F423083C21E89A34 /* VisionDashboardWorkspaceViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3471C5B08AC13922FFACFF4C /* VisionDashboardWorkspaceViewModelTests.swift */; };
 		D7B344787EBB0C2C11792896 /* TrainingReadiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF253EC6A18447BB24967CFD /* TrainingReadiness.swift */; };
 		D7CCFD0218BFD4386D5D4D22 /* InjuryStatisticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1F293988ACCA2CC6728759 /* InjuryStatisticsService.swift */; };
 		D851EC101327DC26B018CB4E /* HabitType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D118CEB3CEB568A3E682BD9 /* HabitType.swift */; };
@@ -1011,6 +1015,7 @@
 		31EB0F6599391E9252AB9C07 /* TrainingReadinessDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingReadinessDetailView.swift; sourceTree = "<group>"; };
 		31FF504B9539F2837320D522 /* ActivityViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityViewModel.swift; sourceTree = "<group>"; };
 		34186F6DA47D0DFE271400E0 /* ExerciseMixInfoSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseMixInfoSheet.swift; sourceTree = "<group>"; };
+		3471C5B08AC13922FFACFF4C /* VisionDashboardWorkspaceViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionDashboardWorkspaceViewModelTests.swift; sourceTree = "<group>"; };
 		3506F2A1942FF5844DF93BE9 /* ExerciseCategory+View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExerciseCategory+View.swift"; sourceTree = "<group>"; };
 		35188BAFF53DD62C3CF9841E /* ExerciseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseView.swift; sourceTree = "<group>"; };
 		35362CB4C7EF0710F453D9E8 /* InjuryViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjuryViewModelTests.swift; sourceTree = "<group>"; };
@@ -1073,7 +1078,7 @@
 		4934F2F7000086E1F923FD77 /* OpenMeteoServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenMeteoServiceTests.swift; sourceTree = "<group>"; };
 		4A53D3C9DB618E1E7EA14258 /* WellnessScore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessScore.swift; sourceTree = "<group>"; };
 		4A765A1B4AF3D1B717795630 /* WatchUITestBaseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchUITestBaseCase.swift; sourceTree = "<group>"; };
-		4A8BF2DE11C7571470B24F6F /* VisionImmersiveExperienceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = VisionImmersiveExperienceViewModel.swift; path = Presentation/Immersive/VisionImmersiveExperienceViewModel.swift; sourceTree = "<group>"; };
+		4A8BF2DE11C7571470B24F6F /* VisionImmersiveExperienceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionImmersiveExperienceViewModel.swift; sourceTree = "<group>"; };
 		4A99EF62449DBCF92A69D502 /* StrengthPRServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrengthPRServiceTests.swift; sourceTree = "<group>"; };
 		4AA4E6841FCABE1E7059F249 /* VisionSpatialViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionSpatialViewModel.swift; sourceTree = "<group>"; };
 		4B0173DFB78590F4E2A67B43 /* CalculateSleepScoreUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculateSleepScoreUseCaseTests.swift; sourceTree = "<group>"; };
@@ -1158,6 +1163,7 @@
 		6E9D6BE56DF7F329B9A53CB6 /* WaveShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveShape.swift; sourceTree = "<group>"; };
 		6F18A0D287E260CBD7D96315 /* ConditionScoreWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionScoreWidget.swift; sourceTree = "<group>"; };
 		6F3CCBAEE5C10521927909F6 /* CalculateConditionScoreUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculateConditionScoreUseCase.swift; sourceTree = "<group>"; };
+		6F5B4F715EAF1F4ED8C87357 /* VisionDashboardWindowScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionDashboardWindowScene.swift; sourceTree = "<group>"; };
 		6FE98F15266CFB70975BFB8F /* ConditionInsightSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionInsightSection.swift; sourceTree = "<group>"; };
 		7016020C0A1A1D099AE37511 /* ExerciseDefaultEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseDefaultEditView.swift; sourceTree = "<group>"; };
 		707A204BEA5651D3AC0BD6B9 /* RestTimerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestTimerViewModel.swift; sourceTree = "<group>"; };
@@ -1448,6 +1454,7 @@
 		DE71A303D3415BD7E8762E3C /* PinnedMetricsEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinnedMetricsEditorView.swift; sourceTree = "<group>"; };
 		DE78DB2AC6F8003138FD0A69 /* HighlightBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightBuilder.swift; sourceTree = "<group>"; };
 		DEA8112DB929B3DADB34CE90 /* WellnessDashboardEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessDashboardEntry.swift; sourceTree = "<group>"; };
+		DEE1138ACB6D34EE763AB704 /* VisionDashboardWorkspaceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionDashboardWorkspaceViewModel.swift; sourceTree = "<group>"; };
 		DFFF0FE906B259BB50046B77 /* HanokEaveShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HanokEaveShape.swift; sourceTree = "<group>"; };
 		E0B1124C57E15A16F5393513 /* WavePreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WavePreset.swift; sourceTree = "<group>"; };
 		E0CB29EC52EC584C606D46B2 /* InjurySeverity+View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InjurySeverity+View.swift"; sourceTree = "<group>"; };
@@ -1618,15 +1625,6 @@
 				FB403FD8611D03AA3B2D6047 /* TrainingVolumeViewModel.swift */,
 			);
 			path = TrainingVolume;
-			sourceTree = "<group>";
-		};
-		0823CB17016A1ABFBE290ACB /* Immersive */ = {
-			isa = PBXGroup;
-			children = (
-				8FB6E47ADCD7F9E12CC4D76F /* VisionImmersiveExperienceView.swift */,
-				117BF4F88D60A123ABF3B607 /* VisionImmersiveSceneView.swift */,
-			);
-			path = Immersive;
 			sourceTree = "<group>";
 		};
 		091B02B3170FA99560235235 /* Resources */ = {
@@ -1945,7 +1943,7 @@
 				3F070EC18FEBAA4756A1019B /* Activity */,
 				651BB42B1782D7944C5A1BF1 /* Chart3D */,
 				472BB223CDCA544B4E0173E9 /* Dashboard */,
-				0823CB17016A1ABFBE290ACB /* Immersive */,
+				D775BC7E8DE767BDF6BDAB4F /* Immersive */,
 				5ABC3E716FAD61FAD712FF83 /* Volumetric */,
 			);
 			path = Presentation;
@@ -1964,6 +1962,7 @@
 			isa = PBXGroup;
 			children = (
 				87AB64F8905AEDA79645CFE5 /* VisionDashboardView.swift */,
+				6F5B4F715EAF1F4ED8C87357 /* VisionDashboardWindowScene.swift */,
 			);
 			path = Dashboard;
 			sourceTree = "<group>";
@@ -2220,6 +2219,7 @@
 				09766B1616F441A6E190AB3D /* Settings */,
 				4CBC0BFFD723A6434AF81D03 /* Shared */,
 				EF7CF7DAEC6EDE44EB3415F0 /* Sleep */,
+				B6A8914700A2E96792B82748 /* Vision */,
 				71F96BDA94F49CF5687D1A8E /* Wellness */,
 				54603B34F068E4B096380D95 /* WhatsNew */,
 			);
@@ -2345,7 +2345,6 @@
 		7FD3A678EDE1D9AC92103880 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
-				D775BC7E8DE767BDF6BDAB4F /* Immersive */,
 				2801569E2046EA43B0A422A5 /* Shared */,
 			);
 			name = Presentation;
@@ -2561,6 +2560,14 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		B6A8914700A2E96792B82748 /* Vision */ = {
+			isa = PBXGroup;
+			children = (
+				DEE1138ACB6D34EE763AB704 /* VisionDashboardWorkspaceViewModel.swift */,
+			);
+			path = Vision;
+			sourceTree = "<group>";
+		};
 		B7A1860050CCF8E42D820FB4 /* Components */ = {
 			isa = PBXGroup;
 			children = (
@@ -2651,9 +2658,10 @@
 		D775BC7E8DE767BDF6BDAB4F /* Immersive */ = {
 			isa = PBXGroup;
 			children = (
-				4A8BF2DE11C7571470B24F6F /* VisionImmersiveExperienceViewModel.swift */,
+				8FB6E47ADCD7F9E12CC4D76F /* VisionImmersiveExperienceView.swift */,
+				117BF4F88D60A123ABF3B607 /* VisionImmersiveSceneView.swift */,
 			);
-			name = Immersive;
+			path = Immersive;
 			sourceTree = "<group>";
 		};
 		DA913B21FEE895E60E186CED /* WeeklyStats */ = {
@@ -2962,6 +2970,7 @@
 				D6928C569558FBEFFD1EA543 /* TrainingVolumeAnalysisServiceTests.swift */,
 				04426AA09C83C5581442899A /* TrainingVolumeViewModelTests.swift */,
 				9F9E9A951BB63F499DE9CEF6 /* TrendAnalysisServiceTests.swift */,
+				3471C5B08AC13922FFACFF4C /* VisionDashboardWorkspaceViewModelTests.swift */,
 				38618BB3728ECFB5A6584C8B /* VisionImmersiveExperienceViewModelTests.swift */,
 				8B861C83A3B2DEE4C00BAE2F /* WatchWorkoutUpdateValidationTests.swift */,
 				EE4D82D291F47695710D83CC /* WaveShapeTests.swift */,
@@ -3681,6 +3690,7 @@
 				FB13AC97683F965EB5B70960 /* UserCategoryManagementView.swift in Sources */,
 				9294E63F49449981FB03B297 /* View+BottomFadeMask.swift in Sources */,
 				AE4F7C1E2A6519C12097C742 /* View+NavigationTitlePolicy.swift in Sources */,
+				906A3160F62CC56F55A3F7AA /* VisionDashboardWorkspaceViewModel.swift in Sources */,
 				716599A57AEA8E93613A630D /* VisionImmersiveExperienceViewModel.swift in Sources */,
 				D71E8C8B0A298A6E1D22B876 /* VitalCard.swift in Sources */,
 				6929604A19862AC9D5D174AA /* VitalCardData.swift in Sources */,
@@ -3868,6 +3878,8 @@
 				4FE918597CF533DA5FB7DF80 /* TrendDirection.swift in Sources */,
 				C329D7F3DF36FD1D8D5722E2 /* VisionContentView.swift in Sources */,
 				E6F60CFFD073A302DE59C16F /* VisionDashboardView.swift in Sources */,
+				77B505B1A1DE988204EF9597 /* VisionDashboardWindowScene.swift in Sources */,
+				7745EBA42EB20C03815B25A6 /* VisionDashboardWorkspaceViewModel.swift in Sources */,
 				E65D80822B97AC73FC4C4870 /* VisionImmersiveExperienceView.swift in Sources */,
 				E6B9C7D3EF300A18CA59ADE6 /* VisionImmersiveExperienceViewModel.swift in Sources */,
 				1F0F4FB7F4F7CB50F224E92C /* VisionImmersiveSceneView.swift in Sources */,
@@ -4091,6 +4103,7 @@
 				6CE77FC67B4548ED0DC8EC21 /* TrainingVolumeViewModelTests.swift in Sources */,
 				33CBA666D1BEC318EE33466A /* TrendAnalysisServiceTests.swift in Sources */,
 				E5797EE48EE90E00D3100B4E /* URLProtocolStub.swift in Sources */,
+				D74EC171F423083C21E89A34 /* VisionDashboardWorkspaceViewModelTests.swift in Sources */,
 				18CB21BB71A305B0C0B2563C /* VisionImmersiveExperienceViewModelTests.swift in Sources */,
 				FFA8F6AEE88173FB6D9737C2 /* WatchWorkoutUpdateValidationTests.swift in Sources */,
 				A74767CE9DFC43FB4368FD05 /* WaveShapeTests.swift in Sources */,

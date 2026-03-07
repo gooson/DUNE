@@ -61,4 +61,47 @@ enum CardioSecondaryUnit: String, Codable, Sendable, CaseIterable {
         case .timeOnly: return nil
         }
     }
+
+    /// Whether this cardio unit represents a machine-driven session where
+    /// elapsed time is automatic and the user controls intensity via machine level.
+    var supportsMachineLevel: Bool {
+        switch self {
+        case .floors, .timeOnly:
+            return true
+        case .km, .meters, .count:
+            return false
+        }
+    }
+
+    /// Machine-driven cardio sessions should default to indoor-only start flows.
+    var isIndoorOnly: Bool {
+        supportsMachineLevel
+    }
+
+    /// Allowed machine level range for supported cardio sessions.
+    var machineLevelRange: ClosedRange<Int>? {
+        guard supportsMachineLevel else { return nil }
+        return 1...20
+    }
+
+    /// Clamps the provided machine level into the supported range.
+    func normalizedMachineLevel(_ value: Int?) -> Int? {
+        guard let value, let range = machineLevelRange else { return nil }
+        return min(max(value, range.lowerBound), range.upperBound)
+    }
+
+    /// Returns a normalized 0.0-1.0 intensity score derived from the average level.
+    func normalizedMachineLevelScore(_ averageLevel: Double?) -> Double? {
+        guard let averageLevel, let range = machineLevelRange else { return nil }
+        let lower = Double(range.lowerBound)
+        let span = Double(range.upperBound - range.lowerBound)
+        guard span > 0 else { return nil }
+        return min(max((averageLevel - lower) / span, 0), 1)
+    }
+
+    /// Reuses the existing stair-climber multiplier curve for machine cardio MET adjustment.
+    func metMultiplier(forMachineLevel level: Int?) -> Double {
+        guard supportsMachineLevel, let level = normalizedMachineLevel(level) else { return 1.0 }
+        return min(max(Double(level) / 5.0, 0.5), 2.0)
+    }
 }

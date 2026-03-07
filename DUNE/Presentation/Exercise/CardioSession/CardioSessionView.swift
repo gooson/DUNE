@@ -29,6 +29,10 @@ struct CardioSessionView: View {
             Spacer()
             primaryMetric
             Spacer()
+            if viewModel.supportsMachineLevel {
+                machineLevelControl
+                Spacer()
+            }
             if viewModel.showsDistance {
                 distanceSection
                 Spacer()
@@ -169,7 +173,16 @@ struct CardioSessionView: View {
 
     // MARK: - Secondary Metrics
 
+    @ViewBuilder
     private var secondaryMetrics: some View {
+        if viewModel.supportsMachineLevel {
+            machineSecondaryMetrics
+        } else {
+            defaultSecondaryMetrics
+        }
+    }
+
+    private var defaultSecondaryMetrics: some View {
         HStack(spacing: DS.Spacing.md) {
             metricTile(
                 icon: "figure.walk",
@@ -190,6 +203,79 @@ struct CardioSessionView: View {
                 iconColor: DS.Color.positive,
                 value: viewModel.formattedElevationGain,
                 unit: "m"
+            )
+
+            metricTile(
+                icon: "flame.fill",
+                iconColor: DS.Color.caution,
+                value: viewModel.estimatedCalories > 0
+                    ? "\(Int(viewModel.estimatedCalories))"
+                    : "--",
+                unit: "kcal"
+            )
+        }
+    }
+
+    private var machineLevelControl: some View {
+        VStack(spacing: DS.Spacing.sm) {
+            Text("Level")
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(DS.Color.textSecondary)
+
+            HStack(spacing: DS.Spacing.md) {
+                machineLevelButton(systemImage: "minus") {
+                    viewModel.adjustMachineLevel(by: -1)
+                }
+
+                VStack(spacing: DS.Spacing.xxs) {
+                    Text(viewModel.formattedCurrentMachineLevel)
+                        .font(.system(size: 38, weight: .bold, design: .rounded).monospacedDigit())
+                        .foregroundStyle(DS.Color.activity)
+                        .contentTransition(.numericText())
+                    Text("Current")
+                        .font(.caption)
+                        .foregroundStyle(DS.Color.textSecondary)
+                }
+                .frame(maxWidth: .infinity)
+
+                machineLevelButton(systemImage: "plus") {
+                    viewModel.adjustMachineLevel(by: 1)
+                }
+            }
+        }
+    }
+
+    private func machineLevelButton(systemImage: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Image(systemName: systemImage)
+                .font(.title3.weight(.bold))
+                .frame(width: 52, height: 52)
+        }
+        .buttonStyle(.borderedProminent)
+        .tint(DS.Color.activity)
+    }
+
+    private var machineSecondaryMetrics: some View {
+        HStack(spacing: DS.Spacing.md) {
+            metricTile(
+                icon: "slider.horizontal.3",
+                iconColor: DS.Color.activity,
+                value: viewModel.formattedCurrentMachineLevel,
+                unit: String(localized: "Level")
+            )
+
+            metricTile(
+                icon: "sum",
+                iconColor: DS.Color.positive,
+                value: viewModel.formattedAverageMachineLevel,
+                unit: String(localized: "Avg Level")
+            )
+
+            metricTile(
+                icon: "arrow.up.circle.fill",
+                iconColor: DS.Color.steps,
+                value: viewModel.formattedMaxMachineLevel,
+                unit: String(localized: "Max Level")
             )
 
             metricTile(

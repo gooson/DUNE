@@ -109,7 +109,13 @@ struct SessionSummaryView: View {
             statItem(title: "Duration", value: formattedDuration)
 
             if workoutManager.isCardioMode {
-                if isStairMode {
+                if workoutManager.supportsMachineLevel {
+                    statItem(title: "Avg Level", value: workoutManager.formattedAverageMachineLevel)
+                    statItem(title: "Max Level", value: workoutManager.formattedMaxMachineLevel)
+                    if isStairMode {
+                        statItem(title: "Floors Climbed", value: formattedFloors)
+                    }
+                } else if isStairMode {
                     statItem(title: "Floors Climbed", value: formattedFloors)
                 } else {
                     statItem(title: "Distance", value: formattedDistance)
@@ -518,13 +524,16 @@ struct SessionSummaryView: View {
             stepCount: steps > 0 ? Int(steps) : nil,
             averagePaceSecondsPerKm: pace > 0 ? pace : nil,
             floorsAscended: floors > 0 ? floors : nil,
+            cardioMachineLevelAverage: workoutManager.averageMachineLevel,
+            cardioMachineLevelMax: workoutManager.maxMachineLevel,
             isFromHealthKit: true,
             healthKitWorkoutID: healthKitWorkoutID,
             exerciseDefinitionID: exerciseDefinitionID,
             primaryMuscles: primaryMuscles,
             secondaryMuscles: secondaryMuscles,
             calorieSource: activeCalories > 0 ? .healthKit : .manual,
-            rpe: effort
+            rpe: effort,
+            autoIntensityRaw: workoutManager.cardioMachineAutoIntensityRaw
         )
         modelContext.insert(record)
     }

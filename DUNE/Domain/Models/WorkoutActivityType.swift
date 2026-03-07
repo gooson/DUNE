@@ -334,6 +334,38 @@ enum WorkoutActivityType: String, Codable, Sendable, CaseIterable {
         }
     }
 
+    // MARK: - Cardio Resolution
+
+    /// Resolves a cardio `WorkoutActivityType` from an exercise definition ID and name.
+    /// Uses a 4-step fallback: direct rawValue -> stem extraction -> name inference -> mixedCardio fallback.
+    /// Returns nil when the input type is not a cardio candidate.
+    static func resolveCardioActivity(
+        from id: String,
+        name: String,
+        inputTypeRaw: String? = nil
+    ) -> WorkoutActivityType? {
+        if let inputTypeRaw,
+           !inputTypeRaw.isEmpty,
+           !cardioInputTypes.contains(inputTypeRaw) {
+            return nil
+        }
+
+        if let type = WorkoutActivityType(rawValue: id), type.category == .cardio {
+            return type
+        }
+
+        let stem = id.components(separatedBy: "-").first ?? ""
+        if !stem.isEmpty, let type = WorkoutActivityType(rawValue: stem), type.category == .cardio {
+            return type
+        }
+
+        if let type = infer(from: name), type.category == .cardio {
+            return type
+        }
+
+        return .mixedCardio
+    }
+
     // MARK: - Distance-Based Resolution
 
     /// Resolves a distance-based `WorkoutActivityType` from an exercise definition ID and name.
@@ -349,26 +381,11 @@ enum WorkoutActivityType: String, Codable, Sendable, CaseIterable {
         name: String,
         inputTypeRaw: String? = nil
     ) -> WorkoutActivityType? {
-        if let inputTypeRaw,
-           !inputTypeRaw.isEmpty,
-           !cardioInputTypes.contains(inputTypeRaw) {
+        guard let type = resolveCardioActivity(from: id, name: name, inputTypeRaw: inputTypeRaw),
+              type.isDistanceBased else {
             return nil
         }
-
-        // 1. Direct rawValue match
-        if let type = WorkoutActivityType(rawValue: id), type.isDistanceBased {
-            return type
-        }
-        // 2. Stem extraction for variants like "running-treadmill"
-        let stem = id.components(separatedBy: "-").first ?? ""
-        if !stem.isEmpty, let type = WorkoutActivityType(rawValue: stem), type.isDistanceBased {
-            return type
-        }
-        // 3. Name-based inference
-        if let type = infer(from: name), type.isDistanceBased {
-            return type
-        }
-        return nil
+        return type
     }
 
     /// Input types that should be treated as cardio workout candidates.

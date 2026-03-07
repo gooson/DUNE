@@ -13,10 +13,19 @@ struct WatchEffortInputPolicyTests {
 
     @Test("descriptor maps effort buckets")
     func descriptorMapsEffortBuckets() {
-        #expect(WatchEffortInputPolicy.descriptor(for: 2) == "Easy")
-        #expect(WatchEffortInputPolicy.descriptor(for: 5) == "Moderate")
-        #expect(WatchEffortInputPolicy.descriptor(for: 8) == "Hard")
-        #expect(WatchEffortInputPolicy.descriptor(for: 10) == "All Out")
+        let easy = WatchEffortInputPolicy.descriptor(for: 2)
+        let moderate = WatchEffortInputPolicy.descriptor(for: 5)
+        let hard = WatchEffortInputPolicy.descriptor(for: 8)
+        let allOut = WatchEffortInputPolicy.descriptor(for: 10)
+
+        #expect(easy == WatchEffortInputPolicy.descriptor(for: 3))
+        #expect(moderate == WatchEffortInputPolicy.descriptor(for: 4))
+        #expect(hard == WatchEffortInputPolicy.descriptor(for: 7))
+        #expect(allOut == WatchEffortInputPolicy.descriptor(for: 9))
+
+        #expect(easy != moderate)
+        #expect(moderate != hard)
+        #expect(hard != allOut)
     }
 
     @Test("shouldPlayHaptic respects debounce interval")

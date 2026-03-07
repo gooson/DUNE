@@ -1,9 +1,9 @@
 ---
 source: brainstorm/vision-pro-features
 priority: p3
-status: ready
+status: in-progress
 created: 2026-03-05
-updated: 2026-03-05
+updated: 2026-03-07
 ---
 
 # Vision Pro Phase 4-5: 소셜 + 고급 기능
@@ -29,6 +29,21 @@ SharePlay 소셜 기능 및 고급 입력 방식 구현.
 ### Multi-Window Dashboard (E1)
 - 각 메트릭을 독립 윈도우로 분리
 - openWindow action으로 공간 배치
+
+## 진행 현황
+
+- [x] E1 Multi-Window Dashboard
+  - condition/activity/sleep/body 전용 visionOS window 추가
+  - 메인 dashboard에서 각 window open action 연결
+  - shared workspace view model + unit test 추가
+- [ ] G1 Shared Workout Space
+- [ ] F3 Voice-First Workout Entry
+- [ ] C5 Exercise Form Guide
+
+## 메모
+
+- 이번 배치는 `/run`으로 E1만 ship 완료.
+- SharePlay(GroupActivities/SharedWorldAnchors)와 voice/body tracking은 capability 및 API 스캐폴드가 별도 필요하므로 후속 구현으로 남김.
 
 ## 기술 요구사항
 - GroupActivities (SharePlay)

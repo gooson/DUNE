@@ -13,8 +13,11 @@ struct CardioSessionRecord: Sendable {
     let averageCadenceStepsPerMinute: Double?
     let elevationGainMeters: Double?
     let floorsAscended: Double?
+    let cardioMachineLevelAverage: Double?
+    let cardioMachineLevelMax: Int?
     let estimatedCalories: Double
     let metValue: Double
+    let autoIntensityRaw: Double?
     let startDate: Date
     /// VO2 Max (cardio fitness) from HealthKit at workout time (ml/kg/min).
     let cardioFitnessVO2Max: Double?
@@ -48,6 +51,9 @@ final class CardioSessionViewModel {
     private(set) var stepCount: Int = 0
     private(set) var cadenceStepsPerMinute: Double = 0
     private(set) var floorsAscended: Double = 0
+    private(set) var currentMachineLevel: Int?
+    private(set) var averageMachineLevel: Double?
+    private(set) var maxMachineLevel: Int?
     private(set) var currentPaceSecondsPerKm: Double = 0
     private(set) var averagePaceSecondsPerKm: Double = 0
     private(set) var estimatedCalories: Double = 0
@@ -99,9 +105,30 @@ final class CardioSessionViewModel {
         return Int(totalElevationGainMeters).formattedWithSeparator
     }
 
+    var cardioUnit: CardioSecondaryUnit {
+        exercise.cardioSecondaryUnit ?? .km
+    }
+
     /// Whether distance/pace should be shown for this activity type.
     var showsDistance: Bool {
-        activityType.isDistanceBased
+        exercise.cardioSecondaryUnit?.usesDistanceField ?? activityType.isDistanceBased
+    }
+
+    var supportsMachineLevel: Bool {
+        cardioUnit.supportsMachineLevel
+    }
+
+    var formattedCurrentMachineLevel: String {
+        currentMachineLevel.map { $0.formattedWithSeparator } ?? "--"
+    }
+
+    var formattedAverageMachineLevel: String {
+        guard let averageMachineLevel, averageMachineLevel.isFinite else { return "--" }
+        return averageMachineLevel.formatted(.number.precision(.fractionLength(1)))
+    }
+
+    var formattedMaxMachineLevel: String {
+        maxMachineLevel.map { $0.formattedWithSeparator } ?? "--"
     }
 
     // MARK: - Dependencies
@@ -116,6 +143,10 @@ final class CardioSessionViewModel {
     private var lastResumeDate: Date?
     private var baselineDaySteps: Double?
     private var lastStepRefreshAt: Date?
+    private var machineLevelWeightedSeconds: TimeInterval = 0
+    private var machineLevelWeightedSum: Double = 0
+    private var machineAdjustedMETSeconds: Double = 0
+    private var lastMachineLevelSampleDate: Date?
 
     private var usesGPSDistance: Bool {
         isOutdoor && locationService != nil
@@ -154,6 +185,7 @@ final class CardioSessionViewModel {
         lastResumeDate = startDate
         pausedAccumulated = 0
         resetLiveMetrics()
+        lastMachineLevelSampleDate = startDate
         state = .running
         baselineDaySteps = nil
         lastStepRefreshAt = nil
@@ -190,9 +222,11 @@ final class CardioSessionViewModel {
 
     func pause() {
         guard state == .running else { return }
+        captureMachineLevelSegment(until: Date())
         if let resume = lastResumeDate {
             pausedAccumulated += Date().timeIntervalSince(resume)
         }
+        lastMachineLevelSampleDate = nil
         lastResumeDate = nil
         state = .paused
         timerTask?.cancel()
@@ -201,22 +235,26 @@ final class CardioSessionViewModel {
     func resume() {
         guard state == .paused else { return }
         lastResumeDate = Date()
+        lastMachineLevelSampleDate = lastResumeDate
         state = .running
         startTimer()
     }
 
     func end() async {
         guard state == .running || state == .paused else { return }
+        let endDate = Date()
 
         // Cancel timer FIRST to prevent race condition
         timerTask?.cancel()
         timerTask = nil
 
         // Compute final elapsed time
+        captureMachineLevelSegment(until: endDate)
         if state == .running, let resume = lastResumeDate {
-            pausedAccumulated += Date().timeIntervalSince(resume)
+            pausedAccumulated += endDate.timeIntervalSince(resume)
             lastResumeDate = nil
         }
+        lastMachineLevelSampleDate = nil
         elapsedSeconds = pausedAccumulated
 
         // Get final distance/elevation from GPS
@@ -231,12 +269,27 @@ final class CardioSessionViewModel {
 
         updateCurrentPace()
         updateAveragePace()
-        updateCalories()
+        updateCalories(at: endDate)
         if activityType == .walking {
             await refreshWalkingSteps(force: true)
         }
         await fetchCardioFitness()
         state = .finished
+    }
+
+    func setMachineLevel(_ level: Int) {
+        guard supportsMachineLevel, let normalized = cardioUnit.normalizedMachineLevel(level) else { return }
+        let now = Date()
+        captureMachineLevelSegment(until: now)
+        currentMachineLevel = normalized
+        maxMachineLevel = max(maxMachineLevel ?? normalized, normalized)
+        updateCalories(at: now)
+    }
+
+    func adjustMachineLevel(by delta: Int) {
+        guard supportsMachineLevel, let range = cardioUnit.machineLevelRange else { return }
+        let baseline = currentMachineLevel ?? range.lowerBound
+        setMachineLevel(baseline + delta)
     }
 
     // MARK: - Timer
@@ -248,7 +301,8 @@ final class CardioSessionViewModel {
                 try? await Task.sleep(for: .seconds(1))
                 guard !Task.isCancelled else { break }
                 guard let self else { break }
-                self.updateElapsed()
+                let now = Date()
+                self.updateElapsed(at: now)
 
                 if let locationService = self.locationService {
                     self.totalDistanceMeters = locationService.totalDistanceMeters
@@ -258,7 +312,7 @@ final class CardioSessionViewModel {
                 self.applyMotionSnapshot(self.motionService.latestSnapshot, isFinal: false)
                 self.updateCurrentPace()
                 self.updateAveragePace()
-                self.updateCalories()
+                self.updateCalories(at: now)
                 if self.activityType == .walking {
                     Task { @MainActor [weak self] in
                         await self?.refreshWalkingSteps()
@@ -268,9 +322,9 @@ final class CardioSessionViewModel {
         }
     }
 
-    private func updateElapsed() {
+    private func updateElapsed(at now: Date) {
         guard let resume = lastResumeDate else { return }
-        elapsedSeconds = pausedAccumulated + Date().timeIntervalSince(resume)
+        elapsedSeconds = pausedAccumulated + now.timeIntervalSince(resume)
     }
 
     private func updateCurrentPace() {
@@ -348,10 +402,16 @@ final class CardioSessionViewModel {
         }
     }
 
-    private func updateCalories() {
+    private func updateCalories(at now: Date = Date()) {
         guard elapsedSeconds > 0 else { return }
+        let metValue: Double = {
+            guard supportsMachineLevel else { return exercise.metValue }
+            captureMachineLevelSegment(until: now)
+            let safeElapsed = max(elapsedSeconds, 1)
+            return max(machineAdjustedMETSeconds / safeElapsed, exercise.metValue * 0.5)
+        }()
         let calories = calorieService.estimate(
-            metValue: exercise.metValue,
+            metValue: metValue,
             bodyWeightKg: CalorieEstimationService.defaultBodyWeightKg,
             durationSeconds: elapsedSeconds,
             restSeconds: 0
@@ -379,12 +439,19 @@ final class CardioSessionViewModel {
         stepCount = 0
         cadenceStepsPerMinute = 0
         floorsAscended = 0
+        currentMachineLevel = nil
+        averageMachineLevel = nil
+        maxMachineLevel = nil
         currentPaceSecondsPerKm = 0
         averagePaceSecondsPerKm = 0
         estimatedCalories = 0
         heartRate = 0
         walkingStepCount = 0
         cardioFitnessVO2Max = nil
+        machineLevelWeightedSeconds = 0
+        machineLevelWeightedSum = 0
+        machineAdjustedMETSeconds = 0
+        lastMachineLevelSampleDate = nil
     }
 
     private func establishWalkingStepBaseline() async {
@@ -423,6 +490,27 @@ final class CardioSessionViewModel {
         }
     }
 
+    private func captureMachineLevelSegment(until date: Date) {
+        guard supportsMachineLevel else { return }
+        guard let lastMachineLevelSampleDate else {
+            self.lastMachineLevelSampleDate = date
+            return
+        }
+        let delta = max(date.timeIntervalSince(lastMachineLevelSampleDate), 0)
+        guard delta > 0 else { return }
+
+        let segmentMET = exercise.metValue * cardioUnit.metMultiplier(forMachineLevel: currentMachineLevel)
+        machineAdjustedMETSeconds += segmentMET * delta
+
+        if let currentMachineLevel {
+            machineLevelWeightedSeconds += delta
+            machineLevelWeightedSum += Double(currentMachineLevel) * delta
+            averageMachineLevel = machineLevelWeightedSum / machineLevelWeightedSeconds
+        }
+
+        self.lastMachineLevelSampleDate = date
+    }
+
     // MARK: - Record Creation
 
     /// Creates a record from the completed cardio session.
@@ -440,6 +528,13 @@ final class CardioSessionViewModel {
         let safeFloors = (floorsAscended > 0 && floorsAscended.isFinite && floorsAscended < 20_000)
             ? floorsAscended
             : nil
+        let safeAverageMachineLevel = averageMachineLevel.flatMap {
+            ($0.isFinite && $0 > 0) ? $0 : nil
+        }
+        let safeMaxMachineLevel = maxMachineLevel.flatMap { cardioUnit.normalizedMachineLevel($0) }
+        let referenceMachineLevel = safeAverageMachineLevel.map { Int($0.rounded()) }
+            ?? safeMaxMachineLevel
+            ?? currentMachineLevel
         let combinedSteps = max(stepCount, Int(walkingStepCount.rounded()))
 
         return CardioSessionRecord(
@@ -453,8 +548,13 @@ final class CardioSessionViewModel {
             averageCadenceStepsPerMinute: safeCadence,
             elevationGainMeters: safeElevation,
             floorsAscended: safeFloors,
+            cardioMachineLevelAverage: safeAverageMachineLevel,
+            cardioMachineLevelMax: safeMaxMachineLevel,
             estimatedCalories: estimatedCalories,
-            metValue: exercise.metValue,
+            metValue: supportsMachineLevel
+                ? exercise.metValue * cardioUnit.metMultiplier(forMachineLevel: referenceMachineLevel)
+                : exercise.metValue,
+            autoIntensityRaw: cardioUnit.normalizedMachineLevelScore(safeAverageMachineLevel),
             startDate: startDate,
             cardioFitnessVO2Max: cardioFitnessVO2Max
         )
