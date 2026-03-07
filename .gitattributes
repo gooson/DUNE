@@ -1,0 +1,4 @@
+# Normalize xcscheme files to Xcode 26 format on staging.
+# Prevents perpetual diffs from xcodegen (v1.3) vs Xcode (v1.7).
+# Setup: git config filter.xcscheme.clean 'scripts/lib/xcscheme-clean-filter.sh'
+*.xcscheme filter=xcscheme
