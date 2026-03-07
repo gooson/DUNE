@@ -10,6 +10,7 @@ struct HealthMetric: Identifiable, Hashable, Sendable {
     let category: Category
     var isHistorical: Bool = false
     var iconOverride: String? = nil
+    var workoutTypeKey: String? = nil
 
     enum Category: String, Sendable, CaseIterable {
         case hrv
