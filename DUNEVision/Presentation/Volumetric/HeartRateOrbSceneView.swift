@@ -4,6 +4,11 @@ import SwiftUI
 struct HeartRateOrbSceneView: View {
     let orb: SpatialTrainingSummary.HeartRateOrb
 
+    @State private var yaw: Float = 0
+    @State private var pitch: Float = 0
+    @State private var dragStartYaw: Float = 0
+    @State private var dragStartPitch: Float = 0
+
     var body: some View {
         TimelineView(.animation(minimumInterval: 1.0 / 24.0)) { timeline in
             let pulse = pulseState(at: timeline.date)
@@ -37,6 +42,8 @@ struct HeartRateOrbSceneView: View {
                 content.add(root)
             } update: { content in
                 guard let root = content.entities.first(where: { $0.name == "orb-root" }) else { return }
+                root.transform.rotation = simd_quatf(angle: yaw, axis: [0, 1, 0])
+                    * simd_quatf(angle: pitch, axis: [1, 0, 0])
                 root.position.y = pulse.floatY
 
                 if let orbEntity = root.findEntity(named: "orb-core") as? ModelEntity {
@@ -48,7 +55,21 @@ struct HeartRateOrbSceneView: View {
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .gesture(rotationGesture)
         }
+    }
+
+    private var rotationGesture: some Gesture {
+        DragGesture(minimumDistance: 2)
+            .onChanged { value in
+                yaw = dragStartYaw + Float(value.translation.width) * 0.008
+                pitch = (dragStartPitch + Float(value.translation.height) * 0.004)
+                    .clamped(to: -0.48...0.18)
+            }
+            .onEnded { _ in
+                dragStartYaw = yaw
+                dragStartPitch = pitch
+            }
     }
 
     private func pulseState(at date: Date) -> PulseState {
@@ -68,4 +89,10 @@ private struct PulseState {
     let coreScale: Float
     let haloScale: Float
     let floatY: Float
+}
+
+private extension Float {
+    func clamped(to range: ClosedRange<Float>) -> Float {
+        min(max(self, range.lowerBound), range.upperBound)
+    }
 }

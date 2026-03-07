@@ -5,6 +5,11 @@ struct TrainingVolumeBlocksSceneView: View {
     let muscles: [SpatialTrainingSummary.MuscleLoad]
     let selectedMuscle: MuscleGroup?
 
+    @State private var yaw: Float = 0.28
+    @State private var pitch: Float = -0.16
+    @State private var dragStartYaw: Float = 0.28
+    @State private var dragStartPitch: Float = -0.16
+
     var body: some View {
         RealityView { content in
             let root = Entity()
@@ -14,6 +19,8 @@ struct TrainingVolumeBlocksSceneView: View {
             content.add(root)
         } update: { content in
             guard let root = content.entities.first(where: { $0.name == "blocks-root" }) else { return }
+            root.transform.rotation = simd_quatf(angle: yaw, axis: [0, 1, 0])
+                * simd_quatf(angle: pitch, axis: [1, 0, 0])
 
             for (index, muscleLoad) in muscles.enumerated() {
                 let name = "block.\(muscleLoad.muscle.rawValue)"
@@ -39,6 +46,20 @@ struct TrainingVolumeBlocksSceneView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .gesture(rotationGesture)
+    }
+
+    private var rotationGesture: some Gesture {
+        DragGesture(minimumDistance: 2)
+            .onChanged { value in
+                yaw = dragStartYaw + Float(value.translation.width) * 0.008
+                pitch = (dragStartPitch + Float(value.translation.height) * 0.004)
+                    .clamped(to: -0.48...0.18)
+            }
+            .onEnded { _ in
+                dragStartYaw = yaw
+                dragStartPitch = pitch
+            }
     }
 
     private func installBase(into root: Entity) {
@@ -74,5 +95,11 @@ struct TrainingVolumeBlocksSceneView: View {
     private func height(for muscleLoad: SpatialTrainingSummary.MuscleLoad) -> Float {
         let normalized = max(0.35, min(Float(muscleLoad.weeklyLoadUnits) / 8.0, 2.4))
         return normalized
+    }
+}
+
+private extension Float {
+    func clamped(to range: ClosedRange<Float>) -> Float {
+        min(max(self, range.lowerBound), range.upperBound)
     }
 }
