@@ -140,9 +140,14 @@ private struct HabitListQueryView: View {
     // Correction #102: cached today exercise check (avoid body-path Calendar ops)
     @State private var cachedTodayExerciseExists = false
     @State private var historySelection: HabitHistorySelection?
+    @State private var actionSelection: HabitActionSelection?
     @State private var heroAppeared = false
 
     private struct HabitHistorySelection: Identifiable {
+        let id: UUID
+    }
+
+    private struct HabitActionSelection: Identifiable {
         let id: UUID
     }
 
@@ -256,61 +261,123 @@ private struct HabitListQueryView: View {
                         HabitRowView(
                             progress: progress,
                             onToggle: { toggleCheck(habitId: progress.id) },
-                            onUpdateValue: { value in updateValue(habitId: progress.id, value: value) }
+                            onUpdateValue: { value in updateValue(habitId: progress.id, value: value) },
+                            trailingAccessory: AnyView(habitActionsPlaceholder)
                         )
                         .contextMenu {
-                            habitContextMenu(for: progress)
+                            habitActionItems(for: progress, deferred: true)
+                        }
+                        .overlay(alignment: .topTrailing) {
+                            habitActionsButton(for: progress)
+                                .padding(.top, habitActionInset)
+                                .padding(.trailing, habitActionInset)
                         }
                     }
                 }
             }
         }
         .accessibilityIdentifier("life-section-habits")
+        .confirmationDialog(
+            "More actions",
+            isPresented: Binding(
+                get: { actionSelection != nil },
+                set: { if !$0 { actionSelection = nil } }
+            ),
+            titleVisibility: .visible
+        ) {
+            if let progress = selectedActionProgress {
+                habitActionItems(for: progress, deferred: true)
+            }
+            Button("Cancel", role: .cancel) {
+                actionSelection = nil
+            }
+        }
+    }
+
+    private var habitActionInset: CGFloat {
+        isRegular ? DS.Spacing.xl : DS.Spacing.lg
+    }
+
+    private var habitActionsPlaceholder: some View {
+        Color.clear
+            .frame(width: 28, height: 28)
+            .accessibilityHidden(true)
+    }
+
+    private var selectedActionProgress: HabitProgress? {
+        guard let actionSelection else { return nil }
+        return viewModel.habitProgresses.first { $0.id == actionSelection.id }
+    }
+
+    private func habitActionsButton(for progress: HabitProgress) -> some View {
+        Button {
+            actionSelection = HabitActionSelection(id: progress.id)
+        } label: {
+            Label("More actions", systemImage: "ellipsis.circle")
+                .labelStyle(.iconOnly)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .padding(6)
+                .background(.ultraThinMaterial, in: Circle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityIdentifier(habitActionsIdentifier(for: progress))
+    }
+
+    private func habitActionsIdentifier(for progress: HabitProgress) -> String {
+        "life-habit-actions-\(progress.name)"
     }
 
     @ViewBuilder
-    private func habitContextMenu(for progress: HabitProgress) -> some View {
+    private func habitActionItems(for progress: HabitProgress, deferred: Bool) -> some View {
+        let habit = habitsByID[progress.id]
+
         Button {
-            performDeferredContextMenuAction {
-                if let habit = habitsByID[progress.id] {
+            performHabitAction(deferred: deferred) {
+                if let habit {
                     viewModel.startEditing(habit)
                 }
             }
         } label: {
             Label("Edit", systemImage: "pencil")
         }
+        .accessibilityIdentifier("life-habit-action-edit")
+        .disabled(habit == nil)
 
         if progress.isCycleBased {
             Button {
-                performDeferredContextMenuAction {
+                performHabitAction(deferred: deferred) {
                     snoozeCycle(habitId: progress.id, days: 1)
                 }
             } label: {
                 Label("Snooze 1 Day", systemImage: "clock.arrow.trianglehead.2.counterclockwise.rotate.90")
             }
+            .accessibilityIdentifier("life-habit-action-snooze")
             .disabled(!progress.isDue)
 
             Button {
-                performDeferredContextMenuAction {
+                performHabitAction(deferred: deferred) {
                     skipCycle(habitId: progress.id)
                 }
             } label: {
                 Label("Skip Cycle", systemImage: "forward.end")
             }
+            .accessibilityIdentifier("life-habit-action-skip")
             .disabled(!progress.isDue)
 
             Button {
-                performDeferredContextMenuAction {
+                performHabitAction(deferred: deferred) {
                     historySelection = HabitHistorySelection(id: progress.id)
                 }
             } label: {
                 Label("History", systemImage: "clock.badge.checkmark")
             }
+            .accessibilityIdentifier("life-habit-action-history")
         }
 
         Button(role: .destructive) {
-            performDeferredContextMenuAction {
-                if let habit = habitsByID[progress.id] {
+            performHabitAction(deferred: deferred) {
+                if let habit {
                     withAnimation {
                         habit.isArchived = true
                     }
@@ -319,6 +386,8 @@ private struct HabitListQueryView: View {
         } label: {
             Label("Archive", systemImage: "archivebox")
         }
+        .accessibilityIdentifier("life-habit-action-archive")
+        .disabled(habit == nil)
     }
 
     // MARK: - Auto Achievements
@@ -726,9 +795,17 @@ private struct HabitListQueryView: View {
         )
     }
 
-    private func performDeferredContextMenuAction(_ action: @escaping @MainActor () -> Void) {
+    private func performHabitAction(deferred: Bool, _ action: @escaping () -> Void) {
+        if deferred {
+            performDeferredHabitAction(action)
+        } else {
+            action()
+        }
+    }
+
+    private func performDeferredHabitAction(_ action: @escaping () -> Void) {
         Task { @MainActor in
-            // Let UIKit finish dismissing the visible context menu before mutating the host row.
+            // Let the current menu/dialog dismiss before mutating the host row or opening sheets.
             await Task.yield()
             action()
         }

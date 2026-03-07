@@ -56,6 +56,9 @@ enum AXID {
     static let lifeToolbarAdd = "life-toolbar-add"
     static let lifeSectionHabits = "life-section-habits"
     static let lifeHabitToggle = "life-habit-toggle"
+    static func lifeHabitActions(_ habitName: String) -> String { "life-habit-actions-\(habitName)" }
+    static let lifeHabitActionEdit = "life-habit-action-edit"
+    static let lifeHabitActionArchive = "life-habit-action-archive"
 
     // MARK: - Settings (active rows)
     static let settingsRowExerciseDefaults = "settings-row-exercisedefaults"
