@@ -56,6 +56,10 @@ final class WorkoutManager: NSObject {
 
     /// Whether the current session is a cardio workout.
     var isCardioMode: Bool { workoutMode.isCardio }
+    /// Current no-motion prompt state for cardio sessions.
+    private(set) var cardioInactivityPrompt: CardioInactivityPrompt?
+    /// Remaining seconds before auto-end once confirmation is active.
+    private(set) var cardioAutoEndCountdown: Int?
 
     // MARK: - Live Metrics
 
@@ -101,6 +105,12 @@ final class WorkoutManager: NSObject {
     private var machineLevelWeightedSeconds: TimeInterval = 0
     private var machineLevelWeightedSum: Double = 0
     private var lastMachineLevelSampleDate: Date?
+    private var inactivityMonitorTask: Task<Void, Never>?
+    private var lastMotionDate: Date?
+    private var lastInteractionDate: Date?
+    private var lastObservedDistance: Double = 0
+    private var lastObservedSteps: Double = 0
+    private var autoEndDeadline: Date?
 
     /// Average heart rate across the entire session.
     var averageHeartRate: Double {
@@ -375,9 +385,11 @@ final class WorkoutManager: NSObject {
         self.isSimulatedSessionActive = false
         self.pausedDuration = 0
         self.pauseStart = nil
+        self.resetCardioInactivityTracking(clearInteractionTimestamp: true)
 
         if Self.isSimulatorRuntime {
             startSimulatedSession(templateName: templateName)
+            startInactivityMonitoringIfNeeded()
             return
         }
 
@@ -417,6 +429,7 @@ final class WorkoutManager: NSObject {
 
             // Notify iPhone via WatchConnectivity
             WatchConnectivityManager.shared.sendWorkoutStarted(templateName: templateName)
+            startInactivityMonitoringIfNeeded()
         } catch {
             Self.logger.error("Failed to start HK session: \(String(describing: error), privacy: .public)")
             newSession.end()
@@ -428,6 +441,7 @@ final class WorkoutManager: NSObject {
             isSimulatedSessionActive = false
             pausedDuration = 0
             pauseStart = nil
+            stopInactivityMonitoring()
             throw error
         }
     }
@@ -445,6 +459,7 @@ final class WorkoutManager: NSObject {
         lastMachineLevelSampleDate = supportsMachineLevel ? startDate : nil
         pausedDuration = 0
         pauseStart = nil
+        resetCardioInactivityTracking(clearInteractionTimestamp: true)
         persistRecoveryState()
         WatchConnectivityManager.shared.sendWorkoutStarted(templateName: templateName)
     }
@@ -498,6 +513,7 @@ final class WorkoutManager: NSObject {
             isFinalizingWorkout = false
             isSimulatedSessionActive = false
             notifyWorkoutEndedIfNeeded()
+            stopInactivityMonitoring()
             return
         }
 
@@ -512,6 +528,19 @@ final class WorkoutManager: NSObject {
             startFinalizationTimeoutWatchdog()
         }
         session?.end()
+        stopInactivityMonitoring()
+    }
+
+    /// User explicitly keeps cardio workout running from inactivity recommendation.
+    func keepCardioWorkoutRunning() {
+        lastInteractionDate = Date()
+        clearInactivityPrompt()
+    }
+
+    /// Pause workout directly from inactivity recommendation.
+    func pauseFromCardioInactivityPrompt() {
+        keepCardioWorkoutRunning()
+        pause()
     }
 
     /// Wait briefly for HealthKit workout finalization after `.ended` to reduce UUID races.
@@ -575,6 +604,7 @@ final class WorkoutManager: NSObject {
     }
 
     func reset() {
+        stopInactivityMonitoring()
         finalizationTimeoutTask?.cancel()
         finalizationTimeoutTask = nil
         session = nil
@@ -609,6 +639,13 @@ final class WorkoutManager: NSObject {
         healthKitWorkoutUUID = nil
         pausedDuration = 0
         pauseStart = nil
+        cardioInactivityPrompt = nil
+        cardioAutoEndCountdown = nil
+        autoEndDeadline = nil
+        lastMotionDate = nil
+        lastInteractionDate = nil
+        lastObservedDistance = 0
+        lastObservedSteps = 0
         clearRecoveryState()
     }
 
@@ -804,6 +841,7 @@ final class WorkoutManager: NSObject {
         lastMachineLevelSampleDate = nil
         pauseStart = date
         isPaused = true
+        clearInactivityPrompt()
     }
 
     private func endPause(at date: Date) {
@@ -818,6 +856,7 @@ final class WorkoutManager: NSObject {
             lastMachineLevelSampleDate = date
         }
         isPaused = false
+        lastInteractionDate = date
     }
 
     private func captureMachineLevelSegment(until date: Date) {
@@ -836,6 +875,79 @@ final class WorkoutManager: NSObject {
         }
 
         self.lastMachineLevelSampleDate = date
+    }
+
+    private func startInactivityMonitoringIfNeeded() {
+        stopInactivityMonitoring()
+        guard isCardioMode else { return }
+
+        resetCardioInactivityTracking(clearInteractionTimestamp: true)
+
+        inactivityMonitorTask = Task { @MainActor [weak self] in
+            while let self, !Task.isCancelled {
+                self.evaluateCardioInactivity(at: Date())
+                try? await Task.sleep(for: .seconds(1))
+            }
+        }
+    }
+
+    private func stopInactivityMonitoring() {
+        inactivityMonitorTask?.cancel()
+        inactivityMonitorTask = nil
+        clearInactivityPrompt()
+    }
+
+    private func resetCardioInactivityTracking(clearInteractionTimestamp: Bool) {
+        lastMotionDate = Date()
+        if clearInteractionTimestamp {
+            lastInteractionDate = Date()
+        }
+        lastObservedDistance = distance
+        lastObservedSteps = steps
+        clearInactivityPrompt()
+    }
+
+    private func clearInactivityPrompt() {
+        cardioInactivityPrompt = nil
+        cardioAutoEndCountdown = nil
+        autoEndDeadline = nil
+    }
+
+    private func evaluateCardioInactivity(at now: Date) {
+        guard isCardioMode, isActive, !isSessionEnded, !isPaused else {
+            clearInactivityPrompt()
+            return
+        }
+
+        if distance > lastObservedDistance || steps > lastObservedSteps {
+            lastMotionDate = now
+            lastObservedDistance = distance
+            lastObservedSteps = steps
+            clearInactivityPrompt()
+            return
+        }
+
+        let referenceDate = max(lastMotionDate ?? now, lastInteractionDate ?? now)
+        let evaluation = CardioInactivityPolicy.evaluate(
+            inactivityDuration: now.timeIntervalSince(referenceDate),
+            autoEndDeadline: autoEndDeadline,
+            now: now
+        )
+
+        switch evaluation {
+        case .none:
+            clearInactivityPrompt()
+        case .softNudge:
+            cardioInactivityPrompt = .softNudge
+            cardioAutoEndCountdown = nil
+        case .confirmation(let deadline):
+            autoEndDeadline = deadline
+            cardioInactivityPrompt = .confirmation
+            cardioAutoEndCountdown = max(Int(ceil(deadline.timeIntervalSince(now))), 0)
+        case .autoEnd:
+            clearInactivityPrompt()
+            end()
+        }
     }
 }
 
@@ -986,6 +1098,8 @@ extension WorkoutManager: HKLiveWorkoutBuilderDelegate {
             if let totalSteps = stepValue {
                 steps = totalSteps
             }
+
+            evaluateCardioInactivity(at: Date())
         }
     }
 
@@ -1005,6 +1119,46 @@ extension WorkoutManager: HKLiveWorkoutBuilderDelegate {
         }
         currentPace = elapsed / km
     }
+}
+
+enum CardioInactivityPrompt: Equatable {
+    case softNudge
+    case confirmation
+}
+
+enum CardioInactivityPolicy {
+    static let softNudgeAfter: TimeInterval = 75
+    static let confirmationAfter: TimeInterval = 120
+    static let countdownDuration: TimeInterval = 10
+
+    static func evaluate(
+        inactivityDuration: TimeInterval,
+        autoEndDeadline: Date?,
+        now: Date
+    ) -> CardioInactivityEvaluation {
+        if let autoEndDeadline {
+            return now >= autoEndDeadline
+                ? .autoEnd
+                : .confirmation(deadline: autoEndDeadline)
+        }
+
+        guard inactivityDuration >= softNudgeAfter else {
+            return .none
+        }
+
+        if inactivityDuration >= confirmationAfter {
+            return .confirmation(deadline: now.addingTimeInterval(countdownDuration))
+        }
+
+        return .softNudge
+    }
+}
+
+enum CardioInactivityEvaluation: Equatable {
+    case none
+    case softNudge
+    case confirmation(deadline: Date)
+    case autoEnd
 }
 
 enum WorkoutElapsedTime {

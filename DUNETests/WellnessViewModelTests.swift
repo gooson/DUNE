@@ -175,6 +175,27 @@ private actor StartupTrackingBodyService: BodyCompositionQuerying {
     }
 }
 
+private actor TodayPreferredBMIBodyService: BodyCompositionQuerying {
+    let todayBMI: Double?
+    let latestBMI: (value: Double, date: Date)?
+
+    init(todayBMI: Double?, latestBMI: (value: Double, date: Date)?) {
+        self.todayBMI = todayBMI
+        self.latestBMI = latestBMI
+    }
+
+    func fetchWeight(days: Int) async throws -> [BodyCompositionSample] { [] }
+    func fetchBodyFat(days: Int) async throws -> [BodyCompositionSample] { [] }
+    func fetchLeanBodyMass(days: Int) async throws -> [BodyCompositionSample] { [] }
+    func fetchWeight(start: Date, end: Date) async throws -> [BodyCompositionSample] { [] }
+    func fetchLatestWeight(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
+    func fetchBMI(for date: Date) async throws -> Double? { todayBMI }
+    func fetchLatestBMI(withinDays days: Int) async throws -> (value: Double, date: Date)? { latestBMI }
+    func fetchBMI(start: Date, end: Date) async throws -> [BodyCompositionSample] { [] }
+    func fetchLatestBodyFat(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
+    func fetchLatestLeanBodyMass(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
+}
+
 private func makeEmptyWellnessSharedSnapshot(fetchedAt: Date = Date()) -> SharedHealthSnapshot {
     SharedHealthSnapshot(
         hrvSamples: [],
@@ -330,14 +351,39 @@ struct WellnessViewModelTests {
             ),
             heartRateService: NoopHeartRateService(),
             sharedHealthDataService: MockSharedHealthDataService(snapshot: makeEmptyWellnessSharedSnapshot())
-        )
-
+        }
+      
         await vm.performRefresh()
-
+      
         let vo2Card = vm.physicalCards.first { $0.category == .vo2Max }
         #expect(vo2Card != nil)
         #expect(vo2Card?.metric.value == 43.7)
         #expect(vo2Card?.lastUpdated == newer)
     }
 
+    @Test("BMI card prefers today's measurement over older latest sample")
+    func bmiCardPrefersTodayMeasurement() async {
+        let now = Date()
+        let weekAgo = Calendar.current.date(byAdding: .day, value: -7, to: now) ?? now
+        let bodyService = TodayPreferredBMIBodyService(
+            todayBMI: 24.6,
+            latestBMI: (value: 23.9, date: weekAgo)
+        )
+
+        let vm = WellnessViewModel(
+            sleepService: NoopSleepService(),
+            bodyService: bodyService,
+            hrvService: NoopHRVService(),
+            vitalsService: NoopVitalsService(),
+            heartRateService: NoopHeartRateService(),
+            sharedHealthDataService: MockSharedHealthDataService(snapshot: makeEmptyWellnessSharedSnapshot())
+        )
+
+        await vm.performRefresh()
+
+        let bmiCard = vm.physicalCards.first(where: { $0.category == .bmi })
+        #expect(bmiCard != nil)
+        #expect(bmiCard?.value == "24.6")
+        #expect(bmiCard?.lastUpdated.daysAgo == 0)
+    }
 }

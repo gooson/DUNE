@@ -20,6 +20,7 @@ struct SessionPagingView: View {
 // MARK: - Cardio: Flat horizontal paging (Apple Fitness pattern)
 
 private struct CardioSessionPagingView: View {
+    @Environment(WorkoutManager.self) private var workoutManager
     @Environment(\.isLuminanceReduced) private var isLuminanceReduced
 
     @State private var selectedTab: CardioTab = .mainMetrics
@@ -45,6 +46,83 @@ private struct CardioSessionPagingView: View {
             if reduced {
                 selectedTab = .mainMetrics
             }
+        }
+        .onChange(of: workoutManager.cardioInactivityPrompt) { oldValue, newValue in
+            guard oldValue != newValue else { return }
+            switch newValue {
+            case .softNudge:
+                WKInterfaceDevice.current().play(.start)
+            case .confirmation:
+                WKInterfaceDevice.current().play(.notification)
+            case nil:
+                break
+            }
+        }
+        .alert(
+            cardioAlertTitle,
+            isPresented: cardioInactivityAlertBinding,
+            actions: {
+                switch workoutManager.cardioInactivityPrompt {
+                case .softNudge:
+                    Button("Keep Running") {
+                        workoutManager.keepCardioWorkoutRunning()
+                    }
+                    Button("Pause") {
+                        workoutManager.pauseFromCardioInactivityPrompt()
+                    }
+                    Button("End Workout", role: .destructive) {
+                        workoutManager.end()
+                    }
+                case .confirmation:
+                    Button("Keep Running") {
+                        workoutManager.keepCardioWorkoutRunning()
+                    }
+                    Button("End Now", role: .destructive) {
+                        workoutManager.end()
+                    }
+                case nil:
+                    Button("OK", role: .cancel) {
+                        workoutManager.keepCardioWorkoutRunning()
+                    }
+                }
+            },
+            message: {
+                Text(cardioAlertMessage)
+            }
+        )
+    }
+
+    private var cardioInactivityAlertBinding: Binding<Bool> {
+        Binding(
+            get: { workoutManager.cardioInactivityPrompt != nil },
+            set: { newValue in
+                if !newValue {
+                    workoutManager.keepCardioWorkoutRunning()
+                }
+            }
+        )
+    }
+
+    private var cardioAlertTitle: String {
+        switch workoutManager.cardioInactivityPrompt {
+        case .softNudge:
+            return "No movement detected"
+        case .confirmation:
+            return "End workout soon?"
+        case nil:
+            return ""
+        }
+    }
+
+    private var cardioAlertMessage: String {
+        switch workoutManager.cardioInactivityPrompt {
+        case .softNudge:
+            return "We haven't detected movement for a while. Are you still working out?"
+        case .confirmation:
+            let countdown = workoutManager.cardioAutoEndCountdown ?? 0
+            return "Ending in \(countdown)s unless you continue."
+        case nil:
+            return ""
         }
     }
 

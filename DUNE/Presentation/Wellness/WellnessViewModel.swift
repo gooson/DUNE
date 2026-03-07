@@ -95,7 +95,7 @@ final class WellnessViewModel {
     private func performLoad() async {
         isLoading = true
         partialFailureMessage = nil
-        let healthKitAvailable = await healthKitManager.isAvailable
+        let healthKitAvailable = healthKitManager.isAvailable
         isMirroredReadOnlyMode = !healthKitAvailable
 
         // Collect results using TaskGroup for 10+ parallel queries (Correction #5)
@@ -511,7 +511,13 @@ final class WellnessViewModel {
             group.addTask {
                 guard !Task.isCancelled else { return (.bmi, .empty) }
                 do {
-                    if let b = try await bodyService.fetchLatestBMI(withinDays: 30) {
+                    let today = Date()
+                    if let todayBMI = try await bodyService.fetchBMI(for: today),
+                       todayBMI > 0, todayBMI < 100 {
+                        return (.bmi, .vitalSample(VitalSample(value: todayBMI, date: today)))
+                    }
+                    if let b = try await bodyService.fetchLatestBMI(withinDays: 30),
+                       b.value > 0, b.value < 100 {
                         return (.bmi, .vitalSample(VitalSample(value: b.value, date: b.date)))
                     }
                     return (.bmi, .empty)
