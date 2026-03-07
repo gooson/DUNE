@@ -97,4 +97,37 @@ final class LifeSeededSmokeTests: SeededUITestBaseCase {
             "Life hero progress card should exist when habits are seeded"
         )
     }
+
+    func testHabitActionsMenuOpensEditSheet() throws {
+        let actionsButton = app.descendants(matching: .any)[AXID.lifeHabitActions("Morning Stretch")].firstMatch
+        XCTAssertTrue(actionsButton.waitForExistence(timeout: 8), "Habit actions button should exist")
+
+        actionsButton.tap()
+
+        let editButton = app.descendants(matching: .any)[AXID.lifeHabitActionEdit].firstMatch
+        XCTAssertTrue(editButton.waitForExistence(timeout: 3), "Edit action should appear in the habit actions menu")
+        editButton.tap()
+
+        let nameField = app.textFields[AXID.habitFormName].firstMatch
+        XCTAssertTrue(nameField.waitForExistence(timeout: 3), "Edit habit sheet should appear from the actions menu")
+        XCTAssertTrue(app.dismissModalIfPresent(cancelIdentifiers: [AXID.habitFormCancel]), "Edit habit sheet should dismiss via shared helper")
+    }
+
+    func testHabitActionsMenuArchivesHabit() throws {
+        let archivedHabitName = "Morning Stretch"
+        let habitLabel = app.staticTexts[archivedHabitName].firstMatch
+        XCTAssertTrue(habitLabel.waitForExistence(timeout: 8), "Seeded habit should exist before archive")
+
+        let actionsButton = app.descendants(matching: .any)[AXID.lifeHabitActions(archivedHabitName)].firstMatch
+        XCTAssertTrue(actionsButton.waitForExistence(timeout: 8), "Habit actions button should exist")
+
+        actionsButton.tap()
+
+        let archiveButton = app.descendants(matching: .any)[AXID.lifeHabitActionArchive].firstMatch
+        XCTAssertTrue(archiveButton.waitForExistence(timeout: 3), "Archive action should appear in the habit actions menu")
+        archiveButton.tap()
+
+        expectation(for: NSPredicate(format: "exists == false"), evaluatedWith: habitLabel)
+        waitForExpectations(timeout: 3)
+    }
 }

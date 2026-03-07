@@ -4,10 +4,23 @@ struct HabitRowView: View {
     let progress: HabitProgress
     let onToggle: () -> Void
     let onUpdateValue: (Double) -> Void
+    let trailingAccessory: AnyView?
 
     @Environment(\.appTheme) private var theme
     @State private var inputText: String = ""
     @State private var isEditing = false
+
+    init(
+        progress: HabitProgress,
+        onToggle: @escaping () -> Void,
+        onUpdateValue: @escaping (Double) -> Void,
+        trailingAccessory: AnyView? = nil
+    ) {
+        self.progress = progress
+        self.onToggle = onToggle
+        self.onUpdateValue = onUpdateValue
+        self.trailingAccessory = trailingAccessory
+    }
 
     var body: some View {
         Group {
@@ -56,7 +69,13 @@ struct HabitRowView: View {
 
                         Spacer()
 
-                        streakBadge
+                        HStack(spacing: DS.Spacing.xs) {
+                            streakBadge
+
+                            if let trailingAccessory {
+                                trailingAccessory
+                            }
+                        }
                     }
 
                     habitInput
