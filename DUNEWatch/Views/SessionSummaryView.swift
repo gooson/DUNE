@@ -24,6 +24,9 @@ struct SessionSummaryView: View {
     @State private var lastEffortHapticDate: Date = .distantPast
     @State private var showEffortInput = false
     @State private var didPresentEffortInput = false
+    @State private var effortInputAutoCloseTask: Task<Void, Never>?
+
+    private let effortInputAutoCloseDelay: Duration = .seconds(12)
 
     var body: some View {
         ScrollView {
@@ -96,6 +99,16 @@ struct SessionSummaryView: View {
         }
         .onChange(of: effortSuggestion?.suggestedEffort) { _, _ in
             initializeSuggestedEffortIfNeeded()
+        }
+        .onChange(of: showEffortInput) { _, isPresented in
+            if isPresented {
+                startEffortInputAutoCloseTimer()
+            } else {
+                cancelEffortInputAutoCloseTimer()
+            }
+        }
+        .onDisappear {
+            cancelEffortInputAutoCloseTimer()
         }
     }
 
@@ -282,6 +295,20 @@ struct SessionSummaryView: View {
         effort = newEffort
         didInitializeEffort = true
         playEffortHapticIfNeeded()
+    }
+
+    private func startEffortInputAutoCloseTimer() {
+        cancelEffortInputAutoCloseTimer()
+        effortInputAutoCloseTask = Task { @MainActor in
+            try? await Task.sleep(for: effortInputAutoCloseDelay)
+            guard !Task.isCancelled, showEffortInput else { return }
+            showEffortInput = false
+        }
+    }
+
+    private func cancelEffortInputAutoCloseTimer() {
+        effortInputAutoCloseTask?.cancel()
+        effortInputAutoCloseTask = nil
     }
 
     private func playEffortHapticIfNeeded() {
