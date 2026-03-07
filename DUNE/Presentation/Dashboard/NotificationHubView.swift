@@ -183,6 +183,7 @@ struct NotificationHubView: View {
                 inboxSection
             }
         }
+        .accessibilityIdentifier("notification-hub-screen")
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
         .background { TabWaveBackground() }

@@ -132,9 +132,11 @@ struct MetricDetailView: View {
                     }
                 }
                 .buttonStyle(.plain)
+                .accessibilityIdentifier("metric-detail-show-all-data")
             }
             .padding(sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.lg)
         }
+        .accessibilityIdentifier("metric-detail-screen-\(metric.category.rawValue)")
         .background { DetailWaveBackground() }
         .environment(\.waveColor, metric.category.themeColor)
         .englishNavigationTitle(metric.category.englishDisplayName)

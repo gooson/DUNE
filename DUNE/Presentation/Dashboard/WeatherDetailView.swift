@@ -133,6 +133,7 @@ struct WeatherDetailView: View {
             }
             .padding(sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.lg)
         }
+        .accessibilityIdentifier("weather-detail-screen")
         .background { DetailWaveBackground() }
         .englishNavigationTitle("Weather")
     }

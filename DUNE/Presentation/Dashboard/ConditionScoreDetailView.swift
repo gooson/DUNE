@@ -119,6 +119,7 @@ struct ConditionScoreDetailView: View {
             }
             .padding(sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.lg)
         }
+        .accessibilityIdentifier("condition-score-detail-screen")
         .background { DetailWaveBackground() }
         .englishNavigationTitle("Condition Score")
         .navigationBarTitleDisplayMode(.large)

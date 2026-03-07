@@ -22,6 +22,7 @@ struct DUNEApp: App {
     @State private var showWhatsNewSheet = false
     @State private var automaticWhatsNewReleases: [WhatsNewReleaseData] = []
     @State private var automaticWhatsNewBuild = ""
+    @State private var hasForcedConsentPresentation = false
 
     let modelContainer: ModelContainer
     private let sharedHealthDataService: SharedHealthDataService
@@ -46,6 +47,14 @@ struct DUNEApp: App {
 
     private static var isRunningLaunchPermissionUITest: Bool {
         ProcessInfo.processInfo.arguments.contains("--healthkit-permission-uitest")
+    }
+
+    private static var isForceCloudSyncConsentUITest: Bool {
+#if DEBUG
+        TestDataSeeder.shouldForceCloudSyncConsent()
+#else
+        false
+#endif
     }
 
     private static var shouldBypassLaunchExperienceForTests: Bool {
@@ -119,6 +128,7 @@ struct DUNEApp: App {
     )
 
     private static let shouldSeedMockData = uiTestLaunchConfiguration.shouldSeedMockData
+    private static let shouldUseMirroredSnapshotServiceForUITests = uiTestLaunchConfiguration.shouldSeedMockData
 
     private static let shouldResetUITestState = uiTestLaunchConfiguration.shouldResetState
 
@@ -141,6 +151,12 @@ struct DUNEApp: App {
     }
 
     init() {
+#if DEBUG
+        if Self.shouldResetUITestState {
+            TestDataSeeder.resetUserDefaults()
+        }
+#endif
+
         let persistedThemeRawValue = UserDefaults.standard.string(forKey: AppTheme.storageKey)
         if let normalizedTheme = AppTheme.resolvedTheme(fromPersistedRawValue: persistedThemeRawValue) {
             if persistedThemeRawValue != normalizedTheme.rawValue {
@@ -169,7 +185,9 @@ struct DUNEApp: App {
 
         let healthKitAvailable = HKHealthStore.isHealthDataAvailable()
         let sharedService: SharedHealthDataService
-        if healthKitAvailable {
+        if Self.shouldUseMirroredSnapshotServiceForUITests {
+            sharedService = CloudMirroredSharedHealthDataService(modelContainer: modelContainer)
+        } else if healthKitAvailable {
             let baseSharedService: SharedHealthDataService = SharedHealthDataServiceImpl(healthKitManager: .shared)
             let mirrorStore: HealthSnapshotMirroring = HealthSnapshotMirrorStore(modelContainer: modelContainer)
             sharedService = MirroringSharedHealthDataService(
@@ -289,20 +307,31 @@ struct DUNEApp: App {
                 )
             }
         }
+        .task {
+            guard Self.isForceCloudSyncConsentUITest else { return }
+            guard !hasForcedConsentPresentation else { return }
+            guard !showConsentSheet else { return }
+            hasForcedConsentPresentation = true
+            showConsentSheet = true
+        }
     }
 
     #if DEBUG
     @ViewBuilder
     private var seedableAppContent: some View {
-        appContent
-            .task {
-                guard !hasSeededMockData else { return }
-                hasSeededMockData = true
-                TestDataSeeder.seed(
-                    into: modelContainer.mainContext,
-                    scenario: Self.uiTestLaunchConfiguration.scenario
-                )
-            }
+        if hasSeededMockData {
+            appContent
+        } else {
+            Color.clear
+                .task {
+                    guard !hasSeededMockData else { return }
+                    TestDataSeeder.seed(
+                        into: modelContainer.mainContext,
+                        scenario: Self.uiTestLaunchConfiguration.scenario
+                    )
+                    hasSeededMockData = true
+                }
+        }
     }
     #else
     // Stub to keep the `else if` branch compiling in Release builds.
