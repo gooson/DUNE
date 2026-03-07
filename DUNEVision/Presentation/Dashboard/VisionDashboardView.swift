@@ -5,6 +5,7 @@ import SwiftUI
 struct VisionDashboardView: View {
     let sharedHealthDataService: SharedHealthDataService?
     let refreshSignal: Int
+    let onOpenDashboardWindow: (VisionDashboardWindowKind) -> Void
     let onOpen3DCharts: () -> Void
     let onOpenVolumetric: () -> Void
     let onOpenImmersive: () -> Void
@@ -69,7 +70,41 @@ struct VisionDashboardView: View {
 
     @ViewBuilder
     private var quickActionsSection: some View {
-        HStack(spacing: 16) {
+        let columns = [
+            GridItem(.flexible(), spacing: 16),
+            GridItem(.flexible(), spacing: 16),
+            GridItem(.flexible(), spacing: 16)
+        ]
+
+        return LazyVGrid(columns: columns, spacing: 16) {
+            quickActionCard(
+                title: "Condition",
+                icon: VisionDashboardWindowKind.condition.systemImage
+            ) {
+                onOpenDashboardWindow(.condition)
+            }
+
+            quickActionCard(
+                title: "Activity",
+                icon: VisionDashboardWindowKind.activity.systemImage
+            ) {
+                onOpenDashboardWindow(.activity)
+            }
+
+            quickActionCard(
+                title: "Sleep",
+                icon: VisionDashboardWindowKind.sleep.systemImage
+            ) {
+                onOpenDashboardWindow(.sleep)
+            }
+
+            quickActionCard(
+                title: "Body",
+                icon: VisionDashboardWindowKind.body.systemImage
+            ) {
+                onOpenDashboardWindow(.body)
+            }
+
             quickActionCard(
                 title: "Immersive Space",
                 icon: "sparkles",
@@ -93,24 +128,6 @@ struct VisionDashboardView: View {
             ) {
                 onOpen3DCharts()
             }
-
-            // TODO: Connect to workout logging navigation
-            quickActionCard(
-                title: "Log Workout",
-                icon: "figure.strengthtraining.traditional",
-                description: "Record your training session"
-            ) {}
-                .disabled(true)
-                .opacity(0.5)
-
-            // TODO: Connect to body composition navigation
-            quickActionCard(
-                title: "Body Stats",
-                icon: "figure.stand",
-                description: "View body composition trends"
-            ) {}
-                .disabled(true)
-                .opacity(0.5)
         }
     }
 
@@ -142,7 +159,7 @@ struct VisionDashboardView: View {
     private func quickActionCard(
         title: LocalizedStringKey,
         icon: String,
-        description: LocalizedStringKey,
+        description: LocalizedStringKey? = nil,
         action: @escaping () -> Void
     ) -> some View {
         Button(action: action) {
@@ -152,12 +169,15 @@ struct VisionDashboardView: View {
                     .foregroundStyle(.tint)
                 Text(title)
                     .font(.headline)
-                Text(description)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .multilineTextAlignment(.center)
+                if let description {
+                    Text(description)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                }
             }
             .frame(maxWidth: .infinity)
+            .frame(minHeight: 132)
             .padding(20)
             .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
         }
