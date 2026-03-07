@@ -10,6 +10,13 @@ final class DashboardSmokeTests: UITestBaseCase {
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: 5))
     }
 
+    func testDashboardNavigationBarExists() throws {
+        navigateToDashboard()
+
+        let title = app.navigationBars["Today"]
+        XCTAssertTrue(title.waitForExistence(timeout: 8), "Today navigation bar should exist")
+    }
+
     func testTabBarExists() throws {
         let tabBar = app.tabBars.firstMatch
         XCTAssertTrue(tabBar.exists, "Tab bar should exist on iPhone")

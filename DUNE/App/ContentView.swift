@@ -33,6 +33,65 @@ enum NotificationPresentationPlanner {
     }
 }
 
+struct NotificationPresentationPaths {
+    var today = NavigationPath()
+    var train = NavigationPath()
+    var wellness = NavigationPath()
+    var life = NavigationPath()
+
+    func path(for section: AppSection) -> NavigationPath {
+        switch section {
+        case .today:
+            today
+        case .train:
+            train
+        case .wellness:
+            wellness
+        case .life:
+            life
+        }
+    }
+
+    mutating func setPath(_ destinations: [NotificationPresentationDestination], for section: AppSection) {
+        clearAll()
+        var path = NavigationPath()
+        for destination in destinations {
+            path.append(destination)
+        }
+
+        switch section {
+        case .today:
+            today = path
+        case .train:
+            train = path
+        case .wellness:
+            wellness = path
+        case .life:
+            life = path
+        }
+    }
+
+    mutating func updatePath(_ path: NavigationPath, for section: AppSection) {
+        switch section {
+        case .today:
+            today = path
+        case .train:
+            train = path
+        case .wellness:
+            wellness = path
+        case .life:
+            life = path
+        }
+    }
+
+    mutating func clearAll() {
+        today = NavigationPath()
+        train = NavigationPath()
+        wellness = NavigationPath()
+        life = NavigationPath()
+    }
+}
+
 struct ContentView: View {
     private let sharedHealthDataService: SharedHealthDataService?
     private let refreshCoordinator: AppRefreshCoordinating?
@@ -48,7 +107,7 @@ struct ContentView: View {
     @State private var refreshSignal = 0
     @State private var foregroundTask: Task<Void, Never>?
     @State private var notificationOpenWorkoutID: String?
-    @State private var notificationPresentationPath: [NotificationPresentationDestination] = []
+    @State private var notificationPresentationPaths = NotificationPresentationPaths()
     @State private var notificationPresentationRequestID = 0
     @State private var notificationRouteSignal = 0
     @State private var notificationHubSignal = 0
@@ -68,111 +127,113 @@ struct ContentView: View {
     }
 
     var body: some View {
-        NavigationStack(path: $notificationPresentationPath) {
-            TabView(selection: tabSelection) {
-                Tab(value: AppSection.today) {
-                    NavigationStack {
-                        DashboardView(
-                            sharedHealthDataService: sharedHealthDataService,
-                            scrollToTopSignal: todayScrollToTopSignal,
-                            refreshSignal: refreshSignal,
-                            notificationHubSignal: notificationHubSignal,
-                            launchExperienceReady: launchExperienceReady,
-                            shouldAutoRequestHealthKitAuthorization: shouldAutoRequestHealthKitAuthorization
-                        )
-                    }
-                    .environment(\.wavePreset, .today)
-                    .environment(\.waveColor, selectedTheme.tabTodayColor)
-                } label: {
-                    Label { Text(verbatim: AppSection.today.title) } icon: { Image(systemName: AppSection.today.icon) }
-                        .accessibilityIdentifier("tab-today")
-                }
-                Tab(value: AppSection.train) {
-                    NavigationStack {
-                        ActivityView(
-                            sharedHealthDataService: sharedHealthDataService,
-                            scrollToTopSignal: activityScrollToTopSignal,
-                            refreshSignal: refreshSignal,
-                            notificationWorkoutID: notificationOpenWorkoutID,
-                            notificationRouteSignal: notificationRouteSignal
-                        )
-                    }
-                    .environment(\.wavePreset, .train)
-                    .environment(\.waveColor, selectedTheme.tabTrainColor)
-                } label: {
-                    Label { Text(verbatim: AppSection.train.title) } icon: { Image(systemName: AppSection.train.icon) }
-                        .accessibilityIdentifier("tab-activity")
-                }
-                Tab(value: AppSection.wellness) {
-                    NavigationStack {
-                        WellnessView(
-                            sharedHealthDataService: sharedHealthDataService,
-                            scrollToTopSignal: wellnessScrollToTopSignal,
-                            refreshSignal: refreshSignal
-                        )
-                    }
-                    .environment(\.wavePreset, .wellness)
-                    .environment(\.waveColor, selectedTheme.tabWellnessColor)
-                } label: {
-                    Label { Text(verbatim: AppSection.wellness.title) } icon: { Image(systemName: AppSection.wellness.icon) }
-                        .accessibilityIdentifier("tab-wellness")
-                }
-                Tab(value: AppSection.life) {
-                    NavigationStack {
-                        LifeView(
-                            scrollToTopSignal: lifeScrollToTopSignal,
-                            refreshSignal: refreshSignal
-                        )
-                    }
-                    .environment(\.wavePreset, .life)
-                    .environment(\.waveColor, selectedTheme.tabLifeColor)
-                } label: {
-                    Label { Text(verbatim: AppSection.life.title) } icon: { Image(systemName: AppSection.life.icon) }
-                        .accessibilityIdentifier("tab-life")
-                }
-            }
-            .environment(\.appTheme, selectedTheme)
-            .tint(selectedTheme.accentColor)
-            .tabViewStyle(.sidebarAdaptable)
-            .navigationDestination(for: NotificationPresentationDestination.self) { destination in
-                switch destination {
-                case .personalRecords:
-                    NotificationPersonalRecordsPushView(
-                        sharedHealthDataService: sharedHealthDataService
+        TabView(selection: tabSelection) {
+            Tab(value: AppSection.today) {
+                NavigationStack(path: notificationPathBinding(for: .today)) {
+                    DashboardView(
+                        sharedHealthDataService: sharedHealthDataService,
+                        scrollToTopSignal: todayScrollToTopSignal,
+                        refreshSignal: refreshSignal,
+                        notificationHubSignal: notificationHubSignal,
+                        launchExperienceReady: launchExperienceReady,
+                        shouldAutoRequestHealthKitAuthorization: shouldAutoRequestHealthKitAuthorization
                     )
-                }
-            }
-            // Foreground refresh: scenePhase .background → .active (Correction #16/#60)
-            .onChange(of: scenePhase) { oldPhase, newPhase in
-                if newPhase == .active {
-                    notificationInboxManager.syncBadge()
-                    Task {
-                        await BedtimeWatchReminderScheduler.shared.refreshSchedule()
+                    .navigationDestination(for: NotificationPresentationDestination.self) { destination in
+                        notificationDestinationView(for: destination)
                     }
                 }
-                if oldPhase == .background, newPhase == .active {
-                    foregroundTask?.cancel()
-                    foregroundTask = Task {
-                        _ = await refreshCoordinator?.requestRefresh(source: .foreground)
+                .environment(\.wavePreset, .today)
+                .environment(\.waveColor, selectedTheme.tabTodayColor)
+            } label: {
+                Label { Text(verbatim: AppSection.today.title) } icon: { Image(systemName: AppSection.today.icon) }
+                    .accessibilityIdentifier("tab-today")
+            }
+            Tab(value: AppSection.train) {
+                NavigationStack(path: notificationPathBinding(for: .train)) {
+                    ActivityView(
+                        sharedHealthDataService: sharedHealthDataService,
+                        scrollToTopSignal: activityScrollToTopSignal,
+                        refreshSignal: refreshSignal,
+                        notificationWorkoutID: notificationOpenWorkoutID,
+                        notificationRouteSignal: notificationRouteSignal
+                    )
+                    .navigationDestination(for: NotificationPresentationDestination.self) { destination in
+                        notificationDestinationView(for: destination)
                     }
                 }
+                .environment(\.wavePreset, .train)
+                .environment(\.waveColor, selectedTheme.tabTrainColor)
+            } label: {
+                Label { Text(verbatim: AppSection.train.title) } icon: { Image(systemName: AppSection.train.icon) }
+                    .accessibilityIdentifier("tab-activity")
             }
-            .onReceive(NotificationCenter.default.publisher(for: NotificationInboxManager.routeRequestedNotification)) { notification in
-                guard let request = NotificationInboxManager.navigationRequest(from: notification) else { return }
+            Tab(value: AppSection.wellness) {
+                NavigationStack(path: notificationPathBinding(for: .wellness)) {
+                    WellnessView(
+                        sharedHealthDataService: sharedHealthDataService,
+                        scrollToTopSignal: wellnessScrollToTopSignal,
+                        refreshSignal: refreshSignal
+                    )
+                    .navigationDestination(for: NotificationPresentationDestination.self) { destination in
+                        notificationDestinationView(for: destination)
+                    }
+                }
+                .environment(\.wavePreset, .wellness)
+                .environment(\.waveColor, selectedTheme.tabWellnessColor)
+            } label: {
+                Label { Text(verbatim: AppSection.wellness.title) } icon: { Image(systemName: AppSection.wellness.icon) }
+                    .accessibilityIdentifier("tab-wellness")
+            }
+            Tab(value: AppSection.life) {
+                NavigationStack(path: notificationPathBinding(for: .life)) {
+                    LifeView(
+                        scrollToTopSignal: lifeScrollToTopSignal,
+                        refreshSignal: refreshSignal
+                    )
+                    .navigationDestination(for: NotificationPresentationDestination.self) { destination in
+                        notificationDestinationView(for: destination)
+                    }
+                }
+                .environment(\.wavePreset, .life)
+                .environment(\.waveColor, selectedTheme.tabLifeColor)
+            } label: {
+                Label { Text(verbatim: AppSection.life.title) } icon: { Image(systemName: AppSection.life.icon) }
+                    .accessibilityIdentifier("tab-life")
+            }
+        }
+        .environment(\.appTheme, selectedTheme)
+        .tint(selectedTheme.accentColor)
+        .tabViewStyle(.sidebarAdaptable)
+        // Foreground refresh: scenePhase .background → .active (Correction #16/#60)
+        .onChange(of: scenePhase) { oldPhase, newPhase in
+            if newPhase == .active {
+                notificationInboxManager.syncBadge()
+                Task {
+                    await BedtimeWatchReminderScheduler.shared.refreshSchedule()
+                }
+            }
+            if oldPhase == .background, newPhase == .active {
+                foregroundTask?.cancel()
+                foregroundTask = Task {
+                    _ = await refreshCoordinator?.requestRefresh(source: .foreground)
+                }
+            }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: NotificationInboxManager.routeRequestedNotification)) { notification in
+            guard let request = NotificationInboxManager.navigationRequest(from: notification) else { return }
+            handleNotificationNavigationRequest(request)
+            notificationInboxManager.clearPendingNavigationRequest(ifMatching: request)
+        }
+        // Listen for refresh signals from coordinator (foreground + HK observer triggers)
+        .task {
+            guard let coordinator = refreshCoordinator else { return }
+            for await _ in coordinator.refreshNeededStream {
+                refreshSignal += 1
+            }
+        }
+        .task {
+            if let request = notificationInboxManager.consumePendingNavigationRequest() {
                 handleNotificationNavigationRequest(request)
-                notificationInboxManager.clearPendingNavigationRequest(ifMatching: request)
-            }
-            // Listen for refresh signals from coordinator (foreground + HK observer triggers)
-            .task {
-                guard let coordinator = refreshCoordinator else { return }
-                for await _ in coordinator.refreshNeededStream {
-                    refreshSignal += 1
-                }
-            }
-            .task {
-                if let request = notificationInboxManager.consumePendingNavigationRequest() {
-                    handleNotificationNavigationRequest(request)
-                }
             }
         }
     }
@@ -209,6 +270,27 @@ struct ContentView: View {
         )
     }
 
+    private func notificationPathBinding(for section: AppSection) -> Binding<NavigationPath> {
+        Binding(
+            get: {
+                notificationPresentationPaths.path(for: section)
+            },
+            set: { newValue in
+                notificationPresentationPaths.updatePath(newValue, for: section)
+            }
+        )
+    }
+
+    @ViewBuilder
+    private func notificationDestinationView(for destination: NotificationPresentationDestination) -> some View {
+        switch destination {
+        case .personalRecords:
+            NotificationPersonalRecordsPushView(
+                sharedHealthDataService: sharedHealthDataService
+            )
+        }
+    }
+
     private func handleNotificationNavigationRequest(_ request: NotificationNavigationRequest) {
         notificationPresentationRequestID += 1
 
@@ -219,16 +301,19 @@ struct ContentView: View {
             return
         }
 
-        notificationPresentationPath = NotificationPresentationPlanner.rootPath(for: plan)
-
         switch plan {
         case .push:
-            break
+            notificationPresentationPaths.setPath(
+                NotificationPresentationPlanner.rootPath(for: plan),
+                for: selectedSection
+            )
         case .openWorkoutInActivity(let workoutID):
+            notificationPresentationPaths.clearAll()
             selectedSection = .train
             notificationOpenWorkoutID = workoutID
             notificationRouteSignal += 1
         case .openNotificationHub:
+            notificationPresentationPaths.clearAll()
             selectedSection = .today
             notificationHubSignal += 1
         }
