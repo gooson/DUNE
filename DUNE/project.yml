@@ -332,6 +332,7 @@ targets:
       # Shared services
       - path: Data/Services
         excludes:
+          - "BedtimeWatchReminderScheduler.swift"
           - "HealthSnapshotMirrorStore.swift"
           - "MirroringSharedHealthDataService.swift"
           - "NotificationServiceImpl.swift"
