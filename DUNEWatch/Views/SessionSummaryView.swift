@@ -25,6 +25,7 @@ struct SessionSummaryView: View {
     @State private var showEffortInput = false
     @State private var didPresentEffortInput = false
     @State private var effortInputAutoCloseTask: Task<Void, Never>?
+    @FocusState private var isEffortCrownFocused: Bool
 
     /// Auto-dismiss effort input after a short period of inactivity.
     private let effortInputAutoCloseDelay: Duration = .seconds(12)
@@ -207,81 +208,81 @@ struct SessionSummaryView: View {
     }
 
     private var effortInputView: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                HStack(spacing: DS.Spacing.xs) {
-                    Image(systemName: "flame.fill")
-                        .font(.caption)
-                        .foregroundStyle(DS.Color.positive)
-                    Text("Workout Intensity")
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle(.secondary)
-                }
+        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            HStack(spacing: DS.Spacing.xs) {
+                Image(systemName: "flame.fill")
+                    .font(.caption)
+                    .foregroundStyle(DS.Color.positive)
+                Text("Workout Intensity")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.secondary)
+            }
 
-                if let suggestion = effortSuggestion {
-                    Text("Recommended \(suggestion.suggestedEffort)/10 from recent history")
+            if let suggestion = effortSuggestion {
+                Text("Recommended \(suggestion.suggestedEffort)/10 from recent history")
+                    .font(DS.Typography.tinyLabel)
+                    .foregroundStyle(.secondary)
+            }
+
+            HStack(spacing: DS.Spacing.sm) {
+                Text("\(effort)")
+                    .font(.system(size: 30, weight: .bold, design: .rounded))
+                    .monospacedDigit()
+                Text("/10")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Spacer(minLength: 0)
+                Text(WatchEffortInputPolicy.descriptor(for: effort))
+                    .font(.caption2.weight(.semibold))
+                    .foregroundStyle(.secondary)
+            }
+
+            Slider(
+                value: Binding(
+                    get: { Double(effort) },
+                    set: { newValue in
+                        let clamped = WatchEffortInputPolicy.clampedEffort(Int(round(newValue)))
+                        updateEffort(clamped)
+                    }
+                ),
+                in: Double(WatchEffortInputPolicy.minimumEffort)...Double(WatchEffortInputPolicy.maximumEffort),
+                step: 1
+            )
+            .tint(DS.Color.positive)
+
+            if let suggestion = effortSuggestion, !suggestion.recentEfforts.isEmpty {
+                HStack(spacing: DS.Spacing.xs) {
+                    Text("Recent")
                         .font(DS.Typography.tinyLabel)
                         .foregroundStyle(.secondary)
-                }
-
-                HStack(spacing: DS.Spacing.sm) {
-                    Text("\(effort)")
-                        .font(.system(size: 30, weight: .bold, design: .rounded))
-                        .monospacedDigit()
-                    Text("/10")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    Spacer(minLength: 0)
-                    Text(WatchEffortInputPolicy.descriptor(for: effort))
-                        .font(.caption2.weight(.semibold))
-                        .foregroundStyle(.secondary)
-                }
-
-                Slider(
-                    value: Binding(
-                        get: { Double(effort) },
-                        set: { newValue in
-                            let clamped = WatchEffortInputPolicy.clampedEffort(Int(round(newValue)))
-                            updateEffort(clamped)
-                        }
-                    ),
-                    in: Double(WatchEffortInputPolicy.minimumEffort)...Double(WatchEffortInputPolicy.maximumEffort),
-                    step: 1
-                )
-                .tint(DS.Color.positive)
-                .focusable()
-                .digitalCrownRotation(
-                    Binding(
-                        get: { Double(effort) },
-                        set: { newValue in
-                            let clamped = WatchEffortInputPolicy.clampedEffort(Int(round(newValue)))
-                            updateEffort(clamped)
-                        }
-                    ),
-                    from: Double(WatchEffortInputPolicy.minimumEffort),
-                    through: Double(WatchEffortInputPolicy.maximumEffort),
-                    by: 1,
-                    sensitivity: .medium,
-                    isContinuous: false,
-                    isHapticFeedbackEnabled: false
-                )
-
-                if let suggestion = effortSuggestion, !suggestion.recentEfforts.isEmpty {
-                    HStack(spacing: DS.Spacing.xs) {
-                        Text("Recent")
-                            .font(DS.Typography.tinyLabel)
-                            .foregroundStyle(.secondary)
-                        ForEach(Array(suggestion.recentEfforts.prefix(5).enumerated()), id: \.offset) { index, value in
-                            let isLatest = index == 0
-                            Text("\(value)")
-                                .font(.system(size: 9, weight: .semibold, design: .rounded))
-                                .foregroundStyle(isLatest ? DS.Color.positive : .secondary)
-                        }
+                    ForEach(Array(suggestion.recentEfforts.prefix(5).enumerated()), id: \.offset) { index, value in
+                        let isLatest = index == 0
+                        Text("\(value)")
+                            .font(.system(size: 9, weight: .semibold, design: .rounded))
+                            .foregroundStyle(isLatest ? DS.Color.positive : .secondary)
                     }
                 }
             }
-            .padding(.horizontal, DS.Spacing.md)
         }
+        .padding(.horizontal, DS.Spacing.md)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .focusable(true)
+        .focused($isEffortCrownFocused)
+        .digitalCrownRotation(
+            Binding(
+                get: { Double(effort) },
+                set: { newValue in
+                    let clamped = WatchEffortInputPolicy.clampedEffort(Int(round(newValue)))
+                    updateEffort(clamped)
+                }
+            ),
+            from: Double(WatchEffortInputPolicy.minimumEffort),
+            through: Double(WatchEffortInputPolicy.maximumEffort),
+            by: 1,
+            sensitivity: .medium,
+            isContinuous: false,
+            isHapticFeedbackEnabled: false
+        )
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Done") {
@@ -289,6 +290,12 @@ struct SessionSummaryView: View {
                     showEffortInput = false
                 }
             }
+        }
+        .onAppear {
+            isEffortCrownFocused = true
+        }
+        .onDisappear {
+            isEffortCrownFocused = false
         }
     }
 

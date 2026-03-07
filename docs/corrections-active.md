@@ -67,6 +67,8 @@ status: approved
 - **중복 가능 label 배열에 `ForEach(id: \\.self)` 금지**: 요일 이니셜처럼 표시값이 반복될 수 있는 collection은 `Identifiable` wrapper나 index-based stable ID를 써서 SwiftUI child identity를 분리 (#212)
 - **summary/detail metric은 데이터 소스 parity 필수**: Activity card가 manual+HealthKit merged input으로 계산한 값을 detail이 local SwiftData만으로 다시 계산하면 불일치가 나므로, 동일 metric은 동일 merge contract 또는 동등한 history fetch를 사용 (#213)
 - **context menu 액션이 host row를 바꾸면 deferred execution 사용**: `Archive`/`Skip`처럼 menu 선택 직후 row state, sheet, navigation을 바꾸는 액션은 `Task.yield()` 등으로 dismissal 이후 실행해 `UIContextMenuInteraction updateVisibleMenuWithBlock` warning을 피한다 (#214)
+- **정적 announcement sheet는 `List`보다 `ScrollView + LazyVStack` 우선**: launch 시점 `What's New` 같은 read-only surface에서 `List`는 simulator에서 본문이 통째로 비는 간헐 렌더링 이슈를 만들 수 있으므로 section chrome/편집이 필요 없으면 stack 기반 컨테이너를 쓴다 (#215)
+- **watch crown input sheet는 `ScrollView` 위에 직접 올리지 않는다**: `digitalCrownRotation`이 필요한 watchOS sheet는 단일 `VStack` focus host에 붙이고 `@FocusState`로 진입 시 포커스를 주어 `Crown Sequencer ... without a view property` warning을 피한다 (#216)
 - **화면 숫자 표기는 `formattedWithSeparator` 경유** (#97)
 - **`changeFractionDigits` 단일 소스: `HealthMetric+View`** (#98)
 - **`HealthMetric.Category` 추가 시 10+ 파일 수정 체크리스트** (#94)
