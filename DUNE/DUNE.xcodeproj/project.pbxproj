@@ -742,6 +742,7 @@
 		F72E09D26852BE8A73315989 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05A0D5258A848BDA2E54050D /* WidgetKit.framework */; };
 		F7A8A082D822B3391E7231D4 /* HeartRateZoneChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 685CF5113B20E70FDED4CA74 /* HeartRateZoneChartView.swift */; };
 		F867748EE551F528B0FE3708 /* InjuryInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B095A1810EBAAE41473515C /* InjuryInfo.swift */; };
+		F87151A7EF59DAB165783416 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 63765429B77F16BB36CD8D6D /* Assets.xcassets */; };
 		F943094564F4745116347826 /* Chart3DContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2205826417DC48C24878F37 /* Chart3DContainerView.swift */; };
 		F95ADD3221D8C40A865D979E /* FatigueInfoSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A715BE6750B6CD2CC873CD6E /* FatigueInfoSheet.swift */; };
 		F96A0F90F398384884AFEE3A /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 292A0E6EDC90AA66EF5C42EB /* DesignSystem.swift */; };
@@ -1106,7 +1107,7 @@
 		6128BFA908002319364422D4 /* ExerciseRecordSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseRecordSnapshot.swift; sourceTree = "<group>"; };
 		617758F8775A4399B7916BD6 /* CarouselHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselHomeView.swift; sourceTree = "<group>"; };
 		6231431C8771D9773B1FE09D /* HabitTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitTypeTests.swift; sourceTree = "<group>"; };
-		63765429B77F16BB36CD8D6D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		63765429B77F16BB36CD8D6D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = ../../Resources/Assets.xcassets; sourceTree = "<group>"; };
 		63DAF3FD574A5DD2BDCA8C25 /* LifeViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifeViewModelTests.swift; sourceTree = "<group>"; };
 		64344CBEF7E4E400A04B3DB4 /* ExerciseTransitionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTransitionView.swift; sourceTree = "<group>"; };
 		64B929FD810C16E46A874B5E /* HealthSnapshotMirroring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthSnapshotMirroring.swift; sourceTree = "<group>"; };
@@ -2523,6 +2524,7 @@
 		B52F5BAF6E762EA15202A26E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				63765429B77F16BB36CD8D6D /* Assets.xcassets */,
 				C84B8D40720420847E41B9A2 /* DUNEVision.entitlements */,
 				D87AB99F4A22A54CC7959CE3 /* Info.plist */,
 				79C3408FCFB3987C00C9D9FB /* Localizable.xcstrings */,
@@ -3295,6 +3297,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F87151A7EF59DAB165783416 /* Assets.xcassets in Resources */,
 				C78F43ABFD45B1EBF297D0BB /* Colors.xcassets in Resources */,
 				E3CB10E6A2DD25CF2ABB98C7 /* Localizable.xcstrings in Resources */,
 			);
@@ -4451,7 +4454,7 @@
 		7F8DD9458AF780F2741877DB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = VisionAppIcon;
 				CODE_SIGN_ENTITLEMENTS = DUNEVision/Resources/DUNEVision.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CURRENT_PROJECT_VERSION = 1;
@@ -4459,6 +4462,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DUNEVision/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = DUNE;
+				INFOPLIST_KEY_CFBundleIconName = VisionAppIcon;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "DUNE needs access to your health data to display condition scores, workout history, and health trends.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "DUNE may write workout and body composition data to Health.";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -4565,7 +4569,7 @@
 		D424653F8EE2BAE8BB4A73F9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = VisionAppIcon;
 				CODE_SIGN_ENTITLEMENTS = DUNEVision/Resources/DUNEVision.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CURRENT_PROJECT_VERSION = 1;
@@ -4573,6 +4577,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DUNEVision/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = DUNE;
+				INFOPLIST_KEY_CFBundleIconName = VisionAppIcon;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "DUNE needs access to your health data to display condition scores, workout history, and health trends.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "DUNE may write workout and body composition data to Health.";
 				LD_RUNPATH_SEARCH_PATHS = (
