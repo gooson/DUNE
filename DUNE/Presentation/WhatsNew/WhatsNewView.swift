@@ -94,15 +94,19 @@ private struct WhatsNewFeatureRow: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.md) {
-            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                HStack(spacing: DS.Spacing.sm) {
-                    WhatsNewBadge(title: feature.area.badgeTitle, tint: tintColor)
+        HStack(alignment: .top, spacing: DS.Spacing.md) {
+            Image(systemName: feature.symbolName)
+                .font(.system(size: 20, weight: .semibold))
+                .foregroundStyle(.white)
+                .frame(width: 40, height: 40)
+                .background(
+                    tintColor.gradient,
+                    in: RoundedRectangle(cornerRadius: DS.Radius.md, style: .continuous)
+                )
+                .accessibilityHidden(true)
 
-                    Image(systemName: feature.symbolName)
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle(tintColor)
-                }
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                WhatsNewBadge(title: feature.area.badgeTitle, tint: tintColor)
 
                 Text(feature.title)
                     .font(DS.Typography.sectionTitle)
@@ -112,12 +116,6 @@ private struct WhatsNewFeatureRow: View {
                     .foregroundStyle(DS.Color.textSecondary)
                     .lineLimit(3)
             }
-
-            WhatsNewFeatureCard(feature: feature, style: .thumbnail)
-                .frame(maxWidth: .infinity)
-                .frame(height: 138)
-                .clipShape(RoundedRectangle(cornerRadius: DS.Radius.lg, style: .continuous))
-                .accessibilityHidden(true)
         }
         .padding(DS.Spacing.md)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous))
@@ -141,29 +139,32 @@ private struct WhatsNewFeatureDetailView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: DS.Spacing.xl) {
-                WhatsNewFeatureCard(feature: feature, style: .hero)
-                    .frame(height: 260)
-                    .clipShape(RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous))
-                    .accessibilityHidden(true)
+                HStack(alignment: .top, spacing: DS.Spacing.md) {
+                    Image(systemName: feature.symbolName)
+                        .font(.system(size: 20, weight: .semibold))
+                        .foregroundStyle(.white)
+                        .frame(width: 40, height: 40)
+                        .background(
+                            tintColor.gradient,
+                            in: RoundedRectangle(cornerRadius: DS.Radius.md, style: .continuous)
+                        )
+                        .accessibilityHidden(true)
 
-                VStack(alignment: .leading, spacing: DS.Spacing.md) {
-                    HStack(alignment: .top, spacing: DS.Spacing.md) {
-                        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                            WhatsNewBadge(title: feature.area.badgeTitle, tint: tintColor)
+                    VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                        WhatsNewBadge(title: feature.area.badgeTitle, tint: tintColor)
 
-                            Text(feature.title)
-                                .font(.system(.title2, design: .rounded, weight: .bold))
+                        Text(feature.title)
+                            .font(.system(.title2, design: .rounded, weight: .bold))
 
-                            Text(feature.summary)
-                                .font(.subheadline)
-                                .foregroundStyle(DS.Color.textSecondary)
-                                .fixedSize(horizontal: false, vertical: true)
-                        }
-
-                        Spacer(minLength: 0)
-
-                        WhatsNewVersionBadge(version: release.version)
+                        Text(feature.summary)
+                            .font(.subheadline)
+                            .foregroundStyle(DS.Color.textSecondary)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
+
+                    Spacer(minLength: 0)
+
+                    WhatsNewVersionBadge(version: release.version)
                 }
 
                 StandardCard {
@@ -190,81 +191,6 @@ private struct WhatsNewFeatureDetailView: View {
     }
 }
 
-// MARK: - SF Symbol Feature Card
-
-private struct WhatsNewFeatureCard: View {
-    let feature: WhatsNewFeatureItem
-    let style: CardStyle
-
-    enum CardStyle {
-        case thumbnail
-        case hero
-
-        var cornerRadius: CGFloat {
-            switch self {
-            case .hero: DS.Radius.xl
-            case .thumbnail: DS.Radius.lg
-            }
-        }
-
-        var primarySize: CGFloat {
-            switch self {
-            case .hero: 64
-            case .thumbnail: 36
-            }
-        }
-
-        var secondarySize: CGFloat {
-            switch self {
-            case .hero: 32
-            case .thumbnail: 20
-            }
-        }
-
-        var secondaryOffset: CGSize {
-            switch self {
-            case .hero: CGSize(width: 60, height: -40)
-            case .thumbnail: CGSize(width: 36, height: -24)
-            }
-        }
-    }
-
-    private var areaGradient: LinearGradient {
-        let tint = WhatsNewStyle.tintColor(for: feature.area)
-        return LinearGradient(
-            colors: [tint.opacity(0.42), DS.Color.desertDusk],
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        )
-    }
-
-    var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: style.cornerRadius, style: .continuous)
-                .fill(areaGradient)
-
-            RoundedRectangle(cornerRadius: style.cornerRadius, style: .continuous)
-                .strokeBorder(.white.opacity(DS.Opacity.border))
-
-            ZStack {
-                // Decorative secondary symbol
-                if let secondary = WhatsNewStyle.secondarySymbol(for: feature.area) {
-                    Image(systemName: secondary)
-                        .font(.system(size: style.secondarySize, weight: .semibold))
-                        .foregroundStyle(.white.opacity(DS.Opacity.overlay))
-                        .offset(style.secondaryOffset)
-                }
-
-                // Primary symbol
-                Image(systemName: feature.symbolName)
-                    .font(.system(size: style.primarySize, weight: .semibold))
-                    .foregroundStyle(.white)
-            }
-        }
-        .accessibilityIdentifier("whatsnew-card-\(feature.id)-\(style == .hero ? "hero" : "thumbnail")")
-    }
-}
-
 // MARK: - Style & Badges
 
 private enum WhatsNewStyle {
@@ -282,23 +208,6 @@ private enum WhatsNewStyle {
             DS.Color.positive
         case .settings:
             DS.Color.desertBronze
-        }
-    }
-
-    static func secondarySymbol(for area: WhatsNewArea) -> String? {
-        switch area {
-        case .today:
-            "sparkles"
-        case .activity:
-            "flame.fill"
-        case .wellness:
-            "heart.fill"
-        case .life:
-            "checklist.checked"
-        case .watch:
-            "applewatch.watchface"
-        case .settings:
-            "paintpalette.fill"
         }
     }
 }
