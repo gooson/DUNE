@@ -76,9 +76,22 @@ Layer boundary: App → Presentation → Domain ← Data
 - `InjuryRecord.durationDays` is identical to `InjuryInfo.durationDays` — the Data layer should delegate: `var durationDays: Int { toInjuryInfo().durationDays }`
 - General rule: when a Data `@Model` already has a `toDomain()` method, computed properties that mirror Domain logic should delegate rather than duplicate
 
+## Chart Gesture Patterns
+- Chart selection: `.simultaneousGesture(selectionDragGesture)` with **default `.all` mask** (not `.subviews`)
+- `.subviews` mask (per Apple docs) means "enable subview gestures but *disable* the added gesture" — anti-pattern for selection
+- All 12 chart views (Shared + Activity feature variants) use identical pattern: Rectangle overlay with DragGesture
+- Gesture state machine in `ChartSelectionInteraction` handles hold-to-activate + scroll restoration
+- UI regression test `ChartInteractionRegressionUITests.testWeeklyStatsLongPressKeepsPeriodAndActivatesSelection()` verifies:
+  - Period picker unchanged during long-press
+  - Selection probe transitions from "none" to active (positive signal, not just "no crash")
+  - Long-press does NOT trigger period scroll as side effect
+- Risk assessment: NO risk of gesture conflict — only one gesture added per chart, no other sibling gestures present
+
 ## Key Files
 - Domain models: `Dailve/Domain/Models/HealthMetric.swift` (WorkoutSummary, HRVSample, SleepStage, HealthMetric)
 - Workout data boundary: `Dailve/Data/HealthKit/WorkoutQueryService.swift`
 - Exercise ViewModel: `Dailve/Presentation/Exercise/ExerciseViewModel.swift`
 - Shared extensions: `Dailve/Presentation/Shared/Extensions/`
 - ExerciseListItem (currently misplaced): `Dailve/Presentation/Exercise/ExerciseViewModel.swift:167`
+- Chart selection: `Presentation/Shared/Charts/ChartSelectionInteraction.swift`
+- Regression tests: `DUNEUITests/Regression/ChartInteractionRegressionUITests.swift`
