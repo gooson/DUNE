@@ -73,6 +73,12 @@ struct ChartSelectionGestureState: Sendable {
         return .updating
     }
 
+    mutating func forceActivate() -> ChartSelectionGestureUpdate {
+        guard phase == .pendingActivation, !isCancelled else { return .inactive }
+        phase = .selecting
+        return .activated(restoreScrollPosition: initialScrollPosition)
+    }
+
     mutating func reset() {
         self = ChartSelectionGestureState()
     }
