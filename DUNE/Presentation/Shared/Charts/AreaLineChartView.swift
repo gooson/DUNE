@@ -186,21 +186,14 @@ struct AreaLineChartView: View {
                 case .inactive:
                     if selectionGestureState.phase == .pendingActivation, activationTask == nil {
                         let location = value.location
-                        activationTask = Task { @MainActor in
-                            try? await Task.sleep(for: .seconds(ChartSelectionInteraction.holdDuration))
-                            guard !Task.isCancelled else { return }
-                            let result = selectionGestureState.forceActivate()
-                            if case .activated(let restoreScrollPosition) = result {
-                                if let restoreScrollPosition {
-                                    scrollPosition = restoreScrollPosition
-                                }
-                                selectedDate = ChartSelectionInteraction.resolvedDate(
-                                    at: location,
-                                    proxy: proxy,
-                                    plotFrame: plotFrame
-                                )
+                        activationTask = ChartSelectionInteraction.makeActivationTask(
+                            location: location, proxy: proxy, plotFrame: plotFrame,
+                            activate: { selectionGestureState.forceActivate() },
+                            onActivated: { date, restoreScroll in
+                                if let restoreScroll { scrollPosition = restoreScroll }
+                                selectedDate = date
                             }
-                        }
+                        )
                     }
                     return
                 case .activated(let restoreScrollPosition):

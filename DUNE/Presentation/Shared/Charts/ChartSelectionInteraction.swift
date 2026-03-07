@@ -93,6 +93,28 @@ enum ChartSelectionInteraction {
     static let bottomMargin: CGFloat = 8
     static let defaultOverlaySize = CGSize(width: 156, height: 34)
 
+    /// Creates a timer-based activation task that fires `forceActivate()` after `holdDuration`.
+    @MainActor
+    static func makeActivationTask(
+        location: CGPoint,
+        proxy: ChartProxy,
+        plotFrame: CGRect,
+        activate: @MainActor @escaping () -> ChartSelectionGestureUpdate,
+        onActivated: @MainActor @escaping (_ selectedDate: Date?, _ restoreScrollPosition: Date?) -> Void
+    ) -> Task<Void, Never> {
+        Task { @MainActor in
+            try? await Task.sleep(for: .seconds(holdDuration))
+            guard !Task.isCancelled else { return }
+            let result = activate()
+            if case .activated(let restoreScroll) = result {
+                onActivated(
+                    resolvedDate(at: location, proxy: proxy, plotFrame: plotFrame),
+                    restoreScroll
+                )
+            }
+        }
+    }
+
     static func resolvedDate(
         at location: CGPoint,
         proxy: ChartProxy,
