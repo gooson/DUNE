@@ -6,6 +6,7 @@ import SwiftUI
 struct VisionContentView: View {
     private let sharedHealthDataService: SharedHealthDataService?
     private let refreshCoordinator: AppRefreshCoordinating?
+    private let workoutService: WorkoutQuerying?
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.openWindow) private var openWindow
     @Environment(\.openImmersiveSpace) private var openImmersiveSpace
@@ -13,13 +14,20 @@ struct VisionContentView: View {
     @State private var selectedSection: AppSection = .today
     @State private var refreshSignal = 0
     @State private var foregroundTask: Task<Void, Never>?
+    @State private var trainViewModel: VisionTrainViewModel
 
     init(
         sharedHealthDataService: SharedHealthDataService? = nil,
-        refreshCoordinator: AppRefreshCoordinating? = nil
+        refreshCoordinator: AppRefreshCoordinating? = nil,
+        workoutService: WorkoutQuerying? = nil
     ) {
         self.sharedHealthDataService = sharedHealthDataService
         self.refreshCoordinator = refreshCoordinator
+        self.workoutService = workoutService
+        _trainViewModel = State(wrappedValue: VisionTrainViewModel(
+            sharedHealthDataService: sharedHealthDataService,
+            workoutService: workoutService
+        ))
     }
 
     var body: some View {
@@ -56,6 +64,7 @@ struct VisionContentView: View {
             Tab(value: AppSection.train) {
                 NavigationStack {
                     VisionTrainView(
+                        viewModel: trainViewModel,
                         onOpen3DCharts: {
                             guard supportsMultipleWindows else { return }
                             scheduleWindowOpen("chart3d")
@@ -71,10 +80,8 @@ struct VisionContentView: View {
             }
             Tab(value: AppSection.wellness) {
                 NavigationStack {
-                    VisionPlaceholderView(
-                        title: AppSection.wellness.title,
-                        systemImage: AppSection.wellness.icon,
-                        message: "Wellness detail surfaces will be added after the shared visionOS source set is stabilized."
+                    VisionWellnessView(
+                        sharedHealthDataService: sharedHealthDataService
                     )
                 }
             } label: {
@@ -86,11 +93,7 @@ struct VisionContentView: View {
             }
             Tab(value: AppSection.life) {
                 NavigationStack {
-                    VisionPlaceholderView(
-                        title: AppSection.life.title,
-                        systemImage: AppSection.life.icon,
-                        message: "Life tracking on visionOS is planned for a later phase."
-                    )
+                    VisionLifeView()
                 }
             } label: {
                 Label {
@@ -131,31 +134,5 @@ struct VisionContentView: View {
                 AppLogger.ui.error("Immersive space failed to open")
             }
         }
-    }
-}
-
-private struct VisionPlaceholderView: View {
-    let title: String
-    let systemImage: String
-    let message: String
-
-    var body: some View {
-        VStack(spacing: 16) {
-            Image(systemName: systemImage)
-                .font(.system(size: 56))
-                .foregroundStyle(.tint)
-
-            Text(title)
-                .font(.title2.weight(.semibold))
-
-            Text(message)
-                .font(.body)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-                .frame(maxWidth: 460)
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .padding(32)
-        .navigationTitle(title)
     }
 }
