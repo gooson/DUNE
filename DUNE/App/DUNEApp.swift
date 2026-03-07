@@ -409,6 +409,9 @@ struct DUNEApp: App {
         WatchSessionManager.shared.syncExerciseLibraryToWatch(using: modelContainer)
         WatchSessionManager.shared.activate()
         observerManager?.startObserving()
+        Task {
+            await BedtimeWatchReminderScheduler.shared.refreshSchedule()
+        }
         scheduleWorkoutTitleBackfill()
     }
 
