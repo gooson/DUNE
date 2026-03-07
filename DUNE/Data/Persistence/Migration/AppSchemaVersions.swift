@@ -91,6 +91,18 @@ enum AppSchemaV7: VersionedSchema {
     static var models: [any PersistentModel.Type] {
         [ExerciseRecord.self, BodyCompositionRecord.self, WorkoutSet.self, CustomExercise.self, WorkoutTemplate.self, InjuryRecord.self, HabitDefinition.self, HabitLog.self, UserCategory.self, ExerciseDefaultRecord.self]
     }
+
+    @Model
+    final class ExerciseDefaultRecord {
+        var id: UUID = UUID()
+        var exerciseDefinitionID: String = ""
+        var defaultWeight: Double?
+        var defaultReps: Int?
+        var isManualOverride: Bool = false
+        var lastUsedDate: Date = Date()
+
+        init() {}
+    }
 }
 
 // MARK: - Schema V8 (Health Snapshot Mirror)
@@ -132,6 +144,18 @@ enum AppSchemaV8: VersionedSchema {
         var completedAt: Date?
         var memo: String?
         var habitDefinition: HabitDefinition?
+
+        init() {}
+    }
+
+    @Model
+    final class ExerciseDefaultRecord {
+        var id: UUID = UUID()
+        var exerciseDefinitionID: String = ""
+        var defaultWeight: Double?
+        var defaultReps: Int?
+        var isManualOverride: Bool = false
+        var lastUsedDate: Date = Date()
 
         init() {}
     }
@@ -206,6 +230,18 @@ enum AppSchemaV9: VersionedSchema {
 
         init() {}
     }
+
+    @Model
+    final class ExerciseDefaultRecord {
+        var id: UUID = UUID()
+        var exerciseDefinitionID: String = ""
+        var defaultWeight: Double?
+        var defaultReps: Int?
+        var isManualOverride: Bool = false
+        var lastUsedDate: Date = Date()
+
+        init() {}
+    }
 }
 
 // MARK: - Schema V10 (Cardio Fitness VO2Max)
@@ -265,6 +301,18 @@ enum AppSchemaV10: VersionedSchema {
 
         init() {}
     }
+
+    @Model
+    final class ExerciseDefaultRecord {
+        var id: UUID = UUID()
+        var exerciseDefinitionID: String = ""
+        var defaultWeight: Double?
+        var defaultReps: Int?
+        var isManualOverride: Bool = false
+        var lastUsedDate: Date = Date()
+
+        init() {}
+    }
 }
 
 // MARK: - Schema V11 (Cardio Machine Level Summary)
@@ -274,17 +322,38 @@ enum AppSchemaV11: VersionedSchema {
     static var models: [any PersistentModel.Type] {
         [ExerciseRecord.self, BodyCompositionRecord.self, WorkoutSet.self, CustomExercise.self, WorkoutTemplate.self, InjuryRecord.self, HabitDefinition.self, HabitLog.self, UserCategory.self, ExerciseDefaultRecord.self, HealthSnapshotMirrorRecord.self]
     }
+
+    @Model
+    final class ExerciseDefaultRecord {
+        var id: UUID = UUID()
+        var exerciseDefinitionID: String = ""
+        var defaultWeight: Double?
+        var defaultReps: Int?
+        var isManualOverride: Bool = false
+        var lastUsedDate: Date = Date()
+
+        init() {}
+    }
+}
+
+// MARK: - Schema V12 (Preferred Exercises)
+
+enum AppSchemaV12: VersionedSchema {
+    static let versionIdentifier = Schema.Version(12, 0, 0)
+    static var models: [any PersistentModel.Type] {
+        [ExerciseRecord.self, BodyCompositionRecord.self, WorkoutSet.self, CustomExercise.self, WorkoutTemplate.self, InjuryRecord.self, HabitDefinition.self, HabitLog.self, UserCategory.self, ExerciseDefaultRecord.self, HealthSnapshotMirrorRecord.self]
+    }
 }
 
 // MARK: - Migration Plan
 
 enum AppMigrationPlan: SchemaMigrationPlan {
     static var schemas: [any VersionedSchema.Type] {
-        [AppSchemaV1.self, AppSchemaV2.self, AppSchemaV3.self, AppSchemaV4.self, AppSchemaV5.self, AppSchemaV6.self, AppSchemaV7.self, AppSchemaV8.self, AppSchemaV9.self, AppSchemaV10.self, AppSchemaV11.self]
+        [AppSchemaV1.self, AppSchemaV2.self, AppSchemaV3.self, AppSchemaV4.self, AppSchemaV5.self, AppSchemaV6.self, AppSchemaV7.self, AppSchemaV8.self, AppSchemaV9.self, AppSchemaV10.self, AppSchemaV11.self, AppSchemaV12.self]
     }
 
     static var stages: [MigrationStage] {
-        [migrateV1toV2, migrateV2toV3, migrateV3toV4, migrateV4toV5, migrateV5toV6, migrateV6toV7, migrateV7toV8, migrateV8toV9, migrateV9toV10, migrateV10toV11]
+        [migrateV1toV2, migrateV2toV3, migrateV3toV4, migrateV4toV5, migrateV5toV6, migrateV6toV7, migrateV7toV8, migrateV8toV9, migrateV9toV10, migrateV10toV11, migrateV11toV12]
     }
 
     static let migrateV1toV2 = MigrationStage.lightweight(
@@ -335,5 +404,10 @@ enum AppMigrationPlan: SchemaMigrationPlan {
     static let migrateV10toV11 = MigrationStage.lightweight(
         fromVersion: AppSchemaV10.self,
         toVersion: AppSchemaV11.self
+    )
+
+    static let migrateV11toV12 = MigrationStage.lightweight(
+        fromVersion: AppSchemaV11.self,
+        toVersion: AppSchemaV12.self
     )
 }

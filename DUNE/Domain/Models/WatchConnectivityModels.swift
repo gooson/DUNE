@@ -44,6 +44,7 @@ struct WatchExerciseInfo: Codable, Sendable {
     let defaultSets: Int
     let defaultReps: Int?
     let defaultWeightKg: Double?
+    let isPreferred: Bool
     let equipment: String?
     let cardioSecondaryUnit: String?
     let aliases: [String]?
@@ -55,6 +56,7 @@ struct WatchExerciseInfo: Codable, Sendable {
         defaultSets: Int,
         defaultReps: Int?,
         defaultWeightKg: Double?,
+        isPreferred: Bool = false,
         equipment: String?,
         cardioSecondaryUnit: String?,
         aliases: [String]? = nil
@@ -65,9 +67,37 @@ struct WatchExerciseInfo: Codable, Sendable {
         self.defaultSets = defaultSets
         self.defaultReps = defaultReps
         self.defaultWeightKg = defaultWeightKg
+        self.isPreferred = isPreferred
         self.equipment = equipment
         self.cardioSecondaryUnit = cardioSecondaryUnit
         self.aliases = aliases
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case id
+        case name
+        case inputType
+        case defaultSets
+        case defaultReps
+        case defaultWeightKg
+        case isPreferred
+        case equipment
+        case cardioSecondaryUnit
+        case aliases
+    }
+
+    init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(String.self, forKey: .id)
+        name = try container.decode(String.self, forKey: .name)
+        inputType = try container.decode(String.self, forKey: .inputType)
+        defaultSets = try container.decode(Int.self, forKey: .defaultSets)
+        defaultReps = try container.decodeIfPresent(Int.self, forKey: .defaultReps)
+        defaultWeightKg = try container.decodeIfPresent(Double.self, forKey: .defaultWeightKg)
+        isPreferred = try container.decodeIfPresent(Bool.self, forKey: .isPreferred) ?? false
+        equipment = try container.decodeIfPresent(String.self, forKey: .equipment)
+        cardioSecondaryUnit = try container.decodeIfPresent(String.self, forKey: .cardioSecondaryUnit)
+        aliases = try container.decodeIfPresent([String].self, forKey: .aliases)
     }
 }
 

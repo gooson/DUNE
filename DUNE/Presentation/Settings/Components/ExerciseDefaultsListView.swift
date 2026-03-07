@@ -16,6 +16,13 @@ struct ExerciseDefaultsListView: View {
     @Environment(\.appTheme) private var theme
 
     private let library = ExerciseLibraryService.shared
+    private var savedDefaultsSnapshot: [String] {
+        savedDefaults.map { record in
+            let weight = record.defaultWeight?.description ?? "nil"
+            let reps = record.defaultReps.map(String.init) ?? "nil"
+            return "\(record.id.uuidString)-\(record.exerciseDefinitionID)-\(weight)-\(reps)-\(record.isManualOverride)-\(record.isPreferred)-\(record.lastUsedDate.timeIntervalSince1970)"
+        }
+    }
 
     var body: some View {
         List {
@@ -34,7 +41,7 @@ struct ExerciseDefaultsListView: View {
                 cachedAllExercises = library.allExercises().sorted { $0.localizedName < $1.localizedName }
             }
         }
-        .onChange(of: savedDefaults.count) {
+        .onChange(of: savedDefaultsSnapshot) {
             rebuildDefaultsIndex()
         }
     }
@@ -91,15 +98,27 @@ struct ExerciseDefaultsListView: View {
                     Text("\(weight.formatted(.number.precision(.fractionLength(0...1)))) kg")
                         .font(.caption)
                         .foregroundStyle(DS.Color.textSecondary)
+                } else if record?.isPreferred == true {
+                    Text("Preferred")
+                        .font(.caption)
+                        .foregroundStyle(DS.Color.textSecondary)
                 }
             }
 
             Spacer()
 
-            if record?.isManualOverride == true {
-                Image(systemName: "pin.fill")
-                    .font(.caption)
-                    .foregroundStyle(theme.accentColor)
+            HStack(spacing: DS.Spacing.xs) {
+                if record?.isPreferred == true {
+                    Image(systemName: "star.fill")
+                        .font(.caption)
+                        .foregroundStyle(DS.Color.positive)
+                }
+
+                if record?.isManualOverride == true {
+                    Image(systemName: "pin.fill")
+                        .font(.caption)
+                        .foregroundStyle(theme.accentColor)
+                }
             }
         }
     }
@@ -109,8 +128,12 @@ struct ExerciseDefaultsListView: View {
     /// Rebuild O(1) lookup dictionary from savedDefaults (Correction #68)
     private func rebuildDefaultsIndex() {
         defaultsByExerciseID = Dictionary(
-            savedDefaults.map { ($0.exerciseDefinitionID, $0) },
-            uniquingKeysWith: { _, latest in latest }
+            savedDefaults.map { record in
+                let representativeID = library.representativeExercise(byID: record.exerciseDefinitionID)?.id
+                    ?? record.exerciseDefinitionID
+                return (representativeID, record)
+            },
+            uniquingKeysWith: { first, _ in first }
         )
     }
 }

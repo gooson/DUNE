@@ -4654,6 +4654,23 @@
         }
       }
     },
+    "Clear Exercise Settings" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "エクササイズ設定を消去"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "운동 설정 지우기"
+          }
+        }
+      }
+    },
     "Clear Filters" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -15076,6 +15093,57 @@
         }
       }
     },
+    "Preferred" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "優先"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "선호"
+          }
+        }
+      }
+    },
+    "Preferred Exercise" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "優先エクササイズ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "선호 운동"
+          }
+        }
+      }
+    },
+    "Preferred Exercises" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "優先エクササイズ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "선호 운동"
+          }
+        }
+      }
+    },
     "Perfect conditions for a run or a walk." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -15410,6 +15478,74 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "인기"
+          }
+        }
+      }
+    },
+    "Set default values and choose exercises that should stay near the top of Quick Start." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "運動ごとのデフォルト値を設定し、Quick Startの上位に置いておきたい運動を選びます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "운동별 기본값을 설정하고 Quick Start 상단에 유지할 운동을 고르세요."
+          }
+        }
+      }
+    },
+    "Manual override keeps your saved defaults. Preferred exercises stay near the top of Quick Start on iPhone and Apple Watch." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "手動固定を有効にすると保存したデフォルト値を維持します。優先エクササイズはiPhoneとApple WatchのQuick Start上部に表示されます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "수동 고정을 켜면 저장한 기본값을 유지합니다. 선호 운동은 iPhone과 Apple Watch의 Quick Start 상단에 표시됩니다."
+          }
+        }
+      }
+    },
+    "Clear saved exercise settings?" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保存した運動設定を消去しますか？"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "저장한 운동 설정을 지울까요?"
+          }
+        }
+      }
+    },
+    "This will remove the saved defaults and preferred status for %@. This change syncs across all your devices." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@の保存済みデフォルトと優先状態を削除します。この変更はすべてのデバイスに同期されます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@의 저장된 기본값과 선호 상태를 삭제합니다. 이 변경은 모든 기기에 동기화됩니다."
           }
         }
       }

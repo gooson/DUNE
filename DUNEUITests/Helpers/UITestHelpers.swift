@@ -53,6 +53,7 @@ enum AXID {
 
     // MARK: - Settings (active rows)
     static let settingsRowExerciseDefaults = "settings-row-exercisedefaults"
+    static let settingsRowPreferredExercises = "settings-row-preferredexercises"
     static let settingsRowRestTime = "settings-row-resttime"
     static let settingsSectionAppearance = "settings-section-appearance"
     static let settingsRowICloudSync = "settings-row-icloud-sync"
