@@ -225,7 +225,8 @@ struct SleepStageChartView: View {
                     }
                     fallthrough
                 case .updating:
-                    if let restore = selectionGestureState.initialScrollPosition {
+                    if let restore = selectionGestureState.initialScrollPosition,
+                       scrollPosition != restore {
                         scrollPosition = restore
                     }
                     selectedDate = ChartSelectionInteraction.resolvedDate(

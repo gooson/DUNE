@@ -227,7 +227,8 @@ struct DotLineChartView: View {
                     }
                     fallthrough
                 case .updating:
-                    if let restore = selectionGestureState.initialScrollPosition {
+                    if let restore = selectionGestureState.initialScrollPosition,
+                       scrollPosition?.wrappedValue != restore {
                         scrollPosition?.wrappedValue = restore
                     }
                     selectedDate = ChartSelectionInteraction.resolvedDate(
