@@ -104,135 +104,24 @@
 
 ## Correction Log
 
-> 안정화된 패턴은 `.claude/rules/`로 졸업되었습니다.
-> 전체 이력(#1~#184)은 `docs/corrections-archive.md`에 보존됩니다.
-> 아래는 rules로 졸업하지 않은 **프로젝트 특화** 교정 사항입니다.
+> 안정화된 패턴은 `.claude/rules/`로 졸업합니다.
+> 전체 이력(#1~#204)은 `docs/corrections-archive.md`에 보존됩니다.
+> 프로젝트 특화 교정 사항은 `docs/corrections-active.md`에 있습니다.
+> `/plan`, `/review` 시 자동으로 참조됩니다.
 
-<!-- Rules 졸업 현황:
-  - swiftui-patterns.md: #28-31, #47-49, #52, #65-66, #70-71, #74, #143-146, #150, #179-183
-  - performance-patterns.md: #8, #16-17, #35, #80, #83, #102, #105, #111, #118, #132, #152-153, #165, #169, #184
-  - swift-layer-boundaries.md: #1, #2, #7, #20, #36, #62, #73, #86, #103, #117, #155
-  - input-validation.md: #3, #4, #6, #11, #18, #21, #22, #38-39, #41-42, #84-85, #101
-  - healthkit-patterns.md: #5, #107-110, #130-131
-  - swiftdata-cloudkit.md: #32-33, #40, #50, #65, #71, #164, #188
-  - watch-navigation.md: #57-61
-  - build-pipeline.md: #95-96, #185
--->
+### Rules 졸업 현황
 
-### Data & Score 로직
-
-- **historical fallback 시 change=nil**: 비인접일 비교는 의미 없음 (#24, #51)
-- **partial failure 보고 필수**: async let 4+개 시 "N of M sources" 형태 (#25, #92)
-- **Hashable: == 와 hash 프로퍼티 일치**: content-aware Hasher 사용 (#26, #87, #175)
-- **RHR fallback을 condition "today"로 전달 금지**: nil이면 보정 스킵 (#112)
-- **Score 추가 시 `{Type}ScoreDetail` + `{Type}CalculationCard` 세트**: 중간 계산값 디버깅 (#113, #116)
-- **통계 파라미터 변경 시 3+개 실데이터 시나리오 검증** (#114)
-- **Fetch window >= 필터 threshold x 2**: dateComponents 시간 truncation 보상 (#115)
-- **Sleep stage 분류: Display와 Score 일관성 필수** (#110)
-- **시계열 regression 입력은 oldest-first 정렬** (#156)
-- **Dedup 필터 빈 문자열 ID 방어**: `!id.isEmpty` 검증 (#63)
-- **HK ID 캡처 -> SwiftData 삭제 -> HK 삭제 순서** (#67)
-
-### DRY & 구조
-
-- **동일 로직 3곳+ 즉시 추출** / 복잡하면 2곳부터 / 같은 파일이면 file-scope (#37, #64, #167, #173)
-- **공유 DTO -> `Presentation/Shared/Models/`** / VM 내부 struct 2곳+ 사용 시 추출 (#86, #155)
-- **3개+ 파일 참조 enum은 전용 파일 분리** (#149)
-- **Popover/inline 중복은 `isInline: Bool` 파라미터로 통합** (#151)
-- **카테고리->색상 매핑은 enum extension 단일 소스** (#176)
-- **모드별 dispatch 함수보다 튜플 반환 단일 함수** (#148)
-- **`Dictionary(uniqueKeysWithValues:)` 사용 금지 -> `uniquingKeysWith`** (#104)
-- **iPad HStack layout은 섹션을 computed property로 추출** (#106)
-
-### Launch & Permissions
-
-- **launch permission 완료 플래그는 요청 전에 영구 저장 금지**: cross-launch persisted state와 same-launch attempt state를 분리하고, system request가 정상 반환된 뒤에만 completion 저장 (#201)
-
-### Watch/iOS Parity
-
-- **Watch DTO 필드 추가 시 양쪽 target 동기화** (#69, #138)
-- **WatchConnectivity DTO는 `Domain/Models/WatchConnectivityModels.swift` 단일 소스 유지** (#190)
-- **Watch 입력도 iOS 동일 수준 검증** (#72)
-- **Watch `isReachable`은 computed property** (#46)
-- **bodyweight volume=0에서 "0kg" 표시 금지** (#170)
-- **검색<->브라우징 모드 전환 시 반대편 캐시 초기화** (#171)
-- **SVG body diagram 위 DragGesture 금지** (#147)
-- **undertrained 리스트는 비즈니스 필터 후 prefix/suffix** (#154)
-- **iOS QuickStart popular도 기록 부족 시 library fallback 필수** (Watch personalizedPopular 패턴) (#189)
-- **Watch 운동 종료는 액션 즉시 `isSessionEnded` 전환 + finalize timeout watchdog 적용** (HealthKit delegate 지연/누락 방어) (#192)
-- **Watch exerciseLibrary 미수신 상태를 `synced`로 표시 금지**: missing context key면 `syncing/notConnected` 유지 + 재요청 경로 확보 (#193)
-- **Watch cardio elapsed/pace는 pause 구간을 제외한 active elapsed 기준으로 계산**: wall-clock 기반 계산 금지 (#194)
-- **Watch 루틴 템플릿은 CloudKit-only 의존 금지**: `WorkoutTemplate` primary는 유지하되 WatchConnectivity fallback DTO/병합(local 우선)으로 가시성 공백 방지 (#195)
-- **watchOS nested TabView 금지**: horizontal(outer)+vertical(inner) 중첩은 제스처 충돌/Crown 라우팅 미정의. flat 수평 TabView 사용 (#197)
-- **Watch saveCardioRecord에 수집된 모든 metric 전달 확인**: `WorkoutManager`가 수집하는 값(steps, floors 등)이 `ExerciseRecord` init에 빠짐없이 전달되는지 점검 (#198)
-- **Watch strength 템플릿: `discardWorkout()` + 개별 HKWorkout 생성**: HKLiveWorkoutBuilder는 단일 HKWorkout만 생성하므로, strength 세션 종료 시 `discardWorkout()` 후 `WatchWorkoutWriter`로 운동별 개별 HKWorkout 저장. 시간 겹침 방지를 위해 순차 오프셋 적용 (#199)
-- **`HKLiveWorkoutDataSource`는 stepCount/flightsClimbed 자동 수집 안 함**: `enableCollection(for: HKQuantityType(.stepCount), predicate: nil)` 명시 호출 필수. 미호출 시 `didCollectDataOf` delegate에 해당 타입 미전달 (#200)
-
-### Design System
-
-- **xcassets 색상은 `Colors/` 하위 배치** / `Color(red:green:blue:)` 인라인 금지 (#119, #177)
-- **light/dark 동일이면 universal만** (#120, #137)
-- **DS.Opacity 용도 기반 네이밍** / 심장 아이콘에 `DS.Color.heartRate` (#139, #140)
-- **DS 토큰 통일 시 용도별 시맨틱 크기 보존** (#163)
-- **브랜드 컬러에 `.accentColor` 직접 사용 금지** (예외: ring gradient) (#136)
-- **다크 모드 배경 gradient opacity >= 0.06** (#127, #128)
-- **비주얼 변경은 v1->v2 2단계** (#129)
-- **정적 색상 배열은 `CaseIterable`에서 파생** (#178)
-
-### Asset Catalog & Xcode
-
-- **xcodegen 후 objectVersion/compatibilityVersion 후처리** (#121)
-- **watchOS: `INFOPLIST_KEY_CFBundleIconName` 명시 + platform 소문자** (#123-125)
-- **native visionOS app icon은 전용 `.imagestack` asset 필요**: iOS `AppIcon.appiconset`의 `visionos` child 추가로 해결되지 않음. `project.yml`에 `Resources/Assets.xcassets` 포함 + `ASSETCATALOG_COMPILER_APPICON_NAME`를 visionOS 전용 stack asset(`VisionAppIcon`)으로 지정 (#201)
-- **XcodeGen shared 파일을 target-specific group(`DUNEVision/...`)으로 다시 매달지 말 것**: 같은 실파일이 여러 PBXGroup에 걸리면 `file reference is a member of multiple groups` malformed warning이 난다. navigator 위치를 분리해야 하면 별도 path(필요 시 symlink)로 참조해 별도 file reference를 강제한다 (#203)
-- **Asset catalog 폴더에 `"provides-namespace": true`** (#159)
-- **AI 생성 아이콘 투명 배경 확인** / 제네릭 장비는 SF Symbol (#160, #161)
-- **Equipment.other -> nil ("없음" vs "미인식" 구분)** (#166)
-- **Icon switch dispatch는 View init에서 pre-resolve** (#162)
-- **validation 에러는 asset catalog "Unassigned" 먼저 확인** (#126)
-
-### UI 표시 규칙
-
-- **탭 이름/네비게이션 타이틀은 영어 고정**: `AppSection.title` + `englishNavigationTitle(_:)` 사용, localized title 금지 (#190)
-- **Watch 사용자 라벨 하드코딩 금지**: 캐러셀/퀵스타트/운동시작 라벨은 `String(localized:)` 경유 (#191)
-- **Watch confirmationDialog에서 `.destructive` 사용 시 테마 tint 대비를 실제 디바이스/시뮬레이터에서 검증** (#192)
-- **화면 숫자 표기는 `formattedWithSeparator` 경유** (#97)
-- **`changeFractionDigits` 단일 소스: `HealthMetric+View`** (#98)
-- **rawValue UI 직접 표시 금지 -> `displayName` computed** (#36)
-- **`HealthMetric.Category` 추가 시 10+ 파일 수정 체크리스트** (#94)
-- **UI 컴포넌트 삭제 시 기능 이관 체크리스트** (#99)
-- **`TodayPinnedMetricsStore` 빈 배열 fallback 주의** (#100)
-- **`Sendable` struct 내 튜플 사용 금지** (#90)
-- **분류 switch에 `default:` 금지 -> exhaustive case** (#93)
-
-### 프로세스
-
-- ~~**빌드 검증은 `scripts/build-ios.sh` 단일 경로** (#95-96)~~ → `build-pipeline.md`로 졸업
-- ~~**CI 스크립트 xcodegen 로직은 `scripts/lib/regen-project.sh` 단일 소스** (#185)~~ → `build-pipeline.md`로 졸업
-- **workflow paths에 `scripts/**` 대신 개별 스크립트 경로 지정** (#186)
-- **새 UI 테스트 파일은 `BaseUITestCase` 상속** (#187)
-- **`/ship` 머지 전략은 `--merge` 기본** (#54)
-- **`/run`에서 `/ship` 호출 전 Pre-Ship 게이트 강제**: clean worktree + upstream/`gh auth` 확인 + `main...HEAD` diff 0이면 ship 생략 (#196)
-- **`.claude/settings.local.json`은 기본적으로 `{}` 유지**: local allow/deny/hook 복제 금지, `settings.json` 상속으로 permission drift 방지 (#203)
-- **`/run` 최종 출력 계약은 상태 기반으로 작성**: 각 phase는 `completed/skipped/failed`와 산출물 경로 또는 명시적 사유를 함께 보고 (#204)
-- **리뷰 적용은 파일별 batch, dead code는 같은 커밋에서 삭제** (#27, #55, #133)
-- **리뷰 에이전트 output 크기 제어: max_turns 6, diff 2000줄+은 직접 리뷰** (#91)
-- **에이전트 리서치 3개 이하, 80% 품질 + 빠른 전달** (#13-15)
-- **버그 수정 -> 빌드 -> 사용자 확인 -> 다음 단계** (#134, #135)
-- **효과 확인된 수정은 즉시 커밋** (#180)
-- **새 기능 구현 후 관련 Correction 항목 재검증** (#81)
-- **UI 구조 변경 시 UI 테스트 동시 갱신** (#158)
-- **문자열 키워드 매칭 false-positive 테스트 필수** (#89, #157)
-- **Launch Splash 최소 노출: CancellationError 명시 처리** (#141-142)
-- **앱 시작 fetch는 값 반환과 persist/sync side effect를 분리**: shared snapshot 비의존 쿼리는 먼저 시작하고, launch-time SwiftData fetch/mapping은 메인 경로에 직접 두지 않는다 (#202)
-- **`throws` 함수에서 silent `guard...return` 금지** (#77)
-- **새 필드 추가 시 전체 파이프라인 점검** (#34)
-- **방어 코드도 비즈니스 로직 고려 + 테스트 검증** (#44)
-- **`Swift.max()` 명시적 호출 (Collection.max 충돌)** (#45)
-- **Deprecated API 즉시 교체 (Xcode warning 0)** (#19)
-- **`isSaving` 리셋은 View에서 insert 완료 후** (#43)
-- **Cross-VM static 프로퍼티 참조 금지 -> 중립 enum** (#73)
-- **UserDefaults: bundle prefix + garbage collection** (#75-76)
-- **`personalizedPopular(limit:)`에 실제 필요 수량 전달** (#174)
-- **`@Query` fetchLimit → `Query(FetchDescriptor)` init 사용** (매크로 직접 파라미터 미지원) (#183)
-- **Swift 6 `@MainActor` + `withThrowingTaskGroup` 내 `@MainActor addTask` 금지** → continuation 내부 Task timeout 패턴 (#184)
+| Rule 파일 | 졸업 교정 번호 |
+|-----------|---------------|
+| swiftui-patterns.md | #28-31, #47-49, #52, #65-66, #70-71, #74, #93, #106, #143-146, #150, #179-183 |
+| performance-patterns.md | #8, #16-17, #35, #80, #83, #102, #105, #111, #118, #132, #152-153, #165, #169, #174, #184 |
+| swift-layer-boundaries.md | #1, #2, #7, #20, #36, #62, #73, #86, #103, #117, #155 |
+| input-validation.md | #3, #4, #6, #11, #18, #21, #22, #38-39, #41-42, #84-85, #101 |
+| healthkit-patterns.md | #5, #107-110, #130-131 |
+| swiftdata-cloudkit.md | #32-33, #40, #50, #65, #71, #164, #188 |
+| watch-navigation.md | #57-61 |
+| build-pipeline.md | #95-96, #185 |
+| watch-ios-parity.md | #46, #69, #72, #138, #147, #154, #170-171, #189-195, #197-200 |
+| design-system-rules.md | #119-120, #127-129, #136-137, #139-140, #163, #176-178 |
+| asset-catalog.md | #121, #123-126, #159-162, #166, #201, #203 |
+| localization.md | #36 |
