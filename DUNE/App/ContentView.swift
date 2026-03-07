@@ -22,6 +22,15 @@ enum NotificationPresentationPlanner {
             return .openNotificationHub
         }
     }
+
+    static func rootPath(for plan: NotificationPresentationPlan) -> [NotificationPresentationDestination] {
+        switch plan {
+        case .push(let destination):
+            [destination]
+        case .openWorkoutInActivity, .openNotificationHub:
+            []
+        }
+    }
 }
 
 struct ContentView: View {
@@ -198,9 +207,11 @@ struct ContentView: View {
             return
         }
 
+        notificationPresentationPath = NotificationPresentationPlanner.rootPath(for: plan)
+
         switch plan {
-        case .push(let destination):
-            notificationPresentationPath.append(destination)
+        case .push:
+            break
         case .openWorkoutInActivity(let workoutID):
             selectedSection = .train
             notificationOpenWorkoutID = workoutID

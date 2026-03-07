@@ -43,7 +43,8 @@ enum CloudSyncPreferenceStore {
 
     static func cloudSeedValue(localValue: Bool?, cloudValue: Bool?) -> Bool? {
         guard cloudValue == nil else { return nil }
-        return localValue
+        guard localValue == true else { return nil }
+        return true
     }
 
     private static func booleanValue(from object: Any?) -> Bool? {

@@ -19,12 +19,16 @@ struct HealthSnapshotMirrorContainerFactoryTests {
         #expect(resolved == true)
     }
 
-    @Test("seeds cloud state from local opt-in only when cloud state is missing")
-    func seedsCloudStateOnlyWhenMissing() {
-        let missingCloudSeed = CloudSyncPreferenceStore.cloudSeedValue(localValue: false, cloudValue: nil)
+    @Test("seeds cloud state only for explicit local opt-in when cloud state is missing")
+    func seedsCloudStateOnlyForLocalOptIn() {
+        let optInSeed = CloudSyncPreferenceStore.cloudSeedValue(localValue: true, cloudValue: nil)
+        let optOutSeed = CloudSyncPreferenceStore.cloudSeedValue(localValue: false, cloudValue: nil)
+        let unsetSeed = CloudSyncPreferenceStore.cloudSeedValue(localValue: nil, cloudValue: nil)
         let existingCloudSeed = CloudSyncPreferenceStore.cloudSeedValue(localValue: true, cloudValue: false)
 
-        #expect(missingCloudSeed == false)
+        #expect(optInSeed == true)
+        #expect(optOutSeed == nil)
+        #expect(unsetSeed == nil)
         #expect(existingCloudSeed == nil)
     }
 

@@ -6,40 +6,16 @@ import WidgetKit
 /// All callers are @MainActor, so read-modify-write is serialized.
 @MainActor
 enum WidgetDataWriter {
-    private static let encoder: JSONEncoder = {
-        let encoder = JSONEncoder()
-        encoder.dateEncodingStrategy = .secondsSince1970
-        return encoder
-    }()
-
-    private static let decoder: JSONDecoder = {
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .secondsSince1970
-        return decoder
-    }()
-
-    private static let fileURL = WidgetScoreData.sharedFileURL()
-
     // Debounce reloadAllTimelines to coalesce rapid writes from multiple VMs.
     private static var reloadWorkItem: DispatchWorkItem?
 
     private static func loadExisting() -> WidgetScoreData? {
-        guard let fileURL else { return nil }
-        guard let jsonData = try? Data(contentsOf: fileURL) else { return nil }
-        do {
-            return try decoder.decode(WidgetScoreData.self, from: jsonData)
-        } catch {
-            AppLogger.data.error("[WidgetDataWriter] Corrupt widget blob, removing: \(error)")
-            try? FileManager.default.removeItem(at: fileURL)
-            return nil
-        }
+        WidgetScoreData.loadSharedData()
     }
 
     private static func save(_ data: WidgetScoreData) {
-        guard let fileURL else { return }
         do {
-            let jsonData = try encoder.encode(data)
-            try jsonData.write(to: fileURL, options: .atomic)
+            try WidgetScoreData.saveSharedData(data)
             scheduleReload()
         } catch {
             AppLogger.data.error("[WidgetDataWriter] Failed to encode widget data: \(error)")

@@ -69,6 +69,15 @@ struct NotificationPresentationPlannerTests {
         #expect(plan == .push(.personalRecords(requestID: 7)))
     }
 
+    @Test("personal records push replaces any existing root push stack")
+    func personalRecordsPushReplacesExistingRootStack() {
+        let path = NotificationPresentationPlanner.rootPath(
+            for: .push(.personalRecords(requestID: 9))
+        )
+
+        #expect(path == [.personalRecords(requestID: 9)])
+    }
+
     @Test("workoutDetail keeps activity tab routing for workout detail")
     func workoutDetailKeepsActivityTabRouting() throws {
         let route = try #require(NotificationRoute.workoutDetail(workoutID: "workout-123"))
@@ -82,6 +91,21 @@ struct NotificationPresentationPlannerTests {
         let plan = NotificationPresentationPlanner.plan(for: .notificationHub, requestID: 2)
 
         #expect(plan == .openNotificationHub)
+    }
+
+    @Test("workoutDetail clears any existing root push stack")
+    func workoutDetailClearsExistingRootStack() throws {
+        let route = try #require(NotificationRoute.workoutDetail(workoutID: "workout-123"))
+        let plan = try #require(NotificationPresentationPlanner.plan(for: route, requestID: 3))
+
+        #expect(NotificationPresentationPlanner.rootPath(for: plan).isEmpty)
+    }
+
+    @Test("notificationHub clears any existing root push stack")
+    func notificationHubClearsExistingRootStack() throws {
+        let plan = try #require(NotificationPresentationPlanner.plan(for: .notificationHub, requestID: 2))
+
+        #expect(NotificationPresentationPlanner.rootPath(for: plan).isEmpty)
     }
 
     @Test("invalid workoutDetail route does not produce a plan")
