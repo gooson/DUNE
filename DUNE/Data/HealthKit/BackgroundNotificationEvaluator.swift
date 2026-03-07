@@ -30,7 +30,7 @@ struct StepGoalResolver {
 final class BackgroundNotificationEvaluator: Sendable {
 
     private let store: HKHealthStore
-    private let notificationService: NotificationService
+    private let notificationService: NotificationServiceImpl
     private let settingsStore: NotificationSettingsStore
     private let throttleStore: NotificationThrottleStore
     private let anchorStore: HealthKitAnchorStore
@@ -38,7 +38,7 @@ final class BackgroundNotificationEvaluator: Sendable {
 
     init(
         store: HKHealthStore,
-        notificationService: NotificationService,
+        notificationService: NotificationServiceImpl,
         settingsStore: NotificationSettingsStore = .shared,
         throttleStore: NotificationThrottleStore = .shared,
         anchorStore: HealthKitAnchorStore = .shared,
@@ -55,9 +55,7 @@ final class BackgroundNotificationEvaluator: Sendable {
         )
     }
 
-    private enum BodyCompositionConstants {
-        static let mergedNotificationIdentifier = "com.dune.bodyComposition.merged"
-    }
+    private static let mergedBodyCompositionNotificationID = "com.dune.bodyComposition.merged"
 
     /// Called from HKObserverQuery callback. Fetches new samples and evaluates for notifications.
     func evaluateAndNotify(sampleType: HKSampleType) async {
@@ -78,7 +76,7 @@ final class BackgroundNotificationEvaluator: Sendable {
         let insight = await evaluate(samples: samples, sampleType: sampleType, insightType: insightType)
         guard let insight else { return }
 
-        // Body composition types: merge into a single replacing notification
+        // Body composition types: atomically buffer + build merged notification
         if isBodyCompositionType(insightType) {
             await sendMergedBodyCompositionNotification(latestInsight: insight)
             return
@@ -96,18 +94,13 @@ final class BackgroundNotificationEvaluator: Sendable {
     }
 
     private func sendMergedBodyCompositionNotification(latestInsight: HealthInsight) async {
-        // Buffer the current value
-        throttleStore.recordBodyCompositionValue(
+        // Atomically buffer value, collect pending, and record throttle
+        let mergedBody = throttleStore.bufferAndBuildMergedBody(
             type: latestInsight.type,
             formattedValue: latestInsight.body
         )
+        guard let mergedBody else { return }
 
-        // Collect all buffered values within the merge window
-        let pending = throttleStore.pendingBodyCompositionValues()
-        guard !pending.isEmpty else { return }
-
-        // Build merged notification content
-        let mergedBody = pending.map(\.formattedValue).joined(separator: "\n")
         let mergedInsight = HealthInsight(
             type: latestInsight.type,
             title: String(localized: "Body Composition Update"),
@@ -117,11 +110,7 @@ final class BackgroundNotificationEvaluator: Sendable {
             route: latestInsight.route
         )
 
-        // Record type-level throttle for dedup
-        throttleStore.recordSent(for: latestInsight.type)
-
-        // Send with fixed identifier to replace previous body composition notification
-        await notificationService.send(mergedInsight, replacingIdentifier: BodyCompositionConstants.mergedNotificationIdentifier)
+        await notificationService.send(mergedInsight, replacingIdentifier: Self.mergedBodyCompositionNotificationID)
     }
 
     // MARK: - Anchored Query

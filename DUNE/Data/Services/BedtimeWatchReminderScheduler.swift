@@ -57,10 +57,14 @@ final class BedtimeWatchReminderScheduler {
         }
 
         // If recent wrist temperature exists, watch was worn during sleep → skip reminder
-        if let _ = try? await vitalsService.fetchLatestWristTemperature(withinDays: Constants.wristTempLookbackDays) {
-            await removePendingReminder()
-            AppLogger.notification.info("[BedtimeReminder] Wrist temperature detected — watch worn, skipping reminder")
-            return
+        do {
+            if try await vitalsService.fetchLatestWristTemperature(withinDays: Constants.wristTempLookbackDays) != nil {
+                await removePendingReminder()
+                AppLogger.notification.info("[BedtimeReminder] Wrist temperature detected — watch worn, skipping reminder")
+                return
+            }
+        } catch {
+            AppLogger.notification.warning("[BedtimeReminder] Wrist temp fetch failed: \(error) — proceeding with reminder")
         }
 
         let calendar = Calendar.current

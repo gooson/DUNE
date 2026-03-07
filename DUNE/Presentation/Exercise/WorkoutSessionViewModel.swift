@@ -289,7 +289,6 @@ final class WorkoutSessionViewModel {
     private func applyInterSessionOverload(weightUnit: WeightUnit) {
         guard !previousSets.isEmpty else { return }
 
-        // Check if all previous sets had reps >= target
         let allMet = previousSets.enumerated().allSatisfy { index, prev in
             guard let reps = prev.reps else { return false }
             let target = targetRepsForSet(at: index)
@@ -297,15 +296,8 @@ final class WorkoutSessionViewModel {
         }
         guard allMet else { return }
 
-        // Apply increment to first set only
         guard let firstWeight = previousSets.first?.weight, firstWeight > 0 else { return }
-        let incrementKg = progressionIncrementKg
-        let maxIncreaseKg = firstWeight * maxProgressiveIncreaseRatio
-        let clampedIncreaseKg = min(incrementKg, max(maxIncreaseKg, 0))
-        let proposedWeightKg = firstWeight + clampedIncreaseKg
-        let roundedWeightKg = roundToPlateStepKg(proposedWeightKg)
-        let displayWeight = weightUnit.fromKg(roundedWeightKg)
-        sets[0].weight = displayWeight.formatted(.number.precision(.fractionLength(0...1)))
+        sets[0].weight = incrementedWeightDisplay(fromKg: firstWeight, unit: weightUnit)
     }
 
     func previousSetInfo(for setNumber: Int) -> PreviousSetInfo? {
@@ -372,13 +364,7 @@ final class WorkoutSessionViewModel {
         guard completedReps >= targetReps else { return false }
 
         let currentWeightKg = weightUnit.toKg(completedWeightDisplay)
-        let incrementKg = progressionIncrementKg
-        let maxIncreaseKg = currentWeightKg * maxProgressiveIncreaseRatio
-        let clampedIncreaseKg = min(incrementKg, max(maxIncreaseKg, 0))
-        let proposedWeightKg = currentWeightKg + clampedIncreaseKg
-        let roundedWeightKg = roundToPlateStepKg(proposedWeightKg)
-        let nextDisplayWeight = weightUnit.fromKg(roundedWeightKg)
-        let formatted = nextDisplayWeight.formatted(.number.precision(.fractionLength(0...1)))
+        let formatted = incrementedWeightDisplay(fromKg: currentWeightKg, unit: weightUnit)
 
         let isNextWeightEmpty = sets[nextIndex].weight.trimmingCharacters(in: .whitespaces).isEmpty
         if isNextWeightEmpty || sets[nextIndex].weight == completed.weight {
@@ -392,20 +378,14 @@ final class WorkoutSessionViewModel {
 
     private let levelUpMinimumRepsAchievementRate = 0.9
 
-    /// Returns true when all sets are completed and at least 90% of them met their target reps.
-    func shouldSuggestLevelUp() -> Bool {
-        guard !sets.isEmpty else { return false }
-        guard completedSetCount == sets.count else { return false }
-        let completed = sets.filter(\.isCompleted)
-        guard !completed.isEmpty else { return false }
-        var achievedCount = 0
-        for (index, set) in completed.enumerated() {
-            guard let reps = normalizedRepsString(from: set.reps).flatMap(Int.init) else { continue }
-            let target = targetRepsForSet(at: index)
-            if reps >= target { achievedCount += 1 }
-        }
-        let rate = Double(achievedCount) / Double(completed.count)
-        return rate >= levelUpMinimumRepsAchievementRate
+    /// True when all sets are completed and at least 90% met their target reps.
+    var shouldSuggestLevelUp: Bool {
+        guard !sets.isEmpty, completedSetCount == sets.count else { return false }
+        let achieved = sets.indices.filter { i in
+            guard let reps = normalizedRepsString(from: sets[i].reps).flatMap(Int.init) else { return false }
+            return reps >= targetRepsForSet(at: i)
+        }.count
+        return Double(achieved) / Double(sets.count) >= levelUpMinimumRepsAchievementRate
     }
 
     // MARK: - Per-Set Validation
@@ -762,6 +742,15 @@ final class WorkoutSessionViewModel {
     private var isLowerBodyCompound: Bool {
         let lowerMuscles: Set<MuscleGroup> = [.quadriceps, .hamstrings, .glutes]
         return !Set(exercise.primaryMuscles).intersection(lowerMuscles).isEmpty
+    }
+
+    private func incrementedWeightDisplay(fromKg baseKg: Double, unit: WeightUnit) -> String {
+        let incrementKg = progressionIncrementKg
+        let maxIncreaseKg = baseKg * maxProgressiveIncreaseRatio
+        let clampedIncreaseKg = min(incrementKg, maxIncreaseKg)
+        let roundedWeightKg = roundToPlateStepKg(baseKg + clampedIncreaseKg)
+        let displayWeight = unit.fromKg(roundedWeightKg)
+        return displayWeight.formatted(.number.precision(.fractionLength(0...1)))
     }
 
     private func roundToPlateStepKg(_ value: Double) -> Double {

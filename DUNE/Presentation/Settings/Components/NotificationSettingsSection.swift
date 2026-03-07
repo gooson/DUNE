@@ -3,7 +3,7 @@ import SwiftUI
 /// Per-type notification toggles for the Settings screen.
 struct NotificationSettingsSection: View {
     @State private var settingsStore = NotificationSettingsStore.shared
-    @AppStorage(BedtimeWatchReminderScheduler.settingsKey) private var isBedtimeReminderEnabled = true
+    @AppStorage("isBedtimeWatchReminderEnabled") private var isBedtimeReminderEnabled = true
 
     /// Grouped insight types for display.
     private static let healthTypes: [HealthInsight.InsightType] = [

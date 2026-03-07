@@ -147,34 +147,37 @@ final class NotificationThrottleStore: @unchecked Sendable {
 
     // MARK: - Body Composition Merge Buffer
 
-    /// Records a body composition value for later merge into a single notification.
-    func recordBodyCompositionValue(type: HealthInsight.InsightType, formattedValue: String) {
+    private static let bufferEncoder = JSONEncoder()
+    private static let bufferDecoder = JSONDecoder()
+
+    /// Atomically buffers the value, collects pending entries, records throttle, and returns
+    /// the merged body string. Returns nil if no pending entries exist.
+    func bufferAndBuildMergedBody(
+        type: HealthInsight.InsightType,
+        formattedValue: String,
+        now: Date = Date()
+    ) -> String? {
         queue.sync {
+            // Buffer the new value
             var buffer = loadBodyCompositionBufferLocked()
             buffer[type.rawValue] = BodyCompositionBufferEntry(
                 formattedValue: formattedValue,
-                timestamp: Date()
+                timestamp: now
             )
             saveBodyCompositionBufferLocked(buffer)
-        }
-    }
 
-    /// Returns all body composition values recorded within the merge window.
-    func pendingBodyCompositionValues(now: Date = Date()) -> [(type: String, formattedValue: String)] {
-        queue.sync {
-            let buffer = loadBodyCompositionBufferLocked()
-            return buffer
+            // Collect pending within merge window
+            let pending = buffer
                 .filter { now.timeIntervalSince($0.value.timestamp) < bodyCompositionMergeWindowSeconds }
                 .sorted { $0.key < $1.key }
-                .map { (type: $0.key, formattedValue: $0.value.formattedValue) }
-        }
-    }
+                .map(\.value.formattedValue)
+            guard !pending.isEmpty else { return nil }
 
-    /// Clears the body composition buffer.
-    func clearBodyCompositionBuffer() {
-        queue.sync {
-            let key = keyPrefix + Keys.bodyCompositionBufferSuffix
-            defaults.removeObject(forKey: key)
+            // Record throttle for all body composition types atomically
+            recordBodyCompositionSentLocked(for: type, now: now)
+            recordSentTypeLocked(for: type, now: now)
+
+            return pending.joined(separator: "\n")
         }
     }
 
@@ -186,7 +189,7 @@ final class NotificationThrottleStore: @unchecked Sendable {
     private func loadBodyCompositionBufferLocked() -> [String: BodyCompositionBufferEntry] {
         let key = keyPrefix + Keys.bodyCompositionBufferSuffix
         guard let data = defaults.data(forKey: key),
-              let buffer = try? JSONDecoder().decode([String: BodyCompositionBufferEntry].self, from: data) else {
+              let buffer = try? Self.bufferDecoder.decode([String: BodyCompositionBufferEntry].self, from: data) else {
             return [:]
         }
         return buffer
@@ -194,7 +197,7 @@ final class NotificationThrottleStore: @unchecked Sendable {
 
     private func saveBodyCompositionBufferLocked(_ buffer: [String: BodyCompositionBufferEntry]) {
         let key = keyPrefix + Keys.bodyCompositionBufferSuffix
-        guard let data = try? JSONEncoder().encode(buffer) else { return }
+        guard let data = try? Self.bufferEncoder.encode(buffer) else { return }
         defaults.set(data, forKey: key)
     }
 

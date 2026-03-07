@@ -706,7 +706,7 @@ struct WorkoutSessionView: View {
             }
             .padding(.top, DS.Spacing.md)
 
-            if viewModel.shouldSuggestLevelUp() {
+            if viewModel.shouldSuggestLevelUp {
                 HStack(spacing: DS.Spacing.sm) {
                     Image(systemName: "star.circle.fill")
                         .font(.title3)

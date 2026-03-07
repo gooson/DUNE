@@ -12,7 +12,4 @@ protocol NotificationService: Sendable {
 
     /// Sends a local notification for the given health insight.
     func send(_ insight: HealthInsight) async
-
-    /// Sends a local notification with a fixed identifier, replacing any previous notification with the same identifier.
-    func send(_ insight: HealthInsight, replacingIdentifier: String) async
 }

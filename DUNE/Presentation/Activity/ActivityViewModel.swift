@@ -116,7 +116,8 @@ final class ActivityViewModel {
         readinessUseCase: TrainingReadinessCalculating = CalculateTrainingReadinessUseCase(),
         sharedHealthDataService: SharedHealthDataService? = nil,
         personalRecordStore: PersonalRecordStore = .shared,
-        recommendationSettingsStore: WorkoutRecommendationSettingsStore = .shared
+        recommendationSettingsStore: WorkoutRecommendationSettingsStore = .shared,
+        templateRecommendationService: any WorkoutTemplateRecommending = WorkoutTemplateRecommendationService()
     ) {
         self.healthKitManager = healthKitManager
         self.workoutService = workoutService ?? WorkoutQueryService(manager: healthKitManager)
@@ -131,7 +132,7 @@ final class ActivityViewModel {
         self.sharedHealthDataService = sharedHealthDataService
         self.personalRecordStore = personalRecordStore
         self.recommendationSettingsStore = recommendationSettingsStore
-        self.templateRecommendationService = WorkoutTemplateRecommendationService()
+        self.templateRecommendationService = templateRecommendationService
         self.recommendationContext = recommendationSettingsStore.context
         self.localizedExerciseNameLookup = buildLocalizedExerciseNameLookup()
     }
