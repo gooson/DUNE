@@ -44,7 +44,6 @@ private struct NoopVitalsService: VitalsQuerying {
     func fetchWristTemperatureBaseline(days: Int) async throws -> Double? { nil }
 }
 
-
 private struct VO2FreshnessVitalsService: VitalsQuerying {
     let latest: VitalSample?
     let history: [VitalSample]
