@@ -233,8 +233,8 @@ struct ExerciseListItemTests {
 
         let summary = item.setSummary
         #expect(summary != nil)
-        #expect(summary?.contains("2 sets") == true)
-        #expect(summary?.contains("18 reps") == true)
+        #expect(summary?.contains(String(localized: "\(2.formattedWithSeparator) sets")) == true)
+        #expect(summary?.contains(String(localized: "\(18.formattedWithSeparator) reps")) == true)
     }
 
     @Test("setSummary includes weight range")
