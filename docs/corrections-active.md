@@ -108,3 +108,5 @@ status: approved
 - **UserDefaults: bundle prefix + garbage collection** (#75-76)
 - **`personalizedPopular(limit:)`에 실제 필요 수량 전달** (#174)
 - **카드 내부 단일 아이콘 설정 이동은 `NavigationLink` 대신 명시적 버튼 라우팅 우선**: `List`/card 안의 inline `NavigationLink`는 row-style disclosure를 끌어와 레이아웃 폭을 먹고 localized summary title을 비정상 줄바꿈시킬 수 있으므로, 작은 설정 아이콘은 `destination` state를 여는 plain button으로 처리한다 (#220)
+- **밝은/반투명 카드의 본문 제목은 decorative theme text 금지**: 추천운동 카드처럼 light material surface 위의 핵심 제목은 `theme.sandColor` 같은 장식용 theme text가 아니라 `.primary` 또는 surface-aware semantic text를 써서 Sakura 같은 밝은 테마에서도 대비를 유지한다 (#221)
+- **numeric input dismiss는 keyboard accessory toolbar보다 inset bar 우선**: SwiftUI `ToolbarItemGroup(placement: .keyboard)`는 iOS simulator/runtime에서 placeholder keyboard constraint warning을 유발할 수 있으므로, numberPad/decimalPad dismiss는 `safeAreaInset(edge: .bottom)` 기반 dismiss bar로 우선 구현한다 (#222)

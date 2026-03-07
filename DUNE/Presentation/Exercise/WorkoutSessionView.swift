@@ -121,13 +121,10 @@ struct WorkoutSessionView: View {
                     .disabled(viewModel.completedSetCount == 0)
                     .fontWeight(.semibold)
             }
-            ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
-                Button("Done") {
-                    isInputFieldFocused = false
-                }
-                .fontWeight(.semibold)
-                .accessibilityIdentifier("workout-keyboard-done-button")
+        }
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            if isInputFieldFocused {
+                keyboardDismissBar
             }
         }
         .onAppear {
@@ -689,6 +686,24 @@ struct WorkoutSessionView: View {
                 .padding(.horizontal, DS.Spacing.lg)
                 .padding(.vertical, DS.Spacing.md)
             }
+        }
+    }
+
+    private var keyboardDismissBar: some View {
+        HStack {
+            Spacer()
+            Button("Done") {
+                isInputFieldFocused = false
+            }
+            .font(.body.weight(.semibold))
+            .accessibilityIdentifier("workout-keyboard-done-button")
+        }
+        .padding(.horizontal, DS.Spacing.lg)
+        .padding(.top, DS.Spacing.sm)
+        .padding(.bottom, DS.Spacing.sm)
+        .background(.ultraThinMaterial)
+        .overlay(alignment: .top) {
+            Divider()
         }
     }
 

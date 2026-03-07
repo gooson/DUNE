@@ -10,7 +10,6 @@ struct SuggestedExerciseRow: View {
     let onToggleInterest: () -> Void
     let onAlternativeSelected: (ExerciseDefinition) -> Void
 
-    @Environment(\.appTheme) private var theme
     @State private var showingAlternatives = false
 
     var body: some View {
@@ -20,7 +19,7 @@ struct SuggestedExerciseRow: View {
                     VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                         Text(exercise.definition.localizedName)
                             .font(.subheadline.weight(.semibold))
-                            .foregroundStyle(theme.sandColor)
+                            .foregroundStyle(.primary)
                             .lineLimit(2)
 
                         Text(exercise.reason)
