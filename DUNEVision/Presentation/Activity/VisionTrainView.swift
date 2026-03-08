@@ -21,6 +21,7 @@ struct VisionTrainView: View {
                 case .idle, .loading:
                     loadingView
                 case .ready:
+                    VisionVoiceWorkoutEntryCard()
                     VisionExerciseFormGuideView()
                     VisionMuscleMapExperienceView(
                         fatigueStates: viewModel.fatigueStates,

@@ -25313,6 +25313,470 @@
           }
         }
       }
+    },
+    "Start Listening": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "音声入力を開始"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "듣기 시작"
+          }
+        }
+      }
+    },
+    "Stop Listening": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "音声入力を停止"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "듣기 중지"
+          }
+        }
+      }
+    },
+    "Transcript": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "文字起こし"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "전사문"
+          }
+        }
+      }
+    },
+    "Speak or type your workout command": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ワークアウトのコマンドを話すか入力してください"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "운동 명령을 말하거나 입력하세요"
+          }
+        }
+      }
+    },
+    "Review Draft": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "下書きを確認"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "초안 검토"
+          }
+        }
+      }
+    },
+    "Draft Preview": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "下書きプレビュー"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "초안 미리보기"
+          }
+        }
+      }
+    },
+    "Distance": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "距離"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "거리"
+          }
+        }
+      }
+    },
+    "Voice Quick Entry": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "音声クイック入力"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "음성 빠른 입력"
+          }
+        }
+      }
+    },
+    "Speak a workout like \"Bench Press 80kg 8 reps\" to generate a Vision Pro draft before the full save flow arrives.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "\"Bench Press 80kg 8 reps\" のように話して、正式な保存フローの前に Vision Pro 下書きを作成します。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "\"Bench Press 80kg 8 reps\"처럼 말해 전체 저장 플로우 전에 Vision Pro 초안을 만드세요."
+          }
+        }
+      }
+    },
+    "No draft yet. Capture a transcript, then review it to see the structured workout entry.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "まだ下書きはありません。文字起こしを作成して確認すると、構造化されたワークアウト入力を確認できます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "아직 초안이 없습니다. 전사문을 만든 뒤 검토하면 구조화된 운동 입력을 볼 수 있습니다."
+          }
+        }
+      }
+    },
+    "Preview only. Saving to workout history will be added in a later phase.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "これはプレビュー専用です。ワークアウト履歴への保存は次のフェーズで追加されます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 기능은 미리보기 전용입니다. 운동 기록 저장은 다음 phase에서 추가됩니다."
+          }
+        }
+      }
+    },
+    "Add an exercise name to the transcript first.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "先にエクササイズ名を文字起こしへ入れてください。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "먼저 운동 이름을 전사문에 넣어 주세요."
+          }
+        }
+      }
+    },
+    "We could not match that exercise yet.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "そのエクササイズはまだ一致させられませんでした。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "아직 그 운동을 매칭하지 못했습니다."
+          }
+        }
+      }
+    },
+    "Add reps for this exercise draft.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このエクササイズ下書きには回数を追加してください。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 운동 초안에는 횟수를 추가해 주세요."
+          }
+        }
+      }
+    },
+    "Add duration or distance for this cardio draft.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この有酸素運動の下書きには時間または距離を追加してください。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 유산소 초안에는 시간이나 거리를 추가해 주세요."
+          }
+        }
+      }
+    },
+    "Add duration for this workout draft.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このワークアウト下書きには時間を追加してください。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 운동 초안에는 시간을 추가해 주세요."
+          }
+        }
+      }
+    },
+    "Add rounds for this workout draft.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このワークアウト下書きにはラウンド数を追加してください。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 운동 초안에는 라운드를 추가해 주세요."
+          }
+        }
+      }
+    },
+    "Weight unit was assumed as kg for this draft.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この下書きの重量単位は kg として扱いました。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 초안의 무게 단위는 kg로 가정했습니다."
+          }
+        }
+      }
+    },
+    "The final number was treated as reps.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最後の数値を回数として扱いました。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "마지막 숫자를 횟수로 처리했습니다."
+          }
+        }
+      }
+    },
+    "The remaining number was treated as minutes.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "残りの数値を分として扱いました。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "남은 숫자를 분으로 처리했습니다."
+          }
+        }
+      }
+    },
+    "The final number was treated as rounds.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最後の数値をラウンド数として扱いました。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "마지막 숫자를 라운드로 처리했습니다."
+          }
+        }
+      }
+    },
+    "Manual text works even if speech permission is unavailable.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "音声権限がなくてもテキスト入力は使えます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "음성 권한이 없어도 텍스트 입력은 사용할 수 있습니다."
+          }
+        }
+      }
+    },
+    "Speech recognition permission was denied. Type the workout instead.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "音声認識の権限が拒否されました。代わりにワークアウトを入力してください。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "음성 인식 권한이 거부되었습니다. 대신 운동을 입력해 주세요."
+          }
+        }
+      }
+    },
+    "Speech recognition is restricted on this device.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このデバイスでは音声認識が制限されています。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 기기에서는 음성 인식이 제한되어 있습니다."
+          }
+        }
+      }
+    },
+    "Speech recognition is not available on this device.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このデバイスでは音声認識を利用できません。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 기기에서는 음성 인식을 사용할 수 없습니다."
+          }
+        }
+      }
+    },
+    "Speech capture could not start. Try again.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "音声キャプチャを開始できませんでした。もう一度お試しください。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "음성 캡처를 시작하지 못했습니다. 다시 시도해 주세요."
+          }
+        }
+      }
+    },
+    "Listening...": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "聞き取り中..."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "듣는 중..."
+          }
+        }
+      }
+    },
+    "Transcript updated. Review the draft when you're ready.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "文字起こしが更新されました。準備ができたら下書きを確認してください。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "전사문이 갱신됐습니다. 준비되면 초안을 검토하세요."
+          }
+        }
+      }
+    },
+    "Voice draft ready.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "音声下書きの準備ができました。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "음성 초안이 준비됐습니다."
+          }
+        }
+      }
     }
   },
   "version": "1.0"
