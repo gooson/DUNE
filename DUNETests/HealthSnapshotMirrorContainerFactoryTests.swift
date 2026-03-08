@@ -32,6 +32,28 @@ struct HealthSnapshotMirrorContainerFactoryTests {
         #expect(existingCloudSeed == nil)
     }
 
+    @Test("runtime refresh action rebuilds when resolved cloud sync value changes")
+    func runtimeRefreshActionRebuildsWhenResolvedValueChanges() {
+        let action = CloudSyncPreferenceStore.runtimeRefreshAction(
+            currentValue: false,
+            localValue: false,
+            cloudValue: true
+        )
+
+        #expect(action == .rebuild(resolvedValue: true))
+    }
+
+    @Test("runtime refresh action stays in place when resolved cloud sync value is unchanged")
+    func runtimeRefreshActionSkipsRebuildWhenValueMatches() {
+        let action = CloudSyncPreferenceStore.runtimeRefreshAction(
+            currentValue: true,
+            localValue: true,
+            cloudValue: nil
+        )
+
+        #expect(action == .noChange(resolvedValue: true))
+    }
+
     @Test("disables CloudKit when sync is off")
     func disablesCloudKitWhenSyncIsOff() {
         let url = FileManager.default.temporaryDirectory

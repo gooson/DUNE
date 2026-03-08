@@ -5,6 +5,7 @@ import UserNotifications
 
 @main
 struct DUNEApp: App {
+    @Environment(\.scenePhase) private var scenePhase
     @AppStorage(AppTheme.storageKey) private var selectedTheme: AppTheme = .desertWarm
     @AppStorage("hasShownCloudSyncConsent") private var hasShownConsent = false
     @AppStorage("hasRequestedHealthKitAuthorization") private var hasRequestedHealthKitAuthorization = false
@@ -24,16 +25,22 @@ struct DUNEApp: App {
     @State private var automaticWhatsNewBuild = ""
     @State private var hasForcedConsentPresentation = false
 
-    let modelContainer: ModelContainer
-    private let sharedHealthDataService: SharedHealthDataService
-    private let refreshCoordinator: AppRefreshCoordinating
-    private let observerManager: HealthKitObserverManager?
+    @State private var appRuntime: AppRuntime
     private let notificationService: any NotificationService
     private let notificationCenterDelegate: AppNotificationCenterDelegate
     private let whatsNewManager = WhatsNewManager.shared
     private let whatsNewStore = WhatsNewStore.shared
     private static let minimumLaunchSplashDuration: Duration = .seconds(1)
     private static let launchSplashResolveDuration: Duration = .milliseconds(700)
+
+    private struct AppRuntime {
+        let revision = UUID()
+        let cloudSyncEnabled: Bool
+        let modelContainer: ModelContainer
+        let sharedHealthDataService: SharedHealthDataService
+        let refreshCoordinator: AppRefreshCoordinating
+        let observerManager: HealthKitObserverManager?
+    }
 
     private static var isRunningXCTest: Bool {
         ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
@@ -150,6 +157,69 @@ struct DUNEApp: App {
         }
     }
 
+    private static func makeAppRuntime(
+        notificationService: any NotificationService,
+        cloudSyncEnabled: Bool? = nil
+    ) -> AppRuntime {
+        let resolvedCloudSyncEnabled = cloudSyncEnabled ?? (Self.isRunningXCTest
+            ? false
+            : CloudSyncPreferenceStore.resolvedValue())
+        let config = ModelConfiguration(
+            isStoredInMemoryOnly: Self.shouldResetUITestState,
+            cloudKitDatabase: (resolvedCloudSyncEnabled && !Self.isRunningXCTest) ? .automatic : .none
+        )
+
+        let modelContainer: ModelContainer
+        do {
+            modelContainer = try Self.makeModelContainer(configuration: config)
+        } catch {
+            AppLogger.data.error("ModelContainer failed: \(error)")
+            modelContainer = Self.recoverModelContainer(after: error, configuration: config)
+        }
+
+        let healthKitAvailable = HKHealthStore.isHealthDataAvailable()
+        let sharedHealthDataService: SharedHealthDataService
+        if Self.shouldUseMirroredSnapshotServiceForUITests {
+            sharedHealthDataService = CloudMirroredSharedHealthDataService(modelContainer: modelContainer)
+        } else if healthKitAvailable {
+            let baseSharedService: SharedHealthDataService = SharedHealthDataServiceImpl(healthKitManager: .shared)
+            let mirrorStore: HealthSnapshotMirroring = HealthSnapshotMirrorStore(modelContainer: modelContainer)
+            sharedHealthDataService = MirroringSharedHealthDataService(
+                baseService: baseSharedService,
+                mirrorStore: mirrorStore
+            )
+        } else {
+            AppLogger.healthKit.info("HealthKit unavailable. Falling back to cloud mirrored snapshot service.")
+            sharedHealthDataService = CloudMirroredSharedHealthDataService(modelContainer: modelContainer)
+        }
+
+        let refreshCoordinator = AppRefreshCoordinatorImpl(sharedHealthDataService: sharedHealthDataService)
+
+        let observerManager: HealthKitObserverManager?
+        if healthKitAvailable {
+            let hkStore = HKHealthStore()
+            let evaluator = BackgroundNotificationEvaluator(
+                store: hkStore,
+                notificationService: notificationService
+            )
+            observerManager = HealthKitObserverManager(
+                store: hkStore,
+                coordinator: refreshCoordinator,
+                notificationEvaluator: evaluator
+            )
+        } else {
+            observerManager = nil
+        }
+
+        return AppRuntime(
+            cloudSyncEnabled: resolvedCloudSyncEnabled,
+            modelContainer: modelContainer,
+            sharedHealthDataService: sharedHealthDataService,
+            refreshCoordinator: refreshCoordinator,
+            observerManager: observerManager
+        )
+    }
+
     init() {
 #if DEBUG
         if Self.shouldResetUITestState {
@@ -169,59 +239,12 @@ struct DUNEApp: App {
             UserDefaults.standard.set(forcedTheme.rawValue, forKey: AppTheme.storageKey)
             _selectedTheme = AppStorage(wrappedValue: forcedTheme, AppTheme.storageKey)
         }
-        let cloudSyncEnabled = Self.isRunningXCTest
-            ? false
-            : CloudSyncPreferenceStore.resolvedValue()
-        let config = ModelConfiguration(
-            isStoredInMemoryOnly: Self.shouldResetUITestState,
-            cloudKitDatabase: (cloudSyncEnabled && !Self.isRunningXCTest) ? .automatic : .none
-        )
-        do {
-            modelContainer = try Self.makeModelContainer(configuration: config)
-        } catch {
-            AppLogger.data.error("ModelContainer failed: \(error)")
-            modelContainer = Self.recoverModelContainer(after: error, configuration: config)
-        }
-
-        let healthKitAvailable = HKHealthStore.isHealthDataAvailable()
-        let sharedService: SharedHealthDataService
-        if Self.shouldUseMirroredSnapshotServiceForUITests {
-            sharedService = CloudMirroredSharedHealthDataService(modelContainer: modelContainer)
-        } else if healthKitAvailable {
-            let baseSharedService: SharedHealthDataService = SharedHealthDataServiceImpl(healthKitManager: .shared)
-            let mirrorStore: HealthSnapshotMirroring = HealthSnapshotMirrorStore(modelContainer: modelContainer)
-            sharedService = MirroringSharedHealthDataService(
-                baseService: baseSharedService,
-                mirrorStore: mirrorStore
-            )
-        } else {
-            AppLogger.healthKit.info("HealthKit unavailable. Falling back to cloud mirrored snapshot service.")
-            sharedService = CloudMirroredSharedHealthDataService(modelContainer: modelContainer)
-        }
-        self.sharedHealthDataService = sharedService
-
-        let coordinator = AppRefreshCoordinatorImpl(sharedHealthDataService: sharedService)
-        self.refreshCoordinator = coordinator
 
         let notifService = NotificationServiceImpl()
         self.notificationService = notifService
         self.notificationCenterDelegate = AppNotificationCenterDelegate()
         UNUserNotificationCenter.current().delegate = notificationCenterDelegate
-
-        if healthKitAvailable {
-            let hkStore = HKHealthStore()
-            let evaluator = BackgroundNotificationEvaluator(
-                store: hkStore,
-                notificationService: notifService
-            )
-            self.observerManager = HealthKitObserverManager(
-                store: hkStore,
-                coordinator: coordinator,
-                notificationEvaluator: evaluator
-            )
-        } else {
-            self.observerManager = nil
-        }
+        _appRuntime = State(initialValue: Self.makeAppRuntime(notificationService: notifService))
     }
 
     private static func deleteStoreFiles(at url: URL) {
@@ -285,17 +308,26 @@ struct DUNEApp: App {
                 guard oldValue, !newValue else { return }
                 Task { await advanceLaunchExperienceFlowIfNeeded() }
             }
+            .onChange(of: scenePhase) { _, newPhase in
+                guard newPhase == .active else { return }
+                Task { await refreshAppRuntimeIfNeeded() }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: NSUbiquitousKeyValueStore.didChangeExternallyNotification)) { notification in
+                guard shouldHandleCloudSyncNotification(notification) else { return }
+                Task { await refreshAppRuntimeIfNeeded() }
+            }
         }
-        .modelContainer(modelContainer)
+        .modelContainer(appRuntime.modelContainer)
     }
 
     private var appContent: some View {
         ContentView(
-            sharedHealthDataService: sharedHealthDataService,
-            refreshCoordinator: refreshCoordinator,
+            sharedHealthDataService: appRuntime.sharedHealthDataService,
+            refreshCoordinator: appRuntime.refreshCoordinator,
             launchExperienceReady: isLaunchExperienceReady,
             shouldAutoRequestHealthKitAuthorization: shouldRequestHealthKitAuthorizationOnLaunch
         )
+        .id(appRuntime.revision)
         .sheet(isPresented: $showConsentSheet) {
             CloudSyncConsentView(isPresented: $showConsentSheet)
         }
@@ -326,7 +358,7 @@ struct DUNEApp: App {
                 .task {
                     guard !hasSeededMockData else { return }
                     TestDataSeeder.seed(
-                        into: modelContainer.mainContext,
+                        into: appRuntime.modelContainer.mainContext,
                         scenario: Self.uiTestLaunchConfiguration.scenario
                     )
                     hasSeededMockData = true
@@ -344,6 +376,46 @@ struct DUNEApp: App {
         guard !hasCompletedPostSplashSetup else { return }
         hasCompletedPostSplashSetup = true
         Task { await advanceLaunchExperienceFlowIfNeeded() }
+    }
+
+    private func shouldHandleCloudSyncNotification(_ notification: Notification) -> Bool {
+        guard let changedKeys = notification.userInfo?[NSUbiquitousKeyValueStoreChangedKeysKey] as? [String] else {
+            return true
+        }
+        return changedKeys.contains(CloudSyncPreferenceStore.storageKey)
+    }
+
+    @MainActor
+    private func refreshAppRuntimeIfNeeded() async {
+        guard !Self.isRunningXCTest else { return }
+
+        let resolvedValue = CloudSyncPreferenceStore.resolvedValue()
+        let action = CloudSyncPreferenceStore.runtimeRefreshAction(
+            currentValue: appRuntime.cloudSyncEnabled,
+            resolvedValue: resolvedValue
+        )
+
+        guard case let .rebuild(resolvedValue: nextValue) = action else {
+            return
+        }
+
+        let previousObserverManager = appRuntime.observerManager
+        if let previousObserverManager {
+            await previousObserverManager.stopObserving()
+        }
+
+        appRuntime = Self.makeAppRuntime(
+            notificationService: notificationService,
+            cloudSyncEnabled: nextValue
+        )
+
+        if isLaunchExperienceReady {
+            hasStartedRuntimeServices = false
+            startRuntimeServicesIfNeeded()
+            Task {
+                await appRuntime.refreshCoordinator.forceRefresh()
+            }
+        }
     }
 
     private var shouldRequestHealthKitAuthorizationOnLaunch: Bool {
@@ -476,10 +548,11 @@ struct DUNEApp: App {
         guard !Self.shouldBypassLaunchExperienceForTests else { return }
 
         hasStartedRuntimeServices = true
+        let modelContainer = appRuntime.modelContainer
         WatchSessionManager.shared.syncWorkoutTemplatesToWatch(using: modelContainer)
         WatchSessionManager.shared.syncExerciseLibraryToWatch(using: modelContainer)
         WatchSessionManager.shared.activate()
-        observerManager?.startObserving()
+        appRuntime.observerManager?.startObserving()
         Task {
             await BedtimeWatchReminderScheduler.shared.refreshSchedule()
         }
@@ -488,7 +561,7 @@ struct DUNEApp: App {
 
     @MainActor
     private func scheduleWorkoutTitleBackfill() {
-        let container = modelContainer
+        let container = appRuntime.modelContainer
         Task(priority: .utility) {
             do {
                 let context = ModelContext(container)
