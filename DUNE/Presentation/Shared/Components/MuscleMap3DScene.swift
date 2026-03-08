@@ -66,6 +66,18 @@ enum MuscleMap3DState {
     static let pitchSensitivity: Float = 0.006
     static let selectedScale: Float = 1.045
     static let defaultShellOpacity: Float = 0.06
+    static let volumeAnimationDuration: TimeInterval = 0.35
+
+    /// Non-uniform scale per volume intensity — X/Z expand more than Y for "bulk" look
+    static func volumeScale(for intensity: MuscleMap3DVolumeIntensity) -> SIMD3<Float> {
+        switch intensity {
+        case .none:     SIMD3<Float>(1.0, 1.0, 1.0)
+        case .light:    SIMD3<Float>(1.02, 1.01, 1.02)
+        case .moderate: SIMD3<Float>(1.05, 1.02, 1.05)
+        case .high:     SIMD3<Float>(1.09, 1.03, 1.09)
+        case .veryHigh: SIMD3<Float>(1.14, 1.04, 1.14)
+        }
+    }
 
     static func clampedZoomScale(_ scale: Float) -> Float {
         Swift.max(minZoomScale, Swift.min(scale, maxZoomScale))
@@ -265,8 +277,27 @@ final class MuscleMap3DScene {
                 }
             }
 
-            muscleRoots[muscle]?.scale = SIMD3<Float>(
-                repeating: isSelected ? MuscleMap3DState.selectedScale : 1
+            guard let root = muscleRoots[muscle] else { continue }
+
+            let volumeScale: SIMD3<Float>
+            if case .volume(let intensity) = displayState {
+                volumeScale = MuscleMap3DState.volumeScale(for: intensity)
+            } else {
+                volumeScale = SIMD3<Float>(repeating: 1.0)
+            }
+
+            let selectionMultiplier = isSelected ? MuscleMap3DState.selectedScale : Float(1.0)
+            let finalScale = volumeScale * selectionMultiplier
+
+            let target = Transform(
+                scale: finalScale,
+                rotation: root.orientation,
+                translation: root.position
+            )
+            root.move(
+                to: target,
+                relativeTo: root.parent,
+                duration: MuscleMap3DState.volumeAnimationDuration
             )
         }
     }
