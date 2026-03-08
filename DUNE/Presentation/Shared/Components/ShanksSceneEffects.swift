@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ShanksSceneStyle {
     let sceneHeight: CGFloat
+    let sceneTopInset: CGFloat
     let gradientEndPoint: UnitPoint
     let waveScale: CGFloat
     let deepOpacity: Double
@@ -24,15 +25,25 @@ struct ShanksSceneStyle {
 extension ShanksSceneStyle {
     static func tab(for preset: WavePreset) -> Self {
         let scale: CGFloat
+        let topInset: CGFloat
         switch preset {
-        case .train:    scale = 1.18
-        case .today:    scale = 1.0
-        case .wellness: scale = 0.84
-        case .life:     scale = 0.70
+        case .train:
+            scale = 1.18
+            topInset = 104
+        case .today:
+            scale = 1.0
+            topInset = 100
+        case .wellness:
+            scale = 0.84
+            topInset = 96
+        case .life:
+            scale = 0.70
+            topInset = 64
         }
 
         return .init(
             sceneHeight: 228,
+            sceneTopInset: topInset,
             gradientEndPoint: DS.Gradient.tabBackgroundEnd,
             waveScale: scale,
             deepOpacity: 0.30,
@@ -55,6 +66,7 @@ extension ShanksSceneStyle {
 
     static let detail = Self(
         sceneHeight: 164,
+        sceneTopInset: 88,
         gradientEndPoint: DS.Gradient.tabBackgroundEnd,
         waveScale: 0.82,
         deepOpacity: 0.22,
@@ -76,6 +88,7 @@ extension ShanksSceneStyle {
 
     static let sheet = Self(
         sceneHeight: 124,
+        sceneTopInset: 56,
         gradientEndPoint: DS.Gradient.sheetBackgroundEnd,
         waveScale: 0.64,
         deepOpacity: 0.16,
@@ -130,49 +143,57 @@ struct ShanksCinematicSceneBackground: View {
                     endPoint: style.gradientEndPoint
                 )
 
-                ShanksWaterMassScene(
-                    style: style,
-                    accentTint: resolvedAccentTint
-                )
-                .frame(height: style.sceneHeight)
+                // Keep the atmospheric tint at the top, but push the ocean scene
+                // itself below the hero card's lower quarter.
+                ZStack(alignment: .top) {
+                    ShanksWaterMassScene(
+                        style: style,
+                        accentTint: resolvedAccentTint
+                    )
+                    .frame(height: style.sceneHeight)
 
-                ShanksUnderwaterCausticOverlay(
-                    style: style,
-                    elapsed: elapsed
-                )
-                .frame(height: style.sceneHeight)
+                    ShanksUnderwaterCausticOverlay(
+                        style: style,
+                        elapsed: elapsed
+                    )
+                    .frame(height: style.sceneHeight)
 
-                ShanksFlagTextureView(opacity: style.textureOpacity * (colorScheme == .dark ? 1.0 : 0.86))
-                    .mask(
-                        LinearGradient(
-                            colors: [
-                                Color.black.opacity(0.9),
-                                Color.black.opacity(0.55),
-                                .clear,
-                            ],
-                            startPoint: .top,
-                            endPoint: .bottom
+                    ShanksFlagTextureView(opacity: style.textureOpacity * (colorScheme == .dark ? 1.0 : 0.86))
+                        .frame(height: style.sceneHeight)
+                        .mask(
+                            LinearGradient(
+                                colors: [
+                                    Color.black.opacity(0.9),
+                                    Color.black.opacity(0.55),
+                                    .clear,
+                                ],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
                         )
-                    )
 
-                if style.flagOpacity > 0 {
-                    ShanksSceneFlagOverlay(
-                        opacity: style.flagOpacity,
-                        width: style.sceneHeight * 0.64
+                    if style.flagOpacity > 0 {
+                        ShanksSceneFlagOverlay(
+                            opacity: style.flagOpacity,
+                            width: style.sceneHeight * 0.64
+                        )
+                        .frame(height: style.sceneHeight)
+                    }
+
+                    ShanksShipHeroOverlay(
+                        style: style,
+                        elapsed: elapsed
                     )
+                    .frame(height: style.sceneHeight)
+
+                    ShanksSurfaceFoamOverlay(
+                        style: style,
+                        elapsed: elapsed
+                    )
+                    .frame(height: style.sceneHeight)
                 }
-
-                ShanksShipHeroOverlay(
-                    style: style,
-                    elapsed: elapsed
-                )
-                .frame(height: style.sceneHeight)
-
-                ShanksSurfaceFoamOverlay(
-                    style: style,
-                    elapsed: elapsed
-                )
-                .frame(height: style.sceneHeight)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                .padding(.top, style.sceneTopInset)
             }
             .ignoresSafeArea()
         }
