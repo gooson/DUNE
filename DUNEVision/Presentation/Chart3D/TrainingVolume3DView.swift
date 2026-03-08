@@ -51,8 +51,8 @@ struct TrainingVolume3DView: View {
     private var trainingVolumeChart: some View {
         Chart3D(plottableData) { point in
             RectangleMark(
-                x: .value("Muscle", point.muscleIndex),
-                y: .value("Volume", point.volume),
+                x: .value("Muscle", point.muscleRange),
+                y: .value("Volume", point.volumeRange),
                 z: .value("Week", point.week)
             )
             .foregroundStyle(by: .value("Muscle", point.muscleGroup))
@@ -201,13 +201,23 @@ struct TrainingVolume3DView: View {
 // MARK: - Models
 
 struct TrainingVolumePoint: Identifiable {
+    private static let muscleHalfWidth = 0.4
+
     let id: Int
     let muscleGroup: String
     let muscleIndex: Double
     let week: Double
     let volume: Double
 
+    var muscleRange: Range<Double> {
+        (muscleIndex - Self.muscleHalfWidth)..<(muscleIndex + Self.muscleHalfWidth)
+    }
+
+    var volumeRange: Range<Double> {
+        0..<volume
+    }
+
     var isPlottable: Bool {
-        muscleIndex.isFinite && week.isFinite && volume.isFinite
+        muscleIndex.isFinite && week.isFinite && volume.isFinite && volume > 0
     }
 }
