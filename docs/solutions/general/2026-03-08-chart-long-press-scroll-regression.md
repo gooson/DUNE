@@ -1,102 +1,113 @@
 ---
-tags: [charts, swiftui, gesture, regression, xcuitest, accessibility, scroll-restoration]
+tags: [swiftui, swift-charts, gesture, long-press, scroll, selection, snap-back, seeded-mock, xcuitest, regression]
 category: general
 date: 2026-03-08
 severity: important
 related_files:
   - DUNE/Presentation/Shared/Charts/ChartSelectionInteraction.swift
+  - DUNE/Presentation/Shared/Charts/ChartSelectionOverlay.swift
+  - DUNE/Presentation/Shared/Charts/DotLineChartView.swift
   - DUNE/Presentation/Shared/Charts/AreaLineChartView.swift
   - DUNE/Presentation/Activity/WeeklyStats/Components/DailyVolumeChartView.swift
-  - DUNE/Presentation/Shared/Charts/ChartSelectionOverlay.swift
   - DUNETests/ChartSelectionInteractionTests.swift
-  - DUNEUITests/Helpers/UITestHelpers.swift
   - DUNEUITests/Regression/ChartInteractionRegressionUITests.swift
-related_solutions: []
+  - .claude/rules/testing-required.md
+  - .claude/rules/documentation-standards.md
+  - docs/corrections-active.md
+related_solutions:
+  - docs/solutions/general/2026-03-08-chart-overlay-scroll-blocking.md
+  - docs/solutions/general/2026-03-08-common-chart-selection-overlay.md
 ---
 
-# Solution: Chart Long-Press Scroll Regression and Coverage Hardening
+# Solution: Chart Long-Press Scroll Regression And Lifecycle Coverage Hardening
 
 ## Problem
 
-공통 차트의 long-press selection 구현이 `DragGesture` 기반으로 바뀐 뒤, 주간 차트에서 손가락을 길게 누를 때 selection보다 가로 스크롤이 먼저 먹으면서 기간이 바뀐 것처럼 보이는 회귀가 생겼다. Activity 차트 일부는 아직 이전 `chartXSelection` 경로를 유지하고 있어 차트별 UX도 달랐다. 첫 번째 UI regression test도 seeded detail 진입 경로가 불안정하고, selection이 실제로 활성화됐는지 확인하지 않아 skip/false-pass 가능성이 남아 있었다.
+차트 스크롤을 복구한 뒤에도 long-press selection lifecycle은 계속 흔들렸다. 어떤 화면에서는 long press가 잘 안 잡혔고, 어떤 화면에서는 long press 중 visible range가 같이 움직였으며, 손을 뗀 뒤 스크롤하면 stale overlay가 남거나 다음 long press에서 이전 월로 snap-back 되는 회귀가 반복됐다.
 
 ### Symptoms
 
-- 주간 차트 long press 시 월간으로 바뀐 것처럼 보임
-- long press 중 차트 visible range가 좁아지거나 이동함
-- 일부 Activity 차트는 공통 floating selection overlay UX를 따르지 않음
-- 초기 UI regression test는 seed 상태에 따라 skip 되었고, selection 실패여도 통과할 수 있었음
+- quick drag는 되는데 long press selection이 잘 시작되지 않음
+- long press 중 차트가 같이 수평 스크롤되어 원하는 값을 읽기 어려움
+- long press 해제 후 스크롤하면 overlay가 남아 있거나 selection state가 정리되지 않음
+- 다시 long press 하면 이전 `scrollPosition`으로 돌아가 visible range가 튀는 현상이 발생함
+- 차트마다 제스처 구현이 달라 한 화면에서 고친 회귀가 다른 화면에서 다시 생김
 
 ### Root Cause
 
-`selectedDate == nil` 여부만으로 scroll 가능 상태를 제어하던 구조라, hold 임계시간을 넘기기 전까지는 scroll이 계속 살아 있었다. 그 사이에 주간 차트가 먼저 수평 이동하면서 selection 의도와 scroll 의도가 섞였다. 동시에 Activity 차트 몇 개는 shared helper를 쓰지 않아 interaction contract가 분산돼 있었다. 검증 측면에서는 test가 unstable Wellness detail seed에 기대고 있었고, visible range label만 비교해서 "selection이 실제로 떴는지"를 관찰하지 못했다.
+원인은 한 가지가 아니었다.
+
+- selection capture가 차트별 로컬 gesture patch에 흩어져 있었다
+- `chartOverlay`가 터치 표면과 표시 레이어 역할을 동시에 맡으면서 scroll arbitration이 계속 흔들렸다
+- long press 종료, 범위 이탈, 이후 스크롤 같은 lifecycle cleanup이 공통 helper에 없었다
+- 검증도 "과거 데이터로 스크롤되는지" 위주라서 `selection activation`, `scroll resume`, `overlay cleanup`, `no snap-back` 같은 후속 회귀를 놓칠 수 있었다
 
 ## Solution
 
-long-press interaction을 `idle -> pendingActivation -> selecting` 상태로 분리한 gesture state machine으로 올리고, activation 순간에는 기존 scroll position을 복원한 뒤 selection 전용 상태로 전환했다. Shared/Activity selection charts를 모두 같은 floating overlay contract로 맞췄다. 이후 review에서 남은 검증 공백을 닫기 위해 seeded Activity weekly-stats 경로를 쓰는 UI regression test로 바꾸고, test 전용 selection probe를 추가해 period 불변성과 selection activation을 동시에 확인하도록 강화했다.
+12개 selection chart를 shared `scrollableChartSelectionOverlay(...)` contract로 통일하고, 입력은 `ChartLongPressSelectionRecognizer`가 담당하게 정리했다. recognizer는 chart container 바깥에서 long press를 감지하고, selection이 활성화되면 pan 경쟁을 끊어 값 확인에 집중하게 한다. 동시에 `ChartSelectionInteraction.clearSelection(...)`과 `scrollPosition` 변경 감시를 추가해 long press 종료 후 stale overlay/selection/restore state를 즉시 정리하도록 만들었다.
+
+검증도 seeded/mock 기준 lifecycle regression으로 넓혔다. 이제 단순히 "스크롤된다"만 보지 않고 long press selection, long press 중 no-scroll, release 후 scroll resume, scroll-after-selection cleanup, no snap-back, chart 표면에서 시작한 부모 vertical scroll까지 같이 확인한다.
 
 ### Changes Made
 
 | File | Change | Reason |
 |------|--------|--------|
-| `DUNE/Presentation/Shared/Charts/ChartSelectionInteraction.swift` | gesture phase/update 모델 추가 | hold 중 scroll과 selection 전환을 명시적으로 제어 |
-| `DUNE/Presentation/Shared/Charts/*ChartView.swift` | `allowsScroll` 기반 scroll gating + scroll position restore 적용 | long press activation 전후의 스크롤 회귀 제거 |
-| `DUNE/Presentation/Activity/**/*ChartView.swift` | `chartXSelection` 제거, floating overlay + shared helper로 통합 | Activity 차트 UX 일관성 확보 |
-| `DUNETests/ChartSelectionInteractionTests.swift` | phase/update/restoreScrollPosition 검증 추가 | gesture state machine 회귀 방지 |
-| `DUNE/Presentation/Shared/Charts/ChartSelectionOverlay.swift` | `--uitesting` 전용 selection probe modifier 추가 | UI test에서 selection activation을 안정적으로 관찰 |
-| `DUNE/Presentation/Activity/WeeklyStats/Components/DailyVolumeChartView.swift` | probe label을 selected point 변화에 연결 | 대표 Activity 차트에서 selection 발생 여부를 외부에서 검증 |
-| `DUNEUITests/Regression/ChartInteractionRegressionUITests.swift` | seeded Activity weekly stats 경로로 회귀 테스트 재작성 | skip 가능한 seed 의존성을 제거하고 false-pass를 방지 |
+| `DUNE/Presentation/Shared/Charts/ChartSelectionOverlay.swift` | `scrollableChartSelectionOverlay(...)`, `ChartLongPressSelectionRecognizer`, `scrollPosition` 변경 시 cleanup 경로 추가 | 12개 차트의 long-press capture와 stale overlay cleanup을 공통 contract로 묶기 위해 |
+| `DUNE/Presentation/Shared/Charts/ChartSelectionInteraction.swift` | `holdDuration`, `allowableMovement`, `clearSelection(...)`, `handleLongPressSelection(...)` 공통화 | long press 인식 안정성, active selection 중 pan 차단, 종료/이탈 cleanup을 한 곳에서 제어하기 위해 |
+| `DUNE/Presentation/Shared/Charts/*` + `DUNE/Presentation/Activity/**` | 개별 `chartXSelection`, `SpatialTapGesture`, 로컬 gesture patch 제거 후 shared modifier 적용 | 차트 종류와 화면에 관계없이 같은 interaction lifecycle을 보장하기 위해 |
+| `DUNEUITests/Regression/ChartInteractionRegressionUITests.swift` | HRV detail / Weekly Stats seeded regression 확장 | quick drag, long press, vertical scroll, cleanup, no snap-back을 실제 사용자 흐름으로 고정하기 위해 |
+| `DUNETests/ChartSelectionInteractionTests.swift` | `clearSelection` unit coverage 추가 | gesture 종료 시 상태 정리가 깨지는 회귀를 UI 이전 레벨에서 막기 위해 |
 
 ### Key Code
 
 ```swift
-switch selectionGestureState.registerChange(
-    at: value.time,
-    translation: value.translation,
-    currentScrollPosition: scrollPosition
-) {
-case .inactive:
-    return
-case .activated(let restoreScrollPosition):
-    if let restoreScrollPosition {
-        scrollPosition = restoreScrollPosition
-    }
-    fallthrough
-case .updating:
-    selectedDate = ChartSelectionInteraction.resolvedDate(
-        at: value.location,
+ChartLongPressSelectionRecognizer(
+    minimumPressDuration: ChartSelectionInteraction.holdDuration
+) { state, location in
+    ChartSelectionInteraction.handleLongPressSelection(
+        state: state,
+        location: location,
         proxy: proxy,
-        plotFrame: plotFrame
+        plotFrame: plotFrame,
+        selectionState: $selectionState,
+        selectedDate: $selectedDate,
+        scrollPosition: scrollPosition
     )
 }
 ```
 
 ```swift
-Rectangle()
-    .fill(Color.black.opacity(0.001))
-    .frame(width: 12, height: 12)
-    .allowsHitTesting(false)
-    .accessibilityElement()
-    .accessibilityIdentifier("chart-selection-probe")
-    .accessibilityLabel(label)
+.onChange(of: scrollPosition.wrappedValue) { _, _ in
+    ChartSelectionInteraction.clearSelection(
+        selectionState: $selectionState,
+        selectedDate: $selectedDate
+    )
+}
 ```
 
 ## Prevention
 
-selection gesture가 들어가는 차트는 “hold 대기”, “selection 활성화”, “scroll 차단”을 helper state에 모두 위임해야 한다. 새 차트가 생겨도 개별 뷰에서 `chartXSelection`과 별도 overlay를 다시 도입하지 않도록 유지한다. UI regression test는 “보이면 안 되는 부작용이 없었다”만 보지 말고, selection이 실제로 활성화됐다는 positive signal도 함께 확인해야 한다.
+차트 제스처는 "스크롤된다" 한 가지로 끝내면 안 된다. 앞으로는 같은 selection UX를 가진 차트는 반드시 shared modifier/recognizer/state cleanup 경로를 사용하고, 개별 화면에서 임시 gesture patch를 다시 만들지 않는다. 또한 gesture 변경은 seeded/mock 데이터로 lifecycle 전체를 직접 재현한 뒤 문서와 규칙까지 같은 턴에 갱신한다.
 
 ### Checklist Addition
 
-- [ ] scrollable chart의 long press는 activation 전후 scroll 상태를 명시적으로 테스트한다
-- [ ] Activity 차트 신규 추가 시 shared chart selection contract 사용 여부를 확인한다
-- [ ] UI regression test는 period/visible-range 불변성과 selection activation을 함께 검증한다
-- [ ] UI-test 전용 probe는 `--uitesting` gate 아래에서만 노출한다
-- [ ] optional detail path보다 seeded 대표 차트 경로를 우선 선택한다
+- [x] 동일 selection UX 차트는 shared `scrollableChartSelectionOverlay(...)` contract로 통일한다
+- [x] quick drag가 selection 없이 과거 데이터 스크롤을 유지하는지 확인한다
+- [x] long press 중 visible range가 변하지 않는지 확인한다
+- [x] long press 해제 직후 horizontal scroll이 즉시 다시 가능한지 확인한다
+- [x] selection 후 스크롤하면 overlay/state가 정리되고 다음 long press에서 snap-back이 없는지 확인한다
+- [x] 차트 표면에서 시작한 vertical drag가 부모 화면 스크롤을 막지 않는지 확인한다
 
 ### Rule Addition (if applicable)
 
-없음
+관련 규칙과 교정사항을 함께 남겼다.
+
+- `.claude/rules/testing-required.md`에 chart gesture lifecycle seeded/mock 검증 체크리스트 추가
+- `.claude/rules/documentation-standards.md`에 solution 문서가 최종 merged 구현과 일치해야 한다는 규칙 추가
+- `docs/corrections-active.md`에 `#228~#230`으로 chart interaction contract, lifecycle regression, solution-doc 동기화 교정사항 추가
 
 ## Lessons Learned
 
-Swift Charts 제스처 회귀는 selection view 코드보다도 “scroll과 selection의 우선순위”에서 더 자주 발생한다. interaction helper를 modifier 수준에 두기보다 상태 기계로 끌어올려야 여러 차트에서 같은 UX를 안정적으로 재사용할 수 있다. 또 UI regression test는 "변하지 않았다"만으로는 부족하고, 의도한 interaction이 실제로 발생했다는 관측점이 있어야 리뷰 후속 이슈를 줄일 수 있다.
+- 차트 제스처 버그는 단일 gesture 수정으로 끝나지 않고 `activation`, `competition`, `cleanup`, `resume`까지 한 묶음으로 봐야 한다.
+- `SpatialTapGesture`나 화면별 overlay patch 같은 우회로는 일시적으로 한 증상만 가릴 수 있고, 다음 회귀를 더 찾기 어렵게 만든다.
+- seeded/mock UI regression은 "보였다/안 보였다" 수준이 아니라 interaction lifecycle 전체를 관찰해야 실제 사용자 이슈를 막을 수 있다.

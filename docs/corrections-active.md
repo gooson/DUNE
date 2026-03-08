@@ -8,7 +8,7 @@ status: approved
 # Active Corrections (프로젝트 특화 교정 사항)
 
 > 안정화된 패턴은 `.claude/rules/`로 졸업합니다.
-> 전체 이력(#1~#184)은 `docs/corrections-archive.md`에 보존됩니다.
+> 전체 이력(#1~#204)은 `docs/corrections-archive.md`에 보존됩니다.
 > 아래는 rules로 졸업하지 않은 **프로젝트 특화** 교정 사항입니다.
 
 <!-- Rules 졸업 현황:
@@ -43,6 +43,7 @@ status: approved
 ### DRY & 구조
 
 - **동일 로직 3곳+ 즉시 추출** / 복잡하면 2곳부터 / 같은 파일이면 file-scope (#37, #64, #167, #173)
+- **동일 selection UX 차트는 shared interaction contract로 통일**: long-press selection/scroll arbitration이 필요한 chart가 2개 이상이면 화면별 gesture patch를 반복하지 말고 공통 modifier/recognizer/state machine으로 편입한다 (#228)
 - **공유 DTO -> `Presentation/Shared/Models/`** / VM 내부 struct 2곳+ 사용 시 추출 (#86, #155)
 - **3개+ 파일 참조 enum은 전용 파일 분리** (#149)
 - **Popover/inline 중복은 `isInline: Bool` 파라미터로 통합** (#151)
@@ -92,6 +93,8 @@ status: approved
 - **`/ship` 머지 전략은 `--merge` 기본** (#54)
 - **`/run`에서 `/ship` 호출 전 Pre-Ship 게이트 강제** (#196)
 - **`/ship` 전 기존 review finding을 final diff 기준으로 재분류**: 수정 후에도 예전 리뷰 코멘트를 그대로 carry 하면 stale finding이 ship 이후 혼란을 만들 수 있으므로, ship 전에 각 finding을 `Open`/`Resolved`/`Stale after fix`로 다시 정리하고 미해결 P1/P2가 남아 있으면 중단한다 (#227)
+- **scrollable chart gesture 수정은 full lifecycle regression을 고정**: quick drag scroll, long-press selection, long-press 중 visible range 고정, vertical parent scroll, release 후 scroll resume, scroll-after-selection overlay cleanup + no snap-back을 seeded/mock UI test 또는 동등한 수동 재현 절차로 남긴다 (#229)
+- **solution 문서는 final implementation과 같은 턴에 동기화**: interaction contract를 바꾸고도 docs/solutions가 이전 시도(`chartXSelection`, `SpatialTapGesture`, 임시 fallback)를 설명한 채 남아 있으면 stale review를 유발하므로, 구현이 바뀐 턴에 관련 solution 문서도 같이 수정한다 (#230)
 - **`.claude/settings.local.json`은 기본적으로 `{}` 유지** (#203)
 - **`/run` 최종 출력 계약은 상태 기반으로 작성** (#204)
 - **리뷰 적용은 파일별 batch, dead code는 같은 커밋에서 삭제** (#27, #55, #133)

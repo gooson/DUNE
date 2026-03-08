@@ -92,10 +92,6 @@ struct SubScoreTrendChartView: View {
                     .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
             }
         }
-        .chartXSelection(value: $selectedDate)
-        .chartGesture { proxy in
-            selectionGesture(proxy: proxy)
-        }
         .chartXAxis {
             AxisMarks(values: .stride(by: .day, count: 3)) { _ in
                 AxisGridLine()
@@ -105,25 +101,23 @@ struct SubScoreTrendChartView: View {
             }
         }
         .chartYScale(domain: yDomain)
-        .chartOverlay { proxy in
-            GeometryReader { geometry in
-                if let plotFrame = proxy.plotFrame.map({ geometry[$0] }) {
-                    ZStack(alignment: .topLeading) {
-                        if let point = selectedPoint,
-                           let anchor = selectedAnchor(for: point, proxy: proxy, plotFrame: plotFrame) {
-                            FloatingChartSelectionOverlay(
-                                date: point.date,
-                                value: "\(formatValue(point.value)) \(unit)",
-                                anchor: anchor,
-                                chartSize: geometry.size,
-                                plotFrame: plotFrame
-                            )
-                            .transition(.opacity)
-                        }
-                    }
-                    .animation(.easeInOut(duration: 0.15), value: selectedDate)
-                    .allowsHitTesting(false)
-                }
+        .scrollableChartSelectionOverlay(
+            isScrollable: false,
+            visibleDomainLength: nil,
+            scrollPosition: nil,
+            selectedDate: $selectedDate,
+            selectionState: $selectionGestureState
+        ) { proxy, plotFrame, chartSize in
+            if let point = selectedPoint,
+               let anchor = selectedAnchor(for: point, proxy: proxy, plotFrame: plotFrame) {
+                FloatingChartSelectionOverlay(
+                    date: point.date,
+                    value: "\(formatValue(point.value)) \(unit)",
+                    anchor: anchor,
+                    chartSize: chartSize,
+                    plotFrame: plotFrame
+                )
+                .transition(.opacity)
             }
         }
         .sensoryFeedback(.selection, trigger: selectedPoint?.date)
@@ -170,17 +164,4 @@ struct SubScoreTrendChartView: View {
         )
     }
 
-    private func selectionGesture(proxy: ChartProxy) -> some Gesture {
-        LongPressGesture(minimumDuration: ChartSelectionInteraction.holdDuration)
-            .sequenced(before: DragGesture(minimumDistance: 0, coordinateSpace: .local))
-            .onChanged { value in
-                guard case .second(true, let drag) = value, let drag else { return }
-                selectionGestureState.beginSelection(scrollPosition: nil)
-                proxy.selectXValue(at: drag.location.x)
-            }
-            .onEnded { _ in
-                selectionGestureState.reset()
-                selectedDate = nil
-            }
-    }
 }

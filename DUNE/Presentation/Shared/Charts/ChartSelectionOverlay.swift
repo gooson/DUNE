@@ -1,4 +1,6 @@
+import Charts
 import SwiftUI
+import UIKit
 
 /// Shared selection overlay shown on chart interaction.
 /// Displays date and value in a themed capsule at the top of the chart.
@@ -69,6 +71,178 @@ extension View {
 
     func chartSelectionUITestProbe(_ label: String) -> some View {
         modifier(ChartSelectionUITestProbeModifier(label: label))
+    }
+
+    func scrollableChartSelectionOverlay<OverlayContent: View>(
+        isScrollable: Bool = true,
+        visibleDomainLength: TimeInterval?,
+        scrollPosition: Binding<Date>?,
+        selectedDate: Binding<Date?>,
+        selectionState: Binding<ChartSelectionGestureState>,
+        @ViewBuilder overlayContent: @escaping (ChartProxy, CGRect, CGSize) -> OverlayContent
+    ) -> some View {
+        modifier(
+            ScrollableChartSelectionOverlayModifier(
+                isScrollable: isScrollable,
+                visibleDomainLength: visibleDomainLength,
+                scrollPosition: scrollPosition,
+                selectedDate: selectedDate,
+                selectionState: selectionState,
+                overlayContent: overlayContent
+            )
+        )
+    }
+}
+
+struct ChartLongPressSelectionRecognizer: UIViewRepresentable {
+    let minimumPressDuration: TimeInterval
+    let onStateChange: @MainActor (UIGestureRecognizer.State, CGPoint) -> Void
+
+    func makeUIView(context: Context) -> GestureAttachmentView {
+        let view = GestureAttachmentView()
+        view.isUserInteractionEnabled = false
+        view.backgroundColor = .clear
+        view.minimumPressDuration = minimumPressDuration
+        view.onStateChange = onStateChange
+        return view
+    }
+
+    func updateUIView(_ uiView: GestureAttachmentView, context: Context) {
+        uiView.minimumPressDuration = minimumPressDuration
+        uiView.onStateChange = onStateChange
+        uiView.attachRecognizerIfNeeded()
+    }
+}
+
+final class GestureAttachmentView: UIView, UIGestureRecognizerDelegate {
+    var minimumPressDuration: TimeInterval = ChartSelectionInteraction.holdDuration {
+        didSet {
+            longPressRecognizer?.minimumPressDuration = minimumPressDuration
+            longPressRecognizer?.allowableMovement = ChartSelectionInteraction.allowableMovement
+        }
+    }
+    var onStateChange: (@MainActor (UIGestureRecognizer.State, CGPoint) -> Void)?
+
+    private weak var recognitionView: UIView?
+    private var longPressRecognizer: UILongPressGestureRecognizer?
+
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        attachRecognizerIfNeeded()
+    }
+
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        attachRecognizerIfNeeded()
+    }
+
+    func attachRecognizerIfNeeded() {
+        guard let recognitionView = window ?? superview else { return }
+
+        if self.recognitionView !== recognitionView {
+            detachRecognizer()
+        }
+
+        guard longPressRecognizer == nil else { return }
+
+        let recognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
+        recognizer.minimumPressDuration = minimumPressDuration
+        recognizer.allowableMovement = ChartSelectionInteraction.allowableMovement
+        recognizer.cancelsTouchesInView = true
+        recognizer.delegate = self
+        recognitionView.addGestureRecognizer(recognizer)
+
+        self.recognitionView = recognitionView
+        self.longPressRecognizer = recognizer
+    }
+
+    override func removeFromSuperview() {
+        detachRecognizer()
+        super.removeFromSuperview()
+    }
+
+    private func detachRecognizer() {
+        if let longPressRecognizer, let recognitionView {
+            recognitionView.removeGestureRecognizer(longPressRecognizer)
+        }
+        longPressRecognizer = nil
+        recognitionView = nil
+    }
+
+    @objc
+    private func handleLongPress(_ recognizer: UILongPressGestureRecognizer) {
+        let location = recognizer.location(in: self)
+        Task { @MainActor in
+            onStateChange?(recognizer.state, location)
+        }
+    }
+
+    func gestureRecognizer(
+        _ gestureRecognizer: UIGestureRecognizer,
+        shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
+    ) -> Bool {
+        if longPressRecognizer?.state == .began || longPressRecognizer?.state == .changed {
+            if gestureRecognizer is UIPanGestureRecognizer || otherGestureRecognizer is UIPanGestureRecognizer {
+                return false
+            }
+        }
+        return true
+    }
+}
+
+private struct ScrollableChartSelectionOverlayModifier<OverlayContent: View>: ViewModifier {
+    let isScrollable: Bool
+    let visibleDomainLength: TimeInterval?
+    let scrollPosition: Binding<Date>?
+    @Binding var selectedDate: Date?
+    @Binding var selectionState: ChartSelectionGestureState
+    let overlayContent: (ChartProxy, CGRect, CGSize) -> OverlayContent
+
+    func body(content: Content) -> some View {
+        configuredContent(content)
+            .chartOverlay { proxy in
+                GeometryReader { geometry in
+                    if let plotFrame = proxy.plotFrame.map({ geometry[$0] }) {
+                        ZStack(alignment: .topLeading) {
+                            ChartLongPressSelectionRecognizer(
+                                minimumPressDuration: ChartSelectionInteraction.holdDuration
+                            ) { state, location in
+                                ChartSelectionInteraction.handleLongPressSelection(
+                                    state: state,
+                                    location: location,
+                                    proxy: proxy,
+                                    plotFrame: plotFrame,
+                                    selectionState: $selectionState,
+                                    selectedDate: $selectedDate,
+                                    scrollPosition: scrollPosition
+                                )
+                            }
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+                            overlayContent(proxy, plotFrame, geometry.size)
+                        }
+                        .animation(.easeInOut(duration: 0.15), value: selectedDate)
+                    }
+                }
+            }
+    }
+
+    @ViewBuilder
+    private func configuredContent(_ content: Content) -> some View {
+        if isScrollable, let visibleDomainLength, let scrollPosition {
+            content
+                .chartScrollableAxes(.horizontal)
+                .chartXVisibleDomain(length: visibleDomainLength)
+                .chartScrollPosition(x: scrollPosition)
+                .onChange(of: scrollPosition.wrappedValue) { _, _ in
+                    ChartSelectionInteraction.clearSelection(
+                        selectionState: $selectionState,
+                        selectedDate: $selectedDate
+                    )
+                }
+        } else {
+            content
+        }
     }
 }
 

@@ -1,5 +1,6 @@
 import CoreGraphics
 import Foundation
+import SwiftUI
 import Testing
 @testable import DUNE
 
@@ -48,6 +49,32 @@ struct ChartSelectionInteractionTests {
         #expect(state.isSelecting == false)
         #expect(state.allowsScroll == true)
         #expect(state.initialScrollPosition == nil)
+    }
+
+    @Test("clearSelection resets state and selected date")
+    @MainActor
+    func clearSelectionResetsBindings() {
+        var state = ChartSelectionGestureState()
+        state.beginSelection(scrollPosition: Date(timeIntervalSinceReferenceDate: 100))
+        var selectedDate: Date? = Date(timeIntervalSinceReferenceDate: 200)
+
+        let stateBinding = Binding(
+            get: { state },
+            set: { state = $0 }
+        )
+        let selectedBinding = Binding(
+            get: { selectedDate },
+            set: { selectedDate = $0 }
+        )
+
+        ChartSelectionInteraction.clearSelection(
+            selectionState: stateBinding,
+            selectedDate: selectedBinding
+        )
+
+        #expect(state.phase == .idle)
+        #expect(state.initialScrollPosition == nil)
+        #expect(selectedDate == nil)
     }
 
     @Test("Nearest point snaps to closest date")
