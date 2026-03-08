@@ -17,7 +17,7 @@ updated: 2026-03-08
 - `defaultWindowPlacement` 기반 dashboard/chart3d placement planner와 targeted unit test가 추가됐다.
 - DUNEVision에 남아 있던 `.caption` 사용이 `.callout` 이상으로 정리됐다.
 - 남은 closure 범위는 visionOS simulator 또는 실기기에서 window placement를 실제로 눈으로 검증하는 일뿐이다.
-- Phase 5C(`todos/023-ready-p2-vision-phase4-remaining.md`)는 이 TODO가 닫힌 뒤에 진행한다.
+- Phase 5C(`todos/023-in-progress-p2-vision-phase4-remaining.md`)는 placement 실기기 검증만 남은 상태라 병행 진행한다.
 
 ## 목표
 

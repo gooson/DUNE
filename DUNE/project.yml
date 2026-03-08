@@ -333,6 +333,9 @@ targets:
       # Shared persistence for mirrored snapshot fallback
       - path: Data/Persistence/HealthSnapshotMirrorContainerFactory.swift
       - path: Data/Persistence/Models/HealthSnapshotMirrorRecord.swift
+      - path: Data/Persistence/Models/ExerciseRecord.swift
+      - path: Data/Persistence/Models/WorkoutSet.swift
+      - path: Data/Persistence/Models/BodyCompositionRecord.swift
       - path: Data/Persistence/Migration/PersistentStoreRecovery.swift
       - path: Data/Persistence/NotificationSettingsStore.swift
       - path: Data/Persistence/NotificationThrottleStore.swift

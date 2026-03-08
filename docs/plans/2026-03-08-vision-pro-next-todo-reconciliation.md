@@ -20,7 +20,7 @@ status: approved
 | `todos/020-in-progress-p3-vision-pro-phase4-social-advanced.md` | 수정 | umbrella TODO에 5A 완료와 5B 진행 상태 반영 |
 | `todos/021-done-p1-vision-real-data-pipeline.md` | 수정/rename | 실데이터 파이프라인 TODO를 shipped 상태로 정리 |
 | `todos/022-in-progress-p2-vision-ux-polish.md` | 수정/rename | UX polish TODO의 진행 상태와 남은 범위를 명시 |
-| `todos/023-ready-p2-vision-phase4-remaining.md` | 수정 | 5B 완료 후 착수하는 후속 TODO임을 명시 |
+| `todos/023-in-progress-p2-vision-phase4-remaining.md` | 수정 | 5B 완료 후 착수하는 후속 TODO임을 명시 |
 
 ## Implementation Steps
 

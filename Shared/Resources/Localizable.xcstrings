@@ -16519,18 +16519,18 @@
         }
       }
     },
-    "Preview only. Saving to workout history will be added in a later phase." : {
+    "Save this draft to workout history when it looks right." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "これはプレビュー専用です。ワークアウト履歴への保存は次のフェーズで追加されます。"
+            "value" : "内容が問題なければ、この下書きをワークアウト履歴に保存してください。"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "이 기능은 미리보기 전용입니다. 운동 기록 저장은 다음 phase에서 추가됩니다."
+            "value" : "내용이 맞으면 이 초안을 운동 기록에 저장하세요."
           }
         }
       }
@@ -18066,6 +18066,22 @@
         }
       }
     },
+    "Review the voice draft before saving it." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保存する前に音声の下書きを確認してください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "저장하기 전에 음성 초안을 먼저 검토하세요."
+          }
+        }
+      }
+    },
     "Review unread insights and jump back into important updates any time." : {
       "extractionState" : "stale",
       "localizations" : {
@@ -18443,6 +18459,54 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "이 운동을 저장하고 종료할까요?"
+          }
+        }
+      }
+    },
+    "Save to History" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "履歴に保存"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기록에 저장"
+          }
+        }
+      }
+    },
+    "Saved" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保存済み"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "저장됨"
+          }
+        }
+      }
+    },
+    "Saved to workout history." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ワークアウト履歴に保存しました。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "운동 기록에 저장했습니다."
           }
         }
       }
@@ -20456,18 +20520,18 @@
         }
       }
     },
-    "Speak a workout like \"Bench Press 80kg 8 reps\" to generate a Vision Pro draft before the full save flow arrives." : {
+    "Speak a workout like \"Bench Press 80kg 8 reps\" to review it and save a quick entry without leaving Vision Pro." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "\"Bench Press 80kg 8 reps\" のように話して、正式な保存フローの前に Vision Pro 下書きを作成します。"
+            "value" : "\"Bench Press 80kg 8 reps\" のように話して、下書きを確認しながら Vision Pro 内でクイック保存できます。"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "\"Bench Press 80kg 8 reps\"처럼 말해 전체 저장 플로우 전에 Vision Pro 초안을 만드세요."
+            "value" : "\"Bench Press 80kg 8 reps\"처럼 말해 초안을 검토하고 Vision Pro를 벗어나지 않고 빠르게 저장하세요."
           }
         }
       }
