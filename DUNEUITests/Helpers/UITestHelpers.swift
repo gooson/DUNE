@@ -187,10 +187,23 @@ enum AXID {
     static let pickerCancelButton = "picker-cancel-button"
     static let pickerCreateCustomButton = "picker-create-custom-button"
     static let pickerAllExercisesButton = "picker-all-exercises-button"
+    static let pickerHideAllButton = "picker-hide-all-button"
+    static let pickerClearFilters = "picker-clear-filters"
     static let pickerSectionRecent = "picker-section-recent"
+    static let pickerSectionPreferred = "picker-section-preferred"
     static let pickerSectionPopular = "picker-section-popular"
+    static let pickerSectionTemplates = "picker-section-templates"
+    static let pickerSectionAll = "picker-section-all"
+    static let pickerFilterCategoryScroll = "picker-filter-category-scroll"
+    static let pickerFilterMuscleScroll = "picker-filter-muscle-scroll"
+    static let pickerFilterEquipmentScroll = "picker-filter-equipment-scroll"
     static func pickerExerciseRow(_ exerciseID: String) -> String { "picker-row-\(exerciseID)" }
     static func pickerExerciseDetailButton(_ exerciseID: String) -> String { "picker-detail-\(exerciseID)" }
+    static func pickerTemplateRow(_ slug: String) -> String { "picker-template-\(slug)" }
+    static func pickerFilterCategory(_ slug: String) -> String { "picker-filter-category-\(slug)" }
+    static func pickerFilterUserCategory(_ slug: String) -> String { "picker-filter-user-category-\(slug)" }
+    static func pickerFilterMuscle(_ slug: String) -> String { "picker-filter-muscle-\(slug)" }
+    static func pickerFilterEquipment(_ slug: String) -> String { "picker-filter-equipment-\(slug)" }
 
     // MARK: - Workout Session
     static let workoutSessionScreen = "workout-session-screen"
