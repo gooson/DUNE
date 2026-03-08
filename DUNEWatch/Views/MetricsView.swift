@@ -93,9 +93,11 @@ struct MetricsView: View {
             Button("+1 Set") {
                 addExtraSet()
             }
+            .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionMetricsLastSetAdd)
             Button("Finish Exercise", role: .destructive) {
                 finishCurrentExercise()
             }
+            .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionMetricsLastSetFinish)
         } message: {
             Text("Add another set or move on?")
         }
@@ -123,6 +125,7 @@ struct MetricsView: View {
             heartRateDisplay
         }
         .padding(.horizontal, DS.Spacing.md)
+        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionMetricsScreen)
     }
 
     // MARK: - Progress
@@ -227,6 +230,7 @@ struct MetricsView: View {
             }
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionMetricsInputCard)
     }
 
     // MARK: - Complete Button
@@ -244,7 +248,7 @@ struct MetricsView: View {
         }
         .buttonStyle(.borderedProminent)
         .tint(DS.Color.positive)
-        .accessibilityIdentifier("watch-session-complete-set-button")
+        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionMetricsCompleteSetButton)
     }
 
     // MARK: - Heart Rate
@@ -287,6 +291,7 @@ struct MetricsView: View {
             ProgressView()
                 .tint(DS.Color.positive)
         }
+        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionMetricsNextExercise)
         .onAppear {
             transitionTask?.cancel()
             transitionTask = Task {

@@ -24,6 +24,7 @@ struct ControlsView: View {
                 .frame(maxWidth: .infinity)
             }
             .tint(DS.Color.negative)
+            .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionControlsEndButton)
 
             // Pause / Resume
             Button {
@@ -42,6 +43,7 @@ struct ControlsView: View {
                 .frame(maxWidth: .infinity)
             }
             .tint(DS.Color.caution)
+            .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionControlsPauseResumeButton)
 
             // Skip Exercise (strength only)
             if showSkip, !workoutManager.isCardioMode, !workoutManager.isLastExercise {
@@ -57,8 +59,10 @@ struct ControlsView: View {
                     .frame(maxWidth: .infinity)
                 }
                 .tint(.secondary)
+                .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionControlsSkipButton)
             }
         }
+        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionControlsScreen)
         .confirmationDialog(
             "End Workout?",
             isPresented: $showEndConfirmation,

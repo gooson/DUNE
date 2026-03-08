@@ -52,7 +52,7 @@ struct SessionSummaryView: View {
                     effortSummaryRow
                 }
                 .buttonStyle(.plain)
-                .accessibilityIdentifier("watch-summary-effort-button")
+                .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionSummaryEffortButton)
 
                 if !workoutManager.isCardioMode {
                     Divider()
@@ -72,12 +72,14 @@ struct SessionSummaryView: View {
                 .buttonStyle(.borderedProminent)
                 .tint(DS.Color.positive)
                 .disabled(isSaving || workoutManager.isFinalizingWorkout)
+                .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionSummaryDoneButton)
                 .padding(.top, DS.Spacing.md)
             }
             .padding(.horizontal, DS.Spacing.xs)
         }
         .background { WatchWaveBackground(color: DS.Color.positive) }
         .navigationBarBackButtonHidden()
+        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionSummaryScreen)
         .alert("Save Error", isPresented: .init(
             get: { saveError != nil },
             set: { if !$0 { saveError = nil } }
@@ -163,6 +165,7 @@ struct SessionSummaryView: View {
 
             statItem(title: "Avg HR", value: averageHR > 0 ? Int(averageHR).formattedWithSeparator : "--")
         }
+        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionSummaryStatsGrid)
     }
 
     private var isStairMode: Bool {
@@ -286,6 +289,7 @@ struct SessionSummaryView: View {
                 }
             }
         }
+        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionSummaryExerciseBreakdown)
     }
 
     /// Calculates total volume (weight × reps) for a set of completed sets.
@@ -717,6 +721,7 @@ private struct SessionEffortInputSheet: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .focusable(true)
         .focused($isCrownFocused)
+        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionSummaryEffortSheet)
         .digitalCrownRotation(
             Binding(
                 get: { Double(effort) },
@@ -737,6 +742,7 @@ private struct SessionEffortInputSheet: View {
                 Button("Done") {
                     onClose()
                 }
+                .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionSummaryEffortDoneButton)
             }
         }
         .onAppear {
