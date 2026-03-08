@@ -40,7 +40,6 @@ final class BedtimeReminderScheduler {
         static let legacyNotificationIdentifier = "com.raftel.dune.bedtime-watch-reminder"
         static let notificationIdentifier = "com.raftel.dune.bedtime-reminder"
         static let lookbackDays = 7
-        static let leadMinutes = 120
     }
 
     private let sleepService: SleepQuerying
@@ -67,9 +66,13 @@ final class BedtimeReminderScheduler {
         self.now = now
     }
 
-    func refreshSchedule() async {
+    func refreshSchedule(force: Bool = false) async {
         let currentDate = now()
-        if let last = lastRefreshDate, currentDate.timeIntervalSince(last) < 30 * 60 { return }
+        if !force,
+           let last = lastRefreshDate,
+           currentDate.timeIntervalSince(last) < 30 * 60 {
+            return
+        }
         lastRefreshDate = currentDate
 
         let isEnabled = userDefaults.object(forKey: Self.settingsKey) as? Bool ?? true
@@ -115,8 +118,9 @@ final class BedtimeReminderScheduler {
             return
         }
 
+        let leadTime = configuredLeadTime()
         let bedtimeMinutes = (bedtime.hour ?? 0) * 60 + (bedtime.minute ?? 0)
-        let triggerMinutes = (bedtimeMinutes - Constants.leadMinutes + (24 * 60)) % (24 * 60)
+        let triggerMinutes = (bedtimeMinutes - leadTime.minutes + (24 * 60)) % (24 * 60)
 
         var triggerComponents = DateComponents()
         triggerComponents.hour = triggerMinutes / 60
@@ -148,5 +152,13 @@ final class BedtimeReminderScheduler {
     func removePendingReminder() async {
         notificationScheduler.removePendingReminder(identifier: Constants.notificationIdentifier)
         notificationScheduler.removePendingReminder(identifier: Constants.legacyNotificationIdentifier)
+    }
+
+    private func configuredLeadTime() -> BedtimeReminderLeadTime {
+        guard let rawValue = userDefaults.object(forKey: BedtimeReminderLeadTime.storageKey) as? Int,
+              let leadTime = BedtimeReminderLeadTime(rawValue: rawValue) else {
+            return BedtimeReminderLeadTime.defaultValue
+        }
+        return leadTime
     }
 }

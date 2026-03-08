@@ -3,7 +3,9 @@ import SwiftUI
 /// Per-type notification toggles for the Settings screen.
 struct NotificationSettingsSection: View {
     @State private var settingsStore = NotificationSettingsStore.shared
-    @AppStorage("isBedtimeWatchReminderEnabled") private var isBedtimeReminderEnabled = true
+    @AppStorage(BedtimeReminderScheduler.settingsKey) private var isBedtimeReminderEnabled = true
+    @AppStorage(BedtimeReminderLeadTime.storageKey)
+    private var bedtimeReminderLeadTime: BedtimeReminderLeadTime = BedtimeReminderLeadTime.defaultValue
 
     /// Grouped insight types for display.
     private static let healthTypes: [HealthInsight.InsightType] = [
@@ -20,10 +22,22 @@ struct NotificationSettingsSection: View {
             Toggle(isOn: $isBedtimeReminderEnabled) {
                 Label("Bedtime Reminder", systemImage: "moon.stars.fill")
             }
+            Picker("Reminder Lead Time", selection: $bedtimeReminderLeadTime) {
+                ForEach(BedtimeReminderLeadTime.allCases, id: \.self) { leadTime in
+                    Text(leadTime.displayName).tag(leadTime)
+                }
+            }
+            .disabled(!isBedtimeReminderEnabled)
         } header: {
             Text("Notifications")
         } footer: {
             Text("Health alerts are sent at most once per day, duplicates are suppressed for one hour, and informational alerts use a daily budget.")
+        }
+        .onChange(of: isBedtimeReminderEnabled) { _, _ in
+            rescheduleBedtimeReminder()
+        }
+        .onChange(of: bedtimeReminderLeadTime) { _, _ in
+            rescheduleBedtimeReminder()
         }
     }
 
@@ -33,6 +47,12 @@ struct NotificationSettingsSection: View {
             set: { settingsStore.setEnabled($0, for: type) }
         )) {
             Label(type.settingsDisplayName, systemImage: type.settingsIcon)
+        }
+    }
+
+    private func rescheduleBedtimeReminder() {
+        Task {
+            await BedtimeReminderScheduler.shared.refreshSchedule(force: true)
         }
     }
 }
