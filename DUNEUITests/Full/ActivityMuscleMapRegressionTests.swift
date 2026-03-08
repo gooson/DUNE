@@ -72,13 +72,12 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
 
         // The picker starts on Recovery (first case). Tap Volume segment.
         let volumeButton = modePicker.buttons["Volume"]
-        if volumeButton.exists {
-            volumeButton.tap()
+        XCTAssertTrue(volumeButton.waitForExistence(timeout: 5), "Volume segment should be present in mode picker")
+        volumeButton.tap()
 
-            // Summary card should still exist after mode switch
-            let summaryCard = app.descendants(matching: .any)[AXID.muscleMap3DSummaryCard].firstMatch
-            XCTAssertTrue(summaryCard.exists, "Summary card should persist after mode switch")
-        }
+        // Summary card should still exist after mode switch
+        let summaryCard = app.descendants(matching: .any)[AXID.muscleMap3DSummaryCard].firstMatch
+        XCTAssertTrue(summaryCard.exists, "Summary card should persist after mode switch")
     }
 
     func testMuscleMap3DViewMuscleStripExists() throws {
@@ -148,9 +147,4 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
         XCTAssertTrue(screen3D.waitForExistence(timeout: 10), "3D view should appear")
     }
 
-    private func tapBackButton() {
-        let backButton = app.navigationBars.buttons.element(boundBy: 0)
-        XCTAssertTrue(backButton.waitForExistence(timeout: 5), "Back button should exist")
-        backButton.tap()
-    }
 }
