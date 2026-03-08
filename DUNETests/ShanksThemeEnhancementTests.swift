@@ -65,4 +65,34 @@ struct ShanksThemeEnhancementTests {
 
         #expect(path.isEmpty == true)
     }
+
+    @Test("Scene presets keep the ocean start line below the top edge")
+    func scenePresetTopInsetsArePositive() {
+        let presets: [ShanksSceneStyle] = [
+            .tab(for: .today),
+            .tab(for: .train),
+            .tab(for: .wellness),
+            .tab(for: .life),
+            .detail,
+            .sheet,
+        ]
+
+        for style in presets {
+            #expect(style.sceneTopInset > 0)
+            #expect(style.sceneHeight > 0)
+            #expect(style.sceneTopInset < style.sceneHeight)
+        }
+    }
+
+    @Test("Scene presets tier ocean start line by presentation depth")
+    func scenePresetTopInsetTiering() {
+        let tab = ShanksSceneStyle.tab(for: .today)
+        let detail = ShanksSceneStyle.detail
+        let sheet = ShanksSceneStyle.sheet
+        let life = ShanksSceneStyle.tab(for: .life)
+
+        #expect(tab.sceneTopInset > detail.sceneTopInset)
+        #expect(detail.sceneTopInset > sheet.sceneTopInset)
+        #expect(tab.sceneTopInset > life.sceneTopInset)
+    }
 }
