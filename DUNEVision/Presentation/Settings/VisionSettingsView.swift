@@ -2,7 +2,6 @@ import SwiftUI
 import SwiftData
 
 struct VisionSettingsView: View {
-    @AppStorage(CloudSyncPreferenceStore.storageKey) private var isCloudSyncEnabled = false
     @AppStorage(SimulatorAdvancedMockDataModeStore.storageKey) private var isSimulatorMockEnabled = false
 
     private let modelContainer: ModelContainer
@@ -16,22 +15,12 @@ struct VisionSettingsView: View {
 
     var body: some View {
         Form {
-            dataPrivacySection
             if SimulatorAdvancedMockDataModeStore.isSimulatorAvailable {
                 simulatorMockDataSection
             }
             aboutSection
         }
         .navigationTitle("Settings")
-    }
-
-    private var dataPrivacySection: some View {
-        Section("Data & Privacy") {
-            Toggle(isOn: cloudSyncBinding) {
-                Label("iCloud Sync", systemImage: "icloud")
-            }
-            .accessibilityIdentifier("vision-settings-row-icloud-sync")
-        }
     }
 
     private var simulatorMockDataSection: some View {
@@ -94,16 +83,6 @@ struct VisionSettingsView: View {
                     .foregroundStyle(.secondary)
             }
         }
-    }
-
-    private var cloudSyncBinding: Binding<Bool> {
-        Binding(
-            get: { isCloudSyncEnabled },
-            set: { newValue in
-                CloudSyncPreferenceStore.setEnabled(newValue)
-                isCloudSyncEnabled = newValue
-            }
-        )
     }
 
     private var appVersion: String {
