@@ -219,6 +219,7 @@ struct SimulatorAdvancedMockDataSet: Sendable {
             .filter { $0.date >= cutoff && $0.date < referenceDate }
             .sorted { $0.date > $1.date }
             .first
+            .map { (value: $0.sum, date: $0.date) }
     }
 
     func stepsCollection(start: Date, end: Date) -> [(date: Date, sum: Double)] {
@@ -946,12 +947,14 @@ enum SimulatorAdvancedMockDataProvider {
     @MainActor
     private static func deletePersistedData(from context: ModelContext) throws {
         try deleteAll(HealthSnapshotMirrorRecord.self, from: context)
+#if os(iOS)
         try deleteAll(ExerciseRecord.self, from: context)
         try deleteAll(WorkoutSet.self, from: context)
         try deleteAll(BodyCompositionRecord.self, from: context)
         try deleteAll(CustomExercise.self, from: context)
         try deleteAll(WorkoutTemplate.self, from: context)
         try deleteAll(UserCategory.self, from: context)
+#endif
     }
 
     @MainActor
@@ -972,6 +975,7 @@ enum SimulatorAdvancedMockDataProvider {
             )
         }
 
+#if os(iOS)
         for index in stride(from: 0, to: dataSet.weightSamples.count, by: 2) {
             let weightSample = dataSet.weightSamples[index]
             let bodyFatSample = dataSet.bodyFatSamples[index]
@@ -1048,7 +1052,7 @@ enum SimulatorAdvancedMockDataProvider {
                         defaultReps: 1,
                         defaultWeightKg: nil,
                         restDuration: nil,
-                        equipment: Equipment.none.rawValue,
+                        equipment: nil,
                         inputTypeRaw: ExerciseInputType.durationDistance.rawValue,
                         cardioSecondaryUnitRaw: CardioSecondaryUnit.km.rawValue
                     ),
@@ -1070,6 +1074,7 @@ enum SimulatorAdvancedMockDataProvider {
         for record in buildExerciseRecords(from: dataSet.workouts) {
             context.insert(record)
         }
+#endif
     }
 
     @MainActor
@@ -1083,6 +1088,7 @@ enum SimulatorAdvancedMockDataProvider {
         }
     }
 
+#if os(iOS)
     private static func buildExerciseRecords(
         from workouts: [SimulatorAdvancedMockWorkout]
     ) -> [ExerciseRecord] {
@@ -1231,6 +1237,7 @@ enum SimulatorAdvancedMockDataProvider {
         set.exerciseRecord = record
         return set
     }
+#endif
 }
 
 private extension Double {

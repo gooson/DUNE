@@ -143,7 +143,7 @@ struct SettingsView: View {
     // MARK: - Data & Privacy
 
     private var simulatorMockDataSection: some View {
-        Section("Mock Data") {
+        Section {
             HStack {
                 Text("Preset")
                 Spacer()
@@ -173,6 +173,8 @@ struct SettingsView: View {
             }
             .accessibilityIdentifier("settings-button-reset-mock-data")
             .disabled(isProcessingSimulatorMockData || !isSimulatorMockEnabled)
+        } header: {
+            Text("Mock Data")
         } footer: {
             VStack(alignment: .leading, spacing: 6) {
                 Text("Simulator only. Seeds advanced athlete health trends, workouts, and per-exercise history.")

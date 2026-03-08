@@ -45,7 +45,7 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
                 end: mockData.referenceDate.addingTimeInterval(1)
             )
         }
-        try await fetchQuantitySamples(
+        return try await fetchQuantitySamples(
             type: HKQuantityType(.bodyMass),
             unit: .gramUnit(with: .kilo),
             days: days,
@@ -60,7 +60,7 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
                 end: mockData.referenceDate.addingTimeInterval(1)
             )
         }
-        try await fetchQuantitySamples(
+        return try await fetchQuantitySamples(
             type: HKQuantityType(.bodyFatPercentage),
             unit: .percent(),
             days: days,
@@ -75,7 +75,7 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
                 end: mockData.referenceDate.addingTimeInterval(1)
             )
         }
-        try await fetchQuantitySamples(
+        return try await fetchQuantitySamples(
             type: HKQuantityType(.leanBodyMass),
             unit: .gramUnit(with: .kilo),
             days: days,
@@ -87,7 +87,7 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
         if let mockData = SimulatorAdvancedMockDataProvider.current() {
             return mockData.weightSamples(start: start, end: end)
         }
-        try await fetchQuantitySamples(
+        return try await fetchQuantitySamples(
             type: HKQuantityType(.bodyMass),
             unit: .gramUnit(with: .kilo),
             start: start,
@@ -172,7 +172,7 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
         if let mockData = SimulatorAdvancedMockDataProvider.current() {
             return mockData.bmiSamples(start: start, end: end)
         }
-        try await fetchQuantitySamples(
+        return try await fetchQuantitySamples(
             type: HKQuantityType(.bodyMassIndex),
             unit: .count(),
             start: start,
@@ -185,7 +185,7 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
         if let mockData = SimulatorAdvancedMockDataProvider.current() {
             return mockData.bodyFatSamples(start: start, end: end)
         }
-        try await fetchQuantitySamples(
+        return try await fetchQuantitySamples(
             type: HKQuantityType(.bodyFatPercentage),
             unit: .percent(),
             start: start,
@@ -199,7 +199,7 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
         if let mockData = SimulatorAdvancedMockDataProvider.current() {
             return mockData.leanBodyMassSamples(start: start, end: end)
         }
-        try await fetchQuantitySamples(
+        return try await fetchQuantitySamples(
             type: HKQuantityType(.leanBodyMass),
             unit: .gramUnit(with: .kilo),
             start: start,

@@ -66,7 +66,7 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
         if let mockData = SimulatorAdvancedMockDataProvider.current() {
             return mockData.latestSpO2(withinDays: days)
         }
-        try await fetchLatest(
+        return try await fetchLatest(
             type: .oxygenSaturation,
             unit: Self.percentUnit,
             withinDays: days,
@@ -78,7 +78,7 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
         if let mockData = SimulatorAdvancedMockDataProvider.current() {
             return mockData.latestRespiratoryRate(withinDays: days)
         }
-        try await fetchLatest(
+        return try await fetchLatest(
             type: .respiratoryRate,
             unit: Self.breathsPerMinUnit,
             withinDays: days,
@@ -90,7 +90,7 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
         if let mockData = SimulatorAdvancedMockDataProvider.current() {
             return mockData.latestVO2Max(withinDays: days)
         }
-        try await fetchLatest(
+        return try await fetchLatest(
             type: .vo2Max,
             unit: Self.vo2MaxUnit,
             withinDays: days,
@@ -102,7 +102,7 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
         if let mockData = SimulatorAdvancedMockDataProvider.current() {
             return mockData.latestHeartRateRecovery(withinDays: days)
         }
-        try await fetchLatest(
+        return try await fetchLatest(
             type: .heartRateRecoveryOneMinute,
             unit: Self.bpmUnit,
             withinDays: days,
@@ -114,7 +114,7 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
         if let mockData = SimulatorAdvancedMockDataProvider.current() {
             return mockData.latestWristTemperature(withinDays: days)
         }
-        try await fetchLatest(
+        return try await fetchLatest(
             type: .appleSleepingWristTemperature,
             unit: Self.celsiusUnit,
             withinDays: days,
@@ -131,7 +131,7 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
                 end: mockData.referenceDate.addingTimeInterval(1)
             )
         }
-        try await fetchCollection(
+        return try await fetchCollection(
             type: .oxygenSaturation,
             unit: Self.percentUnit,
             days: days,
@@ -146,7 +146,7 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
                 end: mockData.referenceDate.addingTimeInterval(1)
             )
         }
-        try await fetchCollection(
+        return try await fetchCollection(
             type: .respiratoryRate,
             unit: Self.breathsPerMinUnit,
             days: days,
@@ -161,7 +161,7 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
                 end: mockData.referenceDate.addingTimeInterval(1)
             )
         }
-        try await fetchCollection(
+        return try await fetchCollection(
             type: .vo2Max,
             unit: Self.vo2MaxUnit,
             days: days,
@@ -176,7 +176,7 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
                 end: mockData.referenceDate.addingTimeInterval(1)
             )
         }
-        try await fetchCollection(
+        return try await fetchCollection(
             type: .heartRateRecoveryOneMinute,
             unit: Self.bpmUnit,
             days: days,
@@ -191,7 +191,7 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
                 end: mockData.referenceDate.addingTimeInterval(1)
             )
         }
-        try await fetchCollection(
+        return try await fetchCollection(
             type: .appleSleepingWristTemperature,
             unit: Self.celsiusUnit,
             days: days,
@@ -205,7 +205,7 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
         if let mockData = SimulatorAdvancedMockDataProvider.current() {
             return mockData.oxygenSaturation(start: start, end: end)
         }
-        try await fetchCollection(
+        return try await fetchCollection(
             type: .oxygenSaturation,
             unit: Self.percentUnit,
             start: start, end: end,
@@ -217,7 +217,7 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
         if let mockData = SimulatorAdvancedMockDataProvider.current() {
             return mockData.respiratoryRate(start: start, end: end)
         }
-        try await fetchCollection(
+        return try await fetchCollection(
             type: .respiratoryRate,
             unit: Self.breathsPerMinUnit,
             start: start, end: end,
@@ -229,7 +229,7 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
         if let mockData = SimulatorAdvancedMockDataProvider.current() {
             return mockData.vo2Max(start: start, end: end)
         }
-        try await fetchCollection(
+        return try await fetchCollection(
             type: .vo2Max,
             unit: Self.vo2MaxUnit,
             start: start, end: end,
@@ -241,7 +241,7 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
         if let mockData = SimulatorAdvancedMockDataProvider.current() {
             return mockData.heartRateRecovery(start: start, end: end)
         }
-        try await fetchCollection(
+        return try await fetchCollection(
             type: .heartRateRecoveryOneMinute,
             unit: Self.bpmUnit,
             start: start, end: end,
@@ -253,7 +253,7 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
         if let mockData = SimulatorAdvancedMockDataProvider.current() {
             return mockData.wristTemperature(start: start, end: end)
         }
-        try await fetchCollection(
+        return try await fetchCollection(
             type: .appleSleepingWristTemperature,
             unit: Self.celsiusUnit,
             start: start, end: end,
