@@ -1,21 +1,62 @@
 {
   "releases": [
     {
+      "version": "0.3.0",
+      "introKey": "Sleep predictions, injury alerts, smart workout picks, weekly reports, a 3D muscle map, and bedtime reminders — your training just got smarter.",
+      "features": [
+        {
+          "id": "sleepPrediction",
+          "titleKey": "Sleep Prediction",
+          "summaryKey": "See tonight's predicted sleep quality based on your recent patterns and today's activity.",
+          "symbolName": "bed.double.fill",
+          "area": "wellness"
+        },
+        {
+          "id": "injuryRisk",
+          "titleKey": "Injury Risk",
+          "summaryKey": "Get a daily injury risk score based on your training load, recovery, and workout history.",
+          "symbolName": "exclamationmark.shield.fill",
+          "area": "activity"
+        },
+        {
+          "id": "workoutRecommendations",
+          "titleKey": "Workout Recommendations",
+          "summaryKey": "Receive personalized exercise suggestions based on muscle fatigue and training balance.",
+          "symbolName": "sparkles",
+          "area": "activity"
+        },
+        {
+          "id": "weeklyReport",
+          "titleKey": "Weekly Report",
+          "summaryKey": "Review a summary of your week — volume, intensity, and key highlights.",
+          "symbolName": "doc.text.fill",
+          "area": "activity"
+        },
+        {
+          "id": "muscleMap3D",
+          "titleKey": "3D Muscle Map",
+          "summaryKey": "Explore your muscle recovery on an upgraded 3D body model with smoother detail.",
+          "symbolName": "figure.arms.open",
+          "area": "activity"
+        },
+        {
+          "id": "bedtimeReminder",
+          "titleKey": "Bedtime Reminder",
+          "summaryKey": "Set a nightly reminder to wind down and protect your sleep schedule.",
+          "symbolName": "moon.fill",
+          "area": "wellness"
+        }
+      ]
+    },
+    {
       "version": "0.2.0",
-      "introKey": "Start with condition, weather, sleep debt, notifications, widgets, muscle map, training, wellness, habits, themes, and Apple Watch workouts in one flow.",
+      "introKey": "Widgets, weather, coaching, sleep debt, cardio tracking, themes, and three languages — all in one update.",
       "features": [
         {
           "id": "widgets",
           "titleKey": "Widgets",
           "summaryKey": "Add DUNE widgets to your Home Screen and glance at your key scores without opening the app.",
           "symbolName": "square.grid.2x2.fill",
-          "area": "today"
-        },
-        {
-          "id": "conditionScore",
-          "titleKey": "Condition Score",
-          "summaryKey": "Check your condition score, coaching, and weather from the Today tab.",
-          "symbolName": "heart.text.square.fill",
           "area": "today"
         },
         {
@@ -28,7 +69,7 @@
         {
           "id": "sleepDebt",
           "titleKey": "Sleep Debt",
-          "summaryKey": "Spot your weekly sleep debt and open the sleep detail to compare recent rest against your baseline.",
+          "summaryKey": "Spot your weekly sleep debt and compare recent rest against your baseline.",
           "symbolName": "moon.zzz.fill",
           "area": "today"
         },
@@ -40,25 +81,11 @@
           "area": "today"
         },
         {
-          "id": "muscleMap",
-          "titleKey": "Muscle Map",
-          "summaryKey": "Open the muscle map to check which areas are recovered, overloaded, or ready for the next session.",
-          "symbolName": "figure.stand",
-          "area": "activity"
-        },
-        {
           "id": "trainingReadiness",
           "titleKey": "Training Readiness",
           "summaryKey": "Open recovery details, weekly stats, and suggestions built around your recent training.",
           "symbolName": "figure.strengthtraining.traditional",
           "area": "activity"
-        },
-        {
-          "id": "wellness",
-          "titleKey": "Wellness",
-          "summaryKey": "See sleep, body, and active indicators together in one score-driven view.",
-          "symbolName": "leaf.fill",
-          "area": "wellness"
         },
         {
           "id": "habits",
@@ -80,6 +107,96 @@
           "summaryKey": "Start workouts faster on Apple Watch and sync completed sessions back to iPhone.",
           "symbolName": "applewatch.watchface",
           "area": "watch"
+        },
+        {
+          "id": "cardioLiveTracking",
+          "titleKey": "Cardio Live Tracking",
+          "summaryKey": "Track distance, pace, and heart rate in real time during runs and walks.",
+          "symbolName": "figure.run",
+          "area": "activity"
+        },
+        {
+          "id": "coachingInsights",
+          "titleKey": "Coaching Insights",
+          "summaryKey": "Get personalized coaching cards with actionable tips based on your condition and trends.",
+          "symbolName": "lightbulb.fill",
+          "area": "today"
+        },
+        {
+          "id": "localization",
+          "titleKey": "Localization",
+          "summaryKey": "Full support for English, Korean, and Japanese across every screen.",
+          "symbolName": "globe",
+          "area": "settings"
+        },
+        {
+          "id": "airQuality",
+          "titleKey": "Air Quality",
+          "summaryKey": "Check PM2.5 and PM10 levels alongside weather before your outdoor session.",
+          "symbolName": "aqi.medium",
+          "area": "today"
+        }
+      ]
+    },
+    {
+      "version": "0.1.0",
+      "introKey": "Track workouts, check your condition, and see your progress — all built around your body's data.",
+      "features": [
+        {
+          "id": "exerciseLogging",
+          "titleKey": "Exercise Logging",
+          "summaryKey": "Log sets, reps, and weight with custom exercises, draft recovery, and search filters.",
+          "symbolName": "dumbbell.fill",
+          "area": "activity"
+        },
+        {
+          "id": "conditionScore",
+          "titleKey": "Condition Score",
+          "summaryKey": "Check your HRV and resting heart rate to see how ready your body is each day.",
+          "symbolName": "heart.text.square.fill",
+          "area": "today"
+        },
+        {
+          "id": "workoutTemplates",
+          "titleKey": "Workout Templates",
+          "summaryKey": "Create, edit, and start workouts from saved templates for a faster session.",
+          "symbolName": "list.clipboard.fill",
+          "area": "activity"
+        },
+        {
+          "id": "progressiveOverload",
+          "titleKey": "Progressive Overload",
+          "summaryKey": "Track 1RM estimates and view exercise history charts to measure your progress.",
+          "symbolName": "chart.line.uptrend.xyaxis",
+          "area": "activity"
+        },
+        {
+          "id": "muscleMap",
+          "titleKey": "Muscle Map",
+          "summaryKey": "See which muscle groups are recovered, overloaded, or ready on an interactive body map.",
+          "symbolName": "figure.stand",
+          "area": "activity"
+        },
+        {
+          "id": "watchWorkout",
+          "titleKey": "Apple Watch",
+          "summaryKey": "Track workouts on Apple Watch and sync completed sessions back to iPhone.",
+          "symbolName": "applewatch",
+          "area": "watch"
+        },
+        {
+          "id": "wellnessTab",
+          "titleKey": "Wellness",
+          "summaryKey": "View sleep, body, and active indicators together in one score-driven dashboard.",
+          "symbolName": "leaf.fill",
+          "area": "wellness"
+        },
+        {
+          "id": "iPadSupport",
+          "titleKey": "iPad Support",
+          "summaryKey": "Full iPad layout with sidebar navigation and universal design.",
+          "symbolName": "ipad.landscape",
+          "area": "settings"
         }
       ]
     }
