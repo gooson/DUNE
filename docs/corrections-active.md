@@ -64,6 +64,7 @@ status: approved
 - **`navigationDestination(item:)` 재트리거는 nil trampoline 금지**: 같은 frame에 `destination = nil` 후 다시 값 대입하지 말고 request token 기반 `Identifiable`로 단일 write 처리 (#208)
 - **`ImageRenderer` export/share 경로는 explicit size 필수**: offscreen SwiftUI 렌더링에서 intrinsic height가 0으로 풀릴 수 있으므로 `sizeThatFits`로 먼저 측정하고 `frame` + `proposedSize`를 함께 고정 (#209)
 - **알림 보상 상세는 탭 전환보다 현재 탭 push 우선**: `activityPersonalRecords` 같은 reward route는 `selectedSection`를 바꾸지 말고 활성 탭의 `NavigationStack(path:)`에 push해서 현재 화면 컨텍스트를 유지 (#210)
+- **hero-anchor 배경 startline은 preset 추정보다 실제 frame 측정 우선**: hero-first 탭에서 바다/scene background가 card 하단 기준으로 시작돼야 하면 `PreferenceKey + named coordinate space + environment override`로 hero `minY + height * 0.75`를 전달하고, detail/sheet처럼 anchor가 없는 경로만 fallback preset을 유지한다 (#231)
 - **screen-level AXID는 상호작용 root가 아닌 안정 anchor에만 부여**: SwiftUI root `VStack`/sheet container에 화면 식별자를 붙이면 child CTA identifier와 hit-testing이 함께 먹힐 수 있으므로, screen marker는 헤더/scroll surface 같은 비인터랙티브 anchor에 두고 실제 버튼 id가 살아 있는지 debugDescription으로 확인한다 (#227)
 - **XCUI identifier tap은 Button-first + shared timeout budget 유지**: toolbar/save/add CTA를 찾는 helper가 `descendants(matching: .any)`를 먼저 누르거나 fallback timeout을 고정하면 `Any/Other` wrapper mis-tap과 조기 실패가 다시 flaky CI를 만든다. `buttons[AXID]`와 `.button` descendants를 먼저 탐색하고, fallback도 caller timeout budget 안에서만 동작시킨다 (#228)
 - **SF Symbol literal 변경 시 `UIImage(systemName:)` 해상도 테스트 추가**: `iconName` 문자열은 컴파일 타임 검증이 없으므로 공용 enum/icon mapping 변경 때 실제 system symbol set에서 resolve되는지 unit test로 고정 (#211)
