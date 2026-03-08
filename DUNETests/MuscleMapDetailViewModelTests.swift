@@ -298,25 +298,25 @@ struct MuscleMap3DStateTests {
         #expect(backYaw > .pi)
     }
 
-    @Test("SVG-derived 3D geometry covers all muscle groups")
-    func geometryCoversAllMuscles() {
-        let coveredMuscles = Set(MuscleMap3DGeometry.allEntries.map(\.descriptor.muscle))
-        #expect(coveredMuscles == Set(MuscleGroup.allCases))
+    @Test("USDZ entity naming covers all muscle groups")
+    func usdzEntityNamingCoversAllMuscles() {
+        for muscle in MuscleGroup.allCases {
+            let entityName = "muscle_\(muscle.rawValue)"
+            let parsed = MuscleMap3DState.muscle(from: entityName)
+            #expect(parsed == muscle)
+        }
     }
 
-    @Test("Front and back SVG parts map to the expected planes")
-    func partPlanesMatchExpectedSides() {
-        let frontChest = MuscleMap3DGeometry.descriptor(for: "front-chest")
-        let backGlutes = MuscleMap3DGeometry.descriptor(for: "back-glutes")
-
-        #expect(frontChest?.plane == .front)
-        #expect(backGlutes?.plane == .back)
+    @Test("Muscle entity name parsing rejects non-muscle names")
+    func muscleParsingRejectsInvalidNames() {
+        #expect(MuscleMap3DState.muscle(from: "body_shell") == nil)
+        #expect(MuscleMap3DState.muscle(from: "shell-0") == nil)
+        #expect(MuscleMap3DState.muscle(from: "") == nil)
     }
 
-    @Test("Backside muscles use a negative z offset")
-    func backsideOffsetsAreNegative() {
-        let descriptor = MuscleMap3DGeometry.descriptor(for: "back-hamstrings")
-        #expect(descriptor?.zOffset == MuscleMap3DGeometry.backLayerZ)
-        #expect(descriptor?.zOffset ?? 0 < 0)
+    @Test("USDZ asset exists in bundle")
+    func usdzAssetExistsInBundle() {
+        let url = Bundle.main.url(forResource: "muscle_body", withExtension: "usdz")
+        #expect(url != nil)
     }
 }
