@@ -45,7 +45,7 @@ struct VisionExerciseFormGuideView: View {
                 .font(.title2.weight(.semibold))
 
             Text("Search a supported lift and inspect setup cues, target muscles, and equipment context before you move into the spatial strength scene.")
-                .font(.subheadline)
+                .font(.callout)
                 .foregroundStyle(.secondary)
                 .frame(maxWidth: 760, alignment: .leading)
         }
@@ -174,7 +174,7 @@ struct VisionExerciseFormGuideView: View {
                     .font(.title3.weight(.semibold))
                 if let secondaryName = guide.secondaryDisplayName() {
                     Text(verbatim: secondaryName)
-                        .font(.subheadline)
+                        .font(.callout)
                         .foregroundStyle(.secondary)
                 }
             }
@@ -186,7 +186,7 @@ struct VisionExerciseFormGuideView: View {
             }
 
             Text(guide.exercise.equipment.equipmentDescription)
-                .font(.subheadline)
+                .font(.callout)
                 .foregroundStyle(.secondary)
         }
     }
@@ -200,7 +200,7 @@ struct VisionExerciseFormGuideView: View {
                     .font(.callout)
                     .foregroundStyle(.secondary)
                 Text(verbatim: value)
-                    .font(.subheadline.weight(.semibold))
+                    .font(.callout.weight(.semibold))
             }
         }
         .padding(.horizontal, 14)
@@ -232,7 +232,7 @@ struct VisionExerciseFormGuideView: View {
                         .background(.tint, in: Circle())
 
                     Text(String(localized: String.LocalizationValue(cue)))
-                        .font(.subheadline)
+                        .font(.callout)
                         .foregroundStyle(.secondary)
                 }
             }
@@ -288,7 +288,7 @@ struct VisionExerciseFormGuideView: View {
                 .font(.system(size: 28))
                 .foregroundStyle(.tint)
             Text(message)
-                .font(.subheadline)
+                .font(.callout)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
         }
