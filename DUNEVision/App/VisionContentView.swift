@@ -18,6 +18,7 @@ struct VisionContentView: View {
     // Phase 4: refreshSignal will propagate live-data updates to child views
     @State private var refreshSignal = 0
     @State private var foregroundTask: Task<Void, Never>?
+    @State private var showSettings = false
     @State private var trainViewModel: VisionTrainViewModel
     @State private var isProcessingSimulatorMockData = false
     @State private var simulatorMockStatusMessage: String?
@@ -47,6 +48,13 @@ struct VisionContentView: View {
                         refreshSignal: refreshSignal,
                         isSimulatorMockEnabled: isSimulatorMockEnabled,
                         simulatorMockStatusMessage: simulatorMockStatusMessage,
+                        onOpenSettings: {
+                            if supportsMultipleWindows {
+                                scheduleWindowOpen(VisionWindowPlacementPlanner.settingsWindowID)
+                            } else {
+                                showSettings = true
+                            }
+                        },
                         onOpenDashboardWindow: { windowKind in
                             guard supportsMultipleWindows else { return }
                             scheduleWindowOpen(windowKind.windowID)
@@ -69,7 +77,11 @@ struct VisionContentView: View {
                             resetAdvancedMockData()
                         }
                     )
+                    .navigationDestination(isPresented: $showSettings) {
+                        VisionSettingsView(modelContainer: modelContainer)
+                    }
                 }
+                .accessibilityIdentifier(VisionSurfaceAccessibility.sectionScreenID(for: .today))
             } label: {
                 Label {
                     Text(verbatim: AppSection.today.title)
@@ -87,6 +99,7 @@ struct VisionContentView: View {
                         }
                     )
                 }
+                .accessibilityIdentifier(VisionSurfaceAccessibility.sectionScreenID(for: .train))
             } label: {
                 Label {
                     Text(verbatim: AppSection.train.title)
@@ -101,6 +114,7 @@ struct VisionContentView: View {
                         refreshSignal: refreshSignal
                     )
                 }
+                .accessibilityIdentifier(VisionSurfaceAccessibility.sectionScreenID(for: .wellness))
             } label: {
                 Label {
                     Text(verbatim: AppSection.wellness.title)
@@ -112,6 +126,7 @@ struct VisionContentView: View {
                 NavigationStack {
                     VisionLifeView()
                 }
+                .accessibilityIdentifier(VisionSurfaceAccessibility.sectionScreenID(for: .life))
             } label: {
                 Label {
                     Text(verbatim: AppSection.life.title)
@@ -120,6 +135,7 @@ struct VisionContentView: View {
                 }
             }
         }
+        .accessibilityIdentifier(VisionSurfaceAccessibility.contentRoot)
         .onDisappear { foregroundTask?.cancel() }
         .onChange(of: scenePhase) { oldPhase, newPhase in
             if oldPhase == .background, newPhase == .active {

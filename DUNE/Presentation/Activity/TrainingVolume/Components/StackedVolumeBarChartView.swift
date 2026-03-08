@@ -7,16 +7,36 @@ struct StackedVolumeBarChartView: View {
     let topTypeKeys: [String] // Top 5 type keys for color assignment
     let typeColors: [String: Color]
     let typeNames: [String: String]
+    let period: VolumePeriod
 
     @Environment(\.appTheme) private var theme
 
     @State private var selectedDate: Date?
+    @State private var scrollPosition: Date = .now
     @State private var selectionGestureState = ChartSelectionGestureState()
+    @State private var lastSelectionProbeLabel = "none"
 
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            Text("Daily Volume")
-                .font(.subheadline.weight(.semibold))
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Daily Volume")
+                    .font(.subheadline.weight(.semibold))
+
+                if isScrollable {
+                    VStack(alignment: .leading, spacing: 0) {
+                        Text(visibleRangeLabel)
+                            .font(.caption2)
+                            .foregroundStyle(DS.Color.textSecondary)
+                            .contentTransition(.numericText())
+
+                        Color.clear
+                            .frame(width: 1, height: 1)
+                            .accessibilityElement(children: .ignore)
+                            .accessibilityLabel(visibleRangeLabel)
+                            .accessibilityIdentifier("training-volume-daily-volume-visible-range")
+                    }
+                }
+            }
 
             if dailyBreakdown.isEmpty || dailyBreakdown.allSatisfy({ $0.segments.isEmpty }) {
                 emptyState
@@ -24,12 +44,15 @@ struct StackedVolumeBarChartView: View {
                 chartView
                     .frame(height: 160)
                     .clipped()
+                    .overlay { chartAccessibilitySurface }
 
                 legendRow
             }
         }
         .padding(DS.Spacing.md)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        .onAppear(perform: resetScrollPosition)
+        .onChange(of: dailyBreakdown.count) { _, _ in resetScrollPosition() }
     }
 
     // MARK: - Chart
@@ -52,8 +75,9 @@ struct StackedVolumeBarChartView: View {
                     .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
             }
         }
+        .chartXScale(domain: xDomain)
         .chartXAxis {
-            AxisMarks(values: .stride(by: .day, count: xAxisStride)) { _ in
+            AxisMarks(values: .stride(by: .day, count: period.chartAxisStrideCount)) { _ in
                 AxisValueLabel(format: .dateTime.month(.abbreviated).day())
                     .foregroundStyle(theme.sandColor)
                 AxisGridLine()
@@ -78,9 +102,9 @@ struct StackedVolumeBarChartView: View {
         }
         .chartYScale(domain: 0...(maxDailyMinutes * 1.15))
         .scrollableChartSelectionOverlay(
-            isScrollable: false,
-            visibleDomainLength: nil,
-            scrollPosition: nil,
+            isScrollable: isScrollable,
+            visibleDomainLength: isScrollable ? period.visibleDomainSeconds : nil,
+            scrollPosition: isScrollable ? $scrollPosition : nil,
             selectedDate: $selectedDate,
             selectionState: $selectionGestureState
         ) { proxy, plotFrame, chartSize in
@@ -101,6 +125,11 @@ struct StackedVolumeBarChartView: View {
             }
         }
         .sensoryFeedback(.selection, trigger: selectedPoint?.date)
+        .onChange(of: selectedPoint?.date) { _, newValue in
+            guard let newValue else { return }
+            lastSelectionProbeLabel = newValue.formatted(date: .abbreviated, time: .omitted)
+        }
+        .chartSelectionUITestProbe(lastSelectionProbeLabel)
     }
 
     // MARK: - Legend
@@ -148,6 +177,26 @@ struct StackedVolumeBarChartView: View {
         return ChartSelectionInteraction.nearestPoint(to: selectedDate, in: dailyBreakdown, date: \.date)
     }
 
+    private var xDomain: ClosedRange<Date> {
+        resolvedDayBucketXDomain(dates: dailyBreakdown.map(\.date))
+    }
+
+    private var isScrollable: Bool {
+        dailyBreakdown.count > period.days
+    }
+
+    private var visibleRangeLabel: String {
+        period.visibleRangeLabel(from: scrollPosition)
+    }
+
+    private var chartAccessibilitySurface: some View {
+        ChartUITestSurface(
+            identifier: "training-volume-chart-daily-volume",
+            label: String(localized: "Daily Volume"),
+            value: isScrollable ? visibleRangeLabel : ""
+        )
+    }
+
     private func selectedAnchor(
         for point: DailyVolumePoint,
         proxy: ChartProxy,
@@ -165,12 +214,10 @@ struct StackedVolumeBarChartView: View {
         return Swift.max(maxVal, 1)
     }
 
-    private var xAxisStride: Int {
-        let count = dailyBreakdown.count
-        if count <= 7 { return 1 }
-        if count <= 30 { return 7 }
-        if count <= 90 { return 14 }
-        return 30
+    private func resetScrollPosition() {
+        guard let latestDate = dailyBreakdown.map(\.date).max() else { return }
+        let preferredStart = period.initialVisibleStart(latestDate: latestDate)
+        scrollPosition = preferredStart < xDomain.lowerBound ? xDomain.lowerBound : preferredStart
     }
 
     private var emptyState: some View {

@@ -7,6 +7,7 @@ struct VisionDashboardView: View {
     let refreshSignal: Int
     let isSimulatorMockEnabled: Bool
     let simulatorMockStatusMessage: String?
+    let onOpenSettings: () -> Void
     let onOpenDashboardWindow: (VisionDashboardWindowKind) -> Void
     let onOpen3DCharts: () -> Void
     let onOpenVolumetric: () -> Void
@@ -30,6 +31,14 @@ struct VisionDashboardView: View {
         }
         .navigationTitle("Today")
         .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button(action: onOpenSettings) {
+                    Image(systemName: "gearshape")
+                }
+                .accessibilityLabel("Settings")
+                .accessibilityIdentifier("vision-dashboard-toolbar-settings")
+            }
+
             ToolbarItemGroup(placement: .primaryAction) {
                 Button {
                     onOpenImmersive()

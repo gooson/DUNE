@@ -102,6 +102,27 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
         )
     }
 
+    func testTrainingVolumeDailyVolumeChartScrollsToPastData() throws {
+        openTrainingVolumeDetail()
+
+        let chart = trainingVolumeDailyVolumeChart()
+        let initialRange = visibleRangeValue(of: chart)
+
+        let start = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.80, dy: 0.55))
+        let end = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.20, dy: 0.55))
+        start.press(forDuration: 0.05, thenDragTo: end)
+
+        if visibleRangeValue(of: chart) == initialRange {
+            start.press(forDuration: 0.05, thenDragTo: end)
+        }
+
+        XCTAssertNotEqual(
+            visibleRangeValue(of: chart),
+            initialRange,
+            "Quick horizontal drag should reveal older daily volume data"
+        )
+    }
+
     func testTrainingVolumeTrainingLoadLongPressKeepsVisibleRangeAndActivatesSelection() throws {
         openTrainingVolumeDetail()
 
@@ -367,6 +388,12 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
             app.scrollToHittableElementIfNeeded(AXID.trainingVolumeChartTrainingLoad, maxSwipes: 6),
             "Training load chart should be on-screen before chart gestures"
         )
+        return chart
+    }
+
+    private func trainingVolumeDailyVolumeChart() -> XCUIElement {
+        let chart = waitForElement(AXID.trainingVolumeChartDailyVolume, timeout: 15)
+        XCTAssertTrue(chart.exists, "Training volume daily volume chart should be visible on the detail screen")
         return chart
     }
 

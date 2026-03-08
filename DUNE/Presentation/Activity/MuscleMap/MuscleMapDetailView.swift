@@ -63,6 +63,7 @@ struct MuscleMapDetailView: View {
                         )
                     }
                 }
+                .accessibilityIdentifier("musclemap-detail-volume-section")
 
                 // Recovery Overview
                 SectionGroup(title: "Recovery Status", icon: "heart.text.clipboard", iconColor: DS.Color.activity) {
@@ -73,6 +74,7 @@ struct MuscleMapDetailView: View {
                         nextRecovery: viewModel.nextRecovery
                     )
                 }
+                .accessibilityIdentifier("musclemap-detail-recovery-section")
             }
             .padding(.horizontal, DS.Spacing.lg)
         }

@@ -26,5 +26,6 @@ struct VisionLifeView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding(32)
         .navigationTitle("Life")
+        .accessibilityIdentifier(VisionSurfaceAccessibility.lifePlaceholder)
     }
 }
