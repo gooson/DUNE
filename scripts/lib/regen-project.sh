@@ -53,6 +53,12 @@ normalize_xcscheme() {
       <CommandLineArguments>\
       </CommandLineArguments>|' "$scheme_file"
     fi
+    # Xcode rewrites the watch UI test scheme with MacroExpansion before TestPlans.
+    if grep -q 'BuildableName = "DUNEWatch.app"' "$scheme_file" \
+        && grep -q 'BuildableName = "DUNEWatchUITests.xctest"' "$scheme_file"; then
+        perl -0pi -e 's{(<TestAction\b[^>]*>\s*)(<TestPlans>.*?</TestPlans>\s*)(<MacroExpansion>.*?</MacroExpansion>\s*)}{$1$3$2}sg' "$scheme_file"
+        perl -0pi -e 's{<TestPlanReference\s+default = "YES"\s+reference = "([^"]+)">}{<TestPlanReference\n            reference = "$1"\n            default = "YES">}sg' "$scheme_file"
+    fi
 }
 
 # Normalize all xcscheme files under a given .xcodeproj directory.

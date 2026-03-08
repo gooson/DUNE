@@ -45,4 +45,11 @@ if ! grep -q 'CommandLineArguments' "$tmp" && grep -q 'TestableReference' "$tmp"
       </CommandLineArguments>|' "$tmp"
 fi
 
+# Keep staged watch UI schemes aligned with Xcode's saved ordering.
+if grep -q 'BuildableName = "DUNEWatch.app"' "$tmp" \
+    && grep -q 'BuildableName = "DUNEWatchUITests.xctest"' "$tmp"; then
+    perl -0pi -e 's{(<TestAction\b[^>]*>\s*)(<TestPlans>.*?</TestPlans>\s*)(<MacroExpansion>.*?</MacroExpansion>\s*)}{$1$3$2}sg' "$tmp"
+    perl -0pi -e 's{<TestPlanReference\s+default = "YES"\s+reference = "([^"]+)">}{<TestPlanReference\n            reference = "$1"\n            default = "YES">}sg' "$tmp"
+fi
+
 cat "$tmp"
