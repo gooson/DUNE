@@ -4,6 +4,11 @@ import SwiftData
 enum CloudSyncPreferenceStore {
     static let storageKey = "isCloudSyncEnabled"
 
+    enum RuntimeRefreshAction: Equatable {
+        case noChange(resolvedValue: Bool)
+        case rebuild(resolvedValue: Bool)
+    }
+
     @discardableResult
     static func resolvedValue(
         userDefaults: UserDefaults = .standard,
@@ -13,13 +18,14 @@ enum CloudSyncPreferenceStore {
 
         let localValue = booleanValue(from: userDefaults.object(forKey: storageKey))
         let cloudValue = booleanValue(from: ubiquitousStore.object(forKey: storageKey))
-        let resolved = resolve(localValue: localValue, cloudValue: cloudValue)
+        let resolution = makeResolution(localValue: localValue, cloudValue: cloudValue)
+        let resolved = resolution.resolvedValue
 
         if localValue != resolved {
             userDefaults.set(resolved, forKey: storageKey)
         }
 
-        if let seedValue = cloudSeedValue(localValue: localValue, cloudValue: cloudValue) {
+        if let seedValue = resolution.seedValue {
             ubiquitousStore.set(seedValue, forKey: storageKey)
             ubiquitousStore.synchronize()
         }
@@ -47,6 +53,34 @@ enum CloudSyncPreferenceStore {
         return true
     }
 
+    static func runtimeRefreshAction(
+        currentValue: Bool,
+        localValue: Bool?,
+        cloudValue: Bool?
+    ) -> RuntimeRefreshAction {
+        runtimeRefreshAction(
+            currentValue: currentValue,
+            resolvedValue: makeResolution(localValue: localValue, cloudValue: cloudValue).resolvedValue
+        )
+    }
+
+    static func runtimeRefreshAction(
+        currentValue: Bool,
+        resolvedValue: Bool
+    ) -> RuntimeRefreshAction {
+        if currentValue == resolvedValue {
+            return .noChange(resolvedValue: resolvedValue)
+        }
+        return .rebuild(resolvedValue: resolvedValue)
+    }
+
+    private static func makeResolution(localValue: Bool?, cloudValue: Bool?) -> Resolution {
+        Resolution(
+            resolvedValue: resolve(localValue: localValue, cloudValue: cloudValue),
+            seedValue: cloudSeedValue(localValue: localValue, cloudValue: cloudValue)
+        )
+    }
+
     private static func booleanValue(from object: Any?) -> Bool? {
         if let boolValue = object as? Bool {
             return boolValue
@@ -55,6 +89,11 @@ enum CloudSyncPreferenceStore {
             return numberValue.boolValue
         }
         return nil
+    }
+
+    private struct Resolution {
+        let resolvedValue: Bool
+        let seedValue: Bool?
     }
 }
 
