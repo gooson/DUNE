@@ -114,7 +114,7 @@ struct ConditionScatter3DView: View {
             legendItem(color: .orange, label: "Fair (40-59)")
             legendItem(color: .red, label: "Poor (<40)")
         }
-        .font(.caption)
+        .font(.callout)
     }
 
     private func legendItem(color: Color, label: String) -> some View {
