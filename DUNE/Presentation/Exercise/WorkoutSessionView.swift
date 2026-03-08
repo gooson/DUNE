@@ -120,6 +120,7 @@ struct WorkoutSessionView: View {
                 Button("Done") { saveWorkout() }
                     .disabled(viewModel.completedSetCount == 0)
                     .fontWeight(.semibold)
+                    .accessibilityIdentifier("workout-session-done")
             }
         }
         .safeAreaInset(edge: .bottom, spacing: 0) {
@@ -252,6 +253,7 @@ struct WorkoutSessionView: View {
 
             Divider()
         }
+        .accessibilityIdentifier("workout-session-screen")
     }
 
     private func dotColor(for index: Int) -> Color {
@@ -495,7 +497,8 @@ struct WorkoutSessionView: View {
         keyboardType: UIKeyboardType,
         stepButtons: [(String, () -> Void)]
     ) -> some View {
-        VStack(spacing: DS.Spacing.sm) {
+        let fieldIdentifier = "workout-session-field-\(label.lowercased().replacingOccurrences(of: " ", with: "-"))"
+        return VStack(spacing: DS.Spacing.sm) {
             Text(label)
                 .font(.caption.weight(.bold))
                 .foregroundStyle(DS.Color.textSecondary)
@@ -508,6 +511,7 @@ struct WorkoutSessionView: View {
                 .focused($isInputFieldFocused)
                 .onSubmit { isInputFieldFocused = false }
                 .foregroundStyle(DS.Color.activity)
+                .accessibilityIdentifier(fieldIdentifier)
 
             HStack(spacing: DS.Spacing.sm) {
                 ForEach(Array(stepButtons.enumerated()), id: \.offset) { _, button in
@@ -683,6 +687,7 @@ struct WorkoutSessionView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .tint(DS.Color.activity)
+                .accessibilityIdentifier("workout-session-complete-set")
                 .padding(.horizontal, DS.Spacing.lg)
                 .padding(.vertical, DS.Spacing.md)
             }
@@ -754,6 +759,7 @@ struct WorkoutSessionView: View {
                 }
                 .buttonStyle(.bordered)
                 .tint(DS.Color.activity)
+                .accessibilityIdentifier("workout-session-add-set")
 
                 if let info = templateInfo, info.nextExerciseName != nil {
                     // Template intermediate: advance to next exercise
@@ -770,6 +776,7 @@ struct WorkoutSessionView: View {
                     }
                     .buttonStyle(.borderedProminent)
                     .tint(DS.Color.activity)
+                    .accessibilityIdentifier("workout-session-finish")
                 } else {
                     // Standalone or last exercise in template
                     Button {
@@ -782,10 +789,12 @@ struct WorkoutSessionView: View {
                     }
                     .buttonStyle(.borderedProminent)
                     .tint(DS.Color.negative)
+                    .accessibilityIdentifier("workout-session-finish")
                 }
             }
             .padding(.horizontal, DS.Spacing.lg)
         }
+        .accessibilityIdentifier("workout-session-last-set-sheet")
     }
 
     // MARK: - Actions

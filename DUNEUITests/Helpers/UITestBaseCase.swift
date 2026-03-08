@@ -1,4 +1,4 @@
-import XCTest
+@preconcurrency import XCTest
 
 /// Base class for all UI tests providing shared setup, interruption handling,
 /// and convenience navigation helpers.
@@ -6,6 +6,7 @@ class UITestBaseCase: XCTestCase {
     enum LaunchScenario: String {
         case empty = "empty"
         case defaultSeeded = "default-seeded"
+        case activityExerciseSeeded = "activity-exercise-seeded"
     }
 
     struct LaunchConfiguration {
@@ -160,4 +161,9 @@ class UITestBaseCase: XCTestCase {
 /// Base class for tests that require mock data to be seeded
 class SeededUITestBaseCase: UITestBaseCase {
     override var shouldSeedMockData: Bool { true }
+}
+
+class ActivityExerciseSeededUITestBaseCase: SeededUITestBaseCase {
+    override var uiScenario: LaunchScenario? { .activityExerciseSeeded }
+    override var initialTabSelectionArgument: String? { "train" }
 }

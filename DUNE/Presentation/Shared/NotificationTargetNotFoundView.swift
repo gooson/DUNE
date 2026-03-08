@@ -24,6 +24,7 @@ struct NotificationTargetNotFoundView: View {
                 .foregroundStyle(.tertiary)
                 .textSelection(.enabled)
         }
+        .accessibilityIdentifier("notification-target-not-found-screen")
         .padding(DS.Spacing.lg)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background { DetailWaveBackground() }

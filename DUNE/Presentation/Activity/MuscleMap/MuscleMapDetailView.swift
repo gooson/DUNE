@@ -76,6 +76,7 @@ struct MuscleMapDetailView: View {
             }
             .padding(.horizontal, DS.Spacing.lg)
         }
+        .accessibilityIdentifier("activity-musclemap-detail-screen")
         .background { DetailWaveBackground() }
         .englishNavigationTitle("Muscle Map")
         .navigationBarTitleDisplayMode(.inline)

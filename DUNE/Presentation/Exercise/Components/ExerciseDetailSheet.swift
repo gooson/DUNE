@@ -20,11 +20,13 @@ struct ExerciseDetailSheet: View {
                 .padding(.horizontal, DS.Spacing.lg)
                 .padding(.bottom, DS.Spacing.xl)
             }
+            .accessibilityIdentifier("exercise-detail-screen")
             .englishNavigationTitle(exercise.name)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Close") { dismiss() }
+                        .accessibilityIdentifier("exercise-detail-close")
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Start") {
@@ -32,6 +34,7 @@ struct ExerciseDetailSheet: View {
                         onSelect()
                     }
                     .fontWeight(.semibold)
+                    .accessibilityIdentifier("exercise-detail-start")
                 }
             }
         }

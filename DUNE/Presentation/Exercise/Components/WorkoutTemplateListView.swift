@@ -28,6 +28,7 @@ struct WorkoutTemplateListView: View {
                 } label: {
                     Image(systemName: "plus")
                 }
+                .accessibilityIdentifier("workout-template-list-add")
             }
         }
         .sheet(isPresented: $showingCreateSheet) {
@@ -86,6 +87,7 @@ struct WorkoutTemplateListView: View {
             .tint(DS.Color.activity)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .accessibilityIdentifier("workout-template-list-screen")
     }
 
     private var templateList: some View {
@@ -115,6 +117,7 @@ struct WorkoutTemplateListView: View {
             }
             .scrollContentBackground(.hidden)
         }
+        .accessibilityIdentifier("workout-template-list-screen")
     }
 
     private func templateRow(_ template: WorkoutTemplate) -> some View {

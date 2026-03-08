@@ -58,6 +58,7 @@ struct CardioSessionView: View {
                     showSummary = true
                 }
             }
+            .accessibilityIdentifier("cardio-session-confirm-end")
             Button("Cancel", role: .cancel) {}
         } message: {
             Text("Save and finish this workout?")
@@ -108,6 +109,7 @@ struct CardioSessionView: View {
             statusBadge
         }
         .padding(.top, DS.Spacing.md)
+        .accessibilityIdentifier("cardio-session-screen")
     }
 
     private var statusBadge: some View {
@@ -346,6 +348,7 @@ struct CardioSessionView: View {
             .buttonStyle(.borderedProminent)
             .tint(DS.Color.negative)
             .disabled(viewModel.state == .idle || viewModel.state == .finished)
+            .accessibilityIdentifier("cardio-session-end")
         }
     }
 }

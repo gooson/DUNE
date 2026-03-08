@@ -1,4 +1,4 @@
-import XCTest
+@preconcurrency import XCTest
 
 final class DailveUITestsLaunchTests: XCTestCase {
     private var app: XCUIApplication!

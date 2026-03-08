@@ -41,6 +41,7 @@ struct TrainingReadinessDetailView: View {
             }
             .padding()
         }
+        .accessibilityIdentifier("activity-training-readiness-detail-screen")
         .background { DetailWaveBackground() }
         .englishNavigationTitle("Training Readiness")
         .task {

@@ -1,4 +1,4 @@
-import XCTest
+@preconcurrency import XCTest
 
 /// Smoke tests for the Settings screen.
 /// Verifies key UI elements exist and the screen renders without crashing.

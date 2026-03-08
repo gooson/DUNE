@@ -1,4 +1,4 @@
-import XCTest
+@preconcurrency import XCTest
 
 /// Visual regression capture for Sakura theme in light/dark appearance.
 /// Captures full-screen Today tab screenshots as XCTest attachments.

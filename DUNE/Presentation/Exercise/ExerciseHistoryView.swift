@@ -41,6 +41,7 @@ struct ExerciseHistoryView: View {
             }
             .padding(.horizontal, DS.Spacing.lg)
         }
+        .accessibilityIdentifier("exercise-history-screen")
         .englishNavigationTitle(exerciseName)
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {

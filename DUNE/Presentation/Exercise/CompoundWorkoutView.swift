@@ -58,6 +58,7 @@ struct CompoundWorkoutView: View {
                     .transition(.move(edge: .bottom).combined(with: .opacity))
             }
         }
+        .accessibilityIdentifier("compound-workout-screen")
         .background { DetailWaveBackground() }
         .animation(DS.Animation.snappy, value: setTimer.isRunning)
         .animation(DS.Animation.snappy, value: viewModel.isTransitioning)

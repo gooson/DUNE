@@ -375,6 +375,7 @@ struct ExerciseSessionDetailView: View {
                 .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
             }
             .buttonStyle(.plain)
+            .accessibilityIdentifier("exercise-session-view-history")
         }
     }
 

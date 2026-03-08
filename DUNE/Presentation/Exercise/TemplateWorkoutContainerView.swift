@@ -39,6 +39,7 @@ struct TemplateWorkoutContainerView: View {
     var body: some View {
         NavigationStack {
             content
+                .accessibilityIdentifier("template-workout-container-screen")
             .confirmationDialog(
                 "End Template?",
                 isPresented: $showEndConfirmation,
@@ -84,6 +85,7 @@ struct TemplateWorkoutContainerView: View {
                 } label: {
                     Image(systemName: "xmark")
                 }
+                .accessibilityIdentifier("template-workout-container-close")
             }
         }
     }

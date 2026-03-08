@@ -159,6 +159,7 @@ struct ActivityView: View {
                                 )
                             }
                             .buttonStyle(.plain)
+                            .accessibilityIdentifier("activity-section-pr")
                         }
 
                         SectionGroup(title: "Achievement History", icon: "medal.fill", iconColor: DS.Color.activity) {
@@ -166,6 +167,7 @@ struct ActivityView: View {
                                 AchievementHistoryPreview(events: viewModel.workoutRewardHistory)
                             }
                             .buttonStyle(.plain)
+                            .accessibilityIdentifier("activity-section-achievement")
                         }
 
                         // ⑩ Consistency
@@ -176,6 +178,7 @@ struct ActivityView: View {
                                 ConsistencyCard(streak: viewModel.workoutStreak)
                             }
                             .buttonStyle(.plain)
+                            .accessibilityIdentifier("activity-section-consistency")
                         }
 
                         // ⑪ Exercise Mix
@@ -186,6 +189,7 @@ struct ActivityView: View {
                                 ExerciseFrequencySection(frequencies: viewModel.exerciseFrequencies)
                             }
                             .buttonStyle(.plain)
+                            .accessibilityIdentifier("activity-section-exercisemix")
                         }
                     }
                 }
@@ -234,9 +238,9 @@ struct ActivityView: View {
                 preferredExerciseIDs: preferredExerciseIDs,
                 popularExerciseIDs: popularExerciseIDs,
                 mode: .quickStart,
-                onStartTemplate: startFromTemplate
+                onStartTemplate: startTemplateFromPicker
             ) { exercise in
-                selectedExercise = exercise
+                startExerciseFromPicker(exercise)
             }
         }
         .sheet(item: $selectedMuscle) { muscle in
@@ -293,6 +297,8 @@ struct ActivityView: View {
         .sheet(item: $selectedExercise) { exercise in
             ExerciseStartView(exercise: exercise)
                 .interactiveDismissDisabled()
+                .presentationDetents([.large])
+                .presentationDragIndicator(.hidden)
         }
         .fullScreenCover(item: $templateConfig) { config in
             TemplateWorkoutContainerView(config: config)
@@ -374,6 +380,30 @@ struct ActivityView: View {
         return nil
     }
 
+    private func startExerciseFromPicker(_ exercise: ExerciseDefinition) {
+        showingExercisePicker = false
+        scheduleQuickStartAction {
+            selectedExercise = exercise
+        }
+    }
+
+    private func startTemplateFromPicker(_ template: WorkoutTemplate) {
+        showingExercisePicker = false
+        scheduleQuickStartAction {
+            startFromTemplate(template)
+        }
+    }
+
+    private func scheduleQuickStartAction(_ action: @escaping @MainActor () -> Void) {
+        Task { @MainActor in
+            while showingExercisePicker {
+                await Task.yield()
+            }
+            await Task.yield()
+            action()
+        }
+    }
+
     private func recoveryMapSection(fillHeight: Bool = false) -> some View {
         NavigationLink(value: ActivityDetailDestination.muscleMap) {
             SectionGroup(title: "Muscle Map", icon: "figure.stand", iconColor: DS.Color.activity, fillHeight: fillHeight) {
@@ -381,9 +411,11 @@ struct ActivityView: View {
                     fatigueStates: viewModel.fatigueStates,
                     onMuscleSelected: { muscle in selectedMuscle = muscle }
                 )
+                .allowsHitTesting(false)
             }
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier("activity-section-musclemap")
     }
 
     private func weeklyStatsSection(fillHeight: Bool = false) -> some View {
@@ -534,15 +566,36 @@ struct ActivityView: View {
             return
         }
 
+#if DEBUG
+        let scenario = UITestSeedScenario.current()
+        if let mocked = TestDataSeeder.mockWorkoutSummary(for: scenario, workoutID: targetWorkoutID) {
+            notificationWorkoutLookup[targetWorkoutID] = mocked
+            notificationWorkoutDestinationID = targetWorkoutID
+            return
+        }
+#endif
+
         // Retry once after forcing a refresh to absorb timing gaps on cold launch.
         await viewModel.loadActivityData()
 
         if let refreshed = viewModel.recentWorkouts.first(where: { $0.id == targetWorkoutID }) {
             notificationWorkoutLookup[targetWorkoutID] = refreshed
             notificationWorkoutDestinationID = targetWorkoutID
-        } else {
-            missingNotificationWorkoutID = targetWorkoutID
+            return
         }
+
+#if DEBUG
+        if let mocked = TestDataSeeder.mockWorkoutSummary(
+            for: UITestSeedScenario.current(),
+            workoutID: targetWorkoutID
+        ) {
+            notificationWorkoutLookup[targetWorkoutID] = mocked
+            notificationWorkoutDestinationID = targetWorkoutID
+            return
+        }
+#endif
+
+        missingNotificationWorkoutID = targetWorkoutID
     }
 
     private func handleExternalPersonalRecordsRoute() async {

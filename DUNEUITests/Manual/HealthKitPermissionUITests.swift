@@ -1,4 +1,4 @@
-import XCTest
+@preconcurrency import XCTest
 
 /// UI test that launches the app and auto-accepts HealthKit permission dialogs.
 /// Run this test once on a fresh simulator before running unit tests to ensure

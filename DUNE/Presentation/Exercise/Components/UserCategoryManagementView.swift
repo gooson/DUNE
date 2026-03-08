@@ -62,6 +62,7 @@ struct UserCategoryManagementView: View {
                 }
             }
         }
+        .accessibilityIdentifier("user-category-management-screen")
         .scrollContentBackground(.hidden)
         .background { DetailWaveBackground() }
         .englishNavigationTitle("Categories")
@@ -73,6 +74,7 @@ struct UserCategoryManagementView: View {
                 } label: {
                     Image(systemName: "plus")
                 }
+                .accessibilityIdentifier("user-category-add")
             }
         }
         .sheet(isPresented: $showingAddSheet) {
@@ -171,6 +173,7 @@ struct UserCategoryEditView: View {
                 Section("Name") {
                     TextField("Category name", text: $name)
                         .autocorrectionDisabled()
+                        .accessibilityIdentifier("user-category-name")
                     if name.trimmingCharacters(in: .whitespaces).count > Self.maxNameLength {
                         Text("Must be \(Self.maxNameLength) characters or less")
                             .font(.caption)
@@ -236,6 +239,7 @@ struct UserCategoryEditView: View {
                     }
                 }
             }
+            .accessibilityIdentifier("user-category-edit-screen")
             .scrollContentBackground(.hidden)
             .background { SheetWaveBackground() }
             .englishNavigationTitle(mode.isCreate ? "New Category" : "Edit Category")
@@ -257,6 +261,7 @@ struct UserCategoryEditView: View {
                     }
                     .disabled(!isValid)
                     .fontWeight(.semibold)
+                    .accessibilityIdentifier("user-category-save")
                 }
             }
         }

@@ -76,6 +76,7 @@ struct PersonalRecordsDetailView: View {
             }
             .padding()
         }
+        .accessibilityIdentifier("activity-personal-records-detail-screen")
         .background { DetailWaveBackground() }
         .englishNavigationTitle("Personal Records")
         .task(id: recordsUpdateKey) {

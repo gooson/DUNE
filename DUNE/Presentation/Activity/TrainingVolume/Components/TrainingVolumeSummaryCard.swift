@@ -21,6 +21,7 @@ struct TrainingVolumeSummaryCard: View {
             }
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier("activity-section-volume")
     }
 
     // MARK: - Last Workout Metrics

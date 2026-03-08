@@ -22,6 +22,7 @@ struct HealthKitWorkoutDetailView: View {
             }
             .padding(.horizontal, DS.Spacing.lg)
         }
+        .accessibilityIdentifier("healthkit-workout-detail-screen")
         .background { DetailWaveBackground() }
         .englishNavigationTitle(resolvedTitle)
         .navigationBarTitleDisplayMode(.inline)

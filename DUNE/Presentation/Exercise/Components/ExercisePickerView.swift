@@ -203,6 +203,7 @@ struct ExercisePickerView: View {
                             } label: {
                                 Image(systemName: "plus")
                             }
+                            .accessibilityIdentifier("picker-create-custom-button")
                         }
                     }
                 }
@@ -245,6 +246,7 @@ struct ExercisePickerView: View {
             }
         }
         .accessibilityIdentifier("picker-root-list")
+        .scrollDismissesKeyboard(.immediately)
         .scrollContentBackground(.hidden)
         .background { SheetWaveBackground() }
         .modifier(FullModeSearchModifier(isQuickStartMode: isQuickStartMode, searchText: $searchText))
@@ -329,6 +331,7 @@ struct ExercisePickerView: View {
                 }
             }
             .foregroundStyle(DS.Color.activity)
+            .accessibilityIdentifier("picker-all-exercises-button")
         }
     }
 
@@ -366,8 +369,9 @@ struct ExercisePickerView: View {
         Section("Templates") {
             ForEach(templates) { template in
                 Button {
-                    onStartTemplate(template)
-                    dismiss()
+                    dismissPicker {
+                        onStartTemplate(template)
+                    }
                 } label: {
                     templateRow(template)
                 }
@@ -484,11 +488,12 @@ struct ExercisePickerView: View {
     }
 
     private func exerciseRow(_ exercise: ExerciseDefinition) -> some View {
-        Button {
-            onSelect(exercise)
-            dismiss()
-        } label: {
-            HStack {
+        HStack(spacing: DS.Spacing.sm) {
+            Button {
+                dismissPicker {
+                    onSelect(exercise)
+                }
+            } label: {
                 VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                     HStack(spacing: DS.Spacing.xs) {
                         Text(exercise.localizedName)
@@ -523,16 +528,28 @@ struct ExercisePickerView: View {
                         .foregroundStyle(.tertiary)
                     }
                 }
-                Spacer()
-
-                Button {
-                    detailExercise = exercise
-                } label: {
-                    Image(systemName: "info.circle")
-                        .foregroundStyle(DS.Color.textSecondary)
-                }
-                .buttonStyle(.plain)
             }
+            .buttonStyle(.plain)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .contentShape(Rectangle())
+            .accessibilityIdentifier("picker-row-\(exercise.id)")
+
+            Button {
+                detailExercise = exercise
+            } label: {
+                Image(systemName: "info.circle")
+                    .foregroundStyle(DS.Color.textSecondary)
+            }
+            .buttonStyle(.plain)
+            .accessibilityIdentifier("picker-detail-\(exercise.id)")
+        }
+    }
+
+    private func dismissPicker(_ action: @escaping @MainActor () -> Void) {
+        dismiss()
+        Task { @MainActor in
+            await Task.yield()
+            action()
         }
     }
 

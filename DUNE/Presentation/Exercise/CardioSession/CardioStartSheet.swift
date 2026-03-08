@@ -74,6 +74,7 @@ struct CardioStartSheet: View {
             Text(exercise.localizedName)
                 .font(.title2.weight(.bold))
         }
+        .accessibilityIdentifier("cardio-start-screen")
     }
 
     // MARK: - Mode Buttons
@@ -86,7 +87,8 @@ struct CardioStartSheet: View {
                     ? String(localized: "Timer and calories only")
                     : String(localized: "Live machine cardio tracking"),
                 icon: "house.fill",
-                isOutdoor: false
+                isOutdoor: false,
+                accessibilityIdentifier: "cardio-start-indoor"
             )
 
             if supportsOutdoorSelection {
@@ -94,13 +96,20 @@ struct CardioStartSheet: View {
                     title: String(localized: "Outdoor"),
                     subtitle: String(localized: "GPS distance tracking"),
                     icon: "sun.max.fill",
-                    isOutdoor: true
+                    isOutdoor: true,
+                    accessibilityIdentifier: "cardio-start-outdoor"
                 )
             }
         }
     }
 
-    private func modeButton(title: String, subtitle: String, icon: String, isOutdoor: Bool) -> some View {
+    private func modeButton(
+        title: String,
+        subtitle: String,
+        icon: String,
+        isOutdoor: Bool,
+        accessibilityIdentifier: String
+    ) -> some View {
         Button {
             selectedOutdoor = isOutdoor
         } label: {
@@ -128,6 +137,12 @@ struct CardioStartSheet: View {
             .background(DS.Color.cardBackground, in: RoundedRectangle(cornerRadius: DS.Radius.md))
         }
         .buttonStyle(.plain)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .contentShape(Rectangle())
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(title)
+        .accessibilityHint(subtitle)
+        .accessibilityIdentifier(accessibilityIdentifier)
     }
 
     // MARK: - Location Warning

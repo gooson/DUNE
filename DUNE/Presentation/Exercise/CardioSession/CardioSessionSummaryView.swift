@@ -25,6 +25,7 @@ struct CardioSessionSummaryView: View {
 
             saveButton
         }
+        .accessibilityIdentifier("cardio-session-summary-screen")
         .padding(.horizontal, DS.Spacing.lg)
         .padding(.bottom, DS.Spacing.lg)
         .background { DetailWaveBackground() }
@@ -194,6 +195,7 @@ struct CardioSessionSummaryView: View {
         .buttonStyle(.borderedProminent)
         .tint(hasSaved ? DS.Color.positive : DS.Color.activity)
         .disabled(isSaving || hasSaved)
+        .accessibilityIdentifier("cardio-session-summary-save")
     }
 
     private func saveWorkout() {

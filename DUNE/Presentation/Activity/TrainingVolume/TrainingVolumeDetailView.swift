@@ -31,6 +31,7 @@ struct TrainingVolumeDetailView: View {
             }
             .padding()
         }
+        .accessibilityIdentifier("activity-training-volume-detail-screen")
         .background { DetailWaveBackground() }
         .englishNavigationTitle("Training Volume")
         .navigationBarTitleDisplayMode(.large)
@@ -152,15 +153,18 @@ struct TrainingVolumeDetailView: View {
                     .font(.subheadline.weight(.semibold))
 
                 ForEach(types) { type in
-                    NavigationLink(value: TrainingVolumeDestination.exerciseType(
-                        typeKey: type.typeKey,
-                        displayName: type.displayName,
-                        categoryRawValue: type.categoryRawValue,
-                        equipmentRawValue: type.equipmentRawValue
-                    )) {
+                    NavigationLink {
+                        ExerciseTypeDetailView(
+                            typeKey: type.typeKey,
+                            displayName: type.displayName,
+                            categoryRawValue: type.categoryRawValue,
+                            equipmentRawValue: type.equipmentRawValue
+                        )
+                    } label: {
                         ExerciseTypeSummaryRow(exerciseType: type)
                     }
                     .buttonStyle(.plain)
+                    .accessibilityIdentifier("activity-training-volume-row-\(type.typeKey)")
 
                     if type.id != types.last?.id {
                         Divider()

@@ -34,7 +34,11 @@ struct ExerciseView: View {
         return base
             .toolbar { toolbarContent }
             .sheet(isPresented: $showingExercisePicker) { exercisePickerSheet }
-            .sheet(item: $exerciseStartConfig, content: exerciseStartSheet)
+            .sheet(item: $exerciseStartConfig) { config in
+                exerciseStartSheet(config: config)
+                    .presentationDetents([.large])
+                    .presentationDragIndicator(.hidden)
+            }
             .sheet(isPresented: $showingCompoundSetup) {
                 CompoundWorkoutSetupView(
                     library: library,
@@ -117,11 +121,13 @@ struct ExerciseView: View {
                 } label: {
                     Label("Single Exercise", systemImage: "figure.run")
                 }
+                .accessibilityIdentifier("exercise-menu-single")
                 Button {
                     showingCompoundSetup = true
                 } label: {
                     Label("Superset / Circuit", systemImage: "arrow.triangle.2.circlepath")
                 }
+                .accessibilityIdentifier("exercise-menu-compound")
             } label: {
                 Image(systemName: "plus")
             }
@@ -136,7 +142,7 @@ struct ExerciseView: View {
             popularExerciseIDs: popularExerciseIDs,
             mode: .quickStart
         ) { exercise in
-            presentExerciseStart(exercise)
+            startExerciseFromPicker(exercise)
         }
     }
 
@@ -192,14 +198,17 @@ struct ExerciseView: View {
                                 } label: {
                                     UnifiedWorkoutRow(item: item, style: .full)
                                 }
+                                .accessibilityIdentifier(exerciseRowIdentifier(for: item))
                             } else if item.source == .healthKit, let summary = item.workoutSummary {
                                 NavigationLink {
                                     HealthKitWorkoutDetailView(workout: summary)
                                 } label: {
                                     UnifiedWorkoutRow(item: item, style: .full)
                                 }
+                                .accessibilityIdentifier(exerciseRowIdentifier(for: item))
                             } else {
                                 UnifiedWorkoutRow(item: item, style: .full)
+                                    .accessibilityIdentifier(exerciseRowIdentifier(for: item))
                             }
                         }
                         .swipeActions(edge: .trailing, allowsFullSwipe: false) {
@@ -241,6 +250,7 @@ struct ExerciseView: View {
                         .listRowSeparator(.hidden)
                     }
                 }
+                .accessibilityIdentifier("exercise-view-screen")
                 .scrollContentBackground(.hidden)
             }
         }
@@ -267,6 +277,13 @@ struct ExerciseView: View {
             exercises: exercises,
             templateEntries: entries
         )
+    }
+
+    private func exerciseRowIdentifier(for item: ExerciseListItem) -> String {
+        if let exerciseDefinitionID = item.exerciseDefinitionID, !exerciseDefinitionID.isEmpty {
+            return "exercise-row-\(exerciseDefinitionID)"
+        }
+        return "exercise-row-\(item.id)"
     }
 
     private func resolveExercise(from entry: TemplateEntry) -> ExerciseDefinition? {
@@ -317,6 +334,23 @@ struct ExerciseView: View {
             exercise: exercise,
             templateEntry: templateEntry
         )
+    }
+
+    private func startExerciseFromPicker(_ exercise: ExerciseDefinition) {
+        showingExercisePicker = false
+        schedulePickerAction {
+            presentExerciseStart(exercise)
+        }
+    }
+
+    private func schedulePickerAction(_ action: @escaping @MainActor () -> Void) {
+        Task { @MainActor in
+            while showingExercisePicker {
+                await Task.yield()
+            }
+            await Task.yield()
+            action()
+        }
     }
 
     private var recentExerciseIDs: [String] {

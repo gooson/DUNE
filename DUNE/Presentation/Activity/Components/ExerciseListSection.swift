@@ -14,9 +14,6 @@ struct ExerciseListSection: View {
     let exerciseRecords: [ExerciseRecord]
     let limit: Int
 
-    @State private var items: [ExerciseListItem] = []
-    @State private var recordsByID: [UUID: ExerciseRecord] = [:]
-
     private let exerciseLibrary: ExerciseLibraryQuerying
 
     init(
@@ -31,41 +28,38 @@ struct ExerciseListSection: View {
         self.exerciseLibrary = exerciseLibrary
     }
 
-    /// Content-based task key — fires on any ID change, not just count.
-    private var taskID: Int {
-        var hasher = Hasher()
-        for w in workouts { hasher.combine(w.id) }
-        for r in exerciseRecords { hasher.combine(r.id) }
-        return hasher.finalize()
+    private var builtContent: (items: [ExerciseListItem], recordsByID: [UUID: ExerciseRecord]) {
+        buildItemsAndIndex()
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            if !items.isEmpty {
-                HStack {
-                    Spacer()
+        let content = builtContent
 
-                    NavigationLink {
-                        ExerciseView()
-                    } label: {
-                        Text("See All")
-                            .font(.caption)
-                            .foregroundStyle(DS.Color.activity)
-                    }
+        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            HStack {
+                Spacer()
+
+                NavigationLink {
+                    ExerciseView()
+                } label: {
+                    Text("See All")
+                        .font(.caption)
+                        .foregroundStyle(DS.Color.activity)
                 }
+                .accessibilityIdentifier("activity-recent-seeall")
             }
 
             // Unified rows — date-sorted, limited
-            ForEach(items.prefix(limit)) { item in
+            ForEach(content.items.prefix(limit)) { item in
                 NavigationLink {
-                    destination(for: item)
+                    destination(for: item, recordsByID: content.recordsByID)
                 } label: {
                     UnifiedWorkoutRow(item: item, style: .compact)
                 }
                 .buttonStyle(.plain)
             }
 
-            if items.isEmpty {
+            if content.items.isEmpty {
                 InlineCard {
                     HStack {
                         Image(systemName: "figure.run")
@@ -78,19 +72,16 @@ struct ExerciseListSection: View {
                 }
             }
         }
-        .task(id: taskID) {
-            let (newItems, newIndex) = buildItemsAndIndex()
-            guard !Task.isCancelled else { return }
-            items = newItems
-            recordsByID = newIndex
-        }
     }
 
     // MARK: - Navigation
 
     @ViewBuilder
-    private func destination(for item: ExerciseListItem) -> some View {
-        if item.source == .manual, let record = findRecord(for: item) {
+    private func destination(
+        for item: ExerciseListItem,
+        recordsByID: [UUID: ExerciseRecord]
+    ) -> some View {
+        if item.source == .manual, let record = findRecord(for: item, recordsByID: recordsByID) {
             ExerciseSessionDetailView(
                 record: record,
                 activityType: item.activityType,
@@ -144,7 +135,10 @@ struct ExerciseListSection: View {
 
     // MARK: - Helpers
 
-    private func findRecord(for item: ExerciseListItem) -> ExerciseRecord? {
+    private func findRecord(
+        for item: ExerciseListItem,
+        recordsByID: [UUID: ExerciseRecord]
+    ) -> ExerciseRecord? {
         guard let uuid = UUID(uuidString: item.id) else { return nil }
         return recordsByID[uuid]
     }

@@ -44,6 +44,7 @@ struct ExerciseTypeDetailView: View {
             }
             .padding()
         }
+        .accessibilityIdentifier("activity-exercise-type-detail-screen")
         .background { DetailWaveBackground() }
         .englishNavigationTitle(displayName)
         .navigationBarTitleDisplayMode(.large)
@@ -61,6 +62,7 @@ struct ExerciseTypeDetailView: View {
             }
         }
         .pickerStyle(.segmented)
+        .accessibilityIdentifier("activity-exercise-type-detail-screen")
     }
 
     // MARK: - Content

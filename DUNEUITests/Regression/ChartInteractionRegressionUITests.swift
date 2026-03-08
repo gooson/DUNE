@@ -1,9 +1,8 @@
-import XCTest
+@preconcurrency import XCTest
 
 /// Regression coverage for chart long-press vs period/selection interaction.
 @MainActor
 final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
-    @MainActor
     override func setUpWithError() throws {
         try super.setUpWithError()
         navigateToActivity()
