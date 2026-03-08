@@ -181,6 +181,18 @@ extension AppTheme {
 
     /// Bright scarlet layer (front) — red hair glow.
     var shanksGlowColor: Color { Color("ShanksGlow") }
+
+    /// Abyss blue-black for the cinematic ocean base.
+    var shanksAbyssColor: Color { Color("ShanksAbyss") }
+
+    /// Mid-water current color used by the sea body.
+    var shanksCurrentColor: Color { Color("ShanksCurrent") }
+
+    /// Bright foam highlight for the surface band.
+    var shanksFoamColor: Color { Color("ShanksFoam") }
+
+    /// Underwater caustic highlight color.
+    var shanksCausticColor: Color { Color("ShanksCaustic") }
 }
 
 // MARK: - Hanok Wave-Specific Colors
