@@ -12,7 +12,14 @@ related_files:
   - DUNE/Presentation/Shared/Charts/HeartRateChartView.swift
   - DUNE/Presentation/Shared/Charts/RangeBarChartView.swift
   - DUNE/Presentation/Shared/Charts/SleepStageChartView.swift
+  - DUNE/Presentation/Activity/TrainingReadiness/Components/ReadinessTrendChartView.swift
+  - DUNE/Presentation/Activity/TrainingReadiness/Components/SubScoreTrendChartView.swift
+  - DUNE/Presentation/Activity/Components/TrainingLoadChartView.swift
+  - DUNE/Presentation/Activity/TrainingVolume/Components/StackedVolumeBarChartView.swift
+  - DUNE/Presentation/Activity/TrainingVolume/ExerciseTypeDetailView.swift
+  - DUNE/Presentation/Activity/WeeklyStats/Components/DailyVolumeChartView.swift
   - DUNETests/ChartSelectionInteractionTests.swift
+  - DUNEUITests/Regression/ChartInteractionRegressionUITests.swift
 related_solutions:
   - docs/solutions/general/2026-02-17-chart-ux-layout-stability.md
   - docs/solutions/architecture/2026-02-23-activity-detail-view-v2-patterns.md
@@ -33,42 +40,37 @@ BMI/Weight/RHR/Sleep detail charts shared the same selection behavior, but the i
 
 ### Root Cause
 
-The shared charts relied on `chartXSelection` plus a fixed top overlay. That made it hard to control long-press activation, snapping behavior, overlay placement, and scroll/selection conflicts consistently across different chart types.
+The original shared charts relied on `chartXSelection` plus a fixed top overlay. Later fixes also diverged into per-screen gesture patches, which made scroll/selection cleanup and stale state handling inconsistent across chart types.
 
 ## Solution
 
-Replace the fixed `chartXSelection` interaction with a shared `chartOverlay + ChartProxy` selection pipeline, then render a floating overlay anchored to the snapped chart point.
+Replace the fixed `chartXSelection` interaction with a shared `chartOverlay + ChartProxy` selection pipeline, then keep the actual long-press capture inside a reusable `UIViewRepresentable` recognizer so scroll, selection, cleanup, and overlay placement all share one contract.
 
 ### Changes Made
 
 | File | Change | Reason |
 |------|--------|--------|
-| `DUNE/Presentation/Shared/Charts/ChartSelectionInteraction.swift` | Added shared gesture activation, nearest-point snapping, anchor conversion, and overlay clamp/flip layout helpers | Centralize all interaction math for common charts |
-| `DUNE/Presentation/Shared/Charts/ChartSelectionOverlay.swift` | Added `FloatingChartSelectionOverlay` with measured size and point-relative positioning | Show value/date near the graph instead of pinning to the top |
-| `DUNE/Presentation/Shared/Charts/AreaLineChartView.swift` | Replaced `chartXSelection` with manual overlay gesture and floating overlay | Fix drag precision and UI placement for area charts |
-| `DUNE/Presentation/Shared/Charts/BarChartView.swift` | Same shared interaction migration | Keep bar chart behavior aligned with other charts |
-| `DUNE/Presentation/Shared/Charts/DotLineChartView.swift` | Same shared interaction migration | Keep HRV/detail chart behavior aligned |
-| `DUNE/Presentation/Shared/Charts/HeartRateChartView.swift` | Added floating overlay and snapped selection | Improve workout heart-rate chart exploration |
-| `DUNE/Presentation/Shared/Charts/RangeBarChartView.swift` | Added floating overlay, localized `Avg` label reuse, and snapped range selection | Improve RHR range chart readability and localization compliance |
-| `DUNE/Presentation/Shared/Charts/SleepStageChartView.swift` | Moved stacked sleep selection to the same floating overlay model | Unify sleep chart interaction with the rest of the app |
-| `DUNETests/ChartSelectionInteractionTests.swift` | Added pure tests for hold activation, cancellation, snapping, clamp, and flip logic | Lock down the interaction math independently from UI rendering |
+| `DUNE/Presentation/Shared/Charts/ChartSelectionInteraction.swift` | Added shared nearest-point snapping, anchor conversion, overlay clamp/flip, and selection cleanup helpers | Centralize interaction math and stale-state cleanup |
+| `DUNE/Presentation/Shared/Charts/ChartSelectionOverlay.swift` | Added `FloatingChartSelectionOverlay`, `ChartLongPressSelectionRecognizer`, and `scrollableChartSelectionOverlay(...)` | Reuse one long-press + overlay contract across charts |
+| `DUNE/Presentation/Shared/Charts/*.swift` + `DUNE/Presentation/Activity/**/*.swift` | Migrated 12 selection charts to the shared modifier | Keep shared/activity interaction behavior aligned |
+| `DUNETests/ChartSelectionInteractionTests.swift` | Added pure tests for snapping, layout, and selection cleanup | Lock down common interaction state independently from UI rendering |
 
 ### Key Code
 
 ```swift
-DragGesture(minimumDistance: 0, coordinateSpace: .local)
-    .onChanged { value in
-        guard selectionGestureState.registerChange(
-            at: value.time,
-            translation: value.translation
-        ) else { return }
-
-        selectedDate = ChartSelectionInteraction.resolvedDate(
-            at: value.location,
-            proxy: proxy,
-            plotFrame: plotFrame
-        )
-    }
+ChartLongPressSelectionRecognizer(
+    minimumPressDuration: ChartSelectionInteraction.holdDuration
+) { state, location in
+    ChartSelectionInteraction.handleLongPressSelection(
+        state: state,
+        location: location,
+        proxy: proxy,
+        plotFrame: plotFrame,
+        selectionState: $selectionState,
+        selectedDate: $selectedDate,
+        scrollPosition: scrollPosition
+    )
+}
 ```
 
 ```swift
@@ -82,18 +84,22 @@ let layout = ChartSelectionInteraction.overlayLayout(
 
 ## Prevention
 
-When a chart needs custom long-press selection UX, do not start from a fixed top overlay or raw `chartXSelection` alone. Move the interaction math into a shared helper, snap to the nearest domain model point, and keep scroll disabled while selection is active.
+When a chart needs custom long-press selection UX, do not start from a fixed top overlay, raw `chartXSelection`, or screen-local gesture patch. Move the interaction math into a shared helper, snap to the nearest domain model point, and clear stale selection state whenever scrolling changes the visible range.
 
 ### Checklist Addition
 
 - [ ] If a chart uses long-press selection, verify scroll and selection do not compete during the same gesture
+- [ ] Verify selection 종료 후 scroll resume, scroll-after-selection cleanup, and no snap-back to old visible range
 - [ ] Trigger haptics from the snapped point identity, not from raw drag coordinates
 - [ ] Clamp floating overlays at horizontal edges and flip them below the point when top space is insufficient
 - [ ] Add pure layout/gesture tests for any new chart interaction helper
 
 ### Rule Addition (if applicable)
 
-No new rule file was added. The existing chart/shared-view patterns were sufficient once the interaction math was extracted.
+관련 규칙을 다음 문서에 반영했다.
+
+- `.claude/rules/testing-required.md` — chart gesture lifecycle seeded 검증 체크리스트
+- `.claude/rules/documentation-standards.md` — solution 문서 final implementation 동기화 규칙
 
 ## Lessons Learned
 

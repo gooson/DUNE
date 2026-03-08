@@ -36,6 +36,16 @@
 - 코드 리뷰, 정적 분석, 단순 유닛 테스트만으로 제스처 변경을 완료 처리하지 않습니다.
 - 가능하면 UI 테스트로 고정하고, 자동화가 어려우면 seeded/mock 데이터 기준 수동 재현 절차와 결과를 작업 응답에 남깁니다.
 
+### 차트 interaction 추가 규칙
+
+- 같은 long-press selection UX를 제공하는 차트는 화면별 hotfix로 나누지 말고 **shared modifier / recognizer / state machine**으로 통일합니다.
+- scrollable selection chart 변경 시에는 최소한 다음 lifecycle을 seeded/mock으로 검증합니다.
+- quick drag가 selection 없이 과거 데이터 스크롤로 동작하는지
+- long press 중 visible range가 밀리지 않고 원하는 값 selection이 가능한지
+- 차트 표면에서 시작한 세로 drag가 부모 화면 스크롤을 막지 않는지
+- long press 종료 직후 가로 스크롤이 즉시 다시 되는지
+- selection 후 스크롤하면 overlay와 stale selection state가 정리되고, 다음 long press가 이전 visible range로 snap-back 하지 않는지
+
 ### 검증 명령
 
 ```bash

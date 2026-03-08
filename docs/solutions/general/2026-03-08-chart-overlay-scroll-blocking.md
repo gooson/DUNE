@@ -4,8 +4,14 @@ category: general
 date: 2026-03-08
 severity: important
 related_files:
+  - DUNE/Presentation/Shared/Charts/ChartSelectionInteraction.swift
+  - DUNE/Presentation/Shared/Charts/ChartSelectionOverlay.swift
   - DUNE/Presentation/Shared/Charts/DotLineChartView.swift
   - DUNE/Presentation/Shared/Charts/AreaLineChartView.swift
+  - DUNE/Presentation/Shared/Charts/HeartRateChartView.swift
+  - DUNE/Presentation/Activity/TrainingReadiness/Components/ReadinessTrendChartView.swift
+  - DUNE/Presentation/Activity/WeeklyStats/Components/DailyVolumeChartView.swift
+  - DUNETests/ChartSelectionInteractionTests.swift
   - DUNEUITests/Regression/ChartInteractionRegressionUITests.swift
   - .claude/rules/testing-required.md
 related_solutions:
@@ -34,46 +40,44 @@ scrollable chart들이 `chartOverlay` 내부의 전체 영역 gesture에 selecti
 
 ## Solution
 
-selection capture를 overlay에서 분리하고, scrollable shared chart들도 activity chart와 동일하게 `chartXSelection + chartGesture(LongPressGesture.sequenced(before: DragGesture))`로 통일했다. overlay는 floating tooltip 렌더링만 담당하도록 남기고 `.allowsHitTesting(false)`를 유지했다. 또한 HRV detail 차트에 selection probe 기반 regression UI test를 추가해 scroll만이 아니라 selection activation과 cleanup까지 검증하게 했다.
+selection capture를 Swift Charts 기본 `chartXSelection`이나 overlay-local drag에 맡기지 않고, shared `scrollableChartSelectionOverlay(...)` modifier로 통일했다. 이 modifier는 `ChartLongPressSelectionRecognizer(UIViewRepresentable)`를 통해 long press를 chart container 바깥에서 관찰하고, overlay는 floating tooltip 렌더링만 담당한다.
+
+scrollable chart에서는 다음 contract를 공통으로 유지한다.
+
+- quick horizontal drag는 그대로 chart scroll
+- long press 인식 후에는 pan을 끊고 selection에 집중
+- long press 종료 후에는 scroll이 즉시 다시 가능
+- scrollPosition이 바뀌면 stale overlay / selection state를 강제로 정리
 
 ### Changes Made
 
 | File | Change | Reason |
 |------|--------|--------|
-| `DUNE/Presentation/Shared/Charts/AreaLineChartView.swift` | shared area chart를 `chartXSelection + chartGesture` long-press flow로 복구 | scroll과 selection을 chart interaction system 안에서 같이 처리 |
-| `DUNE/Presentation/Shared/Charts/BarChartView.swift` | tap selection 제거, gesture 종료 시 `selectedDate = nil` 정리 | sticky dim/rule 상태 제거 |
-| `DUNE/Presentation/Shared/Charts/DotLineChartView.swift` | HRV detail 계열 차트에 long-press selection 복구 + test probe 추가 | seeded UI 테스트에서 selection activation 검증 가능하게 함 |
-| `DUNE/Presentation/Shared/Charts/RangeBarChartView.swift` | tap selection 제거 후 shared contract에 맞춤 | range chart도 동일 회귀 방지 |
-| `DUNE/Presentation/Shared/Charts/SleepStageChartView.swift` | stacked sleep chart selection 경로 통일 | scroll/selection arbitration 일관성 확보 |
-| `DUNEUITests/Regression/ChartInteractionRegressionUITests.swift` | HRV detail scroll + selection cleanup regression 추가 | seeded/mock 데이터 기준 직접 재현 검증 |
-| `.claude/rules/testing-required.md` | gesture 변경 시 seeded/mock 검증 의무 규칙 추가 | 같은 종류의 검증 누락 방지 |
+| `DUNE/Presentation/Shared/Charts/ChartSelectionOverlay.swift` | shared long-press recognizer, floating overlay 렌더링, scrollable selection modifier 추가 | 12개 차트의 interaction 진입점과 overlay rendering을 하나로 통일 |
+| `DUNE/Presentation/Shared/Charts/ChartSelectionInteraction.swift` | selection lifecycle, nearest-point snap, stale selection cleanup, anchor/layout helper 공통화 | scroll/selection 경쟁과 snap-back 회귀를 한 곳에서 제어 |
+| `DUNE/Presentation/Shared/Charts/*` + `DUNE/Presentation/Activity/**/Charts` | 12개 selection chart를 `scrollableChartSelectionOverlay(...)` 경로로 통일 | shared/activity 차트 간 UX contract 분리 제거 |
+| `DUNEUITests/Regression/ChartInteractionRegressionUITests.swift` | scroll, long press, cleanup, scroll-resume, no-snap-back regression 추가 | seeded/mock 데이터 기준 실제 interaction lifecycle 고정 |
+| `DUNETests/ChartSelectionInteractionTests.swift` | stale selection cleanup helper 테스트 추가 | selection state machine의 종료 조건을 unit level에서 고정 |
 
 ### Key Code
 
 ```swift
-.chartXSelection(value: $selectedDate)
-.chartGesture { proxy in
-    LongPressGesture(minimumDuration: ChartSelectionInteraction.holdDuration)
-        .sequenced(before: DragGesture(minimumDistance: 0, coordinateSpace: .local))
-        .onChanged { value in
-            guard case .second(true, let drag) = value, let drag else { return }
-            proxy.selectXValue(at: drag.location.x)
-        }
-        .onEnded { _ in
-            selectedDate = nil
-        }
-}
-.chartOverlay { proxy in
-    GeometryReader { geometry in
-        if let plotFrame = proxy.plotFrame.map({ geometry[$0] }) {
-            ZStack(alignment: .topLeading) {
-                if let point = selectedPoint,
-                   let anchor = selectedAnchor(for: point, proxy: proxy, plotFrame: plotFrame) {
-                    FloatingChartSelectionOverlay(...)
-                }
-            }
-            .allowsHitTesting(false)
-        }
+.scrollableChartSelectionOverlay(
+    isScrollable: timePeriod != nil,
+    visibleDomainLength: timePeriod?.visibleDomainSeconds,
+    scrollPosition: scrollPosition,
+    selectedDate: $selectedDate,
+    selectionState: $selectionGestureState
+) { proxy, plotFrame, chartSize in
+    if let point = selectedPoint,
+       let anchor = selectedAnchor(for: point, proxy: proxy, plotFrame: plotFrame) {
+        FloatingChartSelectionOverlay(
+            date: point.date,
+            value: formattedValue(point),
+            anchor: anchor,
+            chartSize: chartSize,
+            plotFrame: plotFrame
+        )
     }
 }
 ```
@@ -100,9 +104,10 @@ func testHRVDetailChartLongPressSelectionClearsAfterGesture() throws {
 
 ### Checklist Addition
 
-- [x] `chartOverlay`에 full-surface selection gesture를 다시 붙이지 않는다
-- [x] scrollable chart selection은 `chartXSelection + chartGesture(_:)` 우선으로 검토한다
-- [x] selection UI는 long-press 중에만 유지되고 종료 시 정리되는지 확인한다
+- [x] 동일 UX 차트는 shared interaction modifier/recognizer로 통일한다
+- [x] long press 중 visible range가 밀리지 않는지 확인한다
+- [x] selection 종료 후 scroll이 즉시 복구되는지 확인한다
+- [x] selection 후 scroll하면 overlay/stale state가 정리되고 다음 long press가 이전 range로 snap-back 하지 않는지 확인한다
 - [x] 제스처 변경은 seeded/mock 데이터로 직접 재현하고 결과를 남긴다
 
 ### Rule Addition (if applicable)
@@ -115,6 +120,6 @@ func testHRVDetailChartLongPressSelectionClearsAfterGesture() throws {
 ## Lessons Learned
 
 - scroll 회귀를 고쳤다고 해서 interaction regression이 끝난 게 아니다. selection activation, cleanup, scroll 공존 여부를 따로 검증해야 한다.
-- `SpatialTapGesture` 같은 임시 우회는 당장 스크롤 테스트를 통과시킬 수 있어도 원래 UX contract를 깨뜨릴 수 있다.
+- `SpatialTapGesture` 같은 임시 우회나 화면별 patch는 당장 일부 케이스를 통과시켜도 공통 UX contract를 다시 깨뜨릴 수 있다.
 - gesture 변경은 정적 코드 리뷰보다 seeded/mock 데이터 기반 실제 실행 검증이 훨씬 중요하다.
 - interaction 버그는 해결 코드와 함께 테스트 규칙까지 남겨야 재발을 줄일 수 있다.
