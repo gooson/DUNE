@@ -23,11 +23,12 @@ final class TrainingVolumeViewModel {
     init(
         workoutService: WorkoutQuerying? = nil,
         stepsService: StepsQuerying? = nil,
+        hrvService: HRVQuerying? = nil,
         healthKitManager: HealthKitManager = .shared
     ) {
         self.workoutService = workoutService ?? WorkoutQueryService(manager: healthKitManager)
         self.stepsService = stepsService ?? StepsQueryService(manager: healthKitManager)
-        self.hrvService = HRVQueryService(manager: healthKitManager)
+        self.hrvService = hrvService ?? HRVQueryService(manager: healthKitManager)
         self.effortScoreService = EffortScoreService(manager: healthKitManager)
     }
 
@@ -50,12 +51,16 @@ final class TrainingVolumeViewModel {
                 totalVolume: record.totalVolume
             )
         }
+        let manualLoadSnapshots = manualRecords.map(makeExerciseSnapshot)
 
         let period = selectedPeriod
         let fetchDays = period.days * 2 // Current + previous period
 
         async let workoutsTask = safeWorkoutsFetch(days: fetchDays)
-        async let trainingLoadTask = safeTrainingLoadFetch()
+        async let trainingLoadTask = safeTrainingLoadFetch(
+            historyDays: fetchDays,
+            manualLoadSnapshots: manualLoadSnapshots
+        )
 
         let (workouts, loadData) = await (workoutsTask, trainingLoadTask)
 
@@ -89,74 +94,161 @@ final class TrainingVolumeViewModel {
         }
     }
 
-    private func safeTrainingLoadFetch() async -> [TrainingLoadDataPoint] {
+    private func safeTrainingLoadFetch(
+        historyDays: Int,
+        manualLoadSnapshots: [ExerciseRecordSnapshot]
+    ) async -> [TrainingLoadDataPoint] {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        guard historyDays > 0,
+              let start = calendar.date(byAdding: .day, value: -(historyDays - 1), to: today) else {
+            return []
+        }
+
+        let workouts: [WorkoutSummary]
         do {
-            let calendar = Calendar.current
-            let today = calendar.startOfDay(for: Date())
-            guard let start = calendar.date(byAdding: .day, value: -27, to: today) else {
-                return []
+            workouts = try await workoutService.fetchWorkouts(start: start, end: Date())
+        } catch {
+            AppLogger.ui.error("Training load workout fetch failed: \(error.localizedDescription)")
+            return buildManualTrainingLoadHistory(
+                historyDays: historyDays,
+                manualLoadSnapshots: manualLoadSnapshots
+            )
+        }
+
+        let restingHR: Double?
+        do {
+            restingHR = try await hrvService.fetchLatestRestingHeartRate(withinDays: 30)?.value
+        } catch {
+            AppLogger.ui.error("Training load RHR fetch failed: \(error.localizedDescription)")
+            restingHR = nil
+        }
+
+        if workouts.isEmpty {
+            return buildManualTrainingLoadHistory(
+                historyDays: historyDays,
+                manualLoadSnapshots: manualLoadSnapshots
+            )
+        }
+
+        return buildWorkoutTrainingLoadHistory(
+            historyDays: historyDays,
+            workouts: workouts,
+            restingHR: restingHR
+        )
+    }
+
+    private func buildWorkoutTrainingLoadHistory(
+        historyDays: Int,
+        workouts: [WorkoutSummary],
+        restingHR: Double?
+    ) -> [TrainingLoadDataPoint] {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let maxHR: Double = 190
+
+        var dailyWorkouts: [Date: [WorkoutSummary]] = [:]
+        for workout in workouts {
+            let dayStart = calendar.startOfDay(for: workout.date)
+            dailyWorkouts[dayStart, default: []].append(workout)
+        }
+
+        var result: [TrainingLoadDataPoint] = []
+        for dayOffset in (0..<historyDays).reversed() {
+            guard let date = calendar.date(byAdding: .day, value: -dayOffset, to: today) else { continue }
+            let dayStart = calendar.startOfDay(for: date)
+            let dayWorkouts = dailyWorkouts[dayStart] ?? []
+
+            if dayWorkouts.isEmpty {
+                result.append(TrainingLoadDataPoint(date: dayStart, load: 0, source: nil))
+                continue
             }
 
-            async let workoutsTask = workoutService.fetchWorkouts(start: start, end: Date())
-            async let rhrTask = hrvService.fetchLatestRestingHeartRate(withinDays: 30)
+            var dailyLoad = 0.0
+            var bestSource: TrainingLoad.LoadSource?
+            for workout in dayWorkouts {
+                let durationMinutes = workout.duration / 60.0
+                guard durationMinutes > 0, durationMinutes.isFinite else { continue }
 
-            let (workouts, rhrResult) = try await (workoutsTask, rhrTask)
-            let restingHR = rhrResult?.value
-            let maxHR: Double = 190
-
-            var dailyWorkouts: [Date: [WorkoutSummary]] = [:]
-            for workout in workouts {
-                let dayStart = calendar.startOfDay(for: workout.date)
-                dailyWorkouts[dayStart, default: []].append(workout)
-            }
-
-            var result: [TrainingLoadDataPoint] = []
-            for dayOffset in (0..<28).reversed() {
-                guard let date = calendar.date(byAdding: .day, value: -dayOffset, to: today) else { continue }
-                let dayStart = calendar.startOfDay(for: date)
-                let dayWorkouts = dailyWorkouts[dayStart] ?? []
-
-                if dayWorkouts.isEmpty {
-                    result.append(TrainingLoadDataPoint(date: dayStart, load: 0, source: nil))
-                    continue
-                }
-
-                var dailyLoad = 0.0
-                var bestSource: TrainingLoad.LoadSource?
-                for workout in dayWorkouts {
-                    let durationMinutes = workout.duration / 60.0
-                    guard durationMinutes > 0, durationMinutes.isFinite else { continue }
-
-                    if let source = TrainingLoadService.calculateLoad(
+                if let source = TrainingLoadService.calculateLoad(
+                    effortScore: workout.effortScore,
+                    rpe: nil,
+                    durationMinutes: durationMinutes,
+                    heartRateAvg: workout.heartRateAvg,
+                    restingHR: restingHR,
+                    maxHR: maxHR
+                ) {
+                    let load = TrainingLoadService.computeLoadValue(
+                        source: source,
                         effortScore: workout.effortScore,
                         rpe: nil,
                         durationMinutes: durationMinutes,
                         heartRateAvg: workout.heartRateAvg,
                         restingHR: restingHR,
                         maxHR: maxHR
-                    ) {
-                        let load = TrainingLoadService.computeLoadValue(
-                            source: source,
-                            effortScore: workout.effortScore,
-                            rpe: nil,
-                            durationMinutes: durationMinutes,
-                            heartRateAvg: workout.heartRateAvg,
-                            restingHR: restingHR,
-                            maxHR: maxHR
-                        )
-                        guard load.isFinite, !load.isNaN else { continue }
-                        dailyLoad += load
-                        bestSource = bestSource ?? source
-                    }
+                    )
+                    guard load.isFinite, !load.isNaN else { continue }
+                    dailyLoad += load
+                    bestSource = bestSource ?? source
                 }
-
-                result.append(TrainingLoadDataPoint(date: dayStart, load: dailyLoad, source: bestSource))
             }
 
-            return result
-        } catch {
-            AppLogger.ui.error("Training load fetch failed: \(error.localizedDescription)")
-            return []
+            result.append(TrainingLoadDataPoint(date: dayStart, load: dailyLoad, source: bestSource))
         }
+
+        return result
+    }
+
+    private func buildManualTrainingLoadHistory(
+        historyDays: Int,
+        manualLoadSnapshots: [ExerciseRecordSnapshot]
+    ) -> [TrainingLoadDataPoint] {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let fatigueService = FatigueCalculationService()
+
+        var dailyLoads: [Date: Double] = [:]
+        for snapshot in manualLoadSnapshots {
+            let load = fatigueService.sessionLoad(from: snapshot)
+            guard load.isFinite, !load.isNaN, load > 0 else { continue }
+            let dayStart = calendar.startOfDay(for: snapshot.date)
+            dailyLoads[dayStart, default: 0] += load
+        }
+
+        var result: [TrainingLoadDataPoint] = []
+        for dayOffset in (0..<historyDays).reversed() {
+            guard let date = calendar.date(byAdding: .day, value: -dayOffset, to: today) else { continue }
+            let dayStart = calendar.startOfDay(for: date)
+            let load = dailyLoads[dayStart] ?? 0
+            result.append(
+                TrainingLoadDataPoint(
+                    date: dayStart,
+                    load: load,
+                    source: load > 0 ? .rpe : nil
+                )
+            )
+        }
+
+        return result
+    }
+
+    private func makeExerciseSnapshot(from record: ExerciseRecord) -> ExerciseRecordSnapshot {
+        let completedSets = record.completedSets
+        let totalWeight = Swift.min(completedSets.compactMap(\.weight).reduce(0, +), 50_000)
+        let totalReps = Swift.min(completedSets.compactMap(\.reps).reduce(0, +), 10_000)
+        let durationMinutes = record.duration > 0 ? Swift.min(record.duration / 60.0, 480) : nil
+
+        return ExerciseRecordSnapshot(
+            date: record.date,
+            exerciseDefinitionID: record.exerciseDefinitionID,
+            exerciseName: record.exerciseType,
+            primaryMuscles: record.primaryMuscles,
+            secondaryMuscles: record.secondaryMuscles,
+            completedSetCount: completedSets.count,
+            totalWeight: totalWeight > 0 ? totalWeight : nil,
+            totalReps: totalReps > 0 ? totalReps : nil,
+            durationMinutes: durationMinutes,
+            distanceKm: nil
+        )
     }
 }

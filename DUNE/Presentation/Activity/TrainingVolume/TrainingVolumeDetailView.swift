@@ -71,7 +71,10 @@ struct TrainingVolumeDetailView: View {
 
         // Training Load
         if !viewModel.trainingLoadData.isEmpty {
-            TrainingLoadChartView(data: viewModel.trainingLoadData)
+            TrainingLoadChartView(
+                data: viewModel.trainingLoadData,
+                period: viewModel.selectedPeriod
+            )
         }
 
         // Exercise type list
