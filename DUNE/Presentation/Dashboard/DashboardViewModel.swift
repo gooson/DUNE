@@ -779,7 +779,9 @@ final class DashboardViewModel {
 
             typeMetrics.append(HealthMetric(
                 id: "exercise-\(type.lowercased())",
-                name: relevantWorkouts.first?.activityType.displayName ?? type,
+                name: relevantWorkouts.first?.localizedTitle
+                    ?? relevantWorkouts.first?.activityType.displayName
+                    ?? type,
                 value: value,
                 unit: unit,
                 change: nil,
