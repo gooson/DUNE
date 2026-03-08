@@ -54,6 +54,7 @@ struct VisionWellnessView: View {
                 emptySleepCard
             }
         }
+        .accessibilityIdentifier(VisionSurfaceAccessibility.wellnessSleepSection)
     }
 
     private func sleepCard(
@@ -135,6 +136,7 @@ struct VisionWellnessView: View {
         .frame(maxWidth: .infinity)
         .padding(24)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .accessibilityIdentifier(VisionSurfaceAccessibility.wellnessSleepEmptyState)
     }
 
     // MARK: - Body Section
@@ -161,7 +163,9 @@ struct VisionWellnessView: View {
             .frame(maxWidth: .infinity)
             .padding(24)
             .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+            .accessibilityIdentifier(VisionSurfaceAccessibility.wellnessBodyPlaceholder)
         }
+        .accessibilityIdentifier(VisionSurfaceAccessibility.wellnessBodySection)
     }
 
     // MARK: - Data
