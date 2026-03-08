@@ -40,9 +40,11 @@ struct VisionDashboardWindowScene: View {
                     } label: {
                         Label("Refresh", systemImage: "arrow.clockwise")
                     }
+                    .accessibilityIdentifier(VisionSurfaceAccessibility.dashboardWindowRefreshButtonID(for: kind))
                 }
             }
         }
+        .accessibilityIdentifier(VisionSurfaceAccessibility.dashboardWindowRootID(for: kind))
         .task {
             await viewModel.loadIfNeeded()
         }
@@ -98,6 +100,7 @@ struct VisionDashboardWindowScene: View {
         }
         .padding(24)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
+        .accessibilityIdentifier(VisionSurfaceAccessibility.dashboardWindowHeroCardID(for: kind))
     }
 
     @ViewBuilder
@@ -183,6 +186,7 @@ struct VisionDashboardWindowScene: View {
                 bodyCards
             }
         }
+        .accessibilityIdentifier(VisionSurfaceAccessibility.dashboardWindowDetailSectionID(for: kind))
     }
 
     @ViewBuilder
@@ -309,6 +313,7 @@ struct VisionDashboardWindowScene: View {
                     }
                 }
             }
+            .accessibilityIdentifier(VisionSurfaceAccessibility.dashboardWindowActivityRecentSessions)
         }
     }
 
@@ -347,6 +352,7 @@ struct VisionDashboardWindowScene: View {
         }
         .padding(16)
         .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .accessibilityIdentifier(VisionSurfaceAccessibility.dashboardWindowMessageCardID(for: kind))
     }
 
     private func unavailableState(_ message: String) -> some View {
@@ -365,6 +371,7 @@ struct VisionDashboardWindowScene: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding(32)
         .background(windowBackground)
+        .accessibilityIdentifier(VisionSurfaceAccessibility.dashboardWindowUnavailableStateID(for: kind))
     }
 
     private var loadingState: some View {
@@ -379,6 +386,7 @@ struct VisionDashboardWindowScene: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(windowBackground)
+        .accessibilityIdentifier(VisionSurfaceAccessibility.dashboardWindowLoadingStateID(for: kind))
     }
 
     private var windowBackground: some View {

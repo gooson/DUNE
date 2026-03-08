@@ -25,6 +25,7 @@ struct VisionImmersiveExperienceView: View {
                     breathPhase: breathPhase,
                     journeyProgress: journeyProgress
                 )
+                .accessibilityIdentifier(VisionSurfaceAccessibility.immersiveScene)
             }
 
             VStack(spacing: 24) {
@@ -35,6 +36,7 @@ struct VisionImmersiveExperienceView: View {
             .padding(.horizontal, 36)
             .padding(.vertical, 28)
         }
+        .accessibilityIdentifier(VisionSurfaceAccessibility.immersiveRoot)
         .preferredSurroundingsEffect(surroundingsEffect)
         .task {
             await viewModel.loadIfNeeded()
@@ -79,6 +81,7 @@ struct VisionImmersiveExperienceView: View {
                 } label: {
                     Label("Refresh", systemImage: "arrow.clockwise")
                 }
+                .accessibilityIdentifier(VisionSurfaceAccessibility.immersiveRefreshButton)
 
                 Button {
                     Task {
@@ -88,10 +91,12 @@ struct VisionImmersiveExperienceView: View {
                     Label("Close Space", systemImage: "xmark")
                 }
                 .buttonStyle(.borderedProminent)
+                .accessibilityIdentifier(VisionSurfaceAccessibility.immersiveCloseButton)
             }
         }
         .padding(24)
         .glassBackgroundEffect(in: RoundedRectangle(cornerRadius: 30, style: .continuous))
+        .accessibilityIdentifier(VisionSurfaceAccessibility.immersiveHeader)
     }
 
     private var controlPanel: some View {
@@ -102,12 +107,17 @@ struct VisionImmersiveExperienceView: View {
                 }
             }
             .pickerStyle(.segmented)
+            .accessibilityIdentifier(VisionSurfaceAccessibility.immersiveModePicker)
 
             switch viewModel.loadState {
             case .idle, .loading:
                 loadingState
             case .failed(let message):
-                messageCard(message, icon: "exclamationmark.triangle.fill")
+                messageCard(
+                    message,
+                    icon: "exclamationmark.triangle.fill",
+                    identifier: VisionSurfaceAccessibility.immersiveFailedState
+                )
             case .ready:
                 readyPanel
             }
@@ -115,6 +125,7 @@ struct VisionImmersiveExperienceView: View {
         .padding(24)
         .frame(maxWidth: 760, alignment: .leading)
         .glassBackgroundEffect(in: RoundedRectangle(cornerRadius: 34, style: .continuous))
+        .accessibilityIdentifier(VisionSurfaceAccessibility.immersiveControlPanel)
     }
 
     private var readyPanel: some View {
@@ -166,6 +177,7 @@ struct VisionImmersiveExperienceView: View {
                     }
                     .buttonStyle(.borderedProminent)
                     .disabled(viewModel.isSavingMindfulSession)
+                    .accessibilityIdentifier(VisionSurfaceAccessibility.immersiveRecoveryAction)
 
                     Text(viewModel.recoveryStatusText)
                         .font(.subheadline)
@@ -182,9 +194,14 @@ struct VisionImmersiveExperienceView: View {
             }
 
             if let message = viewModel.message {
-                messageCard(message, icon: "waveform.badge.exclamationmark")
+                messageCard(
+                    message,
+                    icon: "waveform.badge.exclamationmark",
+                    identifier: VisionSurfaceAccessibility.immersiveInfoCard
+                )
             }
         }
+        .accessibilityIdentifier(VisionSurfaceAccessibility.immersiveReadyPanel)
     }
 
     private var loadingState: some View {
@@ -196,9 +213,14 @@ struct VisionImmersiveExperienceView: View {
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
         }
+        .accessibilityIdentifier(VisionSurfaceAccessibility.immersiveLoadingState)
     }
 
-    private func messageCard(_ message: String, icon: String) -> some View {
+    private func messageCard(
+        _ message: String,
+        icon: String,
+        identifier: String
+    ) -> some View {
         HStack(alignment: .top, spacing: 10) {
             Image(systemName: icon)
                 .foregroundStyle(.tint)
@@ -208,6 +230,7 @@ struct VisionImmersiveExperienceView: View {
         }
         .padding(16)
         .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .accessibilityIdentifier(identifier)
     }
 
     private func statPill(title: String, value: String) -> some View {
