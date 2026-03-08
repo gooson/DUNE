@@ -66,6 +66,22 @@ struct ShanksThemeEnhancementTests {
         #expect(path.isEmpty == true)
     }
 
+    @Test("Deep sea fish silhouette path is generated for wide rect")
+    func deepSeaFishSilhouettePathWide() {
+        let fish = ShanksDeepSeaFishSilhouetteShape()
+        let path = fish.path(in: CGRect(x: 0, y: 0, width: 240, height: 112))
+
+        #expect(path.isEmpty == false)
+    }
+
+    @Test("Deep sea fish silhouette path is empty for zero-size rect")
+    func deepSeaFishSilhouettePathZeroSize() {
+        let fish = ShanksDeepSeaFishSilhouetteShape()
+        let path = fish.path(in: .zero)
+
+        #expect(path.isEmpty == true)
+    }
+
     @Test("Scene presets keep the ocean start line below the top edge")
     func scenePresetTopInsetsArePositive() {
         let presets: [ShanksSceneStyle] = [
@@ -94,6 +110,20 @@ struct ShanksThemeEnhancementTests {
         #expect(tab.sceneTopInset > detail.sceneTopInset)
         #expect(detail.sceneTopInset > sheet.sceneTopInset)
         #expect(tab.sceneTopInset > life.sceneTopInset)
+    }
+
+    @Test("Fish presets taper from tab to detail to sheet")
+    func fishPresetTiering() {
+        let tab = ShanksSceneStyle.tab(for: .today)
+        let detail = ShanksSceneStyle.detail
+        let sheet = ShanksSceneStyle.sheet
+        let life = ShanksSceneStyle.tab(for: .life)
+
+        #expect(tab.fishCount > detail.fishCount)
+        #expect(detail.fishCount > sheet.fishCount)
+        #expect(tab.fishOpacity > detail.fishOpacity)
+        #expect(detail.fishOpacity > sheet.fishOpacity)
+        #expect(tab.fishOpacity > life.fishOpacity)
     }
 
     @Test("Hero frame start line uses lower-quarter anchor")
