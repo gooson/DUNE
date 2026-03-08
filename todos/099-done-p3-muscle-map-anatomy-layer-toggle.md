@@ -1,7 +1,7 @@
 ---
 source: brainstorm/muscle-map-3d-upgrade
 priority: p3
-status: in-progress
+status: done
 created: 2026-03-08
 updated: 2026-03-09
 ---
@@ -14,8 +14,8 @@ updated: 2026-03-09
 이번 shipped scope는 `Skin / Muscles / Focus` 3단계이며, `Focus`는 선택 근육만 강하게 읽히도록
 비선택 근육을 dim 처리한다.
 `xcodebuild test-without-building`로 `DUNETests/MuscleMapDetailViewModelTests`는
-`iPhone 17 (iOS 26.3.1)`에서 통과했다. 다만 `scripts/build-ios.sh`는 여전히 로컬
-CoreSimulator `simdiskimaged` 불안정으로 실패해 TODO는 완료가 아닌 작업 중 상태로 유지한다.
+`iPhone 17 (iOS 26.3.1)`에서 통과했고, 이후 pre-commit 훅에서 `scripts/build-ios.sh`
+전체 빌드도 성공했다. 따라서 TODO를 완료 상태로 전환한다.
 
 ## 선행 조건
 
