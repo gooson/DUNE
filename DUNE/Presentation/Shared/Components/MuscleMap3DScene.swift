@@ -205,7 +205,7 @@ final class MuscleMap3DScene {
         orbitRoot.scale = SIMD3<Float>(repeating: zoomScale)
     }
 
-    private var lastMuscleFatigueCount: Int = -1
+    private var lastFatigueHash: Int = 0
     private var lastMuscleMode: MuscleMap3DMode?
     private var lastSelectedMuscle: MuscleGroup?
     private var lastMuscleColorScheme: ColorScheme?
@@ -219,12 +219,20 @@ final class MuscleMap3DScene {
     ) {
         updateShellMaterials(colorScheme: colorScheme, opacity: shellOpacity)
 
-        let muscleInputsChanged = fatigueStates.count != lastMuscleFatigueCount
+        var hasher = Hasher()
+        for state in fatigueStates {
+            hasher.combine(state.muscle)
+            hasher.combine(state.fatigueLevel)
+            hasher.combine(state.weeklyVolume)
+        }
+        let fatigueHash = hasher.finalize()
+
+        let muscleInputsChanged = fatigueHash != lastFatigueHash
             || mode != lastMuscleMode
             || selectedMuscle != lastSelectedMuscle
             || colorScheme != lastMuscleColorScheme
         guard muscleInputsChanged else { return }
-        lastMuscleFatigueCount = fatigueStates.count
+        lastFatigueHash = fatigueHash
         lastMuscleMode = mode
         lastSelectedMuscle = selectedMuscle
         lastMuscleColorScheme = colorScheme
