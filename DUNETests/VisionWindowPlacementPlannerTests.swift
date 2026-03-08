@@ -74,6 +74,16 @@ struct VisionWindowPlacementPlannerTests {
         #expect(relationship == .above(VisionWindowPlacementPlanner.mainWindowID))
     }
 
+    @Test("Settings window always opens as a utility panel")
+    func settingsUsesUtilityPanel() {
+        let relationship = VisionWindowPlacementPlanner.relationship(
+            for: VisionWindowPlacementPlanner.settingsWindowID,
+            existingWindowIDs: windowIDs(nil)
+        )
+
+        #expect(relationship == .utilityPanel)
+    }
+
     @Test(
         "Known windows fall back to the utility panel when no anchor window is available",
         arguments: [

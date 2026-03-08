@@ -263,6 +263,17 @@ struct DUNEVisionApp: App {
             makeWindowPlacement(for: VisionDashboardWindowKind.body.windowID, context: context)
         }
 
+        WindowGroup(id: VisionWindowPlacementPlanner.settingsWindowID) {
+            NavigationStack {
+                VisionSettingsView(modelContainer: modelContainer)
+            }
+            .tint(.accentColor)
+        }
+        .defaultSize(width: 520, height: 620)
+        .defaultWindowPlacement { _, context in
+            makeWindowPlacement(for: VisionWindowPlacementPlanner.settingsWindowID, context: context)
+        }
+
         // 3D Charts window — opened via openWindow(id:)
         WindowGroup(id: "chart3d") {
             Chart3DContainerView(sharedHealthDataService: sharedHealthDataService, workoutService: workoutService)

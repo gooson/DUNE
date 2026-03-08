@@ -18,6 +18,7 @@ struct VisionContentView: View {
     // Phase 4: refreshSignal will propagate live-data updates to child views
     @State private var refreshSignal = 0
     @State private var foregroundTask: Task<Void, Never>?
+    @State private var showSettings = false
     @State private var trainViewModel: VisionTrainViewModel
     @State private var isProcessingSimulatorMockData = false
     @State private var simulatorMockStatusMessage: String?
@@ -47,6 +48,13 @@ struct VisionContentView: View {
                         refreshSignal: refreshSignal,
                         isSimulatorMockEnabled: isSimulatorMockEnabled,
                         simulatorMockStatusMessage: simulatorMockStatusMessage,
+                        onOpenSettings: {
+                            if supportsMultipleWindows {
+                                scheduleWindowOpen(VisionWindowPlacementPlanner.settingsWindowID)
+                            } else {
+                                showSettings = true
+                            }
+                        },
                         onOpenDashboardWindow: { windowKind in
                             guard supportsMultipleWindows else { return }
                             scheduleWindowOpen(windowKind.windowID)
@@ -69,6 +77,9 @@ struct VisionContentView: View {
                             resetAdvancedMockData()
                         }
                     )
+                    .navigationDestination(isPresented: $showSettings) {
+                        VisionSettingsView(modelContainer: modelContainer)
+                    }
                 }
             } label: {
                 Label {
