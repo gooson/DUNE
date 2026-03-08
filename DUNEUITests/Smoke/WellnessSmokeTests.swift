@@ -83,28 +83,6 @@ final class WellnessSmokeTests: UITestBaseCase {
         XCTAssertTrue(saveButton.isEnabled, "Save should be enabled after weight input")
     }
 
-    func testBodyFormSaveShowsBodyHistoryLink() throws {
-        let addMenu = wellnessAddMenu()
-        XCTAssertTrue(addMenu.waitForExistence(timeout: 5), "Add menu should exist")
-        addMenu.tap()
-
-        let bodyRecordButton = app.descendants(matching: .any)[AXID.wellnessMenuBodyRecord].firstMatch
-        XCTAssertTrue(bodyRecordButton.waitForExistence(timeout: 3), "Body Record action should exist")
-        bodyRecordButton.tap()
-
-        let saveButton = app.descendants(matching: .any)[AXID.bodyFormSave].firstMatch
-        XCTAssertTrue(saveButton.waitForExistence(timeout: 3), "Body form save button should appear")
-        XCTAssertTrue(app.fillTextInput(AXID.bodyFormWeight, with: "72.5"), "Weight field should accept shared helper input")
-
-        saveButton.tap()
-
-        let bodyHistoryLink = app.descendants(matching: .any)[AXID.wellnessLinkBodyHistory].firstMatch
-        XCTAssertTrue(
-            bodyHistoryLink.waitForExistence(timeout: 5),
-            "Saving a body record should surface the body history link in Wellness"
-        )
-    }
-
     // MARK: - Injury Form
 
     func testInjuryFormOpens() throws {

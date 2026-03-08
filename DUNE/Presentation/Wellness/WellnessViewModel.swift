@@ -477,14 +477,20 @@ final class WellnessViewModel {
             return results
         }
 
+        let now = Date()
+        let todayStart = Calendar.current.startOfDay(for: now)
+
         await withTaskGroup(of: (FetchKey, FetchValue).self) { [
             sleepService, bodyService, hrvService, vitalsService, heartRateService,
-            sleepScoreUseCase, conditionScoreUseCase
+            sleepScoreUseCase, conditionScoreUseCase, todayStart, now
         ] group in
             // --- Weight ---
             group.addTask {
                 guard !Task.isCancelled else { return (.weight, .empty) }
                 do {
+                    if let todayWeight = try await bodyService.fetchWeight(start: todayStart, end: now).first {
+                        return (.weight, .vitalSample(VitalSample(value: todayWeight.value, date: todayWeight.date)))
+                    }
                     if let w = try await bodyService.fetchLatestWeight(withinDays: 30) {
                         return (.weight, .vitalSample(VitalSample(value: w.value, date: w.date)))
                     }
@@ -531,8 +537,10 @@ final class WellnessViewModel {
             group.addTask {
                 guard !Task.isCancelled else { return (.bodyFat, .empty) }
                 do {
-                    let bfHistory = try await bodyService.fetchBodyFat(days: 7)
-                    if let latest = bfHistory.last {
+                    if let todayBodyFat = try await bodyService.fetchBodyFat(start: todayStart, end: now).first {
+                        return (.bodyFat, .vitalSample(VitalSample(value: todayBodyFat.value, date: todayBodyFat.date)))
+                    }
+                    if let latest = try await bodyService.fetchLatestBodyFat(withinDays: 30) {
                         return (.bodyFat, .vitalSample(VitalSample(value: latest.value, date: latest.date)))
                     }
                     return (.bodyFat, .empty)
@@ -558,6 +566,9 @@ final class WellnessViewModel {
             group.addTask {
                 guard !Task.isCancelled else { return (.leanBodyMass, .empty) }
                 do {
+                    if let todayLeanBodyMass = try await bodyService.fetchLeanBodyMass(start: todayStart, end: now).first {
+                        return (.leanBodyMass, .vitalSample(VitalSample(value: todayLeanBodyMass.value, date: todayLeanBodyMass.date)))
+                    }
                     if let lbm = try await bodyService.fetchLatestLeanBodyMass(withinDays: 30) {
                         return (.leanBodyMass, .vitalSample(VitalSample(value: lbm.value, date: lbm.date)))
                     }
