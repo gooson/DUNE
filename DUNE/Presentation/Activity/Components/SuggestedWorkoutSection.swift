@@ -10,6 +10,7 @@ struct SuggestedWorkoutSection: View {
     let recentExerciseIDs: [String]
     let popularExerciseIDs: [String]
     let onStartExercise: (ExerciseDefinition) -> Void
+    let onStartRecommendation: (WorkoutTemplateRecommendation) -> Void
     let onStartTemplate: (WorkoutTemplate) -> Void
     let onContextChanged: (WorkoutRecommendationContext) -> Void
     let isEquipmentAvailable: (Equipment) -> Bool
@@ -357,7 +358,13 @@ struct SuggestedWorkoutSection: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: DS.Spacing.sm) {
                     ForEach(templateRecommendations) { recommendation in
-                        recommendationCard(recommendation)
+                        Button {
+                            onStartRecommendation(recommendation)
+                        } label: {
+                            recommendationCard(recommendation)
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityIdentifier("activity-recommended-routine-card")
                     }
                 }
                 .padding(.vertical, 1)

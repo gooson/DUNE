@@ -72,4 +72,79 @@ enum TemplateExerciseResolver {
             cardioSecondaryUnitRaw: exercise.cardioSecondaryUnit?.rawValue
         )
     }
+
+    static func resolveExercises(
+        from recommendation: WorkoutTemplateRecommendation,
+        library: ExerciseLibraryQuerying
+    ) -> [ExerciseDefinition] {
+        let exercises = library.allExercises()
+        return zip(recommendation.sequenceLabels, recommendation.sequenceTypes).compactMap { label, activityType in
+            resolveRecommendedExercise(
+                label: label,
+                activityType: activityType,
+                exercises: exercises
+            )
+        }
+    }
+
+    private static func resolveRecommendedExercise(
+        label: String,
+        activityType: WorkoutActivityType,
+        exercises: [ExerciseDefinition]
+    ) -> ExerciseDefinition? {
+        let trimmedLabel = label.trimmingCharacters(in: .whitespacesAndNewlines)
+        let canonicalLabel = QuickStartCanonicalService.canonicalExerciseName(for: trimmedLabel)
+
+        if !canonicalLabel.isEmpty {
+            let exactMatches = exercises.filter {
+                recommendationLookupKeys(for: $0).contains(canonicalLabel)
+            }
+
+            if let exactMatch = preferredRecommendationMatch(
+                in: exactMatches,
+                activityType: activityType
+            ) {
+                return exactMatch
+            }
+        }
+
+        let canonicalTypeName = QuickStartCanonicalService.canonicalExerciseName(for: activityType.typeName)
+        guard activityType.category != .strength,
+              !canonicalTypeName.isEmpty,
+              canonicalLabel.isEmpty || canonicalLabel == canonicalTypeName else {
+            return nil
+        }
+
+        let fallbackMatches = exercises.filter { $0.resolvedActivityType == activityType }
+        return preferredRecommendationMatch(in: fallbackMatches, activityType: activityType)
+    }
+
+    private static func recommendationLookupKeys(for exercise: ExerciseDefinition) -> Set<String> {
+        let rawValues = [exercise.name, exercise.localizedName] + (exercise.aliases ?? [])
+        return Set(rawValues.compactMap { rawValue in
+            let canonical = QuickStartCanonicalService.canonicalExerciseName(for: rawValue)
+            return canonical.isEmpty ? nil : canonical
+        })
+    }
+
+    private static func preferredRecommendationMatch(
+        in exercises: [ExerciseDefinition],
+        activityType: WorkoutActivityType
+    ) -> ExerciseDefinition? {
+        exercises.min {
+            recommendationSortKey(for: $0, activityType: activityType)
+                < recommendationSortKey(for: $1, activityType: activityType)
+        }
+    }
+
+    private static func recommendationSortKey(
+        for exercise: ExerciseDefinition,
+        activityType: WorkoutActivityType
+    ) -> (Int, Int, String) {
+        (
+            exercise.resolvedActivityType == activityType ? 0 : 1,
+            exercise.id.count,
+            exercise.id
+        )
+    }
 }

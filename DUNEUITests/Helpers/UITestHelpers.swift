@@ -39,6 +39,7 @@ enum AXID {
     static let activitySectionExerciseMix = "activity-section-exercisemix"
     static let activitySectionRecent = "activity-section-recent"
     static let activityRecentSeeAll = "activity-recent-seeall"
+    static let activityRecommendedRoutineCard = "activity-recommended-routine-card"
     static let activityTrainingReadinessDetailScreen = "activity-training-readiness-detail-screen"
     static let activityMuscleMapDetailScreen = "activity-musclemap-detail-screen"
     static let muscleMapDetailVolumeSection = "musclemap-detail-volume-section"
