@@ -52,7 +52,7 @@ final class ActivitySmokeTests: UITestBaseCase {
             scrollView.swipeDown()
         }
 
-        let addButton = app.descendants(matching: .any)[AXID.activityToolbarAdd].firstMatch
+        let addButton = app.buttons[AXID.activityToolbarAdd].firstMatch
         XCTAssertTrue(addButton.waitForExistence(timeout: 5), "Add button should still exist after scroll interactions")
     }
 
@@ -72,9 +72,8 @@ final class ActivitySmokeTests: UITestBaseCase {
     // MARK: - Exercise Sub-View
 
     func testExercisePickerOpens() throws {
-        let addButton = app.descendants(matching: .any)[AXID.activityToolbarAdd].firstMatch
-        XCTAssertTrue(addButton.waitForExistence(timeout: 5), "Add button should exist")
-        addButton.tap()
+        let addButton = app.buttons[AXID.activityToolbarAdd].firstMatch
+        XCTAssertTrue(app.waitAndTap(AXID.activityToolbarAdd), "Add button should exist")
 
         let pickerList = app.descendants(matching: .any)[AXID.pickerRootList].firstMatch
         XCTAssertTrue(pickerList.waitForExistence(timeout: 5), "Exercise picker should appear")
@@ -85,9 +84,7 @@ final class ActivitySmokeTests: UITestBaseCase {
     }
 
     func testExercisePickerSearchAvailable() throws {
-        let addButton = app.descendants(matching: .any)[AXID.activityToolbarAdd].firstMatch
-        XCTAssertTrue(addButton.waitForExistence(timeout: 5), "Add button should exist")
-        addButton.tap()
+        XCTAssertTrue(app.waitAndTap(AXID.activityToolbarAdd), "Add button should exist")
 
         let pickerList = app.descendants(matching: .any)[AXID.pickerRootList].firstMatch
         XCTAssertTrue(pickerList.waitForExistence(timeout: 5), "Exercise picker should appear")

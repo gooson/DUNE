@@ -308,6 +308,30 @@ extension XCUIApplication {
         }
     }
 
+    @discardableResult
+    func waitAndTap(_ identifier: String, timeout: TimeInterval = 5) -> Bool {
+        let deadline = Date().addingTimeInterval(timeout)
+        let buttonPredicate = NSPredicate(format: "identifier == %@", identifier)
+        let buttonCandidates = [
+            buttons[identifier].firstMatch,
+            descendants(matching: .button).matching(buttonPredicate).firstMatch
+        ]
+
+        for button in buttonCandidates {
+            let remainingTime = max(0, deadline.timeIntervalSinceNow)
+            if button.exists || button.waitForExistence(timeout: remainingTime) {
+                button.tap()
+                return true
+            }
+        }
+
+        let element = descendants(matching: .any)[identifier].firstMatch
+        let remainingTime = max(0, deadline.timeIntervalSinceNow)
+        guard element.exists || element.waitForExistence(timeout: remainingTime) else { return false }
+        element.tap()
+        return true
+    }
+
     func hasPrimaryNavigation(timeout: TimeInterval = 8) -> Bool {
         if tabBars.firstMatch.waitForExistence(timeout: timeout) {
             return true
