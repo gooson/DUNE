@@ -73,10 +73,11 @@ struct GenerateWorkoutReportUseCase: WorkoutReportGenerating, Sendable {
         let averageIntensity: Double
         if !intensities.isEmpty {
             let maxPossible = intensities.max() ?? 1
-            guard maxPossible > 0 else {
+            if maxPossible > 0 {
+                averageIntensity = (intensities.reduce(0, +) / Double(intensities.count)) / maxPossible
+            } else {
                 averageIntensity = 0
             }
-            averageIntensity = (intensities.reduce(0, +) / Double(intensities.count)) / maxPossible
         } else {
             averageIntensity = 0
         }
