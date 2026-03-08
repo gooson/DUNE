@@ -1,9 +1,9 @@
 ---
 source: brainstorm/general-bedtime-reminder
 priority: p3
-status: ready
+status: in-progress
 created: 2026-03-08
-updated: 2026-03-08
+updated: 2026-03-09
 ---
 
 # Bedtime reminder lead time setting
