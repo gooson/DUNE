@@ -1,7 +1,7 @@
 ---
 topic: vision-pro-settings-entry
 date: 2026-03-08
-status: draft
+status: implemented
 confidence: high
 related_solutions:
   - docs/solutions/architecture/2026-03-07-vision-pro-multi-window-dashboard.md
