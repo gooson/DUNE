@@ -48,6 +48,7 @@ struct ConditionScatter3DView: View {
             legend
         }
         .padding()
+        .accessibilityIdentifier(VisionSurfaceAccessibility.chart3DCondition)
         .task(id: selectedPeriod) {
             await loadData()
         }

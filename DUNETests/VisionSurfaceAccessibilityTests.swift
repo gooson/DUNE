@@ -28,4 +28,12 @@ struct VisionSurfaceAccessibilityTests {
         #expect(VisionSurfaceAccessibility.wellnessBodyPlaceholder == "vision-wellness-body-placeholder")
         #expect(VisionSurfaceAccessibility.lifePlaceholder == "vision-life-placeholder")
     }
+
+    @Test("Chart3D identifiers stay stable")
+    func chart3DIdentifiers() {
+        #expect(VisionSurfaceAccessibility.chart3DRoot == "vision-chart3d-root")
+        #expect(VisionSurfaceAccessibility.chart3DPicker == "vision-chart3d-picker")
+        #expect(VisionSurfaceAccessibility.chart3DCondition == "vision-chart3d-condition")
+        #expect(VisionSurfaceAccessibility.chart3DTraining == "vision-chart3d-training")
+    }
 }
