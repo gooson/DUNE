@@ -169,12 +169,13 @@ final class MuscleMap3DScene {
 
     func prepareIfNeeded() async {
         guard !hasPreparedGeometry else { return }
-        hasPreparedGeometry = true
 
         guard let rootEntity = loadUSDZEntity() else {
             AppLogger.ui.error("[MuscleMap3D] Failed to load muscle_body.usdz")
             return
         }
+
+        hasPreparedGeometry = true
 
         installBodyShell(from: rootEntity)
 
@@ -187,10 +188,11 @@ final class MuscleMap3DScene {
 
             let root = usdzEntity.clone(recursive: true)
             root.name = entityName
-            root.components.set(InputTargetComponent())
 
-            var models: [ModelEntity] = []
-            collectModelEntities(from: root, into: &models)
+            let models = collectModelEntities(from: root)
+            if models.isEmpty {
+                AppLogger.ui.warning("[MuscleMap3D] No ModelEntity children for: \(entityName)")
+            }
             for model in models {
                 model.components.set(InputTargetComponent())
             }
@@ -286,17 +288,21 @@ final class MuscleMap3DScene {
         }
         let shellClone = shell.clone(recursive: true)
         shellClone.name = "body-shell"
-        collectModelEntities(from: shellClone, into: &shellModels)
+        shellModels = collectModelEntities(from: shellClone)
         bodyRoot.addChild(shellClone)
     }
 
-    private func collectModelEntities(from entity: Entity, into models: inout [ModelEntity]) {
-        if let model = entity as? ModelEntity {
-            models.append(model)
+    private func collectModelEntities(from root: Entity) -> [ModelEntity] {
+        var models: [ModelEntity] = []
+        var queue: [Entity] = [root]
+        while !queue.isEmpty {
+            let entity = queue.removeFirst()
+            if let model = entity as? ModelEntity {
+                models.append(model)
+            }
+            queue.append(contentsOf: entity.children)
         }
-        for child in entity.children {
-            collectModelEntities(from: child, into: &models)
-        }
+        return models
     }
 
     // MARK: - Materials
@@ -337,6 +343,20 @@ final class MuscleMap3DScene {
         return blended(base, with: .white, ratio: 0.2)
     }
 
+    private static let recoverySpecs: [(hue: CGFloat, sat: CGFloat, darkB: CGFloat, lightB: CGFloat)] = [
+        (0, 0, 0, 0),
+        (0.28, 0.30, 0.75, 0.55),
+        (0.25, 0.32, 0.78, 0.58),
+        (0.20, 0.35, 0.80, 0.62),
+        (0.14, 0.38, 0.82, 0.65),
+        (0.10, 0.42, 0.82, 0.68),
+        (0.07, 0.45, 0.80, 0.65),
+        (0.05, 0.48, 0.75, 0.60),
+        (0.03, 0.50, 0.70, 0.55),
+        (0.01, 0.52, 0.65, 0.50),
+        (0.00, 0.55, 0.58, 0.45),
+    ]
+
     private func recoveryColor(
         for fatigueLevel: FatigueLevel,
         colorScheme: ColorScheme
@@ -347,20 +367,7 @@ final class MuscleMap3DScene {
                 : UIColor(white: 0.76, alpha: 0.82)
         }
 
-        let specs: [(hue: CGFloat, sat: CGFloat, darkB: CGFloat, lightB: CGFloat)] = [
-            (0, 0, 0, 0),
-            (0.28, 0.30, 0.75, 0.55),
-            (0.25, 0.32, 0.78, 0.58),
-            (0.20, 0.35, 0.80, 0.62),
-            (0.14, 0.38, 0.82, 0.65),
-            (0.10, 0.42, 0.82, 0.68),
-            (0.07, 0.45, 0.80, 0.65),
-            (0.05, 0.48, 0.75, 0.60),
-            (0.03, 0.50, 0.70, 0.55),
-            (0.01, 0.52, 0.65, 0.50),
-            (0.00, 0.55, 0.58, 0.45),
-        ]
-        let spec = specs[Int(fatigueLevel.rawValue)]
+        let spec = Self.recoverySpecs[Int(fatigueLevel.rawValue)]
         return UIColor(
             hue: spec.hue,
             saturation: spec.sat,
