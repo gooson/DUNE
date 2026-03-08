@@ -112,6 +112,7 @@ extension ShanksSceneStyle {
 struct ShanksCinematicSceneBackground: View {
     let style: ShanksSceneStyle
     let accentTint: Color?
+    let sceneTopInsetOverride: CGFloat?
 
     @Environment(\.appTheme) private var theme
     @Environment(\.colorScheme) private var colorScheme
@@ -123,7 +124,10 @@ struct ShanksCinematicSceneBackground: View {
     }
 
     private var resolvedSceneTopInset: CGFloat {
-        style.sceneTopInset + (sizeClass == .regular ? 20 : 0)
+        if let sceneTopInsetOverride {
+            return max(sceneTopInsetOverride, 0)
+        }
+        return style.sceneTopInset + (sizeClass == .regular ? 20 : 0)
     }
 
     private var gradientColors: [Color] {

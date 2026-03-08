@@ -176,6 +176,7 @@ struct ShanksTabWaveBackground: View {
     @Environment(\.wavePreset) private var preset
     @Environment(\.waveColor) private var color
     @Environment(\.weatherAtmosphere) private var atmosphere
+    @Environment(\.tabHeroStartLineInset) private var heroStartLineInset
 
     private var isWeatherActive: Bool {
         preset == .today && atmosphere != .default
@@ -184,7 +185,8 @@ struct ShanksTabWaveBackground: View {
     var body: some View {
         ShanksCinematicSceneBackground(
             style: .tab(for: preset),
-            accentTint: isWeatherActive ? atmosphere.waveColor : color
+            accentTint: isWeatherActive ? atmosphere.waveColor : color,
+            sceneTopInsetOverride: heroStartLineInset
         )
         .animation(DS.Animation.atmosphereTransition, value: atmosphere)
     }
@@ -198,7 +200,8 @@ struct ShanksDetailWaveBackground: View {
     var body: some View {
         ShanksCinematicSceneBackground(
             style: .detail,
-            accentTint: color
+            accentTint: color,
+            sceneTopInsetOverride: nil
         )
     }
 }
@@ -207,6 +210,6 @@ struct ShanksDetailWaveBackground: View {
 
 struct ShanksSheetWaveBackground: View {
     var body: some View {
-        ShanksCinematicSceneBackground(style: .sheet, accentTint: nil)
+        ShanksCinematicSceneBackground(style: .sheet, accentTint: nil, sceneTopInsetOverride: nil)
     }
 }

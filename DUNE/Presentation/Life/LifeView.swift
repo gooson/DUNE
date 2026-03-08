@@ -29,6 +29,7 @@ struct LifeView: View {
 
     private let scrollToTopSignal: Int
     private let refreshSignal: Int
+    @State private var heroFrame: CGRect?
 
     private var isRegular: Bool { sizeClass == .regular }
 
@@ -56,6 +57,7 @@ struct LifeView: View {
                     )
                 }
                 .padding(isRegular ? DS.Spacing.xxl : DS.Spacing.lg)
+                .coordinateSpace(name: TabHeroStartLine.coordinateSpace)
             }
             .scrollBounceBehavior(.basedOnSize)
             .waveRefreshable {
@@ -69,7 +71,11 @@ struct LifeView: View {
                 }
             }
         }
-        .background { TabWaveBackground() }
+        .onPreferenceChange(TabHeroFramePreferenceKey.self) { heroFrame = $0 }
+        .background {
+            TabWaveBackground()
+                .environment(\.tabHeroStartLineInset, heroFrame.map(TabHeroStartLine.inset(for:)))
+        }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button {
@@ -157,6 +163,7 @@ private struct HabitListQueryView: View {
         VStack(alignment: .leading, spacing: DS.Spacing.lg) {
             // Hero: completion rate
             heroSection
+                .reportTabHeroFrame()
                 .accessibilityIdentifier("life-hero-progress")
 
             if isRegular {
