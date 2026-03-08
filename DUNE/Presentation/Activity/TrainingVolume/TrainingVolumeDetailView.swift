@@ -63,10 +63,11 @@ struct TrainingVolumeDetailView: View {
 
         // Stacked bar chart
         StackedVolumeBarChartView(
-            dailyBreakdown: comparison.current.dailyBreakdown,
+            dailyBreakdown: viewModel.chartDailyBreakdown,
             topTypeKeys: comparison.current.exerciseTypes.prefix(5).map(\.typeKey),
             typeColors: buildTypeColors(comparison.current.exerciseTypes),
-            typeNames: buildTypeNames(comparison.current.exerciseTypes)
+            typeNames: buildTypeNames(comparison.current.exerciseTypes),
+            period: viewModel.selectedPeriod
         )
 
         // Training Load

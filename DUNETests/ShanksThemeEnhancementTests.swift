@@ -27,4 +27,42 @@ struct ShanksThemeEnhancementTests {
 
         #expect(path.isEmpty == true)
     }
+
+    @Test("Foam crest path is generated for wide rect")
+    func foamCrestPathWide() {
+        let shape = ShanksFoamCrestShape(
+            amplitude: 0.06,
+            frequency: 1.5,
+            phase: .pi / 4,
+            verticalOffset: 0.2,
+            bandDepth: 0.1
+        )
+        let path = shape.path(in: CGRect(x: 0, y: 0, width: 280, height: 120))
+
+        #expect(path.isEmpty == false)
+    }
+
+    @Test("Foam crest path is empty for zero-size rect")
+    func foamCrestPathZeroSize() {
+        let shape = ShanksFoamCrestShape()
+        let path = shape.path(in: .zero)
+
+        #expect(path.isEmpty == true)
+    }
+
+    @Test("Ship silhouette path is generated for wide rect")
+    func shipSilhouettePathWide() {
+        let ship = ShanksRedForceSilhouetteShape()
+        let path = ship.path(in: CGRect(x: 0, y: 0, width: 220, height: 120))
+
+        #expect(path.isEmpty == false)
+    }
+
+    @Test("Ship silhouette path is empty for zero-size rect")
+    func shipSilhouettePathZeroSize() {
+        let ship = ShanksRedForceSilhouetteShape()
+        let path = ship.path(in: .zero)
+
+        #expect(path.isEmpty == true)
+    }
 }

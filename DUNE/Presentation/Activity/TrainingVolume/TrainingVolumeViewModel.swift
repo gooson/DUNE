@@ -10,6 +10,7 @@ final class TrainingVolumeViewModel {
         didSet { triggerReload() }
     }
     var comparison: PeriodComparison?
+    var chartDailyBreakdown: [DailyVolumePoint] = []
     var trainingLoadData: [TrainingLoadDataPoint] = []
     var isLoading = false
     var errorMessage: String?
@@ -55,6 +56,11 @@ final class TrainingVolumeViewModel {
 
         let period = selectedPeriod
         let fetchDays = period.days * 2 // Current + previous period
+        let calendar = Calendar.current
+        let historyEnd = Date()
+        let historyEndDay = calendar.startOfDay(for: historyEnd)
+        let historyStart = calendar.date(byAdding: .day, value: -(fetchDays - 1), to: historyEndDay) ?? historyEndDay
+        let historySnapshots = snapshots.filter { $0.date >= historyStart && $0.date <= historyEnd }
 
         async let workoutsTask = safeWorkoutsFetch(days: fetchDays)
         async let trainingLoadTask = safeTrainingLoadFetch(
@@ -73,6 +79,12 @@ final class TrainingVolumeViewModel {
         )
 
         comparison = result
+        chartDailyBreakdown = TrainingVolumeAnalysisService.buildHistoryDailyBreakdown(
+            workouts: workouts,
+            manualRecords: historySnapshots,
+            start: historyStart,
+            end: historyEnd
+        )
         trainingLoadData = loadData
 
         guard !Task.isCancelled else { return }
@@ -82,6 +94,8 @@ final class TrainingVolumeViewModel {
 
     private func triggerReload() {
         comparison = nil
+        chartDailyBreakdown = []
+        trainingLoadData = []
         // View will call loadData() via .task(id:)
     }
 

@@ -11,7 +11,7 @@ struct DUNEVisionApp: App {
     private let sharedHealthDataService: SharedHealthDataService
     private let refreshCoordinator: AppRefreshCoordinating
     private let observerManager: HealthKitObserverManager?
-    private let workoutService: WorkoutQuerying
+    private var workoutService: WorkoutQuerying
     private let historyModelContainer: ModelContainer
 
     private static func makeInMemoryFallbackContainer() -> ModelContainer {
@@ -261,6 +261,17 @@ struct DUNEVisionApp: App {
         .defaultSize(width: 760, height: 560)
         .defaultWindowPlacement { _, context in
             makeWindowPlacement(for: VisionDashboardWindowKind.body.windowID, context: context)
+        }
+
+        WindowGroup(id: VisionWindowPlacementPlanner.settingsWindowID) {
+            NavigationStack {
+                VisionSettingsView(modelContainer: modelContainer)
+            }
+            .tint(.accentColor)
+        }
+        .defaultSize(width: 520, height: 620)
+        .defaultWindowPlacement { _, context in
+            makeWindowPlacement(for: VisionWindowPlacementPlanner.settingsWindowID, context: context)
         }
 
         // 3D Charts window — opened via openWindow(id:)

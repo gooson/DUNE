@@ -10,6 +10,7 @@ enum VisionWindowPlacementRelationship: Equatable, Sendable {
 
 enum VisionWindowPlacementPlanner {
     static let mainWindowID: String? = nil
+    static let settingsWindowID = "settings"
     static let chart3DWindowID = "chart3d"
 
     static func relationship(
@@ -46,6 +47,9 @@ enum VisionWindowPlacementPlanner {
                 return .utilityPanel
             }
             return .below(mainWindowID)
+
+        case settingsWindowID:
+            return .utilityPanel
 
         case chart3DWindowID:
             guard existingWindowIDs.contains(mainWindowID) else {

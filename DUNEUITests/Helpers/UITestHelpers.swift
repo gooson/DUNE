@@ -221,6 +221,8 @@ enum AXID {
     static let chartSelectionProbe = "chart-selection-probe"
     static let weeklyStatsChartDailyVolume = "weeklystats-chart-daily-volume"
     static let weeklyStatsChartVisibleRange = "weeklystats-chart-visible-range"
+    static let trainingVolumeChartDailyVolume = "training-volume-chart-daily-volume"
+    static let trainingVolumeDailyVolumeVisibleRange = "training-volume-daily-volume-visible-range"
     static let weeklyStatsPeriodPicker = "weeklystats-period-picker"
     static let trainingVolumeChartTrainingLoad = "training-volume-chart-training-load"
     static let trainingVolumeChartVisibleRange = "training-volume-chart-visible-range"
