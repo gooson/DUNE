@@ -132,7 +132,7 @@ struct WorkoutReportCard: View {
 
     private func formatVolume(_ volume: Double) -> String {
         if volume >= 1000 {
-            return String(format: "%.0fk", volume / 1000)
+            return "\(Int(volume / 1000))k"
         }
         return "\(Int(volume))kg"
     }

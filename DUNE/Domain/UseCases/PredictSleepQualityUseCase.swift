@@ -84,7 +84,7 @@ struct PredictSleepQualityUseCase: SleepQualityPredicting, Sendable {
         let hrvImpact: SleepQualityPrediction.Impact = switch input.hrvTrend {
         case .rising: .positive
         case .falling: .negative
-        default: .neutral
+        case .stable, .volatile, .insufficient: .neutral
         }
         factors.append(.init(
             type: .hrvTrend,
