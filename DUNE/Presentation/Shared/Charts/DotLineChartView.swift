@@ -19,7 +19,6 @@ struct DotLineChartView: View {
     @State private var selectedDate: Date?
     @State private var internalScrollPosition: Date = .now
     @State private var selectionGestureState = ChartSelectionGestureState()
-    @State private var activationTask: Task<Void, Never>?
 
     enum Period: String, CaseIterable {
         case week = "7D"
@@ -219,49 +218,22 @@ struct DotLineChartView: View {
     }
 
     private func selectionGesture(proxy: ChartProxy, plotFrame: CGRect) -> some Gesture {
-        DragGesture(minimumDistance: 0, coordinateSpace: .local)
+        LongPressGesture(minimumDuration: ChartSelectionInteraction.holdDuration)
+            .sequenced(before: DragGesture(minimumDistance: 0, coordinateSpace: .local))
             .onChanged { value in
-                let update = selectionGestureState.registerChange(
-                    at: value.time,
-                    translation: value.translation,
-                    currentScrollPosition: scrollPosition?.wrappedValue
-                )
-                switch update {
-                case .inactive:
-                    if selectionGestureState.phase == .pendingActivation, activationTask == nil {
-                        let location = value.location
-                        activationTask = ChartSelectionInteraction.makeActivationTask(
-                            location: location, proxy: proxy, plotFrame: plotFrame,
-                            activate: { selectionGestureState.forceActivate() },
-                            onActivated: { date, restoreScroll in
-                                if let restoreScroll { scrollPosition?.wrappedValue = restoreScroll }
-                                selectedDate = date
-                            }
-                        )
-                    }
-                    return
-                case .activated(let restoreScrollPosition):
-                    activationTask?.cancel()
-                    activationTask = nil
-                    if let restoreScrollPosition {
-                        scrollPosition?.wrappedValue = restoreScrollPosition
-                    }
-                    fallthrough
-                case .updating:
-                    if let restore = selectionGestureState.initialScrollPosition,
-                       scrollPosition?.wrappedValue != restore {
-                        scrollPosition?.wrappedValue = restore
-                    }
-                    selectedDate = ChartSelectionInteraction.resolvedDate(
-                        at: value.location,
-                        proxy: proxy,
-                        plotFrame: plotFrame
-                    )
+                guard case .second(true, let drag) = value, let drag else { return }
+                selectionGestureState.beginSelection(scrollPosition: scrollPosition?.wrappedValue)
+                if let restore = selectionGestureState.initialScrollPosition,
+                   scrollPosition?.wrappedValue != restore {
+                    scrollPosition?.wrappedValue = restore
                 }
+                selectedDate = ChartSelectionInteraction.resolvedDate(
+                    at: drag.location,
+                    proxy: proxy,
+                    plotFrame: plotFrame
+                )
             }
             .onEnded { _ in
-                activationTask?.cancel()
-                activationTask = nil
                 selectionGestureState.reset()
                 selectedDate = nil
             }
