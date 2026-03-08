@@ -37,7 +37,7 @@ struct WellnessView: View {
                     .id(ScrollAnchor.top)
 
                 VStack(spacing: isRegular ? DS.Spacing.xxl : DS.Spacing.xl) {
-                    // Note: injuryRecords check omitted — injuries live in isolated @Query child view
+                    // Keep the root empty-state gate HealthKit-driven; SwiftData records use isolated fallback views.
                     if viewModel.isLoading &&
                         viewModel.physicalCards.isEmpty &&
                         viewModel.activeCards.isEmpty &&
