@@ -122,10 +122,7 @@ class UITestBaseCase: XCTestCase {
 
     func navigateToSettings() {
         navigateToDashboard()
-        let settingsButton = app.descendants(matching: .any)[AXID.dashboardToolbarSettings].firstMatch
-        if settingsButton.waitForExistence(timeout: 5) {
-            settingsButton.tap()
-        }
+        _ = app.waitAndTap(AXID.dashboardToolbarSettings)
     }
 
     /// Wait for an element with a given accessibility identifier

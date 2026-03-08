@@ -64,6 +64,7 @@ final class WeeklyStatsDetailViewModel {
     }
 
     var comparison: PeriodComparison?
+    var chartDailyBreakdown: [DailyVolumePoint] = []
     var summaryStats: [ActivityStat] = []
     var isLoading = false
     var errorMessage: String?
@@ -83,48 +84,59 @@ final class WeeklyStatsDetailViewModel {
         errorMessage = nil
 
         let period = selectedPeriod
+        let calendar = Calendar.current
+        let range = period.dateRange
+        let historyEnd = range.end
+        let historyEndDay = calendar.startOfDay(for: historyEnd)
+        let historyStart = calendar.date(byAdding: .day, value: -(period.fetchDays - 1), to: historyEndDay) ?? historyEndDay
+        let historySnapshots = manualSnapshots.filter { $0.date >= historyStart && $0.date <= historyEnd }
 
-        do {
-            let workouts = try await workoutService.fetchWorkouts(days: period.fetchDays)
+        let workoutResult = await fetchWorkouts(start: historyStart, end: historyEnd)
+        let workouts = workoutResult.workouts
 
-            guard !Task.isCancelled else {
-                isLoading = false
-                return
-            }
-
-            // Filter for specific period range
-            let range = period.dateRange
-
-            let filteredWorkouts: [WorkoutSummary]
-            let filteredSnapshots: [ManualExerciseSnapshot]
-
-            if period == .lastWeek {
-                // For last week, filter manually since TrainingVolumeAnalysisService uses "current" = now-based
-                filteredWorkouts = workouts.filter { $0.date >= range.start && $0.date <= range.end }
-                filteredSnapshots = manualSnapshots.filter { $0.date >= range.start && $0.date <= range.end }
-            } else {
-                filteredWorkouts = workouts
-                filteredSnapshots = manualSnapshots
-            }
-
-            let result = TrainingVolumeAnalysisService.analyze(
-                workouts: filteredWorkouts,
-                manualRecords: filteredSnapshots,
-                period: period.volumePeriod
-            )
-
-            guard !Task.isCancelled else {
-                isLoading = false
-                return
-            }
-
-            comparison = result
-            rebuildSummaryStats(from: result, period: period)
-
-        } catch {
-            AppLogger.ui.error("Weekly stats fetch failed: \(error.localizedDescription)")
-            errorMessage = String(localized: "Unable to load data.")
+        guard !Task.isCancelled else {
+            isLoading = false
+            return
         }
+
+        if workoutResult.didFail && historySnapshots.isEmpty {
+            errorMessage = String(localized: "Unable to load data.")
+            isLoading = false
+            return
+        }
+
+        chartDailyBreakdown = TrainingVolumeAnalysisService.buildHistoryDailyBreakdown(
+            workouts: workouts,
+            manualRecords: historySnapshots,
+            start: historyStart,
+            end: historyEnd
+        )
+
+        let filteredWorkouts: [WorkoutSummary]
+        let filteredSnapshots: [ManualExerciseSnapshot]
+
+        if period == .lastWeek {
+            // For last week, filter manually since TrainingVolumeAnalysisService uses "current" = now-based
+            filteredWorkouts = workouts.filter { $0.date >= range.start && $0.date <= range.end }
+            filteredSnapshots = manualSnapshots.filter { $0.date >= range.start && $0.date <= range.end }
+        } else {
+            filteredWorkouts = workouts
+            filteredSnapshots = historySnapshots
+        }
+
+        let result = TrainingVolumeAnalysisService.analyze(
+            workouts: filteredWorkouts,
+            manualRecords: filteredSnapshots,
+            period: period.volumePeriod
+        )
+
+        guard !Task.isCancelled else {
+            isLoading = false
+            return
+        }
+
+        comparison = result
+        rebuildSummaryStats(from: result, period: period)
 
         isLoading = false
     }
@@ -134,8 +146,18 @@ final class WeeklyStatsDetailViewModel {
     private func triggerReload() {
         loadTask?.cancel()
         comparison = nil
+        chartDailyBreakdown = []
         summaryStats = []
         isLoading = false
+    }
+
+    private func fetchWorkouts(start: Date, end: Date) async -> (workouts: [WorkoutSummary], didFail: Bool) {
+        do {
+            return (try await workoutService.fetchWorkouts(start: start, end: end), false)
+        } catch {
+            AppLogger.ui.error("Weekly stats fetch failed: \(error.localizedDescription)")
+            return ([], true)
+        }
     }
 
     private func rebuildSummaryStats(from result: PeriodComparison, period: StatsPeriod) {

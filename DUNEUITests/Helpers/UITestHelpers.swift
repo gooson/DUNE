@@ -220,7 +220,10 @@ enum AXID {
     static let chartSelectionOverlay = "chart-selection-overlay"
     static let chartSelectionProbe = "chart-selection-probe"
     static let weeklyStatsChartDailyVolume = "weeklystats-chart-daily-volume"
+    static let weeklyStatsChartVisibleRange = "weeklystats-chart-visible-range"
     static let weeklyStatsPeriodPicker = "weeklystats-period-picker"
+    static let trainingVolumeChartTrainingLoad = "training-volume-chart-training-load"
+    static let trainingVolumeChartVisibleRange = "training-volume-chart-visible-range"
     static let trainingReadinessChartTrend = "trainingreadiness-chart-trend"
 
     // MARK: - Sidebar (iPad)
@@ -308,6 +311,30 @@ extension XCUIApplication {
         default:
             nil
         }
+    }
+
+    @discardableResult
+    func waitAndTap(_ identifier: String, timeout: TimeInterval = 5) -> Bool {
+        let deadline = Date().addingTimeInterval(timeout)
+        let buttonPredicate = NSPredicate(format: "identifier == %@", identifier)
+        let buttonCandidates = [
+            buttons[identifier].firstMatch,
+            descendants(matching: .button).matching(buttonPredicate).firstMatch
+        ]
+
+        for button in buttonCandidates {
+            let remainingTime = max(0, deadline.timeIntervalSinceNow)
+            if button.exists || button.waitForExistence(timeout: remainingTime) {
+                button.tap()
+                return true
+            }
+        }
+
+        let element = descendants(matching: .any)[identifier].firstMatch
+        let remainingTime = max(0, deadline.timeIntervalSinceNow)
+        guard element.exists || element.waitForExistence(timeout: remainingTime) else { return false }
+        element.tap()
+        return true
     }
 
     func hasPrimaryNavigation(timeout: TimeInterval = 8) -> Bool {
@@ -412,6 +439,37 @@ extension XCUIApplication {
             }
         }
         return element.exists
+    }
+
+    @discardableResult
+    func scrollToHittableElementIfNeeded(
+        _ identifier: String,
+        maxSwipes: Int = 8,
+        direction: ScrollDirection = .up,
+        timeoutPerCheck: TimeInterval = 1
+    ) -> Bool {
+        let element = descendants(matching: .any)[identifier].firstMatch
+
+        if !element.waitForExistence(timeout: timeoutPerCheck) {
+            _ = scrollToElementIfNeeded(
+                identifier,
+                maxSwipes: maxSwipes,
+                direction: direction,
+                timeoutPerCheck: timeoutPerCheck
+            )
+        }
+
+        for _ in 0..<maxSwipes where !(element.exists && element.isHittable) {
+            let scrollContainer = preferredScrollContainer()
+            switch direction {
+            case .up:
+                scrollContainer.swipeUp()
+            case .down:
+                scrollContainer.swipeDown()
+            }
+        }
+
+        return element.exists && element.isHittable
     }
 
     @discardableResult

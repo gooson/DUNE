@@ -12,6 +12,7 @@ struct DUNEVisionApp: App {
     private let refreshCoordinator: AppRefreshCoordinating
     private let observerManager: HealthKitObserverManager?
     private let workoutService: WorkoutQuerying
+    private let historyModelContainer: ModelContainer
 
     private static func makeInMemoryFallbackContainer() -> ModelContainer {
         do {
@@ -54,6 +55,53 @@ struct DUNEVisionApp: App {
         } catch {
             AppLogger.data.error("visionOS ModelContainer failed: \(error)")
             return recoverModelContainer(
+                after: error,
+                cloudSyncEnabled: cloudSyncEnabled
+            )
+        }
+    }
+
+    private static func makeExerciseHistoryFallbackContainer() -> ModelContainer {
+        do {
+            AppLogger.data.error("visionOS: Falling back to in-memory exercise history container")
+            return try VisionExerciseHistoryContainerFactory.makeInMemoryContainer()
+        } catch {
+            fatalError("Failed to create fallback exercise history container: \(error)")
+        }
+    }
+
+    private static func recoverExerciseHistoryModelContainer(
+        after error: Error,
+        cloudSyncEnabled: Bool
+    ) -> ModelContainer {
+        guard PersistentStoreRecovery.shouldDeleteStore(after: error) else {
+            AppLogger.data.error("visionOS: Skipping exercise history store deletion for non-migration error")
+            return makeExerciseHistoryFallbackContainer()
+        }
+
+        AppLogger.data.error("visionOS: Deleting exercise history store after migration failure")
+        VisionExerciseHistoryContainerFactory.deleteStoreFiles()
+
+        do {
+            return try VisionExerciseHistoryContainerFactory.makeContainer(
+                cloudSyncEnabled: cloudSyncEnabled
+            )
+        } catch {
+            AppLogger.data.error("visionOS: Exercise history container retry failed: \(error)")
+            return makeExerciseHistoryFallbackContainer()
+        }
+    }
+
+    private static func makeExerciseHistoryModelContainer(
+        cloudSyncEnabled: Bool
+    ) -> ModelContainer {
+        do {
+            return try VisionExerciseHistoryContainerFactory.makeContainer(
+                cloudSyncEnabled: cloudSyncEnabled
+            )
+        } catch {
+            AppLogger.data.error("visionOS exercise history ModelContainer failed: \(error)")
+            return recoverExerciseHistoryModelContainer(
                 after: error,
                 cloudSyncEnabled: cloudSyncEnabled
             )
@@ -131,6 +179,10 @@ struct DUNEVisionApp: App {
         }
         self.sharedHealthDataService = sharedService
         self.workoutService = WorkoutQueryService(manager: .shared)
+        self.historyModelContainer = Self.makeExerciseHistoryModelContainer(
+            cloudSyncEnabled: cloudSyncEnabled
+        )
+        self.workoutService = WorkoutQueryService(manager: .shared)
 
         let coordinator = AppRefreshCoordinatorImpl(sharedHealthDataService: sharedService)
         self.refreshCoordinator = coordinator
@@ -156,6 +208,7 @@ struct DUNEVisionApp: App {
                 workoutService: workoutService
             )
             .tint(.accentColor)
+            .modelContainer(historyModelContainer)
         }
 
         WindowGroup(id: VisionDashboardWindowKind.condition.windowID) {

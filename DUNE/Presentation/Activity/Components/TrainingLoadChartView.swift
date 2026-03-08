@@ -5,20 +5,40 @@ import Charts
 /// Each bar represents daily training load, color-coded by intensity zone.
 struct TrainingLoadChartView: View {
     let data: [TrainingLoadDataPoint]
+    let period: VolumePeriod
 
     @Environment(\.appTheme) private var theme
 
     @State private var selectedDate: Date?
+    @State private var scrollPosition: Date = .now
     @State private var cachedMovingAverage: [ChartDataPoint] = []
     @State private var cachedWeekSummary: String?
     @State private var selectionGestureState = ChartSelectionGestureState()
+    @State private var lastSelectionProbeLabel = "none"
 
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             // Header
             HStack {
-                Label("Training Load", systemImage: "flame.fill")
-                    .font(.subheadline.weight(.semibold))
+                VStack(alignment: .leading, spacing: 2) {
+                    Label("Training Load", systemImage: "flame.fill")
+                        .font(.subheadline.weight(.semibold))
+
+                    if isScrollable {
+                        VStack(alignment: .leading, spacing: 0) {
+                            Text(visibleRangeLabel)
+                                .font(.caption2)
+                                .foregroundStyle(DS.Color.textSecondary)
+                                .contentTransition(.numericText())
+
+                            Color.clear
+                                .frame(width: 1, height: 1)
+                                .accessibilityElement(children: .ignore)
+                                .accessibilityLabel(visibleRangeLabel)
+                                .accessibilityIdentifier("training-volume-chart-visible-range")
+                        }
+                    }
+                }
                 Spacer()
                 if let summary = cachedWeekSummary {
                     Text(summary)
@@ -33,6 +53,7 @@ struct TrainingLoadChartView: View {
                 chartView
                     .frame(height: 140)
                     .clipped()
+                    .overlay { chartAccessibilitySurface }
 
                 // Legend
                 HStack(spacing: DS.Spacing.md) {
@@ -46,8 +67,14 @@ struct TrainingLoadChartView: View {
         }
         .padding(DS.Spacing.md)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
-        .onAppear { recalculateChartData() }
-        .onChange(of: data.count) { _, _ in recalculateChartData() }
+        .onAppear {
+            recalculateChartData()
+            resetScrollPosition()
+        }
+        .onChange(of: data.count) { _, _ in
+            recalculateChartData()
+            resetScrollPosition()
+        }
     }
 
     private func recalculateChartData() {
@@ -68,7 +95,6 @@ struct TrainingLoadChartView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 2))
             }
 
-            // 7-day moving average line
             if cachedMovingAverage.count >= 2 {
                 ForEach(cachedMovingAverage) { point in
                     LineMark(
@@ -82,14 +108,14 @@ struct TrainingLoadChartView: View {
                 }
             }
 
-            if selectedDate != nil, let point = selectedPoint {
+            if let point = selectedPoint {
                 RuleMark(x: .value("Selected", point.date, unit: .day))
                     .foregroundStyle(theme.accentColor.opacity(0.35))
                     .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
             }
         }
         .chartXAxis {
-            AxisMarks(values: .stride(by: .day, count: 7)) { _ in
+            AxisMarks(values: .stride(by: .day, count: period.chartAxisStrideCount)) { _ in
                 AxisValueLabel(format: .dateTime.month(.abbreviated).day())
                     .foregroundStyle(theme.sandColor)
                 AxisGridLine()
@@ -105,10 +131,11 @@ struct TrainingLoadChartView: View {
             }
         }
         .chartYScale(domain: 0...(maxLoad * 1.15))
+        .chartXScale(domain: xDomain)
         .scrollableChartSelectionOverlay(
-            isScrollable: false,
-            visibleDomainLength: nil,
-            scrollPosition: nil,
+            isScrollable: isScrollable,
+            visibleDomainLength: isScrollable ? period.visibleDomainSeconds : nil,
+            scrollPosition: isScrollable ? $scrollPosition : nil,
             selectedDate: $selectedDate,
             selectionState: $selectionGestureState
         ) { proxy, plotFrame, chartSize in
@@ -126,6 +153,11 @@ struct TrainingLoadChartView: View {
             }
         }
         .sensoryFeedback(.selection, trigger: selectedPoint?.date)
+        .onChange(of: selectedPoint?.date) { _, newValue in
+            guard let newValue else { return }
+            lastSelectionProbeLabel = newValue.formatted(date: .abbreviated, time: .omitted)
+        }
+        .chartSelectionUITestProbe(lastSelectionProbeLabel)
     }
 
     // MARK: - Helpers
@@ -164,11 +196,29 @@ struct TrainingLoadChartView: View {
         return Swift.max(maxVal, 1)
     }
 
+    private var xDomain: ClosedRange<Date> {
+        resolvedXDomain(scrollDomain: nil, dates: data.map(\.date))
+    }
+
+    private var isScrollable: Bool {
+        data.count > period.days
+    }
+
+    private var chartAccessibilitySurface: some View {
+        ChartUITestSurface(
+            identifier: "training-volume-chart-training-load",
+            label: "Training Load Chart",
+            value: isScrollable ? visibleRangeLabel : ""
+        )
+    }
+
+    private var visibleRangeLabel: String {
+        period.visibleRangeLabel(from: scrollPosition)
+    }
+
     private var selectedPoint: TrainingLoadDataPoint? {
         guard let selectedDate else { return nil }
-        return data.min(by: {
-            abs($0.date.timeIntervalSince(selectedDate)) < abs($1.date.timeIntervalSince(selectedDate))
-        })
+        return ChartSelectionInteraction.nearestPoint(to: selectedDate, in: data, date: \.date)
     }
 
     private func selectedAnchor(
@@ -181,6 +231,12 @@ struct TrainingLoadChartView: View {
             yPosition: proxy.position(forY: point.load),
             plotFrame: plotFrame
         )
+    }
+
+    private func resetScrollPosition() {
+        guard let latestDate = data.map(\.date).max() else { return }
+        let preferredStart = period.initialVisibleStart(latestDate: latestDate)
+        scrollPosition = preferredStart < xDomain.lowerBound ? xDomain.lowerBound : preferredStart
     }
 
     /// 7-day rolling average

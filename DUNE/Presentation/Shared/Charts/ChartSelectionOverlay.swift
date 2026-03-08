@@ -64,6 +64,32 @@ struct FloatingChartSelectionOverlay: View {
     }
 }
 
+struct ChartUITestSurface: UIViewRepresentable {
+    let identifier: String
+    let label: String
+    let value: String
+
+    func makeUIView(context: Context) -> ChartUITestSurfaceView {
+        let view = ChartUITestSurfaceView()
+        view.isUserInteractionEnabled = true
+        view.backgroundColor = .clear
+        view.isAccessibilityElement = true
+        return view
+    }
+
+    func updateUIView(_ uiView: ChartUITestSurfaceView, context: Context) {
+        uiView.accessibilityIdentifier = identifier
+        uiView.accessibilityLabel = label
+        uiView.accessibilityValue = value
+    }
+}
+
+final class ChartUITestSurfaceView: UIView {
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        false
+    }
+}
+
 extension View {
     func chartSurface(cornerRadius: CGFloat, topBloomHeight: CGFloat? = nil) -> some View {
         modifier(ChartSurfaceModifier(cornerRadius: cornerRadius, topBloomHeight: topBloomHeight))

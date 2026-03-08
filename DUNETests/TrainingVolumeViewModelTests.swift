@@ -27,6 +27,14 @@ private struct MockTrainingVolumeStepsService: StepsQuerying {
     func fetchStepsCollection(start: Date, end: Date, interval: DateComponents) async throws -> [(date: Date, sum: Double)] { [] }
 }
 
+private struct MockTrainingVolumeHRVService: HRVQuerying {
+    func fetchHRVSamples(days: Int) async throws -> [HRVSample] { [] }
+    func fetchRestingHeartRate(for date: Date) async throws -> Double? { nil }
+    func fetchLatestRestingHeartRate(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
+    func fetchHRVCollection(start: Date, end: Date, interval: DateComponents) async throws -> [(date: Date, average: Double)] { [] }
+    func fetchRHRCollection(start: Date, end: Date, interval: DateComponents) async throws -> [(date: Date, min: Double, max: Double, average: Double)] { [] }
+}
+
 @Suite("TrainingVolumeViewModel")
 @MainActor
 struct TrainingVolumeViewModelTests {
@@ -74,7 +82,8 @@ struct TrainingVolumeViewModelTests {
                 makeWorkout(id: "run-1", daysAgo: 0, minutes: 40),
                 makeWorkout(id: "run-2", daysAgo: 2, minutes: 30),
             ]),
-            stepsService: MockTrainingVolumeStepsService()
+            stepsService: MockTrainingVolumeStepsService(),
+            hrvService: MockTrainingVolumeHRVService()
         )
 
         await vm.loadData(manualRecords: [makeRecord(daysAgo: 1, minutes: 25)])
@@ -85,11 +94,27 @@ struct TrainingVolumeViewModelTests {
         #expect(vm.errorMessage == nil)
     }
 
+    @Test("loadData falls back to manual records for training load history when workout fetch fails")
+    func loadDataFallsBackToManualTrainingLoadHistory() async {
+        let vm = TrainingVolumeViewModel(
+            workoutService: MockTrainingVolumeWorkoutService(shouldThrow: true),
+            stepsService: MockTrainingVolumeStepsService(),
+            hrvService: MockTrainingVolumeHRVService()
+        )
+
+        await vm.loadData(manualRecords: [makeRecord(daysAgo: 1, minutes: 25)])
+
+        #expect(vm.trainingLoadData.count == 14)
+        #expect(vm.trainingLoadData.contains { $0.load > 0 })
+        #expect(vm.comparison != nil)
+    }
+
     @Test("Changing selectedPeriod clears cached comparison")
     func selectedPeriodClearsComparison() {
         let vm = TrainingVolumeViewModel(
             workoutService: MockTrainingVolumeWorkoutService(),
-            stepsService: MockTrainingVolumeStepsService()
+            stepsService: MockTrainingVolumeStepsService(),
+            hrvService: MockTrainingVolumeHRVService()
         )
 
         vm.comparison = PeriodComparison(
@@ -106,7 +131,8 @@ struct TrainingVolumeViewModelTests {
     func isLoadingGuard() async {
         let vm = TrainingVolumeViewModel(
             workoutService: MockTrainingVolumeWorkoutService(workouts: [makeWorkout(id: "run-1", daysAgo: 0, minutes: 30)]),
-            stepsService: MockTrainingVolumeStepsService()
+            stepsService: MockTrainingVolumeStepsService(),
+            hrvService: MockTrainingVolumeHRVService()
         )
         vm.isLoading = true
 
@@ -114,5 +140,24 @@ struct TrainingVolumeViewModelTests {
 
         #expect(vm.isLoading == true)
         #expect(vm.comparison == nil)
+    }
+
+    @Test("loadData expands training load history to current and previous period") 
+    func loadDataBuildsScrollableTrainingLoadHistory() async {
+        let vm = TrainingVolumeViewModel(
+            workoutService: MockTrainingVolumeWorkoutService(),
+            stepsService: MockTrainingVolumeStepsService(),
+            hrvService: MockTrainingVolumeHRVService()
+        )
+        vm.selectedPeriod = .month
+
+        await vm.loadData(manualRecords: [])
+
+        let today = calendar.startOfDay(for: Date())
+        let expectedStart = calendar.date(byAdding: .day, value: -59, to: today) ?? today
+
+        #expect(vm.trainingLoadData.count == 60)
+        #expect(vm.trainingLoadData.first?.date == expectedStart)
+        #expect(vm.trainingLoadData.last?.date == today)
     }
 }

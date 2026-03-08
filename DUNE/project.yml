@@ -148,6 +148,7 @@ targets:
           - group.com.raftel.dailve
     dependencies:
       - sdk: HealthKit.framework
+      - sdk: GroupActivities.framework
       - sdk: CoreLocation.framework
       - sdk: CoreMotion.framework
       - target: DUNEWatch
@@ -332,6 +333,9 @@ targets:
       # Shared persistence for mirrored snapshot fallback
       - path: Data/Persistence/HealthSnapshotMirrorContainerFactory.swift
       - path: Data/Persistence/Models/HealthSnapshotMirrorRecord.swift
+      - path: Data/Persistence/Models/ExerciseRecord.swift
+      - path: Data/Persistence/Models/WorkoutSet.swift
+      - path: Data/Persistence/Models/BodyCompositionRecord.swift
       - path: Data/Persistence/Migration/PersistentStoreRecovery.swift
       - path: Data/Persistence/NotificationSettingsStore.swift
       - path: Data/Persistence/NotificationThrottleStore.swift
@@ -388,6 +392,7 @@ targets:
       properties:
         com.apple.developer.healthkit: true
         com.apple.developer.healthkit.access: []
+        com.apple.developer.group-session: true
         com.apple.developer.icloud-container-identifiers:
           - iCloud.com.raftel.dailve
         com.apple.developer.icloud-services:
@@ -395,6 +400,7 @@ targets:
         com.apple.developer.ubiquity-kvstore-identifier: "$(TeamIdentifierPrefix)$(CFBundleIdentifier)"
     dependencies:
       - sdk: HealthKit.framework
+      - sdk: GroupActivities.framework
       - sdk: Speech.framework
       - target: DUNEVisionWidgets
         embed: true

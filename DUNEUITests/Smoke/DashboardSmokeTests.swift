@@ -49,9 +49,7 @@ final class DashboardSmokeTests: UITestBaseCase {
 
     func testNavigateToWhatsNew() throws {
         navigateToDashboard()
-        let whatsNewButton = app.descendants(matching: .any)[AXID.dashboardToolbarWhatsNew].firstMatch
-        XCTAssertTrue(whatsNewButton.waitForExistence(timeout: 5), "What's New toolbar button should exist on Today")
-        whatsNewButton.tap()
+        XCTAssertTrue(app.waitAndTap(AXID.dashboardToolbarWhatsNew), "What's New toolbar button should exist on Today")
 
         let screen = app.descendants(matching: .any)[AXID.whatsNewScreen].firstMatch
         XCTAssertTrue(screen.waitForExistence(timeout: 5), "What's New screen should open from the Today toolbar")
@@ -65,9 +63,7 @@ final class DashboardSmokeTests: UITestBaseCase {
 
     func testNavigateToNotificationHub() throws {
         navigateToDashboard()
-        let notificationsButton = app.descendants(matching: .any)[AXID.dashboardToolbarNotifications].firstMatch
-        XCTAssertTrue(notificationsButton.waitForExistence(timeout: 5), "Notifications toolbar button should exist")
-        notificationsButton.tap()
+        XCTAssertTrue(app.waitAndTap(AXID.dashboardToolbarNotifications), "Notifications toolbar button should exist")
 
         let title = app.navigationBars["Notifications"]
         XCTAssertTrue(title.waitForExistence(timeout: 5), "Notifications navigation title should appear")
@@ -86,13 +82,16 @@ final class DashboardSmokeTests: UITestBaseCase {
 
     func testTabNavigationRoundTrip() throws {
         let tabBar = app.tabBars.firstMatch
+        XCTAssertTrue(tabBar.waitForExistence(timeout: 5), "Tab bar should exist")
 
         for tab in ["Activity", "Wellness", "Life", "Today"] {
-            tabBar.buttons[tab].tap()
-            // Just verify no crash — existence check on tab is implicit
-        }
+            let tabButton = tabBar.buttons[tab].firstMatch
+            XCTAssertTrue(tabButton.waitForExistence(timeout: 3), "\(tab) tab should exist")
+            tabButton.tap()
 
-        // Back on Today tab
-        XCTAssertTrue(tabBar.buttons["Today"].isSelected)
+            let selectedPredicate = NSPredicate(format: "isSelected == true")
+            expectation(for: selectedPredicate, evaluatedWith: tabButton)
+            waitForExpectations(timeout: 3)
+        }
     }
 }

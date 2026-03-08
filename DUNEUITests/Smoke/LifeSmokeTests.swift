@@ -26,9 +26,7 @@ final class LifeSmokeTests: UITestBaseCase {
     // MARK: - Habit Form
 
     func testHabitFormOpens() throws {
-        let addButton = app.descendants(matching: .any)[AXID.lifeToolbarAdd].firstMatch
-        XCTAssertTrue(addButton.waitForExistence(timeout: 5), "Add button should exist")
-        addButton.tap()
+        XCTAssertTrue(app.waitAndTap(AXID.lifeToolbarAdd), "Add button should exist")
 
         // Habit form sheet should appear
         let nameField = app.textFields[AXID.habitFormName]
@@ -39,9 +37,8 @@ final class LifeSmokeTests: UITestBaseCase {
     }
 
     func testHabitFormCancelDismisses() throws {
-        let addButton = app.descendants(matching: .any)[AXID.lifeToolbarAdd].firstMatch
-        XCTAssertTrue(addButton.waitForExistence(timeout: 5), "Add button should exist")
-        addButton.tap()
+        let addButton = app.buttons[AXID.lifeToolbarAdd].firstMatch
+        XCTAssertTrue(app.waitAndTap(AXID.lifeToolbarAdd), "Add button should exist")
 
         let cancelButton = app.descendants(matching: .any)[AXID.habitFormCancel].firstMatch
         XCTAssertTrue(cancelButton.waitForExistence(timeout: 3), "Habit form cancel button should exist")
@@ -52,23 +49,18 @@ final class LifeSmokeTests: UITestBaseCase {
     }
 
     func testSaveEmptyHabitKeepsFormPresented() throws {
-        let addButton = app.descendants(matching: .any)[AXID.lifeToolbarAdd].firstMatch
-        XCTAssertTrue(addButton.waitForExistence(timeout: 5), "Add button should exist")
-        addButton.tap()
+        XCTAssertTrue(app.waitAndTap(AXID.lifeToolbarAdd), "Add button should exist")
 
-        let saveButton = app.descendants(matching: .any)[AXID.habitFormSave].firstMatch
-        XCTAssertTrue(saveButton.waitForExistence(timeout: 3), "Habit form save button should exist")
-        saveButton.tap()
+        let nameField = app.textFields[AXID.habitFormName].firstMatch
+        XCTAssertTrue(nameField.waitForExistence(timeout: 3), "Habit name field should appear")
+        XCTAssertTrue(app.waitAndTap(AXID.habitFormSave), "Habit form save button should exist")
 
         // Empty name should fail validation and keep sheet visible
-        let nameField = app.textFields[AXID.habitFormName]
         XCTAssertTrue(nameField.waitForExistence(timeout: 3), "Habit form should remain visible on validation failure")
     }
 
     func testWeeklyFrequencyShowsStepper() throws {
-        let addButton = app.descendants(matching: .any)[AXID.lifeToolbarAdd].firstMatch
-        XCTAssertTrue(addButton.waitForExistence(timeout: 5), "Add button should exist")
-        addButton.tap()
+        XCTAssertTrue(app.waitAndTap(AXID.lifeToolbarAdd), "Add button should exist")
 
         let frequencyPicker = app.descendants(matching: .any)[AXID.habitFormFrequency].firstMatch
         XCTAssertTrue(frequencyPicker.waitForExistence(timeout: 3), "Frequency picker should exist")

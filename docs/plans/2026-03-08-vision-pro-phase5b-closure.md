@@ -67,7 +67,7 @@ window placement를 직접 Scene closure 안에 하드코딩하지 않고, share
 | `DUNEVision/Presentation/Immersive/VisionImmersiveExperienceView.swift` | modify | 잔여 `.caption` 정리 |
 | `todos/020-in-progress-p3-vision-pro-phase4-social-advanced.md` | modify | 5B 완료 및 5C 후속 관계 메모 정리 |
 | `todos/022-in-progress-p2-vision-ux-polish.md` | move/modify | 완료 상태로 전환 |
-| `todos/023-ready-p2-vision-phase4-remaining.md` | modify | 5B 종료 후 다음 phase 문맥 정리 |
+| `todos/023-in-progress-p2-vision-phase4-remaining.md` | modify | 5B 종료 후 다음 phase 문맥 정리 |
 
 ## Implementation Steps
 

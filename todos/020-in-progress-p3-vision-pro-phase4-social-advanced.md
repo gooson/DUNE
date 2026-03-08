@@ -36,10 +36,14 @@ SharePlay 소셜 기능 및 고급 입력 방식 구현.
   - condition/activity/sleep/body 전용 visionOS window 추가
   - 메인 dashboard에서 각 window open action 연결
   - shared workspace view model + unit test 추가
-- [ ] G1 Shared Workout Space
+- [x] G1 Shared Workout Space foundation
+  - Train 탭에서 SharePlay session start/join + realtime workout board 추가
+  - GroupSessionMessenger로 exercise/set/rep/phase 상태를 참가자 간 동기화
+  - late join participant replay와 local-only fallback 처리
 - [ ] F3 Voice-First Workout Entry
   - speech capture + command parser + draft preview foundation 추가
-  - workout history 저장과 SwiftData exercise stack 연결은 후속 scope로 유지
+  - single-entry workout history 저장과 SwiftData exercise stack 연결 완료
+  - 남은 범위는 audio/spatial feedback과 richer session editing
 - [x] C5 Exercise Form Guide foundation
   - Activity 탭에서 지원 운동 guide 검색/선택
   - form cue + equipment + target muscle panel 추가
@@ -47,11 +51,11 @@ SharePlay 소셜 기능 및 고급 입력 방식 구현.
 
 ## 메모
 
-- 이번 배치는 `/run`으로 E1과 F3 foundation(speech capture + parser + draft preview)까지 ship 완료.
-- SharePlay(GroupActivities/SharedWorldAnchors)와 voice persistence/body tracking/full-avatar는 capability 및 API 스캐폴드가 별도 필요하므로 후속 구현으로 남김.
+- 이번 배치는 `/run`으로 G1 foundation(SharePlay workout board), E1, F3 foundation(speech capture + parser + draft preview) + single-entry persistence까지 ship 완료.
+- SharePlay의 SharedWorldAnchors/spatial alignment, voice audio feedback, body tracking, full-avatar는 capability 및 실기기 검증이 추가로 필요하므로 후속 구현으로 남김.
 - Phase 5A 실데이터 연결은 `todos/021-done-p1-vision-real-data-pipeline.md`로 정리됐다.
 - Phase 5B UX polish는 `todos/022-in-progress-p2-vision-ux-polish.md`에서 계속 진행한다.
-- 고급 기능 실행은 Phase 5B 종료 후 `todos/023-ready-p2-vision-phase4-remaining.md`로 이어진다.
+- 고급 기능 실행은 Phase 5B 종료 후 `todos/023-in-progress-p2-vision-phase4-remaining.md`로 이어진다.
 
 ## 기술 요구사항
 - GroupActivities (SharePlay)
