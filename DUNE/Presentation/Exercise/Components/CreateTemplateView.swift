@@ -18,27 +18,44 @@ struct TemplateFormView: View {
 
     @State private var templateName: String
     @State private var entries: [TemplateEntry]
+    @State private var generationPrompt: String
     @State private var showingExercisePicker = false
+    @State private var isGeneratingTemplate = false
     @State private var validationError: String?
 
     @Query private var customExercises: [CustomExercise]
 
     private let library: ExerciseLibraryQuerying = ExerciseLibraryService.shared
+    private let generator: any NaturalLanguageWorkoutGenerating
+    private let workoutService: any WorkoutQuerying
 
     // MARK: - Init
 
     /// Create mode
-    init() {
+    init(
+        generator: any NaturalLanguageWorkoutGenerating = AIWorkoutTemplateGenerator(),
+        workoutService: any WorkoutQuerying = WorkoutQueryService(manager: .shared)
+    ) {
         self.mode = .create
+        self.generator = generator
+        self.workoutService = workoutService
         _templateName = State(initialValue: "")
         _entries = State(initialValue: [])
+        _generationPrompt = State(initialValue: "")
     }
 
     /// Edit mode — prefills with existing template data
-    init(template: WorkoutTemplate) {
+    init(
+        template: WorkoutTemplate,
+        generator: any NaturalLanguageWorkoutGenerating = AIWorkoutTemplateGenerator(),
+        workoutService: any WorkoutQuerying = WorkoutQueryService(manager: .shared)
+    ) {
         self.mode = .edit(template)
+        self.generator = generator
+        self.workoutService = workoutService
         _templateName = State(initialValue: template.name)
         _entries = State(initialValue: template.exerciseEntries)
+        _generationPrompt = State(initialValue: "")
     }
 
     // MARK: - Body
@@ -46,6 +63,10 @@ struct TemplateFormView: View {
     var body: some View {
         NavigationStack {
             Form {
+                if !isEditing {
+                    aiGenerationSection
+                }
+
                 Section("Template Name") {
                     TextField("e.g. Push Day, Leg Day", text: $templateName)
                         .autocorrectionDisabled()
@@ -112,6 +133,41 @@ struct TemplateFormView: View {
     }
 
     // MARK: - Entry Row
+
+    private var aiGenerationSection: some View {
+        Section("AI Workout Generator") {
+            TextField(
+                "e.g. Build me a 30 minute shoulder workout",
+                text: $generationPrompt,
+                axis: .vertical
+            )
+            .lineLimit(2...4)
+            .accessibilityIdentifier("template-form-ai-prompt")
+
+            Button {
+                Task {
+                    await generateTemplateFromPrompt()
+                }
+            } label: {
+                Label("Generate Template", systemImage: "wand.and.stars")
+            }
+            .disabled(!canGenerateTemplate)
+            .buttonStyle(.borderedProminent)
+            .accessibilityIdentifier("template-form-ai-generate")
+
+            if isGeneratingTemplate {
+                ProgressView("Generating Template...")
+            } else if generator.isAvailable {
+                Text("Generating a template will replace the current exercise list.")
+                    .font(.caption)
+                    .foregroundStyle(DS.Color.textSecondary)
+            } else {
+                Text("Workout generation is available on supported Apple Intelligence devices.")
+                    .font(.caption)
+                    .foregroundStyle(DS.Color.textSecondary)
+            }
+        }
+    }
 
     private func entryRow(entry: Binding<TemplateEntry>) -> some View {
         let profile = TemplateExerciseResolver.profile(
@@ -233,6 +289,12 @@ struct TemplateFormView: View {
         return false
     }
 
+    private var canGenerateTemplate: Bool {
+        generator.isAvailable
+            && !isGeneratingTemplate
+            && !generationPrompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+
     /// Creates a binding that maps `TemplateEntry.restDuration` to optional `TimeInterval?`
     /// so it can be used with Picker's tag matching.
     private func restDurationBinding(for entry: Binding<TemplateEntry>) -> Binding<TimeInterval?> {
@@ -240,6 +302,102 @@ struct TemplateFormView: View {
             get: { entry.wrappedValue.restDuration },
             set: { entry.wrappedValue.restDuration = $0 }
         )
+    }
+
+    @MainActor
+    private func generateTemplateFromPrompt() async {
+        let trimmedPrompt = generationPrompt.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedPrompt.isEmpty else {
+            validationError = String(localized: "Please describe the workout you want.")
+            return
+        }
+        guard generator.isAvailable else {
+            validationError = String(localized: "Workout generation is available on supported Apple Intelligence devices.")
+            return
+        }
+
+        isGeneratingTemplate = true
+        validationError = nil
+        defer { isGeneratingTemplate = false }
+
+        do {
+            let snapshots = await recentGenerationSnapshots()
+            let generated = try await generator.generateTemplate(
+                from: WorkoutTemplateGenerationRequest(
+                    prompt: trimmedPrompt,
+                    recentRecords: snapshots
+                ),
+                library: library
+            )
+            let generatedEntries = generated.slots.compactMap { slot -> TemplateEntry? in
+                guard let definition = library.exercise(byID: slot.exerciseDefinitionID) else {
+                    return nil
+                }
+
+                var entry = TemplateExerciseResolver.defaultEntry(for: definition)
+                entry.defaultSets = slot.sets
+                entry.defaultReps = slot.reps
+                return entry
+            }
+
+            guard !generatedEntries.isEmpty else {
+                validationError = String(localized: "We couldn't turn that request into a workout yet.")
+                return
+            }
+
+            templateName = generated.name
+            entries = generatedEntries
+        } catch let error as WorkoutTemplateGenerationError {
+            validationError = generationErrorMessage(for: error)
+        } catch {
+            validationError = String(localized: "Could not generate a workout template right now.")
+        }
+    }
+
+    private func generationErrorMessage(for error: WorkoutTemplateGenerationError) -> String {
+        switch error {
+        case .unavailable:
+            String(localized: "Workout generation is available on supported Apple Intelligence devices.")
+        case .emptyPrompt:
+            String(localized: "Please describe the workout you want.")
+        case .noExercisesMatched, .invalidTemplate:
+            String(localized: "We couldn't turn that request into a workout yet.")
+        case .generationFailed:
+            String(localized: "Could not generate a workout template right now.")
+        }
+    }
+
+    @MainActor
+    private func recentGenerationSnapshots(limit: Int = 30) async -> [ExerciseRecordSnapshot] {
+        var descriptor = FetchDescriptor<ExerciseRecord>(
+            sortBy: [SortDescriptor(\ExerciseRecord.date, order: .reverse)]
+        )
+        descriptor.fetchLimit = limit
+
+        let manualSnapshots = (try? modelContext.fetch(descriptor))?
+            .map { $0.snapshot(library: library) } ?? []
+
+        let healthKitSnapshots: [ExerciseRecordSnapshot]
+        do {
+            let workouts = try await workoutService.fetchWorkouts(days: 14)
+            healthKitSnapshots = workouts
+                .filter { !$0.isFromThisApp && !$0.activityType.primaryMuscles.isEmpty }
+                .map { workout in
+                    ExerciseRecordSnapshot(
+                        date: workout.date,
+                        exerciseName: workout.type,
+                        primaryMuscles: workout.activityType.primaryMuscles,
+                        secondaryMuscles: workout.activityType.secondaryMuscles,
+                        completedSetCount: 0,
+                        durationMinutes: workout.duration > 0 ? min(workout.duration / 60.0, 480) : nil,
+                        distanceKm: workout.distance.flatMap { $0 > 0 ? min($0 / 1000.0, 500) : nil }
+                    )
+                }
+        } catch {
+            healthKitSnapshots = []
+        }
+
+        return Array((manualSnapshots + healthKitSnapshots).sorted { $0.date > $1.date }.prefix(limit))
     }
 
     // MARK: - Save
