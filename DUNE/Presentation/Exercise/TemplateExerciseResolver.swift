@@ -62,11 +62,18 @@ enum TemplateExerciseResolver {
         case .strengthLike, .unresolved:
             3
         }
+        let defaultReps = switch profile {
+        case .cardio:
+            1
+        case .strengthLike, .unresolved:
+            10
+        }
 
         return TemplateEntry(
             exerciseDefinitionID: exercise.id,
             exerciseName: exercise.localizedName,
             defaultSets: defaultSets,
+            defaultReps: defaultReps,
             equipment: exercise.equipment.rawValue,
             inputTypeRaw: exercise.inputType.rawValue,
             cardioSecondaryUnitRaw: exercise.cardioSecondaryUnit?.rawValue

@@ -1,13 +1,14 @@
 ---
-tags: [foundation-models, workout-template, tool-calling, healthkit-context, exercise-library]
+tags: [foundation-models, workout-template, cardio, tool-calling, input-type, template-normalization]
 category: architecture
 date: 2026-03-09
 severity: important
 related_files:
   - DUNE/Data/Services/AIWorkoutTemplateGenerator.swift
   - DUNE/Presentation/Exercise/Components/CreateTemplateView.swift
-  - DUNE/Presentation/Shared/Extensions/ExerciseRecord+Snapshot.swift
+  - DUNE/Presentation/Exercise/TemplateExerciseResolver.swift
   - DUNETests/AIWorkoutTemplateGeneratorTests.swift
+  - DUNETests/TemplateExerciseResolverTests.swift
 related_solutions:
   - docs/solutions/architecture/2026-03-09-foundation-models-integration-pattern.md
 ---
@@ -16,22 +17,23 @@ related_solutions:
 
 ## Problem
 
-자연어로 운동 템플릿을 생성하려면 Foundation Models 출력이 실제 운동 라이브러리와 안정적으로 연결되어야 하고, 최근 운동 컨텍스트도 앱 내부 기록만이 아니라 HealthKit 기록까지 반영되어야 한다.
+`main`에 합쳐진 자연어 운동 템플릿 플로우는 기존 `CreateTemplateView` 구조 안에서 strength/bodyweight 템플릿을 안정적으로 생성하는 방향으로 정리돼 있었다. 여기에 cardio 요청까지 받아야 했는데, 단순히 "템플릿처럼 보이는 운동" 범위를 넓히면 실제 저장 계약이 없는 flexibility/HIIT input type까지 같이 열릴 위험이 있었다.
 
 ### Symptoms
 
-- "30분 어깨 운동 만들어줘" 같은 요청을 템플릿 생성 화면에서 바로 처리할 수 없었다.
-- 생성 결과가 fuzzy search 첫 결과에 의존하면 비슷한 이름의 다른 운동으로 잘못 연결될 수 있었다.
-- 템플릿 생성 화면 진입 시 전체 `ExerciseRecord`를 `@Query`로 읽어 오면서 실제로는 상위 일부 기록만 필요한데도 불필요한 fetch가 발생했다.
-- HealthKit에만 운동 이력이 있는 사용자에게는 개인화 컨텍스트가 거의 비어 있었다.
+- "30분 러닝 템플릿 만들어줘" 같은 cardio 요청이 기존 생성 규칙에서는 제외되거나 strength 기본값으로 저장될 수 있었다.
+- `TemplateExerciseProfile`를 그대로 "template-capable" 의미로 사용하면 `.durationIntensity`, `.roundsBased` 운동도 생성 후보에 들어와 malformed template가 만들어질 수 있었다.
+- cardio 엔트리가 생성기, 폼 매핑, 저장 단계마다 다른 기본값을 쓰면 `sets/reps`, weight, rest가 서로 어긋날 수 있었다.
+- HealthKit workout context를 화면에서 ad-hoc으로 다시 가공하면 shared snapshot 규칙과 drift가 생길 수 있었다.
 
 ### Root Cause
 
-근본 원인은 세 가지였다.
+근본 원인은 네 가지였다.
 
-1. 자연어 요청을 `WorkoutTemplate`로 변환하는 전용 Domain/Data 경계가 없었다.
-2. exercise name 해석이 "정확히 하나의 후보"를 요구하지 않고 첫 fuzzy match를 그대로 채택했다.
-3. 최근 운동 컨텍스트가 SwiftData 수동 기록 중심으로만 구성되어 HealthKit workout summary를 함께 사용하지 않았다.
+1. 템플릿 저장 가능 여부는 UI용 `TemplateExerciseProfile`이 아니라 persisted `ExerciseInputType` 계약으로 판단해야 했다.
+2. cardio는 지원하되 현재 템플릿 스키마에 없는 `.durationIntensity`, `.roundsBased`는 계속 막아야 했다.
+3. cardio normalization(`1 set / 1 rep`, no weight/rest)이 생성기와 UI 저장 경로 전체에 일관되게 반영되지 않으면 값이 쉽게 틀어진다.
+4. HealthKit recent context를 shared snapshot helper 대신 화면에서 직접 조립하면 추천/생성 입력 정책이 분산된다.
 
 ## Solution
 
@@ -39,57 +41,81 @@ related_solutions:
 
 | File | Change | Reason |
 |------|--------|--------|
-| `DUNE/Domain/Protocols/NaturalLanguageWorkoutGenerating.swift` | 자연어 템플릿 생성 프로토콜 추가 | Presentation이 Foundation Models 구현 세부사항에 의존하지 않도록 분리 |
-| `DUNE/Domain/Models/GeneratedWorkoutTemplate.swift` | 생성 결과 전용 모델 추가 | AI 출력과 저장용 `WorkoutTemplate` 변환 사이의 검증 단계를 분리 |
-| `DUNE/Data/Services/AIWorkoutTemplateGenerator.swift` | `@Generable` 스키마, tool calling, strict exercise resolution 구현 | on-device 생성 결과를 실제 exercise catalog에 안전하게 매핑 |
-| `DUNE/Presentation/Shared/Extensions/ExerciseRecord+Snapshot.swift` | 수동 운동 기록을 AI 컨텍스트 snapshot으로 변환 | prompt 컨텍스트 구성을 재사용 가능하게 유지 |
-| `DUNE/Presentation/Exercise/Components/CreateTemplateView.swift` | 자연어 입력 UI, 생성 액션, manual + HealthKit snapshot 병합 로직 추가 | 템플릿 생성 화면에서 개인화된 자연어 생성 기능 제공 |
-| `DUNETests/AIWorkoutTemplateGeneratorTests.swift` | 생성기 helper, invalid slot filtering, ambiguous resolution 테스트 추가 | 모델 출력 검증과 매칭 안전성을 회귀 테스트로 고정 |
+| `DUNE/Data/Services/AIWorkoutTemplateGenerator.swift` | prompt/tool 설명에 cardio 허용을 추가하고, explicit `ExerciseInputType` allowlist + cardio `1/1` normalization을 도입 | cardio 지원을 추가하면서 unsupported template type 유입을 막기 위해 |
+| `DUNE/Presentation/Exercise/Components/CreateTemplateView.swift` | generated slot -> `TemplateEntry` 변환과 save clamp에서 cardio를 `1/1`, `weight/rest nil`로 통일하고, HealthKit context를 `SpatialTrainingAnalyzer.snapshot(from:)`로 통합 | 생성 결과와 저장 결과가 같은 계약을 따르도록 하기 위해 |
+| `DUNE/Presentation/Exercise/TemplateExerciseResolver.swift` | cardio default entry를 `1 set / 1 rep`로 변경 | 수동 추가/AI 생성 모두 같은 템플릿 기본값을 쓰게 하기 위해 |
+| `DUNETests/AIWorkoutTemplateGeneratorTests.swift` | cardio 유지/정규화 테스트와 unsupported non-template type rejection 회귀 테스트 추가 | future change가 다시 HIIT/flexibility를 열어 버리는 회귀를 막기 위해 |
+| `DUNETests/TemplateExerciseResolverTests.swift` | cardio default entry가 `1/1`인지 고정 | UI default drift를 방지하기 위해 |
+| `DUNETests/AICoachingMessageServiceTests.swift` | 현재 `ConditionScore` API에 맞게 사전 컴파일 blocker 제거 | 테스트 타깃 검증을 막는 unrelated compile blocker를 함께 정리하기 위해 |
 
 ### Key Code
 
 ```swift
-let directMatches = library.search(query: trimmedName).filter { exercise in
-    candidateLabels(for: exercise).contains(normalizedName)
-}
-if directMatches.count == 1, let exact = directMatches.first {
-    return exact
-}
-
-let fuzzyMatches = library.search(query: trimmedName)
-guard fuzzyMatches.count == 1 else {
+guard Self.isTemplateSupported(exercise) else {
     return nil
 }
-return fuzzyMatches.first
+
+switch exercise.inputType {
+case .durationDistance:
+    return GeneratedWorkoutExerciseSlot(
+        exerciseDefinitionID: exercise.id,
+        exerciseName: exercise.localizedName,
+        sets: 1,
+        reps: 1
+    )
+case .setsRepsWeight, .setsReps:
+    return GeneratedWorkoutExerciseSlot(
+        exerciseDefinitionID: exercise.id,
+        exerciseName: exercise.localizedName,
+        sets: slot.sets,
+        reps: slot.reps
+    )
+case .durationIntensity, .roundsBased:
+    return nil
+}
 ```
 
 ```swift
-let manualSnapshots = (try? modelContext.fetch(descriptor))?
-    .map { $0.snapshot(library: library) } ?? []
-
-let healthKitSnapshots = try await workoutService.fetchWorkouts(days: 14)
-    .filter { !$0.isFromThisApp && !$0.activityType.primaryMuscles.isEmpty }
-    .map { workout in
-        ExerciseRecordSnapshot(...)
+static func isTemplateSupported(_ exercise: ExerciseDefinition) -> Bool {
+    switch exercise.inputType {
+    case .setsRepsWeight, .setsReps, .durationDistance:
+        true
+    case .durationIntensity, .roundsBased:
+        false
     }
+}
 ```
 
-정리하면, AI 출력은 "고유하게 식별 가능한 운동"만 채택하고, 컨텍스트는 최근 수동 기록과 HealthKit workout summary를 합쳐 생성 품질을 높였다.
+```swift
+switch TemplateExerciseProfile(exercise: definition) {
+case .cardio:
+    entry.defaultSets = 1
+    entry.defaultReps = 1
+    entry.defaultWeightKg = nil
+    entry.restDuration = nil
+case .strengthLike, .unresolved:
+    entry.defaultSets = slot.sets
+    entry.defaultReps = slot.reps
+}
+```
+
+핵심은 "cardio support"를 prompt 문구 하나로 끝내지 않고, generator filter, generated slot normalization, default entry, save clamp, regression tests까지 같은 계약으로 묶은 점이다.
 
 ## Prevention
 
 ### Checklist Addition
 
-- [ ] Foundation Models 출력이 catalog entity로 매핑될 때 ambiguous fallback이 없는지 확인한다.
-- [ ] 화면에서 최근 기록 일부만 필요하면 `@Query` 전체 로드 대신 `FetchDescriptor` + `fetchLimit`을 우선 검토한다.
-- [ ] 운동 추천/생성 컨텍스트는 SwiftData 기록과 HealthKit 요약을 함께 검토해 편향을 줄인다.
+- [ ] template-capable 판정에 `TemplateExerciseProfile`를 재사용하지 말고 저장 스키마 기준 `ExerciseInputType` allowlist를 먼저 정의한다.
+- [ ] 새 input type을 자연어 템플릿 플로우에 추가할 때는 generator filter, entry default, save clamp, tests를 같은 배치에서 함께 수정한다.
+- [ ] HealthKit workout context는 화면별 ad-hoc mapping 대신 shared snapshot helper를 우선 사용한다.
+- [ ] cardio/time-based 엔트리는 sets/reps normalization과 weight/rest nil 정책이 저장 경로 끝까지 유지되는지 확인한다.
 
 ### Rule Addition (if applicable)
 
-지금 단계에서 새 rule 파일은 필요하지 않다. 다만 AI 기반 운동 생성 기능을 추가할 때는 exact-or-unique match 원칙을 리뷰 체크리스트로 반복 적용하는 편이 좋다.
+새 rule 파일은 추가하지 않았다. 대신 `docs/corrections-active.md`에 "template-capable 판정은 `TemplateExerciseProfile` 대용 금지" 교정을 추가해 같은 실수를 다시 막는다.
 
 ## Lessons Learned
 
-- 자연어 생성 기능은 prompt 품질보다 "출력을 안전하게 도메인 모델로 환원하는 규칙"이 더 중요하다.
-- 운동 이력 개인화는 앱 내부 기록만 보면 쉽게 빈약해지므로 HealthKit summary를 함께 쓰는 편이 사용자 체감 품질에 직접 연결된다.
-- Foundation Models 기능은 생성 자체보다도 fallback, validation, ambiguous match 제거를 먼저 설계해야 ship 가능한 품질이 나온다.
+- 자연어 생성에서 "지원 운동 종류를 넓힌다"는 작업은 prompt 품질 문제가 아니라 persistence contract 문제다.
+- presentation profile과 저장 가능 input type은 비슷해 보여도 다른 축이므로, 둘을 같은 의미로 재사용하면 회귀가 생긴다.
+- mainline 구조에 capability gap을 붙일 때는 generator만 수정하지 말고 UI default와 save path까지 같은 규칙으로 맞춰야 drift가 없다.

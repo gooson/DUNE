@@ -118,7 +118,7 @@ struct TemplateExerciseResolverTests {
         #expect(profile.secondarySummaryLabel == String(localized: "Floors"))
     }
 
-    @Test("defaultEntry normalizes cardio templates to a single set")
+    @Test("defaultEntry normalizes cardio templates to a single set and rep")
     func defaultEntryNormalizesCardioTemplate() {
         let definition = makeCardioDefinition()
 
@@ -126,6 +126,7 @@ struct TemplateExerciseResolverTests {
 
         #expect(entry.exerciseDefinitionID == definition.id)
         #expect(entry.defaultSets == 1)
+        #expect(entry.defaultReps == 1)
         #expect(entry.defaultWeightKg == nil)
         #expect(entry.equipment == definition.equipment.rawValue)
         #expect(entry.inputTypeRaw == ExerciseInputType.durationDistance.rawValue)

@@ -39,7 +39,6 @@ struct AICoachingMessageServiceTests {
         let insight = makeTestInsight()
         let input = makeTestInput(conditionScore: ConditionScore(
             score: 75,
-            status: .good,
             date: Date(),
             contributions: [],
             detail: nil

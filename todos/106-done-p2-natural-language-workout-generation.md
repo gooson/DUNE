@@ -22,5 +22,7 @@ updated: 2026-03-09
 ## 참고
 
 - `docs/brainstorms/2026-03-08-apple-on-device-ml-sdk-research.md` Section 7.3
+- `docs/plans/2026-03-09-natural-language-workout-generation.md`
+- `docs/solutions/architecture/2026-03-09-natural-language-workout-template-generation.md`
 - 기존: `DUNE/Domain/UseCases/WorkoutRecommendationService.swift`
 - exercises.json 이름 매칭 → Tool Calling `searchExercise` 도구로 해결
