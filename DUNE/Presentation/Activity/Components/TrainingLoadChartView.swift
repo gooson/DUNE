@@ -197,7 +197,7 @@ struct TrainingLoadChartView: View {
     }
 
     private var xDomain: ClosedRange<Date> {
-        resolvedXDomain(scrollDomain: nil, dates: data.map(\.date))
+        resolvedDayBucketXDomain(dates: data.map(\.date))
     }
 
     private var isScrollable: Bool {

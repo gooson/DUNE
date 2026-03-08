@@ -78,6 +78,24 @@ func resolvedXDomain(scrollDomain: ClosedRange<Date>?, dates: [Date]) -> ClosedR
     return first...last
 }
 
+/// Resolve X-axis domain for day-bucket bar charts.
+/// Extends the upper bound by one day so the latest bucket remains fully visible.
+func resolvedDayBucketXDomain(
+    dates: [Date],
+    calendar: Calendar = .current
+) -> ClosedRange<Date> {
+    guard let first = dates.min(), let last = dates.max() else {
+        let now = Date()
+        return now...now.addingTimeInterval(1)
+    }
+
+    let start = calendar.startOfDay(for: first)
+    let lastDay = calendar.startOfDay(for: last)
+    let end = calendar.date(byAdding: .day, value: 1, to: lastDay) ?? lastDay.addingTimeInterval(86_400)
+
+    return start...end
+}
+
 // MARK: - Highlight
 
 /// Notable data point within a time period (e.g. weekly high/low).
