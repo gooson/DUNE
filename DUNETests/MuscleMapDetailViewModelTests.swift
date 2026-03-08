@@ -277,6 +277,39 @@ struct MuscleMap3DStateTests {
         #expect(state == .volume(.high))
     }
 
+    @Test("Anatomy layer exposes shell only in skin mode")
+    func anatomyLayerShellOpacity() {
+        #expect(
+            MuscleMap3DState.effectiveShellOpacity(
+                for: .skin,
+                configuredShellOpacity: 0.24
+            ) == 0.24
+        )
+        #expect(
+            MuscleMap3DState.effectiveShellOpacity(
+                for: .muscles,
+                configuredShellOpacity: 0.24
+            ) == 0
+        )
+        #expect(
+            MuscleMap3DState.effectiveShellOpacity(
+                for: .focus,
+                configuredShellOpacity: 0.24
+            ) == 0
+        )
+    }
+
+    @Test("Focus layer dims non-selected muscles")
+    func focusLayerMuscleAlpha() {
+        #expect(MuscleMap3DState.effectiveMuscleAlpha(for: .skin, isSelected: false) == 1)
+        #expect(MuscleMap3DState.effectiveMuscleAlpha(for: .muscles, isSelected: false) == 1)
+        #expect(MuscleMap3DState.effectiveMuscleAlpha(for: .focus, isSelected: true) == 1)
+        #expect(
+            MuscleMap3DState.effectiveMuscleAlpha(for: .focus, isSelected: false)
+                == MuscleMap3DState.focusDimmedMuscleAlpha
+        )
+    }
+
     @Test("Zoom scale is clamped to viewer bounds")
     func zoomScaleClamped() {
         #expect(MuscleMap3DState.clampedZoomScale(0.2) == MuscleMap3DState.minZoomScale)

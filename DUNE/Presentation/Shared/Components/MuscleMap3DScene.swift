@@ -16,6 +16,23 @@ enum MuscleMap3DMode: String, CaseIterable, Sendable {
     }
 }
 
+enum MuscleMap3DAnatomyLayer: String, CaseIterable, Sendable {
+    case skin
+    case muscles
+    case focus
+
+    var label: String {
+        switch self {
+        case .skin:
+            String(localized: "Skin")
+        case .muscles:
+            String(localized: "Muscles")
+        case .focus:
+            String(localized: "Focus")
+        }
+    }
+}
+
 enum MuscleMap3DVolumeIntensity: Int, CaseIterable, Sendable {
     case none = 0
     case light = 1
@@ -78,6 +95,7 @@ enum MuscleMap3DState {
         case .veryHigh: SIMD3<Float>(1.14, 1.04, 1.14)
         }
     }
+    static let focusDimmedMuscleAlpha: CGFloat = 0.2
 
     static func clampedZoomScale(_ scale: Float) -> Float {
         Swift.max(minZoomScale, Swift.min(scale, maxZoomScale))
@@ -139,6 +157,30 @@ enum MuscleMap3DState {
         guard entityName.hasPrefix("muscle_") else { return nil }
         let rawValue = String(entityName.dropFirst("muscle_".count))
         return MuscleGroup(rawValue: rawValue)
+    }
+
+    static func effectiveShellOpacity(
+        for anatomyLayer: MuscleMap3DAnatomyLayer,
+        configuredShellOpacity: Float
+    ) -> Float {
+        switch anatomyLayer {
+        case .skin:
+            configuredShellOpacity
+        case .muscles, .focus:
+            0
+        }
+    }
+
+    static func effectiveMuscleAlpha(
+        for anatomyLayer: MuscleMap3DAnatomyLayer,
+        isSelected: Bool
+    ) -> CGFloat {
+        switch anatomyLayer {
+        case .skin, .muscles:
+            1
+        case .focus:
+            isSelected ? 1 : focusDimmedMuscleAlpha
+        }
     }
 
     private static func prioritySort(lhs: MuscleFatigueState, rhs: MuscleFatigueState) -> Bool {
@@ -220,16 +262,24 @@ final class MuscleMap3DScene {
     private var lastFatigueHash: Int = 0
     private var lastMuscleMode: MuscleMap3DMode?
     private var lastSelectedMuscle: MuscleGroup?
+    private var lastAnatomyLayer: MuscleMap3DAnatomyLayer?
     private var lastMuscleColorScheme: ColorScheme?
 
     func updateVisuals(
         fatigueStates: [MuscleFatigueState],
         mode: MuscleMap3DMode,
         selectedMuscle: MuscleGroup?,
+        anatomyLayer: MuscleMap3DAnatomyLayer,
         colorScheme: ColorScheme,
         shellOpacity: Float = MuscleMap3DState.defaultShellOpacity
     ) {
-        updateShellMaterials(colorScheme: colorScheme, opacity: shellOpacity)
+        updateShellMaterials(
+            colorScheme: colorScheme,
+            opacity: MuscleMap3DState.effectiveShellOpacity(
+                for: anatomyLayer,
+                configuredShellOpacity: shellOpacity
+            )
+        )
         guard hasPreparedGeometry, !muscleModels.isEmpty else { return }
 
         var hasher = Hasher()
@@ -243,11 +293,13 @@ final class MuscleMap3DScene {
         let muscleInputsChanged = fatigueHash != lastFatigueHash
             || mode != lastMuscleMode
             || selectedMuscle != lastSelectedMuscle
+            || anatomyLayer != lastAnatomyLayer
             || colorScheme != lastMuscleColorScheme
         guard muscleInputsChanged else { return }
         lastFatigueHash = fatigueHash
         lastMuscleMode = mode
         lastSelectedMuscle = selectedMuscle
+        lastAnatomyLayer = anatomyLayer
         lastMuscleColorScheme = colorScheme
 
         let fatigueByMuscle = Dictionary(
@@ -261,11 +313,18 @@ final class MuscleMap3DScene {
                 mode: mode
             )
             let isSelected = muscle == selectedMuscle
+            let baseColor = resolvedColor(
+                for: displayState,
+                colorScheme: colorScheme,
+                isSelected: isSelected
+            )
             let material = SimpleMaterial(
-                color: resolvedColor(
-                    for: displayState,
-                    colorScheme: colorScheme,
-                    isSelected: isSelected
+                color: applyingAlphaMultiplier(
+                    baseColor,
+                    MuscleMap3DState.effectiveMuscleAlpha(
+                        for: anatomyLayer,
+                        isSelected: isSelected
+                    )
                 ),
                 roughness: isSelected ? 0.15 : 0.32,
                 isMetallic: false
@@ -492,6 +551,21 @@ final class MuscleMap3DScene {
             green: lhsGreen + ((rhsGreen - lhsGreen) * clamped),
             blue: lhsBlue + ((rhsBlue - lhsBlue) * clamped),
             alpha: lhsAlpha + ((rhsAlpha - lhsAlpha) * clamped)
+        )
+    }
+
+    private func applyingAlphaMultiplier(_ color: UIColor, _ multiplier: CGFloat) -> UIColor {
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+        color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+
+        return UIColor(
+            red: red,
+            green: green,
+            blue: blue,
+            alpha: alpha * multiplier
         )
     }
 }
