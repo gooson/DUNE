@@ -430,6 +430,7 @@
 		7B04AFE0C7552DC39F590EA1 /* StreakPeriod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007E8BC8965A9788AD76932D /* StreakPeriod.swift */; };
 		7BC6428999C2838FACA61540 /* CompoundWorkoutMode+View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA7833EB71B7220F7C732F8 /* CompoundWorkoutMode+View.swift */; };
 		7D00E31FD4CBFDC0074BEC46 /* HealthSnapshotMirrorMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3F36139BA51FE43673B11D1 /* HealthSnapshotMirrorMapperTests.swift */; };
+		7D1AFC81C6793FAAEB851482 /* WellnessRegressionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38354A29347500C861D15AC5 /* WellnessRegressionTests.swift */; };
 		7D9A874DE419A866E3B7420D /* ExerciseHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10CEBAC4C8BBE481ABA0BB7B /* ExerciseHistoryView.swift */; };
 		7E3ADCC828DF8A18B48025B2 /* SleepSummaryWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9A4C923F100B7D80FE42B7C /* SleepSummaryWidget.swift */; };
 		7EC18E0990E70AF2DDBFC0B1 /* HRZoneBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2277BEC1445FEEC28CDBDBD0 /* HRZoneBar.swift */; };
@@ -1165,6 +1166,7 @@
 		375D6C69DBBDA80C3F74E752 /* RestTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestTimerView.swift; sourceTree = "<group>"; };
 		37B8B67D8932F2086E6BD3BA /* MuscleMap3DScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuscleMap3DScene.swift; sourceTree = "<group>"; };
 		37F3589B6DCF812C4B06225E /* ChartSelectionOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartSelectionOverlay.swift; sourceTree = "<group>"; };
+		38354A29347500C861D15AC5 /* WellnessRegressionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessRegressionTests.swift; sourceTree = "<group>"; };
 		38618BB3728ECFB5A6584C8B /* VisionImmersiveExperienceViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionImmersiveExperienceViewModelTests.swift; sourceTree = "<group>"; };
 		3952301E1E647D09E0B04F0C /* WhatsNewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewManager.swift; sourceTree = "<group>"; };
 		3967EBEB8943F69000B759F1 /* ShanksSceneEffects.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ShanksSceneEffects.metal; sourceTree = "<group>"; };
@@ -1983,6 +1985,7 @@
 				ADD98A5884F76FE47D896E9E /* ActivityExerciseRegressionTests.swift */,
 				F161CCB00727D7B5C88AA2F9 /* ActivityMuscleMapRegressionTests.swift */,
 				F15D47756EA157E164DF6594 /* TodaySettingsRegressionTests.swift */,
+				38354A29347500C861D15AC5 /* WellnessRegressionTests.swift */,
 			);
 			path = Full;
 			sourceTree = "<group>";
@@ -4618,6 +4621,7 @@
 				408A0FB7C6C4C9B8D8AA83E5 /* TodaySettingsRegressionTests.swift in Sources */,
 				748987DFDA9610129687F053 /* UITestBaseCase.swift in Sources */,
 				E1D466DA3C5F5A368A8033BE /* UITestHelpers.swift in Sources */,
+				7D1AFC81C6793FAAEB851482 /* WellnessRegressionTests.swift in Sources */,
 				859B77E27807125C750586B5 /* WellnessSmokeTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
