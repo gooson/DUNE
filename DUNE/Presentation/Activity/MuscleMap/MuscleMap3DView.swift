@@ -10,7 +10,7 @@ struct MuscleMap3DView: View {
     @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var mode: MuscleMap3DMode = .recovery
     @State private var selectedMuscle: MuscleGroup?
-    @State private var shellOpacity: Double = 0.06
+    @AppStorage("muscleMap3D.shellOpacity") private var shellOpacity: Double = Double(MuscleMap3DState.defaultShellOpacity)
     @State private var resetToken = 0
 
     init(fatigueStates: [MuscleFatigueState], highlightedMuscle: MuscleGroup?) {
@@ -208,11 +208,20 @@ struct MuscleMap3DView: View {
             Label("Skin", systemImage: "eye")
                 .font(.caption)
                 .foregroundStyle(DS.Color.textSecondary)
-                .frame(width: 56, alignment: .leading)
-            Slider(value: $shellOpacity, in: 0...0.5)
-                .tint(DS.Color.activity)
+                .fixedSize(horizontal: true, vertical: false)
+            Slider(value: $shellOpacity, in: 0...0.5) {
+                Text("Skin Opacity")
+            } minimumValueLabel: {
+                Image(systemName: "eye.slash")
+                    .font(.caption2)
+                    .foregroundStyle(DS.Color.textSecondary)
+            } maximumValueLabel: {
+                Image(systemName: "eye")
+                    .font(.caption2)
+                    .foregroundStyle(DS.Color.textSecondary)
+            }
+            .tint(DS.Color.activity)
         }
-        .padding(.horizontal, DS.Spacing.sm)
     }
 
     private var muscleSelectionStrip: some View {

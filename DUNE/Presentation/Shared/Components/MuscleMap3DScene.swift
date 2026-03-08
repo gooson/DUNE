@@ -65,6 +65,7 @@ enum MuscleMap3DState {
     static let rotationSensitivity: Float = 0.01
     static let pitchSensitivity: Float = 0.006
     static let selectedScale: Float = 1.045
+    static let defaultShellOpacity: Float = 0.06
 
     static func clampedZoomScale(_ scale: Float) -> Float {
         Swift.max(minZoomScale, Swift.min(scale, maxZoomScale))
@@ -209,7 +210,7 @@ final class MuscleMap3DScene {
         mode: MuscleMap3DMode,
         selectedMuscle: MuscleGroup?,
         colorScheme: ColorScheme,
-        shellOpacity: Float = 0.06
+        shellOpacity: Float = MuscleMap3DState.defaultShellOpacity
     ) {
         let fatigueByMuscle = Dictionary(
             uniqueKeysWithValues: fatigueStates.map { ($0.muscle, $0) }
@@ -313,8 +314,15 @@ final class MuscleMap3DScene {
 
     // MARK: - Materials
 
-    private func updateShellMaterials(colorScheme: ColorScheme, opacity: Float = 0.06) {
-        let alpha = CGFloat(max(0, min(1, opacity)))
+    private var lastShellOpacity: Float = -1
+    private var lastShellColorScheme: ColorScheme?
+
+    private func updateShellMaterials(colorScheme: ColorScheme, opacity: Float) {
+        guard opacity != lastShellOpacity || colorScheme != lastShellColorScheme else { return }
+        lastShellOpacity = opacity
+        lastShellColorScheme = colorScheme
+
+        let alpha = CGFloat(opacity)
         let tint: UIColor = colorScheme == .dark
             ? UIColor.white.withAlphaComponent(alpha)
             : UIColor.black.withAlphaComponent(alpha)
