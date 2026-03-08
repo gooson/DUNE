@@ -54,6 +54,16 @@ struct VisionWindowPlacementPlannerTests {
         #expect(relationship == .below(VisionDashboardWindowKind.activity.windowID))
     }
 
+    @Test("Body window falls back below the main window when activity is closed")
+    func bodyFallsBackToMainWindow() {
+        let relationship = VisionWindowPlacementPlanner.relationship(
+            for: VisionDashboardWindowKind.body.windowID,
+            existingWindowIDs: windowIDs(nil)
+        )
+
+        #expect(relationship == .below(VisionWindowPlacementPlanner.mainWindowID))
+    }
+
     @Test("Chart3D window opens above the main window")
     func chart3DUsesAboveMainWindow() {
         let relationship = VisionWindowPlacementPlanner.relationship(
@@ -62,6 +72,23 @@ struct VisionWindowPlacementPlannerTests {
         )
 
         #expect(relationship == .above(VisionWindowPlacementPlanner.mainWindowID))
+    }
+
+    @Test(
+        "Known windows fall back to the utility panel when no anchor window is available",
+        arguments: [
+            VisionDashboardWindowKind.condition.windowID,
+            VisionDashboardWindowKind.activity.windowID,
+            VisionWindowPlacementPlanner.chart3DWindowID,
+        ]
+    )
+    func knownWindowsWithoutAnchorsUseUtilityPanel(windowID: String) {
+        let relationship = VisionWindowPlacementPlanner.relationship(
+            for: windowID,
+            existingWindowIDs: []
+        )
+
+        #expect(relationship == .utilityPanel)
     }
 
     @Test("Unknown windows fall back to the utility panel")
