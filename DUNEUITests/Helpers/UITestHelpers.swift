@@ -81,14 +81,21 @@ enum AXID {
     static let injuryDetailMarkRecovered = "injury-detail-mark-recovered"
     static let injuryFormScreen = "injury-form-screen"
 
-    // MARK: - Life Tab (active: hero, toolbar-add, habits section, habit toggle)
+    // MARK: - Life Tab (active: hero, toolbar-add, habits section, actions, history)
     static let lifeHeroProgress = "life-hero-progress"
     static let lifeToolbarAdd = "life-toolbar-add"
     static let lifeSectionHabits = "life-section-habits"
     static let lifeHabitToggle = "life-habit-toggle"
     static func lifeHabitActions(_ habitName: String) -> String { "life-habit-actions-\(habitName)" }
     static let lifeHabitActionEdit = "life-habit-action-edit"
+    static let lifeHabitActionSnooze = "life-habit-action-snooze"
+    static let lifeHabitActionSkip = "life-habit-action-skip"
+    static let lifeHabitActionHistory = "life-habit-action-history"
     static let lifeHabitActionArchive = "life-habit-action-archive"
+    static let lifeHabitHistoryScreen = "life-habit-history-screen"
+    static let lifeHabitHistoryEmpty = "life-habit-history-empty"
+    static let lifeHabitHistoryClose = "life-habit-history-close"
+    static func lifeHabitHistoryRow(_ index: Int) -> String { "life-habit-history-row-\(index)" }
 
     // MARK: - Settings (active rows)
     static let settingsRowExerciseDefaults = "settings-row-exercisedefaults"

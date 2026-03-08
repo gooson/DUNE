@@ -821,6 +821,11 @@ private struct HabitHistorySheet: View {
     var body: some View {
         NavigationStack {
             Group {
+                Color.clear
+                    .frame(height: 1)
+                    .accessibilityElement()
+                    .accessibilityIdentifier("life-habit-history-screen")
+
                 Text(habitName)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
@@ -835,8 +840,9 @@ private struct HabitHistorySheet: View {
                         actionTitle: "Close",
                         action: { dismiss() }
                     )
+                    .accessibilityIdentifier("life-habit-history-empty")
                 } else {
-                    List(entries) { entry in
+                    List(Array(entries.enumerated()), id: \.element.id) { index, entry in
                         HStack(spacing: DS.Spacing.sm) {
                             Image(systemName: iconName(for: entry.action))
                                 .foregroundStyle(color(for: entry.action))
@@ -848,6 +854,8 @@ private struct HabitHistorySheet: View {
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
+                        .accessibilityElement(children: .combine)
+                        .accessibilityIdentifier("life-habit-history-row-\(index)")
                     }
                     .listStyle(.plain)
                 }
@@ -856,6 +864,7 @@ private struct HabitHistorySheet: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Close") { dismiss() }
+                        .accessibilityIdentifier("life-habit-history-close")
                 }
             }
         }
