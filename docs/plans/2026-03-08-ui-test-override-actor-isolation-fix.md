@@ -1,7 +1,7 @@
 ---
 topic: ui-test-override-actor-isolation-fix
 date: 2026-03-08
-status: approved
+status: implemented
 confidence: high
 related_solutions:
   - docs/solutions/general/2026-03-08-chart-long-press-scroll-regression.md
