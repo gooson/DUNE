@@ -22,15 +22,15 @@ SharePlay, Voice Input 등 Phase 4에서 보류된 고급 기능을 구현한다
 
 ### 1. G1 SharePlay Shared Workout Space
 
-- GroupActivities 프레임워크 통합
-- SharedWorldAnchors로 공유 공간 앵커
-- 각 참여자의 운동 데이터가 공간에 실시간 표시
-- 멀티유저 health 비교 뷰
+- Advanced spatial sync scope only
+- SharedWorldAnchors로 공유 공간 앵커 정렬
+- shareplay board를 RealityKit/volumetric surface에 배치
+- 멀티유저 health 비교 및 richer participant placement
 
 ### 2. F3 Voice-First Workout Entry
 
-- SFSpeechRecognizer 통합
-- NLP 파싱: "벤치프레스 80kg 8회" → ExerciseRecord
+- persistence/audio scope only
+- parsed draft → ExerciseRecord save flow 연결
 - 음성 피드백 (TTS 또는 spatial audio)
 - 한국어/영어/일본어 지원
 
@@ -63,3 +63,4 @@ SharePlay, Voice Input 등 Phase 4에서 보류된 고급 기능을 구현한다
 
 - `docs/brainstorms/2026-03-05-vision-pro-features.md` Categories F, G
 - `todos/020-in-progress-p3-vision-pro-phase4-social-advanced.md` (기존 Phase 4 TODO)
+- G1 foundation은 2026-03-08 batch에서 `SharePlay workout board`까지 완료
