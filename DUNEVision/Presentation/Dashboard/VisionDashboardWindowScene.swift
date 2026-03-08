@@ -6,12 +6,14 @@ struct VisionDashboardWindowScene: View {
 
     init(
         kind: VisionDashboardWindowKind,
-        sharedHealthDataService: SharedHealthDataService? = nil
+        sharedHealthDataService: SharedHealthDataService? = nil,
+        workoutService: WorkoutQuerying? = nil
     ) {
         self.kind = kind
         _viewModel = State(
             initialValue: VisionDashboardWorkspaceViewModel(
-                sharedHealthDataService: sharedHealthDataService
+                sharedHealthDataService: sharedHealthDataService,
+                workoutService: workoutService
             )
         )
     }
@@ -43,6 +45,11 @@ struct VisionDashboardWindowScene: View {
         }
         .task {
             await viewModel.loadIfNeeded()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .simulatorAdvancedMockDataDidChange)) { _ in
+            Task {
+                await viewModel.reload()
+            }
         }
     }
 

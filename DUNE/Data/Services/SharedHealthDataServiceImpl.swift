@@ -32,6 +32,9 @@ actor SharedHealthDataServiceImpl: SharedHealthDataService {
     }
 
     func fetchSnapshot() async -> SharedHealthSnapshot {
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.sharedHealthSnapshot
+        }
         let now = nowProvider()
 
         if let cachedSnapshot,

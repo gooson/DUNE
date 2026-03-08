@@ -13,6 +13,13 @@ struct WorkoutQueryService: WorkoutQuerying, Sendable {
     }
 
     func fetchWorkouts(days: Int) async throws -> [WorkoutSummary] {
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            let calendar = Calendar.current
+            let endDate = mockData.referenceDate.addingTimeInterval(1)
+            let startDate = calendar.date(byAdding: .day, value: -days, to: endDate) ?? endDate
+            return mockData.workoutSummaries(start: startDate, end: endDate)
+        }
+        guard manager.isAvailable else { return [] }
         try await manager.ensureNotDenied(for: HKObjectType.workoutType())
         let calendar = Calendar.current
         let endDate = Date()
@@ -39,6 +46,10 @@ struct WorkoutQueryService: WorkoutQuerying, Sendable {
     }
 
     func fetchWorkouts(start: Date, end: Date) async throws -> [WorkoutSummary] {
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.workoutSummaries(start: start, end: end)
+        }
+        guard manager.isAvailable else { return [] }
         try await manager.ensureNotDenied(for: HKObjectType.workoutType())
 
         let predicate = HKQuery.predicateForSamples(

@@ -76,6 +76,18 @@ final class SettingsSmokeTests: UITestBaseCase {
         )
     }
 
+    func testSimulatorMockDataControlsExist() throws {
+        _ = app.scrollToElementIfNeeded(AXID.settingsButtonSeedAdvancedMockData, maxSwipes: 8)
+        XCTAssertTrue(
+            elementExists(AXID.settingsButtonSeedAdvancedMockData, timeout: 5),
+            "Seed Advanced Mock Data button should exist on simulator"
+        )
+        XCTAssertTrue(
+            elementExists(AXID.settingsButtonResetMockData, timeout: 5),
+            "Reset Mock Data button should exist on simulator"
+        )
+    }
+
     func testAboutSectionExists() throws {
         _ = app.scrollToElementIfNeeded(AXID.settingsRowVersion)
         XCTAssertTrue(

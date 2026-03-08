@@ -15,6 +15,10 @@ struct SleepQueryService: SleepQuerying, Sendable {
     }
 
     func fetchSleepStages(for date: Date) async throws -> [SleepStage] {
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.sleepStages(for: date)
+        }
+        guard manager.isAvailable else { return [] }
         try await manager.ensureNotDenied(for: HKCategoryType(.sleepAnalysis))
         let calendar = Calendar.current
         // Sleep data typically starts the evening before
@@ -142,6 +146,10 @@ struct SleepQueryService: SleepQuerying, Sendable {
     }
 
     func fetchLatestSleepStages(withinDays days: Int) async throws -> (stages: [SleepStage], date: Date)? {
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.latestSleepStages(withinDays: days)
+        }
+        guard manager.isAvailable else { return nil }
         let calendar = Calendar.current
         let today = Date()
         for dayOffset in 0...days {
@@ -159,6 +167,12 @@ struct SleepQueryService: SleepQuerying, Sendable {
         start: Date,
         end: Date
     ) async throws -> [(date: Date, totalMinutes: Double, stageBreakdown: [SleepStage.Stage: Double])] {
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.sleepDailyDurations(start: start, end: end).map {
+                (date: $0.date, totalMinutes: $0.totalMinutes, stageBreakdown: $0.stageBreakdown)
+            }
+        }
+        guard manager.isAvailable else { return [] }
         let calendar = Calendar.current
         let dayCount = calendar.dateComponents([.day], from: start, to: end).day ?? 7
 
@@ -192,7 +206,16 @@ struct SleepQueryService: SleepQuerying, Sendable {
     }
 
     func fetchLastNightSleepSummary(for date: Date) async throws -> SleepSummary? {
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            let stages = mockData.sleepStages(for: date)
+            return sleepSummary(from: stages, date: date)
+        }
+        guard manager.isAvailable else { return nil }
         let stages = try await fetchSleepStages(for: date)
+        return sleepSummary(from: stages, date: date)
+    }
+
+    private func sleepSummary(from stages: [SleepStage], date: Date) -> SleepSummary? {
         let sleepStages = stages.filter { $0.stage != .awake }
         guard !sleepStages.isEmpty else { return nil }
 

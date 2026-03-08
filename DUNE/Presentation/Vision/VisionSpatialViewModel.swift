@@ -50,7 +50,9 @@ final class VisionSpatialViewModel {
         message = nil
 
         let healthKitAvailable = healthKitManager.isAvailable
-        guard healthKitAvailable || sharedHealthDataService != nil else {
+        let isSimulatorMockEnabled = SimulatorAdvancedMockDataModeStore.isEnabled
+        let canQueryHealthData = healthKitAvailable || isSimulatorMockEnabled
+        guard canQueryHealthData || sharedHealthDataService != nil else {
             summary = analyzer.buildSummary(
                 workouts: [],
                 latestHeartRateBPM: nil,
@@ -71,8 +73,8 @@ final class VisionSpatialViewModel {
         }
 
         let snapshotTask = Task { await fetchSnapshot() }
-        let heartRateTask = healthKitAvailable ? Task { await fetchLatestHeartRate() } : nil
-        let workoutsTask = healthKitAvailable ? Task { await fetchRecentWorkouts() } : nil
+        let heartRateTask = canQueryHealthData ? Task { await fetchLatestHeartRate() } : nil
+        let workoutsTask = canQueryHealthData ? Task { await fetchRecentWorkouts() } : nil
 
         let snapshotResult = await snapshotTask.value
         let heartRateResult = await heartRateTask?.value ?? VisionFetchResult<VitalSample?>(
@@ -160,4 +162,3 @@ final class VisionSpatialViewModel {
         }
     }
 }
-

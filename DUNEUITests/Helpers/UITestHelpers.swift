@@ -81,6 +81,8 @@ enum AXID {
     static let settingsRowLocationAccess = "settings-row-location-access"
     static let settingsRowWhatsNew = "settings-row-whatsnew"
     static let settingsRowVersion = "settings-row-version"
+    static let settingsButtonSeedAdvancedMockData = "settings-button-seed-advanced-mock-data"
+    static let settingsButtonResetMockData = "settings-button-reset-mock-data"
 
     // MARK: - What's New
     static let whatsNewScreen = "whatsnew-screen"

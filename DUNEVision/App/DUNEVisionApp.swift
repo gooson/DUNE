@@ -7,10 +7,11 @@ struct DUNEVisionApp: App {
     @AppStorage(AppTheme.storageKey) private var selectedTheme: AppTheme = .desertWarm
     @State private var immersionStyle: ImmersionStyle = .progressive
 
+    private let modelContainer: ModelContainer
     private let sharedHealthDataService: SharedHealthDataService
     private let refreshCoordinator: AppRefreshCoordinating
     private let observerManager: HealthKitObserverManager?
-    private let workoutService: WorkoutQuerying?
+    private let workoutService: WorkoutQuerying
 
     private static func makeInMemoryFallbackContainer() -> ModelContainer {
         do {
@@ -43,23 +44,20 @@ struct DUNEVisionApp: App {
         }
     }
 
-    private static func makeMirroredSnapshotService(
+    private static func makeMirroredSnapshotContainer(
         cloudSyncEnabled: Bool
-    ) -> SharedHealthDataService {
-        let modelContainer: ModelContainer
+    ) -> ModelContainer {
         do {
-            modelContainer = try HealthSnapshotMirrorContainerFactory.makeContainer(
+            return try HealthSnapshotMirrorContainerFactory.makeContainer(
                 cloudSyncEnabled: cloudSyncEnabled
             )
         } catch {
             AppLogger.data.error("visionOS ModelContainer failed: \(error)")
-            modelContainer = recoverModelContainer(
+            return recoverModelContainer(
                 after: error,
                 cloudSyncEnabled: cloudSyncEnabled
             )
         }
-
-        return CloudMirroredSharedHealthDataService(modelContainer: modelContainer)
     }
 
     private func makeWindowPlacement(
@@ -119,22 +117,20 @@ struct DUNEVisionApp: App {
 
         let cloudSyncEnabled = UserDefaults.standard.bool(forKey: "isCloudSyncEnabled")
         let healthKitAvailable = HKHealthStore.isHealthDataAvailable()
+        let mirroredContainer = Self.makeMirroredSnapshotContainer(
+            cloudSyncEnabled: cloudSyncEnabled
+        )
+        self.modelContainer = mirroredContainer
+
         let sharedService: SharedHealthDataService
         if healthKitAvailable {
             sharedService = SharedHealthDataServiceImpl(healthKitManager: .shared)
-        } else if cloudSyncEnabled {
-            AppLogger.healthKit.info("HealthKit unavailable on visionOS. Using CloudKit-mirrored snapshot service.")
-            sharedService = Self.makeMirroredSnapshotService(
-                cloudSyncEnabled: cloudSyncEnabled
-            )
         } else {
-            AppLogger.healthKit.info("HealthKit unavailable on visionOS and cloud sync is disabled. Using empty snapshot service.")
-            sharedService = VisionUnavailableSharedHealthDataService()
+            AppLogger.healthKit.info("HealthKit unavailable on visionOS. Using mirrored snapshot service.")
+            sharedService = CloudMirroredSharedHealthDataService(modelContainer: mirroredContainer)
         }
         self.sharedHealthDataService = sharedService
-        self.workoutService = healthKitAvailable
-            ? WorkoutQueryService(manager: .shared)
-            : nil
+        self.workoutService = WorkoutQueryService(manager: .shared)
 
         let coordinator = AppRefreshCoordinatorImpl(sharedHealthDataService: sharedService)
         self.refreshCoordinator = coordinator
@@ -154,6 +150,7 @@ struct DUNEVisionApp: App {
     var body: some Scene {
         WindowGroup {
             VisionContentView(
+                modelContainer: modelContainer,
                 sharedHealthDataService: sharedHealthDataService,
                 refreshCoordinator: refreshCoordinator,
                 workoutService: workoutService
@@ -164,7 +161,8 @@ struct DUNEVisionApp: App {
         WindowGroup(id: VisionDashboardWindowKind.condition.windowID) {
             VisionDashboardWindowScene(
                 kind: .condition,
-                sharedHealthDataService: sharedHealthDataService
+                sharedHealthDataService: sharedHealthDataService,
+                workoutService: workoutService
             )
             .tint(.accentColor)
         }
@@ -176,7 +174,8 @@ struct DUNEVisionApp: App {
         WindowGroup(id: VisionDashboardWindowKind.activity.windowID) {
             VisionDashboardWindowScene(
                 kind: .activity,
-                sharedHealthDataService: sharedHealthDataService
+                sharedHealthDataService: sharedHealthDataService,
+                workoutService: workoutService
             )
             .tint(.accentColor)
         }
@@ -188,7 +187,8 @@ struct DUNEVisionApp: App {
         WindowGroup(id: VisionDashboardWindowKind.sleep.windowID) {
             VisionDashboardWindowScene(
                 kind: .sleep,
-                sharedHealthDataService: sharedHealthDataService
+                sharedHealthDataService: sharedHealthDataService,
+                workoutService: workoutService
             )
             .tint(.accentColor)
         }
@@ -200,7 +200,8 @@ struct DUNEVisionApp: App {
         WindowGroup(id: VisionDashboardWindowKind.body.windowID) {
             VisionDashboardWindowScene(
                 kind: .body,
-                sharedHealthDataService: sharedHealthDataService
+                sharedHealthDataService: sharedHealthDataService,
+                workoutService: workoutService
             )
             .tint(.accentColor)
         }

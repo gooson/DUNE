@@ -211,6 +211,16 @@ struct ContentView: View {
             guard notificationInboxManager.consumePendingNavigationRequest(ifMatching: request) else { return }
             handleNotificationNavigationRequest(request)
         }
+        .onReceive(NotificationCenter.default.publisher(for: .simulatorAdvancedMockDataDidChange)) { _ in
+            Task {
+                if let refreshCoordinator {
+                    await refreshCoordinator.forceRefresh()
+                } else {
+                    await sharedHealthDataService?.invalidateCache()
+                    await MainActor.run { refreshSignal += 1 }
+                }
+            }
+        }
         // Listen for refresh signals from coordinator (foreground + HK observer triggers)
         .task {
             guard let coordinator = refreshCoordinator else { return }

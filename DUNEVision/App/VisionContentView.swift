@@ -1,12 +1,15 @@
 import SwiftUI
+import SwiftData
 
 /// visionOS main navigation view.
 /// Uses standard TabView which renders as a left-side vertical tab bar on visionOS.
 /// Glass material is applied automatically by the system.
 struct VisionContentView: View {
+    @AppStorage(SimulatorAdvancedMockDataModeStore.storageKey) private var isSimulatorMockEnabled = false
+    private let modelContainer: ModelContainer
     private let sharedHealthDataService: SharedHealthDataService?
     private let refreshCoordinator: AppRefreshCoordinating?
-    private let workoutService: WorkoutQuerying?
+    private let workoutService: WorkoutQuerying
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.openWindow) private var openWindow
     @Environment(\.openImmersiveSpace) private var openImmersiveSpace
@@ -16,12 +19,16 @@ struct VisionContentView: View {
     @State private var refreshSignal = 0
     @State private var foregroundTask: Task<Void, Never>?
     @State private var trainViewModel: VisionTrainViewModel
+    @State private var isProcessingSimulatorMockData = false
+    @State private var simulatorMockStatusMessage: String?
 
     init(
+        modelContainer: ModelContainer,
         sharedHealthDataService: SharedHealthDataService? = nil,
         refreshCoordinator: AppRefreshCoordinating? = nil,
-        workoutService: WorkoutQuerying? = nil
+        workoutService: WorkoutQuerying
     ) {
+        self.modelContainer = modelContainer
         self.sharedHealthDataService = sharedHealthDataService
         self.refreshCoordinator = refreshCoordinator
         self.workoutService = workoutService
@@ -38,6 +45,8 @@ struct VisionContentView: View {
                     VisionDashboardView(
                         sharedHealthDataService: sharedHealthDataService,
                         refreshSignal: refreshSignal,
+                        isSimulatorMockEnabled: isSimulatorMockEnabled,
+                        simulatorMockStatusMessage: simulatorMockStatusMessage,
                         onOpenDashboardWindow: { windowKind in
                             guard supportsMultipleWindows else { return }
                             scheduleWindowOpen(windowKind.windowID)
@@ -52,6 +61,12 @@ struct VisionContentView: View {
                         },
                         onOpenImmersive: {
                             scheduleImmersiveOpen()
+                        },
+                        onSeedAdvancedMockData: {
+                            seedAdvancedMockData()
+                        },
+                        onResetAdvancedMockData: {
+                            resetAdvancedMockData()
                         }
                     )
                 }
@@ -82,7 +97,8 @@ struct VisionContentView: View {
             Tab(value: AppSection.wellness) {
                 NavigationStack {
                     VisionWellnessView(
-                        sharedHealthDataService: sharedHealthDataService
+                        sharedHealthDataService: sharedHealthDataService,
+                        refreshSignal: refreshSignal
                     )
                 }
             } label: {
@@ -113,6 +129,17 @@ struct VisionContentView: View {
                 }
             }
         }
+        .onReceive(NotificationCenter.default.publisher(for: .simulatorAdvancedMockDataDidChange)) { _ in
+            Task {
+                if let refreshCoordinator {
+                    await refreshCoordinator.forceRefresh()
+                } else {
+                    await sharedHealthDataService?.invalidateCache()
+                    await MainActor.run { refreshSignal += 1 }
+                }
+                await trainViewModel.reload()
+            }
+        }
         .task {
             guard let coordinator = refreshCoordinator else { return }
             for await _ in coordinator.refreshNeededStream {
@@ -134,6 +161,44 @@ struct VisionContentView: View {
             let result = await openImmersiveSpace(id: "immersive-recovery")
             if result == .error {
                 AppLogger.ui.error("Immersive space failed to open")
+            }
+        }
+    }
+
+    private func seedAdvancedMockData() {
+        guard SimulatorAdvancedMockDataModeStore.isSimulatorAvailable else { return }
+        guard !isProcessingSimulatorMockData else { return }
+        isProcessingSimulatorMockData = true
+        simulatorMockStatusMessage = nil
+
+        Task { @MainActor in
+            defer { isProcessingSimulatorMockData = false }
+            do {
+                try SimulatorAdvancedMockDataProvider.seed(into: ModelContext(modelContainer))
+                isSimulatorMockEnabled = true
+                simulatorMockStatusMessage = String(localized: "Mock data seeded.")
+            } catch {
+                simulatorMockStatusMessage = String(localized: "Mock data could not be updated.")
+                AppLogger.data.error("Vision simulator mock data seed failed: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    private func resetAdvancedMockData() {
+        guard SimulatorAdvancedMockDataModeStore.isSimulatorAvailable else { return }
+        guard !isProcessingSimulatorMockData else { return }
+        isProcessingSimulatorMockData = true
+        simulatorMockStatusMessage = nil
+
+        Task { @MainActor in
+            defer { isProcessingSimulatorMockData = false }
+            do {
+                try SimulatorAdvancedMockDataProvider.reset(into: ModelContext(modelContainer))
+                isSimulatorMockEnabled = false
+                simulatorMockStatusMessage = String(localized: "Mock data reset.")
+            } catch {
+                simulatorMockStatusMessage = String(localized: "Mock data could not be updated.")
+                AppLogger.data.error("Vision simulator mock data reset failed: \(error.localizedDescription)")
             }
         }
     }

@@ -16,6 +16,10 @@ struct HRVQueryService: HRVQuerying, Sendable {
     }
 
     func fetchHRVSamples(days: Int) async throws -> [HRVSample] {
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.hrvSamples(days: days)
+        }
+        guard manager.isAvailable else { return [] }
         try await manager.ensureNotDenied(for: HKQuantityType(.heartRateVariabilitySDNN))
         let calendar = Calendar.current
         let endDate = Date()
@@ -44,6 +48,10 @@ struct HRVQueryService: HRVQuerying, Sendable {
     }
 
     func fetchRestingHeartRate(for date: Date) async throws -> Double? {
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.restingHeartRate(for: date)
+        }
+        guard manager.isAvailable else { return nil }
         try await manager.ensureNotDenied(for: HKQuantityType(.restingHeartRate))
         let calendar = Calendar.current
         let startOfDay = calendar.startOfDay(for: date)
@@ -72,6 +80,10 @@ struct HRVQueryService: HRVQuerying, Sendable {
     }
 
     func fetchLatestRestingHeartRate(withinDays days: Int) async throws -> (value: Double, date: Date)? {
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.latestRestingHeartRate(withinDays: days)
+        }
+        guard manager.isAvailable else { return nil }
         try await manager.ensureNotDenied(for: HKQuantityType(.restingHeartRate))
         let calendar = Calendar.current
         let endDate = Date()
@@ -103,6 +115,13 @@ struct HRVQueryService: HRVQuerying, Sendable {
         end: Date,
         interval: DateComponents
     ) async throws -> [(date: Date, average: Double)] {
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.sharedHealthSnapshot.hrvSamples
+                .filter { $0.date >= start && $0.date < end }
+                .map { (date: Calendar.current.startOfDay(for: $0.date), average: $0.value) }
+                .sorted { $0.date < $1.date }
+        }
+        guard manager.isAvailable else { return [] }
         try await manager.ensureNotDenied(for: HKQuantityType(.heartRateVariabilitySDNN))
 
         let predicate = HKQuery.predicateForSamples(withStart: start, end: end, options: .strictStartDate)
@@ -130,6 +149,10 @@ struct HRVQueryService: HRVQuerying, Sendable {
         end: Date,
         interval: DateComponents
     ) async throws -> [(date: Date, min: Double, max: Double, average: Double)] {
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.rhrCollection(start: start, end: end)
+        }
+        guard manager.isAvailable else { return [] }
         try await manager.ensureNotDenied(for: HKQuantityType(.restingHeartRate))
 
         let predicate = HKQuery.predicateForSamples(withStart: start, end: end, options: .strictStartDate)

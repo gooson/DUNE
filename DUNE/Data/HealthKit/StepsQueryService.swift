@@ -14,6 +14,10 @@ struct StepsQueryService: StepsQuerying, Sendable {
     }
 
     func fetchSteps(for date: Date) async throws -> Double? {
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.steps(for: date)
+        }
+        guard manager.isAvailable else { return nil }
         try await manager.ensureNotDenied(for: HKQuantityType(.stepCount))
         let calendar = Calendar.current
         let startOfDay = calendar.startOfDay(for: date)
@@ -37,6 +41,10 @@ struct StepsQueryService: StepsQuerying, Sendable {
     }
 
     func fetchLatestSteps(withinDays days: Int) async throws -> (value: Double, date: Date)? {
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.latestSteps(withinDays: days)
+        }
+        guard manager.isAvailable else { return nil }
         let calendar = Calendar.current
         let today = Date()
         // Search backwards from yesterday (today is already queried separately)
@@ -54,6 +62,10 @@ struct StepsQueryService: StepsQuerying, Sendable {
         end: Date,
         interval: DateComponents
     ) async throws -> [(date: Date, sum: Double)] {
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.stepsCollection(start: start, end: end)
+        }
+        guard manager.isAvailable else { return [] }
         try await manager.ensureNotDenied(for: HKQuantityType(.stepCount))
 
         let predicate = HKQuery.predicateForSamples(withStart: start, end: end, options: .strictStartDate)

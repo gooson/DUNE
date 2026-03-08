@@ -165,7 +165,9 @@ final class VisionDashboardWorkspaceViewModel {
         message = nil
 
         let healthKitAvailable = healthKitManager.isAvailable
-        if !healthKitAvailable, sharedHealthDataService == nil {
+        let isSimulatorMockEnabled = SimulatorAdvancedMockDataModeStore.isEnabled
+        let canQueryHealthData = healthKitAvailable || isSimulatorMockEnabled
+        if !canQueryHealthData, sharedHealthDataService == nil {
             let emptySummary = Self.buildSummary(
                 snapshot: nil,
                 workouts: [],
@@ -190,10 +192,18 @@ final class VisionDashboardWorkspaceViewModel {
         }
 
         async let snapshotTask = fetchSnapshot()
-        async let workoutsTask = fetchRecentWorkouts()
-        async let weightTask = fetchWeightSamples()
-        async let bodyFatTask = fetchBodyFatSamples()
-        async let leanMassTask = fetchLeanMassSamples()
+        async let workoutsTask = canQueryHealthData
+            ? fetchRecentWorkouts()
+            : VisionFetchResult(value: [], message: nil)
+        async let weightTask = canQueryHealthData
+            ? fetchWeightSamples()
+            : VisionFetchResult(value: [], message: nil)
+        async let bodyFatTask = canQueryHealthData
+            ? fetchBodyFatSamples()
+            : VisionFetchResult(value: [], message: nil)
+        async let leanMassTask = canQueryHealthData
+            ? fetchLeanMassSamples()
+            : VisionFetchResult(value: [], message: nil)
 
         let (snapshotResult, workoutsResult, weightResult, bodyFatResult, leanMassResult) = await (
             snapshotTask,
@@ -449,4 +459,3 @@ final class VisionDashboardWorkspaceViewModel {
         )
     }
 }
-
