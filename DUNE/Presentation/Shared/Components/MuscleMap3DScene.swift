@@ -175,8 +175,6 @@ final class MuscleMap3DScene {
             return
         }
 
-        hasPreparedGeometry = true
-
         installBodyShell(from: rootEntity)
 
         for muscle in MuscleGroup.allCases {
@@ -202,6 +200,8 @@ final class MuscleMap3DScene {
             bodyRoot.addChild(root)
             muscleRoots[muscle] = root
         }
+
+        hasPreparedGeometry = true
     }
 
     func applyInteractionTransform(yaw: Float, pitch: Float, zoomScale: Float) {
@@ -367,7 +367,13 @@ final class MuscleMap3DScene {
                 : UIColor(white: 0.76, alpha: 0.82)
         }
 
-        let spec = Self.recoverySpecs[Int(fatigueLevel.rawValue)]
+        let index = Int(fatigueLevel.rawValue)
+        guard Self.recoverySpecs.indices.contains(index) else {
+            return colorScheme == .dark
+                ? UIColor(white: 0.46, alpha: 0.52)
+                : UIColor(white: 0.76, alpha: 0.82)
+        }
+        let spec = Self.recoverySpecs[index]
         return UIColor(
             hue: spec.hue,
             saturation: spec.sat,

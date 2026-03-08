@@ -316,7 +316,8 @@ struct MuscleMap3DStateTests {
 
     @Test("USDZ asset exists in bundle")
     func usdzAssetExistsInBundle() {
-        let url = Bundle.main.url(forResource: "muscle_body", withExtension: "usdz")
+        let bundle = Bundle(for: MuscleMap3DScene.self)
+        let url = bundle.url(forResource: "muscle_body", withExtension: "usdz")
         #expect(url != nil)
     }
 }
