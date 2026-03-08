@@ -20,12 +20,14 @@ struct Chart3DContainerView: View {
                 }
                 .pickerStyle(.segmented)
                 .padding()
+                .accessibilityIdentifier(VisionSurfaceAccessibility.chart3DPicker)
 
                 chartContent
                 .id("\(selectedChart.rawValue)-\(refreshToken)")
             }
             .navigationTitle("3D Health Charts")
         }
+        .accessibilityIdentifier(VisionSurfaceAccessibility.chart3DRoot)
         .onReceive(NotificationCenter.default.publisher(for: .simulatorAdvancedMockDataDidChange)) { _ in
             refreshToken += 1
         }

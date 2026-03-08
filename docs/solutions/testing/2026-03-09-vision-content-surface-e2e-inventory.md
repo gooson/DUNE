@@ -11,6 +11,8 @@ related_files:
   - DUNEVision/Presentation/Life/VisionLifeView.swift
   - todos/084-done-p3-e2e-dunevision-content-view.md
   - todos/091-done-p3-e2e-dunevision-placeholder-surfaces.md
+  - DUNEVision/Presentation/Chart3D/Chart3DContainerView.swift
+  - todos/088-done-p3-e2e-dunevision-chart3d-container-view.md
 related_solutions:
   - docs/solutions/testing/2026-03-08-e2e-phase0-page-backlog-split.md
 ---

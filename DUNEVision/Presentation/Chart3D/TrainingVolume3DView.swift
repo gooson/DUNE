@@ -41,6 +41,7 @@ struct TrainingVolume3DView: View {
             volumeSummary
         }
         .padding()
+        .accessibilityIdentifier(VisionSurfaceAccessibility.chart3DTraining)
         .task(id: weekRange) {
             await loadData()
         }
