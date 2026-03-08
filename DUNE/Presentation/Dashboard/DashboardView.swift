@@ -3,6 +3,7 @@ import SwiftUI
 struct DashboardView: View {
     @State private var viewModel: DashboardViewModel
     @State private var isShowingPinnedEditor = false
+    @State private var isShowingHealthDataQA = false
     @State private var hasAppeared = false
     @State private var unreadNotificationCount = 0
     @State private var showWhatsNewBadge = false
@@ -122,6 +123,10 @@ struct DashboardView: View {
                             TodayCoachingCard(message: coachingMessage)
                         }
 
+                        HealthDataQACard(isAvailable: HealthDataQAService.isAvailable) {
+                            isShowingHealthDataQA = true
+                        }
+
                         // Insight Cards
                         if !viewModel.insightCards.isEmpty {
                             insightCardsSection
@@ -236,6 +241,14 @@ struct DashboardView: View {
                     set: { viewModel.setPinnedCategories($0) }
                 ),
                 allowedCategories: viewModel.availablePinnedCategories
+            )
+        }
+        .sheet(isPresented: $isShowingHealthDataQA) {
+            HealthDataQASheet(
+                viewModel: HealthDataQAViewModel(
+                    service: HealthDataQAService(sharedHealthDataService: sharedHealthDataService),
+                    isAvailable: HealthDataQAService.isAvailable
+                )
             )
         }
         .englishNavigationTitle("Today")
