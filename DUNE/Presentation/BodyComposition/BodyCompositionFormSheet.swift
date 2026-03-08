@@ -3,7 +3,7 @@ import SwiftUI
 struct BodyCompositionFormSheet: View {
     @Bindable var viewModel: BodyCompositionViewModel
     let isEdit: Bool
-    let onSave: () -> Void
+    let onSave: @MainActor () async -> Bool
     @Environment(\.dismiss) private var dismiss
     @State private var saveCount = 0
 
@@ -45,8 +45,11 @@ struct BodyCompositionFormSheet: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
-                        onSave()
-                        saveCount += 1
+                        Task {
+                            if await onSave() {
+                                saveCount += 1
+                            }
+                        }
                     }
                     .disabled(viewModel.isSaving || (viewModel.newWeight.isEmpty && viewModel.newBodyFat.isEmpty && viewModel.newMuscleMass.isEmpty))
                     .accessibilityIdentifier("body-form-save")

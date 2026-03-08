@@ -3,6 +3,17 @@ import HealthKit
 struct BodyCompositionSample: Sendable {
     let value: Double
     let date: Date
+    let syncIdentifier: String?
+
+    init(value: Double, date: Date, syncIdentifier: String? = nil) {
+        self.value = value
+        self.date = date
+        self.syncIdentifier = syncIdentifier
+    }
+
+    var isManagedByDuneSync: Bool {
+        syncIdentifier?.hasPrefix(BodyCompositionWriteInput.syncIdentifierPrefix) == true
+    }
 }
 
 protocol BodyCompositionQuerying: Sendable {
@@ -14,6 +25,8 @@ protocol BodyCompositionQuerying: Sendable {
     func fetchBMI(for date: Date) async throws -> Double?
     func fetchLatestBMI(withinDays days: Int) async throws -> (value: Double, date: Date)?
     func fetchBMI(start: Date, end: Date) async throws -> [BodyCompositionSample]
+    func fetchBodyFat(start: Date, end: Date) async throws -> [BodyCompositionSample]
+    func fetchLeanBodyMass(start: Date, end: Date) async throws -> [BodyCompositionSample]
     func fetchLatestBodyFat(withinDays days: Int) async throws -> (value: Double, date: Date)?
     func fetchLatestLeanBodyMass(withinDays days: Int) async throws -> (value: Double, date: Date)?
 }
@@ -47,7 +60,8 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
         try await fetchQuantitySamples(
             type: HKQuantityType(.leanBodyMass),
             unit: .gramUnit(with: .kilo),
-            days: days
+            days: days,
+            validRange: 0...300
         )
     }
 
@@ -133,6 +147,27 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
         )
     }
 
+    func fetchBodyFat(start: Date, end: Date) async throws -> [BodyCompositionSample] {
+        try await fetchQuantitySamples(
+            type: HKQuantityType(.bodyFatPercentage),
+            unit: .percent(),
+            start: start,
+            end: end,
+            valueTransform: { $0 * 100 },
+            validRange: 0...100
+        )
+    }
+
+    func fetchLeanBodyMass(start: Date, end: Date) async throws -> [BodyCompositionSample] {
+        try await fetchQuantitySamples(
+            type: HKQuantityType(.leanBodyMass),
+            unit: .gramUnit(with: .kilo),
+            start: start,
+            end: end,
+            validRange: 0...300
+        )
+    }
+
     func fetchLatestBodyFat(withinDays days: Int) async throws -> (value: Double, date: Date)? {
         let samples = try await fetchBodyFat(days: days)
         // fetchBodyFat returns newest first; value already * 100 (0-100%)
@@ -192,10 +227,15 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
 
         let samples = try await manager.execute(descriptor)
 
-        return samples.compactMap { sample in
+        return samples.compactMap { sample -> BodyCompositionSample? in
             let value = valueTransform(sample.quantity.doubleValue(for: unit))
             if let range = validRange, !range.contains(value) { return nil }
-            return BodyCompositionSample(value: value, date: sample.startDate)
+            let syncIdentifier = sample.metadata?[HKMetadataKeySyncIdentifier] as? String
+            return BodyCompositionSample(
+                value: value,
+                date: sample.startDate,
+                syncIdentifier: syncIdentifier
+            )
         }
     }
 }

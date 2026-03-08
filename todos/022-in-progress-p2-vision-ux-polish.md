@@ -1,12 +1,23 @@
 ---
 source: brainstorm/vision-pro-production-roadmap
 priority: p2
-status: ready
+status: in-progress
 created: 2026-03-08
 updated: 2026-03-08
 ---
 
 # Phase 5B: visionOS UX Polish + Spatial Native
+
+## 진행 메모
+
+- Dashboard는 4개 quick action 중심으로 단순화됐고, `Coming Soon` 노출이 제거됐다.
+- `VisionVolumetricExperienceView`의 2D 컨트롤이 ornament로 분리되고 배경 gradient가 제거됐다.
+- volumetric 3D scene들의 drag rotation 패턴과 empty state copy가 통일됐다.
+- 구현 근거와 재사용 패턴은 `docs/solutions/architecture/2026-03-08-visionos-volumetric-ux-polish.md`에 기록돼 있다.
+- `defaultWindowPlacement` 기반 dashboard/chart3d placement planner와 targeted unit test가 추가됐다.
+- DUNEVision에 남아 있던 `.caption` 사용이 `.callout` 이상으로 정리됐다.
+- 남은 closure 범위는 visionOS simulator 또는 실기기에서 window placement를 실제로 눈으로 검증하는 일뿐이다.
+- Phase 5C(`todos/023-ready-p2-vision-phase4-remaining.md`)는 이 TODO가 닫힌 뒤에 진행한다.
 
 ## 목표
 
@@ -61,13 +72,14 @@ visionOS HIG를 준수하고, iOS 복사가 아닌 공간 네이티브 경험을
 
 ## 검증 기준
 
-- [ ] Dashboard에 7개 이상 카드가 한 화면에 나열되지 않음
-- [ ] Volumetric 윈도우에 2D 컨트롤이 직접 포함되지 않음
-- [ ] 모든 텍스트가 .callout 이상
-- [ ] 3D scene에서 일관된 gesture 동작 (orbit, zoom, tap)
+- [x] Dashboard에 7개 이상 카드가 한 화면에 나열되지 않음
+- [x] Volumetric 윈도우에 2D 컨트롤이 직접 포함되지 않음
+- [x] 모든 텍스트가 .callout 이상
+- [x] 3D scene에서 일관된 gesture 동작 (orbit, zoom, tap)
 - [ ] 윈도우 4개 동시 열기 시 겹치지 않음
 
 ## 참고
 
 - Apple Human Interface Guidelines: Spatial Design
 - `docs/brainstorms/2026-03-08-vision-pro-production-roadmap.md` UX 감사 결과
+- `docs/solutions/architecture/2026-03-08-visionos-volumetric-ux-polish.md`

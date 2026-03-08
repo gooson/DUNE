@@ -141,6 +141,8 @@ private struct MockBodyService: BodyCompositionQuerying {
     }
     func fetchLatestBMI(withinDays days: Int) async throws -> (value: Double, date: Date)? { latestBMI }
     func fetchBMI(start: Date, end: Date) async throws -> [BodyCompositionSample] { bmiSamples }
+    func fetchBodyFat(start: Date, end: Date) async throws -> [BodyCompositionSample] { [] }
+    func fetchLeanBodyMass(start: Date, end: Date) async throws -> [BodyCompositionSample] { [] }
     func fetchLatestBodyFat(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
     func fetchLatestLeanBodyMass(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
 }
@@ -838,6 +840,37 @@ struct DashboardViewModelVitalCardTests {
         #expect(walkingCard?.title == String(localized: "Walking"))
         #expect(walkingCard?.unit == String(localized: "steps"))
         #expect(walkingCard?.value == "3,245")
+    }
+
+    @Test("Today activity workout card prefers stored HealthKit title")
+    func todayActivityWorkoutCardPrefersStoredHealthKitTitle() async {
+        let now = Date()
+        let workout = MockWorkoutService(workouts: [
+            WorkoutSummary(
+                id: "w-strength",
+                type: "Bench Press",
+                activityType: .traditionalStrengthTraining,
+                duration: 2_100,
+                calories: 220,
+                distance: nil,
+                date: now
+            )
+        ])
+
+        let vm = DashboardViewModel(
+            hrvService: MockHRVService(),
+            sleepService: MockSleepService(),
+            workoutService: workout,
+            stepsService: MockStepsService(),
+            bodyService: MockBodyService(),
+            pinnedMetricsStore: makePinnedStore([])
+        )
+
+        await vm.loadData()
+
+        let strengthCard = vm.activityCards.first { $0.id == "exercise-bench press" }
+        #expect(strengthCard != nil)
+        #expect(strengthCard?.title == "Bench Press")
     }
 
     @Test("Body cards contain weight and BMI")

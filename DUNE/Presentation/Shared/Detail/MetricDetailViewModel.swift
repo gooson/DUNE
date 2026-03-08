@@ -108,11 +108,11 @@ final class MetricDetailViewModel {
             case .bmi:               try await loadBMIData()
             case .bodyFat:           try await loadBodyFatData()
             case .leanBodyMass:      try await loadLeanBodyMassData()
-            case .spo2:              try await loadVitalsData(.oxygenSaturation, days: 30)
-            case .respiratoryRate:   try await loadVitalsData(.respiratoryRate, days: 30)
-            case .vo2Max:            try await loadVitalsData(.vo2Max, days: 180)
-            case .heartRateRecovery: try await loadVitalsData(.heartRateRecovery, days: 90)
-            case .wristTemperature:  try await loadVitalsData(.wristTemperature, days: 30)
+            case .spo2:              try await loadVitalsData(.oxygenSaturation)
+            case .respiratoryRate:   try await loadVitalsData(.respiratoryRate)
+            case .vo2Max:            try await loadVitalsData(.vo2Max)
+            case .heartRateRecovery: try await loadVitalsData(.heartRateRecovery)
+            case .wristTemperature:  try await loadVitalsData(.wristTemperature)
             }
             guard !Task.isCancelled else {
                 isLoading = false
@@ -184,6 +184,12 @@ final class MetricDetailViewModel {
         let currentRange = selectedPeriod.dateRange(offset: 0)
         let bufferRange = selectedPeriod.dateRange(offset: -selectedPeriod.scrollBufferPeriods)
         return (start: bufferRange.start, end: currentRange.end)
+    }
+
+    /// The full scrollable date domain for charts with sparse data (weight, BMI, body fat, lean body mass).
+    var scrollDomain: ClosedRange<Date> {
+        let range = extendedRange
+        return range.start...range.end
     }
 
     // MARK: - Private Reload Trigger
@@ -459,14 +465,16 @@ final class MetricDetailViewModel {
         loadedWorkouts = current
     }
 
-    // MARK: - Weight
+    // MARK: - Body Composition (Weight, BMI, Body Fat, Lean Body Mass)
 
-    private func loadWeightData() async throws {
+    private func loadBodyCompositionData(
+        fetch: @Sendable (Date, Date) async throws -> [BodyCompositionSample]
+    ) async throws {
         let range = extendedRange
-
-        async let currentSamples = bodyService.fetchWeight(start: range.start, end: range.end)
         let prevRange = HealthDataAggregator.previousPeriodRange(for: selectedPeriod, offset: 0)
-        async let prevSamples = bodyService.fetchWeight(start: prevRange.start, end: prevRange.end)
+
+        async let currentSamples = fetch(range.start, range.end)
+        async let prevSamples = fetch(prevRange.start, prevRange.end)
 
         let current = try await currentSamples
         let previous = try await prevSamples
@@ -477,43 +485,31 @@ final class MetricDetailViewModel {
 
         // Aggregate by day (or larger) to avoid duplicate points on the same day
         // causing Catmull-Rom interpolation spikes
-        chartData = HealthDataAggregator.aggregateByAverage(
+        let aggregated = HealthDataAggregator.aggregateByAverage(
             raw, unit: selectedPeriod == .sixMonths || selectedPeriod == .year
                 ? selectedPeriod.aggregationUnit : .day
         )
 
+        // Compute from local `aggregated` rather than `self.chartData` to use
+        // consistent data within this load cycle
+        let currentRange = selectedPeriod.dateRange(offset: 0)
+        let currentValues = aggregated
+            .filter { $0.date >= currentRange.start && $0.date <= currentRange.end }
+            .map(\.value)
+
+        chartData = aggregated
         summaryStats = HealthDataAggregator.computeSummary(
-            from: currentPeriodValues(),
+            from: currentValues,
             previousPeriodValues: previous.map(\.value)
         )
     }
 
-    // MARK: - BMI
+    private func loadWeightData() async throws {
+        try await loadBodyCompositionData(fetch: bodyService.fetchWeight)
+    }
 
     private func loadBMIData() async throws {
-        let range = extendedRange
-
-        async let currentSamples = bodyService.fetchBMI(start: range.start, end: range.end)
-        let prevRange = HealthDataAggregator.previousPeriodRange(for: selectedPeriod, offset: 0)
-        async let prevSamples = bodyService.fetchBMI(start: prevRange.start, end: prevRange.end)
-
-        let current = try await currentSamples
-        let previous = try await prevSamples
-
-        let raw = current
-            .map { ChartDataPoint(date: $0.date, value: $0.value) }
-            .sorted { $0.date < $1.date }
-
-        // Aggregate by day (or larger) to avoid duplicate points on the same day
-        chartData = HealthDataAggregator.aggregateByAverage(
-            raw, unit: selectedPeriod == .sixMonths || selectedPeriod == .year
-                ? selectedPeriod.aggregationUnit : .day
-        )
-
-        summaryStats = HealthDataAggregator.computeSummary(
-            from: currentPeriodValues(),
-            previousPeriodValues: previous.map(\.value)
-        )
+        try await loadBodyCompositionData(fetch: bodyService.fetchBMI)
     }
 
     // MARK: - Vitals (SpO2, Respiratory Rate, VO2 Max, HR Recovery, Wrist Temp)
@@ -522,48 +518,34 @@ final class MetricDetailViewModel {
         case oxygenSaturation, respiratoryRate, vo2Max, heartRateRecovery, wristTemperature
     }
 
-    private func loadVitalsData(_ type: VitalType, days: Int) async throws {
+    private func loadVitalsData(_ type: VitalType) async throws {
+        let range = extendedRange
         let samples: [VitalSample]
         switch type {
-        case .oxygenSaturation:  samples = try await vitalsService.fetchSpO2Collection(days: days)
-        case .respiratoryRate:   samples = try await vitalsService.fetchRespiratoryRateCollection(days: days)
-        case .vo2Max:            samples = try await vitalsService.fetchVO2MaxHistory(days: days)
-        case .heartRateRecovery: samples = try await vitalsService.fetchHeartRateRecoveryHistory(days: days)
-        case .wristTemperature:  samples = try await vitalsService.fetchWristTemperatureCollection(days: days)
+        case .oxygenSaturation:  samples = try await vitalsService.fetchSpO2Collection(start: range.start, end: range.end)
+        case .respiratoryRate:   samples = try await vitalsService.fetchRespiratoryRateCollection(start: range.start, end: range.end)
+        case .vo2Max:            samples = try await vitalsService.fetchVO2MaxHistory(start: range.start, end: range.end)
+        case .heartRateRecovery: samples = try await vitalsService.fetchHeartRateRecoveryHistory(start: range.start, end: range.end)
+        case .wristTemperature:  samples = try await vitalsService.fetchWristTemperatureCollection(start: range.start, end: range.end)
         }
 
         chartData = samples.map { ChartDataPoint(date: $0.date, value: $0.value) }
-        summaryStats = HealthDataAggregator.computeSummary(from: samples.map(\.value))
+        summaryStats = HealthDataAggregator.computeSummary(from: currentPeriodValues())
     }
 
     private func loadHeartRateData() async throws {
-        let samples = try await heartRateService.fetchHeartRateHistory(days: 30)
+        let range = extendedRange
+        let samples = try await heartRateService.fetchHeartRateHistory(start: range.start, end: range.end)
         chartData = samples.map { ChartDataPoint(date: $0.date, value: $0.value) }
-        summaryStats = HealthDataAggregator.computeSummary(from: samples.map(\.value))
+        summaryStats = HealthDataAggregator.computeSummary(from: currentPeriodValues())
     }
 
     private func loadBodyFatData() async throws {
-        let samples = try await bodyService.fetchBodyFat(days: 90)
-        let raw = samples
-            .map { ChartDataPoint(date: $0.date, value: $0.value) }
-            .sorted { $0.date < $1.date }
-        chartData = HealthDataAggregator.aggregateByAverage(
-            raw, unit: selectedPeriod == .sixMonths || selectedPeriod == .year
-                ? selectedPeriod.aggregationUnit : .day
-        )
-        summaryStats = HealthDataAggregator.computeSummary(from: raw.map(\.value))
+        try await loadBodyCompositionData(fetch: bodyService.fetchBodyFat)
     }
 
     private func loadLeanBodyMassData() async throws {
-        let samples = try await bodyService.fetchLeanBodyMass(days: 90)
-        let raw = samples
-            .map { ChartDataPoint(date: $0.date, value: $0.value) }
-            .sorted { $0.date < $1.date }
-        chartData = HealthDataAggregator.aggregateByAverage(
-            raw, unit: selectedPeriod == .sixMonths || selectedPeriod == .year
-                ? selectedPeriod.aggregationUnit : .day
-        )
-        summaryStats = HealthDataAggregator.computeSummary(from: raw.map(\.value))
+        try await loadBodyCompositionData(fetch: bodyService.fetchLeanBodyMass)
     }
 
     // MARK: - Helpers

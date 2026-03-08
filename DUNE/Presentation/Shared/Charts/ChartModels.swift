@@ -66,6 +66,18 @@ struct ExerciseTotals: Sendable {
     let totalDistanceMeters: Double?
 }
 
+// MARK: - Shared X-Domain
+
+/// Resolve X-axis domain: explicit scroll domain if provided, otherwise derived from date extremes.
+func resolvedXDomain(scrollDomain: ClosedRange<Date>?, dates: [Date]) -> ClosedRange<Date> {
+    if let scrollDomain { return scrollDomain }
+    guard let first = dates.min(), let last = dates.max(), first < last else {
+        let now = Date()
+        return now...now.addingTimeInterval(1)
+    }
+    return first...last
+}
+
 // MARK: - Highlight
 
 /// Notable data point within a time period (e.g. weekly high/low).

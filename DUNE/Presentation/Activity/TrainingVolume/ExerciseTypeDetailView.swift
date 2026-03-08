@@ -152,6 +152,10 @@ struct ExerciseTypeDetailView: View {
                 .foregroundStyle(resolveColor().gradient)
                 .clipShape(RoundedRectangle(cornerRadius: 2))
             }
+            .chartXSelection(value: $selectedDate)
+            .chartGesture { proxy in
+                selectionGesture(proxy: proxy)
+            }
             .chartXAxis {
                 AxisMarks(values: .stride(by: xAxisStride, count: xAxisStrideCount)) { _ in
                     AxisValueLabel(format: .dateTime.month(.abbreviated).day())
@@ -173,13 +177,6 @@ struct ExerciseTypeDetailView: View {
                 GeometryReader { geometry in
                     if let plotFrame = proxy.plotFrame.map({ geometry[$0] }) {
                         ZStack(alignment: .topLeading) {
-                            Rectangle()
-                                .fill(.clear)
-                                .contentShape(Rectangle())
-                                .simultaneousGesture(
-                                    selectionGesture(proxy: proxy, plotFrame: plotFrame)
-                                )
-
                             if let point = selectedTrendPoint,
                                let anchor = selectedAnchor(for: point, proxy: proxy, plotFrame: plotFrame) {
                                 FloatingChartSelectionOverlay(
@@ -194,6 +191,7 @@ struct ExerciseTypeDetailView: View {
                             }
                         }
                         .animation(.easeInOut(duration: 0.15), value: selectedDate)
+                        .allowsHitTesting(false)
                     }
                 }
             }
@@ -274,22 +272,13 @@ struct ExerciseTypeDetailView: View {
         )
     }
 
-    private func selectionGesture(proxy: ChartProxy, plotFrame: CGRect) -> some Gesture {
-        DragGesture(minimumDistance: 0, coordinateSpace: .local)
+    private func selectionGesture(proxy: ChartProxy) -> some Gesture {
+        LongPressGesture(minimumDuration: ChartSelectionInteraction.holdDuration)
+            .sequenced(before: DragGesture(minimumDistance: 0, coordinateSpace: .local))
             .onChanged { value in
-                switch selectionGestureState.registerChange(
-                    at: value.time,
-                    translation: value.translation
-                ) {
-                case .inactive:
-                    return
-                case .activated, .updating:
-                    selectedDate = ChartSelectionInteraction.resolvedDate(
-                        at: value.location,
-                        proxy: proxy,
-                        plotFrame: plotFrame
-                    )
-                }
+                guard case .second(true, let drag) = value, let drag else { return }
+                selectionGestureState.beginSelection(scrollPosition: nil)
+                proxy.selectXValue(at: drag.location.x)
             }
             .onEnded { _ in
                 selectionGestureState.reset()

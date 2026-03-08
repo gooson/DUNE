@@ -112,7 +112,7 @@ struct VisionExerciseFormGuideView: View {
 
                     if let secondaryName = guide.secondaryDisplayName() {
                         Text(verbatim: secondaryName)
-                            .font(.caption)
+                            .font(.callout)
                             .foregroundStyle(.secondary)
                     }
                 }
@@ -139,7 +139,7 @@ struct VisionExerciseFormGuideView: View {
 
     private func chip(_ title: String) -> some View {
         Text(verbatim: title)
-            .font(.caption.weight(.medium))
+            .font(.callout.weight(.medium))
             .foregroundStyle(.secondary)
             .padding(.horizontal, 10)
             .padding(.vertical, 6)
@@ -197,7 +197,7 @@ struct VisionExerciseFormGuideView: View {
                 .foregroundStyle(.tint)
             VStack(alignment: .leading, spacing: 3) {
                 Text(title)
-                    .font(.caption)
+                    .font(.callout)
                     .foregroundStyle(.secondary)
                 Text(verbatim: value)
                     .font(.subheadline.weight(.semibold))
@@ -226,7 +226,7 @@ struct VisionExerciseFormGuideView: View {
             ForEach(Array(guide.formCueKeys.enumerated()), id: \.offset) { index, cue in
                 HStack(alignment: .top, spacing: 12) {
                     Text("\(index + 1)")
-                        .font(.caption.weight(.bold))
+                        .font(.callout.weight(.bold))
                         .foregroundStyle(.white)
                         .frame(width: 22, height: 22)
                         .background(.tint, in: Circle())
@@ -257,7 +257,7 @@ struct VisionExerciseFormGuideView: View {
             }
 
             Text("Primary muscles are the main targets of the movement. Secondary muscles assist and are activated alongside.")
-                .font(.caption)
+                .font(.callout)
                 .foregroundStyle(.secondary)
         }
     }
@@ -265,14 +265,14 @@ struct VisionExerciseFormGuideView: View {
     private func muscleRow(title: LocalizedStringKey, muscles: [MuscleGroup]) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
-                .font(.caption)
+                .font(.callout)
                 .foregroundStyle(.secondary)
 
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
                     ForEach(muscles, id: \.self) { muscle in
                         Text(muscle.displayName)
-                            .font(.caption.weight(.medium))
+                            .font(.callout.weight(.medium))
                             .padding(.horizontal, 10)
                             .padding(.vertical, 7)
                             .background(.ultraThinMaterial, in: Capsule())

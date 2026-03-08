@@ -61,7 +61,7 @@ struct DashboardView: View {
                 VStack(spacing: sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.xl) {
                     if !launchExperienceReady {
                         DashboardSkeletonView()
-                    } else if viewModel.isLoading && viewModel.sortedMetrics.isEmpty {
+                    } else if viewModel.isLoading && !hasAppeared {
                         DashboardSkeletonView()
                     } else if viewModel.sortedMetrics.isEmpty && !viewModel.isLoading {
                         if viewModel.errorMessage != nil {
@@ -292,8 +292,11 @@ struct DashboardView: View {
 
     private func loadDashboard() async {
         await viewModel.loadData(shouldAutoRequestHealthKitAuthorization: shouldAutoRequestHealthKitAuthorization)
-        withAnimation(.easeOut(duration: 0.3)) {
-            hasAppeared = true
+        guard !viewModel.isLoading else { return }
+        if !hasAppeared {
+            withAnimation(.easeOut(duration: 0.3)) {
+                hasAppeared = true
+            }
         }
         reloadUnreadCount()
         reloadWhatsNewBadge()

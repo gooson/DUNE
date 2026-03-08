@@ -228,7 +228,7 @@ final class VisionDashboardWorkspaceViewModel {
         } else if let message {
             loadState = .unavailable(message)
         } else {
-            loadState = .unavailable(String(localized: "No data"))
+            loadState = .unavailable(String(localized: "No data available"))
         }
     }
 

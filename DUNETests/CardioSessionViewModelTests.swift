@@ -101,6 +101,11 @@ struct CardioSessionViewModelTests {
         func fetchVO2MaxHistory(days: Int) async throws -> [VitalSample] { [] }
         func fetchHeartRateRecoveryHistory(days: Int) async throws -> [VitalSample] { [] }
         func fetchWristTemperatureCollection(days: Int) async throws -> [VitalSample] { [] }
+        func fetchSpO2Collection(start: Date, end: Date) async throws -> [VitalSample] { [] }
+        func fetchRespiratoryRateCollection(start: Date, end: Date) async throws -> [VitalSample] { [] }
+        func fetchVO2MaxHistory(start: Date, end: Date) async throws -> [VitalSample] { [] }
+        func fetchHeartRateRecoveryHistory(start: Date, end: Date) async throws -> [VitalSample] { [] }
+        func fetchWristTemperatureCollection(start: Date, end: Date) async throws -> [VitalSample] { [] }
         func fetchWristTemperatureBaseline(days: Int) async throws -> Double? { nil }
     }
 

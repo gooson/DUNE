@@ -5,66 +5,49 @@ import Testing
 
 @Suite("ChartSelectionInteraction")
 struct ChartSelectionInteractionTests {
-    @Test("Selection enters pending phase before activation and keeps scroll enabled")
-    func pendingPhaseKeepsScrollEnabled() {
+    @Test("beginSelection transitions from idle to selecting and captures scroll position")
+    func beginSelectionTransitionsToSelecting() {
         var state = ChartSelectionGestureState()
-        let start = Date(timeIntervalSinceReferenceDate: 100)
-        let initialScroll = Date(timeIntervalSinceReferenceDate: 80)
+        let scrollPos = Date(timeIntervalSinceReferenceDate: 100)
 
-        let initial = state.registerChange(
-            at: start,
-            translation: .zero,
-            currentScrollPosition: initialScroll
-        )
-
-        #expect(initial == .inactive)
-        #expect(state.phase == .pendingActivation)
-        #expect(state.startTime == start)
-        #expect(state.initialScrollPosition == initialScroll)
+        #expect(state.phase == .idle)
         #expect(state.allowsScroll == true)
-        #expect(state.isCancelled == false)
-    }
+        #expect(state.isSelecting == false)
 
-    @Test("Selection activates after hold duration and restores initial scroll position")
-    func activatesAfterHoldDuration() {
-        var state = ChartSelectionGestureState()
-        let start = Date(timeIntervalSinceReferenceDate: 200)
-        let initialScroll = Date(timeIntervalSinceReferenceDate: 180)
+        state.beginSelection(scrollPosition: scrollPos)
 
-        _ = state.registerChange(
-            at: start,
-            translation: .zero,
-            currentScrollPosition: initialScroll
-        )
-        let activated = state.registerChange(
-            at: start.addingTimeInterval(ChartSelectionInteraction.holdDuration + 0.02),
-            translation: CGSize(width: 4, height: 3),
-            currentScrollPosition: Date(timeIntervalSinceReferenceDate: 195)
-        )
-
-        #expect(activated == .activated(restoreScrollPosition: initialScroll))
         #expect(state.phase == .selecting)
         #expect(state.isSelecting == true)
         #expect(state.allowsScroll == false)
-        #expect(state.isCancelled == false)
+        #expect(state.initialScrollPosition == scrollPos)
     }
 
-    @Test("Selection is cancelled when movement exceeds slop before activation")
-    func cancelsWhenMovementExceedsSlop() {
+    @Test("beginSelection is idempotent — second call does not overwrite initialScrollPosition")
+    func beginSelectionIdempotent() {
         var state = ChartSelectionGestureState()
-        let start = Date(timeIntervalSinceReferenceDate: 240)
+        let firstScroll = Date(timeIntervalSinceReferenceDate: 100)
+        let secondScroll = Date(timeIntervalSinceReferenceDate: 200)
 
-        _ = state.registerChange(at: start, translation: .zero)
-        let activated = state.registerChange(
-            at: start.addingTimeInterval(0.05),
-            translation: CGSize(width: ChartSelectionInteraction.activationDistance + 2, height: 0)
-        )
+        state.beginSelection(scrollPosition: firstScroll)
+        state.beginSelection(scrollPosition: secondScroll)
 
-        #expect(activated == .inactive)
+        #expect(state.initialScrollPosition == firstScroll)
+        #expect(state.isSelecting == true)
+    }
+
+    @Test("reset returns state to idle with nil scroll position")
+    func resetReturnsToIdle() {
+        var state = ChartSelectionGestureState()
+        state.beginSelection(scrollPosition: Date(timeIntervalSinceReferenceDate: 100))
+
+        #expect(state.isSelecting == true)
+
+        state.reset()
+
         #expect(state.phase == .idle)
         #expect(state.isSelecting == false)
         #expect(state.allowsScroll == true)
-        #expect(state.isCancelled == true)
+        #expect(state.initialScrollPosition == nil)
     }
 
     @Test("Nearest point snaps to closest date")

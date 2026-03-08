@@ -7,6 +7,7 @@
 - Swift Charts → `.clipped()` 필수; Chart closure 내 allocation 금지
 - gradient/color → `private enum Gradients { static let }` 로 호이스트
 - `.simultaneousGesture` → `including:` 파라미터 금지. `.subviews`는 추가된 제스처를 비활성화함. 제스처 충돌은 `ChartSelectionGestureState` 상태 머신으로 해결
+- `LongPressGesture.sequenced(before: DragGesture)` → `.onChanged`에서 `guard case .second(true, let drag) = value, let drag else { return }` 패턴 사용. `.first(true)` case 처리 금지 (drag location 없이 상태 변경 위험)
 
 ## Navigation & Routing
 - `.navigationDestination(for:)` → 조건 블록 밖 (body 최상위)

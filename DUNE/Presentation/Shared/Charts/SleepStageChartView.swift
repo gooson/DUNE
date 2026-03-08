@@ -17,7 +17,6 @@ struct SleepStageChartView: View {
 
     @State private var selectedDate: Date?
     @State private var selectionGestureState = ChartSelectionGestureState()
-
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             if period == .day {
@@ -89,10 +88,13 @@ struct SleepStageChartView: View {
             }
         }
         .chartScrollableAxes(.horizontal)
-        .scrollDisabled(!selectionGestureState.allowsScroll)
         .chartXVisibleDomain(length: period.visibleDomainSeconds)
         .chartScrollPosition(x: $scrollPosition)
         .chartYScale(domain: yDomain)
+        .chartXSelection(value: $selectedDate)
+        .chartGesture { proxy in
+            selectionGesture(proxy: proxy)
+        }
         .chartXAxis {
             AxisMarks(values: .stride(by: period.strideComponent, count: period.strideCount)) { _ in
                 AxisValueLabel(format: period.axisLabelFormat)
@@ -113,13 +115,6 @@ struct SleepStageChartView: View {
             GeometryReader { geometry in
                 if let plotFrame = proxy.plotFrame.map({ geometry[$0] }) {
                     ZStack(alignment: .topLeading) {
-                        Rectangle()
-                            .fill(.clear)
-                            .contentShape(Rectangle())
-                            .simultaneousGesture(
-                                selectionGesture(proxy: proxy, plotFrame: plotFrame)
-                            )
-
                         if let point = selectedDailyPoint,
                            let anchor = selectedAnchor(for: point, proxy: proxy, plotFrame: plotFrame) {
                             FloatingChartSelectionOverlay(
@@ -133,6 +128,7 @@ struct SleepStageChartView: View {
                         }
                     }
                     .animation(.easeInOut(duration: 0.15), value: selectedDate)
+                    .allowsHitTesting(false)
                 }
             }
         }
@@ -209,32 +205,13 @@ struct SleepStageChartView: View {
         )
     }
 
-    private func selectionGesture(proxy: ChartProxy, plotFrame: CGRect) -> some Gesture {
-        DragGesture(minimumDistance: 0, coordinateSpace: .local)
+    private func selectionGesture(proxy: ChartProxy) -> some Gesture {
+        LongPressGesture(minimumDuration: ChartSelectionInteraction.holdDuration)
+            .sequenced(before: DragGesture(minimumDistance: 0, coordinateSpace: .local))
             .onChanged { value in
-                switch selectionGestureState.registerChange(
-                    at: value.time,
-                    translation: value.translation,
-                    currentScrollPosition: scrollPosition
-                ) {
-                case .inactive:
-                    return
-                case .activated(let restoreScrollPosition):
-                    if let restoreScrollPosition {
-                        scrollPosition = restoreScrollPosition
-                    }
-                    fallthrough
-                case .updating:
-                    if let restore = selectionGestureState.initialScrollPosition,
-                       scrollPosition != restore {
-                        scrollPosition = restore
-                    }
-                    selectedDate = ChartSelectionInteraction.resolvedDate(
-                        at: value.location,
-                        proxy: proxy,
-                        plotFrame: plotFrame
-                    )
-                }
+                guard case .second(true, let drag) = value, let drag else { return }
+                selectionGestureState.beginSelection(scrollPosition: scrollPosition)
+                proxy.selectXValue(at: drag.location.x)
             }
             .onEnded { _ in
                 selectionGestureState.reset()

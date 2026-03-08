@@ -8,6 +8,7 @@ struct RangeBarChartView: View {
     let period: TimePeriod
     var tintColor: Color = DS.Color.rhr
     var trendLine: [ChartDataPoint]?
+    var scrollDomain: ClosedRange<Date>?
     @Binding var scrollPosition: Date
 
     @ScaledMetric(relativeTo: .body) private var chartHeight: CGFloat = 220
@@ -16,7 +17,6 @@ struct RangeBarChartView: View {
 
     @State private var selectedDate: Date?
     @State private var selectionGestureState = ChartSelectionGestureState()
-
     private enum Labels {
         static let average = String(localized: "Avg")
     }
@@ -67,10 +67,14 @@ struct RangeBarChartView: View {
                 }
             }
             .chartScrollableAxes(.horizontal)
-            .scrollDisabled(!selectionGestureState.allowsScroll)
             .chartXVisibleDomain(length: period.visibleDomainSeconds)
             .chartScrollPosition(x: $scrollPosition)
             .chartYScale(domain: yDomain)
+            .chartXScale(domain: effectiveXDomain)
+            .chartXSelection(value: $selectedDate)
+            .chartGesture { proxy in
+                selectionGesture(proxy: proxy)
+            }
             .chartXAxis {
                 AxisMarks(values: .stride(by: period.strideComponent, count: period.strideCount)) { _ in
                     AxisValueLabel(format: period.axisLabelFormat)
@@ -91,13 +95,6 @@ struct RangeBarChartView: View {
                 GeometryReader { geometry in
                     if let plotFrame = proxy.plotFrame.map({ geometry[$0] }) {
                         ZStack(alignment: .topLeading) {
-                            Rectangle()
-                                .fill(.clear)
-                                .contentShape(Rectangle())
-                                .simultaneousGesture(
-                                    selectionGesture(proxy: proxy, plotFrame: plotFrame)
-                                )
-
                             if let point = selectedPoint,
                                let anchor = selectedAnchor(for: point, proxy: proxy, plotFrame: plotFrame) {
                                 FloatingChartSelectionOverlay(
@@ -111,6 +108,7 @@ struct RangeBarChartView: View {
                             }
                         }
                         .animation(.easeInOut(duration: 0.15), value: selectedDate)
+                        .allowsHitTesting(false)
                     }
                 }
             }
@@ -143,6 +141,10 @@ struct RangeBarChartView: View {
         case .sixMonths:  .fixed(8)
         case .year:       .fixed(16)
         }
+    }
+
+    private var effectiveXDomain: ClosedRange<Date> {
+        resolvedXDomain(scrollDomain: scrollDomain, dates: data.map(\.date))
     }
 
     /// Y-axis domain with padding to prevent clipping.
@@ -180,32 +182,13 @@ struct RangeBarChartView: View {
         )
     }
 
-    private func selectionGesture(proxy: ChartProxy, plotFrame: CGRect) -> some Gesture {
-        DragGesture(minimumDistance: 0, coordinateSpace: .local)
+    private func selectionGesture(proxy: ChartProxy) -> some Gesture {
+        LongPressGesture(minimumDuration: ChartSelectionInteraction.holdDuration)
+            .sequenced(before: DragGesture(minimumDistance: 0, coordinateSpace: .local))
             .onChanged { value in
-                switch selectionGestureState.registerChange(
-                    at: value.time,
-                    translation: value.translation,
-                    currentScrollPosition: scrollPosition
-                ) {
-                case .inactive:
-                    return
-                case .activated(let restoreScrollPosition):
-                    if let restoreScrollPosition {
-                        scrollPosition = restoreScrollPosition
-                    }
-                    fallthrough
-                case .updating:
-                    if let restore = selectionGestureState.initialScrollPosition,
-                       scrollPosition != restore {
-                        scrollPosition = restore
-                    }
-                    selectedDate = ChartSelectionInteraction.resolvedDate(
-                        at: value.location,
-                        proxy: proxy,
-                        plotFrame: plotFrame
-                    )
-                }
+                guard case .second(true, let drag) = value, let drag else { return }
+                selectionGestureState.beginSelection(scrollPosition: scrollPosition)
+                proxy.selectXValue(at: drag.location.x)
             }
             .onEnded { _ in
                 selectionGestureState.reset()

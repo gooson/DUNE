@@ -57,6 +57,8 @@ private struct MockAllDataBodyService: BodyCompositionQuerying {
     func fetchBMI(for date: Date) async throws -> Double? { nil }
     func fetchLatestBMI(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
     func fetchBMI(start: Date, end: Date) async throws -> [BodyCompositionSample] { bmi }
+    func fetchBodyFat(start: Date, end: Date) async throws -> [BodyCompositionSample] { [] }
+    func fetchLeanBodyMass(start: Date, end: Date) async throws -> [BodyCompositionSample] { [] }
     func fetchLatestBodyFat(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
     func fetchLatestLeanBodyMass(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
 }
@@ -70,6 +72,7 @@ private struct MockAllDataHeartRateService: HeartRateQuerying {
     }
     func fetchLatestHeartRate(withinDays days: Int) async throws -> VitalSample? { nil }
     func fetchHeartRateHistory(days: Int) async throws -> [VitalSample] { history }
+    func fetchHeartRateHistory(start: Date, end: Date) async throws -> [VitalSample] { history }
     func fetchHeartRateZones(forWorkoutID workoutID: String, maxHR: Double) async throws -> [HeartRateZone] { [] }
 }
 
@@ -91,6 +94,12 @@ private struct MockAllDataVitalsService: VitalsQuerying {
     func fetchVO2MaxHistory(days: Int) async throws -> [VitalSample] { vo2Max }
     func fetchHeartRateRecoveryHistory(days: Int) async throws -> [VitalSample] { recovery }
     func fetchWristTemperatureCollection(days: Int) async throws -> [VitalSample] { wristTemp }
+
+    func fetchSpO2Collection(start: Date, end: Date) async throws -> [VitalSample] { spo2 }
+    func fetchRespiratoryRateCollection(start: Date, end: Date) async throws -> [VitalSample] { respiratory }
+    func fetchVO2MaxHistory(start: Date, end: Date) async throws -> [VitalSample] { vo2Max }
+    func fetchHeartRateRecoveryHistory(start: Date, end: Date) async throws -> [VitalSample] { recovery }
+    func fetchWristTemperatureCollection(start: Date, end: Date) async throws -> [VitalSample] { wristTemp }
 
     func fetchWristTemperatureBaseline(days: Int) async throws -> Double? { nil }
 }

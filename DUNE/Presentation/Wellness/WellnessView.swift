@@ -37,7 +37,6 @@ struct WellnessView: View {
                     .id(ScrollAnchor.top)
 
                 VStack(spacing: isRegular ? DS.Spacing.xxl : DS.Spacing.xl) {
-                    // Note: injuryRecords check omitted — injuries live in isolated @Query child view
                     if viewModel.isLoading &&
                         viewModel.physicalCards.isEmpty &&
                         viewModel.activeCards.isEmpty &&
@@ -158,11 +157,27 @@ struct WellnessView: View {
                 viewModel: bodyViewModel,
                 isEdit: false,
                 onSave: {
-                    if let record = bodyViewModel.createValidatedRecord() {
+                    if let draft = bodyViewModel.createValidatedDraft() {
+                        let record = draft.makeRecord()
+                        do {
+                            try await BodyCompositionWriteService().save(
+                                recordID: record.id,
+                                input: draft.writeInput
+                            )
+                        } catch {
+                            bodyViewModel.validationError = String(localized: "Failed to save record changes. Please try again.")
+                            bodyViewModel.didFinishSaving()
+                            return false
+                        }
+
                         modelContext.insert(record)
+                        bodyViewModel.didFinishSaving()
                         bodyViewModel.resetForm()
                         bodyViewModel.isShowingAddSheet = false
+                        viewModel.loadData()
+                        return true
                     }
+                    return false
                 }
             )
         }
@@ -172,18 +187,29 @@ struct WellnessView: View {
                     viewModel: bodyViewModel,
                     isEdit: true,
                     onSave: {
-                        var didUpdate = false
+                        let previousInput = BodyCompositionWriteInput(record: record)
+                        guard let draft = bodyViewModel.createValidatedDraft() else {
+                            return false
+                        }
                         do {
+                            try await BodyCompositionWriteService().update(
+                                recordID: record.id,
+                                previousInput: previousInput,
+                                input: draft.writeInput
+                            )
                             try modelContext.transaction {
-                                didUpdate = bodyViewModel.applyUpdate(to: record)
+                                bodyViewModel.apply(draft, to: record)
                             }
-                            if didUpdate {
-                                bodyViewModel.isShowingEditSheet = false
-                                bodyViewModel.editingRecord = nil
-                            }
+                            bodyViewModel.didFinishSaving()
+                            bodyViewModel.isShowingEditSheet = false
+                            bodyViewModel.editingRecord = nil
+                            viewModel.loadData()
+                            return true
                         } catch {
                             bodyViewModel.validationError = String(localized: "Failed to save record changes. Please try again.")
+                            bodyViewModel.didFinishSaving()
                         }
+                        return false
                     }
                 )
             }
@@ -224,7 +250,10 @@ struct WellnessView: View {
             AllDataView(category: destination.category)
         }
         .navigationDestination(for: BodyHistoryDestination.self) { _ in
-            BodyHistoryDetailView(viewModel: bodyViewModel)
+            BodyHistoryDetailView(
+                viewModel: bodyViewModel,
+                onRecordsChanged: { viewModel.loadData() }
+            )
         }
         .navigationDestination(for: InjuryHistoryDestination.self) { _ in
             InjuryHistoryView(viewModel: injuryViewModel)

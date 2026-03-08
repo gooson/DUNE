@@ -9,14 +9,7 @@ enum ChartSelectionOverlayEdge: Sendable {
 
 enum ChartSelectionGesturePhase: Equatable, Sendable {
     case idle
-    case pendingActivation
     case selecting
-}
-
-enum ChartSelectionGestureUpdate: Equatable, Sendable {
-    case inactive
-    case activated(restoreScrollPosition: Date?)
-    case updating
 }
 
 struct ChartSelectionOverlayLayout: Equatable, Sendable {
@@ -26,9 +19,7 @@ struct ChartSelectionOverlayLayout: Equatable, Sendable {
 
 struct ChartSelectionGestureState: Sendable {
     private(set) var phase: ChartSelectionGesturePhase = .idle
-    private(set) var startTime: Date?
     private(set) var initialScrollPosition: Date?
-    private(set) var isCancelled = false
 
     var allowsScroll: Bool {
         phase != .selecting
@@ -38,39 +29,11 @@ struct ChartSelectionGestureState: Sendable {
         phase == .selecting
     }
 
-    mutating func registerChange(
-        at time: Date,
-        translation: CGSize,
-        currentScrollPosition: Date? = nil,
-        holdDuration: TimeInterval = ChartSelectionInteraction.holdDuration,
-        activationDistance: CGFloat = ChartSelectionInteraction.activationDistance
-    ) -> ChartSelectionGestureUpdate {
-        if startTime == nil {
-            startTime = time
-            initialScrollPosition = currentScrollPosition
-            phase = .pendingActivation
-        }
-
-        guard isCancelled == false, let startTime else {
-            return .inactive
-        }
-
-        if isSelecting == false {
-            if translation.magnitude > activationDistance {
-                isCancelled = true
-                phase = .idle
-                return .inactive
-            }
-
-            if time.timeIntervalSince(startTime) >= holdDuration {
-                phase = .selecting
-                return .activated(restoreScrollPosition: initialScrollPosition)
-            }
-
-            return .inactive
-        }
-
-        return .updating
+    /// Activate selection directly (used with LongPressGesture-sequenced approach).
+    mutating func beginSelection(scrollPosition: Date?) {
+        guard !isSelecting else { return }
+        phase = .selecting
+        initialScrollPosition = scrollPosition
     }
 
     mutating func reset() {
@@ -80,7 +43,6 @@ struct ChartSelectionGestureState: Sendable {
 
 enum ChartSelectionInteraction {
     static let holdDuration: TimeInterval = 0.18
-    static let activationDistance: CGFloat = 10
     static let overlaySpacing: CGFloat = 12
     static let horizontalMargin: CGFloat = 12
     static let topMargin: CGFloat = 8
@@ -182,11 +144,5 @@ enum ChartSelectionInteraction {
             center: CGPoint(x: centerX, y: clampedY),
             edge: clampedY > anchor.y ? .below : .above
         )
-    }
-}
-
-private extension CGSize {
-    var magnitude: CGFloat {
-        sqrt((width * width) + (height * height))
     }
 }

@@ -26,6 +26,8 @@ private struct NoopBodyService: BodyCompositionQuerying {
     func fetchBMI(for date: Date) async throws -> Double? { nil }
     func fetchLatestBMI(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
     func fetchBMI(start: Date, end: Date) async throws -> [BodyCompositionSample] { [] }
+    func fetchBodyFat(start: Date, end: Date) async throws -> [BodyCompositionSample] { [] }
+    func fetchLeanBodyMass(start: Date, end: Date) async throws -> [BodyCompositionSample] { [] }
     func fetchLatestBodyFat(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
     func fetchLatestLeanBodyMass(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
 }
@@ -41,6 +43,11 @@ private struct NoopVitalsService: VitalsQuerying {
     func fetchVO2MaxHistory(days: Int) async throws -> [VitalSample] { [] }
     func fetchHeartRateRecoveryHistory(days: Int) async throws -> [VitalSample] { [] }
     func fetchWristTemperatureCollection(days: Int) async throws -> [VitalSample] { [] }
+    func fetchSpO2Collection(start: Date, end: Date) async throws -> [VitalSample] { [] }
+    func fetchRespiratoryRateCollection(start: Date, end: Date) async throws -> [VitalSample] { [] }
+    func fetchVO2MaxHistory(start: Date, end: Date) async throws -> [VitalSample] { [] }
+    func fetchHeartRateRecoveryHistory(start: Date, end: Date) async throws -> [VitalSample] { [] }
+    func fetchWristTemperatureCollection(start: Date, end: Date) async throws -> [VitalSample] { [] }
     func fetchWristTemperatureBaseline(days: Int) async throws -> Double? { nil }
 }
 
@@ -58,6 +65,11 @@ private struct VO2FreshnessVitalsService: VitalsQuerying {
     func fetchVO2MaxHistory(days: Int) async throws -> [VitalSample] { history }
     func fetchHeartRateRecoveryHistory(days: Int) async throws -> [VitalSample] { [] }
     func fetchWristTemperatureCollection(days: Int) async throws -> [VitalSample] { [] }
+    func fetchSpO2Collection(start: Date, end: Date) async throws -> [VitalSample] { [] }
+    func fetchRespiratoryRateCollection(start: Date, end: Date) async throws -> [VitalSample] { [] }
+    func fetchVO2MaxHistory(start: Date, end: Date) async throws -> [VitalSample] { history }
+    func fetchHeartRateRecoveryHistory(start: Date, end: Date) async throws -> [VitalSample] { [] }
+    func fetchWristTemperatureCollection(start: Date, end: Date) async throws -> [VitalSample] { [] }
     func fetchWristTemperatureBaseline(days: Int) async throws -> Double? { nil }
 }
 
@@ -68,6 +80,7 @@ private struct NoopHeartRateService: HeartRateQuerying {
     }
     func fetchLatestHeartRate(withinDays days: Int) async throws -> VitalSample? { nil }
     func fetchHeartRateHistory(days: Int) async throws -> [VitalSample] { [] }
+    func fetchHeartRateHistory(start: Date, end: Date) async throws -> [VitalSample] { [] }
     func fetchHeartRateZones(forWorkoutID workoutID: String, maxHR: Double) async throws -> [HeartRateZone] { [] }
 }
 
@@ -163,6 +176,16 @@ private actor StartupTrackingBodyService: BodyCompositionQuerying {
         return []
     }
 
+    func fetchBodyFat(start: Date, end: Date) async throws -> [BodyCompositionSample] {
+        fetchCallCount += 1
+        return []
+    }
+
+    func fetchLeanBodyMass(start: Date, end: Date) async throws -> [BodyCompositionSample] {
+        fetchCallCount += 1
+        return []
+    }
+
     func fetchLatestBodyFat(withinDays days: Int) async throws -> (value: Double, date: Date)? {
         fetchCallCount += 1
         return nil
@@ -191,8 +214,48 @@ private actor TodayPreferredBMIBodyService: BodyCompositionQuerying {
     func fetchBMI(for date: Date) async throws -> Double? { todayBMI }
     func fetchLatestBMI(withinDays days: Int) async throws -> (value: Double, date: Date)? { latestBMI }
     func fetchBMI(start: Date, end: Date) async throws -> [BodyCompositionSample] { [] }
+    func fetchBodyFat(start: Date, end: Date) async throws -> [BodyCompositionSample] { [] }
+    func fetchLeanBodyMass(start: Date, end: Date) async throws -> [BodyCompositionSample] { [] }
     func fetchLatestBodyFat(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
     func fetchLatestLeanBodyMass(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
+}
+
+private actor TodayPreferredBodyMetricsService: BodyCompositionQuerying {
+    let todayWeight: BodyCompositionSample?
+    let latestWeight: (value: Double, date: Date)?
+    let todayBodyFat: BodyCompositionSample?
+    let latestBodyFat: (value: Double, date: Date)?
+    let todayLeanBodyMass: BodyCompositionSample?
+    let latestLeanBodyMass: (value: Double, date: Date)?
+
+    init(
+        todayWeight: BodyCompositionSample?,
+        latestWeight: (value: Double, date: Date)?,
+        todayBodyFat: BodyCompositionSample?,
+        latestBodyFat: (value: Double, date: Date)?,
+        todayLeanBodyMass: BodyCompositionSample?,
+        latestLeanBodyMass: (value: Double, date: Date)?
+    ) {
+        self.todayWeight = todayWeight
+        self.latestWeight = latestWeight
+        self.todayBodyFat = todayBodyFat
+        self.latestBodyFat = latestBodyFat
+        self.todayLeanBodyMass = todayLeanBodyMass
+        self.latestLeanBodyMass = latestLeanBodyMass
+    }
+
+    func fetchWeight(days: Int) async throws -> [BodyCompositionSample] { [] }
+    func fetchBodyFat(days: Int) async throws -> [BodyCompositionSample] { [] }
+    func fetchLeanBodyMass(days: Int) async throws -> [BodyCompositionSample] { [] }
+    func fetchWeight(start: Date, end: Date) async throws -> [BodyCompositionSample] { todayWeight.map { [$0] } ?? [] }
+    func fetchLatestWeight(withinDays days: Int) async throws -> (value: Double, date: Date)? { latestWeight }
+    func fetchBMI(for date: Date) async throws -> Double? { nil }
+    func fetchLatestBMI(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
+    func fetchBMI(start: Date, end: Date) async throws -> [BodyCompositionSample] { [] }
+    func fetchBodyFat(start: Date, end: Date) async throws -> [BodyCompositionSample] { todayBodyFat.map { [$0] } ?? [] }
+    func fetchLeanBodyMass(start: Date, end: Date) async throws -> [BodyCompositionSample] { todayLeanBodyMass.map { [$0] } ?? [] }
+    func fetchLatestBodyFat(withinDays days: Int) async throws -> (value: Double, date: Date)? { latestBodyFat }
+    func fetchLatestLeanBodyMass(withinDays days: Int) async throws -> (value: Double, date: Date)? { latestLeanBodyMass }
 }
 
 private func makeEmptyWellnessSharedSnapshot(fetchedAt: Date = Date()) -> SharedHealthSnapshot {
@@ -384,5 +447,41 @@ struct WellnessViewModelTests {
         #expect(bmiCard != nil)
         #expect(bmiCard?.value == "24.6")
         #expect(bmiCard?.lastUpdated.daysAgo == 0)
+    }
+
+    @Test("Body cards prefer today's measurements over older history")
+    func bodyCardsPreferTodayMeasurements() async {
+        let now = Date()
+        let weekAgo = Calendar.current.date(byAdding: .day, value: -7, to: now) ?? now
+        let bodyService = TodayPreferredBodyMetricsService(
+            todayWeight: BodyCompositionSample(value: 71.4, date: now),
+            latestWeight: (value: 69.8, date: weekAgo),
+            todayBodyFat: BodyCompositionSample(value: 17.8, date: now),
+            latestBodyFat: (value: 19.5, date: weekAgo),
+            todayLeanBodyMass: BodyCompositionSample(value: 30.2, date: now),
+            latestLeanBodyMass: (value: 28.9, date: weekAgo)
+        )
+
+        let vm = WellnessViewModel(
+            sleepService: NoopSleepService(),
+            bodyService: bodyService,
+            hrvService: NoopHRVService(),
+            vitalsService: NoopVitalsService(),
+            heartRateService: NoopHeartRateService(),
+            sharedHealthDataService: MockSharedHealthDataService(snapshot: makeEmptyWellnessSharedSnapshot())
+        )
+
+        await vm.performRefresh()
+
+        let weightCard = vm.physicalCards.first(where: { $0.category == .weight })
+        let bodyFatCard = vm.physicalCards.first(where: { $0.category == .bodyFat })
+        let leanCard = vm.physicalCards.first(where: { $0.category == .leanBodyMass })
+
+        #expect(weightCard?.metric.value == 71.4)
+        #expect(weightCard?.lastUpdated.daysAgo == 0)
+        #expect(bodyFatCard?.metric.value == 17.8)
+        #expect(bodyFatCard?.lastUpdated.daysAgo == 0)
+        #expect(leanCard?.metric.value == 30.2)
+        #expect(leanCard?.lastUpdated.daysAgo == 0)
     }
 }
