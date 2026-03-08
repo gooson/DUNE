@@ -67,4 +67,32 @@ struct VisionSurfaceAccessibilityTests {
         )
         #expect(Set(quickActionIdentifiers).count == VisionDashboardWindowKind.allCases.count)
     }
+
+    @Test("Train identifiers stay stable and unique")
+    func trainIdentifiers() {
+        let identifiers = [
+            VisionSurfaceAccessibility.trainRoot,
+            VisionSurfaceAccessibility.trainHeroCard,
+            VisionSurfaceAccessibility.trainOpenChart3DButton,
+            VisionSurfaceAccessibility.trainLoadingState,
+            VisionSurfaceAccessibility.trainUnavailableState,
+            VisionSurfaceAccessibility.trainFailedState,
+            VisionSurfaceAccessibility.trainSharePlayCard,
+            VisionSurfaceAccessibility.trainVoiceEntryCard,
+            VisionSurfaceAccessibility.trainExerciseGuideCard,
+            VisionSurfaceAccessibility.trainMuscleMapCard,
+        ]
+
+        #expect(VisionSurfaceAccessibility.trainRoot == "vision-train-root")
+        #expect(VisionSurfaceAccessibility.trainHeroCard == "vision-train-hero-card")
+        #expect(VisionSurfaceAccessibility.trainOpenChart3DButton == "vision-train-open-chart3d-button")
+        #expect(VisionSurfaceAccessibility.trainLoadingState == "vision-train-loading-state")
+        #expect(VisionSurfaceAccessibility.trainUnavailableState == "vision-train-unavailable-state")
+        #expect(VisionSurfaceAccessibility.trainFailedState == "vision-train-failed-state")
+        #expect(VisionSurfaceAccessibility.trainSharePlayCard == "vision-train-shareplay-card")
+        #expect(VisionSurfaceAccessibility.trainVoiceEntryCard == "vision-train-voice-entry-card")
+        #expect(VisionSurfaceAccessibility.trainExerciseGuideCard == "vision-train-exercise-guide-card")
+        #expect(VisionSurfaceAccessibility.trainMuscleMapCard == "vision-train-muscle-map-card")
+        #expect(Set(identifiers).count == identifiers.count)
+    }
 }
