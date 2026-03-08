@@ -72,14 +72,59 @@ struct WeeklyStatsDetailViewModelTests {
         #expect(vm.errorMessage == nil)
     }
 
+    @Test("loadData falls back to manual snapshots when workout fetch fails")
+    func loadDataFallsBackToManualSnapshotsWhenWorkoutFetchFails() async {
+        let vm = WeeklyStatsDetailViewModel(
+            workoutService: MockWeeklyStatsWorkoutService(shouldThrow: true)
+        )
+
+        await vm.loadData(manualSnapshots: [makeManual(daysAgo: 1, minutes: 20)])
+
+        #expect(vm.comparison != nil)
+        #expect(vm.chartDailyBreakdown.count == 28)
+        #expect(vm.summaryStats.count == 4)
+        #expect(vm.errorMessage == nil)
+    }
+
+    @Test("loadData builds scrollable chart history for this week")
+    func loadDataBuildsChartHistory() async {
+        let vm = WeeklyStatsDetailViewModel(workoutService: MockWeeklyStatsWorkoutService())
+
+        await vm.loadData(manualSnapshots: [])
+
+        let today = calendar.startOfDay(for: Date())
+        let expectedStart = calendar.date(byAdding: .day, value: -27, to: today) ?? today
+
+        #expect(vm.chartDailyBreakdown.count == 28)
+        #expect(vm.chartDailyBreakdown.first?.date == expectedStart)
+        #expect(vm.chartDailyBreakdown.last?.date == today)
+    }
+
+    @Test("lastWeek chart history anchors to the selected week end date")
+    func lastWeekHistoryAnchorsToSelectedWeek() async {
+        let vm = WeeklyStatsDetailViewModel(workoutService: MockWeeklyStatsWorkoutService())
+        vm.selectedPeriod = .lastWeek
+
+        await vm.loadData(manualSnapshots: [])
+
+        let expectedEnd = calendar.startOfDay(for: vm.selectedPeriod.dateRange.end)
+        let expectedStart = calendar.date(byAdding: .day, value: -27, to: expectedEnd) ?? expectedEnd
+
+        #expect(vm.chartDailyBreakdown.count == 28)
+        #expect(vm.chartDailyBreakdown.first?.date == expectedStart)
+        #expect(vm.chartDailyBreakdown.last?.date == expectedEnd)
+    }
+
     @Test("Changing selectedPeriod clears cached state")
     func selectedPeriodReset() {
         let vm = WeeklyStatsDetailViewModel(workoutService: MockWeeklyStatsWorkoutService())
 
+        vm.chartDailyBreakdown = [DailyVolumePoint(date: Date(), segments: [])]
         vm.summaryStats = [.activeDays(value: "3")]
         vm.selectedPeriod = .thisMonth
 
         #expect(vm.comparison == nil)
+        #expect(vm.chartDailyBreakdown.isEmpty)
         #expect(vm.summaryStats.isEmpty)
         #expect(vm.isLoading == false)
     }

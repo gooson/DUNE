@@ -218,7 +218,10 @@ enum AXID {
     static let chartSelectionOverlay = "chart-selection-overlay"
     static let chartSelectionProbe = "chart-selection-probe"
     static let weeklyStatsChartDailyVolume = "weeklystats-chart-daily-volume"
+    static let weeklyStatsChartVisibleRange = "weeklystats-chart-visible-range"
     static let weeklyStatsPeriodPicker = "weeklystats-period-picker"
+    static let trainingVolumeChartTrainingLoad = "training-volume-chart-training-load"
+    static let trainingVolumeChartVisibleRange = "training-volume-chart-visible-range"
     static let trainingReadinessChartTrend = "trainingreadiness-chart-trend"
 
     // MARK: - Sidebar (iPad)
@@ -410,6 +413,37 @@ extension XCUIApplication {
             }
         }
         return element.exists
+    }
+
+    @discardableResult
+    func scrollToHittableElementIfNeeded(
+        _ identifier: String,
+        maxSwipes: Int = 8,
+        direction: ScrollDirection = .up,
+        timeoutPerCheck: TimeInterval = 1
+    ) -> Bool {
+        let element = descendants(matching: .any)[identifier].firstMatch
+
+        if !element.waitForExistence(timeout: timeoutPerCheck) {
+            _ = scrollToElementIfNeeded(
+                identifier,
+                maxSwipes: maxSwipes,
+                direction: direction,
+                timeoutPerCheck: timeoutPerCheck
+            )
+        }
+
+        for _ in 0..<maxSwipes where !(element.exists && element.isHittable) {
+            let scrollContainer = preferredScrollContainer()
+            switch direction {
+            case .up:
+                scrollContainer.swipeUp()
+            case .down:
+                scrollContainer.swipeDown()
+            }
+        }
+
+        return element.exists && element.isHittable
     }
 
     @discardableResult

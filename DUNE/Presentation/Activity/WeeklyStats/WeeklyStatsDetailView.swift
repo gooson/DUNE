@@ -69,8 +69,10 @@ struct WeeklyStatsDetailView: View {
             }
 
             // Daily volume chart
-            DailyVolumeChartView(dailyBreakdown: comparison.current.dailyBreakdown)
-                .accessibilityIdentifier("weeklystats-chart-daily-volume")
+            DailyVolumeChartView(
+                dailyBreakdown: viewModel.chartDailyBreakdown,
+                period: viewModel.selectedPeriod.volumePeriod
+            )
                 .id(viewModel.selectedPeriod)
                 .transition(.opacity)
                 .animation(.easeInOut(duration: 0.2), value: viewModel.selectedPeriod)

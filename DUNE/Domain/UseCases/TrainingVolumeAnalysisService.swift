@@ -49,6 +49,20 @@ enum TrainingVolumeAnalysisService {
         return PeriodComparison(current: currentSummary, previous: previousSummary)
     }
 
+    static func buildHistoryDailyBreakdown(
+        workouts: [WorkoutSummary],
+        manualRecords: [ManualExerciseSnapshot],
+        start: Date,
+        end: Date
+    ) -> [DailyVolumePoint] {
+        buildDailyBreakdown(
+            workouts: workouts,
+            manualRecords: manualRecords,
+            start: start,
+            end: end
+        )
+    }
+
     // MARK: - Build Summary
 
     private static func buildSummary(
