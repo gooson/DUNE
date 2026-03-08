@@ -3,7 +3,7 @@ source: brainstorm/vision-pro-features
 priority: p3
 status: in-progress
 created: 2026-03-05
-updated: 2026-03-07
+updated: 2026-03-08
 ---
 
 # Vision Pro Phase 4-5: 소셜 + 고급 기능
@@ -47,6 +47,9 @@ SharePlay 소셜 기능 및 고급 입력 방식 구현.
 
 - 이번 배치는 `/run`으로 E1만 ship 완료.
 - SharePlay(GroupActivities/SharedWorldAnchors)와 voice/body tracking/full-avatar는 capability 및 API 스캐폴드가 별도 필요하므로 후속 구현으로 남김.
+- Phase 5A 실데이터 연결은 `todos/021-done-p1-vision-real-data-pipeline.md`로 정리됐다.
+- Phase 5B UX polish는 `todos/022-in-progress-p2-vision-ux-polish.md`에서 계속 진행한다.
+- 고급 기능 실행은 Phase 5B 종료 후 `todos/023-ready-p2-vision-phase4-remaining.md`로 이어진다.
 
 ## 기술 요구사항
 - GroupActivities (SharePlay)

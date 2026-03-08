@@ -8,6 +8,12 @@ updated: 2026-03-08
 
 # Phase 5C: visionOS 고급 기능 (Phase 4 잔여)
 
+## 진행 메모
+
+- Phase 5A 실데이터 연결(`todos/021-done-p1-vision-real-data-pipeline.md`)이 완료됐다.
+- Phase 5B UX polish는 `todos/022-in-progress-p2-vision-ux-polish.md`에서 마무리 중이다.
+- 따라서 이 TODO는 5B 종료 후 착수하는 다음 phase로 유지한다.
+
 ## 목표
 
 SharePlay, Voice Input 등 Phase 4에서 보류된 고급 기능을 구현한다.
