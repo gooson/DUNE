@@ -24,6 +24,7 @@ struct CreateCustomExerciseView: View {
                 Section("Exercise Name") {
                     TextField("e.g. Cable Lateral Raise", text: $name)
                         .autocorrectionDisabled()
+                        .accessibilityIdentifier("create-custom-exercise-name")
                 }
 
                 // Category — built-in + user-defined
@@ -134,6 +135,7 @@ struct CreateCustomExerciseView: View {
                     }
                 }
             }
+            .accessibilityIdentifier("create-custom-exercise-screen")
             .scrollContentBackground(.hidden)
             .background { SheetWaveBackground() }
             .englishNavigationTitle("New Exercise")
@@ -146,6 +148,7 @@ struct CreateCustomExerciseView: View {
                     Button("Create") { createExercise() }
                         .fontWeight(.semibold)
                         .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
+                        .accessibilityIdentifier("create-custom-exercise-create")
                 }
             }
         }

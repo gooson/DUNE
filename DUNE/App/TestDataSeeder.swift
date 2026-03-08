@@ -4,6 +4,7 @@ import SwiftData
 enum UITestSeedScenario: String {
     case empty = "empty"
     case defaultSeeded = "default-seeded"
+    case activityExerciseSeeded = "activity-exercise-seeded"
 
     static func current(arguments: [String] = ProcessInfo.processInfo.arguments) -> UITestSeedScenario {
         guard let index = arguments.firstIndex(of: "--ui-scenario"),
@@ -19,6 +20,8 @@ enum UITestSeedScenario: String {
 /// Seeds mock SwiftData records for UI testing when launched with "--seed-mock".
 enum TestDataSeeder {
     private static let forceCloudSyncConsentArgument = "--ui-force-cloud-sync-consent"
+    static let activityExerciseMockWorkoutID = "ui-test-activity-workout-running"
+    static let activityExerciseMissingWorkoutID = "ui-test-activity-workout-missing"
 
     @MainActor
     static func seed(into context: ModelContext, scenario: UITestSeedScenario = .defaultSeeded) {
@@ -28,14 +31,10 @@ enum TestDataSeeder {
         case .empty:
             return
         case .defaultSeeded:
-            configureTodayDefaults()
-            seedSharedHealthSnapshot(into: context)
-            seedExerciseRecords(into: context)
-            seedBodyCompositionRecords(into: context)
-            seedInjuryRecords(into: context)
-            seedHabitDefinitions(into: context)
-            seedNotificationInbox()
-            try? context.save()
+            seedDefaultRecords(into: context)
+        case .activityExerciseSeeded:
+            seedDefaultRecords(into: context)
+            seedActivityExerciseFixtures(into: context)
         }
     }
 
@@ -65,7 +64,7 @@ enum TestDataSeeder {
         switch scenario {
         case .empty:
             nil
-        case .defaultSeeded:
+        case .defaultSeeded, .activityExerciseSeeded:
             makeWeatherSnapshot()
         }
     }
@@ -77,9 +76,130 @@ enum TestDataSeeder {
         switch scenario {
         case .empty:
             nil
-        case .defaultSeeded:
+        case .defaultSeeded, .activityExerciseSeeded:
             makeSharedHealthSnapshot(fetchedAt: fetchedAt)
         }
+    }
+
+    static func mockWorkoutSummary(
+        for scenario: UITestSeedScenario,
+        workoutID: String
+    ) -> WorkoutSummary? {
+        guard scenario == .activityExerciseSeeded,
+              workoutID == activityExerciseMockWorkoutID else {
+            return nil
+        }
+
+        let date = Calendar.current.date(byAdding: .day, value: -1, to: Date()) ?? Date()
+        return WorkoutSummary(
+            id: workoutID,
+            type: "running",
+            activityType: .running,
+            duration: 35 * 60,
+            calories: 420,
+            distance: 6.2,
+            date: date,
+            isFromThisApp: false,
+            heartRateAvg: 148,
+            heartRateMax: 171,
+            heartRateMin: 98,
+            averagePace: 338,
+            averageSpeed: 2.95,
+            elevationAscended: 82,
+            weatherTemperature: 18,
+            weatherCondition: 1,
+            weatherHumidity: 46,
+            isIndoor: false,
+            effortScore: 7.5,
+            stepCount: 6_540,
+            flightsClimbed: 9,
+            milestoneDistance: .fiveK,
+            isPersonalRecord: true,
+            personalRecordTypes: [.fastestPace]
+        )
+    }
+
+    @MainActor
+    private static func seedDefaultRecords(into context: ModelContext) {
+        configureTodayDefaults()
+        seedSharedHealthSnapshot(into: context)
+        seedExerciseRecords(into: context)
+        seedBodyCompositionRecords(into: context)
+        seedInjuryRecords(into: context)
+        seedHabitDefinitions(into: context)
+        seedNotificationInbox(scenario: .defaultSeeded)
+        try? context.save()
+    }
+
+    @MainActor
+    private static func seedActivityExerciseFixtures(into context: ModelContext) {
+        let category = UserCategory(
+            name: "Codex Mobility",
+            iconName: "figure.cooldown",
+            colorHex: "34C759",
+            defaultInputType: .durationIntensity,
+            sortOrder: 0
+        )
+        context.insert(category)
+
+        let customExercise = CustomExercise(
+            name: "Codex Cable Raise",
+            category: .strength,
+            inputType: .setsRepsWeight,
+            primaryMuscles: [.shoulders],
+            secondaryMuscles: [.triceps],
+            equipment: .cable,
+            metValue: 5.2,
+            customCategoryName: category.name
+        )
+        context.insert(customExercise)
+
+        let singleTemplate = WorkoutTemplate(
+            name: "Codex Strength Starter",
+            exerciseEntries: [
+                TemplateEntry(
+                    exerciseDefinitionID: "barbell-bench-press",
+                    exerciseName: "Bench Press",
+                    defaultSets: 2,
+                    defaultReps: 8,
+                    defaultWeightKg: 60,
+                    restDuration: 45,
+                    equipment: Equipment.barbell.rawValue,
+                    inputTypeRaw: ExerciseInputType.setsRepsWeight.rawValue
+                )
+            ]
+        )
+        context.insert(singleTemplate)
+
+        let multiTemplate = WorkoutTemplate(
+            name: "Codex Circuit Builder",
+            exerciseEntries: [
+                TemplateEntry(
+                    exerciseDefinitionID: "barbell-squat",
+                    exerciseName: "Squat",
+                    defaultSets: 2,
+                    defaultReps: 6,
+                    defaultWeightKg: 80,
+                    restDuration: 60,
+                    equipment: Equipment.barbell.rawValue,
+                    inputTypeRaw: ExerciseInputType.setsRepsWeight.rawValue
+                ),
+                TemplateEntry(
+                    exerciseDefinitionID: "barbell-bench-press",
+                    exerciseName: "Bench Press",
+                    defaultSets: 2,
+                    defaultReps: 8,
+                    defaultWeightKg: 60,
+                    restDuration: 45,
+                    equipment: Equipment.barbell.rawValue,
+                    inputTypeRaw: ExerciseInputType.setsRepsWeight.rawValue
+                )
+            ]
+        )
+        context.insert(multiTemplate)
+
+        seedNotificationInbox(scenario: .activityExerciseSeeded)
+        try? context.save()
     }
 
     // MARK: - Exercise Records
@@ -106,10 +226,10 @@ enum TestDataSeeder {
         )
     }
 
-    private static func seedNotificationInbox() {
+    private static func seedNotificationInbox(scenario: UITestSeedScenario) {
         let manager = NotificationInboxManager.shared
         manager.deleteAll()
-        for insight in makeNotificationInsights() {
+        for insight in makeNotificationInsights(for: scenario) {
             _ = manager.recordSentInsight(insight)
         }
     }
@@ -120,9 +240,9 @@ enum TestDataSeeder {
         let today = calendar.startOfDay(for: Date())
 
         let exercises: [(name: String, defID: String, type: String, muscles: [MuscleGroup])] = [
-            ("Bench Press", "bench-press", "strength", [.chest, .triceps]),
+            ("Bench Press", "barbell-bench-press", "strength", [.chest, .triceps]),
             ("Squat", "barbell-squat", "strength", [.quadriceps, .glutes]),
-            ("Deadlift", "deadlift", "strength", [.hamstrings, .back]),
+            ("Deadlift", "conventional-deadlift", "strength", [.hamstrings, .back]),
         ]
 
         for (index, exercise) in exercises.enumerated() {
@@ -138,7 +258,11 @@ enum TestDataSeeder {
             )
             context.insert(record)
 
-            // Add workout sets after record is in context
+            var seededSets: [WorkoutSet] = []
+
+            // Add workout sets after record is in context.
+            // Set the inverse explicitly so SwiftData treats the record as set-backed
+            // during the same seeded launch used by UI tests.
             for setNum in 1...3 {
                 let set = WorkoutSet(
                     setNumber: setNum,
@@ -146,9 +270,12 @@ enum TestDataSeeder {
                     reps: Swift.max(1, 10 - index),
                     isCompleted: true
                 )
+                set.exerciseRecord = record
                 context.insert(set)
-                record.sets?.append(set)
+                seededSets.append(set)
             }
+
+            record.sets = seededSets
         }
     }
 
@@ -219,26 +346,56 @@ enum TestDataSeeder {
         }
     }
 
-    private static func makeNotificationInsights(referenceDate: Date = Date()) -> [HealthInsight] {
+    private static func makeNotificationInsights(
+        for scenario: UITestSeedScenario,
+        referenceDate: Date = Date()
+    ) -> [HealthInsight] {
         let calendar = Calendar.current
         let now = calendar.startOfDay(for: referenceDate)
-
-        return [
+        var insights: [HealthInsight] = [
             HealthInsight(
                 type: .sleepDebt,
-                title: "Sleep Debt Alert",
-                body: "You slept 6 h 20 m last night. Prioritize recovery today.",
+                title: String(localized: "Sleep Debt Alert"),
+                body: String(localized: "You slept 6 h 20 m last night. Prioritize recovery today."),
                 severity: .attention,
                 date: calendar.date(byAdding: .minute, value: -15, to: now) ?? now
             ),
             HealthInsight(
                 type: .stepGoal,
-                title: "Step Goal Reached",
-                body: "You reached 9,800 steps today. Great momentum.",
+                title: String(localized: "Step Goal Reached"),
+                body: String(localized: "You reached 9,800 steps today. Great momentum."),
                 severity: .celebration,
                 date: calendar.date(byAdding: .minute, value: -45, to: now) ?? now
             )
         ]
+
+        guard scenario == .activityExerciseSeeded else {
+            return insights
+        }
+
+        insights.insert(
+            HealthInsight(
+                type: .workoutPR,
+                title: String(localized: "Workout Detail Route"),
+                body: String(localized: "Open the seeded running workout detail route."),
+                severity: .celebration,
+                date: calendar.date(byAdding: .minute, value: -5, to: now) ?? now,
+                route: .workoutDetail(workoutID: activityExerciseMockWorkoutID)
+            ),
+            at: 0
+        )
+        insights.insert(
+            HealthInsight(
+                type: .workoutPR,
+                title: String(localized: "Missing Workout Route"),
+                body: String(localized: "Open the missing workout fallback screen."),
+                severity: .attention,
+                date: calendar.date(byAdding: .minute, value: -10, to: now) ?? now,
+                route: .workoutDetail(workoutID: activityExerciseMissingWorkoutID)
+            ),
+            at: 1
+        )
+        return insights
     }
 
     private static func makeSharedHealthSnapshot(fetchedAt: Date) -> SharedHealthSnapshot {

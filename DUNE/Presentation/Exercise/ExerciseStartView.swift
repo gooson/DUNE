@@ -44,6 +44,7 @@ struct ExerciseStartView: View {
                     .padding(.top, DS.Spacing.lg)
                     .padding(.bottom, 100)
                 }
+                .accessibilityIdentifier("exercise-start-screen")
 
                 startButton
             }
@@ -173,6 +174,7 @@ struct ExerciseStartView: View {
             }
             .buttonStyle(.borderedProminent)
             .tint(DS.Color.activity)
+            .accessibilityIdentifier("exercise-start-button")
             .padding(.horizontal, DS.Spacing.lg)
             .padding(.vertical, DS.Spacing.md)
         }

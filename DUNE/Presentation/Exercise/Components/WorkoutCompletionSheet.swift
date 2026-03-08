@@ -30,6 +30,7 @@ struct WorkoutCompletionSheet: View {
                         .foregroundStyle(DS.Color.textSecondary)
                 }
                 .padding(.top, DS.Spacing.lg)
+                .accessibilityIdentifier("workout-completion-sheet")
 
                 Spacer()
 
@@ -80,6 +81,7 @@ struct WorkoutCompletionSheet: View {
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, DS.Spacing.md)
                     }
+                    .accessibilityIdentifier("workout-completion-done")
                 }
                 .padding(.horizontal, DS.Spacing.lg)
                 .padding(.bottom, DS.Spacing.lg)

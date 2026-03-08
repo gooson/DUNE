@@ -1,4 +1,4 @@
-import XCTest
+@preconcurrency import XCTest
 
 /// Smoke tests for the Activity tab.
 /// Verifies key UI elements exist and the screen renders without crashing.

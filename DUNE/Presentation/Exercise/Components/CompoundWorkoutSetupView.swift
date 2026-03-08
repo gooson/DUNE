@@ -26,6 +26,7 @@ struct CompoundWorkoutSetupView: View {
                 settingsSection
                 startButton
             }
+            .accessibilityIdentifier("compound-workout-setup-screen")
             .scrollContentBackground(.hidden)
             .englishNavigationTitle("Compound Workout")
             .navigationBarTitleDisplayMode(.inline)
@@ -94,6 +95,7 @@ struct CompoundWorkoutSetupView: View {
                 Label("Add Exercise", systemImage: "plus.circle.fill")
                     .foregroundStyle(DS.Color.activity)
             }
+            .accessibilityIdentifier("compound-workout-setup-add-exercise")
         }
     }
 
@@ -131,6 +133,7 @@ struct CompoundWorkoutSetupView: View {
                     )
             }
             .disabled(!isValid)
+            .accessibilityIdentifier("compound-workout-setup-start")
             .listRowInsets(EdgeInsets())
             .listRowBackground(Color.clear)
         }

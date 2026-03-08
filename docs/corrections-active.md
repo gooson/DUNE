@@ -63,6 +63,7 @@ status: approved
 - **`navigationDestination(item:)` 재트리거는 nil trampoline 금지**: 같은 frame에 `destination = nil` 후 다시 값 대입하지 말고 request token 기반 `Identifiable`로 단일 write 처리 (#208)
 - **`ImageRenderer` export/share 경로는 explicit size 필수**: offscreen SwiftUI 렌더링에서 intrinsic height가 0으로 풀릴 수 있으므로 `sizeThatFits`로 먼저 측정하고 `frame` + `proposedSize`를 함께 고정 (#209)
 - **알림 보상 상세는 탭 전환보다 현재 탭 push 우선**: `activityPersonalRecords` 같은 reward route는 `selectedSection`를 바꾸지 말고 활성 탭의 `NavigationStack(path:)`에 push해서 현재 화면 컨텍스트를 유지 (#210)
+- **screen-level AXID는 상호작용 root가 아닌 안정 anchor에만 부여**: SwiftUI root `VStack`/sheet container에 화면 식별자를 붙이면 child CTA identifier와 hit-testing이 함께 먹힐 수 있으므로, screen marker는 헤더/scroll surface 같은 비인터랙티브 anchor에 두고 실제 버튼 id가 살아 있는지 debugDescription으로 확인한다 (#227)
 - **SF Symbol literal 변경 시 `UIImage(systemName:)` 해상도 테스트 추가**: `iconName` 문자열은 컴파일 타임 검증이 없으므로 공용 enum/icon mapping 변경 때 실제 system symbol set에서 resolve되는지 unit test로 고정 (#211)
 - **중복 가능 label 배열에 `ForEach(id: \\.self)` 금지**: 요일 이니셜처럼 표시값이 반복될 수 있는 collection은 `Identifiable` wrapper나 index-based stable ID를 써서 SwiftUI child identity를 분리 (#212)
 - **summary/detail metric은 데이터 소스 parity 필수**: Activity card가 manual+HealthKit merged input으로 계산한 값을 detail이 local SwiftData만으로 다시 계산하면 불일치가 나므로, 동일 metric은 동일 merge contract 또는 동등한 history fetch를 사용 (#213)

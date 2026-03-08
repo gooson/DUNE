@@ -1,4 +1,4 @@
-import XCTest
+@preconcurrency import XCTest
 
 // MARK: - Accessibility Identifier Constants (3-tier: {tab}-{section}-{element})
 
@@ -34,9 +34,20 @@ enum AXID {
     static let activitySectionWeeklyStats = "activity-section-weeklystats"
     static let activitySectionVolume = "activity-section-volume"
     static let activitySectionPR = "activity-section-pr"
+    static let activitySectionAchievement = "activity-section-achievement"
     static let activitySectionConsistency = "activity-section-consistency"
     static let activitySectionExerciseMix = "activity-section-exercisemix"
     static let activitySectionRecent = "activity-section-recent"
+    static let activityRecentSeeAll = "activity-recent-seeall"
+    static let activityTrainingReadinessDetailScreen = "activity-training-readiness-detail-screen"
+    static let activityMuscleMapDetailScreen = "activity-musclemap-detail-screen"
+    static let activityWeeklyStatsDetailScreen = "activity-weeklystats-detail-screen"
+    static let activityTrainingVolumeDetailScreen = "activity-training-volume-detail-screen"
+    static let activityPersonalRecordsDetailScreen = "activity-personal-records-detail-screen"
+    static let activityConsistencyDetailScreen = "activity-consistency-detail-screen"
+    static let activityExerciseMixDetailScreen = "activity-exercise-mix-detail-screen"
+    static func activityTrainingVolumeRow(_ typeKey: String) -> String { "activity-training-volume-row-\(typeKey)" }
+    static let activityExerciseTypeDetailScreen = "activity-exercise-type-detail-screen"
 
     // MARK: - Wellness Tab (active: hero, toolbar-add, add-menu items)
     static let wellnessHeroScore = "wellness-hero-score"
@@ -128,13 +139,78 @@ enum AXID {
     static let exerciseToolbarTemplates = "exercise-toolbar-templates"
     static let exerciseToolbarCategories = "exercise-toolbar-categories"
     static let exerciseToolbarAdd = "exercise-toolbar-add"
+    static let exerciseMenuSingle = "exercise-menu-single"
+    static let exerciseMenuCompound = "exercise-menu-compound"
+    static let exerciseViewScreen = "exercise-view-screen"
+    static func exerciseRow(_ exerciseID: String) -> String { "exercise-row-\(exerciseID)" }
+    static let exerciseSessionViewHistory = "exercise-session-view-history"
+    static let exerciseHistoryScreen = "exercise-history-screen"
+    static let exerciseStartScreen = "exercise-start-screen"
+    static let exerciseStartButton = "exercise-start-button"
+    static let exerciseDetailScreen = "exercise-detail-screen"
+    static let exerciseDetailClose = "exercise-detail-close"
+    static let exerciseDetailStart = "exercise-detail-start"
+    static let createCustomExerciseScreen = "create-custom-exercise-screen"
+    static let createCustomExerciseName = "create-custom-exercise-name"
+    static let createCustomExerciseCreate = "create-custom-exercise-create"
 
     // MARK: - Exercise Picker
     static let pickerSearchField = "picker-search-field"
     static let pickerRootList = "picker-root-list"
     static let pickerCancelButton = "picker-cancel-button"
+    static let pickerCreateCustomButton = "picker-create-custom-button"
+    static let pickerAllExercisesButton = "picker-all-exercises-button"
     static let pickerSectionRecent = "picker-section-recent"
     static let pickerSectionPopular = "picker-section-popular"
+    static func pickerExerciseRow(_ exerciseID: String) -> String { "picker-row-\(exerciseID)" }
+    static func pickerExerciseDetailButton(_ exerciseID: String) -> String { "picker-detail-\(exerciseID)" }
+
+    // MARK: - Workout Session
+    static let workoutSessionScreen = "workout-session-screen"
+    static let workoutSessionDone = "workout-session-done"
+    static let workoutSessionCompleteSet = "workout-session-complete-set"
+    static let workoutSessionLastSetSheet = "workout-session-last-set-sheet"
+    static let workoutSessionAddSet = "workout-session-add-set"
+    static let workoutSessionFinish = "workout-session-finish"
+    static func workoutSessionField(_ name: String) -> String { "workout-session-field-\(name)" }
+    static let workoutCompletionSheet = "workout-completion-sheet"
+    static let workoutCompletionDone = "workout-completion-done"
+
+    // MARK: - Templates / Compound
+    static let workoutTemplateListScreen = "workout-template-list-screen"
+    static let workoutTemplateListAdd = "workout-template-list-add"
+    static let templateFormScreen = "template-form-screen"
+    static let templateFormName = "template-form-name"
+    static let templateFormAddExercise = "template-form-add-exercise"
+    static let templateFormSave = "template-form-save"
+    static let templateFormCancel = "template-form-cancel"
+    static let templateWorkoutContainerScreen = "template-workout-container-screen"
+    static let templateWorkoutContainerClose = "template-workout-container-close"
+    static let compoundWorkoutSetupScreen = "compound-workout-setup-screen"
+    static let compoundWorkoutSetupAddExercise = "compound-workout-setup-add-exercise"
+    static let compoundWorkoutSetupStart = "compound-workout-setup-start"
+    static let compoundWorkoutScreen = "compound-workout-screen"
+
+    // MARK: - Cardio
+    static let cardioStartScreen = "cardio-start-screen"
+    static let cardioStartIndoor = "cardio-start-indoor"
+    static let cardioStartOutdoor = "cardio-start-outdoor"
+    static let cardioSessionScreen = "cardio-session-screen"
+    static let cardioSessionEnd = "cardio-session-end"
+    static let cardioSessionConfirmEnd = "cardio-session-confirm-end"
+    static let cardioSessionSummaryScreen = "cardio-session-summary-screen"
+    static let cardioSessionSummarySave = "cardio-session-summary-save"
+
+    // MARK: - Notification / HealthKit Detail
+    static let healthkitWorkoutDetailScreen = "healthkit-workout-detail-screen"
+    static let notificationTargetNotFoundScreen = "notification-target-not-found-screen"
+
+    // MARK: - User Categories
+    static let userCategoryManagementScreen = "user-category-management-screen"
+    static let userCategoryAdd = "user-category-add"
+    static let userCategoryEditScreen = "user-category-edit-screen"
+    static let userCategoryName = "user-category-name"
+    static let userCategorySave = "user-category-save"
 
     // MARK: - Chart Detail
     static let detailChartSurface = "detail-chart-surface"

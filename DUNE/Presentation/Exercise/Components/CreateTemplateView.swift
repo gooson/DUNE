@@ -49,6 +49,7 @@ struct TemplateFormView: View {
                 Section("Template Name") {
                     TextField("e.g. Push Day, Leg Day", text: $templateName)
                         .autocorrectionDisabled()
+                        .accessibilityIdentifier("template-form-name")
                 }
 
                 Section {
@@ -68,6 +69,7 @@ struct TemplateFormView: View {
                         Label("Add Exercise", systemImage: "plus.circle")
                             .foregroundStyle(DS.Color.activity)
                     }
+                    .accessibilityIdentifier("template-form-add-exercise")
                 } header: {
                     Text("Exercises (\(entries.count))")
                 }
@@ -80,6 +82,7 @@ struct TemplateFormView: View {
                     }
                 }
             }
+            .accessibilityIdentifier("template-form-screen")
             .scrollContentBackground(.hidden)
             .background { SheetWaveBackground() }
             .englishNavigationTitle(isEditing ? "Edit Template" : "New Template")
@@ -87,11 +90,13 @@ struct TemplateFormView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }
+                        .accessibilityIdentifier("template-form-cancel")
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") { saveTemplate() }
                         .fontWeight(.semibold)
                         .disabled(templateName.trimmingCharacters(in: .whitespaces).isEmpty || entries.isEmpty)
+                        .accessibilityIdentifier("template-form-save")
                 }
             }
             .sheet(isPresented: $showingExercisePicker) {

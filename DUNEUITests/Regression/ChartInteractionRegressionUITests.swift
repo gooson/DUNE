@@ -1,4 +1,4 @@
-import XCTest
+@preconcurrency import XCTest
 
 /// Regression coverage for chart long-press vs period/selection interaction.
 @MainActor

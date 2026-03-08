@@ -35,6 +35,7 @@ struct ExerciseMixDetailView: View {
             }
             .padding()
         }
+        .accessibilityIdentifier("activity-exercise-mix-detail-screen")
         .background { DetailWaveBackground() }
         .englishNavigationTitle("Exercise Mix")
         .task(id: exerciseRecords.count) {

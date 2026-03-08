@@ -27,6 +27,7 @@ struct WeeklyStatsDetailView: View {
             }
             .padding()
         }
+        .accessibilityIdentifier("activity-weeklystats-detail-screen")
         .background { DetailWaveBackground() }
         .englishNavigationTitle(viewModel.selectedPeriod.rawValue)
         .task(id: viewModel.selectedPeriod) {

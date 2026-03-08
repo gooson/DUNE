@@ -36,6 +36,7 @@ struct ConsistencyDetailView: View {
             }
             .padding()
         }
+        .accessibilityIdentifier("activity-consistency-detail-screen")
         .background { DetailWaveBackground() }
         .englishNavigationTitle("Consistency")
         .task(id: exerciseRecords.count) {
