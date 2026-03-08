@@ -3,10 +3,13 @@ source: brainstorm/e2e-ui-test-plan-all-targets
 priority: p2
 status: ready
 created: 2026-03-08
-updated: 2026-03-08
+updated: 2026-03-09
 ---
 
-# E2E Phase 0 Page Backlog Index
+# E2E Phase 0 Open Page Backlog Index
+
+이 문서는 아직 열려 있는 phase 0 `e2e` surface만 관리한다.
+완료된 surface 기록은 [107 E2E Phase 0 Completed Surface Index](107-done-p2-e2e-phase0-completed-surface-index.md)로 분리했다.
 
 ## Must-Have Surface TODOs
 
@@ -34,9 +37,6 @@ updated: 2026-03-08
 - [040 PersonalRecordsDetailView](040-ready-p2-e2e-dune-personal-records-detail-view.md)
 - [041 ConsistencyDetailView](041-ready-p2-e2e-dune-consistency-detail-view.md)
 - [042 ExerciseMixDetailView](042-ready-p2-e2e-dune-exercise-mix-detail-view.md)
-- [043 MuscleMapDetailView](043-ready-p2-e2e-dune-muscle-map-detail-view.md)
-- [044 MuscleMap3DView](044-ready-p2-e2e-dune-muscle-map-3d-view.md)
-- [045 ExercisePickerView](045-ready-p2-e2e-dune-exercise-picker-view.md)
 - [046 ExerciseDetailSheet](046-ready-p2-e2e-dune-exercise-detail-sheet.md)
 - [047 CreateCustomExerciseView](047-ready-p2-e2e-dune-create-custom-exercise-view.md)
 - [048 ExerciseStartView](048-ready-p2-e2e-dune-exercise-start-view.md)
@@ -58,39 +58,18 @@ updated: 2026-03-08
 - [064 NotificationTargetNotFoundView](064-ready-p2-e2e-dune-notification-target-not-found-view.md)
 
 ### DUNE Wellness / Life
-- [065 WellnessView](065-ready-p2-e2e-dune-wellness-view.md)
-- [066 WellnessScoreDetailView](066-ready-p2-e2e-dune-wellness-score-detail-view.md)
-- [067 BodyHistoryDetailView](067-ready-p2-e2e-dune-body-history-detail-view.md)
-- [068 InjuryHistoryView](068-ready-p2-e2e-dune-injury-history-view.md)
-- [069 InjuryStatisticsView](069-ready-p2-e2e-dune-injury-statistics-view.md)
-- [070 BodyCompositionFormSheet](070-ready-p2-e2e-dune-body-composition-form-sheet.md)
-- [071 InjuryFormSheet](071-ready-p2-e2e-dune-injury-form-sheet.md)
-- [072 LifeView](072-ready-p2-e2e-dune-life-view.md)
-- [073 HabitFormSheet](073-ready-p2-e2e-dune-habit-form-sheet.md)
-- [074 HabitHistorySheet](074-ready-p2-e2e-dune-habit-history-sheet.md)
+- 현재 open surface 없음
+- 완료된 Wellness / Life surface는 [107 E2E Phase 0 Completed Surface Index](107-done-p2-e2e-phase0-completed-surface-index.md)에서 관리한다.
 
 ### DUNEWatch
-- [075 CarouselHomeView](075-done-p2-e2e-dunewatch-carousel-home-view.md)
-- [076 QuickStartAllExercisesView](076-done-p2-e2e-dunewatch-quick-start-all-exercises-view.md)
-- [077 WorkoutPreviewView](077-done-p2-e2e-dunewatch-workout-preview-view.md)
-- [078 SessionPagingView](078-done-p2-e2e-dunewatch-session-paging-view.md)
-- [079 MetricsView](079-done-p2-e2e-dunewatch-metrics-view.md)
-- [080 ControlsView](080-done-p2-e2e-dunewatch-controls-view.md)
-- [081 RestTimerView](081-done-p2-e2e-dunewatch-rest-timer-view.md)
-- [082 SetInputSheet](082-done-p2-e2e-dunewatch-set-input-sheet.md)
-- [083 SessionSummaryView](083-done-p2-e2e-dunewatch-session-summary-view.md)
+- 현재 open surface 없음
+- 완료된 watch surface는 [107 E2E Phase 0 Completed Surface Index](107-done-p2-e2e-phase0-completed-surface-index.md)에서 관리한다.
 
 ## Deferred Surface TODOs
 
 ### DUNEVision
-- [084 VisionContentView](084-done-p3-e2e-dunevision-content-view.md)
-- [085 VisionDashboardView](085-done-p3-e2e-dunevision-dashboard-view.md)
-- [086 VisionTrainView](086-done-p3-e2e-dunevision-train-view.md)
-- [087 VisionDashboardWindowScene](087-done-p3-e2e-dunevision-dashboard-window-scene.md)
-- [088 Chart3DContainerView](088-done-p3-e2e-dunevision-chart3d-container-view.md)
-- [089 VisionVolumetricExperienceView](089-done-p3-e2e-dunevision-volumetric-experience-view.md)
-- [090 VisionImmersiveExperienceView](090-done-p3-e2e-dunevision-immersive-experience-view.md)
-- [091 VisionPlaceholderSurfaces](091-done-p3-e2e-dunevision-placeholder-surfaces.md)
+- 현재 open surface 없음
+- 완료된 visionOS deferred surface는 [107 E2E Phase 0 Completed Surface Index](107-done-p2-e2e-phase0-completed-surface-index.md)에서 관리한다.
 
 ### DUNEWidget
 - [092 SmallWidgetView](092-ready-p3-e2e-dunewidget-small-widget-view.md)
@@ -102,4 +81,5 @@ updated: 2026-03-08
 
 - `p2`: `DUNE` + `DUNEWatch` must-have 회귀 surface
 - `p3`: `DUNEVision` + `DUNEWidget` deferred surface
-- 후속 번호는 `096`부터 이어서 사용한다.
+- 완료된 surface 30건은 [107 E2E Phase 0 Completed Surface Index](107-done-p2-e2e-phase0-completed-surface-index.md)로 이동했다.
+- 후속 번호는 `108`부터 이어서 사용한다.
