@@ -335,8 +335,16 @@ struct TemplateFormView: View {
                 }
 
                 var entry = TemplateExerciseResolver.defaultEntry(for: definition)
-                entry.defaultSets = slot.sets
-                entry.defaultReps = slot.reps
+                switch TemplateExerciseProfile(exercise: definition) {
+                case .cardio:
+                    entry.defaultSets = 1
+                    entry.defaultReps = 1
+                    entry.defaultWeightKg = nil
+                    entry.restDuration = nil
+                case .strengthLike, .unresolved:
+                    entry.defaultSets = slot.sets
+                    entry.defaultReps = slot.reps
+                }
                 return entry
             }
 
@@ -381,18 +389,8 @@ struct TemplateFormView: View {
         do {
             let workouts = try await workoutService.fetchWorkouts(days: 14)
             healthKitSnapshots = workouts
-                .filter { !$0.isFromThisApp && !$0.activityType.primaryMuscles.isEmpty }
-                .map { workout in
-                    ExerciseRecordSnapshot(
-                        date: workout.date,
-                        exerciseName: workout.type,
-                        primaryMuscles: workout.activityType.primaryMuscles,
-                        secondaryMuscles: workout.activityType.secondaryMuscles,
-                        completedSetCount: 0,
-                        durationMinutes: workout.duration > 0 ? min(workout.duration / 60.0, 480) : nil,
-                        distanceKm: workout.distance.flatMap { $0 > 0 ? min($0 / 1000.0, 500) : nil }
-                    )
-                }
+                .filter { !$0.isFromThisApp }
+                .compactMap(SpatialTrainingAnalyzer.snapshot(from:))
         } catch {
             healthKitSnapshots = []
         }
@@ -431,6 +429,7 @@ struct TemplateFormView: View {
             )
             if case .cardio = profile {
                 clamped.defaultSets = 1
+                clamped.defaultReps = 1
                 clamped.defaultWeightKg = nil
                 clamped.restDuration = nil
             }

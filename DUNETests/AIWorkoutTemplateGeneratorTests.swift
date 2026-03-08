@@ -112,7 +112,7 @@ struct AIWorkoutTemplateGeneratorTests {
         #expect(!output.contains("running"))
     }
 
-    @Test("Resolve generated template filters unresolved, duplicate, and unsupported slots")
+    @Test("Resolve generated template filters unresolved and duplicate slots while keeping cardio")
     func resolveGeneratedTemplateFiltersInvalidSlots() throws {
         let template = AIWorkoutTemplate(
             name: "Shoulder Builder",
@@ -143,23 +143,46 @@ struct AIWorkoutTemplateGeneratorTests {
 
         #expect(resolved.name == "Shoulder Builder")
         #expect(resolved.estimatedMinutes == 30)
-        #expect(resolved.slots.count == 1)
-        #expect(resolved.slots.first?.exerciseDefinitionID == "dumbbell-shoulder-press")
+        #expect(resolved.slots.count == 2)
+        #expect(resolved.slots.map(\.exerciseDefinitionID) == ["dumbbell-shoulder-press", "running"])
     }
 
-    @Test("Resolve generated template fails when no supported exercises remain")
-    func resolveGeneratedTemplateFailsWithoutValidExercises() {
+    @Test("Resolve generated template normalizes cardio slots to 1 set and 1 rep")
+    func resolveGeneratedTemplateNormalizesCardioSlots() throws {
         let template = AIWorkoutTemplate(
             name: "Cardio Only",
             exercises: [
                 AIExerciseSlot(
                     exerciseID: "running",
                     exerciseName: "Running",
-                    sets: 1,
-                    reps: 1
+                    sets: 4,
+                    reps: 12
                 )
             ],
             estimatedMinutes: 25
+        )
+
+        let resolved = try sut.resolveGeneratedTemplate(template, library: makeLibrary())
+
+        #expect(resolved.slots.count == 1)
+        #expect(resolved.slots[0].exerciseDefinitionID == "running")
+        #expect(resolved.slots[0].sets == 1)
+        #expect(resolved.slots[0].reps == 1)
+    }
+
+    @Test("Resolve generated template still rejects unsupported non-template exercise types")
+    func resolveGeneratedTemplateRejectsUnsupportedExerciseTypes() {
+        let template = AIWorkoutTemplate(
+            name: "Mobility Flow",
+            exercises: [
+                AIExerciseSlot(
+                    exerciseID: "hip-mobility",
+                    exerciseName: "Hip Mobility",
+                    sets: 3,
+                    reps: 10
+                )
+            ],
+            estimatedMinutes: 20
         )
 
         do {
@@ -250,6 +273,16 @@ struct AIWorkoutTemplateGeneratorTests {
                     inputType: .durationDistance,
                     primaryMuscles: [.quadriceps],
                     secondaryMuscles: [.calves],
+                    equipment: .bodyweight
+                ),
+                makeExercise(
+                    id: "hip-mobility",
+                    name: "Hip Mobility",
+                    aliases: ["Mobility Flow", "Stretching"],
+                    category: .flexibility,
+                    inputType: .durationIntensity,
+                    primaryMuscles: [.glutes],
+                    secondaryMuscles: [.hamstrings],
                     equipment: .bodyweight
                 ),
             ]

@@ -1,6 +1,6 @@
 ---
 tags: [corrections, active, project-specific]
-date: 2026-03-08
+date: 2026-03-09
 category: general
 status: approved
 ---
@@ -49,6 +49,7 @@ status: approved
 - **Popover/inline 중복은 `isInline: Bool` 파라미터로 통합** (#151)
 - **모드별 dispatch 함수보다 튜플 반환 단일 함수** (#148)
 - **`Dictionary(uniqueKeysWithValues:)` 사용 금지 -> `uniquingKeysWith`** (#104)
+- **template-capable 판정은 `TemplateExerciseProfile` 대용 금지**: 자연어 템플릿 생성/저장 allowlist는 UI profile이 아니라 persisted `ExerciseInputType` 기준으로 판단하고, 현재 지원 범위는 `.setsRepsWeight`, `.setsReps`, `.durationDistance`만 허용한다 (#232)
 
 ### Launch & Permissions
 

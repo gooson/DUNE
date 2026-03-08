@@ -61,7 +61,8 @@ struct AIWorkoutTemplateGenerator: NaturalLanguageWorkoutGenerating, Sendable {
             최종 구조화 응답을 만들기 전에 반드시 searchExercise 도구를 사용해 정확한 exerciseID와 exerciseName을 확인하세요.
             exerciseID와 exerciseName은 도구 결과를 그대로 복사하세요.
             템플릿 이름은 한국어로 작성하고, 운동 이름은 도구가 반환한 값을 그대로 사용하세요.
-            세트/반복 수가 있는 strength 또는 bodyweight 운동을 우선 선택하세요.
+            strength/bodyweight 운동을 우선 선택하되, 사용자가 달리기/걷기/사이클 같은 cardio를 요청하면 cardio/time-based 운동도 포함할 수 있습니다.
+            cardio 또는 time-based 운동은 sets = 1, reps = 1 로 반환하세요.
             """
         case "ja":
             return """
@@ -70,7 +71,8 @@ struct AIWorkoutTemplateGenerator: NaturalLanguageWorkoutGenerating, Sendable {
             最終の構造化レスポンスを返す前に、必ず searchExercise ツールで正確な exerciseID と exerciseName を確認してください。
             exerciseID と exerciseName はツール結果をそのままコピーしてください。
             テンプレート名は日本語で書き、運動名はツールが返した値をそのまま使ってください。
-            sets と reps に合う strength / bodyweight 種目を優先してください。
+            strength / bodyweight 種目を優先しつつ、ランニングやウォーキングなど cardio 指定がある場合は cardio / time-based 種目も使えます。
+            cardio / time-based 種目は sets = 1, reps = 1 を返してください。
             """
         default:
             return """
@@ -78,7 +80,8 @@ struct AIWorkoutTemplateGenerator: NaturalLanguageWorkoutGenerating, Sendable {
             Before finalizing the structured response, always use the searchExercise tool to confirm the exact exerciseID and exerciseName.
             Copy exerciseID and exerciseName exactly from the tool result.
             Write the template name in the user's language, but keep exercise names exactly as returned by the tool.
-            Prefer strength or bodyweight exercises that fit sets and reps.
+            Prefer strength or bodyweight exercises, but include cardio or time-based exercises when the user asks for them.
+            For cardio or time-based exercises, return sets = 1 and reps = 1.
             """
         }
     }
@@ -103,6 +106,8 @@ struct AIWorkoutTemplateGenerator: NaturalLanguageWorkoutGenerating, Sendable {
         lines.append("- Avoid duplicate exercises.")
         lines.append("- Prefer recovered muscles when recent history suggests clear fatigue.")
         lines.append("- Choose exercises that work as template defaults with sets and reps.")
+        lines.append("- Cardio or time-based exercises are allowed when they fit the request.")
+        lines.append("- For cardio or time-based exercises, use sets = 1 and reps = 1.")
         lines.append("- Use only exercises that exist in DUNE's exercise catalog.")
         lines.append("- If there is not enough context, still generate a reasonable safe template.")
 
@@ -204,19 +209,31 @@ struct AIWorkoutTemplateGenerator: NaturalLanguageWorkoutGenerating, Sendable {
             ) else {
                 return nil
             }
-            guard exercise.inputType == .setsRepsWeight || exercise.inputType == .setsReps else {
+            guard Self.isTemplateSupported(exercise) else {
                 return nil
             }
             guard seenIDs.insert(exercise.id).inserted else {
                 return nil
             }
 
-            return GeneratedWorkoutExerciseSlot(
-                exerciseDefinitionID: exercise.id,
-                exerciseName: exercise.localizedName,
-                sets: slot.sets,
-                reps: slot.reps
-            )
+            switch exercise.inputType {
+            case .durationDistance:
+                return GeneratedWorkoutExerciseSlot(
+                    exerciseDefinitionID: exercise.id,
+                    exerciseName: exercise.localizedName,
+                    sets: 1,
+                    reps: 1
+                )
+            case .setsRepsWeight, .setsReps:
+                return GeneratedWorkoutExerciseSlot(
+                    exerciseDefinitionID: exercise.id,
+                    exerciseName: exercise.localizedName,
+                    sets: slot.sets,
+                    reps: slot.reps
+                )
+            case .durationIntensity, .roundsBased:
+                return nil
+            }
         }
 
         guard !resolvedSlots.isEmpty else {
@@ -266,6 +283,15 @@ struct AIWorkoutTemplateGenerator: NaturalLanguageWorkoutGenerating, Sendable {
         return Set(rawValues.map(normalizedSearchText).filter { !$0.isEmpty })
     }
 
+    static func isTemplateSupported(_ exercise: ExerciseDefinition) -> Bool {
+        switch exercise.inputType {
+        case .setsRepsWeight, .setsReps, .durationDistance:
+            true
+        case .durationIntensity, .roundsBased:
+            false
+        }
+    }
+
     func normalizedSearchText(_ text: String) -> String {
         text.lowercased()
             .replacingOccurrences(
@@ -305,7 +331,7 @@ extension AIWorkoutTemplateGenerator {
         }
 
         let name = "searchExercise"
-        let description = "Search the DUNE exercise catalog and return exact exercise IDs and names for strength or bodyweight template exercises."
+        let description = "Search the DUNE exercise catalog and return exact exercise IDs and names for template-capable exercises, including cardio."
 
         private let library: any ExerciseLibraryQuerying
 
@@ -320,9 +346,9 @@ extension AIWorkoutTemplateGenerator {
             }
 
             let matches = library.search(query: query)
-                .filter { $0.inputType == .setsRepsWeight || $0.inputType == .setsReps }
+                .filter(AIWorkoutTemplateGenerator.isTemplateSupported)
             guard !matches.isEmpty else {
-                return "No matching strength or bodyweight exercises were found."
+                return "No matching template-capable exercises were found."
             }
 
             return matches
