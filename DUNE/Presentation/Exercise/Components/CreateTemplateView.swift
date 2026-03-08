@@ -23,18 +23,22 @@ struct TemplateFormView: View {
     @State private var isGeneratingTemplate = false
     @State private var validationError: String?
 
-    @Query(sort: \ExerciseRecord.date, order: .reverse) private var recentRecords: [ExerciseRecord]
     @Query private var customExercises: [CustomExercise]
 
     private let library: ExerciseLibraryQuerying = ExerciseLibraryService.shared
     private let generator: any NaturalLanguageWorkoutGenerating
+    private let workoutService: any WorkoutQuerying
 
     // MARK: - Init
 
     /// Create mode
-    init(generator: any NaturalLanguageWorkoutGenerating = AIWorkoutTemplateGenerator()) {
+    init(
+        generator: any NaturalLanguageWorkoutGenerating = AIWorkoutTemplateGenerator(),
+        workoutService: any WorkoutQuerying = WorkoutQueryService(manager: .shared)
+    ) {
         self.mode = .create
         self.generator = generator
+        self.workoutService = workoutService
         _templateName = State(initialValue: "")
         _entries = State(initialValue: [])
         _generationPrompt = State(initialValue: "")
@@ -43,10 +47,12 @@ struct TemplateFormView: View {
     /// Edit mode — prefills with existing template data
     init(
         template: WorkoutTemplate,
-        generator: any NaturalLanguageWorkoutGenerating = AIWorkoutTemplateGenerator()
+        generator: any NaturalLanguageWorkoutGenerating = AIWorkoutTemplateGenerator(),
+        workoutService: any WorkoutQuerying = WorkoutQueryService(manager: .shared)
     ) {
         self.mode = .edit(template)
         self.generator = generator
+        self.workoutService = workoutService
         _templateName = State(initialValue: template.name)
         _entries = State(initialValue: template.exerciseEntries)
         _generationPrompt = State(initialValue: "")
@@ -315,7 +321,7 @@ struct TemplateFormView: View {
         defer { isGeneratingTemplate = false }
 
         do {
-            let snapshots = Array(recentRecords.prefix(30)).map { $0.snapshot(library: library) }
+            let snapshots = await recentGenerationSnapshots()
             let generated = try await generator.generateTemplate(
                 from: WorkoutTemplateGenerationRequest(
                     prompt: trimmedPrompt,
@@ -359,6 +365,39 @@ struct TemplateFormView: View {
         case .generationFailed:
             String(localized: "Could not generate a workout template right now.")
         }
+    }
+
+    @MainActor
+    private func recentGenerationSnapshots(limit: Int = 30) async -> [ExerciseRecordSnapshot] {
+        var descriptor = FetchDescriptor<ExerciseRecord>(
+            sortBy: [SortDescriptor(\ExerciseRecord.date, order: .reverse)]
+        )
+        descriptor.fetchLimit = limit
+
+        let manualSnapshots = (try? modelContext.fetch(descriptor))?
+            .map { $0.snapshot(library: library) } ?? []
+
+        let healthKitSnapshots: [ExerciseRecordSnapshot]
+        do {
+            let workouts = try await workoutService.fetchWorkouts(days: 14)
+            healthKitSnapshots = workouts
+                .filter { !$0.isFromThisApp && !$0.activityType.primaryMuscles.isEmpty }
+                .map { workout in
+                    ExerciseRecordSnapshot(
+                        date: workout.date,
+                        exerciseName: workout.type,
+                        primaryMuscles: workout.activityType.primaryMuscles,
+                        secondaryMuscles: workout.activityType.secondaryMuscles,
+                        completedSetCount: 0,
+                        durationMinutes: workout.duration > 0 ? min(workout.duration / 60.0, 480) : nil,
+                        distanceKm: workout.distance.flatMap { $0 > 0 ? min($0 / 1000.0, 500) : nil }
+                    )
+                }
+        } catch {
+            healthKitSnapshots = []
+        }
+
+        return Array((manualSnapshots + healthKitSnapshots).sorted { $0.date > $1.date }.prefix(limit))
     }
 
     // MARK: - Save

@@ -250,11 +250,15 @@ struct AIWorkoutTemplateGenerator: NaturalLanguageWorkoutGenerating, Sendable {
         let directMatches = library.search(query: trimmedName).filter { exercise in
             candidateLabels(for: exercise).contains(normalizedName)
         }
-        if let exact = directMatches.first {
+        if directMatches.count == 1, let exact = directMatches.first {
             return exact
         }
 
-        return library.search(query: trimmedName).first
+        let fuzzyMatches = library.search(query: trimmedName)
+        guard fuzzyMatches.count == 1 else {
+            return nil
+        }
+        return fuzzyMatches.first
     }
 
     func candidateLabels(for exercise: ExerciseDefinition) -> Set<String> {

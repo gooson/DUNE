@@ -172,6 +172,53 @@ struct AIWorkoutTemplateGeneratorTests {
         }
     }
 
+    @Test("Resolve exercise rejects ambiguous exact-name matches")
+    func resolveExerciseRejectsAmbiguousExactMatches() {
+        let ambiguousLibrary = MockWorkoutGenerationLibrary(
+            exercises: [
+                makeExercise(
+                    id: "barbell-shoulder-press",
+                    name: "Barbell Shoulder Press",
+                    aliases: ["Shoulder Press"],
+                    category: .strength,
+                    inputType: .setsRepsWeight,
+                    primaryMuscles: [.shoulders],
+                    secondaryMuscles: [.triceps],
+                    equipment: .barbell
+                ),
+                makeExercise(
+                    id: "dumbbell-shoulder-press-2",
+                    name: "Dumbbell Shoulder Press",
+                    aliases: ["Shoulder Press"],
+                    category: .strength,
+                    inputType: .setsRepsWeight,
+                    primaryMuscles: [.shoulders],
+                    secondaryMuscles: [.triceps],
+                    equipment: .dumbbell
+                ),
+            ]
+        )
+
+        let resolved = sut.resolveExercise(
+            exerciseID: "",
+            exerciseName: "Shoulder Press",
+            library: ambiguousLibrary
+        )
+
+        #expect(resolved == nil)
+    }
+
+    @Test("Resolve exercise rejects ambiguous fuzzy matches")
+    func resolveExerciseRejectsAmbiguousFuzzyMatches() {
+        let resolved = sut.resolveExercise(
+            exerciseID: "",
+            exerciseName: "press",
+            library: makeLibrary()
+        )
+
+        #expect(resolved == nil)
+    }
+
     private func makeLibrary() -> MockWorkoutGenerationLibrary {
         MockWorkoutGenerationLibrary(
             exercises: [
