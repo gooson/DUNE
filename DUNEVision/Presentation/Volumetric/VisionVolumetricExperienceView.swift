@@ -30,6 +30,11 @@ struct VisionVolumetricExperienceView: View {
         .task {
             await viewModel.loadIfNeeded()
         }
+        .onReceive(NotificationCenter.default.publisher(for: .simulatorAdvancedMockDataDidChange)) { _ in
+            Task {
+                await viewModel.reload()
+            }
+        }
     }
 
     // MARK: - Ornaments

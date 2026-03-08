@@ -5,10 +5,14 @@ import SwiftUI
 struct VisionDashboardView: View {
     let sharedHealthDataService: SharedHealthDataService?
     let refreshSignal: Int
+    let isSimulatorMockEnabled: Bool
+    let simulatorMockStatusMessage: String?
     let onOpenDashboardWindow: (VisionDashboardWindowKind) -> Void
     let onOpen3DCharts: () -> Void
     let onOpenVolumetric: () -> Void
     let onOpenImmersive: () -> Void
+    let onSeedAdvancedMockData: () -> Void
+    let onResetAdvancedMockData: () -> Void
 
     @State private var snapshot: SharedHealthSnapshot?
 
@@ -17,6 +21,9 @@ struct VisionDashboardView: View {
             VStack(spacing: 24) {
                 conditionSection
                 quickActionsSection
+                if SimulatorAdvancedMockDataModeStore.isSimulatorAvailable {
+                    simulatorMockDataSection
+                }
                 healthMetricsSection
             }
             .padding(24)
@@ -40,6 +47,15 @@ struct VisionDashboardView: View {
                     onOpen3DCharts()
                 } label: {
                     Label("3D Charts", systemImage: "chart.bar.fill")
+                }
+
+                if SimulatorAdvancedMockDataModeStore.isSimulatorAvailable {
+                    Menu {
+                        Button("Seed Advanced Mock Data", action: onSeedAdvancedMockData)
+                        Button("Reset Mock Data", role: .destructive, action: onResetAdvancedMockData)
+                    } label: {
+                        Label("Mock Data", systemImage: isSimulatorMockEnabled ? "shippingbox.fill" : "shippingbox")
+                    }
                 }
             }
         }
@@ -134,6 +150,39 @@ struct VisionDashboardView: View {
                 metricCard(title: "Sleep", value: sleepText, unit: "hrs", icon: "moon.fill")
             }
         }
+    }
+
+    @ViewBuilder
+    private var simulatorMockDataSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Mock Data")
+                .font(.headline)
+                .foregroundStyle(.secondary)
+
+            HStack(alignment: .center, spacing: 14) {
+                Image(systemName: isSimulatorMockEnabled ? "checkmark.circle.fill" : "shippingbox")
+                    .font(.title2)
+                    .foregroundStyle(.tint)
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Advanced Athlete")
+                        .font(.headline)
+                    Text("Simulator only. Seeds advanced athlete health trends, workouts, and per-exercise history.")
+                        .font(.callout)
+                        .foregroundStyle(.secondary)
+                }
+
+                Spacer()
+            }
+
+            if let simulatorMockStatusMessage {
+                Text(verbatim: simulatorMockStatusMessage)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .padding(20)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
     }
 
     // MARK: - Computed Display Values

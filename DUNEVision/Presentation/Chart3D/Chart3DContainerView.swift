@@ -8,6 +8,7 @@ struct Chart3DContainerView: View {
     var workoutService: WorkoutQuerying?
 
     @State private var selectedChart: Chart3DType = .conditionScatter
+    @State private var refreshToken = 0
 
     var body: some View {
         NavigationStack {
@@ -20,14 +21,23 @@ struct Chart3DContainerView: View {
                 .pickerStyle(.segmented)
                 .padding()
 
-                switch selectedChart {
-                case .conditionScatter:
-                    ConditionScatter3DView(sharedHealthDataService: sharedHealthDataService)
-                case .trainingVolume:
-                    TrainingVolume3DView(workoutService: workoutService)
-                }
+                chartContent
+                .id("\(selectedChart.rawValue)-\(refreshToken)")
             }
             .navigationTitle("3D Health Charts")
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .simulatorAdvancedMockDataDidChange)) { _ in
+            refreshToken += 1
+        }
+    }
+
+    @ViewBuilder
+    private var chartContent: some View {
+        switch selectedChart {
+        case .conditionScatter:
+            ConditionScatter3DView(sharedHealthDataService: sharedHealthDataService)
+        case .trainingVolume:
+            TrainingVolume3DView(workoutService: workoutService)
         }
     }
 }

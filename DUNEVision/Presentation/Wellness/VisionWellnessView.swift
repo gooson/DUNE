@@ -4,6 +4,7 @@ import SwiftUI
 /// Read-only view sourced from SharedHealthSnapshot.
 struct VisionWellnessView: View {
     let sharedHealthDataService: SharedHealthDataService?
+    let refreshSignal: Int
 
     @State private var snapshot: SharedHealthSnapshot?
 
@@ -16,7 +17,7 @@ struct VisionWellnessView: View {
             .padding(24)
         }
         .navigationTitle("Wellness")
-        .task {
+        .task(id: refreshSignal) {
             await loadData()
         }
     }

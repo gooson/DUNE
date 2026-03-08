@@ -39,7 +39,13 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
     }
 
     func fetchWeight(days: Int) async throws -> [BodyCompositionSample] {
-        try await fetchQuantitySamples(
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.weightSamples(
+                start: Calendar.current.date(byAdding: .day, value: -days, to: mockData.referenceDate) ?? mockData.referenceDate,
+                end: mockData.referenceDate.addingTimeInterval(1)
+            )
+        }
+        return try await fetchQuantitySamples(
             type: HKQuantityType(.bodyMass),
             unit: .gramUnit(with: .kilo),
             days: days,
@@ -48,7 +54,13 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
     }
 
     func fetchBodyFat(days: Int) async throws -> [BodyCompositionSample] {
-        try await fetchQuantitySamples(
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.bodyFatSamples(
+                start: Calendar.current.date(byAdding: .day, value: -days, to: mockData.referenceDate) ?? mockData.referenceDate,
+                end: mockData.referenceDate.addingTimeInterval(1)
+            )
+        }
+        return try await fetchQuantitySamples(
             type: HKQuantityType(.bodyFatPercentage),
             unit: .percent(),
             days: days,
@@ -57,7 +69,13 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
     }
 
     func fetchLeanBodyMass(days: Int) async throws -> [BodyCompositionSample] {
-        try await fetchQuantitySamples(
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.leanBodyMassSamples(
+                start: Calendar.current.date(byAdding: .day, value: -days, to: mockData.referenceDate) ?? mockData.referenceDate,
+                end: mockData.referenceDate.addingTimeInterval(1)
+            )
+        }
+        return try await fetchQuantitySamples(
             type: HKQuantityType(.leanBodyMass),
             unit: .gramUnit(with: .kilo),
             days: days,
@@ -66,7 +84,10 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
     }
 
     func fetchWeight(start: Date, end: Date) async throws -> [BodyCompositionSample] {
-        try await fetchQuantitySamples(
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.weightSamples(start: start, end: end)
+        }
+        return try await fetchQuantitySamples(
             type: HKQuantityType(.bodyMass),
             unit: .gramUnit(with: .kilo),
             start: start,
@@ -76,6 +97,9 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
     }
 
     func fetchLatestWeight(withinDays days: Int) async throws -> (value: Double, date: Date)? {
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.latestWeight(withinDays: days)
+        }
         let calendar = Calendar.current
         let today = Date()
         // Search from yesterday back to `days` ago in a single query (sorted by most recent)
@@ -94,6 +118,10 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
     }
 
     func fetchBMI(for date: Date) async throws -> Double? {
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.bmi(for: date)
+        }
+        guard manager.isAvailable else { return nil }
         let calendar = Calendar.current
         let startOfDay = calendar.startOfDay(for: date)
         guard let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay) else {
@@ -120,6 +148,9 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
     }
 
     func fetchLatestBMI(withinDays days: Int) async throws -> (value: Double, date: Date)? {
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.latestBMI(withinDays: days)
+        }
         let calendar = Calendar.current
         let today = Date()
         // Search from yesterday back to `days` ago in a single query
@@ -138,7 +169,10 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
     }
 
     func fetchBMI(start: Date, end: Date) async throws -> [BodyCompositionSample] {
-        try await fetchQuantitySamples(
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.bmiSamples(start: start, end: end)
+        }
+        return try await fetchQuantitySamples(
             type: HKQuantityType(.bodyMassIndex),
             unit: .count(),
             start: start,
@@ -148,7 +182,10 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
     }
 
     func fetchBodyFat(start: Date, end: Date) async throws -> [BodyCompositionSample] {
-        try await fetchQuantitySamples(
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.bodyFatSamples(start: start, end: end)
+        }
+        return try await fetchQuantitySamples(
             type: HKQuantityType(.bodyFatPercentage),
             unit: .percent(),
             start: start,
@@ -159,7 +196,10 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
     }
 
     func fetchLeanBodyMass(start: Date, end: Date) async throws -> [BodyCompositionSample] {
-        try await fetchQuantitySamples(
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.leanBodyMassSamples(start: start, end: end)
+        }
+        return try await fetchQuantitySamples(
             type: HKQuantityType(.leanBodyMass),
             unit: .gramUnit(with: .kilo),
             start: start,
@@ -169,6 +209,9 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
     }
 
     func fetchLatestBodyFat(withinDays days: Int) async throws -> (value: Double, date: Date)? {
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.latestBodyFat(withinDays: days)
+        }
         let samples = try await fetchBodyFat(days: days)
         // fetchBodyFat returns newest first; value already * 100 (0-100%)
         guard let latest = samples.first,
@@ -177,6 +220,9 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
     }
 
     func fetchLatestLeanBodyMass(withinDays days: Int) async throws -> (value: Double, date: Date)? {
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.latestLeanBodyMass(withinDays: days)
+        }
         let samples = try await fetchLeanBodyMass(days: days)
         // Newest first; validate 0-300 kg range
         guard let latest = samples.first,
@@ -193,6 +239,7 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
         valueTransform: @Sendable (Double) -> Double = { $0 },
         validRange: ClosedRange<Double>? = nil
     ) async throws -> [BodyCompositionSample] {
+        guard manager.isAvailable else { return [] }
         let calendar = Calendar.current
         let endDate = Date()
         guard let startDate = calendar.date(byAdding: .day, value: -days, to: endDate) else {
@@ -212,6 +259,7 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
         valueTransform: @Sendable (Double) -> Double = { $0 },
         validRange: ClosedRange<Double>? = nil
     ) async throws -> [BodyCompositionSample] {
+        guard manager.isAvailable else { return [] }
         try await manager.ensureNotDenied(for: type)
 
         let predicate = HKQuery.predicateForSamples(

@@ -49,6 +49,12 @@ struct VisionImmersiveExperienceView: View {
         .onChange(of: viewModel.summary?.sleepJourney.segments.count) { _, _ in
             startAnimationsIfNeeded(restartTimeline: true)
         }
+        .onReceive(NotificationCenter.default.publisher(for: .simulatorAdvancedMockDataDidChange)) { _ in
+            Task {
+                await viewModel.reload()
+                startAnimationsIfNeeded(restartTimeline: true)
+            }
+        }
     }
 
     private var header: some View {

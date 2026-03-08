@@ -38,6 +38,7 @@ struct BodyCompositionWriteInput: Sendable {
         self.leanBodyMass = leanBodyMass
     }
 
+#if os(iOS)
     init(record: BodyCompositionRecord) {
         self.init(
             date: record.date,
@@ -46,6 +47,7 @@ struct BodyCompositionWriteInput: Sendable {
             leanBodyMass: record.muscleMass
         )
     }
+#endif
 
     var activeSampleKinds: Set<BodyCompositionSampleKind> {
         Set(BodyCompositionSampleKind.allCases.filter { quantity(for: $0) != nil })

@@ -63,7 +63,10 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
     // MARK: - Latest values
 
     func fetchLatestSpO2(withinDays days: Int) async throws -> VitalSample? {
-        try await fetchLatest(
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.latestSpO2(withinDays: days)
+        }
+        return try await fetchLatest(
             type: .oxygenSaturation,
             unit: Self.percentUnit,
             withinDays: days,
@@ -72,7 +75,10 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
     }
 
     func fetchLatestRespiratoryRate(withinDays days: Int) async throws -> VitalSample? {
-        try await fetchLatest(
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.latestRespiratoryRate(withinDays: days)
+        }
+        return try await fetchLatest(
             type: .respiratoryRate,
             unit: Self.breathsPerMinUnit,
             withinDays: days,
@@ -81,7 +87,10 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
     }
 
     func fetchLatestVO2Max(withinDays days: Int) async throws -> VitalSample? {
-        try await fetchLatest(
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.latestVO2Max(withinDays: days)
+        }
+        return try await fetchLatest(
             type: .vo2Max,
             unit: Self.vo2MaxUnit,
             withinDays: days,
@@ -90,7 +99,10 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
     }
 
     func fetchLatestHeartRateRecovery(withinDays days: Int) async throws -> VitalSample? {
-        try await fetchLatest(
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.latestHeartRateRecovery(withinDays: days)
+        }
+        return try await fetchLatest(
             type: .heartRateRecoveryOneMinute,
             unit: Self.bpmUnit,
             withinDays: days,
@@ -99,7 +111,10 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
     }
 
     func fetchLatestWristTemperature(withinDays days: Int) async throws -> VitalSample? {
-        try await fetchLatest(
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.latestWristTemperature(withinDays: days)
+        }
+        return try await fetchLatest(
             type: .appleSleepingWristTemperature,
             unit: Self.celsiusUnit,
             withinDays: days,
@@ -110,7 +125,13 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
     // MARK: - Collections
 
     func fetchSpO2Collection(days: Int) async throws -> [VitalSample] {
-        try await fetchCollection(
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.oxygenSaturation(
+                start: Calendar.current.date(byAdding: .day, value: -days, to: mockData.referenceDate) ?? mockData.referenceDate,
+                end: mockData.referenceDate.addingTimeInterval(1)
+            )
+        }
+        return try await fetchCollection(
             type: .oxygenSaturation,
             unit: Self.percentUnit,
             days: days,
@@ -119,7 +140,13 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
     }
 
     func fetchRespiratoryRateCollection(days: Int) async throws -> [VitalSample] {
-        try await fetchCollection(
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.respiratoryRate(
+                start: Calendar.current.date(byAdding: .day, value: -days, to: mockData.referenceDate) ?? mockData.referenceDate,
+                end: mockData.referenceDate.addingTimeInterval(1)
+            )
+        }
+        return try await fetchCollection(
             type: .respiratoryRate,
             unit: Self.breathsPerMinUnit,
             days: days,
@@ -128,7 +155,13 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
     }
 
     func fetchVO2MaxHistory(days: Int) async throws -> [VitalSample] {
-        try await fetchCollection(
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.vo2Max(
+                start: Calendar.current.date(byAdding: .day, value: -days, to: mockData.referenceDate) ?? mockData.referenceDate,
+                end: mockData.referenceDate.addingTimeInterval(1)
+            )
+        }
+        return try await fetchCollection(
             type: .vo2Max,
             unit: Self.vo2MaxUnit,
             days: days,
@@ -137,7 +170,13 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
     }
 
     func fetchHeartRateRecoveryHistory(days: Int) async throws -> [VitalSample] {
-        try await fetchCollection(
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.heartRateRecovery(
+                start: Calendar.current.date(byAdding: .day, value: -days, to: mockData.referenceDate) ?? mockData.referenceDate,
+                end: mockData.referenceDate.addingTimeInterval(1)
+            )
+        }
+        return try await fetchCollection(
             type: .heartRateRecoveryOneMinute,
             unit: Self.bpmUnit,
             days: days,
@@ -146,7 +185,13 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
     }
 
     func fetchWristTemperatureCollection(days: Int) async throws -> [VitalSample] {
-        try await fetchCollection(
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.wristTemperature(
+                start: Calendar.current.date(byAdding: .day, value: -days, to: mockData.referenceDate) ?? mockData.referenceDate,
+                end: mockData.referenceDate.addingTimeInterval(1)
+            )
+        }
+        return try await fetchCollection(
             type: .appleSleepingWristTemperature,
             unit: Self.celsiusUnit,
             days: days,
@@ -157,7 +202,10 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
     // MARK: - Range-based collections
 
     func fetchSpO2Collection(start: Date, end: Date) async throws -> [VitalSample] {
-        try await fetchCollection(
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.oxygenSaturation(start: start, end: end)
+        }
+        return try await fetchCollection(
             type: .oxygenSaturation,
             unit: Self.percentUnit,
             start: start, end: end,
@@ -166,7 +214,10 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
     }
 
     func fetchRespiratoryRateCollection(start: Date, end: Date) async throws -> [VitalSample] {
-        try await fetchCollection(
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.respiratoryRate(start: start, end: end)
+        }
+        return try await fetchCollection(
             type: .respiratoryRate,
             unit: Self.breathsPerMinUnit,
             start: start, end: end,
@@ -175,7 +226,10 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
     }
 
     func fetchVO2MaxHistory(start: Date, end: Date) async throws -> [VitalSample] {
-        try await fetchCollection(
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.vo2Max(start: start, end: end)
+        }
+        return try await fetchCollection(
             type: .vo2Max,
             unit: Self.vo2MaxUnit,
             start: start, end: end,
@@ -184,7 +238,10 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
     }
 
     func fetchHeartRateRecoveryHistory(start: Date, end: Date) async throws -> [VitalSample] {
-        try await fetchCollection(
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.heartRateRecovery(start: start, end: end)
+        }
+        return try await fetchCollection(
             type: .heartRateRecoveryOneMinute,
             unit: Self.bpmUnit,
             start: start, end: end,
@@ -193,7 +250,10 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
     }
 
     func fetchWristTemperatureCollection(start: Date, end: Date) async throws -> [VitalSample] {
-        try await fetchCollection(
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.wristTemperature(start: start, end: end)
+        }
+        return try await fetchCollection(
             type: .appleSleepingWristTemperature,
             unit: Self.celsiusUnit,
             start: start, end: end,
@@ -204,6 +264,15 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
     // MARK: - Computed
 
     func fetchWristTemperatureBaseline(days: Int = 14) async throws -> Double? {
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            let samples = mockData.wristTemperature(
+                start: Calendar.current.date(byAdding: .day, value: -days, to: mockData.referenceDate) ?? mockData.referenceDate,
+                end: mockData.referenceDate.addingTimeInterval(1)
+            )
+            guard !samples.isEmpty else { return nil }
+            let sum = samples.map(\.value).reduce(0, +)
+            return sum / Double(samples.count)
+        }
         let samples = try await fetchCollection(
             type: .appleSleepingWristTemperature,
             unit: Self.celsiusUnit,
@@ -224,6 +293,7 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
         validRange: ClosedRange<Double>
     ) async throws -> VitalSample? {
         let quantityType = HKQuantityType(identifier)
+        guard manager.isAvailable else { return nil }
         try await manager.ensureNotDenied(for: quantityType)
 
         let calendar = Calendar.current
@@ -259,6 +329,7 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
         days: Int,
         validRange: ClosedRange<Double>
     ) async throws -> [VitalSample] {
+        guard manager.isAvailable else { return [] }
         let calendar = Calendar.current
         let endDate = Date()
         guard let startDate = calendar.date(byAdding: .day, value: -days, to: endDate) else {
@@ -280,6 +351,7 @@ struct VitalsQueryService: VitalsQuerying, Sendable {
     ) async throws -> [VitalSample] {
         guard start < end else { return [] }
         let quantityType = HKQuantityType(identifier)
+        guard manager.isAvailable else { return [] }
         try await manager.ensureNotDenied(for: quantityType)
 
         let predicate = HKQuery.predicateForSamples(

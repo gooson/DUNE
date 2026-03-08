@@ -46,7 +46,9 @@ final class VisionTrainViewModel {
         message = nil
 
         let healthKitAvailable = healthKitManager.isAvailable
-        guard healthKitAvailable || sharedHealthDataService != nil else {
+        let isSimulatorMockEnabled = SimulatorAdvancedMockDataModeStore.isEnabled
+        let canQueryWorkoutData = healthKitAvailable || isSimulatorMockEnabled
+        guard canQueryWorkoutData || sharedHealthDataService != nil else {
             fatigueStates = []
             loadState = .unavailable(
                 String(localized: "Health data is not available on this device.")
@@ -65,7 +67,7 @@ final class VisionTrainViewModel {
         }
 
         async let snapshotResult = fetchSnapshot()
-        async let workoutsResult = healthKitAvailable
+        async let workoutsResult = canQueryWorkoutData
             ? fetchWorkouts()
             : VisionFetchResult(value: [], message: nil)
 

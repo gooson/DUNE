@@ -4,6 +4,8 @@ import CoreLocation
 
 struct SettingsView: View {
     @AppStorage(CloudSyncPreferenceStore.storageKey) private var isCloudSyncEnabled = false
+    @AppStorage(SimulatorAdvancedMockDataModeStore.storageKey) private var isSimulatorMockEnabled = false
+    @Environment(\.modelContext) private var modelContext
     @Environment(\.openURL) private var openURL
     @Environment(\.scenePhase) private var scenePhase
 
@@ -11,6 +13,8 @@ struct SettingsView: View {
     @State private var restSeconds: Double = WorkoutSettingsStore.shared.restSeconds
     @State private var setCount: Int = WorkoutSettingsStore.shared.setCount
     @State private var bodyWeightKg: Double = WorkoutSettingsStore.shared.bodyWeightKg
+    @State private var isProcessingSimulatorMockData = false
+    @State private var simulatorMockStatusMessage: String?
 
     private let store = WorkoutSettingsStore.shared
     private let whatsNewStore = WhatsNewStore.shared
@@ -22,6 +26,9 @@ struct SettingsView: View {
             exerciseDefaultsSection
             NotificationSettingsSection()
             appearanceSection
+            if SimulatorAdvancedMockDataModeStore.isSimulatorAvailable {
+                simulatorMockDataSection
+            }
             dataPrivacySection
             aboutSection
         }
@@ -135,6 +142,50 @@ struct SettingsView: View {
 
     // MARK: - Data & Privacy
 
+    private var simulatorMockDataSection: some View {
+        Section {
+            HStack {
+                Text("Preset")
+                Spacer()
+                Text("Advanced Athlete")
+                    .foregroundStyle(DS.Color.textSecondary)
+            }
+
+            HStack {
+                Text("Status")
+                Spacer()
+                Text(isSimulatorMockEnabled ? "Enabled" : "Disabled")
+                    .foregroundStyle(isSimulatorMockEnabled ? Color.accentColor : DS.Color.textSecondary)
+            }
+
+            Button {
+                seedAdvancedMockData()
+            } label: {
+                Label("Seed Advanced Mock Data", systemImage: "shippingbox.fill")
+            }
+            .accessibilityIdentifier("settings-button-seed-advanced-mock-data")
+            .disabled(isProcessingSimulatorMockData)
+
+            Button(role: .destructive) {
+                resetAdvancedMockData()
+            } label: {
+                Label("Reset Mock Data", systemImage: "trash")
+            }
+            .accessibilityIdentifier("settings-button-reset-mock-data")
+            .disabled(isProcessingSimulatorMockData || !isSimulatorMockEnabled)
+        } header: {
+            Text("Mock Data")
+        } footer: {
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Simulator only. Seeds advanced athlete health trends, workouts, and per-exercise history.")
+                if let simulatorMockStatusMessage {
+                    Text(verbatim: simulatorMockStatusMessage)
+                        .foregroundStyle(DS.Color.textSecondary)
+                }
+            }
+        }
+    }
+
     private var dataPrivacySection: some View {
         Section("Data & Privacy") {
             Toggle(isOn: cloudSyncBinding) {
@@ -246,6 +297,40 @@ struct SettingsView: View {
         let build = whatsNewManager.currentBuildNumber()
         guard !build.isEmpty else { return }
         whatsNewStore.markOpened(build: build)
+    }
+
+    private func seedAdvancedMockData() {
+        isProcessingSimulatorMockData = true
+        simulatorMockStatusMessage = nil
+
+        Task { @MainActor in
+            defer { isProcessingSimulatorMockData = false }
+            do {
+                try SimulatorAdvancedMockDataProvider.seed(into: modelContext)
+                isSimulatorMockEnabled = true
+                simulatorMockStatusMessage = String(localized: "Mock data seeded.")
+            } catch {
+                simulatorMockStatusMessage = String(localized: "Mock data could not be updated.")
+                AppLogger.data.error("Simulator mock data seed failed: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    private func resetAdvancedMockData() {
+        isProcessingSimulatorMockData = true
+        simulatorMockStatusMessage = nil
+
+        Task { @MainActor in
+            defer { isProcessingSimulatorMockData = false }
+            do {
+                try SimulatorAdvancedMockDataProvider.reset(into: modelContext)
+                isSimulatorMockEnabled = false
+                simulatorMockStatusMessage = String(localized: "Mock data reset.")
+            } catch {
+                simulatorMockStatusMessage = String(localized: "Mock data could not be updated.")
+                AppLogger.data.error("Simulator mock data reset failed: \(error.localizedDescription)")
+            }
+        }
     }
 }
 

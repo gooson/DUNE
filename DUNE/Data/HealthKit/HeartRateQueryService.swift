@@ -23,6 +23,10 @@ struct HeartRateQueryService: HeartRateQuerying, Sendable {
     }
 
     func fetchHeartRateSamples(forWorkoutID workoutID: String) async throws -> [HeartRateSample] {
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.workout(withID: workoutID)?.heartRateSamples ?? []
+        }
+        guard manager.isAvailable else { return [] }
         try await manager.ensureNotDenied(for: HKQuantityType(.heartRate))
 
         guard let uuid = UUID(uuidString: workoutID) else { return [] }
@@ -81,6 +85,10 @@ struct HeartRateQueryService: HeartRateQuerying, Sendable {
     private static let hrValidRange: ClosedRange<Double> = 20...300
 
     func fetchLatestHeartRate(withinDays days: Int) async throws -> VitalSample? {
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.latestHeartRate(withinDays: days)
+        }
+        guard manager.isAvailable else { return nil }
         let quantityType = HKQuantityType(.heartRate)
         try await manager.ensureNotDenied(for: quantityType)
 
@@ -112,6 +120,12 @@ struct HeartRateQueryService: HeartRateQuerying, Sendable {
     }
 
     func fetchHeartRateHistory(days: Int) async throws -> [VitalSample] {
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.heartRateHistory(
+                start: Calendar.current.date(byAdding: .day, value: -days, to: mockData.referenceDate) ?? mockData.referenceDate,
+                end: mockData.referenceDate.addingTimeInterval(1)
+            )
+        }
         let calendar = Calendar.current
         let endDate = Date()
         guard let startDate = calendar.date(byAdding: .day, value: -days, to: endDate) else {
@@ -121,7 +135,11 @@ struct HeartRateQueryService: HeartRateQuerying, Sendable {
     }
 
     func fetchHeartRateHistory(start: Date, end: Date) async throws -> [VitalSample] {
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.heartRateHistory(start: start, end: end)
+        }
         guard start < end else { return [] }
+        guard manager.isAvailable else { return [] }
         let quantityType = HKQuantityType(.heartRate)
         try await manager.ensureNotDenied(for: quantityType)
 
