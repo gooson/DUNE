@@ -43,9 +43,9 @@ struct AICoachingMessage {
 
 ### 세션 관리
 
-- `LanguageModelSession`을 stored property로 보관 (per-call 생성 금지)
-- `final class` + `@unchecked Sendable`로 세션 상태 관리
-- 첫 `enhance()` 호출 시 lazy 초기화
+- `LanguageModelSession`은 per-call로 생성 (lightweight init)
+- `struct` + `Sendable` 유지 — mutable state 없이 thread-safe
+- `@unchecked Sendable`로 session을 저장하면 data race/force-unwrap 위험 발생하므로 지양
 
 ### Race Condition 방지
 
@@ -72,7 +72,7 @@ enhanceCoachingTask = Task {
 |------|----------|
 | Domain에 FoundationModels import | 프로토콜을 Domain에, 구현을 Data에 분리 |
 | 미지원 기기 크래시 | `isAvailable` static property 체크 |
-| LLM 세션 per-call 생성 | stored property + lazy init |
+| @unchecked Sendable + mutable session | per-call session 생성 (struct Sendable 유지) |
 | 비동기 결과 race | expectedID 패턴으로 stale 결과 무시 |
 | 과도한 AI 출력 | prefix 길이 제한 |
 

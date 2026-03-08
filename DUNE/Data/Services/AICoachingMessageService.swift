@@ -3,22 +3,20 @@ import FoundationModels
 
 /// Enhances coaching insight messages using Apple's on-device Foundation Models.
 /// Falls back to the original template message on unsupported devices or errors.
-final class AICoachingMessageService: CoachingMessageEnhancing, @unchecked Sendable {
+struct AICoachingMessageService: CoachingMessageEnhancing, Sendable {
 
     /// Whether Foundation Models are available on this device.
     static var isAvailable: Bool {
         SystemLanguageModel.default.isAvailable
     }
 
-    private var session: LanguageModelSession?
-
     func enhance(insight: CoachingInsight, context: CoachingInput) async -> CoachingInsight {
         guard Self.isAvailable else { return insight }
 
         do {
-            if session == nil { session = LanguageModelSession() }
+            let session = LanguageModelSession()
             let prompt = buildPrompt(insight: insight, context: context)
-            let response = try await session!.respond(
+            let response = try await session.respond(
                 to: prompt,
                 generating: AICoachingMessage.self
             )
