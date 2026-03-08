@@ -45,6 +45,7 @@ final class WellnessViewModel {
     private let sleepScoreUseCase: SleepScoreCalculating
     private let conditionScoreUseCase: ConditionScoreCalculating
     private let sleepPredictionUseCase: SleepQualityPredicting
+    private let trendAnalysisService: TrendAnalysisService
     private let sharedHealthDataService: SharedHealthDataService?
 
     // MARK: - Internal State
@@ -65,6 +66,7 @@ final class WellnessViewModel {
         sleepScoreUseCase: SleepScoreCalculating? = nil,
         conditionScoreUseCase: ConditionScoreCalculating? = nil,
         sleepPredictionUseCase: SleepQualityPredicting = PredictSleepQualityUseCase(),
+        trendAnalysisService: TrendAnalysisService = TrendAnalysisService(),
         sharedHealthDataService: SharedHealthDataService? = nil
     ) {
         self.healthKitManager = healthKitManager
@@ -77,6 +79,7 @@ final class WellnessViewModel {
         self.sleepScoreUseCase = sleepScoreUseCase ?? CalculateSleepScoreUseCase()
         self.conditionScoreUseCase = conditionScoreUseCase ?? CalculateConditionScoreUseCase()
         self.sleepPredictionUseCase = sleepPredictionUseCase
+        self.trendAnalysisService = trendAnalysisService
         self.sharedHealthDataService = sharedHealthDataService
     }
 
@@ -104,8 +107,6 @@ final class WellnessViewModel {
             return
         }
 
-        let trendService = TrendAnalysisService()
-
         // Recent sleep scores from sleepDetailTrend (convert minutes to rough 0-100 score)
         let recentSleepScores = sleepDetailTrend
             .sorted { $0.date > $1.date }
@@ -118,7 +119,7 @@ final class WellnessViewModel {
         // HRV trend from hrvDetailTrend
         let hrvTrend: TrendDirection
         if hrvDetailTrend.count >= 3 {
-            let analysis = trendService.analyzeTrend(
+            let analysis = trendAnalysisService.analyzeTrend(
                 values: hrvDetailTrend.map { (date: $0.date, value: $0.value) }
             )
             hrvTrend = analysis.direction
@@ -126,22 +127,22 @@ final class WellnessViewModel {
             hrvTrend = .insufficient
         }
 
-        // Bedtime variance from sleepDetailTrend (approximate using minutes deviation)
-        let bedtimeVariance: Double
+        // Sleep duration variance (proxy for bedtime consistency)
+        let sleepDurationVariance: Double
         if sleepDetailTrend.count >= 3 {
             let durations = sleepDetailTrend.map(\.minutes)
             let mean = durations.reduce(0, +) / Double(durations.count)
             let variance = durations.map { ($0 - mean) * ($0 - mean) }.reduce(0, +) / Double(durations.count)
-            bedtimeVariance = variance > 0 ? variance.squareRoot() : 0
+            sleepDurationVariance = variance > 0 ? variance.squareRoot() : 0
         } else {
-            bedtimeVariance = 0
+            sleepDurationVariance = 0
         }
 
         let input = PredictSleepQualityUseCase.Input(
             recentSleepScores: recentSleepScores,
             todayWorkoutIntensity: todayWorkoutIntensity,
             hrvTrend: hrvTrend,
-            bedtimeVarianceMinutes: bedtimeVariance,
+            bedtimeVarianceMinutes: sleepDurationVariance,
             conditionScore: conditionScore,
             dataAvailableDays: sleepDetailTrend.count
         )

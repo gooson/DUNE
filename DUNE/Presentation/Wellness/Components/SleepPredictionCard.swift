@@ -6,6 +6,8 @@ struct SleepPredictionCard: View {
 
     @Environment(\.appTheme) private var theme
 
+    private static let gaugeTrackColor = DS.Color.sleep.opacity(0.15)
+
     var body: some View {
         if let prediction {
             filledContent(prediction)
@@ -22,7 +24,7 @@ struct SleepPredictionCard: View {
                     // Moon gauge
                     ZStack {
                         Circle()
-                            .stroke(DS.Color.sleep.opacity(0.15), lineWidth: 6)
+                            .stroke(Self.gaugeTrackColor, lineWidth: 6)
                         Circle()
                             .trim(from: 0, to: CGFloat(prediction.predictedScore) / 100.0)
                             .stroke(

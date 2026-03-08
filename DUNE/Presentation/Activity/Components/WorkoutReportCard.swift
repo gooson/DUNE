@@ -32,20 +32,20 @@ struct WorkoutReportCard: View {
                 HStack(spacing: DS.Spacing.lg) {
                     statItem(
                         value: "\(report.stats.totalSessions)",
-                        label: String(localized: "Sessions")
+                        label: "Sessions"
                     )
                     statItem(
                         value: "\(report.stats.activeDays)",
-                        label: String(localized: "Days")
+                        label: "Days"
                     )
                     statItem(
                         value: formatVolume(report.stats.totalVolume),
-                        label: String(localized: "Volume")
+                        label: "Volume"
                     )
                     if let change = report.stats.volumeChangePercent {
                         statItem(
                             value: formatChange(change),
-                            label: String(localized: "vs Last"),
+                            label: "vs Last",
                             color: change >= 0 ? DS.Color.positive : DS.Color.negative
                         )
                     }
@@ -118,7 +118,7 @@ struct WorkoutReportCard: View {
 
     // MARK: - Helpers
 
-    private func statItem(value: String, label: String, color: Color = .primary) -> some View {
+    private func statItem(value: String, label: LocalizedStringKey, color: Color = .primary) -> some View {
         VStack(spacing: DS.Spacing.xxs) {
             Text(value)
                 .font(.subheadline.weight(.semibold))

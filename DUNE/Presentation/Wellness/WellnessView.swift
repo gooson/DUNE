@@ -283,6 +283,7 @@ struct WellnessView: View {
         }
         .task(id: refreshSignal) {
             viewModel.loadData()
+            viewModel.recomputeSleepPrediction()
         }
         .onChange(of: viewModel.sleepDetailTrend.count) { _, _ in
             viewModel.recomputeSleepPrediction()

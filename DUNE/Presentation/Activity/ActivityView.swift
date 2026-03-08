@@ -321,7 +321,7 @@ struct ActivityView: View {
             await viewModel.loadActivityData()
             recomputeInjuryConflicts()
             recomputeInjuryRisk()
-            await viewModel.generateWeeklyReport()
+            viewModel.generateWeeklyReport()
         }
         .task(id: notificationRouteSignal) {
             await handleExternalNotificationRoute()

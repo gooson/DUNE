@@ -61,7 +61,7 @@ struct GenerateWorkoutReportUseCase: WorkoutReportGenerating, Sendable {
     private func computeStats(input: Input) -> WorkoutReport.Stats {
         let records = input.records
         let totalSessions = records.count
-        let totalVolume = records.compactMap(\.totalWeight).reduce(0, +)
+        let totalVolume = records.compactMap(\.totalWeight).filter(\.isFinite).reduce(0, +)
         let totalDuration = Int(records.compactMap(\.durationMinutes).reduce(0, +))
         let activeDays = Set(records.map { Calendar.current.startOfDay(for: $0.date) }).count
 
@@ -84,7 +84,8 @@ struct GenerateWorkoutReportUseCase: WorkoutReportGenerating, Sendable {
 
         let volumeChange: Double?
         if let previous = input.previousPeriodVolume, previous > 0 {
-            volumeChange = (totalVolume - previous) / previous
+            let raw = (totalVolume - previous) / previous
+            volumeChange = raw.isFinite ? min(10.0, max(-1.0, raw)) : nil
         } else {
             volumeChange = nil
         }

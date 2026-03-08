@@ -105,6 +105,7 @@ final class ActivityViewModel {
 
     /// Cached manual records for manual-cardio fallback PR calculations.
     private var manualRecordsCache: [ExerciseRecord] = []
+    private var weeklyReportTask: Task<Void, Never>?
     @ObservationIgnored
     private var localizedExerciseNameLookup: [String: String] = [:]
 
@@ -303,7 +304,17 @@ final class ActivityViewModel {
         )
     }
 
-    /// Computes PR, Streak, and Frequency from current exercise record snapshots.
+    /// Partitions exercise record snapshots into current and previous week.
+    private func partitionSnapshotsByWeek() -> (current: [ExerciseRecordSnapshot], previous: [ExerciseRecordSnapshot], weekAgo: Date, twoWeeksAgo: Date) {
+        let calendar = Calendar.current
+        let now = Date()
+        let weekAgo = calendar.date(byAdding: .day, value: -7, to: now) ?? now
+        let twoWeeksAgo = calendar.date(byAdding: .day, value: -14, to: now) ?? now
+        let current = exerciseRecordSnapshots.filter { $0.date >= weekAgo }
+        let previous = exerciseRecordSnapshots.filter { $0.date >= twoWeeksAgo && $0.date < weekAgo }
+        return (current, previous, weekAgo, twoWeeksAgo)
+    }
+
     /// Recomputes injury risk assessment from available data.
     /// Active injuries are passed from the View's @Query since the ViewModel doesn't access SwiftData.
     func recomputeInjuryRisk(activeInjuries: [InjuryInfo] = []) {
@@ -312,20 +323,16 @@ final class ActivityViewModel {
             return
         }
 
-        let calendar = Calendar.current
         let consecutiveDays = workoutStreak?.currentStreak ?? 0
+        let partition = partitionSnapshotsByWeek()
 
-        // Current week volume from exercise record snapshots
-        let weekAgo = calendar.date(byAdding: .day, value: -7, to: Date()) ?? Date()
-        let twoWeeksAgo = calendar.date(byAdding: .day, value: -14, to: Date()) ?? Date()
-
-        let currentWeekVolume = exerciseRecordSnapshots
-            .filter { $0.date >= weekAgo }
+        let currentWeekVolume = partition.current
             .compactMap(\.totalWeight)
+            .filter(\.isFinite)
             .reduce(0, +)
-        let previousWeekVolume = exerciseRecordSnapshots
-            .filter { $0.date >= twoWeeksAgo && $0.date < weekAgo }
+        let previousWeekVolume = partition.previous
             .compactMap(\.totalWeight)
+            .filter(\.isFinite)
             .reduce(0, +)
 
         // Sleep deficit: compare recent sleep to 8h target
@@ -353,39 +360,42 @@ final class ActivityViewModel {
     }
 
     /// Generates a weekly workout report from current exercise data.
-    func generateWeeklyReport() async {
-        guard !exerciseRecordSnapshots.isEmpty else {
-            weeklyReport = nil
-            return
+    func generateWeeklyReport() {
+        weeklyReportTask?.cancel()
+        weeklyReportTask = Task {
+            guard !exerciseRecordSnapshots.isEmpty else {
+                weeklyReport = nil
+                return
+            }
+
+            let partition = partitionSnapshotsByWeek()
+            let thisWeekRecords = partition.current
+            let lastWeekRecords = partition.previous
+
+            guard !thisWeekRecords.isEmpty else {
+                weeklyReport = nil
+                return
+            }
+
+            let previousVolume = lastWeekRecords.isEmpty
+                ? nil
+                : lastWeekRecords.compactMap(\.totalWeight).filter(\.isFinite).reduce(0, +)
+            let streak = workoutStreak?.currentStreak ?? 0
+
+            let input = GenerateWorkoutReportUseCase.Input(
+                records: thisWeekRecords,
+                period: .weekly,
+                startDate: partition.weekAgo,
+                endDate: Date(),
+                previousPeriodVolume: previousVolume,
+                workoutStreak: streak,
+                newPersonalRecords: 0,
+                newExerciseNames: []
+            )
+
+            guard !Task.isCancelled else { return }
+            weeklyReport = await workoutReportUseCase.execute(input: input)
         }
-
-        let calendar = Calendar.current
-        let now = Date()
-        let weekAgo = calendar.date(byAdding: .day, value: -7, to: now) ?? now
-        let twoWeeksAgo = calendar.date(byAdding: .day, value: -14, to: now) ?? now
-
-        let thisWeekRecords = exerciseRecordSnapshots.filter { $0.date >= weekAgo }
-        let lastWeekRecords = exerciseRecordSnapshots.filter { $0.date >= twoWeeksAgo && $0.date < weekAgo }
-
-        guard !thisWeekRecords.isEmpty else {
-            weeklyReport = nil
-            return
-        }
-
-        let previousVolume = lastWeekRecords.isEmpty ? nil : lastWeekRecords.compactMap(\.totalWeight).reduce(0, +)
-        let streak = workoutStreak?.currentStreak ?? 0
-
-        let input = GenerateWorkoutReportUseCase.Input(
-            records: thisWeekRecords,
-            period: .weekly,
-            startDate: weekAgo,
-            endDate: now,
-            previousPeriodVolume: previousVolume,
-            workoutStreak: streak,
-            newPersonalRecords: 0,
-            newExerciseNames: []
-        )
-        weeklyReport = await workoutReportUseCase.execute(input: input)
     }
 
     func recomputeDerivedStats() {

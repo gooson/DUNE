@@ -6,6 +6,8 @@ struct InjuryRiskCard: View {
 
     @Environment(\.appTheme) private var theme
 
+    private static let gaugeTrackColor = DS.Color.activity.opacity(0.15)
+
     var body: some View {
         if let assessment {
             filledContent(assessment)
@@ -22,7 +24,7 @@ struct InjuryRiskCard: View {
                     // Circular gauge
                     ZStack {
                         Circle()
-                            .stroke(DS.Color.activity.opacity(0.15), lineWidth: 6)
+                            .stroke(Self.gaugeTrackColor, lineWidth: 6)
                         Circle()
                             .trim(from: 0, to: CGFloat(assessment.score) / 100.0)
                             .stroke(
@@ -54,10 +56,8 @@ struct InjuryRiskCard: View {
                         .foregroundStyle(.tertiary)
                 }
 
-                // Top risk factors (max 3)
-                let topFactors = Array(assessment.factors
-                    .sorted { $0.contribution > $1.contribution }
-                    .prefix(3))
+                // Top risk factors (max 3, pre-sorted by UseCase)
+                let topFactors = Array(assessment.factors.prefix(3))
 
                 if !topFactors.isEmpty {
                     VStack(alignment: .leading, spacing: DS.Spacing.xs) {

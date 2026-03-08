@@ -84,10 +84,11 @@ struct CalculateInjuryRiskUseCase: InjuryRiskCalculating, Sendable {
         }
         if sleepRisk > 0 {
             let hours = input.sleepDeficitMinutes / 60.0
+            let hoursFormatted = hours.formatted(.number.precision(.fractionLength(1)))
             factors.append(.init(
                 type: .sleepDeficit,
                 contribution: Int(sleepRisk * sleepDeficitWeight * 100),
-                detail: String(localized: "\(String(format: "%.1f", hours))h sleep deficit")
+                detail: String(localized: "\(hoursFormatted)h sleep deficit")
             ))
         }
         if injuryRisk > 0 {
@@ -113,7 +114,8 @@ struct CalculateInjuryRiskUseCase: InjuryRiskCalculating, Sendable {
             + recoveryRisk * lowRecoveryWeight
 
         let score = Int(rawScore * 100)
-        return InjuryRiskAssessment(score: score, factors: factors)
+        let sortedFactors = factors.sorted { $0.contribution > $1.contribution }
+        return InjuryRiskAssessment(score: score, factors: sortedFactors)
     }
 
     // MARK: - Component Calculations
