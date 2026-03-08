@@ -32,12 +32,18 @@ final class VisionVoiceWorkoutEntryViewModel {
         didSet {
             guard transcript != oldValue else { return }
             draft = nil
+            isDraftSaved = false
             errorMessage = nil
+            if !isListening {
+                infoMessage = nil
+            }
         }
     }
 
     var draft: VisionVoiceWorkoutDraft?
     var isListening = false
+    var isSaving = false
+    var isDraftSaved = false
     var infoMessage: String?
     var errorMessage: String?
 
@@ -60,11 +66,22 @@ final class VisionVoiceWorkoutEntryViewModel {
         !transcript.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
+    var canSave: Bool {
+        draft != nil && !isSaving && !isDraftSaved
+    }
+
     var listeningButtonTitle: String {
         if isListening {
             return String(localized: "Stop Listening")
         }
         return String(localized: "Start Listening")
+    }
+
+    var saveButtonTitle: String {
+        if isDraftSaved {
+            return String(localized: "Saved")
+        }
+        return String(localized: "Save to History")
     }
 
     func toggleListening() async {
@@ -132,17 +149,133 @@ final class VisionVoiceWorkoutEntryViewModel {
         switch parser.parse(transcript) {
         case .success(let draft):
             self.draft = draft
+            isDraftSaved = false
             errorMessage = nil
             infoMessage = draft.notes.first ?? String(localized: "Voice draft ready.")
         case .failure(let message):
             draft = nil
+            isDraftSaved = false
+            infoMessage = nil
             errorMessage = message
         }
+    }
+
+    func createValidatedRecord() -> ExerciseRecord? {
+        guard !isSaving, !isDraftSaved else { return nil }
+        guard let draft else {
+            errorMessage = String(localized: "Review the voice draft before saving it.")
+            return nil
+        }
+
+        isSaving = true
+        errorMessage = nil
+        return buildRecord(from: draft)
+    }
+
+    func didFinishSaving() {
+        isSaving = false
+        isDraftSaved = true
+        errorMessage = nil
+        infoMessage = String(localized: "Saved to workout history.")
     }
 
     func clearFeedback() {
         errorMessage = nil
         infoMessage = nil
+    }
+
+    private func buildRecord(from draft: VisionVoiceWorkoutDraft) -> ExerciseRecord {
+        let distanceKm = setDistance(for: draft)
+        let record = ExerciseRecord(
+            date: Date(),
+            exerciseType: draft.exercise.name,
+            duration: recordDuration(for: draft),
+            distance: distanceKm,
+            exerciseDefinitionID: draft.exercise.id,
+            primaryMuscles: draft.exercise.primaryMuscles,
+            secondaryMuscles: draft.exercise.secondaryMuscles,
+            equipment: draft.exercise.equipment
+        )
+
+        let workoutSet = WorkoutSet(
+            setNumber: 1,
+            setType: .working,
+            weight: setWeight(for: draft),
+            reps: setReps(for: draft),
+            duration: setDuration(for: draft),
+            distance: distanceKm,
+            intensity: nil,
+            isCompleted: true,
+            restDuration: nil
+        )
+        workoutSet.exerciseRecord = record
+        record.sets = [workoutSet]
+
+        return record
+    }
+
+    private func normalizedWeightKg(from draft: VisionVoiceWorkoutDraft) -> Double? {
+        guard let weight = draft.weight else { return nil }
+        let unit = draft.weightUnit ?? .kg
+        return unit.toKg(weight)
+    }
+
+    private func setWeight(for draft: VisionVoiceWorkoutDraft) -> Double? {
+        switch draft.exercise.inputType {
+        case .setsRepsWeight, .setsReps:
+            return normalizedWeightKg(from: draft)
+        case .durationDistance, .durationIntensity, .roundsBased:
+            return nil
+        }
+    }
+
+    private func normalizedDistanceKm(from draft: VisionVoiceWorkoutDraft) -> Double? {
+        guard let distance = draft.distance else { return nil }
+
+        switch draft.distanceUnit {
+        case .km, nil:
+            return distance
+        case .meters:
+            return distance / 1_000.0
+        case .miles:
+            return distance * 1.609_344
+        }
+    }
+
+    private func setDistance(for draft: VisionVoiceWorkoutDraft) -> Double? {
+        switch draft.exercise.inputType {
+        case .durationDistance:
+            return normalizedDistanceKm(from: draft)
+        case .setsRepsWeight, .setsReps, .durationIntensity, .roundsBased:
+            return nil
+        }
+    }
+
+    private func recordDuration(for draft: VisionVoiceWorkoutDraft) -> TimeInterval {
+        switch draft.exercise.inputType {
+        case .durationDistance, .durationIntensity, .roundsBased:
+            return draft.durationSeconds ?? 0
+        case .setsRepsWeight, .setsReps:
+            return 0
+        }
+    }
+
+    private func setDuration(for draft: VisionVoiceWorkoutDraft) -> TimeInterval? {
+        switch draft.exercise.inputType {
+        case .durationDistance, .durationIntensity, .roundsBased:
+            return draft.durationSeconds
+        case .setsRepsWeight, .setsReps:
+            return nil
+        }
+    }
+
+    private func setReps(for draft: VisionVoiceWorkoutDraft) -> Int? {
+        switch draft.exercise.inputType {
+        case .setsRepsWeight, .setsReps, .roundsBased:
+            return draft.reps
+        case .durationDistance, .durationIntensity:
+            return nil
+        }
     }
 }
 

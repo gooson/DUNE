@@ -1,7 +1,7 @@
 ---
 source: brainstorm/vision-pro-production-roadmap
 priority: p2
-status: ready
+status: in-progress
 created: 2026-03-08
 updated: 2026-03-08
 ---
@@ -12,7 +12,9 @@ updated: 2026-03-08
 
 - Phase 5A 실데이터 연결(`todos/021-done-p1-vision-real-data-pipeline.md`)이 완료됐다.
 - Phase 5B UX polish는 `todos/022-in-progress-p2-vision-ux-polish.md`에서 마무리 중이다.
-- 따라서 이 TODO는 5B 종료 후 착수하는 다음 phase로 유지한다.
+- Voice quick entry는 draft preview를 넘어 single-entry workout history 저장까지 연결됐다.
+- 따라서 남은 F3 범위는 audio/spatial feedback, richer editing, multilingual confirmation UX로 줄었다.
+- G1도 SharePlay workout board foundation은 완료됐고, 남은 범위는 SharedWorldAnchors 기반 spatial sync/placement 고도화다.
 
 ## 목표
 
@@ -29,10 +31,10 @@ SharePlay, Voice Input 등 Phase 4에서 보류된 고급 기능을 구현한다
 
 ### 2. F3 Voice-First Workout Entry
 
-- persistence/audio scope only
-- parsed draft → ExerciseRecord save flow 연결
-- 음성 피드백 (TTS 또는 spatial audio)
-- 한국어/영어/일본어 지원
+- audio-first enhancement scope only
+- 저장 후 음성 피드백 (TTS 또는 spatial audio)
+- multi-step/richer editing flow
+- 한국어/영어/일본어 confirmation UX polish
 
 ### 3. Spatial Audio
 

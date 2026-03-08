@@ -34,7 +34,7 @@ Vision Pro backlog에서 `todos/021`과 `todos/022`가 모두 `ready`로 남아 
 ### 다음 작업을 문서 안에서 명시했다
 
 - umbrella tracker인 `todos/020-in-progress-p3-vision-pro-phase4-social-advanced.md`에 5A 완료와 5B 진행 사실을 추가했다.
-- `todos/023-ready-p2-vision-phase4-remaining.md`에 5B 완료 이후 착수하는 후속 phase라는 메모를 추가했다.
+- `todos/023-in-progress-p2-vision-phase4-remaining.md`에 5B 완료 이후 착수하는 후속 phase라는 메모를 추가했다.
 
 ## Prevention
 

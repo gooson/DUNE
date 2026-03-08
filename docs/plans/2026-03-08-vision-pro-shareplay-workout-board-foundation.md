@@ -60,7 +60,7 @@ full `SharedWorldAnchors`는 이번 배치에서 구현하지 않는다. 대신 
 | `Shared/Resources/Localizable.xcstrings` | modify | SharePlay UI copy 추가 |
 | `DUNETests/VisionSharePlayWorkoutViewModelTests.swift` | add | lifecycle / merge / replay / fallback 테스트 |
 | `todos/020-in-progress-p3-vision-pro-phase4-social-advanced.md` | modify | G1 foundation 진행 현황 반영 |
-| `todos/023-ready-p2-vision-phase4-remaining.md` | modify | anchor-based advanced scope가 남았음을 명시 |
+| `todos/023-in-progress-p2-vision-phase4-remaining.md` | modify | anchor-based advanced scope가 남았음을 명시 |
 
 ## Implementation Steps
 
@@ -88,7 +88,7 @@ full `SharedWorldAnchors`는 이번 배치에서 구현하지 않는다. 대신 
 
 ### Step 3: Update documentation and TODO state
 
-- **Files**: `todos/020-in-progress-p3-vision-pro-phase4-social-advanced.md`, `todos/023-ready-p2-vision-phase4-remaining.md`
+- **Files**: `todos/020-in-progress-p3-vision-pro-phase4-social-advanced.md`, `todos/023-in-progress-p2-vision-phase4-remaining.md`
 - **Changes**:
   - 이번 배치가 G1 foundation임을 기록
   - `SharedWorldAnchors`/advanced spatial sync는 remaining scope로 재기록

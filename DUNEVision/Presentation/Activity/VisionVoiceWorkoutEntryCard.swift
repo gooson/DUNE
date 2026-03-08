@@ -1,6 +1,8 @@
+import SwiftData
 import SwiftUI
 
 struct VisionVoiceWorkoutEntryCard: View {
+    @Environment(\.modelContext) private var modelContext
     @State private var viewModel: VisionVoiceWorkoutEntryViewModel
 
     init(viewModel: VisionVoiceWorkoutEntryViewModel = VisionVoiceWorkoutEntryViewModel()) {
@@ -37,7 +39,7 @@ struct VisionVoiceWorkoutEntryCard: View {
             Text("Voice Quick Entry")
                 .font(.title2.weight(.semibold))
 
-            Text("Speak a workout like \"Bench Press 80kg 8 reps\" to generate a Vision Pro draft before the full save flow arrives.")
+            Text("Speak a workout like \"Bench Press 80kg 8 reps\" to review it and save a quick entry without leaving Vision Pro.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .frame(maxWidth: 760, alignment: .leading)
@@ -141,9 +143,21 @@ struct VisionVoiceWorkoutEntryCard: View {
                 }
             }
 
-            Text("Preview only. Saving to workout history will be added in a later phase.")
+            Text("Save this draft to workout history when it looks right.")
                 .font(.callout)
                 .foregroundStyle(.secondary)
+
+            Button {
+                saveDraft()
+            } label: {
+                Label(
+                    viewModel.saveButtonTitle,
+                    systemImage: viewModel.isDraftSaved ? "checkmark.circle.fill" : "square.and.arrow.down.fill"
+                )
+                .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.borderedProminent)
+            .disabled(!viewModel.canSave)
         }
         .padding(18)
         .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 24, style: .continuous))
@@ -182,5 +196,11 @@ struct VisionVoiceWorkoutEntryCard: View {
         formatter.allowedUnits = durationSeconds >= 3600 ? [.hour, .minute] : [.minute, .second]
         formatter.unitsStyle = .short
         return formatter.string(from: durationSeconds) ?? "\(Int(durationSeconds))s"
+    }
+
+    private func saveDraft() {
+        guard let record = viewModel.createValidatedRecord() else { return }
+        modelContext.insert(record)
+        viewModel.didFinishSaving()
     }
 }

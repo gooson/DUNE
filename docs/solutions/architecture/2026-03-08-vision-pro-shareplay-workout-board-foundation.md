@@ -12,7 +12,7 @@ related_files:
   - DUNEVision/Resources/DUNEVision.entitlements
   - Shared/Resources/Localizable.xcstrings
   - todos/020-in-progress-p3-vision-pro-phase4-social-advanced.md
-  - todos/023-ready-p2-vision-phase4-remaining.md
+  - todos/023-in-progress-p2-vision-phase4-remaining.md
 related_solutions:
   - docs/solutions/architecture/2026-03-07-vision-pro-multi-window-dashboard.md
   - docs/solutions/architecture/2026-03-08-vision-pro-voice-workout-entry-foundation.md
@@ -50,7 +50,7 @@ related_solutions:
 | `DUNEVision/Resources/DUNEVision.entitlements` | Added `com.apple.developer.group-session` | SharePlay capability를 target entitlement와 일치시키기 위해 |
 | `Shared/Resources/Localizable.xcstrings` | Added SharePlay copy for en/ko/ja | localization leak 없이 새 social UI를 ship하기 위해 |
 | `todos/020-in-progress-p3-vision-pro-phase4-social-advanced.md` | Recorded G1 foundation completion | umbrella TODO 상태를 실제 ship 범위와 맞추기 위해 |
-| `todos/023-ready-p2-vision-phase4-remaining.md` | Narrowed remaining scope to advanced spatial sync | 후속 phase가 foundation 재구현 없이 anchor/audio/persistence만 다루게 하기 위해 |
+| `todos/023-in-progress-p2-vision-phase4-remaining.md` | Narrowed remaining scope to advanced spatial sync | 후속 phase가 foundation 재구현 없이 anchor/audio/persistence만 다루게 하기 위해 |
 
 ### Key Code
 

@@ -135,6 +135,74 @@ struct VisionVoiceWorkoutEntryViewModelTests {
         #expect(transcriber.stopCallCount == 1)
     }
 
+    @Test("createValidatedRecord builds a strength history record")
+    func createValidatedRecordBuildsStrengthRecord() {
+        let transcriber = MockVisionVoiceWorkoutTranscriber()
+        let viewModel = makeViewModel(transcriber: transcriber)
+        viewModel.transcript = "Bench Press 176 lb 8 reps"
+        viewModel.reviewDraft()
+
+        guard let record = viewModel.createValidatedRecord() else {
+            Issue.record("Expected a strength record")
+            return
+        }
+
+        #expect(viewModel.isSaving)
+        #expect(record.exerciseDefinitionID == "barbell-bench-press")
+        #expect(record.exerciseType == "Barbell Bench Press")
+        #expect(record.duration == 0)
+        #expect(record.distance == nil)
+        #expect(record.completedSets.count == 1)
+        #expect(record.completedSets.first?.reps == 8)
+        #expect(record.completedSets.first?.duration == nil)
+        #expect(record.completedSets.first?.distance == nil)
+        #expect(record.completedSets.first?.weight != nil)
+        #expect(abs((record.completedSets.first?.weight ?? 0) - WeightUnit.lb.toKg(176)) < 0.001)
+
+        viewModel.didFinishSaving()
+
+        #expect(viewModel.isSaving == false)
+        #expect(viewModel.isDraftSaved)
+        #expect(viewModel.canSave == false)
+        #expect(viewModel.infoMessage == String(localized: "Saved to workout history."))
+    }
+
+    @Test("createValidatedRecord builds a cardio history record")
+    func createValidatedRecordBuildsCardioRecord() {
+        let transcriber = MockVisionVoiceWorkoutTranscriber()
+        let viewModel = makeViewModel(transcriber: transcriber)
+        viewModel.transcript = "러닝 30분 5km"
+        viewModel.reviewDraft()
+
+        guard let record = viewModel.createValidatedRecord() else {
+            Issue.record("Expected a cardio record")
+            return
+        }
+
+        #expect(viewModel.isSaving)
+        #expect(record.exerciseDefinitionID == "running")
+        #expect(record.exerciseType == "Running")
+        #expect(record.duration == 1_800)
+        #expect(record.distance == 5)
+        #expect(record.completedSets.count == 1)
+        #expect(record.completedSets.first?.reps == nil)
+        #expect(record.completedSets.first?.duration == 1_800)
+        #expect(record.completedSets.first?.distance == 5)
+    }
+
+    @Test("createValidatedRecord requires a reviewed draft")
+    func createValidatedRecordRequiresReviewedDraft() {
+        let transcriber = MockVisionVoiceWorkoutTranscriber()
+        let viewModel = makeViewModel(transcriber: transcriber)
+        viewModel.transcript = "Bench Press 176 lb 8 reps"
+
+        let record = viewModel.createValidatedRecord()
+
+        #expect(record == nil)
+        #expect(viewModel.errorMessage == String(localized: "Review the voice draft before saving it."))
+        #expect(viewModel.isSaving == false)
+    }
+
     private func makeViewModel(
         transcriber: MockVisionVoiceWorkoutTranscriber
     ) -> VisionVoiceWorkoutEntryViewModel {
