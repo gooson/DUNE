@@ -3,6 +3,17 @@ import HealthKit
 struct BodyCompositionSample: Sendable {
     let value: Double
     let date: Date
+    let syncIdentifier: String?
+
+    init(value: Double, date: Date, syncIdentifier: String? = nil) {
+        self.value = value
+        self.date = date
+        self.syncIdentifier = syncIdentifier
+    }
+
+    var isManagedByDuneSync: Bool {
+        syncIdentifier?.hasPrefix(BodyCompositionWriteInput.syncIdentifierPrefix) == true
+    }
 }
 
 protocol BodyCompositionQuerying: Sendable {
@@ -216,10 +227,15 @@ struct BodyCompositionQueryService: BodyCompositionQuerying, Sendable {
 
         let samples = try await manager.execute(descriptor)
 
-        return samples.compactMap { sample in
+        return samples.compactMap { sample -> BodyCompositionSample? in
             let value = valueTransform(sample.quantity.doubleValue(for: unit))
             if let range = validRange, !range.contains(value) { return nil }
-            return BodyCompositionSample(value: value, date: sample.startDate)
+            let syncIdentifier = sample.metadata?[HKMetadataKeySyncIdentifier] as? String
+            return BodyCompositionSample(
+                value: value,
+                date: sample.startDate,
+                syncIdentifier: syncIdentifier
+            )
         }
     }
 }

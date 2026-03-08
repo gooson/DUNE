@@ -16,6 +16,41 @@ struct BodyCompositionListItem: Identifiable {
     }
 }
 
+struct BodyCompositionFormDraft: Sendable {
+    let date: Date
+    let weight: Double?
+    let bodyFatPercentage: Double?
+    let muscleMass: Double?
+    let memo: String
+
+    var writeInput: BodyCompositionWriteInput {
+        BodyCompositionWriteInput(
+            date: date,
+            weight: weight,
+            bodyFatPercentage: bodyFatPercentage,
+            leanBodyMass: muscleMass
+        )
+    }
+
+    func makeRecord() -> BodyCompositionRecord {
+        BodyCompositionRecord(
+            date: date,
+            weight: weight,
+            bodyFatPercentage: bodyFatPercentage,
+            muscleMass: muscleMass,
+            memo: memo
+        )
+    }
+
+    func apply(to record: BodyCompositionRecord) {
+        record.date = date
+        record.weight = weight
+        record.bodyFatPercentage = bodyFatPercentage
+        record.muscleMass = muscleMass
+        record.memo = memo
+    }
+}
+
 @Observable
 @MainActor
 final class BodyCompositionViewModel {
@@ -55,12 +90,15 @@ final class BodyCompositionViewModel {
             async let leanBodyMassTask = bodyCompositionService.fetchLeanBodyMass(days: 90)
 
             let (weights, bodyFats, leanBodyMasses) = try await (weightTask, bodyFatTask, leanBodyMassTask)
+            let historyWeights = weights.filter { !$0.isManagedByDuneSync }
+            let historyBodyFats = bodyFats.filter { !$0.isManagedByDuneSync }
+            let historyLeanBodyMasses = leanBodyMasses.filter { !$0.isManagedByDuneSync }
 
             // Merge by date (group samples from same day)
             var dateMap: [String: (weight: Double?, bodyFat: Double?, muscleMass: Double?, date: Date)] = [:]
             let calendar = Calendar.current
 
-            for sample in weights {
+            for sample in historyWeights {
                 let key = dayKey(sample.date, calendar: calendar)
                 var entry = dateMap[key] ?? (weight: nil, bodyFat: nil, muscleMass: nil, date: sample.date)
                 entry.weight = sample.value
@@ -68,7 +106,7 @@ final class BodyCompositionViewModel {
                 dateMap[key] = entry
             }
 
-            for sample in bodyFats {
+            for sample in historyBodyFats {
                 let key = dayKey(sample.date, calendar: calendar)
                 var entry = dateMap[key] ?? (weight: nil, bodyFat: nil, muscleMass: nil, date: sample.date)
                 entry.bodyFat = sample.value
@@ -76,7 +114,7 @@ final class BodyCompositionViewModel {
                 dateMap[key] = entry
             }
 
-            for sample in leanBodyMasses {
+            for sample in historyLeanBodyMasses {
                 let key = dayKey(sample.date, calendar: calendar)
                 var entry = dateMap[key] ?? (weight: nil, bodyFat: nil, muscleMass: nil, date: sample.date)
                 entry.muscleMass = sample.value
@@ -120,7 +158,7 @@ final class BodyCompositionViewModel {
         allItems(manualRecords: manualRecords).first
     }
 
-    func createValidatedRecord() -> BodyCompositionRecord? {
+    func createValidatedDraft() -> BodyCompositionFormDraft? {
         guard !isSaving else { return nil }
 
         if selectedDate.isFuture {
@@ -130,34 +168,25 @@ final class BodyCompositionViewModel {
 
         guard let validated = validateInputs() else { return nil }
         isSaving = true
-        let record = BodyCompositionRecord(
+        return BodyCompositionFormDraft(
             date: selectedDate,
             weight: validated.weight,
             bodyFatPercentage: validated.bodyFat,
             muscleMass: validated.muscleMass,
             memo: String(newMemo.prefix(maxMemoLength))
         )
-        return record
+    }
+
+    func createValidatedRecord() -> BodyCompositionRecord? {
+        createValidatedDraft()?.makeRecord()
     }
 
     func didFinishSaving() {
         isSaving = false
     }
 
-    func applyUpdate(to record: BodyCompositionRecord) -> Bool {
-        guard !isSaving else { return false }
-        if selectedDate.isFuture {
-            validationError = String(localized: "Future dates are not allowed")
-            return false
-        }
-
-        guard let validated = validateInputs() else { return false }
-        record.date = selectedDate
-        record.weight = validated.weight
-        record.bodyFatPercentage = validated.bodyFat
-        record.muscleMass = validated.muscleMass
-        record.memo = String(newMemo.prefix(maxMemoLength))
-        return true
+    func apply(_ draft: BodyCompositionFormDraft, to record: BodyCompositionRecord) {
+        draft.apply(to: record)
     }
 
     private func validateInputs() -> (weight: Double?, bodyFat: Double?, muscleMass: Double?)? {

@@ -47,21 +47,34 @@ actor HealthKitManager: HealthKitManaging {
     }
 
     func requestAuthorization() async throws {
+        try await requestAuthorization(
+            toShare: [
+                HKQuantityType(.activeEnergyBurned),
+                HKQuantityType(.distanceWalkingRunning),
+                HKQuantityType.workoutType(),
+                HKCategoryType(.mindfulSession),
+            ]
+        )
+    }
+
+    func requestBodyCompositionWriteAuthorization() async throws {
+        try await requestAuthorization(
+            toShare: [
+                HKQuantityType(.bodyMass),
+                HKQuantityType(.bodyFatPercentage),
+                HKQuantityType(.leanBodyMass),
+            ]
+        )
+    }
+
+    private func requestAuthorization(toShare shareTypes: Set<HKSampleType>) async throws {
         guard isAvailable else {
             logger.error("HealthKit not available on this device")
             throw HealthKitError.notAvailable
         }
         do {
             try await store.requestAuthorization(
-                toShare: [
-                    HKQuantityType(.activeEnergyBurned),
-                    HKQuantityType(.distanceWalkingRunning),
-                    HKQuantityType(.bodyMass),
-                    HKQuantityType(.bodyFatPercentage),
-                    HKQuantityType(.leanBodyMass),
-                    HKQuantityType.workoutType(),
-                    HKCategoryType(.mindfulSession),
-                ],
+                toShare: shareTypes,
                 read: readTypes.union([HKObjectType.workoutType()])
             )
             logger.info("HealthKit authorization requested successfully")

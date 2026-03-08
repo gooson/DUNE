@@ -2,6 +2,35 @@ import Foundation
 import Testing
 @testable import DUNE
 
+private actor BodyCompositionHistoryServiceMock: BodyCompositionQuerying {
+    var weights: [BodyCompositionSample]
+    var bodyFats: [BodyCompositionSample]
+    var leanMasses: [BodyCompositionSample]
+
+    init(
+        weights: [BodyCompositionSample] = [],
+        bodyFats: [BodyCompositionSample] = [],
+        leanMasses: [BodyCompositionSample] = []
+    ) {
+        self.weights = weights
+        self.bodyFats = bodyFats
+        self.leanMasses = leanMasses
+    }
+
+    func fetchWeight(days: Int) async throws -> [BodyCompositionSample] { weights }
+    func fetchBodyFat(days: Int) async throws -> [BodyCompositionSample] { bodyFats }
+    func fetchLeanBodyMass(days: Int) async throws -> [BodyCompositionSample] { leanMasses }
+    func fetchWeight(start: Date, end: Date) async throws -> [BodyCompositionSample] { weights }
+    func fetchLatestWeight(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
+    func fetchBMI(for date: Date) async throws -> Double? { nil }
+    func fetchLatestBMI(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
+    func fetchBMI(start: Date, end: Date) async throws -> [BodyCompositionSample] { [] }
+    func fetchBodyFat(start: Date, end: Date) async throws -> [BodyCompositionSample] { bodyFats }
+    func fetchLeanBodyMass(start: Date, end: Date) async throws -> [BodyCompositionSample] { leanMasses }
+    func fetchLatestBodyFat(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
+    func fetchLatestLeanBodyMass(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
+}
+
 @Suite("BodyCompositionViewModel")
 @MainActor
 struct BodyCompositionViewModelTests {
@@ -196,5 +225,30 @@ struct BodyCompositionViewModelTests {
         let latest = vm.latestValues(manualRecords: [record])
         #expect(latest != nil)
         #expect(latest?.weight == 70.0)
+    }
+
+    @Test("loadHealthKitData excludes DUNE-managed sync samples from history items")
+    func loadHealthKitDataExcludesManagedSyncSamples() async {
+        let date = Date(timeIntervalSince1970: 12_345)
+        let managedSyncIdentifier = BodyCompositionWriteInput.syncIdentifier(
+            recordID: UUID(uuidString: "11111111-2222-3333-4444-555555555555")!,
+            kind: .weight
+        )
+        let vm = BodyCompositionViewModel(
+            bodyCompositionService: BodyCompositionHistoryServiceMock(
+                weights: [
+                    BodyCompositionSample(value: 72.0, date: date, syncIdentifier: managedSyncIdentifier)
+                ],
+                bodyFats: [
+                    BodyCompositionSample(value: 18.5, date: date, syncIdentifier: nil)
+                ]
+            )
+        )
+
+        await vm.loadHealthKitData()
+
+        #expect(vm.healthKitItems.count == 1)
+        #expect(vm.healthKitItems[0].weight == nil)
+        #expect(vm.healthKitItems[0].bodyFatPercentage == 18.5)
     }
 }

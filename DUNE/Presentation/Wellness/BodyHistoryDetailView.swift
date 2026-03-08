@@ -3,6 +3,7 @@ import SwiftData
 
 struct BodyHistoryDetailView: View {
     @Bindable var viewModel: BodyCompositionViewModel
+    let onRecordsChanged: @MainActor () -> Void
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \BodyCompositionRecord.date, order: .reverse) private var records: [BodyCompositionRecord]
 
@@ -34,14 +35,35 @@ struct BodyHistoryDetailView: View {
             }
         }
         .background { DetailWaveBackground() }
+        .task {
+            await viewModel.loadHealthKitData()
+        }
         .englishNavigationTitle("Body Records")
         .navigationBarTitleDisplayMode(.inline)
         .alert("Delete Record?", isPresented: $isShowingDeleteConfirmation, presenting: recordToDelete) { record in
             Button("Delete", role: .destructive) {
-                withAnimation {
-                    modelContext.delete(record)
+                let writeInput = BodyCompositionWriteInput(record: record)
+                Task {
+                    do {
+                        try await BodyCompositionWriteService().delete(
+                            recordID: record.id,
+                            input: writeInput
+                        )
+                        await viewModel.loadHealthKitData()
+                        await MainActor.run {
+                            withAnimation {
+                                modelContext.delete(record)
+                            }
+                            recordToDelete = nil
+                            onRecordsChanged()
+                        }
+                    } catch {
+                        AppLogger.healthKit.error("Deleting body record failed: \(error.localizedDescription)")
+                        await MainActor.run {
+                            recordToDelete = nil
+                        }
+                    }
                 }
-                recordToDelete = nil
             }
             Button("Cancel", role: .cancel) {
                 recordToDelete = nil
@@ -55,18 +77,28 @@ struct BodyHistoryDetailView: View {
                     viewModel: viewModel,
                     isEdit: true,
                     onSave: {
-                        var didUpdate = false
+                        let previousInput = BodyCompositionWriteInput(record: record)
+                        guard let draft = viewModel.createValidatedDraft() else {
+                            return false
+                        }
                         do {
+                            try await BodyCompositionWriteService().update(
+                                recordID: record.id,
+                                previousInput: previousInput,
+                                input: draft.writeInput
+                            )
                             try modelContext.transaction {
-                                didUpdate = viewModel.applyUpdate(to: record)
+                                viewModel.apply(draft, to: record)
                             }
-                            if didUpdate {
-                                isShowingEditSheet = false
-                                viewModel.editingRecord = nil
-                                return true
-                            }
+                            viewModel.didFinishSaving()
+                            await viewModel.loadHealthKitData()
+                            isShowingEditSheet = false
+                            viewModel.editingRecord = nil
+                            onRecordsChanged()
+                            return true
                         } catch {
                             viewModel.validationError = String(localized: "Failed to save record changes. Please try again.")
+                            viewModel.didFinishSaving()
                         }
                         return false
                     }

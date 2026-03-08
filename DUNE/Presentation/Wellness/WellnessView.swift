@@ -157,17 +157,15 @@ struct WellnessView: View {
                 viewModel: bodyViewModel,
                 isEdit: false,
                 onSave: {
-                    if let record = bodyViewModel.createValidatedRecord() {
-                        let input = BodyCompositionWriteInput(
-                            date: record.date,
-                            weight: record.weight,
-                            bodyFatPercentage: record.bodyFatPercentage,
-                            leanBodyMass: record.muscleMass
-                        )
+                    if let draft = bodyViewModel.createValidatedDraft() {
+                        let record = draft.makeRecord()
                         do {
-                            try await BodyCompositionWriteService().save(input)
+                            try await BodyCompositionWriteService().save(
+                                recordID: record.id,
+                                input: draft.writeInput
+                            )
                         } catch {
-                            bodyViewModel.validationError = error.localizedDescription
+                            bodyViewModel.validationError = String(localized: "Failed to save record changes. Please try again.")
                             bodyViewModel.didFinishSaving()
                             return false
                         }
@@ -189,18 +187,27 @@ struct WellnessView: View {
                     viewModel: bodyViewModel,
                     isEdit: true,
                     onSave: {
-                        var didUpdate = false
+                        let previousInput = BodyCompositionWriteInput(record: record)
+                        guard let draft = bodyViewModel.createValidatedDraft() else {
+                            return false
+                        }
                         do {
+                            try await BodyCompositionWriteService().update(
+                                recordID: record.id,
+                                previousInput: previousInput,
+                                input: draft.writeInput
+                            )
                             try modelContext.transaction {
-                                didUpdate = bodyViewModel.applyUpdate(to: record)
+                                bodyViewModel.apply(draft, to: record)
                             }
-                            if didUpdate {
-                                bodyViewModel.isShowingEditSheet = false
-                                bodyViewModel.editingRecord = nil
-                                return true
-                            }
+                            bodyViewModel.didFinishSaving()
+                            bodyViewModel.isShowingEditSheet = false
+                            bodyViewModel.editingRecord = nil
+                            viewModel.loadData()
+                            return true
                         } catch {
                             bodyViewModel.validationError = String(localized: "Failed to save record changes. Please try again.")
+                            bodyViewModel.didFinishSaving()
                         }
                         return false
                     }
@@ -243,7 +250,10 @@ struct WellnessView: View {
             AllDataView(category: destination.category)
         }
         .navigationDestination(for: BodyHistoryDestination.self) { _ in
-            BodyHistoryDetailView(viewModel: bodyViewModel)
+            BodyHistoryDetailView(
+                viewModel: bodyViewModel,
+                onRecordsChanged: { viewModel.loadData() }
+            )
         }
         .navigationDestination(for: InjuryHistoryDestination.self) { _ in
             InjuryHistoryView(viewModel: injuryViewModel)
