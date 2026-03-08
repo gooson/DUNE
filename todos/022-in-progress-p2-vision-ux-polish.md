@@ -1,12 +1,21 @@
 ---
 source: brainstorm/vision-pro-production-roadmap
 priority: p2
-status: ready
+status: in-progress
 created: 2026-03-08
 updated: 2026-03-08
 ---
 
 # Phase 5B: visionOS UX Polish + Spatial Native
+
+## 진행 메모
+
+- Dashboard는 4개 quick action 중심으로 단순화됐고, `Coming Soon` 노출이 제거됐다.
+- `VisionVolumetricExperienceView`의 2D 컨트롤이 ornament로 분리되고 배경 gradient가 제거됐다.
+- volumetric 3D scene들의 drag rotation 패턴과 empty state copy가 통일됐다.
+- 구현 근거와 재사용 패턴은 `docs/solutions/architecture/2026-03-08-visionos-volumetric-ux-polish.md`에 기록돼 있다.
+- 남은 closure 범위는 `defaultWindowPlacement`, DUNEVision 전반의 잔여 `.caption` 정리, 그리고 window placement 검증이다.
+- Phase 5C(`todos/023-ready-p2-vision-phase4-remaining.md`)는 이 TODO가 닫힌 뒤에 진행한다.
 
 ## 목표
 
@@ -71,3 +80,4 @@ visionOS HIG를 준수하고, iOS 복사가 아닌 공간 네이티브 경험을
 
 - Apple Human Interface Guidelines: Spatial Design
 - `docs/brainstorms/2026-03-08-vision-pro-production-roadmap.md` UX 감사 결과
+- `docs/solutions/architecture/2026-03-08-visionos-volumetric-ux-polish.md`

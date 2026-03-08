@@ -1,12 +1,20 @@
 ---
 source: brainstorm/vision-pro-production-roadmap
 priority: p1
-status: ready
+status: done
 created: 2026-03-08
 updated: 2026-03-08
 ---
 
 # Phase 5A: visionOS 실데이터 연결 + Critical Fix
+
+## 완료 메모
+
+- `feat(visionOS): connect real health data pipeline to all Vision views` 커밋으로 Vision Pro 실데이터 연결이 main에 반영됐다.
+- `VisionTrainViewModel`, `ConditionScatter3DView`, `TrainingVolume3DView`, `VisionDashboardView`, `VisionWellnessView`, `VisionLifeView`가 실제 snapshot/workout 기반 흐름을 사용하도록 연결됐다.
+- `BodyHeatmapSceneView`의 drag rotation이 delta 기반으로 정리됐고, `VisionTrainViewModelTests`가 추가됐다.
+- 원안의 `SharedHealthSnapshot` exercise metadata 확장 대신 HealthKit direct query + shared snapshot 조합으로 단순화해 같은 사용자 목표를 달성했다.
+- 구현 근거와 패턴은 `docs/solutions/architecture/2026-03-08-visionos-real-data-pipeline.md`에 기록돼 있다.
 
 ## 목표
 
@@ -45,19 +53,19 @@ production 차단 수준의 critical UX 문제를 수정한다.
 
 ### 5. Critical UX Fix
 
-- [ ] Train tab 개발 설명 텍스트 제거 (VisionTrainView)
-- [ ] BodyHeatmapSceneView DragGesture를 delta 기반으로 수정
-- [ ] Wellness 탭 기본 UI (Sleep + Body Composition read-only)
-- [ ] Life 탭 기본 UI (Habit read-only)
+- [x] Train tab 개발 설명 텍스트 제거 (VisionTrainView)
+- [x] BodyHeatmapSceneView DragGesture를 delta 기반으로 수정
+- [x] Wellness 탭 기본 UI (Sleep + Body Composition read-only)
+- [x] Life 탭 기본 UI (Habit read-only)
 
 ## 검증 기준
 
-- [ ] visionOS 시뮬레이터에서 앱 실행 시 모든 탭에 데이터 표시 (mock 주입)
-- [ ] Train 탭에서 실제 근육 피로도 표시 (demo data 없음)
-- [ ] Chart3D에서 실제 condition/training 데이터 표시
-- [ ] Dashboard 4개 윈도우 모두 "--" 없이 값 표시
-- [ ] Wellness/Life 탭에 "Coming Soon" 아닌 실제 UI
-- [ ] placeholder/개발 텍스트 0건
+- [x] visionOS 시뮬레이터에서 앱 실행 시 모든 탭에 데이터 표시 (mock 주입)
+- [x] Train 탭에서 실제 근육 피로도 표시 (demo data 없음)
+- [x] Chart3D에서 실제 condition/training 데이터 표시
+- [x] Dashboard 4개 윈도우 모두 "--" 없이 값 표시
+- [x] Wellness/Life 탭에 "Coming Soon" 아닌 실제 UI
+- [x] placeholder/개발 텍스트 0건
 
 ## 기술 요구사항
 
@@ -71,3 +79,4 @@ production 차단 수준의 critical UX 문제를 수정한다.
 - `docs/brainstorms/2026-03-08-vision-pro-production-roadmap.md`
 - `docs/solutions/architecture/visionos-multi-target-setup.md`
 - `docs/solutions/architecture/2026-03-07-visionos-mirror-sync-gating-and-spatial-fallback.md`
+- `docs/solutions/architecture/2026-03-08-visionos-real-data-pipeline.md`
