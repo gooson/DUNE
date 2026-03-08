@@ -116,9 +116,14 @@ struct ShanksCinematicSceneBackground: View {
     @Environment(\.appTheme) private var theme
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.horizontalSizeClass) private var sizeClass
 
     private var resolvedAccentTint: Color {
         accentTint ?? theme.shanksGlowColor
+    }
+
+    private var resolvedSceneTopInset: CGFloat {
+        style.sceneTopInset + (sizeClass == .regular ? 20 : 0)
     }
 
     private var gradientColors: [Color] {
@@ -193,7 +198,7 @@ struct ShanksCinematicSceneBackground: View {
                     .frame(height: style.sceneHeight)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-                .padding(.top, style.sceneTopInset)
+                .padding(.top, resolvedSceneTopInset)
             }
             .ignoresSafeArea()
         }
