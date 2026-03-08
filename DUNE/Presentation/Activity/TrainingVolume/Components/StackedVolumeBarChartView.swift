@@ -192,7 +192,7 @@ struct StackedVolumeBarChartView: View {
     private var chartAccessibilitySurface: some View {
         ChartUITestSurface(
             identifier: "training-volume-chart-daily-volume",
-            label: "Daily Volume Chart",
+            label: String(localized: "Daily Volume"),
             value: isScrollable ? visibleRangeLabel : ""
         )
     }

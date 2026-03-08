@@ -83,8 +83,8 @@ related_brainstorms:
 ## Testing Strategy
 
 - `scripts/build-ios.sh`
-- `xcodebuild test -project DUNE/DUNE.xcodeproj -scheme DUNETests -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.2' -only-testing DUNETests/TrainingVolumeViewModelTests -only-testing DUNETests/ChartModelsTests`
-- `xcodebuild test -project DUNE/DUNE.xcodeproj -scheme DUNEUITests -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.2' -only-testing DUNEUITests/Regression/ChartInteractionRegressionUITests`
+- `xcodebuild test -project DUNE/DUNE.xcodeproj -scheme DUNETests -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.3.1' -only-testing DUNETests/TrainingVolumeViewModelTests -only-testing DUNETests/ChartModelsTests`
+- `xcodebuild test -project DUNE/DUNE.xcodeproj -scheme DUNEUITests -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.3.1' -only-testing DUNEUITests/Regression/ChartInteractionRegressionUITests`
 
 ## Risks / Edge Cases
 
