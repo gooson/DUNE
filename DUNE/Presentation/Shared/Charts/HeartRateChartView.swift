@@ -95,10 +95,6 @@ struct HeartRateChartView: View {
             }
         }
         .chartYScale(domain: yDomain)
-        .chartXSelection(value: $selectedDate)
-        .chartGesture { proxy in
-            selectionGesture(proxy: proxy)
-        }
         .chartXAxis {
             AxisMarks(values: .automatic(desiredCount: 4)) { _ in
                 AxisValueLabel(format: .dateTime.hour().minute())
@@ -115,26 +111,24 @@ struct HeartRateChartView: View {
                     .foregroundStyle(theme.accentColor.opacity(0.30))
             }
         }
-        .chartOverlay { proxy in
-            GeometryReader { geometry in
-                if let plotFrame = proxy.plotFrame.map({ geometry[$0] }) {
-                    ZStack(alignment: .topLeading) {
-                        if let point = selectedPoint,
-                           let anchor = selectedAnchor(for: point, proxy: proxy, plotFrame: plotFrame) {
-                            FloatingChartSelectionOverlay(
-                                date: point.date,
-                                value: "\(Int(point.bpm).formattedWithSeparator) bpm",
-                                anchor: anchor,
-                                chartSize: geometry.size,
-                                plotFrame: plotFrame,
-                                dateFormat: .dateTime.hour().minute()
-                            )
-                            .transition(.opacity)
-                        }
-                    }
-                    .animation(.easeInOut(duration: 0.15), value: selectedDate)
-                    .allowsHitTesting(false)
-                }
+        .scrollableChartSelectionOverlay(
+            isScrollable: false,
+            visibleDomainLength: nil,
+            scrollPosition: nil,
+            selectedDate: $selectedDate,
+            selectionState: $selectionGestureState
+        ) { proxy, plotFrame, chartSize in
+            if let point = selectedPoint,
+               let anchor = selectedAnchor(for: point, proxy: proxy, plotFrame: plotFrame) {
+                FloatingChartSelectionOverlay(
+                    date: point.date,
+                    value: "\(Int(point.bpm).formattedWithSeparator) bpm",
+                    anchor: anchor,
+                    chartSize: chartSize,
+                    plotFrame: plotFrame,
+                    dateFormat: .dateTime.hour().minute()
+                )
+                .transition(.opacity)
             }
         }
         .sensoryFeedback(.selection, trigger: selectedPoint?.date)
@@ -176,17 +170,4 @@ struct HeartRateChartView: View {
         )
     }
 
-    private func selectionGesture(proxy: ChartProxy) -> some Gesture {
-        LongPressGesture(minimumDuration: ChartSelectionInteraction.holdDuration)
-            .sequenced(before: DragGesture(minimumDistance: 0, coordinateSpace: .local))
-            .onChanged { value in
-                guard case .second(true, let drag) = value, let drag else { return }
-                selectionGestureState.beginSelection(scrollPosition: nil)
-                proxy.selectXValue(at: drag.location.x)
-            }
-            .onEnded { _ in
-                selectionGestureState.reset()
-                selectedDate = nil
-            }
-    }
 }

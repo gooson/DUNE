@@ -1,6 +1,8 @@
 import Charts
 import CoreGraphics
 import Foundation
+import SwiftUI
+import UIKit
 
 enum ChartSelectionOverlayEdge: Sendable {
     case above
@@ -42,7 +44,8 @@ struct ChartSelectionGestureState: Sendable {
 }
 
 enum ChartSelectionInteraction {
-    static let holdDuration: TimeInterval = 0.18
+    static let holdDuration: TimeInterval = 0.35
+    static let allowableMovement: CGFloat = 44
     static let overlaySpacing: CGFloat = 12
     static let horizontalMargin: CGFloat = 12
     static let topMargin: CGFloat = 8
@@ -144,5 +147,66 @@ enum ChartSelectionInteraction {
             center: CGPoint(x: centerX, y: clampedY),
             edge: clampedY > anchor.y ? .below : .above
         )
+    }
+
+    @MainActor
+    static func clearSelection(
+        selectionState: Binding<ChartSelectionGestureState>,
+        selectedDate: Binding<Date?>
+    ) {
+        if selectionState.wrappedValue.phase != .idle {
+            var gestureState = selectionState.wrappedValue
+            gestureState.reset()
+            selectionState.wrappedValue = gestureState
+        }
+        if selectedDate.wrappedValue != nil {
+            selectedDate.wrappedValue = nil
+        }
+    }
+
+    @MainActor
+    static func handleLongPressSelection(
+        state: UIGestureRecognizer.State,
+        location: CGPoint,
+        proxy: ChartProxy,
+        plotFrame: CGRect,
+        selectionState: Binding<ChartSelectionGestureState>,
+        selectedDate: Binding<Date?>,
+        scrollPosition: Binding<Date>? = nil
+    ) {
+        switch state {
+        case .began, .changed:
+            let epsilon: CGFloat = 0.5
+            guard plotFrame.width > 1,
+                  location.x >= plotFrame.minX - epsilon,
+                  location.x <= plotFrame.maxX + epsilon,
+                  location.y >= plotFrame.minY - allowableMovement,
+                  location.y <= plotFrame.maxY + allowableMovement else {
+                clearSelection(selectionState: selectionState, selectedDate: selectedDate)
+                return
+            }
+
+            var gestureState = selectionState.wrappedValue
+            gestureState.beginSelection(scrollPosition: scrollPosition?.wrappedValue)
+            selectionState.wrappedValue = gestureState
+
+            if let scrollPosition,
+               let restore = gestureState.initialScrollPosition,
+               scrollPosition.wrappedValue != restore {
+                scrollPosition.wrappedValue = restore
+            }
+
+            selectedDate.wrappedValue = resolvedDate(
+                at: location,
+                proxy: proxy,
+                plotFrame: plotFrame
+            )
+
+        case .ended, .cancelled, .failed:
+            clearSelection(selectionState: selectionState, selectedDate: selectedDate)
+
+        default:
+            break
+        }
     }
 }

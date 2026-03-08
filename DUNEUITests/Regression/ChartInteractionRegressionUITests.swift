@@ -3,6 +3,30 @@ import XCTest
 /// Regression coverage for chart long-press vs period/selection interaction.
 @MainActor
 final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
+    func testRHRDetailChartScrollsToPastData() throws {
+        openDashboardMetricDetail("rhr")
+        assertDetailChartScrollsToPastData(category: "rhr")
+    }
+
+    func testSleepDetailChartScrollsToPastData() throws {
+        openDashboardMetricDetail("sleep")
+        assertDetailChartScrollsToPastData(category: "sleep")
+    }
+
+    func testStepsDetailChartScrollsToPastData() throws {
+        openDashboardMetricDetail("steps")
+        assertDetailChartScrollsToPastData(category: "steps")
+    }
+
+    func testWeightDetailChartScrollsToPastData() throws {
+        navigateToWellness()
+
+        let weightCard = waitForElement(AXID.wellnessCardWeight, timeout: 15)
+        weightCard.tap()
+
+        assertDetailChartScrollsToPastData(category: "weight")
+    }
+
     func testWeeklyStatsLongPressKeepsPeriodAndActivatesSelection() throws {
         navigateToActivity()
 
@@ -41,26 +65,7 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
         let hrvCard = waitForElement(AXID.wellnessCardHRV, timeout: 15)
         hrvCard.tap()
 
-        let detailScreen = waitForElement(AXID.metricDetailScreen("hrv"), timeout: 15)
-        XCTAssertTrue(detailScreen.exists, "HRV detail should open from the Wellness card")
-
-        let visibleRange = waitForElement(AXID.detailChartVisibleRange, timeout: 15)
-        let chart = waitForElement(AXID.detailChartSurface, timeout: 15)
-        let initialRange = visibleRange.label
-
-        let start = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.78, dy: 0.55))
-        let end = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.22, dy: 0.55))
-        start.press(forDuration: 0.05, thenDragTo: end)
-
-        if visibleRange.label == initialRange {
-            start.press(forDuration: 0.05, thenDragTo: end)
-        }
-
-        XCTAssertNotEqual(
-            visibleRange.label,
-            initialRange,
-            "Horizontal drag on the HRV chart should reveal an older visible range"
-        )
+        assertDetailChartScrollsToPastData(category: "hrv")
     }
 
     func testHRVDetailChartLongPressSelectionClearsAfterGesture() throws {
@@ -90,6 +95,201 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
         XCTAssertTrue(
             overlay.waitForNonExistence(timeout: 2),
             "Shared detail chart selection overlay should clear after the gesture ends"
+        )
+    }
+
+    func testHRVDetailLongPressSelectionDoesNotScrollVisibleRange() throws {
+        navigateToWellness()
+
+        let hrvCard = waitForElement(AXID.wellnessCardHRV, timeout: 15)
+        hrvCard.tap()
+
+        let detailScreen = waitForElement(AXID.metricDetailScreen("hrv"), timeout: 15)
+        XCTAssertTrue(detailScreen.exists, "HRV detail should open from the Wellness card")
+
+        let visibleRange = waitForElement(AXID.detailChartVisibleRange, timeout: 15)
+        let chart = waitForElement(AXID.detailChartSurface, timeout: 15)
+        let initialRange = visibleRange.label
+
+        let start = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.42, dy: 0.55))
+        let end = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.68, dy: 0.55))
+        start.press(forDuration: 0.45, thenDragTo: end)
+
+        XCTAssertEqual(
+            visibleRange.label,
+            initialRange,
+            "Long press selection should not scroll the chart visible range while inspecting values"
+        )
+    }
+
+    func testHRVDetailQuickDragScrollsWithoutActivatingSelection() throws {
+        navigateToWellness()
+
+        let hrvCard = waitForElement(AXID.wellnessCardHRV, timeout: 15)
+        hrvCard.tap()
+
+        let detailScreen = waitForElement(AXID.metricDetailScreen("hrv"), timeout: 15)
+        XCTAssertTrue(detailScreen.exists, "HRV detail should open from the Wellness card")
+
+        let visibleRange = waitForElement(AXID.detailChartVisibleRange, timeout: 15)
+        let chart = waitForElement(AXID.detailChartSurface, timeout: 15)
+        let selectionProbe = waitForElement(AXID.chartSelectionProbe, timeout: 10)
+        let initialRange = visibleRange.label
+        XCTAssertEqual(selectionProbe.label, "none", "Selection probe should be empty before quick drag")
+
+        let start = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.80, dy: 0.55))
+        let end = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.20, dy: 0.55))
+        start.press(forDuration: 0.05, thenDragTo: end)
+
+        if visibleRange.label == initialRange {
+            start.press(forDuration: 0.05, thenDragTo: end)
+        }
+
+        XCTAssertNotEqual(
+            visibleRange.label,
+            initialRange,
+            "Quick horizontal drag should still scroll the chart to older data"
+        )
+        XCTAssertEqual(
+            selectionProbe.label,
+            "none",
+            "Quick drag should not accidentally activate chart selection"
+        )
+    }
+
+    func testHRVDetailChartScrollResumesAfterLongPressEnds() throws {
+        navigateToWellness()
+
+        let hrvCard = waitForElement(AXID.wellnessCardHRV, timeout: 15)
+        hrvCard.tap()
+
+        let detailScreen = waitForElement(AXID.metricDetailScreen("hrv"), timeout: 15)
+        XCTAssertTrue(detailScreen.exists, "HRV detail should open from the Wellness card")
+
+        let visibleRange = waitForElement(AXID.detailChartVisibleRange, timeout: 15)
+        let chart = waitForElement(AXID.detailChartSurface, timeout: 15)
+
+        let selectionStart = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.42, dy: 0.55))
+        let selectionEnd = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.58, dy: 0.55))
+        selectionStart.press(forDuration: 0.45, thenDragTo: selectionEnd)
+
+        let rangeAfterSelection = visibleRange.label
+        let scrollStart = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.80, dy: 0.55))
+        let scrollEnd = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.20, dy: 0.55))
+        scrollStart.press(forDuration: 0.05, thenDragTo: scrollEnd)
+
+        if visibleRange.label == rangeAfterSelection {
+            scrollStart.press(forDuration: 0.05, thenDragTo: scrollEnd)
+        }
+
+        XCTAssertNotEqual(
+            visibleRange.label,
+            rangeAfterSelection,
+            "Chart should resume horizontal scrolling immediately after long press selection ends"
+        )
+    }
+
+    func testHRVDetailScrollAfterSelectionClearsOverlayAndDoesNotSnapBack() throws {
+        navigateToWellness()
+
+        let hrvCard = waitForElement(AXID.wellnessCardHRV, timeout: 15)
+        hrvCard.tap()
+
+        let detailScreen = waitForElement(AXID.metricDetailScreen("hrv"), timeout: 15)
+        XCTAssertTrue(detailScreen.exists, "HRV detail should open from the Wellness card")
+
+        let visibleRange = waitForElement(AXID.detailChartVisibleRange, timeout: 15)
+        let chart = waitForElement(AXID.detailChartSurface, timeout: 15)
+
+        let firstSelectionStart = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.42, dy: 0.55))
+        let firstSelectionEnd = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.58, dy: 0.55))
+        firstSelectionStart.press(forDuration: 0.45, thenDragTo: firstSelectionEnd)
+
+        let scrollStart = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.80, dy: 0.55))
+        let scrollEnd = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.20, dy: 0.55))
+        scrollStart.press(forDuration: 0.05, thenDragTo: scrollEnd)
+
+        if app.descendants(matching: .any)[AXID.chartSelectionOverlay].firstMatch.exists {
+            scrollStart.press(forDuration: 0.05, thenDragTo: scrollEnd)
+        }
+
+        let rangeAfterScroll = visibleRange.label
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.chartSelectionOverlay].firstMatch.waitForNonExistence(timeout: 2),
+            "Scrolling after selection should clear any stale chart overlay"
+        )
+
+        let secondSelectionStart = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.46, dy: 0.55))
+        let secondSelectionEnd = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.62, dy: 0.55))
+        secondSelectionStart.press(forDuration: 0.45, thenDragTo: secondSelectionEnd)
+
+        XCTAssertEqual(
+            visibleRange.label,
+            rangeAfterScroll,
+            "A new long press should not restore the previous visible month after scrolling"
+        )
+    }
+
+    func testHRVDetailScreenVerticalScrollWorksFromChartSurface() throws {
+        navigateToWellness()
+
+        let hrvCard = waitForElement(AXID.wellnessCardHRV, timeout: 15)
+        hrvCard.tap()
+
+        let detailScreen = waitForElement(AXID.metricDetailScreen("hrv"), timeout: 15)
+        XCTAssertTrue(detailScreen.exists, "HRV detail should open from the Wellness card")
+
+        let chart = waitForElement(AXID.detailChartSurface, timeout: 15)
+        let showAllData = waitForElement(AXID.metricDetailShowAllData, timeout: 15)
+
+        if !showAllData.isHittable {
+            let start = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.50, dy: 0.78))
+            let end = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.50, dy: 0.12))
+            start.press(forDuration: 0.05, thenDragTo: end)
+
+            if !showAllData.isHittable {
+                start.press(forDuration: 0.05, thenDragTo: end)
+            }
+        }
+
+        XCTAssertTrue(
+            showAllData.isHittable,
+            "Vertical drag starting on the chart should still scroll the detail screen"
+        )
+    }
+
+    private func openDashboardMetricDetail(_ category: String) {
+        navigateToDashboard()
+
+        XCTAssertTrue(
+            app.scrollToElementIfNeeded(AXID.dashboardMetricCard(category), maxSwipes: 6),
+            "Dashboard metric card for \(category) should be reachable in seeded state"
+        )
+
+        let card = waitForElement(AXID.dashboardMetricCard(category), timeout: 15)
+        card.tap()
+    }
+
+    private func assertDetailChartScrollsToPastData(category: String) {
+        let detailScreen = waitForElement(AXID.metricDetailScreen(category), timeout: 15)
+        XCTAssertTrue(detailScreen.exists, "\(category) detail should open from seeded navigation")
+
+        let visibleRange = waitForElement(AXID.detailChartVisibleRange, timeout: 15)
+        let chart = waitForElement(AXID.detailChartSurface, timeout: 15)
+        let initialRange = visibleRange.label
+
+        let start = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.78, dy: 0.55))
+        let end = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.22, dy: 0.55))
+        start.press(forDuration: 0.05, thenDragTo: end)
+
+        if visibleRange.label == initialRange {
+            start.press(forDuration: 0.05, thenDragTo: end)
+        }
+
+        XCTAssertNotEqual(
+            visibleRange.label,
+            initialRange,
+            "Horizontal drag on the \(category) chart should reveal an older visible range"
         )
     }
 }

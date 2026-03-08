@@ -66,15 +66,8 @@ struct RangeBarChartView: View {
                         .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
                 }
             }
-            .chartScrollableAxes(.horizontal)
-            .chartXVisibleDomain(length: period.visibleDomainSeconds)
-            .chartScrollPosition(x: $scrollPosition)
             .chartYScale(domain: yDomain)
             .chartXScale(domain: effectiveXDomain)
-            .chartXSelection(value: $selectedDate)
-            .chartGesture { proxy in
-                selectionGesture(proxy: proxy)
-            }
             .chartXAxis {
                 AxisMarks(values: .stride(by: period.strideComponent, count: period.strideCount)) { _ in
                     AxisValueLabel(format: period.axisLabelFormat)
@@ -91,25 +84,22 @@ struct RangeBarChartView: View {
                         .foregroundStyle(theme.accentColor.opacity(0.30))
                 }
             }
-            .chartOverlay { proxy in
-                GeometryReader { geometry in
-                    if let plotFrame = proxy.plotFrame.map({ geometry[$0] }) {
-                        ZStack(alignment: .topLeading) {
-                            if let point = selectedPoint,
-                               let anchor = selectedAnchor(for: point, proxy: proxy, plotFrame: plotFrame) {
-                                FloatingChartSelectionOverlay(
-                                    date: point.date,
-                                    value: "\(Int(point.min).formattedWithSeparator)–\(Int(point.max).formattedWithSeparator) bpm (\(Labels.average) \(Int(point.average).formattedWithSeparator))",
-                                    anchor: anchor,
-                                    chartSize: geometry.size,
-                                    plotFrame: plotFrame
-                                )
-                                .transition(.opacity)
-                            }
-                        }
-                        .animation(.easeInOut(duration: 0.15), value: selectedDate)
-                        .allowsHitTesting(false)
-                    }
+            .scrollableChartSelectionOverlay(
+                visibleDomainLength: period.visibleDomainSeconds,
+                scrollPosition: $scrollPosition,
+                selectedDate: $selectedDate,
+                selectionState: $selectionGestureState
+            ) { proxy, plotFrame, chartSize in
+                if let point = selectedPoint,
+                   let anchor = selectedAnchor(for: point, proxy: proxy, plotFrame: plotFrame) {
+                    FloatingChartSelectionOverlay(
+                        date: point.date,
+                        value: "\(Int(point.min).formattedWithSeparator)–\(Int(point.max).formattedWithSeparator) bpm (\(Labels.average) \(Int(point.average).formattedWithSeparator))",
+                        anchor: anchor,
+                        chartSize: chartSize,
+                        plotFrame: plotFrame
+                    )
+                    .transition(.opacity)
                 }
             }
             .sensoryFeedback(.selection, trigger: selectedPoint?.date)
@@ -180,20 +170,6 @@ struct RangeBarChartView: View {
             yPosition: proxy.position(forY: point.average),
             plotFrame: plotFrame
         )
-    }
-
-    private func selectionGesture(proxy: ChartProxy) -> some Gesture {
-        LongPressGesture(minimumDuration: ChartSelectionInteraction.holdDuration)
-            .sequenced(before: DragGesture(minimumDistance: 0, coordinateSpace: .local))
-            .onChanged { value in
-                guard case .second(true, let drag) = value, let drag else { return }
-                selectionGestureState.beginSelection(scrollPosition: scrollPosition)
-                proxy.selectXValue(at: drag.location.x)
-            }
-            .onEnded { _ in
-                selectionGestureState.reset()
-                selectedDate = nil
-            }
     }
 
 }

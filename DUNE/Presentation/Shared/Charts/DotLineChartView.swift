@@ -90,15 +90,10 @@ struct DotLineChartView: View {
                         .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
                 }
             }
-            .chartScrollableAxes(timePeriod != nil ? .horizontal : [])
             .modifier(DotLineScrollModifier(
                 timePeriod: timePeriod,
                 scrollPosition: scrollPosition ?? $internalScrollPosition
             ))
-            .chartXSelection(value: $selectedDate)
-            .chartGesture { proxy in
-                selectionGesture(proxy: proxy)
-            }
             .chartYScale(domain: yDomain)
             .chartXScale(domain: effectiveXDomain)
             .chartXAxis {
@@ -117,25 +112,23 @@ struct DotLineChartView: View {
                         .foregroundStyle(theme.accentColor.opacity(0.30))
                 }
             }
-            .chartOverlay { proxy in
-                GeometryReader { geometry in
-                    if let plotFrame = proxy.plotFrame.map({ geometry[$0] }) {
-                        ZStack(alignment: .topLeading) {
-                            if let selected = selectedPoint,
-                               let anchor = selectedAnchor(for: selected, proxy: proxy, plotFrame: plotFrame) {
-                                FloatingChartSelectionOverlay(
-                                    date: selected.date,
-                                    value: selected.value.formattedWithSeparator(fractionDigits: 1),
-                                    anchor: anchor,
-                                    chartSize: geometry.size,
-                                    plotFrame: plotFrame
-                                )
-                                .transition(.opacity)
-                            }
-                        }
-                        .animation(.easeInOut(duration: 0.15), value: selectedDate)
-                        .allowsHitTesting(false)
-                    }
+            .scrollableChartSelectionOverlay(
+                isScrollable: timePeriod != nil,
+                visibleDomainLength: timePeriod?.visibleDomainSeconds,
+                scrollPosition: scrollPosition ?? $internalScrollPosition,
+                selectedDate: $selectedDate,
+                selectionState: $selectionGestureState
+            ) { proxy, plotFrame, chartSize in
+                if let selected = selectedPoint,
+                   let anchor = selectedAnchor(for: selected, proxy: proxy, plotFrame: plotFrame) {
+                    FloatingChartSelectionOverlay(
+                        date: selected.date,
+                        value: selected.value.formattedWithSeparator(fractionDigits: 1),
+                        anchor: anchor,
+                        chartSize: chartSize,
+                        plotFrame: plotFrame
+                    )
+                    .transition(.opacity)
                 }
             }
             .sensoryFeedback(.selection, trigger: selectedPoint?.date)
@@ -219,19 +212,6 @@ struct DotLineChartView: View {
         )
     }
 
-    private func selectionGesture(proxy: ChartProxy) -> some Gesture {
-        LongPressGesture(minimumDuration: ChartSelectionInteraction.holdDuration)
-            .sequenced(before: DragGesture(minimumDistance: 0, coordinateSpace: .local))
-            .onChanged { value in
-                guard case .second(true, let drag) = value, let drag else { return }
-                selectionGestureState.beginSelection(scrollPosition: scrollPosition?.wrappedValue)
-                proxy.selectXValue(at: drag.location.x)
-            }
-            .onEnded { _ in
-                selectionGestureState.reset()
-                selectedDate = nil
-            }
-    }
 }
 
 /// Applies chartXVisibleDomain + chartScrollPosition only when timePeriod is set.
