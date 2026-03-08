@@ -67,13 +67,28 @@ class UITestBaseCase: XCTestCase {
         )
     }
 
+    private func isApplicationRunning(_ application: XCUIApplication) -> Bool {
+        switch application.state {
+        case .runningForeground, .runningBackground, .runningBackgroundSuspended:
+            return true
+        default:
+            return false
+        }
+    }
+
+    @discardableResult
+    private func terminateIfRunning(_ application: XCUIApplication, timeout: TimeInterval = 5) -> Bool {
+        guard isApplicationRunning(application) else { return true }
+        application.terminate()
+        return application.wait(for: .notRunning, timeout: timeout)
+    }
+
     override func tearDownWithError() throws {
         if let app {
             if let failureCount = testRun?.failureCount, failureCount > 0 {
                 addScreenshotAttachment(named: defaultArtifactName(suffix: "failure"))
             }
-            app.terminate()
-            _ = app.wait(for: .notRunning, timeout: 2)
+            _ = terminateIfRunning(app)
         }
         app = nil
         try super.tearDownWithError()
@@ -97,8 +112,8 @@ class UITestBaseCase: XCTestCase {
 
         addSystemPermissionMonitor()
 
-        // Terminate any lingering instance before launch (CI resilience)
-        app.terminate()
+        // Avoid terminating a non-running AUT; this can deadlock the first CI launch.
+        _ = terminateIfRunning(app)
         app.launch()
     }
 
