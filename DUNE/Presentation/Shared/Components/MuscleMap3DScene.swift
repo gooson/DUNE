@@ -253,6 +253,18 @@ final class MuscleMap3DScene {
         }
     }
 
+    // MARK: - Public Accessors
+
+    func muscleModelEntities(for muscle: MuscleGroup) -> [ModelEntity] {
+        muscleModels[muscle] ?? []
+    }
+
+    func muscleEntity(for muscle: MuscleGroup) -> Entity? {
+        muscleRoots[muscle]
+    }
+
+    var shellModelEntities: [ModelEntity] { shellModels }
+
     func muscle(for entity: Entity) -> MuscleGroup? {
         var current: Entity? = entity
 
