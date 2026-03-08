@@ -3,26 +3,32 @@ import FoundationModels
 
 /// Enhances coaching insight messages using Apple's on-device Foundation Models.
 /// Falls back to the original template message on unsupported devices or errors.
-struct AICoachingMessageService: CoachingMessageEnhancing, Sendable {
+final class AICoachingMessageService: CoachingMessageEnhancing, @unchecked Sendable {
 
     /// Whether Foundation Models are available on this device.
     static var isAvailable: Bool {
         SystemLanguageModel.default.isAvailable
     }
 
+    private var session: LanguageModelSession?
+
     func enhance(insight: CoachingInsight, context: CoachingInput) async -> CoachingInsight {
         guard Self.isAvailable else { return insight }
 
         do {
-            let session = LanguageModelSession()
+            if session == nil { session = LanguageModelSession() }
             let prompt = buildPrompt(insight: insight, context: context)
-            let response = try await session.respond(
+            let response = try await session!.respond(
                 to: prompt,
                 generating: AICoachingMessage.self
             )
 
-            let title = response.content.title.trimmingCharacters(in: .whitespacesAndNewlines)
-            let message = response.content.message.trimmingCharacters(in: .whitespacesAndNewlines)
+            let title = String(response.content.title
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+                .prefix(50))
+            let message = String(response.content.message
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+                .prefix(200))
 
             guard !message.isEmpty else { return insight }
 
@@ -45,7 +51,7 @@ struct AICoachingMessageService: CoachingMessageEnhancing, Sendable {
     func buildPrompt(insight: CoachingInsight, context: CoachingInput) -> String {
         var lines: [String] = []
 
-        let languageInstruction = localeInstruction()
+        let languageInstruction = Self.localeInstruction()
         lines.append(languageInstruction)
         lines.append("")
 
@@ -76,7 +82,7 @@ struct AICoachingMessageService: CoachingMessageEnhancing, Sendable {
     }
 
     /// Returns a locale-appropriate instruction prefix for the prompt.
-    private func localeInstruction() -> String {
+    private static func localeInstruction() -> String {
         let langCode = Locale.current.language.languageCode?.identifier ?? "en"
         switch langCode {
         case "ko":

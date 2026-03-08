@@ -105,6 +105,7 @@ final class DashboardViewModel {
     private let coachingEngine = CoachingEngine()
     private let coachingMessageEnhancer: (any CoachingMessageEnhancing)?
     private var enhanceCoachingTask: Task<Void, Never>?
+    private var lastCoachingInput: CoachingInput?
     private let trendService = TrendAnalysisService()
     private let dismissStore = InsightCardDismissStore.shared
 
@@ -1039,8 +1040,6 @@ final class DashboardViewModel {
         insightCards.removeAll { $0.id == id }
     }
 
-    private var lastCoachingInput: CoachingInput?
-
     private func buildCoachingInsights() {
         let sleepMetric = sortedMetrics.first { $0.category == .sleep }
 
@@ -1079,9 +1078,11 @@ final class DashboardViewModel {
               let input = lastCoachingInput else { return }
 
         enhanceCoachingTask?.cancel()
+        let expectedInsightID = insight.id
         enhanceCoachingTask = Task {
             let enhanced = await enhancer.enhance(insight: insight, context: input)
-            guard !Task.isCancelled else { return }
+            guard !Task.isCancelled,
+                  focusInsight?.id == expectedInsightID else { return }
             focusInsight = enhanced
             coachingMessage = enhanced.message
         }
