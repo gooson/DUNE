@@ -1,7 +1,7 @@
 ---
 source: brainstorm/general-bedtime-reminder
 priority: p3
-status: in-progress
+status: done
 created: 2026-03-08
 updated: 2026-03-09
 ---
