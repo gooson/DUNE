@@ -9,11 +9,14 @@ struct SessionPagingView: View {
     let isCardioMode: Bool
 
     var body: some View {
-        if isCardioMode {
-            CardioSessionPagingView()
-        } else {
-            StrengthSessionPagingView()
+        Group {
+            if isCardioMode {
+                CardioSessionPagingView()
+            } else {
+                StrengthSessionPagingView()
+            }
         }
+        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionPagingRoot)
     }
 }
 
@@ -42,6 +45,7 @@ private struct CardioSessionPagingView: View {
             NowPlayingView()
                 .tag(CardioTab.nowPlaying)
         }
+        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionPagingCardio)
         .onChange(of: isLuminanceReduced) { _, reduced in
             if reduced {
                 selectedTab = .mainMetrics
@@ -154,6 +158,7 @@ private struct StrengthSessionPagingView: View {
                 .tag(StrengthTab.nowPlaying)
         }
         .tabViewStyle(.verticalPage(transitionStyle: .blur))
+        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionPagingStrength)
         .onChange(of: isLuminanceReduced) { _, reduced in
             if reduced {
                 selectedTab = .metrics

@@ -70,15 +70,15 @@ updated: 2026-03-08
 - [074 HabitHistorySheet](074-ready-p2-e2e-dune-habit-history-sheet.md)
 
 ### DUNEWatch
-- [075 CarouselHomeView](075-ready-p2-e2e-dunewatch-carousel-home-view.md)
-- [076 QuickStartAllExercisesView](076-ready-p2-e2e-dunewatch-quick-start-all-exercises-view.md)
-- [077 WorkoutPreviewView](077-ready-p2-e2e-dunewatch-workout-preview-view.md)
-- [078 SessionPagingView](078-ready-p2-e2e-dunewatch-session-paging-view.md)
-- [079 MetricsView](079-ready-p2-e2e-dunewatch-metrics-view.md)
-- [080 ControlsView](080-ready-p2-e2e-dunewatch-controls-view.md)
-- [081 RestTimerView](081-ready-p2-e2e-dunewatch-rest-timer-view.md)
-- [082 SetInputSheet](082-ready-p2-e2e-dunewatch-set-input-sheet.md)
-- [083 SessionSummaryView](083-ready-p2-e2e-dunewatch-session-summary-view.md)
+- [075 CarouselHomeView](075-done-p2-e2e-dunewatch-carousel-home-view.md)
+- [076 QuickStartAllExercisesView](076-done-p2-e2e-dunewatch-quick-start-all-exercises-view.md)
+- [077 WorkoutPreviewView](077-done-p2-e2e-dunewatch-workout-preview-view.md)
+- [078 SessionPagingView](078-done-p2-e2e-dunewatch-session-paging-view.md)
+- [079 MetricsView](079-done-p2-e2e-dunewatch-metrics-view.md)
+- [080 ControlsView](080-done-p2-e2e-dunewatch-controls-view.md)
+- [081 RestTimerView](081-done-p2-e2e-dunewatch-rest-timer-view.md)
+- [082 SetInputSheet](082-done-p2-e2e-dunewatch-set-input-sheet.md)
+- [083 SessionSummaryView](083-done-p2-e2e-dunewatch-session-summary-view.md)
 
 ## Deferred Surface TODOs
 

@@ -102,14 +102,15 @@ struct CarouselHomeView: View {
         Group {
             if cards.isEmpty {
                 emptyState
-                    .accessibilityIdentifier("watch-home-empty-state")
+                    .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.homeEmptyState)
             } else {
                 carousel
-                    .accessibilityIdentifier("watch-home-carousel")
+                    .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.homeCarousel)
             }
         }
         .background { WatchWaveBackground() }
         .navigationTitle("DUNE")
+        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.homeRoot)
         .onAppear {
             updateTemplateContentKey()
             rebuildCards()
@@ -175,6 +176,7 @@ struct CarouselHomeView: View {
                     daysAgo: daysAgo
                 )
             }
+            .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.homeCard(card.id))
             .buttonStyle(.plain)
 
         case .routine(let name, let entries):
@@ -183,13 +185,14 @@ struct CarouselHomeView: View {
             )) {
                 CarouselRoutineCardView(name: name, entries: entries)
             }
+            .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.homeCard(card.id))
             .buttonStyle(.plain)
 
         case .allExercises:
             NavigationLink(value: WatchRoute.quickStartAll) {
                 allExercisesCard
             }
-            .accessibilityIdentifier("watch-home-card-all-exercises")
+            .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.homeAllExercisesCard)
             .buttonStyle(.plain)
         }
     }
@@ -233,7 +236,7 @@ struct CarouselHomeView: View {
             NavigationLink(value: WatchRoute.quickStartAll) {
                 Label(String(localized: "Browse All"), systemImage: "magnifyingglass")
             }
-            .accessibilityIdentifier("watch-home-browse-all-link")
+            .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.homeBrowseAllLink)
             .buttonStyle(.borderedProminent)
             .tint(DS.Color.positive)
             .padding(.top, DS.Spacing.md)

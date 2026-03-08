@@ -37,7 +37,7 @@ struct QuickStartAllExercisesView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                 .padding()
-                .accessibilityIdentifier("watch-quickstart-empty")
+                .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.quickStartEmpty)
             } else {
                 List {
                     Section {
@@ -46,10 +46,10 @@ struct QuickStartAllExercisesView: View {
                                 .tag(nil as WatchExerciseCategory?)
                             ForEach(WatchExerciseCategory.ordered, id: \.self) { category in
                                 Text(verbatim: category.displayName)
-                                    .tag(Optional(category))
+                                .tag(Optional(category))
                             }
                         }
-                        .accessibilityIdentifier("watch-quickstart-category-picker")
+                        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.quickStartCategoryPicker)
                     }
 
                     if isSearching || isFilterActive {
@@ -58,26 +58,35 @@ struct QuickStartAllExercisesView: View {
                         }
                     } else {
                         if !cachedRecent.isEmpty {
-                            Section("Recent") {
+                            Section {
                                 ForEach(cachedRecent, id: \.id) { exercise in
                                     exerciseRow(exercise)
                                 }
+                            } header: {
+                                Text("Recent")
+                                    .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.quickStartSectionRecent)
                             }
                         }
 
                         if !cachedPreferred.isEmpty {
-                            Section("Preferred") {
+                            Section {
                                 ForEach(cachedPreferred, id: \.id) { exercise in
                                     exerciseRow(exercise)
                                 }
+                            } header: {
+                                Text("Preferred")
+                                    .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.quickStartSectionPreferred)
                             }
                         }
 
                         if !cachedPopular.isEmpty {
-                            Section("Popular") {
+                            Section {
                                 ForEach(cachedPopular, id: \.id) { exercise in
                                     exerciseRow(exercise)
                                 }
+                            } header: {
+                                Text("Popular")
+                                    .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.quickStartSectionPopular)
                             }
                         }
 
@@ -92,12 +101,13 @@ struct QuickStartAllExercisesView: View {
                         }
                     }
                 }
-                .accessibilityIdentifier("watch-quickstart-list")
+                .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.quickStartList)
                 .scrollContentBackground(.hidden)
             }
         }
         .background { WatchWaveBackground() }
         .navigationTitle(String(localized: "All Exercises"))
+        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.quickStartScreen)
         .searchable(text: $searchText, prompt: String(localized: "Search"))
         .onAppear {
             rebuildLists()
@@ -115,7 +125,7 @@ struct QuickStartAllExercisesView: View {
         return NavigationLink(value: WatchRoute.workoutPreview(snapshotFromExercise(exercise))) {
             ExerciseTileView(exercise: exercise, subtitle: subtitle)
         }
-        .accessibilityIdentifier("watch-quickstart-exercise-\(exercise.id)")
+        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.quickStartExercise(exercise.id))
     }
 
     private func rebuildLists() {
