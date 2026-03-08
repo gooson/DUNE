@@ -95,4 +95,157 @@ struct VisionSurfaceAccessibilityTests {
         #expect(VisionSurfaceAccessibility.trainMuscleMapCard == "vision-train-muscle-map-card")
         #expect(Set(identifiers).count == identifiers.count)
     }
+
+    @Test("Dashboard window scene identifiers stay stable and unique")
+    func dashboardWindowSceneIdentifiers() {
+        let rootIdentifiers = VisionDashboardWindowKind.allCases.map(VisionSurfaceAccessibility.dashboardWindowRootID)
+        let refreshIdentifiers = VisionDashboardWindowKind.allCases.map(VisionSurfaceAccessibility.dashboardWindowRefreshButtonID)
+        let heroIdentifiers = VisionDashboardWindowKind.allCases.map(VisionSurfaceAccessibility.dashboardWindowHeroCardID)
+        let detailIdentifiers = VisionDashboardWindowKind.allCases.map(VisionSurfaceAccessibility.dashboardWindowDetailSectionID)
+        let loadingIdentifiers = VisionDashboardWindowKind.allCases.map(VisionSurfaceAccessibility.dashboardWindowLoadingStateID)
+        let unavailableIdentifiers = VisionDashboardWindowKind.allCases.map(VisionSurfaceAccessibility.dashboardWindowUnavailableStateID)
+        let messageIdentifiers = VisionDashboardWindowKind.allCases.map(VisionSurfaceAccessibility.dashboardWindowMessageCardID)
+
+        #expect(
+            rootIdentifiers
+                == [
+                    "vision-dashboard-window-condition-root",
+                    "vision-dashboard-window-activity-root",
+                    "vision-dashboard-window-sleep-root",
+                    "vision-dashboard-window-body-root",
+                ]
+        )
+        #expect(
+            refreshIdentifiers
+                == [
+                    "vision-dashboard-window-condition-refresh-button",
+                    "vision-dashboard-window-activity-refresh-button",
+                    "vision-dashboard-window-sleep-refresh-button",
+                    "vision-dashboard-window-body-refresh-button",
+                ]
+        )
+        #expect(
+            heroIdentifiers
+                == [
+                    "vision-dashboard-window-condition-hero-card",
+                    "vision-dashboard-window-activity-hero-card",
+                    "vision-dashboard-window-sleep-hero-card",
+                    "vision-dashboard-window-body-hero-card",
+                ]
+        )
+        #expect(
+            detailIdentifiers
+                == [
+                    "vision-dashboard-window-condition-detail-section",
+                    "vision-dashboard-window-activity-detail-section",
+                    "vision-dashboard-window-sleep-detail-section",
+                    "vision-dashboard-window-body-detail-section",
+                ]
+        )
+        #expect(
+            loadingIdentifiers
+                == [
+                    "vision-dashboard-window-condition-loading-state",
+                    "vision-dashboard-window-activity-loading-state",
+                    "vision-dashboard-window-sleep-loading-state",
+                    "vision-dashboard-window-body-loading-state",
+                ]
+        )
+        #expect(
+            unavailableIdentifiers
+                == [
+                    "vision-dashboard-window-condition-unavailable-state",
+                    "vision-dashboard-window-activity-unavailable-state",
+                    "vision-dashboard-window-sleep-unavailable-state",
+                    "vision-dashboard-window-body-unavailable-state",
+                ]
+        )
+        #expect(
+            messageIdentifiers
+                == [
+                    "vision-dashboard-window-condition-message-card",
+                    "vision-dashboard-window-activity-message-card",
+                    "vision-dashboard-window-sleep-message-card",
+                    "vision-dashboard-window-body-message-card",
+                ]
+        )
+        #expect(VisionSurfaceAccessibility.dashboardWindowActivityRecentSessions == "vision-dashboard-window-activity-recent-sessions")
+        #expect(Set(rootIdentifiers).count == VisionDashboardWindowKind.allCases.count)
+        #expect(Set(refreshIdentifiers).count == VisionDashboardWindowKind.allCases.count)
+        #expect(Set(heroIdentifiers).count == VisionDashboardWindowKind.allCases.count)
+        #expect(Set(detailIdentifiers).count == VisionDashboardWindowKind.allCases.count)
+        #expect(Set(loadingIdentifiers).count == VisionDashboardWindowKind.allCases.count)
+        #expect(Set(unavailableIdentifiers).count == VisionDashboardWindowKind.allCases.count)
+        #expect(Set(messageIdentifiers).count == VisionDashboardWindowKind.allCases.count)
+    }
+
+    @Test("Volumetric identifiers stay stable and unique")
+    func volumetricIdentifiers() {
+        let sceneIdentifiers = VisionSpatialSceneKind.allCases.map(VisionSurfaceAccessibility.volumetricSceneID)
+        let identifiers = [
+            VisionSurfaceAccessibility.volumetricRoot,
+            VisionSurfaceAccessibility.volumetricSceneStage,
+            VisionSurfaceAccessibility.volumetricScenePickerOrnament,
+            VisionSurfaceAccessibility.volumetricScenePicker,
+            VisionSurfaceAccessibility.volumetricTrailingOrnament,
+            VisionSurfaceAccessibility.volumetricMetricStrip,
+            VisionSurfaceAccessibility.volumetricMuscleStrip,
+            VisionSurfaceAccessibility.volumetricLoadingState,
+            VisionSurfaceAccessibility.volumetricMessageState,
+            VisionSurfaceAccessibility.volumetricRetryButton,
+        ]
+
+        #expect(VisionSurfaceAccessibility.volumetricRoot == "vision-volumetric-root")
+        #expect(VisionSurfaceAccessibility.volumetricSceneStage == "vision-volumetric-scene-stage")
+        #expect(VisionSurfaceAccessibility.volumetricScenePickerOrnament == "vision-volumetric-picker-ornament")
+        #expect(VisionSurfaceAccessibility.volumetricScenePicker == "vision-volumetric-scene-picker")
+        #expect(VisionSurfaceAccessibility.volumetricTrailingOrnament == "vision-volumetric-trailing-ornament")
+        #expect(VisionSurfaceAccessibility.volumetricMetricStrip == "vision-volumetric-metric-strip")
+        #expect(VisionSurfaceAccessibility.volumetricMuscleStrip == "vision-volumetric-muscle-strip")
+        #expect(VisionSurfaceAccessibility.volumetricLoadingState == "vision-volumetric-loading-state")
+        #expect(VisionSurfaceAccessibility.volumetricMessageState == "vision-volumetric-message-state")
+        #expect(VisionSurfaceAccessibility.volumetricRetryButton == "vision-volumetric-retry-button")
+        #expect(
+            sceneIdentifiers
+                == [
+                    "vision-volumetric-scene-heartRateOrb",
+                    "vision-volumetric-scene-trainingBlocks",
+                    "vision-volumetric-scene-bodyHeatmap",
+                ]
+        )
+        #expect(Set(identifiers).count == identifiers.count)
+        #expect(Set(sceneIdentifiers).count == VisionSpatialSceneKind.allCases.count)
+    }
+
+    @Test("Immersive identifiers stay stable and unique")
+    func immersiveIdentifiers() {
+        let identifiers = [
+            VisionSurfaceAccessibility.immersiveRoot,
+            VisionSurfaceAccessibility.immersiveScene,
+            VisionSurfaceAccessibility.immersiveHeader,
+            VisionSurfaceAccessibility.immersiveRefreshButton,
+            VisionSurfaceAccessibility.immersiveCloseButton,
+            VisionSurfaceAccessibility.immersiveControlPanel,
+            VisionSurfaceAccessibility.immersiveModePicker,
+            VisionSurfaceAccessibility.immersiveLoadingState,
+            VisionSurfaceAccessibility.immersiveFailedState,
+            VisionSurfaceAccessibility.immersiveReadyPanel,
+            VisionSurfaceAccessibility.immersiveInfoCard,
+            VisionSurfaceAccessibility.immersiveRecoveryAction,
+        ]
+
+        #expect(VisionSurfaceAccessibility.immersiveRoot == "vision-immersive-root")
+        #expect(VisionSurfaceAccessibility.immersiveScene == "vision-immersive-scene")
+        #expect(VisionSurfaceAccessibility.immersiveHeader == "vision-immersive-header")
+        #expect(VisionSurfaceAccessibility.immersiveRefreshButton == "vision-immersive-refresh-button")
+        #expect(VisionSurfaceAccessibility.immersiveCloseButton == "vision-immersive-close-button")
+        #expect(VisionSurfaceAccessibility.immersiveControlPanel == "vision-immersive-control-panel")
+        #expect(VisionSurfaceAccessibility.immersiveModePicker == "vision-immersive-mode-picker")
+        #expect(VisionSurfaceAccessibility.immersiveLoadingState == "vision-immersive-loading-state")
+        #expect(VisionSurfaceAccessibility.immersiveFailedState == "vision-immersive-failed-state")
+        #expect(VisionSurfaceAccessibility.immersiveReadyPanel == "vision-immersive-ready-panel")
+        #expect(VisionSurfaceAccessibility.immersiveInfoCard == "vision-immersive-info-card")
+        #expect(VisionSurfaceAccessibility.immersiveRecoveryAction == "vision-immersive-recovery-action")
+        #expect(Set(identifiers).count == identifiers.count)
+    }
 }

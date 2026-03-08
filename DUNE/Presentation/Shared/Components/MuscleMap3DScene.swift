@@ -65,6 +65,7 @@ enum MuscleMap3DState {
     static let rotationSensitivity: Float = 0.01
     static let pitchSensitivity: Float = 0.006
     static let selectedScale: Float = 1.045
+    static let defaultShellOpacity: Float = 0.06
 
     static func clampedZoomScale(_ scale: Float) -> Float {
         Swift.max(minZoomScale, Swift.min(scale, maxZoomScale))
@@ -204,17 +205,41 @@ final class MuscleMap3DScene {
         orbitRoot.scale = SIMD3<Float>(repeating: zoomScale)
     }
 
+    private var lastFatigueHash: Int = 0
+    private var lastMuscleMode: MuscleMap3DMode?
+    private var lastSelectedMuscle: MuscleGroup?
+    private var lastMuscleColorScheme: ColorScheme?
+
     func updateVisuals(
         fatigueStates: [MuscleFatigueState],
         mode: MuscleMap3DMode,
         selectedMuscle: MuscleGroup?,
-        colorScheme: ColorScheme
+        colorScheme: ColorScheme,
+        shellOpacity: Float = MuscleMap3DState.defaultShellOpacity
     ) {
+        updateShellMaterials(colorScheme: colorScheme, opacity: shellOpacity)
+
+        var hasher = Hasher()
+        for state in fatigueStates {
+            hasher.combine(state.muscle)
+            hasher.combine(state.fatigueLevel)
+            hasher.combine(state.weeklyVolume)
+        }
+        let fatigueHash = hasher.finalize()
+
+        let muscleInputsChanged = fatigueHash != lastFatigueHash
+            || mode != lastMuscleMode
+            || selectedMuscle != lastSelectedMuscle
+            || colorScheme != lastMuscleColorScheme
+        guard muscleInputsChanged else { return }
+        lastFatigueHash = fatigueHash
+        lastMuscleMode = mode
+        lastSelectedMuscle = selectedMuscle
+        lastMuscleColorScheme = colorScheme
+
         let fatigueByMuscle = Dictionary(
             uniqueKeysWithValues: fatigueStates.map { ($0.muscle, $0) }
         )
-
-        updateShellMaterials(colorScheme: colorScheme)
 
         for muscle in MuscleGroup.allCases {
             let displayState = MuscleMap3DState.displayState(
@@ -312,10 +337,18 @@ final class MuscleMap3DScene {
 
     // MARK: - Materials
 
-    private func updateShellMaterials(colorScheme: ColorScheme) {
+    private var lastShellOpacity: Float = -1
+    private var lastShellColorScheme: ColorScheme?
+
+    private func updateShellMaterials(colorScheme: ColorScheme, opacity: Float) {
+        guard opacity != lastShellOpacity || colorScheme != lastShellColorScheme else { return }
+        lastShellOpacity = opacity
+        lastShellColorScheme = colorScheme
+
+        let alpha = CGFloat(opacity)
         let tint: UIColor = colorScheme == .dark
-            ? UIColor.white.withAlphaComponent(0.05)
-            : UIColor.black.withAlphaComponent(0.06)
+            ? UIColor.white.withAlphaComponent(alpha)
+            : UIColor.black.withAlphaComponent(alpha)
         let material = SimpleMaterial(color: tint, roughness: 0.4, isMetallic: false)
 
         for model in shellModels {

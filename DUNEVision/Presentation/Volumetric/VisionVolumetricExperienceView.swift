@@ -21,6 +21,7 @@ struct VisionVolumetricExperienceView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .accessibilityIdentifier(VisionSurfaceAccessibility.volumetricRoot)
         .ornament(attachmentAnchor: .scene(.bottom)) {
             scenePickerOrnament
         }
@@ -48,6 +49,7 @@ struct VisionVolumetricExperienceView: View {
             }
             .pickerStyle(.segmented)
             .frame(maxWidth: 400)
+            .accessibilityIdentifier(VisionSurfaceAccessibility.volumetricScenePicker)
 
             Text(viewModel.selectedScene.description)
                 .font(.callout)
@@ -55,6 +57,7 @@ struct VisionVolumetricExperienceView: View {
         }
         .padding(16)
         .glassBackgroundEffect()
+        .accessibilityIdentifier(VisionSurfaceAccessibility.volumetricScenePickerOrnament)
     }
 
     @ViewBuilder
@@ -70,6 +73,7 @@ struct VisionVolumetricExperienceView: View {
             .padding(16)
             .frame(maxWidth: 340)
             .glassBackgroundEffect()
+            .accessibilityIdentifier(VisionSurfaceAccessibility.volumetricTrailingOrnament)
         }
     }
 
@@ -112,6 +116,7 @@ struct VisionVolumetricExperienceView: View {
         }
         .frame(maxWidth: .infinity)
         .frame(height: 420)
+        .accessibilityIdentifier(VisionSurfaceAccessibility.volumetricSceneStage)
     }
 
     @ViewBuilder
@@ -119,16 +124,19 @@ struct VisionVolumetricExperienceView: View {
         switch viewModel.selectedScene {
         case .heartRateOrb:
             HeartRateOrbSceneView(orb: summary.heartRateOrb)
+                .accessibilityIdentifier(VisionSurfaceAccessibility.volumetricSceneID(for: .heartRateOrb))
         case .trainingBlocks:
             TrainingVolumeBlocksSceneView(
                 muscles: summary.featuredMuscles.isEmpty ? Array(summary.muscleLoads.prefix(6)) : summary.featuredMuscles,
                 selectedMuscle: viewModel.selectedMuscle
             )
+            .accessibilityIdentifier(VisionSurfaceAccessibility.volumetricSceneID(for: .trainingBlocks))
         case .bodyHeatmap:
             BodyHeatmapSceneView(
                 muscleLoads: summary.muscleLoads,
                 selectedMuscle: viewModel.selectedMuscle
             )
+            .accessibilityIdentifier(VisionSurfaceAccessibility.volumetricSceneID(for: .bodyHeatmap))
         }
     }
 
@@ -161,6 +169,7 @@ struct VisionVolumetricExperienceView: View {
                 icon: selected?.muscle.iconName ?? "figure.strengthtraining.traditional"
             )
         }
+        .accessibilityIdentifier(VisionSurfaceAccessibility.volumetricMetricStrip)
     }
 
     private func metricCard(
@@ -220,6 +229,7 @@ struct VisionVolumetricExperienceView: View {
             }
         }
         .frame(maxHeight: 240)
+        .accessibilityIdentifier(VisionSurfaceAccessibility.volumetricMuscleStrip)
     }
 
     private func muscleCardBackground(for muscleLoad: SpatialTrainingSummary.MuscleLoad) -> some ShapeStyle {
@@ -242,6 +252,7 @@ struct VisionVolumetricExperienceView: View {
         }
         .frame(maxWidth: .infinity, minHeight: 320)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 28))
+        .accessibilityIdentifier(VisionSurfaceAccessibility.volumetricLoadingState)
     }
 
     private func messageState(_ message: String) -> some View {
@@ -260,9 +271,11 @@ struct VisionVolumetricExperienceView: View {
             } label: {
                 Label("Try Again", systemImage: "arrow.clockwise")
             }
+            .accessibilityIdentifier(VisionSurfaceAccessibility.volumetricRetryButton)
         }
         .frame(maxWidth: .infinity, minHeight: 320)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 28))
+        .accessibilityIdentifier(VisionSurfaceAccessibility.volumetricMessageState)
     }
 
     // MARK: - Helpers
