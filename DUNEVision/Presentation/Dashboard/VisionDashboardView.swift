@@ -29,6 +29,7 @@ struct VisionDashboardView: View {
             }
             .padding(24)
         }
+        .accessibilityIdentifier(VisionSurfaceAccessibility.dashboardRoot)
         .navigationTitle("Today")
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
@@ -36,7 +37,7 @@ struct VisionDashboardView: View {
                     Image(systemName: "gearshape")
                 }
                 .accessibilityLabel("Settings")
-                .accessibilityIdentifier("vision-dashboard-toolbar-settings")
+                .accessibilityIdentifier(VisionSurfaceAccessibility.dashboardToolbarSettings)
             }
 
             ToolbarItemGroup(placement: .primaryAction) {
@@ -45,18 +46,21 @@ struct VisionDashboardView: View {
                 } label: {
                     Label("Immersive Space", systemImage: "sparkles")
                 }
+                .accessibilityIdentifier(VisionSurfaceAccessibility.dashboardToolbarImmersive)
 
                 Button {
                     onOpenVolumetric()
                 } label: {
                     Label("Spatial Volume", systemImage: "cube.transparent")
                 }
+                .accessibilityIdentifier(VisionSurfaceAccessibility.dashboardToolbarVolumetric)
 
                 Button {
                     onOpen3DCharts()
                 } label: {
                     Label("3D Charts", systemImage: "chart.bar.fill")
                 }
+                .accessibilityIdentifier(VisionSurfaceAccessibility.dashboardToolbarChart3D)
 
                 if SimulatorAdvancedMockDataModeStore.isSimulatorAvailable {
                     Menu {
@@ -65,6 +69,7 @@ struct VisionDashboardView: View {
                     } label: {
                         Label("Mock Data", systemImage: isSimulatorMockEnabled ? "shippingbox.fill" : "shippingbox")
                     }
+                    .accessibilityIdentifier(VisionSurfaceAccessibility.dashboardToolbarMockData)
                 }
             }
         }
@@ -102,6 +107,7 @@ struct VisionDashboardView: View {
                     }
                 }
         }
+        .accessibilityIdentifier(VisionSurfaceAccessibility.dashboardConditionSection)
     }
 
     @ViewBuilder
@@ -114,32 +120,37 @@ struct VisionDashboardView: View {
         LazyVGrid(columns: columns, spacing: 16) {
             quickActionCard(
                 title: "Condition",
-                icon: VisionDashboardWindowKind.condition.systemImage
+                icon: VisionDashboardWindowKind.condition.systemImage,
+                identifier: VisionSurfaceAccessibility.dashboardQuickActionID(for: .condition)
             ) {
                 onOpenDashboardWindow(.condition)
             }
 
             quickActionCard(
                 title: "Activity",
-                icon: VisionDashboardWindowKind.activity.systemImage
+                icon: VisionDashboardWindowKind.activity.systemImage,
+                identifier: VisionSurfaceAccessibility.dashboardQuickActionID(for: .activity)
             ) {
                 onOpenDashboardWindow(.activity)
             }
 
             quickActionCard(
                 title: "Sleep",
-                icon: VisionDashboardWindowKind.sleep.systemImage
+                icon: VisionDashboardWindowKind.sleep.systemImage,
+                identifier: VisionSurfaceAccessibility.dashboardQuickActionID(for: .sleep)
             ) {
                 onOpenDashboardWindow(.sleep)
             }
 
             quickActionCard(
                 title: "Body",
-                icon: VisionDashboardWindowKind.body.systemImage
+                icon: VisionDashboardWindowKind.body.systemImage,
+                identifier: VisionSurfaceAccessibility.dashboardQuickActionID(for: .body)
             ) {
                 onOpenDashboardWindow(.body)
             }
         }
+        .accessibilityIdentifier(VisionSurfaceAccessibility.dashboardQuickActionsSection)
     }
 
     @ViewBuilder
@@ -154,11 +165,30 @@ struct VisionDashboardView: View {
                 GridItem(.flexible()),
                 GridItem(.flexible()),
             ], spacing: 16) {
-                metricCard(title: "HRV", value: hrvText, unit: "ms", icon: "waveform.path.ecg")
-                metricCard(title: "RHR", value: rhrText, unit: "bpm", icon: "heart.fill")
-                metricCard(title: "Sleep", value: sleepText, unit: "hrs", icon: "moon.fill")
+                metricCard(
+                    title: "HRV",
+                    value: hrvText,
+                    unit: "ms",
+                    icon: "waveform.path.ecg",
+                    identifier: VisionSurfaceAccessibility.dashboardMetricHRV
+                )
+                metricCard(
+                    title: "RHR",
+                    value: rhrText,
+                    unit: "bpm",
+                    icon: "heart.fill",
+                    identifier: VisionSurfaceAccessibility.dashboardMetricRHR
+                )
+                metricCard(
+                    title: "Sleep",
+                    value: sleepText,
+                    unit: "hrs",
+                    icon: "moon.fill",
+                    identifier: VisionSurfaceAccessibility.dashboardMetricSleep
+                )
             }
         }
+        .accessibilityIdentifier(VisionSurfaceAccessibility.dashboardHealthMetricsSection)
     }
 
     @ViewBuilder
@@ -192,6 +222,7 @@ struct VisionDashboardView: View {
         }
         .padding(20)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .accessibilityIdentifier(VisionSurfaceAccessibility.dashboardMockDataSection)
     }
 
     // MARK: - Computed Display Values
@@ -223,6 +254,7 @@ struct VisionDashboardView: View {
     private func quickActionCard(
         title: LocalizedStringKey,
         icon: String,
+        identifier: String,
         action: @escaping () -> Void
     ) -> some View {
         Button(action: action) {
@@ -239,10 +271,17 @@ struct VisionDashboardView: View {
             .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier(identifier)
     }
 
     @ViewBuilder
-    private func metricCard(title: LocalizedStringKey, value: String, unit: String, icon: String) -> some View {
+    private func metricCard(
+        title: LocalizedStringKey,
+        value: String,
+        unit: String,
+        icon: String,
+        identifier: String
+    ) -> some View {
         VStack(spacing: 8) {
             Image(systemName: icon)
                 .font(.title2)
@@ -261,5 +300,6 @@ struct VisionDashboardView: View {
         .frame(maxWidth: .infinity)
         .padding(16)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
+        .accessibilityIdentifier(identifier)
     }
 }

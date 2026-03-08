@@ -84,7 +84,7 @@ updated: 2026-03-08
 
 ### DUNEVision
 - [084 VisionContentView](084-ready-p3-e2e-dunevision-content-view.md)
-- [085 VisionDashboardView](085-ready-p3-e2e-dunevision-dashboard-view.md)
+- [085 VisionDashboardView](085-done-p3-e2e-dunevision-dashboard-view.md)
 - [086 VisionTrainView](086-ready-p3-e2e-dunevision-train-view.md)
 - [087 VisionDashboardWindowScene](087-ready-p3-e2e-dunevision-dashboard-window-scene.md)
 - [088 Chart3DContainerView](088-done-p3-e2e-dunevision-chart3d-container-view.md)

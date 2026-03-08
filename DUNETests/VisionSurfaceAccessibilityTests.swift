@@ -36,4 +36,35 @@ struct VisionSurfaceAccessibilityTests {
         #expect(VisionSurfaceAccessibility.chart3DCondition == "vision-chart3d-condition")
         #expect(VisionSurfaceAccessibility.chart3DTraining == "vision-chart3d-training")
     }
+
+    @Test("Dashboard identifiers stay stable and unique")
+    func dashboardIdentifiers() {
+        let quickActionIdentifiers = VisionDashboardWindowKind.allCases.map {
+            VisionSurfaceAccessibility.dashboardQuickActionID(for: $0)
+        }
+
+        #expect(VisionSurfaceAccessibility.dashboardRoot == "vision-dashboard-root")
+        #expect(VisionSurfaceAccessibility.dashboardConditionSection == "vision-dashboard-condition-section")
+        #expect(VisionSurfaceAccessibility.dashboardQuickActionsSection == "vision-dashboard-quick-actions-section")
+        #expect(VisionSurfaceAccessibility.dashboardHealthMetricsSection == "vision-dashboard-health-metrics-section")
+        #expect(VisionSurfaceAccessibility.dashboardMockDataSection == "vision-dashboard-mock-data-section")
+        #expect(VisionSurfaceAccessibility.dashboardToolbarSettings == "vision-dashboard-toolbar-settings")
+        #expect(VisionSurfaceAccessibility.dashboardToolbarImmersive == "vision-dashboard-toolbar-immersive")
+        #expect(VisionSurfaceAccessibility.dashboardToolbarVolumetric == "vision-dashboard-toolbar-volumetric")
+        #expect(VisionSurfaceAccessibility.dashboardToolbarChart3D == "vision-dashboard-toolbar-chart3d")
+        #expect(VisionSurfaceAccessibility.dashboardToolbarMockData == "vision-dashboard-toolbar-mock-data")
+        #expect(VisionSurfaceAccessibility.dashboardMetricHRV == "vision-dashboard-metric-hrv")
+        #expect(VisionSurfaceAccessibility.dashboardMetricRHR == "vision-dashboard-metric-rhr")
+        #expect(VisionSurfaceAccessibility.dashboardMetricSleep == "vision-dashboard-metric-sleep")
+        #expect(
+            quickActionIdentifiers
+                == [
+                    "vision-dashboard-quick-action-condition",
+                    "vision-dashboard-quick-action-activity",
+                    "vision-dashboard-quick-action-sleep",
+                    "vision-dashboard-quick-action-body",
+                ]
+        )
+        #expect(Set(quickActionIdentifiers).count == VisionDashboardWindowKind.allCases.count)
+    }
 }
