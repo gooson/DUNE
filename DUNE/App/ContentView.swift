@@ -195,7 +195,7 @@ struct ContentView: View {
             if newPhase == .active {
                 notificationInboxManager.syncBadge()
                 Task {
-                    await BedtimeWatchReminderScheduler.shared.refreshSchedule()
+                    await BedtimeReminderScheduler.shared.refreshSchedule()
                 }
             }
             if oldPhase == .background, newPhase == .active {

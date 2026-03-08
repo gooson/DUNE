@@ -554,7 +554,7 @@ struct DUNEApp: App {
         WatchSessionManager.shared.activate()
         appRuntime.observerManager?.startObserving()
         Task {
-            await BedtimeWatchReminderScheduler.shared.refreshSchedule()
+            await BedtimeReminderScheduler.shared.refreshSchedule()
         }
         scheduleWorkoutTitleBackfill()
     }
