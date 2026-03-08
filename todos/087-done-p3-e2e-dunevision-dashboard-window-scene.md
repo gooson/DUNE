@@ -56,5 +56,5 @@ updated: 2026-03-09
 ## Deferred Lane
 
 - 실제 `openWindow(id:)` 호출 성공 여부와 새 window lifecycle 자동화는 visionOS harness 지원 전까지 deferred로 유지한다.
-- multi-window placement 충돌 여부는 `todos/022-in-progress-p2-vision-ux-polish.md`의 수동 시각 검증 범위로 남긴다.
+- multi-window placement 충돌 여부는 `todos/107-ready-p2-vision-window-placement-runtime-validation.md`의 수동 시각 검증 범위로 남긴다.
 - recent session row 단위 selector, row ordering, deep content assertion은 후속 automation TODO로 분리한다.

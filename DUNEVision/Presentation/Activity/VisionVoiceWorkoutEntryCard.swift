@@ -40,7 +40,7 @@ struct VisionVoiceWorkoutEntryCard: View {
                 .font(.title2.weight(.semibold))
 
             Text("Speak a workout like \"Bench Press 80kg 8 reps\" to review it and save a quick entry without leaving Vision Pro.")
-                .font(.subheadline)
+                .font(.callout)
                 .foregroundStyle(.secondary)
                 .frame(maxWidth: 760, alignment: .leading)
         }

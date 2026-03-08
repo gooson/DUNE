@@ -11,7 +11,8 @@ updated: 2026-03-08
 ## 진행 메모
 
 - Phase 5A 실데이터 연결(`todos/021-done-p1-vision-real-data-pipeline.md`)이 완료됐다.
-- Phase 5B UX polish는 `todos/022-in-progress-p2-vision-ux-polish.md`에서 마무리 중이다.
+- Phase 5B UX polish 구현은 `todos/022-done-p2-vision-ux-polish.md`로 닫혔다.
+- runtime spatial placement visual verification은 `todos/107-ready-p2-vision-window-placement-runtime-validation.md`에서 별도 추적한다.
 - Voice quick entry는 draft preview를 넘어 single-entry workout history 저장까지 연결됐다.
 - 따라서 남은 F3 범위는 audio/spatial feedback, richer editing, multilingual confirmation UX로 줄었다.
 - G1도 SharePlay workout board foundation은 완료됐고, 남은 범위는 SharedWorldAnchors 기반 spatial sync/placement 고도화다.

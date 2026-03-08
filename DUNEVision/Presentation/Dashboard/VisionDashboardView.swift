@@ -102,7 +102,7 @@ struct VisionDashboardView: View {
                         Text(conditionScoreText)
                             .font(.system(size: 64, weight: .bold, design: .rounded))
                         Text("Condition Score")
-                            .font(.subheadline)
+                            .font(.callout)
                             .foregroundStyle(.secondary)
                     }
                 }
@@ -216,7 +216,7 @@ struct VisionDashboardView: View {
 
             if let simulatorMockStatusMessage {
                 Text(verbatim: simulatorMockStatusMessage)
-                    .font(.footnote)
+                    .font(.callout)
                     .foregroundStyle(.secondary)
             }
         }

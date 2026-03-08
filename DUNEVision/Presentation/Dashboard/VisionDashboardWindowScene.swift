@@ -283,7 +283,7 @@ struct VisionDashboardWindowScene: View {
                 if activity.recentWorkouts.isEmpty {
                     VStack(spacing: 8) {
                         Text("No data available")
-                            .font(.subheadline)
+                            .font(.callout)
                         Text("Start tracking on iPhone or Apple Watch.")
                             .font(.callout)
                             .foregroundStyle(.secondary)
@@ -298,7 +298,7 @@ struct VisionDashboardWindowScene: View {
                                 Text(verbatim: workout.title)
                                     .font(.headline)
                                 Text(workout.date.formatted(date: .abbreviated, time: .shortened))
-                                    .font(.subheadline)
+                                    .font(.callout)
                                     .foregroundStyle(.secondary)
                             }
 
@@ -332,7 +332,7 @@ struct VisionDashboardWindowScene: View {
 
             if let detail {
                 Text(verbatim: detail)
-                    .font(.footnote)
+                    .font(.callout)
                     .foregroundStyle(.secondary)
                     .lineLimit(2)
             }
@@ -347,7 +347,7 @@ struct VisionDashboardWindowScene: View {
             Image(systemName: "waveform.badge.exclamationmark")
                 .foregroundStyle(.tint)
             Text(message)
-                .font(.subheadline)
+                .font(.callout)
                 .foregroundStyle(.secondary)
         }
         .padding(16)
