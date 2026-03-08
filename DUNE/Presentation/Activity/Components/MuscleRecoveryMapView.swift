@@ -150,6 +150,9 @@ struct MuscleRecoveryMapView: View {
                             .frame(width: size.width, height: size.height)
                     }
                     .buttonStyle(.plain)
+                    .accessibilityIdentifier(
+                        "musclemap-body-\(isFront ? "front" : "back")-\(part.muscle.rawValue)"
+                    )
                 }
             }
             .frame(width: size.width, height: size.height)

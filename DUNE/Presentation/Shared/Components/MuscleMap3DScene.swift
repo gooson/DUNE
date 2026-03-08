@@ -160,13 +160,6 @@ final class MuscleMap3DScene {
         hasPreparedGeometry
     }
 
-    #if !os(visionOS)
-    func installIfNeeded(in view: ARView) {
-        guard anchor.scene == nil else { return }
-        view.scene.anchors.append(anchor)
-    }
-    #endif
-
     func prepareIfNeeded() async {
         guard !hasPreparedGeometry else { return }
 

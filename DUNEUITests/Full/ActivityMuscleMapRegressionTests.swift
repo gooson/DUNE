@@ -139,9 +139,9 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
     private func navigateTo3DView() {
         navigateToMuscleMapDetail()
 
-        // Tap on the muscle map area to trigger 3D navigation (muscle selection = 3D push)
-        let detailScreen = app.descendants(matching: .any)[AXID.activityMuscleMapDetailScreen].firstMatch
-        detailScreen.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.15)).tap()
+        let chestButton = app.buttons["musclemap-body-front-chest"].firstMatch
+        XCTAssertTrue(chestButton.waitForExistence(timeout: 10), "Front chest muscle button should exist")
+        chestButton.tap()
 
         let screen3D = app.descendants(matching: .any)[AXID.activityMuscleMap3DScreen].firstMatch
         XCTAssertTrue(screen3D.waitForExistence(timeout: 10), "3D view should appear")
