@@ -133,11 +133,23 @@ struct ActivityView: View {
                             InjuryWarningBanner(conflicts: cachedInjuryConflicts)
                         }
 
+                        // ③.5 Injury Risk Assessment
+                        SectionGroup(title: "Injury Risk", icon: "shield.checkered", iconColor: DS.Color.activity) {
+                            InjuryRiskCard(assessment: viewModel.injuryRiskAssessment)
+                        }
+                        .accessibilityIdentifier("activity-section-injuryrisk")
+
                         // ④ Suggested Workout (with search + templates)
                         suggestedWorkoutSection()
 
                         // ⑤ Training Volume
                         trainingVolumeSection()
+
+                        // ⑥ Weekly Report
+                        SectionGroup(title: "Weekly Report", icon: "doc.text", iconColor: DS.Color.activity) {
+                            WorkoutReportCard(report: viewModel.weeklyReport)
+                        }
+                        .accessibilityIdentifier("activity-section-weeklyreport")
 
                         // ⑧ Recent Workouts
                         SectionGroup(title: "Recent Workouts", icon: "clock.arrow.circlepath", iconColor: DS.Color.activity) {
@@ -308,6 +320,8 @@ struct ActivityView: View {
         .task(id: refreshSignal) {
             await viewModel.loadActivityData()
             recomputeInjuryConflicts()
+            recomputeInjuryRisk()
+            viewModel.generateWeeklyReport()
         }
         .task(id: notificationRouteSignal) {
             await handleExternalNotificationRoute()
@@ -320,9 +334,11 @@ struct ActivityView: View {
             WorkoutTypeCorrectionStore.shared.backfillTitles(from: recentRecords)
             await viewModel.refreshSuggestionFromRecords(recentRecords)
             recomputeInjuryConflicts()
+            recomputeInjuryRisk()
         }
         .onChange(of: activeInjuryRecords.count) { _, _ in
             recomputeInjuryConflicts()
+            recomputeInjuryRisk()
         }
         .onChange(of: viewModel.errorMessage) { _, newMessage in
             guard let newMessage, !newMessage.isEmpty else {
@@ -499,6 +515,11 @@ struct ActivityView: View {
     }
 
     // MARK: - Helpers
+
+    private func recomputeInjuryRisk() {
+        let infos = activeInjuryRecords.filter(\.isActive).map { $0.toInjuryInfo() }
+        viewModel.recomputeInjuryRisk(activeInjuries: infos)
+    }
 
     private func recomputeInjuryConflicts() {
         guard !activeInjuryRecords.isEmpty else {

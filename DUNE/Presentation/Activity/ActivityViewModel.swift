@@ -40,6 +40,8 @@ final class ActivityViewModel {
     var exerciseFrequencies: [ExerciseFrequency] = []
     var weeklyStats: [ActivityStat] = []
     var templateRecommendations: [WorkoutTemplateRecommendation] = []
+    var injuryRiskAssessment: InjuryRiskAssessment?
+    var weeklyReport: WorkoutReport?
 
     /// Weekly training goal in active days.
     let weeklyGoal: Int = 5
@@ -92,6 +94,8 @@ final class ActivityViewModel {
     private let personalRecordStore: PersonalRecordStore
     private let recommendationSettingsStore: WorkoutRecommendationSettingsStore
     private let templateRecommendationService: any WorkoutTemplateRecommending
+    private let injuryRiskUseCase: InjuryRiskCalculating
+    private let workoutReportUseCase: WorkoutReportGenerating
 
     /// Cached recovery modifiers from the most recent fetch.
     private var sleepModifier: Double = 1.0
@@ -101,6 +105,7 @@ final class ActivityViewModel {
 
     /// Cached manual records for manual-cardio fallback PR calculations.
     private var manualRecordsCache: [ExerciseRecord] = []
+    private var weeklyReportTask: Task<Void, Never>?
     @ObservationIgnored
     private var localizedExerciseNameLookup: [String: String] = [:]
 
@@ -117,7 +122,9 @@ final class ActivityViewModel {
         sharedHealthDataService: SharedHealthDataService? = nil,
         personalRecordStore: PersonalRecordStore = .shared,
         recommendationSettingsStore: WorkoutRecommendationSettingsStore = .shared,
-        templateRecommendationService: any WorkoutTemplateRecommending = WorkoutTemplateRecommendationService()
+        templateRecommendationService: any WorkoutTemplateRecommending = WorkoutTemplateRecommendationService(),
+        injuryRiskUseCase: InjuryRiskCalculating = CalculateInjuryRiskUseCase(),
+        workoutReportUseCase: WorkoutReportGenerating? = nil
     ) {
         self.healthKitManager = healthKitManager
         self.workoutService = workoutService ?? WorkoutQueryService(manager: healthKitManager)
@@ -133,6 +140,8 @@ final class ActivityViewModel {
         self.personalRecordStore = personalRecordStore
         self.recommendationSettingsStore = recommendationSettingsStore
         self.templateRecommendationService = templateRecommendationService
+        self.injuryRiskUseCase = injuryRiskUseCase
+        self.workoutReportUseCase = workoutReportUseCase ?? GenerateWorkoutReportUseCase(formatter: FoundationModelReportFormatter())
         self.recommendationContext = recommendationSettingsStore.context
         self.localizedExerciseNameLookup = buildLocalizedExerciseNameLookup()
     }
@@ -295,7 +304,100 @@ final class ActivityViewModel {
         )
     }
 
-    /// Computes PR, Streak, and Frequency from current exercise record snapshots.
+    /// Partitions exercise record snapshots into current and previous week.
+    private func partitionSnapshotsByWeek() -> (current: [ExerciseRecordSnapshot], previous: [ExerciseRecordSnapshot], weekAgo: Date, twoWeeksAgo: Date) {
+        let calendar = Calendar.current
+        let now = Date()
+        let weekAgo = calendar.date(byAdding: .day, value: -7, to: now) ?? now
+        let twoWeeksAgo = calendar.date(byAdding: .day, value: -14, to: now) ?? now
+        let current = exerciseRecordSnapshots.filter { $0.date >= weekAgo }
+        let previous = exerciseRecordSnapshots.filter { $0.date >= twoWeeksAgo && $0.date < weekAgo }
+        return (current, previous, weekAgo, twoWeeksAgo)
+    }
+
+    /// Recomputes injury risk assessment from available data.
+    /// Active injuries are passed from the View's @Query since the ViewModel doesn't access SwiftData.
+    func recomputeInjuryRisk(activeInjuries: [InjuryInfo] = []) {
+        guard !exerciseRecordSnapshots.isEmpty || !recentWorkouts.isEmpty else {
+            injuryRiskAssessment = nil
+            return
+        }
+
+        let consecutiveDays = workoutStreak?.currentStreak ?? 0
+        let partition = partitionSnapshotsByWeek()
+
+        let currentWeekVolume = partition.current
+            .compactMap(\.totalWeight)
+            .filter(\.isFinite)
+            .reduce(0, +)
+        let previousWeekVolume = partition.previous
+            .compactMap(\.totalWeight)
+            .filter(\.isFinite)
+            .reduce(0, +)
+
+        // Sleep deficit: compare recent sleep to 8h target
+        let recentSleep = sleepDailyData.prefix(7)
+        let sleepDeficit: Double
+        if recentSleep.isEmpty {
+            sleepDeficit = 0
+        } else {
+            let avgMinutes = recentSleep.map(\.minutes).reduce(0, +) / Double(recentSleep.count)
+            sleepDeficit = max(0, 480 - avgMinutes) // 8h target = 480 min
+        }
+
+        let conditionScore = trainingReadiness?.score
+
+        let input = CalculateInjuryRiskUseCase.Input(
+            fatigueStates: fatigueStates,
+            consecutiveTrainingDays: consecutiveDays,
+            currentWeekVolume: currentWeekVolume,
+            previousWeekVolume: previousWeekVolume,
+            sleepDeficitMinutes: sleepDeficit,
+            activeInjuries: activeInjuries,
+            conditionScore: conditionScore
+        )
+        injuryRiskAssessment = injuryRiskUseCase.execute(input: input)
+    }
+
+    /// Generates a weekly workout report from current exercise data.
+    func generateWeeklyReport() {
+        weeklyReportTask?.cancel()
+        weeklyReportTask = Task {
+            guard !exerciseRecordSnapshots.isEmpty else {
+                weeklyReport = nil
+                return
+            }
+
+            let partition = partitionSnapshotsByWeek()
+            let thisWeekRecords = partition.current
+            let lastWeekRecords = partition.previous
+
+            guard !thisWeekRecords.isEmpty else {
+                weeklyReport = nil
+                return
+            }
+
+            let previousVolume = lastWeekRecords.isEmpty
+                ? nil
+                : lastWeekRecords.compactMap(\.totalWeight).filter(\.isFinite).reduce(0, +)
+            let streak = workoutStreak?.currentStreak ?? 0
+
+            let input = GenerateWorkoutReportUseCase.Input(
+                records: thisWeekRecords,
+                period: .weekly,
+                startDate: partition.weekAgo,
+                endDate: Date(),
+                previousPeriodVolume: previousVolume,
+                workoutStreak: streak,
+                newPersonalRecords: 0,
+                newExerciseNames: []
+            )
+
+            guard !Task.isCancelled else { return }
+            weeklyReport = await workoutReportUseCase.execute(input: input)
+        }
+    }
+
     func recomputeDerivedStats() {
         recomputePersonalRecordsOnly()
 
