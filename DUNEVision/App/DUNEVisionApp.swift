@@ -11,7 +11,7 @@ struct DUNEVisionApp: App {
     private let sharedHealthDataService: SharedHealthDataService
     private let refreshCoordinator: AppRefreshCoordinating
     private let observerManager: HealthKitObserverManager?
-    private let workoutService: WorkoutQuerying
+    private var workoutService: WorkoutQuerying
     private let historyModelContainer: ModelContainer
 
     private static func makeInMemoryFallbackContainer() -> ModelContainer {
