@@ -57,7 +57,7 @@ struct TrainingVolume3DView: View {
             )
             .foregroundStyle(by: .value("Muscle", point.muscleGroup))
         }
-        .chartXScale(domain: 0...Double(Self.categoryNames.count - 1))
+        .chartXScale(domain: muscleDomain)
         .chartYScale(domain: volumeDomain)
         .chartZScale(domain: 1...Double(weekRange))
         .chartXAxis {
@@ -76,6 +76,10 @@ struct TrainingVolume3DView: View {
         .chartYAxisLabel("Volume (sets)")
         .chartZAxisLabel("Week")
         .frame(minHeight: 400)
+    }
+
+    private var muscleDomain: ClosedRange<Double> {
+        -0.5...(Double(Self.categoryNames.count) - 0.5)
     }
 
     private var weekRangePicker: some View {
