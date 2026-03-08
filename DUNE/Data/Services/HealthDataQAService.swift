@@ -250,6 +250,8 @@ struct HealthDataQAContextBuilder: Sendable {
         let endDate = nowProvider()
         let startDate = calendar.date(byAdding: .day, value: -(boundedDays - 1), to: calendar.startOfDay(for: endDate))
             ?? calendar.startOfDay(for: endDate)
+        let queryEndDate = calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: endDate))
+            ?? endDate
 
         var sleepDurations: [SharedHealthSnapshot.SleepDailyDuration] = []
         if let snapshot = await sharedHealthDataService?.fetchSnapshot() {
@@ -258,7 +260,7 @@ struct HealthDataQAContextBuilder: Sendable {
 
         if sleepDurations.isEmpty {
             do {
-                let fetched = try await sleepService.fetchDailySleepDurations(start: startDate, end: endDate)
+                let fetched = try await sleepService.fetchDailySleepDurations(start: startDate, end: queryEndDate)
                 sleepDurations = fetched.map {
                     SharedHealthSnapshot.SleepDailyDuration(
                         date: $0.date,

@@ -15,10 +15,14 @@ private actor MockQASharedHealthDataService: SharedHealthDataService {
 
 private struct MockQASleepService: SleepQuerying {
     var durations: [(date: Date, totalMinutes: Double, stageBreakdown: [SleepStage.Stage: Double])] = []
+    var requestEvaluator: (@Sendable (Date, Date) -> [(date: Date, totalMinutes: Double, stageBreakdown: [SleepStage.Stage: Double])])?
 
     func fetchSleepStages(for date: Date) async throws -> [SleepStage] { [] }
     func fetchLatestSleepStages(withinDays days: Int) async throws -> (stages: [SleepStage], date: Date)? { nil }
     func fetchDailySleepDurations(start: Date, end: Date) async throws -> [(date: Date, totalMinutes: Double, stageBreakdown: [SleepStage.Stage: Double])] {
+        if let requestEvaluator {
+            return requestEvaluator(start, end)
+        }
         durations
     }
     func fetchLastNightSleepSummary(for date: Date) async throws -> SleepSummary? { nil }
@@ -141,6 +145,32 @@ struct HealthDataQAServiceTests {
 
         #expect(reply.isFallback)
         #expect(reply.text.contains("Health Q&A requires Apple Intelligence") || HealthDataQAService.isAvailable)
+    }
+
+    @Test("Sleep summary live fallback includes the current day window")
+    func sleepSummaryFallbackIncludesCurrentDayWindow() async {
+        let now = Date(timeIntervalSince1970: 1_741_478_400)
+        let calendar = Calendar.current
+        let expectedDate = calendar.startOfDay(for: now)
+        let sleepService = MockQASleepService(
+            requestEvaluator: { start, end in
+                let requestedDays = Calendar.current.dateComponents([.day], from: start, to: end).day
+                guard requestedDays == 1 else { return [] }
+                return [(date: expectedDate, totalMinutes: 435, stageBreakdown: [:])]
+            }
+        )
+        let service = HealthDataQAService(
+            sharedHealthDataService: nil,
+            sleepService: sleepService,
+            workoutService: MockQAWorkoutService(),
+            hrvService: MockQAHRVService(),
+            nowProvider: { now }
+        )
+
+        let summary = await service.makeSleepSummary(days: 1)
+
+        #expect(summary.contains("Sleep summary for the last 1 days"))
+        #expect(summary.contains("Last recorded sleep: 7h 15m"))
     }
 
     private func makeSnapshot(referenceDate: Date) -> SharedHealthSnapshot {
