@@ -90,6 +90,7 @@ status: approved
 - **locale/raw normalization 테스트는 영문 literal/legacy alias 기대 금지**: watch/helper/unit tests는 `String(localized:)` 결과 또는 canonical enum `rawValue`를 기준으로 검증 (#207)
 - **`/ship` 머지 전략은 `--merge` 기본** (#54)
 - **`/run`에서 `/ship` 호출 전 Pre-Ship 게이트 강제** (#196)
+- **`/ship` 전 기존 review finding을 final diff 기준으로 재분류**: 수정 후에도 예전 리뷰 코멘트를 그대로 carry 하면 stale finding이 ship 이후 혼란을 만들 수 있으므로, ship 전에 각 finding을 `Open`/`Resolved`/`Stale after fix`로 다시 정리하고 미해결 P1/P2가 남아 있으면 중단한다 (#227)
 - **`.claude/settings.local.json`은 기본적으로 `{}` 유지** (#203)
 - **`/run` 최종 출력 계약은 상태 기반으로 작성** (#204)
 - **리뷰 적용은 파일별 batch, dead code는 같은 커밋에서 삭제** (#27, #55, #133)

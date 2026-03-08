@@ -108,6 +108,12 @@ truncation이 발생합니다. 이를 방지하기 위해:
 각 리뷰어의 발견사항을 우선순위별로 정리합니다.
 `.claude/skills/review/templates/review-report.md` 형식을 따릅니다.
 
+**Findings Lifecycle 관리 (필수)**:
+- 리뷰 이후 코드가 다시 바뀌면, 기존 finding을 그대로 carry 하지 말고 **현재 diff 기준으로 재확인**합니다
+- 각 finding은 최종적으로 `Open`, `Resolved`, `Stale after fix` 중 하나로 분류합니다
+- `Stale after fix`가 된 finding은 ship 단계로 넘기지 않고, 왜 stale이 됐는지 한 줄로 명시합니다
+- 수정 후 ship 직전에는 최소한 이전 P1/P2 finding 전부를 현재 HEAD 기준으로 재검증합니다
+
 **출력 형식**:
 
 ```
@@ -121,6 +127,7 @@ P3 - MINOR (nice to fix): N건
 - P1이 있으면 즉시 수정을 권장합니다
 - `/triage` 로 각 발견사항을 하나씩 처리할 수 있습니다
 - `/compound` 로 학습한 내용을 문서화할 수 있습니다
+- 수정 후 ship할 때는 **현재 diff 기준으로 open finding만 남았는지** 다시 확인합니다
 
 ## Progress Markers
 
