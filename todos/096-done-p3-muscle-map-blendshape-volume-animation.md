@@ -1,9 +1,9 @@
 ---
 source: brainstorm/muscle-map-3d-upgrade
 priority: p3
-status: pending
+status: done
 created: 2026-03-08
-updated: 2026-03-08
+updated: 2026-03-09
 ---
 
 # BlendShape 볼륨 애니메이션
