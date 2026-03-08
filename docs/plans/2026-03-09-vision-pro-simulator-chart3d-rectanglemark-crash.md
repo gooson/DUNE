@@ -1,7 +1,7 @@
 ---
 topic: vision-pro-simulator-chart3d-rectanglemark-crash
 date: 2026-03-09
-status: draft
+status: implemented
 confidence: high
 related_solutions:
   - docs/solutions/architecture/2026-03-08-visionos-real-data-pipeline.md
@@ -46,8 +46,8 @@ related_brainstorms:
 
 | File | Change Type | Description |
 |------|-------------|-------------|
-| `DUNEVision/Presentation/Chart3D/TrainingVolume3DView.swift` | modify | invalid 3D `RectangleMark` inputs를 valid range-based inputs로 수정 |
-| `DUNETests/TrainingVolume3DViewTests.swift` | add | plotting range helper가 Chart3D contract를 만족하는지 검증 |
+| `DUNEVision/Presentation/Chart3D/TrainingVolume3DView.swift` | modify | invalid 3D `RectangleMark` inputs를 valid range-based inputs로 수정하고 edge clipping을 방지 |
+| `docs/solutions/general/2026-03-09-visionos-chart3d-rectanglemark-extents-crash.md` | add | crash 원인과 해결 규약을 future lookup용으로 기록 |
 
 ## Implementation Steps
 
@@ -63,11 +63,11 @@ related_brainstorms:
 - **Changes**: muscle/week center values 주변에 plotting range를 계산하고, volume은 `0..<volume` range로 전달한다.
 - **Verification**: code review로 `RectangleMark`가 range 2개 / scalar 1개 구성을 만족하는지 확인
 
-### Step 3: Add regression coverage for plotting math
+### Step 3: Verify the fix with target-appropriate checks
 
-- **Files**: `DUNETests/TrainingVolume3DViewTests.swift`
-- **Changes**: range helper가 expected width/height center를 유지하는지 검증한다.
-- **Verification**: Swift Testing unit test 추가 및 실행
+- **Files**: none
+- **Changes**: visionOS target build와 iOS standard build로 회귀를 확인한다.
+- **Verification**: `xcodebuild -scheme DUNEVision ... build`, `scripts/build-ios.sh`
 
 ### Step 4: Build and target-specific verification
 
@@ -86,7 +86,7 @@ related_brainstorms:
 
 ## Testing Strategy
 
-- Unit tests: plotting range helper의 폭/높이/center를 검증하는 Swift Testing 추가
+- Unit tests: 없음. 변경이 visionOS SwiftUI view body + view-local plotting helper에 한정되고, 별도 `DUNEVision` unit-test target이 없어 build verification으로 대체
 - Integration tests: 없음
 - Manual verification: Vision Pro simulator에서 Chart3D 화면 진입 시 crash 재현이 사라졌는지 확인
 
