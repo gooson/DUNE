@@ -11,4 +11,13 @@ enum InjurySeverity: Int, Codable, CaseIterable, Sendable, Comparable, Identifia
     static func < (lhs: InjurySeverity, rhs: InjurySeverity) -> Bool {
         lhs.rawValue < rhs.rawValue
     }
+
+    /// Risk weight for injury risk calculation (0.0-1.0).
+    var riskWeight: Double {
+        switch self {
+        case .minor: 0.3
+        case .moderate: 0.6
+        case .severe: 1.0
+        }
+    }
 }
