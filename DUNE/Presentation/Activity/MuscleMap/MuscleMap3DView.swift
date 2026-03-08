@@ -233,198 +233,138 @@ struct MuscleMap3DView: View {
     }
 }
 
-struct MuscleMap3DViewer: UIViewRepresentable {
+struct MuscleMap3DViewer: View {
     let fatigueStates: [MuscleFatigueState]
     let mode: MuscleMap3DMode
     let colorScheme: ColorScheme
     @Binding var selectedMuscle: MuscleGroup?
     let resetToken: Int
 
-    func makeCoordinator() -> Coordinator {
-        Coordinator(selectedMuscle: $selectedMuscle)
-    }
+    @MainActor
+    private var bodyScene: some View {
+        RealityView { content in
+            if scene.anchor.parent == nil {
+                content.add(scene.anchor)
+            }
 
-    func makeUIView(context: Context) -> ARView {
-        let view = ARView(frame: .zero, cameraMode: .nonAR, automaticallyConfigureSession: false)
-        view.backgroundColor = .clear
-        context.coordinator.attach(to: view)
-        context.coordinator.update(
-            fatigueStates: fatigueStates,
-            mode: mode,
-            colorScheme: colorScheme,
-            selectedMuscle: selectedMuscle,
-            resetToken: resetToken
+            await scene.prepareIfNeeded()
+            hasLoadedScene = true
+            refreshScene()
+        } update: { _ in
+            refreshScene()
+        }
+        .accessibilityIdentifier("musclemap-3d-viewer")
+        .onTapGesture(count: 2) {
+            resetTransform()
+        }
+        .gesture(
+            SpatialTapGesture()
+                .targetedToAnyEntity()
+                .onEnded { value in
+                    selectedMuscle = scene.muscle(for: value.entity)
+                }
         )
-        return view
+        .simultaneousGesture(
+            DragGesture(minimumDistance: 2)
+                .onChanged { value in
+                    yaw = panStartYaw + (Float(value.translation.width) * MuscleMap3DState.rotationSensitivity)
+                    pitch = MuscleMap3DState.clampedPitch(
+                        panStartPitch + (Float(value.translation.height) * MuscleMap3DState.pitchSensitivity)
+                    )
+                    refreshScene()
+                }
+                .onEnded { _ in
+                    panStartYaw = yaw
+                    panStartPitch = pitch
+                }
+        )
+        .simultaneousGesture(
+            MagnifyGesture()
+                .onChanged { value in
+                    zoomScale = MuscleMap3DState.clampedZoomScale(
+                        pinchStartScale * Float(value.magnification)
+                    )
+                    refreshScene()
+                }
+                .onEnded { _ in
+                    pinchStartScale = zoomScale
+                }
+        )
     }
 
-    func updateUIView(_ view: ARView, context: Context) {
-        context.coordinator.update(
+    @State private var scene = MuscleMap3DScene()
+    @State private var yaw: Float = MuscleMap3DState.defaultYaw
+    @State private var pitch: Float = MuscleMap3DState.defaultPitch
+    @State private var zoomScale: Float = 1.0
+    @State private var panStartYaw: Float = MuscleMap3DState.defaultYaw
+    @State private var panStartPitch: Float = MuscleMap3DState.defaultPitch
+    @State private var pinchStartScale: Float = 1.0
+    @State private var appliedResetToken = -1
+    @State private var hasLoadedScene = false
+
+    var body: some View {
+        bodyScene
+            .overlay {
+                if !hasLoadedScene {
+                    ProgressView()
+                        .controlSize(.regular)
+                }
+            }
+            .task {
+                if let selectedMuscle {
+                    focus(on: selectedMuscle)
+                } else {
+                    refreshScene()
+                }
+            }
+            .onChange(of: selectedMuscle) { _, newValue in
+                if let newValue {
+                    focus(on: newValue)
+                } else {
+                    refreshScene()
+                }
+            }
+            .onChange(of: mode) { _, _ in
+                refreshScene()
+            }
+            .onChange(of: colorScheme) { _, _ in
+                refreshScene()
+            }
+            .task(id: resetToken) {
+                guard appliedResetToken != resetToken else { return }
+                appliedResetToken = resetToken
+                resetTransform()
+            }
+    }
+
+    @MainActor
+    private func refreshScene() {
+        scene.applyInteractionTransform(yaw: yaw, pitch: pitch, zoomScale: zoomScale)
+        scene.updateVisuals(
             fatigueStates: fatigueStates,
             mode: mode,
-            colorScheme: colorScheme,
             selectedMuscle: selectedMuscle,
-            resetToken: resetToken
+            colorScheme: colorScheme
         )
     }
 
     @MainActor
-    final class Coordinator: NSObject, UIGestureRecognizerDelegate {
-        private let scene = MuscleMap3DScene()
-        private var selectedMuscle: Binding<MuscleGroup?>
-        private weak var view: ARView?
-        private var yaw: Float = MuscleMap3DState.defaultYaw
-        private var pitch: Float = MuscleMap3DState.defaultPitch
-        private var zoomScale: Float = 1.0
-        private var panStartYaw: Float = 0
-        private var panStartPitch: Float = 0
-        private var pinchStartScale: Float = 1.0
-        private var appliedResetToken = -1
-        private var lastSelectedMuscle: MuscleGroup?
-        private var latestFatigueStates: [MuscleFatigueState] = []
-        private var latestMode: MuscleMap3DMode = .recovery
-        private var latestColorScheme: ColorScheme = .dark
-        private var isSceneReady = false
+    private func resetTransform() {
+        yaw = MuscleMap3DState.defaultYaw
+        pitch = MuscleMap3DState.defaultPitch
+        zoomScale = 1.0
+        panStartYaw = yaw
+        panStartPitch = pitch
+        pinchStartScale = zoomScale
+        refreshScene()
+    }
 
-        init(selectedMuscle: Binding<MuscleGroup?>) {
-            self.selectedMuscle = selectedMuscle
-        }
-
-        func attach(to view: ARView) {
-            self.view = view
-            scene.installIfNeeded(in: view)
-            installGestures(on: view)
-            scene.applyInteractionTransform(yaw: yaw, pitch: pitch, zoomScale: zoomScale)
-
-            Task { @MainActor [weak self] in
-                guard let self else { return }
-                await scene.prepareIfNeeded()
-                isSceneReady = true
-                refreshScene()
-            }
-        }
-
-        func update(
-            fatigueStates: [MuscleFatigueState],
-            mode: MuscleMap3DMode,
-            colorScheme: ColorScheme,
-            selectedMuscle: MuscleGroup?,
-            resetToken: Int
-        ) {
-            latestFatigueStates = fatigueStates
-            latestMode = mode
-            latestColorScheme = colorScheme
-
-            if appliedResetToken != resetToken {
-                appliedResetToken = resetToken
-                resetTransform()
-            }
-
-            if selectedMuscle != lastSelectedMuscle {
-                lastSelectedMuscle = selectedMuscle
-                focus(on: selectedMuscle)
-            }
-
-            refreshScene()
-        }
-
-        func gestureRecognizer(
-            _ gestureRecognizer: UIGestureRecognizer,
-            shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
-        ) -> Bool {
-            (gestureRecognizer is UIPanGestureRecognizer && otherGestureRecognizer is UIPinchGestureRecognizer) ||
-            (gestureRecognizer is UIPinchGestureRecognizer && otherGestureRecognizer is UIPanGestureRecognizer)
-        }
-
-        private func installGestures(on view: ARView) {
-            let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
-            let doubleTap = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTap(_:)))
-            doubleTap.numberOfTapsRequired = 2
-            tap.require(toFail: doubleTap)
-
-            let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
-            pan.maximumNumberOfTouches = 1
-            pan.delegate = self
-
-            let pinch = UIPinchGestureRecognizer(target: self, action: #selector(handlePinch(_:)))
-            pinch.delegate = self
-
-            view.addGestureRecognizer(tap)
-            view.addGestureRecognizer(doubleTap)
-            view.addGestureRecognizer(pan)
-            view.addGestureRecognizer(pinch)
-        }
-
-        private func refreshScene() {
-            scene.applyInteractionTransform(yaw: yaw, pitch: pitch, zoomScale: zoomScale)
-            guard isSceneReady else { return }
-            scene.updateVisuals(
-                fatigueStates: latestFatigueStates,
-                mode: latestMode,
-                selectedMuscle: selectedMuscle.wrappedValue,
-                colorScheme: latestColorScheme
-            )
-        }
-
-        private func resetTransform() {
-            yaw = MuscleMap3DState.defaultYaw
-            pitch = MuscleMap3DState.defaultPitch
-            zoomScale = 1.0
-            refreshScene()
-        }
-
-        private func focus(on muscle: MuscleGroup?) {
-            guard let muscle else { return }
-            yaw = MuscleMap3DState.preferredYaw(for: muscle)
-            pitch = MuscleMap3DState.defaultPitch
-            refreshScene()
-        }
-
-        @objc
-        private func handleTap(_ recognizer: UITapGestureRecognizer) {
-            guard let view else { return }
-            let location = recognizer.location(in: view)
-            guard let entity = view.entities(at: location).first,
-                  let muscle = scene.muscle(for: entity) else { return }
-            selectedMuscle.wrappedValue = muscle
-        }
-
-        @objc
-        private func handleDoubleTap(_ recognizer: UITapGestureRecognizer) {
-            resetTransform()
-        }
-
-        @objc
-        private func handlePan(_ recognizer: UIPanGestureRecognizer) {
-            switch recognizer.state {
-            case .began:
-                panStartYaw = yaw
-                panStartPitch = pitch
-            case .changed:
-                let translation = recognizer.translation(in: recognizer.view)
-                yaw = panStartYaw + (Float(translation.x) * MuscleMap3DState.rotationSensitivity)
-                pitch = MuscleMap3DState.clampedPitch(
-                    panStartPitch + (Float(translation.y) * MuscleMap3DState.pitchSensitivity)
-                )
-                refreshScene()
-            default:
-                break
-            }
-        }
-
-        @objc
-        private func handlePinch(_ recognizer: UIPinchGestureRecognizer) {
-            switch recognizer.state {
-            case .began:
-                pinchStartScale = zoomScale
-            case .changed:
-                zoomScale = MuscleMap3DState.clampedZoomScale(
-                    pinchStartScale * Float(recognizer.scale)
-                )
-                refreshScene()
-            default:
-                break
-            }
-        }
+    @MainActor
+    private func focus(on muscle: MuscleGroup) {
+        yaw = MuscleMap3DState.preferredYaw(for: muscle)
+        pitch = MuscleMap3DState.defaultPitch
+        panStartYaw = yaw
+        panStartPitch = pitch
+        refreshScene()
     }
 }
