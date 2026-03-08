@@ -81,6 +81,7 @@ struct VisionContentView: View {
                         VisionSettingsView(modelContainer: modelContainer)
                     }
                 }
+                .accessibilityIdentifier(VisionSurfaceAccessibility.sectionScreenID(for: .today))
             } label: {
                 Label {
                     Text(verbatim: AppSection.today.title)
@@ -98,6 +99,7 @@ struct VisionContentView: View {
                         }
                     )
                 }
+                .accessibilityIdentifier(VisionSurfaceAccessibility.sectionScreenID(for: .train))
             } label: {
                 Label {
                     Text(verbatim: AppSection.train.title)
@@ -112,6 +114,7 @@ struct VisionContentView: View {
                         refreshSignal: refreshSignal
                     )
                 }
+                .accessibilityIdentifier(VisionSurfaceAccessibility.sectionScreenID(for: .wellness))
             } label: {
                 Label {
                     Text(verbatim: AppSection.wellness.title)
@@ -123,6 +126,7 @@ struct VisionContentView: View {
                 NavigationStack {
                     VisionLifeView()
                 }
+                .accessibilityIdentifier(VisionSurfaceAccessibility.sectionScreenID(for: .life))
             } label: {
                 Label {
                     Text(verbatim: AppSection.life.title)
@@ -131,6 +135,7 @@ struct VisionContentView: View {
                 }
             }
         }
+        .accessibilityIdentifier(VisionSurfaceAccessibility.contentRoot)
         .onDisappear { foregroundTask?.cancel() }
         .onChange(of: scenePhase) { oldPhase, newPhase in
             if oldPhase == .background, newPhase == .active {
