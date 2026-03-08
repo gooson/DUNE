@@ -19,6 +19,10 @@ struct NotificationActivityDestination: Identifiable, Hashable {
             "training-readiness-\(requestID)"
         case .weeklyStats:
             "weekly-stats-\(requestID)"
+        case .injuryRisk:
+            "injury-risk-\(requestID)"
+        case .weeklyReport:
+            "weekly-report-\(requestID)"
         }
     }
 }
@@ -137,7 +141,14 @@ struct ActivityView: View {
 
                         // ③.5 Injury Risk Assessment
                         SectionGroup(title: "Injury Risk", icon: "shield.checkered", iconColor: DS.Color.activity) {
-                            InjuryRiskCard(assessment: viewModel.injuryRiskAssessment)
+                            if viewModel.injuryRiskAssessment != nil {
+                                NavigationLink(value: ActivityDetailDestination.injuryRisk) {
+                                    InjuryRiskCard(assessment: viewModel.injuryRiskAssessment)
+                                }
+                                .buttonStyle(.plain)
+                            } else {
+                                InjuryRiskCard(assessment: nil)
+                            }
                         }
                         .accessibilityIdentifier("activity-section-injuryrisk")
 
@@ -149,7 +160,14 @@ struct ActivityView: View {
 
                         // ⑥ Weekly Report
                         SectionGroup(title: "Weekly Report", icon: "doc.text", iconColor: DS.Color.activity) {
-                            WorkoutReportCard(report: viewModel.weeklyReport)
+                            if viewModel.weeklyReport != nil {
+                                NavigationLink(value: ActivityDetailDestination.weeklyReport) {
+                                    WorkoutReportCard(report: viewModel.weeklyReport)
+                                }
+                                .buttonStyle(.plain)
+                            } else {
+                                WorkoutReportCard(report: nil)
+                            }
                         }
                         .accessibilityIdentifier("activity-section-weeklyreport")
 
@@ -538,6 +556,10 @@ struct ActivityView: View {
             )
         case .weeklyStats:
             WeeklyStatsDetailView()
+        case .injuryRisk:
+            InjuryRiskDetailView(assessment: viewModel.injuryRiskAssessment)
+        case .weeklyReport:
+            WorkoutReportDetailView(report: viewModel.weeklyReport)
         }
     }
 

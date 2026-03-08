@@ -8,4 +8,6 @@ enum ActivityDetailDestination: Hashable {
     case exerciseMix
     case trainingReadiness
     case weeklyStats
+    case injuryRisk
+    case weeklyReport
 }

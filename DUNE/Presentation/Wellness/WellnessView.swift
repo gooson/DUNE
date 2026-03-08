@@ -92,7 +92,14 @@ struct WellnessView: View {
 
                         // Sleep Prediction
                         SectionGroup(title: "Tonight's Sleep", icon: "moon.zzz", iconColor: DS.Color.sleep) {
-                            SleepPredictionCard(prediction: viewModel.sleepPrediction)
+                            if viewModel.sleepPrediction != nil {
+                                NavigationLink(value: SleepPredictionDestination()) {
+                                    SleepPredictionCard(prediction: viewModel.sleepPrediction)
+                                }
+                                .buttonStyle(.plain)
+                            } else {
+                                SleepPredictionCard(prediction: nil)
+                            }
                         }
                         .accessibilityIdentifier("wellness-section-sleep-prediction")
 
@@ -286,6 +293,13 @@ struct WellnessView: View {
                 ProgressView()
             }
         }
+        .navigationDestination(for: SleepPredictionDestination.self) { _ in
+            if let prediction = viewModel.sleepPrediction {
+                SleepPredictionDetailView(prediction: prediction)
+            } else {
+                ProgressView()
+            }
+        }
         .waveRefreshable {
             await viewModel.performRefresh()
         }
@@ -359,6 +373,7 @@ struct WellnessView: View {
 struct WellnessScoreDestination: Hashable {}
 struct BodyHistoryDestination: Hashable {}
 struct InjuryHistoryDestination: Hashable {}
+struct SleepPredictionDestination: Hashable {}
 
 // MARK: - Isolated @Query Child Views
 // Extracted to prevent SwiftData observation from triggering parent ScrollView re-layout.
