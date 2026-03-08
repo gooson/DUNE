@@ -41,8 +41,8 @@ struct FoundationModelReportFormatter: WorkoutReportFormatting, Sendable {
         let periodName = report.period == .weekly ? "week" : "month"
         var lines: [String] = []
 
-        lines.append("Summarize this \(periodName)'s workout data in 2-3 concise sentences.")
-        lines.append("Be encouraging but factual. Use simple language.")
+        let languageInstruction = localeInstruction(periodName: periodName)
+        lines.append(languageInstruction)
         lines.append("")
         lines.append("Stats:")
         lines.append("- Sessions: \(report.stats.totalSessions)")
@@ -67,5 +67,18 @@ struct FoundationModelReportFormatter: WorkoutReportFormatting, Sendable {
         }
 
         return lines.joined(separator: "\n")
+    }
+
+    /// Returns a locale-appropriate instruction prefix for the prompt.
+    private func localeInstruction(periodName: String) -> String {
+        let langCode = Locale.current.language.languageCode?.identifier ?? "en"
+        switch langCode {
+        case "ko":
+            return "이번 \(periodName == "week" ? "주" : "월")의 운동 데이터를 한국어로 2-3문장으로 요약해주세요. 긍정적이지만 사실에 근거해주세요. 쉬운 표현을 사용해주세요."
+        case "ja":
+            return "今\(periodName == "week" ? "週" : "月")のワークアウトデータを日本語で2-3文にまとめてください。前向きで事実に基づいた内容にしてください。わかりやすい言葉を使ってください。"
+        default:
+            return "Summarize this \(periodName)'s workout data in 2-3 concise sentences.\nBe encouraging but factual. Use simple language."
+        }
     }
 }
