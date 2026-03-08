@@ -205,6 +205,11 @@ final class MuscleMap3DScene {
         orbitRoot.scale = SIMD3<Float>(repeating: zoomScale)
     }
 
+    private var lastMuscleFatigueCount: Int = -1
+    private var lastMuscleMode: MuscleMap3DMode?
+    private var lastSelectedMuscle: MuscleGroup?
+    private var lastMuscleColorScheme: ColorScheme?
+
     func updateVisuals(
         fatigueStates: [MuscleFatigueState],
         mode: MuscleMap3DMode,
@@ -212,11 +217,21 @@ final class MuscleMap3DScene {
         colorScheme: ColorScheme,
         shellOpacity: Float = MuscleMap3DState.defaultShellOpacity
     ) {
+        updateShellMaterials(colorScheme: colorScheme, opacity: shellOpacity)
+
+        let muscleInputsChanged = fatigueStates.count != lastMuscleFatigueCount
+            || mode != lastMuscleMode
+            || selectedMuscle != lastSelectedMuscle
+            || colorScheme != lastMuscleColorScheme
+        guard muscleInputsChanged else { return }
+        lastMuscleFatigueCount = fatigueStates.count
+        lastMuscleMode = mode
+        lastSelectedMuscle = selectedMuscle
+        lastMuscleColorScheme = colorScheme
+
         let fatigueByMuscle = Dictionary(
             uniqueKeysWithValues: fatigueStates.map { ($0.muscle, $0) }
         )
-
-        updateShellMaterials(colorScheme: colorScheme, opacity: shellOpacity)
 
         for muscle in MuscleGroup.allCases {
             let displayState = MuscleMap3DState.displayState(
