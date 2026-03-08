@@ -161,7 +161,7 @@ struct DailyVolumeChartView: View {
     }
 
     private var xDomain: ClosedRange<Date> {
-        resolvedXDomain(scrollDomain: nil, dates: dailyBreakdown.map(\.date))
+        resolvedDayBucketXDomain(dates: dailyBreakdown.map(\.date))
     }
 
     private var isScrollable: Bool {

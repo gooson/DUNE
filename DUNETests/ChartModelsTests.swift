@@ -111,3 +111,31 @@ struct HighlightTests {
         #expect(highlight.id.contains("high"))
     }
 }
+
+@Suite("DayBucketXDomain")
+struct DayBucketXDomainTests {
+    private let calendar = Calendar(identifier: .gregorian)
+
+    @Test("extends upper bound to the next day for the latest bucket")
+    func extendsUpperBoundByOneDay() {
+        let start = calendar.date(from: DateComponents(year: 2026, month: 3, day: 2))!
+        let end = calendar.date(from: DateComponents(year: 2026, month: 3, day: 8))!
+
+        let domain = resolvedDayBucketXDomain(dates: [start, end], calendar: calendar)
+        let expectedUpper = calendar.date(byAdding: .day, value: 1, to: end)!
+
+        #expect(domain.lowerBound == start)
+        #expect(domain.upperBound == expectedUpper)
+    }
+
+    @Test("single day still returns a full one-day domain")
+    func singleDayReturnsFullBucket() {
+        let day = calendar.date(from: DateComponents(year: 2026, month: 3, day: 8))!
+
+        let domain = resolvedDayBucketXDomain(dates: [day], calendar: calendar)
+        let expectedUpper = calendar.date(byAdding: .day, value: 1, to: day)!
+
+        #expect(domain.lowerBound == day)
+        #expect(domain.upperBound == expectedUpper)
+    }
+}

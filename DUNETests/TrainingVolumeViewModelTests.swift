@@ -105,6 +105,7 @@ struct TrainingVolumeViewModelTests {
         await vm.loadData(manualRecords: [makeRecord(daysAgo: 1, minutes: 25)])
 
         #expect(vm.trainingLoadData.count == 14)
+        #expect(vm.chartDailyBreakdown.count == 14)
         #expect(vm.trainingLoadData.contains { $0.load > 0 })
         #expect(vm.comparison != nil)
     }
@@ -159,5 +160,24 @@ struct TrainingVolumeViewModelTests {
         #expect(vm.trainingLoadData.count == 60)
         #expect(vm.trainingLoadData.first?.date == expectedStart)
         #expect(vm.trainingLoadData.last?.date == today)
+    }
+
+    @Test("loadData expands daily volume history to current and previous period")
+    func loadDataBuildsScrollableDailyVolumeHistory() async {
+        let vm = TrainingVolumeViewModel(
+            workoutService: MockTrainingVolumeWorkoutService(),
+            stepsService: MockTrainingVolumeStepsService(),
+            hrvService: MockTrainingVolumeHRVService()
+        )
+        vm.selectedPeriod = .month
+
+        await vm.loadData(manualRecords: [])
+
+        let today = calendar.startOfDay(for: Date())
+        let expectedStart = calendar.date(byAdding: .day, value: -59, to: today) ?? today
+
+        #expect(vm.chartDailyBreakdown.count == 60)
+        #expect(vm.chartDailyBreakdown.first?.date == expectedStart)
+        #expect(vm.chartDailyBreakdown.last?.date == today)
     }
 }
