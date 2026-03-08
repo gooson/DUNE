@@ -86,10 +86,10 @@ updated: 2026-03-08
 - [084 VisionContentView](084-ready-p3-e2e-dunevision-content-view.md)
 - [085 VisionDashboardView](085-done-p3-e2e-dunevision-dashboard-view.md)
 - [086 VisionTrainView](086-done-p3-e2e-dunevision-train-view.md)
-- [087 VisionDashboardWindowScene](087-ready-p3-e2e-dunevision-dashboard-window-scene.md)
+- [087 VisionDashboardWindowScene](087-done-p3-e2e-dunevision-dashboard-window-scene.md)
 - [088 Chart3DContainerView](088-done-p3-e2e-dunevision-chart3d-container-view.md)
-- [089 VisionVolumetricExperienceView](089-ready-p3-e2e-dunevision-volumetric-experience-view.md)
-- [090 VisionImmersiveExperienceView](090-ready-p3-e2e-dunevision-immersive-experience-view.md)
+- [089 VisionVolumetricExperienceView](089-done-p3-e2e-dunevision-volumetric-experience-view.md)
+- [090 VisionImmersiveExperienceView](090-done-p3-e2e-dunevision-immersive-experience-view.md)
 - [091 VisionPlaceholderSurfaces](091-ready-p3-e2e-dunevision-placeholder-surfaces.md)
 
 ### DUNEWidget

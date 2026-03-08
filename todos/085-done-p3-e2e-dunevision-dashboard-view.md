@@ -57,7 +57,7 @@ updated: 2026-03-09
 
 ## Deferred Lane
 
-- quick action이 여는 dedicated window scene 검증은 `todos/087-ready-p3-e2e-dunevision-dashboard-window-scene.md`에서 처리한다.
+- quick action이 여는 dedicated window scene 검증은 `todos/087-done-p3-e2e-dunevision-dashboard-window-scene.md`에서 처리했다.
 - toolbar `3D Charts` handoff는 `todos/088-ready-p3-e2e-dunevision-chart3d-container-view.md`에서 처리한다.
-- toolbar `Spatial Volume` handoff는 `todos/089-ready-p3-e2e-dunevision-volumetric-experience-view.md`에서 처리한다.
-- toolbar `Immersive Space` open/close verification은 `todos/090-ready-p3-e2e-dunevision-immersive-experience-view.md`에서 처리한다.
+- toolbar `Spatial Volume` handoff는 `todos/089-done-p3-e2e-dunevision-volumetric-experience-view.md`에서 처리했다.
+- toolbar `Immersive Space` open/close verification은 `todos/090-done-p3-e2e-dunevision-immersive-experience-view.md`에서 처리했다.
