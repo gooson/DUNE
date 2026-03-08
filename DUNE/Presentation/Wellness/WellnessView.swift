@@ -384,6 +384,7 @@ private struct WellnessInjuryBannerView: View {
                                 .font(.caption)
                                 .fontWeight(.medium)
                         }
+                        .accessibilityIdentifier("wellness-link-injuryhistory")
                         .tint(theme.accentColor)
                     }
                 }
@@ -444,6 +445,7 @@ private struct BodyHistoryLinkView: View {
                 }
             }
             .buttonStyle(.plain)
+            .accessibilityIdentifier("wellness-link-bodyhistory")
         }
     }
 }

@@ -11,6 +11,11 @@ struct InjuryStatisticsView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: DS.Spacing.xl) {
+                Color.clear
+                    .frame(height: 1)
+                    .accessibilityElement()
+                    .accessibilityIdentifier("injury-statistics-screen")
+
                 overviewSection
                 frequencySection
                 if !volumeComparisons.isEmpty {

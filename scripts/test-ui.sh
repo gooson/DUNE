@@ -19,6 +19,7 @@ DESTINATION="platform=iOS Simulator,name=${SIMULATOR_NAME},OS=${SIMULATOR_OS}"
 DERIVED_DATA_DIR="${DAILVE_UI_TEST_DERIVED_DATA_DIR:-.deriveddata/ui-tests}"
 LOG_DIR=".xcodebuild"
 LOG_FILE="$LOG_DIR/ui-test.log"
+BUNDLE_ID="${DAILVE_IOS_BUNDLE_ID:-com.raftel.dailve}"
 REGENERATE=1
 SKIP_TESTING=()
 ONLY_TESTING=()
@@ -153,6 +154,7 @@ if [[ -n "$DEVICE_INFO" ]]; then
     IFS=$'\t' read -r DEVICE_UDID RESOLVED_SIMULATOR_NAME RESOLVED_SIMULATOR_OS <<< "$DEVICE_INFO"
     DESTINATION="id=${DEVICE_UDID}"
     xcrun simctl boot "$DEVICE_UDID" 2>/dev/null || true
+    xcrun simctl terminate "$DEVICE_UDID" "$BUNDLE_ID" >/dev/null 2>&1 || true
     echo "Simulator booted: $RESOLVED_SIMULATOR_NAME ($RESOLVED_SIMULATOR_OS) [$DEVICE_UDID]"
 else
     echo "Warning: Could not find simulator '$SIMULATOR_NAME' (OS $SIMULATOR_OS). xcodebuild will attempt to boot one."

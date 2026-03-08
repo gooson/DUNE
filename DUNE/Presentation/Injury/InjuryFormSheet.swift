@@ -10,134 +10,141 @@ struct InjuryFormSheet: View {
 
     var body: some View {
         NavigationStack {
-            Form {
-                if let error = viewModel.validationError {
-                    Text(error)
-                        .foregroundStyle(.red)
-                        .font(.caption)
-                }
+            VStack(spacing: 0) {
+                Color.clear
+                    .frame(height: 1)
+                    .accessibilityElement()
+                    .accessibilityIdentifier("injury-form-screen")
 
-                Section("Body Part") {
-                    Picker("Location", selection: $viewModel.selectedBodyPart) {
-                        Section("Joints") {
-                            ForEach(BodyPart.allCases.filter(\.isJoint), id: \.self) { part in
-                                Text(part.displayName).tag(part)
-                            }
-                        }
-                        Section("Muscles") {
-                            ForEach(BodyPart.allCases.filter { !$0.isJoint }, id: \.self) { part in
-                                Text(part.displayName).tag(part)
-                            }
-                        }
+                Form {
+                    if let error = viewModel.validationError {
+                        Text(error)
+                            .foregroundStyle(.red)
+                            .font(.caption)
                     }
-                    .accessibilityIdentifier("injury-form-bodypart")
 
-                    if viewModel.selectedBodyPart.isLateral {
-                        Picker("Side", selection: Binding(
-                            get: { viewModel.selectedSide ?? .both },
-                            set: { viewModel.selectedSide = $0 }
-                        )) {
-                            ForEach(BodySide.allCases, id: \.self) { side in
-                                Text(side.displayName).tag(side)
-                            }
-                        }
-                        .pickerStyle(.segmented)
-                        .accessibilityIdentifier("injury-form-side")
-                    }
-                }
-
-                Section("Severity") {
-                    ForEach(InjurySeverity.allCases, id: \.self) { severity in
-                        Button {
-                            viewModel.selectedSeverity = severity
-                        } label: {
-                            HStack(spacing: DS.Spacing.sm) {
-                                Image(systemName: severity.iconName)
-                                    .font(.title3)
-                                    .foregroundStyle(severity.color)
-                                    .frame(width: 28)
-
-                                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                                    Text(severity.displayName)
-                                        .font(.subheadline.weight(.medium))
-                                        .foregroundStyle(theme.sandColor)
-                                    Text(severity.severityDescription)
-                                        .font(.caption)
-                                        .foregroundStyle(DS.Color.textSecondary)
+                    Section("Body Part") {
+                        Picker("Location", selection: $viewModel.selectedBodyPart) {
+                            Section("Joints") {
+                                ForEach(BodyPart.allCases.filter(\.isJoint), id: \.self) { part in
+                                    Text(part.displayName).tag(part)
                                 }
+                            }
+                            Section("Muscles") {
+                                ForEach(BodyPart.allCases.filter { !$0.isJoint }, id: \.self) { part in
+                                    Text(part.displayName).tag(part)
+                                }
+                            }
+                        }
+                        .accessibilityIdentifier("injury-form-bodypart")
 
-                                Spacer()
+                        if viewModel.selectedBodyPart.isLateral {
+                            Picker("Side", selection: Binding(
+                                get: { viewModel.selectedSide ?? .both },
+                                set: { viewModel.selectedSide = $0 }
+                            )) {
+                                ForEach(BodySide.allCases, id: \.self) { side in
+                                    Text(side.displayName).tag(side)
+                                }
+                            }
+                            .pickerStyle(.segmented)
+                            .accessibilityIdentifier("injury-form-side")
+                        }
+                    }
 
-                                if viewModel.selectedSeverity == severity {
-                                    Image(systemName: "checkmark")
-                                        .font(.subheadline.weight(.semibold))
+                    Section("Severity") {
+                        ForEach(InjurySeverity.allCases, id: \.self) { severity in
+                            Button {
+                                viewModel.selectedSeverity = severity
+                            } label: {
+                                HStack(spacing: DS.Spacing.sm) {
+                                    Image(systemName: severity.iconName)
+                                        .font(.title3)
                                         .foregroundStyle(severity.color)
+                                        .frame(width: 28)
+
+                                    VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                                        Text(severity.displayName)
+                                            .font(.subheadline.weight(.medium))
+                                            .foregroundStyle(theme.sandColor)
+                                        Text(severity.severityDescription)
+                                            .font(.caption)
+                                            .foregroundStyle(DS.Color.textSecondary)
+                                    }
+
+                                    Spacer()
+
+                                    if viewModel.selectedSeverity == severity {
+                                        Image(systemName: "checkmark")
+                                            .font(.subheadline.weight(.semibold))
+                                            .foregroundStyle(severity.color)
+                                    }
                                 }
+                                .contentShape(Rectangle())
                             }
-                            .contentShape(Rectangle())
+                            .buttonStyle(.plain)
+                            .accessibilityIdentifier("injury-form-severity-\(severity.displayName.lowercased())")
                         }
-                        .buttonStyle(.plain)
-                        .accessibilityIdentifier("injury-form-severity-\(severity.displayName.lowercased())")
                     }
-                }
 
-                Section("Duration") {
-                    DatePicker(
-                        "Start Date",
-                        selection: $viewModel.startDate,
-                        in: ...Date(),
-                        displayedComponents: [.date]
-                    )
-                    .accessibilityIdentifier("injury-form-startdate")
-
-                    Toggle("Recovered", isOn: Binding(
-                        get: { viewModel.endDate != nil },
-                        set: { isRecovered in
-                            viewModel.endDate = isRecovered ? Date() : nil
-                        }
-                    ))
-                    .accessibilityIdentifier("injury-form-recovered-toggle")
-
-                    if viewModel.endDate != nil {
+                    Section("Duration") {
                         DatePicker(
-                            "End Date",
-                            selection: Binding(
-                                get: { viewModel.endDate ?? Date() },
-                                set: { viewModel.endDate = $0 }
-                            ),
-                            in: viewModel.startDate...Date(),
+                            "Start Date",
+                            selection: $viewModel.startDate,
+                            in: ...Date(),
                             displayedComponents: [.date]
                         )
-                        .accessibilityIdentifier("injury-form-enddate")
-                    }
-                }
+                        .accessibilityIdentifier("injury-form-startdate")
 
-                Section("Notes") {
-                    TextField("Memo (optional)", text: $viewModel.memo, axis: .vertical)
-                        .lineLimit(3...6)
-                        .accessibilityIdentifier("injury-form-memo")
-                }
-            }
-            .scrollContentBackground(.hidden)
-            .background { SheetWaveBackground() }
-            .englishNavigationTitle(isEdit ? "Edit Injury" : "Add Injury")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
-                        .accessibilityIdentifier("injury-form-cancel")
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") {
-                        let hadError = viewModel.validationError != nil
-                        onSave()
-                        // Only trigger success haptic if validation passed
-                        if !hadError, viewModel.validationError == nil {
-                            saveCount += 1
+                        Toggle("Recovered", isOn: Binding(
+                            get: { viewModel.endDate != nil },
+                            set: { isRecovered in
+                                viewModel.endDate = isRecovered ? Date() : nil
+                            }
+                        ))
+                        .accessibilityIdentifier("injury-form-recovered-toggle")
+
+                        if viewModel.endDate != nil {
+                            DatePicker(
+                                "End Date",
+                                selection: Binding(
+                                    get: { viewModel.endDate ?? Date() },
+                                    set: { viewModel.endDate = $0 }
+                                ),
+                                in: viewModel.startDate...Date(),
+                                displayedComponents: [.date]
+                            )
+                            .accessibilityIdentifier("injury-form-enddate")
                         }
                     }
-                    .disabled(viewModel.isSaving)
-                    .accessibilityIdentifier("injury-form-save")
+
+                    Section("Notes") {
+                        TextField("Memo (optional)", text: $viewModel.memo, axis: .vertical)
+                            .lineLimit(3...6)
+                            .accessibilityIdentifier("injury-form-memo")
+                    }
+                }
+                .scrollContentBackground(.hidden)
+                .background { SheetWaveBackground() }
+                .englishNavigationTitle(isEdit ? "Edit Injury" : "Add Injury")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Cancel") { dismiss() }
+                            .accessibilityIdentifier("injury-form-cancel")
+                    }
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Save") {
+                            let hadError = viewModel.validationError != nil
+                            onSave()
+                            // Only trigger success haptic if validation passed
+                            if !hadError, viewModel.validationError == nil {
+                                saveCount += 1
+                            }
+                        }
+                        .disabled(viewModel.isSaving)
+                        .accessibilityIdentifier("injury-form-save")
+                    }
                 }
             }
         }
