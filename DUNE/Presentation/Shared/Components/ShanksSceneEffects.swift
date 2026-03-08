@@ -578,9 +578,9 @@ private struct ShanksDeepSeaFishOverlay: View {
                         .fill(
                             LinearGradient(
                                 colors: [
-                                    theme.shanksCurrentColor.opacity(style.fishOpacity * spec.opacity * 0.14 * darkBoost),
-                                    theme.shanksDeepColor.opacity(style.fishOpacity * spec.opacity * 0.72 * darkBoost),
-                                    theme.shanksAbyssColor.opacity(style.fishOpacity * spec.opacity * 0.94),
+                                    theme.shanksCurrentColor.opacity(spec.opacity * 0.14 * darkBoost),
+                                    theme.shanksDeepColor.opacity(spec.opacity * 0.72 * darkBoost),
+                                    theme.shanksAbyssColor.opacity(spec.opacity * 0.94),
                                 ],
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
@@ -589,7 +589,7 @@ private struct ShanksDeepSeaFishOverlay: View {
                         .overlay {
                             ShanksDeepSeaFishSilhouetteShape()
                                 .stroke(
-                                    theme.shanksFoamColor.opacity(style.fishOpacity * spec.opacity * 0.08),
+                                    theme.shanksFoamColor.opacity(spec.opacity * 0.08),
                                     style: StrokeStyle(lineWidth: 0.8, lineCap: .round, lineJoin: .round)
                                 )
                         }
@@ -601,7 +601,7 @@ private struct ShanksDeepSeaFishOverlay: View {
                             y: size.height * (spec.y - 0.5) + driftY
                         )
                         .blur(radius: spec.blur)
-                        .opacity(style.fishOpacity * spec.opacity)
+                        .opacity(style.fishOpacity)
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
