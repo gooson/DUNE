@@ -40,7 +40,7 @@ struct VisionSharePlayWorkoutCard: View {
                 .font(.title2.weight(.semibold))
 
             Text("Start a shared workout board so everyone can keep the current exercise, sets, and reps aligned in Vision Pro.")
-                .font(.subheadline)
+                .font(.callout)
                 .foregroundStyle(.secondary)
                 .frame(maxWidth: 760, alignment: .leading)
         }
@@ -191,7 +191,7 @@ struct VisionSharePlayWorkoutCard: View {
                     .font(.headline)
                 Spacer()
                 Label(participant.phase.displayName, systemImage: participant.phase.systemImage)
-                    .font(.caption.weight(.semibold))
+                    .font(.callout.weight(.semibold))
                     .padding(.horizontal, 10)
                     .padding(.vertical, 6)
                     .background(.ultraThinMaterial, in: Capsule())

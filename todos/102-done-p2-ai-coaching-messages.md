@@ -1,9 +1,9 @@
 ---
 source: brainstorm/apple-on-device-ml-sdk-research
 priority: p2
-status: ready
+status: done
 created: 2026-03-08
-updated: 2026-03-08
+updated: 2026-03-09
 ---
 
 # AI 코칭 메시지 (Foundation Models)

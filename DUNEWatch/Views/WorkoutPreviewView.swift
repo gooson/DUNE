@@ -23,6 +23,7 @@ struct WorkoutPreviewView: View {
         }
         .background { WatchWaveBackground() }
         .navigationTitle(snapshot.name)
+        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.workoutPreviewScreen)
         .alert(String(localized: "Error"), isPresented: .init(
             get: { errorMessage != nil },
             set: { if !$0 { errorMessage = nil } }
@@ -100,7 +101,7 @@ struct WorkoutPreviewView: View {
                     }
                     .buttonStyle(.bordered)
                     .disabled(isStarting)
-                    .accessibilityIdentifier("watch-workout-cardio-indoor-button")
+                    .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.workoutPreviewCardioIndoorButton)
                 } else {
                     Button {
                         startCardio(
@@ -115,7 +116,7 @@ struct WorkoutPreviewView: View {
                     .buttonStyle(.borderedProminent)
                     .tint(DS.Color.activity)
                     .disabled(isStarting)
-                    .accessibilityIdentifier("watch-workout-cardio-indoor-button")
+                    .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.workoutPreviewCardioIndoorButton)
                 }
 
                 if supportsOutdoor {
@@ -132,17 +133,19 @@ struct WorkoutPreviewView: View {
                     .buttonStyle(.borderedProminent)
                     .tint(DS.Color.positive)
                     .disabled(isStarting)
-                    .accessibilityIdentifier("watch-workout-cardio-outdoor-button")
+                    .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.workoutPreviewCardioOutdoorButton)
                 }
 
                 if isStarting {
                     ProgressView()
+                        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.workoutPreviewStarting)
                         .padding(.top, DS.Spacing.sm)
                 }
             }
             .padding(.horizontal, DS.Spacing.lg)
         }
         .scrollBounceBehavior(.basedOnSize)
+        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.workoutPreviewCardio)
     }
 
     private func startCardio(
@@ -240,6 +243,7 @@ struct WorkoutPreviewView: View {
                     )
                 }
             }
+            .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.workoutPreviewStrengthList)
             .scrollContentBackground(.hidden)
 
             Button {
@@ -248,6 +252,7 @@ struct WorkoutPreviewView: View {
                 HStack {
                     if isStarting {
                         ProgressView()
+                            .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.workoutPreviewStarting)
                             .tint(.black)
                     } else {
                         Image(systemName: "play.fill")
@@ -260,7 +265,7 @@ struct WorkoutPreviewView: View {
             .buttonStyle(.borderedProminent)
             .tint(DS.Color.positive)
             .disabled(isStarting)
-            .accessibilityIdentifier("watch-workout-start-button")
+            .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.workoutPreviewStartButton)
             .padding(.horizontal, DS.Spacing.lg)
             .padding(.bottom, DS.Spacing.xs)
         }

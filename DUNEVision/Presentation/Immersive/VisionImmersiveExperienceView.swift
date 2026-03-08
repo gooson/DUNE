@@ -66,7 +66,7 @@ struct VisionImmersiveExperienceView: View {
                     .font(.largeTitle.weight(.bold))
 
                 Text(headerSubtitle)
-                    .font(.subheadline)
+                    .font(.callout)
                     .foregroundStyle(.secondary)
                     .frame(maxWidth: 560, alignment: .leading)
             }
@@ -180,16 +180,16 @@ struct VisionImmersiveExperienceView: View {
                     .accessibilityIdentifier(VisionSurfaceAccessibility.immersiveRecoveryAction)
 
                     Text(viewModel.recoveryStatusText)
-                        .font(.subheadline)
+                        .font(.callout)
                         .foregroundStyle(.secondary)
                 }
             } else if viewModel.selectedMode == .sleepJourney {
                 Text(sleepJourneyStatus)
-                    .font(.subheadline)
+                    .font(.callout)
                     .foregroundStyle(.secondary)
             } else {
                 Text(atmosphereStatus)
-                    .font(.subheadline)
+                    .font(.callout)
                     .foregroundStyle(.secondary)
             }
 
@@ -210,7 +210,7 @@ struct VisionImmersiveExperienceView: View {
             Text("Loading immersive health data")
                 .font(.headline)
             Text("DUNE is fetching condition and sleep context for this space.")
-                .font(.subheadline)
+                .font(.callout)
                 .foregroundStyle(.secondary)
         }
         .accessibilityIdentifier(VisionSurfaceAccessibility.immersiveLoadingState)
@@ -225,7 +225,7 @@ struct VisionImmersiveExperienceView: View {
             Image(systemName: icon)
                 .foregroundStyle(.tint)
             Text(message)
-                .font(.subheadline)
+                .font(.callout)
                 .foregroundStyle(.secondary)
         }
         .padding(16)

@@ -9,4 +9,10 @@ final class WatchHomeSmokeTests: WatchUITestBaseCase {
     func testNavigateToAllExercises() throws {
         openAllExercises()
     }
+
+    func testAllExercisesShowsFixtureSurface() throws {
+        openAllExercises()
+        XCTAssertTrue(elementExists(WatchAXID.quickStartList, timeout: 5))
+        XCTAssertTrue(elementExists(WatchAXID.quickStartExerciseSquat, timeout: 5))
+    }
 }

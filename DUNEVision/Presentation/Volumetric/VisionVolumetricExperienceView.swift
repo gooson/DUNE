@@ -87,7 +87,7 @@ struct VisionVolumetricExperienceView: View {
 
                     if let message = viewModel.message {
                         Text(message)
-                            .font(.footnote)
+                            .font(.callout)
                             .foregroundStyle(.secondary)
                     }
                 }
@@ -109,7 +109,7 @@ struct VisionVolumetricExperienceView: View {
                 Text(sceneTitle)
                     .font(.headline)
                 Text(sceneSubtitle(summary))
-                    .font(.footnote)
+                    .font(.callout)
                     .foregroundStyle(.secondary)
             }
             .padding(18)
@@ -187,10 +187,10 @@ struct VisionVolumetricExperienceView: View {
                 .font(.title3.weight(.semibold))
 
             title
-                .font(.subheadline.weight(.medium))
+                .font(.callout.weight(.medium))
 
             detail
-                .font(.footnote)
+                .font(.callout)
                 .foregroundStyle(.secondary)
                 .lineLimit(2)
         }
@@ -246,7 +246,7 @@ struct VisionVolumetricExperienceView: View {
             Text("Loading spatial health data")
                 .font(.headline)
             Text("Fetching recent workouts, baseline heart rate, and live pulse.")
-                .font(.subheadline)
+                .font(.callout)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
         }

@@ -172,6 +172,28 @@ struct ActivityViewModelTests {
 
     private let calendar = Calendar.current
 
+    private func makeStrengthRecord() -> ExerciseRecord {
+        let record = ExerciseRecord(
+            date: Date(),
+            exerciseType: "Bench Press",
+            duration: 900,
+            exerciseDefinitionID: "bench-press",
+            primaryMuscles: [.chest],
+            secondaryMuscles: [.triceps],
+            equipment: .barbell
+        )
+        let set = WorkoutSet(
+            setNumber: 1,
+            setType: .working,
+            weight: 80,
+            reps: 8,
+            isCompleted: true
+        )
+        set.exerciseRecord = record
+        record.sets = [set]
+        return record
+    }
+
     private func makeIsolatedPRStore() -> PersonalRecordStore {
         let suiteName = "ActivityViewModelTests.\(UUID().uuidString)"
         let defaults = UserDefaults(suiteName: suiteName)!
@@ -184,6 +206,18 @@ struct ActivityViewModelTests {
         let defaults = UserDefaults(suiteName: suiteName)!
         defaults.removePersistentDomain(forName: suiteName)
         return WorkoutRecommendationSettingsStore(defaults: defaults)
+    }
+
+    @Test("record change fingerprint changes when completed set data changes")
+    func recordChangeFingerprintTracksCompletedSetEdits() {
+        let record = makeStrengthRecord()
+        let original = ActivityRecordChangeFingerprint.make(from: [record])
+
+        record.sets?.first?.reps = 10
+
+        let updated = ActivityRecordChangeFingerprint.make(from: [record])
+
+        #expect(original != updated)
     }
 
     // MARK: - Parallel Loading

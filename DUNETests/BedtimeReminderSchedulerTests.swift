@@ -7,11 +7,12 @@ import UserNotifications
 @MainActor
 struct BedtimeReminderSchedulerTests {
 
-    @Test("Schedules reminder two hours before recent average bedtime")
-    func schedulesTwoHoursBeforeAverageBedtime() async throws {
+    @Test("Schedules reminder using selected lead time", arguments: BedtimeReminderLeadTime.allCases)
+    func schedulesReminderUsingSelectedLeadTime(leadTime: BedtimeReminderLeadTime) async throws {
         let calendar = Calendar(identifier: .gregorian)
         let now = try #require(calendar.date(from: DateComponents(year: 2026, month: 3, day: 8, hour: 12)))
         let userDefaults = try makeUserDefaults()
+        userDefaults.set(leadTime.rawValue, forKey: BedtimeReminderLeadTime.storageKey)
         let notificationScheduler = MockBedtimeNotificationScheduler(authorized: true)
         let sleepService = MockSleepService(
             calendar: calendar,
@@ -41,8 +42,17 @@ struct BedtimeReminderSchedulerTests {
 
         let request = try #require(notificationScheduler.requests.first)
         let trigger = try #require(request.trigger as? UNCalendarNotificationTrigger)
-        #expect(trigger.dateComponents.hour == 21)
-        #expect(trigger.dateComponents.minute == 30)
+        switch leadTime {
+        case .thirtyMinutes:
+            #expect(trigger.dateComponents.hour == 23)
+            #expect(trigger.dateComponents.minute == 0)
+        case .oneHour:
+            #expect(trigger.dateComponents.hour == 22)
+            #expect(trigger.dateComponents.minute == 30)
+        case .twoHours:
+            #expect(trigger.dateComponents.hour == 21)
+            #expect(trigger.dateComponents.minute == 30)
+        }
         #expect(request.content.title == "Start winding down now for better recovery tomorrow.")
     }
 
@@ -93,6 +103,46 @@ struct BedtimeReminderSchedulerTests {
             "com.raftel.dune.bedtime-watch-reminder"
         ])
         #expect(notificationScheduler.requests.isEmpty)
+    }
+
+    @Test("Force refresh bypasses debounce after lead time changes")
+    func forceRefreshBypassesDebounceAfterLeadTimeChanges() async throws {
+        let calendar = Calendar(identifier: .gregorian)
+        let now = try #require(calendar.date(from: DateComponents(year: 2026, month: 3, day: 8, hour: 12)))
+        let userDefaults = try makeUserDefaults()
+        userDefaults.set(BedtimeReminderLeadTime.twoHours.rawValue, forKey: BedtimeReminderLeadTime.storageKey)
+        let notificationScheduler = MockBedtimeNotificationScheduler(authorized: true)
+        let sleepService = MockSleepService(
+            calendar: calendar,
+            referenceDate: now,
+            stagesByOffset: [
+                1: [makeSleepStage(dayOffset: 1, hour: 23, minute: 30, calendar: calendar, referenceDate: now)],
+                2: [makeSleepStage(dayOffset: 2, hour: 23, minute: 30, calendar: calendar, referenceDate: now)],
+                3: [makeSleepStage(dayOffset: 3, hour: 23, minute: 30, calendar: calendar, referenceDate: now)]
+            ]
+        )
+
+        let scheduler = BedtimeReminderScheduler(
+            sleepService: sleepService,
+            notificationScheduler: notificationScheduler,
+            userDefaults: userDefaults,
+            calendar: calendar,
+            now: { now }
+        )
+
+        await scheduler.refreshSchedule()
+
+        userDefaults.set(BedtimeReminderLeadTime.thirtyMinutes.rawValue, forKey: BedtimeReminderLeadTime.storageKey)
+        await scheduler.refreshSchedule()
+        #expect(notificationScheduler.requests.count == 1)
+
+        await scheduler.refreshSchedule(force: true)
+        #expect(notificationScheduler.requests.count == 2)
+
+        let request = try #require(notificationScheduler.requests.last)
+        let trigger = try #require(request.trigger as? UNCalendarNotificationTrigger)
+        #expect(trigger.dateComponents.hour == 23)
+        #expect(trigger.dateComponents.minute == 0)
     }
 
     private func makeUserDefaults() throws -> UserDefaults {

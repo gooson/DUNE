@@ -1,6 +1,38 @@
 import XCTest
 
+enum WatchAXID {
+    static let homeRoot = "watch-home-root"
+    static let homeCarousel = "watch-home-carousel"
+    static let homeEmptyState = "watch-home-empty-state"
+    static let homeAllExercisesCard = "watch-home-card-all-exercises"
+    static let homeBrowseAllLink = "watch-home-browse-all-link"
+    static let quickStartScreen = "watch-quickstart-screen"
+    static let quickStartList = "watch-quickstart-list"
+    static let quickStartEmpty = "watch-quickstart-empty"
+    static let quickStartSectionRecent = "watch-quickstart-section-recent"
+    static let quickStartExerciseSquat = "watch-quickstart-exercise-ui-test-squat"
+    static let workoutPreviewScreen = "watch-workout-preview-screen"
+    static let workoutPreviewStrengthList = "watch-workout-preview-strength-list"
+    static let workoutPreviewStartButton = "watch-workout-start-button"
+    static let sessionPagingRoot = "watch-session-paging-root"
+    static let sessionMetricsScreen = "watch-session-metrics-screen"
+    static let sessionMetricsCompleteSetButton = "watch-session-complete-set-button"
+    static let sessionMetricsLastSetFinish = "watch-session-last-set-finish"
+    static let sessionControlsScreen = "watch-session-controls-screen"
+    static let sessionControlsEndButton = "watch-session-end-button"
+    static let sessionControlsPauseResumeButton = "watch-session-pause-resume-button"
+    static let restTimerScreen = "watch-rest-timer-screen"
+    static let restTimerSkipButton = "watch-rest-timer-skip"
+    static let setInputScreen = "watch-set-input-screen"
+    static let setInputDoneButton = "watch-set-input-done"
+    static let sessionSummaryScreen = "watch-session-summary-screen"
+    static let sessionSummaryEffortButton = "watch-summary-effort-button"
+    static let sessionSummaryDoneButton = "watch-session-summary-done"
+}
+
 class WatchUITestBaseCase: XCTestCase {
+    let fixtureStrengthSetCount = 3
+
     enum LaunchScenario: String {
         case empty = "empty"
         case defaultSeeded = "default-seeded"
@@ -80,18 +112,40 @@ class WatchUITestBaseCase: XCTestCase {
         app.descendants(matching: .any)[identifier].firstMatch.waitForExistence(timeout: timeout)
     }
 
+    @discardableResult
+    func tapElement(_ identifier: String, timeout: TimeInterval = 5) -> Bool {
+        let element = app.descendants(matching: .any)[identifier].firstMatch
+        guard element.waitForExistence(timeout: timeout) else { return false }
+        element.tap()
+        return true
+    }
+
+    func waitForAny(_ identifiers: [String], timeout: TimeInterval = 5) -> String? {
+        let deadline = Date().addingTimeInterval(timeout)
+        while Date() < deadline {
+            for identifier in identifiers {
+                if app.descendants(matching: .any)[identifier].firstMatch.exists {
+                    return identifier
+                }
+            }
+            RunLoop.current.run(until: Date().addingTimeInterval(0.1))
+        }
+        return nil
+    }
+
     func ensureHomeVisible(timeout: TimeInterval = 10) {
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: timeout))
-        let hasCarousel = elementExists("watch-home-carousel", timeout: timeout)
-        let hasEmptyState = elementExists("watch-home-empty-state", timeout: timeout)
+        XCTAssertTrue(elementExists(WatchAXID.homeRoot, timeout: timeout), "Home root should exist")
+        let hasCarousel = elementExists(WatchAXID.homeCarousel, timeout: timeout)
+        let hasEmptyState = elementExists(WatchAXID.homeEmptyState, timeout: timeout)
         XCTAssertTrue(hasCarousel || hasEmptyState, "Home should render either carousel or empty state")
     }
 
     func openAllExercises() {
         ensureHomeVisible()
 
-        let allExercisesCard = app.descendants(matching: .any)["watch-home-card-all-exercises"].firstMatch
-        let browseAllLink = app.descendants(matching: .any)["watch-home-browse-all-link"].firstMatch
+        let allExercisesCard = app.descendants(matching: .any)[WatchAXID.homeAllExercisesCard].firstMatch
+        let browseAllLink = app.descendants(matching: .any)[WatchAXID.homeBrowseAllLink].firstMatch
 
         var didTap = false
         if allExercisesCard.waitForExistence(timeout: 2) {
@@ -114,24 +168,116 @@ class WatchUITestBaseCase: XCTestCase {
 
         XCTAssertTrue(didTap, "Should navigate to All Exercises from home")
 
-        let hasQuickstartList = elementExists("watch-quickstart-list", timeout: 8)
-        let hasQuickstartEmpty = elementExists("watch-quickstart-empty", timeout: 8)
+        XCTAssertTrue(elementExists(WatchAXID.quickStartScreen, timeout: 8), "Quick Start root should render")
+        let hasQuickstartList = elementExists(WatchAXID.quickStartList, timeout: 8)
+        let hasQuickstartEmpty = elementExists(WatchAXID.quickStartEmpty, timeout: 8)
         XCTAssertTrue(hasQuickstartList || hasQuickstartEmpty, "All Exercises screen should render")
     }
 
     func startFixtureStrengthWorkout() {
         openAllExercises()
 
-        let exercise = app.descendants(matching: .any)["watch-quickstart-exercise-ui-test-squat"].firstMatch
+        let exercise = app.descendants(matching: .any)[WatchAXID.quickStartExerciseSquat].firstMatch
         XCTAssertTrue(exercise.waitForExistence(timeout: 5), "Fixture exercise should be visible")
         exercise.tap()
 
-        let startButton = app.descendants(matching: .any)["watch-workout-start-button"].firstMatch
+        XCTAssertTrue(elementExists(WatchAXID.workoutPreviewScreen, timeout: 5), "Workout preview root should render")
+        XCTAssertTrue(
+            elementExists(WatchAXID.workoutPreviewStrengthList, timeout: 5),
+            "Workout preview strength list should render"
+        )
+
+        let startButton = app.descendants(matching: .any)[WatchAXID.workoutPreviewStartButton].firstMatch
         XCTAssertTrue(startButton.waitForExistence(timeout: 5), "Workout preview should show Start button")
         startButton.tap()
 
-        let started = app.descendants(matching: .any)["watch-session-complete-set-button"].firstMatch.waitForExistence(timeout: 8)
-        XCTAssertTrue(started, "Workout session should start and show active session UI")
+        let startedIdentifier = waitForAny(
+            [
+                WatchAXID.sessionPagingRoot,
+                WatchAXID.setInputScreen,
+                WatchAXID.sessionMetricsScreen,
+                WatchAXID.sessionMetricsCompleteSetButton
+            ],
+            timeout: 8
+        )
+        XCTAssertNotNil(startedIdentifier, "Workout session should start and show active session UI")
+    }
+
+    func dismissSetInputSheetIfNeeded(timeout: TimeInterval = 5) {
+        guard app.descendants(matching: .any)[WatchAXID.setInputScreen].firstMatch.waitForExistence(timeout: timeout) else {
+            return
+        }
+        XCTAssertTrue(tapElement(WatchAXID.setInputDoneButton), "Set input sheet should dismiss via Done")
+        _ = waitForAny([WatchAXID.sessionMetricsScreen, WatchAXID.sessionMetricsCompleteSetButton], timeout: 5)
+    }
+
+    func openControlsPage() {
+        dismissSetInputSheetIfNeeded()
+        if elementExists(WatchAXID.sessionControlsScreen, timeout: 1) {
+            return
+        }
+
+        let swipeActions: [() -> Void] = [
+            { self.app.swipeDown() },
+            { self.app.swipeRight() },
+            { self.app.swipeLeft() },
+            { self.app.swipeUp() }
+        ]
+
+        for action in swipeActions {
+            action()
+            if elementExists(WatchAXID.sessionControlsScreen, timeout: 2) {
+                return
+            }
+        }
+
+        XCTFail("Controls page should be reachable from the active session")
+    }
+
+    func completeOneSetAndReachRestTimer() {
+        dismissSetInputSheetIfNeeded()
+        XCTAssertTrue(tapElement(WatchAXID.sessionMetricsCompleteSetButton), "Complete Set button should exist")
+        XCTAssertTrue(
+            elementExists(WatchAXID.restTimerScreen, timeout: 5),
+            "Rest timer should appear after completing a non-final set"
+        )
+    }
+
+    func skipRestTimer() {
+        XCTAssertTrue(
+            tapElement(WatchAXID.restTimerSkipButton, timeout: 5),
+            "Rest timer skip button should be available"
+        )
+    }
+
+    func completeFixtureStrengthWorkoutToSummary() {
+        startFixtureStrengthWorkout()
+
+        for setIndex in 1...fixtureStrengthSetCount {
+            dismissSetInputSheetIfNeeded()
+            XCTAssertTrue(
+                tapElement(WatchAXID.sessionMetricsCompleteSetButton, timeout: 5),
+                "Complete Set button should exist for set \(setIndex)"
+            )
+
+            if setIndex < fixtureStrengthSetCount {
+                XCTAssertTrue(
+                    elementExists(WatchAXID.restTimerScreen, timeout: 5),
+                    "Rest timer should appear after set \(setIndex)"
+                )
+                skipRestTimer()
+            } else {
+                XCTAssertTrue(
+                    tapElement(WatchAXID.sessionMetricsLastSetFinish, timeout: 5),
+                    "Finish Exercise action should exist after the last set"
+                )
+            }
+        }
+
+        XCTAssertTrue(
+            elementExists(WatchAXID.sessionSummaryScreen, timeout: 8),
+            "Workout summary should appear after finishing the fixture workout"
+        )
     }
 
     func defaultArtifactName(suffix: String) -> String {

@@ -176,7 +176,7 @@ struct VisionMuscleMapExperienceView: View {
                 .font(.title2.weight(.semibold))
 
             Text(summaryValue(for: selectedState))
-                .font(.subheadline)
+                .font(.callout)
                 .foregroundStyle(.secondary)
 
             HStack(spacing: 20) {

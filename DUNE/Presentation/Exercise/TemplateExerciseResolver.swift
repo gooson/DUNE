@@ -76,15 +76,27 @@ enum TemplateExerciseResolver {
     static func resolveExercises(
         from recommendation: WorkoutTemplateRecommendation,
         library: ExerciseLibraryQuerying
-    ) -> [ExerciseDefinition] {
+    ) -> [ExerciseDefinition]? {
+        guard recommendation.sequenceLabels.count == recommendation.sequenceTypes.count else {
+            return nil
+        }
+
         let exercises = library.allExercises()
-        return zip(recommendation.sequenceLabels, recommendation.sequenceTypes).compactMap { label, activityType in
-            resolveRecommendedExercise(
+        var resolved: [ExerciseDefinition] = []
+        resolved.reserveCapacity(recommendation.sequenceLabels.count)
+
+        for (label, activityType) in zip(recommendation.sequenceLabels, recommendation.sequenceTypes) {
+            guard let exercise = resolveRecommendedExercise(
                 label: label,
                 activityType: activityType,
                 exercises: exercises
-            )
+            ) else {
+                return nil
+            }
+            resolved.append(exercise)
         }
+
+        return resolved
     }
 
     private static func resolveRecommendedExercise(
@@ -109,8 +121,7 @@ enum TemplateExerciseResolver {
         }
 
         let canonicalTypeName = QuickStartCanonicalService.canonicalExerciseName(for: activityType.typeName)
-        guard activityType.category != .strength,
-              !canonicalTypeName.isEmpty,
+        guard !canonicalTypeName.isEmpty,
               canonicalLabel.isEmpty || canonicalLabel == canonicalTypeName else {
             return nil
         }

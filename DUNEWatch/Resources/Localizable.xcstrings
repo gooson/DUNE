@@ -4,74 +4,6 @@
     "--" : {
 
     },
-    "%lld exercise" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld種目"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld종목"
-          }
-        }
-      }
-    },
-    "%lld exercises" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld種目"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld종목"
-          }
-        }
-      }
-    },
-    "%@ · %lld sets" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ · %lldセット"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ · %lld세트"
-          }
-        }
-      }
-    },
-    "%lld sets · %lld reps" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lldセット · %lldレップ"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld세트 · %lld회"
-          }
-        }
-      }
-    },
     "· %.1fkg" : {
 
     },
@@ -92,6 +24,23 @@
     },
     "%@" : {
 
+    },
+    "%@ · %lld sets" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · %lldセット"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · %lld세트"
+          }
+        }
+      }
     },
     "%@ bpm" : {
       "extractionState" : "manual",
@@ -164,19 +113,53 @@
         }
       }
     },
+    "%lld exercise" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld種目"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld종목"
+          }
+        }
+      }
+    },
     "%lld exercises" : {
       "extractionState" : "manual",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%lldエクササイズ"
+            "value" : "%lld種目"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%lld개 운동"
+            "value" : "%lld종목"
+          }
+        }
+      }
+    },
+    "%lld sets · %lld reps" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lldセット · %lldレップ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld세트 · %lld회"
           }
         }
       }
@@ -720,6 +703,23 @@
         }
       }
     },
+    "End Now" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今すぐ終了"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "지금 종료"
+          }
+        }
+      }
+    },
     "End Workout" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -767,23 +767,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "계속하지 않으면 %lld초 후 종료됩니다."
-          }
-        }
-      }
-    },
-    "End Now" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "今すぐ終了"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "지금 종료"
           }
         }
       }
@@ -1012,23 +995,6 @@
     "kcal" : {
 
     },
-    "kg" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "kg"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "kg"
-          }
-        }
-      }
-    },
     "Keep Running" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1042,6 +1008,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "계속 운동"
+          }
+        }
+      }
+    },
+    "kg" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "kg"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "kg"
           }
         }
       }
@@ -1140,23 +1123,6 @@
         }
       }
     },
-    "No movement detected" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "動きが検出されません"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "움직임이 감지되지 않음"
-          }
-        }
-      }
-    },
     "No Exercises" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1170,6 +1136,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "운동 없음"
+          }
+        }
+      }
+    },
+    "No movement detected" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "動きが検出されません"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "움직임이 감지되지 않음"
           }
         }
       }
@@ -1242,23 +1225,6 @@
         }
       }
     },
-    "Pause" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "一時停止"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "일시정지"
-          }
-        }
-      }
-    },
     "Pace" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1272,6 +1238,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "페이스"
+          }
+        }
+      }
+    },
+    "Pause" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一時停止"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "일시정지"
           }
         }
       }
@@ -1292,6 +1275,9 @@
           }
         }
       }
+    },
+    "Popular" : {
+
     },
     "Preferred" : {
       "extractionState" : "manual",

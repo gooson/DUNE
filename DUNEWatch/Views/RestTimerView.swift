@@ -49,6 +49,7 @@ struct RestTimerView: View {
                 VStack(spacing: DS.Spacing.xxs) {
                     Text(timeString)
                         .font(DS.Typography.countdownValue)
+                        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.restTimerCountdown)
 
                     // HR display during rest
                     HStack(spacing: DS.Spacing.xxs) {
@@ -80,6 +81,7 @@ struct RestTimerView: View {
                 }
                 .buttonStyle(.bordered)
                 .tint(.secondary)
+                .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.restTimerAddTimeButton)
 
                 Button {
                     let total = TimeInterval(totalSeconds)
@@ -92,6 +94,7 @@ struct RestTimerView: View {
                 }
                 .buttonStyle(.bordered)
                 .tint(DS.Color.positive)
+                .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.restTimerSkipButton)
 
                 Button(role: .destructive) {
                     cancelCountdown()
@@ -103,8 +106,10 @@ struct RestTimerView: View {
                 }
                 .buttonStyle(.bordered)
                 .tint(DS.Color.negative)
+                .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.restTimerEndButton)
             }
         }
+        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.restTimerScreen)
         .onAppear {
             startCountdown()
         }

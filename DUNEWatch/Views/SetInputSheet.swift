@@ -18,11 +18,13 @@ struct SetInputSheet: View {
     var body: some View {
         if showPreviousSets {
             previousSetsDetail
+                .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.setInputPreviousSetsScreen)
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
                         Button { showPreviousSets = false } label: {
                             Image(systemName: "chevron.left")
                         }
+                        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.setInputPreviousSetsBackButton)
                     }
                 }
         } else {
@@ -40,6 +42,7 @@ struct SetInputSheet: View {
             .focusable(true)
             .focused($isWeightCrownFocused)
             .digitalCrownRotation($weight, from: 0, through: 500, by: 2.5, sensitivity: .medium)
+            .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.setInputScreen)
             .toolbar {
                 if !previousSets.isEmpty {
                     ToolbarItem(placement: .topBarLeading) {
@@ -48,10 +51,12 @@ struct SetInputSheet: View {
                         } label: {
                             Image(systemName: "list.bullet.clipboard")
                         }
+                        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.setInputPreviousSetsButton)
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") { dismiss() }
+                        .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.setInputDoneButton)
                 }
             }
             .onChange(of: weight) { _, newValue in
@@ -115,6 +120,11 @@ struct SetInputSheet: View {
         }
         .buttonStyle(.bordered)
         .tint(.secondary)
+        .accessibilityIdentifier(
+            delta < 0
+                ? WatchWorkoutSurfaceAccessibility.setInputWeightDecrementButton
+                : WatchWorkoutSurfaceAccessibility.setInputWeightIncrementButton
+        )
     }
 
     // MARK: - Reps
@@ -133,6 +143,7 @@ struct SetInputSheet: View {
             }
             .buttonStyle(.bordered)
             .tint(.secondary)
+            .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.setInputRepsDecrementButton)
 
             Spacer()
 
@@ -160,6 +171,7 @@ struct SetInputSheet: View {
             }
             .buttonStyle(.bordered)
             .tint(.secondary)
+            .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.setInputRepsIncrementButton)
         }
     }
 
@@ -187,6 +199,9 @@ struct SetInputSheet: View {
 
                         Spacer()
                     }
+                    .accessibilityIdentifier(
+                        WatchWorkoutSurfaceAccessibility.setInputPreviousSetRow(set.setNumber)
+                    )
                 }
             } header: {
                 Text("Previous Sets")

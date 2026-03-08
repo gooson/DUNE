@@ -23,6 +23,23 @@ struct TemplateExerciseResolverTests {
         )
     }
 
+    private func makeStrengthDefinition(
+        id: String = "bench-press",
+        name: String = "Bench Press"
+    ) -> ExerciseDefinition {
+        ExerciseDefinition(
+            id: id,
+            name: name,
+            localizedName: name,
+            category: .strength,
+            inputType: .weightReps,
+            primaryMuscles: [.chest],
+            secondaryMuscles: [.triceps],
+            equipment: .barbell,
+            metValue: 6.0
+        )
+    }
+
     @Test("resolveExercise preserves custom cardio metadata")
     func resolveExercisePreservesCustomCardioMetadata() {
         let custom = CustomExercise(
@@ -157,7 +174,51 @@ struct TemplateExerciseResolverTests {
             library: ExerciseLibraryService(exercises: [walking, rowing])
         )
 
-        #expect(resolved.map { $0.id } == ["walking", "rowing-machine"])
+        #expect(resolved?.map { $0.id } == ["walking", "rowing-machine"])
+    }
+
+    @Test("resolveExercises returns nil instead of truncating unresolved recommendation steps")
+    func resolveExercisesReturnsNilWhenSequenceCannotBeFullyResolved() {
+        let walking = makeCardioDefinition(id: "walking", name: "Walking", cardioUnit: .km)
+        let recommendation = WorkoutTemplateRecommendation(
+            id: "walking>missing",
+            title: "Incomplete Routine",
+            sequenceTypes: [.walking, .rowing],
+            sequenceLabels: ["Walking", "Unknown Row"],
+            frequency: 2,
+            averageDurationMinutes: 20,
+            lastPerformedAt: .now,
+            score: 1.1
+        )
+
+        let resolved = TemplateExerciseResolver.resolveExercises(
+            from: recommendation,
+            library: ExerciseLibraryService(exercises: [walking])
+        )
+
+        #expect(resolved == nil)
+    }
+
+    @Test("resolveExercises falls back to strength activity type for generic labels")
+    func resolveExercisesFallsBackToStrengthActivityType() {
+        let benchPress = makeStrengthDefinition()
+        let recommendation = WorkoutTemplateRecommendation(
+            id: "strength",
+            title: "Strength Builder",
+            sequenceTypes: [.traditionalStrengthTraining],
+            sequenceLabels: ["Strength"],
+            frequency: 3,
+            averageDurationMinutes: 30,
+            lastPerformedAt: .now,
+            score: 1.0
+        )
+
+        let resolved = TemplateExerciseResolver.resolveExercises(
+            from: recommendation,
+            library: ExerciseLibraryService(exercises: [benchPress])
+        )
+
+        #expect(resolved?.map { $0.id } == ["bench-press"])
     }
 
     @Test("profile normalizes legacy raw cardio input aliases")
