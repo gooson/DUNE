@@ -226,7 +226,7 @@ struct VisionExerciseFormGuideView: View {
             ForEach(Array(guide.formCueKeys.enumerated()), id: \.offset) { index, cue in
                 HStack(alignment: .top, spacing: 12) {
                     Text("\(index + 1)")
-                        .font(.caption.weight(.bold))
+                        .font(.callout.weight(.bold))
                         .foregroundStyle(.white)
                         .frame(width: 22, height: 22)
                         .background(.tint, in: Circle())

@@ -56,7 +56,7 @@ struct VisionExerciseMuscleMapView: View {
             .frame(maxWidth: .infinity)
 
             Text(label)
-                .font(.caption)
+                .font(.callout)
                 .foregroundStyle(.secondary)
         }
         .padding(.vertical, 8)
@@ -69,7 +69,7 @@ struct VisionExerciseMuscleMapView: View {
                 .fill(color)
                 .frame(width: 14, height: 14)
             Text(title)
-                .font(.caption)
+                .font(.callout)
                 .foregroundStyle(.secondary)
         }
     }

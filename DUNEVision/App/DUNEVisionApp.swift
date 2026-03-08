@@ -62,6 +62,52 @@ struct DUNEVisionApp: App {
         return CloudMirroredSharedHealthDataService(modelContainer: modelContainer)
     }
 
+    private func makeWindowPlacement(
+        for windowID: String,
+        context: WindowPlacementContext
+    ) -> WindowPlacement {
+        let relationship = VisionWindowPlacementPlanner.relationship(
+            for: windowID,
+            existingWindowIDs: Set(context.windows.map(\.id))
+        )
+
+        switch relationship {
+        case .utilityPanel:
+            return WindowPlacement(.utilityPanel)
+
+        case let .leading(relativeID):
+            guard let relativeWindow = windowProxy(id: relativeID, in: context) else {
+                return WindowPlacement(.utilityPanel)
+            }
+            return WindowPlacement(.leading(relativeWindow))
+
+        case let .trailing(relativeID):
+            guard let relativeWindow = windowProxy(id: relativeID, in: context) else {
+                return WindowPlacement(.utilityPanel)
+            }
+            return WindowPlacement(.trailing(relativeWindow))
+
+        case let .above(relativeID):
+            guard let relativeWindow = windowProxy(id: relativeID, in: context) else {
+                return WindowPlacement(.utilityPanel)
+            }
+            return WindowPlacement(.above(relativeWindow))
+
+        case let .below(relativeID):
+            guard let relativeWindow = windowProxy(id: relativeID, in: context) else {
+                return WindowPlacement(.utilityPanel)
+            }
+            return WindowPlacement(.below(relativeWindow))
+        }
+    }
+
+    private func windowProxy(
+        id: String?,
+        in context: WindowPlacementContext
+    ) -> WindowProxy? {
+        context.windows.first { $0.id == id }
+    }
+
     init() {
         let persistedThemeRawValue = UserDefaults.standard.string(forKey: AppTheme.storageKey)
         if let normalizedTheme = AppTheme.resolvedTheme(fromPersistedRawValue: persistedThemeRawValue) {
@@ -123,6 +169,9 @@ struct DUNEVisionApp: App {
             .tint(.accentColor)
         }
         .defaultSize(width: 760, height: 560)
+        .defaultWindowPlacement { _, context in
+            makeWindowPlacement(for: VisionDashboardWindowKind.condition.windowID, context: context)
+        }
 
         WindowGroup(id: VisionDashboardWindowKind.activity.windowID) {
             VisionDashboardWindowScene(
@@ -132,6 +181,9 @@ struct DUNEVisionApp: App {
             .tint(.accentColor)
         }
         .defaultSize(width: 860, height: 620)
+        .defaultWindowPlacement { _, context in
+            makeWindowPlacement(for: VisionDashboardWindowKind.activity.windowID, context: context)
+        }
 
         WindowGroup(id: VisionDashboardWindowKind.sleep.windowID) {
             VisionDashboardWindowScene(
@@ -141,6 +193,9 @@ struct DUNEVisionApp: App {
             .tint(.accentColor)
         }
         .defaultSize(width: 760, height: 560)
+        .defaultWindowPlacement { _, context in
+            makeWindowPlacement(for: VisionDashboardWindowKind.sleep.windowID, context: context)
+        }
 
         WindowGroup(id: VisionDashboardWindowKind.body.windowID) {
             VisionDashboardWindowScene(
@@ -150,6 +205,9 @@ struct DUNEVisionApp: App {
             .tint(.accentColor)
         }
         .defaultSize(width: 760, height: 560)
+        .defaultWindowPlacement { _, context in
+            makeWindowPlacement(for: VisionDashboardWindowKind.body.windowID, context: context)
+        }
 
         // 3D Charts window — opened via openWindow(id:)
         WindowGroup(id: "chart3d") {
@@ -157,6 +215,9 @@ struct DUNEVisionApp: App {
                 .tint(.accentColor)
         }
         .defaultSize(width: 800, height: 600, depth: 400)
+        .defaultWindowPlacement { _, context in
+            makeWindowPlacement(for: VisionWindowPlacementPlanner.chart3DWindowID, context: context)
+        }
 
         WindowGroup(id: "spatial-volume") {
             VisionVolumetricExperienceView(sharedHealthDataService: sharedHealthDataService)

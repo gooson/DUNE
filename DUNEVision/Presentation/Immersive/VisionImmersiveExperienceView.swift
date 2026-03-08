@@ -207,7 +207,7 @@ struct VisionImmersiveExperienceView: View {
     private func statPill(title: String, value: String) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(verbatim: title)
-                .font(.caption)
+                .font(.callout)
                 .foregroundStyle(.secondary)
             Text(verbatim: value)
                 .font(.headline.weight(.semibold))
