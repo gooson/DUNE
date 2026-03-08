@@ -256,10 +256,13 @@ struct ExercisePickerView: View {
     private var fullModeSections: some View {
         // Recent exercises section
         if trimmedSearchText.isEmpty && !hasActiveFilters && !recentExercises.isEmpty {
-            Section("Recent") {
+            Section {
                 ForEach(recentExercises) { exercise in
                     exerciseRow(exercise)
                 }
+            } header: {
+                Text("Recent")
+                    .accessibilityIdentifier("picker-section-recent")
             }
         }
 
@@ -287,6 +290,7 @@ struct ExercisePickerView: View {
                         }
                     }
                     .font(.caption)
+                    .accessibilityIdentifier("picker-clear-filters")
                 }
             }
         }
@@ -295,26 +299,35 @@ struct ExercisePickerView: View {
     @ViewBuilder
     private var quickStartHubSections: some View {
         if !recentExercises.isEmpty {
-            Section("Recent") {
+            Section {
                 ForEach(recentExercises) { exercise in
                     exerciseRow(exercise)
                 }
+            } header: {
+                Text("Recent")
+                    .accessibilityIdentifier("picker-section-recent")
             }
         }
 
         if !preferredExercises.isEmpty {
-            Section("Preferred") {
+            Section {
                 ForEach(preferredExercises) { exercise in
                     exerciseRow(exercise)
                 }
+            } header: {
+                Text("Preferred")
+                    .accessibilityIdentifier("picker-section-preferred")
             }
         }
 
         if !popularExercises.isEmpty {
-            Section("Popular") {
+            Section {
                 ForEach(popularExercises) { exercise in
                     exerciseRow(exercise)
                 }
+            } header: {
+                Text("Popular")
+                    .accessibilityIdentifier("picker-section-popular")
             }
         }
 
@@ -366,7 +379,7 @@ struct ExercisePickerView: View {
     private func quickStartTemplateSection(
         onStartTemplate: @escaping (WorkoutTemplate) -> Void
     ) -> some View {
-        Section("Templates") {
+        Section {
             ForEach(templates) { template in
                 Button {
                     dismissPicker {
@@ -376,7 +389,11 @@ struct ExercisePickerView: View {
                     templateRow(template)
                 }
                 .buttonStyle(.plain)
+                .accessibilityIdentifier(templateRowIdentifier(template))
             }
+        } header: {
+            Text("Templates")
+                .accessibilityIdentifier("picker-section-templates")
         }
     }
 
@@ -389,6 +406,7 @@ struct ExercisePickerView: View {
         } header: {
             HStack {
                 Text(quickStartAllSectionTitle)
+                    .accessibilityIdentifier("picker-section-all")
                 Spacer()
                 if showingAllQuickStartExercises && trimmedSearchText.isEmpty {
                     Button("Hide") {
@@ -396,6 +414,7 @@ struct ExercisePickerView: View {
                         showingAllQuickStartExercises = false
                     }
                     .font(.caption)
+                    .accessibilityIdentifier("picker-hide-all-button")
                 }
             }
         }
@@ -419,6 +438,7 @@ struct ExercisePickerView: View {
             }
             .padding(.horizontal, DS.Spacing.lg)
         }
+        .accessibilityIdentifier("picker-filter-category-scroll")
         .listRowInsets(EdgeInsets())
         .listRowBackground(Color.clear)
 
@@ -434,6 +454,7 @@ struct ExercisePickerView: View {
             }
             .padding(.horizontal, DS.Spacing.lg)
         }
+        .accessibilityIdentifier("picker-filter-muscle-scroll")
         .listRowInsets(EdgeInsets())
         .listRowBackground(Color.clear)
 
@@ -449,6 +470,7 @@ struct ExercisePickerView: View {
             }
             .padding(.horizontal, DS.Spacing.lg)
         }
+        .accessibilityIdentifier("picker-filter-equipment-scroll")
         .listRowInsets(EdgeInsets())
         .listRowBackground(Color.clear)
     }
@@ -578,6 +600,7 @@ struct ExercisePickerView: View {
                 )
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier(categoryChipIdentifier(category))
     }
 
     private func userCategoryChip(_ userCat: UserCategory) -> some View {
@@ -611,6 +634,7 @@ struct ExercisePickerView: View {
             )
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier(userCategoryChipIdentifier(userCat))
     }
 
     private func muscleChip(_ muscle: MuscleGroup) -> some View {
@@ -634,6 +658,7 @@ struct ExercisePickerView: View {
                 )
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier(muscleChipIdentifier(muscle))
     }
 
     private func equipmentChip(_ equipment: Equipment) -> some View {
@@ -660,6 +685,27 @@ struct ExercisePickerView: View {
             )
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier(equipmentChipIdentifier(equipment))
+    }
+
+    private func templateRowIdentifier(_ template: WorkoutTemplate) -> String {
+        "picker-template-\(template.id.uuidString.lowercased())"
+    }
+
+    private func categoryChipIdentifier(_ category: ExerciseCategory?) -> String {
+        "picker-filter-category-\(category?.rawValue ?? "all")"
+    }
+
+    private func userCategoryChipIdentifier(_ userCategory: UserCategory) -> String {
+        "picker-filter-user-category-\(userCategory.id.uuidString.lowercased())"
+    }
+
+    private func muscleChipIdentifier(_ muscle: MuscleGroup) -> String {
+        "picker-filter-muscle-\(muscle.rawValue)"
+    }
+
+    private func equipmentChipIdentifier(_ equipment: Equipment) -> String {
+        "picker-filter-equipment-\(equipment.rawValue)"
     }
 
 }

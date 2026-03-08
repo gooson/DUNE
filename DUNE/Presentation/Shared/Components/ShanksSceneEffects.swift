@@ -20,25 +20,43 @@ struct ShanksSceneStyle {
     let wakeOpacity: Double
     let kamusariOpacity: Double
     let kamusariScale: CGFloat
+    let fishCount: Int
+    let fishOpacity: Double
+    let fishScale: CGFloat
 }
 
 extension ShanksSceneStyle {
     static func tab(for preset: WavePreset) -> Self {
         let scale: CGFloat
         let topInset: CGFloat
+        let fishCount: Int
+        let fishOpacity: Double
+        let fishScale: CGFloat
         switch preset {
         case .train:
             scale = 1.18
             topInset = 104
+            fishCount = 3
+            fishOpacity = 0.22
+            fishScale = 1.08
         case .today:
             scale = 1.0
             topInset = 100
+            fishCount = 3
+            fishOpacity = 0.20
+            fishScale = 1.0
         case .wellness:
             scale = 0.84
             topInset = 96
+            fishCount = 2
+            fishOpacity = 0.16
+            fishScale = 0.88
         case .life:
             scale = 0.70
             topInset = 64
+            fishCount = 2
+            fishOpacity = 0.14
+            fishScale = 0.74
         }
 
         return .init(
@@ -60,7 +78,10 @@ extension ShanksSceneStyle {
             shipTopPadding: 76,
             wakeOpacity: 0.54,
             kamusariOpacity: 0.88,
-            kamusariScale: scale
+            kamusariScale: scale,
+            fishCount: fishCount,
+            fishOpacity: fishOpacity,
+            fishScale: fishScale
         )
     }
 
@@ -83,7 +104,10 @@ extension ShanksSceneStyle {
         shipTopPadding: 46,
         wakeOpacity: 0.34,
         kamusariOpacity: 0.58,
-        kamusariScale: 0.78
+        kamusariScale: 0.78,
+        fishCount: 2,
+        fishOpacity: 0.11,
+        fishScale: 0.82
     )
 
     static let sheet = Self(
@@ -105,7 +129,10 @@ extension ShanksSceneStyle {
         shipTopPadding: 24,
         wakeOpacity: 0.20,
         kamusariOpacity: 0.36,
-        kamusariScale: 0.62
+        kamusariScale: 0.62,
+        fishCount: 1,
+        fishOpacity: 0.07,
+        fishScale: 0.62
     )
 }
 
@@ -158,6 +185,12 @@ struct ShanksCinematicSceneBackground: View {
                     ShanksWaterMassScene(
                         style: style,
                         accentTint: resolvedAccentTint
+                    )
+                    .frame(height: style.sceneHeight)
+
+                    ShanksDeepSeaFishOverlay(
+                        style: style,
+                        elapsed: elapsed
                     )
                     .frame(height: style.sceneHeight)
 
@@ -443,6 +476,137 @@ private struct ShanksUnderwaterCausticOverlay: View {
             .concatenating(CGAffineTransform(translationX: centerX, y: centerY))
 
         return capsule.applying(transform)
+    }
+}
+
+struct ShanksDeepSeaFishSilhouetteShape: Shape {
+    func path(in rect: CGRect) -> Path {
+        guard rect.width > 0, rect.height > 0 else { return Path() }
+
+        let w = rect.width
+        let h = rect.height
+        var path = Path()
+
+        path.move(to: CGPoint(x: w * 0.04, y: h * 0.48))
+        path.addCurve(
+            to: CGPoint(x: w * 0.22, y: h * 0.18),
+            control1: CGPoint(x: w * 0.08, y: h * 0.26),
+            control2: CGPoint(x: w * 0.15, y: h * 0.14)
+        )
+        path.addCurve(
+            to: CGPoint(x: w * 0.58, y: h * 0.20),
+            control1: CGPoint(x: w * 0.34, y: h * 0.06),
+            control2: CGPoint(x: w * 0.48, y: h * 0.10)
+        )
+        path.addLine(to: CGPoint(x: w * 0.64, y: h * 0.04))
+        path.addLine(to: CGPoint(x: w * 0.68, y: h * 0.22))
+        path.addCurve(
+            to: CGPoint(x: w * 0.86, y: h * 0.38),
+            control1: CGPoint(x: w * 0.74, y: h * 0.20),
+            control2: CGPoint(x: w * 0.82, y: h * 0.26)
+        )
+        path.addLine(to: CGPoint(x: w * 1.00, y: h * 0.12))
+        path.addLine(to: CGPoint(x: w * 0.94, y: h * 0.48))
+        path.addLine(to: CGPoint(x: w * 1.00, y: h * 0.88))
+        path.addLine(to: CGPoint(x: w * 0.84, y: h * 0.62))
+        path.addCurve(
+            to: CGPoint(x: w * 0.54, y: h * 0.76),
+            control1: CGPoint(x: w * 0.76, y: h * 0.76),
+            control2: CGPoint(x: w * 0.64, y: h * 0.82)
+        )
+        path.addLine(to: CGPoint(x: w * 0.48, y: h * 0.96))
+        path.addLine(to: CGPoint(x: w * 0.40, y: h * 0.74))
+        path.addCurve(
+            to: CGPoint(x: w * 0.18, y: h * 0.66),
+            control1: CGPoint(x: w * 0.32, y: h * 0.76),
+            control2: CGPoint(x: w * 0.24, y: h * 0.72)
+        )
+        path.addCurve(
+            to: CGPoint(x: w * 0.04, y: h * 0.48),
+            control1: CGPoint(x: w * 0.08, y: h * 0.64),
+            control2: CGPoint(x: w * 0.04, y: h * 0.56)
+        )
+        path.closeSubpath()
+
+        return path
+    }
+}
+
+private struct ShanksDeepSeaFishOverlay: View {
+    let style: ShanksSceneStyle
+    let elapsed: TimeInterval
+
+    @Environment(\.appTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
+
+    private struct FishSpec {
+        let x: CGFloat
+        let y: CGFloat
+        let width: CGFloat
+        let height: CGFloat
+        let rotation: Double
+        let speed: Double
+        let phase: Double
+        let opacity: Double
+        let blur: CGFloat
+        let mirrored: Bool
+    }
+
+    private static let specs: [FishSpec] = [
+        .init(x: 0.22, y: 0.70, width: 0.34, height: 0.22, rotation: -8, speed: 0.16, phase: 0.4, opacity: 1.00, blur: 1.0, mirrored: false),
+        .init(x: 0.80, y: 0.48, width: 0.26, height: 0.18, rotation: 7, speed: 0.21, phase: 1.7, opacity: 0.74, blur: 1.8, mirrored: true),
+        .init(x: 0.56, y: 0.82, width: 0.20, height: 0.14, rotation: -3, speed: 0.28, phase: 2.8, opacity: 0.56, blur: 2.4, mirrored: false),
+    ]
+
+    private var darkBoost: Double {
+        colorScheme == .dark ? 1.0 : 0.84
+    }
+
+    var body: some View {
+        GeometryReader { proxy in
+            let size = proxy.size
+
+            ZStack {
+                ForEach(Array(Self.specs.prefix(style.fishCount).enumerated()), id: \.offset) { index, spec in
+                    let width = min(max(size.width * spec.width * style.fishScale, 68), size.width * 0.44)
+                    let height = max(size.height * spec.height * style.fishScale, 24)
+                    let driftX = sin(elapsed * spec.speed + spec.phase) * size.width * 0.028
+                    let driftY = cos(elapsed * spec.speed * 1.4 + spec.phase + Double(index)) * size.height * 0.018
+                    let wobble = sin(elapsed * spec.speed * 2.0 + spec.phase) * 2.4
+
+                    ShanksDeepSeaFishSilhouetteShape()
+                        .fill(
+                            LinearGradient(
+                                colors: [
+                                    theme.shanksCurrentColor.opacity(spec.opacity * 0.14 * darkBoost),
+                                    theme.shanksDeepColor.opacity(spec.opacity * 0.72 * darkBoost),
+                                    theme.shanksAbyssColor.opacity(spec.opacity * 0.94),
+                                ],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .overlay {
+                            ShanksDeepSeaFishSilhouetteShape()
+                                .stroke(
+                                    theme.shanksFoamColor.opacity(spec.opacity * 0.08),
+                                    style: StrokeStyle(lineWidth: 0.8, lineCap: .round, lineJoin: .round)
+                                )
+                        }
+                        .frame(width: width, height: height)
+                        .scaleEffect(x: spec.mirrored ? -1 : 1, y: 1)
+                        .rotationEffect(.degrees(spec.rotation + wobble))
+                        .offset(
+                            x: size.width * (spec.x - 0.5) + driftX,
+                            y: size.height * (spec.y - 0.5) + driftY
+                        )
+                        .blur(radius: spec.blur)
+                        .opacity(style.fishOpacity)
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+        .allowsHitTesting(false)
     }
 }
 

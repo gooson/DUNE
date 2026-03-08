@@ -103,6 +103,9 @@ final class DashboardViewModel {
     private let weatherProvider: WeatherProviding?
     private let scoreUseCase = CalculateConditionScoreUseCase()
     private let coachingEngine = CoachingEngine()
+    private let coachingMessageEnhancer: (any CoachingMessageEnhancing)?
+    private var enhanceCoachingTask: Task<Void, Never>?
+    private var lastCoachingInput: CoachingInput?
     private let trendService = TrendAnalysisService()
     private let dismissStore = InsightCardDismissStore.shared
 
@@ -115,7 +118,8 @@ final class DashboardViewModel {
         bodyService: BodyCompositionQuerying? = nil,
         pinnedMetricsStore: TodayPinnedMetricsStore = .shared,
         sharedHealthDataService: SharedHealthDataService? = nil,
-        weatherProvider: WeatherProviding? = nil
+        weatherProvider: WeatherProviding? = nil,
+        coachingMessageEnhancer: (any CoachingMessageEnhancing)? = AICoachingMessageService()
     ) {
         self.healthKitManager = healthKitManager
         self.hrvService = hrvService ?? HRVQueryService(manager: healthKitManager)
@@ -127,6 +131,7 @@ final class DashboardViewModel {
         self.sharedHealthDataService = sharedHealthDataService
         // Create default weather provider if none injected (Correction: @MainActor init is safe for LocationService)
         self.weatherProvider = weatherProvider ?? WeatherProvider(locationService: LocationService())
+        self.coachingMessageEnhancer = coachingMessageEnhancer
         self.pinnedCategories = pinnedMetricsStore.load()
     }
 
@@ -236,6 +241,7 @@ final class DashboardViewModel {
         sortedMetrics = allMetrics.sorted { $0.changeSignificance > $1.changeSignificance }
         buildCoachingInsights()
         coachingMessage = focusInsight?.message ?? buildCoachingMessage()
+        enhanceCoachingMessageIfAvailable()
         heroBaselineDetails = buildHeroBaselineDetails()
         lastUpdated = Date()
         WidgetDataWriter.writeConditionScore(conditionScore)
@@ -332,6 +338,7 @@ final class DashboardViewModel {
         // Recompute coaching with refreshed weather context.
         buildCoachingInsights()
         coachingMessage = focusInsight?.message ?? buildCoachingMessage()
+        enhanceCoachingMessageIfAvailable()
     }
 
     private func safeWeatherFetch() async -> WeatherSnapshot? {
@@ -1054,6 +1061,7 @@ final class DashboardViewModel {
             weather: weatherSnapshot
         )
 
+        lastCoachingInput = input
         let output = coachingEngine.generate(from: input)
         focusInsight = output.focusInsight
 
@@ -1062,6 +1070,22 @@ final class DashboardViewModel {
         insightCards = output.insightCards
             .filter { !dismissed.contains($0.id) }
             .map { InsightCardData(from: $0) }
+    }
+
+    private func enhanceCoachingMessageIfAvailable() {
+        guard let enhancer = coachingMessageEnhancer,
+              let insight = focusInsight,
+              let input = lastCoachingInput else { return }
+
+        enhanceCoachingTask?.cancel()
+        let expectedInsightID = insight.id
+        enhanceCoachingTask = Task {
+            let enhanced = await enhancer.enhance(insight: insight, context: input)
+            guard !Task.isCancelled,
+                  focusInsight?.id == expectedInsightID else { return }
+            focusInsight = enhanced
+            coachingMessage = enhanced.message
+        }
     }
 
     private func buildCoachingMessage() -> String {
