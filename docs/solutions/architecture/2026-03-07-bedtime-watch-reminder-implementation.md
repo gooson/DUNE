@@ -9,6 +9,9 @@ related_solutions: [docs/solutions/healthkit/background-notification-system.md, 
 
 # Solution: 평균 취침 시간 기반 Apple Watch 취침 리마인더 구현
 
+> Note: 2026-03-08 기준 현재 구현은 watch-specific reminder에서 일반 bedtime reminder로 확장되었습니다.
+> 최신 상태는 `docs/solutions/general/2026-03-08-general-bedtime-reminder.md`를 우선 참조하세요.
+
 ## Problem
 
 요청사항은 "평균 취침 시간 30분 전에 Apple Watch를 안 차고 있으면 알려주기"였지만, 기존 PR은 brainstorm 문서만 추가되어 실제 앱 동작이 전혀 없었다.

@@ -18,7 +18,7 @@ struct NotificationSettingsSection: View {
             }
             notificationToggle(for: .workoutPR)
             Toggle(isOn: $isBedtimeReminderEnabled) {
-                Label("Bedtime Watch Reminder", systemImage: "applewatch")
+                Label("Bedtime Reminder", systemImage: "moon.stars.fill")
             }
         } header: {
             Text("Notifications")
