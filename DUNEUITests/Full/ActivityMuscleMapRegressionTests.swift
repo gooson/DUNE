@@ -35,12 +35,10 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
     func testMuscleMapDetailViewNavigatesTo3D() throws {
         navigateToMuscleMapDetail()
 
-        // Tap the muscle recovery map to trigger 3D navigation
         let detailScreen = app.descendants(matching: .any)[AXID.activityMuscleMapDetailScreen].firstMatch
         XCTAssertTrue(detailScreen.waitForExistence(timeout: 10))
 
-        // Tap on the map area — muscle selection triggers 3D navigation
-        detailScreen.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.15)).tap()
+        tapFrontChestMuscle()
 
         let screen3D = app.descendants(matching: .any)[AXID.activityMuscleMap3DScreen].firstMatch
         XCTAssertTrue(
@@ -139,12 +137,16 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
     private func navigateTo3DView() {
         navigateToMuscleMapDetail()
 
-        let chestButton = app.buttons["musclemap-body-front-chest"].firstMatch
-        XCTAssertTrue(chestButton.waitForExistence(timeout: 10), "Front chest muscle button should exist")
-        chestButton.tap()
+        tapFrontChestMuscle()
 
         let screen3D = app.descendants(matching: .any)[AXID.activityMuscleMap3DScreen].firstMatch
         XCTAssertTrue(screen3D.waitForExistence(timeout: 10), "3D view should appear")
+    }
+
+    private func tapFrontChestMuscle() {
+        let chestButton = app.buttons["musclemap-body-front-chest"].firstMatch
+        XCTAssertTrue(chestButton.waitForExistence(timeout: 10), "Front chest muscle button should exist")
+        chestButton.tap()
     }
 
 }

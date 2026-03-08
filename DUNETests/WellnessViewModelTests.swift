@@ -366,6 +366,51 @@ struct WellnessViewModelTests {
         #expect(vm.conditionScoreFull?.score == sharedCondition.score)
     }
 
+    @Test("performRefresh recomputes sleep prediction after loading sleep trend data")
+    func performRefreshRecomputesSleepPrediction() async {
+        let calendar = Calendar.current
+        let now = Date()
+        let oneDayAgo = calendar.date(byAdding: .day, value: -1, to: now) ?? now
+        let twoDaysAgo = calendar.date(byAdding: .day, value: -2, to: now) ?? now
+
+        let snapshot = SharedHealthSnapshot(
+            hrvSamples: [],
+            todayRHR: 58,
+            yesterdayRHR: 60,
+            latestRHR: nil,
+            rhrCollection: [],
+            todaySleepStages: [
+                SleepStage(stage: .core, duration: 6 * 60 * 60, startDate: now, endDate: now)
+            ],
+            yesterdaySleepStages: [],
+            latestSleepStages: nil,
+            sleepDailyDurations: [
+                .init(date: twoDaysAgo, totalMinutes: 390, stageBreakdown: [:]),
+                .init(date: oneDayAgo, totalMinutes: 420, stageBreakdown: [:]),
+                .init(date: now, totalMinutes: 450, stageBreakdown: [:])
+            ],
+            conditionScore: ConditionScore(score: 74, date: now),
+            baselineStatus: BaselineStatus(daysCollected: 7, daysRequired: 7),
+            recentConditionScores: [],
+            failedSources: [],
+            fetchedAt: now
+        )
+
+        let vm = WellnessViewModel(
+            sleepService: NoopSleepService(),
+            bodyService: NoopBodyService(),
+            hrvService: NoopHRVService(),
+            vitalsService: NoopVitalsService(),
+            heartRateService: NoopHeartRateService(),
+            sharedHealthDataService: MockSharedHealthDataService(snapshot: snapshot)
+        )
+
+        await vm.performRefresh()
+
+        #expect(vm.sleepPrediction != nil)
+        #expect(vm.sleepPrediction?.confidence == .low)
+    }
+
     @Test("Body fetch starts before shared snapshot resolves")
     func bodyFetchStartsBeforeSharedSnapshotCompletes() async {
         let sharedService = SuspendingWellnessSharedHealthDataService(

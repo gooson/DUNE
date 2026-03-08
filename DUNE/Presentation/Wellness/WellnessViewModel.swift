@@ -435,6 +435,7 @@ final class WellnessViewModel {
             )
         }
 
+        recomputeSleepPrediction()
         isLoading = false
     }
 

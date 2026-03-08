@@ -218,6 +218,7 @@ final class MuscleMap3DScene {
         shellOpacity: Float = MuscleMap3DState.defaultShellOpacity
     ) {
         updateShellMaterials(colorScheme: colorScheme, opacity: shellOpacity)
+        guard hasPreparedGeometry, !muscleModels.isEmpty else { return }
 
         var hasher = Hasher()
         for state in fatigueStates {
@@ -341,6 +342,7 @@ final class MuscleMap3DScene {
     private var lastShellColorScheme: ColorScheme?
 
     private func updateShellMaterials(colorScheme: ColorScheme, opacity: Float) {
+        guard hasPreparedGeometry, !shellModels.isEmpty else { return }
         guard opacity != lastShellOpacity || colorScheme != lastShellColorScheme else { return }
         lastShellOpacity = opacity
         lastShellColorScheme = colorScheme

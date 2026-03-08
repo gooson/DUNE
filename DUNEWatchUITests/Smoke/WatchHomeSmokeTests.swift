@@ -12,7 +12,7 @@ final class WatchHomeSmokeTests: WatchUITestBaseCase {
 
     func testAllExercisesShowsFixtureSurface() throws {
         openAllExercises()
-        XCTAssertTrue(elementExists(WatchAXID.quickStartSectionRecent, timeout: 5))
+        XCTAssertTrue(elementExists(WatchAXID.quickStartList, timeout: 5))
         XCTAssertTrue(elementExists(WatchAXID.quickStartExerciseSquat, timeout: 5))
     }
 }

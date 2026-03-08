@@ -1,6 +1,55 @@
 import SwiftUI
 import SwiftData
 
+enum ActivityRecordChangeFingerprint {
+    static func make(from records: [ExerciseRecord]) -> Int {
+        var hasher = Hasher()
+
+        for record in records {
+            hasher.combine(record.id)
+            hasher.combine(record.date)
+            hasher.combine(record.exerciseType)
+            hasher.combine(record.duration)
+            hasher.combine(record.calories)
+            hasher.combine(record.distance)
+            hasher.combine(record.stepCount)
+            hasher.combine(record.averagePaceSecondsPerKm)
+            hasher.combine(record.averageCadenceStepsPerMinute)
+            hasher.combine(record.elevationGainMeters)
+            hasher.combine(record.floorsAscended)
+            hasher.combine(record.cardioMachineLevelAverage)
+            hasher.combine(record.cardioMachineLevelMax)
+            hasher.combine(record.isFromHealthKit)
+            hasher.combine(record.healthKitWorkoutID)
+            hasher.combine(record.exerciseDefinitionID)
+            hasher.combine(record.primaryMusclesRaw)
+            hasher.combine(record.secondaryMusclesRaw)
+            hasher.combine(record.equipmentRaw)
+            hasher.combine(record.estimatedCalories)
+            hasher.combine(record.calorieSourceRaw)
+            hasher.combine(record.rpe)
+            hasher.combine(record.autoIntensityRaw)
+            hasher.combine(record.cardioFitnessVO2Max)
+            hasher.combine(record.createdAt)
+
+            for set in record.completedSets {
+                hasher.combine(set.id)
+                hasher.combine(set.setNumber)
+                hasher.combine(set.setTypeRaw)
+                hasher.combine(set.weight)
+                hasher.combine(set.reps)
+                hasher.combine(set.duration)
+                hasher.combine(set.distance)
+                hasher.combine(set.intensity)
+                hasher.combine(set.isCompleted)
+                hasher.combine(set.restDuration)
+            }
+        }
+
+        return hasher.finalize()
+    }
+}
+
 struct NotificationActivityDestination: Identifiable, Hashable {
     let destination: ActivityDetailDestination
     let requestID: Int
@@ -68,8 +117,7 @@ struct ActivityView: View {
 
     private struct RecordsUpdateKey: Equatable {
         let count: Int
-        let newestID: UUID?
-        let newestDate: Date?
+        let fingerprint: Int
     }
 
     private var isRegular: Bool { sizeClass == .regular }
@@ -79,9 +127,16 @@ struct ActivityView: View {
     private var recordsUpdateKey: RecordsUpdateKey {
         RecordsUpdateKey(
             count: recentRecords.count,
-            newestID: recentRecords.first?.id,
-            newestDate: recentRecords.first?.date
+            fingerprint: recentRecordsFingerprint
         )
+    }
+
+    private var recentRecordsFingerprint: Int {
+        ActivityRecordChangeFingerprint.make(from: recentRecords)
+    }
+
+    private var activeInjurySnapshot: [InjuryInfo] {
+        activeInjuryRecords.map { $0.toInjuryInfo() }
     }
 
     init(
@@ -360,8 +415,9 @@ struct ActivityView: View {
             await viewModel.refreshSuggestionFromRecords(recentRecords)
             recomputeInjuryConflicts()
             recomputeInjuryRisk()
+            viewModel.generateWeeklyReport()
         }
-        .onChange(of: activeInjuryRecords.count) { _, _ in
+        .onChange(of: activeInjurySnapshot) { _, _ in
             recomputeInjuryConflicts()
             recomputeInjuryRisk()
         }
@@ -403,10 +459,13 @@ struct ActivityView: View {
     }
 
     private func startRecommendation(_ recommendation: WorkoutTemplateRecommendation) {
-        let exercises = TemplateExerciseResolver.resolveExercises(
+        guard let exercises = TemplateExerciseResolver.resolveExercises(
             from: recommendation,
             library: library
-        )
+        ) else {
+            AppLogger.exercise.warning("[Recommendation] Failed to resolve sequence for \(recommendation.id)")
+            return
+        }
         guard !exercises.isEmpty else { return }
 
         if exercises.count == 1 {
