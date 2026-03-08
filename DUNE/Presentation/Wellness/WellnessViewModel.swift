@@ -30,6 +30,9 @@ final class WellnessViewModel {
     var hrvDetailTrend: [DailySample] = []
     var rhrDetailTrend: [DailySample] = []
 
+    // Sleep prediction
+    var sleepPrediction: SleepQualityPrediction?
+
     // MARK: - Dependencies
 
     private let healthKitManager: HealthKitManager
@@ -41,6 +44,7 @@ final class WellnessViewModel {
     private let wellnessScoreUseCase: WellnessScoreCalculating
     private let sleepScoreUseCase: SleepScoreCalculating
     private let conditionScoreUseCase: ConditionScoreCalculating
+    private let sleepPredictionUseCase: SleepQualityPredicting
     private let sharedHealthDataService: SharedHealthDataService?
 
     // MARK: - Internal State
@@ -60,6 +64,7 @@ final class WellnessViewModel {
         wellnessScoreUseCase: WellnessScoreCalculating? = nil,
         sleepScoreUseCase: SleepScoreCalculating? = nil,
         conditionScoreUseCase: ConditionScoreCalculating? = nil,
+        sleepPredictionUseCase: SleepQualityPredicting = PredictSleepQualityUseCase(),
         sharedHealthDataService: SharedHealthDataService? = nil
     ) {
         self.healthKitManager = healthKitManager
@@ -71,6 +76,7 @@ final class WellnessViewModel {
         self.wellnessScoreUseCase = wellnessScoreUseCase ?? CalculateWellnessScoreUseCase()
         self.sleepScoreUseCase = sleepScoreUseCase ?? CalculateSleepScoreUseCase()
         self.conditionScoreUseCase = conditionScoreUseCase ?? CalculateConditionScoreUseCase()
+        self.sleepPredictionUseCase = sleepPredictionUseCase
         self.sharedHealthDataService = sharedHealthDataService
     }
 
@@ -88,6 +94,58 @@ final class WellnessViewModel {
         let task = Task { await performLoad() }
         loadTask = task
         await task.value
+    }
+
+    /// Recomputes tonight's sleep quality prediction from available data.
+    /// Call after loadData completes, or when relevant inputs change.
+    func recomputeSleepPrediction(todayWorkoutIntensity: Double = 0) {
+        guard !sleepDetailTrend.isEmpty else {
+            sleepPrediction = nil
+            return
+        }
+
+        let trendService = TrendAnalysisService()
+
+        // Recent sleep scores from sleepDetailTrend (convert minutes to rough 0-100 score)
+        let recentSleepScores = sleepDetailTrend
+            .sorted { $0.date > $1.date }
+            .prefix(14)
+            .map { sample -> Int in
+                // Normalize: 480 min (8h) = 100
+                min(100, max(0, Int(sample.minutes / 480.0 * 100.0)))
+            }
+
+        // HRV trend from hrvDetailTrend
+        let hrvTrend: TrendDirection
+        if hrvDetailTrend.count >= 3 {
+            let analysis = trendService.analyzeTrend(
+                values: hrvDetailTrend.map { (date: $0.date, value: $0.value) }
+            )
+            hrvTrend = analysis.direction
+        } else {
+            hrvTrend = .insufficient
+        }
+
+        // Bedtime variance from sleepDetailTrend (approximate using minutes deviation)
+        let bedtimeVariance: Double
+        if sleepDetailTrend.count >= 3 {
+            let durations = sleepDetailTrend.map(\.minutes)
+            let mean = durations.reduce(0, +) / Double(durations.count)
+            let variance = durations.map { ($0 - mean) * ($0 - mean) }.reduce(0, +) / Double(durations.count)
+            bedtimeVariance = variance > 0 ? variance.squareRoot() : 0
+        } else {
+            bedtimeVariance = 0
+        }
+
+        let input = PredictSleepQualityUseCase.Input(
+            recentSleepScores: recentSleepScores,
+            todayWorkoutIntensity: todayWorkoutIntensity,
+            hrvTrend: hrvTrend,
+            bedtimeVarianceMinutes: bedtimeVariance,
+            conditionScore: conditionScore,
+            dataAvailableDays: sleepDetailTrend.count
+        )
+        sleepPrediction = sleepPredictionUseCase.execute(input: input)
     }
 
     // MARK: - Loading

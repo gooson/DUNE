@@ -87,6 +87,12 @@ struct WellnessView: View {
                             )
                         }
 
+                        // Sleep Prediction
+                        SectionGroup(title: "Tonight's Sleep", icon: "moon.zzz", iconColor: DS.Color.sleep) {
+                            SleepPredictionCard(prediction: viewModel.sleepPrediction)
+                        }
+                        .accessibilityIdentifier("wellness-section-sleep-prediction")
+
                         // Physical section
                         if !viewModel.physicalCards.isEmpty {
                             WellnessSectionGroup(
@@ -277,6 +283,9 @@ struct WellnessView: View {
         }
         .task(id: refreshSignal) {
             viewModel.loadData()
+        }
+        .onChange(of: viewModel.sleepDetailTrend.count) { _, _ in
+            viewModel.recomputeSleepPrediction()
         }
         .englishNavigationTitle("Wellness")
     }
