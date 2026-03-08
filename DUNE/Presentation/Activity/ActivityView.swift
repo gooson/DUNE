@@ -145,6 +145,12 @@ struct ActivityView: View {
                         // ⑤ Training Volume
                         trainingVolumeSection()
 
+                        // ⑥ Weekly Report
+                        SectionGroup(title: "Weekly Report", icon: "doc.text", iconColor: DS.Color.activity) {
+                            WorkoutReportCard(report: viewModel.weeklyReport)
+                        }
+                        .accessibilityIdentifier("activity-section-weeklyreport")
+
                         // ⑧ Recent Workouts
                         SectionGroup(title: "Recent Workouts", icon: "clock.arrow.circlepath", iconColor: DS.Color.activity) {
                             ExerciseListSection(
@@ -315,6 +321,7 @@ struct ActivityView: View {
             await viewModel.loadActivityData()
             recomputeInjuryConflicts()
             recomputeInjuryRisk()
+            await viewModel.generateWeeklyReport()
         }
         .task(id: notificationRouteSignal) {
             await handleExternalNotificationRoute()

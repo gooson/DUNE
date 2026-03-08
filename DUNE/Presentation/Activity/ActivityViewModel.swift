@@ -41,6 +41,7 @@ final class ActivityViewModel {
     var weeklyStats: [ActivityStat] = []
     var templateRecommendations: [WorkoutTemplateRecommendation] = []
     var injuryRiskAssessment: InjuryRiskAssessment?
+    var weeklyReport: WorkoutReport?
 
     /// Weekly training goal in active days.
     let weeklyGoal: Int = 5
@@ -94,6 +95,7 @@ final class ActivityViewModel {
     private let recommendationSettingsStore: WorkoutRecommendationSettingsStore
     private let templateRecommendationService: any WorkoutTemplateRecommending
     private let injuryRiskUseCase: InjuryRiskCalculating
+    private let workoutReportUseCase: WorkoutReportGenerating
 
     /// Cached recovery modifiers from the most recent fetch.
     private var sleepModifier: Double = 1.0
@@ -120,7 +122,8 @@ final class ActivityViewModel {
         personalRecordStore: PersonalRecordStore = .shared,
         recommendationSettingsStore: WorkoutRecommendationSettingsStore = .shared,
         templateRecommendationService: any WorkoutTemplateRecommending = WorkoutTemplateRecommendationService(),
-        injuryRiskUseCase: InjuryRiskCalculating = CalculateInjuryRiskUseCase()
+        injuryRiskUseCase: InjuryRiskCalculating = CalculateInjuryRiskUseCase(),
+        workoutReportUseCase: WorkoutReportGenerating? = nil
     ) {
         self.healthKitManager = healthKitManager
         self.workoutService = workoutService ?? WorkoutQueryService(manager: healthKitManager)
@@ -137,6 +140,7 @@ final class ActivityViewModel {
         self.recommendationSettingsStore = recommendationSettingsStore
         self.templateRecommendationService = templateRecommendationService
         self.injuryRiskUseCase = injuryRiskUseCase
+        self.workoutReportUseCase = workoutReportUseCase ?? GenerateWorkoutReportUseCase(formatter: FoundationModelReportFormatter())
         self.recommendationContext = recommendationSettingsStore.context
         self.localizedExerciseNameLookup = buildLocalizedExerciseNameLookup()
     }
@@ -346,6 +350,42 @@ final class ActivityViewModel {
             conditionScore: conditionScore
         )
         injuryRiskAssessment = injuryRiskUseCase.execute(input: input)
+    }
+
+    /// Generates a weekly workout report from current exercise data.
+    func generateWeeklyReport() async {
+        guard !exerciseRecordSnapshots.isEmpty else {
+            weeklyReport = nil
+            return
+        }
+
+        let calendar = Calendar.current
+        let now = Date()
+        let weekAgo = calendar.date(byAdding: .day, value: -7, to: now) ?? now
+        let twoWeeksAgo = calendar.date(byAdding: .day, value: -14, to: now) ?? now
+
+        let thisWeekRecords = exerciseRecordSnapshots.filter { $0.date >= weekAgo }
+        let lastWeekRecords = exerciseRecordSnapshots.filter { $0.date >= twoWeeksAgo && $0.date < weekAgo }
+
+        guard !thisWeekRecords.isEmpty else {
+            weeklyReport = nil
+            return
+        }
+
+        let previousVolume = lastWeekRecords.isEmpty ? nil : lastWeekRecords.compactMap(\.totalWeight).reduce(0, +)
+        let streak = workoutStreak?.currentStreak ?? 0
+
+        let input = GenerateWorkoutReportUseCase.Input(
+            records: thisWeekRecords,
+            period: .weekly,
+            startDate: weekAgo,
+            endDate: now,
+            previousPeriodVolume: previousVolume,
+            workoutStreak: streak,
+            newPersonalRecords: 0,
+            newExerciseNames: []
+        )
+        weeklyReport = await workoutReportUseCase.execute(input: input)
     }
 
     func recomputeDerivedStats() {
