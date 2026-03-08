@@ -33,6 +33,7 @@ struct DashboardView: View {
     @State private var showNotificationHub = false
     @State private var showWhatsNew = false
     @State private var showSettings = false
+    @State private var heroFrame: CGRect?
 
     init(
         sharedHealthDataService: SharedHealthDataService? = nil,
@@ -92,10 +93,12 @@ struct DashboardView: View {
                                     trendBadges: viewModel.heroBaselineDetails
                                 )
                             }
+                            .reportTabHeroFrame()
                             .buttonStyle(.plain)
                             .accessibilityIdentifier("dashboard-hero-condition")
                         } else if let status = viewModel.baselineStatus, !status.isReady {
                             BaselineProgressView(status: status)
+                                .reportTabHeroFrame()
                         }
 
                         // Weather + coaching (merged when coaching is weather-category)
@@ -180,6 +183,7 @@ struct DashboardView: View {
                     }
                 }
                 .padding(sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.lg)
+                .coordinateSpace(name: TabHeroStartLine.coordinateSpace)
             }
             .onChange(of: scrollToTopSignal) { _, _ in
                 withAnimation(DS.Animation.standard) {
@@ -187,8 +191,12 @@ struct DashboardView: View {
                 }
             }
         }
+        .onPreferenceChange(TabHeroFramePreferenceKey.self) { heroFrame = $0 }
         .environment(\.weatherAtmosphere, viewModel.weatherAtmosphere)
-        .background { TabWaveBackground() }
+        .background {
+            TabWaveBackground()
+                .environment(\.tabHeroStartLineInset, heroFrame.map(TabHeroStartLine.inset(for:)))
+        }
         .navigationDestination(for: ConditionScore.self) { score in
             ConditionScoreDetailView(score: score)
         }

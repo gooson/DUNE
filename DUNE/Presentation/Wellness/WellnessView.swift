@@ -8,6 +8,7 @@ struct WellnessView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.appTheme) private var theme
     @Environment(\.horizontalSizeClass) private var sizeClass
+    @State private var heroFrame: CGRect?
 
     private let scrollToTopSignal: Int
 
@@ -76,6 +77,7 @@ struct WellnessView: View {
                                     bodyScore: viewModel.bodyScore
                                 )
                             }
+                            .reportTabHeroFrame()
                             .buttonStyle(.plain)
                             .accessibilityIdentifier("wellness-hero-score")
                         } else {
@@ -85,6 +87,7 @@ struct WellnessView: View {
                                 conditionScore: viewModel.conditionScore,
                                 bodyScore: viewModel.bodyScore
                             )
+                            .reportTabHeroFrame()
                         }
 
                         // Sleep Prediction
@@ -126,6 +129,7 @@ struct WellnessView: View {
                     }
                 }
                 .padding(isRegular ? DS.Spacing.xxl : DS.Spacing.lg)
+                .coordinateSpace(name: TabHeroStartLine.coordinateSpace)
             }
             .scrollBounceBehavior(.basedOnSize)
             .onChange(of: scrollToTopSignal) { _, _ in
@@ -134,7 +138,11 @@ struct WellnessView: View {
                 }
             }
         }
-        .background { TabWaveBackground() }
+        .onPreferenceChange(TabHeroFramePreferenceKey.self) { heroFrame = $0 }
+        .background {
+            TabWaveBackground()
+                .environment(\.tabHeroStartLineInset, heroFrame.map(TabHeroStartLine.inset(for:)))
+        }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Menu {

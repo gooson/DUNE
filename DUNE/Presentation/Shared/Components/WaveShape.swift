@@ -116,6 +116,57 @@ struct WaveOverlayView: View {
     }
 }
 
+// MARK: - Hero Start Line
+
+struct TabHeroStartLine {
+    static let coordinateSpace = "tab-hero-content"
+
+    static func inset(for frame: CGRect) -> CGFloat {
+        guard frame.height > 0 else { return 0 }
+        return max(frame.minY + frame.height * 0.75, 0)
+    }
+}
+
+struct TabHeroFramePreferenceKey: PreferenceKey {
+    static let defaultValue: CGRect? = nil
+
+    static func reduce(value: inout CGRect?, nextValue: () -> CGRect?) {
+        value = nextValue() ?? value
+    }
+}
+
+private struct TabHeroStartLineInsetKey: EnvironmentKey {
+    static let defaultValue: CGFloat? = nil
+}
+
+extension EnvironmentValues {
+    var tabHeroStartLineInset: CGFloat? {
+        get { self[TabHeroStartLineInsetKey.self] }
+        set { self[TabHeroStartLineInsetKey.self] = newValue }
+    }
+}
+
+private struct TabHeroFrameReporter: ViewModifier {
+    let coordinateSpaceName: String
+
+    func body(content: Content) -> some View {
+        content.background {
+            GeometryReader { proxy in
+                Color.clear.preference(
+                    key: TabHeroFramePreferenceKey.self,
+                    value: proxy.frame(in: .named(coordinateSpaceName))
+                )
+            }
+        }
+    }
+}
+
+extension View {
+    func reportTabHeroFrame(in coordinateSpaceName: String = TabHeroStartLine.coordinateSpace) -> some View {
+        modifier(TabHeroFrameReporter(coordinateSpaceName: coordinateSpaceName))
+    }
+}
+
 // MARK: - Tab Background
 
 /// Tab root background: theme-aware wave motif + gradient.

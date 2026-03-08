@@ -56,6 +56,7 @@ struct ActivityView: View {
     private let notificationWorkoutID: String?
     private let notificationRouteSignal: Int
     private let notificationPersonalRecordsSignal: Int
+    @State private var heroFrame: CGRect?
 
     private enum ScrollAnchor: Hashable {
         case top
@@ -114,6 +115,7 @@ struct ActivityView: View {
                                 isCalibrating: viewModel.trainingReadiness?.isCalibrating ?? true
                             )
                         }
+                        .reportTabHeroFrame()
                         .accessibilityIdentifier("activity-hero-readiness")
                         .buttonStyle(.plain)
 
@@ -206,6 +208,7 @@ struct ActivityView: View {
                     }
                 }
                 .padding()
+                .coordinateSpace(name: TabHeroStartLine.coordinateSpace)
             }
             .waveRefreshable {
                 await viewModel.loadActivityData()
@@ -216,7 +219,11 @@ struct ActivityView: View {
                 }
             }
         }
-        .background { TabWaveBackground() }
+        .onPreferenceChange(TabHeroFramePreferenceKey.self) { heroFrame = $0 }
+        .background {
+            TabWaveBackground()
+                .environment(\.tabHeroStartLineInset, heroFrame.map(TabHeroStartLine.inset(for:)))
+        }
         .overlay(alignment: .top) {
             if let syncToastMessage {
                 ActivitySyncToast(message: syncToastMessage) {

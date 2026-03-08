@@ -5,7 +5,13 @@ date: 2026-03-09
 severity: important
 related_files:
   [
+    DUNE/Presentation/Shared/Components/WaveShape.swift,
     DUNE/Presentation/Shared/Components/ShanksSceneEffects.swift,
+    DUNE/Presentation/Shared/Components/ShanksWaveBackground.swift,
+    DUNE/Presentation/Dashboard/DashboardView.swift,
+    DUNE/Presentation/Activity/ActivityView.swift,
+    DUNE/Presentation/Wellness/WellnessView.swift,
+    DUNE/Presentation/Life/LifeView.swift,
     DUNETests/ShanksThemeEnhancementTests.swift,
     docs/plans/2026-03-09-shanks-ocean-startline-reframe.md,
   ]
@@ -16,62 +22,68 @@ related_solutions:
   ]
 ---
 
-# Solution: 샹크스 바다 장면 시작선을 히어로 카드 하단으로 내리기
+# Solution: 샹크스 바다 장면 시작선을 히어로 카드 실제 3/4 지점에 맞추기
 
 ## Problem
 
-샹크스 시네마틱 오션 테마는 장면 구성 자체는 완성되어 있었지만, 바다 mass와 거품, 배, 카무사리 레이어가 화면 상단에서 너무 빨리 시작되어 hero card와 시각적으로 겹쳐 읽혔다.
+샹크스 시네마틱 오션 테마는 장면 구성 자체는 완성되어 있었지만, 바다 mass와 거품, 배 레이어의 시작선이 hero card 실제 위치를 따라가지 못해 화면마다 체감 품질이 들쭉날쭉했다.
 
 ### Symptoms
 
-- Today/Activity/Wellness 탭에서 hero card 상단부가 바다 레이어와 경쟁해 화면 첫 인상이 복잡해 보였다.
-- detail/sheet에서도 같은 scene engine을 쓰지만, start line 규칙이 명시적이지 않아 장면 시작 위치를 일관되게 조절하기 어려웠다.
-- iPad regular width에서는 hero card가 더 커지는데, 고정 배경 시작점만으로는 “hero 3/4 지점부터 바다가 시작된다”는 요구를 맞추기 어려웠다.
+- Today/Activity/Wellness/Life 탭에서 hero card 하단 1/4 지점보다 위에서 바다가 시작해 첫 화면이 답답하게 보였다.
+- Wellness의 partial failure banner, Dashboard의 baseline progress 같은 hero 전후 분기에서 start line이 어긋났다.
+- iPad regular width나 탭별 hero 높이 차이 때문에 고정 inset 숫자만으로는 “hero 3/4 지점부터 시작” 요구를 안정적으로 맞출 수 없었다.
 
 ### Root Cause
 
-기존 `ShanksCinematicSceneBackground`는 gradient와 실제 ocean scene 레이어를 모두 화면 최상단에 정렬했다. 이 구조에서는 scene을 구성하는 모든 요소가 같은 top origin을 공유하므로, 상단에 atmospheric tint만 남기고 ocean scene만 늦게 시작시키는 제어점이 없었다.
+첫 구현은 `ShanksSceneStyle.sceneTopInset` preset과 size-class 보정만으로 ocean scene을 아래로 내렸다. 이 방식은 scene 자체를 늦게 시작시키는 데는 도움이 됐지만, 실제 hero card frame을 읽지 못해 탭별 hero 높이와 배너 유무를 반영하지 못했다.
 
 ## Solution
 
-`ShanksSceneStyle`에 `sceneTopInset`을 추가하고, `ShanksCinematicSceneBackground`에서 water mass / caustic / texture / flag / ship / foam 레이어를 하나의 scene container로 묶어 공통 inset 아래로 내렸다. 상단 gradient는 그대로 유지해 화면 분위기는 보존하고, 실제 바다 장면만 hero card 하단부에서 시작하도록 분리했다. iPad regular width는 `horizontalSizeClass` 기반으로 inset을 추가 보정했다.
+탭 루트가 실제 hero card frame을 preference로 올리고, `TabWaveBackground`가 그 값을 environment로 받아 샹크스 ocean scene의 start line override로 쓰도록 바꿨다. 계산식은 `hero.minY + hero.height * 0.75`로 고정해 바다가 hero 하단 1/4 지점에서 시작되게 맞췄고, detail/sheet처럼 hero anchor가 없는 경로만 기존 preset fallback을 유지했다.
 
 ### Changes Made
 
 | File | Change | Reason |
 |------|--------|--------|
-| `DUNE/Presentation/Shared/Components/ShanksSceneEffects.swift` | `sceneTopInset` token 추가, tab/detail/sheet preset별 값 정의, regular width 보정 추가 | hero card와 ocean scene의 시작선을 분리하고 presentation depth별로 일관되게 제어하기 위해 |
-| `DUNETests/ShanksThemeEnhancementTests.swift` | preset inset smoke test 추가 | startline token이 0 이하나 비정상 tiering으로 회귀하지 않도록 하기 위해 |
+| `DUNE/Presentation/Shared/Components/WaveShape.swift` | `TabHeroStartLine`, preference key, environment key, hero frame reporter 추가 | 탭 루트가 hero card 실제 frame을 배경으로 전달할 수 있게 하기 위해 |
+| `DUNE/Presentation/Shared/Components/ShanksWaveBackground.swift` | tab 배경이 hero start line override를 읽도록 수정 | 샹크스 tab 배경이 preset 대신 실제 hero 기준선을 사용할 수 있게 하기 위해 |
+| `DUNE/Presentation/Shared/Components/ShanksSceneEffects.swift` | `sceneTopInsetOverride` 지원 추가 | tab은 measured inset을 쓰고 detail/sheet는 preset fallback을 유지하기 위해 |
+| `DUNE/Presentation/Dashboard/DashboardView.swift` | condition hero와 baseline progress 분기 모두 hero frame report 연결 | Today 탭의 대체 hero 상태에서도 바다 시작선이 어긋나지 않게 하기 위해 |
+| `DUNE/Presentation/Activity/ActivityView.swift` | training readiness hero frame을 background에 전달 | Activity hero 높이에 맞춰 바다 시작선을 정렬하기 위해 |
+| `DUNE/Presentation/Wellness/WellnessView.swift` | hero card와 partial failure banner 이후 위치를 측정해 전달 | Wellness의 배너 유무에 따라 바다 시작선이 함께 이동하게 하기 위해 |
+| `DUNE/Presentation/Life/LifeView.swift` | child hero section frame을 root background로 전달 | isolated query 구조를 유지하면서 Life hero 기준선을 공유하기 위해 |
+| `DUNETests/ShanksThemeEnhancementTests.swift` | hero frame 3/4 anchor test, zero-height clamp test 추가 | measured start line 계산이 경계값에서 회귀하지 않도록 하기 위해 |
 | `docs/plans/2026-03-09-shanks-ocean-startline-reframe.md` | 구현 계획 기록 | 요청 배경, 검증 전략, 리스크를 재사용 가능하게 남기기 위해 |
 
 ### Key Code
 
 ```swift
-private var resolvedSceneTopInset: CGFloat {
-    style.sceneTopInset + (sizeClass == .regular ? 20 : 0)
+static func inset(for frame: CGRect) -> CGFloat {
+    guard frame.height > 0 else { return 0 }
+    return max(frame.minY + frame.height * 0.75, 0)
 }
 ```
 
 ```swift
-ZStack(alignment: .top) {
-    ShanksWaterMassScene(style: style, accentTint: resolvedAccentTint)
-    ShanksUnderwaterCausticOverlay(style: style, elapsed: elapsed)
-    ShanksShipHeroOverlay(style: style, elapsed: elapsed)
-    ShanksSurfaceFoamOverlay(style: style, elapsed: elapsed)
+NavigationLink(value: score) {
+    ConditionHeroView(...)
 }
-.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-.padding(.top, resolvedSceneTopInset)
+.reportTabHeroFrame()
+
+TabWaveBackground()
+    .environment(\.tabHeroStartLineInset, heroFrame.map(TabHeroStartLine.inset(for:)))
 ```
 
 ## Prevention
 
-scene-heavy 테마에서 “상단 분위기”와 “실제 장면 본체”를 같은 top origin으로 두지 않는다. 배경을 고도화할수록 gradient tint와 subject layers를 분리하고, 장면 시작점은 preset token으로 조절한다.
+시각적으로 hero card에 고정되어 보여야 하는 scene background는 추정 inset 숫자보다 실제 hero frame 측정을 우선한다. preset은 detail/sheet처럼 anchor가 없는 경로의 fallback으로만 둔다.
 
 ### Checklist Addition
 
-- [ ] hero card가 있는 scene background는 gradient layer와 subject layer의 top origin을 분리했는가?
-- [ ] tab/detail/sheet가 같은 startline token 체계를 공유하는가?
-- [ ] regular width(iPad)에서 hero scale 증가를 반영한 inset 보정이 필요한가?
+- [ ] hero card가 있는 tab root가 실제 hero frame을 preference로 보고하는가?
+- [ ] 대체 hero 분기(loading, baseline, fallback card)도 같은 anchor 경로를 쓰는가?
+- [ ] tab은 measured start line, detail/sheet는 fallback preset으로 책임이 분리돼 있는가?
 
 ### Rule Addition (if applicable)
 
@@ -79,6 +91,6 @@ scene-heavy 테마에서 “상단 분위기”와 “실제 장면 본체”를
 
 ## Lessons Learned
 
-- 시네마틱 테마의 과밀도 문제는 레이어를 줄이는 것보다 “장면이 시작되는 높이”를 토큰화하는 편이 안전하다.
-- 상단 gradient와 ocean scene 본체를 분리하면 감성은 유지하면서 가독성 문제를 훨씬 좁은 범위에서 조정할 수 있다.
-- iPad처럼 hero card 스케일이 달라지는 화면에서는 absolute inset만 두지 말고 size-class 보정을 함께 고려해야 한다.
+- 시네마틱 테마의 과밀도 문제는 레이어 숫자보다 anchor 정렬 오차에서 더 자주 발생한다.
+- hero-first 화면에서 배경 품질 요구가 높으면 preset 튜닝보다 geometry 전달이 결과가 안정적이다.
+- isolated child view 구조여도 preference + environment 조합이면 hero 위치를 root background로 안전하게 올릴 수 있다.

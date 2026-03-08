@@ -95,4 +95,19 @@ struct ShanksThemeEnhancementTests {
         #expect(detail.sceneTopInset > sheet.sceneTopInset)
         #expect(tab.sceneTopInset > life.sceneTopInset)
     }
+
+    @Test("Hero frame start line uses lower-quarter anchor")
+    func heroFrameStartLineInset() {
+        let frame = CGRect(x: 0, y: 24, width: 320, height: 200)
+        let inset = TabHeroStartLine.inset(for: frame)
+
+        #expect(inset == 174.0)
+    }
+
+    @Test("Hero frame start line clamps zero-height frames")
+    func heroFrameStartLineInsetZeroHeight() {
+        let inset = TabHeroStartLine.inset(for: CGRect(x: 0, y: 32, width: 320, height: 0))
+
+        #expect(inset == 0.0)
+    }
 }
