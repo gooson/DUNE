@@ -43,6 +43,7 @@ struct MuscleMap3DView: View {
         ScrollView {
             VStack(spacing: DS.Spacing.lg) {
                 summaryCard
+                    .accessibilityIdentifier("musclemap-3d-summary-card")
 
                 Picker("Mode", selection: $mode) {
                     ForEach(MuscleMap3DMode.allCases, id: \.rawValue) { currentMode in
@@ -50,6 +51,7 @@ struct MuscleMap3DView: View {
                     }
                 }
                 .pickerStyle(.segmented)
+                .accessibilityIdentifier("musclemap-3d-mode-picker")
 
                 MuscleMap3DViewer(
                     fatigueStates: fatigueStates,
@@ -66,12 +68,15 @@ struct MuscleMap3DView: View {
                     RoundedRectangle(cornerRadius: DS.Radius.lg)
                         .strokeBorder(Color.white.opacity(0.08), lineWidth: 1)
                 }
+                .accessibilityIdentifier("musclemap-3d-viewer")
 
                 muscleSelectionStrip
+                    .accessibilityIdentifier("musclemap-3d-muscle-strip")
             }
             .padding(.horizontal, DS.Spacing.lg)
             .padding(.bottom, DS.Spacing.xxl)
         }
+        .accessibilityIdentifier("activity-musclemap-3d-screen")
         .background { DetailWaveBackground() }
         .englishNavigationTitle("Muscle Map 3D")
         .navigationBarTitleDisplayMode(.inline)
@@ -82,6 +87,7 @@ struct MuscleMap3DView: View {
                         resetToken += 1
                     }
                 }
+                .accessibilityIdentifier("musclemap-3d-reset-button")
             }
         }
         .onAppear {
