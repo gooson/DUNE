@@ -16,21 +16,28 @@ struct BodyHistoryDetailView: View {
     }
 
     var body: some View {
-        Group {
-            if allItems.isEmpty {
-                EmptyStateView(
-                    icon: "figure.stand",
-                    title: "No Records",
-                    message: "Your body composition records will appear here."
-                )
-            } else {
-                ScrollView {
-                    LazyVStack(spacing: DS.Spacing.sm) {
-                        ForEach(allItems) { item in
-                            historyRow(item)
+        VStack(spacing: 0) {
+            Color.clear
+                .frame(height: 1)
+                .accessibilityElement()
+                .accessibilityIdentifier("body-history-detail-screen")
+
+            Group {
+                if allItems.isEmpty {
+                    EmptyStateView(
+                        icon: "figure.stand",
+                        title: "No Records",
+                        message: "Your body composition records will appear here."
+                    )
+                } else {
+                    ScrollView {
+                        LazyVStack(spacing: DS.Spacing.sm) {
+                            ForEach(Array(allItems.enumerated()), id: \.element.id) { index, item in
+                                historyRow(item, rowIndex: index)
+                            }
                         }
+                        .padding()
                     }
-                    .padding()
                 }
             }
         }
@@ -107,7 +114,7 @@ struct BodyHistoryDetailView: View {
         }
     }
 
-    private func historyRow(_ item: BodyCompositionListItem) -> some View {
+    private func historyRow(_ item: BodyCompositionListItem, rowIndex: Int) -> some View {
         HStack {
             if item.source == .healthKit {
                 Image(systemName: "heart.fill")
@@ -144,6 +151,7 @@ struct BodyHistoryDetailView: View {
         }
         .padding(DS.Spacing.md)
         .background(.thinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+        .accessibilityIdentifier(rowIdentifier(for: item, rowIndex: rowIndex))
         .contextMenu {
             if item.source == .manual, let record = findManualRecord(id: item.id) {
                 Button {
@@ -152,6 +160,7 @@ struct BodyHistoryDetailView: View {
                 } label: {
                     Label("Edit", systemImage: "pencil")
                 }
+                .accessibilityIdentifier("body-history-edit-action")
                 Button(role: .destructive) {
                     recordToDelete = record
                     isShowingDeleteConfirmation = true
@@ -164,5 +173,13 @@ struct BodyHistoryDetailView: View {
 
     private func findManualRecord(id: String) -> BodyCompositionRecord? {
         records.first { $0.id.uuidString == id }
+    }
+
+    private func rowIdentifier(for item: BodyCompositionListItem, rowIndex: Int) -> String {
+        if item.source == .manual {
+            let manualIndex = allItems[..<rowIndex].filter { $0.source == .manual }.count
+            return "body-history-row-manual-\(manualIndex)"
+        }
+        return "body-history-row-healthkit-\(rowIndex)"
     }
 }

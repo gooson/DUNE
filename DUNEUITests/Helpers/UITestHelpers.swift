@@ -56,12 +56,21 @@ enum AXID {
     static let wellnessCardWeight = "wellness-card-weight"
     static let wellnessMenuBodyRecord = "wellness-menu-body-record"
     static let wellnessMenuInjury = "wellness-menu-injury"
-    // Planned — identifiers not yet applied to views
-    static let wellnessSectionPhysical = "wellness-section-physical"
-    static let wellnessSectionActive = "wellness-section-active"
-    static let wellnessSectionInjury = "wellness-section-injury"
     static let wellnessLinkBodyHistory = "wellness-link-bodyhistory"
     static let wellnessLinkInjuryHistory = "wellness-link-injuryhistory"
+    static let wellnessScoreDetailScreen = "wellness-score-detail-screen"
+    static let bodyHistoryDetailScreen = "body-history-detail-screen"
+    static func bodyHistoryManualRow(_ index: Int) -> String { "body-history-row-manual-\(index)" }
+    static let bodyHistoryEditAction = "body-history-edit-action"
+    static let bodyFormScreen = "body-form-screen"
+    static let injuryHistoryScreen = "injury-history-screen"
+    static let injuryHistoryStats = "injury-history-stats"
+    static func injuryHistoryRow(_ index: Int) -> String { "injury-history-row-\(index)" }
+    static let injuryStatisticsScreen = "injury-statistics-screen"
+    static let injuryDetailScreen = "injury-detail-screen"
+    static let injuryDetailEdit = "injury-detail-edit"
+    static let injuryDetailMarkRecovered = "injury-detail-mark-recovered"
+    static let injuryFormScreen = "injury-form-screen"
 
     // MARK: - Life Tab (active: hero, toolbar-add, habits section, habit toggle)
     static let lifeHeroProgress = "life-hero-progress"

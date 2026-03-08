@@ -35,6 +35,11 @@ struct WellnessScoreDetailView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: DS.Spacing.lg) {
+                Color.clear
+                    .frame(height: 1)
+                    .accessibilityElement()
+                    .accessibilityIdentifier("wellness-score-detail-screen")
+
                 scoreHero
                 subScoreCharts
                 componentWeights

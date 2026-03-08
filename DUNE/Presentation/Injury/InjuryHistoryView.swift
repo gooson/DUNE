@@ -13,29 +13,36 @@ struct InjuryHistoryView: View {
     @State private var showingStatistics = false
 
     var body: some View {
-        List {
-            if !cachedActiveRecords.isEmpty {
-                Section("Active") {
-                    ForEach(cachedActiveRecords) { record in
-                        injuryRow(record)
+        VStack(spacing: 0) {
+            Color.clear
+                .frame(height: 1)
+                .accessibilityElement()
+                .accessibilityIdentifier("injury-history-screen")
+
+            List {
+                if !cachedActiveRecords.isEmpty {
+                    Section("Active") {
+                        ForEach(cachedActiveRecords) { record in
+                            injuryRow(record)
+                        }
                     }
                 }
-            }
 
-            if !cachedEndedRecords.isEmpty {
-                Section("Recovered") {
-                    ForEach(cachedEndedRecords) { record in
-                        injuryRow(record)
+                if !cachedEndedRecords.isEmpty {
+                    Section("Recovered") {
+                        ForEach(cachedEndedRecords) { record in
+                            injuryRow(record)
+                        }
                     }
                 }
-            }
 
-            if allRecords.isEmpty {
-                ContentUnavailableView(
-                    "No Injury Records",
-                    systemImage: "bandage.fill",
-                    description: Text("Injuries you track will appear here.")
-                )
+                if allRecords.isEmpty {
+                    ContentUnavailableView(
+                        "No Injury Records",
+                        systemImage: "bandage.fill",
+                        description: Text("Injuries you track will appear here.")
+                    )
+                }
             }
         }
         .onChange(of: allRecords.count) { _, _ in rebuildRecordCache() }
@@ -54,6 +61,7 @@ struct InjuryHistoryView: View {
                 } label: {
                     Image(systemName: "chart.bar.xaxis")
                 }
+                .accessibilityIdentifier("injury-history-stats")
                 .disabled(allRecords.isEmpty)
             }
         }
@@ -118,6 +126,7 @@ struct InjuryHistoryView: View {
         NavigationLink(value: InjuryDetailDestination(recordID: record.id)) {
             injuryRowContent(record)
         }
+        .accessibilityIdentifier(rowIdentifier(for: record))
         .swipeActions(edge: .trailing) {
             Button { recordToDelete = record } label: {
                 Label("Delete", systemImage: "trash")
@@ -202,6 +211,11 @@ struct InjuryHistoryView: View {
             }
         }
     }
+
+    private func rowIdentifier(for record: InjuryRecord) -> String {
+        let index = allRecords.firstIndex { $0.id == record.id } ?? 0
+        return "injury-history-row-\(index)"
+    }
 }
 
 private struct InjuryDetailDestination: Hashable {
@@ -214,22 +228,29 @@ private struct InjuryDetailView: View {
     @State private var isShowingEditSheet = false
 
     var body: some View {
-        Group {
-            if let record {
-                ScrollView {
-                    VStack(spacing: DS.Spacing.lg) {
-                        summaryCard(record)
-                        timelineCard(record)
-                        notesCard(record)
+        VStack(spacing: 0) {
+            Color.clear
+                .frame(height: 1)
+                .accessibilityElement()
+                .accessibilityIdentifier("injury-detail-screen")
+
+            Group {
+                if let record {
+                    ScrollView {
+                        VStack(spacing: DS.Spacing.lg) {
+                            summaryCard(record)
+                            timelineCard(record)
+                            notesCard(record)
+                        }
+                        .padding(DS.Spacing.lg)
                     }
-                    .padding(DS.Spacing.lg)
+                } else {
+                    ContentUnavailableView(
+                        "Injury Not Found",
+                        systemImage: "bandage.fill",
+                        description: Text("This injury may have been deleted.")
+                    )
                 }
-            } else {
-                ContentUnavailableView(
-                    "Injury Not Found",
-                    systemImage: "bandage.fill",
-                    description: Text("This injury may have been deleted.")
-                )
             }
         }
         .englishNavigationTitle("Injury Detail")
@@ -243,6 +264,7 @@ private struct InjuryDetailView: View {
                         } label: {
                             Label("Mark Recovered", systemImage: "checkmark.circle")
                         }
+                        .accessibilityIdentifier("injury-detail-mark-recovered")
                     }
 
                     Button {
@@ -251,6 +273,7 @@ private struct InjuryDetailView: View {
                     } label: {
                         Label("Edit", systemImage: "pencil")
                     }
+                    .accessibilityIdentifier("injury-detail-edit")
                 }
             }
         }
