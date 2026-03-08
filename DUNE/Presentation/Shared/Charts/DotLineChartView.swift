@@ -19,7 +19,7 @@ struct DotLineChartView: View {
     @State private var selectedDate: Date?
     @State private var internalScrollPosition: Date = .now
     @State private var selectionGestureState = ChartSelectionGestureState()
-
+    @State private var lastSelectionProbeLabel = "none"
     enum Period: String, CaseIterable {
         case week = "7D"
         case month = "30D"
@@ -91,11 +91,14 @@ struct DotLineChartView: View {
                 }
             }
             .chartScrollableAxes(timePeriod != nil ? .horizontal : [])
-            .scrollDisabled(!selectionGestureState.allowsScroll)
             .modifier(DotLineScrollModifier(
                 timePeriod: timePeriod,
                 scrollPosition: scrollPosition ?? $internalScrollPosition
             ))
+            .chartXSelection(value: $selectedDate)
+            .chartGesture { proxy in
+                selectionGesture(proxy: proxy)
+            }
             .chartYScale(domain: yDomain)
             .chartXScale(domain: effectiveXDomain)
             .chartXAxis {
@@ -118,13 +121,6 @@ struct DotLineChartView: View {
                 GeometryReader { geometry in
                     if let plotFrame = proxy.plotFrame.map({ geometry[$0] }) {
                         ZStack(alignment: .topLeading) {
-                            Rectangle()
-                                .fill(.clear)
-                                .contentShape(Rectangle())
-                                .simultaneousGesture(
-                                    selectionGesture(proxy: proxy, plotFrame: plotFrame)
-                                )
-
                             if let selected = selectedPoint,
                                let anchor = selectedAnchor(for: selected, proxy: proxy, plotFrame: plotFrame) {
                                 FloatingChartSelectionOverlay(
@@ -138,10 +134,16 @@ struct DotLineChartView: View {
                             }
                         }
                         .animation(.easeInOut(duration: 0.15), value: selectedDate)
+                        .allowsHitTesting(false)
                     }
                 }
             }
             .sensoryFeedback(.selection, trigger: selectedPoint?.date)
+            .onChange(of: selectedPoint?.date) { _, newValue in
+                guard let newValue else { return }
+                lastSelectionProbeLabel = newValue.formatted(date: .abbreviated, time: .omitted)
+            }
+            .chartSelectionUITestProbe(lastSelectionProbeLabel)
             .frame(height: chartHeight)
             .clipped()
             .accessibilityChartDescriptor(chartDescriptor)
@@ -217,21 +219,13 @@ struct DotLineChartView: View {
         )
     }
 
-    private func selectionGesture(proxy: ChartProxy, plotFrame: CGRect) -> some Gesture {
+    private func selectionGesture(proxy: ChartProxy) -> some Gesture {
         LongPressGesture(minimumDuration: ChartSelectionInteraction.holdDuration)
             .sequenced(before: DragGesture(minimumDistance: 0, coordinateSpace: .local))
             .onChanged { value in
                 guard case .second(true, let drag) = value, let drag else { return }
                 selectionGestureState.beginSelection(scrollPosition: scrollPosition?.wrappedValue)
-                if let restore = selectionGestureState.initialScrollPosition,
-                   scrollPosition?.wrappedValue != restore {
-                    scrollPosition?.wrappedValue = restore
-                }
-                selectedDate = ChartSelectionInteraction.resolvedDate(
-                    at: drag.location,
-                    proxy: proxy,
-                    plotFrame: plotFrame
-                )
+                proxy.selectXValue(at: drag.location.x)
             }
             .onEnded { _ in
                 selectionGestureState.reset()

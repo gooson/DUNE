@@ -41,6 +41,7 @@ enum AXID {
     // MARK: - Wellness Tab (active: hero, toolbar-add, add-menu items)
     static let wellnessHeroScore = "wellness-hero-score"
     static let wellnessToolbarAdd = "wellness-toolbar-add"
+    static let wellnessCardHRV = "wellness-card-hrv"
     static let wellnessCardWeight = "wellness-card-weight"
     static let wellnessMenuBodyRecord = "wellness-menu-body-record"
     static let wellnessMenuInjury = "wellness-menu-injury"

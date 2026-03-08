@@ -18,7 +18,6 @@ struct AreaLineChartView: View {
 
     @State private var selectedDate: Date?
     @State private var selectionGestureState = ChartSelectionGestureState()
-
     // Correction #105/#165 — computed gradient using theme
     private var areaGradient: LinearGradient {
         LinearGradient(
@@ -78,10 +77,13 @@ struct AreaLineChartView: View {
                 }
             }
             .chartScrollableAxes(.horizontal)
-            .scrollDisabled(!selectionGestureState.allowsScroll)
             .chartXVisibleDomain(length: period.visibleDomainSeconds)
             .chartScrollPosition(x: $scrollPosition)
             .chartXScale(domain: effectiveXDomain)
+            .chartXSelection(value: $selectedDate)
+            .chartGesture { proxy in
+                selectionGesture(proxy: proxy)
+            }
             .chartYScale(domain: yDomain)
             .chartXAxis {
                 AxisMarks(values: .stride(by: period.strideComponent, count: period.strideCount)) { _ in
@@ -103,13 +105,6 @@ struct AreaLineChartView: View {
                 GeometryReader { geometry in
                     if let plotFrame = proxy.plotFrame.map({ geometry[$0] }) {
                         ZStack(alignment: .topLeading) {
-                            Rectangle()
-                                .fill(.clear)
-                                .contentShape(Rectangle())
-                                .simultaneousGesture(
-                                    selectionGesture(proxy: proxy, plotFrame: plotFrame)
-                                )
-
                             if let point = selectedPoint,
                                let anchor = selectedAnchor(for: point, proxy: proxy, plotFrame: plotFrame) {
                                 FloatingChartSelectionOverlay(
@@ -123,6 +118,7 @@ struct AreaLineChartView: View {
                             }
                         }
                         .animation(.easeInOut(duration: 0.15), value: selectedDate)
+                        .allowsHitTesting(false)
                     }
                 }
             }
@@ -179,21 +175,13 @@ struct AreaLineChartView: View {
         )
     }
 
-    private func selectionGesture(proxy: ChartProxy, plotFrame: CGRect) -> some Gesture {
+    private func selectionGesture(proxy: ChartProxy) -> some Gesture {
         LongPressGesture(minimumDuration: ChartSelectionInteraction.holdDuration)
             .sequenced(before: DragGesture(minimumDistance: 0, coordinateSpace: .local))
             .onChanged { value in
                 guard case .second(true, let drag) = value, let drag else { return }
                 selectionGestureState.beginSelection(scrollPosition: scrollPosition)
-                if let restore = selectionGestureState.initialScrollPosition,
-                   scrollPosition != restore {
-                    scrollPosition = restore
-                }
-                selectedDate = ChartSelectionInteraction.resolvedDate(
-                    at: drag.location,
-                    proxy: proxy,
-                    plotFrame: plotFrame
-                )
+                proxy.selectXValue(at: drag.location.x)
             }
             .onEnded { _ in
                 selectionGestureState.reset()

@@ -29,6 +29,13 @@
 - Naming: `{TargetType}Tests.swift`
 - 상세 패턴: `.claude/skills/testing-patterns/SKILL.md` 참조
 
+### 제스처 변경 검증 규칙
+
+- `tap`, `drag`, `long press`, `scroll`, selection arbitration 등 제스처 관련 변경은 **반드시 seeded/mock 데이터로 직접 재현 검증**합니다.
+- 차트, 캐러셀, 스크롤 컨테이너처럼 과거/이전 상태가 중요한 UI는 테스트용 데이터를 충분히 넣어 실제 사용자 흐름으로 확인합니다.
+- 코드 리뷰, 정적 분석, 단순 유닛 테스트만으로 제스처 변경을 완료 처리하지 않습니다.
+- 가능하면 UI 테스트로 고정하고, 자동화가 어려우면 seeded/mock 데이터 기준 수동 재현 절차와 결과를 작업 응답에 남깁니다.
+
 ### 검증 명령
 
 ```bash
