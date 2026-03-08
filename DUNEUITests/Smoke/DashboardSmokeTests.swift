@@ -81,17 +81,12 @@ final class DashboardSmokeTests: UITestBaseCase {
     // MARK: - Tab Navigation Round-Trip
 
     func testTabNavigationRoundTrip() throws {
-        let tabBar = app.tabBars.firstMatch
-        XCTAssertTrue(tabBar.waitForExistence(timeout: 5), "Tab bar should exist")
-
         for tab in ["Activity", "Wellness", "Life", "Today"] {
-            let tabButton = tabBar.buttons[tab].firstMatch
-            XCTAssertTrue(tabButton.waitForExistence(timeout: 3), "\(tab) tab should exist")
-            tabButton.tap()
-
-            let selectedPredicate = NSPredicate(format: "isSelected == true")
-            expectation(for: selectedPredicate, evaluatedWith: tabButton)
-            waitForExpectations(timeout: 3)
+            app.navigateToTab(tab)
+            XCTAssertTrue(
+                app.navigationBars[tab].waitForExistence(timeout: 5),
+                "\(tab) root navigation bar should appear after tab switch"
+            )
         }
     }
 }
