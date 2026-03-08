@@ -20,6 +20,16 @@ enum VisionSurfaceAccessibility {
     static let dashboardMetricHRV = "vision-dashboard-metric-hrv"
     static let dashboardMetricRHR = "vision-dashboard-metric-rhr"
     static let dashboardMetricSleep = "vision-dashboard-metric-sleep"
+    static let trainRoot = "vision-train-root"
+    static let trainHeroCard = "vision-train-hero-card"
+    static let trainOpenChart3DButton = "vision-train-open-chart3d-button"
+    static let trainLoadingState = "vision-train-loading-state"
+    static let trainUnavailableState = "vision-train-unavailable-state"
+    static let trainFailedState = "vision-train-failed-state"
+    static let trainSharePlayCard = "vision-train-shareplay-card"
+    static let trainVoiceEntryCard = "vision-train-voice-entry-card"
+    static let trainExerciseGuideCard = "vision-train-exercise-guide-card"
+    static let trainMuscleMapCard = "vision-train-muscle-map-card"
 
     // MARK: - Chart3D Window
     static let chart3DRoot = "vision-chart3d-root"

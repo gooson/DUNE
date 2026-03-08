@@ -22,12 +22,16 @@ struct VisionTrainView: View {
                     loadingView
                 case .ready:
                     VisionSharePlayWorkoutCard()
+                        .accessibilityIdentifier(VisionSurfaceAccessibility.trainSharePlayCard)
                     VisionVoiceWorkoutEntryCard()
+                        .accessibilityIdentifier(VisionSurfaceAccessibility.trainVoiceEntryCard)
                     VisionExerciseFormGuideView()
+                        .accessibilityIdentifier(VisionSurfaceAccessibility.trainExerciseGuideCard)
                     VisionMuscleMapExperienceView(
                         fatigueStates: viewModel.fatigueStates,
                         initialMuscle: .back
                     )
+                    .accessibilityIdentifier(VisionSurfaceAccessibility.trainMuscleMapCard)
                 case .unavailable(let message):
                     emptyStateView(message: message)
                 case .failed(let message):
@@ -36,6 +40,7 @@ struct VisionTrainView: View {
             }
             .padding(24)
         }
+        .accessibilityIdentifier(VisionSurfaceAccessibility.trainRoot)
         .navigationTitle("Activity")
         .task {
             await viewModel.loadIfNeeded()
@@ -56,9 +61,11 @@ struct VisionTrainView: View {
             } label: {
                 Label("Open 3D Charts", systemImage: "chart.bar.fill")
             }
+            .accessibilityIdentifier(VisionSurfaceAccessibility.trainOpenChart3DButton)
         }
         .padding(24)
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
+        .accessibilityIdentifier(VisionSurfaceAccessibility.trainHeroCard)
     }
 
     private var loadingView: some View {
@@ -73,6 +80,7 @@ struct VisionTrainView: View {
         .frame(minHeight: 200)
         .padding(24)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 24, style: .continuous))
+        .accessibilityIdentifier(VisionSurfaceAccessibility.trainLoadingState)
     }
 
     private func emptyStateView(message: String) -> some View {
@@ -94,6 +102,7 @@ struct VisionTrainView: View {
         .frame(minHeight: 200)
         .padding(24)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 24, style: .continuous))
+        .accessibilityIdentifier(VisionSurfaceAccessibility.trainUnavailableState)
     }
 
     private func errorView(message: String) -> some View {
@@ -118,5 +127,6 @@ struct VisionTrainView: View {
         .frame(minHeight: 200)
         .padding(24)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 24, style: .continuous))
+        .accessibilityIdentifier(VisionSurfaceAccessibility.trainFailedState)
     }
 }
