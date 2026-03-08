@@ -54,8 +54,9 @@ SharePlay 소셜 기능 및 고급 입력 방식 구현.
 - 이번 배치는 `/run`으로 G1 foundation(SharePlay workout board), E1, F3 foundation(speech capture + parser + draft preview) + single-entry persistence까지 ship 완료.
 - SharePlay의 SharedWorldAnchors/spatial alignment, voice audio feedback, body tracking, full-avatar는 capability 및 실기기 검증이 추가로 필요하므로 후속 구현으로 남김.
 - Phase 5A 실데이터 연결은 `todos/021-done-p1-vision-real-data-pipeline.md`로 정리됐다.
-- Phase 5B UX polish는 `todos/022-in-progress-p2-vision-ux-polish.md`에서 계속 진행한다.
-- 고급 기능 실행은 Phase 5B 종료 후 `todos/023-in-progress-p2-vision-phase4-remaining.md`로 이어진다.
+- Phase 5B UX polish 구현은 `todos/022-done-p2-vision-ux-polish.md`로 종료됐다.
+- runtime spatial placement visual verification은 `todos/107-ready-p2-vision-window-placement-runtime-validation.md`로 분리됐다.
+- 고급 기능 실행은 5B 구현 종료 기준으로 `todos/023-in-progress-p2-vision-phase4-remaining.md`에서 계속 진행한다.
 
 ## 기술 요구사항
 - GroupActivities (SharePlay)

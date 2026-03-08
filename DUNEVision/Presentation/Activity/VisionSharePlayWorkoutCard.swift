@@ -191,7 +191,7 @@ struct VisionSharePlayWorkoutCard: View {
                     .font(.headline)
                 Spacer()
                 Label(participant.phase.displayName, systemImage: participant.phase.systemImage)
-                    .font(.caption.weight(.semibold))
+                    .font(.callout.weight(.semibold))
                     .padding(.horizontal, 10)
                     .padding(.vertical, 6)
                     .background(.ultraThinMaterial, in: Capsule())
