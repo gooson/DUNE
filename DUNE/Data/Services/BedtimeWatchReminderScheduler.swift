@@ -37,6 +37,7 @@ final class BedtimeReminderScheduler {
     static let settingsKey = "isBedtimeWatchReminderEnabled"
 
     private enum Constants {
+        static let legacyNotificationIdentifier = "com.raftel.dune.bedtime-watch-reminder"
         static let notificationIdentifier = "com.raftel.dune.bedtime-reminder"
         static let lookbackDays = 7
         static let leadMinutes = 120
@@ -146,5 +147,6 @@ final class BedtimeReminderScheduler {
 
     func removePendingReminder() async {
         notificationScheduler.removePendingReminder(identifier: Constants.notificationIdentifier)
+        notificationScheduler.removePendingReminder(identifier: Constants.legacyNotificationIdentifier)
     }
 }

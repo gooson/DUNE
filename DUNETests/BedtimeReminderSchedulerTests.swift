@@ -33,7 +33,10 @@ struct BedtimeReminderSchedulerTests {
 
         await scheduler.refreshSchedule()
 
-        #expect(notificationScheduler.removedIdentifiers == ["com.raftel.dune.bedtime-reminder"])
+        #expect(notificationScheduler.removedIdentifiers == [
+            "com.raftel.dune.bedtime-reminder",
+            "com.raftel.dune.bedtime-watch-reminder"
+        ])
         #expect(notificationScheduler.requests.count == 1)
 
         let request = try #require(notificationScheduler.requests.first)
@@ -61,7 +64,10 @@ struct BedtimeReminderSchedulerTests {
 
         await scheduler.refreshSchedule()
 
-        #expect(notificationScheduler.removedIdentifiers == ["com.raftel.dune.bedtime-reminder"])
+        #expect(notificationScheduler.removedIdentifiers == [
+            "com.raftel.dune.bedtime-reminder",
+            "com.raftel.dune.bedtime-watch-reminder"
+        ])
         #expect(notificationScheduler.requests.isEmpty)
     }
 
@@ -82,7 +88,10 @@ struct BedtimeReminderSchedulerTests {
 
         await scheduler.refreshSchedule()
 
-        #expect(notificationScheduler.removedIdentifiers == ["com.raftel.dune.bedtime-reminder"])
+        #expect(notificationScheduler.removedIdentifiers == [
+            "com.raftel.dune.bedtime-reminder",
+            "com.raftel.dune.bedtime-watch-reminder"
+        ])
         #expect(notificationScheduler.requests.isEmpty)
     }
 
