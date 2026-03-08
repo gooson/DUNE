@@ -137,8 +137,11 @@ final class BodyCompositionViewModel {
             muscleMass: validated.muscleMass,
             memo: String(newMemo.prefix(maxMemoLength))
         )
-        isSaving = false
         return record
+    }
+
+    func didFinishSaving() {
+        isSaving = false
     }
 
     func applyUpdate(to record: BodyCompositionRecord) -> Bool {

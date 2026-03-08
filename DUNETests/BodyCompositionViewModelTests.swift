@@ -79,6 +79,20 @@ struct BodyCompositionViewModelTests {
         #expect(record == nil)
     }
 
+    @Test("createValidatedRecord keeps saving state until save finishes")
+    func savingLifecycle() {
+        let vm = BodyCompositionViewModel()
+        vm.newWeight = "70.0"
+
+        let record = vm.createValidatedRecord()
+
+        #expect(record != nil)
+        #expect(vm.isSaving)
+
+        vm.didFinishSaving()
+        #expect(vm.isSaving == false)
+    }
+
     @Test("resetForm clears all fields")
     func resetForm() {
         let vm = BodyCompositionViewModel()

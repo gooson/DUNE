@@ -63,10 +63,12 @@ struct BodyHistoryDetailView: View {
                             if didUpdate {
                                 isShowingEditSheet = false
                                 viewModel.editingRecord = nil
+                                return true
                             }
                         } catch {
                             viewModel.validationError = String(localized: "Failed to save record changes. Please try again.")
                         }
+                        return false
                     }
                 )
             }

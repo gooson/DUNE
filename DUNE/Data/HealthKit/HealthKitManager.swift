@@ -56,6 +56,9 @@ actor HealthKitManager: HealthKitManaging {
                 toShare: [
                     HKQuantityType(.activeEnergyBurned),
                     HKQuantityType(.distanceWalkingRunning),
+                    HKQuantityType(.bodyMass),
+                    HKQuantityType(.bodyFatPercentage),
+                    HKQuantityType(.leanBodyMass),
                     HKQuantityType.workoutType(),
                     HKCategoryType(.mindfulSession),
                 ],
