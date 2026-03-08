@@ -10,6 +10,7 @@ struct MuscleMap3DView: View {
     @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var mode: MuscleMap3DMode = .recovery
     @State private var selectedMuscle: MuscleGroup?
+    @AppStorage("muscleMap3D.shellOpacity") private var shellOpacity: Double = Double(MuscleMap3DState.defaultShellOpacity)
     @State private var resetToken = 0
 
     init(fatigueStates: [MuscleFatigueState], highlightedMuscle: MuscleGroup?) {
@@ -53,11 +54,15 @@ struct MuscleMap3DView: View {
                 .pickerStyle(.segmented)
                 .accessibilityIdentifier("musclemap-3d-mode-picker")
 
+                skinOpacitySlider
+                    .accessibilityIdentifier("musclemap-3d-skin-slider")
+
                 MuscleMap3DViewer(
                     fatigueStates: fatigueStates,
                     mode: mode,
                     colorScheme: colorScheme,
                     selectedMuscle: $selectedMuscle,
+                    shellOpacity: Float(shellOpacity),
                     resetToken: resetToken
                 )
                 .frame(height: viewerHeight)
@@ -198,6 +203,27 @@ struct MuscleMap3DView: View {
             )
     }
 
+    private var skinOpacitySlider: some View {
+        HStack(spacing: DS.Spacing.sm) {
+            Label("Skin", systemImage: "eye")
+                .font(.caption)
+                .foregroundStyle(DS.Color.textSecondary)
+                .fixedSize(horizontal: true, vertical: false)
+            Slider(value: $shellOpacity, in: 0...0.5) {
+                Text("Skin Opacity")
+            } minimumValueLabel: {
+                Image(systemName: "eye.slash")
+                    .font(.caption2)
+                    .foregroundStyle(DS.Color.textSecondary)
+            } maximumValueLabel: {
+                Image(systemName: "eye")
+                    .font(.caption2)
+                    .foregroundStyle(DS.Color.textSecondary)
+            }
+            .tint(DS.Color.activity)
+        }
+    }
+
     private var muscleSelectionStrip: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: DS.Spacing.sm) {
@@ -238,6 +264,7 @@ struct MuscleMap3DViewer: View {
     let mode: MuscleMap3DMode
     let colorScheme: ColorScheme
     @Binding var selectedMuscle: MuscleGroup?
+    let shellOpacity: Float
     let resetToken: Int
 
     @MainActor
@@ -344,7 +371,8 @@ struct MuscleMap3DViewer: View {
             fatigueStates: fatigueStates,
             mode: mode,
             selectedMuscle: selectedMuscle,
-            colorScheme: colorScheme
+            colorScheme: colorScheme,
+            shellOpacity: shellOpacity
         )
     }
 
