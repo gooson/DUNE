@@ -76,7 +76,7 @@ struct VisionVoiceWorkoutEntryViewModelTests {
         await viewModel.startListening()
 
         #expect(viewModel.isListening == false)
-        #expect(viewModel.infoMessage == "Speech recognition permission was denied. Type the workout instead.")
+        #expect(viewModel.infoMessage == String(localized: "Speech recognition permission was denied. Type the workout instead."))
         #expect(transcriber.startCallCount == 0)
     }
 
@@ -89,7 +89,7 @@ struct VisionVoiceWorkoutEntryViewModelTests {
         transcriber.transcriptHandler?("Bench Press 80kg 8 reps")
 
         #expect(viewModel.isListening)
-        #expect(viewModel.infoMessage == "Listening...")
+        #expect(viewModel.infoMessage == String(localized: "Listening..."))
         #expect(viewModel.transcript == "Bench Press 80kg 8 reps")
         #expect(transcriber.startCallCount == 1)
     }
@@ -105,7 +105,7 @@ struct VisionVoiceWorkoutEntryViewModelTests {
         #expect(viewModel.draft?.exercise.id == "running")
         #expect(viewModel.draft?.durationSeconds == 1_800)
         #expect(viewModel.errorMessage == nil)
-        #expect(viewModel.infoMessage == "Voice draft ready.")
+        #expect(viewModel.infoMessage == String(localized: "Voice draft ready."))
     }
 
     @Test("reviewDraft surfaces parser failure when the transcript is incomplete")
@@ -117,7 +117,7 @@ struct VisionVoiceWorkoutEntryViewModelTests {
         viewModel.reviewDraft()
 
         #expect(viewModel.draft == nil)
-        #expect(viewModel.errorMessage == "Add reps for this exercise draft.")
+        #expect(viewModel.errorMessage == String(localized: "Add reps for this exercise draft."))
     }
 
     @Test("stopListening resets listening state and preserves the transcript")
@@ -131,7 +131,7 @@ struct VisionVoiceWorkoutEntryViewModelTests {
 
         #expect(viewModel.isListening == false)
         #expect(viewModel.transcript == "Squat 100 5")
-        #expect(viewModel.infoMessage == "Transcript updated. Review the draft when you're ready.")
+        #expect(viewModel.infoMessage == String(localized: "Transcript updated. Review the draft when you're ready."))
         #expect(transcriber.stopCallCount == 1)
     }
 

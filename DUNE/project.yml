@@ -381,6 +381,8 @@ targets:
         CODE_SIGN_ENTITLEMENTS: ../DUNEVision/Resources/DUNEVision.entitlements
         INFOPLIST_KEY_NSHealthShareUsageDescription: "DUNE needs access to your health data to display condition scores, workout history, and health trends."
         INFOPLIST_KEY_NSHealthUpdateUsageDescription: "DUNE may write workout and body composition data to Health."
+        INFOPLIST_KEY_NSMicrophoneUsageDescription: "DUNE uses the microphone to capture voice workout drafts in Vision Pro."
+        INFOPLIST_KEY_NSSpeechRecognitionUsageDescription: "DUNE uses speech recognition to turn spoken workout commands into structured drafts."
     entitlements:
       path: ../DUNEVision/Resources/DUNEVision.entitlements
       properties:
@@ -393,6 +395,7 @@ targets:
         com.apple.developer.ubiquity-kvstore-identifier: "$(TeamIdentifierPrefix)$(CFBundleIdentifier)"
     dependencies:
       - sdk: HealthKit.framework
+      - sdk: Speech.framework
       - target: DUNEVisionWidgets
         embed: true
 

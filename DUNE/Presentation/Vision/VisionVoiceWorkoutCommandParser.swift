@@ -162,32 +162,64 @@ struct VisionVoiceWorkoutCommandParser {
         var remainingTranscript = normalizedText(transcript)
 
         let weightMatch = Self.firstMatch(for: Self.weightPattern, in: remainingTranscript)
-        let weight = weightMatch.flatMap { Double(Self.capture(group: 1, from: remainingTranscript, match: $0) ?? "") }
-        let weightUnit = weightMatch.flatMap {
-            guard let token = Self.capture(group: 2, from: remainingTranscript, match: $0) else { return nil }
-            return Self.weightUnit(for: token)
+        let weight: Double?
+        let weightUnit: WeightUnit?
+        if let weightMatch,
+           let weightToken = Self.capture(group: 1, from: remainingTranscript, match: weightMatch) {
+            weight = Double(weightToken)
+        } else {
+            weight = nil
+        }
+        if let weightMatch,
+           let weightUnitToken = Self.capture(group: 2, from: remainingTranscript, match: weightMatch) {
+            weightUnit = Self.weightUnit(for: weightUnitToken)
+        } else {
+            weightUnit = nil
         }
         Self.remove(match: weightMatch, from: &remainingTranscript)
 
         let repsMatch = Self.firstMatch(for: Self.repsPattern, in: remainingTranscript)
-        let reps = repsMatch.flatMap { Int(Self.capture(group: 1, from: remainingTranscript, match: $0) ?? "") }
+        let reps: Int?
+        if let repsMatch,
+           let repsToken = Self.capture(group: 1, from: remainingTranscript, match: repsMatch) {
+            reps = Int(repsToken)
+        } else {
+            reps = nil
+        }
         Self.remove(match: repsMatch, from: &remainingTranscript)
 
         let durationMatch = Self.firstMatch(for: Self.durationPattern, in: remainingTranscript)
-        let durationValue = durationMatch.flatMap { Double(Self.capture(group: 1, from: remainingTranscript, match: $0) ?? "") }
-        let durationSeconds = durationMatch.flatMap {
-            guard let token = Self.capture(group: 2, from: remainingTranscript, match: $0),
-                  let durationValue
-            else { return nil }
-            return Self.durationSeconds(for: durationValue, unitToken: token)
+        let durationValue: Double?
+        if let durationMatch,
+           let durationValueToken = Self.capture(group: 1, from: remainingTranscript, match: durationMatch) {
+            durationValue = Double(durationValueToken)
+        } else {
+            durationValue = nil
+        }
+        let durationSeconds: TimeInterval?
+        if let durationMatch,
+           let durationUnitToken = Self.capture(group: 2, from: remainingTranscript, match: durationMatch),
+           let durationValue {
+            durationSeconds = Self.durationSeconds(for: durationValue, unitToken: durationUnitToken)
+        } else {
+            durationSeconds = nil
         }
         Self.remove(match: durationMatch, from: &remainingTranscript)
 
         let distanceMatch = Self.firstMatch(for: Self.distancePattern, in: remainingTranscript)
-        let distance = distanceMatch.flatMap { Double(Self.capture(group: 1, from: remainingTranscript, match: $0) ?? "") }
-        let distanceUnit = distanceMatch.flatMap {
-            guard let token = Self.capture(group: 2, from: remainingTranscript, match: $0) else { return nil }
-            return Self.distanceUnit(for: token)
+        let distance: Double?
+        let distanceUnit: VisionVoiceDistanceUnit?
+        if let distanceMatch,
+           let distanceToken = Self.capture(group: 1, from: remainingTranscript, match: distanceMatch) {
+            distance = Double(distanceToken)
+        } else {
+            distance = nil
+        }
+        if let distanceMatch,
+           let distanceUnitToken = Self.capture(group: 2, from: remainingTranscript, match: distanceMatch) {
+            distanceUnit = Self.distanceUnit(for: distanceUnitToken)
+        } else {
+            distanceUnit = nil
         }
         Self.remove(match: distanceMatch, from: &remainingTranscript)
 
@@ -231,18 +263,18 @@ struct VisionVoiceWorkoutCommandParser {
         var bestMatch: (score: Int, exercise: ExerciseDefinition)?
 
         for exercise in library.allExercises() {
-            let score = candidateLabels(for: exercise)
-                .map { score(query: normalizedQuery, against: $0) }
+            let candidateScore = candidateLabels(for: exercise)
+                .map { scoreForMatch(query: normalizedQuery, against: $0) }
                 .max() ?? 0
 
-            guard score > 0 else { continue }
+            guard candidateScore > 0 else { continue }
 
             if let existing = bestMatch {
-                if score > existing.score {
-                    bestMatch = (score, exercise)
+                if candidateScore > existing.score {
+                    bestMatch = (candidateScore, exercise)
                 }
             } else {
-                bestMatch = (score, exercise)
+                bestMatch = (candidateScore, exercise)
             }
         }
 
@@ -255,7 +287,7 @@ struct VisionVoiceWorkoutCommandParser {
             .filter { !$0.isEmpty }
     }
 
-    private func score(query: String, against label: String) -> Int {
+    private func scoreForMatch(query: String, against label: String) -> Int {
         guard !label.isEmpty else { return 0 }
         if label == query {
             return 1_000 + label.count
@@ -329,13 +361,13 @@ struct VisionVoiceWorkoutCommandParser {
         let normalized = token.lowercased()
         switch normalized {
         case "km", "kms", "kilometer", "kilometers", "킬로미터", "키로미터":
-            .km
+            return .km
         case "meter", "meters", "미터":
-            .meters
+            return .meters
         case "mile", "miles", "마일":
-            .miles
+            return .miles
         default:
-            nil
+            return nil
         }
     }
 

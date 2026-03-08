@@ -13,6 +13,7 @@ enum VisionVoiceWorkoutAuthorizationStatus: Equatable, Sendable {
     case unsupported
 }
 
+@MainActor
 protocol VisionVoiceWorkoutTranscribing: AnyObject {
     func requestAuthorization() async -> VisionVoiceWorkoutAuthorizationStatus
     func start(

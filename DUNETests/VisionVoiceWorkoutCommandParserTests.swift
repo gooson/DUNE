@@ -83,7 +83,7 @@ struct VisionVoiceWorkoutCommandParserTests {
         #expect(draft.weight == 100)
         #expect(draft.weightUnit == .kg)
         #expect(draft.reps == 5)
-        #expect(draft.notes.contains("Weight unit was assumed as kg for this draft."))
+        #expect(draft.notes.contains(String(localized: "Weight unit was assumed as kg for this draft.")))
     }
 
     @Test("Parses cardio command with duration and distance")
@@ -115,7 +115,7 @@ struct VisionVoiceWorkoutCommandParserTests {
             return
         }
 
-        #expect(message == "Add an exercise name to the transcript first.")
+        #expect(message == String(localized: "Add an exercise name to the transcript first."))
     }
 
     @Test("Fails when a strength command is missing reps")
@@ -129,7 +129,7 @@ struct VisionVoiceWorkoutCommandParserTests {
             return
         }
 
-        #expect(message == "Add reps for this exercise draft.")
+        #expect(message == String(localized: "Add reps for this exercise draft."))
     }
 
     private func makeParser() -> VisionVoiceWorkoutCommandParser {
