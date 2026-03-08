@@ -441,6 +441,8 @@ Phase별 실패 처리:
 
 어떤 항목이든 **산출물 또는 명시적 사유** 중 하나가 비어 있으면 `/run`을 끝내지 않습니다.
 
+6. TODO 정리: 작업 대상 TODO 파일을 `done` 상태로 변경 (파일명 STATUS → done, frontmatter status → done, updated 날짜 갱신)
+
 ## Execution Summary Report
 
 `/run` 종료 시 위의 Final Output Contract 이후에 **Execution Summary Report**를 출력합니다.
