@@ -51,5 +51,5 @@ updated: 2026-03-09
 ## Deferred Lane
 
 - visionOS XCUITest harness가 생기기 전까지 tab switching + root lane 존재 여부까지만 Phase 0 범위로 고정한다.
-- multi-window open verification은 `todos/087-ready-p3-e2e-dunevision-dashboard-window-scene.md`에서 처리한다.
-- volumetric / immersive verification은 `todos/089-ready-p3-e2e-dunevision-volumetric-experience-view.md`, `todos/090-ready-p3-e2e-dunevision-immersive-experience-view.md`에서 처리한다.
+- multi-window open verification은 `todos/087-done-p3-e2e-dunevision-dashboard-window-scene.md`에서 처리했다.
+- volumetric / immersive verification은 `todos/089-done-p3-e2e-dunevision-volumetric-experience-view.md`, `todos/090-done-p3-e2e-dunevision-immersive-experience-view.md`에서 처리했다.
