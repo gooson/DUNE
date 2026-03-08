@@ -10,6 +10,7 @@ struct MuscleMap3DView: View {
     @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var mode: MuscleMap3DMode = .recovery
     @State private var selectedMuscle: MuscleGroup?
+    @State private var shellOpacity: Double = 0.06
     @State private var resetToken = 0
 
     init(fatigueStates: [MuscleFatigueState], highlightedMuscle: MuscleGroup?) {
@@ -53,11 +54,15 @@ struct MuscleMap3DView: View {
                 .pickerStyle(.segmented)
                 .accessibilityIdentifier("musclemap-3d-mode-picker")
 
+                skinOpacitySlider
+                    .accessibilityIdentifier("musclemap-3d-skin-slider")
+
                 MuscleMap3DViewer(
                     fatigueStates: fatigueStates,
                     mode: mode,
                     colorScheme: colorScheme,
                     selectedMuscle: $selectedMuscle,
+                    shellOpacity: Float(shellOpacity),
                     resetToken: resetToken
                 )
                 .frame(height: viewerHeight)
@@ -198,6 +203,18 @@ struct MuscleMap3DView: View {
             )
     }
 
+    private var skinOpacitySlider: some View {
+        HStack(spacing: DS.Spacing.sm) {
+            Label("Skin", systemImage: "eye")
+                .font(.caption)
+                .foregroundStyle(DS.Color.textSecondary)
+                .frame(width: 56, alignment: .leading)
+            Slider(value: $shellOpacity, in: 0...0.5)
+                .tint(DS.Color.activity)
+        }
+        .padding(.horizontal, DS.Spacing.sm)
+    }
+
     private var muscleSelectionStrip: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: DS.Spacing.sm) {
@@ -238,6 +255,7 @@ struct MuscleMap3DViewer: View {
     let mode: MuscleMap3DMode
     let colorScheme: ColorScheme
     @Binding var selectedMuscle: MuscleGroup?
+    let shellOpacity: Float
     let resetToken: Int
 
     @MainActor
@@ -344,7 +362,8 @@ struct MuscleMap3DViewer: View {
             fatigueStates: fatigueStates,
             mode: mode,
             selectedMuscle: selectedMuscle,
-            colorScheme: colorScheme
+            colorScheme: colorScheme,
+            shellOpacity: shellOpacity
         )
     }
 

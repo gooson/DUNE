@@ -208,13 +208,14 @@ final class MuscleMap3DScene {
         fatigueStates: [MuscleFatigueState],
         mode: MuscleMap3DMode,
         selectedMuscle: MuscleGroup?,
-        colorScheme: ColorScheme
+        colorScheme: ColorScheme,
+        shellOpacity: Float = 0.06
     ) {
         let fatigueByMuscle = Dictionary(
             uniqueKeysWithValues: fatigueStates.map { ($0.muscle, $0) }
         )
 
-        updateShellMaterials(colorScheme: colorScheme)
+        updateShellMaterials(colorScheme: colorScheme, opacity: shellOpacity)
 
         for muscle in MuscleGroup.allCases {
             let displayState = MuscleMap3DState.displayState(
@@ -312,10 +313,11 @@ final class MuscleMap3DScene {
 
     // MARK: - Materials
 
-    private func updateShellMaterials(colorScheme: ColorScheme) {
+    private func updateShellMaterials(colorScheme: ColorScheme, opacity: Float = 0.06) {
+        let alpha = CGFloat(max(0, min(1, opacity)))
         let tint: UIColor = colorScheme == .dark
-            ? UIColor.white.withAlphaComponent(0.05)
-            : UIColor.black.withAlphaComponent(0.06)
+            ? UIColor.white.withAlphaComponent(alpha)
+            : UIColor.black.withAlphaComponent(alpha)
         let material = SimpleMaterial(color: tint, roughness: 0.4, isMetallic: false)
 
         for model in shellModels {
