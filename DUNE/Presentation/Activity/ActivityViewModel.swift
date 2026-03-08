@@ -448,11 +448,28 @@ final class ActivityViewModel {
         weeklySteps = stepsResult.weeklyData
         todaySteps = stepsResult.todayMetric
         recentWorkouts = workoutsResult
+        #if DEBUG
+        let scenario = UITestSeedScenario.current()
+        let mockedRecommendations = TestDataSeeder.mockTemplateRecommendations(
+            for: scenario,
+            referenceDate: Date()
+        )
+        if !mockedRecommendations.isEmpty {
+            templateRecommendations = mockedRecommendations
+        } else {
+            templateRecommendations = templateRecommendationService.recommendTemplates(
+                from: workoutsResult,
+                config: .default,
+                referenceDate: Date()
+            )
+        }
+        #else
         templateRecommendations = templateRecommendationService.recommendTemplates(
             from: workoutsResult,
             config: .default,
             referenceDate: Date()
         )
+        #endif
         refreshCardioPersonalRecords(with: workoutsResult)
         triggerCardioPersonalRecordSeedIfNeeded()
         trainingLoadData = loadResult
@@ -786,6 +803,17 @@ final class ActivityViewModel {
     // MARK: - Recent Workouts
 
     private func safeWorkoutsFetch(canQueryHealthKit: Bool) async -> [WorkoutSummary] {
+        #if DEBUG
+        let scenario = UITestSeedScenario.current()
+        let mockedWorkouts = TestDataSeeder.mockRecentWorkouts(
+            for: scenario,
+            referenceDate: Date()
+        )
+        if !mockedWorkouts.isEmpty {
+            return mockedWorkouts
+        }
+        #endif
+
         guard canQueryHealthKit else { return [] }
         do {
             return try await workoutService.fetchWorkouts(days: 7)

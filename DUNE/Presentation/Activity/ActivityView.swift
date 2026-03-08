@@ -361,6 +361,25 @@ struct ActivityView: View {
         )
     }
 
+    private func startRecommendation(_ recommendation: WorkoutTemplateRecommendation) {
+        let exercises = TemplateExerciseResolver.resolveExercises(
+            from: recommendation,
+            library: library
+        )
+        guard !exercises.isEmpty else { return }
+
+        if exercises.count == 1 {
+            selectedExercise = exercises[0]
+            return
+        }
+
+        templateConfig = TemplateWorkoutConfig(
+            templateName: recommendation.title,
+            exercises: exercises,
+            templateEntries: exercises.map { TemplateExerciseResolver.defaultEntry(for: $0) }
+        )
+    }
+
     private func resolveExercise(from entry: TemplateEntry) -> ExerciseDefinition? {
         if let definition = library.exercise(byID: entry.exerciseDefinitionID) {
             return definition
@@ -438,6 +457,7 @@ struct ActivityView: View {
                 recentExerciseIDs: recentExerciseIDs,
                 popularExerciseIDs: popularExerciseIDs,
                 onStartExercise: { exercise in selectedExercise = exercise },
+                onStartRecommendation: startRecommendation,
                 onStartTemplate: startFromTemplate,
                 onContextChanged: { context in
                     viewModel.setRecommendationContext(context)

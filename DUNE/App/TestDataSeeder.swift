@@ -119,6 +119,75 @@ enum TestDataSeeder {
         )
     }
 
+    static func mockRecentWorkouts(
+        for scenario: UITestSeedScenario,
+        referenceDate: Date
+    ) -> [WorkoutSummary] {
+        guard scenario == .activityExerciseSeeded else { return [] }
+
+        let calendar = Calendar.current
+        let referenceMorning = calendar.date(
+            bySettingHour: 7,
+            minute: 12,
+            second: 0,
+            of: referenceDate
+        ) ?? referenceDate
+
+        return [3, 8, 13, 20].compactMap { daysAgo in
+            guard let workoutDate = calendar.date(byAdding: .day, value: -daysAgo, to: referenceMorning) else {
+                return nil
+            }
+
+            return WorkoutSummary(
+                id: "ui-test-recommendation-walking-\(daysAgo)",
+                type: "Walking",
+                activityType: .walking,
+                duration: 4 * 60,
+                calories: 34,
+                distance: 320,
+                date: workoutDate,
+                isFromThisApp: false,
+                heartRateAvg: 102,
+                heartRateMax: 118,
+                heartRateMin: 89,
+                averagePace: 780,
+                averageSpeed: 1.28,
+                elevationAscended: nil,
+                weatherTemperature: 17,
+                weatherCondition: 1,
+                weatherHumidity: 42,
+                isIndoor: false,
+                effortScore: 3.2,
+                stepCount: 540,
+                flightsClimbed: nil,
+                milestoneDistance: nil,
+                isPersonalRecord: false,
+                personalRecordTypes: []
+            )
+        }
+    }
+
+    static func mockTemplateRecommendations(
+        for scenario: UITestSeedScenario,
+        referenceDate: Date
+    ) -> [WorkoutTemplateRecommendation] {
+        guard scenario == .activityExerciseSeeded else { return [] }
+
+        let lastPerformedAt = Calendar.current.date(byAdding: .day, value: -1, to: referenceDate) ?? referenceDate
+        return [
+            WorkoutTemplateRecommendation(
+                id: "walking",
+                title: "Morning Walking 4min",
+                sequenceTypes: [.walking],
+                sequenceLabels: ["Walking"],
+                frequency: 4,
+                averageDurationMinutes: 4,
+                lastPerformedAt: lastPerformedAt,
+                score: 1.4
+            )
+        ]
+    }
+
     @MainActor
     private static func seedDefaultRecords(into context: ModelContext) {
         configureTodayDefaults()

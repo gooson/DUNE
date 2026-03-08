@@ -115,6 +115,51 @@ struct TemplateExerciseResolverTests {
         #expect(entry.cardioSecondaryUnitRaw == CardioSecondaryUnit.floors.rawValue)
     }
 
+    @Test("resolveExercises restores recommended routines by canonical label order")
+    func resolveRecommendedRoutineByCanonicalLabel() {
+        let walking = ExerciseDefinition(
+            id: "walking",
+            name: "Walking",
+            localizedName: "Walking",
+            category: .cardio,
+            inputType: .durationDistance,
+            primaryMuscles: [.quadriceps],
+            secondaryMuscles: [.calves],
+            equipment: .bodyweight,
+            metValue: 3.5,
+            cardioSecondaryUnit: .km
+        )
+        let rowing = ExerciseDefinition(
+            id: "rowing-machine",
+            name: "Rowing Machine",
+            localizedName: "Rowing Machine",
+            category: .cardio,
+            inputType: .durationDistance,
+            primaryMuscles: [.back],
+            secondaryMuscles: [.biceps],
+            equipment: .machine,
+            metValue: 7.0,
+            cardioSecondaryUnit: .meters
+        )
+        let recommendation = WorkoutTemplateRecommendation(
+            id: "walking>rowing",
+            title: "Morning Walk + Row",
+            sequenceTypes: [.walking, .rowing],
+            sequenceLabels: ["Walking Recovery", "Rowing Machine"],
+            frequency: 4,
+            averageDurationMinutes: 18,
+            lastPerformedAt: .now,
+            score: 1.4
+        )
+
+        let resolved = TemplateExerciseResolver.resolveExercises(
+            from: recommendation,
+            library: ExerciseLibraryService(exercises: [walking, rowing])
+        )
+
+        #expect(resolved.map { $0.id } == ["walking", "rowing-machine"])
+    }
+
     @Test("profile normalizes legacy raw cardio input aliases")
     func profileNormalizesLegacyCardioAlias() {
         let profile = TemplateExerciseProfile(

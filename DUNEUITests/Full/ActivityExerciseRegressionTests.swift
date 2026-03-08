@@ -137,6 +137,25 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue(resultRow.waitForExistence(timeout: 8), "Deadlift result should appear after search")
     }
 
+    func testRecommendedRoutineCardOpensExerciseStart() throws {
+        ensureActivityRoot()
+        XCTAssertTrue(
+            app.scrollToElementIfNeeded(AXID.activityRecommendedRoutineCard, maxSwipes: 8),
+            "Recommended routine card should be reachable"
+        )
+
+        let recommendationCard = app.descendants(matching: .any)[AXID.activityRecommendedRoutineCard].firstMatch
+        XCTAssertTrue(recommendationCard.waitForExistence(timeout: 8), "Recommended routine card should exist")
+        recommendationCard.tap()
+
+        let strengthStart = app.descendants(matching: .any)[AXID.exerciseStartScreen].firstMatch
+        let cardioStart = app.descendants(matching: .any)[AXID.cardioStartScreen].firstMatch
+        XCTAssertTrue(
+            strengthStart.waitForExistence(timeout: 3) || cardioStart.waitForExistence(timeout: 7),
+            "Tapping a recommended routine should open the appropriate start flow"
+        )
+    }
+
     func testManualWorkoutSessionSavesAndDismissesCompletionSheet() throws {
         openExerciseSingleExercisePicker()
         startQuickStartExerciseFromDetail(search: "Bench Press", exerciseID: Fixture.benchPressID)
