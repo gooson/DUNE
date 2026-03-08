@@ -789,6 +789,7 @@
 		E4C2612C2811AAF9EF2DB72C /* Equipment+View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E386A3DC0F6866C0CD0628 /* Equipment+View.swift */; };
 		E576B42101FD01305E40949D /* HeroScoreCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA13B622CF21217026F0757 /* HeroScoreCard.swift */; };
 		E5797EE48EE90E00D3100B4E /* URLProtocolStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1FD4AEF42B51C9686F1AC2C /* URLProtocolStub.swift */; };
+		E5F49CB88725191FBABB05A7 /* muscle_body.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 51E9D712E03C69ECD75A5653 /* muscle_body.usdz */; };
 		E65D80822B97AC73FC4C4870 /* VisionImmersiveExperienceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FB6E47ADCD7F9E12CC4D76F /* VisionImmersiveExperienceView.swift */; };
 		E6B9C7D3EF300A18CA59ADE6 /* VisionImmersiveExperienceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A8BF2DE11C7571470B24F6F /* VisionImmersiveExperienceViewModel.swift */; };
 		E6F60CFFD073A302DE59C16F /* VisionDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87AB64F8905AEDA79645CFE5 /* VisionDashboardView.swift */; };
@@ -1192,6 +1193,7 @@
 		5144BAACA8B897A50AA44AFA /* CalculationRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculationRow.swift; sourceTree = "<group>"; };
 		51996036066CBEE46F261333 /* RecentExerciseTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentExerciseTracker.swift; sourceTree = "<group>"; };
 		51E660CCB5284E5C5E12F92B /* LargeWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeWidgetView.swift; sourceTree = "<group>"; };
+		51E9D712E03C69ECD75A5653 /* muscle_body.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = muscle_body.usdz; sourceTree = "<group>"; };
 		521950DB037ABDF33B0CF59D /* ImmersiveRecoveryAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImmersiveRecoveryAnalyzer.swift; sourceTree = "<group>"; };
 		52E27EDBFCD2CF81BAC3A30B /* WorkoutDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDefaults.swift; sourceTree = "<group>"; };
 		52E60731B8382113F60DBEBA /* UITests-CI.xctestplan */ = {isa = PBXFileReference; path = "UITests-CI.xctestplan"; sourceTree = "<group>"; };
@@ -2162,6 +2164,14 @@
 			name = DUNE;
 			sourceTree = "<group>";
 		};
+		4C6602DE773DE9F46086DD2E /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				51E9D712E03C69ECD75A5653 /* muscle_body.usdz */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		4CBC0BFFD723A6434AF81D03 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
@@ -2358,6 +2368,7 @@
 		68976695BF058F7436ABCF72 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				4C6602DE773DE9F46086DD2E /* Models */,
 				63765429B77F16BB36CD8D6D /* Assets.xcassets */,
 				784FEB5BF718A90FAD1E4318 /* DUNE.entitlements */,
 				36F945536ED672B490649FB8 /* Info.plist */,
@@ -3534,6 +3545,7 @@
 				1730E2939253AC8AE0AF8FCC /* Colors.xcassets in Resources */,
 				12B7CC5C9237A51478D8EC2F /* Localizable.xcstrings in Resources */,
 				2EADE537C1FE726718F8C5E4 /* exercises.json in Resources */,
+				E5F49CB88725191FBABB05A7 /* muscle_body.usdz in Resources */,
 				F4CABCF2C9907D4565D07323 /* whats-new.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
