@@ -689,7 +689,7 @@ struct ExercisePickerView: View {
     }
 
     private func templateRowIdentifier(_ template: WorkoutTemplate) -> String {
-        "picker-template-\(pickerToken(template.name))"
+        "picker-template-\(template.id.uuidString.lowercased())"
     }
 
     private func categoryChipIdentifier(_ category: ExerciseCategory?) -> String {
@@ -697,7 +697,7 @@ struct ExercisePickerView: View {
     }
 
     private func userCategoryChipIdentifier(_ userCategory: UserCategory) -> String {
-        "picker-filter-user-category-\(pickerToken(userCategory.name))"
+        "picker-filter-user-category-\(userCategory.id.uuidString.lowercased())"
     }
 
     private func muscleChipIdentifier(_ muscle: MuscleGroup) -> String {
@@ -708,12 +708,6 @@ struct ExercisePickerView: View {
         "picker-filter-equipment-\(equipment.rawValue)"
     }
 
-    private func pickerToken(_ rawValue: String) -> String {
-        rawValue
-            .lowercased()
-            .replacingOccurrences(of: "[^a-z0-9]+", with: "-", options: .regularExpression)
-            .trimmingCharacters(in: CharacterSet(charactersIn: "-"))
-    }
 }
 
 private struct FullModeSearchModifier: ViewModifier {

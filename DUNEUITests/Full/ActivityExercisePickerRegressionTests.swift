@@ -4,9 +4,9 @@
 final class ActivityExercisePickerRegressionTests: ActivityExerciseSeededUITestBaseCase {
     private enum Fixture {
         static let benchPressID = "barbell-bench-press"
-        static let singleTemplateSlug = "codex-strength-starter"
+        static let singleTemplateID = "22222222-2222-4222-8222-222222222222"
         static let customExerciseName = "Codex Cable Raise"
-        static let customCategorySlug = "codex-mobility"
+        static let customCategoryID = "11111111-1111-4111-8111-111111111111"
         static let createdTemplateName = "Codex Picker Template"
     }
 
@@ -26,7 +26,7 @@ final class ActivityExercisePickerRegressionTests: ActivityExerciseSeededUITestB
             "Quick start picker should expose the templates section when seeded templates exist"
         )
 
-        let templateRow = app.descendants(matching: .any)[AXID.pickerTemplateRow(Fixture.singleTemplateSlug)].firstMatch
+        let templateRow = app.descendants(matching: .any)[AXID.pickerTemplateRow(Fixture.singleTemplateID)].firstMatch
         XCTAssertTrue(templateRow.waitForExistence(timeout: 8), "Seeded single template row should exist in picker")
         templateRow.tap()
 
@@ -108,7 +108,7 @@ final class ActivityExercisePickerRegressionTests: ActivityExerciseSeededUITestB
 
         XCTAssertTrue(
             tapHorizontalPickerChip(
-                AXID.pickerFilterUserCategory(Fixture.customCategorySlug),
+                AXID.pickerFilterUserCategory(Fixture.customCategoryID),
                 in: AXID.pickerFilterCategoryScroll
             ),
             "User category chip should be tappable in the category rail"

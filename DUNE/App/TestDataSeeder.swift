@@ -22,6 +22,9 @@ enum TestDataSeeder {
     private static let forceCloudSyncConsentArgument = "--ui-force-cloud-sync-consent"
     static let activityExerciseMockWorkoutID = "ui-test-activity-workout-running"
     static let activityExerciseMissingWorkoutID = "ui-test-activity-workout-missing"
+    static let activityExerciseCategoryID = "11111111-1111-4111-8111-111111111111"
+    static let activityExerciseSingleTemplateID = "22222222-2222-4222-8222-222222222222"
+    static let activityExerciseMultiTemplateID = "33333333-3333-4333-8333-333333333333"
 
     @MainActor
     static func seed(into context: ModelContext, scenario: UITestSeedScenario = .defaultSeeded) {
@@ -209,6 +212,7 @@ enum TestDataSeeder {
             defaultInputType: .durationIntensity,
             sortOrder: 0
         )
+        category.id = UUID(uuidString: activityExerciseCategoryID) ?? category.id
         context.insert(category)
 
         let customExercise = CustomExercise(
@@ -238,6 +242,7 @@ enum TestDataSeeder {
                 )
             ]
         )
+        singleTemplate.id = UUID(uuidString: activityExerciseSingleTemplateID) ?? singleTemplate.id
         context.insert(singleTemplate)
 
         let multiTemplate = WorkoutTemplate(
@@ -265,6 +270,7 @@ enum TestDataSeeder {
                 )
             ]
         )
+        multiTemplate.id = UUID(uuidString: activityExerciseMultiTemplateID) ?? multiTemplate.id
         context.insert(multiTemplate)
 
         seedNotificationInbox(scenario: .activityExerciseSeeded)
