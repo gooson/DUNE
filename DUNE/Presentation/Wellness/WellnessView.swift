@@ -48,19 +48,11 @@ struct WellnessView: View {
                                 viewModel.activeCards.isEmpty &&
                                 viewModel.wellnessScore == nil &&
                                 !viewModel.isLoading {
-                        if viewModel.isMirroredReadOnlyMode {
-                            EmptyStateView(
-                                icon: "leaf.fill",
-                                title: "No Synced Wellness Data",
-                                message: "Open DUNE on your iPhone once to sync HealthKit data, then refresh on Mac."
-                            )
-                        } else {
-                            EmptyStateView(
-                                icon: "leaf.fill",
-                                title: "No Wellness Data",
-                                message: "Wear Apple Watch to bed for sleep tracking, or add body composition records to get started."
-                            )
-                        }
+                        WellnessFallbackStateView(
+                            isMirroredReadOnlyMode: viewModel.isMirroredReadOnlyMode,
+                            onEditInjury: { record in injuryViewModel.startEditing(record) },
+                            onAddInjury: { startAddingInjury() }
+                        )
                     } else {
                         // Partial failure banner
                         if let message = viewModel.partialFailureMessage {
@@ -380,6 +372,42 @@ private struct WellnessInjuryBannerView: View {
     }
 }
 
+/// Fallback for manual body/injury records when HealthKit-driven wellness cards are absent.
+private struct WellnessFallbackStateView: View {
+    @Query(sort: \BodyCompositionRecord.date, order: .reverse) private var bodyRecords: [BodyCompositionRecord]
+    @Query(sort: \InjuryRecord.startDate, order: .reverse) private var injuryRecords: [InjuryRecord]
+
+    let isMirroredReadOnlyMode: Bool
+    let onEditInjury: (InjuryRecord) -> Void
+    let onAddInjury: () -> Void
+
+    var body: some View {
+        if bodyRecords.isEmpty && injuryRecords.isEmpty {
+            if isMirroredReadOnlyMode {
+                EmptyStateView(
+                    icon: "leaf.fill",
+                    title: "No Synced Wellness Data",
+                    message: "Open DUNE on your iPhone once to sync HealthKit data, then refresh on Mac."
+                )
+            } else {
+                EmptyStateView(
+                    icon: "leaf.fill",
+                    title: "No Wellness Data",
+                    message: "Wear Apple Watch to bed for sleep tracking, or add body composition records to get started."
+                )
+            }
+        } else {
+            VStack(spacing: DS.Spacing.xl) {
+                WellnessInjuryBannerView(
+                    onEdit: onEditInjury,
+                    onAdd: onAddInjury
+                )
+                BodyHistoryLinkView()
+            }
+        }
+    }
+}
+
 /// Body History link with its own @Query — only renders when records exist.
 private struct BodyHistoryLinkView: View {
     @Query(sort: \BodyCompositionRecord.date, order: .reverse) private var records: [BodyCompositionRecord]
@@ -405,6 +433,7 @@ private struct BodyHistoryLinkView: View {
                 }
             }
             .buttonStyle(.plain)
+            .accessibilityIdentifier("wellness-link-bodyhistory")
         }
     }
 }
