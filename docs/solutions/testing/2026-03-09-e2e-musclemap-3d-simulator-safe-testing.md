@@ -1,21 +1,21 @@
 ---
-tags: [e2e, ui-test, muscle-map, 3d-view, arview, simulator, xcuitest]
+tags: [e2e, ui-test, muscle-map, 3d-view, realityview, native-renderer, simulator, xcuitest]
 date: 2026-03-09
 category: solution
 status: implemented
 ---
 
-# Simulator-Safe E2E Testing for ARView-Backed Views
+# Simulator-Safe E2E Testing for Native 3D Views
 
 ## Problem
 
-MuscleMap3DView uses RealityKit `ARView` via `UIViewRepresentable`. ARView renders limited or no content on iOS Simulator, making traditional content-based assertions (tap entity, verify rotation, check mesh) unreliable.
+MuscleMap3DView now uses RealityKit `RealityView`, but it is still a native-rendered 3D surface. On iOS Simulator, native 3D content remains a poor target for content-level assertions (entity hit, rotation result, mesh correctness), so tests that treat it like a regular SwiftUI tree stay brittle.
 
 ## Solution
 
-### Strategy: Test SwiftUI Overlay Only
+### Strategy: Test Stable SwiftUI Surface + Semantic Entry Point
 
-ARView-backed views typically have SwiftUI overlays (summary cards, pickers, control strips) layered on top. These overlays are fully functional on simulator.
+Native 3D views still expose reliable SwiftUI overlays (summary cards, pickers, control strips) and stable navigation affordances around them. Those are the right E2E target surface.
 
 **Test scope:**
 - SwiftUI overlay elements: `.exists`, `.waitForExistence`, text content verification
@@ -24,7 +24,7 @@ ARView-backed views typically have SwiftUI overlays (summary cards, pickers, con
 - Controls: reset button, muscle strip capsules
 
 **Explicitly excluded:**
-- ARView entity taps (simulator doesn't render meshes)
+- Native 3D entity hit-testing
 - Camera rotation/pan gestures (no visual feedback to verify)
 - 3D content correctness (entity colors, positions)
 
@@ -40,22 +40,25 @@ Picker.accessibilityIdentifier("musclemap-3d-mode-picker")
 muscleSelectionStrip.accessibilityIdentifier("musclemap-3d-muscle-strip")
 toolbarButton.accessibilityIdentifier("musclemap-3d-reset-button")
 
-// ARView container (existence-only assertion)
+// Native 3D container (existence-only assertion)
 MuscleMap3DViewer.accessibilityIdentifier("musclemap-3d-viewer")
 ```
 
 ### Navigation via Muscle Tap
 
-MuscleMapDetailView navigates to 3D via `onMuscleSelected` closure (muscle tap → `showing3DMap = true`). There is no dedicated "3D button". In E2E tests, use coordinate tap on the detail screen body diagram area:
+MuscleMapDetailView navigates to 3D via `onMuscleSelected` closure (muscle tap → `showing3DMap = true`). There is no dedicated "3D button". Coordinate tap on the body diagram was flaky across device sizes, so each muscle button now exposes a stable AXID. In E2E tests, use a concrete muscle selector:
 
 ```swift
-detailScreen.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.15)).tap()
+let chestButton = app.buttons["musclemap-body-front-chest"].firstMatch
+XCTAssertTrue(chestButton.waitForExistence(timeout: 10))
+chestButton.tap()
 ```
 
 ## Prevention
 
-When adding E2E tests for views backed by native rendering (ARView, SceneKit, Metal):
+When adding E2E tests for views backed by native rendering (RealityView, ARView, SceneKit, Metal):
 1. Identify which UI elements are SwiftUI overlays vs native rendering
-2. Add AXIDs only to SwiftUI overlay elements
+2. Add AXIDs to stable entry points and surrounding SwiftUI controls
 3. Use `.exists` assertion for native rendering containers (not content)
-4. Document simulator limitations in test comments
+4. Avoid coordinate taps when a semantic selector can exist
+5. Document simulator limitations in test comments
