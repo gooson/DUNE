@@ -10,13 +10,19 @@ struct MuscleMap3DView: View {
     @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var mode: MuscleMap3DMode = .recovery
     @State private var selectedMuscle: MuscleGroup?
+    @AppStorage("muscleMap3D.anatomyLayer") private var anatomyLayerRawValue = MuscleMap3DAnatomyLayer.skin.rawValue
     @AppStorage("muscleMap3D.shellOpacity") private var shellOpacity: Double = Double(MuscleMap3DState.defaultShellOpacity)
     @State private var resetToken = 0
 
     init(fatigueStates: [MuscleFatigueState], highlightedMuscle: MuscleGroup?) {
         self.fatigueStates = fatigueStates
         self.highlightedMuscle = highlightedMuscle
-        _selectedMuscle = State(initialValue: highlightedMuscle)
+        _selectedMuscle = State(
+            initialValue: MuscleMap3DState.defaultSelectedMuscle(
+                highlighted: highlightedMuscle,
+                fatigueStates: fatigueStates
+            )
+        )
     }
 
     private var fatigueByMuscle: [MuscleGroup: MuscleFatigueState] {
@@ -40,6 +46,17 @@ struct MuscleMap3DView: View {
         sizeClass == .regular ? 560 : 430
     }
 
+    private var anatomyLayer: MuscleMap3DAnatomyLayer {
+        MuscleMap3DAnatomyLayer(rawValue: anatomyLayerRawValue) ?? .skin
+    }
+
+    private var anatomyLayerSelection: Binding<MuscleMap3DAnatomyLayer> {
+        Binding(
+            get: { anatomyLayer },
+            set: { anatomyLayerRawValue = $0.rawValue }
+        )
+    }
+
     var body: some View {
         ScrollView {
             VStack(spacing: DS.Spacing.lg) {
@@ -54,12 +71,18 @@ struct MuscleMap3DView: View {
                 .pickerStyle(.segmented)
                 .accessibilityIdentifier("musclemap-3d-mode-picker")
 
-                skinOpacitySlider
-                    .accessibilityIdentifier("musclemap-3d-skin-slider")
+                layerPicker
+                    .accessibilityIdentifier("musclemap-3d-layer-picker")
+
+                if anatomyLayer == .skin {
+                    skinOpacitySlider
+                        .accessibilityIdentifier("musclemap-3d-skin-slider")
+                }
 
                 MuscleMap3DViewer(
                     fatigueStates: fatigueStates,
                     mode: mode,
+                    anatomyLayer: anatomyLayer,
                     colorScheme: colorScheme,
                     selectedMuscle: $selectedMuscle,
                     shellOpacity: Float(shellOpacity),
@@ -203,6 +226,21 @@ struct MuscleMap3DView: View {
             )
     }
 
+    private var layerPicker: some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            Text("Layer")
+                .font(.caption)
+                .foregroundStyle(DS.Color.textSecondary)
+
+            Picker("Layer", selection: anatomyLayerSelection) {
+                ForEach(MuscleMap3DAnatomyLayer.allCases, id: \.rawValue) { currentLayer in
+                    Text(currentLayer.label).tag(currentLayer)
+                }
+            }
+            .pickerStyle(.segmented)
+        }
+    }
+
     private var skinOpacitySlider: some View {
         HStack(spacing: DS.Spacing.sm) {
             Label("Skin", systemImage: "eye")
@@ -262,6 +300,7 @@ struct MuscleMap3DView: View {
 struct MuscleMap3DViewer: View {
     let fatigueStates: [MuscleFatigueState]
     let mode: MuscleMap3DMode
+    let anatomyLayer: MuscleMap3DAnatomyLayer
     let colorScheme: ColorScheme
     @Binding var selectedMuscle: MuscleGroup?
     let shellOpacity: Float
@@ -354,6 +393,9 @@ struct MuscleMap3DViewer: View {
             .onChange(of: mode) { _, _ in
                 refreshScene()
             }
+            .onChange(of: anatomyLayer) { _, _ in
+                refreshScene()
+            }
             .onChange(of: colorScheme) { _, _ in
                 refreshScene()
             }
@@ -371,6 +413,7 @@ struct MuscleMap3DViewer: View {
             fatigueStates: fatigueStates,
             mode: mode,
             selectedMuscle: selectedMuscle,
+            anatomyLayer: anatomyLayer,
             colorScheme: colorScheme,
             shellOpacity: shellOpacity
         )
