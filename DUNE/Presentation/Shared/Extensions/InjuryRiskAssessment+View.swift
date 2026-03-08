@@ -23,3 +23,53 @@ extension InjuryRiskAssessment.FactorType {
         }
     }
 }
+
+extension InjuryRiskAssessment.Level {
+    var color: Color {
+        switch self {
+        case .low: DS.Color.positive
+        case .moderate: DS.Color.caution
+        case .high: .orange
+        case .critical: DS.Color.negative
+        }
+    }
+
+    var iconName: String {
+        switch self {
+        case .low: "checkmark.shield"
+        case .moderate: "exclamationmark.shield"
+        case .high: "exclamationmark.triangle"
+        case .critical: "xmark.shield"
+        }
+    }
+
+    var recommendations: [String] {
+        switch self {
+        case .low:
+            [
+                String(localized: "Continue your current training plan"),
+                String(localized: "Maintain good sleep and recovery habits"),
+            ]
+        case .moderate:
+            [
+                String(localized: "Allow adequate rest between sessions"),
+                String(localized: "Include stretching and mobility work"),
+                String(localized: "Monitor any muscle soreness closely"),
+            ]
+        case .high:
+            [
+                String(localized: "Consider reducing today's training intensity"),
+                String(localized: "Focus on recovery: sleep, nutrition, hydration"),
+                String(localized: "Avoid training muscle groups with high fatigue"),
+                String(localized: "Light activity like walking is still beneficial"),
+            ]
+        case .critical:
+            [
+                String(localized: "Rest is strongly recommended today"),
+                String(localized: "Prioritize sleep and recovery"),
+                String(localized: "Consult a professional if pain persists"),
+                String(localized: "Return to training gradually when recovered"),
+            ]
+        }
+    }
+}

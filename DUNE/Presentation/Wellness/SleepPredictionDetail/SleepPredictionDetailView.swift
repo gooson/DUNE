@@ -4,8 +4,6 @@ import SwiftUI
 struct SleepPredictionDetailView: View {
     let prediction: SleepQualityPrediction
 
-    @Environment(\.appTheme) private var theme
-
     private enum Labels {
         static let factors = String(localized: "All Factors")
         static let tips = String(localized: "Sleep Tips")
@@ -38,8 +36,8 @@ struct SleepPredictionDetailView: View {
             score: prediction.predictedScore,
             scoreLabel: "SLEEP",
             statusLabel: prediction.outlook.displayName,
-            statusIcon: outlookIcon(prediction.outlook),
-            statusColor: outlookColor(prediction.outlook),
+            statusIcon: prediction.outlook.iconName,
+            statusColor: prediction.outlook.color,
             guideMessage: prediction.outlook.guideMessage
         )
     }
@@ -87,7 +85,7 @@ struct SleepPredictionDetailView: View {
 
     private func factorRow(_ factor: SleepQualityPrediction.PredictionFactor) -> some View {
         HStack(spacing: DS.Spacing.sm) {
-            Image(systemName: factor.impact.iconName)
+            Image(systemName: factor.type.iconName)
                 .font(.title3)
                 .foregroundStyle(factor.impact.color)
                 .frame(width: 28)
@@ -110,7 +108,7 @@ struct SleepPredictionDetailView: View {
     }
 
     private func impactBadge(_ impact: SleepQualityPrediction.Impact) -> some View {
-        Text(impactLabel(impact))
+        Text(impact.badgeLabel)
             .font(.caption2.weight(.medium))
             .foregroundStyle(impact.color)
             .padding(.horizontal, DS.Spacing.xs)
@@ -135,7 +133,7 @@ struct SleepPredictionDetailView: View {
                     .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
             } else {
                 VStack(spacing: DS.Spacing.xs) {
-                    ForEach(Array(prediction.tips.enumerated()), id: \.offset) { _, tip in
+                    ForEach(prediction.tips, id: \.self) { tip in
                         HStack(alignment: .top, spacing: DS.Spacing.sm) {
                             Image(systemName: "lightbulb.fill")
                                 .font(.subheadline)
@@ -155,31 +153,4 @@ struct SleepPredictionDetailView: View {
         }
     }
 
-    // MARK: - Helpers
-
-    private func outlookColor(_ outlook: SleepQualityPrediction.Outlook) -> Color {
-        switch outlook {
-        case .poor: DS.Color.negative
-        case .fair: DS.Color.caution
-        case .good: DS.Color.positive
-        case .excellent: DS.Color.sleep
-        }
-    }
-
-    private func outlookIcon(_ outlook: SleepQualityPrediction.Outlook) -> String {
-        switch outlook {
-        case .poor: "moon.zzz"
-        case .fair: "moon"
-        case .good: "moon.stars"
-        case .excellent: "moon.stars.fill"
-        }
-    }
-
-    private func impactLabel(_ impact: SleepQualityPrediction.Impact) -> String {
-        switch impact {
-        case .positive: String(localized: "Positive")
-        case .neutral: String(localized: "Neutral")
-        case .negative: String(localized: "Negative")
-        }
-    }
 }

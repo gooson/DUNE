@@ -1,23 +1,14 @@
 import SwiftUI
-import Charts
 
 /// Full detail view for Weekly/Monthly Workout Report — stats, summary, highlights, muscle breakdown.
 struct WorkoutReportDetailView: View {
     let report: WorkoutReport?
-
-    @Environment(\.appTheme) private var theme
 
     private enum Labels {
         static let statistics = String(localized: "Statistics")
         static let summary = String(localized: "Summary")
         static let highlights = String(localized: "Highlights")
         static let muscleBreakdown = String(localized: "Muscle Breakdown")
-        static let sessions = String(localized: "Sessions")
-        static let activeDays = String(localized: "Active Days")
-        static let totalVolume = String(localized: "Total Volume")
-        static let totalDuration = String(localized: "Total Duration")
-        static let avgIntensity = String(localized: "Avg Intensity")
-        static let volumeChange = String(localized: "Volume Change")
         static let noHighlights = String(localized: "No highlights this period")
     }
 
@@ -65,18 +56,18 @@ struct WorkoutReportDetailView: View {
                 .foregroundStyle(.primary)
 
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())], spacing: DS.Spacing.md) {
-                statCell(value: "\(report.stats.totalSessions)", label: Labels.sessions)
-                statCell(value: "\(report.stats.activeDays)", label: Labels.activeDays)
-                statCell(value: formatVolume(report.stats.totalVolume), label: Labels.totalVolume)
-                statCell(value: "\(report.stats.totalDuration) min", label: Labels.totalDuration)
+                statCell(value: "\(report.stats.totalSessions)", label: "Sessions")
+                statCell(value: "\(report.stats.activeDays)", label: "Active Days")
+                statCell(value: formatVolume(report.stats.totalVolume), label: "Total Volume")
+                statCell(value: "\(report.stats.totalDuration) min", label: "Total Duration")
                 statCell(
-                    value: String(format: "%.0f%%", report.stats.averageIntensity * 100),
-                    label: Labels.avgIntensity
+                    value: "\(Int(report.stats.averageIntensity * 100))%",
+                    label: "Avg Intensity"
                 )
                 if let change = report.stats.volumeChangePercent {
                     statCell(
                         value: formatChange(change),
-                        label: Labels.volumeChange,
+                        label: "Volume Change",
                         valueColor: change >= 0 ? DS.Color.positive : DS.Color.negative
                     )
                 }
@@ -84,7 +75,7 @@ struct WorkoutReportDetailView: View {
         }
     }
 
-    private func statCell(value: String, label: String, valueColor: Color = .primary) -> some View {
+    private func statCell(value: String, label: LocalizedStringKey, valueColor: Color = .primary) -> some View {
         VStack(spacing: DS.Spacing.xxs) {
             Text(value)
                 .font(.title3.weight(.semibold).monospacedDigit())
@@ -202,7 +193,9 @@ struct WorkoutReportDetailView: View {
 
     private func formatVolume(_ volume: Double) -> String {
         if volume >= 1000 {
-            return String(format: "%.1fk", volume / 1000)
+            let whole = Int(volume / 1000)
+            let tenth = Int(volume / 100) % 10
+            return "\(whole).\(tenth)k"
         }
         return "\(Int(volume))kg"
     }
@@ -212,11 +205,17 @@ struct WorkoutReportDetailView: View {
         return percent >= 0 ? "+\(percent)%" : "\(percent)%"
     }
 
+    private enum Cache {
+        static let dateIntervalFormatter: DateIntervalFormatter = {
+            let f = DateIntervalFormatter()
+            f.dateStyle = .medium
+            f.timeStyle = .none
+            return f
+        }()
+    }
+
     private func formatDateRange(start: Date, end: Date) -> String {
-        let formatter = DateIntervalFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .none
-        return formatter.string(from: start, to: end)
+        Cache.dateIntervalFormatter.string(from: start, to: end)
     }
 
     private func highlightIcon(_ type: WorkoutReport.HighlightType) -> String {

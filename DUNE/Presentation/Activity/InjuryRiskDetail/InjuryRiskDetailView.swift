@@ -4,8 +4,6 @@ import SwiftUI
 struct InjuryRiskDetailView: View {
     let assessment: InjuryRiskAssessment?
 
-    @Environment(\.appTheme) private var theme
-
     private enum Labels {
         static let riskFactors = String(localized: "Risk Factors")
         static let recommendations = String(localized: "Recommended Actions")
@@ -37,8 +35,8 @@ struct InjuryRiskDetailView: View {
             score: assessment.score,
             scoreLabel: "RISK",
             statusLabel: assessment.level.displayName,
-            statusIcon: levelIcon(assessment.level),
-            statusColor: levelColor(assessment.level),
+            statusIcon: assessment.level.iconName,
+            statusColor: assessment.level.color,
             guideMessage: assessment.level.guideMessage
         )
     }
@@ -64,8 +62,9 @@ struct InjuryRiskDetailView: View {
                 .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
             } else {
                 VStack(spacing: DS.Spacing.sm) {
+                    let maxContribution = assessment.factors.map(\.contribution).max() ?? 1
                     ForEach(assessment.factors, id: \.type) { factor in
-                        factorRow(factor, maxContribution: assessment.factors.first?.contribution ?? 1)
+                        factorRow(factor, maxContribution: maxContribution)
                     }
                 }
             }
@@ -117,11 +116,11 @@ struct InjuryRiskDetailView: View {
                 .foregroundStyle(.primary)
 
             VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                ForEach(recommendationsForLevel(assessment.level), id: \.self) { recommendation in
+                ForEach(assessment.level.recommendations, id: \.self) { recommendation in
                     HStack(alignment: .top, spacing: DS.Spacing.sm) {
                         Image(systemName: "arrow.right.circle.fill")
                             .font(.caption)
-                            .foregroundStyle(levelColor(assessment.level))
+                            .foregroundStyle(assessment.level.color)
                             .padding(.top, 2)
                         Text(recommendation)
                             .font(.subheadline)
@@ -132,56 +131,6 @@ struct InjuryRiskDetailView: View {
             .padding(DS.Spacing.sm)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
-        }
-    }
-
-    // MARK: - Helpers
-
-    private func levelColor(_ level: InjuryRiskAssessment.Level) -> Color {
-        switch level {
-        case .low: DS.Color.positive
-        case .moderate: DS.Color.caution
-        case .high: .orange
-        case .critical: DS.Color.negative
-        }
-    }
-
-    private func levelIcon(_ level: InjuryRiskAssessment.Level) -> String {
-        switch level {
-        case .low: "checkmark.shield"
-        case .moderate: "exclamationmark.shield"
-        case .high: "exclamationmark.triangle"
-        case .critical: "xmark.shield"
-        }
-    }
-
-    private func recommendationsForLevel(_ level: InjuryRiskAssessment.Level) -> [String] {
-        switch level {
-        case .low:
-            [
-                String(localized: "Continue your current training plan"),
-                String(localized: "Maintain good sleep and recovery habits"),
-            ]
-        case .moderate:
-            [
-                String(localized: "Allow adequate rest between sessions"),
-                String(localized: "Include stretching and mobility work"),
-                String(localized: "Monitor any muscle soreness closely"),
-            ]
-        case .high:
-            [
-                String(localized: "Consider reducing today's training intensity"),
-                String(localized: "Focus on recovery: sleep, nutrition, hydration"),
-                String(localized: "Avoid training muscle groups with high fatigue"),
-                String(localized: "Light activity like walking is still beneficial"),
-            ]
-        case .critical:
-            [
-                String(localized: "Rest is strongly recommended today"),
-                String(localized: "Prioritize sleep and recovery"),
-                String(localized: "Consult a professional if pain persists"),
-                String(localized: "Return to training gradually when recovered"),
-            ]
         }
     }
 
