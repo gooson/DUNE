@@ -112,6 +112,19 @@ struct AIWorkoutTemplateGeneratorTests {
         #expect(!output.contains("running"))
     }
 
+    @Test("Search tool excludes unsupported flexibility and HIIT exercise types")
+    func searchToolExcludesUnsupportedExerciseTypes() async throws {
+        let tool = AIWorkoutTemplateGenerator.SearchExerciseTool(library: makeLibrary())
+
+        let flexibilityOutput = try await tool.call(arguments: .init(query: "mobility"))
+        #expect(flexibilityOutput == "No matching template-capable exercises were found.")
+        #expect(!flexibilityOutput.contains("hip-mobility"))
+
+        let hiitOutput = try await tool.call(arguments: .init(query: "burpee"))
+        #expect(hiitOutput == "No matching template-capable exercises were found.")
+        #expect(!hiitOutput.contains("burpee-intervals"))
+    }
+
     @Test("Resolve generated template filters unresolved and duplicate slots while keeping cardio")
     func resolveGeneratedTemplateFiltersInvalidSlots() throws {
         let template = AIWorkoutTemplate(
@@ -183,6 +196,31 @@ struct AIWorkoutTemplateGeneratorTests {
                 )
             ],
             estimatedMinutes: 20
+        )
+
+        do {
+            _ = try sut.resolveGeneratedTemplate(template, library: makeLibrary())
+            Issue.record("Expected noExercisesMatched error")
+        } catch let error as WorkoutTemplateGenerationError {
+            #expect(error == .noExercisesMatched)
+        } catch {
+            Issue.record("Unexpected error: \(error)")
+        }
+    }
+
+    @Test("Resolve generated template rejects unsupported rounds-based exercise types")
+    func resolveGeneratedTemplateRejectsRoundsBasedExerciseTypes() {
+        let template = AIWorkoutTemplate(
+            name: "Burpee Burner",
+            exercises: [
+                AIExerciseSlot(
+                    exerciseID: "burpee-intervals",
+                    exerciseName: "Burpee Intervals",
+                    sets: 5,
+                    reps: 10
+                )
+            ],
+            estimatedMinutes: 18
         )
 
         do {
@@ -283,6 +321,16 @@ struct AIWorkoutTemplateGeneratorTests {
                     inputType: .durationIntensity,
                     primaryMuscles: [.glutes],
                     secondaryMuscles: [.hamstrings],
+                    equipment: .bodyweight
+                ),
+                makeExercise(
+                    id: "burpee-intervals",
+                    name: "Burpee Intervals",
+                    aliases: ["Burpee Circuit", "HIIT Burpees"],
+                    category: .hiit,
+                    inputType: .roundsBased,
+                    primaryMuscles: [.quadriceps],
+                    secondaryMuscles: [.shoulders],
                     equipment: .bodyweight
                 ),
             ]

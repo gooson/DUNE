@@ -42,10 +42,20 @@ struct AIWorkoutTemplateGenerator: NaturalLanguageWorkoutGenerating, Sendable {
                 ),
                 generating: AIWorkoutTemplate.self
             )
-            return try resolveGeneratedTemplate(response.content, library: library)
+            let generated = response.content
+            AppLogger.exercise.debug(
+                "AI workout template raw output promptHash=\(trimmedPrompt, privacy: .private(mask: .hash)) name=\(generated.name, privacy: .private) estimated=\(generated.estimatedMinutes, privacy: .public) slotCount=\(generated.exercises.count, privacy: .public) slots=\(debugSlotSummary(generated.exercises), privacy: .private)"
+            )
+            return try resolveGeneratedTemplate(generated, library: library)
         } catch let error as WorkoutTemplateGenerationError {
+            AppLogger.exercise.error(
+                "AI workout template typed failure promptHash=\(trimmedPrompt, privacy: .private(mask: .hash)) error=\(String(describing: error), privacy: .private)"
+            )
             throw error
         } catch {
+            AppLogger.exercise.error(
+                "AI workout template generation failed promptHash=\(trimmedPrompt, privacy: .private(mask: .hash)) error=\(String(describing: error), privacy: .private)"
+            )
             throw WorkoutTemplateGenerationError.generationFailed
         }
     }
@@ -201,44 +211,68 @@ struct AIWorkoutTemplateGenerator: NaturalLanguageWorkoutGenerating, Sendable {
         }
 
         var seenIDs = Set<String>()
-        let resolvedSlots = generated.exercises.compactMap { slot -> GeneratedWorkoutExerciseSlot? in
+        var resolvedSlots: [GeneratedWorkoutExerciseSlot] = []
+
+        for slot in generated.exercises {
             guard let exercise = resolveExercise(
                 exerciseID: slot.exerciseID,
                 exerciseName: slot.exerciseName,
                 library: library
             ) else {
-                return nil
+                AppLogger.exercise.debug(
+                    "AI workout template dropped unresolved slot id=\(slot.exerciseID, privacy: .private) name=\(slot.exerciseName, privacy: .private)"
+                )
+                continue
             }
             guard Self.isTemplateSupported(exercise) else {
-                return nil
+                AppLogger.exercise.debug(
+                    "AI workout template dropped unsupported slot resolvedID=\(exercise.id, privacy: .private) inputType=\(exercise.inputType.rawValue, privacy: .public)"
+                )
+                continue
             }
             guard seenIDs.insert(exercise.id).inserted else {
-                return nil
+                AppLogger.exercise.debug(
+                    "AI workout template dropped duplicate slot resolvedID=\(exercise.id, privacy: .private)"
+                )
+                continue
             }
 
             switch exercise.inputType {
             case .durationDistance:
-                return GeneratedWorkoutExerciseSlot(
-                    exerciseDefinitionID: exercise.id,
-                    exerciseName: exercise.localizedName,
-                    sets: 1,
-                    reps: 1
+                resolvedSlots.append(
+                    GeneratedWorkoutExerciseSlot(
+                        exerciseDefinitionID: exercise.id,
+                        exerciseName: exercise.localizedName,
+                        sets: 1,
+                        reps: 1
+                    )
                 )
             case .setsRepsWeight, .setsReps:
-                return GeneratedWorkoutExerciseSlot(
-                    exerciseDefinitionID: exercise.id,
-                    exerciseName: exercise.localizedName,
-                    sets: slot.sets,
-                    reps: slot.reps
+                resolvedSlots.append(
+                    GeneratedWorkoutExerciseSlot(
+                        exerciseDefinitionID: exercise.id,
+                        exerciseName: exercise.localizedName,
+                        sets: slot.sets,
+                        reps: slot.reps
+                    )
                 )
             case .durationIntensity, .roundsBased:
-                return nil
+                AppLogger.exercise.debug(
+                    "AI workout template dropped post-filter unsupported slot resolvedID=\(exercise.id, privacy: .private) inputType=\(exercise.inputType.rawValue, privacy: .public)"
+                )
             }
         }
 
         guard !resolvedSlots.isEmpty else {
+            AppLogger.exercise.error(
+                "AI workout template matched no exercises name=\(name, privacy: .private) rawSlotCount=\(generated.exercises.count, privacy: .public) rawSlots=\(debugSlotSummary(generated.exercises), privacy: .private)"
+            )
             throw WorkoutTemplateGenerationError.noExercisesMatched
         }
+
+        AppLogger.exercise.debug(
+            "AI workout template resolved name=\(name, privacy: .private) resolvedSlotCount=\(resolvedSlots.count, privacy: .public) resolvedSlots=\(debugResolvedSlotSummary(resolvedSlots), privacy: .private)"
+        )
 
         return GeneratedWorkoutTemplate(
             name: name,
@@ -270,9 +304,17 @@ struct AIWorkoutTemplateGenerator: NaturalLanguageWorkoutGenerating, Sendable {
         if directMatches.count == 1, let exact = directMatches.first {
             return exact
         }
+        if directMatches.count > 1 {
+            AppLogger.exercise.debug(
+                "AI workout template ambiguous exact lookup name=\(trimmedName, privacy: .private) matchCount=\(directMatches.count, privacy: .public) matches=\(directMatches.map(\.id).joined(separator: ", "), privacy: .private)"
+            )
+        }
 
         let fuzzyMatches = library.search(query: trimmedName)
         guard fuzzyMatches.count == 1 else {
+            AppLogger.exercise.debug(
+                "AI workout template fuzzy lookup failed name=\(trimmedName, privacy: .private) matchCount=\(fuzzyMatches.count, privacy: .public) matches=\(fuzzyMatches.prefix(8).map(\.id).joined(separator: ", "), privacy: .private)"
+            )
             return nil
         }
         return fuzzyMatches.first
@@ -319,6 +361,20 @@ struct AIWorkoutTemplateGenerator: NaturalLanguageWorkoutGenerating, Sendable {
         case .traps: "traps"
         case .lats: "lats"
         }
+    }
+
+    func debugSlotSummary(_ slots: [AIExerciseSlot]) -> String {
+        slots.map { slot in
+            "[id=\(slot.exerciseID), name=\(slot.exerciseName), sets=\(slot.sets), reps=\(slot.reps)]"
+        }
+        .joined(separator: ", ")
+    }
+
+    func debugResolvedSlotSummary(_ slots: [GeneratedWorkoutExerciseSlot]) -> String {
+        slots.map { slot in
+            "[id=\(slot.exerciseDefinitionID), name=\(slot.exerciseName), sets=\(slot.sets), reps=\(slot.reps)]"
+        }
+        .joined(separator: ", ")
     }
 }
 
