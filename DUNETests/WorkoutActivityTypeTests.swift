@@ -119,6 +119,8 @@ struct WorkoutActivityTypeInferTests {
         #expect(WorkoutActivityType.infer(from: "Stair Climber") == .stairClimbing)
         #expect(WorkoutActivityType.infer(from: "Stair Climber Intervals") == .stairClimbing)
         #expect(WorkoutActivityType.infer(from: "Stair Stepper") == .stairStepper)
+        #expect(WorkoutActivityType.infer(from: "천국의 계단") == .stairClimbing)
+        #expect(WorkoutActivityType.infer(from: "천국의계단") == .stairClimbing)
         // Generic climbing should still work
         #expect(WorkoutActivityType.infer(from: "Rock Climbing") == .climbing)
     }

@@ -410,6 +410,7 @@ enum WorkoutActivityType: String, Codable, Sendable, CaseIterable {
             // Stair keywords before generic "climb" to avoid false-positive on "Stair Climber"
             ("stair stepper", .stairStepper), ("stair", .stairClimbing),
             ("stepper", .stairStepper), ("스텝밀", .stairClimbing),
+            ("천국의 계단", .stairClimbing), ("천국의계단", .stairClimbing),
             ("running", .running),
             ("walking", .walking),
             ("cycling", .cycling), ("bike", .cycling), ("cycle", .cycling),
