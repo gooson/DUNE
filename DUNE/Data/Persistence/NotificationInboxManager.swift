@@ -155,6 +155,8 @@ final class NotificationInboxManager: @unchecked Sendable {
             userInfo[UserInfoKeys.routeKind] = route.destination.rawValue
         case .notificationHub:
             break // Hub route is resolved at navigation time; no payload needed in userInfo
+        case .sleepDetail:
+            userInfo[UserInfoKeys.routeKind] = route.destination.rawValue
         }
         return userInfo
     }
@@ -217,6 +219,8 @@ final class NotificationInboxManager: @unchecked Sendable {
             return .activityPersonalRecords
         case .notificationHub:
             return .notificationHub
+        case .sleepDetail:
+            return .sleepDetail
         }
     }
 

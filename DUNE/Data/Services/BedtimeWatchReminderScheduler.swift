@@ -130,6 +130,9 @@ final class BedtimeReminderScheduler {
         content.title = String(localized: "Start winding down now for better recovery tomorrow.")
         content.body = String(localized: "Heading to bed around your usual time can improve sleep quality, recovery, and workout consistency.")
         content.sound = .default
+        content.userInfo = [
+            "notificationRouteKind": NotificationRoute.sleepDetail.destination.rawValue
+        ]
 
         let request = UNNotificationRequest(
             identifier: Constants.notificationIdentifier,

@@ -2,12 +2,14 @@ import SwiftUI
 
 enum NotificationPresentationDestination: Hashable {
     case personalRecords(requestID: Int)
+    case sleepDetail(requestID: Int)
 }
 
 enum NotificationPresentationPlan: Equatable {
     case push(NotificationPresentationDestination)
     case openWorkoutInActivity(workoutID: String)
     case openNotificationHub
+    case openSleepDetailInWellness(requestID: Int)
 }
 
 enum NotificationPresentationPlanner {
@@ -20,6 +22,8 @@ enum NotificationPresentationPlanner {
             return .push(.personalRecords(requestID: requestID))
         case .notificationHub:
             return .openNotificationHub
+        case .sleepDetail:
+            return .openSleepDetailInWellness(requestID: requestID)
         }
     }
 
@@ -27,7 +31,7 @@ enum NotificationPresentationPlanner {
         switch plan {
         case .push(let destination):
             [destination]
-        case .openWorkoutInActivity, .openNotificationHub:
+        case .openWorkoutInActivity, .openNotificationHub, .openSleepDetailInWellness:
             []
         }
     }
@@ -274,6 +278,8 @@ struct ContentView: View {
             NotificationPersonalRecordsPushView(
                 sharedHealthDataService: sharedHealthDataService
             )
+        case .sleepDetail:
+            NotificationSleepDetailPushView(sharedHealthDataService: sharedHealthDataService)
         }
     }
 
@@ -336,6 +342,39 @@ struct ContentView: View {
             clearNavPaths()
             selectedSection = .today
             notificationHubSignal += 1
+        case .openSleepDetailInWellness(let requestID):
+            clearNavPaths(except: .wellness)
+            selectedSection = .wellness
+            var path = NavigationPath()
+            path.append(NotificationPresentationDestination.sleepDetail(requestID: requestID))
+            setNavPath(path, for: .wellness)
+        }
+    }
+}
+
+private struct NotificationSleepDetailPushView: View {
+    @State private var viewModel: WellnessViewModel
+
+    init(sharedHealthDataService: SharedHealthDataService?) {
+        _viewModel = State(initialValue: WellnessViewModel(sharedHealthDataService: sharedHealthDataService))
+    }
+
+    var body: some View {
+        Group {
+            if let prediction = viewModel.sleepPrediction {
+                SleepPredictionDetailView(prediction: prediction)
+            } else if viewModel.isLoading {
+                ProgressView()
+            } else {
+                EmptyStateView(
+                    icon: "moon.zzz",
+                    title: "Sleep Detail Unavailable",
+                    message: "Open Wellness to refresh your latest sleep data."
+                )
+            }
+        }
+        .task {
+            viewModel.loadData()
         }
     }
 }
