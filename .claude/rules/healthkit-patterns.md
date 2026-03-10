@@ -68,8 +68,30 @@ if workout.isFromThisApp {
 
 ## Sleep 데이터 중복 제거
 
-- 정렬 후 sweep-line 방식 사용
+시간 범위 인식 2-phase dedup 사용:
+
+1. Watch/non-Watch 파티셔닝
+2. 각 그룹 내 same-source dedup (overlap 유지, unspecified skip)
+3. Watch coverage 시간 계산 후 non-Watch에서 커버된 부분만 제거 (나머지 보존)
+
+### 핵심 원칙
+
 - **동일 소스** overlap: 유지 (수면 단계 전환기의 겹침은 정상)
 - **동일 소스 unspecified** + 구체적 stage overlap: unspecified skip (과다 집계 방지)
-- **다른 소스** overlap: Watch 우선, 동일 우선순위면 더 긴 duration 유지
+- **Watch vs non-Watch**: 시간 범위 기반 trimming. non-Watch 샘플 전체 삭제 금지 — Watch가 부분 커버일 때 데이터 손실 발생
+- **동일 우선순위 cross-source**: 더 긴 duration 유지
 - 시간 겹침 판정: `a.startDate < b.endDate && b.startDate < a.endDate`
+
+### 금지 패턴
+
+```swift
+// BAD: Watch가 부분 overlap 해도 non-Watch 전체 삭제 → 데이터 손실
+if sampleIsWatch && !anyOverlapIsWatch {
+    for i in overlapIndices { result.remove(at: i) }
+    result.append(sample)
+}
+
+// GOOD: Watch coverage를 계산하고 non-Watch는 gap만 채움
+let watchCoverage = mergedIntervals(watchStages.map { ($0.startDate, $0.endDate) })
+let remainder = subtractIntervals(from: nonWatchInterval, subtracting: watchCoverage)
+```
