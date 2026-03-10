@@ -262,7 +262,7 @@ struct SleepQueryService: SleepQuerying, Sendable {
         return try await withThrowingTaskGroup(
             of: (Date, Double, [SleepStage.Stage: Double])?.self
         ) { group in
-            for dayOffset in 0..<dayCount {
+            for dayOffset in 0...dayCount {
                 guard let date = calendar.date(byAdding: .day, value: dayOffset, to: start) else { continue }
                 group.addTask { [self] in
                     let stages = try await self.fetchSleepStages(for: date)
