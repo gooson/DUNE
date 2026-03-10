@@ -23,7 +23,7 @@ private struct MockQASleepService: SleepQuerying {
         if let requestEvaluator {
             return requestEvaluator(start, end)
         }
-        durations
+        return durations
     }
     func fetchLastNightSleepSummary(for date: Date) async throws -> SleepSummary? { nil }
 }
