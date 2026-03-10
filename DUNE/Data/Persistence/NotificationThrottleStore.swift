@@ -237,6 +237,8 @@ final class NotificationThrottleStore: @unchecked Sendable {
                 routeKey = "activityPersonalRecords"
             case .notificationHub:
                 routeKey = "hub"
+            case .sleepDetail:
+                routeKey = "sleepDetail"
             }
         } else {
             routeKey = "none"

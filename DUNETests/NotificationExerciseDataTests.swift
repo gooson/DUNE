@@ -94,6 +94,13 @@ struct NotificationPresentationPlannerTests {
         #expect(plan == .openNotificationHub)
     }
 
+    @Test("sleepDetail routes to wellness sleep detail presentation")
+    func sleepDetailRoutesToWellnessSleepDetail() {
+        let plan = NotificationPresentationPlanner.plan(for: .sleepDetail, requestID: 11)
+
+        #expect(plan == .openSleepDetailInWellness(requestID: 11))
+    }
+
     @Test("workoutDetail clears any existing notification path")
     func workoutDetailClearsExistingNotificationPath() throws {
         let route = try #require(NotificationRoute.workoutDetail(workoutID: "workout-123"))
@@ -143,6 +150,29 @@ struct NotificationUserInfoRoundTripTests {
         #expect(parsedRoute != nil)
         #expect(parsedRoute?.destination == .workoutDetail)
         #expect(parsedRoute?.workoutID == "workout-abc-123")
+    }
+
+    @Test("sleepDetail route survives encode → decode via userInfo")
+    func sleepDetailRoundTrip() {
+        let manager = makeManager()
+        let insight = HealthInsight(
+            type: .sleepComplete,
+            title: "Sleep reminder",
+            body: "Tap to open sleep detail",
+            severity: .informational,
+            route: .sleepDetail
+        )
+
+        let item = manager.recordSentInsight(insight)
+        let userInfo = manager.notificationUserInfo(for: item)
+
+        #expect(userInfo["notificationRouteKind"] as? String == "sleepDetail")
+
+        let parsedRoute = parseRouteFromUserInfo(
+            manager: manager,
+            userInfo: routePayload(from: userInfo)
+        )
+        #expect(parsedRoute == .sleepDetail)
     }
 
     @Test("insight without route produces userInfo with itemID only and opens notificationHub")
@@ -343,6 +373,20 @@ struct HandleNotificationResponseTests {
         let pending = manager.consumePendingNavigationRequest()
         #expect(pending != nil)
         #expect(pending?.route.workoutID == "orphan-workout")
+    }
+
+    @Test("userInfo without itemID routes sleepDetail payload to sleep detail")
+    func noItemIDWithSleepDetailRoute() async {
+        let manager = makeManager()
+        let userInfo: [AnyHashable: Any] = [
+            "notificationRouteKind": "sleepDetail"
+        ]
+        manager.handleNotificationResponse(userInfo: userInfo)
+
+        try? await Task.sleep(nanoseconds: 50_000_000)
+
+        let pending = manager.consumePendingNavigationRequest()
+        #expect(pending?.route == .sleepDetail)
     }
 
     @Test("completely empty userInfo produces no navigation request")

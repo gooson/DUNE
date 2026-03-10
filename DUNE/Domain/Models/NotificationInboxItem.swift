@@ -6,6 +6,7 @@ struct NotificationRoute: Codable, Sendable, Hashable {
         case workoutDetail
         case activityPersonalRecords
         case notificationHub
+        case sleepDetail
     }
 
     let destination: Destination
@@ -22,6 +23,7 @@ struct NotificationRoute: Codable, Sendable, Hashable {
     )
 
     static let notificationHub = NotificationRoute(destination: .notificationHub, workoutID: nil)
+    static let sleepDetail = NotificationRoute(destination: .sleepDetail, workoutID: nil)
 }
 
 /// Persisted alert item shown in NotificationHubView.
