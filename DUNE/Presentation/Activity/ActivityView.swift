@@ -524,16 +524,27 @@ struct ActivityView: View {
     }
 
     private func recoveryMapSection(fillHeight: Bool = false) -> some View {
-        NavigationLink(value: ActivityDetailDestination.muscleMap) {
-            SectionGroup(title: "Muscle Map", icon: "figure.stand", iconColor: DS.Color.activity, fillHeight: fillHeight) {
-                MuscleRecoveryMapView(
-                    fatigueStates: viewModel.fatigueStates,
-                    onMuscleSelected: { muscle in selectedMuscle = muscle }
-                )
-                .allowsHitTesting(false)
+        SectionGroup(title: "Muscle Map", icon: "figure.stand", iconColor: DS.Color.activity, fillHeight: fillHeight) {
+            MuscleRecoveryMapView(
+                fatigueStates: viewModel.fatigueStates,
+                onMuscleSelected: { muscle in selectedMuscle = muscle }
+            )
+
+            NavigationLink(value: ActivityDetailDestination.muscleMap) {
+                HStack {
+                    Text("View Details")
+                        .font(.subheadline.weight(.medium))
+                        .foregroundStyle(DS.Color.activity)
+                    Image(systemName: "chevron.right")
+                        .font(.caption2.weight(.semibold))
+                        .foregroundStyle(DS.Color.activity)
+                }
+                .frame(maxWidth: .infinity, alignment: .center)
+                .padding(.vertical, DS.Spacing.xs)
             }
+            .buttonStyle(.plain)
+            .accessibilityIdentifier("activity-musclemap-detail-link")
         }
-        .buttonStyle(.plain)
         .accessibilityIdentifier("activity-section-musclemap")
     }
 
