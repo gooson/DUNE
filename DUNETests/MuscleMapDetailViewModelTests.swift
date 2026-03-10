@@ -196,8 +196,8 @@ struct MuscleMapDetailViewModelTests {
     }
 }
 
-@Suite("MuscleMap3DState")
-struct MuscleMap3DStateTests {
+@Suite("MuscleMap3DState Fatigue Intensity")
+struct MuscleMap3DStateFatigueIntensityTests {
 
     private func makeFatigueState(
         muscle: MuscleGroup,

@@ -32,7 +32,7 @@ struct TemplateExerciseResolverTests {
             name: name,
             localizedName: name,
             category: .strength,
-            inputType: .weightReps,
+            inputType: .setsRepsWeight,
             primaryMuscles: [.chest],
             secondaryMuscles: [.triceps],
             equipment: .barbell,
