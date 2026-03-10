@@ -40,18 +40,9 @@ struct SleepQueryService: SleepQuerying, Sendable {
 
         let samples = try await manager.execute(descriptor)
 
-        // Deduplicate: prefer Apple Watch source over iPhone; same-source overlaps kept
-        let deduped = deduplicateSamples(samples)
-
-        return deduped.compactMap { sample in
-            guard let stage = mapSleepCategory(sample.value) else { return nil }
-            return SleepStage(
-                stage: stage,
-                duration: sample.endDate.timeIntervalSince(sample.startDate),
-                startDate: sample.startDate,
-                endDate: sample.endDate
-            )
-        }
+        // Deduplicate with time-range-aware cross-source handling:
+        // Watch data is preferred, but non-Watch fills gaps where Watch has no coverage.
+        return deduplicateAndConvert(samples)
     }
 
     private func mapSleepCategory(_ value: Int) -> SleepStage.Stage? {
@@ -76,17 +67,77 @@ struct SleepQueryService: SleepQuerying, Sendable {
         }
     }
 
-    private func deduplicateSamples(_ samples: [HKCategorySample]) -> [HKCategorySample] {
+    // MARK: - Time-range-aware dedup
+
+    /// Deduplicates sleep samples and converts to SleepStage in one pass.
+    /// Watch data takes priority, but non-Watch data fills time gaps where Watch has no coverage.
+    /// This prevents data loss when the Watch only covers part of the sleep session.
+    private func deduplicateAndConvert(_ samples: [HKCategorySample]) -> [SleepStage] {
+        guard !samples.isEmpty else { return [] }
+
+        // 1. Partition by Watch vs non-Watch
+        var watchSamples: [HKCategorySample] = []
+        var nonWatchSamples: [HKCategorySample] = []
+        for sample in samples {
+            if isWatchSource(sample) {
+                watchSamples.append(sample)
+            } else {
+                nonWatchSamples.append(sample)
+            }
+        }
+
+        // 2. Same-source dedup within each group
+        let dedupedWatch = deduplicateSameSourceGroup(watchSamples)
+        let dedupedNonWatch = deduplicateSameSourceGroup(nonWatchSamples)
+
+        // 3. Convert Watch samples → SleepStage
+        var stages: [SleepStage] = dedupedWatch.compactMap { sample in
+            guard let stage = mapSleepCategory(sample.value) else { return nil }
+            return SleepStage(
+                stage: stage,
+                duration: sample.endDate.timeIntervalSince(sample.startDate),
+                startDate: sample.startDate,
+                endDate: sample.endDate
+            )
+        }
+
+        // 4. Build merged Watch coverage intervals
+        let watchCoverage = Self.mergedIntervals(stages.map { ($0.startDate, $0.endDate) })
+
+        // 5. Non-Watch: trim against Watch coverage, keep remainder
+        for sample in dedupedNonWatch {
+            guard let stage = mapSleepCategory(sample.value) else { continue }
+            let trimmed = Self.subtractIntervals(
+                from: (sample.startDate, sample.endDate),
+                subtracting: watchCoverage
+            )
+            for (start, end) in trimmed {
+                let duration = end.timeIntervalSince(start)
+                guard duration > 0 else { continue }
+                stages.append(SleepStage(
+                    stage: stage,
+                    duration: duration,
+                    startDate: start,
+                    endDate: end
+                ))
+            }
+        }
+
+        return stages.sorted { $0.startDate < $1.startDate }
+    }
+
+    /// Dedup within a single priority group (all-Watch or all-non-Watch).
+    /// Same-source overlaps are kept (stage transitions). Cross-source uses longer-duration wins.
+    private func deduplicateSameSourceGroup(_ samples: [HKCategorySample]) -> [HKCategorySample] {
         let sorted = samples.sorted { $0.startDate < $1.startDate }
         var result: [HKCategorySample] = []
 
         for sample in sorted {
-            // Sweep-line: only check trailing entries that could overlap (already sorted by startDate)
             var overlapIndices: [Int] = []
-            for i in stride(from: result.count - 1, through: 0, by: -1) {
+            // Full scan instead of break-early sweep to handle unsorted result after mutations
+            for i in 0..<result.count {
                 let existing = result[i]
-                guard existing.endDate > sample.startDate else { break }
-                if existing.startDate < sample.endDate {
+                if existing.startDate < sample.endDate && sample.startDate < existing.endDate {
                     overlapIndices.append(i)
                 }
             }
@@ -96,7 +147,6 @@ struct SleepQueryService: SleepQuerying, Sendable {
                 continue
             }
 
-            // Same source overlap: keep both unless unspecified duplicates specific stages
             let sampleSource = sample.sourceRevision.source.bundleIdentifier
             let allSameSource = overlapIndices.allSatisfy {
                 result[$0].sourceRevision.source.bundleIdentifier == sampleSource
@@ -115,32 +165,65 @@ struct SleepQueryService: SleepQuerying, Sendable {
                 continue
             }
 
-            // Cross-source overlap: prefer Watch over non-Watch
-            let sampleIsWatch = isWatchSource(sample)
-            let anyOverlapIsWatch = overlapIndices.contains { isWatchSource(result[$0]) }
-
-            if sampleIsWatch && !anyOverlapIsWatch {
-                // Watch replaces non-Watch
+            // Cross-source within same priority group: keep longer duration
+            let sampleDuration = sample.endDate.timeIntervalSince(sample.startDate)
+            let maxExistingDuration = overlapIndices.map {
+                result[$0].endDate.timeIntervalSince(result[$0].startDate)
+            }.max() ?? 0
+            if sampleDuration > maxExistingDuration {
                 for i in overlapIndices.sorted(by: >) {
                     result.remove(at: i)
                 }
                 result.append(sample)
-            } else if !sampleIsWatch && anyOverlapIsWatch {
-                // Non-Watch overlaps Watch → skip
-                continue
-            } else {
-                // Same priority, different source: keep longer duration
-                let sampleDuration = sample.endDate.timeIntervalSince(sample.startDate)
-                let maxExistingDuration = overlapIndices.map {
-                    result[$0].endDate.timeIntervalSince(result[$0].startDate)
-                }.max() ?? 0
-                if sampleDuration > maxExistingDuration {
-                    for i in overlapIndices.sorted(by: >) {
-                        result.remove(at: i)
-                    }
-                    result.append(sample)
-                }
             }
+        }
+        return result
+    }
+
+    // MARK: - Interval helpers
+
+    /// Merges overlapping time intervals into non-overlapping sorted intervals.
+    static func mergedIntervals(_ intervals: [(Date, Date)]) -> [(Date, Date)] {
+        guard !intervals.isEmpty else { return [] }
+        let sorted = intervals.sorted { $0.0 < $1.0 }
+        var merged: [(Date, Date)] = [sorted[0]]
+        for interval in sorted.dropFirst() {
+            if interval.0 <= merged[merged.count - 1].1 {
+                // Overlaps or adjacent — extend
+                merged[merged.count - 1].1 = max(merged[merged.count - 1].1, interval.1)
+            } else {
+                merged.append(interval)
+            }
+        }
+        return merged
+    }
+
+    /// Subtracts sorted non-overlapping intervals from a single interval.
+    /// Returns the remaining portions of `from` not covered by `subtracting`.
+    static func subtractIntervals(
+        from interval: (Date, Date),
+        subtracting: [(Date, Date)]
+    ) -> [(Date, Date)] {
+        guard !subtracting.isEmpty else { return [interval] }
+        var result: [(Date, Date)] = []
+        var currentStart = interval.0
+
+        for sub in subtracting {
+            // Skip subtraction intervals that end before our current position
+            guard sub.1 > currentStart else { continue }
+            // Stop if subtraction interval starts after our interval ends
+            guard sub.0 < interval.1 else { break }
+
+            // Keep the gap before this subtraction interval
+            if sub.0 > currentStart {
+                result.append((currentStart, min(sub.0, interval.1)))
+            }
+            currentStart = max(currentStart, sub.1)
+        }
+
+        // Keep the remainder after the last subtraction interval
+        if currentStart < interval.1 {
+            result.append((currentStart, interval.1))
         }
         return result
     }
