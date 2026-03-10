@@ -7,6 +7,7 @@ struct SleepDeficitGaugeView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var animatedProgress: Double = 0
+    @State private var showingInfoSheet = false
 
     // Max deficit for gauge scale (10 hours in minutes)
     private let maxDeficitMinutes = 600.0
@@ -22,9 +23,20 @@ struct SleepDeficitGaugeView: View {
     var body: some View {
         StandardCard {
             VStack(spacing: DS.Spacing.lg) {
-                Text("Sleep Debt")
-                    .font(.callout)
-                    .foregroundStyle(DS.Color.textSecondary)
+                HStack(spacing: DS.Spacing.xs) {
+                    Text("Sleep Debt")
+                        .font(.callout)
+                        .foregroundStyle(DS.Color.textSecondary)
+
+                    Button {
+                        showingInfoSheet = true
+                    } label: {
+                        Image(systemName: "info.circle")
+                            .font(.callout)
+                            .foregroundStyle(DS.Color.textSecondary)
+                    }
+                    .buttonStyle(.plain)
+                }
 
                 ZStack {
                     // Background arc
@@ -80,6 +92,9 @@ struct SleepDeficitGaugeView: View {
                     animatedProgress = progress
                 }
             }
+        }
+        .sheet(isPresented: $showingInfoSheet) {
+            SleepDebtInfoSheet()
         }
     }
 
