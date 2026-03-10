@@ -537,7 +537,7 @@ struct ActivityView: View {
                         .foregroundStyle(DS.Color.activity)
                     Image(systemName: "chevron.right")
                         .font(.caption2.weight(.semibold))
-                        .foregroundStyle(DS.Color.activity.opacity(0.6))
+                        .foregroundStyle(DS.Color.activity)
                 }
                 .frame(maxWidth: .infinity, alignment: .center)
                 .padding(.vertical, DS.Spacing.xs)
