@@ -921,12 +921,7 @@ struct WorkoutSessionView: View {
 
         // Standalone / last exercise: show effort + share sheet
         // Derive session effort from set-level RPE if available
-        let setRPEInputs = record.completedSets.map {
-            SetRPEInput(rpe: $0.rpe, setType: $0.setType)
-        }
-        if let setBasedEffort = intensityService.averageSetRPE(sets: setRPEInputs) {
-            record.rpe = setBasedEffort
-        }
+        record.applySetBasedRPE(using: intensityService)
 
         let recentEfforts = exerciseRecords
             .filter { $0.exerciseDefinitionID == exercise.id && $0.rpe != nil }

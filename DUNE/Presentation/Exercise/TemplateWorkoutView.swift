@@ -482,12 +482,7 @@ struct TemplateWorkoutView: View {
 
         // Auto-compute session effort from per-set RPE
         for record in savedRecords {
-            let setRPEInputs = (record.sets ?? []).map {
-                SetRPEInput(rpe: $0.rpe, setType: $0.setType)
-            }
-            if let setBasedEffort = intensityService.averageSetRPE(sets: setRPEInputs) {
-                record.rpe = setBasedEffort
-            }
+            record.applySetBasedRPE(using: intensityService)
         }
 
         // Effort suggestion from recent data

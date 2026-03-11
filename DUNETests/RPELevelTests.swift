@@ -37,12 +37,13 @@ struct RPELevelTests {
 
     // MARK: - Display
 
-    @Test("displayLabel formats correctly")
+    @Test("displayLabel returns category names")
     func displayLabel() {
-        #expect(RPELevel(value: 6.0).displayLabel == "6")
-        #expect(RPELevel(value: 6.5).displayLabel == "6.5")
-        #expect(RPELevel(value: 10.0).displayLabel == "10")
-        #expect(RPELevel(value: 9.5).displayLabel == "9.5")
+        #expect(RPELevel(value: 6.0).displayLabel == String(localized: "Light"))
+        #expect(RPELevel(value: 7.0).displayLabel == String(localized: "Moderate"))
+        #expect(RPELevel(value: 8.0).displayLabel == String(localized: "Hard"))
+        #expect(RPELevel(value: 9.0).displayLabel == String(localized: "Very Hard"))
+        #expect(RPELevel(value: 10.0).displayLabel == String(localized: "Max Effort"))
     }
 
     @Test("RIR mapping is correct")
