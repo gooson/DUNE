@@ -1,7 +1,7 @@
 ---
 topic: swiftdata duplicate version checksums
 date: 2026-03-12
-status: draft
+status: implemented
 confidence: high
 related_solutions:
   - docs/solutions/architecture/2026-03-12-mac-swiftdata-migration-refresh-stability.md
