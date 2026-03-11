@@ -235,7 +235,7 @@ struct AIWorkoutTemplateGenerator: NaturalLanguageWorkoutGenerating, Sendable {
             grouping: records.compactMap { snapshot -> String? in
                 if let id = snapshot.exerciseDefinitionID,
                    let definition = library.exercise(byID: id) {
-                    return definition.localizedName
+                    return definition.name
                 }
                 return snapshot.exerciseName?.trimmingCharacters(in: .whitespacesAndNewlines)
             },
