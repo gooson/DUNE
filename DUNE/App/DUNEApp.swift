@@ -21,9 +21,8 @@ struct DUNEApp: App {
     @State private var hasAttemptedNotificationAuthorizationThisLaunch = false
     @State private var isRequestingDeferredAuthorizations = false
     @State private var hasStartedRuntimeServices = false
-    @State private var showWhatsNewSheet = false
-    @State private var automaticWhatsNewReleases: [WhatsNewReleaseData] = []
-    @State private var automaticWhatsNewBuild = ""
+    @State private var automaticWhatsNewPresentation: AutomaticWhatsNewPresentation?
+    @State private var automaticWhatsNewPresentedBuild = ""
     @State private var hasForcedConsentPresentation = false
 
     @State private var appRuntime: AppRuntime
@@ -33,6 +32,13 @@ struct DUNEApp: App {
     private let whatsNewStore = WhatsNewStore.shared
     private static let minimumLaunchSplashDuration: Duration = .seconds(1)
     private static let launchSplashResolveDuration: Duration = .milliseconds(700)
+
+    private struct AutomaticWhatsNewPresentation: Identifiable, Equatable {
+        let build: String
+        let releases: [WhatsNewReleaseData]
+
+        var id: String { build }
+    }
 
     private struct AppRuntime {
         let revision = UUID()
@@ -340,10 +346,10 @@ struct DUNEApp: App {
         .sheet(isPresented: $showConsentSheet) {
             CloudSyncConsentView(isPresented: $showConsentSheet)
         }
-        .sheet(isPresented: $showWhatsNewSheet, onDismiss: handleAutomaticWhatsNewDismissed) {
+        .sheet(item: $automaticWhatsNewPresentation, onDismiss: handleAutomaticWhatsNewDismissed) { presentation in
             NavigationStack {
                 WhatsNewView(
-                    releases: automaticWhatsNewReleases,
+                    releases: presentation.releases,
                     mode: .automatic
                 )
             }
@@ -476,16 +482,20 @@ struct DUNEApp: App {
         )
     }
 
+    private var isShowingAutomaticWhatsNew: Bool {
+        automaticWhatsNewPresentation != nil
+    }
+
     @MainActor
     private func advanceLaunchExperienceFlowIfNeeded() async {
         guard hasCompletedPostSplashSetup else { return }
         guard !isAdvancingLaunchExperience else { return }
-        guard !showConsentSheet, !showWhatsNewSheet else { return }
+        guard !showConsentSheet, !isShowingAutomaticWhatsNew else { return }
 
         isAdvancingLaunchExperience = true
         defer { isAdvancingLaunchExperience = false }
 
-        while hasCompletedPostSplashSetup, !showConsentSheet, !showWhatsNewSheet {
+        while hasCompletedPostSplashSetup, !showConsentSheet, !isShowingAutomaticWhatsNew {
             switch nextLaunchExperienceStep {
             case .cloudSyncConsent:
                 showConsentSheet = true
@@ -512,19 +522,23 @@ struct DUNEApp: App {
             return
         }
 
-        automaticWhatsNewBuild = build
-        automaticWhatsNewReleases = whatsNewManager.orderedReleases(preferredVersion: currentRelease.version)
-        showWhatsNewSheet = true
+        let releases = whatsNewManager.orderedReleases(preferredVersion: currentRelease.version)
+        guard !releases.isEmpty else {
+            finishLaunchExperienceIfNeeded()
+            return
+        }
+
+        automaticWhatsNewPresentedBuild = build
+        automaticWhatsNewPresentation = AutomaticWhatsNewPresentation(build: build, releases: releases)
     }
 
     @MainActor
     private func handleAutomaticWhatsNewDismissed() {
-        if !automaticWhatsNewBuild.isEmpty {
-            whatsNewStore.markOpened(build: automaticWhatsNewBuild)
+        if !automaticWhatsNewPresentedBuild.isEmpty {
+            whatsNewStore.markOpened(build: automaticWhatsNewPresentedBuild)
         }
 
-        automaticWhatsNewBuild = ""
-        automaticWhatsNewReleases = []
+        automaticWhatsNewPresentedBuild = ""
 
         Task { await advanceLaunchExperienceFlowIfNeeded() }
     }
