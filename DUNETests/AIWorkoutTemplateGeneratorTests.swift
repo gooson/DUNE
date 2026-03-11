@@ -207,6 +207,24 @@ struct AIWorkoutTemplateGeneratorTests {
         #expect(intent.muscleTargets.contains(.shoulders))
     }
 
+    @Test("Fallback template builds clear Korean prompt without model output")
+    func fallbackTemplateBuildsClearKoreanPrompt() throws {
+        let library = makeLibrary()
+        let intent = AIWorkoutTemplateGenerator.promptIntent(for: "20분 어깨 운동")
+
+        let template = try sut.fallbackTemplate(
+            prompt: "20분 어깨 운동",
+            promptIntent: intent,
+            library: library,
+            localeIdentifier: "ko_KR"
+        )
+
+        #expect(template.name == "20분 어깨 운동")
+        #expect(template.estimatedMinutes == 20)
+        #expect(!template.slots.isEmpty)
+        #expect(template.slots.first?.exerciseDefinitionID == "dumbbell-shoulder-press")
+    }
+
     @Test("Resolve generated template filters unresolved and duplicate slots while keeping cardio")
     func resolveGeneratedTemplateFiltersInvalidSlots() throws {
         let template = AIWorkoutTemplate(

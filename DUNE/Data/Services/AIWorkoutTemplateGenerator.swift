@@ -51,7 +51,21 @@ struct AIWorkoutTemplateGenerator: NaturalLanguageWorkoutGenerating, Sendable {
             AppLogger.exercise.debug(
                 "AI workout template raw output promptHash=\(trimmedPrompt, privacy: .private(mask: .hash)) name=\(generated.name, privacy: .private) estimated=\(generated.estimatedMinutes, privacy: .public) slotCount=\(generated.exercises.count, privacy: .public) slots=\(debugSlotSummary(generated.exercises), privacy: .private)"
             )
-            return try resolveGeneratedTemplate(generated, library: library)
+            do {
+                return try resolveGeneratedTemplate(generated, library: library)
+            } catch let error as WorkoutTemplateGenerationError
+                where error == .noExercisesMatched || error == .invalidTemplate {
+                AppLogger.exercise.notice(
+                    "AI workout template falling back to deterministic builder promptHash=\(trimmedPrompt, privacy: .private(mask: .hash)) error=\(String(describing: error), privacy: .private)"
+                )
+                return try fallbackTemplate(
+                    prompt: trimmedPrompt,
+                    promptIntent: promptIntent,
+                    library: library,
+                    localeIdentifier: request.localeIdentifier,
+                    preferredName: generated.name
+                )
+            }
         } catch let error as WorkoutTemplateGenerationError {
             AppLogger.exercise.error(
                 "AI workout template typed failure promptHash=\(trimmedPrompt, privacy: .private(mask: .hash)) error=\(String(describing: error), privacy: .private)"
@@ -61,6 +75,17 @@ struct AIWorkoutTemplateGenerator: NaturalLanguageWorkoutGenerating, Sendable {
             AppLogger.exercise.error(
                 "AI workout template generation failed promptHash=\(trimmedPrompt, privacy: .private(mask: .hash)) error=\(String(describing: error), privacy: .private)"
             )
+            if let fallback = try? fallbackTemplate(
+                prompt: trimmedPrompt,
+                promptIntent: promptIntent,
+                library: library,
+                localeIdentifier: request.localeIdentifier
+            ) {
+                AppLogger.exercise.notice(
+                    "AI workout template recovered from model failure with deterministic builder promptHash=\(trimmedPrompt, privacy: .private(mask: .hash))"
+                )
+                return fallback
+            }
             throw WorkoutTemplateGenerationError.generationFailed
         }
     }
@@ -297,6 +322,48 @@ struct AIWorkoutTemplateGenerator: NaturalLanguageWorkoutGenerating, Sendable {
         )
     }
 
+    func fallbackTemplate(
+        prompt: String,
+        promptIntent: WorkoutPromptIntent,
+        library: ExerciseLibraryQuerying,
+        localeIdentifier: String,
+        preferredName: String? = nil
+    ) throws -> GeneratedWorkoutTemplate {
+        let matches = Self.searchMatches(for: prompt, library: library)
+        guard !matches.isEmpty else {
+            throw WorkoutTemplateGenerationError.noExercisesMatched
+        }
+
+        let estimatedMinutes = min(max(promptIntent.requestedMinutes ?? 30, 10), 120)
+        let targetExerciseCount = Self.targetExerciseCount(
+            estimatedMinutes: estimatedMinutes,
+            preferredCategories: promptIntent.preferredCategories
+        )
+
+        let slots = matches
+            .prefix(targetExerciseCount)
+            .map { exercise in
+                Self.defaultSlot(for: exercise, estimatedMinutes: estimatedMinutes)
+            }
+
+        guard !slots.isEmpty else {
+            throw WorkoutTemplateGenerationError.noExercisesMatched
+        }
+
+        let templateName = Self.fallbackTemplateName(
+            prompt: prompt,
+            promptIntent: promptIntent,
+            localeIdentifier: localeIdentifier,
+            preferredName: preferredName
+        )
+
+        return GeneratedWorkoutTemplate(
+            name: templateName,
+            estimatedMinutes: estimatedMinutes,
+            slots: slots
+        )
+    }
+
     func resolveExercise(
         exerciseID: String,
         exerciseName: String,
@@ -472,6 +539,150 @@ struct AIWorkoutTemplateGenerator: NaturalLanguageWorkoutGenerating, Sendable {
         }
 
         return lines
+    }
+
+    static func targetExerciseCount(
+        estimatedMinutes: Int,
+        preferredCategories: Set<ExerciseCategory>
+    ) -> Int {
+        if preferredCategories == [.cardio] {
+            return 1
+        }
+
+        return switch estimatedMinutes {
+        case ..<15:
+            2
+        case ..<25:
+            3
+        case ..<40:
+            4
+        case ..<55:
+            5
+        default:
+            6
+        }
+    }
+
+    static func defaultSlot(
+        for exercise: ExerciseDefinition,
+        estimatedMinutes: Int
+    ) -> GeneratedWorkoutExerciseSlot {
+        switch exercise.inputType {
+        case .durationDistance:
+            return GeneratedWorkoutExerciseSlot(
+                exerciseDefinitionID: exercise.id,
+                exerciseName: exercise.localizedName,
+                sets: 1,
+                reps: 1
+            )
+        case .setsReps:
+            return GeneratedWorkoutExerciseSlot(
+                exerciseDefinitionID: exercise.id,
+                exerciseName: exercise.localizedName,
+                sets: estimatedMinutes >= 35 ? 4 : 3,
+                reps: 12
+            )
+        case .setsRepsWeight:
+            return GeneratedWorkoutExerciseSlot(
+                exerciseDefinitionID: exercise.id,
+                exerciseName: exercise.localizedName,
+                sets: estimatedMinutes >= 35 ? 4 : 3,
+                reps: 10
+            )
+        case .durationIntensity, .roundsBased:
+            return GeneratedWorkoutExerciseSlot(
+                exerciseDefinitionID: exercise.id,
+                exerciseName: exercise.localizedName,
+                sets: 1,
+                reps: 1
+            )
+        }
+    }
+
+    static func fallbackTemplateName(
+        prompt: String,
+        promptIntent: WorkoutPromptIntent,
+        localeIdentifier: String,
+        preferredName: String? = nil
+    ) -> String {
+        let trimmedPreferredName = preferredName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        if !trimmedPreferredName.isEmpty {
+            return trimmedPreferredName
+        }
+
+        let languageCode = Locale(identifier: localeIdentifier).language.languageCode?.identifier ?? "en"
+        let requestedMinutes = promptIntent.requestedMinutes
+
+        if let primaryMuscle = promptIntent.muscleTargets.sorted(by: { $0.rawValue < $1.rawValue }).first {
+            let muscleLabel = localizedMuscleName(primaryMuscle, languageCode: languageCode)
+            switch languageCode {
+            case "ko":
+                if let requestedMinutes {
+                    return "\(requestedMinutes)분 \(muscleLabel) 운동"
+                }
+                return "\(muscleLabel) 운동"
+            case "ja":
+                if let requestedMinutes {
+                    return "\(requestedMinutes)分 \(muscleLabel) ワークアウト"
+                }
+                return "\(muscleLabel) ワークアウト"
+            default:
+                if let requestedMinutes {
+                    return "\(requestedMinutes) min \(muscleLabel) workout"
+                }
+                return "\(muscleLabel) workout"
+            }
+        }
+
+        let trimmedPrompt = prompt.trimmingCharacters(in: .whitespacesAndNewlines)
+        if !trimmedPrompt.isEmpty {
+            return trimmedPrompt
+        }
+
+        switch languageCode {
+        case "ko":
+            return "운동 템플릿"
+        case "ja":
+            return "ワークアウトテンプレート"
+        default:
+            return "Workout Template"
+        }
+    }
+
+    static func localizedMuscleName(
+        _ muscle: MuscleGroup,
+        languageCode: String
+    ) -> String {
+        switch (languageCode, muscle) {
+        case ("ko", .chest): "가슴"
+        case ("ko", .back): "등"
+        case ("ko", .shoulders): "어깨"
+        case ("ko", .biceps): "이두"
+        case ("ko", .triceps): "삼두"
+        case ("ko", .quadriceps): "하체"
+        case ("ko", .hamstrings): "햄스트링"
+        case ("ko", .glutes): "둔근"
+        case ("ko", .calves): "종아리"
+        case ("ko", .core): "코어"
+        case ("ko", .forearms): "전완"
+        case ("ko", .traps): "승모근"
+        case ("ko", .lats): "광배"
+        case ("ja", .chest): "胸"
+        case ("ja", .back): "背中"
+        case ("ja", .shoulders): "肩"
+        case ("ja", .biceps): "二頭"
+        case ("ja", .triceps): "三頭"
+        case ("ja", .quadriceps): "下半身"
+        case ("ja", .hamstrings): "ハムストリング"
+        case ("ja", .glutes): "臀部"
+        case ("ja", .calves): "ふくらはぎ"
+        case ("ja", .core): "コア"
+        case ("ja", .forearms): "前腕"
+        case ("ja", .traps): "僧帽筋"
+        case ("ja", .lats): "広背筋"
+        default:
+            muscle.rawValue
+        }
     }
 
     static func searchMatches(
