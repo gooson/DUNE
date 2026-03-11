@@ -82,6 +82,7 @@ private struct NoopHeartRateService: HeartRateQuerying {
     func fetchHeartRateHistory(days: Int) async throws -> [VitalSample] { [] }
     func fetchHeartRateHistory(start: Date, end: Date) async throws -> [VitalSample] { [] }
     func fetchHeartRateZones(forWorkoutID workoutID: String, maxHR: Double) async throws -> [HeartRateZone] { [] }
+    func fetchHeartRateRecovery(forWorkoutID workoutID: String) async throws -> HeartRateRecovery? { nil }
 }
 
 private actor MockSharedHealthDataService: SharedHealthDataService {
