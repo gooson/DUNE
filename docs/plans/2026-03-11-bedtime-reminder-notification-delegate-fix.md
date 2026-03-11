@@ -1,7 +1,7 @@
 ---
 topic: bedtime-reminder-notification-delegate-fix
 date: 2026-03-11
-status: draft
+status: implemented
 confidence: high
 related_solutions:
   - docs/solutions/general/2026-03-04-sleep-notification-cold-start-crash.md
