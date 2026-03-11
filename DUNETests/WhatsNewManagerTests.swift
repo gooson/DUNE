@@ -10,7 +10,7 @@ struct WhatsNewManagerTests {
         let release = manager.currentRelease(for: "0.2.0")
 
         #expect(release != nil)
-        #expect(release?.features.count == 11)
+        #expect(release?.features.count == 12)
     }
 
     @Test("Feature IDs match expected set")
@@ -20,9 +20,11 @@ struct WhatsNewManagerTests {
 
         let ids = Set(release.features.map(\.id))
         let expected: Set<String> = [
-            "widgets", "conditionScore", "weather", "sleepDebt",
-            "notifications", "muscleMap", "trainingReadiness",
-            "wellness", "habits", "themes", "watchQuickStart"
+            "widgets", "weather", "sleepDebt",
+            "notifications", "trainingReadiness",
+            "habits", "themes", "watchQuickStart",
+            "cardioLiveTracking", "coachingInsights",
+            "localization", "airQuality"
         ]
         #expect(ids == expected)
     }
