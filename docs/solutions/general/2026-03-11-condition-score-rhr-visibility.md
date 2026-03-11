@@ -47,11 +47,30 @@ init에서 pre-compute 후 조건부 표시:
 - `hasRHRData == false && rhrPenalty > 0` → divider 표시
 - 둘 다 아님 → divider 숨김 (double-divider 방지)
 
+### 5. Display RHR Fallback (2026-03-12 추가)
+
+`todayRHR`이 nil인 경우(Apple이 아직 오늘의 RHR을 계산하지 않은 시점) RHR 행이 완전히 숨겨지는 문제 해결.
+
+**추가 필드** (`ConditionScoreDetail`):
+```swift
+let displayRHR: Double?     // latestRHR fallback (최근 7일 내)
+let displayRHRDate: Date?   // displayRHR의 날짜
+```
+
+**데이터 흐름**:
+- `DashboardViewModel`: 이미 계산된 `effectiveRHR` (todayRHR ?? latestRHR)를 UseCase Input에 전달
+- `SharedHealthDataServiceImpl`: 동일 패턴 적용
+- `ConditionCalculationCard`: `todayRHR ?? displayRHR`로 RHR 행 표시, historical 값이면 날짜 표시
+
+**핵심**: penalty 계산은 여전히 todayRHR/yesterdayRHR만 사용 (Correction #24 준수). displayRHR은 순수 UI 표시용.
+
 ## Prevention
 
 - Domain 모델에서 계산 입력값을 버리지 말고 항상 저장할 것 — UI에서 필요할 수 있음
+- HealthKit 데이터가 "오늘 날짜에 없을 수 있음"을 항상 고려 — `latestRHR` 같은 fallback 경로 확보
 - `BodyScoreDetail` 등 유사 패턴에서도 동일 원칙 적용
 - pre-compute 패턴(Correction #80) 준수: body에서 함수 호출 금지
+- display 용도의 값도 `rhrValidRange` 검증 적용 (todayRHR과 동일 수준)
 
 ## Related
 
