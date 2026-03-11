@@ -19,6 +19,7 @@ struct DUNEApp: App {
     @State private var isAdvancingLaunchExperience = false
     @State private var hasAttemptedHealthKitAuthorizationThisLaunch = false
     @State private var hasAttemptedNotificationAuthorizationThisLaunch = false
+    @State private var isRequestingDeferredAuthorizations = false
     @State private var hasStartedRuntimeServices = false
     @State private var showWhatsNewSheet = false
     @State private var automaticWhatsNewReleases: [WhatsNewReleaseData] = []
@@ -310,7 +311,10 @@ struct DUNEApp: App {
             }
             .onChange(of: scenePhase) { _, newPhase in
                 guard newPhase == .active else { return }
-                Task { await refreshAppRuntimeIfNeeded() }
+                Task {
+                    await refreshAppRuntimeIfNeeded()
+                    await requestDeferredAuthorizationsIfNeeded()
+                }
             }
             .onReceive(NotificationCenter.default.publisher(for: NSUbiquitousKeyValueStore.didChangeExternallyNotification)) { notification in
                 guard shouldHandleCloudSyncNotification(notification) else { return }
@@ -325,7 +329,7 @@ struct DUNEApp: App {
             sharedHealthDataService: appRuntime.sharedHealthDataService,
             refreshCoordinator: appRuntime.refreshCoordinator,
             launchExperienceReady: isLaunchExperienceReady,
-            shouldAutoRequestHealthKitAuthorization: shouldRequestHealthKitAuthorizationOnLaunch
+            canLoadHealthKitData: canLoadHealthKitData
         )
         .id(appRuntime.revision)
         .sheet(isPresented: $showConsentSheet) {
@@ -418,7 +422,7 @@ struct DUNEApp: App {
         }
     }
 
-    private var shouldRequestHealthKitAuthorizationOnLaunch: Bool {
+    private var shouldRequestHealthKitAuthorizationAutomatically: Bool {
         LaunchExperiencePlanner.shouldRequestAuthorization(
             for: LaunchAuthorizationRequestState(
                 isEligible: HKHealthStore.isHealthDataAvailable(),
@@ -429,7 +433,7 @@ struct DUNEApp: App {
         )
     }
 
-    private var shouldRequestNotificationAuthorizationOnLaunch: Bool {
+    private var shouldRequestNotificationAuthorizationAutomatically: Bool {
         LaunchExperiencePlanner.shouldRequestAuthorization(
             for: LaunchAuthorizationRequestState(
                 isEligible: true,
@@ -453,13 +457,15 @@ struct DUNEApp: App {
         return whatsNewStore.shouldShowBadge(build: build)
     }
 
+    private var canLoadHealthKitData: Bool {
+        Self.shouldBypassLaunchExperienceForTests || hasRequestedHealthKitAuthorization
+    }
+
     private var nextLaunchExperienceStep: LaunchExperienceStep {
         LaunchExperiencePlanner.nextStep(
             for: LaunchExperienceState(
                 shouldBypassLaunchExperience: Self.shouldBypassLaunchExperienceForTests,
                 hasShownCloudSyncConsent: hasShownConsent,
-                shouldRequestHealthKitAuthorization: shouldRequestHealthKitAuthorizationOnLaunch,
-                shouldRequestNotificationAuthorization: shouldRequestNotificationAuthorizationOnLaunch,
                 shouldPresentWhatsNew: shouldPresentAutomaticWhatsNew
             )
         )
@@ -479,22 +485,6 @@ struct DUNEApp: App {
             case .cloudSyncConsent:
                 showConsentSheet = true
                 return
-            case .healthKitAuthorization:
-                hasAttemptedHealthKitAuthorizationThisLaunch = true
-                do {
-                    try await HealthKitManager.shared.requestAuthorization()
-                    hasRequestedHealthKitAuthorization = true
-                } catch {
-                    AppLogger.healthKit.error("Launch HealthKit authorization failed: \(error.localizedDescription)")
-                }
-            case .notificationAuthorization:
-                hasAttemptedNotificationAuthorizationThisLaunch = true
-                do {
-                    _ = try await notificationService.requestAuthorization()
-                    hasRequestedNotificationAuthorization = true
-                } catch {
-                    AppLogger.notification.error("Launch notification authorization failed: \(error.localizedDescription)")
-                }
             case .whatsNew:
                 presentAutomaticWhatsNewIfNeeded()
                 return
@@ -540,6 +530,7 @@ struct DUNEApp: App {
 
         isLaunchExperienceReady = true
         startRuntimeServicesIfNeeded()
+        Task { await requestDeferredAuthorizationsIfNeeded() }
     }
 
     @MainActor
@@ -557,6 +548,43 @@ struct DUNEApp: App {
             await BedtimeReminderScheduler.shared.refreshSchedule()
         }
         scheduleWorkoutTitleBackfill()
+    }
+
+    @MainActor
+    private func requestDeferredAuthorizationsIfNeeded() async {
+        guard isLaunchExperienceReady else { return }
+        guard scenePhase == .active else { return }
+        guard !Self.shouldBypassLaunchExperienceForTests else { return }
+        guard !isRequestingDeferredAuthorizations else { return }
+        guard shouldRequestHealthKitAuthorizationAutomatically || shouldRequestNotificationAuthorizationAutomatically else {
+            return
+        }
+
+        isRequestingDeferredAuthorizations = true
+        defer { isRequestingDeferredAuthorizations = false }
+
+        try? await Task.sleep(for: .milliseconds(400))
+        guard scenePhase == .active else { return }
+
+        if shouldRequestHealthKitAuthorizationAutomatically {
+            hasAttemptedHealthKitAuthorizationThisLaunch = true
+            do {
+                try await HealthKitManager.shared.requestAuthorization()
+                hasRequestedHealthKitAuthorization = true
+            } catch {
+                AppLogger.healthKit.error("Deferred HealthKit authorization failed: \(error.localizedDescription)")
+            }
+        }
+
+        if shouldRequestNotificationAuthorizationAutomatically {
+            hasAttemptedNotificationAuthorizationThisLaunch = true
+            do {
+                _ = try await notificationService.requestAuthorization()
+                hasRequestedNotificationAuthorization = true
+            } catch {
+                AppLogger.notification.error("Deferred notification authorization failed: \(error.localizedDescription)")
+            }
+        }
     }
 
     @MainActor

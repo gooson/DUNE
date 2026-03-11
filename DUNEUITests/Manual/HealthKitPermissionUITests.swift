@@ -1,6 +1,7 @@
 @preconcurrency import XCTest
 
-/// UI test that launches the app and auto-accepts HealthKit permission dialogs.
+/// UI test that launches the app, lets the first screen render, and auto-accepts
+/// deferred HealthKit / notification permission dialogs.
 /// Run this test once on a fresh simulator before running unit tests to ensure
 /// HealthKit authorization is granted. Without this, HealthKit queries in unit tests
 /// may fail with authorization errors.
@@ -64,9 +65,10 @@ final class HealthKitPermissionUITests: XCTestCase {
         }
 
         handleCloudSyncConsentIfNeeded()
+        handleAutomaticWhatsNewIfNeeded()
+        waitForDashboardSurface()
         handleHealthKitSheetIfNeeded()
         dismissNotificationAlertIfNeeded()
-        handleAutomaticWhatsNewIfNeeded()
 
         // Verify app is still running
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: 5))
@@ -117,5 +119,10 @@ final class HealthKitPermissionUITests: XCTestCase {
         if closeButton.waitForExistence(timeout: 3) {
             closeButton.tap()
         }
+    }
+
+    private func waitForDashboardSurface() {
+        let todayTab = app.descendants(matching: .any)["tab-today"].firstMatch
+        XCTAssertTrue(todayTab.waitForExistence(timeout: 5), "App content should appear before deferred permission prompts")
     }
 }
