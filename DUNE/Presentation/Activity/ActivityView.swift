@@ -81,6 +81,7 @@ struct NotificationActivityDestination: Identifiable, Hashable {
 struct ActivityView: View {
     @State private var viewModel: ActivityViewModel
     @State private var showingExercisePicker = false
+    @State private var showingAIWorkoutBuilder = false
     @State private var selectedExercise: ExerciseDefinition?
     @State private var templateConfig: TemplateWorkoutConfig?
     @State private var selectedMuscle: MuscleGroup?
@@ -335,6 +336,9 @@ struct ActivityView: View {
                 startExerciseFromPicker(exercise)
             }
         }
+        .sheet(isPresented: $showingAIWorkoutBuilder) {
+            TemplateFormView()
+        }
         .sheet(item: $selectedMuscle) { muscle in
             MuscleDetailPopover(
                 muscle: muscle,
@@ -570,6 +574,7 @@ struct ActivityView: View {
                 onStartExercise: { exercise in selectedExercise = exercise },
                 onStartRecommendation: startRecommendation,
                 onStartTemplate: startFromTemplate,
+                onOpenAIWorkoutBuilder: { showingAIWorkoutBuilder = true },
                 onContextChanged: { context in
                     viewModel.setRecommendationContext(context)
                 },

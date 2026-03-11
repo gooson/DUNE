@@ -12,6 +12,7 @@ struct SuggestedWorkoutSection: View {
     let onStartExercise: (ExerciseDefinition) -> Void
     let onStartRecommendation: (WorkoutTemplateRecommendation) -> Void
     let onStartTemplate: (WorkoutTemplate) -> Void
+    let onOpenAIWorkoutBuilder: () -> Void
     let onContextChanged: (WorkoutRecommendationContext) -> Void
     let isEquipmentAvailable: (Equipment) -> Bool
     let onSetEquipmentAvailability: (Equipment, Bool) -> Void
@@ -62,6 +63,8 @@ struct SuggestedWorkoutSection: View {
                 if !templates.isEmpty {
                     templateStrip
                 }
+
+                aiWorkoutBuilderEntry
 
                 Button("All Exercises", action: onBrowseAll)
                     .font(.caption.weight(.semibold))
@@ -418,6 +421,38 @@ struct SuggestedWorkoutSection: View {
     }
 
     // MARK: - Templates
+
+    private var aiWorkoutBuilderEntry: some View {
+        Button(action: onOpenAIWorkoutBuilder) {
+            InlineCard {
+                HStack(spacing: DS.Spacing.sm) {
+                    Image(systemName: "wand.and.stars")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(DS.Color.activity)
+
+                    VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                        Text("AI Workout Builder")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(.primary)
+                            .lineLimit(1)
+
+                        Text("Describe your ideal workout in natural language and get a ready-to-use template instantly.")
+                            .font(.caption2)
+                            .foregroundStyle(DS.Color.textSecondary)
+                            .lineLimit(2)
+                    }
+
+                    Spacer(minLength: 0)
+
+                    Image(systemName: "chevron.right")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.tertiary)
+                }
+            }
+        }
+        .buttonStyle(.plain)
+        .accessibilityIdentifier("activity-ai-workout-builder")
+    }
 
     private var templateStrip: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
