@@ -97,6 +97,14 @@ struct HeartRateRecovery: Sendable {
         case low      // < 12 bpm
         case normal   // 12-20 bpm
         case good     // > 20 bpm
+
+        var displayName: String {
+            switch self {
+            case .low: String(localized: "Low")
+            case .normal: String(localized: "Normal")
+            case .good: String(localized: "Good")
+            }
+        }
     }
 
     var rating: Rating {

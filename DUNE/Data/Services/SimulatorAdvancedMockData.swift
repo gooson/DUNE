@@ -781,10 +781,10 @@ enum SimulatorAdvancedMockDataProvider {
                 personalRecordTypes: descriptor.personalRecordTypes
             )
 
-            let mockRecovery: HeartRateRecovery? = descriptor.maxHeartRate > 100
+            let mockRecovery: HeartRateRecovery? = descriptor.maxHeartRate > 120
                 ? HeartRateRecovery(
                     peakHR: descriptor.maxHeartRate,
-                    recoveryHR: descriptor.maxHeartRate - Double.random(in: 15...35)
+                    recoveryHR: descriptor.maxHeartRate - 22
                 )
                 : nil
 
