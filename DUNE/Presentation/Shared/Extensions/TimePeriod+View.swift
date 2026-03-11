@@ -47,19 +47,20 @@ extension TimePeriod {
     /// Formatted label for the visible date range starting at `scrollDate`.
     func visibleRangeLabel(from scrollDate: Date) -> String {
         let calendar = Calendar.current
-        let end: Date
+        let endExclusive: Date
         switch self {
         case .day:
-            end = calendar.date(byAdding: .hour, value: 24, to: scrollDate) ?? scrollDate
+            endExclusive = calendar.date(byAdding: .hour, value: 24, to: scrollDate) ?? scrollDate
         case .week:
-            end = calendar.date(byAdding: .day, value: 7, to: scrollDate) ?? scrollDate
+            endExclusive = calendar.date(byAdding: .day, value: 7, to: scrollDate) ?? scrollDate
         case .month:
-            end = calendar.date(byAdding: .month, value: 1, to: scrollDate) ?? scrollDate
+            endExclusive = calendar.date(byAdding: .month, value: 1, to: scrollDate) ?? scrollDate
         case .sixMonths:
-            end = calendar.date(byAdding: .month, value: 6, to: scrollDate) ?? scrollDate
+            endExclusive = calendar.date(byAdding: .month, value: 6, to: scrollDate) ?? scrollDate
         case .year:
-            end = calendar.date(byAdding: .year, value: 1, to: scrollDate) ?? scrollDate
+            endExclusive = calendar.date(byAdding: .year, value: 1, to: scrollDate) ?? scrollDate
         }
+        let displayEnd = calendar.date(byAdding: .second, value: -1, to: endExclusive) ?? scrollDate
 
         let formatter = DateFormatter()
         switch self {
@@ -68,13 +69,13 @@ extension TimePeriod {
             return formatter.string(from: scrollDate)
         case .week:
             formatter.setLocalizedDateFormatFromTemplate("Md")
-            return "\(formatter.string(from: scrollDate)) – \(formatter.string(from: end))"
+            return "\(formatter.string(from: scrollDate)) – \(formatter.string(from: displayEnd))"
         case .month:
             formatter.setLocalizedDateFormatFromTemplate("yMMMM")
             return formatter.string(from: scrollDate)
         case .sixMonths:
             formatter.setLocalizedDateFormatFromTemplate("yM")
-            return "\(formatter.string(from: scrollDate)) – \(formatter.string(from: end))"
+            return "\(formatter.string(from: scrollDate)) – \(formatter.string(from: displayEnd))"
         case .year:
             formatter.setLocalizedDateFormatFromTemplate("y")
             return formatter.string(from: scrollDate)

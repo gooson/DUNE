@@ -348,4 +348,20 @@ struct MetricDetailViewModelTests {
         let label = vm.visibleRangeLabel
         #expect(!label.isEmpty)
     }
+
+    @Test("visibleRangeLabel shows inclusive end date for week window")
+    func visibleRangeLabelUsesInclusiveWeekEndDate() {
+        let vm = makeVM()
+        vm.configure(category: .hrv, currentValue: 50, lastUpdated: Date())
+
+        let scrollDate = calendar.date(from: DateComponents(year: 2026, month: 3, day: 5))!
+        let expectedEnd = calendar.date(byAdding: .day, value: 6, to: scrollDate)!
+        let formatter = DateFormatter()
+        formatter.setLocalizedDateFormatFromTemplate("Md")
+
+        vm.scrollPosition = scrollDate
+
+        let expected = "\(formatter.string(from: scrollDate)) – \(formatter.string(from: expectedEnd))"
+        #expect(vm.visibleRangeLabel == expected)
+    }
 }
