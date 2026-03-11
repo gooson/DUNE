@@ -77,5 +77,7 @@ struct WatchExerciseInfoHashableTests {
 
         let decoded = try JSONDecoder().decode(WatchExerciseInfo.self, from: data)
         #expect(decoded.isPreferred == false)
+        #expect(decoded.lastUsedAt == nil)
+        #expect(decoded.usageCount == 0)
     }
 }

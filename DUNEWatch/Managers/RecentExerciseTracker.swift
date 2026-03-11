@@ -91,6 +91,11 @@ enum RecentExerciseTracker {
         loadUsageCounts()[exerciseID] ?? 0
     }
 
+    /// Returns raw usage count snapshot for batch sorting/filtering.
+    static func usageCounts() -> [String: Int] {
+        loadUsageCounts()
+    }
+
     /// Returns raw last-used timestamps snapshot for batch sorting/filtering.
     static func lastUsedTimestamps() -> [String: Double] {
         loadLastUsedHistory()

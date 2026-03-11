@@ -91,7 +91,8 @@ struct CarouselHomeView: View {
             let weight = exercise.defaultWeightKg?.description ?? "nil"
             let reps = exercise.defaultReps.map(String.init) ?? "nil"
             let equipment = exercise.equipment ?? "nil"
-            return "\(exercise.id)-\(exercise.inputType)-\(exercise.defaultSets)-\(reps)-\(weight)-\(equipment)-\(exercise.isPreferred)"
+            let lastUsedAt = exercise.lastUsedAt?.timeIntervalSince1970.description ?? "nil"
+            return "\(exercise.id)-\(exercise.inputType)-\(exercise.defaultSets)-\(reps)-\(weight)-\(equipment)-\(exercise.isPreferred)-\(lastUsedAt)-\(exercise.usageCount)"
         }
     }
 
@@ -374,8 +375,9 @@ struct CarouselHomeView: View {
 
     /// Computes "N days ago" label at card-build time (not in body).
     private func daysAgoLabel(for exercise: WatchExerciseInfo) -> String? {
-        guard !exercise.id.isEmpty,
-              let lastDate = RecentExerciseTracker.lastUsed(exerciseID: exercise.id) else { return nil }
+        guard !exercise.id.isEmpty else { return nil }
+        let lastDate = RecentExerciseTracker.lastUsed(exerciseID: exercise.id) ?? exercise.lastUsedAt
+        guard let lastDate else { return nil }
         let days = Calendar.current.dateComponents([.day], from: lastDate, to: Date()).day ?? 0
         if days == 0 { return String(localized: "Today") }
         if days == 1 { return String(localized: "Yesterday") }

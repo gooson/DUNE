@@ -114,6 +114,86 @@ struct WatchExerciseHelpersTests {
         #expect(defaults.weight == 100)
     }
 
+    @Test("recentWatchExercises falls back to synced last-used metadata")
+    func recentWatchExercisesUsesSyncedLastUsedFallback() {
+        let recentDate = Date(timeIntervalSince1970: 1_700_010_000)
+        let olderDate = recentDate.addingTimeInterval(-600)
+        let syncedRecent = WatchExerciseInfo(
+            id: "bench-press",
+            name: "Bench Press",
+            inputType: "weight_reps",
+            defaultSets: 3,
+            defaultReps: 8,
+            defaultWeightKg: 80,
+            isPreferred: false,
+            lastUsedAt: recentDate,
+            usageCount: 3,
+            equipment: "barbell",
+            cardioSecondaryUnit: nil
+        )
+        let syncedOlder = WatchExerciseInfo(
+            id: "squat",
+            name: "Squat",
+            inputType: "weight_reps",
+            defaultSets: 3,
+            defaultReps: 5,
+            defaultWeightKg: 100,
+            isPreferred: false,
+            lastUsedAt: olderDate,
+            usageCount: 1,
+            equipment: "barbell",
+            cardioSecondaryUnit: nil
+        )
+
+        let recent = recentWatchExercises(
+            from: [syncedOlder, syncedRecent],
+            limit: 5,
+            lastUsedTimestamps: [:]
+        )
+
+        #expect(recent.map(\.id) == ["bench-press", "squat"])
+    }
+
+    @Test("popularWatchExercises falls back to synced usage metadata")
+    func popularWatchExercisesUsesSyncedUsageFallback() {
+        let syncedPopular = WatchExerciseInfo(
+            id: "bench-press",
+            name: "Bench Press",
+            inputType: "weight_reps",
+            defaultSets: 3,
+            defaultReps: 8,
+            defaultWeightKg: 80,
+            isPreferred: false,
+            lastUsedAt: Date(timeIntervalSince1970: 1_700_010_000),
+            usageCount: 5,
+            equipment: "barbell",
+            cardioSecondaryUnit: nil
+        )
+        let syncedLessPopular = WatchExerciseInfo(
+            id: "squat",
+            name: "Squat",
+            inputType: "weight_reps",
+            defaultSets: 3,
+            defaultReps: 5,
+            defaultWeightKg: 100,
+            isPreferred: false,
+            lastUsedAt: Date(timeIntervalSince1970: 1_700_009_000),
+            usageCount: 2,
+            equipment: "barbell",
+            cardioSecondaryUnit: nil
+        )
+
+        let popular = popularWatchExercises(
+            from: [syncedLessPopular, syncedPopular],
+            limit: 2,
+            excludingCanonical: [],
+            usageCounts: [:],
+            lastUsedTimestamps: [:]
+        )
+
+        #expect(popular.map(\.id) == ["bench-press", "squat"])
+    }
+
     @Test("snapshotFromExercise uses resolved defaults in template entry")
     func snapshotFromExerciseUsesResolvedDefaults() {
         let runID = UUID().uuidString

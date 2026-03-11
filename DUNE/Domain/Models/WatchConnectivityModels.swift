@@ -46,6 +46,8 @@ struct WatchExerciseInfo: Codable, Sendable {
     let defaultReps: Int?
     let defaultWeightKg: Double?
     let isPreferred: Bool
+    let lastUsedAt: Date?
+    let usageCount: Int
     let equipment: String?
     let cardioSecondaryUnit: String?
     let aliases: [String]?
@@ -58,6 +60,8 @@ struct WatchExerciseInfo: Codable, Sendable {
         defaultReps: Int?,
         defaultWeightKg: Double?,
         isPreferred: Bool = false,
+        lastUsedAt: Date? = nil,
+        usageCount: Int = 0,
         equipment: String?,
         cardioSecondaryUnit: String?,
         aliases: [String]? = nil
@@ -69,6 +73,8 @@ struct WatchExerciseInfo: Codable, Sendable {
         self.defaultReps = defaultReps
         self.defaultWeightKg = defaultWeightKg
         self.isPreferred = isPreferred
+        self.lastUsedAt = lastUsedAt
+        self.usageCount = usageCount
         self.equipment = equipment
         self.cardioSecondaryUnit = cardioSecondaryUnit
         self.aliases = aliases
@@ -82,6 +88,8 @@ struct WatchExerciseInfo: Codable, Sendable {
         case defaultReps
         case defaultWeightKg
         case isPreferred
+        case lastUsedAt
+        case usageCount
         case equipment
         case cardioSecondaryUnit
         case aliases
@@ -96,6 +104,8 @@ struct WatchExerciseInfo: Codable, Sendable {
         defaultReps = try container.decodeIfPresent(Int.self, forKey: .defaultReps)
         defaultWeightKg = try container.decodeIfPresent(Double.self, forKey: .defaultWeightKg)
         isPreferred = try container.decodeIfPresent(Bool.self, forKey: .isPreferred) ?? false
+        lastUsedAt = try container.decodeIfPresent(Date.self, forKey: .lastUsedAt)
+        usageCount = try container.decodeIfPresent(Int.self, forKey: .usageCount) ?? 0
         equipment = try container.decodeIfPresent(String.self, forKey: .equipment)
         cardioSecondaryUnit = try container.decodeIfPresent(String.self, forKey: .cardioSecondaryUnit)
         aliases = try container.decodeIfPresent([String].self, forKey: .aliases)

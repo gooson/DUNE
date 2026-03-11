@@ -30,8 +30,10 @@ final class WatchSessionManager: NSObject {
     private var messageHandlerTask: Task<Void, Never>?
     /// Last template snapshot pushed to Watch (used to respond to pull-requests).
     private var cachedWorkoutTemplates: [WatchWorkoutTemplateInfo] = []
-    /// Preferred exercise IDs already normalized to visible representative IDs.
-    private var cachedPreferredExerciseIDs: Set<String> = []
+    /// Last exercise library snapshot pushed to Watch (used for cache fallback).
+    private var cachedExerciseLibrary: [WatchExerciseInfo] = []
+    /// Persistent source for watch re-sync requests after reinstall/background relaunch.
+    private var registeredModelContainer: ModelContainer?
 
     private override init() {
         super.init()
@@ -45,6 +47,10 @@ final class WatchSessionManager: NSObject {
         let session = WCSession.default
         session.delegate = self
         session.activate()
+    }
+
+    func registerModelContainer(_ modelContainer: ModelContainer) {
+        registeredModelContainer = modelContainer
     }
 
     /// Send current workout state to Watch for display
@@ -95,6 +101,7 @@ final class WatchSessionManager: NSObject {
     /// Send exercise library subset to Watch for offline use.
     /// Also includes global workout settings (rest time) in the same context.
     func transferExerciseLibrary(_ exercises: [WatchExerciseInfo]) {
+        cachedExerciseLibrary = exercises
         guard WCSession.default.activationState == .activated else { return }
 
         do {
@@ -198,63 +205,63 @@ final class WatchSessionManager: NSObject {
 
     /// Refreshes preferred exercise snapshot from SwiftData, then syncs full exercise library.
     func syncExerciseLibraryToWatch(using modelContext: ModelContext) {
-        cachedPreferredExerciseIDs = Self.preferredExerciseIDs(using: modelContext)
-        syncExerciseLibraryToWatch()
+        transferExerciseLibrary(Self.makeExerciseLibraryPayload(using: modelContext))
     }
 
     /// Refreshes preferred exercise snapshot off the main actor, then syncs full exercise library.
     func syncExerciseLibraryToWatch(using modelContainer: ModelContainer) {
         Task(priority: .utility) {
-            let preferredExerciseIDs = await Self.preferredExerciseIDs(using: modelContainer)
+            let payload = await Self.makeExerciseLibraryPayload(using: modelContainer)
             guard !Task.isCancelled else { return }
-            cachedPreferredExerciseIDs = preferredExerciseIDs
-            syncExerciseLibraryToWatch()
+            transferExerciseLibrary(payload)
         }
     }
 
-    /// Converts the full exercise library to WatchExerciseInfo and sends via applicationContext.
     func syncExerciseLibraryToWatch() {
-        let preferredExerciseIDs = cachedPreferredExerciseIDs
-        let definitions = ExerciseLibraryService.shared.allExercises()
-        let watchExercises = definitions.map { def in
-            WatchExerciseInfo(
-                id: def.id,
-                name: def.localizedName,
-                inputType: def.inputType.rawValue,
-                defaultSets: WorkoutDefaults.setCount,
-                defaultReps: (def.inputType == .setsRepsWeight || def.inputType == .setsReps) ? 10 : nil,
-                defaultWeightKg: nil,
-                isPreferred: preferredExerciseIDs.contains(def.id),
-                // Map generic catch-all Equipment cases to nil so Watch shows SF Symbol fallback
-                // instead of treating them identically to unknown/corrupted rawValues.
-                equipment: def.equipment == .other ? nil : def.equipment.rawValue,
-                cardioSecondaryUnit: def.cardioSecondaryUnit?.rawValue,
-                aliases: def.aliases
-            )
+        if let registeredModelContainer {
+            syncExerciseLibraryToWatch(using: registeredModelContainer)
+            return
         }
-        transferExerciseLibrary(watchExercises)
+
+        if cachedExerciseLibrary.isEmpty {
+            transferExerciseLibrary(Self.makeFallbackExerciseLibraryPayload())
+            return
+        }
+
+        transferExerciseLibrary(cachedExerciseLibrary)
     }
 
-    private nonisolated static func preferredExerciseIDs(using modelContainer: ModelContainer) async -> Set<String> {
+    private nonisolated static func makeExerciseLibraryPayload(using modelContainer: ModelContainer) async -> [WatchExerciseInfo] {
         let context = ModelContext(modelContainer)
-        return preferredExerciseIDs(using: context)
+        return makeExerciseLibraryPayload(using: context)
     }
 
-    private nonisolated static func preferredExerciseIDs(using modelContext: ModelContext) -> Set<String> {
-        let descriptor = FetchDescriptor<ExerciseDefaultRecord>()
+    private nonisolated static func makeExerciseLibraryPayload(using modelContext: ModelContext) -> [WatchExerciseInfo] {
+        let defaultDescriptor = FetchDescriptor<ExerciseDefaultRecord>()
+        let exerciseRecordDescriptor = FetchDescriptor<ExerciseRecord>()
+
         do {
-            let library = ExerciseLibraryService.shared
-            let records = try modelContext.fetch(descriptor)
-            return Set(records.compactMap { record in
-                guard record.isPreferred else { return nil }
-                let representativeID = library.representativeExercise(byID: record.exerciseDefinitionID)?.id
-                    ?? record.exerciseDefinitionID
-                return representativeID.isEmpty ? nil : representativeID
-            })
+            let defaultRecords = try modelContext.fetch(defaultDescriptor)
+            let exerciseRecords = try modelContext.fetch(exerciseRecordDescriptor)
+            return WatchExerciseLibraryPayloadBuilder.makePayload(
+                definitions: ExerciseLibraryService.shared.allExercises(),
+                defaultRecords: defaultRecords,
+                exerciseRecords: exerciseRecords,
+                library: ExerciseLibraryService.shared
+            )
         } catch {
-            AppLogger.ui.error("Failed to fetch preferred exercises for Watch sync: \(error.localizedDescription)")
-            return []
+            AppLogger.ui.error("Failed to fetch exercise library metadata for Watch sync: \(error.localizedDescription)")
+            return makeFallbackExerciseLibraryPayload()
         }
+    }
+
+    private nonisolated static func makeFallbackExerciseLibraryPayload() -> [WatchExerciseInfo] {
+        WatchExerciseLibraryPayloadBuilder.makePayload(
+            definitions: ExerciseLibraryService.shared.allExercises(),
+            defaultRecords: [],
+            exerciseRecords: [],
+            library: ExerciseLibraryService.shared
+        )
     }
 
     private var currentThemeRawValue: String {
@@ -302,8 +309,13 @@ extension WatchSessionManager: WCSessionDelegate {
             // Auto-sync exercise library to Watch on successful activation
             if activationState == .activated, session.isWatchAppInstalled {
                 loadCachedWatchContext()
-                syncExerciseLibraryToWatch()
-                transferWorkoutTemplates(cachedWorkoutTemplates)
+                if let registeredModelContainer {
+                    syncExerciseLibraryToWatch(using: registeredModelContainer)
+                    syncWorkoutTemplatesToWatch(using: registeredModelContainer)
+                } else {
+                    syncExerciseLibraryToWatch()
+                    transferWorkoutTemplates(cachedWorkoutTemplates)
+                }
             }
         }
     }
@@ -387,10 +399,18 @@ extension WatchSessionManager {
 
     private func handleDecodedMessage(_ message: ParsedWatchIncomingMessage) {
         if message.requestExerciseLibrarySync {
-            syncExerciseLibraryToWatch()
+            if let registeredModelContainer {
+                syncExerciseLibraryToWatch(using: registeredModelContainer)
+            } else {
+                syncExerciseLibraryToWatch()
+            }
         }
         if message.requestWorkoutTemplateSync {
-            transferWorkoutTemplates(cachedWorkoutTemplates)
+            if let registeredModelContainer {
+                syncWorkoutTemplatesToWatch(using: registeredModelContainer)
+            } else {
+                transferWorkoutTemplates(cachedWorkoutTemplates)
+            }
         }
 
         // Handle workout completion from Watch
