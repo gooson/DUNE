@@ -12,6 +12,8 @@ protocol NaturalLanguageWorkoutGenerating: Sendable {
 enum WorkoutTemplateGenerationError: Error, Sendable, Equatable {
     case unavailable
     case emptyPrompt
+    case ambiguousPrompt
+    case unsupportedRequest
     case noExercisesMatched
     case invalidTemplate
     case generationFailed
