@@ -1417,7 +1417,9 @@ struct OceanLegacyArcticTabWaveBackground: View {
         }
         .ignoresSafeArea()
         .onReceive(NotificationCenter.default.publisher(for: .NSProcessInfoPowerStateDidChange)) { _ in
-            isLowPowerModeEnabled = ProcessInfo.processInfo.isLowPowerModeEnabled
+            Task { @MainActor in
+                isLowPowerModeEnabled = ProcessInfo.processInfo.isLowPowerModeEnabled
+            }
         }
     }
 }
@@ -1637,7 +1639,9 @@ struct OceanLegacyArcticDetailWaveBackground: View {
         }
         .ignoresSafeArea()
         .onReceive(NotificationCenter.default.publisher(for: .NSProcessInfoPowerStateDidChange)) { _ in
-            isLowPowerModeEnabled = ProcessInfo.processInfo.isLowPowerModeEnabled
+            Task { @MainActor in
+                isLowPowerModeEnabled = ProcessInfo.processInfo.isLowPowerModeEnabled
+            }
         }
     }
 }
@@ -1824,7 +1828,9 @@ struct OceanLegacyArcticSheetWaveBackground: View {
         }
         .ignoresSafeArea()
         .onReceive(NotificationCenter.default.publisher(for: .NSProcessInfoPowerStateDidChange)) { _ in
-            isLowPowerModeEnabled = ProcessInfo.processInfo.isLowPowerModeEnabled
+            Task { @MainActor in
+                isLowPowerModeEnabled = ProcessInfo.processInfo.isLowPowerModeEnabled
+            }
         }
     }
 }

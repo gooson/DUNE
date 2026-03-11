@@ -52,7 +52,7 @@ struct VisionImmersiveExperienceView: View {
             startAnimationsIfNeeded(restartTimeline: true)
         }
         .onReceive(NotificationCenter.default.publisher(for: .simulatorAdvancedMockDataDidChange)) { _ in
-            Task {
+            Task { @MainActor in
                 await viewModel.reload()
                 startAnimationsIfNeeded(restartTimeline: true)
             }
