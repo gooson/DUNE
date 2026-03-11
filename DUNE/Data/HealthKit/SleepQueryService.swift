@@ -9,6 +9,10 @@ protocol SleepQuerying: Sendable {
 
 struct SleepQueryService: SleepQuerying, Sendable {
     private let manager: HealthKitManager
+    private static let sleepQueryStartOffsetHours = -12
+    private static let primarySleepWindowEndOffsetHours = 12
+    private static let extendedSleepWindowEndOffsetHours = 18
+    private static let lateWakeContinuationGap: TimeInterval = 90 * 60
 
     init(manager: HealthKitManager) {
         self.manager = manager
@@ -21,15 +25,13 @@ struct SleepQueryService: SleepQuerying, Sendable {
         guard manager.isAvailable else { return [] }
         try await manager.ensureNotDenied(for: HKCategoryType(.sleepAnalysis))
         let calendar = Calendar.current
-        // Sleep data typically starts the evening before
-        guard let sleepWindowStart = calendar.date(byAdding: .hour, value: -12, to: calendar.startOfDay(for: date)),
-              let sleepWindowEnd = calendar.date(byAdding: .hour, value: 12, to: calendar.startOfDay(for: date)) else {
-            return []
+        guard let queryWindow = Self.sleepQueryWindow(for: date, calendar: calendar) else {
+            return [] 
         }
 
         let predicate = HKQuery.predicateForSamples(
-            withStart: sleepWindowStart,
-            end: sleepWindowEnd,
+            withStart: queryWindow.start,
+            end: queryWindow.extendedEnd,
             options: .strictStartDate
         )
 
@@ -42,7 +44,67 @@ struct SleepQueryService: SleepQuerying, Sendable {
 
         // Deduplicate with time-range-aware cross-source handling:
         // Watch data is preferred, but non-Watch fills gaps where Watch has no coverage.
-        return deduplicateAndConvert(samples)
+        let stages = deduplicateAndConvert(samples)
+        return Self.trimLateWakeContinuation(
+            stages,
+            primaryWindowEnd: queryWindow.primaryEnd
+        )
+    }
+
+    // Keep the existing noon-anchored sleep day, but query a few more hours so
+    // late wake stages after 12:00 are still available for trimming.
+    static func sleepQueryWindow(
+        for date: Date,
+        calendar: Calendar = .current
+    ) -> (start: Date, primaryEnd: Date, extendedEnd: Date)? {
+        let startOfDay = calendar.startOfDay(for: date)
+        guard
+            let start = calendar.date(
+                byAdding: .hour,
+                value: Self.sleepQueryStartOffsetHours,
+                to: startOfDay
+            ),
+            let primaryEnd = calendar.date(
+                byAdding: .hour,
+                value: Self.primarySleepWindowEndOffsetHours,
+                to: startOfDay
+            ),
+            let extendedEnd = calendar.date(
+                byAdding: .hour,
+                value: Self.extendedSleepWindowEndOffsetHours,
+                to: startOfDay
+            )
+        else {
+            return nil
+        }
+
+        return (start: start, primaryEnd: primaryEnd, extendedEnd: extendedEnd)
+    }
+
+    // Only extend beyond the noon anchor when the later stages are still part of
+    // the same contiguous sleep session. This avoids pulling in afternoon naps.
+    static func trimLateWakeContinuation(
+        _ stages: [SleepStage],
+        primaryWindowEnd: Date,
+        maxGap: TimeInterval = SleepQueryService.lateWakeContinuationGap
+    ) -> [SleepStage] {
+        guard !stages.isEmpty else { return [] }
+        guard let lastPrimaryIndex = stages.lastIndex(where: { $0.startDate < primaryWindowEnd }) else {
+            return stages
+        }
+
+        var endIndex = lastPrimaryIndex
+        var previousEnd = stages[lastPrimaryIndex].endDate
+
+        for index in stages.index(after: lastPrimaryIndex)..<stages.endIndex {
+            let nextStage = stages[index]
+            let gap = nextStage.startDate.timeIntervalSince(previousEnd)
+            guard gap <= maxGap else { break }
+            endIndex = index
+            previousEnd = nextStage.endDate
+        }
+
+        return Array(stages[...endIndex])
     }
 
     private func mapSleepCategory(_ value: Int) -> SleepStage.Stage? {

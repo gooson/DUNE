@@ -5,6 +5,82 @@ import Foundation
 @Suite("SleepQueryService interval helpers")
 struct SleepQueryServiceTests {
 
+    // MARK: - sleep query window
+
+    @Test("Sleep query window extends beyond noon for late wake stages")
+    func sleepQueryWindowExtendsPastNoon() throws {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(secondsFromGMT: 0) ?? .current
+
+        let referenceDate = try #require(makeDate(2026, 3, 12, 8, 0, calendar: calendar))
+        let window = try #require(SleepQueryService.sleepQueryWindow(for: referenceDate, calendar: calendar))
+        let lateWakeStageEnd = try #require(makeDate(2026, 3, 12, 12, 25, calendar: calendar))
+
+        #expect(window.primaryEnd == makeDate(2026, 3, 12, 12, 0, calendar: calendar))
+        #expect(window.extendedEnd >= lateWakeStageEnd)
+    }
+
+    @Test("Late wake continuation keeps post-noon stages from the same session")
+    func trimLateWakeContinuationKeepsContiguousStages() throws {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(secondsFromGMT: 0) ?? .current
+
+        let primaryWindowEnd = try #require(makeDate(2026, 3, 12, 12, 0, calendar: calendar))
+        let stages = [
+            sleepStage(
+                .core,
+                start: try #require(makeDate(2026, 3, 12, 8, 14, calendar: calendar)),
+                end: try #require(makeDate(2026, 3, 12, 12, 0, calendar: calendar))
+            ),
+            sleepStage(
+                .rem,
+                start: try #require(makeDate(2026, 3, 12, 12, 0, calendar: calendar)),
+                end: try #require(makeDate(2026, 3, 12, 12, 25, calendar: calendar))
+            ),
+        ]
+
+        let trimmed = SleepQueryService.trimLateWakeContinuation(
+            stages,
+            primaryWindowEnd: primaryWindowEnd
+        )
+
+        #expect(trimmed.count == 2)
+        #expect(trimmed.reduce(0.0) { $0 + $1.duration } / 60.0 == 251)
+    }
+
+    @Test("Late wake continuation excludes separated afternoon naps")
+    func trimLateWakeContinuationDropsSeparatedNap() throws {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(secondsFromGMT: 0) ?? .current
+
+        let primaryWindowEnd = try #require(makeDate(2026, 3, 12, 12, 0, calendar: calendar))
+        let stages = [
+            sleepStage(
+                .core,
+                start: try #require(makeDate(2026, 3, 12, 9, 0, calendar: calendar)),
+                end: try #require(makeDate(2026, 3, 12, 11, 55, calendar: calendar))
+            ),
+            sleepStage(
+                .rem,
+                start: try #require(makeDate(2026, 3, 12, 11, 55, calendar: calendar)),
+                end: try #require(makeDate(2026, 3, 12, 12, 25, calendar: calendar))
+            ),
+            sleepStage(
+                .core,
+                start: try #require(makeDate(2026, 3, 12, 14, 30, calendar: calendar)),
+                end: try #require(makeDate(2026, 3, 12, 14, 50, calendar: calendar))
+            ),
+        ]
+
+        let trimmed = SleepQueryService.trimLateWakeContinuation(
+            stages,
+            primaryWindowEnd: primaryWindowEnd
+        )
+
+        #expect(trimmed.count == 2)
+        #expect(trimmed.last?.endDate == makeDate(2026, 3, 12, 12, 25, calendar: calendar))
+    }
+
     // MARK: - mergedIntervals
 
     @Test("Empty intervals returns empty")
@@ -200,5 +276,33 @@ struct SleepQueryServiceTests {
         // 5-8h
         #expect(result[2].0 == base.addingTimeInterval(18000))
         #expect(result[2].1 == base.addingTimeInterval(28800))
+    }
+
+    private func makeDate(
+        _ year: Int,
+        _ month: Int,
+        _ day: Int,
+        _ hour: Int,
+        _ minute: Int,
+        calendar: Calendar
+    ) -> Date? {
+        calendar.date(from: DateComponents(
+            calendar: calendar,
+            timeZone: calendar.timeZone,
+            year: year,
+            month: month,
+            day: day,
+            hour: hour,
+            minute: minute
+        ))
+    }
+
+    private func sleepStage(_ stage: SleepStage.Stage, start: Date, end: Date) -> SleepStage {
+        SleepStage(
+            stage: stage,
+            duration: end.timeIntervalSince(start),
+            startDate: start,
+            endDate: end
+        )
     }
 }
