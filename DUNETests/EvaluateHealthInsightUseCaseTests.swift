@@ -4,6 +4,30 @@ import Testing
 
 @Suite("EvaluateHealthInsightUseCase")
 struct EvaluateHealthInsightUseCaseTests {
+    private let calendar = Calendar.current
+
+    private func makeSleepDebtAnalysis(
+        weeklyDeficitMinutes: Double = 210,
+        level: SleepDeficitAnalysis.DeficitLevel = .mild,
+        todayDeficitMinutes: Double = 30,
+        todayOffsetDays: Int = 0
+    ) -> SleepDeficitAnalysis {
+        let today = calendar.startOfDay(for: Date())
+        let applicableDate = calendar.date(byAdding: .day, value: todayOffsetDays, to: today) ?? today
+        let previousDate = calendar.date(byAdding: .day, value: -1, to: applicableDate) ?? applicableDate
+
+        return SleepDeficitAnalysis(
+            shortTermAverage: 480,
+            longTermAverage: 470,
+            weeklyDeficit: weeklyDeficitMinutes,
+            dailyDeficits: [
+                .init(date: previousDate, actualMinutes: 420, deficitMinutes: 60),
+                .init(date: applicableDate, actualMinutes: 450, deficitMinutes: todayDeficitMinutes)
+            ],
+            level: level,
+            dataPointCount: 14
+        )
+    }
 
     // MARK: - HRV Anomaly
 
@@ -129,8 +153,7 @@ struct EvaluateHealthInsightUseCaseTests {
     @Test("SleepDebt: creates attention insight when debt is present")
     func sleepDebtDetected() {
         let result = EvaluateHealthInsightUseCase.evaluateSleepDebt(
-            weeklyDeficitMinutes: 210,
-            level: .mild
+            analysis: makeSleepDebtAnalysis()
         )
         #expect(result != nil)
         #expect(result?.type == .sleepDebt)
@@ -140,8 +163,26 @@ struct EvaluateHealthInsightUseCaseTests {
     @Test("SleepDebt: returns nil for good level")
     func sleepDebtGoodLevel() {
         let result = EvaluateHealthInsightUseCase.evaluateSleepDebt(
-            weeklyDeficitMinutes: 90,
-            level: .good
+            analysis: makeSleepDebtAnalysis(
+                weeklyDeficitMinutes: 90,
+                level: .good
+            )
+        )
+        #expect(result == nil)
+    }
+
+    @Test("SleepDebt: returns nil when today's deficit is zero")
+    func sleepDebtTodayDeficitZero() {
+        let result = EvaluateHealthInsightUseCase.evaluateSleepDebt(
+            analysis: makeSleepDebtAnalysis(todayDeficitMinutes: 0)
+        )
+        #expect(result == nil)
+    }
+
+    @Test("SleepDebt: returns nil when deficit applies to a prior day")
+    func sleepDebtPriorDayOnly() {
+        let result = EvaluateHealthInsightUseCase.evaluateSleepDebt(
+            analysis: makeSleepDebtAnalysis(todayOffsetDays: -1)
         )
         #expect(result == nil)
     }
