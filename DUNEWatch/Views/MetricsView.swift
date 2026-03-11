@@ -43,6 +43,7 @@ struct MetricsView: View {
         }
         .onChange(of: workoutManager.currentExerciseIndex) { _, _ in
             lastRestTimerTotal = nil
+            rpe = nil
             prefillFromEntry()
             refreshPreviousSetsCache()
         }
