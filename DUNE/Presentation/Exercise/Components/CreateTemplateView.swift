@@ -13,6 +13,7 @@ enum TemplateFormMode {
 struct TemplateFormView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.appTheme) private var theme
 
     let mode: TemplateFormMode
 
@@ -149,10 +150,16 @@ struct TemplateFormView: View {
                     await generateTemplateFromPrompt()
                 }
             } label: {
-                Label("Generate Template", systemImage: "wand.and.stars")
+                HStack(spacing: DS.Spacing.xs) {
+                    Image(systemName: "wand.and.stars")
+                        .symbolRenderingMode(.monochrome)
+                    Text("Generate Template")
+                }
+                .font(.subheadline.weight(.semibold))
             }
             .disabled(!canGenerateTemplate)
             .buttonStyle(.borderedProminent)
+            .tint(theme.accentColor)
             .accessibilityIdentifier("template-form-ai-generate")
 
             if isGeneratingTemplate {
