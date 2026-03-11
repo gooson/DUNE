@@ -183,6 +183,10 @@ targets:
       - path: Domain/Models/WatchConnectivityModels.swift
       - path: Domain/Models/HealthMetric.swift
       - path: Domain/Models/HeartRateZone.swift
+      - path: Domain/Models/WorkoutIntensity.swift
+      - path: Domain/UseCases/WorkoutIntensityService.swift
+      # Shared Presentation helpers for set-level RPE
+      - path: Presentation/Shared/Extensions/ExerciseRecord+SetRPE.swift
       # Shared HealthKit mapping (needed for cardio workout configuration)
       - path: Data/HealthKit/WorkoutActivityType+HealthKit.swift
       - path: Data/HealthKit/ExerciseCategory+HealthKit.swift

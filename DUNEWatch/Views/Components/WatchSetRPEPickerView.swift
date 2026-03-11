@@ -1,7 +1,8 @@
 import SwiftUI
+import WatchKit
 
-/// Compact horizontal RPE picker for individual sets (6.0–10.0, 0.5 step).
-struct SetRPEPickerView: View {
+/// Compact 3×3 grid RPE picker for watchOS (Modified Borg scale 6.0–10.0, 0.5 step).
+struct WatchSetRPEPickerView: View {
     @Binding var rpe: Double?
 
     private static let rpeColors: [Color] = [
@@ -16,10 +17,12 @@ struct SetRPEPickerView: View {
         DS.Color.negative,     // 10.0
     ]
 
+    private let columns = Array(repeating: GridItem(.flexible(), spacing: DS.Spacing.xs), count: 3)
+
     var body: some View {
-        VStack(spacing: DS.Spacing.sm) {
+        VStack(spacing: DS.Spacing.xs) {
             rpeHeader
-            rpeButtons
+            rpeGrid
         }
     }
 
@@ -28,24 +31,25 @@ struct SetRPEPickerView: View {
     private var rpeHeader: some View {
         HStack {
             Text("RPE")
-                .font(.caption.weight(.semibold))
+                .font(.caption2.weight(.semibold))
                 .foregroundStyle(DS.Color.textSecondary)
 
             Spacer()
 
             if let rpe {
                 let level = RPELevel(value: rpe)
-                Text("\(level.rir) reps left")
+                Text(level.displayLabel)
                     .font(.caption2)
                     .foregroundStyle(DS.Color.textSecondary)
             }
 
             if rpe != nil {
                 Button {
-                    withAnimation(DS.Animation.snappy) { self.rpe = nil }
+                    withAnimation(.easeInOut(duration: 0.2)) { self.rpe = nil }
+                    WKInterfaceDevice.current().play(.click)
                 } label: {
                     Image(systemName: "xmark.circle.fill")
-                        .font(.caption)
+                        .font(.caption2)
                         .foregroundStyle(DS.Color.textTertiary)
                 }
                 .buttonStyle(.plain)
@@ -53,10 +57,10 @@ struct SetRPEPickerView: View {
         }
     }
 
-    // MARK: - Buttons
+    // MARK: - Grid
 
-    private var rpeButtons: some View {
-        HStack(spacing: DS.Spacing.xs) {
+    private var rpeGrid: some View {
+        LazyVGrid(columns: columns, spacing: DS.Spacing.xs) {
             ForEach(Array(RPELevel.levels.enumerated()), id: \.offset) { index, level in
                 rpeButton(level: level, color: Self.rpeColors[index])
             }
@@ -67,9 +71,10 @@ struct SetRPEPickerView: View {
         let isSelected = rpe == level
 
         return Button {
-            withAnimation(DS.Animation.snappy) {
-                rpe = level
+            withAnimation(.easeInOut(duration: 0.2)) {
+                rpe = isSelected ? nil : level
             }
+            WKInterfaceDevice.current().play(.click)
         } label: {
             Text(RPELevel.format(level))
                 .font(.caption2.weight(isSelected ? .bold : .medium).monospacedDigit())
@@ -82,31 +87,27 @@ struct SetRPEPickerView: View {
                 )
         }
         .buttonStyle(.plain)
-        .sensoryFeedback(.selection, trigger: isSelected)
     }
-
 }
 
-#Preview("Set RPE Picker") {
+#Preview("Watch RPE Picker") {
     struct PreviewWrapper: View {
         @State private var rpe: Double? = 8.0
 
         var body: some View {
-            VStack(spacing: DS.Spacing.xl) {
-                SetRPEPickerView(rpe: $rpe)
+            ScrollView {
+                WatchSetRPEPickerView(rpe: $rpe)
                     .padding(.horizontal)
 
                 if let rpe {
-                    let level = RPELevel(value: rpe)
-                    Text("\(level.displayLabel) — \(level.rir) RIR")
-                        .font(.caption)
+                    Text("\(RPELevel(value: rpe).displayLabel)")
+                        .font(.caption2)
                 } else {
-                    Text("No RPE selected")
-                        .font(.caption)
+                    Text("No RPE")
+                        .font(.caption2)
                         .foregroundStyle(.secondary)
                 }
             }
-            .padding()
         }
     }
 

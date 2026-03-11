@@ -198,6 +198,12 @@ struct SetInputSheet: View {
                         }
 
                         Spacer()
+
+                        if let rpe = set.rpe {
+                            Text("RPE \(rpe, specifier: rpe.truncatingRemainder(dividingBy: 1) == 0 ? "%.0f" : "%.1f")")
+                                .font(.caption2)
+                                .foregroundStyle(DS.Color.textSecondary)
+                        }
                     }
                     .accessibilityIdentifier(
                         WatchWorkoutSurfaceAccessibility.setInputPreviousSetRow(set.setNumber)

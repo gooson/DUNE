@@ -453,13 +453,17 @@ struct SessionSummaryView: View {
                     setType: .working,
                     weight: setData.weight,
                     reps: setData.reps,
-                    isCompleted: true
+                    isCompleted: true,
+                    rpe: setData.rpe
                 )
                 workoutSet.exerciseRecord = record
                 modelContext.insert(workoutSet)
                 workoutSets.append(workoutSet)
             }
             record.sets = workoutSets
+
+            // Compute session effort from set-level RPE (same as iOS)
+            record.applySetBasedRPE()
         }
     }
 
@@ -521,7 +525,8 @@ struct SessionSummaryView: View {
                     reps: set.reps,
                     duration: nil,
                     restDuration: set.restDuration,
-                    isCompleted: true
+                    isCompleted: true,
+                    rpe: set.rpe
                 )
             }
 

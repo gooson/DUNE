@@ -134,6 +134,13 @@ struct RPELevel: Sendable, Hashable {
         guard range.contains(snapped) else { return nil }
         return snapped
     }
+
+    /// Format RPE value for display (e.g. "8" or "8.5").
+    static func format(_ value: Double) -> String {
+        value.truncatingRemainder(dividingBy: 1) == 0
+            ? String(format: "%.0f", value)
+            : String(format: "%.1f", value)
+    }
 }
 
 // MARK: - Effort Suggestion

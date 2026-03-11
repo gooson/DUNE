@@ -10,7 +10,9 @@ struct MetricsView: View {
 
     @State private var weight: Double = 0
     @State private var reps: Int = WatchSetInputPolicy.defaultReps
+    @State private var rpe: Double?
     @State private var showInputSheet = false
+    @State private var showRPESheet = false
     @State private var showRestTimer = false
     @State private var showNextExercise = false
     @State private var showEndConfirmation = false
@@ -66,6 +68,10 @@ struct MetricsView: View {
                 previousSets: cachedPreviousSets
             )
         }
+        .sheet(isPresented: $showRPESheet) {
+            WatchSetRPEPickerView(rpe: $rpe)
+                .padding(.horizontal, DS.Spacing.md)
+        }
         .confirmationDialog(
             "End Workout?",
             isPresented: $showEndConfirmation,
@@ -117,6 +123,9 @@ struct MetricsView: View {
 
             // Weight × Reps — tap to edit
             inputCard
+
+            // RPE — tap to select
+            rpeButton
 
             // Complete Set button (large touch target)
             completeButton
@@ -231,6 +240,46 @@ struct MetricsView: View {
         }
         .buttonStyle(.plain)
         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionMetricsInputCard)
+    }
+
+    // MARK: - RPE Button
+
+    private var rpeButton: some View {
+        Button {
+            showRPESheet = true
+        } label: {
+            HStack(spacing: DS.Spacing.xs) {
+                Text("RPE")
+                    .font(.caption2.weight(.semibold))
+                    .foregroundStyle(DS.Color.textSecondary)
+
+                Spacer()
+
+                if let rpe {
+                    Text(RPELevel.format(rpe))
+                        .font(.caption.weight(.bold).monospacedDigit())
+                        .foregroundStyle(DS.Color.positive)
+                    Text(RPELevel(value: rpe).displayLabel)
+                        .font(.caption2)
+                        .foregroundStyle(DS.Color.textSecondary)
+                } else {
+                    Text("Tap to set")
+                        .font(.caption2)
+                        .foregroundStyle(DS.Color.textTertiary)
+                }
+
+                Image(systemName: "chevron.right")
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+            }
+            .padding(.vertical, DS.Spacing.xs)
+            .padding(.horizontal, DS.Spacing.sm)
+            .background {
+                RoundedRectangle(cornerRadius: DS.Radius.sm)
+                    .fill(DS.Color.textSecondary.opacity(DS.Opacity.border))
+            }
+        }
+        .buttonStyle(.plain)
     }
 
     // MARK: - Complete Button
@@ -371,7 +420,8 @@ struct MetricsView: View {
     private func executeCompleteSet() {
         let wasLastSet = workoutManager.isLastSet
 
-        workoutManager.completeSet(weight: weight > 0 ? weight : nil, reps: reps > 0 ? reps : nil)
+        workoutManager.completeSet(weight: weight > 0 ? weight : nil, reps: reps > 0 ? reps : nil, rpe: rpe)
+        rpe = nil
         refreshPreviousSetsCache()
 
         // Haptic on set completion
