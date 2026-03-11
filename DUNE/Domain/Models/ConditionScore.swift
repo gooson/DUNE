@@ -124,6 +124,10 @@ struct ConditionScoreDetail: Sendable, Hashable {
     let todayRHR: Double?
     /// Yesterday's resting heart rate (bpm), nil if unavailable
     let yesterdayRHR: Double?
+    /// Effective RHR for display (may be from a recent day when todayRHR is nil)
+    let displayRHR: Double?
+    /// Date of the displayRHR value
+    let displayRHRDate: Date?
 }
 
 struct BaselineStatus: Sendable {

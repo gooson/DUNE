@@ -186,4 +186,36 @@ struct CalculateConditionScoreUseCaseTests {
         #expect(output.score?.detail?.todayRHR == nil)
         #expect(output.score?.detail?.yesterdayRHR == nil)
     }
+
+    // MARK: - Display RHR Fallback
+
+    @Test("Detail carries displayRHR when todayRHR is nil")
+    func displayRHRFallback() {
+        let samples = (0..<7).map { day in
+            HRVSample(value: 50, date: Calendar.current.date(byAdding: .day, value: -day, to: Date())!)
+        }
+        let rhrDate = Calendar.current.date(byAdding: .day, value: -2, to: Date())!
+        let output = sut.execute(input: .init(
+            hrvSamples: samples,
+            todayRHR: nil,
+            yesterdayRHR: nil,
+            displayRHR: 62,
+            displayRHRDate: rhrDate
+        ))
+        #expect(output.score?.detail?.todayRHR == nil)
+        #expect(output.score?.detail?.displayRHR == 62)
+        #expect(output.score?.detail?.displayRHRDate == rhrDate)
+    }
+
+    @Test("Detail displayRHR defaults to nil when not provided")
+    func displayRHRDefaultsNil() {
+        let samples = (0..<7).map { day in
+            HRVSample(value: 50, date: Calendar.current.date(byAdding: .day, value: -day, to: Date())!)
+        }
+        let output = sut.execute(input: .init(
+            hrvSamples: samples, todayRHR: nil, yesterdayRHR: nil
+        ))
+        #expect(output.score?.detail?.displayRHR == nil)
+        #expect(output.score?.detail?.displayRHRDate == nil)
+    }
 }

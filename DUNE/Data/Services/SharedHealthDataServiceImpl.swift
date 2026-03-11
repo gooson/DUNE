@@ -242,11 +242,27 @@ actor SharedHealthDataServiceImpl: SharedHealthDataService {
 
         // Only use actual today's RHR for condition change comparison.
         // Historical RHR fallback would compare non-adjacent days (Correction #24)
+        // Effective RHR for display: today's if available, otherwise latest within 7 days
+        let effectiveRHR: Double?
+        let effectiveRHRDate: Date?
+        if let todayRHR {
+            effectiveRHR = todayRHR
+            effectiveRHRDate = referenceDate
+        } else if let latestRHR {
+            effectiveRHR = latestRHR.value
+            effectiveRHRDate = latestRHR.date
+        } else {
+            effectiveRHR = nil
+            effectiveRHRDate = nil
+        }
+
         let output = conditionScoreUseCase.execute(
             input: .init(
                 hrvSamples: conditionSamples,
                 todayRHR: todayRHR,
-                yesterdayRHR: yesterdayRHR
+                yesterdayRHR: yesterdayRHR,
+                displayRHR: effectiveRHR,
+                displayRHRDate: effectiveRHRDate
             )
         )
 

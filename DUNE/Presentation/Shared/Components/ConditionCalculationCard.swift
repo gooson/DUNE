@@ -34,17 +34,22 @@ struct ConditionCalculationCard: View {
         self.rawScoreText = String(format: "%.1f", detail.rawScore)
         self.dateText = Self.formatDate(detail.todayDate)
 
-        // RHR value display
-        if let todayRHR = detail.todayRHR {
+        // RHR value display: prefer todayRHR, fallback to displayRHR (latest available)
+        let effectiveRHR = detail.todayRHR ?? detail.displayRHR
+        if let rhr = effectiveRHR {
             self.hasRHRData = true
             self.showRHRDivider = true
-            if let yesterdayRHR = detail.yesterdayRHR {
-                let change = todayRHR - yesterdayRHR
+            if let yesterdayRHR = detail.yesterdayRHR, detail.todayRHR != nil {
+                let change = rhr - yesterdayRHR
                 let sign = change > 0 ? "+" : ""
-                self.rhrValueText = String(format: "%.0f → %.0f bpm", yesterdayRHR, todayRHR)
+                self.rhrValueText = String(format: "%.0f → %.0f bpm", yesterdayRHR, rhr)
                 self.rhrValueSub = String(format: "%@%.0f", sign, change)
+            } else if detail.todayRHR == nil, let rhrDate = detail.displayRHRDate {
+                // Historical fallback: show value with date
+                self.rhrValueText = String(format: "%.0f bpm", rhr)
+                self.rhrValueSub = Self.formatDate(rhrDate)
             } else {
-                self.rhrValueText = String(format: "%.0f bpm", todayRHR)
+                self.rhrValueText = String(format: "%.0f bpm", rhr)
                 self.rhrValueSub = String(localized: "no comparison")
             }
         } else {
