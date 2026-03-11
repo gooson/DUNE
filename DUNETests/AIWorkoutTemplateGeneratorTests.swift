@@ -123,6 +123,17 @@ struct AIWorkoutTemplateGeneratorTests {
         #expect(!output.contains("running"))
     }
 
+    @Test("Search tool expands broad Japanese muscle prompts into template-capable matches")
+    func searchToolExpandsJapaneseMusclePrompt() async throws {
+        let tool = AIWorkoutTemplateGenerator.SearchExerciseTool(library: makeLibrary())
+
+        let output = try await tool.call(arguments: .init(query: "肩のトレーニングを作って"))
+
+        #expect(output.contains("dumbbell-shoulder-press"))
+        #expect(output.contains("덤벨 숄더 프레스"))
+        #expect(!output.contains("running"))
+    }
+
     @Test("Search tool prefers home-friendly bodyweight matches for home prompts")
     func searchToolPrefersHomeFriendlyMatches() async throws {
         let tool = AIWorkoutTemplateGenerator.SearchExerciseTool(library: makeLibrary())
@@ -150,6 +161,13 @@ struct AIWorkoutTemplateGeneratorTests {
     @Test("Preflight rejects ambiguous prompt before generation")
     func preflightRejectsAmbiguousPrompt() {
         let intent = AIWorkoutTemplateGenerator.promptIntent(for: "운동 추천해줘")
+
+        #expect(AIWorkoutTemplateGenerator.preflightError(for: intent) == .ambiguousPrompt)
+    }
+
+    @Test("Preflight rejects ambiguous Japanese prompt before generation")
+    func preflightRejectsAmbiguousJapanesePrompt() {
+        let intent = AIWorkoutTemplateGenerator.promptIntent(for: "おすすめの運動を作って")
 
         #expect(AIWorkoutTemplateGenerator.preflightError(for: intent) == .ambiguousPrompt)
     }
