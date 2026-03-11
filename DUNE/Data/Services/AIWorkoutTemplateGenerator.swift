@@ -356,7 +356,7 @@ struct AIWorkoutTemplateGenerator: NaturalLanguageWorkoutGenerating, Sendable {
     static func normalizedSearchText(_ text: String) -> String {
         text.lowercased()
             .replacingOccurrences(
-                of: #"[^\\p{L}\\p{N}\\s]"#,
+                of: #"[^\p{L}\p{N}\s]"#,
                 with: " ",
                 options: .regularExpression
             )
