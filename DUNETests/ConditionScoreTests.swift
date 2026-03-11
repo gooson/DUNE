@@ -27,7 +27,9 @@ struct ConditionScoreTests {
             rawScore: 75,
             rhrPenalty: rhrPenalty,
             todayRHR: todayRHR,
-            yesterdayRHR: yesterdayRHR
+            yesterdayRHR: yesterdayRHR,
+            displayRHR: nil,
+            displayRHRDate: nil
         )
     }
 

@@ -26,6 +26,23 @@ struct CalculateConditionScoreUseCase: ConditionScoreCalculating, Sendable {
         let hrvSamples: [HRVSample]
         let todayRHR: Double?
         let yesterdayRHR: Double?
+        /// Effective RHR for UI display (fallback when todayRHR is nil)
+        let displayRHR: Double?
+        let displayRHRDate: Date?
+
+        init(
+            hrvSamples: [HRVSample],
+            todayRHR: Double?,
+            yesterdayRHR: Double?,
+            displayRHR: Double? = nil,
+            displayRHRDate: Date? = nil
+        ) {
+            self.hrvSamples = hrvSamples
+            self.todayRHR = todayRHR
+            self.yesterdayRHR = yesterdayRHR
+            self.displayRHR = displayRHR
+            self.displayRHRDate = displayRHRDate
+        }
     }
 
     struct Output: Sendable {
@@ -140,7 +157,9 @@ struct CalculateConditionScoreUseCase: ConditionScoreCalculating, Sendable {
             rawScore: rawScore,
             rhrPenalty: rhrPenalty,
             todayRHR: input.todayRHR.flatMap { rhrValidRange.contains($0) ? $0 : nil },
-            yesterdayRHR: input.yesterdayRHR.flatMap { rhrValidRange.contains($0) ? $0 : nil }
+            yesterdayRHR: input.yesterdayRHR.flatMap { rhrValidRange.contains($0) ? $0 : nil },
+            displayRHR: input.displayRHR,
+            displayRHRDate: input.displayRHRDate
         )
 
         let score = ConditionScore(score: clampedScore, date: Date(), contributions: contributions, detail: detail)

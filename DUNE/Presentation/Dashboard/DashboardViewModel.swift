@@ -425,7 +425,9 @@ final class DashboardViewModel {
         let input = CalculateConditionScoreUseCase.Input(
             hrvSamples: conditionSamples,
             todayRHR: todayRHR,
-            yesterdayRHR: yesterdayRHR
+            yesterdayRHR: yesterdayRHR,
+            displayRHR: effectiveRHR,
+            displayRHRDate: effectiveRHR != nil ? rhrDate : nil
         )
         let output = scoreUseCase.execute(input: input)
         conditionScore = output.score
