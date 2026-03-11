@@ -556,16 +556,18 @@ final class WorkoutManager: NSObject {
 
     // MARK: - Set/Exercise Navigation
 
-    func completeSet(weight: Double?, reps: Int?) {
+    func completeSet(weight: Double?, reps: Int?, rpe: Double? = nil) {
         // Validate input ranges before recording (mirrors iPhone validation rules)
         let validatedWeight: Double? = weight.flatMap { (0...500).contains($0) ? $0 : nil }
         let validatedReps: Int? = reps.flatMap { (0...1000).contains($0) ? $0 : nil }
+        let validatedRPE: Double? = rpe.flatMap { RPELevel.validate($0) }
 
         let data = CompletedSetData(
             setNumber: currentSetIndex + 1,
             weight: validatedWeight,
             reps: validatedReps,
-            completedAt: Date()
+            completedAt: Date(),
+            rpe: validatedRPE
         )
         if currentExerciseIndex < completedSetsData.count {
             completedSetsData[currentExerciseIndex].append(data)
@@ -1251,6 +1253,8 @@ struct CompletedSetData: Codable, Sendable {
     let completedAt: Date
     /// Rest timer total (including +30s adjustments) used after this set, in seconds.
     var restDuration: TimeInterval?
+    /// Per-set RPE (Rate of Perceived Exertion), Modified Borg scale 6.0-10.0.
+    var rpe: Double?
 }
 
 /// Plain struct snapshot of WorkoutTemplate data.
