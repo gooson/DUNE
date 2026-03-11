@@ -702,6 +702,8 @@ struct AIWorkoutTemplateGenerator: NaturalLanguageWorkoutGenerating, Sendable {
         "flexibility",
         "yoga",
         "pilates",
+        "burpee",
+        "burpees",
         "스트레칭",
         "모빌리티",
         "유연성",
