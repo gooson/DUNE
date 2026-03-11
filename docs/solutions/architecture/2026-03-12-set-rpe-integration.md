@@ -1,5 +1,5 @@
 ---
-tags: [rpe, exercise, workout-set, intensity, swiftdata, migration, picker]
+tags: [rpe, exercise, workout-set, intensity, swiftdata, migration, picker, watchos]
 date: 2026-03-12
 category: architecture
 status: implemented
@@ -50,6 +50,21 @@ extension ExerciseRecord {
 
 이 패턴으로 3개 View에서 중복되던 5줄 블록을 1줄 호출로 통합.
 
+### watchOS Layer
+- `WatchSetRPEPickerView`: 3×3 LazyVGrid RPE picker (iOS 수평 9버튼 → watch 3×3 그리드)
+- `MetricsView`: RPE button + sheet presenter (inputCard ↔ completeButton 사이)
+- `CompletedSetData.rpe: Double?`: in-session ephemeral 데이터 (UserDefaults crash recovery 포함)
+- `WorkoutManager.completeSet(rpe:)`: RPELevel.validate() 통한 검증 후 저장
+- `SessionSummaryView`: WorkoutSet 생성 시 `rpe: setData.rpe` 전달 + `applySetBasedRPE()` 호출
+- `SetInputSheet`: 이전 세트 RPE badge 표시
+
+### Watch Target Source 공유
+- `WorkoutIntensity.swift`, `WorkoutIntensityService.swift`, `ExerciseRecord+SetRPE.swift`를 DUNEWatch target에 개별 파일 참조로 추가 (project.yml)
+- Watch는 iOS의 전체 Presentation/Domain을 공유하지 않으므로 필요한 파일만 명시적으로 추가
+
+### RPELevel.format() 통합
+- iOS `SetRPEPickerView`, Watch `WatchSetRPEPickerView`, Watch `MetricsView`에 중복되던 `formatRPE()` → `RPELevel.format(_:)` static method로 통합
+
 ## Prevention
 
 - 3개 이상 View에서 동일 비즈니스 로직이 반복되면 즉시 Extension으로 추출
@@ -61,3 +76,5 @@ extension ExerciseRecord {
 1. **테스트와 구현 불일치 조기 발견**: `displayLabel`이 "6"이 아닌 "Light"를 반환하는 것을 리뷰에서 발견. 테스트 작성 시 실제 구현을 먼저 읽어야 함.
 2. **DRY 3-occurrence rule 유효**: 3개 View에 동일 패턴이 나타나자마자 추출하여 유지보수성 확보.
 3. **Layer boundary 준수**: Domain의 `WorkoutIntensityService`가 Data의 `WorkoutSet`을 직접 참조할 수 없으므로, Presentation Extension에서 브릿지 역할 수행.
+4. **Watch UI 밀도 적응**: iOS 수평 9버튼이 watch에서는 너무 작음. 3×3 LazyVGrid로 터치 타겟 확보. RPE를 SetInputSheet에 넣지 않고 별도 sheet로 분리하여 각 시트의 복잡도를 낮춤.
+5. **Watch target 소스 공유**: Watch는 iOS target의 전체 모듈을 공유하지 않으므로, project.yml에 개별 파일을 명시적으로 추가해야 함. `find_symbol`로 의존관계를 먼저 파악 후 필요한 파일만 추가.
