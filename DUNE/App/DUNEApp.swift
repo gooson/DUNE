@@ -24,6 +24,7 @@ struct DUNEApp: App {
     @State private var automaticWhatsNewPresentation: AutomaticWhatsNewPresentation?
     @State private var automaticWhatsNewPresentedBuild = ""
     @State private var hasForcedConsentPresentation = false
+    @State private var hasForcedAutomaticWhatsNewPresentation = false
 
     @State private var appRuntime: AppRuntime
     private let notificationService: any NotificationService
@@ -34,10 +35,9 @@ struct DUNEApp: App {
     private static let launchSplashResolveDuration: Duration = .milliseconds(700)
 
     private struct AutomaticWhatsNewPresentation: Identifiable, Equatable {
+        let id: String
         let build: String
         let releases: [WhatsNewReleaseData]
-
-        var id: String { build }
     }
 
     private struct AppRuntime {
@@ -69,6 +69,10 @@ struct DUNEApp: App {
 #else
         false
 #endif
+    }
+
+    private static var shouldForceAutomaticWhatsNewForUITests: Bool {
+        isRunningUITests && ProcessInfo.processInfo.arguments.contains("--force-automatic-whatsnew")
     }
 
     private static var shouldBypassLaunchExperienceForTests: Bool {
@@ -361,6 +365,10 @@ struct DUNEApp: App {
             hasForcedConsentPresentation = true
             showConsentSheet = true
         }
+        .task {
+            guard Self.shouldForceAutomaticWhatsNewForUITests else { return }
+            await forceAutomaticWhatsNewForUITestsIfNeeded()
+        }
     }
 
     #if DEBUG
@@ -529,7 +537,11 @@ struct DUNEApp: App {
         }
 
         automaticWhatsNewPresentedBuild = build
-        automaticWhatsNewPresentation = AutomaticWhatsNewPresentation(build: build, releases: releases)
+        automaticWhatsNewPresentation = AutomaticWhatsNewPresentation(
+            id: build,
+            build: build,
+            releases: releases
+        )
     }
 
     @MainActor
@@ -541,6 +553,29 @@ struct DUNEApp: App {
         automaticWhatsNewPresentedBuild = ""
 
         Task { await advanceLaunchExperienceFlowIfNeeded() }
+    }
+
+    @MainActor
+    private func forceAutomaticWhatsNewForUITestsIfNeeded() async {
+        guard !hasForcedAutomaticWhatsNewPresentation else { return }
+        guard automaticWhatsNewPresentation == nil else { return }
+
+        let version = whatsNewManager.currentAppVersion()
+        let preferredVersion = whatsNewManager.currentRelease(for: version)?.version
+            ?? whatsNewManager.orderedReleases().first?.version
+        guard let preferredVersion else { return }
+
+        let releases = whatsNewManager.orderedReleases(preferredVersion: preferredVersion)
+        guard !releases.isEmpty else { return }
+
+        let build = whatsNewManager.currentBuildNumber()
+        hasForcedAutomaticWhatsNewPresentation = true
+        automaticWhatsNewPresentedBuild = build
+        automaticWhatsNewPresentation = AutomaticWhatsNewPresentation(
+            id: build.isEmpty ? preferredVersion : build,
+            build: build,
+            releases: releases
+        )
     }
 
     @MainActor
