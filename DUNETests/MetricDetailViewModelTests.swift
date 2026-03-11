@@ -224,9 +224,9 @@ struct MetricDetailViewModelTests {
         var stagesByDay: [String: [SleepStage]] = [:]
 
         let samples: [(offset: Int, hour: Int, minute: Int)] = [
-            (1, 23, 40),
-            (2, 0, 10),
-            (3, 23, 55),
+            (0, 23, 40),
+            (1, 0, 10),
+            (2, 23, 55),
         ]
 
         for sample in samples {

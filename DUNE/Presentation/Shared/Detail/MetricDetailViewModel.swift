@@ -383,7 +383,7 @@ final class MetricDetailViewModel {
 
     private func fetchAverageBedtime(today: Date, calendar: Calendar) async -> DateComponents? {
         let recentStages: [[SleepStage]] = await withTaskGroup(of: (Int, [SleepStage])?.self) { [sleepService] group in
-            for offset in 1...SleepDetailConstants.bedtimeLookbackDays {
+            for offset in 0..<SleepDetailConstants.bedtimeLookbackDays {
                 guard let date = calendar.date(byAdding: .day, value: -offset, to: today) else { continue }
                 group.addTask {
                     do {
