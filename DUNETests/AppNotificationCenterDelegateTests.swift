@@ -20,8 +20,10 @@ struct AppNotificationCenterDelegateTests {
     func forwardNotificationResponseDeliversPayloadOnMainActor() async {
         let spy = ResponseHandlerSpy()
         let delegate = AppNotificationCenterDelegate { payload in
-            spy.receivedPayload = payload
-            spy.wasCalledOnMainThread = Thread.isMainThread
+            MainActor.assumeIsolated {
+                spy.receivedPayload = payload
+                spy.wasCalledOnMainThread = Thread.isMainThread
+            }
         }
 
         let payload = NotificationResponsePayload(routeKind: "sleepDetail")
