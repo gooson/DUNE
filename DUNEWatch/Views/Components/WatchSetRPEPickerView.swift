@@ -5,9 +5,15 @@ import WatchKit
 struct WatchSetRPEPickerView: View {
     @Binding var rpe: Double?
 
-    @State private var sliderValue: Double = 8.0
-    @State private var isActive: Bool = false
+    @State private var sliderValue: Double
+    @State private var isActive: Bool
     @State private var showHelp = false
+
+    init(rpe: Binding<Double?>) {
+        _rpe = rpe
+        _sliderValue = State(initialValue: rpe.wrappedValue ?? 8.0)
+        _isActive = State(initialValue: rpe.wrappedValue != nil)
+    }
 
     private var currentColor: Color {
         switch sliderValue {
@@ -29,12 +35,6 @@ struct WatchSetRPEPickerView: View {
             }
         }
         .animation(.easeInOut(duration: 0.2), value: isActive)
-        .task {
-            if let rpe {
-                sliderValue = rpe
-                isActive = true
-            }
-        }
         .sheet(isPresented: $showHelp) {
             WatchRPEHelpSheet()
         }
@@ -43,27 +43,40 @@ struct WatchSetRPEPickerView: View {
     // MARK: - Inactive State
 
     private var inactiveState: some View {
-        Button {
-            withAnimation(.easeInOut(duration: 0.2)) {
-                isActive = true
-                sliderValue = 8.0
-                rpe = 8.0
+        HStack {
+            Button {
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    isActive = true
+                    sliderValue = 8.0
+                    rpe = 8.0
+                }
+                WKInterfaceDevice.current().play(.click)
+            } label: {
+                HStack {
+                    Text("RPE")
+                        .font(.caption2.weight(.semibold))
+                        .foregroundStyle(DS.Color.textSecondary)
+
+                    Spacer()
+
+                    Text("Tap to rate")
+                        .font(.caption2)
+                        .foregroundStyle(DS.Color.textTertiary)
+                }
             }
-            WKInterfaceDevice.current().play(.click)
-        } label: {
-            HStack {
-                Text("RPE")
-                    .font(.caption2.weight(.semibold))
-                    .foregroundStyle(DS.Color.textSecondary)
+            .buttonStyle(.plain)
 
-                Spacer()
-
-                Text("Tap to rate")
+            Button {
+                showHelp = true
+            } label: {
+                Image(systemName: "questionmark.circle")
                     .font(.caption2)
                     .foregroundStyle(DS.Color.textTertiary)
+                    .frame(minWidth: 38, minHeight: 38)
             }
+            .buttonStyle(.plain)
+            .accessibilityLabel(Text("RPE Help"))
         }
-        .buttonStyle(.plain)
     }
 
     // MARK: - Header
@@ -82,8 +95,10 @@ struct WatchSetRPEPickerView: View {
                 Image(systemName: "questionmark.circle")
                     .font(.caption2)
                     .foregroundStyle(DS.Color.textTertiary)
+                    .frame(minWidth: 38, minHeight: 38)
             }
             .buttonStyle(.plain)
+            .accessibilityLabel(Text("RPE Help"))
 
             Button {
                 withAnimation(.easeInOut(duration: 0.2)) {
@@ -95,8 +110,10 @@ struct WatchSetRPEPickerView: View {
                 Image(systemName: "xmark.circle.fill")
                     .font(.caption2)
                     .foregroundStyle(DS.Color.textTertiary)
+                    .frame(minWidth: 38, minHeight: 38)
             }
             .buttonStyle(.plain)
+            .accessibilityLabel(Text("Clear RPE"))
         }
     }
 
@@ -132,9 +149,9 @@ struct WatchSetRPEPickerView: View {
             Text("RPE")
         }
         .tint(currentColor)
+        .sensoryFeedback(.selection, trigger: sliderValue)
         .onChange(of: sliderValue) { _, newValue in
             rpe = newValue
-            WKInterfaceDevice.current().play(.click)
         }
     }
 }

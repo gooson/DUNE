@@ -4,9 +4,15 @@ import SwiftUI
 struct SetRPEPickerView: View {
     @Binding var rpe: Double?
 
-    @State private var sliderValue: Double = 8.0
-    @State private var isActive: Bool = false
+    @State private var sliderValue: Double
+    @State private var isActive: Bool
     @State private var showHelp = false
+
+    init(rpe: Binding<Double?>) {
+        _rpe = rpe
+        _sliderValue = State(initialValue: rpe.wrappedValue ?? 8.0)
+        _isActive = State(initialValue: rpe.wrappedValue != nil)
+    }
 
     private static let categoryLabels: [(label: String, position: Double)] = [
         (String(localized: "Light"), 6.0),
@@ -37,12 +43,6 @@ struct SetRPEPickerView: View {
             }
         }
         .animation(DS.Animation.snappy, value: isActive)
-        .task {
-            if let rpe {
-                sliderValue = rpe
-                isActive = true
-            }
-        }
         .sheet(isPresented: $showHelp) {
             RPEHelpSheet()
         }
@@ -51,27 +51,40 @@ struct SetRPEPickerView: View {
     // MARK: - Inactive State
 
     private var inactiveState: some View {
-        Button {
-            withAnimation(DS.Animation.snappy) {
-                isActive = true
-                sliderValue = 8.0
-                rpe = 8.0
+        HStack {
+            Button {
+                withAnimation(DS.Animation.snappy) {
+                    isActive = true
+                    sliderValue = 8.0
+                    rpe = 8.0
+                }
+            } label: {
+                HStack {
+                    Text("RPE")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(DS.Color.textSecondary)
+
+                    Spacer()
+
+                    Text("Tap to rate")
+                        .font(.caption)
+                        .foregroundStyle(DS.Color.textTertiary)
+                }
+                .padding(.vertical, DS.Spacing.xs)
             }
-        } label: {
-            HStack {
-                Text("RPE")
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(DS.Color.textSecondary)
+            .buttonStyle(.plain)
 
-                Spacer()
-
-                Text("Tap to rate")
+            Button {
+                showHelp = true
+            } label: {
+                Image(systemName: "questionmark.circle")
                     .font(.caption)
                     .foregroundStyle(DS.Color.textTertiary)
+                    .frame(minWidth: 44, minHeight: 44)
             }
-            .padding(.vertical, DS.Spacing.xs)
+            .buttonStyle(.plain)
+            .accessibilityLabel(Text("RPE Help"))
         }
-        .buttonStyle(.plain)
     }
 
     // MARK: - Header
@@ -90,8 +103,10 @@ struct SetRPEPickerView: View {
                 Image(systemName: "questionmark.circle")
                     .font(.caption)
                     .foregroundStyle(DS.Color.textTertiary)
+                    .frame(minWidth: 44, minHeight: 44)
             }
             .buttonStyle(.plain)
+            .accessibilityLabel(Text("RPE Help"))
 
             Button {
                 withAnimation(DS.Animation.snappy) {
@@ -102,8 +117,10 @@ struct SetRPEPickerView: View {
                 Image(systemName: "xmark.circle.fill")
                     .font(.caption)
                     .foregroundStyle(DS.Color.textTertiary)
+                    .frame(minWidth: 44, minHeight: 44)
             }
             .buttonStyle(.plain)
+            .accessibilityLabel(Text("Clear RPE"))
         }
     }
 

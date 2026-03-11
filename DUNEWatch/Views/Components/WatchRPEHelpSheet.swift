@@ -41,13 +41,12 @@ struct WatchRPEHelpSheet: View {
                     .font(.caption2)
                     .foregroundStyle(DS.Color.textSecondary)
                     .padding(.top, DS.Spacing.xs)
+
+                Button("Done") { dismiss() }
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, DS.Spacing.sm)
             }
             .padding(.horizontal)
-        }
-        .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
-                Button("Done") { dismiss() }
-            }
         }
     }
 }
