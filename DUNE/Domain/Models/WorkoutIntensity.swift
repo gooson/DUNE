@@ -87,6 +87,55 @@ enum EffortCategory: Int, CaseIterable, Sendable, Comparable {
     }
 }
 
+// MARK: - Set-Level RPE
+
+/// RPE (Rating of Perceived Exertion) for individual sets.
+/// Uses the modified Borg scale: 6.0-10.0 with 0.5 increments.
+struct RPELevel: Sendable, Hashable {
+    let value: Double
+
+    static let range: ClosedRange<Double> = 6.0...10.0
+    static let step: Double = 0.5
+    static let levels: [Double] = [6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0, 9.5, 10.0]
+
+    /// Reps In Reserve (estimated reps remaining before failure).
+    var rir: Int {
+        switch value {
+        case 10.0: 0
+        case 9.5: 0  // maybe 1
+        case 9.0: 1
+        case 8.5: 1  // maybe 2
+        case 8.0: 2
+        case 7.5: 2  // maybe 3
+        case 7.0: 3
+        case 6.5: 3  // maybe 4
+        case 6.0: 4
+        default: 4
+        }
+    }
+
+    /// Display label for this RPE level.
+    var displayLabel: String {
+        switch value {
+        case 10.0: String(localized: "Max Effort")
+        case 9.0...9.5: String(localized: "Very Hard")
+        case 8.0...8.5: String(localized: "Hard")
+        case 7.0...7.5: String(localized: "Moderate")
+        case 6.0...6.5: String(localized: "Light")
+        default: String(localized: "Light")
+        }
+    }
+
+    /// Validate and snap a raw value to the nearest valid RPE level.
+    /// Returns nil if the value is outside the valid range or not a finite number.
+    static func validate(_ value: Double) -> Double? {
+        guard value.isFinite, range.contains(value) else { return nil }
+        let snapped = (value / step).rounded() * step
+        guard range.contains(snapped) else { return nil }
+        return snapped
+    }
+}
+
 // MARK: - Effort Suggestion
 
 /// Auto-suggested effort with history context, returned by `suggestEffort()`.

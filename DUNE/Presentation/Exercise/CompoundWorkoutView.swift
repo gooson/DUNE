@@ -278,6 +278,15 @@ struct CompoundWorkoutView: View {
                         Label("Delete Set", systemImage: "trash")
                     }
                 }
+
+                if vm.sets[index].isCompleted {
+                    SetRPEPickerView(rpe: Binding(
+                        get: { vm.sets[index].rpe },
+                        set: { vm.sets[index].rpe = $0 }
+                    ))
+                    .padding(.horizontal, DS.Spacing.sm)
+                    .padding(.bottom, DS.Spacing.xs)
+                }
             }
         }
     }
@@ -443,6 +452,11 @@ struct CompoundWorkoutView: View {
         }
         savedRecords = records
         CompoundWorkoutViewModel.clearDraft()
+
+        // Auto-compute session effort from per-set RPE
+        for record in records {
+            record.applySetBasedRPE()
+        }
 
         let exerciseIDs = Set(records.compactMap(\.exerciseDefinitionID))
         let recentEfforts = exerciseRecords

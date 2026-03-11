@@ -29,6 +29,7 @@ struct WatchSetData: Codable, Sendable {
     let duration: TimeInterval?
     var restDuration: TimeInterval?
     let isCompleted: Bool
+    var rpe: Double?
 }
 
 struct WatchHeartRateSample: Codable, Sendable {
