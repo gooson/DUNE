@@ -29,7 +29,9 @@ struct Chart3DContainerView: View {
         }
         .accessibilityIdentifier(VisionSurfaceAccessibility.chart3DRoot)
         .onReceive(NotificationCenter.default.publisher(for: .simulatorAdvancedMockDataDidChange)) { _ in
-            refreshToken += 1
+            Task { @MainActor in
+                refreshToken += 1
+            }
         }
     }
 

@@ -146,12 +146,12 @@ struct VisionContentView: View {
             }
         }
         .onReceive(NotificationCenter.default.publisher(for: .simulatorAdvancedMockDataDidChange)) { _ in
-            Task {
+            Task { @MainActor in
                 if let refreshCoordinator {
                     await refreshCoordinator.forceRefresh()
                 } else {
                     await sharedHealthDataService?.invalidateCache()
-                    await MainActor.run { refreshSignal += 1 }
+                    refreshSignal += 1
                 }
                 await trainViewModel.reload()
             }

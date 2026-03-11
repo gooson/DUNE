@@ -49,7 +49,7 @@ struct VisionDashboardWindowScene: View {
             await viewModel.loadIfNeeded()
         }
         .onReceive(NotificationCenter.default.publisher(for: .simulatorAdvancedMockDataDidChange)) { _ in
-            Task {
+            Task { @MainActor in
                 await viewModel.reload()
             }
         }

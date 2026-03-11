@@ -327,8 +327,11 @@ struct DUNEApp: App {
                 }
             }
             .onReceive(NotificationCenter.default.publisher(for: NSUbiquitousKeyValueStore.didChangeExternallyNotification)) { notification in
-                guard shouldHandleCloudSyncNotification(notification) else { return }
-                Task { await refreshAppRuntimeIfNeeded() }
+                let shouldHandle = shouldHandleCloudSyncNotification(notification)
+                guard shouldHandle else { return }
+                Task { @MainActor in
+                    await refreshAppRuntimeIfNeeded()
+                }
             }
             .onReceive(NotificationCenter.default.publisher(for: .NSPersistentStoreRemoteChange)) { _ in
                 Task { @MainActor in

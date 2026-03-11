@@ -228,7 +228,9 @@ struct DashboardView: View {
             reloadWhatsNewBadge()
         }
         .onReceive(NotificationCenter.default.publisher(for: NotificationInboxManager.inboxDidChangeNotification)) { _ in
-            reloadUnreadCount()
+            Task { @MainActor in
+                reloadUnreadCount()
+            }
         }
         .sheet(isPresented: $isShowingPinnedEditor) {
             PinnedMetricsEditorView(
