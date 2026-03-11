@@ -1,7 +1,7 @@
 ---
 topic: Sleep Query Late End Cutoff
 date: 2026-03-12
-status: draft
+status: implemented
 confidence: medium
 related_solutions:
   - docs/solutions/general/2026-03-12-sleep-average-bedtime-card.md
@@ -34,14 +34,16 @@ related_brainstorms:
 
 ## Approach
 
-`SleepQueryService`의 조회 범위를 `startOfDay(for: date)` 기준 고정 24시간 대신, 늦은 종료를 포착할 수 있는 더 넓은 window로 확장한다.
-구체적으로는 기존 `-12h/+12h` 컷오프를 `-12h/+18h` 수준으로 넓혀 정오 이후 stage를 포착하고, 기존 dedup 및 downstream 계산은 그대로 재사용한다.
+`SleepQueryService`는 기존 noon-anchor semantics를 유지하되, query 자체는 더 넓게 가져오고
+정오 이후 stage는 같은 수면 세션의 연속 구간일 때만 유지한다.
+구체적으로는 기존 `-12h/+12h` 컷오프를 `-12h/+18h`까지 확장해 late wake stage를 가져오고,
+이후 contiguous trimming으로 오후 낮잠 혼입을 막는다.
 
 ### Alternative Approaches Considered
 
 | Approach | Pros | Cons | Decision |
 |----------|------|------|----------|
-| `+18h`로 조회 범위 확장 | 변경 범위가 작고 모든 기존 호출부에 즉시 적용됨 | 늦은 오후 낮잠이 포함될 가능성이 생김 | 채택 |
+| `+18h` 조회 + contiguous trimming | 변경 범위가 작고 모든 기존 호출부에 즉시 적용되며, 오후 낮잠 혼입도 줄일 수 있음 | session continuity 기준(90분 gap)은 휴리스틱임 | 채택 |
 | sleep session을 별도 post-filter로 재구성 | 낮잠/다중 세션 구분을 더 정교하게 처리 가능 | 구현/검증 범위가 커지고 risk가 큼 | 보류 |
 | UI에서만 부족한 분량을 보정 | 표면 증상은 숨길 수 있음 | source of truth가 계속 틀림 | 기각 |
 
@@ -57,7 +59,7 @@ related_brainstorms:
 ### Step 1: Query window 확장 및 의도 명시
 
 - **Files**: `DUNE/Data/HealthKit/SleepQueryService.swift`
-- **Changes**: `fetchSleepStages(for:)`의 query upper bound를 늦은 종료 수면까지 포함하도록 확장하고, 왜 noon cutoff가 부족한지 주석으로 남긴다.
+- **Changes**: `fetchSleepStages(for:)`의 query upper bound를 늦은 종료 수면까지 포함하도록 확장하고, noon 이후 구간은 contiguous continuation만 유지하도록 helper를 추가한다.
 - **Verification**: 정오 이후 stage가 predicate 범위에 포함되는 단위 테스트가 실패 없이 통과한다.
 
 ### Step 2: 늦은 종료 수면 회귀 테스트 추가
@@ -76,7 +78,7 @@ related_brainstorms:
 
 | Case | Handling |
 |------|----------|
-| 수면이 12:00 이후 종료됨 | query upper bound를 오후까지 확장해 마지막 stage 포함 |
+| 수면이 12:00 이후 종료됨 | query upper bound를 오후까지 확장하고, noon 이후 contiguous stage를 유지 |
 | 수면이 매우 늦게 시작되어 다음날 오후까지 이어짐 | 보수적으로 오후까지는 포함하되, 그 이후 장시간 세션은 별도 이슈로 남김 |
 | 오후 낮잠이 같은 anchor day에 존재 | 이번 수정은 source truncation 해결이 우선이며, 낮잠 혼입 여부는 테스트 결과를 보고 추가 분리 검토 |
 | watch/non-watch partial overlap | 기존 `deduplicateAndConvert` 로직 유지 |
