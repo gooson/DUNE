@@ -336,7 +336,7 @@ enum AppSchemaV11: VersionedSchema {
     }
 }
 
-// MARK: - Schema V12 (Preferred Exercises)
+// MARK: - Schema V12 (Pre-Preferred Exercise Snapshot)
 
 enum AppSchemaV12: VersionedSchema {
     static let versionIdentifier = Schema.Version(12, 0, 0)
@@ -344,6 +344,7 @@ enum AppSchemaV12: VersionedSchema {
         [ExerciseRecord.self, BodyCompositionRecord.self, V12WorkoutSet.self, CustomExercise.self, WorkoutTemplate.self, InjuryRecord.self, HabitDefinition.self, HabitLog.self, UserCategory.self, ExerciseDefaultRecord.self, HealthSnapshotMirrorRecord.self]
     }
 
+    /// Snapshot of WorkoutSet before set-level rpe was added.
     @Model
     final class V12WorkoutSet {
         var id: UUID = UUID()
@@ -357,6 +358,19 @@ enum AppSchemaV12: VersionedSchema {
         var intensity: Int? = nil
         var isCompleted: Bool = false
         var restDuration: TimeInterval?
+
+        init() {}
+    }
+
+    /// Snapshot of ExerciseDefaultRecord before isPreferred was added.
+    @Model
+    final class ExerciseDefaultRecord {
+        var id: UUID = UUID()
+        var exerciseDefinitionID: String = ""
+        var defaultWeight: Double?
+        var defaultReps: Int?
+        var isManualOverride: Bool = false
+        var lastUsedDate: Date = Date()
 
         init() {}
     }
