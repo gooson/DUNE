@@ -341,14 +341,50 @@ enum AppSchemaV11: VersionedSchema {
 enum AppSchemaV12: VersionedSchema {
     static let versionIdentifier = Schema.Version(12, 0, 0)
     static var models: [any PersistentModel.Type] {
-        [ExerciseRecord.self, BodyCompositionRecord.self, V12WorkoutSet.self, CustomExercise.self, WorkoutTemplate.self, InjuryRecord.self, HabitDefinition.self, HabitLog.self, UserCategory.self, ExerciseDefaultRecord.self, HealthSnapshotMirrorRecord.self]
+        [V12ExerciseRecord.self, BodyCompositionRecord.self, V12WorkoutSet.self, CustomExercise.self, WorkoutTemplate.self, InjuryRecord.self, HabitDefinition.self, HabitLog.self, UserCategory.self, ExerciseDefaultRecord.self, HealthSnapshotMirrorRecord.self]
+    }
+
+    /// Snapshot of ExerciseRecord after machine-level fields were added and before set-level rpe.
+    @Model
+    final class V12ExerciseRecord {
+        var id: UUID = UUID()
+        var date: Date = Date()
+        var exerciseType: String = ""
+        var duration: TimeInterval = 0
+        var calories: Double?
+        var distance: Double?
+        var stepCount: Int?
+        var averagePaceSecondsPerKm: Double?
+        var averageCadenceStepsPerMinute: Double?
+        var elevationGainMeters: Double?
+        var floorsAscended: Double?
+        var cardioMachineLevelAverage: Double?
+        var cardioMachineLevelMax: Int?
+        var memo: String = ""
+        var isFromHealthKit: Bool = false
+        var healthKitWorkoutID: String?
+        var createdAt: Date = Date()
+
+        @Relationship(deleteRule: .cascade, inverse: \V12WorkoutSet.exerciseRecord)
+        var sets: [V12WorkoutSet]? = []
+        var exerciseDefinitionID: String?
+        var primaryMusclesRaw: [String] = []
+        var secondaryMusclesRaw: [String] = []
+        var equipmentRaw: String?
+        var estimatedCalories: Double?
+        var calorieSourceRaw: String = CalorieSource.manual.rawValue
+        var rpe: Int?
+        var autoIntensityRaw: Double?
+        var cardioFitnessVO2Max: Double?
+
+        init() {}
     }
 
     /// Snapshot of WorkoutSet before set-level rpe was added.
     @Model
     final class V12WorkoutSet {
         var id: UUID = UUID()
-        var exerciseRecord: ExerciseRecord?
+        var exerciseRecord: V12ExerciseRecord?
         var setNumber: Int = 0
         var setTypeRaw: String = SetType.working.rawValue
         var weight: Double?
@@ -381,14 +417,50 @@ enum AppSchemaV12: VersionedSchema {
 enum AppSchemaV13: VersionedSchema {
     static let versionIdentifier = Schema.Version(13, 0, 0)
     static var models: [any PersistentModel.Type] {
-        [ExerciseRecord.self, BodyCompositionRecord.self, V13WorkoutSet.self, CustomExercise.self, WorkoutTemplate.self, InjuryRecord.self, HabitDefinition.self, HabitLog.self, UserCategory.self, ExerciseDefaultRecord.self, HealthSnapshotMirrorRecord.self]
+        [V13ExerciseRecord.self, BodyCompositionRecord.self, V13WorkoutSet.self, CustomExercise.self, WorkoutTemplate.self, InjuryRecord.self, HabitDefinition.self, HabitLog.self, UserCategory.self, ExerciseDefaultRecord.self, HealthSnapshotMirrorRecord.self]
+    }
+
+    /// Snapshot of ExerciseRecord after preferred flag and before set-level rpe.
+    @Model
+    final class V13ExerciseRecord {
+        var id: UUID = UUID()
+        var date: Date = Date()
+        var exerciseType: String = ""
+        var duration: TimeInterval = 0
+        var calories: Double?
+        var distance: Double?
+        var stepCount: Int?
+        var averagePaceSecondsPerKm: Double?
+        var averageCadenceStepsPerMinute: Double?
+        var elevationGainMeters: Double?
+        var floorsAscended: Double?
+        var cardioMachineLevelAverage: Double?
+        var cardioMachineLevelMax: Int?
+        var memo: String = ""
+        var isFromHealthKit: Bool = false
+        var healthKitWorkoutID: String?
+        var createdAt: Date = Date()
+
+        @Relationship(deleteRule: .cascade, inverse: \V13WorkoutSet.exerciseRecord)
+        var sets: [V13WorkoutSet]? = []
+        var exerciseDefinitionID: String?
+        var primaryMusclesRaw: [String] = []
+        var secondaryMusclesRaw: [String] = []
+        var equipmentRaw: String?
+        var estimatedCalories: Double?
+        var calorieSourceRaw: String = CalorieSource.manual.rawValue
+        var rpe: Int?
+        var autoIntensityRaw: Double?
+        var cardioFitnessVO2Max: Double?
+
+        init() {}
     }
 
     /// Snapshot of WorkoutSet before rpe field was added (same as V12WorkoutSet).
     @Model
     final class V13WorkoutSet {
         var id: UUID = UUID()
-        var exerciseRecord: ExerciseRecord?
+        var exerciseRecord: V13ExerciseRecord?
         var setNumber: Int = 0
         var setTypeRaw: String = SetType.working.rawValue
         var weight: Double?
@@ -398,6 +470,20 @@ enum AppSchemaV13: VersionedSchema {
         var intensity: Int? = nil
         var isCompleted: Bool = false
         var restDuration: TimeInterval?
+
+        init() {}
+    }
+
+    /// Snapshot of ExerciseDefaultRecord after isPreferred and before future live-model changes.
+    @Model
+    final class ExerciseDefaultRecord {
+        var id: UUID = UUID()
+        var exerciseDefinitionID: String = ""
+        var defaultWeight: Double?
+        var defaultReps: Int?
+        var isManualOverride: Bool = false
+        var isPreferred: Bool = false
+        var lastUsedDate: Date = Date()
 
         init() {}
     }
