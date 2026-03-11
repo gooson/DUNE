@@ -633,8 +633,11 @@ struct DUNEApp: App {
         if shouldRequestNotificationAuthorizationAutomatically {
             hasAttemptedNotificationAuthorizationThisLaunch = true
             do {
-                _ = try await notificationService.requestAuthorization()
+                let granted = try await notificationService.requestAuthorization()
                 hasRequestedNotificationAuthorization = true
+                if granted {
+                    await BedtimeReminderScheduler.shared.refreshSchedule(force: true)
+                }
             } catch {
                 AppLogger.notification.error("Deferred notification authorization failed: \(error.localizedDescription)")
             }
