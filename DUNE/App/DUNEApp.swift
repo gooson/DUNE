@@ -594,6 +594,7 @@ struct DUNEApp: App {
 
         hasStartedRuntimeServices = true
         let modelContainer = appRuntime.modelContainer
+        WatchSessionManager.shared.registerModelContainer(modelContainer)
         WatchSessionManager.shared.syncWorkoutTemplatesToWatch(using: modelContainer)
         WatchSessionManager.shared.syncExerciseLibraryToWatch(using: modelContainer)
         WatchSessionManager.shared.activate()

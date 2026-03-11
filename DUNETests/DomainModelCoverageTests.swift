@@ -415,6 +415,7 @@ struct WatchConnectivityModelsTests {
 
     @Test("WatchExerciseInfo preserves aliases and optional fields")
     func watchExerciseInfoRoundTrip() throws {
+        let lastUsedAt = Date(timeIntervalSince1970: 1_700_002_000)
         let info = WatchExerciseInfo(
             id: "run",
             name: "Running",
@@ -422,6 +423,9 @@ struct WatchConnectivityModelsTests {
             defaultSets: 1,
             defaultReps: nil,
             defaultWeightKg: nil,
+            isPreferred: true,
+            lastUsedAt: lastUsedAt,
+            usageCount: 7,
             equipment: nil,
             cardioSecondaryUnit: "pace",
             aliases: ["jogging", "run"]
@@ -433,6 +437,9 @@ struct WatchConnectivityModelsTests {
         #expect(decoded.cardioSecondaryUnit == "pace")
         #expect(decoded.defaultReps == nil)
         #expect(decoded.defaultWeightKg == nil)
+        #expect(decoded.isPreferred)
+        #expect(decoded.lastUsedAt == lastUsedAt)
+        #expect(decoded.usageCount == 7)
     }
 
     @Test("WatchWorkoutTemplateInfo supports Codable round trip")

@@ -20,7 +20,8 @@ struct QuickStartAllExercisesView: View {
             let weight = exercise.defaultWeightKg?.description ?? "nil"
             let reps = exercise.defaultReps.map(String.init) ?? "nil"
             let equipment = exercise.equipment ?? "nil"
-            return "\(exercise.id)-\(exercise.inputType)-\(exercise.defaultSets)-\(reps)-\(weight)-\(equipment)-\(exercise.isPreferred)"
+            let lastUsedAt = exercise.lastUsedAt?.timeIntervalSince1970.description ?? "nil"
+            return "\(exercise.id)-\(exercise.inputType)-\(exercise.defaultSets)-\(reps)-\(weight)-\(equipment)-\(exercise.isPreferred)-\(lastUsedAt)-\(exercise.usageCount)"
         }
     }
 
