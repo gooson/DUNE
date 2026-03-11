@@ -256,7 +256,7 @@ struct MetricsView: View {
                 Spacer()
 
                 if let rpe {
-                    Text(formatRPE(rpe))
+                    Text(RPELevel.format(rpe))
                         .font(.caption.weight(.bold).monospacedDigit())
                         .foregroundStyle(DS.Color.positive)
                     Text(RPELevel(value: rpe).displayLabel)
@@ -280,12 +280,6 @@ struct MetricsView: View {
             }
         }
         .buttonStyle(.plain)
-    }
-
-    private func formatRPE(_ value: Double) -> String {
-        value.truncatingRemainder(dividingBy: 1) == 0
-            ? String(format: "%.0f", value)
-            : String(format: "%.1f", value)
     }
 
     // MARK: - Complete Button

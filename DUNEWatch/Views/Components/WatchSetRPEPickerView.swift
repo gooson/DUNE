@@ -76,7 +76,7 @@ struct WatchSetRPEPickerView: View {
             }
             WKInterfaceDevice.current().play(.click)
         } label: {
-            Text(formatRPE(level))
+            Text(RPELevel.format(level))
                 .font(.caption2.weight(isSelected ? .bold : .medium).monospacedDigit())
                 .foregroundStyle(isSelected ? .white : DS.Color.textSecondary)
                 .frame(maxWidth: .infinity)
@@ -87,12 +87,6 @@ struct WatchSetRPEPickerView: View {
                 )
         }
         .buttonStyle(.plain)
-    }
-
-    private func formatRPE(_ value: Double) -> String {
-        value.truncatingRemainder(dividingBy: 1) == 0
-            ? String(format: "%.0f", value)
-            : String(format: "%.1f", value)
     }
 }
 
