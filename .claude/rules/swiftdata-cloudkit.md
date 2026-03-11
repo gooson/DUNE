@@ -36,6 +36,17 @@ record.children = newChildren
 불일치 시 staged migration이 "unknown coordinator model version" (134504) 에러로 실패하며,
 store 삭제 fallback으로도 복구 불가 (새 store 생성에도 스키마 일치 필요).
 
+## 기존 @Model 필드 변경도 새 Schema 버전 필요
+
+최신 `VersionedSchema`가 live model type를 직접 참조하는 상태에서
+필드를 추가/삭제/변경하면 배포된 checksum이 drift한다.
+
+- 이미 배포된 최신 버전은 snapshot model로 고정
+- 실제 변경은 새 `VersionedSchema` + migration stage로 승격
+
+그렇지 않으면 기존 store가 어떤 declared schema에도 매칭되지 않아
+`unknown coordinator model version` (134504) 로 다시 깨질 수 있다.
+
 ## 스키마 변경 테스트
 
 @Model 변경 후 반드시:
