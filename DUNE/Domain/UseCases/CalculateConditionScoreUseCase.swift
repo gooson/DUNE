@@ -158,8 +158,8 @@ struct CalculateConditionScoreUseCase: ConditionScoreCalculating, Sendable {
             rhrPenalty: rhrPenalty,
             todayRHR: input.todayRHR.flatMap { rhrValidRange.contains($0) ? $0 : nil },
             yesterdayRHR: input.yesterdayRHR.flatMap { rhrValidRange.contains($0) ? $0 : nil },
-            displayRHR: input.displayRHR,
-            displayRHRDate: input.displayRHRDate
+            displayRHR: input.displayRHR.flatMap { rhrValidRange.contains($0) ? $0 : nil },
+            displayRHRDate: input.displayRHR.flatMap { rhrValidRange.contains($0) ? input.displayRHRDate : nil }
         )
 
         let score = ConditionScore(score: clampedScore, date: Date(), contributions: contributions, detail: detail)
