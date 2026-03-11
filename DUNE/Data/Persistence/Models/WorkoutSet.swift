@@ -14,6 +14,7 @@ final class WorkoutSet {
     var intensity: Int? = nil
     var isCompleted: Bool = false
     var restDuration: TimeInterval?
+    var rpe: Double? = nil
 
     init(
         setNumber: Int = 0,
@@ -24,7 +25,8 @@ final class WorkoutSet {
         distance: Double? = nil,
         intensity: Int? = nil,
         isCompleted: Bool = false,
-        restDuration: TimeInterval? = nil
+        restDuration: TimeInterval? = nil,
+        rpe: Double? = nil
     ) {
         self.id = UUID()
         self.setNumber = setNumber
@@ -36,6 +38,7 @@ final class WorkoutSet {
         self.intensity = intensity
         self.isCompleted = isCompleted
         self.restDuration = restDuration
+        self.rpe = rpe
     }
 
     var setType: SetType {
