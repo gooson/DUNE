@@ -115,6 +115,16 @@ final class HealthKitPermissionUITests: XCTestCase {
         let whatsNewScreen = app.descendants(matching: .any)["whatsnew-screen"].firstMatch
         guard whatsNewScreen.waitForExistence(timeout: 5) else { return }
 
+        let featureRowIDs = [
+            "whatsnew-row-healthDataQA",
+            "whatsnew-row-widgets",
+            "whatsnew-row-exerciseLogging",
+        ]
+        let hasFeatureRow = featureRowIDs.contains { identifier in
+            app.descendants(matching: .any)[identifier].firstMatch.waitForExistence(timeout: 1)
+        }
+        XCTAssertTrue(hasFeatureRow, "Automatic What's New sheet should render at least one feature row")
+
         let closeButton = app.buttons["whatsnew-close-button"].firstMatch
         if closeButton.waitForExistence(timeout: 3) {
             closeButton.tap()

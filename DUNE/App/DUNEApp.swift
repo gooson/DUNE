@@ -21,10 +21,10 @@ struct DUNEApp: App {
     @State private var hasAttemptedNotificationAuthorizationThisLaunch = false
     @State private var isRequestingDeferredAuthorizations = false
     @State private var hasStartedRuntimeServices = false
-    @State private var showWhatsNewSheet = false
-    @State private var automaticWhatsNewReleases: [WhatsNewReleaseData] = []
-    @State private var automaticWhatsNewBuild = ""
+    @State private var automaticWhatsNewPresentation: AutomaticWhatsNewPresentation?
+    @State private var automaticWhatsNewPresentedBuild = ""
     @State private var hasForcedConsentPresentation = false
+    @State private var hasForcedAutomaticWhatsNewPresentation = false
 
     @State private var appRuntime: AppRuntime
     private let notificationService: any NotificationService
@@ -33,6 +33,12 @@ struct DUNEApp: App {
     private let whatsNewStore = WhatsNewStore.shared
     private static let minimumLaunchSplashDuration: Duration = .seconds(1)
     private static let launchSplashResolveDuration: Duration = .milliseconds(700)
+
+    private struct AutomaticWhatsNewPresentation: Identifiable, Equatable {
+        let id: String
+        let build: String
+        let releases: [WhatsNewReleaseData]
+    }
 
     private struct AppRuntime {
         let revision = UUID()
@@ -63,6 +69,10 @@ struct DUNEApp: App {
 #else
         false
 #endif
+    }
+
+    private static var shouldForceAutomaticWhatsNewForUITests: Bool {
+        isRunningUITests && ProcessInfo.processInfo.arguments.contains("--force-automatic-whatsnew")
     }
 
     private static var shouldBypassLaunchExperienceForTests: Bool {
@@ -340,10 +350,10 @@ struct DUNEApp: App {
         .sheet(isPresented: $showConsentSheet) {
             CloudSyncConsentView(isPresented: $showConsentSheet)
         }
-        .sheet(isPresented: $showWhatsNewSheet, onDismiss: handleAutomaticWhatsNewDismissed) {
+        .sheet(item: $automaticWhatsNewPresentation, onDismiss: handleAutomaticWhatsNewDismissed) { presentation in
             NavigationStack {
                 WhatsNewView(
-                    releases: automaticWhatsNewReleases,
+                    releases: presentation.releases,
                     mode: .automatic
                 )
             }
@@ -354,6 +364,10 @@ struct DUNEApp: App {
             guard !showConsentSheet else { return }
             hasForcedConsentPresentation = true
             showConsentSheet = true
+        }
+        .task {
+            guard Self.shouldForceAutomaticWhatsNewForUITests else { return }
+            await forceAutomaticWhatsNewForUITestsIfNeeded()
         }
     }
 
@@ -476,16 +490,20 @@ struct DUNEApp: App {
         )
     }
 
+    private var isShowingAutomaticWhatsNew: Bool {
+        automaticWhatsNewPresentation != nil
+    }
+
     @MainActor
     private func advanceLaunchExperienceFlowIfNeeded() async {
         guard hasCompletedPostSplashSetup else { return }
         guard !isAdvancingLaunchExperience else { return }
-        guard !showConsentSheet, !showWhatsNewSheet else { return }
+        guard !showConsentSheet, !isShowingAutomaticWhatsNew else { return }
 
         isAdvancingLaunchExperience = true
         defer { isAdvancingLaunchExperience = false }
 
-        while hasCompletedPostSplashSetup, !showConsentSheet, !showWhatsNewSheet {
+        while hasCompletedPostSplashSetup, !showConsentSheet, !isShowingAutomaticWhatsNew {
             switch nextLaunchExperienceStep {
             case .cloudSyncConsent:
                 showConsentSheet = true
@@ -512,21 +530,52 @@ struct DUNEApp: App {
             return
         }
 
-        automaticWhatsNewBuild = build
-        automaticWhatsNewReleases = whatsNewManager.orderedReleases(preferredVersion: currentRelease.version)
-        showWhatsNewSheet = true
+        let releases = whatsNewManager.orderedReleases(preferredVersion: currentRelease.version)
+        guard !releases.isEmpty else {
+            finishLaunchExperienceIfNeeded()
+            return
+        }
+
+        automaticWhatsNewPresentedBuild = build
+        automaticWhatsNewPresentation = AutomaticWhatsNewPresentation(
+            id: build,
+            build: build,
+            releases: releases
+        )
     }
 
     @MainActor
     private func handleAutomaticWhatsNewDismissed() {
-        if !automaticWhatsNewBuild.isEmpty {
-            whatsNewStore.markOpened(build: automaticWhatsNewBuild)
+        if !automaticWhatsNewPresentedBuild.isEmpty {
+            whatsNewStore.markOpened(build: automaticWhatsNewPresentedBuild)
         }
 
-        automaticWhatsNewBuild = ""
-        automaticWhatsNewReleases = []
+        automaticWhatsNewPresentedBuild = ""
 
         Task { await advanceLaunchExperienceFlowIfNeeded() }
+    }
+
+    @MainActor
+    private func forceAutomaticWhatsNewForUITestsIfNeeded() async {
+        guard !hasForcedAutomaticWhatsNewPresentation else { return }
+        guard automaticWhatsNewPresentation == nil else { return }
+
+        let version = whatsNewManager.currentAppVersion()
+        let preferredVersion = whatsNewManager.currentRelease(for: version)?.version
+            ?? whatsNewManager.orderedReleases().first?.version
+        guard let preferredVersion else { return }
+
+        let releases = whatsNewManager.orderedReleases(preferredVersion: preferredVersion)
+        guard !releases.isEmpty else { return }
+
+        let build = whatsNewManager.currentBuildNumber()
+        hasForcedAutomaticWhatsNewPresentation = true
+        automaticWhatsNewPresentedBuild = build
+        automaticWhatsNewPresentation = AutomaticWhatsNewPresentation(
+            id: build.isEmpty ? preferredVersion : build,
+            build: build,
+            releases: releases
+        )
     }
 
     @MainActor
