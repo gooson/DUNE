@@ -229,7 +229,9 @@ struct ContentView: View {
         .task {
             guard let coordinator = refreshCoordinator else { return }
             for await _ in coordinator.refreshNeededStream {
-                refreshSignal += 1
+                await MainActor.run {
+                    refreshSignal += 1
+                }
             }
         }
         .task {
