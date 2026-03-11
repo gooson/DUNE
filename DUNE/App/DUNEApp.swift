@@ -320,6 +320,11 @@ struct DUNEApp: App {
                 guard shouldHandleCloudSyncNotification(notification) else { return }
                 Task { await refreshAppRuntimeIfNeeded() }
             }
+            .onReceive(NotificationCenter.default.publisher(for: .NSPersistentStoreRemoteChange)) { _ in
+                Task {
+                    await appRuntime.refreshCoordinator.requestRefresh(source: .cloudKitRemoteChange)
+                }
+            }
         }
         .modelContainer(appRuntime.modelContainer)
     }

@@ -6,6 +6,7 @@ enum RefreshSource: String, Sendable {
     case healthKitObserver
     case backgroundDelivery
     case pullToRefresh
+    case cloudKitRemoteChange
 }
 
 /// Coordinates app-wide data refresh with throttling.
