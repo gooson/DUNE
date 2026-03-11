@@ -38,6 +38,9 @@ private final class MockVisionSharePlayWorkoutController: VisionSharePlayWorkout
 @Suite("VisionSharePlayWorkoutViewModel")
 @MainActor
 struct VisionSharePlayWorkoutViewModelTests {
+    /// Allow the async event observation Task to process yielded events.
+    private static let eventPropagationDelay = Duration.milliseconds(100)
+
     @Test("Activation disabled keeps the workout board local")
     func activationDisabledKeepsBoardLocal() async {
         let controller = MockVisionSharePlayWorkoutController()
@@ -64,7 +67,7 @@ struct VisionSharePlayWorkoutViewModelTests {
                 activeParticipantIDs: ["local-1", "remote-1"]
             )
         )
-        await Task.yield()
+        try? await Task.sleep(for: Self.eventPropagationDelay)
 
         #expect(viewModel.sessionState == .sharing)
         #expect(controller.sentStates.last?.exerciseName == "Bench Press")
@@ -84,7 +87,7 @@ struct VisionSharePlayWorkoutViewModelTests {
                 activeParticipantIDs: ["local-1"]
             )
         )
-        await Task.yield()
+        try? await Task.sleep(for: Self.eventPropagationDelay)
         let baselineSendCount = controller.sentStates.count
 
         controller.yield(
@@ -93,7 +96,7 @@ struct VisionSharePlayWorkoutViewModelTests {
                 activeParticipantIDs: ["local-1", "remote-1", "remote-2"]
             )
         )
-        await Task.yield()
+        try? await Task.sleep(for: Self.eventPropagationDelay)
 
         #expect(controller.sentStates.count == baselineSendCount + 1)
         #expect(viewModel.participants.count == 3)
@@ -124,7 +127,7 @@ struct VisionSharePlayWorkoutViewModelTests {
                 participantID: "remote-1"
             )
         )
-        await Task.yield()
+        try? await Task.sleep(for: Self.eventPropagationDelay)
 
         #expect(viewModel.participants.count == 2)
         #expect(viewModel.participants[1].title.contains("2"))
@@ -144,9 +147,9 @@ struct VisionSharePlayWorkoutViewModelTests {
                 activeParticipantIDs: ["local-1", "remote-1"]
             )
         )
-        await Task.yield()
+        try? await Task.sleep(for: Self.eventPropagationDelay)
         controller.yield(.invalidated)
-        await Task.yield()
+        try? await Task.sleep(for: Self.eventPropagationDelay)
 
         #expect(viewModel.sessionState == .idle)
         #expect(viewModel.participants.count == 1)
