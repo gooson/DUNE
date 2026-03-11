@@ -185,6 +185,13 @@ struct AIWorkoutTemplateGeneratorTests {
         #expect(AIWorkoutTemplateGenerator.preflightError(for: intent) == nil)
     }
 
+    @Test("Deterministic builder is preferred for clear localized prompts")
+    func deterministicBuilderIsPreferredForClearPrompt() {
+        let intent = AIWorkoutTemplateGenerator.promptIntent(for: "20분 어깨 운동")
+
+        #expect(AIWorkoutTemplateGenerator.shouldPreferDeterministicBuilder(for: intent))
+    }
+
     @Test("Preflight rejects ambiguous Japanese prompt before generation")
     func preflightRejectsAmbiguousJapanesePrompt() {
         let intent = AIWorkoutTemplateGenerator.promptIntent(for: "おすすめの運動を作って")

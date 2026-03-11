@@ -31,6 +31,17 @@ struct AIWorkoutTemplateGenerator: NaturalLanguageWorkoutGenerating, Sendable {
         if let preflightError = Self.preflightError(for: promptIntent) {
             throw preflightError
         }
+        if Self.shouldPreferDeterministicBuilder(for: promptIntent) {
+            AppLogger.exercise.notice(
+                "AI workout template using deterministic builder promptHash=\(trimmedPrompt, privacy: .private(mask: .hash))"
+            )
+            return try fallbackTemplate(
+                prompt: trimmedPrompt,
+                promptIntent: promptIntent,
+                library: library,
+                localeIdentifier: request.localeIdentifier
+            )
+        }
 
         do {
             let tool = SearchExerciseTool(library: library)
@@ -539,6 +550,16 @@ struct AIWorkoutTemplateGenerator: NaturalLanguageWorkoutGenerating, Sendable {
         }
 
         return lines
+    }
+
+    static func shouldPreferDeterministicBuilder(
+        for intent: WorkoutPromptIntent
+    ) -> Bool {
+        !intent.muscleTargets.isEmpty
+            || !intent.preferredEquipment.isEmpty
+            || !intent.preferredCategories.isEmpty
+            || intent.requestsHomeFriendlySelection
+            || intent.requestedMinutes != nil
     }
 
     static func targetExerciseCount(
