@@ -18,21 +18,30 @@ struct AppMigrationPlanTests {
         #expect(currentModelNames.contains("HealthSnapshotMirrorRecord"))
     }
 
-    @Test("V12 freezes ExerciseDefaultRecord before preferred flag and V13 adopts live model")
-    func v12SnapshotFreezesExerciseDefaultRecord() {
-        let v12ModelIDs = Set(AppSchemaV12.models.map(ObjectIdentifier.init))
-        let v13ModelIDs = Set(AppSchemaV13.models.map(ObjectIdentifier.init))
-
-        #expect(v12ModelIDs.contains(ObjectIdentifier(AppSchemaV12.ExerciseDefaultRecord.self)))
-        #expect(!v12ModelIDs.contains(ObjectIdentifier(ExerciseDefaultRecord.self)))
-        #expect(v13ModelIDs.contains(ObjectIdentifier(ExerciseDefaultRecord.self)))
-    }
-
-    @Test("V12 and V13 freeze WorkoutSet before set-level rpe and V14 adopts live model")
-    func workoutSetSnapshotsStayDistinctFromLiveModel() {
+    @Test("V12 and V13 freeze ExerciseDefaultRecord snapshots until V14 adopts the live model")
+    func exerciseDefaultSnapshotsStayDistinctFromLiveModel() {
         let v12ModelIDs = Set(AppSchemaV12.models.map(ObjectIdentifier.init))
         let v13ModelIDs = Set(AppSchemaV13.models.map(ObjectIdentifier.init))
         let v14ModelIDs = Set(AppSchemaV14.models.map(ObjectIdentifier.init))
+
+        #expect(v12ModelIDs.contains(ObjectIdentifier(AppSchemaV12.ExerciseDefaultRecord.self)))
+        #expect(!v12ModelIDs.contains(ObjectIdentifier(ExerciseDefaultRecord.self)))
+        #expect(v13ModelIDs.contains(ObjectIdentifier(AppSchemaV13.ExerciseDefaultRecord.self)))
+        #expect(!v13ModelIDs.contains(ObjectIdentifier(ExerciseDefaultRecord.self)))
+        #expect(v14ModelIDs.contains(ObjectIdentifier(ExerciseDefaultRecord.self)))
+    }
+
+    @Test("V12 and V13 freeze ExerciseRecord and WorkoutSet together before V14 adopts live models")
+    func relationshipSnapshotsStayDistinctFromLiveModels() {
+        let v12ModelIDs = Set(AppSchemaV12.models.map(ObjectIdentifier.init))
+        let v13ModelIDs = Set(AppSchemaV13.models.map(ObjectIdentifier.init))
+        let v14ModelIDs = Set(AppSchemaV14.models.map(ObjectIdentifier.init))
+
+        #expect(v12ModelIDs.contains(ObjectIdentifier(AppSchemaV12.V12ExerciseRecord.self)))
+        #expect(v13ModelIDs.contains(ObjectIdentifier(AppSchemaV13.V13ExerciseRecord.self)))
+        #expect(!v12ModelIDs.contains(ObjectIdentifier(ExerciseRecord.self)))
+        #expect(!v13ModelIDs.contains(ObjectIdentifier(ExerciseRecord.self)))
+        #expect(v14ModelIDs.contains(ObjectIdentifier(ExerciseRecord.self)))
 
         #expect(v12ModelIDs.contains(ObjectIdentifier(AppSchemaV12.V12WorkoutSet.self)))
         #expect(v13ModelIDs.contains(ObjectIdentifier(AppSchemaV13.V13WorkoutSet.self)))
@@ -48,5 +57,63 @@ struct AppMigrationPlanTests {
             migrationPlan: AppMigrationPlan.self,
             configurations: ModelConfiguration(isStoredInMemoryOnly: true)
         )
+    }
+
+    @Test("Migration plan reopens a V11 on-disk store")
+    func migrationPlanReopensV11Store() throws {
+        let storeURL = makeTemporaryStoreURL()
+        defer { removeStoreFiles(at: storeURL) }
+
+        try createStore(at: storeURL, schema: Schema(AppSchemaV11.models))
+        _ = try reopenStoreWithMigrationPlan(at: storeURL)
+    }
+
+    @Test("Migration plan reopens a V12 on-disk store")
+    func migrationPlanReopensV12Store() throws {
+        let storeURL = makeTemporaryStoreURL()
+        defer { removeStoreFiles(at: storeURL) }
+
+        try createStore(at: storeURL, schema: Schema(AppSchemaV12.models))
+        _ = try reopenStoreWithMigrationPlan(at: storeURL)
+    }
+
+    @Test("Migration plan reopens a V13 on-disk store")
+    func migrationPlanReopensV13Store() throws {
+        let storeURL = makeTemporaryStoreURL()
+        defer { removeStoreFiles(at: storeURL) }
+
+        try createStore(at: storeURL, schema: Schema(AppSchemaV13.models))
+        _ = try reopenStoreWithMigrationPlan(at: storeURL)
+    }
+
+    private func createStore(at url: URL, schema: Schema) throws {
+        _ = try ModelContainer(
+            for: schema,
+            configurations: persistentConfiguration(for: schema, url: url)
+        )
+    }
+
+    private func reopenStoreWithMigrationPlan(at url: URL) throws -> ModelContainer {
+        try ModelContainer(
+            for: AppMigrationPlan.currentSchema,
+            migrationPlan: AppMigrationPlan.self,
+            configurations: persistentConfiguration(for: AppMigrationPlan.currentSchema, url: url)
+        )
+    }
+
+    private func persistentConfiguration(for schema: Schema, url: URL) -> ModelConfiguration {
+        ModelConfiguration(schema: schema, url: url, cloudKitDatabase: .none)
+    }
+
+    private func makeTemporaryStoreURL() -> URL {
+        FileManager.default.temporaryDirectory
+            .appendingPathComponent(UUID().uuidString)
+            .appendingPathExtension("store")
+    }
+
+    private func removeStoreFiles(at url: URL) {
+        for suffix in ["", "-wal", "-shm"] {
+            try? FileManager.default.removeItem(at: URL(fileURLWithPath: url.path + suffix))
+        }
     }
 }
