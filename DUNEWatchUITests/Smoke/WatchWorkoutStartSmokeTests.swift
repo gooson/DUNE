@@ -8,6 +8,8 @@ final class WatchWorkoutStartSmokeTests: WatchUITestBaseCase {
 
     func testStrengthWorkoutShowsInputAndMetricsSurfaces() throws {
         startFixtureStrengthWorkout()
+        XCTAssertTrue(elementExists(WatchAXID.setInputScreen, timeout: 5))
+        XCTAssertTrue(elementExists(WatchAXID.setInputRPEControl, timeout: 5))
         dismissSetInputSheetIfNeeded()
         XCTAssertTrue(elementExists(WatchAXID.sessionMetricsScreen, timeout: 5))
         XCTAssertTrue(elementExists(WatchAXID.sessionMetricsCompleteSetButton, timeout: 5))

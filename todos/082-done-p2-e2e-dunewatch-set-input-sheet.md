@@ -38,12 +38,13 @@ updated: 2026-03-09
   - `watch-set-input-weight-increment`
   - `watch-set-input-reps-decrement`
   - `watch-set-input-reps-increment`
+  - `watch-set-input-rpe`
 - Dynamic history row selector:
   - `watch-set-input-previous-set-{setNumber}`
 
 ## State / Assertion Scope
 
-- PR smoke는 initial auto-present sheet가 열리고 `watch-set-input-done`으로 닫히는 lane만 확인한다.
+- PR smoke는 initial auto-present sheet가 열리고 `watch-set-input-rpe` + `watch-set-input-done`이 함께 보이는 lane만 확인한다.
 - previous set history button/screen은 completed set가 누적된 뒤에만 의미가 있으므로 selector inventory까지만 고정한다.
 - weight/reps clamp semantics는 UI surface 범위 밖이며 policy/unit test lane이 담당한다.
 
