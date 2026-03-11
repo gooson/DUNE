@@ -120,7 +120,7 @@ enum EvaluateHealthInsightUseCase: Sendable {
             title: String(localized: "Sleep Debt Alert"),
             body: String(localized: "Weekly sleep debt: \(hours)h \(mins)m"),
             severity: .attention,
-            date: Date()
+            date: now
         )
     }
 
