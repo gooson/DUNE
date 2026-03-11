@@ -716,6 +716,40 @@ struct DashboardViewModelTests {
         #expect(vm.baselineDeltasByMetricID["rhr"]?.shortTermDelta == 10.0)
     }
 
+    @Test("Hero baseline details include baseline-relative RHR badge")
+    func heroBaselineDetailsIncludeRHR() async {
+        let calendar = Calendar.current
+        let today = Date()
+        let samples: [HRVSample] = (0..<7).compactMap { offset in
+            guard let date = calendar.date(byAdding: .day, value: -offset, to: today) else { return nil }
+            return HRVSample(value: offset == 0 ? 60 : 50, date: date)
+        }
+        let rhrCollection: [(date: Date, min: Double, max: Double, average: Double)] = (0..<8).compactMap { offset in
+            guard let date = calendar.date(byAdding: .day, value: -offset, to: today) else { return nil }
+            let average = offset == 0 ? 64.0 : 58.0
+            return (date: date, min: average - 1, max: average + 1, average: average)
+        }
+
+        let vm = DashboardViewModel(
+            hrvService: MockHRVService(
+                samples: samples,
+                todayRHR: 64,
+                yesterdayRHR: 58,
+                latestRHR: (value: 64, date: today),
+                rhrCollection: rhrCollection
+            ),
+            sleepService: MockSleepService(),
+            workoutService: MockWorkoutService(),
+            stepsService: MockStepsService()
+        )
+
+        await vm.loadData()
+
+        let rhrBadge = vm.heroBaselineDetails.first { $0.label == String(localized: "RHR vs 14d avg") }
+        #expect(rhrBadge != nil)
+        #expect(rhrBadge?.inversePolarity == true)
+    }
+
     @Test("Location permission waits for resolution before weather fetch")
     func locationPermissionWaitsBeforeWeatherFetch() async {
         let weatherProvider = MockWeatherProvider(

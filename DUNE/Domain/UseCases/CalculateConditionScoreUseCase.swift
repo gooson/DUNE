@@ -8,14 +8,16 @@ struct CalculateConditionScoreUseCase: ConditionScoreCalculating, Sendable {
     let requiredDays = 7
 
     /// Number of days to include in the condition score baseline window.
-    /// Callers should filter HRV samples to this window before passing to execute().
+    /// The use case trims incoming HRV and RHR series to this rolling window.
     static let conditionWindowDays = 14
 
     private let baselineScore = 50.0
     private let zScoreMultiplier = 15.0
     private let minimumStdDev = 0.25
-    private let rhrChangeThreshold = 2.0
-    private let rhrPenaltyMultiplier = 2.0
+    private let minimumRHRStdDev = 2.0
+    private let rhrZScoreMultiplier = 4.0
+    private let rhrImpactThreshold = 0.5
+    private let maximumRHRAdjustment = 12.0
 
     /// Physiological RHR bounds (bpm) — values outside are ignored
     private let rhrValidRange = 20.0...300.0
@@ -23,7 +25,13 @@ struct CalculateConditionScoreUseCase: ConditionScoreCalculating, Sendable {
     private let hrvValidRange = 0.0...500.0
 
     struct Input: Sendable {
+        struct RHRDailyAverage: Sendable, Hashable {
+            let date: Date
+            let value: Double
+        }
+
         let hrvSamples: [HRVSample]
+        let rhrDailyAverages: [RHRDailyAverage]
         let todayRHR: Double?
         let yesterdayRHR: Double?
         /// Effective RHR for UI display (fallback when todayRHR is nil)
@@ -32,12 +40,14 @@ struct CalculateConditionScoreUseCase: ConditionScoreCalculating, Sendable {
 
         init(
             hrvSamples: [HRVSample],
+            rhrDailyAverages: [RHRDailyAverage] = [],
             todayRHR: Double?,
             yesterdayRHR: Double?,
             displayRHR: Double? = nil,
             displayRHRDate: Date? = nil
         ) {
             self.hrvSamples = hrvSamples
+            self.rhrDailyAverages = rhrDailyAverages
             self.todayRHR = todayRHR
             self.yesterdayRHR = yesterdayRHR
             self.displayRHR = displayRHR
@@ -52,7 +62,7 @@ struct CalculateConditionScoreUseCase: ConditionScoreCalculating, Sendable {
     }
 
     func execute(input: Input) -> Output {
-        let dailyAverages = computeDailyAverages(from: input.hrvSamples)
+        let dailyAverages = Array(computeDailyAverages(from: input.hrvSamples).prefix(Self.conditionWindowDays))
         let baselineStatus = BaselineStatus(
             daysCollected: dailyAverages.count,
             daysRequired: requiredDays
@@ -63,9 +73,10 @@ struct CalculateConditionScoreUseCase: ConditionScoreCalculating, Sendable {
             return Output(score: nil, baselineStatus: baselineStatus, contributions: [])
         }
 
-        // Filter to valid physiological range (0–500ms) and positive values for log()
         let validAverages = dailyAverages.filter { $0.value > 0 && hrvValidRange.contains($0.value) }
-        guard !validAverages.isEmpty, todayAverage.value > 0, hrvValidRange.contains(todayAverage.value) else {
+        guard !validAverages.isEmpty,
+              todayAverage.value > 0,
+              hrvValidRange.contains(todayAverage.value) else {
             return Output(score: nil, baselineStatus: baselineStatus, contributions: [])
         }
 
@@ -73,7 +84,6 @@ struct CalculateConditionScoreUseCase: ConditionScoreCalculating, Sendable {
         let baseline = lnValues.reduce(0, +) / Double(lnValues.count)
         let todayLn = log(todayAverage.value)
 
-        // Coefficient of variation for normal range
         let variance = lnValues.map { ($0 - baseline) * ($0 - baseline) }
             .reduce(0, +) / Double(lnValues.count)
 
@@ -90,11 +100,9 @@ struct CalculateConditionScoreUseCase: ConditionScoreCalculating, Sendable {
         }
         var rawScore = baselineScore + (zScore * zScoreMultiplier)
 
-        // Build contributions with actual numbers
         var contributions: [ScoreContribution] = []
         let baselineHRV = exp(baseline)
 
-        // Guard against exp() overflow for display
         guard !baselineHRV.isNaN && !baselineHRV.isInfinite else {
             return Output(score: nil, baselineStatus: baselineStatus, contributions: [])
         }
@@ -115,33 +123,87 @@ struct CalculateConditionScoreUseCase: ConditionScoreCalculating, Sendable {
         }
         contributions.append(ScoreContribution(factor: .hrv, impact: hrvImpact, detail: hrvDetail))
 
-        // RHR correction: rising RHR + falling HRV = stronger fatigue signal
-        // Only apply when both values are within physiological range (20–300 bpm)
-        var rhrPenalty = 0.0
-        if let todayRHR = input.todayRHR, let yesterdayRHR = input.yesterdayRHR,
-           rhrValidRange.contains(todayRHR), rhrValidRange.contains(yesterdayRHR) {
-            let rhrChange = todayRHR - yesterdayRHR
-            if rhrChange > rhrChangeThreshold && zScore < 0 {
-                rhrPenalty = rhrChange * rhrPenaltyMultiplier
-                rawScore -= rhrPenalty
-            } else if rhrChange < -rhrChangeThreshold && zScore > 0 {
-                rawScore += abs(rhrChange)
+        let calendar = Calendar.current
+        let scoreDate = calendar.startOfDay(for: todayAverage.date)
+        let dailyRHR = computeDailyRHR(from: input.rhrDailyAverages)
+        let todayRHR = validatedRHR(input.todayRHR) ?? dailyRHR.first(where: {
+            calendar.isDate($0.date, inSameDayAs: scoreDate)
+        })?.value
+        let resolvedYesterdayRHR: Double? = {
+            if let inputYesterday = validatedRHR(input.yesterdayRHR) {
+                return inputYesterday
+            }
+            guard let yesterdayDate = calendar.date(byAdding: .day, value: -1, to: scoreDate) else {
+                return nil
+            }
+            return dailyRHR.first(where: {
+                calendar.isDate($0.date, inSameDayAs: yesterdayDate)
+            })?.value
+        }()
+
+        let rhrBaselineSamples = Array(
+            dailyRHR
+                .filter { $0.date < scoreDate }
+                .prefix(Self.conditionWindowDays)
+        )
+        let rhrBaselineValues = rhrBaselineSamples.map(\.value)
+        let baselineRHR = average(rhrBaselineValues)
+        let rhrDeltaFromBaseline = todayRHR.flatMap { today in
+            baselineRHR.map { today - $0 }
+        }
+
+        var rhrAdjustment = 0.0
+        if let todayRHR,
+           let baselineRHR,
+           rhrBaselineValues.count >= requiredDays,
+           let rhrDeltaFromBaseline {
+            let rhrStdDev = standardDeviation(rhrBaselineValues)
+            let effectiveRHRStdDev = max(rhrStdDev, minimumRHRStdDev)
+            let rhrZScore = rhrDeltaFromBaseline / effectiveRHRStdDev
+
+            if rhrZScore.isFinite {
+                rhrAdjustment = max(
+                    -maximumRHRAdjustment,
+                    min(maximumRHRAdjustment, -(rhrZScore * rhrZScoreMultiplier))
+                )
+                rawScore += rhrAdjustment
             }
 
             let rhrImpact: ScoreContribution.Impact
-            let rhrDetail: String
-            let changeSign = rhrChange >= 0 ? "+" : ""
-            if rhrChange < -rhrChangeThreshold {
+            if rhrZScore < -rhrImpactThreshold {
                 rhrImpact = .positive
-                rhrDetail = String(format: "%.0f → %.0f bpm (%@%.0f)", yesterdayRHR, todayRHR, changeSign, rhrChange)
-            } else if rhrChange > rhrChangeThreshold {
+            } else if rhrZScore > rhrImpactThreshold {
                 rhrImpact = .negative
-                rhrDetail = String(format: "%.0f → %.0f bpm (%@%.0f)", yesterdayRHR, todayRHR, changeSign, rhrChange)
             } else {
                 rhrImpact = .neutral
-                rhrDetail = String(format: "%.0f bpm (stable)", todayRHR)
+            }
+
+            let rhrDetail: String
+            if abs(rhrDeltaFromBaseline) < 0.5 {
+                rhrDetail = String(format: "%.0f bpm — near %.0f bpm baseline", todayRHR, baselineRHR)
+            } else {
+                let deltaText = rhrDeltaFromBaseline.formattedWithSeparator(
+                    fractionDigits: 0,
+                    alwaysShowSign: true
+                )
+                rhrDetail = String(format: "%.0f bpm — %@ vs %.0f bpm baseline", todayRHR, deltaText, baselineRHR)
             }
             contributions.append(ScoreContribution(factor: .rhr, impact: rhrImpact, detail: rhrDetail))
+        } else if let todayRHR {
+            let detail = String(format: "%.0f bpm — building baseline", todayRHR)
+            contributions.append(ScoreContribution(factor: .rhr, impact: .neutral, detail: detail))
+        } else if let displayRHR = validatedRHR(input.displayRHR) {
+            let detail: String
+            if let displayRHRDate = input.displayRHRDate {
+                detail = String(
+                    format: "%.0f bpm — latest sample %@",
+                    displayRHR,
+                    Self.Cache.shortDate.string(from: displayRHRDate)
+                )
+            } else {
+                detail = String(format: "%.0f bpm — latest sample", displayRHR)
+            }
+            contributions.append(ScoreContribution(factor: .rhr, impact: .neutral, detail: detail))
         }
 
         let clampedScore = Int(max(0, min(100, rawScore)).rounded())
@@ -155,11 +217,14 @@ struct CalculateConditionScoreUseCase: ConditionScoreCalculating, Sendable {
             daysInBaseline: validAverages.count,
             todayDate: todayAverage.date,
             rawScore: rawScore,
-            rhrPenalty: rhrPenalty,
-            todayRHR: input.todayRHR.flatMap { rhrValidRange.contains($0) ? $0 : nil },
-            yesterdayRHR: input.yesterdayRHR.flatMap { rhrValidRange.contains($0) ? $0 : nil },
-            displayRHR: input.displayRHR.flatMap { rhrValidRange.contains($0) ? $0 : nil },
-            displayRHRDate: input.displayRHR.flatMap { rhrValidRange.contains($0) ? input.displayRHRDate : nil }
+            rhrAdjustment: rhrAdjustment,
+            todayRHR: todayRHR,
+            yesterdayRHR: resolvedYesterdayRHR,
+            baselineRHR: baselineRHR,
+            rhrDeltaFromBaseline: rhrDeltaFromBaseline,
+            rhrBaselineDays: rhrBaselineValues.count,
+            displayRHR: validatedRHR(input.displayRHR),
+            displayRHRDate: validatedRHR(input.displayRHR) != nil ? input.displayRHRDate : nil
         )
 
         let score = ConditionScore(score: clampedScore, date: Date(), contributions: contributions, detail: detail)
@@ -182,5 +247,48 @@ struct CalculateConditionScoreUseCase: ConditionScoreCalculating, Sendable {
             return (date: date, value: avg)
         }
         .sorted { $0.date > $1.date }
+    }
+
+    private func computeDailyRHR(from samples: [Input.RHRDailyAverage]) -> [(date: Date, value: Double)] {
+        let calendar = Calendar.current
+
+        let grouped = Dictionary(grouping: samples) { sample in
+            calendar.startOfDay(for: sample.date)
+        }
+
+        return grouped.compactMap { date, samples in
+            let validValues = samples
+                .map(\.value)
+                .filter { rhrValidRange.contains($0) && $0.isFinite }
+            guard let average = average(validValues) else { return nil }
+            return (date: date, value: average)
+        }
+        .sorted { $0.date > $1.date }
+    }
+
+    private func average(_ values: [Double]) -> Double? {
+        guard !values.isEmpty else { return nil }
+        return values.reduce(0, +) / Double(values.count)
+    }
+
+    private func standardDeviation(_ values: [Double]) -> Double {
+        guard let mean = average(values), !values.isEmpty else { return 0 }
+        let variance = values
+            .map { ($0 - mean) * ($0 - mean) }
+            .reduce(0, +) / Double(values.count)
+        guard variance.isFinite else { return 0 }
+        return sqrt(variance)
+    }
+
+    private func validatedRHR(_ value: Double?) -> Double? {
+        value.flatMap { rhrValidRange.contains($0) ? $0 : nil }
+    }
+
+    private enum Cache {
+        static let shortDate: DateFormatter = {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "M/d"
+            return formatter
+        }()
     }
 }

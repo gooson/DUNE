@@ -28,10 +28,12 @@ struct BaselineDetail: Sendable {
     let label: String
     let value: Double
     let fractionDigits: Int
+    let inversePolarity: Bool
 
-    init(label: String, value: Double, fractionDigits: Int = 1) {
+    init(label: String, value: Double, fractionDigits: Int = 1, inversePolarity: Bool = false) {
         self.label = label
         self.value = value
         self.fractionDigits = fractionDigits
+        self.inversePolarity = inversePolarity
     }
 }

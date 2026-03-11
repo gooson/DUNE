@@ -18,15 +18,18 @@ struct CloudMirroredSharedHealthDataServiceTests {
             daysInBaseline: 9,
             todayDate: Date(timeIntervalSince1970: 1_700_086_400),
             rawScore: 81.2,
-            rhrPenalty: 6,
+            rhrAdjustment: -6,
             todayRHR: 56,
             yesterdayRHR: 58,
+            baselineRHR: 53,
+            rhrDeltaFromBaseline: 3,
+            rhrBaselineDays: 9,
             displayRHR: 56,
             displayRHRDate: Date(timeIntervalSince1970: 1_700_086_400)
         )
         let conditionContributions = [
             ScoreContribution(factor: .hrv, impact: .positive, detail: "61ms — above 55ms avg"),
-            ScoreContribution(factor: .rhr, impact: .negative, detail: "58 → 56 bpm (-2)")
+            ScoreContribution(factor: .rhr, impact: .negative, detail: "56 bpm — +3 vs 53 bpm baseline")
         ]
 
         let olderPayload = HealthSnapshotMirrorMapper.Payload(

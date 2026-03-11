@@ -111,7 +111,7 @@ struct ConditionHeroView: View {
                     if !trendBadges.isEmpty {
                         VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                             ForEach(Array(trendBadges.enumerated()), id: \.offset) { _, detail in
-                                BaselineTrendBadge(detail: detail, inversePolarity: false)
+                                BaselineTrendBadge(detail: detail)
                             }
                         }
                     }

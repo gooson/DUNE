@@ -156,6 +156,7 @@ actor SharedHealthDataServiceImpl: SharedHealthDataService {
             todayRHR: todayRHRResult.value,
             yesterdayRHR: yesterdayRHRResult.value,
             latestRHR: latestRHRResult.value,
+            rhrCollection: rhrCollectionResult.value,
             referenceDate: referenceDate
         )
 
@@ -229,6 +230,7 @@ actor SharedHealthDataServiceImpl: SharedHealthDataService {
         todayRHR: Double?,
         yesterdayRHR: Double?,
         latestRHR: (value: Double, date: Date)?,
+        rhrCollection: [(date: Date, min: Double, max: Double, average: Double)],
         referenceDate: Date
     ) -> (score: ConditionScore?, baselineStatus: BaselineStatus?, recentScores: [ConditionScore]) {
         let calendar = Calendar.current
@@ -259,6 +261,7 @@ actor SharedHealthDataServiceImpl: SharedHealthDataService {
         let output = conditionScoreUseCase.execute(
             input: .init(
                 hrvSamples: conditionSamples,
+                rhrDailyAverages: makeRHRDailyAverages(from: rhrCollection),
                 todayRHR: todayRHR,
                 yesterdayRHR: yesterdayRHR,
                 displayRHR: effectiveRHR,
@@ -266,7 +269,11 @@ actor SharedHealthDataServiceImpl: SharedHealthDataService {
             )
         )
 
-        let recentScores = buildRecentScores(from: hrvSamples, referenceDate: referenceDate)
+        let recentScores = buildRecentScores(
+            from: hrvSamples,
+            rhrCollection: rhrCollection,
+            referenceDate: referenceDate
+        )
 
         return (score: output.score, baselineStatus: output.baselineStatus, recentScores: recentScores)
     }
@@ -311,8 +318,13 @@ actor SharedHealthDataServiceImpl: SharedHealthDataService {
         }
     }
 
-    private func buildRecentScores(from samples: [HRVSample], referenceDate: Date) -> [ConditionScore] {
+    private func buildRecentScores(
+        from samples: [HRVSample],
+        rhrCollection: [(date: Date, min: Double, max: Double, average: Double)],
+        referenceDate: Date
+    ) -> [ConditionScore] {
         let calendar = Calendar.current
+        let rhrDailyAverages = makeRHRDailyAverages(from: rhrCollection)
 
         return (0..<7).compactMap { dayOffset in
             guard let date = calendar.date(byAdding: .day, value: -dayOffset, to: referenceDate),
@@ -321,8 +333,10 @@ actor SharedHealthDataServiceImpl: SharedHealthDataService {
             }
 
             let relevantSamples = samples.filter { $0.date < nextDay }
+            let relevantRHR = rhrDailyAverages.filter { $0.date < nextDay }
             let input = CalculateConditionScoreUseCase.Input(
                 hrvSamples: relevantSamples,
+                rhrDailyAverages: relevantRHR,
                 todayRHR: nil,
                 yesterdayRHR: nil
             )
@@ -334,5 +348,14 @@ actor SharedHealthDataServiceImpl: SharedHealthDataService {
                 contributions: score.contributions
             )
         }
+    }
+
+    private func makeRHRDailyAverages(
+        from collection: [(date: Date, min: Double, max: Double, average: Double)]
+    ) -> [CalculateConditionScoreUseCase.Input.RHRDailyAverage] {
+        collection
+            .filter { $0.average > 0 && $0.average.isFinite }
+            .map { .init(date: $0.date, value: $0.average) }
+            .sorted { $0.date < $1.date }
     }
 }

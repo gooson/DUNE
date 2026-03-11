@@ -6,7 +6,7 @@ import Testing
 struct HealthSnapshotMirrorMapperTests {
     private let sampleContributions: [ScoreContribution] = [
         ScoreContribution(factor: .hrv, impact: .positive, detail: "58ms — above 52ms avg"),
-        ScoreContribution(factor: .rhr, impact: .negative, detail: "59 → 63 bpm (+4)")
+        ScoreContribution(factor: .rhr, impact: .negative, detail: "63 bpm — +4 vs 59 bpm baseline")
     ]
 
     private func makeConditionDetail(
@@ -25,9 +25,12 @@ struct HealthSnapshotMirrorMapperTests {
             daysInBaseline: 10,
             todayDate: todayDate,
             rawScore: 77.4,
-            rhrPenalty: 8,
+            rhrAdjustment: -8,
             todayRHR: todayRHR,
             yesterdayRHR: yesterdayRHR,
+            baselineRHR: 59,
+            rhrDeltaFromBaseline: 4,
+            rhrBaselineDays: 10,
             displayRHR: displayRHR,
             displayRHRDate: displayRHRDate ?? todayDate
         )

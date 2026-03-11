@@ -4,6 +4,11 @@ struct BaselineTrendBadge: View {
     let detail: BaselineDetail
     let inversePolarity: Bool
 
+    init(detail: BaselineDetail, inversePolarity: Bool? = nil) {
+        self.detail = detail
+        self.inversePolarity = inversePolarity ?? detail.inversePolarity
+    }
+
     private var isNeutral: Bool {
         abs(detail.value) < 0.05
     }

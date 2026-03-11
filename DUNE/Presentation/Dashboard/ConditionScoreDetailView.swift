@@ -78,6 +78,7 @@ struct ConditionScoreDetailView: View {
                                 timePeriod: viewModel.selectedPeriod,
                                 tintColor: score.status.color,
                                 trendLine: viewModel.trendLineData,
+                                scrollDomain: viewModel.scrollDomain,
                                 scrollPosition: $viewModel.scrollPosition
                             )
                             .frame(height: chartHeight)
