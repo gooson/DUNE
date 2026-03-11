@@ -12,6 +12,9 @@ struct ConditionCalculationCard: View {
     private let stdDevText: String
     private let stdDevSub: String
     private let rhrPenaltyText: String
+    private let rhrValueText: String
+    private let rhrValueSub: String
+    private let hasRHRData: Bool
     private let rawScoreText: String
     private let dateText: String
 
@@ -27,6 +30,24 @@ struct ConditionCalculationCard: View {
         self.rhrPenaltyText = String(format: "-%.1f", detail.rhrPenalty)
         self.rawScoreText = String(format: "%.1f", detail.rawScore)
         self.dateText = Self.formatDate(detail.todayDate)
+
+        // RHR value display
+        if let todayRHR = detail.todayRHR {
+            self.hasRHRData = true
+            if let yesterdayRHR = detail.yesterdayRHR {
+                let change = todayRHR - yesterdayRHR
+                let sign = change >= 0 ? "+" : ""
+                self.rhrValueText = String(format: "%.0f → %.0f bpm", yesterdayRHR, todayRHR)
+                self.rhrValueSub = String(format: "%@%.0f", sign, change)
+            } else {
+                self.rhrValueText = String(format: "%.0f bpm", todayRHR)
+                self.rhrValueSub = "no comparison"
+            }
+        } else {
+            self.hasRHRData = false
+            self.rhrValueText = "—"
+            self.rhrValueSub = ""
+        }
     }
 
     var body: some View {
@@ -48,6 +69,11 @@ struct ConditionCalculationCard: View {
 
                     CalculationRow(label: "Z-Score", value: zScoreText, sub: zScoreLabel(detail.zScore))
                     CalculationRow(label: "StdDev (ln)", value: stdDevText, sub: stdDevSub)
+
+                    if hasRHRData {
+                        Divider()
+                        CalculationRow(label: "RHR", value: rhrValueText, sub: rhrValueSub)
+                    }
 
                     if detail.rhrPenalty > 0 {
                         CalculationRow(label: "RHR Penalty", value: rhrPenaltyText, sub: "")

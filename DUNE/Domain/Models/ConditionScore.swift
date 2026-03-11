@@ -120,6 +120,10 @@ struct ConditionScoreDetail: Sendable, Hashable {
     let rawScore: Double
     /// RHR penalty applied (0 if none)
     let rhrPenalty: Double
+    /// Today's resting heart rate (bpm), nil if unavailable
+    let todayRHR: Double?
+    /// Yesterday's resting heart rate (bpm), nil if unavailable
+    let yesterdayRHR: Double?
 }
 
 struct BaselineStatus: Sendable {

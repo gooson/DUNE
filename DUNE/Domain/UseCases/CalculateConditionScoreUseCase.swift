@@ -138,7 +138,9 @@ struct CalculateConditionScoreUseCase: ConditionScoreCalculating, Sendable {
             daysInBaseline: validAverages.count,
             todayDate: todayAverage.date,
             rawScore: rawScore,
-            rhrPenalty: rhrPenalty
+            rhrPenalty: rhrPenalty,
+            todayRHR: input.todayRHR,
+            yesterdayRHR: input.yesterdayRHR
         )
 
         let score = ConditionScore(score: clampedScore, date: Date(), contributions: contributions, detail: detail)
