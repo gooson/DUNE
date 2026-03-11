@@ -99,13 +99,18 @@ enum EvaluateHealthInsightUseCase: Sendable {
 
 
 
-    /// Creates an insight when accumulated weekly sleep deficit indicates sleep debt.
+    /// Creates an insight when today's sleep still contributes to accumulated weekly sleep debt.
     static func evaluateSleepDebt(
-        weeklyDeficitMinutes: Double,
-        level: SleepDeficitAnalysis.DeficitLevel
+        analysis: SleepDeficitAnalysis,
+        now: Date = Date(),
+        calendar: Calendar = .current
     ) -> HealthInsight? {
+        let weeklyDeficitMinutes = analysis.weeklyDeficit
         guard weeklyDeficitMinutes.isFinite, weeklyDeficitMinutes > 0 else { return nil }
-        guard level != .good, level != .insufficient else { return nil }
+        guard analysis.level != .good, analysis.level != .insufficient else { return nil }
+        guard analysis.dailyDeficits.contains(where: {
+            calendar.isDate($0.date, inSameDayAs: now) && $0.deficitMinutes.isFinite && $0.deficitMinutes > 0
+        }) else { return nil }
 
         let hours = Int(weeklyDeficitMinutes) / 60
         let mins = Int(weeklyDeficitMinutes) % 60
@@ -115,7 +120,7 @@ enum EvaluateHealthInsightUseCase: Sendable {
             title: String(localized: "Sleep Debt Alert"),
             body: String(localized: "Weekly sleep debt: \(hours)h \(mins)m"),
             severity: .attention,
-            date: Date()
+            date: now
         )
     }
 

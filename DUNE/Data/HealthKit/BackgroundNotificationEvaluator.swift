@@ -249,10 +249,7 @@ final class BackgroundNotificationEvaluator: Sendable {
             longTermDurations: mergedDurations
         ))
 
-        return EvaluateHealthInsightUseCase.evaluateSleepDebt(
-            weeklyDeficitMinutes: analysis.weeklyDeficit,
-            level: analysis.level
-        )
+        return EvaluateHealthInsightUseCase.evaluateSleepDebt(analysis: analysis)
     }
 
     private func mergeSleepDurations(
