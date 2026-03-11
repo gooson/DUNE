@@ -74,6 +74,7 @@ private struct MockAllDataHeartRateService: HeartRateQuerying {
     func fetchHeartRateHistory(days: Int) async throws -> [VitalSample] { history }
     func fetchHeartRateHistory(start: Date, end: Date) async throws -> [VitalSample] { history }
     func fetchHeartRateZones(forWorkoutID workoutID: String, maxHR: Double) async throws -> [HeartRateZone] { [] }
+    func fetchHeartRateRecovery(forWorkoutID workoutID: String) async throws -> HeartRateRecovery? { nil }
 }
 
 private struct MockAllDataVitalsService: VitalsQuerying {

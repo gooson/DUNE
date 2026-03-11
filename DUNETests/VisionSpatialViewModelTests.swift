@@ -73,6 +73,10 @@ private actor MockSpatialHeartRateService: HeartRateQuerying {
         []
     }
 
+    func fetchHeartRateRecovery(forWorkoutID workoutID: String) async throws -> HeartRateRecovery? {
+        nil
+    }
+
     func fetchLatestCallCount() -> Int {
         fetchLatestCount
     }
