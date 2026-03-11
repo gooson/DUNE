@@ -1,7 +1,7 @@
 ---
 topic: sleep-all-data-time-anchor
 date: 2026-03-11
-status: draft
+status: implemented
 confidence: high
 related_solutions:
   - docs/solutions/healthkit/2026-03-04-all-data-sleep-awake-alignment.md
