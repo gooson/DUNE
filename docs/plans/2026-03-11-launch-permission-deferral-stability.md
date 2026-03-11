@@ -1,7 +1,7 @@
 ---
 topic: launch permission deferral stability
 date: 2026-03-11
-status: draft
+status: implemented
 confidence: high
 related_solutions:
   - docs/solutions/architecture/2026-03-07-launch-permission-whatsnew-sequencing.md
