@@ -49,11 +49,7 @@ struct WellnessView: View {
                                 viewModel.wellnessScore == nil &&
                                 !viewModel.isLoading {
                         if viewModel.isMirroredReadOnlyMode {
-                            EmptyStateView(
-                                icon: "leaf.fill",
-                                title: "No Synced Wellness Data",
-                                message: "Open DUNE on your iPhone once to sync HealthKit data, then refresh on Mac."
-                            )
+                            CloudSyncWaitingView()
                         } else {
                             EmptyStateView(
                                 icon: "leaf.fill",
