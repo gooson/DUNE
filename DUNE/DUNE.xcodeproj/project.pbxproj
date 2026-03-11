@@ -139,6 +139,7 @@
 		20BA312107CD67E1CE92E963 /* ExerciseFrequencyServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE8F91B7C40220F1D202474 /* ExerciseFrequencyServiceTests.swift */; };
 		211C636C6818684A8A301680 /* WorkoutStreak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179B7B1B76AA85C280BD0FE1 /* WorkoutStreak.swift */; };
 		215DB46E8E5E399E61FEE73D /* ExerciseRecord+Snapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = A316CB15E5749CD471D04F46 /* ExerciseRecord+Snapshot.swift */; };
+		21991B5AB6D42B75F9F65788 /* PersistentStoreRemoteChangeRefresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F20BC634EA3F53DE20D60BA /* PersistentStoreRemoteChangeRefresh.swift */; };
 		21A29D0E4D1E8068F240842C /* WatchExerciseHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3CF4C3686EE0524CFAAD67 /* WatchExerciseHelpers.swift */; };
 		224B97DA7CE362E0915C1D83 /* PersistentStoreRecovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = B48C93AD983B232D55F21464 /* PersistentStoreRecovery.swift */; };
 		22BBD66736FF59C894EFBC53 /* ConsistencyDetailViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 062A0B6552190E2F4301FC65 /* ConsistencyDetailViewModelTests.swift */; };
@@ -310,6 +311,7 @@
 		4F624EF783FACC53E08F636A /* PersonalRecordServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 591E5D2B9C33E4EEE5BB73E8 /* PersonalRecordServiceTests.swift */; };
 		4F8F2ED246CF4962CC5F46E0 /* MetricHighlightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8116CDD0E5D63DDE1F0E9506 /* MetricHighlightsView.swift */; };
 		4FE918597CF533DA5FB7DF80 /* TrendDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F6B46502897A67A5ADCB458 /* TrendDirection.swift */; };
+		4FF6CD5786ED0742CE250879 /* PersistentStoreRemoteChangeRefreshTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D881031E7F06493B2CF45A57 /* PersistentStoreRemoteChangeRefreshTests.swift */; };
 		50902A554FA38DAE54E1BE0D /* TemplateWorkoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EDCDE1C6BCD0AB6FF1ECB7E /* TemplateWorkoutView.swift */; };
 		5092485AD3C274F1F87A60BE /* ExerciseTotalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 061AFC3497A2CA06787C3B0A /* ExerciseTotalsView.swift */; };
 		50D7412B30FA507F0F69FD20 /* SharedHealthDataServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56CDA83256547CEFFCD8AE71 /* SharedHealthDataServiceImpl.swift */; };
@@ -1239,6 +1241,7 @@
 		3D321C9FD4ACCEAC91CF2FA0 /* LifeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifeViewModel.swift; sourceTree = "<group>"; };
 		3D5CE05D58DF305E90A08E6F /* TemplateWorkoutViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateWorkoutViewModelTests.swift; sourceTree = "<group>"; };
 		3DD5049F6C8C4A81929217AF /* WorkoutActivityType+Icon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkoutActivityType+Icon.swift"; sourceTree = "<group>"; };
+		3F20BC634EA3F53DE20D60BA /* PersistentStoreRemoteChangeRefresh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentStoreRemoteChangeRefresh.swift; sourceTree = "<group>"; };
 		3F7483B0DEF534D4B2732250 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		3F82FBF1529280B268792C51 /* ConditionExplainerSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionExplainerSection.swift; sourceTree = "<group>"; };
 		3FE19D6E196897D06913E8F1 /* ExerciseSessionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseSessionDetailView.swift; sourceTree = "<group>"; };
@@ -1700,6 +1703,7 @@
 		D7C4E7A13385B7E731283C3D /* LocationTrackingServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTrackingServiceProtocol.swift; sourceTree = "<group>"; };
 		D804151E2E622BC023F4E21F /* CompoundWorkoutMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompoundWorkoutMode.swift; sourceTree = "<group>"; };
 		D87AB99F4A22A54CC7959CE3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		D881031E7F06493B2CF45A57 /* PersistentStoreRemoteChangeRefreshTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentStoreRemoteChangeRefreshTests.swift; sourceTree = "<group>"; };
 		D8E7DEA919A810945D7723EC /* SleepViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepViewModel.swift; sourceTree = "<group>"; };
 		D90465CABA4963C635ADAD0B /* AppSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSection.swift; sourceTree = "<group>"; };
 		D9390454CB9F85AE0AE9CF75 /* Double+Formatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Formatting.swift"; sourceTree = "<group>"; };
@@ -2438,6 +2442,7 @@
 				3F7483B0DEF534D4B2732250 /* ContentView.swift */,
 				805BE0A77A9483D9EBD405DD /* DUNEApp.swift */,
 				70958B798BE16A2F43E97F94 /* LaunchExperiencePlanner.swift */,
+				3F20BC634EA3F53DE20D60BA /* PersistentStoreRemoteChangeRefresh.swift */,
 				F735CE9EF78B5ED31C2E053E /* TestDataSeeder.swift */,
 			);
 			path = App;
@@ -3401,6 +3406,7 @@
 				6CE2F01A3DAE682CB43919CE /* ParsedWatchIncomingMessageTests.swift */,
 				6E6C7C5B1170C93529074C33 /* PeriodComparisonTests.swift */,
 				FB154A1DB6B6C1D9420E0B7E /* PersistentStoreRecoveryTests.swift */,
+				D881031E7F06493B2CF45A57 /* PersistentStoreRemoteChangeRefreshTests.swift */,
 				3981FDD5FAEAA88E9D743325 /* PersonalRecordsDetailViewModelTests.swift */,
 				591E5D2B9C33E4EEE5BB73E8 /* PersonalRecordServiceTests.swift */,
 				362F13A07A81BCE82972A944 /* PredictSleepQualityUseCaseTests.swift */,
@@ -4116,6 +4122,7 @@
 				8147BA9DA86B8803CDD20847 /* PeriodComparisonView.swift in Sources */,
 				1C2955BCF186C891A6257367 /* PeriodSwipeModifier.swift in Sources */,
 				A82CF78B8312E13074B255C1 /* PersistentStoreRecovery.swift in Sources */,
+				21991B5AB6D42B75F9F65788 /* PersistentStoreRemoteChangeRefresh.swift in Sources */,
 				C0B5B653392A0AF005BD620B /* PersonalRecord.swift in Sources */,
 				4E17DB0F16138434004B0364 /* PersonalRecordService.swift in Sources */,
 				BB635B9B225C3C1E3C9F3795 /* PersonalRecordStore.swift in Sources */,
@@ -4689,6 +4696,7 @@
 				326B72E89F4EC5FCA56E992A /* ParsedWatchIncomingMessageTests.swift in Sources */,
 				4E6A7116D6A50AEBFF45F70E /* PeriodComparisonTests.swift in Sources */,
 				A45C8191021930DBB92A28A9 /* PersistentStoreRecoveryTests.swift in Sources */,
+				4FF6CD5786ED0742CE250879 /* PersistentStoreRemoteChangeRefreshTests.swift in Sources */,
 				4F624EF783FACC53E08F636A /* PersonalRecordServiceTests.swift in Sources */,
 				FFAE801AE4C3AA64C513FFAE /* PersonalRecordsDetailViewModelTests.swift in Sources */,
 				31D224BFA0A2899C08DCCDD6 /* PredictSleepQualityUseCaseTests.swift in Sources */,
