@@ -269,6 +269,11 @@ struct ExerciseSessionDetailView: View {
                         .font(.subheadline.monospacedDigit())
                         .foregroundStyle(DS.Color.textSecondary)
                 }
+                if let rpe = workoutSet.rpe, let level = RPELevel.validate(rpe) {
+                    Text("RPE \(RPELevel(value: level).displayLabel)")
+                        .font(.caption2.weight(.semibold))
+                        .foregroundStyle(DS.Color.warmGlow)
+                }
             }
         }
         .padding(DS.Spacing.md)

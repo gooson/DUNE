@@ -305,6 +305,15 @@ struct TemplateWorkoutView: View {
                         Label("Delete Set", systemImage: "trash")
                     }
                 }
+
+                if vm.sets[index].isCompleted {
+                    SetRPEPickerView(rpe: Binding(
+                        get: { vm.sets[index].rpe },
+                        set: { vm.sets[index].rpe = $0 }
+                    ))
+                    .padding(.horizontal, DS.Spacing.sm)
+                    .padding(.bottom, DS.Spacing.xs)
+                }
             }
         }
     }
@@ -469,6 +478,16 @@ struct TemplateWorkoutView: View {
             )
             let data = WorkoutShareService.buildShareData(from: input)
             shareImage = WorkoutShareService.renderShareImage(data: data, weightUnit: weightUnit)
+        }
+
+        // Auto-compute session effort from per-set RPE
+        for record in savedRecords {
+            let setRPEInputs = (record.sets ?? []).map {
+                SetRPEInput(rpe: $0.rpe, setType: $0.setType)
+            }
+            if let setBasedEffort = intensityService.averageSetRPE(sets: setRPEInputs) {
+                record.rpe = setBasedEffort
+            }
         }
 
         // Effort suggestion from recent data
