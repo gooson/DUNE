@@ -64,7 +64,7 @@ struct VisionSharePlayWorkoutViewModelTests {
                 activeParticipantIDs: ["local-1", "remote-1"]
             )
         )
-        await Task.yield()
+        try? await Task.sleep(for: .milliseconds(100))
 
         #expect(viewModel.sessionState == .sharing)
         #expect(controller.sentStates.last?.exerciseName == "Bench Press")
@@ -84,7 +84,7 @@ struct VisionSharePlayWorkoutViewModelTests {
                 activeParticipantIDs: ["local-1"]
             )
         )
-        await Task.yield()
+        try? await Task.sleep(for: .milliseconds(100))
         let baselineSendCount = controller.sentStates.count
 
         controller.yield(
@@ -93,7 +93,7 @@ struct VisionSharePlayWorkoutViewModelTests {
                 activeParticipantIDs: ["local-1", "remote-1", "remote-2"]
             )
         )
-        await Task.yield()
+        try? await Task.sleep(for: .milliseconds(100))
 
         #expect(controller.sentStates.count == baselineSendCount + 1)
         #expect(viewModel.participants.count == 3)
@@ -124,7 +124,7 @@ struct VisionSharePlayWorkoutViewModelTests {
                 participantID: "remote-1"
             )
         )
-        await Task.yield()
+        try? await Task.sleep(for: .milliseconds(100))
 
         #expect(viewModel.participants.count == 2)
         #expect(viewModel.participants[1].title.contains("2"))
@@ -144,9 +144,9 @@ struct VisionSharePlayWorkoutViewModelTests {
                 activeParticipantIDs: ["local-1", "remote-1"]
             )
         )
-        await Task.yield()
+        try? await Task.sleep(for: .milliseconds(100))
         controller.yield(.invalidated)
-        await Task.yield()
+        try? await Task.sleep(for: .milliseconds(100))
 
         #expect(viewModel.sessionState == .idle)
         #expect(viewModel.participants.count == 1)
