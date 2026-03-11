@@ -69,11 +69,7 @@ struct DashboardView: View {
                         if viewModel.errorMessage != nil {
                             errorSection
                         } else if viewModel.isMirroredReadOnlyMode {
-                            EmptyStateView(
-                                icon: "heart.text.clipboard",
-                                title: "No Synced Data",
-                                message: "Open DUNE on your iPhone once to sync HealthKit data, then refresh on Mac."
-                            )
+                            CloudSyncWaitingView()
                         } else {
                             EmptyStateView(
                                 icon: "heart.text.clipboard",

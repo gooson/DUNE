@@ -693,6 +693,7 @@
 		BCB18ACC128916B0EF0E6AE4 /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95B20E679BF7D5A033E6F70A /* HealthKitManager.swift */; };
 		BCC496777450EAAE6F578F9E /* CardioSecondaryUnit+View.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC68B5D36DCF76E07C878834 /* CardioSecondaryUnit+View.swift */; };
 		BCE29CA74E0390CAFDA79E76 /* SetRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0049B64ED255ADDD2DDC3FA /* SetRowView.swift */; };
+		BCFCC97BECC929BA1AABC6AA /* CloudSyncWaitingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4D6A8721460B314436730F0 /* CloudSyncWaitingView.swift */; };
 		BD2FEB61549271B50E0E2768 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2B94931917A328870CCC32 /* CoreLocation.framework */; };
 		BDC3418ADEAFC0C05E58EAD3 /* ConfirmDeleteRecordModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36B0B0AE5FD74696DED9783 /* ConfirmDeleteRecordModifier.swift */; };
 		BDF943B9063254856798C033 /* MetricBaselineDelta.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04D26715E7468054891766B /* MetricBaselineDelta.swift */; };
@@ -1586,6 +1587,7 @@
 		B48C93AD983B232D55F21464 /* PersistentStoreRecovery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentStoreRecovery.swift; sourceTree = "<group>"; };
 		B495F6AD03D8A874FD60D067 /* CoachingMessageEnhancing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachingMessageEnhancing.swift; sourceTree = "<group>"; };
 		B4CCBDA07CB49AF2FCE5547A /* CalculateAverageBedtimeUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculateAverageBedtimeUseCaseTests.swift; sourceTree = "<group>"; };
+		B4D6A8721460B314436730F0 /* CloudSyncWaitingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSyncWaitingView.swift; sourceTree = "<group>"; };
 		B53C1171518D1C9CB3C2EAF8 /* RestTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestTimerView.swift; sourceTree = "<group>"; };
 		B558BAFE0B7621F0766FA36C /* WellnessSectionGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessSectionGroup.swift; sourceTree = "<group>"; };
 		B55B45AB2FE85038325352A1 /* OceanWaveBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OceanWaveBackground.swift; sourceTree = "<group>"; };
@@ -2879,6 +2881,7 @@
 				183F960300B0236B06B73D8F /* BodyCalculationCard.swift */,
 				5144BAACA8B897A50AA44AFA /* CalculationRow.swift */,
 				CD368331A74E7D7C21FE142B /* ChangeBadge.swift */,
+				B4D6A8721460B314436730F0 /* CloudSyncWaitingView.swift */,
 				C2F880FF56CE58665042C654 /* ConditionCalculationCard.swift */,
 				92018A060F149756D8999EC8 /* DesertDuneShape.swift */,
 				90C9C146EC95C12731A23396 /* DesertWaveBackground.swift */,
@@ -3891,6 +3894,7 @@
 				00985232CD9E55CCD0C8998F /* CheckInjuryConflictUseCase.swift in Sources */,
 				3C2E466F24B51DD60DDD40E4 /* CloudMirroredSharedHealthDataService.swift in Sources */,
 				B5A224A841FDFDD5FBA67D2D /* CloudSyncConsentView.swift in Sources */,
+				BCFCC97BECC929BA1AABC6AA /* CloudSyncWaitingView.swift in Sources */,
 				F12901D0A4B4109E5325AB12 /* CoachingEngine.swift in Sources */,
 				92EBF5335F8C39421B61C632 /* CoachingInsight.swift in Sources */,
 				D52E7D39424F548020B696DE /* CoachingMessageEnhancing.swift in Sources */,
