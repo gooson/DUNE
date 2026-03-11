@@ -42,6 +42,8 @@ enum HealthSnapshotMirrorMapper {
 
         let conditionScore: Int?
         let conditionStatus: String?
+        let conditionContributions: [ScoreContribution]?
+        let conditionDetail: ConditionScoreDetail?
         let baselineReady: Bool?
         let baselineProgress: Double?
         let recentScores: [ScorePoint]
@@ -86,6 +88,8 @@ enum HealthSnapshotMirrorMapper {
             yesterdaySleepMinutes: sleepTotalMinutes(from: snapshot.yesterdaySleepStages),
             conditionScore: snapshot.conditionScore?.score,
             conditionStatus: snapshot.conditionScore?.status.rawValue,
+            conditionContributions: snapshot.conditionScore?.contributions,
+            conditionDetail: snapshot.conditionScore?.detail,
             baselineReady: snapshot.baselineStatus?.isReady,
             baselineProgress: snapshot.baselineStatus?.progress,
             recentScores: recentScores
@@ -172,7 +176,12 @@ enum HealthSnapshotMirrorMapper {
             latestSleepStages: latestSleepStages,
             sleepDailyDurations: sleepDailyDurations,
             conditionScore: payload.conditionScore.map {
-                ConditionScore(score: $0, date: payload.fetchedAt)
+                ConditionScore(
+                    score: $0,
+                    date: payload.fetchedAt,
+                    contributions: payload.conditionContributions ?? [],
+                    detail: payload.conditionDetail
+                )
             },
             baselineStatus: nil,
             recentConditionScores: recentScores,
