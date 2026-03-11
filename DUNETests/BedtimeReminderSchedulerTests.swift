@@ -145,6 +145,45 @@ struct BedtimeReminderSchedulerTests {
         #expect(trigger.dateComponents.minute == 0)
     }
 
+    @Test("Force refresh schedules once notification authorization is granted after an earlier skip")
+    func forceRefreshSchedulesAfterAuthorizationBecomesAvailable() async throws {
+        let calendar = Calendar(identifier: .gregorian)
+        let now = try #require(calendar.date(from: DateComponents(year: 2026, month: 3, day: 8, hour: 12)))
+        let userDefaults = try makeUserDefaults()
+        userDefaults.set(BedtimeReminderLeadTime.thirtyMinutes.rawValue, forKey: BedtimeReminderLeadTime.storageKey)
+
+        let notificationScheduler = MockBedtimeNotificationScheduler(authorized: false)
+        let sleepService = MockSleepService(
+            calendar: calendar,
+            referenceDate: now,
+            stagesByOffset: [
+                1: [makeSleepStage(dayOffset: 1, hour: 23, minute: 30, calendar: calendar, referenceDate: now)],
+                2: [makeSleepStage(dayOffset: 2, hour: 23, minute: 30, calendar: calendar, referenceDate: now)],
+                3: [makeSleepStage(dayOffset: 3, hour: 23, minute: 30, calendar: calendar, referenceDate: now)]
+            ]
+        )
+
+        let scheduler = BedtimeReminderScheduler(
+            sleepService: sleepService,
+            notificationScheduler: notificationScheduler,
+            userDefaults: userDefaults,
+            calendar: calendar,
+            now: { now }
+        )
+
+        await scheduler.refreshSchedule()
+        #expect(notificationScheduler.requests.isEmpty)
+
+        notificationScheduler.authorized = true
+        await scheduler.refreshSchedule(force: true)
+
+        #expect(notificationScheduler.requests.count == 1)
+        let request = try #require(notificationScheduler.requests.first)
+        let trigger = try #require(request.trigger as? UNCalendarNotificationTrigger)
+        #expect(trigger.dateComponents.hour == 23)
+        #expect(trigger.dateComponents.minute == 0)
+    }
+
     private func makeUserDefaults() throws -> UserDefaults {
         let suiteName = "BedtimeReminderSchedulerTests.\(UUID().uuidString)"
         let defaults = try #require(UserDefaults(suiteName: suiteName))
@@ -206,7 +245,7 @@ private struct MockSleepService: SleepQuerying {
 
 @MainActor
 private final class MockBedtimeNotificationScheduler: BedtimeReminderNotificationScheduling {
-    let authorized: Bool
+    var authorized: Bool
     private(set) var requests: [UNNotificationRequest] = []
     private(set) var removedIdentifiers: [String] = []
 

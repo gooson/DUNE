@@ -101,7 +101,7 @@ struct ConditionScore: Sendable, Hashable {
 
 // MARK: - Condition Score Computation Detail
 
-struct ConditionScoreDetail: Sendable, Hashable {
+struct ConditionScoreDetail: Sendable, Hashable, Codable {
     /// Today's daily average HRV in ms
     let todayHRV: Double
     /// Baseline average HRV in ms (exp of ln-mean)
@@ -120,6 +120,14 @@ struct ConditionScoreDetail: Sendable, Hashable {
     let rawScore: Double
     /// RHR penalty applied (0 if none)
     let rhrPenalty: Double
+    /// Today's resting heart rate (bpm), nil if unavailable
+    let todayRHR: Double?
+    /// Yesterday's resting heart rate (bpm), nil if unavailable
+    let yesterdayRHR: Double?
+    /// Effective RHR for display (may be from a recent day when todayRHR is nil)
+    let displayRHR: Double?
+    /// Date of the displayRHR value
+    let displayRHRDate: Date?
 }
 
 struct BaselineStatus: Sendable {

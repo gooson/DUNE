@@ -83,7 +83,7 @@ struct ContentView: View {
     private let sharedHealthDataService: SharedHealthDataService?
     private let refreshCoordinator: AppRefreshCoordinating?
     private let launchExperienceReady: Bool
-    private let shouldAutoRequestHealthKitAuthorization: Bool
+    private let canLoadHealthKitData: Bool
     @Environment(\.scenePhase) private var scenePhase
     @AppStorage(AppTheme.storageKey) private var selectedTheme: AppTheme = .desertWarm
     @State private var selectedSection: AppSection
@@ -107,12 +107,12 @@ struct ContentView: View {
         sharedHealthDataService: SharedHealthDataService? = nil,
         refreshCoordinator: AppRefreshCoordinating? = nil,
         launchExperienceReady: Bool = true,
-        shouldAutoRequestHealthKitAuthorization: Bool = true
+        canLoadHealthKitData: Bool = true
     ) {
         self.sharedHealthDataService = sharedHealthDataService
         self.refreshCoordinator = refreshCoordinator
         self.launchExperienceReady = launchExperienceReady
-        self.shouldAutoRequestHealthKitAuthorization = shouldAutoRequestHealthKitAuthorization
+        self.canLoadHealthKitData = canLoadHealthKitData
         _selectedSection = State(initialValue: Self.initialSectionForUITests())
     }
 
@@ -126,7 +126,7 @@ struct ContentView: View {
                         refreshSignal: refreshSignal,
                         notificationHubSignal: notificationHubSignal,
                         launchExperienceReady: launchExperienceReady,
-                        shouldAutoRequestHealthKitAuthorization: shouldAutoRequestHealthKitAuthorization
+                        canLoadHealthKitData: canLoadHealthKitData
                     )
                     .navigationDestination(for: NotificationPresentationDestination.self) { destination in
                         notificationDestinationView(for: destination)
@@ -229,7 +229,9 @@ struct ContentView: View {
         .task {
             guard let coordinator = refreshCoordinator else { return }
             for await _ in coordinator.refreshNeededStream {
-                refreshSignal += 1
+                await MainActor.run {
+                    refreshSignal += 1
+                }
             }
         }
         .task {

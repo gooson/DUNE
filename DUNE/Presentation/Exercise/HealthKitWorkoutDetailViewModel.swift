@@ -22,6 +22,7 @@ final class HealthKitWorkoutDetailViewModel {
     }
 
     var heartRateSummary: HeartRateSummary?
+    var heartRateRecovery: HeartRateRecovery?
     var effortScore: Double?
     var isLoading = false
     var errorMessage: String?
@@ -56,11 +57,13 @@ final class HealthKitWorkoutDetailViewModel {
             async let hrResult = safeHeartRateFetch(workoutID: workoutID)
             async let effortResult = safeEffortFetch(workoutID: workoutID)
             async let stepResult = safeStepRangeFetch(workoutID: workoutID)
+            async let recoveryResult = safeRecoveryFetch(workoutID: workoutID)
 
-            let (hr, effort, steps) = await (hrResult, effortResult, stepResult)
+            let (hr, effort, steps, recovery) = await (hrResult, effortResult, stepResult, recoveryResult)
 
             guard !Task.isCancelled else { return }
             heartRateSummary = hr
+            heartRateRecovery = recovery
             effortScore = effort
             workoutStepCount = steps.workout
             dayStepCount = steps.day
@@ -117,6 +120,14 @@ final class HealthKitWorkoutDetailViewModel {
     private func safeEffortFetch(workoutID: String) async -> Double? {
         do {
             return try await effortService.fetchEffortScore(for: workoutID)
+        } catch {
+            return nil
+        }
+    }
+
+    private func safeRecoveryFetch(workoutID: String) async -> HeartRateRecovery? {
+        do {
+            return try await heartRateService.fetchHeartRateRecovery(forWorkoutID: workoutID)
         } catch {
             return nil
         }

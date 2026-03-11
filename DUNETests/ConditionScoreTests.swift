@@ -12,7 +12,9 @@ struct ConditionScoreTests {
     private func makeDetail(
         todayHRV: Double = 50,
         baselineHRV: Double = 45,
-        rhrPenalty: Double = 0
+        rhrPenalty: Double = 0,
+        todayRHR: Double? = nil,
+        yesterdayRHR: Double? = nil
     ) -> ConditionScoreDetail {
         ConditionScoreDetail(
             todayHRV: todayHRV,
@@ -23,7 +25,11 @@ struct ConditionScoreTests {
             daysInBaseline: 14,
             todayDate: Self.fixedDate,
             rawScore: 75,
-            rhrPenalty: rhrPenalty
+            rhrPenalty: rhrPenalty,
+            todayRHR: todayRHR,
+            yesterdayRHR: yesterdayRHR,
+            displayRHR: nil,
+            displayRHRDate: nil
         )
     }
 

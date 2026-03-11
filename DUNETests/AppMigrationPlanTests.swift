@@ -6,7 +6,7 @@ import Testing
 struct AppMigrationPlanTests {
     @Test("Current schema stays aligned with latest migration version")
     func currentSchemaMatchesLatestVersionedSchema() {
-        let latestModelNames = Set(AppSchemaV12.models.map { String(describing: $0) })
+        let latestModelNames = Set(AppSchemaV13.models.map { String(describing: $0) })
         let currentModelNames = Set(AppMigrationPlan.currentSchema.entities.map(\.name))
 
         #expect(currentModelNames == latestModelNames)
@@ -15,5 +15,15 @@ struct AppMigrationPlanTests {
         #expect(currentModelNames.contains("HabitLog"))
         #expect(currentModelNames.contains("ExerciseDefaultRecord"))
         #expect(currentModelNames.contains("HealthSnapshotMirrorRecord"))
+    }
+
+    @Test("V12 freezes ExerciseDefaultRecord before preferred flag and V13 adopts live model")
+    func v12SnapshotFreezesExerciseDefaultRecord() {
+        let v12ModelIDs = Set(AppSchemaV12.models.map(ObjectIdentifier.init))
+        let v13ModelIDs = Set(AppSchemaV13.models.map(ObjectIdentifier.init))
+
+        #expect(v12ModelIDs.contains(ObjectIdentifier(AppSchemaV12.ExerciseDefaultRecord.self)))
+        #expect(!v12ModelIDs.contains(ObjectIdentifier(ExerciseDefaultRecord.self)))
+        #expect(v13ModelIDs.contains(ObjectIdentifier(ExerciseDefaultRecord.self)))
     }
 }

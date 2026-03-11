@@ -156,6 +156,27 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         )
     }
 
+    func testActivityAIWorkoutBuilderOpensTemplateForm() throws {
+        ensureActivityRoot()
+        XCTAssertTrue(
+            app.scrollToElementIfNeeded(AXID.activityAIWorkoutBuilder, maxSwipes: 10),
+            "AI Workout Builder entry should be reachable from Activity"
+        )
+
+        let builderEntry = app.descendants(matching: .any)[AXID.activityAIWorkoutBuilder].firstMatch
+        XCTAssertTrue(builderEntry.waitForExistence(timeout: 8), "AI Workout Builder entry should exist")
+        builderEntry.tap()
+
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.templateFormScreen].firstMatch.waitForExistence(timeout: 8),
+            "Template form should open from Activity AI builder entry"
+        )
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.templateFormAIPrompt].firstMatch.waitForExistence(timeout: 5),
+            "Template form should expose the AI prompt field in create mode"
+        )
+    }
+
     func testManualWorkoutSessionSavesAndDismissesCompletionSheet() throws {
         openExerciseSingleExercisePicker()
         startQuickStartExerciseFromDetail(search: "Bench Press", exerciseID: Fixture.benchPressID)

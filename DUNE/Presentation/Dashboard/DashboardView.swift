@@ -29,7 +29,7 @@ struct DashboardView: View {
     private let refreshSignal: Int
     private let notificationHubSignal: Int
     private let launchExperienceReady: Bool
-    private let shouldAutoRequestHealthKitAuthorization: Bool
+    private let canLoadHealthKitData: Bool
     private let sharedHealthDataService: SharedHealthDataService?
     @State private var showNotificationHub = false
     @State private var showWhatsNew = false
@@ -42,7 +42,7 @@ struct DashboardView: View {
         refreshSignal: Int = 0,
         notificationHubSignal: Int = 0,
         launchExperienceReady: Bool = true,
-        shouldAutoRequestHealthKitAuthorization: Bool = true
+        canLoadHealthKitData: Bool = true
     ) {
         self.sharedHealthDataService = sharedHealthDataService
         _viewModel = State(initialValue: DashboardViewModel(sharedHealthDataService: sharedHealthDataService))
@@ -50,7 +50,7 @@ struct DashboardView: View {
         self.refreshSignal = refreshSignal
         self.notificationHubSignal = notificationHubSignal
         self.launchExperienceReady = launchExperienceReady
-        self.shouldAutoRequestHealthKitAuthorization = shouldAutoRequestHealthKitAuthorization
+        self.canLoadHealthKitData = canLoadHealthKitData
     }
 
     var body: some View {
@@ -69,11 +69,7 @@ struct DashboardView: View {
                         if viewModel.errorMessage != nil {
                             errorSection
                         } else if viewModel.isMirroredReadOnlyMode {
-                            EmptyStateView(
-                                icon: "heart.text.clipboard",
-                                title: "No Synced Data",
-                                message: "Open DUNE on your iPhone once to sync HealthKit data, then refresh on Mac."
-                            )
+                            CloudSyncWaitingView()
                         } else {
                             EmptyStateView(
                                 icon: "heart.text.clipboard",
@@ -218,7 +214,7 @@ struct DashboardView: View {
             guard launchExperienceReady else { return }
             await loadDashboard()
         }
-        .task(id: launchReadyRefreshSignal) {
+        .task(id: dashboardLoadTrigger) {
             guard launchExperienceReady else { return }
             await loadDashboard()
         }
@@ -307,12 +303,12 @@ struct DashboardView: View {
         }
     }
 
-    private var launchReadyRefreshSignal: Int {
-        launchExperienceReady ? refreshSignal : -1
+    private var dashboardLoadTrigger: String {
+        launchExperienceReady ? "\(refreshSignal)-\(canLoadHealthKitData)" : "blocked"
     }
 
     private func loadDashboard() async {
-        await viewModel.loadData(shouldAutoRequestHealthKitAuthorization: shouldAutoRequestHealthKitAuthorization)
+        await viewModel.loadData(canLoadHealthKitData: canLoadHealthKitData)
         guard !viewModel.isLoading else { return }
         if !hasAppeared {
             withAnimation(.easeOut(duration: 0.3)) {

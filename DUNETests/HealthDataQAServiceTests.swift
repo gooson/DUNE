@@ -184,7 +184,11 @@ struct HealthDataQAServiceTests {
             daysInBaseline: 14,
             todayDate: referenceDate,
             rawScore: 68,
-            rhrPenalty: 6.5
+            rhrPenalty: 6.5,
+            todayRHR: 72,
+            yesterdayRHR: 65,
+            displayRHR: nil,
+            displayRHRDate: nil
         )
 
         return SharedHealthSnapshot(

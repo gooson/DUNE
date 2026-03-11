@@ -92,7 +92,6 @@ final class DashboardViewModel {
     }
 
     private let healthKitManager: HealthKitManager
-    private var authorizationChecked = false
     private let hrvService: HRVQuerying
     private let sleepService: SleepQuerying
     private let workoutService: WorkoutQuerying
@@ -150,10 +149,12 @@ final class DashboardViewModel {
         }
     }
 
-    func loadData(shouldAutoRequestHealthKitAuthorization: Bool = true) async {
+    func loadData(canLoadHealthKitData: Bool = true) async {
         guard !isLoading else { return }
         isLoading = true
         let healthKitAvailable = healthKitManager.isAvailable && !Self.shouldUseSeededUITestFixtures
+        let canQueryHealthKit = healthKitAvailable && canLoadHealthKitData
+        let canUseSharedSnapshot = !healthKitAvailable || canLoadHealthKitData
         isMirroredReadOnlyMode = !healthKitAvailable
         errorMessage = nil
         conditionScore = nil
@@ -168,48 +169,31 @@ final class DashboardViewModel {
         weatherSnapshot = nil
         weatherAtmosphere = .default
 
-        if !authorizationChecked {
-            if Self.shouldBypassAuthorizationForTests {
-                authorizationChecked = true
-            } else if healthKitAvailable, shouldAutoRequestHealthKitAuthorization {
-                do {
-                    try await healthKitManager.requestAuthorization()
-                    authorizationChecked = true
-                } catch {
-                    AppLogger.ui.error("HealthKit authorization failed: \(error.localizedDescription)")
-                    errorMessage = error.localizedDescription
-                    isLoading = false
-                    return
-                }
-            } else {
-                authorizationChecked = true
-                if healthKitAvailable {
-                    AppLogger.ui.info("Launch orchestration already handled HealthKit authorization; skip dashboard auto-request")
-                } else {
-                    AppLogger.ui.info("HealthKit unavailable; skip authorization and rely on mirrored health snapshot data")
-                }
-            }
+        if healthKitAvailable, !canLoadHealthKitData, !Self.shouldBypassAuthorizationForTests {
+            AppLogger.ui.info("HealthKit authorization is deferred; skip protected dashboard queries until app-level orchestration completes")
         }
 
-        async let exerciseTask = safeExerciseFetch(canQueryHealthKit: healthKitAvailable)
-        async let stepsTask = safeStepsFetch(canQueryHealthKit: healthKitAvailable)
-        async let weightTask = safeWeightFetch(canQueryHealthKit: healthKitAvailable)
-        async let bmiTask = safeBMIFetch(canQueryHealthKit: healthKitAvailable)
+        async let exerciseTask = safeExerciseFetch(canQueryHealthKit: canQueryHealthKit)
+        async let stepsTask = safeStepsFetch(canQueryHealthKit: canQueryHealthKit)
+        async let weightTask = safeWeightFetch(canQueryHealthKit: canQueryHealthKit)
+        async let bmiTask = safeBMIFetch(canQueryHealthKit: canQueryHealthKit)
         async let weatherTask = safeWeatherFetch()
         let sharedSnapshot: SharedHealthSnapshot?
 #if DEBUG
         if Self.shouldUseSeededUITestFixtures {
             sharedSnapshot = TestDataSeeder.sharedHealthSnapshot(for: UITestSeedScenario.current())
-        } else {
+        } else if canUseSharedSnapshot {
             sharedSnapshot = await sharedHealthDataService?.fetchSnapshot()
+        } else {
+            sharedSnapshot = nil
         }
 #else
-        sharedSnapshot = await sharedHealthDataService?.fetchSnapshot()
+        sharedSnapshot = canUseSharedSnapshot ? await sharedHealthDataService?.fetchSnapshot() : nil
 #endif
 
         // Each fetch is independent — one failure should not block others.
-        async let hrvTask = safeHRVFetch(snapshot: sharedSnapshot, canQueryHealthKit: healthKitAvailable)
-        async let sleepTask = safeSleepFetch(snapshot: sharedSnapshot, canQueryHealthKit: healthKitAvailable)
+        async let hrvTask = safeHRVFetch(snapshot: sharedSnapshot, canQueryHealthKit: canQueryHealthKit)
+        async let sleepTask = safeSleepFetch(snapshot: sharedSnapshot, canQueryHealthKit: canQueryHealthKit)
 
         let (hrvResult, sleepResult, exerciseResult, stepsResult, weightResult, bmiResult, weatherResult) = await (
             hrvTask, sleepTask, exerciseTask, stepsTask, weightTask, bmiTask, weatherTask
@@ -425,7 +409,9 @@ final class DashboardViewModel {
         let input = CalculateConditionScoreUseCase.Input(
             hrvSamples: conditionSamples,
             todayRHR: todayRHR,
-            yesterdayRHR: yesterdayRHR
+            yesterdayRHR: yesterdayRHR,
+            displayRHR: effectiveRHR,
+            displayRHRDate: effectiveRHR != nil ? rhrDate : nil
         )
         let output = scoreUseCase.execute(input: input)
         conditionScore = output.score

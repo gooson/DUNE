@@ -53,8 +53,10 @@ struct AllDataView: View {
     // MARK: - Row
 
     private func dataRow(_ point: ChartDataPoint) -> some View {
-        HStack {
-            Text(point.date, format: .dateTime.hour().minute())
+        let displayDate = point.displayDate ?? point.date
+
+        return HStack {
+            Text(displayDate, format: .dateTime.hour().minute())
                 .font(.subheadline)
                 .foregroundStyle(DS.Color.textSecondary)
                 .frame(width: 60, alignment: .leading)
@@ -66,7 +68,7 @@ struct AllDataView: View {
                 .fontWeight(.medium)
         }
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(point.date, format: .dateTime.hour().minute()), \(formattedValue(point.value))")
+        .accessibilityLabel("\(displayDate, format: .dateTime.hour().minute()), \(formattedValue(point.value))")
     }
 
     // MARK: - Helpers

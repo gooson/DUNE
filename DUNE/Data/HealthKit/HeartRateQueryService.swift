@@ -13,6 +13,8 @@ protocol HeartRateQuerying: Sendable {
     func fetchHeartRateHistory(start: Date, end: Date) async throws -> [VitalSample]
     /// Compute heart rate zone distribution for a workout.
     func fetchHeartRateZones(forWorkoutID workoutID: String, maxHR: Double) async throws -> [HeartRateZone]
+    /// Compute heart rate recovery (HRR₁) from post-workout HR samples.
+    func fetchHeartRateRecovery(forWorkoutID workoutID: String) async throws -> HeartRateRecovery?
 }
 
 struct HeartRateQueryService: HeartRateQuerying, Sendable {
@@ -176,6 +178,74 @@ struct HeartRateQueryService: HeartRateQuerying, Sendable {
     func fetchHeartRateZones(forWorkoutID workoutID: String, maxHR: Double) async throws -> [HeartRateZone] {
         let samples = try await fetchHeartRateSamples(forWorkoutID: workoutID)
         return HeartRateZoneCalculator.computeZones(samples: samples, maxHR: maxHR)
+    }
+
+    // MARK: - Heart Rate Recovery
+
+    func fetchHeartRateRecovery(forWorkoutID workoutID: String) async throws -> HeartRateRecovery? {
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.workout(withID: workoutID)?.heartRateRecovery
+        }
+        guard manager.isAvailable else { return nil }
+        try await manager.ensureNotDenied(for: HKQuantityType(.heartRate))
+
+        guard let uuid = UUID(uuidString: workoutID) else { return nil }
+
+        let workoutPredicate = HKQuery.predicateForObject(with: uuid)
+        let workoutDescriptor = HKSampleQueryDescriptor(
+            predicates: [.workout(workoutPredicate)],
+            sortDescriptors: [SortDescriptor(\.startDate, order: .reverse)],
+            limit: 1
+        )
+        let workouts = try await manager.execute(workoutDescriptor)
+        guard let workout = workouts.first else { return nil }
+
+        // Query HR samples: 60s before workout end to 120s after
+        let queryStart = workout.endDate.addingTimeInterval(-60)
+        let queryEnd = workout.endDate.addingTimeInterval(120)
+
+        let hrPredicate = HKQuery.predicateForSamples(
+            withStart: queryStart,
+            end: queryEnd,
+            options: .strictStartDate
+        )
+        let hrDescriptor = HKSampleQueryDescriptor(
+            predicates: [.quantitySample(type: HKQuantityType(.heartRate), predicate: hrPredicate)],
+            sortDescriptors: [SortDescriptor(\.startDate, order: .forward)]
+        )
+        let rawSamples = try await manager.execute(hrDescriptor)
+        let unit = HKUnit.count().unitDivided(by: .minute())
+
+        let samples: [(bpm: Double, date: Date)] = rawSamples.compactMap { sample in
+            let bpm = sample.quantity.doubleValue(for: unit)
+            guard (20...300).contains(bpm) else { return nil }
+            return (bpm: bpm, date: sample.startDate)
+        }
+
+        return Self.computeRecovery(samples: samples, workoutEndDate: workout.endDate)
+    }
+
+    /// Pure computation of HRR₁ from validated samples. Extracted for testability.
+    static func computeRecovery(
+        samples: [(bpm: Double, date: Date)],
+        workoutEndDate: Date
+    ) -> HeartRateRecovery? {
+        // Peak HR: max in [endDate - 60s, endDate]
+        let peakCandidates = samples.filter {
+            $0.date >= workoutEndDate.addingTimeInterval(-60) && $0.date <= workoutEndDate
+        }
+        guard let peakHR = peakCandidates.map(\.bpm).max() else { return nil }
+
+        // Recovery HR: average in [endDate + 45s, endDate + 75s] (60s ± 15s window)
+        let recoveryCandidates = samples.filter {
+            $0.date >= workoutEndDate.addingTimeInterval(45) && $0.date <= workoutEndDate.addingTimeInterval(75)
+        }
+        guard !recoveryCandidates.isEmpty else { return nil }
+
+        let recoveryHR = recoveryCandidates.map(\.bpm).reduce(0, +) / Double(recoveryCandidates.count)
+        guard recoveryHR.isFinite, peakHR > recoveryHR else { return nil }
+
+        return HeartRateRecovery(peakHR: peakHR, recoveryHR: recoveryHR)
     }
 
     // MARK: - Validation

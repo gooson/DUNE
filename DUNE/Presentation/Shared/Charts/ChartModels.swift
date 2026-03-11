@@ -7,6 +7,13 @@ struct ChartDataPoint: Identifiable, Sendable {
     var id: Date { date }
     let date: Date
     let value: Double
+    let displayDate: Date?
+
+    init(date: Date, value: Double, displayDate: Date? = nil) {
+        self.date = date
+        self.value = value
+        self.displayDate = displayDate
+    }
 }
 
 // MARK: - Range Data Point

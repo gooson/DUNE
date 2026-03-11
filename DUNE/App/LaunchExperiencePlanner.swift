@@ -2,8 +2,6 @@ import Foundation
 
 enum LaunchExperienceStep: Equatable {
     case cloudSyncConsent
-    case healthKitAuthorization
-    case notificationAuthorization
     case whatsNew
     case ready
 }
@@ -11,8 +9,6 @@ enum LaunchExperienceStep: Equatable {
 struct LaunchExperienceState: Equatable {
     let shouldBypassLaunchExperience: Bool
     let hasShownCloudSyncConsent: Bool
-    let shouldRequestHealthKitAuthorization: Bool
-    let shouldRequestNotificationAuthorization: Bool
     let shouldPresentWhatsNew: Bool
 }
 
@@ -38,14 +34,6 @@ enum LaunchExperiencePlanner {
 
         if !state.hasShownCloudSyncConsent {
             return .cloudSyncConsent
-        }
-
-        if state.shouldRequestHealthKitAuthorization {
-            return .healthKitAuthorization
-        }
-
-        if state.shouldRequestNotificationAuthorization {
-            return .notificationAuthorization
         }
 
         if state.shouldPresentWhatsNew {
