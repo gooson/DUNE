@@ -367,11 +367,29 @@ enum AppSchemaV12: VersionedSchema {
 enum AppSchemaV13: VersionedSchema {
     static let versionIdentifier = Schema.Version(13, 0, 0)
     static var models: [any PersistentModel.Type] {
-        [ExerciseRecord.self, BodyCompositionRecord.self, WorkoutSet.self, CustomExercise.self, WorkoutTemplate.self, InjuryRecord.self, HabitDefinition.self, HabitLog.self, UserCategory.self, ExerciseDefaultRecord.self, HealthSnapshotMirrorRecord.self]
+        [ExerciseRecord.self, BodyCompositionRecord.self, V13WorkoutSet.self, CustomExercise.self, WorkoutTemplate.self, InjuryRecord.self, HabitDefinition.self, HabitLog.self, UserCategory.self, ExerciseDefaultRecord.self, HealthSnapshotMirrorRecord.self]
+    }
+
+    /// Snapshot of WorkoutSet before rpe field was added (same as V12WorkoutSet).
+    @Model
+    final class V13WorkoutSet {
+        var id: UUID = UUID()
+        var exerciseRecord: ExerciseRecord?
+        var setNumber: Int = 0
+        var setTypeRaw: String = SetType.working.rawValue
+        var weight: Double?
+        var reps: Int?
+        var duration: TimeInterval?
+        var distance: Double?
+        var intensity: Int? = nil
+        var isCompleted: Bool = false
+        var restDuration: TimeInterval?
+
+        init() {}
     }
 }
 
-// MARK: - Schema V14 (Set-Level RPE)
+// MARK: - Schema V14 (Set-Level RPE — adds WorkoutSet.rpe)
 
 enum AppSchemaV14: VersionedSchema {
     static let versionIdentifier = Schema.Version(14, 0, 0)
