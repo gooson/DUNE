@@ -204,7 +204,7 @@ struct ConditionScoreDetailView: View {
             statusLabel: score.status.label,
             statusIcon: score.status.iconName,
             statusColor: score.status.color,
-            guideMessage: score.status.guideMessage
+            guideMessage: score.narrativeMessage
         )
     }
 

@@ -9,6 +9,25 @@ struct CloudMirroredSharedHealthDataServiceTests {
     func returnsLatestMirroredSnapshot() async throws {
         let container = try makeInMemoryContainer()
         let context = ModelContext(container)
+        let conditionDetail = ConditionScoreDetail(
+            todayHRV: 61,
+            baselineHRV: 55,
+            zScore: 0.91,
+            stdDev: 0.23,
+            effectiveStdDev: 0.25,
+            daysInBaseline: 9,
+            todayDate: Date(timeIntervalSince1970: 1_700_086_400),
+            rawScore: 81.2,
+            rhrPenalty: 6,
+            todayRHR: 56,
+            yesterdayRHR: 58,
+            displayRHR: 56,
+            displayRHRDate: Date(timeIntervalSince1970: 1_700_086_400)
+        )
+        let conditionContributions = [
+            ScoreContribution(factor: .hrv, impact: .positive, detail: "61ms — above 55ms avg"),
+            ScoreContribution(factor: .rhr, impact: .negative, detail: "58 → 56 bpm (-2)")
+        ]
 
         let olderPayload = HealthSnapshotMirrorMapper.Payload(
             fetchedAt: Date(timeIntervalSince1970: 1_700_000_000),
@@ -23,6 +42,8 @@ struct CloudMirroredSharedHealthDataServiceTests {
             yesterdaySleepMinutes: 0,
             conditionScore: 42,
             conditionStatus: "fair",
+            conditionContributions: nil,
+            conditionDetail: nil,
             baselineReady: nil,
             baselineProgress: nil,
             recentScores: []
@@ -50,6 +71,8 @@ struct CloudMirroredSharedHealthDataServiceTests {
             yesterdaySleepMinutes: 390,
             conditionScore: 81,
             conditionStatus: "excellent",
+            conditionContributions: conditionContributions,
+            conditionDetail: conditionDetail,
             baselineReady: nil,
             baselineProgress: nil,
             recentScores: [.init(date: Date(timeIntervalSince1970: 1_700_000_000), score: 76)]
@@ -81,6 +104,8 @@ struct CloudMirroredSharedHealthDataServiceTests {
         #expect(snapshot.fetchedAt == latestPayload.fetchedAt)
         #expect(snapshot.todayRHR == 56)
         #expect(snapshot.conditionScore?.score == 81)
+        #expect(snapshot.conditionScore?.contributions == conditionContributions)
+        #expect(snapshot.conditionScore?.detail == conditionDetail)
         #expect(snapshot.hrvSamples.map(\.value) == [61])
         #expect(snapshot.sleepDailyDurations.first?.totalMinutes == 430)
         #expect(snapshot.failedSources.contains(.todaySleepStages))

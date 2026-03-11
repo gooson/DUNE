@@ -101,7 +101,7 @@ struct ConditionScore: Sendable, Hashable {
 
 // MARK: - Condition Score Computation Detail
 
-struct ConditionScoreDetail: Sendable, Hashable {
+struct ConditionScoreDetail: Sendable, Hashable, Codable {
     /// Today's daily average HRV in ms
     let todayHRV: Double
     /// Baseline average HRV in ms (exp of ln-mean)
