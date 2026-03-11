@@ -869,6 +869,7 @@
 		E6F60CFFD073A302DE59C16F /* VisionDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87AB64F8905AEDA79645CFE5 /* VisionDashboardView.swift */; };
 		E72A7FDF251D398B3A44A229 /* MuscleDetailPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 592CF584A640115B791F8ADF /* MuscleDetailPopover.swift */; };
 		E7489FA63B729342BB07A9A1 /* SleepQueryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E25658726A7A060F0E920A /* SleepQueryService.swift */; };
+		E7729D80997926200794D4D9 /* AverageBedtimeCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD45A61544B3F15CF2623F7 /* AverageBedtimeCard.swift */; };
 		E79A467C07A6947E9B8BA0BA /* SakuraWaveBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 416EC91A97D7FF65DA53209C /* SakuraWaveBackground.swift */; };
 		E7D855DF16C4309333A2F648 /* MiniSparklineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECE18F8AE1ED22A196DA110E /* MiniSparklineView.swift */; };
 		E8127485D6F821F9876E9756 /* ActivityExerciseRegressionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD98A5884F76FE47D896E9E /* ActivityExerciseRegressionTests.swift */; };
@@ -1225,6 +1226,7 @@
 		3981FDD5FAEAA88E9D743325 /* PersonalRecordsDetailViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalRecordsDetailViewModelTests.swift; sourceTree = "<group>"; };
 		399281894B67FFEDF248FC6A /* EffortSliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EffortSliderView.swift; sourceTree = "<group>"; };
 		3AB658CCC6CF3B0EDAF2C618 /* DUNEWatchUITests-PR.xctestplan */ = {isa = PBXFileReference; path = "DUNEWatchUITests-PR.xctestplan"; sourceTree = "<group>"; };
+		3AD45A61544B3F15CF2623F7 /* AverageBedtimeCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AverageBedtimeCard.swift; sourceTree = "<group>"; };
 		3B37646C759053B5DDFECC87 /* PeriodSwipeModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeriodSwipeModifier.swift; sourceTree = "<group>"; };
 		3B916AEC4875C9E95AC4F53C /* WorkoutTemplateListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTemplateListView.swift; sourceTree = "<group>"; };
 		3BB0F8D9854042BBD7FCDAEF /* HRVQueryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HRVQueryService.swift; sourceTree = "<group>"; };
@@ -3294,6 +3296,7 @@
 		EF7CF7DAEC6EDE44EB3415F0 /* Sleep */ = {
 			isa = PBXGroup;
 			children = (
+				3AD45A61544B3F15CF2623F7 /* AverageBedtimeCard.swift */,
 				697B8D595876443714958C03 /* SleepDebtInfoSheet.swift */,
 				2AF3E5FC32C7043412BE7B48 /* SleepDeficitGaugeView.swift */,
 				D8E7DEA919A810945D7723EC /* SleepViewModel.swift */,
@@ -3858,6 +3861,7 @@
 				D8A861114E116D0BC305C703 /* AppTheme+View.swift in Sources */,
 				0E4907C8744D6A9166FF0A0C /* AppTheme.swift in Sources */,
 				830C09BEA71CA42C8A8DCFCA /* AreaLineChartView.swift in Sources */,
+				E7729D80997926200794D4D9 /* AverageBedtimeCard.swift in Sources */,
 				042C53A490067B3FAD6DE1D5 /* BackgroundNotificationEvaluator.swift in Sources */,
 				4832E669A64FC9362247A3D4 /* BarChartView.swift in Sources */,
 				542BCE79A60031512DC47307 /* BaselineTrendBadge.swift in Sources */,

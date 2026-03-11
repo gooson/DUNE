@@ -85,6 +85,10 @@ struct MetricDetailView: View {
                     shimmerTask = nil
                 }
 
+                if metric.category == .sleep, let averageBedtime = viewModel.averageBedtime {
+                    AverageBedtimeCard(averageBedtime: averageBedtime)
+                }
+
                 // Sleep deficit gauge
                 if metric.category == .sleep, let deficit = viewModel.deficitAnalysis,
                    deficit.level != .insufficient {
