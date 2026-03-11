@@ -1,7 +1,7 @@
 ---
 topic: Notification ingress main actor hardening
 date: 2026-03-12
-status: draft
+status: implemented
 confidence: high
 related_solutions:
   - docs/solutions/architecture/2026-03-12-cloudkit-remote-change-mainactor-ingress.md
