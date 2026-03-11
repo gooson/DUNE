@@ -48,6 +48,7 @@ extension Notification.Name {
 struct SimulatorAdvancedMockWorkout: Sendable {
     let summary: WorkoutSummary
     let heartRateSamples: [HeartRateSample]
+    let heartRateRecovery: HeartRateRecovery?
 }
 
 struct SimulatorAdvancedMockVitals: Sendable {
@@ -780,6 +781,13 @@ enum SimulatorAdvancedMockDataProvider {
                 personalRecordTypes: descriptor.personalRecordTypes
             )
 
+            let mockRecovery: HeartRateRecovery? = descriptor.maxHeartRate > 100
+                ? HeartRateRecovery(
+                    peakHR: descriptor.maxHeartRate,
+                    recoveryHR: descriptor.maxHeartRate - Double.random(in: 15...35)
+                )
+                : nil
+
             return SimulatorAdvancedMockWorkout(
                 summary: summary,
                 heartRateSamples: buildHeartRateSamples(
@@ -788,7 +796,8 @@ enum SimulatorAdvancedMockDataProvider {
                     minBPM: descriptor.minHeartRate,
                     averageBPM: descriptor.averageHeartRate,
                     maxBPM: descriptor.maxHeartRate
-                )
+                ),
+                heartRateRecovery: mockRecovery
             )
         }
         .sorted { $0.summary.date > $1.summary.date }
