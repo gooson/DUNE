@@ -18,11 +18,18 @@ private struct StubHRVService: HRVQuerying {
 private struct StubSleepService: SleepQuerying {
     var dailySleep: [(date: Date, totalMinutes: Double, stageBreakdown: [SleepStage.Stage: Double])] = []
     var todayStages: [SleepStage] = []
+    var stagesByDay: [String: [SleepStage]] = [:]
 
-    func fetchSleepStages(for date: Date) async throws -> [SleepStage] { todayStages }
+    func fetchSleepStages(for date: Date) async throws -> [SleepStage] {
+        stagesByDay[Self.dayKey(for: date)] ?? todayStages
+    }
     func fetchLatestSleepStages(withinDays days: Int) async throws -> (stages: [SleepStage], date: Date)? { nil }
     func fetchDailySleepDurations(start: Date, end: Date) async throws -> [(date: Date, totalMinutes: Double, stageBreakdown: [SleepStage.Stage: Double])] { dailySleep }
     func fetchLastNightSleepSummary(for date: Date) async throws -> SleepSummary? { nil }
+
+    static func dayKey(for date: Date, calendar: Calendar = .current) -> String {
+        calendar.startOfDay(for: date).ISO8601Format()
+    }
 }
 
 private struct StubStepsService: StepsQuerying {
@@ -211,6 +218,39 @@ struct MetricDetailViewModelTests {
         #expect(vm.stackedData.first!.segments.count == 3)
     }
 
+    @Test("Sleep detail computes average bedtime from recent sleep starts")
+    func sleepAverageBedtime() async {
+        let today = calendar.startOfDay(for: Date())
+        var stagesByDay: [String: [SleepStage]] = [:]
+
+        let samples: [(offset: Int, hour: Int, minute: Int)] = [
+            (0, 23, 40),
+            (1, 0, 10),
+            (2, 23, 55),
+        ]
+
+        for sample in samples {
+            let referenceDate = calendar.date(byAdding: .day, value: -sample.offset, to: today)!
+            stagesByDay[StubSleepService.dayKey(for: referenceDate)] = [
+                makeSleepStage(
+                    referenceDate: referenceDate,
+                    startHour: sample.hour,
+                    startMinute: sample.minute,
+                    durationMinutes: 420
+                )
+            ]
+        }
+
+        let sleep = StubSleepService(stagesByDay: stagesByDay)
+        let vm = makeVM(sleep: sleep)
+        vm.configure(category: .sleep, currentValue: 0, lastUpdated: Date())
+
+        await vm.loadData()
+
+        #expect(vm.averageBedtime?.hour == 23)
+        #expect(vm.averageBedtime?.minute == 55)
+    }
+
     // MARK: - Empty Data
 
     @Test("Empty data produces no chart data and nil summary")
@@ -363,5 +403,16 @@ struct MetricDetailViewModelTests {
 
         let expected = "\(formatter.string(from: scrollDate)) – \(formatter.string(from: expectedEnd))"
         #expect(vm.visibleRangeLabel == expected)
+    }
+
+    private func makeSleepStage(
+        referenceDate: Date,
+        startHour: Int,
+        startMinute: Int,
+        durationMinutes: Int
+    ) -> SleepStage {
+        let start = calendar.date(bySettingHour: startHour, minute: startMinute, second: 0, of: referenceDate) ?? referenceDate
+        let end = start.addingTimeInterval(Double(durationMinutes * 60))
+        return SleepStage(stage: .core, duration: end.timeIntervalSince(start), startDate: start, endDate: end)
     }
 }

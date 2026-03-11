@@ -135,6 +135,9 @@ final class MetricDetailViewModel {
     /// Sleep deficit analysis (only populated for sleep category).
     private(set) var deficitAnalysis: SleepDeficitAnalysis?
 
+    /// Average sleep start time across recent completed nights.
+    private(set) var averageBedtime: DateComponents?
+
     /// Trend line data points (linear regression) for the visible chart data.
     private(set) var cachedTrendLine: [ChartDataPoint]?
 
@@ -196,6 +199,7 @@ final class MetricDetailViewModel {
 
     private var scrollDebounceTask: Task<Void, Never>?
     private var reloadTask: Task<Void, Never>?
+    private var hasLoadedSleepInsightCards = false
 
     private func triggerReload() {
         reloadTask?.cancel()
@@ -263,14 +267,21 @@ final class MetricDetailViewModel {
 
     // MARK: - Sleep
 
+    private enum SleepDetailConstants {
+        static let bedtimeLookbackDays = 7
+        static let recentDeficitDays = 14
+        static let longTermDeficitDays = 90
+    }
+
     private let deficitUseCase = CalculateSleepDeficitUseCase()
+    private let averageBedtimeUseCase = CalculateAverageBedtimeUseCase()
 
     private func loadSleepData() async throws {
         let range = extendedRange
 
-        // Load deficit analysis once (independent of selected period)
-        if deficitAnalysis == nil {
-            await loadDeficitAnalysis()
+        // Load summary cards once (independent of selected period).
+        if !hasLoadedSleepInsightCards {
+            await loadSleepInsightCards()
         }
 
         if selectedPeriod == .day {
@@ -336,26 +347,66 @@ final class MetricDetailViewModel {
         }
     }
 
-    private func loadDeficitAnalysis() async {
+    private func loadSleepInsightCards() async {
+        hasLoadedSleepInsightCards = true
+
         let calendar = Calendar.current
         let today = Date()
-        let start = calendar.date(byAdding: .day, value: -90, to: today) ?? today
+
+        async let deficitTask = fetchDeficitAnalysis(today: today, calendar: calendar)
+        async let bedtimeTask = fetchAverageBedtime(today: today, calendar: calendar)
+
+        deficitAnalysis = await deficitTask
+        averageBedtime = await bedtimeTask
+    }
+
+    private func fetchDeficitAnalysis(today: Date, calendar: Calendar) async -> SleepDeficitAnalysis? {
+        let start = calendar.date(byAdding: .day, value: -SleepDetailConstants.longTermDeficitDays, to: today) ?? today
         let end = calendar.date(byAdding: .day, value: 1, to: today) ?? today
 
         do {
             let durations = try await sleepService.fetchDailySleepDurations(start: start, end: end)
-            let fourteenDaysAgo = calendar.date(byAdding: .day, value: -14, to: today) ?? today
+            let fourteenDaysAgo = calendar.date(byAdding: .day, value: -SleepDetailConstants.recentDeficitDays, to: today) ?? today
 
             let recent14 = durations.filter { $0.date >= fourteenDaysAgo }.map(CalculateSleepDeficitUseCase.Input.DayDuration.init(from:))
             let longTerm90 = durations.map(CalculateSleepDeficitUseCase.Input.DayDuration.init(from:))
 
-            deficitAnalysis = deficitUseCase.execute(input: .init(
+            return deficitUseCase.execute(input: .init(
                 recentDurations: recent14,
                 longTermDurations: longTerm90
             ))
         } catch {
             AppLogger.ui.error("[Sleep] Deficit analysis failed: \(error.localizedDescription)")
+            return nil
         }
+    }
+
+    private func fetchAverageBedtime(today: Date, calendar: Calendar) async -> DateComponents? {
+        let recentStages: [[SleepStage]] = await withTaskGroup(of: (Int, [SleepStage])?.self) { [sleepService] group in
+            for offset in 0..<SleepDetailConstants.bedtimeLookbackDays {
+                guard let date = calendar.date(byAdding: .day, value: -offset, to: today) else { continue }
+                group.addTask {
+                    do {
+                        let stages = try await sleepService.fetchSleepStages(for: date)
+                        return stages.isEmpty ? nil : (offset, stages)
+                    } catch {
+                        AppLogger.ui.error("[Sleep] Average bedtime fetch failed for day offset \(offset): \(error.localizedDescription)")
+                        return nil
+                    }
+                }
+            }
+
+            var results: [(Int, [SleepStage])] = []
+            for await result in group {
+                if let result { results.append(result) }
+            }
+            return results.sorted { $0.0 < $1.0 }.map(\.1)
+        }
+
+        return averageBedtimeUseCase.execute(input: .init(
+            sleepStagesByDay: recentStages,
+            calendar: calendar
+        ))
     }
 
     // MARK: - Steps
