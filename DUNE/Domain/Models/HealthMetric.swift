@@ -84,6 +84,28 @@ struct HeartRateSummary: Sendable {
     var isEmpty: Bool { samples.isEmpty }
 }
 
+/// Heart rate recovery result computed from post-workout HR samples.
+struct HeartRateRecovery: Sendable {
+    /// Peak HR at or near workout end (bpm).
+    let peakHR: Double
+    /// HR measured ~60 seconds after workout end (bpm).
+    let recoveryHR: Double
+    /// HRR₁ = peakHR - recoveryHR (bpm).
+    var hrr1: Double { peakHR - recoveryHR }
+
+    enum Rating: Sendable {
+        case low      // < 12 bpm
+        case normal   // 12-20 bpm
+        case good     // > 20 bpm
+    }
+
+    var rating: Rating {
+        if hrr1 < 12 { return .low }
+        if hrr1 > 20 { return .good }
+        return .normal
+    }
+}
+
 struct WorkoutSummary: Identifiable, Sendable {
     let id: String
     let type: String
