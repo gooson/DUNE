@@ -77,7 +77,7 @@ struct WorkoutIntensityService: Sendable {
 
         // Map 6.0-10.0 RPE → 1-10 effort: (rpe - 6) / 4 * 9 + 1
         let normalized = (mean - RPELevel.range.lowerBound) / (RPELevel.range.upperBound - RPELevel.range.lowerBound)
-        let effort = Int(round(normalized * 9.0)) + 1
+        let effort = Int(normalized * 9.0) + 1
         return Swift.max(1, Swift.min(10, effort))
     }
 
