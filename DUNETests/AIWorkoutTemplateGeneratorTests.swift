@@ -179,6 +179,14 @@ struct AIWorkoutTemplateGeneratorTests {
         #expect(AIWorkoutTemplateGenerator.preflightError(for: intent) == .unsupportedRequest)
     }
 
+    @Test("Prompt intent extracts Japanese duration")
+    func promptIntentExtractsJapaneseDuration() {
+        let intent = AIWorkoutTemplateGenerator.promptIntent(for: "20分の肩トレを作って")
+
+        #expect(intent.requestedMinutes == 20)
+        #expect(intent.muscleTargets.contains(.shoulders))
+    }
+
     @Test("Resolve generated template filters unresolved and duplicate slots while keeping cardio")
     func resolveGeneratedTemplateFiltersInvalidSlots() throws {
         let template = AIWorkoutTemplate(

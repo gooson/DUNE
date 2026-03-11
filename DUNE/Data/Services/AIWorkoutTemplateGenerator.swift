@@ -401,7 +401,7 @@ struct AIWorkoutTemplateGenerator: NaturalLanguageWorkoutGenerating, Sendable {
         let requestsHomeFriendlySelection = homeKeywords.contains { normalizedQuery.contains($0) }
         let requestedMinutes = requestedDurationMinutes(in: normalizedQuery)
         let meaningfulCore = strippedQuery.replacingOccurrences(
-            of: #"\d+\s*(분|시간|min|mins|minute|minutes|hr|hrs|hour|hours)"#,
+            of: #"\d+\s*(분|시간|分|時間|min|mins|minute|minutes|hr|hrs|hour|hours)"#,
             with: " ",
             options: .regularExpression
         )
@@ -620,7 +620,7 @@ struct AIWorkoutTemplateGenerator: NaturalLanguageWorkoutGenerating, Sendable {
     }
 
     static func requestedDurationMinutes(in normalizedQuery: String) -> Int? {
-        let pattern = #"(?<!\d)(\d{1,3})\s*(분|시간|min|mins|minute|minutes|hr|hrs|hour|hours)"#
+        let pattern = #"(?<!\d)(\d{1,3})\s*(분|시간|分|時間|min|mins|minute|minutes|hr|hrs|hour|hours)"#
         guard let regex = try? NSRegularExpression(pattern: pattern),
               let match = regex.firstMatch(
                 in: normalizedQuery,
@@ -635,7 +635,7 @@ struct AIWorkoutTemplateGenerator: NaturalLanguageWorkoutGenerating, Sendable {
 
         let unit = String(normalizedQuery[unitRange])
         switch unit {
-        case "시간", "hr", "hrs", "hour", "hours":
+        case "시간", "時間", "hr", "hrs", "hour", "hours":
             return rawValue * 60
         default:
             return rawValue
