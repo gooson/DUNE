@@ -7,6 +7,7 @@ import WatchKit
 struct SetInputSheet: View {
     @Binding var weight: Double
     @Binding var reps: Int
+    @Binding var rpe: Double?
     /// Previously completed sets for the current exercise (newest last)
     var previousSets: [CompletedSetData] = []
     @Environment(\.dismiss) private var dismiss
@@ -36,6 +37,11 @@ struct SetInputSheet: View {
 
                 // Reps — inline ± row
                 repsSection
+
+                Divider()
+
+                // RPE — visible in the set input context instead of a separate flow
+                rpeSection
             }
             .padding(.horizontal, DS.Spacing.md)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
@@ -173,6 +179,13 @@ struct SetInputSheet: View {
             .tint(.secondary)
             .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.setInputRepsIncrementButton)
         }
+    }
+
+    // MARK: - RPE
+
+    private var rpeSection: some View {
+        WatchSetRPEPickerView(rpe: $rpe)
+            .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.setInputRPEControl)
     }
 
     // MARK: - Previous Sets (Push Destination)

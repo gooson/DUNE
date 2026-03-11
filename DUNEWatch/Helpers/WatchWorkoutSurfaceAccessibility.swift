@@ -62,6 +62,7 @@ enum WatchWorkoutSurfaceAccessibility {
     static let setInputWeightIncrementButton = "watch-set-input-weight-increment"
     static let setInputRepsDecrementButton = "watch-set-input-reps-decrement"
     static let setInputRepsIncrementButton = "watch-set-input-reps-increment"
+    static let setInputRPEControl = "watch-set-input-rpe"
 
     static func setInputPreviousSetRow(_ setNumber: Int) -> String {
         "watch-set-input-previous-set-\(setNumber)"
