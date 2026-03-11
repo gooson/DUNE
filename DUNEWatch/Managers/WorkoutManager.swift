@@ -110,6 +110,8 @@ final class WorkoutManager: NSObject {
     private var lastInteractionDate: Date?
     private var lastObservedDistance: Double = 0
     private var lastObservedSteps: Double = 0
+    private var lastObservedFloorsClimbed: Double = 0
+    private var lastObservedActiveCalories: Double = 0
     private var autoEndDeadline: Date?
 
     /// Average heart rate across the entire session.
@@ -646,6 +648,8 @@ final class WorkoutManager: NSObject {
         lastInteractionDate = nil
         lastObservedDistance = 0
         lastObservedSteps = 0
+        lastObservedFloorsClimbed = 0
+        lastObservedActiveCalories = 0
         clearRecoveryState()
     }
 
@@ -902,8 +906,7 @@ final class WorkoutManager: NSObject {
         if clearInteractionTimestamp {
             lastInteractionDate = Date()
         }
-        lastObservedDistance = distance
-        lastObservedSteps = steps
+        updateObservedCardioMetricsBaseline()
         clearInactivityPrompt()
     }
 
@@ -913,16 +916,45 @@ final class WorkoutManager: NSObject {
         autoEndDeadline = nil
     }
 
+    private func currentObservedCardioMetrics() -> CardioInactivityObservedMetrics {
+        CardioInactivityObservedMetrics(
+            distance: distance,
+            steps: steps,
+            floorsClimbed: floorsClimbed,
+            activeCalories: activeCalories
+        )
+    }
+
+    private func updateObservedCardioMetricsBaseline() {
+        let currentMetrics = currentObservedCardioMetrics()
+        lastObservedDistance = currentMetrics.distance
+        lastObservedSteps = currentMetrics.steps
+        lastObservedFloorsClimbed = currentMetrics.floorsClimbed
+        lastObservedActiveCalories = currentMetrics.activeCalories
+    }
+
     private func evaluateCardioInactivity(at now: Date) {
         guard isCardioMode, isActive, !isSessionEnded, !isPaused else {
             clearInactivityPrompt()
             return
         }
 
-        if distance > lastObservedDistance || steps > lastObservedSteps {
+        let previousMetrics = CardioInactivityObservedMetrics(
+            distance: lastObservedDistance,
+            steps: lastObservedSteps,
+            floorsClimbed: lastObservedFloorsClimbed,
+            activeCalories: lastObservedActiveCalories
+        )
+        let currentMetrics = currentObservedCardioMetrics()
+
+        if CardioInactivityActivitySignal.hasProgress(
+            workoutMode: workoutMode,
+            supportsMachineLevel: supportsMachineLevel,
+            previous: previousMetrics,
+            current: currentMetrics
+        ) {
             lastMotionDate = now
-            lastObservedDistance = distance
-            lastObservedSteps = steps
+            updateObservedCardioMetricsBaseline()
             clearInactivityPrompt()
             return
         }
@@ -1159,6 +1191,38 @@ enum CardioInactivityEvaluation: Equatable {
     case softNudge
     case confirmation(deadline: Date)
     case autoEnd
+}
+
+struct CardioInactivityObservedMetrics: Equatable {
+    let distance: Double
+    let steps: Double
+    let floorsClimbed: Double
+    let activeCalories: Double
+}
+
+enum CardioInactivityActivitySignal {
+    static func hasProgress(
+        workoutMode: WorkoutMode,
+        supportsMachineLevel: Bool,
+        previous: CardioInactivityObservedMetrics,
+        current: CardioInactivityObservedMetrics
+    ) -> Bool {
+        if current.distance > previous.distance || current.steps > previous.steps {
+            return true
+        }
+
+        if case .cardio(let activityType, _) = workoutMode,
+           activityType.isStairBased,
+           current.floorsClimbed > previous.floorsClimbed {
+            return true
+        }
+
+        if supportsMachineLevel, current.activeCalories > previous.activeCalories {
+            return true
+        }
+
+        return false
+    }
 }
 
 enum WorkoutElapsedTime {
