@@ -173,6 +173,19 @@ struct TimePeriodTests {
         #expect(label.contains("–"))
     }
 
+    @Test("week visibleRangeLabel uses inclusive end date")
+    func weekVisibleRangeLabelUsesInclusiveEndDate() {
+        let calendar = Calendar.current
+        let scrollDate = calendar.date(from: DateComponents(year: 2026, month: 3, day: 5))!
+        let expectedEnd = calendar.date(byAdding: .day, value: 6, to: scrollDate)!
+        let formatter = DateFormatter()
+        formatter.setLocalizedDateFormatFromTemplate("Md")
+
+        let expected = "\(formatter.string(from: scrollDate)) – \(formatter.string(from: expectedEnd))"
+
+        #expect(TimePeriod.week.visibleRangeLabel(from: scrollDate) == expected)
+    }
+
     // MARK: - visibleDomainSeconds
 
     @Test("visibleDomainSeconds increases with period size")

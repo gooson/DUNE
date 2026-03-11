@@ -241,6 +241,7 @@ struct MetricDetailView: View {
                 timePeriod: viewModel.selectedPeriod,
                 tintColor: DS.Color.hrv,
                 trendLine: trend,
+                scrollDomain: viewModel.scrollDomain,
                 scrollPosition: $viewModel.scrollPosition
             )
 
@@ -251,6 +252,7 @@ struct MetricDetailView: View {
                     period: viewModel.selectedPeriod,
                     tintColor: DS.Color.rhr,
                     trendLine: trend,
+                    scrollDomain: viewModel.scrollDomain,
                     scrollPosition: $viewModel.scrollPosition
                 )
             } else {
@@ -261,6 +263,7 @@ struct MetricDetailView: View {
                     timePeriod: viewModel.selectedPeriod,
                     tintColor: DS.Color.rhr,
                     trendLine: trend,
+                    scrollDomain: viewModel.scrollDomain,
                     scrollPosition: $viewModel.scrollPosition
                 )
             }
