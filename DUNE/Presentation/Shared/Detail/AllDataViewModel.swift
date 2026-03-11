@@ -128,20 +128,23 @@ final class AllDataViewModel {
         case .sleep:
             var points: [ChartDataPoint] = []
             let calendar = Calendar.current
-            try await withThrowingTaskGroup(of: (Date, Double).self) { group in
+            try await withThrowingTaskGroup(of: ChartDataPoint?.self) { group in
                 for dayOffset in toDaysAgo..<fromDaysAgo {
-                    guard let date = calendar.date(byAdding: .day, value: -dayOffset, to: Date()) else { continue }
+                    guard let referenceDate = calendar.date(byAdding: .day, value: -dayOffset, to: Date()) else { continue }
+                    let dayAnchor = calendar.startOfDay(for: referenceDate)
                     group.addTask { [sleepService] in
-                        let stages = try await sleepService.fetchSleepStages(for: date)
+                        let stages = try await sleepService.fetchSleepStages(for: referenceDate)
                         // Align with SleepSummary/score policy: sleep duration excludes awake stage.
-                        let total = stages
-                            .filter { $0.stage != .awake }
-                            .reduce(0.0) { $0 + $1.duration } / 60.0
-                        return (date, total)
+                        let sleepStages = stages.filter { $0.stage != .awake }
+                        let total = sleepStages.reduce(0.0) { $0 + $1.duration } / 60.0
+                        guard total > 0 else { return nil }
+
+                        let displayDate = sleepStages.min(by: { $0.startDate < $1.startDate })?.startDate
+                        return ChartDataPoint(date: dayAnchor, value: total, displayDate: displayDate)
                     }
                 }
-                for try await (date, total) in group {
-                    if total > 0 { points.append(ChartDataPoint(date: date, value: total)) }
+                for try await point in group {
+                    if let point { points.append(point) }
                 }
             }
             return points.sorted(by: { $0.date > $1.date })

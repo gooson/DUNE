@@ -167,10 +167,11 @@ struct AllDataViewModelTests {
     func sleepCategoryFiltersZeroTotals() async {
         let sleepDay = day(1)
         let zeroDay = day(2)
+        let bedtime = sleepDay.addingTimeInterval(-17 * 60)
 
         let sleepService = MockAllDataSleepService(stagesByDay: [
             sleepDay: [
-                SleepStage(stage: .core, duration: 7 * 3600, startDate: sleepDay, endDate: sleepDay.addingTimeInterval(7 * 3600)),
+                SleepStage(stage: .core, duration: 7 * 3600, startDate: bedtime, endDate: bedtime.addingTimeInterval(7 * 3600)),
             ],
             zeroDay: [
                 SleepStage(stage: .awake, duration: 1_800, startDate: zeroDay, endDate: zeroDay.addingTimeInterval(1_800)),
@@ -184,6 +185,8 @@ struct AllDataViewModelTests {
 
         #expect(vm.dataPoints.count == 1)
         #expect(abs(vm.dataPoints[0].value - 420) < 0.001)
+        #expect(vm.dataPoints[0].date == sleepDay)
+        #expect(vm.dataPoints[0].displayDate == bedtime)
     }
 
     @Test("groupedByDate returns newest date first and points sorted descending")
