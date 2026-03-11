@@ -253,6 +253,7 @@ struct ActivityView: View {
                             NavigationLink(value: ActivityDetailDestination.personalRecords) {
                                 AchievementHistoryPreview(events: viewModel.workoutRewardHistory)
                             }
+                            .frame(maxWidth: .infinity, alignment: .leading)
                             .buttonStyle(.plain)
                             .accessibilityIdentifier("activity-section-achievement")
                         }
@@ -796,45 +797,79 @@ struct ActivityView: View {
 private struct AchievementHistoryPreview: View {
     let events: [WorkoutRewardEvent]
 
+    @Environment(\.horizontalSizeClass) private var sizeClass
+
+    private var isRegularLayout: Bool { sizeClass == .regular }
+    private var previewLimit: Int { isRegularLayout ? 4 : 3 }
+    private var minimumCardHeight: CGFloat? { isRegularLayout ? 136 : nil }
+
     private var previewEvents: [WorkoutRewardEvent] {
-        Array(events.prefix(3))
+        Array(events.prefix(previewLimit))
     }
 
     var body: some View {
         StandardCard {
-            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            Group {
                 if previewEvents.isEmpty {
-                    Text(String(localized: "No achievements yet. Complete workouts to unlock milestones, badges, and levels."))
-                        .font(.caption)
-                        .foregroundStyle(.tertiary)
+                    emptyState
                 } else {
-                    ForEach(previewEvents) { event in
-                        HStack(spacing: DS.Spacing.xs) {
-                            Image(systemName: iconName(for: event.kind))
-                                .font(.caption2)
-                                .foregroundStyle(color(for: event.kind))
-                                .frame(width: 16)
-
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(event.title)
-                                    .font(.caption.weight(.semibold))
-                                    .foregroundStyle(DS.Color.textSecondary)
-                                    .lineLimit(1)
-                                Text(eventDetailText(event))
-                                    .font(.caption2)
-                                    .foregroundStyle(.tertiary)
-                                    .lineLimit(1)
-                            }
-
-                            Spacer(minLength: 0)
-
-                            Text(event.date, style: .date)
-                                .font(.caption2)
-                                .foregroundStyle(.tertiary)
-                        }
-                    }
+                    populatedState
                 }
             }
+            .frame(maxWidth: .infinity, minHeight: minimumCardHeight, alignment: .leading)
+        }
+    }
+
+    private var emptyState: some View {
+        HStack(alignment: .top, spacing: isRegularLayout ? DS.Spacing.sm : DS.Spacing.xs) {
+            Image(systemName: "medal.fill")
+                .font(isRegularLayout ? .body : .caption)
+                .foregroundStyle(.tertiary)
+                .frame(width: isRegularLayout ? 20 : 16, alignment: .center)
+
+            Text(String(localized: "No achievements yet. Complete workouts to unlock milestones, badges, and levels."))
+                .font(isRegularLayout ? .subheadline : .caption)
+                .foregroundStyle(.tertiary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.vertical, isRegularLayout ? DS.Spacing.sm : 0)
+    }
+
+    private var populatedState: some View {
+        VStack(alignment: .leading, spacing: isRegularLayout ? DS.Spacing.md : DS.Spacing.sm) {
+            ForEach(previewEvents) { event in
+                historyRow(for: event)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private func historyRow(for event: WorkoutRewardEvent) -> some View {
+        HStack(alignment: .top, spacing: isRegularLayout ? DS.Spacing.sm : DS.Spacing.xs) {
+            Image(systemName: iconName(for: event.kind))
+                .font(isRegularLayout ? .caption : .caption2)
+                .foregroundStyle(color(for: event.kind))
+                .frame(width: isRegularLayout ? 20 : 16, alignment: .center)
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(event.title)
+                    .font(isRegularLayout ? .subheadline.weight(.semibold) : .caption.weight(.semibold))
+                    .foregroundStyle(DS.Color.textSecondary)
+                    .lineLimit(isRegularLayout ? 2 : 1)
+                Text(eventDetailText(event))
+                    .font(isRegularLayout ? .caption : .caption2)
+                    .foregroundStyle(.tertiary)
+                    .lineLimit(isRegularLayout ? 2 : 1)
+            }
+
+            Spacer(minLength: 0)
+
+            Text(event.date, style: .date)
+                .font(.caption2)
+                .foregroundStyle(.tertiary)
+                .lineLimit(1)
+                .multilineTextAlignment(.trailing)
         }
     }
 
