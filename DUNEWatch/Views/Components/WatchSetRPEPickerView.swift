@@ -1,29 +1,69 @@
 import SwiftUI
 import WatchKit
 
-/// Compact 3×3 grid RPE picker for watchOS (Modified Borg scale 6.0–10.0, 0.5 step).
+/// RPE slider picker for watchOS with Digital Crown support (6.0–10.0, 0.5 step).
 struct WatchSetRPEPickerView: View {
     @Binding var rpe: Double?
 
-    private static let rpeColors: [Color] = [
-        DS.Color.positive,     // 6.0
-        DS.Color.positive,     // 6.5
-        DS.Color.caution,      // 7.0
-        DS.Color.caution,      // 7.5
-        .orange,               // 8.0
-        .orange,               // 8.5
-        DS.Color.negative,     // 9.0
-        DS.Color.negative,     // 9.5
-        DS.Color.negative,     // 10.0
-    ]
+    @State private var sliderValue: Double = 8.0
+    @State private var isActive: Bool = false
+    @State private var showHelp = false
 
-    private let columns = Array(repeating: GridItem(.flexible(), spacing: DS.Spacing.xs), count: 3)
+    private var currentColor: Color {
+        switch sliderValue {
+        case ..<7.0: DS.Color.positive
+        case 7.0..<8.0: DS.Color.caution
+        case 8.0..<9.0: .orange
+        default: DS.Color.negative
+        }
+    }
 
     var body: some View {
         VStack(spacing: DS.Spacing.xs) {
-            rpeHeader
-            rpeGrid
+            if isActive {
+                rpeHeader
+                rpeDisplay
+                rpeSlider
+            } else {
+                inactiveState
+            }
         }
+        .animation(.easeInOut(duration: 0.2), value: isActive)
+        .task {
+            if let rpe {
+                sliderValue = rpe
+                isActive = true
+            }
+        }
+        .sheet(isPresented: $showHelp) {
+            WatchRPEHelpSheet()
+        }
+    }
+
+    // MARK: - Inactive State
+
+    private var inactiveState: some View {
+        Button {
+            withAnimation(.easeInOut(duration: 0.2)) {
+                isActive = true
+                sliderValue = 8.0
+                rpe = 8.0
+            }
+            WKInterfaceDevice.current().play(.click)
+        } label: {
+            HStack {
+                Text("RPE")
+                    .font(.caption2.weight(.semibold))
+                    .foregroundStyle(DS.Color.textSecondary)
+
+                Spacer()
+
+                Text("Tap to rate")
+                    .font(.caption2)
+                    .foregroundStyle(DS.Color.textTertiary)
+            }
+        }
+        .buttonStyle(.plain)
     }
 
     // MARK: - Header
@@ -36,57 +76,66 @@ struct WatchSetRPEPickerView: View {
 
             Spacer()
 
-            if let rpe {
-                let level = RPELevel(value: rpe)
-                Text(level.displayLabel)
+            Button {
+                showHelp = true
+            } label: {
+                Image(systemName: "questionmark.circle")
                     .font(.caption2)
-                    .foregroundStyle(DS.Color.textSecondary)
+                    .foregroundStyle(DS.Color.textTertiary)
             }
+            .buttonStyle(.plain)
 
-            if rpe != nil {
-                Button {
-                    withAnimation(.easeInOut(duration: 0.2)) { self.rpe = nil }
-                    WKInterfaceDevice.current().play(.click)
-                } label: {
-                    Image(systemName: "xmark.circle.fill")
-                        .font(.caption2)
-                        .foregroundStyle(DS.Color.textTertiary)
+            Button {
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    isActive = false
+                    rpe = nil
                 }
-                .buttonStyle(.plain)
+                WKInterfaceDevice.current().play(.click)
+            } label: {
+                Image(systemName: "xmark.circle.fill")
+                    .font(.caption2)
+                    .foregroundStyle(DS.Color.textTertiary)
             }
+            .buttonStyle(.plain)
         }
     }
 
-    // MARK: - Grid
+    // MARK: - RPE Display
 
-    private var rpeGrid: some View {
-        LazyVGrid(columns: columns, spacing: DS.Spacing.xs) {
-            ForEach(Array(RPELevel.levels.enumerated()), id: \.offset) { index, level in
-                rpeButton(level: level, color: Self.rpeColors[index])
-            }
+    private var rpeDisplay: some View {
+        VStack(spacing: 2) {
+            Text(RPELevel.format(sliderValue))
+                .font(.title3.weight(.bold).monospacedDigit())
+                .foregroundStyle(currentColor)
+                .contentTransition(.numericText())
+
+            let level = RPELevel(value: sliderValue)
+            Text(level.displayLabel)
+                .font(.caption2.weight(.semibold))
+                .foregroundStyle(currentColor)
+
+            Text("\(level.rir) reps left")
+                .font(.caption2)
+                .foregroundStyle(DS.Color.textSecondary)
         }
+        .animation(.easeInOut(duration: 0.2), value: sliderValue)
     }
 
-    private func rpeButton(level: Double, color: Color) -> some View {
-        let isSelected = rpe == level
+    // MARK: - Slider
 
-        return Button {
-            withAnimation(.easeInOut(duration: 0.2)) {
-                rpe = isSelected ? nil : level
-            }
+    private var rpeSlider: some View {
+        Slider(
+            value: $sliderValue,
+            in: RPELevel.range,
+            step: RPELevel.step
+        ) {
+            Text("RPE")
+        }
+        .tint(currentColor)
+        .onChange(of: sliderValue) { _, newValue in
+            rpe = newValue
             WKInterfaceDevice.current().play(.click)
-        } label: {
-            Text(RPELevel.format(level))
-                .font(.caption2.weight(isSelected ? .bold : .medium).monospacedDigit())
-                .foregroundStyle(isSelected ? .white : DS.Color.textSecondary)
-                .frame(maxWidth: .infinity)
-                .frame(height: 28)
-                .background(
-                    RoundedRectangle(cornerRadius: DS.Radius.sm)
-                        .fill(isSelected ? color : color.opacity(DS.Opacity.light))
-                )
         }
-        .buttonStyle(.plain)
     }
 }
 
