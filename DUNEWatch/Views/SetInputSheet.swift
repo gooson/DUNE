@@ -29,21 +29,23 @@ struct SetInputSheet: View {
                     }
                 }
         } else {
-            VStack(spacing: DS.Spacing.lg) {
-                // Weight — large display + crown + ±2.5 buttons
-                weightSection
+            ScrollView {
+                VStack(spacing: DS.Spacing.lg) {
+                    // Weight — large display + crown + ±2.5 buttons
+                    weightSection
 
-                Divider()
+                    Divider()
 
-                // Reps — inline ± row
-                repsSection
+                    // Reps — inline ± row
+                    repsSection
 
-                Divider()
+                    Divider()
 
-                // RPE — visible in the set input context instead of a separate flow
-                rpeSection
+                    // RPE — visible in the set input context instead of a separate flow
+                    rpeSection
+                }
+                .padding(.horizontal, DS.Spacing.md)
             }
-            .padding(.horizontal, DS.Spacing.md)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .focusable(true)
             .focused($isWeightCrownFocused)

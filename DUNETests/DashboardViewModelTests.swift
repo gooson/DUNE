@@ -389,7 +389,22 @@ struct DashboardViewModelTests {
             latestRHR: nil
         )
         let sharedHealthDataService = CountingDashboardSharedHealthDataService(
-            snapshot: makeEmptySharedSnapshot()
+            snapshot: SharedHealthSnapshot(
+                hrvSamples: [HRVSample(value: 48.0, date: Date())],
+                todayRHR: 56.0,
+                yesterdayRHR: 58.0,
+                latestRHR: nil,
+                rhrCollection: [],
+                todaySleepStages: [],
+                yesterdaySleepStages: [],
+                latestSleepStages: nil,
+                sleepDailyDurations: [],
+                conditionScore: nil,
+                baselineStatus: nil,
+                recentConditionScores: [],
+                failedSources: [],
+                fetchedAt: Date()
+            )
         )
         let vm = DashboardViewModel(
             hrvService: hrv,
