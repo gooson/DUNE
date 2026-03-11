@@ -396,6 +396,7 @@
 		6929604A19862AC9D5D174AA /* VitalCardData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786C13C1B0FA5B2E7EA3B20D /* VitalCardData.swift */; };
 		6951B57F6A349AE72E71E2A1 /* WorkoutActivityType+Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD5049F6C8C4A81929217AF /* WorkoutActivityType+Icon.swift */; };
 		69996CEBABC93CD0BDA33E16 /* DUNEVisionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23C5FF090AF4C1A24C1302C0 /* DUNEVisionApp.swift */; };
+		69B7A58F0F23FDDE4835B1E7 /* AppNotificationCenterDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5505862BA8762F32C253527F /* AppNotificationCenterDelegateTests.swift */; };
 		69D281110B487C37D550B89C /* TrainingVolumeDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C933851A534597EE763D048 /* TrainingVolumeDestination.swift */; };
 		6A5EEE80B5D1889C1377CF12 /* StrengthPersonalRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F050A861D1D97B772D48E5 /* StrengthPersonalRecord.swift */; };
 		6AE33CC68171B44C73D232C9 /* OneRMEstimationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91B7F7B485757CCDC1CD2F8 /* OneRMEstimationService.swift */; };
@@ -1290,6 +1291,7 @@
 		53E4A27F1234863E9BA656F0 /* LifeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifeView.swift; sourceTree = "<group>"; };
 		546E9EDCE8F355115B4A71AD /* WorkoutStreakService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutStreakService.swift; sourceTree = "<group>"; };
 		54A33B38690C5D252302DE07 /* VisionTrainViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionTrainViewModelTests.swift; sourceTree = "<group>"; };
+		5505862BA8762F32C253527F /* AppNotificationCenterDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppNotificationCenterDelegateTests.swift; sourceTree = "<group>"; };
 		553A95B6E1E6441784C5ADE1 /* HabitType+View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HabitType+View.swift"; sourceTree = "<group>"; };
 		5556A8DEEE8ED55FAEDA1499 /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
 		55751A2629320D6501A5BB34 /* CompoundWorkoutSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompoundWorkoutSetupView.swift; sourceTree = "<group>"; };
@@ -3298,6 +3300,7 @@
 				223F3457563A0974B96BC5AE /* AIWorkoutTemplateGeneratorTests.swift */,
 				0F24C96476FF43C7EB0B8F20 /* AllDataViewModelTests.swift */,
 				AD5F17FA77FFC37027EBB97A /* AppMigrationPlanTests.swift */,
+				5505862BA8762F32C253527F /* AppNotificationCenterDelegateTests.swift */,
 				30EF0F73E853034311E3C4EF /* AppRefreshCoordinatorTests.swift */,
 				D2A2433FC0E7DC8D148BF7DE /* AppThemeTests.swift */,
 				8230BE0D49BE057D15850FF6 /* BackgroundNotificationEvaluatorTests.swift */,
@@ -4579,6 +4582,7 @@
 				56B3C9F9358F5C8401D5C51E /* AirQualitySnapshotTests.swift in Sources */,
 				94B74B843C5FBB963AE27E69 /* AllDataViewModelTests.swift in Sources */,
 				FBE11C5A26E10B91389D5042 /* AppMigrationPlanTests.swift in Sources */,
+				69B7A58F0F23FDDE4835B1E7 /* AppNotificationCenterDelegateTests.swift in Sources */,
 				5C2C28DAD8CBEE56B32F43F5 /* AppRefreshCoordinatorTests.swift in Sources */,
 				9C5BFF3E842F339C15EB8C01 /* AppThemeTests.swift in Sources */,
 				069DCACE3798C28797D84D28 /* BackgroundNotificationEvaluatorTests.swift in Sources */,
