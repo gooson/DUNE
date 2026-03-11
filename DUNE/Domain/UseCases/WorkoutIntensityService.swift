@@ -22,6 +22,12 @@ struct IntensitySetInput: Sendable {
     let setType: SetType
 }
 
+/// Lightweight input for set-level RPE averaging.
+struct SetRPEInput: Sendable {
+    let rpe: Double?
+    let setType: SetType
+}
+
 // MARK: - Service
 
 /// Computes auto workout intensity by combining multiple signals relative to history.
@@ -51,6 +57,28 @@ struct WorkoutIntensityService: Sendable {
         static let primary: Double = 0.60
         static let volume: Double = 0.30
         static let rpe: Double = 0.10
+    }
+
+    // MARK: - Set-Level RPE
+
+    /// Average set RPE from working/failure/drop sets, mapped to session effort scale (1-10).
+    ///
+    /// - Parameter sets: All sets from the session (warmup sets are excluded automatically).
+    /// - Returns: Integer effort (1-10) derived from mean set RPE, or nil if no valid RPE data.
+    func averageSetRPE(sets: [SetRPEInput]) -> Int? {
+        let validRPEs = sets
+            .filter { $0.setType != .warmup }
+            .compactMap { $0.rpe }
+            .filter { RPELevel.validate($0) != nil }
+        guard !validRPEs.isEmpty else { return nil }
+
+        let mean = validRPEs.reduce(0.0, +) / Double(validRPEs.count)
+        guard mean.isFinite else { return nil }
+
+        // Map 6.0-10.0 RPE → 1-10 effort: (rpe - 6) / 4 * 9 + 1
+        let normalized = (mean - RPELevel.range.lowerBound) / (RPELevel.range.upperBound - RPELevel.range.lowerBound)
+        let effort = Int(round(normalized * 9.0)) + 1
+        return Swift.max(1, Swift.min(10, effort))
     }
 
     // MARK: - Public API
