@@ -11,7 +11,12 @@ struct ConditionCalculationCard: View {
     private let zScoreText: String
     private let stdDevText: String
     private let stdDevSub: String
+    private let zScoreSub: String
     private let rhrPenaltyText: String
+    private let rhrValueText: String
+    private let rhrValueSub: String
+    private let hasRHRData: Bool
+    private let showRHRDivider: Bool
     private let rawScoreText: String
     private let dateText: String
 
@@ -20,6 +25,7 @@ struct ConditionCalculationCard: View {
         self.todayHRVText = String(format: "%.1f ms", detail.todayHRV)
         self.baselineHRVText = String(format: "%.1f ms", detail.baselineHRV)
         self.zScoreText = String(format: "%+.2f", detail.zScore)
+        self.zScoreSub = Self.zScoreLabel(detail.zScore)
         self.stdDevText = String(format: "%.3f", detail.stdDev)
         self.stdDevSub = detail.stdDev < detail.effectiveStdDev
             ? String(format: "→ floor %.2f", detail.effectiveStdDev)
@@ -27,6 +33,26 @@ struct ConditionCalculationCard: View {
         self.rhrPenaltyText = String(format: "-%.1f", detail.rhrPenalty)
         self.rawScoreText = String(format: "%.1f", detail.rawScore)
         self.dateText = Self.formatDate(detail.todayDate)
+
+        // RHR value display
+        if let todayRHR = detail.todayRHR {
+            self.hasRHRData = true
+            self.showRHRDivider = true
+            if let yesterdayRHR = detail.yesterdayRHR {
+                let change = todayRHR - yesterdayRHR
+                let sign = change > 0 ? "+" : ""
+                self.rhrValueText = String(format: "%.0f → %.0f bpm", yesterdayRHR, todayRHR)
+                self.rhrValueSub = String(format: "%@%.0f", sign, change)
+            } else {
+                self.rhrValueText = String(format: "%.0f bpm", todayRHR)
+                self.rhrValueSub = String(localized: "no comparison")
+            }
+        } else {
+            self.hasRHRData = false
+            self.showRHRDivider = detail.rhrPenalty > 0
+            self.rhrValueText = "—"
+            self.rhrValueSub = ""
+        }
     }
 
     var body: some View {
@@ -46,9 +72,14 @@ struct ConditionCalculationCard: View {
 
                     Divider()
 
-                    CalculationRow(label: "Z-Score", value: zScoreText, sub: zScoreLabel(detail.zScore))
+                    CalculationRow(label: "Z-Score", value: zScoreText, sub: zScoreSub)
                     CalculationRow(label: "StdDev (ln)", value: stdDevText, sub: stdDevSub)
 
+                    if showRHRDivider { Divider() }
+
+                    if hasRHRData {
+                        CalculationRow(label: "RHR", value: rhrValueText, sub: rhrValueSub)
+                    }
                     if detail.rhrPenalty > 0 {
                         CalculationRow(label: "RHR Penalty", value: rhrPenaltyText, sub: "")
                     }
@@ -63,7 +94,7 @@ struct ConditionCalculationCard: View {
 
     // MARK: - Private
 
-    private func zScoreLabel(_ z: Double) -> String {
+    private static func zScoreLabel(_ z: Double) -> String {
         if z > 1.0 { return "well above" }
         if z > 0.5 { return "above avg" }
         if z > -0.5 { return "normal" }

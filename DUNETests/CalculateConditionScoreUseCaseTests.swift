@@ -160,4 +160,30 @@ struct CalculateConditionScoreUseCaseTests {
         let rhr = output.contributions.first { $0.factor == .rhr }
         #expect(rhr == nil)
     }
+
+    // MARK: - Detail RHR Fields
+
+    @Test("Detail carries RHR values when provided")
+    func detailCarriesRHRValues() {
+        let samples = (0..<7).map { day in
+            HRVSample(value: 50, date: Calendar.current.date(byAdding: .day, value: -day, to: Date())!)
+        }
+        let output = sut.execute(input: .init(
+            hrvSamples: samples, todayRHR: 72, yesterdayRHR: 68
+        ))
+        #expect(output.score?.detail?.todayRHR == 72)
+        #expect(output.score?.detail?.yesterdayRHR == 68)
+    }
+
+    @Test("Detail RHR fields are nil when not provided")
+    func detailRHRNilWhenNotProvided() {
+        let samples = (0..<7).map { day in
+            HRVSample(value: 50, date: Calendar.current.date(byAdding: .day, value: -day, to: Date())!)
+        }
+        let output = sut.execute(input: .init(
+            hrvSamples: samples, todayRHR: nil, yesterdayRHR: nil
+        ))
+        #expect(output.score?.detail?.todayRHR == nil)
+        #expect(output.score?.detail?.yesterdayRHR == nil)
+    }
 }
