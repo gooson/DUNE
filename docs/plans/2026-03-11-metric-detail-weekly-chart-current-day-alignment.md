@@ -1,7 +1,7 @@
 ---
 topic: metric detail weekly chart current day alignment
 date: 2026-03-11
-status: draft
+status: implemented
 confidence: high
 related_solutions:
   - docs/solutions/architecture/2026-03-08-chart-scroll-unified-vitals.md
