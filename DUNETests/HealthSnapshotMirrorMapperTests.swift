@@ -181,6 +181,46 @@ struct HealthSnapshotMirrorMapperTests {
         #expect(payload.conditionDetail == nil)
     }
 
+    @Test("makeSnapshot reconstructs condition detail for legacy payloads")
+    func makeSnapshotReconstructsLegacyConditionDetail() {
+        let fetchedAt = Date(timeIntervalSince1970: 1_700_100_000)
+        let payload = HealthSnapshotMirrorMapper.Payload(
+            fetchedAt: fetchedAt,
+            failedSources: [],
+            todayRHR: 58,
+            yesterdayRHR: 62,
+            latestRHR: .init(date: fetchedAt, value: 58),
+            hrv14Day: [
+                .init(date: fetchedAt, value: 40),
+                .init(date: fetchedAt.addingTimeInterval(-86_400), value: 52),
+                .init(date: fetchedAt.addingTimeInterval(-172_800), value: 50),
+                .init(date: fetchedAt.addingTimeInterval(-259_200), value: 51),
+                .init(date: fetchedAt.addingTimeInterval(-345_600), value: 53),
+                .init(date: fetchedAt.addingTimeInterval(-432_000), value: 52),
+                .init(date: fetchedAt.addingTimeInterval(-518_400), value: 54)
+            ],
+            rhr14Day: [.init(date: fetchedAt.addingTimeInterval(-86_400), value: 62)],
+            sleep14Day: [],
+            todaySleepMinutes: 0,
+            yesterdaySleepMinutes: 0,
+            conditionScore: 68,
+            conditionStatus: "good",
+            conditionContributions: nil,
+            conditionDetail: nil,
+            baselineReady: nil,
+            baselineProgress: nil,
+            recentScores: []
+        )
+
+        let snapshot = HealthSnapshotMirrorMapper.makeSnapshot(from: payload)
+
+        #expect(snapshot.conditionScore != nil)
+        #expect(snapshot.conditionScore?.detail?.todayRHR == 58)
+        #expect(snapshot.conditionScore?.detail?.yesterdayRHR == 62)
+        #expect(snapshot.conditionScore?.detail?.displayRHR == 58)
+        #expect(snapshot.conditionScore?.contributions.contains(where: { $0.factor == .rhr }) == true)
+    }
+
     @Test("makeSnapshot reconstructs shared snapshot from payload")
     func makeSnapshotFromPayload() {
         let fetchedAt = Date(timeIntervalSince1970: 1_700_100_000)

@@ -162,6 +162,7 @@ enum HealthSnapshotMirrorMapper {
         let failedSources: Set<SharedHealthSnapshot.Source> = Set(
             payload.failedSources.compactMap(SharedHealthSnapshot.Source.init(rawValue:))
         )
+        let conditionScore = restoredConditionScore(from: payload, hrvSamples: hrvSamples)
 
         return SharedHealthSnapshot(
             hrvSamples: hrvSamples,
@@ -175,14 +176,7 @@ enum HealthSnapshotMirrorMapper {
             yesterdaySleepStages: yesterdayStages,
             latestSleepStages: latestSleepStages,
             sleepDailyDurations: sleepDailyDurations,
-            conditionScore: payload.conditionScore.map {
-                ConditionScore(
-                    score: $0,
-                    date: payload.fetchedAt,
-                    contributions: payload.conditionContributions ?? [],
-                    detail: payload.conditionDetail
-                )
-            },
+            conditionScore: conditionScore,
             baselineStatus: nil,
             recentConditionScores: recentScores,
             failedSources: failedSources,
@@ -224,5 +218,44 @@ enum HealthSnapshotMirrorMapper {
         appendStage(.awake, minutes: point.awakeMinutes)
 
         return stages
+    }
+
+    private static func restoredConditionScore(
+        from payload: Payload,
+        hrvSamples: [HRVSample]
+    ) -> ConditionScore? {
+        guard let storedScore = payload.conditionScore else { return nil }
+
+        if payload.conditionDetail != nil || payload.conditionContributions != nil {
+            return ConditionScore(
+                score: storedScore,
+                date: payload.fetchedAt,
+                contributions: payload.conditionContributions ?? [],
+                detail: payload.conditionDetail
+            )
+        }
+
+        let displayRHR = payload.todayRHR ?? payload.latestRHR?.value
+        let displayRHRDate = payload.todayRHR != nil ? payload.fetchedAt : payload.latestRHR?.date
+        let recovered = CalculateConditionScoreUseCase().execute(
+            input: .init(
+                hrvSamples: hrvSamples,
+                todayRHR: payload.todayRHR,
+                yesterdayRHR: payload.yesterdayRHR,
+                displayRHR: displayRHR,
+                displayRHRDate: displayRHRDate
+            )
+        )
+
+        guard let recoveredScore = recovered.score else {
+            return ConditionScore(score: storedScore, date: payload.fetchedAt)
+        }
+
+        return ConditionScore(
+            score: recoveredScore.score,
+            date: payload.fetchedAt,
+            contributions: recoveredScore.contributions,
+            detail: recoveredScore.detail
+        )
     }
 }
