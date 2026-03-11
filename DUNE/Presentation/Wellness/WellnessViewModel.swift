@@ -144,7 +144,7 @@ final class WellnessViewModel {
             hrvTrend: hrvTrend,
             bedtimeVarianceMinutes: sleepDurationVariance,
             conditionScore: conditionScore,
-            dataAvailableDays: sleepDetailTrend.count
+            dataAvailableDays: sleepDetailTrend.filter { $0.minutes > 0 }.count
         )
         sleepPrediction = sleepPredictionUseCase.execute(input: input)
     }
