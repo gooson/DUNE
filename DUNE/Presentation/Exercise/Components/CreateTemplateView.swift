@@ -349,7 +349,7 @@ struct TemplateFormView: View {
             }
 
             guard !generatedEntries.isEmpty else {
-                validationError = String(localized: "We couldn't turn that request into a workout yet.")
+                validationError = generationErrorMessage(for: .noExercisesMatched)
                 return
             }
 
@@ -368,8 +368,12 @@ struct TemplateFormView: View {
             String(localized: "Workout generation is available on supported Apple Intelligence devices.")
         case .emptyPrompt:
             String(localized: "Please describe the workout you want.")
+        case .ambiguousPrompt:
+            String(localized: "That request is still too broad. Try adding a body part, time, or equipment. For example: a 20 minute shoulder workout, upper body with dumbbells at home, or a core routine before running.")
+        case .unsupportedRequest:
+            String(localized: "This template builder cannot save mobility-only or HIIT-only routines yet. Try a strength, bodyweight, or cardio template instead. For example: a 20 minute shoulder workout, bodyweight upper body at home, or a running template.")
         case .noExercisesMatched, .invalidTemplate:
-            String(localized: "We couldn't turn that request into a workout yet.")
+            String(localized: "We couldn't match enough exercises for that request yet. Try adding a body part, time, or equipment. For example: a 20 minute shoulder workout, upper body with dumbbells at home, or a core routine before running.")
         case .generationFailed:
             String(localized: "Could not generate a workout template right now.")
         }

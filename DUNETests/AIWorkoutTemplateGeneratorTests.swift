@@ -108,8 +108,30 @@ struct AIWorkoutTemplateGeneratorTests {
         let output = try await tool.call(arguments: .init(query: "press"))
 
         #expect(output.contains("dumbbell-shoulder-press"))
-        #expect(output.contains("Dumbbell Shoulder Press"))
+        #expect(output.contains("덤벨 숄더 프레스"))
         #expect(!output.contains("running"))
+    }
+
+    @Test("Search tool expands broad Korean muscle prompts into template-capable matches")
+    func searchToolExpandsKoreanMusclePrompt() async throws {
+        let tool = AIWorkoutTemplateGenerator.SearchExerciseTool(library: makeLibrary())
+
+        let output = try await tool.call(arguments: .init(query: "어깨 운동 만들어줘"))
+
+        #expect(output.contains("dumbbell-shoulder-press"))
+        #expect(output.contains("덤벨 숄더 프레스"))
+        #expect(!output.contains("running"))
+    }
+
+    @Test("Search tool prefers home-friendly bodyweight matches for home prompts")
+    func searchToolPrefersHomeFriendlyMatches() async throws {
+        let tool = AIWorkoutTemplateGenerator.SearchExerciseTool(library: makeLibrary())
+
+        let output = try await tool.call(arguments: .init(query: "집에서 맨몸 상체 운동"))
+
+        #expect(output.contains("push-up"))
+        #expect(output.contains("푸시업"))
+        #expect(!output.contains("machine-chest-press"))
     }
 
     @Test("Search tool excludes unsupported flexibility and HIIT exercise types")
@@ -117,12 +139,26 @@ struct AIWorkoutTemplateGeneratorTests {
         let tool = AIWorkoutTemplateGenerator.SearchExerciseTool(library: makeLibrary())
 
         let flexibilityOutput = try await tool.call(arguments: .init(query: "mobility"))
-        #expect(flexibilityOutput == "No matching template-capable exercises were found.")
+        #expect(flexibilityOutput == "This request focuses on workout styles that the template builder cannot save yet.")
         #expect(!flexibilityOutput.contains("hip-mobility"))
 
         let hiitOutput = try await tool.call(arguments: .init(query: "burpee"))
-        #expect(hiitOutput == "No matching template-capable exercises were found.")
+        #expect(hiitOutput == "This request focuses on workout styles that the template builder cannot save yet.")
         #expect(!hiitOutput.contains("burpee-intervals"))
+    }
+
+    @Test("Preflight rejects ambiguous prompt before generation")
+    func preflightRejectsAmbiguousPrompt() {
+        let intent = AIWorkoutTemplateGenerator.promptIntent(for: "운동 추천해줘")
+
+        #expect(AIWorkoutTemplateGenerator.preflightError(for: intent) == .ambiguousPrompt)
+    }
+
+    @Test("Preflight rejects unsupported prompt before generation")
+    func preflightRejectsUnsupportedPrompt() {
+        let intent = AIWorkoutTemplateGenerator.promptIntent(for: "mobility routine")
+
+        #expect(AIWorkoutTemplateGenerator.preflightError(for: intent) == .unsupportedRequest)
     }
 
     @Test("Resolve generated template filters unresolved and duplicate slots while keeping cardio")
@@ -286,6 +322,7 @@ struct AIWorkoutTemplateGeneratorTests {
                 makeExercise(
                     id: "dumbbell-shoulder-press",
                     name: "Dumbbell Shoulder Press",
+                    localizedName: "덤벨 숄더 프레스",
                     aliases: ["Shoulder Press", "Overhead Press"],
                     category: .strength,
                     inputType: .setsRepsWeight,
@@ -296,6 +333,7 @@ struct AIWorkoutTemplateGeneratorTests {
                 makeExercise(
                     id: "push-up",
                     name: "Push Up",
+                    localizedName: "푸시업",
                     aliases: ["Pushup", "Press Up"],
                     category: .bodyweight,
                     inputType: .setsReps,
@@ -306,6 +344,7 @@ struct AIWorkoutTemplateGeneratorTests {
                 makeExercise(
                     id: "running",
                     name: "Running",
+                    localizedName: "러닝",
                     aliases: ["Jogging"],
                     category: .cardio,
                     inputType: .durationDistance,
@@ -316,6 +355,7 @@ struct AIWorkoutTemplateGeneratorTests {
                 makeExercise(
                     id: "hip-mobility",
                     name: "Hip Mobility",
+                    localizedName: "힙 모빌리티",
                     aliases: ["Mobility Flow", "Stretching"],
                     category: .flexibility,
                     inputType: .durationIntensity,
@@ -326,12 +366,24 @@ struct AIWorkoutTemplateGeneratorTests {
                 makeExercise(
                     id: "burpee-intervals",
                     name: "Burpee Intervals",
+                    localizedName: "버피 인터벌",
                     aliases: ["Burpee Circuit", "HIIT Burpees"],
                     category: .hiit,
                     inputType: .roundsBased,
                     primaryMuscles: [.quadriceps],
                     secondaryMuscles: [.shoulders],
                     equipment: .bodyweight
+                ),
+                makeExercise(
+                    id: "machine-chest-press",
+                    name: "Chest Press Machine",
+                    localizedName: "체스트 프레스 머신",
+                    aliases: ["Chest Press"],
+                    category: .strength,
+                    inputType: .setsRepsWeight,
+                    primaryMuscles: [.chest],
+                    secondaryMuscles: [.triceps],
+                    equipment: .machine
                 ),
             ]
         )
@@ -340,6 +392,7 @@ struct AIWorkoutTemplateGeneratorTests {
     private func makeExercise(
         id: String,
         name: String,
+        localizedName: String? = nil,
         aliases: [String],
         category: ExerciseCategory,
         inputType: ExerciseInputType,
@@ -350,7 +403,7 @@ struct AIWorkoutTemplateGeneratorTests {
         ExerciseDefinition(
             id: id,
             name: name,
-            localizedName: name,
+            localizedName: localizedName ?? name,
             category: category,
             inputType: inputType,
             primaryMuscles: primaryMuscles,
