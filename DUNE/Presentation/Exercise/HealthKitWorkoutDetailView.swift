@@ -382,9 +382,57 @@ struct HealthKitWorkoutDetailView: View {
                     title: "No heart rate data"
                 )
             }
+
+            if let recovery = viewModel.heartRateRecovery {
+                recoveryRow(recovery)
+            }
         }
         .padding(DS.Spacing.md)
         .chartSurface(cornerRadius: DS.Radius.md, topBloomHeight: 34)
+    }
+
+    private func recoveryRow(_ recovery: HeartRateRecovery) -> some View {
+        HStack {
+            Label("Recovery", systemImage: "arrow.down.heart.fill")
+                .font(.subheadline)
+                .foregroundStyle(DS.Color.textSecondary)
+
+            Spacer()
+
+            HStack(spacing: DS.Spacing.xs) {
+                Text("\(Int(recovery.hrr1))")
+                    .font(.subheadline.weight(.semibold).monospacedDigit())
+                Text("bpm")
+                    .font(.caption)
+                    .foregroundStyle(DS.Color.textSecondary)
+                Text(recoveryRatingLabel(recovery.rating))
+                    .font(.caption.weight(.medium))
+                    .foregroundStyle(recoveryRatingColor(recovery.rating))
+                    .padding(.horizontal, DS.Spacing.xs)
+                    .padding(.vertical, 2)
+                    .background(
+                        recoveryRatingColor(recovery.rating).opacity(0.15),
+                        in: Capsule()
+                    )
+            }
+        }
+        .padding(.top, DS.Spacing.xs)
+    }
+
+    private func recoveryRatingLabel(_ rating: HeartRateRecovery.Rating) -> String {
+        switch rating {
+        case .low: String(localized: "Low")
+        case .normal: String(localized: "Normal")
+        case .good: String(localized: "Good")
+        }
+    }
+
+    private func recoveryRatingColor(_ rating: HeartRateRecovery.Rating) -> Color {
+        switch rating {
+        case .low: .red
+        case .normal: .yellow
+        case .good: .green
+        }
     }
 
     // MARK: - Weather
