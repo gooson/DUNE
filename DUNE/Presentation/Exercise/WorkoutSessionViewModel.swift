@@ -14,6 +14,8 @@ struct EditableSet: Identifiable {
     var setType: SetType = .working
     /// Rest timer total (including +30s adjustments) used after this set, in seconds.
     var restDuration: TimeInterval?
+    /// Set-level RPE (6.0-10.0, 0.5 step). Nil if not rated.
+    var rpe: Double?
 }
 
 /// Previous session data for inline display
@@ -680,7 +682,8 @@ final class WorkoutSessionViewModel {
                 distance: distanceKm,
                 intensity: levelValue,
                 isCompleted: true,
-                restDuration: editableSet.restDuration
+                restDuration: editableSet.restDuration,
+                rpe: editableSet.rpe.flatMap(RPELevel.validate)
             )
             // Explicit bidirectional link for CloudKit reliability
             workoutSet.exerciseRecord = record
