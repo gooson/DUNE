@@ -12,7 +12,8 @@ struct ConditionScoreTests {
     private func makeDetail(
         todayHRV: Double = 50,
         baselineHRV: Double = 45,
-        rhrPenalty: Double = 0,
+        rhrAdjustment: Double = 0,
+        rhrDeltaFromBaseline: Double? = nil,
         todayRHR: Double? = nil,
         yesterdayRHR: Double? = nil
     ) -> ConditionScoreDetail {
@@ -25,9 +26,12 @@ struct ConditionScoreTests {
             daysInBaseline: 14,
             todayDate: Self.fixedDate,
             rawScore: 75,
-            rhrPenalty: rhrPenalty,
+            rhrAdjustment: rhrAdjustment,
             todayRHR: todayRHR,
             yesterdayRHR: yesterdayRHR,
+            baselineRHR: rhrDeltaFromBaseline.map { (todayRHR ?? 60) - $0 },
+            rhrDeltaFromBaseline: rhrDeltaFromBaseline,
+            rhrBaselineDays: rhrDeltaFromBaseline == nil ? 0 : 14,
             displayRHR: nil,
             displayRHRDate: nil
         )
@@ -95,10 +99,10 @@ struct ConditionScoreTests {
         #expect(above.narrativeMessage != below.narrativeMessage)
     }
 
-    @Test("narrativeMessage: good + high rhrPenalty differs from low rhrPenalty")
+    @Test("narrativeMessage: good + elevated RHR differs from lower RHR")
     func narrativeGoodRHRBranch() {
-        let highRHR = ConditionScore(score: 70, detail: makeDetail(rhrPenalty: 10))
-        let lowRHR = ConditionScore(score: 70, detail: makeDetail(rhrPenalty: 3))
+        let highRHR = ConditionScore(score: 70, detail: makeDetail(rhrAdjustment: -6, rhrDeltaFromBaseline: 4, todayRHR: 64))
+        let lowRHR = ConditionScore(score: 70, detail: makeDetail(rhrAdjustment: 2, rhrDeltaFromBaseline: -2, todayRHR: 58))
         #expect(highRHR.narrativeMessage != lowRHR.narrativeMessage)
     }
 

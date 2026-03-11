@@ -240,6 +240,7 @@ enum HealthSnapshotMirrorMapper {
         let recovered = CalculateConditionScoreUseCase().execute(
             input: .init(
                 hrvSamples: hrvSamples,
+                rhrDailyAverages: payload.rhr14Day.map { .init(date: $0.date, value: $0.value) },
                 todayRHR: payload.todayRHR,
                 yesterdayRHR: payload.yesterdayRHR,
                 displayRHR: displayRHR,

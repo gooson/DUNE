@@ -184,9 +184,12 @@ struct HealthDataQAServiceTests {
             daysInBaseline: 14,
             todayDate: referenceDate,
             rawScore: 68,
-            rhrPenalty: 6.5,
+            rhrAdjustment: -6.5,
             todayRHR: 72,
             yesterdayRHR: 65,
+            baselineRHR: 67,
+            rhrDeltaFromBaseline: 5,
+            rhrBaselineDays: 14,
             displayRHR: nil,
             displayRHRDate: nil
         )

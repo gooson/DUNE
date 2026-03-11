@@ -408,6 +408,7 @@ final class DashboardViewModel {
         // Historical RHR fallback would compare non-adjacent days (Correction #24)
         let input = CalculateConditionScoreUseCase.Input(
             hrvSamples: conditionSamples,
+            rhrDailyAverages: makeRHRDailyAverages(from: rhrCollection),
             todayRHR: todayRHR,
             yesterdayRHR: yesterdayRHR,
             displayRHR: effectiveRHR,
@@ -418,7 +419,7 @@ final class DashboardViewModel {
         baselineStatus = output.baselineStatus
 
         // Build 7-day score history (use full samples for historical range)
-        recentScores = buildRecentScores(from: samples)
+        recentScores = buildRecentScores(from: samples, rhrCollection: rhrCollection)
 
         var metrics: [HealthMetric] = []
 
@@ -1102,15 +1103,50 @@ final class DashboardViewModel {
     }
 
     private func buildHeroBaselineDetails() -> [BaselineDetail] {
-        guard let hrvDelta = baselineDeltasByMetricID["hrv"] else { return [] }
         var details: [BaselineDetail] = []
-        if let yesterday = hrvDelta.yesterdayDelta {
-            details.append(BaselineDetail(label: String(localized: "HRV vs yesterday"), value: yesterday, fractionDigits: 0))
+        if let hrvDetail = heroBaselineDetail(
+            metricID: "hrv",
+            shortLabel: String(localized: "HRV vs 14d avg"),
+            longLabel: String(localized: "HRV vs 60d avg"),
+            inversePolarity: false
+        ) {
+            details.append(hrvDetail)
         }
-        if let short = hrvDelta.shortTermDelta {
-            details.append(BaselineDetail(label: String(localized: "HRV vs 14d avg"), value: short, fractionDigits: 0))
+        if let rhrDetail = heroBaselineDetail(
+            metricID: "rhr",
+            shortLabel: String(localized: "RHR vs 14d avg"),
+            longLabel: String(localized: "RHR vs 60d avg"),
+            inversePolarity: true
+        ) {
+            details.append(rhrDetail)
         }
         return details
+    }
+
+    private func heroBaselineDetail(
+        metricID: String,
+        shortLabel: String,
+        longLabel: String,
+        inversePolarity: Bool
+    ) -> BaselineDetail? {
+        guard let delta = baselineDeltasByMetricID[metricID] else { return nil }
+        if let short = delta.shortTermDelta {
+            return BaselineDetail(
+                label: shortLabel,
+                value: short,
+                fractionDigits: 0,
+                inversePolarity: inversePolarity
+            )
+        }
+        if let long = delta.longTermDelta {
+            return BaselineDetail(
+                label: longLabel,
+                value: long,
+                fractionDigits: 0,
+                inversePolarity: inversePolarity
+            )
+        }
+        return nil
     }
 
     private func average<S: Sequence>(_ values: S) -> Double? where S.Element == Double {
@@ -1181,8 +1217,12 @@ final class DashboardViewModel {
         )
     }
 
-    private func buildRecentScores(from samples: [HRVSample]) -> [ConditionScore] {
+    private func buildRecentScores(
+        from samples: [HRVSample],
+        rhrCollection: [(date: Date, min: Double, max: Double, average: Double)]
+    ) -> [ConditionScore] {
         let calendar = Calendar.current
+        let rhrDailyAverages = makeRHRDailyAverages(from: rhrCollection)
 
         return (0..<7).compactMap { dayOffset in
             guard let date = calendar.date(byAdding: .day, value: -dayOffset, to: Date()),
@@ -1191,13 +1231,24 @@ final class DashboardViewModel {
             }
 
             let relevantSamples = samples.filter { $0.date < nextDay }
+            let relevantRHR = rhrDailyAverages.filter { $0.date < nextDay }
             let input = CalculateConditionScoreUseCase.Input(
                 hrvSamples: relevantSamples,
+                rhrDailyAverages: relevantRHR,
                 todayRHR: nil,
                 yesterdayRHR: nil
             )
             guard let score = scoreUseCase.execute(input: input).score else { return nil }
             return ConditionScore(score: score.score, date: calendar.startOfDay(for: date))
         }
+    }
+
+    private func makeRHRDailyAverages(
+        from collection: [(date: Date, min: Double, max: Double, average: Double)]
+    ) -> [CalculateConditionScoreUseCase.Input.RHRDailyAverage] {
+        collection
+            .filter { $0.average > 0 && $0.average.isFinite }
+            .map { .init(date: $0.date, value: $0.average) }
+            .sorted { $0.date < $1.date }
     }
 }

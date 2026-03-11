@@ -5,59 +5,78 @@ import SwiftUI
 struct ConditionCalculationCard: View {
     let detail: ConditionScoreDetail
 
-    // Pre-compute formatted strings to avoid allocation in body (Correction #80)
     private let todayHRVText: String
     private let baselineHRVText: String
     private let zScoreText: String
     private let stdDevText: String
     private let stdDevSub: String
     private let zScoreSub: String
-    private let rhrPenaltyText: String
-    private let rhrValueText: String
-    private let rhrValueSub: String
-    private let hasRHRData: Bool
-    private let showRHRDivider: Bool
     private let rawScoreText: String
     private let dateText: String
 
+    private let hasRHRSection: Bool
+    private let hasRHRComparison: Bool
+    private let rhrPrimaryLabel: String
+    private let rhrPrimaryText: String
+    private let rhrPrimarySub: String
+    private let rhrBaselineText: String
+    private let rhrBaselineSub: String
+    private let rhrDeltaText: String
+    private let rhrAdjustmentText: String
+
     init(detail: ConditionScoreDetail) {
         self.detail = detail
-        self.todayHRVText = String(format: "%.1f ms", detail.todayHRV)
-        self.baselineHRVText = String(format: "%.1f ms", detail.baselineHRV)
-        self.zScoreText = String(format: "%+.2f", detail.zScore)
-        self.zScoreSub = Self.zScoreLabel(detail.zScore)
-        self.stdDevText = String(format: "%.3f", detail.stdDev)
-        self.stdDevSub = detail.stdDev < detail.effectiveStdDev
-            ? String(format: "→ floor %.2f", detail.effectiveStdDev)
-            : "natural"
-        self.rhrPenaltyText = String(format: "-%.1f", detail.rhrPenalty)
-        self.rawScoreText = String(format: "%.1f", detail.rawScore)
-        self.dateText = Self.formatDate(detail.todayDate)
+        todayHRVText = "\(detail.todayHRV.formattedWithSeparator(fractionDigits: 1)) ms"
+        baselineHRVText = "\(detail.baselineHRV.formattedWithSeparator(fractionDigits: 1)) ms"
+        zScoreText = detail.zScore.formattedWithSeparator(fractionDigits: 2, alwaysShowSign: true)
+        zScoreSub = Self.zScoreLabel(detail.zScore)
+        stdDevText = detail.stdDev.formattedWithSeparator(fractionDigits: 3)
+        stdDevSub = detail.stdDev < detail.effectiveStdDev
+            ? "floor \(detail.effectiveStdDev.formattedWithSeparator(fractionDigits: 2))"
+            : String(localized: "natural")
+        rawScoreText = detail.rawScore.formattedWithSeparator(fractionDigits: 1)
+        dateText = Self.formatDate(detail.todayDate)
 
-        // RHR value display: prefer todayRHR, fallback to displayRHR (latest available)
-        let effectiveRHR = detail.todayRHR ?? detail.displayRHR
-        if let rhr = effectiveRHR {
-            self.hasRHRData = true
-            self.showRHRDivider = true
-            if let yesterdayRHR = detail.yesterdayRHR, detail.todayRHR != nil {
-                let change = rhr - yesterdayRHR
-                let sign = change > 0 ? "+" : ""
-                self.rhrValueText = String(format: "%.0f → %.0f bpm", yesterdayRHR, rhr)
-                self.rhrValueSub = String(format: "%@%.0f", sign, change)
-            } else if detail.todayRHR == nil, let rhrDate = detail.displayRHRDate {
-                // Historical fallback: show value with date
-                self.rhrValueText = String(format: "%.0f bpm", rhr)
-                self.rhrValueSub = Self.formatDate(rhrDate)
+        let displayRHR = detail.todayRHR ?? detail.displayRHR
+        hasRHRSection = displayRHR != nil || detail.baselineRHR != nil
+        hasRHRComparison = detail.todayRHR != nil && detail.baselineRHR != nil && detail.rhrDeltaFromBaseline != nil
+
+        if let todayRHR = detail.todayRHR {
+            rhrPrimaryLabel = String(localized: "Today RHR")
+            rhrPrimaryText = "\(todayRHR.formattedWithSeparator()) bpm"
+            rhrPrimarySub = dateText
+        } else if let displayRHR {
+            rhrPrimaryLabel = String(localized: "Latest RHR")
+            rhrPrimaryText = "\(displayRHR.formattedWithSeparator()) bpm"
+            if let displayDate = detail.displayRHRDate {
+                rhrPrimarySub = Self.formatDate(displayDate)
             } else {
-                self.rhrValueText = String(format: "%.0f bpm", rhr)
-                self.rhrValueSub = String(localized: "no comparison")
+                rhrPrimarySub = String(localized: "latest sample")
             }
         } else {
-            self.hasRHRData = false
-            self.showRHRDivider = detail.rhrPenalty > 0
-            self.rhrValueText = "—"
-            self.rhrValueSub = ""
+            rhrPrimaryLabel = String(localized: "RHR")
+            rhrPrimaryText = "—"
+            rhrPrimarySub = ""
         }
+
+        if let baselineRHR = detail.baselineRHR {
+            rhrBaselineText = "\(baselineRHR.formattedWithSeparator()) bpm"
+            rhrBaselineSub = "\(detail.rhrBaselineDays.formattedWithSeparator) \(String(localized: "days"))"
+        } else {
+            rhrBaselineText = "—"
+            rhrBaselineSub = String(localized: "building baseline")
+        }
+
+        if let delta = detail.rhrDeltaFromBaseline {
+            rhrDeltaText = "\(delta.formattedWithSeparator(alwaysShowSign: true)) bpm"
+        } else {
+            rhrDeltaText = "—"
+        }
+
+        rhrAdjustmentText = detail.rhrAdjustment.formattedWithSeparator(
+            fractionDigits: 1,
+            alwaysShowSign: true
+        )
     }
 
     var body: some View {
@@ -80,13 +99,24 @@ struct ConditionCalculationCard: View {
                     CalculationRow(label: "Z-Score", value: zScoreText, sub: zScoreSub)
                     CalculationRow(label: "StdDev (ln)", value: stdDevText, sub: stdDevSub)
 
-                    if showRHRDivider { Divider() }
+                    if hasRHRSection {
+                        Divider()
 
-                    if hasRHRData {
-                        CalculationRow(label: "RHR", value: rhrValueText, sub: rhrValueSub)
-                    }
-                    if detail.rhrPenalty > 0 {
-                        CalculationRow(label: "RHR Penalty", value: rhrPenaltyText, sub: "")
+                        CalculationRow(label: rhrPrimaryLabel, value: rhrPrimaryText, sub: rhrPrimarySub)
+                        CalculationRow(label: "RHR Baseline", value: rhrBaselineText, sub: rhrBaselineSub)
+
+                        if hasRHRComparison {
+                            CalculationRow(
+                                label: "RHR Delta",
+                                value: rhrDeltaText,
+                                sub: String(localized: "vs baseline")
+                            )
+                            CalculationRow(
+                                label: "RHR Adjustment",
+                                value: rhrAdjustmentText,
+                                sub: String(localized: "baseline-relative")
+                            )
+                        }
                     }
 
                     Divider()
@@ -108,12 +138,11 @@ struct ConditionCalculationCard: View {
         return "well below"
     }
 
-    // Correction #80: DateFormatter cached as static let
     private enum Cache {
         static let shortDate: DateFormatter = {
-            let f = DateFormatter()
-            f.dateFormat = "M/d"
-            return f
+            let formatter = DateFormatter()
+            formatter.dateFormat = "M/d"
+            return formatter
         }()
     }
 

@@ -87,6 +87,11 @@ final class ConditionScoreDetailViewModel {
         return (start: bufferRange.start, end: currentRange.end)
     }
 
+    var scrollDomain: ClosedRange<Date> {
+        let range = extendedRange
+        return range.start...range.end
+    }
+
     // MARK: - Private
 
     private var reloadTask: Task<Void, Never>?
@@ -102,8 +107,20 @@ final class ConditionScoreDetailViewModel {
         // Fetch all HRV samples for the extended period
         let calendar = Calendar.current
         let daysInRange = max(1, calendar.dateComponents([.day], from: range.start, to: range.end).day ?? 7)
+        let currentRHRStart = calendar.date(
+            byAdding: .day,
+            value: -CalculateConditionScoreUseCase.conditionWindowDays,
+            to: range.start
+        ) ?? range.start
 
-        async let currentSamplesTask = hrvService.fetchHRVSamples(days: daysInRange + 7)
+        async let currentSamplesTask = hrvService.fetchHRVSamples(
+            days: daysInRange + CalculateConditionScoreUseCase.conditionWindowDays
+        )
+        async let currentRHRTask = hrvService.fetchRHRCollection(
+            start: currentRHRStart,
+            end: range.end,
+            interval: DateComponents(day: 1)
+        )
 
         // Previous period for comparison (based on current period, not extended)
         let prevRange = HealthDataAggregator.previousPeriodRange(for: selectedPeriod, offset: 0)
@@ -113,14 +130,29 @@ final class ConditionScoreDetailViewModel {
             from: selectedPeriod.dateRange(offset: 0).start,
             to: selectedPeriod.dateRange(offset: 0).end
         ).day ?? 7)
-        async let prevSamplesTask = hrvService.fetchHRVSamples(days: currentPeriodDays + prevDays + 7)
+        let prevRHRStart = calendar.date(
+            byAdding: .day,
+            value: -CalculateConditionScoreUseCase.conditionWindowDays,
+            to: prevRange.start
+        ) ?? prevRange.start
+        async let prevSamplesTask = hrvService.fetchHRVSamples(
+            days: currentPeriodDays + prevDays + CalculateConditionScoreUseCase.conditionWindowDays
+        )
+        async let prevRHRTask = hrvService.fetchRHRCollection(
+            start: prevRHRStart,
+            end: prevRange.end,
+            interval: DateComponents(day: 1)
+        )
 
         let allSamples = try await currentSamplesTask
+        let allRHR = try await currentRHRTask
         let allSamplesForPrev = try await prevSamplesTask
+        let allRHRForPrev = try await prevRHRTask
 
         // Compute daily scores for the extended range
         let allScores = computeDailyScores(
             samples: allSamples,
+            rhrCollection: allRHR,
             range: range,
             calendar: calendar
         )
@@ -128,6 +160,7 @@ final class ConditionScoreDetailViewModel {
         // Compute daily scores for the previous period
         let previousScores = computeDailyScores(
             samples: allSamplesForPrev,
+            rhrCollection: allRHRForPrev,
             range: (start: prevRange.start, end: prevRange.end),
             calendar: calendar
         )
@@ -158,16 +191,23 @@ final class ConditionScoreDetailViewModel {
     /// Uses cursor-based iteration (O(n+m)) instead of per-day filtering (O(n*m)).
     private func computeDailyScores(
         samples: [HRVSample],
+        rhrCollection: [(date: Date, min: Double, max: Double, average: Double)],
         range: (start: Date, end: Date),
         calendar: Calendar
     ) -> [ChartDataPoint] {
         let sortedSamples = samples.sorted { $0.date < $1.date }
+        let sortedRHR = rhrCollection
+            .filter { $0.average > 0 && $0.average.isFinite }
+            .map { CalculateConditionScoreUseCase.Input.RHRDailyAverage(date: $0.date, value: $0.average) }
+            .sorted { $0.date < $1.date }
         var results: [ChartDataPoint] = []
         let startDay = calendar.startOfDay(for: range.start)
         let endDay = calendar.startOfDay(for: range.end)
 
         var sampleCursor = 0
         var cumulativeSamples: [HRVSample] = []
+        var rhrCursor = 0
+        var cumulativeRHR: [CalculateConditionScoreUseCase.Input.RHRDailyAverage] = []
 
         var current = startDay
         while current <= endDay {
@@ -179,10 +219,18 @@ final class ConditionScoreDetailViewModel {
                 sampleCursor += 1
             }
 
+            while rhrCursor < sortedRHR.count && sortedRHR[rhrCursor].date < nextDay {
+                cumulativeRHR.append(sortedRHR[rhrCursor])
+                rhrCursor += 1
+            }
+
             let input = CalculateConditionScoreUseCase.Input(
                 hrvSamples: cumulativeSamples,
+                rhrDailyAverages: cumulativeRHR,
                 todayRHR: nil,
-                yesterdayRHR: nil
+                yesterdayRHR: nil,
+                displayRHR: cumulativeRHR.last?.value,
+                displayRHRDate: cumulativeRHR.last?.date
             )
             let output = scoreUseCase.execute(input: input)
 

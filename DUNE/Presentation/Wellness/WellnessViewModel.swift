@@ -859,14 +859,30 @@ final class WellnessViewModel {
                 group.addTask {
                     guard !Task.isCancelled else { return (.condition, .empty) }
                     do {
-                        let hrvSamples = try await hrvService.fetchHRVSamples(days: 14)
-                        let latestRHRSample = try await hrvService.fetchLatestRestingHeartRate(withinDays: 1)
+                        let calendar = Calendar.current
+                        let today = Date()
+                        let rhrCollectionStart = calendar.date(
+                            byAdding: .day,
+                            value: -CalculateConditionScoreUseCase.conditionWindowDays,
+                            to: today
+                        ) ?? today
+                        async let hrvSamplesTask = hrvService.fetchHRVSamples(days: 14)
+                        async let latestRHRSampleTask = hrvService.fetchLatestRestingHeartRate(withinDays: 1)
+                        async let rhrCollectionTask = hrvService.fetchRHRCollection(
+                            start: rhrCollectionStart,
+                            end: today,
+                            interval: DateComponents(day: 1)
+                        )
+                        let hrvSamples = try await hrvSamplesTask
+                        let latestRHRSample = try await latestRHRSampleTask
+                        let rhrCollection = try await rhrCollectionTask
                         let todayRHR: Double? = latestRHRSample?.value
-                        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date()) ?? Date()
+                        let yesterday = calendar.date(byAdding: .day, value: -1, to: today) ?? today
                         let yesterdayRHR = try await hrvService.fetchRestingHeartRate(for: yesterday)
 
                         let output = conditionScoreUseCase.execute(input: .init(
                             hrvSamples: hrvSamples,
+                            rhrDailyAverages: rhrCollection.map { .init(date: $0.date, value: $0.average) },
                             todayRHR: todayRHR,
                             yesterdayRHR: yesterdayRHR
                         ))

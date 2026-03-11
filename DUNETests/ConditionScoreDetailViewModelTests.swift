@@ -6,12 +6,13 @@ import Foundation
 
 private struct MockHRVService: HRVQuerying {
     var samples: [HRVSample] = []
+    var rhrCollection: [(date: Date, min: Double, max: Double, average: Double)] = []
 
     func fetchHRVSamples(days: Int) async throws -> [HRVSample] { samples }
     func fetchRestingHeartRate(for date: Date) async throws -> Double? { nil }
     func fetchLatestRestingHeartRate(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
     func fetchHRVCollection(start: Date, end: Date, interval: DateComponents) async throws -> [(date: Date, average: Double)] { [] }
-    func fetchRHRCollection(start: Date, end: Date, interval: DateComponents) async throws -> [(date: Date, min: Double, max: Double, average: Double)] { [] }
+    func fetchRHRCollection(start: Date, end: Date, interval: DateComponents) async throws -> [(date: Date, min: Double, max: Double, average: Double)] { rhrCollection }
 }
 
 // MARK: - Tests
@@ -37,12 +38,23 @@ struct ConditionScoreDetailViewModelTests {
         return samples
     }
 
+    private func makeRHRCollection(days: Int, baseValue: Double = 60.0, spread: Double = 2.0) -> [(date: Date, min: Double, max: Double, average: Double)] {
+        let today = calendar.startOfDay(for: Date())
+        var samples: [(date: Date, min: Double, max: Double, average: Double)] = []
+        for dayOffset in 0..<days {
+            guard let date = calendar.date(byAdding: .day, value: -dayOffset, to: today) else { continue }
+            let average = baseValue + (dayOffset % 2 == 0 ? spread : -spread)
+            samples.append((date: date, min: average - 1, max: average + 1, average: average))
+        }
+        return samples
+    }
+
     // MARK: - Loading
 
     @Test("loads chart data from HRV samples for week period")
     func loadsWeekData() async {
         let samples = makeSamples(days: 14, baseValue: 50, spread: 5)
-        let service = MockHRVService(samples: samples)
+        let service = MockHRVService(samples: samples, rhrCollection: makeRHRCollection(days: 14))
         let vm = ConditionScoreDetailViewModel(hrvService: service)
         let score = ConditionScore(score: 65, date: Date())
         vm.configure(score: score)
@@ -57,7 +69,7 @@ struct ConditionScoreDetailViewModelTests {
     @Test("chart data points have values in 0-100 range")
     func scoreValuesInRange() async {
         let samples = makeSamples(days: 14, baseValue: 50, spread: 5)
-        let service = MockHRVService(samples: samples)
+        let service = MockHRVService(samples: samples, rhrCollection: makeRHRCollection(days: 14))
         let vm = ConditionScoreDetailViewModel(hrvService: service)
         vm.configure(score: ConditionScore(score: 50, date: Date()))
 
@@ -73,7 +85,7 @@ struct ConditionScoreDetailViewModelTests {
     @Test("summary stats are computed when data exists")
     func summaryComputed() async {
         let samples = makeSamples(days: 14, baseValue: 50, spread: 5)
-        let service = MockHRVService(samples: samples)
+        let service = MockHRVService(samples: samples, rhrCollection: makeRHRCollection(days: 14))
         let vm = ConditionScoreDetailViewModel(hrvService: service)
         vm.configure(score: ConditionScore(score: 55, date: Date()))
 
@@ -107,7 +119,7 @@ struct ConditionScoreDetailViewModelTests {
     @Test("fewer than 7 days produces no scores (baseline not ready)")
     func insufficientData() async {
         let samples = makeSamples(days: 3, baseValue: 50, spread: 5)
-        let service = MockHRVService(samples: samples)
+        let service = MockHRVService(samples: samples, rhrCollection: makeRHRCollection(days: 3))
         let vm = ConditionScoreDetailViewModel(hrvService: service)
         vm.configure(score: ConditionScore(score: 50, date: Date()))
 
@@ -122,7 +134,7 @@ struct ConditionScoreDetailViewModelTests {
     @Test("highlights include high and low when sufficient data")
     func highlightsBuilt() async {
         let samples = makeSamples(days: 14, baseValue: 50, spread: 10)
-        let service = MockHRVService(samples: samples)
+        let service = MockHRVService(samples: samples, rhrCollection: makeRHRCollection(days: 14))
         let vm = ConditionScoreDetailViewModel(hrvService: service)
         vm.configure(score: ConditionScore(score: 60, date: Date()))
 
@@ -158,5 +170,23 @@ struct ConditionScoreDetailViewModelTests {
         #expect(vm.isLoading == false)
         await vm.loadData()
         #expect(vm.isLoading == false)
+    }
+
+    @Test("scrollDomain extends beyond latest point so today remains reachable")
+    func scrollDomainExtendsToToday() async {
+        let service = MockHRVService(
+            samples: makeSamples(days: 14, baseValue: 50, spread: 5),
+            rhrCollection: makeRHRCollection(days: 14)
+        )
+        let vm = ConditionScoreDetailViewModel(hrvService: service)
+        vm.configure(score: ConditionScore(score: 62, date: Date()))
+
+        await vm.loadData()
+
+        if let latestPoint = vm.chartData.map(\.date).max() {
+            #expect(vm.scrollDomain.upperBound > latestPoint)
+        } else {
+            Issue.record("Expected chart data for scrollDomain regression test")
+        }
     }
 }
