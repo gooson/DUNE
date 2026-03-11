@@ -241,6 +241,26 @@ private actor SuspendingDashboardSharedHealthDataService: SharedHealthDataServic
     }
 }
 
+private actor CountingDashboardSharedHealthDataService: SharedHealthDataService {
+    private let snapshot: SharedHealthSnapshot
+    private var fetchCount = 0
+
+    init(snapshot: SharedHealthSnapshot) {
+        self.snapshot = snapshot
+    }
+
+    func fetchSnapshot() async -> SharedHealthSnapshot {
+        fetchCount += 1
+        return snapshot
+    }
+
+    func invalidateCache() async {}
+
+    func currentFetchCount() -> Int {
+        fetchCount
+    }
+}
+
 private func makeEmptySharedSnapshot(fetchedAt: Date = Date()) -> SharedHealthSnapshot {
     SharedHealthSnapshot(
         hrvSamples: [],
@@ -358,6 +378,39 @@ struct DashboardViewModelTests {
         #expect(rhrMetric != nil)
         #expect(rhrMetric?.value == 58.0)
         #expect(rhrMetric?.isHistorical == false)
+    }
+
+    @Test("Deferred HealthKit gate skips protected queries until launch authorization completes")
+    func deferredHealthKitGateSkipsProtectedQueriesUntilEnabled() async {
+        let hrv = MockHRVService(
+            samples: [HRVSample(value: 48.0, date: Date())],
+            todayRHR: 56.0,
+            yesterdayRHR: 58.0,
+            latestRHR: nil
+        )
+        let sharedHealthDataService = CountingDashboardSharedHealthDataService(
+            snapshot: makeEmptySharedSnapshot()
+        )
+        let vm = DashboardViewModel(
+            hrvService: hrv,
+            sleepService: MockSleepService(),
+            workoutService: MockWorkoutService(),
+            stepsService: MockStepsService(),
+            bodyService: MockBodyService(),
+            sharedHealthDataService: sharedHealthDataService,
+            weatherProvider: MockWeatherProvider(snapshot: makeTestWeatherSnapshot()),
+            coachingMessageEnhancer: nil
+        )
+
+        await vm.loadData(canLoadHealthKitData: false)
+
+        #expect(vm.sortedMetrics.isEmpty)
+        #expect(await sharedHealthDataService.currentFetchCount() == 0)
+
+        await vm.loadData(canLoadHealthKitData: true)
+
+        #expect(vm.sortedMetrics.contains { $0.category == .hrv })
+        #expect(await sharedHealthDataService.currentFetchCount() == 1)
     }
 
     // MARK: - Sleep Fallback

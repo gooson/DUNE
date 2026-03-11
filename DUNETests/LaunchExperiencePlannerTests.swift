@@ -65,8 +65,6 @@ struct LaunchExperiencePlannerTests {
             for: LaunchExperienceState(
                 shouldBypassLaunchExperience: true,
                 hasShownCloudSyncConsent: false,
-                shouldRequestHealthKitAuthorization: true,
-                shouldRequestNotificationAuthorization: true,
                 shouldPresentWhatsNew: true
             )
         )
@@ -80,8 +78,6 @@ struct LaunchExperiencePlannerTests {
             for: LaunchExperienceState(
                 shouldBypassLaunchExperience: false,
                 hasShownCloudSyncConsent: false,
-                shouldRequestHealthKitAuthorization: true,
-                shouldRequestNotificationAuthorization: true,
                 shouldPresentWhatsNew: true
             )
         )
@@ -89,34 +85,30 @@ struct LaunchExperiencePlannerTests {
         #expect(step == .cloudSyncConsent)
     }
 
-    @Test("HealthKit follows consent before notifications and What's New")
-    func healthKitPrecedesLaterSteps() {
+    @Test("What's New follows consent in the blocking launch flow")
+    func whatsNewFollowsConsent() {
         let step = LaunchExperiencePlanner.nextStep(
             for: LaunchExperienceState(
                 shouldBypassLaunchExperience: false,
                 hasShownCloudSyncConsent: true,
-                shouldRequestHealthKitAuthorization: true,
-                shouldRequestNotificationAuthorization: true,
                 shouldPresentWhatsNew: true
             )
         )
 
-        #expect(step == .healthKitAuthorization)
+        #expect(step == .whatsNew)
     }
 
-    @Test("Notifications run before What's New once HealthKit is handled")
-    func notificationsPrecedeWhatsNew() {
+    @Test("Ready is returned as soon as blocking launch surfaces are complete")
+    func readyAfterBlockingSurfacesComplete() {
         let step = LaunchExperiencePlanner.nextStep(
             for: LaunchExperienceState(
                 shouldBypassLaunchExperience: false,
                 hasShownCloudSyncConsent: true,
-                shouldRequestHealthKitAuthorization: false,
-                shouldRequestNotificationAuthorization: true,
-                shouldPresentWhatsNew: true
+                shouldPresentWhatsNew: false
             )
         )
 
-        #expect(step == .notificationAuthorization)
+        #expect(step == .ready)
     }
 
     @Test("What's New is last before ready")
@@ -125,8 +117,6 @@ struct LaunchExperiencePlannerTests {
             for: LaunchExperienceState(
                 shouldBypassLaunchExperience: false,
                 hasShownCloudSyncConsent: true,
-                shouldRequestHealthKitAuthorization: false,
-                shouldRequestNotificationAuthorization: false,
                 shouldPresentWhatsNew: true
             )
         )
@@ -140,8 +130,6 @@ struct LaunchExperiencePlannerTests {
             for: LaunchExperienceState(
                 shouldBypassLaunchExperience: false,
                 hasShownCloudSyncConsent: true,
-                shouldRequestHealthKitAuthorization: false,
-                shouldRequestNotificationAuthorization: false,
                 shouldPresentWhatsNew: false
             )
         )
