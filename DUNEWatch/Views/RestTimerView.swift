@@ -8,6 +8,10 @@ struct RestTimerView: View {
     let onComplete: (_ timerTotal: TimeInterval) -> Void
     let onSkip: (_ timerTotal: TimeInterval) -> Void
     let onEnd: () -> Void
+    /// Auto-estimated RPE for the just-completed set (nil = silent skip).
+    var estimatedRPE: Double?
+    /// Called when user adjusts RPE via ± buttons.
+    var onRPEAdjusted: ((Double) -> Void)?
 
     @Environment(WorkoutManager.self) private var workoutManager
     @Environment(\.isLuminanceReduced) private var isLuminanceReduced
@@ -28,6 +32,10 @@ struct RestTimerView: View {
     @State private var countdownTask: Task<Void, Never>?
     /// Whether the warning haptic has fired.
     @State private var didPlayWarning = false
+    /// Local RPE value for adjustment (initialized from estimatedRPE).
+    @State private var adjustedRPE: Double = 8.0
+    /// Whether RPE adjustment controls are expanded.
+    @State private var showRPEAdjust = false
 
     var body: some View {
         VStack(spacing: DS.Spacing.sm) {
@@ -70,6 +78,12 @@ struct RestTimerView: View {
             }
             .frame(width: 100, height: 100)
 
+            // RPE estimation badge (shown only when available)
+            if estimatedRPE != nil {
+                rpeOverlay
+                    .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.restTimerRPEBadge)
+            }
+
             // +30s / Skip / End buttons
             HStack(spacing: DS.Spacing.md) {
                 Button {
@@ -111,10 +125,86 @@ struct RestTimerView: View {
         }
         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.restTimerScreen)
         .onAppear {
+            showRPEAdjust = false
+            if let estimatedRPE {
+                adjustedRPE = estimatedRPE
+            }
             startCountdown()
         }
         .onDisappear {
             cancelCountdown()
+        }
+    }
+
+    // MARK: - RPE Overlay
+
+    private var rpeOverlay: some View {
+        VStack(spacing: DS.Spacing.xxs) {
+            if showRPEAdjust {
+                // Expanded: ± buttons + value
+                HStack(spacing: DS.Spacing.sm) {
+                    Button {
+                        let newValue = adjustedRPE - RPELevel.step
+                        if RPELevel.range.contains(newValue) {
+                            adjustedRPE = newValue
+                            onRPEAdjusted?(newValue)
+                            WKInterfaceDevice.current().play(.click)
+                        }
+                    } label: {
+                        Image(systemName: "minus")
+                            .font(.caption2.weight(.semibold))
+                            .frame(minWidth: 32, minHeight: 28)
+                    }
+                    .buttonStyle(.bordered)
+                    .tint(.secondary)
+
+                    VStack(spacing: 0) {
+                        Text("RPE \(RPELevel.format(adjustedRPE))")
+                            .font(.caption.weight(.semibold).monospacedDigit())
+                            .foregroundStyle(rpeColor)
+                            .contentTransition(.numericText())
+                        Text(RPELevel(value: adjustedRPE).displayLabel)
+                            .font(.system(size: 9))
+                            .foregroundStyle(.secondary)
+                    }
+
+                    Button {
+                        let newValue = adjustedRPE + RPELevel.step
+                        if RPELevel.range.contains(newValue) {
+                            adjustedRPE = newValue
+                            onRPEAdjusted?(newValue)
+                            WKInterfaceDevice.current().play(.click)
+                        }
+                    } label: {
+                        Image(systemName: "plus")
+                            .font(.caption2.weight(.semibold))
+                            .frame(minWidth: 32, minHeight: 28)
+                    }
+                    .buttonStyle(.bordered)
+                    .tint(.secondary)
+                }
+            } else {
+                // Collapsed: tap to expand
+                Button {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        showRPEAdjust = true
+                    }
+                } label: {
+                    Text("RPE \(RPELevel.format(adjustedRPE))")
+                        .font(.caption.weight(.semibold).monospacedDigit())
+                        .foregroundStyle(rpeColor)
+                }
+                .buttonStyle(.plain)
+            }
+        }
+    }
+
+    private var rpeColor: Color {
+        switch adjustedRPE {
+        case ..<7.0: DS.Color.positive
+        case 7.0..<8.0: DS.Color.caution
+        case 8.0..<9.0: .orange
+        default: DS.Color.negative
         }
     }
 

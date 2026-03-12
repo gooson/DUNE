@@ -583,6 +583,14 @@ final class WorkoutManager: NSObject {
         completedSetsData[currentExerciseIndex][lastIdx].restDuration = duration
     }
 
+    /// Record auto-estimated or user-adjusted RPE on the last completed set.
+    func recordSetRPE(_ rpe: Double) {
+        guard currentExerciseIndex < completedSetsData.count else { return }
+        let lastIdx = completedSetsData[currentExerciseIndex].count - 1
+        guard lastIdx >= 0 else { return }
+        completedSetsData[currentExerciseIndex][lastIdx].rpe = RPELevel.validate(rpe)
+    }
+
     func advanceToNextSet() {
         if currentSetIndex < effectiveTotalSets - 1 {
             currentSetIndex += 1
