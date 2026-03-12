@@ -118,6 +118,9 @@ struct WorkoutActivityTypeInferTests {
     func matchStairClimbing() {
         #expect(WorkoutActivityType.infer(from: "Stair Climber") == .stairClimbing)
         #expect(WorkoutActivityType.infer(from: "Stair Climber Intervals") == .stairClimbing)
+        #expect(WorkoutActivityType.infer(from: "Step Climber") == .stairClimbing)
+        #expect(WorkoutActivityType.infer(from: "스텝 클라이머") == .stairClimbing)
+        #expect(WorkoutActivityType.infer(from: "스텝클라이머") == .stairClimbing)
         #expect(WorkoutActivityType.infer(from: "Stair Stepper") == .stairStepper)
         #expect(WorkoutActivityType.infer(from: "천국의 계단") == .stairClimbing)
         #expect(WorkoutActivityType.infer(from: "천국의계단") == .stairClimbing)
@@ -167,6 +170,17 @@ struct WorkoutActivityTypeInferTests {
     @Test("Empty string returns nil")
     func emptyString() {
         #expect(WorkoutActivityType.infer(from: "") == nil)
+    }
+
+    @Test("Resolves cardio activity from hyphenated stair climber ID")
+    func resolveCardioFromID() {
+        #expect(
+            WorkoutActivityType.resolveCardioActivity(
+                from: "stair-climber",
+                name: "스텝 클라이머",
+                inputTypeRaw: "durationDistance"
+            ) == .stairClimbing
+        )
     }
 }
 
