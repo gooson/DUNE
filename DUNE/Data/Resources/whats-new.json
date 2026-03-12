@@ -1,6 +1,61 @@
 {
   "releases": [
     {
+      "version": "0.4.0",
+      "introKey": "Set-level RPE, stair climbing, VO2 Max tracking, workout rewards, and smarter sleep analysis — your fitness toolkit keeps growing.",
+      "features": [
+        {
+          "id": "setLevelRPE",
+          "titleKey": "Set-Level RPE",
+          "summaryKey": "Rate effort for each set with a redesigned slider — Apple Watch estimates RPE automatically from heart rate.",
+          "symbolName": "gauge.with.dots.needle.33percent",
+          "area": "activity"
+        },
+        {
+          "id": "stairClimber",
+          "titleKey": "Stair Climber",
+          "summaryKey": "Track stair climber workouts and count flights climbed alongside steps and heart rate.",
+          "symbolName": "figure.stair.stepper",
+          "area": "activity"
+        },
+        {
+          "id": "cardioFitness",
+          "titleKey": "Cardio Fitness",
+          "summaryKey": "See your VO2 Max automatically captured from HealthKit during cardio workouts.",
+          "symbolName": "heart.circle.fill",
+          "area": "wellness"
+        },
+        {
+          "id": "watchCardioUX",
+          "titleKey": "Watch Cardio UX",
+          "summaryKey": "Swipe through metrics, controls, and Now Playing on a multi-page cardio screen inspired by Apple Fitness.",
+          "symbolName": "applewatch.and.arrow.forward",
+          "area": "watch"
+        },
+        {
+          "id": "workoutRewards",
+          "titleKey": "Workout Rewards",
+          "summaryKey": "Earn milestone badges for consistency and volume, and review your achievement history.",
+          "symbolName": "trophy.fill",
+          "area": "activity"
+        },
+        {
+          "id": "sleepDeficit",
+          "titleKey": "Sleep Deficit Analysis",
+          "summaryKey": "Get a personalized sleep deficit breakdown with average bedtime trends and recovery guidance.",
+          "symbolName": "chart.bar.fill",
+          "area": "wellness"
+        },
+        {
+          "id": "lifeTabUpgrade",
+          "titleKey": "Life Tab Upgrade",
+          "summaryKey": "Auto-track workout achievements, set recurring habit cycles, and get checklist reminders on time.",
+          "symbolName": "sparkle",
+          "area": "life"
+        }
+      ]
+    },
+    {
       "version": "0.3.0",
       "introKey": "Health Q&A, AI workout builder, sleep predictions, injury alerts, a 3D muscle map, and more — your training just got smarter.",
       "features": [
