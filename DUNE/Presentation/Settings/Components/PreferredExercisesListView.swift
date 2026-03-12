@@ -119,7 +119,7 @@ struct PreferredExercisesListView: View {
             defaultsByExerciseID[exercise.id] = record
         }
 
-        WatchSessionManager.shared.syncExerciseLibraryToWatch()
+        WatchSessionManager.shared.syncExerciseLibraryDefaultsToWatch(using: modelContext)
     }
 
     private func rebuildDefaultsIndex() {

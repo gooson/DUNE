@@ -45,26 +45,35 @@ enum WatchExerciseLibraryPayloadBuilder {
             library: library
         )
 
-        return definitions.map { definition in
-            let canonicalID = canonicalID(for: definition.id, library: library)
-            let entry = metadata.entriesByCanonicalID[canonicalID]
-            let defaultReps = entry?.defaultReps ?? defaultRepsFallback(for: definition)
+        return makePayload(
+            definitions: definitions,
+            metadata: metadata,
+            retainedSnapshot: [:],
+            library: library
+        )
+    }
 
-            return WatchExerciseInfo(
-                id: definition.id,
-                name: definition.localizedName,
-                inputType: definition.inputType.rawValue,
-                defaultSets: WorkoutDefaults.setCount,
-                defaultReps: defaultReps,
-                defaultWeightKg: entry?.defaultWeightKg,
-                isPreferred: entry?.isPreferred ?? false,
-                lastUsedAt: entry?.lastUsedAt,
-                usageCount: entry?.usageCount ?? 0,
-                equipment: definition.equipment == .other ? nil : definition.equipment.rawValue,
-                cardioSecondaryUnit: definition.cardioSecondaryUnit?.rawValue,
-                aliases: definition.aliases
-            )
-        }
+    static func makePayload(
+        definitions: [ExerciseDefinition],
+        defaultRecords: [ExerciseDefaultRecord],
+        retaining existingPayload: [WatchExerciseInfo],
+        library: any ExerciseLibraryQuerying
+    ) -> [WatchExerciseInfo] {
+        let metadata = makeMetadata(
+            defaultRecords: defaultRecords,
+            exerciseRecords: [],
+            library: library
+        )
+        let retainedSnapshot = Dictionary(
+            uniqueKeysWithValues: existingPayload.map { ($0.id, $0) }
+        )
+
+        return makePayload(
+            definitions: definitions,
+            metadata: metadata,
+            retainedSnapshot: retainedSnapshot,
+            library: library
+        )
     }
 
     static func makeMetadata(
@@ -127,6 +136,35 @@ enum WatchExerciseLibraryPayloadBuilder {
             WorkoutDefaults.defaultReps
         default:
             nil
+        }
+    }
+
+    private static func makePayload(
+        definitions: [ExerciseDefinition],
+        metadata: WatchExerciseSyncMetadata,
+        retainedSnapshot: [String: WatchExerciseInfo],
+        library: any ExerciseLibraryQuerying
+    ) -> [WatchExerciseInfo] {
+        definitions.map { definition in
+            let canonicalID = canonicalID(for: definition.id, library: library)
+            let entry = metadata.entriesByCanonicalID[canonicalID]
+            let retained = retainedSnapshot[definition.id]
+            let defaultReps = entry?.defaultReps ?? defaultRepsFallback(for: definition)
+
+            return WatchExerciseInfo(
+                id: definition.id,
+                name: definition.localizedName,
+                inputType: definition.inputType.rawValue,
+                defaultSets: retained?.defaultSets ?? WorkoutDefaults.setCount,
+                defaultReps: defaultReps,
+                defaultWeightKg: entry?.defaultWeightKg,
+                isPreferred: entry?.isPreferred ?? false,
+                lastUsedAt: retained?.lastUsedAt ?? entry?.lastUsedAt,
+                usageCount: retained?.usageCount ?? entry?.usageCount ?? 0,
+                equipment: definition.equipment == .other ? nil : definition.equipment.rawValue,
+                cardioSecondaryUnit: definition.cardioSecondaryUnit?.rawValue,
+                aliases: definition.aliases
+            )
         }
     }
 }

@@ -77,7 +77,20 @@
       }
     },
     "%@ reps left" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "残り%@回"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@회 남음"
+          }
+        }
+      }
     },
     "%@/10 · %@" : {
       "localizations" : {
@@ -537,7 +550,20 @@
       }
     },
     "Clear RPE" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RPEを消去"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RPE 지우기"
+          }
+        }
+      }
     },
     "Complete Set" : {
       "extractionState" : "manual",

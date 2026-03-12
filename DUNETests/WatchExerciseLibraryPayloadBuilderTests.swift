@@ -133,4 +133,73 @@ struct WatchExerciseLibraryPayloadBuilderTests {
         #expect(squatPayload.lastUsedAt == nil)
         #expect(squatPayload.usageCount == 0)
     }
+
+    @Test("defaults-only payload update preserves usage metadata from cached snapshot")
+    func defaultsOnlyUpdatePreservesUsageMetadata() throws {
+        let bench = definition(id: "bench-press", name: "Bench Press")
+        let tempoBench = definition(id: "tempo-bench-press", name: "Tempo Bench Press")
+        let library = MockLibrary(definitions: [bench, tempoBench])
+        let lastUsedAt = Date(timeIntervalSince1970: 1_700_000_000)
+
+        let existingPayload = [
+            WatchExerciseInfo(
+                id: "bench-press",
+                name: "Bench Press",
+                inputType: ExerciseInputType.setsRepsWeight.rawValue,
+                defaultSets: WorkoutDefaults.setCount,
+                defaultReps: WorkoutDefaults.defaultReps,
+                defaultWeightKg: nil,
+                isPreferred: false,
+                lastUsedAt: lastUsedAt,
+                usageCount: 4,
+                equipment: Equipment.barbell.rawValue,
+                cardioSecondaryUnit: nil
+            ),
+            WatchExerciseInfo(
+                id: "tempo-bench-press",
+                name: "Tempo Bench Press",
+                inputType: ExerciseInputType.setsRepsWeight.rawValue,
+                defaultSets: WorkoutDefaults.setCount,
+                defaultReps: WorkoutDefaults.defaultReps,
+                defaultWeightKg: nil,
+                isPreferred: false,
+                lastUsedAt: lastUsedAt,
+                usageCount: 4,
+                equipment: Equipment.barbell.rawValue,
+                cardioSecondaryUnit: nil
+            ),
+        ]
+
+        let defaultRecords = [
+            ExerciseDefaultRecord(
+                exerciseDefinitionID: "tempo-bench-press",
+                defaultWeight: 95,
+                defaultReps: 5,
+                isManualOverride: true,
+                isPreferred: true,
+                lastUsedDate: lastUsedAt.addingTimeInterval(60)
+            )
+        ]
+
+        let payload = WatchExerciseLibraryPayloadBuilder.makePayload(
+            definitions: library.definitions,
+            defaultRecords: defaultRecords,
+            retaining: existingPayload,
+            library: library
+        )
+
+        let benchPayload = try #require(payload.first { $0.id == "bench-press" })
+        #expect(benchPayload.defaultReps == 5)
+        #expect(benchPayload.defaultWeightKg == 95)
+        #expect(benchPayload.isPreferred)
+        #expect(benchPayload.lastUsedAt == lastUsedAt)
+        #expect(benchPayload.usageCount == 4)
+
+        let tempoPayload = try #require(payload.first { $0.id == "tempo-bench-press" })
+        #expect(tempoPayload.defaultReps == 5)
+        #expect(tempoPayload.defaultWeightKg == 95)
+        #expect(tempoPayload.isPreferred)
+        #expect(tempoPayload.lastUsedAt == lastUsedAt)
+        #expect(tempoPayload.usageCount == 4)
+    }
 }

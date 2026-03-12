@@ -214,6 +214,29 @@ struct AIWorkoutTemplateGeneratorTests {
         #expect(intent.muscleTargets.contains(.shoulders))
     }
 
+    @Test("Prompt intent ignores Korean filler deung when listing equipment")
+    func promptIntentIgnoresKoreanFillerDeung() {
+        let query = "덤벨, 밴드 등 상체 운동"
+        let normalizedQuery = AIWorkoutTemplateGenerator.normalizedSearchText(query)
+        let intent = AIWorkoutTemplateGenerator.promptIntent(for: query)
+
+        #expect(!AIWorkoutTemplateGenerator.queryContainsKeyword(normalizedQuery, keyword: "등"))
+        #expect(intent.muscleTargets.contains(.chest))
+        #expect(intent.muscleTargets.contains(.shoulders))
+        #expect(!intent.muscleTargets.contains(.traps))
+        #expect(!intent.matchedSearchTerms.contains("등"))
+    }
+
+    @Test("Prompt intent still recognizes Korean back prompts")
+    func promptIntentRecognizesKoreanBackPrompt() {
+        let intent = AIWorkoutTemplateGenerator.promptIntent(for: "20분 등 운동")
+
+        #expect(intent.requestedMinutes == 20)
+        #expect(intent.muscleTargets.contains(.back))
+        #expect(intent.muscleTargets.contains(.lats))
+        #expect(intent.muscleTargets.contains(.traps))
+    }
+
     @Test("Fallback template builds clear Korean prompt without model output")
     func fallbackTemplateBuildsClearKoreanPrompt() throws {
         let library = makeLibrary()
