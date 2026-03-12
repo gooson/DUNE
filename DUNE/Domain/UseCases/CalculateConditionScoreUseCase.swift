@@ -37,6 +37,7 @@ struct CalculateConditionScoreUseCase: ConditionScoreCalculating, Sendable {
         /// Effective RHR for UI display (fallback when todayRHR is nil)
         let displayRHR: Double?
         let displayRHRDate: Date?
+        let evaluationDate: Date
 
         init(
             hrvSamples: [HRVSample],
@@ -44,7 +45,8 @@ struct CalculateConditionScoreUseCase: ConditionScoreCalculating, Sendable {
             todayRHR: Double?,
             yesterdayRHR: Double?,
             displayRHR: Double? = nil,
-            displayRHRDate: Date? = nil
+            displayRHRDate: Date? = nil,
+            evaluationDate: Date = Date()
         ) {
             self.hrvSamples = hrvSamples
             self.rhrDailyAverages = rhrDailyAverages
@@ -52,6 +54,7 @@ struct CalculateConditionScoreUseCase: ConditionScoreCalculating, Sendable {
             self.yesterdayRHR = yesterdayRHR
             self.displayRHR = displayRHR
             self.displayRHRDate = displayRHRDate
+            self.evaluationDate = evaluationDate
         }
     }
 
@@ -206,6 +209,9 @@ struct CalculateConditionScoreUseCase: ConditionScoreCalculating, Sendable {
             contributions.append(ScoreContribution(factor: .rhr, impact: .neutral, detail: detail))
         }
 
+        let timeAdjustment = timeOfDayAdjustment(for: input.evaluationDate)
+        rawScore += timeAdjustment
+
         let clampedScore = Int(max(0, min(100, rawScore)).rounded())
 
         let detail = ConditionScoreDetail(
@@ -224,10 +230,12 @@ struct CalculateConditionScoreUseCase: ConditionScoreCalculating, Sendable {
             rhrDeltaFromBaseline: rhrDeltaFromBaseline,
             rhrBaselineDays: rhrBaselineValues.count,
             displayRHR: validatedRHR(input.displayRHR),
-            displayRHRDate: validatedRHR(input.displayRHR) != nil ? input.displayRHRDate : nil
+            displayRHRDate: validatedRHR(input.displayRHR) != nil ? input.displayRHRDate : nil,
+            timeOfDayAdjustment: timeAdjustment,
+            evaluationDate: input.evaluationDate
         )
 
-        let score = ConditionScore(score: clampedScore, date: Date(), contributions: contributions, detail: detail)
+        let score = ConditionScore(score: clampedScore, date: input.evaluationDate, contributions: contributions, detail: detail)
 
         return Output(score: score, baselineStatus: baselineStatus, contributions: contributions)
     }
@@ -282,6 +290,17 @@ struct CalculateConditionScoreUseCase: ConditionScoreCalculating, Sendable {
 
     private func validatedRHR(_ value: Double?) -> Double? {
         value.flatMap { rhrValidRange.contains($0) ? $0 : nil }
+    }
+
+    private func timeOfDayAdjustment(for date: Date) -> Double {
+        let hour = Calendar.current.component(.hour, from: date)
+        switch hour {
+        case 0..<6: return 6
+        case 6..<11: return 3
+        case 11..<17: return 0
+        case 17..<22: return -3
+        default: return -1
+        }
     }
 
     private enum Cache {

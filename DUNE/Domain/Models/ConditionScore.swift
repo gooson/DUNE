@@ -153,6 +153,10 @@ struct ConditionScoreDetail: Sendable, Hashable, Codable {
     let displayRHR: Double?
     /// Date of the displayRHR value
     let displayRHRDate: Date?
+    /// Time-of-day adjustment applied to raw score before clamping.
+    let timeOfDayAdjustment: Double
+    /// Timestamp used to evaluate the condition score.
+    let evaluationDate: Date
 
     var rhrPenalty: Double {
         max(0, -rhrAdjustment)
@@ -174,7 +178,9 @@ struct ConditionScoreDetail: Sendable, Hashable, Codable {
         rhrDeltaFromBaseline: Double? = nil,
         rhrBaselineDays: Int = 0,
         displayRHR: Double? = nil,
-        displayRHRDate: Date? = nil
+        displayRHRDate: Date? = nil,
+        timeOfDayAdjustment: Double = 0,
+        evaluationDate: Date = Date()
     ) {
         self.todayHRV = todayHRV
         self.baselineHRV = baselineHRV
@@ -192,6 +198,8 @@ struct ConditionScoreDetail: Sendable, Hashable, Codable {
         self.rhrBaselineDays = rhrBaselineDays
         self.displayRHR = displayRHR
         self.displayRHRDate = displayRHRDate
+        self.timeOfDayAdjustment = timeOfDayAdjustment
+        self.evaluationDate = evaluationDate
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -212,6 +220,8 @@ struct ConditionScoreDetail: Sendable, Hashable, Codable {
         case rhrBaselineDays
         case displayRHR
         case displayRHRDate
+        case timeOfDayAdjustment
+        case evaluationDate
     }
 
     init(from decoder: Decoder) throws {
@@ -238,6 +248,8 @@ struct ConditionScoreDetail: Sendable, Hashable, Codable {
         rhrBaselineDays = try container.decodeIfPresent(Int.self, forKey: .rhrBaselineDays) ?? 0
         displayRHR = try container.decodeIfPresent(Double.self, forKey: .displayRHR)
         displayRHRDate = try container.decodeIfPresent(Date.self, forKey: .displayRHRDate)
+        timeOfDayAdjustment = try container.decodeIfPresent(Double.self, forKey: .timeOfDayAdjustment) ?? 0
+        evaluationDate = try container.decodeIfPresent(Date.self, forKey: .evaluationDate) ?? todayDate
     }
 
     func encode(to encoder: Encoder) throws {
@@ -258,6 +270,8 @@ struct ConditionScoreDetail: Sendable, Hashable, Codable {
         try container.encode(rhrBaselineDays, forKey: .rhrBaselineDays)
         try container.encodeIfPresent(displayRHR, forKey: .displayRHR)
         try container.encodeIfPresent(displayRHRDate, forKey: .displayRHRDate)
+        try container.encode(timeOfDayAdjustment, forKey: .timeOfDayAdjustment)
+        try container.encode(evaluationDate, forKey: .evaluationDate)
     }
 }
 
