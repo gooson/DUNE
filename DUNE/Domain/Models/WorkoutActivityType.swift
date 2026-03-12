@@ -359,6 +359,13 @@ enum WorkoutActivityType: String, Codable, Sendable, CaseIterable {
             return type
         }
 
+        let normalizedID = id
+            .replacingOccurrences(of: "-", with: " ")
+            .replacingOccurrences(of: "_", with: " ")
+        if let type = infer(from: normalizedID), type.category == .cardio {
+            return type
+        }
+
         if let type = infer(from: name), type.category == .cardio {
             return type
         }
@@ -409,7 +416,9 @@ enum WorkoutActivityType: String, Codable, Sendable, CaseIterable {
             ("kickbox", .kickboxing),
             // Stair keywords before generic "climb" to avoid false-positive on "Stair Climber"
             ("stair stepper", .stairStepper), ("stair", .stairClimbing),
+            ("step climber", .stairClimbing), ("stepclimber", .stairClimbing),
             ("stepper", .stairStepper), ("스텝밀", .stairClimbing),
+            ("스텝 클라이머", .stairClimbing), ("스텝클라이머", .stairClimbing),
             ("천국의 계단", .stairClimbing), ("천국의계단", .stairClimbing),
             ("running", .running),
             ("walking", .walking),
