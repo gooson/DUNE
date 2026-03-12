@@ -90,7 +90,7 @@ struct WhatsNewManagerTests {
         let release = manager.currentRelease(for: "0.4.0")
 
         #expect(release != nil)
-        #expect(release?.features.count == 8)
+        #expect(release?.features.count == 7)
     }
 
     @Test("0.4.0 feature IDs match expected set")
@@ -100,7 +100,7 @@ struct WhatsNewManagerTests {
 
         let ids = Set(release.features.map(\.id))
         let expected: Set<String> = [
-            "setLevelRPE", "newThemes", "stairClimber",
+            "setLevelRPE", "stairClimber",
             "cardioFitness", "watchCardioUX",
             "workoutRewards", "sleepDeficit", "lifeTabUpgrade"
         ]
