@@ -33,6 +33,8 @@ enum NotificationHubMetricResolver {
             .bmi
         case .workoutPR:
             .exercise
+        case .lifeChecklistReminder:
+            nil
         }
     }
 
@@ -66,6 +68,8 @@ enum NotificationHubMetricResolver {
         case .workoutPR:
             // Legacy workout notifications might not have route payload.
             // Keep destination available without guessing a potentially wrong value.
+            nil
+        case .lifeChecklistReminder:
             nil
         default:
             firstNumber(in: item.body)

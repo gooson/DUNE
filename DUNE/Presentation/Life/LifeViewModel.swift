@@ -699,6 +699,10 @@ private enum HabitReminderScheduler {
                 content.body = String(localized: "\(habitName) is due in \(offset) days")
             }
             content.sound = .default
+            content.userInfo = NotificationResponsePayload(
+                routeKind: NotificationRoute.notificationHub.destination.rawValue,
+                insightType: HealthInsight.InsightType.lifeChecklistReminder.rawValue
+            ).userInfo
 
             let request = UNNotificationRequest(
                 identifier: notificationID(for: habitID, offsetInDays: offset),

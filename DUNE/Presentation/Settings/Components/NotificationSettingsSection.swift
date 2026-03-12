@@ -72,6 +72,7 @@ extension HealthInsight.InsightType {
         case .bodyFatUpdate: "Body Fat Update"
         case .bmiUpdate: "BMI Update"
         case .workoutPR: "Workout Records"
+        case .lifeChecklistReminder: "Life Checklist"
         }
     }
 
@@ -87,6 +88,7 @@ extension HealthInsight.InsightType {
         case .bodyFatUpdate: "percent"
         case .bmiUpdate: "number"
         case .workoutPR: "trophy.fill"
+        case .lifeChecklistReminder: "checklist"
         }
     }
 }
