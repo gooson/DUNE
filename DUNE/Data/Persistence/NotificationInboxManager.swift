@@ -17,6 +17,7 @@ final class NotificationInboxManager: @unchecked Sendable {
         static let itemID = "notificationItemID"
         static let routeKind = "notificationRouteKind"
         static let workoutID = "notificationWorkoutID"
+        static let insightType = "notificationInsightType"
     }
 
     private let store: NotificationInboxStore
@@ -113,7 +114,12 @@ final class NotificationInboxManager: @unchecked Sendable {
         return existing
     }
 
-    func handleNotificationResponse(userInfo: [AnyHashable: Any]) {
+    func handleNotificationResponse(
+        userInfo: [AnyHashable: Any],
+        fallbackTitle: String? = nil,
+        fallbackBody: String? = nil,
+        fallbackDate: Date = Date()
+    ) {
         let itemID = userInfo[UserInfoKeys.itemID] as? String
         if let itemID {
             let openedItem = open(itemID: itemID)
@@ -133,6 +139,24 @@ final class NotificationInboxManager: @unchecked Sendable {
             return
         }
 
+        if let fallbackTitle,
+           let fallbackBody,
+           let insightTypeRaw = userInfo[UserInfoKeys.insightType] as? String,
+           let insightType = HealthInsight.InsightType(rawValue: insightTypeRaw) {
+            let route = parseRoute(userInfo: userInfo)
+            let insight = HealthInsight(
+                type: insightType,
+                title: fallbackTitle,
+                body: fallbackBody,
+                severity: .informational,
+                date: fallbackDate,
+                route: route
+            )
+            let item = recordSentInsight(insight)
+            _ = open(itemID: item.id)
+            return
+        }
+
         guard let route = parseRoute(userInfo: userInfo) else { return }
         let request = NotificationNavigationRequest(
             itemID: UUID().uuidString,
@@ -142,7 +166,10 @@ final class NotificationInboxManager: @unchecked Sendable {
     }
 
     func notificationUserInfo(for item: NotificationInboxItem) -> [AnyHashable: Any] {
-        var userInfo: [AnyHashable: Any] = [UserInfoKeys.itemID: item.id]
+        var userInfo: [AnyHashable: Any] = [
+            UserInfoKeys.itemID: item.id,
+            UserInfoKeys.insightType: item.insightType.rawValue
+        ]
         guard let route = item.route else { return userInfo }
 
         switch route.destination {

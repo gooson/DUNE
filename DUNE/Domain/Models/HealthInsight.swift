@@ -14,6 +14,7 @@ struct HealthInsight: Sendable {
         case bodyFatUpdate
         case bmiUpdate
         case workoutPR
+        case lifeChecklistReminder
     }
 
     /// Severity of the insight (determines notification priority).
