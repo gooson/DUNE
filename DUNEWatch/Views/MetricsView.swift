@@ -10,7 +10,8 @@ struct MetricsView: View {
 
     @State private var weight: Double = 0
     @State private var reps: Int = WatchSetInputPolicy.defaultReps
-    @State private var rpe: Double?
+    /// Auto-estimated RPE for the just-completed set (shown on rest timer).
+    @State private var estimatedRPE: Double?
     @State private var showInputSheet = false
     @State private var showRestTimer = false
     @State private var showNextExercise = false
@@ -32,7 +33,9 @@ struct MetricsView: View {
                     duration: currentRestDuration,
                     onComplete: { total in handleRestComplete(timerTotal: total) },
                     onSkip: { total in handleRestComplete(timerTotal: total) },
-                    onEnd: { showEndConfirmation = true }
+                    onEnd: { showEndConfirmation = true },
+                    estimatedRPE: estimatedRPE,
+                    onRPEAdjusted: { estimatedRPE = $0 }
                 )
             } else if showNextExercise {
                 nextExerciseTransition
@@ -42,7 +45,7 @@ struct MetricsView: View {
         }
         .onChange(of: workoutManager.currentExerciseIndex) { _, _ in
             lastRestTimerTotal = nil
-            rpe = nil
+            estimatedRPE = nil
             prefillFromEntry()
             refreshPreviousSetsCache()
         }
@@ -65,7 +68,6 @@ struct MetricsView: View {
             SetInputSheet(
                 weight: $weight,
                 reps: $reps,
-                rpe: $rpe,
                 previousSets: cachedPreviousSets
             )
         }
@@ -374,9 +376,14 @@ struct MetricsView: View {
     private func executeCompleteSet() {
         let wasLastSet = workoutManager.isLastSet
 
-        workoutManager.completeSet(weight: weight > 0 ? weight : nil, reps: reps > 0 ? reps : nil, rpe: rpe)
-        rpe = nil
+        workoutManager.completeSet(weight: weight > 0 ? weight : nil, reps: reps > 0 ? reps : nil, rpe: nil)
         refreshPreviousSetsCache()
+
+        // Auto-estimate RPE for the just-completed set
+        let completedSets = workoutManager.completedSetsData.indices.contains(workoutManager.currentExerciseIndex)
+            ? workoutManager.completedSetsData[workoutManager.currentExerciseIndex]
+            : []
+        estimatedRPE = WatchRPEEstimator().estimateRPE(weight: weight, reps: reps, completedSets: completedSets)
 
         // Haptic on set completion
         WKInterfaceDevice.current().play(.success)
@@ -409,6 +416,12 @@ struct MetricsView: View {
     private func handleRestComplete(timerTotal: TimeInterval) {
         workoutManager.recordRestDuration(timerTotal)
         lastRestTimerTotal = timerTotal
+
+        // Save estimated/adjusted RPE to the just-completed set before advancing
+        if let rpe = estimatedRPE {
+            workoutManager.recordSetRPE(rpe)
+        }
+        estimatedRPE = nil
 
         showRestTimer = false
         workoutManager.advanceToNextSet()

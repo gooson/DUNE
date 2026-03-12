@@ -52,7 +52,7 @@ struct WatchWorkoutSurfaceAccessibilityTests {
             WatchWorkoutSurfaceAccessibility.setInputWeightIncrementButton,
             WatchWorkoutSurfaceAccessibility.setInputRepsDecrementButton,
             WatchWorkoutSurfaceAccessibility.setInputRepsIncrementButton,
-            WatchWorkoutSurfaceAccessibility.setInputRPEControl,
+            WatchWorkoutSurfaceAccessibility.restTimerRPEBadge,
             WatchWorkoutSurfaceAccessibility.sessionSummaryScreen,
             WatchWorkoutSurfaceAccessibility.sessionSummaryStatsGrid,
             WatchWorkoutSurfaceAccessibility.sessionSummaryEffortButton,

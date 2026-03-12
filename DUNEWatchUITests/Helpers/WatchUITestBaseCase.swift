@@ -31,7 +31,7 @@ enum WatchAXID {
     static let restTimerSkipButton = "watch-rest-timer-skip"
     static let setInputScreen = "watch-set-input-screen"
     static let setInputDoneButton = "watch-set-input-done"
-    static let setInputRPEControl = "watch-set-input-rpe"
+    static let restTimerRPEBadge = "watch-rest-timer-rpe-badge"
     static let sessionSummaryScreen = "watch-session-summary-screen"
     static let sessionSummaryEffortButton = "watch-summary-effort-button"
     static let sessionSummaryDoneButton = "watch-session-summary-done"

@@ -81,6 +81,7 @@ struct RestTimerView: View {
             // RPE estimation badge (shown only when available)
             if estimatedRPE != nil {
                 rpeOverlay
+                    .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.restTimerRPEBadge)
             }
 
             // +30s / Skip / End buttons
