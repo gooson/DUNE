@@ -467,6 +467,8 @@ struct NotificationHubView: View {
             DS.Color.body
         case .workoutPR:
             DS.Color.activity
+        case .lifeChecklistReminder:
+            DS.Color.tabLife
         }
     }
 }
