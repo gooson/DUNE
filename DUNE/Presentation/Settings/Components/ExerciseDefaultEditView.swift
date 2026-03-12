@@ -146,7 +146,7 @@ struct ExerciseDefaultEditView: View {
             if let record = existingRecord {
                 withAnimation { modelContext.delete(record) }
             }
-            WatchSessionManager.shared.syncExerciseLibraryToWatch()
+            WatchSessionManager.shared.syncExerciseLibraryDefaultsToWatch(using: modelContext)
             isSaving = false
             return
         }
@@ -169,7 +169,7 @@ struct ExerciseDefaultEditView: View {
             )
             modelContext.insert(record)
         }
-        WatchSessionManager.shared.syncExerciseLibraryToWatch()
+        WatchSessionManager.shared.syncExerciseLibraryDefaultsToWatch(using: modelContext)
         isSaving = false
     }
 
@@ -177,7 +177,7 @@ struct ExerciseDefaultEditView: View {
         if let record = existingRecord {
             withAnimation { modelContext.delete(record) }
         }
-        WatchSessionManager.shared.syncExerciseLibraryToWatch()
+        WatchSessionManager.shared.syncExerciseLibraryDefaultsToWatch(using: modelContext)
         dismiss()
     }
 }

@@ -34,6 +34,9 @@ final class WatchSessionManager: NSObject {
     private var cachedExerciseLibrary: [WatchExerciseInfo] = []
     /// Persistent source for watch re-sync requests after reinstall/background relaunch.
     private var registeredModelContainer: ModelContainer?
+    /// Coalesces repeated refresh requests while a full rebuild is already running.
+    private var exerciseLibrarySyncTask: Task<Void, Never>?
+    private var exerciseLibrarySyncGeneration = 0
 
     private override init() {
         super.init()
@@ -205,25 +208,52 @@ final class WatchSessionManager: NSObject {
 
     /// Refreshes preferred exercise snapshot from SwiftData, then syncs full exercise library.
     func syncExerciseLibraryToWatch(using modelContext: ModelContext) {
+        exerciseLibrarySyncTask?.cancel()
+        exerciseLibrarySyncGeneration += 1
+        exerciseLibrarySyncTask = nil
         transferExerciseLibrary(Self.makeExerciseLibraryPayload(using: modelContext))
     }
 
     /// Refreshes preferred exercise snapshot off the main actor, then syncs full exercise library.
     func syncExerciseLibraryToWatch(using modelContainer: ModelContainer) {
-        Task(priority: .utility) {
+        exerciseLibrarySyncTask?.cancel()
+        exerciseLibrarySyncGeneration += 1
+        let syncGeneration = exerciseLibrarySyncGeneration
+        let task = Task(priority: .utility) { [weak self] in
             let payload = await Self.makeExerciseLibraryPayload(using: modelContainer)
             guard !Task.isCancelled else { return }
-            transferExerciseLibrary(payload)
+            await MainActor.run {
+                guard let self else { return }
+                guard self.exerciseLibrarySyncGeneration == syncGeneration else { return }
+                self.exerciseLibrarySyncTask = nil
+                self.transferExerciseLibrary(payload)
+            }
         }
+        exerciseLibrarySyncTask = task
+    }
+
+    /// Refreshes only defaults/preference metadata and reuses cached usage stats.
+    func syncExerciseLibraryDefaultsToWatch(using modelContext: ModelContext) {
+        exerciseLibrarySyncTask?.cancel()
+        exerciseLibrarySyncGeneration += 1
+        exerciseLibrarySyncTask = nil
+        transferExerciseLibrary(
+            Self.makeExerciseLibraryDefaultsPayload(
+                using: modelContext,
+                existingPayload: cachedExerciseLibrary
+            )
+        )
     }
 
     func syncExerciseLibraryToWatch() {
-        if let registeredModelContainer {
-            syncExerciseLibraryToWatch(using: registeredModelContainer)
-            return
-        }
-
         if cachedExerciseLibrary.isEmpty {
+            if exerciseLibrarySyncTask != nil {
+                return
+            }
+            if let registeredModelContainer {
+                syncExerciseLibraryToWatch(using: registeredModelContainer)
+                return
+            }
             transferExerciseLibrary(Self.makeFallbackExerciseLibraryPayload())
             return
         }
@@ -252,6 +282,26 @@ final class WatchSessionManager: NSObject {
         } catch {
             AppLogger.ui.error("Failed to fetch exercise library metadata for Watch sync: \(error.localizedDescription)")
             return makeFallbackExerciseLibraryPayload()
+        }
+    }
+
+    private nonisolated static func makeExerciseLibraryDefaultsPayload(
+        using modelContext: ModelContext,
+        existingPayload: [WatchExerciseInfo]
+    ) -> [WatchExerciseInfo] {
+        let defaultDescriptor = FetchDescriptor<ExerciseDefaultRecord>()
+
+        do {
+            let defaultRecords = try modelContext.fetch(defaultDescriptor)
+            return WatchExerciseLibraryPayloadBuilder.makePayload(
+                definitions: ExerciseLibraryService.shared.allExercises(),
+                defaultRecords: defaultRecords,
+                retaining: existingPayload,
+                library: ExerciseLibraryService.shared
+            )
+        } catch {
+            AppLogger.ui.error("Failed to fetch exercise defaults for Watch sync: \(error.localizedDescription)")
+            return existingPayload.isEmpty ? makeFallbackExerciseLibraryPayload() : existingPayload
         }
     }
 
@@ -309,11 +359,10 @@ extension WatchSessionManager: WCSessionDelegate {
             // Auto-sync exercise library to Watch on successful activation
             if activationState == .activated, session.isWatchAppInstalled {
                 loadCachedWatchContext()
+                syncExerciseLibraryToWatch()
                 if let registeredModelContainer {
-                    syncExerciseLibraryToWatch(using: registeredModelContainer)
                     syncWorkoutTemplatesToWatch(using: registeredModelContainer)
                 } else {
-                    syncExerciseLibraryToWatch()
                     transferWorkoutTemplates(cachedWorkoutTemplates)
                 }
             }
@@ -399,11 +448,7 @@ extension WatchSessionManager {
 
     private func handleDecodedMessage(_ message: ParsedWatchIncomingMessage) {
         if message.requestExerciseLibrarySync {
-            if let registeredModelContainer {
-                syncExerciseLibraryToWatch(using: registeredModelContainer)
-            } else {
-                syncExerciseLibraryToWatch()
-            }
+            syncExerciseLibraryToWatch()
         }
         if message.requestWorkoutTemplateSync {
             if let registeredModelContainer {

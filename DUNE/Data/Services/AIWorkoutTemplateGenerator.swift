@@ -456,7 +456,7 @@ struct AIWorkoutTemplateGenerator: NaturalLanguageWorkoutGenerating, Sendable {
         var preferredCategories = Set<ExerciseCategory>()
         var matchedSearchTerms = Set<String>()
 
-        for (keyword, muscles) in muscleKeywordMap where normalizedQuery.contains(keyword) {
+        for (keyword, muscles) in muscleKeywordMap where queryContainsKeyword(normalizedQuery, keyword: keyword) {
             muscleTargets.formUnion(muscles)
             matchedSearchTerms.insert(keyword)
         }
@@ -1001,6 +1001,16 @@ struct AIWorkoutTemplateGenerator: NaturalLanguageWorkoutGenerating, Sendable {
     static let fullBodyMuscles: Set<MuscleGroup> =
         Set([.chest, .back, .lats, .shoulders, .biceps, .triceps, .quadriceps, .hamstrings, .glutes, .calves, .core])
 
+    static let koreanBackContextKeywords: Set<String> = [
+        "운동",
+        "루틴",
+        "트레이닝",
+        "근육",
+        "위주",
+        "집중",
+        "강화",
+    ]
+
     static let muscleKeywordMap: [(String, Set<MuscleGroup>)] = [
         ("어깨", [.shoulders, .traps]),
         ("숄더", [.shoulders, .traps]),
@@ -1037,6 +1047,51 @@ struct AIWorkoutTemplateGenerator: NaturalLanguageWorkoutGenerating, Sendable {
         ("풀바디", fullBodyMuscles),
         ("全身", fullBodyMuscles),
     ]
+
+    static func queryContainsKeyword(_ normalizedQuery: String, keyword: String) -> Bool {
+        guard !keyword.isEmpty else { return false }
+
+        if keyword == "등" {
+            return containsKoreanBackKeyword(in: normalizedQuery)
+        }
+
+        return normalizedQuery.contains(keyword)
+    }
+
+    static func containsKoreanBackKeyword(in normalizedQuery: String) -> Bool {
+        let tokens = normalizedQuery.split(separator: " ").map(String.init)
+        guard !tokens.isEmpty else { return false }
+
+        for (index, token) in tokens.enumerated() {
+            if token == "등" {
+                let previousMeaningfulToken = tokens[..<index].last { !isDurationToken($0) }
+                if previousMeaningfulToken == nil {
+                    return true
+                }
+
+                if let nextToken = tokens.dropFirst(index + 1).first,
+                   koreanBackContextKeywords.contains(nextToken) {
+                    return true
+                }
+            }
+
+            if token.hasPrefix("등") {
+                let suffix = String(token.dropFirst())
+                if koreanBackContextKeywords.contains(suffix) {
+                    return true
+                }
+            }
+        }
+
+        return false
+    }
+
+    static func isDurationToken(_ token: String) -> Bool {
+        token.range(
+            of: #"^\d+(분|시간|分|時間|min|mins|minute|minutes|hr|hrs|hour|hours)$"#,
+            options: .regularExpression
+        ) != nil
+    }
 
     static let equipmentKeywordMap: [(String, Set<Equipment>)] = [
         ("맨몸", [.bodyweight]),
