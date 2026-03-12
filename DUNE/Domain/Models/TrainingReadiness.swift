@@ -6,6 +6,8 @@ struct TrainingReadiness: Sendable, Hashable {
     let status: Status
     let components: Components
     let isCalibrating: Bool
+    let timeOfDayAdjustment: Double
+    let evaluationDate: Date
 
     enum Status: String, Sendable, CaseIterable {
         case ready
@@ -58,10 +60,18 @@ struct TrainingReadiness: Sendable, Hashable {
         return nil
     }
 
-    init(score: Int, components: Components, isCalibrating: Bool = false) {
+    init(
+        score: Int,
+        components: Components,
+        isCalibrating: Bool = false,
+        timeOfDayAdjustment: Double = 0,
+        evaluationDate: Date = .now
+    ) {
         self.score = max(0, min(100, score))
         self.components = components
         self.isCalibrating = isCalibrating
+        self.timeOfDayAdjustment = timeOfDayAdjustment
+        self.evaluationDate = evaluationDate
 
         switch self.score {
         case 80...100: self.status = .ready

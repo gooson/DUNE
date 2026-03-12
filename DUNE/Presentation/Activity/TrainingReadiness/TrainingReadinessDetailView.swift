@@ -30,6 +30,7 @@ struct TrainingReadinessDetailView: View {
                         .frame(maxWidth: .infinity, minHeight: 200)
                 } else if let readiness = detailVM.readiness {
                     scoreHero(readiness)
+                    timeOfDayCard(readiness)
                     ReadinessTrendChartView(data: detailVM.readinessTrend)
                         .accessibilityIdentifier("trainingreadiness-chart-trend")
                     subScoreCharts
@@ -101,6 +102,45 @@ struct TrainingReadinessDetailView: View {
                 fractionDigits: 1
             )
         }
+    }
+
+
+    private func timeOfDayCard(_ readiness: TrainingReadiness) -> some View {
+        let baseScore = Double(readiness.score) - readiness.timeOfDayAdjustment
+
+        return StandardCard {
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                Text("Time-of-day Effect")
+                    .font(.subheadline.weight(.semibold))
+
+                Text("Current adjustment \(readiness.timeOfDayAdjustment.formattedWithSeparator(fractionDigits: 0, alwaysShowSign: true))")
+                    .font(.caption)
+                    .foregroundStyle(DS.Color.textSecondary)
+
+                HStack {
+                    phaseChip("Night", base: baseScore, hour: 2)
+                    phaseChip("Morning", base: baseScore, hour: 8)
+                    phaseChip("Noon", base: baseScore, hour: 13)
+                    phaseChip("Evening", base: baseScore, hour: 19)
+                }
+            }
+        }
+    }
+
+    private func phaseChip(_ title: String, base: Double, hour: Int) -> some View {
+        let date = Calendar.current.date(bySettingHour: hour, minute: 0, second: 0, of: Date()) ?? Date()
+        let adjustment = ScoreTimeOfDayAdjustment.readinessAndWellness(for: date)
+        let projected = Int(max(0, min(100, (base + adjustment).rounded())))
+
+        return VStack(spacing: DS.Spacing.xxs) {
+            Text(title)
+                .font(.caption2)
+                .foregroundStyle(.tertiary)
+            Text("\(projected)")
+                .font(.caption.weight(.semibold))
+                .monospacedDigit()
+        }
+        .frame(maxWidth: .infinity)
     }
 
     // MARK: - Component Weights
