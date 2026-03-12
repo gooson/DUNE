@@ -1,9 +1,11 @@
+import Foundation
 import Testing
 @testable import DUNE
 
 @Suite("CalculateWellnessScoreUseCase")
 struct CalculateWellnessScoreUseCaseTests {
     let sut = CalculateWellnessScoreUseCase()
+    let referenceDate = Calendar.current.date(bySettingHour: 13, minute: 0, second: 0, of: Date()) ?? Date()
 
     // MARK: - Normal Cases
 
@@ -12,7 +14,8 @@ struct CalculateWellnessScoreUseCaseTests {
         let input = CalculateWellnessScoreUseCase.Input(
             sleepScore: 80,
             conditionScore: 70,
-            bodyTrend: .init(weightChange: -0.3)
+            bodyTrend: .init(weightChange: -0.3),
+            evaluationDate: referenceDate
         )
         let result = sut.execute(input: input)
         #expect(result != nil)
@@ -29,7 +32,8 @@ struct CalculateWellnessScoreUseCaseTests {
         let input = CalculateWellnessScoreUseCase.Input(
             sleepScore: 80,
             conditionScore: 60,
-            bodyTrend: nil
+            bodyTrend: nil,
+            evaluationDate: referenceDate
         )
         let result = sut.execute(input: input)
         #expect(result != nil)
@@ -43,7 +47,8 @@ struct CalculateWellnessScoreUseCaseTests {
         let input = CalculateWellnessScoreUseCase.Input(
             sleepScore: 85,
             conditionScore: nil,
-            bodyTrend: nil
+            bodyTrend: nil,
+            evaluationDate: referenceDate
         )
         let result = sut.execute(input: input)
         #expect(result != nil)
@@ -55,7 +60,8 @@ struct CalculateWellnessScoreUseCaseTests {
         let input = CalculateWellnessScoreUseCase.Input(
             sleepScore: nil,
             conditionScore: nil,
-            bodyTrend: nil
+            bodyTrend: nil,
+            evaluationDate: referenceDate
         )
         let result = sut.execute(input: input)
         #expect(result == nil)
@@ -68,7 +74,8 @@ struct CalculateWellnessScoreUseCaseTests {
         let input = CalculateWellnessScoreUseCase.Input(
             sleepScore: 100,
             conditionScore: nil,
-            bodyTrend: nil
+            bodyTrend: nil,
+            evaluationDate: referenceDate
         )
         let result = sut.execute(input: input)
         #expect(result != nil)
@@ -81,12 +88,41 @@ struct CalculateWellnessScoreUseCaseTests {
         let input = CalculateWellnessScoreUseCase.Input(
             sleepScore: 0,
             conditionScore: nil,
-            bodyTrend: nil
+            bodyTrend: nil,
+            evaluationDate: referenceDate
         )
         let result = sut.execute(input: input)
         #expect(result != nil)
         #expect(result!.score == 0)
         #expect(result!.status == .warning)
+    }
+
+
+    @Test("Time-of-day adjustment is applied to wellness score")
+    func timeOfDayAdjustmentApplied() {
+        let noon = Calendar.current.date(bySettingHour: 13, minute: 0, second: 0, of: Date()) ?? Date()
+        let night = Calendar.current.date(bySettingHour: 2, minute: 0, second: 0, of: Date()) ?? Date()
+
+        let noonInput = CalculateWellnessScoreUseCase.Input(
+            sleepScore: 80,
+            conditionScore: 60,
+            bodyTrend: nil,
+            evaluationDate: noon
+        )
+        let nightInput = CalculateWellnessScoreUseCase.Input(
+            sleepScore: 80,
+            conditionScore: 60,
+            bodyTrend: nil,
+            evaluationDate: night
+        )
+
+        let noonResult = sut.execute(input: noonInput)
+        let nightResult = sut.execute(input: nightInput)
+
+        #expect(noonResult != nil)
+        #expect(nightResult != nil)
+        #expect(nightResult!.score >= noonResult!.score + 5)
+        #expect(nightResult!.timeOfDayAdjustment > noonResult!.timeOfDayAdjustment)
     }
 
     // MARK: - BodyTrend Score

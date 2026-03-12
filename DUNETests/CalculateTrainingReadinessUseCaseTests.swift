@@ -6,6 +6,7 @@ import Testing
 struct CalculateTrainingReadinessUseCaseTests {
     let sut = CalculateTrainingReadinessUseCase()
     let calendar = Calendar.current
+    let referenceDate = Calendar.current.date(bySettingHour: 13, minute: 0, second: 0, of: Date()) ?? Date()
 
     // MARK: - Helpers
 
@@ -53,7 +54,8 @@ struct CalculateTrainingReadinessUseCaseTests {
         sleepMinutes: Double? = 450,
         deepSleepRatio: Double? = 0.22,
         remSleepRatio: Double? = 0.22,
-        fatigueStates: [MuscleFatigueState] = []
+        fatigueStates: [MuscleFatigueState] = [],
+        evaluationDate: Date? = nil
     ) -> CalculateTrainingReadinessUseCase.Input {
         .init(
             hrvSamples: makeHRVSamples(values: hrvValues),
@@ -62,7 +64,8 @@ struct CalculateTrainingReadinessUseCaseTests {
             sleepDurationMinutes: sleepMinutes,
             deepSleepRatio: deepSleepRatio,
             remSleepRatio: remSleepRatio,
-            fatigueStates: fatigueStates
+            fatigueStates: fatigueStates,
+            evaluationDate: evaluationDate ?? referenceDate
         )
     }
 
@@ -127,7 +130,8 @@ struct CalculateTrainingReadinessUseCaseTests {
             sleepDurationMinutes: 450,
             deepSleepRatio: 0.22,
             remSleepRatio: 0.22,
-            fatigueStates: []
+            fatigueStates: [],
+            evaluationDate: referenceDate
         )
         let result = sut.execute(input: input)
         #expect(result != nil)
@@ -175,6 +179,21 @@ struct CalculateTrainingReadinessUseCaseTests {
         #expect(TrainingReadiness(score: 39, components: c).status == .rest)
         #expect(TrainingReadiness(score: 0, components: c).status == .rest)
         #expect(TrainingReadiness(score: 100, components: c).status == .ready)
+    }
+
+
+    @Test("Time-of-day adjustment is applied to readiness score")
+    func timeOfDayAdjustmentApplied() {
+        let noon = calendar.date(bySettingHour: 13, minute: 0, second: 0, of: Date()) ?? Date()
+        let night = calendar.date(bySettingHour: 2, minute: 0, second: 0, of: Date()) ?? Date()
+
+        let noonResult = sut.execute(input: makeDefaultInput(evaluationDate: noon))
+        let nightResult = sut.execute(input: makeDefaultInput(evaluationDate: night))
+
+        #expect(noonResult != nil)
+        #expect(nightResult != nil)
+        #expect(nightResult!.score >= noonResult!.score + 5)
+        #expect(nightResult!.timeOfDayAdjustment > noonResult!.timeOfDayAdjustment)
     }
 
     // MARK: - HRV Component
@@ -431,7 +450,8 @@ struct CalculateTrainingReadinessUseCaseTests {
             todayRHR: nil,
             rhrBaseline: [],
             sleepMinutes: nil,
-            fatigueStates: []
+            fatigueStates: [],
+            evaluationDate: referenceDate
         )
         let result = sut.execute(input: input)
         #expect(result != nil)

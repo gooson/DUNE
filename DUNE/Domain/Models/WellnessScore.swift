@@ -7,6 +7,8 @@ struct WellnessScore: Sendable, Hashable {
     let conditionScore: Int?
     let bodyScore: Int?
     let guideMessage: String
+    let timeOfDayAdjustment: Double
+    let evaluationDate: Date
 
     enum Status: String, Sendable, CaseIterable {
         case excellent
@@ -16,11 +18,20 @@ struct WellnessScore: Sendable, Hashable {
         case warning
     }
 
-    init(score: Int, sleepScore: Int? = nil, conditionScore: Int? = nil, bodyScore: Int? = nil) {
+    init(
+        score: Int,
+        sleepScore: Int? = nil,
+        conditionScore: Int? = nil,
+        bodyScore: Int? = nil,
+        timeOfDayAdjustment: Double = 0,
+        evaluationDate: Date = .now
+    ) {
         self.score = max(0, min(100, score))
         self.sleepScore = sleepScore
         self.conditionScore = conditionScore
         self.bodyScore = bodyScore
+        self.timeOfDayAdjustment = timeOfDayAdjustment
+        self.evaluationDate = evaluationDate
 
         switch self.score {
         case 80...100: self.status = .excellent

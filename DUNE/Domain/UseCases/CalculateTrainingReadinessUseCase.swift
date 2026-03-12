@@ -21,6 +21,7 @@ struct CalculateTrainingReadinessUseCase: TrainingReadinessCalculating, Sendable
         let deepSleepRatio: Double?
         let remSleepRatio: Double?
         let fatigueStates: [MuscleFatigueState]
+        let evaluationDate: Date = .now
     }
 
     // MARK: - Weights
@@ -52,11 +53,14 @@ struct CalculateTrainingReadinessUseCase: TrainingReadinessCalculating, Sendable
         let isCalibrating = input.hrvSamples.isEmpty
             || dailyAverages.count < minimumBaselineDays
 
-        let rawScore = Double(hrvComponent) * hrvWeight
+        var rawScore = Double(hrvComponent) * hrvWeight
             + Double(rhrComponent) * rhrWeight
             + Double(sleepComponent) * sleepWeight
             + Double(fatigueComponent) * fatigueWeight
             + Double(trendComponent) * trendWeight
+
+        let timeAdjustment = ScoreTimeOfDayAdjustment.readinessAndWellness(for: input.evaluationDate)
+        rawScore += timeAdjustment
 
         guard rawScore.isFinite, !rawScore.isNaN else { return nil }
 
@@ -68,7 +72,13 @@ struct CalculateTrainingReadinessUseCase: TrainingReadinessCalculating, Sendable
             fatigueScore: fatigueComponent,
             trendBonus: trendComponent
         )
-        return TrainingReadiness(score: clamped, components: components, isCalibrating: isCalibrating)
+        return TrainingReadiness(
+            score: clamped,
+            components: components,
+            isCalibrating: isCalibrating,
+            timeOfDayAdjustment: timeAdjustment,
+            evaluationDate: input.evaluationDate
+        )
     }
 
     // MARK: - HRV Score (30%)

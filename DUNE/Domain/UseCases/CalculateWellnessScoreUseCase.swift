@@ -14,6 +14,7 @@ struct CalculateWellnessScoreUseCase: WellnessScoreCalculating, Sendable {
         let sleepScore: Int?
         let conditionScore: Int?
         let bodyTrend: BodyTrend?
+        let evaluationDate: Date = .now
     }
 
     /// Body composition trend over the last 7 days.
@@ -90,14 +91,18 @@ struct CalculateWellnessScoreUseCase: WellnessScoreCalculating, Sendable {
 
         guard totalWeight > 0 else { return nil }
 
-        let rawScore = weightedSum / totalWeight
+        var rawScore = weightedSum / totalWeight
+        let timeAdjustment = ScoreTimeOfDayAdjustment.readinessAndWellness(for: input.evaluationDate)
+        rawScore += timeAdjustment
         guard !rawScore.isNaN, !rawScore.isInfinite else { return nil }
 
         return WellnessScore(
             score: Int(rawScore.rounded()),
             sleepScore: input.sleepScore,
             conditionScore: input.conditionScore,
-            bodyScore: bodyScoreValue
+            bodyScore: bodyScoreValue,
+            timeOfDayAdjustment: timeAdjustment,
+            evaluationDate: input.evaluationDate
         )
     }
 }
