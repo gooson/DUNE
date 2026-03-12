@@ -6,26 +6,23 @@ import Foundation
 /// the current set's weight as a percentage of estimated 1RM to an RPE value.
 /// When reps degrade across sets (fatigue), adds +0.5 RPE correction.
 ///
-/// Returns `nil` when estimation is not possible (no prior sets, bodyweight, etc.)
-/// so the UI can silently skip RPE display.
-struct WatchRPEEstimator: Sendable {
+/// Returns `nil` when estimation is not possible (no prior sets, bodyweight,
+/// or reps > 30 where Epley degrades) so the UI can silently skip RPE display.
+enum WatchRPEEstimator {
 
     /// Estimate RPE for the just-completed set based on in-session history.
     ///
     /// - Parameters:
     ///   - weight: Weight used for the completed set (kg).
     ///   - reps: Reps performed in the completed set.
-    ///   - completedSets: All previously completed sets for the current exercise.
+    ///   - completedSets: All previously completed sets for the current exercise
+    ///     (should NOT include the set being estimated).
     /// - Returns: Estimated RPE (6.0–10.0, 0.5 step) or `nil` if estimation is not possible.
-    func estimateRPE(weight: Double, reps: Int, completedSets: [CompletedSetData]) -> Double? {
+    static func estimateRPE(weight: Double, reps: Int, completedSets: [CompletedSetData]) -> Double? {
         guard weight > 0, reps >= 1 else { return nil }
 
-        // Need at least one prior set to estimate 1RM
-        let validSets = completedSets.filter { ($0.weight ?? 0) > 0 && ($0.reps ?? 0) >= 1 }
-        guard !validSets.isEmpty else { return nil }
-
-        // Estimate 1RM from each prior set using Epley formula, take best
-        let best1RM = validSets.compactMap { set -> Double? in
+        // Estimate 1RM from each valid prior set using Epley formula, take best
+        let best1RM = completedSets.compactMap { set -> Double? in
             guard let w = set.weight, w > 0, let r = set.reps, r >= 1 else { return nil }
             return epleyEstimate(weight: w, reps: r)
         }.max()
@@ -38,9 +35,9 @@ struct WatchRPEEstimator: Sendable {
         // Map %1RM to base RPE
         var baseRPE = mapPercentageToRPE(percentageOf1RM)
 
-        // Reps degradation correction: if reps decreased vs previous set, add +0.5
-        if let lastSet = validSets.last,
-           let lastReps = lastSet.reps,
+        // Reps degradation correction: if reps decreased vs last valid set, add +0.5
+        if let lastValidSet = completedSets.last(where: { ($0.weight ?? 0) > 0 && ($0.reps ?? 0) >= 1 }),
+           let lastReps = lastValidSet.reps,
            reps < lastReps {
             baseRPE += 0.5
         }
@@ -52,14 +49,14 @@ struct WatchRPEEstimator: Sendable {
     // MARK: - Private
 
     /// Epley formula: 1RM = weight * (1 + reps/30)
-    private func epleyEstimate(weight: Double, reps: Int) -> Double? {
+    private static func epleyEstimate(weight: Double, reps: Int) -> Double? {
         guard weight > 0, reps >= 1, reps <= 30 else { return nil }
         if reps == 1 { return weight }
         return weight * (1.0 + Double(reps) / 30.0)
     }
 
     /// Maps %1RM to base RPE value.
-    private func mapPercentageToRPE(_ percentage: Double) -> Double {
+    private static func mapPercentageToRPE(_ percentage: Double) -> Double {
         switch percentage {
         case 0.95...: 10.0
         case 0.90..<0.95: 9.0

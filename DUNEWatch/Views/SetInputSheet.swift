@@ -37,8 +37,7 @@ struct SetInputSheet: View {
 
                     // Reps — inline ± row
                     repsSection
-
-}
+                }
                 .padding(.horizontal, DS.Spacing.md)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)

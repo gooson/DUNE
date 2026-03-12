@@ -125,6 +125,7 @@ struct RestTimerView: View {
         }
         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.restTimerScreen)
         .onAppear {
+            showRPEAdjust = false
             if let estimatedRPE {
                 adjustedRPE = estimatedRPE
             }
