@@ -21,6 +21,12 @@ struct CalculateConditionScoreUseCaseTests {
         }
     }
 
+    private func dateAt(hour: Int) -> Date {
+        let now = Date()
+        let dayStart = calendar.startOfDay(for: now)
+        return calendar.date(byAdding: .hour, value: hour, to: dayStart) ?? now
+    }
+
     @Test("Returns nil score when insufficient days")
     func insufficientDays() {
         let input = CalculateConditionScoreUseCase.Input(
@@ -169,5 +175,38 @@ struct CalculateConditionScoreUseCaseTests {
         #expect(output.score?.detail?.todayRHR == nil)
         #expect(output.score?.detail?.displayRHR == 62)
         #expect(output.score?.detail?.displayRHRDate == rhrDate)
+    }
+
+    @Test("Condition score applies time-of-day adjustment for real-time guidance")
+    func timeOfDayAdjustmentAffectsScore() {
+        let baselineInput = CalculateConditionScoreUseCase.Input(
+            hrvSamples: makeHRVSamples([50, 50, 50, 50, 50, 50, 50]),
+            todayRHR: nil,
+            yesterdayRHR: nil,
+            evaluationDate: dateAt(hour: 13)
+        )
+        let morningInput = CalculateConditionScoreUseCase.Input(
+            hrvSamples: makeHRVSamples([50, 50, 50, 50, 50, 50, 50]),
+            todayRHR: nil,
+            yesterdayRHR: nil,
+            evaluationDate: dateAt(hour: 4)
+        )
+        let eveningInput = CalculateConditionScoreUseCase.Input(
+            hrvSamples: makeHRVSamples([50, 50, 50, 50, 50, 50, 50]),
+            todayRHR: nil,
+            yesterdayRHR: nil,
+            evaluationDate: dateAt(hour: 19)
+        )
+
+        let baseline = sut.execute(input: baselineInput)
+        let morning = sut.execute(input: morningInput)
+        let evening = sut.execute(input: eveningInput)
+
+        #expect(baseline.score?.detail?.timeOfDayAdjustment == 0)
+        #expect(morning.score?.detail?.timeOfDayAdjustment == 6)
+        #expect(evening.score?.detail?.timeOfDayAdjustment == -3)
+        #expect((morning.score?.score ?? 0) > (baseline.score?.score ?? 0))
+        #expect((evening.score?.score ?? 0) < (baseline.score?.score ?? 0))
+        #expect(morning.score?.date == morningInput.evaluationDate)
     }
 }
