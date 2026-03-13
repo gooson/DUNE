@@ -287,11 +287,11 @@ struct DUNEApp: App {
     private static func recoverModelContainer(after error: Error, configuration: ModelConfiguration) -> ModelContainer {
         let reflectedError = String(reflecting: error)
         guard PersistentStoreRecovery.shouldDeleteStore(after: error) else {
-            AppLogger.data.error("Skipping store deletion for non-migration container error: \(reflectedError, privacy: .public)")
+            AppLogger.data.error("Skipping store deletion for non-migration container error: \(reflectedError, privacy: .private)")
             return makeInMemoryFallbackContainer()
         }
 
-        AppLogger.data.error("Deleting persistent store after migration compatibility failure: \(reflectedError, privacy: .public)")
+        AppLogger.data.error("Deleting persistent store after migration compatibility failure: \(reflectedError, privacy: .private)")
         deleteStoreFiles(at: configuration.url)
 
         do {
