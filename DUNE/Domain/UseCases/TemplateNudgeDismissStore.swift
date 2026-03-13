@@ -7,6 +7,8 @@ struct TemplateNudgeDismissStore: Sendable {
 
     private static let key = "templateNudgeDismissals"
     private static let dismissDurationSeconds: TimeInterval = 7 * 24 * 60 * 60 // 7 days
+    private static let decoder = JSONDecoder()
+    private static let encoder = JSONEncoder()
 
     private nonisolated(unsafe) let defaults: UserDefaults
 
@@ -37,11 +39,11 @@ struct TemplateNudgeDismissStore: Sendable {
 
     private func loadDismissals() -> [String: Date]? {
         guard let data = defaults.data(forKey: Self.key) else { return nil }
-        return try? JSONDecoder().decode([String: Date].self, from: data)
+        return try? Self.decoder.decode([String: Date].self, from: data)
     }
 
     private func saveDismissals(_ dismissals: [String: Date]) {
-        guard let data = try? JSONEncoder().encode(dismissals) else { return }
+        guard let data = try? Self.encoder.encode(dismissals) else { return }
         defaults.set(data, forKey: Self.key)
     }
 }

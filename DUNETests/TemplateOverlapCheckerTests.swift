@@ -48,7 +48,7 @@ struct TemplateOverlapCheckerTests {
         #expect(TemplateOverlapChecker.isAlreadyCovered(recommendation: rec, existingTemplates: [template]))
     }
 
-    @Test("79% overlap returns false (below threshold)")
+    @Test("40% overlap returns false (below threshold)")
     func belowThreshold() {
         // rec: [A, B, C], template: [A, B, D, E] → intersection=2, union=5 → 40%
         let rec = recommendation(labels: ["a", "b", "c"])

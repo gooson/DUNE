@@ -151,7 +151,6 @@ struct DashboardView: View {
                             TemplateNudgeCard(
                                 recommendation: nudge,
                                 onSaveAsTemplate: { templateNudgeToSave = nudge },
-                                onStartWorkout: { },
                                 onDismiss: {
                                     withAnimation(DS.Animation.standard) {
                                         viewModel.dismissTemplateNudge()
@@ -159,7 +158,6 @@ struct DashboardView: View {
                                 }
                             )
                             .transition(Self.sectionTransition)
-                            .accessibilityIdentifier("dashboard-template-nudge-card")
                         }
 
                         // Sleep deficit badge

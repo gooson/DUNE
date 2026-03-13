@@ -4,7 +4,6 @@ import SwiftUI
 struct TemplateNudgeCard: View {
     let recommendation: WorkoutTemplateRecommendation
     let onSaveAsTemplate: () -> Void
-    let onStartWorkout: () -> Void
     let onDismiss: () -> Void
 
     private static let tagBackground = DS.Color.activity.opacity(DS.Opacity.subtle)
@@ -51,24 +50,14 @@ struct TemplateNudgeCard: View {
                     .font(.caption2)
                     .foregroundStyle(.tertiary)
 
-                // CTAs
-                HStack(spacing: DS.Spacing.sm) {
-                    Button(action: onSaveAsTemplate) {
-                        Label("Save as Template", systemImage: "bookmark.fill")
-                            .font(.caption.weight(.semibold))
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .controlSize(.small)
-                    .tint(DS.Color.activity)
-
-                    Button(action: onStartWorkout) {
-                        Text("Start Workout")
-                            .font(.caption.weight(.semibold))
-                    }
-                    .buttonStyle(.bordered)
-                    .controlSize(.small)
-                    .tint(DS.Color.activity)
+                // CTA
+                Button(action: onSaveAsTemplate) {
+                    Label("Save as Template", systemImage: "bookmark.fill")
+                        .font(.caption.weight(.semibold))
                 }
+                .buttonStyle(.borderedProminent)
+                .controlSize(.small)
+                .tint(DS.Color.activity)
             }
         }
         .accessibilityIdentifier("dashboard-template-nudge-card")
