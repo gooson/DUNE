@@ -47,6 +47,7 @@ struct DUNEApp: App {
         let sharedHealthDataService: SharedHealthDataService
         let refreshCoordinator: AppRefreshCoordinating
         let observerManager: HealthKitObserverManager?
+        let scoreRefreshService: ScoreRefreshService
     }
 
     private static var isRunningXCTest: Bool {
@@ -222,12 +223,15 @@ struct DUNEApp: App {
             observerManager = nil
         }
 
+        let scoreRefreshService = ScoreRefreshService(modelContainer: modelContainer)
+
         return AppRuntime(
             cloudSyncEnabled: resolvedCloudSyncEnabled,
             modelContainer: modelContainer,
             sharedHealthDataService: sharedHealthDataService,
             refreshCoordinator: refreshCoordinator,
-            observerManager: observerManager
+            observerManager: observerManager,
+            scoreRefreshService: scoreRefreshService
         )
     }
 
@@ -346,6 +350,7 @@ struct DUNEApp: App {
         ContentView(
             sharedHealthDataService: appRuntime.sharedHealthDataService,
             refreshCoordinator: appRuntime.refreshCoordinator,
+            scoreRefreshService: appRuntime.scoreRefreshService,
             launchExperienceReady: isLaunchExperienceReady,
             canLoadHealthKitData: canLoadHealthKitData
         )
@@ -602,6 +607,7 @@ struct DUNEApp: App {
         WatchSessionManager.shared.syncExerciseLibraryToWatch(using: modelContainer)
         WatchSessionManager.shared.activate()
         appRuntime.observerManager?.startObserving()
+        appRuntime.scoreRefreshService.startListening(to: appRuntime.refreshCoordinator)
         Task {
             await BedtimeReminderScheduler.shared.refreshSchedule()
         }

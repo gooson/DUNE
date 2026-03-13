@@ -3,6 +3,7 @@ import SwiftUI
 struct TrainingReadinessHeroCard: View {
     let readiness: TrainingReadiness?
     let isCalibrating: Bool
+    var hourlySparkline: HourlySparklineData?
 
     private enum Labels {
         static let scoreLabel = "READINESS"
@@ -29,7 +30,8 @@ struct TrainingReadinessHeroCard: View {
                 badgeText: isCalibrating ? Labels.calibrating : nil,
                 showsChevron: false,
                 accessibilityLabel: String(localized: "Training readiness \(readiness.score), \(readiness.status.label)"),
-                accessibilityHint: nil
+                accessibilityHint: nil,
+                hourlySparkline: hourlySparkline
             )
         } else {
             emptyCard

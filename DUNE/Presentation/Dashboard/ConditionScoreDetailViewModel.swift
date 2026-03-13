@@ -27,12 +27,15 @@ final class ConditionScoreDetailViewModel {
 
     private let hrvService: HRVQuerying
     private let scoreUseCase = CalculateConditionScoreUseCase()
+    private let scoreRefreshService: ScoreRefreshService?
 
     init(
         hrvService: HRVQuerying? = nil,
-        healthKitManager: HealthKitManager = .shared
+        healthKitManager: HealthKitManager = .shared,
+        scoreRefreshService: ScoreRefreshService? = nil
     ) {
         self.hrvService = hrvService ?? HRVQueryService(manager: healthKitManager)
+        self.scoreRefreshService = scoreRefreshService
     }
 
     func configure(score: ConditionScore) {
@@ -45,7 +48,11 @@ final class ConditionScoreDetailViewModel {
         errorMessage = nil
 
         do {
-            try await loadScoreData()
+            if selectedPeriod == .day {
+                await loadHourlyData()
+            } else {
+                try await loadScoreData()
+            }
             guard !Task.isCancelled else {
                 isLoading = false
                 return
@@ -242,6 +249,28 @@ final class ConditionScoreDetailViewModel {
         }
 
         return results
+    }
+
+    // MARK: - Hourly Data (Day Period)
+
+    private func loadHourlyData() async {
+        guard let service = scoreRefreshService else {
+            chartData = []
+            summaryStats = nil
+            return
+        }
+
+        let snapshots = await service.fetchSnapshots(for: Date())
+        let calendar = Calendar.current
+
+        chartData = snapshots.compactMap { snap in
+            guard let score = snap.conditionScore else { return nil }
+            return ChartDataPoint(date: snap.date, value: score)
+        }
+
+        // Summary from hourly data
+        let values = chartData.map(\.value)
+        summaryStats = HealthDataAggregator.computeSummary(from: values, previousPeriodValues: nil)
     }
 
     // MARK: - Highlights

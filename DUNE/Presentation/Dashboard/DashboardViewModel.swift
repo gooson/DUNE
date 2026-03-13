@@ -107,6 +107,12 @@ final class DashboardViewModel {
     private var lastCoachingInput: CoachingInput?
     private let trendService = TrendAnalysisService()
     private let dismissStore = InsightCardDismissStore.shared
+    private let scoreRefreshService: ScoreRefreshService?
+
+    /// Hourly sparkline data for the condition hero card, sourced from ScoreRefreshService.
+    var conditionSparkline: HourlySparklineData {
+        scoreRefreshService?.conditionSparkline ?? .empty
+    }
 
     init(
         healthKitManager: HealthKitManager = .shared,
@@ -118,7 +124,8 @@ final class DashboardViewModel {
         pinnedMetricsStore: TodayPinnedMetricsStore = .shared,
         sharedHealthDataService: SharedHealthDataService? = nil,
         weatherProvider: WeatherProviding? = nil,
-        coachingMessageEnhancer: (any CoachingMessageEnhancing)? = AICoachingMessageService()
+        coachingMessageEnhancer: (any CoachingMessageEnhancing)? = AICoachingMessageService(),
+        scoreRefreshService: ScoreRefreshService? = nil
     ) {
         self.healthKitManager = healthKitManager
         self.hrvService = hrvService ?? HRVQueryService(manager: healthKitManager)
@@ -131,6 +138,7 @@ final class DashboardViewModel {
         // Create default weather provider if none injected (Correction: @MainActor init is safe for LocationService)
         self.weatherProvider = weatherProvider ?? WeatherProvider(locationService: LocationService())
         self.coachingMessageEnhancer = coachingMessageEnhancer
+        self.scoreRefreshService = scoreRefreshService
         self.pinnedCategories = pinnedMetricsStore.load()
     }
 
@@ -229,6 +237,16 @@ final class DashboardViewModel {
         heroBaselineDetails = buildHeroBaselineDetails()
         lastUpdated = Date()
         WidgetDataWriter.writeConditionScore(conditionScore)
+
+        // Persist hourly score snapshot for sparkline tracking
+        if let service = scoreRefreshService, conditionScore != nil {
+            await service.recordSnapshot(
+                conditionScore: conditionScore?.score,
+                wellnessScore: nil,
+                readinessScore: nil
+            )
+        }
+
         isLoading = false
     }
 

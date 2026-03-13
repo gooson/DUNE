@@ -27,6 +27,7 @@ struct HeroScoreCard: View {
     let showsChevron: Bool
     let accessibilityLabel: String
     let accessibilityHint: String?
+    var hourlySparkline: HourlySparklineData?
 
     @State private var animatedScore: Int = 0
     @State private var isAppeared = false
@@ -138,10 +139,32 @@ struct HeroScoreCard: View {
                 }
             }
 
-            Text(guideMessage)
-                .font(.subheadline)
-                .foregroundStyle(DS.Color.textSecondary)
-                .fixedSize(horizontal: false, vertical: true)
+            // Guide message with delta badge
+            HStack(spacing: DS.Spacing.xs) {
+                Text(guideMessage)
+                    .font(.subheadline)
+                    .foregroundStyle(DS.Color.textSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                if let sparkline = hourlySparkline, sparkline.deltaDirection != .stable {
+                    ScoreDeltaBadge(
+                        delta: sparkline.delta,
+                        direction: sparkline.deltaDirection
+                    )
+                }
+            }
+
+            // Hourly sparkline when available
+            if let sparkline = hourlySparkline, !sparkline.points.isEmpty {
+                HStack(spacing: DS.Spacing.xs) {
+                    HourlySparklineView(data: sparkline, tintColor: statusColor)
+                        .frame(height: isRegular ? 48 : 36)
+
+                    Text("Today")
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
+                }
+            }
 
             HStack(spacing: DS.Spacing.md) {
                 ForEach(Array(subScores.enumerated()), id: \.offset) { _, item in

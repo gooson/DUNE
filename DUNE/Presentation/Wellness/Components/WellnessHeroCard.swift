@@ -5,6 +5,7 @@ struct WellnessHeroCard: View {
     let sleepScore: Int?
     let conditionScore: Int?
     let bodyScore: Int?
+    var hourlySparkline: HourlySparklineData?
 
     private enum Labels {
         static let wellness = "WELLNESS"
@@ -30,7 +31,8 @@ struct WellnessHeroCard: View {
                 badgeText: nil,
                 showsChevron: true,
                 accessibilityLabel: "Wellness score \(score.score), \(score.status.label)",
-                accessibilityHint: "Tap to see score details"
+                accessibilityHint: "Tap to see score details",
+                hourlySparkline: hourlySparkline
             )
         } else {
             emptyCard

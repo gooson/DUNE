@@ -47,6 +47,12 @@ final class WellnessViewModel {
     private let sleepPredictionUseCase: SleepQualityPredicting
     private let trendAnalysisService: TrendAnalysisService
     private let sharedHealthDataService: SharedHealthDataService?
+    private let scoreRefreshService: ScoreRefreshService?
+
+    /// Hourly sparkline data for the wellness hero card.
+    var wellnessSparkline: HourlySparklineData {
+        scoreRefreshService?.wellnessSparkline ?? .empty
+    }
 
     // MARK: - Internal State
 
@@ -67,7 +73,8 @@ final class WellnessViewModel {
         conditionScoreUseCase: ConditionScoreCalculating? = nil,
         sleepPredictionUseCase: SleepQualityPredicting = PredictSleepQualityUseCase(),
         trendAnalysisService: TrendAnalysisService = TrendAnalysisService(),
-        sharedHealthDataService: SharedHealthDataService? = nil
+        sharedHealthDataService: SharedHealthDataService? = nil,
+        scoreRefreshService: ScoreRefreshService? = nil
     ) {
         self.healthKitManager = healthKitManager
         self.sleepService = sleepService ?? SleepQueryService(manager: healthKitManager)
@@ -81,6 +88,7 @@ final class WellnessViewModel {
         self.sleepPredictionUseCase = sleepPredictionUseCase
         self.trendAnalysisService = trendAnalysisService
         self.sharedHealthDataService = sharedHealthDataService
+        self.scoreRefreshService = scoreRefreshService
     }
 
     // MARK: - Public
@@ -417,6 +425,15 @@ final class WellnessViewModel {
             bodyTrend: bodyTrend
         ))
         WidgetDataWriter.writeWellnessScore(wellnessScore)
+
+        // Persist hourly score snapshot for sparkline tracking
+        if let service = scoreRefreshService, let wellness = wellnessScore {
+            await service.recordSnapshot(
+                conditionScore: nil,
+                wellnessScore: wellness.score,
+                readinessScore: nil
+            )
+        }
 
         // Sort and split into sections (Correction #88: atomic update)
         let sortedCards = cards.sorted { a, b in

@@ -96,6 +96,12 @@ final class ActivityViewModel {
     private let templateRecommendationService: any WorkoutTemplateRecommending
     private let injuryRiskUseCase: InjuryRiskCalculating
     private let workoutReportUseCase: WorkoutReportGenerating
+    private let scoreRefreshService: ScoreRefreshService?
+
+    /// Hourly sparkline data for the readiness hero card.
+    var readinessSparkline: HourlySparklineData {
+        scoreRefreshService?.readinessSparkline ?? .empty
+    }
 
     /// Cached recovery modifiers from the most recent fetch.
     private var sleepModifier: Double = 1.0
@@ -124,7 +130,8 @@ final class ActivityViewModel {
         recommendationSettingsStore: WorkoutRecommendationSettingsStore = .shared,
         templateRecommendationService: any WorkoutTemplateRecommending = WorkoutTemplateRecommendationService(),
         injuryRiskUseCase: InjuryRiskCalculating = CalculateInjuryRiskUseCase(),
-        workoutReportUseCase: WorkoutReportGenerating? = nil
+        workoutReportUseCase: WorkoutReportGenerating? = nil,
+        scoreRefreshService: ScoreRefreshService? = nil
     ) {
         self.healthKitManager = healthKitManager
         self.workoutService = workoutService ?? WorkoutQueryService(manager: healthKitManager)
@@ -142,6 +149,7 @@ final class ActivityViewModel {
         self.templateRecommendationService = templateRecommendationService
         self.injuryRiskUseCase = injuryRiskUseCase
         self.workoutReportUseCase = workoutReportUseCase ?? GenerateWorkoutReportUseCase(formatter: FoundationModelReportFormatter())
+        self.scoreRefreshService = scoreRefreshService
         self.recommendationContext = recommendationSettingsStore.context
         self.localizedExerciseNameLookup = buildLocalizedExerciseNameLookup()
     }
@@ -622,6 +630,15 @@ final class ActivityViewModel {
         )
         trainingReadiness = readinessUseCase.execute(input: readinessInput)
         WidgetDataWriter.writeReadinessScore(trainingReadiness)
+
+        // Persist hourly score snapshot for sparkline tracking
+        if let service = scoreRefreshService, let readiness = trainingReadiness {
+            await service.recordSnapshot(
+                conditionScore: nil,
+                wellnessScore: nil,
+                readinessScore: readiness.score
+            )
+        }
 
         // Compute derived stats (PRs, streak, frequency, weekly stats)
         recomputeDerivedStats()

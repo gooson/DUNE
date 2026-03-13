@@ -142,13 +142,14 @@ struct ActivityView: View {
 
     init(
         sharedHealthDataService: SharedHealthDataService? = nil,
+        scoreRefreshService: ScoreRefreshService? = nil,
         scrollToTopSignal: Int = 0,
         refreshSignal: Int = 0,
         notificationWorkoutID: String? = nil,
         notificationRouteSignal: Int = 0,
         notificationPersonalRecordsSignal: Int = 0
     ) {
-        _viewModel = State(initialValue: ActivityViewModel(sharedHealthDataService: sharedHealthDataService))
+        _viewModel = State(initialValue: ActivityViewModel(sharedHealthDataService: sharedHealthDataService, scoreRefreshService: scoreRefreshService))
         self.scrollToTopSignal = scrollToTopSignal
         self.refreshSignal = refreshSignal
         self.notificationWorkoutID = notificationWorkoutID
@@ -172,7 +173,8 @@ struct ActivityView: View {
                         NavigationLink(value: ActivityDetailDestination.trainingReadiness) {
                             TrainingReadinessHeroCard(
                                 readiness: viewModel.trainingReadiness,
-                                isCalibrating: viewModel.trainingReadiness?.isCalibrating ?? true
+                                isCalibrating: viewModel.trainingReadiness?.isCalibrating ?? true,
+                                hourlySparkline: viewModel.readinessSparkline.points.isEmpty ? nil : viewModel.readinessSparkline
                             )
                         }
                         .reportTabHeroFrame()

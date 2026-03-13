@@ -82,6 +82,7 @@ struct NotificationPresentationPaths {
 struct ContentView: View {
     private let sharedHealthDataService: SharedHealthDataService?
     private let refreshCoordinator: AppRefreshCoordinating?
+    private let scoreRefreshService: ScoreRefreshService?
     private let launchExperienceReady: Bool
     private let canLoadHealthKitData: Bool
     @Environment(\.scenePhase) private var scenePhase
@@ -106,11 +107,13 @@ struct ContentView: View {
     init(
         sharedHealthDataService: SharedHealthDataService? = nil,
         refreshCoordinator: AppRefreshCoordinating? = nil,
+        scoreRefreshService: ScoreRefreshService? = nil,
         launchExperienceReady: Bool = true,
         canLoadHealthKitData: Bool = true
     ) {
         self.sharedHealthDataService = sharedHealthDataService
         self.refreshCoordinator = refreshCoordinator
+        self.scoreRefreshService = scoreRefreshService
         self.launchExperienceReady = launchExperienceReady
         self.canLoadHealthKitData = canLoadHealthKitData
         _selectedSection = State(initialValue: Self.initialSectionForUITests())
@@ -122,6 +125,7 @@ struct ContentView: View {
                 NavigationStack(path: $todayNavPath) {
                     DashboardView(
                         sharedHealthDataService: sharedHealthDataService,
+                        scoreRefreshService: scoreRefreshService,
                         scrollToTopSignal: todayScrollToTopSignal,
                         refreshSignal: refreshSignal,
                         notificationHubSignal: notificationHubSignal,
@@ -142,6 +146,7 @@ struct ContentView: View {
                 NavigationStack(path: $trainNavPath) {
                     ActivityView(
                         sharedHealthDataService: sharedHealthDataService,
+                        scoreRefreshService: scoreRefreshService,
                         scrollToTopSignal: activityScrollToTopSignal,
                         refreshSignal: refreshSignal,
                         notificationWorkoutID: notificationOpenWorkoutID,
@@ -161,6 +166,7 @@ struct ContentView: View {
                 NavigationStack(path: $wellnessNavPath) {
                     WellnessView(
                         sharedHealthDataService: sharedHealthDataService,
+                        scoreRefreshService: scoreRefreshService,
                         scrollToTopSignal: wellnessScrollToTopSignal,
                         refreshSignal: refreshSignal
                     )
