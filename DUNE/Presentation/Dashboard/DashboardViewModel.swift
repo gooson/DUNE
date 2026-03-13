@@ -22,6 +22,7 @@ final class DashboardViewModel {
     var pinnedCategories: [HealthMetric.Category]
     var baselineDeltasByMetricID: [String: MetricBaselineDelta] = [:]
     private(set) var sleepDeficitAnalysis: SleepDeficitAnalysis?
+    private var hasLoadedOnce = false
 
     // Weather (Correction #8/#52: cached, not computed — accessed in SwiftUI body)
     private(set) var weatherSnapshot: WeatherSnapshot?
@@ -168,8 +169,7 @@ final class DashboardViewModel {
 
         // Optimistic update: only reset state on first load (skeleton display).
         // On reload, keep existing data visible while fetching new data.
-        let isFirstLoad = sortedMetrics.isEmpty && conditionScore == nil
-        if isFirstLoad {
+        if !hasLoadedOnce {
             conditionScore = nil
             baselineStatus = nil
             recentScores = []
@@ -240,6 +240,7 @@ final class DashboardViewModel {
         coachingMessage = focusInsight?.message ?? buildCoachingMessage()
         enhanceCoachingMessageIfAvailable()
         heroBaselineDetails = buildHeroBaselineDetails()
+        hasLoadedOnce = true
         lastUpdated = Date()
         WidgetDataWriter.writeConditionScore(conditionScore)
 
