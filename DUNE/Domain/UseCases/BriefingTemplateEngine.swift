@@ -114,7 +114,7 @@ enum BriefingTemplateEngine {
 
         // Sleep debt advisory
         if let debtHours = data.sleepDebtHours, debtHours > 0.5 {
-            let rounded = String(format: "%.1f", debtHours)
+            let rounded = debtHours.formatted(.number.precision(.fractionLength(1)))
             parts.append(String(localized: "Sleep debt: \(rounded)h — try sleeping earlier tonight."))
         }
 
