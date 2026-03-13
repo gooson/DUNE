@@ -309,6 +309,7 @@ struct DashboardView: View {
         var h = Hasher()
         h.combine(viewModel.sortedMetrics.count)
         h.combine(viewModel.conditionScore != nil)
+        h.combine(viewModel.baselineStatus != nil)
         h.combine(viewModel.weatherSnapshot != nil)
         h.combine(viewModel.errorMessage != nil)
         h.combine(viewModel.insightCards.count)
