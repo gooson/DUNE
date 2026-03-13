@@ -69,9 +69,11 @@ final class ScoreRefreshService {
         let clampedRHR = rhrValue.flatMap { $0.isFinite && $0 >= 20 && $0 <= 300 ? $0 : nil }
         let clampedSleep = sleepScore.flatMap { $0.isFinite && $0 >= 0 && $0 <= 100 ? $0 : nil }
 
-        // Upsert: check for existing snapshot at this hour
+        // Upsert: range predicate spanning the full hour (DST/rounding safe)
+        let calendar = Calendar.current
+        let hourEnd = calendar.date(byAdding: .hour, value: 1, to: hourDate) ?? hourDate
         var descriptor = FetchDescriptor<HourlyScoreSnapshot>(
-            predicate: #Predicate { $0.date == hourDate }
+            predicate: #Predicate { $0.date >= hourDate && $0.date < hourEnd }
         )
         descriptor.fetchLimit = 1
 
@@ -131,7 +133,12 @@ final class ScoreRefreshService {
         )
         descriptor.fetchLimit = 24
 
-        guard let snapshots = try? context.fetch(descriptor), !snapshots.isEmpty else { return }
+        guard let snapshots = try? context.fetch(descriptor), !snapshots.isEmpty else {
+            conditionSparkline = .empty
+            wellnessSparkline = .empty
+            readinessSparkline = .empty
+            return
+        }
 
         conditionSparkline = buildSparkline(from: snapshots, keyPath: \.conditionScore)
         wellnessSparkline = buildSparkline(from: snapshots, keyPath: \.wellnessScore)

@@ -51,10 +51,11 @@ struct ScoreDeltaBadge: View {
     }
 
     private var accessibilityText: String {
+        let magnitude = Int(abs(delta))
         switch direction {
-        case .up: "Up \(Int(abs(delta))) points"
-        case .down: "Down \(Int(abs(delta))) points"
-        case .stable: "Stable"
+        case .up: return String(localized: "Up \(magnitude) points")
+        case .down: return String(localized: "Down \(magnitude) points")
+        case .stable: return String(localized: "Stable")
         }
     }
 }
