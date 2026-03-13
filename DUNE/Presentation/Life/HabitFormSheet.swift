@@ -10,6 +10,7 @@ struct HabitFormSheet: View {
         NavigationStack {
             Form {
                 nameSection
+                iconSection
                 typeSection
                 goalSection
                 frequencySection
@@ -67,6 +68,10 @@ struct HabitFormSheet: View {
             .pickerStyle(.segmented)
             .accessibilityIdentifier("habit-form-type")
         }
+    }
+
+    private var iconSection: some View {
+        HabitIconPicker(selected: $viewModel.selectedIconCategory)
     }
 
     private var goalSection: some View {
