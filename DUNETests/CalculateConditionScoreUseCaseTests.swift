@@ -21,6 +21,27 @@ struct CalculateConditionScoreUseCaseTests {
         }
     }
 
+    private func makeTimedHRVSamples(_ entries: [(dayOffset: Int, hour: Int, value: Double)]) -> [HRVSample] {
+        let today = calendar.startOfDay(for: Date())
+        return entries.compactMap { entry in
+            guard let day = calendar.date(byAdding: .day, value: -entry.dayOffset, to: today),
+                  let date = calendar.date(byAdding: .hour, value: entry.hour, to: day) else {
+                return nil
+            }
+            return HRVSample(value: entry.value, date: date)
+        }
+    }
+
+    private func makeTimedRHRDailyAverages(_ entries: [(dayOffset: Int, value: Double)]) -> [CalculateConditionScoreUseCase.Input.RHRDailyAverage] {
+        let today = calendar.startOfDay(for: Date())
+        return entries.compactMap { entry in
+            guard let date = calendar.date(byAdding: .day, value: -entry.dayOffset, to: today) else {
+                return nil
+            }
+            return .init(date: date, value: entry.value)
+        }
+    }
+
     private func dateAt(hour: Int) -> Date {
         let now = Date()
         let dayStart = calendar.startOfDay(for: now)
@@ -208,5 +229,83 @@ struct CalculateConditionScoreUseCaseTests {
         #expect((morning.score?.score ?? 0) > (baseline.score?.score ?? 0))
         #expect((evening.score?.score ?? 0) < (baseline.score?.score ?? 0))
         #expect(morning.score?.date == morningInput.evaluationDate)
+    }
+
+    @Test("Intraday score expands to a 6h window when the recent 3h window is too sparse")
+    func intradayWindowExpansion() {
+        let hrvSamples = makeTimedHRVSamples([
+            (dayOffset: 0, hour: 0, value: 50),
+            (dayOffset: 0, hour: 1, value: 50),
+            (dayOffset: 0, hour: 4, value: 80),
+            (dayOffset: 1, hour: 12, value: 50),
+            (dayOffset: 2, hour: 12, value: 50),
+            (dayOffset: 3, hour: 12, value: 50),
+            (dayOffset: 4, hour: 12, value: 50),
+            (dayOffset: 5, hour: 12, value: 50),
+            (dayOffset: 6, hour: 12, value: 50)
+        ])
+        let evaluationDate = dateAt(hour: 4)
+
+        let output = sut.executeIntraday(input: .init(
+            hrvSamples: hrvSamples,
+            rhrDailyAverages: makeTimedRHRDailyAverages([
+                (dayOffset: 0, value: 60),
+                (dayOffset: 1, value: 60),
+                (dayOffset: 2, value: 60),
+                (dayOffset: 3, value: 60),
+                (dayOffset: 4, value: 60),
+                (dayOffset: 5, value: 60),
+                (dayOffset: 6, value: 60)
+            ]),
+            evaluationDate: evaluationDate
+        ))
+
+        #expect(output.score != nil)
+        #expect(abs((output.score?.detail?.todayHRV ?? 0) - 60) < 0.001)
+    }
+
+    @Test("Intraday score is less sensitive to stale early spikes than cumulative daily scoring")
+    func intradaySmootherThanCumulative() {
+        let hrvSamples = makeTimedHRVSamples([
+            (dayOffset: 0, hour: 0, value: 110),
+            (dayOffset: 0, hour: 1, value: 50),
+            (dayOffset: 0, hour: 2, value: 50),
+            (dayOffset: 0, hour: 3, value: 50),
+            (dayOffset: 0, hour: 4, value: 50),
+            (dayOffset: 1, hour: 12, value: 50),
+            (dayOffset: 2, hour: 12, value: 50),
+            (dayOffset: 3, hour: 12, value: 50),
+            (dayOffset: 4, hour: 12, value: 50),
+            (dayOffset: 5, hour: 12, value: 50),
+            (dayOffset: 6, hour: 12, value: 50)
+        ])
+        let evaluationDate = dateAt(hour: 4)
+        let rhr = makeTimedRHRDailyAverages([
+            (dayOffset: 0, value: 60),
+            (dayOffset: 1, value: 60),
+            (dayOffset: 2, value: 60),
+            (dayOffset: 3, value: 60),
+            (dayOffset: 4, value: 60),
+            (dayOffset: 5, value: 60),
+            (dayOffset: 6, value: 60)
+        ])
+
+        let cumulative = sut.execute(input: .init(
+            hrvSamples: hrvSamples,
+            rhrDailyAverages: rhr,
+            todayRHR: nil,
+            yesterdayRHR: nil,
+            evaluationDate: evaluationDate
+        ))
+        let intraday = sut.executeIntraday(input: .init(
+            hrvSamples: hrvSamples,
+            rhrDailyAverages: rhr,
+            evaluationDate: evaluationDate
+        ))
+
+        #expect(cumulative.score != nil)
+        #expect(intraday.score != nil)
+        #expect((intraday.score?.score ?? 0) < (cumulative.score?.score ?? 0))
+        #expect(abs((intraday.score?.detail?.todayHRV ?? 0) - 50) < 0.001)
     }
 }
