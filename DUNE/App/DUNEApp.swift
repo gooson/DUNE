@@ -178,7 +178,6 @@ struct DUNEApp: App {
                 AppLogger.data.error("Bare in-memory ModelContainer failed: \(error). Creating minimal container.")
                 // swiftlint:disable:next force_try
                 return try! ModelContainer(for: Schema([]), configurations: ModelConfiguration(isStoredInMemoryOnly: true))
-                // swiftlint:enable:next force_try
             }
         }
     }
