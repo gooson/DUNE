@@ -653,6 +653,7 @@
 		ABBF40792A71DFC626A090D1 /* MetricDetailViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A06885791FBC1C56C1C866F0 /* MetricDetailViewModelTests.swift */; };
 		AC0E247E404351B90E1D74CA /* ActivityMuscleMapRegressionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F161CCB00727D7B5C88AA2F9 /* ActivityMuscleMapRegressionTests.swift */; };
 		AC3D915DCD8449A0E697A6D4 /* InjuryStatisticsServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786AB9705C57E19AFB805771 /* InjuryStatisticsServiceTests.swift */; };
+		AC6AB19CECEC42E3C26CBC01 /* NotificationResponsePayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BAFF8D55E8AD024705DF53 /* NotificationResponsePayload.swift */; };
 		AC8B3CE27D838CC28CC3711F /* ExerciseRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CAA6A5B259A3FF1E4817D0E /* ExerciseRecord.swift */; };
 		AD0A342DC051692DF8B2825D /* muscle_body.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 51E9D712E03C69ECD75A5653 /* muscle_body.usdz */; };
 		AD58777997943FE9BBC83C68 /* ActivityPersonalRecordKindTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 136766B3E6D4531B8584D285 /* ActivityPersonalRecordKindTests.swift */; };
@@ -746,6 +747,7 @@
 		C546B546A664067DE86C9B3A /* BedtimeReminderLeadTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3963CA832623AE166E210458 /* BedtimeReminderLeadTime.swift */; };
 		C56B4C87136BB78ED3E752F3 /* ImmersiveRecoveryAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 521950DB037ABDF33B0CF59D /* ImmersiveRecoveryAnalyzer.swift */; };
 		C5ACA6DE702F654AB70474EC /* TimePeriodTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594FC93D0C20E4F8A7F02483 /* TimePeriodTests.swift */; };
+		C6771E21ABE1369B5B8F1D00 /* NotificationPresentationPlannerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E55A54E843D86747C54EB2 /* NotificationPresentationPlannerTests.swift */; };
 		C68BE44E628275335DD9AE50 /* ExerciseFrequencySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DAA47ED62F5CA7069691922 /* ExerciseFrequencySection.swift */; };
 		C69FDEA13D79F1DDBD4DF80D /* WatchWorkoutWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BDC6679FA148118FD021EA3 /* WatchWorkoutWriter.swift */; };
 		C6D9DEC9735B7E7FA57D3D97 /* ActivityPersonalRecordService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D614DE8E764C244EA79E70 /* ActivityPersonalRecordService.swift */; };
@@ -1079,6 +1081,7 @@
 
 /* Begin PBXFileReference section */
 		007E8BC8965A9788AD76932D /* StreakPeriod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakPeriod.swift; sourceTree = "<group>"; };
+		00BAFF8D55E8AD024705DF53 /* NotificationResponsePayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationResponsePayload.swift; sourceTree = "<group>"; };
 		012362FCF668D48F60793E01 /* WeatherDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailView.swift; sourceTree = "<group>"; };
 		0185066E2B99B6620E4EEF06 /* ConditionHeroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionHeroView.swift; sourceTree = "<group>"; };
 		01BA218FDE5877760D7B6204 /* Speech.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Speech.framework; path = System/Library/Frameworks/Speech.framework; sourceTree = SDKROOT; };
@@ -1841,6 +1844,7 @@
 		F80B575955C93586B3A2BEE7 /* WellnessViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessViewModel.swift; sourceTree = "<group>"; };
 		F8A8642477EE26BD3B071B1B /* QuickStartSectionOrderingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickStartSectionOrderingService.swift; sourceTree = "<group>"; };
 		F9C24CA27FDCBDE0B4B070A8 /* SubScoreTrendChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubScoreTrendChartView.swift; sourceTree = "<group>"; };
+		F9E55A54E843D86747C54EB2 /* NotificationPresentationPlannerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPresentationPlannerTests.swift; sourceTree = "<group>"; };
 		F9F050A861D1D97B772D48E5 /* StrengthPersonalRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrengthPersonalRecord.swift; sourceTree = "<group>"; };
 		FA91D3D9CA05777208023A0B /* EvaluateHealthInsightUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvaluateHealthInsightUseCaseTests.swift; sourceTree = "<group>"; };
 		FAA13B622CF21217026F0757 /* HeroScoreCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeroScoreCard.swift; sourceTree = "<group>"; };
@@ -2214,6 +2218,7 @@
 				0507EEE5B37BA2413ACEBD37 /* InsightCardDismissStore.swift */,
 				24755D4B553B753207FC5061 /* NotificationInboxManager.swift */,
 				8272A895980A27A3A1634EC4 /* NotificationInboxStore.swift */,
+				00BAFF8D55E8AD024705DF53 /* NotificationResponsePayload.swift */,
 				9909F5A1A22FA3CE72C4DD39 /* NotificationSettingsStore.swift */,
 				55CF45307941E934039DD334 /* NotificationThrottleStore.swift */,
 				9FF676D068C0050F96E9EAA7 /* PersonalRecordStore.swift */,
@@ -3447,6 +3452,7 @@
 				5C3C9C63EAF8BFE9F42FBB8E /* NotificationExerciseDataTests.swift */,
 				BE4A8C59A69BFEABB55B4DF9 /* NotificationInboxManagerTests.swift */,
 				2912E51E77899BB08DA96C73 /* NotificationInboxStoreTests.swift */,
+				F9E55A54E843D86747C54EB2 /* NotificationPresentationPlannerTests.swift */,
 				A5C8A5B143FE0F1D9E6ABF91 /* NotificationSettingsStoreTests.swift */,
 				106923875360920910260689 /* NotificationThrottleStoreTests.swift */,
 				9B2289ED768B51C92A48A699 /* NumberFormattingTests.swift */,
@@ -4163,6 +4169,7 @@
 				9D4AA6D7FC54502B53A6E38C /* NotificationInboxManager.swift in Sources */,
 				0CF3E17D3E3921D33007ECA7 /* NotificationInboxStore.swift in Sources */,
 				14260DDB0F9F1E0C89610CB1 /* NotificationPersonalRecordsPushView.swift in Sources */,
+				AC6AB19CECEC42E3C26CBC01 /* NotificationResponsePayload.swift in Sources */,
 				A522C329214D146C448BA29D /* NotificationService.swift in Sources */,
 				042C2EFB2D0C0FB1FB90D7A6 /* NotificationServiceImpl.swift in Sources */,
 				5D38430586B656275B363FF1 /* NotificationSettingsSection.swift in Sources */,
@@ -4760,6 +4767,7 @@
 				9C4C4A637C80949982F6EA70 /* NotificationExerciseDataTests.swift in Sources */,
 				8A73BCDE8E0C38204C9A7F0C /* NotificationInboxManagerTests.swift in Sources */,
 				E9F05F3810B9B38275FA57CA /* NotificationInboxStoreTests.swift in Sources */,
+				C6771E21ABE1369B5B8F1D00 /* NotificationPresentationPlannerTests.swift in Sources */,
 				514B711541E48A63CB40FE87 /* NotificationSettingsStoreTests.swift in Sources */,
 				9658D08663E831B98DD4756A /* NotificationThrottleStoreTests.swift in Sources */,
 				4A8EBB81B8A390BA38030F79 /* NumberFormattingTests.swift in Sources */,

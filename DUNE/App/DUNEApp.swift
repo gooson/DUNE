@@ -160,12 +160,26 @@ struct DUNEApp: App {
     }
 
     private static func makeInMemoryFallbackContainer() -> ModelContainer {
+        AppLogger.data.error("Falling back to in-memory ModelContainer due to persistent store failure")
         let fallbackConfiguration = ModelConfiguration(isStoredInMemoryOnly: true)
         do {
-            AppLogger.data.error("Falling back to in-memory ModelContainer due to persistent store failure")
             return try makeModelContainer(configuration: fallbackConfiguration)
         } catch {
-            fatalError("Failed to create fallback in-memory ModelContainer: \(error)")
+            AppLogger.data.error("In-memory ModelContainer with migration plan also failed: \(error). Creating bare container.")
+            // Without migration plan — avoids migration-related failures that can
+            // prevent even an in-memory container from initializing.
+            do {
+                return try ModelContainer(
+                    for: AppMigrationPlan.currentSchema,
+                    configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+                )
+            } catch {
+                // Absolute last resort — should never happen but prevents fatalError crash.
+                AppLogger.data.error("Bare in-memory ModelContainer failed: \(error). Creating minimal container.")
+                // swiftlint:disable:next force_try
+                return try! ModelContainer(for: Schema([]), configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+                // swiftlint:enable:next force_try
+            }
         }
     }
 
