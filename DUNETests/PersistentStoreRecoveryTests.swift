@@ -35,6 +35,13 @@ struct PersistentStoreRecoveryTests {
         #expect(PersistentStoreRecovery.shouldDeleteStore(after: topLevel))
     }
 
+    @Test("Deletes store for wrapped SwiftData loadIssueModelContainer errors")
+    func deletesStoreForWrappedSwiftDataLoadIssue() {
+        let error = WrappedSwiftDataLoadIssueError()
+
+        #expect(PersistentStoreRecovery.shouldDeleteStore(after: error))
+    }
+
     @Test("Keeps store for non-migration startup failures")
     func keepsStoreForNonMigrationFailures() {
         let error = NSError(
@@ -60,4 +67,21 @@ struct PersistentStoreRecoveryTests {
 
         #expect(!PersistentStoreRecovery.shouldDeleteStore(after: error))
     }
+
+    @Test("Keeps store for other wrapped SwiftData errors")
+    func keepsStoreForOtherWrappedSwiftDataErrors() {
+        let error = WrappedSwiftDataSaveIssueError()
+
+        #expect(!PersistentStoreRecovery.shouldDeleteStore(after: error))
+    }
+}
+
+private struct WrappedSwiftDataLoadIssueError: Error, CustomStringConvertible, CustomDebugStringConvertible {
+    let description = "SwiftData.SwiftDataError(_error: SwiftData.SwiftDataError._Error.loadIssueModelContainer, _explanation: nil)"
+    let debugDescription = "SwiftData.SwiftDataError(_error: SwiftData.SwiftDataError._Error.loadIssueModelContainer, _explanation: nil)"
+}
+
+private struct WrappedSwiftDataSaveIssueError: Error, CustomStringConvertible, CustomDebugStringConvertible {
+    let description = "SwiftData.SwiftDataError(_error: SwiftData.SwiftDataError._Error.saveIssueModelContext, _explanation: nil)"
+    let debugDescription = "SwiftData.SwiftDataError(_error: SwiftData.SwiftDataError._Error.saveIssueModelContext, _explanation: nil)"
 }

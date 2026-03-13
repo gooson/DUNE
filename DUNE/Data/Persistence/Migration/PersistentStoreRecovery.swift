@@ -25,8 +25,21 @@ enum PersistentStoreRecovery {
         "missing mapping model"
     ]
 
+    private static let wrappedSwiftDataMigrationSignatures = [
+        "swiftdata.swiftdataerror",
+        "loadissuemodelcontainer"
+    ]
+
     static func shouldDeleteStore(after error: Error) -> Bool {
-        expandedNSErrorChain(from: error).contains(where: isRecoverableMigrationFailure)
+        let nsErrorChain = expandedNSErrorChain(from: error)
+        if nsErrorChain.contains(where: isRecoverableMigrationFailure) {
+            return true
+        }
+
+        // SwiftData can sometimes swallow the underlying Core Data migration NSError
+        // and only surface a top-level loadIssueModelContainer wrapper.
+        let reflectedError = normalizedErrorText(for: error)
+        return wrappedSwiftDataMigrationSignatures.allSatisfy(reflectedError.contains)
     }
 
     private static func isRecoverableMigrationFailure(_ error: NSError) -> Bool {
@@ -38,13 +51,16 @@ enum PersistentStoreRecovery {
         return migrationMessageSignatures.contains(where: message.contains)
     }
 
-    private static func normalizedErrorText(for error: NSError) -> String {
+    private static func normalizedErrorText(for error: Error) -> String {
+        let nsError = error as NSError
         let components = [
-            error.domain,
-            error.localizedDescription,
-            error.localizedFailureReason,
-            error.localizedRecoverySuggestion,
-            error.userInfo[NSDebugDescriptionErrorKey] as? String,
+            String(describing: error),
+            String(reflecting: error),
+            nsError.domain,
+            nsError.localizedDescription,
+            nsError.localizedFailureReason,
+            nsError.localizedRecoverySuggestion,
+            nsError.userInfo[NSDebugDescriptionErrorKey] as? String,
         ]
 
         return components

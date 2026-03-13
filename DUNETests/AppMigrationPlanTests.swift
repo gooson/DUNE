@@ -7,7 +7,7 @@ import Testing
 struct AppMigrationPlanTests {
     @Test("Current schema stays aligned with latest migration version")
     func currentSchemaMatchesLatestVersionedSchema() {
-        let latestModelNames = Set(AppSchemaV14.models.map { String(describing: $0) })
+        let latestModelNames = Set(AppSchemaV15.models.map { String(describing: $0) })
         let currentModelNames = Set(AppMigrationPlan.currentSchema.entities.map(\.name))
 
         #expect(currentModelNames == latestModelNames)
@@ -16,38 +16,51 @@ struct AppMigrationPlanTests {
         #expect(currentModelNames.contains("HabitLog"))
         #expect(currentModelNames.contains("ExerciseDefaultRecord"))
         #expect(currentModelNames.contains("HealthSnapshotMirrorRecord"))
+        #expect(currentModelNames.contains("HourlyScoreSnapshot"))
     }
 
-    @Test("V12 and V13 freeze ExerciseDefaultRecord snapshots until V14 adopts the live model")
+    @Test("V12 and V13 freeze ExerciseDefaultRecord snapshots while V14 and V15 adopt the live model")
     func exerciseDefaultSnapshotsStayDistinctFromLiveModel() {
         let v12ModelIDs = Set(AppSchemaV12.models.map(ObjectIdentifier.init))
         let v13ModelIDs = Set(AppSchemaV13.models.map(ObjectIdentifier.init))
         let v14ModelIDs = Set(AppSchemaV14.models.map(ObjectIdentifier.init))
+        let v15ModelIDs = Set(AppSchemaV15.models.map(ObjectIdentifier.init))
 
         #expect(v12ModelIDs.contains(ObjectIdentifier(AppSchemaV12.ExerciseDefaultRecord.self)))
         #expect(!v12ModelIDs.contains(ObjectIdentifier(ExerciseDefaultRecord.self)))
         #expect(v13ModelIDs.contains(ObjectIdentifier(AppSchemaV13.ExerciseDefaultRecord.self)))
         #expect(!v13ModelIDs.contains(ObjectIdentifier(ExerciseDefaultRecord.self)))
         #expect(v14ModelIDs.contains(ObjectIdentifier(ExerciseDefaultRecord.self)))
+        #expect(v15ModelIDs.contains(ObjectIdentifier(ExerciseDefaultRecord.self)))
     }
 
-    @Test("V12 and V13 freeze ExerciseRecord and WorkoutSet together before V14 adopts live models")
+    @Test("V12 and V13 freeze ExerciseRecord and WorkoutSet together before V14 and V15 adopt live models")
     func relationshipSnapshotsStayDistinctFromLiveModels() {
         let v12ModelIDs = Set(AppSchemaV12.models.map(ObjectIdentifier.init))
         let v13ModelIDs = Set(AppSchemaV13.models.map(ObjectIdentifier.init))
         let v14ModelIDs = Set(AppSchemaV14.models.map(ObjectIdentifier.init))
+        let v15ModelIDs = Set(AppSchemaV15.models.map(ObjectIdentifier.init))
 
         #expect(v12ModelIDs.contains(ObjectIdentifier(AppSchemaV12.V12ExerciseRecord.self)))
         #expect(v13ModelIDs.contains(ObjectIdentifier(AppSchemaV13.V13ExerciseRecord.self)))
         #expect(!v12ModelIDs.contains(ObjectIdentifier(ExerciseRecord.self)))
         #expect(!v13ModelIDs.contains(ObjectIdentifier(ExerciseRecord.self)))
         #expect(v14ModelIDs.contains(ObjectIdentifier(ExerciseRecord.self)))
+        #expect(v15ModelIDs.contains(ObjectIdentifier(ExerciseRecord.self)))
 
         #expect(v12ModelIDs.contains(ObjectIdentifier(AppSchemaV12.V12WorkoutSet.self)))
         #expect(v13ModelIDs.contains(ObjectIdentifier(AppSchemaV13.V13WorkoutSet.self)))
         #expect(!v12ModelIDs.contains(ObjectIdentifier(WorkoutSet.self)))
         #expect(!v13ModelIDs.contains(ObjectIdentifier(WorkoutSet.self)))
         #expect(v14ModelIDs.contains(ObjectIdentifier(WorkoutSet.self)))
+        #expect(v15ModelIDs.contains(ObjectIdentifier(WorkoutSet.self)))
+    }
+
+    @Test("V15 adds HourlyScoreSnapshot to the live current schema")
+    func hourlyScoreSnapshotBelongsToLatestSchema() {
+        let v15ModelIDs = Set(AppSchemaV15.models.map(ObjectIdentifier.init))
+
+        #expect(v15ModelIDs.contains(ObjectIdentifier(HourlyScoreSnapshot.self)))
     }
 
     @Test("Migration plan builds an in-memory model container without duplicate checksums")
@@ -83,6 +96,15 @@ struct AppMigrationPlanTests {
         defer { removeStoreFiles(at: storeURL) }
 
         try createStore(at: storeURL, schema: Schema(AppSchemaV13.models))
+        _ = try reopenStoreWithMigrationPlan(at: storeURL)
+    }
+
+    @Test("Migration plan reopens a V14 on-disk store")
+    func migrationPlanReopensV14Store() throws {
+        let storeURL = makeTemporaryStoreURL()
+        defer { removeStoreFiles(at: storeURL) }
+
+        try createStore(at: storeURL, schema: Schema(AppSchemaV14.models))
         _ = try reopenStoreWithMigrationPlan(at: storeURL)
     }
 
