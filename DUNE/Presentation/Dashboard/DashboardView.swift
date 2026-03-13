@@ -100,30 +100,37 @@ struct DashboardView: View {
                             .reportTabHeroFrame()
                             .buttonStyle(.plain)
                             .accessibilityIdentifier("dashboard-hero-condition")
+                            .transition(Self.sectionTransition)
                         } else if let status = viewModel.baselineStatus, !status.isReady {
                             BaselineProgressView(status: status)
                                 .reportTabHeroFrame()
+                                .transition(Self.sectionTransition)
                         }
 
                         // Weather + coaching (merged when coaching is weather-category)
-                        if let weather = viewModel.weatherSnapshot {
-                            NavigationLink(value: weather) {
-                                WeatherCard(snapshot: weather, insightInfo: viewModel.weatherCardInsight)
-                            }
-                            .buttonStyle(.plain)
-                            .accessibilityIdentifier("dashboard-weather-card")
-                        } else {
-                            WeatherCardPlaceholder {
-                                Task { await viewModel.requestLocationPermission() }
+                        Group {
+                            if let weather = viewModel.weatherSnapshot {
+                                NavigationLink(value: weather) {
+                                    WeatherCard(snapshot: weather, insightInfo: viewModel.weatherCardInsight)
+                                }
+                                .buttonStyle(.plain)
+                                .accessibilityIdentifier("dashboard-weather-card")
+                            } else {
+                                WeatherCardPlaceholder {
+                                    Task { await viewModel.requestLocationPermission() }
+                                }
                             }
                         }
+                        .transition(Self.sectionTransition)
 
                         // Coaching (standalone when not merged into weather card)
                         if let insight = viewModel.standaloneCoachingInsight {
                             TodayCoachingCard(insight: insight)
+                                .transition(Self.sectionTransition)
                         } else if viewModel.focusInsight == nil,
                                   let coachingMessage = viewModel.coachingMessage {
                             TodayCoachingCard(message: coachingMessage)
+                                .transition(Self.sectionTransition)
                         }
 
                         HealthDataQACard(isAvailable: HealthDataQAService.isAvailable) {
@@ -133,6 +140,7 @@ struct DashboardView: View {
                         // Insight Cards
                         if !viewModel.insightCards.isEmpty {
                             insightCardsSection
+                                .transition(Self.sectionTransition)
                         }
 
                         // Sleep deficit badge
@@ -141,6 +149,7 @@ struct DashboardView: View {
                         // Pinned Metrics
                         if !viewModel.pinnedCards.isEmpty {
                             pinnedSection
+                                .transition(Self.sectionTransition)
                         }
 
                         // Last updated + error banner
@@ -149,10 +158,12 @@ struct DashboardView: View {
                                 .font(.caption2)
                                 .foregroundStyle(.tertiary)
                                 .frame(maxWidth: .infinity, alignment: .trailing)
+                                .transition(.opacity)
                         }
 
                         if let error = viewModel.errorMessage {
                             errorBanner(error)
+                                .transition(Self.errorBannerTransition)
                         }
 
                         // Condition (HRV, RHR)
@@ -164,6 +175,7 @@ struct DashboardView: View {
                                 accessibilityIdentifier: "dashboard-section-condition",
                                 cards: viewModel.conditionCards
                             )
+                            .transition(Self.sectionTransition)
                         }
 
                         // Activity (Steps, Exercise)
@@ -175,6 +187,7 @@ struct DashboardView: View {
                                 accessibilityIdentifier: "dashboard-section-activity",
                                 cards: viewModel.activityCards
                             )
+                            .transition(Self.sectionTransition)
                         }
 
                         // Body (Weight, BMI, Sleep)
@@ -186,11 +199,13 @@ struct DashboardView: View {
                                 accessibilityIdentifier: "dashboard-section-body",
                                 cards: viewModel.bodyCards
                             )
+                            .transition(Self.sectionTransition)
                         }
 
                     }
                 }
                 .padding(sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.lg)
+                .animation(reduceMotion ? .none : DS.Animation.standard, value: sectionVisibilityHash)
                 .coordinateSpace(name: TabHeroStartLine.coordinateSpace)
             }
             .onChange(of: scrollToTopSignal) { _, _ in
@@ -281,6 +296,26 @@ struct DashboardView: View {
         }
     }
 
+    // MARK: - Transitions
+
+    private static let sectionTransition: AnyTransition =
+        .opacity.combined(with: .scale(scale: 0.95, anchor: .top))
+
+    private static let errorBannerTransition: AnyTransition =
+        .opacity.combined(with: .move(edge: .top))
+
+    /// O(1) hash covering all section-visibility drivers.
+    private var sectionVisibilityHash: Int {
+        var h = Hasher()
+        h.combine(viewModel.sortedMetrics.count)
+        h.combine(viewModel.conditionScore != nil)
+        h.combine(viewModel.weatherSnapshot != nil)
+        h.combine(viewModel.errorMessage != nil)
+        h.combine(viewModel.insightCards.count)
+        h.combine(viewModel.pinnedCards.count)
+        return h.finalize()
+    }
+
     // MARK: - Sections
 
     private var pinnedSection: some View {
@@ -337,6 +372,7 @@ struct DashboardView: View {
                 SleepDeficitBadgeView(analysis: deficit)
             }
             .buttonStyle(.plain)
+            .transition(Self.sectionTransition)
         }
     }
 

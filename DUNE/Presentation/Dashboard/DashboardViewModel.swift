@@ -22,6 +22,7 @@ final class DashboardViewModel {
     var pinnedCategories: [HealthMetric.Category]
     var baselineDeltasByMetricID: [String: MetricBaselineDelta] = [:]
     private(set) var sleepDeficitAnalysis: SleepDeficitAnalysis?
+    private var hasLoadedOnce = false
 
     // Weather (Correction #8/#52: cached, not computed — accessed in SwiftUI body)
     private(set) var weatherSnapshot: WeatherSnapshot?
@@ -165,17 +166,22 @@ final class DashboardViewModel {
         let canUseSharedSnapshot = !healthKitAvailable || canLoadHealthKitData
         isMirroredReadOnlyMode = !healthKitAvailable
         errorMessage = nil
-        conditionScore = nil
-        baselineStatus = nil
-        recentScores = []
-        coachingMessage = nil
-        focusInsight = nil
-        insightCards = []
-        heroBaselineDetails = []
-        baselineDeltasByMetricID = [:]
-        activeDaysThisWeek = 0
-        weatherSnapshot = nil
-        weatherAtmosphere = .default
+
+        // Optimistic update: only reset state on first load (skeleton display).
+        // On reload, keep existing data visible while fetching new data.
+        if !hasLoadedOnce {
+            conditionScore = nil
+            baselineStatus = nil
+            recentScores = []
+            coachingMessage = nil
+            focusInsight = nil
+            insightCards = []
+            heroBaselineDetails = []
+            baselineDeltasByMetricID = [:]
+            activeDaysThisWeek = 0
+            weatherSnapshot = nil
+            weatherAtmosphere = .default
+        }
 
         if healthKitAvailable, !canLoadHealthKitData, !Self.shouldBypassAuthorizationForTests {
             AppLogger.ui.info("HealthKit authorization is deferred; skip protected dashboard queries until app-level orchestration completes")
@@ -207,9 +213,6 @@ final class DashboardViewModel {
             hrvTask, sleepTask, exerciseTask, stepsTask, weightTask, bmiTask, weatherTask
         )
 
-        weatherSnapshot = weatherResult
-        weatherAtmosphere = weatherResult.map { WeatherAtmosphere.from($0) } ?? .default
-
         var allMetrics: [HealthMetric] = []
         allMetrics.append(contentsOf: hrvResult.metrics)
         if let sleepMetric = sleepResult.metric { allMetrics.append(sleepMetric) }
@@ -230,11 +233,14 @@ final class DashboardViewModel {
             errorMessage = String(localized: "Failed to load health data")
         }
 
+        weatherSnapshot = weatherResult
+        weatherAtmosphere = weatherResult.map { WeatherAtmosphere.from($0) } ?? .default
         sortedMetrics = allMetrics.sorted { $0.changeSignificance > $1.changeSignificance }
         buildCoachingInsights()
         coachingMessage = focusInsight?.message ?? buildCoachingMessage()
         enhanceCoachingMessageIfAvailable()
         heroBaselineDetails = buildHeroBaselineDetails()
+        hasLoadedOnce = true
         lastUpdated = Date()
         WidgetDataWriter.writeConditionScore(conditionScore)
 
