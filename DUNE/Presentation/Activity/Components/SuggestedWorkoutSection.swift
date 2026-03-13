@@ -11,6 +11,7 @@ struct SuggestedWorkoutSection: View {
     let popularExerciseIDs: [String]
     let onStartExercise: (ExerciseDefinition) -> Void
     let onStartRecommendation: (WorkoutTemplateRecommendation) -> Void
+    let onSaveRecommendationAsTemplate: ((WorkoutTemplateRecommendation) -> Void)?
     let onStartTemplate: (WorkoutTemplate) -> Void
     let onOpenAIWorkoutBuilder: () -> Void
     let onContextChanged: (WorkoutRecommendationContext) -> Void
@@ -367,6 +368,21 @@ struct SuggestedWorkoutSection: View {
                             recommendationCard(recommendation)
                         }
                         .buttonStyle(.plain)
+                        .overlay(alignment: .topTrailing) {
+                            if let onSave = onSaveRecommendationAsTemplate {
+                                Button {
+                                    onSave(recommendation)
+                                } label: {
+                                    Image(systemName: "bookmark")
+                                        .font(.caption)
+                                        .foregroundStyle(DS.Color.activity)
+                                        .padding(DS.Spacing.xs)
+                                }
+                                .buttonStyle(.plain)
+                                .accessibilityLabel("Save as Template")
+                                .accessibilityIdentifier("activity-recommendation-save-template")
+                            }
+                        }
                         .accessibilityIdentifier("activity-recommended-routine-card")
                     }
                 }

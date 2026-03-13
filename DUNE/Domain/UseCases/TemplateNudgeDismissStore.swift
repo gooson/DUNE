@@ -8,7 +8,7 @@ struct TemplateNudgeDismissStore: Sendable {
     private static let key = "templateNudgeDismissals"
     private static let dismissDurationSeconds: TimeInterval = 7 * 24 * 60 * 60 // 7 days
 
-    private let defaults: UserDefaults
+    private nonisolated(unsafe) let defaults: UserDefaults
 
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
