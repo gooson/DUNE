@@ -2,8 +2,8 @@ import SwiftUI
 import Testing
 @testable import DUNE
 
-@Suite("NotificationPresentationPlanner")
-struct NotificationPresentationPlannerTests {
+@Suite("NotificationPresentationPlanner standalone")
+struct NotificationPresentationPlannerStandaloneTests {
 
     @Test("sleepDetail route produces openSleepDetailInWellness plan")
     func sleepDetailRoute() {
@@ -17,8 +17,8 @@ struct NotificationPresentationPlannerTests {
     }
 
     @Test("workoutDetail route with valid workoutID produces openWorkoutInActivity plan")
-    func workoutDetailRoute() {
-        let route = NotificationRoute.workoutDetail(workoutID: "w-123")
+    func workoutDetailRoute() throws {
+        let route = try #require(NotificationRoute.workoutDetail(workoutID: "w-123"))
         let plan = NotificationPresentationPlanner.plan(for: route, requestID: 2)
         guard case .openWorkoutInActivity(let workoutID) = plan else {
             Issue.record("Expected openWorkoutInActivity, got \(String(describing: plan))")
@@ -30,8 +30,7 @@ struct NotificationPresentationPlannerTests {
     @Test("workoutDetail route with empty workoutID returns nil")
     func workoutDetailEmptyID() {
         let route = NotificationRoute.workoutDetail(workoutID: "")
-        let plan = NotificationPresentationPlanner.plan(for: route, requestID: 3)
-        #expect(plan == nil)
+        #expect(route == nil)
     }
 
     @Test("notificationHub route produces openNotificationHub plan")
@@ -42,10 +41,10 @@ struct NotificationPresentationPlannerTests {
     }
 
     @Test("activityPersonalRecords route produces push plan with personalRecords destination")
-    func activityPersonalRecordsRoute() {
+    func activityPersonalRecordsRoute() throws {
         let route = NotificationRoute.activityPersonalRecords
-        let plan = NotificationPresentationPlanner.plan(for: route, requestID: 5)
-        let path = NotificationPresentationPlanner.rootPath(for: plan!)
+        let plan = try #require(NotificationPresentationPlanner.plan(for: route, requestID: 5))
+        let path = NotificationPresentationPlanner.rootPath(for: plan)
         #expect(path.count == 1)
         guard case .personalRecords(let requestID) = path.first else {
             Issue.record("Expected personalRecords destination")
@@ -55,8 +54,8 @@ struct NotificationPresentationPlannerTests {
     }
 }
 
-@Suite("NotificationPresentationPaths")
-struct NotificationPresentationPathsTests {
+@Suite("NotificationPresentationPaths standalone")
+struct NotificationPresentationPathsStandaloneTests {
 
     @Test("setPath clears other tabs")
     func setPathClearsOtherTabs() {
@@ -83,6 +82,100 @@ struct NotificationPresentationPathsTests {
         #expect(paths.today.isEmpty)
         #expect(!paths.train.isEmpty)
         #expect(paths.wellness.isEmpty)
+    }
+
+    private func makePath(count: Int) -> NavigationPath {
+        var path = NavigationPath()
+        for i in 0..<count {
+            path.append(NotificationPresentationDestination.personalRecords(requestID: i))
+        }
+        return path
+    }
+}
+
+@Suite("NotificationPresentationState reducer")
+struct NotificationPresentationStateReducerTests {
+
+    @Test("notificationHub route selects Today, clears paths, and increments hub signal")
+    func notificationHubRouteAppliesState() {
+        var state = makeState(selectedSection: .train)
+        state.paths.today = makePath(count: 1)
+        state.paths.train = makePath(count: 2)
+        state.paths.wellness = makePath(count: 1)
+
+        state.apply(NotificationNavigationRequest(itemID: "hub-item", route: .notificationHub))
+
+        #expect(state.selectedSection == .today)
+        #expect(state.paths.today.isEmpty)
+        #expect(state.paths.train.isEmpty)
+        #expect(state.paths.wellness.isEmpty)
+        #expect(state.paths.life.isEmpty)
+        #expect(state.notificationHubSignal == 1)
+        #expect(state.notificationRouteSignal == 0)
+        #expect(state.notificationPresentationRequestID == 1)
+    }
+
+    @Test("workoutDetail route switches to Train and emits route signal")
+    func workoutDetailRouteAppliesState() throws {
+        var state = makeState(selectedSection: .today)
+        state.paths.today = makePath(count: 1)
+
+        let route = try #require(NotificationRoute.workoutDetail(workoutID: "w-123"))
+        state.apply(NotificationNavigationRequest(itemID: "workout-item", route: route))
+
+        #expect(state.selectedSection == .train)
+        #expect(state.notificationOpenWorkoutID == "w-123")
+        #expect(state.paths.today.isEmpty)
+        #expect(state.paths.train.isEmpty)
+        #expect(state.notificationRouteSignal == 1)
+        #expect(state.notificationHubSignal == 0)
+        #expect(state.notificationPresentationRequestID == 1)
+    }
+
+    @Test("sleepDetail route switches to Wellness and pushes sleep detail")
+    func sleepDetailRouteAppliesState() {
+        var state = makeState(selectedSection: .life)
+        state.paths.life = makePath(count: 1)
+
+        state.apply(NotificationNavigationRequest(itemID: "sleep-item", route: .sleepDetail))
+
+        #expect(state.selectedSection == .wellness)
+        #expect(state.paths.today.isEmpty)
+        #expect(state.paths.train.isEmpty)
+        #expect(!state.paths.wellness.isEmpty)
+        #expect(state.paths.life.isEmpty)
+        #expect(state.notificationRouteSignal == 0)
+        #expect(state.notificationHubSignal == 0)
+        #expect(state.notificationPresentationRequestID == 1)
+    }
+
+    @Test("activityPersonalRecords route pushes on the current tab and clears other paths")
+    func activityPersonalRecordsRouteAppliesState() {
+        var state = makeState(selectedSection: .today)
+        state.paths.train = makePath(count: 1)
+        state.paths.life = makePath(count: 1)
+
+        state.apply(NotificationNavigationRequest(itemID: "pr-item", route: .activityPersonalRecords))
+
+        #expect(state.selectedSection == .today)
+        #expect(!state.paths.today.isEmpty)
+        #expect(state.paths.train.isEmpty)
+        #expect(state.paths.wellness.isEmpty)
+        #expect(state.paths.life.isEmpty)
+        #expect(state.notificationRouteSignal == 0)
+        #expect(state.notificationHubSignal == 0)
+        #expect(state.notificationPresentationRequestID == 1)
+    }
+
+    private func makeState(selectedSection: AppSection) -> NotificationPresentationState {
+        NotificationPresentationState(
+            selectedSection: selectedSection,
+            notificationOpenWorkoutID: nil,
+            paths: NotificationPresentationPaths(),
+            notificationPresentationRequestID: 0,
+            notificationRouteSignal: 0,
+            notificationHubSignal: 0
+        )
     }
 
     private func makePath(count: Int) -> NavigationPath {
