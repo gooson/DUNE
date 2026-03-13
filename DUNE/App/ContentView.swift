@@ -204,6 +204,13 @@ struct ContentView: View {
         .onChange(of: scenePhase) { oldPhase, newPhase in
             if newPhase == .active {
                 notificationInboxManager.syncBadge()
+                // Fallback: consume any pending navigation request that .onReceive may have missed
+                // (e.g. notification posted before the Combine subscription was active).
+                // If .onReceive already consumed it, this returns nil harmlessly (dedup via consume).
+                if let request = notificationInboxManager.consumePendingNavigationRequest() {
+                    AppLogger.notification.info("[ContentView] scenePhase fallback navigation: route=\(request.route.destination.rawValue)")
+                    handleNotificationNavigationRequest(request)
+                }
                 Task {
                     await BedtimeReminderScheduler.shared.refreshSchedule()
                 }
@@ -216,13 +223,9 @@ struct ContentView: View {
             }
         }
         .onReceive(NotificationCenter.default.publisher(for: NotificationInboxManager.routeRequestedNotification)) { notification in
-            let request = NotificationInboxManager.navigationRequest(from: notification)
-            Task { @MainActor in
-                guard let request else { return }
-                // Cold launch can surface the same request via startup pending state and the delayed notification post.
-                guard notificationInboxManager.consumePendingNavigationRequest(ifMatching: request) else { return }
-                handleNotificationNavigationRequest(request)
-            }
+            guard let request = NotificationInboxManager.navigationRequest(from: notification) else { return }
+            guard notificationInboxManager.consumePendingNavigationRequest(ifMatching: request) else { return }
+            handleNotificationNavigationRequest(request)
         }
         .onReceive(NotificationCenter.default.publisher(for: .simulatorAdvancedMockDataDidChange)) { _ in
             Task { @MainActor in

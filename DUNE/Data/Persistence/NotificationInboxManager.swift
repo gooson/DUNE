@@ -21,7 +21,7 @@ final class NotificationInboxManager: @unchecked Sendable {
     }
 
     private let store: NotificationInboxStore
-    private let badgeUpdater: @Sendable (Int) -> Void
+    private let badgeUpdater: @Sendable (Int) -> Void // Set once at init, never mutated
     private let queue = DispatchQueue(label: "com.dune.notification-inbox-manager")
     private var pendingNavigationRequest: NotificationNavigationRequest?
 
@@ -230,14 +230,18 @@ final class NotificationInboxManager: @unchecked Sendable {
         queue.sync {
             pendingNavigationRequest = request
         }
-        Task { @MainActor in
+        // Use DispatchQueue.main.async instead of Task { @MainActor in } to ensure
+        // deterministic delivery via the run loop. Swift concurrency Task scheduling
+        // introduced non-deterministic delays that caused .onReceive to miss notifications.
+        DispatchQueue.main.async {
             NotificationCenter.default.post(name: Self.routeRequestedNotification, object: request)
         }
     }
 
     private func postInboxDidChange() {
         let unreadCount = store.unreadCount()
-        Task { @MainActor in
+        let badgeUpdater = self.badgeUpdater
+        DispatchQueue.main.async {
             NotificationCenter.default.post(name: Self.inboxDidChangeNotification, object: nil)
             badgeUpdater(unreadCount)
         }
