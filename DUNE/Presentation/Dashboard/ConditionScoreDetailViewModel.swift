@@ -261,7 +261,6 @@ final class ConditionScoreDetailViewModel {
         }
 
         let snapshots = await service.fetchSnapshots(for: Date())
-        let calendar = Calendar.current
 
         chartData = snapshots.compactMap { snap in
             guard let score = snap.conditionScore else { return nil }
