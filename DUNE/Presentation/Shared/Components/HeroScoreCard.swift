@@ -160,7 +160,7 @@ struct HeroScoreCard: View {
                     HourlySparklineView(data: sparkline, tintColor: statusColor)
                         .frame(height: isRegular ? 48 : 36)
 
-                    Text("Today")
+                    Text(sparkline.includesYesterday ? "24h" : "Today")
                         .font(.caption2)
                         .foregroundStyle(.tertiary)
                 }
