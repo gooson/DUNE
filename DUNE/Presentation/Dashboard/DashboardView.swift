@@ -100,9 +100,11 @@ struct DashboardView: View {
                             .reportTabHeroFrame()
                             .buttonStyle(.plain)
                             .accessibilityIdentifier("dashboard-hero-condition")
+                            .transition(sectionTransition)
                         } else if let status = viewModel.baselineStatus, !status.isReady {
                             BaselineProgressView(status: status)
                                 .reportTabHeroFrame()
+                                .transition(sectionTransition)
                         }
 
                         // Weather + coaching (merged when coaching is weather-category)
@@ -112,18 +114,22 @@ struct DashboardView: View {
                             }
                             .buttonStyle(.plain)
                             .accessibilityIdentifier("dashboard-weather-card")
+                            .transition(sectionTransition)
                         } else {
                             WeatherCardPlaceholder {
                                 Task { await viewModel.requestLocationPermission() }
                             }
+                            .transition(sectionTransition)
                         }
 
                         // Coaching (standalone when not merged into weather card)
                         if let insight = viewModel.standaloneCoachingInsight {
                             TodayCoachingCard(insight: insight)
+                                .transition(sectionTransition)
                         } else if viewModel.focusInsight == nil,
                                   let coachingMessage = viewModel.coachingMessage {
                             TodayCoachingCard(message: coachingMessage)
+                                .transition(sectionTransition)
                         }
 
                         HealthDataQACard(isAvailable: HealthDataQAService.isAvailable) {
@@ -133,6 +139,7 @@ struct DashboardView: View {
                         // Insight Cards
                         if !viewModel.insightCards.isEmpty {
                             insightCardsSection
+                                .transition(sectionTransition)
                         }
 
                         // Sleep deficit badge
@@ -141,6 +148,7 @@ struct DashboardView: View {
                         // Pinned Metrics
                         if !viewModel.pinnedCards.isEmpty {
                             pinnedSection
+                                .transition(sectionTransition)
                         }
 
                         // Last updated + error banner
@@ -149,10 +157,12 @@ struct DashboardView: View {
                                 .font(.caption2)
                                 .foregroundStyle(.tertiary)
                                 .frame(maxWidth: .infinity, alignment: .trailing)
+                                .transition(.opacity)
                         }
 
                         if let error = viewModel.errorMessage {
                             errorBanner(error)
+                                .transition(sectionTransition)
                         }
 
                         // Condition (HRV, RHR)
@@ -164,6 +174,7 @@ struct DashboardView: View {
                                 accessibilityIdentifier: "dashboard-section-condition",
                                 cards: viewModel.conditionCards
                             )
+                            .transition(sectionTransition)
                         }
 
                         // Activity (Steps, Exercise)
@@ -175,6 +186,7 @@ struct DashboardView: View {
                                 accessibilityIdentifier: "dashboard-section-activity",
                                 cards: viewModel.activityCards
                             )
+                            .transition(sectionTransition)
                         }
 
                         // Body (Weight, BMI, Sleep)
@@ -186,11 +198,13 @@ struct DashboardView: View {
                                 accessibilityIdentifier: "dashboard-section-body",
                                 cards: viewModel.bodyCards
                             )
+                            .transition(sectionTransition)
                         }
 
                     }
                 }
                 .padding(sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.lg)
+                .animation(reduceMotion ? .none : DS.Animation.standard, value: viewModel.sortedMetrics.count)
                 .coordinateSpace(name: TabHeroStartLine.coordinateSpace)
             }
             .onChange(of: scrollToTopSignal) { _, _ in
@@ -281,6 +295,12 @@ struct DashboardView: View {
         }
     }
 
+    // MARK: - Transitions
+
+    private var sectionTransition: AnyTransition {
+        .opacity.combined(with: .scale(scale: 0.95, anchor: .top))
+    }
+
     // MARK: - Sections
 
     private var pinnedSection: some View {
@@ -337,6 +357,7 @@ struct DashboardView: View {
                 SleepDeficitBadgeView(analysis: deficit)
             }
             .buttonStyle(.plain)
+            .transition(sectionTransition)
         }
     }
 
