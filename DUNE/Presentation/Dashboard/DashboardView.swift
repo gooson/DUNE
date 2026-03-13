@@ -286,12 +286,7 @@ struct DashboardView: View {
             NavigationStack {
                 TemplateFormView(
                     prefillName: nudge.title,
-                    prefillEntries: nudge.sequenceLabels.map { label in
-                        TemplateEntry(
-                            exerciseDefinitionID: label,
-                            exerciseName: label
-                        )
-                    }
+                    prefillEntries: []
                 )
             }
         }

@@ -347,12 +347,7 @@ struct ActivityView: View {
             NavigationStack {
                 TemplateFormView(
                     prefillName: recommendation.title,
-                    prefillEntries: recommendation.sequenceLabels.map { label in
-                        TemplateEntry(
-                            exerciseDefinitionID: label,
-                            exerciseName: label
-                        )
-                    }
+                    prefillEntries: []
                 )
             }
         }
