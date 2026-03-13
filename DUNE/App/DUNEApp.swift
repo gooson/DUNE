@@ -166,8 +166,8 @@ struct DUNEApp: App {
             return try makeModelContainer(configuration: fallbackConfiguration)
         } catch {
             AppLogger.data.error("In-memory ModelContainer with migration plan also failed: \(error). Creating bare container.")
-            // Last resort: create a bare in-memory container without the migration plan.
-            // The app will launch with no persisted data but will not crash.
+            // Without migration plan — avoids migration-related failures that can
+            // prevent even an in-memory container from initializing.
             do {
                 return try ModelContainer(
                     for: AppMigrationPlan.currentSchema,

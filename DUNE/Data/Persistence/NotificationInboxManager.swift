@@ -128,21 +128,21 @@ final class NotificationInboxManager: @unchecked Sendable {
         if let itemID {
             let openedItem = open(itemID: itemID)
             if let openedItem, preferredRoute(for: openedItem) != nil {
-                AppLogger.notification.info("[InboxManager] Routed via preferredRoute for itemID=\(itemID)")
+                AppLogger.notification.debug("[InboxManager] Routed via preferredRoute for itemID=\(itemID)")
                 return
             }
             if openedItem?.insightType == .workoutPR {
-                AppLogger.notification.info("[InboxManager] Routing workoutPR to activityPersonalRecords")
+                AppLogger.notification.debug("[InboxManager] Routing workoutPR to activityPersonalRecords")
                 emitNavigationRequest(.init(itemID: itemID, route: .activityPersonalRecords))
                 return
             }
             if let route = parseRoute(userInfo: userInfo) {
-                AppLogger.notification.info("[InboxManager] Routing via parseRoute: \(route.destination.rawValue)")
+                AppLogger.notification.debug("[InboxManager] Routing via parseRoute: \(route.destination.rawValue)")
                 emitNavigationRequest(.init(itemID: itemID, route: route))
                 return
             }
             // Non-routed notification (sleep, HRV, etc.) — navigate to hub
-            AppLogger.notification.info("[InboxManager] No route found, falling back to notificationHub")
+            AppLogger.notification.debug("[InboxManager] No route found, falling back to notificationHub")
             emitNavigationRequest(.init(itemID: itemID, route: .notificationHub))
             return
         }
@@ -152,7 +152,7 @@ final class NotificationInboxManager: @unchecked Sendable {
            let insightTypeRaw,
            let insightType = HealthInsight.InsightType(rawValue: insightTypeRaw) {
             let route = parseRoute(userInfo: userInfo)
-            AppLogger.notification.info("[InboxManager] Fallback path: creating insight type=\(insightType.rawValue), route=\(route?.destination.rawValue ?? "nil")")
+            AppLogger.notification.debug("[InboxManager] Fallback path: creating insight type=\(insightType.rawValue), route=\(route?.destination.rawValue ?? "nil")")
             let insight = HealthInsight(
                 type: insightType,
                 title: fallbackTitle,
@@ -170,7 +170,7 @@ final class NotificationInboxManager: @unchecked Sendable {
             AppLogger.notification.warning("[InboxManager] No itemID, no fallback, no route — notification dropped")
             return
         }
-        AppLogger.notification.info("[InboxManager] Route-only path: \(route.destination.rawValue)")
+        AppLogger.notification.debug("[InboxManager] Route-only path: \(route.destination.rawValue)")
         let request = NotificationNavigationRequest(
             itemID: UUID().uuidString,
             route: route
