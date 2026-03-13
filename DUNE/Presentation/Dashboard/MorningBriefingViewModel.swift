@@ -6,14 +6,22 @@ import Observation
 @MainActor
 final class MorningBriefingViewModel {
     private(set) var sections: BriefingTemplateEngine.Sections?
-    private(set) var isAnimating = false
 
     private static let lastBriefingDateKey = "lastBriefingDate"
+
+    private enum Cache {
+        static let dateFormatter: DateFormatter = {
+            let f = DateFormatter()
+            f.dateFormat = "yyyy-MM-dd"
+            f.locale = Locale(identifier: "en_US_POSIX")
+            return f
+        }()
+    }
 
     /// Whether the briefing sheet should be presented today.
     static func shouldShowBriefing() -> Bool {
         let lastDate = UserDefaults.standard.string(forKey: lastBriefingDateKey)
-        let today = Self.todayString()
+        let today = todayString()
         return lastDate != today
     }
 
@@ -32,15 +40,9 @@ final class MorningBriefingViewModel {
         sections = BriefingTemplateEngine.generate(from: data)
     }
 
-    func beginAnimation() {
-        isAnimating = true
-    }
-
     // MARK: - Private
 
     private static func todayString() -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        return formatter.string(from: Date())
+        Cache.dateFormatter.string(from: Date())
     }
 }

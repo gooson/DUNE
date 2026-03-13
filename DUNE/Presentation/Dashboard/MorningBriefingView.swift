@@ -68,9 +68,11 @@ struct MorningBriefingView: View {
                 }
             }
         }
+        .onDisappear {
+            MorningBriefingViewModel.markBriefingShown()
+        }
         .task {
             viewModel.loadSections(from: data)
-            MorningBriefingViewModel.markBriefingShown()
             // Stagger section animations
             for index in 0..<4 {
                 try? await Task.sleep(for: .milliseconds(150 * index))
@@ -83,13 +85,7 @@ struct MorningBriefingView: View {
     }
 
     private var conditionColor: Color {
-        switch data.conditionStatus {
-        case .excellent: DS.Color.scoreExcellent
-        case .good: DS.Color.scoreGood
-        case .fair: DS.Color.scoreFair
-        case .tired: DS.Color.scoreTired
-        case .warning: DS.Color.scoreWarning
-        }
+        data.conditionStatus.color
     }
 
     @ViewBuilder

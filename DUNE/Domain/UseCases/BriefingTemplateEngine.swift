@@ -47,7 +47,7 @@ enum BriefingTemplateEngine {
     private static func recoveryMessage(for data: MorningBriefingData) -> String {
         var parts: [String] = []
 
-        if let sleepMinutes = data.sleepDurationMinutes {
+        if let sleepMinutes = data.sleepDurationMinutes, sleepMinutes >= 0 {
             let hours = Int(sleepMinutes) / 60
             let mins = Int(sleepMinutes) % 60
             if mins > 0 {

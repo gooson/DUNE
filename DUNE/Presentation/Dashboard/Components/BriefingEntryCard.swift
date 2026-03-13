@@ -45,12 +45,6 @@ struct BriefingEntryCard: View {
     }
 
     private var statusColor: Color {
-        switch conditionStatus {
-        case .excellent: DS.Color.scoreExcellent
-        case .good: DS.Color.scoreGood
-        case .fair: DS.Color.scoreFair
-        case .tired: DS.Color.scoreTired
-        case .warning: DS.Color.scoreWarning
-        }
+        conditionStatus.color
     }
 }

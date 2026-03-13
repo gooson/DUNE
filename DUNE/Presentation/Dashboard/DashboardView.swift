@@ -6,6 +6,7 @@ struct DashboardView: View {
     @State private var isShowingHealthDataQA = false
     @State private var hasAppeared = false
     @State private var isShowingBriefing = false
+    @AppStorage("morningBriefingDisabled") private var isBriefingDisabled = false
     @State private var unreadNotificationCount = 0
     @State private var showWhatsNewBadge = false
     @State private var cachedWhatsNewReleases: [WhatsNewReleaseData] = []
@@ -110,7 +111,7 @@ struct DashboardView: View {
 
                         // Morning Briefing entry
                         if let briefingData = viewModel.briefingData,
-                           MorningBriefingViewModel.isEnabled {
+                           !isBriefingDisabled {
                             BriefingEntryCard(conditionStatus: briefingData.conditionStatus) {
                                 isShowingBriefing = true
                             }
@@ -307,7 +308,7 @@ struct DashboardView: View {
         }
         .onChange(of: viewModel.briefingData != nil) { _, hasData in
             if hasData,
-               MorningBriefingViewModel.isEnabled,
+               !isBriefingDisabled,
                MorningBriefingViewModel.shouldShowBriefing() {
                 isShowingBriefing = true
             }
