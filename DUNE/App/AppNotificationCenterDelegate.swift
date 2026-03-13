@@ -110,14 +110,14 @@ final class AppNotificationCenterDelegate: NSObject, UNUserNotificationCenterDel
         didReceive response: UNNotificationResponse
     ) async {
         let content = response.notification.request.content
-        await forwardNotificationResponse(
-            NotificationResponsePayload(
-                userInfo: content.userInfo,
-                title: content.title,
-                body: content.body,
-                date: response.notification.date
-            )
+        let payload = NotificationResponsePayload(
+            userInfo: content.userInfo,
+            title: content.title,
+            body: content.body,
+            date: response.notification.date
         )
+        AppLogger.notification.info("[NotificationDelegate] didReceive: itemID=\(payload.itemID ?? "nil"), routeKind=\(payload.routeKind ?? "nil"), insightType=\(payload.insightType ?? "nil")")
+        await forwardNotificationResponse(payload)
     }
 
     func forwardNotificationResponse(_ payload: NotificationResponsePayload) async {

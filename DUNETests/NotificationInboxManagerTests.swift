@@ -216,6 +216,36 @@ struct NotificationInboxManagerTests {
         #expect(pending?.route.destination == .activityPersonalRecords)
     }
 
+    @Test("handleNotificationResponse creates item via fallback when no itemID but insightType present")
+    func handleNotificationResponseFallbackWithInsightType() async {
+        let store = makeStore()
+        let recorder = BadgeRecorder()
+        let manager = NotificationInboxManager(
+            store: store,
+            badgeUpdater: { recorder.record($0) }
+        )
+
+        // Simulate a bedtime reminder notification (no itemID, but has insightType + routeKind)
+        let userInfo: [AnyHashable: Any] = [
+            "notificationRouteKind": "sleepDetail",
+            "notificationInsightType": "sleepComplete"
+        ]
+
+        manager.handleNotificationResponse(
+            userInfo: userInfo,
+            fallbackTitle: "Time for Bed",
+            fallbackBody: "It's your scheduled bedtime",
+            fallbackDate: Date()
+        )
+
+        // Should have created an inbox item and routed to sleepDetail
+        let items = manager.items()
+        #expect(!items.isEmpty)
+        let createdItem = items.first
+        #expect(createdItem?.insightType == .sleepComplete)
+        #expect(createdItem?.isRead == true)
+    }
+
     @Test("handleNotificationResponse marks non-routed notification as read")
     func handleNotificationResponseMarksRead() async {
         let store = makeStore()

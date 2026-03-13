@@ -243,8 +243,10 @@ struct ContentView: View {
                 }
             }
         }
-        .task {
+        .task(id: launchExperienceReady) {
+            guard launchExperienceReady else { return }
             if let request = notificationInboxManager.consumePendingNavigationRequest() {
+                AppLogger.notification.info("[ContentView] Cold-start pending navigation: route=\(request.route.destination.rawValue)")
                 handleNotificationNavigationRequest(request)
             }
         }
