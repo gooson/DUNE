@@ -6,7 +6,7 @@ struct TemplateSnapshot: Sendable {
     let exerciseDefinitionIDs: Set<String>
 
     init(exerciseDefinitionIDs: [String]) {
-        self.exerciseDefinitionIDs = Set(exerciseDefinitionIDs)
+        self.exerciseDefinitionIDs = Set(exerciseDefinitionIDs.map { $0.lowercased() })
     }
 }
 
@@ -24,7 +24,7 @@ struct TemplateOverlapChecker: Sendable {
         guard !recommendationLabels.isEmpty else { return false }
 
         for template in existingTemplates {
-            let templateIDs = Set(template.exerciseDefinitionIDs.map { $0.lowercased() })
+            let templateIDs = template.exerciseDefinitionIDs
             guard !templateIDs.isEmpty else { continue }
 
             let intersection = recommendationLabels.intersection(templateIDs)

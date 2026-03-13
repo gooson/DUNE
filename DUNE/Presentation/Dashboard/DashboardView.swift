@@ -5,7 +5,7 @@ struct DashboardView: View {
     @State private var viewModel: DashboardViewModel
     @State private var isShowingPinnedEditor = false
     @State private var isShowingHealthDataQA = false
-    @State private var isShowingTemplateForm = false
+    @State private var templateNudgeToSave: WorkoutTemplateRecommendation?
     @State private var hasAppeared = false
     @State private var unreadNotificationCount = 0
     @State private var showWhatsNewBadge = false
@@ -150,10 +150,8 @@ struct DashboardView: View {
                         if let nudge = viewModel.templateNudgeRecommendation {
                             TemplateNudgeCard(
                                 recommendation: nudge,
-                                onSaveAsTemplate: { isShowingTemplateForm = true },
-                                onStartWorkout: {
-                                    // TODO: wire to activity start flow
-                                },
+                                onSaveAsTemplate: { templateNudgeToSave = nudge },
+                                onStartWorkout: { },
                                 onDismiss: {
                                     withAnimation(DS.Animation.standard) {
                                         viewModel.dismissTemplateNudge()
@@ -284,19 +282,17 @@ struct DashboardView: View {
                 allowedCategories: viewModel.availablePinnedCategories
             )
         }
-        .sheet(isPresented: $isShowingTemplateForm) {
-            if let nudge = viewModel.templateNudgeRecommendation {
-                NavigationStack {
-                    TemplateFormView(
-                        prefillName: nudge.title,
-                        prefillEntries: nudge.sequenceLabels.map { label in
-                            TemplateEntry(
-                                exerciseDefinitionID: label,
-                                exerciseName: label
-                            )
-                        }
-                    )
-                }
+        .sheet(item: $templateNudgeToSave) { nudge in
+            NavigationStack {
+                TemplateFormView(
+                    prefillName: nudge.title,
+                    prefillEntries: nudge.sequenceLabels.map { label in
+                        TemplateEntry(
+                            exerciseDefinitionID: label,
+                            exerciseName: label
+                        )
+                    }
+                )
             }
         }
         .sheet(isPresented: $isShowingHealthDataQA) {

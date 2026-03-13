@@ -376,7 +376,7 @@ struct SuggestedWorkoutSection: View {
                                     Image(systemName: "bookmark")
                                         .font(.caption)
                                         .foregroundStyle(DS.Color.activity)
-                                        .padding(DS.Spacing.xs)
+                                        .padding(DS.Spacing.sm)
                                 }
                                 .buttonStyle(.plain)
                                 .accessibilityLabel("Save as Template")
