@@ -164,3 +164,26 @@ Call recalculate in .task and .onChange, not in body
 - Impact: Chart re-renders per gesture update even though scroll position stabilized
 - Fix: Guard assignment on value change: `if scrollPosition != restore { scrollPosition = restore }`
 - Pattern locations: AreaLineChartView, BarChartView, DotLineChartView, RangeBarChartView, SleepStageChartView
+
+## ScoreRefreshService / HourlySparklineView Patterns (hourly-condition-tracking PR)
+
+### Triple recordSnapshot() calls per refresh cycle — redundant DB writes + loadTodaySparklines() triple-fires
+- Each ViewModel (Dashboard, Wellness, Activity) calls `service.recordSnapshot()` independently on every refresh
+- Each `recordSnapshot()` ends with `await loadTodaySparklines()` = 1 fetch × 3 calls = 3 fetches per refresh cycle
+- The `lastSnapshotHour` guard is per-service call, not shared: if Dashboard writes condition only, then Wellness writes wellness only, they each bypass the guard because they pass different non-nil fields, so three fetches always happen
+- Fix: batch all three scores into a single `recordSnapshot()` call from a coordinator or shared callback, not from three independent VMs
+
+### New ModelContext per async call in ScoreRefreshService
+- `recordSnapshot()` and `loadTodaySparklines()` each create `ModelContext(modelContainer)` on every invocation
+- On a refresh cycle: 3 recordSnapshot() calls × 1 context + 3 loadTodaySparklines() × 1 context = 6 new ModelContext allocations
+- Fix: store a single `private let context: ModelContext` as a stored property (created once in init)
+
+### LinearGradient allocation inside Chart closure body
+- `HourlySparklineView.body`: `LinearGradient(colors: [tintColor.opacity(0.3), tintColor.opacity(0.05)], ...)` is created inline inside the Chart closure
+- Creates 2 Color + 1 LinearGradient value per render on hero cards; three hero cards = 6 Color + 3 LinearGradient per scroll frame
+- Fix: hoist to stored property: `private let areaGradient: LinearGradient` initialized from `tintColor` param in init
+
+### yDomain computed property calls .map/.min/.max on every body render
+- `HourlySparklineView.yDomain` maps all N points to extract min/max on every render pass
+- With hero card count-up animation (20–30 frames): N × 2 passes per frame during animation
+- Fix: compute once in init or cache with `nonisolated(unsafe) let` when `data` is a `let` parameter

@@ -31,6 +31,7 @@ struct DashboardView: View {
     private let launchExperienceReady: Bool
     private let canLoadHealthKitData: Bool
     private let sharedHealthDataService: SharedHealthDataService?
+    private let scoreRefreshService: ScoreRefreshService?
     @State private var showNotificationHub = false
     @State private var showWhatsNew = false
     @State private var showSettings = false
@@ -38,6 +39,7 @@ struct DashboardView: View {
 
     init(
         sharedHealthDataService: SharedHealthDataService? = nil,
+        scoreRefreshService: ScoreRefreshService? = nil,
         scrollToTopSignal: Int = 0,
         refreshSignal: Int = 0,
         notificationHubSignal: Int = 0,
@@ -45,7 +47,11 @@ struct DashboardView: View {
         canLoadHealthKitData: Bool = true
     ) {
         self.sharedHealthDataService = sharedHealthDataService
-        _viewModel = State(initialValue: DashboardViewModel(sharedHealthDataService: sharedHealthDataService))
+        self.scoreRefreshService = scoreRefreshService
+        _viewModel = State(initialValue: DashboardViewModel(
+            sharedHealthDataService: sharedHealthDataService,
+            scoreRefreshService: scoreRefreshService
+        ))
         self.scrollToTopSignal = scrollToTopSignal
         self.refreshSignal = refreshSignal
         self.notificationHubSignal = notificationHubSignal
@@ -87,7 +93,8 @@ struct DashboardView: View {
                                     score: score,
                                     recentScores: viewModel.recentScores,
                                     weeklyGoalProgress: viewModel.weeklyGoalProgress,
-                                    trendBadges: viewModel.heroBaselineDetails
+                                    trendBadges: viewModel.heroBaselineDetails,
+                                    hourlySparkline: viewModel.conditionSparkline.nonEmptyOrNil
                                 )
                             }
                             .reportTabHeroFrame()
@@ -199,7 +206,7 @@ struct DashboardView: View {
                 .environment(\.tabHeroStartLineInset, heroFrame.map(TabHeroStartLine.inset(for:)))
         }
         .navigationDestination(for: ConditionScore.self) { score in
-            ConditionScoreDetailView(score: score)
+            ConditionScoreDetailView(score: score, scoreRefreshService: scoreRefreshService)
         }
         .navigationDestination(for: HealthMetric.self) { metric in
             MetricDetailView(metric: metric)

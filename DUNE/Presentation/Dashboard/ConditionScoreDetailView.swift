@@ -4,13 +4,20 @@ import SwiftUI
 /// Shows score ring, trend chart, summary, insight, and score explainer.
 struct ConditionScoreDetailView: View {
     let score: ConditionScore
+    let scoreRefreshService: ScoreRefreshService?
 
     private enum Labels {
         static let scoreLabel = "CONDITION"
     }
 
-    @State private var viewModel = ConditionScoreDetailViewModel()
+    @State private var viewModel: ConditionScoreDetailViewModel
     @Environment(\.horizontalSizeClass) private var sizeClass
+
+    init(score: ConditionScore, scoreRefreshService: ScoreRefreshService? = nil) {
+        self.score = score
+        self.scoreRefreshService = scoreRefreshService
+        _viewModel = State(initialValue: ConditionScoreDetailViewModel(scoreRefreshService: scoreRefreshService))
+    }
 
     var body: some View {
         ScrollView {

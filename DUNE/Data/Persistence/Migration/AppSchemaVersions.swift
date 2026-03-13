@@ -498,17 +498,26 @@ enum AppSchemaV14: VersionedSchema {
     }
 }
 
+// MARK: - Schema V15 (Hourly Score Snapshots)
+
+enum AppSchemaV15: VersionedSchema {
+    static let versionIdentifier = Schema.Version(15, 0, 0)
+    static var models: [any PersistentModel.Type] {
+        [ExerciseRecord.self, BodyCompositionRecord.self, WorkoutSet.self, CustomExercise.self, WorkoutTemplate.self, InjuryRecord.self, HabitDefinition.self, HabitLog.self, UserCategory.self, ExerciseDefaultRecord.self, HealthSnapshotMirrorRecord.self, HourlyScoreSnapshot.self]
+    }
+}
+
 // MARK: - Migration Plan
 
 enum AppMigrationPlan: SchemaMigrationPlan {
-    static let currentSchema = Schema(AppSchemaV14.models)
+    static let currentSchema = Schema(AppSchemaV15.models)
 
     static var schemas: [any VersionedSchema.Type] {
-        [AppSchemaV1.self, AppSchemaV2.self, AppSchemaV3.self, AppSchemaV4.self, AppSchemaV5.self, AppSchemaV6.self, AppSchemaV7.self, AppSchemaV8.self, AppSchemaV9.self, AppSchemaV10.self, AppSchemaV11.self, AppSchemaV12.self, AppSchemaV13.self, AppSchemaV14.self]
+        [AppSchemaV1.self, AppSchemaV2.self, AppSchemaV3.self, AppSchemaV4.self, AppSchemaV5.self, AppSchemaV6.self, AppSchemaV7.self, AppSchemaV8.self, AppSchemaV9.self, AppSchemaV10.self, AppSchemaV11.self, AppSchemaV12.self, AppSchemaV13.self, AppSchemaV14.self, AppSchemaV15.self]
     }
 
     static var stages: [MigrationStage] {
-        [migrateV1toV2, migrateV2toV3, migrateV3toV4, migrateV4toV5, migrateV5toV6, migrateV6toV7, migrateV7toV8, migrateV8toV9, migrateV9toV10, migrateV10toV11, migrateV11toV12, migrateV12toV13, migrateV13toV14]
+        [migrateV1toV2, migrateV2toV3, migrateV3toV4, migrateV4toV5, migrateV5toV6, migrateV6toV7, migrateV7toV8, migrateV8toV9, migrateV9toV10, migrateV10toV11, migrateV11toV12, migrateV12toV13, migrateV13toV14, migrateV14toV15]
     }
 
     static let migrateV1toV2 = MigrationStage.lightweight(
@@ -574,5 +583,10 @@ enum AppMigrationPlan: SchemaMigrationPlan {
     static let migrateV13toV14 = MigrationStage.lightweight(
         fromVersion: AppSchemaV13.self,
         toVersion: AppSchemaV14.self
+    )
+
+    static let migrateV14toV15 = MigrationStage.lightweight(
+        fromVersion: AppSchemaV14.self,
+        toVersion: AppSchemaV15.self
     )
 }

@@ -22,10 +22,11 @@ struct WellnessView: View {
 
     init(
         sharedHealthDataService: SharedHealthDataService? = nil,
+        scoreRefreshService: ScoreRefreshService? = nil,
         scrollToTopSignal: Int = 0,
         refreshSignal: Int = 0
     ) {
-        _viewModel = State(initialValue: WellnessViewModel(sharedHealthDataService: sharedHealthDataService))
+        _viewModel = State(initialValue: WellnessViewModel(sharedHealthDataService: sharedHealthDataService, scoreRefreshService: scoreRefreshService))
         self.scrollToTopSignal = scrollToTopSignal
         self.refreshSignal = refreshSignal
     }
@@ -70,7 +71,8 @@ struct WellnessView: View {
                                     score: viewModel.wellnessScore,
                                     sleepScore: viewModel.sleepScore,
                                     conditionScore: viewModel.conditionScore,
-                                    bodyScore: viewModel.bodyScore
+                                    bodyScore: viewModel.bodyScore,
+                                    hourlySparkline: viewModel.wellnessSparkline.nonEmptyOrNil
                                 )
                             }
                             .reportTabHeroFrame()
@@ -81,7 +83,8 @@ struct WellnessView: View {
                                 score: viewModel.wellnessScore,
                                 sleepScore: viewModel.sleepScore,
                                 conditionScore: viewModel.conditionScore,
-                                bodyScore: viewModel.bodyScore
+                                bodyScore: viewModel.bodyScore,
+                                hourlySparkline: viewModel.wellnessSparkline.nonEmptyOrNil
                             )
                             .reportTabHeroFrame()
                         }

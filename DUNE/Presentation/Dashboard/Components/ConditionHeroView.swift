@@ -6,6 +6,7 @@ struct ConditionHeroView: View {
     let recentScores: [ConditionScore]
     var weeklyGoalProgress: (completedDays: Int, goalDays: Int)? = nil
     var trendBadges: [BaselineDetail] = []
+    var hourlySparkline: HourlySparklineData?
 
     private enum Labels {
         static let scoreLabel = "CONDITION"
@@ -71,13 +72,31 @@ struct ConditionHeroView: View {
                             .foregroundStyle(score.status.color)
                     }
 
-                    // Guide message
-                    Text(score.narrativeMessage)
-                        .font(.subheadline)
-                        .foregroundStyle(DS.Color.textSecondary)
+                    // Guide message with delta badge
+                    HStack(spacing: DS.Spacing.xs) {
+                        Text(score.narrativeMessage)
+                            .font(.subheadline)
+                            .foregroundStyle(DS.Color.textSecondary)
 
-                    // 7-day sparkline
-                    if !recentScores.isEmpty {
+                        if let sparkline = hourlySparkline, sparkline.deltaDirection != .stable {
+                            ScoreDeltaBadge(
+                                delta: sparkline.delta,
+                                direction: sparkline.deltaDirection
+                            )
+                        }
+                    }
+
+                    // Hourly sparkline (today) or 7-day sparkline (fallback)
+                    if let sparkline = hourlySparkline, !sparkline.points.isEmpty {
+                        HStack(spacing: DS.Spacing.xs) {
+                            HourlySparklineView(data: sparkline, tintColor: score.status.color)
+                                .frame(height: isRegular ? Layout.sparklineHeightRegular : Layout.sparklineHeightCompact)
+
+                            Text("Today")
+                                .font(.caption2)
+                                .foregroundStyle(.tertiary)
+                        }
+                    } else if !recentScores.isEmpty {
                         HStack(spacing: DS.Spacing.xs) {
                             TrendChartView(scores: recentScores)
                                 .frame(height: isRegular ? Layout.sparklineHeightRegular : Layout.sparklineHeightCompact)
