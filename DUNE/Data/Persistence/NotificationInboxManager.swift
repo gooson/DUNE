@@ -21,7 +21,7 @@ final class NotificationInboxManager: @unchecked Sendable {
     }
 
     private let store: NotificationInboxStore
-    private let badgeUpdater: @Sendable (Int) -> Void
+    private let badgeUpdater: @Sendable (Int) -> Void // Set once at init, never mutated
     private let queue = DispatchQueue(label: "com.dune.notification-inbox-manager")
     private var pendingNavigationRequest: NotificationNavigationRequest?
 

@@ -206,6 +206,7 @@ struct ContentView: View {
                 notificationInboxManager.syncBadge()
                 // Fallback: consume any pending navigation request that .onReceive may have missed
                 // (e.g. notification posted before the Combine subscription was active).
+                // If .onReceive already consumed it, this returns nil harmlessly (dedup via consume).
                 if let request = notificationInboxManager.consumePendingNavigationRequest() {
                     AppLogger.notification.info("[ContentView] scenePhase fallback navigation: route=\(request.route.destination.rawValue)")
                     handleNotificationNavigationRequest(request)
