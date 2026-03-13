@@ -250,9 +250,7 @@ struct DashboardView: View {
             reloadWhatsNewBadge()
         }
         .onReceive(NotificationCenter.default.publisher(for: NotificationInboxManager.inboxDidChangeNotification)) { _ in
-            Task { @MainActor in
-                reloadUnreadCount()
-            }
+            reloadUnreadCount()
         }
         .sheet(isPresented: $isShowingPinnedEditor) {
             PinnedMetricsEditorView(
@@ -511,8 +509,7 @@ struct DashboardView: View {
 
     private func cardGrid(cards: [VitalCardData]) -> some View {
         LazyVGrid(columns: gridColumns, spacing: DS.Spacing.md) {
-            ForEach(cards.indices, id: \.self) { index in
-                let card = cards[index]
+            ForEach(Array(cards.enumerated()), id: \.element.id) { index, card in
                 NavigationLink(value: card.metric) {
                     VitalCard(data: card, animationIndex: index)
                 }
