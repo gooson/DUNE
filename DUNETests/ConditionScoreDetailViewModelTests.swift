@@ -158,6 +158,7 @@ struct ConditionScoreDetailViewModelTests {
 
         #expect(vm.currentScore?.score == 75)
         #expect(vm.currentScore?.status == .good)
+        #expect(vm.scrollPosition == TimePeriod.week.dateRange.start)
     }
 
     // MARK: - Loading State
@@ -182,6 +183,10 @@ struct ConditionScoreDetailViewModelTests {
         vm.configure(score: ConditionScore(score: 62, date: Date()))
 
         await vm.loadData()
+
+        let currentRange = TimePeriod.week.dateRange
+        let expectedUpperBound = TimePeriod.week.scrollDomainUpperBound(referenceDate: currentRange.end)
+        #expect(vm.scrollDomain.upperBound == expectedUpperBound)
 
         if let latestPoint = vm.chartData.map(\.date).max() {
             #expect(vm.scrollDomain.upperBound > latestPoint)

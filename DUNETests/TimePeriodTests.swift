@@ -186,6 +186,17 @@ struct TimePeriodTests {
         #expect(TimePeriod.week.visibleRangeLabel(from: scrollDate) == expected)
     }
 
+    @Test("scrollDomainUpperBound aligns week charts to next day boundary")
+    func scrollDomainUpperBoundUsesNextDayBoundary() {
+        let calendar = Calendar.current
+        let referenceDate = calendar.date(
+            from: DateComponents(year: 2026, month: 3, day: 14, hour: 2, minute: 52)
+        )!
+        let expected = calendar.date(from: DateComponents(year: 2026, month: 3, day: 15))!
+
+        #expect(TimePeriod.week.scrollDomainUpperBound(referenceDate: referenceDate, calendar: calendar) == expected)
+    }
+
     // MARK: - visibleDomainSeconds
 
     @Test("visibleDomainSeconds increases with period size")
