@@ -279,6 +279,9 @@ struct DashboardView: View {
                 MorningBriefingView(data: briefingData)
             }
         }
+        .onChange(of: viewModel.briefingData == nil) { _, isNil in
+            if isNil { isShowingBriefing = false }
+        }
         .sheet(isPresented: $isShowingHealthDataQA) {
             HealthDataQASheet(
                 viewModel: HealthDataQAViewModel(

@@ -31,6 +31,8 @@ struct BriefingEntryCard: View {
             }
         }
         .buttonStyle(.plain)
+        .accessibilityLabel(Text("Morning Briefing, \(subtitle)"))
+        .accessibilityHint(Text("Opens your daily briefing"))
         .accessibilityIdentifier("briefing-entry-card")
     }
 

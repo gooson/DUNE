@@ -6,6 +6,7 @@ struct MorningBriefingView: View {
     @State private var viewModel = MorningBriefingViewModel()
     @State private var visibleSections: Set<Int> = []
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         NavigationStack {
@@ -73,12 +74,15 @@ struct MorningBriefingView: View {
         }
         .task {
             viewModel.loadSections(from: data)
-            // Stagger section animations
-            for index in 0..<4 {
-                try? await Task.sleep(for: .milliseconds(150 * index))
-                guard !Task.isCancelled else { return }
-                withAnimation(DS.Animation.emphasize) {
-                    visibleSections.insert(index)
+            if reduceMotion {
+                visibleSections = [0, 1, 2, 3]
+            } else {
+                for index in 0..<4 {
+                    try? await Task.sleep(for: .milliseconds(150 * index))
+                    guard !Task.isCancelled else { return }
+                    withAnimation(DS.Animation.emphasize) {
+                        visibleSections.insert(index)
+                    }
                 }
             }
         }
@@ -125,5 +129,6 @@ private struct BriefingSectionCard: View {
                 Spacer(minLength: 0)
             }
         }
+        .accessibilityElement(children: .combine)
     }
 }
