@@ -143,7 +143,7 @@ final class ScoreRefreshService {
             return
         }
 
-        let hasYesterday = snapshots.contains { $0.date < startOfDay }
+        let hasYesterday = snapshots.first.map { $0.date < startOfDay } ?? false
 
         conditionSparkline = buildSparkline(from: snapshots, keyPath: \.conditionScore, includesYesterday: hasYesterday)
         wellnessSparkline = buildSparkline(from: snapshots, keyPath: \.wellnessScore, includesYesterday: hasYesterday)
