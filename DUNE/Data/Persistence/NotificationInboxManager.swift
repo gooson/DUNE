@@ -230,14 +230,18 @@ final class NotificationInboxManager: @unchecked Sendable {
         queue.sync {
             pendingNavigationRequest = request
         }
-        Task { @MainActor in
+        // Use DispatchQueue.main.async instead of Task { @MainActor in } to ensure
+        // deterministic delivery via the run loop. Swift concurrency Task scheduling
+        // introduced non-deterministic delays that caused .onReceive to miss notifications.
+        DispatchQueue.main.async {
             NotificationCenter.default.post(name: Self.routeRequestedNotification, object: request)
         }
     }
 
     private func postInboxDidChange() {
         let unreadCount = store.unreadCount()
-        Task { @MainActor in
+        let badgeUpdater = self.badgeUpdater
+        DispatchQueue.main.async {
             NotificationCenter.default.post(name: Self.inboxDidChangeNotification, object: nil)
             badgeUpdater(unreadCount)
         }
