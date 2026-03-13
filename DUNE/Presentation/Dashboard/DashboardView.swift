@@ -94,7 +94,7 @@ struct DashboardView: View {
                                     recentScores: viewModel.recentScores,
                                     weeklyGoalProgress: viewModel.weeklyGoalProgress,
                                     trendBadges: viewModel.heroBaselineDetails,
-                                    hourlySparkline: viewModel.conditionSparkline.points.isEmpty ? nil : viewModel.conditionSparkline
+                                    hourlySparkline: viewModel.conditionSparkline.nonEmptyOrNil
                                 )
                             }
                             .reportTabHeroFrame()

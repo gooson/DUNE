@@ -42,6 +42,17 @@
 - InjuryViewModel.applyUpdate() resets isSaving = false implicitly via early return — but in success path the flag is never reset (isSaving is only set in createValidatedRecord, not applyUpdate). This is an inconsistency but not exploitable since applyUpdate does not set isSaving = true.
 - InjuryCardView.durationLabel creates a new DateFormatter on every render call — performance gap, not security (P3 overlap with Performance Oracle).
 
+### Hourly Condition Tracking Audit (Branch feature/hourly-condition-tracking)
+- **P2**: `HourlyScoreSnapshot` has no bounds validation on `conditionScore`, `wellnessScore`, `readinessScore` (docs say 0-100) or on `hrvValue`/`rhrValue`/`sleepScore`. A corrupted CloudKit record with out-of-range scores persists and propagates to sparkline rendering without any clamping.
+- **P2**: `HourlySparklineData.yDomain` computes `max(0, minScore - 5)...min(100, maxScore + 5)` — safe at the chart level, but the underlying `score` values are never clamped before being stored or used for delta calculation. A score of 200 produces a delta of 200 displayed in `ScoreDeltaBadge` via `Int(abs(delta))`.
+- **P2**: `ScoreRefreshService.lastSnapshotHour` skip gate (`if let lastHour = lastSnapshotHour, lastHour == hourDate { return }`) fires once per process launch per hour. Three independent ViewModels (Dashboard, Wellness, Activity) each call `recordSnapshot` with a different score field and nil for the others. First caller wins and sets `lastSnapshotHour`; subsequent callers in the same hour are silently dropped. Result: whichever VM loads first determines the saved snapshot — the other two score fields remain nil for that hour even though valid scores were computed.
+- **P3**: `ScoreRefreshService` error path logs `error.localizedDescription` to `AppLogger.data` — consistent with the codebase pattern, not user-facing, acceptable.
+- **Safe**: CloudKit migration follows V14→V15 lightweight migration with explicit stage — correct pattern per `swiftdata-cloudkit.md`.
+- **Safe**: `HourlyScoreSnapshot` all fields Optional for CloudKit compatibility — correct.
+- **Safe**: `ScoreRefreshService` is `@MainActor` — no concurrent write race to in-memory sparkline state.
+- **Safe**: `buildSparkline` uses `compactMap` to skip nil score fields — no NaN/Infinite risk at sparkline construction.
+- **Safe**: No secrets, credentials, or user PII stored in the new model; only computed health scores.
+
 ### Localization Audit (Commit 842a1bc)
 - **Safe**: 31 new xcstrings keys added (no secrets, no injection patterns, no XSS vectors)
 - **Safe**: Enum rawValue → displayName pattern with String(localized:) is type-safe

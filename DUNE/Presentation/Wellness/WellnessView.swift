@@ -72,7 +72,7 @@ struct WellnessView: View {
                                     sleepScore: viewModel.sleepScore,
                                     conditionScore: viewModel.conditionScore,
                                     bodyScore: viewModel.bodyScore,
-                                    hourlySparkline: viewModel.wellnessSparkline.points.isEmpty ? nil : viewModel.wellnessSparkline
+                                    hourlySparkline: viewModel.wellnessSparkline.nonEmptyOrNil
                                 )
                             }
                             .reportTabHeroFrame()
@@ -84,7 +84,7 @@ struct WellnessView: View {
                                 sleepScore: viewModel.sleepScore,
                                 conditionScore: viewModel.conditionScore,
                                 bodyScore: viewModel.bodyScore,
-                                hourlySparkline: viewModel.wellnessSparkline.points.isEmpty ? nil : viewModel.wellnessSparkline
+                                hourlySparkline: viewModel.wellnessSparkline.nonEmptyOrNil
                             )
                             .reportTabHeroFrame()
                         }

@@ -25,6 +25,11 @@ struct HourlySparklineData: Sendable, Equatable {
     }
 
     static let empty = HourlySparklineData(points: [], currentScore: 0, previousScore: nil)
+
+    /// Returns self if non-empty, nil otherwise. Eliminates repeated `.points.isEmpty ? nil : self` at call sites.
+    var nonEmptyOrNil: HourlySparklineData? {
+        points.isEmpty ? nil : self
+    }
 }
 
 enum DeltaDirection: Sendable, Equatable {

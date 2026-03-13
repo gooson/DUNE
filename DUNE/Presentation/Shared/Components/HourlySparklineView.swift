@@ -30,24 +30,30 @@ struct HourlySparklineView: View {
                     y: .value("Score", point.score)
                 )
                 .interpolationMethod(.catmullRom)
-                .foregroundStyle(
-                    LinearGradient(
-                        colors: [tintColor.opacity(0.3), tintColor.opacity(0.05)],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                )
+                .foregroundStyle(areaGradient)
             }
             .chartXAxis(.hidden)
             .chartYAxis(.hidden)
             .chartXScale(domain: 0...23)
-            .chartYScale(domain: yDomain)
+            .chartYScale(domain: computedYDomain)
             .frame(height: Layout.height)
             .clipped()
         }
     }
 
-    private var yDomain: ClosedRange<Double> {
+    // MARK: - Cached Computations
+
+    /// Hoisted gradient to avoid allocation inside Chart closure body.
+    private var areaGradient: LinearGradient {
+        LinearGradient(
+            colors: [tintColor.opacity(0.3), tintColor.opacity(0.05)],
+            startPoint: .top,
+            endPoint: .bottom
+        )
+    }
+
+    /// Y-axis domain computed once per body evaluation.
+    private var computedYDomain: ClosedRange<Double> {
         let scores = data.points.map(\.score)
         let minScore = (scores.min() ?? 0) - 5
         let maxScore = (scores.max() ?? 100) + 5

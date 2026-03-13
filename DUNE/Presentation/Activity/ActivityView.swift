@@ -174,7 +174,7 @@ struct ActivityView: View {
                             TrainingReadinessHeroCard(
                                 readiness: viewModel.trainingReadiness,
                                 isCalibrating: viewModel.trainingReadiness?.isCalibrating ?? true,
-                                hourlySparkline: viewModel.readinessSparkline.points.isEmpty ? nil : viewModel.readinessSparkline
+                                hourlySparkline: viewModel.readinessSparkline.nonEmptyOrNil
                             )
                         }
                         .reportTabHeroFrame()

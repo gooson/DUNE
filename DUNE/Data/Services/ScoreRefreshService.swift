@@ -21,17 +21,17 @@ final class ScoreRefreshService {
 
     // MARK: - Dependencies
 
-    private let modelContainer: ModelContainer
+    private let context: ModelContext
 
     // MARK: - Internal State
 
     private var listenTask: Task<Void, Never>?
-    private var lastSnapshotHour: Date?
+    private var sparklineReloadTask: Task<Void, Never>?
 
     // MARK: - Init
 
     init(modelContainer: ModelContainer) {
-        self.modelContainer = modelContainer
+        self.context = ModelContext(modelContainer)
     }
 
     // MARK: - Public API
@@ -48,7 +48,8 @@ final class ScoreRefreshService {
     }
 
     /// Record a score snapshot for the current hour.
-    /// Called by ViewModels after they compute scores from SharedHealthSnapshot.
+    /// Multiple callers may invoke this with partial data (e.g. only conditionScore);
+    /// the upsert merges non-nil fields into the existing row.
     func recordSnapshot(
         conditionScore: Int?,
         wellnessScore: Int?,
@@ -60,10 +61,13 @@ final class ScoreRefreshService {
         let now = Date()
         let hourDate = HourlyScoreSnapshot.hourTruncated(now)
 
-        // Skip if we already saved a snapshot for this hour
-        if let lastHour = lastSnapshotHour, lastHour == hourDate { return }
-
-        let context = ModelContext(modelContainer)
+        // Clamp score values to valid 0-100 range before persisting
+        let clampedCondition = conditionScore.map { Double(min(max($0, 0), 100)) }
+        let clampedWellness = wellnessScore.map { Double(min(max($0, 0), 100)) }
+        let clampedReadiness = readinessScore.map { Double(min(max($0, 0), 100)) }
+        let clampedHRV = hrvValue.flatMap { $0.isFinite && $0 >= 0 && $0 <= 500 ? $0 : nil }
+        let clampedRHR = rhrValue.flatMap { $0.isFinite && $0 >= 20 && $0 <= 300 ? $0 : nil }
+        let clampedSleep = sleepScore.flatMap { $0.isFinite && $0 >= 0 && $0 <= 100 ? $0 : nil }
 
         // Upsert: check for existing snapshot at this hour
         var descriptor = FetchDescriptor<HourlyScoreSnapshot>(
@@ -74,42 +78,50 @@ final class ScoreRefreshService {
         let existing = try? context.fetch(descriptor).first
 
         if let existing {
-            if let v = conditionScore { existing.conditionScore = Double(v) }
-            if let v = wellnessScore { existing.wellnessScore = Double(v) }
-            if let v = readinessScore { existing.readinessScore = Double(v) }
-            if let v = hrvValue { existing.hrvValue = v }
-            if let v = rhrValue { existing.rhrValue = v }
-            if let v = sleepScore { existing.sleepScore = v }
+            if let v = clampedCondition { existing.conditionScore = v }
+            if let v = clampedWellness { existing.wellnessScore = v }
+            if let v = clampedReadiness { existing.readinessScore = v }
+            if let v = clampedHRV { existing.hrvValue = v }
+            if let v = clampedRHR { existing.rhrValue = v }
+            if let v = clampedSleep { existing.sleepScore = v }
             existing.createdAt = now
         } else {
             let snap = HourlyScoreSnapshot(
                 date: hourDate,
-                conditionScore: conditionScore.map { Double($0) },
-                wellnessScore: wellnessScore.map { Double($0) },
-                readinessScore: readinessScore.map { Double($0) },
-                hrvValue: hrvValue,
-                rhrValue: rhrValue,
-                sleepScore: sleepScore
+                conditionScore: clampedCondition,
+                wellnessScore: clampedWellness,
+                readinessScore: clampedReadiness,
+                hrvValue: clampedHRV,
+                rhrValue: clampedRHR,
+                sleepScore: clampedSleep
             )
             context.insert(snap)
         }
 
         do {
             try context.save()
-            lastSnapshotHour = hourDate
             AppLogger.data.info("[ScoreRefreshService] Saved hourly snapshot at \(hourDate)")
         } catch {
             AppLogger.data.error("[ScoreRefreshService] Failed to save hourly snapshot: \(error.localizedDescription)")
         }
 
-        // Refresh sparklines after saving
-        await loadTodaySparklines()
         lastRefreshedAt = now
+        scheduleSparklineReload()
+    }
+
+    /// Debounced sparkline reload — coalesces multiple rapid recordSnapshot calls
+    /// (from Dashboard, Wellness, Activity VMs) into a single fetch.
+    private func scheduleSparklineReload() {
+        sparklineReloadTask?.cancel()
+        sparklineReloadTask = Task {
+            try? await Task.sleep(for: .milliseconds(200))
+            guard !Task.isCancelled else { return }
+            await loadTodaySparklines()
+        }
     }
 
     /// Load today's sparkline data from persisted snapshots.
     func loadTodaySparklines() async {
-        let context = ModelContext(modelContainer)
         let calendar = Calendar.current
         let startOfDay = calendar.startOfDay(for: Date())
 
@@ -128,7 +140,6 @@ final class ScoreRefreshService {
 
     /// Fetch hourly snapshots for a specific date (for detail view drill-down).
     func fetchSnapshots(for date: Date) async -> [HourlyScoreSnapshot] {
-        let context = ModelContext(modelContainer)
         let calendar = Calendar.current
         let startOfDay = calendar.startOfDay(for: date)
         guard let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay) else { return [] }

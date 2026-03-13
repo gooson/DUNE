@@ -4,7 +4,7 @@ import SwiftUI
 /// Shows score ring, trend chart, summary, insight, and score explainer.
 struct ConditionScoreDetailView: View {
     let score: ConditionScore
-    var scoreRefreshService: ScoreRefreshService?
+    let scoreRefreshService: ScoreRefreshService?
 
     private enum Labels {
         static let scoreLabel = "CONDITION"
