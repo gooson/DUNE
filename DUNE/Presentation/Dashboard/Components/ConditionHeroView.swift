@@ -92,7 +92,7 @@ struct ConditionHeroView: View {
                             HourlySparklineView(data: sparkline, tintColor: score.status.color)
                                 .frame(height: isRegular ? Layout.sparklineHeightRegular : Layout.sparklineHeightCompact)
 
-                            Text("Today")
+                            Text(sparkline.includesYesterday ? "24h" : "Today")
                                 .font(.caption2)
                                 .foregroundStyle(.tertiary)
                         }

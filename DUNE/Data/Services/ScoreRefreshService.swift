@@ -122,16 +122,19 @@ final class ScoreRefreshService {
         }
     }
 
-    /// Load today's sparkline data from persisted snapshots.
+    /// Load rolling 24-hour sparkline data from persisted snapshots.
+    /// At the start of a new day, yesterday's data provides continuity.
     func loadTodaySparklines() async {
+        let now = Date()
         let calendar = Calendar.current
-        let startOfDay = calendar.startOfDay(for: Date())
+        let startOfDay = calendar.startOfDay(for: now)
+        let twentyFourHoursAgo = now.addingTimeInterval(-24 * 60 * 60)
 
         var descriptor = FetchDescriptor<HourlyScoreSnapshot>(
-            predicate: #Predicate { $0.date >= startOfDay },
+            predicate: #Predicate { $0.date >= twentyFourHoursAgo },
             sortBy: [SortDescriptor(\.date)]
         )
-        descriptor.fetchLimit = 24
+        descriptor.fetchLimit = 48 // max 24h of hourly snapshots with some margin
 
         guard let snapshots = try? context.fetch(descriptor), !snapshots.isEmpty else {
             conditionSparkline = .empty
@@ -140,9 +143,11 @@ final class ScoreRefreshService {
             return
         }
 
-        conditionSparkline = buildSparkline(from: snapshots, keyPath: \.conditionScore)
-        wellnessSparkline = buildSparkline(from: snapshots, keyPath: \.wellnessScore)
-        readinessSparkline = buildSparkline(from: snapshots, keyPath: \.readinessScore)
+        let hasYesterday = snapshots.contains { $0.date < startOfDay }
+
+        conditionSparkline = buildSparkline(from: snapshots, keyPath: \.conditionScore, includesYesterday: hasYesterday)
+        wellnessSparkline = buildSparkline(from: snapshots, keyPath: \.wellnessScore, includesYesterday: hasYesterday)
+        readinessSparkline = buildSparkline(from: snapshots, keyPath: \.readinessScore, includesYesterday: hasYesterday)
     }
 
     /// Fetch hourly snapshots for a specific date (for detail view drill-down).
@@ -164,22 +169,27 @@ final class ScoreRefreshService {
 
     private func buildSparkline(
         from snapshots: [HourlyScoreSnapshot],
-        keyPath: KeyPath<HourlyScoreSnapshot, Double?>
+        keyPath: KeyPath<HourlyScoreSnapshot, Double?>,
+        includesYesterday: Bool
     ) -> HourlySparklineData {
         let calendar = Calendar.current
-        let points: [HourlySparklineData.HourlyPoint] = snapshots.compactMap { snap in
+        let raw: [(hour: Int, score: Double)] = snapshots.compactMap { snap in
             guard let score = snap[keyPath: keyPath] else { return nil }
             let hour = calendar.component(.hour, from: snap.date)
-            return HourlySparklineData.HourlyPoint(hour: hour, score: score)
+            return (hour: hour, score: score)
+        }
+        let indexed: [HourlySparklineData.HourlyPoint] = raw.enumerated().map { idx, pair in
+            HourlySparklineData.HourlyPoint(index: idx, hour: pair.hour, score: pair.score)
         }
 
-        guard let last = points.last else { return .empty }
-        let previous = points.count >= 2 ? points[points.count - 2].score : nil
+        guard let last = indexed.last else { return .empty }
+        let previous = indexed.count >= 2 ? indexed[indexed.count - 2].score : nil
 
         return HourlySparklineData(
-            points: points,
+            points: indexed,
             currentScore: last.score,
-            previousScore: previous
+            previousScore: previous,
+            includesYesterday: includesYesterday
         )
     }
 }

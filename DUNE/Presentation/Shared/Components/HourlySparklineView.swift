@@ -17,16 +17,16 @@ struct HourlySparklineView: View {
                 .fill(.clear)
                 .frame(height: Layout.height)
         } else {
-            Chart(data.points, id: \.hour) { point in
+            Chart(data.points) { point in
                 LineMark(
-                    x: .value("Hour", point.hour),
+                    x: .value("Hour", point.index),
                     y: .value("Score", point.score)
                 )
                 .interpolationMethod(.catmullRom)
                 .foregroundStyle(tintColor)
 
                 AreaMark(
-                    x: .value("Hour", point.hour),
+                    x: .value("Hour", point.index),
                     y: .value("Score", point.score)
                 )
                 .interpolationMethod(.catmullRom)
@@ -34,7 +34,7 @@ struct HourlySparklineView: View {
             }
             .chartXAxis(.hidden)
             .chartYAxis(.hidden)
-            .chartXScale(domain: 0...23)
+            .chartXScale(domain: 0...max(data.points.count - 1, 1))
             .chartYScale(domain: computedYDomain)
             .frame(height: Layout.height)
             .clipped()
