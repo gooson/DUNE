@@ -19,6 +19,7 @@ final class ExerciseTypeDetailViewModel {
     var isLoading = false
 
     private let workoutService: WorkoutQuerying
+    private var loadRequestID = 0
 
     init(
         typeKey: String,
@@ -34,9 +35,9 @@ final class ExerciseTypeDetailViewModel {
     // MARK: - Loading
 
     func loadData(manualRecords: [ExerciseRecord]) async {
-        guard !isLoading else { return }
+        let requestID = beginLoadRequest()
         isLoading = true
-        defer { isLoading = false }
+        defer { finishLoadRequest(requestID) }
 
         let snapshots = manualRecords
             .filter { "manual-\($0.exerciseType)" == typeKey || $0.exerciseType == typeKey }
@@ -58,7 +59,7 @@ final class ExerciseTypeDetailViewModel {
         do {
             let workouts = try await workoutService.fetchWorkouts(days: fetchDays)
 
-            guard !Task.isCancelled else { return }
+            guard isCurrentLoadRequest(requestID) else { return }
 
             // Filter to this type
             let isHKType = !typeKey.hasPrefix("manual-")
@@ -72,6 +73,7 @@ final class ExerciseTypeDetailViewModel {
                 period: period
             )
 
+            guard isCurrentLoadRequest(requestID) else { return }
             currentSummary = comparison.current.exerciseTypes.first
             previousSummary = comparison.previous?.exerciseTypes.first
 
@@ -89,10 +91,9 @@ final class ExerciseTypeDetailViewModel {
                 .prefix(10))
 
         } catch {
+            guard isCurrentLoadRequest(requestID) else { return }
             AppLogger.ui.error("Exercise type detail fetch failed: \(error.localizedDescription)")
         }
-
-        guard !Task.isCancelled else { return }
     }
 
     // MARK: - Computed
@@ -116,8 +117,30 @@ final class ExerciseTypeDetailViewModel {
     // MARK: - Private
 
     private func triggerReload() {
+        invalidateLoadRequests()
         currentSummary = nil
         previousSummary = nil
         trendData = []
+        recentWorkouts = []
+        isLoading = false
+    }
+
+    private func beginLoadRequest() -> Int {
+        loadRequestID += 1
+        return loadRequestID
+    }
+
+    private func invalidateLoadRequests() {
+        loadRequestID += 1
+    }
+
+    private func isCurrentLoadRequest(_ requestID: Int) -> Bool {
+        requestID == loadRequestID && !Task.isCancelled
+    }
+
+    private func finishLoadRequest(_ requestID: Int) {
+        if requestID == loadRequestID {
+            isLoading = false
+        }
     }
 }

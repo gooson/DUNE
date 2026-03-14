@@ -134,6 +134,48 @@ private actor SuspendingWellnessSharedHealthDataService: SharedHealthDataService
     }
 }
 
+private actor SequencedWellnessSharedHealthDataService: SharedHealthDataService {
+    private let firstSnapshot: SharedHealthSnapshot
+    private let secondSnapshot: SharedHealthSnapshot
+    private var fetchCount = 0
+    private var didStartFirstFetch = false
+    private var fetchStartedContinuation: CheckedContinuation<Void, Never>?
+    private var fetchReleaseContinuation: CheckedContinuation<Void, Never>?
+
+    init(firstSnapshot: SharedHealthSnapshot, secondSnapshot: SharedHealthSnapshot) {
+        self.firstSnapshot = firstSnapshot
+        self.secondSnapshot = secondSnapshot
+    }
+
+    func fetchSnapshot() async -> SharedHealthSnapshot {
+        fetchCount += 1
+        if fetchCount == 1 {
+            didStartFirstFetch = true
+            fetchStartedContinuation?.resume()
+            fetchStartedContinuation = nil
+            await withCheckedContinuation { continuation in
+                fetchReleaseContinuation = continuation
+            }
+            return firstSnapshot
+        }
+        return secondSnapshot
+    }
+
+    func invalidateCache() async {}
+
+    func waitUntilFirstFetchStarts() async {
+        if didStartFirstFetch { return }
+        await withCheckedContinuation { continuation in
+            fetchStartedContinuation = continuation
+        }
+    }
+
+    func resumeFirstFetch() {
+        fetchReleaseContinuation?.resume()
+        fetchReleaseContinuation = nil
+    }
+}
+
 private actor StartupTrackingBodyService: BodyCompositionQuerying {
     private(set) var fetchCallCount = 0
 
@@ -438,6 +480,58 @@ struct WellnessViewModelTests {
 
         await sharedService.resumeFetch()
         await loadTask.value
+    }
+
+    @Test("newer wellness refresh ignores an older delayed snapshot response")
+    func newerWellnessRefreshWinsOverOlderResponse() async {
+        let now = Date()
+        let firstSnapshot = SharedHealthSnapshot(
+            hrvSamples: [],
+            todayRHR: nil,
+            yesterdayRHR: nil,
+            latestRHR: nil,
+            rhrCollection: [],
+            todaySleepStages: [
+                SleepStage(stage: .core, duration: 7 * 60 * 60, startDate: now, endDate: now.addingTimeInterval(7 * 60 * 60))
+            ],
+            yesterdaySleepStages: [],
+            latestSleepStages: nil,
+            sleepDailyDurations: [],
+            conditionScore: ConditionScore(score: 72, date: now),
+            baselineStatus: BaselineStatus(daysCollected: 7, daysRequired: 7),
+            recentConditionScores: [],
+            failedSources: [],
+            fetchedAt: now
+        )
+        let service = SequencedWellnessSharedHealthDataService(
+            firstSnapshot: firstSnapshot,
+            secondSnapshot: makeEmptyWellnessSharedSnapshot()
+        )
+        let vm = WellnessViewModel(
+            sleepService: NoopSleepService(),
+            bodyService: NoopBodyService(),
+            hrvService: NoopHRVService(),
+            vitalsService: NoopVitalsService(),
+            heartRateService: NoopHeartRateService(),
+            sharedHealthDataService: service
+        )
+
+        let firstTask = Task {
+            await vm.performRefresh()
+        }
+
+        await service.waitUntilFirstFetchStarts()
+        await vm.performRefresh()
+
+        #expect(vm.activeCards.isEmpty)
+        #expect(vm.conditionScore == nil)
+
+        await service.resumeFirstFetch()
+        await firstTask.value
+
+        #expect(vm.activeCards.isEmpty)
+        #expect(vm.conditionScore == nil)
+        #expect(vm.isLoading == false)
     }
 
     @Test("VO2 card prefers freshest history sample when latest query is older")

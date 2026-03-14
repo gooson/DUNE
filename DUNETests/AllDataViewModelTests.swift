@@ -15,6 +15,51 @@ private struct MockAllDataHRVService: HRVQuerying {
     func fetchRHRCollection(start: Date, end: Date, interval: DateComponents) async throws -> [(date: Date, min: Double, max: Double, average: Double)] { [] }
 }
 
+private actor SequencedAllDataHRVService: HRVQuerying {
+    private let firstSamples: [HRVSample]
+    private let secondSamples: [HRVSample]
+    private var fetchCount = 0
+    private var didStartFirstFetch = false
+    private var fetchStartedContinuation: CheckedContinuation<Void, Never>?
+    private var fetchReleaseContinuation: CheckedContinuation<Void, Never>?
+
+    init(firstSamples: [HRVSample], secondSamples: [HRVSample]) {
+        self.firstSamples = firstSamples
+        self.secondSamples = secondSamples
+    }
+
+    func fetchHRVSamples(days: Int) async throws -> [HRVSample] {
+        fetchCount += 1
+        if fetchCount == 1 {
+            didStartFirstFetch = true
+            fetchStartedContinuation?.resume()
+            fetchStartedContinuation = nil
+            await withCheckedContinuation { continuation in
+                fetchReleaseContinuation = continuation
+            }
+            return firstSamples
+        }
+        return secondSamples
+    }
+
+    func fetchRestingHeartRate(for date: Date) async throws -> Double? { nil }
+    func fetchLatestRestingHeartRate(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
+    func fetchHRVCollection(start: Date, end: Date, interval: DateComponents) async throws -> [(date: Date, average: Double)] { [] }
+    func fetchRHRCollection(start: Date, end: Date, interval: DateComponents) async throws -> [(date: Date, min: Double, max: Double, average: Double)] { [] }
+
+    func waitUntilFirstFetchStarts() async {
+        if didStartFirstFetch { return }
+        await withCheckedContinuation { continuation in
+            fetchStartedContinuation = continuation
+        }
+    }
+
+    func resumeFirstFetch() {
+        fetchReleaseContinuation?.resume()
+        fetchReleaseContinuation = nil
+    }
+}
+
 private struct MockAllDataSleepService: SleepQuerying {
     var stagesByDay: [Date: [SleepStage]] = [:]
 
@@ -208,5 +253,32 @@ struct AllDataViewModelTests {
         #expect(grouped[0].date > grouped[1].date)
         #expect(grouped[0].points.count == 2)
         #expect(grouped[0].points[0].date > grouped[0].points[1].date)
+    }
+
+    @Test("loadInitialData invalidates an older page response")
+    func loadInitialDataInvalidatesOlderPageResponse() async {
+        let service = SequencedAllDataHRVService(
+            firstSamples: [HRVSample(value: 52, date: day(1))],
+            secondSamples: []
+        )
+        let vm = AllDataViewModel(hrvService: service)
+        vm.configure(category: .hrv)
+
+        let firstTask = Task {
+            await vm.loadInitialData()
+        }
+
+        await service.waitUntilFirstFetchStarts()
+        await vm.loadInitialData()
+
+        #expect(vm.dataPoints.isEmpty)
+        #expect(vm.hasMoreData == false)
+
+        await service.resumeFirstFetch()
+        await firstTask.value
+
+        #expect(vm.dataPoints.isEmpty)
+        #expect(vm.hasMoreData == false)
+        #expect(vm.isLoading == false)
     }
 }

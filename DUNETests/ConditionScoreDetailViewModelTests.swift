@@ -15,6 +15,69 @@ private struct MockHRVService: HRVQuerying {
     func fetchRHRCollection(start: Date, end: Date, interval: DateComponents) async throws -> [(date: Date, min: Double, max: Double, average: Double)] { rhrCollection }
 }
 
+private actor SequencedConditionHRVService: HRVQuerying {
+    private let firstSamples: [HRVSample]
+    private let secondSamples: [HRVSample]
+    private let firstRHR: [(date: Date, min: Double, max: Double, average: Double)]
+    private let secondRHR: [(date: Date, min: Double, max: Double, average: Double)]
+    private var sampleFetchCount = 0
+    private var rhrFetchCount = 0
+    private var didStartFirstFetch = false
+    private var fetchStartedContinuation: CheckedContinuation<Void, Never>?
+    private var fetchReleaseContinuation: CheckedContinuation<Void, Never>?
+
+    init(
+        firstSamples: [HRVSample],
+        secondSamples: [HRVSample],
+        firstRHR: [(date: Date, min: Double, max: Double, average: Double)],
+        secondRHR: [(date: Date, min: Double, max: Double, average: Double)]
+    ) {
+        self.firstSamples = firstSamples
+        self.secondSamples = secondSamples
+        self.firstRHR = firstRHR
+        self.secondRHR = secondRHR
+    }
+
+    func fetchHRVSamples(days: Int) async throws -> [HRVSample] {
+        sampleFetchCount += 1
+        if sampleFetchCount == 1 {
+            didStartFirstFetch = true
+            fetchStartedContinuation?.resume()
+            fetchStartedContinuation = nil
+            await withCheckedContinuation { continuation in
+                fetchReleaseContinuation = continuation
+            }
+            return firstSamples
+        }
+        return secondSamples
+    }
+
+    func fetchRestingHeartRate(for date: Date) async throws -> Double? { nil }
+    func fetchLatestRestingHeartRate(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
+    func fetchHRVCollection(start: Date, end: Date, interval: DateComponents) async throws -> [(date: Date, average: Double)] { [] }
+
+    func fetchRHRCollection(
+        start: Date,
+        end: Date,
+        interval: DateComponents
+    ) async throws -> [(date: Date, min: Double, max: Double, average: Double)] {
+        rhrFetchCount += 1
+        return rhrFetchCount == 1 ? firstRHR : secondRHR
+    }
+
+    func waitUntilFirstFetchStarts() async {
+        if didStartFirstFetch { return }
+        await withCheckedContinuation { continuation in
+            fetchStartedContinuation = continuation
+        }
+    }
+
+    func resumeFirstFetch() {
+        fetchReleaseContinuation?.resume()
+        fetchReleaseContinuation = nil
+    }
+}
+
 // MARK: - Tests
 
 @Suite("ConditionScoreDetailViewModel")
@@ -255,5 +318,34 @@ struct ConditionScoreDetailViewModelTests {
         #expect(vm.chartData.count >= 2)
         #expect(vm.chartData.allSatisfy { calendar.isDate($0.date, inSameDayAs: Date()) })
         #expect(vm.summaryStats != nil)
+    }
+
+    @Test("latest load wins when an older request finishes later")
+    func latestLoadWinsOverOlderResponse() async {
+        let service = SequencedConditionHRVService(
+            firstSamples: makeSamples(days: 14, baseValue: 52, spread: 4),
+            secondSamples: [],
+            firstRHR: makeRHRCollection(days: 14, baseValue: 60, spread: 2),
+            secondRHR: []
+        )
+        let vm = ConditionScoreDetailViewModel(hrvService: service)
+        vm.configure(score: ConditionScore(score: 60, date: Date()))
+
+        let firstTask = Task {
+            await vm.loadData()
+        }
+
+        await service.waitUntilFirstFetchStarts()
+        await vm.loadData()
+
+        #expect(vm.chartData.isEmpty)
+        #expect(vm.summaryStats == nil)
+
+        await service.resumeFirstFetch()
+        await firstTask.value
+
+        #expect(vm.chartData.isEmpty)
+        #expect(vm.summaryStats == nil)
+        #expect(vm.isLoading == false)
     }
 }
