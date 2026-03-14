@@ -40,7 +40,7 @@ struct PostureResultView: View {
                     .rotationEffect(.degrees(-90))
 
                 VStack(spacing: 2) {
-                    Text("\(Int(animatedScore * 100))")
+                    Text("\(Int((animatedScore * 100).rounded()))")
                         .font(.system(size: 36, weight: .bold, design: .rounded))
                         .contentTransition(.numericText())
 
@@ -49,7 +49,7 @@ struct PostureResultView: View {
                         .foregroundStyle(.secondary)
                 }
             }
-            .task {
+            .task(id: score) {
                 let target = CGFloat(score) / 100.0
                 if reduceMotion {
                     animatedScore = target
@@ -76,7 +76,9 @@ struct PostureResultView: View {
         .padding()
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(Text("Posture score \(score) out of 100"))
+        .accessibilityLabel(Text(viewModel.hasBothCaptures
+            ? "Posture score \(score) out of 100"
+            : "Posture score \(score) out of 100, partial assessment"))
     }
 
     private func scoreColor(_ score: Int) -> Color {
@@ -90,13 +92,13 @@ struct PostureResultView: View {
     private var captureImagesSection: some View {
         HStack(spacing: 12) {
             captureImageCard(
-                label: "Front",
+                label: String(localized: "Front"),
                 imageData: viewModel.frontResult?.imageData,
                 joints: viewModel.frontAssessment?.jointPositions ?? []
             )
 
             captureImageCard(
-                label: "Side",
+                label: String(localized: "Side"),
                 imageData: viewModel.sideResult?.imageData,
                 joints: viewModel.sideAssessment?.jointPositions ?? []
             )
@@ -104,7 +106,7 @@ struct PostureResultView: View {
     }
 
     private func captureImageCard(
-        label: LocalizedStringKey,
+        label: String,
         imageData: Data?,
         joints: [JointPosition3D]
     ) -> some View {

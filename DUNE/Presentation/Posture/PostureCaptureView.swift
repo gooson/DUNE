@@ -14,6 +14,8 @@ struct PostureCaptureView: View {
                     .accessibilityLabel(Text("Camera preview for posture assessment"))
 
                 phaseOverlay
+                    // Phase transition animation (#122)
+                    .animation(DS.Animation.standard, value: viewModel.capturePhase)
             }
             .navigationTitle("Posture Assessment")
             .navigationBarTitleDisplayMode(.inline)
@@ -28,8 +30,6 @@ struct PostureCaptureView: View {
             .sensoryFeedback(.impact(weight: .light), trigger: viewModel.hapticCountdown)
             .sensoryFeedback(.success, trigger: viewModel.hapticSuccessCount)
             .sensoryFeedback(.error, trigger: viewModel.hapticErrorCount)
-            // Phase transition animation (#122)
-            .animation(DS.Animation.standard, value: viewModel.capturePhase)
         }
     }
 
