@@ -37,13 +37,16 @@ enum WatchRPEEstimator {
 
         // Reps degradation correction: if reps decreased vs last valid set, add +0.5
         if let lastValidSet = completedSets.last(where: { ($0.weight ?? 0) > 0 && ($0.reps ?? 0) >= 1 }),
+           let lastWeight = lastValidSet.weight,
            let lastReps = lastValidSet.reps,
+           abs(lastWeight - weight) < 0.001,
            reps < lastReps {
             baseRPE += 0.5
         }
 
         // Validate and snap to 0.5 step within 6.0–10.0
-        return RPELevel.validate(baseRPE)
+        let clampedRPE = min(RPELevel.range.upperBound, max(RPELevel.range.lowerBound, baseRPE))
+        return RPELevel.validate(clampedRPE)
     }
 
     // MARK: - Private

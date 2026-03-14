@@ -30,8 +30,8 @@ actor HealthDataQAService: HealthDataQuestionAnswering {
             hrvService: hrvService,
             nowProvider: nowProvider
         )
-        self.nowProvider = nowProvider
         self.availabilityProvider = availabilityProvider
+        self.nowProvider = nowProvider
     }
 
     func ask(_ question: String) async -> HealthDataQAReply {

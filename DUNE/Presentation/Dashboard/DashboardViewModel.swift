@@ -228,6 +228,15 @@ final class DashboardViewModel {
 
         guard isCurrentLoadRequest(requestID) else { return }
 
+        if hrvResult.failed, sharedSnapshot == nil {
+            // Avoid showing stale readiness data after a live HRV refresh fails.
+            conditionScore = nil
+            baselineStatus = nil
+            recentScores = []
+            baselineDeltasByMetricID["hrv"] = nil
+            baselineDeltasByMetricID["rhr"] = nil
+        }
+
         var allMetrics: [HealthMetric] = []
         allMetrics.append(contentsOf: hrvResult.metrics)
         if let sleepMetric = sleepResult.metric { allMetrics.append(sleepMetric) }

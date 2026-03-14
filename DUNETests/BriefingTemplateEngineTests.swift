@@ -71,43 +71,42 @@ struct BriefingTemplateEngineTests {
     func recoveryMessageWithSleep() {
         let data = makeData(sleepDurationMinutes: 450) // 7h 30m
         let sections = BriefingTemplateEngine.generate(from: data)
-        #expect(sections.recoveryMessage.contains("7h 30m"))
+        #expect(sections.recoveryMessage == String(localized: "You slept \(7)h \(30)m last night."))
     }
 
     @Test("Recovery message shows whole hours without minutes")
     func recoveryMessageWholeHours() {
         let data = makeData(sleepDurationMinutes: 480) // 8h 0m
         let sections = BriefingTemplateEngine.generate(from: data)
-        #expect(sections.recoveryMessage.contains("8 hours"))
-        #expect(!sections.recoveryMessage.contains("0m"))
+        #expect(sections.recoveryMessage == String(localized: "You slept \(8) hours last night."))
     }
 
     @Test("Recovery message includes HRV delta up")
     func recoveryMessageHRVUp() {
         let data = makeData(hrvDelta: 5.0)
         let sections = BriefingTemplateEngine.generate(from: data)
-        #expect(sections.recoveryMessage.contains("up 5ms"))
+        #expect(sections.recoveryMessage == String(localized: "HRV is up \(5)ms from yesterday."))
     }
 
     @Test("Recovery message includes HRV delta down")
     func recoveryMessageHRVDown() {
         let data = makeData(hrvDelta: -3.0)
         let sections = BriefingTemplateEngine.generate(from: data)
-        #expect(sections.recoveryMessage.contains("down 3ms"))
+        #expect(sections.recoveryMessage == String(localized: "HRV is down \(3)ms from yesterday."))
     }
 
     @Test("Recovery message includes RHR delta drop")
     func recoveryMessageRHRDrop() {
         let data = makeData(rhrDelta: -2.0)
         let sections = BriefingTemplateEngine.generate(from: data)
-        #expect(sections.recoveryMessage.contains("dropped 2bpm"))
+        #expect(sections.recoveryMessage == String(localized: "RHR dropped \(2)bpm — a positive sign."))
     }
 
     @Test("Recovery message includes RHR delta rise")
     func recoveryMessageRHRRise() {
         let data = makeData(rhrDelta: 3.0)
         let sections = BriefingTemplateEngine.generate(from: data)
-        #expect(sections.recoveryMessage.contains("up 3bpm"))
+        #expect(sections.recoveryMessage == String(localized: "RHR is up \(3)bpm from yesterday."))
     }
 
     @Test("Recovery message falls back to condition score when no deltas")
