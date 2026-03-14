@@ -296,6 +296,7 @@
 		4337D3461D700FA31FE828E7 /* WavePreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0B1124C57E15A16F5393513 /* WavePreset.swift */; };
 		435AF1A0057736C743182D9F /* BodyPart.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF967E3F8E93D54A406F60D8 /* BodyPart.swift */; };
 		439F4321E5F0800737EE34F7 /* CalculateSleepScoreUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B0173DFB78590F4E2A67B43 /* CalculateSleepScoreUseCaseTests.swift */; };
+		43EF6F37C549B4EE947BC65E /* PostureHistoryViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C430E2447A95E4EED96996D6 /* PostureHistoryViewModelTests.swift */; };
 		4404EACB64D9EA0EF0680DAC /* CalculateSleepScoreUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B108D756A1C141141A1C523C /* CalculateSleepScoreUseCase.swift */; };
 		44152CFF5733CB416293DA28 /* VolumeIntensity.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8815B7EE0E03F982CA0013 /* VolumeIntensity.swift */; };
 		442F521EDF4B19C60D211312 /* HealthDataQAViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57695BB4FBBFC9C33E754876 /* HealthDataQAViewModelTests.swift */; };
@@ -1755,6 +1756,7 @@
 		C2F880FF56CE58665042C654 /* ConditionCalculationCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionCalculationCard.swift; sourceTree = "<group>"; };
 		C36B0B0AE5FD74696DED9783 /* ConfirmDeleteRecordModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmDeleteRecordModifier.swift; sourceTree = "<group>"; };
 		C3F284AA8370BF92635A7358 /* LocationTrackingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTrackingService.swift; sourceTree = "<group>"; };
+		C430E2447A95E4EED96996D6 /* PostureHistoryViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostureHistoryViewModelTests.swift; sourceTree = "<group>"; };
 		C47A094139E4D5875C5CAB91 /* CardioWorkoutModeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardioWorkoutModeTests.swift; sourceTree = "<group>"; };
 		C48597EA5F4B36A25DD9C4D8 /* ShanksThemeEnhancementTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShanksThemeEnhancementTests.swift; sourceTree = "<group>"; };
 		C493C4200C751F4DE99AE749 /* CardioSecondaryPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardioSecondaryPage.swift; sourceTree = "<group>"; };
@@ -3601,6 +3603,7 @@
 				D881031E7F06493B2CF45A57 /* PersistentStoreRemoteChangeRefreshTests.swift */,
 				3981FDD5FAEAA88E9D743325 /* PersonalRecordsDetailViewModelTests.swift */,
 				591E5D2B9C33E4EEE5BB73E8 /* PersonalRecordServiceTests.swift */,
+				C430E2447A95E4EED96996D6 /* PostureHistoryViewModelTests.swift */,
 				A3A92D5402A3800B7EB26CC4 /* PostureMetricTypeTests.swift */,
 				362F13A07A81BCE82972A944 /* PredictSleepQualityUseCaseTests.swift */,
 				6CECB8413BB3625F5ADF8A15 /* QuickStartPopularityServiceTests.swift */,
@@ -4964,6 +4967,7 @@
 				4FF6CD5786ED0742CE250879 /* PersistentStoreRemoteChangeRefreshTests.swift in Sources */,
 				4F624EF783FACC53E08F636A /* PersonalRecordServiceTests.swift in Sources */,
 				FFAE801AE4C3AA64C513FFAE /* PersonalRecordsDetailViewModelTests.swift in Sources */,
+				43EF6F37C549B4EE947BC65E /* PostureHistoryViewModelTests.swift in Sources */,
 				161A660C36E9E5BBF44E3D3A /* PostureMetricTypeTests.swift in Sources */,
 				31D224BFA0A2899C08DCCDD6 /* PredictSleepQualityUseCaseTests.swift in Sources */,
 				C74CA0C004299D824462435E /* QuickStartPopularityServiceTests.swift in Sources */,

@@ -145,7 +145,7 @@ struct PostureHistoryViewModelTests {
     // MARK: - Comparison
 
     @Test("comparisonDelta computes score differences")
-    func comparisonDelta() {
+    func comparisonDelta() throws {
         let vm = PostureHistoryViewModel()
         let older = makeRecord(
             date: Date().addingTimeInterval(-86400),
