@@ -381,6 +381,15 @@ final class DashboardViewModel {
         snapshot: SharedHealthSnapshot?,
         canQueryHealthKit: Bool
     ) async -> (metrics: [HealthMetric], failed: Bool) {
+        // HealthKit first — provides rich per-type cards
+        if canQueryHealthKit {
+            do { return (try await fetchExerciseData(), false) }
+            catch {
+                AppLogger.ui.error("Exercise fetch failed: \(error.localizedDescription)")
+                return ([], true)
+            }
+        }
+        // Snapshot fallback (Mac / no-HealthKit environments)
         if let snapshot, let minutes = snapshot.todayExerciseMinutes, minutes > 0 {
             let failed = snapshot.failedSources.contains(.todayExercise)
             let metric = HealthMetric(
@@ -394,7 +403,6 @@ final class DashboardViewModel {
             )
             return ([metric], failed)
         }
-        // Fallback: most recent exercise within 7 days (for Mac when no workout today)
         if let snapshot, let recent = snapshot.recentExercise {
             let failed = snapshot.failedSources.contains(.todayExercise)
             let metric = HealthMetric(
@@ -409,18 +417,22 @@ final class DashboardViewModel {
             )
             return ([metric], failed)
         }
-        guard canQueryHealthKit else { return ([], false) }
-        do { return (try await fetchExerciseData(), false) }
-        catch {
-            AppLogger.ui.error("Exercise fetch failed: \(error.localizedDescription)")
-            return ([], true)
-        }
+        return ([], false)
     }
 
     private func safeStepsFetch(
         snapshot: SharedHealthSnapshot?,
         canQueryHealthKit: Bool
     ) async -> (metric: HealthMetric?, failed: Bool) {
+        // HealthKit first
+        if canQueryHealthKit {
+            do { return (try await fetchStepsData(), false) }
+            catch {
+                AppLogger.ui.error("Steps fetch failed: \(error.localizedDescription)")
+                return (nil, true)
+            }
+        }
+        // Snapshot fallback (Mac / no-HealthKit environments)
         if let snapshot, let steps = snapshot.todaySteps, steps > 0, steps <= 200_000 {
             let failed = snapshot.failedSources.contains(.todaySteps)
             let metric = HealthMetric(
@@ -434,18 +446,22 @@ final class DashboardViewModel {
             )
             return (metric, failed)
         }
-        guard canQueryHealthKit else { return (nil, false) }
-        do { return (try await fetchStepsData(), false) }
-        catch {
-            AppLogger.ui.error("Steps fetch failed: \(error.localizedDescription)")
-            return (nil, true)
-        }
+        return (nil, false)
     }
 
     private func safeWeightFetch(
         snapshot: SharedHealthSnapshot?,
         canQueryHealthKit: Bool
     ) async -> (metric: HealthMetric?, failed: Bool) {
+        // HealthKit first
+        if canQueryHealthKit {
+            do { return (try await fetchWeightData(), false) }
+            catch {
+                AppLogger.ui.error("Weight fetch failed: \(error.localizedDescription)")
+                return (nil, true)
+            }
+        }
+        // Snapshot fallback (Mac / no-HealthKit environments)
         if let snapshot, let weight = snapshot.latestWeight,
            weight.value > 0, weight.value < 500 {
             let failed = snapshot.failedSources.contains(.latestWeight)
@@ -461,18 +477,22 @@ final class DashboardViewModel {
             )
             return (metric, failed)
         }
-        guard canQueryHealthKit else { return (nil, false) }
-        do { return (try await fetchWeightData(), false) }
-        catch {
-            AppLogger.ui.error("Weight fetch failed: \(error.localizedDescription)")
-            return (nil, true)
-        }
+        return (nil, false)
     }
 
     private func safeBMIFetch(
         snapshot: SharedHealthSnapshot?,
         canQueryHealthKit: Bool
     ) async -> (metric: HealthMetric?, failed: Bool) {
+        // HealthKit first
+        if canQueryHealthKit {
+            do { return (try await fetchBMIData(), false) }
+            catch {
+                AppLogger.ui.error("BMI fetch failed: \(error.localizedDescription)")
+                return (nil, true)
+            }
+        }
+        // Snapshot fallback (Mac / no-HealthKit environments)
         if let snapshot, let bmi = snapshot.latestBMI,
            bmi.value > 0, bmi.value < 100 {
             let failed = snapshot.failedSources.contains(.latestBMI)
@@ -488,12 +508,7 @@ final class DashboardViewModel {
             )
             return (metric, failed)
         }
-        guard canQueryHealthKit else { return (nil, false) }
-        do { return (try await fetchBMIData(), false) }
-        catch {
-            AppLogger.ui.error("BMI fetch failed: \(error.localizedDescription)")
-            return (nil, true)
-        }
+        return (nil, false)
     }
 
     /// Request location permission from user action (e.g. tapping weather placeholder).
