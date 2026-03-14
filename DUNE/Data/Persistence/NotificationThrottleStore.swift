@@ -12,6 +12,7 @@ final class NotificationThrottleStore: @unchecked Sendable {
     private let dailyBudgetLimit: Int
     private let dedupWindowSeconds: TimeInterval
     private let bodyCompositionMergeWindowSeconds: TimeInterval
+    private let bodyCompositionDebounceSeconds: TimeInterval
     private let queue = DispatchQueue(label: "com.dune.notification-throttle-store")
 
     private enum Keys {
@@ -27,7 +28,8 @@ final class NotificationThrottleStore: @unchecked Sendable {
         calendar: Calendar = .current,
         dailyBudgetLimit: Int = 6,
         dedupWindowSeconds: TimeInterval = 60 * 60,
-        bodyCompositionMergeWindowSeconds: TimeInterval = 60 * 5
+        bodyCompositionMergeWindowSeconds: TimeInterval = 60 * 5,
+        bodyCompositionDebounceSeconds: TimeInterval = 3
     ) {
         self.defaults = defaults
         self.keyPrefix = (Bundle.main.bundleIdentifier ?? "com.dailve") + ".notificationThrottle."
@@ -35,6 +37,7 @@ final class NotificationThrottleStore: @unchecked Sendable {
         self.dailyBudgetLimit = max(dailyBudgetLimit, 1)
         self.dedupWindowSeconds = max(dedupWindowSeconds, 0)
         self.bodyCompositionMergeWindowSeconds = max(bodyCompositionMergeWindowSeconds, 0)
+        self.bodyCompositionDebounceSeconds = max(bodyCompositionDebounceSeconds, 0)
     }
 
     /// Returns true if a notification of this type can be sent now.
@@ -150,23 +153,38 @@ final class NotificationThrottleStore: @unchecked Sendable {
     private static let bufferEncoder = JSONEncoder()
     private static let bufferDecoder = JSONDecoder()
 
-    /// Atomically buffers the value, collects pending entries, records throttle, and returns
-    /// the merged body string. Returns nil if no pending entries exist.
-    func bufferAndBuildMergedBody(
+    /// Buffers a body composition value for later merged delivery.
+    /// Call this immediately when a body composition sample arrives,
+    /// then call `claimAndBuildMergedBody()` after a short debounce delay.
+    func bufferBodyCompositionValue(
         type: HealthInsight.InsightType,
         formattedValue: String,
         now: Date = Date()
-    ) -> String? {
+    ) {
         queue.sync {
-            // Buffer the new value
             var buffer = loadBodyCompositionBufferLocked()
             buffer[type.rawValue] = BodyCompositionBufferEntry(
                 formattedValue: formattedValue,
                 timestamp: now
             )
             saveBodyCompositionBufferLocked(buffer)
+        }
+    }
+
+    /// Atomically claims the send slot and returns the merged body string.
+    /// Returns nil if another caller already sent within the debounce window,
+    /// or if no pending entries exist, or if daily budget is exhausted.
+    func claimAndBuildMergedBody(now: Date = Date()) -> String? {
+        queue.sync {
+            // Debounce: if already sent within debounce window, another task won the race
+            let sentKey = keyPrefix + Keys.bodyCompositionLastSentSuffix
+            if let lastSent = defaults.object(forKey: sentKey) as? Date,
+               now.timeIntervalSince(lastSent) < bodyCompositionDebounceSeconds {
+                return nil
+            }
 
             // Collect pending within merge window
+            let buffer = loadBodyCompositionBufferLocked()
             let pending = buffer
                 .filter { now.timeIntervalSince($0.value.timestamp) < bodyCompositionMergeWindowSeconds }
                 .sorted { $0.key < $1.key }
@@ -177,13 +195,17 @@ final class NotificationThrottleStore: @unchecked Sendable {
             let count = dailyCountLocked(now: now)
             guard count < dailyBudgetLimit else { return nil }
 
-            // Record throttle for all body composition types atomically
-            recordBodyCompositionSentLocked(for: type, now: now)
-            recordSentTypeLocked(for: type, now: now)
+            // Claim the send slot — record group throttle timestamp
+            defaults.set(now, forKey: sentKey)
 
-            // Increment daily informational count (body comp is always informational)
-            let key = keyPrefix + Keys.dailyCountSuffix
-            defaults.set(count + 1, forKey: key)
+            // Record per-type throttle for each buffered type within merge window
+            for (typeKey, entry) in buffer where now.timeIntervalSince(entry.timestamp) < bodyCompositionMergeWindowSeconds {
+                defaults.set(now, forKey: keyPrefix + typeKey)
+            }
+
+            // Increment daily informational count
+            let countKey = keyPrefix + Keys.dailyCountSuffix
+            defaults.set(count + 1, forKey: countKey)
             defaults.set(now, forKey: keyPrefix + Keys.dailyCountDateSuffix)
 
             return pending.joined(separator: "\n")
