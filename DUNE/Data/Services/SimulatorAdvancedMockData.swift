@@ -4,33 +4,53 @@ import SwiftData
 enum SimulatorAdvancedMockDataModeStore {
     static let storageKey = "simulatorAdvancedMockDataEnabled"
     static let referenceDateStorageKey = "simulatorAdvancedMockDataReferenceDate"
+    private static let unitTestDefaultsSuiteName: String = {
+        let identifier = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] ?? UUID().uuidString
+        return "DUNE.SimulatorAdvancedMockDataTests.\(stableSuiteHash(for: identifier))"
+    }()
+
+    private static var isRunningXCTest: Bool {
+        ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
+    }
+
+    private static var currentDefaults: UserDefaults {
+        guard isRunningXCTest else { return .standard }
+        return UserDefaults(suiteName: unitTestDefaultsSuiteName) ?? .standard
+    }
+
+    private static func stableSuiteHash(for identifier: String) -> UInt64 {
+        identifier.unicodeScalars.reduce(1_469_598_103_934_665_603) { partialResult, scalar in
+            (partialResult ^ UInt64(scalar.value)) &* 1_099_511_628_211
+        }
+    }
 
     static var isSimulatorAvailable: Bool {
 #if targetEnvironment(simulator)
         true
 #else
-        false
+        isRunningXCTest
 #endif
     }
 
     static var isEnabled: Bool {
-        isSimulatorAvailable && UserDefaults.standard.bool(forKey: storageKey)
+        isSimulatorAvailable && currentDefaults.bool(forKey: storageKey)
     }
 
     static var referenceDate: Date? {
         guard isSimulatorAvailable else { return nil }
-        let interval = UserDefaults.standard.double(forKey: referenceDateStorageKey)
+        let interval = currentDefaults.double(forKey: referenceDateStorageKey)
         guard interval > 0 else { return nil }
         return Date(timeIntervalSince1970: interval)
     }
 
-    static func setEnabled(_ enabled: Bool, defaults: UserDefaults = .standard) {
+    static func setEnabled(_ enabled: Bool, defaults: UserDefaults? = nil) {
         guard isSimulatorAvailable else { return }
-        defaults.set(enabled, forKey: storageKey)
+        (defaults ?? currentDefaults).set(enabled, forKey: storageKey)
     }
 
-    static func setReferenceDate(_ date: Date?, defaults: UserDefaults = .standard) {
+    static func setReferenceDate(_ date: Date?, defaults: UserDefaults? = nil) {
         guard isSimulatorAvailable else { return }
+        let defaults = defaults ?? currentDefaults
         if let date {
             defaults.set(date.timeIntervalSince1970, forKey: referenceDateStorageKey)
         } else {

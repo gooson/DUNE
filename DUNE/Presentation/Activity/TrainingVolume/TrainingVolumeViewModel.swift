@@ -37,6 +37,7 @@ final class TrainingVolumeViewModel {
     // MARK: - Loading
 
     func loadData(manualRecords: [ExerciseRecord]) async {
+        guard !isLoading else { return }
         let requestID = beginLoadRequest()
         isLoading = true
         errorMessage = nil
