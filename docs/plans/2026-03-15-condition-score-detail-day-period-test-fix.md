@@ -29,7 +29,7 @@ related_brainstorms:
 
 ## Approach
 
-테스트 데이터에서 `Date()`의 hour component를 직접 조합하는 대신, 항상 현재 시각보다 과거인 시간대를 기준으로 샘플을 생성한다. 이렇게 하면 새벽 0시~2시 실행에서도 future sample이 만들어지지 않는다.
+ViewModel에 테스트 전용 기준 시각을 주입할 수 있도록 `nowProvider`를 추가하고, 실패 테스트는 noon anchor를 주입해 항상 같은 날의 과거 hour bucket을 만들도록 고정한다. 이렇게 하면 새벽 0시~2시 실행에서도 future sample이 만들어지지 않는다.
 
 ### Alternative Approaches Considered
 
@@ -37,26 +37,27 @@ related_brainstorms:
 |----------|------|------|----------|
 | Production code에서 future sample 허용 | 테스트를 안 건드릴 수 있음 | 실제 앱 contract를 바꾸고 의미 없는 미래 데이터까지 포함할 위험 | 기각 |
 | 테스트에서 고정 clock/date 주입 | 완전한 결정성 | 현재 구조상 주입점이 없고 수정 범위가 커짐 | 보류 |
-| 테스트 샘플 시간을 항상 `now` 이전으로 조정 | 최소 변경, flake 제거 | helper 계산을 조금 바꿔야 함 | 채택 |
+| ViewModel에 고정 `nowProvider`를 주입하고 테스트를 noon anchor로 고정 | 결정적이고 수정 범위가 작음 | production init surface가 1개 늘어남 | 채택 |
 
 ## Affected Files
 
 | File | Change Type | Description |
 |------|-------------|-------------|
-| DUNETests/ConditionScoreDetailViewModelTests.swift | test fix | 새벽 시간대에도 과거 샘플만 생성하도록 day-period 테스트 데이터 안정화 |
+| DUNE/Presentation/Dashboard/ConditionScoreDetailViewModel.swift | testability update | `loadHourlyData()`가 주입 가능한 기준 시각을 사용하도록 확장 |
+| DUNETests/ConditionScoreDetailViewModelTests.swift | test fix | noon anchor를 주입해 새벽 시간대에도 day-period 테스트를 안정화 |
 
 ## Implementation Steps
 
 ### Step 1: 실패 원인 고정
 
-- **Files**: `DUNETests/ConditionScoreDetailViewModelTests.swift`
-- **Changes**: 현재 hour 기반 샘플 생성이 future timestamps를 만들 수 있음을 테스트 코드에서 제거
+- **Files**: `DUNE/Presentation/Dashboard/ConditionScoreDetailViewModel.swift`, `DUNETests/ConditionScoreDetailViewModelTests.swift`
+- **Changes**: `loadHourlyData()`가 `nowProvider`를 사용하도록 바꾸고 테스트에서 고정 시각을 주입
 - **Verification**: 대상 테스트가 새벽 시간대에도 `chartData.count >= 2`를 만족
 
 ### Step 2: 회귀 검증
 
 - **Files**: `DUNETests/ConditionScoreDetailViewModelTests.swift`
-- **Changes**: 필요 시 assertion은 유지하고 입력 데이터만 안정화
+- **Changes**: 기존 assertion을 유지한 채 same-day/hourly contract만 고정
 - **Verification**: `ConditionScoreDetailViewModelTests` 대상 실행 통과
 
 ## Edge Cases
