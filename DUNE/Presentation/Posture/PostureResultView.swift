@@ -143,7 +143,9 @@ struct PostureResultView: View {
                                     .font(.title2)
                                     .foregroundStyle(.tertiary)
 
-                                Text("Capture \(label.lowercased()) view")
+                                Text(captureType == .front
+                                    ? "Capture front view for analysis"
+                                    : "Capture side view for analysis")
                                     .font(.caption2)
                                     .foregroundStyle(.tertiary)
                             }
