@@ -31546,6 +31546,642 @@
           }
         }
       }
+    },
+    "Front View": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "전면 촬영"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正面撮影"
+          }
+        }
+      }
+    },
+    "Side View": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "측면 촬영"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "側面撮影"
+          }
+        }
+      }
+    },
+    "Stand facing the camera with your full body visible. Keep your arms relaxed at your sides.": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "카메라를 정면으로 보고 전신이 보이게 서세요. 팔은 편하게 옆에 내려주세요."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カメラに向かって全身が見えるように立ってください。腕はリラックスして体の横に下ろしてください。"
+          }
+        }
+      }
+    },
+    "Turn to show your side profile. Keep your arms relaxed and stand naturally.": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "옆모습이 보이도록 돌아서세요. 팔은 편하게 내리고 자연스럽게 서세요."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "横向きになってください。腕はリラックスして自然に立ってください。"
+          }
+        }
+      }
+    },
+    "Analyzing posture...": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "자세 분석 중..."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "姿勢を分析中..."
+          }
+        }
+      }
+    },
+    "Camera is not available": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "카메라를 사용할 수 없습니다"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カメラが利用できません"
+          }
+        }
+      }
+    },
+    "Camera session is not active": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "카메라 세션이 활성화되지 않았습니다"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カメラセッションが有効ではありません"
+          }
+        }
+      }
+    },
+    "Failed to capture photo": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사진 촬영에 실패했습니다"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "写真の撮影に失敗しました"
+          }
+        }
+      }
+    },
+    "No body pose detected. Please ensure your full body is visible": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "자세를 감지할 수 없습니다. 전신이 보이는지 확인해주세요"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "体のポーズが検出されませんでした。全身が見えることを確認してください"
+          }
+        }
+      }
+    },
+    "Could not detect body pose clearly. Please try again in better lighting": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "자세를 정확하게 감지하지 못했습니다. 더 밝은 곳에서 다시 시도해주세요"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "体のポーズを明確に検出できませんでした。より明るい場所で再試行してください"
+          }
+        }
+      }
+    },
+    "Failed to process the captured image": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "촬영된 이미지를 처리하지 못했습니다"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "撮影した画像の処理に失敗しました"
+          }
+        }
+      }
+    },
+    "An unexpected error occurred": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "예기치 않은 오류가 발생했습니다"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "予期しないエラーが発生しました"
+          }
+        }
+      }
+    },
+    "At least one capture is required": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "최소 한 장의 촬영이 필요합니다"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "少なくとも1枚の撮影が必要です"
+          }
+        }
+      }
+    },
+    "Partial assessment — capture both views for full results": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "부분 평가 — 전체 결과를 위해 양쪽 촬영을 완료하세요"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "部分的な評価 — 完全な結果を得るには両方の撮影を行ってください"
+          }
+        }
+      }
+    },
+    "Add a note about this assessment...": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 평가에 대한 메모를 추가하세요..."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この評価についてメモを追加..."
+          }
+        }
+      }
+    },
+    "Capture Side View": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "측면 촬영"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "側面を撮影"
+          }
+        }
+      }
+    },
+    "Save Assessment": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "평가 저장"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "評価を保存"
+          }
+        }
+      }
+    },
+    "Forward Head": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "거북목"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "前方頭位"
+          }
+        }
+      }
+    },
+    "Rounded Shoulders": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "굽은 어깨"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "巻き肩"
+          }
+        }
+      }
+    },
+    "Thoracic Kyphosis": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "흉추 과만곡"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "胸椎後弯"
+          }
+        }
+      }
+    },
+    "Knee Hyperextension": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "무릎 과신전"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "膝過伸展"
+          }
+        }
+      }
+    },
+    "Shoulder Asymmetry": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "어깨 비대칭"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "肩の非対称"
+          }
+        }
+      }
+    },
+    "Hip Asymmetry": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "골반 비대칭"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "骨盤の非対称"
+          }
+        }
+      }
+    },
+    "Knee Alignment": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "무릎 정렬"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "膝アライメント"
+          }
+        }
+      }
+    },
+    "Lateral Shift": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "체간 측방 이동"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "側方シフト"
+          }
+        }
+      }
+    },
+    "Unmeasurable": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "측정 불가"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "測定不可"
+          }
+        }
+      }
+    },
+    "Head position relative to the shoulder line. Forward head posture increases neck strain.": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "어깨 라인 대비 머리 위치. 거북목 자세는 목의 부담을 증가시킵니다."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "肩のラインに対する頭の位置。前方頭位は首への負担を増加させます。"
+          }
+        }
+      }
+    },
+    "Shoulder position relative to the spine. Rounded shoulders indicate tight chest muscles.": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "척추 대비 어깨 위치. 굽은 어깨는 가슴 근육의 긴장을 나타냅니다."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "脊椎に対する肩の位置。巻き肩は胸筋の緊張を示します。"
+          }
+        }
+      }
+    },
+    "Upper back curvature. Excessive kyphosis can lead to back pain and breathing issues.": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "상부 등 곡률. 과도한 만곡은 허리 통증과 호흡 문제를 유발할 수 있습니다."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "上背部の湾曲。過度の後弯は腰痛や呼吸の問題を引き起こす可能性があります。"
+          }
+        }
+      }
+    },
+    "Knee extension angle. Hyperextension puts stress on knee ligaments.": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "무릎 신전 각도. 과신전은 무릎 인대에 스트레스를 줍니다."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "膝の伸展角度。過伸展は膝の靭帯にストレスをかけます。"
+          }
+        }
+      }
+    },
+    "Height difference between shoulders. May indicate muscular imbalance or scoliosis.": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "양쪽 어깨의 높이 차이. 근육 불균형이나 척추측만증을 나타낼 수 있습니다."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "肩の高さの差。筋肉のアンバランスや側弯症を示す可能性があります。"
+          }
+        }
+      }
+    },
+    "Height difference between hips. Can affect gait and cause lower back pain.": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "양쪽 골반의 높이 차이. 보행에 영향을 주고 허리 통증을 유발할 수 있습니다."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "骨盤の高さの差。歩行に影響し、腰痛の原因になる可能性があります。"
+          }
+        }
+      }
+    },
+    "Knee angle in the frontal plane. Valgus or varus alignment affects joint loading.": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "전면에서 본 무릎 각도. 외반 또는 내반 정렬은 관절 부하에 영향을 줍니다."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "前額面での膝の角度。外反または内反のアライメントは関節の負荷に影響します。"
+          }
+        }
+      }
+    },
+    "Horizontal offset of the head from the body center. Indicates weight distribution imbalance.": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "몸 중심에서 머리의 수평 편차. 체중 분배 불균형을 나타냅니다."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "体の中心からの頭の水平偏差。体重分布のアンバランスを示します。"
+          }
+        }
+      }
+    },
+    "Posture Assessment": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "자세 평가"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "姿勢評価"
+          }
+        }
+      }
+    },
+    "Assessment Details": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "평가 상세"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "評価詳細"
+          }
+        }
+      }
+    },
+    "Posture Score": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "자세 점수"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "姿勢スコア"
+          }
+        }
+      }
+    },
+    "/ 100": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "/ 100"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "/ 100"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "/ 100"
+          }
+        }
+      }
+    },
+    "Retake": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retake"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "재촬영"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "撮り直す"
+          }
+        }
+      }
     }
   },
   "version": "1.0"
