@@ -14,28 +14,12 @@ struct JointOverlayView: View {
             )
             let offsetX = (geometry.size.width - imageSize.width * scale) / 2
             let offsetY = (geometry.size.height - imageSize.height * scale) / 2
+            let statusMap = Self.buildJointStatusMap(from: metrics)
 
             ZStack {
-                // Plumb line (ideal alignment reference)
                 plumbLine(scale: scale, offsetX: offsetX, offsetY: offsetY)
-
-                // Connection lines (color-coded by metric status)
-                connectionLines(scale: scale, offsetX: offsetX, offsetY: offsetY)
-
-                // Joint dots (color-coded by metric status)
-                ForEach(jointPositions) { joint in
-                    if let point = projectToScreen(
-                        joint: joint,
-                        scale: scale,
-                        offsetX: offsetX,
-                        offsetY: offsetY
-                    ) {
-                        Circle()
-                            .fill(statusColor(for: joint.name))
-                            .frame(width: 10, height: 10)
-                            .position(point)
-                    }
-                }
+                connectionLines(scale: scale, offsetX: offsetX, offsetY: offsetY, statusMap: statusMap)
+                jointDots(scale: scale, offsetX: offsetX, offsetY: offsetY, statusMap: statusMap)
             }
             .clipped()
         }
@@ -58,6 +42,29 @@ struct JointOverlayView: View {
             x: offsetX + imageX * imageSize.width * scale,
             y: offsetY + (1.0 - imageY) * imageSize.height * scale
         )
+    }
+
+    // MARK: - Joint Dots
+
+    private func jointDots(
+        scale: CGFloat,
+        offsetX: CGFloat,
+        offsetY: CGFloat,
+        statusMap: [String: PostureStatus]
+    ) -> some View {
+        ForEach(jointPositions) { joint in
+            if let point = projectToScreen(
+                joint: joint,
+                scale: scale,
+                offsetX: offsetX,
+                offsetY: offsetY
+            ) {
+                Circle()
+                    .fill(Self.color(for: joint.name, in: statusMap))
+                    .frame(width: 10, height: 10)
+                    .position(point)
+            }
+        }
     }
 
     // MARK: - Plumb Line
@@ -87,7 +94,7 @@ struct JointOverlayView: View {
                    let bottomPoint = projectToScreen(
                        joint: bottomJoint, scale: scale, offsetX: offsetX, offsetY: offsetY
                    ) {
-                    // Ideal vertical line (plumb line) — from top anchor X, full height
+                    // Ideal vertical line (plumb line)
                     Path { path in
                         path.move(to: CGPoint(x: topPoint.x, y: topPoint.y))
                         path.addLine(to: CGPoint(x: topPoint.x, y: bottomPoint.y))
@@ -97,7 +104,7 @@ struct JointOverlayView: View {
                         style: StrokeStyle(lineWidth: 1.5, dash: [6, 4])
                     )
 
-                    // Actual alignment line — connecting actual joint positions
+                    // Actual alignment line
                     Path { path in
                         path.move(to: topPoint)
                         path.addLine(to: bottomPoint)
@@ -132,7 +139,8 @@ struct JointOverlayView: View {
     private func connectionLines(
         scale: CGFloat,
         offsetX: CGFloat,
-        offsetY: CGFloat
+        offsetY: CGFloat,
+        statusMap: [String: PostureStatus]
     ) -> some View {
         let jointMap = Dictionary(uniqueKeysWithValues: jointPositions.map { ($0.name, $0) })
 
@@ -150,7 +158,7 @@ struct JointOverlayView: View {
                     path.addLine(to: toPoint)
                 }
                 .stroke(
-                    segmentColor(from: connection.0, to: connection.1),
+                    Self.segmentColor(from: connection.0, to: connection.1, statusMap: statusMap),
                     lineWidth: 2
                 )
             }
@@ -160,10 +168,9 @@ struct JointOverlayView: View {
     // MARK: - Status-Based Colors
 
     /// Builds a lookup from joint name to worst PostureStatus affecting that joint.
-    private var jointStatusMap: [String: PostureStatus] {
-        let measurable = metrics.filter { $0.status != .unmeasurable }
+    private static func buildJointStatusMap(from metrics: [PostureMetricResult]) -> [String: PostureStatus] {
         var map: [String: PostureStatus] = [:]
-        for metric in measurable {
+        for metric in metrics where metric.status != .unmeasurable {
             for jointName in metric.type.affectedJointNames {
                 if let existing = map[jointName] {
                     if metric.status > existing {
@@ -177,33 +184,25 @@ struct JointOverlayView: View {
         return map
     }
 
-    private func statusColor(for jointName: String) -> Color {
-        guard let status = jointStatusMap[jointName] else {
+    private static func color(for jointName: String, in statusMap: [String: PostureStatus]) -> Color {
+        guard let status = statusMap[jointName] else {
             return .white.opacity(0.8)
         }
         return status.color
     }
 
-    private func segmentColor(from: String, to: String) -> Color {
-        let fromStatus = jointStatusMap[from]
-        let toStatus = jointStatusMap[to]
+    private static func segmentColor(
+        from: String,
+        to: String,
+        statusMap: [String: PostureStatus]
+    ) -> Color {
+        let worst = [statusMap[from], statusMap[to]]
+            .compactMap { $0 }
+            .max()
 
-        // Use the worse status of the two endpoints
-        let status: PostureStatus?
-        switch (fromStatus, toStatus) {
-        case let (.some(a), .some(b)):
-            status = max(a, b)
-        case let (.some(a), .none):
-            status = a
-        case let (.none, .some(b)):
-            status = b
-        case (.none, .none):
-            status = nil
-        }
-
-        guard let status else {
+        guard let worst else {
             return .white.opacity(0.6)
         }
-        return status.color.opacity(0.8)
+        return worst.color.opacity(0.8)
     }
 }
