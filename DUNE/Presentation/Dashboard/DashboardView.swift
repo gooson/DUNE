@@ -1,9 +1,11 @@
 import SwiftUI
+import SwiftData
 
 struct DashboardView: View {
     @State private var viewModel: DashboardViewModel
     @State private var isShowingPinnedEditor = false
     @State private var isShowingHealthDataQA = false
+    @State private var templateNudgeToSave: WorkoutTemplateRecommendation?
     @State private var hasAppeared = false
     @State private var isShowingBriefing = false
     @AppStorage("morningBriefingDisabled") private var isBriefingDisabled = false
@@ -12,6 +14,7 @@ struct DashboardView: View {
     @State private var cachedWhatsNewReleases: [WhatsNewReleaseData] = []
     @State private var cachedCurrentRelease: WhatsNewReleaseData?
     @State private var cachedBuildNumber: String = ""
+    @Query(sort: \WorkoutTemplate.updatedAt, order: .reverse) private var templates: [WorkoutTemplate]
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.openURL) private var openURL
     private let inboxManager = NotificationInboxManager.shared
@@ -154,6 +157,20 @@ struct DashboardView: View {
                                 .transition(Self.sectionTransition)
                         }
 
+                        // Template nudge
+                        if let nudge = viewModel.templateNudgeRecommendation {
+                            TemplateNudgeCard(
+                                recommendation: nudge,
+                                onSaveAsTemplate: { templateNudgeToSave = nudge },
+                                onDismiss: {
+                                    withAnimation(DS.Animation.standard) {
+                                        viewModel.dismissTemplateNudge()
+                                    }
+                                }
+                            )
+                            .transition(Self.sectionTransition)
+                        }
+
                         // Sleep deficit badge
                         sleepDeficitSection
 
@@ -260,10 +277,8 @@ struct DashboardView: View {
             reloadUnreadCount()
             reloadWhatsNewBadge()
         }
-        .onReceive(NotificationCenter.default.publisher(for: NotificationInboxManager.inboxDidChangeNotification)) { _ in
-            Task { @MainActor in
-                reloadUnreadCount()
-            }
+        .onReceive(NotificationCenter.default.mainThreadPublisher(for: NotificationInboxManager.inboxDidChangeNotification)) { _ in
+            reloadUnreadCount()
         }
         .sheet(isPresented: $isShowingPinnedEditor) {
             PinnedMetricsEditorView(
@@ -281,6 +296,14 @@ struct DashboardView: View {
         }
         .onChange(of: viewModel.briefingData == nil) { _, isNil in
             if isNil { isShowingBriefing = false }
+        }
+        .sheet(item: $templateNudgeToSave) { nudge in
+            NavigationStack {
+                TemplateFormView(
+                    prefillName: nudge.title,
+                    prefillEntries: []
+                )
+            }
         }
         .sheet(isPresented: $isShowingHealthDataQA) {
             HealthDataQASheet(
@@ -339,6 +362,7 @@ struct DashboardView: View {
         h.combine(viewModel.weatherSnapshot != nil)
         h.combine(viewModel.errorMessage != nil)
         h.combine(viewModel.insightCards.count)
+        h.combine(viewModel.templateNudgeRecommendation != nil)
         h.combine(viewModel.pinnedCards.count)
         return h.finalize()
     }
@@ -388,6 +412,12 @@ struct DashboardView: View {
         }
         reloadUnreadCount()
         reloadWhatsNewBadge()
+
+        // Template nudge (non-blocking, after main data loaded)
+        let snapshots = templates.map {
+            TemplateSnapshot(exerciseDefinitionIDs: $0.exerciseEntries.map(\.exerciseDefinitionID))
+        }
+        await viewModel.loadTemplateNudge(existingTemplateSnapshots: snapshots)
     }
 
     @ViewBuilder
@@ -537,8 +567,7 @@ struct DashboardView: View {
 
     private func cardGrid(cards: [VitalCardData]) -> some View {
         LazyVGrid(columns: gridColumns, spacing: DS.Spacing.md) {
-            ForEach(cards.indices, id: \.self) { index in
-                let card = cards[index]
+            ForEach(Array(cards.enumerated()), id: \.element.id) { index, card in
                 NavigationLink(value: card.metric) {
                     VitalCard(data: card, animationIndex: index)
                 }

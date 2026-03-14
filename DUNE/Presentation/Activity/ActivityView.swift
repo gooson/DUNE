@@ -82,6 +82,7 @@ struct ActivityView: View {
     @State private var viewModel: ActivityViewModel
     @State private var showingExercisePicker = false
     @State private var showingAIWorkoutBuilder = false
+    @State private var saveRecommendationAsTemplate: WorkoutTemplateRecommendation?
     @State private var selectedExercise: ExerciseDefinition?
     @State private var templateConfig: TemplateWorkoutConfig?
     @State private var selectedMuscle: MuscleGroup?
@@ -342,6 +343,14 @@ struct ActivityView: View {
         .sheet(isPresented: $showingAIWorkoutBuilder) {
             TemplateFormView()
         }
+        .sheet(item: $saveRecommendationAsTemplate) { recommendation in
+            NavigationStack {
+                TemplateFormView(
+                    prefillName: recommendation.title,
+                    prefillEntries: []
+                )
+            }
+        }
         .sheet(item: $selectedMuscle) { muscle in
             MuscleDetailPopover(
                 muscle: muscle,
@@ -576,6 +585,9 @@ struct ActivityView: View {
                 popularExerciseIDs: popularExerciseIDs,
                 onStartExercise: { exercise in selectedExercise = exercise },
                 onStartRecommendation: startRecommendation,
+                onSaveRecommendationAsTemplate: { recommendation in
+                    saveRecommendationAsTemplate = recommendation
+                },
                 onStartTemplate: startFromTemplate,
                 onOpenAIWorkoutBuilder: { showingAIWorkoutBuilder = true },
                 onContextChanged: { context in

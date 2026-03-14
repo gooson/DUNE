@@ -117,6 +117,17 @@ enum TimePeriod: String, CaseIterable, Sendable {
         }
     }
 
+    /// Exclusive upper bound for chart scroll/display domains.
+    /// Aligning to the next day boundary prevents Swift Charts from clamping
+    /// today-inclusive windows back by the current time-of-day.
+    func scrollDomainUpperBound(
+        referenceDate: Date = Date(),
+        calendar: Calendar = .current
+    ) -> Date {
+        let startOfReferenceDay = calendar.startOfDay(for: referenceDate)
+        return calendar.date(byAdding: .day, value: 1, to: startOfReferenceDay) ?? referenceDate
+    }
+
     /// Number of periods of historical data to preload for scroll buffer.
     /// Keep small for large periods to avoid HealthKit query latency.
     var scrollBufferPeriods: Int {

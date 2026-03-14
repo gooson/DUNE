@@ -79,6 +79,46 @@ struct NotificationPresentationPaths {
     }
 }
 
+struct NotificationPresentationState {
+    var selectedSection: AppSection
+    var notificationOpenWorkoutID: String?
+    var paths: NotificationPresentationPaths
+    var notificationPresentationRequestID: Int
+    var notificationRouteSignal: Int
+    var notificationHubSignal: Int
+
+    mutating func apply(_ request: NotificationNavigationRequest) {
+        notificationPresentationRequestID += 1
+
+        guard let plan = NotificationPresentationPlanner.plan(
+            for: request.route,
+            requestID: notificationPresentationRequestID
+        ) else {
+            return
+        }
+
+        switch plan {
+        case .push:
+            paths.clearAll(except: selectedSection)
+            let destinations = NotificationPresentationPlanner.rootPath(for: plan)
+            paths.setPath(destinations, for: selectedSection)
+        case .openWorkoutInActivity(let workoutID):
+            paths.clearAll()
+            selectedSection = .train
+            notificationOpenWorkoutID = workoutID
+            notificationRouteSignal += 1
+        case .openNotificationHub:
+            paths.clearAll()
+            selectedSection = .today
+            notificationHubSignal += 1
+        case .openSleepDetailInWellness(let requestID):
+            paths.clearAll(except: .wellness)
+            selectedSection = .wellness
+            paths.setPath([.sleepDetail(requestID: requestID)], for: .wellness)
+        }
+    }
+}
+
 struct ContentView: View {
     private let sharedHealthDataService: SharedHealthDataService?
     private let refreshCoordinator: AppRefreshCoordinating?
@@ -209,7 +249,9 @@ struct ContentView: View {
                 // If .onReceive already consumed it, this returns nil harmlessly (dedup via consume).
                 if let request = notificationInboxManager.consumePendingNavigationRequest() {
                     AppLogger.notification.info("[ContentView] scenePhase fallback navigation: route=\(request.route.destination.rawValue)")
-                    handleNotificationNavigationRequest(request)
+                    MainActor.assumeIsolated {
+                        handleNotificationNavigationRequest(request)
+                    }
                 }
                 Task {
                     await BedtimeReminderScheduler.shared.refreshSchedule()
@@ -222,12 +264,14 @@ struct ContentView: View {
                 }
             }
         }
-        .onReceive(NotificationCenter.default.publisher(for: NotificationInboxManager.routeRequestedNotification)) { notification in
+        .onReceive(NotificationCenter.default.mainThreadPublisher(for: NotificationInboxManager.routeRequestedNotification)) { notification in
             guard let request = NotificationInboxManager.navigationRequest(from: notification) else { return }
             guard notificationInboxManager.consumePendingNavigationRequest(ifMatching: request) else { return }
-            handleNotificationNavigationRequest(request)
+            MainActor.assumeIsolated {
+                handleNotificationNavigationRequest(request)
+            }
         }
-        .onReceive(NotificationCenter.default.publisher(for: .simulatorAdvancedMockDataDidChange)) { _ in
+        .onReceive(NotificationCenter.default.mainThreadPublisher(for: .simulatorAdvancedMockDataDidChange)) { _ in
             Task { @MainActor in
                 if let refreshCoordinator {
                     await refreshCoordinator.forceRefresh()
@@ -252,7 +296,11 @@ struct ContentView: View {
             await Task.yield()
             if let request = notificationInboxManager.consumePendingNavigationRequest() {
                 AppLogger.notification.info("[ContentView] Cold-start pending navigation: route=\(request.route.destination.rawValue)")
-                handleNotificationNavigationRequest(request)
+                // SwiftUI's .task(id:) action is nonisolated; after the first suspension
+                // we must re-enter MainActor before mutating tab and navigation state.
+                await MainActor.run {
+                    handleNotificationNavigationRequest(request)
+                }
             }
         }
     }
@@ -310,63 +358,35 @@ struct ContentView: View {
         )
     }
 
-    private func clearNavPaths(except excluded: AppSection? = nil) {
-        var paths = currentNotificationPresentationPaths
-        paths.clearAll(except: excluded)
-
-        if excluded != .today && !todayNavPath.isEmpty { todayNavPath = paths.today }
-        if excluded != .train && !trainNavPath.isEmpty { trainNavPath = paths.train }
-        if excluded != .wellness && !wellnessNavPath.isEmpty { wellnessNavPath = paths.wellness }
-        if excluded != .life && !lifeNavPath.isEmpty { lifeNavPath = paths.life }
+    private var currentNotificationPresentationState: NotificationPresentationState {
+        NotificationPresentationState(
+            selectedSection: selectedSection,
+            notificationOpenWorkoutID: notificationOpenWorkoutID,
+            paths: currentNotificationPresentationPaths,
+            notificationPresentationRequestID: notificationPresentationRequestID,
+            notificationRouteSignal: notificationRouteSignal,
+            notificationHubSignal: notificationHubSignal
+        )
     }
 
-    private func setNavPath(_ path: NavigationPath, for section: AppSection) {
-        var paths = currentNotificationPresentationPaths
-        paths.updatePath(path, for: section)
-
-        switch section {
-        case .today: todayNavPath = paths.today
-        case .train: trainNavPath = paths.train
-        case .wellness: wellnessNavPath = paths.wellness
-        case .life: lifeNavPath = paths.life
-        }
+    @MainActor
+    private func applyNotificationPresentationState(_ state: NotificationPresentationState) {
+        selectedSection = state.selectedSection
+        notificationOpenWorkoutID = state.notificationOpenWorkoutID
+        todayNavPath = state.paths.today
+        trainNavPath = state.paths.train
+        wellnessNavPath = state.paths.wellness
+        lifeNavPath = state.paths.life
+        notificationPresentationRequestID = state.notificationPresentationRequestID
+        notificationRouteSignal = state.notificationRouteSignal
+        notificationHubSignal = state.notificationHubSignal
     }
 
+    @MainActor
     private func handleNotificationNavigationRequest(_ request: NotificationNavigationRequest) {
-        notificationPresentationRequestID += 1
-
-        guard let plan = NotificationPresentationPlanner.plan(
-            for: request.route,
-            requestID: notificationPresentationRequestID
-        ) else {
-            return
-        }
-
-        switch plan {
-        case .push:
-            clearNavPaths(except: selectedSection)
-            let destinations = NotificationPresentationPlanner.rootPath(for: plan)
-            var path = NavigationPath()
-            for destination in destinations {
-                path.append(destination)
-            }
-            setNavPath(path, for: selectedSection)
-        case .openWorkoutInActivity(let workoutID):
-            clearNavPaths()
-            selectedSection = .train
-            notificationOpenWorkoutID = workoutID
-            notificationRouteSignal += 1
-        case .openNotificationHub:
-            clearNavPaths()
-            selectedSection = .today
-            notificationHubSignal += 1
-        case .openSleepDetailInWellness(let requestID):
-            clearNavPaths(except: .wellness)
-            selectedSection = .wellness
-            var path = NavigationPath()
-            path.append(NotificationPresentationDestination.sleepDetail(requestID: requestID))
-            setNavPath(path, for: .wellness)
-        }
+        var state = currentNotificationPresentationState
+        state.apply(request)
+        applyNotificationPresentationState(state)
     }
 }
 

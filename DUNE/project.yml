@@ -340,6 +340,7 @@ targets:
       - path: Data/Persistence/Models/ExerciseRecord.swift
       - path: Data/Persistence/Models/WorkoutSet.swift
       - path: Data/Persistence/Models/BodyCompositionRecord.swift
+      - path: Data/Persistence/Models/HourlyScoreSnapshot.swift
       - path: Data/Persistence/Migration/PersistentStoreRecovery.swift
       - path: Data/Persistence/NotificationSettingsStore.swift
       - path: Data/Persistence/NotificationThrottleStore.swift
@@ -351,6 +352,7 @@ targets:
       # Shared services
       - path: Data/Services
         excludes:
+          - "AIWorkoutTemplateGenerator.swift"
           - "BedtimeWatchReminderScheduler.swift"
           - "HealthSnapshotMirrorStore.swift"
           - "MirroringSharedHealthDataService.swift"
@@ -361,6 +363,7 @@ targets:
       - path: Resources/Models/muscle_body.usdz
       - path: Presentation/Shared/Components/MuscleMap3DScene.swift
       - path: Presentation/Shared/Extensions/Equipment+View.swift
+      - path: Presentation/Shared/Extensions/Double+Formatting.swift
       - path: Presentation/Shared/Extensions/ExerciseRecord+WeeklyVolume.swift
       - path: Presentation/Shared/Extensions/MuscleGroup+View.swift
       - path: Presentation/Shared/Extensions/FatigueLevel+DisplayName.swift

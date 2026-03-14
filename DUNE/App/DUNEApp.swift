@@ -344,14 +344,14 @@ struct DUNEApp: App {
                     await requestDeferredAuthorizationsIfNeeded()
                 }
             }
-            .onReceive(NotificationCenter.default.publisher(for: NSUbiquitousKeyValueStore.didChangeExternallyNotification)) { notification in
+            .onReceive(NotificationCenter.default.mainThreadPublisher(for: NSUbiquitousKeyValueStore.didChangeExternallyNotification)) { notification in
                 let shouldHandle = shouldHandleCloudSyncNotification(notification)
                 guard shouldHandle else { return }
                 Task { @MainActor in
                     await refreshAppRuntimeIfNeeded()
                 }
             }
-            .onReceive(NotificationCenter.default.publisher(for: .NSPersistentStoreRemoteChange)) { _ in
+            .onReceive(NotificationCenter.default.mainThreadPublisher(for: .NSPersistentStoreRemoteChange)) { _ in
                 Task { @MainActor in
                     await PersistentStoreRemoteChangeRefresh.request(using: appRuntime.refreshCoordinator)
                 }

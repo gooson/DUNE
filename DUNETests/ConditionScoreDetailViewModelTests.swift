@@ -49,6 +49,27 @@ struct ConditionScoreDetailViewModelTests {
         return samples
     }
 
+    private func makeTimedSamples(_ entries: [(dayOffset: Int, hour: Int, value: Double)]) -> [HRVSample] {
+        let today = calendar.startOfDay(for: Date())
+        return entries.compactMap { entry in
+            guard let day = calendar.date(byAdding: .day, value: -entry.dayOffset, to: today),
+                  let date = calendar.date(byAdding: .hour, value: entry.hour, to: day) else {
+                return nil
+            }
+            return HRVSample(value: entry.value, date: date)
+        }
+    }
+
+    private func makeTimedRHRCollection(_ entries: [(dayOffset: Int, value: Double)]) -> [(date: Date, min: Double, max: Double, average: Double)] {
+        let today = calendar.startOfDay(for: Date())
+        return entries.compactMap { entry in
+            guard let date = calendar.date(byAdding: .day, value: -entry.dayOffset, to: today) else {
+                return nil
+            }
+            return (date: date, min: entry.value - 1, max: entry.value + 1, average: entry.value)
+        }
+    }
+
     // MARK: - Loading
 
     @Test("loads chart data from HRV samples for week period")
@@ -158,6 +179,7 @@ struct ConditionScoreDetailViewModelTests {
 
         #expect(vm.currentScore?.score == 75)
         #expect(vm.currentScore?.status == .good)
+        #expect(vm.scrollPosition == TimePeriod.week.dateRange.start)
     }
 
     // MARK: - Loading State
@@ -183,10 +205,55 @@ struct ConditionScoreDetailViewModelTests {
 
         await vm.loadData()
 
+        let currentRange = TimePeriod.week.dateRange
+        let expectedUpperBound = TimePeriod.week.scrollDomainUpperBound(referenceDate: currentRange.end)
+        #expect(vm.scrollDomain.upperBound == expectedUpperBound)
+
         if let latestPoint = vm.chartData.map(\.date).max() {
             #expect(vm.scrollDomain.upperBound > latestPoint)
         } else {
             Issue.record("Expected chart data for scrollDomain regression test")
         }
+    }
+
+    @Test("day period recomputes hourly chart data from raw HRV samples without snapshot service")
+    func dayPeriodUsesIntradayRecompute() async {
+        let currentHour = max(3, calendar.component(.hour, from: Date()))
+        let todayHours = [currentHour - 3, currentHour - 2, currentHour - 1]
+        let samples = makeTimedSamples([
+            (dayOffset: 0, hour: todayHours[0], value: 85),
+            (dayOffset: 0, hour: todayHours[1], value: 50),
+            (dayOffset: 0, hour: todayHours[2], value: 50),
+            (dayOffset: 1, hour: 12, value: 50),
+            (dayOffset: 2, hour: 12, value: 50),
+            (dayOffset: 3, hour: 12, value: 50),
+            (dayOffset: 4, hour: 12, value: 50),
+            (dayOffset: 5, hour: 12, value: 50),
+            (dayOffset: 6, hour: 12, value: 50)
+        ])
+        let service = MockHRVService(
+            samples: samples,
+            rhrCollection: makeTimedRHRCollection([
+                (dayOffset: 0, value: 60),
+                (dayOffset: 1, value: 60),
+                (dayOffset: 2, value: 60),
+                (dayOffset: 3, value: 60),
+                (dayOffset: 4, value: 60),
+                (dayOffset: 5, value: 60),
+                (dayOffset: 6, value: 60)
+            ])
+        )
+        let vm = ConditionScoreDetailViewModel(hrvService: service)
+        vm.configure(score: ConditionScore(score: 65, date: Date()))
+        vm.selectedPeriod = .day
+
+        try? await Task.sleep(for: .milliseconds(50))
+        if vm.chartData.isEmpty {
+            await vm.loadData()
+        }
+
+        #expect(vm.chartData.count >= 2)
+        #expect(vm.chartData.allSatisfy { calendar.isDate($0.date, inSameDayAs: Date()) })
+        #expect(vm.summaryStats != nil)
     }
 }

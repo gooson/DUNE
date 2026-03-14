@@ -25,7 +25,8 @@ struct CloudMirroredSharedHealthDataServiceTests {
             rhrDeltaFromBaseline: 3,
             rhrBaselineDays: 9,
             displayRHR: 56,
-            displayRHRDate: Date(timeIntervalSince1970: 1_700_086_400)
+            displayRHRDate: Date(timeIntervalSince1970: 1_700_086_400),
+            evaluationDate: Date(timeIntervalSince1970: 1_700_086_400)
         )
         let conditionContributions = [
             ScoreContribution(factor: .hrv, impact: .positive, detail: "61ms — above 55ms avg"),

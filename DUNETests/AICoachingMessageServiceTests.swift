@@ -9,13 +9,13 @@ struct AICoachingMessageServiceTests {
 
     // MARK: - Fallback Behavior
 
-    @Test("Returns original insight when Foundation Models unavailable")
+    @Test("Returns original insight when Foundation Models are unavailable")
     func fallbackWhenUnavailable() async {
-        // On simulator, SystemLanguageModel.default.isAvailable == false
+        let unavailableSUT = AICoachingMessageService(availabilityProvider: { false })
         let insight = makeTestInsight()
         let input = makeTestInput()
 
-        let result = await sut.enhance(insight: insight, context: input)
+        let result = await unavailableSUT.enhance(insight: insight, context: input)
 
         #expect(result.id == insight.id)
         #expect(result.title == insight.title)
@@ -26,10 +26,10 @@ struct AICoachingMessageServiceTests {
         #expect(result.actionHint == insight.actionHint)
     }
 
-    @Test("isAvailable returns false on simulator")
-    func isAvailableOnSimulator() {
-        // Foundation Models require A17 Pro+ hardware
-        #expect(!AICoachingMessageService.isAvailable)
+    @Test("Injected availability is respected")
+    func injectedAvailabilityIsRespected() {
+        let unavailableSUT = AICoachingMessageService(availabilityProvider: { false })
+        #expect(!unavailableSUT.isAvailable)
     }
 
     // MARK: - Prompt Construction
