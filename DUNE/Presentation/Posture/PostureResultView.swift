@@ -90,27 +90,33 @@ struct PostureResultView: View {
     // MARK: - Capture Images
 
     private var captureImagesSection: some View {
-        HStack(spacing: 12) {
+        HStack(alignment: .top, spacing: 12) {
             captureImageCard(
                 label: String(localized: "Front"),
+                captureType: .front,
                 imageData: viewModel.frontResult?.imageData,
-                joints: viewModel.frontAssessment?.jointPositions ?? []
+                joints: viewModel.frontAssessment?.jointPositions ?? [],
+                metrics: viewModel.frontAssessment?.metrics ?? []
             )
 
             captureImageCard(
                 label: String(localized: "Side"),
+                captureType: .side,
                 imageData: viewModel.sideResult?.imageData,
-                joints: viewModel.sideAssessment?.jointPositions ?? []
+                joints: viewModel.sideAssessment?.jointPositions ?? [],
+                metrics: viewModel.sideAssessment?.metrics ?? []
             )
         }
     }
 
     private func captureImageCard(
         label: String,
+        captureType: PostureCaptureType,
         imageData: Data?,
-        joints: [JointPosition3D]
+        joints: [JointPosition3D],
+        metrics: [PostureMetricResult]
     ) -> some View {
-        VStack(spacing: 4) {
+        VStack(spacing: 8) {
             ZStack {
                 if let imageData, let uiImage = UIImage(data: imageData) {
                     Image(uiImage: uiImage)
@@ -121,7 +127,9 @@ struct PostureResultView: View {
                             if !joints.isEmpty {
                                 JointOverlayView(
                                     jointPositions: joints,
-                                    imageSize: uiImage.size
+                                    imageSize: uiImage.size,
+                                    metrics: metrics,
+                                    captureType: captureType
                                 )
                             }
                         }
@@ -130,19 +138,56 @@ struct PostureResultView: View {
                         .fill(.quaternary)
                         .aspectRatio(3 / 4, contentMode: .fit)
                         .overlay {
-                            Image(systemName: "camera.fill")
-                                .font(.title2)
-                                .foregroundStyle(.tertiary)
+                            VStack(spacing: 6) {
+                                Image(systemName: "camera.fill")
+                                    .font(.title2)
+                                    .foregroundStyle(.tertiary)
+
+                                Text(captureType == .front
+                                    ? "Capture front view for analysis"
+                                    : "Capture side view for analysis")
+                                    .font(.caption2)
+                                    .foregroundStyle(.tertiary)
+                            }
                         }
                 }
             }
 
             Text(label)
-                .font(.caption)
+                .font(.caption.weight(.medium))
                 .foregroundStyle(.secondary)
+
+            // Per-capture metric summary
+            if !metrics.isEmpty {
+                captureMetricSummary(metrics)
+            }
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text("\(label) view capture"))
+    }
+
+    private func captureMetricSummary(_ metrics: [PostureMetricResult]) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            ForEach(metrics) { metric in
+                HStack(spacing: 4) {
+                    Circle()
+                        .fill(metric.status.color)
+                        .frame(width: 6, height: 6)
+
+                    Text(metric.type.displayName)
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
+
+                    Spacer(minLength: 0)
+
+                    Text(metricValueText(metric))
+                        .font(.caption2.monospacedDigit())
+                        .foregroundStyle(.secondary)
+                }
+            }
+        }
+        .padding(.horizontal, 4)
     }
 
     // MARK: - Metrics
