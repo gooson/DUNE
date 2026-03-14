@@ -34,9 +34,6 @@ final class TrainingReadinessDetailViewModel {
     private(set) var trendLineData: [ChartDataPoint]?
     private(set) var scrollDomain: ClosedRange<Date> = Date.now...Date.now
 
-    /// Rolling window duration for the day period (24 hours in seconds).
-    private static let rollingWindowSeconds: TimeInterval = 24 * 60 * 60
-
     private let hrvService: HRVQuerying
     private let sleepService: SleepQuerying
     private let scoreRefreshService: ScoreRefreshService?
@@ -93,7 +90,7 @@ final class TrainingReadinessDetailViewModel {
 
     private func resetScrollPosition() {
         if selectedPeriod == .day {
-            scrollPosition = Date().addingTimeInterval(-Self.rollingWindowSeconds)
+            scrollPosition = Date().addingTimeInterval(-ScoreRefreshService.rollingWindowSeconds)
         } else {
             let range = selectedPeriod.dateRange(offset: 0)
             scrollPosition = range.start

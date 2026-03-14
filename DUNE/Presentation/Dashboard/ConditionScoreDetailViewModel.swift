@@ -31,9 +31,6 @@ final class ConditionScoreDetailViewModel {
     private(set) var scrollDomain: ClosedRange<Date> = Date.now...Date.now
     private(set) var currentScore: ConditionScore?
 
-    /// Rolling window duration for the day period (24 hours in seconds).
-    private static let rollingWindowSeconds: TimeInterval = 24 * 60 * 60
-
     private let hrvService: HRVQuerying
     private let scoreUseCase = CalculateConditionScoreUseCase()
     private let scoreRefreshService: ScoreRefreshService?
@@ -91,7 +88,7 @@ final class ConditionScoreDetailViewModel {
     private func resetScrollPosition() {
         if selectedPeriod == .day {
             // Rolling 24h: scroll to show the full 24h window starting from now-24h
-            scrollPosition = nowProvider().addingTimeInterval(-Self.rollingWindowSeconds)
+            scrollPosition = nowProvider().addingTimeInterval(-ScoreRefreshService.rollingWindowSeconds)
         } else {
             let range = selectedPeriod.dateRange(offset: 0)
             scrollPosition = range.start
@@ -307,7 +304,7 @@ final class ConditionScoreDetailViewModel {
         let calendar = Calendar.current
         let now = nowProvider()
         // Rolling 24h window: show yesterday's data too (especially useful at early hours)
-        let twentyFourHoursAgo = now.addingTimeInterval(-Self.rollingWindowSeconds)
+        let twentyFourHoursAgo = now.addingTimeInterval(-ScoreRefreshService.rollingWindowSeconds)
         let baselineStart = calendar.date(
             byAdding: .day,
             value: -CalculateConditionScoreUseCase.conditionWindowDays,
