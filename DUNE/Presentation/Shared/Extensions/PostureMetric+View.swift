@@ -50,6 +50,24 @@ extension PostureMetricType {
     }
 }
 
+// MARK: - Posture Score Helpers
+
+/// Shared score-to-color mapping used across all posture views.
+func postureScoreColor(_ score: Int) -> Color {
+    if score >= 80 { return .green }
+    if score >= 60 { return .yellow }
+    return .red
+}
+
+/// Shared metric value formatter used across posture views.
+func formattedPostureMetricValue(_ value: Double, unit: PostureMetricUnit) -> String {
+    let formatted = value.formatted(.number.precision(.fractionLength(1)))
+    switch unit {
+    case .degrees: return "\(formatted)°"
+    case .centimeters: return "\(formatted) cm"
+    }
+}
+
 extension PostureStatus {
     var color: Color {
         switch self {
