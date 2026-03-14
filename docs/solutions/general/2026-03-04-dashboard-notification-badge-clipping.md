@@ -1,65 +1,72 @@
 ---
-tags: [swiftui, toolbar, notification, badge, clipping, dashboard]
+tags: [swiftui, toolbar, notification, badge, clipping, dashboard, zstack]
 category: general
-date: 2026-03-04
+date: 2026-03-15
 severity: important
 related_files:
   - DUNE/Presentation/Dashboard/DashboardView.swift
-  - DUNEUITests/Helpers/UITestHelpers.swift
-  - DUNEUITests/Smoke/DashboardSmokeTests.swift
 related_solutions: []
 ---
 
-# Solution: Today 툴바 알림 뱃지 상단 잘림
+# Solution: Today 툴바 알림 뱃지 잘림 (v2)
 
 ## Problem
 
 ### Symptoms
 
 - Today 탭 우상단 알림 벨 아이콘의 unread 뱃지(빨간 캡슐) 상단이 잘려 보임
-- unread count가 있을 때만 재현되며, 아이콘 자체 동작(알림 허브 이동)은 정상
+- unread count가 있을 때만 재현
 
-### Root Cause
+### Root Cause (v1 fix 실패)
 
-`DashboardView.notificationBellIcon`에서 뱃지를 `offset(x: 8, y: -8)`로 위쪽으로 크게 이동했다.
-툴바 아이템 렌더링 경계를 넘어가면서 캡슐 상단이 클리핑되었다.
+v1에서 `offset(x:8, y:-8)` → `overlay(alignment: .topTrailing)` + `offset(x: 6)`으로 변경했으나,
+`overlay`는 부모 프레임 경계 밖으로 나간 콘텐츠를 렌더링하되, **툴바 아이템 컨테이너가 해당 경계에서 클리핑**하여
+뱃지 상단이 여전히 잘렸다.
 
-## Solution
+핵심 원인: `overlay` 콘텐츠는 부모 레이아웃 경계를 확장하지 않음 → 툴바가 22×22 프레임 기준으로 클리핑.
 
-음수 Y offset 의존을 제거하고, `overlay(alignment: .topTrailing)` + 고정 프레임으로 배치를 전환했다.
+## Solution (v2)
 
-### Changes Made
-
-| File | Change | Reason |
-|------|--------|--------|
-| `DUNE/Presentation/Dashboard/DashboardView.swift` | `notificationBellIcon`를 `Image + overlay` 구조로 변경, `frame(width: 22, height: 22)` 적용 | 툴바 경계 내에서 뱃지를 안정적으로 렌더링 |
-| `DUNEUITests/Helpers/UITestHelpers.swift` | `dashboardToolbarNotifications` AXID 상수 추가 | 테스트에서 알림 버튼 식별자를 문자열 하드코딩 없이 재사용 |
-| `DUNEUITests/Smoke/DashboardSmokeTests.swift` | `testNotificationButtonExists()` 추가 | 알림 버튼 존재 회귀 검증 |
+`overlay` + `offset` 대신 `ZStack(alignment: .topTrailing)`으로 전환.
+ZStack은 모든 자식 뷰의 유니온으로 레이아웃 경계를 확장하므로 뱃지가 경계 내부에 자연스럽게 위치.
 
 ### Key Code
 
 ```swift
-Image(systemName: "bell")
-    .frame(width: 22, height: 22)
-    .overlay(alignment: .topTrailing) {
+private var notificationBellIcon: some View {
+    ZStack(alignment: .topTrailing) {
+        Image(systemName: "bell")
+            .frame(width: 22, height: 22)
+            .padding([.top, .trailing], 4)
+
         if unreadNotificationCount > 0 {
             Text(unreadBadgeLabel)
+                .font(.system(size: 9, weight: .bold))
+                .foregroundStyle(.white)
+                .padding(.horizontal, 5)
+                .padding(.vertical, 2)
                 .background(Color.red, in: Capsule())
-                .offset(x: 6)
+                .accessibilityLabel("...")
         }
     }
+}
 ```
+
+### Why ZStack works
+
+| 구조 | 레이아웃 경계 | 클리핑 |
+|------|-------------|--------|
+| `overlay` + `offset` | 부모(22×22)만 — offset은 레이아웃에 영향 없음 | 툴바가 22×22 기준으로 클리핑 |
+| `ZStack` | 모든 자식의 유니온 (벨+패딩+뱃지) | 뱃지가 경계 내부 → 클리핑 없음 |
+
+### 주의사항
+
+- `.frame(width: 22, height: 22)`를 벨 아이콘에 유지해야 툴바 간격이 일관적
+- `.padding([.top, .trailing], 4)`는 뱃지가 위치할 공간 확보 + 벨과 뱃지의 시각적 분리
+- 뱃지 없을 때도 padding으로 인해 26×26 크기 (4pt 증가) — 허용 범위
 
 ## Prevention
 
-### Checklist
-
-- [ ] Toolbar 뱃지/라벨은 큰 음수 Y offset으로 경계를 넘기지 않는다.
-- [ ] 툴바 오버레이 요소는 `overlay(alignment:)`와 명시적 프레임으로 배치한다.
-- [ ] 툴바 접근성 ID는 UI 테스트 상수(`AXID`)에 함께 등록한다.
-
-## Verification
-
-- App build: `xcodebuild build -project DUNE/DUNE.xcodeproj -scheme DUNE -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.2' -quiet` 통과
-- Unit test: `xcodebuild test -project DUNE/DUNE.xcodeproj -scheme DUNETests -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.2' -only-testing DUNETests/DashboardViewModelTests -quiet` 통과
-- UI test: CoreSimulatorService 연결 불안정으로 실행 실패 (`Unable to find a device matching...`) — 코드 실패 아님
+- 툴바 아이템에서 `overlay` + `offset`으로 경계 밖 콘텐츠를 배치하지 않는다
+- 뱃지/라벨 오버레이가 필요하면 `ZStack`으로 레이아웃 경계를 자연 확장한다
+- 벨 아이콘의 `.frame()` 제거 금지 — 툴바 간격 일관성 유지
