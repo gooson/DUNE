@@ -299,53 +299,69 @@ struct PostureHistoryView: View {
                     .foregroundStyle(viewModel.comparisonSelection.contains(record.id)
                         ? DS.Color.body
                         : .secondary)
-                    .onTapGesture {
-                        viewModel.toggleComparison(record.id)
-                    }
             }
 
-            NavigationLink(value: PostureRecordDestination(id: record.id)) {
-                HStack(spacing: DS.Spacing.md) {
-                    // Score circle
-                    scoreCircle(record.overallScore)
-
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(record.date, style: .date)
-                            .font(.subheadline.weight(.medium))
-
-                        HStack(spacing: DS.Spacing.xs) {
-                            Text(String(localized: "\(record.allMetrics.count) metrics"))
-                                .font(.caption)
-                                .foregroundStyle(DS.Color.textSecondary)
-
-                            if !record.memo.isEmpty {
-                                Text("\u{00B7}")
-                                    .foregroundStyle(DS.Color.textSecondary)
-                                Text(record.memo)
-                                    .font(.caption)
-                                    .foregroundStyle(DS.Color.textSecondary)
-                                    .lineLimit(1)
-                            }
-                        }
-                    }
-
-                    Spacer()
-
-                    Image(systemName: "chevron.right")
-                        .font(.caption)
-                        .foregroundStyle(.tertiary)
-                }
-            }
-            .buttonStyle(.plain)
-            .disabled(isCompareMode)
+            recordRowContent(record)
         }
         .padding(DS.Spacing.md)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+        .contentShape(Rectangle())
+        .onTapGesture {
+            if isCompareMode {
+                viewModel.toggleComparison(record.id)
+            }
+        }
         .contextMenu {
             Button(role: .destructive) {
                 recordToDelete = record
             } label: {
                 Label("Delete", systemImage: "trash")
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func recordRowContent(_ record: PostureAssessmentRecord) -> some View {
+        if isCompareMode {
+            rowBody(record)
+        } else {
+            NavigationLink(value: PostureRecordDestination(id: record.id)) {
+                rowBody(record)
+            }
+            .buttonStyle(.plain)
+        }
+    }
+
+    private func rowBody(_ record: PostureAssessmentRecord) -> some View {
+        HStack(spacing: DS.Spacing.md) {
+            scoreCircle(record.overallScore)
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(record.date, style: .date)
+                    .font(.subheadline.weight(.medium))
+
+                HStack(spacing: DS.Spacing.xs) {
+                    Text(String(localized: "\(record.allMetrics.count) metrics"))
+                        .font(.caption)
+                        .foregroundStyle(DS.Color.textSecondary)
+
+                    if !record.memo.isEmpty {
+                        Text("\u{00B7}")
+                            .foregroundStyle(DS.Color.textSecondary)
+                        Text(record.memo)
+                            .font(.caption)
+                            .foregroundStyle(DS.Color.textSecondary)
+                            .lineLimit(1)
+                    }
+                }
+            }
+
+            Spacer()
+
+            if !isCompareMode {
+                Image(systemName: "chevron.right")
+                    .font(.caption)
+                    .foregroundStyle(.tertiary)
             }
         }
     }

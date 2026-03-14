@@ -9,7 +9,7 @@ struct PostureDetailView: View {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: 24) {
+            VStack(spacing: DS.Spacing.lg) {
                 scoreSection
                 captureImagesSection
                 metricsSection
@@ -20,9 +20,8 @@ struct PostureDetailView: View {
 
                 deleteButton
             }
-            .padding()
+            .padding(.horizontal, DS.Spacing.lg)
         }
-        .background(Color(.systemGroupedBackground))
         .englishNavigationTitle("Assessment Detail")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -32,12 +31,14 @@ struct PostureDetailView: View {
                     .foregroundStyle(.secondary)
             }
         }
+        .background { DetailWaveBackground() }
+        .environment(\.waveColor, DS.Color.body)
     }
 
     // MARK: - Score
 
     private var scoreSection: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: DS.Spacing.sm) {
             ZStack {
                 Circle()
                     .stroke(.quaternary, lineWidth: 12)
@@ -73,8 +74,8 @@ struct PostureDetailView: View {
                 .foregroundStyle(.orange)
             }
         }
-        .padding()
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
+        .padding(DS.Spacing.lg)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text("Posture score \(record.overallScore) out of 100"))
     }
@@ -82,7 +83,7 @@ struct PostureDetailView: View {
     // MARK: - Capture Images
 
     private var captureImagesSection: some View {
-        HStack(alignment: .top, spacing: 12) {
+        HStack(alignment: .top, spacing: DS.Spacing.md) {
             imageCard(
                 label: String(localized: "Front"),
                 captureType: .front,
@@ -108,12 +109,12 @@ struct PostureDetailView: View {
         joints: [JointPosition3D],
         metrics: [PostureMetricResult]
     ) -> some View {
-        VStack(spacing: 8) {
+        VStack(spacing: DS.Spacing.sm) {
             if let imageData, let uiImage = UIImage(data: imageData) {
                 Image(uiImage: uiImage)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .clipShape(RoundedRectangle(cornerRadius: DS.Radius.sm))
                     .overlay {
                         if !joints.isEmpty {
                             JointOverlayView(
@@ -125,7 +126,7 @@ struct PostureDetailView: View {
                         }
                     }
             } else {
-                RoundedRectangle(cornerRadius: 12)
+                RoundedRectangle(cornerRadius: DS.Radius.sm)
                     .fill(.quaternary)
                     .aspectRatio(3 / 4, contentMode: .fit)
                     .overlay {
@@ -144,7 +145,7 @@ struct PostureDetailView: View {
     // MARK: - Metrics
 
     private var metricsSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: DS.Spacing.md) {
             Text("Assessment Details")
                 .font(.headline)
 
@@ -153,12 +154,12 @@ struct PostureDetailView: View {
                 metricRow(metric)
             }
         }
-        .padding()
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
+        .padding(DS.Spacing.md)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
     }
 
     private func metricRow(_ metric: PostureMetricResult) -> some View {
-        HStack(spacing: 12) {
+        HStack(spacing: DS.Spacing.md) {
             Image(systemName: metric.type.iconName)
                 .font(.title3)
                 .foregroundStyle(metric.status.color)
@@ -179,7 +180,7 @@ struct PostureDetailView: View {
                 .font(.caption.weight(.medium))
                 .foregroundStyle(metric.status.color)
         }
-        .padding(.vertical, 4)
+        .padding(.vertical, DS.Spacing.xs)
     }
 
     private func metricValueText(_ metric: PostureMetricResult) -> String {
@@ -189,7 +190,7 @@ struct PostureDetailView: View {
     // MARK: - Memo
 
     private var memoSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             Text("Memo")
                 .font(.headline)
 
@@ -198,8 +199,8 @@ struct PostureDetailView: View {
                 .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding()
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
+        .padding(DS.Spacing.md)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
     }
 
     // MARK: - Delete
