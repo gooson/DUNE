@@ -123,7 +123,7 @@ private func makeEmptyActivitySharedSnapshot(fetchedAt: Date = Date()) -> Shared
         hrvSamples: [],
         todayRHR: nil,
         yesterdayRHR: nil,
-        latestRHR: nil,
+        latestRHR: SharedHealthSnapshot.RHRSample(value: 56, date: fetchedAt),
         rhrCollection: [],
         todaySleepStages: [],
         yesterdaySleepStages: [],
@@ -208,6 +208,30 @@ struct ActivityViewModelTests {
         return WorkoutRecommendationSettingsStore(defaults: defaults)
     }
 
+    private func makeViewModel(
+        workoutService: WorkoutQuerying = MockWorkoutService(),
+        stepsService: StepsQuerying = MockStepsService(),
+        hrvService: HRVQuerying = MockHRVService(),
+        sleepService: SleepQuerying = MockSleepService(),
+        recommendationService: WorkoutRecommending? = nil,
+        sharedHealthDataService: SharedHealthDataService? = nil,
+        personalRecordStore: PersonalRecordStore = .shared,
+        recommendationSettingsStore: WorkoutRecommendationSettingsStore = .shared
+    ) -> ActivityViewModel {
+        ActivityViewModel(
+            workoutService: workoutService,
+            stepsService: stepsService,
+            hrvService: hrvService,
+            sleepService: sleepService,
+            recommendationService: recommendationService,
+            sharedHealthDataService: sharedHealthDataService ?? MockSharedHealthDataService(
+                snapshot: makeEmptyActivitySharedSnapshot()
+            ),
+            personalRecordStore: personalRecordStore,
+            recommendationSettingsStore: recommendationSettingsStore
+        )
+    }
+
     @Test("record change fingerprint changes when completed set data changes")
     func recordChangeFingerprintTracksCompletedSetEdits() {
         let record = makeStrengthRecord()
@@ -233,7 +257,7 @@ struct ActivityViewModelTests {
             (date: today, sum: 8500),
         ])
 
-        let vm = ActivityViewModel(workoutService: workouts, stepsService: steps)
+        let vm = makeViewModel(workoutService: workouts, stepsService: steps)
         await vm.loadActivityData()
 
         #expect(vm.todayExercise != nil)
@@ -261,7 +285,7 @@ struct ActivityViewModelTests {
                 date: Date()
             )
         )
-        let vm = ActivityViewModel(
+        let vm = makeViewModel(
             workoutService: workoutService,
             stepsService: MockStepsService(),
             hrvService: MockHRVService(),
@@ -296,7 +320,7 @@ struct ActivityViewModelTests {
             (date: today, sum: 5000),
         ])
 
-        let vm = ActivityViewModel(workoutService: MockWorkoutService(), stepsService: steps)
+        let vm = makeViewModel(workoutService: MockWorkoutService(), stepsService: steps)
         await vm.loadActivityData()
 
         // Should have 7 data points (filling gaps with 0)
@@ -315,7 +339,7 @@ struct ActivityViewModelTests {
             WorkoutSummary(id: "1", type: "Running", duration: 3600, calories: nil, distance: nil, date: today),
         ])
 
-        let vm = ActivityViewModel(workoutService: workouts, stepsService: MockStepsService())
+        let vm = makeViewModel(workoutService: workouts, stepsService: MockStepsService())
         await vm.loadActivityData()
 
         #expect(vm.weeklyExerciseMinutes.count == 7)
@@ -333,7 +357,7 @@ struct ActivityViewModelTests {
             (date: calendar.startOfDay(for: Date()), sum: 5000),
         ])
 
-        let vm = ActivityViewModel(workoutService: workouts, stepsService: steps)
+        let vm = makeViewModel(workoutService: workouts, stepsService: steps)
         await vm.loadActivityData()
 
         // Steps should still load even if workouts fail
@@ -353,7 +377,7 @@ struct ActivityViewModelTests {
         ])
         let steps = MockStepsService(shouldThrow: true)
 
-        let vm = ActivityViewModel(workoutService: workouts, stepsService: steps)
+        let vm = makeViewModel(workoutService: workouts, stepsService: steps)
         await vm.loadActivityData()
 
         // Exercise should still load
@@ -367,7 +391,7 @@ struct ActivityViewModelTests {
 
     @Test("empty state when no data")
     func emptyState() async {
-        let vm = ActivityViewModel(
+        let vm = makeViewModel(
             workoutService: MockWorkoutService(),
             stepsService: MockStepsService()
         )
@@ -390,7 +414,7 @@ struct ActivityViewModelTests {
             WorkoutSummary(id: "3", type: "Yoga", duration: 600, calories: nil, distance: nil, date: today),
         ])
 
-        let vm = ActivityViewModel(workoutService: workouts, stepsService: MockStepsService())
+        let vm = makeViewModel(workoutService: workouts, stepsService: MockStepsService())
         await vm.loadActivityData()
 
         #expect(vm.todayExercise!.value == 80.0) // (1800+2400+600)/60
@@ -407,7 +431,7 @@ struct ActivityViewModelTests {
             (date: calendar.date(byAdding: .day, value: -3, to: today)!, sum: 8000),
         ])
 
-        let vm = ActivityViewModel(workoutService: MockWorkoutService(), stepsService: steps)
+        let vm = makeViewModel(workoutService: MockWorkoutService(), stepsService: steps)
         await vm.loadActivityData()
 
         // Verify ascending date order
@@ -437,7 +461,7 @@ struct ActivityViewModelTests {
             fetchedAt: now
         )
 
-        let vm = ActivityViewModel(
+        let vm = makeViewModel(
             workoutService: MockWorkoutService(),
             stepsService: MockStepsService(),
             hrvService: hrvService,
@@ -456,7 +480,7 @@ struct ActivityViewModelTests {
     @Test("manual cardio fallback appears in unified personal records")
     func manualCardioFallbackPR() {
         let store = makeIsolatedPRStore()
-        let vm = ActivityViewModel(
+        let vm = makeViewModel(
             workoutService: MockWorkoutService(),
             stepsService: MockStepsService(),
             personalRecordStore: store
@@ -480,7 +504,7 @@ struct ActivityViewModelTests {
     @Test("HealthKit cardio records take precedence over manual fallback")
     func healthKitCardioPrecedence() {
         let store = makeIsolatedPRStore()
-        let vm = ActivityViewModel(
+        let vm = makeViewModel(
             workoutService: MockWorkoutService(),
             stepsService: MockStepsService(),
             personalRecordStore: store
@@ -515,7 +539,7 @@ struct ActivityViewModelTests {
     @Test("refreshSuggestionFromRecords updates derived stats when debounce is disabled")
     func refreshSuggestionFromRecordsImmediate() async {
         let store = makeIsolatedPRStore()
-        let vm = ActivityViewModel(
+        let vm = makeViewModel(
             workoutService: MockWorkoutService(),
             stepsService: MockStepsService(),
             personalRecordStore: store
@@ -538,7 +562,7 @@ struct ActivityViewModelTests {
     @Test("refreshSuggestionFromRecords does not mutate state when cancelled during debounce")
     func refreshSuggestionFromRecordsCancellation() async {
         let store = makeIsolatedPRStore()
-        let vm = ActivityViewModel(
+        let vm = makeViewModel(
             workoutService: MockWorkoutService(),
             stepsService: MockStepsService(),
             personalRecordStore: store
@@ -565,7 +589,7 @@ struct ActivityViewModelTests {
     func recommendationExclusionPersists() {
         let store = makeIsolatedRecommendationStore()
         let recommendationService = MockRecommendationService()
-        let vm = ActivityViewModel(
+        let vm = makeViewModel(
             workoutService: MockWorkoutService(),
             stepsService: MockStepsService(),
             recommendationService: recommendationService,
@@ -586,7 +610,7 @@ struct ActivityViewModelTests {
     func equipmentAndContextUpdatesConstraints() {
         let store = makeIsolatedRecommendationStore()
         let recommendationService = MockRecommendationService()
-        let vm = ActivityViewModel(
+        let vm = makeViewModel(
             workoutService: MockWorkoutService(),
             stepsService: MockStepsService(),
             recommendationService: recommendationService,
