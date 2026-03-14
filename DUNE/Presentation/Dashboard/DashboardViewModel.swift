@@ -262,7 +262,14 @@ final class DashboardViewModel {
 
         weatherSnapshot = weatherResult
         weatherAtmosphere = weatherResult.map { WeatherAtmosphere.from($0) } ?? .default
-        sortedMetrics = allMetrics.sorted { $0.changeSignificance > $1.changeSignificance }
+
+        // Optimistic retention: on Mac mirrored mode, if reload yields empty metrics
+        // but we already have data, keep existing metrics to prevent infinite spinner.
+        if hasLoadedOnce && isMirroredReadOnlyMode && allMetrics.isEmpty && !self.sortedMetrics.isEmpty {
+            AppLogger.ui.info("Optimistic retention: keeping \(self.sortedMetrics.count) existing metrics (reload returned empty)")
+        } else {
+            sortedMetrics = allMetrics.sorted { $0.changeSignificance > $1.changeSignificance }
+        }
         buildCoachingInsights()
         coachingMessage = focusInsight?.message ?? buildCoachingMessage()
         enhanceCoachingMessageIfAvailable()
