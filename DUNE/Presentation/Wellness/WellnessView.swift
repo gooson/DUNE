@@ -20,6 +20,7 @@ struct WellnessView: View {
     private var isRegular: Bool { sizeClass == .regular }
 
     private let refreshSignal: Int
+    private let scoreRefreshService: ScoreRefreshService?
 
     init(
         sharedHealthDataService: SharedHealthDataService? = nil,
@@ -30,6 +31,7 @@ struct WellnessView: View {
         _viewModel = State(initialValue: WellnessViewModel(sharedHealthDataService: sharedHealthDataService, scoreRefreshService: scoreRefreshService))
         self.scrollToTopSignal = scrollToTopSignal
         self.refreshSignal = refreshSignal
+        self.scoreRefreshService = scoreRefreshService
     }
 
     var body: some View {
@@ -300,7 +302,8 @@ struct WellnessView: View {
                 WellnessScoreDetailView(
                     wellnessScore: score,
                     conditionScore: viewModel.conditionScoreFull,
-                    bodyScoreDetail: viewModel.bodyScoreDetail
+                    bodyScoreDetail: viewModel.bodyScoreDetail,
+                    scoreRefreshService: scoreRefreshService
                 )
             } else {
                 ProgressView()

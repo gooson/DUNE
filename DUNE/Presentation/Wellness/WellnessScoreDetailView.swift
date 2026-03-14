@@ -9,9 +9,23 @@ struct WellnessScoreDetailView: View {
     let wellnessScore: WellnessScore
     let conditionScore: ConditionScore?
     let bodyScoreDetail: BodyScoreDetail?
+    let scoreRefreshService: ScoreRefreshService?
 
-    @State private var viewModel = WellnessScoreDetailViewModel()
+    @State private var viewModel: WellnessScoreDetailViewModel
     @Environment(\.horizontalSizeClass) private var sizeClass
+
+    init(
+        wellnessScore: WellnessScore,
+        conditionScore: ConditionScore?,
+        bodyScoreDetail: BodyScoreDetail?,
+        scoreRefreshService: ScoreRefreshService? = nil
+    ) {
+        self.wellnessScore = wellnessScore
+        self.conditionScore = conditionScore
+        self.bodyScoreDetail = bodyScoreDetail
+        self.scoreRefreshService = scoreRefreshService
+        _viewModel = State(initialValue: WellnessScoreDetailViewModel(scoreRefreshService: scoreRefreshService))
+    }
 
     private enum Labels {
         static let scoreLabel = "WELLNESS"
@@ -101,27 +115,29 @@ struct WellnessScoreDetailView: View {
                 }
 
                 // 8. Sub-Score Charts (HRV → RHR → Sleep)
-                SubScoreTrendChartView(
-                    title: "HRV",
-                    data: viewModel.hrvTrend,
-                    color: DS.Color.hrv,
-                    unit: "ms"
-                )
+                if viewModel.selectedPeriod != .day {
+                    SubScoreTrendChartView(
+                        title: "HRV",
+                        data: viewModel.hrvTrend,
+                        color: DS.Color.hrv,
+                        unit: "ms"
+                    )
 
-                SubScoreTrendChartView(
-                    title: "Resting Heart Rate",
-                    data: viewModel.rhrTrend,
-                    color: DS.Color.heartRate,
-                    unit: "bpm"
-                )
+                    SubScoreTrendChartView(
+                        title: "Resting Heart Rate",
+                        data: viewModel.rhrTrend,
+                        color: DS.Color.heartRate,
+                        unit: "bpm"
+                    )
 
-                SubScoreTrendChartView(
-                    title: "Sleep Duration",
-                    data: viewModel.sleepTrend,
-                    color: DS.Color.sleep,
-                    unit: "hrs",
-                    fractionDigits: 1
-                )
+                    SubScoreTrendChartView(
+                        title: "Sleep Duration",
+                        data: viewModel.sleepTrend,
+                        color: DS.Color.sleep,
+                        unit: "hrs",
+                        fractionDigits: 1
+                    )
+                }
 
                 // 9. Component Weights
                 ScoreCompositionCard(

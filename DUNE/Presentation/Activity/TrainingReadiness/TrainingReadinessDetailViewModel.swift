@@ -36,14 +36,17 @@ final class TrainingReadinessDetailViewModel {
 
     private let hrvService: HRVQuerying
     private let sleepService: SleepQuerying
+    private let scoreRefreshService: ScoreRefreshService?
 
     init(
         hrvService: HRVQuerying? = nil,
         sleepService: SleepQuerying? = nil,
-        healthKitManager: HealthKitManager = .shared
+        healthKitManager: HealthKitManager = .shared,
+        scoreRefreshService: ScoreRefreshService? = nil
     ) {
         self.hrvService = hrvService ?? HRVQueryService(manager: healthKitManager)
         self.sleepService = sleepService ?? SleepQueryService(manager: healthKitManager)
+        self.scoreRefreshService = scoreRefreshService
         recalculateScrollDomain()
     }
 
@@ -60,7 +63,11 @@ final class TrainingReadinessDetailViewModel {
         highlights = []
 
         do {
-            try await loadReadinessData()
+            if selectedPeriod == .day {
+                await loadHourlyData()
+            } else {
+                try await loadReadinessData()
+            }
             guard !Task.isCancelled else {
                 isLoading = false
                 return
@@ -82,8 +89,12 @@ final class TrainingReadinessDetailViewModel {
     }
 
     private func resetScrollPosition() {
-        let range = selectedPeriod.dateRange(offset: 0)
-        scrollPosition = range.start
+        if selectedPeriod == .day {
+            scrollPosition = Date().addingTimeInterval(-ScoreRefreshService.rollingWindowSeconds)
+        } else {
+            let range = selectedPeriod.dateRange(offset: 0)
+            scrollPosition = range.start
+        }
     }
 
     private var extendedRange: (start: Date, end: Date) {
@@ -113,6 +124,32 @@ final class TrainingReadinessDetailViewModel {
         reloadTask?.cancel()
         isLoading = false
         reloadTask = Task { await loadData() }
+    }
+
+    // MARK: - Hourly Data (Day Period)
+
+    private func loadHourlyData() async {
+        guard let service = scoreRefreshService else {
+            chartData = []
+            summaryStats = nil
+            return
+        }
+
+        let snapshots = await service.fetchRolling24hSnapshots()
+        chartData = snapshots.compactMap { snap in
+            guard let score = snap.readinessScore else { return nil }
+            return ChartDataPoint(date: snap.date, value: score)
+        }
+
+        let values = chartData.map(\.value)
+        summaryStats = HealthDataAggregator.computeSummary(from: values, previousPeriodValues: nil)
+
+        // Sub-scores not shown for hourly view
+        hrvTrend = []
+        rhrTrend = []
+        sleepTrend = []
+
+        recalculateScrollDomain()
     }
 
     private func loadReadinessData() async throws {

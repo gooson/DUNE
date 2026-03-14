@@ -103,6 +103,21 @@ Layer boundary: App → Presentation → Domain ← Data
 - Only `calculateOverallScore` clamps to `max(0, min(100,...))` — the Domain model computed properties do not, causing behavioral drift
 - Fix: extract to `static func overallScore(from: [PostureMetricResult]) -> Int` and delegate from the computed properties
 
+### ScoreRefreshService passed through View layer (Data→Presentation boundary violation)
+- `ScoreRefreshService` (Data layer) is stored as a `let` property on `ActivityView` and `WellnessView` and forwarded directly to child detail Views
+- Views then pass it to ViewModels at init time — creating a Presentation→Data direct dependency visible in View code
+- Rule: Data-layer services must not be stored or forwarded by Views; inject via ViewModel constructor only, and ViewModel receives it from App-layer composition root (e.g., `ContentView` or environment)
+- Established pattern (feature/wellness-readiness-hourly): P2 finding — acceptable for now as no alternative injection mechanism exists, but blocks if a 4th detail view or refactor is needed
+
+### rollingWindowSeconds triplication
+- `private static let rollingWindowSeconds: TimeInterval = 24 * 60 * 60` now exists in `ConditionScoreDetailViewModel`, `WellnessScoreDetailViewModel`, and `TrainingReadinessDetailViewModel` (3 locations → DRY threshold crossed)
+- Also `ScoreRefreshService.loadTodaySparklines()` and `ScoreRefreshService.fetchRolling24hSnapshots()` each inline `24 * 60 * 60` (2 more locations)
+- Rule: extract to a shared constant, e.g., `ScoreDetailConstants.rollingWindowSeconds` or `HourlyScoreSnapshot.rollingWindowDuration`
+
+### fetchRolling24hSnapshots duplicates loadTodaySparklines fetch logic
+- `ScoreRefreshService.fetchRolling24hSnapshots()` (line 170) is a near-verbatim copy of the fetch descriptor in `loadTodaySparklines()` (line 127) — same predicate, same fetchLimit=48, same sort
+- Should be extracted to a private `fetchRolling24hDescriptor()` helper and reused by both callers
+
 ### Canonical layout verbatim repetition in Views
 - The sizeClass-split Summary Stats + Highlights block (iPad HStack / iPhone VStack) appears verbatim in all 3 detail views
 - Not yet extracted; a shared `AdaptiveScoreDetailSection` view wrapping this pattern would eliminate the repetition

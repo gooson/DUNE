@@ -7,9 +7,16 @@ import SwiftUI
 /// → Calculation Card → Explainer
 struct TrainingReadinessDetailView: View {
     let readiness: TrainingReadiness?
+    let scoreRefreshService: ScoreRefreshService?
 
-    @State private var viewModel = TrainingReadinessDetailViewModel()
+    @State private var viewModel: TrainingReadinessDetailViewModel
     @Environment(\.horizontalSizeClass) private var sizeClass
+
+    init(readiness: TrainingReadiness?, scoreRefreshService: ScoreRefreshService? = nil) {
+        self.readiness = readiness
+        self.scoreRefreshService = scoreRefreshService
+        _viewModel = State(initialValue: TrainingReadinessDetailViewModel(scoreRefreshService: scoreRefreshService))
+    }
 
     private enum Labels {
         static let scoreLabel = "READINESS"
@@ -100,27 +107,29 @@ struct TrainingReadinessDetailView: View {
                     }
 
                     // 8. Sub-Score Charts (HRV → RHR → Sleep)
-                    SubScoreTrendChartView(
-                        title: "HRV",
-                        data: viewModel.hrvTrend,
-                        color: DS.Color.hrv,
-                        unit: "ms"
-                    )
+                    if viewModel.selectedPeriod != .day {
+                        SubScoreTrendChartView(
+                            title: "HRV",
+                            data: viewModel.hrvTrend,
+                            color: DS.Color.hrv,
+                            unit: "ms"
+                        )
 
-                    SubScoreTrendChartView(
-                        title: "Resting Heart Rate",
-                        data: viewModel.rhrTrend,
-                        color: DS.Color.heartRate,
-                        unit: "bpm"
-                    )
+                        SubScoreTrendChartView(
+                            title: "Resting Heart Rate",
+                            data: viewModel.rhrTrend,
+                            color: DS.Color.heartRate,
+                            unit: "bpm"
+                        )
 
-                    SubScoreTrendChartView(
-                        title: "Sleep Duration",
-                        data: viewModel.sleepTrend,
-                        color: DS.Color.sleep,
-                        unit: "hrs",
-                        fractionDigits: 1
-                    )
+                        SubScoreTrendChartView(
+                            title: "Sleep Duration",
+                            data: viewModel.sleepTrend,
+                            color: DS.Color.sleep,
+                            unit: "hrs",
+                            fractionDigits: 1
+                        )
+                    }
 
                     // 9. Component Weights
                     ScoreCompositionCard(
