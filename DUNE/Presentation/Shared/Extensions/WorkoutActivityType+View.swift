@@ -238,6 +238,14 @@ extension WorkoutSummary {
         if let corrected = correctionStore.correctedTitle(for: id) {
             return corrected
         }
-        return WorkoutActivityType.localizedDisplayName(forStoredTitle: type) ?? type
+        if let localized = WorkoutActivityType.localizedDisplayName(forStoredTitle: type) {
+            return localized
+        }
+        // Custom HealthKit titles (e.g. "Tempo Run") don't match any typeName —
+        // fall back to the localized activity type name instead of raw English.
+        if activityType != .other {
+            return activityType.displayName
+        }
+        return type
     }
 }
