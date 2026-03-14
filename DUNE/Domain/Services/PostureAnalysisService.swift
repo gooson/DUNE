@@ -42,22 +42,7 @@ struct PostureAnalysisService: Sendable {
 
     /// Calculate overall posture score from all metrics.
     func calculateOverallScore(metrics: [PostureMetricResult]) -> Int {
-        let measurable = metrics.filter { $0.status != .unmeasurable }
-        guard !measurable.isEmpty else { return 0 }
-
-        var weightedSum = 0.0
-        var totalWeight = 0.0
-
-        for metric in measurable {
-            let weight = metric.type.scoreWeight
-            weightedSum += metric.normalizedScore * weight
-            totalWeight += weight
-        }
-
-        guard totalWeight > 0 else { return 0 }
-        let raw = (weightedSum / totalWeight) * 100.0
-        guard raw.isFinite else { return 0 }
-        return max(0, min(100, Int(raw.rounded())))
+        metrics.weightedOverallScore()
     }
 
     // MARK: - Frontal Metrics

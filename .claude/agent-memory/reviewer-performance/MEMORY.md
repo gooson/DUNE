@@ -165,6 +165,46 @@ Call recalculate in .task and .onChange, not in body
 - Fix: Guard assignment on value change: `if scrollPosition != restore { scrollPosition = restore }`
 - Pattern locations: AreaLineChartView, BarChartView, DotLineChartView, RangeBarChartView, SleepStageChartView
 
+## PostureAssessmentRecord / PostureResultView Patterns (posture-assessment PR)
+
+### PostureAssessmentRecord — JSON decode in computed properties called from body
+- `frontMetrics`, `sideMetrics`, `frontJointPositions`, `sideJointPositions` are all computed properties that call `Self.decode(json)` (JSONDecoder round-trip) on every access
+- `allMetrics` chains `frontMetrics + sideMetrics` = 2 JSON decodes per access
+- Called from `PostureResultView.metricsSection` body via `viewModel.combinedAssessment.allMetrics` — fires on every render
+- These are on the @Model object; SwiftData observation triggers render on any write
+- Fix: decode once into stored properties on first access (`private(set) lazy var`-like pattern using `didSet` or pre-decoded transient properties)
+
+### PostureResultView — triple combinedAssessment.overallScore in body
+- `scoreSection` body accesses `viewModel.combinedAssessment.overallScore` twice (`.trim` value and `Text` label) plus `scoreColor` accesses it a third time
+- `combinedAssessment` is a computed property on the @Observable ViewModel — creates a new `CombinedPostureAssessment` struct on every access
+- `overallScore` on `CombinedPostureAssessment` iterates all metrics and computes weighted sum on every call
+- Three calls per body render = 3× struct allocation + 3× weighted sum pass
+- Fix: `let combined = viewModel.combinedAssessment` local binding at top of `scoreSection`; or store as a cached computed property on ViewModel
+
+### PostureAssessmentViewModel.previewLayer — new AVCaptureVideoPreviewLayer on every body access
+- `previewLayer` is a `var` (line ~1878) that returns `AVCaptureVideoPreviewLayer(session: ...)` on every call
+- Called from the ViewModel, which is @Observable — any state change triggers body re-eval
+- AVCaptureVideoPreviewLayer allocation involves Core Animation layer creation
+- Fix: store as `private let _previewLayer: AVCaptureVideoPreviewLayer` initialized once in `setupCamera()` or init
+
+### JointOverlayView — Dictionary built in connectionLines() on every render
+- `connectionLines(scale:offsetX:offsetY:)` creates `Dictionary(uniqueKeysWithValues: jointPositions.map { ($0.name, $0) })` on every call
+- Called from `body` inside GeometryReader, which fires on every layout pass
+- With 17 joints: 17-entry map + dictionary init per render
+- Fix: hoist `jointMap` to a stored property or use `.task(id: jointPositions.count)` invalidation pattern
+
+### PostureCaptureService.captureWithAveraging — sequential capture with sleep
+- `captureWithAveraging(frameCount: 3)` loops 3 times with `Task.sleep(.milliseconds(300))` between captures — ~900ms total blocking the calling Task
+- All 3 captures are sequential; there is no structural reason they cannot pipeline (capture n+1 while processing n)
+- `compressImage(_:)` (JPEG encoding at 0.7 quality on a `.photo` preset full-res image) happens synchronously inside `detectPose(from:)` on the main-actor path
+- Fix: move JPEG compression to a background task; pipeline overlap is harder due to single `photoContinuation` but `Task.sleep` is acceptable for UX countdown context — flag as P3
+
+### PostureStatus < ordering — linear scan on every comparison
+- `PostureStatus.<` creates a local `[PostureStatus]` array on every call and calls `.firstIndex(of:)` (O(N) scan) twice
+- Used in `analyzeFrontView` knee-merge `max(by:)` which calls `<` O(N log N) times
+- Array is 4 elements so impact is tiny, but pattern is incorrect — should use rawValue Int ordering or a static let
+- Fix: `private static let order: [PostureStatus] = [.normal, .caution, .warning, .unmeasurable]` static let; or assign Int raw values
+
 ## ScoreRefreshService / HourlySparklineView Patterns (hourly-condition-tracking PR)
 
 ### Triple recordSnapshot() calls per refresh cycle — redundant DB writes + loadTodaySparklines() triple-fires

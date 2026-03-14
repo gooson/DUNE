@@ -77,6 +77,22 @@
 - UserDefaults used for workout recovery state — low sensitivity data, acceptable
 - `print()` debug calls in production code (WorkoutManager.swift lines 304, 316)
 
+### Posture Assessment Audit (Branch claude/elated-herschel)
+- **P1**: `PostureAssessmentRecord` stores raw JPEG `Data?` in SwiftData (`frontImageData`, `sideImageData`). This data syncs to CloudKit and propagates across all devices — user body images stored without size cap. A single high-res JPEG at default AVFoundation quality can be 3-10 MB; multiplied across records and devices this is a significant data exposure and storage risk. No maximum byte-size guard exists before `modelContext.insert(record)`.
+- **P1**: `photoContinuation` in `PostureCaptureService` is a stored `var` property not protected against concurrent access. The class is declared `@unchecked Sendable`. If `capturePhoto()` is called concurrently (e.g. countdown Task not cancelled before second tap), the first continuation leaks and is never resumed — guaranteed Task suspension leak (memory leak + silent hang).
+- **P2**: `overallScore` in `PostureAssessmentRecord` is stored as plain `Int` with no bounds validation at init time. `combinedAssessment.overallScore` is `Int(raw.rounded())` but `PostureAnalysisService.calculateOverallScore` already clamps to 0-100; however `PostureAssessmentRecord.init` accepts any `Int` directly — a CloudKit-injected record could carry a score outside 0-100 and render unclamped in the UI (score arc trim goes from `CGFloat(overallScore) / 100.0`, so a score of 200 fills the ring 2× over, a negative score draws nothing but may confuse stats).
+- **P2**: `PostureCaptureService.captureSession` is `let` (public) on the service; `PostureAssessmentViewModel` exposes `captureService` as `let` (not private). Any caller can reach `captureService.captureSession` and stop/start/reconfigure the session externally, bypassing `setupCamera()` safety guards.
+- **P2**: `JointPosition3D.name` is a free `String` field that gets JSON-encoded into `frontJointPositionsJSON`/`sideJointPositionsJSON` and stored in SwiftData / synced via CloudKit. While the field is populated from a fixed `trackedJoints` static array, there is no validation that names conform to that set at the model level — a CloudKit-injected record with arbitrary joint names persists and could produce unexpected behavior in analysis service lookup.
+- **P3**: `PostureCaptureView.analyzingOverlay` has `Text("Analyzing posture...")` as a hardcoded English string (not wrapped in `String(localized:)`). Minor localization leak, not a security issue.
+- **Safe**: `PostureAssessmentViewModel.createValidatedRecord()` trims memo to 500 characters via `String(memo.prefix(500))` — memo overflow prevented.
+- **Safe**: `PostureAssessmentViewModel.createValidatedRecord()` guards `isSaving` flag for idempotency — double-save prevented, flag reset in both nil-return paths.
+- **Safe**: `PostureCaptureService.setupCamera()` uses `AVCaptureDevice.default(.builtInWideAngleCamera, position: .front)` — fixed hardware device, no user-controlled path injection.
+- **Safe**: `PostureCaptureService.extractJointPositions` guards `x.isFinite, y.isFinite, z.isFinite` — NaN/Inf coordinates filtered before storage.
+- **Safe**: `PostureAnalysisService` is a pure value-type domain service with no imports of AVFoundation/UIKit — correct layer separation.
+- **Safe**: Schema migration V15→V16 uses lightweight migration with explicit stage — correct pattern per `swiftdata-cloudkit.md`. `PostureAssessmentRecord` relationships are all Optional for CloudKit compatibility.
+- **Safe**: Error messages shown in `capturePhase = .error(...)` are either constant localized strings or `captureErrorMessage(error)` which maps to localized strings — no `error.localizedDescription` leakage to UI.
+- **Safe**: `PostureAssessmentRecord` JSON decode uses `try? decoder.decode(...)` with a typed Codable — no untyped deserialization risk.
+
 ### Not Applicable to This Codebase
 - SQL injection (no raw SQL, uses SwiftData/HealthKit)
 - XSS (native iOS app, no WebView)

@@ -56,10 +56,11 @@ enum PostureStatus: String, Codable, Sendable, Hashable, Comparable {
     case warning    // Significantly outside normal
     case unmeasurable // Could not be measured (low confidence, occluded)
 
+    private static let statusOrder: [PostureStatus] = [.normal, .caution, .warning, .unmeasurable]
+
     static func < (lhs: PostureStatus, rhs: PostureStatus) -> Bool {
-        let order: [PostureStatus] = [.normal, .caution, .warning, .unmeasurable]
-        guard let l = order.firstIndex(of: lhs),
-              let r = order.firstIndex(of: rhs) else { return false }
+        guard let l = statusOrder.firstIndex(of: lhs),
+              let r = statusOrder.firstIndex(of: rhs) else { return false }
         return l < r
     }
 }
@@ -78,6 +79,28 @@ struct PostureMetricResult: Codable, Sendable, Hashable, Identifiable {
 
     /// Normalized score (0.0-1.0) for weighted composition.
     var normalizedScore: Double { Double(score) / 100.0 }
+}
+
+extension [PostureMetricResult] {
+    /// Weighted overall score (0-100) from measurable metrics, clamped.
+    func weightedOverallScore() -> Int {
+        let measurable = filter { $0.status != .unmeasurable }
+        guard !measurable.isEmpty else { return 0 }
+
+        var weightedSum = 0.0
+        var totalWeight = 0.0
+
+        for metric in measurable {
+            let weight = metric.type.scoreWeight
+            weightedSum += metric.normalizedScore * weight
+            totalWeight += weight
+        }
+
+        guard totalWeight > 0 else { return 0 }
+        let raw = (weightedSum / totalWeight) * 100.0
+        guard raw.isFinite else { return 0 }
+        return Swift.max(0, Swift.min(100, Int(raw.rounded())))
+    }
 }
 
 /// Unit of measurement for posture metrics.

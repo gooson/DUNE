@@ -27,26 +27,6 @@ extension PostureMetricType {
         }
     }
 
-    var description: String {
-        switch self {
-        case .forwardHead:
-            String(localized: "Head position relative to the shoulder line. Forward head posture increases neck strain.")
-        case .roundedShoulders:
-            String(localized: "Shoulder position relative to the spine. Rounded shoulders indicate tight chest muscles.")
-        case .thoracicKyphosis:
-            String(localized: "Upper back curvature. Excessive kyphosis can lead to back pain and breathing issues.")
-        case .kneeHyperextension:
-            String(localized: "Knee extension angle. Hyperextension puts stress on knee ligaments.")
-        case .shoulderAsymmetry:
-            String(localized: "Height difference between shoulders. May indicate muscular imbalance or scoliosis.")
-        case .hipAsymmetry:
-            String(localized: "Height difference between hips. Can affect gait and cause lower back pain.")
-        case .kneeAlignment:
-            String(localized: "Knee angle in the frontal plane. Valgus or varus alignment affects joint loading.")
-        case .lateralShift:
-            String(localized: "Horizontal offset of the head from the body center. Indicates weight distribution imbalance.")
-        }
-    }
 }
 
 extension PostureStatus {

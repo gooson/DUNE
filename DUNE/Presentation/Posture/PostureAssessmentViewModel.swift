@@ -63,8 +63,10 @@ final class PostureAssessmentViewModel {
 
     // MARK: - Dependencies
 
-    let captureService: PostureCaptureService
+    private let captureService: PostureCaptureService
     private let analysisService = PostureAnalysisService()
+
+    var captureSession: AVCaptureSession { captureService.captureSession }
 
     // MARK: - Init
 
@@ -86,12 +88,6 @@ final class PostureAssessmentViewModel {
 
     func stopCamera() {
         captureService.stopSession()
-    }
-
-    var previewLayer: AVCaptureVideoPreviewLayer {
-        let layer = AVCaptureVideoPreviewLayer(session: captureService.captureSession)
-        layer.videoGravity = .resizeAspectFill
-        return layer
     }
 
     // MARK: - Capture Flow

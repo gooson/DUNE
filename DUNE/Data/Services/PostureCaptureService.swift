@@ -94,6 +94,10 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
             throw PostureCaptureError.captureSessionNotRunning
         }
 
+        guard photoContinuation == nil else {
+            throw PostureCaptureError.photoCaptureFailed
+        }
+
         return try await withCheckedThrowingContinuation { continuation in
             self.photoContinuation = continuation
             let settings = AVCapturePhotoSettings()
@@ -281,9 +285,20 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
 
     // MARK: - Image Compression
 
+    private static let maxImageDimension: CGFloat = 1080
+
     private func compressImage(_ cgImage: CGImage) -> Data? {
         let uiImage = UIImage(cgImage: cgImage)
-        return uiImage.jpegData(compressionQuality: Self.jpegCompressionQuality)
+        let scaled = downscaled(uiImage, maxDimension: Self.maxImageDimension)
+        return scaled.jpegData(compressionQuality: Self.jpegCompressionQuality)
+    }
+
+    private func downscaled(_ image: UIImage, maxDimension: CGFloat) -> UIImage {
+        let size = image.size
+        guard size.width > maxDimension || size.height > maxDimension else { return image }
+        let scale = maxDimension / max(size.width, size.height)
+        let targetSize = CGSize(width: size.width * scale, height: size.height * scale)
+        return image.preparingThumbnail(of: targetSize) ?? image
     }
 }
 

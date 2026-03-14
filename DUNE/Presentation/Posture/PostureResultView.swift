@@ -23,20 +23,21 @@ struct PostureResultView: View {
     // MARK: - Score
 
     private var scoreSection: some View {
-        VStack(spacing: 8) {
+        let score = viewModel.combinedAssessment.overallScore
+        return VStack(spacing: 8) {
             ZStack {
                 Circle()
                     .stroke(.quaternary, lineWidth: 12)
                     .frame(width: 120, height: 120)
 
                 Circle()
-                    .trim(from: 0, to: CGFloat(viewModel.combinedAssessment.overallScore) / 100.0)
-                    .stroke(scoreColor, style: StrokeStyle(lineWidth: 12, lineCap: .round))
+                    .trim(from: 0, to: CGFloat(score) / 100.0)
+                    .stroke(scoreColor(score), style: StrokeStyle(lineWidth: 12, lineCap: .round))
                     .frame(width: 120, height: 120)
                     .rotationEffect(.degrees(-90))
 
                 VStack(spacing: 2) {
-                    Text("\(viewModel.combinedAssessment.overallScore)")
+                    Text("\(score)")
                         .font(.system(size: 36, weight: .bold, design: .rounded))
 
                     Text("/ 100")
@@ -62,8 +63,7 @@ struct PostureResultView: View {
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
     }
 
-    private var scoreColor: Color {
-        let score = viewModel.combinedAssessment.overallScore
+    private func scoreColor(_ score: Int) -> Color {
         if score >= 80 { return .green }
         if score >= 60 { return .yellow }
         return .red
@@ -74,13 +74,13 @@ struct PostureResultView: View {
     private var captureImagesSection: some View {
         HStack(spacing: 12) {
             captureImageCard(
-                label: String(localized: "Front"),
+                label: "Front",
                 imageData: viewModel.frontResult?.imageData,
                 joints: viewModel.frontAssessment?.jointPositions ?? []
             )
 
             captureImageCard(
-                label: String(localized: "Side"),
+                label: "Side",
                 imageData: viewModel.sideResult?.imageData,
                 joints: viewModel.sideAssessment?.jointPositions ?? []
             )
@@ -88,7 +88,7 @@ struct PostureResultView: View {
     }
 
     private func captureImageCard(
-        label: String,
+        label: LocalizedStringKey,
         imageData: Data?,
         joints: [JointPosition3D]
     ) -> some View {
@@ -167,12 +167,11 @@ struct PostureResultView: View {
     }
 
     private func metricValueText(_ metric: PostureMetricResult) -> String {
-        let unitSuffix: String
+        let formatted = metric.value.formatted(.number.precision(.fractionLength(1)))
         switch metric.unit {
-        case .degrees: unitSuffix = "°"
-        case .centimeters: unitSuffix = " cm"
+        case .degrees: return "\(formatted)°"
+        case .centimeters: return "\(formatted) cm"
         }
-        return String(format: "%.1f%@", metric.value, unitSuffix)
     }
 
     // MARK: - Memo
@@ -242,6 +241,7 @@ struct PostureResultView: View {
         guard let record = viewModel.createValidatedRecord() else { return }
         modelContext.insert(record)
         viewModel.didFinishSaving()
+        viewModel.resetAll()
         dismiss()
     }
 }

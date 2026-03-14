@@ -32,7 +32,7 @@ final class PostureAssessmentRecord {
     ) {
         self.id = UUID()
         self.date = date
-        self.overallScore = overallScore
+        self.overallScore = max(0, min(100, overallScore))
         self.frontMetricsJSON = Self.encode(frontMetrics)
         self.sideMetricsJSON = Self.encode(sideMetrics)
         self.frontJointPositionsJSON = Self.encode(frontJointPositions)

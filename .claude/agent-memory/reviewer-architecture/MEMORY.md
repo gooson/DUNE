@@ -88,6 +88,21 @@ Layer boundary: App → Presentation → Domain ← Data
 - Risk: future callsite may pass a bare String literal and silently bypass localization
 - Preferred fix: type `label` as `LocalizedStringKey` so the compiler enforces localization at the call site; or at minimum document the invariant
 
+### ViewModel exposing Data-layer service as public property
+- `captureService: PostureCaptureService` declared `let` (public) on `PostureAssessmentViewModel`
+- Views reach through it (`viewModel.captureService.captureSession`) bypassing the ViewModel abstraction
+- Rule: service dependencies on ViewModels must be `private`; expose only what the View needs (e.g., `var captureSession: AVCaptureSession`)
+
+### ViewModel returning UIKit types (dead code pattern)
+- `var previewLayer: AVCaptureVideoPreviewLayer` on `PostureAssessmentViewModel` returns a UIKit CALayer subclass — violates ViewModel purity
+- Additionally was dead code — View never called it, accessed session directly
+- Detection: grep ViewModel files for `AVCaptureVideoPreviewLayer`, `UIView`, `UIImage`, `CALayer` return types
+
+### Domain weighted-score calculation duplication
+- `PostureAssessment.overallScore`, `CombinedPostureAssessment.overallScore`, and `PostureAnalysisService.calculateOverallScore` contain the same weighted-sum loop
+- Only `calculateOverallScore` clamps to `max(0, min(100,...))` — the Domain model computed properties do not, causing behavioral drift
+- Fix: extract to `static func overallScore(from: [PostureMetricResult]) -> Int` and delegate from the computed properties
+
 ### Canonical layout verbatim repetition in Views
 - The sizeClass-split Summary Stats + Highlights block (iPad HStack / iPhone VStack) appears verbatim in all 3 detail views
 - Not yet extracted; a shared `AdaptiveScoreDetailSection` view wrapping this pattern would eliminate the repetition

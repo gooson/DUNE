@@ -9,7 +9,7 @@ struct PostureCaptureView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                CameraPreviewView(session: viewModel.captureService.captureSession)
+                CameraPreviewView(session: viewModel.captureSession)
                     .ignoresSafeArea()
 
                 phaseOverlay
@@ -117,7 +117,7 @@ struct PostureCaptureView: View {
                     .tint(.white)
                     .scaleEffect(1.5)
 
-                Text("Analyzing posture...")
+                Text(String(localized: "Analyzing posture..."))
                     .font(.headline)
                     .foregroundStyle(.white)
             }
