@@ -24,6 +24,12 @@ struct PostureCaptureView: View {
             }
             .task { viewModel.setupCamera() }
             .onDisappear { viewModel.stopCamera() }
+            // Haptic feedback (#121)
+            .sensoryFeedback(.impact(weight: .light), trigger: viewModel.hapticCountdown)
+            .sensoryFeedback(.success, trigger: viewModel.hapticSuccessCount)
+            .sensoryFeedback(.error, trigger: viewModel.hapticErrorCount)
+            // Phase transition animation (#122)
+            .animation(DS.Animation.standard, value: viewModel.capturePhase)
         }
     }
 
@@ -34,16 +40,22 @@ struct PostureCaptureView: View {
         switch viewModel.capturePhase {
         case .idle:
             Color.black
+                .transition(.opacity)
         case .guiding:
             guidingOverlay
+                .transition(.opacity)
         case .countdown(let count):
             countdownOverlay(count)
+                .transition(.opacity)
         case .capturing, .analyzing:
             analyzingOverlay
+                .transition(.opacity)
         case .result:
             resultTransitionOverlay
+                .transition(.move(edge: .bottom).combined(with: .opacity))
         case .error(let message):
             errorOverlay(message)
+                .transition(.opacity)
         }
     }
 
