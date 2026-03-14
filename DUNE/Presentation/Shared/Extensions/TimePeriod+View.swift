@@ -66,6 +66,10 @@ extension TimePeriod {
         switch self {
         case .day:
             formatter.setLocalizedDateFormatFromTemplate("MMMdE")
+            // Rolling 24h: show range if the window spans two different days
+            if !calendar.isDate(scrollDate, inSameDayAs: displayEnd) {
+                return "\(formatter.string(from: scrollDate)) – \(formatter.string(from: displayEnd))"
+            }
             return formatter.string(from: scrollDate)
         case .week:
             formatter.setLocalizedDateFormatFromTemplate("Md")
