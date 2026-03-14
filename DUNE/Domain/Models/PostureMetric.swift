@@ -29,6 +29,28 @@ enum PostureMetricType: String, Codable, CaseIterable, Sendable, Identifiable, H
         }
     }
 
+    /// Joint names affected by this metric, used for color-coded overlay.
+    var affectedJointNames: Set<String> {
+        switch self {
+        case .forwardHead:
+            ["centerHead", "topHead", "centerShoulder"]
+        case .roundedShoulders:
+            ["leftShoulder", "rightShoulder", "centerShoulder"]
+        case .thoracicKyphosis:
+            ["centerShoulder", "spine"]
+        case .kneeHyperextension:
+            ["leftKnee", "rightKnee", "leftAnkle", "rightAnkle"]
+        case .shoulderAsymmetry:
+            ["leftShoulder", "rightShoulder"]
+        case .hipAsymmetry:
+            ["leftHip", "rightHip"]
+        case .kneeAlignment:
+            ["leftKnee", "rightKnee"]
+        case .lateralShift:
+            ["centerShoulder", "spine", "root"]
+        }
+    }
+
     /// Score weight tier for overall posture score calculation.
     var scoreWeight: Double {
         switch self {
