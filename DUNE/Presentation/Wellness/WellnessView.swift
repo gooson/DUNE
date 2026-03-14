@@ -283,10 +283,7 @@ struct WellnessView: View {
                 WellnessScoreDetailView(
                     wellnessScore: score,
                     conditionScore: viewModel.conditionScoreFull,
-                    bodyScoreDetail: viewModel.bodyScoreDetail,
-                    sleepDailyData: viewModel.sleepDetailTrend,
-                    hrvDailyData: viewModel.hrvDetailTrend,
-                    rhrDailyData: viewModel.rhrDetailTrend
+                    bodyScoreDetail: viewModel.bodyScoreDetail
                 )
             } else {
                 ProgressView()
