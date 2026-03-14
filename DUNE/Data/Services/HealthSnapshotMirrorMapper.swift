@@ -26,6 +26,16 @@ enum HealthSnapshotMirrorMapper {
             let score: Int
         }
 
+        struct WeightPoint: Codable, Sendable, Equatable {
+            let date: Date
+            let value: Double
+        }
+
+        struct BMIPoint: Codable, Sendable, Equatable {
+            let date: Date
+            let value: Double
+        }
+
         let fetchedAt: Date
         let failedSources: [String]
 
@@ -47,6 +57,12 @@ enum HealthSnapshotMirrorMapper {
         let baselineReady: Bool?
         let baselineProgress: Double?
         let recentScores: [ScorePoint]
+
+        // Activity/Body fields (Optional for backward compatibility)
+        var todaySteps: Double? = nil
+        var todayExerciseMinutes: Double? = nil
+        var latestWeight: WeightPoint? = nil
+        var latestBMI: BMIPoint? = nil
     }
 
     static func makePayload(from snapshot: SharedHealthSnapshot) -> Payload {
@@ -92,7 +108,15 @@ enum HealthSnapshotMirrorMapper {
             conditionDetail: snapshot.conditionScore?.detail,
             baselineReady: snapshot.baselineStatus?.isReady,
             baselineProgress: snapshot.baselineStatus?.progress,
-            recentScores: recentScores
+            recentScores: recentScores,
+            todaySteps: snapshot.todaySteps,
+            todayExerciseMinutes: snapshot.todayExerciseMinutes,
+            latestWeight: snapshot.latestWeight.map {
+                Payload.WeightPoint(date: $0.date, value: $0.value)
+            },
+            latestBMI: snapshot.latestBMI.map {
+                Payload.BMIPoint(date: $0.date, value: $0.value)
+            }
         )
     }
 
@@ -176,6 +200,14 @@ enum HealthSnapshotMirrorMapper {
             yesterdaySleepStages: yesterdayStages,
             latestSleepStages: latestSleepStages,
             sleepDailyDurations: sleepDailyDurations,
+            todaySteps: payload.todaySteps,
+            todayExerciseMinutes: payload.todayExerciseMinutes,
+            latestWeight: payload.latestWeight.map {
+                SharedHealthSnapshot.WeightSample(value: $0.value, date: $0.date)
+            },
+            latestBMI: payload.latestBMI.map {
+                SharedHealthSnapshot.BMISample(value: $0.value, date: $0.date)
+            },
             conditionScore: conditionScore,
             baselineStatus: nil,
             recentConditionScores: recentScores,
