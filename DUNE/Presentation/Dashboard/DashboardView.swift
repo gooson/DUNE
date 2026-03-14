@@ -7,6 +7,8 @@ struct DashboardView: View {
     @State private var isShowingHealthDataQA = false
     @State private var templateNudgeToSave: WorkoutTemplateRecommendation?
     @State private var hasAppeared = false
+    @State private var isShowingBriefing = false
+    @AppStorage("morningBriefingDisabled") private var isBriefingDisabled = false
     @State private var unreadNotificationCount = 0
     @State private var showWhatsNewBadge = false
     @State private var cachedWhatsNewReleases: [WhatsNewReleaseData] = []
@@ -108,6 +110,15 @@ struct DashboardView: View {
                             BaselineProgressView(status: status)
                                 .reportTabHeroFrame()
                                 .transition(Self.sectionTransition)
+                        }
+
+                        // Morning Briefing entry
+                        if let briefingData = viewModel.briefingData,
+                           !isBriefingDisabled {
+                            BriefingEntryCard(conditionStatus: briefingData.conditionStatus) {
+                                isShowingBriefing = true
+                            }
+                            .transition(Self.sectionTransition)
                         }
 
                         // Weather + coaching (merged when coaching is weather-category)
@@ -278,6 +289,14 @@ struct DashboardView: View {
                 allowedCategories: viewModel.availablePinnedCategories
             )
         }
+        .sheet(isPresented: $isShowingBriefing) {
+            if let briefingData = viewModel.briefingData {
+                MorningBriefingView(data: briefingData)
+            }
+        }
+        .onChange(of: viewModel.briefingData == nil) { _, isNil in
+            if isNil { isShowingBriefing = false }
+        }
         .sheet(item: $templateNudgeToSave) { nudge in
             NavigationStack {
                 TemplateFormView(
@@ -312,6 +331,13 @@ struct DashboardView: View {
         }
         .navigationDestination(isPresented: $showSettings) {
             SettingsView()
+        }
+        .onChange(of: viewModel.briefingData != nil) { _, hasData in
+            if hasData,
+               !isBriefingDisabled,
+               MorningBriefingViewModel.shouldShowBriefing() {
+                isShowingBriefing = true
+            }
         }
         .onChange(of: notificationHubSignal) { _, newValue in
             guard newValue > 0 else { return }
