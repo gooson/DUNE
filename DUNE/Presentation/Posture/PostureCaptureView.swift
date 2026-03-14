@@ -11,6 +11,7 @@ struct PostureCaptureView: View {
             ZStack {
                 CameraPreviewView(session: viewModel.captureSession)
                     .ignoresSafeArea()
+                    .accessibilityLabel(Text("Camera preview for posture assessment"))
 
                 phaseOverlay
             }
@@ -78,6 +79,8 @@ struct PostureCaptureView: View {
                                 .strokeBorder(.black.opacity(0.2), lineWidth: 3)
                         }
                 }
+                .accessibilityLabel(Text("Capture photo"))
+                .accessibilityHint(Text("Starts a 3-second countdown before capturing"))
                 .padding(.bottom, 40)
             }
         }
@@ -103,6 +106,7 @@ struct PostureCaptureView: View {
                 .foregroundStyle(.white)
                 .contentTransition(.numericText())
                 .animation(.easeInOut(duration: 0.3), value: count)
+                .accessibilityLabel(Text("Countdown: \(count)"))
         }
     }
 
@@ -153,6 +157,8 @@ struct PostureCaptureView: View {
                 .buttonStyle(.borderedProminent)
             }
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(Text("Error: \(message)"))
     }
 }
 
