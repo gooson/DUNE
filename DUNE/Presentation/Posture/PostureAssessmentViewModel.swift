@@ -62,7 +62,7 @@ final class PostureAssessmentViewModel {
 
     // MARK: - Dependencies
 
-    private let captureService: PostureCaptureService
+    let captureService: PostureCaptureService
     private let analysisService = PostureAnalysisService()
 
     // MARK: - Init
