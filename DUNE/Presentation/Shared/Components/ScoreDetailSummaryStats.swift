@@ -4,7 +4,8 @@ import SwiftUI
 /// Used by Condition, Training Readiness, and Wellness score detail views.
 struct ScoreDetailSummaryStats: View {
     let summary: MetricSummary
-    let sizeClass: UserInterfaceSizeClass?
+
+    @Environment(\.horizontalSizeClass) private var sizeClass
 
     var body: some View {
         StandardCard {

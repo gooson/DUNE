@@ -8,8 +8,8 @@ struct CalculationMethodCard: View {
     let bullets: [LocalizedStringKey]
 
     init(
-        icon: String = "function",
-        title: LocalizedStringKey = "Calculation Method",
+        icon: String,
+        title: LocalizedStringKey,
         bullets: [LocalizedStringKey]
     ) {
         self.icon = icon

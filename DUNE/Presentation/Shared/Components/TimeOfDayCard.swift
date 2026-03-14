@@ -4,7 +4,23 @@ import SwiftUI
 /// Shows how the score adjusts across 4 time phases (Night/Morning/Noon/Evening).
 struct TimeOfDayCard: View {
     let currentAdjustment: Double
-    let baseScore: Double
+
+    private let phases: [(title: LocalizedStringKey, projected: Int)]
+
+    init(currentAdjustment: Double, baseScore: Double) {
+        self.currentAdjustment = currentAdjustment
+        let calendar = Calendar.current
+        let now = Date()
+        self.phases = [(LocalizedStringKey("Night"), 2),
+                       (LocalizedStringKey("Morning"), 8),
+                       (LocalizedStringKey("Noon"), 13),
+                       (LocalizedStringKey("Evening"), 19)].map { title, hour in
+            let date = calendar.date(bySettingHour: hour, minute: 0, second: 0, of: now) ?? now
+            let adjustment = ScoreTimeOfDayAdjustment.readinessAndWellness(for: date)
+            let projected = Int(max(0, min(100, (baseScore + adjustment).rounded())))
+            return (title: title, projected: projected)
+        }
+    }
 
     var body: some View {
         StandardCard {
@@ -17,28 +33,19 @@ struct TimeOfDayCard: View {
                     .foregroundStyle(DS.Color.textSecondary)
 
                 HStack {
-                    phaseChip("Night", hour: 2)
-                    phaseChip("Morning", hour: 8)
-                    phaseChip("Noon", hour: 13)
-                    phaseChip("Evening", hour: 19)
+                    ForEach(Array(phases.enumerated()), id: \.offset) { _, phase in
+                        VStack(spacing: DS.Spacing.xxs) {
+                            Text(phase.title)
+                                .font(.caption2)
+                                .foregroundStyle(.tertiary)
+                            Text("\(phase.projected)")
+                                .font(.caption.weight(.semibold))
+                                .monospacedDigit()
+                        }
+                        .frame(maxWidth: .infinity)
+                    }
                 }
             }
         }
-    }
-
-    private func phaseChip(_ title: LocalizedStringKey, hour: Int) -> some View {
-        let date = Calendar.current.date(bySettingHour: hour, minute: 0, second: 0, of: Date()) ?? Date()
-        let adjustment = ScoreTimeOfDayAdjustment.readinessAndWellness(for: date)
-        let projected = Int(max(0, min(100, (baseScore + adjustment).rounded())))
-
-        return VStack(spacing: DS.Spacing.xxs) {
-            Text(title)
-                .font(.caption2)
-                .foregroundStyle(.tertiary)
-            Text("\(projected)")
-                .font(.caption.weight(.semibold))
-                .monospacedDigit()
-        }
-        .frame(maxWidth: .infinity)
     }
 }

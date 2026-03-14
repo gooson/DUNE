@@ -17,7 +17,9 @@ final class TrainingReadinessDetailViewModel {
         }
     }
     var scrollPosition: Date = .now
-    var showTrendLine: Bool = false
+    var showTrendLine: Bool = false {
+        didSet { recalculateTrendLine() }
+    }
 
     var readiness: TrainingReadiness?
     var chartData: [ChartDataPoint] = []
@@ -29,6 +31,9 @@ final class TrainingReadinessDetailViewModel {
     var isLoading = false
     var errorMessage: String?
 
+    private(set) var trendLineData: [ChartDataPoint]?
+    private(set) var scrollDomain: ClosedRange<Date> = Date.now...Date.now
+
     private let hrvService: HRVQuerying
     private let sleepService: SleepQuerying
 
@@ -39,17 +44,20 @@ final class TrainingReadinessDetailViewModel {
     ) {
         self.hrvService = hrvService ?? HRVQueryService(manager: healthKitManager)
         self.sleepService = sleepService ?? SleepQueryService(manager: healthKitManager)
+        recalculateScrollDomain()
     }
 
     func configure(readiness: TrainingReadiness?) {
         self.readiness = readiness
         resetScrollPosition()
+        recalculateScrollDomain()
     }
 
     func loadData() async {
         guard !isLoading else { return }
         isLoading = true
         errorMessage = nil
+        highlights = []
 
         do {
             try await loadReadinessData()
@@ -58,9 +66,10 @@ final class TrainingReadinessDetailViewModel {
                 return
             }
             buildHighlights()
+            recalculateTrendLine()
         } catch {
             AppLogger.ui.error("ReadinessDetail load failed: \(error.localizedDescription)")
-            errorMessage = error.localizedDescription
+            errorMessage = String(localized: "Could not load data.")
         }
 
         isLoading = false
@@ -70,19 +79,6 @@ final class TrainingReadinessDetailViewModel {
 
     var visibleRangeLabel: String {
         selectedPeriod.visibleRangeLabel(from: scrollPosition)
-    }
-
-    var trendLineData: [ChartDataPoint]? {
-        guard showTrendLine else { return nil }
-        return MetricDetailViewModel.computeTrendLine(
-            from: chartData, period: selectedPeriod, scrollPosition: scrollPosition
-        )
-    }
-
-    var scrollDomain: ClosedRange<Date> {
-        let range = extendedRange
-        let upperBound = selectedPeriod.scrollDomainUpperBound(referenceDate: range.end)
-        return range.start...max(range.end, upperBound)
     }
 
     private func resetScrollPosition() {
@@ -96,12 +92,26 @@ final class TrainingReadinessDetailViewModel {
         return (start: bufferRange.start, end: currentRange.end)
     }
 
+    private func recalculateScrollDomain() {
+        let range = extendedRange
+        let upperBound = selectedPeriod.scrollDomainUpperBound(referenceDate: range.end)
+        scrollDomain = range.start...max(range.end, upperBound)
+    }
+
+    private func recalculateTrendLine() {
+        guard showTrendLine else { trendLineData = nil; return }
+        trendLineData = MetricDetailViewModel.computeTrendLine(
+            from: chartData, period: selectedPeriod, scrollPosition: scrollPosition
+        )
+    }
+
     // MARK: - Private
 
     private var reloadTask: Task<Void, Never>?
 
     private func triggerReload() {
         reloadTask?.cancel()
+        isLoading = false
         reloadTask = Task { await loadData() }
     }
 
@@ -110,8 +120,13 @@ final class TrainingReadinessDetailViewModel {
         let range = extendedRange
         let daysInRange = max(1, calendar.dateComponents([.day], from: range.start, to: range.end).day ?? 14)
 
-        // Fetch HRV, RHR, and Sleep in parallel
-        async let hrvTask = hrvService.fetchHRVSamples(days: daysInRange)
+        // Previous period
+        let prevRange = HealthDataAggregator.previousPeriodRange(for: selectedPeriod, offset: 0)
+        let prevDays = max(1, calendar.dateComponents([.day], from: prevRange.start, to: prevRange.end).day ?? 14)
+
+        // Fetch HRV once for full window (current + previous), partition by date later
+        let totalHRVDays = daysInRange + prevDays
+        async let allHRVTask = hrvService.fetchHRVSamples(days: totalHRVDays)
         async let rhrTask = hrvService.fetchRHRCollection(
             start: range.start,
             end: range.end,
@@ -120,13 +135,6 @@ final class TrainingReadinessDetailViewModel {
         async let sleepTask = sleepService.fetchDailySleepDurations(
             start: range.start,
             end: range.end
-        )
-
-        // Previous period for comparison
-        let prevRange = HealthDataAggregator.previousPeriodRange(for: selectedPeriod, offset: 0)
-        let prevDays = max(1, calendar.dateComponents([.day], from: prevRange.start, to: prevRange.end).day ?? 14)
-        async let prevHRVTask = hrvService.fetchHRVSamples(
-            days: daysInRange + prevDays
         )
         async let prevRHRTask = hrvService.fetchRHRCollection(
             start: prevRange.start,
@@ -138,16 +146,14 @@ final class TrainingReadinessDetailViewModel {
             end: prevRange.end
         )
 
-        let (allHRV, allRHR, allSleep) = try await (hrvTask, rhrTask, sleepTask)
-        let (prevHRV, prevRHR, prevSleep) = try await (prevHRVTask, prevRHRTask, prevSleepTask)
+        let allHRV = try await allHRVTask
+        let (allRHR, allSleep) = try await (rhrTask, sleepTask)
+        let (prevRHR, prevSleep) = try await (prevRHRTask, prevSleepTask)
 
-        // Build sub-score arrays for current period
+        // Build sub-score arrays using shared helpers
         let currentPeriodRange = selectedPeriod.dateRange(offset: 0)
-        let currentHRV = buildHRVDailyAverages(from: allHRV, start: range.start, end: range.end, calendar: calendar)
-        let currentRHR = allRHR
-            .filter { $0.average > 0 && $0.average.isFinite }
-            .map { ChartDataPoint(date: $0.date, value: $0.average) }
-            .sorted { $0.date < $1.date }
+        let currentHRV = HealthDataAggregator.buildHRVDailyAverages(from: allHRV, start: range.start, end: range.end, calendar: calendar)
+        let currentRHR = HealthDataAggregator.buildRHRDailyPoints(from: allRHR)
         let currentSleep = allSleep
             .map { ChartDataPoint(date: $0.date, value: Swift.max(0, Swift.min($0.totalMinutes / 60.0, 24))) }
             .sorted { $0.date < $1.date }
@@ -156,7 +162,7 @@ final class TrainingReadinessDetailViewModel {
         rhrTrend = currentRHR.filter { $0.date >= currentPeriodRange.start && $0.date <= currentPeriodRange.end }
         sleepTrend = currentSleep.filter { $0.date >= currentPeriodRange.start && $0.date <= currentPeriodRange.end }
 
-        // Build readiness trend from sub-scores (full extended range for chart scroll)
+        // Build readiness trend
         let allScores = buildReadinessTrend(hrv: currentHRV, rhr: currentRHR, sleep: currentSleep)
         chartData = allScores
 
@@ -166,16 +172,13 @@ final class TrainingReadinessDetailViewModel {
             )
         }
 
-        // Previous period scores for comparison
-        let prevHRVDaily = buildHRVDailyAverages(from: prevHRV, start: prevRange.start, end: prevRange.end, calendar: calendar)
-        let prevRHRDaily = prevRHR
-            .filter { $0.average > 0 && $0.average.isFinite }
-            .map { ChartDataPoint(date: $0.date, value: $0.average) }
+        // Previous period — partition allHRV by date
+        let prevHRVDaily = HealthDataAggregator.buildHRVDailyAverages(from: allHRV, start: prevRange.start, end: prevRange.end, calendar: calendar)
+        let prevRHRDaily = HealthDataAggregator.buildRHRDailyPoints(from: prevRHR)
         let prevSleepDaily = prevSleep
             .map { ChartDataPoint(date: $0.date, value: Swift.max(0, Swift.min($0.totalMinutes / 60.0, 24))) }
         let previousScores = buildReadinessTrend(hrv: prevHRVDaily, rhr: prevRHRDaily, sleep: prevSleepDaily)
 
-        // Summary stats from current period only
         let currentPeriodScores = allScores.filter {
             $0.date >= currentPeriodRange.start && $0.date <= currentPeriodRange.end
         }
@@ -183,25 +186,8 @@ final class TrainingReadinessDetailViewModel {
             from: currentPeriodScores.map(\.value),
             previousPeriodValues: previousScores.isEmpty ? nil : previousScores.map(\.value)
         )
-    }
 
-    // MARK: - HRV Daily Averages
-
-    private func buildHRVDailyAverages(
-        from samples: [HRVSample],
-        start: Date,
-        end: Date,
-        calendar: Calendar
-    ) -> [ChartDataPoint] {
-        let filtered = samples.filter { $0.date >= start && $0.date <= end }
-        let grouped = Dictionary(grouping: filtered) { calendar.startOfDay(for: $0.date) }
-        return grouped.compactMap { day, daySamples in
-            let values = daySamples.map(\.value)
-            guard !values.isEmpty else { return nil }
-            let avg = values.reduce(0, +) / Double(values.count)
-            guard avg.isFinite else { return nil }
-            return ChartDataPoint(date: day, value: avg)
-        }.sorted { $0.date < $1.date }
+        recalculateScrollDomain()
     }
 
     // MARK: - Readiness Trend Approximation

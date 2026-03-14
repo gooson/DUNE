@@ -59,7 +59,7 @@ struct ScoreCompositionCard: View {
                 .font(.caption)
                 .fontWeight(.medium)
                 .monospacedDigit()
-                .foregroundStyle(component.score != nil ? AnyShapeStyle(theme.sandColor) : AnyShapeStyle(.tertiary))
+                .foregroundStyle(component.score != nil ? theme.sandColor : Color.secondary)
                 .frame(width: 32, alignment: .trailing)
         }
         .accessibilityElement(children: .combine)

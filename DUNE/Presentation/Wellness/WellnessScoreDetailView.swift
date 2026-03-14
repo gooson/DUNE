@@ -18,6 +18,12 @@ struct WellnessScoreDetailView: View {
         static let sleep = String(localized: "Sleep")
         static let condition = String(localized: "Condition")
         static let body = String(localized: "Body")
+        nonisolated(unsafe) static let calculationBullets: [LocalizedStringKey] = [
+            "Final score = weighted average of Sleep(40%), Condition(35%), and Body(25%).",
+            "Sleep and Condition come from Apple Watch signals, then normalized to 0-100.",
+            "Body score is derived from 7-day trend stability and direction changes.",
+            "If any component is missing, remaining weights are re-normalized before final scoring.",
+        ]
     }
 
     var body: some View {
@@ -77,7 +83,7 @@ struct WellnessScoreDetailView: View {
                 if sizeClass == .regular {
                     HStack(alignment: .top, spacing: DS.Spacing.lg) {
                         if let summary = viewModel.summaryStats {
-                            ScoreDetailSummaryStats(summary: summary, sizeClass: sizeClass)
+                            ScoreDetailSummaryStats(summary: summary)
                                 .frame(maxWidth: .infinity)
                         }
                         if !viewModel.highlights.isEmpty {
@@ -87,7 +93,7 @@ struct WellnessScoreDetailView: View {
                     }
                 } else {
                     if let summary = viewModel.summaryStats {
-                        ScoreDetailSummaryStats(summary: summary, sizeClass: sizeClass)
+                        ScoreDetailSummaryStats(summary: summary)
                     }
                     if !viewModel.highlights.isEmpty {
                         ScoreDetailHighlights(highlights: viewModel.highlights)
@@ -147,12 +153,7 @@ struct WellnessScoreDetailView: View {
                 CalculationMethodCard(
                     icon: "function",
                     title: "Calculation Method",
-                    bullets: [
-                        "Final score = weighted average of Sleep(40%), Condition(35%), and Body(25%).",
-                        "Sleep and Condition come from Apple Watch signals, then normalized to 0-100.",
-                        "Body score is derived from 7-day trend stability and direction changes.",
-                        "If any component is missing, remaining weights are re-normalized before final scoring.",
-                    ]
+                    bullets: Labels.calculationBullets
                 )
             }
             .padding(sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.lg)

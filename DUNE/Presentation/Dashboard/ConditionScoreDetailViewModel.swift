@@ -16,7 +16,9 @@ final class ConditionScoreDetailViewModel {
         }
     }
     var scrollPosition: Date = .now
-    var showTrendLine: Bool = false
+    var showTrendLine: Bool = false {
+        didSet { recalculateTrendLine() }
+    }
     var chartData: [ChartDataPoint] = []
     var hrvTrend: [ChartDataPoint] = []
     var rhrTrend: [ChartDataPoint] = []
@@ -25,6 +27,8 @@ final class ConditionScoreDetailViewModel {
     var isLoading = false
     var errorMessage: String?
 
+    private(set) var trendLineData: [ChartDataPoint]?
+    private(set) var scrollDomain: ClosedRange<Date> = Date.now...Date.now
     private(set) var currentScore: ConditionScore?
 
     private let hrvService: HRVQuerying
@@ -38,17 +42,20 @@ final class ConditionScoreDetailViewModel {
     ) {
         self.hrvService = hrvService ?? HRVQueryService(manager: healthKitManager)
         self.scoreRefreshService = scoreRefreshService
+        recalculateScrollDomain()
     }
 
     func configure(score: ConditionScore) {
         self.currentScore = score
         resetScrollPosition()
+        recalculateScrollDomain()
     }
 
     func loadData() async {
         guard !isLoading else { return }
         isLoading = true
         errorMessage = nil
+        highlights = []
 
         do {
             if selectedPeriod == .day {
@@ -61,9 +68,10 @@ final class ConditionScoreDetailViewModel {
                 return
             }
             buildHighlights()
+            recalculateTrendLine()
         } catch {
             AppLogger.ui.error("ConditionScoreDetail load failed: \(error.localizedDescription)")
-            errorMessage = error.localizedDescription
+            errorMessage = String(localized: "Could not load data.")
         }
 
         isLoading = false
@@ -74,14 +82,6 @@ final class ConditionScoreDetailViewModel {
     /// Label showing the currently visible date range, like Health app.
     var visibleRangeLabel: String {
         selectedPeriod.visibleRangeLabel(from: scrollPosition)
-    }
-
-    /// Trend line data points (linear regression) for the visible chart data.
-    var trendLineData: [ChartDataPoint]? {
-        guard showTrendLine else { return nil }
-        return MetricDetailViewModel.computeTrendLine(
-            from: chartData, period: selectedPeriod, scrollPosition: scrollPosition
-        )
     }
 
     private func resetScrollPosition() {
@@ -97,10 +97,17 @@ final class ConditionScoreDetailViewModel {
         return (start: bufferRange.start, end: currentRange.end)
     }
 
-    var scrollDomain: ClosedRange<Date> {
+    private func recalculateScrollDomain() {
         let range = extendedRange
         let upperBound = selectedPeriod.scrollDomainUpperBound(referenceDate: range.end)
-        return range.start...max(range.end, upperBound)
+        scrollDomain = range.start...max(range.end, upperBound)
+    }
+
+    private func recalculateTrendLine() {
+        guard showTrendLine else { trendLineData = nil; return }
+        trendLineData = MetricDetailViewModel.computeTrendLine(
+            from: chartData, period: selectedPeriod, scrollPosition: scrollPosition
+        )
     }
 
     // MARK: - Private
@@ -109,6 +116,7 @@ final class ConditionScoreDetailViewModel {
 
     private func triggerReload() {
         reloadTask?.cancel()
+        isLoading = false
         reloadTask = Task { await loadData() }
     }
 
@@ -179,14 +187,15 @@ final class ConditionScoreDetailViewModel {
         chartData = allScores
 
         // Sub-score trends: daily HRV averages and RHR averages within current period
-        let currentPeriodStart = selectedPeriod.dateRange(offset: 0).start
-        buildSubScoreTrends(
-            samples: allSamples,
-            rhrCollection: allRHR,
-            rangeStart: currentPeriodStart,
-            rangeEnd: range.end,
+        let currentPeriodRange = selectedPeriod.dateRange(offset: 0)
+        hrvTrend = HealthDataAggregator.buildHRVDailyAverages(
+            from: allSamples,
+            start: currentPeriodRange.start,
+            end: currentPeriodRange.end,
             calendar: calendar
         )
+        rhrTrend = HealthDataAggregator.buildRHRDailyPoints(from: allRHR)
+            .filter { $0.date >= currentPeriodRange.start && $0.date <= currentPeriodRange.end }
 
         // Aggregate for longer periods
         if selectedPeriod == .sixMonths || selectedPeriod == .year {
@@ -196,7 +205,6 @@ final class ConditionScoreDetailViewModel {
         }
 
         // Summary stats from current period only
-        let currentPeriodRange = selectedPeriod.dateRange(offset: 0)
         let currentPeriodScores = allScores.filter {
             $0.date >= currentPeriodRange.start && $0.date <= currentPeriodRange.end
         }
@@ -205,6 +213,8 @@ final class ConditionScoreDetailViewModel {
             from: currentPeriodScores.map(\.value),
             previousPeriodValues: previousScores.isEmpty ? nil : previousScores.map(\.value)
         )
+
+        recalculateScrollDomain()
     }
 
     /// Computes daily condition scores within the given range.
@@ -314,33 +324,6 @@ final class ConditionScoreDetailViewModel {
         // Sub-scores not shown for hourly view
         hrvTrend = []
         rhrTrend = []
-    }
-
-    // MARK: - Sub-Score Trends
-
-    private func buildSubScoreTrends(
-        samples: [HRVSample],
-        rhrCollection: [(date: Date, min: Double, max: Double, average: Double)],
-        rangeStart: Date,
-        rangeEnd: Date,
-        calendar: Calendar
-    ) {
-        // HRV daily averages
-        let filteredSamples = samples.filter { $0.date >= rangeStart && $0.date <= rangeEnd }
-        let grouped = Dictionary(grouping: filteredSamples) { calendar.startOfDay(for: $0.date) }
-        hrvTrend = grouped.compactMap { day, daySamples in
-            let values = daySamples.map(\.value)
-            guard !values.isEmpty else { return nil }
-            let avg = values.reduce(0, +) / Double(values.count)
-            guard avg.isFinite else { return nil }
-            return ChartDataPoint(date: day, value: avg)
-        }.sorted { $0.date < $1.date }
-
-        // RHR daily averages
-        rhrTrend = rhrCollection
-            .filter { $0.date >= rangeStart && $0.date <= rangeEnd && $0.average > 0 && $0.average.isFinite }
-            .map { ChartDataPoint(date: $0.date, value: $0.average) }
-            .sorted { $0.date < $1.date }
     }
 
     // MARK: - Highlights

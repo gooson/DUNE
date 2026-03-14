@@ -106,7 +106,7 @@ struct ConditionScoreDetailView: View {
                 if sizeClass == .regular {
                     HStack(alignment: .top, spacing: DS.Spacing.lg) {
                         if let summary = viewModel.summaryStats {
-                            ScoreDetailSummaryStats(summary: summary, sizeClass: sizeClass)
+                            ScoreDetailSummaryStats(summary: summary)
                                 .frame(maxWidth: .infinity)
                         }
                         if !viewModel.highlights.isEmpty {
@@ -116,7 +116,7 @@ struct ConditionScoreDetailView: View {
                     }
                 } else {
                     if let summary = viewModel.summaryStats {
-                        ScoreDetailSummaryStats(summary: summary, sizeClass: sizeClass)
+                        ScoreDetailSummaryStats(summary: summary)
                     }
                     if !viewModel.highlights.isEmpty {
                         ScoreDetailHighlights(highlights: viewModel.highlights)
