@@ -272,10 +272,10 @@ struct PostureHistoryView: View {
                 Text("History")
                     .font(.headline)
                 Spacer()
-                if isCompareMode && viewModel.canCompare {
-                    let ids = Array(viewModel.comparisonSelection)
+                if isCompareMode && viewModel.canCompare,
+                   let pair = viewModel.comparisonPair {
                     NavigationLink(
-                        value: PostureComparisonDestination(olderID: ids[0], newerID: ids[1])
+                        value: PostureComparisonDestination(olderID: pair.0, newerID: pair.1)
                     ) {
                         Text("Compare Selected")
                             .font(.caption.weight(.medium))
@@ -357,7 +357,7 @@ struct PostureHistoryView: View {
                 .frame(width: 40, height: 40)
 
             Circle()
-                .trim(from: 0, to: CGFloat(score) / 100.0)
+                .trim(from: 0, to: min(1, max(0, CGFloat(score) / 100.0)))
                 .stroke(
                     scoreColor(score),
                     style: StrokeStyle(lineWidth: 4, lineCap: .round)
@@ -371,9 +371,7 @@ struct PostureHistoryView: View {
     }
 
     private func scoreColor(_ score: Int) -> Color {
-        if score >= 80 { return .green }
-        if score >= 60 { return .yellow }
-        return .red
+        postureScoreColor(score)
     }
 }
 

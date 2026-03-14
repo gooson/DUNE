@@ -31,7 +31,7 @@ struct PostureComparisonView: View {
 
             VStack(spacing: DS.Spacing.xs) {
                 let delta = newer.overallScore - older.overallScore
-                Image(systemName: delta >= 0 ? "arrow.right" : "arrow.right")
+                Image(systemName: delta >= 0 ? "arrow.up.right" : "arrow.down.right")
                     .font(.title3)
                     .foregroundStyle(.secondary)
 
@@ -57,7 +57,7 @@ struct PostureComparisonView: View {
                     .frame(width: 72, height: 72)
 
                 Circle()
-                    .trim(from: 0, to: CGFloat(score) / 100.0)
+                    .trim(from: 0, to: min(1, max(0, CGFloat(score) / 100.0)))
                     .stroke(
                         scoreColor(score),
                         style: StrokeStyle(lineWidth: 6, lineCap: .round)
@@ -193,7 +193,7 @@ struct PostureComparisonView: View {
 
                 HStack(spacing: DS.Spacing.xs) {
                     if let oldVal = delta.oldValue {
-                        Text(formattedValue(oldVal, unit: delta.unit))
+                        Text(formattedPostureMetricValue(oldVal, unit: delta.unit))
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     } else {
@@ -207,7 +207,7 @@ struct PostureComparisonView: View {
                         .foregroundStyle(.tertiary)
 
                     if let newVal = delta.newValue {
-                        Text(formattedValue(newVal, unit: delta.unit))
+                        Text(formattedPostureMetricValue(newVal, unit: delta.unit))
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     } else {
@@ -240,17 +240,7 @@ struct PostureComparisonView: View {
         return improved ? .green : .red
     }
 
-    private func formattedValue(_ value: Double, unit: PostureMetricUnit) -> String {
-        let formatted = value.formatted(.number.precision(.fractionLength(1)))
-        switch unit {
-        case .degrees: return "\(formatted)°"
-        case .centimeters: return "\(formatted) cm"
-        }
-    }
-
     private func scoreColor(_ score: Int) -> Color {
-        if score >= 80 { return .green }
-        if score >= 60 { return .yellow }
-        return .red
+        postureScoreColor(score)
     }
 }

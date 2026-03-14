@@ -117,6 +117,13 @@ final class PostureHistoryViewModel {
     var canCompare: Bool {
         comparisonSelection.count == 2
     }
+
+    /// Returns pair of IDs safely extracted from the selection set, or nil if not exactly 2.
+    var comparisonPair: (UUID, UUID)? {
+        let ids = Array(comparisonSelection)
+        guard ids.count == 2 else { return nil }
+        return (ids[0], ids[1])
+    }
 }
 
 // MARK: - MetricDelta

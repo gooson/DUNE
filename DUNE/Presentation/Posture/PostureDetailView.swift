@@ -5,6 +5,7 @@ struct PostureDetailView: View {
     let record: PostureAssessmentRecord
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @State private var showDeleteConfirmation = false
 
     var body: some View {
         ScrollView {
@@ -43,7 +44,7 @@ struct PostureDetailView: View {
                     .frame(width: 120, height: 120)
 
                 Circle()
-                    .trim(from: 0, to: CGFloat(record.overallScore) / 100.0)
+                    .trim(from: 0, to: min(1, max(0, CGFloat(record.overallScore) / 100.0)))
                     .stroke(scoreColor(record.overallScore), style: StrokeStyle(lineWidth: 12, lineCap: .round))
                     .frame(width: 120, height: 120)
                     .rotationEffect(.degrees(-90))
@@ -182,11 +183,7 @@ struct PostureDetailView: View {
     }
 
     private func metricValueText(_ metric: PostureMetricResult) -> String {
-        let formatted = metric.value.formatted(.number.precision(.fractionLength(1)))
-        switch metric.unit {
-        case .degrees: return "\(formatted)°"
-        case .centimeters: return "\(formatted) cm"
-        }
+        formattedPostureMetricValue(metric.value, unit: metric.unit)
     }
 
     // MARK: - Memo
@@ -209,23 +206,32 @@ struct PostureDetailView: View {
 
     private var deleteButton: some View {
         Button(role: .destructive) {
-            withAnimation {
-                modelContext.delete(record)
-            }
-            dismiss()
+            showDeleteConfirmation = true
         } label: {
             Label(String(localized: "Delete Assessment"), systemImage: "trash")
                 .frame(maxWidth: .infinity)
         }
         .buttonStyle(.bordered)
         .controlSize(.large)
+        .alert(
+            String(localized: "Delete Assessment"),
+            isPresented: $showDeleteConfirmation
+        ) {
+            Button(String(localized: "Delete"), role: .destructive) {
+                withAnimation {
+                    modelContext.delete(record)
+                }
+                dismiss()
+            }
+            Button(String(localized: "Cancel"), role: .cancel) {}
+        } message: {
+            Text("This assessment will be permanently deleted.")
+        }
     }
 
     // MARK: - Helpers
 
     private func scoreColor(_ score: Int) -> Color {
-        if score >= 80 { return .green }
-        if score >= 60 { return .yellow }
-        return .red
+        postureScoreColor(score)
     }
 }
