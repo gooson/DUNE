@@ -32,9 +32,10 @@ struct DUNEWatchApp: App {
     )
 
     private static func makeModelContainer(configuration: ModelConfiguration) throws -> ModelContainer {
+        // All migration stages are .lightweight — automatic migration handles them.
+        // Staged plan removed due to drifted VersionedSchema hashes causing 134504.
         try ModelContainer(
             for: AppMigrationPlan.currentSchema,
-            migrationPlan: AppMigrationPlan.self,
             configurations: configuration
         )
     }

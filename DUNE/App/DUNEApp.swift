@@ -152,9 +152,12 @@ struct DUNEApp: App {
     private static let shouldResetUITestState = uiTestLaunchConfiguration.shouldResetState
 
     private static func makeModelContainer(configuration: ModelConfiguration) throws -> ModelContainer {
+        // All migration stages are .lightweight — SwiftData's automatic migration
+        // handles them without an explicit plan. The staged migration plan is removed
+        // because multiple VersionedSchemas (V2-V7, V11) reference live model types
+        // whose hashes drifted, causing 134504 "unknown model version" on every launch.
         try ModelContainer(
             for: AppMigrationPlan.currentSchema,
-            migrationPlan: AppMigrationPlan.self,
             configurations: configuration
         )
     }
