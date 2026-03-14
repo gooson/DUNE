@@ -29,9 +29,7 @@ struct CloudSyncWaitingView: View {
                         .frame(maxWidth: 320)
 
                     if let onRetry {
-                        Button {
-                            onRetry()
-                        } label: {
+                        Button(action: onRetry) {
                             Label("Retry", systemImage: "arrow.clockwise")
                         }
                         .buttonStyle(.bordered)
