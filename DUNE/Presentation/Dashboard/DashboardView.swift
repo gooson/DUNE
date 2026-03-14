@@ -17,6 +17,7 @@ struct DashboardView: View {
     @Query(sort: \WorkoutTemplate.updatedAt, order: .reverse) private var templates: [WorkoutTemplate]
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.openURL) private var openURL
+    private let library: ExerciseLibraryQuerying = ExerciseLibraryService.shared
     private let inboxManager = NotificationInboxManager.shared
     private let whatsNewStore = WhatsNewStore.shared
     private let whatsNewManager = WhatsNewManager.shared
@@ -303,7 +304,10 @@ struct DashboardView: View {
             NavigationStack {
                 TemplateFormView(
                     prefillName: nudge.title,
-                    prefillEntries: []
+                    prefillEntries: TemplateExerciseResolver.resolveExercises(
+                        from: nudge,
+                        library: library
+                    )?.map { TemplateExerciseResolver.defaultEntry(for: $0) } ?? []
                 )
             }
         }
