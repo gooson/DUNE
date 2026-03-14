@@ -159,13 +159,19 @@ actor SharedHealthDataServiceImpl: SharedHealthDataService {
 
         async let todayExerciseTask = fetch(
             source: .todayExercise,
-            defaultValue: Optional<Double>.none
+            defaultValue: (today: Optional<Double>.none, recent: Optional<(minutes: Double, date: Date)>.none)
         ) {
-            let workouts = try await workoutService.fetchWorkouts(days: 1)
-            let totalMinutes = workouts
-                .filter { calendar.isDate($0.date, inSameDayAs: referenceDate) }
-                .reduce(0.0) { $0 + $1.duration / 60.0 }
-            return totalMinutes > 0 ? totalMinutes : nil
+            let workouts = try await workoutService.fetchWorkouts(days: 7)
+            let todayWorkouts = workouts.filter { calendar.isDate($0.date, inSameDayAs: referenceDate) }
+            let todayMinutes = todayWorkouts.reduce(0.0) { $0 + $1.duration / 60.0 }
+            let todayResult: Double? = todayMinutes > 0 ? todayMinutes : nil
+
+            // Find most recent exercise if not today
+            var recentResult: (minutes: Double, date: Date)?
+            if todayResult == nil, let latest = workouts.first {
+                recentResult = (minutes: latest.duration / 60.0, date: latest.date)
+            }
+            return (today: todayResult, recent: recentResult)
         }
 
         async let latestWeightTask = fetch(
@@ -246,12 +252,17 @@ actor SharedHealthDataServiceImpl: SharedHealthDataService {
             failedSources.insert(source)
         }
 
+        let exerciseToday = todayExerciseResult.value.today
+        let exerciseRecent = todayExerciseResult.value.recent
+
         AppLogger.data.info("""
             [SharedHealthDataService] Snapshot built — \
             steps: \(todayStepsResult.value.map { String(format: "%.0f", $0) } ?? "nil", privacy: .public), \
-            exercise: \(todayExerciseResult.value.map { String(format: "%.1f", $0) } ?? "nil", privacy: .public)min, \
+            exerciseToday: \(exerciseToday.map { String(format: "%.1f", $0) } ?? "nil", privacy: .public)min, \
+            exerciseRecent: \(exerciseRecent.map { String(format: "%.1f", $0.minutes) } ?? "nil", privacy: .public)min, \
             weight: \(latestWeightResult.value.map { String(format: "%.1f", $0.value) } ?? "nil", privacy: .public)kg, \
             bmi: \(latestBMIResult.value.map { String(format: "%.1f", $0.value) } ?? "nil", privacy: .public), \
+            sleepDays: \(sleepDailyDurationsResult.value.count, privacy: .public), \
             failed: \(failedSources.map(\.rawValue).sorted(), privacy: .public)
             """)
 
@@ -276,7 +287,10 @@ actor SharedHealthDataServiceImpl: SharedHealthDataService {
                 )
             },
             todaySteps: todayStepsResult.value,
-            todayExerciseMinutes: todayExerciseResult.value,
+            todayExerciseMinutes: exerciseToday,
+            recentExercise: exerciseRecent.map {
+                SharedHealthSnapshot.ExerciseSample(minutes: $0.minutes, date: $0.date, isHistorical: true)
+            },
             latestWeight: latestWeightResult.value.map {
                 SharedHealthSnapshot.WeightSample(value: $0.value, date: $0.date)
             },

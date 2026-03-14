@@ -66,8 +66,16 @@ struct SharedHealthSnapshot: Sendable {
     let latestSleepStages: SleepStagesSample?
     let sleepDailyDurations: [SleepDailyDuration]
 
+    struct ExerciseSample: Sendable {
+        let minutes: Double
+        let date: Date
+        let isHistorical: Bool
+    }
+
     var todaySteps: Double? = nil
     var todayExerciseMinutes: Double? = nil
+    /// Most recent exercise within 7 days (for Mac fallback when todayExerciseMinutes is nil)
+    var recentExercise: ExerciseSample? = nil
     var latestWeight: WeightSample? = nil
     var latestBMI: BMISample? = nil
 

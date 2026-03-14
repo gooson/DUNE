@@ -394,6 +394,21 @@ final class DashboardViewModel {
             )
             return ([metric], failed)
         }
+        // Fallback: most recent exercise within 7 days (for Mac when no workout today)
+        if let snapshot, let recent = snapshot.recentExercise {
+            let failed = snapshot.failedSources.contains(.todayExercise)
+            let metric = HealthMetric(
+                id: "exercise",
+                name: String(localized: "Exercise"),
+                value: recent.minutes,
+                unit: "min",
+                change: nil,
+                date: recent.date,
+                category: .exercise,
+                isHistorical: recent.isHistorical
+            )
+            return ([metric], failed)
+        }
         guard canQueryHealthKit else { return ([], false) }
         do { return (try await fetchExerciseData(), false) }
         catch {
