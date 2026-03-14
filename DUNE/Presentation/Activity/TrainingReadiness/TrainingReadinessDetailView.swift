@@ -1,16 +1,15 @@
 import SwiftUI
 
-/// Detail view for Training Readiness: score hero, 14-day trend, sub-score breakdowns.
+/// Detail view for Training Readiness.
+/// Follows the canonical score detail layout:
+/// Hero → Time-of-Day → Period Picker → Chart Header → DotLineChart
+/// → Summary Stats → Highlights → Sub-Scores → Component Weights
+/// → Calculation Card → Explainer
 struct TrainingReadinessDetailView: View {
     let readiness: TrainingReadiness?
-    let hrvDailyAverages: [DailySample]
-    let rhrDailyData: [DailySample]
-    let sleepDailyData: [SleepDailySample]
 
-    @State private var detailVM = TrainingReadinessDetailViewModel()
+    @State private var viewModel = TrainingReadinessDetailViewModel()
     @Environment(\.horizontalSizeClass) private var sizeClass
-
-    private var isRegular: Bool { sizeClass == .regular }
 
     private enum Labels {
         static let scoreLabel = "READINESS"
@@ -24,38 +23,143 @@ struct TrainingReadinessDetailView: View {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: DS.Spacing.lg) {
-                if detailVM.isLoading {
+            VStack(alignment: .leading, spacing: sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.xl) {
+                if viewModel.isLoading && viewModel.chartData.isEmpty {
                     ProgressView()
                         .frame(maxWidth: .infinity, minHeight: 200)
-                } else if let readiness = detailVM.readiness {
+                } else if let readiness = viewModel.readiness {
+                    // 1. Score Hero
                     scoreHero(readiness)
-                    timeOfDayCard(readiness)
-                    ReadinessTrendChartView(data: detailVM.readinessTrend)
-                        .accessibilityIdentifier("trainingreadiness-chart-trend")
-                    subScoreCharts
-                    componentWeights(readiness)
-                    calculationMethodSection(readiness)
+
+                    // 2. Time-of-Day Card
+                    TimeOfDayCard(
+                        currentAdjustment: readiness.timeOfDayAdjustment,
+                        baseScore: Double(readiness.score) - readiness.timeOfDayAdjustment
+                    )
+
+                    // 3. Period Picker
+                    Picker("Period", selection: $viewModel.selectedPeriod) {
+                        ForEach(TimePeriod.allCases, id: \.self) { period in
+                            Text(period.displayName).tag(period)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .sensoryFeedback(.selection, trigger: viewModel.selectedPeriod)
+
+                    // 4. Chart Header
+                    ScoreDetailChartHeader(
+                        visibleRangeLabel: viewModel.visibleRangeLabel,
+                        showTrendLine: $viewModel.showTrendLine,
+                        tintColor: readiness.status.color
+                    )
+
+                    // 5. Main Trend Chart (DotLineChartView)
+                    StandardCard {
+                        Group {
+                            if viewModel.chartData.isEmpty && !viewModel.isLoading {
+                                ScoreDetailEmptyState(chartHeight: chartHeight)
+                            } else {
+                                DotLineChartView(
+                                    data: viewModel.chartData,
+                                    baseline: 50,
+                                    yAxisLabel: "Score",
+                                    timePeriod: viewModel.selectedPeriod,
+                                    tintColor: readiness.status.color,
+                                    trendLine: viewModel.trendLineData,
+                                    scrollDomain: viewModel.scrollDomain,
+                                    scrollPosition: $viewModel.scrollPosition
+                                )
+                                .frame(height: chartHeight)
+                                .accessibilityIdentifier("trainingreadiness-chart-trend")
+                            }
+                        }
+                        .id(viewModel.selectedPeriod)
+                        .transition(.opacity)
+                    }
+                    .animation(.easeInOut(duration: 0.25), value: viewModel.selectedPeriod)
+
+                    // 6. Summary Stats + 7. Highlights
+                    if sizeClass == .regular {
+                        HStack(alignment: .top, spacing: DS.Spacing.lg) {
+                            if let summary = viewModel.summaryStats {
+                                ScoreDetailSummaryStats(summary: summary, sizeClass: sizeClass)
+                                    .frame(maxWidth: .infinity)
+                            }
+                            if !viewModel.highlights.isEmpty {
+                                ScoreDetailHighlights(highlights: viewModel.highlights)
+                                    .frame(maxWidth: .infinity)
+                            }
+                        }
+                    } else {
+                        if let summary = viewModel.summaryStats {
+                            ScoreDetailSummaryStats(summary: summary, sizeClass: sizeClass)
+                        }
+                        if !viewModel.highlights.isEmpty {
+                            ScoreDetailHighlights(highlights: viewModel.highlights)
+                        }
+                    }
+
+                    // 8. Sub-Score Charts (HRV → RHR → Sleep)
+                    SubScoreTrendChartView(
+                        title: "HRV",
+                        data: viewModel.hrvTrend,
+                        color: DS.Color.hrv,
+                        unit: "ms"
+                    )
+
+                    SubScoreTrendChartView(
+                        title: "Resting Heart Rate",
+                        data: viewModel.rhrTrend,
+                        color: DS.Color.heartRate,
+                        unit: "bpm"
+                    )
+
+                    SubScoreTrendChartView(
+                        title: "Sleep Duration",
+                        data: viewModel.sleepTrend,
+                        color: DS.Color.sleep,
+                        unit: "hrs",
+                        fractionDigits: 1
+                    )
+
+                    // 9. Component Weights
+                    ScoreCompositionCard(
+                        title: "Score Composition",
+                        components: [
+                            .init(label: String(localized: "HRV Variability"), weight: "30%", score: readiness.components.hrvScore, color: DS.Color.hrv),
+                            .init(label: String(localized: "Sleep Quality"), weight: "25%", score: readiness.components.sleepScore, color: DS.Color.sleep),
+                            .init(label: String(localized: "Resting Heart Rate"), weight: "20%", score: readiness.components.rhrScore, color: DS.Color.heartRate),
+                            .init(label: String(localized: "Recovery Status"), weight: "15%", score: readiness.components.fatigueScore, color: DS.Color.activity),
+                            .init(label: String(localized: "Trend Bonus"), weight: "10%", score: readiness.components.trendBonus, color: DS.Color.fitness),
+                        ]
+                    )
+
+                    // 10. Calculation Card
+                    CalculationMethodCard(
+                        icon: "function",
+                        title: "Calculation Method",
+                        bullets: calculationBullets(readiness)
+                    )
                 } else {
-                    emptyState
+                    ScoreDetailEmptyState(
+                        icon: "figure.run",
+                        title: "Need More Data",
+                        message: "Track your workouts and wear Apple Watch to see your training readiness breakdown."
+                    )
                 }
             }
-            .padding()
+            .padding(sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.lg)
         }
         .accessibilityIdentifier("activity-training-readiness-detail-screen")
         .background { DetailWaveBackground() }
         .englishNavigationTitle("Training Readiness")
         .task {
-            detailVM.loadData(
-                readiness: readiness,
-                hrvDailyAverages: hrvDailyAverages,
-                rhrDailyData: rhrDailyData,
-                sleepDailyData: sleepDailyData
-            )
+            viewModel.configure(readiness: readiness)
+            await viewModel.loadData()
         }
     }
 
-    // MARK: - Score Hero
+    // MARK: - Subviews
 
     private func scoreHero(_ readiness: TrainingReadiness) -> some View {
         DetailScoreHero(
@@ -76,171 +180,21 @@ struct TrainingReadinessDetailView: View {
         )
     }
 
-    // MARK: - Sub-Score Charts
-
-    private var subScoreCharts: some View {
-        VStack(spacing: DS.Spacing.md) {
-            SubScoreTrendChartView(
-                title: "HRV",
-                data: detailVM.hrvTrend,
-                color: DS.Color.hrv,
-                unit: "ms"
-            )
-
-            SubScoreTrendChartView(
-                title: "Resting Heart Rate",
-                data: detailVM.rhrTrend,
-                color: DS.Color.heartRate,
-                unit: "bpm"
-            )
-
-            SubScoreTrendChartView(
-                title: "Sleep Duration",
-                data: detailVM.sleepTrend,
-                color: DS.Color.sleep,
-                unit: "hrs",
-                fractionDigits: 1
-            )
+    private func calculationBullets(_ readiness: TrainingReadiness) -> [LocalizedStringKey] {
+        var bullets: [LocalizedStringKey] = [
+            "Final score = HRV(30%) + RHR(20%) + Sleep(25%) + Recovery(15%) + Trend(10%).",
+            "Each component is normalized to 0-100 before weighting.",
+            "HRV/RHR are compared against your personal baseline; positive trend increases score.",
+        ]
+        if readiness.isCalibrating {
+            bullets.append("Calibration in progress: more recent data will stabilize the baseline.")
         }
+        return bullets
     }
 
+    // MARK: - Helpers
 
-    private func timeOfDayCard(_ readiness: TrainingReadiness) -> some View {
-        let baseScore = Double(readiness.score) - readiness.timeOfDayAdjustment
-
-        return StandardCard {
-            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                Text("Time-of-day Effect")
-                    .font(.subheadline.weight(.semibold))
-
-                Text("Current adjustment \(readiness.timeOfDayAdjustment.formattedWithSeparator(fractionDigits: 0, alwaysShowSign: true))")
-                    .font(.caption)
-                    .foregroundStyle(DS.Color.textSecondary)
-
-                HStack {
-                    phaseChip("Night", base: baseScore, hour: 2)
-                    phaseChip("Morning", base: baseScore, hour: 8)
-                    phaseChip("Noon", base: baseScore, hour: 13)
-                    phaseChip("Evening", base: baseScore, hour: 19)
-                }
-            }
-        }
-    }
-
-    private func phaseChip(_ title: String, base: Double, hour: Int) -> some View {
-        let date = Calendar.current.date(bySettingHour: hour, minute: 0, second: 0, of: Date()) ?? Date()
-        let adjustment = ScoreTimeOfDayAdjustment.readinessAndWellness(for: date)
-        let projected = Int(max(0, min(100, (base + adjustment).rounded())))
-
-        return VStack(spacing: DS.Spacing.xxs) {
-            Text(title)
-                .font(.caption2)
-                .foregroundStyle(.tertiary)
-            Text("\(projected)")
-                .font(.caption.weight(.semibold))
-                .monospacedDigit()
-        }
-        .frame(maxWidth: .infinity)
-    }
-
-    // MARK: - Component Weights
-
-    private func componentWeights(_ readiness: TrainingReadiness) -> some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            Text("Score Composition")
-                .font(.subheadline.weight(.semibold))
-
-            weightRow(label: "HRV Variability", weight: "30%", score: readiness.components.hrvScore, color: DS.Color.hrv)
-            weightRow(label: "Sleep Quality", weight: "25%", score: readiness.components.sleepScore, color: DS.Color.sleep)
-            weightRow(label: "Resting Heart Rate", weight: "20%", score: readiness.components.rhrScore, color: DS.Color.heartRate)
-            weightRow(label: "Recovery Status", weight: "15%", score: readiness.components.fatigueScore, color: DS.Color.activity)
-            weightRow(label: "Trend Bonus", weight: "10%", score: readiness.components.trendBonus, color: DS.Color.fitness)
-        }
-        .padding(DS.Spacing.md)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
-    }
-
-    private func weightRow(label: LocalizedStringKey, weight: String, score: Int, color: Color) -> some View {
-        HStack {
-            Text(label)
-                .font(.subheadline)
-            Spacer()
-            Text(weight)
-                .font(.caption)
-                .foregroundStyle(.tertiary)
-            GeometryReader { geo in
-                let fraction = CGFloat(score) / 100.0
-                Capsule()
-                    .fill(color.opacity(0.15))
-                    .overlay(alignment: .leading) {
-                        Capsule()
-                            .fill(color)
-                            .frame(width: geo.size.width * fraction)
-                    }
-            }
-            .frame(width: 60, height: 6)
-            .clipShape(Capsule())
-            Text("\(score)")
-                .font(.caption)
-                .fontWeight(.medium)
-                .monospacedDigit()
-                .frame(width: 28, alignment: .trailing)
-        }
-    }
-
-    // MARK: - Calculation Method
-
-    private func calculationMethodSection(_ readiness: TrainingReadiness) -> some View {
-        StandardCard {
-            VStack(alignment: .leading, spacing: DS.Spacing.md) {
-                HStack(spacing: DS.Spacing.sm) {
-                    Image(systemName: "function")
-                        .foregroundStyle(DS.Color.textSecondary)
-                    Text("Calculation Method")
-                        .font(.subheadline.weight(.semibold))
-                }
-
-                calculationMethodLine("Final score = HRV(30%) + RHR(20%) + Sleep(25%) + Recovery(15%) + Trend(10%).")
-                calculationMethodLine("Each component is normalized to 0-100 before weighting.")
-                calculationMethodLine("HRV/RHR are compared against your personal baseline; positive trend increases score.")
-
-                if readiness.isCalibrating {
-                    calculationMethodLine("Calibration in progress: more recent data will stabilize the baseline.")
-                }
-            }
-        }
-    }
-
-    private func calculationMethodLine(_ text: LocalizedStringKey) -> some View {
-        HStack(alignment: .top, spacing: DS.Spacing.sm) {
-            Circle()
-                .fill(.tertiary)
-                .frame(width: 4, height: 4)
-                .padding(.top, 6)
-
-            Text(text)
-                .font(.caption)
-                .foregroundStyle(DS.Color.textSecondary)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-    }
-
-    // MARK: - Empty State
-
-    private var emptyState: some View {
-        VStack(spacing: DS.Spacing.lg) {
-            Image(systemName: "figure.run")
-                .font(.largeTitle)
-                .foregroundStyle(.quaternary)
-            Text("Need More Data")
-                .font(.headline)
-                .foregroundStyle(DS.Color.textSecondary)
-            Text("Track your workouts and wear Apple Watch to see your training readiness breakdown.")
-                .font(.subheadline)
-                .foregroundStyle(.tertiary)
-                .multilineTextAlignment(.center)
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, DS.Spacing.xl)
+    private var chartHeight: CGFloat {
+        sizeClass == .regular ? 360 : 250
     }
 }
