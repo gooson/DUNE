@@ -1416,7 +1416,7 @@ struct OceanLegacyArcticTabWaveBackground: View {
             )
         }
         .ignoresSafeArea()
-        .onReceive(NotificationCenter.default.publisher(for: .NSProcessInfoPowerStateDidChange)) { _ in
+        .onReceive(NotificationCenter.default.mainThreadPublisher(for: .NSProcessInfoPowerStateDidChange)) { _ in
             Task { @MainActor in
                 isLowPowerModeEnabled = ProcessInfo.processInfo.isLowPowerModeEnabled
             }
@@ -1638,7 +1638,7 @@ struct OceanLegacyArcticDetailWaveBackground: View {
             )
         }
         .ignoresSafeArea()
-        .onReceive(NotificationCenter.default.publisher(for: .NSProcessInfoPowerStateDidChange)) { _ in
+        .onReceive(NotificationCenter.default.mainThreadPublisher(for: .NSProcessInfoPowerStateDidChange)) { _ in
             Task { @MainActor in
                 isLowPowerModeEnabled = ProcessInfo.processInfo.isLowPowerModeEnabled
             }
@@ -1827,7 +1827,7 @@ struct OceanLegacyArcticSheetWaveBackground: View {
             )
         }
         .ignoresSafeArea()
-        .onReceive(NotificationCenter.default.publisher(for: .NSProcessInfoPowerStateDidChange)) { _ in
+        .onReceive(NotificationCenter.default.mainThreadPublisher(for: .NSProcessInfoPowerStateDidChange)) { _ in
             Task { @MainActor in
                 isLowPowerModeEnabled = ProcessInfo.processInfo.isLowPowerModeEnabled
             }

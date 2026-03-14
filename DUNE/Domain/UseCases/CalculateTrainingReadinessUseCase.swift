@@ -21,7 +21,27 @@ struct CalculateTrainingReadinessUseCase: TrainingReadinessCalculating, Sendable
         let deepSleepRatio: Double?
         let remSleepRatio: Double?
         let fatigueStates: [MuscleFatigueState]
-        let evaluationDate: Date = .now
+        let evaluationDate: Date
+
+        init(
+            hrvSamples: [HRVSample],
+            todayRHR: Double?,
+            rhrBaseline: [Double],
+            sleepDurationMinutes: Double?,
+            deepSleepRatio: Double?,
+            remSleepRatio: Double?,
+            fatigueStates: [MuscleFatigueState],
+            evaluationDate: Date = .now
+        ) {
+            self.hrvSamples = hrvSamples
+            self.todayRHR = todayRHR
+            self.rhrBaseline = rhrBaseline
+            self.sleepDurationMinutes = sleepDurationMinutes
+            self.deepSleepRatio = deepSleepRatio
+            self.remSleepRatio = remSleepRatio
+            self.fatigueStates = fatigueStates
+            self.evaluationDate = evaluationDate
+        }
     }
 
     // MARK: - Weights

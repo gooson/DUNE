@@ -252,6 +252,7 @@ struct VisionMuscleMapExperienceView: View {
             fatigueStates: fatigueStates,
             mode: mode,
             selectedMuscle: selectedMuscle,
+            anatomyLayer: .skin,
             colorScheme: colorScheme
         )
     }

@@ -14,7 +14,8 @@ struct HealthSnapshotMirrorMapperTests {
         todayRHR: Double? = 63,
         yesterdayRHR: Double? = 59,
         displayRHR: Double? = 63,
-        displayRHRDate: Date? = nil
+        displayRHRDate: Date? = nil,
+        evaluationDate: Date? = nil
     ) -> ConditionScoreDetail {
         ConditionScoreDetail(
             todayHRV: 58,
@@ -32,7 +33,8 @@ struct HealthSnapshotMirrorMapperTests {
             rhrDeltaFromBaseline: 4,
             rhrBaselineDays: 10,
             displayRHR: displayRHR,
-            displayRHRDate: displayRHRDate ?? todayDate
+            displayRHRDate: displayRHRDate ?? todayDate,
+            evaluationDate: evaluationDate ?? todayDate
         )
     }
 

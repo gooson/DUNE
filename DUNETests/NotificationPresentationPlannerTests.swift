@@ -3,7 +3,7 @@ import Testing
 @testable import DUNE
 
 @Suite("NotificationPresentationPlanner")
-struct NotificationPresentationPlannerTests {
+struct NotificationPresentationPlannerRoutingTests {
 
     @Test("sleepDetail route produces openSleepDetailInWellness plan")
     func sleepDetailRoute() {
@@ -17,8 +17,8 @@ struct NotificationPresentationPlannerTests {
     }
 
     @Test("workoutDetail route with valid workoutID produces openWorkoutInActivity plan")
-    func workoutDetailRoute() {
-        let route = NotificationRoute.workoutDetail(workoutID: "w-123")
+    func workoutDetailRoute() throws {
+        let route = try #require(NotificationRoute.workoutDetail(workoutID: "w-123"))
         let plan = NotificationPresentationPlanner.plan(for: route, requestID: 2)
         guard case .openWorkoutInActivity(let workoutID) = plan else {
             Issue.record("Expected openWorkoutInActivity, got \(String(describing: plan))")
@@ -30,8 +30,7 @@ struct NotificationPresentationPlannerTests {
     @Test("workoutDetail route with empty workoutID returns nil")
     func workoutDetailEmptyID() {
         let route = NotificationRoute.workoutDetail(workoutID: "")
-        let plan = NotificationPresentationPlanner.plan(for: route, requestID: 3)
-        #expect(plan == nil)
+        #expect(route == nil)
     }
 
     @Test("notificationHub route produces openNotificationHub plan")
@@ -42,10 +41,10 @@ struct NotificationPresentationPlannerTests {
     }
 
     @Test("activityPersonalRecords route produces push plan with personalRecords destination")
-    func activityPersonalRecordsRoute() {
+    func activityPersonalRecordsRoute() throws {
         let route = NotificationRoute.activityPersonalRecords
-        let plan = NotificationPresentationPlanner.plan(for: route, requestID: 5)
-        let path = NotificationPresentationPlanner.rootPath(for: plan!)
+        let plan = try #require(NotificationPresentationPlanner.plan(for: route, requestID: 5))
+        let path = NotificationPresentationPlanner.rootPath(for: plan)
         #expect(path.count == 1)
         guard case .personalRecords(let requestID) = path.first else {
             Issue.record("Expected personalRecords destination")

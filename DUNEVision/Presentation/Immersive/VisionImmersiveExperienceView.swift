@@ -51,7 +51,7 @@ struct VisionImmersiveExperienceView: View {
         .onChange(of: viewModel.summary?.sleepJourney.segments.count) { _, _ in
             startAnimationsIfNeeded(restartTimeline: true)
         }
-        .onReceive(NotificationCenter.default.publisher(for: .simulatorAdvancedMockDataDidChange)) { _ in
+        .onReceive(NotificationCenter.default.mainThreadPublisher(for: .simulatorAdvancedMockDataDidChange)) { _ in
             Task { @MainActor in
                 await viewModel.reload()
                 startAnimationsIfNeeded(restartTimeline: true)

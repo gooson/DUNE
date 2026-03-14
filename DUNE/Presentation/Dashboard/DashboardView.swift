@@ -249,7 +249,7 @@ struct DashboardView: View {
             reloadUnreadCount()
             reloadWhatsNewBadge()
         }
-        .onReceive(NotificationCenter.default.publisher(for: NotificationInboxManager.inboxDidChangeNotification)) { _ in
+        .onReceive(NotificationCenter.default.mainThreadPublisher(for: NotificationInboxManager.inboxDidChangeNotification)) { _ in
             Task { @MainActor in
                 reloadUnreadCount()
             }

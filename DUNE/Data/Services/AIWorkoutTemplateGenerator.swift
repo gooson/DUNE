@@ -7,13 +7,18 @@ struct AIWorkoutTemplateGenerator: NaturalLanguageWorkoutGenerating, Sendable {
     }
 
     private let recommendationService: any WorkoutRecommending
+    private let availabilityProvider: @Sendable () -> Bool
 
-    init(recommendationService: any WorkoutRecommending = WorkoutRecommendationService()) {
+    init(
+        recommendationService: any WorkoutRecommending = WorkoutRecommendationService(),
+        availabilityProvider: @escaping @Sendable () -> Bool = { Self.isAvailable }
+    ) {
         self.recommendationService = recommendationService
+        self.availabilityProvider = availabilityProvider
     }
 
     var isAvailable: Bool {
-        Self.isAvailable
+        availabilityProvider()
     }
 
     func generateTemplate(
@@ -24,7 +29,7 @@ struct AIWorkoutTemplateGenerator: NaturalLanguageWorkoutGenerating, Sendable {
         guard !trimmedPrompt.isEmpty else {
             throw WorkoutTemplateGenerationError.emptyPrompt
         }
-        guard Self.isAvailable else {
+        guard isAvailable else {
             throw WorkoutTemplateGenerationError.unavailable
         }
         let promptIntent = Self.promptIntent(for: trimmedPrompt)

@@ -224,7 +224,7 @@ struct NotificationHubView: View {
         .task {
             reload()
         }
-        .onReceive(NotificationCenter.default.publisher(for: NotificationInboxManager.inboxDidChangeNotification)) { _ in
+        .onReceive(NotificationCenter.default.mainThreadPublisher(for: NotificationInboxManager.inboxDidChangeNotification)) { _ in
             Task { @MainActor in
                 reload()
             }

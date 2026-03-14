@@ -145,7 +145,7 @@ struct VisionContentView: View {
                 }
             }
         }
-        .onReceive(NotificationCenter.default.publisher(for: .simulatorAdvancedMockDataDidChange)) { _ in
+        .onReceive(NotificationCenter.default.mainThreadPublisher(for: .simulatorAdvancedMockDataDidChange)) { _ in
             Task { @MainActor in
                 if let refreshCoordinator {
                     await refreshCoordinator.forceRefresh()
