@@ -43,7 +43,6 @@ struct PostureResultView: View {
                     Text("\(Int(animatedScore * 100))")
                         .font(.system(size: 36, weight: .bold, design: .rounded))
                         .contentTransition(.numericText())
-                        .animation(DS.Animation.numeric, value: animatedScore)
 
                     Text("/ 100")
                         .font(.caption)
