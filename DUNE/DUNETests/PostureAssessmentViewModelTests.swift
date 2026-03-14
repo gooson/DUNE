@@ -103,7 +103,7 @@ struct PostureAssessmentViewModelTests {
     // MARK: - Memo
 
     @Test("Memo is trimmed to 500 characters in createValidatedRecord")
-    func memoTruncation() {
+    func memoTruncation() throws {
         let vm = PostureAssessmentViewModel()
         // Simulate having a front assessment to pass validation
         vm.frontAssessment = PostureAssessment(
@@ -116,10 +116,9 @@ struct PostureAssessmentViewModelTests {
         )
         vm.memo = String(repeating: "a", count: 600)
 
-        let record = vm.createValidatedRecord()
+        let record = try #require(vm.createValidatedRecord())
 
-        #expect(record != nil)
-        #expect(record!.memo.count == 500)
+        #expect(record.memo.count == 500)
     }
 
     // MARK: - Combined Assessment

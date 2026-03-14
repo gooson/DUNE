@@ -127,22 +127,30 @@ struct JointPosition3D: Codable, Sendable, Hashable, Identifiable {
     let y: Float                // Meters from root, up positive
     let z: Float                // Meters from root, toward camera positive
 
+    // 2D image-space coordinates (normalized 0-1), populated via VNHumanBodyPose3DObservation.pointInImage
+    let imageX: CGFloat?
+    let imageY: CGFloat?
+
     var position: SIMD3<Float> {
         SIMD3(x, y, z)
     }
 
-    init(name: String, position: SIMD3<Float>) {
+    init(name: String, position: SIMD3<Float>, imageX: CGFloat? = nil, imageY: CGFloat? = nil) {
         self.name = name
         self.x = position.x
         self.y = position.y
         self.z = position.z
+        self.imageX = imageX
+        self.imageY = imageY
     }
 
-    init(name: String, x: Float, y: Float, z: Float) {
+    init(name: String, x: Float, y: Float, z: Float, imageX: CGFloat? = nil, imageY: CGFloat? = nil) {
         self.name = name
         self.x = x
         self.y = y
         self.z = z
+        self.imageX = imageX
+        self.imageY = imageY
     }
 }
 

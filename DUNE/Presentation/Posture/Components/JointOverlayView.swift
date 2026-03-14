@@ -19,16 +19,17 @@ struct JointOverlayView: View {
 
                 // Joint dots
                 ForEach(jointPositions) { joint in
-                    let point = projectToScreen(
+                    if let point = projectToScreen(
                         joint: joint,
                         scale: scale,
                         offsetX: offsetX,
                         offsetY: offsetY
-                    )
-                    Circle()
-                        .fill(jointColor(for: joint.name))
-                        .frame(width: 10, height: 10)
-                        .position(point)
+                    ) {
+                        Circle()
+                            .fill(jointColor(for: joint.name))
+                            .frame(width: 10, height: 10)
+                            .position(point)
+                    }
                 }
             }
         }
@@ -41,15 +42,16 @@ struct JointOverlayView: View {
         scale: CGFloat,
         offsetX: CGFloat,
         offsetY: CGFloat
-    ) -> CGPoint {
-        // Project 3D coordinates to 2D screen space
-        // X maps to horizontal, Y maps to vertical (inverted for screen coords)
-        let normalizedX = CGFloat(joint.x + 0.5) // Center at 0.5
-        let normalizedY = CGFloat(1.0 - (joint.y + 0.5)) // Flip Y
+    ) -> CGPoint? {
+        // Use 2D image coordinates from VNHumanBodyPose3DObservation.pointInImage
+        guard let imageX = joint.imageX, let imageY = joint.imageY else {
+            return nil
+        }
 
+        // Vision normalized coords: origin bottom-left, Y up → flip Y for UIKit
         return CGPoint(
-            x: offsetX + normalizedX * imageSize.width * scale,
-            y: offsetY + normalizedY * imageSize.height * scale
+            x: offsetX + imageX * imageSize.width * scale,
+            y: offsetY + (1.0 - imageY) * imageSize.height * scale
         )
     }
 
@@ -84,14 +86,13 @@ struct JointOverlayView: View {
         return Path { path in
             for (from, to) in Self.connections {
                 guard let fromJoint = jointMap[from],
-                      let toJoint = jointMap[to] else { continue }
-
-                let fromPoint = projectToScreen(
-                    joint: fromJoint, scale: scale, offsetX: offsetX, offsetY: offsetY
-                )
-                let toPoint = projectToScreen(
-                    joint: toJoint, scale: scale, offsetX: offsetX, offsetY: offsetY
-                )
+                      let toJoint = jointMap[to],
+                      let fromPoint = projectToScreen(
+                          joint: fromJoint, scale: scale, offsetX: offsetX, offsetY: offsetY
+                      ),
+                      let toPoint = projectToScreen(
+                          joint: toJoint, scale: scale, offsetX: offsetX, offsetY: offsetY
+                      ) else { continue }
 
                 path.move(to: fromPoint)
                 path.addLine(to: toPoint)

@@ -127,6 +127,11 @@ struct WellnessView: View {
                             }
                         }
 
+                        // Posture Assessment (isolated @Query)
+                        PostureAssessmentLinkView(
+                            onCapture: { isShowingPostureCapture = true }
+                        )
+
                         // Injury Banner (isolated @Query — re-renders independently)
                         WellnessInjuryBannerView(
                             onEdit: { record in injuryViewModel.startEditing(record) },
@@ -377,6 +382,7 @@ struct WellnessView: View {
 struct WellnessScoreDestination: Hashable {}
 struct BodyHistoryDestination: Hashable {}
 struct InjuryHistoryDestination: Hashable {}
+struct PostureHistoryDestination: Hashable {}
 struct SleepPredictionDestination: Hashable {}
 
 // MARK: - Isolated @Query Child Views
@@ -444,6 +450,111 @@ private struct WellnessInjuryBannerView: View {
                 }
             }
         }
+    }
+}
+
+/// Posture assessment card with its own @Query — shows latest result or start prompt.
+private struct PostureAssessmentLinkView: View {
+    @Query(sort: \PostureAssessmentRecord.date, order: .reverse)
+    private var records: [PostureAssessmentRecord]
+    @Environment(\.appTheme) private var theme
+
+    let onCapture: () -> Void
+
+    var body: some View {
+        StandardCard {
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                HStack(spacing: DS.Spacing.xs) {
+                    Image(systemName: "figure.stand")
+                        .font(.subheadline)
+                        .foregroundStyle(DS.Color.body)
+
+                    Text("Posture Assessment")
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+
+                    Spacer()
+
+                    if !records.isEmpty {
+                        NavigationLink(value: PostureHistoryDestination()) {
+                            Text("View All")
+                                .font(.caption)
+                                .fontWeight(.medium)
+                        }
+                        .tint(theme.accentColor)
+                    }
+                }
+
+                if let latest = records.first {
+                    InlineCard {
+                        HStack(spacing: DS.Spacing.md) {
+                            ZStack {
+                                Circle()
+                                    .stroke(.quaternary, lineWidth: 4)
+                                    .frame(width: 40, height: 40)
+
+                                Circle()
+                                    .trim(from: 0, to: CGFloat(latest.overallScore) / 100.0)
+                                    .stroke(
+                                        scoreColor(latest.overallScore),
+                                        style: StrokeStyle(lineWidth: 4, lineCap: .round)
+                                    )
+                                    .frame(width: 40, height: 40)
+                                    .rotationEffect(.degrees(-90))
+
+                                Text("\(latest.overallScore)")
+                                    .font(.caption2.bold())
+                            }
+
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(latest.date.formatted(.dateTime.month(.abbreviated).day()))
+                                    .font(.caption)
+                                    .fontWeight(.medium)
+
+                                Text(String(localized: "\(latest.allMetrics.count) metrics measured"))
+                                    .font(.caption2)
+                                    .foregroundStyle(DS.Color.textSecondary)
+                            }
+
+                            Spacer()
+
+                            Button {
+                                onCapture()
+                            } label: {
+                                Image(systemName: "camera.fill")
+                                    .font(.subheadline)
+                            }
+                            .tint(theme.accentColor)
+                        }
+                    }
+                } else {
+                    InlineCard {
+                        HStack(spacing: DS.Spacing.sm) {
+                            Image(systemName: "camera.viewfinder")
+                                .foregroundStyle(DS.Color.textSecondary)
+
+                            Text("Capture your first posture assessment")
+                                .font(.caption)
+                                .foregroundStyle(DS.Color.textSecondary)
+
+                            Spacer()
+
+                            Button("Start") {
+                                onCapture()
+                            }
+                            .font(.caption.weight(.medium))
+                            .tint(theme.accentColor)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private func scoreColor(_ score: Int) -> Color {
+        if score >= 80 { return .green }
+        if score >= 60 { return .yellow }
+        return .red
     }
 }
 

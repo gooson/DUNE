@@ -62,7 +62,7 @@ struct PostureAnalysisServiceTests {
     }
 
     @Test("Shoulder asymmetry detected with uneven shoulders")
-    func shoulderAsymmetry() {
+    func shoulderAsymmetry() throws {
         var joints = perfectFrontJoints
         // Make left shoulder 4cm higher
         if let idx = joints.firstIndex(where: { $0.name == "leftShoulder" }) {
@@ -70,39 +70,36 @@ struct PostureAnalysisServiceTests {
         }
 
         let results = service.analyzeFrontView(joints: joints)
-        let shoulderMetric = results.first { $0.type == .shoulderAsymmetry }
+        let shoulderMetric = try #require(results.first { $0.type == .shoulderAsymmetry })
 
-        #expect(shoulderMetric != nil)
-        #expect(shoulderMetric?.status == .caution || shoulderMetric?.status == .warning)
-        #expect(shoulderMetric!.value > 3.0, "Expected > 3cm asymmetry")
+        #expect(shoulderMetric.status == .caution || shoulderMetric.status == .warning)
+        #expect(shoulderMetric.value > 3.0, "Expected > 3cm asymmetry")
     }
 
     @Test("Hip asymmetry detected with uneven hips")
-    func hipAsymmetry() {
+    func hipAsymmetry() throws {
         var joints = perfectFrontJoints
         if let idx = joints.firstIndex(where: { $0.name == "leftHip" }) {
             joints[idx] = joint("leftHip", x: -0.12, y: 0.94, z: 0)
         }
 
         let results = service.analyzeFrontView(joints: joints)
-        let hipMetric = results.first { $0.type == .hipAsymmetry }
+        let hipMetric = try #require(results.first { $0.type == .hipAsymmetry })
 
-        #expect(hipMetric != nil)
-        #expect(hipMetric!.value > 3.0)
+        #expect(hipMetric.value > 3.0)
     }
 
     @Test("Lateral shift detected when head is off-center")
-    func lateralShift() {
+    func lateralShift() throws {
         var joints = perfectFrontJoints
         if let idx = joints.firstIndex(where: { $0.name == "centerHead" }) {
             joints[idx] = joint("centerHead", x: 0.05, y: 1.7, z: 0)
         }
 
         let results = service.analyzeFrontView(joints: joints)
-        let shiftMetric = results.first { $0.type == .lateralShift }
+        let shiftMetric = try #require(results.first { $0.type == .lateralShift })
 
-        #expect(shiftMetric != nil)
-        #expect(shiftMetric!.value > 3.0)
+        #expect(shiftMetric.value > 3.0)
     }
 
     @Test("Missing frontal joints yield unmeasurable results")

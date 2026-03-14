@@ -239,8 +239,8 @@ struct PostureResultView: View {
 
     private func saveAssessment() {
         guard let record = viewModel.createValidatedRecord() else { return }
+        defer { viewModel.didFinishSaving() }
         modelContext.insert(record)
-        viewModel.didFinishSaving()
         viewModel.resetAll()
         dismiss()
     }
