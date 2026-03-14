@@ -13,6 +13,7 @@ struct WorkoutPreviewView: View {
     @State private var isStarting = false
     @State private var errorMessage: String?
     @State private var selectedLevel: Int = 5
+    @FocusState private var levelFocused: Bool
 
     var body: some View {
         VStack(spacing: 0) {
@@ -89,8 +90,9 @@ struct WorkoutPreviewView: View {
                 Text(LocalizedStringKey(activityType.typeName))
                     .font(DS.Typography.exerciseName)
 
-                if cardioUnit?.supportsMachineLevel == true {
-                    machineLevelPicker(range: cardioUnit?.machineLevelRange ?? 1...20)
+                if let cardioUnit, cardioUnit.supportsMachineLevel,
+                   let range = cardioUnit.machineLevelRange {
+                    machineLevelPicker(range: range)
                 }
 
                 if supportsOutdoor {
@@ -219,7 +221,7 @@ struct WorkoutPreviewView: View {
                 .disabled(selectedLevel <= range.lowerBound)
 
                 Text("\(selectedLevel)")
-                    .font(DS.Typography.primaryMetric)
+                    .font(DS.Typography.secondaryMetric)
                     .foregroundStyle(DS.Color.activity)
                     .contentTransition(.numericText())
                     .frame(minWidth: 36)
@@ -237,6 +239,20 @@ struct WorkoutPreviewView: View {
                 .tint(DS.Color.activity)
                 .disabled(selectedLevel >= range.upperBound)
             }
+            .focusable(true)
+            .focused($levelFocused)
+            .digitalCrownRotation(
+                detent: $selectedLevel,
+                from: range.lowerBound,
+                through: range.upperBound,
+                by: 1,
+                sensitivity: .low,
+                isContinuous: false,
+                isHapticFeedbackEnabled: true
+            )
+        }
+        .onAppear {
+            levelFocused = true
         }
     }
 
