@@ -10891,16 +10891,16 @@
     },
     "Front": {
       "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "前面"
-          }
-        },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "전면"
+            "value": "정면"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正面"
           }
         }
       }
@@ -24189,18 +24189,17 @@
       }
     },
     "Side": {
-      "extractionState": "manual",
       "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "左右"
-          }
-        },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "좌우"
+            "value": "측면"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "側面"
           }
         }
       }
@@ -32359,6 +32358,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@撮影画像"
+          }
+        }
+      }
+    },
+    "Posture score %lld out of 100, partial assessment": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "자세 점수 100점 만점 중 %lld점, 부분 측정"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "姿勢スコア 100点中%lld点、部分評価"
           }
         }
       }
