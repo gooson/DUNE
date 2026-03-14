@@ -39,6 +39,7 @@ status: approved
 - **시계열 regression 입력은 oldest-first 정렬** (#156)
 - **Dedup 필터 빈 문자열 ID 방어**: `!id.isEmpty` 검증 (#63)
 - **HK ID 캡처 -> SwiftData 삭제 -> HK 삭제 순서** (#67)
+- **`day` detail 차트는 end-to-end intraday 해상도 유지**: x-axis가 시간 단위면 service interval, mock aggregation, ViewModel chart transform도 hour/raw semantics를 유지하고, `week+`용 일평균 로직을 `day`에 재사용하지 않는다 (#234)
 
 ### DRY & 구조
 

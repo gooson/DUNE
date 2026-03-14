@@ -11,10 +11,22 @@ protocol HeartRateQuerying: Sendable {
     func fetchHeartRateHistory(days: Int) async throws -> [VitalSample]
     /// Fetch daily average heart rate samples within a date range (for scrollable detail charts).
     func fetchHeartRateHistory(start: Date, end: Date) async throws -> [VitalSample]
+    /// Fetch period-aware average heart rate samples within a date range.
+    func fetchHeartRateHistory(start: Date, end: Date, interval: DateComponents) async throws -> [VitalSample]
     /// Compute heart rate zone distribution for a workout.
     func fetchHeartRateZones(forWorkoutID workoutID: String, maxHR: Double) async throws -> [HeartRateZone]
     /// Compute heart rate recovery (HRR₁) from post-workout HR samples.
     func fetchHeartRateRecovery(forWorkoutID workoutID: String) async throws -> HeartRateRecovery?
+}
+
+extension HeartRateQuerying {
+    func fetchHeartRateHistory(
+        start: Date,
+        end: Date,
+        interval: DateComponents
+    ) async throws -> [VitalSample] {
+        try await fetchHeartRateHistory(start: start, end: end)
+    }
 }
 
 struct HeartRateQueryService: HeartRateQuerying, Sendable {
@@ -122,12 +134,6 @@ struct HeartRateQueryService: HeartRateQuerying, Sendable {
     }
 
     func fetchHeartRateHistory(days: Int) async throws -> [VitalSample] {
-        if let mockData = SimulatorAdvancedMockDataProvider.current() {
-            return mockData.heartRateHistory(
-                start: Calendar.current.date(byAdding: .day, value: -days, to: mockData.referenceDate) ?? mockData.referenceDate,
-                end: mockData.referenceDate.addingTimeInterval(1)
-            )
-        }
         let calendar = Calendar.current
         let endDate = Date()
         guard let startDate = calendar.date(byAdding: .day, value: -days, to: endDate) else {
@@ -137,8 +143,23 @@ struct HeartRateQueryService: HeartRateQuerying, Sendable {
     }
 
     func fetchHeartRateHistory(start: Date, end: Date) async throws -> [VitalSample] {
+        try await fetchHeartRateHistory(
+            start: start,
+            end: end,
+            interval: DateComponents(day: 1)
+        )
+    }
+
+    func fetchHeartRateHistory(
+        start: Date,
+        end: Date,
+        interval: DateComponents
+    ) async throws -> [VitalSample] {
         if let mockData = SimulatorAdvancedMockDataProvider.current() {
-            return mockData.heartRateHistory(start: start, end: end)
+            return Self.aggregateHistory(
+                mockData.heartRateHistory(start: start, end: end),
+                interval: interval
+            )
         }
         guard start < end else { return [] }
         guard manager.isAvailable else { return [] }
@@ -147,18 +168,17 @@ struct HeartRateQueryService: HeartRateQuerying, Sendable {
 
         let calendar = Calendar.current
 
-        // Use statistics collection for daily averages (auto-dedup)
+        // Use statistics collection so detail charts can request hourly or daily buckets.
         let predicate = HKQuery.predicateForSamples(
             withStart: start,
             end: end,
             options: .strictStartDate
         )
 
-        let interval = DateComponents(day: 1)
         let query = HKStatisticsCollectionQueryDescriptor(
             predicate: .quantitySample(type: quantityType, predicate: predicate),
             options: .discreteAverage,
-            anchorDate: calendar.startOfDay(for: start),
+            anchorDate: Self.anchorDate(for: start, interval: interval, calendar: calendar),
             intervalComponents: interval
         )
 
@@ -173,6 +193,19 @@ struct HeartRateQueryService: HeartRateQuerying, Sendable {
         }
 
         return results.sorted { $0.date < $1.date }
+    }
+
+    static func aggregateHistory(
+        _ samples: [VitalSample],
+        interval: DateComponents,
+        calendar: Calendar = .current
+    ) -> [VitalSample] {
+        let points = samples.map { ChartDataPoint(date: $0.date, value: $0.value) }
+        return HealthDataAggregator.aggregateByAverage(
+            points,
+            unit: aggregationUnit(for: interval),
+            calendar: calendar
+        ).map { VitalSample(value: $0.value, date: $0.date) }
     }
 
     func fetchHeartRateZones(forWorkoutID workoutID: String, maxHR: Double) async throws -> [HeartRateZone] {
@@ -255,6 +288,33 @@ struct HeartRateQueryService: HeartRateQuerying, Sendable {
     static func validatedSample(bpm: Double, date: Date) -> HeartRateSample? {
         guard (20...300).contains(bpm) else { return nil }
         return HeartRateSample(bpm: bpm, date: date)
+    }
+
+    private static func anchorDate(
+        for start: Date,
+        interval: DateComponents,
+        calendar: Calendar
+    ) -> Date {
+        switch aggregationUnit(for: interval) {
+        case .hour, .day:
+            return calendar.startOfDay(for: start)
+        case .weekOfYear:
+            let components = calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: start)
+            return calendar.date(from: components) ?? calendar.startOfDay(for: start)
+        case .month:
+            let components = calendar.dateComponents([.year, .month], from: start)
+            return calendar.date(from: components) ?? calendar.startOfDay(for: start)
+        default:
+            return calendar.startOfDay(for: start)
+        }
+    }
+
+    private static func aggregationUnit(for interval: DateComponents) -> Calendar.Component {
+        if interval.hour == 1 { return .hour }
+        if interval.day == 1 { return .day }
+        if interval.weekOfYear == 1 { return .weekOfYear }
+        if interval.month == 1 { return .month }
+        return .day
     }
 
     // MARK: - Downsampling

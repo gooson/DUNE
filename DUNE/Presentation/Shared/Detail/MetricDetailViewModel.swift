@@ -565,12 +565,19 @@ final class MetricDetailViewModel {
             .map { ChartDataPoint(date: $0.date, value: $0.value) }
             .sorted { $0.date < $1.date }
 
-        // Aggregate by day (or larger) to avoid duplicate points on the same day
-        // causing Catmull-Rom interpolation spikes
-        let aggregated = HealthDataAggregator.aggregateByAverage(
-            raw, unit: selectedPeriod == .sixMonths || selectedPeriod == .year
-                ? selectedPeriod.aggregationUnit : .day
-        )
+        let aggregated: [ChartDataPoint]
+        if selectedPeriod == .day {
+            aggregated = raw
+        } else {
+            // Aggregate by day (or larger) to avoid duplicate points on the same day
+            // causing Catmull-Rom interpolation spikes outside intraday detail.
+            aggregated = HealthDataAggregator.aggregateByAverage(
+                raw,
+                unit: selectedPeriod == .sixMonths || selectedPeriod == .year
+                    ? selectedPeriod.aggregationUnit
+                    : .day
+            )
+        }
 
         // Compute from local `aggregated` rather than `self.chartData` to use
         // consistent data within this load cycle
@@ -619,7 +626,12 @@ final class MetricDetailViewModel {
 
     private func loadHeartRateData(requestID: Int) async throws {
         let range = extendedRange
-        let samples = try await heartRateService.fetchHeartRateHistory(start: range.start, end: range.end)
+        let interval = HealthDataAggregator.intervalComponents(for: selectedPeriod)
+        let samples = try await heartRateService.fetchHeartRateHistory(
+            start: range.start,
+            end: range.end,
+            interval: interval
+        )
         guard isCurrentReloadRequest(requestID) else { return }
         chartData = samples.map { ChartDataPoint(date: $0.date, value: $0.value) }
         summaryStats = HealthDataAggregator.computeSummary(from: currentPeriodValues())
