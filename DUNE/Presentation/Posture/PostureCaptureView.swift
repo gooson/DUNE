@@ -117,7 +117,6 @@ struct PostureCaptureView: View {
                 .font(.system(size: 120, weight: .bold, design: .rounded))
                 .foregroundStyle(.white)
                 .contentTransition(.numericText())
-                .animation(.easeInOut(duration: 0.3), value: count)
                 .accessibilityLabel(Text("Countdown: \(count)"))
         }
     }
