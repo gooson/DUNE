@@ -53,7 +53,7 @@ struct BedtimeReminderSchedulerTests {
             #expect(trigger.dateComponents.hour == 21)
             #expect(trigger.dateComponents.minute == 30)
         }
-        #expect(request.content.title == "Start winding down now for better recovery tomorrow.")
+        #expect(request.content.title == String(localized: "Start winding down now for better recovery tomorrow."))
     }
 
     @Test("Removes pending reminder without scheduling when disabled")

@@ -645,8 +645,8 @@ struct DashboardViewModelTests {
         #expect(delta?.shortTermDelta != nil)
     }
 
-    @Test("Condition score resets when HRV fetch fails on refresh")
-    func conditionScoreClearsAfterHRVFailure() async {
+    @Test("Condition score is preserved when HRV fetch fails during refresh")
+    func conditionScoreIsPreservedAfterHRVFailure() async {
         let calendar = Calendar.current
         let samples = (0..<7).compactMap { offset -> HRVSample? in
             guard let date = calendar.date(byAdding: .day, value: -offset, to: Date()) else { return nil }
@@ -666,12 +666,14 @@ struct DashboardViewModelTests {
 
         await vm.loadData()
         #expect(vm.conditionScore != nil)
+        let initialConditionScore = vm.conditionScore
+        let initialRecentScores = vm.recentScores
 
         await hrv.setShouldThrowSamples(true)
         await vm.loadData()
 
-        #expect(vm.conditionScore == nil)
-        #expect(vm.recentScores.isEmpty)
+        #expect(vm.conditionScore == initialConditionScore)
+        #expect(vm.recentScores == initialRecentScores)
     }
 
     @Test("Weekly goal counts only workouts in current calendar week")

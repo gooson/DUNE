@@ -28,7 +28,7 @@ struct Chart3DContainerView: View {
             .navigationTitle("3D Health Charts")
         }
         .accessibilityIdentifier(VisionSurfaceAccessibility.chart3DRoot)
-        .onReceive(NotificationCenter.default.publisher(for: .simulatorAdvancedMockDataDidChange)) { _ in
+        .onReceive(NotificationCenter.default.mainThreadPublisher(for: .simulatorAdvancedMockDataDidChange)) { _ in
             Task { @MainActor in
                 refreshToken += 1
             }

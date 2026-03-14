@@ -6,8 +6,13 @@ actor HealthDataQAService: HealthDataQuestionAnswering {
         SystemLanguageModel.default.isAvailable
     }
 
+    static func defaultAvailabilityProvider() -> Bool {
+        isAvailable
+    }
+
     private let contextBuilder: HealthDataQAContextBuilder
     private let nowProvider: @Sendable () -> Date
+    private let availabilityProvider: @Sendable () -> Bool
     private var session: LanguageModelSession?
 
     init(
@@ -15,7 +20,8 @@ actor HealthDataQAService: HealthDataQuestionAnswering {
         sleepService: any SleepQuerying = SleepQueryService(manager: .shared),
         workoutService: any WorkoutQuerying = WorkoutQueryService(manager: .shared),
         hrvService: any HRVQuerying = HRVQueryService(manager: .shared),
-        nowProvider: @escaping @Sendable () -> Date = Date.init
+        nowProvider: @escaping @Sendable () -> Date = Date.init,
+        availabilityProvider: @escaping @Sendable () -> Bool = HealthDataQAService.defaultAvailabilityProvider
     ) {
         self.contextBuilder = HealthDataQAContextBuilder(
             sharedHealthDataService: sharedHealthDataService,
@@ -25,6 +31,7 @@ actor HealthDataQAService: HealthDataQuestionAnswering {
             nowProvider: nowProvider
         )
         self.nowProvider = nowProvider
+        self.availabilityProvider = availabilityProvider
     }
 
     func ask(_ question: String) async -> HealthDataQAReply {
@@ -37,7 +44,7 @@ actor HealthDataQAService: HealthDataQuestionAnswering {
             )
         }
 
-        guard Self.isAvailable else {
+        guard availabilityProvider() else {
             return unsupportedReply()
         }
 

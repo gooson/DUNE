@@ -10,8 +10,20 @@ struct AICoachingMessageService: CoachingMessageEnhancing, Sendable {
         SystemLanguageModel.default.isAvailable
     }
 
+    private let availabilityProvider: @Sendable () -> Bool
+
+    init(
+        availabilityProvider: @escaping @Sendable () -> Bool = { Self.isAvailable }
+    ) {
+        self.availabilityProvider = availabilityProvider
+    }
+
+    var isAvailable: Bool {
+        availabilityProvider()
+    }
+
     func enhance(insight: CoachingInsight, context: CoachingInput) async -> CoachingInsight {
-        guard Self.isAvailable else { return insight }
+        guard isAvailable else { return insight }
 
         do {
             let session = LanguageModelSession()

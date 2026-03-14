@@ -40,7 +40,8 @@ status: implemented
 }
 ```
 
-`.onReceive` closure는 SwiftUI가 MainActor에서 호출하므로 추가 Task 불필요.
+이 경로는 `emitNavigationRequest`가 `DispatchQueue.main.async`로 post하고, view 쪽 notification publisher도
+main-thread delivery contract를 가지므로 추가 Task 불필요.
 
 ### 2. `emitNavigationRequest` — Task → DispatchQueue.main.async (NotificationInboxManager.swift)
 
@@ -71,7 +72,7 @@ if newPhase == .active {
 
 ## Prevention
 
-1. **`.onReceive` 핸들러에 `Task { @MainActor in }` 래핑 금지** — `.onReceive`는 이미 MainActor
+1. **이미 main-thread delivery가 보장된 `.onReceive` 핸들러에 `Task { @MainActor in }`를 중첩하지 않는다** — 불필요한 scheduling hop만 늘어난다
 2. **NotificationCenter post에 `Task { @MainActor in }` 대신 `DispatchQueue.main.async` 사용** — Combine publisher 기반 `.onReceive`와 같은 run loop 메커니즘 사용
 3. **notification 기반 navigation은 3중 안전망 유지**: `.onReceive` (즉시) + `scenePhase .active` (fallback) + `.task(id: launchExperienceReady)` (cold-start)
 
