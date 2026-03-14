@@ -66,9 +66,11 @@ struct MorningBriefingView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button(String(localized: "Done")) { dismiss() }
+                        .accessibilityIdentifier("dashboard-morning-briefing-dismiss")
                 }
             }
         }
+        .accessibilityIdentifier("dashboard-morning-briefing-screen")
         .onDisappear {
             MorningBriefingViewModel.markBriefingShown()
         }

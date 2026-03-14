@@ -19,6 +19,7 @@ struct TrainingVolumeSummaryCard: View {
                     miniBarChart
                 }
             }
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
         .accessibilityIdentifier("activity-section-volume")

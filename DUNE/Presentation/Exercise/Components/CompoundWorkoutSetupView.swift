@@ -1,6 +1,13 @@
 import SwiftUI
 import SwiftData
 
+struct CompoundWorkoutSetupDraft {
+    var selectedExercises: [ExerciseDefinition] = []
+    var mode: CompoundWorkoutMode = .superset
+    var totalRounds: Int = 3
+    var restBetweenExercises: Int = 30
+}
+
 /// Setup screen for creating a superset or circuit workout
 struct CompoundWorkoutSetupView: View {
     let library: ExerciseLibraryQuerying
@@ -8,14 +15,11 @@ struct CompoundWorkoutSetupView: View {
     let onStart: (CompoundWorkoutConfig) -> Void
 
     @Environment(\.dismiss) private var dismiss
-    @State private var selectedExercises: [ExerciseDefinition] = []
-    @State private var mode: CompoundWorkoutMode = .superset
-    @State private var totalRounds: Int = 3
-    @State private var restBetweenExercises: Int = 30
+    @Binding var draft: CompoundWorkoutSetupDraft
     @State private var showingPicker = false
 
     private var isValid: Bool {
-        selectedExercises.count >= 2
+        draft.selectedExercises.count >= 2
     }
 
     var body: some View {
@@ -36,15 +40,12 @@ struct CompoundWorkoutSetupView: View {
                 }
             }
             .sheet(isPresented: $showingPicker) {
-                ExercisePickerView(
+                CompoundExercisePickerSheet(
                     library: library,
                     recentExerciseIDs: recentExerciseIDs,
-                    mode: .full
-                ) { exercise in
-                    if !selectedExercises.contains(where: { $0.id == exercise.id }) {
-                        selectedExercises.append(exercise)
-                    }
-                }
+                    selectedExercises: $draft.selectedExercises,
+                    isPresented: $showingPicker
+                )
             }
             .background { SheetWaveBackground() }
         }
@@ -54,13 +55,13 @@ struct CompoundWorkoutSetupView: View {
 
     private var modeSection: some View {
         Section {
-            Picker("Mode", selection: $mode) {
+            Picker("Mode", selection: $draft.mode) {
                 Text("Superset").tag(CompoundWorkoutMode.superset)
                 Text("Circuit").tag(CompoundWorkoutMode.circuit)
             }
             .pickerStyle(.segmented)
         } footer: {
-            Text(mode == .superset
+            Text(draft.mode == .superset
                 ? "Alternate between 2 exercises with minimal rest."
                 : "Cycle through 3+ exercises in rounds.")
         }
@@ -69,8 +70,8 @@ struct CompoundWorkoutSetupView: View {
     // MARK: - Exercises
 
     private var exercisesSection: some View {
-        Section("Exercises (\(selectedExercises.count))") {
-            ForEach(selectedExercises) { exercise in
+        Section {
+            ForEach(draft.selectedExercises) { exercise in
                 HStack {
                     VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                         Text(exercise.localizedName)
@@ -81,12 +82,14 @@ struct CompoundWorkoutSetupView: View {
                     }
                     Spacer()
                 }
+                .accessibilityElement(children: .combine)
+                .accessibilityIdentifier("compound-workout-setup-row-\(exercise.id)")
             }
             .onDelete { indexSet in
-                selectedExercises.remove(atOffsets: indexSet)
+                draft.selectedExercises.remove(atOffsets: indexSet)
             }
             .onMove { source, destination in
-                selectedExercises.move(fromOffsets: source, toOffset: destination)
+                draft.selectedExercises.move(fromOffsets: source, toOffset: destination)
             }
 
             Button {
@@ -96,6 +99,9 @@ struct CompoundWorkoutSetupView: View {
                     .foregroundStyle(DS.Color.activity)
             }
             .accessibilityIdentifier("compound-workout-setup-add-exercise")
+        } header: {
+            Text("Exercises (\(draft.selectedExercises.count))")
+                .accessibilityIdentifier("compound-workout-setup-selection-count")
         }
     }
 
@@ -103,8 +109,8 @@ struct CompoundWorkoutSetupView: View {
 
     private var settingsSection: some View {
         Section("Settings") {
-            Stepper("Rounds: \(totalRounds)", value: $totalRounds, in: 1...10)
-            Stepper("Rest: \(restBetweenExercises)s", value: $restBetweenExercises, in: 0...120, step: 15)
+            Stepper("Rounds: \(draft.totalRounds)", value: $draft.totalRounds, in: 1...10)
+            Stepper("Rest: \(draft.restBetweenExercises)s", value: $draft.restBetweenExercises, in: 0...120, step: 15)
         }
     }
 
@@ -114,10 +120,10 @@ struct CompoundWorkoutSetupView: View {
         Section {
             Button {
                 let config = CompoundWorkoutConfig(
-                    exercises: selectedExercises,
-                    mode: mode,
-                    totalRounds: totalRounds,
-                    restBetweenExercises: restBetweenExercises
+                    exercises: draft.selectedExercises,
+                    mode: draft.mode,
+                    totalRounds: draft.totalRounds,
+                    restBetweenExercises: draft.restBetweenExercises
                 )
                 onStart(config)
                 dismiss()
@@ -136,6 +142,26 @@ struct CompoundWorkoutSetupView: View {
             .accessibilityIdentifier("compound-workout-setup-start")
             .listRowInsets(EdgeInsets())
             .listRowBackground(Color.clear)
+        }
+    }
+}
+
+private struct CompoundExercisePickerSheet: View {
+    let library: ExerciseLibraryQuerying
+    let recentExerciseIDs: [String]
+    @Binding var selectedExercises: [ExerciseDefinition]
+    @Binding var isPresented: Bool
+
+    var body: some View {
+        ExercisePickerView(
+            library: library,
+            recentExerciseIDs: recentExerciseIDs,
+            mode: .full
+        ) { exercise in
+            if !selectedExercises.contains(where: { $0.id == exercise.id }) {
+                selectedExercises.append(exercise)
+            }
+            isPresented = false
         }
     }
 }

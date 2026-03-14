@@ -29,6 +29,7 @@ enum TestDataSeeder {
     @MainActor
     static func seed(into context: ModelContext, scenario: UITestSeedScenario = .defaultSeeded) {
         resetUserDefaults()
+        configureSimulatorAdvancedMockData(for: scenario)
 
         switch scenario {
         case .empty:
@@ -49,6 +50,8 @@ enum TestDataSeeder {
             "hasRequestedHealthKitAuthorization",
             "hasRequestedNotificationAuthorization",
             AppTheme.storageKey,
+            SimulatorAdvancedMockDataModeStore.storageKey,
+            SimulatorAdvancedMockDataModeStore.referenceDateStorageKey,
             "\(bundleID).notificationInbox.items",
             "\(bundleID).today.pinnedMetricCategories",
             "\(bundleID).whatsNew.lastOpenedBuild"
@@ -61,6 +64,20 @@ enum TestDataSeeder {
 
     static func shouldForceCloudSyncConsent(arguments: [String] = ProcessInfo.processInfo.arguments) -> Bool {
         arguments.contains(forceCloudSyncConsentArgument)
+    }
+
+    static func configureSimulatorAdvancedMockData(
+        for scenario: UITestSeedScenario,
+        defaults: UserDefaults = .standard,
+        referenceDate: Date = Date()
+    ) {
+        SimulatorAdvancedMockDataModeStore.setEnabled(false, defaults: defaults)
+        SimulatorAdvancedMockDataModeStore.setReferenceDate(nil, defaults: defaults)
+
+        guard scenario == .defaultSeeded else { return }
+
+        SimulatorAdvancedMockDataModeStore.setReferenceDate(referenceDate, defaults: defaults)
+        SimulatorAdvancedMockDataModeStore.setEnabled(true, defaults: defaults)
     }
 
     static func weatherSnapshot(for scenario: UITestSeedScenario) -> WeatherSnapshot? {
@@ -419,6 +436,7 @@ enum TestDataSeeder {
                 log.habitDefinition = definition
             }
         }
+
     }
 
     private static func makeNotificationInsights(

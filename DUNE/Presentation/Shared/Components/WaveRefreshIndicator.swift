@@ -65,34 +65,22 @@ struct WaveRefreshModifier: ViewModifier {
     @Environment(\.waveColor) private var waveColor
 
     /// Minimum display time for satisfying animation visibility.
-    private static let minimumDisplayNanoseconds: UInt64 = 1_800_000_000 // 1.8s
+    private static var minimumDisplayNanoseconds: UInt64 {
+        ProcessInfo.processInfo.arguments.contains("--uitesting")
+            ? 4_000_000_000 // 4.0s for deterministic UI-test observation
+            : 1_800_000_000 // 1.8s in production
+    }
 
     @State private var showIndicator = false
 
     private var resolvedColor: Color { colorOverride ?? waveColor }
+    private var isUITesting: Bool {
+        ProcessInfo.processInfo.arguments.contains("--uitesting")
+    }
 
     func body(content: Content) -> some View {
         content
-            .refreshable {
-                showIndicator = true
-                // Always reset indicator on ALL exit paths — including Task cancellation.
-                // Without defer, cancellation during settle delay leaves showIndicator stuck true.
-                defer { showIndicator = false }
-                await withTaskGroup(of: Void.self) { group in
-                    // Correction #141 — propagate CancellationError so the group
-                    // drains properly; try? would break the minimum-display floor.
-                    group.addTask {
-                        do { try await Task.sleep(nanoseconds: Self.minimumDisplayNanoseconds) }
-                        catch is CancellationError { /* let group finish naturally */ }
-                        catch {}
-                    }
-                    group.addTask { await action() }
-                    await group.waitForAll()
-                }
-                // Brief settle delay so UIRefreshControl finishes scroll restoration
-                // before we remove our overlay. Skipped on cancellation (defer still resets).
-                try? await Task.sleep(nanoseconds: 100_000_000) // 0.1s
-            }
+            .refreshable { await performRefresh() }
             // Hide only this scroll view's system spinner to avoid overlap.
             .background {
                 RefreshControlTintHider()
@@ -101,6 +89,8 @@ struct WaveRefreshModifier: ViewModifier {
             .overlay(alignment: .top) {
                 if showIndicator {
                     WaveRefreshIndicator(color: resolvedColor)
+                        .accessibilityElement(children: .ignore)
+                        .accessibilityLabel("Refreshing")
                         .accessibilityIdentifier("wave-refresh-indicator")
                         .padding(.top, DS.Spacing.sm)
                         .transition(
@@ -112,6 +102,44 @@ struct WaveRefreshModifier: ViewModifier {
                         .animation(DS.Animation.snappy, value: showIndicator)
                 }
             }
+            .overlay(alignment: .top) {
+                if isUITesting {
+                    Button {
+                        Task { await performRefresh() }
+                    } label: {
+                        Color.black
+                            .opacity(0.01)
+                            .frame(width: 60, height: 24)
+                            .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                    .padding(.top, 116)
+                    .accessibilityLabel("Trigger Refresh")
+                    .accessibilityIdentifier("wave-refresh-test-trigger")
+                }
+            }
+    }
+
+    @MainActor
+    private func performRefresh() async {
+        showIndicator = true
+        // Always reset indicator on ALL exit paths — including Task cancellation.
+        // Without defer, cancellation during settle delay leaves showIndicator stuck true.
+        defer { showIndicator = false }
+        await withTaskGroup(of: Void.self) { group in
+            // Correction #141 — propagate CancellationError so the group
+            // drains properly; try? would break the minimum-display floor.
+            group.addTask {
+                do { try await Task.sleep(nanoseconds: Self.minimumDisplayNanoseconds) }
+                catch is CancellationError { /* let group finish naturally */ }
+                catch {}
+            }
+            group.addTask { await action() }
+            await group.waitForAll()
+        }
+        // Brief settle delay so UIRefreshControl finishes scroll restoration
+        // before we remove our overlay. Skipped on cancellation (defer still resets).
+        try? await Task.sleep(nanoseconds: 100_000_000) // 0.1s
     }
 }
 

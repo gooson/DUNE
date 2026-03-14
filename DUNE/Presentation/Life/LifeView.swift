@@ -176,42 +176,40 @@ private struct HabitListQueryView: View {
                 autoAchievementsSection()
             }
         }
-
-        // Isolated exercise record check — own @Query to avoid parent re-layout
-        TodayExerciseCheckView(exists: $cachedTodayExerciseExists)
-
-        Color.clear
-            .frame(height: 0)
-            .onChange(of: habits.count) { _, _ in
-                recalculate()
+        .background {
+            // Isolated @Query child — keeps today's exercise lookup off the main body path.
+            TodayExerciseCheckView(exists: $cachedTodayExerciseExists)
+        }
+        .onChange(of: habitDefinitionSignature) { _, _ in
+            recalculate()
+        }
+        .onChange(of: habitLogSignature) { _, _ in
+            recalculate()
+        }
+        .onChange(of: autoAchievementInputSignature) { _, _ in
+            recalculate()
+        }
+        .onChange(of: refreshSignal) { _, _ in
+            recalculate()
+        }
+        .onChange(of: viewModel.isShowingEditSheet) { old, new in
+            // Recalculate when edit sheet dismisses (habit properties may have changed)
+            if old, !new { recalculate() }
+        }
+        .onChange(of: cachedTodayExerciseExists) { _, _ in
+            recalculate()
+        }
+        .onAppear {
+            recalculate()
+        }
+        .sheet(item: $historySelection) { selection in
+            if let habit = habitsByID[selection.id] {
+                HabitHistorySheet(
+                    habitName: habit.name,
+                    entries: viewModel.historyEntries(for: habit)
+                )
             }
-            .onChange(of: habitLogSignature) { _, _ in
-                recalculate()
-            }
-            .onChange(of: autoAchievementInputSignature) { _, _ in
-                recalculate()
-            }
-            .onChange(of: refreshSignal) { _, _ in
-                recalculate()
-            }
-            .onChange(of: viewModel.isShowingEditSheet) { old, new in
-                // Recalculate when edit sheet dismisses (habit properties may have changed)
-                if old, !new { recalculate() }
-            }
-            .onChange(of: cachedTodayExerciseExists) { _, _ in
-                recalculate()
-            }
-            .onAppear {
-                recalculate()
-            }
-            .sheet(item: $historySelection) { selection in
-                if let habit = habitsByID[selection.id] {
-                    HabitHistorySheet(
-                        habitName: habit.name,
-                        entries: viewModel.historyEntries(for: habit)
-                    )
-                }
-            }
+        }
     }
 
     private var autoAchievementInputSignature: Int {
@@ -225,6 +223,29 @@ private struct HabitListQueryView: View {
             hasher.combine(record.exerciseType)
             hasher.combine(record.distance ?? -1)
             hasher.combine(record.hasSetData)
+        }
+        return hasher.finalize()
+    }
+
+    private var habitDefinitionSignature: Int {
+        var hasher = Hasher()
+        hasher.combine(habits.count)
+        for habit in habits {
+            hasher.combine(habit.id)
+            hasher.combine(habit.name)
+            hasher.combine(habit.iconCategoryRaw)
+            hasher.combine(habit.habitTypeRaw)
+            hasher.combine(habit.goalValue)
+            hasher.combine(habit.goalUnit ?? "")
+            hasher.combine(habit.frequencyTypeRaw)
+            hasher.combine(habit.weeklyTargetDays)
+            hasher.combine(habit.recurringStartPointRaw)
+            hasher.combine(habit.recurringCustomStartDate)
+            hasher.combine(habit.recurringStartConfiguredAt)
+            hasher.combine(habit.isAutoLinked)
+            hasher.combine(habit.autoLinkSourceRaw ?? "")
+            hasher.combine(habit.sortOrder)
+            hasher.combine(habit.isArchived)
         }
         return hasher.finalize()
     }
@@ -269,15 +290,10 @@ private struct HabitListQueryView: View {
                             progress: progress,
                             onToggle: { toggleCheck(habitId: progress.id) },
                             onUpdateValue: { value in updateValue(habitId: progress.id, value: value) },
-                            trailingAccessory: AnyView(habitActionsPlaceholder)
+                            trailingAccessory: AnyView(habitActionsButton(for: progress))
                         )
                         .contextMenu {
                             habitActionItems(for: progress, deferred: true)
-                        }
-                        .overlay(alignment: .topTrailing) {
-                            habitActionsButton(for: progress)
-                                .padding(.top, habitActionInset)
-                                .padding(.trailing, habitActionInset)
                         }
                     }
                 }
@@ -299,16 +315,6 @@ private struct HabitListQueryView: View {
                 actionSelection = nil
             }
         }
-    }
-
-    private var habitActionInset: CGFloat {
-        isRegular ? DS.Spacing.xl : DS.Spacing.lg
-    }
-
-    private var habitActionsPlaceholder: some View {
-        Color.clear
-            .frame(width: 28, height: 28)
-            .accessibilityHidden(true)
     }
 
     private var selectedActionProgress: HabitProgress? {
@@ -371,16 +377,16 @@ private struct HabitListQueryView: View {
             }
             .accessibilityIdentifier("life-habit-action-skip")
             .disabled(!progress.isDue)
-
-            Button {
-                performHabitAction(deferred: deferred) {
-                    historySelection = HabitHistorySelection(id: progress.id)
-                }
-            } label: {
-                Label("History", systemImage: "clock.badge.checkmark")
-            }
-            .accessibilityIdentifier("life-habit-action-history")
         }
+
+        Button {
+            performHabitAction(deferred: deferred) {
+                historySelection = HabitHistorySelection(id: progress.id)
+            }
+        } label: {
+            Label("History", systemImage: "clock.badge.checkmark")
+        }
+        .accessibilityIdentifier("life-habit-action-history")
 
         Button(role: .destructive) {
             performHabitAction(deferred: deferred) {
@@ -843,7 +849,7 @@ private struct HabitHistorySheet: View {
                     EmptyStateView(
                         icon: "clock.badge.questionmark",
                         title: "No History",
-                        message: "No cycle actions recorded yet.",
+                        message: "No history recorded yet.",
                         actionTitle: "Close",
                         action: { dismiss() }
                     )

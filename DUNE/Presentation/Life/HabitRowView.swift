@@ -26,6 +26,7 @@ struct HabitRowView: View {
         Group {
             if isWholeRowToggle {
                 cardContent
+                    .accessibilityElement(children: .contain)
                     .contentShape(Rectangle())
                     .onTapGesture {
                         guard !isToggleDisabled else { return }
@@ -36,11 +37,17 @@ struct HabitRowView: View {
                         guard !isToggleDisabled else { return }
                         onToggle()
                     }
-                    .accessibilityIdentifier("life-habit-toggle")
+                    .accessibilityLabel(progress.name)
             } else {
                 cardContent
+                    .accessibilityElement(children: .contain)
+                    .accessibilityLabel(progress.name)
             }
         }
+    }
+
+    private var rowIdentifier: String {
+        "life-habit-row-\(progress.name)"
     }
 
     private var isWholeRowToggle: Bool {
@@ -66,6 +73,7 @@ struct HabitRowView: View {
                         Text(progress.name)
                             .font(.subheadline)
                             .fontWeight(.medium)
+                            .accessibilityIdentifier(rowIdentifier)
 
                         Spacer()
 

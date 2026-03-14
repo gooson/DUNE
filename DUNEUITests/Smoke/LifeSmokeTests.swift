@@ -32,8 +32,10 @@ final class LifeSmokeTests: UITestBaseCase {
         let nameField = app.textFields[AXID.habitFormName]
         XCTAssertTrue(nameField.waitForExistence(timeout: 3), "Habit name field should appear")
 
-        let typePicker = app.descendants(matching: .any)[AXID.habitFormType].firstMatch
-        XCTAssertTrue(typePicker.waitForExistence(timeout: 3), "Habit type picker should appear")
+        XCTAssertTrue(
+            app.scrollToElementInPrimaryFormIfNeeded(AXID.habitFormTypeOption("check"), maxSwipes: 4),
+            "Habit type picker should appear"
+        )
     }
 
     func testHabitFormCancelDismisses() throws {
@@ -62,8 +64,10 @@ final class LifeSmokeTests: UITestBaseCase {
     func testWeeklyFrequencyShowsStepper() throws {
         XCTAssertTrue(app.waitAndTap(AXID.lifeToolbarAdd), "Add button should exist")
 
-        let frequencyPicker = app.descendants(matching: .any)[AXID.habitFormFrequency].firstMatch
-        XCTAssertTrue(frequencyPicker.waitForExistence(timeout: 3), "Frequency picker should exist")
+        XCTAssertTrue(
+            app.scrollToElementInPrimaryFormIfNeeded(AXID.habitFormFrequencyWeekly, maxSwipes: 5),
+            "Frequency picker should exist"
+        )
         let weeklySegment = app.descendants(matching: .any)[AXID.habitFormFrequencyWeekly].firstMatch
         XCTAssertTrue(weeklySegment.waitForExistence(timeout: 3), "Weekly segment should exist")
         weeklySegment.tap()
@@ -91,8 +95,11 @@ final class LifeSeededSmokeTests: SeededUITestBaseCase {
     }
 
     func testHabitActionsMenuOpensEditSheet() throws {
+        XCTAssertTrue(
+            app.scrollToLifeHabitActionsButton(named: "Morning Stretch", maxSwipes: 8),
+            "Habit actions button should exist"
+        )
         let actionsButton = app.descendants(matching: .any)[AXID.lifeHabitActions("Morning Stretch")].firstMatch
-        XCTAssertTrue(actionsButton.waitForExistence(timeout: 8), "Habit actions button should exist")
 
         actionsButton.tap()
 
@@ -107,11 +114,16 @@ final class LifeSeededSmokeTests: SeededUITestBaseCase {
 
     func testHabitActionsMenuArchivesHabit() throws {
         let archivedHabitName = "Morning Stretch"
-        let habitLabel = app.staticTexts[archivedHabitName].firstMatch
-        XCTAssertTrue(habitLabel.waitForExistence(timeout: 8), "Seeded habit should exist before archive")
+        XCTAssertTrue(
+            app.scrollToLifeHabit(named: archivedHabitName, maxSwipes: 8),
+            "Seeded habit should exist before archive"
+        )
 
+        XCTAssertTrue(
+            app.scrollToLifeHabitActionsButton(named: archivedHabitName, maxSwipes: 8),
+            "Habit actions button should exist"
+        )
         let actionsButton = app.descendants(matching: .any)[AXID.lifeHabitActions(archivedHabitName)].firstMatch
-        XCTAssertTrue(actionsButton.waitForExistence(timeout: 8), "Habit actions button should exist")
 
         actionsButton.tap()
 
@@ -119,7 +131,7 @@ final class LifeSeededSmokeTests: SeededUITestBaseCase {
         XCTAssertTrue(archiveButton.waitForExistence(timeout: 3), "Archive action should appear in the habit actions menu")
         archiveButton.tap()
 
-        expectation(for: NSPredicate(format: "exists == false"), evaluatedWith: habitLabel)
+        expectation(for: NSPredicate(format: "exists == false"), evaluatedWith: actionsButton)
         waitForExpectations(timeout: 3)
     }
 }

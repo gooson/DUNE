@@ -13,6 +13,8 @@ enum AXID {
     static let dashboardToolbarNotifications = "dashboard-toolbar-notifications"
     static let dashboardToolbarWhatsNew = "dashboard-toolbar-whatsnew"
     static let dashboardToolbarSettings = "dashboard-toolbar-settings"
+    static let dashboardMorningBriefingScreen = "dashboard-morning-briefing-screen"
+    static let dashboardMorningBriefingDismiss = "dashboard-morning-briefing-dismiss"
     static let dashboardPinnedEdit = "dashboard-pinned-edit"
     static let notificationsReadAllButton = "notifications-read-all-button"
     static let notificationsDeleteAllButton = "notifications-delete-all-button"
@@ -24,13 +26,16 @@ enum AXID {
     static let dashboardSectionActivity = "dashboard-section-activity"
     static let dashboardSectionBody = "dashboard-section-body"
     static func dashboardMetricCard(_ category: String) -> String { "dashboard-metric-\(category)" }
+    static func notificationWorkoutRow(_ workoutID: String) -> String { "notification-row-workout-\(workoutID)" }
 
     // MARK: - Activity Tab (active: hero, toolbar-add)
     static let activityHeroReadiness = "activity-hero-readiness"
     static let activityToolbarAdd = "activity-toolbar-add"
     static let activityQuickStartSearch = "activity-exercise-search"
     static let waveRefreshIndicator = "wave-refresh-indicator"
+    static let waveRefreshTestTrigger = "wave-refresh-test-trigger"
     static let activitySectionMuscleMap = "activity-section-musclemap"
+    static let activityMuscleMapDetailLink = "activity-musclemap-detail-link"
     static let activitySectionWeeklyStats = "activity-section-weeklystats"
     static let activitySectionVolume = "activity-section-volume"
     static let activitySectionPR = "activity-section-pr"
@@ -87,6 +92,7 @@ enum AXID {
     static let lifeToolbarAdd = "life-toolbar-add"
     static let lifeSectionHabits = "life-section-habits"
     static let lifeHabitToggle = "life-habit-toggle"
+    static func lifeHabitRow(_ habitName: String) -> String { "life-habit-row-\(habitName)" }
     static func lifeHabitActions(_ habitName: String) -> String { "life-habit-actions-\(habitName)" }
     static let lifeHabitActionEdit = "life-habit-action-edit"
     static let lifeHabitActionSnooze = "life-habit-action-snooze"
@@ -157,6 +163,7 @@ enum AXID {
     static let habitFormCancel = "habit-form-cancel"
     static let habitFormName = "habit-form-name"
     static let habitFormType = "habit-form-type"
+    static func habitFormTypeOption(_ type: String) -> String { "habit-form-type-\(type)" }
     static let habitFormGoalValue = "habit-form-goalvalue"
     static let habitFormGoalUnit = "habit-form-goalunit"
     static let habitFormFrequency = "habit-form-frequency"
@@ -181,6 +188,7 @@ enum AXID {
     static let createCustomExerciseScreen = "create-custom-exercise-screen"
     static let createCustomExerciseName = "create-custom-exercise-name"
     static let createCustomExerciseCreate = "create-custom-exercise-create"
+    static func createCustomExerciseMuscle(_ muscle: String) -> String { "create-custom-exercise-muscle-\(muscle)" }
 
     // MARK: - Exercise Picker
     static let pickerSearchField = "picker-search-field"
@@ -220,6 +228,20 @@ enum AXID {
     // MARK: - Templates / Compound
     static let workoutTemplateListScreen = "workout-template-list-screen"
     static let workoutTemplateListAdd = "workout-template-list-add"
+    static func workoutTemplateRow(_ name: String) -> String {
+        let slug = name
+            .lowercased()
+            .replacingOccurrences(of: "[^a-z0-9]+", with: "-", options: .regularExpression)
+            .trimmingCharacters(in: CharacterSet(charactersIn: "-"))
+        return "workout-template-row-\(slug)"
+    }
+    static func workoutTemplateEdit(_ name: String) -> String {
+        let slug = name
+            .lowercased()
+            .replacingOccurrences(of: "[^a-z0-9]+", with: "-", options: .regularExpression)
+            .trimmingCharacters(in: CharacterSet(charactersIn: "-"))
+        return "workout-template-edit-\(slug)"
+    }
     static let templateFormScreen = "template-form-screen"
     static let templateFormName = "template-form-name"
     static let templateFormAIPrompt = "template-form-ai-prompt"
@@ -230,7 +252,9 @@ enum AXID {
     static let templateWorkoutContainerScreen = "template-workout-container-screen"
     static let templateWorkoutContainerClose = "template-workout-container-close"
     static let compoundWorkoutSetupScreen = "compound-workout-setup-screen"
+    static let compoundWorkoutSetupSelectionCount = "compound-workout-setup-selection-count"
     static let compoundWorkoutSetupAddExercise = "compound-workout-setup-add-exercise"
+    static func compoundWorkoutSetupRow(_ exerciseID: String) -> String { "compound-workout-setup-row-\(exerciseID)" }
     static let compoundWorkoutSetupStart = "compound-workout-setup-start"
     static let compoundWorkoutScreen = "compound-workout-screen"
 
@@ -263,9 +287,11 @@ enum AXID {
     static let weeklyStatsChartDailyVolume = "weeklystats-chart-daily-volume"
     static let weeklyStatsChartVisibleRange = "weeklystats-chart-visible-range"
     static let trainingVolumeChartDailyVolume = "training-volume-chart-daily-volume"
+    static let trainingVolumeChartDailyVolumeSelectionProbe = "training-volume-chart-daily-volume-selection-probe"
     static let trainingVolumeDailyVolumeVisibleRange = "training-volume-daily-volume-visible-range"
     static let weeklyStatsPeriodPicker = "weeklystats-period-picker"
     static let trainingVolumeChartTrainingLoad = "training-volume-chart-training-load"
+    static let trainingVolumeChartTrainingLoadSelectionProbe = "training-volume-chart-training-load-selection-probe"
     static let trainingVolumeChartVisibleRange = "training-volume-chart-visible-range"
     static let trainingReadinessChartTrend = "trainingreadiness-chart-trend"
 
@@ -516,6 +542,72 @@ extension XCUIApplication {
     }
 
     @discardableResult
+    func scrollToLifeHabit(
+        named habitName: String,
+        maxSwipes: Int = 8,
+        timeoutPerCheck: TimeInterval = 1
+    ) -> Bool {
+        _ = scrollToElementIfNeeded(
+            AXID.lifeSectionHabits,
+            maxSwipes: Swift.max(2, maxSwipes / 2),
+            timeoutPerCheck: timeoutPerCheck
+        )
+
+        let habitRow = descendants(matching: .any)[AXID.lifeHabitRow(habitName)].firstMatch
+        let habitLabel = staticTexts[habitName].firstMatch
+        let actionsButton = descendants(matching: .any)[AXID.lifeHabitActions(habitName)].firstMatch
+
+        for _ in 0..<maxSwipes {
+            if habitRow.waitForExistence(timeout: timeoutPerCheck)
+                || habitLabel.waitForExistence(timeout: timeoutPerCheck)
+                || actionsButton.waitForExistence(timeout: timeoutPerCheck) {
+                return true
+            }
+            preferredScrollContainer().swipeUp()
+        }
+
+        return habitRow.exists || habitLabel.exists || actionsButton.exists
+    }
+
+    @discardableResult
+    func scrollToLifeHabitActionsButton(
+        named habitName: String,
+        maxSwipes: Int = 8,
+        timeoutPerCheck: TimeInterval = 1
+    ) -> Bool {
+        let actionsButton = descendants(matching: .any)[AXID.lifeHabitActions(habitName)].firstMatch
+        let _ = scrollToLifeHabit(named: habitName, maxSwipes: maxSwipes, timeoutPerCheck: timeoutPerCheck)
+
+        for _ in 0..<maxSwipes {
+            if actionsButton.waitForExistence(timeout: timeoutPerCheck), actionsButton.isHittable {
+                return true
+            }
+            preferredScrollContainer().swipeUp()
+        }
+
+        return actionsButton.exists && actionsButton.isHittable
+    }
+
+    @discardableResult
+    func scrollToElementInPrimaryFormIfNeeded(
+        _ identifier: String,
+        maxSwipes: Int = 6,
+        timeoutPerCheck: TimeInterval = 1
+    ) -> Bool {
+        let element = descendants(matching: .any)[identifier].firstMatch
+        if element.waitForExistence(timeout: timeoutPerCheck) {
+            return true
+        }
+
+        let formContainer = tables.firstMatch.exists ? tables.firstMatch : scrollViews.firstMatch
+        for _ in 0..<maxSwipes where !element.waitForExistence(timeout: timeoutPerCheck) {
+            formContainer.swipeUp()
+        }
+
+        return element.exists
+    }
+
+    @discardableResult
     func dismissModalIfPresent(
         cancelIdentifiers: [String] = [],
         timeout: TimeInterval = 2
@@ -543,6 +635,33 @@ extension XCUIApplication {
         }
 
         return false
+    }
+
+    func pullToRefresh(
+        in container: XCUIElement? = nil,
+        from triggerElement: XCUIElement? = nil,
+        attemptCount: Int = 2
+    ) {
+        let scrollContainer = container ?? preferredScrollContainer()
+
+        for attempt in 0..<attemptCount {
+            let start: XCUICoordinate
+            let end: XCUICoordinate
+
+            if let triggerElement {
+                let startY = attempt == 0 ? 0.30 : 0.20
+                let dragDistance = attempt == 0 ? 260.0 : 320.0
+                start = triggerElement.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
+                end = start.withOffset(CGVector(dx: 0, dy: dragDistance))
+            } else {
+                let startY = attempt == 0 ? 0.18 : 0.12
+                let endY = attempt == 0 ? 0.86 : 0.92
+                start = scrollContainer.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
+                end = scrollContainer.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: endY))
+            }
+
+            start.press(forDuration: 0.05, thenDragTo: end)
+        }
     }
 
     @discardableResult
@@ -582,14 +701,22 @@ extension XCUIApplication {
     }
 
     private func preferredScrollContainer() -> XCUIElement {
-        let containers = [
-            scrollViews.firstMatch,
-            tables.firstMatch,
-            collectionViews.firstMatch
+        let containerQueries = [
+            tables,
+            scrollViews,
+            collectionViews
         ]
 
-        for container in containers where container.waitForExistence(timeout: 1) {
-            return container
+        for query in containerQueries {
+            if let hittableContainer = query.allElementsBoundByIndex.first(where: { $0.exists && $0.isHittable }) {
+                return hittableContainer
+            }
+        }
+
+        for query in containerQueries {
+            if let visibleContainer = query.allElementsBoundByIndex.first(where: { $0.exists && !$0.frame.isEmpty }) {
+                return visibleContainer
+            }
         }
 
         return self

@@ -41,7 +41,7 @@ final class LifeRegressionTests: SeededUITestBaseCase {
         waitForExpectations(timeout: 5)
 
         XCTAssertTrue(
-            app.scrollToElementIfNeeded(AXID.lifeHabitActions("Evening Walk"), maxSwipes: 6),
+            app.scrollToLifeHabitActionsButton(named: "Evening Walk", maxSwipes: 8),
             "Newly saved habit should expose its actions button on the Life list"
         )
     }
@@ -116,7 +116,7 @@ final class LifeRegressionTests: SeededUITestBaseCase {
     private func openActionsMenu(for habitName: String) {
         ensureLifeRoot()
         XCTAssertTrue(
-            app.scrollToElementIfNeeded(AXID.lifeHabitActions(habitName), maxSwipes: 6),
+            app.scrollToLifeHabitActionsButton(named: habitName, maxSwipes: 8),
             "\(habitName) actions button should be reachable"
         )
 

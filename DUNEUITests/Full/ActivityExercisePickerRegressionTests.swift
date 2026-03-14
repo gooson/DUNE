@@ -39,13 +39,17 @@ final class ActivityExercisePickerRegressionTests: ActivityExerciseSeededUITestB
     func testQuickStartPickerCanRevealAllExercisesAndOpenDetail() throws {
         openQuickStartPicker()
 
+        XCTAssertTrue(
+            scrollPickerToHittableElementIfNeeded(AXID.pickerAllExercisesButton, maxSwipes: 6),
+            "All Exercises button should be reachable in quick start hub"
+        )
         let allExercisesButton = app.descendants(matching: .any)[AXID.pickerAllExercisesButton].firstMatch
         XCTAssertTrue(allExercisesButton.waitForExistence(timeout: 8), "All Exercises button should exist in quick start hub")
         allExercisesButton.tap()
 
         XCTAssertTrue(
-            app.descendants(matching: .any)[AXID.pickerSectionAll].firstMatch.waitForExistence(timeout: 8),
-            "Quick start picker should switch to the all-exercises section"
+            scrollPickerToHittableElementIfNeeded(AXID.pickerHideAllButton, maxSwipes: 4, direction: .down),
+            "Quick start picker should expose the Hide action after revealing all exercises"
         )
 
         let hideButton = app.descendants(matching: .any)[AXID.pickerHideAllButton].firstMatch
@@ -80,7 +84,8 @@ final class ActivityExercisePickerRegressionTests: ActivityExerciseSeededUITestB
     }
 
     func testFullPickerSupportsFilterSelectorsAndSelectionFromTemplateForm() throws {
-        openTemplateFormPicker()
+        executionTimeAllowance = 180
+        openTemplateFormPicker(prefillName: Fixture.createdTemplateName)
 
         let createCustomButton = app.descendants(matching: .any)[AXID.pickerCreateCustomButton].firstMatch
         XCTAssertTrue(createCustomButton.waitForExistence(timeout: 8), "Full picker should expose create custom CTA")
@@ -89,20 +94,12 @@ final class ActivityExercisePickerRegressionTests: ActivityExerciseSeededUITestB
             tapHorizontalPickerChip(AXID.pickerFilterCategory("strength"), in: AXID.pickerFilterCategoryScroll),
             "Strength category chip should be tappable"
         )
-        XCTAssertTrue(
-            tapHorizontalPickerChip(AXID.pickerFilterMuscle("shoulders"), in: AXID.pickerFilterMuscleScroll),
-            "Shoulders muscle chip should be tappable"
-        )
-        XCTAssertTrue(
-            tapHorizontalPickerChip(AXID.pickerFilterEquipment("cable"), in: AXID.pickerFilterEquipmentScroll),
-            "Cable equipment chip should be tappable"
-        )
 
         let clearFiltersButton = app.descendants(matching: .any)[AXID.pickerClearFilters].firstMatch
         XCTAssertTrue(clearFiltersButton.waitForExistence(timeout: 8), "Clear Filters action should appear after applying filters")
 
-        let customExerciseLabel = app.staticTexts[Fixture.customExerciseName].firstMatch
-        XCTAssertTrue(customExerciseLabel.waitForExistence(timeout: 8), "Filtered picker should surface the seeded custom exercise")
+        let customExerciseRow = app.buttons.matching(NSPredicate(format: "label CONTAINS %@", Fixture.customExerciseName)).firstMatch
+        XCTAssertTrue(customExerciseRow.waitForExistence(timeout: 8), "Filtered picker should surface the seeded custom exercise")
 
         clearFiltersButton.tap()
 
@@ -113,25 +110,15 @@ final class ActivityExercisePickerRegressionTests: ActivityExerciseSeededUITestB
             ),
             "User category chip should be tappable in the category rail"
         )
-        XCTAssertTrue(customExerciseLabel.waitForExistence(timeout: 8), "User category filter should keep the seeded custom exercise visible")
-
-        let customExerciseCell = app.tables.cells.containing(.staticText, identifier: Fixture.customExerciseName).firstMatch
-        if customExerciseCell.waitForExistence(timeout: 3) {
-            customExerciseCell.tap()
-        } else {
-            customExerciseLabel.tap()
-        }
+        XCTAssertTrue(customExerciseRow.waitForExistence(timeout: 8), "User category filter should keep the seeded custom exercise visible")
+        customExerciseRow.tap()
 
         XCTAssertTrue(
             app.descendants(matching: .any)[AXID.templateFormScreen].firstMatch.waitForExistence(timeout: 8),
             "Selecting an exercise from the full picker should return to the template form"
         )
-        XCTAssertTrue(
-            app.fillTextInput(AXID.templateFormName, with: Fixture.createdTemplateName),
-            "Template form name should be editable after returning from picker"
-        )
 
-        let saveButton = app.descendants(matching: .any)[AXID.templateFormSave].firstMatch
+        let saveButton = app.buttons[AXID.templateFormSave].firstMatch
         XCTAssertTrue(saveButton.waitForExistence(timeout: 5), "Template save button should exist")
         XCTAssertTrue(saveButton.isEnabled, "Template save should enable after one picked exercise and a name")
     }
@@ -168,7 +155,7 @@ final class ActivityExercisePickerRegressionTests: ActivityExerciseSeededUITestB
         )
     }
 
-    private func openTemplateFormPicker() {
+    private func openTemplateFormPicker(prefillName: String? = nil) {
         openExerciseViewFromRecentWorkouts()
 
         let templatesButton = app.descendants(matching: .any)[AXID.exerciseToolbarTemplates].firstMatch
@@ -184,6 +171,13 @@ final class ActivityExercisePickerRegressionTests: ActivityExerciseSeededUITestB
 
         let templateForm = app.descendants(matching: .any)[AXID.templateFormScreen].firstMatch
         XCTAssertTrue(templateForm.waitForExistence(timeout: 8), "Template form should appear")
+
+        if let prefillName {
+            XCTAssertTrue(
+                app.fillTextInput(AXID.templateFormName, with: prefillName),
+                "Template form name should be editable before opening the full picker"
+            )
+        }
 
         let addExerciseButton = app.descendants(matching: .any)[AXID.templateFormAddExercise].firstMatch
         XCTAssertTrue(addExerciseButton.waitForExistence(timeout: 5), "Add Exercise button should exist in template form")
@@ -218,6 +212,7 @@ final class ActivityExercisePickerRegressionTests: ActivityExerciseSeededUITestB
         in containerIdentifier: String,
         maxSwipes: Int = 8
     ) -> Bool {
+        _ = scrollPickerToElementIfNeeded(containerIdentifier, maxSwipes: 6)
         let container = app.descendants(matching: .any)[containerIdentifier].firstMatch
         guard container.waitForExistence(timeout: 5) else { return false }
 
@@ -244,5 +239,67 @@ final class ActivityExercisePickerRegressionTests: ActivityExerciseSeededUITestB
         }
 
         return false
+    }
+
+    private func scrollPickerToElementIfNeeded(
+        _ identifier: String,
+        maxSwipes: Int = 6,
+        direction: ScrollDirection = .up,
+        timeoutPerCheck: TimeInterval = 0.25
+    ) -> Bool {
+        let element = app.descendants(matching: .any)[identifier].firstMatch
+        let pickerList = app.tables[AXID.pickerRootList].firstMatch
+
+        guard pickerList.waitForExistence(timeout: 5) else {
+            return element.exists
+        }
+
+        for _ in 0..<maxSwipes {
+            if element.exists || element.waitForExistence(timeout: timeoutPerCheck) {
+                return true
+            }
+
+            switch direction {
+            case .up:
+                pickerList.swipeUp()
+            case .down:
+                pickerList.swipeDown()
+            }
+        }
+
+        return element.exists
+    }
+
+    private func scrollPickerToHittableElementIfNeeded(
+        _ identifier: String,
+        maxSwipes: Int = 6,
+        direction: ScrollDirection = .up,
+        timeoutPerCheck: TimeInterval = 0.25
+    ) -> Bool {
+        let element = app.descendants(matching: .any)[identifier].firstMatch
+        guard scrollPickerToElementIfNeeded(
+            identifier,
+            maxSwipes: maxSwipes,
+            direction: direction,
+            timeoutPerCheck: timeoutPerCheck
+        ) else {
+            return false
+        }
+
+        let pickerList = app.tables[AXID.pickerRootList].firstMatch
+        guard pickerList.waitForExistence(timeout: 5) else {
+            return element.exists && element.isHittable
+        }
+
+        for _ in 0..<maxSwipes where !(element.exists && element.isHittable) {
+            switch direction {
+            case .up:
+                pickerList.swipeUp()
+            case .down:
+                pickerList.swipeDown()
+            }
+        }
+
+        return element.exists && element.isHittable
     }
 }

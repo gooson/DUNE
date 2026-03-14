@@ -63,6 +63,7 @@ struct HabitFormSheet: View {
                 ForEach(HabitType.allCases, id: \.self) { type in
                     Label(type.displayName, systemImage: type.iconName)
                         .tag(type)
+                        .accessibilityIdentifier("habit-form-type-\(type.rawValue)")
                 }
             }
             .pickerStyle(.segmented)

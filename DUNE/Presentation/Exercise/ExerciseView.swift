@@ -15,6 +15,7 @@ struct ExerciseView: View {
     @State private var showingTemplates = false
     @State private var workoutSuggestion: WorkoutSuggestion?
     @State private var showingCompoundSetup = false
+    @State private var compoundSetupDraft = CompoundWorkoutSetupDraft()
     @State private var compoundConfig: CompoundWorkoutConfig?
     @State private var templateConfig: TemplateWorkoutConfig?
     @State private var recordToDelete: ExerciseRecord?
@@ -42,10 +43,12 @@ struct ExerciseView: View {
             .sheet(isPresented: $showingCompoundSetup) {
                 CompoundWorkoutSetupView(
                     library: library,
-                    recentExerciseIDs: recentExerciseIDs
-                ) { config in
-                    compoundConfig = config
-                }
+                    recentExerciseIDs: recentExerciseIDs,
+                    onStart: { config in
+                        compoundConfig = config
+                    },
+                    draft: $compoundSetupDraft
+                )
             }
             .navigationDestination(item: $compoundConfig) { config in
                 CompoundWorkoutView(config: config)
@@ -123,6 +126,7 @@ struct ExerciseView: View {
                 }
                 .accessibilityIdentifier("exercise-menu-single")
                 Button {
+                    compoundSetupDraft = CompoundWorkoutSetupDraft()
                     showingCompoundSetup = true
                 } label: {
                     Label("Superset / Circuit", systemImage: "arrow.triangle.2.circlepath")

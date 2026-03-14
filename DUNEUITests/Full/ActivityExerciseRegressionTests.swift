@@ -14,6 +14,8 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         static let createdCategory = "Codex Recovery"
         static let notificationWorkoutRouteTitle = "Workout Detail Route"
         static let notificationMissingRouteTitle = "Missing Workout Route"
+        static let notificationWorkoutRouteID = "ui-test-activity-workout-running"
+        static let notificationMissingRouteID = "ui-test-activity-workout-missing"
     }
 
     override func setUpWithError() throws {
@@ -31,8 +33,12 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         tapBackButton()
         ensureActivityRoot()
 
-        XCTAssertTrue(app.scrollToElementIfNeeded(AXID.activitySectionMuscleMap, maxSwipes: 4))
-        waitForElement(AXID.activitySectionMuscleMap, timeout: 5).tap()
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.activitySectionMuscleMap, maxSwipes: 4))
+        XCTAssertTrue(
+            app.scrollToHittableElementIfNeeded(AXID.activityMuscleMapDetailLink, maxSwipes: 4),
+            "Muscle Map detail link should be reachable"
+        )
+        waitForElement(AXID.activityMuscleMapDetailLink, timeout: 5).tap()
         XCTAssertTrue(
             app.descendants(matching: .any)[AXID.activityMuscleMapDetailScreen].firstMatch.waitForExistence(timeout: 10),
             "Muscle Map detail should open"
@@ -41,7 +47,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         tapBackButton()
         ensureActivityRoot()
 
-        XCTAssertTrue(app.scrollToElementIfNeeded(AXID.activitySectionWeeklyStats, maxSwipes: 4))
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.activitySectionWeeklyStats, maxSwipes: 4))
         waitForElement(AXID.activitySectionWeeklyStats, timeout: 5).tap()
         XCTAssertTrue(
             app.descendants(matching: .any)[AXID.activityWeeklyStatsDetailScreen].firstMatch.waitForExistence(timeout: 10),
@@ -51,7 +57,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         tapBackButton()
         ensureActivityRoot()
 
-        XCTAssertTrue(app.scrollToElementIfNeeded(AXID.activitySectionVolume, maxSwipes: 8))
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.activitySectionVolume, maxSwipes: 8))
         waitForElement(AXID.activitySectionVolume, timeout: 5).tap()
         XCTAssertTrue(
             app.descendants(matching: .any)[AXID.activityTrainingVolumeDetailScreen].firstMatch.waitForExistence(timeout: 10),
@@ -63,7 +69,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     }
 
     func testActivitySecondaryDetailRoutesOpenExpectedScreens() throws {
-        XCTAssertTrue(app.scrollToElementIfNeeded(AXID.activitySectionPR, maxSwipes: 10))
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.activitySectionPR, maxSwipes: 10))
         waitForElement(AXID.activitySectionPR, timeout: 5).tap()
         XCTAssertTrue(
             app.descendants(matching: .any)[AXID.activityPersonalRecordsDetailScreen].firstMatch.waitForExistence(timeout: 10),
@@ -73,7 +79,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         tapBackButton()
         ensureActivityRoot()
 
-        XCTAssertTrue(app.scrollToElementIfNeeded(AXID.activitySectionConsistency, maxSwipes: 10))
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.activitySectionConsistency, maxSwipes: 10))
         waitForElement(AXID.activitySectionConsistency, timeout: 5).tap()
         XCTAssertTrue(
             app.descendants(matching: .any)[AXID.activityConsistencyDetailScreen].firstMatch.waitForExistence(timeout: 10),
@@ -227,7 +233,8 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         let templateForm = app.descendants(matching: .any)[AXID.templateFormScreen].firstMatch
         XCTAssertTrue(templateForm.waitForExistence(timeout: 8), "Template form should appear")
 
-        let saveButton = app.descendants(matching: .any)[AXID.templateFormSave].firstMatch
+        let saveButton = app.buttons[AXID.templateFormSave].firstMatch
+        XCTAssertTrue(saveButton.waitForExistence(timeout: 5), "Template save button should exist")
         XCTAssertFalse(saveButton.isEnabled, "Template save should be disabled without name and entries")
 
         app.descendants(matching: .any)[AXID.templateFormAddExercise].firstMatch.tap()
@@ -244,7 +251,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             app.fillTextInput(AXID.createCustomExerciseName, with: Fixture.customExercise),
             "Custom exercise name should be editable"
         )
-        let shouldersChip = app.buttons["Shoulders"].firstMatch
+        let shouldersChip = app.buttons[AXID.createCustomExerciseMuscle("shoulders")].firstMatch
         XCTAssertTrue(shouldersChip.waitForExistence(timeout: 5), "Shoulders chip should exist")
         shouldersChip.tap()
         app.descendants(matching: .any)[AXID.createCustomExerciseCreate].firstMatch.tap()
@@ -257,14 +264,14 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue(saveButton.isEnabled, "Template save should enable after required inputs")
         saveButton.tap()
 
-        let createdTemplateLabel = app.staticTexts[Fixture.createdTemplate].firstMatch
-        XCTAssertTrue(createdTemplateLabel.waitForExistence(timeout: 8), "Created template should appear in list")
+        let createdTemplateRow = app.buttons[AXID.workoutTemplateRow(Fixture.createdTemplate)].firstMatch
+        XCTAssertTrue(createdTemplateRow.waitForExistence(timeout: 8), "Created template should appear in list")
 
-        let seedCell = app.tables.cells.containing(.staticText, identifier: Fixture.singleTemplate).firstMatch
+        let seedCell = app.buttons[AXID.workoutTemplateRow(Fixture.singleTemplate)].firstMatch
         XCTAssertTrue(seedCell.waitForExistence(timeout: 8), "Seeded single template should exist")
         seedCell.swipeRight()
 
-        let editButton = app.buttons["Edit"].firstMatch
+        let editButton = app.buttons[AXID.workoutTemplateEdit(Fixture.singleTemplate)].firstMatch
         XCTAssertTrue(editButton.waitForExistence(timeout: 5), "Edit swipe action should appear")
         editButton.tap()
 
@@ -273,11 +280,11 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             "Edit template form should appear"
         )
         XCTAssertTrue(app.fillTextInput(AXID.templateFormName, with: Fixture.updatedTemplate), "Seeded template name should be editable")
-        app.descendants(matching: .any)[AXID.templateFormSave].firstMatch.tap()
+        app.buttons[AXID.templateFormSave].firstMatch.tap()
 
-        XCTAssertTrue(app.staticTexts[Fixture.updatedTemplate].firstMatch.waitForExistence(timeout: 8), "Updated template should appear")
+        XCTAssertTrue(app.buttons[AXID.workoutTemplateRow(Fixture.updatedTemplate)].firstMatch.waitForExistence(timeout: 8), "Updated template should appear")
 
-        let circuitTemplate = app.staticTexts[Fixture.circuitTemplate].firstMatch
+        let circuitTemplate = app.buttons[AXID.workoutTemplateRow(Fixture.circuitTemplate)].firstMatch
         XCTAssertTrue(circuitTemplate.waitForExistence(timeout: 8), "Seeded multi template should exist")
         circuitTemplate.tap()
 
@@ -306,9 +313,19 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         addCompoundExercise(Fixture.benchPressID)
         addCompoundExercise("barbell-squat")
 
-        let startButton = app.descendants(matching: .any)[AXID.compoundWorkoutSetupStart].firstMatch
+        let selectionCount = app.descendants(matching: .any)[AXID.compoundWorkoutSetupSelectionCount].firstMatch
+        XCTAssertTrue(selectionCount.waitForExistence(timeout: 5), "Compound setup selection count should exist")
+        XCTAssertEqual(selectionCount.label, "Exercises (2)", "Compound setup should reflect both selected exercises")
+
+        let startButtons = app.descendants(matching: .any)
+            .matching(identifier: AXID.compoundWorkoutSetupStart)
+            .allElementsBoundByIndex
+        let startButton = startButtons.last ?? app.descendants(matching: .any)[AXID.compoundWorkoutSetupStart].firstMatch
         XCTAssertTrue(startButton.waitForExistence(timeout: 5), "Compound start button should exist")
-        XCTAssertTrue(startButton.isEnabled, "Compound start should enable after two selections")
+        XCTAssertTrue(
+            waitForEnabled(startButton, timeout: 5),
+            "Compound start should enable after two selections"
+        )
         startButton.tap()
 
         XCTAssertTrue(
@@ -384,7 +401,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     func testNotificationWorkoutRouteOpensMockWorkoutDetail() throws {
         openNotificationHub()
 
-        let workoutRouteRow = app.staticTexts[Fixture.notificationWorkoutRouteTitle].firstMatch
+        let workoutRouteRow = app.buttons[AXID.notificationWorkoutRow(Fixture.notificationWorkoutRouteID)].firstMatch
         XCTAssertTrue(workoutRouteRow.waitForExistence(timeout: 8), "Workout route notification should exist")
         workoutRouteRow.tap()
 
@@ -397,7 +414,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     func testNotificationMissingWorkoutRouteShowsFallback() throws {
         openNotificationHub()
 
-        let missingRouteRow = app.staticTexts[Fixture.notificationMissingRouteTitle].firstMatch
+        let missingRouteRow = app.buttons[AXID.notificationWorkoutRow(Fixture.notificationMissingRouteID)].firstMatch
         XCTAssertTrue(missingRouteRow.waitForExistence(timeout: 8), "Missing route notification should exist")
         missingRouteRow.tap()
 
@@ -505,9 +522,15 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     }
 
     private func addCompoundExercise(_ exerciseID: String) {
+        let setupScreen = app.descendants(matching: .any)[AXID.compoundWorkoutSetupScreen].firstMatch
+        XCTAssertTrue(setupScreen.waitForExistence(timeout: 5), "Compound setup screen should exist")
+
         let addExercise = app.descendants(matching: .any)[AXID.compoundWorkoutSetupAddExercise].firstMatch
         XCTAssertTrue(addExercise.waitForExistence(timeout: 5), "Add exercise button should exist in setup")
-        addExercise.tap()
+        XCTAssertTrue(
+            openCompoundPicker(using: addExercise, in: setupScreen),
+            "Add exercise button should be reachable in compound setup"
+        )
 
         let pickerRow = app.descendants(matching: .any)[AXID.pickerExerciseRow(exerciseID)].firstMatch
         XCTAssertTrue(pickerRow.waitForExistence(timeout: 8), "Compound picker row should exist for \(exerciseID)")
@@ -521,8 +544,14 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
 
     private func openNotificationHub() {
         navigateToDashboard()
+        let dashboardHero = app.descendants(matching: .any)[AXID.dashboardHeroCondition].firstMatch
+        XCTAssertTrue(dashboardHero.waitForExistence(timeout: 12), "Dashboard hero should appear before opening notifications")
+
+        dismissMorningBriefingIfNeeded()
+
         let notificationsButton = app.descendants(matching: .any)[AXID.dashboardToolbarNotifications].firstMatch
-        XCTAssertTrue(notificationsButton.waitForExistence(timeout: 8), "Notifications button should exist")
+        XCTAssertTrue(notificationsButton.waitForExistence(timeout: 5), "Notifications button should exist on the dashboard")
+        XCTAssertTrue(waitForHittable(notificationsButton, timeout: 8), "Notifications button should be tappable")
         notificationsButton.tap()
 
         let hub = app.descendants(matching: .any)[AXID.notificationHubScreen].firstMatch
@@ -534,4 +563,70 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue(backButton.waitForExistence(timeout: 5), "Back button should exist")
         backButton.tap()
     }
+
+    private func openCompoundPicker(using button: XCUIElement, in container: XCUIElement, maxSwipes: Int = 6) -> Bool {
+        let picker = app.descendants(matching: .any)[AXID.pickerRootList].firstMatch
+
+        if button.isHittable {
+            button.tap()
+            return picker.waitForExistence(timeout: 5)
+        }
+
+        for _ in 0..<maxSwipes {
+            if button.exists {
+                button.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+                if picker.waitForExistence(timeout: 2) {
+                    return true
+                }
+            }
+            container.swipeUp()
+        }
+
+        for _ in 0..<maxSwipes {
+            if button.exists {
+                button.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+                if picker.waitForExistence(timeout: 2) {
+                    return true
+                }
+            }
+            container.swipeDown()
+        }
+
+        return false
+    }
+
+    private func waitForEnabled(_ element: XCUIElement, timeout: TimeInterval) -> Bool {
+        let predicate = NSPredicate(format: "isEnabled == true")
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: element)
+        return XCTWaiter.wait(for: [expectation], timeout: timeout) == .completed
+    }
+
+    private func waitForHittable(_ element: XCUIElement, timeout: TimeInterval) -> Bool {
+        let predicate = NSPredicate(format: "exists == true AND hittable == true")
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: element)
+        return XCTWaiter.wait(for: [expectation], timeout: timeout) == .completed
+    }
+
+    private func dismissMorningBriefingIfNeeded() {
+        let briefingScreen = app.descendants(matching: .any)[AXID.dashboardMorningBriefingScreen].firstMatch
+        let deadline = Date().addingTimeInterval(2)
+        while Date() < deadline {
+            if briefingScreen.exists { break }
+            RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.1))
+        }
+        guard briefingScreen.exists else { return }
+
+        let dismissButton = app.descendants(matching: .any)[AXID.dashboardMorningBriefingDismiss].firstMatch
+        XCTAssertTrue(dismissButton.waitForExistence(timeout: 2), "Morning Briefing dismiss button should exist")
+        dismissButton.tap()
+
+        let predicate = NSPredicate(format: "exists == false")
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: briefingScreen)
+        XCTAssertEqual(
+            XCTWaiter.wait(for: [expectation], timeout: 5),
+            .completed,
+            "Morning Briefing should dismiss before opening notifications"
+        )
+    }
+
 }

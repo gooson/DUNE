@@ -41,6 +41,11 @@ final class TrainingVolumeViewModel {
         errorMessage = nil
         defer { isLoading = false }
 
+        // Let the detail screen commit its first frame before the heavier
+        // training-volume aggregation work starts on the main actor.
+        await Task.yield()
+        guard !Task.isCancelled else { return }
+
         let snapshots = manualRecords.map { record in
             ManualExerciseSnapshot(
                 date: record.date,

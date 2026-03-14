@@ -557,9 +557,9 @@ struct ActivityView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .center)
                 .padding(.vertical, DS.Spacing.xs)
+                .accessibilityIdentifier("activity-musclemap-detail-link")
             }
             .buttonStyle(.plain)
-            .accessibilityIdentifier("activity-musclemap-detail-link")
         }
         .accessibilityIdentifier("activity-section-musclemap")
     }

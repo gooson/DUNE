@@ -137,13 +137,11 @@ struct TemplateFormView: View {
                 }
             }
             .sheet(isPresented: $showingExercisePicker) {
-                ExercisePickerView(
+                TemplateExercisePickerSheet(
                     library: library,
-                    recentExerciseIDs: [],
-                    mode: .full
-                ) { exercise in
-                    entries.append(TemplateExerciseResolver.defaultEntry(for: exercise))
-                }
+                    entries: $entries,
+                    isPresented: $showingExercisePicker
+                )
             }
         }
     }
@@ -479,6 +477,23 @@ struct TemplateFormView: View {
             template.updatedAt = Date()
         }
         dismiss()
+    }
+}
+
+private struct TemplateExercisePickerSheet: View {
+    let library: ExerciseLibraryQuerying
+    @Binding var entries: [TemplateEntry]
+    @Binding var isPresented: Bool
+
+    var body: some View {
+        ExercisePickerView(
+            library: library,
+            recentExerciseIDs: [],
+            mode: .full
+        ) { exercise in
+            entries.append(TemplateExerciseResolver.defaultEntry(for: exercise))
+            isPresented = false
+        }
     }
 }
 

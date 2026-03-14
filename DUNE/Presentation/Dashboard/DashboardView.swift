@@ -436,6 +436,8 @@ struct DashboardView: View {
     private var notificationBellIcon: some View {
         Image(systemName: "bell")
             .frame(width: 22, height: 22)
+            .frame(width: 44, height: 44)
+            .contentShape(Rectangle())
             .overlay(alignment: .topTrailing) {
                 if unreadNotificationCount > 0 {
                     Text(unreadBadgeLabel)

@@ -89,7 +89,13 @@ struct ConditionScoreDetailView: View {
                                 scrollPosition: $viewModel.scrollPosition
                             )
                             .frame(height: chartHeight)
-                            .accessibilityIdentifier("detail-chart-surface")
+                            .overlay {
+                                ChartUITestSurface(
+                                    identifier: "detail-chart-surface",
+                                    label: "Condition Detail Chart",
+                                    value: viewModel.visibleRangeLabel
+                                )
+                            }
                         }
                     }
                     .id(viewModel.selectedPeriod)

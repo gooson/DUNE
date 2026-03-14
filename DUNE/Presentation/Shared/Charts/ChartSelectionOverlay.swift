@@ -95,8 +95,11 @@ extension View {
         modifier(ChartSurfaceModifier(cornerRadius: cornerRadius, topBloomHeight: topBloomHeight))
     }
 
-    func chartSelectionUITestProbe(_ label: String) -> some View {
-        modifier(ChartSelectionUITestProbeModifier(label: label))
+    func chartSelectionUITestProbe(
+        _ label: String,
+        identifier: String = "chart-selection-probe"
+    ) -> some View {
+        modifier(ChartSelectionUITestProbeModifier(label: label, identifier: identifier))
     }
 
     func scrollableChartSelectionOverlay<OverlayContent: View>(
@@ -197,9 +200,10 @@ final class GestureAttachmentView: UIView, UIGestureRecognizerDelegate {
 
     @objc
     private func handleLongPress(_ recognizer: UILongPressGestureRecognizer) {
+        let state = recognizer.state
         let location = recognizer.location(in: self)
         Task { @MainActor in
-            onStateChange?(recognizer.state, location)
+            onStateChange?(state, location)
         }
     }
 
@@ -327,20 +331,22 @@ private struct ChartSurfaceModifier: ViewModifier {
 
 private struct ChartSelectionUITestProbeModifier: ViewModifier {
     let label: String
+    let identifier: String
 
     private static let isEnabled = ProcessInfo.processInfo.arguments.contains("--uitesting")
 
     func body(content: Content) -> some View {
-        content.overlay(alignment: .bottomTrailing) {
-            if Self.isEnabled {
-                Rectangle()
-                    .fill(Color.black.opacity(0.001))
-                    .frame(width: 12, height: 12)
-                    .allowsHitTesting(false)
-                    .accessibilityElement()
-                    .accessibilityIdentifier("chart-selection-probe")
-                    .accessibilityLabel(label)
+        content
+            .overlay {
+                if Self.isEnabled {
+                    // Mirror the full chart bounds so the probe remains discoverable
+                    // even when the chart is partially clipped during UI test scrolling.
+                    ChartUITestSurface(
+                        identifier: identifier,
+                        label: label,
+                        value: ""
+                    )
+                }
             }
-        }
     }
 }
