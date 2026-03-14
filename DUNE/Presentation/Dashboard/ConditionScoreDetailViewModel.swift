@@ -18,6 +18,8 @@ final class ConditionScoreDetailViewModel {
     var scrollPosition: Date = .now
     var showTrendLine: Bool = false
     var chartData: [ChartDataPoint] = []
+    var hrvTrend: [ChartDataPoint] = []
+    var rhrTrend: [ChartDataPoint] = []
     var summaryStats: MetricSummary?
     var highlights: [Highlight] = []
     var isLoading = false
@@ -176,6 +178,16 @@ final class ConditionScoreDetailViewModel {
 
         chartData = allScores
 
+        // Sub-score trends: daily HRV averages and RHR averages within current period
+        let currentPeriodStart = selectedPeriod.dateRange(offset: 0).start
+        buildSubScoreTrends(
+            samples: allSamples,
+            rhrCollection: allRHR,
+            rangeStart: currentPeriodStart,
+            rangeEnd: range.end,
+            calendar: calendar
+        )
+
         // Aggregate for longer periods
         if selectedPeriod == .sixMonths || selectedPeriod == .year {
             chartData = HealthDataAggregator.aggregateByAverage(
@@ -298,6 +310,37 @@ final class ConditionScoreDetailViewModel {
 
         let values = chartData.map(\.value)
         summaryStats = HealthDataAggregator.computeSummary(from: values, previousPeriodValues: nil)
+
+        // Sub-scores not shown for hourly view
+        hrvTrend = []
+        rhrTrend = []
+    }
+
+    // MARK: - Sub-Score Trends
+
+    private func buildSubScoreTrends(
+        samples: [HRVSample],
+        rhrCollection: [(date: Date, min: Double, max: Double, average: Double)],
+        rangeStart: Date,
+        rangeEnd: Date,
+        calendar: Calendar
+    ) {
+        // HRV daily averages
+        let filteredSamples = samples.filter { $0.date >= rangeStart && $0.date <= rangeEnd }
+        let grouped = Dictionary(grouping: filteredSamples) { calendar.startOfDay(for: $0.date) }
+        hrvTrend = grouped.compactMap { day, daySamples in
+            let values = daySamples.map(\.value)
+            guard !values.isEmpty else { return nil }
+            let avg = values.reduce(0, +) / Double(values.count)
+            guard avg.isFinite else { return nil }
+            return ChartDataPoint(date: day, value: avg)
+        }.sorted { $0.date < $1.date }
+
+        // RHR daily averages
+        rhrTrend = rhrCollection
+            .filter { $0.date >= rangeStart && $0.date <= rangeEnd && $0.average > 0 && $0.average.isFinite }
+            .map { ChartDataPoint(date: $0.date, value: $0.average) }
+            .sorted { $0.date < $1.date }
     }
 
     // MARK: - Highlights
