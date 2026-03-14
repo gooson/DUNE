@@ -68,9 +68,7 @@ extension TimePeriod {
             formatter.setLocalizedDateFormatFromTemplate("MMMdE")
             // Rolling 24h: show range if the window spans two different days
             if !calendar.isDate(scrollDate, inSameDayAs: displayEnd) {
-                let endFormatter = DateFormatter()
-                endFormatter.setLocalizedDateFormatFromTemplate("MMMdE")
-                return "\(formatter.string(from: scrollDate)) – \(endFormatter.string(from: displayEnd))"
+                return "\(formatter.string(from: scrollDate)) – \(formatter.string(from: displayEnd))"
             }
             return formatter.string(from: scrollDate)
         case .week:
