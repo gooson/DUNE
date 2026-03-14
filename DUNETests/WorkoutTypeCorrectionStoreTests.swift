@@ -86,4 +86,38 @@ final class WorkoutTypeCorrectionStoreTests: XCTestCase {
 
         XCTAssertEqual(workout.localizedTitle(using: store), "레거시 벤치프레스")
     }
+
+    func testLocalizedTitleFallsBackToActivityTypeDisplayName() {
+        // "Tempo Run" doesn't match any typeName → should fall back to activityType.displayName
+        let workout = WorkoutSummary(
+            id: "hk-custom-1",
+            type: "Tempo Run",
+            activityType: .running,
+            duration: 2880,
+            calories: 612,
+            distance: 10_200,
+            date: Date()
+        )
+
+        let title = workout.localizedTitle(using: store)
+        // Should NOT be "Tempo Run" (raw English)
+        XCTAssertNotEqual(title, "Tempo Run")
+        // Should be the localized displayName for .running
+        XCTAssertEqual(title, WorkoutActivityType.running.displayName)
+    }
+
+    func testLocalizedTitleReturnsRawTypeForOtherActivity() {
+        // activityType == .other with unrecognized title → should return raw type
+        let workout = WorkoutSummary(
+            id: "hk-custom-2",
+            type: "My Custom Workout",
+            activityType: .other,
+            duration: 1800,
+            calories: 100,
+            distance: nil,
+            date: Date()
+        )
+
+        XCTAssertEqual(workout.localizedTitle(using: store), "My Custom Workout")
+    }
 }
