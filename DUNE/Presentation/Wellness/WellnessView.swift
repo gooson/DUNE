@@ -297,6 +297,9 @@ struct WellnessView: View {
         .navigationDestination(for: InjuryHistoryDestination.self) { _ in
             InjuryHistoryView(viewModel: injuryViewModel)
         }
+        .navigationDestination(for: PostureHistoryDestination.self) { _ in
+            PostureHistoryView()
+        }
         .navigationDestination(for: WellnessScoreDestination.self) { _ in
             if let score = viewModel.wellnessScore {
                 WellnessScoreDetailView(
