@@ -34,15 +34,18 @@ final class ConditionScoreDetailViewModel {
     private let hrvService: HRVQuerying
     private let scoreUseCase = CalculateConditionScoreUseCase()
     private let scoreRefreshService: ScoreRefreshService?
+    private let nowProvider: @Sendable () -> Date
     private var reloadRequestID = 0
 
     init(
         hrvService: HRVQuerying? = nil,
         healthKitManager: HealthKitManager = .shared,
-        scoreRefreshService: ScoreRefreshService? = nil
+        scoreRefreshService: ScoreRefreshService? = nil,
+        nowProvider: @escaping @Sendable () -> Date = Date.init
     ) {
         self.hrvService = hrvService ?? HRVQueryService(manager: healthKitManager)
         self.scoreRefreshService = scoreRefreshService
+        self.nowProvider = nowProvider
         recalculateScrollDomain()
     }
 
@@ -294,7 +297,7 @@ final class ConditionScoreDetailViewModel {
 
     private func loadHourlyData(requestID: Int) async throws {
         let calendar = Calendar.current
-        let now = Date()
+        let now = nowProvider()
         let startOfDay = calendar.startOfDay(for: now)
         let baselineStart = calendar.date(
             byAdding: .day,
