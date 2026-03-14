@@ -80,7 +80,9 @@ struct DashboardView: View {
                         if viewModel.errorMessage != nil {
                             errorSection
                         } else if viewModel.isMirroredReadOnlyMode {
-                            CloudSyncWaitingView()
+                            CloudSyncWaitingView {
+                                Task { await viewModel.loadData(canLoadHealthKitData: canLoadHealthKitData) }
+                            }
                         } else {
                             EmptyStateView(
                                 icon: "heart.text.clipboard",

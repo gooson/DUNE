@@ -80,7 +80,14 @@ struct DUNEWatchApp: App {
         let fm = FileManager.default
         for suffix in ["", "-wal", "-shm"] {
             let fileURL = URL(fileURLWithPath: url.path + suffix)
-            try? fm.removeItem(at: fileURL)
+            do {
+                try fm.removeItem(at: fileURL)
+                logger.info("Deleted store file: \(fileURL.lastPathComponent)")
+            } catch let error as NSError where error.domain == NSCocoaErrorDomain && error.code == NSFileNoSuchFileError {
+                // File doesn't exist — nothing to delete.
+            } catch {
+                logger.error("Failed to delete store file \(fileURL.lastPathComponent): \(error.localizedDescription)")
+            }
         }
     }
 
@@ -97,7 +104,19 @@ struct DUNEWatchApp: App {
         do {
             return try makeModelContainer(configuration: configuration)
         } catch {
-            logger.error("ModelContainer retry failed: \(error.localizedDescription, privacy: .public)")
+            logger.error("ModelContainer retry with CloudKit failed: \(error.localizedDescription, privacy: .public)")
+        }
+
+        do {
+            let noCloudConfig = ModelConfiguration(
+                url: configuration.url,
+                cloudKitDatabase: .none
+            )
+            let container = try makeModelContainer(configuration: noCloudConfig)
+            logger.info("ModelContainer recovered without CloudKit.")
+            return container
+        } catch {
+            logger.error("ModelContainer retry without CloudKit also failed: \(error.localizedDescription, privacy: .public)")
             return makeInMemoryFallbackContainer()
         }
     }

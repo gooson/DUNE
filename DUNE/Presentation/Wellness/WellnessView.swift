@@ -50,7 +50,9 @@ struct WellnessView: View {
                                 viewModel.wellnessScore == nil &&
                                 !viewModel.isLoading {
                         if viewModel.isMirroredReadOnlyMode {
-                            CloudSyncWaitingView()
+                            CloudSyncWaitingView {
+                                Task { await viewModel.loadData() }
+                            }
                         } else {
                             EmptyStateView(
                                 icon: "leaf.fill",

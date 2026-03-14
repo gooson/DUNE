@@ -277,10 +277,16 @@ struct DUNEApp: App {
 
     private static func deleteStoreFiles(at url: URL) {
         let fm = FileManager.default
-        // SwiftData/SQLite uses .sqlite, .sqlite-wal, .sqlite-shm
         for suffix in ["", "-wal", "-shm"] {
             let fileURL = URL(fileURLWithPath: url.path + suffix)
-            try? fm.removeItem(at: fileURL)
+            do {
+                try fm.removeItem(at: fileURL)
+                AppLogger.data.info("Deleted store file: \(fileURL.lastPathComponent)")
+            } catch let error as NSError where error.domain == NSCocoaErrorDomain && error.code == NSFileNoSuchFileError {
+                // File doesn't exist — nothing to delete.
+            } catch {
+                AppLogger.data.error("Failed to delete store file \(fileURL.lastPathComponent): \(error.localizedDescription)")
+            }
         }
     }
 
@@ -294,10 +300,27 @@ struct DUNEApp: App {
         AppLogger.data.error("Deleting persistent store after migration compatibility failure: \(reflectedError, privacy: .private)")
         deleteStoreFiles(at: configuration.url)
 
+        // Retry 1: same configuration (CloudKit enabled if originally enabled).
         do {
             return try makeModelContainer(configuration: configuration)
         } catch {
-            AppLogger.data.error("ModelContainer retry failed: \(error)")
+            AppLogger.data.error("ModelContainer retry with CloudKit failed: \(error)")
+        }
+
+        // Retry 2: disable CloudKit in case stale CloudKit metadata caused the failure.
+        // On Mac, the store may have been synced with a schema version that no longer
+        // matches the current migration plan. Creating without CloudKit avoids the
+        // metadata reconciliation that triggers the repeated 134504 error.
+        do {
+            let noCloudConfig = ModelConfiguration(
+                url: configuration.url,
+                cloudKitDatabase: .none
+            )
+            let container = try makeModelContainer(configuration: noCloudConfig)
+            AppLogger.data.info("ModelContainer recovered without CloudKit. Data will sync on next runtime rebuild.")
+            return container
+        } catch {
+            AppLogger.data.error("ModelContainer retry without CloudKit also failed: \(error)")
             return makeInMemoryFallbackContainer()
         }
     }
