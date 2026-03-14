@@ -97,7 +97,8 @@ enum PostureCaptureType: String, Codable, Sendable, Hashable {
 // MARK: - Joint Position
 
 /// Named 3D joint position extracted from Vision pose detection.
-struct JointPosition3D: Codable, Sendable, Hashable {
+struct JointPosition3D: Codable, Sendable, Hashable, Identifiable {
+    var id: String { name }
     let name: String            // Vision joint name (e.g. "centerHead")
     let x: Float                // Meters from root, right positive
     let y: Float                // Meters from root, up positive

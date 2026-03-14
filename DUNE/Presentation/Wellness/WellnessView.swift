@@ -5,6 +5,7 @@ struct WellnessView: View {
     @State private var viewModel: WellnessViewModel
     @State private var bodyViewModel = BodyCompositionViewModel()
     @State private var injuryViewModel = InjuryViewModel()
+    @State private var isShowingPostureCapture = false
     @Environment(\.modelContext) private var modelContext
     @Environment(\.appTheme) private var theme
     @Environment(\.horizontalSizeClass) private var sizeClass
@@ -167,6 +168,12 @@ struct WellnessView: View {
                         Label("Injury", systemImage: "bandage.fill")
                     }
                     .accessibilityIdentifier("wellness-menu-injury")
+                    Button {
+                        isShowingPostureCapture = true
+                    } label: {
+                        Label("Posture Assessment", systemImage: "figure.stand")
+                    }
+                    .accessibilityIdentifier("wellness-menu-posture")
                 } label: {
                     Image(systemName: "plus")
                 }
@@ -263,6 +270,9 @@ struct WellnessView: View {
                     }
                 )
             }
+        }
+        .fullScreenCover(isPresented: $isShowingPostureCapture) {
+            PostureCaptureView()
         }
         // Correction #48: navigationDestination outside conditional blocks
         .navigationDestination(for: HealthMetric.self) { metric in

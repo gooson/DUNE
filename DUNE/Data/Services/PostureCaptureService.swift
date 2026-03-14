@@ -37,7 +37,7 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
 
     let captureSession = AVCaptureSession()
     private let photoOutput = AVCapturePhotoOutput()
-    private var photoContinuation: CheckedContinuation<AVCapturePhoto, any Error>?
+    private var photoContinuation: CheckedContinuation<CGImage, any Error>?
 
     // MARK: - Configuration
 
@@ -89,7 +89,7 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
 
     // MARK: - Photo Capture
 
-    func capturePhoto() async throws -> AVCapturePhoto {
+    func capturePhoto() async throws -> CGImage {
         guard captureSession.isRunning else {
             throw PostureCaptureError.captureSessionNotRunning
         }
@@ -104,10 +104,21 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
     // MARK: - Pose Detection
 
     func detectPose(from image: CGImage) async throws -> PostureCaptureResult {
-        let request = DetectHumanBodyPose3DRequest()
-        let observations = try await request.perform(on: image)
+        let request = VNDetectHumanBodyPose3DRequest()
+        let handler = VNImageRequestHandler(cgImage: image, options: [:])
 
-        guard let observation = observations.first else {
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, any Error>) in
+            DispatchQueue.global(qos: .userInitiated).async {
+                do {
+                    try handler.perform([request])
+                    continuation.resume()
+                } catch {
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+
+        guard let observation = request.results?.first else {
             throw PostureCaptureError.noPoseDetected
         }
 
@@ -142,12 +153,7 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
     // MARK: - Full Capture Pipeline
 
     func captureAndDetect() async throws -> PostureCaptureResult {
-        let photo = try await capturePhoto()
-
-        guard let cgImage = photo.cgImageRepresentation() else {
-            throw PostureCaptureError.imageConversionFailed
-        }
-
+        let cgImage = try await capturePhoto()
         return try await detectPose(from: cgImage)
     }
 
@@ -167,7 +173,7 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
 
     // MARK: - Joint Extraction
 
-    private static let trackedJoints: [(HumanBodyPose3DObservation.JointName, String)] = [
+    private static let trackedJoints: [(VNHumanBodyPose3DObservation.JointName, String)] = [
         (.centerHead, "centerHead"),
         (.topHead, "topHead"),
         (.leftShoulder, "leftShoulder"),
@@ -188,7 +194,7 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
     ]
 
     private func extractJointPositions(
-        from observation: HumanBodyPose3DObservation
+        from observation: VNHumanBodyPose3DObservation
     ) -> [JointPosition3D] {
         var positions: [JointPosition3D] = []
 
@@ -197,8 +203,8 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
                 continue
             }
 
-            // position is simd_float4x4 — translation in columns.3
-            let translation = point.position.columns.3
+            // localPosition is simd_float4x4 — translation in columns.3
+            let translation = point.localPosition.columns.3
             let x = translation.x
             let y = translation.y
             let z = translation.z
@@ -291,8 +297,10 @@ extension PostureCaptureService: AVCapturePhotoCaptureDelegate {
     ) {
         if let error {
             photoContinuation?.resume(throwing: error)
+        } else if let cgImage = photo.cgImageRepresentation() {
+            photoContinuation?.resume(returning: cgImage)
         } else {
-            photoContinuation?.resume(returning: photo)
+            photoContinuation?.resume(throwing: PostureCaptureError.imageConversionFailed)
         }
         photoContinuation = nil
     }

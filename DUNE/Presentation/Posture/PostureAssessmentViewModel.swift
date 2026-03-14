@@ -41,7 +41,8 @@ final class PostureAssessmentViewModel {
     var combinedAssessment: CombinedPostureAssessment {
         CombinedPostureAssessment(
             frontAssessment: frontAssessment,
-            sideAssessment: sideAssessment
+            sideAssessment: sideAssessment,
+            date: Date()
         )
     }
 
