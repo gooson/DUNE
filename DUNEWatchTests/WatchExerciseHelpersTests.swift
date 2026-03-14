@@ -14,7 +14,10 @@ struct WatchExerciseHelpersTests {
         isPreferred: Bool = false,
         equipment: String? = "barbell",
         cardioSecondaryUnit: String? = nil,
-        aliases: [String]? = nil
+        aliases: [String]? = nil,
+        procedureSets: [WatchProcedureSetSnapshot]? = nil,
+        procedureUpdatedAt: Date? = nil,
+        progressionIncrementKg: Double? = nil
     ) -> WatchExerciseInfo {
         WatchExerciseInfo(
             id: id,
@@ -26,7 +29,10 @@ struct WatchExerciseHelpersTests {
             isPreferred: isPreferred,
             equipment: equipment,
             cardioSecondaryUnit: cardioSecondaryUnit,
-            aliases: aliases
+            aliases: aliases,
+            procedureSets: procedureSets,
+            procedureUpdatedAt: procedureUpdatedAt,
+            progressionIncrementKg: progressionIncrementKg
         )
     }
 
@@ -112,6 +118,75 @@ struct WatchExerciseHelpersTests {
         let defaults = resolvedDefaults(for: target)
         #expect(defaults.reps == 6)
         #expect(defaults.weight == 100)
+    }
+
+    @Test("resolvedDefaults prefers procedure first set and applies progression overlay")
+    func resolvedDefaultsPrefersProcedureSnapshot() {
+        let target = exercise(
+            id: "\(UUID().uuidString)-bench",
+            defaultSets: 3,
+            defaultReps: 10,
+            defaultWeightKg: 60,
+            procedureSets: [
+                WatchProcedureSetSnapshot(setNumber: 1, weight: 80, reps: 10),
+                WatchProcedureSetSnapshot(setNumber: 2, weight: 82.5, reps: 8),
+                WatchProcedureSetSnapshot(setNumber: 3, weight: 85, reps: 6),
+            ],
+            procedureUpdatedAt: Date(timeIntervalSince1970: 1_700_010_000),
+            progressionIncrementKg: 2.5
+        )
+
+        let defaults = resolvedDefaults(for: target)
+        #expect(defaults.reps == 10)
+        #expect(defaults.weight == 82.5)
+    }
+
+    @Test("resolvedProcedureSets prefers newer local procedure over synced payload")
+    func resolvedProcedureSetsPrefersNewerLocalProcedure() {
+        let runID = UUID().uuidString
+        let target = exercise(
+            id: "\(runID)-bench",
+            procedureSets: [
+                WatchProcedureSetSnapshot(setNumber: 1, weight: 70, reps: 10),
+                WatchProcedureSetSnapshot(setNumber: 2, weight: 72.5, reps: 8),
+            ],
+            procedureUpdatedAt: Date(timeIntervalSince1970: 1_700_000_000),
+            progressionIncrementKg: 2.5
+        )
+
+        RecentExerciseTracker.recordLatestProcedure(
+            exerciseID: target.id,
+            sets: [
+                WatchProcedureSetSnapshot(setNumber: 1, weight: 80, reps: 6),
+                WatchProcedureSetSnapshot(setNumber: 2, weight: 82.5, reps: 5),
+                WatchProcedureSetSnapshot(setNumber: 3, weight: 85, reps: 4),
+            ]
+        )
+
+        let procedure = resolvedProcedureSets(for: target)
+        #expect(procedure?.count == 3)
+        #expect(procedure?.first?.weight == 82.5)
+        #expect(procedure?[1].weight == 82.5)
+    }
+
+    @Test("exerciseSubtitle reflects restored procedure set count")
+    func exerciseSubtitleUsesProcedureSetCount() {
+        let target = exercise(
+            id: "\(UUID().uuidString)-bench",
+            defaultSets: 2,
+            defaultReps: 10,
+            defaultWeightKg: 60,
+            procedureSets: [
+                WatchProcedureSetSnapshot(setNumber: 1, weight: 80, reps: 10),
+                WatchProcedureSetSnapshot(setNumber: 2, weight: 82.5, reps: 8),
+                WatchProcedureSetSnapshot(setNumber: 3, weight: 85, reps: 6),
+            ],
+            procedureUpdatedAt: Date(timeIntervalSince1970: 1_700_010_000),
+            progressionIncrementKg: nil
+        )
+
+        let expected = String(localized: "\(3) sets · \(10) reps") + " · 80.0kg"
+        #expect(exerciseSubtitle(for: target) == expected)
     }
 
     @Test("recentWatchExercises falls back to synced last-used metadata")
@@ -221,6 +296,33 @@ struct WatchExerciseHelpersTests {
         #expect(entry.defaultWeightKg == 130)
         #expect(entry.inputTypeRaw == ExerciseInputType.setsRepsWeight.rawValue)
         #expect(entry.cardioSecondaryUnitRaw == exerciseInfo.cardioSecondaryUnit)
+    }
+
+    @Test("snapshotFromExercise carries restored procedure plans")
+    func snapshotFromExerciseCarriesProcedurePlans() {
+        let exerciseInfo = exercise(
+            id: "\(UUID().uuidString)-bench",
+            defaultSets: 2,
+            defaultReps: 10,
+            defaultWeightKg: 60,
+            procedureSets: [
+                WatchProcedureSetSnapshot(setNumber: 1, weight: 80, reps: 10),
+                WatchProcedureSetSnapshot(setNumber: 2, weight: 82.5, reps: 8),
+                WatchProcedureSetSnapshot(setNumber: 3, weight: 85, reps: 6),
+            ],
+            procedureUpdatedAt: Date(timeIntervalSince1970: 1_700_010_000),
+            progressionIncrementKg: nil
+        )
+
+        let snapshot = snapshotFromExercise(exerciseInfo)
+        let entry = try! #require(snapshot.entries.first)
+        let plannedSets = try! #require(snapshot.procedureSetsByExerciseID?[exerciseInfo.id])
+
+        #expect(entry.defaultSets == 3)
+        #expect(entry.defaultReps == 10)
+        #expect(entry.defaultWeightKg == 80)
+        #expect(plannedSets.count == 3)
+        #expect(plannedSets[1].weight == 82.5)
     }
 
     @Test("snapshotFromExercise preserves cardio metadata")

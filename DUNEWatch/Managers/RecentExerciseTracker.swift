@@ -11,6 +11,7 @@ enum RecentExerciseTracker {
     private static let usageCountKey = "\(baseKey).usageCount"
     private static let latestSetByExerciseKey = "\(baseKey).latestSetByExercise"
     private static let latestSetByCanonicalKey = "\(baseKey).latestSetByCanonical"
+    private static let latestProcedureByExerciseKey = "\(baseKey).latestProcedureByExercise"
     private static let maxEntries = 50
 
     /// Curated default popular exercises shown when user has no history.
@@ -52,6 +53,11 @@ enum RecentExerciseTracker {
     struct LatestSetSnapshot: Codable, Sendable {
         let weight: Double?
         let reps: Int?
+        let updatedAt: TimeInterval
+    }
+
+    struct ProcedureSnapshot: Codable, Sendable {
+        let sets: [WatchProcedureSetSnapshot]
         let updatedAt: TimeInterval
     }
 
@@ -160,6 +166,26 @@ enum RecentExerciseTracker {
 
         let canonicalID = canonicalExerciseID(exerciseID: exerciseID)
         return loadLatestSetByCanonical()[canonicalID]
+    }
+
+    /// Record latest completed procedure for exact-ID replay.
+    static func recordLatestProcedure(exerciseID: String, sets: [WatchProcedureSetSnapshot]) {
+        guard !exerciseID.isEmpty, !sets.isEmpty else { return }
+
+        let snapshot = ProcedureSnapshot(
+            sets: sets.sorted { $0.setNumber < $1.setNumber },
+            updatedAt: Date().timeIntervalSince1970
+        )
+
+        var byExercise = loadLatestProcedureByExercise()
+        byExercise[exerciseID] = snapshot
+        persistLatestProcedureByExercise(byExercise)
+    }
+
+    /// Returns the latest exact-ID procedure snapshot for an exercise.
+    static func latestProcedure(exerciseID: String) -> ProcedureSnapshot? {
+        guard !exerciseID.isEmpty else { return nil }
+        return loadLatestProcedureByExercise()[exerciseID]
     }
 
     /// Sort exercises: recently used first (by recency), then unused alphabetically.
@@ -361,5 +387,19 @@ enum RecentExerciseTracker {
     private static func persistLatestSetByCanonical(_ snapshots: [String: LatestSetSnapshot]) {
         guard let data = try? JSONEncoder().encode(snapshots) else { return }
         UserDefaults.standard.set(data, forKey: latestSetByCanonicalKey)
+    }
+
+    private static func loadLatestProcedureByExercise() -> [String: ProcedureSnapshot] {
+        guard let data = UserDefaults.standard.data(forKey: latestProcedureByExerciseKey),
+              let decoded = try? JSONDecoder().decode([String: ProcedureSnapshot].self, from: data)
+        else {
+            return [:]
+        }
+        return decoded
+    }
+
+    private static func persistLatestProcedureByExercise(_ snapshots: [String: ProcedureSnapshot]) {
+        guard let data = try? JSONEncoder().encode(snapshots) else { return }
+        UserDefaults.standard.set(data, forKey: latestProcedureByExerciseKey)
     }
 }

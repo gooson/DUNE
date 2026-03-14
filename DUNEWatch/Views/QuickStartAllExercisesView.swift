@@ -21,7 +21,10 @@ struct QuickStartAllExercisesView: View {
             let reps = exercise.defaultReps.map(String.init) ?? "nil"
             let equipment = exercise.equipment ?? "nil"
             let lastUsedAt = exercise.lastUsedAt?.timeIntervalSince1970.description ?? "nil"
-            return "\(exercise.id)-\(exercise.inputType)-\(exercise.defaultSets)-\(reps)-\(weight)-\(equipment)-\(exercise.isPreferred)-\(lastUsedAt)-\(exercise.usageCount)"
+            let procedureCount = exercise.procedureSets?.count ?? 0
+            let procedureUpdatedAt = exercise.procedureUpdatedAt?.timeIntervalSince1970.description ?? "nil"
+            let progressionIncrementKg = exercise.progressionIncrementKg?.description ?? "nil"
+            return "\(exercise.id)-\(exercise.inputType)-\(exercise.defaultSets)-\(reps)-\(weight)-\(equipment)-\(exercise.isPreferred)-\(lastUsedAt)-\(exercise.usageCount)-\(procedureCount)-\(procedureUpdatedAt)-\(progressionIncrementKg)"
         }
     }
 
