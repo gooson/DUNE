@@ -172,14 +172,27 @@ actor SharedHealthDataServiceImpl: SharedHealthDataService {
             source: .latestWeight,
             defaultValue: Optional<(value: Double, date: Date)>.none
         ) {
-            try await bodyService.fetchLatestWeight(withinDays: 30)
+            // Check today first, then historical (fetchLatestWeight excludes today)
+            let todaySamples = try await bodyService.fetchWeight(
+                start: calendar.startOfDay(for: referenceDate),
+                end: calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: referenceDate)) ?? referenceDate
+            )
+            if let latest = todaySamples.first, latest.value > 0, latest.value < 500 {
+                return (value: latest.value, date: latest.date)
+            }
+            return try await bodyService.fetchLatestWeight(withinDays: 30)
         }
 
         async let latestBMITask = fetch(
             source: .latestBMI,
             defaultValue: Optional<(value: Double, date: Date)>.none
         ) {
-            try await bodyService.fetchLatestBMI(withinDays: 30)
+            // Check today first, then historical (fetchLatestBMI excludes today)
+            if let todayBMI = try await bodyService.fetchBMI(for: referenceDate),
+               todayBMI > 0, todayBMI < 100 {
+                return (value: todayBMI, date: referenceDate)
+            }
+            return try await bodyService.fetchLatestBMI(withinDays: 30)
         }
 
         let hrvSamplesResult = await hrvSamplesTask
@@ -232,6 +245,15 @@ actor SharedHealthDataServiceImpl: SharedHealthDataService {
         for (source, failed) in failureInputs where failed {
             failedSources.insert(source)
         }
+
+        AppLogger.data.info("""
+            [SharedHealthDataService] Snapshot built — \
+            steps: \(todayStepsResult.value.map { String(format: "%.0f", $0) } ?? "nil", privacy: .public), \
+            exercise: \(todayExerciseResult.value.map { String(format: "%.1f", $0) } ?? "nil", privacy: .public)min, \
+            weight: \(latestWeightResult.value.map { String(format: "%.1f", $0.value) } ?? "nil", privacy: .public)kg, \
+            bmi: \(latestBMIResult.value.map { String(format: "%.1f", $0.value) } ?? "nil", privacy: .public), \
+            failed: \(failedSources.map(\.rawValue).sorted(), privacy: .public)
+            """)
 
         return SharedHealthSnapshot(
             hrvSamples: hrvSamplesResult.value,
