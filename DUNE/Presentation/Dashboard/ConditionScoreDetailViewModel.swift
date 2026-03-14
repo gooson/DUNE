@@ -86,8 +86,13 @@ final class ConditionScoreDetailViewModel {
     }
 
     private func resetScrollPosition() {
-        let range = selectedPeriod.dateRange(offset: 0)
-        scrollPosition = range.start
+        if selectedPeriod == .day {
+            // Rolling 24h: scroll to show the full 24h window starting from now-24h
+            scrollPosition = nowProvider().addingTimeInterval(-24 * 60 * 60)
+        } else {
+            let range = selectedPeriod.dateRange(offset: 0)
+            scrollPosition = range.start
+        }
     }
 
     // MARK: - Extended Range
