@@ -405,6 +405,28 @@ struct MetricDetailViewModelTests {
         #expect(vm.visibleRangeLabel == expected)
     }
 
+    @Test("configure resets scrollPosition to current period start")
+    func configureResetsScrollPosition() {
+        let vm = makeVM()
+        vm.scrollPosition = Date()
+
+        vm.configure(category: .hrv, currentValue: 50, lastUpdated: Date())
+
+        #expect(vm.scrollPosition == TimePeriod.week.dateRange.start)
+    }
+
+    @Test("scrollDomain extends to next day boundary for current period")
+    func scrollDomainUsesAlignedUpperBound() {
+        let vm = makeVM()
+        vm.configure(category: .hrv, currentValue: 50, lastUpdated: Date())
+
+        let currentRange = TimePeriod.week.dateRange
+        let expectedUpperBound = TimePeriod.week.scrollDomainUpperBound(referenceDate: currentRange.end)
+
+        #expect(vm.scrollDomain.upperBound == expectedUpperBound)
+        #expect(vm.scrollDomain.upperBound > currentRange.end)
+    }
+
     private func makeSleepStage(
         referenceDate: Date,
         startHour: Int,

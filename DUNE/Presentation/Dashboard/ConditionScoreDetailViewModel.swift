@@ -40,6 +40,7 @@ final class ConditionScoreDetailViewModel {
 
     func configure(score: ConditionScore) {
         self.currentScore = score
+        resetScrollPosition()
     }
 
     func loadData() async {
@@ -96,7 +97,8 @@ final class ConditionScoreDetailViewModel {
 
     var scrollDomain: ClosedRange<Date> {
         let range = extendedRange
-        return range.start...range.end
+        let upperBound = selectedPeriod.scrollDomainUpperBound(referenceDate: range.end)
+        return range.start...max(range.end, upperBound)
     }
 
     // MARK: - Private

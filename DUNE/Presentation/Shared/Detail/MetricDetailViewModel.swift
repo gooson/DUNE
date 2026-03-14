@@ -89,6 +89,7 @@ final class MetricDetailViewModel {
         self.lastUpdated = lastUpdated
         self.workoutTypeName = workoutTypeName
         self.metricUnit = metricUnit ?? ""
+        resetScrollPosition()
     }
 
     func loadData() async {
@@ -192,7 +193,8 @@ final class MetricDetailViewModel {
     /// The full scrollable date domain for charts with sparse data (weight, BMI, body fat, lean body mass).
     var scrollDomain: ClosedRange<Date> {
         let range = extendedRange
-        return range.start...range.end
+        let upperBound = selectedPeriod.scrollDomainUpperBound(referenceDate: range.end)
+        return range.start...max(range.end, upperBound)
     }
 
     // MARK: - Private Reload Trigger

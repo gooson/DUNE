@@ -59,6 +59,21 @@ struct TemplateFormView: View {
         _generationPrompt = State(initialValue: "")
     }
 
+    /// Pre-fill mode — creates a new template with suggested name and exercises from a recommendation nudge
+    init(
+        prefillName: String,
+        prefillEntries: [TemplateEntry],
+        generator: any NaturalLanguageWorkoutGenerating = AIWorkoutTemplateGenerator(),
+        workoutService: any WorkoutQuerying = WorkoutQueryService(manager: .shared)
+    ) {
+        self.mode = .create
+        self.generator = generator
+        self.workoutService = workoutService
+        _templateName = State(initialValue: String(prefillName.prefix(100)))
+        _entries = State(initialValue: prefillEntries)
+        _generationPrompt = State(initialValue: "")
+    }
+
     // MARK: - Body
 
     var body: some View {

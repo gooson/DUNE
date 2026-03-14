@@ -56,7 +56,7 @@ struct ScoreContributorsView: View {
             }
         }
         .padding(.vertical, DS.Spacing.xs)
-        .accessibilityLabel("\(contribution.factor.displayName), \(contribution.impact.rawValue), \(contribution.detail)")
+        .accessibilityLabel("\(contribution.factor.displayName), \(contribution.impact.accessibilityName), \(contribution.detail)")
     }
 
     private func impactColor(_ impact: ScoreContribution.Impact) -> Color {
@@ -80,6 +80,18 @@ struct ScoreContributorsView: View {
         case .negative: BarFraction.negative
         }
         return totalWidth * fraction
+    }
+}
+
+// MARK: - ScoreContribution.Impact + Accessibility
+
+extension ScoreContribution.Impact {
+    var accessibilityName: String {
+        switch self {
+        case .positive: String(localized: "Positive")
+        case .neutral: String(localized: "Neutral")
+        case .negative: String(localized: "Negative")
+        }
     }
 }
 
