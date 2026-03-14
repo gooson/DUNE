@@ -163,22 +163,13 @@ struct DUNEApp: App {
         AppLogger.data.error("Falling back to in-memory ModelContainer due to persistent store failure")
         let fallbackConfiguration = ModelConfiguration(isStoredInMemoryOnly: true)
         do {
-            return try makeModelContainer(configuration: fallbackConfiguration)
+            // Skip migration plan — in-memory stores have nothing to migrate.
+            return try makeFreshModelContainer(configuration: fallbackConfiguration)
         } catch {
-            AppLogger.data.error("In-memory ModelContainer with migration plan also failed: \(error). Creating bare container.")
-            // Without migration plan — avoids migration-related failures that can
-            // prevent even an in-memory container from initializing.
-            do {
-                return try ModelContainer(
-                    for: AppMigrationPlan.currentSchema,
-                    configurations: ModelConfiguration(isStoredInMemoryOnly: true)
-                )
-            } catch {
-                // Absolute last resort — should never happen but prevents fatalError crash.
-                AppLogger.data.error("Bare in-memory ModelContainer failed: \(error). Creating minimal container.")
-                // swiftlint:disable:next force_try
-                return try! ModelContainer(for: Schema([]), configurations: ModelConfiguration(isStoredInMemoryOnly: true))
-            }
+            // Absolute last resort — should never happen but prevents fatalError crash.
+            AppLogger.data.error("In-memory ModelContainer failed: \(error). Creating minimal container.")
+            // swiftlint:disable:next force_try
+            return try! ModelContainer(for: Schema([]), configurations: ModelConfiguration(isStoredInMemoryOnly: true))
         }
     }
 
@@ -290,6 +281,19 @@ struct DUNEApp: App {
         }
     }
 
+    /// Create a ModelContainer WITHOUT the migration plan.
+    /// Used after store deletion when a fresh store needs no migration.
+    /// The staged migration plan contains VersionedSchemas that reference live model
+    /// types whose hashes have drifted since declaration (V2-V7, V11 reference live
+    /// types later modified). This causes 134504 "unknown model version" even on empty
+    /// stores. Bypassing the migration plan avoids plan-validation errors entirely.
+    private static func makeFreshModelContainer(configuration: ModelConfiguration) throws -> ModelContainer {
+        try ModelContainer(
+            for: AppMigrationPlan.currentSchema,
+            configurations: configuration
+        )
+    }
+
     private static func recoverModelContainer(after error: Error, configuration: ModelConfiguration) -> ModelContainer {
         let reflectedError = String(reflecting: error)
         guard PersistentStoreRecovery.shouldDeleteStore(after: error) else {
@@ -300,27 +304,26 @@ struct DUNEApp: App {
         AppLogger.data.error("Deleting persistent store after migration compatibility failure: \(reflectedError, privacy: .private)")
         deleteStoreFiles(at: configuration.url)
 
-        // Retry 1: same configuration (CloudKit enabled if originally enabled).
+        // Retry 1: fresh container WITHOUT migration plan (deleted store needs no migration).
         do {
-            return try makeModelContainer(configuration: configuration)
+            let container = try makeFreshModelContainer(configuration: configuration)
+            AppLogger.data.info("ModelContainer recovered with fresh store (no migration plan).")
+            return container
         } catch {
-            AppLogger.data.error("ModelContainer retry with CloudKit failed: \(error)")
+            AppLogger.data.error("Fresh ModelContainer retry failed: \(error)")
         }
 
-        // Retry 2: disable CloudKit in case stale CloudKit metadata caused the failure.
-        // On Mac, the store may have been synced with a schema version that no longer
-        // matches the current migration plan. Creating without CloudKit avoids the
-        // metadata reconciliation that triggers the repeated 134504 error.
+        // Retry 2: fresh container without CloudKit either.
         do {
             let noCloudConfig = ModelConfiguration(
                 url: configuration.url,
                 cloudKitDatabase: .none
             )
-            let container = try makeModelContainer(configuration: noCloudConfig)
+            let container = try makeFreshModelContainer(configuration: noCloudConfig)
             AppLogger.data.info("ModelContainer recovered without CloudKit. Data will sync on next runtime rebuild.")
             return container
         } catch {
-            AppLogger.data.error("ModelContainer retry without CloudKit also failed: \(error)")
+            AppLogger.data.error("Fresh ModelContainer retry without CloudKit also failed: \(error)")
             return makeInMemoryFallbackContainer()
         }
     }

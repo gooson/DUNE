@@ -40,12 +40,14 @@ struct DUNEWatchApp: App {
     }
 
     private static func makeInMemoryFallbackContainer() -> ModelContainer {
+        logger.error("Falling back to in-memory ModelContainer due to persistent store failure")
         let fallbackConfiguration = ModelConfiguration(isStoredInMemoryOnly: true)
         do {
-            logger.error("Falling back to in-memory ModelContainer due to persistent store failure")
-            return try makeModelContainer(configuration: fallbackConfiguration)
+            // Skip migration plan — in-memory stores have nothing to migrate.
+            return try makeFreshModelContainer(configuration: fallbackConfiguration)
         } catch {
-            fatalError("Failed to create fallback in-memory ModelContainer: \(error)")
+            // swiftlint:disable:next force_try
+            return try! ModelContainer(for: Schema([]), configurations: ModelConfiguration(isStoredInMemoryOnly: true))
         }
     }
 
@@ -91,6 +93,14 @@ struct DUNEWatchApp: App {
         }
     }
 
+    /// Create a ModelContainer WITHOUT the migration plan — for fresh stores after deletion.
+    private static func makeFreshModelContainer(configuration: ModelConfiguration) throws -> ModelContainer {
+        try ModelContainer(
+            for: AppMigrationPlan.currentSchema,
+            configurations: configuration
+        )
+    }
+
     private static func recoverModelContainer(after error: Error, configuration: ModelConfiguration) -> ModelContainer {
         let reflectedError = String(reflecting: error)
         guard PersistentStoreRecovery.shouldDeleteStore(after: error) else {
@@ -101,22 +111,26 @@ struct DUNEWatchApp: App {
         logger.error("Deleting persistent store after migration compatibility failure: \(reflectedError, privacy: .private)")
         deleteStoreFiles(at: configuration.url)
 
+        // Retry 1: fresh container WITHOUT migration plan (deleted store needs no migration).
         do {
-            return try makeModelContainer(configuration: configuration)
+            let container = try makeFreshModelContainer(configuration: configuration)
+            logger.info("ModelContainer recovered with fresh store (no migration plan).")
+            return container
         } catch {
-            logger.error("ModelContainer retry with CloudKit failed: \(error.localizedDescription, privacy: .public)")
+            logger.error("Fresh ModelContainer retry failed: \(error.localizedDescription, privacy: .public)")
         }
 
+        // Retry 2: fresh container without CloudKit either.
         do {
             let noCloudConfig = ModelConfiguration(
                 url: configuration.url,
                 cloudKitDatabase: .none
             )
-            let container = try makeModelContainer(configuration: noCloudConfig)
+            let container = try makeFreshModelContainer(configuration: noCloudConfig)
             logger.info("ModelContainer recovered without CloudKit.")
             return container
         } catch {
-            logger.error("ModelContainer retry without CloudKit also failed: \(error.localizedDescription, privacy: .public)")
+            logger.error("Fresh ModelContainer retry without CloudKit also failed: \(error.localizedDescription, privacy: .public)")
             return makeInMemoryFallbackContainer()
         }
     }
