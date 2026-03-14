@@ -11,6 +11,10 @@ struct SharedHealthSnapshot: Sendable {
         case yesterdaySleepStages
         case latestSleepStages
         case sleepDailyDurations
+        case todaySteps
+        case todayExercise
+        case latestWeight
+        case latestBMI
     }
 
     struct RHRSample: Sendable {
@@ -27,6 +31,16 @@ struct SharedHealthSnapshot: Sendable {
         let date: Date
         let totalMinutes: Double
         let stageBreakdown: [SleepStage.Stage: Double]
+    }
+
+    struct WeightSample: Sendable {
+        let value: Double
+        let date: Date
+    }
+
+    struct BMISample: Sendable {
+        let value: Double
+        let date: Date
     }
 
     struct EffectiveRHR: Sendable {
@@ -51,6 +65,11 @@ struct SharedHealthSnapshot: Sendable {
     let yesterdaySleepStages: [SleepStage]
     let latestSleepStages: SleepStagesSample?
     let sleepDailyDurations: [SleepDailyDuration]
+
+    var todaySteps: Double? = nil
+    var todayExerciseMinutes: Double? = nil
+    var latestWeight: WeightSample? = nil
+    var latestBMI: BMISample? = nil
 
     let conditionScore: ConditionScore?
     let baselineStatus: BaselineStatus?
