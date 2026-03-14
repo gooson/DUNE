@@ -253,7 +253,9 @@ final class DashboardViewModel {
 
         if failureCount > 0 && !allMetrics.isEmpty {
             errorMessage = String(localized: "Some data could not be loaded (\(failureCount) of 6 sources)")
-        } else if failureCount > 0 && allMetrics.isEmpty {
+        } else if failureCount > 0 && allMetrics.isEmpty && !isMirroredReadOnlyMode {
+            // On Mac (mirrored mode), empty data means CloudKit hasn't synced yet —
+            // show CloudSyncWaitingView instead of an error.
             errorMessage = String(localized: "Failed to load health data")
         }
 
