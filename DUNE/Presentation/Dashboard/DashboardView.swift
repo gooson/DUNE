@@ -442,7 +442,8 @@ struct DashboardView: View {
     private var notificationBellIcon: some View {
         ZStack(alignment: .topTrailing) {
             Image(systemName: "bell")
-                .padding([.top, .trailing], 6)
+                .frame(width: 22, height: 22)
+                .padding([.top, .trailing], 4)
 
             if unreadNotificationCount > 0 {
                 Text(unreadBadgeLabel)
