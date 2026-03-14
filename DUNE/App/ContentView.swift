@@ -264,14 +264,14 @@ struct ContentView: View {
                 }
             }
         }
-        .onReceive(NotificationCenter.default.publisher(for: NotificationInboxManager.routeRequestedNotification)) { notification in
+        .onReceive(NotificationCenter.default.mainThreadPublisher(for: NotificationInboxManager.routeRequestedNotification)) { notification in
             guard let request = NotificationInboxManager.navigationRequest(from: notification) else { return }
             guard notificationInboxManager.consumePendingNavigationRequest(ifMatching: request) else { return }
             MainActor.assumeIsolated {
                 handleNotificationNavigationRequest(request)
             }
         }
-        .onReceive(NotificationCenter.default.publisher(for: .simulatorAdvancedMockDataDidChange)) { _ in
+        .onReceive(NotificationCenter.default.mainThreadPublisher(for: .simulatorAdvancedMockDataDidChange)) { _ in
             Task { @MainActor in
                 if let refreshCoordinator {
                     await refreshCoordinator.forceRefresh()

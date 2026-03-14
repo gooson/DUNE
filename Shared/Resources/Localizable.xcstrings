@@ -8011,6 +8011,23 @@
         }
       }
     },
+    "Dismiss": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "閉じる"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "닫기"
+          }
+        }
+      }
+    },
     "Distance": {
       "localizations": {
         "ja": {
@@ -20568,6 +20585,29 @@
         }
       }
     },
+    "Repeated %lld times, avg %lld min": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repeated %lld times, avg %lld min"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld回繰り返し、平均%lld分"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld회 반복, 평균 %lld분"
+          }
+        }
+      }
+    },
     "Reps": {
       "localizations": {
         "ja": {
@@ -21719,6 +21759,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "저장"
+          }
+        }
+      }
+    },
+    "Save as Template": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "テンプレートとして保存"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "템플릿으로 저장"
           }
         }
       }
@@ -30719,6 +30776,23 @@
         }
       }
     },
+    "Your Routine": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あなたのルーティン"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "나의 루틴"
+          }
+        }
+      }
+    },
     "Your sleep score is trending downward. Try reducing screen time an hour before bed and limiting caffeine to before 2 PM.": {
       "extractionState": "manual",
       "localizations": {
@@ -30816,6 +30890,642 @@
           "stringUnit": {
             "state": "translated",
             "value": "安定"
+          }
+        }
+      }
+    },
+    "Excellent condition today": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "오늘 컨디션이 최상입니다"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今日のコンディションは最高です"
+          }
+        }
+      }
+    },
+    "Good condition today": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "오늘 컨디션이 좋습니다"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今日のコンディションは良好です"
+          }
+        }
+      }
+    },
+    "Fair condition today": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "오늘 컨디션이 보통입니다"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今日のコンディションは普通です"
+          }
+        }
+      }
+    },
+    "Your body needs rest": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "오늘은 쉬어가세요"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "体が休息を必要としています"
+          }
+        }
+      }
+    },
+    "Recovery recommended": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "회복이 필요합니다"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "回復をおすすめします"
+          }
+        }
+      }
+    },
+    "You slept %lldh %lldm last night.": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "어젯밤 %lld시간 %lld분 수면했어요."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "昨夜は%lld時間%lld分眠りました。"
+          }
+        }
+      }
+    },
+    "You slept %lld hours last night.": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "어젯밤 %lld시간 수면했어요."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "昨夜は%lld時間眠りました。"
+          }
+        }
+      }
+    },
+    "HRV is up %lldms from yesterday.": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HRV가 어제보다 %lldms 상승했어요."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HRVが昨日より%lldms上昇しました。"
+          }
+        }
+      }
+    },
+    "HRV is down %lldms from yesterday.": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HRV가 어제보다 %lldms 하락했어요."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HRVが昨日より%lldms低下しました。"
+          }
+        }
+      }
+    },
+    "RHR dropped %lldbpm — a positive sign.": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "안정시 심박수가 %lldbpm 떨어졌어요 — 좋은 신호예요."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "安静時心拍数が%lldbpm低下 — 良い兆候です。"
+          }
+        }
+      }
+    },
+    "RHR is up %lldbpm from yesterday.": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "안정시 심박수가 어제보다 %lldbpm 올랐어요."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "安静時心拍数が昨日より%lldbpm上昇しました。"
+          }
+        }
+      }
+    },
+    "Your condition score is %lld today.": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "오늘의 컨디션 점수는 %lld점이에요."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今日のコンディションスコアは%lld点です。"
+          }
+        }
+      }
+    },
+    "Great day for a challenging workout.": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "도전적인 운동에 좋은 날이에요."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "チャレンジングなワークアウトに最適な日です。"
+          }
+        }
+      }
+    },
+    "A moderate workout fits your condition well.": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "적당한 운동이 컨디션에 잘 맞아요."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "適度なワークアウトがコンディションに合っています。"
+          }
+        }
+      }
+    },
+    "Keep it light today to help recovery.": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "회복을 위해 오늘은 가볍게 해보세요."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "回復のため、今日は軽めにしましょう。"
+          }
+        }
+      }
+    },
+    "Focus on rest and gentle stretching.": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "휴식과 가벼운 스트레칭에 집중하세요."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "休息と軽いストレッチに集中しましょう。"
+          }
+        }
+      }
+    },
+    "Sleep debt: %@h — try sleeping earlier tonight.": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "수면 부채: %@시간 — 오늘 일찍 자보세요."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "睡眠負債: %@時間 — 今夜は早めに就寝しましょう。"
+          }
+        }
+      }
+    },
+    "Trending up this week": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이번 주 상승세"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今週は上昇傾向"
+          }
+        }
+      }
+    },
+    "Trending down this week": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이번 주 하락세"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今週は下降傾向"
+          }
+        }
+      }
+    },
+    "Your week so far": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이번 주 현황"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今週のまとめ"
+          }
+        }
+      }
+    },
+    "Average condition: %lld points.": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "평균 컨디션: %lld점."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "平均コンディション: %lld点。"
+          }
+        }
+      }
+    },
+    "Weekly exercise goal completed!": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "주간 운동 목표 달성!"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "週間運動目標達成！"
+          }
+        }
+      }
+    },
+    "%lld/%lld exercise days done, %lld to go.": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "운동 %lld/%lld일 완료, %lld일 남았어요."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "運動%lld/%lld日完了、残り%lld日。"
+          }
+        }
+      }
+    },
+    "No workouts yet this week — start today!": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이번 주 아직 운동 기록이 없어요 — 오늘 시작해보세요!"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今週はまだ運動していません — 今日始めましょう！"
+          }
+        }
+      }
+    },
+    "Check weather conditions before heading out.": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "외출 전 날씨를 확인하세요."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "外出前に天気を確認しましょう。"
+          }
+        }
+      }
+    },
+    "Outdoor fitness level: %@.": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "야외 운동 적합도: %@."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "屋外フィットネスレベル: %@。"
+          }
+        }
+      }
+    },
+    "High Intensity": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "고강도"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "高強度"
+          }
+        }
+      }
+    },
+    "Moderate Intensity": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "중강도"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "中強度"
+          }
+        }
+      }
+    },
+    "Light Intensity": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "저강도"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "低強度"
+          }
+        }
+      }
+    },
+    "Rest or Light Activity": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "휴식 또는 가벼운 활동"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "休息または軽い活動"
+          }
+        }
+      }
+    },
+    "Morning Briefing": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "모닝 브리핑"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "モーニングブリーフィング"
+          }
+        }
+      }
+    },
+    "Excellent day ahead": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "최고의 하루가 될 거예요"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "素晴らしい一日になりそうです"
+          }
+        }
+      }
+    },
+    "Good day ahead": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "좋은 하루가 될 거예요"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "良い一日になりそうです"
+          }
+        }
+      }
+    },
+    "Rest is important today": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "오늘은 휴식이 중요해요"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今日は休息が大切です"
+          }
+        }
+      }
+    },
+    "Recovery day": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "회복의 날"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "リカバリーデー"
+          }
+        }
+      }
+    },
+    "Good Morning": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "좋은 아침"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "おはようございます"
+          }
+        }
+      }
+    },
+    "Show a daily briefing with your condition, recovery insights, and recommendations when you first open the app each morning.": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "매일 아침 앱을 처음 열면 컨디션, 회복 인사이트, 추천 사항이 담긴 브리핑을 표시합니다."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "毎朝アプリを開くと、コンディション、回復インサイト、おすすめを含むブリーフィングを表示します。"
+          }
+        }
+      }
+    },
+    "Opens your daily briefing": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opens your daily briefing"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "오늘의 브리핑을 엽니다"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今日のブリーフィングを開きます"
+          }
+        }
+      }
+    },
+    "Morning Briefing, %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Morning Briefing, %@"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "모닝 브리핑, %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "モーニングブリーフィング、%@"
           }
         }
       }

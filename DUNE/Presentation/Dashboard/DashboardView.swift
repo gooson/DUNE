@@ -1,15 +1,20 @@
 import SwiftUI
+import SwiftData
 
 struct DashboardView: View {
     @State private var viewModel: DashboardViewModel
     @State private var isShowingPinnedEditor = false
     @State private var isShowingHealthDataQA = false
+    @State private var templateNudgeToSave: WorkoutTemplateRecommendation?
     @State private var hasAppeared = false
+    @State private var isShowingBriefing = false
+    @AppStorage("morningBriefingDisabled") private var isBriefingDisabled = false
     @State private var unreadNotificationCount = 0
     @State private var showWhatsNewBadge = false
     @State private var cachedWhatsNewReleases: [WhatsNewReleaseData] = []
     @State private var cachedCurrentRelease: WhatsNewReleaseData?
     @State private var cachedBuildNumber: String = ""
+    @Query(sort: \WorkoutTemplate.updatedAt, order: .reverse) private var templates: [WorkoutTemplate]
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.openURL) private var openURL
     private let inboxManager = NotificationInboxManager.shared
@@ -107,6 +112,15 @@ struct DashboardView: View {
                                 .transition(Self.sectionTransition)
                         }
 
+                        // Morning Briefing entry
+                        if let briefingData = viewModel.briefingData,
+                           !isBriefingDisabled {
+                            BriefingEntryCard(conditionStatus: briefingData.conditionStatus) {
+                                isShowingBriefing = true
+                            }
+                            .transition(Self.sectionTransition)
+                        }
+
                         // Weather + coaching (merged when coaching is weather-category)
                         Group {
                             if let weather = viewModel.weatherSnapshot {
@@ -141,6 +155,20 @@ struct DashboardView: View {
                         if !viewModel.insightCards.isEmpty {
                             insightCardsSection
                                 .transition(Self.sectionTransition)
+                        }
+
+                        // Template nudge
+                        if let nudge = viewModel.templateNudgeRecommendation {
+                            TemplateNudgeCard(
+                                recommendation: nudge,
+                                onSaveAsTemplate: { templateNudgeToSave = nudge },
+                                onDismiss: {
+                                    withAnimation(DS.Animation.standard) {
+                                        viewModel.dismissTemplateNudge()
+                                    }
+                                }
+                            )
+                            .transition(Self.sectionTransition)
                         }
 
                         // Sleep deficit badge
@@ -249,7 +277,7 @@ struct DashboardView: View {
             reloadUnreadCount()
             reloadWhatsNewBadge()
         }
-        .onReceive(NotificationCenter.default.publisher(for: NotificationInboxManager.inboxDidChangeNotification)) { _ in
+        .onReceive(NotificationCenter.default.mainThreadPublisher(for: NotificationInboxManager.inboxDidChangeNotification)) { _ in
             reloadUnreadCount()
         }
         .sheet(isPresented: $isShowingPinnedEditor) {
@@ -260,6 +288,22 @@ struct DashboardView: View {
                 ),
                 allowedCategories: viewModel.availablePinnedCategories
             )
+        }
+        .sheet(isPresented: $isShowingBriefing) {
+            if let briefingData = viewModel.briefingData {
+                MorningBriefingView(data: briefingData)
+            }
+        }
+        .onChange(of: viewModel.briefingData == nil) { _, isNil in
+            if isNil { isShowingBriefing = false }
+        }
+        .sheet(item: $templateNudgeToSave) { nudge in
+            NavigationStack {
+                TemplateFormView(
+                    prefillName: nudge.title,
+                    prefillEntries: []
+                )
+            }
         }
         .sheet(isPresented: $isShowingHealthDataQA) {
             HealthDataQASheet(
@@ -288,6 +332,13 @@ struct DashboardView: View {
         .navigationDestination(isPresented: $showSettings) {
             SettingsView()
         }
+        .onChange(of: viewModel.briefingData != nil) { _, hasData in
+            if hasData,
+               !isBriefingDisabled,
+               MorningBriefingViewModel.shouldShowBriefing() {
+                isShowingBriefing = true
+            }
+        }
         .onChange(of: notificationHubSignal) { _, newValue in
             guard newValue > 0 else { return }
             showNotificationHub = true
@@ -311,6 +362,7 @@ struct DashboardView: View {
         h.combine(viewModel.weatherSnapshot != nil)
         h.combine(viewModel.errorMessage != nil)
         h.combine(viewModel.insightCards.count)
+        h.combine(viewModel.templateNudgeRecommendation != nil)
         h.combine(viewModel.pinnedCards.count)
         return h.finalize()
     }
@@ -360,6 +412,12 @@ struct DashboardView: View {
         }
         reloadUnreadCount()
         reloadWhatsNewBadge()
+
+        // Template nudge (non-blocking, after main data loaded)
+        let snapshots = templates.map {
+            TemplateSnapshot(exerciseDefinitionIDs: $0.exerciseEntries.map(\.exerciseDefinitionID))
+        }
+        await viewModel.loadTemplateNudge(existingTemplateSnapshots: snapshots)
     }
 
     @ViewBuilder

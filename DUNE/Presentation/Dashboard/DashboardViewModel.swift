@@ -18,11 +18,15 @@ final class DashboardViewModel {
     var focusInsight: CoachingInsight?
     private(set) var insightCards: [InsightCardData] = []
     var workoutSuggestion: WorkoutSuggestion?
+    var templateNudgeRecommendation: WorkoutTemplateRecommendation?
     var heroBaselineDetails: [BaselineDetail] = []
     var pinnedCategories: [HealthMetric.Category]
     var baselineDeltasByMetricID: [String: MetricBaselineDelta] = [:]
     private(set) var sleepDeficitAnalysis: SleepDeficitAnalysis?
     private var hasLoadedOnce = false
+
+    /// Assembled briefing data for the morning briefing sheet.
+    private(set) var briefingData: MorningBriefingData?
 
     // Weather (Correction #8/#52: cached, not computed — accessed in SwiftUI body)
     private(set) var weatherSnapshot: WeatherSnapshot?
@@ -109,6 +113,8 @@ final class DashboardViewModel {
     private let trendService = TrendAnalysisService()
     private let dismissStore = InsightCardDismissStore.shared
     private let scoreRefreshService: ScoreRefreshService?
+    private let templateRecommendationService: any WorkoutTemplateRecommending
+    private let nudgeDismissStore: TemplateNudgeDismissStore
 
     /// Hourly sparkline data for the condition hero card, sourced from ScoreRefreshService.
     var conditionSparkline: HourlySparklineData {
@@ -126,7 +132,9 @@ final class DashboardViewModel {
         sharedHealthDataService: SharedHealthDataService? = nil,
         weatherProvider: WeatherProviding? = nil,
         coachingMessageEnhancer: (any CoachingMessageEnhancing)? = AICoachingMessageService(),
-        scoreRefreshService: ScoreRefreshService? = nil
+        scoreRefreshService: ScoreRefreshService? = nil,
+        templateRecommendationService: (any WorkoutTemplateRecommending)? = nil,
+        nudgeDismissStore: TemplateNudgeDismissStore = .shared
     ) {
         self.healthKitManager = healthKitManager
         self.hrvService = hrvService ?? HRVQueryService(manager: healthKitManager)
@@ -140,6 +148,8 @@ final class DashboardViewModel {
         self.weatherProvider = weatherProvider ?? WeatherProvider(locationService: LocationService())
         self.coachingMessageEnhancer = coachingMessageEnhancer
         self.scoreRefreshService = scoreRefreshService
+        self.templateRecommendationService = templateRecommendationService ?? WorkoutTemplateRecommendationService()
+        self.nudgeDismissStore = nudgeDismissStore
         self.pinnedCategories = pinnedMetricsStore.load()
     }
 
@@ -249,6 +259,7 @@ final class DashboardViewModel {
         coachingMessage = focusInsight?.message ?? buildCoachingMessage()
         enhanceCoachingMessageIfAvailable()
         heroBaselineDetails = buildHeroBaselineDetails()
+        briefingData = buildBriefingData()
         hasLoadedOnce = true
         lastUpdated = Date()
         WidgetDataWriter.writeConditionScore(conditionScore)
@@ -263,6 +274,37 @@ final class DashboardViewModel {
         }
 
         isLoading = false
+    }
+
+    /// Load template nudge recommendation using existing templates from View's @Query.
+    func loadTemplateNudge(existingTemplateSnapshots: [TemplateSnapshot]) async {
+        guard !Self.shouldUseSeededUITestFixtures else {
+            templateNudgeRecommendation = nil
+            return
+        }
+        do {
+            let workouts = try await workoutService.fetchWorkouts(days: 42)
+            let recommendations = templateRecommendationService.recommendTemplates(
+                from: workouts,
+                config: .default,
+                referenceDate: Date()
+            )
+            templateNudgeRecommendation = recommendations.first { rec in
+                !TemplateOverlapChecker.isAlreadyCovered(
+                    recommendation: rec,
+                    existingTemplates: existingTemplateSnapshots
+                ) && !nudgeDismissStore.isDismissed(rec.id)
+            }
+        } catch {
+            AppLogger.ui.info("Template nudge load skipped: \(error.localizedDescription)")
+            templateNudgeRecommendation = nil
+        }
+    }
+
+    func dismissTemplateNudge() {
+        guard let rec = templateNudgeRecommendation else { return }
+        nudgeDismissStore.dismiss(rec.id)
+        templateNudgeRecommendation = nil
     }
 
     private func safeHRVFetch(
@@ -1133,6 +1175,48 @@ final class DashboardViewModel {
             return String(localized: "No score yet. A short workout today helps maintain your weekly goal rhythm.")
         }
         return String(localized: "No score yet. Keep your routine steady and collect more recovery data.")
+    }
+
+    private func buildBriefingData() -> MorningBriefingData? {
+        guard let score = conditionScore else { return nil }
+        let detail = score.detail
+        let sleepMetric = sortedMetrics.first { $0.category == .sleep }
+        let hrvDelta = baselineDeltasByMetricID["hrv"]?.yesterdayDelta
+        let rhrDelta = baselineDeltasByMetricID["rhr"]?.yesterdayDelta
+
+        // Find recovery/training insights from coaching
+        let recoveryInsight = insightCards.first { $0.category == .recovery }?.message
+        let trainingInsight = insightCards.first { $0.category == .training }?.message
+
+        // Sleep debt from deficit analysis
+        let sleepDebtHours: Double? = {
+            guard let deficit = sleepDeficitAnalysis, deficit.weeklyDeficit > 0 else { return nil }
+            return deficit.weeklyDeficit / 60.0
+        }()
+
+        return MorningBriefingData(
+            conditionScore: score.score,
+            conditionStatus: score.status,
+            hrvValue: detail?.todayHRV,
+            hrvDelta: hrvDelta,
+            rhrValue: detail?.displayRHR,
+            rhrDelta: rhrDelta,
+            sleepDurationMinutes: sleepMetric?.value,
+            deepSleepMinutes: nil,
+            sleepDeltaMinutes: nil,
+            recoveryInsight: recoveryInsight,
+            trainingInsight: trainingInsight,
+            sleepDebtHours: sleepDebtHours,
+            recentScores: recentScores.map { .init(date: $0.date, score: $0.score) },
+            weeklyAverage: recentScores.isEmpty ? score.score : recentScores.map(\.score).reduce(0, +) / recentScores.count,
+            previousWeekAverage: nil,
+            activeDays: activeDaysThisWeek,
+            goalDays: weeklyGoalDays,
+            weatherCondition: weatherSnapshot?.condition.label,
+            temperature: weatherSnapshot?.temperature,
+            outdoorFitnessLevel: weatherSnapshot?.outdoorFitnessLevel.displayName,
+            weatherInsight: focusInsight?.category == .weather ? focusInsight?.message : nil
+        )
     }
 
     private func buildHeroBaselineDetails() -> [BaselineDetail] {

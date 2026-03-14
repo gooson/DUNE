@@ -38,15 +38,15 @@ private struct MockWorkoutGenerationLibrary: ExerciseLibraryQuerying {
 @Suite("AIWorkoutTemplateGenerator")
 struct AIWorkoutTemplateGeneratorTests {
     private let sut = AIWorkoutTemplateGenerator()
+    private let unavailableSUT = AIWorkoutTemplateGenerator(availabilityProvider: { false })
 
-    @Test("Returns unavailable error on simulator when Foundation Models are not available")
-    func unavailableOnSimulator() async {
-        let sut = AIWorkoutTemplateGenerator(availabilityProvider: { false })
+    @Test("Returns unavailable error when Foundation Models are not available")
+    func unavailableWhenFoundationModelsAreUnavailable() async {
         let request = WorkoutTemplateGenerationRequest(prompt: "Build a shoulder workout")
 
         do {
-            _ = try await sut.generateTemplate(from: request, library: makeLibrary())
-            Issue.record("Expected workout generation to fail on simulator")
+            _ = try await unavailableSUT.generateTemplate(from: request, library: makeLibrary())
+            Issue.record("Expected workout generation to fail when availability is disabled")
         } catch let error as WorkoutTemplateGenerationError {
             #expect(error == .unavailable)
         } catch {

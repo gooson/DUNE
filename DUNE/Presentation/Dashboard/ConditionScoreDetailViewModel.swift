@@ -50,7 +50,7 @@ final class ConditionScoreDetailViewModel {
 
         do {
             if selectedPeriod == .day {
-                await loadHourlyData()
+                try await loadHourlyData()
             } else {
                 try await loadScoreData()
             }
@@ -255,21 +255,47 @@ final class ConditionScoreDetailViewModel {
 
     // MARK: - Hourly Data (Day Period)
 
-    private func loadHourlyData() async {
-        guard let service = scoreRefreshService else {
-            chartData = []
-            summaryStats = nil
-            return
+    private func loadHourlyData() async throws {
+        let calendar = Calendar.current
+        let now = Date()
+        let startOfDay = calendar.startOfDay(for: now)
+        let baselineStart = calendar.date(
+            byAdding: .day,
+            value: -CalculateConditionScoreUseCase.conditionWindowDays,
+            to: startOfDay
+        ) ?? startOfDay
+
+        async let samplesTask = hrvService.fetchHRVSamples(
+            days: CalculateConditionScoreUseCase.conditionWindowDays + 1
+        )
+        async let rhrTask = hrvService.fetchRHRCollection(
+            start: baselineStart,
+            end: now,
+            interval: DateComponents(day: 1)
+        )
+
+        let (samples, rhrCollection) = try await (samplesTask, rhrTask)
+        let rhrDailyAverages = rhrCollection
+            .filter { $0.average > 0 && $0.average.isFinite }
+            .map { CalculateConditionScoreUseCase.Input.RHRDailyAverage(date: $0.date, value: $0.average) }
+        let hourlyEvaluationDates = Dictionary(grouping: samples.filter { $0.date >= startOfDay && $0.date <= now }) {
+            calendar.dateInterval(of: .hour, for: $0.date)?.start ?? $0.date
+        }
+        .compactMap { hourDate, samplesInHour in
+            samplesInHour.map(\.date).max().map { (hourDate: hourDate, evaluationDate: $0) }
+        }
+        .sorted { $0.hourDate < $1.hourDate }
+
+        chartData = hourlyEvaluationDates.compactMap { item in
+            let output = scoreUseCase.executeIntraday(input: .init(
+                hrvSamples: samples,
+                rhrDailyAverages: rhrDailyAverages,
+                evaluationDate: item.evaluationDate
+            ))
+            guard let score = output.score else { return nil }
+            return ChartDataPoint(date: item.hourDate, value: Double(score.score))
         }
 
-        let snapshots = await service.fetchSnapshots(for: Date())
-
-        chartData = snapshots.compactMap { snap in
-            guard let score = snap.conditionScore else { return nil }
-            return ChartDataPoint(date: snap.date, value: score)
-        }
-
-        // Summary from hourly data
         let values = chartData.map(\.value)
         summaryStats = HealthDataAggregator.computeSummary(from: values, previousPeriodValues: nil)
     }

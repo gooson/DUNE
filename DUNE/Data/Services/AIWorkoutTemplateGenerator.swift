@@ -11,7 +11,7 @@ struct AIWorkoutTemplateGenerator: NaturalLanguageWorkoutGenerating, Sendable {
 
     init(
         recommendationService: any WorkoutRecommending = WorkoutRecommendationService(),
-        availabilityProvider: @escaping @Sendable () -> Bool = { AIWorkoutTemplateGenerator.isAvailable }
+        availabilityProvider: @escaping @Sendable () -> Bool = { Self.isAvailable }
     ) {
         self.recommendationService = recommendationService
         self.availabilityProvider = availabilityProvider
@@ -29,7 +29,7 @@ struct AIWorkoutTemplateGenerator: NaturalLanguageWorkoutGenerating, Sendable {
         guard !trimmedPrompt.isEmpty else {
             throw WorkoutTemplateGenerationError.emptyPrompt
         }
-        guard availabilityProvider() else {
+        guard isAvailable else {
             throw WorkoutTemplateGenerationError.unavailable
         }
         let promptIntent = Self.promptIntent(for: trimmedPrompt)

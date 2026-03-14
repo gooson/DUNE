@@ -138,8 +138,8 @@ struct HealthDataQAServiceTests {
             sleepService: MockQASleepService(),
             workoutService: MockQAWorkoutService(),
             hrvService: MockQAHRVService(),
-            availabilityProvider: { false },
-            nowProvider: { now }
+            nowProvider: { now },
+            availabilityProvider: { false }
         )
 
         let reply = await service.ask("How did I sleep this week?")

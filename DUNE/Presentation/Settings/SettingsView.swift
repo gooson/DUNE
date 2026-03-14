@@ -25,6 +25,7 @@ struct SettingsView: View {
             workoutDefaultsSection
             exerciseDefaultsSection
             NotificationSettingsSection()
+            morningBriefingSection
             appearanceSection
             if SimulatorAdvancedMockDataModeStore.isSimulatorAvailable {
                 simulatorMockDataSection
@@ -128,6 +129,26 @@ struct SettingsView: View {
             Text("Per-Exercise")
         } footer: {
             Text("Set default values and choose exercises that should stay near the top of Quick Start.")
+        }
+    }
+
+    // MARK: - Morning Briefing
+
+    @State private var isMorningBriefingEnabled = MorningBriefingViewModel.isEnabled
+
+    private var morningBriefingSection: some View {
+        Section {
+            Toggle(isOn: $isMorningBriefingEnabled) {
+                Label("Morning Briefing", systemImage: "sun.horizon.fill")
+            }
+            .onChange(of: isMorningBriefingEnabled) { _, newValue in
+                MorningBriefingViewModel.isEnabled = newValue
+            }
+            .accessibilityIdentifier("settings-row-morning-briefing")
+        } header: {
+            Text("Morning Briefing")
+        } footer: {
+            Text("Show a daily briefing with your condition, recovery insights, and recommendations when you first open the app each morning.")
         }
     }
 

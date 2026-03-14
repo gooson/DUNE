@@ -6,6 +6,10 @@ actor HealthDataQAService: HealthDataQuestionAnswering {
         SystemLanguageModel.default.isAvailable
     }
 
+    static func defaultAvailabilityProvider() -> Bool {
+        isAvailable
+    }
+
     private let contextBuilder: HealthDataQAContextBuilder
     private let nowProvider: @Sendable () -> Date
     private let availabilityProvider: @Sendable () -> Bool
@@ -16,8 +20,8 @@ actor HealthDataQAService: HealthDataQuestionAnswering {
         sleepService: any SleepQuerying = SleepQueryService(manager: .shared),
         workoutService: any WorkoutQuerying = WorkoutQueryService(manager: .shared),
         hrvService: any HRVQuerying = HRVQueryService(manager: .shared),
-        availabilityProvider: @escaping @Sendable () -> Bool = { HealthDataQAService.isAvailable },
-        nowProvider: @escaping @Sendable () -> Date = Date.init
+        nowProvider: @escaping @Sendable () -> Date = Date.init,
+        availabilityProvider: @escaping @Sendable () -> Bool = HealthDataQAService.defaultAvailabilityProvider
     ) {
         self.contextBuilder = HealthDataQAContextBuilder(
             sharedHealthDataService: sharedHealthDataService,
