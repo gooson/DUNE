@@ -15,6 +15,59 @@ private struct StubHRVService: HRVQuerying {
     func fetchRHRCollection(start: Date, end: Date, interval: DateComponents) async throws -> [(date: Date, min: Double, max: Double, average: Double)] { rhrCollection }
 }
 
+private actor SequencedMetricHRVService: HRVQuerying {
+    private let firstCollection: [(date: Date, average: Double)]
+    private let secondCollection: [(date: Date, average: Double)]
+    private var collectionFetchCount = 0
+    private var didStartFirstFetch = false
+    private var fetchStartedContinuation: CheckedContinuation<Void, Never>?
+    private var fetchReleaseContinuation: CheckedContinuation<Void, Never>?
+
+    init(
+        firstCollection: [(date: Date, average: Double)],
+        secondCollection: [(date: Date, average: Double)]
+    ) {
+        self.firstCollection = firstCollection
+        self.secondCollection = secondCollection
+    }
+
+    func fetchHRVSamples(days: Int) async throws -> [HRVSample] { [] }
+    func fetchRestingHeartRate(for date: Date) async throws -> Double? { nil }
+    func fetchLatestRestingHeartRate(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
+
+    func fetchHRVCollection(
+        start: Date,
+        end: Date,
+        interval: DateComponents
+    ) async throws -> [(date: Date, average: Double)] {
+        collectionFetchCount += 1
+        if collectionFetchCount == 1 {
+            didStartFirstFetch = true
+            fetchStartedContinuation?.resume()
+            fetchStartedContinuation = nil
+            await withCheckedContinuation { continuation in
+                fetchReleaseContinuation = continuation
+            }
+            return firstCollection
+        }
+        return secondCollection
+    }
+
+    func fetchRHRCollection(start: Date, end: Date, interval: DateComponents) async throws -> [(date: Date, min: Double, max: Double, average: Double)] { [] }
+
+    func waitUntilFirstFetchStarts() async {
+        if didStartFirstFetch { return }
+        await withCheckedContinuation { continuation in
+            fetchStartedContinuation = continuation
+        }
+    }
+
+    func resumeFirstFetch() {
+        fetchReleaseContinuation?.resume()
+        fetchReleaseContinuation = nil
+    }
+}
+
 private struct StubSleepService: SleepQuerying {
     var dailySleep: [(date: Date, totalMinutes: Double, stageBreakdown: [SleepStage.Stage: Double])] = []
     var todayStages: [SleepStage] = []
@@ -263,6 +316,39 @@ struct MetricDetailViewModelTests {
         #expect(vm.chartData.isEmpty)
         #expect(vm.summaryStats == nil)
         #expect(vm.highlights.isEmpty)
+    }
+
+    @Test("latest metric load ignores an older delayed response")
+    func latestMetricLoadWinsOverOlderResponse() async {
+        let today = calendar.startOfDay(for: Date())
+        let service = SequencedMetricHRVService(
+            firstCollection: [
+                (date: calendar.date(byAdding: .day, value: -1, to: today)!, average: 42),
+                (date: today, average: 48),
+            ],
+            secondCollection: [
+                (date: today, average: 60),
+            ]
+        )
+        let vm = MetricDetailViewModel(hrvService: service)
+        vm.configure(category: .hrv, currentValue: 60, lastUpdated: Date())
+
+        let firstTask = Task {
+            await vm.loadData()
+        }
+
+        await service.waitUntilFirstFetchStarts()
+        await vm.loadData()
+
+        #expect(vm.chartData.count == 1)
+        #expect(vm.chartData.first?.value == 60)
+
+        await service.resumeFirstFetch()
+        await firstTask.value
+
+        #expect(vm.chartData.count == 1)
+        #expect(vm.chartData.first?.value == 60)
+        #expect(vm.isLoading == false)
     }
 
     // MARK: - Highlights

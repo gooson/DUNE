@@ -106,6 +106,7 @@ final class ActivityViewModel {
     /// Cached recovery modifiers from the most recent fetch.
     private var sleepModifier: Double = 1.0
     private var readinessModifier: Double = 1.0
+    private var loadRequestID = 0
     private var didAttemptCardioSeed = false
     private var cardioSeedTask: Task<Void, Never>?
 
@@ -524,14 +525,13 @@ final class ActivityViewModel {
     }
 
     func loadActivityData() async {
-        guard !isLoading else { return }
+        let requestID = beginLoadRequest()
         isLoading = true
         errorMessage = nil
 
-        // Always reset isLoading on ALL exit paths — including Task cancellation.
-        // Without defer, Task.isCancelled guards leave isLoading stuck at true,
-        // permanently blocking future loads. Safe for Void async functions.
-        defer { isLoading = false }
+        // Only the active request may clear loading; stale cancelled requests must not
+        // hide a newer in-flight refresh.
+        defer { finishLoadRequest(requestID) }
 
         let healthKitAvailable = healthKitManager.isAvailable
         isMirroredReadOnlyMode = !healthKitAvailable
@@ -551,7 +551,7 @@ final class ActivityViewModel {
             exerciseTask, stepsTask, workoutsTask, trainingLoadTask, sleepTask, readinessTask, sleepDailyTask
         )
 
-        guard !Task.isCancelled else { return }
+        guard isCurrentLoadRequest(requestID) else { return }
 
         weeklyExerciseMinutes = exerciseResult.weeklyData
         todayExercise = exerciseResult.todayMetric
@@ -639,11 +639,25 @@ final class ActivityViewModel {
                 readinessScore: readiness.score
             )
         }
+        guard isCurrentLoadRequest(requestID) else { return }
 
         // Compute derived stats (PRs, streak, frequency, weekly stats)
         recomputeDerivedStats()
+    }
 
-        guard !Task.isCancelled else { return }
+    private func beginLoadRequest() -> Int {
+        loadRequestID += 1
+        return loadRequestID
+    }
+
+    private func isCurrentLoadRequest(_ requestID: Int) -> Bool {
+        requestID == loadRequestID && !Task.isCancelled
+    }
+
+    private func finishLoadRequest(_ requestID: Int) {
+        if requestID == loadRequestID {
+            isLoading = false
+        }
     }
 
     // MARK: - Personal Record Helpers
