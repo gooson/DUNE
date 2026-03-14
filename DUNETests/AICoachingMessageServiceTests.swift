@@ -1,4 +1,5 @@
 import Foundation
+import FoundationModels
 import Testing
 @testable import DUNE
 

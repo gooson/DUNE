@@ -21,6 +21,48 @@ private struct MockWeeklyStatsWorkoutService: WorkoutQuerying {
     }
 }
 
+private actor SequencedWeeklyStatsWorkoutService: WorkoutQuerying {
+    private let firstWorkouts: [WorkoutSummary]
+    private let secondWorkouts: [WorkoutSummary]
+    private var fetchCount = 0
+    private var didStartFirstFetch = false
+    private var fetchStartedContinuation: CheckedContinuation<Void, Never>?
+    private var fetchReleaseContinuation: CheckedContinuation<Void, Never>?
+
+    init(firstWorkouts: [WorkoutSummary], secondWorkouts: [WorkoutSummary]) {
+        self.firstWorkouts = firstWorkouts
+        self.secondWorkouts = secondWorkouts
+    }
+
+    func fetchWorkouts(days: Int) async throws -> [WorkoutSummary] { [] }
+
+    func fetchWorkouts(start: Date, end: Date) async throws -> [WorkoutSummary] {
+        fetchCount += 1
+        if fetchCount == 1 {
+            didStartFirstFetch = true
+            fetchStartedContinuation?.resume()
+            fetchStartedContinuation = nil
+            await withCheckedContinuation { continuation in
+                fetchReleaseContinuation = continuation
+            }
+            return firstWorkouts
+        }
+        return secondWorkouts
+    }
+
+    func waitUntilFirstFetchStarts() async {
+        if didStartFirstFetch { return }
+        await withCheckedContinuation { continuation in
+            fetchStartedContinuation = continuation
+        }
+    }
+
+    func resumeFirstFetch() {
+        fetchReleaseContinuation?.resume()
+        fetchReleaseContinuation = nil
+    }
+}
+
 @Suite("WeeklyStatsDetailViewModel")
 @MainActor
 struct WeeklyStatsDetailViewModelTests {
@@ -139,6 +181,31 @@ struct WeeklyStatsDetailViewModelTests {
 
         #expect(vm.errorMessage != nil)
         #expect(vm.summaryStats.isEmpty)
+        #expect(vm.isLoading == false)
+    }
+
+    @Test("newer period load keeps stale older response from overwriting chart history")
+    func newerPeriodLoadWinsOverOlderResponse() async {
+        let service = SequencedWeeklyStatsWorkoutService(
+            firstWorkouts: [makeWorkout(id: "w1", daysAgo: 0, minutes: 30)],
+            secondWorkouts: []
+        )
+        let vm = WeeklyStatsDetailViewModel(workoutService: service)
+
+        let firstTask = Task {
+            await vm.loadData(manualSnapshots: [])
+        }
+
+        await service.waitUntilFirstFetchStarts()
+        vm.selectedPeriod = .thisMonth
+        await vm.loadData(manualSnapshots: [])
+
+        #expect(vm.chartDailyBreakdown.count == 60)
+
+        await service.resumeFirstFetch()
+        await firstTask.value
+
+        #expect(vm.chartDailyBreakdown.count == 60)
         #expect(vm.isLoading == false)
     }
 }

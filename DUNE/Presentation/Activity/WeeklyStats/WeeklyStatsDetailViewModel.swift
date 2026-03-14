@@ -71,6 +71,7 @@ final class WeeklyStatsDetailViewModel {
 
     private let workoutService: WorkoutQuerying
     private var loadTask: Task<Void, Never>?
+    private var loadRequestID = 0
 
     init(workoutService: WorkoutQuerying? = nil, healthKitManager: HealthKitManager = .shared) {
         self.workoutService = workoutService ?? WorkoutQueryService(manager: healthKitManager)
@@ -79,9 +80,10 @@ final class WeeklyStatsDetailViewModel {
     // MARK: - Loading
 
     func loadData(manualSnapshots: [ManualExerciseSnapshot]) async {
-        loadTask?.cancel()
+        let requestID = beginLoadRequest()
         isLoading = true
         errorMessage = nil
+        defer { finishLoadRequest(requestID) }
 
         let period = selectedPeriod
         let calendar = Calendar.current
@@ -94,17 +96,14 @@ final class WeeklyStatsDetailViewModel {
         let workoutResult = await fetchWorkouts(start: historyStart, end: historyEnd)
         let workouts = workoutResult.workouts
 
-        guard !Task.isCancelled else {
-            isLoading = false
-            return
-        }
+        guard isCurrentLoadRequest(requestID) else { return }
 
         if workoutResult.didFail && historySnapshots.isEmpty {
             errorMessage = String(localized: "Unable to load data.")
-            isLoading = false
             return
         }
 
+        guard isCurrentLoadRequest(requestID) else { return }
         chartDailyBreakdown = TrainingVolumeAnalysisService.buildHistoryDailyBreakdown(
             workouts: workouts,
             manualRecords: historySnapshots,
@@ -130,25 +129,40 @@ final class WeeklyStatsDetailViewModel {
             period: period.volumePeriod
         )
 
-        guard !Task.isCancelled else {
-            isLoading = false
-            return
-        }
+        guard isCurrentLoadRequest(requestID) else { return }
 
         comparison = result
         rebuildSummaryStats(from: result, period: period)
-
-        isLoading = false
     }
 
     // MARK: - Private
 
     private func triggerReload() {
+        invalidateLoadRequests()
         loadTask?.cancel()
         comparison = nil
         chartDailyBreakdown = []
         summaryStats = []
         isLoading = false
+    }
+
+    private func beginLoadRequest() -> Int {
+        loadRequestID += 1
+        return loadRequestID
+    }
+
+    private func invalidateLoadRequests() {
+        loadRequestID += 1
+    }
+
+    private func isCurrentLoadRequest(_ requestID: Int) -> Bool {
+        requestID == loadRequestID && !Task.isCancelled
+    }
+
+    private func finishLoadRequest(_ requestID: Int) {
+        if requestID == loadRequestID {
+            isLoading = false
+        }
     }
 
     private func fetchWorkouts(start: Date, end: Date) async -> (workouts: [WorkoutSummary], didFail: Bool) {

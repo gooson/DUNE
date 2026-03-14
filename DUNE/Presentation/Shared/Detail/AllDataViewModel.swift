@@ -22,6 +22,7 @@ final class AllDataViewModel {
 
     private var currentPage = 0
     private let pageSize = 30 // days per page
+    private var pageRequestID = 0
 
     init(
         hrvService: HRVQuerying? = nil,
@@ -47,28 +48,26 @@ final class AllDataViewModel {
     }
 
     func loadInitialData() async {
+        resetPageRequests()
         currentPage = 0
         dataPoints = []
         hasMoreData = true
+        isLoading = false
         await loadNextPage()
     }
 
-    private var pageTask: Task<Void, Never>?
-
     func loadNextPage() async {
         guard !isLoading, hasMoreData else { return }
-        pageTask?.cancel()
+        let requestID = beginPageRequest()
         isLoading = true
+        defer { finishPageRequest(requestID) }
 
         let startDay = currentPage * pageSize
         let endDay = startDay + pageSize
 
         do {
             let newPoints = try await fetchData(fromDaysAgo: endDay, toDaysAgo: startDay)
-            guard !Task.isCancelled else {
-                isLoading = false
-                return
-            }
+            guard isCurrentPageRequest(requestID) else { return }
             if newPoints.isEmpty {
                 hasMoreData = false
             } else {
@@ -76,11 +75,10 @@ final class AllDataViewModel {
                 currentPage += 1
             }
         } catch {
+            guard isCurrentPageRequest(requestID) else { return }
             AppLogger.ui.error("AllData load failed: \(error.localizedDescription)")
             hasMoreData = false
         }
-
-        isLoading = false
     }
 
     // MARK: - Grouped Data
@@ -97,6 +95,25 @@ final class AllDataViewModel {
     }
 
     // MARK: - Private
+
+    private func beginPageRequest() -> Int {
+        pageRequestID += 1
+        return pageRequestID
+    }
+
+    private func resetPageRequests() {
+        pageRequestID += 1
+    }
+
+    private func isCurrentPageRequest(_ requestID: Int) -> Bool {
+        requestID == pageRequestID && !Task.isCancelled
+    }
+
+    private func finishPageRequest(_ requestID: Int) {
+        if requestID == pageRequestID {
+            isLoading = false
+        }
+    }
 
     private func fetchData(fromDaysAgo: Int, toDaysAgo: Int) async throws -> [ChartDataPoint] {
         switch category {
