@@ -37,6 +37,7 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
 
     let captureSession = AVCaptureSession()
     private let photoOutput = AVCapturePhotoOutput()
+    private let continuationLock = NSLock()
     private var photoContinuation: CheckedContinuation<CGImage, any Error>?
 
     // MARK: - Configuration
@@ -94,12 +95,13 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
             throw PostureCaptureError.captureSessionNotRunning
         }
 
-        guard photoContinuation == nil else {
+        let alreadyCapturing = continuationLock.withLock { photoContinuation != nil }
+        guard !alreadyCapturing else {
             throw PostureCaptureError.photoCaptureFailed
         }
 
         return try await withCheckedThrowingContinuation { continuation in
-            self.photoContinuation = continuation
+            self.continuationLock.withLock { self.photoContinuation = continuation }
             let settings = AVCapturePhotoSettings()
             self.photoOutput.capturePhoto(with: settings, delegate: self)
         }
@@ -215,7 +217,22 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
 
             guard x.isFinite, y.isFinite, z.isFinite else { continue }
 
-            positions.append(JointPosition3D(name: name, x: x, y: y, z: z))
+            // Extract 2D image-space coordinates via pointInImage (normalized 0-1)
+            var imageX: CGFloat?
+            var imageY: CGFloat?
+            if let imagePoint = try? observation.pointInImage(jointName) {
+                let px = imagePoint.x
+                let py = imagePoint.y
+                if px.isFinite, py.isFinite {
+                    imageX = px
+                    imageY = py
+                }
+            }
+
+            positions.append(JointPosition3D(
+                name: name, x: x, y: y, z: z,
+                imageX: imageX, imageY: imageY
+            ))
         }
 
         return positions
@@ -256,8 +273,15 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
             let medianY = median(matchingJoints.map(\.y))
             let medianZ = median(matchingJoints.map(\.z))
 
+            // Use last frame's 2D image coordinates (most recent camera pose)
+            let lastImageX = matchingJoints.last?.imageX
+            let lastImageY = matchingJoints.last?.imageY
+
             averagedPositions.append(
-                JointPosition3D(name: jointName, x: medianX, y: medianY, z: medianZ)
+                JointPosition3D(
+                    name: jointName, x: medianX, y: medianY, z: medianZ,
+                    imageX: lastImageX, imageY: lastImageY
+                )
             )
         }
 
@@ -310,13 +334,17 @@ extension PostureCaptureService: AVCapturePhotoCaptureDelegate {
         didFinishProcessingPhoto photo: AVCapturePhoto,
         error: (any Error)?
     ) {
-        if let error {
-            photoContinuation?.resume(throwing: error)
-        } else if let cgImage = photo.cgImageRepresentation() {
-            photoContinuation?.resume(returning: cgImage)
-        } else {
-            photoContinuation?.resume(throwing: PostureCaptureError.imageConversionFailed)
+        let continuation = continuationLock.withLock { () -> CheckedContinuation<CGImage, any Error>? in
+            let c = photoContinuation
+            photoContinuation = nil
+            return c
         }
-        photoContinuation = nil
+        if let error {
+            continuation?.resume(throwing: error)
+        } else if let cgImage = photo.cgImageRepresentation() {
+            continuation?.resume(returning: cgImage)
+        } else {
+            continuation?.resume(throwing: PostureCaptureError.imageConversionFailed)
+        }
     }
 }

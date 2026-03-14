@@ -38,13 +38,9 @@ final class PostureAssessmentViewModel {
 
     // MARK: - Computed
 
-    var combinedAssessment: CombinedPostureAssessment {
-        CombinedPostureAssessment(
-            frontAssessment: frontAssessment,
-            sideAssessment: sideAssessment,
-            date: Date()
-        )
-    }
+    private(set) var combinedAssessment = CombinedPostureAssessment(
+        frontAssessment: nil, sideAssessment: nil, date: Date()
+    )
 
     var canSave: Bool {
         frontAssessment != nil || sideAssessment != nil
@@ -60,6 +56,10 @@ final class PostureAssessmentViewModel {
         case .side: String(localized: "Side View")
         }
     }
+
+    // MARK: - Tasks
+
+    private var countdownTask: Task<Void, Never>?
 
     // MARK: - Dependencies
 
@@ -87,6 +87,8 @@ final class PostureAssessmentViewModel {
     }
 
     func stopCamera() {
+        countdownTask?.cancel()
+        countdownTask = nil
         captureService.stopSession()
     }
 
@@ -94,13 +96,20 @@ final class PostureAssessmentViewModel {
 
     func startCountdown() {
         guard case .guiding = capturePhase else { return }
-
-        Task {
-            for i in stride(from: 3, through: 1, by: -1) {
-                capturePhase = .countdown(i)
-                try await Task.sleep(for: .seconds(1))
+        countdownTask?.cancel()
+        countdownTask = Task {
+            do {
+                for i in stride(from: 3, through: 1, by: -1) {
+                    capturePhase = .countdown(i)
+                    try await Task.sleep(for: .seconds(1))
+                }
+                guard !Task.isCancelled else { return }
+                await performCapture()
+            } catch {
+                if case .countdown = capturePhase {
+                    capturePhase = .guiding
+                }
             }
-            await performCapture()
         }
     }
 
@@ -146,6 +155,11 @@ final class PostureAssessmentViewModel {
             )
         }
 
+        combinedAssessment = CombinedPostureAssessment(
+            frontAssessment: frontAssessment,
+            sideAssessment: sideAssessment,
+            date: Date()
+        )
         capturePhase = .result
     }
 
@@ -165,10 +179,17 @@ final class PostureAssessmentViewModel {
             sideResult = nil
             sideAssessment = nil
         }
+        combinedAssessment = CombinedPostureAssessment(
+            frontAssessment: frontAssessment,
+            sideAssessment: sideAssessment,
+            date: Date()
+        )
         capturePhase = .guiding
     }
 
     func resetAll() {
+        countdownTask?.cancel()
+        countdownTask = nil
         captureType = .front
         frontResult = nil
         sideResult = nil
