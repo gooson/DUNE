@@ -36,6 +36,12 @@ final class PostureAssessmentViewModel {
 
     var memo: String = ""
 
+    // MARK: - Haptic Triggers
+
+    private(set) var hapticCountdown: Int = 0
+    private(set) var hapticSuccessCount: Int = 0
+    private(set) var hapticErrorCount: Int = 0
+
     // MARK: - Computed
 
     private(set) var combinedAssessment = CombinedPostureAssessment(
@@ -101,6 +107,7 @@ final class PostureAssessmentViewModel {
             do {
                 for i in stride(from: 3, through: 1, by: -1) {
                     capturePhase = .countdown(i)
+                    hapticCountdown = i
                     try await Task.sleep(for: .seconds(1))
                 }
                 guard !Task.isCancelled else { return }
@@ -122,8 +129,10 @@ final class PostureAssessmentViewModel {
             processResult(result)
         } catch let error as PostureCaptureError {
             capturePhase = .error(captureErrorMessage(error))
+            hapticErrorCount += 1
         } catch {
             capturePhase = .error(String(localized: "An unexpected error occurred"))
+            hapticErrorCount += 1
         }
     }
 
@@ -161,6 +170,7 @@ final class PostureAssessmentViewModel {
             date: Date()
         )
         capturePhase = .result
+        hapticSuccessCount += 1
     }
 
     // MARK: - Navigation

@@ -5,6 +5,9 @@ struct PostureResultView: View {
     @Bindable var viewModel: PostureAssessmentViewModel
     let dismiss: DismissAction
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    @State private var animatedScore: Double = 0
 
     var body: some View {
         ScrollView {
@@ -31,18 +34,29 @@ struct PostureResultView: View {
                     .frame(width: 120, height: 120)
 
                 Circle()
-                    .trim(from: 0, to: CGFloat(score) / 100.0)
+                    .trim(from: 0, to: animatedScore)
                     .stroke(scoreColor(score), style: StrokeStyle(lineWidth: 12, lineCap: .round))
                     .frame(width: 120, height: 120)
                     .rotationEffect(.degrees(-90))
 
                 VStack(spacing: 2) {
-                    Text("\(score)")
+                    Text("\(Int(animatedScore * 100))")
                         .font(.system(size: 36, weight: .bold, design: .rounded))
+                        .contentTransition(.numericText())
 
                     Text("/ 100")
                         .font(.caption)
                         .foregroundStyle(.secondary)
+                }
+            }
+            .task {
+                let target = CGFloat(score) / 100.0
+                if reduceMotion {
+                    animatedScore = target
+                } else {
+                    withAnimation(DS.Animation.slow) {
+                        animatedScore = target
+                    }
                 }
             }
 
@@ -61,6 +75,8 @@ struct PostureResultView: View {
         }
         .padding()
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text("Posture score \(score) out of 100"))
     }
 
     private func scoreColor(_ score: Int) -> Color {
@@ -123,6 +139,8 @@ struct PostureResultView: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text("\(label) view capture"))
     }
 
     // MARK: - Metrics
@@ -164,6 +182,8 @@ struct PostureResultView: View {
                 .foregroundStyle(metric.status.color)
         }
         .padding(.vertical, 4)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text("\(metric.type.displayName), \(metric.status.displayName), \(metricValueText(metric))"))
     }
 
     private func metricValueText(_ metric: PostureMetricResult) -> String {
@@ -217,6 +237,7 @@ struct PostureResultView: View {
             .buttonStyle(.borderedProminent)
             .controlSize(.large)
             .disabled(!viewModel.canSave || viewModel.isSaving)
+            .accessibilityHint(Text("Saves the posture assessment to your history"))
 
             Button {
                 viewModel.retakeCurrentCapture()

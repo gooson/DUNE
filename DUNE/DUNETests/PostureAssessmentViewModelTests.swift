@@ -21,6 +21,9 @@ struct PostureAssessmentViewModelTests {
         #expect(vm.hasBothCaptures == false)
         #expect(vm.isSaving == false)
         #expect(vm.memo == "")
+        #expect(vm.hapticCountdown == 0)
+        #expect(vm.hapticSuccessCount == 0)
+        #expect(vm.hapticErrorCount == 0)
     }
 
     // MARK: - createValidatedRecord
