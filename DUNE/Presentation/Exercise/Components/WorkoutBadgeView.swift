@@ -15,6 +15,7 @@ enum WorkoutBadgeView {
         .padding(.horizontal, DS.Spacing.sm)
         .padding(.vertical, DS.Spacing.xxs)
         .background(distance.color.opacity(0.12), in: Capsule())
+        .fixedSize()
     }
 
     /// Personal record badge.
@@ -29,6 +30,7 @@ enum WorkoutBadgeView {
         .padding(.horizontal, DS.Spacing.sm)
         .padding(.vertical, DS.Spacing.xxs)
         .background(.orange.opacity(0.12), in: Capsule())
+        .fixedSize()
     }
 
     /// Compact inline badge for list rows — shows first milestone or PR.
