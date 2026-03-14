@@ -12,7 +12,9 @@ final class NotificationThrottleStore: @unchecked Sendable {
     private let dailyBudgetLimit: Int
     private let dedupWindowSeconds: TimeInterval
     private let bodyCompositionMergeWindowSeconds: TimeInterval
-    private let bodyCompositionDebounceSeconds: TimeInterval
+    /// Duration to wait before claiming the send slot, allowing sibling values to buffer.
+    /// The evaluator should sleep for slightly less than this value before calling `claimAndBuildMergedBody()`.
+    let bodyCompositionDebounceSeconds: TimeInterval
     private let queue = DispatchQueue(label: "com.dune.notification-throttle-store")
 
     private enum Keys {
@@ -207,6 +209,9 @@ final class NotificationThrottleStore: @unchecked Sendable {
             let countKey = keyPrefix + Keys.dailyCountSuffix
             defaults.set(count + 1, forKey: countKey)
             defaults.set(now, forKey: keyPrefix + Keys.dailyCountDateSuffix)
+
+            // Clear buffer to prevent stale values from appearing in the next notification
+            saveBodyCompositionBufferLocked([:])
 
             return pending.joined(separator: "\n")
         }

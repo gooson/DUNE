@@ -102,7 +102,9 @@ final class BackgroundNotificationEvaluator: Sendable {
 
         // Debounce: wait for sibling body composition values (weight/bodyFat/BMI)
         // to arrive from concurrent HKObserverQuery callbacks before sending.
-        try? await Task.sleep(for: .seconds(2))
+        // Sleep duration must be less than the debounce guard window.
+        let sleepDuration = max(throttleStore.bodyCompositionDebounceSeconds - 1, 1)
+        try? await Task.sleep(for: .seconds(sleepDuration))
 
         // Atomically claim the send slot and build merged body.
         // Only one concurrent caller wins; others get nil.
