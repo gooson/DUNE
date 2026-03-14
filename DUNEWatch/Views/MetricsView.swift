@@ -332,6 +332,15 @@ struct MetricsView: View {
             entryDefaultReps: entry.defaultReps
         )
 
+        if let plannedSet = workoutManager.currentPlannedSetForCurrentExercise {
+            weight = plannedSet.weight ?? entry.defaultWeightKg ?? 0
+            reps = WatchSetInputPolicy.resolvedInitialReps(
+                lastSetReps: plannedSet.reps,
+                entryDefaultReps: entry.defaultReps
+            )
+            return
+        }
+
         // Use previous set's weight/reps if available, otherwise fall back to template default
         if let lastSet = workoutManager.lastCompletedSetForCurrentExercise {
             weight = lastSet.weight ?? entry.defaultWeightKg ?? 0

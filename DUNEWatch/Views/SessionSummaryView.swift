@@ -559,6 +559,16 @@ struct SessionSummaryView: View {
                     reps: lastSet.reps
                 )
             }
+            RecentExerciseTracker.recordLatestProcedure(
+                exerciseID: entry.exerciseDefinitionID,
+                sets: setsData.map {
+                    WatchProcedureSetSnapshot(
+                        setNumber: $0.setNumber,
+                        weight: $0.weight,
+                        reps: $0.reps
+                    )
+                }
+            )
         }
     }
 
