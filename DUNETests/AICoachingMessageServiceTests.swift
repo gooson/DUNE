@@ -1,4 +1,5 @@
 import Foundation
+import FoundationModels
 import Testing
 @testable import DUNE
 
@@ -11,7 +12,7 @@ struct AICoachingMessageServiceTests {
 
     @Test("Returns original insight when Foundation Models unavailable")
     func fallbackWhenUnavailable() async {
-        // On simulator, SystemLanguageModel.default.isAvailable == false
+        let sut = AICoachingMessageService(availabilityProvider: { false })
         let insight = makeTestInsight()
         let input = makeTestInput()
 
@@ -26,10 +27,9 @@ struct AICoachingMessageServiceTests {
         #expect(result.actionHint == insight.actionHint)
     }
 
-    @Test("isAvailable returns false on simulator")
-    func isAvailableOnSimulator() {
-        // Foundation Models require A17 Pro+ hardware
-        #expect(!AICoachingMessageService.isAvailable)
+    @Test("isAvailable mirrors Foundation Models runtime support")
+    func isAvailableMirrorsRuntimeSupport() {
+        #expect(AICoachingMessageService.isAvailable == SystemLanguageModel.default.isAvailable)
     }
 
     // MARK: - Prompt Construction

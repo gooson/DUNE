@@ -41,6 +41,7 @@ struct AIWorkoutTemplateGeneratorTests {
 
     @Test("Returns unavailable error on simulator when Foundation Models are not available")
     func unavailableOnSimulator() async {
+        let sut = AIWorkoutTemplateGenerator(availabilityProvider: { false })
         let request = WorkoutTemplateGenerationRequest(prompt: "Build a shoulder workout")
 
         do {

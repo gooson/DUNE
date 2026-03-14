@@ -14,7 +14,19 @@ struct CalculateWellnessScoreUseCase: WellnessScoreCalculating, Sendable {
         let sleepScore: Int?
         let conditionScore: Int?
         let bodyTrend: BodyTrend?
-        let evaluationDate: Date = .now
+        let evaluationDate: Date
+
+        init(
+            sleepScore: Int?,
+            conditionScore: Int?,
+            bodyTrend: BodyTrend?,
+            evaluationDate: Date = .now
+        ) {
+            self.sleepScore = sleepScore
+            self.conditionScore = conditionScore
+            self.bodyTrend = bodyTrend
+            self.evaluationDate = evaluationDate
+        }
     }
 
     /// Body composition trend over the last 7 days.

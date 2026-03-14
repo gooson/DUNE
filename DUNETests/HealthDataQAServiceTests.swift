@@ -138,13 +138,14 @@ struct HealthDataQAServiceTests {
             sleepService: MockQASleepService(),
             workoutService: MockQAWorkoutService(),
             hrvService: MockQAHRVService(),
+            availabilityProvider: { false },
             nowProvider: { now }
         )
 
         let reply = await service.ask("How did I sleep this week?")
 
         #expect(reply.isFallback)
-        #expect(reply.text.contains("Health Q&A requires Apple Intelligence") || HealthDataQAService.isAvailable)
+        #expect(reply.text == String(localized: "Health Q&A requires Apple Intelligence on a supported device."))
     }
 
     @Test("Sleep summary live fallback includes the current day window")

@@ -6,6 +6,7 @@ import UserNotifications
 @Suite("BedtimeReminderScheduler")
 @MainActor
 struct BedtimeReminderSchedulerTests {
+    private let expectedTitle = String(localized: "Start winding down now for better recovery tomorrow.")
 
     @Test("Schedules reminder using selected lead time", arguments: BedtimeReminderLeadTime.allCases)
     func schedulesReminderUsingSelectedLeadTime(leadTime: BedtimeReminderLeadTime) async throws {
@@ -53,7 +54,7 @@ struct BedtimeReminderSchedulerTests {
             #expect(trigger.dateComponents.hour == 21)
             #expect(trigger.dateComponents.minute == 30)
         }
-        #expect(request.content.title == "Start winding down now for better recovery tomorrow.")
+        #expect(request.content.title == expectedTitle)
     }
 
     @Test("Removes pending reminder without scheduling when disabled")
