@@ -281,7 +281,8 @@ struct ConditionScoreDetailViewModelTests {
 
     @Test("day period recomputes hourly chart data from raw HRV samples without snapshot service")
     func dayPeriodUsesIntradayRecompute() async {
-        let currentHour = max(3, calendar.component(.hour, from: Date()))
+        let fixedNow = calendar.date(bySettingHour: 12, minute: 0, second: 0, of: Date()) ?? Date()
+        let currentHour = calendar.component(.hour, from: fixedNow)
         let todayHours = [currentHour - 3, currentHour - 2, currentHour - 1]
         let samples = makeTimedSamples([
             (dayOffset: 0, hour: todayHours[0], value: 85),
@@ -306,8 +307,8 @@ struct ConditionScoreDetailViewModelTests {
                 (dayOffset: 6, value: 60)
             ])
         )
-        let vm = ConditionScoreDetailViewModel(hrvService: service)
-        vm.configure(score: ConditionScore(score: 65, date: Date()))
+        let vm = ConditionScoreDetailViewModel(hrvService: service, nowProvider: { fixedNow })
+        vm.configure(score: ConditionScore(score: 65, date: fixedNow))
         vm.selectedPeriod = .day
 
         try? await Task.sleep(for: .milliseconds(50))
@@ -316,7 +317,7 @@ struct ConditionScoreDetailViewModelTests {
         }
 
         #expect(vm.chartData.count >= 2)
-        #expect(vm.chartData.allSatisfy { calendar.isDate($0.date, inSameDayAs: Date()) })
+        #expect(vm.chartData.allSatisfy { calendar.isDate($0.date, inSameDayAs: fixedNow) })
         #expect(vm.summaryStats != nil)
     }
 
