@@ -247,13 +247,15 @@ final class DashboardViewModel {
         if let bmiMetric = bmiResult.metric { allMetrics.append(bmiMetric) }
 
         // Track partial failures
-        let failureCount = [
+        let sourceFailures = [
             hrvResult.failed, sleepResult.failed, exerciseResult.failed,
             stepsResult.failed, weightResult.failed, bmiResult.failed
-        ].filter { $0 }.count
+        ]
+        let failureCount = sourceFailures.filter { $0 }.count
+        let totalSources = sourceFailures.count
 
         if failureCount > 0 && !allMetrics.isEmpty {
-            errorMessage = String(localized: "Some data could not be loaded (\(failureCount) of 6 sources)")
+            errorMessage = String(localized: "Some data could not be loaded (\(failureCount) of \(totalSources) sources)")
         } else if failureCount > 0 && allMetrics.isEmpty && !isMirroredReadOnlyMode {
             // On Mac (mirrored mode), empty data means CloudKit hasn't synced yet —
             // show CloudSyncWaitingView instead of an error.
@@ -404,7 +406,7 @@ final class DashboardViewModel {
         snapshot: SharedHealthSnapshot?,
         canQueryHealthKit: Bool
     ) async -> (metric: HealthMetric?, failed: Bool) {
-        if let snapshot, let steps = snapshot.todaySteps, steps > 0 {
+        if let snapshot, let steps = snapshot.todaySteps, steps > 0, steps <= 200_000 {
             let failed = snapshot.failedSources.contains(.todaySteps)
             let metric = HealthMetric(
                 id: "steps",

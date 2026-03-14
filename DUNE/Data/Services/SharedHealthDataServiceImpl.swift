@@ -163,7 +163,7 @@ actor SharedHealthDataServiceImpl: SharedHealthDataService {
         ) {
             let workouts = try await workoutService.fetchWorkouts(days: 1)
             let totalMinutes = workouts
-                .filter { Calendar.current.isDate($0.date, inSameDayAs: referenceDate) }
+                .filter { calendar.isDate($0.date, inSameDayAs: referenceDate) }
                 .reduce(0.0) { $0 + $1.duration / 60.0 }
             return totalMinutes > 0 ? totalMinutes : nil
         }
