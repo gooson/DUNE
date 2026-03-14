@@ -298,15 +298,16 @@ final class ConditionScoreDetailViewModel {
     private func loadHourlyData(requestID: Int) async throws {
         let calendar = Calendar.current
         let now = nowProvider()
-        let startOfDay = calendar.startOfDay(for: now)
+        // Rolling 24h window: show yesterday's data too (especially useful at early hours)
+        let twentyFourHoursAgo = now.addingTimeInterval(-24 * 60 * 60)
         let baselineStart = calendar.date(
             byAdding: .day,
             value: -CalculateConditionScoreUseCase.conditionWindowDays,
-            to: startOfDay
-        ) ?? startOfDay
+            to: twentyFourHoursAgo
+        ) ?? twentyFourHoursAgo
 
         async let samplesTask = hrvService.fetchHRVSamples(
-            days: CalculateConditionScoreUseCase.conditionWindowDays + 1
+            days: CalculateConditionScoreUseCase.conditionWindowDays + 2
         )
         async let rhrTask = hrvService.fetchRHRCollection(
             start: baselineStart,
@@ -318,7 +319,7 @@ final class ConditionScoreDetailViewModel {
         let rhrDailyAverages = rhrCollection
             .filter { $0.average > 0 && $0.average.isFinite }
             .map { CalculateConditionScoreUseCase.Input.RHRDailyAverage(date: $0.date, value: $0.average) }
-        let hourlyEvaluationDates = Dictionary(grouping: samples.filter { $0.date >= startOfDay && $0.date <= now }) {
+        let hourlyEvaluationDates = Dictionary(grouping: samples.filter { $0.date >= twentyFourHoursAgo && $0.date <= now }) {
             calendar.dateInterval(of: .hour, for: $0.date)?.start ?? $0.date
         }
         .compactMap { hourDate, samplesInHour in
