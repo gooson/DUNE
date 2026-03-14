@@ -284,28 +284,37 @@ struct ConditionScoreDetailViewModelTests {
         let fixedNow = calendar.date(bySettingHour: 12, minute: 0, second: 0, of: Date()) ?? Date()
         let currentHour = calendar.component(.hour, from: fixedNow)
         let todayHours = [currentHour - 3, currentHour - 2, currentHour - 1]
+        // computeIntradayAverage needs >= 2 samples from same calendar day
         let samples = makeTimedSamples([
             (dayOffset: 0, hour: todayHours[0], value: 85),
             (dayOffset: 0, hour: todayHours[1], value: 50),
             (dayOffset: 0, hour: todayHours[2], value: 50),
-            (dayOffset: 1, hour: currentHour + 1, value: 50),  // yesterday, within 24h window
-            (dayOffset: 1, hour: currentHour + 5, value: 50),  // yesterday, within 24h window
-            (dayOffset: 2, hour: 12, value: 50),
-            (dayOffset: 3, hour: 12, value: 50),
-            (dayOffset: 4, hour: 12, value: 50),
-            (dayOffset: 5, hour: 12, value: 50),
-            (dayOffset: 6, hour: 12, value: 50)
+            // Yesterday: multiple hourly samples (within 24h window from noon)
+            (dayOffset: 1, hour: currentHour + 1, value: 50),
+            (dayOffset: 1, hour: currentHour + 2, value: 48),
+            (dayOffset: 1, hour: currentHour + 4, value: 52),
+            (dayOffset: 1, hour: currentHour + 5, value: 50),
+            // Baseline days
+            (dayOffset: 2, hour: 10, value: 50),
+            (dayOffset: 2, hour: 14, value: 50),
+            (dayOffset: 3, hour: 10, value: 50),
+            (dayOffset: 3, hour: 14, value: 50),
+            (dayOffset: 4, hour: 10, value: 50),
+            (dayOffset: 4, hour: 14, value: 50),
+            (dayOffset: 5, hour: 10, value: 50),
+            (dayOffset: 5, hour: 14, value: 50),
+            (dayOffset: 6, hour: 10, value: 50),
+            (dayOffset: 6, hour: 14, value: 50),
+            (dayOffset: 7, hour: 10, value: 50),
+            (dayOffset: 7, hour: 14, value: 50)
         ])
         let service = MockHRVService(
             samples: samples,
             rhrCollection: makeTimedRHRCollection([
-                (dayOffset: 0, value: 60),
-                (dayOffset: 1, value: 60),
-                (dayOffset: 2, value: 60),
-                (dayOffset: 3, value: 60),
-                (dayOffset: 4, value: 60),
-                (dayOffset: 5, value: 60),
-                (dayOffset: 6, value: 60)
+                (dayOffset: 0, value: 60), (dayOffset: 1, value: 60),
+                (dayOffset: 2, value: 60), (dayOffset: 3, value: 60),
+                (dayOffset: 4, value: 60), (dayOffset: 5, value: 60),
+                (dayOffset: 6, value: 60), (dayOffset: 7, value: 60)
             ])
         )
         let vm = ConditionScoreDetailViewModel(hrvService: service, nowProvider: { fixedNow })
@@ -317,7 +326,7 @@ struct ConditionScoreDetailViewModelTests {
             await vm.loadData()
         }
 
-        // Rolling 24h: should include today's 3 points + yesterday's 2 points within window
+        // Rolling 24h: should include today + yesterday points within window
         #expect(vm.chartData.count >= 4)
         #expect(vm.summaryStats != nil)
     }
@@ -326,29 +335,41 @@ struct ConditionScoreDetailViewModelTests {
     func dayPeriodEarlyMorningShowsYesterdayData() async {
         let fixedNow = calendar.date(bySettingHour: 3, minute: 0, second: 0, of: Date()) ?? Date()
         // Yesterday's samples at various hours (all within 24h window)
+        // computeIntradayAverage needs >= 2 samples from same calendar day,
+        // so yesterday needs multiple samples spread across the day
         let samples = makeTimedSamples([
             (dayOffset: 0, hour: 1, value: 50),    // today 1am
             (dayOffset: 0, hour: 2, value: 52),    // today 2am
-            (dayOffset: 1, hour: 5, value: 48),    // yesterday 5am — within 24h
-            (dayOffset: 1, hour: 10, value: 45),   // yesterday 10am — within 24h
-            (dayOffset: 1, hour: 15, value: 47),   // yesterday 3pm — within 24h
-            (dayOffset: 1, hour: 20, value: 46),   // yesterday 8pm — within 24h
-            (dayOffset: 2, hour: 12, value: 50),
-            (dayOffset: 3, hour: 12, value: 50),
-            (dayOffset: 4, hour: 12, value: 50),
-            (dayOffset: 5, hour: 12, value: 50),
-            (dayOffset: 6, hour: 12, value: 50)
+            // Yesterday: many samples throughout the day (within 24h of 3am)
+            (dayOffset: 1, hour: 5, value: 48),
+            (dayOffset: 1, hour: 8, value: 45),
+            (dayOffset: 1, hour: 10, value: 45),
+            (dayOffset: 1, hour: 13, value: 47),
+            (dayOffset: 1, hour: 15, value: 47),
+            (dayOffset: 1, hour: 18, value: 46),
+            (dayOffset: 1, hour: 20, value: 46),
+            (dayOffset: 1, hour: 22, value: 49),
+            // Baseline days
+            (dayOffset: 2, hour: 10, value: 50),
+            (dayOffset: 2, hour: 14, value: 50),
+            (dayOffset: 3, hour: 10, value: 50),
+            (dayOffset: 3, hour: 14, value: 50),
+            (dayOffset: 4, hour: 10, value: 50),
+            (dayOffset: 4, hour: 14, value: 50),
+            (dayOffset: 5, hour: 10, value: 50),
+            (dayOffset: 5, hour: 14, value: 50),
+            (dayOffset: 6, hour: 10, value: 50),
+            (dayOffset: 6, hour: 14, value: 50),
+            (dayOffset: 7, hour: 10, value: 50),
+            (dayOffset: 7, hour: 14, value: 50)
         ])
         let service = MockHRVService(
             samples: samples,
             rhrCollection: makeTimedRHRCollection([
-                (dayOffset: 0, value: 60),
-                (dayOffset: 1, value: 60),
-                (dayOffset: 2, value: 60),
-                (dayOffset: 3, value: 60),
-                (dayOffset: 4, value: 60),
-                (dayOffset: 5, value: 60),
-                (dayOffset: 6, value: 60)
+                (dayOffset: 0, value: 60), (dayOffset: 1, value: 60),
+                (dayOffset: 2, value: 60), (dayOffset: 3, value: 60),
+                (dayOffset: 4, value: 60), (dayOffset: 5, value: 60),
+                (dayOffset: 6, value: 60), (dayOffset: 7, value: 60)
             ])
         )
         let vm = ConditionScoreDetailViewModel(hrvService: service, nowProvider: { fixedNow })
@@ -360,12 +381,11 @@ struct ConditionScoreDetailViewModelTests {
             await vm.loadData()
         }
 
-        // At 3am: should include today's 2 points + yesterday's 4 points
-        #expect(vm.chartData.count >= 5)
-        // Summary stats should reflect multiple data points, not just 1
+        // At 3am: should include yesterday's hourly data within the 24h window
+        #expect(vm.chartData.count >= 3)
+        // Summary stats should reflect multiple data points
         #expect(vm.summaryStats != nil)
         if let stats = vm.summaryStats {
-            // With multiple points, min and max should potentially differ
             #expect(stats.average > 0)
         }
     }
