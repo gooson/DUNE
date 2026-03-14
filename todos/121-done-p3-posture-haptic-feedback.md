@@ -1,7 +1,7 @@
 ---
 source: review/apple-ux-expert
 priority: p3
-status: ready
+status: done
 created: 2026-03-15
 updated: 2026-03-15
 ---
