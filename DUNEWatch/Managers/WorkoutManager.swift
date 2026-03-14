@@ -291,7 +291,8 @@ final class WorkoutManager: NSObject {
     func startCardioSession(
         activityType: WorkoutActivityType,
         isOutdoor: Bool,
-        secondaryUnit: CardioSecondaryUnit? = nil
+        secondaryUnit: CardioSecondaryUnit? = nil,
+        initialLevel: Int? = nil
     ) async throws {
         let previousMode = workoutMode
         let previousCardioSecondaryUnit = cardioSecondaryUnit
@@ -330,6 +331,9 @@ final class WorkoutManager: NSObject {
 
         do {
             try await startHKSession(config: config, templateName: activityType.typeName)
+            if let initialLevel {
+                setMachineLevel(initialLevel)
+            }
         } catch {
             // Restore state on failure to prevent inconsistent workoutMode
             workoutMode = previousMode
