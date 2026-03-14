@@ -18,6 +18,7 @@ final class DashboardViewModel {
     var focusInsight: CoachingInsight?
     private(set) var insightCards: [InsightCardData] = []
     var workoutSuggestion: WorkoutSuggestion?
+    var templateNudgeRecommendation: WorkoutTemplateRecommendation?
     var heroBaselineDetails: [BaselineDetail] = []
     var pinnedCategories: [HealthMetric.Category]
     var baselineDeltasByMetricID: [String: MetricBaselineDelta] = [:]
@@ -109,6 +110,8 @@ final class DashboardViewModel {
     private let trendService = TrendAnalysisService()
     private let dismissStore = InsightCardDismissStore.shared
     private let scoreRefreshService: ScoreRefreshService?
+    private let templateRecommendationService: any WorkoutTemplateRecommending
+    private let nudgeDismissStore: TemplateNudgeDismissStore
 
     /// Hourly sparkline data for the condition hero card, sourced from ScoreRefreshService.
     var conditionSparkline: HourlySparklineData {
@@ -126,7 +129,9 @@ final class DashboardViewModel {
         sharedHealthDataService: SharedHealthDataService? = nil,
         weatherProvider: WeatherProviding? = nil,
         coachingMessageEnhancer: (any CoachingMessageEnhancing)? = AICoachingMessageService(),
-        scoreRefreshService: ScoreRefreshService? = nil
+        scoreRefreshService: ScoreRefreshService? = nil,
+        templateRecommendationService: (any WorkoutTemplateRecommending)? = nil,
+        nudgeDismissStore: TemplateNudgeDismissStore = .shared
     ) {
         self.healthKitManager = healthKitManager
         self.hrvService = hrvService ?? HRVQueryService(manager: healthKitManager)
@@ -140,6 +145,8 @@ final class DashboardViewModel {
         self.weatherProvider = weatherProvider ?? WeatherProvider(locationService: LocationService())
         self.coachingMessageEnhancer = coachingMessageEnhancer
         self.scoreRefreshService = scoreRefreshService
+        self.templateRecommendationService = templateRecommendationService ?? WorkoutTemplateRecommendationService()
+        self.nudgeDismissStore = nudgeDismissStore
         self.pinnedCategories = pinnedMetricsStore.load()
     }
 
@@ -254,6 +261,37 @@ final class DashboardViewModel {
         }
 
         isLoading = false
+    }
+
+    /// Load template nudge recommendation using existing templates from View's @Query.
+    func loadTemplateNudge(existingTemplateSnapshots: [TemplateSnapshot]) async {
+        guard !Self.shouldUseSeededUITestFixtures else {
+            templateNudgeRecommendation = nil
+            return
+        }
+        do {
+            let workouts = try await workoutService.fetchWorkouts(days: 42)
+            let recommendations = templateRecommendationService.recommendTemplates(
+                from: workouts,
+                config: .default,
+                referenceDate: Date()
+            )
+            templateNudgeRecommendation = recommendations.first { rec in
+                !TemplateOverlapChecker.isAlreadyCovered(
+                    recommendation: rec,
+                    existingTemplates: existingTemplateSnapshots
+                ) && !nudgeDismissStore.isDismissed(rec.id)
+            }
+        } catch {
+            AppLogger.ui.info("Template nudge load skipped: \(error.localizedDescription)")
+            templateNudgeRecommendation = nil
+        }
+    }
+
+    func dismissTemplateNudge() {
+        guard let rec = templateNudgeRecommendation else { return }
+        nudgeDismissStore.dismiss(rec.id)
+        templateNudgeRecommendation = nil
     }
 
     private func safeHRVFetch(
