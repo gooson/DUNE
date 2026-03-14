@@ -125,6 +125,7 @@ struct ActivityView: View {
     private var isRegular: Bool { sizeClass == .regular }
 
     private let refreshSignal: Int
+    private let scoreRefreshService: ScoreRefreshService?
 
     private var recordsUpdateKey: RecordsUpdateKey {
         RecordsUpdateKey(
@@ -153,6 +154,7 @@ struct ActivityView: View {
         _viewModel = State(initialValue: ActivityViewModel(sharedHealthDataService: sharedHealthDataService, scoreRefreshService: scoreRefreshService))
         self.scrollToTopSignal = scrollToTopSignal
         self.refreshSignal = refreshSignal
+        self.scoreRefreshService = scoreRefreshService
         self.notificationWorkoutID = notificationWorkoutID
         self.notificationRouteSignal = notificationRouteSignal
         self.notificationPersonalRecordsSignal = notificationPersonalRecordsSignal
@@ -642,7 +644,8 @@ struct ActivityView: View {
             ExerciseMixDetailView()
         case .trainingReadiness:
             TrainingReadinessDetailView(
-                readiness: viewModel.trainingReadiness
+                readiness: viewModel.trainingReadiness,
+                scoreRefreshService: scoreRefreshService
             )
         case .weeklyStats:
             WeeklyStatsDetailView()
