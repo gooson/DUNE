@@ -347,7 +347,10 @@ struct ActivityView: View {
             NavigationStack {
                 TemplateFormView(
                     prefillName: recommendation.title,
-                    prefillEntries: []
+                    prefillEntries: TemplateExerciseResolver.resolveExercises(
+                        from: recommendation,
+                        library: library
+                    )?.map { TemplateExerciseResolver.defaultEntry(for: $0) } ?? []
                 )
             }
         }
