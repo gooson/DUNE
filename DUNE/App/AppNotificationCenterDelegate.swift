@@ -57,15 +57,4 @@ final class AppNotificationCenterDelegate: NSObject, UNUserNotificationCenterDel
         responseHandler(payload)
         completionHandler()
     }
-
-    func forwardNotificationResponse(
-        _ payload: NotificationResponsePayload,
-        completionHandler: @escaping @Sendable () -> Void = {}
-    ) {
-        let responseHandler = self.responseHandler
-        DispatchQueue.main.async {
-            responseHandler(payload)
-            completionHandler()
-        }
-    }
 }

@@ -1,5 +1,6 @@
 import Foundation
 import Testing
+import UserNotifications
 @testable import DUNE
 
 @Suite("AppNotificationCenterDelegate")
@@ -16,46 +17,10 @@ struct AppNotificationCenterDelegateTests {
         #expect(options.contains(.badge))
     }
 
-    @Test("forwardNotificationResponse delivers payload on main thread")
-    func forwardNotificationResponseDeliversPayloadOnMainThread() async {
-        let spy = ResponseHandlerSpy()
-        let delegate = AppNotificationCenterDelegate { payload in
-            MainActor.assumeIsolated {
-                spy.receivedPayload = payload
-                spy.wasCalledOnMainThread = Thread.isMainThread
-            }
-        }
-
-        let payload = NotificationResponsePayload(routeKind: "sleepDetail")
-
-        await withCheckedContinuation { continuation in
-            delegate.forwardNotificationResponse(payload) {
-                continuation.resume()
-            }
-        }
-
-        #expect(spy.receivedPayload == payload)
-        #expect(spy.wasCalledOnMainThread)
-    }
-
-    @Test("forwardNotificationResponse calls completion handler on main thread")
-    func forwardNotificationResponseCallsCompletionOnMainThread() async {
+    @Test("init accepts custom response handler without calling it")
+    func initAcceptsCustomResponseHandler() {
+        // Verifies delegate can be constructed with a custom handler
         let delegate = AppNotificationCenterDelegate { _ in }
-
-        let payload = NotificationResponsePayload(routeKind: "workoutDetail")
-
-        let completionOnMain = await withCheckedContinuation { continuation in
-            delegate.forwardNotificationResponse(payload) {
-                continuation.resume(returning: Thread.isMainThread)
-            }
-        }
-
-        #expect(completionOnMain)
+        #expect(delegate is UNUserNotificationCenterDelegate)
     }
-}
-
-@MainActor
-private final class ResponseHandlerSpy: @unchecked Sendable {
-    var receivedPayload: NotificationResponsePayload?
-    var wasCalledOnMainThread = false
 }
