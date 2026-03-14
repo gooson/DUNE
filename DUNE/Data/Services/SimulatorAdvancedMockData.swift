@@ -6,7 +6,7 @@ enum SimulatorAdvancedMockDataModeStore {
     static let referenceDateStorageKey = "simulatorAdvancedMockDataReferenceDate"
     private static let unitTestDefaultsSuiteName: String = {
         let identifier = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] ?? UUID().uuidString
-        return "DUNE.SimulatorAdvancedMockDataTests.\(identifier.hashValue.magnitude)"
+        return "DUNE.SimulatorAdvancedMockDataTests.\(stableSuiteHash(for: identifier))"
     }()
 
     private static var isRunningXCTest: Bool {
@@ -16,6 +16,12 @@ enum SimulatorAdvancedMockDataModeStore {
     private static var currentDefaults: UserDefaults {
         guard isRunningXCTest else { return .standard }
         return UserDefaults(suiteName: unitTestDefaultsSuiteName) ?? .standard
+    }
+
+    private static func stableSuiteHash(for identifier: String) -> UInt64 {
+        identifier.unicodeScalars.reduce(1_469_598_103_934_665_603) { partialResult, scalar in
+            (partialResult ^ UInt64(scalar.value)) &* 1_099_511_628_211
+        }
     }
 
     static var isSimulatorAvailable: Bool {

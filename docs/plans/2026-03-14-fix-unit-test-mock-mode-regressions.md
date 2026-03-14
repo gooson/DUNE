@@ -30,22 +30,22 @@ related_brainstorms: []
 
 ## Approach
 
-`SimulatorAdvancedMockDataModeStore`에 테스트 환경에서만 simulator availability와 defaults 저장소를 override할 수 있는 internal hook을 추가한다. unit tests는 이 hook을 사용해 isolated `UserDefaults` suite와 availability override를 설정하고, 각 테스트 종료 시 원복한다. 별도로 `TrainingVolumeViewModel`에는 `guard !isLoading else { return }`를 추가해 중복 로드 요청을 무시하도록 맞춘다.
+`SimulatorAdvancedMockDataModeStore`가 XCTest 런타임에서는 simulator availability를 열고, app runtime과 분리된 test-scoped `UserDefaults` suite를 사용하도록 조정한다. 이렇게 하면 기존 테스트 코드 수정 없이 mock mode persistence와 query fallback이 deterministic하게 동작한다. 별도로 `TrainingVolumeViewModel`에는 `guard !isLoading else { return }`를 추가해 중복 로드 요청을 무시하도록 맞춘다.
 
 ### Alternative Approaches Considered
 
 | Approach | Pros | Cons | Decision |
 |----------|------|------|----------|
 | 테스트를 simulator 전용으로 제한 | production 코드 변경 없음 | 로컬/CI 대상 편차가 계속 남고 현재 실패 원인을 해결하지 못함 | 기각 |
-| `isSimulatorAvailable`를 XCTest에서 항상 true로 변경 | 구현이 단순함 | test isolation이 부족하고 defaults/state leakage 가능성이 남음 | 부분 채택 안 함 |
-| availability override + isolated defaults hook 추가 | 테스트 대상 편차 제거, 상태 제어 가능, production 영향 최소 | small test hook 추가 필요 | 채택 |
+| `isSimulatorAvailable`를 XCTest에서 항상 true로 변경 | 구현이 단순함 | test isolation이 부족하고 defaults/state leakage 가능성이 남음 | 기각 |
+| XCTest 전용 defaults suite + XCTest availability gate | 테스트 대상 편차 제거, 상태 제어 가능, production 영향 최소 | production store에 test-aware 분기 추가 필요 | 채택 |
 
 ## Affected Files
 
 | File | Change Type | Description |
 |------|-------------|-------------|
 | `DUNE/Data/Services/SimulatorAdvancedMockData.swift` | modify | 테스트 환경 override와 isolated defaults 지원 추가 |
-| `DUNETests/SimulatorAdvancedMockDataTests.swift` | modify | 테스트별 mock-mode environment setup/teardown 정리 |
+| `DUNETests/SimulatorAdvancedMockDataTests.swift` | verify | 기존 테스트가 new test-scoped defaults 경로에서도 그대로 통과하는지 검증 |
 | `DUNE/Presentation/Activity/TrainingVolume/TrainingVolumeViewModel.swift` | modify | 중복 load guard 복원 |
 | `DUNETests/TrainingVolumeViewModelTests.swift` | verify | existing expectation과 구현 일치 여부 검증 |
 
@@ -53,8 +53,8 @@ related_brainstorms: []
 
 ### Step 1: Stabilize simulator advanced mock mode for tests
 
-- **Files**: `DUNE/Data/Services/SimulatorAdvancedMockData.swift`, `DUNETests/SimulatorAdvancedMockDataTests.swift`
-- **Changes**: availability override와 test-scoped defaults를 추가하고, existing tests가 해당 hook을 통해 deterministic setup을 수행하도록 정리한다.
+- **Files**: `DUNE/Data/Services/SimulatorAdvancedMockData.swift`
+- **Changes**: XCTest 런타임에서 simulator gate를 열고 test-scoped defaults suite를 사용하도록 조정한다.
 - **Verification**: `SimulatorAdvancedMockDataTests`에서 `isEnabled`, `referenceDate`, `workouts.count`, `snapshot.fetchedAt` 기대값이 모두 통과한다.
 
 ### Step 2: Restore loading guard semantics
@@ -73,9 +73,9 @@ related_brainstorms: []
 
 | Case | Handling |
 |------|----------|
-| 테스트가 iOS simulator가 아니라 `My Mac` 대상에서 실행됨 | test-only availability override로 mock mode 경로를 강제 활성화 |
-| standard defaults에 남은 기존 mock state가 새 테스트에 영향을 줌 | isolated suite를 사용하고 teardown에서 removePersistentDomain 수행 |
-| production UI가 non-simulator 환경에서 mock section을 노출할 위험 | override는 tests에서만 명시적으로 설정하고 기본값은 기존 simulator gate 유지 |
+| 테스트가 iOS simulator가 아니라 `My Mac` 대상에서 실행됨 | XCTest 런타임에서는 simulator gate를 열어 mock mode 경로를 유지 |
+| standard defaults에 남은 기존 mock state가 새 테스트에 영향을 줌 | XCTest 전용 defaults suite로 app runtime state와 분리 |
+| production UI가 non-simulator 환경에서 mock section을 노출할 위험 | 일반 런타임은 기존 simulator gate를 유지하고 XCTest에서만 분기 |
 | overlapping load 요청 중 첫 요청 결과가 늦게 도착 | existing requestID 기반 stale-result guard 유지 |
 
 ## Testing Strategy
@@ -88,8 +88,8 @@ related_brainstorms: []
 
 | Risk | Probability | Impact | Mitigation |
 |------|-------------|--------|------------|
-| 테스트 훅이 production code path에 새 branch를 추가해 runtime behavior를 흔듦 | low | medium | 기본 path는 기존 `targetEnvironment(simulator)` 유지, test에서만 override 사용 |
-| isolated defaults hook 정리가 누락되어 다른 테스트를 오염시킴 | medium | medium | helper에서 setup/teardown을 한곳으로 묶고 `defer`로 원복 |
+| test-aware branch가 production runtime behavior를 흔듦 | low | medium | 일반 런타임은 기존 simulator gate를 유지하고 XCTest에서만 defaults suite를 분리 |
+| test-scoped suite 이름이 세션마다 달라 stale domain이 쌓일 수 있음 | low | low | deterministic hash로 suite 이름을 고정하고 random `hashValue` 사용을 피함 |
 | loading guard 복원이 실제 refresh UX를 막음 | low | low | guard는 이미 `isLoading == true`인 동일 viewmodel 호출에만 적용되고 async refresh path는 별도 유지 |
 
 ## Confidence Assessment
