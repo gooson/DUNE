@@ -16,8 +16,8 @@ struct AppNotificationCenterDelegateTests {
         #expect(options.contains(.badge))
     }
 
-    @Test("forwardNotificationResponse delivers payload on main actor")
-    func forwardNotificationResponseDeliversPayloadOnMainActor() async {
+    @Test("forwardNotificationResponse delivers payload on main thread")
+    func forwardNotificationResponseDeliversPayloadOnMainThread() async {
         let spy = ResponseHandlerSpy()
         let delegate = AppNotificationCenterDelegate { payload in
             MainActor.assumeIsolated {
@@ -28,10 +28,29 @@ struct AppNotificationCenterDelegateTests {
 
         let payload = NotificationResponsePayload(routeKind: "sleepDetail")
 
-        await delegate.forwardNotificationResponse(payload)
+        await withCheckedContinuation { continuation in
+            delegate.forwardNotificationResponse(payload) {
+                continuation.resume()
+            }
+        }
 
         #expect(spy.receivedPayload == payload)
         #expect(spy.wasCalledOnMainThread)
+    }
+
+    @Test("forwardNotificationResponse calls completion handler on main thread")
+    func forwardNotificationResponseCallsCompletionOnMainThread() async {
+        let delegate = AppNotificationCenterDelegate { _ in }
+
+        let payload = NotificationResponsePayload(routeKind: "workoutDetail")
+
+        let completionOnMain = await withCheckedContinuation { continuation in
+            delegate.forwardNotificationResponse(payload) {
+                continuation.resume(returning: Thread.isMainThread)
+            }
+        }
+
+        #expect(completionOnMain)
     }
 }
 
