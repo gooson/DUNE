@@ -261,6 +261,49 @@ private actor CountingDashboardSharedHealthDataService: SharedHealthDataService 
     }
 }
 
+private actor SequencedDashboardSharedHealthDataService: SharedHealthDataService {
+    private let snapshots: [SharedHealthSnapshot]
+    private var nextFetchIndex = 0
+    private var startedFetches: Set<Int> = []
+    private var startContinuations: [Int: CheckedContinuation<Void, Never>] = [:]
+    private var releaseContinuations: [Int: CheckedContinuation<Void, Never>] = [:]
+
+    init(snapshots: [SharedHealthSnapshot]) {
+        self.snapshots = snapshots
+    }
+
+    func fetchSnapshot() async -> SharedHealthSnapshot {
+        let index = nextFetchIndex
+        nextFetchIndex += 1
+        startedFetches.insert(index)
+        startContinuations[index]?.resume()
+        startContinuations[index] = nil
+
+        await withCheckedContinuation { continuation in
+            releaseContinuations[index] = continuation
+        }
+
+        return snapshots[index]
+    }
+
+    func invalidateCache() async {}
+
+    func waitUntilFetchStarts(call index: Int) async {
+        if startedFetches.contains(index) {
+            return
+        }
+
+        await withCheckedContinuation { continuation in
+            startContinuations[index] = continuation
+        }
+    }
+
+    func resumeFetch(call index: Int) {
+        releaseContinuations[index]?.resume()
+        releaseContinuations[index] = nil
+    }
+}
+
 private func makeEmptySharedSnapshot(fetchedAt: Date = Date()) -> SharedHealthSnapshot {
     SharedHealthSnapshot(
         hrvSamples: [],
@@ -277,6 +320,25 @@ private func makeEmptySharedSnapshot(fetchedAt: Date = Date()) -> SharedHealthSn
         recentConditionScores: [],
         failedSources: [],
         fetchedAt: fetchedAt
+    )
+}
+
+private func makeDashboardSharedSnapshot(hrvValue: Double) -> SharedHealthSnapshot {
+    SharedHealthSnapshot(
+        hrvSamples: [HRVSample(value: hrvValue, date: Date())],
+        todayRHR: 55,
+        yesterdayRHR: 57,
+        latestRHR: nil,
+        rhrCollection: [],
+        todaySleepStages: [],
+        yesterdaySleepStages: [],
+        latestSleepStages: nil,
+        sleepDailyDurations: [],
+        conditionScore: nil,
+        baselineStatus: nil,
+        recentConditionScores: [],
+        failedSources: [],
+        fetchedAt: Date()
     )
 }
 
@@ -848,6 +910,42 @@ struct DashboardViewModelTests {
 
         await sharedService.resumeFetch()
         _ = await loadTask.result
+    }
+
+    @Test("Latest dashboard load wins over older response")
+    func latestDashboardLoadWinsOverOlderResponse() async {
+        let sharedService = SequencedDashboardSharedHealthDataService(
+            snapshots: [
+                makeDashboardSharedSnapshot(hrvValue: 22),
+                makeDashboardSharedSnapshot(hrvValue: 71),
+            ]
+        )
+        let vm = DashboardViewModel(
+            hrvService: MockHRVService(),
+            sleepService: MockSleepService(),
+            workoutService: MockWorkoutService(),
+            stepsService: MockStepsService(),
+            bodyService: MockBodyService(),
+            sharedHealthDataService: sharedService,
+            weatherProvider: MockWeatherProvider(snapshot: makeTestWeatherSnapshot()),
+            coachingMessageEnhancer: nil
+        )
+
+        let firstLoad = Task { await vm.loadData() }
+        await sharedService.waitUntilFetchStarts(call: 0)
+
+        let secondLoad = Task { await vm.loadData() }
+        await sharedService.waitUntilFetchStarts(call: 1)
+
+        await sharedService.resumeFetch(call: 1)
+        _ = await secondLoad.result
+
+        await sharedService.resumeFetch(call: 0)
+        _ = await firstLoad.result
+
+        let hrvMetric = vm.sortedMetrics.first { $0.category == .hrv }
+        #expect(hrvMetric?.value == 71)
+        #expect(vm.isLoading == false)
     }
 
     private func makePinnedStore(_ categories: [HealthMetric.Category]) -> TodayPinnedMetricsStore {

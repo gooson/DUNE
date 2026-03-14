@@ -118,6 +118,48 @@ private actor StartupTrackingWorkoutService: WorkoutQuerying {
     }
 }
 
+private actor SequencedActivityWorkoutService: WorkoutQuerying {
+    private let firstRecentWorkouts: [WorkoutSummary]
+    private let secondRecentWorkouts: [WorkoutSummary]
+    private var recentFetchCount = 0
+    private var didStartFirstFetch = false
+    private var fetchStartedContinuation: CheckedContinuation<Void, Never>?
+    private var fetchReleaseContinuation: CheckedContinuation<Void, Never>?
+
+    init(firstRecentWorkouts: [WorkoutSummary], secondRecentWorkouts: [WorkoutSummary]) {
+        self.firstRecentWorkouts = firstRecentWorkouts
+        self.secondRecentWorkouts = secondRecentWorkouts
+    }
+
+    func fetchWorkouts(days: Int) async throws -> [WorkoutSummary] {
+        recentFetchCount += 1
+        if recentFetchCount == 1 {
+            didStartFirstFetch = true
+            fetchStartedContinuation?.resume()
+            fetchStartedContinuation = nil
+            await withCheckedContinuation { continuation in
+                fetchReleaseContinuation = continuation
+            }
+            return firstRecentWorkouts
+        }
+        return secondRecentWorkouts
+    }
+
+    func fetchWorkouts(start: Date, end: Date) async throws -> [WorkoutSummary] { [] }
+
+    func waitUntilFirstFetchStarts() async {
+        if didStartFirstFetch { return }
+        await withCheckedContinuation { continuation in
+            fetchStartedContinuation = continuation
+        }
+    }
+
+    func resumeFirstFetch() {
+        fetchReleaseContinuation?.resume()
+        fetchReleaseContinuation = nil
+    }
+}
+
 private func makeEmptyActivitySharedSnapshot(fetchedAt: Date = Date()) -> SharedHealthSnapshot {
     SharedHealthSnapshot(
         hrvSamples: [],
@@ -282,6 +324,47 @@ struct ActivityViewModelTests {
 
         await sharedService.resumeFetch()
         await loadTask.value
+    }
+
+    @Test("newer activity refresh ignores an older delayed workout response")
+    func newerActivityRefreshWinsOverOlderResponse() async {
+        let workout = WorkoutSummary(
+            id: "run-1",
+            type: "Running",
+            activityType: .running,
+            duration: 1_800,
+            calories: 220,
+            distance: 5_000,
+            date: Date()
+        )
+        let service = SequencedActivityWorkoutService(
+            firstRecentWorkouts: [workout],
+            secondRecentWorkouts: []
+        )
+        let vm = ActivityViewModel(
+            workoutService: service,
+            stepsService: MockStepsService(),
+            hrvService: MockHRVService(),
+            sleepService: MockSleepService(),
+            sharedHealthDataService: MockSharedHealthDataService(snapshot: makeEmptyActivitySharedSnapshot()),
+            personalRecordStore: makeIsolatedPRStore(),
+            recommendationSettingsStore: makeIsolatedRecommendationStore()
+        )
+
+        let firstTask = Task {
+            await vm.loadActivityData()
+        }
+
+        await service.waitUntilFirstFetchStarts()
+        await vm.loadActivityData()
+
+        #expect(vm.recentWorkouts.isEmpty)
+
+        await service.resumeFirstFetch()
+        await firstTask.value
+
+        #expect(vm.recentWorkouts.isEmpty)
+        #expect(vm.isLoading == false)
     }
 
     // MARK: - Weekly Data Gap Fill

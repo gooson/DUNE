@@ -58,6 +58,7 @@ final class WellnessViewModel {
 
     private var loadTask: Task<Void, Never>?
     private static let staleDays = 3
+    private var loadRequestID = 0
 
     // MARK: - Init
 
@@ -95,12 +96,14 @@ final class WellnessViewModel {
 
     func loadData() {
         // Cancel-before-spawn (Correction #16)
+        invalidateLoadRequests()
         loadTask?.cancel()
         loadTask = Task { await performLoad() }
     }
 
     /// Async entry point for `.refreshable` — awaits load completion so spinner persists.
     func performRefresh() async {
+        invalidateLoadRequests()
         loadTask?.cancel()
         let task = Task { await performLoad() }
         loadTask = task
@@ -160,18 +163,17 @@ final class WellnessViewModel {
     // MARK: - Loading
 
     private func performLoad() async {
+        let requestID = beginLoadRequest()
         isLoading = true
         partialFailureMessage = nil
+        defer { finishLoadRequest(requestID) }
         let healthKitAvailable = healthKitManager.isAvailable
         isMirroredReadOnlyMode = !healthKitAvailable
 
         // Collect results using TaskGroup for 10+ parallel queries (Correction #5)
         let results = await fetchAllData(canQueryHealthKit: healthKitAvailable)
 
-        guard !Task.isCancelled else { // Correction #17
-            isLoading = false
-            return
-        }
+        guard isCurrentLoadRequest(requestID) else { return } // Correction #17
         // Keep trend inputs for wellness detail charts
         sleepDetailTrend = results.sleepWeekly
             .sorted { $0.date < $1.date }
@@ -407,10 +409,7 @@ final class WellnessViewModel {
             ))
         }
 
-        guard !Task.isCancelled else {
-            isLoading = false
-            return
-        }
+        guard isCurrentLoadRequest(requestID) else { return }
 
         // --- Body Trend for Wellness Score ---
         let bodyTrend = buildBodyTrend(results: results)
@@ -434,6 +433,7 @@ final class WellnessViewModel {
                 readinessScore: nil
             )
         }
+        guard isCurrentLoadRequest(requestID) else { return }
 
         // Sort and split into sections (Correction #88: atomic update)
         let sortedCards = cards.sorted { a, b in
@@ -453,7 +453,25 @@ final class WellnessViewModel {
         }
 
         recomputeSleepPrediction()
-        isLoading = false
+    }
+
+    private func beginLoadRequest() -> Int {
+        loadRequestID += 1
+        return loadRequestID
+    }
+
+    private func invalidateLoadRequests() {
+        loadRequestID += 1
+    }
+
+    private func isCurrentLoadRequest(_ requestID: Int) -> Bool {
+        requestID == loadRequestID && !Task.isCancelled
+    }
+
+    private func finishLoadRequest(_ requestID: Int) {
+        if requestID == loadRequestID {
+            isLoading = false
+        }
     }
 
     // MARK: - Parallel Fetch

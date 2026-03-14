@@ -115,6 +115,7 @@ final class DashboardViewModel {
     private let scoreRefreshService: ScoreRefreshService?
     private let templateRecommendationService: any WorkoutTemplateRecommending
     private let nudgeDismissStore: TemplateNudgeDismissStore
+    private var loadRequestID = 0
 
     /// Hourly sparkline data for the condition hero card, sourced from ScoreRefreshService.
     var conditionSparkline: HourlySparklineData {
@@ -169,8 +170,10 @@ final class DashboardViewModel {
     }
 
     func loadData(canLoadHealthKitData: Bool = true) async {
-        guard !isLoading else { return }
+        let requestID = beginLoadRequest()
         isLoading = true
+        defer { finishLoadRequest(requestID) }
+
         let healthKitAvailable = healthKitManager.isAvailable && !Self.shouldUseSeededUITestFixtures
         let canQueryHealthKit = healthKitAvailable && canLoadHealthKitData
         let canUseSharedSnapshot = !healthKitAvailable || canLoadHealthKitData
@@ -223,6 +226,8 @@ final class DashboardViewModel {
             hrvTask, sleepTask, exerciseTask, stepsTask, weightTask, bmiTask, weatherTask
         )
 
+        guard isCurrentLoadRequest(requestID) else { return }
+
         var allMetrics: [HealthMetric] = []
         allMetrics.append(contentsOf: hrvResult.metrics)
         if let sleepMetric = sleepResult.metric { allMetrics.append(sleepMetric) }
@@ -256,15 +261,13 @@ final class DashboardViewModel {
         WidgetDataWriter.writeConditionScore(conditionScore)
 
         // Persist hourly score snapshot for sparkline tracking
-        if let service = scoreRefreshService, conditionScore != nil {
+        if isCurrentLoadRequest(requestID), let service = scoreRefreshService, conditionScore != nil {
             await service.recordSnapshot(
                 conditionScore: conditionScore?.score,
                 wellnessScore: nil,
                 readinessScore: nil
             )
         }
-
-        isLoading = false
     }
 
     /// Load template nudge recommendation using existing templates from View's @Query.
@@ -296,6 +299,21 @@ final class DashboardViewModel {
         guard let rec = templateNudgeRecommendation else { return }
         nudgeDismissStore.dismiss(rec.id)
         templateNudgeRecommendation = nil
+    }
+
+    private func beginLoadRequest() -> Int {
+        loadRequestID += 1
+        return loadRequestID
+    }
+
+    private func isCurrentLoadRequest(_ requestID: Int) -> Bool {
+        requestID == loadRequestID && !Task.isCancelled
+    }
+
+    private func finishLoadRequest(_ requestID: Int) {
+        if requestID == loadRequestID {
+            isLoading = false
+        }
     }
 
     private func safeHRVFetch(

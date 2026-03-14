@@ -2,6 +2,51 @@ import Foundation
 import Testing
 @testable import DUNE
 
+private actor SequencedExerciseWorkoutService: WorkoutQuerying {
+    private let dayResults: [[WorkoutSummary]]
+    private var nextDayFetchIndex = 0
+    private var startedDayFetches: Set<Int> = []
+    private var startContinuations: [Int: CheckedContinuation<Void, Never>] = [:]
+    private var releaseContinuations: [Int: CheckedContinuation<Void, Never>] = [:]
+
+    init(dayResults: [[WorkoutSummary]]) {
+        self.dayResults = dayResults
+    }
+
+    func fetchWorkouts(days: Int) async throws -> [WorkoutSummary] {
+        let index = nextDayFetchIndex
+        nextDayFetchIndex += 1
+        startedDayFetches.insert(index)
+        startContinuations[index]?.resume()
+        startContinuations[index] = nil
+
+        await withCheckedContinuation { continuation in
+            releaseContinuations[index] = continuation
+        }
+
+        return dayResults[index]
+    }
+
+    func fetchWorkouts(start: Date, end: Date) async throws -> [WorkoutSummary] {
+        []
+    }
+
+    func waitUntilDayFetchStarts(call index: Int) async {
+        if startedDayFetches.contains(index) {
+            return
+        }
+
+        await withCheckedContinuation { continuation in
+            startContinuations[index] = continuation
+        }
+    }
+
+    func resumeDayFetch(call index: Int) {
+        releaseContinuations[index]?.resume()
+        releaseContinuations[index] = nil
+    }
+}
+
 @Suite("ExerciseViewModel")
 @MainActor
 struct ExerciseViewModelTests {
@@ -192,6 +237,44 @@ struct ExerciseViewModelTests {
         #expect(vm.allExercises[0].type == "Running")
         #expect(vm.allExercises[1].type == "Bench Press")
         #expect(vm.allExercises[2].type == "Cycling")
+    }
+
+    @Test("Latest workout load wins over older response")
+    func latestWorkoutLoadWinsOverOlderResponse() async {
+        let now = Date()
+        let oldWorkout = WorkoutSummary(
+            id: "old",
+            type: "Running",
+            duration: 1800,
+            calories: 200,
+            distance: nil,
+            date: now.addingTimeInterval(-3600)
+        )
+        let newWorkout = WorkoutSummary(
+            id: "new",
+            type: "Cycling",
+            duration: 2400,
+            calories: 320,
+            distance: nil,
+            date: now
+        )
+        let service = SequencedExerciseWorkoutService(dayResults: [[oldWorkout], [newWorkout]])
+        let vm = ExerciseViewModel(workoutService: service)
+
+        let firstLoad = Task { await vm.loadHealthKitWorkouts() }
+        await service.waitUntilDayFetchStarts(call: 0)
+
+        let secondLoad = Task { await vm.loadHealthKitWorkouts() }
+        await service.waitUntilDayFetchStarts(call: 1)
+
+        await service.resumeDayFetch(call: 1)
+        _ = await secondLoad.result
+
+        await service.resumeDayFetch(call: 0)
+        _ = await firstLoad.result
+
+        #expect(vm.healthKitWorkouts.map(\.id) == ["new"])
+        #expect(vm.isLoading == false)
     }
 }
 

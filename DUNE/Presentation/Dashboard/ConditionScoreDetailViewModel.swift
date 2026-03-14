@@ -28,6 +28,7 @@ final class ConditionScoreDetailViewModel {
     private let hrvService: HRVQuerying
     private let scoreUseCase = CalculateConditionScoreUseCase()
     private let scoreRefreshService: ScoreRefreshService?
+    private var reloadRequestID = 0
 
     init(
         hrvService: HRVQuerying? = nil,
@@ -44,27 +45,24 @@ final class ConditionScoreDetailViewModel {
     }
 
     func loadData() async {
-        guard !isLoading else { return }
+        let requestID = beginReloadRequest()
         isLoading = true
         errorMessage = nil
+        defer { finishReloadRequest(requestID) }
 
         do {
             if selectedPeriod == .day {
-                try await loadHourlyData()
+                try await loadHourlyData(requestID: requestID)
             } else {
-                try await loadScoreData()
+                try await loadScoreData(requestID: requestID)
             }
-            guard !Task.isCancelled else {
-                isLoading = false
-                return
-            }
+            guard isCurrentReloadRequest(requestID) else { return }
             buildHighlights()
         } catch {
+            guard isCurrentReloadRequest(requestID) else { return }
             AppLogger.ui.error("ConditionScoreDetail load failed: \(error.localizedDescription)")
             errorMessage = error.localizedDescription
         }
-
-        isLoading = false
     }
 
     // MARK: - Scroll Position
@@ -106,11 +104,28 @@ final class ConditionScoreDetailViewModel {
     private var reloadTask: Task<Void, Never>?
 
     private func triggerReload() {
+        reloadRequestID += 1
         reloadTask?.cancel()
+        isLoading = false
         reloadTask = Task { await loadData() }
     }
 
-    private func loadScoreData() async throws {
+    private func beginReloadRequest() -> Int {
+        reloadRequestID += 1
+        return reloadRequestID
+    }
+
+    private func isCurrentReloadRequest(_ requestID: Int) -> Bool {
+        requestID == reloadRequestID && !Task.isCancelled
+    }
+
+    private func finishReloadRequest(_ requestID: Int) {
+        if requestID == reloadRequestID {
+            isLoading = false
+        }
+    }
+
+    private func loadScoreData(requestID: Int) async throws {
         let range = extendedRange
 
         // Fetch all HRV samples for the extended period
@@ -174,6 +189,7 @@ final class ConditionScoreDetailViewModel {
             calendar: calendar
         )
 
+        guard isCurrentReloadRequest(requestID) else { return }
         chartData = allScores
 
         // Aggregate for longer periods
@@ -255,7 +271,7 @@ final class ConditionScoreDetailViewModel {
 
     // MARK: - Hourly Data (Day Period)
 
-    private func loadHourlyData() async throws {
+    private func loadHourlyData(requestID: Int) async throws {
         let calendar = Calendar.current
         let now = Date()
         let startOfDay = calendar.startOfDay(for: now)
@@ -286,6 +302,7 @@ final class ConditionScoreDetailViewModel {
         }
         .sorted { $0.hourDate < $1.hourDate }
 
+        guard isCurrentReloadRequest(requestID) else { return }
         chartData = hourlyEvaluationDates.compactMap { item in
             let output = scoreUseCase.executeIntraday(input: .init(
                 hrvSamples: samples,

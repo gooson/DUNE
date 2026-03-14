@@ -21,6 +21,7 @@ final class TrainingVolumeViewModel {
     private let stepsService: StepsQuerying
     private let hrvService: HRVQuerying
     private let effortScoreService: EffortScoreService
+    private var loadRequestID = 0
     init(
         workoutService: WorkoutQuerying? = nil,
         stepsService: StepsQuerying? = nil,
@@ -36,10 +37,10 @@ final class TrainingVolumeViewModel {
     // MARK: - Loading
 
     func loadData(manualRecords: [ExerciseRecord]) async {
-        guard !isLoading else { return }
+        let requestID = beginLoadRequest()
         isLoading = true
         errorMessage = nil
-        defer { isLoading = false }
+        defer { finishLoadRequest(requestID) }
 
         let snapshots = manualRecords.map { record in
             ManualExerciseSnapshot(
@@ -70,7 +71,7 @@ final class TrainingVolumeViewModel {
 
         let (workouts, loadData) = await (workoutsTask, trainingLoadTask)
 
-        guard !Task.isCancelled else { return }
+        guard isCurrentLoadRequest(requestID) else { return }
 
         let result = TrainingVolumeAnalysisService.analyze(
             workouts: workouts,
@@ -78,6 +79,7 @@ final class TrainingVolumeViewModel {
             period: period
         )
 
+        guard isCurrentLoadRequest(requestID) else { return }
         comparison = result
         chartDailyBreakdown = TrainingVolumeAnalysisService.buildHistoryDailyBreakdown(
             workouts: workouts,
@@ -86,17 +88,36 @@ final class TrainingVolumeViewModel {
             end: historyEnd
         )
         trainingLoadData = loadData
-
-        guard !Task.isCancelled else { return }
     }
 
     // MARK: - Private
 
     private func triggerReload() {
+        invalidateLoadRequests()
         comparison = nil
         chartDailyBreakdown = []
         trainingLoadData = []
+        isLoading = false
         // View will call loadData() via .task(id:)
+    }
+
+    private func beginLoadRequest() -> Int {
+        loadRequestID += 1
+        return loadRequestID
+    }
+
+    private func invalidateLoadRequests() {
+        loadRequestID += 1
+    }
+
+    private func isCurrentLoadRequest(_ requestID: Int) -> Bool {
+        requestID == loadRequestID && !Task.isCancelled
+    }
+
+    private func finishLoadRequest(_ requestID: Int) {
+        if requestID == loadRequestID {
+            isLoading = false
+        }
     }
 
     private func safeWorkoutsFetch(days: Int) async -> [WorkoutSummary] {
