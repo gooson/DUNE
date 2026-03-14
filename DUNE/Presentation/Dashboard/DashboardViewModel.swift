@@ -200,10 +200,6 @@ final class DashboardViewModel {
             AppLogger.ui.info("HealthKit authorization is deferred; skip protected dashboard queries until app-level orchestration completes")
         }
 
-        async let exerciseTask = safeExerciseFetch(canQueryHealthKit: canQueryHealthKit)
-        async let stepsTask = safeStepsFetch(canQueryHealthKit: canQueryHealthKit)
-        async let weightTask = safeWeightFetch(canQueryHealthKit: canQueryHealthKit)
-        async let bmiTask = safeBMIFetch(canQueryHealthKit: canQueryHealthKit)
         async let weatherTask = safeWeatherFetch()
         let sharedSnapshot: SharedHealthSnapshot?
 #if DEBUG
@@ -219,8 +215,13 @@ final class DashboardViewModel {
 #endif
 
         // Each fetch is independent — one failure should not block others.
+        // All snapshot-aware fetches launch after snapshot is available.
         async let hrvTask = safeHRVFetch(snapshot: sharedSnapshot, canQueryHealthKit: canQueryHealthKit)
         async let sleepTask = safeSleepFetch(snapshot: sharedSnapshot, canQueryHealthKit: canQueryHealthKit)
+        async let exerciseTask = safeExerciseFetch(snapshot: sharedSnapshot, canQueryHealthKit: canQueryHealthKit)
+        async let stepsTask = safeStepsFetch(snapshot: sharedSnapshot, canQueryHealthKit: canQueryHealthKit)
+        async let weightTask = safeWeightFetch(snapshot: sharedSnapshot, canQueryHealthKit: canQueryHealthKit)
+        async let bmiTask = safeBMIFetch(snapshot: sharedSnapshot, canQueryHealthKit: canQueryHealthKit)
 
         let (hrvResult, sleepResult, exerciseResult, stepsResult, weightResult, bmiResult, weatherResult) = await (
             hrvTask, sleepTask, exerciseTask, stepsTask, weightTask, bmiTask, weatherTask
@@ -367,7 +368,23 @@ final class DashboardViewModel {
         }
     }
 
-    private func safeExerciseFetch(canQueryHealthKit: Bool) async -> (metrics: [HealthMetric], failed: Bool) {
+    private func safeExerciseFetch(
+        snapshot: SharedHealthSnapshot?,
+        canQueryHealthKit: Bool
+    ) async -> (metrics: [HealthMetric], failed: Bool) {
+        if let snapshot, let minutes = snapshot.todayExerciseMinutes, minutes > 0 {
+            let failed = snapshot.failedSources.contains(.todayExercise)
+            let metric = HealthMetric(
+                id: "exercise",
+                name: String(localized: "Exercise"),
+                value: minutes,
+                unit: "min",
+                change: nil,
+                date: snapshot.fetchedAt,
+                category: .exercise
+            )
+            return ([metric], failed)
+        }
         guard canQueryHealthKit else { return ([], false) }
         do { return (try await fetchExerciseData(), false) }
         catch {
@@ -376,7 +393,23 @@ final class DashboardViewModel {
         }
     }
 
-    private func safeStepsFetch(canQueryHealthKit: Bool) async -> (metric: HealthMetric?, failed: Bool) {
+    private func safeStepsFetch(
+        snapshot: SharedHealthSnapshot?,
+        canQueryHealthKit: Bool
+    ) async -> (metric: HealthMetric?, failed: Bool) {
+        if let snapshot, let steps = snapshot.todaySteps, steps > 0 {
+            let failed = snapshot.failedSources.contains(.todaySteps)
+            let metric = HealthMetric(
+                id: "steps",
+                name: String(localized: "Steps"),
+                value: steps,
+                unit: "",
+                change: nil,
+                date: snapshot.fetchedAt,
+                category: .steps
+            )
+            return (metric, failed)
+        }
         guard canQueryHealthKit else { return (nil, false) }
         do { return (try await fetchStepsData(), false) }
         catch {
@@ -385,7 +418,25 @@ final class DashboardViewModel {
         }
     }
 
-    private func safeWeightFetch(canQueryHealthKit: Bool) async -> (metric: HealthMetric?, failed: Bool) {
+    private func safeWeightFetch(
+        snapshot: SharedHealthSnapshot?,
+        canQueryHealthKit: Bool
+    ) async -> (metric: HealthMetric?, failed: Bool) {
+        if let snapshot, let weight = snapshot.latestWeight,
+           weight.value > 0, weight.value < 500 {
+            let failed = snapshot.failedSources.contains(.latestWeight)
+            let metric = HealthMetric(
+                id: "weight",
+                name: String(localized: "Weight"),
+                value: weight.value,
+                unit: "kg",
+                change: nil,
+                date: weight.date,
+                category: .weight,
+                isHistorical: !Calendar.current.isDateInToday(weight.date)
+            )
+            return (metric, failed)
+        }
         guard canQueryHealthKit else { return (nil, false) }
         do { return (try await fetchWeightData(), false) }
         catch {
@@ -394,7 +445,25 @@ final class DashboardViewModel {
         }
     }
 
-    private func safeBMIFetch(canQueryHealthKit: Bool) async -> (metric: HealthMetric?, failed: Bool) {
+    private func safeBMIFetch(
+        snapshot: SharedHealthSnapshot?,
+        canQueryHealthKit: Bool
+    ) async -> (metric: HealthMetric?, failed: Bool) {
+        if let snapshot, let bmi = snapshot.latestBMI,
+           bmi.value > 0, bmi.value < 100 {
+            let failed = snapshot.failedSources.contains(.latestBMI)
+            let metric = HealthMetric(
+                id: "bmi",
+                name: String(localized: "BMI"),
+                value: bmi.value,
+                unit: "",
+                change: nil,
+                date: bmi.date,
+                category: .bmi,
+                isHistorical: !Calendar.current.isDateInToday(bmi.date)
+            )
+            return (metric, failed)
+        }
         guard canQueryHealthKit else { return (nil, false) }
         do { return (try await fetchBMIData(), false) }
         catch {
