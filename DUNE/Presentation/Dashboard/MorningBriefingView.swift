@@ -81,7 +81,7 @@ struct MorningBriefingView: View {
                     try? await Task.sleep(for: .milliseconds(150 * index))
                     guard !Task.isCancelled else { return }
                     withAnimation(DS.Animation.emphasize) {
-                        visibleSections.insert(index)
+                        _ = visibleSections.insert(index)
                     }
                 }
             }
