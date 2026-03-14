@@ -118,6 +118,29 @@ private struct StubBodyService: BodyCompositionQuerying {
     func fetchLatestLeanBodyMass(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
 }
 
+private actor StubHeartRateService: HeartRateQuerying {
+    var historySamples: [VitalSample] = []
+    private(set) var requestedIntervals: [DateComponents] = []
+
+    init(historySamples: [VitalSample] = []) {
+        self.historySamples = historySamples
+    }
+
+    func fetchHeartRateSamples(forWorkoutID workoutID: String) async throws -> [HeartRateSample] { [] }
+    func fetchHeartRateSummary(forWorkoutID workoutID: String) async throws -> HeartRateSummary {
+        HeartRateSummary(average: 0, max: 0, min: 0, samples: [])
+    }
+    func fetchLatestHeartRate(withinDays days: Int) async throws -> VitalSample? { nil }
+    func fetchHeartRateHistory(days: Int) async throws -> [VitalSample] { historySamples }
+    func fetchHeartRateHistory(start: Date, end: Date) async throws -> [VitalSample] { historySamples }
+    func fetchHeartRateHistory(start: Date, end: Date, interval: DateComponents) async throws -> [VitalSample] {
+        requestedIntervals.append(interval)
+        return historySamples
+    }
+    func fetchHeartRateZones(forWorkoutID workoutID: String, maxHR: Double) async throws -> [HeartRateZone] { [] }
+    func fetchHeartRateRecovery(forWorkoutID workoutID: String) async throws -> HeartRateRecovery? { nil }
+}
+
 // MARK: - Tests
 
 @Suite("MetricDetailViewModel")
@@ -126,19 +149,29 @@ struct MetricDetailViewModelTests {
 
     private let calendar = Calendar.current
 
+    private func waitForAutomaticReload(of viewModel: MetricDetailViewModel) async {
+        await Task.yield()
+        for _ in 0..<50 {
+            if !viewModel.isLoading { return }
+            await Task.yield()
+        }
+    }
+
     private func makeVM(
         hrv: StubHRVService = StubHRVService(),
         sleep: StubSleepService = StubSleepService(),
         steps: StubStepsService = StubStepsService(),
         workout: StubWorkoutService = StubWorkoutService(),
-        body: StubBodyService = StubBodyService()
+        body: StubBodyService = StubBodyService(),
+        heartRate: HeartRateQuerying? = nil
     ) -> MetricDetailViewModel {
         MetricDetailViewModel(
             hrvService: hrv,
             sleepService: sleep,
             stepsService: steps,
             workoutService: workout,
-            bodyService: body
+            bodyService: body,
+            heartRateService: heartRate
         )
     }
 
@@ -247,6 +280,48 @@ struct MetricDetailViewModelTests {
         #expect(vm.chartData.count == 3)
         #expect(vm.summaryStats!.min == 74.5)
         #expect(vm.summaryStats!.max == 75.0)
+    }
+
+    @Test("Weight day period preserves multiple same-day samples")
+    func weightDayPeriodPreservesIntradaySamples() async {
+        let now = Date()
+        let today = calendar.startOfDay(for: now)
+        let firstCandidate = now.addingTimeInterval(-30 * 60)
+        let first = Swift.max(firstCandidate, today.addingTimeInterval(60))
+        let secondCandidate = now.addingTimeInterval(-5 * 60)
+        let second = Swift.max(secondCandidate, first.addingTimeInterval(60))
+        let body = StubBodyService(weightSamples: [
+            BodyCompositionSample(value: 75.0, date: first),
+            BodyCompositionSample(value: 74.0, date: second),
+        ])
+        let vm = makeVM(body: body)
+        vm.configure(category: .weight, currentValue: 74.0, lastUpdated: second)
+        vm.selectedPeriod = .day
+        await waitForAutomaticReload(of: vm)
+
+        #expect(vm.chartData.count == 2)
+        #expect(vm.chartData.map(\.date) == [first, second])
+        #expect(vm.summaryStats?.average == 74.5)
+    }
+
+    @Test("Heart rate day period requests hourly history buckets")
+    func heartRateDayPeriodUsesHourlyBuckets() async {
+        let today = calendar.startOfDay(for: Date())
+        let hourlySamples = [
+            VitalSample(value: 72, date: calendar.date(byAdding: .hour, value: 0, to: today)!),
+            VitalSample(value: 76, date: calendar.date(byAdding: .hour, value: 4, to: today)!),
+            VitalSample(value: 70, date: calendar.date(byAdding: .hour, value: 8, to: today)!),
+        ]
+        let heartRate = StubHeartRateService(historySamples: hourlySamples)
+        let vm = makeVM(heartRate: heartRate)
+        vm.configure(category: .heartRate, currentValue: 70, lastUpdated: hourlySamples.last?.date)
+        vm.selectedPeriod = .day
+        await waitForAutomaticReload(of: vm)
+
+        let requestedIntervals = await heartRate.requestedIntervals
+        #expect(requestedIntervals == [DateComponents(hour: 1)])
+        #expect(vm.chartData.count == hourlySamples.count)
+        #expect(vm.chartData.map(\.value) == hourlySamples.map(\.value))
     }
 
     // MARK: - Sleep
