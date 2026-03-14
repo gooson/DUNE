@@ -639,10 +639,7 @@ struct ActivityView: View {
             ExerciseMixDetailView()
         case .trainingReadiness:
             TrainingReadinessDetailView(
-                readiness: viewModel.trainingReadiness,
-                hrvDailyAverages: viewModel.hrvDailyAverages,
-                rhrDailyData: viewModel.rhrDailyData,
-                sleepDailyData: viewModel.sleepDailyData
+                readiness: viewModel.trainingReadiness
             )
         case .weeklyStats:
             WeeklyStatsDetailView()

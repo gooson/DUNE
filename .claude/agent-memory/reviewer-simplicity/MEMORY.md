@@ -94,6 +94,13 @@
 - **Card container modifier chain repeated 3x (P2 DRY)**: `.frame(maxWidth: .infinity).frame(minHeight: 200).padding(24).background(.ultraThinMaterial, in: RoundedRectangle(...))` repeated in `loadingView`, `emptyStateView`, and `errorView` inside `VisionTrainView.swift`. Extract to a `View` modifier or ViewModifier.
 - **`workoutService` passthrough stored property (P3)**: `VisionContentView` stores `private let workoutService: WorkoutQuerying?` only to pass it to `VisionTrainViewModel` in `init`. After init, the property is never referenced again. Can pass inline without storing.
 
+### 2026-03-14: Score Detail View Refactor Review
+- **`buildHRVDailyAverages` (P1 DRY)**: Identical 10-line function copied verbatim into `TrainingReadinessDetailViewModel` and `WellnessScoreDetailViewModel`. `ConditionScoreDetailViewModel.buildSubScoreTrends` expresses the same logic inline. 3 occurrences = must extract. Target: `extension [HRVSample] { func dailyAveragePoints(in:calendar:) -> [ChartDataPoint] }`.
+- **`loadReadinessData`/`loadWellnessData` structural duplication (P1 DRY)**: Both are ~80-line functions with the same 6-parallel-fetch skeleton (current + previous period HRV/RHR/Sleep). Only the final trend-approximation function differs. Consider extracting a shared `ScoreDetailDataLoader` scaffold.
+- **`ScoreDetailSummaryStats` leaks `sizeClass` parameter (P2)**: Component receives `sizeClass: UserInterfaceSizeClass?` from caller. Should use `@Environment(\.horizontalSizeClass)` internally, matching other shared components in the same diff.
+- **`CalculationMethodCard` defaults are dead (P2)**: `icon` and `title` have defaults but every call site passes the same explicit values. Either remove defaults or drop the parameters.
+- **Shared components (7 new) are justified**: `ScoreDetailChartHeader`, `ScoreDetailEmptyState`, `ScoreDetailHighlights`, `ScoreDetailSummaryStats`, `TimeOfDayCard`, `ScoreCompositionCard`, `CalculationMethodCard` each replace 3+ per-view copies and are actively used by 2-3 views each. Extraction is appropriate.
+
 ### 2026-02-17: Prior Findings
 - Muscle Volume Calculation extracted to shared extension (resolved)
 - Formula/Metric rawValue display: acceptable for technical context

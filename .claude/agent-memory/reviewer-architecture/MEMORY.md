@@ -76,6 +76,23 @@ Layer boundary: App → Presentation → Domain ← Data
 - `InjuryRecord.durationDays` is identical to `InjuryInfo.durationDays` — the Data layer should delegate: `var durationDays: Int { toInjuryInfo().durationDays }`
 - General rule: when a Data `@Model` already has a `toDomain()` method, computed properties that mirror Domain logic should delegate rather than duplicate
 
+### Self-contained score detail ViewModels — HealthKit fetch duplication
+- Pattern introduced in this PR: `TrainingReadinessDetailViewModel` and `WellnessScoreDetailViewModel` each own full HealthKit fetch + HRV daily averaging + trend approximation + scroll/period state
+- `buildHRVDailyAverages` is byte-for-byte identical in both files — crosses the 3-location DRY threshold when combined with `ConditionScoreDetailViewModel.buildSubScoreTrends`
+- Rule: extract to `HealthDataAggregator.buildHRVDailyAverages(from:start:end:calendar:) -> [ChartDataPoint]` (already has `aggregateByAverage`, `computeSummary`, `previousPeriodRange`)
+- Scroll/period state boilerplate (`resetScrollPosition`, `triggerReload`, `extendedRange`, `scrollDomain`, `visibleRangeLabel`, `trendLineData`) is also triplicated — candidate for a shared `ScoreDetailChartState` or base class in a future PR
+
+### ScoreCompositionCard.Component.label type
+- `ScoreCompositionCard.Component.label` is typed as `String`, not `LocalizedStringKey`
+- Callsites in `TrainingReadinessDetailView` use `String(localized:)` correctly; `WellnessScoreDetailView` uses `Labels.*` which are also `String(localized:)` — so localization is correct at callsite
+- Risk: future callsite may pass a bare String literal and silently bypass localization
+- Preferred fix: type `label` as `LocalizedStringKey` so the compiler enforces localization at the call site; or at minimum document the invariant
+
+### Canonical layout verbatim repetition in Views
+- The sizeClass-split Summary Stats + Highlights block (iPad HStack / iPhone VStack) appears verbatim in all 3 detail views
+- Not yet extracted; a shared `AdaptiveScoreDetailSection` view wrapping this pattern would eliminate the repetition
+- Current state is acceptable but is a P3 extraction target if a 4th detail view is added
+
 ## Chart Gesture Patterns
 - Chart selection: `.simultaneousGesture(selectionDragGesture)` with **default `.all` mask** (not `.subviews`)
 - `.subviews` mask (per Apple docs) means "enable subview gestures but *disable* the added gesture" — anti-pattern for selection

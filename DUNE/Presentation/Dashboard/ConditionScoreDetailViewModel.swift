@@ -16,13 +16,19 @@ final class ConditionScoreDetailViewModel {
         }
     }
     var scrollPosition: Date = .now
-    var showTrendLine: Bool = false
+    var showTrendLine: Bool = false {
+        didSet { recalculateTrendLine() }
+    }
     var chartData: [ChartDataPoint] = []
+    var hrvTrend: [ChartDataPoint] = []
+    var rhrTrend: [ChartDataPoint] = []
     var summaryStats: MetricSummary?
     var highlights: [Highlight] = []
     var isLoading = false
     var errorMessage: String?
 
+    private(set) var trendLineData: [ChartDataPoint]?
+    private(set) var scrollDomain: ClosedRange<Date> = Date.now...Date.now
     private(set) var currentScore: ConditionScore?
 
     private let hrvService: HRVQuerying
@@ -37,17 +43,20 @@ final class ConditionScoreDetailViewModel {
     ) {
         self.hrvService = hrvService ?? HRVQueryService(manager: healthKitManager)
         self.scoreRefreshService = scoreRefreshService
+        recalculateScrollDomain()
     }
 
     func configure(score: ConditionScore) {
         self.currentScore = score
         resetScrollPosition()
+        recalculateScrollDomain()
     }
 
     func loadData() async {
         let requestID = beginReloadRequest()
         isLoading = true
         errorMessage = nil
+        highlights = []
         defer { finishReloadRequest(requestID) }
 
         do {
@@ -58,10 +67,11 @@ final class ConditionScoreDetailViewModel {
             }
             guard isCurrentReloadRequest(requestID) else { return }
             buildHighlights()
+            recalculateTrendLine()
         } catch {
             guard isCurrentReloadRequest(requestID) else { return }
             AppLogger.ui.error("ConditionScoreDetail load failed: \(error.localizedDescription)")
-            errorMessage = error.localizedDescription
+            errorMessage = String(localized: "Could not load data.")
         }
     }
 
@@ -70,14 +80,6 @@ final class ConditionScoreDetailViewModel {
     /// Label showing the currently visible date range, like Health app.
     var visibleRangeLabel: String {
         selectedPeriod.visibleRangeLabel(from: scrollPosition)
-    }
-
-    /// Trend line data points (linear regression) for the visible chart data.
-    var trendLineData: [ChartDataPoint]? {
-        guard showTrendLine else { return nil }
-        return MetricDetailViewModel.computeTrendLine(
-            from: chartData, period: selectedPeriod, scrollPosition: scrollPosition
-        )
     }
 
     private func resetScrollPosition() {
@@ -93,10 +95,17 @@ final class ConditionScoreDetailViewModel {
         return (start: bufferRange.start, end: currentRange.end)
     }
 
-    var scrollDomain: ClosedRange<Date> {
+    private func recalculateScrollDomain() {
         let range = extendedRange
         let upperBound = selectedPeriod.scrollDomainUpperBound(referenceDate: range.end)
-        return range.start...max(range.end, upperBound)
+        scrollDomain = range.start...max(range.end, upperBound)
+    }
+
+    private func recalculateTrendLine() {
+        guard showTrendLine else { trendLineData = nil; return }
+        trendLineData = MetricDetailViewModel.computeTrendLine(
+            from: chartData, period: selectedPeriod, scrollPosition: scrollPosition
+        )
     }
 
     // MARK: - Private
@@ -192,6 +201,17 @@ final class ConditionScoreDetailViewModel {
         guard isCurrentReloadRequest(requestID) else { return }
         chartData = allScores
 
+        // Sub-score trends: daily HRV averages and RHR averages within current period
+        let currentPeriodRange = selectedPeriod.dateRange(offset: 0)
+        hrvTrend = HealthDataAggregator.buildHRVDailyAverages(
+            from: allSamples,
+            start: currentPeriodRange.start,
+            end: currentPeriodRange.end,
+            calendar: calendar
+        )
+        rhrTrend = HealthDataAggregator.buildRHRDailyPoints(from: allRHR)
+            .filter { $0.date >= currentPeriodRange.start && $0.date <= currentPeriodRange.end }
+
         // Aggregate for longer periods
         if selectedPeriod == .sixMonths || selectedPeriod == .year {
             chartData = HealthDataAggregator.aggregateByAverage(
@@ -200,7 +220,6 @@ final class ConditionScoreDetailViewModel {
         }
 
         // Summary stats from current period only
-        let currentPeriodRange = selectedPeriod.dateRange(offset: 0)
         let currentPeriodScores = allScores.filter {
             $0.date >= currentPeriodRange.start && $0.date <= currentPeriodRange.end
         }
@@ -209,6 +228,8 @@ final class ConditionScoreDetailViewModel {
             from: currentPeriodScores.map(\.value),
             previousPeriodValues: previousScores.isEmpty ? nil : previousScores.map(\.value)
         )
+
+        recalculateScrollDomain()
     }
 
     /// Computes daily condition scores within the given range.
@@ -315,6 +336,10 @@ final class ConditionScoreDetailViewModel {
 
         let values = chartData.map(\.value)
         summaryStats = HealthDataAggregator.computeSummary(from: values, previousPeriodValues: nil)
+
+        // Sub-scores not shown for hourly view
+        hrvTrend = []
+        rhrTrend = []
     }
 
     // MARK: - Highlights

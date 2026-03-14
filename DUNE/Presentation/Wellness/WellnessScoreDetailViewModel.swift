@@ -2,12 +2,12 @@ import Foundation
 import Observation
 import OSLog
 
-/// ViewModel for the Training Readiness detail view.
+/// ViewModel for the Wellness Score detail view.
 /// Self-contained: fetches HRV/RHR/Sleep data directly from HealthKit.
 /// Supports period selection and produces DotLineChartView-ready data.
 @Observable
 @MainActor
-final class TrainingReadinessDetailViewModel {
+final class WellnessScoreDetailViewModel {
     var selectedPeriod: TimePeriod = .week {
         didSet {
             if oldValue != selectedPeriod {
@@ -21,7 +21,9 @@ final class TrainingReadinessDetailViewModel {
         didSet { recalculateTrendLine() }
     }
 
-    var readiness: TrainingReadiness?
+    var wellnessScore: WellnessScore?
+    var conditionScore: ConditionScore?
+    var bodyScoreDetail: BodyScoreDetail?
     var chartData: [ChartDataPoint] = []
     var hrvTrend: [ChartDataPoint] = []
     var rhrTrend: [ChartDataPoint] = []
@@ -47,8 +49,14 @@ final class TrainingReadinessDetailViewModel {
         recalculateScrollDomain()
     }
 
-    func configure(readiness: TrainingReadiness?) {
-        self.readiness = readiness
+    func configure(
+        wellnessScore: WellnessScore,
+        conditionScore: ConditionScore?,
+        bodyScoreDetail: BodyScoreDetail?
+    ) {
+        self.wellnessScore = wellnessScore
+        self.conditionScore = conditionScore
+        self.bodyScoreDetail = bodyScoreDetail
         resetScrollPosition()
         recalculateScrollDomain()
     }
@@ -60,7 +68,7 @@ final class TrainingReadinessDetailViewModel {
         highlights = []
 
         do {
-            try await loadReadinessData()
+            try await loadWellnessData()
             guard !Task.isCancelled else {
                 isLoading = false
                 return
@@ -68,7 +76,7 @@ final class TrainingReadinessDetailViewModel {
             buildHighlights()
             recalculateTrendLine()
         } catch {
-            AppLogger.ui.error("ReadinessDetail load failed: \(error.localizedDescription)")
+            AppLogger.ui.error("WellnessDetail load failed: \(error.localizedDescription)")
             errorMessage = String(localized: "Could not load data.")
         }
 
@@ -115,7 +123,7 @@ final class TrainingReadinessDetailViewModel {
         reloadTask = Task { await loadData() }
     }
 
-    private func loadReadinessData() async throws {
+    private func loadWellnessData() async throws {
         let calendar = Calendar.current
         let range = extendedRange
         let daysInRange = max(1, calendar.dateComponents([.day], from: range.start, to: range.end).day ?? 14)
@@ -162,8 +170,8 @@ final class TrainingReadinessDetailViewModel {
         rhrTrend = currentRHR.filter { $0.date >= currentPeriodRange.start && $0.date <= currentPeriodRange.end }
         sleepTrend = currentSleep.filter { $0.date >= currentPeriodRange.start && $0.date <= currentPeriodRange.end }
 
-        // Build readiness trend
-        let allScores = buildReadinessTrend(hrv: currentHRV, rhr: currentRHR, sleep: currentSleep)
+        // Build wellness trend
+        let allScores = buildWellnessTrend(hrv: currentHRV, rhr: currentRHR, sleep: currentSleep)
         chartData = allScores
 
         if selectedPeriod == .sixMonths || selectedPeriod == .year {
@@ -177,7 +185,7 @@ final class TrainingReadinessDetailViewModel {
         let prevRHRDaily = HealthDataAggregator.buildRHRDailyPoints(from: prevRHR)
         let prevSleepDaily = prevSleep
             .map { ChartDataPoint(date: $0.date, value: Swift.max(0, Swift.min($0.totalMinutes / 60.0, 24))) }
-        let previousScores = buildReadinessTrend(hrv: prevHRVDaily, rhr: prevRHRDaily, sleep: prevSleepDaily)
+        let previousScores = buildWellnessTrend(hrv: prevHRVDaily, rhr: prevRHRDaily, sleep: prevSleepDaily)
 
         let currentPeriodScores = allScores.filter {
             $0.date >= currentPeriodRange.start && $0.date <= currentPeriodRange.end
@@ -190,21 +198,22 @@ final class TrainingReadinessDetailViewModel {
         recalculateScrollDomain()
     }
 
-    // MARK: - Readiness Trend Approximation
+    // MARK: - Wellness Trend Approximation
 
-    /// Approximate scoring weights for the trend chart.
+    /// Wellness = Sleep(40%) + Condition(35%) + Body(25%).
+    /// Since Body score requires SwiftData (weight trends), we re-normalize
+    /// the remaining weights: Sleep 40/(40+35) ≈ 0.53, Condition 35/(40+35) ≈ 0.47.
     private enum ApproxWeights {
-        static let hrv: Double = 0.4
-        static let rhr: Double = 0.3
-        static let sleep: Double = 0.3
+        static let sleep: Double = 0.53
+        static let condition: Double = 0.47
     }
 
-    private func buildReadinessTrend(
+    private func buildWellnessTrend(
         hrv: [ChartDataPoint],
         rhr: [ChartDataPoint],
         sleep: [ChartDataPoint]
     ) -> [ChartDataPoint] {
-        guard !hrv.isEmpty else { return [] }
+        guard !hrv.isEmpty || !sleep.isEmpty else { return [] }
 
         let calendar = Calendar.current
         let hrvByDay = Dictionary(hrv.map { (calendar.startOfDay(for: $0.date), $0.value) }, uniquingKeysWith: { _, last in last })
@@ -212,8 +221,9 @@ final class TrainingReadinessDetailViewModel {
         let sleepByDay = Dictionary(sleep.map { (calendar.startOfDay(for: $0.date), $0.value) }, uniquingKeysWith: { _, last in last })
 
         let hrvValues = hrv.map(\.value)
-        let hrvMean = hrvValues.reduce(0, +) / Double(hrvValues.count)
+        let hrvMean = hrvValues.isEmpty ? 0 : hrvValues.reduce(0, +) / Double(hrvValues.count)
         let hrvStdDev: Double = {
+            guard !hrvValues.isEmpty else { return 1.0 }
             let variance = hrvValues.map { ($0 - hrvMean) * ($0 - hrvMean) }.reduce(0, +) / Double(hrvValues.count)
             return sqrt(Swift.max(variance, 0.01))
         }()
@@ -223,33 +233,28 @@ final class TrainingReadinessDetailViewModel {
 
         let allDays = Set(
             hrv.map { calendar.startOfDay(for: $0.date) }
-            + rhr.map { calendar.startOfDay(for: $0.date) }
+            + sleep.map { calendar.startOfDay(for: $0.date) }
         ).sorted()
 
         return allDays.compactMap { day in
-            guard let hrvValue = hrvByDay[day] else { return nil }
+            var conditionScore: Double = 50 // neutral
+            if let hrvValue = hrvByDay[day] {
+                let normalRange = Swift.max(hrvStdDev, 1.0)
+                conditionScore = Swift.max(0, Swift.min(100, 50 + (hrvValue - hrvMean) / normalRange * 20))
 
-            let normalRange = Swift.max(hrvStdDev, 1.0)
-            let hrvScore = Int(Swift.max(0, Swift.min(100, 50 + (hrvValue - hrvMean) / normalRange * 20)))
-
-            let rhrScore: Int
-            if let rhrValue = rhrByDay[day], rhrMean > 0 {
-                let delta = rhrValue - rhrMean
-                rhrScore = Int(Swift.max(0, Swift.min(100, 70 - delta * 5)))
-            } else {
-                rhrScore = 50
+                if let rhrValue = rhrByDay[day], rhrMean > 0 {
+                    let rhrDelta = rhrValue - rhrMean
+                    let rhrAdjustment = Swift.max(-15, Swift.min(15, -rhrDelta * 3))
+                    conditionScore = Swift.max(0, Swift.min(100, conditionScore + rhrAdjustment))
+                }
             }
 
-            let sleepScore: Int
+            var sleepScore: Double = 50 // neutral
             if let sleepHours = sleepByDay[day] {
-                sleepScore = Int(Swift.max(0, Swift.min(100, sleepHours / 8.0 * 80)))
-            } else {
-                sleepScore = 50
+                sleepScore = Swift.max(0, Swift.min(100, sleepHours / 8.0 * 80))
             }
 
-            let score = Double(hrvScore) * ApproxWeights.hrv
-                      + Double(rhrScore) * ApproxWeights.rhr
-                      + Double(sleepScore) * ApproxWeights.sleep
+            let score = conditionScore * ApproxWeights.condition + sleepScore * ApproxWeights.sleep
             guard score.isFinite && !score.isNaN else { return nil }
 
             return ChartDataPoint(date: day, value: Swift.max(0, Swift.min(100, score)))
