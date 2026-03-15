@@ -3,6 +3,9 @@ import UIKit
 /// Generates a professional PDF report from a posture assessment record.
 struct PostureReportGenerator {
 
+    // PDF is always white-background — resolve semantic colors in light mode.
+    private static let lightTraits = UITraitCollection(userInterfaceStyle: .light)
+
     private enum Layout {
         static let pageWidth: CGFloat = 612   // US Letter
         static let pageHeight: CGFloat = 792
@@ -36,6 +39,11 @@ struct PostureReportGenerator {
         static let bodyBold = UIFont.systemFont(ofSize: 12, weight: .semibold)
         static let caption = UIFont.systemFont(ofSize: 10, weight: .regular)
         static let scoreNumber = UIFont.monospacedDigitSystemFont(ofSize: 48, weight: .bold)
+    }
+
+    /// Resolve a semantic UIColor for light-mode PDF rendering.
+    private func light(_ color: UIColor) -> UIColor {
+        color.resolvedColor(with: Self.lightTraits)
     }
 
     func generatePDF(
@@ -90,7 +98,7 @@ struct PostureReportGenerator {
         let title = "Posture Assessment Report" as NSString
         let titleAttrs: [NSAttributedString.Key: Any] = [
             .font: Fonts.title,
-            .foregroundColor: UIColor.label,
+            .foregroundColor: light(.label),
         ]
         title.draw(in: CGRect(x: Layout.margin, y: currentY, width: Layout.contentWidth, height: 30), withAttributes: titleAttrs)
         currentY += 32
@@ -98,7 +106,7 @@ struct PostureReportGenerator {
         let dateString = Cache.dateFormatter.string(from: date) as NSString
         let dateAttrs: [NSAttributedString.Key: Any] = [
             .font: Fonts.subtitle,
-            .foregroundColor: UIColor.secondaryLabel,
+            .foregroundColor: light(.secondaryLabel),
         ]
         dateString.draw(in: CGRect(x: Layout.margin, y: currentY, width: Layout.contentWidth, height: 20), withAttributes: dateAttrs)
         currentY += 22
@@ -107,7 +115,7 @@ struct PostureReportGenerator {
         let dividerPath = UIBezierPath()
         dividerPath.move(to: CGPoint(x: Layout.margin, y: currentY))
         dividerPath.addLine(to: CGPoint(x: Layout.pageWidth - Layout.margin, y: currentY))
-        UIColor.separator.setStroke()
+        light(.separator).setStroke()
         dividerPath.lineWidth = 0.5
         dividerPath.stroke()
         currentY += Layout.lineSpacing
@@ -121,7 +129,7 @@ struct PostureReportGenerator {
         let sectionTitle = "Overall Score" as NSString
         let sectionAttrs: [NSAttributedString.Key: Any] = [
             .font: Fonts.sectionTitle,
-            .foregroundColor: UIColor.label,
+            .foregroundColor: light(.label),
         ]
         sectionTitle.draw(in: CGRect(x: Layout.margin, y: currentY, width: Layout.contentWidth, height: 22), withAttributes: sectionAttrs)
         currentY += 26
@@ -143,7 +151,7 @@ struct PostureReportGenerator {
         let sectionTitle = "Assessment Details" as NSString
         let sectionAttrs: [NSAttributedString.Key: Any] = [
             .font: Fonts.sectionTitle,
-            .foregroundColor: UIColor.label,
+            .foregroundColor: light(.label),
         ]
         sectionTitle.draw(in: CGRect(x: Layout.margin, y: currentY, width: Layout.contentWidth, height: 22), withAttributes: sectionAttrs)
         currentY += 28
@@ -169,7 +177,7 @@ struct PostureReportGenerator {
     private func drawMetricTableHeader(at y: CGFloat) -> CGFloat {
         let headerAttrs: [NSAttributedString.Key: Any] = [
             .font: Fonts.bodyBold,
-            .foregroundColor: UIColor.secondaryLabel,
+            .foregroundColor: light(.secondaryLabel),
         ]
 
         ("Metric" as NSString).draw(in: CGRect(x: Layout.col1, y: y, width: 200, height: 16), withAttributes: headerAttrs)
@@ -181,7 +189,7 @@ struct PostureReportGenerator {
         let path = UIBezierPath()
         path.move(to: CGPoint(x: Layout.margin, y: dividerY))
         path.addLine(to: CGPoint(x: Layout.pageWidth - Layout.margin, y: dividerY))
-        UIColor.separator.setStroke()
+        light(.separator).setStroke()
         path.lineWidth = 0.5
         path.stroke()
 
@@ -191,7 +199,7 @@ struct PostureReportGenerator {
     private func drawMetricRow(at y: CGFloat, metric: PostureMetricResult) -> CGFloat {
         let bodyAttrs: [NSAttributedString.Key: Any] = [
             .font: Fonts.body,
-            .foregroundColor: UIColor.label,
+            .foregroundColor: light(.label),
         ]
 
         let name = metric.type.displayName as NSString
@@ -219,14 +227,14 @@ struct PostureReportGenerator {
         let sectionTitle = "Notes" as NSString
         let sectionAttrs: [NSAttributedString.Key: Any] = [
             .font: Fonts.sectionTitle,
-            .foregroundColor: UIColor.label,
+            .foregroundColor: light(.label),
         ]
         sectionTitle.draw(in: CGRect(x: Layout.margin, y: currentY, width: Layout.contentWidth, height: 22), withAttributes: sectionAttrs)
         currentY += 26
 
         let memoAttrs: [NSAttributedString.Key: Any] = [
             .font: Fonts.body,
-            .foregroundColor: UIColor.secondaryLabel,
+            .foregroundColor: light(.secondaryLabel),
         ]
         let memoString = memo as NSString
         let memoRect = memoString.boundingRect(
@@ -248,7 +256,7 @@ struct PostureReportGenerator {
         let footerY = Layout.pageHeight - 30
         let footerAttrs: [NSAttributedString.Key: Any] = [
             .font: Fonts.caption,
-            .foregroundColor: UIColor.tertiaryLabel,
+            .foregroundColor: light(.tertiaryLabel),
         ]
         let footer = "Generated by DUNE" as NSString
         footer.draw(in: CGRect(x: Layout.margin, y: footerY, width: Layout.contentWidth, height: 14), withAttributes: footerAttrs)

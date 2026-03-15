@@ -37,9 +37,14 @@ struct JointOverlayView: View {
             return nil
         }
 
-        // Vision normalized coords: origin bottom-left, Y up → flip Y for UIKit
+        // Vision normalized coords: origin bottom-left, Y up → flip Y for UIKit.
+        // Front camera: the saved image has EXIF mirroring baked in (selfie view),
+        // but pointInImage() returns coords in the raw (un-mirrored) CGImage space.
+        // Mirror X so the skeleton matches the displayed mirrored image.
+        let adjustedX = captureType == .front ? (1.0 - imageX) : imageX
+
         return CGPoint(
-            x: offsetX + imageX * imageSize.width * scale,
+            x: offsetX + adjustedX * imageSize.width * scale,
             y: offsetY + (1.0 - imageY) * imageSize.height * scale
         )
     }

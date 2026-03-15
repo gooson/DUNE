@@ -103,9 +103,12 @@ struct BodyGuideOverlay: View {
     }
 
     /// Convert Vision normalized coordinates (origin bottom-left) to screen coordinates (origin top-left).
+    /// Front camera: the preview layer is mirrored (selfie), but Vision keypoints are from the
+    /// un-mirrored video frame. Mirror X so the skeleton matches the displayed preview.
     private func visionToScreen(_ point: CGPoint, size: CGSize) -> CGPoint {
-        CGPoint(
-            x: point.x * size.width,
+        let adjustedX = captureType == .front ? (1.0 - point.x) : point.x
+        return CGPoint(
+            x: adjustedX * size.width,
             y: (1.0 - point.y) * size.height
         )
     }
