@@ -200,12 +200,23 @@ struct HeartRateQueryService: HeartRateQuerying, Sendable {
         interval: DateComponents,
         calendar: Calendar = .current
     ) -> [VitalSample] {
-        let points = samples.map { ChartDataPoint(date: $0.date, value: $0.value) }
-        return HealthDataAggregator.aggregateByAverage(
-            points,
-            unit: aggregationUnit(for: interval),
-            calendar: calendar
-        ).map { VitalSample(value: $0.value, date: $0.date) }
+        guard !samples.isEmpty else { return [] }
+
+        let unit = aggregationUnit(for: interval)
+        var grouped: [Date: [Double]] = [:]
+
+        for sample in samples {
+            let key = bucketStart(for: sample.date, unit: unit, calendar: calendar)
+            grouped[key, default: []].append(sample.value)
+        }
+
+        return grouped.compactMap { date, values in
+            guard !values.isEmpty else { return nil }
+            let average = values.reduce(0, +) / Double(values.count)
+            guard average.isFinite else { return nil }
+            return VitalSample(value: average, date: date)
+        }
+        .sorted { $0.date < $1.date }
     }
 
     func fetchHeartRateZones(forWorkoutID workoutID: String, maxHR: Double) async throws -> [HeartRateZone] {
@@ -315,6 +326,19 @@ struct HeartRateQueryService: HeartRateQuerying, Sendable {
         if interval.weekOfYear == 1 { return .weekOfYear }
         if interval.month == 1 { return .month }
         return .day
+    }
+
+    private static func bucketStart(
+        for date: Date,
+        unit: Calendar.Component,
+        calendar: Calendar
+    ) -> Date {
+        if unit == .weekOfYear {
+            let components = calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date)
+            return calendar.date(from: components) ?? date
+        }
+
+        return calendar.dateInterval(of: unit, for: date)?.start ?? date
     }
 
     // MARK: - Downsampling
