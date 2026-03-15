@@ -27,7 +27,9 @@ struct ScoreDetailSummaryStats: View {
                     }
                 }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private func statItem(label: LocalizedStringKey, value: String) -> some View {

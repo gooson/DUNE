@@ -305,15 +305,16 @@ final class ConditionScoreDetailViewModel {
         let now = nowProvider()
         // Rolling 24h window: show yesterday's data too (especially useful at early hours)
         let twentyFourHoursAgo = now.addingTimeInterval(-ScoreRefreshService.rollingWindowSeconds)
+        let fortyEightHoursAgo = now.addingTimeInterval(-ScoreRefreshService.rollingWindowSeconds * 2)
         let baselineStart = calendar.date(
             byAdding: .day,
             value: -CalculateConditionScoreUseCase.conditionWindowDays,
-            to: twentyFourHoursAgo
-        ) ?? twentyFourHoursAgo
+            to: fortyEightHoursAgo
+        ) ?? fortyEightHoursAgo
 
-        // +2: conditionWindow + today + yesterday (rolling 24h spans two calendar days)
+        // +3: conditionWindow + today + yesterday + previous-day overlap for day-over-day summary change
         async let samplesTask = hrvService.fetchHRVSamples(
-            days: CalculateConditionScoreUseCase.conditionWindowDays + 2
+            days: CalculateConditionScoreUseCase.conditionWindowDays + 3
         )
         async let rhrTask = hrvService.fetchRHRCollection(
             start: baselineStart,
@@ -325,7 +326,7 @@ final class ConditionScoreDetailViewModel {
         let rhrDailyAverages = rhrCollection
             .filter { $0.average > 0 && $0.average.isFinite }
             .map { CalculateConditionScoreUseCase.Input.RHRDailyAverage(date: $0.date, value: $0.average) }
-        let hourlyEvaluationDates = Dictionary(grouping: samples.filter { $0.date >= twentyFourHoursAgo && $0.date <= now }) {
+        let hourlyEvaluationDates = Dictionary(grouping: samples.filter { $0.date >= fortyEightHoursAgo && $0.date <= now }) {
             calendar.dateInterval(of: .hour, for: $0.date)?.start ?? $0.date
         }
         .compactMap { hourDate, samplesInHour in
@@ -333,8 +334,11 @@ final class ConditionScoreDetailViewModel {
         }
         .sorted { $0.hourDate < $1.hourDate }
 
+        let currentWindow = hourlyEvaluationDates.filter { $0.hourDate >= twentyFourHoursAgo && $0.hourDate <= now }
+        let previousWindow = hourlyEvaluationDates.filter { $0.hourDate >= fortyEightHoursAgo && $0.hourDate < twentyFourHoursAgo }
+
         guard isCurrentReloadRequest(requestID) else { return }
-        chartData = hourlyEvaluationDates.compactMap { item in
+        chartData = currentWindow.compactMap { item in
             let output = scoreUseCase.executeIntraday(input: .init(
                 hrvSamples: samples,
                 rhrDailyAverages: rhrDailyAverages,
@@ -344,8 +348,20 @@ final class ConditionScoreDetailViewModel {
             return ChartDataPoint(date: item.hourDate, value: Double(score.score))
         }
 
+        let previousValues = previousWindow.compactMap { item in
+            let output = scoreUseCase.executeIntraday(input: .init(
+                hrvSamples: samples,
+                rhrDailyAverages: rhrDailyAverages,
+                evaluationDate: item.evaluationDate
+            ))
+            return output.score.map { Double($0.score) }
+        }
+
         let values = chartData.map(\.value)
-        summaryStats = HealthDataAggregator.computeSummary(from: values, previousPeriodValues: nil)
+        summaryStats = HealthDataAggregator.computeSummary(
+            from: values,
+            previousPeriodValues: previousValues.isEmpty ? nil : previousValues
+        )
 
         // Sub-scores not shown for hourly view
         hrvTrend = []
