@@ -290,45 +290,46 @@ struct PostureHistoryView: View {
         }
     }
 
+    @ViewBuilder
     private func recordRow(_ record: PostureAssessmentRecord) -> some View {
-        HStack(spacing: DS.Spacing.md) {
-            if isCompareMode {
+        if isCompareMode {
+            HStack(spacing: DS.Spacing.md) {
                 Image(systemName: viewModel.comparisonSelection.contains(record.id)
                     ? "checkmark.circle.fill"
                     : "circle")
                     .foregroundStyle(viewModel.comparisonSelection.contains(record.id)
                         ? DS.Color.body
                         : .secondary)
-            }
 
-            recordRowContent(record)
-        }
-        .padding(DS.Spacing.md)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
-        .contentShape(Rectangle())
-        .onTapGesture {
-            if isCompareMode {
+                rowBody(record)
+            }
+            .padding(DS.Spacing.md)
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+            .contentShape(Rectangle())
+            .onTapGesture {
                 viewModel.toggleComparison(record.id)
             }
-        }
-        .contextMenu {
-            Button(role: .destructive) {
-                recordToDelete = record
-            } label: {
-                Label("Delete", systemImage: "trash")
+            .contextMenu {
+                Button(role: .destructive) {
+                    recordToDelete = record
+                } label: {
+                    Label("Delete", systemImage: "trash")
+                }
             }
-        }
-    }
-
-    @ViewBuilder
-    private func recordRowContent(_ record: PostureAssessmentRecord) -> some View {
-        if isCompareMode {
-            rowBody(record)
         } else {
             NavigationLink(value: PostureRecordDestination(id: record.id)) {
                 rowBody(record)
             }
             .buttonStyle(.plain)
+            .padding(DS.Spacing.md)
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+            .contextMenu {
+                Button(role: .destructive) {
+                    recordToDelete = record
+                } label: {
+                    Label("Delete", systemImage: "trash")
+                }
+            }
         }
     }
 
