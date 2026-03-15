@@ -162,7 +162,6 @@ struct PersonalRecordsDetailView: View {
                 }
             }
             .frame(height: 220)
-            .clipped()
         }
         .padding(DS.Spacing.md)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
