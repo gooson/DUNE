@@ -39,7 +39,7 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
     let captureSession = AVCaptureSession()
     private let photoOutput = AVCapturePhotoOutput()
     private let continuationLock = NSLock()
-    private var photoContinuation: CheckedContinuation<CGImage, any Error>?
+    private var photoContinuation: CheckedContinuation<(CGImage, Data?), any Error>?
 
     // MARK: - Configuration
 
@@ -91,7 +91,7 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
 
     // MARK: - Photo Capture
 
-    func capturePhoto() async throws -> CGImage {
+    func capturePhoto() async throws -> (CGImage, Data?) {
         guard captureSession.isRunning else {
             throw PostureCaptureError.captureSessionNotRunning
         }
@@ -111,6 +111,10 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
     // MARK: - Pose Detection
 
     func detectPose(from image: CGImage) async throws -> PostureCaptureResult {
+        try await detectPose(from: image, orientedJPEG: nil)
+    }
+
+    func detectPose(from image: CGImage, orientedJPEG: Data?) async throws -> PostureCaptureResult {
         let request = VNDetectHumanBodyPose3DRequest()
         let handler = VNImageRequestHandler(cgImage: image, options: [:])
 
@@ -147,7 +151,9 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
             heightEstimation = .reference
         }
 
-        let imageData = compressImage(image)
+        // Use oriented JPEG from AVCapturePhoto if available (preserves correct orientation),
+        // otherwise fall back to compressing the raw CGImage
+        let imageData = orientedJPEG ?? compressImage(image)
 
         return PostureCaptureResult(
             jointPositions: jointPositions,
@@ -160,8 +166,8 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
     // MARK: - Full Capture Pipeline
 
     func captureAndDetect() async throws -> PostureCaptureResult {
-        let cgImage = try await capturePhoto()
-        return try await detectPose(from: cgImage)
+        let (cgImage, orientedJPEG) = try await capturePhoto()
+        return try await detectPose(from: cgImage, orientedJPEG: orientedJPEG)
     }
 
     // MARK: - Multi-Frame Averaging
@@ -325,6 +331,18 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
         let targetSize = CGSize(width: size.width * scale, height: size.height * scale)
         return image.preparingThumbnail(of: targetSize) ?? image
     }
+
+    /// Creates a compressed JPEG from AVCapturePhoto with correct orientation applied.
+    /// Uses fileDataRepresentation() which includes EXIF orientation, then re-encodes
+    /// through UIImage to bake the orientation into pixel data for reliable display.
+    private func compressOrientedImage(from photo: AVCapturePhoto) -> Data? {
+        guard let fileData = photo.fileDataRepresentation(),
+              let uiImage = UIImage(data: fileData) else {
+            return nil
+        }
+        let scaled = downscaled(uiImage, maxDimension: Self.maxImageDimension)
+        return scaled.jpegData(compressionQuality: Self.jpegCompressionQuality)
+    }
 }
 
 // MARK: - AVCapturePhotoCaptureDelegate
@@ -335,7 +353,7 @@ extension PostureCaptureService: AVCapturePhotoCaptureDelegate {
         didFinishProcessingPhoto photo: AVCapturePhoto,
         error: (any Error)?
     ) {
-        let continuation = continuationLock.withLock { () -> CheckedContinuation<CGImage, any Error>? in
+        let continuation = continuationLock.withLock { () -> CheckedContinuation<(CGImage, Data?), any Error>? in
             let c = photoContinuation
             photoContinuation = nil
             return c
@@ -343,7 +361,10 @@ extension PostureCaptureService: AVCapturePhotoCaptureDelegate {
         if let error {
             continuation?.resume(throwing: error)
         } else if let cgImage = photo.cgImageRepresentation() {
-            continuation?.resume(returning: cgImage)
+            // fileDataRepresentation() produces JPEG with correct EXIF orientation baked in,
+            // so the stored image displays in portrait as captured by the front camera.
+            let orientedJPEG = compressOrientedImage(from: photo)
+            continuation?.resume(returning: (cgImage, orientedJPEG))
         } else {
             continuation?.resume(throwing: PostureCaptureError.imageConversionFailed)
         }
