@@ -219,6 +219,18 @@ struct PostureGuidanceAnalyzerTests {
         #expect(state.isReady)
     }
 
+    @Test("GuidanceState: isReady with slightlyFar distance")
+    func guidanceStateIsReadySlightlyFar() {
+        var state = GuidanceState()
+        state.isFullBodyVisible = true
+        state.distanceStatus = .slightlyFar
+        state.isStable = true
+        state.lightingStatus = .good
+        state.isCorrectOrientation = true
+        state.areArmsRelaxed = true
+        #expect(state.isReady)
+    }
+
     @Test("GuidanceState: not ready when any condition fails")
     func guidanceStateNotReady() {
         var state = GuidanceState()
