@@ -29,8 +29,8 @@ status: implemented
 
 | File | Change |
 |------|--------|
-| `RealtimePoseTracker.swift` | sampleBuffer를 async queue에 넘기지 않도록 재구성 + `copyPixelBuffer` 딥카피 |
-| `PostureCaptureService.swift` | `detectPoseFromVideoFrame` 시그니처를 `CVPixelBuffer`로 변경 |
+| `PostureCaptureService.swift` | `captureOutput`에서 `CVPixelBuffer`를 deep-copy한 뒤 callback으로 전달 |
+| `RealtimePoseTracker.swift` | `handleFrame`이 `CMSampleBuffer` 대신 copied buffer만 받아 3D Task를 시작 |
 
 ### 핵심 패턴
 
@@ -43,17 +43,22 @@ serialQueue.async {
     }
 }
 
-// After: state 판단은 sync로 끝내고, deep-copy된 버퍼만 Task로 전달
-serialQueue.sync {
-    shouldSample3D = !is3DInFlight && now - last3DSampleTime >= Self.min3DInterval
+// After: camera callback에서 deep-copy한 버퍼만 후속 파이프라인으로 전달
+let copiedBuffer: CVPixelBuffer? = if !keypoints.isEmpty {
+    Self.copyPixelBuffer(pixelBuffer)
+} else {
+    nil
 }
+onRealtimeFrame?(keypoints, copiedBuffer)
 
-if shouldSample3D,
-   let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer),
-   let copiedBuffer = Self.copyPixelBuffer(pixelBuffer) {
-    let copiedBufferBox = SendablePixelBuffer(value: copiedBuffer)
-    self.pending3DTask = Task {
-        await self?.perform3DDetection(copiedBufferBox.value)
+private func handleFrame(keypoints: [(String, CGPoint)], copiedBuffer: CVPixelBuffer?) {
+    serialQueue.async {
+        if !is3DInFlight,
+           let buffer = copiedBuffer {
+            self.pending3DTask = Task {
+                await self?.perform3DDetection(buffer)
+            }
+        }
     }
 }
 ```
@@ -70,7 +75,7 @@ if shouldSample3D,
 ### 패턴: AVCaptureSession 버퍼를 비동기 작업에 전달할 때
 
 - **절대 `CMSampleBuffer`를 어떤 비동기 queue/task/closure에도 캡처하지 않음**
-- 필요한 데이터를 복사한 후 원본은 즉시 해제
+- 필요한 데이터를 **async 경계 전에 복사**한 후 원본은 즉시 해제
 - `CVPixelBuffer` 딥카피 또는 `CGImage` 변환 후 전달
 
 ### 패턴: guard-return 대 if-let 선택
