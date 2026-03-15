@@ -76,6 +76,7 @@ struct PostureDetailView: View {
                 .foregroundStyle(.orange)
             }
         }
+        .frame(maxWidth: .infinity)
         .padding(DS.Spacing.lg)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
         .accessibilityElement(children: .ignore)
@@ -112,7 +113,7 @@ struct PostureDetailView: View {
         metrics: [PostureMetricResult]
     ) -> some View {
         VStack(spacing: DS.Spacing.sm) {
-            if let imageData, let uiImage = UIImage(data: imageData) {
+            if let imageData, let uiImage = UIImage(data: imageData)?.postureOrientationCorrected {
                 Image(uiImage: uiImage)
                     .resizable()
                     .aspectRatio(contentMode: .fit)

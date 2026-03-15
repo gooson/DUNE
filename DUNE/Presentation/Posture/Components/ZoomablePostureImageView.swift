@@ -1,5 +1,18 @@
 import SwiftUI
 
+// MARK: - Posture Image Orientation Correction
+
+extension UIImage {
+    /// Corrects orientation for posture photos saved by the old capture pipeline.
+    /// Old code used `UIImage(cgImage:)` which discards EXIF orientation metadata,
+    /// baking landscape pixels for portrait front-camera captures.
+    /// Detects landscape dimensions and rotates 90° CW to restore portrait.
+    var postureOrientationCorrected: UIImage {
+        guard size.width > size.height, let cgImage else { return self }
+        return UIImage(cgImage: cgImage, scale: scale, orientation: .right)
+    }
+}
+
 // MARK: - Zoomable Image Item
 
 struct ZoomableImageItem: Identifiable {
