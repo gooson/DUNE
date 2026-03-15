@@ -166,19 +166,30 @@ final class ScoreRefreshService {
     /// Fetch hourly snapshots for the rolling 24h window (now - 24h to now).
     /// Used by wellness/readiness detail views for day-period hourly charts.
     func fetchRolling24hSnapshots() async -> [HourlyScoreSnapshot] {
-        let twentyFourHoursAgo = Date().addingTimeInterval(-Self.rollingWindowSeconds)
-        return (try? context.fetch(rolling24hDescriptor(from: twentyFourHoursAgo))) ?? []
+        await fetchRollingSnapshots(hoursBack: 24)
+    }
+
+    /// Fetch hourly snapshots for a rolling time window (now - hoursBack to now).
+    func fetchRollingSnapshots(hoursBack: Int) async -> [HourlyScoreSnapshot] {
+        let clampedHours = max(1, hoursBack)
+        let startDate = Date().addingTimeInterval(-TimeInterval(clampedHours) * 60 * 60)
+        let fetchLimit = max(48, clampedHours * 2)
+        return (try? context.fetch(rollingDescriptor(from: startDate, fetchLimit: fetchLimit))) ?? []
     }
 
     // MARK: - Private
 
-    private func rolling24hDescriptor(from startDate: Date) -> FetchDescriptor<HourlyScoreSnapshot> {
+    private func rollingDescriptor(from startDate: Date, fetchLimit: Int) -> FetchDescriptor<HourlyScoreSnapshot> {
         var descriptor = FetchDescriptor<HourlyScoreSnapshot>(
             predicate: #Predicate { $0.date >= startDate },
             sortBy: [SortDescriptor(\.date)]
         )
-        descriptor.fetchLimit = 48
+        descriptor.fetchLimit = max(1, fetchLimit)
         return descriptor
+    }
+
+    private func rolling24hDescriptor(from startDate: Date) -> FetchDescriptor<HourlyScoreSnapshot> {
+        rollingDescriptor(from: startDate, fetchLimit: 48)
     }
 
     private func buildSparkline(

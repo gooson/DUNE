@@ -135,14 +135,24 @@ final class TrainingReadinessDetailViewModel {
             return
         }
 
-        let snapshots = await service.fetchRolling24hSnapshots()
-        chartData = snapshots.compactMap { snap in
+        let snapshots = await service.fetchRollingSnapshots(hoursBack: 48)
+        let now = Date()
+        let currentStart = now.addingTimeInterval(-ScoreRefreshService.rollingWindowSeconds)
+
+        let currentSnapshots = snapshots.filter { $0.date >= currentStart && $0.date <= now }
+        let previousSnapshots = snapshots.filter { $0.date < currentStart }
+
+        chartData = currentSnapshots.compactMap { snap in
             guard let score = snap.readinessScore else { return nil }
             return ChartDataPoint(date: snap.date, value: score)
         }
 
         let values = chartData.map(\.value)
-        summaryStats = HealthDataAggregator.computeSummary(from: values, previousPeriodValues: nil)
+        let previousValues = previousSnapshots.compactMap(\.readinessScore)
+        summaryStats = HealthDataAggregator.computeSummary(
+            from: values,
+            previousPeriodValues: previousValues.isEmpty ? nil : previousValues
+        )
 
         // Sub-scores not shown for hourly view
         hrvTrend = []
