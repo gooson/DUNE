@@ -6,6 +6,7 @@ struct PostureDetailView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @State private var showDeleteConfirmation = false
+    @State private var zoomImage: ZoomableImageItem?
 
     var body: some View {
         ScrollView {
@@ -33,6 +34,15 @@ struct PostureDetailView: View {
         }
         .background { DetailWaveBackground() }
         .environment(\.waveColor, DS.Color.body)
+        .sheet(item: $zoomImage) { item in
+            ZoomablePostureImageView(
+                uiImage: item.uiImage,
+                joints: item.joints,
+                metrics: item.metrics,
+                captureType: item.captureType,
+                label: item.label
+            )
+        }
     }
 
     // MARK: - Score
@@ -124,6 +134,16 @@ struct PostureDetailView: View {
                                 captureType: captureType
                             )
                         }
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        zoomImage = ZoomableImageItem(
+                            uiImage: uiImage,
+                            joints: joints,
+                            metrics: metrics,
+                            captureType: captureType,
+                            label: label
+                        )
                     }
             } else {
                 RoundedRectangle(cornerRadius: DS.Radius.sm)
@@ -239,4 +259,15 @@ struct PostureDetailView: View {
     private func scoreColor(_ score: Int) -> Color {
         postureScoreColor(score)
     }
+}
+
+// MARK: - Zoom Item
+
+struct ZoomableImageItem: Identifiable {
+    let id = UUID()
+    let uiImage: UIImage
+    let joints: [JointPosition3D]
+    let metrics: [PostureMetricResult]
+    let captureType: PostureCaptureType
+    let label: String
 }

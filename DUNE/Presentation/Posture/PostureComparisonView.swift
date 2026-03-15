@@ -5,6 +5,8 @@ struct PostureComparisonView: View {
     let newer: PostureAssessmentRecord
     let viewModel: PostureHistoryViewModel
 
+    @State private var zoomImage: ZoomableImageItem?
+
     var body: some View {
         ScrollView {
             VStack(spacing: DS.Spacing.lg) {
@@ -18,6 +20,15 @@ struct PostureComparisonView: View {
         .navigationBarTitleDisplayMode(.inline)
         .background { DetailWaveBackground() }
         .environment(\.waveColor, DS.Color.body)
+        .sheet(item: $zoomImage) { item in
+            ZoomablePostureImageView(
+                uiImage: item.uiImage,
+                joints: item.joints,
+                metrics: item.metrics,
+                captureType: item.captureType,
+                label: item.label
+            )
+        }
     }
 
     // MARK: - Score Comparison
@@ -151,6 +162,18 @@ struct PostureComparisonView: View {
                                 captureType: captureType
                             )
                         }
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        zoomImage = ZoomableImageItem(
+                            uiImage: uiImage,
+                            joints: joints,
+                            metrics: metrics,
+                            captureType: captureType,
+                            label: captureType == .front
+                                ? String(localized: "Front")
+                                : String(localized: "Side")
+                        )
                     }
             } else {
                 RoundedRectangle(cornerRadius: 8)
