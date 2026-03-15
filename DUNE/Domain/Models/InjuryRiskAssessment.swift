@@ -45,6 +45,7 @@ struct InjuryRiskAssessment: Sendable, Hashable {
         case sleepDeficit
         case activeInjury
         case lowRecovery
+        case postureIssue
     }
 
     init(score: Int, factors: [RiskFactor] = [], date: Date = Date()) {

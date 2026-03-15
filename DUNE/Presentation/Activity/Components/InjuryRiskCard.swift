@@ -115,6 +115,7 @@ struct InjuryRiskCard: View {
         case .sleepDeficit: "moon.zzz"
         case .activeInjury: "bandage"
         case .lowRecovery: "battery.25percent"
+        case .postureIssue: "figure.stand"
         }
     }
 }

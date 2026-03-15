@@ -128,6 +128,24 @@ extension [PostureMetricResult] {
     }
 }
 
+// MARK: - Body Part Mapping
+
+extension PostureMetricType {
+    /// Body parts affected by this posture metric, used for injury system integration.
+    var affectedBodyParts: [BodyPart] {
+        switch self {
+        case .forwardHead:          return [.neck]
+        case .roundedShoulders:     return [.shoulder]
+        case .thoracicKyphosis:     return [.lowerBack]
+        case .kneeHyperextension:   return [.knee]
+        case .shoulderAsymmetry:    return [.shoulder]
+        case .hipAsymmetry:         return [.hip]
+        case .kneeAlignment:        return [.knee]
+        case .lateralShift:         return [.hip]
+        }
+    }
+}
+
 /// Unit of measurement for posture metrics.
 enum PostureMetricUnit: String, Codable, Sendable, Hashable {
     case degrees    // Angular measurement
