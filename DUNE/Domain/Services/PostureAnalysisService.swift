@@ -444,32 +444,33 @@ struct PostureAnalysisService: Sendable {
         // Left knee angle
         if let hip = kp["leftHip"], let knee = kp["leftKnee"], let ankle = kp["leftAnkle"] {
             let deg = angle2D(a: hip, vertex: knee, c: ankle)
+            guard deg.isFinite else { return angles }
             let status = classifyKneeAngle(deg)
             angles.append(RealtimeAngle(
                 type: .leftKnee, degrees: deg, status: status,
-                displayPosition: knee
+                jointName: "leftKnee"
             ))
         }
 
         // Right knee angle
         if let hip = kp["rightHip"], let knee = kp["rightKnee"], let ankle = kp["rightAnkle"] {
             let deg = angle2D(a: hip, vertex: knee, c: ankle)
+            guard deg.isFinite else { return angles }
             let status = classifyKneeAngle(deg)
             angles.append(RealtimeAngle(
                 type: .rightKnee, degrees: deg, status: status,
-                displayPosition: knee
+                jointName: "rightKnee"
             ))
         }
 
         // Shoulder tilt (y-difference as proxy for asymmetry)
         if let left = kp["leftShoulder"], let right = kp["rightShoulder"] {
-            let tiltDeg = abs(left.y - right.y) * 180 // normalized → rough degree proxy
+            let tiltDeg = abs(left.y - right.y) * 180 // normalized → rough deviation proxy
+            guard tiltDeg.isFinite else { return angles }
             let status: PostureStatus = tiltDeg <= 3 ? .normal : tiltDeg <= 8 ? .caution : .warning
-            let midX = (left.x + right.x) / 2
-            let midY = (left.y + right.y) / 2
             angles.append(RealtimeAngle(
                 type: .shoulderTilt, degrees: tiltDeg, status: status,
-                displayPosition: CGPoint(x: midX, y: midY)
+                jointName: "leftShoulder"
             ))
         }
 
@@ -478,10 +479,11 @@ struct PostureAnalysisService: Sendable {
            let leftHip = kp["leftHip"], let rightHip = kp["rightHip"] {
             let midHipX = (leftHip.x + rightHip.x) / 2
             let leanDeg = abs(nose.x - midHipX) * 180
+            guard leanDeg.isFinite else { return angles }
             let status: PostureStatus = leanDeg <= 3 ? .normal : leanDeg <= 8 ? .caution : .warning
             angles.append(RealtimeAngle(
                 type: .trunkLean, degrees: leanDeg, status: status,
-                displayPosition: CGPoint(x: midHipX, y: (nose.y + leftHip.y) / 2)
+                jointName: "nose"
             ))
         }
 

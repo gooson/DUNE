@@ -9,27 +9,15 @@ struct RealtimeAngle: Sendable, Hashable, Identifiable {
     let type: AngleType
     let degrees: Double
     let status: PostureStatus
-    /// Normalized screen position (0-1) where the angle should be displayed.
-    let displayPosition: CGPoint
+    /// Joint name used for position lookup in skeleton keypoints.
+    let jointName: String
 
     enum AngleType: String, Sendable, Hashable, CaseIterable {
         case leftKnee
         case rightKnee
         case shoulderTilt     // Left-right shoulder height difference proxy
         case trunkLean        // Lateral trunk shift proxy
-        case hipAngle         // Hip flexion (side view)
     }
-}
-
-// MARK: - Realtime Pose Snapshot
-
-/// A single frame's pose data with estimated angles.
-struct RealtimePoseSnapshot: Sendable {
-    let timestamp: CFAbsoluteTime
-    let keypoints2D: [(String, CGPoint)]
-    let angles: [RealtimeAngle]
-    /// 3D analysis result (populated only on 3D sample frames).
-    let analysis3D: [PostureMetricResult]?
 }
 
 // MARK: - Realtime Pose State
@@ -38,18 +26,12 @@ struct RealtimePoseSnapshot: Sendable {
 struct RealtimePoseState: Sendable {
     var isActive: Bool = false
     var currentAngles: [RealtimeAngle] = []
-    var currentScore: Int = 0
     var smoothedScore: Int = 0
     var skeletonKeypoints: [(String, CGPoint)] = []
-    var guidanceState = GuidanceState()
-    /// Latest 3D analysis metrics (updated at 3D sample rate).
-    var latestMetrics: [PostureMetricResult] = []
     /// Whether 3D pipeline is producing results.
     var is3DActive: Bool = false
     /// Frames since last valid detection (for timeout).
     var framesSinceLastDetection: Int = 0
-
-    static let detectionTimeoutFrames = 9 // ~300ms at 30fps
 }
 
 // MARK: - Score Smoothing
@@ -70,6 +52,16 @@ struct ScoreRingBuffer: Sendable {
         buffer[index] = value
         index = (index + 1) % capacity
         count = min(count + 1, capacity)
+    }
+
+    /// Replace the most recent entry (for 3D score override on same frame).
+    mutating func replaceLast(_ value: Int) {
+        guard count > 0 else {
+            append(value)
+            return
+        }
+        let lastIndex = (index - 1 + capacity) % capacity
+        buffer[lastIndex] = value
     }
 
     var average: Int {

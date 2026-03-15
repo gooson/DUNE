@@ -3,44 +3,47 @@ import SwiftUI
 /// Canvas overlay that renders joint angle arcs and values on the camera preview.
 struct AngleOverlay: View {
     let angles: [RealtimeAngle]
+    let keypoints: [(String, CGPoint)]
     var isFrontCamera: Bool = false
 
     var body: some View {
-        Canvas { context, size in
+        Canvas(opaque: false, colorMode: .nonLinear) { context, size in
             for angle in angles {
-                let screenPoint = visionToScreen(angle.displayPosition, size: size)
-                drawAngleLabel(context: context, at: screenPoint, angle: angle)
+                guard let resolved = context.resolveSymbol(id: angle.id) else { continue }
+                let position = keypointPosition(for: angle, size: size)
+                // Draw background pill
+                let bgRect = CGRect(
+                    x: position.x + 8,
+                    y: position.y - 10,
+                    width: 38,
+                    height: 20
+                )
+                context.fill(
+                    RoundedRectangle(cornerRadius: 4).path(in: bgRect),
+                    with: .color(.black.opacity(0.6))
+                )
+                context.draw(resolved, at: CGPoint(x: bgRect.midX, y: bgRect.midY), anchor: .center)
+            }
+        } symbols: {
+            ForEach(angles) { angle in
+                Text("\(Int(angle.degrees))°")
+                    .font(.system(size: 13, weight: .bold, design: .rounded))
+                    .foregroundStyle(statusColor(angle.status))
+                    .tag(angle.id)
             }
         }
         .allowsHitTesting(false)
     }
 
-    // MARK: - Drawing
+    // MARK: - Position Lookup
 
-    private func drawAngleLabel(context: GraphicsContext, at point: CGPoint, angle: RealtimeAngle) {
-        let color = statusColor(angle.status)
-        let text = Text("\(Int(angle.degrees))°")
-            .font(.system(size: 13, weight: .bold, design: .rounded))
-            .foregroundStyle(color)
-
-        // Background pill
-        let bgRect = CGRect(
-            x: point.x + 8,
-            y: point.y - 10,
-            width: 38,
-            height: 20
-        )
-        context.fill(
-            RoundedRectangle(cornerRadius: 4).path(in: bgRect),
-            with: .color(.black.opacity(0.6))
-        )
-
-        // Text
-        context.draw(
-            context.resolve(text),
-            at: CGPoint(x: bgRect.midX, y: bgRect.midY),
-            anchor: .center
-        )
+    private func keypointPosition(for angle: RealtimeAngle, size: CGSize) -> CGPoint {
+        let kpDict = Dictionary(keypoints, uniquingKeysWith: { _, last in last })
+        if let point = kpDict[angle.jointName] {
+            return visionToScreen(point, size: size)
+        }
+        // Fallback: center of screen
+        return CGPoint(x: size.width / 2, y: size.height / 2)
     }
 
     // MARK: - Coordinate Conversion

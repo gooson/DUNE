@@ -10,7 +10,7 @@ final class RealtimePoseTracker: @unchecked Sendable {
 
     // MARK: - Callbacks
 
-    /// Called on every 2D frame with updated state.
+    /// Called at throttled rate with updated state.
     var onStateUpdate: (@Sendable (RealtimePoseState) -> Void)?
 
     // MARK: - Dependencies
@@ -24,9 +24,12 @@ final class RealtimePoseTracker: @unchecked Sendable {
     private var state = RealtimePoseState()
     private var scoreBuffer = ScoreRingBuffer(capacity: 10)
     private var is3DInFlight = false
+    private var isStopped = true
     private var last3DSampleTime: CFAbsoluteTime = 0
     private var lastValidKeypoints: [(String, CGPoint)] = []
     private var lastValidTime: CFAbsoluteTime = 0
+    private var lastStateUpdateTime: CFAbsoluteTime = 0
+    private var pending3DTask: Task<Void, Never>?
 
     // MARK: - Configuration
 
@@ -34,6 +37,8 @@ final class RealtimePoseTracker: @unchecked Sendable {
     private static let min3DInterval: CFAbsoluteTime = 0.25 // 4fps target
     /// How long to keep last valid detection before clearing (seconds).
     private static let detectionTimeout: CFAbsoluteTime = 0.3
+    /// Minimum interval between state update callbacks (seconds).
+    private static let stateUpdateInterval: CFAbsoluteTime = 0.1 // 10fps max UI updates
 
     // MARK: - Init
 
@@ -44,20 +49,25 @@ final class RealtimePoseTracker: @unchecked Sendable {
     // MARK: - Lifecycle
 
     func start() {
+        captureService.onRealtimeFrame = { [weak self] keypoints, sampleBuffer in
+            self?.handleFrame(keypoints: keypoints, sampleBuffer: sampleBuffer)
+        }
+
         serialQueue.async { [weak self] in
             self?.state = RealtimePoseState(isActive: true)
             self?.scoreBuffer.reset()
             self?.is3DInFlight = false
-        }
-
-        captureService.onRealtimeFrame = { [weak self] keypoints, pixelBuffer in
-            self?.handleFrame(keypoints: keypoints, pixelBuffer: pixelBuffer)
+            self?.isStopped = false
+            self?.lastStateUpdateTime = 0
         }
     }
 
     func stop() {
         captureService.onRealtimeFrame = nil
+        pending3DTask?.cancel()
+        pending3DTask = nil
         serialQueue.async { [weak self] in
+            self?.isStopped = true
             self?.state = RealtimePoseState()
             self?.scoreBuffer.reset()
         }
@@ -65,9 +75,9 @@ final class RealtimePoseTracker: @unchecked Sendable {
 
     // MARK: - Frame Handling
 
-    private func handleFrame(keypoints: [(String, CGPoint)], pixelBuffer: CVPixelBuffer) {
+    private func handleFrame(keypoints: [(String, CGPoint)], sampleBuffer: CMSampleBuffer) {
         serialQueue.async { [weak self] in
-            guard let self, self.state.isActive else { return }
+            guard let self, self.state.isActive, !self.isStopped else { return }
 
             let now = CFAbsoluteTimeGetCurrent()
 
@@ -93,43 +103,48 @@ final class RealtimePoseTracker: @unchecked Sendable {
                 if !angles.isEmpty {
                     let avgAngleScore = self.score(from: angles)
                     self.scoreBuffer.append(avgAngleScore)
-                    self.state.currentScore = avgAngleScore
                     self.state.smoothedScore = self.scoreBuffer.average
                 }
             }
 
-            // 3D sampling trigger
+            // 3D sampling trigger — CMSampleBuffer keeps pixel buffer alive
             if !self.is3DInFlight,
                !keypoints.isEmpty,
                now - self.last3DSampleTime >= Self.min3DInterval {
                 self.is3DInFlight = true
                 self.last3DSampleTime = now
-                // pixelBuffer is retained by the Task closure automatically
-                Task { [weak self] in
-                    await self?.perform3DDetection(pixelBuffer)
+                self.pending3DTask = Task { [weak self] in
+                    await self?.perform3DDetection(sampleBuffer)
                 }
             }
 
-            self.onStateUpdate?(self.state)
+            // Throttle UI updates
+            if now - self.lastStateUpdateTime >= Self.stateUpdateInterval {
+                self.lastStateUpdateTime = now
+                self.onStateUpdate?(self.state)
+            }
         }
     }
 
     // MARK: - 3D Detection
 
-    private func perform3DDetection(_ pixelBuffer: CVPixelBuffer) async {
+    private func perform3DDetection(_ sampleBuffer: CMSampleBuffer) async {
+        guard !Task.isCancelled else { return }
+
         do {
-            let result = try await captureService.detectPoseFromVideoFrame(pixelBuffer)
+            let result = try await captureService.detectPoseFromVideoFrame(sampleBuffer)
+
+            guard !Task.isCancelled else { return }
+
             let metrics = analysisService.analyzeFrontView(joints: result.jointPositions)
                 + analysisService.analyzeSideView(joints: result.jointPositions)
-            let score = analysisService.calculateOverallScore(metrics: metrics)
+            let score = max(0, min(100, analysisService.calculateOverallScore(metrics: metrics)))
 
             serialQueue.async { [weak self] in
-                guard let self else { return }
-                self.state.latestMetrics = metrics
+                guard let self, !self.isStopped else { return }
                 self.state.is3DActive = true
-                // 3D score is more accurate — weight it more
-                self.scoreBuffer.append(score)
-                self.state.currentScore = score
+                // 3D score is more accurate — replace the most recent 2D score
+                self.scoreBuffer.replaceLast(score)
                 self.state.smoothedScore = self.scoreBuffer.average
                 self.is3DInFlight = false
                 self.onStateUpdate?(self.state)
@@ -138,7 +153,6 @@ final class RealtimePoseTracker: @unchecked Sendable {
             AppLogger.data.debug("[RealtimePoseTracker] 3D detection failed: \(error.localizedDescription)")
             serialQueue.async { [weak self] in
                 self?.is3DInFlight = false
-                // Keep using 2D results — graceful degradation
             }
         }
     }

@@ -13,11 +13,9 @@ final class RealtimePostureViewModel {
 
     var isActive: Bool = false
     var currentAngles: [RealtimeAngle] = []
-    var currentScore: Int = 0
     var smoothedScore: Int = 0
     var skeletonKeypoints: [(String, CGPoint)] = []
     var guidanceState = GuidanceState()
-    var latestMetrics: [PostureMetricResult] = []
     var is3DActive: Bool = false
     var cameraPosition: CameraPosition = .back
 
@@ -59,6 +57,7 @@ final class RealtimePostureViewModel {
             tracker.start()
             isActive = true
         } catch {
+            AppLogger.data.error("[RealtimePostureViewModel] Camera setup failed: \(error.localizedDescription)")
             isActive = false
         }
     }
@@ -80,10 +79,8 @@ final class RealtimePostureViewModel {
 
     private func applyState(_ state: RealtimePoseState) {
         currentAngles = state.currentAngles
-        currentScore = state.currentScore
         smoothedScore = state.smoothedScore
         skeletonKeypoints = state.skeletonKeypoints
-        latestMetrics = state.latestMetrics
         is3DActive = state.is3DActive
     }
 }

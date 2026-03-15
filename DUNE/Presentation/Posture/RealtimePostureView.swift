@@ -31,6 +31,7 @@ struct RealtimePostureView: View {
                 if !viewModel.currentAngles.isEmpty {
                     AngleOverlay(
                         angles: viewModel.currentAngles,
+                        keypoints: viewModel.skeletonKeypoints,
                         isFrontCamera: viewModel.cameraPosition == .front
                     )
                 }

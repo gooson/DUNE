@@ -6,10 +6,11 @@ struct RealtimeScoreBadge: View {
     let is3DActive: Bool
 
     var body: some View {
+        let color = scoreColor
         HStack(spacing: 6) {
             Text("\(score)")
                 .font(.system(size: 28, weight: .bold, design: .rounded))
-                .foregroundStyle(scoreColor)
+                .foregroundStyle(color)
                 .contentTransition(.numericText())
                 .animation(.easeInOut(duration: 0.3), value: score)
 

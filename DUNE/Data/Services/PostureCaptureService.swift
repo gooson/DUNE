@@ -54,8 +54,9 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
     private static let frameAnalysisInterval: CFAbsoluteTime = 0.1 // 10fps max
     /// Combined frame update callback: guidance state + skeleton keypoints in a single dispatch.
     var onFrameUpdate: (@Sendable (GuidanceState, [(String, CGPoint)]) -> Void)?
-    /// Realtime analysis callback: keypoints + pixel buffer for 3D sampling.
-    var onRealtimeFrame: (@Sendable ([(String, CGPoint)], CVPixelBuffer) -> Void)?
+    /// Realtime analysis callback: keypoints + sample buffer for 3D sampling.
+    /// CMSampleBuffer retains the underlying pixel buffer, preventing pool recycling.
+    var onRealtimeFrame: (@Sendable ([(String, CGPoint)], CMSampleBuffer) -> Void)?
 
     // MARK: - Camera State
 
@@ -225,10 +226,15 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
     // MARK: - 3D Pose Detection from Video Frame
 
     /// Detect 3D pose from a video pixel buffer. Used by RealtimePoseTracker for periodic 3D sampling.
-    func detectPoseFromVideoFrame(_ pixelBuffer: CVPixelBuffer) async throws -> PostureCaptureResult {
+    /// Reusable CIContext for video frame conversion. Thread-safe.
+    private static let ciContext = CIContext()
+
+    func detectPoseFromVideoFrame(_ sampleBuffer: CMSampleBuffer) async throws -> PostureCaptureResult {
+        guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
+            throw PostureCaptureError.imageConversionFailed
+        }
         let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
-        let context = CIContext()
-        guard let cgImage = context.createCGImage(ciImage, from: ciImage.extent) else {
+        guard let cgImage = Self.ciContext.createCGImage(ciImage, from: ciImage.extent) else {
             throw PostureCaptureError.imageConversionFailed
         }
         // No EXIF orientation for live video frames (already rotated by connection.videoRotationAngle)
@@ -515,7 +521,7 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
         )
 
         onFrameUpdate?(state, keypoints)
-        onRealtimeFrame?(keypoints, pixelBuffer)
+        onRealtimeFrame?(keypoints, sampleBuffer)
     }
 
     /// Compute average luminance from Y plane of pixel buffer.

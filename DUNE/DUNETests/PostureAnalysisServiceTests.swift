@@ -279,6 +279,15 @@ struct PostureAnalysisServiceTests {
         #expect(buffer.average == 84) // (100+90+85+70+75)/5 = 84
     }
 
+    @Test("Score ring buffer replaceLast overwrites most recent")
+    func scoreRingBufferReplaceLast() {
+        var buffer = ScoreRingBuffer(capacity: 5)
+        buffer.append(80)
+        buffer.append(90)
+        buffer.replaceLast(100) // Replace 90 with 100
+        #expect(buffer.average == 90) // (80+100)/2 = 90
+    }
+
     @Test("Score ring buffer reset clears values")
     func scoreRingBufferReset() {
         var buffer = ScoreRingBuffer(capacity: 5)
