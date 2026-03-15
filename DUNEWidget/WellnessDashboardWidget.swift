@@ -2,7 +2,7 @@ import SwiftUI
 import WidgetKit
 
 struct WellnessDashboardWidget: Widget {
-    let kind = "WellnessDashboardWidget"
+    let kind = WidgetSurfaceAccessibility.widgetKind
 
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: WidgetScoreProvider()) { entry in
@@ -10,7 +10,7 @@ struct WellnessDashboardWidget: Widget {
         }
         .configurationDisplayName(String(localized: "DUNE Today"))
         .description(String(localized: "Condition, Readiness, and Wellness scores at a glance."))
-        .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
+        .supportedFamilies(WidgetSurfaceFamily.allCases.map(\.widgetFamily))
     }
 }
 
@@ -36,5 +36,18 @@ struct WellnessDashboardWidgetEntryView: View {
 struct DUNEWidgetBundle: WidgetBundle {
     var body: some Widget {
         WellnessDashboardWidget()
+    }
+}
+
+private extension WidgetSurfaceFamily {
+    var widgetFamily: WidgetFamily {
+        switch self {
+        case .small:
+            .systemSmall
+        case .medium:
+            .systemMedium
+        case .large:
+            .systemLarge
+        }
     }
 }

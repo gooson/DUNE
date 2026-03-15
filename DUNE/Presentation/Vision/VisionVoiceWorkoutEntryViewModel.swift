@@ -25,12 +25,19 @@ protocol VisionVoiceWorkoutTranscribing: AnyObject {
     func stop()
 }
 
+@MainActor
+protocol VisionVoiceWorkoutSpeaking: AnyObject {
+    func speak(_ text: String, localeIdentifier: String)
+    func stop()
+}
+
 @Observable
 @MainActor
 final class VisionVoiceWorkoutEntryViewModel {
     var transcript: String = "" {
         didSet {
             guard transcript != oldValue else { return }
+            speaker.stop()
             draft = nil
             isDraftSaved = false
             errorMessage = nil
@@ -49,15 +56,18 @@ final class VisionVoiceWorkoutEntryViewModel {
 
     private let parser: VisionVoiceWorkoutCommandParser
     private let transcriber: any VisionVoiceWorkoutTranscribing
+    private let speaker: any VisionVoiceWorkoutSpeaking
     private let localeIdentifier: String
 
     init(
         parser: VisionVoiceWorkoutCommandParser = VisionVoiceWorkoutCommandParser(),
         transcriber: any VisionVoiceWorkoutTranscribing = VisionVoiceWorkoutTranscriberFactory.makeDefault(),
+        speaker: any VisionVoiceWorkoutSpeaking = VisionVoiceWorkoutSpeakerFactory.makeDefault(),
         localeIdentifier: String = Locale.autoupdatingCurrent.identifier
     ) {
         self.parser = parser
         self.transcriber = transcriber
+        self.speaker = speaker
         self.localeIdentifier = localeIdentifier
         self.infoMessage = String(localized: "Manual text works even if speech permission is unavailable.")
     }
@@ -94,6 +104,7 @@ final class VisionVoiceWorkoutEntryViewModel {
 
     func startListening() async {
         errorMessage = nil
+        speaker.stop()
 
         switch await transcriber.requestAuthorization() {
         case .authorized:
@@ -151,7 +162,11 @@ final class VisionVoiceWorkoutEntryViewModel {
             self.draft = draft
             isDraftSaved = false
             errorMessage = nil
-            infoMessage = draft.notes.first ?? String(localized: "Voice draft ready.")
+            let reviewMessage = reviewFeedbackMessage(for: draft)
+            infoMessage = [reviewMessage, draft.notes.first]
+                .compactMap { $0 }
+                .joined(separator: "\n")
+            speakFeedback(reviewMessage)
         case .failure(let message):
             draft = nil
             isDraftSaved = false
@@ -176,12 +191,75 @@ final class VisionVoiceWorkoutEntryViewModel {
         isSaving = false
         isDraftSaved = true
         errorMessage = nil
-        infoMessage = String(localized: "Saved to workout history.")
+        if let draft {
+            let saveMessage = savedFeedbackMessage(for: draft)
+            infoMessage = saveMessage
+            speakFeedback(saveMessage)
+        } else {
+            let fallbackMessage = String(localized: "Saved to workout history.")
+            infoMessage = fallbackMessage
+            speakFeedback(fallbackMessage)
+        }
     }
 
     func clearFeedback() {
         errorMessage = nil
         infoMessage = nil
+        speaker.stop()
+    }
+
+    func stopAudioFeedback() {
+        speaker.stop()
+    }
+
+    func adjustReps(by delta: Int) {
+        guard !isListening, let draft, let reps = draft.reps else { return }
+        let updatedReps = max(1, reps + delta)
+        guard updatedReps != reps else { return }
+        applyEditedDraft(updatedDraft(from: draft, reps: updatedReps))
+    }
+
+    func adjustWeight(by delta: Int) {
+        guard !isListening,
+              let draft,
+              let weight = draft.weight,
+              let weightUnit = draft.weightUnit
+        else { return }
+
+        let step = weightUnit == .kg ? 2.5 : 5.0
+        let updatedWeight = max(step, weight + Double(delta) * step)
+        guard updatedWeight != weight else { return }
+        applyEditedDraft(updatedDraft(from: draft, weight: updatedWeight))
+    }
+
+    func adjustDuration(by delta: Int) {
+        guard !isListening, let draft, let durationSeconds = draft.durationSeconds else { return }
+        let step: TimeInterval = 60
+        let updatedDuration = max(step, durationSeconds + TimeInterval(delta) * step)
+        guard updatedDuration != durationSeconds else { return }
+        applyEditedDraft(updatedDraft(from: draft, durationSeconds: updatedDuration))
+    }
+
+    func adjustDistance(by delta: Int) {
+        guard !isListening,
+              let draft,
+              let distance = draft.distance,
+              let distanceUnit = draft.distanceUnit
+        else { return }
+
+        let step: Double
+        switch distanceUnit {
+        case .km:
+            step = 0.5
+        case .meters:
+            step = 100
+        case .miles:
+            step = 0.25
+        }
+
+        let updatedDistance = max(step, distance + Double(delta) * step)
+        guard updatedDistance != distance else { return }
+        applyEditedDraft(updatedDraft(from: draft, distance: updatedDistance))
     }
 
     private func buildRecord(from draft: VisionVoiceWorkoutDraft) -> ExerciseRecord {
@@ -277,6 +355,108 @@ final class VisionVoiceWorkoutEntryViewModel {
             return nil
         }
     }
+
+    private var currentLocale: Locale {
+        Locale(identifier: localeIdentifier)
+    }
+
+    private func updatedDraft(
+        from draft: VisionVoiceWorkoutDraft,
+        reps: Int? = nil,
+        weight: Double? = nil,
+        durationSeconds: TimeInterval? = nil,
+        distance: Double? = nil
+    ) -> VisionVoiceWorkoutDraft {
+        VisionVoiceWorkoutDraft(
+            transcript: draft.transcript,
+            exercise: draft.exercise,
+            reps: reps ?? draft.reps,
+            weight: weight ?? draft.weight,
+            weightUnit: draft.weightUnit,
+            durationSeconds: durationSeconds ?? draft.durationSeconds,
+            distance: distance ?? draft.distance,
+            distanceUnit: draft.distanceUnit,
+            notes: draft.notes
+        )
+    }
+
+    private func applyEditedDraft(_ draft: VisionVoiceWorkoutDraft) {
+        self.draft = draft
+        isSaving = false
+        isDraftSaved = false
+        errorMessage = nil
+        speaker.stop()
+        infoMessage = reviewFeedbackMessage(for: draft)
+    }
+
+    private func reviewFeedbackMessage(for draft: VisionVoiceWorkoutDraft) -> String {
+        String(
+            format: String(localized: "Ready to save %@."),
+            locale: currentLocale,
+            draftSummary(for: draft)
+        )
+    }
+
+    private func savedFeedbackMessage(for draft: VisionVoiceWorkoutDraft) -> String {
+        String(
+            format: String(localized: "Saved %@."),
+            locale: currentLocale,
+            draftSummary(for: draft)
+        )
+    }
+
+    private func draftSummary(for draft: VisionVoiceWorkoutDraft) -> String {
+        let formatter = ListFormatter()
+        formatter.locale = currentLocale
+
+        let parts = [draft.primaryDisplayName(locale: currentLocale)] + metricSummaryParts(for: draft)
+        return formatter.string(from: parts) ?? parts.joined(separator: ", ")
+    }
+
+    private func metricSummaryParts(for draft: VisionVoiceWorkoutDraft) -> [String] {
+        var parts: [String] = []
+
+        if let weight = draft.weight, let weightUnit = draft.weightUnit {
+            parts.append("\(formattedNumber(weight)) \(weightUnit.displayName)")
+        }
+        if let reps = draft.reps {
+            let formattedReps = reps.formatted(.number.locale(currentLocale))
+            parts.append(
+                String(
+                    format: String(localized: "%@ reps"),
+                    locale: currentLocale,
+                    formattedReps
+                )
+            )
+        }
+        if let durationSeconds = draft.durationSeconds {
+            parts.append(formattedDuration(durationSeconds))
+        }
+        if let distance = draft.distance, let distanceUnit = draft.distanceUnit {
+            parts.append("\(formattedNumber(distance)) \(distanceUnit.displayName)")
+        }
+
+        return parts
+    }
+
+    private func formattedNumber(_ value: Double) -> String {
+        value.formatted(.number.precision(.fractionLength(0...1)).locale(currentLocale))
+    }
+
+    private func formattedDuration(_ durationSeconds: TimeInterval) -> String {
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = durationSeconds >= 3600 ? [.hour, .minute] : [.minute, .second]
+        formatter.unitsStyle = .short
+        var calendar = Calendar.autoupdatingCurrent
+        calendar.locale = currentLocale
+        formatter.calendar = calendar
+        return formatter.string(from: durationSeconds) ?? "\(Int(durationSeconds))s"
+    }
+
+    private func speakFeedback(_ message: String) {
+        guard !isListening, !message.isEmpty else { return }
+        speaker.speak(message, localeIdentifier: localeIdentifier)
+    }
 }
 
 private enum VisionVoiceWorkoutTranscriberFactory {
@@ -286,6 +466,17 @@ private enum VisionVoiceWorkoutTranscriberFactory {
         VisionSpeechWorkoutTranscriber()
         #else
         UnsupportedVisionVoiceWorkoutTranscriber()
+        #endif
+    }
+}
+
+private enum VisionVoiceWorkoutSpeakerFactory {
+    @MainActor
+    static func makeDefault() -> any VisionVoiceWorkoutSpeaking {
+        #if os(visionOS)
+        VisionSpeechWorkoutSpeaker()
+        #else
+        UnsupportedVisionVoiceWorkoutSpeaker()
         #endif
     }
 }
@@ -308,11 +499,41 @@ private final class UnsupportedVisionVoiceWorkoutTranscriber: VisionVoiceWorkout
     func stop() {}
 }
 
+@MainActor
+private final class UnsupportedVisionVoiceWorkoutSpeaker: VisionVoiceWorkoutSpeaking {
+    func speak(_ text: String, localeIdentifier: String) {}
+    func stop() {}
+}
+
 private enum VisionVoiceWorkoutTranscriberError: Error {
     case unavailable
 }
 
 #if os(visionOS)
+@MainActor
+private final class VisionSpeechWorkoutSpeaker: VisionVoiceWorkoutSpeaking {
+    private let speechSynthesizer = AVSpeechSynthesizer()
+
+    func speak(_ text: String, localeIdentifier: String) {
+        guard !text.isEmpty else { return }
+        if speechSynthesizer.isSpeaking {
+            speechSynthesizer.stopSpeaking(at: .immediate)
+        }
+
+        let utterance = AVSpeechUtterance(string: text)
+        utterance.rate = AVSpeechUtteranceDefaultSpeechRate
+        utterance.voice = AVSpeechSynthesisVoice(
+            language: localeIdentifier.replacingOccurrences(of: "_", with: "-")
+        )
+        speechSynthesizer.speak(utterance)
+    }
+
+    func stop() {
+        guard speechSynthesizer.isSpeaking else { return }
+        speechSynthesizer.stopSpeaking(at: .immediate)
+    }
+}
+
 @MainActor
 private final class VisionSpeechWorkoutTranscriber: NSObject, VisionVoiceWorkoutTranscribing {
     private let audioEngine = AVAudioEngine()
