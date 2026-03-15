@@ -12,6 +12,7 @@ final class TrainingVolumeViewModel {
     var comparison: PeriodComparison?
     var chartDailyBreakdown: [DailyVolumePoint] = []
     var trainingLoadData: [TrainingLoadDataPoint] = []
+    var rpeTrendData: [RPETrendDataPoint] = []
     var isLoading = false
     var errorMessage: String?
 
@@ -89,6 +90,7 @@ final class TrainingVolumeViewModel {
             end: historyEnd
         )
         trainingLoadData = loadData
+        rpeTrendData = Self.buildRPETrendData(from: manualRecords, historyDays: fetchDays)
     }
 
     // MARK: - Private
@@ -98,6 +100,7 @@ final class TrainingVolumeViewModel {
         comparison = nil
         chartDailyBreakdown = []
         trainingLoadData = []
+        rpeTrendData = []
         isLoading = false
         // View will call loadData() via .task(id:)
     }
@@ -268,6 +271,36 @@ final class TrainingVolumeViewModel {
         return result
     }
 
+    // MARK: - RPE Trend
+
+    static func buildRPETrendData(
+        from records: [ExerciseRecord],
+        historyDays: Int
+    ) -> [RPETrendDataPoint] {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+
+        var dailyRPE: [Date: (sum: Double, count: Int)] = [:]
+        for record in records {
+            guard let rpe = record.rpe, rpe >= 1, rpe <= 10 else { continue }
+            let dayStart = calendar.startOfDay(for: record.date)
+            let existing = dailyRPE[dayStart, default: (sum: 0, count: 0)]
+            dailyRPE[dayStart] = (sum: existing.sum + Double(rpe), count: existing.count + 1)
+        }
+
+        var result: [RPETrendDataPoint] = []
+        for dayOffset in (0..<historyDays).reversed() {
+            guard let date = calendar.date(byAdding: .day, value: -dayOffset, to: today) else { continue }
+            let dayStart = calendar.startOfDay(for: date)
+            if let bucket = dailyRPE[dayStart] {
+                let avg = bucket.sum / Double(bucket.count)
+                result.append(RPETrendDataPoint(date: dayStart, averageRPE: avg, sessionCount: bucket.count))
+            }
+        }
+
+        return result
+    }
+
     private func makeExerciseSnapshot(from record: ExerciseRecord) -> ExerciseRecordSnapshot {
         let completedSets = record.completedSets
         let totalWeight = Swift.min(completedSets.compactMap(\.weight).reduce(0, +), 50_000)
@@ -287,4 +320,13 @@ final class TrainingVolumeViewModel {
             distanceKm: nil
         )
     }
+}
+
+// MARK: - RPE Trend Data Point
+
+struct RPETrendDataPoint: Identifiable, Sendable {
+    var id: Date { date }
+    let date: Date
+    let averageRPE: Double
+    let sessionCount: Int
 }
