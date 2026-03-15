@@ -14,6 +14,8 @@ struct WorkoutPreviewView: View {
     @State private var errorMessage: String?
     @State private var selectedLevel: Int = 5
     @FocusState private var levelFocused: Bool
+    /// Mutable copy of entries for pre-workout reordering (original template unchanged).
+    @State private var reorderedEntries: [TemplateEntry] = []
 
     var body: some View {
         VStack(spacing: 0) {
@@ -262,7 +264,7 @@ struct WorkoutPreviewView: View {
         VStack(spacing: 0) {
             List {
                 Section {
-                    ForEach(Array(snapshot.entries.enumerated()), id: \.element.id) { index, entry in
+                    ForEach(Array(reorderedEntries.enumerated()), id: \.element.id) { index, entry in
                         HStack(spacing: DS.Spacing.md) {
                             Text("\(index + 1)")
                                 .font(DS.Typography.metricLabel)
@@ -299,13 +301,33 @@ struct WorkoutPreviewView: View {
                                 .foregroundStyle(.secondary)
                             }
                         }
+                        .contextMenu {
+                            if index > 0 {
+                                Button {
+                                    withAnimation {
+                                        reorderedEntries.swapAt(index, index - 1)
+                                    }
+                                } label: {
+                                    Label(String(localized: "Move Up"), systemImage: "arrow.up")
+                                }
+                            }
+                            if index < reorderedEntries.count - 1 {
+                                Button {
+                                    withAnimation {
+                                        reorderedEntries.swapAt(index, index + 1)
+                                    }
+                                } label: {
+                                    Label(String(localized: "Move Down"), systemImage: "arrow.down")
+                                }
+                            }
+                        }
                     }
                 } header: {
                     Text(
                         String(
                             format: String(localized: "%@ exercises"),
                             locale: Locale.current,
-                            snapshot.entries.count.formattedWithSeparator
+                            reorderedEntries.count.formattedWithSeparator
                         )
                     )
                 }
@@ -336,16 +358,27 @@ struct WorkoutPreviewView: View {
             .padding(.horizontal, DS.Spacing.lg)
             .padding(.bottom, DS.Spacing.xs)
         }
+        .onAppear {
+            if reorderedEntries.isEmpty {
+                reorderedEntries = snapshot.entries
+            }
+        }
     }
 
     private func startStrengthWorkout() {
         guard !isStarting else { return }
         isStarting = true
 
+        let reorderedSnapshot = WorkoutSessionTemplate(
+            name: snapshot.name,
+            entries: reorderedEntries,
+            procedureSetsByExerciseID: snapshot.procedureSetsByExerciseID
+        )
+
         Task {
             do {
                 try await workoutManager.requestAuthorization()
-                try await workoutManager.startQuickWorkout(with: snapshot)
+                try await workoutManager.startQuickWorkout(with: reorderedSnapshot)
                 WKInterfaceDevice.current().play(.success)
                 isStarting = false
             } catch {
