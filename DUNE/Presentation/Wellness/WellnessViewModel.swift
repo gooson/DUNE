@@ -118,7 +118,9 @@ final class WellnessViewModel {
             bodyTrend: bodyTrend,
             postureScore: postureScore
         ))
-        WidgetDataWriter.writeWellnessScore(wellnessScore)
+        if !isLoading {
+            WidgetDataWriter.writeWellnessScore(wellnessScore)
+        }
     }
 
     /// Async entry point for `.refreshable` — awaits load completion so spinner persists.

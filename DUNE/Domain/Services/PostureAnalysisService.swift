@@ -403,9 +403,9 @@ struct PostureAnalysisService: Sendable {
     }
 
     /// Compute confidence based on joint availability.
-    /// All required joints present with direct detection → 0.9.
-    /// Midpoint fallback used → 0.7.
-    /// Partial joints → 0.5.
+    /// All required joints present with direct detection → 1.0.
+    /// All required joints present but midpoint fallback used → capped at 0.7.
+    /// Partial joints → ratio * 0.9.
     private func jointConfidence(required: [String], available: [String: SIMD3<Float>], usedMidpoint: Bool = false) -> Double {
         guard !required.isEmpty else { return 1.0 }
         let found = required.filter { available[$0] != nil }.count

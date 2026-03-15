@@ -50,47 +50,71 @@ extension PostureMetricType {
     }
 }
 
-// MARK: - Posture Score Helpers
+// MARK: - Posture View Helpers
+
+/// Namespace for shared posture display helpers used across posture views.
+enum PostureViewHelpers {
+    /// Score-to-color mapping.
+    static func scoreColor(_ score: Int) -> Color {
+        if score >= 80 { return .green }
+        if score >= 60 { return .yellow }
+        return .red
+    }
+
+    /// Metric value formatter.
+    static func formattedValue(_ value: Double, unit: PostureMetricUnit) -> String {
+        let formatted = value.formatted(.number.precision(.fractionLength(1)))
+        switch unit {
+        case .degrees: return "\(formatted)°"
+        case .centimeters: return "\(formatted) cm"
+        }
+    }
+
+    /// Confidence badge shown inline with metric value.
+    @ViewBuilder
+    static func confidenceBadge(_ confidence: Double) -> some View {
+        if confidence < 1.0 && confidence > 0 {
+            HStack(spacing: 2) {
+                Circle()
+                    .fill(confidenceColor(confidence))
+                    .frame(width: 6, height: 6)
+
+                Text("\(Int(confidence * 100))%")
+                    .font(.caption2.monospacedDigit())
+                    .foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    /// Color for confidence level indicator.
+    static func confidenceColor(_ confidence: Double) -> Color {
+        if confidence >= 0.8 { return .green }
+        if confidence >= 0.6 { return .orange }
+        return .red
+    }
+}
+
+// MARK: - Convenience Aliases
 
 /// Shared score-to-color mapping used across all posture views.
 func postureScoreColor(_ score: Int) -> Color {
-    if score >= 80 { return .green }
-    if score >= 60 { return .yellow }
-    return .red
+    PostureViewHelpers.scoreColor(score)
 }
 
 /// Shared metric value formatter used across posture views.
 func formattedPostureMetricValue(_ value: Double, unit: PostureMetricUnit) -> String {
-    let formatted = value.formatted(.number.precision(.fractionLength(1)))
-    switch unit {
-    case .degrees: return "\(formatted)°"
-    case .centimeters: return "\(formatted) cm"
-    }
+    PostureViewHelpers.formattedValue(value, unit: unit)
 }
-
-// MARK: - Confidence Display
 
 /// Confidence badge shown inline with metric value.
 @ViewBuilder
 func confidenceBadge(_ confidence: Double) -> some View {
-    if confidence < 1.0 && confidence > 0 {
-        HStack(spacing: 2) {
-            Circle()
-                .fill(confidenceColor(confidence))
-                .frame(width: 6, height: 6)
-
-            Text("\(Int(confidence * 100))%")
-                .font(.caption2.monospacedDigit())
-                .foregroundStyle(.secondary)
-        }
-    }
+    PostureViewHelpers.confidenceBadge(confidence)
 }
 
 /// Color for confidence level indicator.
 func confidenceColor(_ confidence: Double) -> Color {
-    if confidence >= 0.8 { return .green }
-    if confidence >= 0.6 { return .orange }
-    return .red
+    PostureViewHelpers.confidenceColor(confidence)
 }
 
 extension PostureStatus {
