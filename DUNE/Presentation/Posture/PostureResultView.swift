@@ -142,11 +142,15 @@ struct PostureResultView: View {
                                     .font(.title2)
                                     .foregroundStyle(.tertiary)
 
-                                Text(captureType == .front
-                                    ? "Capture front view for analysis"
-                                    : "Capture side view for analysis")
-                                    .font(.caption2)
-                                    .foregroundStyle(.tertiary)
+                                Group {
+                                    if captureType == .front {
+                                        Text("Capture front view for analysis")
+                                    } else {
+                                        Text("Capture side view for analysis")
+                                    }
+                                }
+                                .font(.caption2)
+                                .foregroundStyle(.tertiary)
                             }
                         }
                 }
