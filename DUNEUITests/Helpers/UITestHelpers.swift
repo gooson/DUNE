@@ -48,6 +48,10 @@ enum AXID {
     static let activityRecommendedRoutineCard = "activity-recommended-routine-card"
     static let activityAIWorkoutBuilder = "activity-ai-workout-builder"
     static let activityTrainingReadinessDetailScreen = "activity-training-readiness-detail-screen"
+    static let trainingReadinessPeriodPicker = "training-readiness-period-picker"
+    static let trainingReadinessSubscoreHRV = "training-readiness-subscore-hrv"
+    static let trainingReadinessSubscoreRHR = "training-readiness-subscore-rhr"
+    static let trainingReadinessSubscoreSleep = "training-readiness-subscore-sleep"
     static let activityMuscleMapDetailScreen = "activity-musclemap-detail-screen"
     static let muscleMapDetailVolumeSection = "musclemap-detail-volume-section"
     static let muscleMapDetailRecoverySection = "musclemap-detail-recovery-section"
@@ -58,12 +62,27 @@ enum AXID {
     static let muscleMap3DMuscleStrip = "musclemap-3d-muscle-strip"
     static let muscleMap3DResetButton = "musclemap-3d-reset-button"
     static let activityWeeklyStatsDetailScreen = "activity-weeklystats-detail-screen"
+    static let activityWeeklyStatsSummaryGrid = "activity-weeklystats-summary-grid"
+    static let activityWeeklyStatsBreakdown = "activity-weeklystats-breakdown"
     static let activityTrainingVolumeDetailScreen = "activity-training-volume-detail-screen"
+    static let activityTrainingVolumePeriodPicker = "activity-training-volume-period-picker"
+    static let activityTrainingVolumeOverview = "activity-training-volume-overview"
+    static let activityTrainingVolumeTypeList = "activity-training-volume-type-list"
     static let activityPersonalRecordsDetailScreen = "activity-personal-records-detail-screen"
+    static let activityPersonalRecordsMetricPicker = "activity-personal-records-metric-picker"
+    static let activityPersonalRecordsTimelineChart = "activity-personal-records-timeline-chart"
+    static let activityPersonalRecordsRewardSummary = "activity-personal-records-reward-summary"
+    static let activityPersonalRecordsAchievementHistory = "activity-personal-records-achievement-history"
     static let activityConsistencyDetailScreen = "activity-consistency-detail-screen"
+    static let activityConsistencyCalendar = "activity-consistency-calendar"
+    static let activityConsistencyHistory = "activity-consistency-history"
+    static let activityConsistencyEmptyState = "activity-consistency-empty-state"
     static let activityExerciseMixDetailScreen = "activity-exercise-mix-detail-screen"
     static func activityTrainingVolumeRow(_ typeKey: String) -> String { "activity-training-volume-row-\(typeKey)" }
     static let activityExerciseTypeDetailScreen = "activity-exercise-type-detail-screen"
+    static let activityExerciseTypePeriodPicker = "activity-exercise-type-period-picker"
+    static let activityExerciseTypeTrendChart = "activity-exercise-type-trend-chart"
+    static let activityExerciseTypeRecentSessions = "activity-exercise-type-recent-sessions"
 
     // MARK: - Wellness Tab (active: hero, toolbar-add, add-menu items)
     static let wellnessHeroScore = "wellness-hero-score"
@@ -116,6 +135,20 @@ enum AXID {
     static let settingsRowVersion = "settings-row-version"
     static let settingsButtonSeedAdvancedMockData = "settings-button-seed-advanced-mock-data"
     static let settingsButtonResetMockData = "settings-button-reset-mock-data"
+    static let exerciseDefaultsScreen = "exercise-defaults-screen"
+    static let exerciseDefaultsConfiguredSection = "exercise-defaults-configured-section"
+    static let exerciseDefaultsAllSection = "exercise-defaults-all-section"
+    static func exerciseDefaultsRow(_ exerciseID: String) -> String { "exercise-defaults-row-\(exerciseID)" }
+    static let exerciseDefaultEditScreen = "exercise-default-edit-screen"
+    static let exerciseDefaultEditWeight = "exercise-default-edit-weight"
+    static let exerciseDefaultEditReps = "exercise-default-edit-reps"
+    static let exerciseDefaultEditManualOverride = "exercise-default-edit-manual-override"
+    static let exerciseDefaultEditPreferred = "exercise-default-edit-preferred"
+    static let exerciseDefaultEditSave = "exercise-default-edit-save"
+    static let exerciseDefaultEditClear = "exercise-default-edit-clear"
+    static let preferredExercisesScreen = "preferred-exercises-screen"
+    static let preferredExercisesPreferredSection = "preferred-exercises-preferred-section"
+    static func preferredExerciseToggle(_ exerciseID: String) -> String { "preferred-exercise-toggle-\(exerciseID)" }
 
     // MARK: - What's New
     static let whatsNewScreen = "whatsnew-screen"
@@ -749,10 +782,20 @@ extension XCUIApplication {
         fallbackLabel: String? = nil,
         timeout: TimeInterval = 5
     ) -> Bool {
+        dismissKeyboardIfPresent()
+
         let switchControl = switches[identifier].firstMatch
         let genericControl = descendants(matching: .any)[identifier].firstMatch
-        let toggle = switchControl.exists ? switchControl : genericControl
-        guard toggle.waitForExistence(timeout: timeout) else { return false }
+        let toggle: XCUIElement
+
+        if switchControl.waitForExistence(timeout: timeout) {
+            toggle = switchControl
+        } else if genericControl.waitForExistence(timeout: timeout) {
+            toggle = genericControl
+        } else {
+            return false
+        }
+
         if switchState(of: toggle) == isOn { return true }
 
         let tapTargets: [XCUIElement] = [
@@ -763,11 +806,46 @@ extension XCUIApplication {
 
         for target in tapTargets where target.exists {
             target.tap()
-            if switchState(of: toggle) == isOn { return true }
+            if waitForSwitchState(of: toggle, expected: isOn, timeout: 1.5) {
+                return true
+            }
         }
 
         toggle.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
-        return switchState(of: toggle) == isOn
+        return waitForSwitchState(of: toggle, expected: isOn, timeout: 1.5)
+    }
+
+    @discardableResult
+    func dismissKeyboardIfPresent(timeout: TimeInterval = 1) -> Bool {
+        let keyboard = keyboards.firstMatch
+        guard keyboard.waitForExistence(timeout: timeout) else { return false }
+
+        for _ in 0..<3 {
+            let keyboardButtons = [
+                "Done",
+                "Return",
+                "Search",
+                "search",
+                "Go",
+                "Next"
+            ].map { keyboard.buttons[$0] }
+
+            if let button = keyboardButtons.first(where: \.exists) {
+                button.tap()
+            } else if let toolbarDone = toolbars.buttons.matching(NSPredicate(format: "label == 'Done'")).allElementsBoundByIndex.first(where: \.exists) {
+                toolbarDone.tap()
+            } else if navigationBars.firstMatch.exists {
+                navigationBars.firstMatch.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+            } else {
+                coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.2)).tap()
+            }
+
+            if !keyboard.waitForExistence(timeout: 0.5) {
+                return true
+            }
+        }
+
+        return !keyboard.exists
     }
 
     @discardableResult
@@ -879,6 +957,24 @@ extension XCUIApplication {
         default:
             return nil
         }
+    }
+
+    private func waitForSwitchState(
+        of element: XCUIElement,
+        expected: Bool,
+        timeout: TimeInterval
+    ) -> Bool {
+        let deadline = Date().addingTimeInterval(timeout)
+
+        while Date() < deadline {
+            if switchState(of: element) == expected {
+                return true
+            }
+
+            RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.1))
+        }
+
+        return switchState(of: element) == expected
     }
 
     private func preferredScrollContainer() -> XCUIElement {

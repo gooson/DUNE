@@ -62,7 +62,7 @@ struct ExerciseTypeDetailView: View {
             }
         }
         .pickerStyle(.segmented)
-        .accessibilityIdentifier("activity-exercise-type-detail-screen")
+        .accessibilityIdentifier("activity-exercise-type-period-picker")
     }
 
     // MARK: - Content
@@ -195,6 +195,7 @@ struct ExerciseTypeDetailView: View {
         }
         .padding(DS.Spacing.md)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        .accessibilityIdentifier("activity-exercise-type-trend-chart")
     }
 
     // MARK: - Period Comparison
@@ -288,6 +289,7 @@ struct ExerciseTypeDetailView: View {
         }
         .padding(DS.Spacing.md)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        .accessibilityIdentifier("activity-exercise-type-recent-sessions")
     }
 
     private func recentSessionRow(_ workout: WorkoutSummary) -> some View {
