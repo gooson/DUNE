@@ -20342,18 +20342,18 @@
         }
       }
     },
-    "Posture Assessment": {
+    "posture": {
       "localizations": {
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "姿勢評価"
+            "value": "姿勢"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "자세 평가"
+            "value": "자세"
           }
         }
       }
@@ -20370,6 +20370,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "자세"
+          }
+        }
+      }
+    },
+    "Posture Assessment": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "姿勢評価"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "자세 평가"
           }
         }
       }
@@ -20435,22 +20451,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "자세 점수는 최신 자세 평가 결과(0-100)를 반영합니다."
-          }
-        }
-      }
-    },
-    "posture": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "姿勢"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "자세"
           }
         }
       }
@@ -21954,6 +21954,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "미리 알림 시간"
+          }
+        }
+      }
+    },
+    "Reorder Exercises": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "エクササイズの並べ替え"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "운동 순서 변경"
           }
         }
       }
@@ -23883,7 +23899,9 @@
         }
       }
     },
+    "Select up to %@ metrics shown at the top of Today.": {},
     "Select up to 3 metrics shown at the top of Today.": {
+      "extractionState": "stale",
       "localizations": {
         "ja": {
           "stringUnit": {
@@ -24968,23 +24986,6 @@
         }
       }
     },
-    "Sleep and Condition come from Apple Watch signals, then normalized to 0-100.": {
-      "extractionState": "manual",
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "睡眠とコンディションはApple Watchのシグナルから0〜100に正規化されます。"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "수면과 컨디션은 Apple Watch 신호를 기반으로 0-100으로 정규화됩니다."
-          }
-        }
-      }
-    },
     "Sleep (%)": {
       "localizations": {
         "ja": {
@@ -25030,6 +25031,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "수면 보정"
+          }
+        }
+      }
+    },
+    "Sleep and Condition come from Apple Watch signals, then normalized to 0-100.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "睡眠とコンディションはApple Watchのシグナルから0〜100に正規化されます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "수면과 컨디션은 Apple Watch 신호를 기반으로 0-100으로 정규화됩니다."
           }
         }
       }
@@ -28343,7 +28361,9 @@
         }
       }
     },
+    "Top %@ Metrics": {},
     "Top 3 Metrics": {
+      "extractionState": "stale",
       "localizations": {
         "ja": {
           "stringUnit": {
@@ -28783,6 +28803,23 @@
         }
       }
     },
+    "Training intensity has been high": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "トレーニング強度が高い状態です"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "운동 강도가 높은 상태예요"
+          }
+        }
+      }
+    },
     "Training Load": {
       "extractionState": "manual",
       "localizations": {
@@ -28812,23 +28849,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "운동을 하면 트레이닝 부하가 표시돼요"
-          }
-        }
-      }
-    },
-    "Training intensity has been high": {
-      "extractionState": "manual",
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "トレーニング強度が高い状態です"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "운동 강도가 높은 상태예요"
           }
         }
       }
@@ -32374,23 +32394,6 @@
         }
       }
     },
-    "You've hit %lld/%lld days this month. Go all the way!": {
-      "extractionState": "manual",
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "今月%lld/%lld日達成。最後まで頑張りましょう！"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "이번 달 %lld/%lld일 달성. 끝까지 가보세요!"
-          }
-        }
-      }
-    },
     "You've had %lld consecutive high-effort sessions (RPE 8+). Consider a lighter workout today to aid recovery.": {
       "extractionState": "manual",
       "localizations": {
@@ -32404,6 +32407,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld회 연속 고강도 세션(RPE 8+)이 이어지고 있어요. 회복을 위해 오늘은 가벼운 운동을 고려해 보세요."
+          }
+        }
+      }
+    },
+    "You've hit %lld/%lld days this month. Go all the way!": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今月%lld/%lld日達成。最後まで頑張りましょう！"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이번 달 %lld/%lld일 달성. 끝까지 가보세요!"
           }
         }
       }
@@ -32666,23 +32686,6 @@
         }
       }
     },
-    "Your longest consecutive workout record ever": {
-      "extractionState": "manual",
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "これまでの最長連続ワークアウト記録"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "지금까지의 최장 연속 운동 기록"
-          }
-        }
-      }
-    },
     "Your last %lld sessions were all high intensity (RPE 8+). Take a recovery day or lower the intensity to avoid burnout and injury.": {
       "extractionState": "manual",
       "localizations": {
@@ -32696,6 +32699,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "최근 %lld회 세션이 모두 고강도(RPE 8+)였어요. 번아웃과 부상을 방지하기 위해 휴식일을 갖거나 강도를 낮춰 보세요."
+          }
+        }
+      }
+    },
+    "Your longest consecutive workout record ever": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "これまでの最長連続ワークアウト記録"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지금까지의 최장 연속 운동 기록"
           }
         }
       }
@@ -32784,18 +32804,50 @@
         }
       }
     },
-    "Reorder Exercises": {
+    "Move Up": {
       "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "운동 순서 변경"
-          }
-        },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "エクササイズの並べ替え"
+            "value": "上に移動"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "위로 이동"
+          }
+        }
+      }
+    },
+    "Move Down": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "下に移動"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "아래로 이동"
+          }
+        }
+      }
+    },
+    "Reorder": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "順序変更"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "순서 변경"
           }
         }
       }

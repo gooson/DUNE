@@ -863,6 +863,7 @@
 		D71E8C8B0A298A6E1D22B876 /* VitalCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8F9BE2A26652A4127A1448 /* VitalCard.swift */; };
 		D72E816E13428B4171275767 /* CardioMetricProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4087B1E4B9E03A54843804F3 /* CardioMetricProfile.swift */; };
 		D74EC171F423083C21E89A34 /* VisionDashboardWorkspaceViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3471C5B08AC13922FFACFF4C /* VisionDashboardWorkspaceViewModelTests.swift */; };
+		D78F0D7DA0BFCBF5E4220134 /* WatchExerciseReorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20CC491E16FA900C397A7E6C /* WatchExerciseReorderView.swift */; };
 		D7B344787EBB0C2C11792896 /* TrainingReadiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF253EC6A18447BB24967CFD /* TrainingReadiness.swift */; };
 		D7CCFD0218BFD4386D5D4D22 /* InjuryStatisticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1F293988ACCA2CC6728759 /* InjuryStatisticsService.swift */; };
 		D851EC101327DC26B018CB4E /* HabitType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D118CEB3CEB568A3E682BD9 /* HabitType.swift */; };
@@ -1227,6 +1228,7 @@
 		1FC22C6FC50E542AFB508B23 /* InjuryFormSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjuryFormSheet.swift; sourceTree = "<group>"; };
 		1FE8BC988546D748BF34416C /* DUNEVisionWidgets.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = DUNEVisionWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FFA3611F2144286B4CA7B58 /* WorkoutRecommendationContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutRecommendationContext.swift; sourceTree = "<group>"; };
+		20CC491E16FA900C397A7E6C /* WatchExerciseReorderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchExerciseReorderView.swift; sourceTree = "<group>"; };
 		214A80561E45E0B5649186E7 /* DashboardSmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardSmokeTests.swift; sourceTree = "<group>"; };
 		2153DAB8E4EC88DC523B28ED /* MuscleFatigueStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuscleFatigueStateTests.swift; sourceTree = "<group>"; };
 		21647597A2C0B51FC24189E8 /* InjuryRiskCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjuryRiskCard.swift; sourceTree = "<group>"; };
@@ -3450,6 +3452,7 @@
 				AC633D24FFCE79E199762DA7 /* SessionPagingView.swift */,
 				06DE6A0A9D65914656F4E894 /* SessionSummaryView.swift */,
 				B85A575459959F54B24A81B2 /* SetInputSheet.swift */,
+				20CC491E16FA900C397A7E6C /* WatchExerciseReorderView.swift */,
 				E3A971FA2C5A6F7B790EA4C9 /* WatchWaveBackground.swift */,
 				0A6409B6D1F44020E024AD83 /* WorkoutPreviewView.swift */,
 			);
@@ -4798,6 +4801,7 @@
 				2BCFE196BD23636F17890BE6 /* WatchConnectivityModels.swift in Sources */,
 				80A886C46DE074B9CE900902 /* WatchEffortInputPolicy.swift in Sources */,
 				21A29D0E4D1E8068F240842C /* WatchExerciseHelpers.swift in Sources */,
+				D78F0D7DA0BFCBF5E4220134 /* WatchExerciseReorderView.swift in Sources */,
 				AE7EAA9C33CD7C27851D7556 /* WatchRPEEstimator.swift in Sources */,
 				A11AB82B81D47D9B15231021 /* WatchSetInputPolicy.swift in Sources */,
 				341831B22CED501A6090869C /* WatchSyncStatusView.swift in Sources */,
