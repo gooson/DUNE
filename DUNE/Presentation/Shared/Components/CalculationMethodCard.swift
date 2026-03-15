@@ -31,6 +31,7 @@ struct CalculationMethodCard: View {
                     bulletRow(bullet)
                 }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 
@@ -45,6 +46,8 @@ struct CalculationMethodCard: View {
                 .font(.caption)
                 .foregroundStyle(DS.Color.textSecondary)
                 .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
