@@ -102,29 +102,21 @@ struct WatchWaveBackground: View {
     private var isSakura: Bool { theme == .sakuraCalm }
     private var isArctic: Bool { theme == .arcticDawn }
     private var isSolar: Bool { theme == .solarPop }
-    private var isShanks: Bool { theme == .shanksRed }
-    private var isHanok: Bool { theme == .hanok }
 
     var body: some View {
         let resolvedColor = color ?? theme.accentColor
         let baseWaveColor: Color = {
             if isArctic { return Color("ArcticDeep") }
-            if isShanks { return Color("ShanksDeep") }
-            if isHanok { return theme.hanokDeepColor }
             return resolvedColor
         }()
         let gradientTop = {
             let topColor: Color
             if isArctic {
                 topColor = Color("ArcticDeep")
-            } else if isShanks {
-                topColor = Color("ShanksDeep")
-            } else if isHanok {
-                topColor = theme.hanokMidColor
             } else {
                 topColor = resolvedColor
             }
-            return topColor.opacity(isSakura ? 0.22 : (isArctic ? 0.30 : (isSolar ? 0.34 : (isShanks ? 0.32 : (isHanok ? 0.30 : DS.Opacity.light)))))
+            return topColor.opacity(isSakura ? 0.22 : (isArctic ? 0.30 : (isSolar ? 0.34 : DS.Opacity.light)))
         }()
         let secondaryTop: Color = {
             if isSakura {
@@ -136,12 +128,6 @@ struct WatchWaveBackground: View {
             if isSolar {
                 return Color("SolarAccent").opacity(0.18)
             }
-            if isShanks {
-                return Color("ShanksCore").opacity(0.20)
-            }
-            if isHanok {
-                return theme.hanokMistColor.opacity(0.18)
-            }
             return .clear
         }()
         let tertiaryTop: Color = {
@@ -150,12 +136,6 @@ struct WatchWaveBackground: View {
             }
             if isSolar {
                 return Color("SolarCore").opacity(0.13)
-            }
-            if isShanks {
-                return Color("ShanksGlow").opacity(0.14)
-            }
-            if isHanok {
-                return theme.scoreExcellent.opacity(0.12)
             }
             return .clear
         }()
@@ -166,23 +146,17 @@ struct WatchWaveBackground: View {
             if isSolar {
                 return Color("SolarEmber").opacity(0.09)
             }
-            if isShanks {
-                return Color("ShanksBronze").opacity(0.08)
-            }
-            if isHanok {
-                return theme.sandColor.opacity(0.08)
-            }
             return .clear
         }()
 
         ZStack(alignment: .top) {
             WatchWaveShape(
-                amplitude: isArctic ? 0.040 : (isHanok ? 0.036 : WatchWaveDefaults.amplitude),
-                frequency: isArctic ? 1.35 : (isHanok ? 1.15 : WatchWaveDefaults.frequency),
+                amplitude: isArctic ? 0.040 : WatchWaveDefaults.amplitude,
+                frequency: isArctic ? 1.35 : WatchWaveDefaults.frequency,
                 phase: phase,
-                verticalOffset: isArctic ? 0.62 : (isHanok ? 0.58 : WatchWaveDefaults.verticalOffset)
+                verticalOffset: isArctic ? 0.62 : WatchWaveDefaults.verticalOffset
             )
-            .fill(baseWaveColor.opacity(isSakura ? 0.26 : (isArctic ? 0.30 : (isSolar ? 0.30 : (isShanks ? 0.28 : (isHanok ? 0.31 : DS.Opacity.medium))))))
+            .fill(baseWaveColor.opacity(isSakura ? 0.26 : (isArctic ? 0.30 : (isSolar ? 0.30 : DS.Opacity.medium))))
             .mask {
                 LinearGradient(
                     stops: [
@@ -216,28 +190,6 @@ struct WatchWaveBackground: View {
                     )
                 }
                 .frame(height: WatchWaveDefaults.frameHeight + 6)
-            }
-
-            if isHanok {
-                WatchWaveShape(
-                    amplitude: 0.028,
-                    frequency: 0.92,
-                    phase: -phase * 0.72,
-                    verticalOffset: 0.66
-                )
-                .fill(theme.hanokMistColor.opacity(0.18))
-                .mask {
-                    LinearGradient(
-                        stops: [
-                            .init(color: .white, location: 0),
-                            .init(color: .white, location: 0.50),
-                            .init(color: .white.opacity(0), location: 1.0)
-                        ],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                }
-                .frame(height: WatchWaveDefaults.frameHeight + 8)
             }
 
             LinearGradient(
@@ -290,14 +242,6 @@ struct WatchWaveBackground: View {
                     .padding(.top, 5)
             }
 
-            if isHanok {
-                WatchHanokRoofSealOverlay(
-                    phase: petalPhase,
-                    opacity: reduceMotion ? 0.18 : 0.26
-                )
-                .frame(height: WatchWaveDefaults.frameHeight + 8)
-                .padding(.top, 2)
-            }
         }
         .ignoresSafeArea()
         .allowsHitTesting(false)
@@ -316,109 +260,12 @@ struct WatchWaveBackground: View {
             withAnimation(DS.Animation.waveDrift) {
                 phase = 2 * .pi
             }
-            if isSakura || isSolar || isHanok {
+            if isSakura || isSolar {
                 withAnimation(.linear(duration: 14).repeatForever(autoreverses: false)) {
                     petalPhase = 2 * .pi
                 }
             }
         }
-    }
-}
-
-private struct WatchHanokRoofSealShape: Shape {
-    func path(in rect: CGRect) -> Path {
-        guard rect.width > 0, rect.height > 0 else { return Path() }
-
-        let size = min(rect.width, rect.height)
-        let center = CGPoint(x: rect.midX, y: rect.midY)
-        let outerDiameter = size * 0.76
-        let innerDiameter = size * 0.26
-
-        var path = Path()
-        path.addEllipse(
-            in: CGRect(
-                x: center.x - outerDiameter / 2,
-                y: center.y - outerDiameter / 2,
-                width: outerDiameter,
-                height: outerDiameter
-            )
-        )
-        path.addEllipse(
-            in: CGRect(
-                x: center.x - innerDiameter / 2,
-                y: center.y - innerDiameter / 2,
-                width: innerDiameter,
-                height: innerDiameter
-            )
-        )
-
-        let petalRect = CGRect(
-            x: -size * 0.08,
-            y: -size * 0.29,
-            width: size * 0.16,
-            height: size * 0.22
-        )
-
-        for index in 0..<6 {
-            let angle = CGFloat(index) * .pi / 3
-            let transform = CGAffineTransform(rotationAngle: angle)
-                .concatenating(CGAffineTransform(translationX: center.x, y: center.y))
-            path.addPath(
-                RoundedRectangle(cornerRadius: size * 0.06, style: .continuous).path(in: petalRect),
-                transform: transform
-            )
-        }
-
-        return path
-    }
-}
-
-private struct WatchHanokRoofSealOverlay: View {
-    let phase: CGFloat
-    let opacity: Double
-
-    @Environment(\.appTheme) private var theme
-
-    var body: some View {
-        GeometryReader { proxy in
-            let driftX = CGFloat(sin(phase * 0.72)) * 2.0
-            let driftY = CGFloat(cos(phase * 0.52)) * 1.4
-
-            ZStack {
-                Capsule(style: .continuous)
-                    .fill(
-                        LinearGradient(
-                            colors: [
-                                theme.hanokDeepColor.opacity(opacity * 0.30),
-                                theme.sandColor.opacity(opacity * 0.42),
-                                .clear
-                            ],
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
-                    )
-                    .frame(width: proxy.size.width * 0.30, height: 2.0)
-                    .rotationEffect(.degrees(-8))
-                    .position(x: proxy.size.width * 0.72 + driftX, y: proxy.size.height * 0.18 + driftY)
-
-                WatchHanokRoofSealShape()
-                    .stroke(
-                        LinearGradient(
-                            colors: [
-                                theme.sandColor.opacity(opacity * 0.92),
-                                theme.scoreExcellent.opacity(opacity * 0.52),
-                                theme.hanokDeepColor.opacity(opacity * 0.80),
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        ),
-                        style: StrokeStyle(lineWidth: 1.0, lineCap: .round, lineJoin: .round)
-                    )
-                    .frame(width: 18, height: 18)
-                    .position(x: proxy.size.width * 0.82 + driftX, y: proxy.size.height * 0.18 + driftY)
-            }
-        }
-        .allowsHitTesting(false)
     }
 }
 
