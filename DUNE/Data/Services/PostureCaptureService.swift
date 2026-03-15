@@ -1,7 +1,7 @@
 import AVFoundation
 import Foundation
 import UIKit
-import Vision
+@preconcurrency import Vision
 
 // MARK: - Protocol
 
@@ -137,8 +137,8 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
         let bodyHeight: Double?
         let heightEstimation: HeightEstimationType
 
-        if let height = try? observation.bodyHeight,
-           height.isFinite, height > 0.5, height < 2.5 {
+        let height = observation.bodyHeight
+        if height.isFinite, height > 0.5, height < 2.5 {
             bodyHeight = Double(height)
             heightEstimation = .measured
         } else {

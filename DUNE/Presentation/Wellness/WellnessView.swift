@@ -54,7 +54,7 @@ struct WellnessView: View {
                                 !viewModel.isLoading {
                         if viewModel.isMirroredReadOnlyMode {
                             CloudSyncWaitingView {
-                                Task { await viewModel.loadData() }
+                                Task { viewModel.loadData() }
                             }
                         } else {
                             EmptyStateView(
