@@ -203,7 +203,7 @@ final class RealtimePoseTracker: @unchecked Sendable {
             }
         } else {
             guard let srcAddr = CVPixelBufferGetBaseAddress(source),
-                  let dstAddr = CVPixelBufferGetBaseAddress(dest) else { return dest }
+                  let dstAddr = CVPixelBufferGetBaseAddress(dest) else { return nil }
             let srcBPR = CVPixelBufferGetBytesPerRow(source)
             let dstBPR = CVPixelBufferGetBytesPerRow(dest)
             if srcBPR == dstBPR {
