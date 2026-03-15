@@ -111,11 +111,9 @@ final class RealtimePoseTracker: @unchecked Sendable {
             // that causes "Could not create mlImage buffer" errors.
             if !self.is3DInFlight,
                !keypoints.isEmpty,
-               now - self.last3DSampleTime >= Self.min3DInterval {
-                guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer),
-                      let copiedBuffer = Self.copyPixelBuffer(pixelBuffer) else {
-                    return
-                }
+               now - self.last3DSampleTime >= Self.min3DInterval,
+               let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer),
+               let copiedBuffer = Self.copyPixelBuffer(pixelBuffer) {
                 self.is3DInFlight = true
                 self.last3DSampleTime = now
                 self.pending3DTask = Task { [weak self] in
