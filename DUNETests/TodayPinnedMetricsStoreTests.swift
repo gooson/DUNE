@@ -14,15 +14,16 @@ struct TodayPinnedMetricsStoreTests {
         #expect(loaded == [.hrv, .rhr, .sleep])
     }
 
-    @Test("Save normalizes duplicates and enforces top 3")
+    @Test("Save normalizes duplicates and enforces max count")
     func saveNormalization() {
         let defaults = makeDefaults()
         let store = TodayPinnedMetricsStore(defaults: defaults)
 
-        store.save([.steps, .steps, .hrv, .rhr, .sleep])
+        store.save([.steps, .steps, .hrv, .rhr, .sleep, .exercise, .weight, .bmi])
         let loaded = store.load()
 
-        #expect(loaded == [.steps, .hrv, .rhr])
+        #expect(loaded == [.steps, .hrv, .rhr, .sleep, .exercise, .weight])
+        #expect(loaded.count == TodayPinnedMetricsStore.maxPinnedCount)
     }
 
     @Test("Load ignores invalid raw values")
@@ -34,7 +35,7 @@ struct TodayPinnedMetricsStoreTests {
         defaults.set(["invalid", "hrv", "sleep", "rhr", "exercise"], forKey: key)
         let loaded = store.load()
 
-        #expect(loaded == [.hrv, .sleep, .rhr])
+        #expect(loaded == [.hrv, .sleep, .rhr, .exercise])
     }
 
     private func makeDefaults() -> UserDefaults {

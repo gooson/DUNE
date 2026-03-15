@@ -33,12 +33,12 @@ struct PinnedMetricsEditorView: View {
                             }
                         }
                         .buttonStyle(.plain)
-                        .disabled(!selectedSet.contains(category) && workingSelection.count >= 3)
+                        .disabled(!selectedSet.contains(category) && workingSelection.count >= TodayPinnedMetricsStore.maxPinnedCount)
                     }
                 } header: {
-                    Text("Top 3 Metrics")
+                    Text("Top \(TodayPinnedMetricsStore.maxPinnedCount) Metrics")
                 } footer: {
-                    Text("Select up to 3 metrics shown at the top of Today.")
+                    Text("Select up to \(TodayPinnedMetricsStore.maxPinnedCount) metrics shown at the top of Today.")
                 }
             }
             .scrollContentBackground(.hidden)
@@ -72,7 +72,7 @@ struct PinnedMetricsEditorView: View {
             workingSelection.remove(at: index)
             return
         }
-        guard workingSelection.count < 3 else { return }
+        guard workingSelection.count < TodayPinnedMetricsStore.maxPinnedCount else { return }
         workingSelection.append(category)
     }
 }
