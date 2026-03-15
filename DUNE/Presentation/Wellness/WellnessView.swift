@@ -133,6 +133,7 @@ struct WellnessView: View {
                         // Posture Assessment (isolated @Query)
                         PostureAssessmentLinkView(
                             onCapture: { isShowingPostureCapture = true },
+                            onRealtime: { isShowingRealtimePosture = true },
                             onScoreUpdate: { viewModel.postureScore = $0.map { max(0, min(100, $0)) } }
                         )
 
@@ -313,6 +314,9 @@ struct WellnessView: View {
         .navigationDestination(for: PostureHistoryDestination.self) { _ in
             PostureHistoryView()
         }
+        .navigationDestination(for: PostureRecordDestination.self) { destination in
+            PostureRecordLookupView(recordID: destination.id)
+        }
         .navigationDestination(for: WellnessScoreDestination.self) { _ in
             if let score = viewModel.wellnessScore {
                 WellnessScoreDetailView(
@@ -479,6 +483,7 @@ private struct PostureAssessmentLinkView: View {
     @Environment(\.appTheme) private var theme
 
     let onCapture: () -> Void
+    let onRealtime: () -> Void
     var onScoreUpdate: ((Int?) -> Void)?
 
     var body: some View {
@@ -505,72 +510,102 @@ private struct PostureAssessmentLinkView: View {
                     }
                 }
 
-                if let latest = records.first {
-                    InlineCard {
-                        HStack(spacing: DS.Spacing.md) {
-                            ZStack {
-                                Circle()
-                                    .stroke(.quaternary, lineWidth: 4)
-                                    .frame(width: 40, height: 40)
+                // Action buttons: Camera Capture + Realtime Analysis
+                actionButtons
 
-                                Circle()
-                                    .trim(from: 0, to: CGFloat(latest.overallScore) / 100.0)
-                                    .stroke(
-                                        scoreColor(latest.overallScore),
-                                        style: StrokeStyle(lineWidth: 4, lineCap: .round)
-                                    )
-                                    .frame(width: 40, height: 40)
-                                    .rotationEffect(.degrees(-90))
-
-                                Text("\(latest.overallScore)")
-                                    .font(.caption2.bold())
-                            }
-
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(latest.date.formatted(.dateTime.month(.abbreviated).day()))
-                                    .font(.caption)
-                                    .fontWeight(.medium)
-
-                                Text(String(localized: "\(latest.allMetrics.count) metrics measured"))
-                                    .font(.caption2)
-                                    .foregroundStyle(DS.Color.textSecondary)
-                            }
-
-                            Spacer()
-
-                            Button {
-                                onCapture()
-                            } label: {
-                                Image(systemName: "camera.fill")
-                                    .font(.subheadline)
-                            }
-                            .tint(theme.accentColor)
+                // Recent records (up to 3) — tap to navigate to detail
+                if !records.isEmpty {
+                    ForEach(records.prefix(3)) { record in
+                        NavigationLink(value: PostureRecordDestination(id: record.id)) {
+                            recordRow(record)
                         }
-                    }
-                } else {
-                    InlineCard {
-                        HStack(spacing: DS.Spacing.sm) {
-                            Image(systemName: "camera.viewfinder")
-                                .foregroundStyle(DS.Color.textSecondary)
-
-                            Text("Capture your first posture assessment")
-                                .font(.caption)
-                                .foregroundStyle(DS.Color.textSecondary)
-
-                            Spacer()
-
-                            Button("Start") {
-                                onCapture()
-                            }
-                            .font(.caption.weight(.medium))
-                            .tint(theme.accentColor)
-                        }
+                        .buttonStyle(.plain)
                     }
                 }
             }
         }
         .onChange(of: records.first?.overallScore, initial: true) { _, newValue in
             onScoreUpdate?(newValue)
+        }
+    }
+
+    // MARK: - Action Buttons
+
+    private var actionButtons: some View {
+        HStack(spacing: DS.Spacing.sm) {
+            Button {
+                onCapture()
+            } label: {
+                HStack(spacing: DS.Spacing.xs) {
+                    Image(systemName: "camera.fill")
+                        .font(.caption)
+                    Text("Capture")
+                        .font(.caption.weight(.medium))
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, DS.Spacing.sm)
+                .background(DS.Color.body.opacity(0.12), in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+            }
+            .buttonStyle(.plain)
+            .tint(DS.Color.body)
+
+            Button {
+                onRealtime()
+            } label: {
+                HStack(spacing: DS.Spacing.xs) {
+                    Image(systemName: "figure.walk.motion")
+                        .font(.caption)
+                    Text(String(localized: "Realtime"))
+                        .font(.caption.weight(.medium))
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, DS.Spacing.sm)
+                .background(DS.Color.body.opacity(0.12), in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+            }
+            .buttonStyle(.plain)
+            .tint(DS.Color.body)
+        }
+    }
+
+    // MARK: - Record Row
+
+    private func recordRow(_ record: PostureAssessmentRecord) -> some View {
+        InlineCard {
+            HStack(spacing: DS.Spacing.md) {
+                ZStack {
+                    Circle()
+                        .stroke(.quaternary, lineWidth: 4)
+                        .frame(width: 40, height: 40)
+
+                    Circle()
+                        .trim(from: 0, to: CGFloat(record.overallScore) / 100.0)
+                        .stroke(
+                            scoreColor(record.overallScore),
+                            style: StrokeStyle(lineWidth: 4, lineCap: .round)
+                        )
+                        .frame(width: 40, height: 40)
+                        .rotationEffect(.degrees(-90))
+
+                    Text("\(record.overallScore)")
+                        .font(.caption2.bold())
+                }
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(record.date.formatted(.dateTime.month(.abbreviated).day()))
+                        .font(.caption)
+                        .fontWeight(.medium)
+
+                    Text(String(localized: "\(record.allMetrics.count) metrics measured"))
+                        .font(.caption2)
+                        .foregroundStyle(DS.Color.textSecondary)
+                }
+
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+            }
         }
     }
 
@@ -605,6 +640,21 @@ private struct BodyHistoryLinkView: View {
             }
             .buttonStyle(.plain)
             .accessibilityIdentifier("wellness-link-bodyhistory")
+        }
+    }
+}
+
+/// Lookup wrapper that resolves a PostureAssessmentRecord by ID via @Query.
+private struct PostureRecordLookupView: View {
+    let recordID: UUID
+    @Query(sort: \PostureAssessmentRecord.date, order: .reverse)
+    private var records: [PostureAssessmentRecord]
+
+    var body: some View {
+        if let record = records.first(where: { $0.id == recordID }) {
+            PostureDetailView(record: record)
+        } else {
+            ContentUnavailableView("Record not found", systemImage: "exclamationmark.triangle")
         }
     }
 }
