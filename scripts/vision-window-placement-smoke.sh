@@ -122,7 +122,7 @@ data = json.load(sys.stdin)
 candidates = []
 
 def parse_os(runtime: str) -> str:
-    match = re.search(r"(?:xros|visionos)-(\\d+)-(\\d+)", runtime, re.IGNORECASE)
+    match = re.search(r"(?:xros|visionos)-(\d+)-(\d+)", runtime, re.IGNORECASE)
     return f"{match.group(1)}.{match.group(2)}" if match else ""
 
 for runtime, devices in data["devices"].items():
