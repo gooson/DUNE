@@ -628,6 +628,84 @@ final class WorkoutManager: NSObject {
         advanceToNextExercise()
     }
 
+    // MARK: - Exercise Reordering
+
+    enum MoveDirection {
+        case up, down
+    }
+
+    /// Whether the exercise at the given index can be moved in the specified direction.
+    func canMoveExercise(at index: Int, direction: MoveDirection) -> Bool {
+        guard let snapshot = templateSnapshot else { return false }
+        let count = snapshot.entries.count
+        guard index >= 0, index < count else { return false }
+        // Cannot move exercises that have completed sets
+        if index < completedSetsData.count, !completedSetsData[index].isEmpty { return false }
+        switch direction {
+        case .up:
+            // Cannot move up past completed exercises
+            guard index > 0 else { return false }
+            if completedSetsData[index - 1].isEmpty { return true }
+            return false
+        case .down:
+            guard index < count - 1 else { return false }
+            if completedSetsData[index + 1].isEmpty { return true }
+            return false
+        }
+    }
+
+    /// Whether there are at least 2 non-completed exercises that can be reordered.
+    var canReorderExercises: Bool {
+        guard let snapshot = templateSnapshot else { return false }
+        var nonCompleted = 0
+        for i in 0..<snapshot.entries.count {
+            if i >= completedSetsData.count || completedSetsData[i].isEmpty {
+                nonCompleted += 1
+                if nonCompleted >= 2 { return true }
+            }
+        }
+        return false
+    }
+
+    /// Move the exercise at the given index up or down by one position.
+    /// Keeps `completedSetsData`, `extraSetsPerExercise`, and `currentExerciseIndex` in sync.
+    func moveExercise(at index: Int, direction: MoveDirection) {
+        guard canMoveExercise(at: index, direction: direction) else { return }
+        guard templateSnapshot != nil else { return }
+
+        let targetIndex: Int
+        switch direction {
+        case .up: targetIndex = index - 1
+        case .down: targetIndex = index + 1
+        }
+
+        // Track current exercise identity before swap
+        let currentEntryID = templateSnapshot!.entries[currentExerciseIndex].id
+
+        // Swap entries
+        templateSnapshot!.entries.swapAt(index, targetIndex)
+
+        // Swap completedSetsData
+        if index < completedSetsData.count, targetIndex < completedSetsData.count {
+            completedSetsData.swapAt(index, targetIndex)
+        }
+
+        // Remap extraSetsPerExercise keys
+        let extraAtIndex = extraSetsPerExercise[index]
+        let extraAtTarget = extraSetsPerExercise[targetIndex]
+        extraSetsPerExercise.removeValue(forKey: index)
+        extraSetsPerExercise.removeValue(forKey: targetIndex)
+        if let v = extraAtIndex { extraSetsPerExercise[targetIndex] = v }
+        if let v = extraAtTarget { extraSetsPerExercise[index] = v }
+
+        // Restore currentExerciseIndex to follow the same exercise
+        if let newIndex = templateSnapshot!.entries.firstIndex(where: { $0.id == currentEntryID }) {
+            currentExerciseIndex = newIndex
+        }
+
+        persistRecoveryState()
+    }
+
     func reset() {
         stopInactivityMonitoring()
         finalizationTimeoutTask?.cancel()
@@ -1282,7 +1360,7 @@ struct CompletedSetData: Codable, Sendable {
 /// Avoids holding a SwiftData @Model reference in the singleton (M6).
 struct WorkoutSessionTemplate: Codable, Sendable {
     let name: String
-    let entries: [TemplateEntry]
+    var entries: [TemplateEntry]
     let procedureSetsByExerciseID: [String: [WatchProcedureSetSnapshot]]?
 
     init(
