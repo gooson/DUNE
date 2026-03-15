@@ -34,15 +34,7 @@ struct PostureDetailView: View {
         }
         .background { DetailWaveBackground() }
         .environment(\.waveColor, DS.Color.body)
-        .sheet(item: $zoomImage) { item in
-            ZoomablePostureImageView(
-                uiImage: item.uiImage,
-                joints: item.joints,
-                metrics: item.metrics,
-                captureType: item.captureType,
-                label: item.label
-            )
-        }
+        .postureImageZoom($zoomImage)
     }
 
     // MARK: - Score
@@ -259,15 +251,4 @@ struct PostureDetailView: View {
     private func scoreColor(_ score: Int) -> Color {
         postureScoreColor(score)
     }
-}
-
-// MARK: - Zoom Item
-
-struct ZoomableImageItem: Identifiable {
-    let id = UUID()
-    let uiImage: UIImage
-    let joints: [JointPosition3D]
-    let metrics: [PostureMetricResult]
-    let captureType: PostureCaptureType
-    let label: String
 }

@@ -23,15 +23,7 @@ struct PostureResultView: View {
             .padding()
         }
         .background(Color(.systemGroupedBackground))
-        .sheet(item: $zoomImage) { item in
-            ZoomablePostureImageView(
-                uiImage: item.uiImage,
-                joints: item.joints,
-                metrics: item.metrics,
-                captureType: item.captureType,
-                label: item.label
-            )
-        }
+        .postureImageZoom($zoomImage)
     }
 
     // MARK: - Score

@@ -20,15 +20,7 @@ struct PostureComparisonView: View {
         .navigationBarTitleDisplayMode(.inline)
         .background { DetailWaveBackground() }
         .environment(\.waveColor, DS.Color.body)
-        .sheet(item: $zoomImage) { item in
-            ZoomablePostureImageView(
-                uiImage: item.uiImage,
-                joints: item.joints,
-                metrics: item.metrics,
-                captureType: item.captureType,
-                label: item.label
-            )
-        }
+        .postureImageZoom($zoomImage)
     }
 
     // MARK: - Score Comparison

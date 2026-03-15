@@ -1,5 +1,34 @@
 import SwiftUI
 
+// MARK: - Zoomable Image Item
+
+struct ZoomableImageItem: Identifiable {
+    let id = UUID()
+    let uiImage: UIImage
+    let joints: [JointPosition3D]
+    let metrics: [PostureMetricResult]
+    let captureType: PostureCaptureType
+    let label: String
+}
+
+// MARK: - View Modifier
+
+extension View {
+    func postureImageZoom(_ item: Binding<ZoomableImageItem?>) -> some View {
+        sheet(item: item) { zoomItem in
+            ZoomablePostureImageView(
+                uiImage: zoomItem.uiImage,
+                joints: zoomItem.joints,
+                metrics: zoomItem.metrics,
+                captureType: zoomItem.captureType,
+                label: zoomItem.label
+            )
+        }
+    }
+}
+
+// MARK: - Zoomable View
+
 struct ZoomablePostureImageView: View {
     let uiImage: UIImage
     let joints: [JointPosition3D]
@@ -19,19 +48,10 @@ struct ZoomablePostureImageView: View {
     var body: some View {
         NavigationStack {
             GeometryReader { geometry in
-                let imageAspect = uiImage.size.width / uiImage.size.height
-                let containerAspect = geometry.size.width / geometry.size.height
-                let fittedSize: CGSize = if imageAspect > containerAspect {
-                    CGSize(
-                        width: geometry.size.width,
-                        height: geometry.size.width / imageAspect
-                    )
-                } else {
-                    CGSize(
-                        width: geometry.size.height * imageAspect,
-                        height: geometry.size.height
-                    )
-                }
+                let fittedSize = computeFittedSize(
+                    imageSize: uiImage.size,
+                    containerSize: geometry.size
+                )
 
                 Image(uiImage: uiImage)
                     .resizable()
@@ -49,51 +69,47 @@ struct ZoomablePostureImageView: View {
                     .scaleEffect(scale)
                     .offset(offset)
                     .gesture(
-                        MagnificationGesture()
-                            .onChanged { value in
-                                let newScale = lastScale * value
-                                scale = min(max(newScale, minScale), maxScale)
-                            }
-                            .onEnded { _ in
-                                lastScale = scale
-                                if scale <= minScale {
-                                    withAnimation(.spring(duration: 0.3)) {
-                                        offset = .zero
-                                        lastOffset = .zero
-                                    }
+                        SimultaneousGesture(
+                            MagnificationGesture()
+                                .onChanged { value in
+                                    scale = min(max(lastScale * value, minScale), maxScale)
                                 }
-                            }
-                    )
-                    .simultaneousGesture(
-                        DragGesture()
-                            .onChanged { value in
-                                guard scale > minScale else { return }
-                                offset = CGSize(
-                                    width: lastOffset.width + value.translation.width,
-                                    height: lastOffset.height + value.translation.height
-                                )
-                            }
-                            .onEnded { _ in
-                                lastOffset = offset
-                                clampOffset(fittedSize: fittedSize, containerSize: geometry.size)
-                            }
-                    )
-                    .simultaneousGesture(
-                        TapGesture(count: 2)
-                            .onEnded {
-                                withAnimation(.spring(duration: 0.3)) {
-                                    if scale > minScale {
-                                        scale = minScale
-                                        lastScale = minScale
-                                        offset = .zero
-                                        lastOffset = .zero
-                                    } else {
-                                        scale = 3.0
-                                        lastScale = 3.0
+                                .onEnded { _ in
+                                    lastScale = scale
+                                    if scale <= minScale {
+                                        withAnimation(.spring(duration: 0.3)) {
+                                            offset = .zero
+                                            lastOffset = .zero
+                                        }
                                     }
+                                },
+                            DragGesture()
+                                .onChanged { value in
+                                    guard scale > minScale else { return }
+                                    offset = CGSize(
+                                        width: lastOffset.width + value.translation.width,
+                                        height: lastOffset.height + value.translation.height
+                                    )
                                 }
-                            }
+                                .onEnded { _ in
+                                    lastOffset = offset
+                                    clampOffset(fittedSize: fittedSize, containerSize: geometry.size)
+                                }
+                        )
                     )
+                    .onTapGesture(count: 2) {
+                        withAnimation(.spring(duration: 0.3)) {
+                            if scale > minScale {
+                                scale = minScale
+                                lastScale = minScale
+                                offset = .zero
+                                lastOffset = .zero
+                            } else {
+                                scale = 3.0
+                                lastScale = 3.0
+                            }
+                        }
+                    }
                     .frame(width: geometry.size.width, height: geometry.size.height)
             }
             .background(.black)
@@ -112,6 +128,22 @@ struct ZoomablePostureImageView: View {
                     .tint(.white)
                 }
             }
+        }
+    }
+
+    private func computeFittedSize(imageSize: CGSize, containerSize: CGSize) -> CGSize {
+        let imageAspect = imageSize.width / imageSize.height
+        let containerAspect = containerSize.width / containerSize.height
+        if imageAspect > containerAspect {
+            return CGSize(
+                width: containerSize.width,
+                height: containerSize.width / imageAspect
+            )
+        } else {
+            return CGSize(
+                width: containerSize.height * imageAspect,
+                height: containerSize.height
+            )
         }
     }
 

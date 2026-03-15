@@ -151,9 +151,13 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
             heightEstimation = .reference
         }
 
-        // Use oriented JPEG from AVCapturePhoto if available (preserves correct orientation),
-        // otherwise fall back to compressing the raw CGImage
-        let imageData = orientedJPEG ?? compressImage(image)
+        // Compress oriented file data (preserves correct orientation) off the delegate callback,
+        // or fall back to compressing the raw CGImage for the external API path
+        let imageData: Data? = if let orientedJPEG {
+            compressOrientedData(orientedJPEG)
+        } else {
+            compressImage(image)
+        }
 
         return PostureCaptureResult(
             jointPositions: jointPositions,
@@ -332,14 +336,11 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
         return image.preparingThumbnail(of: targetSize) ?? image
     }
 
-    /// Creates a compressed JPEG from AVCapturePhoto with correct orientation applied.
-    /// Uses fileDataRepresentation() which includes EXIF orientation, then re-encodes
-    /// through UIImage to bake the orientation into pixel data for reliable display.
-    private func compressOrientedImage(from photo: AVCapturePhoto) -> Data? {
-        guard let fileData = photo.fileDataRepresentation(),
-              let uiImage = UIImage(data: fileData) else {
-            return nil
-        }
+    /// Compresses oriented file data (from AVCapturePhoto.fileDataRepresentation())
+    /// by decoding through UIImage to bake EXIF orientation into pixel data,
+    /// then downscaling and re-encoding as JPEG.
+    private func compressOrientedData(_ fileData: Data) -> Data? {
+        guard let uiImage = UIImage(data: fileData) else { return nil }
         let scaled = downscaled(uiImage, maxDimension: Self.maxImageDimension)
         return scaled.jpegData(compressionQuality: Self.jpegCompressionQuality)
     }
@@ -361,10 +362,10 @@ extension PostureCaptureService: AVCapturePhotoCaptureDelegate {
         if let error {
             continuation?.resume(throwing: error)
         } else if let cgImage = photo.cgImageRepresentation() {
-            // fileDataRepresentation() produces JPEG with correct EXIF orientation baked in,
-            // so the stored image displays in portrait as captured by the front camera.
-            let orientedJPEG = compressOrientedImage(from: photo)
-            continuation?.resume(returning: (cgImage, orientedJPEG))
+            // Pass raw file data (with EXIF orientation) for deferred compression
+            // outside the delegate callback to reduce peak memory on the AVFoundation queue.
+            let fileData = photo.fileDataRepresentation()
+            continuation?.resume(returning: (cgImage, fileData))
         } else {
             continuation?.resume(throwing: PostureCaptureError.imageConversionFailed)
         }

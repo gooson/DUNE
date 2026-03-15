@@ -85,6 +85,7 @@
 		0F834E1794779DBEA43AFAED /* LocationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F89A9AAAF0B7F9E6A889644 /* LocationServiceTests.swift */; };
 		0FA513935361ED3C1752DCB6 /* ImmersiveRecoveryAnalyzerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5263378992B52150849736C /* ImmersiveRecoveryAnalyzerTests.swift */; };
 		0FCB357BD1585CE4720ECAAC /* UnifiedWorkoutRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A16A0B3CBD132DADD226C3C0 /* UnifiedWorkoutRow.swift */; };
+		112F8F5D61568C06819BA037 /* ZoomablePostureImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C4DD7F5EFB50EDEC3F4F76 /* ZoomablePostureImageView.swift */; };
 		11F6B963E66AACECBDF27BA6 /* TrainingVolumeSummaryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CA299AE0A18366E54F0BFD /* TrainingVolumeSummaryCard.swift */; };
 		120D3F5511B60F2304711CCE /* WatchWaveBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A971FA2C5A6F7B790EA4C9 /* WatchWaveBackground.swift */; };
 		124A09CF363DA1A056DFFA37 /* FatigueLegendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DC50D026AAB2A8B7A9DD4D /* FatigueLegendView.swift */; };
@@ -1676,6 +1677,7 @@
 		A7C3B92639721EAE64DA567F /* TrainingVolumeBlocksSceneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingVolumeBlocksSceneView.swift; sourceTree = "<group>"; };
 		A7EFEAD555EAFE792CC16B22 /* ExerciseCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseCategory.swift; sourceTree = "<group>"; };
 		A9C06DC25E57413433F6D779 /* CreateTemplateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTemplateView.swift; sourceTree = "<group>"; };
+		A9C4DD7F5EFB50EDEC3F4F76 /* ZoomablePostureImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomablePostureImageView.swift; sourceTree = "<group>"; };
 		A9C6D3719C4EB9F248C10683 /* EquipmentIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EquipmentIcon.swift; sourceTree = "<group>"; };
 		AB0DC4EC599FA6243D52ACB1 /* FatigueCalculationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FatigueCalculationService.swift; sourceTree = "<group>"; };
 		ABD319B52FF0E7BEDD80E8A3 /* TimePeriod+View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimePeriod+View.swift"; sourceTree = "<group>"; };
@@ -3194,6 +3196,7 @@
 			children = (
 				D4B4EEDF0D9588A7DF08B19E /* BodyGuideOverlay.swift */,
 				02997D4056929FD9C01F8D17 /* JointOverlayView.swift */,
+				A9C4DD7F5EFB50EDEC3F4F76 /* ZoomablePostureImageView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -4528,6 +4531,7 @@
 				9648715B68D1A41B122F94E5 /* WorkoutTemplateRecommendationService.swift in Sources */,
 				74EDEAA5BC87A4C3E3285958 /* WorkoutTypeCorrectionStore.swift in Sources */,
 				EE5F0C52BBC046AF1ADFF32E /* WorkoutWriteService.swift in Sources */,
+				112F8F5D61568C06819BA037 /* ZoomablePostureImageView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
