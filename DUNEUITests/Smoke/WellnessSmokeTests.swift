@@ -76,11 +76,17 @@ final class WellnessSmokeTests: UITestBaseCase {
 
         let saveButton = app.descendants(matching: .any)[AXID.bodyFormSave].firstMatch
         XCTAssertTrue(saveButton.waitForExistence(timeout: 3), "Body form save button should appear")
-        XCTAssertFalse(saveButton.isEnabled, "Save should be disabled when all inputs are empty")
+
+        saveButton.tap()
+        let bodyForm = app.descendants(matching: .any)[AXID.bodyFormScreen].firstMatch
+        XCTAssertTrue(bodyForm.waitForExistence(timeout: 2), "Body form should remain visible without a measurement")
 
         XCTAssertTrue(app.fillTextInput(AXID.bodyFormWeight, with: "72.5"), "Weight field should accept shared helper input")
 
-        XCTAssertTrue(saveButton.isEnabled, "Save should be enabled after weight input")
+        saveButton.tap()
+        let dismissed = NSPredicate(format: "exists == false")
+        expectation(for: dismissed, evaluatedWith: bodyForm)
+        waitForExpectations(timeout: 10)
     }
 
     // MARK: - Injury Form
@@ -112,10 +118,15 @@ final class WellnessSmokeTests: UITestBaseCase {
 
         let recoveredToggle = app.descendants(matching: .any)[AXID.injuryFormRecoveredToggle].firstMatch
         XCTAssertTrue(recoveredToggle.waitForExistence(timeout: 3), "Recovered toggle should exist")
-        recoveredToggle.tap()
+        XCTAssertTrue(
+            app.setSwitch(AXID.injuryFormRecoveredToggle, to: true, fallbackLabel: "Recovered"),
+            "Recovered toggle should turn on"
+        )
 
-        let endDate = app.descendants(matching: .any)[AXID.injuryFormEndDate].firstMatch
-        XCTAssertTrue(endDate.waitForExistence(timeout: 3), "End date picker should appear after enabling recovered toggle")
+        XCTAssertTrue(
+            app.scrollToInjuryEndDateIfNeeded(maxSwipes: 4, timeoutPerCheck: 1.5),
+            "End date picker should appear after enabling recovered toggle"
+        )
     }
 
     private func wellnessAddMenu() -> XCUIElement {

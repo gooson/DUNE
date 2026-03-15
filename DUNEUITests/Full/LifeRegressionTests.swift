@@ -15,7 +15,6 @@ final class LifeRegressionTests: SeededUITestBaseCase {
 
     override func setUpWithError() throws {
         try super.setUpWithError()
-        navigateToLife()
     }
 
     func testLifeRootRendersAndAddFlowCreatesNewHabit() throws {
@@ -41,8 +40,8 @@ final class LifeRegressionTests: SeededUITestBaseCase {
         waitForExpectations(timeout: 5)
 
         XCTAssertTrue(
-            app.scrollToLifeHabitActionsButton(named: "Evening Walk", maxSwipes: 8),
-            "Newly saved habit should expose its actions button on the Life list"
+            app.openLifeHabitActions(named: "Evening Walk", maxSwipes: 8),
+            "Newly saved habit should expose its action menu on the Life list"
         )
     }
 
@@ -57,9 +56,13 @@ final class LifeRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(nameField.waitForExistence(timeout: 5), "Edit habit form should appear")
         XCTAssertTrue(app.fillTextInput(AXID.habitFormName, with: "Morning Stretch AM"), "Edit form should allow renaming a habit")
 
-        let saveButton = app.descendants(matching: .any)[AXID.habitFormSave].firstMatch
-        XCTAssertTrue(saveButton.waitForExistence(timeout: 5), "Habit save button should exist in edit mode")
-        saveButton.tap()
+        XCTAssertTrue(
+            app.waitAndTap(AXID.habitFormSave, timeout: 5) || app.buttons["Save"].firstMatch.waitForExistence(timeout: 2),
+            "Habit save button should exist in edit mode"
+        )
+        if app.buttons["Save"].firstMatch.exists {
+            app.buttons["Save"].firstMatch.tap()
+        }
 
         let dismissed = NSPredicate(format: "exists == false")
         expectation(for: dismissed, evaluatedWith: nameField)
@@ -116,13 +119,9 @@ final class LifeRegressionTests: SeededUITestBaseCase {
     private func openActionsMenu(for habitName: String) {
         ensureLifeRoot()
         XCTAssertTrue(
-            app.scrollToLifeHabitActionsButton(named: habitName, maxSwipes: 8),
-            "\(habitName) actions button should be reachable"
+            app.openLifeHabitActions(named: habitName, maxSwipes: 8),
+            "\(habitName) actions menu should be reachable"
         )
-
-        let actionsButton = app.descendants(matching: .any)[AXID.lifeHabitActions(habitName)].firstMatch
-        XCTAssertTrue(actionsButton.waitForExistence(timeout: 5), "\(habitName) actions button should exist")
-        actionsButton.tap()
     }
 
     private func openHistory(for habitName: String) {

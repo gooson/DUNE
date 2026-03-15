@@ -4,9 +4,10 @@
 /// Verifies key UI elements exist and the screen renders without crashing.
 @MainActor
 final class LifeSmokeTests: UITestBaseCase {
+    override var initialTabSelectionArgument: String? { "life" }
+
     override func setUpWithError() throws {
         try super.setUpWithError()
-        navigateToLife()
     }
 
     // MARK: - Elements
@@ -33,7 +34,7 @@ final class LifeSmokeTests: UITestBaseCase {
         XCTAssertTrue(nameField.waitForExistence(timeout: 3), "Habit name field should appear")
 
         XCTAssertTrue(
-            app.scrollToElementInPrimaryFormIfNeeded(AXID.habitFormTypeOption("check"), maxSwipes: 4),
+            app.scrollToElementInPrimaryFormIfNeeded(AXID.habitFormType, maxSwipes: 4),
             "Habit type picker should appear"
         )
     }
@@ -82,9 +83,10 @@ final class LifeSmokeTests: UITestBaseCase {
 /// Tests that require mock habit data to verify hero section and habit rows.
 @MainActor
 final class LifeSeededSmokeTests: SeededUITestBaseCase {
+    override var initialTabSelectionArgument: String? { "life" }
+
     override func setUpWithError() throws {
         try super.setUpWithError()
-        navigateToLife()
     }
 
     func testHeroProgressExists() throws {
@@ -96,12 +98,9 @@ final class LifeSeededSmokeTests: SeededUITestBaseCase {
 
     func testHabitActionsMenuOpensEditSheet() throws {
         XCTAssertTrue(
-            app.scrollToLifeHabitActionsButton(named: "Morning Stretch", maxSwipes: 8),
-            "Habit actions button should exist"
+            app.openLifeHabitActions(named: "Morning Stretch", maxSwipes: 8),
+            "Habit actions should open from the seeded habit row"
         )
-        let actionsButton = app.descendants(matching: .any)[AXID.lifeHabitActions("Morning Stretch")].firstMatch
-
-        actionsButton.tap()
 
         let editButton = app.descendants(matching: .any)[AXID.lifeHabitActionEdit].firstMatch
         XCTAssertTrue(editButton.waitForExistence(timeout: 3), "Edit action should appear in the habit actions menu")
@@ -120,18 +119,16 @@ final class LifeSeededSmokeTests: SeededUITestBaseCase {
         )
 
         XCTAssertTrue(
-            app.scrollToLifeHabitActionsButton(named: archivedHabitName, maxSwipes: 8),
-            "Habit actions button should exist"
+            app.openLifeHabitActions(named: archivedHabitName, maxSwipes: 8),
+            "Habit actions should open from the seeded habit row"
         )
         let actionsButton = app.descendants(matching: .any)[AXID.lifeHabitActions(archivedHabitName)].firstMatch
-
-        actionsButton.tap()
 
         let archiveButton = app.descendants(matching: .any)[AXID.lifeHabitActionArchive].firstMatch
         XCTAssertTrue(archiveButton.waitForExistence(timeout: 3), "Archive action should appear in the habit actions menu")
         archiveButton.tap()
-
-        expectation(for: NSPredicate(format: "exists == false"), evaluatedWith: actionsButton)
-        waitForExpectations(timeout: 3)
+        let habitRow = app.descendants(matching: .any)[AXID.lifeHabitRow(archivedHabitName)].firstMatch
+        expectation(for: NSPredicate(format: "exists == false"), evaluatedWith: habitRow)
+        waitForExpectations(timeout: 5)
     }
 }

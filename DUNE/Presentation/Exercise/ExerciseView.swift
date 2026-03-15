@@ -164,6 +164,7 @@ struct ExerciseView: View {
             if viewModel.isLoading && viewModel.allExercises.isEmpty {
                 ProgressView()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .accessibilityIdentifier("exercise-view-screen")
             } else if viewModel.allExercises.isEmpty && !viewModel.isLoading {
                 EmptyStateView(
                     icon: "figure.run",
@@ -172,6 +173,7 @@ struct ExerciseView: View {
                     actionTitle: "Add Exercise",
                     action: { showingExercisePicker = true }
                 )
+                .accessibilityIdentifier("exercise-view-screen")
             } else {
                 List {
                     // Draft recovery banner

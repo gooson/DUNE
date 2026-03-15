@@ -30,6 +30,7 @@ enum AXID {
 
     // MARK: - Activity Tab (active: hero, toolbar-add)
     static let activityHeroReadiness = "activity-hero-readiness"
+    static let activityRootScroll = "activity-root-scroll"
     static let activityToolbarAdd = "activity-toolbar-add"
     static let activityQuickStartSearch = "activity-exercise-search"
     static let waveRefreshIndicator = "wave-refresh-indicator"
@@ -542,6 +543,71 @@ extension XCUIApplication {
     }
 
     @discardableResult
+    func scrollToPickerElementIfNeeded(
+        _ identifier: String,
+        maxSwipes: Int = 6,
+        direction: ScrollDirection = .up,
+        timeoutPerCheck: TimeInterval = 0.25
+    ) -> Bool {
+        let element = descendants(matching: .any)[identifier].firstMatch
+        let pickerList = tables[AXID.pickerRootList].firstMatch
+
+        guard pickerList.waitForExistence(timeout: 5) else {
+            return element.exists
+        }
+
+        for _ in 0..<maxSwipes {
+            if element.exists || element.waitForExistence(timeout: timeoutPerCheck) {
+                return true
+            }
+
+            switch direction {
+            case .up:
+                pickerList.swipeUp()
+            case .down:
+                pickerList.swipeDown()
+            }
+        }
+
+        return element.exists
+    }
+
+    @discardableResult
+    func scrollToHittablePickerElementIfNeeded(
+        _ identifier: String,
+        maxSwipes: Int = 6,
+        direction: ScrollDirection = .up,
+        timeoutPerCheck: TimeInterval = 0.25
+    ) -> Bool {
+        let element = descendants(matching: .any)[identifier].firstMatch
+
+        guard scrollToPickerElementIfNeeded(
+            identifier,
+            maxSwipes: maxSwipes,
+            direction: direction,
+            timeoutPerCheck: timeoutPerCheck
+        ) else {
+            return false
+        }
+
+        let pickerList = tables[AXID.pickerRootList].firstMatch
+        guard pickerList.waitForExistence(timeout: 5) else {
+            return element.exists && element.isHittable
+        }
+
+        for _ in 0..<maxSwipes where !(element.exists && element.isHittable) {
+            switch direction {
+            case .up:
+                pickerList.swipeUp()
+            case .down:
+                pickerList.swipeDown()
+            }
+        }
+
+        return element.exists && element.isHittable
+    }
+
+    @discardableResult
     func scrollToLifeHabit(
         named habitName: String,
         maxSwipes: Int = 8,
@@ -556,6 +622,7 @@ extension XCUIApplication {
         let habitRow = descendants(matching: .any)[AXID.lifeHabitRow(habitName)].firstMatch
         let habitLabel = staticTexts[habitName].firstMatch
         let actionsButton = descendants(matching: .any)[AXID.lifeHabitActions(habitName)].firstMatch
+        let scrollContainer = tables.firstMatch.exists ? tables.firstMatch : scrollViews.firstMatch
 
         for _ in 0..<maxSwipes {
             if habitRow.waitForExistence(timeout: timeoutPerCheck)
@@ -563,7 +630,12 @@ extension XCUIApplication {
                 || actionsButton.waitForExistence(timeout: timeoutPerCheck) {
                 return true
             }
-            preferredScrollContainer().swipeUp()
+
+            if scrollContainer.exists {
+                scrollContainer.swipeUp()
+            } else {
+                RunLoop.current.run(until: Date(timeIntervalSinceNow: timeoutPerCheck))
+            }
         }
 
         return habitRow.exists || habitLabel.exists || actionsButton.exists
@@ -577,15 +649,54 @@ extension XCUIApplication {
     ) -> Bool {
         let actionsButton = descendants(matching: .any)[AXID.lifeHabitActions(habitName)].firstMatch
         let _ = scrollToLifeHabit(named: habitName, maxSwipes: maxSwipes, timeoutPerCheck: timeoutPerCheck)
+        let scrollContainer = tables.firstMatch.exists ? tables.firstMatch : scrollViews.firstMatch
 
         for _ in 0..<maxSwipes {
             if actionsButton.waitForExistence(timeout: timeoutPerCheck), actionsButton.isHittable {
                 return true
             }
-            preferredScrollContainer().swipeUp()
+
+            if scrollContainer.exists {
+                scrollContainer.swipeUp()
+            } else {
+                RunLoop.current.run(until: Date(timeIntervalSinceNow: timeoutPerCheck))
+            }
         }
 
         return actionsButton.exists && actionsButton.isHittable
+    }
+
+    @discardableResult
+    func openLifeHabitActions(
+        named habitName: String,
+        maxSwipes: Int = 8,
+        timeoutPerCheck: TimeInterval = 1
+    ) -> Bool {
+        let actionsButton = descendants(matching: .any)[AXID.lifeHabitActions(habitName)].firstMatch
+        if scrollToLifeHabitActionsButton(
+            named: habitName,
+            maxSwipes: maxSwipes,
+            timeoutPerCheck: timeoutPerCheck
+        ) {
+            actionsButton.tap()
+            return true
+        }
+
+        _ = scrollToLifeHabit(named: habitName, maxSwipes: maxSwipes, timeoutPerCheck: timeoutPerCheck)
+
+        let row = descendants(matching: .any)[AXID.lifeHabitRow(habitName)].firstMatch
+        if row.waitForExistence(timeout: timeoutPerCheck) {
+            row.press(forDuration: 1.2)
+            return true
+        }
+
+        let label = staticTexts[habitName].firstMatch
+        if label.waitForExistence(timeout: timeoutPerCheck) {
+            label.press(forDuration: 1.2)
+            return true
+        }
+
+        return false
     }
 
     @discardableResult
@@ -605,6 +716,58 @@ extension XCUIApplication {
         }
 
         return element.exists
+    }
+
+    @discardableResult
+    func scrollToInjuryEndDateIfNeeded(
+        maxSwipes: Int = 6,
+        timeoutPerCheck: TimeInterval = 1
+    ) -> Bool {
+        let identifiedElement = descendants(matching: .any)[AXID.injuryFormEndDate].firstMatch
+        let labeledElement = staticTexts["End Date"].firstMatch
+        if identifiedElement.waitForExistence(timeout: timeoutPerCheck)
+            || labeledElement.waitForExistence(timeout: timeoutPerCheck) {
+            return true
+        }
+
+        let formContainer = tables.firstMatch.exists ? tables.firstMatch : scrollViews.firstMatch
+        for _ in 0..<maxSwipes {
+            formContainer.swipeUp()
+            if identifiedElement.waitForExistence(timeout: timeoutPerCheck)
+                || labeledElement.waitForExistence(timeout: timeoutPerCheck) {
+                return true
+            }
+        }
+
+        return identifiedElement.exists || labeledElement.exists
+    }
+
+    @discardableResult
+    func setSwitch(
+        _ identifier: String,
+        to isOn: Bool,
+        fallbackLabel: String? = nil,
+        timeout: TimeInterval = 5
+    ) -> Bool {
+        let switchControl = switches[identifier].firstMatch
+        let genericControl = descendants(matching: .any)[identifier].firstMatch
+        let toggle = switchControl.exists ? switchControl : genericControl
+        guard toggle.waitForExistence(timeout: timeout) else { return false }
+        if switchState(of: toggle) == isOn { return true }
+
+        let tapTargets: [XCUIElement] = [
+            toggle,
+            fallbackLabel.map { staticTexts[$0].firstMatch },
+            fallbackLabel.map { buttons[$0].firstMatch }
+        ].compactMap { $0 }
+
+        for target in tapTargets where target.exists {
+            target.tap()
+            if switchState(of: toggle) == isOn { return true }
+        }
+
+        toggle.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+        return switchState(of: toggle) == isOn
     }
 
     @discardableResult
@@ -700,7 +863,38 @@ extension XCUIApplication {
         element.typeText(value)
     }
 
+    private func switchState(of element: XCUIElement) -> Bool? {
+        switch element.value {
+        case let number as NSNumber:
+            return number.boolValue
+        case let string as String:
+            switch string.lowercased() {
+            case "1", "on", "true":
+                return true
+            case "0", "off", "false":
+                return false
+            default:
+                return nil
+            }
+        default:
+            return nil
+        }
+    }
+
     private func preferredScrollContainer() -> XCUIElement {
+        let prioritizedContainers = [
+            tables[AXID.pickerRootList].firstMatch,
+            descendants(matching: .any)[AXID.activityRootScroll].firstMatch
+        ]
+
+        for container in prioritizedContainers where container.exists && container.isHittable {
+            return container
+        }
+
+        for container in prioritizedContainers where container.exists && !container.frame.isEmpty {
+            return container
+        }
+
         let containerQueries = [
             tables,
             scrollViews,

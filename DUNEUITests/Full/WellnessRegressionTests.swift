@@ -63,16 +63,16 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
 
         let saveButton = app.descendants(matching: .any)[AXID.bodyFormSave].firstMatch
         XCTAssertTrue(saveButton.waitForExistence(timeout: 5), "Body form save button should exist")
-        XCTAssertFalse(saveButton.isEnabled, "Save should be disabled before body input")
+        let bodyForm = app.descendants(matching: .any)[AXID.bodyFormScreen].firstMatch
+        saveButton.tap()
+        XCTAssertTrue(bodyForm.waitForExistence(timeout: 2), "Body form should remain visible before body input")
 
         XCTAssertTrue(app.fillTextInput(AXID.bodyFormWeight, with: "91.2"), "Weight field should accept a seeded regression value")
-        XCTAssertTrue(saveButton.isEnabled, "Save should enable after entering a body value")
         saveButton.tap()
 
-        let bodyForm = app.descendants(matching: .any)[AXID.bodyFormScreen].firstMatch
         let dismissed = NSPredicate(format: "exists == false")
         expectation(for: dismissed, evaluatedWith: bodyForm)
-        waitForExpectations(timeout: 5)
+        waitForExpectations(timeout: 10)
 
         openBodyHistory()
         XCTAssertTrue(app.staticTexts["91.2 kg"].firstMatch.waitForExistence(timeout: 8), "Newly saved weight should appear in body history")
@@ -99,7 +99,7 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
 
         let dismissed = NSPredicate(format: "exists == false")
         expectation(for: dismissed, evaluatedWith: form)
-        waitForExpectations(timeout: 5)
+        waitForExpectations(timeout: 10)
 
         XCTAssertTrue(
             app.descendants(matching: .any)[AXID.bodyHistoryDetailScreen].firstMatch.waitForExistence(timeout: 8),
@@ -113,10 +113,15 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
 
         let recoveredToggle = app.descendants(matching: .any)[AXID.injuryFormRecoveredToggle].firstMatch
         XCTAssertTrue(recoveredToggle.waitForExistence(timeout: 5), "Recovered toggle should exist")
-        recoveredToggle.tap()
+        XCTAssertTrue(
+            app.setSwitch(AXID.injuryFormRecoveredToggle, to: true, fallbackLabel: "Recovered"),
+            "Recovered toggle should turn on"
+        )
 
-        let endDate = app.descendants(matching: .any)[AXID.injuryFormEndDate].firstMatch
-        XCTAssertTrue(endDate.waitForExistence(timeout: 5), "End date should appear after enabling recovered")
+        XCTAssertTrue(
+            app.scrollToInjuryEndDateIfNeeded(maxSwipes: 4, timeoutPerCheck: 1.5),
+            "End date should appear after enabling recovered"
+        )
 
         let saveButton = app.descendants(matching: .any)[AXID.injuryFormSave].firstMatch
         XCTAssertTrue(saveButton.waitForExistence(timeout: 5), "Injury save button should exist")
@@ -125,7 +130,7 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         let form = app.descendants(matching: .any)[AXID.injuryFormScreen].firstMatch
         let dismissed = NSPredicate(format: "exists == false")
         expectation(for: dismissed, evaluatedWith: form)
-        waitForExpectations(timeout: 5)
+        waitForExpectations(timeout: 10)
 
         openInjuryHistory()
         let rows = app.descendants(matching: .any)

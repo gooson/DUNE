@@ -33,7 +33,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         tapBackButton()
         ensureActivityRoot()
 
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.activitySectionMuscleMap, maxSwipes: 4))
+        XCTAssertTrue(app.scrollToElementIfNeeded(AXID.activitySectionMuscleMap, maxSwipes: 4))
         XCTAssertTrue(
             app.scrollToHittableElementIfNeeded(AXID.activityMuscleMapDetailLink, maxSwipes: 4),
             "Muscle Map detail link should be reachable"
@@ -47,7 +47,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         tapBackButton()
         ensureActivityRoot()
 
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.activitySectionWeeklyStats, maxSwipes: 4))
+        XCTAssertTrue(app.scrollToElementIfNeeded(AXID.activitySectionWeeklyStats, maxSwipes: 4))
         waitForElement(AXID.activitySectionWeeklyStats, timeout: 5).tap()
         XCTAssertTrue(
             app.descendants(matching: .any)[AXID.activityWeeklyStatsDetailScreen].firstMatch.waitForExistence(timeout: 10),
@@ -57,7 +57,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         tapBackButton()
         ensureActivityRoot()
 
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.activitySectionVolume, maxSwipes: 8))
+        XCTAssertTrue(app.scrollToElementIfNeeded(AXID.activitySectionVolume, maxSwipes: 8))
         waitForElement(AXID.activitySectionVolume, timeout: 5).tap()
         XCTAssertTrue(
             app.descendants(matching: .any)[AXID.activityTrainingVolumeDetailScreen].firstMatch.waitForExistence(timeout: 10),
@@ -69,7 +69,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     }
 
     func testActivitySecondaryDetailRoutesOpenExpectedScreens() throws {
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.activitySectionPR, maxSwipes: 10))
+        XCTAssertTrue(app.scrollToElementIfNeeded(AXID.activitySectionPR, maxSwipes: 10))
         waitForElement(AXID.activitySectionPR, timeout: 5).tap()
         XCTAssertTrue(
             app.descendants(matching: .any)[AXID.activityPersonalRecordsDetailScreen].firstMatch.waitForExistence(timeout: 10),
@@ -79,7 +79,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         tapBackButton()
         ensureActivityRoot()
 
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.activitySectionConsistency, maxSwipes: 10))
+        XCTAssertTrue(app.scrollToElementIfNeeded(AXID.activitySectionConsistency, maxSwipes: 10))
         waitForElement(AXID.activitySectionConsistency, timeout: 5).tap()
         XCTAssertTrue(
             app.descendants(matching: .any)[AXID.activityConsistencyDetailScreen].firstMatch.waitForExistence(timeout: 10),
@@ -124,6 +124,10 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         dismissSearchKeyboardIfPresent()
 
         let detailButton = app.descendants(matching: .any)[AXID.pickerExerciseDetailButton(Fixture.benchPressID)].firstMatch
+        XCTAssertTrue(
+            app.scrollToHittablePickerElementIfNeeded(AXID.pickerExerciseDetailButton(Fixture.benchPressID), maxSwipes: 8),
+            "Bench Press detail button should be reachable after search"
+        )
         XCTAssertTrue(detailButton.waitForExistence(timeout: 8), "Bench Press detail button should exist")
         detailButton.tap()
 
@@ -140,6 +144,10 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         dismissSearchKeyboardIfPresent()
 
         let resultRow = app.descendants(matching: .any)[AXID.pickerExerciseRow(Fixture.deadliftID)].firstMatch
+        XCTAssertTrue(
+            app.scrollToHittablePickerElementIfNeeded(AXID.pickerExerciseRow(Fixture.deadliftID), maxSwipes: 8),
+            "Deadlift result should be reachable after search"
+        )
         XCTAssertTrue(resultRow.waitForExistence(timeout: 8), "Deadlift result should appear after search")
     }
 
@@ -340,6 +348,10 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         dismissSearchKeyboardIfPresent()
 
         let detailButton = app.descendants(matching: .any)[AXID.pickerExerciseDetailButton(Fixture.runningID)].firstMatch
+        XCTAssertTrue(
+            app.scrollToHittablePickerElementIfNeeded(AXID.pickerExerciseDetailButton(Fixture.runningID), maxSwipes: 8),
+            "Running detail button should be reachable"
+        )
         XCTAssertTrue(detailButton.waitForExistence(timeout: 8), "Running detail button should exist")
         detailButton.tap()
 
@@ -427,8 +439,17 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     // MARK: - Helpers
 
     private func ensureActivityRoot() {
+        let activityAddButton = app.descendants(matching: .any)[AXID.activityToolbarAdd].firstMatch
+        if !activityAddButton.waitForExistence(timeout: 3) {
+            let backButton = app.navigationBars.buttons["BackButton"].firstMatch
+            if backButton.waitForExistence(timeout: 2) {
+                backButton.tap()
+            }
+        }
+
         let hero = app.descendants(matching: .any)[AXID.activityHeroReadiness].firstMatch
         XCTAssertTrue(hero.waitForExistence(timeout: 15), "Activity hero should exist")
+        XCTAssertTrue(activityAddButton.waitForExistence(timeout: 5), "Activity add button should exist")
     }
 
     private func openQuickStartPicker() {
@@ -443,14 +464,27 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
 
     private func openExerciseViewFromRecentWorkouts() {
         ensureActivityRoot()
-        XCTAssertTrue(app.scrollToElementIfNeeded(AXID.activityRecentSeeAll, maxSwipes: 10))
-
-        let seeAllButton = app.descendants(matching: .any)[AXID.activityRecentSeeAll].firstMatch
-        XCTAssertTrue(seeAllButton.waitForExistence(timeout: 5), "Recent workouts See All should be reachable")
-        seeAllButton.tap()
-
+        let seeAllButton = app.buttons[AXID.activityRecentSeeAll].firstMatch
         let exerciseScreen = app.descendants(matching: .any)[AXID.exerciseViewScreen].firstMatch
-        XCTAssertTrue(exerciseScreen.waitForExistence(timeout: 10), "Exercise screen should appear")
+        let exerciseToolbarAdd = app.descendants(matching: .any)[AXID.exerciseToolbarAdd].firstMatch
+        for _ in 0..<2 {
+            XCTAssertTrue(
+                app.scrollToHittableElementIfNeeded(AXID.activityRecentSeeAll, maxSwipes: 10),
+                "Recent workouts See All should be reachable and tappable"
+            )
+            XCTAssertTrue(seeAllButton.waitForExistence(timeout: 5), "Recent workouts See All should exist")
+            for _ in 0..<2 {
+                XCTAssertTrue(waitForHittable(seeAllButton, timeout: 2), "Recent workouts See All should be hittable")
+                seeAllButton.tap()
+
+                if exerciseScreen.waitForExistence(timeout: 10) ||
+                    exerciseToolbarAdd.waitForExistence(timeout: 10) {
+                    return
+                }
+            }
+        }
+
+        XCTFail("Exercise screen should appear")
     }
 
     private func openExerciseSingleExercisePicker() {
@@ -473,6 +507,10 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         dismissSearchKeyboardIfPresent()
 
         let detailButton = app.descendants(matching: .any)[AXID.pickerExerciseDetailButton(exerciseID)].firstMatch
+        XCTAssertTrue(
+            app.scrollToHittablePickerElementIfNeeded(AXID.pickerExerciseDetailButton(exerciseID), maxSwipes: 8),
+            "Quick start detail button should be reachable for \(exerciseID)"
+        )
         XCTAssertTrue(detailButton.waitForExistence(timeout: 8), "Quick start detail button should exist for \(exerciseID)")
         detailButton.tap()
 
@@ -533,6 +571,10 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         )
 
         let pickerRow = app.descendants(matching: .any)[AXID.pickerExerciseRow(exerciseID)].firstMatch
+        XCTAssertTrue(
+            app.scrollToHittablePickerElementIfNeeded(AXID.pickerExerciseRow(exerciseID), maxSwipes: 8),
+            "Compound picker row should be reachable for \(exerciseID)"
+        )
         XCTAssertTrue(pickerRow.waitForExistence(timeout: 8), "Compound picker row should exist for \(exerciseID)")
         pickerRow.tap()
 

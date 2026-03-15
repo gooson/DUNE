@@ -3,6 +3,8 @@
 /// Regression coverage for chart long-press vs period/selection interaction.
 @MainActor
 final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
+    override var initialTabSelectionArgument: String? { "train" }
+
     func testRHRDetailChartScrollsToPastData() throws {
         openDashboardMetricDetail("rhr")
         assertDetailChartScrollsToPastData(category: "rhr")
@@ -349,11 +351,21 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
     }
 
     private func openWeeklyStatsDetail() {
-        navigateToActivity()
+        let readinessHero = app.descendants(matching: .any)[AXID.activityHeroReadiness].firstMatch
+        for _ in 0..<2 {
+            navigateToActivity()
+            dismissMorningBriefingIfNeeded(timeout: 1.5)
+            if readinessHero.waitForExistence(timeout: 15) {
+                break
+            }
+        }
 
-        let readinessHero = waitForElement(AXID.activityHeroReadiness, timeout: 15)
         XCTAssertTrue(readinessHero.exists, "Activity tab should be visible before opening weekly stats")
 
+        XCTAssertTrue(
+            app.scrollToHittableElementIfNeeded(AXID.activitySectionWeeklyStats, maxSwipes: 6),
+            "Weekly stats section should be reachable before opening detail"
+        )
         let weeklyStatsSection = waitForElement(AXID.activitySectionWeeklyStats, timeout: 15)
         weeklyStatsSection.tap()
 
@@ -362,9 +374,15 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
     }
 
     private func openTrainingVolumeDetail() {
-        navigateToActivity()
+        let readinessHero = app.descendants(matching: .any)[AXID.activityHeroReadiness].firstMatch
+        for _ in 0..<2 {
+            navigateToActivity()
+            dismissMorningBriefingIfNeeded(timeout: 1.5)
+            if readinessHero.waitForExistence(timeout: 15) {
+                break
+            }
+        }
 
-        let readinessHero = waitForElement(AXID.activityHeroReadiness, timeout: 15)
         XCTAssertTrue(readinessHero.exists, "Activity tab should be visible before opening training volume")
         let volumeSection = waitForElement(AXID.activitySectionVolume, timeout: 15)
         XCTAssertTrue(
