@@ -285,14 +285,15 @@ final class ActivityViewModel {
     /// Recompute fatigue states and suggestion from both SwiftData records and HealthKit workouts.
     private func recomputeFatigueAndSuggestion() {
         // Build set of HK workout IDs that already have ExerciseRecords (to avoid double-counting)
-        let linkedHKIDs: Set<String> = Set(
-            manualRecordsCache.compactMap(\.healthKitWorkoutID)
-        )
+        let linkedHKIDs = Set(manualRecordsCache.compactMap(\.healthKitWorkoutID))
 
         // Merge SwiftData exercise snapshots with HealthKit workout snapshots
         var healthKitSnapshots: [ExerciseRecordSnapshot] = []
 
         for workout in recentWorkouts {
+            let durationMin = workout.duration > 0 ? Swift.min(workout.duration / 60.0, 480) : nil
+            let distKm = workout.distance.flatMap { $0 > 0 ? Swift.min($0 / 1000.0, 500) : nil }
+
             if !workout.isFromThisApp {
                 // Third-party workouts: use activityType muscles (existing behavior)
                 guard !workout.activityType.primaryMuscles.isEmpty else { continue }
@@ -302,8 +303,8 @@ final class ActivityViewModel {
                     primaryMuscles: workout.activityType.primaryMuscles,
                     secondaryMuscles: workout.activityType.secondaryMuscles,
                     completedSetCount: 0,
-                    durationMinutes: workout.duration > 0 ? Swift.min(workout.duration / 60.0, 480) : nil,
-                    distanceKm: workout.distance.flatMap { $0 > 0 ? Swift.min($0 / 1000.0, 500) : nil }
+                    durationMinutes: durationMin,
+                    distanceKm: distKm
                 ))
             } else if !linkedHKIDs.contains(workout.id) {
                 // Orphaned app-created workout (ExerciseRecord lost due to store recovery).
@@ -320,8 +321,8 @@ final class ActivityViewModel {
                         primaryMuscles: definition.primaryMuscles,
                         secondaryMuscles: definition.secondaryMuscles,
                         completedSetCount: 0,
-                        durationMinutes: workout.duration > 0 ? Swift.min(workout.duration / 60.0, 480) : nil,
-                        distanceKm: workout.distance.flatMap { $0 > 0 ? Swift.min($0 / 1000.0, 500) : nil }
+                        durationMinutes: durationMin,
+                        distanceKm: distKm
                     ))
                 } else if !workout.activityType.primaryMuscles.isEmpty {
                     // Fallback to activityType muscles if library lookup fails
@@ -331,8 +332,8 @@ final class ActivityViewModel {
                         primaryMuscles: workout.activityType.primaryMuscles,
                         secondaryMuscles: workout.activityType.secondaryMuscles,
                         completedSetCount: 0,
-                        durationMinutes: workout.duration > 0 ? Swift.min(workout.duration / 60.0, 480) : nil,
-                        distanceKm: workout.distance.flatMap { $0 > 0 ? Swift.min($0 / 1000.0, 500) : nil }
+                        durationMinutes: durationMin,
+                        distanceKm: distKm
                     ))
                 }
             }
