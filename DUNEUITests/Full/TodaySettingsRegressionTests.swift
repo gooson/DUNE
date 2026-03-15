@@ -191,7 +191,7 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         )
     }
 
-    func testExerciseDefaultEditPersistsSavedValues() throws {
+    func testExerciseDefaultEditClearsSavedValues() throws {
         openExerciseDefaults()
 
         let row = exerciseDefaultsBenchPressRow()
@@ -221,7 +221,7 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         )
     }
 
-    func testPreferredExercisesToggleCreatesPreferredSection() throws {
+    func testPreferredExercisesSearchShowsToggle() throws {
         openPreferredExercises()
 
         searchPreferredExercises(Fixture.deadliftSearchQuery)

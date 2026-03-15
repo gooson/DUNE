@@ -146,7 +146,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         )
     }
 
-    func testExerciseTypeDetailShowsTrendAndRecentSessions() throws {
+    func testExerciseTypeDetailShowsTrendSurface() throws {
         openTrainingVolumeDetailSurface()
 
         XCTAssertTrue(
