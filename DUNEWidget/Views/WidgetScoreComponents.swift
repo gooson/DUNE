@@ -1,7 +1,8 @@
 import SwiftUI
 
 struct WidgetMetric: Identifiable {
-    let id: String
+    let kind: WidgetSurfaceMetric
+    var id: WidgetSurfaceMetric { kind }
     let title: String
     let compactTitle: String
     let score: Int?
@@ -49,7 +50,7 @@ extension WellnessDashboardEntry {
     var metrics: [WidgetMetric] {
         [
             WidgetMetric(
-                id: "condition",
+                kind: .condition,
                 title: WidgetMetricText.condition,
                 compactTitle: "C",
                 score: conditionScore,
@@ -59,7 +60,7 @@ extension WellnessDashboardEntry {
                 icon: WidgetDS.iconForConditionStatus(conditionStatusRaw)
             ),
             WidgetMetric(
-                id: "readiness",
+                kind: .readiness,
                 title: WidgetMetricText.readiness,
                 compactTitle: "R",
                 score: readinessScore,
@@ -69,7 +70,7 @@ extension WellnessDashboardEntry {
                 icon: WidgetDS.iconForReadinessStatus(readinessStatusRaw)
             ),
             WidgetMetric(
-                id: "wellness",
+                kind: .wellness,
                 title: WidgetMetricText.wellness,
                 compactTitle: "W",
                 score: wellnessScore,
@@ -127,6 +128,7 @@ struct WidgetRingView: View {
 
 struct WidgetCompactMetricView: View {
     let metric: WidgetMetric
+    let family: WidgetSurfaceFamily
 
     var body: some View {
         VStack(spacing: 6) {
@@ -137,11 +139,13 @@ struct WidgetCompactMetricView: View {
                 .foregroundStyle(WidgetDS.Color.textSecondary)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .accessibilityIdentifier(WidgetSurfaceAccessibility.metricID(metric.kind, family: family))
     }
 }
 
 struct WidgetMetricTileView: View {
     let metric: WidgetMetric
+    let family: WidgetSurfaceFamily
 
     var body: some View {
         VStack(spacing: WidgetDS.Layout.rowSpacing) {
@@ -178,6 +182,7 @@ struct WidgetMetricTileView: View {
         .padding(.horizontal, 4)
         .padding(.bottom, 10)
         .background(tileBackground)
+        .accessibilityIdentifier(WidgetSurfaceAccessibility.metricID(metric.kind, family: family))
     }
 
     private var tileBackground: some View {
@@ -192,6 +197,7 @@ struct WidgetMetricTileView: View {
 
 struct WidgetMetricRowView: View {
     let metric: WidgetMetric
+    let family: WidgetSurfaceFamily
 
     var body: some View {
         HStack(spacing: 12) {
@@ -235,6 +241,7 @@ struct WidgetMetricRowView: View {
         .padding(.vertical, 10)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         .background(backgroundShape)
+        .accessibilityIdentifier(WidgetSurfaceAccessibility.metricID(metric.kind, family: family))
     }
 
     private var backgroundShape: some View {
