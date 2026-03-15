@@ -1,5 +1,5 @@
 #if !os(visionOS)
-import AVFoundation
+import CoreVideo
 import Foundation
 import os
 
@@ -48,8 +48,8 @@ final class RealtimePoseTracker: @unchecked Sendable {
     // MARK: - Lifecycle
 
     func start() {
-        captureService.onRealtimeFrame = { [weak self] keypoints, sampleBuffer in
-            self?.handleFrame(keypoints: keypoints, sampleBuffer: sampleBuffer)
+        captureService.onRealtimeFrame = { [weak self] keypoints, copiedBuffer in
+            self?.handleFrame(keypoints: keypoints, copiedBuffer: copiedBuffer)
         }
 
         serialQueue.async { [weak self] in
@@ -75,7 +75,10 @@ final class RealtimePoseTracker: @unchecked Sendable {
 
     // MARK: - Frame Handling
 
-    private func handleFrame(keypoints: [(String, CGPoint)], sampleBuffer: CMSampleBuffer) {
+    /// Process a frame with pre-extracted keypoints and an optional deep-copied pixel buffer.
+    /// The copied buffer is independent of the camera pool — no CMSampleBuffer is ever
+    /// captured here, so pool buffers are recycled in the camera callback immediately.
+    private func handleFrame(keypoints: [(String, CGPoint)], copiedBuffer: CVPixelBuffer?) {
         serialQueue.async { [weak self] in
             guard let self, self.state.isActive, !self.isStopped else { return }
 
@@ -106,18 +109,15 @@ final class RealtimePoseTracker: @unchecked Sendable {
                 }
             }
 
-            // 3D sampling trigger — copy pixel buffer to release CMSampleBuffer
-            // back to the camera pool immediately, preventing pool starvation
-            // that causes "Could not create mlImage buffer" errors.
+            // 3D sampling trigger — copiedBuffer is already independent of camera pool
             if !self.is3DInFlight,
                !keypoints.isEmpty,
                now - self.last3DSampleTime >= Self.min3DInterval,
-               let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer),
-               let copiedBuffer = Self.copyPixelBuffer(pixelBuffer) {
+               let buffer = copiedBuffer {
                 self.is3DInFlight = true
                 self.last3DSampleTime = now
                 self.pending3DTask = Task { [weak self] in
-                    await self?.perform3DDetection(copiedBuffer)
+                    await self?.perform3DDetection(buffer)
                 }
             }
 
@@ -158,65 +158,6 @@ final class RealtimePoseTracker: @unchecked Sendable {
                 self?.is3DInFlight = false
             }
         }
-    }
-
-    // MARK: - Pixel Buffer Copy
-
-    /// Deep-copy a CVPixelBuffer so the original (owned by the camera pool) can
-    /// be recycled immediately. Supports both planar (420YpCbCr) and interleaved formats.
-    private static func copyPixelBuffer(_ source: CVPixelBuffer) -> CVPixelBuffer? {
-        let width = CVPixelBufferGetWidth(source)
-        let height = CVPixelBufferGetHeight(source)
-        let format = CVPixelBufferGetPixelFormatType(source)
-
-        var copy: CVPixelBuffer?
-        let status = CVPixelBufferCreate(
-            kCFAllocatorDefault, width, height, format,
-            [kCVPixelBufferIOSurfacePropertiesKey: [:] as CFDictionary] as CFDictionary,
-            &copy
-        )
-        guard status == kCVReturnSuccess, let dest = copy else { return nil }
-
-        CVPixelBufferLockBaseAddress(source, .readOnly)
-        CVPixelBufferLockBaseAddress(dest, [])
-        defer {
-            CVPixelBufferUnlockBaseAddress(source, .readOnly)
-            CVPixelBufferUnlockBaseAddress(dest, [])
-        }
-
-        let planeCount = CVPixelBufferGetPlaneCount(source)
-        if planeCount > 0 {
-            for plane in 0..<planeCount {
-                guard let srcAddr = CVPixelBufferGetBaseAddressOfPlane(source, plane),
-                      let dstAddr = CVPixelBufferGetBaseAddressOfPlane(dest, plane) else { continue }
-                let srcBPR = CVPixelBufferGetBytesPerRowOfPlane(source, plane)
-                let dstBPR = CVPixelBufferGetBytesPerRowOfPlane(dest, plane)
-                let planeHeight = CVPixelBufferGetHeightOfPlane(source, plane)
-                if srcBPR == dstBPR {
-                    memcpy(dstAddr, srcAddr, srcBPR * planeHeight)
-                } else {
-                    let copyBPR = min(srcBPR, dstBPR)
-                    for row in 0..<planeHeight {
-                        memcpy(dstAddr + row * dstBPR, srcAddr + row * srcBPR, copyBPR)
-                    }
-                }
-            }
-        } else {
-            guard let srcAddr = CVPixelBufferGetBaseAddress(source),
-                  let dstAddr = CVPixelBufferGetBaseAddress(dest) else { return nil }
-            let srcBPR = CVPixelBufferGetBytesPerRow(source)
-            let dstBPR = CVPixelBufferGetBytesPerRow(dest)
-            if srcBPR == dstBPR {
-                memcpy(dstAddr, srcAddr, srcBPR * height)
-            } else {
-                let copyBPR = min(srcBPR, dstBPR)
-                for row in 0..<height {
-                    memcpy(dstAddr + row * dstBPR, srcAddr + row * srcBPR, copyBPR)
-                }
-            }
-        }
-
-        return dest
     }
 
     // MARK: - Scoring

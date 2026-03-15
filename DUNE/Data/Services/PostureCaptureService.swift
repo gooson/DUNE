@@ -59,9 +59,10 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
     private static let frameAnalysisInterval: CFAbsoluteTime = 0.1 // 10fps max
     /// Combined frame update callback: guidance state + skeleton keypoints in a single dispatch.
     var onFrameUpdate: (@Sendable (GuidanceState, [(String, CGPoint)], CGSize) -> Void)?
-    /// Realtime analysis callback: keypoints + sample buffer for 3D sampling.
-    /// CMSampleBuffer retains the underlying pixel buffer, preventing pool recycling.
-    var onRealtimeFrame: (@Sendable ([(String, CGPoint)], CMSampleBuffer) -> Void)?
+    /// Realtime analysis callback: keypoints + deep-copied pixel buffer for 3D sampling.
+    /// The copied buffer is independent of the camera pool — the original CMSampleBuffer
+    /// never escapes `captureOutput`, so pool buffers are recycled immediately.
+    var onRealtimeFrame: (@Sendable ([(String, CGPoint)], CVPixelBuffer?) -> Void)?
 
     // MARK: - Camera State
 
@@ -666,6 +667,65 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
         return data as Data
     }
 
+    // MARK: - Pixel Buffer Copy
+
+    /// Deep-copy a CVPixelBuffer so the original (owned by the camera pool) can
+    /// be recycled immediately. Supports both planar (420YpCbCr) and interleaved formats.
+    static func copyPixelBuffer(_ source: CVPixelBuffer) -> CVPixelBuffer? {
+        let width = CVPixelBufferGetWidth(source)
+        let height = CVPixelBufferGetHeight(source)
+        let format = CVPixelBufferGetPixelFormatType(source)
+
+        var copy: CVPixelBuffer?
+        let status = CVPixelBufferCreate(
+            kCFAllocatorDefault, width, height, format,
+            nil, // plain heap — no IOSurface overhead for CPU-only use
+            &copy
+        )
+        guard status == kCVReturnSuccess, let dest = copy else { return nil }
+
+        CVPixelBufferLockBaseAddress(source, .readOnly)
+        CVPixelBufferLockBaseAddress(dest, [])
+        defer {
+            CVPixelBufferUnlockBaseAddress(source, .readOnly)
+            CVPixelBufferUnlockBaseAddress(dest, [])
+        }
+
+        let planeCount = CVPixelBufferGetPlaneCount(source)
+        if planeCount > 0 {
+            for plane in 0..<planeCount {
+                guard let srcAddr = CVPixelBufferGetBaseAddressOfPlane(source, plane),
+                      let dstAddr = CVPixelBufferGetBaseAddressOfPlane(dest, plane) else { continue }
+                let srcBPR = CVPixelBufferGetBytesPerRowOfPlane(source, plane)
+                let dstBPR = CVPixelBufferGetBytesPerRowOfPlane(dest, plane)
+                let planeHeight = CVPixelBufferGetHeightOfPlane(source, plane)
+                if srcBPR == dstBPR {
+                    memcpy(dstAddr, srcAddr, srcBPR * planeHeight)
+                } else {
+                    let copyBPR = min(srcBPR, dstBPR)
+                    for row in 0..<planeHeight {
+                        memcpy(dstAddr + row * dstBPR, srcAddr + row * srcBPR, copyBPR)
+                    }
+                }
+            }
+        } else {
+            guard let srcAddr = CVPixelBufferGetBaseAddress(source),
+                  let dstAddr = CVPixelBufferGetBaseAddress(dest) else { return nil }
+            let srcBPR = CVPixelBufferGetBytesPerRow(source)
+            let dstBPR = CVPixelBufferGetBytesPerRow(dest)
+            if srcBPR == dstBPR {
+                memcpy(dstAddr, srcAddr, srcBPR * height)
+            } else {
+                let copyBPR = min(srcBPR, dstBPR)
+                for row in 0..<height {
+                    memcpy(dstAddr + row * dstBPR, srcAddr + row * srcBPR, copyBPR)
+                }
+            }
+        }
+
+        return dest
+    }
+
     private func configurePhotoConnectionForCurrentOrientation() {
         guard let connection = photoOutput.connection(with: .video) else { return }
 
@@ -841,7 +901,16 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
         let orientedImageSize = Self.orientedImageSize(for: rawImageSize, orientation: orientation)
 
         onFrameUpdate?(state, keypoints, orientedImageSize)
-        onRealtimeFrame?(keypoints, sampleBuffer)
+
+        // Deep-copy pixel buffer so the original CMSampleBuffer (and its pool-backed
+        // pixel buffer) is released when this callback returns. Only copy when keypoints
+        // are detected, since the 3D pipeline requires keypoints to trigger.
+        let copiedBuffer: CVPixelBuffer? = if !keypoints.isEmpty {
+            Self.copyPixelBuffer(pixelBuffer)
+        } else {
+            nil
+        }
+        onRealtimeFrame?(keypoints, copiedBuffer)
     }
 
     /// Compute average luminance from Y plane of pixel buffer.
