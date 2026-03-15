@@ -18,10 +18,6 @@ extension AppTheme {
             "Arctic"
         case .solarPop:
             "Solar"
-        case .shanksRed:
-            "Shanks"
-        case .hanok:
-            "Hanok"
         }
     }
 
@@ -170,44 +166,6 @@ extension AppTheme {
     var solarGlowColor: Color { Color("SolarGlow") }
 }
 
-// MARK: - Shanks Wave-Specific Colors
-
-extension AppTheme {
-    /// Deep dark layer (back) — pirate flag black.
-    var shanksDeepColor: Color { Color("ShanksDeep") }
-
-    /// Core crimson layer (mid) — blood red.
-    var shanksCoreColor: Color { Color("ShanksCore") }
-
-    /// Bright scarlet layer (front) — red hair glow.
-    var shanksGlowColor: Color { Color("ShanksGlow") }
-
-    /// Abyss blue-black for the cinematic ocean base.
-    var shanksAbyssColor: Color { Color("ShanksAbyss") }
-
-    /// Mid-water current color used by the sea body.
-    var shanksCurrentColor: Color { Color("ShanksCurrent") }
-
-    /// Bright foam highlight for the surface band.
-    var shanksFoamColor: Color { Color("ShanksFoam") }
-
-    /// Underwater caustic highlight color.
-    var shanksCausticColor: Color { Color("ShanksCaustic") }
-}
-
-// MARK: - Hanok Wave-Specific Colors
-
-extension AppTheme {
-    /// Deep giwa (기와) layer color (back).
-    var hanokDeepColor: Color { Color("HanokDeep") }
-
-    /// Mid changho (창호) layer color.
-    var hanokMidColor: Color { Color("HanokMid") }
-
-    /// Light hanji (한지) mist layer color (front).
-    var hanokMistColor: Color { Color("HanokMist") }
-}
-
 // MARK: - Score Colors
 
 extension AppTheme {
@@ -309,7 +267,7 @@ extension AppTheme {
     /// Whether this theme uses a glass-style card border with custom surface gradients.
     var usesGlassBorder: Bool {
         switch self {
-        case .sakuraCalm, .arcticDawn, .solarPop, .hanok, .shanksRed: true
+        case .sakuraCalm, .arcticDawn, .solarPop: true
         case .desertWarm, .oceanCool, .forestGreen: false
         }
     }
@@ -334,8 +292,6 @@ extension AppTheme {
         case .sakuraCalm:  String(localized: "Sakura Calm")
         case .arcticDawn:  String(localized: "Arctic Dawn")
         case .solarPop:    String(localized: "Solar Pop")
-        case .shanksRed:   String(localized: "Shanks Red")
-        case .hanok:       "Hanok"
         }
     }
 }
