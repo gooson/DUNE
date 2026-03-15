@@ -433,6 +433,85 @@ struct PostureAnalysisService: Sendable {
         }
     }
 
+    // MARK: - Realtime 2D Angle Estimation
+
+    /// Estimate key angles from 2D normalized keypoints (Vision coordinates, origin bottom-left).
+    /// Less accurate than 3D analysis (no depth) — confidence capped at 0.5.
+    func estimateAnglesFrom2D(keypoints: [(String, CGPoint)]) -> [RealtimeAngle] {
+        let kp = Dictionary(keypoints, uniquingKeysWith: { _, last in last })
+        var angles: [RealtimeAngle] = []
+
+        // Left knee angle
+        if let hip = kp["leftHip"], let knee = kp["leftKnee"], let ankle = kp["leftAnkle"] {
+            let deg = angle2D(a: hip, vertex: knee, c: ankle)
+            guard deg.isFinite else { return angles }
+            let status = classifyKneeAngle(deg)
+            angles.append(RealtimeAngle(
+                type: .leftKnee, degrees: deg, status: status,
+                jointName: "leftKnee"
+            ))
+        }
+
+        // Right knee angle
+        if let hip = kp["rightHip"], let knee = kp["rightKnee"], let ankle = kp["rightAnkle"] {
+            let deg = angle2D(a: hip, vertex: knee, c: ankle)
+            guard deg.isFinite else { return angles }
+            let status = classifyKneeAngle(deg)
+            angles.append(RealtimeAngle(
+                type: .rightKnee, degrees: deg, status: status,
+                jointName: "rightKnee"
+            ))
+        }
+
+        // Shoulder tilt (y-difference as proxy for asymmetry)
+        if let left = kp["leftShoulder"], let right = kp["rightShoulder"] {
+            let tiltDeg = abs(left.y - right.y) * 180 // normalized → rough deviation proxy
+            guard tiltDeg.isFinite else { return angles }
+            let status: PostureStatus = tiltDeg <= 3 ? .normal : tiltDeg <= 8 ? .caution : .warning
+            angles.append(RealtimeAngle(
+                type: .shoulderTilt, degrees: tiltDeg, status: status,
+                jointName: "leftShoulder"
+            ))
+        }
+
+        // Trunk lean (head vs mid-hip lateral offset)
+        if let nose = kp["nose"],
+           let leftHip = kp["leftHip"], let rightHip = kp["rightHip"] {
+            let midHipX = (leftHip.x + rightHip.x) / 2
+            let leanDeg = abs(nose.x - midHipX) * 180
+            guard leanDeg.isFinite else { return angles }
+            let status: PostureStatus = leanDeg <= 3 ? .normal : leanDeg <= 8 ? .caution : .warning
+            angles.append(RealtimeAngle(
+                type: .trunkLean, degrees: leanDeg, status: status,
+                jointName: "nose"
+            ))
+        }
+
+        return angles
+    }
+
+    /// 2D angle in degrees at vertex formed by points a, vertex, c.
+    private func angle2D(a: CGPoint, vertex: CGPoint, c: CGPoint) -> Double {
+        let ba = CGVector(dx: a.x - vertex.x, dy: a.y - vertex.y)
+        let bc = CGVector(dx: c.x - vertex.x, dy: c.y - vertex.y)
+
+        let dot = ba.dx * bc.dx + ba.dy * bc.dy
+        let magA = sqrt(ba.dx * ba.dx + ba.dy * ba.dy)
+        let magC = sqrt(bc.dx * bc.dx + bc.dy * bc.dy)
+        guard magA > 0, magC > 0 else { return 0 }
+
+        let cosAngle = max(-1, min(1, dot / (magA * magC)))
+        return acos(cosAngle) * (180.0 / .pi)
+    }
+
+    /// Classify knee angle from 2D estimation.
+    private func classifyKneeAngle(_ degrees: Double) -> PostureStatus {
+        // Standing: ~170-180°. Lower = more flexion
+        if degrees >= 165 { return .normal }
+        if degrees >= 140 { return .caution }
+        return .warning
+    }
+
     // MARK: - Left-Right Symmetry Detail
 
     /// Detailed left-right comparison for symmetry analysis view.
