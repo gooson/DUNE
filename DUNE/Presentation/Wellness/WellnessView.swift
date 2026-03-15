@@ -131,7 +131,8 @@ struct WellnessView: View {
 
                         // Posture Assessment (isolated @Query)
                         PostureAssessmentLinkView(
-                            onCapture: { isShowingPostureCapture = true }
+                            onCapture: { isShowingPostureCapture = true },
+                            onScoreUpdate: { viewModel.postureScore = $0 }
                         )
 
                         // Injury Banner (isolated @Query — re-renders independently)
@@ -466,6 +467,7 @@ private struct PostureAssessmentLinkView: View {
     @Environment(\.appTheme) private var theme
 
     let onCapture: () -> Void
+    var onScoreUpdate: ((Int?) -> Void)?
 
     var body: some View {
         StandardCard {
@@ -554,6 +556,12 @@ private struct PostureAssessmentLinkView: View {
                     }
                 }
             }
+        }
+        .task {
+            onScoreUpdate?(records.first?.overallScore)
+        }
+        .onChange(of: records.first?.overallScore) { _, newValue in
+            onScoreUpdate?(newValue)
         }
     }
 

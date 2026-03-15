@@ -21,6 +21,7 @@ final class WellnessViewModel {
     var conditionScore: Int?
     var bodyScore: Int?
     var bodyScoreDetail: BodyScoreDetail?
+    var postureScore: Int?
 
     // Full condition score for detail navigation
     var conditionScoreFull: ConditionScore?
@@ -421,7 +422,8 @@ final class WellnessViewModel {
         wellnessScore = wellnessScoreUseCase.execute(input: .init(
             sleepScore: sleepScore,
             conditionScore: conditionScore,
-            bodyTrend: bodyTrend
+            bodyTrend: bodyTrend,
+            postureScore: postureScore
         ))
         WidgetDataWriter.writeWellnessScore(wellnessScore)
 
