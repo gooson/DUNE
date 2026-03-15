@@ -1,6 +1,7 @@
 #if !os(visionOS)
 import AVFoundation
 import Foundation
+import os
 import UIKit
 @preconcurrency import Vision
 
@@ -340,7 +341,10 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
     /// by decoding through UIImage to bake EXIF orientation into pixel data,
     /// then downscaling and re-encoding as JPEG.
     private func compressOrientedData(_ fileData: Data) -> Data? {
-        guard let uiImage = UIImage(data: fileData) else { return nil }
+        guard let uiImage = UIImage(data: fileData) else {
+            AppLogger.data.warning("[PostureCapture] compressOrientedData: failed to decode JPEG (\(fileData.count) bytes)")
+            return nil
+        }
         let scaled = downscaled(uiImage, maxDimension: Self.maxImageDimension)
         return scaled.jpegData(compressionQuality: Self.jpegCompressionQuality)
     }

@@ -78,6 +78,7 @@ struct ZoomablePostureImageView: View {
 
     private let minScale: CGFloat = 1.0
     private let maxScale: CGFloat = 5.0
+    private let doubleTapScale: CGFloat = 3.0
 
     var body: some View {
         NavigationStack {
@@ -139,8 +140,8 @@ struct ZoomablePostureImageView: View {
                                 offset = .zero
                                 lastOffset = .zero
                             } else {
-                                scale = 3.0
-                                lastScale = 3.0
+                                scale = doubleTapScale
+                                lastScale = doubleTapScale
                             }
                         }
                     }
@@ -166,6 +167,8 @@ struct ZoomablePostureImageView: View {
     }
 
     private func computeFittedSize(imageSize: CGSize, containerSize: CGSize) -> CGSize {
+        guard imageSize.height > 0, imageSize.width > 0,
+              containerSize.height > 0, containerSize.width > 0 else { return containerSize }
         let imageAspect = imageSize.width / imageSize.height
         let containerAspect = containerSize.width / containerSize.height
         if imageAspect > containerAspect {

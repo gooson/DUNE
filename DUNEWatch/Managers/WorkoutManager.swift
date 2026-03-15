@@ -682,9 +682,8 @@ final class WorkoutManager: NSObject {
         // Track current exercise identity before swap
         let currentEntryID = snapshot.entries[currentExerciseIndex].id
 
-        // Swap entries
+        // Swap entries in local copy (publish to observers only after all arrays are synced)
         snapshot.entries.swapAt(index, targetIndex)
-        templateSnapshot = snapshot
 
         // Pad completedSetsData to match entries count before swap
         let entryCount = snapshot.entries.count
@@ -706,6 +705,8 @@ final class WorkoutManager: NSObject {
             currentExerciseIndex = newIndex
         }
 
+        // Publish snapshot after all companion arrays are synced
+        templateSnapshot = snapshot
         persistRecoveryState()
     }
 

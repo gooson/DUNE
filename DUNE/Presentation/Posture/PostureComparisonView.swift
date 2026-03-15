@@ -161,14 +161,11 @@ struct PostureComparisonView: View {
                     }
                     .contentShape(Rectangle())
                     .onTapGesture {
-                        zoomImage = ZoomableImageItem(
+                        zoomImage = .make(
                             uiImage: uiImage,
                             joints: displayJoints,
                             metrics: metrics,
-                            captureType: captureType,
-                            label: captureType == .front
-                                ? String(localized: "Front")
-                                : String(localized: "Side")
+                            captureType: captureType
                         )
                     }
             } else {
