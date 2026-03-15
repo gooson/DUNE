@@ -20,6 +20,7 @@ struct TemplateWorkoutView: View {
     @State private var effortSuggestion: EffortSuggestion?
     @State private var saveCount = 0
     @State private var showTransition = false
+    @State private var showingReorderSheet = false
 
     @Query private var exerciseRecords: [ExerciseRecord]
 
@@ -82,6 +83,12 @@ struct TemplateWorkoutView: View {
                     Button("Done") { finishWorkout() }
                         .fontWeight(.semibold)
                         .disabled(!viewModel.hasAnyCompleted)
+                } else if viewModel.canReorderExercises {
+                    Button {
+                        showingReorderSheet = true
+                    } label: {
+                        Image(systemName: "arrow.up.arrow.down")
+                    }
                 }
             }
         }
@@ -107,6 +114,10 @@ struct TemplateWorkoutView: View {
             Button("OK") { viewModel.validationError = nil }
         } message: {
             Text(viewModel.validationError ?? "")
+        }
+        .sheet(isPresented: $showingReorderSheet) {
+            ExerciseReorderSheet(viewModel: viewModel)
+                .presentationDetents([.medium, .large])
         }
         .sheet(isPresented: $showingCompletionSheet, onDismiss: { dismiss() }) {
             WorkoutCompletionSheet(
@@ -151,7 +162,7 @@ struct TemplateWorkoutView: View {
             // Exercise tabs
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: DS.Spacing.sm) {
-                    ForEach(config.exercises.indices, id: \.self) { index in
+                    ForEach(viewModel.exercises.indices, id: \.self) { index in
                         exerciseTab(index: index)
                     }
                 }
@@ -160,7 +171,7 @@ struct TemplateWorkoutView: View {
     }
 
     private func exerciseTab(index: Int) -> some View {
-        let exercise = config.exercises[index]
+        let exercise = viewModel.exercises[index]
         let status = viewModel.exerciseStatuses[index]
         let isCurrent = index == viewModel.currentExerciseIndex
 
