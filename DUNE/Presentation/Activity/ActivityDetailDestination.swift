@@ -3,6 +3,7 @@ import Foundation
 /// Navigation destinations for Activity tab detail views.
 enum ActivityDetailDestination: Hashable {
     case muscleMap
+    case muscleMap3D
     case personalRecords
     case consistency
     case exerciseMix
