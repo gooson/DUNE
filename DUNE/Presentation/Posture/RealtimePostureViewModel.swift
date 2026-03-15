@@ -2,6 +2,7 @@
 import AVFoundation
 import Foundation
 import Observation
+import UIKit
 
 // MARK: - ViewModel
 
@@ -15,9 +16,11 @@ final class RealtimePostureViewModel {
     var currentAngles: [RealtimeAngle] = []
     var smoothedScore: Int = 0
     var skeletonKeypoints: [(String, CGPoint)] = []
+    var skeletonImageSize: CGSize = .zero
     var guidanceState = GuidanceState()
     var is3DActive: Bool = false
     var cameraPosition: CameraPosition = .back
+    var deviceOrientation: UIDeviceOrientation = .portrait
 
     // MARK: - Dependencies
 
@@ -25,6 +28,7 @@ final class RealtimePostureViewModel {
     private let tracker: RealtimePoseTracker
 
     var captureSession: AVCaptureSession { captureService.captureSession }
+    var captureServiceDevice: AVCaptureDevice? { captureService.currentDevice }
 
     // MARK: - Init
 
@@ -38,11 +42,13 @@ final class RealtimePostureViewModel {
         do {
             let position: AVCaptureDevice.Position = cameraPosition == .front ? .front : .back
             try captureService.setupCamera(position: position)
+            captureService.updateDeviceOrientation(deviceOrientation)
 
             // Setup guidance callbacks (same as capture mode)
-            captureService.onFrameUpdate = { [weak self] state, _ in
+            captureService.onFrameUpdate = { [weak self] state, _, imageSize in
                 Task { @MainActor [weak self] in
                     self?.guidanceState = state
+                    self?.skeletonImageSize = imageSize
                 }
             }
 
@@ -75,6 +81,16 @@ final class RealtimePostureViewModel {
         start()
     }
 
+    func updateDeviceOrientation(_ orientation: UIDeviceOrientation) {
+        guard orientation.isValidInterfaceOrientation else { return }
+        deviceOrientation = orientation
+        captureService.updateDeviceOrientation(orientation)
+    }
+
+    func updatePreviewRotationAngle(_ angle: CGFloat) {
+        captureService.updatePreviewRotationAngle(angle)
+    }
+
     // MARK: - State Application
 
     private func applyState(_ state: RealtimePoseState) {
@@ -82,6 +98,17 @@ final class RealtimePostureViewModel {
         smoothedScore = state.smoothedScore
         skeletonKeypoints = state.skeletonKeypoints
         is3DActive = state.is3DActive
+    }
+}
+
+private extension UIDeviceOrientation {
+    var isValidInterfaceOrientation: Bool {
+        switch self {
+        case .portrait, .portraitUpsideDown, .landscapeLeft, .landscapeRight:
+            return true
+        default:
+            return false
+        }
     }
 }
 #endif

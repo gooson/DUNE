@@ -352,6 +352,7 @@
 		4E6A7116D6A50AEBFF45F70E /* PeriodComparisonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6C7C5B1170C93529074C33 /* PeriodComparisonTests.swift */; };
 		4E92D970187EF598460C98D6 /* HRVQueryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB0F8D9854042BBD7FCDAEF /* HRVQueryService.swift */; };
 		4EAB81E303563EEE850634FB /* FatigueAlgorithmSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C7D2F9B9998008E5FCC798B /* FatigueAlgorithmSheet.swift */; };
+		4F5184C5B207FA1FED6349A5 /* PostureImageMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81440D3DF6BC43A1AA619A64 /* PostureImageMetadata.swift */; };
 		4F624EF783FACC53E08F636A /* PersonalRecordServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 591E5D2B9C33E4EEE5BB73E8 /* PersonalRecordServiceTests.swift */; };
 		4F8F2ED246CF4962CC5F46E0 /* MetricHighlightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8116CDD0E5D63DDE1F0E9506 /* MetricHighlightsView.swift */; };
 		4FE918597CF533DA5FB7DF80 /* TrendDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F6B46502897A67A5ADCB458 /* TrendDirection.swift */; };
@@ -574,6 +575,7 @@
 		8CCDE878E0A6405A04F565F4 /* WorkoutSessionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E882D53E292E133616B49E7F /* WorkoutSessionViewModel.swift */; };
 		8CEE3730928D8E2A41AA438F /* SakuraBranchShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6F31E1186A8F5ADB9E6AA74 /* SakuraBranchShape.swift */; };
 		8D4DA9B1C2EEB006C56041F7 /* WorkoutMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76CF9FCAF3F58BB28A805F26 /* WorkoutMode.swift */; };
+		8D6CC1F819F552765BB4A8AD /* PostureImageMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81440D3DF6BC43A1AA619A64 /* PostureImageMetadata.swift */; };
 		8DB4E592778F3866B8A96323 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCE1A4E28D7EBDE8CCE21DC /* SettingsView.swift */; };
 		8DF11125145F337CECC47AAB /* OceanWaveBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = B55B45AB2FE85038325352A1 /* OceanWaveBackground.swift */; };
 		8E107781CD1727C7378EAEB5 /* HourlySparklineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1F028A1EC1439D13867E8C2 /* HourlySparklineView.swift */; };
@@ -1569,6 +1571,7 @@
 		805BE0A77A9483D9EBD405DD /* DUNEApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DUNEApp.swift; sourceTree = "<group>"; };
 		80B5A9B59379F065EF3695D5 /* SpatialTrainingAnalyzerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpatialTrainingAnalyzerTests.swift; sourceTree = "<group>"; };
 		8116CDD0E5D63DDE1F0E9506 /* MetricHighlightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricHighlightsView.swift; sourceTree = "<group>"; };
+		81440D3DF6BC43A1AA619A64 /* PostureImageMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostureImageMetadata.swift; sourceTree = "<group>"; };
 		8145B825EB89E83F3FF7278D /* BackgroundNotificationEvaluator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundNotificationEvaluator.swift; sourceTree = "<group>"; };
 		817CA990C629A95CC2FDA761 /* WatchLibrarySyncRequestPolicyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchLibrarySyncRequestPolicyTests.swift; sourceTree = "<group>"; };
 		81DC50D026AAB2A8B7A9DD4D /* FatigueLegendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FatigueLegendView.swift; sourceTree = "<group>"; };
@@ -3373,6 +3376,7 @@
 				1A72F9D5496419C6A5E27102 /* PersonalRecord.swift */,
 				427C7E6163F6AEC8A616164A /* PostureAssessment.swift */,
 				97229649292300FF49970026 /* PostureGuidance.swift */,
+				81440D3DF6BC43A1AA619A64 /* PostureImageMetadata.swift */,
 				493F8560505E080F4EE6706A /* PostureMetric.swift */,
 				B272A719E42194AD3662924B /* RealtimePoseState.swift */,
 				46EF849C02D1DA6C830471C9 /* ScoreContribution.swift */,
@@ -4405,6 +4409,7 @@
 				B5DCF7C7C3433A6387C549A5 /* PostureGuidanceAnalyzer.swift in Sources */,
 				95F15E787AB5E571EE87FF67 /* PostureHistoryView.swift in Sources */,
 				2140C066D37A2D563B782091 /* PostureHistoryViewModel.swift in Sources */,
+				8D6CC1F819F552765BB4A8AD /* PostureImageMetadata.swift in Sources */,
 				F0C4F8E02A623B461094DDA5 /* PostureMetric+View.swift in Sources */,
 				5D60DA6C095553CBC89AEEE9 /* PostureMetric.swift in Sources */,
 				1574FCAEC67C49A685C2428E /* PostureReminderScheduler.swift in Sources */,
@@ -4734,6 +4739,7 @@
 				1E736D693F9E783B477486DD /* PostureCaptureService.swift in Sources */,
 				786738EECEE53B6AF7FC3F4F /* PostureGuidance.swift in Sources */,
 				B647AA54D58A0B16F0F7F4FE /* PostureGuidanceAnalyzer.swift in Sources */,
+				4F5184C5B207FA1FED6349A5 /* PostureImageMetadata.swift in Sources */,
 				09A853054E15B5E46312B51F /* PostureMetric.swift in Sources */,
 				8CC55BD7F8766D4466727E00 /* PostureReminderScheduler.swift in Sources */,
 				99A7AE6429C9BDAB3976364F /* PredictSleepQualityUseCase.swift in Sources */,

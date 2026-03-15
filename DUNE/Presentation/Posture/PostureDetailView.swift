@@ -131,10 +131,10 @@ struct PostureDetailView: View {
         metrics: [PostureMetricResult]
     ) -> some View {
         VStack(spacing: DS.Spacing.sm) {
-            if let imageData, let rawImage = UIImage(data: imageData) {
-                let needsCorrection = rawImage.needsPostureOrientationCorrection
-                let uiImage = needsCorrection ? rawImage.postureOrientationCorrected : rawImage
-                let displayJoints = needsCorrection ? postureOrientationCorrectedJoints(joints) : joints
+            if let imageData,
+               let displayContext = postureImageDisplayContext(imageData: imageData, joints: joints) {
+                let uiImage = displayContext.uiImage
+                let displayJoints = displayContext.joints
 
                 Image(uiImage: uiImage)
                     .resizable()

@@ -13,7 +13,10 @@ struct RealtimePostureView: View {
                 // Camera preview
                 CameraPreviewView(
                     session: viewModel.captureSession,
-                    isMirrored: viewModel.cameraPosition == .front
+                    captureDevice: viewModel.captureServiceDevice,
+                    isMirrored: viewModel.cameraPosition == .front,
+                    deviceOrientation: viewModel.deviceOrientation,
+                    onPreviewRotationAngleChange: viewModel.updatePreviewRotationAngle
                 )
                 .ignoresSafeArea()
 
@@ -23,6 +26,7 @@ struct RealtimePostureView: View {
                         captureType: .front,
                         guidanceState: viewModel.guidanceState,
                         skeletonKeypoints: viewModel.skeletonKeypoints,
+                        sourceImageSize: viewModel.skeletonImageSize,
                         isFrontCamera: viewModel.cameraPosition == .front
                     )
                 }
@@ -77,6 +81,10 @@ struct RealtimePostureView: View {
                     }
                     .accessibilityLabel(Text("Switch camera"))
                 }
+            }
+            .task { viewModel.updateDeviceOrientation(UIDevice.current.orientation) }
+            .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
+                viewModel.updateDeviceOrientation(UIDevice.current.orientation)
             }
             .task { viewModel.start() }
             .onDisappear { viewModel.stop() }

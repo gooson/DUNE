@@ -1,11 +1,12 @@
 import SwiftUI
+import ImageIO
 
 // MARK: - Posture Image Orientation Correction
 
 extension UIImage {
-    /// Whether this posture image has incorrect landscape orientation
-    /// (old capture pipeline baked landscape pixels without EXIF metadata).
-    var needsPostureOrientationCorrection: Bool {
+    /// Old posture photos were stored as landscape pixels without a marker that
+    /// they had already been normalized.
+    var needsLegacyPostureOrientationCorrection: Bool {
         size.width > size.height
     }
 
@@ -14,8 +15,42 @@ extension UIImage {
     /// baking landscape pixels for portrait front-camera captures.
     /// Detects landscape dimensions and rotates 90° CW to restore portrait.
     var postureOrientationCorrected: UIImage {
-        guard needsPostureOrientationCorrection, let cgImage else { return self }
+        guard needsLegacyPostureOrientationCorrection, let cgImage else { return self }
         return UIImage(cgImage: cgImage, scale: scale, orientation: .right)
+    }
+}
+
+struct PostureImageDisplayContext {
+    let uiImage: UIImage
+    let joints: [JointPosition3D]
+}
+
+func postureImageDisplayContext(
+    imageData: Data,
+    joints: [JointPosition3D]
+) -> PostureImageDisplayContext? {
+    guard let rawImage = UIImage(data: imageData) else { return nil }
+
+    let needsLegacyCorrection =
+        !imageData.hasNormalizedPostureMarker &&
+        rawImage.needsLegacyPostureOrientationCorrection
+
+    return PostureImageDisplayContext(
+        uiImage: needsLegacyCorrection ? rawImage.postureOrientationCorrected : rawImage,
+        joints: needsLegacyCorrection ? postureOrientationCorrectedJoints(joints) : joints
+    )
+}
+
+private extension Data {
+    var hasNormalizedPostureMarker: Bool {
+        guard let source = CGImageSourceCreateWithData(self as CFData, nil),
+              let properties = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [String: Any],
+              let tiff = properties[kCGImagePropertyTIFFDictionary as String] as? [String: Any],
+              let software = tiff[kCGImagePropertyTIFFSoftware as String] as? String else {
+            return false
+        }
+
+        return software == PostureImageMetadata.uprightJPEGSoftwareMarker
     }
 }
 

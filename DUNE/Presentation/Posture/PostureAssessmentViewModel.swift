@@ -3,6 +3,7 @@ import AVFoundation
 import AVFAudio
 import Foundation
 import Observation
+import UIKit
 
 // MARK: - Capture Phase
 
@@ -46,6 +47,8 @@ final class PostureAssessmentViewModel {
 
     /// Real-time 2D skeleton keypoints for preview overlay (normalized 0-1, origin bottom-left).
     var skeletonKeypoints: [(String, CGPoint)] = []
+    var skeletonImageSize: CGSize = .zero
+    var deviceOrientation: UIDeviceOrientation = .portrait
 
     // MARK: - Haptic Triggers
 
@@ -91,6 +94,7 @@ final class PostureAssessmentViewModel {
     private let analysisService = PostureAnalysisService()
 
     var captureSession: AVCaptureSession { captureService.captureSession }
+    var captureServiceDevice: AVCaptureDevice? { captureService.currentDevice }
 
     // MARK: - Init
 
@@ -104,6 +108,7 @@ final class PostureAssessmentViewModel {
         do {
             let position: AVCaptureDevice.Position = cameraPosition == .front ? .front : .back
             try captureService.setupCamera(position: position)
+            captureService.updateDeviceOrientation(deviceOrientation)
             setupGuidanceCallbacks()
             captureService.startSession()
             capturePhase = .preparing
@@ -128,9 +133,11 @@ final class PostureAssessmentViewModel {
         isManualCountdown = false
         guidanceState = GuidanceState()
         skeletonKeypoints = []
+        skeletonImageSize = .zero
 
         do {
             try captureService.switchCamera()
+            captureService.updateDeviceOrientation(deviceOrientation)
             cameraPosition = captureService.currentPosition == .front ? .front : .back
             setupGuidanceCallbacks()
             capturePhase = .preparing
@@ -142,13 +149,24 @@ final class PostureAssessmentViewModel {
     // MARK: - Guidance Callbacks
 
     private func setupGuidanceCallbacks() {
-        captureService.onFrameUpdate = { [weak self] state, keypoints in
+        captureService.onFrameUpdate = { [weak self] state, keypoints, imageSize in
             Task { @MainActor [weak self] in
                 self?.guidanceState = state
                 self?.skeletonKeypoints = keypoints
+                self?.skeletonImageSize = imageSize
                 self?.handleAutoCapture(state)
             }
         }
+    }
+
+    func updateDeviceOrientation(_ orientation: UIDeviceOrientation) {
+        guard orientation.isValidInterfaceOrientation else { return }
+        deviceOrientation = orientation
+        captureService.updateDeviceOrientation(orientation)
+    }
+
+    func updatePreviewRotationAngle(_ angle: CGFloat) {
+        captureService.updatePreviewRotationAngle(angle)
     }
 
     private func handleAutoCapture(_ state: GuidanceState) {
@@ -274,6 +292,7 @@ final class PostureAssessmentViewModel {
         captureType = .side
         guidanceState = GuidanceState()
         skeletonKeypoints = []
+        skeletonImageSize = .zero
         autoReadyStartTime = nil
         capturePhase = .preparing
     }
@@ -294,6 +313,7 @@ final class PostureAssessmentViewModel {
         )
         guidanceState = GuidanceState()
         skeletonKeypoints = []
+        skeletonImageSize = .zero
         autoReadyStartTime = nil
         capturePhase = .preparing
     }
@@ -313,6 +333,7 @@ final class PostureAssessmentViewModel {
         isSaving = false
         guidanceState = GuidanceState()
         skeletonKeypoints = []
+        skeletonImageSize = .zero
         capturePhase = .idle
     }
 
@@ -377,6 +398,17 @@ final class PostureAssessmentViewModel {
             String(localized: "Could not detect body pose clearly. Please try again in better lighting")
         case .imageConversionFailed:
             String(localized: "Failed to process the captured image")
+        }
+    }
+}
+
+private extension UIDeviceOrientation {
+    var isValidInterfaceOrientation: Bool {
+        switch self {
+        case .portrait, .portraitUpsideDown, .landscapeLeft, .landscapeRight:
+            return true
+        default:
+            return false
         }
     }
 }

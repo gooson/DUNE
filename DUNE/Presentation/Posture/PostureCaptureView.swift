@@ -12,7 +12,10 @@ struct PostureCaptureView: View {
             ZStack {
                 CameraPreviewView(
                     session: viewModel.captureSession,
-                    isMirrored: viewModel.cameraPosition == .front
+                    captureDevice: viewModel.captureServiceDevice,
+                    isMirrored: viewModel.cameraPosition == .front,
+                    deviceOrientation: viewModel.deviceOrientation,
+                    onPreviewRotationAngleChange: viewModel.updatePreviewRotationAngle
                 )
                 .ignoresSafeArea()
                 .accessibilityLabel(Text("Camera preview for posture assessment"))
@@ -31,6 +34,10 @@ struct PostureCaptureView: View {
                 }
             }
             .task { viewModel.setupCamera() }
+            .task { viewModel.updateDeviceOrientation(UIDevice.current.orientation) }
+            .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
+                viewModel.updateDeviceOrientation(UIDevice.current.orientation)
+            }
             .onDisappear { viewModel.stopCamera() }
             .sensoryFeedback(.impact(weight: .light), trigger: viewModel.hapticCountdown)
             .sensoryFeedback(.success, trigger: viewModel.hapticSuccessCount)
@@ -102,6 +109,7 @@ struct PostureCaptureView: View {
                 captureType: viewModel.captureType,
                 guidanceState: viewModel.guidanceState,
                 skeletonKeypoints: viewModel.skeletonKeypoints,
+                sourceImageSize: viewModel.skeletonImageSize,
                 isFrontCamera: viewModel.cameraPosition == .front
             )
 
@@ -214,6 +222,7 @@ struct PostureCaptureView: View {
                 captureType: viewModel.captureType,
                 guidanceState: viewModel.guidanceState,
                 skeletonKeypoints: viewModel.skeletonKeypoints,
+                sourceImageSize: viewModel.skeletonImageSize,
                 isFrontCamera: viewModel.cameraPosition == .front
             )
 
@@ -281,30 +290,70 @@ struct PostureCaptureView: View {
 
 struct CameraPreviewView: UIViewRepresentable {
     let session: AVCaptureSession
+    let captureDevice: AVCaptureDevice?
     var isMirrored: Bool = true
+    var deviceOrientation: UIDeviceOrientation = .portrait
+    var onPreviewRotationAngleChange: ((CGFloat) -> Void)?
 
     func makeUIView(context: Context) -> CameraPreviewUIView {
         let view = CameraPreviewUIView()
-        view.previewLayer.session = session
-        view.previewLayer.videoGravity = .resizeAspectFill
+        view.updatePreview(
+            session: session,
+            captureDevice: captureDevice,
+            isMirrored: isMirrored,
+            onPreviewRotationAngleChange: onPreviewRotationAngleChange
+        )
         return view
     }
 
     func updateUIView(_ uiView: CameraPreviewUIView, context: Context) {
-        if let connection = uiView.previewLayer.connection {
-            // Front camera preview should be mirrored (natural selfie view)
-            // Back camera preview should not be mirrored
-            connection.automaticallyAdjustsVideoMirroring = false
-            connection.isVideoMirrored = isMirrored
-        }
+        _ = deviceOrientation
+        uiView.updatePreview(
+            session: session,
+            captureDevice: captureDevice,
+            isMirrored: isMirrored,
+            onPreviewRotationAngleChange: onPreviewRotationAngleChange
+        )
     }
 }
 
 final class CameraPreviewUIView: UIView {
+    private var rotationCoordinator: AVCaptureDevice.RotationCoordinator?
+    private var lastReportedPreviewRotationAngle: CGFloat?
+
     override class var layerClass: AnyClass { AVCaptureVideoPreviewLayer.self }
 
     var previewLayer: AVCaptureVideoPreviewLayer {
         layer as! AVCaptureVideoPreviewLayer
+    }
+
+    func updatePreview(
+        session: AVCaptureSession,
+        captureDevice: AVCaptureDevice?,
+        isMirrored: Bool,
+        onPreviewRotationAngleChange: ((CGFloat) -> Void)?
+    ) {
+        previewLayer.session = session
+        previewLayer.videoGravity = .resizeAspectFill
+
+        if rotationCoordinator?.device !== captureDevice {
+            rotationCoordinator = captureDevice.map {
+                AVCaptureDevice.RotationCoordinator(device: $0, previewLayer: previewLayer)
+            }
+        }
+
+        guard let connection = previewLayer.connection else { return }
+        connection.automaticallyAdjustsVideoMirroring = false
+        connection.isVideoMirrored = isMirrored
+
+        let angle = rotationCoordinator?.videoRotationAngleForHorizonLevelPreview ?? 0
+        guard connection.isVideoRotationAngleSupported(angle) else { return }
+        connection.videoRotationAngle = angle
+
+        if lastReportedPreviewRotationAngle != angle {
+            lastReportedPreviewRotationAngle = angle
+            onPreviewRotationAngleChange?(angle)
+        }
     }
 }
 #endif
