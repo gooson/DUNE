@@ -47,6 +47,7 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
     private let orientationLock = NSLock()
     private var photoContinuation: CheckedContinuation<(CGImage, Data?), any Error>?
     private var currentDeviceOrientation: UIDeviceOrientation = .portrait
+    private var currentPreviewRotationAngle: CGFloat?
     private var rotationCoordinator: AVCaptureDevice.RotationCoordinator?
 
     // MARK: - Real-time Guidance
@@ -155,6 +156,13 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
         guard Self.isInterfaceOrientation(orientation) else { return }
         orientationLock.withLock {
             currentDeviceOrientation = orientation
+        }
+    }
+
+    func updatePreviewRotationAngle(_ angle: CGFloat) {
+        guard angle.isFinite else { return }
+        orientationLock.withLock {
+            currentPreviewRotationAngle = Self.normalizedRightAngle(from: angle)
         }
     }
 
@@ -613,6 +621,10 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
         orientationLock.withLock { currentDeviceOrientation }
     }
 
+    private var livePreviewRotationAngle: CGFloat? {
+        orientationLock.withLock { currentPreviewRotationAngle }
+    }
+
     private static func isInterfaceOrientation(_ orientation: UIDeviceOrientation) -> Bool {
         switch orientation {
         case .portrait, .portraitUpsideDown, .landscapeLeft, .landscapeRight:
@@ -635,6 +647,25 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
         default:
             return .right
         }
+    }
+
+    private static func liveVisionOrientation(forPreviewRotationAngle angle: CGFloat) -> CGImagePropertyOrientation {
+        switch Int(normalizedRightAngle(from: angle)) {
+        case 0:
+            return .up
+        case 180:
+            return .down
+        case 270:
+            return .left
+        default:
+            return .right
+        }
+    }
+
+    private static func normalizedRightAngle(from angle: CGFloat) -> CGFloat {
+        let normalized = angle.truncatingRemainder(dividingBy: 360)
+        let positive = normalized < 0 ? normalized + 360 : normalized
+        return (positive / 90).rounded() * 90
     }
 
     private static func orientedImageSize(
@@ -690,7 +721,14 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
         lastFrameAnalysisTime = now
 
         guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
-        let orientation = Self.liveVisionOrientation(for: liveDeviceOrientation)
+        let orientation: CGImagePropertyOrientation
+        if let previewRotationAngle = livePreviewRotationAngle {
+            orientation = Self.liveVisionOrientation(
+                forPreviewRotationAngle: previewRotationAngle
+            )
+        } else {
+            orientation = Self.liveVisionOrientation(for: liveDeviceOrientation)
+        }
         let handler = VNImageRequestHandler(
             cvPixelBuffer: pixelBuffer,
             orientation: orientation,

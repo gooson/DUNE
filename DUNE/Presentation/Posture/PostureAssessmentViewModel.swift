@@ -165,6 +165,10 @@ final class PostureAssessmentViewModel {
         captureService.updateDeviceOrientation(orientation)
     }
 
+    func updatePreviewRotationAngle(_ angle: CGFloat) {
+        captureService.updatePreviewRotationAngle(angle)
+    }
+
     private func handleAutoCapture(_ state: GuidanceState) {
         guard case .preparing = capturePhase else { return }
         guard isAutoCapture else { return }

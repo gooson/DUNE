@@ -14,7 +14,8 @@ struct PostureCaptureView: View {
                     session: viewModel.captureSession,
                     captureDevice: viewModel.captureServiceDevice,
                     isMirrored: viewModel.cameraPosition == .front,
-                    deviceOrientation: viewModel.deviceOrientation
+                    deviceOrientation: viewModel.deviceOrientation,
+                    onPreviewRotationAngleChange: viewModel.updatePreviewRotationAngle
                 )
                 .ignoresSafeArea()
                 .accessibilityLabel(Text("Camera preview for posture assessment"))
@@ -292,21 +293,33 @@ struct CameraPreviewView: UIViewRepresentable {
     let captureDevice: AVCaptureDevice?
     var isMirrored: Bool = true
     var deviceOrientation: UIDeviceOrientation = .portrait
+    var onPreviewRotationAngleChange: ((CGFloat) -> Void)?
 
     func makeUIView(context: Context) -> CameraPreviewUIView {
         let view = CameraPreviewUIView()
-        view.updatePreview(session: session, captureDevice: captureDevice, isMirrored: isMirrored)
+        view.updatePreview(
+            session: session,
+            captureDevice: captureDevice,
+            isMirrored: isMirrored,
+            onPreviewRotationAngleChange: onPreviewRotationAngleChange
+        )
         return view
     }
 
     func updateUIView(_ uiView: CameraPreviewUIView, context: Context) {
         _ = deviceOrientation
-        uiView.updatePreview(session: session, captureDevice: captureDevice, isMirrored: isMirrored)
+        uiView.updatePreview(
+            session: session,
+            captureDevice: captureDevice,
+            isMirrored: isMirrored,
+            onPreviewRotationAngleChange: onPreviewRotationAngleChange
+        )
     }
 }
 
 final class CameraPreviewUIView: UIView {
     private var rotationCoordinator: AVCaptureDevice.RotationCoordinator?
+    private var lastReportedPreviewRotationAngle: CGFloat?
 
     override class var layerClass: AnyClass { AVCaptureVideoPreviewLayer.self }
 
@@ -317,7 +330,8 @@ final class CameraPreviewUIView: UIView {
     func updatePreview(
         session: AVCaptureSession,
         captureDevice: AVCaptureDevice?,
-        isMirrored: Bool
+        isMirrored: Bool,
+        onPreviewRotationAngleChange: ((CGFloat) -> Void)?
     ) {
         previewLayer.session = session
         previewLayer.videoGravity = .resizeAspectFill
@@ -335,6 +349,11 @@ final class CameraPreviewUIView: UIView {
         let angle = rotationCoordinator?.videoRotationAngleForHorizonLevelPreview ?? 0
         guard connection.isVideoRotationAngleSupported(angle) else { return }
         connection.videoRotationAngle = angle
+
+        if lastReportedPreviewRotationAngle != angle {
+            lastReportedPreviewRotationAngle = angle
+            onPreviewRotationAngleChange?(angle)
+        }
     }
 }
 #endif
