@@ -193,6 +193,113 @@ struct PostureAnalysisServiceTests {
         #expect(score == 0)
     }
 
+    // MARK: - 2D Angle Estimation
+
+    @Test("Perfect standing 2D keypoints yield normal knee angles")
+    func perfectStanding2DKnees() {
+        // Straight standing posture (normalized Vision coords, origin bottom-left)
+        let keypoints: [(String, CGPoint)] = [
+            ("nose", CGPoint(x: 0.5, y: 0.95)),
+            ("leftShoulder", CGPoint(x: 0.4, y: 0.8)),
+            ("rightShoulder", CGPoint(x: 0.6, y: 0.8)),
+            ("leftHip", CGPoint(x: 0.42, y: 0.55)),
+            ("rightHip", CGPoint(x: 0.58, y: 0.55)),
+            ("leftKnee", CGPoint(x: 0.42, y: 0.3)),
+            ("rightKnee", CGPoint(x: 0.58, y: 0.3)),
+            ("leftAnkle", CGPoint(x: 0.42, y: 0.05)),
+            ("rightAnkle", CGPoint(x: 0.58, y: 0.05)),
+        ]
+
+        let angles = service.estimateAnglesFrom2D(keypoints: keypoints)
+        let leftKnee = angles.first { $0.type == .leftKnee }
+        let rightKnee = angles.first { $0.type == .rightKnee }
+
+        #expect(leftKnee?.status == .normal, "Straight knee should be normal")
+        #expect(rightKnee?.status == .normal, "Straight knee should be normal")
+        #expect((leftKnee?.degrees ?? 0) > 165, "Straight knee angle should be > 165°")
+    }
+
+    @Test("Bent knees yield caution or warning")
+    func bent2DKnees() {
+        // Knees significantly bent (squat-like)
+        let keypoints: [(String, CGPoint)] = [
+            ("nose", CGPoint(x: 0.5, y: 0.85)),
+            ("leftShoulder", CGPoint(x: 0.4, y: 0.75)),
+            ("rightShoulder", CGPoint(x: 0.6, y: 0.75)),
+            ("leftHip", CGPoint(x: 0.42, y: 0.55)),
+            ("rightHip", CGPoint(x: 0.58, y: 0.55)),
+            ("leftKnee", CGPoint(x: 0.35, y: 0.35)),   // Knee pushed forward
+            ("rightKnee", CGPoint(x: 0.65, y: 0.35)),
+            ("leftAnkle", CGPoint(x: 0.42, y: 0.05)),
+            ("rightAnkle", CGPoint(x: 0.58, y: 0.05)),
+        ]
+
+        let angles = service.estimateAnglesFrom2D(keypoints: keypoints)
+        let leftKnee = angles.first { $0.type == .leftKnee }
+
+        #expect(leftKnee != nil)
+        #expect(leftKnee?.status == .caution || leftKnee?.status == .warning)
+    }
+
+    @Test("Shoulder tilt detected in 2D")
+    func shoulderTilt2D() {
+        let keypoints: [(String, CGPoint)] = [
+            ("leftShoulder", CGPoint(x: 0.4, y: 0.82)),   // Higher
+            ("rightShoulder", CGPoint(x: 0.6, y: 0.75)),   // Lower — 0.07 diff
+        ]
+
+        let angles = service.estimateAnglesFrom2D(keypoints: keypoints)
+        let tilt = angles.first { $0.type == .shoulderTilt }
+
+        #expect(tilt != nil)
+        #expect(tilt?.status == .caution || tilt?.status == .warning)
+    }
+
+    @Test("Empty 2D keypoints produce no angles")
+    func empty2DKeypoints() {
+        let angles = service.estimateAnglesFrom2D(keypoints: [])
+        #expect(angles.isEmpty)
+    }
+
+    // MARK: - ScoreRingBuffer
+
+    @Test("Score ring buffer averages correctly")
+    func scoreRingBufferAverage() {
+        var buffer = ScoreRingBuffer(capacity: 5)
+        buffer.append(80)
+        buffer.append(90)
+        buffer.append(85)
+
+        #expect(buffer.average == 85) // (80+90+85)/3 = 85
+
+        buffer.append(70)
+        buffer.append(75)
+        #expect(buffer.average == 80) // (80+90+85+70+75)/5 = 80
+
+        // Overflow capacity — oldest replaced
+        buffer.append(100)
+        #expect(buffer.average == 84) // (100+90+85+70+75)/5 = 84
+    }
+
+    @Test("Score ring buffer replaceLast overwrites most recent")
+    func scoreRingBufferReplaceLast() {
+        var buffer = ScoreRingBuffer(capacity: 5)
+        buffer.append(80)
+        buffer.append(90)
+        buffer.replaceLast(100) // Replace 90 with 100
+        #expect(buffer.average == 90) // (80+100)/2 = 90
+    }
+
+    @Test("Score ring buffer reset clears values")
+    func scoreRingBufferReset() {
+        var buffer = ScoreRingBuffer(capacity: 5)
+        buffer.append(80)
+        buffer.append(90)
+        buffer.reset()
+
+        #expect(buffer.average == 0)
+    }
+
     // MARK: - Edge Cases
 
     @Test("NaN joint coordinates produce unmeasurable")
@@ -211,7 +318,7 @@ struct PostureAnalysisServiceTests {
     @Test("Infinity joint coordinates produce unmeasurable")
     func infinityCoordinates() {
         let joints = [
-            joint("leftShoulder", x: .infinity, y: 1.4, z: 0),
+            joint("leftShoulder", x: -0.2, y: .infinity, z: 0),
             joint("rightShoulder", x: 0.2, y: 1.4, z: 0),
         ]
 

@@ -1,3 +1,4 @@
+#if !os(visionOS)
 import Foundation
 import UserNotifications
 
@@ -71,3 +72,4 @@ final class PostureReminderScheduler {
         notificationScheduler.removePendingReminder(identifier: Constants.notificationIdentifier)
     }
 }
+#endif

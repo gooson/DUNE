@@ -62,3 +62,30 @@ enum VisionWindowPlacementPlanner {
         }
     }
 }
+
+struct VisionWindowPlacementSmokeConfiguration: Equatable, Sendable {
+    static let smokeLaunchArgument = "--vision-window-placement-smoke"
+
+    let isEnabled: Bool
+    let shouldSeedMockData: Bool
+    let autoOpenWindowIDs: [String]
+
+    static func current(
+        arguments: [String] = ProcessInfo.processInfo.arguments
+    ) -> VisionWindowPlacementSmokeConfiguration {
+        let isEnabled = arguments.contains(smokeLaunchArgument)
+        let shouldSeedMockData = isEnabled || arguments.contains("--seed-mock")
+
+        return VisionWindowPlacementSmokeConfiguration(
+            isEnabled: isEnabled,
+            shouldSeedMockData: shouldSeedMockData,
+            autoOpenWindowIDs: isEnabled ? [
+                VisionDashboardWindowKind.condition.windowID,
+                VisionDashboardWindowKind.activity.windowID,
+                VisionDashboardWindowKind.sleep.windowID,
+                VisionDashboardWindowKind.body.windowID,
+                VisionWindowPlacementPlanner.chart3DWindowID,
+            ] : []
+        )
+    }
+}

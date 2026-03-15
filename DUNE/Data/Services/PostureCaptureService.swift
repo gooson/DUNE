@@ -59,6 +59,9 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
     private static let frameAnalysisInterval: CFAbsoluteTime = 0.1 // 10fps max
     /// Combined frame update callback: guidance state + skeleton keypoints in a single dispatch.
     var onFrameUpdate: (@Sendable (GuidanceState, [(String, CGPoint)], CGSize) -> Void)?
+    /// Realtime analysis callback: keypoints + sample buffer for 3D sampling.
+    /// CMSampleBuffer retains the underlying pixel buffer, preventing pool recycling.
+    var onRealtimeFrame: (@Sendable ([(String, CGPoint)], CMSampleBuffer) -> Void)?
 
     // MARK: - Camera State
 
@@ -253,6 +256,67 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
             bodyHeight: bodyHeight,
             heightEstimation: heightEstimation,
             imageData: imageData
+        )
+    }
+
+    // MARK: - 3D Pose Detection from Video Frame
+
+    /// Detect 3D pose from a live video frame. Uses VNImageRequestHandler(cvPixelBuffer:)
+    /// directly to avoid CIContext/CGImage round-trip overhead (~15-25ms per frame).
+    func detectPoseFromVideoFrame(_ sampleBuffer: CMSampleBuffer) async throws -> PostureCaptureResult {
+        guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
+            throw PostureCaptureError.imageConversionFailed
+        }
+
+        let request = VNDetectHumanBodyPose3DRequest()
+        let confidenceRequest = VNDetectHumanBodyPoseRequest()
+        // No EXIF orientation for live video frames (already rotated by connection.videoRotationAngle)
+        let handler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer, orientation: .up, options: [:])
+
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, any Error>) in
+            DispatchQueue.global(qos: .userInitiated).async {
+                do {
+                    try handler.perform([request, confidenceRequest])
+                    continuation.resume()
+                } catch {
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+
+        guard let observation = request.results?.first else {
+            throw PostureCaptureError.noPoseDetected
+        }
+
+        let confidenceBy2DJointName = Self.captureConfidenceBy2DJointName(
+            from: confidenceRequest.results?.first
+        )
+        let jointPositions = extractJointPositions(
+            from: observation,
+            confidenceBy2DJointName: confidenceBy2DJointName
+        )
+
+        guard !jointPositions.isEmpty else {
+            throw PostureCaptureError.insufficientConfidence
+        }
+
+        let bodyHeight: Double?
+        let heightEstimation: HeightEstimationType
+
+        let height = observation.bodyHeight
+        if height.isFinite, height > 0.5, height < 2.5 {
+            bodyHeight = Double(height)
+            heightEstimation = .measured
+        } else {
+            bodyHeight = Self.referenceBodyHeight
+            heightEstimation = .reference
+        }
+
+        return PostureCaptureResult(
+            jointPositions: jointPositions,
+            bodyHeight: bodyHeight,
+            heightEstimation: heightEstimation,
+            imageData: nil
         )
     }
 
@@ -781,6 +845,7 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
         let orientedImageSize = Self.orientedImageSize(for: rawImageSize, orientation: orientation)
 
         onFrameUpdate?(state, keypoints, orientedImageSize)
+        onRealtimeFrame?(keypoints, sampleBuffer)
     }
 
     /// Compute average luminance from Y plane of pixel buffer.

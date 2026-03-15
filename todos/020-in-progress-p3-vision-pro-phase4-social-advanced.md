@@ -36,6 +36,7 @@ SharePlay 소셜 기능 및 고급 입력 방식 구현.
   - condition/activity/sleep/body 전용 visionOS window 추가
   - 메인 dashboard에서 각 window open action 연결
   - shared workspace view model + unit test 추가
+  - launch-arg smoke + screenshot artifact로 primary runtime placement 검증 완료
 - [x] G1 Shared Workout Space foundation
   - Train 탭에서 SharePlay session start/join + realtime workout board 추가
   - GroupSessionMessenger로 exercise/set/rep/phase 상태를 참가자 간 동기화
@@ -57,7 +58,8 @@ SharePlay 소셜 기능 및 고급 입력 방식 구현.
 - voice confirmation polish는 `todos/140-done-p2-vision-voice-feedback-confirmation.md`에서 정리했다.
 - Phase 5A 실데이터 연결은 `todos/021-done-p1-vision-real-data-pipeline.md`로 정리됐다.
 - Phase 5B UX polish 구현은 `todos/022-done-p2-vision-ux-polish.md`로 종료됐다.
-- runtime spatial placement visual verification은 `todos/107-ready-p2-vision-window-placement-runtime-validation.md`로 분리됐다.
+- runtime spatial placement primary smoke는 `todos/107-done-p2-vision-window-placement-runtime-validation.md`로 닫았다.
+- no-anchor utilityPanel fallback은 `todos/141-ready-p3-vision-window-placement-no-anchor-fallback.md`로 별도 추적한다.
 - 고급 기능 실행은 5B 구현 종료 기준으로 `todos/023-in-progress-p2-vision-phase4-remaining.md`에서 계속 진행한다.
 
 ## 기술 요구사항

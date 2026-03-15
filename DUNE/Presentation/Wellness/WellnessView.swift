@@ -6,6 +6,7 @@ struct WellnessView: View {
     @State private var bodyViewModel = BodyCompositionViewModel()
     @State private var injuryViewModel = InjuryViewModel()
     @State private var isShowingPostureCapture = false
+    @State private var isShowingRealtimePosture = false
     @Environment(\.modelContext) private var modelContext
     @Environment(\.appTheme) private var theme
     @Environment(\.horizontalSizeClass) private var sizeClass
@@ -182,6 +183,12 @@ struct WellnessView: View {
                         Label("Posture Assessment", systemImage: "figure.stand")
                     }
                     .accessibilityIdentifier("wellness-menu-posture")
+                    Button {
+                        isShowingRealtimePosture = true
+                    } label: {
+                        Label(String(localized: "Realtime Analysis"), systemImage: "figure.walk.motion")
+                    }
+                    .accessibilityIdentifier("wellness-menu-realtime-posture")
                 } label: {
                     Image(systemName: "plus")
                 }
@@ -282,6 +289,9 @@ struct WellnessView: View {
         #if !os(visionOS)
         .fullScreenCover(isPresented: $isShowingPostureCapture) {
             PostureCaptureView()
+        }
+        .fullScreenCover(isPresented: $isShowingRealtimePosture) {
+            RealtimePostureView()
         }
         #endif
         // Correction #48: navigationDestination outside conditional blocks
