@@ -118,6 +118,26 @@ Layer boundary: App → Presentation → Domain ← Data
 - `ScoreRefreshService.fetchRolling24hSnapshots()` (line 170) is a near-verbatim copy of the fetch descriptor in `loadTodaySparklines()` (line 127) — same predicate, same fetchLimit=48, same sort
 - Should be extracted to a private `fetchRolling24hDescriptor()` helper and reused by both callers
 
+### ZoomableImageItem co-location (unresolved as of feature/posture-zoom)
+- `ZoomableImageItem` struct is defined in `PostureDetailView.swift:266` but used by 3 Views: `PostureDetailView`, `PostureComparisonView`, `PostureResultView`
+- Rule: shared Presentation DTOs must live in `Presentation/Shared/Models/` (same rule as `ExerciseListItem`)
+- Should be: `DUNE/Presentation/Posture/Models/ZoomableImageItem.swift` or `Presentation/Shared/Models/ZoomableImageItem.swift`
+
+### ZoomableImageItem.label type inconsistency
+- `ZoomableImageItem.label` is typed as `String`, not `LocalizedStringKey`
+- Callsites use `String(localized:)` correctly, but there is no compiler enforcement
+- Same pattern as `ScoreCompositionCard.Component.label` anti-pattern — risk of future bare String literal bypassing localization
+- Fix: type `label` as `LocalizedStringKey`
+
+### ZoomablePostureImageView sheet block triplication
+- `.sheet(item: $zoomImage) { ZoomablePostureImageView(...) }` appears verbatim in `PostureDetailView`, `PostureComparisonView`, and `PostureResultView` (3 locations → DRY threshold crossed)
+- Extract to a ViewModifier: `PostureImageZoomModifier(zoomImage: Binding<ZoomableImageItem?>)`
+- Usage: `.postureImageZoom($zoomImage)` on each View
+
+### PostureHistoryView.recordRow duplicate modifiers
+- After the `@ViewBuilder` refactor, `.background(.ultraThinMaterial...)` and `.contextMenu { Button(role: .destructive) {...} }` are duplicated in both branches of the `if isCompareMode` block
+- Shared modifiers should be applied after the branch, not inside each branch
+
 ### Canonical layout verbatim repetition in Views
 - The sizeClass-split Summary Stats + Highlights block (iPad HStack / iPhone VStack) appears verbatim in all 3 detail views
 - Not yet extracted; a shared `AdaptiveScoreDetailSection` view wrapping this pattern would eliminate the repetition

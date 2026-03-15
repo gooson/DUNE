@@ -9,6 +9,7 @@ struct PostureResultView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     @State private var animatedScore: Double = 0
+    @State private var zoomImage: ZoomableImageItem?
 
     var body: some View {
         ScrollView {
@@ -22,6 +23,7 @@ struct PostureResultView: View {
             .padding()
         }
         .background(Color(.systemGroupedBackground))
+        .postureImageZoom($zoomImage)
     }
 
     // MARK: - Score
@@ -131,6 +133,16 @@ struct PostureResultView: View {
                                     captureType: captureType
                                 )
                             }
+                        }
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            zoomImage = ZoomableImageItem(
+                                uiImage: uiImage,
+                                joints: joints,
+                                metrics: metrics,
+                                captureType: captureType,
+                                label: label
+                            )
                         }
                 } else {
                     RoundedRectangle(cornerRadius: 12)
