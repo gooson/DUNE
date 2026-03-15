@@ -5,11 +5,15 @@ import SwiftData
 /// Uses standard TabView which renders as a left-side vertical tab bar on visionOS.
 /// Glass material is applied automatically by the system.
 struct VisionContentView: View {
+    private static let windowPlacementSmokeInitialDelayNanos: UInt64 = 800_000_000
+    private static let windowPlacementSmokeStepDelayNanos: UInt64 = 350_000_000
+
     @AppStorage(SimulatorAdvancedMockDataModeStore.storageKey) private var isSimulatorMockEnabled = false
     private let modelContainer: ModelContainer
     private let sharedHealthDataService: SharedHealthDataService?
     private let refreshCoordinator: AppRefreshCoordinating?
     private let workoutService: WorkoutQuerying
+    private let windowPlacementSmokeConfiguration: VisionWindowPlacementSmokeConfiguration
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.openWindow) private var openWindow
     @Environment(\.openImmersiveSpace) private var openImmersiveSpace
@@ -33,6 +37,7 @@ struct VisionContentView: View {
         self.sharedHealthDataService = sharedHealthDataService
         self.refreshCoordinator = refreshCoordinator
         self.workoutService = workoutService
+        self.windowPlacementSmokeConfiguration = .current()
         _trainViewModel = State(wrappedValue: VisionTrainViewModel(
             sharedHealthDataService: sharedHealthDataService,
             workoutService: workoutService
@@ -156,6 +161,9 @@ struct VisionContentView: View {
                 await trainViewModel.reload()
             }
         }
+        .task(id: windowPlacementSmokeConfiguration) {
+            await runWindowPlacementSmokeIfNeeded()
+        }
         .task {
             guard let coordinator = refreshCoordinator else { return }
             for await _ in coordinator.refreshNeededStream {
@@ -163,6 +171,28 @@ struct VisionContentView: View {
                     refreshSignal += 1
                 }
             }
+        }
+    }
+
+    @MainActor
+    private func runWindowPlacementSmokeIfNeeded() async {
+        guard windowPlacementSmokeConfiguration.isEnabled else { return }
+        guard supportsMultipleWindows else {
+            AppLogger.ui.info("[VisionWindowPlacementSmoke] Multiple windows unsupported; skipping smoke flow")
+            return
+        }
+
+        if windowPlacementSmokeConfiguration.shouldSeedMockData {
+            applyAdvancedMockDataSeed()
+        }
+
+        try? await Task.sleep(nanoseconds: Self.windowPlacementSmokeInitialDelayNanos)
+
+        for windowID in windowPlacementSmokeConfiguration.autoOpenWindowIDs {
+            guard !Task.isCancelled else { return }
+            AppLogger.ui.info("[VisionWindowPlacementSmoke] Opening \(windowID)")
+            openWindow(id: windowID)
+            try? await Task.sleep(nanoseconds: Self.windowPlacementSmokeStepDelayNanos)
         }
     }
 
@@ -184,40 +214,50 @@ struct VisionContentView: View {
     }
 
     private func seedAdvancedMockData() {
+        Task { @MainActor in
+            applyAdvancedMockDataSeed()
+        }
+    }
+
+    @MainActor
+    private func applyAdvancedMockDataSeed() {
         guard SimulatorAdvancedMockDataModeStore.isSimulatorAvailable else { return }
         guard !isProcessingSimulatorMockData else { return }
         isProcessingSimulatorMockData = true
         simulatorMockStatusMessage = nil
 
-        Task { @MainActor in
-            defer { isProcessingSimulatorMockData = false }
-            do {
-                try SimulatorAdvancedMockDataProvider.seed(into: ModelContext(modelContainer))
-                isSimulatorMockEnabled = true
-                simulatorMockStatusMessage = String(localized: "Mock data seeded.")
-            } catch {
-                simulatorMockStatusMessage = String(localized: "Mock data could not be updated.")
-                AppLogger.data.error("Vision simulator mock data seed failed: \(error.localizedDescription)")
-            }
+        defer { isProcessingSimulatorMockData = false }
+        do {
+            try SimulatorAdvancedMockDataProvider.seed(into: ModelContext(modelContainer))
+            isSimulatorMockEnabled = true
+            simulatorMockStatusMessage = String(localized: "Mock data seeded.")
+        } catch {
+            simulatorMockStatusMessage = String(localized: "Mock data could not be updated.")
+            AppLogger.data.error("Vision simulator mock data seed failed: \(error.localizedDescription)")
         }
     }
 
     private func resetAdvancedMockData() {
+        Task { @MainActor in
+            applyAdvancedMockDataReset()
+        }
+    }
+
+    @MainActor
+    private func applyAdvancedMockDataReset() {
         guard SimulatorAdvancedMockDataModeStore.isSimulatorAvailable else { return }
         guard !isProcessingSimulatorMockData else { return }
         isProcessingSimulatorMockData = true
         simulatorMockStatusMessage = nil
 
-        Task { @MainActor in
-            defer { isProcessingSimulatorMockData = false }
-            do {
-                try SimulatorAdvancedMockDataProvider.reset(into: ModelContext(modelContainer))
-                isSimulatorMockEnabled = false
-                simulatorMockStatusMessage = String(localized: "Mock data reset.")
-            } catch {
-                simulatorMockStatusMessage = String(localized: "Mock data could not be updated.")
-                AppLogger.data.error("Vision simulator mock data reset failed: \(error.localizedDescription)")
-            }
+        defer { isProcessingSimulatorMockData = false }
+        do {
+            try SimulatorAdvancedMockDataProvider.reset(into: ModelContext(modelContainer))
+            isSimulatorMockEnabled = false
+            simulatorMockStatusMessage = String(localized: "Mock data reset.")
+        } catch {
+            simulatorMockStatusMessage = String(localized: "Mock data could not be updated.")
+            AppLogger.data.error("Vision simulator mock data reset failed: \(error.localizedDescription)")
         }
     }
 }
