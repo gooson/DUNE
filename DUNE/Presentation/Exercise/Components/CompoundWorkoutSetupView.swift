@@ -61,9 +61,11 @@ struct CompoundWorkoutSetupView: View {
             }
             .pickerStyle(.segmented)
         } footer: {
-            Text(draft.mode == .superset
-                ? "Alternate between 2 exercises with minimal rest."
-                : "Cycle through 3+ exercises in rounds.")
+            if draft.mode == .superset {
+                Text("Alternate between 2 exercises with minimal rest.")
+            } else {
+                Text("Cycle through 3+ exercises in rounds.")
+            }
         }
     }
 

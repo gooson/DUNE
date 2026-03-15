@@ -20,6 +20,7 @@ struct DotLineChartView: View {
     @State private var internalScrollPosition: Date = .now
     @State private var selectionGestureState = ChartSelectionGestureState()
     @State private var lastSelectionProbeLabel = "none"
+    @State private var cachedYDomain: ClosedRange<Double> = 0...100
     enum Period: String, CaseIterable {
         case week = "7D"
         case month = "30D"
@@ -94,7 +95,7 @@ struct DotLineChartView: View {
                 timePeriod: timePeriod,
                 scrollPosition: scrollPosition ?? $internalScrollPosition
             ))
-            .chartYScale(domain: yDomain)
+            .chartYScale(domain: cachedYDomain)
             .chartXScale(domain: effectiveXDomain)
             .chartXAxis {
                 AxisMarks(values: .stride(by: xStrideComponent, count: xStrideCount)) { _ in
@@ -140,6 +141,8 @@ struct DotLineChartView: View {
             .chartSelectionUITestProbe(lastSelectionProbeLabel)
             .frame(height: chartHeight)
             .clipped()
+            .onAppear { cachedYDomain = Self.computeYDomain(from: data) }
+            .onChange(of: data.count) { _, _ in cachedYDomain = Self.computeYDomain(from: data) }
     }
 
     private var chartDescriptor: StandardChartAccessibility {
@@ -185,8 +188,8 @@ struct DotLineChartView: View {
         resolvedXDomain(scrollDomain: scrollDomain, dates: data.map(\.date))
     }
 
-    /// Y-axis domain with padding to prevent top/bottom clipping.
-    private var yDomain: ClosedRange<Double> {
+    /// Recompute Y-axis domain from data.
+    private static func computeYDomain(from data: [ChartDataPoint]) -> ClosedRange<Double> {
         guard let minVal = data.map(\.value).min(),
               let maxVal = data.map(\.value).max() else {
             return 0...100
