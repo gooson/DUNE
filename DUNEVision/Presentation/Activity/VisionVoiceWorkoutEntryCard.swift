@@ -129,6 +129,8 @@ struct VisionVoiceWorkoutEntryCard: View {
                         metricEditor(
                             title: "Weight",
                             value: "\(weight.formatted(.number.precision(.fractionLength(0...1)))) \(unit.displayName)",
+                            decrementLabel: "Decrease Weight",
+                            incrementLabel: "Increase Weight",
                             decrement: { viewModel.adjustWeight(by: -1) },
                             increment: { viewModel.adjustWeight(by: 1) }
                         )
@@ -137,6 +139,8 @@ struct VisionVoiceWorkoutEntryCard: View {
                         metricEditor(
                             title: "Reps",
                             value: "\(reps)",
+                            decrementLabel: "Decrease Reps",
+                            incrementLabel: "Increase Reps",
                             decrement: { viewModel.adjustReps(by: -1) },
                             increment: { viewModel.adjustReps(by: 1) }
                         )
@@ -145,6 +149,8 @@ struct VisionVoiceWorkoutEntryCard: View {
                         metricEditor(
                             title: "Duration",
                             value: formattedDuration(durationSeconds),
+                            decrementLabel: "Decrease Duration",
+                            incrementLabel: "Increase Duration",
                             decrement: { viewModel.adjustDuration(by: -1) },
                             increment: { viewModel.adjustDuration(by: 1) }
                         )
@@ -153,6 +159,8 @@ struct VisionVoiceWorkoutEntryCard: View {
                         metricEditor(
                             title: "Distance",
                             value: "\(distance.formatted(.number.precision(.fractionLength(0...1)))) \(unit.displayName)",
+                            decrementLabel: "Decrease Distance",
+                            incrementLabel: "Increase Distance",
                             decrement: { viewModel.adjustDistance(by: -1) },
                             increment: { viewModel.adjustDistance(by: 1) }
                         )
@@ -201,6 +209,8 @@ struct VisionVoiceWorkoutEntryCard: View {
     private func metricEditor(
         title: LocalizedStringKey,
         value: String,
+        decrementLabel: LocalizedStringKey,
+        incrementLabel: LocalizedStringKey,
         decrement: @escaping () -> Void,
         increment: @escaping () -> Void
     ) -> some View {
@@ -215,11 +225,13 @@ struct VisionVoiceWorkoutEntryCard: View {
                     Image(systemName: "minus.circle.fill")
                 }
                 .buttonStyle(.bordered)
+                .accessibilityLabel(decrementLabel)
 
                 Button(action: increment) {
                     Image(systemName: "plus.circle.fill")
                 }
                 .buttonStyle(.borderedProminent)
+                .accessibilityLabel(incrementLabel)
             }
         }
         .frame(minWidth: 140, alignment: .leading)

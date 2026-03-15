@@ -37,6 +37,7 @@ final class VisionVoiceWorkoutEntryViewModel {
     var transcript: String = "" {
         didSet {
             guard transcript != oldValue else { return }
+            speaker.stop()
             draft = nil
             isDraftSaved = false
             errorMessage = nil

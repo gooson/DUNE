@@ -111,7 +111,7 @@ struct VisionVoiceWorkoutEntryViewModelTests {
         #expect(viewModel.infoMessage == String(localized: "Listening..."))
         #expect(viewModel.transcript == "Bench Press 80kg 8 reps")
         #expect(transcriber.startCallCount == 1)
-        #expect(speaker.stopCallCount == 1)
+        #expect(speaker.stopCallCount == 2)
     }
 
     @Test("reviewDraft stores a parsed draft and announces localized confirmation")
@@ -334,6 +334,21 @@ struct VisionVoiceWorkoutEntryViewModelTests {
 
         #expect(viewModel.draft != nil)
         #expect(speaker.spokenMessages.isEmpty)
+    }
+
+    @Test("Editing the transcript stops any active spoken confirmation")
+    func editingTranscriptStopsActiveSpeech() {
+        let transcriber = MockVisionVoiceWorkoutTranscriber()
+        let speaker = MockVisionVoiceWorkoutSpeaker()
+        let viewModel = makeViewModel(transcriber: transcriber, speaker: speaker, localeIdentifier: "en_US")
+        viewModel.transcript = "Bench Press 176 lb 8 reps"
+        viewModel.reviewDraft()
+
+        viewModel.transcript = "Running 30 minutes 5 km"
+
+        #expect(viewModel.draft == nil)
+        #expect(speaker.stopCallCount == 2)
+        #expect(viewModel.infoMessage == nil)
     }
 
     private func makeViewModel(
