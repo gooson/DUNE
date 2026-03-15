@@ -1,3 +1,4 @@
+#if !os(visionOS)
 import SwiftData
 import SwiftUI
 
@@ -311,3 +312,4 @@ struct PostureResultView: View {
         dismiss()
     }
 }
+#endif

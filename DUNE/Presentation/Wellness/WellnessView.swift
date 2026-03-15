@@ -279,9 +279,11 @@ struct WellnessView: View {
                 )
             }
         }
+        #if !os(visionOS)
         .fullScreenCover(isPresented: $isShowingPostureCapture) {
             PostureCaptureView()
         }
+        #endif
         // Correction #48: navigationDestination outside conditional blocks
         .navigationDestination(for: HealthMetric.self) { metric in
             MetricDetailView(metric: metric)

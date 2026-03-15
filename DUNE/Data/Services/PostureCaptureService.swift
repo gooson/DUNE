@@ -1,3 +1,4 @@
+#if !os(visionOS)
 import AVFoundation
 import Foundation
 import UIKit
@@ -348,3 +349,4 @@ extension PostureCaptureService: AVCapturePhotoCaptureDelegate {
         }
     }
 }
+#endif

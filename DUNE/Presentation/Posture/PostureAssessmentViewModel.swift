@@ -1,3 +1,4 @@
+#if !os(visionOS)
 import AVFoundation
 import Foundation
 import Observation
@@ -266,3 +267,4 @@ final class PostureAssessmentViewModel {
         }
     }
 }
+#endif
