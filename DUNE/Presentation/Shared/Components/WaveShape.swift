@@ -183,8 +183,6 @@ struct TabWaveBackground: View {
             case .sakuraCalm:  SakuraTabWaveBackground()
             case .arcticDawn:  OceanLegacyArcticTabWaveBackground()
             case .solarPop:    SolarTabWaveBackground()
-            case .shanksRed:   ShanksTabWaveBackground()
-            case .hanok:       HanokTabWaveBackground()
             }
         }
         .id(theme)
@@ -206,8 +204,6 @@ struct DetailWaveBackground: View {
             case .sakuraCalm:  SakuraDetailWaveBackground()
             case .arcticDawn:  OceanLegacyArcticDetailWaveBackground()
             case .solarPop:    SolarDetailWaveBackground()
-            case .shanksRed:   ShanksDetailWaveBackground()
-            case .hanok:       HanokDetailWaveBackground()
             }
         }
         .id(theme)
@@ -229,8 +225,6 @@ struct SheetWaveBackground: View {
             case .sakuraCalm:  SakuraSheetWaveBackground()
             case .arcticDawn:  OceanLegacyArcticSheetWaveBackground()
             case .solarPop:    SolarSheetWaveBackground()
-            case .shanksRed:   ShanksSheetWaveBackground()
-            case .hanok:       HanokSheetWaveBackground()
             }
         }
         .id(theme)
