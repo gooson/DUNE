@@ -15,6 +15,10 @@ struct PostureDetailView: View {
                 captureImagesSection
                 metricsSection
 
+                if record.frontImageData != nil {
+                    symmetryLink
+                }
+
                 if !record.memo.isEmpty {
                     memoSection
                 }
@@ -202,6 +206,36 @@ struct PostureDetailView: View {
 
     private func metricValueText(_ metric: PostureMetricResult) -> String {
         formattedPostureMetricValue(metric.value, unit: metric.unit)
+    }
+
+    // MARK: - Symmetry Link
+
+    private var symmetryLink: some View {
+        NavigationLink(value: PostureSymmetryDestination(id: record.id)) {
+            HStack(spacing: DS.Spacing.md) {
+                Image(systemName: "arrow.left.arrow.right")
+                    .font(.title3)
+                    .foregroundStyle(DS.Color.body)
+                    .frame(width: 32)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Left-Right Comparison")
+                        .font(.subheadline.weight(.medium))
+                    Text("Detailed symmetry analysis")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                    .font(.caption)
+                    .foregroundStyle(.tertiary)
+            }
+            .padding(DS.Spacing.md)
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        }
+        .buttonStyle(.plain)
     }
 
     // MARK: - Memo

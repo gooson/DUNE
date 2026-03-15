@@ -72,6 +72,13 @@ struct PostureHistoryView: View {
                 ContentUnavailableView("Records not found", systemImage: "exclamationmark.triangle")
             }
         }
+        .navigationDestination(for: PostureSymmetryDestination.self) { destination in
+            if let record = records.first(where: { $0.id == destination.id }) {
+                PostureSymmetryView(record: record)
+            } else {
+                ContentUnavailableView("Record not found", systemImage: "exclamationmark.triangle")
+            }
+        }
         .alert(
             String(localized: "Delete Assessment"),
             isPresented: Binding(
@@ -396,4 +403,8 @@ struct PostureRecordDestination: Hashable {
 struct PostureComparisonDestination: Hashable {
     let olderID: UUID
     let newerID: UUID
+}
+
+struct PostureSymmetryDestination: Hashable {
+    let id: UUID
 }
