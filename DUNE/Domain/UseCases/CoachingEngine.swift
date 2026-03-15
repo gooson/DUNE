@@ -222,10 +222,7 @@ struct CoachingEngine: Sendable {
                 message: String(localized: "Your last \(input.recentHighRPEStreak) sessions were all high intensity (RPE 8+). Take a recovery day or lower the intensity to avoid burnout and injury."),
                 iconName: "exclamationmark.triangle.fill"
             ))
-        }
-
-        // P2: Elevated RPE streak (3-4 consecutive sessions)
-        if input.recentHighRPEStreak >= 3, input.recentHighRPEStreak < 5 {
+        } else if input.recentHighRPEStreak >= 3 {
             results.append(CoachingInsight(
                 id: "recovery-rpe-elevated",
                 priority: .high,
