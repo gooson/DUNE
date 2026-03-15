@@ -35,6 +35,8 @@ enum NotificationHubMetricResolver {
             .exercise
         case .lifeChecklistReminder:
             nil
+        case .postureReminder:
+            nil
         }
     }
 
@@ -478,6 +480,8 @@ struct NotificationHubView: View {
             DS.Color.activity
         case .lifeChecklistReminder:
             DS.Color.tabLife
+        case .postureReminder:
+            DS.Color.body
         }
     }
 }
