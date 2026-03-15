@@ -316,7 +316,7 @@ struct PostureAnalysisServiceTests {
     @Test("Infinity joint coordinates produce unmeasurable")
     func infinityCoordinates() {
         let joints = [
-            joint("leftShoulder", x: .infinity, y: 1.4, z: 0),
+            joint("leftShoulder", x: -0.2, y: .infinity, z: 0),
             joint("rightShoulder", x: 0.2, y: 1.4, z: 0),
         ]
 
