@@ -25,7 +25,7 @@ struct DistanceIndicatorView: View {
 
     var body: some View {
         VStack(spacing: 4) {
-            Text(String(localized: "Near"))
+            Text("Near")
                 .font(.system(size: 9, weight: .medium))
                 .foregroundStyle(.white.opacity(0.5))
 
@@ -41,18 +41,19 @@ struct DistanceIndicatorView: View {
                         .frame(height: geometry.size.height * 0.3)
                         .offset(y: -geometry.size.height * 0.2)
 
-                    // Indicator dot
+                    // Indicator dot (hidden when unknown)
                     Circle()
                         .fill(indicatorColor)
                         .frame(width: 10, height: 10)
                         .shadow(color: indicatorColor.opacity(0.6), radius: 4)
                         .offset(y: -geometry.size.height * indicatorPosition + 5)
                         .animation(.easeInOut(duration: 0.3), value: status)
+                        .opacity(status == .unknown ? 0 : 1)
                 }
             }
             .frame(width: 8)
 
-            Text(String(localized: "Far"))
+            Text("Far")
                 .font(.system(size: 9, weight: .medium))
                 .foregroundStyle(.white.opacity(0.5))
         }

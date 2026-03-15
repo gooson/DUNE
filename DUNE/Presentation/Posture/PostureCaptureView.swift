@@ -12,7 +12,7 @@ struct PostureCaptureView: View {
             ZStack {
                 CameraPreviewView(
                     session: viewModel.captureSession,
-                    isMirrored: !viewModel.isUsingBackCamera
+                    isMirrored: viewModel.cameraPosition == .front
                 )
                 .ignoresSafeArea()
                 .accessibilityLabel(Text("Camera preview for posture assessment"))
@@ -101,7 +101,8 @@ struct PostureCaptureView: View {
             BodyGuideOverlay(
                 captureType: viewModel.captureType,
                 guidanceState: viewModel.guidanceState,
-                skeletonKeypoints: viewModel.skeletonKeypoints
+                skeletonKeypoints: viewModel.skeletonKeypoints,
+                isFrontCamera: viewModel.cameraPosition == .front
             )
 
             // Distance indicator (left side)
@@ -212,7 +213,8 @@ struct PostureCaptureView: View {
             BodyGuideOverlay(
                 captureType: viewModel.captureType,
                 guidanceState: viewModel.guidanceState,
-                skeletonKeypoints: viewModel.skeletonKeypoints
+                skeletonKeypoints: viewModel.skeletonKeypoints,
+                isFrontCamera: viewModel.cameraPosition == .front
             )
 
             Text("\(count)")

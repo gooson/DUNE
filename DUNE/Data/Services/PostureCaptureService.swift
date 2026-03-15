@@ -51,10 +51,8 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
     // Accessed only on videoDataQueue (single serial queue) — no lock needed.
     private var lastFrameAnalysisTime: CFAbsoluteTime = 0
     private static let frameAnalysisInterval: CFAbsoluteTime = 0.1 // 10fps max
-    var onGuidanceUpdate: (@Sendable (GuidanceState) -> Void)?
-
-    /// Latest 2D pose keypoints for real-time skeleton overlay (normalized 0-1, origin bottom-left).
-    var onSkeletonUpdate: (@Sendable ([(String, CGPoint)]) -> Void)?
+    /// Combined frame update callback: guidance state + skeleton keypoints in a single dispatch.
+    var onFrameUpdate: (@Sendable (GuidanceState, [(String, CGPoint)]) -> Void)?
 
     // MARK: - Camera State
 
@@ -69,6 +67,12 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
     // MARK: - Setup
 
     func setupCamera(position: AVCaptureDevice.Position = .front) throws {
+        // Drain any leaked photoContinuation from a previous session
+        continuationLock.withLock {
+            photoContinuation?.resume(throwing: PostureCaptureError.captureSessionNotRunning)
+            photoContinuation = nil
+        }
+
         currentPosition = position
         guard let device = AVCaptureDevice.default(
             .builtInWideAngleCamera,
@@ -109,6 +113,10 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
         videoDataOutput.setSampleBufferDelegate(self, queue: videoDataQueue)
         if captureSession.canAddOutput(videoDataOutput) {
             captureSession.addOutput(videoDataOutput)
+            // Rotate video frames to portrait so Vision coordinates match preview orientation
+            if let connection = videoDataOutput.connection(with: .video) {
+                connection.videoRotationAngle = 90
+            }
         }
 
         captureSession.commitConfiguration()
@@ -471,8 +479,7 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
             luminance: luminance
         )
 
-        onGuidanceUpdate?(state)
-        onSkeletonUpdate?(keypoints)
+        onFrameUpdate?(state, keypoints)
     }
 
     /// Compute average luminance from Y plane of pixel buffer.

@@ -74,15 +74,11 @@ final class PostureAssessmentViewModel {
         }
     }
 
-    var isUsingBackCamera: Bool {
-        cameraPosition == .back
-    }
-
     // MARK: - Tasks
 
     private var countdownTask: Task<Void, Never>?
-    private var autoCountdownTask: Task<Void, Never>?
     private var autoReadyStartTime: CFAbsoluteTime?
+    private var isManualCountdown = false
 
     // MARK: - TTS
 
@@ -119,10 +115,7 @@ final class PostureAssessmentViewModel {
     func stopCamera() {
         countdownTask?.cancel()
         countdownTask = nil
-        autoCountdownTask?.cancel()
-        autoCountdownTask = nil
-        captureService.onGuidanceUpdate = nil
-        captureService.onSkeletonUpdate = nil
+        captureService.onFrameUpdate = nil
         captureService.stopSession()
     }
 
@@ -131,9 +124,8 @@ final class PostureAssessmentViewModel {
     func switchCamera() {
         countdownTask?.cancel()
         countdownTask = nil
-        autoCountdownTask?.cancel()
-        autoCountdownTask = nil
         autoReadyStartTime = nil
+        isManualCountdown = false
         guidanceState = GuidanceState()
         skeletonKeypoints = []
 
@@ -150,21 +142,16 @@ final class PostureAssessmentViewModel {
     // MARK: - Guidance Callbacks
 
     private func setupGuidanceCallbacks() {
-        captureService.onGuidanceUpdate = { [weak self] state in
+        captureService.onFrameUpdate = { [weak self] state, keypoints in
             Task { @MainActor [weak self] in
-                self?.handleGuidanceUpdate(state)
-            }
-        }
-        captureService.onSkeletonUpdate = { [weak self] keypoints in
-            Task { @MainActor [weak self] in
+                self?.guidanceState = state
                 self?.skeletonKeypoints = keypoints
+                self?.handleAutoCapture(state)
             }
         }
     }
 
-    private func handleGuidanceUpdate(_ state: GuidanceState) {
-        guidanceState = state
-
+    private func handleAutoCapture(_ state: GuidanceState) {
         guard case .preparing = capturePhase else { return }
         guard isAutoCapture else { return }
 
@@ -174,7 +161,7 @@ final class PostureAssessmentViewModel {
             if autoReadyStartTime == nil { autoReadyStartTime = now }
             if now - start >= Self.autoReadyDelay {
                 autoReadyStartTime = nil
-                startCountdown()
+                startCountdown(manual: false)
             }
         } else {
             autoReadyStartTime = nil
@@ -183,11 +170,11 @@ final class PostureAssessmentViewModel {
 
     // MARK: - Capture Flow
 
-    func startCountdown() {
+    func startCountdown(manual: Bool = true) {
         guard case .preparing = capturePhase else { return }
         countdownTask?.cancel()
-        autoCountdownTask?.cancel()
         autoReadyStartTime = nil
+        isManualCountdown = manual
 
         countdownTask = Task {
             do {
@@ -196,16 +183,19 @@ final class PostureAssessmentViewModel {
                     hapticCountdown = i
 
                     // TTS for back camera
-                    if isUsingBackCamera {
+                    if cameraPosition == .back {
                         speak("\(i)")
                     }
 
                     try await Task.sleep(for: .seconds(1))
 
-                    // Cancel if pose is lost during countdown
-                    if !guidanceState.isFullBodyVisible, case .countdown = capturePhase {
+                    // Auto-capture: cancel if pose is lost during countdown
+                    // Manual capture: proceed regardless (user explicitly triggered)
+                    if !isManualCountdown,
+                       !guidanceState.isFullBodyVisible,
+                       case .countdown = capturePhase {
                         capturePhase = .preparing
-                        if isUsingBackCamera {
+                        if cameraPosition == .back {
                             speak(String(localized: "Pose lost. Please hold still."))
                         }
                         return
@@ -273,7 +263,7 @@ final class PostureAssessmentViewModel {
         capturePhase = .result
         hapticSuccessCount += 1
 
-        if isUsingBackCamera {
+        if cameraPosition == .back {
             speak(String(localized: "Capture complete"))
         }
     }
@@ -311,9 +301,8 @@ final class PostureAssessmentViewModel {
     func resetAll() {
         countdownTask?.cancel()
         countdownTask = nil
-        autoCountdownTask?.cancel()
-        autoCountdownTask = nil
         autoReadyStartTime = nil
+        isManualCountdown = false
         captureType = .front
         frontResult = nil
         sideResult = nil
