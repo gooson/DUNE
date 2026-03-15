@@ -241,11 +241,9 @@ extension WorkoutSummary {
         if let localized = WorkoutActivityType.localizedDisplayName(forStoredTitle: type) {
             return localized
         }
-        // Custom HealthKit titles (e.g. "Tempo Run") don't match any typeName —
-        // fall back to the localized activity type name instead of raw English.
-        if activityType != .other {
-            return activityType.displayName
-        }
+        // type that differs from activityType.typeName is a custom exercise name
+        // from HealthKit metadata (e.g. "Bench Press") — preserve it.
+        // When type == activityType.typeName, localizedDisplayName above already matched.
         return type
     }
 }
