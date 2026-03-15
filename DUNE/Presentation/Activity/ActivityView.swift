@@ -292,6 +292,7 @@ struct ActivityView: View {
                 .padding()
                 .coordinateSpace(name: TabHeroStartLine.coordinateSpace)
             }
+            .accessibilityIdentifier("activity-root-scroll")
             .waveRefreshable {
                 await viewModel.loadActivityData()
             }

@@ -14,7 +14,7 @@ struct WhatsNewView: View {
 
     var body: some View {
         ScrollView {
-            LazyVStack(alignment: .leading, spacing: DS.Spacing.xl) {
+            VStack(alignment: .leading, spacing: DS.Spacing.xl) {
                 ForEach(releases) { release in
                     VStack(alignment: .leading, spacing: DS.Spacing.lg) {
                         releaseHeader(release: release)
@@ -166,6 +166,8 @@ private struct WhatsNewFeatureDetailView: View {
                     WhatsNewVersionBadge(version: release.version)
                 }
 
+                heroArtwork
+
                 StandardCard {
                     Text(release.intro)
                         .font(.subheadline)
@@ -187,6 +189,58 @@ private struct WhatsNewFeatureDetailView: View {
         .navigationTitle(feature.title)
         .navigationBarTitleDisplayMode(.inline)
         .accessibilityIdentifier("whatsnew-detail-\(feature.id)")
+    }
+
+    private var heroArtwork: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous)
+                .fill(
+                    LinearGradient(
+                        colors: [tintColor.opacity(0.95), tintColor.opacity(0.45), DS.Color.primaryText.opacity(0.08)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+
+            Circle()
+                .fill(.white.opacity(0.16))
+                .frame(width: 180, height: 180)
+                .offset(x: 110, y: -50)
+
+            Circle()
+                .fill(.white.opacity(0.10))
+                .frame(width: 120, height: 120)
+                .offset(x: -100, y: 60)
+
+            VStack(spacing: DS.Spacing.sm) {
+                Image(systemName: feature.symbolName)
+                    .font(.system(size: 54, weight: .bold))
+                    .foregroundStyle(.white)
+
+                Text(feature.title)
+                    .font(.system(.title3, design: .rounded, weight: .bold))
+                    .foregroundStyle(.white)
+                    .multilineTextAlignment(.center)
+            }
+            .padding(DS.Spacing.xl)
+        }
+        .frame(maxWidth: .infinity)
+        .frame(height: 220)
+        .clipShape(RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous)
+                .strokeBorder(.white.opacity(0.12))
+        )
+        .overlay(alignment: .topLeading) {
+            Color.clear
+                .frame(width: 1, height: 1)
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(feature.title)
+                .accessibilityIdentifier("whatsnew-artwork-\(feature.id)-hero")
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(feature.title)
+        .accessibilityIdentifier("whatsnew-artwork-\(feature.id)-hero")
     }
 }
 

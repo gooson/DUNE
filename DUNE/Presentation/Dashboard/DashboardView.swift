@@ -462,6 +462,8 @@ struct DashboardView: View {
                     .accessibilityLabel("\(unreadNotificationCount.formatted()) unread notifications")
             }
         }
+        .frame(width: 44, height: 44)
+        .contentShape(Rectangle())
     }
 
     private var unreadBadgeLabel: String {

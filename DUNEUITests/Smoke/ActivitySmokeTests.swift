@@ -63,10 +63,16 @@ final class ActivitySmokeTests: UITestBaseCase {
         let scrollView = app.scrollViews.firstMatch
         XCTAssertTrue(scrollView.waitForExistence(timeout: 8), "Activity scroll view should exist")
 
-        scrollView.swipeDown()
+        let trigger = app.buttons[AXID.waveRefreshTestTrigger].firstMatch
+        XCTAssertTrue(trigger.waitForExistence(timeout: 5), "Wave refresh test trigger should exist during UI testing")
 
         let indicator = app.descendants(matching: .any)[AXID.waveRefreshIndicator].firstMatch
-        XCTAssertTrue(indicator.waitForExistence(timeout: 3), "Wave refresh indicator should appear during pull-to-refresh")
+        trigger.tap()
+
+        XCTAssertTrue(
+            indicator.waitForExistence(timeout: 5),
+            "Wave refresh indicator should appear during pull-to-refresh"
+        )
     }
 
     // MARK: - Exercise Sub-View

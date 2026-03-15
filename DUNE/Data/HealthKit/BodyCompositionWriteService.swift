@@ -113,6 +113,8 @@ enum BodyCompositionWriteError: Error {
 
 struct BodyCompositionWriteService: BodyCompositionWriting, Sendable {
     private let manager: HealthKitManager
+    private static let shouldBypassHealthKitSyncForAutomatedUITests =
+        ProcessInfo.processInfo.arguments.contains("--uitesting")
 
     init(manager: HealthKitManager = .shared) {
         self.manager = manager
@@ -139,6 +141,13 @@ struct BodyCompositionWriteService: BodyCompositionWriting, Sendable {
         let currentKinds = currentInput?.activeSampleKinds ?? []
         guard !previousKinds.isEmpty || !currentKinds.isEmpty else {
             throw BodyCompositionWriteError.emptyMeasurements
+        }
+
+        // Automated UI tests verify local form flows and should not depend on
+        // simulator HealthKit authorization or write availability.
+        if Self.shouldBypassHealthKitSyncForAutomatedUITests {
+            AppLogger.healthKit.info("Skipping body composition HealthKit sync for automated UI tests")
+            return
         }
 
         try await manager.requestBodyCompositionWriteAuthorization()

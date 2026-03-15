@@ -309,6 +309,7 @@ struct NotificationHubView: View {
                     notificationRow(for: item, index: index)
                 }
                 .buttonStyle(.plain)
+                .accessibilityIdentifier(notificationRowAccessibilityIdentifier(for: item))
                 .swipeActions(edge: .leading, allowsFullSwipe: true) {
                     Button(item.isRead ? "Unread" : "Read") {
                         item.isRead ? inboxManager.markUnread(id: item.id) : inboxManager.markRead(id: item.id)
@@ -449,6 +450,16 @@ struct NotificationHubView: View {
         }
 
         return (String(localized: "\(category.displayName) Detail"), category.iconName)
+    }
+
+    private func notificationRowAccessibilityIdentifier(for item: NotificationInboxItem) -> String {
+        if item.route?.destination == .workoutDetail,
+           let workoutID = item.route?.workoutID,
+           !workoutID.isEmpty {
+            return "notification-row-workout-\(workoutID)"
+        }
+
+        return "notification-row-\(item.id)"
     }
 
     private func iconTint(for type: HealthInsight.InsightType) -> Color {

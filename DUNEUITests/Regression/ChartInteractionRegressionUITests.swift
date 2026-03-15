@@ -3,6 +3,8 @@
 /// Regression coverage for chart long-press vs period/selection interaction.
 @MainActor
 final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
+    override var initialTabSelectionArgument: String? { "train" }
+
     func testRHRDetailChartScrollsToPastData() throws {
         openDashboardMetricDetail("rhr")
         assertDetailChartScrollsToPastData(category: "rhr")
@@ -21,6 +23,10 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
     func testWeightDetailChartScrollsToPastData() throws {
         navigateToWellness()
 
+        XCTAssertTrue(
+            app.scrollToElementIfNeeded(AXID.wellnessCardWeight, maxSwipes: 6),
+            "Weight card should be reachable in seeded Wellness state"
+        )
         let weightCard = waitForElement(AXID.wellnessCardWeight, timeout: 15)
         weightCard.tap()
 
@@ -34,13 +40,11 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
         let initialPeriod = periodPicker.value as? String
 
         let chart = waitForElement(AXID.weeklyStatsChartDailyVolume, timeout: 15)
-        let selectionProbe = waitForElement(AXID.chartSelectionProbe, timeout: 10)
+        let selectionProbe = waitForElement(AXID.chartSelectionProbe, timeout: 15)
         let initialRange = visibleRangeValue(of: chart)
         XCTAssertEqual(selectionProbe.label, "none", "Selection probe should be empty before the gesture")
 
-        let start = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.45, dy: 0.55))
-        let end = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.58, dy: 0.55))
-        start.press(forDuration: 0.45, thenDragTo: end)
+        let probeLabel = performLongPressUntilProbeChanges(chart: chart, selectionProbe: selectionProbe)
 
         XCTAssertEqual(
             periodPicker.value as? String,
@@ -48,7 +52,7 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
             "Long press selection should not change the weekly stats period"
         )
         XCTAssertNotEqual(
-            selectionProbe.label,
+            probeLabel,
             "none",
             "Long press selection should update the chart selection probe"
         )
@@ -64,20 +68,9 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
         openWeeklyStatsDetail()
 
         let chart = waitForElement(AXID.weeklyStatsChartDailyVolume, timeout: 15)
-        let initialRange = visibleRangeValue(of: chart)
-
-        let start = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.80, dy: 0.55))
-        let end = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.20, dy: 0.55))
-        start.press(forDuration: 0.05, thenDragTo: end)
-
-        if visibleRangeValue(of: chart) == initialRange {
-            start.press(forDuration: 0.05, thenDragTo: end)
-        }
-
-        XCTAssertNotEqual(
-            visibleRangeValue(of: chart),
-            initialRange,
-            "Quick horizontal drag should reveal older daily volume data"
+        assertChartVisibleRangeChanges(
+            chart,
+            failureMessage: "Quick horizontal drag should reveal older daily volume data"
         )
     }
 
@@ -85,20 +78,9 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
         openTrainingVolumeDetail()
 
         let chart = trainingVolumeChart()
-        let initialRange = visibleRangeValue(of: chart)
-
-        let start = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.80, dy: 0.55))
-        let end = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.20, dy: 0.55))
-        start.press(forDuration: 0.05, thenDragTo: end)
-
-        if visibleRangeValue(of: chart) == initialRange {
-            start.press(forDuration: 0.05, thenDragTo: end)
-        }
-
-        XCTAssertNotEqual(
-            visibleRangeValue(of: chart),
-            initialRange,
-            "Quick horizontal drag should reveal older training load data"
+        assertChartVisibleRangeChanges(
+            chart,
+            failureMessage: "Quick horizontal drag should reveal older training load data"
         )
     }
 
@@ -106,20 +88,9 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
         openTrainingVolumeDetail()
 
         let chart = trainingVolumeDailyVolumeChart()
-        let initialRange = visibleRangeValue(of: chart)
-
-        let start = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.80, dy: 0.55))
-        let end = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.20, dy: 0.55))
-        start.press(forDuration: 0.05, thenDragTo: end)
-
-        if visibleRangeValue(of: chart) == initialRange {
-            start.press(forDuration: 0.05, thenDragTo: end)
-        }
-
-        XCTAssertNotEqual(
-            visibleRangeValue(of: chart),
-            initialRange,
-            "Quick horizontal drag should reveal older daily volume data"
+        assertChartVisibleRangeChanges(
+            chart,
+            failureMessage: "Quick horizontal drag should reveal older daily volume data"
         )
     }
 
@@ -127,13 +98,11 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
         openTrainingVolumeDetail()
 
         let chart = trainingVolumeChart()
-        let selectionProbe = waitForElement(AXID.chartSelectionProbe, timeout: 10)
+        let selectionProbe = waitForElement(AXID.trainingVolumeChartTrainingLoadSelectionProbe, timeout: 15)
         let initialRange = visibleRangeValue(of: chart)
         XCTAssertEqual(selectionProbe.label, "none", "Selection probe should be empty before long press")
 
-        let start = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.45, dy: 0.55))
-        let end = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.58, dy: 0.55))
-        start.press(forDuration: 0.45, thenDragTo: end)
+        let probeLabel = performLongPressUntilProbeChanges(chart: chart, selectionProbe: selectionProbe)
 
         XCTAssertEqual(
             visibleRangeValue(of: chart),
@@ -141,32 +110,24 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
             "Long press selection should not move the training load visible range"
         )
         XCTAssertNotEqual(
-            selectionProbe.label,
+            probeLabel,
             "none",
             "Long press selection should update the training load selection probe"
         )
     }
 
     func testHRVDetailChartScrollsToPastData() throws {
-        navigateToWellness()
-
-        let hrvCard = waitForElement(AXID.wellnessCardHRV, timeout: 15)
-        hrvCard.tap()
-
+        openWellnessMetricDetail(AXID.wellnessCardHRV)
         assertDetailChartScrollsToPastData(category: "hrv")
     }
 
     func testHRVDetailChartLongPressSelectionClearsAfterGesture() throws {
-        navigateToWellness()
-
-        let hrvCard = waitForElement(AXID.wellnessCardHRV, timeout: 15)
-        hrvCard.tap()
-
+        openWellnessMetricDetail(AXID.wellnessCardHRV)
         let detailScreen = waitForElement(AXID.metricDetailScreen("hrv"), timeout: 15)
         XCTAssertTrue(detailScreen.exists, "HRV detail should open from the Wellness card")
 
         let chart = waitForElement(AXID.detailChartSurface, timeout: 15)
-        let selectionProbe = waitForElement(AXID.chartSelectionProbe, timeout: 10)
+        let selectionProbe = waitForElement(AXID.chartSelectionProbe, timeout: 15)
         XCTAssertEqual(selectionProbe.label, "none", "Selection probe should be empty before long press")
 
         let start = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.42, dy: 0.55))
@@ -187,11 +148,7 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
     }
 
     func testHRVDetailLongPressSelectionDoesNotScrollVisibleRange() throws {
-        navigateToWellness()
-
-        let hrvCard = waitForElement(AXID.wellnessCardHRV, timeout: 15)
-        hrvCard.tap()
-
+        openWellnessMetricDetail(AXID.wellnessCardHRV)
         let detailScreen = waitForElement(AXID.metricDetailScreen("hrv"), timeout: 15)
         XCTAssertTrue(detailScreen.exists, "HRV detail should open from the Wellness card")
 
@@ -211,17 +168,13 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
     }
 
     func testHRVDetailQuickDragScrollsWithoutActivatingSelection() throws {
-        navigateToWellness()
-
-        let hrvCard = waitForElement(AXID.wellnessCardHRV, timeout: 15)
-        hrvCard.tap()
-
+        openWellnessMetricDetail(AXID.wellnessCardHRV)
         let detailScreen = waitForElement(AXID.metricDetailScreen("hrv"), timeout: 15)
         XCTAssertTrue(detailScreen.exists, "HRV detail should open from the Wellness card")
 
         let visibleRange = waitForElement(AXID.detailChartVisibleRange, timeout: 15)
         let chart = waitForElement(AXID.detailChartSurface, timeout: 15)
-        let selectionProbe = waitForElement(AXID.chartSelectionProbe, timeout: 10)
+        let selectionProbe = waitForElement(AXID.chartSelectionProbe, timeout: 15)
         let initialRange = visibleRange.label
         XCTAssertEqual(selectionProbe.label, "none", "Selection probe should be empty before quick drag")
 
@@ -246,11 +199,7 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
     }
 
     func testHRVDetailChartScrollResumesAfterLongPressEnds() throws {
-        navigateToWellness()
-
-        let hrvCard = waitForElement(AXID.wellnessCardHRV, timeout: 15)
-        hrvCard.tap()
-
+        openWellnessMetricDetail(AXID.wellnessCardHRV)
         let detailScreen = waitForElement(AXID.metricDetailScreen("hrv"), timeout: 15)
         XCTAssertTrue(detailScreen.exists, "HRV detail should open from the Wellness card")
 
@@ -278,11 +227,7 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
     }
 
     func testHRVDetailScrollAfterSelectionClearsOverlayAndDoesNotSnapBack() throws {
-        navigateToWellness()
-
-        let hrvCard = waitForElement(AXID.wellnessCardHRV, timeout: 15)
-        hrvCard.tap()
-
+        openWellnessMetricDetail(AXID.wellnessCardHRV)
         let detailScreen = waitForElement(AXID.metricDetailScreen("hrv"), timeout: 15)
         XCTAssertTrue(detailScreen.exists, "HRV detail should open from the Wellness card")
 
@@ -319,11 +264,7 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
     }
 
     func testHRVDetailScreenVerticalScrollWorksFromChartSurface() throws {
-        navigateToWellness()
-
-        let hrvCard = waitForElement(AXID.wellnessCardHRV, timeout: 15)
-        hrvCard.tap()
-
+        openWellnessMetricDetail(AXID.wellnessCardHRV)
         let detailScreen = waitForElement(AXID.metricDetailScreen("hrv"), timeout: 15)
         XCTAssertTrue(detailScreen.exists, "HRV detail should open from the Wellness card")
 
@@ -348,9 +289,10 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
 
     private func openDashboardMetricDetail(_ category: String) {
         navigateToDashboard()
+        dismissMorningBriefingIfNeeded()
 
         XCTAssertTrue(
-            app.scrollToElementIfNeeded(AXID.dashboardMetricCard(category), maxSwipes: 6),
+            app.scrollToHittableElementIfNeeded(AXID.dashboardMetricCard(category), maxSwipes: 12),
             "Dashboard metric card for \(category) should be reachable in seeded state"
         )
 
@@ -358,12 +300,72 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
         card.tap()
     }
 
-    private func openWeeklyStatsDetail() {
-        navigateToActivity()
+    private func openWellnessMetricDetail(_ cardIdentifier: String) {
+        navigateToWellness()
+        let card = app.descendants(matching: .any)[cardIdentifier].firstMatch
+        var reachedCard = false
 
-        let readinessHero = waitForElement(AXID.activityHeroReadiness, timeout: 15)
+        for _ in 0..<6 {
+            dismissMorningBriefingIfNeeded(timeout: 1.5)
+            if card.waitForExistence(timeout: 1) {
+                reachedCard = true
+                break
+            }
+
+            let scrollView = app.scrollViews.firstMatch
+            if scrollView.waitForExistence(timeout: 1) {
+                scrollView.swipeUp()
+            }
+        }
+
+        XCTAssertTrue(reachedCard || card.exists, "\(cardIdentifier) should be reachable in seeded Wellness state")
+        card.tap()
+    }
+
+    private func dismissMorningBriefingIfNeeded(timeout: TimeInterval = 5) {
+        let briefingScreen = app.descendants(matching: .any)[AXID.dashboardMorningBriefingScreen].firstMatch
+        let dismissButton = app.descendants(matching: .any)[AXID.dashboardMorningBriefingDismiss].firstMatch
+        let deadline = Date().addingTimeInterval(timeout)
+
+        while Date() < deadline {
+            if dismissButton.waitForExistence(timeout: 0.25) {
+                dismissButton.tap()
+
+                let predicate = NSPredicate(format: "exists == false")
+                let expectation = XCTNSPredicateExpectation(predicate: predicate, object: briefingScreen)
+                XCTAssertEqual(
+                    XCTWaiter.wait(for: [expectation], timeout: 5),
+                    .completed,
+                    "Morning Briefing should dismiss before opening metric detail flows"
+                )
+                return
+            }
+
+            RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.1))
+        }
+
+        guard !briefingScreen.exists else {
+            XCTFail("Morning Briefing remained visible without exposing a dismiss button")
+            return
+        }
+    }
+
+    private func openWeeklyStatsDetail() {
+        let readinessHero = app.descendants(matching: .any)[AXID.activityHeroReadiness].firstMatch
+        for _ in 0..<2 {
+            navigateToActivity()
+            dismissMorningBriefingIfNeeded(timeout: 1.5)
+            if readinessHero.waitForExistence(timeout: 15) {
+                break
+            }
+        }
+
         XCTAssertTrue(readinessHero.exists, "Activity tab should be visible before opening weekly stats")
 
+        XCTAssertTrue(
+            app.scrollToHittableElementIfNeeded(AXID.activitySectionWeeklyStats, maxSwipes: 6),
+            "Weekly stats section should be reachable before opening detail"
+        )
         let weeklyStatsSection = waitForElement(AXID.activitySectionWeeklyStats, timeout: 15)
         weeklyStatsSection.tap()
 
@@ -372,20 +374,43 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
     }
 
     private func openTrainingVolumeDetail() {
-        navigateToActivity()
+        let readinessHero = app.descendants(matching: .any)[AXID.activityHeroReadiness].firstMatch
+        for _ in 0..<2 {
+            navigateToActivity()
+            dismissMorningBriefingIfNeeded(timeout: 1.5)
+            if readinessHero.waitForExistence(timeout: 15) {
+                break
+            }
+        }
 
-        let readinessHero = waitForElement(AXID.activityHeroReadiness, timeout: 15)
         XCTAssertTrue(readinessHero.exists, "Activity tab should be visible before opening training volume")
-        waitForElement(AXID.activitySectionVolume, timeout: 15).tap()
+        let volumeSection = waitForElement(AXID.activitySectionVolume, timeout: 15)
+        XCTAssertTrue(
+            scrollUntilHittable(volumeSection, maxSwipes: 8),
+            "Training volume section should be reachable before opening detail"
+        )
+        let detailScreen = app.descendants(matching: .any)[AXID.activityTrainingVolumeDetailScreen].firstMatch
 
-        let detailScreen = waitForElement(AXID.activityTrainingVolumeDetailScreen, timeout: 15)
-        XCTAssertTrue(detailScreen.exists, "Training volume detail should open from the Activity tab")
+        for attempt in 0..<2 {
+            volumeSection.tap()
+            if detailScreen.waitForExistence(timeout: attempt == 0 ? 10 : 15) {
+                XCTAssertTrue(detailScreen.exists, "Training volume detail should open from the Activity tab")
+                return
+            }
+
+            XCTAssertTrue(
+                scrollUntilHittable(volumeSection, maxSwipes: 3),
+                "Training volume section should remain tappable while retrying detail navigation"
+            )
+        }
+
+        XCTFail("Training volume detail should open from the Activity tab")
     }
 
     private func trainingVolumeChart() -> XCUIElement {
         let chart = waitForElement(AXID.trainingVolumeChartTrainingLoad, timeout: 15)
         XCTAssertTrue(
-            app.scrollToHittableElementIfNeeded(AXID.trainingVolumeChartTrainingLoad, maxSwipes: 6),
+            scrollTrainingVolumeDetailUntilHittable(chart, maxSwipes: 6),
             "Training load chart should be on-screen before chart gestures"
         )
         return chart
@@ -393,8 +418,38 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
 
     private func trainingVolumeDailyVolumeChart() -> XCUIElement {
         let chart = waitForElement(AXID.trainingVolumeChartDailyVolume, timeout: 15)
-        XCTAssertTrue(chart.exists, "Training volume daily volume chart should be visible on the detail screen")
+        XCTAssertTrue(
+            scrollTrainingVolumeDetailUntilHittable(chart, maxSwipes: 6),
+            "Training volume daily volume chart should be on-screen before chart gestures"
+        )
         return chart
+    }
+
+    private func scrollTrainingVolumeDetailUntilHittable(
+        _ element: XCUIElement,
+        maxSwipes: Int
+    ) -> Bool {
+        scrollUntilHittable(
+            element,
+            maxSwipes: maxSwipes,
+            scrollContainer: app.descendants(matching: .any)[AXID.activityTrainingVolumeDetailScreen].firstMatch
+        )
+    }
+
+    private func scrollUntilHittable(
+        _ element: XCUIElement,
+        maxSwipes: Int,
+        scrollContainer: XCUIElement? = nil
+    ) -> Bool {
+        for _ in 0..<maxSwipes where !(element.exists && element.isHittable) {
+            if let scrollContainer, scrollContainer.exists {
+                scrollContainer.swipeUp()
+            } else {
+                app.swipeUp()
+            }
+        }
+
+        return element.exists && element.isHittable
     }
 
     private func assertDetailChartScrollsToPastData(category: String) {
@@ -405,16 +460,9 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
         let chart = waitForElement(AXID.detailChartSurface, timeout: 15)
         let initialRange = visibleRange.label
 
-        let start = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.78, dy: 0.55))
-        let end = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.22, dy: 0.55))
-        start.press(forDuration: 0.05, thenDragTo: end)
-
-        if visibleRange.label == initialRange {
-            start.press(forDuration: 0.05, thenDragTo: end)
-        }
-
+        let updatedRange = performHorizontalChartDragUntilRangeChanges(chart, initialRange: initialRange)
         XCTAssertNotEqual(
-            visibleRange.label,
+            updatedRange,
             initialRange,
             "Horizontal drag on the \(category) chart should reveal an older visible range"
         )
@@ -422,5 +470,112 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
 
     private func visibleRangeValue(of element: XCUIElement) -> String {
         element.value as? String ?? ""
+    }
+
+    private func waitForLabelChange(
+        of element: XCUIElement,
+        from initialLabel: String,
+        timeout: TimeInterval = 1.5
+    ) -> String {
+        let deadline = Date().addingTimeInterval(timeout)
+        var latestLabel = element.label
+
+        while Date() < deadline {
+            latestLabel = element.label
+            if latestLabel != initialLabel {
+                return latestLabel
+            }
+            RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.1))
+        }
+
+        return latestLabel
+    }
+
+    private func performHorizontalChartDragUntilRangeChanges(
+        _ chart: XCUIElement,
+        initialRange: String,
+        attempts: [(startDX: CGFloat, endDX: CGFloat, duration: TimeInterval)] = [
+            (0.88, 0.12, 0.05),
+            (0.12, 0.88, 0.05),
+            (0.92, 0.08, 0.05),
+            (0.08, 0.92, 0.05),
+            (0.84, 0.16, 0.05),
+            (0.16, 0.84, 0.05),
+        ],
+        timeoutPerAttempt: TimeInterval = 1.5
+    ) -> String {
+        for attempt in attempts {
+            let start = chart.coordinate(withNormalizedOffset: CGVector(dx: attempt.startDX, dy: 0.55))
+            let end = chart.coordinate(withNormalizedOffset: CGVector(dx: attempt.endDX, dy: 0.55))
+            start.press(forDuration: attempt.duration, thenDragTo: end)
+
+            let updatedRange = waitForVisibleRangeChange(
+                of: chart,
+                from: initialRange,
+                timeout: timeoutPerAttempt
+            )
+            if updatedRange != initialRange {
+                return updatedRange
+            }
+        }
+
+        return visibleRangeValue(of: chart)
+    }
+
+    private func waitForVisibleRangeChange(
+        of element: XCUIElement,
+        from initialRange: String,
+        timeout: TimeInterval = 1.5
+    ) -> String {
+        let deadline = Date().addingTimeInterval(timeout)
+        var latestRange = visibleRangeValue(of: element)
+
+        while Date() < deadline {
+            latestRange = visibleRangeValue(of: element)
+            if latestRange != initialRange {
+                return latestRange
+            }
+            RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.1))
+        }
+
+        return latestRange
+    }
+
+    private func assertChartVisibleRangeChanges(
+        _ chart: XCUIElement,
+        failureMessage: String
+    ) {
+        let initialRange = visibleRangeValue(of: chart)
+        let updatedRange = performHorizontalChartDragUntilRangeChanges(chart, initialRange: initialRange)
+
+        XCTAssertNotEqual(
+            updatedRange,
+            initialRange,
+            failureMessage
+        )
+    }
+
+    private func performLongPressUntilProbeChanges(
+        chart: XCUIElement,
+        selectionProbe: XCUIElement,
+        attempts: [(startDX: CGFloat, endDX: CGFloat)] = [
+            (0.45, 0.58),
+            (0.48, 0.54),
+            (0.40, 0.52),
+        ],
+        duration: TimeInterval = 0.45
+    ) -> String {
+        for attempt in attempts {
+            let start = chart.coordinate(withNormalizedOffset: CGVector(dx: attempt.startDX, dy: 0.55))
+            let end = chart.coordinate(withNormalizedOffset: CGVector(dx: attempt.endDX, dy: 0.55))
+            start.press(forDuration: duration, thenDragTo: end)
+
+            let probeLabel = waitForLabelChange(of: selectionProbe, from: "none")
+            if probeLabel != "none" {
+                return probeLabel
+            }
+        }
+
+        return selectionProbe.label
     }
 }

@@ -136,10 +136,10 @@ struct DotLineChartView: View {
                 guard let newValue else { return }
                 lastSelectionProbeLabel = newValue.formatted(date: .abbreviated, time: .omitted)
             }
+            .accessibilityChartDescriptor(chartDescriptor)
             .chartSelectionUITestProbe(lastSelectionProbeLabel)
             .frame(height: chartHeight)
             .clipped()
-            .accessibilityChartDescriptor(chartDescriptor)
     }
 
     private var chartDescriptor: StandardChartAccessibility {

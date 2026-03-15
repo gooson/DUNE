@@ -98,7 +98,7 @@ struct TrainingLoadChartView: View {
             if cachedMovingAverage.count >= 2 {
                 ForEach(cachedMovingAverage) { point in
                     LineMark(
-                        x: .value("Date", point.date),
+                        x: .value("Date", point.date, unit: .day),
                         y: .value("Average", point.value),
                         series: .value("Series", "avg")
                     )
@@ -157,7 +157,10 @@ struct TrainingLoadChartView: View {
             guard let newValue else { return }
             lastSelectionProbeLabel = newValue.formatted(date: .abbreviated, time: .omitted)
         }
-        .chartSelectionUITestProbe(lastSelectionProbeLabel)
+        .chartSelectionUITestProbe(
+            lastSelectionProbeLabel,
+            identifier: "training-volume-chart-training-load-selection-probe"
+        )
     }
 
     // MARK: - Helpers

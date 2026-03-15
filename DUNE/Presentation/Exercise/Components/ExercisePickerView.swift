@@ -74,7 +74,9 @@ struct ExercisePickerView: View {
             customResults = customDefinitions.filter { $0.customCategoryName == userCatName }
         } else if let category = selectedCategory {
             libraryResults = library.exercises(forCategory: category)
-            customResults = customDefinitions.filter { $0.category == category && $0.customCategoryName == nil }
+            // Custom exercises should remain visible under their base exercise category
+            // even when they also belong to a user-defined category.
+            customResults = customDefinitions.filter { $0.category == category }
         } else {
             libraryResults = library.allExercises()
             customResults = customDefinitions
@@ -298,6 +300,22 @@ struct ExercisePickerView: View {
 
     @ViewBuilder
     private var quickStartHubSections: some View {
+        Section {
+            Button {
+                showingAllQuickStartExercises = true
+            } label: {
+                HStack {
+                    Label("All Exercises", systemImage: "plus.circle.fill")
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
+                }
+            }
+            .foregroundStyle(DS.Color.activity)
+            .accessibilityIdentifier("picker-all-exercises-button")
+        }
+
         if !recentExercises.isEmpty {
             Section {
                 ForEach(recentExercises) { exercise in
@@ -329,22 +347,6 @@ struct ExercisePickerView: View {
                 Text("Popular")
                     .accessibilityIdentifier("picker-section-popular")
             }
-        }
-
-        Section {
-            Button {
-                showingAllQuickStartExercises = true
-            } label: {
-                HStack {
-                    Label("All Exercises", systemImage: "plus.circle.fill")
-                    Spacer()
-                    Image(systemName: "chevron.right")
-                        .font(.caption2)
-                        .foregroundStyle(.tertiary)
-                }
-            }
-            .foregroundStyle(DS.Color.activity)
-            .accessibilityIdentifier("picker-all-exercises-button")
         }
     }
 
@@ -511,50 +513,7 @@ struct ExercisePickerView: View {
 
     private func exerciseRow(_ exercise: ExerciseDefinition) -> some View {
         HStack(spacing: DS.Spacing.sm) {
-            Button {
-                dismissPicker {
-                    onSelect(exercise)
-                }
-            } label: {
-                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                    HStack(spacing: DS.Spacing.xs) {
-                        Text(exercise.localizedName)
-                            .font(.body)
-                            .foregroundStyle(theme.sandColor)
-                        if exercise.id.hasPrefix("custom-") {
-                            Text("Custom")
-                                .font(.system(size: 9, weight: .medium))
-                                .padding(.horizontal, DS.Spacing.xs)
-                                .padding(.vertical, 1)
-                                .background(DS.Color.activity.opacity(0.15), in: Capsule())
-                                .foregroundStyle(DS.Color.activity)
-                        }
-                    }
-                    if exercise.localizedName != exercise.name {
-                        Text(exercise.name)
-                            .font(.caption)
-                            .foregroundStyle(.tertiary)
-                    }
-                    HStack(spacing: DS.Spacing.xs) {
-                        Text(exercise.primaryMuscles.map(\.displayName).joined(separator: ", "))
-                            .font(.caption)
-                            .foregroundStyle(DS.Color.textSecondary)
-                        Text("\u{00B7}")
-                            .foregroundStyle(.tertiary)
-                        Label {
-                            Text(exercise.equipment.displayName)
-                        } icon: {
-                            exercise.equipment.svgIcon(size: 12)
-                        }
-                        .font(.caption)
-                        .foregroundStyle(.tertiary)
-                    }
-                }
-            }
-            .buttonStyle(.plain)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .contentShape(Rectangle())
-            .accessibilityIdentifier("picker-row-\(exercise.id)")
+            rowPrimaryAction(for: exercise)
 
             Button {
                 detailExercise = exercise
@@ -567,11 +526,77 @@ struct ExercisePickerView: View {
         }
     }
 
+    @ViewBuilder
+    private func rowPrimaryAction(for exercise: ExerciseDefinition) -> some View {
+        if isQuickStartMode {
+            Button {
+                dismissPicker {
+                    onSelect(exercise)
+                }
+            } label: {
+                exerciseRowContent(exercise)
+            }
+            .buttonStyle(.plain)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .contentShape(Rectangle())
+            .accessibilityIdentifier("picker-row-\(exercise.id)")
+        } else {
+            exerciseRowContent(exercise)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    onSelect(exercise)
+                }
+                .accessibilityIdentifier("picker-row-\(exercise.id)")
+                .accessibilityAddTraits(.isButton)
+        }
+    }
+
+    private func exerciseRowContent(_ exercise: ExerciseDefinition) -> some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+            HStack(spacing: DS.Spacing.xs) {
+                Text(exercise.localizedName)
+                    .font(.body)
+                    .foregroundStyle(theme.sandColor)
+                if exercise.id.hasPrefix("custom-") {
+                    Text("Custom")
+                        .font(.system(size: 9, weight: .medium))
+                        .padding(.horizontal, DS.Spacing.xs)
+                        .padding(.vertical, 1)
+                        .background(DS.Color.activity.opacity(0.15), in: Capsule())
+                        .foregroundStyle(DS.Color.activity)
+                }
+            }
+            if exercise.localizedName != exercise.name {
+                Text(exercise.name)
+                    .font(.caption)
+                    .foregroundStyle(.tertiary)
+            }
+            HStack(spacing: DS.Spacing.xs) {
+                Text(exercise.primaryMuscles.map(\.displayName).joined(separator: ", "))
+                    .font(.caption)
+                    .foregroundStyle(DS.Color.textSecondary)
+                Text("\u{00B7}")
+                    .foregroundStyle(.tertiary)
+                Label {
+                    Text(exercise.equipment.displayName)
+                } icon: {
+                    exercise.equipment.svgIcon(size: 12)
+                }
+                .font(.caption)
+                .foregroundStyle(.tertiary)
+            }
+        }
+    }
+
     private func dismissPicker(_ action: @escaping @MainActor () -> Void) {
         dismiss()
-        Task { @MainActor in
-            await Task.yield()
-            action()
+        // Nested sheet dismissal can cancel structured tasks before the selection
+        // mutation reaches the presenting view, so hop to the next main-queue turn.
+        DispatchQueue.main.async {
+            Task { @MainActor in
+                action()
+            }
         }
     }
 

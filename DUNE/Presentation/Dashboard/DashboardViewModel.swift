@@ -175,10 +175,11 @@ final class DashboardViewModel {
         isLoading = true
         defer { finishLoadRequest(requestID) }
 
-        let healthKitAvailable = healthKitManager.isAvailable && !Self.shouldUseSeededUITestFixtures
-        let canQueryHealthKit = healthKitAvailable && canLoadHealthKitData
-        let canUseSharedSnapshot = !healthKitAvailable || canLoadHealthKitData
-        isMirroredReadOnlyMode = !healthKitAvailable
+        let healthKitAvailable = healthKitManager.isAvailable
+        let canQueryMockBackedServices = Self.shouldUseSeededUITestFixtures
+        let canQueryHealthKit = (healthKitAvailable || canQueryMockBackedServices) && canLoadHealthKitData
+        let canUseSharedSnapshot = canQueryMockBackedServices || !healthKitAvailable || canLoadHealthKitData
+        isMirroredReadOnlyMode = !healthKitAvailable && !canQueryMockBackedServices
         errorMessage = nil
 
         // Optimistic update: only reset state on first load (skeleton display).

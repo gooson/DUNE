@@ -129,7 +129,10 @@ struct StackedVolumeBarChartView: View {
             guard let newValue else { return }
             lastSelectionProbeLabel = newValue.formatted(date: .abbreviated, time: .omitted)
         }
-        .chartSelectionUITestProbe(lastSelectionProbeLabel)
+        .chartSelectionUITestProbe(
+            lastSelectionProbeLabel,
+            identifier: "training-volume-chart-daily-volume-selection-probe"
+        )
     }
 
     // MARK: - Legend

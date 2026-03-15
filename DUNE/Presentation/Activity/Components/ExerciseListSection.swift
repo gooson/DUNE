@@ -13,6 +13,7 @@ struct ExerciseListSection: View {
     let workouts: [WorkoutSummary]
     let exerciseRecords: [ExerciseRecord]
     let limit: Int
+    @State private var isShowingExerciseView = false
 
     private let exerciseLibrary: ExerciseLibraryQuerying
 
@@ -39,13 +40,22 @@ struct ExerciseListSection: View {
             HStack {
                 Spacer()
 
-                NavigationLink {
-                    ExerciseView()
+                Button {
+                    isShowingExerciseView = true
                 } label: {
-                    Text("See All")
-                        .font(.caption)
-                        .foregroundStyle(DS.Color.activity)
+                    HStack(spacing: DS.Spacing.xxs) {
+                        Text("See All")
+                        Image(systemName: "chevron.right")
+                            .font(.caption2.weight(.semibold))
+                    }
+                    .font(.caption)
+                    .foregroundStyle(DS.Color.activity)
+                    .padding(.vertical, 6)
+                    .padding(.horizontal, 8)
+                    .contentShape(Rectangle())
                 }
+                .buttonStyle(.plain)
+                .frame(maxWidth: .infinity, alignment: .trailing)
                 .accessibilityIdentifier("activity-recent-seeall")
             }
 
@@ -71,6 +81,9 @@ struct ExerciseListSection: View {
                     }
                 }
             }
+        }
+        .navigationDestination(isPresented: $isShowingExerciseView) {
+            ExerciseView()
         }
     }
 

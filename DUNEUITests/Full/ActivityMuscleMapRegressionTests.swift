@@ -69,7 +69,7 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
         XCTAssertTrue(modePicker.waitForExistence(timeout: 10), "Mode picker should exist")
 
         // The picker starts on Recovery (first case). Tap Volume segment.
-        let volumeButton = modePicker.buttons["Volume"]
+        let volumeButton = modePicker.buttons.element(boundBy: 1)
         XCTAssertTrue(volumeButton.waitForExistence(timeout: 5), "Volume segment should be present in mode picker")
         volumeButton.tap()
 
@@ -125,10 +125,14 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
         let hero = app.descendants(matching: .any)[AXID.activityHeroReadiness].firstMatch
         XCTAssertTrue(hero.waitForExistence(timeout: 15), "Activity hero should exist")
 
-        XCTAssertTrue(app.scrollToElementIfNeeded(AXID.activitySectionMuscleMap, maxSwipes: 4))
-        let section = app.descendants(matching: .any)[AXID.activitySectionMuscleMap].firstMatch
-        XCTAssertTrue(section.waitForExistence(timeout: 5), "Muscle map section should exist")
-        section.tap()
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.activitySectionMuscleMap, maxSwipes: 4))
+        XCTAssertTrue(
+            app.scrollToHittableElementIfNeeded(AXID.activityMuscleMapDetailLink, maxSwipes: 4),
+            "Muscle map detail link should be reachable"
+        )
+        let detailLink = app.descendants(matching: .any)[AXID.activityMuscleMapDetailLink].firstMatch
+        XCTAssertTrue(detailLink.waitForExistence(timeout: 5), "Muscle map detail link should exist")
+        detailLink.tap()
 
         let detailScreen = app.descendants(matching: .any)[AXID.activityMuscleMapDetailScreen].firstMatch
         XCTAssertTrue(detailScreen.waitForExistence(timeout: 10), "Muscle Map detail should appear")

@@ -192,6 +192,11 @@ final class BodyCompositionViewModel {
     private func validateInputs() -> (weight: Double?, bodyFat: Double?, muscleMass: Double?)? {
         validationError = nil
 
+        if newWeight.isEmpty && newBodyFat.isEmpty && newMuscleMass.isEmpty {
+            validationError = String(localized: "Enter at least one body measurement")
+            return nil
+        }
+
         let weight: Double? = newWeight.isEmpty ? nil : Double(newWeight)
         if !newWeight.isEmpty {
             guard let w = weight, w > 0, w < maxWeight else {

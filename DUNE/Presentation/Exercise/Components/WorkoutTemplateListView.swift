@@ -99,6 +99,7 @@ struct WorkoutTemplateListView: View {
                     templateRow(template)
                 }
                 .buttonStyle(.plain)
+                .accessibilityIdentifier(templateRowAccessibilityIdentifier(for: template))
                 .swipeActions(edge: .leading, allowsFullSwipe: false) {
                     Button {
                         templateToEdit = template
@@ -106,6 +107,7 @@ struct WorkoutTemplateListView: View {
                         Label("Edit", systemImage: "pencil")
                     }
                     .tint(.orange)
+                    .accessibilityIdentifier(templateEditAccessibilityIdentifier(for: template))
                 }
                 .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                     Button(role: .destructive) {
@@ -147,6 +149,33 @@ struct WorkoutTemplateListView: View {
             }
         }
         .padding(.vertical, DS.Spacing.xxs)
+    }
+
+    private func templateRowAccessibilityIdentifier(for template: WorkoutTemplate) -> String {
+        let slug = templateAccessibilitySlug(for: template)
+
+        if slug.isEmpty {
+            return "workout-template-row-\(template.id.uuidString.lowercased())"
+        }
+
+        return "workout-template-row-\(slug)"
+    }
+
+    private func templateEditAccessibilityIdentifier(for template: WorkoutTemplate) -> String {
+        let slug = templateAccessibilitySlug(for: template)
+
+        if slug.isEmpty {
+            return "workout-template-edit-\(template.id.uuidString.lowercased())"
+        }
+
+        return "workout-template-edit-\(slug)"
+    }
+
+    private func templateAccessibilitySlug(for template: WorkoutTemplate) -> String {
+        template.name
+            .lowercased()
+            .replacingOccurrences(of: "[^a-z0-9]+", with: "-", options: .regularExpression)
+            .trimmingCharacters(in: CharacterSet(charactersIn: "-"))
     }
 
     private func syncTemplatesToWatch() {

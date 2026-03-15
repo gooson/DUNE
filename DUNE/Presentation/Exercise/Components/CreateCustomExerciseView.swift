@@ -177,6 +177,7 @@ struct CreateCustomExerciseView: View {
                 )
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier("create-custom-exercise-muscle-\(muscle.rawValue)")
     }
 
     private func createExercise() {

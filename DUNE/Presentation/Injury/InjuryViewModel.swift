@@ -20,6 +20,7 @@ final class InjuryViewModel {
     var selectedSide: BodySide? = nil
     var selectedSeverity: InjurySeverity = .moderate
     var startDate: Date = Date() { didSet { validationError = nil } }
+    var isRecovered = false
     var endDate: Date?
     var memo: String = ""
     var validationError: String?
@@ -71,6 +72,7 @@ final class InjuryViewModel {
     func markAsRecovered(_ record: InjuryRecord) {
         guard !isSaving else { return }
         record.endDate = Date()
+        isRecovered = true
     }
 
     // MARK: - Form Helpers
@@ -81,6 +83,7 @@ final class InjuryViewModel {
         selectedSide = record.bodySide
         selectedSeverity = record.severity
         startDate = record.startDate
+        isRecovered = record.endDate != nil
         endDate = record.endDate
         memo = record.memo
         validationError = nil
@@ -92,6 +95,7 @@ final class InjuryViewModel {
         selectedSide = nil
         selectedSeverity = .moderate
         startDate = Date()
+        isRecovered = false
         endDate = nil
         memo = ""
         validationError = nil

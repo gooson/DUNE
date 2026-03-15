@@ -46,7 +46,13 @@ struct MetricDetailView: View {
                         } else {
                             chart
                                 .frame(height: chartHeight)
-                                .accessibilityIdentifier("detail-chart-surface")
+                                .overlay {
+                                    ChartUITestSurface(
+                                        identifier: "detail-chart-surface",
+                                        label: "\(metric.category.englishDisplayName) Detail Chart",
+                                        value: viewModel.visibleRangeLabel
+                                    )
+                                }
                         }
                     }
                     .id(viewModel.selectedPeriod)

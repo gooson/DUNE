@@ -96,25 +96,34 @@ struct InjuryFormSheet: View {
                         )
                         .accessibilityIdentifier("injury-form-startdate")
 
-                        Toggle("Recovered", isOn: Binding(
-                            get: { viewModel.endDate != nil },
-                            set: { isRecovered in
-                                viewModel.endDate = isRecovered ? Date() : nil
+                        Button {
+                            viewModel.isRecovered.toggle()
+                            viewModel.endDate = viewModel.isRecovered ? (viewModel.endDate ?? Date()) : nil
+                        } label: {
+                            HStack {
+                                Text("Recovered")
+                                Spacer()
+                                Image(systemName: viewModel.isRecovered ? "checkmark.circle.fill" : "circle")
+                                    .foregroundStyle(viewModel.isRecovered ? Color.green : DS.Color.textSecondary)
                             }
-                        ))
+                            .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
                         .accessibilityIdentifier("injury-form-recovered-toggle")
+                        .accessibilityValue(viewModel.isRecovered ? "On" : "Off")
 
-                        if viewModel.endDate != nil {
+                        if viewModel.isRecovered, viewModel.endDate != nil {
                             DatePicker(
-                                "End Date",
                                 selection: Binding(
                                     get: { viewModel.endDate ?? Date() },
                                     set: { viewModel.endDate = $0 }
                                 ),
                                 in: viewModel.startDate...Date(),
                                 displayedComponents: [.date]
-                            )
-                            .accessibilityIdentifier("injury-form-enddate")
+                            ) {
+                                Text("End Date")
+                                    .accessibilityIdentifier("injury-form-enddate")
+                            }
                         }
                     }
 
