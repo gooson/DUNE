@@ -1,9 +1,9 @@
 ---
 source: brainstorm/posture-assessment-system
 priority: p3
-status: ready
+status: done
 created: 2026-03-15
-updated: 2026-03-15
+updated: 2026-03-16
 ---
 
 # 좌우 비교 상세 분석

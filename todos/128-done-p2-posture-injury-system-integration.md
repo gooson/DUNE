@@ -1,9 +1,9 @@
 ---
 source: brainstorm/posture-assessment-system
 priority: p2
-status: ready
+status: done
 created: 2026-03-15
-updated: 2026-03-15
+updated: 2026-03-16
 ---
 
 # Injury 시스템 연계
