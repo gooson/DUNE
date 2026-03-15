@@ -643,14 +643,13 @@ final class WorkoutManager: NSObject {
         if index < completedSetsData.count, !completedSetsData[index].isEmpty { return false }
         switch direction {
         case .up:
-            // Cannot move up past completed exercises
             guard index > 0 else { return false }
-            if completedSetsData[index - 1].isEmpty { return true }
-            return false
+            guard index - 1 < completedSetsData.count else { return true }
+            return completedSetsData[index - 1].isEmpty
         case .down:
             guard index < count - 1 else { return false }
-            if completedSetsData[index + 1].isEmpty { return true }
-            return false
+            guard index + 1 < completedSetsData.count else { return true }
+            return completedSetsData[index + 1].isEmpty
         }
     }
 
@@ -671,7 +670,6 @@ final class WorkoutManager: NSObject {
     /// Keeps `completedSetsData`, `extraSetsPerExercise`, and `currentExerciseIndex` in sync.
     func moveExercise(at index: Int, direction: MoveDirection) {
         guard canMoveExercise(at: index, direction: direction) else { return }
-        guard templateSnapshot != nil else { return }
 
         let targetIndex: Int
         switch direction {
@@ -685,12 +683,14 @@ final class WorkoutManager: NSObject {
         // Swap entries
         templateSnapshot!.entries.swapAt(index, targetIndex)
 
-        // Swap completedSetsData
-        if index < completedSetsData.count, targetIndex < completedSetsData.count {
-            completedSetsData.swapAt(index, targetIndex)
+        // Pad completedSetsData to match entries count before swap
+        let entryCount = templateSnapshot!.entries.count
+        while completedSetsData.count < entryCount {
+            completedSetsData.append([])
         }
+        completedSetsData.swapAt(index, targetIndex)
 
-        // Remap extraSetsPerExercise keys
+        // Remap extraSetsPerExercise keys (swap values at index <-> targetIndex)
         let extraAtIndex = extraSetsPerExercise[index]
         let extraAtTarget = extraSetsPerExercise[targetIndex]
         extraSetsPerExercise.removeValue(forKey: index)

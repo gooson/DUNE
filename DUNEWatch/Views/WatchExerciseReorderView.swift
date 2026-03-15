@@ -5,7 +5,6 @@ import SwiftUI
 /// Completed exercises are pinned and cannot be moved.
 struct WatchExerciseReorderView: View {
     @Environment(WorkoutManager.self) private var workoutManager
-    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         List {
@@ -16,29 +15,17 @@ struct WatchExerciseReorderView: View {
                             && !workoutManager.completedSetsData[index].isEmpty
                         let isCurrent = index == workoutManager.currentExerciseIndex
 
-                        HStack(spacing: DS.Spacing.md) {
-                            if isCompleted {
-                                Image(systemName: "checkmark.circle.fill")
-                                    .foregroundStyle(DS.Color.positive)
-                                    .frame(width: 20)
-                            } else if isCurrent {
-                                Image(systemName: "play.circle.fill")
-                                    .foregroundStyle(DS.Color.activity)
-                                    .frame(width: 20)
-                            } else {
-                                Text("\(index + 1)")
-                                    .font(DS.Typography.metricLabel)
-                                    .foregroundStyle(.secondary)
-                                    .frame(width: 20)
-                            }
+                        let row = exerciseRow(
+                            index: index,
+                            entry: entry,
+                            isCompleted: isCompleted,
+                            isCurrent: isCurrent
+                        )
 
-                            Text(entry.exerciseName)
-                                .font(DS.Typography.tileSubtitle)
-                                .lineLimit(1)
-                        }
-                        .opacity(isCompleted ? 0.5 : 1.0)
-                        .contextMenu {
-                            if !isCompleted {
+                        if isCompleted {
+                            row
+                        } else {
+                            row.contextMenu {
                                 if workoutManager.canMoveExercise(at: index, direction: .up) {
                                     Button {
                                         workoutManager.moveExercise(at: index, direction: .up)
@@ -57,12 +44,40 @@ struct WatchExerciseReorderView: View {
                         }
                     }
                 } header: {
-                    Text(String(localized: "Reorder Exercises"))
+                    Text("Reorder Exercises")
                 }
             }
         }
         .scrollContentBackground(.hidden)
         .background { WatchWaveBackground() }
-        .navigationTitle(String(localized: "Reorder"))
+    }
+
+    private func exerciseRow(
+        index: Int,
+        entry: TemplateEntry,
+        isCompleted: Bool,
+        isCurrent: Bool
+    ) -> some View {
+        HStack(spacing: DS.Spacing.md) {
+            if isCompleted {
+                Image(systemName: "checkmark.circle.fill")
+                    .foregroundStyle(DS.Color.positive)
+                    .frame(width: 20)
+            } else if isCurrent {
+                Image(systemName: "play.circle.fill")
+                    .foregroundStyle(DS.Color.activity)
+                    .frame(width: 20)
+            } else {
+                Text("\(index + 1)")
+                    .font(DS.Typography.metricLabel)
+                    .foregroundStyle(.secondary)
+                    .frame(width: 20)
+            }
+
+            Text(entry.exerciseName)
+                .font(DS.Typography.tileSubtitle)
+                .lineLimit(1)
+        }
+        .opacity(isCompleted ? 0.5 : 1.0)
     }
 }

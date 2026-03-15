@@ -15,7 +15,12 @@ struct WorkoutPreviewView: View {
     @State private var selectedLevel: Int = 5
     @FocusState private var levelFocused: Bool
     /// Mutable copy of entries for pre-workout reordering (original template unchanged).
-    @State private var reorderedEntries: [TemplateEntry] = []
+    @State private var reorderedEntries: [TemplateEntry]
+
+    init(snapshot: WorkoutSessionTemplate) {
+        self.snapshot = snapshot
+        _reorderedEntries = State(initialValue: snapshot.entries)
+    }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -304,18 +309,14 @@ struct WorkoutPreviewView: View {
                         .contextMenu {
                             if index > 0 {
                                 Button {
-                                    withAnimation {
-                                        reorderedEntries.swapAt(index, index - 1)
-                                    }
+                                    reorderedEntries.swapAt(index, index - 1)
                                 } label: {
                                     Label(String(localized: "Move Up"), systemImage: "arrow.up")
                                 }
                             }
                             if index < reorderedEntries.count - 1 {
                                 Button {
-                                    withAnimation {
-                                        reorderedEntries.swapAt(index, index + 1)
-                                    }
+                                    reorderedEntries.swapAt(index, index + 1)
                                 } label: {
                                     Label(String(localized: "Move Down"), systemImage: "arrow.down")
                                 }
@@ -357,11 +358,6 @@ struct WorkoutPreviewView: View {
             .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.workoutPreviewStartButton)
             .padding(.horizontal, DS.Spacing.lg)
             .padding(.bottom, DS.Spacing.xs)
-        }
-        .onAppear {
-            if reorderedEntries.isEmpty {
-                reorderedEntries = snapshot.entries
-            }
         }
     }
 
