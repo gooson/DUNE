@@ -287,6 +287,13 @@ final class ActivityViewModel {
         // Build set of HK workout IDs that already have ExerciseRecords (to avoid double-counting)
         let linkedHKIDs = Set(manualRecordsCache.compactMap(\.healthKitWorkoutID))
 
+        // Build name→definition lookup for orphaned workout recovery (O(E) once, not O(W×E))
+        var libraryByName: [String: ExerciseDefinition] = [:]
+        for def in library.allExercises() where !def.primaryMuscles.isEmpty {
+            libraryByName[def.name.lowercased()] = def
+            libraryByName[def.localizedName.lowercased()] = def
+        }
+
         // Merge SwiftData exercise snapshots with HealthKit workout snapshots
         var healthKitSnapshots: [ExerciseRecordSnapshot] = []
 
@@ -308,12 +315,9 @@ final class ActivityViewModel {
                 ))
             } else if !linkedHKIDs.contains(workout.id) {
                 // Orphaned app-created workout (ExerciseRecord lost due to store recovery).
-                // Recover muscle data by looking up the exercise name in the library.
+                // Recover muscle data via O(1) name lookup.
                 let exerciseName = workout.type
-                if let definition = library.search(query: exerciseName).first(where: {
-                    $0.name.caseInsensitiveCompare(exerciseName) == .orderedSame
-                        || $0.localizedName.caseInsensitiveCompare(exerciseName) == .orderedSame
-                }), !definition.primaryMuscles.isEmpty {
+                if let definition = libraryByName[exerciseName.lowercased()] {
                     healthKitSnapshots.append(ExerciseRecordSnapshot(
                         date: workout.date,
                         exerciseDefinitionID: definition.id,
