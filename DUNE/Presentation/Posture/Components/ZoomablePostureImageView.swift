@@ -34,17 +34,6 @@ func postureOrientationCorrectedJoints(_ joints: [JointPosition3D]) -> [JointPos
     }
 }
 
-// MARK: - Zoomable Image Item
-
-struct ZoomableImageItem: Identifiable {
-    let id = UUID()
-    let uiImage: UIImage
-    let joints: [JointPosition3D]
-    let metrics: [PostureMetricResult]
-    let captureType: PostureCaptureType
-    let label: String
-}
-
 // MARK: - View Modifier
 
 extension View {
