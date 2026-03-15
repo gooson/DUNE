@@ -276,6 +276,28 @@
         }
       }
     },
+    "%@ reps" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ reps"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@回"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@회"
+          }
+        }
+      }
+    },
     "%@ and %lld muscle groups total show very high fatigue. Rest for 1–2 days, then ease back in with light exercise." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -8703,6 +8725,134 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "거리"
+          }
+        }
+      }
+    },
+    "Decrease Distance" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "距離を減らす"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "거리 줄이기"
+          }
+        }
+      }
+    },
+    "Decrease Duration" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "時間を減らす"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "시간 줄이기"
+          }
+        }
+      }
+    },
+    "Decrease Reps" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "回数を減らす"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "횟수 줄이기"
+          }
+        }
+      }
+    },
+    "Decrease Weight" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重量を減らす"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "중량 줄이기"
+          }
+        }
+      }
+    },
+    "Increase Distance" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "距離を増やす"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "거리 늘리기"
+          }
+        }
+      }
+    },
+    "Increase Duration" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "時間を増やす"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "시간 늘리기"
+          }
+        }
+      }
+    },
+    "Increase Reps" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "回数を増やす"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "횟수 늘리기"
+          }
+        }
+      }
+    },
+    "Increase Weight" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重量を増やす"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "중량 늘리기"
           }
         }
       }
@@ -21760,6 +21910,28 @@
         }
       }
     },
+    "Ready to save %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Ready to save %1$@."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@を保存できます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 저장 준비가 됐습니다."
+          }
+        }
+      }
+    },
     "Ready to Train" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -24046,6 +24218,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "저장됨"
+          }
+        }
+      }
+    },
+    "Saved %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Saved %1$@."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@を保存しました。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 저장했습니다."
           }
         }
       }

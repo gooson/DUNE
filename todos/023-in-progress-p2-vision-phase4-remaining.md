@@ -3,7 +3,7 @@ source: brainstorm/vision-pro-production-roadmap
 priority: p2
 status: in-progress
 created: 2026-03-08
-updated: 2026-03-08
+updated: 2026-03-16
 ---
 
 # Phase 5C: visionOS 고급 기능 (Phase 4 잔여)
@@ -14,7 +14,8 @@ updated: 2026-03-08
 - Phase 5B UX polish 구현은 `todos/022-done-p2-vision-ux-polish.md`로 닫혔다.
 - runtime spatial placement visual verification은 `todos/107-ready-p2-vision-window-placement-runtime-validation.md`에서 별도 추적한다.
 - Voice quick entry는 draft preview를 넘어 single-entry workout history 저장까지 연결됐다.
-- 따라서 남은 F3 범위는 audio/spatial feedback, richer editing, multilingual confirmation UX로 줄었다.
+- `todos/140-done-p2-vision-voice-feedback-confirmation.md`에서 locale-aware confirmation, TTS fallback, quick adjust editing을 닫았다.
+- 따라서 남은 F3 범위는 true spatial audio cue와 multi-step session editing으로 줄었다.
 - G1도 SharePlay workout board foundation은 완료됐고, 남은 범위는 SharedWorldAnchors 기반 spatial sync/placement 고도화다.
 
 ## 목표
@@ -32,10 +33,9 @@ SharePlay, Voice Input 등 Phase 4에서 보류된 고급 기능을 구현한다
 
 ### 2. F3 Voice-First Workout Entry
 
-- audio-first enhancement scope only
-- 저장 후 음성 피드백 (TTS 또는 spatial audio)
-- multi-step/richer editing flow
-- 한국어/영어/일본어 confirmation UX polish
+- advanced audio-first scope only
+- spatial audio cue / ambient soundscape
+- multi-step session editing beyond quick adjust
 
 ### 3. Spatial Audio
 
