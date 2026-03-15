@@ -7,6 +7,7 @@ struct PostureDetailView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var showDeleteConfirmation = false
     @State private var zoomImage: ZoomableImageItem?
+    @State private var pdfURL: URL?
 
     var body: some View {
         ScrollView {
@@ -34,6 +35,19 @@ struct PostureDetailView: View {
                 Text(record.date, style: .date)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
+            }
+            ToolbarItem(placement: .primaryAction) {
+                if let pdfURL {
+                    ShareLink(item: pdfURL) {
+                        Image(systemName: "square.and.arrow.up")
+                    }
+                } else {
+                    Button {
+                        generatePDFReport()
+                    } label: {
+                        Image(systemName: "doc.text")
+                    }
+                }
             }
         }
         .background { DetailWaveBackground() }
@@ -285,5 +299,16 @@ struct PostureDetailView: View {
 
     private func scoreColor(_ score: Int) -> Color {
         postureScoreColor(score)
+    }
+
+    private func generatePDFReport() {
+        let generator = PostureReportGenerator()
+        let data = generator.generatePDF(from: record)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let fileName = "PostureReport-\(dateFormatter.string(from: record.date)).pdf"
+        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
+        try? data.write(to: tempURL)
+        pdfURL = tempURL
     }
 }
