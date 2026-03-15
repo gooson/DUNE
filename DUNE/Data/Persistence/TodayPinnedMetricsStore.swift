@@ -8,7 +8,7 @@ final class TodayPinnedMetricsStore: @unchecked Sendable {
     private let defaults: UserDefaults
     private let key: String
 
-    static let maxPinnedCount = 3
+    static let maxPinnedCount = 6
     static let fallback: [HealthMetric.Category] = [.hrv, .rhr, .sleep]
     static let allowedCategories: Set<HealthMetric.Category> = [
         .hrv, .rhr, .sleep, .steps, .exercise, .weight, .bmi
