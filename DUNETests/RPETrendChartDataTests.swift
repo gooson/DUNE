@@ -3,6 +3,7 @@ import Testing
 @testable import DUNE
 
 @Suite("RPE Trend Chart Data Aggregation")
+@MainActor
 struct RPETrendChartDataTests {
 
     // MARK: - Empty / No Data
@@ -120,7 +121,7 @@ struct RPETrendChartDataTests {
     private func makeRecord(daysAgo: Int, rpe: Int?) -> ExerciseRecord {
         let calendar = Calendar.current
         let date = calendar.date(byAdding: .day, value: -daysAgo, to: Date()) ?? Date()
-        let record = ExerciseRecord(exerciseType: "Test", date: date)
+        let record = ExerciseRecord(date: date, exerciseType: "Test")
         record.rpe = rpe
         return record
     }
