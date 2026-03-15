@@ -17,6 +17,8 @@ struct PersonalRecordsDetailView: View {
          GridItem(.flexible(), spacing: DS.Spacing.sm)]
     }
 
+    private let cardMinHeight: CGFloat = 148
+
     private var recordsUpdateKey: Int {
         var hasher = Hasher()
         for record in records {
@@ -333,10 +335,13 @@ struct PersonalRecordsDetailView: View {
                     .lineLimit(1)
             }
 
+            Spacer(minLength: 0)
+
             Text(record.date, style: .date)
                 .font(.caption2)
                 .foregroundStyle(.tertiary)
         }
+        .frame(maxWidth: .infinity, minHeight: cardMinHeight, alignment: .topLeading)
         .padding(DS.Spacing.sm)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
     }
