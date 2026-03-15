@@ -3,7 +3,7 @@ source: brainstorm/e2e-ui-test-plan-all-targets
 priority: p2
 status: ready
 created: 2026-03-08
-updated: 2026-03-09
+updated: 2026-03-16
 ---
 
 # E2E Phase 0 Open Page Backlog Index
@@ -14,16 +14,6 @@ updated: 2026-03-09
 ## Must-Have Surface TODOs
 
 ### DUNE Today / Settings
-- [022 DashboardView](022-ready-p2-e2e-dune-dashboard-view.md)
-- [023 ConditionScoreDetailView](023-ready-p2-e2e-dune-condition-score-detail-view.md)
-- [024 MetricDetailView](024-ready-p2-e2e-dune-metric-detail-view.md)
-- [025 AllDataView](025-ready-p2-e2e-dune-all-data-view.md)
-- [026 WeatherDetailView](026-ready-p2-e2e-dune-weather-detail-view.md)
-- [027 NotificationHubView](027-ready-p2-e2e-dune-notification-hub-view.md)
-- [028 SettingsView](028-ready-p2-e2e-dune-settings-view.md)
-- [029 WhatsNewView](029-ready-p2-e2e-dune-whats-new-view.md)
-- [030 PinnedMetricsEditorView](030-ready-p2-e2e-dune-pinned-metrics-editor-view.md)
-- [031 CloudSyncConsentView](031-ready-p2-e2e-dune-cloud-sync-consent-view.md)
 - [032 ExerciseDefaultsListView](032-ready-p2-e2e-dune-exercise-defaults-list-view.md)
 - [033 ExerciseDefaultEditView](033-ready-p2-e2e-dune-exercise-default-edit-view.md)
 - [034 PreferredExercisesListView](034-ready-p2-e2e-dune-preferred-exercises-list-view.md)
@@ -79,5 +69,5 @@ updated: 2026-03-09
 
 - `p2`: `DUNE` + `DUNEWatch` must-have 회귀 surface
 - `p3`: `DUNEVision` + `DUNEWidget` deferred surface
-- 완료된 surface 34건은 [107 E2E Phase 0 Completed Surface Index](107-done-p2-e2e-phase0-completed-surface-index.md)로 이동했다.
+- 완료된 surface 44건은 [107 E2E Phase 0 Completed Surface Index](107-done-p2-e2e-phase0-completed-surface-index.md)로 이동했다.
 - 후속 번호는 `108`부터 이어서 사용한다.

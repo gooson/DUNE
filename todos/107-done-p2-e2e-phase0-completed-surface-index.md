@@ -3,7 +3,7 @@ source: brainstorm/e2e-ui-test-plan-all-targets
 priority: p2
 status: done
 created: 2026-03-09
-updated: 2026-03-09
+updated: 2026-03-16
 ---
 
 # E2E Phase 0 Completed Surface Index
@@ -11,6 +11,19 @@ updated: 2026-03-09
 이 문서는 phase 0 `e2e` surface 중 `done` 상태 문서를 target별로 묶어 보여준다.
 세부 inventory, assertion scope, PR gate, deferred lane의 source of truth는 각 개별 `done` TODO 문서다.
 현재 열려 있는 backlog는 [101 E2E Phase 0 Open Page Backlog Index](101-ready-p2-e2e-phase0-page-backlog-index.md)에서 관리한다.
+
+## DUNE Today / Settings
+
+- [022 DashboardView](022-done-p2-e2e-dune-dashboard-view.md)
+- [023 ConditionScoreDetailView](023-done-p2-e2e-dune-condition-score-detail-view.md)
+- [024 MetricDetailView](024-done-p2-e2e-dune-metric-detail-view.md)
+- [025 AllDataView](025-done-p2-e2e-dune-all-data-view.md)
+- [026 WeatherDetailView](026-done-p2-e2e-dune-weather-detail-view.md)
+- [027 NotificationHubView](027-done-p2-e2e-dune-notification-hub-view.md)
+- [028 SettingsView](028-done-p2-e2e-dune-settings-view.md)
+- [029 WhatsNewView](029-done-p2-e2e-dune-whats-new-view.md)
+- [030 PinnedMetricsEditorView](030-done-p2-e2e-dune-pinned-metrics-editor-view.md)
+- [031 CloudSyncConsentView](031-done-p2-e2e-dune-cloud-sync-consent-view.md)
 
 ## DUNE Activity / Exercise
 
