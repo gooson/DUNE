@@ -3,6 +3,7 @@ import AVFoundation
 import Foundation
 import ImageIO
 import os
+import UniformTypeIdentifiers
 import UIKit
 @preconcurrency import Vision
 
@@ -43,7 +44,10 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
     private let videoDataOutput = AVCaptureVideoDataOutput()
     private let videoDataQueue = DispatchQueue(label: "com.dune.posture.videoData", qos: .userInitiated)
     private let continuationLock = NSLock()
+    private let orientationLock = NSLock()
     private var photoContinuation: CheckedContinuation<(CGImage, Data?), any Error>?
+    private var currentDeviceOrientation: UIDeviceOrientation = .portrait
+    private var rotationCoordinator: AVCaptureDevice.RotationCoordinator?
 
     // MARK: - Real-time Guidance
 
@@ -53,11 +57,12 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
     private var lastFrameAnalysisTime: CFAbsoluteTime = 0
     private static let frameAnalysisInterval: CFAbsoluteTime = 0.1 // 10fps max
     /// Combined frame update callback: guidance state + skeleton keypoints in a single dispatch.
-    var onFrameUpdate: (@Sendable (GuidanceState, [(String, CGPoint)]) -> Void)?
+    var onFrameUpdate: (@Sendable (GuidanceState, [(String, CGPoint)], CGSize) -> Void)?
 
     // MARK: - Camera State
 
     private(set) var currentPosition: AVCaptureDevice.Position = .front
+    private(set) var currentDevice: AVCaptureDevice?
 
     // MARK: - Configuration
 
@@ -85,6 +90,8 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
         ) else {
             throw PostureCaptureError.cameraUnavailable
         }
+        currentDevice = device
+        rotationCoordinator = AVCaptureDevice.RotationCoordinator(device: device, previewLayer: nil)
 
         let input = try AVCaptureDeviceInput(device: device)
 
@@ -117,9 +124,12 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
         videoDataOutput.setSampleBufferDelegate(self, queue: videoDataQueue)
         if captureSession.canAddOutput(videoDataOutput) {
             captureSession.addOutput(videoDataOutput)
-            // Rotate video frames to portrait so Vision coordinates match preview orientation
             if let connection = videoDataOutput.connection(with: .video) {
-                connection.videoRotationAngle = 90
+                // Keep raw video-data buffers in native sensor orientation and let
+                // Vision apply explicit orientation metadata per frame.
+                connection.videoRotationAngle = 0
+                connection.automaticallyAdjustsVideoMirroring = false
+                connection.isVideoMirrored = false
             }
         }
 
@@ -141,6 +151,13 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
         captureSession.stopRunning()
     }
 
+    func updateDeviceOrientation(_ orientation: UIDeviceOrientation) {
+        guard Self.isInterfaceOrientation(orientation) else { return }
+        orientationLock.withLock {
+            currentDeviceOrientation = orientation
+        }
+    }
+
     // MARK: - Photo Capture
 
     func capturePhoto() async throws -> (CGImage, Data?) {
@@ -155,6 +172,7 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
 
         return try await withCheckedThrowingContinuation { continuation in
             self.continuationLock.withLock { self.photoContinuation = continuation }
+            self.configurePhotoConnectionForCurrentOrientation()
             let settings = AVCapturePhotoSettings()
             self.photoOutput.capturePhoto(with: settings, delegate: self)
         }
@@ -518,9 +536,9 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
     private static let maxImageDimension: CGFloat = 1080
 
     private func compressImage(_ cgImage: CGImage) -> Data? {
-        let uiImage = UIImage(cgImage: cgImage)
+        let uiImage = normalizedImage(UIImage(cgImage: cgImage))
         let scaled = downscaled(uiImage, maxDimension: Self.maxImageDimension)
-        return scaled.jpegData(compressionQuality: Self.jpegCompressionQuality)
+        return encodePostureJPEG(scaled)
     }
 
     private func downscaled(_ image: UIImage, maxDimension: CGFloat) -> UIImage {
@@ -539,8 +557,96 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
             AppLogger.data.warning("[PostureCapture] compressOrientedData: failed to decode JPEG (\(fileData.count) bytes)")
             return nil
         }
-        let scaled = downscaled(uiImage, maxDimension: Self.maxImageDimension)
-        return scaled.jpegData(compressionQuality: Self.jpegCompressionQuality)
+        let flattened = normalizedImage(uiImage)
+        let scaled = downscaled(flattened, maxDimension: Self.maxImageDimension)
+        return encodePostureJPEG(scaled)
+    }
+
+    private func normalizedImage(_ image: UIImage) -> UIImage {
+        let rendererFormat = UIGraphicsImageRendererFormat.default()
+        rendererFormat.scale = 1
+        return UIGraphicsImageRenderer(size: image.size, format: rendererFormat).image { _ in
+            image.draw(in: CGRect(origin: .zero, size: image.size))
+        }
+    }
+
+    private func encodePostureJPEG(_ image: UIImage) -> Data? {
+        guard let cgImage = image.cgImage else {
+            return image.jpegData(compressionQuality: Self.jpegCompressionQuality)
+        }
+
+        let data = NSMutableData()
+        guard let destination = CGImageDestinationCreateWithData(
+            data,
+            UTType.jpeg.identifier as CFString,
+            1,
+            nil
+        ) else {
+            return image.jpegData(compressionQuality: Self.jpegCompressionQuality)
+        }
+
+        let properties: [CFString: Any] = [
+            kCGImageDestinationLossyCompressionQuality: Self.jpegCompressionQuality,
+            kCGImagePropertyTIFFDictionary: [
+                kCGImagePropertyTIFFSoftware: PostureImageMetadata.uprightJPEGSoftwareMarker,
+            ],
+        ]
+        CGImageDestinationAddImage(destination, cgImage, properties as CFDictionary)
+        guard CGImageDestinationFinalize(destination) else {
+            return image.jpegData(compressionQuality: Self.jpegCompressionQuality)
+        }
+        return data as Data
+    }
+
+    private func configurePhotoConnectionForCurrentOrientation() {
+        guard let connection = photoOutput.connection(with: .video) else { return }
+
+        connection.automaticallyAdjustsVideoMirroring = false
+        connection.isVideoMirrored = currentPosition == .front
+
+        let angle = rotationCoordinator?.videoRotationAngleForHorizonLevelCapture ?? 0
+        guard connection.isVideoRotationAngleSupported(angle) else { return }
+        connection.videoRotationAngle = angle
+    }
+
+    private var liveDeviceOrientation: UIDeviceOrientation {
+        orientationLock.withLock { currentDeviceOrientation }
+    }
+
+    private static func isInterfaceOrientation(_ orientation: UIDeviceOrientation) -> Bool {
+        switch orientation {
+        case .portrait, .portraitUpsideDown, .landscapeLeft, .landscapeRight:
+            return true
+        default:
+            return false
+        }
+    }
+
+    private static func liveVisionOrientation(for orientation: UIDeviceOrientation) -> CGImagePropertyOrientation {
+        switch orientation {
+        case .portraitUpsideDown:
+            return .left
+        case .landscapeLeft:
+            return .up
+        case .landscapeRight:
+            return .down
+        case .portrait:
+            return .right
+        default:
+            return .right
+        }
+    }
+
+    private static func orientedImageSize(
+        for size: CGSize,
+        orientation: CGImagePropertyOrientation
+    ) -> CGSize {
+        switch orientation {
+        case .left, .leftMirrored, .right, .rightMirrored:
+            return CGSize(width: size.height, height: size.width)
+        default:
+            return size
+        }
     }
 }
 
@@ -584,8 +690,12 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
         lastFrameAnalysisTime = now
 
         guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
-
-        let handler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer, options: [:])
+        let orientation = Self.liveVisionOrientation(for: liveDeviceOrientation)
+        let handler = VNImageRequestHandler(
+            cvPixelBuffer: pixelBuffer,
+            orientation: orientation,
+            options: [:]
+        )
 
         do {
             try handler.perform([bodyPoseRequest])
@@ -626,7 +736,13 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
             luminance: luminance
         )
 
-        onFrameUpdate?(state, keypoints)
+        let rawImageSize = CGSize(
+            width: CVPixelBufferGetWidth(pixelBuffer),
+            height: CVPixelBufferGetHeight(pixelBuffer)
+        )
+        let orientedImageSize = Self.orientedImageSize(for: rawImageSize, orientation: orientation)
+
+        onFrameUpdate?(state, keypoints, orientedImageSize)
     }
 
     /// Compute average luminance from Y plane of pixel buffer.

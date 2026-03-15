@@ -5,6 +5,7 @@ struct BodyGuideOverlay: View {
     let captureType: PostureCaptureType
     let guidanceState: GuidanceState
     let skeletonKeypoints: [(String, CGPoint)]
+    let sourceImageSize: CGSize
     var isFrontCamera: Bool = true
 
     private static let skeletonConnections: [(String, String)] = [
@@ -96,13 +97,29 @@ struct BodyGuideOverlay: View {
         }
     }
 
-    /// Convert Vision normalized coordinates (origin bottom-left) to screen coordinates (origin top-left).
-    /// For front camera, mirror horizontally to match the mirrored preview.
+    /// Convert Vision normalized coordinates (origin bottom-left) into the same
+    /// aspect-fill projection used by the preview layer.
     private func visionToScreen(_ point: CGPoint, size: CGSize) -> CGPoint {
         let x = isFrontCamera ? (1.0 - point.x) : point.x
+        guard sourceImageSize.width > 0, sourceImageSize.height > 0 else {
+            return CGPoint(
+                x: x * size.width,
+                y: (1.0 - point.y) * size.height
+            )
+        }
+
+        let scale = max(
+            size.width / sourceImageSize.width,
+            size.height / sourceImageSize.height
+        )
+        let scaledWidth = sourceImageSize.width * scale
+        let scaledHeight = sourceImageSize.height * scale
+        let offsetX = (size.width - scaledWidth) / 2
+        let offsetY = (size.height - scaledHeight) / 2
+
         return CGPoint(
-            x: x * size.width,
-            y: (1.0 - point.y) * size.height
+            x: offsetX + x * sourceImageSize.width * scale,
+            y: offsetY + (1.0 - point.y) * sourceImageSize.height * scale
         )
     }
 

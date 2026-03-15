@@ -140,10 +140,10 @@ struct PostureComparisonView: View {
         captureType: PostureCaptureType
     ) -> some View {
         Group {
-            if let imageData, let rawImage = UIImage(data: imageData) {
-                let needsCorrection = rawImage.needsPostureOrientationCorrection
-                let uiImage = needsCorrection ? rawImage.postureOrientationCorrected : rawImage
-                let displayJoints = needsCorrection ? postureOrientationCorrectedJoints(joints) : joints
+            if let imageData,
+               let displayContext = postureImageDisplayContext(imageData: imageData, joints: joints) {
+                let uiImage = displayContext.uiImage
+                let displayJoints = displayContext.joints
 
                 Image(uiImage: uiImage)
                     .resizable()

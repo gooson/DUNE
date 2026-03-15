@@ -1,5 +1,6 @@
 import Foundation
 import Testing
+import UIKit
 import Vision
 
 @testable import DUNE
@@ -320,5 +321,76 @@ struct PostureCaptureServiceJointFilteringTests {
             y: 1.2,
             z: -.infinity
         ))
+    }
+}
+
+@Suite("Posture image display context")
+struct PostureImageDisplayContextTests {
+
+    @Test("Tagged normalized posture image skips legacy correction")
+    func skipsLegacyCorrectionForTaggedLandscapeImage() {
+        let imageData = makeJPEGData(size: CGSize(width: 1200, height: 900), marker: true)
+        let joints = [JointPosition3D(name: "root", x: 0, y: 0, z: 0, imageX: 0.2, imageY: 0.3)]
+
+        let context = postureImageDisplayContext(imageData: imageData, joints: joints)
+
+        #expect(context != nil)
+        #expect(context?.uiImage.size == CGSize(width: 1200, height: 900))
+        #expect(context?.joints.first?.imageX == 0.2)
+        #expect(context?.joints.first?.imageY == 0.3)
+    }
+
+    @Test("Untagged legacy posture image still rotates joints")
+    func keepsLegacyCorrectionForUntaggedLandscapeImage() {
+        let imageData = makeJPEGData(size: CGSize(width: 1200, height: 900), marker: false)
+        let joints = [JointPosition3D(name: "root", x: 0, y: 0, z: 0, imageX: 0.2, imageY: 0.3)]
+
+        let context = postureImageDisplayContext(imageData: imageData, joints: joints)
+
+        #expect(context != nil)
+        #expect(context?.uiImage.imageOrientation == .right)
+        #expect(context?.joints.first?.imageX == 0.3)
+        #expect(context?.joints.first?.imageY == 0.8)
+    }
+
+    private func makeJPEGData(size: CGSize, marker: Bool) -> Data {
+        let renderer = UIGraphicsImageRenderer(size: size)
+        let image = renderer.image { context in
+            UIColor.white.setFill()
+            context.fill(CGRect(origin: .zero, size: size))
+        }
+
+        guard let cgImage = image.cgImage else {
+            Issue.record("Failed to create test image")
+            return Data()
+        }
+
+        let data = NSMutableData()
+        guard let destination = CGImageDestinationCreateWithData(
+            data,
+            "public.jpeg" as CFString,
+            1,
+            nil
+        ) else {
+            Issue.record("Failed to create JPEG destination")
+            return Data()
+        }
+
+        var properties: [CFString: Any] = [
+            kCGImageDestinationLossyCompressionQuality: CGFloat(0.8),
+        ]
+        if marker {
+            properties[kCGImagePropertyTIFFDictionary] = [
+                kCGImagePropertyTIFFSoftware: PostureImageMetadata.uprightJPEGSoftwareMarker,
+            ]
+        }
+
+        CGImageDestinationAddImage(destination, cgImage, properties as CFDictionary)
+        guard CGImageDestinationFinalize(destination) else {
+            Issue.record("Failed to finalize JPEG destination")
+            return Data()
+        }
+
+        return data as Data
     }
 }
