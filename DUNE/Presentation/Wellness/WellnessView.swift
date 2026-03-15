@@ -557,18 +557,13 @@ private struct PostureAssessmentLinkView: View {
                 }
             }
         }
-        .task {
-            onScoreUpdate?(records.first?.overallScore)
-        }
-        .onChange(of: records.first?.overallScore) { _, newValue in
+        .onChange(of: records.first?.overallScore, initial: true) { _, newValue in
             onScoreUpdate?(newValue)
         }
     }
 
     private func scoreColor(_ score: Int) -> Color {
-        if score >= 80 { return .green }
-        if score >= 60 { return .yellow }
-        return .red
+        postureScoreColor(score)
     }
 }
 
