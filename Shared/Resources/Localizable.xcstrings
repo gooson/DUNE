@@ -1250,6 +1250,22 @@
         }
       }
     },
+    "%lld metrics" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld個の指標"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld개 지표"
+          }
+        }
+      }
+    },
     "%lld metrics measured" : {
       "localizations" : {
         "en" : {
@@ -5793,6 +5809,22 @@
         }
       }
     },
+    "Capture your first posture assessment to start tracking your progress." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最初の姿勢評価を撮影して、進捗を追跡しましょう。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "첫 자세 평가를 촬영하여 진행 상황을 추적하세요."
+          }
+        }
+      }
+    },
     "Cardio" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -6458,6 +6490,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "격투"
+          }
+        }
+      }
+    },
+    "Compare" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "比較"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "비교"
+          }
+        }
+      }
+    },
+    "Compare Selected" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選択した項目を比較"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "선택 항목 비교"
           }
         }
       }
@@ -8224,6 +8288,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "모든 알림을 삭제할까요?"
+          }
+        }
+      }
+    },
+    "Delete Assessment" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "評価を削除"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "평가 삭제"
           }
         }
       }
@@ -13040,7 +13120,6 @@
       }
     },
     "History" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -16282,6 +16361,22 @@
         }
       }
     },
+    "Metric Changes" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "指標の変化"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "지표 변화"
+          }
+        }
+      }
+    },
     "Midnight" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -17851,6 +17946,22 @@
         }
       }
     },
+    "No data for this metric" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "この指標のデータがありません"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 지표의 데이터가 없습니다"
+          }
+        }
+      }
+    },
     "No data yet" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -18180,6 +18291,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "아직 개인 기록이 없습니다."
+          }
+        }
+      }
+    },
+    "No Posture Assessments" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "姿勢評価の記録なし"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "자세 평가 기록 없음"
           }
         }
       }
@@ -19503,6 +19630,22 @@
         }
       }
     },
+    "Overall" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "総合"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "전체"
+          }
+        }
+      }
+    },
     "Overdue · Tap to complete" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -19600,6 +19743,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "패들 스포츠"
+          }
+        }
+      }
+    },
+    "Partial assessment" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "部分評価"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "부분 평가"
           }
         }
       }
@@ -19952,6 +20111,22 @@
         }
       }
     },
+    "Photo Comparison" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "写真比較"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "사진 비교"
+          }
+        }
+      }
+    },
     "Physical" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -20221,6 +20396,9 @@
           }
         }
       }
+    },
+    "Posture score %@ out of 100" : {
+
     },
     "Posture score %lld out of 100" : {
       "localizations" : {
@@ -21151,6 +21329,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "권장 조치"
+          }
+        }
+      }
+    },
+    "Record more assessments to see trends" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "トレンドを確認するにはさらに評価を記録してください"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "트렌드를 확인하려면 더 많은 평가를 기록하세요"
           }
         }
       }
@@ -27505,6 +27699,22 @@
         }
       }
     },
+    "This assessment will be permanently deleted." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "この評価は完全に削除されます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 평가가 영구적으로 삭제됩니다."
+          }
+        }
+      }
+    },
     "This atmosphere is using fallback recovery guidance." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -32495,214 +32705,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "τ (타우): 근육 크기별 회복 속도 (대근육 72시간, 소근육 36시간)"
-          }
-        }
-      }
-    },
-    "No Posture Assessments": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "자세 평가 기록 없음"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "姿勢評価の記録なし"
-          }
-        }
-      }
-    },
-    "Capture your first posture assessment to start tracking your progress.": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "첫 자세 평가를 촬영하여 진행 상황을 추적하세요."
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "最初の姿勢評価を撮影して、進捗を追跡しましょう。"
-          }
-        }
-      }
-    },
-    "Record more assessments to see trends": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "트렌드를 확인하려면 더 많은 평가를 기록하세요"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "トレンドを確認するにはさらに評価を記録してください"
-          }
-        }
-      }
-    },
-    "No data for this metric": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "이 지표의 데이터가 없습니다"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "この指標のデータがありません"
-          }
-        }
-      }
-    },
-    "Overall": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "전체"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "総合"
-          }
-        }
-      }
-    },
-    "Compare": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "비교"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "比較"
-          }
-        }
-      }
-    },
-    "Compare Selected": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "선택 항목 비교"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "選択した項目を比較"
-          }
-        }
-      }
-    },
-    "Delete Assessment": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "평가 삭제"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "評価を削除"
-          }
-        }
-      }
-    },
-    "This assessment will be permanently deleted.": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "이 평가가 영구적으로 삭제됩니다."
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "この評価は完全に削除されます。"
-          }
-        }
-      }
-    },
-    "Partial assessment": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "부분 평가"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "部分評価"
-          }
-        }
-      }
-    },
-    "Photo Comparison": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "사진 비교"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "写真比較"
-          }
-        }
-      }
-    },
-    "Metric Changes": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "지표 변화"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "指標の変化"
-          }
-        }
-      }
-    },
-    "%lld metrics": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld개 지표"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld個の指標"
           }
         }
       }
