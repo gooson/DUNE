@@ -1,6 +1,7 @@
 #if !os(visionOS)
 import AVFoundation
 import Foundation
+import os
 import UIKit
 @preconcurrency import Vision
 
@@ -38,8 +39,26 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
 
     let captureSession = AVCaptureSession()
     private let photoOutput = AVCapturePhotoOutput()
+    private let videoDataOutput = AVCaptureVideoDataOutput()
+    private let videoDataQueue = DispatchQueue(label: "com.dune.posture.videoData", qos: .userInitiated)
     private let continuationLock = NSLock()
     private var photoContinuation: CheckedContinuation<(CGImage, Data?), any Error>?
+
+    // MARK: - Real-time Guidance
+
+    private let guidanceAnalyzer = PostureGuidanceAnalyzer()
+    private let bodyPoseRequest = VNDetectHumanBodyPoseRequest()
+    // Accessed only on videoDataQueue (single serial queue) — no lock needed.
+    private var lastFrameAnalysisTime: CFAbsoluteTime = 0
+    private static let frameAnalysisInterval: CFAbsoluteTime = 0.1 // 10fps max
+    var onGuidanceUpdate: (@Sendable (GuidanceState) -> Void)?
+
+    /// Latest 2D pose keypoints for real-time skeleton overlay (normalized 0-1, origin bottom-left).
+    var onSkeletonUpdate: (@Sendable ([(String, CGPoint)]) -> Void)?
+
+    // MARK: - Camera State
+
+    private(set) var currentPosition: AVCaptureDevice.Position = .front
 
     // MARK: - Configuration
 
@@ -49,11 +68,12 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
 
     // MARK: - Setup
 
-    func setupCamera() throws {
+    func setupCamera(position: AVCaptureDevice.Position = .front) throws {
+        currentPosition = position
         guard let device = AVCaptureDevice.default(
             .builtInWideAngleCamera,
             for: .video,
-            position: .front
+            position: position
         ) else {
             throw PostureCaptureError.cameraUnavailable
         }
@@ -62,6 +82,14 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
 
         captureSession.beginConfiguration()
         captureSession.sessionPreset = .photo
+
+        // Remove existing inputs/outputs for camera switching
+        for existing in captureSession.inputs {
+            captureSession.removeInput(existing)
+        }
+        for existing in captureSession.outputs {
+            captureSession.removeOutput(existing)
+        }
 
         guard captureSession.canAddInput(input) else {
             captureSession.commitConfiguration()
@@ -76,7 +104,19 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
         captureSession.addOutput(photoOutput)
         photoOutput.maxPhotoQualityPrioritization = .quality
 
+        // Add video data output for real-time pose guidance
+        videoDataOutput.alwaysDiscardsLateVideoFrames = true
+        videoDataOutput.setSampleBufferDelegate(self, queue: videoDataQueue)
+        if captureSession.canAddOutput(videoDataOutput) {
+            captureSession.addOutput(videoDataOutput)
+        }
+
         captureSession.commitConfiguration()
+    }
+
+    func switchCamera() throws {
+        let newPosition: AVCaptureDevice.Position = currentPosition == .front ? .back : .front
+        try setupCamera(position: newPosition)
     }
 
     func startSession() {
@@ -340,7 +380,10 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
     /// by decoding through UIImage to bake EXIF orientation into pixel data,
     /// then downscaling and re-encoding as JPEG.
     private func compressOrientedData(_ fileData: Data) -> Data? {
-        guard let uiImage = UIImage(data: fileData) else { return nil }
+        guard let uiImage = UIImage(data: fileData) else {
+            AppLogger.data.warning("[PostureCapture] compressOrientedData: failed to decode JPEG (\(fileData.count) bytes)")
+            return nil
+        }
         let scaled = downscaled(uiImage, maxDimension: Self.maxImageDimension)
         return scaled.jpegData(compressionQuality: Self.jpegCompressionQuality)
     }
@@ -369,6 +412,101 @@ extension PostureCaptureService: AVCapturePhotoCaptureDelegate {
         } else {
             continuation?.resume(throwing: PostureCaptureError.imageConversionFailed)
         }
+    }
+}
+
+// MARK: - AVCaptureVideoDataOutputSampleBufferDelegate (Real-time 2D Pose)
+
+extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
+    func captureOutput(
+        _ output: AVCaptureOutput,
+        didOutput sampleBuffer: CMSampleBuffer,
+        from connection: AVCaptureConnection
+    ) {
+        // Throttle to ~10fps
+        let now = CFAbsoluteTimeGetCurrent()
+        guard now - lastFrameAnalysisTime >= Self.frameAnalysisInterval else { return }
+        lastFrameAnalysisTime = now
+
+        guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
+
+        let handler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer, options: [:])
+
+        do {
+            try handler.perform([bodyPoseRequest])
+        } catch {
+            return
+        }
+
+        let observation = bodyPoseRequest.results?.first
+
+        // Extract 2D keypoints for skeleton overlay
+        var keypoints: [(String, CGPoint)] = []
+        if let observation {
+            let jointNames: [(VNHumanBodyPoseObservation.JointName, String)] = [
+                (.nose, "nose"),
+                (.leftShoulder, "leftShoulder"), (.rightShoulder, "rightShoulder"),
+                (.leftElbow, "leftElbow"), (.rightElbow, "rightElbow"),
+                (.leftWrist, "leftWrist"), (.rightWrist, "rightWrist"),
+                (.leftHip, "leftHip"), (.rightHip, "rightHip"),
+                (.leftKnee, "leftKnee"), (.rightKnee, "rightKnee"),
+                (.leftAnkle, "leftAnkle"), (.rightAnkle, "rightAnkle"),
+            ]
+            for (jointName, name) in jointNames {
+                if let point = try? observation.recognizedPoint(jointName),
+                   point.confidence > 0.3 {
+                    // Vision normalized: origin bottom-left (0,0) to top-right (1,1)
+                    keypoints.append((name, point.location))
+                }
+            }
+        }
+
+        // Compute luminance from pixel buffer
+        let luminance = averageLuminance(from: pixelBuffer)
+
+        // Update guidance state
+        let state = guidanceAnalyzer.analyze(
+            observation: observation,
+            keypoints: keypoints,
+            luminance: luminance
+        )
+
+        onGuidanceUpdate?(state)
+        onSkeletonUpdate?(keypoints)
+    }
+
+    /// Compute average luminance from Y plane of pixel buffer.
+    private func averageLuminance(from pixelBuffer: CVPixelBuffer) -> Double {
+        CVPixelBufferLockBaseAddress(pixelBuffer, .readOnly)
+        defer { CVPixelBufferUnlockBaseAddress(pixelBuffer, .readOnly) }
+
+        guard let baseAddress = CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0) else {
+            return 0.5
+        }
+
+        let width = CVPixelBufferGetWidthOfPlane(pixelBuffer, 0)
+        let height = CVPixelBufferGetHeightOfPlane(pixelBuffer, 0)
+        let bytesPerRow = CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 0)
+
+        // Sample every 16th pixel for performance
+        let stride = 16
+        var totalLuminance: UInt64 = 0
+        var sampleCount: UInt64 = 0
+
+        let buffer = baseAddress.assumingMemoryBound(to: UInt8.self)
+        var y = 0
+        while y < height {
+            var x = 0
+            while x < width {
+                totalLuminance += UInt64(buffer[y * bytesPerRow + x])
+                sampleCount += 1
+                x += stride
+            }
+            y += stride
+        }
+
+        guard sampleCount > 0 else { return 0.5 }
+        return Double(totalLuminance) / Double(sampleCount) / 255.0
     }
 }
 #endif

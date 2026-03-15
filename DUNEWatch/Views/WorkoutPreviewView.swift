@@ -311,6 +311,7 @@ struct WorkoutPreviewView: View {
                             if reorderedEntries.count > 1 {
                                 HStack(spacing: DS.Spacing.sm) {
                                     Button {
+                                        guard index > 0 else { return }
                                         reorderedEntries.swapAt(index, index - 1)
                                     } label: {
                                         Image(systemName: "arrow.up")
@@ -321,6 +322,7 @@ struct WorkoutPreviewView: View {
                                     .disabled(index == 0)
 
                                     Button {
+                                        guard index + 1 < reorderedEntries.count else { return }
                                         reorderedEntries.swapAt(index, index + 1)
                                     } label: {
                                         Image(systemName: "arrow.down")

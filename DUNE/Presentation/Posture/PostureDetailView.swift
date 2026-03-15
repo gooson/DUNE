@@ -131,15 +131,19 @@ struct PostureDetailView: View {
         metrics: [PostureMetricResult]
     ) -> some View {
         VStack(spacing: DS.Spacing.sm) {
-            if let imageData, let uiImage = UIImage(data: imageData)?.postureOrientationCorrected {
+            if let imageData, let rawImage = UIImage(data: imageData) {
+                let needsCorrection = rawImage.needsPostureOrientationCorrection
+                let uiImage = needsCorrection ? rawImage.postureOrientationCorrected : rawImage
+                let displayJoints = needsCorrection ? postureOrientationCorrectedJoints(joints) : joints
+
                 Image(uiImage: uiImage)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .clipShape(RoundedRectangle(cornerRadius: DS.Radius.sm))
                     .overlay {
-                        if !joints.isEmpty {
+                        if !displayJoints.isEmpty {
                             JointOverlayView(
-                                jointPositions: joints,
+                                jointPositions: displayJoints,
                                 imageSize: uiImage.size,
                                 metrics: metrics,
                                 captureType: captureType
@@ -150,7 +154,7 @@ struct PostureDetailView: View {
                     .onTapGesture {
                         zoomImage = ZoomableImageItem(
                             uiImage: uiImage,
-                            joints: joints,
+                            joints: displayJoints,
                             metrics: metrics,
                             captureType: captureType,
                             label: label

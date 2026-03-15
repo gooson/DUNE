@@ -10,12 +10,14 @@ struct PostureCaptureView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                CameraPreviewView(session: viewModel.captureSession)
-                    .ignoresSafeArea()
-                    .accessibilityLabel(Text("Camera preview for posture assessment"))
+                CameraPreviewView(
+                    session: viewModel.captureSession,
+                    isMirrored: !viewModel.isUsingBackCamera
+                )
+                .ignoresSafeArea()
+                .accessibilityLabel(Text("Camera preview for posture assessment"))
 
                 phaseOverlay
-                    // Phase transition animation (#122)
                     .animation(DS.Animation.standard, value: viewModel.capturePhase)
             }
             .navigationTitle("Posture Assessment")
@@ -24,13 +26,45 @@ struct PostureCaptureView: View {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(String(localized: "Close")) { dismiss() }
                 }
+                ToolbarItem(placement: .topBarTrailing) {
+                    cameraControls
+                }
             }
             .task { viewModel.setupCamera() }
             .onDisappear { viewModel.stopCamera() }
-            // Haptic feedback (#121)
             .sensoryFeedback(.impact(weight: .light), trigger: viewModel.hapticCountdown)
             .sensoryFeedback(.success, trigger: viewModel.hapticSuccessCount)
             .sensoryFeedback(.error, trigger: viewModel.hapticErrorCount)
+        }
+    }
+
+    // MARK: - Camera Controls
+
+    @ViewBuilder
+    private var cameraControls: some View {
+        if case .preparing = viewModel.capturePhase {
+            HStack(spacing: 12) {
+                // Camera flip button
+                Button {
+                    viewModel.switchCamera()
+                } label: {
+                    Image(systemName: "camera.rotate")
+                        .font(.body)
+                        .foregroundStyle(.white)
+                }
+                .accessibilityLabel(Text("Switch camera"))
+
+                // Auto/Manual toggle
+                Button {
+                    viewModel.isAutoCapture.toggle()
+                } label: {
+                    Image(systemName: viewModel.isAutoCapture ? "a.circle.fill" : "a.circle")
+                        .font(.body)
+                        .foregroundStyle(viewModel.isAutoCapture ? .green : .white)
+                }
+                .accessibilityLabel(Text(viewModel.isAutoCapture ? "Auto capture on" : "Auto capture off"))
+                .accessibilityHint(Text("Toggle automatic capture when ready"))
+            }
         }
     }
 
@@ -42,8 +76,8 @@ struct PostureCaptureView: View {
         case .idle:
             Color.black
                 .transition(.opacity)
-        case .guiding:
-            guidingOverlay
+        case .preparing:
+            preparingOverlay
                 .transition(.opacity)
         case .countdown(let count):
             countdownOverlay(count)
@@ -60,37 +94,72 @@ struct PostureCaptureView: View {
         }
     }
 
-    // MARK: - Guiding
+    // MARK: - Preparing (Real-time Guidance)
 
-    private var guidingOverlay: some View {
+    private var preparingOverlay: some View {
         ZStack {
-            BodyGuideOverlay(captureType: viewModel.captureType)
+            BodyGuideOverlay(
+                captureType: viewModel.captureType,
+                guidanceState: viewModel.guidanceState,
+                skeletonKeypoints: viewModel.skeletonKeypoints
+            )
+
+            // Distance indicator (left side)
+            HStack {
+                DistanceIndicatorView(status: viewModel.guidanceState.distanceStatus)
+                    .padding(.leading, 8)
+                Spacer()
+            }
 
             VStack {
+                // Top: lighting warning
+                if viewModel.guidanceState.lightingStatus == .tooLow {
+                    lightingWarning
+                        .padding(.top, 60)
+                }
+
                 Spacer()
 
+                // Checklist (top-left area)
+                HStack {
+                    Spacer()
+                    GuidanceChecklistView(guidanceState: viewModel.guidanceState)
+                }
+                .padding(.trailing, 8)
+                .padding(.bottom, 8)
+
+                // Guidance hint text
+                guidanceHintText
+                    .padding(.bottom, 8)
+
+                // Capture type label
                 Text(viewModel.currentCaptureLabel)
                     .font(.title2.bold())
                     .foregroundStyle(.white)
                     .padding(.bottom, 8)
 
-                Text(guidingInstructionText)
-                    .font(.subheadline)
-                    .foregroundStyle(.white.opacity(0.8))
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 32)
-                    .padding(.bottom, 24)
-
+                // Manual capture button
                 Button {
                     viewModel.startCountdown()
                 } label: {
-                    Circle()
-                        .fill(.white)
-                        .frame(width: 72, height: 72)
-                        .overlay {
+                    ZStack {
+                        Circle()
+                            .fill(.white)
+                            .frame(width: 72, height: 72)
+                            .overlay {
+                                Circle()
+                                    .strokeBorder(
+                                        viewModel.guidanceState.isReady ? Color.green : Color.black.opacity(0.2),
+                                        lineWidth: 3
+                                    )
+                            }
+                        if viewModel.isAutoCapture && viewModel.guidanceState.isReady {
+                            // Pulsing ring when auto-capture is about to trigger
                             Circle()
-                                .strokeBorder(.black.opacity(0.2), lineWidth: 3)
+                                .stroke(.green.opacity(0.5), lineWidth: 2)
+                                .frame(width: 84, height: 84)
                         }
+                    }
                 }
                 .accessibilityLabel(Text("Capture photo"))
                 .accessibilityHint(Text("Starts a 3-second countdown before capturing"))
@@ -99,20 +168,52 @@ struct PostureCaptureView: View {
         }
     }
 
-    private var guidingInstructionText: String {
-        switch viewModel.captureType {
-        case .front:
-            String(localized: "Stand facing the camera with your full body visible. Keep your arms relaxed at your sides.")
-        case .side:
-            String(localized: "Turn to show your side profile. Keep your arms relaxed and stand naturally.")
+    private var lightingWarning: some View {
+        Label(
+            String(localized: "Low lighting detected"),
+            systemImage: "sun.max.trianglebadge.exclamationmark"
+        )
+        .font(.caption.weight(.medium))
+        .foregroundStyle(.yellow)
+        .padding(.horizontal, 12)
+        .padding(.vertical, 6)
+        .background(.ultraThinMaterial, in: Capsule())
+    }
+
+    private var guidanceHintText: some View {
+        Group {
+            if let hint = viewModel.guidanceState.primaryHint {
+                Text(hint.displayMessage)
+                    .font(.subheadline)
+                    .foregroundStyle(.white.opacity(0.9))
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 32)
+                    .padding(.vertical, 8)
+                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 8))
+            } else if viewModel.guidanceState.isReady {
+                Text(viewModel.isAutoCapture
+                    ? String(localized: "Hold still — capturing automatically...")
+                    : String(localized: "Ready! Tap the button to capture."))
+                    .font(.subheadline)
+                    .foregroundStyle(.green)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 32)
+                    .padding(.vertical, 8)
+                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 8))
+            }
         }
+        .animation(.easeInOut(duration: 0.2), value: viewModel.guidanceState.primaryHint)
     }
 
     // MARK: - Countdown
 
     private func countdownOverlay(_ count: Int) -> some View {
         ZStack {
-            BodyGuideOverlay(captureType: viewModel.captureType)
+            BodyGuideOverlay(
+                captureType: viewModel.captureType,
+                guidanceState: viewModel.guidanceState,
+                skeletonKeypoints: viewModel.skeletonKeypoints
+            )
 
             Text("\(count)")
                 .font(.system(size: 120, weight: .bold, design: .rounded))
@@ -178,6 +279,7 @@ struct PostureCaptureView: View {
 
 struct CameraPreviewView: UIViewRepresentable {
     let session: AVCaptureSession
+    var isMirrored: Bool = true
 
     func makeUIView(context: Context) -> CameraPreviewUIView {
         let view = CameraPreviewUIView()
@@ -186,7 +288,14 @@ struct CameraPreviewView: UIViewRepresentable {
         return view
     }
 
-    func updateUIView(_ uiView: CameraPreviewUIView, context: Context) {}
+    func updateUIView(_ uiView: CameraPreviewUIView, context: Context) {
+        if let connection = uiView.previewLayer.connection {
+            // Front camera preview should be mirrored (natural selfie view)
+            // Back camera preview should not be mirrored
+            connection.automaticallyAdjustsVideoMirroring = false
+            connection.isVideoMirrored = isMirrored
+        }
+    }
 }
 
 final class CameraPreviewUIView: UIView {

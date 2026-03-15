@@ -3,25 +3,35 @@ import SwiftUI
 // MARK: - Posture Image Orientation Correction
 
 extension UIImage {
+    /// Whether this posture image has incorrect landscape orientation
+    /// (old capture pipeline baked landscape pixels without EXIF metadata).
+    var needsPostureOrientationCorrection: Bool {
+        size.width > size.height
+    }
+
     /// Corrects orientation for posture photos saved by the old capture pipeline.
     /// Old code used `UIImage(cgImage:)` which discards EXIF orientation metadata,
     /// baking landscape pixels for portrait front-camera captures.
     /// Detects landscape dimensions and rotates 90° CW to restore portrait.
     var postureOrientationCorrected: UIImage {
-        guard size.width > size.height, let cgImage else { return self }
+        guard needsPostureOrientationCorrection, let cgImage else { return self }
         return UIImage(cgImage: cgImage, scale: scale, orientation: .right)
     }
 }
 
-// MARK: - Zoomable Image Item
-
-struct ZoomableImageItem: Identifiable {
-    let id = UUID()
-    let uiImage: UIImage
-    let joints: [JointPosition3D]
-    let metrics: [PostureMetricResult]
-    let captureType: PostureCaptureType
-    let label: String
+/// Transforms joint positions from original landscape coordinate space
+/// to corrected portrait coordinate space (90° CW rotation).
+/// Vision normalized coords: origin bottom-left, Y up.
+/// Transform: new_imageX = old_imageY, new_imageY = 1 - old_imageX
+func postureOrientationCorrectedJoints(_ joints: [JointPosition3D]) -> [JointPosition3D] {
+    joints.map { joint in
+        JointPosition3D(
+            name: joint.name,
+            x: joint.x, y: joint.y, z: joint.z,
+            imageX: joint.imageY,
+            imageY: joint.imageX.map { 1.0 - $0 }
+        )
+    }
 }
 
 // MARK: - View Modifier
@@ -57,6 +67,7 @@ struct ZoomablePostureImageView: View {
 
     private let minScale: CGFloat = 1.0
     private let maxScale: CGFloat = 5.0
+    private let doubleTapScale: CGFloat = 3.0
 
     var body: some View {
         NavigationStack {
@@ -118,8 +129,8 @@ struct ZoomablePostureImageView: View {
                                 offset = .zero
                                 lastOffset = .zero
                             } else {
-                                scale = 3.0
-                                lastScale = 3.0
+                                scale = doubleTapScale
+                                lastScale = doubleTapScale
                             }
                         }
                     }
@@ -145,6 +156,8 @@ struct ZoomablePostureImageView: View {
     }
 
     private func computeFittedSize(imageSize: CGSize, containerSize: CGSize) -> CGSize {
+        guard imageSize.height > 0, imageSize.width > 0,
+              containerSize.height > 0, containerSize.width > 0 else { return containerSize }
         let imageAspect = imageSize.width / imageSize.height
         let containerAspect = containerSize.width / containerSize.height
         if imageAspect > containerAspect {

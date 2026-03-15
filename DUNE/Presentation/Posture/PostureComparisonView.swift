@@ -140,15 +140,19 @@ struct PostureComparisonView: View {
         captureType: PostureCaptureType
     ) -> some View {
         Group {
-            if let imageData, let uiImage = UIImage(data: imageData)?.postureOrientationCorrected {
+            if let imageData, let rawImage = UIImage(data: imageData) {
+                let needsCorrection = rawImage.needsPostureOrientationCorrection
+                let uiImage = needsCorrection ? rawImage.postureOrientationCorrected : rawImage
+                let displayJoints = needsCorrection ? postureOrientationCorrectedJoints(joints) : joints
+
                 Image(uiImage: uiImage)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                     .overlay {
-                        if !joints.isEmpty {
+                        if !displayJoints.isEmpty {
                             JointOverlayView(
-                                jointPositions: joints,
+                                jointPositions: displayJoints,
                                 imageSize: uiImage.size,
                                 metrics: metrics,
                                 captureType: captureType
@@ -157,14 +161,11 @@ struct PostureComparisonView: View {
                     }
                     .contentShape(Rectangle())
                     .onTapGesture {
-                        zoomImage = ZoomableImageItem(
+                        zoomImage = .make(
                             uiImage: uiImage,
-                            joints: joints,
+                            joints: displayJoints,
                             metrics: metrics,
-                            captureType: captureType,
-                            label: captureType == .front
-                                ? String(localized: "Front")
-                                : String(localized: "Side")
+                            captureType: captureType
                         )
                     }
             } else {
