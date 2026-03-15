@@ -8,6 +8,7 @@ struct ControlsView: View {
     @Environment(WorkoutManager.self) private var workoutManager
 
     @State private var showEndConfirmation = false
+    @State private var showReorderSheet = false
 
     var body: some View {
         VStack(spacing: DS.Spacing.lg) {
@@ -61,6 +62,25 @@ struct ControlsView: View {
                 .tint(.secondary)
                 .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionControlsSkipButton)
             }
+
+            // Reorder Exercises (strength only, 2+ non-completed)
+            if showSkip, !workoutManager.isCardioMode, workoutManager.canReorderExercises {
+                Button {
+                    showReorderSheet = true
+                } label: {
+                    VStack(spacing: DS.Spacing.xxs) {
+                        Image(systemName: "arrow.up.arrow.down")
+                            .font(.title3)
+                        Text(String(localized: "Reorder"))
+                            .font(DS.Typography.metricLabel)
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+                .tint(.secondary)
+            }
+        }
+        .sheet(isPresented: $showReorderSheet) {
+            WatchExerciseReorderView()
         }
         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionControlsScreen)
         .confirmationDialog(
