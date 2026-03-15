@@ -17,6 +17,7 @@ final class ConsistencyDetailViewModel {
     var cachedFirstWeekdayOffset: Int = 0
     var isLoading = false
     private let workoutService: WorkoutQuerying
+    private var loadRequestID = 0
 
     init(workoutService: WorkoutQuerying? = nil, healthKitManager: HealthKitManager = .shared) {
         self.workoutService = workoutService ?? WorkoutQueryService(manager: healthKitManager)
@@ -24,8 +25,9 @@ final class ConsistencyDetailViewModel {
 
     /// Loads streak and calendar data from exercise records.
     func loadData(from exerciseRecords: [ExerciseRecord]) async {
+        let requestID = beginLoadRequest()
         isLoading = true
-        defer { isLoading = false }
+        defer { finishLoadRequest(requestID) }
 
         let manualWorkouts: [WorkoutStreakService.WorkoutDay] = exerciseRecords.map { record in
             WorkoutStreakService.WorkoutDay(
@@ -34,7 +36,7 @@ final class ConsistencyDetailViewModel {
             )
         }
         let healthKitWorkouts = await fetchHealthKitWorkouts()
-        guard !Task.isCancelled else { return }
+        guard isCurrentLoadRequest(requestID) else { return }
 
         let workouts = manualWorkouts + healthKitWorkouts
 
@@ -80,6 +82,21 @@ final class ConsistencyDetailViewModel {
         guard let firstDay = calendar.date(from: calendar.dateComponents([.year, .month], from: month)) else { return 0 }
         // weekday: 1=Sunday...7=Saturday
         return calendar.component(.weekday, from: firstDay) - 1
+    }
+
+    private func beginLoadRequest() -> Int {
+        loadRequestID += 1
+        return loadRequestID
+    }
+
+    private func isCurrentLoadRequest(_ requestID: Int) -> Bool {
+        requestID == loadRequestID && !Task.isCancelled
+    }
+
+    private func finishLoadRequest(_ requestID: Int) {
+        if requestID == loadRequestID {
+            isLoading = false
+        }
     }
 
     private func fetchHealthKitWorkouts() async -> [WorkoutStreakService.WorkoutDay] {

@@ -6,6 +6,7 @@ struct WellnessScore: Sendable, Hashable {
     let sleepScore: Int?
     let conditionScore: Int?
     let bodyScore: Int?
+    let postureScore: Int?
     let guideMessage: String
     let timeOfDayAdjustment: Double
     let evaluationDate: Date
@@ -23,6 +24,7 @@ struct WellnessScore: Sendable, Hashable {
         sleepScore: Int? = nil,
         conditionScore: Int? = nil,
         bodyScore: Int? = nil,
+        postureScore: Int? = nil,
         timeOfDayAdjustment: Double = 0,
         evaluationDate: Date = .now
     ) {
@@ -30,6 +32,7 @@ struct WellnessScore: Sendable, Hashable {
         self.sleepScore = sleepScore
         self.conditionScore = conditionScore
         self.bodyScore = bodyScore
+        self.postureScore = postureScore
         self.timeOfDayAdjustment = timeOfDayAdjustment
         self.evaluationDate = evaluationDate
 
@@ -49,7 +52,8 @@ struct WellnessScore: Sendable, Hashable {
         let scores: [(String, Int)] = [
             (String(localized: "sleep"), sleepScore),
             (String(localized: "condition"), conditionScore),
-            (String(localized: "body"), bodyScore)
+            (String(localized: "body"), bodyScore),
+            (String(localized: "posture"), postureScore)
         ].compactMap { name, val in
             guard let val else { return nil }
             return (name, val)

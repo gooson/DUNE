@@ -19,9 +19,10 @@ func exerciseSubtitle(for exercise: WatchExerciseInfo) -> String {
         return cardioSummary(for: profile)
     }
 
+    let plannedSets = resolvedProcedureSets(for: exercise)
     let defaults = resolvedDefaults(for: exercise)
     return exerciseSubtitle(
-        sets: exercise.defaultSets,
+        sets: plannedSets?.count ?? exercise.defaultSets,
         reps: defaults.reps,
         weight: defaults.weight
     )
@@ -232,10 +233,51 @@ func prioritizedWatchExercises(
 
 /// Resolves weight/reps defaults from latest set or exercise defaults.
 func resolvedDefaults(for exercise: WatchExerciseInfo) -> (weight: Double?, reps: Int) {
+    if let firstPlannedSet = resolvedProcedureSets(for: exercise)?.first {
+        let reps = firstPlannedSet.reps ?? exercise.defaultReps ?? 10
+        return (weight: firstPlannedSet.weight, reps: reps)
+    }
+
     let latest = RecentExerciseTracker.latestSet(exerciseID: exercise.id)
     let reps = latest?.reps ?? exercise.defaultReps ?? 10
     let weight = latest?.weight ?? exercise.defaultWeightKg
     return (weight: weight, reps: reps)
+}
+
+func resolvedProcedureSets(for exercise: WatchExerciseInfo) -> [WatchProcedureSetSnapshot]? {
+    let local = RecentExerciseTracker.latestProcedure(exerciseID: exercise.id)
+    let syncedUpdatedAt = exercise.procedureUpdatedAt?.timeIntervalSince1970 ?? .leastNormalMagnitude
+
+    let baseSets: [WatchProcedureSetSnapshot]?
+    if let local, local.updatedAt >= syncedUpdatedAt {
+        baseSets = local.sets
+    } else {
+        baseSets = exercise.procedureSets
+    }
+
+    guard let baseSets, !baseSets.isEmpty else { return nil }
+    return applyingProgressionOverlay(to: baseSets, incrementKg: exercise.progressionIncrementKg)
+}
+
+private func applyingProgressionOverlay(
+    to sets: [WatchProcedureSetSnapshot],
+    incrementKg: Double?
+) -> [WatchProcedureSetSnapshot] {
+    guard let incrementKg, incrementKg > 0 else { return sets }
+    guard sets.allSatisfy({ ($0.reps ?? 0) > 0 }) else { return sets }
+    guard let first = sets.first, let firstWeight = first.weight, firstWeight > 0 else { return sets }
+
+    let clampedIncreaseKg = min(incrementKg, firstWeight * 0.10)
+    let step = incrementKg <= 1.0 ? 1.0 : 2.5
+    let roundedWeightKg = ((firstWeight + clampedIncreaseKg) / step).rounded() * step
+
+    var updatedSets = sets
+    updatedSets[0] = WatchProcedureSetSnapshot(
+        setNumber: first.setNumber,
+        weight: roundedWeightKg,
+        reps: first.reps
+    )
+    return updatedSets
 }
 
 func routineMetaLabel(
@@ -264,11 +306,12 @@ func routineMetaLabel(
 
 /// Creates a single-exercise template snapshot for navigation.
 func snapshotFromExercise(_ exercise: WatchExerciseInfo) -> WorkoutSessionTemplate {
+    let plannedSets = resolvedProcedureSets(for: exercise)
     let defaults = resolvedDefaults(for: exercise)
     let entry = TemplateEntry(
         exerciseDefinitionID: exercise.id,
         exerciseName: exercise.name,
-        defaultSets: exercise.defaultSets,
+        defaultSets: plannedSets?.count ?? exercise.defaultSets,
         defaultReps: defaults.reps,
         defaultWeightKg: defaults.weight,
         equipment: exercise.equipment,
@@ -277,7 +320,8 @@ func snapshotFromExercise(_ exercise: WatchExerciseInfo) -> WorkoutSessionTempla
     )
     return WorkoutSessionTemplate(
         name: exercise.name,
-        entries: [entry]
+        entries: [entry],
+        procedureSetsByExerciseID: plannedSets.map { [exercise.id: $0] }
     )
 }
 

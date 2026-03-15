@@ -18,6 +18,7 @@ final class DashboardViewModel {
     var focusInsight: CoachingInsight?
     private(set) var insightCards: [InsightCardData] = []
     var workoutSuggestion: WorkoutSuggestion?
+    var recentHighRPEStreak: Int = 0
     var templateNudgeRecommendation: WorkoutTemplateRecommendation?
     var heroBaselineDetails: [BaselineDetail] = []
     var pinnedCategories: [HealthMetric.Category]
@@ -115,6 +116,7 @@ final class DashboardViewModel {
     private let scoreRefreshService: ScoreRefreshService?
     private let templateRecommendationService: any WorkoutTemplateRecommending
     private let nudgeDismissStore: TemplateNudgeDismissStore
+    private var loadRequestID = 0
 
     /// Hourly sparkline data for the condition hero card, sourced from ScoreRefreshService.
     var conditionSparkline: HourlySparklineData {
@@ -169,8 +171,10 @@ final class DashboardViewModel {
     }
 
     func loadData(canLoadHealthKitData: Bool = true) async {
-        guard !isLoading else { return }
+        let requestID = beginLoadRequest()
         isLoading = true
+        defer { finishLoadRequest(requestID) }
+
         let healthKitAvailable = healthKitManager.isAvailable
         let canQueryMockBackedServices = Self.shouldUseSeededUITestFixtures
         let canQueryHealthKit = (healthKitAvailable || canQueryMockBackedServices) && canLoadHealthKitData
@@ -198,10 +202,6 @@ final class DashboardViewModel {
             AppLogger.ui.info("HealthKit authorization is deferred; skip protected dashboard queries until app-level orchestration completes")
         }
 
-        async let exerciseTask = safeExerciseFetch(canQueryHealthKit: canQueryHealthKit)
-        async let stepsTask = safeStepsFetch(canQueryHealthKit: canQueryHealthKit)
-        async let weightTask = safeWeightFetch(canQueryHealthKit: canQueryHealthKit)
-        async let bmiTask = safeBMIFetch(canQueryHealthKit: canQueryHealthKit)
         async let weatherTask = safeWeatherFetch()
         let sharedSnapshot: SharedHealthSnapshot?
 #if DEBUG
@@ -217,12 +217,28 @@ final class DashboardViewModel {
 #endif
 
         // Each fetch is independent — one failure should not block others.
+        // All snapshot-aware fetches launch after snapshot is available.
         async let hrvTask = safeHRVFetch(snapshot: sharedSnapshot, canQueryHealthKit: canQueryHealthKit)
         async let sleepTask = safeSleepFetch(snapshot: sharedSnapshot, canQueryHealthKit: canQueryHealthKit)
+        async let exerciseTask = safeExerciseFetch(snapshot: sharedSnapshot, canQueryHealthKit: canQueryHealthKit)
+        async let stepsTask = safeStepsFetch(snapshot: sharedSnapshot, canQueryHealthKit: canQueryHealthKit)
+        async let weightTask = safeWeightFetch(snapshot: sharedSnapshot, canQueryHealthKit: canQueryHealthKit)
+        async let bmiTask = safeBMIFetch(snapshot: sharedSnapshot, canQueryHealthKit: canQueryHealthKit)
 
         let (hrvResult, sleepResult, exerciseResult, stepsResult, weightResult, bmiResult, weatherResult) = await (
             hrvTask, sleepTask, exerciseTask, stepsTask, weightTask, bmiTask, weatherTask
         )
+
+        guard isCurrentLoadRequest(requestID) else { return }
+
+        if hrvResult.failed, sharedSnapshot == nil {
+            // Avoid showing stale readiness data after a live HRV refresh fails.
+            conditionScore = nil
+            baselineStatus = nil
+            recentScores = []
+            baselineDeltasByMetricID["hrv"] = nil
+            baselineDeltasByMetricID["rhr"] = nil
+        }
 
         var allMetrics: [HealthMetric] = []
         allMetrics.append(contentsOf: hrvResult.metrics)
@@ -233,20 +249,31 @@ final class DashboardViewModel {
         if let bmiMetric = bmiResult.metric { allMetrics.append(bmiMetric) }
 
         // Track partial failures
-        let failureCount = [
+        let sourceFailures = [
             hrvResult.failed, sleepResult.failed, exerciseResult.failed,
             stepsResult.failed, weightResult.failed, bmiResult.failed
-        ].filter { $0 }.count
+        ]
+        let failureCount = sourceFailures.filter { $0 }.count
+        let totalSources = sourceFailures.count
 
         if failureCount > 0 && !allMetrics.isEmpty {
-            errorMessage = String(localized: "Some data could not be loaded (\(failureCount) of 6 sources)")
-        } else if failureCount > 0 && allMetrics.isEmpty {
+            errorMessage = String(localized: "Some data could not be loaded (\(failureCount) of \(totalSources) sources)")
+        } else if failureCount > 0 && allMetrics.isEmpty && !isMirroredReadOnlyMode {
+            // On Mac (mirrored mode), empty data means CloudKit hasn't synced yet —
+            // show CloudSyncWaitingView instead of an error.
             errorMessage = String(localized: "Failed to load health data")
         }
 
         weatherSnapshot = weatherResult
         weatherAtmosphere = weatherResult.map { WeatherAtmosphere.from($0) } ?? .default
-        sortedMetrics = allMetrics.sorted { $0.changeSignificance > $1.changeSignificance }
+
+        // Optimistic retention: on Mac mirrored mode, if reload yields empty metrics
+        // but we already have data, keep existing metrics to prevent infinite spinner.
+        if hasLoadedOnce && isMirroredReadOnlyMode && allMetrics.isEmpty && !self.sortedMetrics.isEmpty {
+            AppLogger.ui.info("Optimistic retention: keeping \(self.sortedMetrics.count) existing metrics (reload returned empty)")
+        } else {
+            sortedMetrics = allMetrics.sorted { $0.changeSignificance > $1.changeSignificance }
+        }
         buildCoachingInsights()
         coachingMessage = focusInsight?.message ?? buildCoachingMessage()
         enhanceCoachingMessageIfAvailable()
@@ -257,15 +284,13 @@ final class DashboardViewModel {
         WidgetDataWriter.writeConditionScore(conditionScore)
 
         // Persist hourly score snapshot for sparkline tracking
-        if let service = scoreRefreshService, conditionScore != nil {
+        if isCurrentLoadRequest(requestID), let service = scoreRefreshService, conditionScore != nil {
             await service.recordSnapshot(
                 conditionScore: conditionScore?.score,
                 wellnessScore: nil,
                 readinessScore: nil
             )
         }
-
-        isLoading = false
     }
 
     /// Load template nudge recommendation using existing templates from View's @Query.
@@ -299,6 +324,21 @@ final class DashboardViewModel {
         templateNudgeRecommendation = nil
     }
 
+    private func beginLoadRequest() -> Int {
+        loadRequestID += 1
+        return loadRequestID
+    }
+
+    private func isCurrentLoadRequest(_ requestID: Int) -> Bool {
+        requestID == loadRequestID && !Task.isCancelled
+    }
+
+    private func finishLoadRequest(_ requestID: Int) {
+        if requestID == loadRequestID {
+            isLoading = false
+        }
+    }
+
     private func safeHRVFetch(
         snapshot: SharedHealthSnapshot?,
         canQueryHealthKit: Bool
@@ -307,8 +347,9 @@ final class DashboardViewModel {
             let hrvRelatedSources: Set<SharedHealthSnapshot.Source> = [
                 .hrvSamples, .todayRHR, .yesterdayRHR, .latestRHR, .rhrCollection
             ]
-            let failed = !snapshot.failedSources.isDisjoint(with: hrvRelatedSources)
-            return (fetchHRVData(from: snapshot), failed)
+            let metrics = fetchHRVData(from: snapshot)
+            let failed = metrics.isEmpty && !snapshot.failedSources.isDisjoint(with: hrvRelatedSources)
+            return (metrics, failed)
         }
         guard canQueryHealthKit else { return ([], false) }
 
@@ -327,8 +368,9 @@ final class DashboardViewModel {
             let sleepRelatedSources: Set<SharedHealthSnapshot.Source> = [
                 .todaySleepStages, .yesterdaySleepStages, .latestSleepStages, .sleepDailyDurations
             ]
-            let failed = !snapshot.failedSources.isDisjoint(with: sleepRelatedSources)
-            return (fetchSleepData(from: snapshot), failed)
+            let metric = fetchSleepData(from: snapshot)
+            let failed = metric == nil && !snapshot.failedSources.isDisjoint(with: sleepRelatedSources)
+            return (metric, failed)
         }
         guard canQueryHealthKit else { return (nil, false) }
 
@@ -339,40 +381,145 @@ final class DashboardViewModel {
         }
     }
 
-    private func safeExerciseFetch(canQueryHealthKit: Bool) async -> (metrics: [HealthMetric], failed: Bool) {
-        guard canQueryHealthKit else { return ([], false) }
-        do { return (try await fetchExerciseData(), false) }
-        catch {
-            AppLogger.ui.error("Exercise fetch failed: \(error.localizedDescription)")
+    private func safeExerciseFetch(
+        snapshot: SharedHealthSnapshot?,
+        canQueryHealthKit: Bool
+    ) async -> (metrics: [HealthMetric], failed: Bool) {
+        // HealthKit first — provides rich per-type cards
+        if canQueryHealthKit {
+            do { return (try await fetchExerciseData(), false) }
+            catch {
+                AppLogger.ui.error("Exercise fetch failed: \(error.localizedDescription)")
+                return ([], true)
+            }
+        }
+        // Snapshot fallback (Mac / no-HealthKit environments)
+        if let snapshot, let minutes = snapshot.todayExerciseMinutes, minutes > 0 {
+            let metric = HealthMetric(
+                id: "exercise",
+                name: String(localized: "Exercise"),
+                value: minutes,
+                unit: "min",
+                change: nil,
+                date: snapshot.fetchedAt,
+                category: .exercise
+            )
+            return ([metric], false)
+        }
+        if let snapshot, let recent = snapshot.recentExercise {
+            let metric = HealthMetric(
+                id: "exercise",
+                name: String(localized: "Exercise"),
+                value: recent.minutes,
+                unit: "min",
+                change: nil,
+                date: recent.date,
+                category: .exercise,
+                isHistorical: recent.isHistorical
+            )
+            return ([metric], false)
+        }
+        if let snapshot, snapshot.failedSources.contains(.todayExercise) {
             return ([], true)
         }
+        return ([], false)
     }
 
-    private func safeStepsFetch(canQueryHealthKit: Bool) async -> (metric: HealthMetric?, failed: Bool) {
-        guard canQueryHealthKit else { return (nil, false) }
-        do { return (try await fetchStepsData(), false) }
-        catch {
-            AppLogger.ui.error("Steps fetch failed: \(error.localizedDescription)")
+    private func safeStepsFetch(
+        snapshot: SharedHealthSnapshot?,
+        canQueryHealthKit: Bool
+    ) async -> (metric: HealthMetric?, failed: Bool) {
+        // HealthKit first
+        if canQueryHealthKit {
+            do { return (try await fetchStepsData(), false) }
+            catch {
+                AppLogger.ui.error("Steps fetch failed: \(error.localizedDescription)")
+                return (nil, true)
+            }
+        }
+        // Snapshot fallback (Mac / no-HealthKit environments)
+        if let snapshot, let steps = snapshot.todaySteps, steps > 0, steps <= 200_000 {
+            let metric = HealthMetric(
+                id: "steps",
+                name: String(localized: "Steps"),
+                value: steps,
+                unit: "",
+                change: nil,
+                date: snapshot.fetchedAt,
+                category: .steps
+            )
+            return (metric, false)
+        }
+        if let snapshot, snapshot.failedSources.contains(.todaySteps) {
             return (nil, true)
         }
+        return (nil, false)
     }
 
-    private func safeWeightFetch(canQueryHealthKit: Bool) async -> (metric: HealthMetric?, failed: Bool) {
-        guard canQueryHealthKit else { return (nil, false) }
-        do { return (try await fetchWeightData(), false) }
-        catch {
-            AppLogger.ui.error("Weight fetch failed: \(error.localizedDescription)")
+    private func safeWeightFetch(
+        snapshot: SharedHealthSnapshot?,
+        canQueryHealthKit: Bool
+    ) async -> (metric: HealthMetric?, failed: Bool) {
+        // HealthKit first
+        if canQueryHealthKit {
+            do { return (try await fetchWeightData(), false) }
+            catch {
+                AppLogger.ui.error("Weight fetch failed: \(error.localizedDescription)")
+                return (nil, true)
+            }
+        }
+        // Snapshot fallback (Mac / no-HealthKit environments)
+        if let snapshot, let weight = snapshot.latestWeight,
+           weight.value > 0, weight.value < 500 {
+            let metric = HealthMetric(
+                id: "weight",
+                name: String(localized: "Weight"),
+                value: weight.value,
+                unit: "kg",
+                change: nil,
+                date: weight.date,
+                category: .weight,
+                isHistorical: !Calendar.current.isDateInToday(weight.date)
+            )
+            return (metric, false)
+        }
+        if let snapshot, snapshot.failedSources.contains(.latestWeight) {
             return (nil, true)
         }
+        return (nil, false)
     }
 
-    private func safeBMIFetch(canQueryHealthKit: Bool) async -> (metric: HealthMetric?, failed: Bool) {
-        guard canQueryHealthKit else { return (nil, false) }
-        do { return (try await fetchBMIData(), false) }
-        catch {
-            AppLogger.ui.error("BMI fetch failed: \(error.localizedDescription)")
+    private func safeBMIFetch(
+        snapshot: SharedHealthSnapshot?,
+        canQueryHealthKit: Bool
+    ) async -> (metric: HealthMetric?, failed: Bool) {
+        // HealthKit first
+        if canQueryHealthKit {
+            do { return (try await fetchBMIData(), false) }
+            catch {
+                AppLogger.ui.error("BMI fetch failed: \(error.localizedDescription)")
+                return (nil, true)
+            }
+        }
+        // Snapshot fallback (Mac / no-HealthKit environments)
+        if let snapshot, let bmi = snapshot.latestBMI,
+           bmi.value > 0, bmi.value < 100 {
+            let metric = HealthMetric(
+                id: "bmi",
+                name: String(localized: "BMI"),
+                value: bmi.value,
+                unit: "",
+                change: nil,
+                date: bmi.date,
+                category: .bmi,
+                isHistorical: !Calendar.current.isDateInToday(bmi.date)
+            )
+            return (metric, false)
+        }
+        if let snapshot, snapshot.failedSources.contains(.latestBMI) {
             return (nil, true)
         }
+        return (nil, false)
     }
 
     /// Request location permission from user action (e.g. tapping weather placeholder).
@@ -1089,6 +1236,21 @@ final class DashboardViewModel {
         )
     }
 
+    /// Compute consecutive recent high-RPE sessions (RPE >= 8) from most recent backward.
+    /// Sessions with nil RPE break the streak. Sessions older than 30 days are excluded
+    /// to prevent stale data from inflating the streak.
+    static func computeHighRPEStreak(from records: [ExerciseRecord]) -> Int {
+        let cutoff = Date().addingTimeInterval(-30 * 86_400)
+        let sorted = records.sorted { $0.date > $1.date }
+        var streak = 0
+        for record in sorted {
+            guard record.date >= cutoff else { break }
+            guard let rpe = record.rpe, rpe >= 8 else { break }
+            streak += 1
+        }
+        return streak
+    }
+
     func dismissInsightCard(id: String) {
         dismissStore.dismiss(cardID: id)
         insightCards.removeAll { $0.id == id }
@@ -1112,7 +1274,8 @@ final class DashboardViewModel {
             workoutSuggestion: workoutSuggestion,
             recentPRExerciseName: nil,
             currentStreakMilestone: nil,
-            weather: weatherSnapshot
+            weather: weatherSnapshot,
+            recentHighRPEStreak: recentHighRPEStreak
         )
 
         lastCoachingInput = input

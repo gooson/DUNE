@@ -32,20 +32,23 @@ struct DUNEWatchApp: App {
     )
 
     private static func makeModelContainer(configuration: ModelConfiguration) throws -> ModelContainer {
+        // All migration stages are .lightweight — automatic migration handles them.
+        // Staged plan removed due to drifted VersionedSchema hashes causing 134504.
         try ModelContainer(
             for: AppMigrationPlan.currentSchema,
-            migrationPlan: AppMigrationPlan.self,
             configurations: configuration
         )
     }
 
     private static func makeInMemoryFallbackContainer() -> ModelContainer {
+        logger.error("Falling back to in-memory ModelContainer due to persistent store failure")
         let fallbackConfiguration = ModelConfiguration(isStoredInMemoryOnly: true)
         do {
-            logger.error("Falling back to in-memory ModelContainer due to persistent store failure")
-            return try makeModelContainer(configuration: fallbackConfiguration)
+            // Skip migration plan — in-memory stores have nothing to migrate.
+            return try makeFreshModelContainer(configuration: fallbackConfiguration)
         } catch {
-            fatalError("Failed to create fallback in-memory ModelContainer: \(error)")
+            // swiftlint:disable:next force_try
+            return try! ModelContainer(for: Schema([]), configurations: ModelConfiguration(isStoredInMemoryOnly: true))
         }
     }
 
@@ -80,8 +83,23 @@ struct DUNEWatchApp: App {
         let fm = FileManager.default
         for suffix in ["", "-wal", "-shm"] {
             let fileURL = URL(fileURLWithPath: url.path + suffix)
-            try? fm.removeItem(at: fileURL)
+            do {
+                try fm.removeItem(at: fileURL)
+                logger.info("Deleted store file: \(fileURL.lastPathComponent)")
+            } catch let error as NSError where error.domain == NSCocoaErrorDomain && error.code == NSFileNoSuchFileError {
+                // File doesn't exist — nothing to delete.
+            } catch {
+                logger.error("Failed to delete store file \(fileURL.lastPathComponent): \(error.localizedDescription)")
+            }
         }
+    }
+
+    /// Create a ModelContainer WITHOUT the migration plan — for fresh stores after deletion.
+    private static func makeFreshModelContainer(configuration: ModelConfiguration) throws -> ModelContainer {
+        try ModelContainer(
+            for: AppMigrationPlan.currentSchema,
+            configurations: configuration
+        )
     }
 
     private static func recoverModelContainer(after error: Error, configuration: ModelConfiguration) -> ModelContainer {
@@ -94,10 +112,26 @@ struct DUNEWatchApp: App {
         logger.error("Deleting persistent store after migration compatibility failure: \(reflectedError, privacy: .private)")
         deleteStoreFiles(at: configuration.url)
 
+        // Retry 1: fresh container WITHOUT migration plan (deleted store needs no migration).
         do {
-            return try makeModelContainer(configuration: configuration)
+            let container = try makeFreshModelContainer(configuration: configuration)
+            logger.info("ModelContainer recovered with fresh store (no migration plan).")
+            return container
         } catch {
-            logger.error("ModelContainer retry failed: \(error.localizedDescription, privacy: .public)")
+            logger.error("Fresh ModelContainer retry failed: \(error.localizedDescription, privacy: .public)")
+        }
+
+        // Retry 2: fresh container without CloudKit either.
+        do {
+            let noCloudConfig = ModelConfiguration(
+                url: configuration.url,
+                cloudKitDatabase: .none
+            )
+            let container = try makeFreshModelContainer(configuration: noCloudConfig)
+            logger.info("ModelContainer recovered without CloudKit.")
+            return container
+        } catch {
+            logger.error("Fresh ModelContainer retry without CloudKit also failed: \(error.localizedDescription, privacy: .public)")
             return makeInMemoryFallbackContainer()
         }
     }

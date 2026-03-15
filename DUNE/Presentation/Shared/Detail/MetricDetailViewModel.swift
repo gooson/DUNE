@@ -93,39 +93,36 @@ final class MetricDetailViewModel {
     }
 
     func loadData() async {
-        guard !isLoading else { return }
+        let requestID = beginReloadRequest()
         isLoading = true
         errorMessage = nil
+        defer { finishReloadRequest(requestID) }
 
         do {
             switch category {
-            case .hrv:               try await loadHRVData()
-            case .rhr:               try await loadRHRData()
-            case .heartRate:         try await loadHeartRateData()
-            case .sleep:             try await loadSleepData()
-            case .steps:             try await loadStepsData()
-            case .exercise:          try await loadExerciseData()
-            case .weight:            try await loadWeightData()
-            case .bmi:               try await loadBMIData()
-            case .bodyFat:           try await loadBodyFatData()
-            case .leanBodyMass:      try await loadLeanBodyMassData()
-            case .spo2:              try await loadVitalsData(.oxygenSaturation)
-            case .respiratoryRate:   try await loadVitalsData(.respiratoryRate)
-            case .vo2Max:            try await loadVitalsData(.vo2Max)
-            case .heartRateRecovery: try await loadVitalsData(.heartRateRecovery)
-            case .wristTemperature:  try await loadVitalsData(.wristTemperature)
+            case .hrv:               try await loadHRVData(requestID: requestID)
+            case .rhr:               try await loadRHRData(requestID: requestID)
+            case .heartRate:         try await loadHeartRateData(requestID: requestID)
+            case .sleep:             try await loadSleepData(requestID: requestID)
+            case .steps:             try await loadStepsData(requestID: requestID)
+            case .exercise:          try await loadExerciseData(requestID: requestID)
+            case .weight:            try await loadWeightData(requestID: requestID)
+            case .bmi:               try await loadBMIData(requestID: requestID)
+            case .bodyFat:           try await loadBodyFatData(requestID: requestID)
+            case .leanBodyMass:      try await loadLeanBodyMassData(requestID: requestID)
+            case .spo2:              try await loadVitalsData(.oxygenSaturation, requestID: requestID)
+            case .respiratoryRate:   try await loadVitalsData(.respiratoryRate, requestID: requestID)
+            case .vo2Max:            try await loadVitalsData(.vo2Max, requestID: requestID)
+            case .heartRateRecovery: try await loadVitalsData(.heartRateRecovery, requestID: requestID)
+            case .wristTemperature:  try await loadVitalsData(.wristTemperature, requestID: requestID)
             }
-            guard !Task.isCancelled else {
-                isLoading = false
-                return
-            }
+            guard isCurrentReloadRequest(requestID) else { return }
             buildHighlights()
         } catch {
+            guard isCurrentReloadRequest(requestID) else { return }
             AppLogger.ui.error("MetricDetail load failed for \(self.category.rawValue): \(error.localizedDescription)")
             errorMessage = error.localizedDescription
         }
-
-        isLoading = false
     }
 
     // MARK: - Cached Scroll-Reactive Properties (correction log #8)
@@ -201,16 +198,38 @@ final class MetricDetailViewModel {
 
     private var scrollDebounceTask: Task<Void, Never>?
     private var reloadTask: Task<Void, Never>?
+    private var reloadRequestID = 0
     private var hasLoadedSleepInsightCards = false
 
     private func triggerReload() {
+        invalidateReloadRequests()
         reloadTask?.cancel()
+        isLoading = false
         reloadTask = Task { await loadData() }
+    }
+
+    private func beginReloadRequest() -> Int {
+        reloadRequestID += 1
+        return reloadRequestID
+    }
+
+    private func invalidateReloadRequests() {
+        reloadRequestID += 1
+    }
+
+    private func isCurrentReloadRequest(_ requestID: Int) -> Bool {
+        requestID == reloadRequestID && !Task.isCancelled
+    }
+
+    private func finishReloadRequest(_ requestID: Int) {
+        if requestID == reloadRequestID {
+            isLoading = false
+        }
     }
 
     // MARK: - HRV
 
-    private func loadHRVData() async throws {
+    private func loadHRVData(requestID: Int) async throws {
         let range = extendedRange
         let interval = HealthDataAggregator.intervalComponents(for: selectedPeriod)
 
@@ -225,6 +244,7 @@ final class MetricDetailViewModel {
         let current = try await currentData
         let previous = try await prevData
 
+        guard isCurrentReloadRequest(requestID) else { return }
         chartData = current.map { ChartDataPoint(date: $0.date, value: $0.average) }
         summaryStats = HealthDataAggregator.computeSummary(
             from: currentPeriodValues(),
@@ -234,7 +254,7 @@ final class MetricDetailViewModel {
 
     // MARK: - RHR
 
-    private func loadRHRData() async throws {
+    private func loadRHRData(requestID: Int) async throws {
         let range = extendedRange
         let interval = HealthDataAggregator.intervalComponents(for: selectedPeriod)
 
@@ -249,6 +269,7 @@ final class MetricDetailViewModel {
         let current = try await currentData
         let previous = try await prevData
 
+        guard isCurrentReloadRequest(requestID) else { return }
         rangeData = current.map {
             RangeDataPoint(date: $0.date, min: $0.min, max: $0.max, average: $0.average)
         }
@@ -278,19 +299,21 @@ final class MetricDetailViewModel {
     private let deficitUseCase = CalculateSleepDeficitUseCase()
     private let averageBedtimeUseCase = CalculateAverageBedtimeUseCase()
 
-    private func loadSleepData() async throws {
+    private func loadSleepData(requestID: Int) async throws {
         let range = extendedRange
 
         // Load summary cards once (independent of selected period).
         if !hasLoadedSleepInsightCards {
-            await loadSleepInsightCards()
+            await loadSleepInsightCards(requestID: requestID)
         }
+        guard isCurrentReloadRequest(requestID) else { return }
 
         if selectedPeriod == .day {
             // Day mode: show raw sleep stages
             let stages = try await sleepService.fetchSleepStages(for: Date())
             let sleepStages = stages.filter { $0.stage != .awake }
             let totalMinutes = sleepStages.reduce(0.0) { $0 + $1.duration } / 60.0
+            guard isCurrentReloadRequest(requestID) else { return }
             chartData = [ChartDataPoint(date: Date(), value: totalMinutes)]
             summaryStats = HealthDataAggregator.computeSummary(from: [totalMinutes])
         } else {
@@ -307,6 +330,7 @@ final class MetricDetailViewModel {
             let previous = try await prevSleep
 
             // Build chart data (total minutes)
+            guard isCurrentReloadRequest(requestID) else { return }
             chartData = current.map {
                 ChartDataPoint(date: $0.date, value: $0.totalMinutes)
             }
@@ -349,17 +373,19 @@ final class MetricDetailViewModel {
         }
     }
 
-    private func loadSleepInsightCards() async {
-        hasLoadedSleepInsightCards = true
-
+    private func loadSleepInsightCards(requestID: Int) async {
         let calendar = Calendar.current
         let today = Date()
 
         async let deficitTask = fetchDeficitAnalysis(today: today, calendar: calendar)
         async let bedtimeTask = fetchAverageBedtime(today: today, calendar: calendar)
 
-        deficitAnalysis = await deficitTask
-        averageBedtime = await bedtimeTask
+        let deficit = await deficitTask
+        let bedtime = await bedtimeTask
+        guard isCurrentReloadRequest(requestID) else { return }
+        deficitAnalysis = deficit
+        averageBedtime = bedtime
+        hasLoadedSleepInsightCards = true
     }
 
     private func fetchDeficitAnalysis(today: Date, calendar: Calendar) async -> SleepDeficitAnalysis? {
@@ -413,7 +439,7 @@ final class MetricDetailViewModel {
 
     // MARK: - Steps
 
-    private func loadStepsData() async throws {
+    private func loadStepsData(requestID: Int) async throws {
         let range = extendedRange
         let interval = HealthDataAggregator.intervalComponents(for: selectedPeriod)
 
@@ -429,6 +455,7 @@ final class MetricDetailViewModel {
         let previous = try await prevData
 
         let raw = current.map { ChartDataPoint(date: $0.date, value: $0.sum) }
+        guard isCurrentReloadRequest(requestID) else { return }
 
         // For 6M/Y, aggregate sums by week/month
         if selectedPeriod == .sixMonths || selectedPeriod == .year {
@@ -470,7 +497,7 @@ final class MetricDetailViewModel {
 
     // MARK: - Exercise
 
-    private func loadExerciseData() async throws {
+    private func loadExerciseData(requestID: Int) async throws {
         let range = extendedRange
 
         async let currentWorkouts = workoutService.fetchWorkouts(start: range.start, end: range.end)
@@ -494,6 +521,7 @@ final class MetricDetailViewModel {
         let useDistance = isDistanceBased && current.contains(where: { $0.distance != nil && $0.distance! > 0 })
         metricUnit = useDistance ? "km" : "min"
 
+        guard isCurrentReloadRequest(requestID) else { return }
         // Aggregate for longer periods
         if selectedPeriod == .sixMonths || selectedPeriod == .year {
             chartData = HealthDataAggregator.aggregateBySum(
@@ -521,6 +549,7 @@ final class MetricDetailViewModel {
     // MARK: - Body Composition (Weight, BMI, Body Fat, Lean Body Mass)
 
     private func loadBodyCompositionData(
+        requestID: Int,
         fetch: @Sendable (Date, Date) async throws -> [BodyCompositionSample]
     ) async throws {
         let range = extendedRange
@@ -536,12 +565,19 @@ final class MetricDetailViewModel {
             .map { ChartDataPoint(date: $0.date, value: $0.value) }
             .sorted { $0.date < $1.date }
 
-        // Aggregate by day (or larger) to avoid duplicate points on the same day
-        // causing Catmull-Rom interpolation spikes
-        let aggregated = HealthDataAggregator.aggregateByAverage(
-            raw, unit: selectedPeriod == .sixMonths || selectedPeriod == .year
-                ? selectedPeriod.aggregationUnit : .day
-        )
+        let aggregated: [ChartDataPoint]
+        if selectedPeriod == .day {
+            aggregated = raw
+        } else {
+            // Aggregate by day (or larger) to avoid duplicate points on the same day
+            // causing Catmull-Rom interpolation spikes outside intraday detail.
+            aggregated = HealthDataAggregator.aggregateByAverage(
+                raw,
+                unit: selectedPeriod == .sixMonths || selectedPeriod == .year
+                    ? selectedPeriod.aggregationUnit
+                    : .day
+            )
+        }
 
         // Compute from local `aggregated` rather than `self.chartData` to use
         // consistent data within this load cycle
@@ -550,6 +586,7 @@ final class MetricDetailViewModel {
             .filter { $0.date >= currentRange.start && $0.date <= currentRange.end }
             .map(\.value)
 
+        guard isCurrentReloadRequest(requestID) else { return }
         chartData = aggregated
         summaryStats = HealthDataAggregator.computeSummary(
             from: currentValues,
@@ -557,12 +594,12 @@ final class MetricDetailViewModel {
         )
     }
 
-    private func loadWeightData() async throws {
-        try await loadBodyCompositionData(fetch: bodyService.fetchWeight)
+    private func loadWeightData(requestID: Int) async throws {
+        try await loadBodyCompositionData(requestID: requestID, fetch: bodyService.fetchWeight)
     }
 
-    private func loadBMIData() async throws {
-        try await loadBodyCompositionData(fetch: bodyService.fetchBMI)
+    private func loadBMIData(requestID: Int) async throws {
+        try await loadBodyCompositionData(requestID: requestID, fetch: bodyService.fetchBMI)
     }
 
     // MARK: - Vitals (SpO2, Respiratory Rate, VO2 Max, HR Recovery, Wrist Temp)
@@ -571,7 +608,7 @@ final class MetricDetailViewModel {
         case oxygenSaturation, respiratoryRate, vo2Max, heartRateRecovery, wristTemperature
     }
 
-    private func loadVitalsData(_ type: VitalType) async throws {
+    private func loadVitalsData(_ type: VitalType, requestID: Int) async throws {
         let range = extendedRange
         let samples: [VitalSample]
         switch type {
@@ -582,23 +619,30 @@ final class MetricDetailViewModel {
         case .wristTemperature:  samples = try await vitalsService.fetchWristTemperatureCollection(start: range.start, end: range.end)
         }
 
+        guard isCurrentReloadRequest(requestID) else { return }
         chartData = samples.map { ChartDataPoint(date: $0.date, value: $0.value) }
         summaryStats = HealthDataAggregator.computeSummary(from: currentPeriodValues())
     }
 
-    private func loadHeartRateData() async throws {
+    private func loadHeartRateData(requestID: Int) async throws {
         let range = extendedRange
-        let samples = try await heartRateService.fetchHeartRateHistory(start: range.start, end: range.end)
+        let interval = HealthDataAggregator.intervalComponents(for: selectedPeriod)
+        let samples = try await heartRateService.fetchHeartRateHistory(
+            start: range.start,
+            end: range.end,
+            interval: interval
+        )
+        guard isCurrentReloadRequest(requestID) else { return }
         chartData = samples.map { ChartDataPoint(date: $0.date, value: $0.value) }
         summaryStats = HealthDataAggregator.computeSummary(from: currentPeriodValues())
     }
 
-    private func loadBodyFatData() async throws {
-        try await loadBodyCompositionData(fetch: bodyService.fetchBodyFat)
+    private func loadBodyFatData(requestID: Int) async throws {
+        try await loadBodyCompositionData(requestID: requestID, fetch: bodyService.fetchBodyFat)
     }
 
-    private func loadLeanBodyMassData() async throws {
-        try await loadBodyCompositionData(fetch: bodyService.fetchLeanBodyMass)
+    private func loadLeanBodyMassData(requestID: Int) async throws {
+        try await loadBodyCompositionData(requestID: requestID, fetch: bodyService.fetchLeanBodyMass)
     }
 
     // MARK: - Helpers

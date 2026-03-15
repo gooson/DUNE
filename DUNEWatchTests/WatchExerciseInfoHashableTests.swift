@@ -79,5 +79,8 @@ struct WatchExerciseInfoHashableTests {
         #expect(decoded.isPreferred == false)
         #expect(decoded.lastUsedAt == nil)
         #expect(decoded.usageCount == 0)
+        #expect(decoded.procedureSets == nil)
+        #expect(decoded.procedureUpdatedAt == nil)
+        #expect(decoded.progressionIncrementKg == nil)
     }
 }

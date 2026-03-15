@@ -28,6 +28,7 @@ struct WatchExerciseLibraryPayloadBuilderTests {
         category: ExerciseCategory = .strength,
         inputType: ExerciseInputType = .setsRepsWeight,
         equipment: Equipment = .barbell,
+        primaryMuscles: [MuscleGroup] = [],
         cardioSecondaryUnit: CardioSecondaryUnit? = nil
     ) -> ExerciseDefinition {
         ExerciseDefinition(
@@ -36,7 +37,7 @@ struct WatchExerciseLibraryPayloadBuilderTests {
             localizedName: name,
             category: category,
             inputType: inputType,
-            primaryMuscles: [],
+            primaryMuscles: primaryMuscles,
             secondaryMuscles: [],
             equipment: equipment,
             metValue: 5.0,
@@ -70,20 +71,28 @@ struct WatchExerciseLibraryPayloadBuilderTests {
                 lastUsedDate: defaultUpdatedAt
             )
         ]
-        let exerciseRecords = [
-            ExerciseRecord(
-                date: defaultUpdatedAt.addingTimeInterval(300),
-                exerciseType: "Bench Press",
-                duration: 600,
-                exerciseDefinitionID: "bench-press"
-            ),
-            ExerciseRecord(
-                date: mostRecentWorkout,
-                exerciseType: "Tempo Bench Press",
-                duration: 720,
-                exerciseDefinitionID: "tempo-bench-press"
-            )
+        let benchRecord = ExerciseRecord(
+            date: defaultUpdatedAt.addingTimeInterval(300),
+            exerciseType: "Bench Press",
+            duration: 600,
+            exerciseDefinitionID: "bench-press"
+        )
+        benchRecord.sets = [
+            WorkoutSet(setNumber: 1, weight: 80, reps: 10, isCompleted: true),
+            WorkoutSet(setNumber: 2, weight: 82.5, reps: 8, isCompleted: true),
         ]
+        let tempoRecord = ExerciseRecord(
+            date: mostRecentWorkout,
+            exerciseType: "Tempo Bench Press",
+            duration: 720,
+            exerciseDefinitionID: "tempo-bench-press"
+        )
+        tempoRecord.sets = [
+            WorkoutSet(setNumber: 1, weight: 85, reps: 6, isCompleted: true),
+            WorkoutSet(setNumber: 2, weight: 87.5, reps: 5, isCompleted: true),
+            WorkoutSet(setNumber: 3, weight: 90, reps: 4, isCompleted: true),
+        ]
+        let exerciseRecords = [benchRecord, tempoRecord]
 
         let payload = WatchExerciseLibraryPayloadBuilder.makePayload(
             definitions: library.definitions,
@@ -98,6 +107,10 @@ struct WatchExerciseLibraryPayloadBuilderTests {
         #expect(benchPayload.isPreferred)
         #expect(benchPayload.lastUsedAt == mostRecentWorkout)
         #expect(benchPayload.usageCount == 2)
+        #expect(benchPayload.procedureSets?.count == 2)
+        #expect(benchPayload.procedureSets?.first?.weight == 80)
+        #expect(benchPayload.procedureUpdatedAt == benchRecord.date)
+        #expect(benchPayload.progressionIncrementKg == 2.5)
 
         let tempoPayload = try #require(payload.first { $0.id == "tempo-bench-press" })
         #expect(tempoPayload.defaultReps == 5)
@@ -105,6 +118,10 @@ struct WatchExerciseLibraryPayloadBuilderTests {
         #expect(tempoPayload.isPreferred)
         #expect(tempoPayload.lastUsedAt == mostRecentWorkout)
         #expect(tempoPayload.usageCount == 2)
+        #expect(tempoPayload.procedureSets?.count == 3)
+        #expect(tempoPayload.procedureSets?.first?.weight == 85)
+        #expect(tempoPayload.procedureUpdatedAt == tempoRecord.date)
+        #expect(tempoPayload.progressionIncrementKg == 2.5)
 
         let runningPayload = try #require(payload.first { $0.id == "running" })
         #expect(runningPayload.defaultReps == nil)
@@ -112,11 +129,18 @@ struct WatchExerciseLibraryPayloadBuilderTests {
         #expect(!runningPayload.isPreferred)
         #expect(runningPayload.lastUsedAt == nil)
         #expect(runningPayload.usageCount == 0)
+        #expect(runningPayload.procedureSets == nil)
+        #expect(runningPayload.procedureUpdatedAt == nil)
+        #expect(runningPayload.progressionIncrementKg == nil)
     }
 
     @Test("payload falls back to standard strength defaults when persisted defaults are absent")
     func payloadFallsBackToStandardStrengthDefaults() throws {
-        let squat = definition(id: "barbell-squat", name: "Squat")
+        let squat = definition(
+            id: "barbell-squat",
+            name: "Squat",
+            primaryMuscles: [.quadriceps, .glutes]
+        )
         let library = MockLibrary(definitions: [squat])
 
         let payload = WatchExerciseLibraryPayloadBuilder.makePayload(
@@ -132,6 +156,8 @@ struct WatchExerciseLibraryPayloadBuilderTests {
         #expect(squatPayload.defaultWeightKg == nil)
         #expect(squatPayload.lastUsedAt == nil)
         #expect(squatPayload.usageCount == 0)
+        #expect(squatPayload.procedureSets == nil)
+        #expect(squatPayload.progressionIncrementKg == 5.0)
     }
 
     @Test("defaults-only payload update preserves usage metadata from cached snapshot")
@@ -153,7 +179,13 @@ struct WatchExerciseLibraryPayloadBuilderTests {
                 lastUsedAt: lastUsedAt,
                 usageCount: 4,
                 equipment: Equipment.barbell.rawValue,
-                cardioSecondaryUnit: nil
+                cardioSecondaryUnit: nil,
+                procedureSets: [
+                    WatchProcedureSetSnapshot(setNumber: 1, weight: 70, reps: 10),
+                    WatchProcedureSetSnapshot(setNumber: 2, weight: 72.5, reps: 8),
+                ],
+                procedureUpdatedAt: lastUsedAt,
+                progressionIncrementKg: 2.5
             ),
             WatchExerciseInfo(
                 id: "tempo-bench-press",
@@ -166,7 +198,13 @@ struct WatchExerciseLibraryPayloadBuilderTests {
                 lastUsedAt: lastUsedAt,
                 usageCount: 4,
                 equipment: Equipment.barbell.rawValue,
-                cardioSecondaryUnit: nil
+                cardioSecondaryUnit: nil,
+                procedureSets: [
+                    WatchProcedureSetSnapshot(setNumber: 1, weight: 75, reps: 6),
+                    WatchProcedureSetSnapshot(setNumber: 2, weight: 77.5, reps: 5),
+                ],
+                procedureUpdatedAt: lastUsedAt,
+                progressionIncrementKg: 2.5
             ),
         ]
 
@@ -194,6 +232,10 @@ struct WatchExerciseLibraryPayloadBuilderTests {
         #expect(benchPayload.isPreferred)
         #expect(benchPayload.lastUsedAt == lastUsedAt)
         #expect(benchPayload.usageCount == 4)
+        #expect(benchPayload.procedureSets?.count == 2)
+        #expect(benchPayload.procedureSets?.first?.weight == 70)
+        #expect(benchPayload.procedureUpdatedAt == lastUsedAt)
+        #expect(benchPayload.progressionIncrementKg == 2.5)
 
         let tempoPayload = try #require(payload.first { $0.id == "tempo-bench-press" })
         #expect(tempoPayload.defaultReps == 5)
@@ -201,5 +243,9 @@ struct WatchExerciseLibraryPayloadBuilderTests {
         #expect(tempoPayload.isPreferred)
         #expect(tempoPayload.lastUsedAt == lastUsedAt)
         #expect(tempoPayload.usageCount == 4)
+        #expect(tempoPayload.procedureSets?.count == 2)
+        #expect(tempoPayload.procedureSets?.first?.weight == 75)
+        #expect(tempoPayload.procedureUpdatedAt == lastUsedAt)
+        #expect(tempoPayload.progressionIncrementKg == 2.5)
     }
 }

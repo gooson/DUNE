@@ -12,8 +12,6 @@ struct AppThemeTests {
         #expect(AppTheme.sakuraCalm.rawValue == "sakuraCalm")
         #expect(AppTheme.arcticDawn.rawValue == "arcticDawn")
         #expect(AppTheme.solarPop.rawValue == "solarPop")
-        #expect(AppTheme.shanksRed.rawValue == "shanksRed")
-        #expect(AppTheme.hanok.rawValue == "hanok")
     }
 
     @Test("Codable round-trip preserves identity")
@@ -27,15 +25,13 @@ struct AppThemeTests {
 
     @Test("CaseIterable includes all themes")
     func allCases() {
-        #expect(AppTheme.allCases.count == 8)
+        #expect(AppTheme.allCases.count == 6)
         #expect(AppTheme.allCases.contains(.desertWarm))
         #expect(AppTheme.allCases.contains(.oceanCool))
         #expect(AppTheme.allCases.contains(.forestGreen))
         #expect(AppTheme.allCases.contains(.sakuraCalm))
         #expect(AppTheme.allCases.contains(.arcticDawn))
         #expect(AppTheme.allCases.contains(.solarPop))
-        #expect(AppTheme.allCases.contains(.shanksRed))
-        #expect(AppTheme.allCases.contains(.hanok))
     }
 
     @Test("Init from unknown rawValue returns nil")
@@ -60,55 +56,18 @@ struct AppThemeTests {
         #expect(AppTheme.sakuraCalm.assetPrefix == "Sakura")
         #expect(AppTheme.arcticDawn.assetPrefix == "Arctic")
         #expect(AppTheme.solarPop.assetPrefix == "Solar")
-        #expect(AppTheme.shanksRed.assetPrefix == "Shanks")
-        #expect(AppTheme.hanok.assetPrefix == "Hanok")
     }
 
     @Test("usesGlassBorder returns true for glass-border themes")
     func glassBorderThemes() {
-        let glassThemes: [AppTheme] = [.sakuraCalm, .arcticDawn, .solarPop, .hanok, .shanksRed]
+        let glassThemes: [AppTheme] = [.sakuraCalm, .arcticDawn, .solarPop]
         let plainThemes: [AppTheme] = [.desertWarm, .oceanCool, .forestGreen]
+
         for theme in glassThemes {
             #expect(theme.usesGlassBorder == true)
         }
         for theme in plainThemes {
             #expect(theme.usesGlassBorder == false)
         }
-    }
-
-    @Test("Themed asset name resolution follows prefix convention")
-    func themedAssetNameResolution() {
-        #expect(
-            AppTheme.desertWarm.themedAssetName(defaultAsset: "ScoreGood", variantSuffix: "ScoreGood")
-                == "ScoreGood"
-        )
-        #expect(
-            AppTheme.oceanCool.themedAssetName(defaultAsset: "ScoreGood", variantSuffix: "ScoreGood")
-                == "OceanScoreGood"
-        )
-        #expect(
-            AppTheme.forestGreen.themedAssetName(defaultAsset: "MetricHRV", variantSuffix: "MetricHRV")
-                == "ForestMetricHRV"
-        )
-        #expect(
-            AppTheme.sakuraCalm.themedAssetName(defaultAsset: "CardBackground", variantSuffix: "CardBackground")
-                == "SakuraCardBackground"
-        )
-        #expect(
-            AppTheme.arcticDawn.themedAssetName(defaultAsset: "ScoreWarning", variantSuffix: "ScoreWarning")
-                == "ArcticScoreWarning"
-        )
-        #expect(
-            AppTheme.solarPop.themedAssetName(defaultAsset: "AccentColor", variantSuffix: "Accent")
-                == "SolarAccent"
-        )
-        #expect(
-            AppTheme.shanksRed.themedAssetName(defaultAsset: "ScoreExcellent", variantSuffix: "ScoreExcellent")
-                == "ShanksScoreExcellent"
-        )
-        #expect(
-            AppTheme.hanok.themedAssetName(defaultAsset: "MetricSleep", variantSuffix: "MetricSleep")
-                == "HanokMetricSleep"
-        )
     }
 }

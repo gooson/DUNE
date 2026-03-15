@@ -86,4 +86,36 @@ final class WorkoutTypeCorrectionStoreTests: XCTestCase {
 
         XCTAssertEqual(workout.localizedTitle(using: store), "레거시 벤치프레스")
     }
+
+    func testLocalizedTitlePreservesCustomMetadataExerciseName() {
+        // Custom exercise name from HealthKit metadata (e.g. "Bench Press")
+        // should be preserved, not replaced by activityType.displayName
+        let workout = WorkoutSummary(
+            id: "hk-custom-1",
+            type: "Bench Press",
+            activityType: .traditionalStrengthTraining,
+            duration: 1800,
+            calories: 220,
+            distance: nil,
+            date: Date()
+        )
+
+        let title = workout.localizedTitle(using: store)
+        XCTAssertEqual(title, "Bench Press")
+    }
+
+    func testLocalizedTitleReturnsRawTypeForOtherActivity() {
+        // activityType == .other with unrecognized title → should return raw type
+        let workout = WorkoutSummary(
+            id: "hk-custom-2",
+            type: "My Custom Workout",
+            activityType: .other,
+            duration: 1800,
+            calories: 100,
+            distance: nil,
+            date: Date()
+        )
+
+        XCTAssertEqual(workout.localizedTitle(using: store), "My Custom Workout")
+    }
 }

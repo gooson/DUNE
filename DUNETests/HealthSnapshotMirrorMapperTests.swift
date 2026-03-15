@@ -226,6 +226,145 @@ struct HealthSnapshotMirrorMapperTests {
         #expect(snapshot.conditionScore?.contributions.contains(where: { $0.factor == .rhr }) == true)
     }
 
+    @Test("activity/body fields roundtrip through encode/decode")
+    func activityBodyFieldsRoundtrip() throws {
+        let fetchedAt = Date(timeIntervalSince1970: 1_700_000_000)
+        let weightDate = Date(timeIntervalSince1970: 1_699_950_000)
+        let bmiDate = Date(timeIntervalSince1970: 1_699_960_000)
+
+        let payload = HealthSnapshotMirrorMapper.Payload(
+            fetchedAt: fetchedAt,
+            failedSources: [],
+            todayRHR: nil,
+            yesterdayRHR: nil,
+            latestRHR: nil,
+            hrv14Day: [],
+            rhr14Day: [],
+            sleep14Day: [],
+            todaySleepMinutes: 0,
+            yesterdaySleepMinutes: 0,
+            conditionScore: nil,
+            conditionStatus: nil,
+            conditionContributions: nil,
+            conditionDetail: nil,
+            baselineReady: nil,
+            baselineProgress: nil,
+            recentScores: [],
+            todaySteps: 8542,
+            todayExerciseMinutes: 45.5,
+            latestWeight: .init(date: weightDate, value: 72.3),
+            latestBMI: .init(date: bmiDate, value: 23.1)
+        )
+
+        let json = try HealthSnapshotMirrorMapper.encode(payload)
+        let decoded = try HealthSnapshotMirrorMapper.decode(json)
+
+        #expect(decoded.todaySteps == 8542)
+        #expect(decoded.todayExerciseMinutes == 45.5)
+        #expect(decoded.latestWeight?.value == 72.3)
+        #expect(decoded.latestWeight?.date == weightDate)
+        #expect(decoded.latestBMI?.value == 23.1)
+        #expect(decoded.latestBMI?.date == bmiDate)
+    }
+
+    @Test("legacy payload without activity/body fields decodes with nil")
+    func legacyPayloadWithoutActivityBodyFields() throws {
+        let legacyJSON = """
+        {
+          "failedSources" : [],
+          "fetchedAt" : 1700000000000,
+          "hrv14Day" : [],
+          "latestRHR" : null,
+          "recentScores" : [],
+          "rhr14Day" : [],
+          "sleep14Day" : [],
+          "todayRHR" : null,
+          "todaySleepMinutes" : 0,
+          "yesterdayRHR" : null,
+          "yesterdaySleepMinutes" : 0
+        }
+        """
+
+        let payload = try HealthSnapshotMirrorMapper.decode(legacyJSON)
+
+        #expect(payload.todaySteps == nil)
+        #expect(payload.todayExerciseMinutes == nil)
+        #expect(payload.latestWeight == nil)
+        #expect(payload.latestBMI == nil)
+    }
+
+    @Test("makeSnapshot restores activity/body fields from payload")
+    func makeSnapshotRestoresActivityBodyFields() {
+        let fetchedAt = Date(timeIntervalSince1970: 1_700_100_000)
+        let weightDate = Date(timeIntervalSince1970: 1_700_050_000)
+
+        let payload = HealthSnapshotMirrorMapper.Payload(
+            fetchedAt: fetchedAt,
+            failedSources: [],
+            todayRHR: nil,
+            yesterdayRHR: nil,
+            latestRHR: nil,
+            hrv14Day: [],
+            rhr14Day: [],
+            sleep14Day: [],
+            todaySleepMinutes: 0,
+            yesterdaySleepMinutes: 0,
+            conditionScore: nil,
+            conditionStatus: nil,
+            conditionContributions: nil,
+            conditionDetail: nil,
+            baselineReady: nil,
+            baselineProgress: nil,
+            recentScores: [],
+            todaySteps: 12000,
+            todayExerciseMinutes: 60,
+            latestWeight: .init(date: weightDate, value: 75.0),
+            latestBMI: .init(date: weightDate, value: 24.5)
+        )
+
+        let snapshot = HealthSnapshotMirrorMapper.makeSnapshot(from: payload)
+
+        #expect(snapshot.todaySteps == 12000)
+        #expect(snapshot.todayExerciseMinutes == 60)
+        #expect(snapshot.latestWeight?.value == 75.0)
+        #expect(snapshot.latestWeight?.date == weightDate)
+        #expect(snapshot.latestBMI?.value == 24.5)
+    }
+
+    @Test("makePayload includes activity/body fields from snapshot")
+    func makePayloadIncludesActivityBodyFields() {
+        let fetchedAt = Date(timeIntervalSince1970: 1_700_000_000)
+        let weightDate = Date(timeIntervalSince1970: 1_699_950_000)
+
+        let snapshot = SharedHealthSnapshot(
+            hrvSamples: [],
+            todayRHR: nil,
+            yesterdayRHR: nil,
+            latestRHR: nil,
+            rhrCollection: [],
+            todaySleepStages: [],
+            yesterdaySleepStages: [],
+            latestSleepStages: nil,
+            sleepDailyDurations: [],
+            todaySteps: 9500,
+            todayExerciseMinutes: 30,
+            latestWeight: .init(value: 68.5, date: weightDate),
+            latestBMI: .init(value: 22.0, date: weightDate),
+            conditionScore: nil,
+            baselineStatus: nil,
+            recentConditionScores: [],
+            failedSources: [],
+            fetchedAt: fetchedAt
+        )
+
+        let payload = HealthSnapshotMirrorMapper.makePayload(from: snapshot)
+
+        #expect(payload.todaySteps == 9500)
+        #expect(payload.todayExerciseMinutes == 30)
+        #expect(payload.latestWeight?.value == 68.5)
+        #expect(payload.latestBMI?.value == 22.0)
+    }
+
     @Test("makeSnapshot reconstructs shared snapshot from payload")
     func makeSnapshotFromPayload() {
         let fetchedAt = Date(timeIntervalSince1970: 1_700_100_000)

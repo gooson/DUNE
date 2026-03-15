@@ -171,6 +171,39 @@ enum HealthDataAggregator {
         return result
     }
 
+    // MARK: - HRV Daily Averages
+
+    /// Groups HRV samples by day and computes daily averages.
+    /// Filters out-of-range values (0–500 ms) per project HealthKit validation rules.
+    static func buildHRVDailyAverages(
+        from samples: [HRVSample],
+        start: Date,
+        end: Date,
+        calendar: Calendar = .current
+    ) -> [ChartDataPoint] {
+        let filtered = samples.filter { $0.date >= start && $0.date <= end && $0.value > 0 && $0.value <= 500 }
+        let grouped = Dictionary(grouping: filtered) { calendar.startOfDay(for: $0.date) }
+        return grouped.compactMap { day, daySamples in
+            let values = daySamples.map(\.value)
+            guard !values.isEmpty else { return nil }
+            let avg = values.reduce(0, +) / Double(values.count)
+            guard avg.isFinite else { return nil }
+            return ChartDataPoint(date: day, value: avg)
+        }.sorted { $0.date < $1.date }
+    }
+
+    // MARK: - RHR Filtering
+
+    /// Filters RHR collection to valid range (20–300 bpm) and converts to ChartDataPoints.
+    static func buildRHRDailyPoints(
+        from collection: [(date: Date, min: Double, max: Double, average: Double)]
+    ) -> [ChartDataPoint] {
+        collection
+            .filter { $0.average >= 20 && $0.average <= 300 && $0.average.isFinite }
+            .map { ChartDataPoint(date: $0.date, value: $0.average) }
+            .sorted { $0.date < $1.date }
+    }
+
     // MARK: - Private
 
     private static func groupByUnit(

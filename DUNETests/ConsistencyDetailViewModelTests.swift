@@ -21,6 +21,51 @@ private struct MockConsistencyWorkoutService: WorkoutQuerying {
     }
 }
 
+private actor SequencedConsistencyWorkoutService: WorkoutQuerying {
+    private let results: [[WorkoutSummary]]
+    private var nextFetchIndex = 0
+    private var startedFetches: Set<Int> = []
+    private var startContinuations: [Int: CheckedContinuation<Void, Never>] = [:]
+    private var releaseContinuations: [Int: CheckedContinuation<Void, Never>] = [:]
+
+    init(results: [[WorkoutSummary]]) {
+        self.results = results
+    }
+
+    func fetchWorkouts(days: Int) async throws -> [WorkoutSummary] {
+        let index = nextFetchIndex
+        nextFetchIndex += 1
+        startedFetches.insert(index)
+        startContinuations[index]?.resume()
+        startContinuations[index] = nil
+
+        await withCheckedContinuation { continuation in
+            releaseContinuations[index] = continuation
+        }
+
+        return results[index]
+    }
+
+    func fetchWorkouts(start: Date, end: Date) async throws -> [WorkoutSummary] {
+        []
+    }
+
+    func waitUntilFetchStarts(call index: Int) async {
+        if startedFetches.contains(index) {
+            return
+        }
+
+        await withCheckedContinuation { continuation in
+            startContinuations[index] = continuation
+        }
+    }
+
+    func resumeFetch(call index: Int) {
+        releaseContinuations[index]?.resume()
+        releaseContinuations[index] = nil
+    }
+}
+
 @Suite("ConsistencyDetailViewModel")
 @MainActor
 struct ConsistencyDetailViewModelTests {
@@ -131,6 +176,32 @@ struct ConsistencyDetailViewModelTests {
         #expect(vm.workoutStreak?.bestStreak == 1)
         #expect(vm.workoutStreak?.monthlyCount == 1)
         #expect(vm.hasWorkout(on: day(0)))
+    }
+
+    @Test("Latest consistency load wins over older response")
+    func latestConsistencyLoadWinsOverOlderResponse() async {
+        let service = SequencedConsistencyWorkoutService(results: [[], []])
+        let vm = ConsistencyDetailViewModel(workoutService: service)
+        let olderRecords = [makeRecord(daysAgo: 0, durationMinutes: 30)]
+        let newerRecords = [
+            makeRecord(daysAgo: 0, durationMinutes: 30),
+            makeRecord(daysAgo: 1, durationMinutes: 35),
+        ]
+
+        let firstLoad = Task { await vm.loadData(from: olderRecords) }
+        await service.waitUntilFetchStarts(call: 0)
+
+        let secondLoad = Task { await vm.loadData(from: newerRecords) }
+        await service.waitUntilFetchStarts(call: 1)
+
+        await service.resumeFetch(call: 1)
+        _ = await secondLoad.result
+
+        await service.resumeFetch(call: 0)
+        _ = await firstLoad.result
+
+        #expect(vm.workoutStreak?.currentStreak == 2)
+        #expect(vm.isLoading == false)
     }
 }
 

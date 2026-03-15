@@ -15,8 +15,15 @@ struct DashboardView: View {
     @State private var cachedCurrentRelease: WhatsNewReleaseData?
     @State private var cachedBuildNumber: String = ""
     @Query(sort: \WorkoutTemplate.updatedAt, order: .reverse) private var templates: [WorkoutTemplate]
+    @Query(
+        FetchDescriptor<ExerciseRecord>(
+            sortBy: [SortDescriptor(\ExerciseRecord.date, order: .reverse)],
+            fetchLimit: 20
+        )
+    ) private var exerciseRecords: [ExerciseRecord]
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.openURL) private var openURL
+    private let library: ExerciseLibraryQuerying = ExerciseLibraryService.shared
     private let inboxManager = NotificationInboxManager.shared
     private let whatsNewStore = WhatsNewStore.shared
     private let whatsNewManager = WhatsNewManager.shared
@@ -80,7 +87,9 @@ struct DashboardView: View {
                         if viewModel.errorMessage != nil {
                             errorSection
                         } else if viewModel.isMirroredReadOnlyMode {
-                            CloudSyncWaitingView()
+                            CloudSyncWaitingView {
+                                Task { await viewModel.loadData(canLoadHealthKitData: canLoadHealthKitData) }
+                            }
                         } else {
                             EmptyStateView(
                                 icon: "heart.text.clipboard",
@@ -301,7 +310,10 @@ struct DashboardView: View {
             NavigationStack {
                 TemplateFormView(
                     prefillName: nudge.title,
-                    prefillEntries: []
+                    prefillEntries: TemplateExerciseResolver.resolveExercises(
+                        from: nudge,
+                        library: library
+                    )?.map { TemplateExerciseResolver.defaultEntry(for: $0) } ?? []
                 )
             }
         }
@@ -403,6 +415,7 @@ struct DashboardView: View {
     }
 
     private func loadDashboard() async {
+        viewModel.recentHighRPEStreak = DashboardViewModel.computeHighRPEStreak(from: exerciseRecords)
         await viewModel.loadData(canLoadHealthKitData: canLoadHealthKitData)
         guard !viewModel.isLoading else { return }
         if !hasAppeared {
@@ -434,22 +447,23 @@ struct DashboardView: View {
     }
 
     private var notificationBellIcon: some View {
-        Image(systemName: "bell")
-            .frame(width: 22, height: 22)
-            .frame(width: 44, height: 44)
-            .contentShape(Rectangle())
-            .overlay(alignment: .topTrailing) {
-                if unreadNotificationCount > 0 {
-                    Text(unreadBadgeLabel)
-                        .font(.system(size: 9, weight: .bold))
-                        .foregroundStyle(.white)
-                        .padding(.horizontal, 5)
-                        .padding(.vertical, 2)
-                        .background(Color.red, in: Capsule())
-                        .offset(x: 6)
-                        .accessibilityLabel("\(unreadNotificationCount.formatted()) unread notifications")
-                }
+        ZStack(alignment: .topTrailing) {
+            Image(systemName: "bell")
+                .frame(width: 22, height: 22)
+                .padding([.top, .trailing], 4)
+
+            if unreadNotificationCount > 0 {
+                Text(unreadBadgeLabel)
+                    .font(.system(size: 9, weight: .bold))
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 5)
+                    .padding(.vertical, 2)
+                    .background(Color.red, in: Capsule())
+                    .accessibilityLabel("\(unreadNotificationCount.formatted()) unread notifications")
             }
+        }
+        .frame(width: 44, height: 44)
+        .contentShape(Rectangle())
     }
 
     private var unreadBadgeLabel: String {

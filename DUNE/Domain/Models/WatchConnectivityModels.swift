@@ -37,6 +37,13 @@ struct WatchHeartRateSample: Codable, Sendable {
     let timestamp: Date
 }
 
+/// Compact per-set strength procedure snapshot used for Quick Start replay.
+struct WatchProcedureSetSnapshot: Codable, Sendable, Hashable {
+    let setNumber: Int
+    let weight: Double?
+    let reps: Int?
+}
+
 /// Compact exercise metadata used by Watch UI.
 struct WatchExerciseInfo: Codable, Sendable {
     let id: String
@@ -51,6 +58,9 @@ struct WatchExerciseInfo: Codable, Sendable {
     let equipment: String?
     let cardioSecondaryUnit: String?
     let aliases: [String]?
+    let procedureSets: [WatchProcedureSetSnapshot]?
+    let procedureUpdatedAt: Date?
+    let progressionIncrementKg: Double?
 
     init(
         id: String,
@@ -64,7 +74,10 @@ struct WatchExerciseInfo: Codable, Sendable {
         usageCount: Int = 0,
         equipment: String?,
         cardioSecondaryUnit: String?,
-        aliases: [String]? = nil
+        aliases: [String]? = nil,
+        procedureSets: [WatchProcedureSetSnapshot]? = nil,
+        procedureUpdatedAt: Date? = nil,
+        progressionIncrementKg: Double? = nil
     ) {
         self.id = id
         self.name = name
@@ -78,6 +91,9 @@ struct WatchExerciseInfo: Codable, Sendable {
         self.equipment = equipment
         self.cardioSecondaryUnit = cardioSecondaryUnit
         self.aliases = aliases
+        self.procedureSets = procedureSets
+        self.procedureUpdatedAt = procedureUpdatedAt
+        self.progressionIncrementKg = progressionIncrementKg
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -93,6 +109,9 @@ struct WatchExerciseInfo: Codable, Sendable {
         case equipment
         case cardioSecondaryUnit
         case aliases
+        case procedureSets
+        case procedureUpdatedAt
+        case progressionIncrementKg
     }
 
     init(from decoder: any Decoder) throws {
@@ -109,6 +128,9 @@ struct WatchExerciseInfo: Codable, Sendable {
         equipment = try container.decodeIfPresent(String.self, forKey: .equipment)
         cardioSecondaryUnit = try container.decodeIfPresent(String.self, forKey: .cardioSecondaryUnit)
         aliases = try container.decodeIfPresent([String].self, forKey: .aliases)
+        procedureSets = try container.decodeIfPresent([WatchProcedureSetSnapshot].self, forKey: .procedureSets)
+        procedureUpdatedAt = try container.decodeIfPresent(Date.self, forKey: .procedureUpdatedAt)
+        progressionIncrementKg = try container.decodeIfPresent(Double.self, forKey: .progressionIncrementKg)
     }
 }
 

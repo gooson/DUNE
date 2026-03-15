@@ -216,6 +216,15 @@ final class WorkoutManager: NSObject {
         return completedSetsData[currentExerciseIndex].last
     }
 
+    /// Planned set data restored from Quick Start procedure snapshot for the current set.
+    var currentPlannedSetForCurrentExercise: WatchProcedureSetSnapshot? {
+        guard let snapshot = templateSnapshot,
+              currentExerciseIndex < snapshot.entries.count else { return nil }
+        let exerciseID = snapshot.entries[currentExerciseIndex].exerciseDefinitionID
+        return snapshot.procedureSetsByExerciseID?[exerciseID]?
+            .first { $0.setNumber == currentSetIndex + 1 }
+    }
+
     // MARK: - HealthKit Authorization
 
     func requestAuthorization(timeout seconds: TimeInterval = 10) async throws {
@@ -291,7 +300,8 @@ final class WorkoutManager: NSObject {
     func startCardioSession(
         activityType: WorkoutActivityType,
         isOutdoor: Bool,
-        secondaryUnit: CardioSecondaryUnit? = nil
+        secondaryUnit: CardioSecondaryUnit? = nil,
+        initialLevel: Int? = nil
     ) async throws {
         let previousMode = workoutMode
         let previousCardioSecondaryUnit = cardioSecondaryUnit
@@ -330,6 +340,9 @@ final class WorkoutManager: NSObject {
 
         do {
             try await startHKSession(config: config, templateName: activityType.typeName)
+            if let initialLevel {
+                setMachineLevel(initialLevel)
+            }
         } catch {
             // Restore state on failure to prevent inconsistent workoutMode
             workoutMode = previousMode
@@ -1270,6 +1283,17 @@ struct CompletedSetData: Codable, Sendable {
 struct WorkoutSessionTemplate: Codable, Sendable {
     let name: String
     let entries: [TemplateEntry]
+    let procedureSetsByExerciseID: [String: [WatchProcedureSetSnapshot]]?
+
+    init(
+        name: String,
+        entries: [TemplateEntry],
+        procedureSetsByExerciseID: [String: [WatchProcedureSetSnapshot]]? = nil
+    ) {
+        self.name = name
+        self.entries = entries
+        self.procedureSetsByExerciseID = procedureSetsByExerciseID
+    }
 }
 
 /// Persisted state for crash recovery (C4).

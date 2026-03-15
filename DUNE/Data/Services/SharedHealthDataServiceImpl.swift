@@ -8,6 +8,9 @@ actor SharedHealthDataServiceImpl: SharedHealthDataService {
 
     private let hrvService: HRVQuerying
     private let sleepService: SleepQuerying
+    private let stepsService: StepsQuerying
+    private let workoutService: WorkoutQuerying
+    private let bodyService: BodyCompositionQuerying
     private let conditionScoreUseCase: ConditionScoreCalculating
     private let cacheTTL: TimeInterval
     private let nowProvider: @Sendable () -> Date
@@ -20,12 +23,18 @@ actor SharedHealthDataServiceImpl: SharedHealthDataService {
         healthKitManager: HealthKitManager = .shared,
         hrvService: HRVQuerying? = nil,
         sleepService: SleepQuerying? = nil,
+        stepsService: StepsQuerying? = nil,
+        workoutService: WorkoutQuerying? = nil,
+        bodyService: BodyCompositionQuerying? = nil,
         conditionScoreUseCase: ConditionScoreCalculating = CalculateConditionScoreUseCase(),
         cacheTTL: TimeInterval = 300,
         nowProvider: @escaping @Sendable () -> Date = Date.init
     ) {
         self.hrvService = hrvService ?? HRVQueryService(manager: healthKitManager)
         self.sleepService = sleepService ?? SleepQueryService(manager: healthKitManager)
+        self.stepsService = stepsService ?? StepsQueryService(manager: healthKitManager)
+        self.workoutService = workoutService ?? WorkoutQueryService(manager: healthKitManager)
+        self.bodyService = bodyService ?? BodyCompositionQueryService(manager: healthKitManager)
         self.conditionScoreUseCase = conditionScoreUseCase
         self.cacheTTL = cacheTTL
         self.nowProvider = nowProvider
@@ -141,6 +150,57 @@ actor SharedHealthDataServiceImpl: SharedHealthDataService {
             try await sleepService.fetchDailySleepDurations(start: sleepDailyStart, end: sleepDailyEnd)
         }
 
+        async let todayStepsTask = fetch(
+            source: .todaySteps,
+            defaultValue: Optional<Double>.none
+        ) {
+            try await stepsService.fetchSteps(for: referenceDate)
+        }
+
+        async let todayExerciseTask = fetch(
+            source: .todayExercise,
+            defaultValue: (today: Optional<Double>.none, recent: Optional<(minutes: Double, date: Date)>.none)
+        ) {
+            let workouts = try await workoutService.fetchWorkouts(days: 7)
+            let todayWorkouts = workouts.filter { calendar.isDate($0.date, inSameDayAs: referenceDate) }
+            let todayMinutes = todayWorkouts.reduce(0.0) { $0 + $1.duration / 60.0 }
+            let todayResult: Double? = todayMinutes > 0 ? todayMinutes : nil
+
+            // Find most recent exercise if not today
+            var recentResult: (minutes: Double, date: Date)?
+            if todayResult == nil, let latest = workouts.first {
+                recentResult = (minutes: latest.duration / 60.0, date: latest.date)
+            }
+            return (today: todayResult, recent: recentResult)
+        }
+
+        async let latestWeightTask = fetch(
+            source: .latestWeight,
+            defaultValue: Optional<(value: Double, date: Date)>.none
+        ) {
+            // Check today first, then historical (fetchLatestWeight excludes today)
+            let todaySamples = try await bodyService.fetchWeight(
+                start: calendar.startOfDay(for: referenceDate),
+                end: calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: referenceDate)) ?? referenceDate
+            )
+            if let latest = todaySamples.first, latest.value > 0, latest.value < 500 {
+                return (value: latest.value, date: latest.date)
+            }
+            return try await bodyService.fetchLatestWeight(withinDays: 30)
+        }
+
+        async let latestBMITask = fetch(
+            source: .latestBMI,
+            defaultValue: Optional<(value: Double, date: Date)>.none
+        ) {
+            // Check today first, then historical (fetchLatestBMI excludes today)
+            if let todayBMI = try await bodyService.fetchBMI(for: referenceDate),
+               todayBMI > 0, todayBMI < 100 {
+                return (value: todayBMI, date: referenceDate)
+            }
+            return try await bodyService.fetchLatestBMI(withinDays: 30)
+        }
+
         let hrvSamplesResult = await hrvSamplesTask
         let todayRHRResult = await todayRHRTask
         let yesterdayRHRResult = await yesterdayRHRTask
@@ -150,6 +210,10 @@ actor SharedHealthDataServiceImpl: SharedHealthDataService {
         let yesterdaySleepStagesResult = await yesterdaySleepStagesTask
         let latestSleepStagesResult = await latestSleepStagesTask
         let sleepDailyDurationsResult = await sleepDailyDurationsTask
+        let todayStepsResult = await todayStepsTask
+        let todayExerciseResult = await todayExerciseTask
+        let latestWeightResult = await latestWeightTask
+        let latestBMIResult = await latestBMITask
 
         let conditionResult = computeCondition(
             hrvSamples: hrvSamplesResult.value,
@@ -178,11 +242,29 @@ actor SharedHealthDataServiceImpl: SharedHealthDataService {
             (.todaySleepStages, todaySleepStagesResult.failed),
             (.yesterdaySleepStages, yesterdaySleepStagesResult.failed),
             (.latestSleepStages, latestSleepStagesResult.failed),
-            (.sleepDailyDurations, sleepDailyDurationsResult.failed)
+            (.sleepDailyDurations, sleepDailyDurationsResult.failed),
+            (.todaySteps, todayStepsResult.failed),
+            (.todayExercise, todayExerciseResult.failed),
+            (.latestWeight, latestWeightResult.failed),
+            (.latestBMI, latestBMIResult.failed)
         ]
         for (source, failed) in failureInputs where failed {
             failedSources.insert(source)
         }
+
+        let exerciseToday = todayExerciseResult.value.today
+        let exerciseRecent = todayExerciseResult.value.recent
+
+        AppLogger.data.info("""
+            [SharedHealthDataService] Snapshot built — \
+            steps: \(todayStepsResult.value.map { String(format: "%.0f", $0) } ?? "nil", privacy: .public), \
+            exerciseToday: \(exerciseToday.map { String(format: "%.1f", $0) } ?? "nil", privacy: .public)min, \
+            exerciseRecent: \(exerciseRecent.map { String(format: "%.1f", $0.minutes) } ?? "nil", privacy: .public)min, \
+            weight: \(latestWeightResult.value.map { String(format: "%.1f", $0.value) } ?? "nil", privacy: .public)kg, \
+            bmi: \(latestBMIResult.value.map { String(format: "%.1f", $0.value) } ?? "nil", privacy: .public), \
+            sleepDays: \(sleepDailyDurationsResult.value.count, privacy: .public), \
+            failed: \(failedSources.map(\.rawValue).sorted(), privacy: .public)
+            """)
 
         return SharedHealthSnapshot(
             hrvSamples: hrvSamplesResult.value,
@@ -203,6 +285,17 @@ actor SharedHealthDataServiceImpl: SharedHealthDataService {
                     totalMinutes: $0.totalMinutes,
                     stageBreakdown: $0.stageBreakdown
                 )
+            },
+            todaySteps: todayStepsResult.value,
+            todayExerciseMinutes: exerciseToday,
+            recentExercise: exerciseRecent.map {
+                SharedHealthSnapshot.ExerciseSample(minutes: $0.minutes, date: $0.date, isHistorical: true)
+            },
+            latestWeight: latestWeightResult.value.map {
+                SharedHealthSnapshot.WeightSample(value: $0.value, date: $0.date)
+            },
+            latestBMI: latestBMIResult.value.map {
+                SharedHealthSnapshot.BMISample(value: $0.value, date: $0.date)
             },
             conditionScore: conditionResult.score,
             baselineStatus: conditionResult.baselineStatus,

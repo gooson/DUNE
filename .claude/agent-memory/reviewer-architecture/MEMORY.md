@@ -76,6 +76,53 @@ Layer boundary: App → Presentation → Domain ← Data
 - `InjuryRecord.durationDays` is identical to `InjuryInfo.durationDays` — the Data layer should delegate: `var durationDays: Int { toInjuryInfo().durationDays }`
 - General rule: when a Data `@Model` already has a `toDomain()` method, computed properties that mirror Domain logic should delegate rather than duplicate
 
+### Self-contained score detail ViewModels — HealthKit fetch duplication
+- Pattern introduced in this PR: `TrainingReadinessDetailViewModel` and `WellnessScoreDetailViewModel` each own full HealthKit fetch + HRV daily averaging + trend approximation + scroll/period state
+- `buildHRVDailyAverages` is byte-for-byte identical in both files — crosses the 3-location DRY threshold when combined with `ConditionScoreDetailViewModel.buildSubScoreTrends`
+- Rule: extract to `HealthDataAggregator.buildHRVDailyAverages(from:start:end:calendar:) -> [ChartDataPoint]` (already has `aggregateByAverage`, `computeSummary`, `previousPeriodRange`)
+- Scroll/period state boilerplate (`resetScrollPosition`, `triggerReload`, `extendedRange`, `scrollDomain`, `visibleRangeLabel`, `trendLineData`) is also triplicated — candidate for a shared `ScoreDetailChartState` or base class in a future PR
+
+### ScoreCompositionCard.Component.label type
+- `ScoreCompositionCard.Component.label` is typed as `String`, not `LocalizedStringKey`
+- Callsites in `TrainingReadinessDetailView` use `String(localized:)` correctly; `WellnessScoreDetailView` uses `Labels.*` which are also `String(localized:)` — so localization is correct at callsite
+- Risk: future callsite may pass a bare String literal and silently bypass localization
+- Preferred fix: type `label` as `LocalizedStringKey` so the compiler enforces localization at the call site; or at minimum document the invariant
+
+### ViewModel exposing Data-layer service as public property
+- `captureService: PostureCaptureService` declared `let` (public) on `PostureAssessmentViewModel`
+- Views reach through it (`viewModel.captureService.captureSession`) bypassing the ViewModel abstraction
+- Rule: service dependencies on ViewModels must be `private`; expose only what the View needs (e.g., `var captureSession: AVCaptureSession`)
+
+### ViewModel returning UIKit types (dead code pattern)
+- `var previewLayer: AVCaptureVideoPreviewLayer` on `PostureAssessmentViewModel` returns a UIKit CALayer subclass — violates ViewModel purity
+- Additionally was dead code — View never called it, accessed session directly
+- Detection: grep ViewModel files for `AVCaptureVideoPreviewLayer`, `UIView`, `UIImage`, `CALayer` return types
+
+### Domain weighted-score calculation duplication
+- `PostureAssessment.overallScore`, `CombinedPostureAssessment.overallScore`, and `PostureAnalysisService.calculateOverallScore` contain the same weighted-sum loop
+- Only `calculateOverallScore` clamps to `max(0, min(100,...))` — the Domain model computed properties do not, causing behavioral drift
+- Fix: extract to `static func overallScore(from: [PostureMetricResult]) -> Int` and delegate from the computed properties
+
+### ScoreRefreshService passed through View layer (Data→Presentation boundary violation)
+- `ScoreRefreshService` (Data layer) is stored as a `let` property on `ActivityView` and `WellnessView` and forwarded directly to child detail Views
+- Views then pass it to ViewModels at init time — creating a Presentation→Data direct dependency visible in View code
+- Rule: Data-layer services must not be stored or forwarded by Views; inject via ViewModel constructor only, and ViewModel receives it from App-layer composition root (e.g., `ContentView` or environment)
+- Established pattern (feature/wellness-readiness-hourly): P2 finding — acceptable for now as no alternative injection mechanism exists, but blocks if a 4th detail view or refactor is needed
+
+### rollingWindowSeconds triplication
+- `private static let rollingWindowSeconds: TimeInterval = 24 * 60 * 60` now exists in `ConditionScoreDetailViewModel`, `WellnessScoreDetailViewModel`, and `TrainingReadinessDetailViewModel` (3 locations → DRY threshold crossed)
+- Also `ScoreRefreshService.loadTodaySparklines()` and `ScoreRefreshService.fetchRolling24hSnapshots()` each inline `24 * 60 * 60` (2 more locations)
+- Rule: extract to a shared constant, e.g., `ScoreDetailConstants.rollingWindowSeconds` or `HourlyScoreSnapshot.rollingWindowDuration`
+
+### fetchRolling24hSnapshots duplicates loadTodaySparklines fetch logic
+- `ScoreRefreshService.fetchRolling24hSnapshots()` (line 170) is a near-verbatim copy of the fetch descriptor in `loadTodaySparklines()` (line 127) — same predicate, same fetchLimit=48, same sort
+- Should be extracted to a private `fetchRolling24hDescriptor()` helper and reused by both callers
+
+### Canonical layout verbatim repetition in Views
+- The sizeClass-split Summary Stats + Highlights block (iPad HStack / iPhone VStack) appears verbatim in all 3 detail views
+- Not yet extracted; a shared `AdaptiveScoreDetailSection` view wrapping this pattern would eliminate the repetition
+- Current state is acceptable but is a P3 extraction target if a 4th detail view is added
+
 ## Chart Gesture Patterns
 - Chart selection: `.simultaneousGesture(selectionDragGesture)` with **default `.all` mask** (not `.subviews`)
 - `.subviews` mask (per Apple docs) means "enable subview gestures but *disable* the added gesture" — anti-pattern for selection

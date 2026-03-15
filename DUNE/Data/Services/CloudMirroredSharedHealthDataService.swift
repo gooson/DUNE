@@ -63,7 +63,19 @@ actor CloudMirroredSharedHealthDataService: SharedHealthDataService {
         }
 
         let payload = try HealthSnapshotMirrorMapper.decode(latestRecord.payloadJSON)
-        return HealthSnapshotMirrorMapper.makeSnapshot(from: payload)
+        let snapshot = HealthSnapshotMirrorMapper.makeSnapshot(from: payload)
+        AppLogger.data.info("""
+            [CloudMirroredSnapshot] Loaded — \
+            steps: \(snapshot.todaySteps.map { String(format: "%.0f", $0) } ?? "nil", privacy: .public), \
+            exerciseToday: \(snapshot.todayExerciseMinutes.map { String(format: "%.1f", $0) } ?? "nil", privacy: .public)min, \
+            exerciseRecent: \(snapshot.recentExercise.map { String(format: "%.1f", $0.minutes) } ?? "nil", privacy: .public)min, \
+            weight: \(snapshot.latestWeight.map { String(format: "%.1f", $0.value) } ?? "nil", privacy: .public)kg, \
+            bmi: \(snapshot.latestBMI.map { String(format: "%.1f", $0.value) } ?? "nil", privacy: .public), \
+            sleepDays: \(snapshot.sleepDailyDurations.count, privacy: .public), \
+            sleepInput: \(snapshot.sleepScoreInput != nil ? "yes" : "nil", privacy: .public), \
+            fetchedAt: \(snapshot.fetchedAt, privacy: .public)
+            """)
+        return snapshot
     }
 
     private static func emptySnapshot(referenceDate: Date) -> SharedHealthSnapshot {

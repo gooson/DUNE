@@ -78,6 +78,38 @@ let reflectedError = String(reflecting: error)
 logger.error("ModelContainer failed: \(reflectedError, privacy: .private)")
 ```
 
+## Follow-up: CloudKit-disabled Retry + Sync UX (same date)
+
+store 삭제 후 retry가 CloudKit metadata 불일치로 재실패하는 경우를 위해
+3단계 recovery chain을 추가했다.
+
+```
+1차: 삭제 → retry(CloudKit 유지) → 성공이면 return
+2차: 1차 실패 → retry(CloudKit 없음) → 성공이면 return
+3차: 2차 실패 → in-memory fallback
+```
+
+### 추가 변경
+
+| File | Change | Reason |
+|------|--------|--------|
+| `DUNEApp.swift` | `recoverModelContainer`에 `cloudKitDatabase: .none` 2차 retry 추가 | stale CloudKit metadata가 원인인 경우 persistent store 복구 |
+| `DUNEWatchApp.swift` | 동일 패턴 적용 | watch recovery 경로 일관성 |
+| `DUNEApp.swift` | `deleteStoreFiles` do/catch 명시적 로깅 | 삭제 실패 원인 진단 |
+| `CloudSyncWaitingView.swift` | 30초 timeout + 확장 안내 + Retry 버튼 | in-memory fallback 시 무한 대기 UX 개선 |
+| `DashboardView.swift`, `WellnessView.swift` | `onRetry` 클로저 전달 | Retry 액션 연결 |
+
+### Key Code
+
+```swift
+// Retry 2: disable CloudKit
+let noCloudConfig = ModelConfiguration(
+    url: configuration.url,
+    cloudKitDatabase: .none
+)
+let container = try makeModelContainer(configuration: noCloudConfig)
+```
+
 ## Prevention
 
 ### Checklist Addition

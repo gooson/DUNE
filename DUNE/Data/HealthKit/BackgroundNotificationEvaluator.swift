@@ -94,12 +94,21 @@ final class BackgroundNotificationEvaluator: Sendable {
     }
 
     private func sendMergedBodyCompositionNotification(latestInsight: HealthInsight) async {
-        // Atomically buffer value, collect pending, and record throttle
-        let mergedBody = throttleStore.bufferAndBuildMergedBody(
+        // Buffer the value immediately
+        throttleStore.bufferBodyCompositionValue(
             type: latestInsight.type,
             formattedValue: latestInsight.body
         )
-        guard let mergedBody else { return }
+
+        // Debounce: wait for sibling body composition values (weight/bodyFat/BMI)
+        // to arrive from concurrent HKObserverQuery callbacks before sending.
+        // Sleep duration must be less than the debounce guard window.
+        let sleepDuration = max(throttleStore.bodyCompositionDebounceSeconds - 1, 1)
+        try? await Task.sleep(for: .seconds(sleepDuration))
+
+        // Atomically claim the send slot and build merged body.
+        // Only one concurrent caller wins; others get nil.
+        guard let mergedBody = throttleStore.claimAndBuildMergedBody() else { return }
 
         let mergedInsight = HealthInsight(
             type: latestInsight.type,

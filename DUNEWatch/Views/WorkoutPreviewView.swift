@@ -12,6 +12,8 @@ struct WorkoutPreviewView: View {
 
     @State private var isStarting = false
     @State private var errorMessage: String?
+    @State private var selectedLevel: Int = 5
+    @FocusState private var levelFocused: Bool
 
     var body: some View {
         VStack(spacing: 0) {
@@ -88,6 +90,11 @@ struct WorkoutPreviewView: View {
                 Text(LocalizedStringKey(activityType.typeName))
                     .font(DS.Typography.exerciseName)
 
+                if let cardioUnit, cardioUnit.supportsMachineLevel,
+                   let range = cardioUnit.machineLevelRange {
+                    machineLevelPicker(range: range)
+                }
+
                 if supportsOutdoor {
                     Button {
                         startCardio(
@@ -156,13 +163,16 @@ struct WorkoutPreviewView: View {
         guard !isStarting else { return }
         isStarting = true
 
+        let level: Int? = secondaryUnit?.supportsMachineLevel == true ? selectedLevel : nil
+
         Task {
             do {
                 try await workoutManager.requestAuthorization()
                 try await workoutManager.startCardioSession(
                     activityType: activityType,
                     isOutdoor: isOutdoor,
-                    secondaryUnit: secondaryUnit
+                    secondaryUnit: secondaryUnit,
+                    initialLevel: level
                 )
                 WKInterfaceDevice.current().play(.success)
                 isStarting = false
@@ -186,6 +196,63 @@ struct WorkoutPreviewView: View {
             return .timeOnly
         default:
             return activityType.isDistanceBased ? .km : nil
+        }
+    }
+
+    // MARK: - Machine Level Picker
+
+    private func machineLevelPicker(range: ClosedRange<Int>) -> some View {
+        VStack(spacing: DS.Spacing.xs) {
+            Text("Level")
+                .font(DS.Typography.metricLabel)
+                .foregroundStyle(.secondary)
+
+            HStack(spacing: DS.Spacing.lg) {
+                Button {
+                    if selectedLevel > range.lowerBound {
+                        selectedLevel -= 1
+                    }
+                } label: {
+                    Image(systemName: "minus")
+                        .font(.title3.weight(.bold))
+                        .frame(maxWidth: .infinity, minHeight: 40)
+                }
+                .buttonStyle(.bordered)
+                .disabled(selectedLevel <= range.lowerBound)
+
+                Text("\(selectedLevel)")
+                    .font(DS.Typography.secondaryMetric)
+                    .foregroundStyle(DS.Color.activity)
+                    .contentTransition(.numericText())
+                    .frame(minWidth: 36)
+
+                Button {
+                    if selectedLevel < range.upperBound {
+                        selectedLevel += 1
+                    }
+                } label: {
+                    Image(systemName: "plus")
+                        .font(.title3.weight(.bold))
+                        .frame(maxWidth: .infinity, minHeight: 40)
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(DS.Color.activity)
+                .disabled(selectedLevel >= range.upperBound)
+            }
+            .focusable(true)
+            .focused($levelFocused)
+            .digitalCrownRotation(
+                detent: $selectedLevel,
+                from: range.lowerBound,
+                through: range.upperBound,
+                by: 1,
+                sensitivity: .low,
+                isContinuous: false,
+                isHapticFeedbackEnabled: true
+            )
+        }
+        .onAppear {
+            levelFocused = true
         }
     }
 

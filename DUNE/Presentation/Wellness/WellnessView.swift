@@ -5,6 +5,7 @@ struct WellnessView: View {
     @State private var viewModel: WellnessViewModel
     @State private var bodyViewModel = BodyCompositionViewModel()
     @State private var injuryViewModel = InjuryViewModel()
+    @State private var isShowingPostureCapture = false
     @Environment(\.modelContext) private var modelContext
     @Environment(\.appTheme) private var theme
     @Environment(\.horizontalSizeClass) private var sizeClass
@@ -19,6 +20,7 @@ struct WellnessView: View {
     private var isRegular: Bool { sizeClass == .regular }
 
     private let refreshSignal: Int
+    private let scoreRefreshService: ScoreRefreshService?
 
     init(
         sharedHealthDataService: SharedHealthDataService? = nil,
@@ -29,6 +31,7 @@ struct WellnessView: View {
         _viewModel = State(initialValue: WellnessViewModel(sharedHealthDataService: sharedHealthDataService, scoreRefreshService: scoreRefreshService))
         self.scrollToTopSignal = scrollToTopSignal
         self.refreshSignal = refreshSignal
+        self.scoreRefreshService = scoreRefreshService
     }
 
     var body: some View {
@@ -50,7 +53,9 @@ struct WellnessView: View {
                                 viewModel.wellnessScore == nil &&
                                 !viewModel.isLoading {
                         if viewModel.isMirroredReadOnlyMode {
-                            CloudSyncWaitingView()
+                            CloudSyncWaitingView {
+                                Task { await viewModel.loadData() }
+                            }
                         } else {
                             EmptyStateView(
                                 icon: "leaf.fill",
@@ -124,6 +129,12 @@ struct WellnessView: View {
                             }
                         }
 
+                        // Posture Assessment (isolated @Query)
+                        PostureAssessmentLinkView(
+                            onCapture: { isShowingPostureCapture = true },
+                            onScoreUpdate: { viewModel.postureScore = $0.map { max(0, min(100, $0)) } }
+                        )
+
                         // Injury Banner (isolated @Query — re-renders independently)
                         WellnessInjuryBannerView(
                             onEdit: { record in injuryViewModel.startEditing(record) },
@@ -165,6 +176,12 @@ struct WellnessView: View {
                         Label("Injury", systemImage: "bandage.fill")
                     }
                     .accessibilityIdentifier("wellness-menu-injury")
+                    Button {
+                        isShowingPostureCapture = true
+                    } label: {
+                        Label("Posture Assessment", systemImage: "figure.stand")
+                    }
+                    .accessibilityIdentifier("wellness-menu-posture")
                 } label: {
                     Image(systemName: "plus")
                 }
@@ -262,6 +279,9 @@ struct WellnessView: View {
                 )
             }
         }
+        .fullScreenCover(isPresented: $isShowingPostureCapture) {
+            PostureCaptureView()
+        }
         // Correction #48: navigationDestination outside conditional blocks
         .navigationDestination(for: HealthMetric.self) { metric in
             MetricDetailView(metric: metric)
@@ -278,15 +298,16 @@ struct WellnessView: View {
         .navigationDestination(for: InjuryHistoryDestination.self) { _ in
             InjuryHistoryView(viewModel: injuryViewModel)
         }
+        .navigationDestination(for: PostureHistoryDestination.self) { _ in
+            PostureHistoryView()
+        }
         .navigationDestination(for: WellnessScoreDestination.self) { _ in
             if let score = viewModel.wellnessScore {
                 WellnessScoreDetailView(
                     wellnessScore: score,
                     conditionScore: viewModel.conditionScoreFull,
                     bodyScoreDetail: viewModel.bodyScoreDetail,
-                    sleepDailyData: viewModel.sleepDetailTrend,
-                    hrvDailyData: viewModel.hrvDetailTrend,
-                    rhrDailyData: viewModel.rhrDetailTrend
+                    scoreRefreshService: scoreRefreshService
                 )
             } else {
                 ProgressView()
@@ -368,6 +389,7 @@ struct WellnessView: View {
 struct WellnessScoreDestination: Hashable {}
 struct BodyHistoryDestination: Hashable {}
 struct InjuryHistoryDestination: Hashable {}
+struct PostureHistoryDestination: Hashable {}
 struct SleepPredictionDestination: Hashable {}
 
 // MARK: - Isolated @Query Child Views
@@ -435,6 +457,118 @@ private struct WellnessInjuryBannerView: View {
                 }
             }
         }
+    }
+}
+
+/// Posture assessment card with its own @Query — shows latest result or start prompt.
+private struct PostureAssessmentLinkView: View {
+    @Query(sort: \PostureAssessmentRecord.date, order: .reverse)
+    private var records: [PostureAssessmentRecord]
+    @Environment(\.appTheme) private var theme
+
+    let onCapture: () -> Void
+    var onScoreUpdate: ((Int?) -> Void)?
+
+    var body: some View {
+        StandardCard {
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                HStack(spacing: DS.Spacing.xs) {
+                    Image(systemName: "figure.stand")
+                        .font(.subheadline)
+                        .foregroundStyle(DS.Color.body)
+
+                    Text("Posture Assessment")
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+
+                    Spacer()
+
+                    if !records.isEmpty {
+                        NavigationLink(value: PostureHistoryDestination()) {
+                            Text("View All")
+                                .font(.caption)
+                                .fontWeight(.medium)
+                        }
+                        .tint(theme.accentColor)
+                    }
+                }
+
+                if let latest = records.first {
+                    InlineCard {
+                        HStack(spacing: DS.Spacing.md) {
+                            ZStack {
+                                Circle()
+                                    .stroke(.quaternary, lineWidth: 4)
+                                    .frame(width: 40, height: 40)
+
+                                Circle()
+                                    .trim(from: 0, to: CGFloat(latest.overallScore) / 100.0)
+                                    .stroke(
+                                        scoreColor(latest.overallScore),
+                                        style: StrokeStyle(lineWidth: 4, lineCap: .round)
+                                    )
+                                    .frame(width: 40, height: 40)
+                                    .rotationEffect(.degrees(-90))
+
+                                Text("\(latest.overallScore)")
+                                    .font(.caption2.bold())
+                            }
+
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(latest.date.formatted(.dateTime.month(.abbreviated).day()))
+                                    .font(.caption)
+                                    .fontWeight(.medium)
+
+                                Text(String(localized: "\(latest.allMetrics.count) metrics measured"))
+                                    .font(.caption2)
+                                    .foregroundStyle(DS.Color.textSecondary)
+                            }
+
+                            Spacer()
+
+                            Button {
+                                onCapture()
+                            } label: {
+                                Image(systemName: "camera.fill")
+                                    .font(.subheadline)
+                            }
+                            .tint(theme.accentColor)
+                        }
+                    }
+                } else {
+                    InlineCard {
+                        HStack(spacing: DS.Spacing.sm) {
+                            Image(systemName: "camera.viewfinder")
+                                .foregroundStyle(DS.Color.textSecondary)
+
+                            Text("Capture your first posture assessment")
+                                .font(.caption)
+                                .foregroundStyle(DS.Color.textSecondary)
+
+                            Spacer()
+
+                            Button("Start") {
+                                onCapture()
+                            }
+                            .font(.caption.weight(.medium))
+                            .tint(theme.accentColor)
+                        }
+                    }
+                }
+            }
+        }
+        .task {
+            onScoreUpdate?(records.first?.overallScore)
+        }
+        .onChange(of: records.first?.overallScore) { _, newValue in
+            onScoreUpdate?(newValue)
+        }
+    }
+
+    private func scoreColor(_ score: Int) -> Color {
+        if score >= 80 { return .green }
+        if score >= 60 { return .yellow }
+        return .red
     }
 }
 

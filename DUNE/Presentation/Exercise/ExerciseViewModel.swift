@@ -19,6 +19,7 @@ final class ExerciseViewModel {
 
     /// The earliest date already fetched (cursor for next page).
     private var oldestFetchedDate: Date?
+    private var loadRequestID = 0
 
     init(workoutService: WorkoutQuerying? = nil, exerciseLibrary: ExerciseLibraryQuerying? = nil) {
         self.workoutService = workoutService ?? WorkoutQueryService(manager: .shared)
@@ -61,12 +62,16 @@ final class ExerciseViewModel {
     }
 
     func loadHealthKitWorkouts() async {
+        let requestID = beginLoadRequest()
         isLoading = true
+        defer { finishLoadRequest(requestID) }
+
         hasMoreData = true
         oldestFetchedDate = nil
 
         do {
             let workouts = try await workoutService.fetchWorkouts(days: Self.pageSizeDays)
+            guard isCurrentLoadRequest(requestID) else { return }
             healthKitWorkouts = workouts
 
             if let oldest = workouts.last?.date {
@@ -77,10 +82,10 @@ final class ExerciseViewModel {
                 hasMoreData = false
             }
         } catch {
+            guard isCurrentLoadRequest(requestID) else { return }
             AppLogger.ui.error("Exercise data load failed: \(error.localizedDescription)")
             errorMessage = String(localized: "Could not load workout data")
         }
-        isLoading = false
     }
 
     /// Loads the next page of older workouts.
@@ -91,12 +96,13 @@ final class ExerciseViewModel {
             return
         }
 
+        let requestID = loadRequestID
         isLoadingMore = true
+        defer { isLoadingMore = false }
         let calendar = Calendar.current
         guard let pageStart = calendar.date(
             byAdding: .day, value: -Self.pageSizeDays, to: cursor
         ) else {
-            isLoadingMore = false
             hasMoreData = false
             return
         }
@@ -105,6 +111,8 @@ final class ExerciseViewModel {
             let moreWorkouts = try await workoutService.fetchWorkouts(
                 start: pageStart, end: cursor
             )
+
+            guard isCurrentLoadRequest(requestID) else { return }
 
             if moreWorkouts.isEmpty {
                 hasMoreData = false
@@ -121,7 +129,21 @@ final class ExerciseViewModel {
         } catch {
             AppLogger.ui.error("Exercise load more failed: \(error.localizedDescription)")
         }
-        isLoadingMore = false
+    }
+
+    private func beginLoadRequest() -> Int {
+        loadRequestID += 1
+        return loadRequestID
+    }
+
+    private func isCurrentLoadRequest(_ requestID: Int) -> Bool {
+        requestID == loadRequestID && !Task.isCancelled
+    }
+
+    private func finishLoadRequest(_ requestID: Int) {
+        if requestID == loadRequestID {
+            isLoading = false
+        }
     }
 
 }

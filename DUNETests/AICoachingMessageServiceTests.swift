@@ -1,4 +1,5 @@
 import Foundation
+import FoundationModels
 import Testing
 @testable import DUNE
 
@@ -144,7 +145,8 @@ struct AICoachingMessageServiceTests {
             workoutSuggestion: nil,
             recentPRExerciseName: nil,
             currentStreakMilestone: nil,
-            weather: nil
+            weather: nil,
+            recentHighRPEStreak: 0
         )
     }
 }

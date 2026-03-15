@@ -76,6 +76,53 @@ struct HeartRateQueryServiceTests {
         let sample = HeartRateQueryService.validatedSample(bpm: 120, date: specificDate)
         #expect(sample?.date == specificDate)
     }
+
+    @Test("aggregateHistory averages heart rate into hourly buckets")
+    func aggregateHistoryHourlyBuckets() {
+        let calendar = Calendar(identifier: .gregorian)
+        let startOfDay = calendar.startOfDay(for: testDate)
+        let samples = [
+            VitalSample(value: 60, date: calendar.date(byAdding: .minute, value: 5, to: startOfDay)!),
+            VitalSample(value: 90, date: calendar.date(byAdding: .minute, value: 35, to: startOfDay)!),
+            VitalSample(value: 72, date: calendar.date(byAdding: .hour, value: 1, to: startOfDay)!),
+        ]
+
+        let result = HeartRateQueryService.aggregateHistory(
+            samples,
+            interval: DateComponents(hour: 1),
+            calendar: calendar
+        )
+
+        #expect(result.count == 2)
+        #expect(result[0].date == startOfDay)
+        #expect(result[0].value == 75) // (60 + 90) / 2
+        #expect(result[1].date == calendar.date(byAdding: .hour, value: 1, to: startOfDay))
+        #expect(result[1].value == 72)
+    }
+
+    @Test("aggregateHistory keeps daily buckets for default history queries")
+    func aggregateHistoryDailyBuckets() {
+        let calendar = Calendar(identifier: .gregorian)
+        let startOfDay = calendar.startOfDay(for: testDate)
+        let dayTwo = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
+        let samples = [
+            VitalSample(value: 60, date: calendar.date(byAdding: .hour, value: 2, to: startOfDay)!),
+            VitalSample(value: 90, date: calendar.date(byAdding: .hour, value: 20, to: startOfDay)!),
+            VitalSample(value: 72, date: calendar.date(byAdding: .hour, value: 3, to: dayTwo)!),
+        ]
+
+        let result = HeartRateQueryService.aggregateHistory(
+            samples,
+            interval: DateComponents(day: 1),
+            calendar: calendar
+        )
+
+        #expect(result.count == 2)
+        #expect(result[0].date == startOfDay)
+        #expect(result[0].value == 75)
+        #expect(result[1].date == dayTwo)
+        #expect(result[1].value == 72)
+    }
 }
 
 @Suite("HeartRateSample Model")

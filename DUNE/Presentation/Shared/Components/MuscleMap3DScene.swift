@@ -73,16 +73,16 @@ enum MuscleMap3DDisplayState: Equatable, Sendable {
 }
 
 enum MuscleMap3DState {
-    static let defaultYaw: Float = 0.28
-    static let minZoomScale: Float = 0.82
-    static let maxZoomScale: Float = 1.45
-    static let defaultPitch: Float = -0.18
+    static let defaultYaw: Float = 0.0
+    static let minZoomScale: Float = 0.2
+    static let maxZoomScale: Float = 5.0
+    static let defaultPitch: Float = 0.0
     static let minPitch: Float = -0.52
-    static let maxPitch: Float = 0.22
+    static let maxPitch: Float = 0.30
     static let rotationSensitivity: Float = 0.01
     static let pitchSensitivity: Float = 0.006
     static let selectedScale: Float = 1.045
-    static let defaultShellOpacity: Float = 0.06
+    static let defaultShellOpacity: Float = 0.18
     static let volumeAnimationDuration: TimeInterval = 0.35
 
     /// Non-uniform scale per volume intensity — X/Z expand more than Y for "bulk" look
@@ -114,9 +114,9 @@ enum MuscleMap3DState {
     static func preferredYaw(for muscle: MuscleGroup) -> Float {
         switch muscle {
         case .back, .lats, .traps, .glutes, .hamstrings, .calves:
-            .pi + 0.12
+            .pi
         case .triceps:
-            .pi - 0.28
+            .pi * 0.75
         default:
             defaultYaw
         }
@@ -165,9 +165,10 @@ enum MuscleMap3DState {
     ) -> Float {
         switch anatomyLayer {
         case .skin:
-            configuredShellOpacity
+            max(configuredShellOpacity, defaultShellOpacity)
         case .muscles, .focus:
-            0
+            // Always show minimal shell so the head silhouette is visible
+            defaultShellOpacity
         }
     }
 
@@ -206,7 +207,12 @@ final class MuscleMap3DScene {
     private var hasPreparedGeometry = false
 
     init() {
-        bodyRoot.position = [0, -0.05, -1.25]
+        // The USDZ model is normalized to 1.72m height.
+        // Stand upright (-90° X) then face the camera (180° Y).
+        let standUp = simd_quatf(angle: -.pi / 2, axis: [1, 0, 0])
+        let faceFront = simd_quatf(angle: .pi, axis: [0, 1, 0])
+        bodyRoot.orientation = faceFront * standUp
+        bodyRoot.position = [0, 0.25, -0.5]
         orbitRoot.addChild(bodyRoot)
         anchor.addChild(orbitRoot)
     }
@@ -326,7 +332,7 @@ final class MuscleMap3DScene {
                         isSelected: isSelected
                     )
                 ),
-                roughness: isSelected ? 0.15 : 0.32,
+                roughness: isSelected ? 0.25 : 0.55,
                 isMetallic: false
             )
 
@@ -461,8 +467,8 @@ final class MuscleMap3DScene {
         switch displayState {
         case .noData:
             base = colorScheme == .dark
-                ? UIColor(white: 0.46, alpha: 0.52)
-                : UIColor(white: 0.76, alpha: 0.82)
+                ? UIColor(red: 0.35, green: 0.18, blue: 0.15, alpha: 0.6)
+                : UIColor(red: 0.50, green: 0.30, blue: 0.25, alpha: 0.7)
         case .recovery(let fatigueLevel):
             base = recoveryColor(for: fatigueLevel, colorScheme: colorScheme)
         case .volume(let intensity):
@@ -473,19 +479,9 @@ final class MuscleMap3DScene {
         return blended(base, with: .white, ratio: 0.2)
     }
 
-    private static let recoverySpecs: [(hue: CGFloat, sat: CGFloat, darkB: CGFloat, lightB: CGFloat)] = [
-        (0, 0, 0, 0),
-        (0.28, 0.30, 0.75, 0.55),
-        (0.25, 0.32, 0.78, 0.58),
-        (0.20, 0.35, 0.80, 0.62),
-        (0.14, 0.38, 0.82, 0.65),
-        (0.10, 0.42, 0.82, 0.68),
-        (0.07, 0.45, 0.80, 0.65),
-        (0.05, 0.48, 0.75, 0.60),
-        (0.03, 0.50, 0.70, 0.55),
-        (0.01, 0.52, 0.65, 0.50),
-        (0.00, 0.55, 0.58, 0.45),
-    ]
+    // Realistic muscle base: reddish-brown. Recovery blends toward green (rested) or red (fatigued).
+    private static let muscleBase = UIColor(red: 0.55, green: 0.22, blue: 0.18, alpha: 1)
+    private static let muscleRested = UIColor(red: 0.50, green: 0.28, blue: 0.22, alpha: 1)
 
     private func recoveryColor(
         for fatigueLevel: FatigueLevel,
@@ -493,42 +489,37 @@ final class MuscleMap3DScene {
     ) -> UIColor {
         if fatigueLevel == .noData {
             return colorScheme == .dark
-                ? UIColor(white: 0.46, alpha: 0.52)
-                : UIColor(white: 0.76, alpha: 0.82)
+                ? UIColor(red: 0.35, green: 0.18, blue: 0.15, alpha: 0.6)
+                : UIColor(red: 0.50, green: 0.30, blue: 0.25, alpha: 0.7)
         }
 
-        let index = Int(fatigueLevel.rawValue)
-        guard Self.recoverySpecs.indices.contains(index) else {
-            return colorScheme == .dark
-                ? UIColor(white: 0.46, alpha: 0.52)
-                : UIColor(white: 0.76, alpha: 0.82)
-        }
-        let spec = Self.recoverySpecs[index]
-        return UIColor(
-            hue: spec.hue,
-            saturation: spec.sat,
-            brightness: colorScheme == .dark ? spec.darkB : spec.lightB,
-            alpha: 1
-        )
+        let t = CGFloat(fatigueLevel.rawValue) / 10.0
+        // Rested (0) = healthy brownish-red, Fatigued (10) = deep inflamed red
+        let red = 0.50 + t * 0.38
+        let green = 0.28 - t * 0.18
+        let blue = 0.22 - t * 0.14
+        let brightness: CGFloat = colorScheme == .dark ? 1.0 : 0.85
+        return UIColor(red: red * brightness, green: green * brightness, blue: blue * brightness, alpha: 1)
     }
 
     private func volumeColor(
         for intensity: MuscleMap3DVolumeIntensity,
         colorScheme: ColorScheme
     ) -> UIColor {
+        let brightness: CGFloat = colorScheme == .dark ? 1.0 : 0.85
         switch intensity {
         case .none:
             return colorScheme == .dark
-                ? UIColor(white: 0.46, alpha: 0.52)
-                : UIColor(white: 0.76, alpha: 0.82)
+                ? UIColor(red: 0.35, green: 0.18, blue: 0.15, alpha: 0.6)
+                : UIColor(red: 0.50, green: 0.30, blue: 0.25, alpha: 0.7)
         case .light:
-            return UIColor(red: 0.65, green: 0.53, blue: 0.38, alpha: 0.85)
+            return UIColor(red: 0.52 * brightness, green: 0.25 * brightness, blue: 0.20 * brightness, alpha: 0.9)
         case .moderate:
-            return UIColor(red: 0.76, green: 0.50, blue: 0.30, alpha: 0.9)
+            return UIColor(red: 0.60 * brightness, green: 0.24 * brightness, blue: 0.18 * brightness, alpha: 0.95)
         case .high:
-            return UIColor(red: 0.84, green: 0.42, blue: 0.24, alpha: 0.95)
+            return UIColor(red: 0.72 * brightness, green: 0.22 * brightness, blue: 0.16 * brightness, alpha: 1)
         case .veryHigh:
-            return UIColor(red: 0.92, green: 0.34, blue: 0.18, alpha: 1)
+            return UIColor(red: 0.85 * brightness, green: 0.18 * brightness, blue: 0.12 * brightness, alpha: 1)
         }
     }
 

@@ -13,6 +13,8 @@ struct PersonalRecordsSection: View {
          GridItem(.flexible(), spacing: DS.Spacing.sm)]
     }
 
+    private let cardMinHeight: CGFloat = 148
+
     var body: some View {
         if records.isEmpty {
             emptyState
@@ -143,10 +145,13 @@ struct PersonalRecordsSection: View {
                     .lineLimit(1)
             }
 
+            Spacer(minLength: 0)
+
             Text(record.date, style: .date)
                 .font(.caption2)
                 .foregroundStyle(.tertiary)
         }
+        .frame(maxWidth: .infinity, minHeight: cardMinHeight, alignment: .topLeading)
         .padding(DS.Spacing.sm)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
     }

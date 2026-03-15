@@ -16,55 +16,66 @@ final class ConditionScoreDetailViewModel {
         }
     }
     var scrollPosition: Date = .now
-    var showTrendLine: Bool = false
+    var showTrendLine: Bool = false {
+        didSet { recalculateTrendLine() }
+    }
     var chartData: [ChartDataPoint] = []
+    var hrvTrend: [ChartDataPoint] = []
+    var rhrTrend: [ChartDataPoint] = []
     var summaryStats: MetricSummary?
     var highlights: [Highlight] = []
     var isLoading = false
     var errorMessage: String?
 
+    private(set) var trendLineData: [ChartDataPoint]?
+    private(set) var scrollDomain: ClosedRange<Date> = Date.now...Date.now
     private(set) var currentScore: ConditionScore?
 
     private let hrvService: HRVQuerying
     private let scoreUseCase = CalculateConditionScoreUseCase()
     private let scoreRefreshService: ScoreRefreshService?
+    private let nowProvider: @Sendable () -> Date
+    private var reloadRequestID = 0
 
     init(
         hrvService: HRVQuerying? = nil,
         healthKitManager: HealthKitManager = .shared,
-        scoreRefreshService: ScoreRefreshService? = nil
+        scoreRefreshService: ScoreRefreshService? = nil,
+        nowProvider: @escaping @Sendable () -> Date = Date.init
     ) {
         self.hrvService = hrvService ?? HRVQueryService(manager: healthKitManager)
         self.scoreRefreshService = scoreRefreshService
+        self.nowProvider = nowProvider
+        recalculateScrollDomain()
     }
 
     func configure(score: ConditionScore) {
         self.currentScore = score
         resetScrollPosition()
+        recalculateScrollDomain()
     }
 
     func loadData() async {
-        guard !isLoading else { return }
+        let requestID = beginReloadRequest()
         isLoading = true
         errorMessage = nil
+        highlights = []
+        defer { finishReloadRequest(requestID) }
 
         do {
             if selectedPeriod == .day {
-                try await loadHourlyData()
+                try await loadHourlyData(requestID: requestID)
             } else {
-                try await loadScoreData()
+                try await loadScoreData(requestID: requestID)
             }
-            guard !Task.isCancelled else {
-                isLoading = false
-                return
-            }
+            guard isCurrentReloadRequest(requestID) else { return }
             buildHighlights()
+            recalculateTrendLine()
         } catch {
+            guard isCurrentReloadRequest(requestID) else { return }
             AppLogger.ui.error("ConditionScoreDetail load failed: \(error.localizedDescription)")
-            errorMessage = error.localizedDescription
+            errorMessage = String(localized: "Could not load data.")
         }
-
-        isLoading = false
     }
 
     // MARK: - Scroll Position
@@ -74,17 +85,14 @@ final class ConditionScoreDetailViewModel {
         selectedPeriod.visibleRangeLabel(from: scrollPosition)
     }
 
-    /// Trend line data points (linear regression) for the visible chart data.
-    var trendLineData: [ChartDataPoint]? {
-        guard showTrendLine else { return nil }
-        return MetricDetailViewModel.computeTrendLine(
-            from: chartData, period: selectedPeriod, scrollPosition: scrollPosition
-        )
-    }
-
     private func resetScrollPosition() {
-        let range = selectedPeriod.dateRange(offset: 0)
-        scrollPosition = range.start
+        if selectedPeriod == .day {
+            // Rolling 24h: scroll to show the full 24h window starting from now-24h
+            scrollPosition = nowProvider().addingTimeInterval(-ScoreRefreshService.rollingWindowSeconds)
+        } else {
+            let range = selectedPeriod.dateRange(offset: 0)
+            scrollPosition = range.start
+        }
     }
 
     // MARK: - Extended Range
@@ -95,10 +103,17 @@ final class ConditionScoreDetailViewModel {
         return (start: bufferRange.start, end: currentRange.end)
     }
 
-    var scrollDomain: ClosedRange<Date> {
+    private func recalculateScrollDomain() {
         let range = extendedRange
         let upperBound = selectedPeriod.scrollDomainUpperBound(referenceDate: range.end)
-        return range.start...max(range.end, upperBound)
+        scrollDomain = range.start...max(range.end, upperBound)
+    }
+
+    private func recalculateTrendLine() {
+        guard showTrendLine else { trendLineData = nil; return }
+        trendLineData = MetricDetailViewModel.computeTrendLine(
+            from: chartData, period: selectedPeriod, scrollPosition: scrollPosition
+        )
     }
 
     // MARK: - Private
@@ -106,11 +121,28 @@ final class ConditionScoreDetailViewModel {
     private var reloadTask: Task<Void, Never>?
 
     private func triggerReload() {
+        reloadRequestID += 1
         reloadTask?.cancel()
+        isLoading = false
         reloadTask = Task { await loadData() }
     }
 
-    private func loadScoreData() async throws {
+    private func beginReloadRequest() -> Int {
+        reloadRequestID += 1
+        return reloadRequestID
+    }
+
+    private func isCurrentReloadRequest(_ requestID: Int) -> Bool {
+        requestID == reloadRequestID && !Task.isCancelled
+    }
+
+    private func finishReloadRequest(_ requestID: Int) {
+        if requestID == reloadRequestID {
+            isLoading = false
+        }
+    }
+
+    private func loadScoreData(requestID: Int) async throws {
         let range = extendedRange
 
         // Fetch all HRV samples for the extended period
@@ -174,7 +206,19 @@ final class ConditionScoreDetailViewModel {
             calendar: calendar
         )
 
+        guard isCurrentReloadRequest(requestID) else { return }
         chartData = allScores
+
+        // Sub-score trends: daily HRV averages and RHR averages within current period
+        let currentPeriodRange = selectedPeriod.dateRange(offset: 0)
+        hrvTrend = HealthDataAggregator.buildHRVDailyAverages(
+            from: allSamples,
+            start: currentPeriodRange.start,
+            end: currentPeriodRange.end,
+            calendar: calendar
+        )
+        rhrTrend = HealthDataAggregator.buildRHRDailyPoints(from: allRHR)
+            .filter { $0.date >= currentPeriodRange.start && $0.date <= currentPeriodRange.end }
 
         // Aggregate for longer periods
         if selectedPeriod == .sixMonths || selectedPeriod == .year {
@@ -184,7 +228,6 @@ final class ConditionScoreDetailViewModel {
         }
 
         // Summary stats from current period only
-        let currentPeriodRange = selectedPeriod.dateRange(offset: 0)
         let currentPeriodScores = allScores.filter {
             $0.date >= currentPeriodRange.start && $0.date <= currentPeriodRange.end
         }
@@ -193,6 +236,8 @@ final class ConditionScoreDetailViewModel {
             from: currentPeriodScores.map(\.value),
             previousPeriodValues: previousScores.isEmpty ? nil : previousScores.map(\.value)
         )
+
+        recalculateScrollDomain()
     }
 
     /// Computes daily condition scores within the given range.
@@ -255,18 +300,21 @@ final class ConditionScoreDetailViewModel {
 
     // MARK: - Hourly Data (Day Period)
 
-    private func loadHourlyData() async throws {
+    private func loadHourlyData(requestID: Int) async throws {
         let calendar = Calendar.current
-        let now = Date()
-        let startOfDay = calendar.startOfDay(for: now)
+        let now = nowProvider()
+        // Rolling 24h window: show yesterday's data too (especially useful at early hours)
+        let twentyFourHoursAgo = now.addingTimeInterval(-ScoreRefreshService.rollingWindowSeconds)
+        let fortyEightHoursAgo = now.addingTimeInterval(-ScoreRefreshService.rollingWindowSeconds * 2)
         let baselineStart = calendar.date(
             byAdding: .day,
             value: -CalculateConditionScoreUseCase.conditionWindowDays,
-            to: startOfDay
-        ) ?? startOfDay
+            to: fortyEightHoursAgo
+        ) ?? fortyEightHoursAgo
 
+        // +3: conditionWindow + today + yesterday + previous-day overlap for day-over-day summary change
         async let samplesTask = hrvService.fetchHRVSamples(
-            days: CalculateConditionScoreUseCase.conditionWindowDays + 1
+            days: CalculateConditionScoreUseCase.conditionWindowDays + 3
         )
         async let rhrTask = hrvService.fetchRHRCollection(
             start: baselineStart,
@@ -278,7 +326,7 @@ final class ConditionScoreDetailViewModel {
         let rhrDailyAverages = rhrCollection
             .filter { $0.average > 0 && $0.average.isFinite }
             .map { CalculateConditionScoreUseCase.Input.RHRDailyAverage(date: $0.date, value: $0.average) }
-        let hourlyEvaluationDates = Dictionary(grouping: samples.filter { $0.date >= startOfDay && $0.date <= now }) {
+        let hourlyEvaluationDates = Dictionary(grouping: samples.filter { $0.date >= fortyEightHoursAgo && $0.date <= now }) {
             calendar.dateInterval(of: .hour, for: $0.date)?.start ?? $0.date
         }
         .compactMap { hourDate, samplesInHour in
@@ -286,7 +334,11 @@ final class ConditionScoreDetailViewModel {
         }
         .sorted { $0.hourDate < $1.hourDate }
 
-        chartData = hourlyEvaluationDates.compactMap { item in
+        let currentWindow = hourlyEvaluationDates.filter { $0.hourDate >= twentyFourHoursAgo && $0.hourDate <= now }
+        let previousWindow = hourlyEvaluationDates.filter { $0.hourDate >= fortyEightHoursAgo && $0.hourDate < twentyFourHoursAgo }
+
+        guard isCurrentReloadRequest(requestID) else { return }
+        chartData = currentWindow.compactMap { item in
             let output = scoreUseCase.executeIntraday(input: .init(
                 hrvSamples: samples,
                 rhrDailyAverages: rhrDailyAverages,
@@ -296,8 +348,24 @@ final class ConditionScoreDetailViewModel {
             return ChartDataPoint(date: item.hourDate, value: Double(score.score))
         }
 
+        let previousValues = previousWindow.compactMap { item in
+            let output = scoreUseCase.executeIntraday(input: .init(
+                hrvSamples: samples,
+                rhrDailyAverages: rhrDailyAverages,
+                evaluationDate: item.evaluationDate
+            ))
+            return output.score.map { Double($0.score) }
+        }
+
         let values = chartData.map(\.value)
-        summaryStats = HealthDataAggregator.computeSummary(from: values, previousPeriodValues: nil)
+        summaryStats = HealthDataAggregator.computeSummary(
+            from: values,
+            previousPeriodValues: previousValues.isEmpty ? nil : previousValues
+        )
+
+        // Sub-scores not shown for hourly view
+        hrvTrend = []
+        rhrTrend = []
     }
 
     // MARK: - Highlights

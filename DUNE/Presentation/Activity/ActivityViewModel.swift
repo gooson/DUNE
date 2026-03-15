@@ -106,6 +106,7 @@ final class ActivityViewModel {
     /// Cached recovery modifiers from the most recent fetch.
     private var sleepModifier: Double = 1.0
     private var readinessModifier: Double = 1.0
+    private var loadRequestID = 0
     private var didAttemptCardioSeed = false
     private var cardioSeedTask: Task<Void, Never>?
 
@@ -283,21 +284,67 @@ final class ActivityViewModel {
 
     /// Recompute fatigue states and suggestion from both SwiftData records and HealthKit workouts.
     private func recomputeFatigueAndSuggestion() {
+        // Build set of HK workout IDs that already have ExerciseRecords (to avoid double-counting)
+        let linkedHKIDs = Set(manualRecordsCache.compactMap(\.healthKitWorkoutID))
+
+        // Build name→definition lookup for orphaned workout recovery (O(E) once, not O(W×E))
+        var libraryByName: [String: ExerciseDefinition] = [:]
+        for def in library.allExercises() where !def.primaryMuscles.isEmpty {
+            libraryByName[def.name.lowercased()] = def
+            libraryByName[def.localizedName.lowercased()] = def
+        }
+
         // Merge SwiftData exercise snapshots with HealthKit workout snapshots
-        let healthKitSnapshots = recentWorkouts
-            .filter { !$0.isFromThisApp }  // Avoid double-counting app-created workouts
-            .filter { !$0.activityType.primaryMuscles.isEmpty }
-            .map { workout in
-                ExerciseRecordSnapshot(
+        var healthKitSnapshots: [ExerciseRecordSnapshot] = []
+
+        for workout in recentWorkouts {
+            let durationMin = workout.duration > 0 ? Swift.min(workout.duration / 60.0, 480) : nil
+            let distKm = workout.distance.flatMap { $0 > 0 ? Swift.min($0 / 1000.0, 500) : nil }
+
+            if !workout.isFromThisApp {
+                // Third-party workouts: use activityType muscles (existing behavior)
+                guard !workout.activityType.primaryMuscles.isEmpty else { continue }
+                healthKitSnapshots.append(ExerciseRecordSnapshot(
                     date: workout.date,
                     exerciseName: workout.activityType.rawValue.capitalized,
                     primaryMuscles: workout.activityType.primaryMuscles,
                     secondaryMuscles: workout.activityType.secondaryMuscles,
                     completedSetCount: 0,
-                    durationMinutes: workout.duration > 0 ? Swift.min(workout.duration / 60.0, 480) : nil,
-                    distanceKm: workout.distance.flatMap { $0 > 0 ? Swift.min($0 / 1000.0, 500) : nil }
-                )
+                    durationMinutes: durationMin,
+                    distanceKm: distKm
+                ))
+            } else if !linkedHKIDs.contains(workout.id)
+                        && !hasMatchingRecord(for: workout) {
+                // Orphaned app-created workout (ExerciseRecord lost due to store recovery).
+                // Recover muscle data via O(1) name lookup.
+                let exerciseName = workout.type
+                guard !exerciseName.isEmpty else { continue }
+                if let definition = libraryByName[exerciseName.lowercased()] {
+                    healthKitSnapshots.append(ExerciseRecordSnapshot(
+                        date: workout.date,
+                        exerciseDefinitionID: definition.id,
+                        exerciseName: definition.localizedName,
+                        primaryMuscles: definition.primaryMuscles,
+                        secondaryMuscles: definition.secondaryMuscles,
+                        completedSetCount: 0,
+                        durationMinutes: durationMin,
+                        distanceKm: distKm
+                    ))
+                } else if !workout.activityType.primaryMuscles.isEmpty {
+                    // Fallback to activityType muscles if library lookup fails
+                    healthKitSnapshots.append(ExerciseRecordSnapshot(
+                        date: workout.date,
+                        exerciseName: exerciseName,
+                        primaryMuscles: workout.activityType.primaryMuscles,
+                        secondaryMuscles: workout.activityType.secondaryMuscles,
+                        completedSetCount: 0,
+                        durationMinutes: durationMin,
+                        distanceKm: distKm
+                    ))
+                }
             }
+            // else: app-created workout WITH linked ExerciseRecord → already in exerciseRecordSnapshots
+        }
 
         let allSnapshots = exerciseRecordSnapshots + healthKitSnapshots
         fatigueStates = recommendationService.computeFatigueStates(
@@ -310,6 +357,15 @@ final class ActivityViewModel {
             library: library,
             constraints: recommendationConstraints
         )
+    }
+
+    /// Whether an ExerciseRecord matches this HKWorkout by date proximity (±2 min) and exercise type.
+    /// Covers Watch workouts (no healthKitWorkoutID) and race conditions where the ID is not yet written.
+    private func hasMatchingRecord(for workout: WorkoutSummary) -> Bool {
+        manualRecordsCache.contains { record in
+            record.exerciseType.caseInsensitiveCompare(workout.type) == .orderedSame
+                && abs(record.date.timeIntervalSince(workout.date)) < 120
+        }
     }
 
     /// Partitions exercise record snapshots into current and previous week.
@@ -524,14 +580,13 @@ final class ActivityViewModel {
     }
 
     func loadActivityData() async {
-        guard !isLoading else { return }
+        let requestID = beginLoadRequest()
         isLoading = true
         errorMessage = nil
 
-        // Always reset isLoading on ALL exit paths — including Task cancellation.
-        // Without defer, Task.isCancelled guards leave isLoading stuck at true,
-        // permanently blocking future loads. Safe for Void async functions.
-        defer { isLoading = false }
+        // Only the active request may clear loading; stale cancelled requests must not
+        // hide a newer in-flight refresh.
+        defer { finishLoadRequest(requestID) }
 
         let healthKitAvailable = healthKitManager.isAvailable
         isMirroredReadOnlyMode = !healthKitAvailable
@@ -551,7 +606,7 @@ final class ActivityViewModel {
             exerciseTask, stepsTask, workoutsTask, trainingLoadTask, sleepTask, readinessTask, sleepDailyTask
         )
 
-        guard !Task.isCancelled else { return }
+        guard isCurrentLoadRequest(requestID) else { return }
 
         weeklyExerciseMinutes = exerciseResult.weeklyData
         todayExercise = exerciseResult.todayMetric
@@ -639,11 +694,25 @@ final class ActivityViewModel {
                 readinessScore: readiness.score
             )
         }
+        guard isCurrentLoadRequest(requestID) else { return }
 
         // Compute derived stats (PRs, streak, frequency, weekly stats)
         recomputeDerivedStats()
+    }
 
-        guard !Task.isCancelled else { return }
+    private func beginLoadRequest() -> Int {
+        loadRequestID += 1
+        return loadRequestID
+    }
+
+    private func isCurrentLoadRequest(_ requestID: Int) -> Bool {
+        requestID == loadRequestID && !Task.isCancelled
+    }
+
+    private func finishLoadRequest(_ requestID: Int) {
+        if requestID == loadRequestID {
+            isLoading = false
+        }
     }
 
     // MARK: - Personal Record Helpers

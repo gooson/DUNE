@@ -15,6 +15,69 @@ private struct MockHRVService: HRVQuerying {
     func fetchRHRCollection(start: Date, end: Date, interval: DateComponents) async throws -> [(date: Date, min: Double, max: Double, average: Double)] { rhrCollection }
 }
 
+private actor SequencedConditionHRVService: HRVQuerying {
+    private let firstSamples: [HRVSample]
+    private let secondSamples: [HRVSample]
+    private let firstRHR: [(date: Date, min: Double, max: Double, average: Double)]
+    private let secondRHR: [(date: Date, min: Double, max: Double, average: Double)]
+    private var sampleFetchCount = 0
+    private var rhrFetchCount = 0
+    private var didStartFirstFetch = false
+    private var fetchStartedContinuation: CheckedContinuation<Void, Never>?
+    private var fetchReleaseContinuation: CheckedContinuation<Void, Never>?
+
+    init(
+        firstSamples: [HRVSample],
+        secondSamples: [HRVSample],
+        firstRHR: [(date: Date, min: Double, max: Double, average: Double)],
+        secondRHR: [(date: Date, min: Double, max: Double, average: Double)]
+    ) {
+        self.firstSamples = firstSamples
+        self.secondSamples = secondSamples
+        self.firstRHR = firstRHR
+        self.secondRHR = secondRHR
+    }
+
+    func fetchHRVSamples(days: Int) async throws -> [HRVSample] {
+        sampleFetchCount += 1
+        if sampleFetchCount == 1 {
+            didStartFirstFetch = true
+            fetchStartedContinuation?.resume()
+            fetchStartedContinuation = nil
+            await withCheckedContinuation { continuation in
+                fetchReleaseContinuation = continuation
+            }
+            return firstSamples
+        }
+        return secondSamples
+    }
+
+    func fetchRestingHeartRate(for date: Date) async throws -> Double? { nil }
+    func fetchLatestRestingHeartRate(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
+    func fetchHRVCollection(start: Date, end: Date, interval: DateComponents) async throws -> [(date: Date, average: Double)] { [] }
+
+    func fetchRHRCollection(
+        start: Date,
+        end: Date,
+        interval: DateComponents
+    ) async throws -> [(date: Date, min: Double, max: Double, average: Double)] {
+        rhrFetchCount += 1
+        return rhrFetchCount == 1 ? firstRHR : secondRHR
+    }
+
+    func waitUntilFirstFetchStarts() async {
+        if didStartFirstFetch { return }
+        await withCheckedContinuation { continuation in
+            fetchStartedContinuation = continuation
+        }
+    }
+
+    func resumeFirstFetch() {
+        fetchReleaseContinuation?.resume()
+        fetchReleaseContinuation = nil
+    }
+}
+
 // MARK: - Tests
 
 @Suite("ConditionScoreDetailViewModel")
@@ -216,35 +279,46 @@ struct ConditionScoreDetailViewModelTests {
         }
     }
 
-    @Test("day period recomputes hourly chart data from raw HRV samples without snapshot service")
-    func dayPeriodUsesIntradayRecompute() async {
-        let currentHour = max(3, calendar.component(.hour, from: Date()))
+    @Test("day period uses rolling 24h window including yesterday's data")
+    func dayPeriodUsesRolling24hWindow() async {
+        let fixedNow = calendar.date(bySettingHour: 12, minute: 0, second: 0, of: Date()) ?? Date()
+        let currentHour = calendar.component(.hour, from: fixedNow)
         let todayHours = [currentHour - 3, currentHour - 2, currentHour - 1]
+        // computeIntradayAverage needs >= 2 samples from same calendar day
         let samples = makeTimedSamples([
             (dayOffset: 0, hour: todayHours[0], value: 85),
             (dayOffset: 0, hour: todayHours[1], value: 50),
             (dayOffset: 0, hour: todayHours[2], value: 50),
-            (dayOffset: 1, hour: 12, value: 50),
-            (dayOffset: 2, hour: 12, value: 50),
-            (dayOffset: 3, hour: 12, value: 50),
-            (dayOffset: 4, hour: 12, value: 50),
-            (dayOffset: 5, hour: 12, value: 50),
-            (dayOffset: 6, hour: 12, value: 50)
+            // Yesterday: multiple hourly samples (within 24h window from noon)
+            (dayOffset: 1, hour: currentHour + 1, value: 50),
+            (dayOffset: 1, hour: currentHour + 2, value: 48),
+            (dayOffset: 1, hour: currentHour + 4, value: 52),
+            (dayOffset: 1, hour: currentHour + 5, value: 50),
+            // Baseline days
+            (dayOffset: 2, hour: 10, value: 50),
+            (dayOffset: 2, hour: 14, value: 50),
+            (dayOffset: 3, hour: 10, value: 50),
+            (dayOffset: 3, hour: 14, value: 50),
+            (dayOffset: 4, hour: 10, value: 50),
+            (dayOffset: 4, hour: 14, value: 50),
+            (dayOffset: 5, hour: 10, value: 50),
+            (dayOffset: 5, hour: 14, value: 50),
+            (dayOffset: 6, hour: 10, value: 50),
+            (dayOffset: 6, hour: 14, value: 50),
+            (dayOffset: 7, hour: 10, value: 50),
+            (dayOffset: 7, hour: 14, value: 50)
         ])
         let service = MockHRVService(
             samples: samples,
             rhrCollection: makeTimedRHRCollection([
-                (dayOffset: 0, value: 60),
-                (dayOffset: 1, value: 60),
-                (dayOffset: 2, value: 60),
-                (dayOffset: 3, value: 60),
-                (dayOffset: 4, value: 60),
-                (dayOffset: 5, value: 60),
-                (dayOffset: 6, value: 60)
+                (dayOffset: 0, value: 60), (dayOffset: 1, value: 60),
+                (dayOffset: 2, value: 60), (dayOffset: 3, value: 60),
+                (dayOffset: 4, value: 60), (dayOffset: 5, value: 60),
+                (dayOffset: 6, value: 60), (dayOffset: 7, value: 60)
             ])
         )
-        let vm = ConditionScoreDetailViewModel(hrvService: service)
-        vm.configure(score: ConditionScore(score: 65, date: Date()))
+        let vm = ConditionScoreDetailViewModel(hrvService: service, nowProvider: { fixedNow })
+        vm.configure(score: ConditionScore(score: 65, date: fixedNow))
         vm.selectedPeriod = .day
 
         try? await Task.sleep(for: .milliseconds(50))
@@ -252,8 +326,96 @@ struct ConditionScoreDetailViewModelTests {
             await vm.loadData()
         }
 
-        #expect(vm.chartData.count >= 2)
-        #expect(vm.chartData.allSatisfy { calendar.isDate($0.date, inSameDayAs: Date()) })
+        // Rolling 24h: should include today + yesterday points within window
+        #expect(vm.chartData.count >= 4)
         #expect(vm.summaryStats != nil)
+    }
+
+    @Test("day period at 3am includes yesterday's hourly data")
+    func dayPeriodEarlyMorningShowsYesterdayData() async {
+        let fixedNow = calendar.date(bySettingHour: 3, minute: 0, second: 0, of: Date()) ?? Date()
+        // Yesterday's samples at various hours (all within 24h window)
+        // computeIntradayAverage needs >= 2 samples from same calendar day,
+        // so yesterday needs multiple samples spread across the day
+        let samples = makeTimedSamples([
+            (dayOffset: 0, hour: 1, value: 50),    // today 1am
+            (dayOffset: 0, hour: 2, value: 52),    // today 2am
+            // Yesterday: many samples throughout the day (within 24h of 3am)
+            (dayOffset: 1, hour: 5, value: 48),
+            (dayOffset: 1, hour: 8, value: 45),
+            (dayOffset: 1, hour: 10, value: 45),
+            (dayOffset: 1, hour: 13, value: 47),
+            (dayOffset: 1, hour: 15, value: 47),
+            (dayOffset: 1, hour: 18, value: 46),
+            (dayOffset: 1, hour: 20, value: 46),
+            (dayOffset: 1, hour: 22, value: 49),
+            // Baseline days
+            (dayOffset: 2, hour: 10, value: 50),
+            (dayOffset: 2, hour: 14, value: 50),
+            (dayOffset: 3, hour: 10, value: 50),
+            (dayOffset: 3, hour: 14, value: 50),
+            (dayOffset: 4, hour: 10, value: 50),
+            (dayOffset: 4, hour: 14, value: 50),
+            (dayOffset: 5, hour: 10, value: 50),
+            (dayOffset: 5, hour: 14, value: 50),
+            (dayOffset: 6, hour: 10, value: 50),
+            (dayOffset: 6, hour: 14, value: 50),
+            (dayOffset: 7, hour: 10, value: 50),
+            (dayOffset: 7, hour: 14, value: 50)
+        ])
+        let service = MockHRVService(
+            samples: samples,
+            rhrCollection: makeTimedRHRCollection([
+                (dayOffset: 0, value: 60), (dayOffset: 1, value: 60),
+                (dayOffset: 2, value: 60), (dayOffset: 3, value: 60),
+                (dayOffset: 4, value: 60), (dayOffset: 5, value: 60),
+                (dayOffset: 6, value: 60), (dayOffset: 7, value: 60)
+            ])
+        )
+        let vm = ConditionScoreDetailViewModel(hrvService: service, nowProvider: { fixedNow })
+        vm.configure(score: ConditionScore(score: 65, date: fixedNow))
+        vm.selectedPeriod = .day
+
+        try? await Task.sleep(for: .milliseconds(50))
+        if vm.chartData.isEmpty {
+            await vm.loadData()
+        }
+
+        // At 3am: should include yesterday's hourly data within the 24h window
+        #expect(vm.chartData.count >= 3)
+        // Summary stats should reflect multiple data points
+        #expect(vm.summaryStats != nil)
+        if let stats = vm.summaryStats {
+            #expect(stats.average > 0)
+        }
+    }
+
+    @Test("latest load wins when an older request finishes later")
+    func latestLoadWinsOverOlderResponse() async {
+        let service = SequencedConditionHRVService(
+            firstSamples: makeSamples(days: 14, baseValue: 52, spread: 4),
+            secondSamples: [],
+            firstRHR: makeRHRCollection(days: 14, baseValue: 60, spread: 2),
+            secondRHR: []
+        )
+        let vm = ConditionScoreDetailViewModel(hrvService: service)
+        vm.configure(score: ConditionScore(score: 60, date: Date()))
+
+        let firstTask = Task {
+            await vm.loadData()
+        }
+
+        await service.waitUntilFirstFetchStarts()
+        await vm.loadData()
+
+        #expect(vm.chartData.isEmpty)
+        #expect(vm.summaryStats == nil)
+
+        await service.resumeFirstFetch()
+        await firstTask.value
+
+        #expect(vm.chartData.isEmpty)
+        #expect(vm.summaryStats == nil)
+        #expect(vm.isLoading == false)
     }
 }

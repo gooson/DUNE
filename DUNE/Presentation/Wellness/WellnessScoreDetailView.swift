@@ -1,54 +1,165 @@
 import SwiftUI
 
-/// Detail view for Wellness Score in the same visual pattern as Training Readiness detail.
+/// Detail view for Wellness Score.
+/// Follows the canonical score detail layout:
+/// Hero → Time-of-Day → Period Picker → Chart Header → DotLineChart
+/// → Summary Stats → Highlights → Sub-Scores → Component Weights
+/// → Contributors → Calculation Cards → Explainer
 struct WellnessScoreDetailView: View {
     let wellnessScore: WellnessScore
     let conditionScore: ConditionScore?
     let bodyScoreDetail: BodyScoreDetail?
-    let sleepDailyData: [SleepDailySample]
-    let hrvDailyData: [DailySample]
-    let rhrDailyData: [DailySample]
+    let scoreRefreshService: ScoreRefreshService?
 
-    @Environment(\.appTheme) private var theme
+    @State private var viewModel: WellnessScoreDetailViewModel
     @Environment(\.horizontalSizeClass) private var sizeClass
 
-    private var isRegular: Bool { sizeClass == .regular }
-
-    private var sleepTrendData: [ChartDataPoint] {
-        sleepDailyData
-            .sorted { $0.date < $1.date }
-            .map { ChartDataPoint(date: $0.date, value: $0.minutes / 60.0) }
+    init(
+        wellnessScore: WellnessScore,
+        conditionScore: ConditionScore?,
+        bodyScoreDetail: BodyScoreDetail?,
+        scoreRefreshService: ScoreRefreshService? = nil
+    ) {
+        self.wellnessScore = wellnessScore
+        self.conditionScore = conditionScore
+        self.bodyScoreDetail = bodyScoreDetail
+        self.scoreRefreshService = scoreRefreshService
+        _viewModel = State(initialValue: WellnessScoreDetailViewModel(scoreRefreshService: scoreRefreshService))
     }
 
-    private var hrvTrendData: [ChartDataPoint] {
-        hrvDailyData
-            .sorted { $0.date < $1.date }
-            .map { ChartDataPoint(date: $0.date, value: $0.value) }
-    }
-
-    private var rhrTrendData: [ChartDataPoint] {
-        rhrDailyData
-            .sorted { $0.date < $1.date }
-            .map { ChartDataPoint(date: $0.date, value: $0.value) }
+    private enum Labels {
+        static let scoreLabel = "WELLNESS"
+        static let sleep = String(localized: "Sleep")
+        static let condition = String(localized: "Condition")
+        static let body = String(localized: "Body")
+        static let posture = String(localized: "Posture")
+        nonisolated(unsafe) static let calculationBullets: [LocalizedStringKey] = [
+            "Final score = weighted average of Sleep(35%), Condition(30%), Body(20%), and Posture(15%).",
+            "Sleep and Condition come from Apple Watch signals, then normalized to 0-100.",
+            "Body score is derived from 7-day trend stability and direction changes.",
+            "Posture score reflects your latest posture assessment result (0-100).",
+            "If any component is missing, remaining weights are re-normalized before final scoring.",
+        ]
     }
 
     var body: some View {
         ScrollView {
-            VStack(spacing: DS.Spacing.lg) {
-                Color.clear
-                    .frame(height: 1)
-                    .accessibilityElement()
-                    .accessibilityIdentifier("wellness-score-detail-screen")
-
+            VStack(alignment: .leading, spacing: sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.xl) {
+                // 1. Score Hero
                 scoreHero
-                timeOfDayCard
-                subScoreCharts
-                componentWeights
 
-                if let conditionScore, !conditionScore.contributions.isEmpty {
-                    contributorsCard(conditionScore.contributions)
+                // 2. Time-of-Day Card
+                TimeOfDayCard(
+                    currentAdjustment: wellnessScore.timeOfDayAdjustment,
+                    baseScore: Double(wellnessScore.score) - wellnessScore.timeOfDayAdjustment
+                )
+
+                // 3. Period Picker
+                Picker("Period", selection: $viewModel.selectedPeriod) {
+                    ForEach(TimePeriod.allCases, id: \.self) { period in
+                        Text(period.displayName).tag(period)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .sensoryFeedback(.selection, trigger: viewModel.selectedPeriod)
+
+                // 4. Chart Header
+                ScoreDetailChartHeader(
+                    visibleRangeLabel: viewModel.visibleRangeLabel,
+                    showTrendLine: $viewModel.showTrendLine,
+                    tintColor: wellnessScore.status.color
+                )
+
+                // 5. Main Trend Chart (DotLineChartView)
+                StandardCard {
+                    Group {
+                        if viewModel.chartData.isEmpty && !viewModel.isLoading {
+                            ScoreDetailEmptyState(chartHeight: chartHeight)
+                        } else {
+                            DotLineChartView(
+                                data: viewModel.chartData,
+                                baseline: 50,
+                                yAxisLabel: "Score",
+                                timePeriod: viewModel.selectedPeriod,
+                                tintColor: wellnessScore.status.color,
+                                trendLine: viewModel.trendLineData,
+                                scrollDomain: viewModel.scrollDomain,
+                                scrollPosition: $viewModel.scrollPosition
+                            )
+                            .frame(height: chartHeight)
+                            .accessibilityIdentifier("wellness-chart-trend")
+                        }
+                    }
+                    .id(viewModel.selectedPeriod)
+                    .transition(.opacity)
+                }
+                .animation(.easeInOut(duration: 0.25), value: viewModel.selectedPeriod)
+
+                // 6. Summary Stats + 7. Highlights
+                if sizeClass == .regular {
+                    HStack(alignment: .top, spacing: DS.Spacing.lg) {
+                        if let summary = viewModel.summaryStats {
+                            ScoreDetailSummaryStats(summary: summary)
+                                .frame(maxWidth: .infinity)
+                        }
+                        if !viewModel.highlights.isEmpty {
+                            ScoreDetailHighlights(highlights: viewModel.highlights)
+                                .frame(maxWidth: .infinity)
+                        }
+                    }
+                } else {
+                    if let summary = viewModel.summaryStats {
+                        ScoreDetailSummaryStats(summary: summary)
+                    }
+                    if !viewModel.highlights.isEmpty {
+                        ScoreDetailHighlights(highlights: viewModel.highlights)
+                    }
                 }
 
+                // 8. Sub-Score Charts (HRV → RHR → Sleep)
+                if viewModel.selectedPeriod != .day {
+                    SubScoreTrendChartView(
+                        title: "HRV",
+                        data: viewModel.hrvTrend,
+                        color: DS.Color.hrv,
+                        unit: "ms"
+                    )
+
+                    SubScoreTrendChartView(
+                        title: "Resting Heart Rate",
+                        data: viewModel.rhrTrend,
+                        color: DS.Color.heartRate,
+                        unit: "bpm"
+                    )
+
+                    SubScoreTrendChartView(
+                        title: "Sleep Duration",
+                        data: viewModel.sleepTrend,
+                        color: DS.Color.sleep,
+                        unit: "hrs",
+                        fractionDigits: 1
+                    )
+                }
+
+                // 9. Component Weights
+                ScoreCompositionCard(
+                    title: "Score Composition",
+                    components: [
+                        .init(label: Labels.sleep, weight: "35%", score: wellnessScore.sleepScore, color: DS.Color.sleep),
+                        .init(label: Labels.condition, weight: "30%", score: wellnessScore.conditionScore, color: DS.Color.hrv),
+                        .init(label: Labels.body, weight: "20%", score: wellnessScore.bodyScore, color: DS.Color.body),
+                        .init(label: Labels.posture, weight: "15%", score: wellnessScore.postureScore, color: DS.Color.posture),
+                    ]
+                )
+
+                // 10. Contributors
+                if let conditionScore, !conditionScore.contributions.isEmpty {
+                    StandardCard {
+                        ScoreContributorsView(contributions: conditionScore.contributions)
+                    }
+                }
+
+                // 11. Calculation Cards
                 if let detail = conditionScore?.detail {
                     ConditionCalculationCard(detail: detail)
                 }
@@ -57,21 +168,40 @@ struct WellnessScoreDetailView: View {
                     BodyCalculationCard(detail: bodyDetail)
                 }
 
-                explainerCard
+                // 12. Explainer
+                CalculationMethodCard(
+                    icon: "function",
+                    title: "Calculation Method",
+                    bullets: Labels.calculationBullets
+                )
             }
-            .padding()
+            .padding(sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.lg)
         }
+        .accessibilityIdentifier("wellness-score-detail-screen")
         .background { DetailWaveBackground() }
         .englishNavigationTitle("Wellness Score")
         .navigationBarTitleDisplayMode(.large)
+        .overlay {
+            if viewModel.isLoading && viewModel.chartData.isEmpty {
+                ProgressView()
+            }
+        }
+        .task {
+            viewModel.configure(
+                wellnessScore: wellnessScore,
+                conditionScore: conditionScore,
+                bodyScoreDetail: bodyScoreDetail
+            )
+            await viewModel.loadData()
+        }
     }
 
-    // MARK: - Score Hero
+    // MARK: - Subviews
 
     private var scoreHero: some View {
         DetailScoreHero(
             score: wellnessScore.score,
-            scoreLabel: "WELLNESS",
+            scoreLabel: Labels.scoreLabel,
             statusLabel: wellnessScore.status.label,
             statusIcon: wellnessScore.status.iconName,
             statusColor: wellnessScore.status.color,
@@ -80,198 +210,14 @@ struct WellnessScoreDetailView: View {
                 .init(label: Labels.sleep, value: wellnessScore.sleepScore, color: DS.Color.sleep),
                 .init(label: Labels.condition, value: wellnessScore.conditionScore, color: DS.Color.hrv),
                 .init(label: Labels.body, value: wellnessScore.bodyScore, color: DS.Color.body),
+                .init(label: Labels.posture, value: wellnessScore.postureScore, color: DS.Color.posture),
             ]
         )
     }
 
+    // MARK: - Helpers
 
-    private var timeOfDayCard: some View {
-        let baseScore = Double(wellnessScore.score) - wellnessScore.timeOfDayAdjustment
-
-        return StandardCard {
-            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                Text("Time-of-day Effect")
-                    .font(.subheadline.weight(.semibold))
-
-                Text("Current adjustment \(wellnessScore.timeOfDayAdjustment.formattedWithSeparator(fractionDigits: 0, alwaysShowSign: true))")
-                    .font(.caption)
-                    .foregroundStyle(DS.Color.textSecondary)
-
-                HStack {
-                    phaseChip("Night", base: baseScore, hour: 2)
-                    phaseChip("Morning", base: baseScore, hour: 8)
-                    phaseChip("Noon", base: baseScore, hour: 13)
-                    phaseChip("Evening", base: baseScore, hour: 19)
-                }
-            }
-        }
-    }
-
-    private func phaseChip(_ title: String, base: Double, hour: Int) -> some View {
-        let date = Calendar.current.date(bySettingHour: hour, minute: 0, second: 0, of: Date()) ?? Date()
-        let adjustment = ScoreTimeOfDayAdjustment.readinessAndWellness(for: date)
-        let projected = Int(max(0, min(100, (base + adjustment).rounded())))
-
-        return VStack(spacing: DS.Spacing.xxs) {
-            Text(title)
-                .font(.caption2)
-                .foregroundStyle(.tertiary)
-            Text("\(projected)")
-                .font(.caption.weight(.semibold))
-                .monospacedDigit()
-        }
-        .frame(maxWidth: .infinity)
-    }
-
-    // MARK: - Sub-score Charts
-
-    private var subScoreCharts: some View {
-        VStack(spacing: DS.Spacing.md) {
-            SubScoreTrendChartView(
-                title: "Sleep Duration",
-                data: sleepTrendData,
-                color: DS.Color.sleep,
-                unit: "hrs",
-                fractionDigits: 1
-            )
-
-            SubScoreTrendChartView(
-                title: "HRV",
-                data: hrvTrendData,
-                color: DS.Color.hrv,
-                unit: "ms"
-            )
-
-            SubScoreTrendChartView(
-                title: "Resting Heart Rate",
-                data: rhrTrendData,
-                color: DS.Color.heartRate,
-                unit: "bpm"
-            )
-        }
-    }
-
-    // MARK: - Component Weights
-
-    private var componentWeights: some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            Text("Score Composition")
-                .font(.subheadline.weight(.semibold))
-
-            weightRow(
-                label: "Sleep Quality",
-                weight: "40%",
-                score: wellnessScore.sleepScore,
-                color: DS.Color.sleep
-            )
-
-            weightRow(
-                label: "Condition",
-                weight: "35%",
-                score: wellnessScore.conditionScore,
-                color: DS.Color.hrv
-            )
-
-            weightRow(
-                label: "Body Trend",
-                weight: "25%",
-                score: wellnessScore.bodyScore,
-                color: DS.Color.body
-            )
-        }
-        .padding(DS.Spacing.md)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
-    }
-
-    private func weightRow(
-        label: LocalizedStringKey,
-        weight: String,
-        score: Int?,
-        color: Color
-    ) -> some View {
-        HStack {
-            Text(label)
-                .font(.subheadline)
-
-            Spacer()
-
-            Text(weight)
-                .font(.caption)
-                .foregroundStyle(.tertiary)
-
-            GeometryReader { geo in
-                let resolved = max(0, min(score ?? 0, 100))
-                let fraction = CGFloat(resolved) / 100.0
-
-                Capsule()
-                    .fill(color.opacity(0.15))
-                    .overlay(alignment: .leading) {
-                        Capsule()
-                            .fill(color)
-                            .frame(width: geo.size.width * fraction)
-                    }
-            }
-            .frame(width: 60, height: 6)
-            .clipShape(Capsule())
-
-            Text(score.map { "\($0)" } ?? "--")
-                .font(.caption)
-                .fontWeight(.medium)
-                .monospacedDigit()
-                .foregroundStyle(score != nil ? AnyShapeStyle(theme.sandColor) : AnyShapeStyle(.tertiary))
-                .frame(width: 32, alignment: .trailing)
-        }
-        .accessibilityElement(children: .combine)
-    }
-
-    // MARK: - Contributors + Explainer
-
-    private func contributorsCard(_ contributions: [ScoreContribution]) -> some View {
-        StandardCard {
-            ScoreContributorsView(contributions: contributions)
-        }
-    }
-
-    // MARK: - Explainer
-
-    private var explainerCard: some View {
-        StandardCard {
-            VStack(alignment: .leading, spacing: DS.Spacing.md) {
-                HStack(spacing: DS.Spacing.sm) {
-                    Image(systemName: "info.circle.fill")
-                        .foregroundStyle(DS.Color.textSecondary)
-                    Text("Calculation Method")
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                }
-
-                explainerItem("Final score = weighted average of Sleep(40%), Condition(35%), and Body(25%).")
-                explainerItem("Sleep and Condition come from Apple Watch signals, then normalized to 0-100.")
-                explainerItem("Body score is derived from 7-day trend stability and direction changes.")
-                explainerItem("If any component is missing, remaining weights are re-normalized before final scoring.")
-            }
-        }
-    }
-
-    private func explainerItem(_ text: LocalizedStringKey) -> some View {
-        HStack(alignment: .top, spacing: DS.Spacing.sm) {
-            Circle()
-                .fill(.tertiary)
-                .frame(width: 4, height: 4)
-                .padding(.top, 6)
-
-            Text(text)
-                .font(.caption)
-                .foregroundStyle(DS.Color.textSecondary)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-    }
-
-    // MARK: - Constants
-
-    private enum Labels {
-        static let sleep = String(localized: "Sleep")
-        static let condition = String(localized: "Condition")
-        static let body = String(localized: "Body")
+    private var chartHeight: CGFloat {
+        sizeClass == .regular ? 360 : 250
     }
 }

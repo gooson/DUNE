@@ -27,9 +27,15 @@ struct WatchExerciseSyncMetadata: Sendable, Equatable {
         }
     }
 
-    var entriesByCanonicalID: [String: Entry]
+    struct ProcedureEntry: Sendable, Equatable {
+        var sets: [WatchProcedureSetSnapshot]
+        var updatedAt: Date
+    }
 
-    static let empty = WatchExerciseSyncMetadata(entriesByCanonicalID: [:])
+    var entriesByCanonicalID: [String: Entry]
+    var procedureByExerciseID: [String: ProcedureEntry]
+
+    static let empty = WatchExerciseSyncMetadata(entriesByCanonicalID: [:], procedureByExerciseID: [:])
 }
 
 enum WatchExerciseLibraryPayloadBuilder {
@@ -82,6 +88,7 @@ enum WatchExerciseLibraryPayloadBuilder {
         library: any ExerciseLibraryQuerying
     ) -> WatchExerciseSyncMetadata {
         var entriesByCanonicalID: [String: WatchExerciseSyncMetadata.Entry] = [:]
+        var procedureByExerciseID: [String: WatchExerciseSyncMetadata.ProcedureEntry] = [:]
 
         for record in defaultRecords {
             guard !record.exerciseDefinitionID.isEmpty else { continue }
@@ -96,6 +103,19 @@ enum WatchExerciseLibraryPayloadBuilder {
             }
 
             entriesByCanonicalID[canonicalID] = entry
+        }
+
+        let sortedRecords = exerciseRecords.sorted { $0.date > $1.date }
+        for record in sortedRecords {
+            guard let exerciseDefinitionID = record.exerciseDefinitionID,
+                  !exerciseDefinitionID.isEmpty else {
+                continue
+            }
+
+            if procedureByExerciseID[exerciseDefinitionID] == nil,
+               let procedure = makeProcedureEntry(from: record) {
+                procedureByExerciseID[exerciseDefinitionID] = procedure
+            }
         }
 
         for record in exerciseRecords {
@@ -119,7 +139,10 @@ enum WatchExerciseLibraryPayloadBuilder {
             entriesByCanonicalID[canonicalID] = entry
         }
 
-        return WatchExerciseSyncMetadata(entriesByCanonicalID: entriesByCanonicalID)
+        return WatchExerciseSyncMetadata(
+            entriesByCanonicalID: entriesByCanonicalID,
+            procedureByExerciseID: procedureByExerciseID
+        )
     }
 
     private static func canonicalID(
@@ -139,6 +162,44 @@ enum WatchExerciseLibraryPayloadBuilder {
         }
     }
 
+    private static func makeProcedureEntry(
+        from record: ExerciseRecord
+    ) -> WatchExerciseSyncMetadata.ProcedureEntry? {
+        let sets = record.completedSets.compactMap { set -> WatchProcedureSetSnapshot? in
+            guard set.weight != nil || set.reps != nil else { return nil }
+            return WatchProcedureSetSnapshot(
+                setNumber: set.setNumber,
+                weight: set.weight,
+                reps: set.reps
+            )
+        }
+        .sorted { $0.setNumber < $1.setNumber }
+
+        guard !sets.isEmpty else { return nil }
+        return WatchExerciseSyncMetadata.ProcedureEntry(sets: sets, updatedAt: record.date)
+    }
+
+    private static func progressionIncrementKg(for definition: ExerciseDefinition) -> Double? {
+        switch definition.inputType {
+        case .setsRepsWeight, .setsReps:
+            break
+        default:
+            return nil
+        }
+
+        let lowerMuscles: Set<MuscleGroup> = [.quadriceps, .hamstrings, .glutes]
+        if !Set(definition.primaryMuscles).intersection(lowerMuscles).isEmpty {
+            return 5.0
+        }
+
+        switch definition.equipment {
+        case .dumbbell, .kettlebell, .band, .trx, .medicineBall, .stabilityBall, .bodyweight, .other:
+            return 1.0
+        default:
+            return 2.5
+        }
+    }
+
     private static func makePayload(
         definitions: [ExerciseDefinition],
         metadata: WatchExerciseSyncMetadata,
@@ -150,6 +211,8 @@ enum WatchExerciseLibraryPayloadBuilder {
             let entry = metadata.entriesByCanonicalID[canonicalID]
             let retained = retainedSnapshot[definition.id]
             let defaultReps = entry?.defaultReps ?? defaultRepsFallback(for: definition)
+            let procedure = metadata.procedureByExerciseID[definition.id]
+            let progressionIncrement = progressionIncrementKg(for: definition) ?? retained?.progressionIncrementKg
 
             return WatchExerciseInfo(
                 id: definition.id,
@@ -163,7 +226,10 @@ enum WatchExerciseLibraryPayloadBuilder {
                 usageCount: retained?.usageCount ?? entry?.usageCount ?? 0,
                 equipment: definition.equipment == .other ? nil : definition.equipment.rawValue,
                 cardioSecondaryUnit: definition.cardioSecondaryUnit?.rawValue,
-                aliases: definition.aliases
+                aliases: definition.aliases,
+                procedureSets: procedure?.sets ?? retained?.procedureSets,
+                procedureUpdatedAt: procedure?.updatedAt ?? retained?.procedureUpdatedAt,
+                progressionIncrementKg: progressionIncrement
             )
         }
     }

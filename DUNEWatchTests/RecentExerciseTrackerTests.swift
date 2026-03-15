@@ -91,4 +91,36 @@ struct RecentExerciseTrackerTests {
         #expect(fallback?.weight == 80)
         #expect(fallback?.reps == 10)
     }
+
+    @Test("latestProcedure stores exact ID snapshot without canonical fallback")
+    func latestProcedureExactOnly() {
+        let runID = UUID().uuidString
+        let exactID = "\(runID)-bench-press"
+        let variantID = "tempo-\(runID)-bench-press"
+        let otherVariant = "pause-\(runID)-bench-press"
+
+        RecentExerciseTracker.recordLatestProcedure(
+            exerciseID: variantID,
+            sets: [
+                WatchProcedureSetSnapshot(setNumber: 1, weight: 60, reps: 10),
+                WatchProcedureSetSnapshot(setNumber: 2, weight: 62.5, reps: 8),
+            ]
+        )
+        RecentExerciseTracker.recordLatestProcedure(
+            exerciseID: exactID,
+            sets: [
+                WatchProcedureSetSnapshot(setNumber: 1, weight: 80, reps: 6),
+                WatchProcedureSetSnapshot(setNumber: 2, weight: 82.5, reps: 5),
+                WatchProcedureSetSnapshot(setNumber: 3, weight: 85, reps: 4),
+            ]
+        )
+
+        let exact = RecentExerciseTracker.latestProcedure(exerciseID: exactID)
+        #expect(exact?.sets.count == 3)
+        #expect(exact?.sets.first?.weight == 80)
+        #expect(exact?.sets.last?.reps == 4)
+
+        let other = RecentExerciseTracker.latestProcedure(exerciseID: otherVariant)
+        #expect(other == nil)
+    }
 }

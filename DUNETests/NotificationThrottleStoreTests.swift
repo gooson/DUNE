@@ -10,14 +10,16 @@ struct NotificationThrottleStoreTests {
     private func makeStore(
         dailyBudgetLimit: Int = 6,
         dedupWindowSeconds: TimeInterval = 60 * 60,
-        bodyCompositionMergeWindowSeconds: TimeInterval = 60 * 5
+        bodyCompositionMergeWindowSeconds: TimeInterval = 60 * 5,
+        bodyCompositionDebounceSeconds: TimeInterval = 3
     ) -> NotificationThrottleStore {
         let defaults = UserDefaults(suiteName: "test.throttle.\(UUID().uuidString)")!
         return NotificationThrottleStore(
             defaults: defaults,
             dailyBudgetLimit: dailyBudgetLimit,
             dedupWindowSeconds: dedupWindowSeconds,
-            bodyCompositionMergeWindowSeconds: bodyCompositionMergeWindowSeconds
+            bodyCompositionMergeWindowSeconds: bodyCompositionMergeWindowSeconds,
+            bodyCompositionDebounceSeconds: bodyCompositionDebounceSeconds
         )
     }
 
@@ -210,5 +212,94 @@ struct NotificationThrottleStoreTests {
 
         #expect(store.shouldSendAndRecord(insight: weight, now: base) == true)
         #expect(store.shouldSendAndRecord(insight: bmi, now: base.addingTimeInterval(60 * 6)) == true)
+    }
+
+    // MARK: - Body Composition Debounce (buffer + claim pattern)
+
+    @Test("Buffer then claim returns merged body with all buffered values")
+    func bufferThenClaimReturnsMergedBody() {
+        let store = makeStore(dedupWindowSeconds: 0, bodyCompositionMergeWindowSeconds: 60 * 5)
+        let base = Date(timeIntervalSince1970: 60_000)
+
+        // Simulate 3 concurrent HKObserverQuery callbacks buffering values
+        store.bufferBodyCompositionValue(type: .weightUpdate, formattedValue: "73.2kg", now: base)
+        store.bufferBodyCompositionValue(type: .bodyFatUpdate, formattedValue: "18.4%", now: base.addingTimeInterval(0.1))
+        store.bufferBodyCompositionValue(type: .bmiUpdate, formattedValue: "BMI: 22.1", now: base.addingTimeInterval(0.2))
+
+        // After debounce delay, first claim wins
+        let result = store.claimAndBuildMergedBody(now: base.addingTimeInterval(2))
+        #expect(result != nil)
+        #expect(result!.contains("73.2kg"))
+        #expect(result!.contains("18.4%"))
+        #expect(result!.contains("BMI: 22.1"))
+    }
+
+    @Test("Second claim within debounce window returns nil")
+    func secondClaimWithinDebounceReturnsNil() {
+        let store = makeStore(
+            dedupWindowSeconds: 0,
+            bodyCompositionMergeWindowSeconds: 60 * 5,
+            bodyCompositionDebounceSeconds: 3
+        )
+        let base = Date(timeIntervalSince1970: 70_000)
+
+        store.bufferBodyCompositionValue(type: .weightUpdate, formattedValue: "73.2kg", now: base)
+        store.bufferBodyCompositionValue(type: .bodyFatUpdate, formattedValue: "18.4%", now: base.addingTimeInterval(0.1))
+
+        // First claim succeeds
+        let first = store.claimAndBuildMergedBody(now: base.addingTimeInterval(2))
+        #expect(first != nil)
+
+        // Second claim within debounce window (3s) fails
+        let second = store.claimAndBuildMergedBody(now: base.addingTimeInterval(2.5))
+        #expect(second == nil)
+    }
+
+    @Test("Claim after debounce window expires succeeds again")
+    func claimAfterDebounceWindowSucceeds() {
+        let store = makeStore(
+            dedupWindowSeconds: 0,
+            bodyCompositionMergeWindowSeconds: 60 * 5,
+            bodyCompositionDebounceSeconds: 3
+        )
+        let base = Date(timeIntervalSince1970: 80_000)
+
+        store.bufferBodyCompositionValue(type: .weightUpdate, formattedValue: "73.2kg", now: base)
+
+        let first = store.claimAndBuildMergedBody(now: base.addingTimeInterval(2))
+        #expect(first != nil)
+
+        // Buffer new value and claim after debounce window
+        store.bufferBodyCompositionValue(type: .weightUpdate, formattedValue: "74.0kg", now: base.addingTimeInterval(4))
+        let second = store.claimAndBuildMergedBody(now: base.addingTimeInterval(6))
+        #expect(second != nil)
+        #expect(second!.contains("74.0kg"))
+    }
+
+    @Test("Single body composition value is sent after debounce")
+    func singleBodyCompositionValueSentAfterDebounce() {
+        let store = makeStore(dedupWindowSeconds: 0, bodyCompositionMergeWindowSeconds: 60 * 5)
+        let base = Date(timeIntervalSince1970: 90_000)
+
+        // Only weight recorded (no bodyFat or BMI)
+        store.bufferBodyCompositionValue(type: .weightUpdate, formattedValue: "73.2kg", now: base)
+
+        let result = store.claimAndBuildMergedBody(now: base.addingTimeInterval(2))
+        #expect(result == "73.2kg")
+    }
+
+    @Test("Claim records per-type throttle for all buffered types")
+    func claimRecordsPerTypeThrottle() {
+        let store = makeStore(dedupWindowSeconds: 0, bodyCompositionMergeWindowSeconds: 60 * 5)
+        let base = Date(timeIntervalSince1970: 100_000)
+
+        store.bufferBodyCompositionValue(type: .weightUpdate, formattedValue: "73.2kg", now: base)
+        store.bufferBodyCompositionValue(type: .bmiUpdate, formattedValue: "22.1", now: base.addingTimeInterval(0.1))
+
+        _ = store.claimAndBuildMergedBody(now: base.addingTimeInterval(2))
+
+        // Both types should now be throttled for today
+        #expect(store.canSend(for: .weightUpdate, now: base.addingTimeInterval(3)) == false)
+        #expect(store.canSend(for: .bmiUpdate, now: base.addingTimeInterval(3)) == false)
     }
 }

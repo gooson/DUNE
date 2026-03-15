@@ -238,6 +238,12 @@ extension WorkoutSummary {
         if let corrected = correctionStore.correctedTitle(for: id) {
             return corrected
         }
-        return WorkoutActivityType.localizedDisplayName(forStoredTitle: type) ?? type
+        if let localized = WorkoutActivityType.localizedDisplayName(forStoredTitle: type) {
+            return localized
+        }
+        // type that differs from activityType.typeName is a custom exercise name
+        // from HealthKit metadata (e.g. "Bench Press") — preserve it.
+        // When type == activityType.typeName, localizedDisplayName above already matched.
+        return type
     }
 }

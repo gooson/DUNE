@@ -49,6 +49,13 @@ struct UnifiedWorkoutRow: View {
                     }
                 }
 
+                if item.milestoneDistance != nil || item.isPersonalRecord {
+                    WorkoutBadgeView.inlineBadge(
+                        milestone: item.milestoneDistance,
+                        isPersonalRecord: item.isPersonalRecord
+                    )
+                }
+
                 if let summary = item.setSummary {
                     Text(summary)
                         .font(.caption)
@@ -127,14 +134,6 @@ struct UnifiedWorkoutRow: View {
                 .lineLimit(1)
 
             sourceBadge
-
-            if style == .compact,
-               item.milestoneDistance != nil || item.isPersonalRecord {
-                WorkoutBadgeView.inlineBadge(
-                    milestone: item.milestoneDistance,
-                    isPersonalRecord: item.isPersonalRecord
-                )
-            }
         }
     }
 

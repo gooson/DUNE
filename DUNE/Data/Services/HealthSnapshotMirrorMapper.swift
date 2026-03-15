@@ -26,6 +26,22 @@ enum HealthSnapshotMirrorMapper {
             let score: Int
         }
 
+        struct WeightPoint: Codable, Sendable, Equatable {
+            let date: Date
+            let value: Double
+        }
+
+        struct BMIPoint: Codable, Sendable, Equatable {
+            let date: Date
+            let value: Double
+        }
+
+        struct ExercisePoint: Codable, Sendable, Equatable {
+            let date: Date
+            let minutes: Double
+            let isHistorical: Bool
+        }
+
         let fetchedAt: Date
         let failedSources: [String]
 
@@ -47,6 +63,13 @@ enum HealthSnapshotMirrorMapper {
         let baselineReady: Bool?
         let baselineProgress: Double?
         let recentScores: [ScorePoint]
+
+        // Activity/Body fields (Optional for backward compatibility)
+        var todaySteps: Double? = nil
+        var todayExerciseMinutes: Double? = nil
+        var recentExercise: ExercisePoint? = nil
+        var latestWeight: WeightPoint? = nil
+        var latestBMI: BMIPoint? = nil
     }
 
     static func makePayload(from snapshot: SharedHealthSnapshot) -> Payload {
@@ -92,7 +115,18 @@ enum HealthSnapshotMirrorMapper {
             conditionDetail: snapshot.conditionScore?.detail,
             baselineReady: snapshot.baselineStatus?.isReady,
             baselineProgress: snapshot.baselineStatus?.progress,
-            recentScores: recentScores
+            recentScores: recentScores,
+            todaySteps: snapshot.todaySteps,
+            todayExerciseMinutes: snapshot.todayExerciseMinutes,
+            recentExercise: snapshot.recentExercise.map {
+                Payload.ExercisePoint(date: $0.date, minutes: $0.minutes, isHistorical: $0.isHistorical)
+            },
+            latestWeight: snapshot.latestWeight.map {
+                Payload.WeightPoint(date: $0.date, value: $0.value)
+            },
+            latestBMI: snapshot.latestBMI.map {
+                Payload.BMIPoint(date: $0.date, value: $0.value)
+            }
         )
     }
 
@@ -176,6 +210,17 @@ enum HealthSnapshotMirrorMapper {
             yesterdaySleepStages: yesterdayStages,
             latestSleepStages: latestSleepStages,
             sleepDailyDurations: sleepDailyDurations,
+            todaySteps: payload.todaySteps,
+            todayExerciseMinutes: payload.todayExerciseMinutes,
+            recentExercise: payload.recentExercise.map {
+                SharedHealthSnapshot.ExerciseSample(minutes: $0.minutes, date: $0.date, isHistorical: $0.isHistorical)
+            },
+            latestWeight: payload.latestWeight.map {
+                SharedHealthSnapshot.WeightSample(value: $0.value, date: $0.date)
+            },
+            latestBMI: payload.latestBMI.map {
+                SharedHealthSnapshot.BMISample(value: $0.value, date: $0.date)
+            },
             conditionScore: conditionScore,
             baselineStatus: nil,
             recentConditionScores: recentScores,

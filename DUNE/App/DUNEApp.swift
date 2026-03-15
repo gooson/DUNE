@@ -152,9 +152,12 @@ struct DUNEApp: App {
     private static let shouldResetUITestState = uiTestLaunchConfiguration.shouldResetState
 
     private static func makeModelContainer(configuration: ModelConfiguration) throws -> ModelContainer {
+        // All migration stages are .lightweight — SwiftData's automatic migration
+        // handles them without an explicit plan. The staged migration plan is removed
+        // because multiple VersionedSchemas (V2-V7, V11) reference live model types
+        // whose hashes drifted, causing 134504 "unknown model version" on every launch.
         try ModelContainer(
             for: AppMigrationPlan.currentSchema,
-            migrationPlan: AppMigrationPlan.self,
             configurations: configuration
         )
     }
@@ -163,22 +166,13 @@ struct DUNEApp: App {
         AppLogger.data.error("Falling back to in-memory ModelContainer due to persistent store failure")
         let fallbackConfiguration = ModelConfiguration(isStoredInMemoryOnly: true)
         do {
-            return try makeModelContainer(configuration: fallbackConfiguration)
+            // Skip migration plan — in-memory stores have nothing to migrate.
+            return try makeFreshModelContainer(configuration: fallbackConfiguration)
         } catch {
-            AppLogger.data.error("In-memory ModelContainer with migration plan also failed: \(error). Creating bare container.")
-            // Without migration plan — avoids migration-related failures that can
-            // prevent even an in-memory container from initializing.
-            do {
-                return try ModelContainer(
-                    for: AppMigrationPlan.currentSchema,
-                    configurations: ModelConfiguration(isStoredInMemoryOnly: true)
-                )
-            } catch {
-                // Absolute last resort — should never happen but prevents fatalError crash.
-                AppLogger.data.error("Bare in-memory ModelContainer failed: \(error). Creating minimal container.")
-                // swiftlint:disable:next force_try
-                return try! ModelContainer(for: Schema([]), configurations: ModelConfiguration(isStoredInMemoryOnly: true))
-            }
+            // Absolute last resort — should never happen but prevents fatalError crash.
+            AppLogger.data.error("In-memory ModelContainer failed: \(error). Creating minimal container.")
+            // swiftlint:disable:next force_try
+            return try! ModelContainer(for: Schema([]), configurations: ModelConfiguration(isStoredInMemoryOnly: true))
         }
     }
 
@@ -277,11 +271,30 @@ struct DUNEApp: App {
 
     private static func deleteStoreFiles(at url: URL) {
         let fm = FileManager.default
-        // SwiftData/SQLite uses .sqlite, .sqlite-wal, .sqlite-shm
         for suffix in ["", "-wal", "-shm"] {
             let fileURL = URL(fileURLWithPath: url.path + suffix)
-            try? fm.removeItem(at: fileURL)
+            do {
+                try fm.removeItem(at: fileURL)
+                AppLogger.data.info("Deleted store file: \(fileURL.lastPathComponent)")
+            } catch let error as NSError where error.domain == NSCocoaErrorDomain && error.code == NSFileNoSuchFileError {
+                // File doesn't exist — nothing to delete.
+            } catch {
+                AppLogger.data.error("Failed to delete store file \(fileURL.lastPathComponent): \(error.localizedDescription)")
+            }
         }
+    }
+
+    /// Create a ModelContainer WITHOUT the migration plan.
+    /// Used after store deletion when a fresh store needs no migration.
+    /// The staged migration plan contains VersionedSchemas that reference live model
+    /// types whose hashes have drifted since declaration (V2-V7, V11 reference live
+    /// types later modified). This causes 134504 "unknown model version" even on empty
+    /// stores. Bypassing the migration plan avoids plan-validation errors entirely.
+    private static func makeFreshModelContainer(configuration: ModelConfiguration) throws -> ModelContainer {
+        try ModelContainer(
+            for: AppMigrationPlan.currentSchema,
+            configurations: configuration
+        )
     }
 
     private static func recoverModelContainer(after error: Error, configuration: ModelConfiguration) -> ModelContainer {
@@ -294,10 +307,26 @@ struct DUNEApp: App {
         AppLogger.data.error("Deleting persistent store after migration compatibility failure: \(reflectedError, privacy: .private)")
         deleteStoreFiles(at: configuration.url)
 
+        // Retry 1: fresh container WITHOUT migration plan (deleted store needs no migration).
         do {
-            return try makeModelContainer(configuration: configuration)
+            let container = try makeFreshModelContainer(configuration: configuration)
+            AppLogger.data.info("ModelContainer recovered with fresh store (no migration plan).")
+            return container
         } catch {
-            AppLogger.data.error("ModelContainer retry failed: \(error)")
+            AppLogger.data.error("Fresh ModelContainer retry failed: \(error)")
+        }
+
+        // Retry 2: fresh container without CloudKit either.
+        do {
+            let noCloudConfig = ModelConfiguration(
+                url: configuration.url,
+                cloudKitDatabase: .none
+            )
+            let container = try makeFreshModelContainer(configuration: noCloudConfig)
+            AppLogger.data.info("ModelContainer recovered without CloudKit. Data will sync on next runtime rebuild.")
+            return container
+        } catch {
+            AppLogger.data.error("Fresh ModelContainer retry without CloudKit also failed: \(error)")
             return makeInMemoryFallbackContainer()
         }
     }

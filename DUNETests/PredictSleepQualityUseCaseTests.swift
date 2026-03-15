@@ -5,6 +5,7 @@ import Testing
 @Suite("PredictSleepQualityUseCase")
 struct PredictSleepQualityUseCaseTests {
     let sut = PredictSleepQualityUseCase()
+    let expectedConsistencyTip = String(localized: "A consistent bedtime improves sleep quality")
 
     // MARK: - Helpers
 
@@ -151,7 +152,7 @@ struct PredictSleepQualityUseCaseTests {
     @Test("High variance generates consistency tip")
     func bedtimeVarianceTip() {
         let result = sut.execute(input: makeDefaultInput(bedtimeVarianceMinutes: 90))
-        #expect(result.tips.contains(String(localized: "A consistent bedtime improves sleep quality")))
+        #expect(result.tips.contains(expectedConsistencyTip))
     }
 
     // MARK: - Empty Data
