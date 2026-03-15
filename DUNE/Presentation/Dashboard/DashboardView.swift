@@ -15,7 +15,12 @@ struct DashboardView: View {
     @State private var cachedCurrentRelease: WhatsNewReleaseData?
     @State private var cachedBuildNumber: String = ""
     @Query(sort: \WorkoutTemplate.updatedAt, order: .reverse) private var templates: [WorkoutTemplate]
-    @Query(sort: \ExerciseRecord.date, order: .reverse) private var exerciseRecords: [ExerciseRecord]
+    @Query(
+        FetchDescriptor<ExerciseRecord>(
+            sortBy: [SortDescriptor(\ExerciseRecord.date, order: .reverse)],
+            fetchLimit: 20
+        )
+    ) private var exerciseRecords: [ExerciseRecord]
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.openURL) private var openURL
     private let library: ExerciseLibraryQuerying = ExerciseLibraryService.shared

@@ -12,6 +12,8 @@ struct RPETrendChartView: View {
     @State private var selectedDate: Date?
     @State private var scrollPosition: Date = .now
     @State private var cachedMovingAverage: [ChartDataPoint] = []
+    @State private var cachedWeekAverageRPE: String?
+    @State private var cachedXDomain: ClosedRange<Date> = Date()...Date()
     @State private var selectionGestureState = ChartSelectionGestureState()
     @State private var lastSelectionProbeLabel = "none"
 
@@ -31,7 +33,7 @@ struct RPETrendChartView: View {
                     }
                 }
                 Spacer()
-                if let avg = weekAverageRPE {
+                if let avg = cachedWeekAverageRPE {
                     Text(avg)
                         .font(.caption)
                         .foregroundStyle(DS.Color.textSecondary)
@@ -55,17 +57,19 @@ struct RPETrendChartView: View {
         .padding(DS.Spacing.md)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
         .onAppear {
-            recalculateMovingAverage()
+            recalculateCachedValues()
             resetScrollPosition()
         }
         .onChange(of: data.count) { _, _ in
-            recalculateMovingAverage()
+            recalculateCachedValues()
             resetScrollPosition()
         }
     }
 
-    private func recalculateMovingAverage() {
+    private func recalculateCachedValues() {
         cachedMovingAverage = computeMovingAverage()
+        cachedWeekAverageRPE = computeWeekAverageRPE()
+        cachedXDomain = resolvedDayBucketXDomain(dates: data.map(\.date))
     }
 
     // MARK: - Chart
@@ -117,7 +121,7 @@ struct RPETrendChartView: View {
             }
         }
         .chartYScale(domain: 0...10)
-        .chartXScale(domain: xDomain)
+        .chartXScale(domain: cachedXDomain)
         .scrollableChartSelectionOverlay(
             isScrollable: isScrollable,
             visibleDomainLength: isScrollable ? period.visibleDomainSeconds : nil,
@@ -164,10 +168,6 @@ struct RPETrendChartView: View {
         }
     }
 
-    private var xDomain: ClosedRange<Date> {
-        resolvedDayBucketXDomain(dates: data.map(\.date))
-    }
-
     private var isScrollable: Bool {
         data.count > period.days
     }
@@ -204,7 +204,7 @@ struct RPETrendChartView: View {
     private func resetScrollPosition() {
         guard let latestDate = data.map(\.date).max() else { return }
         let preferredStart = period.initialVisibleStart(latestDate: latestDate)
-        scrollPosition = preferredStart < xDomain.lowerBound ? xDomain.lowerBound : preferredStart
+        scrollPosition = preferredStart < cachedXDomain.lowerBound ? cachedXDomain.lowerBound : preferredStart
     }
 
     /// 7-day rolling average
@@ -220,7 +220,7 @@ struct RPETrendChartView: View {
         return result
     }
 
-    private var weekAverageRPE: String? {
+    private func computeWeekAverageRPE() -> String? {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
         guard let weekAgo = calendar.date(byAdding: .day, value: -7, to: today) else { return nil }
