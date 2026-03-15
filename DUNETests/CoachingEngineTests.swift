@@ -21,7 +21,8 @@ struct CoachingEngineTests {
         workoutSuggestion: WorkoutSuggestion? = nil,
         recentPRExerciseName: String? = nil,
         currentStreakMilestone: Int? = nil,
-        weather: WeatherSnapshot? = nil
+        weather: WeatherSnapshot? = nil,
+        recentHighRPEStreak: Int = 0
     ) -> CoachingInput {
         CoachingInput(
             conditionScore: conditionScore,
@@ -38,7 +39,8 @@ struct CoachingEngineTests {
             workoutSuggestion: workoutSuggestion,
             recentPRExerciseName: recentPRExerciseName,
             currentStreakMilestone: currentStreakMilestone,
-            weather: weather
+            weather: weather,
+            recentHighRPEStreak: recentHighRPEStreak
         )
     }
 
@@ -263,6 +265,68 @@ struct CoachingEngineTests {
         // weather=nil → "weather-unavailable-default" ambient insight is generated
         #expect(!weatherInsights.isEmpty)
         #expect(weatherInsights.allSatisfy { $0.priority == .ambient })
+    }
+
+    // MARK: - RPE Overtraining triggers
+
+    @Test("No RPE streak does not generate RPE insight")
+    func noRPEStreakNoInsight() {
+        let input = makeInput(recentHighRPEStreak: 0)
+        let output = engine.generate(from: input)
+        let allInsights = [output.focusInsight] + output.insightCards
+        let hasRPE = allInsights.contains { $0.id.hasPrefix("recovery-rpe") }
+        #expect(!hasRPE)
+    }
+
+    @Test("Streak of 2 does not trigger RPE insight")
+    func rpeStreak2NoInsight() {
+        let input = makeInput(recentHighRPEStreak: 2)
+        let output = engine.generate(from: input)
+        let allInsights = [output.focusInsight] + output.insightCards
+        let hasRPE = allInsights.contains { $0.id.hasPrefix("recovery-rpe") }
+        #expect(!hasRPE)
+    }
+
+    @Test("Streak of 3 triggers elevated RPE insight (P2)")
+    func rpeStreak3TriggersElevated() {
+        let input = makeInput(recentHighRPEStreak: 3)
+        let output = engine.generate(from: input)
+        let allInsights = [output.focusInsight] + output.insightCards
+        let rpeInsight = allInsights.first { $0.id == "recovery-rpe-elevated" }
+        #expect(rpeInsight != nil)
+        #expect(rpeInsight?.priority == .high)
+    }
+
+    @Test("Streak of 4 triggers elevated RPE insight (P2)")
+    func rpeStreak4TriggersElevated() {
+        let input = makeInput(recentHighRPEStreak: 4)
+        let output = engine.generate(from: input)
+        let allInsights = [output.focusInsight] + output.insightCards
+        let rpeInsight = allInsights.first { $0.id == "recovery-rpe-elevated" }
+        #expect(rpeInsight != nil)
+        #expect(rpeInsight?.priority == .high)
+    }
+
+    @Test("Streak of 5 triggers overtraining RPE insight (P1)")
+    func rpeStreak5TriggersOvertraining() {
+        let input = makeInput(recentHighRPEStreak: 5)
+        let output = engine.generate(from: input)
+        let allInsights = [output.focusInsight] + output.insightCards
+        let rpeInsight = allInsights.first { $0.id == "recovery-rpe-overtraining" }
+        #expect(rpeInsight != nil)
+        #expect(rpeInsight?.priority == .critical)
+        // Should NOT also have the elevated insight
+        let hasElevated = allInsights.contains { $0.id == "recovery-rpe-elevated" }
+        #expect(!hasElevated)
+    }
+
+    @Test("Streak of 7 triggers overtraining (P1), not elevated")
+    func rpeStreak7TriggersOvertraining() {
+        let input = makeInput(recentHighRPEStreak: 7)
+        let output = engine.generate(from: input)
+        let allInsights = [output.focusInsight] + output.insightCards
+        let rpeInsight = allInsights.first { $0.id == "recovery-rpe-overtraining" }
+        #expect(rpeInsight != nil)
     }
 
     private func makeWeather(

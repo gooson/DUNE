@@ -17,6 +17,7 @@ struct CoachingInput: Sendable {
     let recentPRExerciseName: String?
     let currentStreakMilestone: Int?
     let weather: WeatherSnapshot?
+    let recentHighRPEStreak: Int
 }
 
 /// Output from the coaching engine
@@ -208,6 +209,27 @@ struct CoachingEngine: Sendable {
                 title: String(localized: "Signs of overtraining detected"),
                 message: String(localized: "\(muscleNames) and \(overtrainedMuscles.count) muscle groups total show very high fatigue. Rest for 1–2 days, then ease back in with light exercise."),
                 iconName: "exclamationmark.shield.fill"
+            ))
+        }
+
+        // P1: Sustained high RPE (5+ consecutive sessions)
+        if input.recentHighRPEStreak >= 5 {
+            results.append(CoachingInsight(
+                id: "recovery-rpe-overtraining",
+                priority: .critical,
+                category: .recovery,
+                title: String(localized: "Overtraining risk from sustained high effort"),
+                message: String(localized: "Your last \(input.recentHighRPEStreak) sessions were all high intensity (RPE 8+). Take a recovery day or lower the intensity to avoid burnout and injury."),
+                iconName: "exclamationmark.triangle.fill"
+            ))
+        } else if input.recentHighRPEStreak >= 3 {
+            results.append(CoachingInsight(
+                id: "recovery-rpe-elevated",
+                priority: .high,
+                category: .recovery,
+                title: String(localized: "Training intensity has been high"),
+                message: String(localized: "You've had \(input.recentHighRPEStreak) consecutive high-effort sessions (RPE 8+). Consider a lighter workout today to aid recovery."),
+                iconName: "gauge.with.dots.needle.67percent"
             ))
         }
 

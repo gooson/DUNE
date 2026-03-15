@@ -78,6 +78,14 @@ struct TrainingVolumeDetailView: View {
             )
         }
 
+        // RPE Trend
+        if !viewModel.rpeTrendData.isEmpty {
+            RPETrendChartView(
+                data: viewModel.rpeTrendData,
+                period: viewModel.selectedPeriod
+            )
+        }
+
         // Exercise type list
         exerciseTypeList(comparison.current.exerciseTypes)
     }
