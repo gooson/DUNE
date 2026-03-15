@@ -345,8 +345,9 @@ final class DashboardViewModel {
             let hrvRelatedSources: Set<SharedHealthSnapshot.Source> = [
                 .hrvSamples, .todayRHR, .yesterdayRHR, .latestRHR, .rhrCollection
             ]
-            let failed = !snapshot.failedSources.isDisjoint(with: hrvRelatedSources)
-            return (fetchHRVData(from: snapshot), failed)
+            let metrics = fetchHRVData(from: snapshot)
+            let failed = metrics.isEmpty && !snapshot.failedSources.isDisjoint(with: hrvRelatedSources)
+            return (metrics, failed)
         }
         guard canQueryHealthKit else { return ([], false) }
 
@@ -365,8 +366,9 @@ final class DashboardViewModel {
             let sleepRelatedSources: Set<SharedHealthSnapshot.Source> = [
                 .todaySleepStages, .yesterdaySleepStages, .latestSleepStages, .sleepDailyDurations
             ]
-            let failed = !snapshot.failedSources.isDisjoint(with: sleepRelatedSources)
-            return (fetchSleepData(from: snapshot), failed)
+            let metric = fetchSleepData(from: snapshot)
+            let failed = metric == nil && !snapshot.failedSources.isDisjoint(with: sleepRelatedSources)
+            return (metric, failed)
         }
         guard canQueryHealthKit else { return (nil, false) }
 
@@ -391,7 +393,6 @@ final class DashboardViewModel {
         }
         // Snapshot fallback (Mac / no-HealthKit environments)
         if let snapshot, let minutes = snapshot.todayExerciseMinutes, minutes > 0 {
-            let failed = snapshot.failedSources.contains(.todayExercise)
             let metric = HealthMetric(
                 id: "exercise",
                 name: String(localized: "Exercise"),
@@ -401,10 +402,9 @@ final class DashboardViewModel {
                 date: snapshot.fetchedAt,
                 category: .exercise
             )
-            return ([metric], failed)
+            return ([metric], false)
         }
         if let snapshot, let recent = snapshot.recentExercise {
-            let failed = snapshot.failedSources.contains(.todayExercise)
             let metric = HealthMetric(
                 id: "exercise",
                 name: String(localized: "Exercise"),
@@ -415,7 +415,10 @@ final class DashboardViewModel {
                 category: .exercise,
                 isHistorical: recent.isHistorical
             )
-            return ([metric], failed)
+            return ([metric], false)
+        }
+        if let snapshot, snapshot.failedSources.contains(.todayExercise) {
+            return ([], true)
         }
         return ([], false)
     }
@@ -434,7 +437,6 @@ final class DashboardViewModel {
         }
         // Snapshot fallback (Mac / no-HealthKit environments)
         if let snapshot, let steps = snapshot.todaySteps, steps > 0, steps <= 200_000 {
-            let failed = snapshot.failedSources.contains(.todaySteps)
             let metric = HealthMetric(
                 id: "steps",
                 name: String(localized: "Steps"),
@@ -444,7 +446,10 @@ final class DashboardViewModel {
                 date: snapshot.fetchedAt,
                 category: .steps
             )
-            return (metric, failed)
+            return (metric, false)
+        }
+        if let snapshot, snapshot.failedSources.contains(.todaySteps) {
+            return (nil, true)
         }
         return (nil, false)
     }
@@ -464,7 +469,6 @@ final class DashboardViewModel {
         // Snapshot fallback (Mac / no-HealthKit environments)
         if let snapshot, let weight = snapshot.latestWeight,
            weight.value > 0, weight.value < 500 {
-            let failed = snapshot.failedSources.contains(.latestWeight)
             let metric = HealthMetric(
                 id: "weight",
                 name: String(localized: "Weight"),
@@ -475,7 +479,10 @@ final class DashboardViewModel {
                 category: .weight,
                 isHistorical: !Calendar.current.isDateInToday(weight.date)
             )
-            return (metric, failed)
+            return (metric, false)
+        }
+        if let snapshot, snapshot.failedSources.contains(.latestWeight) {
+            return (nil, true)
         }
         return (nil, false)
     }
@@ -495,7 +502,6 @@ final class DashboardViewModel {
         // Snapshot fallback (Mac / no-HealthKit environments)
         if let snapshot, let bmi = snapshot.latestBMI,
            bmi.value > 0, bmi.value < 100 {
-            let failed = snapshot.failedSources.contains(.latestBMI)
             let metric = HealthMetric(
                 id: "bmi",
                 name: String(localized: "BMI"),
@@ -506,7 +512,10 @@ final class DashboardViewModel {
                 category: .bmi,
                 isHistorical: !Calendar.current.isDateInToday(bmi.date)
             )
-            return (metric, failed)
+            return (metric, false)
+        }
+        if let snapshot, snapshot.failedSources.contains(.latestBMI) {
+            return (nil, true)
         }
         return (nil, false)
     }
