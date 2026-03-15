@@ -8,6 +8,12 @@ import os
 /// - 3D pipeline: Periodic sampling → full 3D pose detection + analysis
 final class RealtimePoseTracker: @unchecked Sendable {
 
+    /// A deep-copied pixel buffer can be transferred to the 3D detection task
+    /// without sharing the camera pool's mutable storage.
+    private struct SendablePixelBuffer: @unchecked Sendable {
+        let value: CVPixelBuffer
+    }
+
     // MARK: - Callbacks
 
     /// Called at throttled rate with updated state.
@@ -76,10 +82,14 @@ final class RealtimePoseTracker: @unchecked Sendable {
     // MARK: - Frame Handling
 
     private func handleFrame(keypoints: [(String, CGPoint)], sampleBuffer: CMSampleBuffer) {
-        serialQueue.async { [weak self] in
-            guard let self, self.state.isActive, !self.isStopped else { return }
+        let now = CFAbsoluteTimeGetCurrent()
+        var stateSnapshot: RealtimePoseState?
+        var shouldSample3D = false
 
-            let now = CFAbsoluteTimeGetCurrent()
+        // Keep all mutable tracker state on the serial queue, but do not carry
+        // CMSampleBuffer itself across the async boundary.
+        serialQueue.sync {
+            guard self.state.isActive, !self.isStopped else { return }
 
             if keypoints.isEmpty {
                 // No detection this frame
@@ -106,26 +116,45 @@ final class RealtimePoseTracker: @unchecked Sendable {
                 }
             }
 
-            // 3D sampling trigger — copy pixel buffer to release CMSampleBuffer
-            // back to the camera pool immediately, preventing pool starvation
-            // that causes "Could not create mlImage buffer" errors.
+            // 3D sampling trigger — copy pixel buffer on the capture queue so the
+            // original CMSampleBuffer is never retained by a queued closure/task.
             if !self.is3DInFlight,
                !keypoints.isEmpty,
-               now - self.last3DSampleTime >= Self.min3DInterval,
-               let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer),
-               let copiedBuffer = Self.copyPixelBuffer(pixelBuffer) {
+               now - self.last3DSampleTime >= Self.min3DInterval {
                 self.is3DInFlight = true
                 self.last3DSampleTime = now
-                self.pending3DTask = Task { [weak self] in
-                    await self?.perform3DDetection(copiedBuffer)
-                }
+                shouldSample3D = true
             }
 
             // Throttle UI updates
             if now - self.lastStateUpdateTime >= Self.stateUpdateInterval {
                 self.lastStateUpdateTime = now
-                self.onStateUpdate?(self.state)
+                stateSnapshot = self.state
             }
+        }
+
+        if shouldSample3D {
+            if let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer),
+               let copiedBuffer = Self.copyPixelBuffer(pixelBuffer) {
+                let copiedBufferBox = SendablePixelBuffer(value: copiedBuffer)
+                serialQueue.sync {
+                    guard self.state.isActive, !self.isStopped else {
+                        self.is3DInFlight = false
+                        return
+                    }
+                    self.pending3DTask = Task { [weak self, copiedBufferBox] in
+                        await self?.perform3DDetection(copiedBufferBox.value)
+                    }
+                }
+            } else {
+                serialQueue.async { [weak self] in
+                    self?.is3DInFlight = false
+                }
+            }
+        }
+
+        if let stateSnapshot {
+            onStateUpdate?(stateSnapshot)
         }
     }
 

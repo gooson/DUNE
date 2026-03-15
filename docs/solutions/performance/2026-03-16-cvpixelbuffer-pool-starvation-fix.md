@@ -19,7 +19,7 @@ status: implemented
 
 ### 근본 원인
 
-`RealtimePoseTracker.handleFrame`에서 3D 감지를 비동기 Task로 실행할 때 `CMSampleBuffer`를 클로저에 캡처. `CMSampleBuffer`는 AVCaptureSession의 CVPixelBuffer 풀 버퍼를 보유하므로, 3D 감지 완료까지 (50-250ms) 풀에 반환되지 않음.
+`RealtimePoseTracker.handleFrame`에서 `CMSampleBuffer`를 `serialQueue.async` 같은 비동기 경계 너머로 넘겼다. 이후 3D 감지를 위한 Task까지 이어지면 `CMSampleBuffer`가 AVCaptureSession의 CVPixelBuffer 풀 버퍼를 더 오래 붙잡게 되고, 해당 버퍼가 Vision 처리 완료 전까지 풀에 반환되지 않음.
 
 카메라 풀은 3-5개 버퍼만 보유. 30fps 전달 중 1개가 장시간 잠기면 풀이 고갈되어 Vision 내부 ML 파이프라인이 BGRA 변환 버퍼를 할당하지 못함.
 
@@ -29,22 +29,31 @@ status: implemented
 
 | File | Change |
 |------|--------|
-| `RealtimePoseTracker.swift` | `copyPixelBuffer` 딥카피 + `if-let` 체인으로 안전 처리 |
+| `RealtimePoseTracker.swift` | sampleBuffer를 async queue에 넘기지 않도록 재구성 + `copyPixelBuffer` 딥카피 |
 | `PostureCaptureService.swift` | `detectPoseFromVideoFrame` 시그니처를 `CVPixelBuffer`로 변경 |
 
 ### 핵심 패턴
 
 ```swift
-// Before: CMSampleBuffer가 Task에 캡처 → 풀 고갈
-self.pending3DTask = Task {
-    await self?.perform3DDetection(sampleBuffer)  // sampleBuffer holds pool buffer
+// Before: CMSampleBuffer가 queued closure / Task에 캡처 → 풀 고갈
+serialQueue.async {
+    let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)
+    self.pending3DTask = Task {
+        await self?.perform3DDetection(sampleBuffer)
+    }
 }
 
-// After: 복사본만 Task에 전달 → 원본 즉시 반환
-if let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer),
+// After: state 판단은 sync로 끝내고, deep-copy된 버퍼만 Task로 전달
+serialQueue.sync {
+    shouldSample3D = !is3DInFlight && now - last3DSampleTime >= Self.min3DInterval
+}
+
+if shouldSample3D,
+   let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer),
    let copiedBuffer = Self.copyPixelBuffer(pixelBuffer) {
+    let copiedBufferBox = SendablePixelBuffer(value: copiedBuffer)
     self.pending3DTask = Task {
-        await self?.perform3DDetection(copiedBuffer)  // independent buffer
+        await self?.perform3DDetection(copiedBufferBox.value)
     }
 }
 ```
@@ -60,7 +69,7 @@ if let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer),
 
 ### 패턴: AVCaptureSession 버퍼를 비동기 작업에 전달할 때
 
-- **절대 `CMSampleBuffer`를 비동기 Task/closure에 캡처하지 않음**
+- **절대 `CMSampleBuffer`를 어떤 비동기 queue/task/closure에도 캡처하지 않음**
 - 필요한 데이터를 복사한 후 원본은 즉시 해제
 - `CVPixelBuffer` 딥카피 또는 `CGImage` 변환 후 전달
 

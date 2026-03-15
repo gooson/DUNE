@@ -60,7 +60,8 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
     /// Combined frame update callback: guidance state + skeleton keypoints in a single dispatch.
     var onFrameUpdate: (@Sendable (GuidanceState, [(String, CGPoint)], CGSize) -> Void)?
     /// Realtime analysis callback: keypoints + sample buffer for 3D sampling.
-    /// CMSampleBuffer retains the underlying pixel buffer, preventing pool recycling.
+    /// Callers must extract/copy what they need synchronously and must not retain
+    /// the sample buffer across any async boundary, or the camera pool cannot recycle it.
     var onRealtimeFrame: (@Sendable ([(String, CGPoint)], CMSampleBuffer) -> Void)?
 
     // MARK: - Camera State
