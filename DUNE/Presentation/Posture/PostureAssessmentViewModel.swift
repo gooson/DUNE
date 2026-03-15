@@ -1,5 +1,6 @@
 #if !os(visionOS)
 import AVFoundation
+import AVFAudio
 import Foundation
 import Observation
 
@@ -7,7 +8,7 @@ import Observation
 
 enum PostureCapturePhase: Sendable, Hashable {
     case idle
-    case guiding
+    case preparing
     case countdown(Int)
     case capturing
     case analyzing
@@ -37,6 +38,15 @@ final class PostureAssessmentViewModel {
 
     var memo: String = ""
 
+    // MARK: - Guidance State
+
+    var guidanceState = GuidanceState()
+    var cameraPosition: CameraPosition = .front
+    var isAutoCapture: Bool = true
+
+    /// Real-time 2D skeleton keypoints for preview overlay (normalized 0-1, origin bottom-left).
+    var skeletonKeypoints: [(String, CGPoint)] = []
+
     // MARK: - Haptic Triggers
 
     private(set) var hapticCountdown: Int = 0
@@ -64,9 +74,20 @@ final class PostureAssessmentViewModel {
         }
     }
 
+    var isUsingBackCamera: Bool {
+        cameraPosition == .back
+    }
+
     // MARK: - Tasks
 
     private var countdownTask: Task<Void, Never>?
+    private var autoCountdownTask: Task<Void, Never>?
+    private var autoReadyStartTime: CFAbsoluteTime?
+
+    // MARK: - TTS
+
+    private let speechSynthesizer = AVSpeechSynthesizer()
+    private static let autoReadyDelay: TimeInterval = 2.0
 
     // MARK: - Dependencies
 
@@ -85,9 +106,11 @@ final class PostureAssessmentViewModel {
 
     func setupCamera() {
         do {
-            try captureService.setupCamera()
+            let position: AVCaptureDevice.Position = cameraPosition == .front ? .front : .back
+            try captureService.setupCamera(position: position)
+            setupGuidanceCallbacks()
             captureService.startSession()
-            capturePhase = .guiding
+            capturePhase = .preparing
         } catch {
             capturePhase = .error(String(localized: "Camera is not available"))
         }
@@ -96,26 +119,104 @@ final class PostureAssessmentViewModel {
     func stopCamera() {
         countdownTask?.cancel()
         countdownTask = nil
+        autoCountdownTask?.cancel()
+        autoCountdownTask = nil
+        captureService.onGuidanceUpdate = nil
+        captureService.onSkeletonUpdate = nil
         captureService.stopSession()
+    }
+
+    // MARK: - Camera Switching
+
+    func switchCamera() {
+        countdownTask?.cancel()
+        countdownTask = nil
+        autoCountdownTask?.cancel()
+        autoCountdownTask = nil
+        autoReadyStartTime = nil
+        guidanceState = GuidanceState()
+        skeletonKeypoints = []
+
+        do {
+            try captureService.switchCamera()
+            cameraPosition = captureService.currentPosition == .front ? .front : .back
+            setupGuidanceCallbacks()
+            capturePhase = .preparing
+        } catch {
+            capturePhase = .error(String(localized: "Camera is not available"))
+        }
+    }
+
+    // MARK: - Guidance Callbacks
+
+    private func setupGuidanceCallbacks() {
+        captureService.onGuidanceUpdate = { [weak self] state in
+            Task { @MainActor [weak self] in
+                self?.handleGuidanceUpdate(state)
+            }
+        }
+        captureService.onSkeletonUpdate = { [weak self] keypoints in
+            Task { @MainActor [weak self] in
+                self?.skeletonKeypoints = keypoints
+            }
+        }
+    }
+
+    private func handleGuidanceUpdate(_ state: GuidanceState) {
+        guidanceState = state
+
+        guard case .preparing = capturePhase else { return }
+        guard isAutoCapture else { return }
+
+        if state.isReady {
+            if autoReadyStartTime == nil {
+                autoReadyStartTime = CFAbsoluteTimeGetCurrent()
+            }
+            let elapsed = CFAbsoluteTimeGetCurrent() - (autoReadyStartTime ?? CFAbsoluteTimeGetCurrent())
+            if elapsed >= Self.autoReadyDelay {
+                autoReadyStartTime = nil
+                startCountdown()
+            }
+        } else {
+            autoReadyStartTime = nil
+        }
     }
 
     // MARK: - Capture Flow
 
     func startCountdown() {
-        guard case .guiding = capturePhase else { return }
+        guard case .preparing = capturePhase else { return }
         countdownTask?.cancel()
+        autoCountdownTask?.cancel()
+        autoReadyStartTime = nil
+
         countdownTask = Task {
             do {
                 for i in stride(from: 3, through: 1, by: -1) {
                     capturePhase = .countdown(i)
                     hapticCountdown = i
+
+                    // TTS for back camera
+                    if isUsingBackCamera {
+                        speakCountdown(i)
+                    }
+
                     try await Task.sleep(for: .seconds(1))
+
+                    // Cancel if pose is lost during countdown
+                    if !guidanceState.isFullBodyVisible, case .countdown = capturePhase {
+                        capturePhase = .preparing
+                        if isUsingBackCamera {
+                            speak(String(localized: "Pose lost. Please hold still."))
+                        }
+                        return
+                    }
                 }
                 guard !Task.isCancelled else { return }
                 await performCapture()
             } catch {
                 if case .countdown = capturePhase {
-                    capturePhase = .guiding
+                    capturePhase = .preparing
                 }
             }
         }
@@ -172,13 +273,20 @@ final class PostureAssessmentViewModel {
         )
         capturePhase = .result
         hapticSuccessCount += 1
+
+        if isUsingBackCamera {
+            speak(String(localized: "Capture complete"))
+        }
     }
 
     // MARK: - Navigation
 
     func proceedToSideCapture() {
         captureType = .side
-        capturePhase = .guiding
+        guidanceState = GuidanceState()
+        skeletonKeypoints = []
+        autoReadyStartTime = nil
+        capturePhase = .preparing
     }
 
     func retakeCurrentCapture() {
@@ -195,12 +303,18 @@ final class PostureAssessmentViewModel {
             sideAssessment: sideAssessment,
             date: Date()
         )
-        capturePhase = .guiding
+        guidanceState = GuidanceState()
+        skeletonKeypoints = []
+        autoReadyStartTime = nil
+        capturePhase = .preparing
     }
 
     func resetAll() {
         countdownTask?.cancel()
         countdownTask = nil
+        autoCountdownTask?.cancel()
+        autoCountdownTask = nil
+        autoReadyStartTime = nil
         captureType = .front
         frontResult = nil
         sideResult = nil
@@ -209,6 +323,8 @@ final class PostureAssessmentViewModel {
         memo = ""
         validationError = nil
         isSaving = false
+        guidanceState = GuidanceState()
+        skeletonKeypoints = []
         capturePhase = .idle
     }
 
@@ -246,6 +362,22 @@ final class PostureAssessmentViewModel {
 
     func didFinishSaving() {
         isSaving = false
+    }
+
+    // MARK: - TTS
+
+    private func speakCountdown(_ count: Int) {
+        let utterance = AVSpeechUtterance(string: "\(count)")
+        utterance.rate = AVSpeechUtteranceDefaultSpeechRate
+        utterance.volume = 1.0
+        speechSynthesizer.speak(utterance)
+    }
+
+    private func speak(_ text: String) {
+        let utterance = AVSpeechUtterance(string: text)
+        utterance.rate = AVSpeechUtteranceDefaultSpeechRate
+        utterance.volume = 1.0
+        speechSynthesizer.speak(utterance)
     }
 
     // MARK: - Error Messages
