@@ -16,10 +16,13 @@ struct DashboardView: View {
     @State private var cachedBuildNumber: String = ""
     @Query(sort: \WorkoutTemplate.updatedAt, order: .reverse) private var templates: [WorkoutTemplate]
     @Query(
-        FetchDescriptor<ExerciseRecord>(
-            sortBy: [SortDescriptor(\ExerciseRecord.date, order: .reverse)],
-            fetchLimit: 20
-        )
+        {
+            var fd = FetchDescriptor<ExerciseRecord>(
+                sortBy: [SortDescriptor(\ExerciseRecord.date, order: .reverse)]
+            )
+            fd.fetchLimit = 20
+            return fd
+        }()
     ) private var exerciseRecords: [ExerciseRecord]
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.openURL) private var openURL
