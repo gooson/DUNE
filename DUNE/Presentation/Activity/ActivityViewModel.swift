@@ -313,10 +313,12 @@ final class ActivityViewModel {
                     durationMinutes: durationMin,
                     distanceKm: distKm
                 ))
-            } else if !linkedHKIDs.contains(workout.id) {
+            } else if !linkedHKIDs.contains(workout.id)
+                        && !hasMatchingRecord(for: workout) {
                 // Orphaned app-created workout (ExerciseRecord lost due to store recovery).
                 // Recover muscle data via O(1) name lookup.
                 let exerciseName = workout.type
+                guard !exerciseName.isEmpty else { continue }
                 if let definition = libraryByName[exerciseName.lowercased()] {
                     healthKitSnapshots.append(ExerciseRecordSnapshot(
                         date: workout.date,
@@ -355,6 +357,15 @@ final class ActivityViewModel {
             library: library,
             constraints: recommendationConstraints
         )
+    }
+
+    /// Whether an ExerciseRecord matches this HKWorkout by date proximity (±2 min) and exercise type.
+    /// Covers Watch workouts (no healthKitWorkoutID) and race conditions where the ID is not yet written.
+    private func hasMatchingRecord(for workout: WorkoutSummary) -> Bool {
+        manualRecordsCache.contains { record in
+            record.exerciseType.caseInsensitiveCompare(workout.type) == .orderedSame
+                && abs(record.date.timeIntervalSince(workout.date)) < 120
+        }
     }
 
     /// Partitions exercise record snapshots into current and previous week.
