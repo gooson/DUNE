@@ -669,7 +669,9 @@ final class WorkoutManager: NSObject {
     /// Move the exercise at the given index up or down by one position.
     /// Keeps `completedSetsData`, `extraSetsPerExercise`, and `currentExerciseIndex` in sync.
     func moveExercise(at index: Int, direction: MoveDirection) {
-        guard canMoveExercise(at: index, direction: direction) else { return }
+        guard canMoveExercise(at: index, direction: direction),
+              var snapshot = templateSnapshot,
+              currentExerciseIndex < snapshot.entries.count else { return }
 
         let targetIndex: Int
         switch direction {
@@ -678,13 +680,14 @@ final class WorkoutManager: NSObject {
         }
 
         // Track current exercise identity before swap
-        let currentEntryID = templateSnapshot!.entries[currentExerciseIndex].id
+        let currentEntryID = snapshot.entries[currentExerciseIndex].id
 
         // Swap entries
-        templateSnapshot!.entries.swapAt(index, targetIndex)
+        snapshot.entries.swapAt(index, targetIndex)
+        templateSnapshot = snapshot
 
         // Pad completedSetsData to match entries count before swap
-        let entryCount = templateSnapshot!.entries.count
+        let entryCount = snapshot.entries.count
         while completedSetsData.count < entryCount {
             completedSetsData.append([])
         }
@@ -699,7 +702,7 @@ final class WorkoutManager: NSObject {
         if let v = extraAtTarget { extraSetsPerExercise[index] = v }
 
         // Restore currentExerciseIndex to follow the same exercise
-        if let newIndex = templateSnapshot!.entries.firstIndex(where: { $0.id == currentEntryID }) {
+        if let newIndex = snapshot.entries.firstIndex(where: { $0.id == currentEntryID }) {
             currentExerciseIndex = newIndex
         }
 

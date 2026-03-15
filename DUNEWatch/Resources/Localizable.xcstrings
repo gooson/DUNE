@@ -1328,6 +1328,40 @@
         }
       }
     },
+    "Move Down" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "下に移動"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아래로 이동"
+          }
+        }
+      }
+    },
+    "Move Up" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上に移動"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "위로 이동"
+          }
+        }
+      }
+    },
     "Near Max" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1619,6 +1653,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "회복"
+          }
+        }
+      }
+    },
+    "Reorder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "順序変更"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "순서 변경"
+          }
+        }
+      }
+    },
+    "Reorder Exercises" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "エクササイズの順序変更"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "운동 순서 변경"
           }
         }
       }
