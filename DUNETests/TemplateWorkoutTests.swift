@@ -136,3 +136,127 @@ struct WorkoutSessionViewModelDefaultSetCountTests {
         #expect(vm.sets.count == WorkoutDefaults.setCount)
     }
 }
+
+@Suite("TemplateWorkoutViewModel Reorder")
+@MainActor
+struct TemplateWorkoutViewModelReorderTests {
+
+    private func makeExercise(id: String, name: String) -> ExerciseDefinition {
+        ExerciseDefinition(
+            id: id,
+            name: name,
+            localizedName: name,
+            category: .strength,
+            inputType: .setsRepsWeight,
+            primaryMuscles: [.chest],
+            secondaryMuscles: [],
+            equipment: .barbell,
+            metValue: 6.0
+        )
+    }
+
+    private func makeEntry(id: String, name: String) -> TemplateEntry {
+        TemplateEntry(
+            exerciseDefinitionID: id,
+            exerciseName: name,
+            defaultSets: 3,
+            defaultReps: 10,
+            defaultWeightKg: nil
+        )
+    }
+
+    private func makeViewModel(count: Int = 3) -> TemplateWorkoutViewModel {
+        let names = ["Bench Press", "Squat", "Deadlift", "OHP", "Row"]
+        let exercises = (0..<count).map { i in
+            makeExercise(id: "ex-\(i)", name: names[i])
+        }
+        let entries = (0..<count).map { i in
+            makeEntry(id: "ex-\(i)", name: names[i])
+        }
+        let config = TemplateWorkoutConfig(
+            templateName: "Test",
+            exercises: exercises,
+            templateEntries: entries
+        )
+        return TemplateWorkoutViewModel(config: config)
+    }
+
+    @Test("moveExercise swaps two exercises")
+    func moveSwapsTwo() {
+        let vm = makeViewModel()
+        // Move index 2 (Deadlift) to index 0
+        vm.moveExercise(from: IndexSet(integer: 2), to: 0)
+
+        #expect(vm.exercises[0].name == "Deadlift")
+        #expect(vm.exercises[1].name == "Bench Press")
+        #expect(vm.exercises[2].name == "Squat")
+    }
+
+    @Test("moveExercise keeps all parallel arrays in sync")
+    func moveKeepsArraysInSync() {
+        let vm = makeViewModel()
+        vm.moveExercise(from: IndexSet(integer: 0), to: 3)
+
+        // exercises, templateEntries, exerciseViewModels should all match
+        for i in vm.exercises.indices {
+            #expect(vm.exercises[i].id == vm.templateEntries[i].exerciseDefinitionID)
+        }
+        #expect(vm.exercises.count == vm.exerciseViewModels.count)
+        #expect(vm.exercises.count == vm.exerciseStatuses.count)
+    }
+
+    @Test("moveExercise tracks currentExerciseIndex")
+    func moveTracksCurrent() {
+        let vm = makeViewModel()
+        // Current is index 0 (Bench Press, inProgress)
+        #expect(vm.currentExerciseIndex == 0)
+        #expect(vm.currentExercise.name == "Bench Press")
+
+        // Move Bench Press from 0 to end
+        vm.moveExercise(from: IndexSet(integer: 0), to: 3)
+
+        // currentExerciseIndex should follow Bench Press to its new position
+        #expect(vm.currentExercise.name == "Bench Press")
+        #expect(vm.currentExerciseIndex == 2)
+    }
+
+    @Test("moveExercise preserves completed status")
+    func movePreservesCompleted() {
+        let vm = makeViewModel()
+        vm.exerciseStatuses[1] = .completed
+
+        // Move completed exercise
+        vm.moveExercise(from: IndexSet(integer: 1), to: 0)
+
+        #expect(vm.exerciseStatuses[0] == .completed)
+        #expect(vm.exercises[0].name == "Squat")
+    }
+
+    @Test("canReorderExercises requires 2+ non-completed")
+    func canReorderRequiresTwo() {
+        let vm = makeViewModel(count: 2)
+        #expect(vm.canReorderExercises == true)
+
+        vm.exerciseStatuses[0] = .completed
+        #expect(vm.canReorderExercises == false)
+    }
+
+    @Test("canReorderExercises with all completed")
+    func canReorderAllCompleted() {
+        let vm = makeViewModel()
+        for i in vm.exerciseStatuses.indices {
+            vm.exerciseStatuses[i] = .completed
+        }
+        #expect(vm.canReorderExercises == false)
+    }
+
+    @Test("config remains unchanged after reorder")
+    func configUnchanged() {
+        let vm = makeViewModel()
+        let originalFirstID = vm.config.exercises[0].id
+
+        vm.moveExercise(from: IndexSet(integer: 0), to: 3)
+
+        #expect(vm.config.exercises[0].id == originalFirstID)
+    }
+}
