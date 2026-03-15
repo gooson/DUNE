@@ -217,9 +217,13 @@ struct PostureResultView: View {
                 Text(metric.type.displayName)
                     .font(.subheadline.weight(.medium))
 
-                Text(metricValueText(metric))
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                HStack(spacing: DS.Spacing.sm) {
+                    Text(metricValueText(metric))
+                        .font(.caption.weight(.semibold).monospacedDigit())
+                        .foregroundStyle(.primary)
+
+                    confidenceBadge(metric.confidence)
+                }
             }
 
             Spacer()
@@ -234,11 +238,7 @@ struct PostureResultView: View {
     }
 
     private func metricValueText(_ metric: PostureMetricResult) -> String {
-        let formatted = metric.value.formatted(.number.precision(.fractionLength(1)))
-        switch metric.unit {
-        case .degrees: return "\(formatted)°"
-        case .centimeters: return "\(formatted) cm"
-        }
+        formattedPostureMetricValue(metric.value, unit: metric.unit)
     }
 
     // MARK: - Memo

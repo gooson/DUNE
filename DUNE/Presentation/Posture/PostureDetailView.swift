@@ -169,9 +169,13 @@ struct PostureDetailView: View {
                 Text(metric.type.displayName)
                     .font(.subheadline.weight(.medium))
 
-                Text(metricValueText(metric))
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                HStack(spacing: DS.Spacing.sm) {
+                    Text(metricValueText(metric))
+                        .font(.caption.weight(.semibold).monospacedDigit())
+                        .foregroundStyle(.primary)
+
+                    confidenceBadge(metric.confidence)
+                }
             }
 
             Spacer()

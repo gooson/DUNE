@@ -68,6 +68,31 @@ func formattedPostureMetricValue(_ value: Double, unit: PostureMetricUnit) -> St
     }
 }
 
+// MARK: - Confidence Display
+
+/// Confidence badge shown inline with metric value.
+@ViewBuilder
+func confidenceBadge(_ confidence: Double) -> some View {
+    if confidence < 1.0 && confidence > 0 {
+        HStack(spacing: 2) {
+            Circle()
+                .fill(confidenceColor(confidence))
+                .frame(width: 6, height: 6)
+
+            Text("\(Int(confidence * 100))%")
+                .font(.caption2.monospacedDigit())
+                .foregroundStyle(.secondary)
+        }
+    }
+}
+
+/// Color for confidence level indicator.
+func confidenceColor(_ confidence: Double) -> Color {
+    if confidence >= 0.8 { return .green }
+    if confidence >= 0.6 { return .orange }
+    return .red
+}
+
 extension PostureStatus {
     var color: Color {
         switch self {
