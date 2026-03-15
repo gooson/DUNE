@@ -76,9 +76,34 @@ struct PostureMetricResult: Codable, Sendable, Hashable, Identifiable {
     let unit: PostureMetricUnit
     let status: PostureStatus
     let score: Int              // 0-100 score for this individual metric
+    let confidence: Double      // 0.0-1.0 measurement confidence
 
     /// Normalized score (0.0-1.0) for weighted composition.
     var normalizedScore: Double { Double(score) / 100.0 }
+
+    // Backward-compatible decoding for existing JSON without confidence field
+    enum CodingKeys: String, CodingKey {
+        case type, value, unit, status, score, confidence
+    }
+
+    init(type: PostureMetricType, value: Double, unit: PostureMetricUnit, status: PostureStatus, score: Int, confidence: Double = 1.0) {
+        self.type = type
+        self.value = value
+        self.unit = unit
+        self.status = status
+        self.score = score
+        self.confidence = max(0, min(1, confidence))
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        type = try container.decode(PostureMetricType.self, forKey: .type)
+        value = try container.decode(Double.self, forKey: .value)
+        unit = try container.decode(PostureMetricUnit.self, forKey: .unit)
+        status = try container.decode(PostureStatus.self, forKey: .status)
+        score = try container.decode(Int.self, forKey: .score)
+        confidence = max(0, min(1, try container.decodeIfPresent(Double.self, forKey: .confidence) ?? 1.0))
+    }
 }
 
 extension [PostureMetricResult] {

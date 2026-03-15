@@ -59,13 +59,15 @@ struct PostureAnalysisService: Sendable {
 
         let status = classifyAsymmetry(Double(diffCm))
         let score = scoreAsymmetry(Double(diffCm))
+        let conf = jointConfidence(required: ["leftShoulder", "rightShoulder"], available: joints)
 
         return PostureMetricResult(
             type: .shoulderAsymmetry,
             value: Double(diffCm),
             unit: .centimeters,
             status: status,
-            score: score
+            score: score,
+            confidence: conf
         )
     }
 
@@ -81,13 +83,15 @@ struct PostureAnalysisService: Sendable {
 
         let status = classifyAsymmetry(Double(diffCm))
         let score = scoreAsymmetry(Double(diffCm))
+        let conf = jointConfidence(required: ["leftHip", "rightHip"], available: joints)
 
         return PostureMetricResult(
             type: .hipAsymmetry,
             value: Double(diffCm),
             unit: .centimeters,
             status: status,
-            score: score
+            score: score,
+            confidence: conf
         )
     }
 
@@ -127,12 +131,15 @@ struct PostureAnalysisService: Sendable {
             score = max(20, 70 - Int(deviation * 3))
         }
 
+        let conf = jointConfidence(required: [hipKey, kneeKey, ankleKey], available: joints)
+
         return PostureMetricResult(
             type: .kneeAlignment,
             value: deviation,
             unit: .degrees,
             status: status,
-            score: max(0, min(100, score))
+            score: max(0, min(100, score)),
+            confidence: conf
         )
     }
 
@@ -160,12 +167,15 @@ struct PostureAnalysisService: Sendable {
             score = max(20, 70 - Int(shiftCm * 10))
         }
 
+        let conf = jointConfidence(required: ["centerHead", "root"], available: joints)
+
         return PostureMetricResult(
             type: .lateralShift,
             value: Double(shiftCm),
             unit: .centimeters,
             status: status,
-            score: max(0, min(100, score))
+            score: max(0, min(100, score)),
+            confidence: conf
         )
     }
 
@@ -198,12 +208,20 @@ struct PostureAnalysisService: Sendable {
             score = max(10, 60 - Int(displacement * 6))
         }
 
+        let usedMidpoint = joints["centerShoulder"] == nil
+        let conf = jointConfidence(
+            required: ["centerHead", "centerShoulder"],
+            available: joints,
+            usedMidpoint: usedMidpoint
+        )
+
         return PostureMetricResult(
             type: .forwardHead,
             value: displacement,
             unit: .centimeters,
             status: status,
-            score: max(0, min(100, score))
+            score: max(0, min(100, score)),
+            confidence: conf
         )
     }
 
@@ -233,12 +251,20 @@ struct PostureAnalysisService: Sendable {
             score = max(10, 60 - Int(displacement * 5))
         }
 
+        let usedMidpointRS = joints["centerShoulder"] == nil
+        let confRS = jointConfidence(
+            required: ["centerShoulder", "spine"],
+            available: joints,
+            usedMidpoint: usedMidpointRS
+        )
+
         return PostureMetricResult(
             type: .roundedShoulders,
             value: displacement,
             unit: .centimeters,
             status: status,
-            score: max(0, min(100, score))
+            score: max(0, min(100, score)),
+            confidence: confRS
         )
     }
 
@@ -275,12 +301,20 @@ struct PostureAnalysisService: Sendable {
             score = max(10, Int(degrees / 2))
         }
 
+        let usedMidpointTK = joints["centerShoulder"] == nil
+        let confTK = jointConfidence(
+            required: ["centerShoulder", "spine", "root"],
+            available: joints,
+            usedMidpoint: usedMidpointTK
+        )
+
         return PostureMetricResult(
             type: .thoracicKyphosis,
             value: 180.0 - degrees,  // Express as curvature deviation from straight
             unit: .degrees,
             status: status,
-            score: max(0, min(100, score))
+            score: max(0, min(100, score)),
+            confidence: confTK
         )
     }
 
@@ -330,12 +364,15 @@ struct PostureAnalysisService: Sendable {
             score = max(20, 60 - Int(deviation * 3))
         }
 
+        let confKH = jointConfidence(required: [hipKey, kneeKey, ankleKey], available: joints)
+
         return PostureMetricResult(
             type: .kneeHyperextension,
             value: deviation,
             unit: .degrees,
             status: status,
-            score: max(0, min(100, score))
+            score: max(0, min(100, score)),
+            confidence: confKH
         )
     }
 
@@ -362,7 +399,18 @@ struct PostureAnalysisService: Sendable {
 
     /// Helper to create unmeasurable result.
     private func unmeasurable(_ type: PostureMetricType) -> PostureMetricResult {
-        PostureMetricResult(type: type, value: 0, unit: .centimeters, status: .unmeasurable, score: 0)
+        PostureMetricResult(type: type, value: 0, unit: .centimeters, status: .unmeasurable, score: 0, confidence: 0)
+    }
+
+    /// Compute confidence based on joint availability.
+    /// All required joints present with direct detection → 0.9.
+    /// Midpoint fallback used → 0.7.
+    /// Partial joints → 0.5.
+    private func jointConfidence(required: [String], available: [String: SIMD3<Float>], usedMidpoint: Bool = false) -> Double {
+        let found = required.filter { available[$0] != nil }.count
+        let ratio = Double(found) / Double(max(1, required.count))
+        let base = ratio * 0.9
+        return usedMidpoint ? min(base, 0.7) : base
     }
 
     /// Classify asymmetry (cm) into status.
