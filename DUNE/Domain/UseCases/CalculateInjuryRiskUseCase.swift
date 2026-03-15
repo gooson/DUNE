@@ -4,10 +4,10 @@ protocol InjuryRiskCalculating: Sendable {
     func execute(input: CalculateInjuryRiskUseCase.Input) -> InjuryRiskAssessment
 }
 
-/// Calculates injury risk score (0-100) from fatigue, training patterns, sleep, and injury history.
+/// Calculates injury risk score (0-100) from fatigue, training patterns, sleep, injury history, and posture.
 ///
-/// Weights: muscleFatigue(25%) + consecutiveTraining(20%) + volumeSpike(20%)
-///        + sleepDeficit(15%) + activeInjury(10%) + lowRecovery(10%)
+/// Weights: muscleFatigue(22.5%) + consecutiveTraining(20%) + volumeSpike(20%)
+///        + sleepDeficit(15%) + activeInjury(10%) + lowRecovery(7.5%) + postureIssue(5%)
 struct CalculateInjuryRiskUseCase: InjuryRiskCalculating, Sendable {
 
     struct Input: Sendable {
@@ -18,16 +18,41 @@ struct CalculateInjuryRiskUseCase: InjuryRiskCalculating, Sendable {
         let sleepDeficitMinutes: Double
         let activeInjuries: [InjuryInfo]
         let conditionScore: Int?
+        let postureWarningCount: Int
+        let postureScore: Int?
+
+        init(
+            fatigueStates: [MuscleFatigueState],
+            consecutiveTrainingDays: Int,
+            currentWeekVolume: Double,
+            previousWeekVolume: Double,
+            sleepDeficitMinutes: Double,
+            activeInjuries: [InjuryInfo],
+            conditionScore: Int?,
+            postureWarningCount: Int = 0,
+            postureScore: Int? = nil
+        ) {
+            self.fatigueStates = fatigueStates
+            self.consecutiveTrainingDays = consecutiveTrainingDays
+            self.currentWeekVolume = currentWeekVolume
+            self.previousWeekVolume = previousWeekVolume
+            self.sleepDeficitMinutes = sleepDeficitMinutes
+            self.activeInjuries = activeInjuries
+            self.conditionScore = conditionScore
+            self.postureWarningCount = postureWarningCount
+            self.postureScore = postureScore
+        }
     }
 
     // MARK: - Weights (total = 1.0)
 
-    private let muscleFatigueWeight = 0.25
+    private let muscleFatigueWeight = 0.225
     private let consecutiveTrainingWeight = 0.20
     private let volumeSpikeWeight = 0.20
     private let sleepDeficitWeight = 0.15
     private let activeInjuryWeight = 0.10
-    private let lowRecoveryWeight = 0.10
+    private let lowRecoveryWeight = 0.075
+    private let postureIssueWeight = 0.05
 
     // MARK: - Thresholds
 
@@ -56,6 +81,10 @@ struct CalculateInjuryRiskUseCase: InjuryRiskCalculating, Sendable {
         let sleepRisk = computeSleepDeficitRisk(input.sleepDeficitMinutes)
         let injuryRisk = computeActiveInjuryRisk(input.activeInjuries)
         let recoveryRisk = computeLowRecoveryRisk(input.conditionScore)
+        let postureRisk = computePostureIssueRisk(
+            warningCount: input.postureWarningCount,
+            score: input.postureScore
+        )
 
         // Build factors list (only include meaningful contributions)
         if fatigueRisk > 0 {
@@ -105,6 +134,13 @@ struct CalculateInjuryRiskUseCase: InjuryRiskCalculating, Sendable {
                 detail: String(localized: "Low recovery score")
             ))
         }
+        if postureRisk > 0 {
+            factors.append(.init(
+                type: .postureIssue,
+                contribution: Int(postureRisk * postureIssueWeight * 100),
+                detail: String(localized: "\(input.postureWarningCount) posture warnings detected")
+            ))
+        }
 
         let rawScore = fatigueRisk * muscleFatigueWeight
             + consecutiveRisk * consecutiveTrainingWeight
@@ -112,6 +148,7 @@ struct CalculateInjuryRiskUseCase: InjuryRiskCalculating, Sendable {
             + sleepRisk * sleepDeficitWeight
             + injuryRisk * activeInjuryWeight
             + recoveryRisk * lowRecoveryWeight
+            + postureRisk * postureIssueWeight
 
         let score = Int(rawScore * 100)
         let sortedFactors = factors.sorted { $0.contribution > $1.contribution }
@@ -172,6 +209,24 @@ struct CalculateInjuryRiskUseCase: InjuryRiskCalculating, Sendable {
         // Below 40 starts contributing to risk, below 20 = full risk
         guard score < 40 else { return 0 }
         return min(1.0, Double(40 - score) / 20.0)
+    }
+
+    /// Returns 0.0-1.0 based on posture warning metrics count and overall score.
+    private func computePostureIssueRisk(warningCount: Int, score: Int?) -> Double {
+        guard warningCount > 0 || (score != nil && score! < 50) else { return 0 }
+
+        var risk = 0.0
+
+        // Warning count contribution (each warning adds 0.25, max 1.0)
+        risk += min(1.0, Double(warningCount) * 0.25)
+
+        // Low posture score contribution
+        if let score, score < 50 {
+            let deficit = Double(50 - score) / 50.0
+            risk = max(risk, deficit)
+        }
+
+        return min(1.0, risk)
     }
 
     // MARK: - Formatting Helpers

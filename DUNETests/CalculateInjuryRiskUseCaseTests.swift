@@ -303,22 +303,117 @@ struct CalculateInjuryRiskUseCaseTests {
         let result = sut.execute(input: makeDefaultInput(conditionScore: 30))
         #expect(result.factors.contains { $0.type == .lowRecovery })
         let factor = result.factors.first { $0.type == .lowRecovery }!
-        // (40-30)/20 = 0.5, * 0.10 * 100 = 5
-        #expect(factor.contribution == 5)
+        // (40-30)/20 = 0.5, * 0.075 * 100 = 3
+        #expect(factor.contribution == 3)
     }
 
     @Test("Condition 20 or below → full recovery risk")
     func veryLowConditionFullRisk() {
         let result = sut.execute(input: makeDefaultInput(conditionScore: 10))
         let factor = result.factors.first { $0.type == .lowRecovery }!
-        // (40-10)/20 = 1.5, clamped 1.0 → 1.0 * 0.10 * 100 = 10
-        #expect(factor.contribution == 10)
+        // (40-10)/20 = 1.5, clamped 1.0 → 1.0 * 0.075 * 100 = 7
+        #expect(factor.contribution == 7)
     }
 
     @Test("Nil condition score → no recovery risk")
     func nilConditionNoRisk() {
         let result = sut.execute(input: makeDefaultInput(conditionScore: nil))
         #expect(!result.factors.contains { $0.type == .lowRecovery })
+    }
+
+    // MARK: - Posture Issue
+
+    @Test("No posture warnings → no posture risk")
+    func noPostureWarnings() {
+        let input = CalculateInjuryRiskUseCase.Input(
+            fatigueStates: [],
+            consecutiveTrainingDays: 0,
+            currentWeekVolume: 1000,
+            previousWeekVolume: 1000,
+            sleepDeficitMinutes: 0,
+            activeInjuries: [],
+            conditionScore: 70,
+            postureWarningCount: 0,
+            postureScore: 80
+        )
+        let result = sut.execute(input: input)
+        #expect(!result.factors.contains { $0.type == .postureIssue })
+    }
+
+    @Test("2 posture warnings → partial posture risk")
+    func postureWarningsPartial() {
+        let input = CalculateInjuryRiskUseCase.Input(
+            fatigueStates: [],
+            consecutiveTrainingDays: 0,
+            currentWeekVolume: 1000,
+            previousWeekVolume: 1000,
+            sleepDeficitMinutes: 0,
+            activeInjuries: [],
+            conditionScore: 70,
+            postureWarningCount: 2,
+            postureScore: nil
+        )
+        let result = sut.execute(input: input)
+        #expect(result.factors.contains { $0.type == .postureIssue })
+        let factor = result.factors.first { $0.type == .postureIssue }!
+        // 2 * 0.25 = 0.5, * 0.05 * 100 = 2
+        #expect(factor.contribution == 2)
+    }
+
+    @Test("4+ posture warnings → full posture risk")
+    func postureWarningsFull() {
+        let input = CalculateInjuryRiskUseCase.Input(
+            fatigueStates: [],
+            consecutiveTrainingDays: 0,
+            currentWeekVolume: 1000,
+            previousWeekVolume: 1000,
+            sleepDeficitMinutes: 0,
+            activeInjuries: [],
+            conditionScore: 70,
+            postureWarningCount: 4,
+            postureScore: nil
+        )
+        let result = sut.execute(input: input)
+        let factor = result.factors.first { $0.type == .postureIssue }!
+        // 4 * 0.25 = 1.0, * 0.05 * 100 = 5
+        #expect(factor.contribution == 5)
+    }
+
+    @Test("Low posture score contributes to risk")
+    func lowPostureScore() {
+        let input = CalculateInjuryRiskUseCase.Input(
+            fatigueStates: [],
+            consecutiveTrainingDays: 0,
+            currentWeekVolume: 1000,
+            previousWeekVolume: 1000,
+            sleepDeficitMinutes: 0,
+            activeInjuries: [],
+            conditionScore: 70,
+            postureWarningCount: 0,
+            postureScore: 20
+        )
+        let result = sut.execute(input: input)
+        #expect(result.factors.contains { $0.type == .postureIssue })
+        let factor = result.factors.first { $0.type == .postureIssue }!
+        // score deficit: (50-20)/50 = 0.6, * 0.05 * 100 = 3
+        #expect(factor.contribution == 3)
+    }
+
+    @Test("Posture score above 50 with no warnings → no risk")
+    func goodPostureNoRisk() {
+        let input = CalculateInjuryRiskUseCase.Input(
+            fatigueStates: [],
+            consecutiveTrainingDays: 0,
+            currentWeekVolume: 1000,
+            previousWeekVolume: 1000,
+            sleepDeficitMinutes: 0,
+            activeInjuries: [],
+            conditionScore: 70,
+            postureWarningCount: 0,
+            postureScore: 60
+        )
+        let result = sut.execute(input: input)
+        #expect(!result.factors.contains { $0.type == .postureIssue })
     }
 
     // MARK: - Combined Scenario
@@ -333,8 +428,8 @@ struct CalculateInjuryRiskUseCaseTests {
             activeInjuries: [makeInjury(severity: .severe)],  // full: 10
             conditionScore: 10              // full: 10
         ))
-        // Without fatigue: 20+20+15+10+10 = 75
-        #expect(result.score == 75)
+        // Without fatigue: 20+20+15+10+7 = 72 (lowRecovery at 7.5%)
+        #expect(result.score == 72)
         #expect(result.level == .high)
         #expect(result.factors.count >= 5)
     }

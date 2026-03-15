@@ -432,4 +432,99 @@ struct PostureAnalysisService: Sendable {
             return max(20, 70 - Int(diffCm * 10))
         }
     }
+
+    // MARK: - Left-Right Symmetry Detail
+
+    /// Detailed left-right comparison for symmetry analysis view.
+    func analyzeSymmetryDetails(joints: [JointPosition3D]) -> [SymmetryDetail] {
+        let lookup = Dictionary(joints.map { ($0.name, $0.position) }) { _, last in last }
+        var details: [SymmetryDetail] = []
+
+        // Shoulder asymmetry
+        if let left = lookup["leftShoulder"], let right = lookup["rightShoulder"] {
+            let leftY = Double(left.y) * 100  // meters → cm
+            let rightY = Double(right.y) * 100
+            let diff = leftY - rightY  // positive = left higher
+            details.append(SymmetryDetail(
+                metric: .shoulderAsymmetry,
+                leftValue: leftY,
+                rightValue: rightY,
+                difference: diff,
+                unit: .centimeters,
+                status: classifyAsymmetry(abs(diff))
+            ))
+        }
+
+        // Hip asymmetry
+        if let left = lookup["leftHip"], let right = lookup["rightHip"] {
+            let leftY = Double(left.y) * 100
+            let rightY = Double(right.y) * 100
+            let diff = leftY - rightY
+            details.append(SymmetryDetail(
+                metric: .hipAsymmetry,
+                leftValue: leftY,
+                rightValue: rightY,
+                difference: diff,
+                unit: .centimeters,
+                status: classifyAsymmetry(abs(diff))
+            ))
+        }
+
+        // Knee alignment per side
+        if let leftHip = lookup["leftHip"],
+           let leftKnee = lookup["leftKnee"],
+           let leftAnkle = lookup["leftAnkle"] {
+            let angle = angleBetweenPoints(
+                a: SIMD3<Float>(leftHip.x, leftHip.y, 0),
+                vertex: SIMD3<Float>(leftKnee.x, leftKnee.y, 0),
+                c: SIMD3<Float>(leftAnkle.x, leftAnkle.y, 0)
+            )
+            let leftDev = max(0, 180.0 - Double(angle))
+
+            if let rightHip = lookup["rightHip"],
+               let rightKnee = lookup["rightKnee"],
+               let rightAnkle = lookup["rightAnkle"] {
+                let rightAngle = angleBetweenPoints(
+                    a: SIMD3<Float>(rightHip.x, rightHip.y, 0),
+                    vertex: SIMD3<Float>(rightKnee.x, rightKnee.y, 0),
+                    c: SIMD3<Float>(rightAnkle.x, rightAnkle.y, 0)
+                )
+                let rightDev = max(0, 180.0 - Double(rightAngle))
+                let diff = leftDev - rightDev
+                let worstDev = max(leftDev, rightDev)
+                let status: PostureStatus = worstDev <= 5 ? .normal : worstDev <= 12 ? .caution : .warning
+
+                details.append(SymmetryDetail(
+                    metric: .kneeAlignment,
+                    leftValue: leftDev,
+                    rightValue: rightDev,
+                    difference: diff,
+                    unit: .degrees,
+                    status: status
+                ))
+            }
+        }
+
+        return details
+    }
+}
+
+// MARK: - Symmetry Detail
+
+/// Detailed left-right comparison for a single posture metric.
+struct SymmetryDetail: Sendable, Identifiable {
+    var id: PostureMetricType { metric }
+
+    let metric: PostureMetricType
+    let leftValue: Double
+    let rightValue: Double
+    let difference: Double       // positive = left higher/larger
+    let unit: PostureMetricUnit
+    let status: PostureStatus
+
+    /// Which side is higher/more deviated.
+    var higherSide: BodySide {
+        if abs(difference) < 0.1 { return .both }
+        return difference > 0 ? .left : .right
+    }
 }

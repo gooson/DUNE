@@ -57,6 +57,43 @@ struct PostureMetricTypeTests {
         #expect(hyperext.contains("rightAnkle"))
     }
 
+    // MARK: - AffectedBodyParts (Injury Integration)
+
+    @Test("Every metric type has non-empty affectedBodyParts")
+    func allMetricsHaveBodyParts() {
+        for metricType in PostureMetricType.allCases {
+            #expect(
+                !metricType.affectedBodyParts.isEmpty,
+                "\(metricType.rawValue) should map to at least one body part"
+            )
+        }
+    }
+
+    @Test("forwardHead maps to neck")
+    func forwardHeadBodyParts() {
+        #expect(PostureMetricType.forwardHead.affectedBodyParts == [.neck])
+    }
+
+    @Test("shoulderAsymmetry maps to shoulder")
+    func shoulderAsymmetryBodyParts() {
+        #expect(PostureMetricType.shoulderAsymmetry.affectedBodyParts == [.shoulder])
+    }
+
+    @Test("hipAsymmetry maps to hip")
+    func hipAsymmetryBodyParts() {
+        #expect(PostureMetricType.hipAsymmetry.affectedBodyParts == [.hip])
+    }
+
+    @Test("kneeAlignment maps to knee")
+    func kneeAlignmentBodyParts() {
+        #expect(PostureMetricType.kneeAlignment.affectedBodyParts == [.knee])
+    }
+
+    @Test("thoracicKyphosis maps to lowerBack")
+    func thoracicKyphosisBodyParts() {
+        #expect(PostureMetricType.thoracicKyphosis.affectedBodyParts == [.lowerBack])
+    }
+
     // MARK: - PostureMetricResult Confidence
 
     @Test("PostureMetricResult decodes without confidence field (backward compatibility)")

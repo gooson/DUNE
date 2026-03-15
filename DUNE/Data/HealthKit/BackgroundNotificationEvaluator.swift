@@ -182,6 +182,8 @@ final class BackgroundNotificationEvaluator: Sendable {
             return evaluateWorkoutSamples(samples)
         case .lifeChecklistReminder:
             return nil
+        case .postureReminder:
+            return nil
         }
     }
 

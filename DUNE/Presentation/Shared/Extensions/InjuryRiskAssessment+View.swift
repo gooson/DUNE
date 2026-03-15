@@ -9,6 +9,7 @@ extension InjuryRiskAssessment.FactorType {
         case .sleepDeficit: String(localized: "Sleep Deficit")
         case .activeInjury: String(localized: "Active Injury")
         case .lowRecovery: String(localized: "Low Recovery")
+        case .postureIssue: String(localized: "Posture Issue")
         }
     }
 
@@ -20,6 +21,7 @@ extension InjuryRiskAssessment.FactorType {
         case .sleepDeficit: "moon.zzz"
         case .activeInjury: "bandage"
         case .lowRecovery: "battery.25percent"
+        case .postureIssue: "figure.stand"
         }
     }
 }

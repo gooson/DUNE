@@ -7,6 +7,7 @@ struct PostureDetailView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var showDeleteConfirmation = false
     @State private var zoomImage: ZoomableImageItem?
+    @State private var pdfURL: URL?
 
     var body: some View {
         ScrollView {
@@ -14,6 +15,10 @@ struct PostureDetailView: View {
                 scoreSection
                 captureImagesSection
                 metricsSection
+
+                if record.frontImageData != nil {
+                    symmetryLink
+                }
 
                 if !record.memo.isEmpty {
                     memoSection
@@ -30,6 +35,19 @@ struct PostureDetailView: View {
                 Text(record.date, style: .date)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
+            }
+            ToolbarItem(placement: .primaryAction) {
+                if let pdfURL {
+                    ShareLink(item: pdfURL) {
+                        Image(systemName: "square.and.arrow.up")
+                    }
+                } else {
+                    Button {
+                        generatePDFReport()
+                    } label: {
+                        Image(systemName: "doc.text")
+                    }
+                }
             }
         }
         .background { DetailWaveBackground() }
@@ -208,6 +226,36 @@ struct PostureDetailView: View {
         formattedPostureMetricValue(metric.value, unit: metric.unit)
     }
 
+    // MARK: - Symmetry Link
+
+    private var symmetryLink: some View {
+        NavigationLink(value: PostureSymmetryDestination(id: record.id)) {
+            HStack(spacing: DS.Spacing.md) {
+                Image(systemName: "arrow.left.arrow.right")
+                    .font(.title3)
+                    .foregroundStyle(DS.Color.body)
+                    .frame(width: 32)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Left-Right Comparison")
+                        .font(.subheadline.weight(.medium))
+                    Text("Detailed symmetry analysis")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                    .font(.caption)
+                    .foregroundStyle(.tertiary)
+            }
+            .padding(DS.Spacing.md)
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        }
+        .buttonStyle(.plain)
+    }
+
     // MARK: - Memo
 
     private var memoSection: some View {
@@ -255,5 +303,25 @@ struct PostureDetailView: View {
 
     private func scoreColor(_ score: Int) -> Color {
         postureScoreColor(score)
+    }
+
+    private func generatePDFReport() {
+        let date = record.date
+        let score = record.overallScore
+        let metrics = record.allMetrics
+        let memo = record.memo
+
+        Task.detached {
+            let generator = PostureReportGenerator()
+            let data = generator.generatePDF(
+                date: date, score: score, metrics: metrics, memo: memo
+            )
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            let fileName = "PostureReport-\(dateFormatter.string(from: date)).pdf"
+            let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
+            try? data.write(to: tempURL)
+            await MainActor.run { pdfURL = tempURL }
+        }
     }
 }

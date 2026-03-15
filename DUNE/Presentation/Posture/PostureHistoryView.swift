@@ -17,6 +17,7 @@ struct PostureHistoryView: View {
                 if records.isEmpty {
                     emptyState
                 } else {
+                    reminderBanner
                     chartSection
                     metricFilterPills
                     statsCards
@@ -72,6 +73,13 @@ struct PostureHistoryView: View {
                 ContentUnavailableView("Records not found", systemImage: "exclamationmark.triangle")
             }
         }
+        .navigationDestination(for: PostureSymmetryDestination.self) { destination in
+            if let record = records.first(where: { $0.id == destination.id }) {
+                PostureSymmetryView(record: record)
+            } else {
+                ContentUnavailableView("Record not found", systemImage: "exclamationmark.triangle")
+            }
+        }
         .alert(
             String(localized: "Delete Assessment"),
             isPresented: Binding(
@@ -104,6 +112,31 @@ struct PostureHistoryView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.top, DS.Spacing.xxxl)
+    }
+
+    // MARK: - Reminder Banner
+
+    @ViewBuilder
+    private var reminderBanner: some View {
+        if let daysSince = viewModel.daysSinceLastAssessment, daysSince >= 7 {
+            HStack(spacing: DS.Spacing.md) {
+                Image(systemName: "clock.badge.exclamationmark")
+                    .font(.title3)
+                    .foregroundStyle(.orange)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Time for a new assessment")
+                        .font(.subheadline.weight(.medium))
+                    Text(String(localized: "\(daysSince) days since last measurement"))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
+                Spacer()
+            }
+            .padding(DS.Spacing.md)
+            .background(.orange.opacity(0.1), in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        }
     }
 
     // MARK: - Chart
@@ -396,4 +429,8 @@ struct PostureRecordDestination: Hashable {
 struct PostureComparisonDestination: Hashable {
     let olderID: UUID
     let newerID: UUID
+}
+
+struct PostureSymmetryDestination: Hashable {
+    let id: UUID
 }
