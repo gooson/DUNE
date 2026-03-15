@@ -407,8 +407,10 @@ struct PostureAnalysisService: Sendable {
     /// Midpoint fallback used → 0.7.
     /// Partial joints → 0.5.
     private func jointConfidence(required: [String], available: [String: SIMD3<Float>], usedMidpoint: Bool = false) -> Double {
+        guard !required.isEmpty else { return 1.0 }
         let found = required.filter { available[$0] != nil }.count
-        let ratio = Double(found) / Double(max(1, required.count))
+        let ratio = Double(found) / Double(required.count)
+        if ratio >= 1.0 && !usedMidpoint { return 1.0 }
         let base = ratio * 0.9
         return usedMidpoint ? min(base, 0.7) : base
     }

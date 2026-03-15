@@ -82,9 +82,7 @@ struct PostureResultView: View {
     }
 
     private func scoreColor(_ score: Int) -> Color {
-        if score >= 80 { return .green }
-        if score >= 60 { return .yellow }
-        return .red
+        postureScoreColor(score)
     }
 
     // MARK: - Capture Images

@@ -132,7 +132,7 @@ struct WellnessView: View {
                         // Posture Assessment (isolated @Query)
                         PostureAssessmentLinkView(
                             onCapture: { isShowingPostureCapture = true },
-                            onScoreUpdate: { viewModel.postureScore = $0 }
+                            onScoreUpdate: { viewModel.postureScore = $0.map { max(0, min(100, $0)) } }
                         )
 
                         // Injury Banner (isolated @Query — re-renders independently)

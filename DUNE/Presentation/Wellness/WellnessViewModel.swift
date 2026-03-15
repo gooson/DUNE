@@ -21,7 +21,11 @@ final class WellnessViewModel {
     var conditionScore: Int?
     var bodyScore: Int?
     var bodyScoreDetail: BodyScoreDetail?
-    var postureScore: Int?
+    var postureScore: Int? {
+        didSet {
+            if postureScore != oldValue { recalculateWellnessScore() }
+        }
+    }
 
     // Full condition score for detail navigation
     var conditionScoreFull: ConditionScore?
@@ -100,6 +104,21 @@ final class WellnessViewModel {
         invalidateLoadRequests()
         loadTask?.cancel()
         loadTask = Task { await performLoad() }
+    }
+
+    /// Re-run wellness score calculation with current cached inputs.
+    /// Called when `postureScore` arrives asynchronously after initial load.
+    func recalculateWellnessScore() {
+        let bodyTrend: CalculateWellnessScoreUseCase.BodyTrend? = bodyScoreDetail.map {
+            .init(weightChange: $0.weightChange)
+        }
+        wellnessScore = wellnessScoreUseCase.execute(input: .init(
+            sleepScore: sleepScore,
+            conditionScore: conditionScore,
+            bodyTrend: bodyTrend,
+            postureScore: postureScore
+        ))
+        WidgetDataWriter.writeWellnessScore(wellnessScore)
     }
 
     /// Async entry point for `.refreshable` — awaits load completion so spinner persists.
