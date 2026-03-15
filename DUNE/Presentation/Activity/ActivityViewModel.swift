@@ -284,12 +284,19 @@ final class ActivityViewModel {
 
     /// Recompute fatigue states and suggestion from both SwiftData records and HealthKit workouts.
     private func recomputeFatigueAndSuggestion() {
+        // Build set of HK workout IDs that already have ExerciseRecords (to avoid double-counting)
+        let linkedHKIDs: Set<String> = Set(
+            manualRecordsCache.compactMap(\.healthKitWorkoutID)
+        )
+
         // Merge SwiftData exercise snapshots with HealthKit workout snapshots
-        let healthKitSnapshots = recentWorkouts
-            .filter { !$0.isFromThisApp }  // Avoid double-counting app-created workouts
-            .filter { !$0.activityType.primaryMuscles.isEmpty }
-            .map { workout in
-                ExerciseRecordSnapshot(
+        var healthKitSnapshots: [ExerciseRecordSnapshot] = []
+
+        for workout in recentWorkouts {
+            if !workout.isFromThisApp {
+                // Third-party workouts: use activityType muscles (existing behavior)
+                guard !workout.activityType.primaryMuscles.isEmpty else { continue }
+                healthKitSnapshots.append(ExerciseRecordSnapshot(
                     date: workout.date,
                     exerciseName: workout.activityType.rawValue.capitalized,
                     primaryMuscles: workout.activityType.primaryMuscles,
@@ -297,8 +304,40 @@ final class ActivityViewModel {
                     completedSetCount: 0,
                     durationMinutes: workout.duration > 0 ? Swift.min(workout.duration / 60.0, 480) : nil,
                     distanceKm: workout.distance.flatMap { $0 > 0 ? Swift.min($0 / 1000.0, 500) : nil }
-                )
+                ))
+            } else if !linkedHKIDs.contains(workout.id) {
+                // Orphaned app-created workout (ExerciseRecord lost due to store recovery).
+                // Recover muscle data by looking up the exercise name in the library.
+                let exerciseName = workout.type
+                if let definition = library.search(query: exerciseName).first(where: {
+                    $0.name.caseInsensitiveCompare(exerciseName) == .orderedSame
+                        || $0.localizedName.caseInsensitiveCompare(exerciseName) == .orderedSame
+                }), !definition.primaryMuscles.isEmpty {
+                    healthKitSnapshots.append(ExerciseRecordSnapshot(
+                        date: workout.date,
+                        exerciseDefinitionID: definition.id,
+                        exerciseName: definition.localizedName,
+                        primaryMuscles: definition.primaryMuscles,
+                        secondaryMuscles: definition.secondaryMuscles,
+                        completedSetCount: 0,
+                        durationMinutes: workout.duration > 0 ? Swift.min(workout.duration / 60.0, 480) : nil,
+                        distanceKm: workout.distance.flatMap { $0 > 0 ? Swift.min($0 / 1000.0, 500) : nil }
+                    ))
+                } else if !workout.activityType.primaryMuscles.isEmpty {
+                    // Fallback to activityType muscles if library lookup fails
+                    healthKitSnapshots.append(ExerciseRecordSnapshot(
+                        date: workout.date,
+                        exerciseName: exerciseName,
+                        primaryMuscles: workout.activityType.primaryMuscles,
+                        secondaryMuscles: workout.activityType.secondaryMuscles,
+                        completedSetCount: 0,
+                        durationMinutes: workout.duration > 0 ? Swift.min(workout.duration / 60.0, 480) : nil,
+                        distanceKm: workout.distance.flatMap { $0 > 0 ? Swift.min($0 / 1000.0, 500) : nil }
+                    ))
+                }
             }
+            // else: app-created workout WITH linked ExerciseRecord → already in exerciseRecordSnapshots
+        }
 
         let allSnapshots = exerciseRecordSnapshots + healthKitSnapshots
         fatigueStates = recommendationService.computeFatigueStates(

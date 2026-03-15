@@ -41,45 +41,42 @@ if activityType != .other {
 |------|--------|------|
 | `DUNE/Presentation/Shared/Extensions/WorkoutActivityType+View.swift` | `localizedTitle` fallback 수정 | Medium |
 | `DUNETests/WorkoutTypeCorrectionStoreTests.swift` | "Tempo Run" 테스트 수정 | Low |
+| `DUNE/Presentation/Activity/ActivityViewModel.swift` | 고아 HK 워크아웃에서 근육 데이터 복구 | Medium |
 
 ## Implementation Steps
 
-### Step 1: `localizedTitle` fallback 수정
+### Step 1: `localizedTitle` fallback 수정 (완료)
 
-`type`이 `activityType.typeName`과 다르면 metadata에서 온 커스텀 이름 →
-그대로 반환. 같으면 generic name이므로 localized fallback 적용.
-
-```swift
-func localizedTitle(using correctionStore: WorkoutTypeCorrectionStore = .shared) -> String {
-    if let corrected = correctionStore.correctedTitle(for: id) {
-        return corrected
-    }
-    if let localized = WorkoutActivityType.localizedDisplayName(forStoredTitle: type) {
-        return localized
-    }
-    // type이 activityType.typeName과 다르면 custom exercise name (metadata) → 보존
-    // 같으면 generic name이므로 activityType.displayName으로 localize
-    return type
-}
-```
-
-핵심: `activityType.displayName` fallback 제거. 이유:
+`activityType.displayName` fallback 제거. 이유:
 - `type == activityType.typeName`인 경우: `localizedDisplayName`이 이미 매칭 성공
 - `type != activityType.typeName`인 경우: custom name → 보존 필요
 - 따라서 `activityType.displayName` fallback 도달 경로가 없음
 
-### Step 2: 테스트 수정
+### Step 2: 테스트 수정 (완료)
 
-- `testLocalizedTitleFallsBackToActivityTypeDisplayName`: "Tempo Run" 시나리오는 실제 코드 경로에서 발생 불가 → 삭제 또는 실제 시나리오로 교체
-- `healthKitDisplayNamePrefersStoredWorkoutTitle`: "Bench Press" 테스트 통과 확인
+- `testLocalizedTitleFallsBackToActivityTypeDisplayName` → `testLocalizedTitlePreservesCustomMetadataExerciseName`으로 교체
+- "Bench Press" 보존 테스트 통과 확인
+
+### Step 3: 고아 HK 워크아웃에서 근육 데이터 복구 (완료)
+
+SwiftData 스토어 복구(PersistentStoreRecovery)로 ExerciseRecord가 삭제된 경우,
+HealthKit에 남아있는 앱 생성 워크아웃에서 근육 데이터를 복구.
+
+`recomputeFatigueAndSuggestion()`에서:
+1. `manualRecordsCache`의 `healthKitWorkoutID`로 연결된 HK ID 집합 구성
+2. 앱 생성 HK 워크아웃 중 연결된 ExerciseRecord가 없는 것(고아)을 식별
+3. 고아 워크아웃의 exercise name을 라이브러리에서 검색하여 근육 데이터 획득
+4. 라이브러리 매칭 실패 시 activityType 기본 근육 데이터로 fallback
 
 ## Test Strategy
 
-- 기존 테스트 `healthKitDisplayNamePrefersStoredWorkoutTitle` 통과 확인
-- 기존 테스트 `healthKitDisplayNameLocalizesLegacyActivityTitle` 통과 확인
-- "Tempo Run" 테스트 → 실제 시나리오(type == activityType.typeName)로 변경
+- `testLocalizedTitlePreservesCustomMetadataExerciseName` 통과 확인
+- `testLocalizedTitleReturnsRawTypeForOtherActivity` 통과 확인
+- `testWorkoutSummaryLocalizedTitleUsesCorrectionStore` 통과 확인
+- 고아 워크아웃 복구: 기존 `recomputeFatigueAndSuggestion` 경로 테스트는 ViewModel 통합 테스트 영역
 
 ## Risks
 
-- "Tempo Run" 같은 서드파티 커스텀 이름이 실제로 type에 도달할 경우 영어로 표시됨
-  → 하지만 `resolveTitle`이 우리 metadata key만 읽으므로 이 시나리오는 발생 불가
+- 라이브러리 검색이 대소문자/로케일 차이로 실패할 수 있음 → `caseInsensitiveCompare` 사용
+- 고아 워크아웃이 많을 경우 검색 비용 → `recentWorkouts`는 최근 N일로 제한되어 있으므로 실질적 부담 없음
+- 라이브러리에 없는 커스텀 운동명 → `activityType.primaryMuscles` fallback 사용
