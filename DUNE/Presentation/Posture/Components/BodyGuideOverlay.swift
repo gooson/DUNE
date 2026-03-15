@@ -5,6 +5,17 @@ struct BodyGuideOverlay: View {
     let captureType: PostureCaptureType
     let guidanceState: GuidanceState
     let skeletonKeypoints: [(String, CGPoint)]
+    var isFrontCamera: Bool = true
+
+    private static let skeletonConnections: [(String, String)] = [
+        ("leftShoulder", "rightShoulder"),
+        ("leftShoulder", "leftElbow"), ("leftElbow", "leftWrist"),
+        ("rightShoulder", "rightElbow"), ("rightElbow", "rightWrist"),
+        ("leftShoulder", "leftHip"), ("rightShoulder", "rightHip"),
+        ("leftHip", "rightHip"),
+        ("leftHip", "leftKnee"), ("leftKnee", "leftAnkle"),
+        ("rightHip", "rightKnee"), ("rightKnee", "rightAnkle"),
+    ]
 
     var body: some View {
         GeometryReader { geometry in
@@ -59,22 +70,10 @@ struct BodyGuideOverlay: View {
                 uniquingKeysWith: { _, last in last }
             )
 
-            // Draw connections
-            let connections: [(String, String)] = [
-                ("leftShoulder", "rightShoulder"),
-                ("leftShoulder", "leftElbow"), ("leftElbow", "leftWrist"),
-                ("rightShoulder", "rightElbow"), ("rightElbow", "rightWrist"),
-                ("leftShoulder", "leftHip"), ("rightShoulder", "rightHip"),
-                ("leftHip", "rightHip"),
-                ("leftHip", "leftKnee"), ("leftKnee", "leftAnkle"),
-                ("rightHip", "rightKnee"), ("rightKnee", "rightAnkle"),
-            ]
+            let lineColor: Color = guidanceState.isReady ? .green.opacity(0.7) : .white.opacity(0.5)
+            let dotColor: Color = guidanceState.isReady ? .green : .cyan.opacity(0.8)
 
-            let lineColor = guidanceState.isReady
-                ? Color.green.opacity(0.7)
-                : Color.white.opacity(0.5)
-
-            for (from, to) in connections {
+            for (from, to) in Self.skeletonConnections {
                 guard let p1 = kpMap[from], let p2 = kpMap[to] else { continue }
                 let start = visionToScreen(p1, size: canvasSize)
                 let end = visionToScreen(p2, size: canvasSize)
@@ -83,11 +82,6 @@ struct BodyGuideOverlay: View {
                 path.addLine(to: end)
                 context.stroke(path, with: .color(lineColor), lineWidth: 2)
             }
-
-            // Draw joint dots
-            let dotColor = guidanceState.isReady
-                ? Color.green
-                : Color.cyan.opacity(0.8)
 
             for (_, point) in skeletonKeypoints {
                 let screenPoint = visionToScreen(point, size: canvasSize)
@@ -103,9 +97,11 @@ struct BodyGuideOverlay: View {
     }
 
     /// Convert Vision normalized coordinates (origin bottom-left) to screen coordinates (origin top-left).
+    /// For front camera, mirror horizontally to match the mirrored preview.
     private func visionToScreen(_ point: CGPoint, size: CGSize) -> CGPoint {
-        CGPoint(
-            x: point.x * size.width,
+        let x = isFrontCamera ? (1.0 - point.x) : point.x
+        return CGPoint(
+            x: x * size.width,
             y: (1.0 - point.y) * size.height
         )
     }

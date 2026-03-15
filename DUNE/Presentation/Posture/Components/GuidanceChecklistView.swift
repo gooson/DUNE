@@ -9,29 +9,29 @@ struct GuidanceChecklistView: View {
             checklistItem(
                 satisfied: guidanceState.isFullBodyVisible,
                 icon: "figure.stand",
-                label: String(localized: "Full body visible")
+                label: "Full body visible"
             )
             checklistItem(
-                satisfied: guidanceState.distanceStatus == .optimal || guidanceState.distanceStatus == .slightlyFar,
+                satisfied: guidanceState.isDistanceAcceptable,
                 icon: "arrow.left.and.right",
-                label: String(localized: "Distance OK")
+                label: "Distance OK"
             )
             checklistItem(
                 satisfied: guidanceState.isStable,
                 icon: "hand.raised.slash",
-                label: String(localized: "Holding still")
+                label: "Holding still"
             )
             checklistItem(
                 satisfied: guidanceState.lightingStatus != .tooLow,
                 icon: "sun.max",
-                label: String(localized: "Lighting OK")
+                label: "Lighting OK"
             )
         }
         .padding(12)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
     }
 
-    private func checklistItem(satisfied: Bool, icon: String, label: String) -> some View {
+    private func checklistItem(satisfied: Bool, icon: String, label: LocalizedStringKey) -> some View {
         HStack(spacing: 8) {
             Image(systemName: satisfied ? "checkmark.circle.fill" : "circle")
                 .font(.body)
