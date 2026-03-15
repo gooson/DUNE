@@ -261,13 +261,9 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
 
     // MARK: - 3D Pose Detection from Video Frame
 
-    /// Detect 3D pose from a live video frame. Uses VNImageRequestHandler(cvPixelBuffer:)
-    /// directly to avoid CIContext/CGImage round-trip overhead (~15-25ms per frame).
-    func detectPoseFromVideoFrame(_ sampleBuffer: CMSampleBuffer) async throws -> PostureCaptureResult {
-        guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
-            throw PostureCaptureError.imageConversionFailed
-        }
-
+    /// Detect 3D pose from a copied pixel buffer. Caller must pass a buffer that is NOT
+    /// backed by the AVCaptureSession pool so the camera can continue recycling frames.
+    func detectPoseFromVideoFrame(_ pixelBuffer: CVPixelBuffer) async throws -> PostureCaptureResult {
         let request = VNDetectHumanBodyPose3DRequest()
         let confidenceRequest = VNDetectHumanBodyPoseRequest()
         // No EXIF orientation for live video frames (already rotated by connection.videoRotationAngle)
