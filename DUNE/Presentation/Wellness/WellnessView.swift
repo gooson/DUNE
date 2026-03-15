@@ -555,7 +555,7 @@ private struct PostureAssessmentLinkView: View {
                 HStack(spacing: DS.Spacing.xs) {
                     Image(systemName: "figure.walk.motion")
                         .font(.caption)
-                    Text(String(localized: "Realtime"))
+                    Text("Realtime")
                         .font(.caption.weight(.medium))
                 }
                 .frame(maxWidth: .infinity)
