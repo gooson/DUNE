@@ -19,7 +19,7 @@ struct GuidanceState: Sendable, Hashable {
     /// Whether all conditions are met for capture.
     var isReady: Bool {
         isFullBodyVisible
-            && distanceStatus == .optimal
+            && isDistanceAcceptable
             && isStable
             && lightingStatus != .tooLow
             && isCorrectOrientation
@@ -30,7 +30,7 @@ struct GuidanceState: Sendable, Hashable {
     var primaryHint: GuidanceHint? {
         if !isFullBodyVisible { return .fullBodyNotVisible }
         if distanceStatus == .tooClose { return .tooClose }
-        if distanceStatus == .tooFar || distanceStatus == .slightlyFar { return .tooFar }
+        if distanceStatus == .tooFar { return .tooFar }
         if lightingStatus == .tooLow { return .lowLighting }
         if !isCorrectOrientation { return .wrongOrientation }
         if !areArmsRelaxed { return .armsNotRelaxed }
