@@ -93,6 +93,21 @@
 - **Safe**: Error messages shown in `capturePhase = .error(...)` are either constant localized strings or `captureErrorMessage(error)` which maps to localized strings — no `error.localizedDescription` leakage to UI.
 - **Safe**: `PostureAssessmentRecord` JSON decode uses `try? decoder.decode(...)` with a typed Codable — no untyped deserialization risk.
 
+### Symmetry / Report / Injury Risk Audit (Branch claude/suspicious-stonebraker)
+- **Safe**: `PostureReminderScheduler` notification payload is entirely constant strings — no user data interpolated into title, body, or userInfo. Zero injection risk.
+- **Safe**: `PostureReminderScheduler.settingsKey` is public `static let` consistent with prior bedtime scheduler pattern — same P3 note applies, acceptable.
+- **Safe**: `PostureMetricResult.init` clamps `confidence` to `max(0, min(1, confidence))` — confidence field safe at construction and in custom Decoder.
+- **Safe**: `PostureMetricResult` custom decoder also clamps confidence via `decodeIfPresent` + `max(0, min(1, ...))`.
+- **Safe**: `PostureAnalysisService` score branches all use `max(0, min(100, score))` before passing to `PostureMetricResult` — per-metric score clamped.
+- **Safe**: `[PostureMetricResult].weightedOverallScore()` guards `totalWeight > 0`, `.isFinite`, and `max(0, min(100, ...))` — aggregate score safe.
+- **Safe**: `InjuryRiskAssessment.init` clamps `score` with `max(0, min(100, score))` — injury risk score overflow impossible.
+- **Safe**: `CalculateInjuryRiskUseCase` all component sub-functions return `min(1.0, ...)` — individual risk components bounded.
+- **Safe**: `PostureAnalysisService.analyzeSymmetryDetails` operates only on already-decoded `[JointPosition3D]` values — no new injection surface.
+- **Safe**: `PostureSymmetryViewModel.loadSymmetry` has no state mutation on empty-joints path (early return) — no stale data risk.
+- **P2**: `PostureReportGenerator.drawMemoSection` passes `record.memo` unbounded into PDF drawing. `memo` is trimmed to 500 chars at creation time in `createValidatedRecord()`, but `PostureAssessmentRecord.init` accepts any `String` for `memo` directly (no trim in model init). A CloudKit-injected record with a very large memo string will render uncapped in the PDF — `boundingRect` is capped to height:200 but content can overflow that rect silently (NSString.draw clips to rect, no crash, but output is truncated without warning to user). Low severity since native PDF rendering clips rather than crashes, but defence-in-depth trim at `drawMemoSection` call site is missing.
+- **P2**: `PostureReportGenerator` passes `record.overallScore` directly to `drawScoreSection` without clamping. `PostureAssessmentRecord.init` clamps score, but a CloudKit-injected record modifying `overallScore` directly on the SwiftData model (bypassing init) could pass an unclamped Int. `scoreUIColor` has no else-guard for score > 100 (falls through to `.systemRed` at `>= 80` → returns green for 200). Score string renders as "200 / 100" in PDF. Not user-exploitable from the app but CloudKit propagation path is a concern (same P2 established in prior audit).
+- **P3**: `PostureReminderScheduler` error path logs `error.localizedDescription` to `AppLogger.notification` — consistent with codebase pattern, not user-facing.
+
 ### Not Applicable to This Codebase
 - SQL injection (no raw SQL, uses SwiftData/HealthKit)
 - XSS (native iOS app, no WebView)
