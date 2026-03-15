@@ -276,6 +276,28 @@
         }
       }
     },
+    "%@ reps" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ reps"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@回"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@회"
+          }
+        }
+      }
+    },
     "%@ and %lld muscle groups total show very high fatigue. Rest for 1–2 days, then ease back in with light exercise." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -21760,6 +21782,28 @@
         }
       }
     },
+    "Ready to save %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Ready to save %1$@."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@を保存できます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 저장 준비가 됐습니다."
+          }
+        }
+      }
+    },
     "Ready to Train" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -24046,6 +24090,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "저장됨"
+          }
+        }
+      }
+    },
+    "Saved %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Saved %1$@."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@を保存しました。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 저장했습니다."
           }
         }
       }

@@ -30,6 +30,7 @@ struct VisionVoiceWorkoutEntryCard: View {
         .padding(22)
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
         .onDisappear {
+            viewModel.stopAudioFeedback()
             viewModel.stopListening()
         }
     }
@@ -122,25 +123,47 @@ struct VisionVoiceWorkoutEntryCard: View {
                 }
             }
 
-            HStack(spacing: 10) {
-                if let weight = draft.weight, let unit = draft.weightUnit {
-                    metricChip(
-                        title: "Weight",
-                        value: "\(weight.formatted(.number.precision(.fractionLength(0...1)))) \(unit.displayName)"
-                    )
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 10) {
+                    if let weight = draft.weight, let unit = draft.weightUnit {
+                        metricEditor(
+                            title: "Weight",
+                            value: "\(weight.formatted(.number.precision(.fractionLength(0...1)))) \(unit.displayName)",
+                            decrement: { viewModel.adjustWeight(by: -1) },
+                            increment: { viewModel.adjustWeight(by: 1) }
+                        )
+                    }
+                    if let reps = draft.reps {
+                        metricEditor(
+                            title: "Reps",
+                            value: "\(reps)",
+                            decrement: { viewModel.adjustReps(by: -1) },
+                            increment: { viewModel.adjustReps(by: 1) }
+                        )
+                    }
+                    if let durationSeconds = draft.durationSeconds {
+                        metricEditor(
+                            title: "Duration",
+                            value: formattedDuration(durationSeconds),
+                            decrement: { viewModel.adjustDuration(by: -1) },
+                            increment: { viewModel.adjustDuration(by: 1) }
+                        )
+                    }
+                    if let distance = draft.distance, let unit = draft.distanceUnit {
+                        metricEditor(
+                            title: "Distance",
+                            value: "\(distance.formatted(.number.precision(.fractionLength(0...1)))) \(unit.displayName)",
+                            decrement: { viewModel.adjustDistance(by: -1) },
+                            increment: { viewModel.adjustDistance(by: 1) }
+                        )
+                    }
                 }
-                if let reps = draft.reps {
-                    metricChip(title: "Reps", value: "\(reps)")
-                }
-                if let durationSeconds = draft.durationSeconds {
-                    metricChip(title: "Duration", value: formattedDuration(durationSeconds))
-                }
-                if let distance = draft.distance, let unit = draft.distanceUnit {
-                    metricChip(
-                        title: "Distance",
-                        value: "\(distance.formatted(.number.precision(.fractionLength(0...1)))) \(unit.displayName)"
-                    )
-                }
+            }
+
+            if let note = draft.notes.first {
+                Text(note)
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
             }
 
             Text("Save this draft to workout history when it looks right.")
@@ -175,19 +198,33 @@ struct VisionVoiceWorkoutEntryCard: View {
         .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 24, style: .continuous))
     }
 
-    private func metricChip(
+    private func metricEditor(
         title: LocalizedStringKey,
-        value: String
+        value: String,
+        decrement: @escaping () -> Void,
+        increment: @escaping () -> Void
     ) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: 10) {
             Text(title)
                 .font(.callout)
                 .foregroundStyle(.secondary)
             Text(verbatim: value)
                 .font(.callout.weight(.semibold))
+            HStack(spacing: 8) {
+                Button(action: decrement) {
+                    Image(systemName: "minus.circle.fill")
+                }
+                .buttonStyle(.bordered)
+
+                Button(action: increment) {
+                    Image(systemName: "plus.circle.fill")
+                }
+                .buttonStyle(.borderedProminent)
+            }
         }
+        .frame(minWidth: 140, alignment: .leading)
         .padding(.horizontal, 14)
-        .padding(.vertical, 10)
+        .padding(.vertical, 12)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
     }
 

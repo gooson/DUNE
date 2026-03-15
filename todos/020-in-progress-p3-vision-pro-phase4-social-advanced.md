@@ -3,7 +3,7 @@ source: brainstorm/vision-pro-features
 priority: p3
 status: in-progress
 created: 2026-03-05
-updated: 2026-03-08
+updated: 2026-03-16
 ---
 
 # Vision Pro Phase 4-5: 소셜 + 고급 기능
@@ -43,7 +43,8 @@ SharePlay 소셜 기능 및 고급 입력 방식 구현.
 - [ ] F3 Voice-First Workout Entry
   - speech capture + command parser + draft preview foundation 추가
   - single-entry workout history 저장과 SwiftData exercise stack 연결 완료
-  - 남은 범위는 audio/spatial feedback과 richer session editing
+  - locale-aware confirmation, TTS fallback, quick adjust editing 완료
+  - 남은 범위는 spatial audio cue와 multi-step richer session editing
 - [x] C5 Exercise Form Guide foundation
   - Activity 탭에서 지원 운동 guide 검색/선택
   - form cue + equipment + target muscle panel 추가
@@ -53,6 +54,7 @@ SharePlay 소셜 기능 및 고급 입력 방식 구현.
 
 - 이번 배치는 `/run`으로 G1 foundation(SharePlay workout board), E1, F3 foundation(speech capture + parser + draft preview) + single-entry persistence까지 ship 완료.
 - SharePlay의 SharedWorldAnchors/spatial alignment, voice audio feedback, body tracking, full-avatar는 capability 및 실기기 검증이 추가로 필요하므로 후속 구현으로 남김.
+- voice confirmation polish는 `todos/140-done-p2-vision-voice-feedback-confirmation.md`에서 정리했다.
 - Phase 5A 실데이터 연결은 `todos/021-done-p1-vision-real-data-pipeline.md`로 정리됐다.
 - Phase 5B UX polish 구현은 `todos/022-done-p2-vision-ux-polish.md`로 종료됐다.
 - runtime spatial placement visual verification은 `todos/107-ready-p2-vision-window-placement-runtime-validation.md`로 분리됐다.
