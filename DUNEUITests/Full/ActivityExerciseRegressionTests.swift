@@ -5,6 +5,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     private enum Fixture {
         static let benchPressID = "barbell-bench-press"
         static let deadliftID = "conventional-deadlift"
+        static let manualStrengthTypeKey = "manual-strength"
         static let runningID = "running"
         static let singleTemplate = "Codex Strength Starter"
         static let updatedTemplate = "Codex Strength Updated"
@@ -20,6 +21,55 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
 
     override func setUpWithError() throws {
         try super.setUpWithError()
+    }
+
+    func testActivityRootShowsPrimaryRegressionAnchors() throws {
+        ensureActivityRoot()
+
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.activityRootScroll].firstMatch.waitForExistence(timeout: 10),
+            "Activity root scroll should exist for the seeded surface"
+        )
+        XCTAssertTrue(
+            app.scrollToElementIfNeeded(AXID.activitySectionWeeklyStats, maxSwipes: 4),
+            "Weekly stats section should be reachable from the Activity root"
+        )
+        XCTAssertTrue(
+            app.scrollToElementIfNeeded(AXID.activitySectionPR, maxSwipes: 10),
+            "Personal records section should be reachable from the Activity root"
+        )
+        XCTAssertTrue(
+            app.scrollToElementIfNeeded(AXID.activitySectionConsistency, maxSwipes: 10),
+            "Consistency section should be reachable from the Activity root"
+        )
+    }
+
+    func testTrainingReadinessDetailShowsTrendAndSubscoreSections() throws {
+        openTrainingReadinessDetail()
+
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.trainingReadinessPeriodPicker].firstMatch.waitForExistence(timeout: 15),
+            "Training readiness detail should expose the period picker"
+        )
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.trainingReadinessChartTrend].firstMatch.waitForExistence(timeout: 15),
+            "Training readiness detail should render the trend chart"
+        )
+
+        tapSegment(in: AXID.trainingReadinessPeriodPicker, index: 1, timeout: 10)
+
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.trainingReadinessSubscoreHRV].firstMatch.waitForExistence(timeout: 15),
+            "HRV subscore chart should appear after leaving day mode"
+        )
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.trainingReadinessSubscoreRHR].firstMatch.waitForExistence(timeout: 15),
+            "RHR subscore chart should appear after leaving day mode"
+        )
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.trainingReadinessSubscoreSleep].firstMatch.waitForExistence(timeout: 15),
+            "Sleep subscore chart should appear after leaving day mode"
+        )
     }
 
     func testActivityDetailRoutesOpenExpectedScreens() throws {
@@ -93,6 +143,88 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue(
             app.descendants(matching: .any)[AXID.activityExerciseMixDetailScreen].firstMatch.waitForExistence(timeout: 10),
             "Exercise Mix detail should open"
+        )
+    }
+
+    func testExerciseTypeDetailShowsTrendAndRecentSessions() throws {
+        openTrainingVolumeDetailSurface()
+
+        XCTAssertTrue(
+            app.scrollToElementIfNeeded(AXID.activityTrainingVolumeTypeList, maxSwipes: 10),
+            "Exercise type list should be reachable in Training Volume detail"
+        )
+        XCTAssertTrue(
+            app.scrollToHittableElementIfNeeded(AXID.activityTrainingVolumeRow(Fixture.manualStrengthTypeKey), maxSwipes: 10),
+            "Manual strength row should be reachable in Training Volume detail"
+        )
+        let row = app.descendants(matching: .any)[AXID.activityTrainingVolumeRow(Fixture.manualStrengthTypeKey)].firstMatch
+        XCTAssertTrue(row.waitForExistence(timeout: 8), "Manual strength row should exist in Training Volume detail")
+        row.tap()
+
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.activityExerciseTypeDetailScreen].firstMatch.waitForExistence(timeout: 10),
+            "Exercise type detail should open from the Training Volume detail list"
+        )
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.activityExerciseTypePeriodPicker].firstMatch.waitForExistence(timeout: 15),
+            "Exercise type detail should expose the period picker"
+        )
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.activityExerciseTypeTrendChart].firstMatch.waitForExistence(timeout: 15),
+            "Exercise type detail should render the trend chart"
+        )
+
+        tapSegment(in: AXID.activityExerciseTypePeriodPicker, index: 1, timeout: 10)
+
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.activityExerciseTypeTrendChart].firstMatch.waitForExistence(timeout: 15),
+            "Exercise type detail should keep the trend chart visible after period switching"
+        )
+    }
+
+    func testPersonalRecordsDetailShowsTimelineRewardsAndHistory() throws {
+        openActivityDetail(
+            sectionIdentifier: AXID.activitySectionPR,
+            destinationIdentifier: AXID.activityPersonalRecordsDetailScreen,
+            maxSwipes: 10
+        )
+
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.activityPersonalRecordsMetricPicker].firstMatch.waitForExistence(timeout: 15),
+            "Personal Records detail should expose the metric picker"
+        )
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.activityPersonalRecordsTimelineChart].firstMatch.waitForExistence(timeout: 15),
+            "Personal Records detail should render the timeline chart"
+        )
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.activityPersonalRecordsRewardSummary].firstMatch.waitForExistence(timeout: 15),
+            "Personal Records detail should show the reward summary"
+        )
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.activityPersonalRecordsAchievementHistory].firstMatch.waitForExistence(timeout: 15),
+            "Personal Records detail should show the achievement history"
+        )
+    }
+
+    func testConsistencyDetailShowsCalendarAndHistorySections() throws {
+        openActivityDetail(
+            sectionIdentifier: AXID.activitySectionConsistency,
+            destinationIdentifier: AXID.activityConsistencyDetailScreen,
+            maxSwipes: 10
+        )
+
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.activityConsistencyCalendar].firstMatch.waitForExistence(timeout: 15),
+            "Consistency detail should show the calendar heatmap"
+        )
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.activityConsistencyHistory].firstMatch.waitForExistence(timeout: 15),
+            "Consistency detail should show the streak history"
+        )
+        XCTAssertFalse(
+            app.descendants(matching: .any)[AXID.activityConsistencyEmptyState].firstMatch.exists,
+            "Seeded consistency detail should not fall back to the empty state"
         )
     }
 
@@ -437,6 +569,44 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     }
 
     // MARK: - Helpers
+
+    private func openTrainingReadinessDetail() {
+        ensureActivityRoot()
+        let readinessHero = waitForElement(AXID.activityHeroReadiness, timeout: 15)
+        readinessHero.tap()
+
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.activityTrainingReadinessDetailScreen].firstMatch.waitForExistence(timeout: 10),
+            "Training Readiness detail should open from the Activity hero"
+        )
+    }
+
+    private func openTrainingVolumeDetailSurface() {
+        openActivityDetail(
+            sectionIdentifier: AXID.activitySectionVolume,
+            destinationIdentifier: AXID.activityTrainingVolumeDetailScreen,
+            maxSwipes: 8
+        )
+    }
+
+    private func openActivityDetail(
+        sectionIdentifier: String,
+        destinationIdentifier: String,
+        maxSwipes: Int
+    ) {
+        ensureActivityRoot()
+        XCTAssertTrue(
+            app.scrollToHittableElementIfNeeded(sectionIdentifier, maxSwipes: maxSwipes),
+            "\(sectionIdentifier) should be reachable before opening detail"
+        )
+        let section = waitForElement(sectionIdentifier, timeout: 8)
+        section.tap()
+
+        XCTAssertTrue(
+            app.descendants(matching: .any)[destinationIdentifier].firstMatch.waitForExistence(timeout: 10),
+            "\(destinationIdentifier) should open from the Activity surface"
+        )
+    }
 
     private func ensureActivityRoot() {
         let activityAddButton = app.descendants(matching: .any)[AXID.activityToolbarAdd].firstMatch

@@ -74,7 +74,7 @@ enum TestDataSeeder {
         SimulatorAdvancedMockDataModeStore.setEnabled(false, defaults: defaults)
         SimulatorAdvancedMockDataModeStore.setReferenceDate(nil, defaults: defaults)
 
-        guard scenario == .defaultSeeded else { return }
+        guard scenario != .empty else { return }
 
         SimulatorAdvancedMockDataModeStore.setReferenceDate(referenceDate, defaults: defaults)
         SimulatorAdvancedMockDataModeStore.setEnabled(true, defaults: defaults)
@@ -212,6 +212,7 @@ enum TestDataSeeder {
     private static func seedDefaultRecords(into context: ModelContext) {
         configureTodayDefaults()
         seedSharedHealthSnapshot(into: context)
+        seedExerciseDefaults(into: context)
         seedExerciseRecords(into: context)
         seedBodyCompositionRecords(into: context)
         seedInjuryRecords(into: context)
@@ -292,6 +293,19 @@ enum TestDataSeeder {
 
         seedNotificationInbox(scenario: .activityExerciseSeeded)
         try? context.save()
+    }
+
+    @MainActor
+    private static func seedExerciseDefaults(into context: ModelContext) {
+        let benchPressDefault = ExerciseDefaultRecord(
+            exerciseDefinitionID: "barbell-bench-press",
+            defaultWeight: 60,
+            defaultReps: 8,
+            isManualOverride: false,
+            isPreferred: false,
+            lastUsedDate: Date()
+        )
+        context.insert(benchPressDefault)
     }
 
     // MARK: - Exercise Records

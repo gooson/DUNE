@@ -14,18 +14,10 @@ updated: 2026-03-16
 ## Must-Have Surface TODOs
 
 ### DUNE Today / Settings
-- [032 ExerciseDefaultsListView](032-ready-p2-e2e-dune-exercise-defaults-list-view.md)
-- [033 ExerciseDefaultEditView](033-ready-p2-e2e-dune-exercise-default-edit-view.md)
-- [034 PreferredExercisesListView](034-ready-p2-e2e-dune-preferred-exercises-list-view.md)
+- 현재 open surface 없음
+- 완료된 Today / Settings surface는 [107 E2E Phase 0 Completed Surface Index](107-done-p2-e2e-phase0-completed-surface-index.md)에서 관리한다.
 
 ### DUNE Activity / Exercise
-- [035 ActivityView](035-ready-p2-e2e-dune-activity-view.md)
-- [036 TrainingReadinessDetailView](036-ready-p2-e2e-dune-training-readiness-detail-view.md)
-- [037 WeeklyStatsDetailView](037-ready-p2-e2e-dune-weekly-stats-detail-view.md)
-- [038 TrainingVolumeDetailView](038-ready-p2-e2e-dune-training-volume-detail-view.md)
-- [039 ExerciseTypeDetailView](039-ready-p2-e2e-dune-exercise-type-detail-view.md)
-- [040 PersonalRecordsDetailView](040-ready-p2-e2e-dune-personal-records-detail-view.md)
-- [041 ConsistencyDetailView](041-ready-p2-e2e-dune-consistency-detail-view.md)
 - [042 ExerciseMixDetailView](042-ready-p2-e2e-dune-exercise-mix-detail-view.md)
 - [046 ExerciseDetailSheet](046-ready-p2-e2e-dune-exercise-detail-sheet.md)
 - [047 CreateCustomExerciseView](047-ready-p2-e2e-dune-create-custom-exercise-view.md)
@@ -69,5 +61,5 @@ updated: 2026-03-16
 
 - `p2`: `DUNE` + `DUNEWatch` must-have 회귀 surface
 - `p3`: `DUNEVision` + `DUNEWidget` deferred surface
-- 완료된 surface 44건은 [107 E2E Phase 0 Completed Surface Index](107-done-p2-e2e-phase0-completed-surface-index.md)로 이동했다.
+- 완료된 surface 54건은 [107 E2E Phase 0 Completed Surface Index](107-done-p2-e2e-phase0-completed-surface-index.md)로 이동했다.
 - 후속 번호는 `108`부터 이어서 사용한다.

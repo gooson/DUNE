@@ -58,6 +58,7 @@ struct ExerciseTypeSummaryRow: View {
                 .foregroundStyle(.tertiary)
         }
         .padding(.vertical, DS.Spacing.xs)
+        .accessibilityIdentifier("activity-training-volume-row-\(exerciseType.typeKey)")
     }
 
     private var hasUnlockedBadge: Bool {

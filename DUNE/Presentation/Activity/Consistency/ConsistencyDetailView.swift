@@ -151,6 +151,7 @@ struct ConsistencyDetailView: View {
         }
         .padding(DS.Spacing.md)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        .accessibilityIdentifier("activity-consistency-calendar")
     }
 
     // MARK: - Streak History
@@ -189,6 +190,7 @@ struct ConsistencyDetailView: View {
         }
         .padding(DS.Spacing.md)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        .accessibilityIdentifier("activity-consistency-history")
     }
 
     // MARK: - Empty State
@@ -208,5 +210,6 @@ struct ConsistencyDetailView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, DS.Spacing.xl)
+        .accessibilityIdentifier("activity-consistency-empty-state")
     }
 }

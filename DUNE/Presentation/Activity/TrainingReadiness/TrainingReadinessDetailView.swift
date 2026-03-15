@@ -51,6 +51,7 @@ struct TrainingReadinessDetailView: View {
                         }
                     }
                     .pickerStyle(.segmented)
+                    .accessibilityIdentifier("training-readiness-period-picker")
                     .sensoryFeedback(.selection, trigger: viewModel.selectedPeriod)
 
                     // 4. Chart Header
@@ -83,6 +84,7 @@ struct TrainingReadinessDetailView: View {
                         .id(viewModel.selectedPeriod)
                         .transition(.opacity)
                     }
+                    .accessibilityIdentifier("trainingreadiness-chart-trend")
                     .animation(.easeInOut(duration: 0.25), value: viewModel.selectedPeriod)
 
                     // 6. Summary Stats + 7. Highlights
@@ -114,6 +116,7 @@ struct TrainingReadinessDetailView: View {
                             color: DS.Color.hrv,
                             unit: "ms"
                         )
+                        .accessibilityIdentifier("training-readiness-subscore-hrv")
 
                         SubScoreTrendChartView(
                             title: "Resting Heart Rate",
@@ -121,6 +124,7 @@ struct TrainingReadinessDetailView: View {
                             color: DS.Color.heartRate,
                             unit: "bpm"
                         )
+                        .accessibilityIdentifier("training-readiness-subscore-rhr")
 
                         SubScoreTrendChartView(
                             title: "Sleep Duration",
@@ -129,6 +133,7 @@ struct TrainingReadinessDetailView: View {
                             unit: "hrs",
                             fractionDigits: 1
                         )
+                        .accessibilityIdentifier("training-readiness-subscore-sleep")
                     }
 
                     // 9. Component Weights

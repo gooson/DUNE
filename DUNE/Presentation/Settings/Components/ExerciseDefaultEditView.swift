@@ -43,6 +43,7 @@ struct ExerciseDefaultEditView: View {
                         .keyboardType(.decimalPad)
                         .multilineTextAlignment(.trailing)
                         .frame(width: 80)
+                        .accessibilityIdentifier("exercise-default-edit-weight")
                 }
 
                 if exercise.inputType == .setsRepsWeight || exercise.inputType == .setsReps {
@@ -53,16 +54,19 @@ struct ExerciseDefaultEditView: View {
                             .keyboardType(.numberPad)
                             .multilineTextAlignment(.trailing)
                             .frame(width: 80)
+                            .accessibilityIdentifier("exercise-default-edit-reps")
                     }
                 }
 
                 Toggle(isOn: $isManualOverride) {
                     Label("Manual Override", systemImage: "pin")
                 }
+                .accessibilityIdentifier("exercise-default-edit-manual-override")
 
                 Toggle(isOn: $isPreferred) {
                     Label("Preferred Exercise", systemImage: "star")
                 }
+                .accessibilityIdentifier("exercise-default-edit-preferred")
             } header: {
                 Text(exercise.localizedName)
             } footer: {
@@ -74,9 +78,11 @@ struct ExerciseDefaultEditView: View {
                     Button("Clear Exercise Settings", role: .destructive) {
                         showClearConfirmation = true
                     }
+                    .accessibilityIdentifier("exercise-default-edit-clear")
                 }
             }
         }
+        .accessibilityIdentifier("exercise-default-edit-screen")
         .scrollContentBackground(.hidden)
         .background { DetailWaveBackground() }
         .englishNavigationTitle("Exercise Default")
@@ -87,6 +93,7 @@ struct ExerciseDefaultEditView: View {
                     saveDefaults()
                     dismiss()
                 }
+                .accessibilityIdentifier("exercise-default-edit-save")
                 .disabled(isSaving)
             }
         }

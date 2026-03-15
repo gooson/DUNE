@@ -24,9 +24,19 @@ updated: 2026-03-16
 - [029 WhatsNewView](029-done-p2-e2e-dune-whats-new-view.md)
 - [030 PinnedMetricsEditorView](030-done-p2-e2e-dune-pinned-metrics-editor-view.md)
 - [031 CloudSyncConsentView](031-done-p2-e2e-dune-cloud-sync-consent-view.md)
+- [032 ExerciseDefaultsListView](032-done-p2-e2e-dune-exercise-defaults-list-view.md)
+- [033 ExerciseDefaultEditView](033-done-p2-e2e-dune-exercise-default-edit-view.md)
+- [034 PreferredExercisesListView](034-done-p2-e2e-dune-preferred-exercises-list-view.md)
 
 ## DUNE Activity / Exercise
 
+- [035 ActivityView](035-done-p2-e2e-dune-activity-view.md)
+- [036 TrainingReadinessDetailView](036-done-p2-e2e-dune-training-readiness-detail-view.md)
+- [037 WeeklyStatsDetailView](037-done-p2-e2e-dune-weekly-stats-detail-view.md)
+- [038 TrainingVolumeDetailView](038-done-p2-e2e-dune-training-volume-detail-view.md)
+- [039 ExerciseTypeDetailView](039-done-p2-e2e-dune-exercise-type-detail-view.md)
+- [040 PersonalRecordsDetailView](040-done-p2-e2e-dune-personal-records-detail-view.md)
+- [041 ConsistencyDetailView](041-done-p2-e2e-dune-consistency-detail-view.md)
 - [043 MuscleMapDetailView](043-done-p2-e2e-dune-muscle-map-detail-view.md)
 - [044 MuscleMap3DView](044-done-p2-e2e-dune-muscle-map-3d-view.md)
 - [045 ExercisePickerView](045-done-p2-e2e-dune-exercise-picker-view.md)
