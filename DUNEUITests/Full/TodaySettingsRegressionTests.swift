@@ -17,6 +17,8 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
     }
 
     func testTodayTabReselectScrollsConditionHeroToTop() throws {
+        dismissMorningBriefingIfNeeded()
+
         let hero = app.descendants(matching: .any)[AXID.dashboardHeroCondition].firstMatch
         XCTAssertTrue(hero.waitForExistence(timeout: 15), "Condition hero should appear for seeded Today state")
 
@@ -37,8 +39,11 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
     }
 
     func testConditionHeroOpensConditionScoreDetail() throws {
+        dismissMorningBriefingIfNeeded()
+
         let hero = app.descendants(matching: .any)[AXID.dashboardHeroCondition].firstMatch
         XCTAssertTrue(hero.waitForExistence(timeout: 15), "Condition hero should exist")
+        XCTAssertTrue(waitForHittable(hero, timeout: 5), "Condition hero should be tappable")
         hero.tap()
 
         let detail = app.descendants(matching: .any)[AXID.conditionScoreDetailScreen].firstMatch
@@ -46,6 +51,8 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
     }
 
     func testSleepMetricOpensMetricDetailAndAllData() throws {
+        dismissMorningBriefingIfNeeded()
+
         XCTAssertTrue(
             app.scrollToElementIfNeeded(AXID.dashboardMetricCard("sleep")),
             "Sleep metric card should be reachable on Today"
@@ -67,6 +74,8 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
     }
 
     func testWeatherCardOpensWeatherDetail() throws {
+        dismissMorningBriefingIfNeeded()
+
         let weatherCard = app.descendants(matching: .any)[AXID.dashboardWeatherCard].firstMatch
         XCTAssertTrue(weatherCard.waitForExistence(timeout: 10), "Seeded Today state should render weather card")
         weatherCard.tap()
@@ -76,10 +85,16 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
     }
 
     func testPinnedMetricsEditorOpensAndDismisses() throws {
-        let identifiedEditButton = app.descendants(matching: .any)[AXID.dashboardPinnedEdit].firstMatch
-        let labeledEditButton = app.buttons["Edit"].firstMatch
-        let editButton = identifiedEditButton.waitForExistence(timeout: 2) ? identifiedEditButton : labeledEditButton
-        XCTAssertTrue(editButton.waitForExistence(timeout: 10), "Pinned edit button should exist")
+        dismissMorningBriefingIfNeeded()
+
+        XCTAssertTrue(
+            app.scrollToHittableElementIfNeeded(AXID.dashboardPinnedEdit, maxSwipes: 8),
+            "Pinned edit button should be reachable"
+        )
+
+        let editButton = app.descendants(matching: .any)[AXID.dashboardPinnedEdit].firstMatch
+        XCTAssertTrue(editButton.waitForExistence(timeout: 5), "Pinned edit button should exist")
+        XCTAssertTrue(waitForHittable(editButton, timeout: 5), "Pinned edit button should be tappable")
         editButton.tap()
 
         let editor = app.descendants(matching: .any)[AXID.pinnedMetricsEditorScreen].firstMatch
@@ -93,12 +108,7 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
     }
 
     func testNotificationHubControlsTransitionToEmptyState() throws {
-        let notificationsButton = app.descendants(matching: .any)[AXID.dashboardToolbarNotifications].firstMatch
-        XCTAssertTrue(notificationsButton.waitForExistence(timeout: 5), "Notifications toolbar button should exist")
-        notificationsButton.tap()
-
-        let navBar = app.navigationBars["Notifications"].firstMatch
-        XCTAssertTrue(navBar.waitForExistence(timeout: 5), "Notification hub should open")
+        openNotificationHub()
 
         let settingsButton = app.descendants(matching: .any)[AXID.notificationsOpenSettingsButton].firstMatch
         XCTAssertTrue(settingsButton.waitForExistence(timeout: 5), "Notification settings shortcut should exist")
@@ -126,7 +136,7 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
     }
 
     func testSettingsShowsPhaseTwoRows() throws {
-        navigateToSettings()
+        openSettings()
 
         XCTAssertTrue(
             app.descendants(matching: .any)[AXID.settingsRowRestTime].firstMatch.waitForExistence(timeout: 5),
@@ -158,6 +168,70 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
             app.descendants(matching: .any)[AXID.settingsRowVersion].firstMatch.waitForExistence(timeout: 5),
             "Version row should exist"
         )
+    }
+
+    private func openNotificationHub() {
+        dismissMorningBriefingIfNeeded(timeout: 1.5)
+
+        let notificationsButton = app.descendants(matching: .any)[AXID.dashboardToolbarNotifications].firstMatch
+        XCTAssertTrue(notificationsButton.waitForExistence(timeout: 5), "Notifications toolbar button should exist")
+        XCTAssertTrue(waitForHittable(notificationsButton, timeout: 5), "Notifications button should be tappable")
+        notificationsButton.tap()
+
+        let hub = app.descendants(matching: .any)[AXID.notificationHubScreen].firstMatch
+        XCTAssertTrue(hub.waitForExistence(timeout: 8), "Notification hub should open")
+    }
+
+    private func openSettings() {
+        dismissMorningBriefingIfNeeded(timeout: 1.5)
+
+        let settingsButton = app.descendants(matching: .any)[AXID.dashboardToolbarSettings].firstMatch
+        XCTAssertTrue(settingsButton.waitForExistence(timeout: 5), "Settings toolbar button should exist")
+        XCTAssertTrue(waitForHittable(settingsButton, timeout: 5), "Settings toolbar button should be tappable")
+        settingsButton.tap()
+
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.settingsRowRestTime].firstMatch.waitForExistence(timeout: 8),
+            "Settings root should open from Today toolbar"
+        )
+    }
+
+    private func waitForHittable(_ element: XCUIElement, timeout: TimeInterval) -> Bool {
+        let predicate = NSPredicate(format: "exists == true AND hittable == true")
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: element)
+        return XCTWaiter.wait(for: [expectation], timeout: timeout) == .completed
+    }
+
+    private func dismissMorningBriefingIfNeeded(timeout: TimeInterval = 5) {
+        let briefingScreen = app.descendants(matching: .any)[AXID.dashboardMorningBriefingScreen].firstMatch
+        let dismissButton = app.descendants(matching: .any)[AXID.dashboardMorningBriefingDismiss].firstMatch
+        let deadline = Date().addingTimeInterval(timeout)
+
+        while Date() < deadline {
+            if dismissButton.waitForExistence(timeout: 0.25) {
+                dismissButton.tap()
+
+                let predicate = NSPredicate(format: "exists == false")
+                let expectation = XCTNSPredicateExpectation(predicate: predicate, object: briefingScreen)
+                XCTAssertEqual(
+                    XCTWaiter.wait(for: [expectation], timeout: 5),
+                    .completed,
+                    "Morning Briefing should dismiss before opening Today settings regression routes"
+                )
+                return
+            }
+
+            if !briefingScreen.exists {
+                return
+            }
+
+            RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.1))
+        }
+
+        guard !briefingScreen.exists else {
+            XCTFail("Morning Briefing remained visible without exposing a dismiss button")
+            return
+        }
     }
 }
 
