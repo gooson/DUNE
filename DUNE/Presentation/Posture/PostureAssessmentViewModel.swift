@@ -49,6 +49,7 @@ final class PostureAssessmentViewModel {
     var skeletonKeypoints: [(String, CGPoint)] = []
     var skeletonImageSize: CGSize = .zero
     var deviceOrientation: UIDeviceOrientation = .portrait
+    var captureDiagnostics = PostureCaptureDiagnostics()
 
     // MARK: - Haptic Triggers
 
@@ -75,6 +76,10 @@ final class PostureAssessmentViewModel {
         case .front: String(localized: "Front View")
         case .side: String(localized: "Side View")
         }
+    }
+
+    var isDiagnosticsEnabled: Bool {
+        PostureCaptureService.isDiagnosticsEnabled
     }
 
     // MARK: - Tasks
@@ -121,6 +126,7 @@ final class PostureAssessmentViewModel {
         countdownTask?.cancel()
         countdownTask = nil
         captureService.onFrameUpdate = nil
+        captureService.onDiagnosticsUpdate = nil
         captureService.stopSession()
     }
 
@@ -155,6 +161,11 @@ final class PostureAssessmentViewModel {
                 self?.skeletonKeypoints = keypoints
                 self?.skeletonImageSize = imageSize
                 self?.handleAutoCapture(state)
+            }
+        }
+        captureService.onDiagnosticsUpdate = { [weak self] diagnostics in
+            Task { @MainActor [weak self] in
+                self?.captureDiagnostics = diagnostics
             }
         }
     }

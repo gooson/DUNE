@@ -113,6 +113,19 @@ struct PostureCaptureView: View {
                 isFrontCamera: viewModel.cameraPosition == .front
             )
 
+            if viewModel.isDiagnosticsEnabled {
+                VStack {
+                    HStack {
+                        diagnosticsOverlay
+                        Spacer()
+                    }
+                    Spacer()
+                }
+                .padding(.top, 60)
+                .padding(.leading, 8)
+                .accessibilityHidden(true)
+            }
+
             // Distance indicator (left side)
             HStack {
                 DistanceIndicatorView(status: viewModel.guidanceState.distanceStatus)
@@ -175,6 +188,26 @@ struct PostureCaptureView: View {
                 .padding(.bottom, 40)
             }
         }
+    }
+
+    private var diagnosticsOverlay: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text("DEBUG")
+                .font(.caption2.weight(.bold))
+            Text("preset \(viewModel.captureDiagnostics.sessionPreset)")
+            Text(
+                "frame \(viewModel.captureDiagnostics.frameWidth)x\(viewModel.captureDiagnostics.frameHeight) \(viewModel.captureDiagnostics.pixelFormat)"
+            )
+            Text("pose \(viewModel.captureDiagnostics.lastPoseLatencyMs)ms err \(viewModel.captureDiagnostics.poseErrorCount)")
+            if let lastVisionError = viewModel.captureDiagnostics.lastVisionError {
+                Text(lastVisionError)
+                    .lineLimit(2)
+            }
+        }
+        .font(.caption2.monospaced())
+        .foregroundStyle(.white)
+        .padding(8)
+        .background(.black.opacity(0.55), in: RoundedRectangle(cornerRadius: 10))
     }
 
     private var lightingWarning: some View {
