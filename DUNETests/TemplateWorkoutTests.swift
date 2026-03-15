@@ -259,4 +259,17 @@ struct TemplateWorkoutViewModelReorderTests {
 
         #expect(vm.config.exercises[0].id == originalFirstID)
     }
+
+    @Test("moveExercise refuses to move completed exercises")
+    func moveRefusesCompleted() {
+        let vm = makeViewModel()
+        vm.exerciseStatuses[1] = .completed
+        let originalOrder = vm.exercises.map(\.id)
+
+        // Attempt to move completed exercise
+        vm.moveExercise(from: IndexSet(integer: 1), to: 0)
+
+        // Order should be unchanged
+        #expect(vm.exercises.map(\.id) == originalOrder)
+    }
 }
