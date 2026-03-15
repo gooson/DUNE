@@ -490,6 +490,88 @@ struct DashboardViewModelTests {
         #expect(await sharedHealthDataService.currentFetchCount() == 1)
     }
 
+    @Test("Shared snapshot source failure does not show partial error when fallback metric is available")
+    func sharedSnapshotFailureWithFallbackDoesNotShowError() async {
+        let now = Date()
+        let sleepDate = Calendar.current.date(byAdding: .day, value: -1, to: now) ?? now
+        let sleepStages = [
+            SleepStage(stage: .core, duration: 3600, startDate: sleepDate, endDate: sleepDate.addingTimeInterval(3600))
+        ]
+        let snapshot = SharedHealthSnapshot(
+            hrvSamples: [HRVSample(value: 48.0, date: now)],
+            todayRHR: nil,
+            yesterdayRHR: nil,
+            latestRHR: SharedHealthSnapshot.RHRSample(value: 56.0, date: now),
+            rhrCollection: [],
+            todaySleepStages: [],
+            yesterdaySleepStages: [],
+            latestSleepStages: SharedHealthSnapshot.SleepStagesSample(stages: sleepStages, date: sleepDate),
+            sleepDailyDurations: [
+                SharedHealthSnapshot.SleepDailyDuration(
+                    date: sleepDate,
+                    totalMinutes: 360,
+                    stageBreakdown: [.core: 360]
+                )
+            ],
+            conditionScore: nil,
+            baselineStatus: nil,
+            recentConditionScores: [],
+            failedSources: [.todaySleepStages, .todayRHR],
+            fetchedAt: now
+        )
+        let vm = DashboardViewModel(
+            hrvService: MockHRVService(),
+            sleepService: MockSleepService(),
+            workoutService: MockWorkoutService(),
+            stepsService: MockStepsService(),
+            sharedHealthDataService: CountingDashboardSharedHealthDataService(snapshot: snapshot),
+            weatherProvider: MockWeatherProvider(snapshot: makeTestWeatherSnapshot()),
+            coachingMessageEnhancer: nil
+        )
+
+        await vm.loadData()
+
+        #expect(vm.sortedMetrics.contains { $0.category == .hrv })
+        #expect(vm.sortedMetrics.contains { $0.category == .sleep })
+        #expect(vm.errorMessage == nil)
+    }
+
+    @Test("Shared snapshot source failure shows partial error when category card cannot be built")
+    func sharedSnapshotFailureWithoutFallbackShowsError() async {
+        let now = Date()
+        let snapshot = SharedHealthSnapshot(
+            hrvSamples: [],
+            todayRHR: nil,
+            yesterdayRHR: nil,
+            latestRHR: nil,
+            rhrCollection: [],
+            todaySleepStages: [],
+            yesterdaySleepStages: [],
+            latestSleepStages: nil,
+            sleepDailyDurations: [],
+            todaySteps: 1200,
+            conditionScore: nil,
+            baselineStatus: nil,
+            recentConditionScores: [],
+            failedSources: [.hrvSamples],
+            fetchedAt: now
+        )
+        let vm = DashboardViewModel(
+            hrvService: MockHRVService(),
+            sleepService: MockSleepService(),
+            workoutService: MockWorkoutService(),
+            stepsService: MockStepsService(),
+            sharedHealthDataService: CountingDashboardSharedHealthDataService(snapshot: snapshot),
+            weatherProvider: MockWeatherProvider(snapshot: makeTestWeatherSnapshot()),
+            coachingMessageEnhancer: nil
+        )
+
+        await vm.loadData()
+
+        #expect(vm.sortedMetrics.contains { $0.category == .steps })
+        #expect(vm.errorMessage?.contains("Some data could not be loaded") == true)
+    }
+
     // MARK: - Sleep Fallback
 
     @Test("Sleep falls back to latest when today is empty")
