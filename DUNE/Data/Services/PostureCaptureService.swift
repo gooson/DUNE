@@ -1,6 +1,7 @@
 #if !os(visionOS)
 import AVFoundation
 import Foundation
+import ImageIO
 import os
 import UIKit
 @preconcurrency import Vision
@@ -164,7 +165,11 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
 
     func detectPose(from image: CGImage, orientedJPEG: Data?) async throws -> PostureCaptureResult {
         let request = VNDetectHumanBodyPose3DRequest()
-        let handler = VNImageRequestHandler(cgImage: image, options: [:])
+        // Pass EXIF orientation so pointInImage() returns coordinates in the
+        // displayed (portrait, mirrored-for-front-camera) coordinate space,
+        // not in the raw landscape sensor coordinate space.
+        let orientation = Self.extractOrientation(from: orientedJPEG)
+        let handler = VNImageRequestHandler(cgImage: image, orientation: orientation, options: [:])
 
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, any Error>) in
             DispatchQueue.global(qos: .userInitiated).async {
@@ -364,6 +369,21 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
         } else {
             return sorted[count / 2]
         }
+    }
+
+    // MARK: - Orientation Extraction
+
+    /// Extracts EXIF orientation from JPEG file data so Vision can return
+    /// image-space coordinates in the displayed (portrait) coordinate system.
+    private static func extractOrientation(from jpegData: Data?) -> CGImagePropertyOrientation {
+        guard let data = jpegData,
+              let source = CGImageSourceCreateWithData(data as CFData, nil),
+              let properties = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [String: Any],
+              let raw = properties[kCGImagePropertyOrientation as String] as? UInt32,
+              let orientation = CGImagePropertyOrientation(rawValue: raw) else {
+            return .up
+        }
+        return orientation
     }
 
     // MARK: - Image Compression
