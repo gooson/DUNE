@@ -12,7 +12,8 @@ updated: 2026-03-16
 
 - Phase 5A 실데이터 연결(`todos/021-done-p1-vision-real-data-pipeline.md`)이 완료됐다.
 - Phase 5B UX polish 구현은 `todos/022-done-p2-vision-ux-polish.md`로 닫혔다.
-- runtime spatial placement visual verification은 `todos/107-ready-p2-vision-window-placement-runtime-validation.md`에서 별도 추적한다.
+- runtime spatial placement primary smoke는 `todos/107-done-p2-vision-window-placement-runtime-validation.md`에서 닫았다.
+- 남은 E1 runtime scope는 `todos/141-ready-p3-vision-window-placement-no-anchor-fallback.md`의 no-anchor utilityPanel fallback 관찰뿐이다.
 - Voice quick entry는 draft preview를 넘어 single-entry workout history 저장까지 연결됐다.
 - `todos/140-done-p2-vision-voice-feedback-confirmation.md`에서 locale-aware confirmation, TTS fallback, quick adjust editing을 닫았다.
 - 따라서 남은 F3 범위는 true spatial audio cue와 multi-step session editing으로 줄었다.
