@@ -114,6 +114,8 @@ targets:
       # Shared Widget Data
       - path: ../Shared/WidgetScoreData.swift
         group: Shared
+      - path: ../Shared/WidgetSurfaceAccessibility.swift
+        group: Shared
     settings:
       base:
         INFOPLIST_FILE: Resources/Info.plist
@@ -240,6 +242,8 @@ targets:
         group: Shared/Resources
       # Shared Widget Data
       - path: ../Shared/WidgetScoreData.swift
+        group: Shared
+      - path: ../Shared/WidgetSurfaceAccessibility.swift
         group: Shared
     settings:
       base:
