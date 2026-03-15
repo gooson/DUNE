@@ -1,7 +1,7 @@
 import SwiftUI
 
 /// In-session exercise reorder sheet for Watch.
-/// Shows exercise list with context menu for Move Up/Move Down.
+/// Shows exercise list with explicit up/down buttons.
 /// Completed exercises are pinned and cannot be moved.
 struct WatchExerciseReorderView: View {
     @Environment(WorkoutManager.self) private var workoutManager
@@ -15,34 +15,53 @@ struct WatchExerciseReorderView: View {
                             && !workoutManager.completedSetsData[index].isEmpty
                         let isCurrent = index == workoutManager.currentExerciseIndex
 
-                        let row = exerciseRow(
-                            index: index,
-                            entry: entry,
-                            isCompleted: isCompleted,
-                            isCurrent: isCurrent
-                        )
+                        VStack(spacing: DS.Spacing.xs) {
+                            HStack(spacing: DS.Spacing.md) {
+                                if isCompleted {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .foregroundStyle(DS.Color.positive)
+                                        .frame(width: 20)
+                                } else if isCurrent {
+                                    Image(systemName: "play.circle.fill")
+                                        .foregroundStyle(DS.Color.activity)
+                                        .frame(width: 20)
+                                } else {
+                                    Text("\(index + 1)")
+                                        .font(DS.Typography.metricLabel)
+                                        .foregroundStyle(.secondary)
+                                        .frame(width: 20)
+                                }
 
-                        row
-                            .swipeActions(edge: .leading) {
-                                if !isCompleted, workoutManager.canMoveExercise(at: index, direction: .up) {
+                                Text(entry.exerciseName)
+                                    .font(DS.Typography.tileSubtitle)
+                                    .lineLimit(1)
+                            }
+                            .opacity(isCompleted ? 0.5 : 1.0)
+
+                            if !isCompleted {
+                                HStack(spacing: DS.Spacing.sm) {
                                     Button {
                                         workoutManager.moveExercise(at: index, direction: .up)
                                     } label: {
-                                        Label(String(localized: "Move Up"), systemImage: "arrow.up")
+                                        Image(systemName: "arrow.up")
+                                            .font(.caption2)
+                                            .frame(maxWidth: .infinity, minHeight: 28)
                                     }
-                                    .tint(DS.Color.activity)
-                                }
-                            }
-                            .swipeActions(edge: .trailing) {
-                                if !isCompleted, workoutManager.canMoveExercise(at: index, direction: .down) {
+                                    .buttonStyle(.bordered)
+                                    .disabled(!workoutManager.canMoveExercise(at: index, direction: .up))
+
                                     Button {
                                         workoutManager.moveExercise(at: index, direction: .down)
                                     } label: {
-                                        Label(String(localized: "Move Down"), systemImage: "arrow.down")
+                                        Image(systemName: "arrow.down")
+                                            .font(.caption2)
+                                            .frame(maxWidth: .infinity, minHeight: 28)
                                     }
-                                    .tint(DS.Color.activity)
+                                    .buttonStyle(.bordered)
+                                    .disabled(!workoutManager.canMoveExercise(at: index, direction: .down))
                                 }
                             }
+                        }
                     }
                 } header: {
                     Text("Reorder Exercises")
@@ -51,34 +70,5 @@ struct WatchExerciseReorderView: View {
         }
         .scrollContentBackground(.hidden)
         .background { WatchWaveBackground() }
-    }
-
-    private func exerciseRow(
-        index: Int,
-        entry: TemplateEntry,
-        isCompleted: Bool,
-        isCurrent: Bool
-    ) -> some View {
-        HStack(spacing: DS.Spacing.md) {
-            if isCompleted {
-                Image(systemName: "checkmark.circle.fill")
-                    .foregroundStyle(DS.Color.positive)
-                    .frame(width: 20)
-            } else if isCurrent {
-                Image(systemName: "play.circle.fill")
-                    .foregroundStyle(DS.Color.activity)
-                    .frame(width: 20)
-            } else {
-                Text("\(index + 1)")
-                    .font(DS.Typography.metricLabel)
-                    .foregroundStyle(.secondary)
-                    .frame(width: 20)
-            }
-
-            Text(entry.exerciseName)
-                .font(DS.Typography.tileSubtitle)
-                .lineLimit(1)
-        }
-        .opacity(isCompleted ? 0.5 : 1.0)
     }
 }

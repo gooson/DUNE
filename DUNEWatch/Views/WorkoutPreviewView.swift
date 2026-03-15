@@ -270,60 +270,66 @@ struct WorkoutPreviewView: View {
             List {
                 Section {
                     ForEach(Array(reorderedEntries.enumerated()), id: \.element.id) { index, entry in
-                        HStack(spacing: DS.Spacing.md) {
-                            Text("\(index + 1)")
-                                .font(DS.Typography.metricLabel)
-                                .foregroundStyle(.secondary)
-                                .frame(width: 16)
+                        VStack(spacing: DS.Spacing.xs) {
+                            HStack(spacing: DS.Spacing.md) {
+                                Text("\(index + 1)")
+                                    .font(DS.Typography.metricLabel)
+                                    .foregroundStyle(.secondary)
+                                    .frame(width: 16)
 
-                            EquipmentIconView(equipment: entry.equipment, size: 20)
-                                .frame(width: 20, height: 20)
+                                EquipmentIconView(equipment: entry.equipment, size: 20)
+                                    .frame(width: 20, height: 20)
 
-                            VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                                Text(entry.exerciseName)
-                                    .font(DS.Typography.tileSubtitle)
-                                    .lineLimit(1)
+                                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                                    Text(entry.exerciseName)
+                                        .font(DS.Typography.tileSubtitle)
+                                        .lineLimit(1)
 
-                                let profile = TemplateExerciseProfile(
-                                    inputTypeRaw: resolvedInputType(for: entry),
-                                    cardioSecondaryUnitRaw: resolvedCardioSecondaryUnitRaw(for: entry)
-                                )
+                                    let profile = TemplateExerciseProfile(
+                                        inputTypeRaw: resolvedInputType(for: entry),
+                                        cardioSecondaryUnitRaw: resolvedCardioSecondaryUnitRaw(for: entry)
+                                    )
 
-                                HStack(spacing: DS.Spacing.xs) {
-                                    if profile.showsStrengthDefaultsEditor {
-                                        Text("\(entry.defaultSets)\u{00d7}\(entry.defaultReps)")
-                                        if let kg = entry.defaultWeightKg, kg > 0 {
-                                            Text("\u{00b7} \(kg, specifier: "%.1f")kg")
-                                        }
-                                    } else {
-                                        Text(profile.primarySummaryLabel)
-                                        if let secondary = profile.secondarySummaryLabel {
-                                            Text("\u{00b7} \(secondary)")
+                                    HStack(spacing: DS.Spacing.xs) {
+                                        if profile.showsStrengthDefaultsEditor {
+                                            Text("\(entry.defaultSets)\u{00d7}\(entry.defaultReps)")
+                                            if let kg = entry.defaultWeightKg, kg > 0 {
+                                                Text("\u{00b7} \(kg, specifier: "%.1f")kg")
+                                            }
+                                        } else {
+                                            Text(profile.primarySummaryLabel)
+                                            if let secondary = profile.secondarySummaryLabel {
+                                                Text("\u{00b7} \(secondary)")
+                                            }
                                         }
                                     }
+                                    .font(DS.Typography.metricLabel)
+                                    .foregroundStyle(.secondary)
                                 }
-                                .font(DS.Typography.metricLabel)
-                                .foregroundStyle(.secondary)
                             }
-                        }
-                        .swipeActions(edge: .leading) {
-                            if index > 0 {
-                                Button {
-                                    reorderedEntries.swapAt(index, index - 1)
-                                } label: {
-                                    Label(String(localized: "Move Up"), systemImage: "arrow.up")
+
+                            if reorderedEntries.count > 1 {
+                                HStack(spacing: DS.Spacing.sm) {
+                                    Button {
+                                        reorderedEntries.swapAt(index, index - 1)
+                                    } label: {
+                                        Image(systemName: "arrow.up")
+                                            .font(.caption2)
+                                            .frame(maxWidth: .infinity, minHeight: 28)
+                                    }
+                                    .buttonStyle(.bordered)
+                                    .disabled(index == 0)
+
+                                    Button {
+                                        reorderedEntries.swapAt(index, index + 1)
+                                    } label: {
+                                        Image(systemName: "arrow.down")
+                                            .font(.caption2)
+                                            .frame(maxWidth: .infinity, minHeight: 28)
+                                    }
+                                    .buttonStyle(.bordered)
+                                    .disabled(index == reorderedEntries.count - 1)
                                 }
-                                .tint(DS.Color.activity)
-                            }
-                        }
-                        .swipeActions(edge: .trailing) {
-                            if index < reorderedEntries.count - 1 {
-                                Button {
-                                    reorderedEntries.swapAt(index, index + 1)
-                                } label: {
-                                    Label(String(localized: "Move Down"), systemImage: "arrow.down")
-                                }
-                                .tint(DS.Color.activity)
                             }
                         }
                     }
