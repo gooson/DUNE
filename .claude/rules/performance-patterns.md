@@ -35,6 +35,11 @@
 - `defer` 사용: Void async → 필수, returning func → 금지 (명시적 리셋)
 - Swift 6 `@MainActor` 클래스에서 `withThrowingTaskGroup` 내 `@MainActor addTask` 금지 → continuation 내부 Task timeout 패턴 사용
 
+## AVCaptureSession Buffer Pool
+- `CMSampleBuffer`를 비동기 Task/closure에 캡처 금지 → CVPixelBuffer 딥카피 후 원본 즉시 해제
+- Vision `mlImage buffer` 에러는 메모리 부족이 아닌 **풀 고갈** 시그널
+- 카메라 관련 변경은 반드시 실기기 테스트 (시뮬레이터 재현 불가)
+
 ## JSON/Data
 - 번들 JSON 파싱 → `static let shared` 싱글턴
 - aggregate 합산 → `isFinite` guard + 물리적 상한

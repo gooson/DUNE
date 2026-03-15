@@ -106,14 +106,18 @@ final class RealtimePoseTracker: @unchecked Sendable {
                 }
             }
 
-            // 3D sampling trigger — CMSampleBuffer keeps pixel buffer alive
+            // 3D sampling trigger — copy pixel buffer to release CMSampleBuffer
+            // back to the camera pool immediately, preventing pool starvation
+            // that causes "Could not create mlImage buffer" errors.
             if !self.is3DInFlight,
                !keypoints.isEmpty,
-               now - self.last3DSampleTime >= Self.min3DInterval {
+               now - self.last3DSampleTime >= Self.min3DInterval,
+               let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer),
+               let copiedBuffer = Self.copyPixelBuffer(pixelBuffer) {
                 self.is3DInFlight = true
                 self.last3DSampleTime = now
                 self.pending3DTask = Task { [weak self] in
-                    await self?.perform3DDetection(sampleBuffer)
+                    await self?.perform3DDetection(copiedBuffer)
                 }
             }
 
@@ -127,11 +131,11 @@ final class RealtimePoseTracker: @unchecked Sendable {
 
     // MARK: - 3D Detection
 
-    private func perform3DDetection(_ sampleBuffer: CMSampleBuffer) async {
+    private func perform3DDetection(_ pixelBuffer: CVPixelBuffer) async {
         guard !Task.isCancelled else { return }
 
         do {
-            let result = try await captureService.detectPoseFromVideoFrame(sampleBuffer)
+            let result = try await captureService.detectPoseFromVideoFrame(pixelBuffer)
 
             guard !Task.isCancelled else { return }
 
@@ -154,6 +158,65 @@ final class RealtimePoseTracker: @unchecked Sendable {
                 self?.is3DInFlight = false
             }
         }
+    }
+
+    // MARK: - Pixel Buffer Copy
+
+    /// Deep-copy a CVPixelBuffer so the original (owned by the camera pool) can
+    /// be recycled immediately. Supports both planar (420YpCbCr) and interleaved formats.
+    private static func copyPixelBuffer(_ source: CVPixelBuffer) -> CVPixelBuffer? {
+        let width = CVPixelBufferGetWidth(source)
+        let height = CVPixelBufferGetHeight(source)
+        let format = CVPixelBufferGetPixelFormatType(source)
+
+        var copy: CVPixelBuffer?
+        let status = CVPixelBufferCreate(
+            kCFAllocatorDefault, width, height, format,
+            [kCVPixelBufferIOSurfacePropertiesKey: [:] as CFDictionary] as CFDictionary,
+            &copy
+        )
+        guard status == kCVReturnSuccess, let dest = copy else { return nil }
+
+        CVPixelBufferLockBaseAddress(source, .readOnly)
+        CVPixelBufferLockBaseAddress(dest, [])
+        defer {
+            CVPixelBufferUnlockBaseAddress(source, .readOnly)
+            CVPixelBufferUnlockBaseAddress(dest, [])
+        }
+
+        let planeCount = CVPixelBufferGetPlaneCount(source)
+        if planeCount > 0 {
+            for plane in 0..<planeCount {
+                guard let srcAddr = CVPixelBufferGetBaseAddressOfPlane(source, plane),
+                      let dstAddr = CVPixelBufferGetBaseAddressOfPlane(dest, plane) else { continue }
+                let srcBPR = CVPixelBufferGetBytesPerRowOfPlane(source, plane)
+                let dstBPR = CVPixelBufferGetBytesPerRowOfPlane(dest, plane)
+                let planeHeight = CVPixelBufferGetHeightOfPlane(source, plane)
+                if srcBPR == dstBPR {
+                    memcpy(dstAddr, srcAddr, srcBPR * planeHeight)
+                } else {
+                    let copyBPR = min(srcBPR, dstBPR)
+                    for row in 0..<planeHeight {
+                        memcpy(dstAddr + row * dstBPR, srcAddr + row * srcBPR, copyBPR)
+                    }
+                }
+            }
+        } else {
+            guard let srcAddr = CVPixelBufferGetBaseAddress(source),
+                  let dstAddr = CVPixelBufferGetBaseAddress(dest) else { return dest }
+            let srcBPR = CVPixelBufferGetBytesPerRow(source)
+            let dstBPR = CVPixelBufferGetBytesPerRow(dest)
+            if srcBPR == dstBPR {
+                memcpy(dstAddr, srcAddr, srcBPR * height)
+            } else {
+                let copyBPR = min(srcBPR, dstBPR)
+                for row in 0..<height {
+                    memcpy(dstAddr + row * dstBPR, srcAddr + row * srcBPR, copyBPR)
+                }
+            }
+        }
+
+        return dest
     }
 
     // MARK: - Scoring
