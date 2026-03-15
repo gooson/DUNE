@@ -162,8 +162,10 @@ struct TemplateWorkoutView: View {
             // Exercise tabs
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: DS.Spacing.sm) {
-                    ForEach(viewModel.exercises.indices, id: \.self) { index in
-                        exerciseTab(index: index)
+                    ForEach(viewModel.exercises, id: \.id) { exercise in
+                        if let index = viewModel.exercises.firstIndex(where: { $0.id == exercise.id }) {
+                            exerciseTab(index: index)
+                        }
                     }
                 }
             }
