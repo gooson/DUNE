@@ -1,6 +1,61 @@
 {
   "releases": [
     {
+      "version": "0.5.0",
+      "introKey": "AI posture analysis, morning briefings, RPE trend insights, an upgraded 3D muscle map, and smarter Watch workouts — DUNE now sees how you move.",
+      "features": [
+        {
+          "id": "postureAssessment",
+          "titleKey": "Posture Analysis",
+          "summaryKey": "Capture a photo and get AI-powered posture scoring with plumb-line overlay, symmetry comparison, trend tracking, and PDF reports.",
+          "symbolName": "figure.stand.line.dotted.figure.stand",
+          "area": "wellness"
+        },
+        {
+          "id": "morningBriefing",
+          "titleKey": "Morning Briefing",
+          "summaryKey": "Start your day with a personalized dashboard card summarizing your condition, sleep, and today's training plan.",
+          "symbolName": "sun.horizon.fill",
+          "area": "today"
+        },
+        {
+          "id": "rpeTrend",
+          "titleKey": "RPE Trend & Overtraining Alert",
+          "summaryKey": "Track your RPE trend over time with a moving average chart, and receive coaching alerts when overtraining patterns emerge.",
+          "symbolName": "chart.line.uptrend.xyaxis.circle.fill",
+          "area": "activity"
+        },
+        {
+          "id": "muscleMap3DOverhaul",
+          "titleKey": "3D Muscle Map Overhaul",
+          "summaryKey": "Explore muscle recovery on a fullscreen RealityKit viewer with the Z-Anatomy model for smoother, more detailed visualization.",
+          "symbolName": "cube.fill",
+          "area": "activity"
+        },
+        {
+          "id": "watchExerciseReorder",
+          "titleKey": "Watch Exercise Reorder",
+          "summaryKey": "Reorder exercises mid-workout on Apple Watch — rearrange your session on the fly from your wrist.",
+          "symbolName": "arrow.up.arrow.down",
+          "area": "watch"
+        },
+        {
+          "id": "hourlyCondition",
+          "titleKey": "Hourly Condition Tracking",
+          "summaryKey": "See how your condition changes throughout the day with hourly HRV and heart rate charts.",
+          "symbolName": "clock.fill",
+          "area": "wellness"
+        },
+        {
+          "id": "templateNudge",
+          "titleKey": "Template Nudge",
+          "summaryKey": "Get a smart nudge on your dashboard when it's time to create a workout template from your recent sessions.",
+          "symbolName": "lightbulb.max.fill",
+          "area": "activity"
+        }
+      ]
+    },
+    {
       "version": "0.4.0",
       "introKey": "Set-level RPE, stair climbing, VO2 Max tracking, workout rewards, and smarter sleep analysis — your fitness toolkit keeps growing.",
       "features": [
