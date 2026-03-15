@@ -22,26 +22,27 @@ struct WatchExerciseReorderView: View {
                             isCurrent: isCurrent
                         )
 
-                        if isCompleted {
-                            row
-                        } else {
-                            row.contextMenu {
-                                if workoutManager.canMoveExercise(at: index, direction: .up) {
+                        row
+                            .swipeActions(edge: .leading) {
+                                if !isCompleted, workoutManager.canMoveExercise(at: index, direction: .up) {
                                     Button {
                                         workoutManager.moveExercise(at: index, direction: .up)
                                     } label: {
                                         Label(String(localized: "Move Up"), systemImage: "arrow.up")
                                     }
+                                    .tint(DS.Color.activity)
                                 }
-                                if workoutManager.canMoveExercise(at: index, direction: .down) {
+                            }
+                            .swipeActions(edge: .trailing) {
+                                if !isCompleted, workoutManager.canMoveExercise(at: index, direction: .down) {
                                     Button {
                                         workoutManager.moveExercise(at: index, direction: .down)
                                     } label: {
                                         Label(String(localized: "Move Down"), systemImage: "arrow.down")
                                     }
+                                    .tint(DS.Color.activity)
                                 }
                             }
-                        }
                     }
                 } header: {
                     Text("Reorder Exercises")

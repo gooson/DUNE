@@ -306,20 +306,24 @@ struct WorkoutPreviewView: View {
                                 .foregroundStyle(.secondary)
                             }
                         }
-                        .contextMenu {
+                        .swipeActions(edge: .leading) {
                             if index > 0 {
                                 Button {
                                     reorderedEntries.swapAt(index, index - 1)
                                 } label: {
                                     Label(String(localized: "Move Up"), systemImage: "arrow.up")
                                 }
+                                .tint(DS.Color.activity)
                             }
+                        }
+                        .swipeActions(edge: .trailing) {
                             if index < reorderedEntries.count - 1 {
                                 Button {
                                     reorderedEntries.swapAt(index, index + 1)
                                 } label: {
                                     Label(String(localized: "Move Down"), systemImage: "arrow.down")
                                 }
+                                .tint(DS.Color.activity)
                             }
                         }
                     }
