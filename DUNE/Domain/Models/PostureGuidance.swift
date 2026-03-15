@@ -83,4 +83,23 @@ enum GuidanceHint: Sendable, Hashable {
     case wrongOrientation
     case armsNotRelaxed
     case notStable
+
+    var displayMessage: String {
+        switch self {
+        case .fullBodyNotVisible:
+            String(localized: "Move back so your full body is visible")
+        case .tooClose:
+            String(localized: "Step back a little")
+        case .tooFar:
+            String(localized: "Move a little closer")
+        case .lowLighting:
+            String(localized: "Move to a brighter area")
+        case .wrongOrientation:
+            String(localized: "Face the camera directly")
+        case .armsNotRelaxed:
+            String(localized: "Relax your arms at your sides")
+        case .notStable:
+            String(localized: "Hold still for a moment")
+        }
+    }
 }

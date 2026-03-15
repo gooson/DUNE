@@ -169,11 +169,10 @@ final class PostureAssessmentViewModel {
         guard isAutoCapture else { return }
 
         if state.isReady {
-            if autoReadyStartTime == nil {
-                autoReadyStartTime = CFAbsoluteTimeGetCurrent()
-            }
-            let elapsed = CFAbsoluteTimeGetCurrent() - (autoReadyStartTime ?? CFAbsoluteTimeGetCurrent())
-            if elapsed >= Self.autoReadyDelay {
+            let now = CFAbsoluteTimeGetCurrent()
+            let start = autoReadyStartTime ?? now
+            if autoReadyStartTime == nil { autoReadyStartTime = now }
+            if now - start >= Self.autoReadyDelay {
                 autoReadyStartTime = nil
                 startCountdown()
             }
@@ -198,7 +197,7 @@ final class PostureAssessmentViewModel {
 
                     // TTS for back camera
                     if isUsingBackCamera {
-                        speakCountdown(i)
+                        speak("\(i)")
                     }
 
                     try await Task.sleep(for: .seconds(1))
@@ -365,13 +364,6 @@ final class PostureAssessmentViewModel {
     }
 
     // MARK: - TTS
-
-    private func speakCountdown(_ count: Int) {
-        let utterance = AVSpeechUtterance(string: "\(count)")
-        utterance.rate = AVSpeechUtteranceDefaultSpeechRate
-        utterance.volume = 1.0
-        speechSynthesizer.speak(utterance)
-    }
 
     private func speak(_ text: String) {
         let utterance = AVSpeechUtterance(string: text)

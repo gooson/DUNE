@@ -46,6 +46,8 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
     // MARK: - Real-time Guidance
 
     private let guidanceAnalyzer = PostureGuidanceAnalyzer()
+    private let bodyPoseRequest = VNDetectHumanBodyPoseRequest()
+    // Accessed only on videoDataQueue (single serial queue) — no lock needed.
     private var lastFrameAnalysisTime: CFAbsoluteTime = 0
     private static let frameAnalysisInterval: CFAbsoluteTime = 0.1 // 10fps max
     var onGuidanceUpdate: (@Sendable (GuidanceState) -> Void)?
@@ -424,16 +426,15 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
 
         guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
 
-        let request = VNDetectHumanBodyPoseRequest()
         let handler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer, options: [:])
 
         do {
-            try handler.perform([request])
+            try handler.perform([bodyPoseRequest])
         } catch {
             return
         }
 
-        let observation = request.results?.first
+        let observation = bodyPoseRequest.results?.first
 
         // Extract 2D keypoints for skeleton overlay
         var keypoints: [(String, CGPoint)] = []

@@ -183,7 +183,7 @@ struct PostureCaptureView: View {
     private var guidanceHintText: some View {
         Group {
             if let hint = viewModel.guidanceState.primaryHint {
-                Text(hintMessage(hint))
+                Text(hint.displayMessage)
                     .font(.subheadline)
                     .foregroundStyle(.white.opacity(0.9))
                     .multilineTextAlignment(.center)
@@ -203,25 +203,6 @@ struct PostureCaptureView: View {
             }
         }
         .animation(.easeInOut(duration: 0.2), value: viewModel.guidanceState.primaryHint)
-    }
-
-    private func hintMessage(_ hint: GuidanceHint) -> String {
-        switch hint {
-        case .fullBodyNotVisible:
-            String(localized: "Move back so your full body is visible")
-        case .tooClose:
-            String(localized: "Step back a little")
-        case .tooFar:
-            String(localized: "Move a little closer")
-        case .lowLighting:
-            String(localized: "Move to a brighter area")
-        case .wrongOrientation:
-            String(localized: "Face the camera directly")
-        case .armsNotRelaxed:
-            String(localized: "Relax your arms at your sides")
-        case .notStable:
-            String(localized: "Hold still for a moment")
-        }
     }
 
     // MARK: - Countdown
