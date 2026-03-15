@@ -216,12 +216,22 @@ final class TemplateWorkoutViewModel {
 
     /// Whether reordering is available (need at least 2 non-completed exercises)
     var canReorderExercises: Bool {
-        exerciseStatuses.filter { $0 != .completed }.count >= 2
+        var nonCompleted = 0
+        for status in exerciseStatuses {
+            if status != .completed {
+                nonCompleted += 1
+                if nonCompleted >= 2 { return true }
+            }
+        }
+        return false
     }
 
     /// Reorder exercises by moving from source offsets to destination.
     /// All parallel arrays are moved in sync. currentExerciseIndex is tracked.
     func moveExercise(from source: IndexSet, to destination: Int) {
+        // Refuse to move completed exercises
+        guard source.allSatisfy({ exerciseStatuses[$0] != .completed }) else { return }
+
         // Track current exercise identity before move
         let currentExerciseID = exercises[currentExerciseIndex].id
 
@@ -334,12 +344,29 @@ final class TemplateWorkoutViewModel {
 
     @discardableResult
     func restoreFromDraft(_ draft: TemplateWorkoutDraft) -> Bool {
-        let currentIDs = exercises.map(\.id)
-        guard draft.exerciseIDs == currentIDs else { return false }
+        // Verify same exercise set (order may differ after reorder)
+        let currentIDs = Set(exercises.map(\.id))
+        let draftIDs = Set(draft.exerciseIDs)
+        guard currentIDs == draftIDs else { return false }
         guard draft.exerciseSets.count == exerciseViewModels.count else { return false }
         guard draft.exerciseStatusRaws.count == exerciseStatuses.count else { return false }
 
-        currentExerciseIndex = min(draft.currentExerciseIndex, exercises.count - 1)
+        // Reorder arrays to match draft's saved order (preserves reorder state)
+        if exercises.map(\.id) != draft.exerciseIDs {
+            let idOrder = draft.exerciseIDs
+            let sortOrder = { (a: ExerciseDefinition, b: ExerciseDefinition) -> Bool in
+                let ai = idOrder.firstIndex(of: a.id) ?? 0
+                let bi = idOrder.firstIndex(of: b.id) ?? 0
+                return ai < bi
+            }
+            let indices = exercises.indices.sorted { sortOrder(exercises[$0], exercises[$1]) }
+            exercises = indices.map { exercises[$0] }
+            templateEntries = indices.map { templateEntries[$0] }
+            exerciseViewModels = indices.map { exerciseViewModels[$0] }
+            exerciseStatuses = indices.map { exerciseStatuses[$0] }
+        }
+
+        currentExerciseIndex = max(0, min(draft.currentExerciseIndex, exercises.count - 1))
 
         // Restore statuses
         for (i, raw) in draft.exerciseStatusRaws.enumerated() {

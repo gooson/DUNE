@@ -9,14 +9,15 @@ struct ExerciseReorderSheet: View {
     var body: some View {
         NavigationStack {
             List {
-                ForEach(viewModel.exercises.indices, id: \.self) { index in
-                    exerciseRow(index: index)
-                        .moveDisabled(viewModel.exerciseStatuses[index] == .completed)
+                ForEach(viewModel.exercises, id: \.id) { exercise in
+                    if let index = viewModel.exercises.firstIndex(where: { $0.id == exercise.id }) {
+                        let status = viewModel.exerciseStatuses[index]
+                        exerciseRow(exercise: exercise, status: status)
+                            .moveDisabled(status == .completed)
+                    }
                 }
                 .onMove { source, destination in
-                    withAnimation {
-                        viewModel.moveExercise(from: source, to: destination)
-                    }
+                    viewModel.moveExercise(from: source, to: destination)
                 }
             }
             .environment(\.editMode, .constant(.active))
@@ -30,11 +31,8 @@ struct ExerciseReorderSheet: View {
         }
     }
 
-    private func exerciseRow(index: Int) -> some View {
-        let exercise = viewModel.exercises[index]
-        let status = viewModel.exerciseStatuses[index]
-
-        return HStack(spacing: DS.Spacing.sm) {
+    private func exerciseRow(exercise: ExerciseDefinition, status: TemplateExerciseStatus) -> some View {
+        HStack(spacing: DS.Spacing.sm) {
             statusIcon(for: status)
                 .foregroundStyle(statusColor(for: status))
 
@@ -75,11 +73,6 @@ struct ExerciseReorderSheet: View {
     }
 
     private func statusColor(for status: TemplateExerciseStatus) -> Color {
-        switch status {
-        case .completed: DS.Color.activity
-        case .inProgress: DS.Color.activity
-        case .skipped: DS.Color.textSecondary
-        case .pending: DS.Color.textSecondary
-        }
+        (status == .completed || status == .inProgress) ? DS.Color.activity : DS.Color.textSecondary
     }
 }
