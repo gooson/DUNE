@@ -64,6 +64,22 @@ private final class MockVisionVoiceWorkoutTranscriber: VisionVoiceWorkoutTranscr
     }
 }
 
+@MainActor
+private final class MockVisionVoiceWorkoutSpeaker: VisionVoiceWorkoutSpeaking {
+    var spokenMessages: [String] = []
+    var localeIdentifiers: [String] = []
+    var stopCallCount = 0
+
+    func speak(_ text: String, localeIdentifier: String) {
+        spokenMessages.append(text)
+        localeIdentifiers.append(localeIdentifier)
+    }
+
+    func stop() {
+        stopCallCount += 1
+    }
+}
+
 @Suite("VisionVoiceWorkoutEntryViewModel")
 @MainActor
 struct VisionVoiceWorkoutEntryViewModelTests {
@@ -71,19 +87,22 @@ struct VisionVoiceWorkoutEntryViewModelTests {
     func deniedAuthorizationUsesManualFallback() async {
         let transcriber = MockVisionVoiceWorkoutTranscriber()
         transcriber.authorizationStatus = .denied
-        let viewModel = makeViewModel(transcriber: transcriber)
+        let speaker = MockVisionVoiceWorkoutSpeaker()
+        let viewModel = makeViewModel(transcriber: transcriber, speaker: speaker)
 
         await viewModel.startListening()
 
         #expect(viewModel.isListening == false)
         #expect(viewModel.infoMessage == String(localized: "Speech recognition permission was denied. Type the workout instead."))
         #expect(transcriber.startCallCount == 0)
+        #expect(speaker.stopCallCount == 1)
     }
 
     @Test("Authorized listening stores transcript updates")
     func authorizedListeningReceivesTranscript() async {
         let transcriber = MockVisionVoiceWorkoutTranscriber()
-        let viewModel = makeViewModel(transcriber: transcriber)
+        let speaker = MockVisionVoiceWorkoutSpeaker()
+        let viewModel = makeViewModel(transcriber: transcriber, speaker: speaker)
 
         await viewModel.startListening()
         transcriber.transcriptHandler?("Bench Press 80kg 8 reps")
@@ -92,38 +111,57 @@ struct VisionVoiceWorkoutEntryViewModelTests {
         #expect(viewModel.infoMessage == String(localized: "Listening..."))
         #expect(viewModel.transcript == "Bench Press 80kg 8 reps")
         #expect(transcriber.startCallCount == 1)
+        #expect(speaker.stopCallCount == 2)
     }
 
-    @Test("reviewDraft stores a parsed draft on success")
+    @Test("reviewDraft stores a parsed draft and announces localized confirmation")
     func reviewDraftStoresParsedResult() {
         let transcriber = MockVisionVoiceWorkoutTranscriber()
-        let viewModel = makeViewModel(transcriber: transcriber)
+        let speaker = MockVisionVoiceWorkoutSpeaker()
+        let localeIdentifier = "ko_KR"
+        let viewModel = makeViewModel(
+            transcriber: transcriber,
+            speaker: speaker,
+            localeIdentifier: localeIdentifier
+        )
         viewModel.transcript = "러닝 30분 5km"
 
         viewModel.reviewDraft()
 
-        #expect(viewModel.draft?.exercise.id == "running")
-        #expect(viewModel.draft?.durationSeconds == 1_800)
+        guard let draft = viewModel.draft else {
+            Issue.record("Expected a parsed cardio draft")
+            return
+        }
+
+        let expectedMessage = expectedReviewMessage(for: draft, localeIdentifier: localeIdentifier)
+
+        #expect(draft.exercise.id == "running")
+        #expect(draft.durationSeconds == 1_800)
         #expect(viewModel.errorMessage == nil)
-        #expect(viewModel.infoMessage == String(localized: "Voice draft ready."))
+        #expect(viewModel.infoMessage == expectedMessage)
+        #expect(speaker.spokenMessages == [expectedMessage])
+        #expect(speaker.localeIdentifiers == [localeIdentifier])
     }
 
     @Test("reviewDraft surfaces parser failure when the transcript is incomplete")
     func reviewDraftSurfacesParserFailure() {
         let transcriber = MockVisionVoiceWorkoutTranscriber()
-        let viewModel = makeViewModel(transcriber: transcriber)
+        let speaker = MockVisionVoiceWorkoutSpeaker()
+        let viewModel = makeViewModel(transcriber: transcriber, speaker: speaker)
         viewModel.transcript = "Bench Press 80kg"
 
         viewModel.reviewDraft()
 
         #expect(viewModel.draft == nil)
         #expect(viewModel.errorMessage == String(localized: "Add reps for this exercise draft."))
+        #expect(speaker.spokenMessages.isEmpty)
     }
 
     @Test("stopListening resets listening state and preserves the transcript")
     func stopListeningResetsState() async {
         let transcriber = MockVisionVoiceWorkoutTranscriber()
-        let viewModel = makeViewModel(transcriber: transcriber)
+        let speaker = MockVisionVoiceWorkoutSpeaker()
+        let viewModel = makeViewModel(transcriber: transcriber, speaker: speaker)
 
         await viewModel.startListening()
         transcriber.transcriptHandler?("Squat 100 5")
@@ -133,12 +171,19 @@ struct VisionVoiceWorkoutEntryViewModelTests {
         #expect(viewModel.transcript == "Squat 100 5")
         #expect(viewModel.infoMessage == String(localized: "Transcript updated. Review the draft when you're ready."))
         #expect(transcriber.stopCallCount == 1)
+        #expect(speaker.spokenMessages.isEmpty)
     }
 
     @Test("createValidatedRecord builds a strength history record")
     func createValidatedRecordBuildsStrengthRecord() {
         let transcriber = MockVisionVoiceWorkoutTranscriber()
-        let viewModel = makeViewModel(transcriber: transcriber)
+        let speaker = MockVisionVoiceWorkoutSpeaker()
+        let localeIdentifier = "en_US"
+        let viewModel = makeViewModel(
+            transcriber: transcriber,
+            speaker: speaker,
+            localeIdentifier: localeIdentifier
+        )
         viewModel.transcript = "Bench Press 176 lb 8 reps"
         viewModel.reviewDraft()
 
@@ -161,16 +206,23 @@ struct VisionVoiceWorkoutEntryViewModelTests {
 
         viewModel.didFinishSaving()
 
+        guard let draft = viewModel.draft else {
+            Issue.record("Expected a parsed draft to remain after save")
+            return
+        }
+
         #expect(viewModel.isSaving == false)
         #expect(viewModel.isDraftSaved)
         #expect(viewModel.canSave == false)
-        #expect(viewModel.infoMessage == String(localized: "Saved to workout history."))
+        #expect(viewModel.infoMessage == expectedSavedMessage(for: draft, localeIdentifier: localeIdentifier))
+        #expect(speaker.spokenMessages.last == expectedSavedMessage(for: draft, localeIdentifier: localeIdentifier))
     }
 
     @Test("createValidatedRecord builds a cardio history record")
     func createValidatedRecordBuildsCardioRecord() {
         let transcriber = MockVisionVoiceWorkoutTranscriber()
-        let viewModel = makeViewModel(transcriber: transcriber)
+        let speaker = MockVisionVoiceWorkoutSpeaker()
+        let viewModel = makeViewModel(transcriber: transcriber, speaker: speaker)
         viewModel.transcript = "러닝 30분 5km"
         viewModel.reviewDraft()
 
@@ -193,7 +245,8 @@ struct VisionVoiceWorkoutEntryViewModelTests {
     @Test("createValidatedRecord requires a reviewed draft")
     func createValidatedRecordRequiresReviewedDraft() {
         let transcriber = MockVisionVoiceWorkoutTranscriber()
-        let viewModel = makeViewModel(transcriber: transcriber)
+        let speaker = MockVisionVoiceWorkoutSpeaker()
+        let viewModel = makeViewModel(transcriber: transcriber, speaker: speaker)
         viewModel.transcript = "Bench Press 176 lb 8 reps"
 
         let record = viewModel.createValidatedRecord()
@@ -203,8 +256,105 @@ struct VisionVoiceWorkoutEntryViewModelTests {
         #expect(viewModel.isSaving == false)
     }
 
+    @Test("Adjusting a saved strength draft re-enables saving and updates mapped values")
+    func adjustingStrengthDraftReenablesSaving() {
+        let transcriber = MockVisionVoiceWorkoutTranscriber()
+        let speaker = MockVisionVoiceWorkoutSpeaker()
+        let localeIdentifier = "en_US"
+        let viewModel = makeViewModel(
+            transcriber: transcriber,
+            speaker: speaker,
+            localeIdentifier: localeIdentifier
+        )
+        viewModel.transcript = "Bench Press 176 lb 8 reps"
+        viewModel.reviewDraft()
+        _ = viewModel.createValidatedRecord()
+        viewModel.didFinishSaving()
+
+        viewModel.adjustWeight(by: 1)
+        viewModel.adjustReps(by: 1)
+
+        guard let draft = viewModel.draft,
+              let record = viewModel.createValidatedRecord()
+        else {
+            Issue.record("Expected adjusted strength draft and record")
+            return
+        }
+
+        #expect(draft.weight == 181)
+        #expect(draft.reps == 9)
+        #expect(viewModel.isDraftSaved == false)
+        #expect(viewModel.infoMessage == expectedReviewMessage(for: draft, localeIdentifier: localeIdentifier))
+        #expect(record.completedSets.first?.reps == 9)
+        #expect(abs((record.completedSets.first?.weight ?? 0) - WeightUnit.lb.toKg(181)) < 0.001)
+    }
+
+    @Test("Adjusting a cardio draft updates duration and distance before save")
+    func adjustingCardioDraftUpdatesMetrics() {
+        let transcriber = MockVisionVoiceWorkoutTranscriber()
+        let speaker = MockVisionVoiceWorkoutSpeaker()
+        let localeIdentifier = "ko_KR"
+        let viewModel = makeViewModel(
+            transcriber: transcriber,
+            speaker: speaker,
+            localeIdentifier: localeIdentifier
+        )
+        viewModel.transcript = "러닝 30분 5km"
+        viewModel.reviewDraft()
+
+        viewModel.adjustDuration(by: 1)
+        viewModel.adjustDistance(by: -1)
+
+        guard let draft = viewModel.draft,
+              let record = viewModel.createValidatedRecord()
+        else {
+            Issue.record("Expected adjusted cardio draft and record")
+            return
+        }
+
+        #expect(draft.durationSeconds == 1_860)
+        #expect(draft.distance == 4.5)
+        #expect(viewModel.infoMessage == expectedReviewMessage(for: draft, localeIdentifier: localeIdentifier))
+        #expect(record.duration == 1_860)
+        #expect(record.distance == 4.5)
+        #expect(record.completedSets.first?.duration == 1_860)
+        #expect(record.completedSets.first?.distance == 4.5)
+    }
+
+    @Test("Reviewing while listening updates text feedback without speaking")
+    func reviewDraftWhileListeningSkipsSpeechFeedback() async {
+        let transcriber = MockVisionVoiceWorkoutTranscriber()
+        let speaker = MockVisionVoiceWorkoutSpeaker()
+        let viewModel = makeViewModel(transcriber: transcriber, speaker: speaker, localeIdentifier: "en_US")
+
+        await viewModel.startListening()
+        viewModel.transcript = "Bench Press 176 lb 8 reps"
+
+        viewModel.reviewDraft()
+
+        #expect(viewModel.draft != nil)
+        #expect(speaker.spokenMessages.isEmpty)
+    }
+
+    @Test("Editing the transcript stops any active spoken confirmation")
+    func editingTranscriptStopsActiveSpeech() {
+        let transcriber = MockVisionVoiceWorkoutTranscriber()
+        let speaker = MockVisionVoiceWorkoutSpeaker()
+        let viewModel = makeViewModel(transcriber: transcriber, speaker: speaker, localeIdentifier: "en_US")
+        viewModel.transcript = "Bench Press 176 lb 8 reps"
+        viewModel.reviewDraft()
+
+        viewModel.transcript = "Running 30 minutes 5 km"
+
+        #expect(viewModel.draft == nil)
+        #expect(speaker.stopCallCount == 2)
+        #expect(viewModel.infoMessage == nil)
+    }
+
     private func makeViewModel(
-        transcriber: MockVisionVoiceWorkoutTranscriber
+        transcriber: MockVisionVoiceWorkoutTranscriber,
+        speaker: MockVisionVoiceWorkoutSpeaker,
+        localeIdentifier: String = "ko_KR"
     ) -> VisionVoiceWorkoutEntryViewModel {
         VisionVoiceWorkoutEntryViewModel(
             parser: VisionVoiceWorkoutCommandParser(
@@ -231,7 +381,8 @@ struct VisionVoiceWorkoutEntryViewModelTests {
                 )
             ),
             transcriber: transcriber,
-            localeIdentifier: "ko_KR"
+            speaker: speaker,
+            localeIdentifier: localeIdentifier
         )
     }
 
@@ -257,5 +408,76 @@ struct VisionVoiceWorkoutEntryViewModelTests {
             aliases: aliases,
             cardioSecondaryUnit: cardioSecondaryUnit
         )
+    }
+
+    private func expectedReviewMessage(
+        for draft: VisionVoiceWorkoutDraft,
+        localeIdentifier: String
+    ) -> String {
+        String(
+            format: String(localized: "Ready to save %@."),
+            locale: Locale(identifier: localeIdentifier),
+            expectedSummary(for: draft, localeIdentifier: localeIdentifier)
+        )
+    }
+
+    private func expectedSavedMessage(
+        for draft: VisionVoiceWorkoutDraft,
+        localeIdentifier: String
+    ) -> String {
+        String(
+            format: String(localized: "Saved %@."),
+            locale: Locale(identifier: localeIdentifier),
+            expectedSummary(for: draft, localeIdentifier: localeIdentifier)
+        )
+    }
+
+    private func expectedSummary(
+        for draft: VisionVoiceWorkoutDraft,
+        localeIdentifier: String
+    ) -> String {
+        let locale = Locale(identifier: localeIdentifier)
+        let formatter = ListFormatter()
+        formatter.locale = locale
+
+        var parts = [draft.primaryDisplayName(locale: locale)]
+        if let weight = draft.weight, let weightUnit = draft.weightUnit {
+            parts.append("\(formattedNumber(weight, localeIdentifier: localeIdentifier)) \(weightUnit.displayName)")
+        }
+        if let reps = draft.reps {
+            parts.append(
+                String(
+                    format: String(localized: "%@ reps"),
+                    locale: locale,
+                    reps.formatted(.number.locale(locale))
+                )
+            )
+        }
+        if let durationSeconds = draft.durationSeconds {
+            parts.append(formattedDuration(durationSeconds, localeIdentifier: localeIdentifier))
+        }
+        if let distance = draft.distance, let distanceUnit = draft.distanceUnit {
+            parts.append("\(formattedNumber(distance, localeIdentifier: localeIdentifier)) \(distanceUnit.displayName)")
+        }
+
+        return formatter.string(from: parts) ?? parts.joined(separator: ", ")
+    }
+
+    private func formattedNumber(_ value: Double, localeIdentifier: String) -> String {
+        let locale = Locale(identifier: localeIdentifier)
+        return value.formatted(.number.precision(.fractionLength(0...1)).locale(locale))
+    }
+
+    private func formattedDuration(
+        _ durationSeconds: TimeInterval,
+        localeIdentifier: String
+    ) -> String {
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = durationSeconds >= 3600 ? [.hour, .minute] : [.minute, .second]
+        formatter.unitsStyle = .short
+        var calendar = Calendar.autoupdatingCurrent
+        calendar.locale = Locale(identifier: localeIdentifier)
+        formatter.calendar = calendar
+        return formatter.string(from: durationSeconds) ?? "\(Int(durationSeconds))s"
     }
 }

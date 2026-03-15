@@ -61,7 +61,10 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
 
     // MARK: - Configuration
 
-    private static let minimumConfidence: Float = 0.3
+    // Final captures use a stricter threshold than live guidance so weak
+    // outliers do not leak into the saved overlay or posture analysis.
+    static let capturedJointMinimumConfidence: Float = 0.5
+    private static let previewJointMinimumConfidence: Float = 0.3
     private static let jpegCompressionQuality: CGFloat = 0.7
     private static let referenceBodyHeight: Double = 1.8
 
@@ -165,6 +168,7 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
 
     func detectPose(from image: CGImage, orientedJPEG: Data?) async throws -> PostureCaptureResult {
         let request = VNDetectHumanBodyPose3DRequest()
+        let confidenceRequest = VNDetectHumanBodyPoseRequest()
         // Pass EXIF orientation so pointInImage() returns coordinates in the
         // displayed (portrait, mirrored-for-front-camera) coordinate space,
         // not in the raw landscape sensor coordinate space.
@@ -174,7 +178,7 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, any Error>) in
             DispatchQueue.global(qos: .userInitiated).async {
                 do {
-                    try handler.perform([request])
+                    try handler.perform([request, confidenceRequest])
                     continuation.resume()
                 } catch {
                     continuation.resume(throwing: error)
@@ -186,7 +190,13 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
             throw PostureCaptureError.noPoseDetected
         }
 
-        let jointPositions = extractJointPositions(from: observation)
+        let confidenceBy2DJointName = Self.captureConfidenceBy2DJointName(
+            from: confidenceRequest.results?.first
+        )
+        let jointPositions = extractJointPositions(
+            from: observation,
+            confidenceBy2DJointName: confidenceBy2DJointName
+        )
 
         guard !jointPositions.isEmpty else {
             throw PostureCaptureError.insufficientConfidence
@@ -263,8 +273,27 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
         (.rightAnkle, "rightAnkle"),
     ]
 
+    private static let confidenceSourceJoints: [VNHumanBodyPoseObservation.JointName] = [
+        .nose,
+        .neck,
+        .root,
+        .leftShoulder,
+        .rightShoulder,
+        .leftElbow,
+        .rightElbow,
+        .leftWrist,
+        .rightWrist,
+        .leftHip,
+        .rightHip,
+        .leftKnee,
+        .rightKnee,
+        .leftAnkle,
+        .rightAnkle,
+    ]
+
     private func extractJointPositions(
-        from observation: VNHumanBodyPose3DObservation
+        from observation: VNHumanBodyPose3DObservation,
+        confidenceBy2DJointName: [VNHumanBodyPoseObservation.JointName: Float]
     ) -> [JointPosition3D] {
         var positions: [JointPosition3D] = []
 
@@ -279,7 +308,17 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
             let y = translation.y
             let z = translation.z
 
-            guard x.isFinite, y.isFinite, z.isFinite else { continue }
+            guard Self.shouldKeepCapturedJoint(
+                confidence: Self.capturedJointConfidence(
+                    for: name,
+                    confidenceBy2DJointName: confidenceBy2DJointName
+                ),
+                x: x,
+                y: y,
+                z: z
+            ) else {
+                continue
+            }
 
             // Extract 2D image-space coordinates via pointInImage (normalized 0-1)
             var imageX: CGFloat?
@@ -287,7 +326,9 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
             if let imagePoint = try? observation.pointInImage(jointName) {
                 let px = imagePoint.x
                 let py = imagePoint.y
-                if px.isFinite, py.isFinite {
+                if px.isFinite, py.isFinite,
+                   (0...1).contains(px),
+                   (0...1).contains(py) {
                     imageX = px
                     imageY = py
                 }
@@ -300,6 +341,92 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
         }
 
         return positions
+    }
+
+    private static func captureConfidenceBy2DJointName(
+        from observation: VNHumanBodyPoseObservation?
+    ) -> [VNHumanBodyPoseObservation.JointName: Float] {
+        guard let observation else { return [:] }
+
+        var confidenceByJointName: [VNHumanBodyPoseObservation.JointName: Float] = [:]
+        for jointName in confidenceSourceJoints {
+            guard let point = try? observation.recognizedPoint(jointName),
+                  point.confidence.isFinite else {
+                continue
+            }
+            confidenceByJointName[jointName] = point.confidence
+        }
+
+        return confidenceByJointName
+    }
+
+    static func capturedJointConfidence(
+        for jointName: String,
+        confidenceBy2DJointName: [VNHumanBodyPoseObservation.JointName: Float]
+    ) -> Float? {
+        switch jointName {
+        case "topHead", "centerHead":
+            return confidenceBy2DJointName[.nose]
+        case "centerShoulder":
+            return confidenceBy2DJointName[.neck]
+        case "spine":
+            return minConfidence(
+                confidenceBy2DJointName[.neck],
+                confidenceBy2DJointName[.root]
+            )
+        case "leftShoulder":
+            return confidenceBy2DJointName[.leftShoulder]
+        case "rightShoulder":
+            return confidenceBy2DJointName[.rightShoulder]
+        case "leftElbow":
+            return confidenceBy2DJointName[.leftElbow]
+        case "rightElbow":
+            return confidenceBy2DJointName[.rightElbow]
+        case "leftWrist":
+            return confidenceBy2DJointName[.leftWrist]
+        case "rightWrist":
+            return confidenceBy2DJointName[.rightWrist]
+        case "leftHip":
+            return confidenceBy2DJointName[.leftHip]
+        case "rightHip":
+            return confidenceBy2DJointName[.rightHip]
+        case "leftKnee":
+            return confidenceBy2DJointName[.leftKnee]
+        case "rightKnee":
+            return confidenceBy2DJointName[.rightKnee]
+        case "leftAnkle":
+            return confidenceBy2DJointName[.leftAnkle]
+        case "rightAnkle":
+            return confidenceBy2DJointName[.rightAnkle]
+        case "root":
+            return confidenceBy2DJointName[.root]
+        default:
+            return nil
+        }
+    }
+
+    private static func minConfidence(_ lhs: Float?, _ rhs: Float?) -> Float? {
+        switch (lhs, rhs) {
+        case let (.some(lhs), .some(rhs)):
+            return min(lhs, rhs)
+        case let (.some(lhs), .none):
+            return lhs
+        case let (.none, .some(rhs)):
+            return rhs
+        case (.none, .none):
+            return nil
+        }
+    }
+
+    static func shouldKeepCapturedJoint(
+        confidence: Float?,
+        x: Float,
+        y: Float,
+        z: Float
+    ) -> Bool {
+        guard x.isFinite && y.isFinite && z.isFinite else { return false }
+        guard let confidence else { return false }
+        return confidence >= capturedJointMinimumConfidence
     }
 
     // MARK: - Averaging
@@ -482,7 +609,7 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
             ]
             for (jointName, name) in jointNames {
                 if let point = try? observation.recognizedPoint(jointName),
-                   point.confidence > 0.3 {
+                   point.confidence >= Self.previewJointMinimumConfidence {
                     // Vision normalized: origin bottom-left (0,0) to top-right (1,1)
                     keypoints.append((name, point.location))
                 }
