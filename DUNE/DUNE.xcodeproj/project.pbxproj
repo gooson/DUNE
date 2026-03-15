@@ -463,6 +463,7 @@
 		6FD220A10C7F1955BB5AFAD6 /* WellnessHeroCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46042A019450D3D3F1655E11 /* WellnessHeroCard.swift */; };
 		6FEDF2B38A9D38E920585AF3 /* WeatherSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = B133F87C97D09195B9E69EC6 /* WeatherSnapshot.swift */; };
 		70FD8016B2A0A672625834D1 /* WeatherConditionType+View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4745F8682FD155D6CA7635C6 /* WeatherConditionType+View.swift */; };
+		711504A3B1D82114383A0BE3 /* RealtimePoseTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D4BCBA4C3918C0B181F195 /* RealtimePoseTracker.swift */; };
 		7133F03FA44885B0CB3F5EB1 /* OpenMeteoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC9C8CA380772ECFFA7FB65 /* OpenMeteoService.swift */; };
 		716599A57AEA8E93613A630D /* VisionImmersiveExperienceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A8BF2DE11C7571470B24F6F /* VisionImmersiveExperienceViewModel.swift */; };
 		7178120B0538BE41CB25A785 /* ExerciseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EDE3D6055F41543ECE9A8B7 /* ExerciseViewModel.swift */; };
@@ -897,6 +898,7 @@
 		DB1D6C454A026AA85EB424F0 /* WorkoutSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985922DC24E5CE8B7199ADF2 /* WorkoutSet.swift */; };
 		DB24BF4B1182F233D7F86C34 /* VisionSpatialSceneSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581B7317C386EF0B5B372718 /* VisionSpatialSceneSupport.swift */; };
 		DBE6F0223F25A5B4D407D8BA /* EffortScoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A45A83B73D17F3E3C4C1BD94 /* EffortScoreService.swift */; };
+		DC0A748296B059F6E451CC52 /* RealtimePoseTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D4BCBA4C3918C0B181F195 /* RealtimePoseTracker.swift */; };
 		DC18539122E7C5149CE3D099 /* TemplateOverlapCheckerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285169182BAC0721901A55F1 /* TemplateOverlapCheckerTests.swift */; };
 		DC3C14237E1C59B8F355C33B /* ConditionInsightSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FE98F15266CFB70975BFB8F /* ConditionInsightSection.swift */; };
 		DC43E9F95493CFAE4EF21ACF /* CoachingMessageEnhancing.swift in Sources */ = {isa = PBXBuildFile; fileRef = B495F6AD03D8A874FD60D067 /* CoachingMessageEnhancing.swift */; };
@@ -1427,6 +1429,7 @@
 		581B7317C386EF0B5B372718 /* VisionSpatialSceneSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionSpatialSceneSupport.swift; sourceTree = "<group>"; };
 		5847375B792BEF2E1562895C /* SetRPEPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetRPEPickerView.swift; sourceTree = "<group>"; };
 		58514E1E986A1EEBF81E6549 /* AppSchemaVersions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSchemaVersions.swift; sourceTree = "<group>"; };
+		58D4BCBA4C3918C0B181F195 /* RealtimePoseTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealtimePoseTracker.swift; sourceTree = "<group>"; };
 		58D5DEEE5C5CBABCAC7D9851 /* DashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModel.swift; sourceTree = "<group>"; };
 		58F8D1A2CD15125D3D503339 /* VisionExerciseFormGuideViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionExerciseFormGuideViewModel.swift; sourceTree = "<group>"; };
 		591E5D2B9C33E4EEE5BB73E8 /* PersonalRecordServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalRecordServiceTests.swift; sourceTree = "<group>"; };
@@ -2942,6 +2945,7 @@
 				C249B098206A2DB018DE6A67 /* PostureCaptureService.swift */,
 				A7638C00F380657CF75DDE10 /* PostureGuidanceAnalyzer.swift */,
 				20270C704B62361EF2975D94 /* PostureReminderScheduler.swift */,
+				58D4BCBA4C3918C0B181F195 /* RealtimePoseTracker.swift */,
 				13C5C287D12A6B0DA6836470 /* ScoreRefreshService.swift */,
 				56CDA83256547CEFFCD8AE71 /* SharedHealthDataServiceImpl.swift */,
 				57F90F52E6F65856C74331CE /* SimulatorAdvancedMockData.swift */,
@@ -4395,6 +4399,7 @@
 				097C40BDA504D56DE049FF3A /* RPETrendChartView.swift in Sources */,
 				161F9DBD6875A4A7D6C1D866 /* RangeBarChartView.swift in Sources */,
 				E6EEB408EDCD962E26D5D874 /* RealtimePoseState.swift in Sources */,
+				711504A3B1D82114383A0BE3 /* RealtimePoseTracker.swift in Sources */,
 				FFB2479A56E1B27F008E117C /* RecoveryModifierService.swift in Sources */,
 				6DA940A4876020F09133B584 /* RecoveryOverviewSection.swift in Sources */,
 				CD8A742A7943E90BA129BD7A /* RestTimerView.swift in Sources */,
@@ -4708,6 +4713,7 @@
 				3FD9C82C64DD7DAC35F57539 /* QuickStartPopularityService.swift in Sources */,
 				3C7E29583C05815236E4354A /* QuickStartSectionOrderingService.swift in Sources */,
 				0A6A5F2EB3C46EB2BDE872DD /* RealtimePoseState.swift in Sources */,
+				DC0A748296B059F6E451CC52 /* RealtimePoseTracker.swift in Sources */,
 				207F4E6631B84D5BC999CB1C /* RecoveryModifierService.swift in Sources */,
 				F078EDC10008BBBEA62FDE3C /* ScoreContribution.swift in Sources */,
 				24A83072AAE82255223DF204 /* ScoreRefreshService.swift in Sources */,
