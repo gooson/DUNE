@@ -32,10 +32,12 @@ struct WellnessScoreDetailView: View {
         static let sleep = String(localized: "Sleep")
         static let condition = String(localized: "Condition")
         static let body = String(localized: "Body")
+        static let posture = String(localized: "Posture")
         nonisolated(unsafe) static let calculationBullets: [LocalizedStringKey] = [
-            "Final score = weighted average of Sleep(40%), Condition(35%), and Body(25%).",
+            "Final score = weighted average of Sleep(35%), Condition(30%), Body(20%), and Posture(15%).",
             "Sleep and Condition come from Apple Watch signals, then normalized to 0-100.",
             "Body score is derived from 7-day trend stability and direction changes.",
+            "Posture score reflects your latest posture assessment result (0-100).",
             "If any component is missing, remaining weights are re-normalized before final scoring.",
         ]
     }
@@ -143,9 +145,10 @@ struct WellnessScoreDetailView: View {
                 ScoreCompositionCard(
                     title: "Score Composition",
                     components: [
-                        .init(label: Labels.sleep, weight: "40%", score: wellnessScore.sleepScore, color: DS.Color.sleep),
-                        .init(label: Labels.condition, weight: "35%", score: wellnessScore.conditionScore, color: DS.Color.hrv),
-                        .init(label: Labels.body, weight: "25%", score: wellnessScore.bodyScore, color: DS.Color.body),
+                        .init(label: Labels.sleep, weight: "35%", score: wellnessScore.sleepScore, color: DS.Color.sleep),
+                        .init(label: Labels.condition, weight: "30%", score: wellnessScore.conditionScore, color: DS.Color.hrv),
+                        .init(label: Labels.body, weight: "20%", score: wellnessScore.bodyScore, color: DS.Color.body),
+                        .init(label: Labels.posture, weight: "15%", score: wellnessScore.postureScore, color: DS.Color.posture),
                     ]
                 )
 
@@ -207,6 +210,7 @@ struct WellnessScoreDetailView: View {
                 .init(label: Labels.sleep, value: wellnessScore.sleepScore, color: DS.Color.sleep),
                 .init(label: Labels.condition, value: wellnessScore.conditionScore, color: DS.Color.hrv),
                 .init(label: Labels.body, value: wellnessScore.bodyScore, color: DS.Color.body),
+                .init(label: Labels.posture, value: wellnessScore.postureScore, color: DS.Color.posture),
             ]
         )
     }

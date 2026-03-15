@@ -20,6 +20,7 @@ enum DS {
         static let activity  = SwiftUI.Color("MetricActivity")
         static let steps     = SwiftUI.Color("MetricSteps")
         static let body      = SwiftUI.Color("MetricBody")
+        static let posture   = SwiftUI.Color("MetricPosture")
         static let vitals    = SwiftUI.Color("WellnessVitals")
         static let fitness   = SwiftUI.Color("WellnessFitness")
 
