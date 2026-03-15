@@ -1236,11 +1236,14 @@ final class DashboardViewModel {
     }
 
     /// Compute consecutive recent high-RPE sessions (RPE >= 8) from most recent backward.
-    /// Sessions with nil RPE break the streak.
+    /// Sessions with nil RPE break the streak. Sessions older than 30 days are excluded
+    /// to prevent stale data from inflating the streak.
     static func computeHighRPEStreak(from records: [ExerciseRecord]) -> Int {
+        let cutoff = Date().addingTimeInterval(-30 * 86_400)
         let sorted = records.sorted { $0.date > $1.date }
         var streak = 0
         for record in sorted {
+            guard record.date >= cutoff else { break }
             guard let rpe = record.rpe, rpe >= 8 else { break }
             streak += 1
         }
