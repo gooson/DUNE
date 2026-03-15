@@ -10729,19 +10729,18 @@
         }
       }
     },
-    "Final score = weighted average of Sleep(40%), Condition(35%), and Body(25%)." : {
-      "extractionState" : "manual",
+    "Final score = weighted average of Sleep(35%), Condition(30%), Body(20%), and Posture(15%)." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "最終スコア = 睡眠(40%)、コンディション(35%)、ボディ(25%)の加重平均です。"
+            "value" : "最終スコア = 睡眠(35%)、コンディション(30%)、ボディ(20%)、姿勢(15%)の加重平均です。"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "최종 점수 = 수면(40%), 컨디션(35%), 신체(25%)의 가중 평균입니다."
+            "value" : "최종 점수 = 수면(35%), 컨디션(30%), 신체(20%), 자세(15%)의 가중 평균입니다."
           }
         }
       }
@@ -20381,6 +20380,22 @@
         }
       }
     },
+    "Posture" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "姿勢"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "자세"
+          }
+        }
+      }
+    },
     "Posture Score" : {
       "localizations" : {
         "ja" : {
@@ -20428,6 +20443,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "자세 점수 100점 만점 중 %lld점, 부분 측정"
+          }
+        }
+      }
+    },
+    "Posture score reflects your latest posture assessment result (0-100)." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "姿勢スコアは最新の姿勢評価結果(0-100)を反映します。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "자세 점수는 최신 자세 평가 결과(0-100)를 반영합니다."
+          }
+        }
+      }
+    },
+    "posture" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "姿勢"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "자세"
           }
         }
       }
@@ -24926,6 +24973,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "수면"
+          }
+        }
+      }
+    },
+    "Sleep and Condition come from Apple Watch signals, then normalized to 0-100." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "睡眠とコンディションはApple Watchのシグナルから取得し、0-100に正規化されます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "수면과 컨디션은 Apple Watch 신호에서 가져와 0-100으로 정규화됩니다."
           }
         }
       }

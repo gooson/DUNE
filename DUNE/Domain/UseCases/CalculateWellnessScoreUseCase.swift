@@ -6,25 +6,29 @@ protocol WellnessScoreCalculating: Sendable {
 
 struct CalculateWellnessScoreUseCase: WellnessScoreCalculating, Sendable {
     // Weight allocation (must sum to 1.0)
-    private let sleepWeight = 0.40
-    private let conditionWeight = 0.35
-    private let bodyWeight = 0.25
+    private let sleepWeight = 0.35
+    private let conditionWeight = 0.30
+    private let bodyWeight = 0.20
+    private let postureWeight = 0.15
 
     struct Input: Sendable {
         let sleepScore: Int?
         let conditionScore: Int?
         let bodyTrend: BodyTrend?
+        let postureScore: Int?
         let evaluationDate: Date
 
         init(
             sleepScore: Int?,
             conditionScore: Int?,
             bodyTrend: BodyTrend?,
+            postureScore: Int? = nil,
             evaluationDate: Date = .now
         ) {
             self.sleepScore = sleepScore
             self.conditionScore = conditionScore
             self.bodyTrend = bodyTrend
+            self.postureScore = postureScore
             self.evaluationDate = evaluationDate
         }
     }
@@ -76,8 +80,9 @@ struct CalculateWellnessScoreUseCase: WellnessScoreCalculating, Sendable {
         let hasSleep = input.sleepScore != nil
         let hasCondition = input.conditionScore != nil
         let hasBody = input.bodyTrend != nil
+        let hasPosture = input.postureScore != nil
 
-        let componentCount = [hasSleep, hasCondition, hasBody].filter(\.self).count
+        let componentCount = [hasSleep, hasCondition, hasBody, hasPosture].filter(\.self).count
 
         // Need at least 1 component to produce a score
         guard componentCount >= 1 else { return nil }
@@ -100,6 +105,10 @@ struct CalculateWellnessScoreUseCase: WellnessScoreCalculating, Sendable {
             totalWeight += bodyWeight
             weightedSum += Double(body) * bodyWeight
         }
+        if let posture = input.postureScore {
+            totalWeight += postureWeight
+            weightedSum += Double(posture) * postureWeight
+        }
 
         guard totalWeight > 0 else { return nil }
 
@@ -113,6 +122,7 @@ struct CalculateWellnessScoreUseCase: WellnessScoreCalculating, Sendable {
             sleepScore: input.sleepScore,
             conditionScore: input.conditionScore,
             bodyScore: bodyScoreValue,
+            postureScore: input.postureScore,
             timeOfDayAdjustment: timeAdjustment,
             evaluationDate: input.evaluationDate
         )

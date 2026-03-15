@@ -237,12 +237,12 @@ final class WellnessScoreDetailViewModel {
 
     // MARK: - Wellness Trend Approximation
 
-    /// Wellness = Sleep(40%) + Condition(35%) + Body(25%).
-    /// Since Body score requires SwiftData (weight trends), we re-normalize
-    /// the remaining weights: Sleep 40/(40+35) ≈ 0.53, Condition 35/(40+35) ≈ 0.47.
+    /// Wellness = Sleep(35%) + Condition(30%) + Body(20%) + Posture(15%).
+    /// Since Body/Posture scores require SwiftData, we re-normalize
+    /// the remaining weights: Sleep 35/(35+30) ≈ 0.54, Condition 30/(35+30) ≈ 0.46.
     private enum ApproxWeights {
-        static let sleep: Double = 0.53
-        static let condition: Double = 0.47
+        static let sleep: Double = 0.54
+        static let condition: Double = 0.46
     }
 
     private func buildWellnessTrend(

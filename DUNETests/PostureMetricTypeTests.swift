@@ -56,4 +56,58 @@ struct PostureMetricTypeTests {
         #expect(hyperext.contains("leftKnee"))
         #expect(hyperext.contains("rightAnkle"))
     }
+
+    // MARK: - PostureMetricResult Confidence
+
+    @Test("PostureMetricResult decodes without confidence field (backward compatibility)")
+    func decodeWithoutConfidence() throws {
+        let json = """
+        {"type":"forwardHead","value":12.5,"unit":"degrees","status":"caution","score":70}
+        """
+        let data = Data(json.utf8)
+        let result = try JSONDecoder().decode(PostureMetricResult.self, from: data)
+        #expect(result.confidence == 1.0)
+        #expect(result.type == .forwardHead)
+        #expect(result.value == 12.5)
+        #expect(result.score == 70)
+    }
+
+    @Test("PostureMetricResult decodes with confidence field")
+    func decodeWithConfidence() throws {
+        let json = """
+        {"type":"roundedShoulders","value":8.3,"unit":"degrees","status":"normal","score":90,"confidence":0.85}
+        """
+        let data = Data(json.utf8)
+        let result = try JSONDecoder().decode(PostureMetricResult.self, from: data)
+        #expect(result.confidence == 0.85)
+        #expect(result.type == .roundedShoulders)
+    }
+
+    @Test("PostureMetricResult confidence is clamped to 0-1")
+    func confidenceClamped() {
+        let overOne = PostureMetricResult(
+            type: .forwardHead, value: 10, unit: .degrees,
+            status: .normal, score: 80, confidence: 1.5
+        )
+        #expect(overOne.confidence == 1.0)
+
+        let underZero = PostureMetricResult(
+            type: .forwardHead, value: 10, unit: .degrees,
+            status: .normal, score: 80, confidence: -0.5
+        )
+        #expect(underZero.confidence == 0.0)
+    }
+
+    @Test("PostureMetricResult roundtrip encoding preserves confidence")
+    func roundtripConfidence() throws {
+        let original = PostureMetricResult(
+            type: .hipAsymmetry, value: 2.1, unit: .centimeters,
+            status: .caution, score: 65, confidence: 0.72
+        )
+        let data = try JSONEncoder().encode(original)
+        let decoded = try JSONDecoder().decode(PostureMetricResult.self, from: data)
+        #expect(decoded.confidence == 0.72)
+        #expect(decoded.type == original.type)
+        #expect(decoded.value == original.value)
+    }
 }

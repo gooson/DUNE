@@ -19,12 +19,68 @@ struct CalculateWellnessScoreUseCaseTests {
         )
         let result = sut.execute(input: input)
         #expect(result != nil)
-        // Sleep 80*0.4=32, Condition 70*0.35=24.5, Body ~75*0.25=18.75 -> ~75
+        // Sleep 80*0.35=28, Condition 70*0.30=21, Body ~65*0.20=13 -> ~(28+21+13)/0.85 ≈ 73
         #expect(result!.score >= 60)
         #expect(result!.score <= 90)
         #expect(result!.sleepScore == 80)
         #expect(result!.conditionScore == 70)
         #expect(result!.bodyScore != nil)
+    }
+
+    @Test("Full data with posture produces weighted score")
+    func fullDataWithPosture() {
+        let input = CalculateWellnessScoreUseCase.Input(
+            sleepScore: 80,
+            conditionScore: 70,
+            bodyTrend: .init(weightChange: -0.3),
+            postureScore: 90,
+            evaluationDate: referenceDate
+        )
+        let result = sut.execute(input: input)
+        #expect(result != nil)
+        // All 4 components: 80*0.35 + 70*0.30 + 65*0.20 + 90*0.15 = 28+21+13+13.5 = 75.5
+        #expect(result!.score >= 65)
+        #expect(result!.score <= 90)
+        #expect(result!.postureScore == 90)
+    }
+
+    @Test("Posture only produces valid score")
+    func postureOnly() {
+        let input = CalculateWellnessScoreUseCase.Input(
+            sleepScore: nil,
+            conditionScore: nil,
+            bodyTrend: nil,
+            postureScore: 75,
+            evaluationDate: referenceDate
+        )
+        let result = sut.execute(input: input)
+        #expect(result != nil)
+        #expect(result!.score == 75)
+        #expect(result!.postureScore == 75)
+        #expect(result!.sleepScore == nil)
+    }
+
+    @Test("Nil posture redistributes weights to other components")
+    func nilPostureRedistributes() {
+        let withPosture = CalculateWellnessScoreUseCase.Input(
+            sleepScore: 80,
+            conditionScore: 80,
+            bodyTrend: nil,
+            postureScore: 80,
+            evaluationDate: referenceDate
+        )
+        let withoutPosture = CalculateWellnessScoreUseCase.Input(
+            sleepScore: 80,
+            conditionScore: 80,
+            bodyTrend: nil,
+            evaluationDate: referenceDate
+        )
+        let resultWith = sut.execute(input: withPosture)
+        let resultWithout = sut.execute(input: withoutPosture)
+        #expect(resultWith != nil)
+        #expect(resultWithout != nil)
+        // Both should score ~80 since all components are 80
+        #expect(resultWith!.score == resultWithout!.score)
     }
 
     @Test("Two components redistributes weights")
@@ -37,7 +93,7 @@ struct CalculateWellnessScoreUseCaseTests {
         )
         let result = sut.execute(input: input)
         #expect(result != nil)
-        // (80*0.4 + 60*0.35) / (0.4+0.35) = (32+21)/0.75 = 70.67
+        // (80*0.35 + 60*0.30) / (0.35+0.30) = (28+18)/0.65 = 70.77
         #expect(result!.score == 71)
         #expect(result!.bodyScore == nil)
     }
