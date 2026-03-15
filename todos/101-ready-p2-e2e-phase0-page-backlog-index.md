@@ -72,14 +72,12 @@ updated: 2026-03-09
 - 완료된 visionOS deferred surface는 [107 E2E Phase 0 Completed Surface Index](107-done-p2-e2e-phase0-completed-surface-index.md)에서 관리한다.
 
 ### DUNEWidget
-- [092 SmallWidgetView](092-ready-p3-e2e-dunewidget-small-widget-view.md)
-- [093 MediumWidgetView](093-ready-p3-e2e-dunewidget-medium-widget-view.md)
-- [094 LargeWidgetView](094-ready-p3-e2e-dunewidget-large-widget-view.md)
-- [095 WidgetPlaceholderStates](095-ready-p3-e2e-dunewidget-placeholder-states.md)
+- 현재 open surface 없음
+- 완료된 widget surface는 [107 E2E Phase 0 Completed Surface Index](107-done-p2-e2e-phase0-completed-surface-index.md)에서 관리한다.
 
 ## Notes
 
 - `p2`: `DUNE` + `DUNEWatch` must-have 회귀 surface
 - `p3`: `DUNEVision` + `DUNEWidget` deferred surface
-- 완료된 surface 30건은 [107 E2E Phase 0 Completed Surface Index](107-done-p2-e2e-phase0-completed-surface-index.md)로 이동했다.
+- 완료된 surface 34건은 [107 E2E Phase 0 Completed Surface Index](107-done-p2-e2e-phase0-completed-surface-index.md)로 이동했다.
 - 후속 번호는 `108`부터 이어서 사용한다.

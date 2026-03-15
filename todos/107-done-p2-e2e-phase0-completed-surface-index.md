@@ -54,8 +54,15 @@ updated: 2026-03-09
 - [090 VisionImmersiveExperienceView](090-done-p3-e2e-dunevision-immersive-experience-view.md)
 - [091 VisionPlaceholderSurfaces](091-done-p3-e2e-dunevision-placeholder-surfaces.md)
 
+## DUNEWidget Deferred
+
+- [092 SmallWidgetView](092-done-p3-e2e-dunewidget-small-widget-view.md)
+- [093 MediumWidgetView](093-done-p3-e2e-dunewidget-medium-widget-view.md)
+- [094 LargeWidgetView](094-done-p3-e2e-dunewidget-large-widget-view.md)
+- [095 WidgetPlaceholderStates](095-done-p3-e2e-dunewidget-placeholder-states.md)
+
 ## Notes
 
 - 개별 완료 문서는 삭제하지 않는다. 상세 내용은 각 `done` TODO에서 유지한다.
 - 새 surface가 완료되면 active backlog index에서 제거한 뒤 이 문서에 추가한다.
-- `DUNEWidget` surface는 아직 open backlog에 남아 있으므로 여기 포함하지 않았다.
+- `DUNEWidget` deferred surface 4건도 이 문서로 이동했으며, 후속 snapshot/preview lane은 별도 TODO로 계속 관리한다.
