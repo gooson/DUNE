@@ -56,6 +56,10 @@ struct TemplateWorkoutDraft: Codable {
 final class TemplateWorkoutViewModel {
     let config: TemplateWorkoutConfig
 
+    /// Mutable exercise arrays — copied from config at init, reorderable during session.
+    var exercises: [ExerciseDefinition]
+    var templateEntries: [TemplateEntry]
+
     /// One WorkoutSessionViewModel per exercise
     var exerciseViewModels: [WorkoutSessionViewModel]
 
@@ -78,7 +82,7 @@ final class TemplateWorkoutViewModel {
     // MARK: - Computed Properties
 
     var currentExercise: ExerciseDefinition {
-        config.exercises[currentExerciseIndex]
+        exercises[currentExerciseIndex]
     }
 
     var currentViewModel: WorkoutSessionViewModel {
@@ -90,7 +94,7 @@ final class TemplateWorkoutViewModel {
     }
 
     var totalExercises: Int {
-        config.exercises.count
+        exercises.count
     }
 
     var isAllDone: Bool {
@@ -110,6 +114,8 @@ final class TemplateWorkoutViewModel {
 
     init(config: TemplateWorkoutConfig) {
         self.config = config
+        self.exercises = config.exercises
+        self.templateEntries = config.templateEntries
         self.exerciseViewModels = config.exercises.map { exercise in
             WorkoutSessionViewModel(exercise: exercise)
         }
@@ -129,7 +135,7 @@ final class TemplateWorkoutViewModel {
     /// Adjusts set counts per exercise to match template defaults.
     /// Called during init (no weight unit needed).
     private func adjustSetCounts() {
-        for (index, entry) in config.templateEntries.enumerated() {
+        for (index, entry) in templateEntries.enumerated() {
             guard index < exerciseViewModels.count else { break }
             let vm = exerciseViewModels[index]
 
@@ -149,10 +155,10 @@ final class TemplateWorkoutViewModel {
         guard !didPrefillTemplateDefaults else { return }
         didPrefillTemplateDefaults = true
 
-        for (index, entry) in config.templateEntries.enumerated() {
+        for (index, entry) in templateEntries.enumerated() {
             guard index < exerciseViewModels.count else { break }
             let vm = exerciseViewModels[index]
-            let profile = TemplateExerciseProfile(exercise: config.exercises[index])
+            let profile = TemplateExerciseProfile(exercise: exercises[index])
 
             guard profile.showsStrengthDefaultsEditor else {
                 continue
@@ -197,12 +203,46 @@ final class TemplateWorkoutViewModel {
 
     /// Jump to a specific exercise
     func goToExercise(at index: Int) {
-        guard config.exercises.indices.contains(index) else { return }
+        guard exercises.indices.contains(index) else { return }
         let status = exerciseStatuses[index]
         // Allow jumping to pending or skipped exercises (re-do)
         if status == .pending || status == .skipped {
             currentExerciseIndex = index
             exerciseStatuses[index] = .inProgress
+        }
+    }
+
+    // MARK: - Reorder
+
+    /// Whether reordering is available (need at least 2 non-completed exercises)
+    var canReorderExercises: Bool {
+        var nonCompleted = 0
+        for status in exerciseStatuses {
+            if status != .completed {
+                nonCompleted += 1
+                if nonCompleted >= 2 { return true }
+            }
+        }
+        return false
+    }
+
+    /// Reorder exercises by moving from source offsets to destination.
+    /// All parallel arrays are moved in sync. currentExerciseIndex is tracked.
+    func moveExercise(from source: IndexSet, to destination: Int) {
+        // Refuse to move completed exercises
+        guard source.allSatisfy({ exerciseStatuses[$0] != .completed }) else { return }
+
+        // Track current exercise identity before move
+        let currentExerciseID = exercises[currentExerciseIndex].id
+
+        exercises.move(fromOffsets: source, toOffset: destination)
+        templateEntries.move(fromOffsets: source, toOffset: destination)
+        exerciseViewModels.move(fromOffsets: source, toOffset: destination)
+        exerciseStatuses.move(fromOffsets: source, toOffset: destination)
+
+        // Restore currentExerciseIndex to follow the same exercise
+        if let newIndex = exercises.firstIndex(where: { $0.id == currentExerciseID }) {
+            currentExerciseIndex = newIndex
         }
     }
 
@@ -251,7 +291,7 @@ final class TemplateWorkoutViewModel {
 
     private func findNextPendingIndex(after index: Int) -> Int? {
         // Search forward from current index
-        for i in (index + 1)..<config.exercises.count {
+        for i in (index + 1)..<exercises.count {
             if exerciseStatuses[i] == .pending {
                 return i
             }
@@ -292,7 +332,7 @@ final class TemplateWorkoutViewModel {
             }
         }
         let draft = TemplateWorkoutDraft(
-            exerciseIDs: config.exercises.map(\.id),
+            exerciseIDs: exercises.map(\.id),
             exerciseSets: exerciseSets,
             exerciseStatusRaws: statusRaws,
             currentExerciseIndex: currentExerciseIndex,
@@ -304,12 +344,29 @@ final class TemplateWorkoutViewModel {
 
     @discardableResult
     func restoreFromDraft(_ draft: TemplateWorkoutDraft) -> Bool {
-        let configIDs = config.exercises.map(\.id)
-        guard draft.exerciseIDs == configIDs else { return false }
+        // Verify same exercise set (order may differ after reorder)
+        let currentIDs = Set(exercises.map(\.id))
+        let draftIDs = Set(draft.exerciseIDs)
+        guard currentIDs == draftIDs else { return false }
         guard draft.exerciseSets.count == exerciseViewModels.count else { return false }
         guard draft.exerciseStatusRaws.count == exerciseStatuses.count else { return false }
 
-        currentExerciseIndex = min(draft.currentExerciseIndex, config.exercises.count - 1)
+        // Reorder arrays to match draft's saved order (preserves reorder state)
+        if exercises.map(\.id) != draft.exerciseIDs {
+            let idOrder = draft.exerciseIDs
+            let sortOrder = { (a: ExerciseDefinition, b: ExerciseDefinition) -> Bool in
+                let ai = idOrder.firstIndex(of: a.id) ?? 0
+                let bi = idOrder.firstIndex(of: b.id) ?? 0
+                return ai < bi
+            }
+            let indices = exercises.indices.sorted { sortOrder(exercises[$0], exercises[$1]) }
+            exercises = indices.map { exercises[$0] }
+            templateEntries = indices.map { templateEntries[$0] }
+            exerciseViewModels = indices.map { exerciseViewModels[$0] }
+            exerciseStatuses = indices.map { exerciseStatuses[$0] }
+        }
+
+        currentExerciseIndex = max(0, min(draft.currentExerciseIndex, exercises.count - 1))
 
         // Restore statuses
         for (i, raw) in draft.exerciseStatusRaws.enumerated() {

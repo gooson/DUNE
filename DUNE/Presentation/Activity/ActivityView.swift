@@ -58,6 +58,8 @@ struct NotificationActivityDestination: Identifiable, Hashable {
         switch destination {
         case .muscleMap:
             "muscle-map-\(requestID)"
+        case .muscleMap3D:
+            "muscle-map-3d-\(requestID)"
         case .personalRecords:
             "personal-records-\(requestID)"
         case .consistency:
@@ -551,20 +553,31 @@ struct ActivityView: View {
                 onMuscleSelected: { muscle in selectedMuscle = muscle }
             )
 
-            NavigationLink(value: ActivityDetailDestination.muscleMap) {
-                HStack {
-                    Text("View Details")
+            HStack {
+                NavigationLink(value: ActivityDetailDestination.muscleMap) {
+                    HStack {
+                        Text("View Details")
+                            .font(.subheadline.weight(.medium))
+                            .foregroundStyle(DS.Color.activity)
+                        Image(systemName: "chevron.right")
+                            .font(.caption2.weight(.semibold))
+                            .foregroundStyle(DS.Color.activity)
+                    }
+                }
+                .buttonStyle(.plain)
+                .accessibilityIdentifier("activity-musclemap-detail-link")
+
+                Spacer()
+
+                NavigationLink(value: ActivityDetailDestination.muscleMap3D) {
+                    Image(systemName: "cube")
                         .font(.subheadline.weight(.medium))
                         .foregroundStyle(DS.Color.activity)
-                    Image(systemName: "chevron.right")
-                        .font(.caption2.weight(.semibold))
-                        .foregroundStyle(DS.Color.activity)
                 }
-                .frame(maxWidth: .infinity, alignment: .center)
-                .padding(.vertical, DS.Spacing.xs)
+                .buttonStyle(.plain)
+                .accessibilityIdentifier("activity-musclemap-3d-link")
             }
-            .buttonStyle(.plain)
-            .accessibilityIdentifier("activity-musclemap-detail-link")
+            .padding(.vertical, DS.Spacing.xs)
         }
         .accessibilityIdentifier("activity-section-musclemap")
     }
@@ -631,6 +644,8 @@ struct ActivityView: View {
         switch destination {
         case .muscleMap:
             MuscleMapDetailView(fatigueStates: viewModel.fatigueStates)
+        case .muscleMap3D:
+            MuscleMap3DView(fatigueStates: viewModel.fatigueStates, highlightedMuscle: nil)
         case .personalRecords:
             PersonalRecordsDetailView(
                 records: viewModel.personalRecords,
