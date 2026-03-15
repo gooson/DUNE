@@ -15,5 +15,5 @@ updated: 2026-03-16
 - [x] AXID / selector inventory를 고정한다.
 - [x] 주요 state와 assertion 범위를 정리한다.
 - [x] PR gate / nightly 배치를 확정한다.
-- Notes: force-show launch hook route는 `DUNEUITests/Full/CloudSyncConsentRegressionTests.swift`에서 닫았고, real launch branching / sync decision permutations는 specialized follow-up lane으로 유지한다.
-- Implementation: `DUNEUITests/Full/CloudSyncConsentRegressionTests.swift`
+- Notes: force-show launch hook route는 `DUNEUITests/Full/TodaySettingsRegressionTests.swift` 안의 `CloudSyncConsentRegressionTests` 클래스로 닫았고, real launch branching / sync decision permutations는 specialized follow-up lane으로 유지한다.
+- Implementation: `DUNEUITests/Full/TodaySettingsRegressionTests.swift`
