@@ -1,5 +1,6 @@
 import Foundation
 import Testing
+import Vision
 
 @testable import DUNE
 
@@ -217,5 +218,107 @@ struct PostureAnalysisServiceTests {
         let shoulderMetric = results.first { $0.type == .shoulderAsymmetry }
 
         #expect(shoulderMetric?.status == .unmeasurable)
+    }
+}
+
+@Suite("PostureCaptureService joint filtering")
+struct PostureCaptureServiceJointFilteringTests {
+
+    @Test("Reliable captured joints are preserved")
+    func keepsReliableJoint() {
+        let keep = PostureCaptureService.shouldKeepCapturedJoint(
+            confidence: PostureCaptureService.capturedJointMinimumConfidence,
+            x: 0,
+            y: 1.2,
+            z: 0
+        )
+
+        #expect(keep)
+    }
+
+    @Test("Low-confidence captured joints are dropped")
+    func dropsLowConfidenceJoint() {
+        let keep = PostureCaptureService.shouldKeepCapturedJoint(
+            confidence: PostureCaptureService.capturedJointMinimumConfidence - 0.01,
+            x: 0,
+            y: 1.2,
+            z: 0
+        )
+
+        #expect(!keep)
+    }
+
+    @Test("Missing mapped 2D confidence drops captured joint")
+    func dropsJointWhenMappedConfidenceMissing() {
+        let confidence = PostureCaptureService.capturedJointConfidence(
+            for: "centerHead",
+            confidenceBy2DJointName: [:]
+        )
+        let keep = PostureCaptureService.shouldKeepCapturedJoint(
+            confidence: confidence,
+            x: 0,
+            y: 1.2,
+            z: 0
+        )
+
+        #expect(confidence == nil)
+        #expect(!keep)
+    }
+
+    @Test("Derived captured joints reuse mapped 2D confidences")
+    func mapsDerivedJointConfidence() {
+        let confidenceBy2DJointName = [
+            VNHumanBodyPoseObservation.JointName.nose: Float(0.81),
+            VNHumanBodyPoseObservation.JointName.neck: Float(0.72),
+            VNHumanBodyPoseObservation.JointName.root: Float(0.64),
+            VNHumanBodyPoseObservation.JointName.leftShoulder: Float(0.93),
+        ]
+
+        #expect(
+            PostureCaptureService.capturedJointConfidence(
+                for: "centerHead",
+                confidenceBy2DJointName: confidenceBy2DJointName
+            ) == 0.81
+        )
+        #expect(
+            PostureCaptureService.capturedJointConfidence(
+                for: "centerShoulder",
+                confidenceBy2DJointName: confidenceBy2DJointName
+            ) == 0.72
+        )
+        #expect(
+            PostureCaptureService.capturedJointConfidence(
+                for: "spine",
+                confidenceBy2DJointName: confidenceBy2DJointName
+            ) == 0.64
+        )
+        #expect(
+            PostureCaptureService.capturedJointConfidence(
+                for: "leftShoulder",
+                confidenceBy2DJointName: confidenceBy2DJointName
+            ) == 0.93
+        )
+    }
+
+    @Test("Non-finite captured joints are dropped")
+    func dropsNonFiniteJoint() {
+        #expect(!PostureCaptureService.shouldKeepCapturedJoint(
+            confidence: 1.0,
+            x: .nan,
+            y: 1.2,
+            z: 0
+        ))
+        #expect(!PostureCaptureService.shouldKeepCapturedJoint(
+            confidence: 1.0,
+            x: 0,
+            y: .infinity,
+            z: 0
+        ))
+        #expect(!PostureCaptureService.shouldKeepCapturedJoint(
+            confidence: 1.0,
+            x: 0,
+            y: 1.2,
+            z: -.infinity
+        ))
     }
 }

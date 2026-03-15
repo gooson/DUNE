@@ -31,6 +31,7 @@ status: approved
 - **historical fallback 시 change=nil**: 비인접일 비교는 의미 없음 (#24, #51)
 - **partial failure 보고 필수**: async let 4+개 시 "N of M sources" 형태 (#25, #92)
 - **Hashable: == 와 hash 프로퍼티 일치**: content-aware Hasher 사용 (#26, #87, #175)
+- **Vision 3D pose 저장 경로는 2D confidence를 함께 검증하고, mapped confidence가 없으면 joint를 버린다**: `VNHumanBodyRecognizedPoint3D`는 per-joint confidence를 직접 주지 않으므로, posture overlay/analysis용 joint를 저장할 때는 같은 이미지에서 2D pose를 함께 실행해 confidence를 매핑하고, `nil` confidence를 pass-through 하지 않는다 (#235)
 - **RHR fallback을 condition "today"로 전달 금지**: nil이면 보정 스킵 (#112)
 - **Score 추가 시 `{Type}ScoreDetail` + `{Type}CalculationCard` 세트**: 중간 계산값 디버깅 (#113, #116)
 - **통계 파라미터 변경 시 3+개 실데이터 시나리오 검증** (#114)
