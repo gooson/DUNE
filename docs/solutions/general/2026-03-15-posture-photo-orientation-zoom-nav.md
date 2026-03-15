@@ -44,6 +44,24 @@ let imageData = if let orientedJPEG {
 
 **주의**: 기존 `photo.cgImageRepresentation()` → `UIImage(cgImage:)` 경로는 orientation 메타데이터를 무시. 반드시 `fileDataRepresentation()` → `UIImage(data:)` 경로 사용.
 
+### 1.1. Display-Time Orientation Correction (기존 데이터)
+
+새 캡처 파이프라인은 올바른 orientation으로 저장하지만, 이미 저장된 JPEG 데이터는 landscape 픽셀이 baked-in. 표시 시점에서 보정:
+
+```swift
+extension UIImage {
+    var postureOrientationCorrected: UIImage {
+        guard size.width > size.height, let cgImage else { return self }
+        return UIImage(cgImage: cgImage, scale: scale, orientation: .right)
+    }
+}
+
+// 모든 posture image 표시 시:
+let uiImage = UIImage(data: imageData)?.postureOrientationCorrected
+```
+
+자세 사진은 항상 세로(portrait)이므로, `width > height`면 잘못된 orientation. 90° CW 회전으로 복원.
+
 ### 2. Zoomable Photo Viewer
 
 `ZoomablePostureImageView` 컴포넌트 생성:

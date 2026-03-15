@@ -119,7 +119,7 @@ struct PostureResultView: View {
     ) -> some View {
         VStack(spacing: 8) {
             ZStack {
-                if let imageData, let uiImage = UIImage(data: imageData) {
+                if let imageData, let uiImage = UIImage(data: imageData)?.postureOrientationCorrected {
                     Image(uiImage: uiImage)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
