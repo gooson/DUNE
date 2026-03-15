@@ -21,7 +21,8 @@ struct CoachingEngineTests {
         workoutSuggestion: WorkoutSuggestion? = nil,
         recentPRExerciseName: String? = nil,
         currentStreakMilestone: Int? = nil,
-        weather: WeatherSnapshot? = nil
+        weather: WeatherSnapshot? = nil,
+        recentHighRPEStreak: Int = 0
     ) -> CoachingInput {
         CoachingInput(
             conditionScore: conditionScore,
@@ -38,7 +39,8 @@ struct CoachingEngineTests {
             workoutSuggestion: workoutSuggestion,
             recentPRExerciseName: recentPRExerciseName,
             currentStreakMilestone: currentStreakMilestone,
-            weather: weather
+            weather: weather,
+            recentHighRPEStreak: recentHighRPEStreak
         )
     }
 

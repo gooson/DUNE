@@ -15,6 +15,7 @@ struct DashboardView: View {
     @State private var cachedCurrentRelease: WhatsNewReleaseData?
     @State private var cachedBuildNumber: String = ""
     @Query(sort: \WorkoutTemplate.updatedAt, order: .reverse) private var templates: [WorkoutTemplate]
+    @Query(sort: \ExerciseRecord.date, order: .reverse) private var exerciseRecords: [ExerciseRecord]
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.openURL) private var openURL
     private let library: ExerciseLibraryQuerying = ExerciseLibraryService.shared
@@ -409,6 +410,7 @@ struct DashboardView: View {
     }
 
     private func loadDashboard() async {
+        viewModel.recentHighRPEStreak = DashboardViewModel.computeHighRPEStreak(from: exerciseRecords)
         await viewModel.loadData(canLoadHealthKitData: canLoadHealthKitData)
         guard !viewModel.isLoading else { return }
         if !hasAppeared {

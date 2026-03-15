@@ -145,7 +145,8 @@ struct AICoachingMessageServiceTests {
             workoutSuggestion: nil,
             recentPRExerciseName: nil,
             currentStreakMilestone: nil,
-            weather: nil
+            weather: nil,
+            recentHighRPEStreak: 0
         )
     }
 }
