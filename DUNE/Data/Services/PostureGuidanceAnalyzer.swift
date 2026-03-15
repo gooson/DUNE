@@ -8,9 +8,9 @@ final class PostureGuidanceAnalyzer: @unchecked Sendable {
     // MARK: - Configuration
 
     /// Body ratio thresholds (head-ankle distance as fraction of image height).
-    private static let bodyRatioTooFar: CGFloat = 0.4
-    private static let bodyRatioSlightlyFar: CGFloat = 0.55
-    private static let bodyRatioOptimalMax: CGFloat = 0.85
+    private static let bodyRatioTooFar: CGFloat = 0.35
+    private static let bodyRatioSlightlyFar: CGFloat = 0.45
+    private static let bodyRatioOptimalMax: CGFloat = 0.90
     // Above optimalMax → tooClose
 
     /// Luminance thresholds (0-1 scale).
@@ -33,20 +33,19 @@ final class PostureGuidanceAnalyzer: @unchecked Sendable {
         keypoints: [(String, CGPoint)],
         luminance: Double
     ) -> GuidanceState {
-        guard let observation else {
-            lock.withLock { recentNosePositions.removeAll() }
-            return GuidanceState(
-                lightingStatus: lightingStatus(from: luminance)
-            )
-        }
-
         let keypointMap = Dictionary(keypoints, uniquingKeysWith: { _, last in last })
+        let lighting = lightingStatus(from: luminance)
+
+        guard !keypointMap.isEmpty else {
+            lock.withLock { recentNosePositions.removeAll() }
+            return GuidanceState(lightingStatus: lighting)
+        }
 
         let isFullBody = checkFullBodyVisible(keypointMap)
         let distance = checkDistance(keypointMap)
-        let lighting = lightingStatus(from: luminance)
         let stable = checkStability(keypointMap)
-        let orientation = checkOrientation(observation)
+        // checkOrientation requires the VNHumanBodyPoseObservation for confidence values
+        let orientation = observation.map { checkOrientation($0) } ?? false
         let armsRelaxed = checkArmsRelaxed(keypointMap)
 
         return GuidanceState(

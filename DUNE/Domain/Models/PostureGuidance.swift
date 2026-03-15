@@ -11,6 +11,11 @@ struct GuidanceState: Sendable, Hashable {
     var isCorrectOrientation: Bool = false
     var areArmsRelaxed: Bool = false
 
+    /// Whether distance is acceptable for capture (optimal or slightly far).
+    var isDistanceAcceptable: Bool {
+        distanceStatus == .optimal || distanceStatus == .slightlyFar
+    }
+
     /// Whether all conditions are met for capture.
     var isReady: Bool {
         isFullBodyVisible
@@ -37,7 +42,7 @@ struct GuidanceState: Sendable, Hashable {
     var satisfiedCount: Int {
         var count = 0
         if isFullBodyVisible { count += 1 }
-        if distanceStatus == .optimal || distanceStatus == .slightlyFar { count += 1 }
+        if isDistanceAcceptable { count += 1 }
         if isStable { count += 1 }
         if lightingStatus != .tooLow { count += 1 }
         return count
