@@ -235,20 +235,63 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
 
     // MARK: - 3D Pose Detection from Video Frame
 
-    /// Detect 3D pose from a video pixel buffer. Used by RealtimePoseTracker for periodic 3D sampling.
-    /// Reusable CIContext for video frame conversion. Thread-safe.
-    private static let ciContext = CIContext()
-
+    /// Detect 3D pose from a live video frame. Uses VNImageRequestHandler(cvPixelBuffer:)
+    /// directly to avoid CIContext/CGImage round-trip overhead (~15-25ms per frame).
     func detectPoseFromVideoFrame(_ sampleBuffer: CMSampleBuffer) async throws -> PostureCaptureResult {
         guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
             throw PostureCaptureError.imageConversionFailed
         }
-        let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
-        guard let cgImage = Self.ciContext.createCGImage(ciImage, from: ciImage.extent) else {
-            throw PostureCaptureError.imageConversionFailed
-        }
+
+        let request = VNDetectHumanBodyPose3DRequest()
+        let confidenceRequest = VNDetectHumanBodyPoseRequest()
         // No EXIF orientation for live video frames (already rotated by connection.videoRotationAngle)
-        return try await detectPose(from: cgImage, orientedJPEG: nil)
+        let handler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer, orientation: .up, options: [:])
+
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, any Error>) in
+            DispatchQueue.global(qos: .userInitiated).async {
+                do {
+                    try handler.perform([request, confidenceRequest])
+                    continuation.resume()
+                } catch {
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+
+        guard let observation = request.results?.first else {
+            throw PostureCaptureError.noPoseDetected
+        }
+
+        let confidenceBy2DJointName = Self.captureConfidenceBy2DJointName(
+            from: confidenceRequest.results?.first
+        )
+        let jointPositions = extractJointPositions(
+            from: observation,
+            confidenceBy2DJointName: confidenceBy2DJointName
+        )
+
+        guard !jointPositions.isEmpty else {
+            throw PostureCaptureError.insufficientConfidence
+        }
+
+        let bodyHeight: Double?
+        let heightEstimation: HeightEstimationType
+
+        let height = observation.bodyHeight
+        if height.isFinite, height > 0.5, height < 2.5 {
+            bodyHeight = Double(height)
+            heightEstimation = .measured
+        } else {
+            bodyHeight = Self.referenceBodyHeight
+            heightEstimation = .reference
+        }
+
+        return PostureCaptureResult(
+            jointPositions: jointPositions,
+            bodyHeight: bodyHeight,
+            heightEstimation: heightEstimation,
+            imageData: nil
+        )
     }
 
     // MARK: - Full Capture Pipeline

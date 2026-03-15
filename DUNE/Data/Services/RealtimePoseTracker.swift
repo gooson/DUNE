@@ -26,7 +26,6 @@ final class RealtimePoseTracker: @unchecked Sendable {
     private var is3DInFlight = false
     private var isStopped = true
     private var last3DSampleTime: CFAbsoluteTime = 0
-    private var lastValidKeypoints: [(String, CGPoint)] = []
     private var lastValidTime: CFAbsoluteTime = 0
     private var lastStateUpdateTime: CFAbsoluteTime = 0
     private var pending3DTask: Task<Void, Never>?
@@ -65,8 +64,9 @@ final class RealtimePoseTracker: @unchecked Sendable {
     func stop() {
         captureService.onRealtimeFrame = nil
         pending3DTask?.cancel()
-        pending3DTask = nil
         serialQueue.async { [weak self] in
+            self?.pending3DTask?.cancel()
+            self?.pending3DTask = nil
             self?.isStopped = true
             self?.state = RealtimePoseState()
             self?.scoreBuffer.reset()
@@ -90,7 +90,6 @@ final class RealtimePoseTracker: @unchecked Sendable {
                 }
             } else {
                 // Valid detection
-                self.lastValidKeypoints = keypoints
                 self.lastValidTime = now
                 self.state.framesSinceLastDetection = 0
                 self.state.skeletonKeypoints = keypoints

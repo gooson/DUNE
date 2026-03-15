@@ -8,14 +8,15 @@ struct AngleOverlay: View {
 
     var body: some View {
         Canvas(opaque: false, colorMode: .nonLinear) { context, size in
+            let kpDict = Dictionary(keypoints, uniquingKeysWith: { _, last in last })
             for angle in angles {
                 guard let resolved = context.resolveSymbol(id: angle.id) else { continue }
-                let position = keypointPosition(for: angle, size: size)
-                // Draw background pill
+                let position = keypointScreenPosition(for: angle, size: size, kpDict: kpDict)
+                // Draw background pill (44pt to fit 3-digit angles like 170°)
                 let bgRect = CGRect(
                     x: position.x + 8,
                     y: position.y - 10,
-                    width: 38,
+                    width: 44,
                     height: 20
                 )
                 context.fill(
@@ -37,8 +38,11 @@ struct AngleOverlay: View {
 
     // MARK: - Position Lookup
 
-    private func keypointPosition(for angle: RealtimeAngle, size: CGSize) -> CGPoint {
-        let kpDict = Dictionary(keypoints, uniquingKeysWith: { _, last in last })
+    private func keypointScreenPosition(
+        for angle: RealtimeAngle,
+        size: CGSize,
+        kpDict: [String: CGPoint]
+    ) -> CGPoint {
         if let point = kpDict[angle.jointName] {
             return visionToScreen(point, size: size)
         }
