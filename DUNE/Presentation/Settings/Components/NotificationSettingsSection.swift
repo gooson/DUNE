@@ -6,6 +6,7 @@ struct NotificationSettingsSection: View {
     @AppStorage(BedtimeReminderScheduler.settingsKey) private var isBedtimeReminderEnabled = true
     @AppStorage(BedtimeReminderLeadTime.storageKey)
     private var bedtimeReminderLeadTime: BedtimeReminderLeadTime = BedtimeReminderLeadTime.defaultValue
+    @AppStorage(PostureReminderScheduler.settingsKey) private var isPostureReminderEnabled = false
 
     /// Grouped insight types for display.
     private static let healthTypes: [HealthInsight.InsightType] = [
@@ -21,6 +22,9 @@ struct NotificationSettingsSection: View {
             notificationToggle(for: .workoutPR)
             Toggle(isOn: $isBedtimeReminderEnabled) {
                 Label("Bedtime Reminder", systemImage: "moon.stars.fill")
+            }
+            Toggle(isOn: $isPostureReminderEnabled) {
+                Label("Posture Reminder", systemImage: "figure.stand")
             }
             Picker("Reminder Lead Time", selection: $bedtimeReminderLeadTime) {
                 ForEach(BedtimeReminderLeadTime.allCases, id: \.self) { leadTime in
@@ -39,6 +43,9 @@ struct NotificationSettingsSection: View {
         .onChange(of: bedtimeReminderLeadTime) { _, _ in
             rescheduleBedtimeReminder()
         }
+        .onChange(of: isPostureReminderEnabled) { _, _ in
+            reschedulePostureReminder()
+        }
     }
 
     private func notificationToggle(for type: HealthInsight.InsightType) -> some View {
@@ -53,6 +60,12 @@ struct NotificationSettingsSection: View {
     private func rescheduleBedtimeReminder() {
         Task {
             await BedtimeReminderScheduler.shared.refreshSchedule(force: true)
+        }
+    }
+
+    private func reschedulePostureReminder() {
+        Task {
+            await PostureReminderScheduler.shared.refreshSchedule()
         }
     }
 }

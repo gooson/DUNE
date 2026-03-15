@@ -20,6 +20,7 @@ final class PostureHistoryViewModel {
     private(set) var worstScore: Int = 0
     private(set) var totalMeasurements: Int = 0
     private(set) var changePercentage: Double?
+    private(set) var daysSinceLastAssessment: Int?
 
     // MARK: - Load
 
@@ -32,6 +33,13 @@ final class PostureHistoryViewModel {
             worstScore = 0
             changePercentage = nil
             return
+        }
+
+        // Days since last assessment (records are sorted newest-first from @Query)
+        if let latestDate = records.first?.date {
+            daysSinceLastAssessment = Calendar.current.dateComponents([.day], from: latestDate, to: .now).day
+        } else {
+            daysSinceLastAssessment = nil
         }
 
         let sorted = records.sorted { $0.date < $1.date }

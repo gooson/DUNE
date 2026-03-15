@@ -302,13 +302,22 @@ struct PostureDetailView: View {
     }
 
     private func generatePDFReport() {
-        let generator = PostureReportGenerator()
-        let data = generator.generatePDF(from: record)
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        let fileName = "PostureReport-\(dateFormatter.string(from: record.date)).pdf"
-        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
-        try? data.write(to: tempURL)
-        pdfURL = tempURL
+        let date = record.date
+        let score = record.overallScore
+        let metrics = record.allMetrics
+        let memo = record.memo
+
+        Task.detached {
+            let generator = PostureReportGenerator()
+            let data = generator.generatePDF(
+                date: date, score: score, metrics: metrics, memo: memo
+            )
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            let fileName = "PostureReport-\(dateFormatter.string(from: date)).pdf"
+            let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
+            try? data.write(to: tempURL)
+            await MainActor.run { pdfURL = tempURL }
+        }
     }
 }

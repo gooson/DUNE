@@ -118,27 +118,24 @@ struct PostureHistoryView: View {
 
     @ViewBuilder
     private var reminderBanner: some View {
-        if let latest = records.first {
-            let daysSince = Calendar.current.dateComponents([.day], from: latest.date, to: .now).day ?? 0
-            if daysSince >= 7 {
-                HStack(spacing: DS.Spacing.md) {
-                    Image(systemName: "clock.badge.exclamationmark")
-                        .font(.title3)
-                        .foregroundStyle(.orange)
+        if let daysSince = viewModel.daysSinceLastAssessment, daysSince >= 7 {
+            HStack(spacing: DS.Spacing.md) {
+                Image(systemName: "clock.badge.exclamationmark")
+                    .font(.title3)
+                    .foregroundStyle(.orange)
 
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Time for a new assessment")
-                            .font(.subheadline.weight(.medium))
-                        Text(String(localized: "\(daysSince) days since last measurement"))
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-
-                    Spacer()
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Time for a new assessment")
+                        .font(.subheadline.weight(.medium))
+                    Text(String(localized: "\(daysSince) days since last measurement"))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
-                .padding(DS.Spacing.md)
-                .background(.orange.opacity(0.1), in: RoundedRectangle(cornerRadius: DS.Radius.md))
+
+                Spacer()
             }
+            .padding(DS.Spacing.md)
+            .background(.orange.opacity(0.1), in: RoundedRectangle(cornerRadius: DS.Radius.md))
         }
     }
 

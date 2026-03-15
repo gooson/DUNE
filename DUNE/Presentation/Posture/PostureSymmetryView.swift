@@ -21,7 +21,7 @@ struct PostureSymmetryView: View {
         .navigationBarTitleDisplayMode(.inline)
         .background { DetailWaveBackground() }
         .environment(\.waveColor, DS.Color.body)
-        .onAppear { viewModel.loadSymmetry(from: record) }
+        .task { viewModel.loadSymmetry(from: record) }
     }
 
     // MARK: - Header
@@ -75,7 +75,7 @@ struct PostureSymmetryView: View {
                     Text("L")
                         .font(.caption2.weight(.bold))
                         .foregroundStyle(.secondary)
-                    Text(formattedValue(detail.leftValue, unit: detail.unit))
+                    Text(formattedPostureMetricValue(detail.leftValue, unit: detail.unit))
                         .font(.callout.weight(.semibold).monospacedDigit())
                 }
                 .frame(width: 60, alignment: .trailing)
@@ -88,7 +88,7 @@ struct PostureSymmetryView: View {
                     Text("R")
                         .font(.caption2.weight(.bold))
                         .foregroundStyle(.secondary)
-                    Text(formattedValue(detail.rightValue, unit: detail.unit))
+                    Text(formattedPostureMetricValue(detail.rightValue, unit: detail.unit))
                         .font(.callout.weight(.semibold).monospacedDigit())
                 }
                 .frame(width: 60, alignment: .leading)
@@ -163,10 +163,6 @@ struct PostureSymmetryView: View {
 
     // MARK: - Helpers
 
-    private func formattedValue(_ value: Double, unit: PostureMetricUnit) -> String {
-        formattedPostureMetricValue(value, unit: unit)
-    }
-
     private func differenceIcon(_ detail: SymmetryDetail) -> String {
         if detail.higherSide == .both { return "equal.circle" }
         return detail.higherSide == .left ? "arrow.left" : "arrow.right"
@@ -174,7 +170,7 @@ struct PostureSymmetryView: View {
 
     private func differenceSummary(_ detail: SymmetryDetail) -> String {
         let absDiff = abs(detail.difference)
-        let formatted = formattedValue(absDiff, unit: detail.unit)
+        let formatted = formattedPostureMetricValue(absDiff, unit: detail.unit)
 
         if detail.higherSide == .both {
             return String(localized: "Balanced")

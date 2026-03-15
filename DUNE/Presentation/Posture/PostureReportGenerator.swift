@@ -9,7 +9,24 @@ struct PostureReportGenerator {
         static let margin: CGFloat = 50
         static let contentWidth: CGFloat = pageWidth - margin * 2
         static let lineSpacing: CGFloat = 6
+
+        // Table column positions
+        static let col1: CGFloat = margin
+        static let col2: CGFloat = margin + contentWidth * 0.45
+        static let col3: CGFloat = margin + contentWidth * 0.65
+        static let col4: CGFloat = margin + contentWidth * 0.85
     }
+
+    private enum Cache {
+        static let dateFormatter: DateFormatter = {
+            let f = DateFormatter()
+            f.dateStyle = .long
+            return f
+        }()
+    }
+
+    /// Maximum memo length rendered in PDF to prevent layout overflow.
+    private static let maxMemoLength = 500
 
     private enum Fonts {
         static let title = UIFont.systemFont(ofSize: 24, weight: .bold)
@@ -21,7 +38,15 @@ struct PostureReportGenerator {
         static let scoreNumber = UIFont.monospacedDigitSystemFont(ofSize: 48, weight: .bold)
     }
 
-    func generatePDF(from record: PostureAssessmentRecord) -> Data {
+    func generatePDF(
+        date: Date,
+        score: Int,
+        metrics: [PostureMetricResult],
+        memo: String
+    ) -> Data {
+        let score = min(max(score, 0), 100)
+        let memo = String(memo.prefix(Self.maxMemoLength))
+
         let renderer = UIGraphicsPDFRenderer(
             bounds: CGRect(x: 0, y: 0, width: Layout.pageWidth, height: Layout.pageHeight)
         )
@@ -31,26 +56,25 @@ struct PostureReportGenerator {
             var y = Layout.margin
 
             // Title
-            y = drawTitle(at: y, date: record.date, context: context)
+            y = drawTitle(at: y, date: date, context: context)
             y += Layout.lineSpacing * 2
 
             // Score
-            y = drawScoreSection(at: y, score: record.overallScore)
+            y = drawScoreSection(at: y, score: score)
             y += Layout.lineSpacing * 2
 
             // Metrics
-            let allMetrics = record.allMetrics
-            if !allMetrics.isEmpty {
-                y = drawMetricsSection(at: y, metrics: allMetrics, context: context)
+            if !metrics.isEmpty {
+                y = drawMetricsSection(at: y, metrics: metrics, context: context)
             }
 
             // Memo
-            if !record.memo.isEmpty {
+            if !memo.isEmpty {
                 if y > Layout.pageHeight - 120 {
                     context.beginPage()
                     y = Layout.margin
                 }
-                y = drawMemoSection(at: y, memo: record.memo)
+                y = drawMemoSection(at: y, memo: memo)
             }
 
             // Footer
@@ -71,9 +95,7 @@ struct PostureReportGenerator {
         title.draw(in: CGRect(x: Layout.margin, y: currentY, width: Layout.contentWidth, height: 30), withAttributes: titleAttrs)
         currentY += 32
 
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .long
-        let dateString = dateFormatter.string(from: date) as NSString
+        let dateString = Cache.dateFormatter.string(from: date) as NSString
         let dateAttrs: [NSAttributedString.Key: Any] = [
             .font: Fonts.subtitle,
             .foregroundColor: UIColor.secondaryLabel,
@@ -150,15 +172,10 @@ struct PostureReportGenerator {
             .foregroundColor: UIColor.secondaryLabel,
         ]
 
-        let col1: CGFloat = Layout.margin
-        let col2: CGFloat = Layout.margin + Layout.contentWidth * 0.45
-        let col3: CGFloat = Layout.margin + Layout.contentWidth * 0.65
-        let col4: CGFloat = Layout.margin + Layout.contentWidth * 0.85
-
-        ("Metric" as NSString).draw(in: CGRect(x: col1, y: y, width: 200, height: 16), withAttributes: headerAttrs)
-        ("Value" as NSString).draw(in: CGRect(x: col2, y: y, width: 80, height: 16), withAttributes: headerAttrs)
-        ("Status" as NSString).draw(in: CGRect(x: col3, y: y, width: 80, height: 16), withAttributes: headerAttrs)
-        ("Confidence" as NSString).draw(in: CGRect(x: col4, y: y, width: 80, height: 16), withAttributes: headerAttrs)
+        ("Metric" as NSString).draw(in: CGRect(x: Layout.col1, y: y, width: 200, height: 16), withAttributes: headerAttrs)
+        ("Value" as NSString).draw(in: CGRect(x: Layout.col2, y: y, width: 80, height: 16), withAttributes: headerAttrs)
+        ("Status" as NSString).draw(in: CGRect(x: Layout.col3, y: y, width: 80, height: 16), withAttributes: headerAttrs)
+        ("Confidence" as NSString).draw(in: CGRect(x: Layout.col4, y: y, width: 80, height: 16), withAttributes: headerAttrs)
 
         let dividerY = y + 18
         let path = UIBezierPath()
@@ -177,26 +194,21 @@ struct PostureReportGenerator {
             .foregroundColor: UIColor.label,
         ]
 
-        let col1: CGFloat = Layout.margin
-        let col2: CGFloat = Layout.margin + Layout.contentWidth * 0.45
-        let col3: CGFloat = Layout.margin + Layout.contentWidth * 0.65
-        let col4: CGFloat = Layout.margin + Layout.contentWidth * 0.85
-
         let name = metric.type.displayName as NSString
-        name.draw(in: CGRect(x: col1, y: y, width: col2 - col1 - 8, height: 16), withAttributes: bodyAttrs)
+        name.draw(in: CGRect(x: Layout.col1, y: y, width: Layout.col2 - Layout.col1 - 8, height: 16), withAttributes: bodyAttrs)
 
         let value = formattedPostureMetricValue(metric.value, unit: metric.unit) as NSString
-        value.draw(in: CGRect(x: col2, y: y, width: 80, height: 16), withAttributes: bodyAttrs)
+        value.draw(in: CGRect(x: Layout.col2, y: y, width: 80, height: 16), withAttributes: bodyAttrs)
 
         let statusAttrs: [NSAttributedString.Key: Any] = [
             .font: Fonts.body,
             .foregroundColor: statusUIColor(metric.status),
         ]
         let status = metric.status.displayName as NSString
-        status.draw(in: CGRect(x: col3, y: y, width: 80, height: 16), withAttributes: statusAttrs)
+        status.draw(in: CGRect(x: Layout.col3, y: y, width: 80, height: 16), withAttributes: statusAttrs)
 
         let confidence = "\(Int(metric.confidence * 100))%" as NSString
-        confidence.draw(in: CGRect(x: col4, y: y, width: 60, height: 16), withAttributes: bodyAttrs)
+        confidence.draw(in: CGRect(x: Layout.col4, y: y, width: 60, height: 16), withAttributes: bodyAttrs)
 
         return y + 22
     }

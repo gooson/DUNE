@@ -653,6 +653,7 @@ struct DUNEApp: App {
         appRuntime.scoreRefreshService.startListening(to: appRuntime.refreshCoordinator)
         Task {
             await BedtimeReminderScheduler.shared.refreshSchedule()
+            await PostureReminderScheduler.shared.refreshSchedule()
         }
         scheduleWorkoutTitleBackfill()
     }
@@ -690,6 +691,7 @@ struct DUNEApp: App {
                 hasRequestedNotificationAuthorization = true
                 if granted {
                     await BedtimeReminderScheduler.shared.refreshSchedule(force: true)
+                    await PostureReminderScheduler.shared.refreshSchedule()
                 }
             } catch {
                 AppLogger.notification.error("Deferred notification authorization failed: \(error.localizedDescription)")
