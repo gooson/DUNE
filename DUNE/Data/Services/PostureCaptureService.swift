@@ -1,5 +1,6 @@
 #if !os(visionOS)
 import AVFoundation
+import CoreImage
 import Foundation
 import ImageIO
 import os
@@ -247,10 +248,11 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
     private static let frameAnalysisInterval: CFAbsoluteTime = 0.1 // 10fps max
     /// Combined frame update callback: guidance state + skeleton keypoints in a single dispatch.
     var onFrameUpdate: (@Sendable (GuidanceState, [(String, CGPoint)], CGSize) -> Void)?
-    /// Realtime analysis callback: keypoints + deep-copied pixel buffer for 3D sampling.
-    /// The copied buffer is independent of the camera pool — the original CMSampleBuffer
-    /// never escapes `captureOutput`, so pool buffers are recycled immediately.
-    var onRealtimeFrame: (@Sendable ([(String, CGPoint)], CVPixelBuffer?) -> Void)?
+    /// Realtime analysis callback: keypoints + CGImage for 3D sampling.
+    /// CGImage is created from the pool buffer via CIContext — completely independent of
+    /// the camera pool, so pool buffers are recycled immediately in captureOutput.
+    var onRealtimeFrame: (@Sendable ([(String, CGPoint)], CGImage?) -> Void)?
+    private static let ciContext = CIContext(options: [.useSoftwareRenderer: false])
     var onDiagnosticsUpdate: (@Sendable (PostureCaptureDiagnostics) -> Void)?
     private var livePoseErrorCount = 0
     private var liveConfiguration = PostureCaptureLiveConfiguration.current()
@@ -491,59 +493,11 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
 
     // MARK: - 3D Pose Detection from Video Frame
 
-    /// Detect 3D pose from a copied pixel buffer. Caller must pass a buffer that is NOT
-    /// backed by the AVCaptureSession pool so the camera can continue recycling frames.
-    func detectPoseFromVideoFrame(_ pixelBuffer: CVPixelBuffer) async throws -> PostureCaptureResult {
-        let request = VNDetectHumanBodyPose3DRequest()
-        let confidenceRequest = VNDetectHumanBodyPoseRequest()
-        // No EXIF orientation for live video frames (already rotated by connection.videoRotationAngle)
-        let handler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer, orientation: .up, options: [:])
-
-        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, any Error>) in
-            DispatchQueue.global(qos: .userInitiated).async {
-                do {
-                    try handler.perform([request, confidenceRequest])
-                    continuation.resume()
-                } catch {
-                    continuation.resume(throwing: error)
-                }
-            }
-        }
-
-        guard let observation = request.results?.first else {
-            throw PostureCaptureError.noPoseDetected
-        }
-
-        let confidenceBy2DJointName = Self.captureConfidenceBy2DJointName(
-            from: confidenceRequest.results?.first
-        )
-        let jointPositions = extractJointPositions(
-            from: observation,
-            confidenceBy2DJointName: confidenceBy2DJointName
-        )
-
-        guard !jointPositions.isEmpty else {
-            throw PostureCaptureError.insufficientConfidence
-        }
-
-        let bodyHeight: Double?
-        let heightEstimation: HeightEstimationType
-
-        let height = observation.bodyHeight
-        if height.isFinite, height > 0.5, height < 2.5 {
-            bodyHeight = Double(height)
-            heightEstimation = .measured
-        } else {
-            bodyHeight = Self.referenceBodyHeight
-            heightEstimation = .reference
-        }
-
-        return PostureCaptureResult(
-            jointPositions: jointPositions,
-            bodyHeight: bodyHeight,
-            heightEstimation: heightEstimation,
-            imageData: nil
-        )
+    /// Detect 3D pose from a CGImage extracted from a video frame.
+    /// CGImage has zero dependency on the AVCaptureSession buffer pool,
+    /// so this can safely run on any queue/Task without causing pool starvation.
+    func detectPoseFromVideoFrame(_ cgImage: CGImage) async throws -> PostureCaptureResult {
+        try await detectPose(from: cgImage, orientedJPEG: nil)
     }
 
     // MARK: - Full Capture Pipeline
@@ -1069,20 +1023,14 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
         guard now - lastFrameAnalysisTime >= Self.frameAnalysisInterval else { return }
         lastFrameAnalysisTime = now
 
-        guard let poolBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
+        guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
         guard onFrameUpdate != nil || onRealtimeFrame != nil else { return }
 
-        // Deep-copy immediately so the pool-backed buffer is released when we return.
-        // Without this, VNImageRequestHandler holds the pool buffer during perform(),
-        // and Vision's internal YUV→BGRA conversion fails with "Could not create mlImage buffer"
-        // when the camera pool (3-5 buffers) is exhausted.
         let rawImageSize = CGSize(
-            width: CVPixelBufferGetWidth(poolBuffer),
-            height: CVPixelBufferGetHeight(poolBuffer)
+            width: CVPixelBufferGetWidth(pixelBuffer),
+            height: CVPixelBufferGetHeight(pixelBuffer)
         )
-        let pixelFormat = Self.pixelFormatLabel(CVPixelBufferGetPixelFormatType(poolBuffer))
-        guard let pixelBuffer = Self.copyPixelBuffer(poolBuffer) else { return }
-        // poolBuffer is no longer used — it will be released when sampleBuffer goes out of scope.
+        let pixelFormat = Self.pixelFormatLabel(CVPixelBufferGetPixelFormatType(pixelBuffer))
 
         let orientation: CGImagePropertyOrientation
         if let previewRotationAngle = livePreviewRotationAngle {
@@ -1092,6 +1040,9 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
         } else {
             orientation = Self.liveVisionOrientation(for: liveDeviceOrientation)
         }
+
+        // 2D detection uses pool buffer directly — synchronous on videoDataQueue,
+        // buffer is released when this method returns.
         let handler = VNImageRequestHandler(
             cvPixelBuffer: pixelBuffer,
             orientation: orientation,
@@ -1137,7 +1088,7 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
             }
         }
 
-        // Compute luminance from copied pixel buffer
+        // Compute luminance from pool buffer (synchronous, no escape)
         let luminance = Self.averageLuminance(from: pixelBuffer)
 
         // Update guidance state
@@ -1158,9 +1109,17 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
             lastVisionError: nil
         )
 
-        // Pass the already-copied buffer to the 3D pipeline (no second copy needed).
-        // Only pass when keypoints are detected, since the 3D pipeline requires them.
-        onRealtimeFrame?(keypoints, keypoints.isEmpty ? nil : pixelBuffer)
+        // For 3D pipeline: create CGImage from pool buffer (pool-independent).
+        // CGImage is heap-allocated and has zero dependency on the camera buffer pool,
+        // so it can safely cross async boundaries without causing pool starvation.
+        var cgImageFor3D: CGImage?
+        if !keypoints.isEmpty, onRealtimeFrame != nil {
+            let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
+            cgImageFor3D = Self.ciContext.createCGImage(ciImage, from: ciImage.extent)
+        }
+        // Pool buffer (pixelBuffer) is released when sampleBuffer goes out of scope.
+
+        onRealtimeFrame?(keypoints, cgImageFor3D)
     }
 
     /// Compute average luminance from either the Y plane (420f/420v) or RGB channels (BGRA).
