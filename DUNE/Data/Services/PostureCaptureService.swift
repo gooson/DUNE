@@ -243,6 +243,10 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
 
     private let guidanceAnalyzer = PostureGuidanceAnalyzer()
     private let bodyPoseRequest = VNDetectHumanBodyPoseRequest()
+    /// Serializes ALL Vision perform() calls across 2D and 3D pipelines.
+    /// Vision's internal ML buffer pool is shared — concurrent perform() calls
+    /// cause "Could not create mlImage buffer" errors from pool exhaustion.
+    private let visionSemaphore = DispatchSemaphore(value: 1)
     // Accessed only on videoDataQueue (single serial queue) — no lock needed.
     private var lastFrameAnalysisTime: CFAbsoluteTime = 0
     private static let frameAnalysisInterval: CFAbsoluteTime = 0.1 // 10fps max
@@ -437,11 +441,17 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
         let handler = VNImageRequestHandler(cgImage: image, orientation: orientation, options: [:])
 
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, any Error>) in
-            DispatchQueue.global(qos: .userInitiated).async {
+            DispatchQueue.global(qos: .userInitiated).async { [visionSemaphore] in
+                // Wait for any in-progress 2D detection to finish.
+                // Vision's internal ML buffer pool is shared — concurrent perform() calls
+                // cause "Could not create mlImage buffer" errors.
+                visionSemaphore.wait()
                 do {
                     try handler.perform([request, confidenceRequest])
+                    visionSemaphore.signal()
                     continuation.resume()
                 } catch {
+                    visionSemaphore.signal()
                     continuation.resume(throwing: error)
                 }
             }
@@ -1053,6 +1063,9 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
         }
 
         // 2D detection on CGImage — no pool buffer involvement during ML inference.
+        // Acquire Vision semaphore with zero timeout: skip this frame if 3D is running.
+        // Vision's internal ML buffer pool is shared — concurrent perform() exhausts it.
+        guard visionSemaphore.wait(timeout: .now()) == .success else { return }
         let handler = VNImageRequestHandler(
             cgImage: cgImage,
             orientation: orientation,
@@ -1062,7 +1075,9 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
 
         do {
             try handler.perform([bodyPoseRequest])
+            visionSemaphore.signal()
         } catch {
+            visionSemaphore.signal()
             livePoseErrorCount += 1
             publishDiagnostics(
                 frameWidth: Int(rawImageSize.width),
