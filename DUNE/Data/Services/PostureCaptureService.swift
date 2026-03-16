@@ -230,6 +230,7 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
     private let photoOutput = AVCapturePhotoOutput()
     private let videoDataOutput = AVCaptureVideoDataOutput()
     private let videoDataQueue = DispatchQueue(label: "com.dune.posture.videoData", qos: .userInitiated)
+    private let sessionQueue = DispatchQueue(label: "com.dune.posture.session", qos: .userInitiated)
     private let continuationLock = NSLock()
     private let orientationLock = NSLock()
     private var photoContinuation: CheckedContinuation<(CGImage, Data?), any Error>?
@@ -360,11 +361,10 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
         let previousConfiguration = liveConfiguration
         liveConfiguration = configuration
         do {
-            let wasRunning = captureSession.isRunning
             try setupCamera(position: currentPosition)
-            if wasRunning {
-                startSession()
-            }
+            // Always restart — startSession() guards against double-start on sessionQueue,
+            // avoiding the TOCTOU race of reading isRunning on the caller thread.
+            startSession()
         } catch {
             liveConfiguration = previousConfiguration
             throw error
@@ -372,13 +372,17 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
     }
 
     func startSession() {
-        guard !captureSession.isRunning else { return }
-        captureSession.startRunning()
+        sessionQueue.async { [captureSession] in
+            guard !captureSession.isRunning else { return }
+            captureSession.startRunning()
+        }
     }
 
     func stopSession() {
-        guard captureSession.isRunning else { return }
-        captureSession.stopRunning()
+        sessionQueue.async { [captureSession] in
+            guard captureSession.isRunning else { return }
+            captureSession.stopRunning()
+        }
     }
 
     func updateDeviceOrientation(_ orientation: UIDeviceOrientation) {
