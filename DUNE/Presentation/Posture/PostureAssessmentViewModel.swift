@@ -49,6 +49,7 @@ final class PostureAssessmentViewModel {
     var skeletonKeypoints: [(String, CGPoint)] = []
     var skeletonImageSize: CGSize = .zero
     var deviceOrientation: UIDeviceOrientation = .portrait
+    var captureDiagnostics = PostureCaptureDiagnostics()
 
     // MARK: - Haptic Triggers
 
@@ -75,6 +76,10 @@ final class PostureAssessmentViewModel {
         case .front: String(localized: "Front View")
         case .side: String(localized: "Side View")
         }
+    }
+
+    var isDiagnosticsEnabled: Bool {
+        PostureCaptureService.isDiagnosticsEnabled
     }
 
     // MARK: - Tasks
@@ -121,6 +126,7 @@ final class PostureAssessmentViewModel {
         countdownTask?.cancel()
         countdownTask = nil
         captureService.onFrameUpdate = nil
+        captureService.onDiagnosticsUpdate = nil
         captureService.stopSession()
     }
 
@@ -157,6 +163,11 @@ final class PostureAssessmentViewModel {
                 self?.handleAutoCapture(state)
             }
         }
+        captureService.onDiagnosticsUpdate = { [weak self] diagnostics in
+            Task { @MainActor [weak self] in
+                self?.captureDiagnostics = diagnostics
+            }
+        }
     }
 
     func updateDeviceOrientation(_ orientation: UIDeviceOrientation) {
@@ -167,6 +178,34 @@ final class PostureAssessmentViewModel {
 
     func updatePreviewRotationAngle(_ angle: CGFloat) {
         captureService.updatePreviewRotationAngle(angle)
+    }
+
+    func cycleDiagnosticsPreset() {
+        guard isDiagnosticsEnabled else { return }
+        applyLiveDiagnosticsConfiguration(captureService.currentLiveConfiguration.cyclingPreset())
+    }
+
+    func cycleDiagnosticsPixelFormat() {
+        guard isDiagnosticsEnabled else { return }
+        applyLiveDiagnosticsConfiguration(captureService.currentLiveConfiguration.cyclingPixelFormat())
+    }
+
+    private func applyLiveDiagnosticsConfiguration(_ configuration: PostureCaptureLiveConfiguration) {
+        countdownTask?.cancel()
+        countdownTask = nil
+        autoReadyStartTime = nil
+        isManualCountdown = false
+        guidanceState = GuidanceState()
+        skeletonKeypoints = []
+        skeletonImageSize = .zero
+
+        do {
+            try captureService.updateLiveConfiguration(configuration)
+            captureService.updateDeviceOrientation(deviceOrientation)
+            capturePhase = .preparing
+        } catch {
+            capturePhase = .error(String(localized: "Camera is not available"))
+        }
     }
 
     private func handleAutoCapture(_ state: GuidanceState) {

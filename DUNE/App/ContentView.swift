@@ -135,6 +135,7 @@ struct ContentView: View {
     @State private var refreshSignal = 0
     @State private var foregroundTask: Task<Void, Never>?
     @State private var notificationOpenWorkoutID: String?
+    @State private var isShowingLaunchPostureCapture = PostureCaptureService.shouldAutoOpenCaptureOnLaunch
     @State private var todayNavPath = NavigationPath()
     @State private var trainNavPath = NavigationPath()
     @State private var wellnessNavPath = NavigationPath()
@@ -303,10 +304,18 @@ struct ContentView: View {
                 }
             }
         }
+        #if !os(visionOS)
+        .fullScreenCover(isPresented: $isShowingLaunchPostureCapture) {
+            PostureCaptureView()
+        }
+        #endif
     }
 
     private static func initialSectionForUITests() -> AppSection {
         let args = ProcessInfo.processInfo.arguments
+        if args.contains("--posture-open-capture") {
+            return .wellness
+        }
         guard args.contains("--uitesting"),
               let index = args.firstIndex(of: "--uitest-initial-tab"),
               args.indices.contains(index + 1) else {

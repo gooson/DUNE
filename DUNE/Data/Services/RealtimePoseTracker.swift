@@ -8,6 +8,10 @@ import os
 /// - 3D pipeline: Periodic sampling → full 3D pose detection + analysis
 final class RealtimePoseTracker: @unchecked Sendable {
 
+    private struct SendablePixelBuffer: @unchecked Sendable {
+        let value: CVPixelBuffer
+    }
+
     // MARK: - Callbacks
 
     /// Called at throttled rate with updated state.
@@ -49,7 +53,10 @@ final class RealtimePoseTracker: @unchecked Sendable {
 
     func start() {
         captureService.onRealtimeFrame = { [weak self] keypoints, copiedBuffer in
-            self?.handleFrame(keypoints: keypoints, copiedBuffer: copiedBuffer)
+            self?.handleFrame(
+                keypoints: keypoints,
+                copiedBuffer: copiedBuffer.map(SendablePixelBuffer.init)
+            )
         }
 
         serialQueue.async { [weak self] in
@@ -78,7 +85,7 @@ final class RealtimePoseTracker: @unchecked Sendable {
     /// Process a frame with pre-extracted keypoints and an optional deep-copied pixel buffer.
     /// The copied buffer is independent of the camera pool — no CMSampleBuffer is ever
     /// captured here, so pool buffers are recycled in the camera callback immediately.
-    private func handleFrame(keypoints: [(String, CGPoint)], copiedBuffer: CVPixelBuffer?) {
+    private func handleFrame(keypoints: [(String, CGPoint)], copiedBuffer: SendablePixelBuffer?) {
         serialQueue.async { [weak self] in
             guard let self, self.state.isActive, !self.isStopped else { return }
 
@@ -113,11 +120,11 @@ final class RealtimePoseTracker: @unchecked Sendable {
             if !self.is3DInFlight,
                !keypoints.isEmpty,
                now - self.last3DSampleTime >= Self.min3DInterval,
-               let buffer = copiedBuffer {
+               let copiedBuffer {
                 self.is3DInFlight = true
                 self.last3DSampleTime = now
-                self.pending3DTask = Task { [weak self] in
-                    await self?.perform3DDetection(buffer)
+                self.pending3DTask = Task { [weak self, copiedBuffer] in
+                    await self?.perform3DDetection(copiedBuffer.value)
                 }
             }
 

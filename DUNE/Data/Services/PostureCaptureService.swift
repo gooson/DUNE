@@ -33,6 +33,193 @@ enum PostureCaptureError: Error, Sendable {
     case imageConversionFailed
 }
 
+enum PostureCaptureLiveSessionPresetOption: String, Sendable, CaseIterable {
+    case automatic
+    case hd1280x720
+    case high
+    case photo
+
+    var displayLabel: String {
+        switch self {
+        case .automatic: "auto"
+        case .hd1280x720: "720p"
+        case .high: "high"
+        case .photo: "photo"
+        }
+    }
+
+    func resolvedPreset(for session: AVCaptureSession) -> AVCaptureSession.Preset {
+        switch self {
+        case .automatic:
+            if session.canSetSessionPreset(.hd1280x720) {
+                return .hd1280x720
+            }
+            if session.canSetSessionPreset(.high) {
+                return .high
+            }
+            return .photo
+        case .hd1280x720:
+            return session.canSetSessionPreset(.hd1280x720) ? .hd1280x720 : Self.automatic.resolvedPreset(for: session)
+        case .high:
+            return session.canSetSessionPreset(.high) ? .high : Self.automatic.resolvedPreset(for: session)
+        case .photo:
+            return .photo
+        }
+    }
+
+    static func fromLaunchArguments(_ arguments: [String]) -> Self {
+        guard let rawValue = PostureCaptureLiveConfiguration.argumentValue(
+            for: "--posture-live-preset",
+            in: arguments
+        )?.lowercased() else {
+            return .automatic
+        }
+
+        switch rawValue {
+        case "720p", "hd1280x720":
+            return .hd1280x720
+        case "high":
+            return .high
+        case "photo":
+            return .photo
+        default:
+            return .automatic
+        }
+    }
+
+    func next() -> Self {
+        switch self {
+        case .automatic: .hd1280x720
+        case .hd1280x720: .high
+        case .high: .photo
+        case .photo: .automatic
+        }
+    }
+}
+
+enum PostureCaptureLivePixelFormatOption: String, Sendable, CaseIterable {
+    case automatic
+    case fullRange420f
+    case videoRange420v
+    case bgra
+
+    var displayLabel: String {
+        switch self {
+        case .automatic: "auto"
+        case .fullRange420f: "420f"
+        case .videoRange420v: "420v"
+        case .bgra: "32BGRA"
+        }
+    }
+
+    func resolvedFormat(from availableFormats: [OSType]) -> OSType? {
+        switch self {
+        case .automatic:
+            return Self.preferredNativeFormat(from: availableFormats)
+        case .fullRange420f:
+            if availableFormats.contains(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange) {
+                return kCVPixelFormatType_420YpCbCr8BiPlanarFullRange
+            }
+            return Self.preferredNativeFormat(from: availableFormats)
+        case .videoRange420v:
+            if availableFormats.contains(kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange) {
+                return kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange
+            }
+            return Self.preferredNativeFormat(from: availableFormats)
+        case .bgra:
+            if availableFormats.contains(kCVPixelFormatType_32BGRA) {
+                return kCVPixelFormatType_32BGRA
+            }
+            return Self.preferredNativeFormat(from: availableFormats)
+        }
+    }
+
+    static func fromLaunchArguments(_ arguments: [String]) -> Self {
+        guard let rawValue = PostureCaptureLiveConfiguration.argumentValue(
+            for: "--posture-live-format",
+            in: arguments
+        )?.lowercased() else {
+            return .automatic
+        }
+
+        switch rawValue {
+        case "420f", "fullrange", "full-range":
+            return .fullRange420f
+        case "420v", "videorange", "video-range":
+            return .videoRange420v
+        case "bgra", "32bgra":
+            return .bgra
+        default:
+            return .automatic
+        }
+    }
+
+    func next() -> Self {
+        switch self {
+        case .automatic: .fullRange420f
+        case .fullRange420f: .videoRange420v
+        case .videoRange420v: .bgra
+        case .bgra: .automatic
+        }
+    }
+
+    private static func preferredNativeFormat(from availableFormats: [OSType]) -> OSType? {
+        if availableFormats.contains(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange) {
+            return kCVPixelFormatType_420YpCbCr8BiPlanarFullRange
+        }
+        if availableFormats.contains(kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange) {
+            return kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange
+        }
+        if availableFormats.contains(kCVPixelFormatType_32BGRA) {
+            return kCVPixelFormatType_32BGRA
+        }
+        return availableFormats.first
+    }
+}
+
+struct PostureCaptureLiveConfiguration: Sendable, Equatable {
+    var preset: PostureCaptureLiveSessionPresetOption = .automatic
+    var pixelFormat: PostureCaptureLivePixelFormatOption = .automatic
+
+    static func current(arguments: [String] = ProcessInfo.processInfo.arguments) -> Self {
+        Self(
+            preset: PostureCaptureLiveSessionPresetOption.fromLaunchArguments(arguments),
+            pixelFormat: PostureCaptureLivePixelFormatOption.fromLaunchArguments(arguments)
+        )
+    }
+
+    static func argumentValue(for key: String, in arguments: [String]) -> String? {
+        guard let index = arguments.firstIndex(of: key), arguments.indices.contains(index + 1) else {
+            return nil
+        }
+        return arguments[index + 1]
+    }
+
+    func cyclingPreset() -> Self {
+        var copy = self
+        copy.preset = preset.next()
+        return copy
+    }
+
+    func cyclingPixelFormat() -> Self {
+        var copy = self
+        copy.pixelFormat = pixelFormat.next()
+        return copy
+    }
+}
+
+struct PostureCaptureDiagnostics: Sendable, Equatable {
+    var configuredPreset: String = ""
+    var configuredPixelFormat: String = ""
+    var sessionPreset: String = ""
+    var frameWidth: Int = 0
+    var frameHeight: Int = 0
+    var pixelFormat: String = ""
+    var lastPoseLatencyMs: Int = 0
+    var poseErrorCount: Int = 0
+    var lastVisionError: String?
+}
+
 // MARK: - PostureCaptureService
 
 final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendable {
@@ -63,6 +250,9 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
     /// The copied buffer is independent of the camera pool — the original CMSampleBuffer
     /// never escapes `captureOutput`, so pool buffers are recycled immediately.
     var onRealtimeFrame: (@Sendable ([(String, CGPoint)], CVPixelBuffer?) -> Void)?
+    var onDiagnosticsUpdate: (@Sendable (PostureCaptureDiagnostics) -> Void)?
+    private var livePoseErrorCount = 0
+    private var liveConfiguration = PostureCaptureLiveConfiguration.current()
 
     // MARK: - Camera State
 
@@ -77,6 +267,18 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
     private static let previewJointMinimumConfidence: Float = 0.3
     private static let jpegCompressionQuality: CGFloat = 0.7
     private static let referenceBodyHeight: Double = 1.8
+
+    static var isDiagnosticsEnabled: Bool {
+        ProcessInfo.processInfo.arguments.contains("--posture-capture-diagnostics")
+    }
+
+    static var shouldAutoOpenCaptureOnLaunch: Bool {
+        ProcessInfo.processInfo.arguments.contains("--posture-open-capture")
+    }
+
+    var currentLiveConfiguration: PostureCaptureLiveConfiguration {
+        liveConfiguration
+    }
 
     // MARK: - Setup
 
@@ -101,7 +303,6 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
         let input = try AVCaptureDeviceInput(device: device)
 
         captureSession.beginConfiguration()
-        captureSession.sessionPreset = .photo
 
         // Remove existing inputs/outputs for camera switching
         for existing in captureSession.inputs {
@@ -116,6 +317,7 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
             throw PostureCaptureError.cameraUnavailable
         }
         captureSession.addInput(input)
+        captureSession.sessionPreset = liveConfiguration.preset.resolvedPreset(for: captureSession)
 
         guard captureSession.canAddOutput(photoOutput) else {
             captureSession.commitConfiguration()
@@ -126,9 +328,10 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
 
         // Add video data output for real-time pose guidance
         videoDataOutput.alwaysDiscardsLateVideoFrames = true
-        videoDataOutput.setSampleBufferDelegate(self, queue: videoDataQueue)
         if captureSession.canAddOutput(videoDataOutput) {
             captureSession.addOutput(videoDataOutput)
+            applyLiveVideoOutputConfiguration()
+            videoDataOutput.setSampleBufferDelegate(self, queue: videoDataQueue)
             if let connection = videoDataOutput.connection(with: .video) {
                 // Keep raw video-data buffers in native sensor orientation and let
                 // Vision apply explicit orientation metadata per frame.
@@ -139,11 +342,33 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
         }
 
         captureSession.commitConfiguration()
+        publishDiagnostics(
+            frameWidth: 0,
+            frameHeight: 0,
+            pixelFormat: liveConfiguration.pixelFormat.displayLabel,
+            lastPoseLatencyMs: 0,
+            lastVisionError: nil
+        )
     }
 
     func switchCamera() throws {
         let newPosition: AVCaptureDevice.Position = currentPosition == .front ? .back : .front
         try setupCamera(position: newPosition)
+    }
+
+    func updateLiveConfiguration(_ configuration: PostureCaptureLiveConfiguration) throws {
+        let previousConfiguration = liveConfiguration
+        liveConfiguration = configuration
+        do {
+            let wasRunning = captureSession.isRunning
+            try setupCamera(position: currentPosition)
+            if wasRunning {
+                startSession()
+            }
+        } catch {
+            liveConfiguration = previousConfiguration
+            throw error
+        }
     }
 
     func startSession() {
@@ -854,12 +1079,27 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
             orientation: orientation,
             options: [:]
         )
+        let rawImageSize = CGSize(
+            width: CVPixelBufferGetWidth(pixelBuffer),
+            height: CVPixelBufferGetHeight(pixelBuffer)
+        )
+        let pixelFormat = Self.pixelFormatLabel(CVPixelBufferGetPixelFormatType(pixelBuffer))
+        let requestStart = CFAbsoluteTimeGetCurrent()
 
         do {
             try handler.perform([bodyPoseRequest])
         } catch {
+            livePoseErrorCount += 1
+            publishDiagnostics(
+                frameWidth: Int(rawImageSize.width),
+                frameHeight: Int(rawImageSize.height),
+                pixelFormat: pixelFormat,
+                lastPoseLatencyMs: Int((CFAbsoluteTimeGetCurrent() - requestStart) * 1000),
+                lastVisionError: error.localizedDescription
+            )
             return
         }
+        let requestLatencyMs = Int((CFAbsoluteTimeGetCurrent() - requestStart) * 1000)
 
         let observation = bodyPoseRequest.results?.first
 
@@ -885,7 +1125,7 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
         }
 
         // Compute luminance from pixel buffer
-        let luminance = averageLuminance(from: pixelBuffer)
+        let luminance = Self.averageLuminance(from: pixelBuffer)
 
         // Update guidance state
         let state = guidanceAnalyzer.analyze(
@@ -894,13 +1134,16 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
             luminance: luminance
         )
 
-        let rawImageSize = CGSize(
-            width: CVPixelBufferGetWidth(pixelBuffer),
-            height: CVPixelBufferGetHeight(pixelBuffer)
-        )
         let orientedImageSize = Self.orientedImageSize(for: rawImageSize, orientation: orientation)
 
         onFrameUpdate?(state, keypoints, orientedImageSize)
+        publishDiagnostics(
+            frameWidth: Int(rawImageSize.width),
+            frameHeight: Int(rawImageSize.height),
+            pixelFormat: pixelFormat,
+            lastPoseLatencyMs: requestLatencyMs,
+            lastVisionError: nil
+        )
 
         // Deep-copy pixel buffer so the original CMSampleBuffer (and its pool-backed
         // pixel buffer) is released when this callback returns. Only copy when keypoints
@@ -913,30 +1156,58 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
         onRealtimeFrame?(keypoints, copiedBuffer)
     }
 
-    /// Compute average luminance from Y plane of pixel buffer.
-    private func averageLuminance(from pixelBuffer: CVPixelBuffer) -> Double {
+    /// Compute average luminance from either the Y plane (420f/420v) or RGB channels (BGRA).
+    static func averageLuminance(from pixelBuffer: CVPixelBuffer) -> Double {
         CVPixelBufferLockBaseAddress(pixelBuffer, .readOnly)
         defer { CVPixelBufferUnlockBaseAddress(pixelBuffer, .readOnly) }
 
-        guard let baseAddress = CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0) else {
+        let planeCount = CVPixelBufferGetPlaneCount(pixelBuffer)
+        if planeCount > 0,
+           let baseAddress = CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0) {
+            let width = CVPixelBufferGetWidthOfPlane(pixelBuffer, 0)
+            let height = CVPixelBufferGetHeightOfPlane(pixelBuffer, 0)
+            let bytesPerRow = CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 0)
+
+            let stride = 16
+            var totalLuminance: UInt64 = 0
+            var sampleCount: UInt64 = 0
+
+            let buffer = baseAddress.assumingMemoryBound(to: UInt8.self)
+            var y = 0
+            while y < height {
+                var x = 0
+                while x < width {
+                    totalLuminance += UInt64(buffer[y * bytesPerRow + x])
+                    sampleCount += 1
+                    x += stride
+                }
+                y += stride
+            }
+
+            guard sampleCount > 0 else { return 0.5 }
+            return Double(totalLuminance) / Double(sampleCount) / 255.0
+        }
+
+        guard let baseAddress = CVPixelBufferGetBaseAddress(pixelBuffer) else {
             return 0.5
         }
 
-        let width = CVPixelBufferGetWidthOfPlane(pixelBuffer, 0)
-        let height = CVPixelBufferGetHeightOfPlane(pixelBuffer, 0)
-        let bytesPerRow = CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 0)
-
-        // Sample every 16th pixel for performance
+        let width = CVPixelBufferGetWidth(pixelBuffer)
+        let height = CVPixelBufferGetHeight(pixelBuffer)
+        let bytesPerRow = CVPixelBufferGetBytesPerRow(pixelBuffer)
         let stride = 16
-        var totalLuminance: UInt64 = 0
-        var sampleCount: UInt64 = 0
-
         let buffer = baseAddress.assumingMemoryBound(to: UInt8.self)
+        var totalLuminance = 0.0
+        var sampleCount = 0.0
         var y = 0
         while y < height {
             var x = 0
             while x < width {
-                totalLuminance += UInt64(buffer[y * bytesPerRow + x])
+                let offset = y * bytesPerRow + x * 4
+                let blue = Double(buffer[offset])
+                let green = Double(buffer[offset + 1])
+                let red = Double(buffer[offset + 2])
+                totalLuminance += (0.0722 * blue + 0.7152 * green + 0.2126 * red) / 255.0
                 sampleCount += 1
                 x += stride
             }
@@ -944,7 +1215,58 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
         }
 
         guard sampleCount > 0 else { return 0.5 }
-        return Double(totalLuminance) / Double(sampleCount) / 255.0
+        return totalLuminance / sampleCount
+    }
+
+    private func applyLiveVideoOutputConfiguration() {
+        let availableFormats = videoDataOutput.availableVideoPixelFormatTypes
+        if let format = liveConfiguration.pixelFormat.resolvedFormat(from: availableFormats) {
+            videoDataOutput.videoSettings = [
+                kCVPixelBufferPixelFormatTypeKey as String: Int(format),
+            ]
+        } else {
+            videoDataOutput.videoSettings = [:]
+        }
+    }
+
+    private static func pixelFormatLabel(_ format: OSType) -> String {
+        switch format {
+        case kCVPixelFormatType_32BGRA:
+            return "32BGRA"
+        case kCVPixelFormatType_420YpCbCr8BiPlanarFullRange:
+            return "420f"
+        case kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange:
+            return "420v"
+        default:
+            return String(format: "0x%08X", format)
+        }
+    }
+
+    private func publishDiagnostics(
+        frameWidth: Int,
+        frameHeight: Int,
+        pixelFormat: String,
+        lastPoseLatencyMs: Int,
+        lastVisionError: String?
+    ) {
+        let diagnostics = PostureCaptureDiagnostics(
+            configuredPreset: liveConfiguration.preset.displayLabel,
+            configuredPixelFormat: liveConfiguration.pixelFormat.displayLabel,
+            sessionPreset: captureSession.sessionPreset.rawValue,
+            frameWidth: frameWidth,
+            frameHeight: frameHeight,
+            pixelFormat: pixelFormat,
+            lastPoseLatencyMs: lastPoseLatencyMs,
+            poseErrorCount: livePoseErrorCount,
+            lastVisionError: lastVisionError
+        )
+        onDiagnosticsUpdate?(diagnostics)
+        guard Self.isDiagnosticsEnabled else { return }
+        if let lastVisionError {
+            AppLogger.data.error("[PostureCapture] live pose failed cfgPreset=\(diagnostics.configuredPreset) cfgFormat=\(diagnostics.configuredPixelFormat) preset=\(diagnostics.sessionPreset) frame=\(frameWidth)x\(frameHeight) format=\(pixelFormat) latency=\(lastPoseLatencyMs)ms errors=\(self.livePoseErrorCount) message=\(lastVisionError)")
+        } else {
+            AppLogger.data.debug("[PostureCapture] live pose cfgPreset=\(diagnostics.configuredPreset) cfgFormat=\(diagnostics.configuredPixelFormat) preset=\(diagnostics.sessionPreset) frame=\(frameWidth)x\(frameHeight) format=\(pixelFormat) latency=\(lastPoseLatencyMs)ms errors=\(self.livePoseErrorCount)")
+        }
     }
 }
 #endif
