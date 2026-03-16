@@ -1070,6 +1070,7 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
         lastFrameAnalysisTime = now
 
         guard let poolBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
+        guard onFrameUpdate != nil || onRealtimeFrame != nil else { return }
 
         // Deep-copy immediately so the pool-backed buffer is released when we return.
         // Without this, VNImageRequestHandler holds the pool buffer during perform(),
