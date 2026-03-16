@@ -1,5 +1,5 @@
 #if !os(visionOS)
-import CoreVideo
+import CoreGraphics
 import Foundation
 import os
 
@@ -7,10 +7,6 @@ import os
 /// - 2D pipeline: Every frame callback → angle estimation via PostureAnalysisService
 /// - 3D pipeline: Periodic sampling → full 3D pose detection + analysis
 final class RealtimePoseTracker: @unchecked Sendable {
-
-    private struct SendablePixelBuffer: @unchecked Sendable {
-        let value: CVPixelBuffer
-    }
 
     // MARK: - Callbacks
 
@@ -52,11 +48,8 @@ final class RealtimePoseTracker: @unchecked Sendable {
     // MARK: - Lifecycle
 
     func start() {
-        captureService.onRealtimeFrame = { [weak self] keypoints, copiedBuffer in
-            self?.handleFrame(
-                keypoints: keypoints,
-                copiedBuffer: copiedBuffer.map(SendablePixelBuffer.init)
-            )
+        captureService.onRealtimeFrame = { [weak self] keypoints, cgImage in
+            self?.handleFrame(keypoints: keypoints, cgImage: cgImage)
         }
 
         serialQueue.async { [weak self] in
@@ -82,10 +75,10 @@ final class RealtimePoseTracker: @unchecked Sendable {
 
     // MARK: - Frame Handling
 
-    /// Process a frame with pre-extracted keypoints and an optional deep-copied pixel buffer.
-    /// The copied buffer is independent of the camera pool — no CMSampleBuffer is ever
-    /// captured here, so pool buffers are recycled in the camera callback immediately.
-    private func handleFrame(keypoints: [(String, CGPoint)], copiedBuffer: SendablePixelBuffer?) {
+    /// Process a frame with pre-extracted keypoints and an optional CGImage for 3D sampling.
+    /// CGImage is pool-independent — no CMSampleBuffer or CVPixelBuffer ever escapes
+    /// the camera callback, so pool buffers are recycled immediately.
+    private func handleFrame(keypoints: [(String, CGPoint)], cgImage: CGImage?) {
         serialQueue.async { [weak self] in
             guard let self, self.state.isActive, !self.isStopped else { return }
 
@@ -116,15 +109,15 @@ final class RealtimePoseTracker: @unchecked Sendable {
                 }
             }
 
-            // 3D sampling trigger — copiedBuffer is already independent of camera pool
+            // 3D sampling trigger — CGImage is completely independent of camera pool
             if !self.is3DInFlight,
                !keypoints.isEmpty,
                now - self.last3DSampleTime >= Self.min3DInterval,
-               let copiedBuffer {
+               let cgImage {
                 self.is3DInFlight = true
                 self.last3DSampleTime = now
-                self.pending3DTask = Task { [weak self, copiedBuffer] in
-                    await self?.perform3DDetection(copiedBuffer.value)
+                self.pending3DTask = Task { [weak self] in
+                    await self?.perform3DDetection(cgImage)
                 }
             }
 
@@ -138,11 +131,11 @@ final class RealtimePoseTracker: @unchecked Sendable {
 
     // MARK: - 3D Detection
 
-    private func perform3DDetection(_ pixelBuffer: CVPixelBuffer) async {
+    private func perform3DDetection(_ cgImage: CGImage) async {
         guard !Task.isCancelled else { return }
 
         do {
-            let result = try await captureService.detectPoseFromVideoFrame(pixelBuffer)
+            let result = try await captureService.detectPoseFromVideoFrame(cgImage)
 
             guard !Task.isCancelled else { return }
 
