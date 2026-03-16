@@ -35,6 +35,7 @@ struct ExerciseDefaultsListView: View {
             }
             allExercisesSection
         }
+        .accessibilityIdentifier("exercise-defaults-screen")
         .scrollContentBackground(.hidden)
         .background { DetailWaveBackground() }
         .englishNavigationTitle("Exercise Defaults")
@@ -63,9 +64,11 @@ struct ExerciseDefaultsListView: View {
                         } label: {
                             exerciseRow(exercise: exercise, record: record)
                         }
+                        .accessibilityIdentifier("exercise-defaults-row-\(exercise.id)")
                     }
                 }
             }
+            .accessibilityIdentifier("exercise-defaults-configured-section")
         }
     }
 
@@ -79,8 +82,10 @@ struct ExerciseDefaultsListView: View {
                 } label: {
                     exerciseRow(exercise: exercise, record: defaultsByExerciseID[exercise.id])
                 }
+                .accessibilityIdentifier("exercise-defaults-row-\(exercise.id)")
             }
         }
+        .accessibilityIdentifier("exercise-defaults-all-section")
     }
 
     private var filteredExercises: [ExerciseDefinition] {
@@ -125,6 +130,8 @@ struct ExerciseDefaultsListView: View {
                 }
             }
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("exercise-defaults-row-\(exercise.id)")
     }
 
     // MARK: - Helpers

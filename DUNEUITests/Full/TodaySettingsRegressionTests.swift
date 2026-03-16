@@ -2,6 +2,14 @@
 
 @MainActor
 final class TodaySettingsRegressionTests: SeededUITestBaseCase {
+    private enum Fixture {
+        static let benchPressID = "barbell-bench-press"
+        static let deadliftID = "conventional-deadlift"
+        static let deadliftSearchQuery = "Deadlift"
+        static let savedWeight = "72.5"
+        static let savedReps = "8"
+    }
+
     override var additionalLaunchArguments: [String] {
         [
             "-AppleLanguages",
@@ -170,6 +178,63 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         )
     }
 
+    func testExerciseDefaultsListSearchesAndOpensEditRoute() throws {
+        openExerciseDefaults()
+
+        let row = exerciseDefaultsBenchPressRow()
+        XCTAssertTrue(row.waitForExistence(timeout: 5), "Bench Press row should exist in Exercise Defaults")
+        row.tap()
+
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.exerciseDefaultEditScreen].firstMatch.waitForExistence(timeout: 8),
+            "Exercise default edit screen should open from the list row"
+        )
+    }
+
+    func testExerciseDefaultEditClearsSavedValues() throws {
+        openExerciseDefaults()
+
+        let row = exerciseDefaultsBenchPressRow()
+        XCTAssertTrue(row.waitForExistence(timeout: 5), "Bench Press row should exist before editing")
+        row.tap()
+
+        let editScreen = app.descendants(matching: .any)[AXID.exerciseDefaultEditScreen].firstMatch
+        XCTAssertTrue(editScreen.waitForExistence(timeout: 8), "Exercise default edit screen should open")
+        XCTAssertTrue(app.fillTextInput(AXID.exerciseDefaultEditWeight, with: Fixture.savedWeight), "Weight field should accept edited value")
+        XCTAssertTrue(app.fillTextInput(AXID.exerciseDefaultEditReps, with: Fixture.savedReps), "Reps field should accept edited value")
+
+        let clearButton = app.buttons[AXID.exerciseDefaultEditClear].firstMatch
+        XCTAssertTrue(clearButton.waitForExistence(timeout: 5), "Clear Exercise Settings button should exist for a saved default")
+        clearButton.tap()
+
+        let confirmClear = app.sheets.buttons["Clear Exercise Settings"].firstMatch
+        XCTAssertTrue(confirmClear.waitForExistence(timeout: 5), "Clear Exercise Settings confirmation should appear")
+        confirmClear.tap()
+
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.exerciseDefaultsScreen].firstMatch.waitForExistence(timeout: 8),
+            "Clearing exercise defaults should return to the list"
+        )
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.exerciseDefaultsConfiguredSection].firstMatch.waitForNonExistence(timeout: 8),
+            "Configured section should disappear after clearing the only saved default"
+        )
+    }
+
+    func testPreferredExercisesSearchShowsToggle() throws {
+        openPreferredExercises()
+
+        searchPreferredExercises(Fixture.deadliftSearchQuery)
+        _ = app.dismissKeyboardIfPresent(timeout: 2)
+
+        let toggle = app.switches[AXID.preferredExerciseToggle(Fixture.deadliftID)].firstMatch
+        XCTAssertTrue(
+            toggle.waitForExistence(timeout: 8),
+            "Deadlift preferred toggle should exist in filtered preferred exercises results"
+        )
+        XCTAssertTrue(waitForHittable(toggle, timeout: 5), "Deadlift preferred toggle should be hittable")
+    }
+
     private func openNotificationHub() {
         dismissMorningBriefingIfNeeded(timeout: 1.5)
 
@@ -194,6 +259,79 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
             app.descendants(matching: .any)[AXID.settingsRowRestTime].firstMatch.waitForExistence(timeout: 8),
             "Settings root should open from Today toolbar"
         )
+    }
+
+    private func openExerciseDefaults() {
+        openSettings()
+        let row = app.descendants(matching: .any)[AXID.settingsRowExerciseDefaults].firstMatch
+        XCTAssertTrue(row.waitForExistence(timeout: 5), "Exercise Defaults row should exist in Settings")
+        row.tap()
+
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.exerciseDefaultsScreen].firstMatch.waitForExistence(timeout: 8),
+            "Exercise Defaults screen should open from Settings"
+        )
+    }
+
+    private func openPreferredExercises() {
+        openSettings()
+        let row = app.descendants(matching: .any)[AXID.settingsRowPreferredExercises].firstMatch
+        XCTAssertTrue(row.waitForExistence(timeout: 5), "Preferred Exercises row should exist in Settings")
+        row.tap()
+
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.preferredExercisesScreen].firstMatch.waitForExistence(timeout: 8),
+            "Preferred Exercises screen should open from Settings"
+        )
+    }
+
+    private func searchPreferredExercises(_ query: String) {
+        let list = app.collectionViews[AXID.preferredExercisesScreen].firstMatch.exists
+            ? app.collectionViews[AXID.preferredExercisesScreen].firstMatch
+            : app.collectionViews.firstMatch
+
+        var searchField = app.searchFields.firstMatch
+        if !searchField.waitForExistence(timeout: 2), list.exists {
+            list.swipeDown()
+            searchField = app.searchFields.firstMatch
+        }
+
+        XCTAssertTrue(searchField.waitForExistence(timeout: 5), "Preferred Exercises search field should exist")
+        searchField.tap()
+        searchField.typeText(query)
+        _ = app.dismissKeyboardIfPresent()
+    }
+
+    private func exerciseDefaultsBenchPressRow() -> XCUIElement {
+        let identifiedRow = app.descendants(matching: .any)[AXID.exerciseDefaultsRow(Fixture.benchPressID)].firstMatch
+        let button = app.buttons["Bench Press"].firstMatch
+        let text = app.staticTexts["Bench Press"].firstMatch
+        let container = app.collectionViews[AXID.exerciseDefaultsScreen].firstMatch.exists
+            ? app.collectionViews[AXID.exerciseDefaultsScreen].firstMatch
+            : app.collectionViews.firstMatch
+
+        for _ in 0..<8 {
+            if identifiedRow.exists {
+                return identifiedRow
+            }
+            if button.exists {
+                return button
+            }
+            if text.exists {
+                return text
+            }
+            if container.exists {
+                container.swipeUp()
+            }
+        }
+
+        if identifiedRow.exists {
+            return identifiedRow
+        }
+        if button.exists {
+            return button
+        }
+        return text
     }
 
     private func waitForHittable(_ element: XCUIElement, timeout: TimeInterval) -> Bool {

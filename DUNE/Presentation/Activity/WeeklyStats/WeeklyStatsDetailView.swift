@@ -64,9 +64,10 @@ struct WeeklyStatsDetailView: View {
     private func contentSection(_ comparison: PeriodComparison) -> some View {
         VStack(spacing: DS.Spacing.lg) {
             // Summary stats grid
-            if !viewModel.summaryStats.isEmpty {
-                summaryGrid
-            }
+        if !viewModel.summaryStats.isEmpty {
+            summaryGrid
+                .accessibilityIdentifier("activity-weeklystats-summary-grid")
+        }
 
             // Daily volume chart
             DailyVolumeChartView(
@@ -82,6 +83,7 @@ struct WeeklyStatsDetailView: View {
                 .id(viewModel.selectedPeriod)
                 .transition(.opacity)
                 .animation(.easeInOut(duration: 0.2), value: viewModel.selectedPeriod)
+                .accessibilityIdentifier("activity-weeklystats-breakdown")
         }
     }
 

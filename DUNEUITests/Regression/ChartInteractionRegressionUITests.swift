@@ -74,6 +74,37 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
         )
     }
 
+    func testWeeklyStatsSurfaceShowsSummaryBreakdownAndPeriodSwitching() throws {
+        openWeeklyStatsDetail()
+
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.activityWeeklyStatsSummaryGrid].firstMatch.waitForExistence(timeout: 15),
+            "Weekly stats summary grid should exist in the detail surface"
+        )
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.weeklyStatsChartDailyVolume].firstMatch.waitForExistence(timeout: 15),
+            "Weekly stats daily volume chart should exist in the detail surface"
+        )
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.activityWeeklyStatsBreakdown].firstMatch.waitForExistence(timeout: 15),
+            "Weekly stats exercise breakdown should exist in the detail surface"
+        )
+
+        let periodPicker = waitForElement(AXID.weeklyStatsPeriodPicker, timeout: 15)
+        let initialPeriod = periodPicker.value as? String
+        tapSegment(in: AXID.weeklyStatsPeriodPicker, index: 1, timeout: 10)
+
+        XCTAssertNotEqual(
+            periodPicker.value as? String,
+            initialPeriod,
+            "Weekly stats period picker should switch to a different range"
+        )
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.weeklyStatsChartDailyVolume].firstMatch.waitForExistence(timeout: 15),
+            "Weekly stats chart should remain visible after period switching"
+        )
+    }
+
     func testTrainingVolumeTrainingLoadChartScrollsToPastData() throws {
         openTrainingVolumeDetail()
 
@@ -113,6 +144,41 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
             probeLabel,
             "none",
             "Long press selection should update the training load selection probe"
+        )
+    }
+
+    func testTrainingVolumeSurfaceShowsOverviewChartsAndTypeList() throws {
+        openTrainingVolumeDetail()
+
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.activityTrainingVolumeOverview].firstMatch.waitForExistence(timeout: 15),
+            "Training volume overview card should exist in the detail surface"
+        )
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.trainingVolumeChartDailyVolume].firstMatch.waitForExistence(timeout: 15),
+            "Training volume daily chart should exist in the detail surface"
+        )
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.trainingVolumeChartTrainingLoad].firstMatch.waitForExistence(timeout: 15),
+            "Training load chart should exist in the detail surface"
+        )
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.activityTrainingVolumeTypeList].firstMatch.waitForExistence(timeout: 15),
+            "Exercise type list should exist in the training volume detail surface"
+        )
+
+        let periodPicker = waitForElement(AXID.activityTrainingVolumePeriodPicker, timeout: 15)
+        let initialPeriod = periodPicker.value as? String
+        tapSegment(in: AXID.activityTrainingVolumePeriodPicker, index: 1, timeout: 10)
+
+        XCTAssertNotEqual(
+            periodPicker.value as? String,
+            initialPeriod,
+            "Training volume period picker should switch to a different range"
+        )
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.activityTrainingVolumeTypeList].firstMatch.waitForExistence(timeout: 15),
+            "Exercise type list should remain visible after switching the training volume period"
         )
     }
 

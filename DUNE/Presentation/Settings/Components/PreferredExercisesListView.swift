@@ -32,6 +32,7 @@ struct PreferredExercisesListView: View {
                         preferredToggleRow(for: exercise)
                     }
                 }
+                .accessibilityIdentifier("preferred-exercises-preferred-section")
             }
 
             Section(allExercisesSectionTitle) {
@@ -40,6 +41,7 @@ struct PreferredExercisesListView: View {
                 }
             }
         }
+        .accessibilityIdentifier("preferred-exercises-screen")
         .scrollContentBackground(.hidden)
         .background { DetailWaveBackground() }
         .englishNavigationTitle("Preferred Exercises")

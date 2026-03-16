@@ -118,6 +118,7 @@ struct PersonalRecordsDetailView: View {
                 }
             }
             .pickerStyle(.segmented)
+            .accessibilityIdentifier("activity-personal-records-metric-picker")
         }
     }
 
@@ -167,6 +168,7 @@ struct PersonalRecordsDetailView: View {
         }
         .padding(DS.Spacing.md)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        .accessibilityIdentifier("activity-personal-records-timeline-chart")
     }
 
     private var prGrid: some View {
@@ -229,6 +231,7 @@ struct PersonalRecordsDetailView: View {
         }
         .padding(DS.Spacing.md)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        .accessibilityIdentifier("activity-personal-records-reward-summary")
     }
 
     private var achievementHistorySection: some View {
@@ -252,6 +255,7 @@ struct PersonalRecordsDetailView: View {
         }
         .padding(DS.Spacing.md)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        .accessibilityIdentifier("activity-personal-records-achievement-history")
     }
 
     private func historyRow(_ event: WorkoutRewardEvent) -> some View {

@@ -49,6 +49,8 @@ struct TrainingVolumeDetailView: View {
             }
         }
         .pickerStyle(.segmented)
+        .accessibilityIdentifier("activity-training-volume-period-picker")
+        .accessibilityValue(viewModel.selectedPeriod.displayName)
     }
 
     // MARK: - Content
@@ -139,6 +141,7 @@ struct TrainingVolumeDetailView: View {
         }
         .padding(DS.Spacing.md)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        .accessibilityIdentifier("activity-training-volume-overview")
     }
 
     private func statRow(label: LocalizedStringKey, value: String, change: Double?) -> some View {
@@ -185,6 +188,7 @@ struct TrainingVolumeDetailView: View {
             }
             .padding(DS.Spacing.md)
             .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+            .accessibilityIdentifier("activity-training-volume-type-list")
         }
     }
 

@@ -153,6 +153,20 @@ class UITestBaseCase: XCTestCase {
         app.descendants(matching: .any)[identifier].firstMatch.waitForExistence(timeout: timeout)
     }
 
+    @discardableResult
+    func tapSegment(in identifier: String, index: Int, timeout: TimeInterval = 5) -> XCUIElement {
+        let segmentedControl = app.segmentedControls[identifier].firstMatch
+        let fallbackControl = app.descendants(matching: .any)[identifier].firstMatch
+        let control = segmentedControl.exists ? segmentedControl : fallbackControl
+
+        XCTAssertTrue(control.waitForExistence(timeout: timeout), "Segmented control '\(identifier)' should exist")
+
+        let segment = control.buttons.element(boundBy: index)
+        XCTAssertTrue(segment.waitForExistence(timeout: timeout), "Segment \(index) should exist in '\(identifier)'")
+        segment.tap()
+        return segment
+    }
+
     func defaultArtifactName(suffix: String) -> String {
         let rawTestName = name.split(separator: " ").last.map(String.init) ?? "UITest"
         let sanitizedTestName = rawTestName.replacingOccurrences(of: "[^A-Za-z0-9_-]", with: "-", options: .regularExpression)
