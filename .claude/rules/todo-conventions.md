@@ -1,5 +1,17 @@
 # TODO System Conventions
 
+## Directory Structure
+
+```
+todos/
+├── active/          # 작업 대상 (pending, ready, in-progress)
+│   ├── e2e/         # End-to-End 페이지 리뷰
+│   ├── posture/     # 자세 분석 기능
+│   ├── vision/      # visionOS 관련
+│   └── general/     # 기타 (architecture, fix, refactor 등)
+└── done/            # 완료된 항목 아카이브
+```
+
 ## File Naming
 
 `NNN-STATUS-PRIORITY-description.md`
@@ -11,9 +23,9 @@
 
 ## Examples
 
-- `001-ready-p1-fix-auth-bypass.md`
-- `002-pending-p2-add-unit-tests.md`
-- `003-in-progress-p3-refactor-utils.md`
+- `active/e2e/032-ready-p2-e2e-dune-exercise-defaults-list-view.md`
+- `active/posture/133-pending-p3-posture-realtime-video-analysis.md`
+- `done/001-done-p2-healthkit-auth-check.md`
 
 ## Status Transitions
 
@@ -24,7 +36,20 @@ pending -> ready -> in-progress -> done
 - **pending**: 아직 착수 조건이 갖춰지지 않음
 - **ready**: 착수 가능, 필요한 정보와 계획이 있음
 - **in-progress**: 현재 작업 중
-- **done**: 완료됨 (파일은 기록으로 유지)
+- **done**: 완료 시 `done/` 폴더로 이동
+
+## Category Assignment
+
+새 TODO 생성 시 다음 기준으로 카테고리 폴더 선택:
+
+| 카테고리 | 기준 |
+|---------|------|
+| `e2e/` | 페이지/화면 단위 End-to-End 리뷰 |
+| `posture/` | 자세 분석 (PostureAnalysis) 관련 |
+| `vision/` | visionOS, RealityKit, 공간 컴퓨팅 |
+| `general/` | 위에 해당하지 않는 모든 항목 |
+
+새 기능 영역이 5개+ TODO를 생성하면 전용 폴더 신설 가능.
 
 ## TODO File Content
 
@@ -41,9 +66,9 @@ updated: YYYY-MM-DD
 ## Numbering
 
 새 TODO 생성 시:
-1. todos/ 의 기존 파일에서 가장 높은 번호 확인
+1. `todos/active/` + `todos/done/` 전체에서 가장 높은 번호 확인
 2. 그 다음 번호 사용
-3. 충돌 방지를 위해 항상 순차적으로 증가
+3. 번호는 전역 고유 (카테고리 간 공유)
 
 ## Priority Definitions
 
