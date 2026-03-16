@@ -249,7 +249,11 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
     private let visionSemaphore = DispatchSemaphore(value: 1)
     // Accessed only on videoDataQueue (single serial queue) — no lock needed.
     private var lastFrameAnalysisTime: CFAbsoluteTime = 0
+    private var lastCGImageCreationTime: CFAbsoluteTime = 0
     private static let frameAnalysisInterval: CFAbsoluteTime = 0.1 // 10fps max
+    /// CGImage creation interval — matches 3D sampling rate (~4fps).
+    /// Creating CGImage every frame (10fps) wastes GPU and competes with Vision ML.
+    private static let cgImageCreationInterval: CFAbsoluteTime = 0.25
     /// Combined frame update callback: guidance state + skeleton keypoints in a single dispatch.
     var onFrameUpdate: (@Sendable (GuidanceState, [(String, CGPoint)], CGSize) -> Void)?
     /// Realtime analysis callback: keypoints + CGImage for 3D sampling.
@@ -1042,17 +1046,6 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
         )
         let pixelFormat = Self.pixelFormatLabel(CVPixelBufferGetPixelFormatType(poolBuffer))
 
-        // Compute luminance from pool buffer first (fast, no ML, ~instant).
-        let luminance = Self.averageLuminance(from: poolBuffer)
-
-        // Convert pool buffer → CGImage immediately so pool buffer is freed ASAP.
-        // CIContext.createCGImage does GPU→CPU transfer (~3-5ms) and produces a
-        // heap-allocated CGImage with zero dependency on the camera buffer pool.
-        let ciImage = CIImage(cvPixelBuffer: poolBuffer)
-        guard let cgImage = Self.ciContext.createCGImage(ciImage, from: ciImage.extent) else { return }
-        // poolBuffer is no longer referenced — released when sampleBuffer scope ends.
-        // ALL subsequent work uses cgImage only.
-
         let orientation: CGImagePropertyOrientation
         if let previewRotationAngle = livePreviewRotationAngle {
             orientation = Self.liveVisionOrientation(
@@ -1062,12 +1055,12 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
             orientation = Self.liveVisionOrientation(for: liveDeviceOrientation)
         }
 
-        // 2D detection on CGImage — no pool buffer involvement during ML inference.
-        // Acquire Vision semaphore with zero timeout: skip this frame if 3D is running.
-        // Vision's internal ML buffer pool is shared — concurrent perform() exhausts it.
+        // --- 2D detection: pool buffer direct use (original working pattern) ---
+        // Pool buffer is synchronous-only: held during perform(), released when method returns.
+        // Skip this frame if 3D Vision is running (shared internal ML buffer pool).
         guard visionSemaphore.wait(timeout: .now()) == .success else { return }
         let handler = VNImageRequestHandler(
-            cgImage: cgImage,
+            cvPixelBuffer: poolBuffer,
             orientation: orientation,
             options: [:]
         )
@@ -1113,6 +1106,9 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
             }
         }
 
+        // Luminance from pool buffer (fast, no ML, ~instant)
+        let luminance = Self.averageLuminance(from: poolBuffer)
+
         // Update guidance state
         let state = guidanceAnalyzer.analyze(
             observation: observation,
@@ -1131,8 +1127,19 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
             lastVisionError: nil
         )
 
-        // Same CGImage reused for 3D pipeline — already pool-independent.
-        onRealtimeFrame?(keypoints, keypoints.isEmpty ? nil : cgImage)
+        // --- 3D sampling: CGImage only when needed (~4fps, not every frame) ---
+        // CIContext.createCGImage at 10fps wastes GPU bandwidth and competes with
+        // Vision's ML pipeline. Only create when 3D tracker actually needs a sample.
+        var cgImageFor3D: CGImage?
+        if !keypoints.isEmpty, onRealtimeFrame != nil,
+           now - lastCGImageCreationTime >= Self.cgImageCreationInterval {
+            lastCGImageCreationTime = now
+            let ciImage = CIImage(cvPixelBuffer: poolBuffer)
+            cgImageFor3D = Self.ciContext.createCGImage(ciImage, from: ciImage.extent)
+        }
+        // Pool buffer released when sampleBuffer goes out of scope.
+
+        onRealtimeFrame?(keypoints, cgImageFor3D)
     }
 
     /// Compute average luminance from either the Y plane (420f/420v) or RGB channels (BGRA).
