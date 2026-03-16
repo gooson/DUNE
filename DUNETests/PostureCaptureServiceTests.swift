@@ -25,6 +25,44 @@ struct PostureCaptureServiceTests {
         #expect(luminance > 0.95)
     }
 
+    @Test("Live configuration parses posture capture launch arguments")
+    func liveConfigurationLaunchArguments() {
+        let configuration = PostureCaptureLiveConfiguration.current(
+            arguments: [
+                "--posture-open-capture",
+                "--posture-live-preset", "photo",
+                "--posture-live-format", "bgra",
+            ]
+        )
+
+        #expect(configuration.preset == .photo)
+        #expect(configuration.pixelFormat == .bgra)
+    }
+
+    @Test("Automatic live pixel format prefers native YUV over BGRA")
+    func automaticLivePixelFormatPrefersNativeYUV() {
+        let format = PostureCaptureLivePixelFormatOption.automatic.resolvedFormat(
+            from: [
+                kCVPixelFormatType_32BGRA,
+                kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange,
+                kCVPixelFormatType_420YpCbCr8BiPlanarFullRange,
+            ]
+        )
+
+        #expect(format == kCVPixelFormatType_420YpCbCr8BiPlanarFullRange)
+    }
+
+    @Test("Requested BGRA falls back to YUV when BGRA is unavailable")
+    func requestedBGRAPixelFormatFallsBackToNativeYUV() {
+        let format = PostureCaptureLivePixelFormatOption.bgra.resolvedFormat(
+            from: [
+                kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange,
+            ]
+        )
+
+        #expect(format == kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange)
+    }
+
     // MARK: - Helpers
 
     private func makeNV12Buffer(width: Int, height: Int, yValue: UInt8) throws -> CVPixelBuffer {

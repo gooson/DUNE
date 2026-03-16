@@ -180,6 +180,34 @@ final class PostureAssessmentViewModel {
         captureService.updatePreviewRotationAngle(angle)
     }
 
+    func cycleDiagnosticsPreset() {
+        guard isDiagnosticsEnabled else { return }
+        applyLiveDiagnosticsConfiguration(captureService.currentLiveConfiguration.cyclingPreset())
+    }
+
+    func cycleDiagnosticsPixelFormat() {
+        guard isDiagnosticsEnabled else { return }
+        applyLiveDiagnosticsConfiguration(captureService.currentLiveConfiguration.cyclingPixelFormat())
+    }
+
+    private func applyLiveDiagnosticsConfiguration(_ configuration: PostureCaptureLiveConfiguration) {
+        countdownTask?.cancel()
+        countdownTask = nil
+        autoReadyStartTime = nil
+        isManualCountdown = false
+        guidanceState = GuidanceState()
+        skeletonKeypoints = []
+        skeletonImageSize = .zero
+
+        do {
+            try captureService.updateLiveConfiguration(configuration)
+            captureService.updateDeviceOrientation(deviceOrientation)
+            capturePhase = .preparing
+        } catch {
+            capturePhase = .error(String(localized: "Camera is not available"))
+        }
+    }
+
     private func handleAutoCapture(_ state: GuidanceState) {
         guard case .preparing = capturePhase else { return }
         guard isAutoCapture else { return }

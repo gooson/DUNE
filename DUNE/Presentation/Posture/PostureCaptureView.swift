@@ -194,6 +194,7 @@ struct PostureCaptureView: View {
         VStack(alignment: .leading, spacing: 4) {
             Text("DEBUG")
                 .font(.caption2.weight(.bold))
+            Text("cfg \(viewModel.captureDiagnostics.configuredPreset) / \(viewModel.captureDiagnostics.configuredPixelFormat)")
             Text("preset \(viewModel.captureDiagnostics.sessionPreset)")
             Text(
                 "frame \(viewModel.captureDiagnostics.frameWidth)x\(viewModel.captureDiagnostics.frameHeight) \(viewModel.captureDiagnostics.pixelFormat)"
@@ -203,6 +204,28 @@ struct PostureCaptureView: View {
                 Text(lastVisionError)
                     .lineLimit(2)
             }
+            HStack(spacing: 6) {
+                Button {
+                    viewModel.cycleDiagnosticsPreset()
+                } label: {
+                    Text("Preset")
+                        .font(.caption2.weight(.semibold))
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(.white.opacity(0.2))
+                .accessibilityIdentifier("posture-diagnostics-preset")
+
+                Button {
+                    viewModel.cycleDiagnosticsPixelFormat()
+                } label: {
+                    Text("Format")
+                        .font(.caption2.weight(.semibold))
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(.white.opacity(0.2))
+                .accessibilityIdentifier("posture-diagnostics-format")
+            }
+            .padding(.top, 2)
         }
         .font(.caption2.monospaced())
         .foregroundStyle(.white)

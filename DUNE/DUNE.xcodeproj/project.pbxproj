@@ -440,6 +440,7 @@
 		667FEF7253B2B5BE8C9739ED /* UserCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F3FB7C3DD3C4308674823C4 /* UserCategory.swift */; };
 		674A234182454D89875BBA61 /* WatchUITestBaseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A765A1B4AF3D1B717795630 /* WatchUITestBaseCase.swift */; };
 		676CCDA5E86BAD2F9CFA2A7D /* OutdoorFitnessScoreAirQualityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CFDA670F81810314CD34C04 /* OutdoorFitnessScoreAirQualityTests.swift */; };
+		67A7421E3685E92363159BFC /* PostureCaptureDiagnosticsSmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A07C9920925813361939D479 /* PostureCaptureDiagnosticsSmokeTests.swift */; };
 		67D48D6AFBC5DD68CB586118 /* HealthMetric.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEE16B5E0F3639BD2C2DF24 /* HealthMetric.swift */; };
 		686CB13E9AFB8A6A8C81B596 /* ExerciseDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F2EFD9169B4451946FB6BD /* ExerciseDefinition.swift */; };
 		68884C9DC53A8BE7979F570C /* HabitDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F785633C4455CC0AECD33E /* HabitDefinition.swift */; };
@@ -1687,6 +1688,7 @@
 		A04D26715E7468054891766B /* MetricBaselineDelta.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricBaselineDelta.swift; sourceTree = "<group>"; };
 		A06885791FBC1C56C1C866F0 /* MetricDetailViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricDetailViewModelTests.swift; sourceTree = "<group>"; };
 		A0786FBA36AD886ABD4F315B /* RecoveryModifierService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoveryModifierService.swift; sourceTree = "<group>"; };
+		A07C9920925813361939D479 /* PostureCaptureDiagnosticsSmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostureCaptureDiagnosticsSmokeTests.swift; sourceTree = "<group>"; };
 		A0D614DE8E764C244EA79E70 /* ActivityPersonalRecordService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityPersonalRecordService.swift; sourceTree = "<group>"; };
 		A102590CB05BEC487D529242 /* CarouselRoutineCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselRoutineCardView.swift; sourceTree = "<group>"; };
 		A16A0B3CBD132DADD226C3C0 /* UnifiedWorkoutRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnifiedWorkoutRow.swift; sourceTree = "<group>"; };
@@ -3774,6 +3776,7 @@
 				214A80561E45E0B5649186E7 /* DashboardSmokeTests.swift */,
 				606C6F1EB73B5AA13662C421 /* LaunchExperienceSmokeTests.swift */,
 				9E37E4D6D8BA8C8B0A76CA57 /* LifeSmokeTests.swift */,
+				A07C9920925813361939D479 /* PostureCaptureDiagnosticsSmokeTests.swift */,
 				A17E0BC95346E3B046F570F9 /* SettingsSmokeTests.swift */,
 				E939EC2882FFF467DEA00F2C /* WellnessSmokeTests.swift */,
 			);
@@ -5166,6 +5169,7 @@
 				1E7E5F36C42E4AF5A79F38A3 /* LaunchScreenTests.swift in Sources */,
 				D5C1B5EF98E3627D9F0C5385 /* LifeRegressionTests.swift in Sources */,
 				B77564E8520C074F01830D3B /* LifeSmokeTests.swift in Sources */,
+				67A7421E3685E92363159BFC /* PostureCaptureDiagnosticsSmokeTests.swift in Sources */,
 				466841DCDCD697B3E35EFBCF /* SakuraThemeSnapshotTests.swift in Sources */,
 				DB17F1397D943FE451B147B8 /* SettingsSmokeTests.swift in Sources */,
 				408A0FB7C6C4C9B8D8AA83E5 /* TodaySettingsRegressionTests.swift in Sources */,
