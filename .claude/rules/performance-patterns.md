@@ -36,9 +36,10 @@
 - Swift 6 `@MainActor` 클래스에서 `withThrowingTaskGroup` 내 `@MainActor addTask` 금지 → continuation 내부 Task timeout 패턴 사용
 
 ## AVCaptureSession Buffer Pool
-- `captureOutput` 시작부에서 pool buffer를 즉시 deep-copy → 이후 모든 작업(VNImageRequestHandler, luminance 등)에 copy 사용
-- `CMSampleBuffer`를 비동기 Task/closure에 캡처 금지 → CVPixelBuffer 딥카피 후 원본 즉시 해제
-- pool buffer를 synchronous `VNImageRequestHandler.perform()`에도 직접 전달 금지 → Vision 내부 YUV→BGRA 변환이 pool을 추가 소모
+- `CMSampleBuffer`/`CVPixelBuffer`를 비동기 Task/closure에 캡처 금지
+- 2D detection (synchronous): pool buffer 직접 사용 가능 — `captureOutput` 반환 시 pool에 즉시 반환
+- 3D detection (async): `CIContext.createCGImage`로 CGImage 변환 후 전달 — CGImage만 풀 의존성 제로
+- CVPixelBuffer 딥카피는 불충분 — Vision 내부 ML 파이프라인이 여전히 풀을 경유할 수 있음
 - Vision `mlImage buffer` 에러는 메모리 부족이 아닌 **풀 고갈** 시그널
 - 카메라 관련 변경은 반드시 실기기 테스트 (시뮬레이터 재현 불가)
 

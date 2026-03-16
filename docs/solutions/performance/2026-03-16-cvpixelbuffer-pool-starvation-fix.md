@@ -1,5 +1,5 @@
 ---
-tags: [posture, avfoundation, cvpixelbuffer, vision, mlimage, buffer-pool, camera, performance]
+tags: [posture, avfoundation, cvpixelbuffer, vision, mlimage, buffer-pool, camera, performance, cgimage]
 date: 2026-03-16
 category: solution
 status: implemented
@@ -9,7 +9,7 @@ status: implemented
 
 ## Problem
 
-실기기에서 자세교정 카메라 실행 시 `Could not create mlImage buffer of type kCVPixelFormatType_32BGRA` 에러가 반복 발생하여 사진 촬영 불가.
+실기기에서 자세교정 카메라 실행 시 `Could not create mlImage buffer of type kCVPixelFormatType_32BGRA` 에러가 반복 발생하여 3D 포즈 감지 실패.
 
 ### 증상
 
@@ -17,13 +17,13 @@ status: implemented
 - Xcode 콘솔에 `FigXPCUtilities err=-17281`, `Could not create mlImage buffer` 반복 출력
 - 시뮬레이터에서는 발생하지 않음 (시뮬레이터는 다른 카메라 파이프라인 사용)
 
-### 근본 원인 (2단계)
+### 근본 원인
 
-**1차 원인 (3D 파이프라인)**: `RealtimePoseTracker.handleFrame`에서 `CMSampleBuffer`를 `serialQueue.async` 같은 비동기 경계 너머로 넘겼다. 이후 3D 감지를 위한 Task까지 이어지면 `CMSampleBuffer`가 AVCaptureSession의 CVPixelBuffer 풀 버퍼를 더 오래 붙잡게 되고, 해당 버퍼가 Vision 처리 완료 전까지 풀에 반환되지 않음.
+Dual pipeline(2D+3D)이 추가되면서 `CVPixelBuffer`가 비동기 경계를 넘어 3D Task까지 도달. AVCaptureSession의 pool buffer(3-5개)가 Vision ML 파이프라인에 의해 장시간 잠겨 풀이 고갈됨.
 
-**2차 원인 (2D 파이프라인)**: 3D용 late deep-copy 수정 후에도 에러 지속. `captureOutput` 내의 2D `VNImageRequestHandler`가 pool-backed buffer를 직접 참조하여 `perform()` 중 Vision 내부 YUV→BGRA 변환 시 같은 풀 고갈 발생. 실시간 dual pipeline(2D+3D)이 추가되면서 callback당 pool buffer 보유 시간이 증가한 것이 근본 원인.
+**CVPixelBuffer 딥카피로는 불충분**: 딥카피한 CVPixelBuffer도 `VNImageRequestHandler`에 전달하면 Vision 내부 ML 파이프라인이 추가 버퍼를 할당하려 시도하여 여전히 경합 발생. 2D(videoDataQueue) + 3D(global queue) 동시 실행 시 Vision의 내부 버퍼 풀이 고갈됨.
 
-카메라 풀은 3-5개 버퍼만 보유. 30fps 전달 중 1개가 장시간 잠기면 풀이 고갈되어 Vision 내부 ML 파이프라인이 BGRA 변환 버퍼를 할당하지 못함.
+**CGImage만이 풀 의존성 제로**: CGImage는 heap-allocated 독립 이미지로, AVCaptureSession 버퍼 풀과 완전히 분리.
 
 ## Solution
 
@@ -31,46 +31,46 @@ status: implemented
 
 | File | Change |
 |------|--------|
-| `PostureCaptureService.swift` | `captureOutput`에서 `CVPixelBuffer`를 deep-copy한 뒤 callback으로 전달 |
-| `RealtimePoseTracker.swift` | `handleFrame`이 `CMSampleBuffer` 대신 copied buffer만 받아 3D Task를 시작 |
+| `PostureCaptureService.swift` | 2D detection은 pool buffer 직접 사용, 3D용으로 `CIContext.createCGImage`로 CGImage 생성 |
+| `PostureCaptureService.swift` | `onRealtimeFrame` 콜백 타입을 `CVPixelBuffer?` → `CGImage?`로 변경 |
+| `PostureCaptureService.swift` | `detectPoseFromVideoFrame`이 `CGImage`를 받아 기존 `detectPose(from:)` 위임 |
+| `RealtimePoseTracker.swift` | `SendablePixelBuffer` 래퍼 제거, `CGImage` 직접 사용 (이미 Sendable) |
 
-### 핵심 패턴: Early Deep-Copy
+### 핵심 패턴: Pool Buffer → CGImage 분리
 
 ```swift
-// Before (1차 수정): 2D detection 후 3D용으로만 late copy → 2D detection이 여전히 pool buffer 사용
-let handler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer /* pool-backed */)
-try handler.perform([bodyPoseRequest])  // Vision holds pool buffer during ML inference
-// ... luminance, guidance ...
-let copiedBuffer: CVPixelBuffer? = if !keypoints.isEmpty {
-    Self.copyPixelBuffer(pixelBuffer)  // Late copy for 3D only
-} else { nil }
+// captureOutput — pool buffer는 이 메서드 내에서만 사용
+guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
 
-// After (2차 수정): captureOutput 시작부에서 즉시 deep-copy → pool buffer 즉시 해제
-guard let poolBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
-guard let pixelBuffer = Self.copyPixelBuffer(poolBuffer) else { return }
-// poolBuffer is released when sampleBuffer goes out of scope — pool freed immediately.
+// 2D detection: pool buffer 직접 사용 (synchronous, 반환 시 즉시 해제)
+let handler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer, orientation: orientation)
+try handler.perform([bodyPoseRequest])
+// ... keypoints, luminance, guidance ...
 
-let handler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer /* heap copy */)
-try handler.perform([bodyPoseRequest])  // Vision uses independent copy
-// ... luminance(from: pixelBuffer), guidance ...
-onRealtimeFrame?(keypoints, keypoints.isEmpty ? nil : pixelBuffer)  // Same copy reused for 3D
+// 3D pipeline: CGImage로 변환 (pool 의존성 제로)
+var cgImageFor3D: CGImage?
+if !keypoints.isEmpty, onRealtimeFrame != nil {
+    let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
+    cgImageFor3D = Self.ciContext.createCGImage(ciImage, from: ciImage.extent)
+}
+// pixelBuffer는 sampleBuffer scope 종료 시 pool에 반환
+
+onRealtimeFrame?(keypoints, cgImageFor3D)
 ```
 
-### copyPixelBuffer 구현
+### 시도했으나 실패한 접근
 
-- `CVPixelBufferCreate`로 독립 버퍼 생성 (CPU-only heap, IOSurface 없음)
-- planar (420YpCbCr) + interleaved 포맷 모두 지원
-- `memcpy`로 plane별 데이터 복사
-- 실패 시 해당 프레임 전체 건너뜀 (10fps 중 1프레임 유실은 무해)
+1. **Late deep-copy (3D only)**: 2D detection이 여전히 pool buffer 사용 → 풀 고갈
+2. **Early deep-copy (모든 작업)**: CVPixelBuffer 딥카피도 Vision 내부에서 추가 버퍼 경합 발생
 
 ## Prevention
 
 ### 패턴: AVCaptureSession 버퍼 사용 원칙
 
-- **pool-backed buffer를 synchronous Vision detection에도 직접 전달하지 않음** — `perform()` 중 내부 변환이 pool을 추가 소모
-- **`captureOutput` 시작부에서 즉시 deep-copy** 후 모든 후속 작업에 copy 사용
-- **절대 `CMSampleBuffer`를 어떤 비동기 queue/task/closure에도 캡처하지 않음**
-- `CVPixelBuffer` 딥카피 또는 `CGImage` 변환 후 전달
+- **pool buffer는 `captureOutput` 스코프 내에서만 사용** — synchronous 작업에 한정
+- **비동기 경계를 넘기는 데이터는 반드시 CGImage로 변환** — `CIContext.createCGImage` 사용
+- **절대 `CMSampleBuffer`/`CVPixelBuffer`를 어떤 비동기 queue/task/closure에도 캡처하지 않음**
+- **CVPixelBuffer 딥카피도 Vision과 동시 사용 시 풀 고갈 가능** — CGImage가 유일한 안전 경로
 
 ### 패턴: guard-return 대 if-let 선택
 
@@ -80,5 +80,7 @@ onRealtimeFrame?(keypoints, keypoints.isEmpty ? nil : pixelBuffer)  // Same copy
 ## Lessons Learned
 
 1. `CMSampleBuffer`는 AVCaptureSession의 풀 버퍼를 보유한다는 것을 항상 인지해야 함
-2. 시뮬레이터에서는 재현되지 않는 실기기 전용 버그 — 카메라 관련 변경은 반드시 실기기 테스트
-3. Vision 프레임워크의 `mlImage buffer` 에러는 메모리 부족이 아닌 **버퍼 풀 고갈** 시그널
+2. CVPixelBuffer 딥카피는 Vision 동시 실행 환경에서 불충분 — CGImage만 풀 독립적
+3. 시뮬레이터에서는 재현되지 않는 실기기 전용 버그 — 카메라 관련 변경은 반드시 실기기 테스트
+4. Vision 프레임워크의 `mlImage buffer` 에러는 메모리 부족이 아닌 **버퍼 풀 고갈** 시그널
+5. `CIContext.createCGImage`는 GPU→CPU 전송이지만 일반적으로 <5ms로 30fps에 무해
