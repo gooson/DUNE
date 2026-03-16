@@ -1069,7 +1069,20 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
         guard now - lastFrameAnalysisTime >= Self.frameAnalysisInterval else { return }
         lastFrameAnalysisTime = now
 
-        guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
+        guard let poolBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
+
+        // Deep-copy immediately so the pool-backed buffer is released when we return.
+        // Without this, VNImageRequestHandler holds the pool buffer during perform(),
+        // and Vision's internal YUV→BGRA conversion fails with "Could not create mlImage buffer"
+        // when the camera pool (3-5 buffers) is exhausted.
+        let rawImageSize = CGSize(
+            width: CVPixelBufferGetWidth(poolBuffer),
+            height: CVPixelBufferGetHeight(poolBuffer)
+        )
+        let pixelFormat = Self.pixelFormatLabel(CVPixelBufferGetPixelFormatType(poolBuffer))
+        guard let pixelBuffer = Self.copyPixelBuffer(poolBuffer) else { return }
+        // poolBuffer is no longer used — it will be released when sampleBuffer goes out of scope.
+
         let orientation: CGImagePropertyOrientation
         if let previewRotationAngle = livePreviewRotationAngle {
             orientation = Self.liveVisionOrientation(
@@ -1083,11 +1096,6 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
             orientation: orientation,
             options: [:]
         )
-        let rawImageSize = CGSize(
-            width: CVPixelBufferGetWidth(pixelBuffer),
-            height: CVPixelBufferGetHeight(pixelBuffer)
-        )
-        let pixelFormat = Self.pixelFormatLabel(CVPixelBufferGetPixelFormatType(pixelBuffer))
         let requestStart = CFAbsoluteTimeGetCurrent()
 
         do {
@@ -1128,7 +1136,7 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
             }
         }
 
-        // Compute luminance from pixel buffer
+        // Compute luminance from copied pixel buffer
         let luminance = Self.averageLuminance(from: pixelBuffer)
 
         // Update guidance state
@@ -1149,15 +1157,9 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
             lastVisionError: nil
         )
 
-        // Deep-copy pixel buffer so the original CMSampleBuffer (and its pool-backed
-        // pixel buffer) is released when this callback returns. Only copy when keypoints
-        // are detected, since the 3D pipeline requires keypoints to trigger.
-        let copiedBuffer: CVPixelBuffer? = if !keypoints.isEmpty {
-            Self.copyPixelBuffer(pixelBuffer)
-        } else {
-            nil
-        }
-        onRealtimeFrame?(keypoints, copiedBuffer)
+        // Pass the already-copied buffer to the 3D pipeline (no second copy needed).
+        // Only pass when keypoints are detected, since the 3D pipeline requires them.
+        onRealtimeFrame?(keypoints, keypoints.isEmpty ? nil : pixelBuffer)
     }
 
     /// Compute average luminance from either the Y plane (420f/420v) or RGB channels (BGRA).
