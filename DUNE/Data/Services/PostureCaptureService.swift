@@ -1023,14 +1023,25 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
         guard now - lastFrameAnalysisTime >= Self.frameAnalysisInterval else { return }
         lastFrameAnalysisTime = now
 
-        guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
+        guard let poolBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
         guard onFrameUpdate != nil || onRealtimeFrame != nil else { return }
 
         let rawImageSize = CGSize(
-            width: CVPixelBufferGetWidth(pixelBuffer),
-            height: CVPixelBufferGetHeight(pixelBuffer)
+            width: CVPixelBufferGetWidth(poolBuffer),
+            height: CVPixelBufferGetHeight(poolBuffer)
         )
-        let pixelFormat = Self.pixelFormatLabel(CVPixelBufferGetPixelFormatType(pixelBuffer))
+        let pixelFormat = Self.pixelFormatLabel(CVPixelBufferGetPixelFormatType(poolBuffer))
+
+        // Compute luminance from pool buffer first (fast, no ML, ~instant).
+        let luminance = Self.averageLuminance(from: poolBuffer)
+
+        // Convert pool buffer → CGImage immediately so pool buffer is freed ASAP.
+        // CIContext.createCGImage does GPU→CPU transfer (~3-5ms) and produces a
+        // heap-allocated CGImage with zero dependency on the camera buffer pool.
+        let ciImage = CIImage(cvPixelBuffer: poolBuffer)
+        guard let cgImage = Self.ciContext.createCGImage(ciImage, from: ciImage.extent) else { return }
+        // poolBuffer is no longer referenced — released when sampleBuffer scope ends.
+        // ALL subsequent work uses cgImage only.
 
         let orientation: CGImagePropertyOrientation
         if let previewRotationAngle = livePreviewRotationAngle {
@@ -1041,10 +1052,9 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
             orientation = Self.liveVisionOrientation(for: liveDeviceOrientation)
         }
 
-        // 2D detection uses pool buffer directly — synchronous on videoDataQueue,
-        // buffer is released when this method returns.
+        // 2D detection on CGImage — no pool buffer involvement during ML inference.
         let handler = VNImageRequestHandler(
-            cvPixelBuffer: pixelBuffer,
+            cgImage: cgImage,
             orientation: orientation,
             options: [:]
         )
@@ -1088,9 +1098,6 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
             }
         }
 
-        // Compute luminance from pool buffer (synchronous, no escape)
-        let luminance = Self.averageLuminance(from: pixelBuffer)
-
         // Update guidance state
         let state = guidanceAnalyzer.analyze(
             observation: observation,
@@ -1109,17 +1116,8 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
             lastVisionError: nil
         )
 
-        // For 3D pipeline: create CGImage from pool buffer (pool-independent).
-        // CGImage is heap-allocated and has zero dependency on the camera buffer pool,
-        // so it can safely cross async boundaries without causing pool starvation.
-        var cgImageFor3D: CGImage?
-        if !keypoints.isEmpty, onRealtimeFrame != nil {
-            let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
-            cgImageFor3D = Self.ciContext.createCGImage(ciImage, from: ciImage.extent)
-        }
-        // Pool buffer (pixelBuffer) is released when sampleBuffer goes out of scope.
-
-        onRealtimeFrame?(keypoints, cgImageFor3D)
+        // Same CGImage reused for 3D pipeline — already pool-independent.
+        onRealtimeFrame?(keypoints, keypoints.isEmpty ? nil : cgImage)
     }
 
     /// Compute average luminance from either the Y plane (420f/420v) or RGB channels (BGRA).
