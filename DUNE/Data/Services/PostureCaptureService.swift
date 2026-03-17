@@ -164,7 +164,7 @@ enum PostureCaptureLivePixelFormatOption: String, Sendable, CaseIterable {
         }
     }
 
-    private static func preferredNativeFormat(from availableFormats: [OSType]) -> OSType? {
+    static func preferredNativeFormat(from availableFormats: [OSType]) -> OSType? {
         if availableFormats.contains(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange) {
             return kCVPixelFormatType_420YpCbCr8BiPlanarFullRange
         }
@@ -1206,7 +1206,26 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
 
     private func applyLiveVideoOutputConfiguration() {
         let availableFormats = videoDataOutput.availableVideoPixelFormatTypes
-        if let format = liveConfiguration.pixelFormat.resolvedFormat(from: availableFormats) {
+
+        // Force BGRA when user hasn't explicitly chosen a format.
+        // Vision's ML pipeline requires BGRA buffers. When the camera delivers YUV,
+        // Vision tries to create an internal "mlImage buffer of type BGRA" for conversion.
+        // On front camera (TrueDepth), this internal allocation fails because the depth
+        // sensor hardware consumes shared GPU/buffer resources.
+        // By requesting BGRA directly, the camera hardware handles the conversion and
+        // Vision can use the buffer as-is — no internal mlImage buffer needed.
+        let format: OSType?
+        if liveConfiguration.pixelFormat == .automatic {
+            if availableFormats.contains(kCVPixelFormatType_32BGRA) {
+                format = kCVPixelFormatType_32BGRA
+            } else {
+                format = PostureCaptureLivePixelFormatOption.preferredNativeFormat(from: availableFormats)
+            }
+        } else {
+            format = liveConfiguration.pixelFormat.resolvedFormat(from: availableFormats)
+        }
+
+        if let format {
             videoDataOutput.videoSettings = [
                 kCVPixelBufferPixelFormatTypeKey as String: Int(format),
             ]
