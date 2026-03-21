@@ -130,6 +130,11 @@ struct WellnessView: View {
                             }
                         }
 
+                        // Watch Posture Summary (if received today)
+                        if let postureSummary = WatchSessionManager.shared.receivedPostureSummary {
+                            WatchPostureSummaryCard(summary: postureSummary)
+                        }
+
                         // Posture Assessment (isolated @Query)
                         PostureAssessmentLinkView(
                             onCapture: { isShowingPostureCapture = true },
