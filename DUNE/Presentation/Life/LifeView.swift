@@ -579,7 +579,8 @@ private struct HabitListQueryView: View {
     private func autoAchievementsSection(fillHeight: Bool = false) -> some View {
         let groups = autoAchievementGroups
         let customGoals = viewModel.autoLinkedProgresses
-        let completedGoals = groups.reduce(0) { $0 + $1.completedCount } + customGoals.filter(\.isCompleted).count
+        let customCompletedCount = customGoals.filter(\.isCompleted).count
+        let completedGoals = groups.reduce(0) { $0 + $1.completedCount } + customCompletedCount
         let totalGoals = groups.reduce(0) { $0 + $1.metrics.count } + customGoals.count
         let useTwoColumnCards = isRegular && !fillHeight
 
@@ -630,35 +631,7 @@ private struct HabitListQueryView: View {
 
                 // Custom auto-linked habits
                 if !customGoals.isEmpty {
-                    customAutoGoalsGroup(customGoals)
-                }
-            }
-        }
-    }
-
-    @State private var pendingArchiveHabitID: UUID?
-
-    private func customAutoGoalsGroup(_ progresses: [HabitProgress]) -> some View {
-        let completedCount = progresses.filter(\.isCompleted).count
-
-        return StandardCard {
-            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                HStack(spacing: DS.Spacing.xs) {
-                    Image(systemName: "figure.run.circle")
-                        .font(.caption)
-                        .foregroundStyle(theme.accentColor)
-                    Text("Custom Goals")
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                    Spacer()
-                    Text("\(completedCount)/\(progresses.count)")
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
-                        .monospacedDigit()
-                }
-
-                ForEach(progresses) { progress in
-                    customAutoGoalRow(progress)
+                    customAutoGoalsGroup(customGoals, completedCount: customCompletedCount)
                 }
             }
         }
@@ -677,6 +650,32 @@ private struct HabitListQueryView: View {
             }
             Button("Cancel", role: .cancel) {
                 pendingArchiveHabitID = nil
+            }
+        }
+    }
+
+    @State private var pendingArchiveHabitID: UUID?
+
+    private func customAutoGoalsGroup(_ progresses: [HabitProgress], completedCount: Int) -> some View {
+        StandardCard {
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                HStack(spacing: DS.Spacing.xs) {
+                    Image(systemName: "figure.run.circle")
+                        .font(.caption)
+                        .foregroundStyle(theme.accentColor)
+                    Text("Custom Goals")
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                    Spacer()
+                    Text("\(completedCount)/\(progresses.count)")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .monospacedDigit()
+                }
+
+                ForEach(progresses) { progress in
+                    customAutoGoalRow(progress)
+                }
             }
         }
     }

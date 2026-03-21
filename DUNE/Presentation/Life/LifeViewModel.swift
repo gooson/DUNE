@@ -290,8 +290,6 @@ final class LifeViewModel {
                 let isCompleted = cycleSnapshot.lastAction == .complete && !cycleSnapshot.isDue
                 let effectiveValue = isCompleted ? habit.goalValue : 0
 
-
-
                 progresses.append(HabitProgress(
                     id: habit.id,
                     name: habit.name,
