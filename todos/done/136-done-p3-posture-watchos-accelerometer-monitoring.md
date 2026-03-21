@@ -1,9 +1,9 @@
 ---
 source: brainstorm/posture-assessment-system
 priority: p3
-status: pending
+status: done
 created: 2026-03-15
-updated: 2026-03-15
+updated: 2026-03-22
 ---
 
 # watchOS 가속도계 기반 일상 자세 모니터링

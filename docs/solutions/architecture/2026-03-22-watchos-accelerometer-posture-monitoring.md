@@ -81,3 +81,5 @@ WatchPostureMonitor.swift (@Observable Manager)
 2. **CMMotionActivityManager vs CMMotionManager**: 활동 감지는 저전력 API, DeviceMotion은 고전력 → 이중 전략으로 배터리 보호
 3. **Swift 6 strict concurrency**: CoreMotion 콜백은 OperationQueue 스레드 → MainActor 전환 시 반드시 generation/cancellation guard
 4. **watchOS 시뮬레이터 제한**: CMMotionManager는 시뮬레이터에서 미작동 → 실기기 테스트 필수
+5. **`self?.` 와 @MainActor Task**: `@MainActor` 클래스의 Task 내에서 `self?.method()`는 불필요한 implicit await 경고 유발 → `guard let self` + `self.method()` 패턴 사용
+6. **watchOS toolbar 아이콘**: 앱 tint(warmGlow 등)가 toolbar 아이콘에 자동 적용됨 → `.foregroundStyle(.secondary)` 명시로 중립 색상 유지
