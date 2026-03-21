@@ -1191,6 +1191,23 @@
         }
       }
     },
+    "%lld days ago" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld日前"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld일 전"
+          }
+        }
+      }
+    },
     "%lld days per week" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1492,6 +1509,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld 포인트"
+          }
+        }
+      }
+    },
+    "%lld records" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld件の記録"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld건 기록"
           }
         }
       }
@@ -7257,6 +7291,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "세트 완료"
+          }
+        }
+      }
+    },
+    "Complete this habit to start building your history" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "習慣を完了して履歴を作りましょう"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "습관을 완료하면 히스토리가 쌓여요"
           }
         }
       }
@@ -20087,7 +20138,6 @@
       }
     },
     "No History" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -35757,57 +35807,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "τ (타우): 근육 크기별 회복 속도 (대근육 72시간, 소근육 36시간)"
-          }
-        }
-      }
-    },
-    "%lld days ago": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld일 전"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld日前"
-          }
-        }
-      }
-    },
-    "%lld records": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld건 기록"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld件の記録"
-          }
-        }
-      }
-    },
-    "Complete this habit to start building your history": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "습관을 완료하면 히스토리가 쌓여요"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "習慣を完了して履歴を作りましょう"
           }
         }
       }
