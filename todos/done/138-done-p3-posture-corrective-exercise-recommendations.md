@@ -1,9 +1,9 @@
 ---
 source: brainstorm/posture-assessment-system
 priority: p3
-status: pending
+status: done
 created: 2026-03-15
-updated: 2026-03-15
+updated: 2026-03-22
 ---
 
 # 교정 운동 추천
