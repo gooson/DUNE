@@ -47,26 +47,26 @@ struct HabitHeatmapDetailView: View {
     private var statsRow: some View {
         HStack(spacing: DS.Spacing.md) {
             statCard(
-                title: String(localized: "Daily Average"),
+                title: "Daily Average",
                 value: String(format: "%.1f", dailyAverage),
                 icon: "chart.line.uptrend.xyaxis"
             )
 
             statCard(
-                title: String(localized: "Longest Streak"),
+                title: "Longest Streak",
                 value: "\(longestStreak)",
                 icon: "flame.fill"
             )
 
             statCard(
-                title: String(localized: "Active Days"),
+                title: "Active Days",
                 value: "\(activeDays)",
                 icon: "checkmark.circle.fill"
             )
         }
     }
 
-    private func statCard(title: String, value: String, icon: String) -> some View {
+    private func statCard(title: LocalizedStringKey, value: String, icon: String) -> some View {
         VStack(spacing: DS.Spacing.xs) {
             Image(systemName: icon)
                 .font(.title3)
@@ -101,30 +101,12 @@ struct HabitHeatmapDetailView: View {
 
             HabitHeatmapGridView(data: data)
 
-            heatmapLegend
+            HabitHeatmapLegend()
         }
         .padding(DS.Spacing.md)
         .background {
             RoundedRectangle(cornerRadius: DS.Radius.sm)
                 .fill(.ultraThinMaterial)
-        }
-    }
-
-    private var heatmapLegend: some View {
-        HStack(spacing: DS.Spacing.xs) {
-            Text("Less")
-                .font(.caption2)
-                .foregroundStyle(.secondary)
-
-            ForEach([0.0, 0.25, 0.5, 0.75, 1.0], id: \.self) { level in
-                RoundedRectangle(cornerRadius: 2)
-                    .fill(DS.Color.tabLife.opacity(0.08 + level * 0.8))
-                    .frame(width: 12, height: 12)
-            }
-
-            Text("More")
-                .font(.caption2)
-                .foregroundStyle(.secondary)
         }
     }
 
@@ -135,6 +117,8 @@ struct HabitHeatmapDetailView: View {
             Text("By Weekday")
                 .font(.headline)
 
+            let maxTotal = weekdayStats.map(\.count).max() ?? 1
+
             ForEach(weekdayStats, id: \.weekday) { stat in
                 HStack {
                     Text(stat.name)
@@ -142,21 +126,22 @@ struct HabitHeatmapDetailView: View {
                         .frame(width: 30, alignment: .leading)
 
                     GeometryReader { geometry in
-                        let barWidth = stat.maxTotal > 0
-                            ? geometry.size.width * CGFloat(stat.count) / CGFloat(stat.maxTotal)
+                        let barWidth = maxTotal > 0
+                            ? geometry.size.width * CGFloat(stat.count) / CGFloat(maxTotal)
                             : 0
 
                         RoundedRectangle(cornerRadius: 4)
                             .fill(DS.Color.tabLife.opacity(0.6))
-                            .frame(width: max(0, barWidth))
+                            .frame(width: max(0, barWidth), height: 12)
+                            .frame(maxHeight: .infinity, alignment: .center)
                     }
+                    .frame(height: 20)
 
                     Text("\(stat.count)")
                         .font(.caption.monospacedDigit())
                         .foregroundStyle(.secondary)
                         .frame(width: 30, alignment: .trailing)
                 }
-                .frame(height: 20)
             }
         }
         .padding(DS.Spacing.md)
@@ -191,7 +176,7 @@ struct HabitHeatmapDetailView: View {
         for item in validData {
             if item.completionCount > 0 {
                 currentStreak += 1
-                maxStreak = max(maxStreak, currentStreak)
+                maxStreak = Swift.max(maxStreak, currentStreak)
             } else {
                 currentStreak = 0
             }
@@ -203,12 +188,19 @@ struct HabitHeatmapDetailView: View {
         let weekday: Int
         let name: String
         let count: Int
-        let maxTotal: Int
     }
 
     private var weekdayStats: [WeekdayStat] {
         let calendar = Calendar.current
-        let names = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+        let names = [
+            String(localized: "Mon"),
+            String(localized: "Tue"),
+            String(localized: "Wed"),
+            String(localized: "Thu"),
+            String(localized: "Fri"),
+            String(localized: "Sat"),
+            String(localized: "Sun"),
+        ]
         var counts = Array(repeating: 0, count: 7)
 
         for item in validData where item.completionCount > 0 {
@@ -217,18 +209,18 @@ struct HabitHeatmapDetailView: View {
             counts[mondayIndex] += item.completionCount
         }
 
-        let maxCount = counts.max() ?? 1
         return (0..<7).map { i in
-            WeekdayStat(weekday: i, name: names[i], count: counts[i], maxTotal: maxCount)
+            WeekdayStat(weekday: i, name: names[i], count: counts[i])
         }
     }
 }
 
-// MARK: - Standalone Heatmap Grid (reusable in detail)
+// MARK: - Shared Heatmap Grid
 
 struct HabitHeatmapGridView: View {
     let data: [DailyCompletionCount]
 
+    private let cellSize: CGFloat = 12
     private let cellSpacing: CGFloat = 2
     private let rows = 7
 
@@ -241,7 +233,7 @@ struct HabitHeatmapGridView: View {
                     ForEach(paddedData) { item in
                         RoundedRectangle(cornerRadius: 2)
                             .fill(cellColor(for: item))
-                            .frame(width: 12, height: 12)
+                            .frame(width: cellSize, height: cellSize)
                     }
                 }
             }
@@ -250,7 +242,7 @@ struct HabitHeatmapGridView: View {
     }
 
     private var gridRows: [GridItem] {
-        Array(repeating: GridItem(.fixed(12), spacing: cellSpacing), count: rows)
+        Array(repeating: GridItem(.fixed(cellSize), spacing: cellSpacing), count: rows)
     }
 
     private var paddedData: [DailyCompletionCount] {
@@ -288,7 +280,7 @@ struct HabitHeatmapGridView: View {
                 Text(dayLabel(for: row))
                     .font(.system(size: 8))
                     .foregroundStyle(.secondary)
-                    .frame(width: 20, height: 12, alignment: .trailing)
+                    .frame(width: 20, height: cellSize, alignment: .trailing)
             }
         }
         .padding(.trailing, 2)
@@ -297,5 +289,28 @@ struct HabitHeatmapGridView: View {
     private func dayLabel(for row: Int) -> String {
         let labels = ["M", "", "W", "", "F", "", "S"]
         return labels[row]
+    }
+}
+
+// MARK: - Shared Legend
+
+struct HabitHeatmapLegend: View {
+    var body: some View {
+        HStack(spacing: DS.Spacing.xs) {
+            Text("Less")
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+
+            ForEach(Array(stride(from: 0.0, through: 1.0, by: 0.25)).indices, id: \.self) { index in
+                let level = Double(index) * 0.25
+                RoundedRectangle(cornerRadius: 2)
+                    .fill(DS.Color.tabLife.opacity(0.08 + level * 0.8))
+                    .frame(width: 12, height: 12)
+            }
+
+            Text("More")
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+        }
     }
 }
