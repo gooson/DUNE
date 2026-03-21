@@ -173,6 +173,7 @@ private struct HabitListQueryView: View {
     @State private var heatmapData: [DailyCompletionCount] = []
     @State private var weeklyReport: WeeklyHabitReport?
     @State private var showingReport = false
+    @State private var showingHeatmapDetail = false
 
     private struct HabitHistorySelection: Identifiable {
         let id: UUID
@@ -307,7 +308,9 @@ private struct HabitListQueryView: View {
                 monthlyRates: monthlyRates
             )
 
-            HabitHeatmapView(data: heatmapData)
+            HabitHeatmapView(data: heatmapData) {
+                showingHeatmapDetail = true
+            }
 
             if weeklyReport != nil {
                 Button {
@@ -331,6 +334,9 @@ private struct HabitListQueryView: View {
             if let report = weeklyReport {
                 WeeklyHabitReportView(report: report)
             }
+        }
+        .navigationDestination(isPresented: $showingHeatmapDetail) {
+            HabitHeatmapDetailView(data: heatmapData)
         }
     }
 
@@ -402,8 +408,9 @@ private struct HabitListQueryView: View {
     // MARK: - Filtered & Grouped Progresses
 
     private var filteredProgresses: [HabitProgress] {
-        guard let filter = selectedCategoryFilter else { return viewModel.habitProgresses }
-        return viewModel.habitProgresses.filter { $0.iconCategory == filter }
+        let base = viewModel.habitProgresses.filter { !$0.isAutoLinked }
+        guard let filter = selectedCategoryFilter else { return base }
+        return base.filter { $0.iconCategory == filter }
     }
 
     private var groupedProgresses: [(timeOfDay: HabitTimeOfDay, items: [HabitProgress])] {
@@ -571,8 +578,10 @@ private struct HabitListQueryView: View {
 
     private func autoAchievementsSection(fillHeight: Bool = false) -> some View {
         let groups = autoAchievementGroups
-        let completedGoals = groups.reduce(0) { $0 + $1.completedCount }
-        let totalGoals = groups.reduce(0) { $0 + $1.metrics.count }
+        let customGoals = viewModel.autoLinkedProgresses
+        let customCompletedCount = customGoals.filter(\.isCompleted).count
+        let completedGoals = groups.reduce(0) { $0 + $1.completedCount } + customCompletedCount
+        let totalGoals = groups.reduce(0) { $0 + $1.metrics.count } + customGoals.count
         let useTwoColumnCards = isRegular && !fillHeight
 
         return SectionGroup(
@@ -597,7 +606,7 @@ private struct HabitListQueryView: View {
                     }
                 }
 
-                if viewModel.autoExerciseProgresses.isEmpty {
+                if viewModel.autoExerciseProgresses.isEmpty && customGoals.isEmpty {
                     StandardCard {
                         Text("No HealthKit-linked workouts yet")
                             .font(.subheadline)
@@ -619,8 +628,91 @@ private struct HabitListQueryView: View {
                         }
                     }
                 }
+
+                // Custom auto-linked habits
+                if !customGoals.isEmpty {
+                    customAutoGoalsGroup(customGoals, completedCount: customCompletedCount)
+                }
             }
         }
+        .confirmationDialog(
+            "Remove this goal?",
+            isPresented: Binding(
+                get: { pendingArchiveHabitID != nil },
+                set: { if !$0 { pendingArchiveHabitID = nil } }
+            ),
+            titleVisibility: .visible
+        ) {
+            Button("Remove", role: .destructive) {
+                if let id = pendingArchiveHabitID {
+                    archiveAutoLinkedHabit(id: id)
+                }
+            }
+            Button("Cancel", role: .cancel) {
+                pendingArchiveHabitID = nil
+            }
+        }
+    }
+
+    @State private var pendingArchiveHabitID: UUID?
+
+    private func customAutoGoalsGroup(_ progresses: [HabitProgress], completedCount: Int) -> some View {
+        StandardCard {
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                HStack(spacing: DS.Spacing.xs) {
+                    Image(systemName: "figure.run.circle")
+                        .font(.caption)
+                        .foregroundStyle(theme.accentColor)
+                    Text("Custom Goals")
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                    Spacer()
+                    Text("\(completedCount)/\(progresses.count)")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .monospacedDigit()
+                }
+
+                ForEach(progresses) { progress in
+                    customAutoGoalRow(progress)
+                }
+            }
+        }
+    }
+
+    private func customAutoGoalRow(_ progress: HabitProgress) -> some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+            HStack(spacing: DS.Spacing.xs) {
+                Image(systemName: progress.iconCategory.iconName)
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                Text(progress.name)
+                    .font(.caption)
+                Spacer()
+                if progress.isCompleted {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.caption2)
+                        .foregroundStyle(DS.Color.positive)
+                }
+            }
+            ProgressView(value: progress.todayValue, total: max(progress.goalValue, 1))
+                .tint(progress.isCompleted ? DS.Color.positive : theme.accentColor)
+        }
+        .contextMenu {
+            Button {
+                pendingArchiveHabitID = progress.id
+            } label: {
+                Label("Remove", systemImage: "trash")
+            }
+            .tint(.red)
+        }
+    }
+
+    private func archiveAutoLinkedHabit(id: UUID) {
+        guard let habit = habitsByID[id] else { return }
+        viewModel.cancelPendingReminders(for: habit)
+        habit.isArchived = true
+        recalculate()
     }
 
     private func autoAchievementGroupCard(_ group: AutoAchievementGroup) -> some View {
