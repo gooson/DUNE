@@ -164,7 +164,7 @@ enum PostureCaptureLivePixelFormatOption: String, Sendable, CaseIterable {
         }
     }
 
-    static func preferredNativeFormat(from availableFormats: [OSType]) -> OSType? {
+    private static func preferredNativeFormat(from availableFormats: [OSType]) -> OSType? {
         if availableFormats.contains(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange) {
             return kCVPixelFormatType_420YpCbCr8BiPlanarFullRange
         }
@@ -249,16 +249,18 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
     private let visionSemaphore = DispatchSemaphore(value: 1)
     // Accessed only on videoDataQueue (single serial queue) — no lock needed.
     private var lastFrameAnalysisTime: CFAbsoluteTime = 0
-    private var last3DSamplingTime: CFAbsoluteTime = 0
+    private var lastCGImageCreationTime: CFAbsoluteTime = 0
     private static let frameAnalysisInterval: CFAbsoluteTime = 0.1 // 10fps max
-    /// 3D sampling interval — controls how often a CGImage is passed to onRealtimeFrame.
-    private static let threeDSamplingInterval: CFAbsoluteTime = 0.25 // ~4fps
+    /// CGImage creation interval — matches 3D sampling rate (~4fps).
+    /// Creating CGImage every frame (10fps) wastes GPU and competes with Vision ML.
+    private static let cgImageCreationInterval: CFAbsoluteTime = 0.25
     /// Combined frame update callback: guidance state + skeleton keypoints in a single dispatch.
     var onFrameUpdate: (@Sendable (GuidanceState, [(String, CGPoint)], CGSize) -> Void)?
     /// Realtime analysis callback: keypoints + CGImage for 3D sampling.
-    /// CGImage is created from the pool buffer via CPU memcpy — completely independent of
+    /// CGImage is created from the pool buffer via CIContext — completely independent of
     /// the camera pool, so pool buffers are recycled immediately in captureOutput.
     var onRealtimeFrame: (@Sendable ([(String, CGPoint)], CGImage?) -> Void)?
+    private static let ciContext = CIContext(options: [.useSoftwareRenderer: false])
     var onDiagnosticsUpdate: (@Sendable (PostureCaptureDiagnostics) -> Void)?
     private var livePoseErrorCount = 0
     private var liveConfiguration = PostureCaptureLiveConfiguration.current()
@@ -267,7 +269,6 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
 
     private(set) var currentPosition: AVCaptureDevice.Position = .front
     private(set) var currentDevice: AVCaptureDevice?
-    private var isPhotoOutputEnabled = true
 
     // MARK: - Configuration
 
@@ -292,13 +293,7 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
 
     // MARK: - Setup
 
-    /// - Parameter needsPhotoCapture: When false, photoOutput is NOT added to the session.
-    ///   This frees GPU/buffer resources on front camera (TrueDepth) where the depth sensor
-    ///   hardware competes with Vision's ML buffer allocation. Each AVCaptureOutput added
-    ///   to the session reserves hardware buffer slots — fewer outputs = more headroom.
-    func setupCamera(position: AVCaptureDevice.Position = .front, needsPhotoCapture: Bool = true) throws {
-        isPhotoOutputEnabled = needsPhotoCapture
-
+    func setupCamera(position: AVCaptureDevice.Position = .front) throws {
         // Drain any leaked photoContinuation from a previous session
         continuationLock.withLock {
             photoContinuation?.resume(throwing: PostureCaptureError.captureSessionNotRunning)
@@ -306,7 +301,6 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
         }
 
         currentPosition = position
-
         guard let device = AVCaptureDevice.default(
             .builtInWideAngleCamera,
             for: .video,
@@ -336,21 +330,12 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
         captureSession.addInput(input)
         captureSession.sessionPreset = liveConfiguration.preset.resolvedPreset(for: captureSession)
 
-        // Only add photoOutput when photo capture is needed (e.g. PostureAssessmentViewModel).
-        // Each output reserves hardware buffer slots. On front camera (TrueDepth), the depth
-        // sensor already consumes shared GPU resources. Omitting photoOutput in realtime-only
-        // mode frees buffer slots so Vision's ML inference can allocate its internal buffers.
-        if needsPhotoCapture {
-            guard captureSession.canAddOutput(photoOutput) else {
-                captureSession.commitConfiguration()
-                throw PostureCaptureError.cameraUnavailable
-            }
-            captureSession.addOutput(photoOutput)
-            // Front camera (TrueDepth): use .speed to minimize GPU resource pre-allocation.
-            // The depth sensor hardware already consumes shared buffer slots — .quality
-            // pre-allocates additional high-res buffers that starve Vision's ML inference.
-            photoOutput.maxPhotoQualityPrioritization = position == .front ? .speed : .quality
+        guard captureSession.canAddOutput(photoOutput) else {
+            captureSession.commitConfiguration()
+            throw PostureCaptureError.cameraUnavailable
         }
+        captureSession.addOutput(photoOutput)
+        photoOutput.maxPhotoQualityPrioritization = .quality
 
         // Add video data output for real-time pose guidance
         videoDataOutput.alwaysDiscardsLateVideoFrames = true
@@ -379,14 +364,14 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
 
     func switchCamera() throws {
         let newPosition: AVCaptureDevice.Position = currentPosition == .front ? .back : .front
-        try setupCamera(position: newPosition, needsPhotoCapture: isPhotoOutputEnabled)
+        try setupCamera(position: newPosition)
     }
 
     func updateLiveConfiguration(_ configuration: PostureCaptureLiveConfiguration) throws {
         let previousConfiguration = liveConfiguration
         liveConfiguration = configuration
         do {
-            try setupCamera(position: currentPosition, needsPhotoCapture: isPhotoOutputEnabled)
+            try setupCamera(position: currentPosition)
             // Always restart — startSession() guards against double-start on sessionQueue,
             // avoiding the TOCTOU race of reading isRunning on the caller thread.
             startSession()
@@ -496,7 +481,13 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
             }
             observation3D = request3D.results?.first
         } catch {
-            AppLogger.data.debug("[PostureCapture] 3D detection failed (2D fallback): \(error.localizedDescription)")
+            AppLogger.data.debug("[PostureCapture] 3D detection unavailable, using 2D fallback: \(error.localizedDescription)")
+        }
+
+        let imageData: Data? = if let orientedJPEG {
+            compressOrientedData(orientedJPEG)
+        } else {
+            compressImage(image)
         }
 
         // --- 3) Use 3D if available, else fall back to 2D ---
@@ -516,12 +507,6 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
                     heightEstimation = .reference
                 }
 
-                let imageData: Data? = if let orientedJPEG {
-                    compressOrientedData(orientedJPEG)
-                } else {
-                    compressImage(image)
-                }
-
                 return PostureCaptureResult(
                     jointPositions: joints,
                     bodyHeight: bodyHeight,
@@ -531,16 +516,10 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
             }
         }
 
-        // --- 2D fallback: frontal metrics work, sagittal returns "unmeasurable" ---
+        // 2D fallback: frontal metrics work (z=0), sagittal returns "unmeasurable"
         let joints2D = Self.extractJointPositionsFrom2D(observation2D)
         guard !joints2D.isEmpty else {
             throw PostureCaptureError.insufficientConfidence
-        }
-
-        let imageData: Data? = if let orientedJPEG {
-            compressOrientedData(orientedJPEG)
-        } else {
-            compressImage(image)
         }
 
         return PostureCaptureResult(
@@ -673,11 +652,9 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
         return positions
     }
 
-    /// Extract joint positions from a 2D-only pose observation.
-    /// Used as fallback when 3D detection fails (iPad front camera, unsupported devices).
-    /// Coordinates are normalized (0-1) with z=0. Frontal metrics (shoulder/hip asymmetry,
-    /// knee alignment) still produce meaningful relative comparisons.
-    /// Sagittal metrics (forward head, rounded shoulders) will return "unmeasurable" (z=0).
+    // MARK: - 2D Fallback Joint Extraction
+
+    /// Map 2D pose joints to JointPosition3D names for fallback when 3D detection fails.
     private static let tracked2DJoints: [(VNHumanBodyPoseObservation.JointName, String)] = [
         (.nose, "centerHead"),
         (.neck, "centerShoulder"),
@@ -696,6 +673,10 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
         (.rightAnkle, "rightAnkle"),
     ]
 
+    /// Extract joint positions from a 2D-only pose observation.
+    /// Used as fallback when 3D detection fails (front camera on some devices).
+    /// Coordinates are normalized (0-1) with z=0. Frontal metrics still produce
+    /// meaningful relative comparisons; sagittal metrics return "unmeasurable".
     static func extractJointPositionsFrom2D(
         _ observation: VNHumanBodyPoseObservation
     ) -> [JointPosition3D] {
@@ -705,7 +686,7 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
             guard let point = try? observation.recognizedPoint(jointName),
                   point.confidence >= capturedJointMinimumConfidence else { continue }
 
-            let loc = point.location  // normalized 0-1, origin bottom-left
+            let loc = point.location
             positions.append(JointPosition3D(
                 name: name,
                 x: Float(loc.x),
@@ -719,13 +700,15 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
         // Synthesize "spine" as midpoint between centerShoulder and root
         if let neck = positions.first(where: { $0.name == "centerShoulder" }),
            let root = positions.first(where: { $0.name == "root" }) {
+            let midImageX: CGFloat? = neck.imageX.flatMap { nx in root.imageX.map { rx in (nx + rx) / 2 } }
+            let midImageY: CGFloat? = neck.imageY.flatMap { ny in root.imageY.map { ry in (ny + ry) / 2 } }
             positions.append(JointPosition3D(
                 name: "spine",
                 x: (neck.x + root.x) / 2,
                 y: (neck.y + root.y) / 2,
                 z: 0,
-                imageX: neck.imageX.flatMap { nx in root.imageX.map { rx in (nx + rx) / 2 } },
-                imageY: neck.imageY.flatMap { ny in root.imageY.map { ry in (ny + ry) / 2 } }
+                imageX: midImageX,
+                imageY: midImageY
             ))
         }
 
@@ -969,61 +952,6 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
         return data as Data
     }
 
-    // MARK: - CGImage from Pool Buffer
-
-    /// Software-only CIContext — avoids GPU/ANE contention with camera hardware.
-    private static let softwareCIContext = CIContext(options: [.useSoftwareRenderer: true])
-    private static let bgraColorSpace = CGColorSpaceCreateDeviceRGB()
-
-    /// Create a pool-independent CGImage from any CVPixelBuffer format.
-    ///
-    /// - BGRA: fast CPU memcpy (~0.4ms at 720p)
-    /// - YUV (420f/420v): software CIContext render (~3-5ms at 720p)
-    ///
-    /// The resulting CGImage lives in heap memory, completely independent of
-    /// the camera's IOSurface buffer pool and GPU/ANE resources.
-    static func createCGImageFromBuffer(_ pixelBuffer: CVPixelBuffer) -> CGImage? {
-        let pixelFormat = CVPixelBufferGetPixelFormatType(pixelBuffer)
-
-        // BGRA: direct CPU memcpy (fastest path)
-        if pixelFormat == kCVPixelFormatType_32BGRA {
-            CVPixelBufferLockBaseAddress(pixelBuffer, .readOnly)
-            defer { CVPixelBufferUnlockBaseAddress(pixelBuffer, .readOnly) }
-
-            let width = CVPixelBufferGetWidth(pixelBuffer)
-            let height = CVPixelBufferGetHeight(pixelBuffer)
-            let bytesPerRow = CVPixelBufferGetBytesPerRow(pixelBuffer)
-            guard let baseAddress = CVPixelBufferGetBaseAddress(pixelBuffer) else { return nil }
-
-            let byteCount = CVPixelBufferGetDataSize(pixelBuffer)
-            let data = Data(bytes: baseAddress, count: byteCount)
-            guard let provider = CGDataProvider(data: data as CFData) else { return nil }
-
-            let bitmapInfo = CGBitmapInfo(
-                rawValue: CGImageAlphaInfo.noneSkipFirst.rawValue
-                    | CGBitmapInfo.byteOrder32Little.rawValue
-            )
-
-            return CGImage(
-                width: width,
-                height: height,
-                bitsPerComponent: 8,
-                bitsPerPixel: 32,
-                bytesPerRow: bytesPerRow,
-                space: bgraColorSpace,
-                bitmapInfo: bitmapInfo,
-                provider: provider,
-                decode: nil,
-                shouldInterpolate: false,
-                intent: .defaultIntent
-            )
-        }
-
-        // YUV or other formats: software CIContext render (CPU-only, no GPU/ANE)
-        let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
-        return softwareCIContext.createCGImage(ciImage, from: ciImage.extent)
-    }
-
     // MARK: - Pixel Buffer Copy
 
     /// Deep-copy a CVPixelBuffer so the original (owned by the camera pool) can
@@ -1215,25 +1143,12 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
             orientation = Self.liveVisionOrientation(for: liveDeviceOrientation)
         }
 
-        // Luminance from pool buffer (fast, no ML, ~instant)
-        let luminance = Self.averageLuminance(from: poolBuffer)
-
-        // --- 2D detection: CGImage to decouple from camera pool ---
-        // On front camera (TrueDepth), Vision's perform() with IOSurface-backed pool
-        // buffers fails because the depth sensor hardware consumes shared GPU/buffer
-        // resources. Even BGRA format doesn't fully solve this — Vision's ML inference
-        // still allocates internal buffers from the same shared pool.
-        // Creating a CGImage via CPU memcpy decouples Vision from the camera pool entirely.
+        // --- 2D detection: pool buffer direct use (original working pattern) ---
+        // Pool buffer is synchronous-only: held during perform(), released when method returns.
         // Skip this frame if 3D Vision is running (shared internal ML buffer pool).
         guard visionSemaphore.wait(timeout: .now()) == .success else { return }
-        guard let cgImage = Self.createCGImageFromBuffer(poolBuffer) else {
-            visionSemaphore.signal()
-            return
-        }
-        // Pool buffer is no longer needed — released when sampleBuffer goes out of scope.
-
         let handler = VNImageRequestHandler(
-            cgImage: cgImage,
+            cvPixelBuffer: poolBuffer,
             orientation: orientation,
             options: [:]
         )
@@ -1279,6 +1194,9 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
             }
         }
 
+        // Luminance from pool buffer (fast, no ML, ~instant)
+        let luminance = Self.averageLuminance(from: poolBuffer)
+
         // Update guidance state
         let state = guidanceAnalyzer.analyze(
             observation: observation,
@@ -1297,13 +1215,18 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
             lastVisionError: nil
         )
 
-        // --- 3D sampling: reuse CGImage at throttled rate (~4fps) ---
+        // --- 3D sampling: CGImage only when needed (~4fps, not every frame) ---
+        // CIContext.createCGImage at 10fps wastes GPU bandwidth and competes with
+        // Vision's ML pipeline. Only create when 3D tracker actually needs a sample.
         var cgImageFor3D: CGImage?
         if !keypoints.isEmpty, onRealtimeFrame != nil,
-           now - last3DSamplingTime >= Self.threeDSamplingInterval {
-            last3DSamplingTime = now
-            cgImageFor3D = cgImage
+           now - lastCGImageCreationTime >= Self.cgImageCreationInterval {
+            lastCGImageCreationTime = now
+            let ciImage = CIImage(cvPixelBuffer: poolBuffer)
+            cgImageFor3D = Self.ciContext.createCGImage(ciImage, from: ciImage.extent)
         }
+        // Pool buffer released when sampleBuffer goes out of scope.
+
         onRealtimeFrame?(keypoints, cgImageFor3D)
     }
 
@@ -1371,20 +1294,7 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
 
     private func applyLiveVideoOutputConfiguration() {
         let availableFormats = videoDataOutput.availableVideoPixelFormatTypes
-
-        let format: OSType?
-        if liveConfiguration.pixelFormat == .automatic {
-            // Use camera's native format — don't force BGRA.
-            // Forcing BGRA on front camera causes FigCaptureSourceRemote XPC errors
-            // (-17281) because the camera hardware can't deliver BGRA reliably.
-            // Instead, let the camera deliver its native YUV format and convert
-            // to CGImage via software CIContext in captureOutput.
-            format = PostureCaptureLivePixelFormatOption.preferredNativeFormat(from: availableFormats)
-        } else {
-            format = liveConfiguration.pixelFormat.resolvedFormat(from: availableFormats)
-        }
-
-        if let format {
+        if let format = liveConfiguration.pixelFormat.resolvedFormat(from: availableFormats) {
             videoDataOutput.videoSettings = [
                 kCVPixelBufferPixelFormatTypeKey as String: Int(format),
             ]
