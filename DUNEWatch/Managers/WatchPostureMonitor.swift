@@ -1,4 +1,4 @@
-import CoreMotion
+@preconcurrency import CoreMotion
 import Foundation
 import Observation
 import OSLog
@@ -62,8 +62,8 @@ final class WatchPostureMonitor {
 
     // MARK: - Private State
 
-    private let activityManager = CMMotionActivityManager()
-    private let motionManager = CMMotionManager()
+    private nonisolated(unsafe) let activityManager = CMMotionActivityManager()
+    private nonisolated(unsafe) let motionManager = CMMotionManager()
     private nonisolated(unsafe) let userDefaults: UserDefaults
     /// Injected closure to check workout active state (testability).
     private let isWorkoutActive: @MainActor () -> Bool
@@ -197,12 +197,43 @@ final class WatchPostureMonitor {
     // MARK: - Activity Tracking
 
     private func startActivityTracking() {
-        activityManager.startActivityUpdates(to: activityQueue) { activity in
+        Self.registerActivityCallback(manager: activityManager, queue: activityQueue)
+    }
+
+    /// Register CoreMotion activity callback. Must be nonisolated so the closure
+    /// does NOT inherit @MainActor isolation (Swift 6 _dispatch_assert_queue_fail).
+    nonisolated private static func registerActivityCallback(
+        manager: CMMotionActivityManager,
+        queue: OperationQueue
+    ) {
+        manager.startActivityUpdates(to: queue) { activity in
             guard let activity else { return }
-            let state = WatchPostureMonitor.mapActivity(activity)
+            let state = mapActivity(activity)
 
             Task { @MainActor in
-                WatchPostureMonitor.shared.handleActivityChange(state)
+                shared.handleActivityChange(state)
+            }
+        }
+    }
+
+    /// Register CoreMotion device motion callback. Must be nonisolated so the closure
+    /// does NOT inherit @MainActor isolation (Swift 6 _dispatch_assert_queue_fail).
+    nonisolated private static func registerDeviceMotionCallback(
+        manager: CMMotionManager,
+        queue: OperationQueue,
+        generation: Int
+    ) {
+        manager.startDeviceMotionUpdates(to: queue) { motion, error in
+            if let error {
+                logger.warning("[PostureMonitor] DeviceMotion error: \(error.localizedDescription)")
+                return
+            }
+            guard let motion else { return }
+
+            Task { @MainActor in
+                let monitor = shared
+                guard monitor.deviceMotionGeneration == generation else { return }
+                monitor.deviceMotionSamples.append(motion)
             }
         }
     }
@@ -357,19 +388,11 @@ final class WatchPostureMonitor {
 
         motionManager.deviceMotionUpdateInterval = 1.0 / Constants.deviceMotionFrequencyHz
 
-        motionManager.startDeviceMotionUpdates(to: motionQueue) { motion, error in
-            if let error {
-                WatchPostureMonitor.logger.warning("[PostureMonitor] DeviceMotion error: \(error.localizedDescription)")
-                return
-            }
-            guard let motion else { return }
-
-            Task { @MainActor in
-                let monitor = WatchPostureMonitor.shared
-                guard monitor.deviceMotionGeneration == currentGeneration else { return }
-                monitor.deviceMotionSamples.append(motion)
-            }
-        }
+        Self.registerDeviceMotionCallback(
+            manager: motionManager,
+            queue: motionQueue,
+            generation: currentGeneration
+        )
 
         // Stop after duration
         deviceMotionStopTask?.cancel()
