@@ -118,6 +118,26 @@ A skill is a set of local instructions to follow that is stored in a `SKILL.md` 
 - 문서에 명시된 도구가 현재 세션에 없으면, 가장 가까운 대체 도구/절차로 실행하고 그 차이를 짧게 사용자에게 알립니다.
 - 상위 지침(시스템/개발자)과 충돌하는 항목은 상위 지침을 우선합니다.
 
+## Codex Adapter Layer
+
+- `.claude/**` 는 **수정하지 않는 source of truth** 입니다. Codex 전용 번역/보강은 `.codex/**` 와 `AGENTS.md` 에만 기록합니다.
+- Codex 실행 adapter 문서는 다음 3개를 기준으로 유지합니다.
+  - `.codex/agent-map.md`
+  - `.codex/skill-compat.md`
+  - `.codex/agent-memory/README.md`
+- Claude 문서의 `Task tool` 지시는 Codex에서 우선 **role selection** 으로 해석합니다.
+  - 기본값: 현재 에이전트가 해당 역할을 inline으로 수행
+  - 예외: 사용자가 병렬/위임/sub-agent를 명시적으로 요청했거나, 현재 활성 skill 실행이 실제 agent launch를 요구하고 런타임 정책상 허용될 때만 `spawn_agent` 사용
+- Claude 문서의 `TodoWrite` 지시는 Codex에서 `update_plan` 으로 대응합니다.
+- review 계열 agent는 기본적으로 **read-only** 입니다.
+  - 리뷰 중 테스트 작성/즉시 수정 지시가 문서에 있더라도, 사용자가 명시적으로 수정을 요청하지 않았다면 finding 보고까지만 수행합니다.
+  - 실제 수정은 `/work` 또는 `/run`의 Resolve 단계에서만 수행합니다.
+- memory 해석 규칙:
+  - `.claude/agent-memory/**` 는 Codex의 **read source**
+  - Codex가 새 learnings를 남길 때는 `.codex/agent-memory/**` 를 **shadow write target** 으로 사용
+  - Claude 전용 repo 밖 persistent memory 경로는 직접 write target으로 가정하지 않습니다.
+- `.claude/agents/*.md` 또는 핵심 skill 목록이 바뀌면 Codex adapter 문서를 함께 갱신하고 `python3 scripts/check-codex-claude-parity.py` 로 drift를 검사합니다.
+
 ## Permission Parity (`.claude/settings.local.json`)
 
 Codex는 아래 allow list를 Claude와 동일 기준으로 취급합니다(단, 시스템 sandbox 정책이 더 강하면 sandbox 우선).
