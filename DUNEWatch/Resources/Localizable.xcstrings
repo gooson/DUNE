@@ -59,6 +59,9 @@
         }
       }
     },
+    "%@ min" : {
+
+    },
     "%@ min ago" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1026,6 +1029,43 @@
         }
       }
     },
+    "Gait %@" : {
+
+    },
+    "Gait %lld" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "歩行 %lld"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "보행 %lld"
+          }
+        }
+      }
+    },
+    "Gait Score" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "歩行スコア"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "보행 점수"
+          }
+        }
+      }
+    },
     "Hanok" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1552,6 +1592,43 @@
     "Popular" : {
 
     },
+    "Posture" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "姿勢"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "자세"
+          }
+        }
+      }
+    },
+    "POSTURE" : {
+
+    },
+    "Posture Monitoring" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "姿勢モニタリング"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "자세 모니터링"
+          }
+        }
+      }
+    },
     "Preferred" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1653,6 +1730,39 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "회복"
+          }
+        }
+      }
+    },
+    "Remind me to stretch after" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ストレッチリマインダー間隔"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "스트레칭 알림 간격"
+          }
+        }
+      }
+    },
+    "Reminders Sent" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "送信済みリマインダー"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "발송된 알림"
           }
         }
       }
@@ -1853,6 +1963,39 @@
       "extractionState" : "manual",
       "shouldTranslate" : false
     },
+    "Sitting" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "座位"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "앉은 시간"
+          }
+        }
+      }
+    },
+    "Sitting today" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今日の座位時間"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "오늘 앉은 시간"
+          }
+        }
+      }
+    },
     "Skip" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1955,6 +2098,22 @@
         }
       }
     },
+    "Stretch Reminder" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ストレッチリマインダー"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "스트레칭 알림"
+          }
+        }
+      }
+    },
     "Swim" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2042,6 +2201,42 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "시간만"
+          }
+        }
+      }
+    },
+    "Time to stretch!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ストレッチの時間です！"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "스트레칭 시간이에요!"
+          }
+        }
+      }
+    },
+    "Today" : {
+
+    },
+    "Tracks sitting time and walking posture using motion sensors." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "モーションセンサーで座位時間と歩行姿勢を追跡します。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "모션 센서로 앉은 시간과 걸음걸이 자세를 추적합니다."
           }
         }
       }
@@ -2157,6 +2352,23 @@
     "Workout Intensity" : {
 
     },
+    "You've been sitting for a while. Take a moment to stand and stretch." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "長時間座っています。立ち上がってストレッチしましょう。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "오래 앉아 있었어요. 일어나서 스트레칭해 보세요."
+          }
+        }
+      }
+    },
     "Zone %@" : {
 
     },
@@ -2173,199 +2385,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "존 %lld"
-          }
-        }
-      }
-    }
-    ,
-    "Gait %lld" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "歩行 %lld"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "보행 %lld"
-          }
-        }
-      }
-    },
-    "Gait Score" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "歩行スコア"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "보행 점수"
-          }
-        }
-      }
-    },
-    "Posture" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "姿勢"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "자세"
-          }
-        }
-      }
-    },
-    "Posture Monitoring" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "姿勢モニタリング"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "자세 모니터링"
-          }
-        }
-      }
-    },
-    "Remind me to stretch after" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ストレッチリマインダー間隔"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "스트레칭 알림 간격"
-          }
-        }
-      }
-    },
-    "Reminders Sent" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "送信済みリマインダー"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "발송된 알림"
-          }
-        }
-      }
-    },
-    "Sitting" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "座位"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "앉은 시간"
-          }
-        }
-      }
-    },
-    "Sitting today" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "今日の座位時間"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "오늘 앉은 시간"
-          }
-        }
-      }
-    },
-    "Stretch Reminder" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ストレッチリマインダー"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "스트레칭 알림"
-          }
-        }
-      }
-    },
-    "Time to stretch!" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ストレッチの時間です！"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "스트레칭 시간이에요!"
-          }
-        }
-      }
-    },
-    "Tracks sitting time and walking posture using motion sensors." : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "モーションセンサーで座位時間と歩行姿勢を追跡します。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "모션 센서로 앉은 시간과 걸음걸이 자세를 추적합니다."
-          }
-        }
-      }
-    },
-    "You've been sitting for a while. Take a moment to stand and stretch." : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "長時間座っています。立ち上がってストレッチしましょう。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "오래 앉아 있었어요. 일어나서 스트레칭해 보세요."
           }
         }
       }
