@@ -5,6 +5,7 @@ import OSLog
 @main
 struct DUNEWatchApp: App {
     @State private var connectivity = WatchConnectivityManager.shared
+    @State private var postureMonitor = WatchPostureMonitor.shared
     private static let logger = Logger(subsystem: "com.raftel.dailve", category: "WatchApp")
 
     let modelContainer: ModelContainer
@@ -150,6 +151,7 @@ struct DUNEWatchApp: App {
                 .tint(resolvedTheme.accentColor)
                 .onAppear {
                     connectivity.activate()
+                    postureMonitor.startMonitoringIfEnabled()
                 }
         }
         .modelContainer(modelContainer)

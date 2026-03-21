@@ -4,6 +4,7 @@ import SwiftUI
 enum WatchRoute: Hashable {
     case quickStartAll
     case workoutPreview(WorkoutSessionTemplate)
+    case postureSettings
 }
 
 // WorkoutSessionTemplate needs Hashable for navigation value
@@ -66,6 +67,8 @@ struct ContentView: View {
                     QuickStartAllExercisesView()
                 case .workoutPreview(let snapshot):
                     WorkoutPreviewView(snapshot: snapshot)
+                case .postureSettings:
+                    PostureMonitorSettingsView()
                 }
             }
         }

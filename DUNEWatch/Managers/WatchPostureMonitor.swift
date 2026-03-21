@@ -61,7 +61,7 @@ final class WatchPostureMonitor {
 
     private let activityManager = CMMotionActivityManager()
     private let motionManager = CMMotionManager()
-    private let userDefaults: UserDefaults
+    private nonisolated(unsafe) let userDefaults: UserDefaults
 
     /// Timestamp when current stationary period started.
     private var sedentaryStartDate: Date?
