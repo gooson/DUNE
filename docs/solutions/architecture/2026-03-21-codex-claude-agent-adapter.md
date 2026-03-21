@@ -2,6 +2,7 @@
 tags: [codex, claude, agents, adapter, workflow, parity]
 category: architecture
 date: 2026-03-21
+status: implemented
 severity: important
 related_files:
   - AGENTS.md
