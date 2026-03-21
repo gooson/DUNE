@@ -37,7 +37,7 @@ struct FormCheckpoint: Sendable, Identifiable {
     let isPrimaryAngle: Bool
 
     /// Short coaching cue spoken when the checkpoint is caution/warning.
-    let coachingCue: String
+    var coachingCue: String = ""
 
     func evaluate(degrees: Double) -> PostureStatus {
         guard degrees.isFinite else { return .unmeasurable }
