@@ -28,10 +28,14 @@ actor AppRefreshCoordinatorImpl: AppRefreshCoordinating {
     }
 
     func requestRefresh(source: RefreshSource) async -> Bool {
+        // CloudKit remote change bypasses throttle — on Mac this is the primary
+        // data arrival path and must not be delayed by the post-launch cooldown.
+        let bypassThrottle = source == .cloudKitRemoteChange
+
         let now = nowProvider()
         let elapsed = now.timeIntervalSince(lastRefreshDate)
 
-        guard elapsed >= throttleInterval else {
+        guard bypassThrottle || elapsed >= throttleInterval else {
             AppLogger.ui.debug("[AppRefreshCoordinator] Throttled \(source.rawValue) — \(String(format: "%.0f", elapsed))s since last refresh")
             return false
         }
