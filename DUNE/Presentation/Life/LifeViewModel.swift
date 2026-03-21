@@ -85,6 +85,9 @@ final class LifeViewModel {
         let action: HabitCycleAction
         let date: Date
         let value: Double
+        let goalValue: Double
+        let goalUnit: String?
+        let habitType: HabitType
     }
 
     // MARK: - Habit CRUD
@@ -230,7 +233,10 @@ final class LifeViewModel {
                 id: log.id,
                 action: action(for: log),
                 date: log.date,
-                value: log.value
+                value: log.value,
+                goalValue: habit.goalValue,
+                goalUnit: habit.goalUnit,
+                habitType: habit.habitType
             )
         }
     }

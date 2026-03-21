@@ -40,8 +40,12 @@ struct HabitCompletionChartView: View {
             }
 
             chartContent
-                .frame(height: 180)
+                .chartPlotStyle { plotContent in
+                    plotContent.frame(height: 160)
+                }
+                .padding(.top, 8)
                 .clipped()
+                .frame(minHeight: 200)
         }
         .padding(DS.Spacing.md)
         .background {
@@ -83,14 +87,9 @@ struct HabitCompletionChartView: View {
             }
         }
         .chartXAxis {
-            AxisMarks(values: .stride(by: .weekOfYear)) { _ in
+            AxisMarks(values: .stride(by: .weekOfYear, count: 2)) { _ in
                 AxisGridLine()
-                AxisValueLabel(format: .dateTime.month(.abbreviated).day())
-            }
-        }
-        .chartOverlay { chartProxy in
-            GeometryReader { _ in
-                Color.clear
+                AxisValueLabel(format: .dateTime.month(.narrow).day())
             }
         }
     }
@@ -119,7 +118,7 @@ struct HabitCompletionChartView: View {
         .chartXAxis {
             AxisMarks(values: .stride(by: .month)) { _ in
                 AxisGridLine()
-                AxisValueLabel(format: .dateTime.month(.abbreviated))
+                AxisValueLabel(format: .dateTime.month(.narrow))
             }
         }
     }

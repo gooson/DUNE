@@ -569,6 +569,16 @@
         }
       }
     },
+    "%@ of %@ completed": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ of %2$@ completed"
+          }
+        }
+      }
+    },
     "%@ on %@ will be permanently deleted from all your devices.": {
       "localizations": {
         "en": {
@@ -1167,6 +1177,23 @@
         }
       }
     },
+    "%lld days ago": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld日前"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld일 전"
+          }
+        }
+      }
+    },
     "%lld days per week": {
       "extractionState": "stale",
       "localizations": {
@@ -1306,6 +1333,23 @@
         }
       }
     },
+    "%lld min": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld分"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld분"
+          }
+        }
+      }
+    },
     "%lld muscle groups with high fatigue": {
       "localizations": {
         "ja": {
@@ -1372,6 +1416,23 @@
         }
       }
     },
+    "%lld of %lld completed": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld / %2$lld 完了"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld / %2$lld 완료"
+          }
+        }
+      }
+    },
     "%lld of %lld habits done — keep going!": {
       "extractionState": "manual",
       "localizations": {
@@ -1434,6 +1495,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld 포인트"
+          }
+        }
+      }
+    },
+    "%lld records": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld件の記録"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld건 기록"
           }
         }
       }
@@ -1720,6 +1798,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld회"
+          }
+        }
+      }
+    },
+    "%lldx per week": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "週%lld回"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "주 %lld회"
           }
         }
       }
@@ -3105,6 +3200,23 @@
         }
       }
     },
+    "Afternoon": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "午後"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "오후"
+          }
+        }
+      }
+    },
     "AI posture analysis, morning briefings, RPE trend insights, an upgraded 3D muscle map, and smarter Watch workouts — DUNE now sees how you move.": {
       "extractionState": "manual",
       "localizations": {
@@ -3203,6 +3315,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "대기질"
+          }
+        }
+      }
+    },
+    "All": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "すべて"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "전체"
           }
         }
       }
@@ -3547,6 +3676,23 @@
         }
       }
     },
+    "Anytime": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "いつでも"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "언제든"
+          }
+        }
+      }
+    },
     "Appearance": {
       "extractionState": "manual",
       "localizations": {
@@ -3560,6 +3706,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "외관"
+          }
+        }
+      }
+    },
+    "Apple Watch required": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Watchが必要です"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Watch가 필요합니다"
           }
         }
       }
@@ -3619,6 +3782,28 @@
       "extractionState": "manual",
       "shouldTranslate": false
     },
+    "Arm Extension": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arm Extension"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "腕の伸展"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "팔 신전"
+          }
+        }
+      }
+    },
     "Arms": {
       "extractionState": "stale",
       "localizations": {
@@ -3649,6 +3834,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "주 3회 팔 운동"
+          }
+        }
+      }
+    },
+    "Ascent": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ascent"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "上昇"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "상승"
           }
         }
       }
@@ -4297,6 +4504,28 @@
         }
       }
     },
+    "Back Angle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back Angle"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "背中の角度"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "허리 각도"
+          }
+        }
+      }
+    },
     "Back-supported squat machine. Targets quadriceps": {
       "extractionState": "manual",
       "localizations": {
@@ -4510,6 +4739,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "수직 가이드 레일의 바벨. 안전한 고중량 운동"
+          }
+        }
+      }
+    },
+    "Barbell Squat": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Barbell Squat"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "バーベルスクワット"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "바벨 스쿼트"
           }
         }
       }
@@ -4769,6 +5020,50 @@
         }
       }
     },
+    "Bend to 90 degrees": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bend to 90 degrees"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "90度まで曲げて"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "90도로 굽히세요"
+          }
+        }
+      }
+    },
+    "Bend your knees slightly": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bend your knees slightly"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "膝を軽く曲げて"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "무릎을 살짝 굽히세요"
+          }
+        }
+      }
+    },
     "Best day": {
       "extractionState": "manual",
       "localizations": {
@@ -4782,6 +5077,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "최고의 날"
+          }
+        }
+      }
+    },
+    "Best Habits": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ベスト習慣"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "최고 습관"
           }
         }
       }
@@ -5358,6 +5670,28 @@
         }
       }
     },
+    "Bodyweight Squat": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bodyweight Squat"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "自重スクワット"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "맨몸 스쿼트"
+          }
+        }
+      }
+    },
     "Both": {
       "extractionState": "manual",
       "localizations": {
@@ -5388,6 +5722,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "두 지표를 결합하여 회복 속도 조정"
+          }
+        }
+      }
+    },
+    "Bottom": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bottom"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最低点"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "최저점"
           }
         }
       }
@@ -6395,6 +6751,23 @@
         }
       }
     },
+    "Clean Desk": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "デスク整理"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "책상 정리"
+          }
+        }
+      }
+    },
     "Clear": {
       "extractionState": "manual",
       "localizations": {
@@ -6639,6 +7012,23 @@
         }
       }
     },
+    "Coding Practice": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "コーディング練習"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "코딩 연습"
+          }
+        }
+      }
+    },
     "Collecting Data": {
       "extractionState": "manual",
       "localizations": {
@@ -6873,6 +7263,23 @@
         }
       }
     },
+    "Complete this habit to start building your history": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "習慣を完了して履歴を作りましょう"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "습관을 완료하면 히스토리가 쌓여요"
+          }
+        }
+      }
+    },
     "Complete workouts on your iPhone or Apple Watch to see training volume distribution.": {
       "localizations": {
         "ja": {
@@ -6967,6 +7374,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "완료된 운동은 저장되었습니다."
+          }
+        }
+      }
+    },
+    "Completion Rate": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "達成率"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "달성률"
           }
         }
       }
@@ -7321,6 +7745,23 @@
         }
       }
     },
+    "Connect with Friends": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "友人との交流"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "친구와 소통"
+          }
+        }
+      }
+    },
     "Consecutive Training": {
       "extractionState": "manual",
       "localizations": {
@@ -7534,6 +7975,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "내려올 때도 제어하고, 바닥에서는 팔을 완전히 펴세요."
+          }
+        }
+      }
+    },
+    "Conventional Deadlift": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conventional Deadlift"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "コンベンショナルデッドリフト"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "컨벤셔널 데드리프트"
           }
         }
       }
@@ -8333,6 +8796,23 @@
         }
       }
     },
+    "Deep Breathing": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "深呼吸"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "심호흡"
+          }
+        }
+      }
+    },
     "Deep sleep at %@ — looking good. Keep your current sleep routine. Deep sleep is key for muscle recovery and hormone balance.": {
       "extractionState": "manual",
       "localizations": {
@@ -8535,6 +9015,28 @@
         }
       }
     },
+    "Depress your shoulders": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Depress your shoulders"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "肩を下げて"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "어깨를 내리세요"
+          }
+        }
+      }
+    },
     "Descend until thighs are parallel or below": {
       "localizations": {
         "ja": {
@@ -8547,6 +9049,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "허벅지가 평행 이하가 될 때까지 내려가세요."
+          }
+        }
+      }
+    },
+    "Descent": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Descent"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "下降"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "하강"
           }
         }
       }
@@ -8666,6 +9190,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "난이도"
+          }
+        }
+      }
+    },
+    "Digital Detox": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "デジタルデトックス"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "디지털 디톡스"
           }
         }
       }
@@ -8939,6 +9480,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "드래그하여 회전하세요. 강조된 근육은 최근 회복 부담을 반영합니다."
+          }
+        }
+      }
+    },
+    "Drink Water": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "水を飲む"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "물 마시기"
           }
         }
       }
@@ -10252,6 +10810,28 @@
         }
       }
     },
+    "Exercise Mode": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exercise Mode"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "エクササイズモード"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "운동 모드"
+          }
+        }
+      }
+    },
     "Exercise Name": {
       "extractionState": "manual",
       "localizations": {
@@ -10439,6 +11019,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "지수 감쇠 모델"
+          }
+        }
+      }
+    },
+    "Extend your arms fully": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Extend your arms fully"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "腕を完全に伸ばして"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "팔을 끝까지 펴세요"
           }
         }
       }
@@ -11367,6 +11969,28 @@
       "extractionState": "manual",
       "shouldTranslate": false
     },
+    "Form Check": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Form Check"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "フォームチェック"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "폼 체크"
+          }
+        }
+      }
+    },
     "Form Cues": {
       "localizations": {
         "ja": {
@@ -11379,6 +12003,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "자세 포인트"
+          }
+        }
+      }
+    },
+    "Form Score": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Form Score"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "フォームスコア"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "폼 점수"
           }
         }
       }
@@ -11477,6 +12123,23 @@
         }
       }
     },
+    "From Template": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "テンプレートから"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "템플릿에서"
+          }
+        }
+      }
+    },
     "Front": {
       "localizations": {
         "ja": {
@@ -11506,6 +12169,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "대칭 분석에는 정면 이미지가 필요합니다"
+          }
+        }
+      }
+    },
+    "Front Knee": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Front Knee"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "前膝"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "앞 무릎"
           }
         }
       }
@@ -11722,6 +12407,23 @@
         }
       }
     },
+    "Gait": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "歩行"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "보행"
+          }
+        }
+      }
+    },
     "Gathering your data": {
       "extractionState": "manual",
       "localizations": {
@@ -11735,6 +12437,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "데이터를 수집하고 있습니다"
+          }
+        }
+      }
+    },
+    "General Posture": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "General Posture"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一般姿勢"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "일반 자세"
           }
         }
       }
@@ -11921,6 +12645,28 @@
         }
       }
     },
+    "Go deeper": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Go deeper"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "もっと深く"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "더 내려가세요"
+          }
+        }
+      }
+    },
     "Goal": {
       "extractionState": "manual",
       "localizations": {
@@ -11988,6 +12734,50 @@
         }
       }
     },
+    "Good alignment": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Good alignment"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "いいアライメント"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "정렬 좋아요"
+          }
+        }
+      }
+    },
+    "Good back position": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Good back position"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "背中いいですよ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "허리 좋아요"
+          }
+        }
+      }
+    },
     "Good condition today": {
       "localizations": {
         "ja": {
@@ -12037,6 +12827,50 @@
         }
       }
     },
+    "Good depth": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Good depth"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "いい深さ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "좋은 깊이"
+          }
+        }
+      }
+    },
+    "Good hip hinge": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Good hip hinge"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ヒップヒンジいいですよ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "힙힌지 좋아요"
+          }
+        }
+      }
+    },
     "Good HRV": {
       "extractionState": "manual",
       "localizations": {
@@ -12050,6 +12884,72 @@
           "stringUnit": {
             "state": "translated",
             "value": "양호한 HRV"
+          }
+        }
+      }
+    },
+    "Good knee angle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Good knee angle"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "膝の角度いいですよ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "무릎 각도 좋아요"
+          }
+        }
+      }
+    },
+    "Good knee position": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Good knee position"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "膝いいですよ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "무릎 좋아요"
+          }
+        }
+      }
+    },
+    "Good lockout": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Good lockout"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "いいロックアウト"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "좋은 락아웃"
           }
         }
       }
@@ -12104,6 +13004,50 @@
         }
       }
     },
+    "Good posture": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Good posture"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "いい姿勢"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "자세 좋아요"
+          }
+        }
+      }
+    },
+    "Good pull": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Good pull"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "いいプル"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "좋은 풀업"
+          }
+        }
+      }
+    },
     "Good recovery — RHR below baseline": {
       "extractionState": "manual",
       "localizations": {
@@ -12117,6 +13061,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "회복 양호 — RHR이 기준선보다 낮아요"
+          }
+        }
+      }
+    },
+    "Good shoulder position": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Good shoulder position"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "肩いいですよ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "어깨 좋아요"
           }
         }
       }
@@ -12154,6 +13120,28 @@
         }
       }
     },
+    "Good torso position": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Good torso position"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "上体いいですよ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "상체 좋아요"
+          }
+        }
+      }
+    },
     "GPS distance tracking": {
       "extractionState": "manual",
       "localizations": {
@@ -12184,6 +13172,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "건강 데이터를 보려면 HealthKit 접근 권한을 허용하세요."
+          }
+        }
+      }
+    },
+    "Gratitude Practice": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "感謝の実践"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "감사 연습"
           }
         }
       }
@@ -12418,6 +13423,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "습관 이름을 입력해주세요"
+          }
+        }
+      }
+    },
+    "Habit Templates": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "習慣テンプレート"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "습관 템플릿"
           }
         }
       }
@@ -12763,6 +13785,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "이 환경에서는 건강 데이터를 사용할 수 없습니다."
+          }
+        }
+      }
+    },
+    "Health data syncs through iCloud. This may take a moment on first launch.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "健康データはiCloudを通じて同期されます。初回起動時は少々お待ちください。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "건강 데이터가 iCloud를 통해 동기화됩니다. 첫 실행 시 잠시 걸릴 수 있어요."
           }
         }
       }
@@ -13427,6 +14466,28 @@
         }
       }
     },
+    "Hinge at your hips": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hinge at your hips"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "股関節から曲げて"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "엉덩이를 뒤로 빼세요"
+          }
+        }
+      }
+    },
     "Hinge forward to ~45 degrees": {
       "localizations": {
         "ja": {
@@ -13472,6 +14533,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "골반 비대칭"
+          }
+        }
+      }
+    },
+    "Hip Hinge": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hip Hinge"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ヒップヒンジ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "힙 힌지"
           }
         }
       }
@@ -14279,6 +15362,23 @@
         }
       }
     },
+    "If data doesn't appear, make sure iCloud sync is enabled in DUNE settings on your iPhone and the app has been opened at least once.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "データが表示されない場合は、iPhoneのDUNE設定でiCloud同期が有効になっていて、アプリを一度は開いたことを確認してください。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "데이터가 표시되지 않으면 iPhone의 DUNE 설정에서 iCloud 동기화가 켜져 있고, 앱을 한 번 이상 실행했는지 확인하세요."
+          }
+        }
+      }
+    },
     "Immersive Recovery Space": {
       "extractionState": "manual",
       "localizations": {
@@ -14936,6 +16036,50 @@
         }
       }
     },
+    "Keep your back straight": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep your back straight"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "背中をまっすぐに"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "허리를 펴세요"
+          }
+        }
+      }
+    },
+    "Keep your torso upright": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep your torso upright"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "上体をまっすぐに"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "상체를 똑바로 유지하세요"
+          }
+        }
+      }
+    },
     "Kettlebell": {
       "extractionState": "manual",
       "localizations": {
@@ -15069,6 +16213,50 @@
         }
       }
     },
+    "Knee Bend": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Knee Bend"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "膝の曲げ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "무릎 굽힘"
+          }
+        }
+      }
+    },
+    "Knee Depth": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Knee Depth"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "膝の深さ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "무릎 깊이"
+          }
+        }
+      }
+    },
     "Knee extension angle. Hyperextension puts stress on knee ligaments.": {
       "extractionState": "stale",
       "localizations": {
@@ -15116,6 +16304,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "라크로스"
+          }
+        }
+      }
+    },
+    "Language Study": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "語学学習"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "언어 학습"
           }
         }
       }
@@ -15546,6 +16751,7 @@
         }
       }
     },
+    "Less": {},
     "Level": {
       "extractionState": "manual",
       "localizations": {
@@ -15671,6 +16877,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Life 탭 업그레이드"
+          }
+        }
+      }
+    },
+    "Lifestyle": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ライフスタイル"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "라이프스타일"
           }
         }
       }
@@ -16145,6 +17368,28 @@
         }
       }
     },
+    "Lockout": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lockout"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ロックアウト"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "락아웃"
+          }
+        }
+      }
+    },
     "Log sets, reps, and weight with custom exercises, draft recovery, and search filters.": {
       "extractionState": "manual",
       "localizations": {
@@ -16486,6 +17731,28 @@
         }
       }
     },
+    "Lunge": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lunge"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ランジ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "런지"
+          }
+        }
+      }
+    },
     "Lv %lld": {
       "extractionState": "manual",
       "localizations": {
@@ -16771,6 +18038,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "메디신볼"
+          }
+        }
+      }
+    },
+    "Meditation": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "瞑想"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "명상"
           }
         }
       }
@@ -17462,6 +18746,23 @@
         }
       }
     },
+    "Monthly": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "月間"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "월간"
+          }
+        }
+      }
+    },
     "Monthly Progress": {
       "localizations": {
         "ja": {
@@ -17494,6 +18795,7 @@
         }
       }
     },
+    "More": {},
     "More actions": {
       "extractionState": "manual",
       "localizations": {
@@ -18065,6 +19367,23 @@
         }
       }
     },
+    "Needs Improvement": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "改善が必要"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "개선 필요"
+          }
+        }
+      }
+    },
     "Negative": {
       "extractionState": "manual",
       "localizations": {
@@ -18398,6 +19717,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "활성 부상 없음"
+          }
+        }
+      }
+    },
+    "No Alcohol": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "禁酒"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "금주"
           }
         }
       }
@@ -18755,7 +20091,6 @@
       }
     },
     "No History": {
-      "extractionState": "stale",
       "localizations": {
         "ja": {
           "stringUnit": {
@@ -18901,6 +20236,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "자세 평가 기록 없음"
+          }
+        }
+      }
+    },
+    "No posture data yet": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "姿勢データがまだありません"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "자세 데이터가 아직 없습니다"
           }
         }
       }
@@ -19895,6 +21247,23 @@
         }
       }
     },
+    "Open DUNE on Apple Watch → tap ⚙️ at top right → enable Posture Monitoring.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple WatchでDUNEを開く → 右上の⚙️をタップ → 姿勢モニタリングを有効にしてください。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Watch에서 DUNE 열기 → 우측 상단 ⚙️ 탭 → 자세 모니터링을 활성화하세요."
+          }
+        }
+      }
+    },
     "Open Feature": {
       "extractionState": "stale",
       "localizations": {
@@ -20271,6 +21640,28 @@
         }
       }
     },
+    "Overhead Press": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Overhead Press"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "オーバーヘッドプレス"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "오버헤드 프레스"
+          }
+        }
+      }
+    },
     "Overtrained": {
       "extractionState": "manual",
       "localizations": {
@@ -20368,6 +21759,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "패들 스포츠"
+          }
+        }
+      }
+    },
+    "Pair an Apple Watch to monitor your posture throughout the day.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Watchをペアリングして、一日を通して姿勢をモニタリングしましょう。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Watch를 연결하여 하루 종일 자세를 모니터링하세요."
           }
         }
       }
@@ -21341,6 +22749,28 @@
         }
       }
     },
+    "Press straight overhead": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Press straight overhead"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "真上に押して"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "머리 위로 똑바로 밀어세요"
+          }
+        }
+      }
+    },
     "PREV": {
       "localizations": {
         "ja": {
@@ -21473,6 +22903,23 @@
         }
       }
     },
+    "Productivity": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "生産性"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "생산성"
+          }
+        }
+      }
+    },
     "Progress": {
       "extractionState": "manual",
       "localizations": {
@@ -21563,6 +23010,28 @@
         }
       }
     },
+    "Pull higher": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pull higher"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "もっと高く引いて"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "더 높이 당기세요"
+          }
+        }
+      }
+    },
     "Pull until chin clears the bar": {
       "localizations": {
         "ja": {
@@ -21592,6 +23061,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "풀다운 케이블 머신. 광배근 발달"
+          }
+        }
+      }
+    },
+    "Pull-up": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pull-up"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "プルアップ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "풀업"
           }
         }
       }
@@ -21869,6 +23360,23 @@
         }
       }
     },
+    "Reading": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "読書"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "독서"
+          }
+        }
+      }
+    },
     "Ready": {
       "extractionState": "manual",
       "localizations": {
@@ -22123,6 +23631,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "권장 조치"
+          }
+        }
+      }
+    },
+    "Recommended Exercises": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "おすすめ矯正エクササイズ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "추천 교정 운동"
           }
         }
       }
@@ -22746,6 +24270,23 @@
         }
       }
     },
+    "Reminder": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "リマインダー"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "알림"
+          }
+        }
+      }
+    },
     "Reminder Lead Time": {
       "extractionState": "manual",
       "localizations": {
@@ -22763,19 +24304,36 @@
         }
       }
     },
-    "Remove this goal?": {
+    "Reminder time": {
       "extractionState": "manual",
       "localizations": {
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "この目標を削除しますか？"
+            "value": "リマインダー時刻"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "이 목표를 삭제할까요?"
+            "value": "알림 시각"
+          }
+        }
+      }
+    },
+    "Reminders": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "通知"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "알림"
           }
         }
       }
@@ -22793,6 +24351,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "삭제"
+          }
+        }
+      }
+    },
+    "Remove this goal?": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この目標を削除しますか？"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 목표를 삭제할까요?"
           }
         }
       }
@@ -22878,16 +24453,16 @@
             "value": "Reps"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "반복"
-          }
-        },
         "ja": {
           "stringUnit": {
             "state": "translated",
             "value": "レップ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "반복"
           }
         }
       }
@@ -24820,16 +26395,16 @@
             "value": "Select Exercise"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "운동 선택"
-          }
-        },
         "ja": {
           "stringUnit": {
             "state": "translated",
             "value": "エクササイズ選択"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "운동 선택"
           }
         }
       }
@@ -25169,6 +26744,28 @@
         }
       }
     },
+    "Setup": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Setup"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "準備"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "준비"
+          }
+        }
+      }
+    },
     "Severe": {
       "extractionState": "manual",
       "localizations": {
@@ -25484,6 +27081,28 @@
         }
       }
     },
+    "Shoulder Alignment": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shoulder Alignment"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "肩のアライメント"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "어깨 정렬"
+          }
+        }
+      }
+    },
     "Shoulder Asymmetry": {
       "localizations": {
         "ja": {
@@ -25496,6 +27115,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "어깨 비대칭"
+          }
+        }
+      }
+    },
+    "Shoulder Engagement": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shoulder Engagement"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "肩の活性"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "어깨 활성"
           }
         }
       }
@@ -25735,6 +27376,23 @@
         }
       }
     },
+    "Sitting": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "座位時間"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "앉은 시간"
+          }
+        }
+      }
+    },
     "Skating": {
       "extractionState": "manual",
       "localizations": {
@@ -25799,6 +27457,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "피부 투명도"
+          }
+        }
+      }
+    },
+    "Skincare Routine": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "スキンケア"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "스킨케어"
           }
         }
       }
@@ -25983,6 +27658,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "수면과 컨디션은 Apple Watch 신호를 기반으로 0-100으로 정규화됩니다."
+          }
+        }
+      }
+    },
+    "Sleep Before Midnight": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "深夜前に就寝"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "자정 전 취침"
           }
         }
       }
@@ -27780,6 +29472,28 @@
         }
       }
     },
+    "Stay upright": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stay upright"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "上体をまっすぐに"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "상체를 세우세요"
+          }
+        }
+      }
+    },
     "Step back a little": {
       "localizations": {
         "ja": {
@@ -28028,6 +29742,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "근력 중량"
+          }
+        }
+      }
+    },
+    "Stretching": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ストレッチ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "스트레칭"
           }
         }
       }
@@ -28402,19 +30133,19 @@
         }
       }
     },
-    "If data doesn't appear, make sure iCloud sync is enabled in DUNE settings on your iPhone and the app has been opened at least once.": {
+    "Take Vitamins": {
       "extractionState": "manual",
       "localizations": {
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "データが表示されない場合は、iPhoneのDUNE設定でiCloud同期が有効になっていて、アプリを一度は開いたことを確認してください。"
+            "value": "ビタミンを飲む"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "데이터가 표시되지 않으면 iPhone의 DUNE 설정에서 iCloud 동기화가 켜져 있고, 앱을 한 번 이상 실행했는지 확인하세요."
+            "value": "비타민 복용"
           }
         }
       }
@@ -29111,6 +30842,23 @@
         }
       }
     },
+    "Time of Day": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "時間帯"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "시간대"
+          }
+        }
+      }
+    },
     "Time only": {
       "localizations": {
         "ja": {
@@ -29464,6 +31212,28 @@
         }
       }
     },
+    "Torso Upright": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Torso Upright"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "上体の直立"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "상체 직립"
+          }
+        }
+      }
+    },
     "total": {
       "localizations": {
         "ja": {
@@ -29624,6 +31394,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "달리기와 걷기 중 거리, 페이스, 심박수를 실시간으로 추적하세요."
+          }
+        }
+      }
+    },
+    "Track Expenses": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "支出記録"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지출 기록"
           }
         }
       }
@@ -31153,6 +32940,23 @@
         }
       }
     },
+    "View Weekly Report": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "週間レポートを見る"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "주간 리포트 보기"
+          }
+        }
+      }
+    },
     "View your muscle fatigue and recovery status in spatial 3D. Data is synced from your workouts on iPhone and Apple Watch.": {
       "localizations": {
         "ja": {
@@ -31215,6 +33019,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "VO2 Max"
+          }
+        }
+      }
+    },
+    "Voice coaching": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voice coaching"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ボイスコーチング"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "음성 코칭"
           }
         }
       }
@@ -31518,23 +33344,6 @@
         }
       }
     },
-    "Health data syncs through iCloud. This may take a moment on first launch.": {
-      "extractionState": "manual",
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "健康データはiCloudを通じて同期されます。初回起動時は少々お待ちください。"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "건강 데이터가 iCloud를 통해 동기화됩니다. 첫 실행 시 잠시 걸릴 수 있어요."
-          }
-        }
-      }
-    },
     "Waiting for the first live update.": {
       "localizations": {
         "ja": {
@@ -31547,6 +33356,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "첫 실시간 업데이트를 기다리는 중입니다."
+          }
+        }
+      }
+    },
+    "Walk 10,000 Steps": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1万歩ウォーキング"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "만보 걷기"
           }
         }
       }
@@ -31683,6 +33509,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Watch 운동 순서 변경"
+          }
+        }
+      }
+    },
+    "Watch Posture": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Watch姿勢モニタリング"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Watch 자세 모니터링"
           }
         }
       }
@@ -33145,6 +34988,23 @@
         }
       }
     },
+    "Write Journal": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "日記を書く"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "일기 쓰기"
+          }
+        }
+      }
+    },
     "Y": {
       "extractionState": "manual",
       "localizations": {
@@ -33409,6 +35269,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "이번 주 %lld일 운동했습니다. 꾸준함이 가장 큰 힘입니다."
+          }
+        }
+      }
+    },
+    "You'll receive reminders based on the habit's frequency": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "習慣の頻度に基づいてリマインダーを受け取ります"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "습관 빈도에 맞춰 알림을 받습니다"
           }
         }
       }
@@ -33891,1817 +35768,226 @@
         }
       }
     },
-    "General Posture": {
+    "Daily habit completions over the last 90 days": {
       "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "General Posture"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "일반 자세"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "一般姿勢"
-          }
-        }
-      }
-    },
-    "Form Check": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Form Check"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "폼 체크"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "フォームチェック"
-          }
-        }
-      }
-    },
-    "Form Score": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Form Score"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "폼 점수"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "フォームスコア"
-          }
-        }
-      }
-    },
-    "Setup": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Setup"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "준비"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "準備"
-          }
-        }
-      }
-    },
-    "Descent": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Descent"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "하강"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "下降"
-          }
-        }
-      }
-    },
-    "Bottom": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bottom"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "최저점"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "最低点"
-          }
-        }
-      }
-    },
-    "Ascent": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ascent"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "상승"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "上昇"
-          }
-        }
-      }
-    },
-    "Lockout": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lockout"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "락아웃"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ロックアウト"
-          }
-        }
-      }
-    },
-    "Exercise Mode": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Exercise Mode"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "운동 모드"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "エクササイズモード"
-          }
-        }
-      }
-    },
-    "Go deeper": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Go deeper"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "더 내려가세요"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "もっと深く"
-          }
-        }
-      }
-    },
-    "Keep your back straight": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Keep your back straight"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "허리를 펴세요"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "背中をまっすぐに"
-          }
-        }
-      }
-    },
-    "Hinge at your hips": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hinge at your hips"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "엉덩이를 뒤로 빼세요"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "股関節から曲げて"
-          }
-        }
-      }
-    },
-    "Bend your knees slightly": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bend your knees slightly"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "무릎을 살짝 굽히세요"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "膝を軽く曲げて"
-          }
-        }
-      }
-    },
-    "Extend your arms fully": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Extend your arms fully"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "팔을 끝까지 펴세요"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "腕を完全に伸ばして"
-          }
-        }
-      }
-    },
-    "Press straight overhead": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Press straight overhead"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "머리 위로 똑바로 밀어세요"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "真上に押して"
-          }
-        }
-      }
-    },
-    "Voice coaching": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Voice coaching"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "음성 코칭"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ボイスコーチング"
-          }
-        }
-      }
-    },
-    "Good depth": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Good depth"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "좋은 깊이"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "いい深さ"
-          }
-        }
-      }
-    },
-    "Good back position": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Good back position"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "허리 좋아요"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "背中いいですよ"
-          }
-        }
-      }
-    },
-    "Good hip hinge": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Good hip hinge"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "힙힌지 좋아요"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ヒップヒンジいいですよ"
-          }
-        }
-      }
-    },
-    "Good knee position": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Good knee position"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "무릎 좋아요"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "膝いいですよ"
-          }
-        }
-      }
-    },
-    "Good lockout": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Good lockout"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "좋은 락아웃"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "いいロックアウト"
-          }
-        }
-      }
-    },
-    "Good alignment": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Good alignment"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "정렬 좋아요"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "いいアライメント"
-          }
-        }
-      }
-    },
-    "Pull higher": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pull higher"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "더 높이 당기세요"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "もっと高く引いて"
-          }
-        }
-      }
-    },
-    "Good pull": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Good pull"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "좋은 풀업"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "いいプル"
-          }
-        }
-      }
-    },
-    "Depress your shoulders": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Depress your shoulders"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "어깨를 내리세요"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "肩を下げて"
-          }
-        }
-      }
-    },
-    "Good shoulder position": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Good shoulder position"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "어깨 좋아요"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "肩いいですよ"
-          }
-        }
-      }
-    },
-    "Stay upright": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Stay upright"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "상체를 세우세요"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "上体をまっすぐに"
-          }
-        }
-      }
-    },
-    "Good posture": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Good posture"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "자세 좋아요"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "いい姿勢"
-          }
-        }
-      }
-    },
-    "Bend to 90 degrees": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bend to 90 degrees"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "90도로 굽히세요"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "90度まで曲げて"
-          }
-        }
-      }
-    },
-    "Good knee angle": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Good knee angle"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "무릎 각도 좋아요"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "膝の角度いいですよ"
-          }
-        }
-      }
-    },
-    "Keep your torso upright": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Keep your torso upright"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "상체를 똑바로 유지하세요"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "上体をまっすぐに"
-          }
-        }
-      }
-    },
-    "Good torso position": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Good torso position"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "상체 좋아요"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "上体いいですよ"
-          }
-        }
-      }
-    },
-    "Barbell Squat": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Barbell Squat"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "바벨 스쿼트"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "バーベルスクワット"
-          }
-        }
-      }
-    },
-    "Conventional Deadlift": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Conventional Deadlift"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "컨벤셔널 데드리프트"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "コンベンショナルデッドリフト"
-          }
-        }
-      }
-    },
-    "Overhead Press": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Overhead Press"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "오버헤드 프레스"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "オーバーヘッドプレス"
-          }
-        }
-      }
-    },
-    "Pull-up": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pull-up"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "풀업"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "プルアップ"
-          }
-        }
-      }
-    },
-    "Bodyweight Squat": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bodyweight Squat"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "맨몸 스쿼트"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "自重スクワット"
-          }
-        }
-      }
-    },
-    "Lunge": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lunge"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "런지"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ランジ"
-          }
-        }
-      }
-    },
-    "Knee Depth": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Knee Depth"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "무릎 깊이"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "膝の深さ"
-          }
-        }
-      }
-    },
-    "Back Angle": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Back Angle"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "허리 각도"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "背中の角度"
-          }
-        }
-      }
-    },
-    "Hip Hinge": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hip Hinge"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "힙 힌지"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ヒップヒンジ"
-          }
-        }
-      }
-    },
-    "Knee Bend": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Knee Bend"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "무릎 굽힘"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "膝の曲げ"
-          }
-        }
-      }
-    },
-    "Arm Extension": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Arm Extension"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "팔 신전"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "腕の伸展"
-          }
-        }
-      }
-    },
-    "Shoulder Alignment": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Shoulder Alignment"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "어깨 정렬"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "肩のアライメント"
-          }
-        }
-      }
-    },
-    "Shoulder Engagement": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Shoulder Engagement"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "어깨 활성"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "肩の活性"
-          }
-        }
-      }
-    },
-    "Torso Upright": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Torso Upright"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "상체 직립"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "上体の直立"
-          }
-        }
-      }
-    },
-    "Front Knee": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Front Knee"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "앞 무릎"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "前膝"
-          }
-        }
-      }
-    },
-    "Afternoon": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "오후"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "午後"
-          }
-        }
-      }
-    },
-    "Anytime": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "언제든"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "いつでも"
-          }
-        }
-      }
-    },
-    "Productivity": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "생산성"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "生産性"
-          }
-        }
-      }
-    },
-    "Lifestyle": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "라이프스타일"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ライフスタイル"
-          }
-        }
-      }
-    },
-    "Drink Water": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "물 마시기"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "水を飲む"
-          }
-        }
-      }
-    },
-    "Take Vitamins": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "비타민 복용"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ビタミンを飲む"
-          }
-        }
-      }
-    },
-    "Sleep Before Midnight": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "자정 전 취침"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "深夜前に就寝"
-          }
-        }
-      }
-    },
-    "No Alcohol": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "금주"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "禁酒"
-          }
-        }
-      }
-    },
-    "Stretching": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "스트레칭"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ストレッチ"
-          }
-        }
-      }
-    },
-    "Walk 10,000 Steps": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "만보 걷기"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "1万歩ウォーキング"
-          }
-        }
-      }
-    },
-    "Reading": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "독서"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "読書"
-          }
-        }
-      }
-    },
-    "Coding Practice": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "코딩 연습"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "コーディング練習"
-          }
-        }
-      }
-    },
-    "Write Journal": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "일기 쓰기"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "日記を書く"
-          }
-        }
-      }
-    },
-    "Language Study": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "언어 학습"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "語学学習"
-          }
-        }
-      }
-    },
-    "Meditation": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "명상"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "瞑想"
-          }
-        }
-      }
-    },
-    "Gratitude Practice": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "감사 연습"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "感謝の実践"
-          }
-        }
-      }
-    },
-    "Deep Breathing": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "심호흡"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "深呼吸"
-          }
-        }
-      }
-    },
-    "Digital Detox": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "디지털 디톡스"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "デジタルデトックス"
-          }
-        }
-      }
-    },
-    "Skincare Routine": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "스킨케어"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "スキンケア"
-          }
-        }
-      }
-    },
-    "Clean Desk": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "책상 정리"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "デスク整理"
-          }
-        }
-      }
-    },
-    "Track Expenses": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "지출 기록"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "支出記録"
-          }
-        }
-      }
-    },
-    "Connect with Friends": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "친구와 소통"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "友人との交流"
-          }
-        }
-      }
-    },
-    "Monthly": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "월간"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "月間"
-          }
-        }
-      }
-    },
-    "Completion Rate": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "달성률"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "達成率"
-          }
-        }
-      }
-    },
-    "View Weekly Report": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "주간 리포트 보기"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "週間レポートを見る"
-          }
-        }
-      }
-    },
-    "Best Habits": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "최고 습관"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ベスト習慣"
-          }
-        }
-      }
-    },
-    "Needs Improvement": {
-      "extractionState": "manual",
-      "localizations": {
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "개선 필요"
+            "value": "최근 90일간 일별 습관 완료 현황"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "改善が必要"
+            "value": "過去90日間の習慣達成状況"
           }
         }
       }
     },
-    "Habit Templates": {
-      "extractionState": "manual",
+    "Daily Average": {
       "localizations": {
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "습관 템플릿"
+            "value": "일 평균"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "習慣テンプレート"
+            "value": "日平均"
           }
         }
       }
     },
-    "From Template": {
-      "extractionState": "manual",
+    "Longest Streak": {
       "localizations": {
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "템플릿에서"
+            "value": "최장 연속"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "テンプレートから"
+            "value": "最長連続"
           }
         }
       }
     },
-    "Time of Day": {
-      "extractionState": "manual",
+    "Total Completions": {
       "localizations": {
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "시간대"
+            "value": "총 완료 횟수"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "時間帯"
+            "value": "合計達成回数"
           }
         }
       }
     },
-    "Reminder": {
-      "extractionState": "manual",
+    "Last 90 Days": {
       "localizations": {
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "알림"
+            "value": "최근 90일"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "リマインダー"
+            "value": "過去90日間"
           }
         }
       }
     },
-    "Reminder time": {
-      "extractionState": "manual",
+    "Activity Map": {
       "localizations": {
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "알림 시각"
+            "value": "활동 맵"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "リマインダー時刻"
+            "value": "アクティビティマップ"
           }
         }
       }
     },
-    "You'll receive reminders based on the habit's frequency": {
-      "extractionState": "manual",
+    "By Weekday": {
       "localizations": {
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "습관 빈도에 맞춰 알림을 받습니다"
+            "value": "요일별"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "習慣の頻度に基づいてリマインダーを受け取ります"
+            "value": "曜日別"
           }
         }
       }
     },
-    "%lldx per week": {
-      "extractionState": "manual",
+    "Mon": {
       "localizations": {
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "주 %lld회"
+            "value": "월"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "週%lld回"
+            "value": "月"
           }
         }
       }
     },
-    "%lld min": {
-      "extractionState": "manual",
+    "Tue": {
       "localizations": {
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld분"
+            "value": "화"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld分"
+            "value": "火"
           }
         }
       }
     },
-    "All": {
-      "extractionState": "manual",
+    "Wed": {
       "localizations": {
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "전체"
+            "value": "수"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "すべて"
+            "value": "水"
           }
         }
       }
     },
-    "%lld of %lld completed": {
-      "extractionState": "manual",
+    "Thu": {
       "localizations": {
         "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld / %2$lld 완료"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld / %2$lld 完了"
-          }
-        }
-      }
-    },
-    "Apple Watch required": {
-      "extractionState": "manual",
-      "localizations": {
-        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Apple Watchが必要です"
+            "value": "목"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Apple Watch가 필요합니다"
-          }
-        }
-      }
-    },
-    "Open DUNE on Apple Watch → tap ⚙️ at top right → enable Posture Monitoring.": {
-      "extractionState": "manual",
-      "localizations": {
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Apple WatchでDUNEを開く → 右上の⚙️をタップ → 姿勢モニタリングを有効にしてください。"
+            "value": "木"
           }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Apple Watch에서 DUNE 열기 → 우측 상단 ⚙️ 탭 → 자세 모니터링을 활성화하세요."
-          }
         }
       }
     },
-    "Gait": {
-      "extractionState": "manual",
+    "Fri": {
       "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "歩行"
-          }
-        },
         "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "보행"
-          }
-        }
-      }
-    },
-    "No posture data yet": {
-      "extractionState": "manual",
-      "localizations": {
-        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "姿勢データがまだありません"
+            "value": "금"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "자세 데이터가 아직 없습니다"
-          }
-        }
-      }
-    },
-    "Pair an Apple Watch to monitor your posture throughout the day.": {
-      "extractionState": "manual",
-      "localizations": {
         "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Apple Watchをペアリングして、一日を通して姿勢をモニタリングしましょう。"
-          }
-        },
-        "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "Apple Watch를 연결하여 하루 종일 자세를 모니터링하세요."
+            "value": "金"
           }
         }
       }
     },
-    "Reminders": {
-      "extractionState": "manual",
+    "Sat": {
       "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "通知"
-          }
-        },
         "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "알림"
-          }
-        }
-      }
-    },
-    "Sitting": {
-      "extractionState": "manual",
-      "localizations": {
-        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "座位時間"
+            "value": "토"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "앉은 시간"
-          }
-        }
-      }
-    },
-    "Watch Posture": {
-      "extractionState": "manual",
-      "localizations": {
         "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Watch姿勢モニタリング"
-          }
-        },
-        "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "Watch 자세 모니터링"
+            "value": "土"
           }
         }
       }
     },
-    "Recommended Exercises": {
+    "Sun": {
       "localizations": {
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "추천 교정 운동"
+            "value": "일"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "おすすめ矯正エクササイズ"
+            "value": "日"
           }
         }
       }
