@@ -43,7 +43,9 @@ struct HabitCompletionChartView: View {
                 .chartPlotStyle { plotContent in
                     plotContent.frame(height: 160)
                 }
+                .padding(.top, 8)
                 .clipped()
+                .frame(minHeight: 200)
         }
         .padding(DS.Spacing.md)
         .background {
@@ -116,7 +118,7 @@ struct HabitCompletionChartView: View {
         .chartXAxis {
             AxisMarks(values: .stride(by: .month)) { _ in
                 AxisGridLine()
-                AxisValueLabel(format: .dateTime.month(.abbreviated))
+                AxisValueLabel(format: .dateTime.month(.narrow))
             }
         }
     }
