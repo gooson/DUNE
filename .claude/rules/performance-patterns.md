@@ -42,6 +42,7 @@
 - BGRA 포맷만으로는 불충분 — Vision ML inference 자체의 내부 버퍼 할당이 여전히 IOSurface pool과 경쟁
 - CGImage는 heap memory에 존재 → IOSurface pool 의존성 제로 → TrueDepth 리소스와 무관
 - CPU memcpy 기반 CGImage 생성 (720p BGRA ≈ 0.4ms) — CIContext GPU round-trip 불필요
+- Vision `mlImage buffer` 에러는 메모리 부족이 아닌 **풀 고갈** 시그널 — CGImage 전환 필요 신호
 - 카메라 관련 변경은 반드시 실기기 테스트 (시뮬레이터 재현 불가)
 
 ## JSON/Data

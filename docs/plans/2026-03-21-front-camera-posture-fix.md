@@ -2,7 +2,7 @@
 tags: [posture, camera, front-camera, truedepth, vision, buffer-pool]
 date: 2026-03-21
 category: plan
-status: draft
+status: implemented
 ---
 
 # Plan: 전면 카메라 자세교정 실패 수정

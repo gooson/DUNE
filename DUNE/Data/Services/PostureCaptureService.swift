@@ -877,7 +877,10 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
     static func createCGImageFromBGRABuffer(_ pixelBuffer: CVPixelBuffer) -> CGImage? {
         let pixelFormat = CVPixelBufferGetPixelFormatType(pixelBuffer)
         guard pixelFormat == kCVPixelFormatType_32BGRA else {
-            // Non-BGRA: fall back to CIContext (slower but handles any format)
+            // Non-BGRA: fall back to CIContext (slower but handles any format).
+            // NOTE: this path still touches the IOSurface pool via CIImage(cvPixelBuffer:)
+            // — not safe for TrueDepth front camera. Expected only on rear camera
+            // historical formats where pool contention does not occur.
             let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
             return fallbackCIContext.createCGImage(ciImage, from: ciImage.extent)
         }
@@ -890,8 +893,10 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
         let bytesPerRow = CVPixelBufferGetBytesPerRow(pixelBuffer)
         guard let baseAddress = CVPixelBufferGetBaseAddress(pixelBuffer) else { return nil }
 
-        // Copy pixel data to heap — breaks IOSurface pool dependency
-        let data = Data(bytes: baseAddress, count: bytesPerRow * height)
+        // Copy pixel data to heap — breaks IOSurface pool dependency.
+        // Use CVPixelBufferGetDataSize for accurate size (accounts for padding).
+        let byteCount = CVPixelBufferGetDataSize(pixelBuffer)
+        let data = Data(bytes: baseAddress, count: byteCount)
         guard let provider = CGDataProvider(data: data as CFData) else { return nil }
 
         // 32BGRA = little-endian byte order, alpha channel in first byte (noneSkipFirst)
