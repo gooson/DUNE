@@ -125,8 +125,22 @@ final class WatchPostureMonitor {
 
     func startMonitoring() {
         guard !isMonitoring else { return }
+
+#if targetEnvironment(simulator)
+        Self.logger.info("[PostureMonitor] CoreMotion not available on simulator — skipping")
+        isMonitoring = true
+        resetDailySummaryIfNeeded()
+        startSedentaryCheckTimer()
+        return
+#else
         guard CMMotionActivityManager.isActivityAvailable() else {
             Self.logger.warning("[PostureMonitor] Activity tracking not available")
+            return
+        }
+
+        let authStatus = CMMotionActivityManager.authorizationStatus()
+        guard authStatus != .denied, authStatus != .restricted else {
+            Self.logger.warning("[PostureMonitor] Motion authorization denied/restricted")
             return
         }
 
@@ -136,6 +150,7 @@ final class WatchPostureMonitor {
         startSedentaryCheckTimer()
 
         Self.logger.info("[PostureMonitor] Monitoring started")
+#endif
     }
 
     func stopMonitoring() {
