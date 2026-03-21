@@ -221,10 +221,8 @@ struct HabitHeatmapDetailView: View {
 struct HabitHeatmapGridView: View {
     let data: [DailyCompletionCount]
 
-    private let cellSpacing: CGFloat = 2
+    private let cellSpacing: CGFloat = 3
     private let rows = 7
-    private let dayLabelWidth: CGFloat = 28
-    private let dayLabelTrailing: CGFloat = 4
 
     private static let dayLabels: [String] = [
         String(localized: "Mon"),
@@ -237,52 +235,59 @@ struct HabitHeatmapGridView: View {
     ]
 
     var body: some View {
-        GeometryReader { geometry in
-            let cellSize = computeCellSize(for: geometry.size.width)
-            let gridRows = Array(repeating: GridItem(.fixed(cellSize), spacing: cellSpacing), count: rows)
-
-            HStack(alignment: .top, spacing: 0) {
-                VStack(spacing: cellSpacing) {
-                    ForEach(0..<rows, id: \.self) { row in
-                        Text(Self.dayLabels[row])
-                            .font(.system(size: 9))
-                            .foregroundStyle(.secondary)
-                            .frame(width: dayLabelWidth, height: cellSize, alignment: .trailing)
-                    }
+        HStack(alignment: .top, spacing: 4) {
+            // Day labels column
+            VStack(spacing: cellSpacing) {
+                ForEach(0..<rows, id: \.self) { row in
+                    Text(Self.dayLabels[row])
+                        .font(.system(size: 9))
+                        .foregroundStyle(.secondary)
+                        .frame(maxHeight: .infinity)
                 }
-                .padding(.trailing, dayLabelTrailing)
+            }
+            .fixedSize(horizontal: true, vertical: false)
 
-                LazyHGrid(rows: gridRows, spacing: cellSpacing) {
-                    ForEach(paddedData) { item in
-                        RoundedRectangle(cornerRadius: 2)
-                            .fill(cellColor(for: item))
-                            .frame(width: cellSize, height: cellSize)
+            // Grid columns — each column is one week
+            HStack(spacing: cellSpacing) {
+                ForEach(columns, id: \.index) { col in
+                    VStack(spacing: cellSpacing) {
+                        ForEach(col.items) { item in
+                            RoundedRectangle(cornerRadius: 2)
+                                .fill(cellColor(for: item))
+                                .aspectRatio(1, contentMode: .fit)
+                        }
+                        // Fill remaining rows in incomplete last column
+                        if col.items.count < rows {
+                            ForEach(0..<(rows - col.items.count), id: \.self) { _ in
+                                Color.clear
+                                    .aspectRatio(1, contentMode: .fit)
+                            }
+                        }
                     }
                 }
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .frame(height: gridHeight)
     }
 
-    // MARK: - Layout
+    // MARK: - Column Data
 
-    private var columnCount: Int {
-        let total = paddedData.count
-        return max(1, (total + rows - 1) / rows)
+    private struct GridColumn: Sendable {
+        let index: Int
+        let items: [DailyCompletionCount]
     }
 
-    private func computeCellSize(for totalWidth: CGFloat) -> CGFloat {
-        let available = totalWidth - dayLabelWidth - dayLabelTrailing
-        let cols = CGFloat(columnCount)
-        let size = (available - (cols - 1) * cellSpacing) / cols
-        return min(16, max(6, size))
-    }
-
-    private var gridHeight: CGFloat {
-        // Use midpoint cell size (11) for height estimation
-        let cellSize: CGFloat = 11
-        return CGFloat(rows) * cellSize + CGFloat(rows - 1) * cellSpacing
+    private var columns: [GridColumn] {
+        let items = paddedData
+        var result: [GridColumn] = []
+        var i = 0
+        var colIndex = 0
+        while i < items.count {
+            let end = min(i + rows, items.count)
+            result.append(GridColumn(index: colIndex, items: Array(items[i..<end])))
+            i = end
+            colIndex += 1
+        }
+        return result
     }
 
     // MARK: - Data
