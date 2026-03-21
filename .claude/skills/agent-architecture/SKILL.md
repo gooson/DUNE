@@ -1,73 +1,97 @@
 ---
 name: agent-architecture
-description: "에이전트 시스템 아키텍처 패턴. 에이전트 설계, 프롬프트 엔지니어링, 컨텍스트 관리. AI/에이전트 코드 작성 시 자동으로 참조됩니다."
+description: "이 프로젝트의 에이전트 시스템 아키텍처. 리뷰 에이전트 6종, 품질 에이전트 4종, PR 에이전트의 역할과 실행 규칙. 에이전트 프롬프트를 수정하거나 새 에이전트를 추가할 때, 또는 /review나 /run에서 에이전트 실행 문제가 발생할 때 이 스킬을 참조합니다."
 ---
 
-# Agent Architecture Patterns
+# Agent Architecture — DUNE Project
 
-## Agent Design Principles
+## Agent Inventory
 
-1. **Single Responsibility**: 하나의 에이전트는 하나의 명확한 역할
-2. **Explicit Context**: 필요한 컨텍스트를 명시적으로 제공
-3. **Graceful Failure**: 에러 시 적절한 폴백과 사용자 안내
-4. **Memory Management**: 컨텍스트 윈도우의 효율적 사용
-5. **Composability**: 에이전트 간 조합이 가능한 설계
+이 프로젝트는 14개의 서브에이전트를 사용합니다. 모두 `.claude/agents/` 에 정의되어 있습니다.
 
-## Prompt Engineering
+### Review Agents (6종)
 
-### Structure
-1. Role definition (who the agent is)
-2. Context (what it knows)
-3. Task (what to do)
-4. Constraints (what NOT to do)
-5. Output format (how to respond)
+`/review` 스킬이 병렬로 실행하는 코드 리뷰 전문가입니다.
 
-### Best Practices
-- Clear, unambiguous instructions
-- Structured output format specification
-- Few-shot examples when the task is novel
-- Explicit constraints and boundaries
-- Priority ordering when multiple objectives exist
+| Agent | File | 관점 | 실행 조건 |
+|-------|------|------|----------|
+| Security Sentinel | `reviewer-security.md` | OWASP, 인증, 입력 검증, 비밀 노출 | 항상 |
+| Performance Oracle | `reviewer-performance.md` | N+1, 캐싱, 메모리, 알고리즘 | 항상 |
+| Architecture Strategist | `reviewer-architecture.md` | SOLID, 패턴, 결합도/응집도 | 항상 |
+| Data Integrity Guardian | `reviewer-data-integrity.md` | 유효성, 트랜잭션, 레이스 컨디션 | 항상 |
+| Code Simplicity Reviewer | `reviewer-simplicity.md` | 과잉 설계, 불필요 추상화, dead code | 항상 |
+| Agent-Native Reviewer | `reviewer-agent-native.md` | 프롬프트, 컨텍스트, 도구 사용 | `.claude/` 변경 시에만 |
 
-## Context Management
+### Quality Agents (4종)
 
-- Minimize context size: only include relevant information
-- Use summaries for large content
-- Fork to subagents for heavy operations
-- Persist learnings via agent memory or docs/solutions/
+`/work` Phase 3과 `/run` Phase 3.5에서 변경 내용에 따라 선택적으로 실행합니다.
 
-## Error Recovery
+| Agent | File | 역할 | 실행 조건 |
+|-------|------|------|----------|
+| Swift UI Expert | `swift-ui-expert.md` | 레이아웃, Auto Layout, SwiftUI 구현 | UI/View 코드 변경 |
+| Apple UX Expert | `apple-ux-expert.md` | HIG 준수, UX 흐름, 애니메이션 | UI/View 코드 변경 |
+| Performance Optimizer | `perf-optimizer.md` | 스크롤, 메모리, 파싱 최적화 | 대량 데이터 처리 구현 |
+| App Quality Gate | `app-quality-gate.md` | 코드+테스트+HIG+아키텍처 종합 | 주요 기능 완성 |
 
-- Retry with modified approach (not same approach)
-- Escalate to user when stuck after 2 attempts
-- Log failures for future prevention
-- Never silently fail - always inform
+### Utility Agents (4종)
 
-## Agent-Native Environment Checklist
+| Agent | File | 역할 | 호출 시점 |
+|-------|------|------|----------|
+| PR Reviewer | `pr-reviewer.md` | git diff + rules 검증 + 크래시 위험 검출 | `/ship`, `/run` Phase 6 |
+| Planner | `planner.md` | 구현 전략 설계 | `/plan` 리서치 |
+| Researcher | `researcher.md` | 코드베이스/문서 조사 | 탐색적 리서치 |
+| UI Test Expert | `ui-test-expert.md` | UI 테스트 시나리오 생성/검증 | UI 변경 후 |
 
-### Level 1 (Basic)
-- [ ] File read/write access
-- [ ] Test execution
-- [ ] Git commits
+## Execution Rules
 
-### Level 2 (Full Local)
-- [ ] Browser access
-- [ ] Local logs
-- [ ] PR creation
+### Review Agents 실행 규칙
 
-### Level 3 (Production Visibility)
-- [ ] Production logs (read-only)
-- [ ] Error tracking (Sentry, etc.)
-- [ ] Monitoring dashboards
+1. **병렬 실행 필수**: 6개 에이전트를 하나의 메시지에서 동시 launch
+2. **model: sonnet**: 각 리뷰 에이전트는 `claude-sonnet-4-6`으로 실행
+3. **max_turns: 6**: 토큰 초과 방지를 위해 턴 수 제한
+4. **diff 크기 제한**: 2000줄 이상이면 에이전트 대신 주 에이전트가 직접 리뷰
+5. **Agent-Native 스킵**: `.claude/` 하위 파일 변경이 없으면 항상 스킵
 
-### Level 4 (Full Integration)
-- [ ] Ticket system (Jira, Linear, etc.)
-- [ ] Deployment
-- [ ] External service integration
+### Quality Agents 실행 규칙
 
-## Inter-Agent Communication
+1. **조건부 실행**: `git diff --name-only`로 변경 파일 분류 후 해당 에이전트만 launch
+2. **병렬 실행 권장**: 가능하면 동시 실행
+3. **스킵 시 사유 기록**: 에이전트를 실행하지 않은 경우 왜 스킵했는지 명시
 
-- Use structured output formats for agent-to-agent data passing
-- Define clear input/output contracts
-- Document expected data shapes
-- Handle missing or malformed data gracefully
+### PR Reviewer 실행 규칙
+
+1. **ship 직전 실행**: PR 생성 전에 `.claude/rules/` 기반 코딩 룰 준수 검증
+2. **단독 실행**: 다른 에이전트와 병렬이 아닌 독립 단계
+
+## Agent Prompt 작성 원칙
+
+새 에이전트를 추가하거나 기존 에이전트를 수정할 때:
+
+1. **단일 책임**: 하나의 에이전트는 하나의 명확한 관점만 담당
+2. **프로젝트 컨텍스트 제공**: `.claude/rules/` 의 관련 규칙을 에이전트 프롬프트에 포함하거나 참조
+3. **출력 형식 통일**: P1/P2/P3 우선순위 + File:Line + Issue + Suggestion 구조
+4. **간결한 지시**: "git diff 1회 실행 후 findings만 출력"처럼 불필요한 탐색 최소화
+5. **프로젝트 규칙 연동**: performance-patterns, swiftui-patterns 등 rules와 일관된 기준 적용
+
+## Agent 간 관계
+
+```
+/review ──→ [Review Agents ×5-6] ──→ P1/P2/P3 통합
+                                         │
+/run ───→ /review + [Quality Agents] ──→ /resolve ──→ /ship
+                                                        │
+                                              [PR Reviewer] ──→ PR 생성
+```
+
+- Review Agents의 findings는 `/triage`로 분류하거나 `/run`의 Resolve Phase에서 자동 수정
+- Quality Agents의 findings는 Review findings에 병합
+- PR Reviewer는 최종 ship 게이트로 독립 실행
+
+## Troubleshooting
+
+| 증상 | 원인 | 해결 |
+|------|------|------|
+| 에이전트 output truncation | diff가 너무 큼 | diff < 2000줄 확인, 초과 시 직접 리뷰 |
+| 에이전트가 findings 없이 종료 | max_turns 부족 또는 diff 미전달 | diff를 /tmp에 저장 후 경로 전달 |
+| Agent-Native가 항상 실행됨 | 스킵 조건 미적용 | `.claude/` 변경 여부를 diff --name-only로 먼저 확인 |
+| 리뷰 에이전트 간 중복 findings | 관점 경계 불명확 | 각 에이전트의 관점을 명확히 구분 (보안≠성능≠아키텍처) |

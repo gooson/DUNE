@@ -32,12 +32,12 @@ struct SomeViewModelTests { ... }
 ### Unit Tests
 - **Framework**: Swift Testing
 - **Coverage target**: Domain UseCases 100%, ViewModel validation 100%
-- **Run command**: `xcodebuild test -project DUNE.xcodeproj -scheme DUNETests -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.2' -only-testing DUNETests -quiet`
+- **Run command**: `xcodebuild test -project DUNE.xcodeproj -scheme DUNETests -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max,OS=26.3.1' -only-testing DUNETests -quiet`
 
 ### UI Tests
 - **Framework**: XCTest
 - **Coverage target**: Critical user flows (launch, navigation)
-- **Run command**: `xcodebuild test -project DUNE.xcodeproj -scheme DUNEUITests -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.2' -only-testing DUNEUITests -quiet`
+- **Run command**: `xcodebuild test -project DUNE.xcodeproj -scheme DUNEUITests -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max,OS=26.3.1' -only-testing DUNEUITests -quiet`
 
 ## Mocking Strategy
 

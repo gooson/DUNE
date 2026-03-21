@@ -83,14 +83,14 @@ scripts/build-ios.sh
 ### 유닛 테스트
 ```bash
 xcodebuild test -project DUNE/DUNE.xcodeproj -scheme DUNETests \
-  -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max,OS=26.2' \
+  -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max,OS=26.3.1' \
   -only-testing DUNETests
 ```
 
 ### UI 테스트
 ```bash
 xcodebuild test -project DUNE/DUNE.xcodeproj -scheme DUNEUITests \
-  -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max,OS=26.2' \
+  -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max,OS=26.3.1' \
   -only-testing DUNEUITests
 ```
 
