@@ -579,8 +579,7 @@ private struct HabitListQueryView: View {
     private func autoAchievementsSection(fillHeight: Bool = false) -> some View {
         let groups = autoAchievementGroups
         let customGoals = viewModel.autoLinkedProgresses
-        let customCompletedCount = customGoals.filter(\.isCompleted).count
-        let completedGoals = groups.reduce(0) { $0 + $1.completedCount } + customCompletedCount
+        let completedGoals = groups.reduce(0) { $0 + $1.completedCount } + customGoals.filter(\.isCompleted).count
         let totalGoals = groups.reduce(0) { $0 + $1.metrics.count } + customGoals.count
         let useTwoColumnCards = isRegular && !fillHeight
 
@@ -629,90 +628,20 @@ private struct HabitListQueryView: View {
                     }
                 }
 
-                // Custom auto-linked habits
-                if !customGoals.isEmpty {
-                    customAutoGoalsGroup(customGoals, completedCount: customCompletedCount)
+                // Auto-linked habits — same row pattern as My Habits
+                ForEach(customGoals) { progress in
+                    HabitRowView(
+                        progress: progress,
+                        onToggle: { toggleCheck(habitId: progress.id) },
+                        onUpdateValue: { value in updateValue(habitId: progress.id, value: value) },
+                        trailingAccessory: AnyView(habitActionsButton(for: progress))
+                    )
+                    .contextMenu {
+                        habitActionItems(for: progress, deferred: true)
+                    }
                 }
             }
         }
-        .confirmationDialog(
-            "Remove this goal?",
-            isPresented: Binding(
-                get: { pendingArchiveHabitID != nil },
-                set: { if !$0 { pendingArchiveHabitID = nil } }
-            ),
-            titleVisibility: .visible
-        ) {
-            Button("Remove", role: .destructive) {
-                if let id = pendingArchiveHabitID {
-                    archiveAutoLinkedHabit(id: id)
-                }
-            }
-            Button("Cancel", role: .cancel) {
-                pendingArchiveHabitID = nil
-            }
-        }
-    }
-
-    @State private var pendingArchiveHabitID: UUID?
-
-    private func customAutoGoalsGroup(_ progresses: [HabitProgress], completedCount: Int) -> some View {
-        StandardCard {
-            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                HStack(spacing: DS.Spacing.xs) {
-                    Image(systemName: "figure.run.circle")
-                        .font(.caption)
-                        .foregroundStyle(theme.accentColor)
-                    Text("Custom Goals")
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                    Spacer()
-                    Text("\(completedCount)/\(progresses.count)")
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
-                        .monospacedDigit()
-                }
-
-                ForEach(progresses) { progress in
-                    customAutoGoalRow(progress)
-                }
-            }
-        }
-    }
-
-    private func customAutoGoalRow(_ progress: HabitProgress) -> some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-            HStack(spacing: DS.Spacing.xs) {
-                Image(systemName: progress.iconCategory.iconName)
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-                Text(progress.name)
-                    .font(.caption)
-                Spacer()
-                if progress.isCompleted {
-                    Image(systemName: "checkmark.circle.fill")
-                        .font(.caption2)
-                        .foregroundStyle(DS.Color.positive)
-                }
-            }
-            ProgressView(value: progress.todayValue, total: max(progress.goalValue, 1))
-                .tint(progress.isCompleted ? DS.Color.positive : theme.accentColor)
-        }
-        .contextMenu {
-            Button {
-                pendingArchiveHabitID = progress.id
-            } label: {
-                Label("Remove", systemImage: "trash")
-            }
-            .tint(.red)
-        }
-    }
-
-    private func archiveAutoLinkedHabit(id: UUID) {
-        guard let habit = habitsByID[id] else { return }
-        viewModel.cancelPendingReminders(for: habit)
-        habit.isArchived = true
-        recalculate()
     }
 
     private func autoAchievementGroupCard(_ group: AutoAchievementGroup) -> some View {
