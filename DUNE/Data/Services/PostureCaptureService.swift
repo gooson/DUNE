@@ -1,5 +1,5 @@
 #if !os(visionOS)
-import AVFoundation
+@preconcurrency import AVFoundation
 import CoreImage
 import Foundation
 import ImageIO
