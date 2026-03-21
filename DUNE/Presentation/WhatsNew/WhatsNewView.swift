@@ -16,7 +16,7 @@ struct WhatsNewView: View {
     private var visibleReleases: [WhatsNewReleaseData] {
         switch mode {
         case .automatic:
-            releases.isEmpty ? [] : [releases[0]]
+            releases.first.map { [$0] } ?? []
         case .manual:
             releases
         }
@@ -83,13 +83,13 @@ struct WhatsNewView: View {
 
     private func sectionHeader(release: WhatsNewReleaseData) -> some View {
         VStack(alignment: .leading, spacing: DS.Spacing.md) {
-            HStack(alignment: .firstTextBaseline) {
-                Text("What's New")
+            HStack(alignment: .center) {
+                Text("Version")
                     .font(.system(.largeTitle, design: .rounded, weight: .bold))
 
-                Spacer()
-
-                WhatsNewVersionBadge(version: release.version)
+                Text(verbatim: release.version)
+                    .font(.system(.largeTitle, design: .rounded, weight: .bold))
+                    .foregroundStyle(DS.Color.textSecondary)
             }
 
             Text(release.intro)
@@ -215,26 +215,27 @@ private struct WhatsNewFeatureDetailView: View {
 
     @ViewBuilder
     private var heroArtwork: some View {
-        if let assetName = feature.screenshotAsset {
+        if let assetName = feature.screenshotAsset, !assetName.isEmpty {
             screenshotHero(assetName: assetName)
         } else {
             symbolHero
         }
     }
 
-    /// Real screenshot hero — shown when screenshotAsset is provided.
+    /// Real screenshot hero — shown when screenshotAsset is provided and non-empty.
+    /// Note: Image(_:) returns empty view if asset is absent from catalog.
     private func screenshotHero(assetName: String) -> some View {
         Image(assetName)
             .resizable()
             .scaledToFit()
-            .frame(maxWidth: .infinity)
-            .frame(maxHeight: 400)
+            .frame(maxWidth: .infinity, maxHeight: 400)
             .clipShape(RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous))
             .overlay(
                 RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous)
                     .strokeBorder(.white.opacity(0.12))
             )
             .shadow(color: .black.opacity(0.2), radius: 12, y: 6)
+            .accessibilityElement(children: .ignore)
             .accessibilityLabel(feature.title)
             .accessibilityIdentifier("whatsnew-artwork-\(feature.id)-hero")
     }

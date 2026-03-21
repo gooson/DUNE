@@ -164,7 +164,7 @@ struct WhatsNewManagerTests {
 
         let posture = release.features.first { $0.id == "postureAssessment" }
         #expect(posture?.screenshotAsset == "WhatsNew/0.5.0/postureAssessment")
-        #expect(posture?.hasScreenshot == true)
+        #expect(posture?.screenshotAsset != nil)
     }
 
     @Test("screenshotAsset is nil for features without it")
@@ -174,7 +174,7 @@ struct WhatsNewManagerTests {
 
         let muscleMap = release.features.first { $0.id == "muscleMap3DOverhaul" }
         #expect(muscleMap?.screenshotAsset == nil)
-        #expect(muscleMap?.hasScreenshot == false)
+        #expect(muscleMap?.screenshotAsset == nil)
     }
 
     @Test("Older versions have no screenshotAsset on any feature")
@@ -198,7 +198,7 @@ struct WhatsNewManagerTests {
             screenshotAsset: "WhatsNew/1.0.0/test"
         )
 
-        #expect(feature.hasScreenshot == true)
+        #expect(feature.screenshotAsset != nil)
         #expect(feature.screenshotAsset == "WhatsNew/1.0.0/test")
     }
 
@@ -212,7 +212,7 @@ struct WhatsNewManagerTests {
             area: .today
         )
 
-        #expect(feature.hasScreenshot == false)
+        #expect(feature.screenshotAsset == nil)
         #expect(feature.screenshotAsset == nil)
     }
 

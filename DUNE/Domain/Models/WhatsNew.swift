@@ -25,8 +25,6 @@ struct WhatsNewFeatureItem: Codable, Identifiable, Hashable, Sendable {
     let title: String
     let summary: String
 
-    var hasScreenshot: Bool { screenshotAsset != nil }
-
     enum CodingKeys: String, CodingKey {
         case id, titleKey, summaryKey, symbolName, area, screenshotAsset
     }
