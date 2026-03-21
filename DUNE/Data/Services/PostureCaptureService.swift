@@ -306,6 +306,8 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
         }
 
         currentPosition = position
+        configureLiveBodyPoseCompute(for: position)
+
         guard let device = AVCaptureDevice.default(
             .builtInWideAngleCamera,
             for: .video,
@@ -409,6 +411,27 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
         }
     }
 
+    /// Force CPU compute for the stored bodyPoseRequest on front camera.
+    /// TrueDepth's depth sensor occupies the Neural Engine, causing
+    /// "Could not create mlImage buffer" when Vision tries to allocate
+    /// ANE buffers. CPU inference is ~10-15ms per frame — well within
+    /// the 10fps (100ms) budget.
+    private func configureLiveBodyPoseCompute(for position: AVCaptureDevice.Position) {
+        if position == .front {
+            bodyPoseRequest.usesCPUOnly = true
+        } else {
+            bodyPoseRequest.usesCPUOnly = false
+        }
+    }
+
+    /// Configure per-call Vision requests for the current camera position.
+    func configureRequestCompute(_ requests: [VNRequest]) {
+        guard currentPosition == .front else { return }
+        for request in requests {
+            request.usesCPUOnly = true
+        }
+    }
+
     func updateDeviceOrientation(_ orientation: UIDeviceOrientation) {
         guard Self.isInterfaceOrientation(orientation) else { return }
         orientationLock.withLock {
@@ -452,6 +475,8 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
     func detectPose(from image: CGImage, orientedJPEG: Data?) async throws -> PostureCaptureResult {
         let request = VNDetectHumanBodyPose3DRequest()
         let confidenceRequest = VNDetectHumanBodyPoseRequest()
+        // Force CPU compute on front camera — TrueDepth ANE contention
+        configureRequestCompute([request, confidenceRequest])
         // Pass EXIF orientation so pointInImage() returns coordinates in the
         // displayed (portrait, mirrored-for-front-camera) coordinate space,
         // not in the raw landscape sensor coordinate space.
