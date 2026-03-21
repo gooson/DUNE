@@ -40,7 +40,7 @@ struct RealtimePostureView: View {
                     )
                 }
 
-                // Score badge (top-left)
+                // Score badge (top-left) + exercise mode button (top-right area)
                 VStack {
                     HStack {
                         RealtimeScoreBadge(
@@ -48,11 +48,21 @@ struct RealtimePostureView: View {
                             is3DActive: viewModel.is3DActive
                         )
                         Spacer()
+                        exerciseModeButton
                     }
                     .padding(.horizontal, 16)
                     .padding(.top, 8)
 
                     Spacer()
+
+                    // Form check overlay (when exercise selected)
+                    if let formState = viewModel.formState,
+                       let exercise = viewModel.selectedExercise {
+                        FormCheckOverlay(
+                            formState: formState,
+                            exerciseName: exercise.displayName
+                        )
+                    }
 
                     // Guidance hint when no body detected
                     if let hint = viewModel.guidanceState.primaryHint {
@@ -62,7 +72,7 @@ struct RealtimePostureView: View {
                             .padding(.horizontal, 32)
                             .padding(.vertical, 8)
                             .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 8))
-                            .padding(.bottom, 80)
+                            .padding(.bottom, viewModel.isFormMode ? 16 : 80)
                     }
                 }
             }
@@ -88,6 +98,31 @@ struct RealtimePostureView: View {
             }
             .task { viewModel.start() }
             .onDisappear { viewModel.stop() }
+            .sheet(isPresented: $viewModel.showExercisePicker) {
+                ExercisePickerSheet(
+                    exercises: ExerciseFormRule.allBuiltIn,
+                    selectedExerciseID: viewModel.selectedExercise?.exerciseID,
+                    onSelect: viewModel.selectExercise
+                )
+            }
+        }
+    }
+
+    private var exerciseModeButton: some View {
+        Button {
+            viewModel.showExercisePicker = true
+        } label: {
+            HStack(spacing: 4) {
+                Image(systemName: viewModel.isFormMode ? "figure.strengthtraining.traditional" : "figure.stand")
+                if let exercise = viewModel.selectedExercise {
+                    Text(exercise.displayName)
+                        .font(.caption)
+                }
+            }
+            .foregroundStyle(.white)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 6)
+            .background(.ultraThinMaterial, in: Capsule())
         }
     }
 }
