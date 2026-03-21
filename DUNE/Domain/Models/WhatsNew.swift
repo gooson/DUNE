@@ -21,19 +21,23 @@ struct WhatsNewFeatureItem: Codable, Identifiable, Hashable, Sendable {
     let summaryKey: String
     let symbolName: String
     let area: WhatsNewArea
+    let screenshotAsset: String?
     let title: String
     let summary: String
 
+    var hasScreenshot: Bool { screenshotAsset != nil }
+
     enum CodingKeys: String, CodingKey {
-        case id, titleKey, summaryKey, symbolName, area
+        case id, titleKey, summaryKey, symbolName, area, screenshotAsset
     }
 
-    init(id: String, titleKey: String, summaryKey: String, symbolName: String, area: WhatsNewArea) {
+    init(id: String, titleKey: String, summaryKey: String, symbolName: String, area: WhatsNewArea, screenshotAsset: String? = nil) {
         self.id = id
         self.titleKey = titleKey
         self.summaryKey = summaryKey
         self.symbolName = symbolName
         self.area = area
+        self.screenshotAsset = screenshotAsset
         self.title = String(localized: String.LocalizationValue(titleKey))
         self.summary = String(localized: String.LocalizationValue(summaryKey))
     }
@@ -45,6 +49,7 @@ struct WhatsNewFeatureItem: Codable, Identifiable, Hashable, Sendable {
         summaryKey = try container.decode(String.self, forKey: .summaryKey)
         symbolName = try container.decode(String.self, forKey: .symbolName)
         area = try container.decode(WhatsNewArea.self, forKey: .area)
+        screenshotAsset = try container.decodeIfPresent(String.self, forKey: .screenshotAsset)
         title = String(localized: String.LocalizationValue(titleKey))
         summary = String(localized: String.LocalizationValue(summaryKey))
     }
@@ -56,9 +61,17 @@ struct WhatsNewFeatureItem: Codable, Identifiable, Hashable, Sendable {
         try container.encode(summaryKey, forKey: .summaryKey)
         try container.encode(symbolName, forKey: .symbolName)
         try container.encode(area, forKey: .area)
+        try container.encodeIfPresent(screenshotAsset, forKey: .screenshotAsset)
     }
 }
 
+/// Metadata-only entry in catalog.json (no features).
+struct WhatsNewReleaseIndex: Codable, Sendable {
+    let version: String
+    let introKey: String
+}
+
+/// Full release with features, assembled from catalog index + per-version JSON.
 struct WhatsNewReleaseData: Codable, Identifiable, Hashable, Sendable {
     let version: String
     let introKey: String
@@ -94,6 +107,13 @@ struct WhatsNewReleaseData: Codable, Identifiable, Hashable, Sendable {
     }
 }
 
-struct WhatsNewCatalog: Codable, Sendable {
-    let releases: [WhatsNewReleaseData]
+/// Catalog index — contains only release metadata (version + introKey).
+struct WhatsNewCatalogIndex: Codable, Sendable {
+    let releases: [WhatsNewReleaseIndex]
+}
+
+/// Per-version detail file — contains version + features array.
+struct WhatsNewVersionDetail: Codable, Sendable {
+    let version: String
+    let features: [WhatsNewFeatureItem]
 }
