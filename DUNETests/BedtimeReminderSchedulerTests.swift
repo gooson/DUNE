@@ -348,6 +348,34 @@ struct BedtimeReminderSchedulerTests {
         ])
     }
 
+    @Test("Schedules reminder when watch is paired even if companion app is not installed")
+    func schedulesReminderWithoutCompanionAppInstalled() async throws {
+        let calendar = Calendar(identifier: .gregorian)
+        let now = try #require(calendar.date(from: DateComponents(year: 2026, month: 3, day: 8, hour: 12)))
+        let userDefaults = try makeUserDefaults()
+        let notificationScheduler = MockBedtimeNotificationScheduler(authorized: true)
+
+        let scheduler = BedtimeReminderScheduler(
+            sleepService: MockSleepService(
+                calendar: calendar,
+                referenceDate: now,
+                stagesByOffset: [
+                    1: [makeSleepStage(dayOffset: 1, hour: 23, minute: 30, calendar: calendar, referenceDate: now)]
+                ]
+            ),
+            watchWearStateService: MockWatchWearStateService(response: false),
+            watchAvailabilityProvider: MockWatchAvailabilityProvider(isPaired: true, isWatchAppInstalled: false),
+            notificationScheduler: notificationScheduler,
+            userDefaults: userDefaults,
+            calendar: calendar,
+            now: { now }
+        )
+
+        await scheduler.refreshSchedule()
+
+        #expect(notificationScheduler.requests.count == 1)
+    }
+
     private func triggerDate(for request: UNNotificationRequest, calendar: Calendar) throws -> Date {
         let trigger = try #require(request.trigger as? UNCalendarNotificationTrigger)
         return try #require(calendar.date(from: trigger.dateComponents))

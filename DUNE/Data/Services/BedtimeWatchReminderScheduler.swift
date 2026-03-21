@@ -34,7 +34,6 @@ struct UserNotificationCenterBedtimeReminderScheduler: BedtimeReminderNotificati
 @MainActor
 protocol BedtimeReminderWatchAvailabilityProviding {
     var isPaired: Bool { get }
-    var isWatchAppInstalled: Bool { get }
 }
 
 @MainActor
@@ -42,11 +41,6 @@ struct WatchConnectivityBedtimeReminderWatchAvailabilityProvider: BedtimeReminde
     var isPaired: Bool {
         guard WCSession.isSupported() else { return false }
         return WCSession.default.isPaired
-    }
-
-    var isWatchAppInstalled: Bool {
-        guard WCSession.isSupported() else { return false }
-        return WCSession.default.isWatchAppInstalled
     }
 }
 
@@ -108,8 +102,7 @@ final class BedtimeReminderScheduler {
             return
         }
 
-        guard watchAvailabilityProvider.isPaired,
-              watchAvailabilityProvider.isWatchAppInstalled else {
+        guard watchAvailabilityProvider.isPaired else {
             await removePendingReminder()
             return
         }
