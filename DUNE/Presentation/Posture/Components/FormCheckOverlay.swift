@@ -4,7 +4,7 @@ import SwiftUI
 /// Overlay displaying exercise form check results during realtime analysis.
 struct FormCheckOverlay: View {
     let formState: ExerciseFormState
-    let exerciseName: String
+    let exerciseName: LocalizedStringKey
 
     var body: some View {
         VStack(spacing: 8) {
@@ -39,7 +39,7 @@ struct FormCheckOverlay: View {
                     Circle()
                         .fill(StatusColors.status(result.status))
                         .frame(width: 8, height: 8)
-                    Text(result.checkpointName)
+                    Text(LocalizedStringKey(result.checkpointName))
                         .font(.caption)
                         .foregroundStyle(.white)
                     Spacer()
