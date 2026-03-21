@@ -19,7 +19,7 @@ final class RealtimePostureViewModel {
     var skeletonImageSize: CGSize = .zero
     var guidanceState = GuidanceState()
     var is3DActive: Bool = false
-    var cameraPosition: CameraPosition = .back
+    var cameraPosition: CameraPosition = .front
     var deviceOrientation: UIDeviceOrientation = .portrait
 
     // Form check mode
