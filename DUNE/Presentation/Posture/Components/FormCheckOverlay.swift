@@ -37,20 +37,20 @@ struct FormCheckOverlay: View {
             ForEach(formState.checkpointResults) { result in
                 HStack {
                     Circle()
-                        .fill(StatusColors.status(result.status))
+                        .fill(StatusColors.status(for: result))
                         .frame(width: 8, height: 8)
                     Text(LocalizedStringKey(result.checkpointName))
                         .font(.caption)
-                        .foregroundStyle(.white)
+                        .foregroundStyle(StatusColors.label(for: result))
                     Spacer()
                     if result.status != .unmeasurable {
                         Text("\(Int(result.currentDegrees))\u{00B0}")
                             .font(.caption.monospacedDigit())
-                            .foregroundStyle(.white.opacity(0.8))
+                            .foregroundStyle(StatusColors.value(for: result))
                     } else {
                         Text("--")
                             .font(.caption)
-                            .foregroundStyle(.white.opacity(0.4))
+                            .foregroundStyle(StatusColors.value(for: result))
                     }
                 }
                 .accessibilityElement(children: .combine)
@@ -82,13 +82,35 @@ private enum StatusColors {
     static let cautionColor: Color = .yellow
     static let warningColor: Color = .red
     static let unmeasurableColor: Color = .gray
+    static let inactiveColor: Color = .white.opacity(0.35)
+
+    static func status(for result: CheckpointResult) -> Color {
+        guard result.isActivePhase else { return inactiveColor }
+        switch result.status {
+        case .normal: return normalColor
+        case .caution: return cautionColor
+        case .warning: return warningColor
+        case .unmeasurable: return unmeasurableColor
+        }
+    }
+
+    static func label(for result: CheckpointResult) -> Color {
+        result.isActivePhase ? .white : .white.opacity(0.6)
+    }
+
+    static func value(for result: CheckpointResult) -> Color {
+        if result.status == .unmeasurable {
+            return .white.opacity(result.isActivePhase ? 0.4 : 0.25)
+        }
+        return .white.opacity(result.isActivePhase ? 0.8 : 0.45)
+    }
 
     static func status(_ status: PostureStatus) -> Color {
         switch status {
-        case .normal: normalColor
-        case .caution: cautionColor
-        case .warning: warningColor
-        case .unmeasurable: unmeasurableColor
+        case .normal: return normalColor
+        case .caution: return cautionColor
+        case .warning: return warningColor
+        case .unmeasurable: return unmeasurableColor
         }
     }
 

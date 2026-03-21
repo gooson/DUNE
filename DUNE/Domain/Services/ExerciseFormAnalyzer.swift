@@ -15,7 +15,6 @@ final class ExerciseFormAnalyzer: @unchecked Sendable {
     // MARK: - State (caller must synchronize access)
 
     private let rule: ExerciseFormRule
-    private let checkpointsByName: [String: FormCheckpoint]
     private var currentPhase: ExercisePhase = .setup
     private var repCount: Int = 0
     private var repScoreSum: Int = 0       // Running sum of completed rep scores
@@ -33,7 +32,6 @@ final class ExerciseFormAnalyzer: @unchecked Sendable {
 
     init(rule: ExerciseFormRule) {
         self.rule = rule
-        self.checkpointsByName = Dictionary(uniqueKeysWithValues: rule.checkpoints.map { ($0.name, $0) })
     }
 
     // MARK: - Public API
@@ -50,11 +48,13 @@ final class ExerciseFormAnalyzer: @unchecked Sendable {
         var primaryAngle: Double?
 
         for checkpoint in rule.checkpoints {
+            let isActivePhase = checkpoint.activePhases.contains(currentPhase)
             guard let a = kp[checkpoint.jointA],
                   let vertex = kp[checkpoint.jointVertex],
                   let c = kp[checkpoint.jointC] else {
                 results.append(CheckpointResult(
                     checkpointName: checkpoint.name,
+                    isActivePhase: isActivePhase,
                     status: .unmeasurable,
                     currentDegrees: 0
                 ))
@@ -65,6 +65,7 @@ final class ExerciseFormAnalyzer: @unchecked Sendable {
             guard degrees.isFinite else {
                 results.append(CheckpointResult(
                     checkpointName: checkpoint.name,
+                    isActivePhase: isActivePhase,
                     status: .unmeasurable,
                     currentDegrees: 0
                 ))
@@ -76,15 +77,17 @@ final class ExerciseFormAnalyzer: @unchecked Sendable {
             }
 
             let status: PostureStatus
-            if checkpoint.activePhases.contains(currentPhase) {
+            if isActivePhase {
                 status = checkpoint.evaluate(degrees: degrees)
             } else {
-                // Checkpoint not active in current phase — show as normal (not evaluated)
+                // Preserve the measured angle while marking the checkpoint inactive
+                // so downstream consumers do not treat it as evaluated feedback.
                 status = .normal
             }
 
             results.append(CheckpointResult(
                 checkpointName: checkpoint.name,
+                isActivePhase: isActivePhase,
                 status: status,
                 currentDegrees: degrees
             ))
@@ -97,9 +100,7 @@ final class ExerciseFormAnalyzer: @unchecked Sendable {
 
         // Score the current frame's active checkpoints (O(1) lookup via checkpointsByName)
         let activeResults = results.filter { result in
-            checkpointsByName[result.checkpointName]?
-                .activePhases.contains(currentPhase) == true
-                && result.status != .unmeasurable
+            result.isActivePhase && result.status != .unmeasurable
         }
         if !activeResults.isEmpty {
             let frameScore = Self.scoreFromResults(activeResults)

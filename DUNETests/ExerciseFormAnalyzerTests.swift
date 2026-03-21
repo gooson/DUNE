@@ -82,6 +82,15 @@ struct ExerciseFormAnalyzerTests {
         }
     }
 
+    @Test("Inactive checkpoints are flagged outside their active phases")
+    func inactiveCheckpointsAreFlagged() {
+        let analyzer = ExerciseFormAnalyzer(rule: .barbellSquat)
+        let state = analyzer.processFrame(keypoints: standingKeypoints())
+
+        #expect(state.currentPhase == .setup)
+        #expect(state.checkpointResults.allSatisfy { $0.isActivePhase == false })
+    }
+
     @Test("Missing keypoints produce unmeasurable status")
     func missingKeypoints() {
         let analyzer = ExerciseFormAnalyzer(rule: .barbellSquat)
@@ -113,7 +122,7 @@ struct ExerciseFormAnalyzerTests {
         }
 
         // Should have transitioned from setup through descent
-        let phaseAfterDescent = lastState?.currentPhase
+        _ = lastState?.currentPhase
         // At bottom
         for _ in 0..<5 {
             lastState = analyzer.processFrame(keypoints: bottom)
