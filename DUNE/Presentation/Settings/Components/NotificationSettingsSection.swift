@@ -21,17 +21,22 @@ struct NotificationSettingsSection: View {
             }
             notificationToggle(for: .workoutPR)
             Toggle(isOn: $isBedtimeReminderEnabled) {
-                Label("Bedtime Reminder", systemImage: "moon.stars.fill")
+                Label("Apple Watch Bedtime Reminder", systemImage: "moon.stars.fill")
             }
             Toggle(isOn: $isPostureReminderEnabled) {
                 Label("Posture Reminder", systemImage: "figure.stand")
             }
-            Picker("Reminder Lead Time", selection: $bedtimeReminderLeadTime) {
+            Picker("Apple Watch Reminder Lead Time", selection: $bedtimeReminderLeadTime) {
                 ForEach(BedtimeReminderLeadTime.allCases, id: \.self) { leadTime in
                     Text(leadTime.displayName).tag(leadTime)
                 }
             }
             .disabled(!isBedtimeReminderEnabled)
+            if isBedtimeReminderEnabled {
+                Text("DUNE skips this reminder when recent Apple Watch heart-rate data suggests you're already wearing your watch.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
         } header: {
             Text("Notifications")
         } footer: {

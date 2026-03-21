@@ -383,13 +383,19 @@ struct SleepQueryService: SleepQuerying, Sendable {
     }
 
     private func isWatchSource(_ sample: HKSample) -> Bool {
+        Self.isWatchSource(
+            productType: sample.sourceRevision.productType,
+            bundleIdentifier: sample.sourceRevision.source.bundleIdentifier
+        )
+    }
+
+    static func isWatchSource(productType: String?, bundleIdentifier: String) -> Bool {
         // 1. Product type check: most reliable (e.g., "Watch6,18", "Watch7,1")
-        if let productType = sample.sourceRevision.productType,
-           productType.hasPrefix("Watch") {
+        if let productType, productType.hasPrefix("Watch") {
             return true
         }
-        // 2. Bundle ID fallback (e.g., com.apple.NanoHealthApp)
-        let bundleID = sample.sourceRevision.source.bundleIdentifier
-        return bundleID.localizedCaseInsensitiveContains("watch")
+        // 2. Bundle ID fallback (e.g., com.apple.NanoHealthApp, watchkit child bundles)
+        return bundleIdentifier.localizedCaseInsensitiveContains("watch")
+            || bundleIdentifier.localizedCaseInsensitiveContains("nano")
     }
 }

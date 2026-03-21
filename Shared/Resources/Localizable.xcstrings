@@ -3757,6 +3757,57 @@
         }
       }
     },
+    "Apple Watch Bedtime Reminder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch就寝リマインダー"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch 취침 알림"
+          }
+        }
+      }
+    },
+    "Apple Watch Reminder Lead Time" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch通知タイミング"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch 알림 시간"
+          }
+        }
+      }
+    },
+    "Put on your Apple Watch before bed." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "寝る前にApple Watchを着けてください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "잠들기 전에 Apple Watch를 착용하세요."
+          }
+        }
+      }
+    },
     "Apply sunscreen and wear a hat for outdoor workouts. Exercise in the shade when possible." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -9617,6 +9668,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "DUNE"
+          }
+        }
+      }
+    },
+    "DUNE skips this reminder when recent Apple Watch heart-rate data suggests you're already wearing your watch." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最近のApple Watch心拍データからすでに着用中と判断した場合、DUNEはこの通知を送信しません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최근 Apple Watch 심박 데이터로 이미 시계를 착용 중인 것으로 보이면 DUNE이 이 알림을 건너뜁니다."
           }
         }
       }

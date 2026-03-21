@@ -90,7 +90,12 @@ final class HealthKitObserverManager: Sendable {
                 async let notifyTask: Void = {
                     await notificationEvaluator?.evaluateAndNotify(sampleType: sampleType)
                 }()
-                _ = await (refreshTask, notifyTask)
+                async let bedtimeTask: Void = {
+                    if sampleType.identifier == HKCategoryType(.sleepAnalysis).identifier {
+                        await BedtimeReminderScheduler.shared.refreshSchedule(force: true)
+                    }
+                }()
+                _ = await (refreshTask, notifyTask, bedtimeTask)
             }
         }
 
