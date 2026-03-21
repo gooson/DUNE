@@ -216,6 +216,7 @@ targets:
         INFOPLIST_KEY_WKCompanionAppBundleIdentifier: com.raftel.dailve
         INFOPLIST_KEY_NSHealthShareUsageDescription: "DUNE needs access to your health data to track heart rate during workouts."
         INFOPLIST_KEY_NSHealthUpdateUsageDescription: "DUNE records your workout data to Health."
+        INFOPLIST_KEY_NSMotionUsageDescription: "DUNE uses motion data to monitor your daily posture and walking patterns."
         CODE_SIGN_ENTITLEMENTS: ../DUNEWatch/DUNEWatch.entitlements
     entitlements:
       path: ../DUNEWatch/DUNEWatch.entitlements
@@ -229,6 +230,7 @@ targets:
     dependencies:
       - sdk: HealthKit.framework
       - sdk: WatchConnectivity.framework
+      - sdk: CoreMotion.framework
 
   DUNEWidget:
     type: app-extension

@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleIconName</key>
 	<string>AppIcon</string>
+	<key>NSMotionUsageDescription</key>
+	<string>DUNE uses motion data to monitor your daily posture and walking patterns.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>

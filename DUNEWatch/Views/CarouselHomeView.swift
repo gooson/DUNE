@@ -114,6 +114,13 @@ struct CarouselHomeView: View {
         }
         .background { WatchWaveBackground() }
         .navigationTitle("DUNE")
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                NavigationLink(value: WatchRoute.postureSettings) {
+                    Image(systemName: "figure.stand")
+                }
+            }
+        }
         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.homeRoot)
         .onAppear {
             updateTemplateContentKey()
