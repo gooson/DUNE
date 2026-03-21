@@ -648,7 +648,7 @@ private struct HabitListQueryView: View {
                             }
 
                             ForEach(customGoals) { progress in
-                                autoLinkedHabitRow(progress)
+                                autoLinkedMetricRow(progress)
                             }
                         }
                     }
@@ -715,7 +715,7 @@ private struct HabitListQueryView: View {
         }
     }
 
-    private func autoLinkedHabitRow(_ progress: HabitProgress) -> some View {
+    private func autoLinkedMetricRow(_ progress: HabitProgress) -> some View {
         VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
             HStack(spacing: DS.Spacing.xs) {
                 Text(progress.name)
@@ -727,28 +727,13 @@ private struct HabitListQueryView: View {
                         .font(.caption2)
                         .foregroundStyle(DS.Color.positive)
                 }
-                Menu {
-                    Button(role: .destructive) {
-                        if let habit = habitsByID[progress.id] {
-                            viewModel.cancelPendingReminders(for: habit)
-                            withAnimation {
-                                habit.isArchived = true
-                            }
-                            recalculate()
-                        }
-                    } label: {
-                        Label("Archive", systemImage: "archivebox")
-                    }
-                } label: {
-                    Image(systemName: "ellipsis")
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
-                        .padding(4)
-                }
-                .buttonStyle(.plain)
+                habitActionsButton(for: progress)
             }
             ProgressView(value: progress.todayValue, total: max(progress.goalValue, 1))
                 .tint(progress.isCompleted ? DS.Color.positive : theme.accentColor)
+        }
+        .contextMenu {
+            habitActionItems(for: progress, deferred: true)
         }
     }
 
