@@ -617,6 +617,31 @@ struct LifeViewModelTests {
         #expect(vm.completedCount == 0)
     }
 
+    @Test("completedCount excludes auto-linked even when completed")
+    func autoLinkedCompletedExcludedFromHero() {
+        let vm = LifeViewModel()
+        let autoHabit = HabitDefinition(
+            name: "Workout",
+            iconCategory: .fitness,
+            habitType: .check,
+            goalValue: 1,
+            goalUnit: nil,
+            frequency: .daily,
+            isAutoLinked: true,
+            autoLinkSource: "exercise"
+        )
+
+        // todayExerciseExists = true → auto-linked habit is completed
+        vm.calculateProgresses(habits: [autoHabit], todayExerciseExists: true)
+
+        #expect(vm.autoLinkedProgresses.count == 1)
+        #expect(vm.autoLinkedProgresses.first?.isCompleted == true)
+
+        // Hero counts must still be 0 — auto-linked excluded
+        #expect(vm.totalActiveCount == 0)
+        #expect(vm.completedCount == 0)
+    }
+
     @Test("LifeHabitLogSync insert updates relationship immediately")
     func lifeHabitLogSyncInsert() {
         let habit = HabitDefinition(
