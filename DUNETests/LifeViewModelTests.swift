@@ -611,6 +611,10 @@ struct LifeViewModelTests {
         let nonAutoLinked = vm.habitProgresses.filter { !$0.isAutoLinked }
         #expect(nonAutoLinked.count == 1)
         #expect(nonAutoLinked.first?.name == "Read")
+
+        // Hero counts exclude auto-linked
+        #expect(vm.totalActiveCount == 1)
+        #expect(vm.completedCount == 0)
     }
 
     @Test("LifeHabitLogSync insert updates relationship immediately")

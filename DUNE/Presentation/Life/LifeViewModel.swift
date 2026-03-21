@@ -51,9 +51,7 @@ final class LifeViewModel {
     private(set) var autoExerciseProgresses: [LifeAutoAchievementProgress] =
         LifeAutoAchievementService.calculateProgresses(from: [])
 
-    var autoLinkedProgresses: [HabitProgress] {
-        habitProgresses.filter(\.isAutoLinked)
-    }
+    private(set) var autoLinkedProgresses: [HabitProgress] = []
 
     /// Context-aware narrative for the Life hero card.
     var heroNarrative: String {
@@ -280,14 +278,13 @@ final class LifeViewModel {
         let today = calendar.startOfDay(for: referenceDate)
 
         var progresses: [HabitProgress] = []
-        var completed = 0
 
         for habit in habits where !habit.isArchived {
             if let cycleSnapshot = makeCycleSnapshot(for: habit, referenceDate: referenceDate, calendar: calendar) {
                 let isCompleted = cycleSnapshot.lastAction == .complete && !cycleSnapshot.isDue
                 let effectiveValue = isCompleted ? habit.goalValue : 0
 
-                if isCompleted { completed += 1 }
+
 
                 progresses.append(HabitProgress(
                     id: habit.id,
@@ -340,8 +337,6 @@ final class LifeViewModel {
                 referenceDate: referenceDate
             )
 
-            if isCompleted { completed += 1 }
-
             progresses.append(HabitProgress(
                 id: habit.id,
                 name: habit.name,
@@ -370,8 +365,11 @@ final class LifeViewModel {
         }
 
         habitProgresses = progresses
-        completedCount = completed
-        totalActiveCount = progresses.count
+        autoLinkedProgresses = progresses.filter(\.isAutoLinked)
+
+        let manualProgresses = progresses.filter { !$0.isAutoLinked }
+        completedCount = manualProgresses.filter(\.isCompleted).count
+        totalActiveCount = manualProgresses.count
     }
 
     func calculateAutoExerciseProgresses(

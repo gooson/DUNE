@@ -628,18 +628,22 @@ private struct HabitListQueryView: View {
         }
     }
 
+    @State private var pendingArchiveHabitID: UUID?
+
     private func customAutoGoalsGroup(_ progresses: [HabitProgress]) -> some View {
-        StandardCard {
+        let completedCount = progresses.filter(\.isCompleted).count
+
+        return StandardCard {
             VStack(alignment: .leading, spacing: DS.Spacing.sm) {
                 HStack(spacing: DS.Spacing.xs) {
-                    Image(systemName: "star.fill")
+                    Image(systemName: "figure.run.circle")
                         .font(.caption)
                         .foregroundStyle(theme.accentColor)
                     Text("Custom Goals")
                         .font(.subheadline)
                         .fontWeight(.semibold)
                     Spacer()
-                    Text("\(progresses.filter(\.isCompleted).count)/\(progresses.count)")
+                    Text("\(completedCount)/\(progresses.count)")
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                         .monospacedDigit()
@@ -648,6 +652,23 @@ private struct HabitListQueryView: View {
                 ForEach(progresses) { progress in
                     customAutoGoalRow(progress)
                 }
+            }
+        }
+        .confirmationDialog(
+            "Remove this goal?",
+            isPresented: Binding(
+                get: { pendingArchiveHabitID != nil },
+                set: { if !$0 { pendingArchiveHabitID = nil } }
+            ),
+            titleVisibility: .visible
+        ) {
+            Button("Remove", role: .destructive) {
+                if let id = pendingArchiveHabitID {
+                    archiveAutoLinkedHabit(id: id)
+                }
+            }
+            Button("Cancel", role: .cancel) {
+                pendingArchiveHabitID = nil
             }
         }
     }
@@ -660,7 +681,6 @@ private struct HabitListQueryView: View {
                     .foregroundStyle(.secondary)
                 Text(progress.name)
                     .font(.caption)
-                    .foregroundStyle(.secondary)
                 Spacer()
                 if progress.isCompleted {
                     Image(systemName: "checkmark.circle.fill")
@@ -668,24 +688,23 @@ private struct HabitListQueryView: View {
                         .foregroundStyle(DS.Color.positive)
                 }
             }
-            ProgressView(value: progress.todayValue, total: Swift.max(progress.goalValue, 1))
+            ProgressView(value: progress.todayValue, total: max(progress.goalValue, 1))
                 .tint(progress.isCompleted ? DS.Color.positive : theme.accentColor)
         }
         .contextMenu {
-            Button(role: .destructive) {
-                archiveAutoLinkedHabit(id: progress.id)
+            Button {
+                pendingArchiveHabitID = progress.id
             } label: {
                 Label("Remove", systemImage: "trash")
             }
+            .tint(.red)
         }
     }
 
     private func archiveAutoLinkedHabit(id: UUID) {
         guard let habit = habitsByID[id] else { return }
-        withAnimation {
-            viewModel.cancelPendingReminders(for: habit)
-            habit.isArchived = true
-        }
+        viewModel.cancelPendingReminders(for: habit)
+        habit.isArchived = true
         recalculate()
     }
 
