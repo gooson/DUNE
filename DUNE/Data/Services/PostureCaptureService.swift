@@ -1,7 +1,6 @@
 #if !os(visionOS)
 @preconcurrency import AVFoundation
 import CoreImage
-import CoreML
 import Foundation
 import ImageIO
 import os
@@ -307,7 +306,6 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
         }
 
         currentPosition = position
-        configureLiveBodyPoseCompute(for: position)
 
         guard let device = AVCaptureDevice.default(
             .builtInWideAngleCamera,
@@ -412,30 +410,6 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
         }
     }
 
-    /// CPU compute device, resolved lazily to avoid crash during static init in simulators.
-    private lazy var cpuDevice: MLComputeDevice? = {
-        MLComputeDevice.allComputeDevices.first { if case .cpu = $0 { return true }; return false }
-    }()
-
-    /// Force CPU compute for the stored bodyPoseRequest on front camera.
-    /// On some devices (iPad, TrueDepth iPhones), the front camera competes
-    /// with Vision's Neural Engine for shared resources. CPU inference
-    /// is ~10-15ms per frame — well within the 10fps (100ms) budget.
-    private func configureLiveBodyPoseCompute(for position: AVCaptureDevice.Position) {
-        bodyPoseRequest.setComputeDevice(
-            position == .front ? cpuDevice : nil,
-            for: .main
-        )
-    }
-
-    /// Configure per-call Vision requests for the current camera position.
-    private func configureRequestCompute(_ requests: [VNRequest]) {
-        guard currentPosition == .front, let cpu = cpuDevice else { return }
-        for request in requests {
-            request.setComputeDevice(cpu, for: .main)
-        }
-    }
-
     func updateDeviceOrientation(_ orientation: UIDeviceOrientation) {
         guard Self.isInterfaceOrientation(orientation) else { return }
         orientationLock.withLock {
@@ -479,8 +453,6 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
     func detectPose(from image: CGImage, orientedJPEG: Data?) async throws -> PostureCaptureResult {
         let request3D = VNDetectHumanBodyPose3DRequest()
         let request2D = VNDetectHumanBodyPoseRequest()
-        configureRequestCompute([request3D, request2D])
-
         // Pass EXIF orientation so pointInImage() returns coordinates in the
         // displayed (portrait, mirrored-for-front-camera) coordinate space,
         // not in the raw landscape sensor coordinate space.
