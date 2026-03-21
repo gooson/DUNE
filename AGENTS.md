@@ -125,17 +125,8 @@ A skill is a set of local instructions to follow that is stored in a `SKILL.md` 
   - `.codex/agent-map.md`
   - `.codex/skill-compat.md`
   - `.codex/agent-memory/README.md`
-- Claude 문서의 `Task tool` 지시는 Codex에서 우선 **role selection** 으로 해석합니다.
-  - 기본값: 현재 에이전트가 해당 역할을 inline으로 수행
-  - 예외: 사용자가 병렬/위임/sub-agent를 명시적으로 요청했거나, 현재 활성 skill 실행이 실제 agent launch를 요구하고 런타임 정책상 허용될 때만 `spawn_agent` 사용
-- Claude 문서의 `TodoWrite` 지시는 Codex에서 `update_plan` 으로 대응합니다.
-- review 계열 agent는 기본적으로 **read-only** 입니다.
-  - 리뷰 중 테스트 작성/즉시 수정 지시가 문서에 있더라도, 사용자가 명시적으로 수정을 요청하지 않았다면 finding 보고까지만 수행합니다.
-  - 실제 수정은 `/work` 또는 `/run`의 Resolve 단계에서만 수행합니다.
-- memory 해석 규칙:
-  - `.claude/agent-memory/**` 는 Codex의 **read source**
-  - Codex가 새 learnings를 남길 때는 `.codex/agent-memory/**` 를 **shadow write target** 으로 사용
-  - Claude 전용 repo 밖 persistent memory 경로는 직접 write target으로 가정하지 않습니다.
+- 공통 실행 규칙(`Task tool`, `TodoWrite`, read-only review, memory policy)은 `.codex/skill-compat.md` 를 canonical source로 사용합니다.
+- agent별 모델/추론/edit policy/memory source는 `.codex/agent-map.md` 를 canonical source로 사용합니다.
 - `.claude/agents/*.md` 또는 핵심 skill 목록이 바뀌면 Codex adapter 문서를 함께 갱신하고 `python3 scripts/check-codex-claude-parity.py` 로 drift를 검사합니다.
 
 ## Permission Parity (`.claude/settings.local.json`)
