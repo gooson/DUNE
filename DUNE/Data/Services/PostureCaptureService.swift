@@ -249,7 +249,10 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
     private let visionSemaphore = DispatchSemaphore(value: 1)
     // Accessed only on videoDataQueue (single serial queue) — no lock needed.
     private var lastFrameAnalysisTime: CFAbsoluteTime = 0
+    private var last3DSamplingTime: CFAbsoluteTime = 0
     private static let frameAnalysisInterval: CFAbsoluteTime = 0.1 // 10fps max
+    /// 3D sampling interval — controls how often a CGImage is passed to onRealtimeFrame.
+    private static let threeDSamplingInterval: CFAbsoluteTime = 0.25 // ~4fps
     /// Combined frame update callback: guidance state + skeleton keypoints in a single dispatch.
     var onFrameUpdate: (@Sendable (GuidanceState, [(String, CGPoint)], CGSize) -> Void)?
     /// Realtime analysis callback: keypoints + CGImage for 3D sampling.
@@ -861,6 +864,9 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
 
     // MARK: - CGImage from Pool Buffer
 
+    private static let fallbackCIContext = CIContext(options: [.useSoftwareRenderer: false])
+    private static let bgraColorSpace = CGColorSpaceCreateDeviceRGB()
+
     /// Create a CGImage from a BGRA CVPixelBuffer via CPU memcpy.
     /// The resulting CGImage lives in heap memory — completely independent of
     /// the camera's IOSurface buffer pool. This eliminates TrueDepth (front camera)
@@ -873,8 +879,7 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
         guard pixelFormat == kCVPixelFormatType_32BGRA else {
             // Non-BGRA: fall back to CIContext (slower but handles any format)
             let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
-            return CIContext(options: [.useSoftwareRenderer: false])
-                .createCGImage(ciImage, from: ciImage.extent)
+            return fallbackCIContext.createCGImage(ciImage, from: ciImage.extent)
         }
 
         CVPixelBufferLockBaseAddress(pixelBuffer, .readOnly)
@@ -901,7 +906,7 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
             bitsPerComponent: 8,
             bitsPerPixel: 32,
             bytesPerRow: bytesPerRow,
-            space: CGColorSpaceCreateDeviceRGB(),
+            space: bgraColorSpace,
             bitmapInfo: bitmapInfo,
             provider: provider,
             decode: nil,
@@ -1104,19 +1109,20 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
         // Luminance from pool buffer (fast, no ML, ~instant)
         let luminance = Self.averageLuminance(from: poolBuffer)
 
-        // --- Create CGImage from pool buffer (CPU memcpy) ---
+        // --- 2D detection: CGImage to decouple from camera pool ---
         // On front camera (TrueDepth), Vision's perform() with IOSurface-backed pool
         // buffers fails because the depth sensor hardware consumes shared GPU/buffer
         // resources. Even BGRA format doesn't fully solve this — Vision's ML inference
         // still allocates internal buffers from the same shared pool.
-        // Creating a CGImage via CPU memcpy decouples Vision from the camera pool
-        // entirely. The same CGImage serves both 2D detection and 3D sampling.
-        guard let cgImage = Self.createCGImageFromBGRABuffer(poolBuffer) else { return }
-        // Pool buffer is no longer needed — released when sampleBuffer goes out of scope.
-
-        // --- 2D detection on CGImage (pool-independent) ---
+        // Creating a CGImage via CPU memcpy decouples Vision from the camera pool entirely.
         // Skip this frame if 3D Vision is running (shared internal ML buffer pool).
         guard visionSemaphore.wait(timeout: .now()) == .success else { return }
+        guard let cgImage = Self.createCGImageFromBGRABuffer(poolBuffer) else {
+            visionSemaphore.signal()
+            return
+        }
+        // Pool buffer is no longer needed — released when sampleBuffer goes out of scope.
+
         let handler = VNImageRequestHandler(
             cgImage: cgImage,
             orientation: orientation,
@@ -1182,8 +1188,14 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
             lastVisionError: nil
         )
 
-        // Pass the same CGImage for 3D sampling (already pool-independent)
-        onRealtimeFrame?(keypoints, keypoints.isEmpty ? nil : cgImage)
+        // --- 3D sampling: reuse CGImage at throttled rate (~4fps) ---
+        var cgImageFor3D: CGImage?
+        if !keypoints.isEmpty, onRealtimeFrame != nil,
+           now - last3DSamplingTime >= Self.threeDSamplingInterval {
+            last3DSamplingTime = now
+            cgImageFor3D = cgImage
+        }
+        onRealtimeFrame?(keypoints, cgImageFor3D)
     }
 
     /// Compute average luminance from either the Y plane (420f/420v) or RGB channels (BGRA).
