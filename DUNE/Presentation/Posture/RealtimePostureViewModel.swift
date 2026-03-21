@@ -95,17 +95,16 @@ final class RealtimePostureViewModel {
             tracker.start()
         } catch {
             AppLogger.data.error("[RealtimePostureViewModel] Camera switch failed: \(error.localizedDescription)")
+            isActive = false
         }
     }
 
     func selectExercise(_ rule: ExerciseFormRule?) {
         selectedExercise = rule
         tracker.setExercise(rule)
-        // Stop voice coaching when exercise changes or cleared
-        if rule == nil {
-            voiceCoach.setEnabled(false)
-            isVoiceCoachingEnabled = false
-        }
+        // Reset voice coaching on any exercise change (including switch between exercises)
+        voiceCoach.setEnabled(false)
+        isVoiceCoachingEnabled = false
     }
 
     func toggleVoiceCoaching() {
@@ -132,8 +131,8 @@ final class RealtimePostureViewModel {
         is3DActive = state.is3DActive
         formState = state.formState
 
-        // Feed form state to voice coach
-        if let formState = state.formState, let rule = selectedExercise {
+        // Feed form state to voice coach (guard isEnabled to avoid struct copy on every frame)
+        if voiceCoach.isEnabled, let formState = state.formState, let rule = selectedExercise {
             voiceCoach.processFormState(formState, rule: rule)
         }
     }

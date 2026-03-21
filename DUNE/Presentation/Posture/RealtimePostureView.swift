@@ -60,7 +60,7 @@ struct RealtimePostureView: View {
                        let exercise = viewModel.selectedExercise {
                         FormCheckOverlay(
                             formState: formState,
-                            exerciseName: exercise.displayName
+                            exerciseName: LocalizedStringKey(exercise.displayName)
                         )
                         .padding(.bottom, 80)
                     }
@@ -127,7 +127,7 @@ struct RealtimePostureView: View {
         } label: {
             HStack(spacing: 4) {
                 Image(systemName: viewModel.isFormMode ? "figure.strengthtraining.traditional" : "figure.stand")
-                Text(viewModel.selectedExercise?.displayName ?? String(localized: "Select Exercise"))
+                Text(LocalizedStringKey(viewModel.selectedExercise?.displayName ?? "Select Exercise"))
                     .font(.caption)
             }
             .foregroundStyle(.white)
