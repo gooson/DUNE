@@ -51,14 +51,14 @@ struct HabitRowView: View {
     }
 
     private var isWholeRowToggle: Bool {
-        progress.isCycleBased || progress.type == .check
+        progress.isCycleBased || progress.isAutoLinked || progress.type == .check
     }
 
     private var isToggleDisabled: Bool {
         if progress.isCycleBased {
             return !progress.canCompleteCycle
         }
-        return progress.isAutoCompleted
+        return progress.isAutoLinked || progress.isAutoCompleted
     }
 
     private var cardContent: some View {
@@ -137,6 +137,8 @@ struct HabitRowView: View {
     private var habitInput: some View {
         if progress.isCycleBased {
             cycleCheckInput
+        } else if progress.isAutoLinked {
+            checkInput
         } else {
             switch progress.type {
             case .check:
