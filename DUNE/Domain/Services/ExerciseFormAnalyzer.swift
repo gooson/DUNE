@@ -167,7 +167,7 @@ final class ExerciseFormAnalyzer: @unchecked Sendable {
                 let wasLockout = currentPhase == .lockout
                 currentPhase = .descent
                 reachedBottom = false
-                if wasLockout {
+                if wasLockout, currentRepScoreCount > 0 {
                     finalizeRep()
                 }
             }
