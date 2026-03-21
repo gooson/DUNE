@@ -174,10 +174,112 @@ extension ExerciseFormRule {
         lockoutThreshold: 165   // Elbow angle rises above 165° → lockout
     )
 
+    // MARK: - Bodyweight Exercises
+
+    /// Pull-up — front view recommended.
+    /// Upper-body only: lower limb keypoints may be occluded on bar.
+    static let pullUp = ExerciseFormRule(
+        exerciseID: "pull-up",
+        displayName: "Pull-up",
+        checkpoints: [
+            FormCheckpoint(
+                name: "Arm Extension",
+                jointA: "leftShoulder", jointVertex: "leftElbow", jointC: "leftWrist",
+                passRange: 30...80,       // Deep pull — elbows well bent at top
+                cautionRange: 80...100,   // Not pulling high enough
+                activePhases: [.ascent, .lockout],
+                isPrimaryAngle: true,
+                coachingCue: "Pull higher",
+                positiveCue: "Good pull"
+            ),
+            FormCheckpoint(
+                name: "Shoulder Engagement",
+                jointA: "leftElbow", jointVertex: "leftShoulder", jointC: "leftHip",
+                passRange: 10...50,       // Shoulders depressed, elbows close
+                cautionRange: 50...70,    // Shoulders shrugged or elbows flared
+                activePhases: [.ascent, .lockout],
+                isPrimaryAngle: false,
+                coachingCue: "Depress your shoulders",
+                positiveCue: "Good shoulder position"
+            ),
+        ],
+        recommendedCameraPosition: .front,
+        descentThreshold: 140,  // Elbow angle rises above 140° → descent (lowering)
+        bottomThreshold: 160,   // Elbow angle rises above 160° → dead hang (bottom)
+        lockoutThreshold: 90    // Elbow angle drops below 90° → top position
+    )
+
+    /// Bodyweight Squat — side view recommended.
+    static let bodyweightSquat = ExerciseFormRule(
+        exerciseID: "bodyweight-squat",
+        displayName: "Bodyweight Squat",
+        checkpoints: [
+            FormCheckpoint(
+                name: "Knee Depth",
+                jointA: "leftHip", jointVertex: "leftKnee", jointC: "leftAnkle",
+                passRange: 60...100,     // Parallel or below
+                cautionRange: 100...120, // Slightly above parallel
+                activePhases: [.descent, .bottom],
+                isPrimaryAngle: true,
+                coachingCue: "Go deeper",
+                positiveCue: "Good depth"
+            ),
+            FormCheckpoint(
+                name: "Torso Upright",
+                jointA: "leftShoulder", jointVertex: "leftHip", jointC: "leftKnee",
+                passRange: 50...80,      // More upright than barbell (no bar load)
+                cautionRange: 40...90,
+                activePhases: [.descent, .bottom, .ascent],
+                isPrimaryAngle: false,
+                coachingCue: "Stay upright",
+                positiveCue: "Good posture"
+            ),
+        ],
+        recommendedCameraPosition: .side,
+        descentThreshold: 160,
+        bottomThreshold: 110,
+        lockoutThreshold: 165
+    )
+
+    /// Lunge — side view recommended (front leg visible).
+    static let lunge = ExerciseFormRule(
+        exerciseID: "lunge",
+        displayName: "Lunge",
+        checkpoints: [
+            FormCheckpoint(
+                name: "Front Knee",
+                jointA: "leftHip", jointVertex: "leftKnee", jointC: "leftAnkle",
+                passRange: 80...100,     // ~90° at bottom
+                cautionRange: 70...110,
+                activePhases: [.descent, .bottom],
+                isPrimaryAngle: true,
+                coachingCue: "Bend to 90 degrees",
+                positiveCue: "Good knee angle"
+            ),
+            FormCheckpoint(
+                name: "Torso Upright",
+                jointA: "leftShoulder", jointVertex: "leftHip", jointC: "leftKnee",
+                passRange: 60...100,     // Upright torso
+                cautionRange: 50...110,
+                activePhases: [.descent, .bottom, .ascent],
+                isPrimaryAngle: false,
+                coachingCue: "Keep your torso upright",
+                positiveCue: "Good torso position"
+            ),
+        ],
+        recommendedCameraPosition: .side,
+        descentThreshold: 155,  // Knee angle drops below 155° → descent
+        bottomThreshold: 105,   // Knee angle drops below 105° → bottom
+        lockoutThreshold: 160   // Knee angle rises above 160° → lockout
+    )
+
     /// All built-in form check exercises.
     static let allBuiltIn: [ExerciseFormRule] = [
         .barbellSquat,
         .conventionalDeadlift,
         .overheadPress,
+        .pullUp,
+        .bodyweightSquat,
+        .lunge,
     ]
 }
