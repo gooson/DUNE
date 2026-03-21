@@ -50,6 +50,9 @@ struct PostureDetailView: View {
                 }
             }
         }
+        .navigationDestination(for: PostureSymmetryDestination.self) { destination in
+            PostureSymmetryView(record: record)
+        }
         .background { DetailWaveBackground() }
         .environment(\.waveColor, DS.Color.body)
         .postureImageZoom($zoomImage)
