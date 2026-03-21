@@ -425,7 +425,7 @@ struct ActivityView: View {
             await viewModel.loadActivityData()
             recomputeInjuryConflicts()
             recomputeInjuryRisk()
-            viewModel.generateWeeklyReport()
+            await viewModel.generateWeeklyReport()
         }
         .task(id: notificationRouteSignal) {
             await handleExternalNotificationRoute()
@@ -439,7 +439,7 @@ struct ActivityView: View {
             await viewModel.refreshSuggestionFromRecords(recentRecords)
             recomputeInjuryConflicts()
             recomputeInjuryRisk()
-            viewModel.generateWeeklyReport()
+            await viewModel.generateWeeklyReport()
         }
         .onChange(of: activeInjurySnapshot) { _, _ in
             recomputeInjuryConflicts()

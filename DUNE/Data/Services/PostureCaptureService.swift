@@ -948,6 +948,7 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
             return image.jpegData(compressionQuality: Self.jpegCompressionQuality)
         }
 
+        let marker = PostureImageMetadata.uprightJPEGSoftwareMarker
         let data = NSMutableData()
         guard let destination = CGImageDestinationCreateWithData(
             data,
@@ -961,7 +962,10 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
         let properties: [CFString: Any] = [
             kCGImageDestinationLossyCompressionQuality: Self.jpegCompressionQuality,
             kCGImagePropertyTIFFDictionary: [
-                kCGImagePropertyTIFFSoftware: PostureImageMetadata.uprightJPEGSoftwareMarker,
+                kCGImagePropertyTIFFSoftware: marker,
+            ],
+            kCGImagePropertyExifDictionary: [
+                kCGImagePropertyExifUserComment: marker,
             ],
         ]
         CGImageDestinationAddImage(destination, cgImage, properties as CFDictionary)

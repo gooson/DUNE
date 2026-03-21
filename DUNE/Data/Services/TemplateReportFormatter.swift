@@ -12,7 +12,11 @@ struct TemplateReportFormatter: WorkoutReportFormatting, Sendable {
 
         // Main stats sentence
         if report.stats.totalSessions > 0 {
-            parts.append(String(localized: "You trained \(report.stats.activeDays) days \(periodName) with \(report.stats.totalSessions) sessions totaling \(Int(report.stats.totalVolume)) kg volume."))
+            parts.append(
+                String(
+                    localized: "You trained \(report.stats.activeDays) days \(periodName) with \(report.stats.totalSessions) sessions totaling \(Int(report.stats.totalVolume)) kg volume."
+                )
+            )
         } else {
             return String(localized: "No workouts recorded \(periodName).")
         }

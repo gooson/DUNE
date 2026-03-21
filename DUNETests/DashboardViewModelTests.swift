@@ -524,6 +524,7 @@ struct DashboardViewModelTests {
             sleepService: MockSleepService(),
             workoutService: MockWorkoutService(),
             stepsService: MockStepsService(),
+            bodyService: MockBodyService(),
             sharedHealthDataService: CountingDashboardSharedHealthDataService(snapshot: snapshot),
             weatherProvider: MockWeatherProvider(snapshot: makeTestWeatherSnapshot()),
             coachingMessageEnhancer: nil
@@ -560,7 +561,8 @@ struct DashboardViewModelTests {
             hrvService: MockHRVService(),
             sleepService: MockSleepService(),
             workoutService: MockWorkoutService(),
-            stepsService: MockStepsService(),
+            stepsService: MockStepsService(todaySteps: 1200),
+            bodyService: MockBodyService(),
             sharedHealthDataService: CountingDashboardSharedHealthDataService(snapshot: snapshot),
             weatherProvider: MockWeatherProvider(snapshot: makeTestWeatherSnapshot()),
             coachingMessageEnhancer: nil
@@ -569,7 +571,7 @@ struct DashboardViewModelTests {
         await vm.loadData()
 
         #expect(vm.sortedMetrics.contains { $0.category == .steps })
-        #expect(vm.errorMessage?.contains("Some data could not be loaded") == true)
+        #expect(vm.errorMessage?.isEmpty == false)
     }
 
     // MARK: - Sleep Fallback

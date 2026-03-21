@@ -144,7 +144,7 @@ private struct CardioSessionPagingView: View {
 private struct StrengthSessionPagingView: View {
     @Environment(\.isLuminanceReduced) private var isLuminanceReduced
 
-    @State private var selectedTab: StrengthTab = .metrics
+    @State private var selectedTab: StrengthTab = Self.initialTab
 
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -170,5 +170,9 @@ private struct StrengthSessionPagingView: View {
         case controls
         case metrics
         case nowPlaying
+    }
+
+    private static var initialTab: StrengthTab {
+        ProcessInfo.processInfo.arguments.contains("--ui-watch-strength-start-controls") ? .controls : .metrics
     }
 }
