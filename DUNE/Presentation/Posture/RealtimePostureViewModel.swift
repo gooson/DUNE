@@ -88,9 +88,14 @@ final class RealtimePostureViewModel {
     }
 
     func switchCamera() {
-        stop()
+        tracker.stop()
         cameraPosition = cameraPosition == .front ? .back : .front
-        start()
+        do {
+            try captureService.switchCamera()
+            tracker.start()
+        } catch {
+            AppLogger.data.error("[RealtimePostureViewModel] Camera switch failed: \(error.localizedDescription)")
+        }
     }
 
     func selectExercise(_ rule: ExerciseFormRule?) {
