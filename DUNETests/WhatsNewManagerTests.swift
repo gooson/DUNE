@@ -174,7 +174,6 @@ struct WhatsNewManagerTests {
 
         let muscleMap = release.features.first { $0.id == "muscleMap3DOverhaul" }
         #expect(muscleMap?.screenshotAsset == nil)
-        #expect(muscleMap?.screenshotAsset == nil)
     }
 
     @Test("Older versions have no screenshotAsset on any feature")
@@ -212,7 +211,6 @@ struct WhatsNewManagerTests {
             area: .today
         )
 
-        #expect(feature.screenshotAsset == nil)
         #expect(feature.screenshotAsset == nil)
     }
 
