@@ -95,6 +95,7 @@ final class RealtimePostureViewModel {
             tracker.start()
         } catch {
             AppLogger.data.error("[RealtimePostureViewModel] Camera switch failed: \(error.localizedDescription)")
+            isActive = false
         }
     }
 
