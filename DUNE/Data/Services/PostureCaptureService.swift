@@ -267,6 +267,7 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
 
     private(set) var currentPosition: AVCaptureDevice.Position = .front
     private(set) var currentDevice: AVCaptureDevice?
+    private var isPhotoOutputEnabled = true
 
     // MARK: - Configuration
 
@@ -291,7 +292,13 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
 
     // MARK: - Setup
 
-    func setupCamera(position: AVCaptureDevice.Position = .front) throws {
+    /// - Parameter needsPhotoCapture: When false, photoOutput is NOT added to the session.
+    ///   This frees GPU/buffer resources on front camera (TrueDepth) where the depth sensor
+    ///   hardware competes with Vision's ML buffer allocation. Each AVCaptureOutput added
+    ///   to the session reserves hardware buffer slots — fewer outputs = more headroom.
+    func setupCamera(position: AVCaptureDevice.Position = .front, needsPhotoCapture: Bool = true) throws {
+        isPhotoOutputEnabled = needsPhotoCapture
+
         // Drain any leaked photoContinuation from a previous session
         continuationLock.withLock {
             photoContinuation?.resume(throwing: PostureCaptureError.captureSessionNotRunning)
@@ -328,12 +335,21 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
         captureSession.addInput(input)
         captureSession.sessionPreset = liveConfiguration.preset.resolvedPreset(for: captureSession)
 
-        guard captureSession.canAddOutput(photoOutput) else {
-            captureSession.commitConfiguration()
-            throw PostureCaptureError.cameraUnavailable
+        // Only add photoOutput when photo capture is needed (e.g. PostureAssessmentViewModel).
+        // Each output reserves hardware buffer slots. On front camera (TrueDepth), the depth
+        // sensor already consumes shared GPU resources. Omitting photoOutput in realtime-only
+        // mode frees buffer slots so Vision's ML inference can allocate its internal buffers.
+        if needsPhotoCapture {
+            guard captureSession.canAddOutput(photoOutput) else {
+                captureSession.commitConfiguration()
+                throw PostureCaptureError.cameraUnavailable
+            }
+            captureSession.addOutput(photoOutput)
+            // Front camera (TrueDepth): use .speed to minimize GPU resource pre-allocation.
+            // The depth sensor hardware already consumes shared buffer slots — .quality
+            // pre-allocates additional high-res buffers that starve Vision's ML inference.
+            photoOutput.maxPhotoQualityPrioritization = position == .front ? .speed : .quality
         }
-        captureSession.addOutput(photoOutput)
-        photoOutput.maxPhotoQualityPrioritization = .quality
 
         // Add video data output for real-time pose guidance
         videoDataOutput.alwaysDiscardsLateVideoFrames = true
@@ -362,14 +378,14 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
 
     func switchCamera() throws {
         let newPosition: AVCaptureDevice.Position = currentPosition == .front ? .back : .front
-        try setupCamera(position: newPosition)
+        try setupCamera(position: newPosition, needsPhotoCapture: isPhotoOutputEnabled)
     }
 
     func updateLiveConfiguration(_ configuration: PostureCaptureLiveConfiguration) throws {
         let previousConfiguration = liveConfiguration
         liveConfiguration = configuration
         do {
-            try setupCamera(position: currentPosition)
+            try setupCamera(position: currentPosition, needsPhotoCapture: isPhotoOutputEnabled)
             // Always restart — startSession() guards against double-start on sessionQueue,
             // avoiding the TOCTOU race of reading isRunning on the caller thread.
             startSession()
