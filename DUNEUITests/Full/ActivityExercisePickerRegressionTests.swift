@@ -57,6 +57,10 @@ final class ActivityExercisePickerRegressionTests: ActivityExerciseSeededUITestB
         hideButton.tap()
 
         XCTAssertTrue(
+            scrollPickerToElementIfNeeded(AXID.pickerAllExercisesButton, maxSwipes: 4, direction: .down),
+            "Quick start picker should restore the hub entry after hiding all exercises"
+        )
+        XCTAssertTrue(
             app.descendants(matching: .any)[AXID.pickerAllExercisesButton].firstMatch.waitForExistence(timeout: 8),
             "Quick start picker should return to the hub after hiding all exercises"
         )
@@ -64,6 +68,10 @@ final class ActivityExercisePickerRegressionTests: ActivityExerciseSeededUITestB
         XCTAssertTrue(app.fillTextInput(AXID.pickerSearchField, with: "Bench Press"), "Picker search should accept Bench Press")
         dismissSearchKeyboardIfPresent()
 
+        XCTAssertTrue(
+            scrollPickerToHittableElementIfNeeded(AXID.pickerExerciseDetailButton(Fixture.benchPressID), maxSwipes: 4),
+            "Bench Press detail button should be reachable after search"
+        )
         let detailButton = app.descendants(matching: .any)[AXID.pickerExerciseDetailButton(Fixture.benchPressID)].firstMatch
         XCTAssertTrue(detailButton.waitForExistence(timeout: 8), "Bench Press detail button should exist after search")
         detailButton.tap()
@@ -133,9 +141,7 @@ final class ActivityExercisePickerRegressionTests: ActivityExerciseSeededUITestB
     private func openQuickStartPicker() {
         ensureActivityRoot()
 
-        let addButton = app.descendants(matching: .any)[AXID.activityToolbarAdd].firstMatch
-        XCTAssertTrue(addButton.waitForExistence(timeout: 5), "Activity add button should exist")
-        addButton.tap()
+        XCTAssertTrue(app.waitAndTap(AXID.activityToolbarAdd), "Activity add button should exist")
 
         let picker = app.descendants(matching: .any)[AXID.pickerRootList].firstMatch
         XCTAssertTrue(picker.waitForExistence(timeout: 8), "Quick start picker should appear")
