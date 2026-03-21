@@ -424,13 +424,22 @@ final class CameraPreviewUIView: UIView {
     }
 
     private func applyRotationAngle(_ angle: CGFloat) {
-        guard let connection = previewLayer.connection,
-              connection.isVideoRotationAngleSupported(angle) else { return }
-        connection.videoRotationAngle = angle
+        guard let connection = previewLayer.connection else { return }
 
-        if lastReportedPreviewRotationAngle != angle {
-            lastReportedPreviewRotationAngle = angle
-            onPreviewRotationAngleChange?(angle)
+        // On Mac (Designed for iPad), RotationCoordinator returns 0 because Mac
+        // doesn't rotate, but the FaceTime camera produces landscape buffers that
+        // need 90° rotation for upright display in the app window.
+        var effectiveAngle = angle
+        if effectiveAngle == 0, ProcessInfo.processInfo.isiOSAppOnMac {
+            effectiveAngle = 90
+        }
+
+        guard connection.isVideoRotationAngleSupported(effectiveAngle) else { return }
+        connection.videoRotationAngle = effectiveAngle
+
+        if lastReportedPreviewRotationAngle != effectiveAngle {
+            lastReportedPreviewRotationAngle = effectiveAngle
+            onPreviewRotationAngleChange?(effectiveAngle)
         }
     }
 }
