@@ -32,6 +32,8 @@ struct RealtimePoseState: Sendable {
     var is3DActive: Bool = false
     /// Frames since last valid detection (for timeout).
     var framesSinceLastDetection: Int = 0
+    /// Exercise form state when form check mode is active.
+    var formState: ExerciseFormState?
 }
 
 // MARK: - Score Smoothing

@@ -22,6 +22,12 @@ final class RealtimePostureViewModel {
     var cameraPosition: CameraPosition = .back
     var deviceOrientation: UIDeviceOrientation = .portrait
 
+    // Form check mode
+    var selectedExercise: ExerciseFormRule?
+    var formState: ExerciseFormState?
+    var showExercisePicker: Bool = false
+    var isFormMode: Bool { selectedExercise != nil }
+
     // MARK: - Dependencies
 
     private let captureService = PostureCaptureService()
@@ -81,6 +87,11 @@ final class RealtimePostureViewModel {
         start()
     }
 
+    func selectExercise(_ rule: ExerciseFormRule?) {
+        selectedExercise = rule
+        tracker.setExercise(rule)
+    }
+
     func updateDeviceOrientation(_ orientation: UIDeviceOrientation) {
         guard orientation.isValidInterfaceOrientation else { return }
         deviceOrientation = orientation
@@ -98,6 +109,7 @@ final class RealtimePostureViewModel {
         smoothedScore = state.smoothedScore
         skeletonKeypoints = state.skeletonKeypoints
         is3DActive = state.is3DActive
+        formState = state.formState
     }
 }
 
