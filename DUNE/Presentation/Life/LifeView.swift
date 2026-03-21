@@ -1107,13 +1107,19 @@ private struct HabitHistorySheet: View {
 
     // MARK: - Entry List
 
-    private var entryList: some View {
-        ScrollView {
-            LazyVStack(spacing: 0) {
-                ForEach(Array(entries.enumerated()), id: \.element.id) { index, entry in
-                    entryRow(entry, index: index)
+    // Hoist today's startOfDay outside ForEach to avoid per-row Calendar allocation
+    private var todayStartOfDay: Date {
+        Calendar.current.startOfDay(for: Date())
+    }
 
-                    if index < entries.count - 1 {
+    private var entryList: some View {
+        let today = todayStartOfDay
+        return ScrollView {
+            LazyVStack(spacing: 0) {
+                ForEach(entries) { entry in
+                    entryRow(entry, today: today)
+
+                    if entry.id != entries.last?.id {
                         Divider()
                             .padding(.leading, 52)
                     }
@@ -1123,7 +1129,7 @@ private struct HabitHistorySheet: View {
         }
     }
 
-    private func entryRow(_ entry: LifeViewModel.HabitHistoryEntry, index: Int) -> some View {
+    private func entryRow(_ entry: LifeViewModel.HabitHistoryEntry, today: Date) -> some View {
         HStack(spacing: DS.Spacing.sm) {
             // Action icon
             Image(systemName: iconName(for: entry.action))
@@ -1152,7 +1158,7 @@ private struct HabitHistorySheet: View {
 
             // Date
             VStack(alignment: .trailing, spacing: 2) {
-                Text(relativeDate(entry.date))
+                Text(relativeDate(entry.date, today: today))
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 Text(entry.date.formatted(date: .abbreviated, time: .omitted))
@@ -1162,7 +1168,7 @@ private struct HabitHistorySheet: View {
         }
         .padding(.vertical, DS.Spacing.sm)
         .accessibilityElement(children: .combine)
-        .accessibilityIdentifier("life-habit-history-row-\(index)")
+        .accessibilityIdentifier("life-habit-history-row-\(entry.id.uuidString.prefix(8))")
     }
 
     // MARK: - Empty State
@@ -1197,22 +1203,23 @@ private struct HabitHistorySheet: View {
     }
 
     private func valueDescription(for entry: LifeViewModel.HabitHistoryEntry) -> String {
+        let value = max(0, Int(entry.value))
+        let goal = max(0, Int(entry.goalValue))
         switch entry.habitType {
         case .check:
             return String(localized: "Done")
         case .duration:
             let unit = entry.goalUnit ?? String(localized: "min")
-            return "\(Int(entry.value))/\(Int(entry.goalValue)) \(unit)"
+            return "\(value)/\(goal) \(unit)"
         case .count:
             let unit = entry.goalUnit ?? ""
-            let text = "\(Int(entry.value))/\(Int(entry.goalValue))"
+            let text = "\(value)/\(goal)"
             return unit.isEmpty ? text : "\(text) \(unit)"
         }
     }
 
-    private func relativeDate(_ date: Date) -> String {
+    private func relativeDate(_ date: Date, today: Date) -> String {
         let calendar = Calendar.current
-        let today = calendar.startOfDay(for: Date())
         let target = calendar.startOfDay(for: date)
         let days = calendar.dateComponents([.day], from: target, to: today).day ?? 0
 
