@@ -3756,7 +3756,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Apple Watch 취침 알림"
+            "value" : "Apple Watch 취침 미리 알림"
           }
         }
       }
@@ -3773,7 +3773,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Apple Watch 알림 시간"
+            "value" : "Apple Watch 취침 미리 알림 시간"
           }
         }
       }
@@ -5005,6 +5005,23 @@
         }
       }
     },
+    "Bedtime": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "就寝"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "취침"
+          }
+        }
+      }
+    },
     "Bedtime Reminder": {
       "extractionState": "manual",
       "localizations": {
@@ -5017,7 +5034,7 @@
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "취침 알림"
+            "value": "취침 미리 알림"
           }
         }
       }
@@ -9712,6 +9729,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "최근 Apple Watch 심박 데이터로 이미 시계를 착용 중인 것으로 보이면 DUNE이 이 알림을 건너뜁니다."
+          }
+        }
+      }
+    },
+    "DUNE skips this reminder when recent heart-rate data suggests you're already wearing your watch." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最近の心拍データからすでに着用中と判断した場合、DUNEはこの通知を送信しません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최근 심박 데이터로 이미 워치를 착용 중인 것으로 보이면 DUNE이 이 알림을 건너뜁니다."
           }
         }
       }
@@ -24526,7 +24560,7 @@
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "미리 알림 시간"
+            "value": "취침 미리 알림 시간"
           }
         }
       }
@@ -33759,13 +33793,47 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Watch"
+            "value": "ウォッチ"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "Watch"
+            "value": "워치"
+          }
+        }
+      }
+    },
+    "Watch Reminder": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ウォッチリマインダー"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "워치 미리 알림"
+          }
+        }
+      }
+    },
+    "Watch Reminder Lead Time": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ウォッチ通知タイミング"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "워치 미리 알림 시간"
           }
         }
       }

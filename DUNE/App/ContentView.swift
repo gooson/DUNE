@@ -256,6 +256,7 @@ struct ContentView: View {
                 }
                 Task {
                     await BedtimeReminderScheduler.shared.refreshSchedule()
+                    await AppleWatchBedtimeReminderScheduler.shared.refreshSchedule()
                 }
             }
             if oldPhase == .background, newPhase == .active {
