@@ -27,12 +27,15 @@ OUTPUT_PATH=""
 WAIT_SECONDS="${DAILVE_VISION_SMOKE_WAIT_SECONDS:-8}"
 REGENERATE=1
 SKIP_BUILD=0
+SMOKE_MODE="primary"
+SMOKE_LAUNCH_ARGUMENT="--vision-window-placement-smoke"
 
 usage() {
     cat <<'EOF'
 Usage: scripts/vision-window-placement-smoke.sh [options]
 
 Options:
+  --no-anchor          Run the no-anchor utility-panel fallback smoke
   --no-regen            Skip xcodegen regeneration unless the project is missing
   --skip-build          Reuse the existing derived data app bundle
   --output <path>       Screenshot output path
@@ -42,6 +45,11 @@ EOF
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
+        --no-anchor)
+            SMOKE_MODE="no-anchor"
+            SMOKE_LAUNCH_ARGUMENT="--vision-window-placement-no-anchor-smoke"
+            shift
+            ;;
         --no-regen)
             REGENERATE=0
             shift
@@ -74,7 +82,7 @@ mkdir -p "$DERIVED_DATA_DIR" "$ARTIFACT_DIR" "$LOG_DIR"
 regen_project
 
 if [[ -z "$OUTPUT_PATH" ]]; then
-    OUTPUT_PATH="$ARTIFACT_DIR/window-placement-$(date +%Y%m%d-%H%M%S).png"
+    OUTPUT_PATH="$ARTIFACT_DIR/window-placement-${SMOKE_MODE}-$(date +%Y%m%d-%H%M%S).png"
 fi
 
 if [[ "$SKIP_BUILD" -ne 1 ]]; then
@@ -176,7 +184,7 @@ xcrun simctl install "$DEVICE_UDID" "$APP_PATH"
 echo "Launching placement smoke flow..."
 xcrun simctl launch "$DEVICE_UDID" "$BUNDLE_ID" \
     --seed-mock \
-    --vision-window-placement-smoke
+    "$SMOKE_LAUNCH_ARGUMENT"
 
 echo "Waiting ${WAIT_SECONDS}s for windows to open..."
 sleep "$WAIT_SECONDS"
@@ -188,10 +196,12 @@ NOTE_PATH="${OUTPUT_PATH%.png}.txt"
 cat >"$NOTE_PATH" <<EOF
 Vision window placement smoke
 date: $(date '+%Y-%m-%d %H:%M:%S')
+mode: $SMOKE_MODE
 simulator: $RESOLVED_SIMULATOR_NAME (${RESOLVED_SIMULATOR_OS:-unknown})
 udid: $DEVICE_UDID
 app: $APP_PATH
-launch_args: --seed-mock --vision-window-placement-smoke
+launch_args: --seed-mock $SMOKE_LAUNCH_ARGUMENT
+wait_seconds: $WAIT_SECONDS
 screenshot: $OUTPUT_PATH
 EOF
 

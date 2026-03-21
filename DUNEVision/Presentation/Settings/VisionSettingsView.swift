@@ -2,15 +2,25 @@ import SwiftUI
 import SwiftData
 
 struct VisionSettingsView: View {
+    private static let windowPlacementSmokeInitialDelayNanos: UInt64 = 1_000_000_000
+    private static let windowPlacementSmokeStepDelayNanos: UInt64 = 350_000_000
+
     @AppStorage(SimulatorAdvancedMockDataModeStore.storageKey) private var isSimulatorMockEnabled = false
 
     private let modelContainer: ModelContainer
+    private let smokeConfiguration: VisionWindowPlacementSmokeConfiguration
+
+    @Environment(\.openWindow) private var openWindow
 
     @State private var isProcessingSimulatorMockData = false
     @State private var simulatorMockStatusMessage: String?
 
-    init(modelContainer: ModelContainer) {
+    init(
+        modelContainer: ModelContainer,
+        smokeConfiguration: VisionWindowPlacementSmokeConfiguration = .current()
+    ) {
         self.modelContainer = modelContainer
+        self.smokeConfiguration = smokeConfiguration
     }
 
     var body: some View {
@@ -21,6 +31,9 @@ struct VisionSettingsView: View {
             aboutSection
         }
         .navigationTitle("Settings")
+        .task(id: smokeConfiguration) {
+            await runWindowPlacementSmokeContinuationIfNeeded()
+        }
     }
 
     private var simulatorMockDataSection: some View {
@@ -128,6 +141,20 @@ struct VisionSettingsView: View {
                 simulatorMockStatusMessage = String(localized: "Mock data could not be updated.")
                 AppLogger.data.error("Vision settings mock data reset failed: \(error.localizedDescription)")
             }
+        }
+    }
+
+    @MainActor
+    private func runWindowPlacementSmokeContinuationIfNeeded() async {
+        guard smokeConfiguration.mode == .noAnchor else { return }
+
+        try? await Task.sleep(nanoseconds: Self.windowPlacementSmokeInitialDelayNanos)
+
+        for windowID in smokeConfiguration.secondaryWindowAutoOpenIDs {
+            guard !Task.isCancelled else { return }
+            AppLogger.ui.info("[VisionWindowPlacementSmoke] Opening \(windowID) from settings utility panel")
+            openWindow(id: windowID)
+            try? await Task.sleep(nanoseconds: Self.windowPlacementSmokeStepDelayNanos)
         }
     }
 }

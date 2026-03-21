@@ -7,6 +7,7 @@ import SwiftData
 struct VisionContentView: View {
     private static let windowPlacementSmokeInitialDelayNanos: UInt64 = 800_000_000
     private static let windowPlacementSmokeStepDelayNanos: UInt64 = 350_000_000
+    private static let windowPlacementSmokeDismissDelayNanos: UInt64 = 700_000_000
 
     @AppStorage(SimulatorAdvancedMockDataModeStore.storageKey) private var isSimulatorMockEnabled = false
     private let modelContainer: ModelContainer
@@ -16,6 +17,7 @@ struct VisionContentView: View {
     private let windowPlacementSmokeConfiguration: VisionWindowPlacementSmokeConfiguration
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.openWindow) private var openWindow
+    @Environment(\.dismissWindow) private var dismissWindow
     @Environment(\.openImmersiveSpace) private var openImmersiveSpace
     @Environment(\.supportsMultipleWindows) private var supportsMultipleWindows
     @State private var selectedSection: AppSection = .today
@@ -83,7 +85,10 @@ struct VisionContentView: View {
                         }
                     )
                     .navigationDestination(isPresented: $showSettings) {
-                        VisionSettingsView(modelContainer: modelContainer)
+                        VisionSettingsView(
+                            modelContainer: modelContainer,
+                            smokeConfiguration: windowPlacementSmokeConfiguration
+                        )
                     }
                 }
                 .accessibilityIdentifier(VisionSurfaceAccessibility.sectionScreenID(for: .today))
@@ -188,12 +193,17 @@ struct VisionContentView: View {
 
         try? await Task.sleep(nanoseconds: Self.windowPlacementSmokeInitialDelayNanos)
 
-        for windowID in windowPlacementSmokeConfiguration.autoOpenWindowIDs {
+        for windowID in windowPlacementSmokeConfiguration.mainWindowAutoOpenIDs {
             guard !Task.isCancelled else { return }
             AppLogger.ui.info("[VisionWindowPlacementSmoke] Opening \(windowID)")
             openWindow(id: windowID)
             try? await Task.sleep(nanoseconds: Self.windowPlacementSmokeStepDelayNanos)
         }
+
+        guard windowPlacementSmokeConfiguration.shouldDismissMainWindow else { return }
+        try? await Task.sleep(nanoseconds: Self.windowPlacementSmokeDismissDelayNanos)
+        AppLogger.ui.info("[VisionWindowPlacementSmoke] Dismissing main window for no-anchor fallback")
+        dismissWindow()
     }
 
     private func scheduleWindowOpen(_ id: String) {
