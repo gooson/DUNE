@@ -33,7 +33,9 @@ UI 표시 (운동명 + 대상 메트릭 + 장비 + 카테고리)
 |------|------|
 | `Domain/Models/CorrectiveRecommendation.swift` | 추천 결과 모델 (exercise + targetMetrics) |
 | `Domain/UseCases/CorrectiveExerciseUseCase.swift` | 매핑 테이블 + 추천 로직 |
-| `Presentation/Posture/PostureResultView.swift` | correctiveExercisesSection |
+| `Presentation/Posture/Components/CorrectiveExercisesSectionView.swift` | 공유 UI 컴포넌트 |
+| `Presentation/Posture/PostureResultView.swift` | 결과 화면에서 공유 컴포넌트 사용 |
+| `Presentation/Posture/PostureDetailView.swift` | 히스토리 상세에서 공유 컴포넌트 사용 |
 | `Presentation/Posture/PostureAssessmentViewModel.swift` | refreshCombinedAssessment() 헬퍼 |
 
 ### 설계 결정

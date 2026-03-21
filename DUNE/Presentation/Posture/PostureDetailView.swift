@@ -8,6 +8,7 @@ struct PostureDetailView: View {
     @State private var showDeleteConfirmation = false
     @State private var zoomImage: ZoomableImageItem?
     @State private var pdfURL: URL?
+    @State private var correctiveRecommendations: [CorrectiveRecommendation] = []
 
     var body: some View {
         ScrollView {
@@ -15,6 +16,10 @@ struct PostureDetailView: View {
                 scoreSection
                 captureImagesSection
                 metricsSection
+
+                CorrectiveExercisesSectionView(recommendations: correctiveRecommendations)
+                    .padding(DS.Spacing.md)
+                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
 
                 if record.frontImageData != nil {
                     symmetryLink
@@ -49,6 +54,13 @@ struct PostureDetailView: View {
                     }
                 }
             }
+        }
+        .navigationDestination(for: PostureSymmetryDestination.self) { _ in
+            PostureSymmetryView(record: record)
+        }
+        .task {
+            let useCase = CorrectiveExerciseUseCase(library: ExerciseLibraryService.shared)
+            correctiveRecommendations = useCase.recommendations(for: record.allMetrics)
         }
         .background { DetailWaveBackground() }
         .environment(\.waveColor, DS.Color.body)
