@@ -173,6 +173,7 @@ private struct HabitListQueryView: View {
     @State private var heatmapData: [DailyCompletionCount] = []
     @State private var weeklyReport: WeeklyHabitReport?
     @State private var showingReport = false
+    @State private var showingHeatmapDetail = false
 
     private struct HabitHistorySelection: Identifiable {
         let id: UUID
@@ -307,7 +308,9 @@ private struct HabitListQueryView: View {
                 monthlyRates: monthlyRates
             )
 
-            HabitHeatmapView(data: heatmapData)
+            HabitHeatmapView(data: heatmapData) {
+                showingHeatmapDetail = true
+            }
 
             if weeklyReport != nil {
                 Button {
@@ -331,6 +334,9 @@ private struct HabitListQueryView: View {
             if let report = weeklyReport {
                 WeeklyHabitReportView(report: report)
             }
+        }
+        .navigationDestination(isPresented: $showingHeatmapDetail) {
+            HabitHeatmapDetailView(data: heatmapData)
         }
     }
 
