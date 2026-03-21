@@ -57,6 +57,8 @@ actor AppRefreshCoordinatorImpl: AppRefreshCoordinating {
             }
         }
 
+        // Advance general throttle for all sources (including CloudKit) so a
+        // CloudKit-triggered refresh isn't followed by a redundant foreground refresh.
         lastRefreshDate = now
         await sharedHealthDataService.invalidateCache()
         continuation.yield(source)
