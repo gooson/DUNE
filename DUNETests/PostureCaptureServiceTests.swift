@@ -63,6 +63,70 @@ struct PostureCaptureServiceTests {
         #expect(format == kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange)
     }
 
+    @Test("Capture result reports whether a true 3D pose was produced")
+    func captureResultTracksTrue3DPose() {
+        let threeDResult = PostureCaptureResult(
+            jointPositions: [],
+            bodyHeight: 1.8,
+            heightEstimation: .measured,
+            imageData: nil,
+            poseSource: .threeD
+        )
+        let fallbackResult = PostureCaptureResult(
+            jointPositions: [],
+            bodyHeight: 1.8,
+            heightEstimation: .reference,
+            imageData: nil,
+            poseSource: .twoDFallback
+        )
+
+        #expect(threeDResult.hasTrue3DPose)
+        #expect(!fallbackResult.hasTrue3DPose)
+    }
+
+    @Test("Averaged pose source stays in fallback mode when any sample is 2D fallback")
+    func averagedPoseSourceIsConservative() {
+        let mixedSources = [
+            PostureCaptureResult(
+                jointPositions: [],
+                bodyHeight: 1.8,
+                heightEstimation: .measured,
+                imageData: nil,
+                poseSource: .threeD
+            ),
+            PostureCaptureResult(
+                jointPositions: [],
+                bodyHeight: 1.8,
+                heightEstimation: .reference,
+                imageData: nil,
+                poseSource: .twoDFallback
+            ),
+        ]
+
+        #expect(PostureCaptureResult.averagedPoseSource(for: []) == .twoDFallback)
+        #expect(PostureCaptureResult.averagedPoseSource(for: mixedSources) == .twoDFallback)
+        #expect(
+            PostureCaptureResult.averagedPoseSource(
+                for: [
+                    PostureCaptureResult(
+                        jointPositions: [],
+                        bodyHeight: 1.8,
+                        heightEstimation: .measured,
+                        imageData: nil,
+                        poseSource: .threeD
+                    ),
+                    PostureCaptureResult(
+                        jointPositions: [],
+                        bodyHeight: 1.75,
+                        heightEstimation: .reference,
+                        imageData: nil,
+                        poseSource: .threeD
+                    ),
+                ]
+            ) == .threeD
+        )
+    }
+
     // MARK: - Helpers
 
     private func makeNV12Buffer(width: Int, height: Int, yValue: UInt8) throws -> CVPixelBuffer {
