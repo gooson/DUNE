@@ -579,6 +579,40 @@ struct LifeViewModelTests {
         #expect(weekly5?.currentValue == 1)
     }
 
+    @Test("autoLinkedProgresses filters only auto-linked habits")
+    func autoLinkedProgressesFilter() {
+        let vm = LifeViewModel()
+        let normalHabit = HabitDefinition(
+            name: "Read",
+            iconCategory: .study,
+            habitType: .check,
+            goalValue: 1,
+            goalUnit: nil,
+            frequency: .daily,
+            isAutoLinked: false
+        )
+        let autoHabit = HabitDefinition(
+            name: "Workout",
+            iconCategory: .fitness,
+            habitType: .check,
+            goalValue: 1,
+            goalUnit: nil,
+            frequency: .daily,
+            isAutoLinked: true,
+            autoLinkSource: "exercise"
+        )
+
+        vm.calculateProgresses(habits: [normalHabit, autoHabit], todayExerciseExists: false)
+
+        #expect(vm.habitProgresses.count == 2)
+        #expect(vm.autoLinkedProgresses.count == 1)
+        #expect(vm.autoLinkedProgresses.first?.name == "Workout")
+
+        let nonAutoLinked = vm.habitProgresses.filter { !$0.isAutoLinked }
+        #expect(nonAutoLinked.count == 1)
+        #expect(nonAutoLinked.first?.name == "Read")
+    }
+
     @Test("LifeHabitLogSync insert updates relationship immediately")
     func lifeHabitLogSyncInsert() {
         let habit = HabitDefinition(
