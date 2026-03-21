@@ -1,9 +1,9 @@
 ---
 source: brainstorm/realtime-video-posture-analysis
 priority: p3
-status: pending
+status: done
 created: 2026-03-15
-updated: 2026-03-16
+updated: 2026-03-22
 ---
 
 # 실시간 영상 자세 분석 — 상위 항목
@@ -29,3 +29,7 @@ updated: 2026-03-16
 듀얼 파이프라인: 2D 연속 (30fps) + 3D 주기적 (3-5fps)
 타겟 디바이스: A17+ 전용
 카메라: 삼각대 고정 전제 (핸드헬드는 Future)
+
+## 잔여 항목
+
+- #142 (Phase 4C: 세트 녹화 & 리플레이)는 독립 TODO로 별도 추적

@@ -38,6 +38,9 @@ final class WellnessViewModel {
     // Sleep prediction
     var sleepPrediction: SleepQualityPrediction?
 
+    // Watch posture summary (received via WatchConnectivity)
+    var watchPostureSummary: DailyPostureSummary?
+
     // MARK: - Dependencies
 
     private let healthKitManager: HealthKitManager
@@ -104,6 +107,9 @@ final class WellnessViewModel {
         invalidateLoadRequests()
         loadTask?.cancel()
         loadTask = Task { await performLoad() }
+
+        // Refresh Watch posture summary
+        watchPostureSummary = WatchSessionManager.shared.receivedPostureSummary
     }
 
     /// Re-run wellness score calculation with current cached inputs.

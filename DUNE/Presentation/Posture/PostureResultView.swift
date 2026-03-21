@@ -17,6 +17,7 @@ struct PostureResultView: View {
                 scoreSection
                 captureImagesSection
                 metricsSection
+                correctiveExercisesSection
                 memoSection
                 actionButtons
             }
@@ -258,6 +259,52 @@ struct PostureResultView: View {
 
     private func metricValueText(_ metric: PostureMetricResult) -> String {
         formattedPostureMetricValue(metric.value, unit: metric.unit)
+    }
+
+    // MARK: - Memo
+
+    // MARK: - Corrective Exercises
+
+    @ViewBuilder
+    private var correctiveExercisesSection: some View {
+        if !viewModel.correctiveRecommendations.isEmpty {
+            VStack(alignment: .leading, spacing: 12) {
+                Text("Recommended Exercises")
+                    .font(.headline)
+                    .accessibilityAddTraits(.isHeader)
+
+                ForEach(viewModel.correctiveRecommendations) { rec in
+                    let metricsDescription = rec.targetMetrics.map(\.displayName).joined(separator: ", ")
+                    HStack(spacing: 12) {
+                        Image(systemName: rec.exercise.equipment.iconName)
+                            .font(.title3)
+                            .foregroundStyle(.secondary)
+                            .frame(minWidth: 32)
+
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(rec.exercise.localizedName)
+                                .font(.subheadline.weight(.medium))
+
+                            Text(metricsDescription)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+
+                        Spacer()
+
+                        Text(rec.exercise.category.displayName)
+                            .font(.caption2)
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background(.quaternary, in: Capsule())
+                    }
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel("\(rec.exercise.localizedName), \(metricsDescription), \(rec.exercise.category.displayName)")
+                }
+            }
+            .padding()
+            .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
+        }
     }
 
     // MARK: - Memo

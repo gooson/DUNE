@@ -118,7 +118,7 @@ struct CarouselHomeView: View {
             ToolbarItem(placement: .topBarTrailing) {
                 NavigationLink(value: WatchRoute.postureSettings) {
                     Image(systemName: "gearshape")
-                        .font(.system(size: 12))
+                        .font(.system(size: 17))
                         .foregroundStyle(.secondary)
                 }
                 .buttonStyle(.plain)

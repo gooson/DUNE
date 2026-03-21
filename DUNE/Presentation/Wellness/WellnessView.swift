@@ -130,6 +130,12 @@ struct WellnessView: View {
                             }
                         }
 
+                        // Watch Posture Summary
+                        WatchPostureSummaryCard(
+                            summary: viewModel.watchPostureSummary,
+                            isWatchAppInstalled: WatchSessionManager.shared.isWatchAppInstalled
+                        )
+
                         // Posture Assessment (isolated @Query)
                         PostureAssessmentLinkView(
                             onCapture: { isShowingPostureCapture = true },
