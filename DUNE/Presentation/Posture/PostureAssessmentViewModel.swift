@@ -62,6 +62,7 @@ final class PostureAssessmentViewModel {
     private(set) var combinedAssessment = CombinedPostureAssessment(
         frontAssessment: nil, sideAssessment: nil, date: Date()
     )
+    private(set) var correctiveRecommendations: [CorrectiveRecommendation] = []
 
     var canSave: Bool {
         frontAssessment != nil || sideAssessment != nil
@@ -95,6 +96,9 @@ final class PostureAssessmentViewModel {
 
     // MARK: - Dependencies
 
+    private let correctiveExerciseUseCase = CorrectiveExerciseUseCase(
+        library: ExerciseLibraryService.shared
+    )
     private let captureService: PostureCaptureService
     private let analysisService = PostureAnalysisService()
 
@@ -317,6 +321,9 @@ final class PostureAssessmentViewModel {
             sideAssessment: sideAssessment,
             date: Date()
         )
+        correctiveRecommendations = correctiveExerciseUseCase.recommendations(
+            for: combinedAssessment.allMetrics
+        )
         capturePhase = .result
         hapticSuccessCount += 1
 
@@ -349,6 +356,9 @@ final class PostureAssessmentViewModel {
             frontAssessment: frontAssessment,
             sideAssessment: sideAssessment,
             date: Date()
+        )
+        correctiveRecommendations = correctiveExerciseUseCase.recommendations(
+            for: combinedAssessment.allMetrics
         )
         guidanceState = GuidanceState()
         skeletonKeypoints = []
