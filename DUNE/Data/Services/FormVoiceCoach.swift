@@ -1,24 +1,5 @@
 import AVFoundation
 
-// MARK: - FormCoachingMessage (internal to voice coaching)
-
-/// A coaching message triggered by a form checkpoint evaluation.
-struct FormCoachingMessage: Sendable, Identifiable {
-    let id = UUID()
-    let checkpointName: String
-    let message: String
-    let priority: Priority
-
-    enum Priority: Int, Comparable, Sendable {
-        case caution = 0
-        case warning = 1
-
-        static func < (lhs: Self, rhs: Self) -> Bool {
-            lhs.rawValue < rhs.rawValue
-        }
-    }
-}
-
 // MARK: - FormVoiceCoach
 
 /// Provides real-time voice coaching during exercise form checks.
@@ -28,6 +9,17 @@ struct FormCoachingMessage: Sendable, Identifiable {
 ///
 /// All public methods must be called from `@MainActor` (the owning ViewModel is `@MainActor`).
 final class FormVoiceCoach: @unchecked Sendable {
+
+    // MARK: - Types
+
+    private enum CuePriority: Int, Comparable {
+        case caution = 0
+        case warning = 1
+
+        static func < (lhs: Self, rhs: Self) -> Bool {
+            lhs.rawValue < rhs.rawValue
+        }
+    }
 
     // MARK: - Configuration
 
@@ -99,7 +91,7 @@ final class FormVoiceCoach: @unchecked Sendable {
         // Find the highest-priority actionable checkpoint without intermediate array.
         var bestName: String?
         var bestCue: String?
-        var bestPriority: FormCoachingMessage.Priority?
+        var bestPriority: CuePriority?
 
         for result in state.checkpointResults {
             guard result.status == .caution || result.status == .warning else { continue }
@@ -112,14 +104,13 @@ final class FormVoiceCoach: @unchecked Sendable {
                 continue
             }
 
-            let priority: FormCoachingMessage.Priority =
+            let priority: CuePriority =
                 result.status == .warning ? .warning : .caution
 
-            if bestPriority == nil || priority > bestPriority! {
-                bestName = result.checkpointName
-                bestCue = checkpoint.coachingCue
-                bestPriority = priority
-            }
+            if let existing = bestPriority, priority <= existing { continue }
+            bestName = result.checkpointName
+            bestCue = checkpoint.coachingCue
+            bestPriority = priority
         }
 
         guard let name = bestName, let cue = bestCue else { return }

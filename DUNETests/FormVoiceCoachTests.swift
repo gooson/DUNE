@@ -111,16 +111,6 @@ struct FormVoiceCoachTests {
         coach.stop()
     }
 
-    @Test("FormCoachingMessage priority ordering")
-    func messagePriorityOrdering() {
-        let caution = FormCoachingMessage.Priority.caution
-        let warning = FormCoachingMessage.Priority.warning
-
-        #expect(caution < warning)
-        #expect(!(warning < caution))
-        #expect(!(caution < caution))
-    }
-
     @Test("Unmeasurable status does not trigger coaching")
     func unmeasurableSkipped() {
         let coach = makeCoach()
