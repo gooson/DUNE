@@ -48,6 +48,7 @@ struct TemplateWorkoutContainerView: View {
                 Button("End Template", role: .destructive) {
                     dismiss()
                 }
+                .accessibilityIdentifier("template-workout-container-end")
                 Button("Cancel", role: .cancel) {}
             } message: {
                 Text("Completed exercises have been saved.")

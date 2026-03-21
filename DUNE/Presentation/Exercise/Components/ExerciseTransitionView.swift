@@ -67,9 +67,11 @@ struct ExerciseTransitionView: View {
             }
             .buttonStyle(.borderedProminent)
             .tint(DS.Color.activity)
+            .accessibilityIdentifier("template-workout-transition-start")
             .padding(.horizontal, DS.Spacing.lg)
             .padding(.bottom, DS.Spacing.xl)
         }
+        .accessibilityIdentifier("template-workout-transition-screen")
         .background { DetailWaveBackground() }
         .task {
             for tick in stride(from: 4, through: 0, by: -1) {

@@ -84,6 +84,7 @@ struct CompoundWorkoutView: View {
                 }
                 .disabled(viewModel.totalCompletedSets == 0)
                 .fontWeight(.semibold)
+                .accessibilityIdentifier("compound-workout-finish")
             }
         }
         .onAppear {

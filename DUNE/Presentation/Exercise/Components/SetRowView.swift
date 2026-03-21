@@ -49,6 +49,7 @@ struct SetRowView: View {
                     .foregroundStyle(editableSet.isCompleted ? DS.Color.activity : .secondary)
             }
             .buttonStyle(.plain)
+            .accessibilityIdentifier("set-row-complete-\(editableSet.setNumber)")
         }
         .padding(.vertical, DS.Spacing.xs)
         .padding(.horizontal, DS.Spacing.sm)
@@ -118,11 +119,13 @@ struct SetRowView: View {
                     .keyboardType(.decimalPad)
                     .textFieldStyle(.roundedBorder)
                     .frame(maxWidth: 70)
+                    .accessibilityIdentifier("set-row-field-\(editableSet.setNumber)-weight")
 
                 TextField("reps", text: $editableSet.reps)
                     .keyboardType(.numberPad)
                     .textFieldStyle(.roundedBorder)
                     .frame(maxWidth: 60)
+                    .accessibilityIdentifier("set-row-field-\(editableSet.setNumber)-reps")
             }
 
         case .setsReps:
@@ -131,6 +134,7 @@ struct SetRowView: View {
                     .keyboardType(.numberPad)
                     .textFieldStyle(.roundedBorder)
                     .frame(maxWidth: 70)
+                    .accessibilityIdentifier("set-row-field-\(editableSet.setNumber)-reps")
             }
 
         case .durationDistance:
@@ -139,6 +143,7 @@ struct SetRowView: View {
                     .keyboardType(.numberPad)
                     .textFieldStyle(.roundedBorder)
                     .frame(maxWidth: 60)
+                    .accessibilityIdentifier("set-row-field-\(editableSet.setNumber)-duration")
 
                 let unit = cardioUnit ?? .km
                 if unit != .timeOnly {
@@ -147,17 +152,20 @@ struct SetRowView: View {
                             .keyboardType(unit.keyboardType)
                             .textFieldStyle(.roundedBorder)
                             .frame(maxWidth: 70)
+                            .accessibilityIdentifier("set-row-field-\(editableSet.setNumber)-distance")
                     } else if unit.usesRepsField {
                         TextField(unit.placeholder, text: $editableSet.reps)
                             .keyboardType(.numberPad)
                             .textFieldStyle(.roundedBorder)
                             .frame(maxWidth: 70)
+                            .accessibilityIdentifier("set-row-field-\(editableSet.setNumber)-reps")
 
                         if unit == .floors {
                             TextField("lvl", text: $editableSet.level)
                                 .keyboardType(.numberPad)
                                 .textFieldStyle(.roundedBorder)
                                 .frame(maxWidth: 56)
+                                .accessibilityIdentifier("set-row-field-\(editableSet.setNumber)-level")
                         }
                     }
                 }
@@ -168,6 +176,7 @@ struct SetRowView: View {
                 .keyboardType(.numberPad)
                 .textFieldStyle(.roundedBorder)
                 .frame(maxWidth: 60)
+                .accessibilityIdentifier("set-row-field-\(editableSet.setNumber)-duration")
 
         case .roundsBased:
             HStack(spacing: DS.Spacing.xs) {
@@ -175,11 +184,13 @@ struct SetRowView: View {
                     .keyboardType(.numberPad)
                     .textFieldStyle(.roundedBorder)
                     .frame(maxWidth: 60)
+                    .accessibilityIdentifier("set-row-field-\(editableSet.setNumber)-reps")
 
                 TextField("sec", text: $editableSet.duration)
                     .keyboardType(.numberPad)
                     .textFieldStyle(.roundedBorder)
                     .frame(maxWidth: 60)
+                    .accessibilityIdentifier("set-row-field-\(editableSet.setNumber)-duration")
             }
         }
     }

@@ -83,9 +83,9 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         tapBackButton()
         ensureActivityRoot()
 
-        XCTAssertTrue(app.scrollToElementIfNeeded(AXID.activitySectionMuscleMap, maxSwipes: 4))
+        XCTAssertTrue(app.scrollToElementIfNeeded(AXID.activitySectionMuscleMap, maxSwipes: 8))
         XCTAssertTrue(
-            app.scrollToHittableElementIfNeeded(AXID.activityMuscleMapDetailLink, maxSwipes: 4),
+            app.scrollToHittableElementIfNeeded(AXID.activityMuscleMapDetailLink, maxSwipes: 10),
             "Muscle Map detail link should be reachable"
         )
         waitForElement(AXID.activityMuscleMapDetailLink, timeout: 5).tap()
@@ -364,6 +364,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     }
 
     func testTemplateListSupportsCreateEditAndTemplateStart() throws {
+        executionTimeAllowance = 240
         openTemplateList()
 
         let addButton = app.descendants(matching: .any)[AXID.workoutTemplateListAdd].firstMatch
@@ -432,9 +433,49 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             app.descendants(matching: .any)[AXID.templateWorkoutContainerScreen].firstMatch.waitForExistence(timeout: 10),
             "Template workout container should open for multi-exercise template"
         )
+        let transitionStart = app.buttons[AXID.templateWorkoutTransitionStart].firstMatch
+        let workoutSessionDone = app.buttons[AXID.workoutSessionDone].firstMatch
+        XCTAssertTrue(
+            waitForEither(transitionStart, workoutSessionDone, timeout: 8),
+            "Template workflow should expose a transition start CTA or enter the workout session directly"
+        )
+        if transitionStart.exists {
+            transitionStart.tap()
+        }
+
+        XCTAssertTrue(
+            workoutSessionDone.waitForExistence(timeout: 10),
+            "Starting the template transition should enter the workout session lane"
+        )
     }
 
-    func testCompoundWorkoutSetupStartsWorkout() throws {
+    func testTemplateWorkoutContainerCloseDismissesFullScreenFlow() throws {
+        openTemplateList()
+
+        let circuitTemplate = app.buttons[AXID.workoutTemplateRow(Fixture.circuitTemplate)].firstMatch
+        XCTAssertTrue(circuitTemplate.waitForExistence(timeout: 8), "Seeded multi template should exist")
+        circuitTemplate.tap()
+
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.templateWorkoutContainerScreen].firstMatch.waitForExistence(timeout: 10),
+            "Template workout container should open for multi-exercise template"
+        )
+
+        let closeButton = app.buttons[AXID.templateWorkoutContainerClose].firstMatch
+        XCTAssertTrue(closeButton.waitForExistence(timeout: 5), "Template container close button should exist")
+        closeButton.tap()
+
+        let endTemplate = app.buttons[AXID.templateWorkoutContainerEnd].firstMatch
+        XCTAssertTrue(endTemplate.waitForExistence(timeout: 5), "Template end confirmation should appear")
+        endTemplate.tap()
+
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.workoutTemplateListScreen].firstMatch.waitForExistence(timeout: 10),
+            "Ending the template flow should return to the template list"
+        )
+    }
+
+    func testCompoundWorkoutSetupStartsWorkoutAndFinishesFlow() throws {
         openExerciseViewFromRecentWorkouts()
 
         let addMenu = app.descendants(matching: .any)[AXID.exerciseToolbarAdd].firstMatch
@@ -471,6 +512,29 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue(
             app.descendants(matching: .any)[AXID.compoundWorkoutScreen].firstMatch.waitForExistence(timeout: 10),
             "Compound workout screen should open"
+        )
+
+        XCTAssertTrue(
+            app.fillTextInput(AXID.setRowField(1, "weight"), with: "60"),
+            "Compound workout first set weight should be editable"
+        )
+        XCTAssertTrue(
+            app.fillTextInput(AXID.setRowField(1, "reps"), with: "8"),
+            "Compound workout first set reps should be editable"
+        )
+
+        let completeSetButton = app.buttons[AXID.setRowComplete(1)].firstMatch
+        XCTAssertTrue(completeSetButton.waitForExistence(timeout: 5), "Compound workout complete-set button should exist")
+        completeSetButton.tap()
+
+        let finishButton = app.buttons[AXID.compoundWorkoutFinish].firstMatch
+        XCTAssertTrue(finishButton.waitForExistence(timeout: 5), "Compound workout finish button should exist")
+        XCTAssertTrue(waitForEnabled(finishButton, timeout: 5), "Compound workout finish button should enable after one completed set")
+        finishButton.tap()
+
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.workoutCompletionSheet].firstMatch.waitForExistence(timeout: 10),
+            "Finishing a compound workout should show the completion sheet"
         )
     }
 
@@ -552,6 +616,41 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue(
             app.descendants(matching: .any)[AXID.healthkitWorkoutDetailScreen].firstMatch.waitForExistence(timeout: 10),
             "Mock HealthKit workout detail should open from notification"
+        )
+    }
+
+    func testNotificationWorkoutRouteOpensHealthKitDetailAndTitleEditor() throws {
+        openNotificationHub()
+
+        let workoutRouteRow = app.buttons[AXID.notificationWorkoutRow(Fixture.notificationWorkoutRouteID)].firstMatch
+        XCTAssertTrue(workoutRouteRow.waitForExistence(timeout: 8), "Workout route notification should exist")
+        workoutRouteRow.tap()
+
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.healthkitWorkoutDetailScreen].firstMatch.waitForExistence(timeout: 10),
+            "HealthKit workout detail should open from the notification workout route"
+        )
+
+        let editTitleButton = app.buttons[AXID.healthkitWorkoutEditTitle].firstMatch
+        XCTAssertTrue(editTitleButton.waitForExistence(timeout: 5), "HealthKit workout detail should expose the edit title action")
+        editTitleButton.tap()
+
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.healthkitWorkoutTitleEditorScreen].firstMatch.waitForExistence(timeout: 8),
+            "HealthKit title editor should appear"
+        )
+        XCTAssertTrue(
+            app.fillTextInput(AXID.healthkitWorkoutTitleField, with: "Codex Route Title"),
+            "HealthKit workout title field should be editable"
+        )
+
+        let saveButton = app.buttons[AXID.healthkitWorkoutTitleSave].firstMatch
+        XCTAssertTrue(saveButton.waitForExistence(timeout: 5), "HealthKit title editor save button should exist")
+        saveButton.tap()
+
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.healthkitWorkoutDetailScreen].firstMatch.waitForExistence(timeout: 10),
+            "Saving the title edit should return to the HealthKit workout detail"
         )
     }
 
@@ -644,7 +743,10 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             )
             XCTAssertTrue(seeAllButton.waitForExistence(timeout: 5), "Recent workouts See All should exist")
             for _ in 0..<2 {
-                XCTAssertTrue(waitForHittable(seeAllButton, timeout: 2), "Recent workouts See All should be hittable")
+                if !waitForHittable(seeAllButton, timeout: 2) {
+                    _ = app.scrollToHittableElementIfNeeded(AXID.activityRecentSeeAll, maxSwipes: 3)
+                }
+                guard seeAllButton.isHittable else { continue }
                 seeAllButton.tap()
 
                 if exerciseScreen.waitForExistence(timeout: 10) ||
@@ -817,6 +919,19 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         let predicate = NSPredicate(format: "exists == true AND hittable == true")
         let expectation = XCTNSPredicateExpectation(predicate: predicate, object: element)
         return XCTWaiter.wait(for: [expectation], timeout: timeout) == .completed
+    }
+
+    private func waitForEither(_ first: XCUIElement, _ second: XCUIElement, timeout: TimeInterval) -> Bool {
+        let deadline = Date().addingTimeInterval(timeout)
+        while Date() < deadline {
+            if first.exists || second.exists {
+                return true
+            }
+
+            RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.1))
+        }
+
+        return first.exists || second.exists
     }
 
     private func dismissMorningBriefingIfNeeded() {

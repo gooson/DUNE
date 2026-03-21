@@ -59,13 +59,16 @@ struct HealthKitWorkoutDetailView: View {
             Form {
                 TextField("Workout Name", text: $editedTitle)
                     .textInputAutocapitalization(.words)
+                    .accessibilityIdentifier("healthkit-workout-title-field")
             }
+            .accessibilityIdentifier("healthkit-workout-title-editor-screen")
             .englishNavigationTitle("Edit Workout Name")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
                         isShowingTitleEditor = false
                     }
+                    .accessibilityIdentifier("healthkit-workout-title-cancel")
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
@@ -74,6 +77,7 @@ struct HealthKitWorkoutDetailView: View {
                         correctedTitle = WorkoutTypeCorrectionStore.shared.correctedTitle(for: workout.id)
                         isShowingTitleEditor = false
                     }
+                    .accessibilityIdentifier("healthkit-workout-title-save")
                 }
             }
         }
