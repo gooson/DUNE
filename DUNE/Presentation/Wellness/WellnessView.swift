@@ -130,10 +130,11 @@ struct WellnessView: View {
                             }
                         }
 
-                        // Watch Posture Summary (if received today)
-                        if let postureSummary = viewModel.watchPostureSummary {
-                            WatchPostureSummaryCard(summary: postureSummary)
-                        }
+                        // Watch Posture Summary
+                        WatchPostureSummaryCard(
+                            summary: viewModel.watchPostureSummary,
+                            isWatchAppInstalled: WatchSessionManager.shared.isWatchAppInstalled
+                        )
 
                         // Posture Assessment (isolated @Query)
                         PostureAssessmentLinkView(
