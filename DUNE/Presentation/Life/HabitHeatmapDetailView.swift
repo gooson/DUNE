@@ -48,7 +48,7 @@ struct HabitHeatmapDetailView: View {
         HStack(spacing: DS.Spacing.md) {
             statCard(
                 title: "Daily Average",
-                value: String(format: "%.1f", dailyAverage),
+                value: dailyAverage.formatted(.number.precision(.fractionLength(1))),
                 icon: "chart.line.uptrend.xyaxis"
             )
 
@@ -113,13 +113,14 @@ struct HabitHeatmapDetailView: View {
     // MARK: - Weekday Breakdown
 
     private var weekdayBreakdownCard: some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.md) {
+        let stats = weekdayStats
+        let maxTotal = stats.map(\.count).max() ?? 1
+
+        return VStack(alignment: .leading, spacing: DS.Spacing.md) {
             Text("By Weekday")
                 .font(.headline)
 
-            let maxTotal = weekdayStats.map(\.count).max() ?? 1
-
-            ForEach(weekdayStats, id: \.weekday) { stat in
+            ForEach(stats, id: \.weekday) { stat in
                 HStack {
                     Text(stat.name)
                         .font(.subheadline)
@@ -295,16 +296,17 @@ struct HabitHeatmapGridView: View {
 // MARK: - Shared Legend
 
 struct HabitHeatmapLegend: View {
+    private static let levels: [Double] = [0.0, 0.25, 0.5, 0.75, 1.0]
+
     var body: some View {
         HStack(spacing: DS.Spacing.xs) {
             Text("Less")
                 .font(.caption2)
                 .foregroundStyle(.secondary)
 
-            ForEach(Array(stride(from: 0.0, through: 1.0, by: 0.25)).indices, id: \.self) { index in
-                let level = Double(index) * 0.25
+            ForEach(Self.levels.indices, id: \.self) { index in
                 RoundedRectangle(cornerRadius: 2)
-                    .fill(DS.Color.tabLife.opacity(0.08 + level * 0.8))
+                    .fill(DS.Color.tabLife.opacity(0.08 + Self.levels[index] * 0.8))
                     .frame(width: 12, height: 12)
             }
 
