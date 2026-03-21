@@ -23,6 +23,9 @@ final class WatchSessionManager: NSObject {
     /// Latest workout data received from Watch
     private(set) var receivedWorkoutUpdate: WatchWorkoutUpdate?
 
+    /// Latest daily posture summary received from Watch
+    private(set) var receivedPostureSummary: DailyPostureSummary?
+
     /// Callback for when Watch sends a completed workout
     var onWorkoutReceived: ((WatchWorkoutUpdate) -> Void)?
 
@@ -458,6 +461,19 @@ extension WatchSessionManager {
             }
         }
 
+        // Handle posture summary from Watch
+        if let data = message.postureSummaryData {
+            do {
+                let summary = try JSONDecoder().decode(DailyPostureSummary.self, from: data)
+                // Only accept if summary is from today
+                if Calendar.current.isDateInToday(summary.date) {
+                    receivedPostureSummary = summary
+                }
+            } catch {
+                AppLogger.ui.error("Failed to decode posture summary: \(error.localizedDescription)")
+            }
+        }
+
         // Handle workout completion from Watch
         if let data = message.workoutCompleteData {
             do {
@@ -486,12 +502,14 @@ extension WatchSessionManager {
 struct ParsedWatchIncomingMessage: Sendable {
     let workoutCompleteData: Data?
     let setCompletedData: Data?
+    let postureSummaryData: Data?
     let requestExerciseLibrarySync: Bool
     let requestWorkoutTemplateSync: Bool
 
     init(from message: [String: Any]) {
         workoutCompleteData = message["workoutComplete"] as? Data
         setCompletedData = message["setCompleted"] as? Data
+        postureSummaryData = message["postureSummary"] as? Data
         requestExerciseLibrarySync = (message["requestExerciseLibrarySync"] as? Bool) == true
         requestWorkoutTemplateSync = (message["requestWorkoutTemplateSync"] as? Bool) == true
     }

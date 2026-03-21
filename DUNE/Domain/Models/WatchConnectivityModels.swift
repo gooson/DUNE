@@ -134,6 +134,15 @@ struct WatchExerciseInfo: Codable, Sendable {
     }
 }
 
+/// Daily posture monitoring summary sent from Watch to iPhone via WatchConnectivity.
+struct DailyPostureSummary: Sendable, Codable, Equatable {
+    let sedentaryMinutes: Int
+    let walkingMinutes: Int
+    let averageGaitScore: Int?
+    let stretchRemindersTriggered: Int
+    let date: Date
+}
+
 /// Lightweight workout template payload sent from iPhone to Watch.
 /// Used as a fallback sync path when CloudKit template propagation is delayed/disabled.
 struct WatchWorkoutTemplateInfo: Codable, Sendable {

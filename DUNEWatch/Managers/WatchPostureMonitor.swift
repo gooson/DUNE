@@ -264,6 +264,14 @@ final class WatchPostureMonitor {
         case .running, .unknown:
             break
         }
+
+        // Sync updated summary to iPhone on state transition
+        syncSummaryToPhone()
+    }
+
+    /// Sends current daily summary to iPhone via WatchConnectivity.
+    private func syncSummaryToPhone() {
+        WatchConnectivityManager.shared.sendPostureSummary(buildDailySummary())
     }
 
     /// Accumulate elapsed time since last state change into the appropriate daily counter.
@@ -331,6 +339,7 @@ final class WatchPostureMonitor {
 
         stretchReminderCount += 1
         scheduleLocalNotification()
+        syncSummaryToPhone()
     }
 
     private func scheduleLocalNotification() {

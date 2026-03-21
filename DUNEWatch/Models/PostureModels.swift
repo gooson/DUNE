@@ -24,17 +24,6 @@ struct GaitQualityScore: Sendable, Equatable {
     static let zero = GaitQualityScore(symmetry: 0, regularity: 0, overall: 0)
 }
 
-// MARK: - Daily Posture Summary
-
-/// Daily posture monitoring summary sent to iPhone via WatchConnectivity.
-struct DailyPostureSummary: Sendable, Codable, Equatable {
-    let sedentaryMinutes: Int
-    let walkingMinutes: Int
-    let averageGaitScore: Int?
-    let stretchRemindersTriggered: Int
-    let date: Date
-}
-
 // MARK: - Formatting
 
 /// Shared minute-formatting utility for posture UI components.

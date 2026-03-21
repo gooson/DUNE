@@ -244,6 +244,32 @@ final class WatchConnectivityManager: NSObject {
         }
     }
 
+    /// Send daily posture summary to iPhone for display in Wellness tab.
+    /// Uses sendMessage for immediate delivery + transferUserInfo for background fallback.
+    func sendPostureSummary(_ summary: DailyPostureSummary) {
+        guard WCSession.isSupported() else { return }
+        let session = WCSession.default
+
+        do {
+            let data = try JSONEncoder().encode(summary)
+            let payload: [String: Any] = ["postureSummary": data]
+
+            if session.isReachable {
+                session.sendMessage(
+                    payload,
+                    replyHandler: nil,
+                    errorHandler: Self.makeWCErrorHandler("Failed to send posture summary")
+                )
+            }
+
+            if session.activationState == .activated {
+                session.transferUserInfo(payload)
+            }
+        } catch {
+            Self.logger.error("Failed to encode posture summary: \(error.localizedDescription, privacy: .public)")
+        }
+    }
+
     private func updatePhoneWorkoutLifecycleContext(isActive: Bool, templateName: String?) {
         guard WCSession.isSupported() else { return }
         let session = WCSession.default
