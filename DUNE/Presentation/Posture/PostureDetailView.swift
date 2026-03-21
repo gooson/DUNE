@@ -8,6 +8,11 @@ struct PostureDetailView: View {
     @State private var showDeleteConfirmation = false
     @State private var zoomImage: ZoomableImageItem?
     @State private var pdfURL: URL?
+    @State private var correctiveRecommendations: [CorrectiveRecommendation] = []
+
+    private static let correctiveUseCase = CorrectiveExerciseUseCase(
+        library: ExerciseLibraryService.shared
+    )
 
     var body: some View {
         ScrollView {
@@ -15,6 +20,7 @@ struct PostureDetailView: View {
                 scoreSection
                 captureImagesSection
                 metricsSection
+                correctiveExercisesSection
 
                 if record.frontImageData != nil {
                     symmetryLink
@@ -52,6 +58,11 @@ struct PostureDetailView: View {
         }
         .navigationDestination(for: PostureSymmetryDestination.self) { destination in
             PostureSymmetryView(record: record)
+        }
+        .task {
+            correctiveRecommendations = Self.correctiveUseCase.recommendations(
+                for: record.allMetrics
+            )
         }
         .background { DetailWaveBackground() }
         .environment(\.waveColor, DS.Color.body)
@@ -227,6 +238,50 @@ struct PostureDetailView: View {
 
     private func metricValueText(_ metric: PostureMetricResult) -> String {
         formattedPostureMetricValue(metric.value, unit: metric.unit)
+    }
+
+    // MARK: - Corrective Exercises
+
+    @ViewBuilder
+    private var correctiveExercisesSection: some View {
+        if !correctiveRecommendations.isEmpty {
+            VStack(alignment: .leading, spacing: DS.Spacing.md) {
+                Text("Recommended Exercises")
+                    .font(.headline)
+                    .accessibilityAddTraits(.isHeader)
+
+                ForEach(correctiveRecommendations) { rec in
+                    let metricsDescription = rec.targetMetrics.map(\.displayName).joined(separator: ", ")
+                    HStack(spacing: DS.Spacing.md) {
+                        Image(systemName: rec.exercise.equipment.iconName)
+                            .font(.title3)
+                            .foregroundStyle(.secondary)
+                            .frame(minWidth: 32)
+
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(rec.exercise.localizedName)
+                                .font(.subheadline.weight(.medium))
+
+                            Text(metricsDescription)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+
+                        Spacer()
+
+                        Text(rec.exercise.category.displayName)
+                            .font(.caption2)
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background(.quaternary, in: Capsule())
+                    }
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel("\(rec.exercise.localizedName), \(metricsDescription), \(rec.exercise.category.displayName)")
+                }
+            }
+            .padding(DS.Spacing.md)
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        }
     }
 
     // MARK: - Symmetry Link
