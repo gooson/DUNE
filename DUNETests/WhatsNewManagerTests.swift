@@ -157,32 +157,15 @@ struct WhatsNewManagerTests {
 
     // MARK: - Screenshot Asset Tests
 
-    @Test("screenshotAsset is parsed for features that have it")
-    func screenshotAssetParsed() {
+    @Test("All current releases have no screenshotAsset (assets not yet added)")
+    func allReleasesNoScreenshots() {
         let manager = WhatsNewManager.shared
-        let release = manager.currentRelease(for: "0.5.0")!
+        let releases = manager.orderedReleases()
 
-        let posture = release.features.first { $0.id == "postureAssessment" }
-        #expect(posture?.screenshotAsset == "WhatsNew/0.5.0/postureAssessment")
-        #expect(posture?.screenshotAsset != nil)
-    }
-
-    @Test("screenshotAsset is nil for features without it")
-    func screenshotAssetNilWhenMissing() {
-        let manager = WhatsNewManager.shared
-        let release = manager.currentRelease(for: "0.5.0")!
-
-        let muscleMap = release.features.first { $0.id == "muscleMap3DOverhaul" }
-        #expect(muscleMap?.screenshotAsset == nil)
-    }
-
-    @Test("Older versions have no screenshotAsset on any feature")
-    func olderVersionsNoScreenshots() {
-        let manager = WhatsNewManager.shared
-        let release = manager.currentRelease(for: "0.2.0")!
-
-        for feature in release.features {
-            #expect(feature.screenshotAsset == nil, "Feature \(feature.id) should not have screenshotAsset")
+        for release in releases {
+            for feature in release.features {
+                #expect(feature.screenshotAsset == nil, "Feature \(feature.id) in \(release.version) should not have screenshotAsset until assets are added")
+            }
         }
     }
 
