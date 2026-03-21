@@ -2,7 +2,7 @@
 tags: [chart, axis, clipping, life-tab]
 date: 2026-03-22
 category: plan
-status: draft
+status: implemented
 ---
 
 # 달성률 차트 축 표시 수정
