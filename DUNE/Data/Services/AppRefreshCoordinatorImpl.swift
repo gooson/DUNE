@@ -3,11 +3,17 @@ import Foundation
 actor AppRefreshCoordinatorImpl: AppRefreshCoordinating {
     private let sharedHealthDataService: SharedHealthDataService
     private let throttleInterval: TimeInterval
+    private let cloudKitThrottleInterval: TimeInterval
     private let nowProvider: @Sendable () -> Date
 
     // Initialized to "now" so the first minute after launch is throttled
     // (app's .task already loads fresh data).
     private var lastRefreshDate: Date
+
+    // Separate throttle tracker for CloudKit remote changes to prevent
+    // feedback loops (save snapshot → CloudKit sync → notification → repeat).
+    // Initialized to .distantPast so the first CloudKit notification always passes.
+    private var lastCloudKitRefreshDate: Date = .distantPast
 
     private let continuation: AsyncStream<RefreshSource>.Continuation
     nonisolated let refreshNeededStream: AsyncStream<RefreshSource>
@@ -15,10 +21,12 @@ actor AppRefreshCoordinatorImpl: AppRefreshCoordinating {
     init(
         sharedHealthDataService: SharedHealthDataService,
         throttleInterval: TimeInterval = 60,
+        cloudKitThrottleInterval: TimeInterval = 5,
         nowProvider: @escaping @Sendable () -> Date = Date.init
     ) {
         self.sharedHealthDataService = sharedHealthDataService
         self.throttleInterval = throttleInterval
+        self.cloudKitThrottleInterval = cloudKitThrottleInterval
         self.nowProvider = nowProvider
         self.lastRefreshDate = nowProvider()
 
@@ -28,18 +36,29 @@ actor AppRefreshCoordinatorImpl: AppRefreshCoordinating {
     }
 
     func requestRefresh(source: RefreshSource) async -> Bool {
-        // CloudKit remote change bypasses throttle — on Mac this is the primary
-        // data arrival path and must not be delayed by the post-launch cooldown.
-        let bypassThrottle = source == .cloudKitRemoteChange
-
         let now = nowProvider()
-        let elapsed = now.timeIntervalSince(lastRefreshDate)
 
-        guard bypassThrottle || elapsed >= throttleInterval else {
-            AppLogger.ui.debug("[AppRefreshCoordinator] Throttled \(source.rawValue) — \(String(format: "%.0f", elapsed))s since last refresh")
-            return false
+        if source == .cloudKitRemoteChange {
+            // CloudKit remote change uses a dedicated short throttle (default 5s)
+            // instead of the general 60s interval. This prevents feedback loops
+            // (snapshot save → CloudKit sync → notification → repeat) while still
+            // keeping Mac data arrival responsive.
+            let cloudKitElapsed = now.timeIntervalSince(lastCloudKitRefreshDate)
+            guard cloudKitElapsed >= cloudKitThrottleInterval else {
+                AppLogger.ui.debug("[AppRefreshCoordinator] Throttled \(source.rawValue) — \(String(format: "%.0f", cloudKitElapsed))s since last CloudKit refresh")
+                return false
+            }
+            lastCloudKitRefreshDate = now
+        } else {
+            let elapsed = now.timeIntervalSince(lastRefreshDate)
+            guard elapsed >= throttleInterval else {
+                AppLogger.ui.debug("[AppRefreshCoordinator] Throttled \(source.rawValue) — \(String(format: "%.0f", elapsed))s since last refresh")
+                return false
+            }
         }
 
+        // Advance general throttle for all sources (including CloudKit) so a
+        // CloudKit-triggered refresh isn't followed by a redundant foreground refresh.
         lastRefreshDate = now
         await sharedHealthDataService.invalidateCache()
         continuation.yield(source)
@@ -49,7 +68,9 @@ actor AppRefreshCoordinatorImpl: AppRefreshCoordinating {
     }
 
     func forceRefresh() async {
-        lastRefreshDate = nowProvider()
+        let now = nowProvider()
+        lastRefreshDate = now
+        lastCloudKitRefreshDate = now
         await sharedHealthDataService.invalidateCache()
         continuation.yield(.pullToRefresh)
 
