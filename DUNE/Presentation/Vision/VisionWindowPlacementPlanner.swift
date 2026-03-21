@@ -120,8 +120,8 @@ struct VisionWindowPlacementSmokeConfiguration: Equatable, Sendable {
         case .noAnchor:
             mainWindowAutoOpenIDs = [VisionWindowPlacementPlanner.settingsWindowID]
             secondaryWindowAutoOpenIDs = [
-                VisionDashboardWindowKind.condition.windowID,
                 VisionWindowPlacementPlanner.chart3DWindowID,
+                VisionDashboardWindowKind.condition.windowID,
             ]
             shouldDismissMainWindow = true
         }

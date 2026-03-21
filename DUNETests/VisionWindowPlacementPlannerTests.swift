@@ -156,8 +156,8 @@ struct VisionWindowPlacementPlannerTests {
             VisionWindowPlacementPlanner.settingsWindowID,
         ])
         #expect(configuration.secondaryWindowAutoOpenIDs == [
-            VisionDashboardWindowKind.condition.windowID,
             VisionWindowPlacementPlanner.chart3DWindowID,
+            VisionDashboardWindowKind.condition.windowID,
         ])
         #expect(configuration.shouldDismissMainWindow)
     }

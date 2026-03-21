@@ -29,11 +29,16 @@ updated: 2026-03-22
 
 ## 검증 결과
 
-- 실행 명령: `scripts/vision-window-placement-smoke.sh --no-anchor`
+- 실행 명령:
+  - `scripts/vision-window-placement-smoke.sh --no-anchor`
+  - `scripts/vision-window-placement-smoke.sh --no-anchor --wait-seconds 2.8`
 - launch args: `--seed-mock --vision-window-placement-no-anchor-smoke`
-- artifact: `.tmp/vision-window-placement-smoke/window-placement-no-anchor-20260322-021444.png`
-- note: `.tmp/vision-window-placement-smoke/window-placement-no-anchor-20260322-021444.txt`
-- screenshot 기준으로 main window가 없는 상태에서도 `condition` dashboard window와 `chart3d` fallback surface가 접근 가능한 위치에 배치되고, 나머지 열린 window와 완전히 겹쳐 접근 불가 상태로 가지 않는 것을 확인했다.
+- dashboard-focused artifact: `.tmp/vision-window-placement-smoke/window-placement-no-anchor-20260322-022352.png`
+- dashboard-focused note: `.tmp/vision-window-placement-smoke/window-placement-no-anchor-20260322-022352.txt`
+- chart/settings-focused artifact: `.tmp/vision-window-placement-smoke/window-placement-no-anchor-20260322-022438.png`
+- chart/settings-focused note: `.tmp/vision-window-placement-smoke/window-placement-no-anchor-20260322-022438.txt`
+- no-anchor smoke가 기존 secondary windows를 먼저 닫고 settings utility panel을 연 뒤 main window를 dismiss하도록 고정돼, simulator 재실행 간 window restoration 영향 없이 fallback lane을 반복 재현할 수 있음을 확인했다.
+- 두 smoke artifact를 합쳐 보면 main window가 없는 상태에서도 settings utility surface, `condition` dashboard fallback, `chart3d` fallback progression이 모두 접근 가능한 위치에서 재현되며, 완전한 overlap 때문에 접근 불가 상태로 가는 패턴은 보이지 않았다.
 
 ## 참고
 

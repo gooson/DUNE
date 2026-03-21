@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftData
 
 struct VisionSettingsView: View {
-    private static let windowPlacementSmokeInitialDelayNanos: UInt64 = 1_000_000_000
+    private static let windowPlacementSmokeInitialDelayNanos: UInt64 = 1_500_000_000
     private static let windowPlacementSmokeStepDelayNanos: UInt64 = 350_000_000
 
     @AppStorage(SimulatorAdvancedMockDataModeStore.storageKey) private var isSimulatorMockEnabled = false
