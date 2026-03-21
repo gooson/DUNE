@@ -44,13 +44,17 @@ func postureImageDisplayContext(
 private extension Data {
     var hasNormalizedPostureMarker: Bool {
         guard let source = CGImageSourceCreateWithData(self as CFData, nil),
-              let properties = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [String: Any],
-              let tiff = properties[kCGImagePropertyTIFFDictionary as String] as? [String: Any],
-              let software = tiff[kCGImagePropertyTIFFSoftware as String] as? String else {
+              let properties = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [String: Any] else {
             return false
         }
 
-        return software == PostureImageMetadata.uprightJPEGSoftwareMarker
+        let marker = PostureImageMetadata.uprightJPEGSoftwareMarker
+        let tiff = properties[kCGImagePropertyTIFFDictionary as String] as? [String: Any]
+        let exif = properties[kCGImagePropertyExifDictionary as String] as? [String: Any]
+        let software = tiff?[kCGImagePropertyTIFFSoftware as String] as? String
+        let comment = exif?[kCGImagePropertyExifUserComment as String] as? String
+
+        return software == marker || comment == marker
     }
 }
 

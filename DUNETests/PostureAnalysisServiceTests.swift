@@ -1,6 +1,7 @@
 import Foundation
 import Testing
 import UIKit
+import UniformTypeIdentifiers
 import Vision
 
 @testable import DUNE
@@ -461,7 +462,9 @@ struct PostureImageDisplayContextTests {
     }
 
     private func makeJPEGData(size: CGSize, marker: Bool) -> Data {
-        let renderer = UIGraphicsImageRenderer(size: size)
+        let rendererFormat = UIGraphicsImageRendererFormat.default()
+        rendererFormat.scale = 1
+        let renderer = UIGraphicsImageRenderer(size: size, format: rendererFormat)
         let image = renderer.image { context in
             UIColor.white.setFill()
             context.fill(CGRect(origin: .zero, size: size))
@@ -475,7 +478,7 @@ struct PostureImageDisplayContextTests {
         let data = NSMutableData()
         guard let destination = CGImageDestinationCreateWithData(
             data,
-            "public.jpeg" as CFString,
+            UTType.jpeg.identifier as CFString,
             1,
             nil
         ) else {
@@ -487,8 +490,12 @@ struct PostureImageDisplayContextTests {
             kCGImageDestinationLossyCompressionQuality: CGFloat(0.8),
         ]
         if marker {
+            let markerValue = PostureImageMetadata.uprightJPEGSoftwareMarker
             properties[kCGImagePropertyTIFFDictionary] = [
-                kCGImagePropertyTIFFSoftware: PostureImageMetadata.uprightJPEGSoftwareMarker,
+                kCGImagePropertyTIFFSoftware: markerValue,
+            ]
+            properties[kCGImagePropertyExifDictionary] = [
+                kCGImagePropertyExifUserComment: markerValue,
             ]
         }
 

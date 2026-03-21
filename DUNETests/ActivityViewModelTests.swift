@@ -206,6 +206,58 @@ private enum TestError: Error {
     case mockFailure
 }
 
+private struct LocalizationCatalog: Decodable {
+    let strings: [String: LocalizationCatalogEntry]
+}
+
+private struct LocalizationCatalogEntry: Decodable {
+    let localizations: [String: LocalizationCatalogLocalization]?
+}
+
+private struct LocalizationCatalogLocalization: Decodable {
+    let stringUnit: LocalizationCatalogStringUnit?
+}
+
+private struct LocalizationCatalogStringUnit: Decodable {
+    let value: String?
+}
+
+private struct FormatPlaceholder: Equatable {
+    let position: String?
+    let type: String
+}
+
+private func placeholderSequence(in string: String) -> [FormatPlaceholder] {
+    let pattern = #"%(?:(\d+)\$)?(lld|@|d|f|u|ld|lu|zd|zu|g|i|li|llu|lf|s|%)"#
+    guard let regex = try? NSRegularExpression(pattern: pattern) else {
+        return []
+    }
+
+    let range = NSRange(string.startIndex..<string.endIndex, in: string)
+    return regex.matches(in: string, range: range).compactMap { match in
+        let typeRange = match.range(at: 2)
+        guard let swiftTypeRange = Range(typeRange, in: string) else {
+            return nil
+        }
+
+        let type = String(string[swiftTypeRange])
+        guard type != "%" else {
+            return nil
+        }
+
+        let positionRange = match.range(at: 1)
+        let position = Range(positionRange, in: string).map { String(string[$0]) }
+        return FormatPlaceholder(position: position, type: type)
+    }
+}
+
+private func localizableCatalogURL() -> URL {
+    URL(fileURLWithPath: #filePath)
+        .deletingLastPathComponent()
+        .deletingLastPathComponent()
+        .appendingPathComponent("Shared/Resources/Localizable.xcstrings")
+}
+
 // MARK: - Tests
 
 @Suite("ActivityViewModel")
@@ -258,7 +310,10 @@ struct ActivityViewModelTests {
         recommendationService: WorkoutRecommending? = nil,
         sharedHealthDataService: SharedHealthDataService? = nil,
         personalRecordStore: PersonalRecordStore = .shared,
-        recommendationSettingsStore: WorkoutRecommendationSettingsStore = .shared
+        recommendationSettingsStore: WorkoutRecommendationSettingsStore = .shared,
+        workoutReportUseCase: WorkoutReportGenerating = GenerateWorkoutReportUseCase(
+            formatter: TemplateReportFormatter()
+        )
     ) -> ActivityViewModel {
         ActivityViewModel(
             workoutService: workoutService,
@@ -270,7 +325,8 @@ struct ActivityViewModelTests {
                 snapshot: makeEmptyActivitySharedSnapshot()
             ),
             personalRecordStore: personalRecordStore,
-            recommendationSettingsStore: recommendationSettingsStore
+            recommendationSettingsStore: recommendationSettingsStore,
+            workoutReportUseCase: workoutReportUseCase
         )
     }
 
@@ -734,10 +790,7 @@ struct ActivityViewModelTests {
         await vm.loadActivityData()
         // No SwiftData records — exerciseRecordSnapshots is empty
         vm.updateSuggestion(records: [])
-        vm.generateWeeklyReport()
-
-        // Allow the async Task inside generateWeeklyReport to complete
-        try? await Task.sleep(nanoseconds: 200_000_000)
+        await vm.generateWeeklyReport()
 
         #expect(vm.weeklyReport != nil, "Weekly report should include HealthKit-only workouts")
         if let report = vm.weeklyReport {
@@ -795,14 +848,53 @@ struct ActivityViewModelTests {
 
         await vm.loadActivityData()
         vm.updateSuggestion(records: [record])
-        vm.generateWeeklyReport()
-
-        try? await Task.sleep(nanoseconds: 200_000_000)
+        await vm.generateWeeklyReport()
 
         #expect(vm.weeklyReport != nil)
         if let report = vm.weeklyReport {
             // 1 SwiftData record + 1 third-party HK = 2 (linked HK excluded)
             #expect(report.stats.totalSessions == 2)
         }
+    }
+
+    @Test("localized format strings use positional placeholders when translations reorder arguments")
+    func localizedFormatStringsUseStablePlaceholderOrder() throws {
+        let data = try Data(contentsOf: localizableCatalogURL())
+        let catalog = try JSONDecoder().decode(LocalizationCatalog.self, from: data)
+
+        let mismatches = catalog.strings
+            .sorted { $0.key < $1.key }
+            .flatMap { key, entry -> [String] in
+                let baseSequence = placeholderSequence(in: key)
+                guard baseSequence.count > 1 else {
+                    return []
+                }
+
+                return (entry.localizations ?? [:])
+                    .sorted { $0.key < $1.key }
+                    .compactMap { language, localization in
+                        guard let value = localization.stringUnit?.value else {
+                            return nil
+                        }
+
+                        let localizedSequence = placeholderSequence(in: value)
+                        guard localizedSequence.count > 1 else {
+                            return nil
+                        }
+                        guard localizedSequence.contains(where: { $0.position != nil }) == false else {
+                            return nil
+                        }
+                        guard baseSequence.map(\.type) != localizedSequence.map(\.type) else {
+                            return nil
+                        }
+
+                        return "\(language): \(key) -> \(value)"
+                    }
+            }
+
+        #expect(
+            mismatches.isEmpty,
+            "Found localized format strings with reordered placeholders but no positional specifiers:\n\(mismatches.joined(separator: "\n"))"
+        )
     }
 }

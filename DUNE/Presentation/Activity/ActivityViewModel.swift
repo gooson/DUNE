@@ -113,7 +113,7 @@ final class ActivityViewModel {
     /// Cached manual records for manual-cardio fallback PR calculations.
     private var manualRecordsCache: [ExerciseRecord] = []
     private var healthKitOnlySnapshots: [ExerciseRecordSnapshot] = []
-    private var weeklyReportTask: Task<Void, Never>?
+    private var weeklyReportRequestID = 0
     @ObservationIgnored
     private var localizedExerciseNameLookup: [String: String] = [:]
 
@@ -433,43 +433,44 @@ final class ActivityViewModel {
     }
 
     /// Generates a weekly workout report from current exercise data.
-    func generateWeeklyReport() {
-        weeklyReportTask?.cancel()
-        weeklyReportTask = Task {
-            let allSnapshots = allExerciseSnapshots
-            guard !allSnapshots.isEmpty else {
-                weeklyReport = nil
-                return
-            }
+    func generateWeeklyReport() async {
+        weeklyReportRequestID += 1
+        let requestID = weeklyReportRequestID
 
-            let partition = partitionSnapshotsByWeek()
-            let thisWeekRecords = partition.current
-            let lastWeekRecords = partition.previous
-
-            guard !thisWeekRecords.isEmpty else {
-                weeklyReport = nil
-                return
-            }
-
-            let previousVolume = lastWeekRecords.isEmpty
-                ? nil
-                : lastWeekRecords.compactMap(\.totalWeight).filter(\.isFinite).reduce(0, +)
-            let streak = workoutStreak?.currentStreak ?? 0
-
-            let input = GenerateWorkoutReportUseCase.Input(
-                records: thisWeekRecords,
-                period: .weekly,
-                startDate: partition.weekAgo,
-                endDate: Date(),
-                previousPeriodVolume: previousVolume,
-                workoutStreak: streak,
-                newPersonalRecords: 0,
-                newExerciseNames: []
-            )
-
-            guard !Task.isCancelled else { return }
-            weeklyReport = await workoutReportUseCase.execute(input: input)
+        let allSnapshots = allExerciseSnapshots
+        guard !allSnapshots.isEmpty else {
+            weeklyReport = nil
+            return
         }
+
+        let partition = partitionSnapshotsByWeek()
+        let thisWeekRecords = partition.current
+        let lastWeekRecords = partition.previous
+
+        guard !thisWeekRecords.isEmpty else {
+            weeklyReport = nil
+            return
+        }
+
+        let previousVolume = lastWeekRecords.isEmpty
+            ? nil
+            : lastWeekRecords.compactMap(\.totalWeight).filter(\.isFinite).reduce(0, +)
+        let streak = workoutStreak?.currentStreak ?? 0
+
+        let input = GenerateWorkoutReportUseCase.Input(
+            records: thisWeekRecords,
+            period: .weekly,
+            startDate: partition.weekAgo,
+            endDate: Date(),
+            previousPeriodVolume: previousVolume,
+            workoutStreak: streak,
+            newPersonalRecords: 0,
+            newExerciseNames: []
+        )
+
+        let report = await workoutReportUseCase.execute(input: input)
+        guard !Task.isCancelled, requestID == weeklyReportRequestID else { return }
+        weeklyReport = report
     }
 
     func recomputeDerivedStats() {

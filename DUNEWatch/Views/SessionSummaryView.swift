@@ -79,6 +79,7 @@ struct SessionSummaryView: View {
         }
         .background { WatchWaveBackground(color: DS.Color.positive) }
         .navigationBarBackButtonHidden()
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionSummaryScreen)
         .alert("Save Error", isPresented: .init(
             get: { saveError != nil },

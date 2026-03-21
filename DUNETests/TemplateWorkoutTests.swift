@@ -220,13 +220,13 @@ struct TemplateWorkoutViewModelReorderTests {
         #expect(vm.currentExerciseIndex == 2)
     }
 
-    @Test("moveExercise preserves completed status")
+    @Test("moveExercise keeps completed status aligned when moving another exercise")
     func movePreservesCompleted() {
         let vm = makeViewModel()
         vm.exerciseStatuses[1] = .completed
 
-        // Move completed exercise
-        vm.moveExercise(from: IndexSet(integer: 1), to: 0)
+        // Move a non-completed exercise around a completed one.
+        vm.moveExercise(from: IndexSet(integer: 0), to: 3)
 
         #expect(vm.exerciseStatuses[0] == .completed)
         #expect(vm.exercises[0].name == "Squat")

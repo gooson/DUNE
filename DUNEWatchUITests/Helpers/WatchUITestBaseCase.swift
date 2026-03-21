@@ -24,17 +24,22 @@ enum WatchAXID {
     static let sessionMetricsCompleteSetButton = "watch-session-complete-set-button"
     static let sessionMetricsCompleteSetLabels = ["Complete Set", "세트 완료", "セット完了"]
     static let sessionMetricsLastSetFinish = "watch-session-last-set-finish"
+    static let sessionMetricsLastSetFinishLabels = ["Finish Exercise", "운동 마치기", "エクササイズ終了"]
     static let sessionControlsScreen = "watch-session-controls-screen"
     static let sessionControlsEndButton = "watch-session-end-button"
+    static let sessionControlsEndLabels = ["End", "종료", "終了"]
     static let sessionControlsPauseResumeButton = "watch-session-pause-resume-button"
+    static let sessionControlsPauseResumeLabels = ["Pause", "일시정지", "一時停止", "Resume", "재개", "再開"]
     static let restTimerScreen = "watch-rest-timer-screen"
     static let restTimerSkipButton = "watch-rest-timer-skip"
+    static let restTimerSkipLabels = ["Skip", "건너뛰기", "スキップ"]
     static let setInputScreen = "watch-set-input-screen"
     static let setInputDoneButton = "watch-set-input-done"
     static let restTimerRPEBadge = "watch-rest-timer-rpe-badge"
     static let sessionSummaryScreen = "watch-session-summary-screen"
     static let sessionSummaryEffortButton = "watch-summary-effort-button"
     static let sessionSummaryDoneButton = "watch-session-summary-done"
+    static let sessionSummaryDoneLabels = ["Done", "완료", "完了", "Finishing...", "마무리 중...", "完了処理中..."]
 }
 
 class WatchUITestBaseCase: XCTestCase {
@@ -118,6 +123,12 @@ class WatchUITestBaseCase: XCTestCase {
         app.launch()
     }
 
+    func relaunchApp(withAdditionalArguments additionalArguments: [String]) {
+        var configuration = launchConfiguration
+        configuration.additionalArguments.append(contentsOf: additionalArguments)
+        launchApp(with: configuration)
+    }
+
     override func tearDownWithError() throws {
         if let app {
             if let failureCount = testRun?.failureCount, failureCount > 0 {
@@ -148,6 +159,36 @@ class WatchUITestBaseCase: XCTestCase {
             return waitForButton(
                 identifier: identifier,
                 exactLabels: WatchAXID.sessionMetricsCompleteSetLabels,
+                timeout: timeout
+            ) != nil
+        case WatchAXID.sessionMetricsLastSetFinish:
+            return waitForButton(
+                identifier: identifier,
+                exactLabels: WatchAXID.sessionMetricsLastSetFinishLabels,
+                timeout: timeout
+            ) != nil
+        case WatchAXID.sessionControlsEndButton:
+            return waitForButton(
+                identifier: identifier,
+                exactLabels: WatchAXID.sessionControlsEndLabels,
+                timeout: timeout
+            ) != nil
+        case WatchAXID.sessionControlsPauseResumeButton:
+            return waitForButton(
+                identifier: identifier,
+                exactLabels: WatchAXID.sessionControlsPauseResumeLabels,
+                timeout: timeout
+            ) != nil
+        case WatchAXID.restTimerSkipButton:
+            return waitForButton(
+                identifier: identifier,
+                exactLabels: WatchAXID.restTimerSkipLabels,
+                timeout: timeout
+            ) != nil
+        case WatchAXID.sessionSummaryDoneButton:
+            return waitForButton(
+                identifier: identifier,
+                exactLabels: WatchAXID.sessionSummaryDoneLabels,
                 timeout: timeout
             ) != nil
         default:
@@ -183,6 +224,51 @@ class WatchUITestBaseCase: XCTestCase {
             guard let button = waitForButton(
                 identifier: identifier,
                 exactLabels: WatchAXID.sessionMetricsCompleteSetLabels,
+                timeout: timeout
+            ) else {
+                return false
+            }
+            element = button
+        case WatchAXID.sessionMetricsLastSetFinish:
+            guard let button = waitForButton(
+                identifier: identifier,
+                exactLabels: WatchAXID.sessionMetricsLastSetFinishLabels,
+                timeout: timeout
+            ) else {
+                return false
+            }
+            element = button
+        case WatchAXID.sessionControlsEndButton:
+            guard let button = waitForButton(
+                identifier: identifier,
+                exactLabels: WatchAXID.sessionControlsEndLabels,
+                timeout: timeout
+            ) else {
+                return false
+            }
+            element = button
+        case WatchAXID.sessionControlsPauseResumeButton:
+            guard let button = waitForButton(
+                identifier: identifier,
+                exactLabels: WatchAXID.sessionControlsPauseResumeLabels,
+                timeout: timeout
+            ) else {
+                return false
+            }
+            element = button
+        case WatchAXID.restTimerSkipButton:
+            guard let button = waitForButton(
+                identifier: identifier,
+                exactLabels: WatchAXID.restTimerSkipLabels,
+                timeout: timeout
+            ) else {
+                return false
+            }
+            element = button
+        case WatchAXID.sessionSummaryDoneButton:
+            guard let button = waitForButton(
+                identifier: identifier,
+                exactLabels: WatchAXID.sessionSummaryDoneLabels,
                 timeout: timeout
             ) else {
                 return false
@@ -330,20 +416,20 @@ class WatchUITestBaseCase: XCTestCase {
 
     func openControlsPage() {
         dismissSetInputSheetIfNeeded()
-        if elementExists(WatchAXID.sessionControlsScreen, timeout: 1) {
+        if controlsPageVisible(timeout: 1) {
             return
         }
 
         let swipeActions: [() -> Void] = [
+            { self.app.swipeUp() },
+            { self.app.swipeUp() },
             { self.app.swipeDown() },
-            { self.app.swipeRight() },
-            { self.app.swipeLeft() },
-            { self.app.swipeUp() }
+            { self.app.swipeDown() }
         ]
 
         for action in swipeActions {
             action()
-            if elementExists(WatchAXID.sessionControlsScreen, timeout: 2) {
+            if controlsPageVisible(timeout: 2) {
                 return
             }
         }
@@ -365,6 +451,12 @@ class WatchUITestBaseCase: XCTestCase {
             tapElement(WatchAXID.restTimerSkipButton, timeout: 5),
             "Rest timer skip button should be available"
         )
+    }
+
+    private func controlsPageVisible(timeout: TimeInterval) -> Bool {
+        elementExists(WatchAXID.sessionControlsScreen, timeout: timeout)
+            || elementExists(WatchAXID.sessionControlsEndButton, timeout: timeout)
+            || elementExists(WatchAXID.sessionControlsPauseResumeButton, timeout: timeout)
     }
 
     func completeFixtureStrengthWorkoutToSummary() {

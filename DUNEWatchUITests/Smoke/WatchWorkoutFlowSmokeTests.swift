@@ -3,6 +3,7 @@ import XCTest
 @MainActor
 final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
     func testControlsSurfaceIsReachableDuringStrengthWorkout() throws {
+        relaunchApp(withAdditionalArguments: ["--ui-watch-strength-start-controls"])
         startFixtureStrengthWorkout()
         openControlsPage()
 

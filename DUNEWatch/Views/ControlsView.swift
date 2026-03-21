@@ -82,6 +82,7 @@ struct ControlsView: View {
         .sheet(isPresented: $showReorderSheet) {
             WatchExerciseReorderView()
         }
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.sessionControlsScreen)
         .confirmationDialog(
             "End Workout?",

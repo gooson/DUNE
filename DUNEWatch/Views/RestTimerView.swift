@@ -123,6 +123,7 @@ struct RestTimerView: View {
                 .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.restTimerEndButton)
             }
         }
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier(WatchWorkoutSurfaceAccessibility.restTimerScreen)
         .onAppear {
             showRPEAdjust = false

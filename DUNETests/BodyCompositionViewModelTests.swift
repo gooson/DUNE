@@ -80,18 +80,18 @@ struct BodyCompositionViewModelTests {
         #expect(vm.validationError != nil)
     }
 
-    @Test("createValidatedRecord allows empty optional fields")
+    @Test("createValidatedRecord requires at least one body measurement")
     func emptyOptionalFields() {
         let vm = BodyCompositionViewModel()
-        // All fields empty is valid (all optional)
         let record = vm.createValidatedRecord()
-        #expect(record != nil)
-        #expect(record?.weight == nil)
+        #expect(record == nil)
+        #expect(vm.validationError != nil)
     }
 
     @Test("Memo is truncated to 500 characters")
     func memoTruncation() {
         let vm = BodyCompositionViewModel()
+        vm.newWeight = "70"
         vm.newMemo = String(repeating: "a", count: 600)
 
         let record = vm.createValidatedRecord()

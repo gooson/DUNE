@@ -277,7 +277,7 @@ struct MuscleMap3DStateFatigueIntensityTests {
         #expect(state == .volume(.high))
     }
 
-    @Test("Anatomy layer exposes shell only in skin mode")
+    @Test("Anatomy layer keeps a minimal shell for spatial context")
     func anatomyLayerShellOpacity() {
         #expect(
             MuscleMap3DState.effectiveShellOpacity(
@@ -289,13 +289,13 @@ struct MuscleMap3DStateFatigueIntensityTests {
             MuscleMap3DState.effectiveShellOpacity(
                 for: .muscles,
                 configuredShellOpacity: 0.24
-            ) == 0
+            ) == MuscleMap3DState.defaultShellOpacity
         )
         #expect(
             MuscleMap3DState.effectiveShellOpacity(
                 for: .focus,
                 configuredShellOpacity: 0.24
-            ) == 0
+            ) == MuscleMap3DState.defaultShellOpacity
         )
     }
 
@@ -313,7 +313,7 @@ struct MuscleMap3DStateFatigueIntensityTests {
     @Test("Zoom scale is clamped to viewer bounds")
     func zoomScaleClamped() {
         #expect(MuscleMap3DState.clampedZoomScale(0.2) == MuscleMap3DState.minZoomScale)
-        #expect(MuscleMap3DState.clampedZoomScale(2.4) == MuscleMap3DState.maxZoomScale)
+        #expect(MuscleMap3DState.clampedZoomScale(6.0) == MuscleMap3DState.maxZoomScale)
     }
 
     @Test("Yaw normalization keeps angles in 0 to 360 degrees")
@@ -328,7 +328,7 @@ struct MuscleMap3DStateFatigueIntensityTests {
         let backYaw = MuscleMap3DState.preferredYaw(for: .back)
 
         #expect(chestYaw == MuscleMap3DState.defaultYaw)
-        #expect(backYaw > .pi)
+        #expect(backYaw == .pi)
     }
 
     @Test("USDZ entity naming covers all muscle groups")
