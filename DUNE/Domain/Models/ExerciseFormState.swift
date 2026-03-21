@@ -7,6 +7,8 @@ struct CheckpointResult: Sendable, Identifiable {
     var id: String { checkpointName }
 
     let checkpointName: String
+    /// Whether this checkpoint is meant to be evaluated in the current phase.
+    let isActivePhase: Bool
     let status: PostureStatus
     let currentDegrees: Double
 }

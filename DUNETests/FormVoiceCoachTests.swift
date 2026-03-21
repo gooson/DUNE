@@ -1,3 +1,4 @@
+import Foundation
 import Testing
 @testable import DUNE
 
@@ -8,9 +9,10 @@ struct FormVoiceCoachTests {
 
     private func makeCoach(
         cooldown: TimeInterval = 5.0,
-        now: @escaping () -> Date = { Date() }
+        now: @escaping () -> Date = { Date() },
+        didSpeak: ((String) -> Void)? = nil
     ) -> FormVoiceCoach {
-        FormVoiceCoach(cooldown: cooldown, now: now)
+        FormVoiceCoach(cooldown: cooldown, now: now, didSpeak: didSpeak)
     }
 
     private func makeFormState(
@@ -24,6 +26,20 @@ struct FormVoiceCoachTests {
         return state
     }
 
+    private func makeResult(
+        checkpointName: String,
+        status: PostureStatus,
+        currentDegrees: Double,
+        isActivePhase: Bool = true
+    ) -> CheckpointResult {
+        CheckpointResult(
+            checkpointName: checkpointName,
+            isActivePhase: isActivePhase,
+            status: status,
+            currentDegrees: currentDegrees
+        )
+    }
+
     // MARK: - Tests
 
     @Test("Disabled coach does not crash on processFormState")
@@ -31,7 +47,7 @@ struct FormVoiceCoachTests {
         let coach = makeCoach()
         // Coach is disabled by default — calling process should be a no-op
         let state = makeFormState(results: [
-            CheckpointResult(checkpointName: "Knee Depth", status: .warning, currentDegrees: 130),
+            makeResult(checkpointName: "Knee Depth", status: .warning, currentDegrees: 130),
         ])
         coach.processFormState(state, rule: .barbellSquat)
         // No crash = success
@@ -50,11 +66,16 @@ struct FormVoiceCoachTests {
     @Test("Cooldown prevents repeated speech for same checkpoint")
     func cooldownPreventsRepeat() {
         var currentTime = Date()
-        let coach = makeCoach(cooldown: 5.0, now: { currentTime })
+        var spokenCues: [String] = []
+        let coach = makeCoach(
+            cooldown: 5.0,
+            now: { currentTime },
+            didSpeak: { spokenCues.append($0) }
+        )
         coach.setEnabled(true)
 
         let state = makeFormState(results: [
-            CheckpointResult(checkpointName: "Knee Depth", status: .warning, currentDegrees: 130),
+            makeResult(checkpointName: "Knee Depth", status: .warning, currentDegrees: 130),
         ])
 
         // First call — should attempt to speak (synthesizer may not actually
@@ -72,32 +93,70 @@ struct FormVoiceCoachTests {
         // Third call — cooldown expired, should attempt speech again
         coach.processFormState(state, rule: .barbellSquat)
 
+        #expect(spokenCues == ["Go deeper", "Go deeper"])
         coach.stop()
     }
 
-    @Test("Normal status does not trigger coaching")
-    func normalStatusSkipped() {
-        let coach = makeCoach()
+    @Test("Active normal status can emit a positive coaching cue")
+    func normalStatusCanTriggerPositiveCue() {
+        var spokenCues: [String] = []
+        let coach = makeCoach(didSpeak: { spokenCues.append($0) })
         coach.setEnabled(true)
 
         let state = makeFormState(results: [
-            CheckpointResult(checkpointName: "Knee Depth", status: .normal, currentDegrees: 80),
-            CheckpointResult(checkpointName: "Back Angle", status: .normal, currentDegrees: 55),
+            makeResult(checkpointName: "Knee Depth", status: .normal, currentDegrees: 80),
+            makeResult(checkpointName: "Back Angle", status: .normal, currentDegrees: 55),
         ])
 
-        // Should be a no-op (no cue needed for normal status)
         coach.processFormState(state, rule: .barbellSquat)
+
+        #expect(spokenCues == ["Good depth"])
+        coach.stop()
+    }
+
+    @Test("Inactive checkpoints are ignored even if they look normal")
+    func inactiveCheckpointsAreIgnored() {
+        var spokenCues: [String] = []
+        let coach = makeCoach(didSpeak: { spokenCues.append($0) })
+        coach.setEnabled(true)
+
+        let state = makeFormState(
+            results: [
+                makeResult(
+                    checkpointName: "Knee Depth",
+                    status: .normal,
+                    currentDegrees: 170,
+                    isActivePhase: false
+                ),
+                makeResult(
+                    checkpointName: "Back Angle",
+                    status: .normal,
+                    currentDegrees: 55,
+                    isActivePhase: false
+                ),
+            ],
+            phase: .setup
+        )
+
+        coach.processFormState(state, rule: .barbellSquat)
+
+        #expect(spokenCues.isEmpty)
         coach.stop()
     }
 
     @Test("Stop clears cooldown history")
     func stopClearsCooldowns() {
-        var currentTime = Date()
-        let coach = makeCoach(cooldown: 5.0, now: { currentTime })
+        let currentTime = Date()
+        var spokenCues: [String] = []
+        let coach = makeCoach(
+            cooldown: 5.0,
+            now: { currentTime },
+            didSpeak: { spokenCues.append($0) }
+        )
         coach.setEnabled(true)
 
         let state = makeFormState(results: [
-            CheckpointResult(checkpointName: "Knee Depth", status: .warning, currentDegrees: 130),
+            makeResult(checkpointName: "Knee Depth", status: .warning, currentDegrees: 130),
         ])
 
         coach.processFormState(state, rule: .barbellSquat)
@@ -108,6 +167,8 @@ struct FormVoiceCoachTests {
 
         // Same time — should be able to speak again since cooldowns were cleared
         coach.processFormState(state, rule: .barbellSquat)
+
+        #expect(spokenCues == ["Go deeper", "Go deeper"])
         coach.stop()
     }
 
@@ -117,7 +178,7 @@ struct FormVoiceCoachTests {
         coach.setEnabled(true)
 
         let state = makeFormState(results: [
-            CheckpointResult(checkpointName: "Knee Depth", status: .unmeasurable, currentDegrees: 0),
+            makeResult(checkpointName: "Knee Depth", status: .unmeasurable, currentDegrees: 0),
         ])
 
         coach.processFormState(state, rule: .barbellSquat)

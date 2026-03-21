@@ -40,6 +40,7 @@ final class FormVoiceCoach: @unchecked Sendable {
 
     private let synthesizer = AVSpeechSynthesizer()
     private let voice: AVSpeechSynthesisVoice?
+    private let didSpeak: ((String) -> Void)?
 
     // MARK: - State
 
@@ -53,9 +54,14 @@ final class FormVoiceCoach: @unchecked Sendable {
 
     // MARK: - Init
 
-    init(cooldown: TimeInterval = 5.0, now: @escaping () -> Date = { Date() }) {
+    init(
+        cooldown: TimeInterval = 5.0,
+        now: @escaping () -> Date = { Date() },
+        didSpeak: ((String) -> Void)? = nil
+    ) {
         self.cooldown = cooldown
         self.now = now
+        self.didSpeak = didSpeak
 
         // Cache voice once at init
         let languageCode = Locale.current.language.languageCode?.identifier ?? "en"
@@ -85,7 +91,7 @@ final class FormVoiceCoach: @unchecked Sendable {
         guard isEnabled else { return }
 
         // Early exit if already speaking — avoid building unnecessary collections.
-        guard !synthesizer.isSpeaking else { return }
+        guard didSpeak != nil || !synthesizer.isSpeaking else { return }
 
         // Cache checkpoint lookup per rule (invalidate on rule change).
         if cachedRuleID != rule.id {
@@ -104,6 +110,7 @@ final class FormVoiceCoach: @unchecked Sendable {
         var bestPriority: CuePriority?
 
         for result in state.checkpointResults {
+            guard result.isActivePhase else { continue }
             guard result.status != .unmeasurable else { continue }
             guard let checkpoint = cachedCheckpoints[result.checkpointName] else { continue }
 
@@ -154,6 +161,11 @@ final class FormVoiceCoach: @unchecked Sendable {
     // MARK: - Internals
 
     private func speak(_ text: String) {
+        if let didSpeak {
+            didSpeak(text)
+            return
+        }
+
         let localizedText = String(localized: String.LocalizationValue(text))
         let utterance = AVSpeechUtterance(string: localizedText)
         utterance.rate = 0.55
