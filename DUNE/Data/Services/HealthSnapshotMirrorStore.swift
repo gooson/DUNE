@@ -42,6 +42,9 @@ actor HealthSnapshotMirrorStore: HealthSnapshotMirroring {
         )
 
         if let existing = try context.fetch(descriptor).first {
+            // Only update if payload actually changed to avoid unnecessary
+            // CloudKit sync (dirty record → sync → remote change notification).
+            guard existing.payloadJSON != payloadJSON else { return }
             existing.syncedAt = Date()
             existing.sourceDevice = sourceDevice
             existing.payloadVersion = Self.payloadVersion
