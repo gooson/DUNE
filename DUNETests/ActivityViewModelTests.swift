@@ -707,4 +707,102 @@ struct ActivityViewModelTests {
         #expect(vm.recommendationContext == .home)
         #expect(recommendationService.lastConstraints.allowedEquipment?.contains(.dumbbell) == false)
     }
+
+    @Test("weekly report includes HealthKit-only workouts")
+    func weeklyReportIncludesHealthKitWorkouts() async {
+        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date())!
+        let hkWorkout = WorkoutSummary(
+            id: "HK-THIRD-PARTY",
+            type: "Running",
+            activityType: .running,
+            duration: 1800,
+            calories: 300,
+            distance: 5000,
+            date: yesterday,
+            isFromThisApp: false
+        )
+        let workoutService = MockWorkoutService(workouts: [hkWorkout])
+
+        let store = makeIsolatedPRStore()
+        let vm = makeViewModel(
+            workoutService: workoutService,
+            stepsService: MockStepsService(),
+            personalRecordStore: store
+        )
+
+        // Load HealthKit data (populates recentWorkouts)
+        await vm.loadActivityData()
+        // No SwiftData records — exerciseRecordSnapshots is empty
+        vm.updateSuggestion(records: [])
+        vm.generateWeeklyReport()
+
+        // Allow the async Task inside generateWeeklyReport to complete
+        try? await Task.sleep(nanoseconds: 200_000_000)
+
+        #expect(vm.weeklyReport != nil, "Weekly report should include HealthKit-only workouts")
+        if let report = vm.weeklyReport {
+            #expect(report.stats.totalSessions == 1)
+            #expect(report.stats.activeDays == 1)
+        }
+    }
+
+    @Test("weekly report merges SwiftData and HealthKit workouts without duplication")
+    func weeklyReportMergesWithoutDuplication() async {
+        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date())!
+
+        // SwiftData record (from app)
+        let record = ExerciseRecord(
+            date: yesterday,
+            exerciseType: "Bench Press",
+            duration: 2400,
+            calories: 200,
+            distance: nil
+        )
+        record.primaryMusclesRaw = MuscleGroup.chest.rawValue
+        record.healthKitWorkoutID = "HK-APP-1"
+
+        // HealthKit workout linked to the above record
+        let linkedHKWorkout = WorkoutSummary(
+            id: "HK-APP-1",
+            type: "Bench Press",
+            activityType: .traditionalStrengthTraining,
+            duration: 2400,
+            calories: 200,
+            distance: nil,
+            date: yesterday,
+            isFromThisApp: true
+        )
+
+        // HealthKit third-party workout (not in SwiftData)
+        let thirdPartyWorkout = WorkoutSummary(
+            id: "HK-THIRD-PARTY",
+            type: "Running",
+            activityType: .running,
+            duration: 1800,
+            calories: 300,
+            distance: 5000,
+            date: yesterday,
+            isFromThisApp: false
+        )
+
+        let workoutService = MockWorkoutService(workouts: [linkedHKWorkout, thirdPartyWorkout])
+        let store = makeIsolatedPRStore()
+        let vm = makeViewModel(
+            workoutService: workoutService,
+            stepsService: MockStepsService(),
+            personalRecordStore: store
+        )
+
+        await vm.loadActivityData()
+        vm.updateSuggestion(records: [record])
+        vm.generateWeeklyReport()
+
+        try? await Task.sleep(nanoseconds: 200_000_000)
+
+        #expect(vm.weeklyReport != nil)
+        if let report = vm.weeklyReport {
+            // 1 SwiftData record + 1 third-party HK = 2 (linked HK excluded)
+            #expect(report.stats.totalSessions == 2)
+        }
+    }
 }

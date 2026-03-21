@@ -112,6 +112,7 @@ final class ActivityViewModel {
 
     /// Cached manual records for manual-cardio fallback PR calculations.
     private var manualRecordsCache: [ExerciseRecord] = []
+    private var healthKitOnlySnapshots: [ExerciseRecordSnapshot] = []
     private var weeklyReportTask: Task<Void, Never>?
     @ObservationIgnored
     private var localizedExerciseNameLookup: [String: String] = [:]
@@ -159,6 +160,11 @@ final class ActivityViewModel {
 
     /// Cached SwiftData snapshots for merging with HealthKit data.
     private var exerciseRecordSnapshots: [ExerciseRecordSnapshot] = []
+
+    /// Combined SwiftData + HealthKit-only exercise snapshots.
+    private var allExerciseSnapshots: [ExerciseRecordSnapshot] {
+        exerciseRecordSnapshots + healthKitOnlySnapshots
+    }
 
     var recommendationAvailableEquipment: [Equipment] {
         Equipment.allCases.filter { isEquipmentAvailable($0) }
@@ -346,6 +352,8 @@ final class ActivityViewModel {
             // else: app-created workout WITH linked ExerciseRecord → already in exerciseRecordSnapshots
         }
 
+        healthKitOnlySnapshots = healthKitSnapshots
+
         let allSnapshots = exerciseRecordSnapshots + healthKitSnapshots
         fatigueStates = recommendationService.computeFatigueStates(
             from: allSnapshots,
@@ -368,21 +376,22 @@ final class ActivityViewModel {
         }
     }
 
-    /// Partitions exercise record snapshots into current and previous week.
+    /// Partitions all exercise snapshots (SwiftData + HealthKit) into current and previous week.
     private func partitionSnapshotsByWeek() -> (current: [ExerciseRecordSnapshot], previous: [ExerciseRecordSnapshot], weekAgo: Date, twoWeeksAgo: Date) {
         let calendar = Calendar.current
         let now = Date()
         let weekAgo = calendar.date(byAdding: .day, value: -7, to: now) ?? now
         let twoWeeksAgo = calendar.date(byAdding: .day, value: -14, to: now) ?? now
-        let current = exerciseRecordSnapshots.filter { $0.date >= weekAgo }
-        let previous = exerciseRecordSnapshots.filter { $0.date >= twoWeeksAgo && $0.date < weekAgo }
+        let allSnapshots = allExerciseSnapshots
+        let current = allSnapshots.filter { $0.date >= weekAgo }
+        let previous = allSnapshots.filter { $0.date >= twoWeeksAgo && $0.date < weekAgo }
         return (current, previous, weekAgo, twoWeeksAgo)
     }
 
     /// Recomputes injury risk assessment from available data.
     /// Active injuries are passed from the View's @Query since the ViewModel doesn't access SwiftData.
     func recomputeInjuryRisk(activeInjuries: [InjuryInfo] = []) {
-        guard !exerciseRecordSnapshots.isEmpty || !recentWorkouts.isEmpty else {
+        guard !allExerciseSnapshots.isEmpty || !recentWorkouts.isEmpty else {
             injuryRiskAssessment = nil
             return
         }
@@ -427,7 +436,8 @@ final class ActivityViewModel {
     func generateWeeklyReport() {
         weeklyReportTask?.cancel()
         weeklyReportTask = Task {
-            guard !exerciseRecordSnapshots.isEmpty else {
+            let allSnapshots = allExerciseSnapshots
+            guard !allSnapshots.isEmpty else {
                 weeklyReport = nil
                 return
             }
@@ -533,9 +543,10 @@ final class ActivityViewModel {
     private func rebuildWeeklyStats() {
         let calendar = Calendar.current
         let weekAgo = calendar.date(byAdding: .day, value: -7, to: Date()) ?? Date()
-        let thisWeek = exerciseRecordSnapshots.filter { $0.date >= weekAgo }
+        let allSnapshots = allExerciseSnapshots
+        let thisWeek = allSnapshots.filter { $0.date >= weekAgo }
         let prevWeekStart = calendar.date(byAdding: .day, value: -14, to: Date()) ?? Date()
-        let prevWeek = exerciseRecordSnapshots.filter { $0.date >= prevWeekStart && $0.date < weekAgo }
+        let prevWeek = allSnapshots.filter { $0.date >= prevWeekStart && $0.date < weekAgo }
 
         // Volume
         let totalVolume = thisWeek.compactMap(\.totalWeight).reduce(0, +)
