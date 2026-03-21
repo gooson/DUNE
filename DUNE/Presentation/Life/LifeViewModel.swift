@@ -51,6 +51,10 @@ final class LifeViewModel {
     private(set) var autoExerciseProgresses: [LifeAutoAchievementProgress] =
         LifeAutoAchievementService.calculateProgresses(from: [])
 
+    var autoLinkedProgresses: [HabitProgress] {
+        habitProgresses.filter(\.isAutoLinked)
+    }
+
     /// Context-aware narrative for the Life hero card.
     var heroNarrative: String {
         if totalActiveCount == 0 {
