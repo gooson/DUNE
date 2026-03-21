@@ -1,6 +1,7 @@
 #if !os(visionOS)
 import AVFoundation
 import CoreImage
+import CoreML
 import Foundation
 import ImageIO
 import os
@@ -411,24 +412,27 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
         }
     }
 
+    /// CPU compute device, resolved lazily to avoid crash during static init in simulators.
+    private lazy var cpuDevice: MLComputeDevice? = {
+        MLComputeDevice.allComputeDevices.first { if case .cpu = $0 { return true }; return false }
+    }()
+
     /// Force CPU compute for the stored bodyPoseRequest on front camera.
-    /// TrueDepth's depth sensor occupies the Neural Engine, causing
-    /// "Could not create mlImage buffer" when Vision tries to allocate
-    /// ANE buffers. CPU inference is ~10-15ms per frame — well within
-    /// the 10fps (100ms) budget.
+    /// On some devices (iPad, TrueDepth iPhones), the front camera competes
+    /// with Vision's Neural Engine for shared resources. CPU inference
+    /// is ~10-15ms per frame — well within the 10fps (100ms) budget.
     private func configureLiveBodyPoseCompute(for position: AVCaptureDevice.Position) {
-        if position == .front {
-            bodyPoseRequest.usesCPUOnly = true
-        } else {
-            bodyPoseRequest.usesCPUOnly = false
-        }
+        bodyPoseRequest.setComputeDevice(
+            position == .front ? cpuDevice : nil,
+            for: .main
+        )
     }
 
     /// Configure per-call Vision requests for the current camera position.
-    func configureRequestCompute(_ requests: [VNRequest]) {
-        guard currentPosition == .front else { return }
+    private func configureRequestCompute(_ requests: [VNRequest]) {
+        guard currentPosition == .front, let cpu = cpuDevice else { return }
         for request in requests {
-            request.usesCPUOnly = true
+            request.setComputeDevice(cpu, for: .main)
         }
     }
 
@@ -473,10 +477,10 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
     }
 
     func detectPose(from image: CGImage, orientedJPEG: Data?) async throws -> PostureCaptureResult {
-        let request = VNDetectHumanBodyPose3DRequest()
-        let confidenceRequest = VNDetectHumanBodyPoseRequest()
-        // Force CPU compute on front camera — TrueDepth ANE contention
-        configureRequestCompute([request, confidenceRequest])
+        let request3D = VNDetectHumanBodyPose3DRequest()
+        let request2D = VNDetectHumanBodyPoseRequest()
+        configureRequestCompute([request3D, request2D])
+
         // Pass EXIF orientation so pointInImage() returns coordinates in the
         // displayed (portrait, mirrored-for-front-camera) coordinate space,
         // not in the raw landscape sensor coordinate space.
@@ -485,12 +489,9 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
 
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, any Error>) in
             DispatchQueue.global(qos: .userInitiated).async { [visionSemaphore] in
-                // Wait for any in-progress 2D detection to finish.
-                // Vision's internal ML buffer pool is shared — concurrent perform() calls
-                // cause "Could not create mlImage buffer" errors.
                 visionSemaphore.wait()
                 do {
-                    try handler.perform([request, confidenceRequest])
+                    try handler.perform([request3D, request2D])
                     visionSemaphore.signal()
                     continuation.resume()
                 } catch {
@@ -500,36 +501,53 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
             }
         }
 
-        guard let observation = request.results?.first else {
+        // --- Try 3D results first ---
+        if let observation3D = request3D.results?.first {
+            let confidenceMap = Self.captureConfidenceBy2DJointName(from: request2D.results?.first)
+            let joints = extractJointPositions(from: observation3D, confidenceBy2DJointName: confidenceMap)
+
+            if !joints.isEmpty {
+                let bodyHeight: Double?
+                let heightEstimation: HeightEstimationType
+                let height = observation3D.bodyHeight
+                if height.isFinite, height > 0.5, height < 2.5 {
+                    bodyHeight = Double(height)
+                    heightEstimation = .measured
+                } else {
+                    bodyHeight = Self.referenceBodyHeight
+                    heightEstimation = .reference
+                }
+
+                let imageData: Data? = if let orientedJPEG {
+                    compressOrientedData(orientedJPEG)
+                } else {
+                    compressImage(image)
+                }
+
+                return PostureCaptureResult(
+                    jointPositions: joints,
+                    bodyHeight: bodyHeight,
+                    heightEstimation: heightEstimation,
+                    imageData: imageData
+                )
+            }
+        }
+
+        // --- Fallback: 2D-only results ---
+        // 3D detection fails on some devices/cameras (iPad front camera,
+        // "ABPKPersonIDTracker not supported", "mlImage buffer" errors).
+        // 2D joints with z=0 still provide frontal metrics (shoulder/hip
+        // asymmetry, knee alignment, lateral shift). Sagittal metrics
+        // (forward head, rounded shoulders) return "unmeasurable".
+        guard let observation2D = request2D.results?.first else {
             throw PostureCaptureError.noPoseDetected
         }
 
-        let confidenceBy2DJointName = Self.captureConfidenceBy2DJointName(
-            from: confidenceRequest.results?.first
-        )
-        let jointPositions = extractJointPositions(
-            from: observation,
-            confidenceBy2DJointName: confidenceBy2DJointName
-        )
-
-        guard !jointPositions.isEmpty else {
+        let joints2D = Self.extractJointPositionsFrom2D(observation2D)
+        guard !joints2D.isEmpty else {
             throw PostureCaptureError.insufficientConfidence
         }
 
-        let bodyHeight: Double?
-        let heightEstimation: HeightEstimationType
-
-        let height = observation.bodyHeight
-        if height.isFinite, height > 0.5, height < 2.5 {
-            bodyHeight = Double(height)
-            heightEstimation = .measured
-        } else {
-            bodyHeight = Self.referenceBodyHeight
-            heightEstimation = .reference
-        }
-
-        // Compress oriented file data (preserves correct orientation) off the delegate callback,
-        // or fall back to compressing the raw CGImage for the external API path
         let imageData: Data? = if let orientedJPEG {
             compressOrientedData(orientedJPEG)
         } else {
@@ -537,9 +555,9 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
         }
 
         return PostureCaptureResult(
-            jointPositions: jointPositions,
-            bodyHeight: bodyHeight,
-            heightEstimation: heightEstimation,
+            jointPositions: joints2D,
+            bodyHeight: Self.referenceBodyHeight,
+            heightEstimation: .reference,
             imageData: imageData
         )
     }
@@ -660,6 +678,65 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
             positions.append(JointPosition3D(
                 name: name, x: x, y: y, z: z,
                 imageX: imageX, imageY: imageY
+            ))
+        }
+
+        return positions
+    }
+
+    /// Extract joint positions from a 2D-only pose observation.
+    /// Used as fallback when 3D detection fails (iPad front camera, unsupported devices).
+    /// Coordinates are normalized (0-1) with z=0. Frontal metrics (shoulder/hip asymmetry,
+    /// knee alignment) still produce meaningful relative comparisons.
+    /// Sagittal metrics (forward head, rounded shoulders) will return "unmeasurable" (z=0).
+    private static let tracked2DJoints: [(VNHumanBodyPoseObservation.JointName, String)] = [
+        (.nose, "centerHead"),
+        (.neck, "centerShoulder"),
+        (.root, "root"),
+        (.leftShoulder, "leftShoulder"),
+        (.rightShoulder, "rightShoulder"),
+        (.leftElbow, "leftElbow"),
+        (.rightElbow, "rightElbow"),
+        (.leftWrist, "leftWrist"),
+        (.rightWrist, "rightWrist"),
+        (.leftHip, "leftHip"),
+        (.rightHip, "rightHip"),
+        (.leftKnee, "leftKnee"),
+        (.rightKnee, "rightKnee"),
+        (.leftAnkle, "leftAnkle"),
+        (.rightAnkle, "rightAnkle"),
+    ]
+
+    static func extractJointPositionsFrom2D(
+        _ observation: VNHumanBodyPoseObservation
+    ) -> [JointPosition3D] {
+        var positions: [JointPosition3D] = []
+
+        for (jointName, name) in tracked2DJoints {
+            guard let point = try? observation.recognizedPoint(jointName),
+                  point.confidence >= capturedJointMinimumConfidence else { continue }
+
+            let loc = point.location  // normalized 0-1, origin bottom-left
+            positions.append(JointPosition3D(
+                name: name,
+                x: Float(loc.x),
+                y: Float(loc.y),
+                z: 0,
+                imageX: loc.x,
+                imageY: loc.y
+            ))
+        }
+
+        // Synthesize "spine" as midpoint between centerShoulder and root
+        if let neck = positions.first(where: { $0.name == "centerShoulder" }),
+           let root = positions.first(where: { $0.name == "root" }) {
+            positions.append(JointPosition3D(
+                name: "spine",
+                x: (neck.x + root.x) / 2,
+                y: (neck.y + root.y) / 2,
+                z: 0,
+                imageX: neck.imageX.flatMap { nx in root.imageX.map { rx in (nx + rx) / 2 } },
+                imageY: neck.imageY.flatMap { ny in root.imageY.map { ry in (ny + ry) / 2 } }
             ))
         }
 
