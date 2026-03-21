@@ -260,7 +260,7 @@ final class WatchPostureMonitor {
             while !Task.isCancelled {
                 try? await Task.sleep(for: .seconds(60))
                 guard !Task.isCancelled else { break }
-                await self?.periodicCheck()
+                self?.periodicCheck()
             }
         }
     }
@@ -377,7 +377,7 @@ final class WatchPostureMonitor {
         deviceMotionStopTask = Task { [weak self] in
             try? await Task.sleep(for: .seconds(Constants.deviceMotionSampleDurationSeconds))
             guard !Task.isCancelled else { return }
-            await self?.finishDeviceMotionCollection()
+            self?.finishDeviceMotionCollection()
         }
 
         Self.logger.info("[PostureMonitor] Started DeviceMotion collection (\(Constants.deviceMotionSampleDurationSeconds)s)")
