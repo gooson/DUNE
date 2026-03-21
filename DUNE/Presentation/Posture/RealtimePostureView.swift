@@ -62,6 +62,7 @@ struct RealtimePostureView: View {
                             formState: formState,
                             exerciseName: exercise.displayName
                         )
+                        .padding(.bottom, 80)
                     }
 
                     // Guidance hint when no body detected
@@ -92,11 +93,13 @@ struct RealtimePostureView: View {
                     .accessibilityLabel(Text("Switch camera"))
                 }
             }
-            .task { viewModel.updateDeviceOrientation(UIDevice.current.orientation) }
+            .task {
+                viewModel.updateDeviceOrientation(UIDevice.current.orientation)
+                viewModel.start()
+            }
             .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
                 viewModel.updateDeviceOrientation(UIDevice.current.orientation)
             }
-            .task { viewModel.start() }
             .onDisappear { viewModel.stop() }
             .sheet(isPresented: $viewModel.showExercisePicker) {
                 ExercisePickerSheet(

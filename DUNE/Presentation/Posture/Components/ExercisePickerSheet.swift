@@ -18,7 +18,7 @@ struct ExercisePickerSheet: View {
                     dismiss()
                 } label: {
                     HStack {
-                        Label(String(localized: "General Posture"), systemImage: "figure.stand")
+                        Label("General Posture", systemImage: "figure.stand")
                         Spacer()
                         if selectedExerciseID == nil {
                             Image(systemName: "checkmark")
@@ -28,7 +28,7 @@ struct ExercisePickerSheet: View {
                 }
                 .tint(.primary)
 
-                Section(String(localized: "Form Check")) {
+                Section("Form Check") {
                     ForEach(exercises) { exercise in
                         Button {
                             onSelect(exercise)
@@ -51,7 +51,7 @@ struct ExercisePickerSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(String(localized: "Close")) { dismiss() }
+                    Button("Close") { dismiss() }
                 }
             }
         }

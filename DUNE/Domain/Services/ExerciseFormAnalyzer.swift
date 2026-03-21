@@ -15,13 +15,15 @@ final class ExerciseFormAnalyzer: @unchecked Sendable {
     // MARK: - State (caller must synchronize access)
 
     private let rule: ExerciseFormRule
+    private let checkpointsByName: [String: FormCheckpoint]
     private var currentPhase: ExercisePhase = .setup
     private var repCount: Int = 0
-    private var repScores: [Int] = []  // Scores per completed rep
-    private var currentRepCheckpointScores: [Int] = []
+    private var repScoreSum: Int = 0       // Running sum of completed rep scores
+    private var currentRepScoreSum: Int = 0
+    private var currentRepScoreCount: Int = 0
 
     // Phase detection state
-    private var primaryAngleHistory: [Double] = []  // Last N primary angle values
+    private var keypointCache: [String: CGPoint] = [:]
     private var previousPrimaryAngle: Double?
     private var consecutiveDescentFrames: Int = 0
     private var consecutiveAscentFrames: Int = 0
@@ -31,6 +33,7 @@ final class ExerciseFormAnalyzer: @unchecked Sendable {
 
     init(rule: ExerciseFormRule) {
         self.rule = rule
+        self.checkpointsByName = Dictionary(uniqueKeysWithValues: rule.checkpoints.map { ($0.name, $0) })
     }
 
     // MARK: - Public API
@@ -38,7 +41,9 @@ final class ExerciseFormAnalyzer: @unchecked Sendable {
     /// Process a single frame of 2D keypoints.
     /// Returns the updated form state.
     func processFrame(keypoints: [(String, CGPoint)]) -> ExerciseFormState {
-        let kp = Dictionary(keypoints, uniquingKeysWith: { _, last in last })
+        keypointCache.removeAll(keepingCapacity: true)
+        for (name, point) in keypoints { keypointCache[name] = point }
+        let kp = keypointCache
 
         // Evaluate all checkpoints
         var results: [CheckpointResult] = []
@@ -90,30 +95,25 @@ final class ExerciseFormAnalyzer: @unchecked Sendable {
             updatePhase(primaryAngle: angle)
         }
 
-        // Score the current frame's active checkpoints
+        // Score the current frame's active checkpoints (O(1) lookup via checkpointsByName)
         let activeResults = results.filter { result in
-            rule.checkpoints.first { $0.name == result.checkpointName }?
+            checkpointsByName[result.checkpointName]?
                 .activePhases.contains(currentPhase) == true
                 && result.status != .unmeasurable
         }
         if !activeResults.isEmpty {
             let frameScore = Self.scoreFromResults(activeResults)
-            currentRepCheckpointScores.append(frameScore)
+            currentRepScoreSum += frameScore
+            currentRepScoreCount += 1
         }
 
-        let currentRepScore: Int
-        if currentRepCheckpointScores.isEmpty {
-            currentRepScore = 0
-        } else {
-            currentRepScore = currentRepCheckpointScores.reduce(0, +) / currentRepCheckpointScores.count
-        }
+        let currentRepScore = currentRepScoreCount > 0
+            ? currentRepScoreSum / currentRepScoreCount
+            : 0
 
-        let averageScore: Int
-        if repScores.isEmpty {
-            averageScore = currentRepScore
-        } else {
-            averageScore = repScores.reduce(0, +) / repScores.count
-        }
+        let averageScore = repCount > 0
+            ? repScoreSum / repCount
+            : currentRepScore
 
         return ExerciseFormState(
             exerciseID: rule.exerciseID,
@@ -129,9 +129,10 @@ final class ExerciseFormAnalyzer: @unchecked Sendable {
     func reset() {
         currentPhase = .setup
         repCount = 0
-        repScores = []
-        currentRepCheckpointScores = []
-        primaryAngleHistory = []
+        repScoreSum = 0
+        currentRepScoreSum = 0
+        currentRepScoreCount = 0
+        keypointCache.removeAll(keepingCapacity: true)
         previousPrimaryAngle = nil
         consecutiveDescentFrames = 0
         consecutiveAscentFrames = 0
@@ -163,10 +164,10 @@ final class ExerciseFormAnalyzer: @unchecked Sendable {
             // Transition to descent when angle drops below threshold
             if primaryAngle < rule.descentThreshold,
                consecutiveDescentFrames >= Self.phaseDebounceFrames {
+                let wasLockout = currentPhase == .lockout
                 currentPhase = .descent
                 reachedBottom = false
-                if currentPhase == .lockout {
-                    // New rep cycle starting — record previous rep
+                if wasLockout {
                     finalizeRep()
                 }
             }
@@ -197,14 +198,12 @@ final class ExerciseFormAnalyzer: @unchecked Sendable {
 
     private func finalizeRep() {
         repCount += 1
-        let repScore: Int
-        if currentRepCheckpointScores.isEmpty {
-            repScore = 0
-        } else {
-            repScore = currentRepCheckpointScores.reduce(0, +) / currentRepCheckpointScores.count
-        }
-        repScores.append(repScore)
-        currentRepCheckpointScores = []
+        let repScore = currentRepScoreCount > 0
+            ? currentRepScoreSum / currentRepScoreCount
+            : 0
+        repScoreSum += repScore
+        currentRepScoreSum = 0
+        currentRepScoreCount = 0
     }
 
     // MARK: - Geometry
