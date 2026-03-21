@@ -115,9 +115,12 @@ struct VisionWindowPlacementPlannerTests {
     func smokeConfigurationDisabledByDefault() {
         let configuration = VisionWindowPlacementSmokeConfiguration.current(arguments: [])
 
+        #expect(configuration.mode == .disabled)
         #expect(configuration.isEnabled == false)
         #expect(configuration.shouldSeedMockData == false)
-        #expect(configuration.autoOpenWindowIDs.isEmpty)
+        #expect(configuration.mainWindowAutoOpenIDs.isEmpty)
+        #expect(configuration.secondaryWindowAutoOpenIDs.isEmpty)
+        #expect(configuration.shouldDismissMainWindow == false)
     }
 
     @Test("Smoke configuration enables seeded auto-open flow")
@@ -126,24 +129,51 @@ struct VisionWindowPlacementPlannerTests {
             arguments: [VisionWindowPlacementSmokeConfiguration.smokeLaunchArgument]
         )
 
+        #expect(configuration.mode == .primary)
         #expect(configuration.isEnabled)
         #expect(configuration.shouldSeedMockData)
-        #expect(configuration.autoOpenWindowIDs == [
+        #expect(configuration.mainWindowAutoOpenIDs == [
             VisionDashboardWindowKind.condition.windowID,
             VisionDashboardWindowKind.activity.windowID,
             VisionDashboardWindowKind.sleep.windowID,
             VisionDashboardWindowKind.body.windowID,
             VisionWindowPlacementPlanner.chart3DWindowID,
         ])
+        #expect(configuration.secondaryWindowAutoOpenIDs.isEmpty)
+        #expect(configuration.shouldDismissMainWindow == false)
+    }
+
+    @Test("No-anchor smoke configuration opens settings first and continues from utility panel")
+    func noAnchorSmokeConfigurationUsesSettingsContinuation() {
+        let configuration = VisionWindowPlacementSmokeConfiguration.current(
+            arguments: [VisionWindowPlacementSmokeConfiguration.noAnchorSmokeLaunchArgument]
+        )
+
+        #expect(configuration.mode == .noAnchor)
+        #expect(configuration.isEnabled)
+        #expect(configuration.shouldSeedMockData)
+        #expect(configuration.mainWindowAutoOpenIDs == [
+            VisionWindowPlacementPlanner.settingsWindowID,
+        ])
+        #expect(configuration.secondaryWindowAutoOpenIDs == [
+            VisionWindowPlacementPlanner.chart3DWindowID,
+            VisionDashboardWindowKind.condition.windowID,
+        ])
+        #expect(configuration.shouldDismissMainWindow)
     }
 
     @Test("Seed mock alone does not auto-open windows")
     func seedMockWithoutSmokeDoesNotAutoOpenWindows() {
-        let configuration = VisionWindowPlacementSmokeConfiguration.current(arguments: ["--seed-mock"])
+        let configuration = VisionWindowPlacementSmokeConfiguration.current(
+            arguments: [VisionWindowPlacementSmokeConfiguration.seedMockLaunchArgument]
+        )
 
+        #expect(configuration.mode == .disabled)
         #expect(configuration.isEnabled == false)
         #expect(configuration.shouldSeedMockData)
-        #expect(configuration.autoOpenWindowIDs.isEmpty)
+        #expect(configuration.mainWindowAutoOpenIDs.isEmpty)
+        #expect(configuration.secondaryWindowAutoOpenIDs.isEmpty)
+        #expect(configuration.shouldDismissMainWindow == false)
     }
 
     private func windowIDs(_ ids: String?...) -> Set<String?> {

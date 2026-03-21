@@ -63,29 +63,75 @@ enum VisionWindowPlacementPlanner {
     }
 }
 
+enum VisionWindowPlacementSmokeMode: Equatable, Sendable {
+    case disabled
+    case primary
+    case noAnchor
+}
+
 struct VisionWindowPlacementSmokeConfiguration: Equatable, Sendable {
     static let smokeLaunchArgument = "--vision-window-placement-smoke"
+    static let noAnchorSmokeLaunchArgument = "--vision-window-placement-no-anchor-smoke"
+    static let seedMockLaunchArgument = "--seed-mock"
 
-    let isEnabled: Bool
+    let mode: VisionWindowPlacementSmokeMode
     let shouldSeedMockData: Bool
-    let autoOpenWindowIDs: [String]
+    let mainWindowAutoOpenIDs: [String]
+    let secondaryWindowAutoOpenIDs: [String]
+    let shouldDismissMainWindow: Bool
+
+    var isEnabled: Bool {
+        mode != .disabled
+    }
 
     static func current(
         arguments: [String] = ProcessInfo.processInfo.arguments
     ) -> VisionWindowPlacementSmokeConfiguration {
-        let isEnabled = arguments.contains(smokeLaunchArgument)
-        let shouldSeedMockData = isEnabled || arguments.contains("--seed-mock")
+        let mode: VisionWindowPlacementSmokeMode
+        if arguments.contains(noAnchorSmokeLaunchArgument) {
+            mode = .noAnchor
+        } else if arguments.contains(smokeLaunchArgument) {
+            mode = .primary
+        } else {
+            mode = .disabled
+        }
 
-        return VisionWindowPlacementSmokeConfiguration(
-            isEnabled: isEnabled,
-            shouldSeedMockData: shouldSeedMockData,
-            autoOpenWindowIDs: isEnabled ? [
+        let shouldSeedMockData = mode != .disabled || arguments.contains(seedMockLaunchArgument)
+
+        let mainWindowAutoOpenIDs: [String]
+        let secondaryWindowAutoOpenIDs: [String]
+        let shouldDismissMainWindow: Bool
+
+        switch mode {
+        case .disabled:
+            mainWindowAutoOpenIDs = []
+            secondaryWindowAutoOpenIDs = []
+            shouldDismissMainWindow = false
+        case .primary:
+            mainWindowAutoOpenIDs = [
                 VisionDashboardWindowKind.condition.windowID,
                 VisionDashboardWindowKind.activity.windowID,
                 VisionDashboardWindowKind.sleep.windowID,
                 VisionDashboardWindowKind.body.windowID,
                 VisionWindowPlacementPlanner.chart3DWindowID,
-            ] : []
+            ]
+            secondaryWindowAutoOpenIDs = []
+            shouldDismissMainWindow = false
+        case .noAnchor:
+            mainWindowAutoOpenIDs = [VisionWindowPlacementPlanner.settingsWindowID]
+            secondaryWindowAutoOpenIDs = [
+                VisionWindowPlacementPlanner.chart3DWindowID,
+                VisionDashboardWindowKind.condition.windowID,
+            ]
+            shouldDismissMainWindow = true
+        }
+
+        return VisionWindowPlacementSmokeConfiguration(
+            mode: mode,
+            shouldSeedMockData: shouldSeedMockData,
+            mainWindowAutoOpenIDs: mainWindowAutoOpenIDs,
+            secondaryWindowAutoOpenIDs: secondaryWindowAutoOpenIDs,
+            shouldDismissMainWindow: shouldDismissMainWindow
         )
     }
 }

@@ -7,6 +7,16 @@ import SwiftData
 struct VisionContentView: View {
     private static let windowPlacementSmokeInitialDelayNanos: UInt64 = 800_000_000
     private static let windowPlacementSmokeStepDelayNanos: UInt64 = 350_000_000
+    private static let windowPlacementSmokeDismissDelayNanos: UInt64 = 350_000_000
+    private static let windowPlacementSmokeManagedWindowIDs = [
+        VisionDashboardWindowKind.condition.windowID,
+        VisionDashboardWindowKind.activity.windowID,
+        VisionDashboardWindowKind.sleep.windowID,
+        VisionDashboardWindowKind.body.windowID,
+        VisionWindowPlacementPlanner.settingsWindowID,
+        VisionWindowPlacementPlanner.chart3DWindowID,
+        "spatial-volume",
+    ]
 
     @AppStorage(SimulatorAdvancedMockDataModeStore.storageKey) private var isSimulatorMockEnabled = false
     private let modelContainer: ModelContainer
@@ -16,6 +26,7 @@ struct VisionContentView: View {
     private let windowPlacementSmokeConfiguration: VisionWindowPlacementSmokeConfiguration
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.openWindow) private var openWindow
+    @Environment(\.dismissWindow) private var dismissWindow
     @Environment(\.openImmersiveSpace) private var openImmersiveSpace
     @Environment(\.supportsMultipleWindows) private var supportsMultipleWindows
     @State private var selectedSection: AppSection = .today
@@ -83,7 +94,10 @@ struct VisionContentView: View {
                         }
                     )
                     .navigationDestination(isPresented: $showSettings) {
-                        VisionSettingsView(modelContainer: modelContainer)
+                        VisionSettingsView(
+                            modelContainer: modelContainer,
+                            smokeConfiguration: windowPlacementSmokeConfiguration
+                        )
                     }
                 }
                 .accessibilityIdentifier(VisionSurfaceAccessibility.sectionScreenID(for: .today))
@@ -187,12 +201,26 @@ struct VisionContentView: View {
         }
 
         try? await Task.sleep(nanoseconds: Self.windowPlacementSmokeInitialDelayNanos)
+        dismissExistingSmokeWindows()
+        try? await Task.sleep(nanoseconds: Self.windowPlacementSmokeStepDelayNanos)
 
-        for windowID in windowPlacementSmokeConfiguration.autoOpenWindowIDs {
+        for windowID in windowPlacementSmokeConfiguration.mainWindowAutoOpenIDs {
             guard !Task.isCancelled else { return }
             AppLogger.ui.info("[VisionWindowPlacementSmoke] Opening \(windowID)")
             openWindow(id: windowID)
             try? await Task.sleep(nanoseconds: Self.windowPlacementSmokeStepDelayNanos)
+        }
+
+        guard windowPlacementSmokeConfiguration.shouldDismissMainWindow else { return }
+        try? await Task.sleep(nanoseconds: Self.windowPlacementSmokeDismissDelayNanos)
+        AppLogger.ui.info("[VisionWindowPlacementSmoke] Dismissing main window for no-anchor fallback")
+        dismissWindow()
+    }
+
+    @MainActor
+    private func dismissExistingSmokeWindows() {
+        for windowID in Self.windowPlacementSmokeManagedWindowIDs {
+            dismissWindow(id: windowID)
         }
     }
 

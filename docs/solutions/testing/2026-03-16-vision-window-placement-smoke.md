@@ -11,7 +11,7 @@ related_files:
   - DUNETests/VisionWindowPlacementPlannerTests.swift
   - scripts/vision-window-placement-smoke.sh
   - todos/107-done-p2-vision-window-placement-runtime-validation.md
-  - todos/141-ready-p3-vision-window-placement-no-anchor-fallback.md
+  - todos/144-done-p3-vision-window-placement-no-anchor-fallback.md
 related_solutions:
   - docs/solutions/architecture/2026-03-08-visionos-window-placement-planner.md
   - docs/solutions/testing/2026-03-08-e2e-phase1-test-infrastructure.md
