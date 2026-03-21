@@ -1209,12 +1209,15 @@ private struct HabitHistorySheet: View {
         case .check:
             return String(localized: "Done")
         case .duration:
+            // goalUnit is user-entered free-text; "min" fallback is localized
             let unit = entry.goalUnit ?? String(localized: "min")
-            return "\(value)/\(goal) \(unit)"
+            return String(localized: "\(value)/\(goal) \(unit)")
         case .count:
             let unit = entry.goalUnit ?? ""
-            let text = "\(value)/\(goal)"
-            return unit.isEmpty ? text : "\(text) \(unit)"
+            if unit.isEmpty {
+                return "\(value)/\(goal)"
+            }
+            return String(localized: "\(value)/\(goal) \(unit)")
         }
     }
 
