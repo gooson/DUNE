@@ -178,6 +178,12 @@ extension ExerciseFormRule {
 
     /// Pull-up — front view recommended.
     /// Upper-body only: lower limb keypoints may be occluded on bar.
+    ///
+    /// Phase mapping (angle = elbow):
+    ///   descent = pulling up (angle decreasing from dead hang)
+    ///   bottom  = top of pull-up (angle at minimum, elbows bent)
+    ///   ascent  = lowering body (angle increasing back to dead hang)
+    ///   lockout = dead hang (angle at maximum, arms straight → rep counted)
     static let pullUp = ExerciseFormRule(
         exerciseID: "pull-up",
         displayName: "Pull-up",
@@ -187,7 +193,7 @@ extension ExerciseFormRule {
                 jointA: "leftShoulder", jointVertex: "leftElbow", jointC: "leftWrist",
                 passRange: 30...80,       // Deep pull — elbows well bent at top
                 cautionRange: 80...100,   // Not pulling high enough
-                activePhases: [.ascent, .lockout],
+                activePhases: [.descent, .bottom],
                 isPrimaryAngle: true,
                 coachingCue: "Pull higher",
                 positiveCue: "Good pull"
@@ -197,16 +203,16 @@ extension ExerciseFormRule {
                 jointA: "leftElbow", jointVertex: "leftShoulder", jointC: "leftHip",
                 passRange: 10...50,       // Shoulders depressed, elbows close
                 cautionRange: 50...70,    // Shoulders shrugged or elbows flared
-                activePhases: [.ascent, .lockout],
+                activePhases: [.descent, .bottom],
                 isPrimaryAngle: false,
                 coachingCue: "Depress your shoulders",
                 positiveCue: "Good shoulder position"
             ),
         ],
         recommendedCameraPosition: .front,
-        descentThreshold: 140,  // Elbow angle rises above 140° → descent (lowering)
-        bottomThreshold: 160,   // Elbow angle rises above 160° → dead hang (bottom)
-        lockoutThreshold: 90    // Elbow angle drops below 90° → top position
+        descentThreshold: 155,  // Elbow angle drops below 155° → started pulling
+        bottomThreshold: 80,    // Elbow angle drops below 80° → top of pull-up
+        lockoutThreshold: 160   // Elbow angle rises above 160° → dead hang (rep counted)
     )
 
     /// Bodyweight Squat — side view recommended.
