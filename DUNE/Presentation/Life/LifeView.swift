@@ -579,7 +579,8 @@ private struct HabitListQueryView: View {
     private func autoAchievementsSection(fillHeight: Bool = false) -> some View {
         let groups = autoAchievementGroups
         let customGoals = viewModel.autoLinkedProgresses
-        let completedGoals = groups.reduce(0) { $0 + $1.completedCount } + customGoals.filter(\.isCompleted).count
+        let customCompletedCount = customGoals.filter(\.isCompleted).count
+        let completedGoals = groups.reduce(0) { $0 + $1.completedCount } + customCompletedCount
         let totalGoals = groups.reduce(0) { $0 + $1.metrics.count } + customGoals.count
         let useTwoColumnCards = isRegular && !fillHeight
 
@@ -628,10 +629,24 @@ private struct HabitListQueryView: View {
                     }
                 }
 
-                // Auto-linked habits — metric row style with archive action
+                // Auto-linked habits — same card style as other achievement groups
                 if !customGoals.isEmpty {
                     StandardCard {
                         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                            HStack(spacing: DS.Spacing.xs) {
+                                Image(systemName: "star.fill")
+                                    .font(.caption)
+                                    .foregroundStyle(theme.accentColor)
+                                Text("My Goals")
+                                    .font(.subheadline)
+                                    .fontWeight(.semibold)
+                                Spacer()
+                                Text("\(customCompletedCount)/\(customGoals.count)")
+                                    .font(.caption2)
+                                    .foregroundStyle(.secondary)
+                                    .monospacedDigit()
+                            }
+
                             ForEach(customGoals) { progress in
                                 autoLinkedHabitRow(progress)
                             }
