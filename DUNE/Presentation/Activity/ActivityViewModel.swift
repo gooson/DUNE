@@ -161,6 +161,11 @@ final class ActivityViewModel {
     /// Cached SwiftData snapshots for merging with HealthKit data.
     private var exerciseRecordSnapshots: [ExerciseRecordSnapshot] = []
 
+    /// Combined SwiftData + HealthKit-only exercise snapshots.
+    private var allExerciseSnapshots: [ExerciseRecordSnapshot] {
+        exerciseRecordSnapshots + healthKitOnlySnapshots
+    }
+
     var recommendationAvailableEquipment: [Equipment] {
         Equipment.allCases.filter { isEquipmentAvailable($0) }
     }
@@ -377,7 +382,7 @@ final class ActivityViewModel {
         let now = Date()
         let weekAgo = calendar.date(byAdding: .day, value: -7, to: now) ?? now
         let twoWeeksAgo = calendar.date(byAdding: .day, value: -14, to: now) ?? now
-        let allSnapshots = exerciseRecordSnapshots + healthKitOnlySnapshots
+        let allSnapshots = allExerciseSnapshots
         let current = allSnapshots.filter { $0.date >= weekAgo }
         let previous = allSnapshots.filter { $0.date >= twoWeeksAgo && $0.date < weekAgo }
         return (current, previous, weekAgo, twoWeeksAgo)
@@ -431,7 +436,7 @@ final class ActivityViewModel {
     func generateWeeklyReport() {
         weeklyReportTask?.cancel()
         weeklyReportTask = Task {
-            let allSnapshots = exerciseRecordSnapshots + healthKitOnlySnapshots
+            let allSnapshots = allExerciseSnapshots
             guard !allSnapshots.isEmpty else {
                 weeklyReport = nil
                 return
@@ -538,7 +543,7 @@ final class ActivityViewModel {
     private func rebuildWeeklyStats() {
         let calendar = Calendar.current
         let weekAgo = calendar.date(byAdding: .day, value: -7, to: Date()) ?? Date()
-        let allSnapshots = exerciseRecordSnapshots + healthKitOnlySnapshots
+        let allSnapshots = allExerciseSnapshots
         let thisWeek = allSnapshots.filter { $0.date >= weekAgo }
         let prevWeekStart = calendar.date(byAdding: .day, value: -14, to: Date()) ?? Date()
         let prevWeek = allSnapshots.filter { $0.date >= prevWeekStart && $0.date < weekAgo }
