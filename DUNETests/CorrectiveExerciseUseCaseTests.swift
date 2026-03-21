@@ -193,7 +193,7 @@ struct CorrectiveExerciseUseCaseTests {
     @Test("All metric types have corrective exercise IDs")
     func allMetricsMapped() {
         for metricType in PostureMetricType.allCases {
-            let ids = CorrectiveExerciseUseCase.correctiveExerciseIDs(for: metricType)
+            let ids = CorrectiveExerciseUseCase.exerciseIDsByMetric[metricType] ?? []
             #expect(!ids.isEmpty, "No corrective exercises for \(metricType)")
         }
     }

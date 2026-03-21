@@ -31,11 +31,11 @@ struct CorrectiveExerciseUseCase: Sendable {
             return lhs.type.scoreWeight > rhs.type.scoreWeight
         }
 
-        // Build exercise → target metrics + best priority
+        // Build exercise → target metrics + best priority index (lower = higher priority)
         var exerciseMap: [String: (metrics: [PostureMetricType], priority: Int)] = [:]
 
         for (index, issue) in sortedIssues.enumerated() {
-            let exerciseIDs = Self.correctiveExerciseIDs(for: issue.type)
+            let exerciseIDs = Self.exerciseIDsByMetric[issue.type] ?? []
             for exerciseID in exerciseIDs {
                 if var existing = exerciseMap[exerciseID] {
                     existing.metrics.append(issue.type)
@@ -47,21 +47,15 @@ struct CorrectiveExerciseUseCase: Sendable {
             }
         }
 
-        // Resolve exercise definitions and build recommendations
-        var recommendations: [CorrectiveRecommendation] = []
+        // Resolve exercise definitions, sort, and build recommendations
+        var resolved: [(id: String, exercise: ExerciseDefinition, metrics: [PostureMetricType], priority: Int)] = []
 
         for (exerciseID, entry) in exerciseMap {
             guard let exercise = library.exercise(byID: exerciseID) else { continue }
-            recommendations.append(CorrectiveRecommendation(
-                id: exerciseID,
-                exercise: exercise,
-                targetMetrics: entry.metrics,
-                priority: entry.priority
-            ))
+            resolved.append((id: exerciseID, exercise: exercise, metrics: entry.metrics, priority: entry.priority))
         }
 
-        // Sort: lower priority number first, then bodyweight equipment first for accessibility
-        recommendations.sort { lhs, rhs in
+        resolved.sort { lhs, rhs in
             if lhs.priority != rhs.priority {
                 return lhs.priority < rhs.priority
             }
@@ -71,30 +65,23 @@ struct CorrectiveExerciseUseCase: Sendable {
             return lhs.exercise.name < rhs.exercise.name
         }
 
-        return Array(recommendations.prefix(limit))
+        return resolved.prefix(limit).map {
+            CorrectiveRecommendation(id: $0.id, exercise: $0.exercise, targetMetrics: $0.metrics)
+        }
     }
 
     // MARK: - Mapping
 
     /// Curated exercise IDs for each posture metric type.
-    static func correctiveExerciseIDs(for metricType: PostureMetricType) -> [String] {
-        switch metricType {
-        case .forwardHead:
-            return ["stretching", "mobility-work", "yoga"]
-        case .roundedShoulders:
-            return ["band-pull-apart", "reverse-fly", "face-pull"]
-        case .thoracicKyphosis:
-            return ["foam-rolling", "yoga", "dead-bug"]
-        case .kneeHyperextension:
-            return ["stretching", "bodyweight-squat", "glute-bridge"]
-        case .shoulderAsymmetry:
-            return ["band-pull-apart", "mobility-work"]
-        case .hipAsymmetry:
-            return ["glute-bridge-unilateral", "plank", "dead-bug"]
-        case .kneeAlignment:
-            return ["bodyweight-squat", "glute-bridge", "stretching"]
-        case .lateralShift:
-            return ["plank", "dead-bug", "glute-bridge"]
-        }
-    }
+    /// IDs must match entries in exercises.json.
+    static let exerciseIDsByMetric: [PostureMetricType: [String]] = [
+        .forwardHead:        ["stretching", "mobility-work", "yoga"],
+        .roundedShoulders:   ["band-pull-apart", "reverse-fly", "face-pull"],
+        .thoracicKyphosis:   ["foam-rolling", "yoga", "dead-bug"],
+        .kneeHyperextension: ["stretching", "bodyweight-squat", "glute-bridge"],
+        .shoulderAsymmetry:  ["band-pull-apart", "mobility-work"],
+        .hipAsymmetry:       ["glute-bridge-unilateral", "plank", "dead-bug"],
+        .kneeAlignment:      ["bodyweight-squat", "glute-bridge", "stretching"],
+        .lateralShift:       ["plank", "dead-bug", "glute-bridge"],
+    ]
 }

@@ -5,7 +5,6 @@ struct CorrectiveRecommendation: Sendable, Identifiable, Hashable {
     let id: String
     let exercise: ExerciseDefinition
     let targetMetrics: [PostureMetricType]
-    let priority: Int
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)

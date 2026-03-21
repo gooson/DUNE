@@ -96,9 +96,7 @@ final class PostureAssessmentViewModel {
 
     // MARK: - Dependencies
 
-    private let correctiveExerciseUseCase = CorrectiveExerciseUseCase(
-        library: ExerciseLibraryService.shared
-    )
+    private let correctiveExerciseUseCase: CorrectiveExerciseUseCase
     private let captureService: PostureCaptureService
     private let analysisService = PostureAnalysisService()
 
@@ -107,8 +105,12 @@ final class PostureAssessmentViewModel {
 
     // MARK: - Init
 
-    init(captureService: PostureCaptureService = PostureCaptureService()) {
+    init(
+        captureService: PostureCaptureService = PostureCaptureService(),
+        correctiveExerciseUseCase: CorrectiveExerciseUseCase = CorrectiveExerciseUseCase(library: ExerciseLibraryService.shared)
+    ) {
         self.captureService = captureService
+        self.correctiveExerciseUseCase = correctiveExerciseUseCase
     }
 
     // MARK: - Camera Setup
@@ -316,14 +318,7 @@ final class PostureAssessmentViewModel {
             )
         }
 
-        combinedAssessment = CombinedPostureAssessment(
-            frontAssessment: frontAssessment,
-            sideAssessment: sideAssessment,
-            date: Date()
-        )
-        correctiveRecommendations = correctiveExerciseUseCase.recommendations(
-            for: combinedAssessment.allMetrics
-        )
+        refreshCombinedAssessment()
         capturePhase = .result
         hapticSuccessCount += 1
 
@@ -352,14 +347,7 @@ final class PostureAssessmentViewModel {
             sideResult = nil
             sideAssessment = nil
         }
-        combinedAssessment = CombinedPostureAssessment(
-            frontAssessment: frontAssessment,
-            sideAssessment: sideAssessment,
-            date: Date()
-        )
-        correctiveRecommendations = correctiveExerciseUseCase.recommendations(
-            for: combinedAssessment.allMetrics
-        )
+        refreshCombinedAssessment()
         guidanceState = GuidanceState()
         skeletonKeypoints = []
         skeletonImageSize = .zero
@@ -429,6 +417,18 @@ final class PostureAssessmentViewModel {
         utterance.rate = AVSpeechUtteranceDefaultSpeechRate
         utterance.volume = 1.0
         speechSynthesizer.speak(utterance)
+    }
+
+    // MARK: - Assessment Refresh
+
+    private func refreshCombinedAssessment() {
+        combinedAssessment = CombinedPostureAssessment(
+            frontAssessment: frontAssessment,
+            sideAssessment: sideAssessment,
+            date: Date()
+        )
+        let metrics = combinedAssessment.allMetrics
+        correctiveRecommendations = correctiveExerciseUseCase.recommendations(for: metrics)
     }
 
     // MARK: - Error Messages

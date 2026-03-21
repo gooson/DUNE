@@ -267,24 +267,25 @@ struct PostureResultView: View {
 
     @ViewBuilder
     private var correctiveExercisesSection: some View {
-        let recommendations = viewModel.correctiveRecommendations
-        if !recommendations.isEmpty {
+        if !viewModel.correctiveRecommendations.isEmpty {
             VStack(alignment: .leading, spacing: 12) {
                 Text("Recommended Exercises")
                     .font(.headline)
+                    .accessibilityAddTraits(.isHeader)
 
-                ForEach(recommendations) { rec in
+                ForEach(viewModel.correctiveRecommendations) { rec in
+                    let metricsDescription = rec.targetMetrics.map(\.displayName).joined(separator: ", ")
                     HStack(spacing: 12) {
                         Image(systemName: rec.exercise.equipment.iconName)
                             .font(.title3)
                             .foregroundStyle(.secondary)
-                            .frame(width: 32)
+                            .frame(minWidth: 32)
 
                         VStack(alignment: .leading, spacing: 2) {
                             Text(rec.exercise.localizedName)
                                 .font(.subheadline.weight(.medium))
 
-                            Text(rec.targetMetrics.map(\.displayName).joined(separator: ", "))
+                            Text(metricsDescription)
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
@@ -297,6 +298,8 @@ struct PostureResultView: View {
                             .padding(.vertical, 2)
                             .background(.quaternary, in: Capsule())
                     }
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel("\(rec.exercise.localizedName), \(metricsDescription), \(rec.exercise.category.displayName)")
                 }
             }
             .padding()
