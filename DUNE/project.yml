@@ -123,7 +123,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.raftel.dailve
         PRODUCT_NAME: DUNE
         CURRENT_PROJECT_VERSION: &currentProjectVersion "1"
-        MARKETING_VERSION: &marketingVersion "0.5.0"
+        MARKETING_VERSION: &marketingVersion "0.6.0"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         GENERATE_INFOPLIST_FILE: true
         INFOPLIST_KEY_CFBundleDisplayName: DUNE
@@ -342,6 +342,7 @@ targets:
       - path: Data/ExerciseDescriptions.swift
       - path: Data/Resources/exercises.json
       - path: Data/Resources/whats-new/catalog.json
+      - path: Data/Resources/whats-new/0.6.0.json
       - path: Data/Resources/whats-new/0.5.0.json
       - path: Data/Resources/whats-new/0.4.0.json
       - path: Data/Resources/whats-new/0.3.0.json
