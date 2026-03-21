@@ -127,10 +127,8 @@ struct RealtimePostureView: View {
         } label: {
             HStack(spacing: 4) {
                 Image(systemName: viewModel.isFormMode ? "figure.strengthtraining.traditional" : "figure.stand")
-                if let exercise = viewModel.selectedExercise {
-                    Text(exercise.displayName)
-                        .font(.caption)
-                }
+                Text(viewModel.selectedExercise?.displayName ?? String(localized: "Select Exercise"))
+                    .font(.caption)
             }
             .foregroundStyle(.white)
             .padding(.horizontal, 10)
