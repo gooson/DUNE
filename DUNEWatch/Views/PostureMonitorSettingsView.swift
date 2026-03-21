@@ -32,7 +32,7 @@ struct PostureMonitorSettingsView: View {
                 Section {
                     Picker(selection: $thresholdMinutes) {
                         ForEach(Self.thresholdOptions, id: \.self) { minutes in
-                            Text("\(minutes) min")
+                            Text("\(minutes)min")
                                 .tag(minutes)
                         }
                     } label: {
