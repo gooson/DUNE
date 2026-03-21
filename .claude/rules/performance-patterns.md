@@ -37,12 +37,10 @@
 
 ## AVCaptureSession Buffer Pool
 - `CMSampleBuffer`/`CVPixelBuffer`를 비동기 Task/closure에 캡처 금지
-- 2D/3D detection 모두: pool buffer를 Vision에 직접 전달 금지 — `createCGImageFromBGRABuffer()`로 CGImage 변환 후 전달
-- 전면 카메라(TrueDepth)는 depth sensor가 GPU/buffer 공유 리소스를 점유하여 Vision의 pool buffer 직접 사용 시 내부 ML buffer 할당 실패
-- BGRA 포맷만으로는 불충분 — Vision ML inference 자체의 내부 버퍼 할당이 여전히 IOSurface pool과 경쟁
-- CGImage는 heap memory에 존재 → IOSurface pool 의존성 제로 → TrueDepth 리소스와 무관
-- CPU memcpy 기반 CGImage 생성 (720p BGRA ≈ 0.4ms) — CIContext GPU round-trip 불필요
-- Vision `mlImage buffer` 에러는 메모리 부족이 아닌 **풀 고갈** 시그널 — CGImage 전환 필요 신호
+- 2D detection (synchronous): pool buffer 직접 사용 가능 — `captureOutput` 반환 시 pool에 즉시 반환
+- 3D detection (async): `CIContext.createCGImage`로 CGImage 변환 후 전달 — CGImage만 풀 의존성 제로
+- CVPixelBuffer 딥카피는 불충분 — Vision 내부 ML 파이프라인이 여전히 풀을 경유할 수 있음
+- Vision `mlImage buffer` 에러는 메모리 부족이 아닌 **풀 고갈** 시그널
 - 카메라 관련 변경은 반드시 실기기 테스트 (시뮬레이터 재현 불가)
 
 ## JSON/Data

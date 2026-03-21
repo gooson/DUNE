@@ -41,10 +41,7 @@ final class RealtimePostureViewModel {
     func start() {
         do {
             let position: AVCaptureDevice.Position = cameraPosition == .front ? .front : .back
-            // No photo capture needed — skip photoOutput to free GPU/buffer resources.
-            // On front camera (TrueDepth), each output reserves hardware buffer slots
-            // that compete with Vision's ML inference for shared resources.
-            try captureService.setupCamera(position: position, needsPhotoCapture: false)
+            try captureService.setupCamera(position: position)
             captureService.updateDeviceOrientation(deviceOrientation)
 
             // Setup guidance callbacks (same as capture mode)
