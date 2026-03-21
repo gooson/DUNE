@@ -16,11 +16,26 @@ protocol PostureCapturing: Sendable {
 
 // MARK: - Capture Result
 
+enum PostureCapturePoseSource: String, Sendable, Hashable {
+    case threeD
+    case twoDFallback
+}
+
 struct PostureCaptureResult: Sendable {
     let jointPositions: [JointPosition3D]
     let bodyHeight: Double?
     let heightEstimation: HeightEstimationType
     let imageData: Data?
+    let poseSource: PostureCapturePoseSource
+
+    var hasTrue3DPose: Bool {
+        poseSource == .threeD
+    }
+
+    static func averagedPoseSource(for results: [PostureCaptureResult]) -> PostureCapturePoseSource {
+        guard !results.isEmpty else { return .twoDFallback }
+        return results.allSatisfy(\.hasTrue3DPose) ? .threeD : .twoDFallback
+    }
 }
 
 // MARK: - Capture Error
@@ -511,7 +526,8 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
                     jointPositions: joints,
                     bodyHeight: bodyHeight,
                     heightEstimation: heightEstimation,
-                    imageData: imageData
+                    imageData: imageData,
+                    poseSource: .threeD
                 )
             }
         }
@@ -526,7 +542,8 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
             jointPositions: joints2D,
             bodyHeight: Self.referenceBodyHeight,
             heightEstimation: .reference,
-            imageData: imageData
+            imageData: imageData,
+            poseSource: .twoDFallback
         )
     }
 
@@ -809,7 +826,8 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
                 jointPositions: [],
                 bodyHeight: nil,
                 heightEstimation: .reference,
-                imageData: nil
+                imageData: nil,
+                poseSource: .twoDFallback
             )
         }
 
@@ -856,7 +874,8 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
             jointPositions: averagedPositions,
             bodyHeight: avgHeight,
             heightEstimation: lastResult.heightEstimation,
-            imageData: lastResult.imageData
+            imageData: lastResult.imageData,
+            poseSource: PostureCaptureResult.averagedPoseSource(for: results)
         )
     }
 

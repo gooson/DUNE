@@ -131,6 +131,17 @@ final class RealtimePoseTracker: @unchecked Sendable {
 
     // MARK: - 3D Detection
 
+    static func preciseScoreIfAvailable(
+        from result: PostureCaptureResult,
+        analysisService: PostureAnalysisService = PostureAnalysisService()
+    ) -> Int? {
+        guard result.hasTrue3DPose else { return nil }
+
+        let metrics = analysisService.analyzeFrontView(joints: result.jointPositions)
+            + analysisService.analyzeSideView(joints: result.jointPositions)
+        return max(0, min(100, analysisService.calculateOverallScore(metrics: metrics)))
+    }
+
     private func perform3DDetection(_ cgImage: CGImage) async {
         guard !Task.isCancelled else { return }
 
@@ -139,9 +150,15 @@ final class RealtimePoseTracker: @unchecked Sendable {
 
             guard !Task.isCancelled else { return }
 
-            let metrics = analysisService.analyzeFrontView(joints: result.jointPositions)
-                + analysisService.analyzeSideView(joints: result.jointPositions)
-            let score = max(0, min(100, analysisService.calculateOverallScore(metrics: metrics)))
+            guard let score = Self.preciseScoreIfAvailable(from: result, analysisService: analysisService) else {
+                serialQueue.async { [weak self] in
+                    guard let self, !self.isStopped else { return }
+                    self.state.is3DActive = false
+                    self.is3DInFlight = false
+                    self.onStateUpdate?(self.state)
+                }
+                return
+            }
 
             serialQueue.async { [weak self] in
                 guard let self, !self.isStopped else { return }
@@ -155,7 +172,10 @@ final class RealtimePoseTracker: @unchecked Sendable {
         } catch {
             AppLogger.data.debug("[RealtimePoseTracker] 3D detection failed: \(error.localizedDescription)")
             serialQueue.async { [weak self] in
-                self?.is3DInFlight = false
+                guard let self, !self.isStopped else { return }
+                self.state.is3DActive = false
+                self.is3DInFlight = false
+                self.onStateUpdate?(self.state)
             }
         }
     }
