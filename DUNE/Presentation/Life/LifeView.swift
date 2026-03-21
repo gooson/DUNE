@@ -628,16 +628,14 @@ private struct HabitListQueryView: View {
                     }
                 }
 
-                // Auto-linked habits — same row pattern as My Habits
-                ForEach(customGoals) { progress in
-                    HabitRowView(
-                        progress: progress,
-                        onToggle: { toggleCheck(habitId: progress.id) },
-                        onUpdateValue: { value in updateValue(habitId: progress.id, value: value) },
-                        trailingAccessory: AnyView(habitActionsButton(for: progress))
-                    )
-                    .contextMenu {
-                        habitActionItems(for: progress, deferred: true)
+                // Auto-linked habits — metric row style with archive action
+                if !customGoals.isEmpty {
+                    StandardCard {
+                        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                            ForEach(customGoals) { progress in
+                                autoLinkedHabitRow(progress)
+                            }
+                        }
                     }
                 }
             }
@@ -699,6 +697,43 @@ private struct HabitListQueryView: View {
             }
             ProgressView(value: metric.progressRatio)
                 .tint(metric.isCompleted ? DS.Color.positive : theme.accentColor)
+        }
+    }
+
+    private func autoLinkedHabitRow(_ progress: HabitProgress) -> some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+            HStack(spacing: DS.Spacing.xs) {
+                Text(progress.name)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Spacer()
+                if progress.isCompleted {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.caption2)
+                        .foregroundStyle(DS.Color.positive)
+                }
+                Menu {
+                    Button(role: .destructive) {
+                        if let habit = habitsByID[progress.id] {
+                            viewModel.cancelPendingReminders(for: habit)
+                            withAnimation {
+                                habit.isArchived = true
+                            }
+                            recalculate()
+                        }
+                    } label: {
+                        Label("Archive", systemImage: "archivebox")
+                    }
+                } label: {
+                    Image(systemName: "ellipsis")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .padding(4)
+                }
+                .buttonStyle(.plain)
+            }
+            ProgressView(value: progress.todayValue, total: max(progress.goalValue, 1))
+                .tint(progress.isCompleted ? DS.Color.positive : theme.accentColor)
         }
     }
 
