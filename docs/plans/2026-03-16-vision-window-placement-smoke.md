@@ -55,7 +55,7 @@ related_brainstorms:
 | `todos/107-ready-p2-vision-window-placement-runtime-validation.md` | modify | 완료 근거 또는 scope split 반영 |
 | `todos/020-in-progress-p3-vision-pro-phase4-social-advanced.md` | modify | runtime validation 완료 및 남은 residual scope 반영 |
 | `todos/023-in-progress-p2-vision-phase4-remaining.md` | modify | window placement residual scope 재정리 |
-| `todos/141-*.md` | add | no-anchor fallback residual manual scope를 별도 TODO로 분리 |
+| `todos/144-*.md` | add | no-anchor fallback residual manual scope를 별도 TODO로 분리 |
 | `docs/solutions/testing/2026-03-16-vision-window-placement-smoke.md` | add | smoke workflow와 artifact 기반 검증 패턴 문서화 |
 
 ## Implementation Steps

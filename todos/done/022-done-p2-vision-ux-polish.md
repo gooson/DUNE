@@ -19,7 +19,7 @@ updated: 2026-03-09
 - Review/resolve 단계에서 남아 있던 `.subheadline`/`.footnote`도 모두 `.callout` 계열로 상향해, `DUNEVision`에서 callout 미만 text style이 정적 grep 기준 0건이 됐다.
 - runtime spatial placement의 simulator/device 시각 검증은 `todos/107-ready-p2-vision-window-placement-runtime-validation.md`로 분리했다.
 - 이는 아직 별도 visionOS UI harness 없이 `openWindow`/window lifecycle automation이 어려운 현재 저장소 제약을 반영한 정리다.
-- 따라서 Phase 5C(`todos/023-in-progress-p2-vision-phase4-remaining.md`)는 5B 구현 종료를 전제로 계속 진행할 수 있다.
+- 당시 기준으로는 Phase 5C(`todos/023-done-p2-vision-phase4-remaining.md`)를 5B 구현 종료 이후 후속 batch로 넘겼다.
 - `scripts/build-ios.sh`와 `xcodebuild -project DUNE/DUNE.xcodeproj -scheme DUNEVision -destination 'generic/platform=visionOS' ... build`를 2026-03-09 기준으로 다시 실행해, resolve 전후 모두 빌드 성공을 확인했다.
 - `VisionWindowPlacementPlannerTests` 단독 재실행도 시도했지만, 현재 `DUNETests` 스킴에는 이번 변경과 무관한 기존 compile failure(`DUNETests/AICoachingMessageServiceTests.swift:42`, `Extra argument 'status' in call`, `Cannot infer contextual base in reference to member 'good'`)가 있어 suite 실행 전 단계에서 중단됐다.
 

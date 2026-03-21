@@ -10,7 +10,7 @@ updated: 2026-03-16
 
 ## 설명
 
-`todos/023-in-progress-p2-vision-phase4-remaining.md`의 F3 후속 중 이번 배치에서 닫을 수 있는 범위를 분리한다. 현재 voice quick entry는 transcript review와 single-entry save까지는 가능하지만, locale-aware confirmation, audio feedback, lightweight draft editing은 아직 부족하다.
+`todos/023-done-p2-vision-phase4-remaining.md`로 정리된 F3 후속 중 이번 배치에서 닫을 수 있는 범위를 분리한다. 현재 voice quick entry는 transcript review와 single-entry save까지는 가능하지만, locale-aware confirmation, audio feedback, lightweight draft editing은 아직 부족하다.
 
 ## 구현 범위
 
@@ -31,4 +31,4 @@ updated: 2026-03-16
 - `docs/plans/2026-03-16-vision-voice-feedback-confirmation.md`
 - `docs/solutions/architecture/2026-03-08-vision-pro-voice-workout-entry-foundation.md`
 - `docs/solutions/architecture/2026-03-08-vision-pro-voice-entry-persistence.md`
-- `todos/023-in-progress-p2-vision-phase4-remaining.md`
+- `todos/023-done-p2-vision-phase4-remaining.md`

@@ -26,7 +26,7 @@ updated: 2026-03-16
 - [x] condition/activity/sleep/body 4개 window를 같은 세션에서 열었을 때 겹침이 없다.
 - [x] `chart3d` window가 메인 window 위쪽 relative placement 의도와 어긋나지 않는다.
 - [x] 결과를 TODO 또는 docs/solutions/ 문서에 남긴다.
-- [x] no-anchor fallback은 `todos/141-ready-p3-vision-window-placement-no-anchor-fallback.md`로 분리했다.
+- [x] no-anchor fallback은 `todos/144-done-p3-vision-window-placement-no-anchor-fallback.md`로 분리했고 후속 batch에서 닫았다.
 
 ## 검증 결과
 
