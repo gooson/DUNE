@@ -391,7 +391,7 @@ final class ActivityViewModel {
     /// Recomputes injury risk assessment from available data.
     /// Active injuries are passed from the View's @Query since the ViewModel doesn't access SwiftData.
     func recomputeInjuryRisk(activeInjuries: [InjuryInfo] = []) {
-        guard !exerciseRecordSnapshots.isEmpty || !recentWorkouts.isEmpty else {
+        guard !allExerciseSnapshots.isEmpty || !recentWorkouts.isEmpty else {
             injuryRiskAssessment = nil
             return
         }
