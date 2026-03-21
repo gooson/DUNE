@@ -39,6 +39,9 @@ struct FormCheckpoint: Sendable, Identifiable {
     /// Short coaching cue spoken when the checkpoint is caution/warning.
     var coachingCue: String = ""
 
+    /// Short positive cue spoken when the checkpoint is normal (good form).
+    var positiveCue: String = ""
+
     func evaluate(degrees: Double) -> PostureStatus {
         guard degrees.isFinite else { return .unmeasurable }
         if passRange.contains(degrees) { return .normal }
@@ -87,7 +90,8 @@ extension ExerciseFormRule {
                 cautionRange: 100...120, // Slightly above parallel
                 activePhases: [.descent, .bottom],
                 isPrimaryAngle: true,
-                coachingCue: "Go deeper"
+                coachingCue: "Go deeper",
+                positiveCue: "Good depth"
             ),
             FormCheckpoint(
                 name: "Back Angle",
@@ -96,7 +100,8 @@ extension ExerciseFormRule {
                 cautionRange: 30...80,   // Slightly too upright or too forward
                 activePhases: [.descent, .bottom, .ascent],
                 isPrimaryAngle: false,
-                coachingCue: "Keep your back straight"
+                coachingCue: "Keep your back straight",
+                positiveCue: "Good back position"
             ),
         ],
         recommendedCameraPosition: .side,
@@ -117,7 +122,8 @@ extension ExerciseFormRule {
                 cautionRange: 20...80,
                 activePhases: [.descent, .bottom, .ascent],
                 isPrimaryAngle: false,
-                coachingCue: "Hinge at your hips"
+                coachingCue: "Hinge at your hips",
+                positiveCue: "Good hip hinge"
             ),
             FormCheckpoint(
                 name: "Knee Bend",
@@ -126,7 +132,8 @@ extension ExerciseFormRule {
                 cautionRange: 110...175,
                 activePhases: [.descent, .bottom],
                 isPrimaryAngle: true,
-                coachingCue: "Bend your knees slightly"
+                coachingCue: "Bend your knees slightly",
+                positiveCue: "Good knee position"
             ),
         ],
         recommendedCameraPosition: .side,
@@ -147,7 +154,8 @@ extension ExerciseFormRule {
                 cautionRange: 130...180,
                 activePhases: [.ascent, .lockout],
                 isPrimaryAngle: true,
-                coachingCue: "Extend your arms fully"
+                coachingCue: "Extend your arms fully",
+                positiveCue: "Good lockout"
             ),
             FormCheckpoint(
                 name: "Shoulder Alignment",
@@ -156,7 +164,8 @@ extension ExerciseFormRule {
                 cautionRange: 130...180,
                 activePhases: [.lockout],
                 isPrimaryAngle: false,
-                coachingCue: "Press straight overhead"
+                coachingCue: "Press straight overhead",
+                positiveCue: "Good alignment"
             ),
         ],
         recommendedCameraPosition: .front,

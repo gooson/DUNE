@@ -13,17 +13,27 @@ final class FormVoiceCoach: @unchecked Sendable {
     // MARK: - Types
 
     private enum CuePriority: Int, Comparable {
-        case caution = 0
-        case warning = 1
+        case normal = 0
+        case caution = 1
+        case warning = 2
 
         static func < (lhs: Self, rhs: Self) -> Bool {
             lhs.rawValue < rhs.rawValue
+        }
+
+        /// Cooldown per priority: normal gets longer interval to avoid over-coaching.
+        var cooldown: TimeInterval {
+            switch self {
+            case .normal:  10.0
+            case .caution: 5.0
+            case .warning: 5.0
+            }
         }
     }
 
     // MARK: - Configuration
 
-    /// Minimum interval between repeated cues for the same checkpoint.
+    /// Base cooldown (used for testing injection).
     let cooldown: TimeInterval
 
     // MARK: - Dependencies
@@ -94,22 +104,36 @@ final class FormVoiceCoach: @unchecked Sendable {
         var bestPriority: CuePriority?
 
         for result in state.checkpointResults {
-            guard result.status == .caution || result.status == .warning else { continue }
+            guard result.status != .unmeasurable else { continue }
             guard let checkpoint = cachedCheckpoints[result.checkpointName] else { continue }
-            guard !checkpoint.coachingCue.isEmpty else { continue }
 
-            // Cooldown check
-            if let lastTime = lastSpokenTimes[result.checkpointName],
-               currentTime.timeIntervalSince(lastTime) < cooldown {
+            let priority: CuePriority
+            let cue: String
+            switch result.status {
+            case .warning:
+                priority = .warning
+                cue = checkpoint.coachingCue
+            case .caution:
+                priority = .caution
+                cue = checkpoint.coachingCue
+            case .normal:
+                priority = .normal
+                cue = checkpoint.positiveCue
+            case .unmeasurable:
                 continue
             }
 
-            let priority: CuePriority =
-                result.status == .warning ? .warning : .caution
+            guard !cue.isEmpty else { continue }
+
+            // Status-dependent cooldown
+            if let lastTime = lastSpokenTimes[result.checkpointName],
+               currentTime.timeIntervalSince(lastTime) < priority.cooldown {
+                continue
+            }
 
             if let existing = bestPriority, priority <= existing { continue }
             bestName = result.checkpointName
-            bestCue = checkpoint.coachingCue
+            bestCue = cue
             bestPriority = priority
         }
 
