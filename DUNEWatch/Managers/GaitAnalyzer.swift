@@ -1,38 +1,6 @@
 import CoreMotion
 import Foundation
 
-// MARK: - Domain Models
-
-/// Activity state detected by CMMotionActivityManager.
-enum PostureActivityState: String, Sendable {
-    case stationary
-    case walking
-    case running
-    case unknown
-}
-
-/// Gait quality score computed from wrist motion during walking.
-struct GaitQualityScore: Sendable, Equatable {
-    /// Arm swing symmetry (0.0-1.0, higher = more symmetric).
-    let symmetry: Double
-    /// Step regularity (0.0-1.0, higher = more regular).
-    let regularity: Double
-    /// Overall score (0-100).
-    let overall: Int
-
-    static let zero = GaitQualityScore(symmetry: 0, regularity: 0, overall: 0)
-}
-
-/// Daily posture monitoring summary sent to iPhone.
-struct DailyPostureSummary: Sendable, Codable, Equatable {
-    let sedentaryMinutes: Int
-    let standingMinutes: Int
-    let walkingMinutes: Int
-    let averageGaitScore: Int?
-    let stretchRemindersTriggered: Int
-    let date: Date
-}
-
 // MARK: - Gait Analyzer
 
 /// Analyzes CMDeviceMotion samples collected during walking to produce a gait quality score.

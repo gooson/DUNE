@@ -22,23 +22,24 @@ struct PostureSummaryCard: View {
                     .font(.system(size: 32))
                     .foregroundStyle(sedentaryColor)
 
-                Text(sedentaryLabel)
+                Text(PostureFormatting.formatMinutes(sedentaryMinutes))
                     .font(.system(.title3, design: .rounded).bold())
                     .foregroundStyle(sedentaryColor)
 
-                Text(String(localized: "Sitting today"))
+                Text("Sitting today")
                     .font(DS.Typography.metricLabel)
                     .foregroundStyle(.secondary)
             }
 
             // Gait score (if available)
             if let score = averageGaitScore {
+                let color = gaitColor(for: score)
                 HStack(spacing: DS.Spacing.xs) {
                     Image(systemName: "figure.walk")
-                        .foregroundStyle(gaitColor(for: score))
-                    Text(String(localized: "Gait \(score)"))
+                        .foregroundStyle(color)
+                    Text("Gait \(score)")
                         .font(DS.Typography.metricLabel)
-                        .foregroundStyle(gaitColor(for: score))
+                        .foregroundStyle(color)
                 }
                 .padding(.top, DS.Spacing.xxs)
             }
@@ -50,18 +51,6 @@ struct PostureSummaryCard: View {
     }
 
     // MARK: - Computed
-
-    private var sedentaryLabel: String {
-        if sedentaryMinutes < 60 {
-            return String(localized: "\(sedentaryMinutes) min")
-        }
-        let hours = sedentaryMinutes / 60
-        let mins = sedentaryMinutes % 60
-        if mins == 0 {
-            return String(localized: "\(hours)h")
-        }
-        return String(localized: "\(hours)h \(mins)m")
-    }
 
     private var sedentaryIcon: String {
         if sedentaryMinutes >= thresholdMinutes {

@@ -36,7 +36,6 @@ struct GaitAnalyzerTests {
     func summaryCodable() throws {
         let summary = DailyPostureSummary(
             sedentaryMinutes: 120,
-            standingMinutes: 60,
             walkingMinutes: 30,
             averageGaitScore: 75,
             stretchRemindersTriggered: 2,
@@ -53,7 +52,6 @@ struct GaitAnalyzerTests {
     func summaryNilGaitScore() throws {
         let summary = DailyPostureSummary(
             sedentaryMinutes: 45,
-            standingMinutes: 30,
             walkingMinutes: 0,
             averageGaitScore: nil,
             stretchRemindersTriggered: 1,

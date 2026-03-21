@@ -14,7 +14,7 @@ import WatchKit
 @Observable
 @MainActor
 final class WatchPostureMonitor {
-    nonisolated static let shared = WatchPostureMonitor()
+    static let shared = WatchPostureMonitor()
     nonisolated private static let logger = Logger(subsystem: "com.raftel.dailve", category: "PostureMonitor")
 
     // MARK: - Settings Keys
@@ -37,42 +37,61 @@ final class WatchPostureMonitor {
         static let nightEndHour = 6
         /// Stop DeviceMotion collection when battery is below this level.
         static let lowBatteryThreshold: Float = 0.20
+        /// Maximum daily minutes for any single counter (24h = 1440 min).
+        static let maxDailyMinutes = 1440
     }
 
     // MARK: - Observable State
 
     private(set) var currentActivity: PostureActivityState = .unknown
     private(set) var sedentaryMinutesToday: Int = 0
-    private(set) var standingMinutesToday: Int = 0
     private(set) var walkingMinutesToday: Int = 0
     private(set) var latestGaitScore: GaitQualityScore?
     private(set) var gaitScoresToday: [GaitQualityScore] = []
     private(set) var stretchReminderCount: Int = 0
     private(set) var isMonitoring = false
 
+    /// Stored property: cached UserDefaults value (performance-patterns.md).
+    private(set) var sedentaryThresholdMinutes: Int
+    /// Stored property: cached UserDefaults value (performance-patterns.md).
+    private(set) var isEnabled: Bool
+
     /// Average gait score for today (nil if no walking sessions).
-    var averageGaitScore: Int? {
-        guard !gaitScoresToday.isEmpty else { return nil }
-        let sum = gaitScoresToday.map(\.overall).reduce(0, +)
-        return sum / gaitScoresToday.count
-    }
+    /// Cached: updated only when gaitScoresToday changes.
+    private(set) var cachedAverageGaitScore: Int?
 
     // MARK: - Private State
 
     private let activityManager = CMMotionActivityManager()
     private let motionManager = CMMotionManager()
     private nonisolated(unsafe) let userDefaults: UserDefaults
+    /// Injected closure to check workout active state (testability).
+    private let isWorkoutActive: @MainActor () -> Bool
 
-    /// Timestamp when current stationary period started.
-    private var sedentaryStartDate: Date?
-    /// Accumulated sedentary seconds within current period (before threshold trigger).
-    private var currentSedentarySeconds: TimeInterval = 0
+    /// Reusable operation queues (avoid per-cycle allocation).
+    private let activityQueue: OperationQueue = {
+        let q = OperationQueue()
+        q.maxConcurrentOperationCount = 1
+        q.name = "com.raftel.dune.posture.activity"
+        return q
+    }()
+    private let motionQueue: OperationQueue = {
+        let q = OperationQueue()
+        q.maxConcurrentOperationCount = 1
+        q.name = "com.raftel.dune.posture.motion"
+        return q
+    }()
+
+    /// Timestamp when current activity state started (for elapsed-time-based accumulation).
+    private var activityStateStartDate: Date?
     /// Timer that checks sedentary duration every minute.
     private var sedentaryCheckTask: Task<Void, Never>?
     /// Cooldown: last time DeviceMotion was collected.
     private var lastDeviceMotionCollectionDate: Date?
     /// Whether DeviceMotion is currently collecting.
     private var isCollectingDeviceMotion = false
+    /// Generation counter to discard stale in-flight DeviceMotion appends.
+    private var deviceMotionGeneration: Int = 0
     /// Buffer for DeviceMotion samples.
     private var deviceMotionSamples: [CMDeviceMotion] = []
     /// Task for stopping DeviceMotion after duration.
@@ -80,19 +99,18 @@ final class WatchPostureMonitor {
     /// Date when today's summary was last reset.
     private var summaryResetDate: Date?
 
-    var sedentaryThresholdMinutes: Int {
-        let stored = userDefaults.integer(forKey: SettingsKey.sedentaryThresholdMinutes)
-        return stored > 0 ? stored : Constants.defaultSedentaryThresholdMinutes
-    }
-
-    var isEnabled: Bool {
-        userDefaults.bool(forKey: SettingsKey.isEnabled)
-    }
-
     // MARK: - Init
 
-    nonisolated init(userDefaults: UserDefaults = .standard) {
+    init(
+        userDefaults: UserDefaults = .standard,
+        isWorkoutActive: @MainActor @escaping () -> Bool = { WorkoutManager.shared.isActive }
+    ) {
         self.userDefaults = userDefaults
+        self.isWorkoutActive = isWorkoutActive
+
+        let stored = userDefaults.integer(forKey: SettingsKey.sedentaryThresholdMinutes)
+        self.sedentaryThresholdMinutes = stored > 0 ? stored : Constants.defaultSedentaryThresholdMinutes
+        self.isEnabled = userDefaults.bool(forKey: SettingsKey.isEnabled)
     }
 
     // MARK: - Lifecycle
@@ -128,13 +146,14 @@ final class WatchPostureMonitor {
         stopDeviceMotionCollection()
         sedentaryCheckTask?.cancel()
         sedentaryCheckTask = nil
-        sedentaryStartDate = nil
+        activityStateStartDate = nil
 
         Self.logger.info("[PostureMonitor] Monitoring stopped")
     }
 
     func setEnabled(_ enabled: Bool) {
         userDefaults.set(enabled, forKey: SettingsKey.isEnabled)
+        isEnabled = enabled
         if enabled {
             startMonitoring()
         } else {
@@ -145,6 +164,7 @@ final class WatchPostureMonitor {
     func setSedentaryThreshold(minutes: Int) {
         let clamped = max(15, min(120, minutes))
         userDefaults.set(clamped, forKey: SettingsKey.sedentaryThresholdMinutes)
+        sedentaryThresholdMinutes = clamped
     }
 
     // MARK: - Daily Summary
@@ -152,9 +172,8 @@ final class WatchPostureMonitor {
     func buildDailySummary() -> DailyPostureSummary {
         DailyPostureSummary(
             sedentaryMinutes: sedentaryMinutesToday,
-            standingMinutes: standingMinutesToday,
             walkingMinutes: walkingMinutesToday,
-            averageGaitScore: averageGaitScore,
+            averageGaitScore: cachedAverageGaitScore,
             stretchRemindersTriggered: stretchReminderCount,
             date: summaryResetDate ?? Date()
         )
@@ -163,10 +182,7 @@ final class WatchPostureMonitor {
     // MARK: - Activity Tracking
 
     private func startActivityTracking() {
-        let queue = OperationQueue()
-        queue.maxConcurrentOperationCount = 1
-
-        activityManager.startActivityUpdates(to: queue) { [weak self] activity in
+        activityManager.startActivityUpdates(to: activityQueue) { [weak self] activity in
             guard let self, let activity else { return }
             let state = Self.mapActivity(activity)
 
@@ -186,38 +202,36 @@ final class WatchPostureMonitor {
 
     private func handleActivityChange(_ newState: PostureActivityState) {
         let previousState = currentActivity
-        currentActivity = newState
 
-        // Accumulate time for previous state
+        // Accumulate elapsed time for previous state
         accumulateTimeForPreviousState(previousState)
+
+        currentActivity = newState
+        activityStateStartDate = Date()
 
         switch newState {
         case .stationary:
-            if previousState != .stationary {
-                sedentaryStartDate = Date()
-                currentSedentarySeconds = 0
-            }
+            break // Sedentary check timer handles threshold alerts
 
         case .walking:
-            sedentaryStartDate = nil
-            currentSedentarySeconds = 0
             triggerGaitAnalysisIfReady()
 
         case .running, .unknown:
-            sedentaryStartDate = nil
-            currentSedentarySeconds = 0
+            break
         }
     }
 
+    /// Accumulate elapsed time since last state change into the appropriate daily counter.
     private func accumulateTimeForPreviousState(_ state: PostureActivityState) {
-        // Approximate: add 1 minute per state change (activity updates typically every ~30-60s)
+        guard let startDate = activityStateStartDate else { return }
+        let elapsedMinutes = Int(Date().timeIntervalSince(startDate) / 60)
+        guard elapsedMinutes > 0 else { return }
+
         switch state {
         case .stationary:
-            sedentaryMinutesToday += 1
-        case .walking:
-            walkingMinutesToday += 1
-        case .running:
-            walkingMinutesToday += 1
+            sedentaryMinutesToday = min(Constants.maxDailyMinutes, sedentaryMinutesToday + elapsedMinutes)
+        case .walking, .running:
+            walkingMinutesToday = min(Constants.maxDailyMinutes, walkingMinutesToday + elapsedMinutes)
         case .unknown:
             break
         }
@@ -231,22 +245,26 @@ final class WatchPostureMonitor {
             while !Task.isCancelled {
                 try? await Task.sleep(for: .seconds(60))
                 guard !Task.isCancelled else { break }
-                await self?.checkSedentaryDuration()
+                await self?.periodicCheck()
             }
         }
     }
 
+    private func periodicCheck() {
+        resetDailySummaryIfNeeded()
+        checkSedentaryDuration()
+    }
+
     private func checkSedentaryDuration() {
-        guard let startDate = sedentaryStartDate else { return }
+        guard currentActivity == .stationary,
+              let startDate = activityStateStartDate else { return }
 
-        let elapsed = Date().timeIntervalSince(startDate)
-        let thresholdSeconds = TimeInterval(sedentaryThresholdMinutes * 60)
+        let elapsedMinutes = Int(Date().timeIntervalSince(startDate) / 60)
 
-        if elapsed >= thresholdSeconds {
+        if elapsedMinutes >= sedentaryThresholdMinutes {
             triggerStretchReminder()
-            // Reset for next period
-            sedentaryStartDate = Date()
-            currentSedentarySeconds = 0
+            // Reset start for next period
+            activityStateStartDate = Date()
         }
     }
 
@@ -261,7 +279,7 @@ final class WatchPostureMonitor {
         }
 
         // Suppress during active workout
-        if WorkoutManager.shared.isActive {
+        if isWorkoutActive() {
             Self.logger.info("[PostureMonitor] Suppressing stretch reminder during workout")
             return
         }
@@ -316,6 +334,8 @@ final class WatchPostureMonitor {
 
     private func startDeviceMotionCollection() {
         isCollectingDeviceMotion = true
+        deviceMotionGeneration += 1
+        let currentGeneration = deviceMotionGeneration
         deviceMotionSamples.removeAll()
         deviceMotionSamples.reserveCapacity(
             Int(Constants.deviceMotionSampleDurationSeconds * Constants.deviceMotionFrequencyHz)
@@ -323,10 +343,7 @@ final class WatchPostureMonitor {
 
         motionManager.deviceMotionUpdateInterval = 1.0 / Constants.deviceMotionFrequencyHz
 
-        let queue = OperationQueue()
-        queue.maxConcurrentOperationCount = 1
-
-        motionManager.startDeviceMotionUpdates(to: queue) { [weak self] motion, error in
+        motionManager.startDeviceMotionUpdates(to: motionQueue) { [weak self] motion, error in
             guard let self else { return }
             if let error {
                 Self.logger.warning("[PostureMonitor] DeviceMotion error: \(error.localizedDescription)")
@@ -335,7 +352,8 @@ final class WatchPostureMonitor {
             guard let motion else { return }
 
             Task { @MainActor [weak self] in
-                self?.deviceMotionSamples.append(motion)
+                guard let self, self.deviceMotionGeneration == currentGeneration else { return }
+                self.deviceMotionSamples.append(motion)
             }
         }
 
@@ -344,25 +362,36 @@ final class WatchPostureMonitor {
         deviceMotionStopTask = Task { [weak self] in
             try? await Task.sleep(for: .seconds(Constants.deviceMotionSampleDurationSeconds))
             guard !Task.isCancelled else { return }
-            await self?.stopDeviceMotionCollection()
-            await self?.processGaitSamples()
+            await self?.finishDeviceMotionCollection()
         }
 
         Self.logger.info("[PostureMonitor] Started DeviceMotion collection (\(Constants.deviceMotionSampleDurationSeconds)s)")
     }
 
-    private func stopDeviceMotionCollection() {
+    private func finishDeviceMotionCollection() {
         motionManager.stopDeviceMotionUpdates()
         isCollectingDeviceMotion = false
         deviceMotionStopTask?.cancel()
         deviceMotionStopTask = nil
         lastDeviceMotionCollectionDate = Date()
-    }
 
-    private func processGaitSamples() {
+        // Snapshot samples and clear buffer
         let samples = deviceMotionSamples
         deviceMotionSamples.removeAll()
 
+        processGaitSamples(samples)
+    }
+
+    private func stopDeviceMotionCollection() {
+        motionManager.stopDeviceMotionUpdates()
+        isCollectingDeviceMotion = false
+        deviceMotionGeneration += 1 // Invalidate any in-flight appends
+        deviceMotionStopTask?.cancel()
+        deviceMotionStopTask = nil
+        lastDeviceMotionCollectionDate = Date()
+    }
+
+    private func processGaitSamples(_ samples: [CMDeviceMotion]) {
         guard let score = GaitAnalyzer.analyze(samples) else {
             Self.logger.info("[PostureMonitor] Insufficient samples for gait analysis (\(samples.count))")
             return
@@ -370,7 +399,18 @@ final class WatchPostureMonitor {
 
         latestGaitScore = score
         gaitScoresToday.append(score)
+        updateCachedAverageGaitScore()
         Self.logger.info("[PostureMonitor] Gait score: \(score.overall) (symmetry: \(score.symmetry), regularity: \(score.regularity))")
+    }
+
+    /// Update cached average gait score (avoids recomputation on every View access).
+    private func updateCachedAverageGaitScore() {
+        guard !gaitScoresToday.isEmpty else {
+            cachedAverageGaitScore = nil
+            return
+        }
+        let sum = gaitScoresToday.map(\.overall).reduce(0, +)
+        cachedAverageGaitScore = Int((Double(sum) / Double(gaitScoresToday.count)).rounded())
     }
 
     // MARK: - Daily Reset
@@ -384,11 +424,11 @@ final class WatchPostureMonitor {
         }
 
         sedentaryMinutesToday = 0
-        standingMinutesToday = 0
         walkingMinutesToday = 0
         gaitScoresToday.removeAll()
         stretchReminderCount = 0
         latestGaitScore = nil
+        cachedAverageGaitScore = nil
         summaryResetDate = today
     }
 }
