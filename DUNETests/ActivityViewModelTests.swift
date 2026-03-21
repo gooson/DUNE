@@ -758,7 +758,7 @@ struct ActivityViewModelTests {
             calories: 200,
             distance: nil
         )
-        record.primaryMusclesRaw = MuscleGroup.chest.rawValue
+        record.primaryMusclesRaw = [MuscleGroup.chest.rawValue]
         record.healthKitWorkoutID = "HK-APP-1"
 
         // HealthKit workout linked to the above record
