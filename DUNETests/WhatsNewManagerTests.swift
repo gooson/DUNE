@@ -197,12 +197,48 @@ struct WhatsNewManagerTests {
         #expect(feature.screenshotAsset == nil)
     }
 
-    @Test("All five releases are loaded from per-version JSON files")
+    @Test("JSON parsing loads 0.6.0 release with all features")
+    func jsonParsingLoads060Release() {
+        let manager = WhatsNewManager.shared
+
+        let release = manager.currentRelease(for: "0.6.0")
+
+        #expect(release != nil)
+        #expect(release?.features.count == 6)
+    }
+
+    @Test("0.6.0 feature IDs match expected set")
+    func featureIDsMatch060() {
+        let manager = WhatsNewManager.shared
+        let release = manager.currentRelease(for: "0.6.0")!
+
+        let ids = Set(release.features.map(\.id))
+        let expected: Set<String> = [
+            "exerciseFormCoach", "correctiveExercises",
+            "lifeTabOverhaul", "watchPostureMonitor",
+            "autoLinkedHabits", "watchBedtimeReminder"
+        ]
+        #expect(ids == expected)
+    }
+
+    @Test("0.6.0 feature localization keys are non-empty")
+    func featureLocalizationKeysNonEmpty060() {
+        let manager = WhatsNewManager.shared
+        let release = manager.currentRelease(for: "0.6.0")!
+
+        for feature in release.features {
+            #expect(!feature.titleKey.isEmpty, "titleKey should not be empty for \(feature.id)")
+            #expect(!feature.summaryKey.isEmpty, "summaryKey should not be empty for \(feature.id)")
+            #expect(!feature.symbolName.isEmpty, "symbolName should not be empty for \(feature.id)")
+        }
+    }
+
+    @Test("All six releases are loaded from per-version JSON files")
     func allReleasesLoaded() {
         let manager = WhatsNewManager.shared
         let releases = manager.orderedReleases()
 
-        #expect(releases.count == 5)
+        #expect(releases.count == 6)
 
         let versions = releases.map(\.version)
         #expect(versions.contains("0.1.0"))
@@ -210,5 +246,6 @@ struct WhatsNewManagerTests {
         #expect(versions.contains("0.3.0"))
         #expect(versions.contains("0.4.0"))
         #expect(versions.contains("0.5.0"))
+        #expect(versions.contains("0.6.0"))
     }
 }
