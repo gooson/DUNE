@@ -199,7 +199,6 @@
 		283877D1823947D0F1488673 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7483B0DEF534D4B2732250 /* ContentView.swift */; };
 		2850CDE867B19510CEE69E78 /* WellnessScore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A53D3C9DB618E1E7EA14258 /* WellnessScore.swift */; };
 		2900AE15BC6BD8592710FCA9 /* VisionTrainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6156372E1C62A22529262BFB /* VisionTrainViewModel.swift */; };
-		2918FFC005333A50AD124396 /* FormCoachingMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B1D780BAE7C137DF254C84 /* FormCoachingMessage.swift */; };
 		2929AE54801029332A24E9C4 /* CloudMirroredSharedHealthDataServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791722B9EE0B8158AF9BE9C1 /* CloudMirroredSharedHealthDataServiceTests.swift */; };
 		296E90B36084CE8B27710382 /* ExerciseCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7EFEAD555EAFE792CC16B22 /* ExerciseCategory.swift */; };
 		298A9C03B1702506266B9AE1 /* FatigueCalculationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0DC4EC599FA6243D52ACB1 /* FatigueCalculationService.swift */; };
@@ -1022,7 +1021,6 @@
 		F0F45CA8E1E095A1F8A688EC /* WellnessViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80B575955C93586B3A2BEE7 /* WellnessViewModel.swift */; };
 		F12901D0A4B4109E5325AB12 /* CoachingEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 971DC9F7C9192F07FD1A7D19 /* CoachingEngine.swift */; };
 		F15E3C53FF28ABE6C64801F9 /* ControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1986B90781DC55AF9335AF20 /* ControlsView.swift */; };
-		F18FEAE3496393B2EECB979A /* FormCoachingMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B1D780BAE7C137DF254C84 /* FormCoachingMessage.swift */; };
 		F206006E8693D8E279DDB590 /* ExerciseDefinitionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9441173046C70D7C27B512F9 /* ExerciseDefinitionTests.swift */; };
 		F220EC17BE7809616F8E8880 /* 0.5.0.json in Resources */ = {isa = PBXBuildFile; fileRef = 1428C5EC6CC5A79F678989B7 /* 0.5.0.json */; };
 		F2D58E20E761C551ECC3A18A /* InjurySeverity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6D6B86049B5F9B0D54B37D8 /* InjurySeverity.swift */; };
@@ -1314,7 +1312,6 @@
 		277091EEE879AF5A61DD3BAB /* 0.1.0.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = 0.1.0.json; sourceTree = "<group>"; };
 		27A1CCBB6CFE3349ED9F2977 /* ExerciseTileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTileView.swift; sourceTree = "<group>"; };
 		27A78DE2FF5482DA12BE6460 /* WellnessScoreDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessScoreDetailViewModel.swift; sourceTree = "<group>"; };
-		27B1D780BAE7C137DF254C84 /* FormCoachingMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormCoachingMessage.swift; sourceTree = "<group>"; };
 		280B092F05D4E02252AD6357 /* SleepQualityPrediction+View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SleepQualityPrediction+View.swift"; sourceTree = "<group>"; };
 		283467C5AD192A471015F763 /* FatigueCalculationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FatigueCalculationServiceTests.swift; sourceTree = "<group>"; };
 		285169182BAC0721901A55F1 /* TemplateOverlapCheckerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateOverlapCheckerTests.swift; sourceTree = "<group>"; };
@@ -3421,7 +3418,6 @@
 				945E60E17D909A3827EEC089 /* ExerciseFrequency.swift */,
 				6128BFA908002319364422D4 /* ExerciseRecordSnapshot.swift */,
 				79761F7F114A558AD359404A /* FatigueLevel.swift */,
-				27B1D780BAE7C137DF254C84 /* FormCoachingMessage.swift */,
 				A20700D3DC212D422B37DCD4 /* GeneratedWorkoutTemplate.swift */,
 				9D118CEB3CEB568A3E682BD9 /* HabitType.swift */,
 				89EDD6470ADF876A6BCB04C1 /* HealthInsight.swift */,
@@ -4348,7 +4344,6 @@
 				EAD08235FF95AF7AF4F321F0 /* ForestSilhouetteShape.swift in Sources */,
 				C0998E402D974722DED256ED /* ForestWaveBackground.swift in Sources */,
 				A2CDC5CD2AD32D436D44E014 /* FormCheckOverlay.swift in Sources */,
-				F18FEAE3496393B2EECB979A /* FormCoachingMessage.swift in Sources */,
 				8CAA6DB23440D297A60FD599 /* FormVoiceCoach.swift in Sources */,
 				47898EB1C3324781A6016FB1 /* FoundationModelReportFormatter.swift in Sources */,
 				DA8BCD5423CFC8560A21CC82 /* GenerateWorkoutReportUseCase.swift in Sources */,
@@ -4773,7 +4768,6 @@
 				298A9C03B1702506266B9AE1 /* FatigueCalculationService.swift in Sources */,
 				A4CF5D2802D393C8366B9938 /* FatigueLevel+DisplayName.swift in Sources */,
 				16EAD101264E6874BFC6A884 /* FatigueLevel.swift in Sources */,
-				2918FFC005333A50AD124396 /* FormCoachingMessage.swift in Sources */,
 				913BB44064E6C8B330F2A869 /* FormVoiceCoach.swift in Sources */,
 				7A041F2638FBB15EF917CDB9 /* FoundationModelReportFormatter.swift in Sources */,
 				E6B207F15013AC166C931CD5 /* GenerateWorkoutReportUseCase.swift in Sources */,

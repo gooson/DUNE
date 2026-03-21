@@ -87,7 +87,7 @@ extension ExerciseFormRule {
                 cautionRange: 100...120, // Slightly above parallel
                 activePhases: [.descent, .bottom],
                 isPrimaryAngle: true,
-                coachingCue: String(localized: "Go deeper")
+                coachingCue: "Go deeper"
             ),
             FormCheckpoint(
                 name: "Back Angle",
@@ -96,7 +96,7 @@ extension ExerciseFormRule {
                 cautionRange: 30...80,   // Slightly too upright or too forward
                 activePhases: [.descent, .bottom, .ascent],
                 isPrimaryAngle: false,
-                coachingCue: String(localized: "Keep your back straight")
+                coachingCue: "Keep your back straight"
             ),
         ],
         recommendedCameraPosition: .side,
@@ -117,7 +117,7 @@ extension ExerciseFormRule {
                 cautionRange: 20...80,
                 activePhases: [.descent, .bottom, .ascent],
                 isPrimaryAngle: false,
-                coachingCue: String(localized: "Hinge at your hips")
+                coachingCue: "Hinge at your hips"
             ),
             FormCheckpoint(
                 name: "Knee Bend",
@@ -126,7 +126,7 @@ extension ExerciseFormRule {
                 cautionRange: 110...175,
                 activePhases: [.descent, .bottom],
                 isPrimaryAngle: true,
-                coachingCue: String(localized: "Bend your knees slightly")
+                coachingCue: "Bend your knees slightly"
             ),
         ],
         recommendedCameraPosition: .side,
@@ -147,7 +147,7 @@ extension ExerciseFormRule {
                 cautionRange: 130...180,
                 activePhases: [.ascent, .lockout],
                 isPrimaryAngle: true,
-                coachingCue: String(localized: "Extend your arms fully")
+                coachingCue: "Extend your arms fully"
             ),
             FormCheckpoint(
                 name: "Shoulder Alignment",
@@ -156,7 +156,7 @@ extension ExerciseFormRule {
                 cautionRange: 130...180,
                 activePhases: [.lockout],
                 isPrimaryAngle: false,
-                coachingCue: String(localized: "Press straight overhead")
+                coachingCue: "Press straight overhead"
             ),
         ],
         recommendedCameraPosition: .front,

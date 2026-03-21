@@ -1,9 +1,32 @@
 import AVFoundation
 
+// MARK: - FormCoachingMessage (internal to voice coaching)
+
+/// A coaching message triggered by a form checkpoint evaluation.
+struct FormCoachingMessage: Sendable, Identifiable {
+    let id = UUID()
+    let checkpointName: String
+    let message: String
+    let priority: Priority
+
+    enum Priority: Int, Comparable, Sendable {
+        case caution = 0
+        case warning = 1
+
+        static func < (lhs: Self, rhs: Self) -> Bool {
+            lhs.rawValue < rhs.rawValue
+        }
+    }
+}
+
+// MARK: - FormVoiceCoach
+
 /// Provides real-time voice coaching during exercise form checks.
 ///
 /// Monitors checkpoint evaluation results and speaks coaching cues via
 /// `AVSpeechSynthesizer` with cooldown-based repetition suppression.
+///
+/// All public methods must be called from `@MainActor` (the owning ViewModel is `@MainActor`).
 final class FormVoiceCoach: @unchecked Sendable {
 
     // MARK: - Configuration
@@ -14,12 +37,14 @@ final class FormVoiceCoach: @unchecked Sendable {
     // MARK: - Dependencies
 
     private let synthesizer = AVSpeechSynthesizer()
-    private let voiceLanguage: String
+    private let voice: AVSpeechSynthesisVoice?
 
     // MARK: - State
 
     private var lastSpokenTimes: [String: Date] = [:]
     private var isEnabled = false
+    private var cachedCheckpoints: [String: FormCheckpoint] = [:]
+    private var cachedRuleID: String?
 
     /// Injectable clock for testing.
     private let now: () -> Date
@@ -30,13 +55,15 @@ final class FormVoiceCoach: @unchecked Sendable {
         self.cooldown = cooldown
         self.now = now
 
-        // Determine voice language from current locale
+        // Cache voice once at init
         let languageCode = Locale.current.language.languageCode?.identifier ?? "en"
+        let voiceLanguage: String
         switch languageCode {
         case "ko": voiceLanguage = "ko-KR"
         case "ja": voiceLanguage = "ja-JP"
         default:   voiceLanguage = "en-US"
         }
+        self.voice = AVSpeechSynthesisVoice(language: voiceLanguage)
     }
 
     // MARK: - Public API
@@ -46,7 +73,8 @@ final class FormVoiceCoach: @unchecked Sendable {
         if enabled {
             configureAudioSession()
         } else {
-            stop()
+            synthesizer.stopSpeaking(at: .immediate)
+            deactivateAudioSession()
         }
     }
 
@@ -54,21 +82,29 @@ final class FormVoiceCoach: @unchecked Sendable {
     func processFormState(_ state: ExerciseFormState, rule: ExerciseFormRule) {
         guard isEnabled else { return }
 
+        // Early exit if already speaking — avoid building unnecessary collections.
+        guard !synthesizer.isSpeaking else { return }
+
+        // Cache checkpoint lookup per rule (invalidate on rule change).
+        if cachedRuleID != rule.id {
+            cachedCheckpoints.removeAll(keepingCapacity: true)
+            for cp in rule.checkpoints {
+                cachedCheckpoints[cp.name] = cp
+            }
+            cachedRuleID = rule.id
+        }
+
         let currentTime = now()
 
-        // Build a lookup from checkpoint name to its rule definition.
-        let checkpointsByName = Dictionary(
-            rule.checkpoints.map { ($0.name, $0) },
-            uniquingKeysWith: { first, _ in first }
-        )
-
-        // Collect messages needing speech, sorted by priority (warning first).
-        var messages: [FormCoachingMessage] = []
+        // Find the highest-priority actionable checkpoint without intermediate array.
+        var bestName: String?
+        var bestCue: String?
+        var bestPriority: FormCoachingMessage.Priority?
 
         for result in state.checkpointResults {
             guard result.status == .caution || result.status == .warning else { continue }
-            guard let checkpoint = checkpointsByName[result.checkpointName] else { continue }
-            guard checkpoint.coachingCue.isEmpty == false else { continue }
+            guard let checkpoint = cachedCheckpoints[result.checkpointName] else { continue }
+            guard !checkpoint.coachingCue.isEmpty else { continue }
 
             // Cooldown check
             if let lastTime = lastSpokenTimes[result.checkpointName],
@@ -78,42 +114,39 @@ final class FormVoiceCoach: @unchecked Sendable {
 
             let priority: FormCoachingMessage.Priority =
                 result.status == .warning ? .warning : .caution
-            messages.append(FormCoachingMessage(
-                checkpointName: result.checkpointName,
-                message: checkpoint.coachingCue,
-                priority: priority
-            ))
+
+            if bestPriority == nil || priority > bestPriority! {
+                bestName = result.checkpointName
+                bestCue = checkpoint.coachingCue
+                bestPriority = priority
+            }
         }
 
-        // Speak highest priority message only (avoid message flooding).
-        guard let topMessage = messages.max(by: { $0.priority < $1.priority }) else { return }
+        guard let name = bestName, let cue = bestCue else { return }
 
-        // Don't queue if already speaking — skip to avoid delay buildup.
-        guard !synthesizer.isSpeaking else { return }
-
-        speak(topMessage.message)
-        lastSpokenTimes[topMessage.checkpointName] = currentTime
+        speak(cue)
+        lastSpokenTimes[name] = currentTime
     }
 
     func stop() {
         synthesizer.stopSpeaking(at: .immediate)
         lastSpokenTimes.removeAll()
+        cachedCheckpoints.removeAll()
+        cachedRuleID = nil
         deactivateAudioSession()
     }
 
     // MARK: - Internals
 
     private func speak(_ text: String) {
-        let utterance = AVSpeechUtterance(string: text)
+        let localizedText = String(localized: String.LocalizationValue(text))
+        let utterance = AVSpeechUtterance(string: localizedText)
         utterance.rate = 0.55
         utterance.pitchMultiplier = 1.0
         utterance.preUtteranceDelay = 0
         utterance.postUtteranceDelay = 0.1
         utterance.volume = 0.9
-
-        if let voice = AVSpeechSynthesisVoice(language: voiceLanguage) {
-            utterance.voice = voice
-        }
+        utterance.voice = voice
 
         synthesizer.speak(utterance)
     }
