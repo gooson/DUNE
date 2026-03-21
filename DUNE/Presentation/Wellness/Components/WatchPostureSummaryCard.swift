@@ -29,13 +29,13 @@ struct WatchPostureSummaryCard: View {
                 HStack(spacing: DS.Spacing.lg) {
                     metricItem(
                         icon: "figure.seated.seatbelt",
-                        value: formatMinutes(summary.sedentaryMinutes),
+                        value: PostureFormatting.formatMinutes(summary.sedentaryMinutes),
                         label: "Sitting"
                     )
 
                     metricItem(
                         icon: "figure.walk",
-                        value: formatMinutes(summary.walkingMinutes),
+                        value: PostureFormatting.formatMinutes(summary.walkingMinutes),
                         label: "Walking"
                     )
 
@@ -73,15 +73,4 @@ struct WatchPostureSummaryCard: View {
         }
     }
 
-    private func formatMinutes(_ minutes: Int) -> String {
-        if minutes < 60 {
-            return String(localized: "\(minutes)min")
-        }
-        let hours = minutes / 60
-        let mins = minutes % 60
-        if mins == 0 {
-            return String(localized: "\(hours)h")
-        }
-        return String(localized: "\(hours)h \(mins)min")
-    }
 }

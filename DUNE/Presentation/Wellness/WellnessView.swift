@@ -131,7 +131,7 @@ struct WellnessView: View {
                         }
 
                         // Watch Posture Summary (if received today)
-                        if let postureSummary = WatchSessionManager.shared.receivedPostureSummary {
+                        if let postureSummary = viewModel.watchPostureSummary {
                             WatchPostureSummaryCard(summary: postureSummary)
                         }
 
