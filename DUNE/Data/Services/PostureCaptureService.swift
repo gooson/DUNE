@@ -954,60 +954,57 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
 
     // MARK: - CGImage from Pool Buffer
 
-    private static let fallbackCIContext = CIContext(options: [.useSoftwareRenderer: false])
+    /// Software-only CIContext — avoids GPU/ANE contention with camera hardware.
+    private static let softwareCIContext = CIContext(options: [.useSoftwareRenderer: true])
     private static let bgraColorSpace = CGColorSpaceCreateDeviceRGB()
 
-    /// Create a CGImage from a BGRA CVPixelBuffer via CPU memcpy.
-    /// The resulting CGImage lives in heap memory — completely independent of
-    /// the camera's IOSurface buffer pool. This eliminates TrueDepth (front camera)
-    /// resource contention where Vision's ML buffer allocation competes with the
-    /// depth sensor hardware for shared GPU/buffer resources.
+    /// Create a pool-independent CGImage from any CVPixelBuffer format.
     ///
-    /// Performance: 720p BGRA = 3.6 MB memcpy ≈ 0.4 ms — well within 10fps budget.
-    static func createCGImageFromBGRABuffer(_ pixelBuffer: CVPixelBuffer) -> CGImage? {
+    /// - BGRA: fast CPU memcpy (~0.4ms at 720p)
+    /// - YUV (420f/420v): software CIContext render (~3-5ms at 720p)
+    ///
+    /// The resulting CGImage lives in heap memory, completely independent of
+    /// the camera's IOSurface buffer pool and GPU/ANE resources.
+    static func createCGImageFromBuffer(_ pixelBuffer: CVPixelBuffer) -> CGImage? {
         let pixelFormat = CVPixelBufferGetPixelFormatType(pixelBuffer)
-        guard pixelFormat == kCVPixelFormatType_32BGRA else {
-            // Non-BGRA: fall back to CIContext (slower but handles any format).
-            // NOTE: this path still touches the IOSurface pool via CIImage(cvPixelBuffer:)
-            // — not safe for TrueDepth front camera. Expected only on rear camera
-            // historical formats where pool contention does not occur.
-            let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
-            return fallbackCIContext.createCGImage(ciImage, from: ciImage.extent)
+
+        // BGRA: direct CPU memcpy (fastest path)
+        if pixelFormat == kCVPixelFormatType_32BGRA {
+            CVPixelBufferLockBaseAddress(pixelBuffer, .readOnly)
+            defer { CVPixelBufferUnlockBaseAddress(pixelBuffer, .readOnly) }
+
+            let width = CVPixelBufferGetWidth(pixelBuffer)
+            let height = CVPixelBufferGetHeight(pixelBuffer)
+            let bytesPerRow = CVPixelBufferGetBytesPerRow(pixelBuffer)
+            guard let baseAddress = CVPixelBufferGetBaseAddress(pixelBuffer) else { return nil }
+
+            let byteCount = CVPixelBufferGetDataSize(pixelBuffer)
+            let data = Data(bytes: baseAddress, count: byteCount)
+            guard let provider = CGDataProvider(data: data as CFData) else { return nil }
+
+            let bitmapInfo = CGBitmapInfo(
+                rawValue: CGImageAlphaInfo.noneSkipFirst.rawValue
+                    | CGBitmapInfo.byteOrder32Little.rawValue
+            )
+
+            return CGImage(
+                width: width,
+                height: height,
+                bitsPerComponent: 8,
+                bitsPerPixel: 32,
+                bytesPerRow: bytesPerRow,
+                space: bgraColorSpace,
+                bitmapInfo: bitmapInfo,
+                provider: provider,
+                decode: nil,
+                shouldInterpolate: false,
+                intent: .defaultIntent
+            )
         }
 
-        CVPixelBufferLockBaseAddress(pixelBuffer, .readOnly)
-        defer { CVPixelBufferUnlockBaseAddress(pixelBuffer, .readOnly) }
-
-        let width = CVPixelBufferGetWidth(pixelBuffer)
-        let height = CVPixelBufferGetHeight(pixelBuffer)
-        let bytesPerRow = CVPixelBufferGetBytesPerRow(pixelBuffer)
-        guard let baseAddress = CVPixelBufferGetBaseAddress(pixelBuffer) else { return nil }
-
-        // Copy pixel data to heap — breaks IOSurface pool dependency.
-        // Use CVPixelBufferGetDataSize for accurate size (accounts for padding).
-        let byteCount = CVPixelBufferGetDataSize(pixelBuffer)
-        let data = Data(bytes: baseAddress, count: byteCount)
-        guard let provider = CGDataProvider(data: data as CFData) else { return nil }
-
-        // 32BGRA = little-endian byte order, alpha channel in first byte (noneSkipFirst)
-        let bitmapInfo = CGBitmapInfo(
-            rawValue: CGImageAlphaInfo.noneSkipFirst.rawValue
-                | CGBitmapInfo.byteOrder32Little.rawValue
-        )
-
-        return CGImage(
-            width: width,
-            height: height,
-            bitsPerComponent: 8,
-            bitsPerPixel: 32,
-            bytesPerRow: bytesPerRow,
-            space: bgraColorSpace,
-            bitmapInfo: bitmapInfo,
-            provider: provider,
-            decode: nil,
-            shouldInterpolate: false,
-            intent: .defaultIntent
-        )
+        // YUV or other formats: software CIContext render (CPU-only, no GPU/ANE)
+        let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
+        return softwareCIContext.createCGImage(ciImage, from: ciImage.extent)
     }
 
     // MARK: - Pixel Buffer Copy
@@ -1212,7 +1209,7 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
         // Creating a CGImage via CPU memcpy decouples Vision from the camera pool entirely.
         // Skip this frame if 3D Vision is running (shared internal ML buffer pool).
         guard visionSemaphore.wait(timeout: .now()) == .success else { return }
-        guard let cgImage = Self.createCGImageFromBGRABuffer(poolBuffer) else {
+        guard let cgImage = Self.createCGImageFromBuffer(poolBuffer) else {
             visionSemaphore.signal()
             return
         }
@@ -1358,20 +1355,14 @@ extension PostureCaptureService: AVCaptureVideoDataOutputSampleBufferDelegate {
     private func applyLiveVideoOutputConfiguration() {
         let availableFormats = videoDataOutput.availableVideoPixelFormatTypes
 
-        // Force BGRA when user hasn't explicitly chosen a format.
-        // Vision's ML pipeline requires BGRA buffers. When the camera delivers YUV,
-        // Vision tries to create an internal "mlImage buffer of type BGRA" for conversion.
-        // On front camera (TrueDepth), this internal allocation fails because the depth
-        // sensor hardware consumes shared GPU/buffer resources.
-        // By requesting BGRA directly, the camera hardware handles the conversion and
-        // Vision can use the buffer as-is — no internal mlImage buffer needed.
         let format: OSType?
         if liveConfiguration.pixelFormat == .automatic {
-            if availableFormats.contains(kCVPixelFormatType_32BGRA) {
-                format = kCVPixelFormatType_32BGRA
-            } else {
-                format = PostureCaptureLivePixelFormatOption.preferredNativeFormat(from: availableFormats)
-            }
+            // Use camera's native format — don't force BGRA.
+            // Forcing BGRA on front camera causes FigCaptureSourceRemote XPC errors
+            // (-17281) because the camera hardware can't deliver BGRA reliably.
+            // Instead, let the camera deliver its native YUV format and convert
+            // to CGImage via software CIContext in captureOutput.
+            format = PostureCaptureLivePixelFormatOption.preferredNativeFormat(from: availableFormats)
         } else {
             format = liveConfiguration.pixelFormat.resolvedFormat(from: availableFormats)
         }
