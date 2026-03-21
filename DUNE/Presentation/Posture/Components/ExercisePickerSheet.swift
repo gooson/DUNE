@@ -35,7 +35,11 @@ struct ExercisePickerSheet: View {
                             dismiss()
                         } label: {
                             HStack {
-                                Label(exercise.displayName, systemImage: iconName(for: exercise))
+                                Label {
+                                    Text(LocalizedStringKey(exercise.displayName))
+                                } icon: {
+                                    Image(systemName: iconName(for: exercise))
+                                }
                                 Spacer()
                                 if selectedExerciseID == exercise.exerciseID {
                                     Image(systemName: "checkmark")
@@ -63,6 +67,9 @@ struct ExercisePickerSheet: View {
         case "barbell-squat": return "figure.strengthtraining.traditional"
         case "conventional-deadlift": return "figure.strengthtraining.functional"
         case "overhead-press": return "figure.arms.open"
+        case "pull-up": return "figure.climbing"
+        case "bodyweight-squat": return "figure.squat"
+        case "lunge": return "figure.lunges"
         default: return "figure.mixed.cardio"
         }
     }
