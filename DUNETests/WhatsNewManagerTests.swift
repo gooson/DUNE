@@ -154,4 +154,78 @@ struct WhatsNewManagerTests {
             #expect(!feature.symbolName.isEmpty, "symbolName should not be empty for \(feature.id)")
         }
     }
+
+    // MARK: - Screenshot Asset Tests
+
+    @Test("screenshotAsset is parsed for features that have it")
+    func screenshotAssetParsed() {
+        let manager = WhatsNewManager.shared
+        let release = manager.currentRelease(for: "0.5.0")!
+
+        let posture = release.features.first { $0.id == "postureAssessment" }
+        #expect(posture?.screenshotAsset == "WhatsNew/0.5.0/postureAssessment")
+        #expect(posture?.screenshotAsset != nil)
+    }
+
+    @Test("screenshotAsset is nil for features without it")
+    func screenshotAssetNilWhenMissing() {
+        let manager = WhatsNewManager.shared
+        let release = manager.currentRelease(for: "0.5.0")!
+
+        let muscleMap = release.features.first { $0.id == "muscleMap3DOverhaul" }
+        #expect(muscleMap?.screenshotAsset == nil)
+    }
+
+    @Test("Older versions have no screenshotAsset on any feature")
+    func olderVersionsNoScreenshots() {
+        let manager = WhatsNewManager.shared
+        let release = manager.currentRelease(for: "0.2.0")!
+
+        for feature in release.features {
+            #expect(feature.screenshotAsset == nil, "Feature \(feature.id) should not have screenshotAsset")
+        }
+    }
+
+    @Test("WhatsNewFeatureItem init with screenshotAsset")
+    func featureItemInitWithScreenshot() {
+        let feature = WhatsNewFeatureItem(
+            id: "test",
+            titleKey: "Test",
+            summaryKey: "Test summary",
+            symbolName: "star",
+            area: .today,
+            screenshotAsset: "WhatsNew/1.0.0/test"
+        )
+
+        #expect(feature.screenshotAsset != nil)
+        #expect(feature.screenshotAsset == "WhatsNew/1.0.0/test")
+    }
+
+    @Test("WhatsNewFeatureItem init without screenshotAsset defaults to nil")
+    func featureItemInitWithoutScreenshot() {
+        let feature = WhatsNewFeatureItem(
+            id: "test",
+            titleKey: "Test",
+            summaryKey: "Test summary",
+            symbolName: "star",
+            area: .today
+        )
+
+        #expect(feature.screenshotAsset == nil)
+    }
+
+    @Test("All five releases are loaded from per-version JSON files")
+    func allReleasesLoaded() {
+        let manager = WhatsNewManager.shared
+        let releases = manager.orderedReleases()
+
+        #expect(releases.count == 5)
+
+        let versions = releases.map(\.version)
+        #expect(versions.contains("0.1.0"))
+        #expect(versions.contains("0.2.0"))
+        #expect(versions.contains("0.3.0"))
+        #expect(versions.contains("0.4.0"))
+        #expect(versions.contains("0.5.0"))
+    }
 }

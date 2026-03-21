@@ -339,7 +339,12 @@ targets:
       - path: Data/ExerciseLibraryService.swift
       - path: Data/ExerciseDescriptions.swift
       - path: Data/Resources/exercises.json
-      - path: Data/Resources/whats-new.json
+      - path: Data/Resources/whats-new/catalog.json
+      - path: Data/Resources/whats-new/0.5.0.json
+      - path: Data/Resources/whats-new/0.4.0.json
+      - path: Data/Resources/whats-new/0.3.0.json
+      - path: Data/Resources/whats-new/0.2.0.json
+      - path: Data/Resources/whats-new/0.1.0.json
       # Shared persistence for mirrored snapshot fallback
       - path: Data/Persistence/HealthSnapshotMirrorContainerFactory.swift
       - path: Data/Persistence/Models/HealthSnapshotMirrorRecord.swift

@@ -1,0 +1,61 @@
+{
+  "version": "0.1.0",
+  "features": [
+    {
+      "id": "exerciseLogging",
+      "titleKey": "Exercise Logging",
+      "summaryKey": "Log sets, reps, and weight with custom exercises, draft recovery, and search filters.",
+      "symbolName": "dumbbell.fill",
+      "area": "activity"
+    },
+    {
+      "id": "conditionScore",
+      "titleKey": "Condition Score",
+      "summaryKey": "Check your HRV and resting heart rate to see how ready your body is each day.",
+      "symbolName": "heart.text.square.fill",
+      "area": "today"
+    },
+    {
+      "id": "workoutTemplates",
+      "titleKey": "Workout Templates",
+      "summaryKey": "Create, edit, and start workouts from saved templates for a faster session.",
+      "symbolName": "list.clipboard.fill",
+      "area": "activity"
+    },
+    {
+      "id": "progressiveOverload",
+      "titleKey": "Progressive Overload",
+      "summaryKey": "Track 1RM estimates and view exercise history charts to measure your progress.",
+      "symbolName": "chart.line.uptrend.xyaxis",
+      "area": "activity"
+    },
+    {
+      "id": "muscleMap",
+      "titleKey": "Muscle Map",
+      "summaryKey": "See which muscle groups are recovered, overloaded, or ready on an interactive body map.",
+      "symbolName": "figure.stand",
+      "area": "activity"
+    },
+    {
+      "id": "watchWorkout",
+      "titleKey": "Apple Watch",
+      "summaryKey": "Track workouts on Apple Watch and sync completed sessions back to iPhone.",
+      "symbolName": "applewatch",
+      "area": "watch"
+    },
+    {
+      "id": "wellnessTab",
+      "titleKey": "Wellness",
+      "summaryKey": "View sleep, body, and active indicators together in one score-driven dashboard.",
+      "symbolName": "leaf.fill",
+      "area": "wellness"
+    },
+    {
+      "id": "iPadSupport",
+      "titleKey": "iPad Support",
+      "summaryKey": "Full iPad layout with sidebar navigation and universal design.",
+      "symbolName": "ipad.landscape",
+      "area": "settings"
+    }
+  ]
+}
