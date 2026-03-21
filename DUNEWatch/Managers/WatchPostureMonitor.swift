@@ -198,8 +198,8 @@ final class WatchPostureMonitor {
 
     private func startActivityTracking() {
         activityManager.startActivityUpdates(to: activityQueue) { [weak self] activity in
-            guard let self, let activity else { return }
-            let state = Self.mapActivity(activity)
+            guard let activity else { return }
+            let state = WatchPostureMonitor.mapActivity(activity)
 
             Task { @MainActor [weak self] in
                 guard let self else { return }
@@ -359,9 +359,8 @@ final class WatchPostureMonitor {
         motionManager.deviceMotionUpdateInterval = 1.0 / Constants.deviceMotionFrequencyHz
 
         motionManager.startDeviceMotionUpdates(to: motionQueue) { [weak self] motion, error in
-            guard let self else { return }
             if let error {
-                Self.logger.warning("[PostureMonitor] DeviceMotion error: \(error.localizedDescription)")
+                WatchPostureMonitor.logger.warning("[PostureMonitor] DeviceMotion error: \(error.localizedDescription)")
                 return
             }
             guard let motion else { return }
