@@ -451,19 +451,17 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
     }
 
     func detectPose(from image: CGImage, orientedJPEG: Data?) async throws -> PostureCaptureResult {
-        let request3D = VNDetectHumanBodyPose3DRequest()
-        let request2D = VNDetectHumanBodyPoseRequest()
-        // Pass EXIF orientation so pointInImage() returns coordinates in the
-        // displayed (portrait, mirrored-for-front-camera) coordinate space,
-        // not in the raw landscape sensor coordinate space.
         let orientation = Self.extractOrientation(from: orientedJPEG)
-        let handler = VNImageRequestHandler(cgImage: image, orientation: orientation, options: [:])
+
+        // --- 1) Always run 2D first (reliable on all devices/cameras) ---
+        let request2D = VNDetectHumanBodyPoseRequest()
+        let handler2D = VNImageRequestHandler(cgImage: image, orientation: orientation, options: [:])
 
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, any Error>) in
             DispatchQueue.global(qos: .userInitiated).async { [visionSemaphore] in
                 visionSemaphore.wait()
                 do {
-                    try handler.perform([request3D, request2D])
+                    try handler2D.perform([request2D])
                     visionSemaphore.signal()
                     continuation.resume()
                 } catch {
@@ -473,15 +471,43 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
             }
         }
 
-        // --- Try 3D results first ---
-        if let observation3D = request3D.results?.first {
-            let confidenceMap = Self.captureConfidenceBy2DJointName(from: request2D.results?.first)
-            let joints = extractJointPositions(from: observation3D, confidenceBy2DJointName: confidenceMap)
+        guard let observation2D = request2D.results?.first else {
+            throw PostureCaptureError.noPoseDetected
+        }
+
+        // --- 2) Try 3D separately (fails on some devices — "mlImage buffer" error) ---
+        let request3D = VNDetectHumanBodyPose3DRequest()
+        let handler3D = VNImageRequestHandler(cgImage: image, orientation: orientation, options: [:])
+
+        var observation3D: VNHumanBodyPose3DObservation?
+        do {
+            try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, any Error>) in
+                DispatchQueue.global(qos: .userInitiated).async { [visionSemaphore] in
+                    visionSemaphore.wait()
+                    do {
+                        try handler3D.perform([request3D])
+                        visionSemaphore.signal()
+                        continuation.resume()
+                    } catch {
+                        visionSemaphore.signal()
+                        continuation.resume(throwing: error)
+                    }
+                }
+            }
+            observation3D = request3D.results?.first
+        } catch {
+            AppLogger.data.debug("[PostureCapture] 3D detection failed (2D fallback): \(error.localizedDescription)")
+        }
+
+        // --- 3) Use 3D if available, else fall back to 2D ---
+        if let obs3D = observation3D {
+            let confidenceMap = Self.captureConfidenceBy2DJointName(from: observation2D)
+            let joints = extractJointPositions(from: obs3D, confidenceBy2DJointName: confidenceMap)
 
             if !joints.isEmpty {
                 let bodyHeight: Double?
                 let heightEstimation: HeightEstimationType
-                let height = observation3D.bodyHeight
+                let height = obs3D.bodyHeight
                 if height.isFinite, height > 0.5, height < 2.5 {
                     bodyHeight = Double(height)
                     heightEstimation = .measured
@@ -505,16 +531,7 @@ final class PostureCaptureService: NSObject, PostureCapturing, @unchecked Sendab
             }
         }
 
-        // --- Fallback: 2D-only results ---
-        // 3D detection fails on some devices/cameras (iPad front camera,
-        // "ABPKPersonIDTracker not supported", "mlImage buffer" errors).
-        // 2D joints with z=0 still provide frontal metrics (shoulder/hip
-        // asymmetry, knee alignment, lateral shift). Sagittal metrics
-        // (forward head, rounded shoulders) return "unmeasurable".
-        guard let observation2D = request2D.results?.first else {
-            throw PostureCaptureError.noPoseDetected
-        }
-
+        // --- 2D fallback: frontal metrics work, sagittal returns "unmeasurable" ---
         let joints2D = Self.extractJointPositionsFrom2D(observation2D)
         guard !joints2D.isEmpty else {
             throw PostureCaptureError.insufficientConfidence
