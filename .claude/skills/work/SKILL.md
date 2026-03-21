@@ -68,7 +68,12 @@ $ARGUMENTS 에 대한 구현을 수행합니다.
 
 프로젝트에 맞는 명령을 실행합니다:
 - Build: `scripts/build-ios.sh` (xcodebuild 직접 실행 금지 — build-pipeline.md 참조)
-- Test suite: `xcodebuild test ...` (xcode-project skill 참조)
+- Unit Test: `xcodebuild test ... -only-testing DUNETests` (xcode-project skill 참조)
+- **UI Test** (UI 변경이 포함된 경우 필수):
+  - `ui-test-expert` 에이전트로 UI 테스트 작성/업데이트
+  - `xcodebuild test -project DUNE/DUNE.xcodeproj -scheme DUNEUITests -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max,OS=26.3.1' -only-testing DUNEUITests`
+  - 레이아웃 검증: 주요 요소의 존재, 접근성 식별자 확인 포함
+  - UI 테스트가 통과해야 Quality Check 통과
 
 ### 3.2 전문 에이전트 검증
 
@@ -92,6 +97,7 @@ $ARGUMENTS 에 대한 구현을 수행합니다.
 - [ ] 에러 핸들링이 적절한가?
 - [ ] 불필요한 코드가 없는가?
 - [ ] 보안 취약점이 없는가?
+- [ ] UI 변경이 있는 경우, UI 테스트가 작성/업데이트되고 통과하는가?
 
 ### 3.4 품질 Gate
 
