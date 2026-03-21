@@ -67,9 +67,9 @@ struct ExercisePickerSheet: View {
         case "barbell-squat": return "figure.strengthtraining.traditional"
         case "conventional-deadlift": return "figure.strengthtraining.functional"
         case "overhead-press": return "figure.arms.open"
-        case "pull-up": return "figure.climbing"
-        case "bodyweight-squat": return "figure.squat"
-        case "lunge": return "figure.lunges"
+        case "pull-up": return "figure.highintensity.intervaltraining"
+        case "bodyweight-squat": return "figure.flexibility"
+        case "lunge": return "figure.step.training"
         default: return "figure.mixed.cardio"
         }
     }
