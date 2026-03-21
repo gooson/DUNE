@@ -1,5 +1,9 @@
 import HealthKit
 
+protocol WatchWearStateQuerying: Sendable {
+    func hasRecentWatchHeartRateSample(startingAt startDate: Date, endingAt endDate: Date) async -> Bool
+}
+
 protocol HeartRateQuerying: Sendable {
     /// Fetch heart rate samples recorded during a specific HKWorkout, identified by UUID string.
     func fetchHeartRateSamples(forWorkoutID workoutID: String) async throws -> [HeartRateSample]
@@ -29,7 +33,7 @@ extension HeartRateQuerying {
     }
 }
 
-struct HeartRateQueryService: HeartRateQuerying, Sendable {
+struct HeartRateQueryService: HeartRateQuerying, WatchWearStateQuerying, Sendable {
     private let manager: HealthKitManager
 
     init(manager: HealthKitManager) {
@@ -131,6 +135,53 @@ struct HeartRateQueryService: HeartRateQuerying, Sendable {
         guard Self.hrValidRange.contains(value) else { return nil }
 
         return VitalSample(value: value, date: sample.startDate)
+    }
+
+    func hasRecentWatchHeartRateSample(startingAt startDate: Date, endingAt endDate: Date) async -> Bool {
+        guard startDate < endDate else { return false }
+
+        if let mockData = SimulatorAdvancedMockDataProvider.current(),
+           let sample = mockData.latestHeartRate(withinDays: 1) {
+            return sample.date >= startDate && sample.date <= endDate
+        }
+
+        guard manager.isAvailable else { return false }
+        let quantityType = HKQuantityType(.heartRate)
+
+        do {
+            try await manager.ensureNotDenied(for: quantityType)
+        } catch {
+            return false
+        }
+
+        let predicate = HKQuery.predicateForSamples(
+            withStart: startDate,
+            end: endDate,
+            options: .strictStartDate
+        )
+
+        let descriptor = HKSampleQueryDescriptor(
+            predicates: [.quantitySample(type: quantityType, predicate: predicate)],
+            sortDescriptors: [SortDescriptor(\.startDate, order: .reverse)],
+            limit: 20
+        )
+
+        do {
+            let samples = try await manager.execute(descriptor)
+            return samples.contains { sample in
+                let bpm = sample.quantity.doubleValue(for: Self.bpmUnit)
+                guard Self.hrValidRange.contains(bpm) else { return false }
+                return Self.isWatchSource(
+                    productType: sample.sourceRevision.productType,
+                    bundleIdentifier: sample.sourceRevision.source.bundleIdentifier
+                )
+            }
+        } catch {
+            AppLogger.notification.error(
+                "[BedtimeReminder] Failed to query recent watch heart rate: \(error.localizedDescription)"
+            )
+            return false
+        }
     }
 
     func fetchHeartRateHistory(days: Int) async throws -> [VitalSample] {
@@ -299,6 +350,13 @@ struct HeartRateQueryService: HeartRateQuerying, Sendable {
     static func validatedSample(bpm: Double, date: Date) -> HeartRateSample? {
         guard (20...300).contains(bpm) else { return nil }
         return HeartRateSample(bpm: bpm, date: date)
+    }
+
+    static func isWatchSource(productType: String?, bundleIdentifier: String) -> Bool {
+        SleepQueryService.isWatchSource(
+            productType: productType,
+            bundleIdentifier: bundleIdentifier
+        )
     }
 
     private static func anchorDate(

@@ -6,7 +6,7 @@ enum BedtimeReminderLeadTime: Int, CaseIterable, Sendable {
     case twoHours = 120
 
     static let storageKey = "bedtimeReminderLeadTime"
-    static let defaultValue: BedtimeReminderLeadTime = .twoHours
+    static let defaultValue: BedtimeReminderLeadTime = .oneHour
 
     var minutes: Int { rawValue }
 }

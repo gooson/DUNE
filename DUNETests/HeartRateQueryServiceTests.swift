@@ -77,6 +77,30 @@ struct HeartRateQueryServiceTests {
         #expect(sample?.date == specificDate)
     }
 
+    @Test("Watch source prefers product type")
+    func watchSourceUsesProductType() {
+        #expect(HeartRateQueryService.isWatchSource(
+            productType: "Watch7,1",
+            bundleIdentifier: "com.apple.health.1234"
+        ))
+    }
+
+    @Test("Watch source falls back to bundle identifier")
+    func watchSourceFallsBackToBundleIdentifier() {
+        #expect(HeartRateQueryService.isWatchSource(
+            productType: nil,
+            bundleIdentifier: "com.apple.NanoHealthApp"
+        ))
+    }
+
+    @Test("Non-watch source is rejected")
+    func nonWatchSourceRejected() {
+        #expect(!HeartRateQueryService.isWatchSource(
+            productType: nil,
+            bundleIdentifier: "com.apple.Health"
+        ))
+    }
+
     @Test("aggregateHistory averages heart rate into hourly buckets")
     func aggregateHistoryHourlyBuckets() {
         let calendar = Calendar(identifier: .gregorian)

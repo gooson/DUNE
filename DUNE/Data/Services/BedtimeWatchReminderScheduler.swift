@@ -1,5 +1,6 @@
 import Foundation
 import UserNotifications
+import WatchConnectivity
 
 @MainActor
 protocol BedtimeReminderNotificationScheduling {
@@ -30,7 +31,20 @@ struct UserNotificationCenterBedtimeReminderScheduler: BedtimeReminderNotificati
     }
 }
 
-/// Schedules a daily bedtime reminder based on the user's recent average bedtime.
+@MainActor
+protocol BedtimeReminderWatchAvailabilityProviding {
+    var isPaired: Bool { get }
+}
+
+@MainActor
+struct WatchConnectivityBedtimeReminderWatchAvailabilityProvider: BedtimeReminderWatchAvailabilityProviding {
+    var isPaired: Bool {
+        guard WCSession.isSupported() else { return false }
+        return WCSession.default.isPaired
+    }
+}
+
+/// Schedules the next bedtime reminder based on the user's recent average bedtime.
 @MainActor
 final class BedtimeReminderScheduler {
     static let shared = BedtimeReminderScheduler()
@@ -40,9 +54,12 @@ final class BedtimeReminderScheduler {
         static let legacyNotificationIdentifier = "com.raftel.dune.bedtime-watch-reminder"
         static let notificationIdentifier = "com.raftel.dune.bedtime-reminder"
         static let lookbackDays = 7
+        static let watchWearLookbackInterval: TimeInterval = 90 * 60
     }
 
     private let sleepService: SleepQuerying
+    private let watchWearStateService: WatchWearStateQuerying
+    private let watchAvailabilityProvider: BedtimeReminderWatchAvailabilityProviding
     private let notificationScheduler: BedtimeReminderNotificationScheduling
     private let bedtimeCalculator: CalculateAverageBedtimeUseCase
     private let userDefaults: UserDefaults
@@ -52,6 +69,8 @@ final class BedtimeReminderScheduler {
 
     init(
         sleepService: SleepQuerying = SleepQueryService(manager: .shared),
+        watchWearStateService: WatchWearStateQuerying = HeartRateQueryService(manager: .shared),
+        watchAvailabilityProvider: BedtimeReminderWatchAvailabilityProviding = WatchConnectivityBedtimeReminderWatchAvailabilityProvider(),
         notificationScheduler: BedtimeReminderNotificationScheduling = UserNotificationCenterBedtimeReminderScheduler(),
         bedtimeCalculator: CalculateAverageBedtimeUseCase = .init(),
         userDefaults: UserDefaults = .standard,
@@ -59,6 +78,8 @@ final class BedtimeReminderScheduler {
         now: @escaping () -> Date = Date.init
     ) {
         self.sleepService = sleepService
+        self.watchWearStateService = watchWearStateService
+        self.watchAvailabilityProvider = watchAvailabilityProvider
         self.notificationScheduler = notificationScheduler
         self.bedtimeCalculator = bedtimeCalculator
         self.userDefaults = userDefaults
@@ -77,6 +98,11 @@ final class BedtimeReminderScheduler {
 
         let isEnabled = userDefaults.object(forKey: Self.settingsKey) as? Bool ?? true
         guard isEnabled else {
+            await removePendingReminder()
+            return
+        }
+
+        guard watchAvailabilityProvider.isPaired else {
             await removePendingReminder()
             return
         }
@@ -121,14 +147,28 @@ final class BedtimeReminderScheduler {
         let leadTime = configuredLeadTime()
         let bedtimeMinutes = (bedtime.hour ?? 0) * 60 + (bedtime.minute ?? 0)
         let triggerMinutes = (bedtimeMinutes - leadTime.minutes + (24 * 60)) % (24 * 60)
+        guard let triggerDate = nextTriggerDate(triggerMinutes: triggerMinutes, from: currentDate) else {
+            await removePendingReminder()
+            return
+        }
 
-        var triggerComponents = DateComponents()
-        triggerComponents.hour = triggerMinutes / 60
-        triggerComponents.minute = triggerMinutes % 60
+        if await shouldSkipReminderBecauseWatchIsLikelyWorn(
+            currentDate: currentDate,
+            triggerDate: triggerDate
+        ) {
+            await removePendingReminder()
+            AppLogger.notification.info("[BedtimeReminder] Skipped because Apple Watch appears to be worn near bedtime")
+            return
+        }
+
+        let triggerComponents = calendar.dateComponents(
+            [.year, .month, .day, .hour, .minute],
+            from: triggerDate
+        )
 
         let content = UNMutableNotificationContent()
-        content.title = String(localized: "Start winding down now for better recovery tomorrow.")
-        content.body = String(localized: "Heading to bed around your usual time can improve sleep quality, recovery, and workout consistency.")
+        content.title = String(localized: "Put on your Apple Watch before bed.")
+        content.body = String(localized: "Wear your Apple Watch to bed to track sleep.")
         content.sound = .default
         content.userInfo = NotificationResponsePayload(
             routeKind: NotificationRoute.sleepDetail.destination.rawValue,
@@ -138,16 +178,14 @@ final class BedtimeReminderScheduler {
         let request = UNNotificationRequest(
             identifier: Constants.notificationIdentifier,
             content: content,
-            trigger: UNCalendarNotificationTrigger(dateMatching: triggerComponents, repeats: true)
+            trigger: UNCalendarNotificationTrigger(dateMatching: triggerComponents, repeats: false)
         )
 
         await removePendingReminder()
 
         do {
             try await notificationScheduler.add(request)
-            let hh = triggerComponents.hour ?? 0
-            let mm = triggerComponents.minute ?? 0
-            AppLogger.notification.info("[BedtimeReminder] Scheduled at \(hh):\(String(format: "%02d", mm))")
+            AppLogger.notification.info("[BedtimeReminder] Scheduled for \(triggerDate.formatted(date: .abbreviated, time: .shortened))")
         } catch {
             AppLogger.notification.error("[BedtimeReminder] Failed to schedule reminder: \(error.localizedDescription)")
         }
@@ -164,5 +202,38 @@ final class BedtimeReminderScheduler {
             return BedtimeReminderLeadTime.defaultValue
         }
         return leadTime
+    }
+
+    private func nextTriggerDate(triggerMinutes: Int, from referenceDate: Date) -> Date? {
+        let startOfDay = calendar.startOfDay(for: referenceDate)
+        guard let todayTrigger = calendar.date(byAdding: .minute, value: triggerMinutes, to: startOfDay) else {
+            return nil
+        }
+
+        if todayTrigger > referenceDate {
+            return todayTrigger
+        }
+
+        return calendar.date(byAdding: .day, value: 1, to: todayTrigger)
+    }
+
+    private func shouldSkipReminderBecauseWatchIsLikelyWorn(
+        currentDate: Date,
+        triggerDate: Date
+    ) async -> Bool {
+        let evaluationWindowStart = triggerDate.addingTimeInterval(-Constants.watchWearLookbackInterval)
+        guard currentDate >= evaluationWindowStart, currentDate < triggerDate else {
+            return false
+        }
+
+        let sampleWindowStart = max(
+            evaluationWindowStart,
+            currentDate.addingTimeInterval(-Constants.watchWearLookbackInterval)
+        )
+
+        return await watchWearStateService.hasRecentWatchHeartRateSample(
+            startingAt: sampleWindowStart,
+            endingAt: currentDate
+        )
     }
 }

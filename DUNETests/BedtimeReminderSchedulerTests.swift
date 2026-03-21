@@ -6,7 +6,7 @@ import UserNotifications
 @Suite("BedtimeReminderScheduler")
 @MainActor
 struct BedtimeReminderSchedulerTests {
-    private let expectedTitle = String(localized: "Start winding down now for better recovery tomorrow.")
+    private let expectedTitle = String(localized: "Put on your Apple Watch before bed.")
 
     @Test("Schedules reminder using selected lead time", arguments: BedtimeReminderLeadTime.allCases)
     func schedulesReminderUsingSelectedLeadTime(leadTime: BedtimeReminderLeadTime) async throws {
@@ -15,6 +15,7 @@ struct BedtimeReminderSchedulerTests {
         let userDefaults = try makeUserDefaults()
         userDefaults.set(leadTime.rawValue, forKey: BedtimeReminderLeadTime.storageKey)
         let notificationScheduler = MockBedtimeNotificationScheduler(authorized: true)
+        let watchWearStateService = MockWatchWearStateService(response: false)
         let sleepService = MockSleepService(
             calendar: calendar,
             referenceDate: now,
@@ -27,6 +28,8 @@ struct BedtimeReminderSchedulerTests {
 
         let scheduler = BedtimeReminderScheduler(
             sleepService: sleepService,
+            watchWearStateService: watchWearStateService,
+            watchAvailabilityProvider: MockWatchAvailabilityProvider(),
             notificationScheduler: notificationScheduler,
             userDefaults: userDefaults,
             calendar: calendar,
@@ -42,19 +45,51 @@ struct BedtimeReminderSchedulerTests {
         #expect(notificationScheduler.requests.count == 1)
 
         let request = try #require(notificationScheduler.requests.first)
-        let trigger = try #require(request.trigger as? UNCalendarNotificationTrigger)
+        let triggerDate = try triggerDate(for: request, calendar: calendar)
         switch leadTime {
         case .thirtyMinutes:
-            #expect(trigger.dateComponents.hour == 23)
-            #expect(trigger.dateComponents.minute == 0)
+            let expected = try expectedDate(year: 2026, month: 3, day: 8, hour: 23, minute: 0, calendar: calendar)
+            #expect(triggerDate == expected)
         case .oneHour:
-            #expect(trigger.dateComponents.hour == 22)
-            #expect(trigger.dateComponents.minute == 30)
+            let expected = try expectedDate(year: 2026, month: 3, day: 8, hour: 22, minute: 30, calendar: calendar)
+            #expect(triggerDate == expected)
         case .twoHours:
-            #expect(trigger.dateComponents.hour == 21)
-            #expect(trigger.dateComponents.minute == 30)
+            let expected = try expectedDate(year: 2026, month: 3, day: 8, hour: 21, minute: 30, calendar: calendar)
+            #expect(triggerDate == expected)
         }
         #expect(request.content.title == expectedTitle)
+        #expect(await watchWearStateService.queryCount() == 0)
+    }
+
+    @Test("Uses one hour default lead time when no selection is stored")
+    func usesOneHourDefaultLeadTimeWhenSelectionMissing() async throws {
+        let calendar = Calendar(identifier: .gregorian)
+        let now = try #require(calendar.date(from: DateComponents(year: 2026, month: 3, day: 8, hour: 12)))
+        let userDefaults = try makeUserDefaults()
+        let notificationScheduler = MockBedtimeNotificationScheduler(authorized: true)
+
+        let scheduler = BedtimeReminderScheduler(
+            sleepService: MockSleepService(
+                calendar: calendar,
+                referenceDate: now,
+                stagesByOffset: [
+                    1: [makeSleepStage(dayOffset: 1, hour: 23, minute: 30, calendar: calendar, referenceDate: now)]
+                ]
+            ),
+            watchWearStateService: MockWatchWearStateService(response: false),
+            watchAvailabilityProvider: MockWatchAvailabilityProvider(),
+            notificationScheduler: notificationScheduler,
+            userDefaults: userDefaults,
+            calendar: calendar,
+            now: { now }
+        )
+
+        await scheduler.refreshSchedule()
+
+        let request = try #require(notificationScheduler.requests.first)
+        let triggerDate = try triggerDate(for: request, calendar: calendar)
+        let expected = try expectedDate(year: 2026, month: 3, day: 8, hour: 22, minute: 30, calendar: calendar)
+        #expect(triggerDate == expected)
     }
 
     @Test("Removes pending reminder without scheduling when disabled")
@@ -67,6 +102,8 @@ struct BedtimeReminderSchedulerTests {
         let notificationScheduler = MockBedtimeNotificationScheduler(authorized: true)
         let scheduler = BedtimeReminderScheduler(
             sleepService: MockSleepService(calendar: calendar, referenceDate: now, stagesByOffset: [:]),
+            watchWearStateService: MockWatchWearStateService(response: false),
+            watchAvailabilityProvider: MockWatchAvailabilityProvider(),
             notificationScheduler: notificationScheduler,
             userDefaults: userDefaults,
             calendar: calendar,
@@ -91,6 +128,8 @@ struct BedtimeReminderSchedulerTests {
 
         let scheduler = BedtimeReminderScheduler(
             sleepService: MockSleepService(calendar: calendar, referenceDate: now, stagesByOffset: [:]),
+            watchWearStateService: MockWatchWearStateService(response: false),
+            watchAvailabilityProvider: MockWatchAvailabilityProvider(),
             notificationScheduler: notificationScheduler,
             userDefaults: userDefaults,
             calendar: calendar,
@@ -113,6 +152,7 @@ struct BedtimeReminderSchedulerTests {
         let userDefaults = try makeUserDefaults()
         userDefaults.set(BedtimeReminderLeadTime.twoHours.rawValue, forKey: BedtimeReminderLeadTime.storageKey)
         let notificationScheduler = MockBedtimeNotificationScheduler(authorized: true)
+        let watchWearStateService = MockWatchWearStateService(response: false)
         let sleepService = MockSleepService(
             calendar: calendar,
             referenceDate: now,
@@ -125,6 +165,8 @@ struct BedtimeReminderSchedulerTests {
 
         let scheduler = BedtimeReminderScheduler(
             sleepService: sleepService,
+            watchWearStateService: watchWearStateService,
+            watchAvailabilityProvider: MockWatchAvailabilityProvider(),
             notificationScheduler: notificationScheduler,
             userDefaults: userDefaults,
             calendar: calendar,
@@ -141,9 +183,10 @@ struct BedtimeReminderSchedulerTests {
         #expect(notificationScheduler.requests.count == 2)
 
         let request = try #require(notificationScheduler.requests.last)
-        let trigger = try #require(request.trigger as? UNCalendarNotificationTrigger)
-        #expect(trigger.dateComponents.hour == 23)
-        #expect(trigger.dateComponents.minute == 0)
+        let triggerDate = try triggerDate(for: request, calendar: calendar)
+        let expected = try expectedDate(year: 2026, month: 3, day: 8, hour: 23, minute: 0, calendar: calendar)
+        #expect(triggerDate == expected)
+        #expect(await watchWearStateService.queryCount() == 0)
     }
 
     @Test("Force refresh schedules once notification authorization is granted after an earlier skip")
@@ -166,6 +209,8 @@ struct BedtimeReminderSchedulerTests {
 
         let scheduler = BedtimeReminderScheduler(
             sleepService: sleepService,
+            watchWearStateService: MockWatchWearStateService(response: false),
+            watchAvailabilityProvider: MockWatchAvailabilityProvider(),
             notificationScheduler: notificationScheduler,
             userDefaults: userDefaults,
             calendar: calendar,
@@ -180,9 +225,177 @@ struct BedtimeReminderSchedulerTests {
 
         #expect(notificationScheduler.requests.count == 1)
         let request = try #require(notificationScheduler.requests.first)
+        let triggerDate = try triggerDate(for: request, calendar: calendar)
+        let expected = try expectedDate(year: 2026, month: 3, day: 8, hour: 23, minute: 0, calendar: calendar)
+        #expect(triggerDate == expected)
+    }
+
+    @Test("Schedules tomorrow when today's reminder time already passed")
+    func schedulesTomorrowWhenTodayHasPassed() async throws {
+        let calendar = Calendar(identifier: .gregorian)
+        let now = try #require(calendar.date(from: DateComponents(year: 2026, month: 3, day: 8, hour: 23, minute: 10)))
+        let userDefaults = try makeUserDefaults()
+        userDefaults.set(BedtimeReminderLeadTime.thirtyMinutes.rawValue, forKey: BedtimeReminderLeadTime.storageKey)
+        let notificationScheduler = MockBedtimeNotificationScheduler(authorized: true)
+
+        let scheduler = BedtimeReminderScheduler(
+            sleepService: MockSleepService(
+                calendar: calendar,
+                referenceDate: now,
+                stagesByOffset: [
+                    1: [makeSleepStage(dayOffset: 1, hour: 23, minute: 30, calendar: calendar, referenceDate: now)]
+                ]
+            ),
+            watchWearStateService: MockWatchWearStateService(response: false),
+            watchAvailabilityProvider: MockWatchAvailabilityProvider(),
+            notificationScheduler: notificationScheduler,
+            userDefaults: userDefaults,
+            calendar: calendar,
+            now: { now }
+        )
+
+        await scheduler.refreshSchedule()
+
+        let request = try #require(notificationScheduler.requests.first)
+        let triggerDate = try triggerDate(for: request, calendar: calendar)
+        let expected = try expectedDate(year: 2026, month: 3, day: 9, hour: 23, minute: 0, calendar: calendar)
+        #expect(triggerDate == expected)
+    }
+
+    @Test("Does not skip tonight's reminder just because watch data exists earlier in the day")
+    func doesNotSkipEarlierDayReminderWhenWatchDataExists() async throws {
+        let calendar = Calendar(identifier: .gregorian)
+        let now = try #require(calendar.date(from: DateComponents(year: 2026, month: 3, day: 8, hour: 12)))
+        let userDefaults = try makeUserDefaults()
+        let notificationScheduler = MockBedtimeNotificationScheduler(authorized: true)
+        let watchWearStateService = MockWatchWearStateService(response: true)
+
+        let scheduler = BedtimeReminderScheduler(
+            sleepService: MockSleepService(
+                calendar: calendar,
+                referenceDate: now,
+                stagesByOffset: [
+                    1: [makeSleepStage(dayOffset: 1, hour: 23, minute: 30, calendar: calendar, referenceDate: now)]
+                ]
+            ),
+            watchWearStateService: watchWearStateService,
+            watchAvailabilityProvider: MockWatchAvailabilityProvider(),
+            notificationScheduler: notificationScheduler,
+            userDefaults: userDefaults,
+            calendar: calendar,
+            now: { now }
+        )
+
+        await scheduler.refreshSchedule()
+
+        #expect(notificationScheduler.requests.count == 1)
+        #expect(await watchWearStateService.queryCount() == 0)
+    }
+
+    @Test("Removes reminder when watch is likely worn near the trigger time")
+    func removesReminderWhenWatchLikelyWornNearTrigger() async throws {
+        let calendar = Calendar(identifier: .gregorian)
+        let now = try #require(calendar.date(from: DateComponents(year: 2026, month: 3, day: 8, hour: 22, minute: 10)))
+        let userDefaults = try makeUserDefaults()
+        let notificationScheduler = MockBedtimeNotificationScheduler(authorized: true)
+        let watchWearStateService = MockWatchWearStateService(response: true)
+
+        let scheduler = BedtimeReminderScheduler(
+            sleepService: MockSleepService(
+                calendar: calendar,
+                referenceDate: now,
+                stagesByOffset: [
+                    1: [makeSleepStage(dayOffset: 1, hour: 23, minute: 30, calendar: calendar, referenceDate: now)]
+                ]
+            ),
+            watchWearStateService: watchWearStateService,
+            watchAvailabilityProvider: MockWatchAvailabilityProvider(),
+            notificationScheduler: notificationScheduler,
+            userDefaults: userDefaults,
+            calendar: calendar,
+            now: { now }
+        )
+
+        await scheduler.refreshSchedule(force: true)
+
+        #expect(notificationScheduler.requests.isEmpty)
+        #expect(await watchWearStateService.queryCount() == 1)
+    }
+
+    @Test("Removes reminder when Apple Watch is unavailable")
+    func removesReminderWhenWatchUnavailable() async throws {
+        let calendar = Calendar(identifier: .gregorian)
+        let now = try #require(calendar.date(from: DateComponents(year: 2026, month: 3, day: 8, hour: 12)))
+        let userDefaults = try makeUserDefaults()
+        let notificationScheduler = MockBedtimeNotificationScheduler(authorized: true)
+
+        let scheduler = BedtimeReminderScheduler(
+            sleepService: MockSleepService(calendar: calendar, referenceDate: now, stagesByOffset: [:]),
+            watchWearStateService: MockWatchWearStateService(response: false),
+            watchAvailabilityProvider: MockWatchAvailabilityProvider(isPaired: false, isWatchAppInstalled: false),
+            notificationScheduler: notificationScheduler,
+            userDefaults: userDefaults,
+            calendar: calendar,
+            now: { now }
+        )
+
+        await scheduler.refreshSchedule()
+
+        #expect(notificationScheduler.requests.isEmpty)
+        #expect(notificationScheduler.removedIdentifiers == [
+            "com.raftel.dune.bedtime-reminder",
+            "com.raftel.dune.bedtime-watch-reminder"
+        ])
+    }
+
+    @Test("Schedules reminder when watch is paired even if companion app is not installed")
+    func schedulesReminderWithoutCompanionAppInstalled() async throws {
+        let calendar = Calendar(identifier: .gregorian)
+        let now = try #require(calendar.date(from: DateComponents(year: 2026, month: 3, day: 8, hour: 12)))
+        let userDefaults = try makeUserDefaults()
+        let notificationScheduler = MockBedtimeNotificationScheduler(authorized: true)
+
+        let scheduler = BedtimeReminderScheduler(
+            sleepService: MockSleepService(
+                calendar: calendar,
+                referenceDate: now,
+                stagesByOffset: [
+                    1: [makeSleepStage(dayOffset: 1, hour: 23, minute: 30, calendar: calendar, referenceDate: now)]
+                ]
+            ),
+            watchWearStateService: MockWatchWearStateService(response: false),
+            watchAvailabilityProvider: MockWatchAvailabilityProvider(isPaired: true, isWatchAppInstalled: false),
+            notificationScheduler: notificationScheduler,
+            userDefaults: userDefaults,
+            calendar: calendar,
+            now: { now }
+        )
+
+        await scheduler.refreshSchedule()
+
+        #expect(notificationScheduler.requests.count == 1)
+    }
+
+    private func triggerDate(for request: UNNotificationRequest, calendar: Calendar) throws -> Date {
         let trigger = try #require(request.trigger as? UNCalendarNotificationTrigger)
-        #expect(trigger.dateComponents.hour == 23)
-        #expect(trigger.dateComponents.minute == 0)
+        return try #require(calendar.date(from: trigger.dateComponents))
+    }
+
+    private func expectedDate(
+        year: Int,
+        month: Int,
+        day: Int,
+        hour: Int,
+        minute: Int,
+        calendar: Calendar
+    ) throws -> Date {
+        try #require(calendar.date(from: DateComponents(
+            year: year,
+            month: month,
+            day: day,
+            hour: hour,
+            minute: minute
+        )))
     }
 
     private func makeUserDefaults() throws -> UserDefaults {
@@ -242,6 +455,30 @@ private struct MockSleepService: SleepQuerying {
     func fetchLastNightSleepSummary(for date: Date) async throws -> SleepSummary? {
         nil
     }
+}
+
+private actor MockWatchWearStateService: WatchWearStateQuerying {
+    private let response: Bool
+    private var intervals: [(Date, Date)] = []
+
+    init(response: Bool) {
+        self.response = response
+    }
+
+    func hasRecentWatchHeartRateSample(startingAt startDate: Date, endingAt endDate: Date) async -> Bool {
+        intervals.append((startDate, endDate))
+        return response
+    }
+
+    func queryCount() -> Int {
+        intervals.count
+    }
+}
+
+@MainActor
+private struct MockWatchAvailabilityProvider: BedtimeReminderWatchAvailabilityProviding {
+    var isPaired = true
+    var isWatchAppInstalled = true
 }
 
 @MainActor
