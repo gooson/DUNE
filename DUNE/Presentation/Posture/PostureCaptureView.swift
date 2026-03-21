@@ -375,7 +375,9 @@ struct CameraPreviewView: UIViewRepresentable {
 
 final class CameraPreviewUIView: UIView {
     private var rotationCoordinator: AVCaptureDevice.RotationCoordinator?
+    private var rotationObservation: NSKeyValueObservation?
     private var lastReportedPreviewRotationAngle: CGFloat?
+    private var onPreviewRotationAngleChange: ((CGFloat) -> Void)?
 
     override class var layerClass: AnyClass { AVCaptureVideoPreviewLayer.self }
 
@@ -389,12 +391,28 @@ final class CameraPreviewUIView: UIView {
         isMirrored: Bool,
         onPreviewRotationAngleChange: ((CGFloat) -> Void)?
     ) {
+        self.onPreviewRotationAngleChange = onPreviewRotationAngleChange
         previewLayer.session = session
         previewLayer.videoGravity = .resizeAspectFill
 
         if rotationCoordinator?.device !== captureDevice {
+            rotationObservation?.invalidate()
+            rotationObservation = nil
+
             rotationCoordinator = captureDevice.map {
                 AVCaptureDevice.RotationCoordinator(device: $0, previewLayer: previewLayer)
+            }
+
+            // KVO-observe rotation angle so the preview stays upright on Mac
+            // (where device orientation changes never retrigger updateUIView).
+            rotationObservation = rotationCoordinator?.observe(
+                \.videoRotationAngleForHorizonLevelPreview,
+                options: [.new, .initial]
+            ) { [weak self] _, change in
+                let angle = change.newValue ?? 0
+                DispatchQueue.main.async { [weak self] in
+                    self?.applyRotationAngle(angle)
+                }
             }
         }
 
@@ -402,8 +420,12 @@ final class CameraPreviewUIView: UIView {
         connection.automaticallyAdjustsVideoMirroring = false
         connection.isVideoMirrored = isMirrored
 
-        let angle = rotationCoordinator?.videoRotationAngleForHorizonLevelPreview ?? 0
-        guard connection.isVideoRotationAngleSupported(angle) else { return }
+        applyRotationAngle(rotationCoordinator?.videoRotationAngleForHorizonLevelPreview ?? 0)
+    }
+
+    private func applyRotationAngle(_ angle: CGFloat) {
+        guard let connection = previewLayer.connection,
+              connection.isVideoRotationAngleSupported(angle) else { return }
         connection.videoRotationAngle = angle
 
         if lastReportedPreviewRotationAngle != angle {
