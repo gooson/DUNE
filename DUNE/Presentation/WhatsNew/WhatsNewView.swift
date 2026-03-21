@@ -12,30 +12,21 @@ struct WhatsNewView: View {
 
     @Environment(\.dismiss) private var dismiss
 
+    /// In automatic mode, show only the latest (first) release.
+    private var visibleReleases: [WhatsNewReleaseData] {
+        switch mode {
+        case .automatic:
+            releases.isEmpty ? [] : [releases[0]]
+        case .manual:
+            releases
+        }
+    }
+
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: DS.Spacing.xl) {
-                ForEach(releases) { release in
-                    VStack(alignment: .leading, spacing: DS.Spacing.lg) {
-                        releaseHeader(release: release)
-
-                        VStack(spacing: DS.Spacing.md) {
-                            ForEach(release.features) { feature in
-                                NavigationLink {
-                                    WhatsNewFeatureDetailView(
-                                        release: release,
-                                        feature: feature,
-                                        mode: mode
-                                    )
-                                } label: {
-                                    WhatsNewFeatureRow(feature: feature)
-                                }
-                                .buttonStyle(.plain)
-                                .accessibilityIdentifier("whatsnew-row-\(feature.id)")
-                            }
-                        }
-                        .padding(.horizontal, DS.Spacing.lg)
-                    }
+            VStack(alignment: .leading, spacing: DS.Spacing.xxl) {
+                ForEach(visibleReleases) { release in
+                    releaseSection(release: release)
                 }
             }
             .padding(.vertical, DS.Spacing.md)
@@ -65,25 +56,54 @@ struct WhatsNewView: View {
         .accessibilityIdentifier("whatsnew-screen")
     }
 
-    private func releaseHeader(release: WhatsNewReleaseData) -> some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.md) {
-            Text("What's New")
-                .font(.system(.largeTitle, design: .rounded, weight: .bold))
+    // MARK: - Release Section
 
-            HStack(alignment: .top, spacing: DS.Spacing.md) {
-                WhatsNewVersionBadge(version: release.version)
+    private func releaseSection(release: WhatsNewReleaseData) -> some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.lg) {
+            sectionHeader(release: release)
 
-                Text(release.intro)
-                    .font(.subheadline)
-                    .foregroundStyle(DS.Color.textSecondary)
-                    .fixedSize(horizontal: false, vertical: true)
+            VStack(spacing: DS.Spacing.md) {
+                ForEach(release.features) { feature in
+                    NavigationLink {
+                        WhatsNewFeatureDetailView(
+                            release: release,
+                            feature: feature,
+                            mode: mode
+                        )
+                    } label: {
+                        WhatsNewFeatureRow(feature: feature)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityIdentifier("whatsnew-row-\(feature.id)")
+                }
             }
+            .padding(.horizontal, DS.Spacing.lg)
+        }
+    }
+
+    private func sectionHeader(release: WhatsNewReleaseData) -> some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.md) {
+            HStack(alignment: .firstTextBaseline) {
+                Text("What's New")
+                    .font(.system(.largeTitle, design: .rounded, weight: .bold))
+
+                Spacer()
+
+                WhatsNewVersionBadge(version: release.version)
+            }
+
+            Text(release.intro)
+                .font(.subheadline)
+                .foregroundStyle(DS.Color.textSecondary)
+                .fixedSize(horizontal: false, vertical: true)
         }
         .padding(.top, DS.Spacing.md)
         .padding(.horizontal, DS.Spacing.lg)
         .textCase(nil)
     }
 }
+
+// MARK: - Feature Row
 
 private struct WhatsNewFeatureRow: View {
     let feature: WhatsNewFeatureItem
@@ -125,6 +145,8 @@ private struct WhatsNewFeatureRow: View {
         .accessibilityElement(children: .combine)
     }
 }
+
+// MARK: - Feature Detail
 
 private struct WhatsNewFeatureDetailView: View {
     let release: WhatsNewReleaseData
@@ -191,7 +213,34 @@ private struct WhatsNewFeatureDetailView: View {
         .accessibilityIdentifier("whatsnew-detail-\(feature.id)")
     }
 
+    @ViewBuilder
     private var heroArtwork: some View {
+        if let assetName = feature.screenshotAsset {
+            screenshotHero(assetName: assetName)
+        } else {
+            symbolHero
+        }
+    }
+
+    /// Real screenshot hero — shown when screenshotAsset is provided.
+    private func screenshotHero(assetName: String) -> some View {
+        Image(assetName)
+            .resizable()
+            .scaledToFit()
+            .frame(maxWidth: .infinity)
+            .frame(maxHeight: 400)
+            .clipShape(RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous)
+                    .strokeBorder(.white.opacity(0.12))
+            )
+            .shadow(color: .black.opacity(0.2), radius: 12, y: 6)
+            .accessibilityLabel(feature.title)
+            .accessibilityIdentifier("whatsnew-artwork-\(feature.id)-hero")
+    }
+
+    /// Fallback SF Symbol hero — used when no screenshot is available.
+    private var symbolHero: some View {
         ZStack {
             RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous)
                 .fill(
@@ -231,13 +280,6 @@ private struct WhatsNewFeatureDetailView: View {
             RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous)
                 .strokeBorder(.white.opacity(0.12))
         )
-        .overlay(alignment: .topLeading) {
-            Color.clear
-                .frame(width: 1, height: 1)
-                .accessibilityElement(children: .ignore)
-                .accessibilityLabel(feature.title)
-                .accessibilityIdentifier("whatsnew-artwork-\(feature.id)-hero")
-        }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(feature.title)
         .accessibilityIdentifier("whatsnew-artwork-\(feature.id)-hero")
@@ -298,7 +340,7 @@ private struct WhatsNewVersionBadge: View {
 #Preview {
     NavigationStack {
         WhatsNewView(
-            releases: WhatsNewManager.shared.orderedReleases(preferredVersion: "0.2.0"),
+            releases: WhatsNewManager.shared.orderedReleases(preferredVersion: "0.5.0"),
             mode: .manual
         )
     }
