@@ -762,6 +762,7 @@
 		B436B4B8674090B703AA70A5 /* WellnessViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E380EC98B19E3059C141F1B /* WellnessViewModelTests.swift */; };
 		B43DF330B53C48C8E8862121 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A8B9695E041B2FDA423693 /* ContentView.swift */; };
 		B4759B5276FEEE4755FC5D11 /* ImmersiveRecoverySummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7E8FCC6ECA980DDB7CDD14 /* ImmersiveRecoverySummary.swift */; };
+		B4BBB4D4023FF4D157B18F9E /* CorrectiveExercisesSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0935A4E2D04002965E68EDB /* CorrectiveExercisesSectionView.swift */; };
 		B5343E2B431447DABC66BFAC /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FC1ABC946AF7D3798A6BB69A /* Colors.xcassets */; };
 		B57E086BE8E2A6997933916A /* ExercisePickerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2440341D6480E1B5BF84D08 /* ExercisePickerSheet.swift */; };
 		B5A224A841FDFDD5FBA67D2D /* CloudSyncConsentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE38415A2416BA59A79AB274 /* CloudSyncConsentView.swift */; };
@@ -1740,6 +1741,7 @@
 		A06885791FBC1C56C1C866F0 /* MetricDetailViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricDetailViewModelTests.swift; sourceTree = "<group>"; };
 		A0786FBA36AD886ABD4F315B /* RecoveryModifierService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoveryModifierService.swift; sourceTree = "<group>"; };
 		A07C9920925813361939D479 /* PostureCaptureDiagnosticsSmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostureCaptureDiagnosticsSmokeTests.swift; sourceTree = "<group>"; };
+		A0935A4E2D04002965E68EDB /* CorrectiveExercisesSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectiveExercisesSectionView.swift; sourceTree = "<group>"; };
 		A0D614DE8E764C244EA79E70 /* ActivityPersonalRecordService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityPersonalRecordService.swift; sourceTree = "<group>"; };
 		A102590CB05BEC487D529242 /* CarouselRoutineCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselRoutineCardView.swift; sourceTree = "<group>"; };
 		A16A0B3CBD132DADD226C3C0 /* UnifiedWorkoutRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnifiedWorkoutRow.swift; sourceTree = "<group>"; };
@@ -3342,6 +3344,7 @@
 			children = (
 				F4A49B8CCD32D8A522CF9A5B /* AngleOverlay.swift */,
 				D4B4EEDF0D9588A7DF08B19E /* BodyGuideOverlay.swift */,
+				A0935A4E2D04002965E68EDB /* CorrectiveExercisesSectionView.swift */,
 				AA2F7027BBB4DC1015941756 /* DistanceIndicatorView.swift */,
 				F2440341D6480E1B5BF84D08 /* ExercisePickerSheet.swift */,
 				E2515DFF6A1DFD4F81AFE686 /* FormCheckOverlay.swift */,
@@ -4302,6 +4305,7 @@
 				D055B2F29BF3D797B256C789 /* ConsistencyInfoSheet.swift in Sources */,
 				283877D1823947D0F1488673 /* ContentView.swift in Sources */,
 				FDADA1008418B267FEE52880 /* CorrectiveExerciseUseCase.swift in Sources */,
+				B4BBB4D4023FF4D157B18F9E /* CorrectiveExercisesSectionView.swift in Sources */,
 				045075C2AB4C83BF33CB71FB /* CorrectiveRecommendation.swift in Sources */,
 				C24B243CE5933DF20ED69ABE /* CreateCustomExerciseView.swift in Sources */,
 				94D6B783007C23991D9CA96F /* CreateTemplateView.swift in Sources */,
