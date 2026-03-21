@@ -6,9 +6,8 @@ import AVFoundation
 ///
 /// Monitors checkpoint evaluation results and speaks coaching cues via
 /// `AVSpeechSynthesizer` with cooldown-based repetition suppression.
-///
-/// All public methods must be called from `@MainActor` (the owning ViewModel is `@MainActor`).
-final class FormVoiceCoach: @unchecked Sendable {
+@MainActor
+final class FormVoiceCoach {
 
     // MARK: - Types
 
@@ -26,15 +25,10 @@ final class FormVoiceCoach: @unchecked Sendable {
             switch self {
             case .normal:  10.0
             case .caution: 5.0
-            case .warning: 5.0
+            case .warning: 3.0
             }
         }
     }
-
-    // MARK: - Configuration
-
-    /// Base cooldown (used for testing injection).
-    let cooldown: TimeInterval
 
     // MARK: - Dependencies
 
@@ -44,7 +38,7 @@ final class FormVoiceCoach: @unchecked Sendable {
     // MARK: - State
 
     private var lastSpokenTimes: [String: Date] = [:]
-    private var isEnabled = false
+    private(set) var isEnabled = false
     private var cachedCheckpoints: [String: FormCheckpoint] = [:]
     private var cachedRuleID: String?
 
@@ -53,8 +47,7 @@ final class FormVoiceCoach: @unchecked Sendable {
 
     // MARK: - Init
 
-    init(cooldown: TimeInterval = 5.0, now: @escaping () -> Date = { Date() }) {
-        self.cooldown = cooldown
+    init(now: @escaping @Sendable () -> Date = { Date() }) {
         self.now = now
 
         // Cache voice once at init
@@ -82,8 +75,6 @@ final class FormVoiceCoach: @unchecked Sendable {
 
     /// Evaluates the current form state and speaks coaching cues as needed.
     func processFormState(_ state: ExerciseFormState, rule: ExerciseFormRule) {
-        guard isEnabled else { return }
-
         // Early exit if already speaking — avoid building unnecessary collections.
         guard !synthesizer.isSpeaking else { return }
 
@@ -166,7 +157,7 @@ final class FormVoiceCoach: @unchecked Sendable {
         synthesizer.speak(utterance)
     }
 
-    private func configureAudioSession() {
+    private nonisolated func configureAudioSession() {
         do {
             let session = AVAudioSession.sharedInstance()
             try session.setCategory(.playback, options: .duckOthers)
@@ -176,7 +167,7 @@ final class FormVoiceCoach: @unchecked Sendable {
         }
     }
 
-    private func deactivateAudioSession() {
+    private nonisolated func deactivateAudioSession() {
         do {
             let session = AVAudioSession.sharedInstance()
             try session.setActive(false, options: .notifyOthersOnDeactivation)
