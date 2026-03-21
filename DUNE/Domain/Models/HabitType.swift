@@ -68,6 +68,42 @@ enum HabitIconCategory: String, Sendable, CaseIterable {
     }
 }
 
+// MARK: - Habit Time of Day
+
+enum HabitTimeOfDay: String, Sendable, CaseIterable {
+    case morning
+    case afternoon
+    case evening
+    case anytime
+
+    var displayName: String {
+        switch self {
+        case .morning:   String(localized: "Morning")
+        case .afternoon: String(localized: "Afternoon")
+        case .evening:   String(localized: "Evening")
+        case .anytime:   String(localized: "Anytime")
+        }
+    }
+
+    var iconName: String {
+        switch self {
+        case .morning:   "sunrise.fill"
+        case .afternoon: "sun.max.fill"
+        case .evening:   "moon.fill"
+        case .anytime:   "clock.fill"
+        }
+    }
+
+    var sortIndex: Int {
+        switch self {
+        case .morning:   0
+        case .afternoon: 1
+        case .evening:   2
+        case .anytime:   3
+        }
+    }
+}
+
 enum HabitCycleAction: String, Sendable, Equatable {
     case complete
     case skip
@@ -106,4 +142,5 @@ struct HabitProgress: Sendable, Identifiable {
     let isOverdue: Bool
     let lastCycleAction: HabitCycleAction?
     let historyCount: Int
+    let timeOfDay: HabitTimeOfDay
 }

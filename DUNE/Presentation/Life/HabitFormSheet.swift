@@ -14,6 +14,8 @@ struct HabitFormSheet: View {
                 typeSection
                 goalSection
                 frequencySection
+                timeOfDaySection
+                reminderTimeSection
                 autoLinkSection
 
                 if let error = viewModel.validationError {
@@ -163,6 +165,49 @@ struct HabitFormSheet: View {
                         .foregroundStyle(.secondary)
                 }
             }
+        }
+    }
+
+    private var timeOfDaySection: some View {
+        Section("Time of Day") {
+            Picker("When", selection: $viewModel.selectedTimeOfDay) {
+                ForEach(HabitTimeOfDay.allCases, id: \.self) { time in
+                    Label(time.displayName, systemImage: time.iconName)
+                        .tag(time)
+                }
+            }
+            .pickerStyle(.segmented)
+            .accessibilityIdentifier("habit-form-timeofday")
+        }
+    }
+
+    @State private var reminderDate = Calendar.current.date(
+        from: DateComponents(hour: 9, minute: 0)
+    ) ?? Date()
+
+    private var reminderTimeSection: some View {
+        Section("Reminder") {
+            DatePicker(
+                "Reminder time",
+                selection: Binding(
+                    get: {
+                        Calendar.current.date(
+                            from: DateComponents(hour: viewModel.reminderHour, minute: viewModel.reminderMinute)
+                        ) ?? Date()
+                    },
+                    set: { newDate in
+                        let components = Calendar.current.dateComponents([.hour, .minute], from: newDate)
+                        viewModel.reminderHour = components.hour ?? 9
+                        viewModel.reminderMinute = components.minute ?? 0
+                    }
+                ),
+                displayedComponents: .hourAndMinute
+            )
+            .accessibilityIdentifier("habit-form-reminder-time")
+
+            Text("You'll receive reminders based on the habit's frequency")
+                .font(.caption)
+                .foregroundStyle(.secondary)
         }
     }
 

@@ -9,7 +9,7 @@ final class LifeViewModel {
     private let maxGoalValue: Double = 1440 // 24 hours in minutes
     private let maxCountGoal: Double = 999
     private let maxIntervalDays = 365
-    private let reminderOffsetsInDays = [3, 1, 0]
+    // Reminder offsets are now computed per-habit via reminderOffsets(for:)
 
     private let skipMemoMarker = "[dune-life-cycle-skip]"
     private let snoozeMemoMarker = "[dune-life-cycle-snooze]"
@@ -33,6 +33,9 @@ final class LifeViewModel {
     var intervalStartPoint: HabitRecurringStartPoint = .createdAt
     var intervalCustomStartDate: Date = Calendar.current.startOfDay(for: Date())
     var isAutoLinked: Bool = false
+    var reminderHour: Int = 9
+    var reminderMinute: Int = 0
+    var selectedTimeOfDay: HabitTimeOfDay = .anytime
     var validationError: String?
     var isSaving = false
 
@@ -100,7 +103,10 @@ final class LifeViewModel {
             recurringCustomStartDate: validated.recurringCustomStartDate,
             recurringStartConfiguredAt: validated.recurringStartConfiguredAt,
             isAutoLinked: validated.isAutoLinked,
-            autoLinkSource: validated.isAutoLinked ? "exercise" : nil
+            autoLinkSource: validated.isAutoLinked ? "exercise" : nil,
+            reminderHour: reminderHour,
+            reminderMinute: reminderMinute,
+            timeOfDay: selectedTimeOfDay
         )
     }
 
@@ -116,6 +122,9 @@ final class LifeViewModel {
         habit.goalUnit = validated.goalUnit
         habit.isAutoLinked = validated.isAutoLinked
         habit.autoLinkSourceRaw = validated.isAutoLinked ? "exercise" : nil
+        habit.reminderHour = reminderHour
+        habit.reminderMinute = reminderMinute
+        habit.timeOfDayRaw = selectedTimeOfDay.rawValue
 
         let calendar = Calendar.current
         let previousStartPoint = habit.recurringStartPoint
@@ -236,13 +245,23 @@ final class LifeViewModel {
 
     func refreshReminderSchedule(for habit: HabitDefinition, referenceDate: Date = Date()) {
         let snapshot = cycleSnapshot(for: habit, referenceDate: referenceDate)
+        let offsets = HabitReminderScheduler.reminderOffsets(for: habit.frequency)
         Task {
             await HabitReminderScheduler.reschedule(
                 habitID: habit.id,
                 habitName: habit.name,
                 nextDueDate: snapshot?.nextDueDate,
-                reminderOffsetsInDays: reminderOffsetsInDays
+                reminderOffsetsInDays: offsets,
+                reminderHour: habit.reminderHour,
+                reminderMinute: habit.reminderMinute
             )
+        }
+    }
+
+    /// Cancel all pending reminders for this habit (called after early completion).
+    func cancelPendingReminders(for habit: HabitDefinition) {
+        Task {
+            await HabitReminderScheduler.removeAllReminders(habitID: habit.id)
         }
     }
 
@@ -288,7 +307,8 @@ final class LifeViewModel {
                     isDue: cycleSnapshot.isDue,
                     isOverdue: cycleSnapshot.isOverdue,
                     lastCycleAction: cycleSnapshot.lastAction,
-                    historyCount: cycleSnapshot.historyCount
+                    historyCount: cycleSnapshot.historyCount,
+                    timeOfDay: habit.timeOfDay
                 ))
                 continue
             }
@@ -340,7 +360,8 @@ final class LifeViewModel {
                 isDue: false,
                 isOverdue: false,
                 lastCycleAction: nil,
-                historyCount: logs.count
+                historyCount: logs.count,
+                timeOfDay: habit.timeOfDay
             ))
         }
 
@@ -386,6 +407,9 @@ final class LifeViewModel {
         goalValue = habit.habitType == .check ? "1" : String(format: "%.0f", habit.goalValue)
         goalUnit = habit.goalUnit ?? ""
         isAutoLinked = habit.isAutoLinked
+        reminderHour = habit.reminderHour
+        reminderMinute = habit.reminderMinute
+        selectedTimeOfDay = habit.timeOfDay
         validationError = nil
 
         switch habit.frequency {
@@ -424,9 +448,41 @@ final class LifeViewModel {
         intervalStartPoint = .createdAt
         intervalCustomStartDate = calendarStartOfDay(Date())
         isAutoLinked = false
+        reminderHour = 9
+        reminderMinute = 0
+        selectedTimeOfDay = .anytime
         validationError = nil
         editingHabit = nil
         logInputValue = ""
+    }
+
+    // MARK: - Template Prefill
+
+    func prefillFromTemplate(_ template: HabitTemplate) {
+        name = template.name
+        selectedIconCategory = template.iconCategory
+        selectedType = template.type
+        goalValue = template.type == .check ? "1" : String(format: "%.0f", template.suggestedGoalValue)
+        goalUnit = template.suggestedGoalUnit ?? ""
+        selectedTimeOfDay = template.suggestedTimeOfDay
+
+        switch template.suggestedFrequency {
+        case .daily:
+            frequencyType = "daily"
+            weeklyTargetDays = 7
+            intervalDays = 7
+        case .weekly(let days):
+            frequencyType = "weekly"
+            weeklyTargetDays = days
+            intervalDays = 7
+        case .interval(let days):
+            frequencyType = "interval"
+            intervalDays = days
+            weeklyTargetDays = 3
+            intervalStartPoint = .createdAt
+        }
+
+        validationError = nil
     }
 
     // MARK: - Private
@@ -540,7 +596,9 @@ final class LifeViewModel {
 
         let isDue = today >= dueDate
         let isOverdue = today > dueDate
-        let canComplete = isDue || lastAction == nil
+        // Early completion: always completable unless already completed in current cycle
+        let isCompletedThisCycle = lastAction == .complete && !isDue
+        let canComplete = !isCompletedThisCycle
 
         return HabitCycleSnapshot(
             nextDueDate: dueDate,
@@ -661,33 +719,59 @@ final class LifeViewModel {
     }
 }
 
-private enum HabitReminderScheduler {
+enum HabitReminderScheduler {
+
+    // MARK: - Interval-Proportional Offsets
+
+    static func reminderOffsets(for frequency: HabitFrequency) -> [Int] {
+        switch frequency {
+        case .daily:
+            return [0]
+        case .weekly:
+            return [0]
+        case .interval(let days):
+            switch days {
+            case 1:       return [0]
+            case 2...7:   return [1, 0]
+            case 8...14:  return [3, 1, 0]
+            case 15...30: return [7, 3, 1, 0]
+            default:      return [14, 7, 3, 0]
+            }
+        }
+    }
+
+    // MARK: - Schedule
+
     static func reschedule(
         habitID: UUID,
         habitName: String,
         nextDueDate: Date?,
-        reminderOffsetsInDays: [Int]
+        reminderOffsetsInDays: [Int],
+        reminderHour: Int = 9,
+        reminderMinute: Int = 0
     ) async {
         let center = UNUserNotificationCenter.current()
-        let identifiers = reminderOffsetsInDays.map { notificationID(for: habitID, offsetInDays: $0) }
-        center.removePendingNotificationRequests(withIdentifiers: identifiers)
+
+        // Remove all existing reminders for this habit (use broad prefix match)
+        await removeAllReminders(habitID: habitID)
 
         guard let nextDueDate else { return }
 
         let calendar = Calendar.current
         let now = Date()
+        let hour = max(0, min(reminderHour, 23))
+        let minute = max(0, min(reminderMinute, 59))
 
         for offset in reminderOffsetsInDays {
             guard let candidateDate = calendar.date(byAdding: .day, value: -offset, to: nextDueDate) else {
                 continue
             }
 
-            let triggerDate = scheduledTriggerDate(from: candidateDate, calendar: calendar)
-            guard triggerDate > now else { continue }
+            var components = calendar.dateComponents([.year, .month, .day], from: candidateDate)
+            components.hour = hour
+            components.minute = minute
 
-            var components = calendar.dateComponents([.year, .month, .day], from: triggerDate)
-            components.hour = 9
-            components.minute = 0
+            guard let triggerDate = calendar.date(from: components), triggerDate > now else { continue }
 
             let content = UNMutableNotificationContent()
             content.title = String(localized: "Life Checklist")
@@ -718,14 +802,19 @@ private enum HabitReminderScheduler {
         }
     }
 
-    private static func notificationID(for habitID: UUID, offsetInDays: Int) -> String {
-        "dune.life.habit.\(habitID.uuidString).\(offsetInDays)d"
+    // MARK: - Cancel All Reminders
+
+    static func removeAllReminders(habitID: UUID) async {
+        let center = UNUserNotificationCenter.current()
+        let prefix = "dune.life.habit.\(habitID.uuidString)."
+        let pending = await center.pendingNotificationRequests()
+        let matching = pending.filter { $0.identifier.hasPrefix(prefix) }.map(\.identifier)
+        if !matching.isEmpty {
+            center.removePendingNotificationRequests(withIdentifiers: matching)
+        }
     }
 
-    private static func scheduledTriggerDate(from date: Date, calendar: Calendar) -> Date {
-        var components = calendar.dateComponents([.year, .month, .day], from: date)
-        components.hour = 9
-        components.minute = 0
-        return calendar.date(from: components) ?? date
+    private static func notificationID(for habitID: UUID, offsetInDays: Int) -> String {
+        "dune.life.habit.\(habitID.uuidString).\(offsetInDays)d"
     }
 }

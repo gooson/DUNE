@@ -23,6 +23,7 @@ enum LifeHabitLogSync {
 struct LifeView: View {
     @State private var viewModel = LifeViewModel()
     @State private var localRefreshSignal = 0
+    @State private var isShowingTemplateSheet = false
     @Environment(\.modelContext) private var modelContext
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.appTheme) private var theme
@@ -78,15 +79,33 @@ struct LifeView: View {
         }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
-                Button {
-                    viewModel.resetForm()
-                    viewModel.isShowingAddSheet = true
+                Menu {
+                    Button {
+                        viewModel.resetForm()
+                        viewModel.isShowingAddSheet = true
+                    } label: {
+                        Label("New Habit", systemImage: "plus")
+                    }
+
+                    Button {
+                        isShowingTemplateSheet = true
+                    } label: {
+                        Label("From Template", systemImage: "doc.on.doc")
+                    }
                 } label: {
                     Image(systemName: "plus")
                 }
                 .accessibilityLabel("Add habit")
                 .accessibilityIdentifier("life-toolbar-add")
             }
+        }
+        .sheet(isPresented: $isShowingTemplateSheet) {
+            HabitTemplateSheet(
+                viewModel: viewModel,
+                onSelect: {
+                    viewModel.isShowingAddSheet = true
+                }
+            )
         }
         .sheet(isPresented: $viewModel.isShowingAddSheet) {
             HabitFormSheet(
@@ -148,6 +167,12 @@ private struct HabitListQueryView: View {
     @State private var historySelection: HabitHistorySelection?
     @State private var actionSelection: HabitActionSelection?
     @State private var heroAppeared = false
+    @State private var selectedCategoryFilter: HabitIconCategory?
+    @State private var weeklyRates: [WeeklyCompletionRate] = []
+    @State private var monthlyRates: [MonthlyCompletionRate] = []
+    @State private var heatmapData: [DailyCompletionCount] = []
+    @State private var weeklyReport: WeeklyHabitReport?
+    @State private var showingReport = false
 
     private struct HabitHistorySelection: Identifiable {
         let id: UUID
@@ -165,6 +190,11 @@ private struct HabitListQueryView: View {
             heroSection
                 .reportTabHeroFrame()
                 .accessibilityIdentifier("life-hero-progress")
+
+            // Analytics section (chart + heatmap)
+            if !habits.isEmpty {
+                analyticsSection
+            }
 
             if isRegular {
                 HStack(alignment: .top, spacing: DS.Spacing.md) {
@@ -246,6 +276,9 @@ private struct HabitListQueryView: View {
             hasher.combine(habit.autoLinkSourceRaw ?? "")
             hasher.combine(habit.sortOrder)
             hasher.combine(habit.isArchived)
+            hasher.combine(habit.reminderHour)
+            hasher.combine(habit.reminderMinute)
+            hasher.combine(habit.timeOfDayRaw)
         }
         return hasher.finalize()
     }
@@ -261,6 +294,123 @@ private struct HabitListQueryView: View {
             hasher.combine(log.memo ?? "")
         }
         return hasher.finalize()
+    }
+
+    // MARK: - Analytics Section
+
+    private var analyticsSection: some View {
+        VStack(spacing: DS.Spacing.md) {
+            HabitCompletionChartView(
+                weeklyRates: weeklyRates,
+                monthlyRates: monthlyRates
+            )
+
+            HabitHeatmapView(data: heatmapData)
+
+            if weeklyReport != nil {
+                Button {
+                    showingReport = true
+                } label: {
+                    Label("View Weekly Report", systemImage: "doc.text.magnifyingglass")
+                        .font(.subheadline.bold())
+                        .foregroundStyle(DS.Color.tabLife)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, DS.Spacing.sm)
+                        .background {
+                            RoundedRectangle(cornerRadius: DS.Radius.sm)
+                                .fill(.ultraThinMaterial)
+                        }
+                }
+                .buttonStyle(.plain)
+                .accessibilityIdentifier("life-weekly-report-button")
+            }
+        }
+        .navigationDestination(isPresented: $showingReport) {
+            if let report = weeklyReport {
+                WeeklyHabitReportView(report: report)
+            }
+        }
+    }
+
+    // MARK: - Category Filter
+
+    private var categoryFilterSection: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: DS.Spacing.xs) {
+                filterChip(label: String(localized: "All"), isSelected: selectedCategoryFilter == nil) {
+                    selectedCategoryFilter = nil
+                }
+
+                ForEach(activeCategories, id: \.self) { category in
+                    filterChip(
+                        label: category.displayName,
+                        icon: category.iconName,
+                        isSelected: selectedCategoryFilter == category
+                    ) {
+                        selectedCategoryFilter = selectedCategoryFilter == category ? nil : category
+                    }
+                }
+            }
+            .padding(.horizontal, DS.Spacing.xxs)
+        }
+        .scrollBounceBehavior(.basedOnSize)
+    }
+
+    private var activeCategories: [HabitIconCategory] {
+        let used = Set(viewModel.habitProgresses.map(\.iconCategory))
+        return HabitIconCategory.allCases.filter { used.contains($0) }
+    }
+
+    private func filterChip(
+        label: String,
+        icon: String? = nil,
+        isSelected: Bool,
+        action: @escaping () -> Void
+    ) -> some View {
+        Button(action: action) {
+            HStack(spacing: DS.Spacing.xxs) {
+                if let icon {
+                    Image(systemName: icon)
+                        .font(.caption2)
+                }
+                Text(label)
+                    .font(.caption)
+                    .fontWeight(isSelected ? .semibold : .regular)
+            }
+            .padding(.horizontal, DS.Spacing.sm)
+            .padding(.vertical, DS.Spacing.xs)
+            .background {
+                if isSelected {
+                    Capsule().fill(DS.Color.tabLife.opacity(DS.Opacity.medium))
+                } else {
+                    Capsule().fill(.ultraThinMaterial)
+                }
+            }
+            .overlay {
+                if isSelected {
+                    Capsule()
+                        .stroke(DS.Color.tabLife, lineWidth: 1)
+                }
+            }
+        }
+        .buttonStyle(.plain)
+        .foregroundStyle(isSelected ? DS.Color.tabLife : .secondary)
+    }
+
+    // MARK: - Filtered & Grouped Progresses
+
+    private var filteredProgresses: [HabitProgress] {
+        guard let filter = selectedCategoryFilter else { return viewModel.habitProgresses }
+        return viewModel.habitProgresses.filter { $0.iconCategory == filter }
+    }
+
+    private var groupedProgresses: [(timeOfDay: HabitTimeOfDay, items: [HabitProgress])] {
+        let grouped = Dictionary(grouping: filteredProgresses, by: \.timeOfDay)
+        return HabitTimeOfDay.allCases
+            .compactMap { timeOfDay in
+                guard let items = grouped[timeOfDay], !items.isEmpty else { return nil }
+                return (timeOfDay: timeOfDay, items: items)
+            }
     }
 
     // MARK: - Sections
@@ -285,15 +435,27 @@ private struct HabitListQueryView: View {
                 )
             } else {
                 VStack(spacing: DS.Spacing.sm) {
-                    ForEach(viewModel.habitProgresses) { progress in
-                        HabitRowView(
-                            progress: progress,
-                            onToggle: { toggleCheck(habitId: progress.id) },
-                            onUpdateValue: { value in updateValue(habitId: progress.id, value: value) },
-                            trailingAccessory: AnyView(habitActionsButton(for: progress))
-                        )
-                        .contextMenu {
-                            habitActionItems(for: progress, deferred: true)
+                    // Category filter chips
+                    if activeCategories.count > 1 {
+                        categoryFilterSection
+                    }
+
+                    // Time-of-day grouped habits
+                    ForEach(groupedProgresses, id: \.timeOfDay) { group in
+                        if groupedProgresses.count > 1 || group.timeOfDay != .anytime {
+                            timeOfDayHeader(group.timeOfDay, count: group.items.count)
+                        }
+
+                        ForEach(group.items) { progress in
+                            HabitRowView(
+                                progress: progress,
+                                onToggle: { toggleCheck(habitId: progress.id) },
+                                onUpdateValue: { value in updateValue(habitId: progress.id, value: value) },
+                                trailingAccessory: AnyView(habitActionsButton(for: progress))
+                            )
+                            .contextMenu {
+                                habitActionItems(for: progress, deferred: true)
+                            }
                         }
                     }
                 }
@@ -686,6 +848,23 @@ private struct HabitListQueryView: View {
         }
     }
 
+    private func timeOfDayHeader(_ timeOfDay: HabitTimeOfDay, count: Int) -> some View {
+        HStack(spacing: DS.Spacing.xs) {
+            Image(systemName: timeOfDay.iconName)
+                .font(.caption)
+                .foregroundStyle(DS.Color.tabLife)
+            Text(timeOfDay.displayName)
+                .font(.caption)
+                .fontWeight(.semibold)
+                .foregroundStyle(.secondary)
+            Spacer()
+            Text("\(count)")
+                .font(.caption2)
+                .foregroundStyle(.tertiary)
+        }
+        .padding(.top, DS.Spacing.xs)
+    }
+
     // MARK: - Actions
 
     private func todayLogs(for habit: HabitDefinition, date: Date = Date()) -> [HabitLog] {
@@ -724,6 +903,8 @@ private struct HabitListQueryView: View {
             if let log = viewModel.createCycleActionLog(for: habit, action: .complete) {
                 insertLog(log, into: habit)
                 viewModel.didFinishSaving()
+                // Cancel pending reminders on early completion, reschedule for next cycle
+                viewModel.cancelPendingReminders(for: habit)
                 viewModel.refreshReminderSchedule(for: habit)
             }
             recalculate()
@@ -805,6 +986,40 @@ private struct HabitListQueryView: View {
         )
         viewModel.calculateAutoExerciseProgresses(
             exerciseRecords: exerciseRecords
+        )
+        recalculateAnalytics()
+    }
+
+    private func recalculateAnalytics() {
+        let logSnapshots = habitLogs.map { log in
+            HabitLogSnapshot(
+                habitID: log.habitDefinition?.id ?? UUID(),
+                date: log.date,
+                value: log.value,
+                memo: log.memo
+            )
+        }
+        let habitSnapshots = habits.map { habit in
+            HabitSnapshot(
+                id: habit.id,
+                name: habit.name,
+                goalValue: habit.goalValue,
+                frequencyTypeRaw: habit.frequencyTypeRaw,
+                weeklyTargetDays: habit.weeklyTargetDays
+            )
+        }
+
+        weeklyRates = HabitAnalyticsService.weeklyCompletionRates(
+            logs: logSnapshots, habits: habitSnapshots
+        )
+        monthlyRates = HabitAnalyticsService.monthlyCompletionRates(
+            logs: logSnapshots, habits: habitSnapshots
+        )
+        heatmapData = HabitAnalyticsService.dailyCompletionCounts(
+            logs: logSnapshots
+        )
+        weeklyReport = HabitAnalyticsService.weeklyReport(
+            logs: logSnapshots, habits: habitSnapshots
         )
     }
 

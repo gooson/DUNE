@@ -22,6 +22,9 @@ final class HabitDefinition {
     var sortOrder: Int = 0
     var isArchived: Bool = false
     var createdAt: Date = Date()
+    var reminderHour: Int = 9
+    var reminderMinute: Int = 0
+    var timeOfDayRaw: String = "anytime"
 
     // CloudKit: relationship MUST be Optional (Correction #32)
     @Relationship(deleteRule: .cascade, inverse: \HabitLog.habitDefinition)
@@ -51,6 +54,10 @@ final class HabitDefinition {
         HabitRecurringStartPoint(rawValue: recurringStartPointRaw) ?? .createdAt
     }
 
+    var timeOfDay: HabitTimeOfDay {
+        HabitTimeOfDay(rawValue: timeOfDayRaw) ?? .anytime
+    }
+
     // MARK: - Init
 
     init(
@@ -65,7 +72,10 @@ final class HabitDefinition {
         recurringStartConfiguredAt: Date? = nil,
         isAutoLinked: Bool = false,
         autoLinkSource: String? = nil,
-        sortOrder: Int = 0
+        sortOrder: Int = 0,
+        reminderHour: Int = 9,
+        reminderMinute: Int = 0,
+        timeOfDay: HabitTimeOfDay = .anytime
     ) {
         self.id = UUID()
         self.name = name
@@ -76,6 +86,9 @@ final class HabitDefinition {
         self.isAutoLinked = isAutoLinked
         self.autoLinkSourceRaw = autoLinkSource
         self.sortOrder = sortOrder
+        self.reminderHour = reminderHour
+        self.reminderMinute = reminderMinute
+        self.timeOfDayRaw = timeOfDay.rawValue
         self.createdAt = Date()
 
         let calendar = Calendar.current
