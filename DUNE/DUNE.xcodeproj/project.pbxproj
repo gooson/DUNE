@@ -772,6 +772,7 @@
 		B74D2E3C792AD1740643250C /* ActivityPersonalRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60947737B84C07CCFB3AD0E8 /* ActivityPersonalRecord.swift */; };
 		B751D392B68ADF09B923261E /* 0.2.0.json in Resources */ = {isa = PBXBuildFile; fileRef = 96F5179C1476342DC2379489 /* 0.2.0.json */; };
 		B7606BBE651EF0032CB60817 /* InsightCategory+View.swift in Sources */ = {isa = PBXBuildFile; fileRef = D994A392672AE7C4C51F5579 /* InsightCategory+View.swift */; };
+		B76F1D337E8ED37EF4433E09 /* WatchPostureSummaryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886D82231DCA9949B3C1B055 /* WatchPostureSummaryCard.swift */; };
 		B77564E8520C074F01830D3B /* LifeSmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E37E4D6D8BA8C8B0A76CA57 /* LifeSmokeTests.swift */; };
 		B7BDAE4185073979EDE45DCB /* AppSchemaVersions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58514E1E986A1EEBF81E6549 /* AppSchemaVersions.swift */; };
 		B7C6FDE69AAEDC914A63F636 /* PersonalRecordsInfoSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31EAF2A3A059B4BDC5773C2E /* PersonalRecordsInfoSheet.swift */; };
@@ -1642,6 +1643,7 @@
 		8815741BE59A16C7A4227958 /* StrengthPersonalRecordTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrengthPersonalRecordTests.swift; sourceTree = "<group>"; };
 		882DAAFE1CE3B956CC6D92A3 /* SmallWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallWidgetView.swift; sourceTree = "<group>"; };
 		883A719B58C8D0622ABF49F8 /* MuscleMap3DView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuscleMap3DView.swift; sourceTree = "<group>"; };
+		886D82231DCA9949B3C1B055 /* WatchPostureSummaryCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchPostureSummaryCard.swift; sourceTree = "<group>"; };
 		8898A3CA38365F33AD42139F /* SleepDeficitAnalysis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepDeficitAnalysis.swift; sourceTree = "<group>"; };
 		8961A32F30C89FDC43C9D037 /* WatchDeleteRequestPolicyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchDeleteRequestPolicyTests.swift; sourceTree = "<group>"; };
 		898A5D4A742BE6B7C1A3895A /* MotionTrackingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionTrackingService.swift; sourceTree = "<group>"; };
@@ -3314,6 +3316,7 @@
 			children = (
 				42B8DD1902CA8C47B7E6CD3E /* SleepPredictionCard.swift */,
 				EC8F9BE2A26652A4127A1448 /* VitalCard.swift */,
+				886D82231DCA9949B3C1B055 /* WatchPostureSummaryCard.swift */,
 				46042A019450D3D3F1655E11 /* WellnessHeroCard.swift */,
 				B558BAFE0B7621F0766FA36C /* WellnessSectionGroup.swift */,
 			);
@@ -4650,6 +4653,7 @@
 				B89AEB22CAD0D2B4A06726D9 /* VolumePeriod+View.swift in Sources */,
 				538C565534D6BE12F079C52D /* WatchConnectivityModels.swift in Sources */,
 				32CDDCAB36FE7F87D2894657 /* WatchExerciseLibraryPayloadBuilder.swift in Sources */,
+				B76F1D337E8ED37EF4433E09 /* WatchPostureSummaryCard.swift in Sources */,
 				AE006E4AE75E2509DCA7F9CF /* WatchSessionManager.swift in Sources */,
 				4337D3461D700FA31FE828E7 /* WavePreset.swift in Sources */,
 				FC056FB54F71C80BD31D09DC /* WaveRefreshIndicator.swift in Sources */,

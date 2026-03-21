@@ -98,6 +98,8 @@ final class WatchPostureMonitor {
     private var deviceMotionStopTask: Task<Void, Never>?
     /// Date when today's summary was last reset.
     private var summaryResetDate: Date?
+    /// Throttle: last time posture summary was sent to iPhone.
+    private var lastSummarySyncDate: Date?
 
     // MARK: - Init
 
@@ -264,6 +266,22 @@ final class WatchPostureMonitor {
         case .running, .unknown:
             break
         }
+
+        // Sync updated summary to iPhone on state transition
+        syncSummaryToPhone()
+    }
+
+    /// Sends current daily summary to iPhone via WatchConnectivity.
+    /// Throttled to at most once per 60 seconds to avoid hot-path encoding.
+    /// `force: true` bypasses throttle (e.g. after stretch reminder).
+    private func syncSummaryToPhone(force: Bool = false) {
+        let now = Date()
+        if !force, let lastSync = lastSummarySyncDate,
+           now.timeIntervalSince(lastSync) < 60 {
+            return
+        }
+        lastSummarySyncDate = now
+        WatchConnectivityManager.shared.sendPostureSummary(buildDailySummary())
     }
 
     /// Accumulate elapsed time since last state change into the appropriate daily counter.
@@ -331,6 +349,7 @@ final class WatchPostureMonitor {
 
         stretchReminderCount += 1
         scheduleLocalNotification()
+        syncSummaryToPhone(force: true)
     }
 
     private func scheduleLocalNotification() {
