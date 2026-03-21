@@ -118,6 +118,17 @@ A skill is a set of local instructions to follow that is stored in a `SKILL.md` 
 - 문서에 명시된 도구가 현재 세션에 없으면, 가장 가까운 대체 도구/절차로 실행하고 그 차이를 짧게 사용자에게 알립니다.
 - 상위 지침(시스템/개발자)과 충돌하는 항목은 상위 지침을 우선합니다.
 
+## Codex Adapter Layer
+
+- `.claude/**` 는 **수정하지 않는 source of truth** 입니다. Codex 전용 번역/보강은 `.codex/**` 와 `AGENTS.md` 에만 기록합니다.
+- Codex 실행 adapter 문서는 다음 3개를 기준으로 유지합니다.
+  - `.codex/agent-map.md`
+  - `.codex/skill-compat.md`
+  - `.codex/agent-memory/README.md`
+- 공통 실행 규칙(`Task tool`, `TodoWrite`, read-only review, memory policy)은 `.codex/skill-compat.md` 를 canonical source로 사용합니다.
+- agent별 모델/추론/edit policy/memory source는 `.codex/agent-map.md` 를 canonical source로 사용합니다.
+- `.claude/agents/*.md` 또는 핵심 skill 목록이 바뀌면 Codex adapter 문서를 함께 갱신하고 `python3 scripts/check-codex-claude-parity.py` 로 drift를 검사합니다.
+
 ## Permission Parity (`.claude/settings.local.json`)
 
 Codex는 아래 allow list를 Claude와 동일 기준으로 취급합니다(단, 시스템 sandbox 정책이 더 강하면 sandbox 우선).
