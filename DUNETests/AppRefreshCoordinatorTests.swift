@@ -215,24 +215,78 @@ struct AppRefreshCoordinatorTests {
         #expect(result == true)
     }
 
-    // MARK: - CloudKit Remote Change Bypass
+    // MARK: - CloudKit Remote Change Throttle
 
-    @Test("cloudKitRemoteChange bypasses throttle")
-    func cloudKitRemoteChangeBypassesThrottle() async {
+    @Test("cloudKitRemoteChange uses dedicated short throttle, not general throttle")
+    func cloudKitRemoteChangeUsesDedicatedThrottle() async {
         let fixedDate = Date(timeIntervalSince1970: 1000)
         let service = MockRefreshService()
         let coordinator = AppRefreshCoordinatorImpl(
             sharedHealthDataService: service,
             throttleInterval: 60,
+            cloudKitThrottleInterval: 5,
             nowProvider: { fixedDate }
         )
 
-        // Request at 0s elapsed — normally throttled, but cloudKitRemoteChange bypasses
+        // First CloudKit request passes (lastCloudKitRefreshDate is .distantPast)
         let result = await coordinator.requestRefresh(source: .cloudKitRemoteChange)
 
         #expect(result == true)
         let cacheCount = await service.invalidateCacheCallCount
         #expect(cacheCount == 1)
+    }
+
+    @Test("Rapid cloudKitRemoteChange within 5s is throttled")
+    func rapidCloudKitRemoteChangeIsThrottled() async {
+        let clock = MutableDate(Date(timeIntervalSince1970: 1000))
+        let service = MockRefreshService()
+        let coordinator = AppRefreshCoordinatorImpl(
+            sharedHealthDataService: service,
+            throttleInterval: 60,
+            cloudKitThrottleInterval: 5,
+            nowProvider: { clock.value }
+        )
+
+        // First passes
+        let first = await coordinator.requestRefresh(source: .cloudKitRemoteChange)
+
+        // Second at +2s — within CloudKit throttle
+        clock.value = Date(timeIntervalSince1970: 1002)
+        let second = await coordinator.requestRefresh(source: .cloudKitRemoteChange)
+
+        // Third at +4s — still within CloudKit throttle
+        clock.value = Date(timeIntervalSince1970: 1004)
+        let third = await coordinator.requestRefresh(source: .cloudKitRemoteChange)
+
+        #expect(first == true)
+        #expect(second == false)
+        #expect(third == false)
+        let cacheCount = await service.invalidateCacheCallCount
+        #expect(cacheCount == 1)
+    }
+
+    @Test("cloudKitRemoteChange passes after dedicated throttle interval")
+    func cloudKitRemoteChangePassesAfterThrottleInterval() async {
+        let clock = MutableDate(Date(timeIntervalSince1970: 1000))
+        let service = MockRefreshService()
+        let coordinator = AppRefreshCoordinatorImpl(
+            sharedHealthDataService: service,
+            throttleInterval: 60,
+            cloudKitThrottleInterval: 5,
+            nowProvider: { clock.value }
+        )
+
+        // First passes
+        let first = await coordinator.requestRefresh(source: .cloudKitRemoteChange)
+
+        // Second at +6s — past CloudKit throttle
+        clock.value = Date(timeIntervalSince1970: 1006)
+        let second = await coordinator.requestRefresh(source: .cloudKitRemoteChange)
+
+        #expect(first == true)
+        #expect(second == true)
+        let cacheCount = await service.invalidateCacheCallCount
+        #expect(cacheCount == 2)
     }
 
     @Test("cloudKitRemoteChange updates lastRefreshDate so subsequent non-bypass sources are throttled")
@@ -242,10 +296,11 @@ struct AppRefreshCoordinatorTests {
         let coordinator = AppRefreshCoordinatorImpl(
             sharedHealthDataService: service,
             throttleInterval: 60,
+            cloudKitThrottleInterval: 5,
             nowProvider: { clock.value }
         )
 
-        // cloudKitRemoteChange at 0s (bypasses)
+        // cloudKitRemoteChange passes (dedicated throttle)
         let first = await coordinator.requestRefresh(source: .cloudKitRemoteChange)
 
         // foreground at +10s (should be throttled — lastRefreshDate was updated)
@@ -254,6 +309,38 @@ struct AppRefreshCoordinatorTests {
 
         #expect(first == true)
         #expect(second == false)
+    }
+
+    @Test("CloudKit and general throttles are independent")
+    func cloudKitAndGeneralThrottlesAreIndependent() async {
+        let clock = MutableDate(Date(timeIntervalSince1970: 1000))
+        let service = MockRefreshService()
+        let coordinator = AppRefreshCoordinatorImpl(
+            sharedHealthDataService: service,
+            throttleInterval: 60,
+            cloudKitThrottleInterval: 5,
+            nowProvider: { clock.value }
+        )
+
+        // CloudKit at +0s passes (dedicated throttle, lastCloudKitRefreshDate is .distantPast)
+        let first = await coordinator.requestRefresh(source: .cloudKitRemoteChange)
+
+        // foreground at +61s passes general throttle (60s from init time)
+        clock.value = Date(timeIntervalSince1970: 1061)
+        let second = await coordinator.requestRefresh(source: .foreground)
+
+        // CloudKit at +62s — 62s since last CloudKit refresh, passes dedicated throttle
+        clock.value = Date(timeIntervalSince1970: 1062)
+        let third = await coordinator.requestRefresh(source: .cloudKitRemoteChange)
+
+        // foreground at +63s — only 2s since last general refresh, throttled
+        clock.value = Date(timeIntervalSince1970: 1063)
+        let fourth = await coordinator.requestRefresh(source: .foreground)
+
+        #expect(first == true)
+        #expect(second == true)
+        #expect(third == true)
+        #expect(fourth == false)
     }
 
     @Test("Request 1 second before threshold is throttled")
