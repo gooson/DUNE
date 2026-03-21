@@ -26,6 +26,7 @@
 
 ## Scene Phase / Lifecycle 콜백
 - `.active` scene phase에서 비용 높은 작업(HealthKit 쿼리 등) → `lastRefreshDate` throttle (30분 등 도메인 적합 간격)
+- `NSPersistentStoreRemoteChange` 기반 refresh에서 throttle bypass 금지 → SwiftData write가 CloudKit sync를 트리거하여 feedback loop 발생. 전용 짧은 throttle(5초 등) 사용
 
 ## Task Concurrency
 - Cancel-before-spawn: `reloadTask?.cancel()` 후 새 Task 할당
