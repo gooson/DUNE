@@ -67,7 +67,7 @@ $ARGUMENTS 에 대한 구현을 수행합니다.
 ### 3.1 자동 검증
 
 프로젝트에 맞는 명령을 실행합니다:
-- Build: `xcodebuild build ...`
+- Build: `scripts/build-ios.sh` (xcodebuild 직접 실행 금지 — build-pipeline.md 참조)
 - Test suite: `xcodebuild test ...` (xcode-project skill 참조)
 
 ### 3.2 전문 에이전트 검증

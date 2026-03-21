@@ -11,8 +11,8 @@ agent: ui-test-expert
 - **Framework**: XCTest (`XCUIApplication`, `XCUIElement`)
 - **Location**: `DUNE/DUNEUITests/`
 - **File naming**: `{Feature}UITests.swift`
-- **Run command**: `xcodebuild test -project DUNE/DUNE.xcodeproj -scheme DUNEUITests -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.2' -only-testing DUNEUITests -quiet`
-- **iPad command**: `xcodebuild test -project DUNE/DUNE.xcodeproj -scheme DUNEUITests -destination 'platform=iOS Simulator,name=iPad Pro 13-inch (M4),OS=26.2' -only-testing DUNEUITests -quiet`
+- **Run command**: `xcodebuild test -project DUNE/DUNE.xcodeproj -scheme DUNEUITests -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max,OS=26.3.1' -only-testing DUNEUITests -quiet`
+- **iPad command**: `xcodebuild test -project DUNE/DUNE.xcodeproj -scheme DUNEUITests -destination 'platform=iOS Simulator,name=iPad Pro 13-inch (M4),OS=26.3.1' -only-testing DUNEUITests -quiet`
 
 ## Accessibility Identifier Convention
 
