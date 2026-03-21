@@ -122,8 +122,8 @@ targets:
         CODE_SIGN_ENTITLEMENTS: Resources/DUNE.entitlements
         PRODUCT_BUNDLE_IDENTIFIER: com.raftel.dailve
         PRODUCT_NAME: DUNE
-        CURRENT_PROJECT_VERSION: "1"
-        MARKETING_VERSION: "0.5.0"
+        CURRENT_PROJECT_VERSION: &currentProjectVersion "1"
+        MARKETING_VERSION: &marketingVersion "0.5.0"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         GENERATE_INFOPLIST_FILE: true
         INFOPLIST_KEY_CFBundleDisplayName: DUNE
@@ -201,8 +201,8 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.raftel.dailve.watchkitapp
         PRODUCT_NAME: DUNEWatch
-        CURRENT_PROJECT_VERSION: "1"
-        MARKETING_VERSION: "0.5.0"
+        CURRENT_PROJECT_VERSION: *currentProjectVersion
+        MARKETING_VERSION: *marketingVersion
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         GENERATE_INFOPLIST_FILE: true
         INFOPLIST_FILE: ../DUNEWatch/Resources/Info.plist
@@ -251,8 +251,8 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.raftel.dailve.widget
         PRODUCT_NAME: DUNEWidget
-        CURRENT_PROJECT_VERSION: "1"
-        MARKETING_VERSION: "0.5.0"
+        CURRENT_PROJECT_VERSION: *currentProjectVersion
+        MARKETING_VERSION: *marketingVersion
         GENERATE_INFOPLIST_FILE: true
         INFOPLIST_FILE: ../DUNEWidget/Resources/Info.plist
         INFOPLIST_KEY_CFBundleDisplayName: DUNE Widget
@@ -391,8 +391,8 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.raftel.dailve.vision
         PRODUCT_NAME: DUNEVision
-        CURRENT_PROJECT_VERSION: "1"
-        MARKETING_VERSION: "0.5.0"
+        CURRENT_PROJECT_VERSION: *currentProjectVersion
+        MARKETING_VERSION: *marketingVersion
         ASSETCATALOG_COMPILER_APPICON_NAME: VisionAppIcon
         GENERATE_INFOPLIST_FILE: true
         INFOPLIST_FILE: ../DUNEVision/Resources/Info.plist
@@ -438,8 +438,8 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.raftel.dailve.vision.widgets
         PRODUCT_NAME: DUNEVisionWidgets
-        CURRENT_PROJECT_VERSION: "1"
-        MARKETING_VERSION: "0.5.0"
+        CURRENT_PROJECT_VERSION: *currentProjectVersion
+        MARKETING_VERSION: *marketingVersion
         GENERATE_INFOPLIST_FILE: true
         INFOPLIST_FILE: ../DUNEVisionWidgets/Resources/Info.plist
         XROS_DEPLOYMENT_TARGET: "26.0"
