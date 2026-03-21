@@ -28420,18 +28420,19 @@
         }
       }
     },
-    "Taking longer than expected. Make sure iCloud sync is enabled on your iPhone and the DUNE app has been opened recently." : {
+    "If data doesn't appear, make sure iCloud sync is enabled in DUNE settings on your iPhone and the app has been opened at least once." : {
+      "extractionState" : "manual",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "予想より時間がかかっています。iPhoneでiCloud同期が有効になっていて、DUNEアプリを最近開いたことを確認してください。"
+            "value" : "データが表示されない場合は、iPhoneのDUNE設定でiCloud同期が有効になっていて、アプリを一度は開いたことを確認してください。"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "예상보다 시간이 오래 걸리고 있습니다. iPhone에서 iCloud 동기화가 활성화되어 있고 DUNE 앱을 최근에 열었는지 확인해 주세요."
+            "value" : "데이터가 표시되지 않으면 iPhone의 DUNE 설정에서 iCloud 동기화가 켜져 있고, 앱을 한 번 이상 실행했는지 확인하세요."
           }
         }
       }
@@ -31543,19 +31544,19 @@
         }
       }
     },
-    "Waiting for health data from your iPhone. This may take a moment." : {
+    "Health data syncs through iCloud. This may take a moment on first launch." : {
       "extractionState" : "manual",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "iPhoneからの健康データを待っています。しばらくお待ちください。"
+            "value" : "健康データはiCloudを通じて同期されます。初回起動時は少々お待ちください。"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "iPhone에서 건강 데이터를 기다리고 있습니다. 잠시만 기다려 주세요."
+            "value" : "건강 데이터가 iCloud를 통해 동기화됩니다. 첫 실행 시 잠시 걸릴 수 있어요."
           }
         }
       }

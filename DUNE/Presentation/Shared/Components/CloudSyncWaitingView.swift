@@ -22,7 +22,7 @@ struct CloudSyncWaitingView: View {
 
             if showExtendedHelp {
                 VStack(spacing: DS.Spacing.md) {
-                    Text("Taking longer than expected. Make sure iCloud sync is enabled on your iPhone and the DUNE app has been opened recently.")
+                    Text("If data doesn't appear, make sure iCloud sync is enabled in DUNE settings on your iPhone and the app has been opened at least once.")
                         .font(.subheadline)
                         .foregroundStyle(DS.Color.textSecondary)
                         .multilineTextAlignment(.center)
@@ -37,7 +37,7 @@ struct CloudSyncWaitingView: View {
                 }
                 .transition(.opacity.combined(with: .move(edge: .bottom)))
             } else {
-                Text("Waiting for health data from your iPhone. This may take a moment.")
+                Text("Health data syncs through iCloud. This may take a moment on first launch.")
                     .font(.subheadline)
                     .foregroundStyle(DS.Color.textSecondary)
                     .multilineTextAlignment(.center)
