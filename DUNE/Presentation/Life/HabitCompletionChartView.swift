@@ -85,14 +85,9 @@ struct HabitCompletionChartView: View {
             }
         }
         .chartXAxis {
-            AxisMarks(values: .automatic(desiredCount: 5)) { _ in
+            AxisMarks(values: .stride(by: .weekOfYear, count: 2)) { _ in
                 AxisGridLine()
                 AxisValueLabel(format: .dateTime.month(.narrow).day())
-            }
-        }
-        .chartOverlay { chartProxy in
-            GeometryReader { _ in
-                Color.clear
             }
         }
     }
@@ -119,7 +114,7 @@ struct HabitCompletionChartView: View {
             }
         }
         .chartXAxis {
-            AxisMarks(values: .automatic(desiredCount: 6)) { _ in
+            AxisMarks(values: .stride(by: .month)) { _ in
                 AxisGridLine()
                 AxisValueLabel(format: .dateTime.month(.abbreviated))
             }
