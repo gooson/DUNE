@@ -81,11 +81,17 @@ struct NotificationActivityDestination: Identifiable, Hashable {
 /// Activity tab — Hero-first layout.
 /// Layout: Hero → Muscle Map → Weekly Stats → Search+Suggestion+Templates → Volume → Workouts → PRs → Consistency → Frequency.
 struct ActivityView: View {
+    private enum PendingQuickStartAction {
+        case exercise(ExerciseDefinition)
+        case template(WorkoutTemplate)
+    }
+
     @State private var viewModel: ActivityViewModel
     @State private var showingExercisePicker = false
     @State private var showingAIWorkoutBuilder = false
     @State private var saveRecommendationAsTemplate: WorkoutTemplateRecommendation?
     @State private var selectedExercise: ExerciseDefinition?
+    @State private var pendingQuickStartAction: PendingQuickStartAction?
     @State private var templateConfig: TemplateWorkoutConfig?
     @State private var selectedMuscle: MuscleGroup?
     @State private var showingPRInfo = false
@@ -333,7 +339,7 @@ struct ActivityView: View {
                 .accessibilityIdentifier("activity-toolbar-add")
             }
         }
-        .sheet(isPresented: $showingExercisePicker) {
+        .sheet(isPresented: $showingExercisePicker, onDismiss: runPendingQuickStartAction) {
             ExercisePickerView(
                 library: library,
                 recentExerciseIDs: recentExerciseIDs,
@@ -524,26 +530,24 @@ struct ActivityView: View {
     }
 
     private func startExerciseFromPicker(_ exercise: ExerciseDefinition) {
+        pendingQuickStartAction = .exercise(exercise)
         showingExercisePicker = false
-        scheduleQuickStartAction {
-            selectedExercise = exercise
-        }
     }
 
     private func startTemplateFromPicker(_ template: WorkoutTemplate) {
+        pendingQuickStartAction = .template(template)
         showingExercisePicker = false
-        scheduleQuickStartAction {
-            startFromTemplate(template)
-        }
     }
 
-    private func scheduleQuickStartAction(_ action: @escaping @MainActor () -> Void) {
-        Task { @MainActor in
-            while showingExercisePicker {
-                await Task.yield()
-            }
-            await Task.yield()
-            action()
+    private func runPendingQuickStartAction() {
+        guard let pendingQuickStartAction else { return }
+        self.pendingQuickStartAction = nil
+
+        switch pendingQuickStartAction {
+        case .exercise(let exercise):
+            selectedExercise = exercise
+        case .template(let template):
+            startFromTemplate(template)
         }
     }
 

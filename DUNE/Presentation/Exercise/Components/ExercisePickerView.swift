@@ -516,7 +516,7 @@ struct ExercisePickerView: View {
             rowPrimaryAction(for: exercise)
 
             Button {
-                detailExercise = exercise
+                presentDetailSheet(for: exercise)
             } label: {
                 Image(systemName: "info.circle")
                     .foregroundStyle(DS.Color.textSecondary)
@@ -596,6 +596,16 @@ struct ExercisePickerView: View {
         DispatchQueue.main.async {
             Task { @MainActor in
                 action()
+            }
+        }
+    }
+
+    private func presentDetailSheet(for exercise: ExerciseDefinition) {
+        // Detail presentation is triggered from a list row inside a picker sheet.
+        // Hopping to the next main-queue turn avoids dropping the nested sheet on CI.
+        DispatchQueue.main.async {
+            Task { @MainActor in
+                detailExercise = exercise
             }
         }
     }
