@@ -83,14 +83,39 @@ final class ScoreRefreshService {
         let existing = try? context.fetch(descriptor).first
 
         if let existing {
-            if let v = clampedCondition { existing.conditionScore = v }
-            if let v = clampedWellness { existing.wellnessScore = v }
-            if let v = clampedReadiness { existing.readinessScore = v }
-            if let v = clampedHRV { existing.hrvValue = v }
-            if let v = clampedRHR { existing.rhrValue = v }
-            if let v = clampedSleep { existing.sleepScore = v }
+            // Only mutate fields that actually changed to avoid unnecessary
+            // CloudKit sync (dirty record → sync → remote change notification → loop).
+            var changed = false
+            if let v = clampedCondition, existing.conditionScore != v {
+                existing.conditionScore = v; changed = true
+            }
+            if let v = clampedWellness, existing.wellnessScore != v {
+                existing.wellnessScore = v; changed = true
+            }
+            if let v = clampedReadiness, existing.readinessScore != v {
+                existing.readinessScore = v; changed = true
+            }
+            if let v = clampedHRV, existing.hrvValue != v {
+                existing.hrvValue = v; changed = true
+            }
+            if let v = clampedRHR, existing.rhrValue != v {
+                existing.rhrValue = v; changed = true
+            }
+            if let v = clampedSleep, existing.sleepScore != v {
+                existing.sleepScore = v; changed = true
+            }
+            guard changed else {
+                lastRefreshedAt = now
+                scheduleSparklineReload()
+                return
+            }
             existing.createdAt = now
         } else {
+            // All fields nil means nothing to record — skip insert entirely.
+            guard clampedCondition != nil || clampedWellness != nil || clampedReadiness != nil
+                    || clampedHRV != nil || clampedRHR != nil || clampedSleep != nil else {
+                return
+            }
             let snap = HourlyScoreSnapshot(
                 date: hourDate,
                 conditionScore: clampedCondition,
