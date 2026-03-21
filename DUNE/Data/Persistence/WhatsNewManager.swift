@@ -2,15 +2,15 @@ import Foundation
 import OSLog
 
 /// Shared release catalog for the What's New surface.
-/// Loads from per-version JSON files in the `whats-new/` bundle directory.
+/// Loads from per-version JSON files bundled individually from `whats-new/`.
 final class WhatsNewManager: Sendable {
     static let shared = WhatsNewManager()
 
     private let releases: [WhatsNewReleaseData]
 
     init(bundle: Bundle = .main) {
-        guard let catalogURL = bundle.url(forResource: "catalog", withExtension: "json", subdirectory: "whats-new") else {
-            AppLogger.data.error("[WhatsNew] catalog.json not found in whats-new/")
+        guard let catalogURL = bundle.url(forResource: "catalog", withExtension: "json") else {
+            AppLogger.data.error("[WhatsNew] catalog.json not found in bundle")
             releases = []
             return
         }
@@ -30,8 +30,7 @@ final class WhatsNewManager: Sendable {
         for entry in catalogIndex.releases {
             guard let versionURL = bundle.url(
                 forResource: entry.version,
-                withExtension: "json",
-                subdirectory: "whats-new"
+                withExtension: "json"
             ) else {
                 AppLogger.data.warning("[WhatsNew] \(entry.version).json not found, skipping")
                 continue
