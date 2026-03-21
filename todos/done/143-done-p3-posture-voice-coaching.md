@@ -1,9 +1,9 @@
 ---
 source: brainstorm/realtime-video-posture-analysis
 priority: p3
-status: pending
+status: done
 created: 2026-03-16
-updated: 2026-03-16
+updated: 2026-03-22
 ---
 
 # Phase 4D: 음성 코칭

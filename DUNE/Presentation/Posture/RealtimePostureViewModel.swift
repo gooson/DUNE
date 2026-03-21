@@ -28,10 +28,14 @@ final class RealtimePostureViewModel {
     var showExercisePicker: Bool = false
     var isFormMode: Bool { selectedExercise != nil }
 
+    // Voice coaching
+    var isVoiceCoachingEnabled: Bool = false
+
     // MARK: - Dependencies
 
     private let captureService = PostureCaptureService()
     private let tracker: RealtimePoseTracker
+    private let voiceCoach = FormVoiceCoach()
 
     var captureSession: AVCaptureSession { captureService.captureSession }
     var captureServiceDevice: AVCaptureDevice? { captureService.currentDevice }
@@ -76,6 +80,8 @@ final class RealtimePostureViewModel {
 
     func stop() {
         tracker.stop()
+        voiceCoach.stop()
+        isVoiceCoachingEnabled = false
         captureService.onFrameUpdate = nil
         captureService.stopSession()
         isActive = false
@@ -90,6 +96,16 @@ final class RealtimePostureViewModel {
     func selectExercise(_ rule: ExerciseFormRule?) {
         selectedExercise = rule
         tracker.setExercise(rule)
+        // Stop voice coaching when exercise changes or cleared
+        if rule == nil {
+            voiceCoach.setEnabled(false)
+            isVoiceCoachingEnabled = false
+        }
+    }
+
+    func toggleVoiceCoaching() {
+        isVoiceCoachingEnabled.toggle()
+        voiceCoach.setEnabled(isVoiceCoachingEnabled)
     }
 
     func updateDeviceOrientation(_ orientation: UIDeviceOrientation) {
@@ -110,6 +126,11 @@ final class RealtimePostureViewModel {
         skeletonKeypoints = state.skeletonKeypoints
         is3DActive = state.is3DActive
         formState = state.formState
+
+        // Feed form state to voice coach
+        if let formState = state.formState, let rule = selectedExercise {
+            voiceCoach.processFormState(formState, rule: rule)
+        }
     }
 }
 

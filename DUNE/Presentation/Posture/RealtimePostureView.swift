@@ -83,7 +83,17 @@ struct RealtimePostureView: View {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(String(localized: "Close")) { dismiss() }
                 }
-                ToolbarItem(placement: .topBarTrailing) {
+                ToolbarItemGroup(placement: .topBarTrailing) {
+                    if viewModel.isFormMode {
+                        Button {
+                            viewModel.toggleVoiceCoaching()
+                        } label: {
+                            Image(systemName: viewModel.isVoiceCoachingEnabled ? "speaker.wave.2.fill" : "speaker.slash")
+                                .foregroundStyle(.white)
+                        }
+                        .accessibilityLabel(Text("Voice coaching"))
+                    }
+
                     Button {
                         viewModel.switchCamera()
                     } label: {

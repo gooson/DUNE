@@ -228,7 +228,7 @@ struct ExerciseFormAnalyzerTests {
         #expect(checkpoint.evaluate(degrees: 110) == .caution)  // In caution but not pass
         #expect(checkpoint.evaluate(degrees: 40) == .warning)   // Outside caution
         #expect(checkpoint.evaluate(degrees: 130) == .warning)  // Outside caution
-        #expect(checkpoint.evaluate(degrees: .nan) == .unmeasurable)
+        #expect(checkpoint.evaluate(degrees: Double.nan) == .unmeasurable)
     }
 
     @Test("Overhead press uses elbow angle for phase detection")
