@@ -3,14 +3,14 @@ source: brainstorm/e2e-ui-test-plan-all-targets
 priority: p2
 status: done
 created: 2026-03-09
-updated: 2026-03-16
+updated: 2026-03-21
 ---
 
 # E2E Phase 0 Completed Surface Index
 
 이 문서는 phase 0 `e2e` surface 중 `done` 상태 문서를 target별로 묶어 보여준다.
 세부 inventory, assertion scope, PR gate, deferred lane의 source of truth는 각 개별 `done` TODO 문서다.
-현재 열려 있는 backlog는 [101 E2E Phase 0 Open Page Backlog Index](101-ready-p2-e2e-phase0-page-backlog-index.md)에서 관리한다.
+phase 0 open backlog는 2026-03-21 기준 0건이며, closeout 아카이브는 [101 E2E Phase 0 Open Page Backlog Index](101-done-p2-e2e-phase0-page-backlog-index.md)에 남긴다.
 
 ## DUNE Today / Settings
 
@@ -37,9 +37,29 @@ updated: 2026-03-16
 - [039 ExerciseTypeDetailView](039-done-p2-e2e-dune-exercise-type-detail-view.md)
 - [040 PersonalRecordsDetailView](040-done-p2-e2e-dune-personal-records-detail-view.md)
 - [041 ConsistencyDetailView](041-done-p2-e2e-dune-consistency-detail-view.md)
+- [042 ExerciseMixDetailView](042-done-p2-e2e-dune-exercise-mix-detail-view.md)
 - [043 MuscleMapDetailView](043-done-p2-e2e-dune-muscle-map-detail-view.md)
 - [044 MuscleMap3DView](044-done-p2-e2e-dune-muscle-map-3d-view.md)
 - [045 ExercisePickerView](045-done-p2-e2e-dune-exercise-picker-view.md)
+- [046 ExerciseDetailSheet](046-done-p2-e2e-dune-exercise-detail-sheet.md)
+- [047 CreateCustomExerciseView](047-done-p2-e2e-dune-create-custom-exercise-view.md)
+- [048 ExerciseStartView](048-done-p2-e2e-dune-exercise-start-view.md)
+- [049 WorkoutSessionView](049-done-p2-e2e-dune-workout-session-view.md)
+- [050 WorkoutCompletionSheet](050-done-p2-e2e-dune-workout-completion-sheet.md)
+- [051 ExerciseView](051-done-p2-e2e-dune-exercise-view.md)
+- [052 ExerciseHistoryView](052-done-p2-e2e-dune-exercise-history-view.md)
+- [053 WorkoutTemplateListView](053-done-p2-e2e-dune-workout-template-list-view.md)
+- [054 CreateTemplateView](054-done-p2-e2e-dune-create-template-view.md)
+- [055 TemplateWorkoutContainerView](055-done-p2-e2e-dune-template-workout-container-view.md)
+- [056 TemplateWorkoutView](056-done-p2-e2e-dune-template-workout-view.md)
+- [057 CompoundWorkoutSetupView](057-done-p2-e2e-dune-compound-workout-setup-view.md)
+- [058 CompoundWorkoutView](058-done-p2-e2e-dune-compound-workout-view.md)
+- [059 CardioStartSheet](059-done-p2-e2e-dune-cardio-start-sheet.md)
+- [060 CardioSessionView](060-done-p2-e2e-dune-cardio-session-view.md)
+- [061 CardioSessionSummaryView](061-done-p2-e2e-dune-cardio-session-summary-view.md)
+- [062 HealthKitWorkoutDetailView](062-done-p2-e2e-dune-healthkit-workout-detail-view.md)
+- [063 UserCategoryManagementView](063-done-p2-e2e-dune-user-category-management-view.md)
+- [064 NotificationTargetNotFoundView](064-done-p2-e2e-dune-notification-target-not-found-view.md)
 
 ## DUNE Wellness / Life
 
@@ -87,5 +107,6 @@ updated: 2026-03-16
 ## Notes
 
 - 개별 완료 문서는 삭제하지 않는다. 상세 내용은 각 `done` TODO에서 유지한다.
-- 새 surface가 완료되면 active backlog index에서 제거한 뒤 이 문서에 추가한다.
+- phase 0 surface 74건이 모두 `done`으로 전환되었다.
+- open backlog는 비어 있으며, closeout 당시 wave 정리 기록은 [101 E2E Phase 0 Open Page Backlog Index](101-done-p2-e2e-phase0-page-backlog-index.md)에 남긴다.
 - `DUNEWidget` deferred surface 4건도 이 문서로 이동했으며, 후속 snapshot/preview lane은 별도 TODO로 계속 관리한다.

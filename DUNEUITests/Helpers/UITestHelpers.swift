@@ -223,6 +223,8 @@ enum AXID {
     static let createCustomExerciseName = "create-custom-exercise-name"
     static let createCustomExerciseCreate = "create-custom-exercise-create"
     static func createCustomExerciseMuscle(_ muscle: String) -> String { "create-custom-exercise-muscle-\(muscle)" }
+    static let templateWorkoutTransitionScreen = "template-workout-transition-screen"
+    static let templateWorkoutTransitionStart = "template-workout-transition-start"
 
     // MARK: - Exercise Picker
     static let pickerSearchField = "picker-search-field"
@@ -256,6 +258,8 @@ enum AXID {
     static let workoutSessionAddSet = "workout-session-add-set"
     static let workoutSessionFinish = "workout-session-finish"
     static func workoutSessionField(_ name: String) -> String { "workout-session-field-\(name)" }
+    static func setRowField(_ setNumber: Int, _ field: String) -> String { "set-row-field-\(setNumber)-\(field)" }
+    static func setRowComplete(_ setNumber: Int) -> String { "set-row-complete-\(setNumber)" }
     static let workoutCompletionSheet = "workout-completion-sheet"
     static let workoutCompletionDone = "workout-completion-done"
 
@@ -285,12 +289,14 @@ enum AXID {
     static let templateFormCancel = "template-form-cancel"
     static let templateWorkoutContainerScreen = "template-workout-container-screen"
     static let templateWorkoutContainerClose = "template-workout-container-close"
+    static let templateWorkoutContainerEnd = "template-workout-container-end"
     static let compoundWorkoutSetupScreen = "compound-workout-setup-screen"
     static let compoundWorkoutSetupSelectionCount = "compound-workout-setup-selection-count"
     static let compoundWorkoutSetupAddExercise = "compound-workout-setup-add-exercise"
     static func compoundWorkoutSetupRow(_ exerciseID: String) -> String { "compound-workout-setup-row-\(exerciseID)" }
     static let compoundWorkoutSetupStart = "compound-workout-setup-start"
     static let compoundWorkoutScreen = "compound-workout-screen"
+    static let compoundWorkoutFinish = "compound-workout-finish"
 
     // MARK: - Cardio
     static let cardioStartScreen = "cardio-start-screen"
@@ -304,6 +310,11 @@ enum AXID {
 
     // MARK: - Notification / HealthKit Detail
     static let healthkitWorkoutDetailScreen = "healthkit-workout-detail-screen"
+    static let healthkitWorkoutEditTitle = "healthkit-workout-edit-title"
+    static let healthkitWorkoutTitleEditorScreen = "healthkit-workout-title-editor-screen"
+    static let healthkitWorkoutTitleField = "healthkit-workout-title-field"
+    static let healthkitWorkoutTitleCancel = "healthkit-workout-title-cancel"
+    static let healthkitWorkoutTitleSave = "healthkit-workout-title-save"
     static let notificationTargetNotFoundScreen = "notification-target-not-found-screen"
 
     // MARK: - User Categories
