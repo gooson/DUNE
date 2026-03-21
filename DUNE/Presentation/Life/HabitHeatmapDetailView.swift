@@ -216,19 +216,41 @@ struct HabitHeatmapDetailView: View {
     }
 }
 
-// MARK: - Shared Heatmap Grid
+// MARK: - Shared Heatmap Grid (fills available width)
 
 struct HabitHeatmapGridView: View {
     let data: [DailyCompletionCount]
 
-    private let cellSize: CGFloat = 12
     private let cellSpacing: CGFloat = 2
     private let rows = 7
+    private let dayLabelWidth: CGFloat = 28
+    private let dayLabelTrailing: CGFloat = 4
+
+    private static let dayLabels: [String] = [
+        String(localized: "Mon"),
+        String(localized: "Tue"),
+        String(localized: "Wed"),
+        String(localized: "Thu"),
+        String(localized: "Fri"),
+        String(localized: "Sat"),
+        String(localized: "Sun"),
+    ]
 
     var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
+        GeometryReader { geometry in
+            let cellSize = computeCellSize(for: geometry.size.width)
+            let gridRows = Array(repeating: GridItem(.fixed(cellSize), spacing: cellSpacing), count: rows)
+
             HStack(alignment: .top, spacing: 0) {
-                dayLabels
+                VStack(spacing: cellSpacing) {
+                    ForEach(0..<rows, id: \.self) { row in
+                        Text(Self.dayLabels[row])
+                            .font(.system(size: 9))
+                            .foregroundStyle(.secondary)
+                            .frame(width: dayLabelWidth, height: cellSize, alignment: .trailing)
+                    }
+                }
+                .padding(.trailing, dayLabelTrailing)
 
                 LazyHGrid(rows: gridRows, spacing: cellSpacing) {
                     ForEach(paddedData) { item in
@@ -238,13 +260,32 @@ struct HabitHeatmapGridView: View {
                     }
                 }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .scrollBounceBehavior(.basedOnSize)
+        .frame(height: gridHeight)
     }
 
-    private var gridRows: [GridItem] {
-        Array(repeating: GridItem(.fixed(cellSize), spacing: cellSpacing), count: rows)
+    // MARK: - Layout
+
+    private var columnCount: Int {
+        let total = paddedData.count
+        return max(1, (total + rows - 1) / rows)
     }
+
+    private func computeCellSize(for totalWidth: CGFloat) -> CGFloat {
+        let available = totalWidth - dayLabelWidth - dayLabelTrailing
+        let cols = CGFloat(columnCount)
+        let size = (available - (cols - 1) * cellSpacing) / cols
+        return min(16, max(6, size))
+    }
+
+    private var gridHeight: CGFloat {
+        // Use midpoint cell size (11) for height estimation
+        let cellSize: CGFloat = 11
+        return CGFloat(rows) * cellSize + CGFloat(rows - 1) * cellSpacing
+    }
+
+    // MARK: - Data
 
     private var paddedData: [DailyCompletionCount] {
         guard let firstDate = data.first?.date else { return data }
@@ -273,23 +314,6 @@ struct HabitHeatmapGridView: View {
         let ratio = Double(item.completionCount) / Double(maxCount)
         let opacity = 0.2 + ratio * 0.8
         return DS.Color.tabLife.opacity(opacity)
-    }
-
-    private var dayLabels: some View {
-        VStack(spacing: cellSpacing) {
-            ForEach(0..<rows, id: \.self) { row in
-                Text(dayLabel(for: row))
-                    .font(.system(size: 8))
-                    .foregroundStyle(.secondary)
-                    .frame(width: 20, height: cellSize, alignment: .trailing)
-            }
-        }
-        .padding(.trailing, 2)
-    }
-
-    private func dayLabel(for row: Int) -> String {
-        let labels = ["M", "", "W", "", "F", "", "S"]
-        return labels[row]
     }
 }
 
