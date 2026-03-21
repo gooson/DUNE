@@ -118,6 +118,7 @@ struct CarouselHomeView: View {
             ToolbarItem(placement: .topBarTrailing) {
                 NavigationLink(value: WatchRoute.postureSettings) {
                     Image(systemName: "figure.stand")
+                        .foregroundStyle(.secondary)
                 }
             }
         }

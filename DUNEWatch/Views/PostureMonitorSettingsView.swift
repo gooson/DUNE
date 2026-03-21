@@ -4,16 +4,11 @@ import SwiftUI
 struct PostureMonitorSettingsView: View {
     @State private var postureMonitor = WatchPostureMonitor.shared
 
-    @State private var isEnabled: Bool
-    @State private var thresholdMinutes: Int
+    @State private var isEnabled = false
+    @State private var thresholdMinutes = 45
+    @State private var didLoadInitialValues = false
 
     private static let thresholdOptions = [30, 45, 60, 90, 120]
-
-    init() {
-        let monitor = WatchPostureMonitor.shared
-        _isEnabled = State(initialValue: monitor.isEnabled)
-        _thresholdMinutes = State(initialValue: monitor.sedentaryThresholdMinutes)
-    }
 
     var body: some View {
         List {
@@ -77,6 +72,12 @@ struct PostureMonitorSettingsView: View {
             }
         }
         .navigationTitle(String(localized: "Posture"))
+        .onAppear {
+            guard !didLoadInitialValues else { return }
+            didLoadInitialValues = true
+            isEnabled = postureMonitor.isEnabled
+            thresholdMinutes = postureMonitor.sedentaryThresholdMinutes
+        }
     }
 
     private func todaySummaryRow(icon: String, label: LocalizedStringKey, value: String) -> some View {
