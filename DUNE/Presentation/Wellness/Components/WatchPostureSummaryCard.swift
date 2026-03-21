@@ -111,7 +111,7 @@ struct WatchPostureSummaryCard: View {
 
     private var emptyStateMessage: String {
         if isWatchAppInstalled {
-            return String(localized: "Enable posture monitoring on your Apple Watch to track sitting time and walking posture.")
+            return String(localized: "Open DUNE on Apple Watch → tap ⚙️ at top right → enable Posture Monitoring.")
         }
         return String(localized: "Pair an Apple Watch to monitor your posture throughout the day.")
     }
