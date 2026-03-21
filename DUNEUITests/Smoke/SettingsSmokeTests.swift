@@ -23,6 +23,34 @@ final class SettingsSmokeTests: UITestBaseCase {
         )
     }
 
+    func testBedtimeReminderSettingsExist() throws {
+        _ = app.scrollToElementIfNeeded(AXID.settingsRowBedtimeReminder)
+
+        XCTAssertTrue(
+            elementExists(AXID.settingsRowBedtimeReminder, timeout: 5),
+            "General bedtime reminder row should exist"
+        )
+        XCTAssertTrue(
+            elementExists(AXID.settingsRowBedtimeReminderLeadTime, timeout: 5),
+            "General bedtime lead time row should exist"
+        )
+        XCTAssertTrue(
+            elementExists(AXID.settingsRowAppleWatchBedtimeReminder, timeout: 5),
+            "Apple Watch bedtime reminder row should exist"
+        )
+        XCTAssertTrue(
+            elementExists(AXID.settingsRowAppleWatchBedtimeReminderLeadTime, timeout: 5),
+            "Apple Watch bedtime lead time row should exist"
+        )
+        XCTAssertTrue(
+            elementExists(AXID.settingsRowPostureReminder, timeout: 5),
+            "Posture reminder row should exist"
+        )
+
+        _ = app.scrollToHittableElementIfNeeded(AXID.settingsRowPostureReminder)
+        addScreenshotAttachment(named: defaultArtifactName(suffix: "bedtime-settings"))
+    }
+
     func testExerciseDefaultsLinkExists() throws {
         XCTAssertTrue(
             elementExists(AXID.settingsRowExerciseDefaults, timeout: 5),

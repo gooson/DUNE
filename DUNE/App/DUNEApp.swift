@@ -653,6 +653,7 @@ struct DUNEApp: App {
         appRuntime.scoreRefreshService.startListening(to: appRuntime.refreshCoordinator)
         Task {
             await BedtimeReminderScheduler.shared.refreshSchedule()
+            await AppleWatchBedtimeReminderScheduler.shared.refreshSchedule()
             await PostureReminderScheduler.shared.refreshSchedule()
         }
         scheduleWorkoutTitleBackfill()
@@ -691,6 +692,7 @@ struct DUNEApp: App {
                 hasRequestedNotificationAuthorization = true
                 if granted {
                     await BedtimeReminderScheduler.shared.refreshSchedule(force: true)
+                    await AppleWatchBedtimeReminderScheduler.shared.refreshSchedule(force: true)
                     await PostureReminderScheduler.shared.refreshSchedule()
                 }
             } catch {
