@@ -4,8 +4,12 @@ import SwiftUI
 struct NotificationSettingsSection: View {
     @State private var settingsStore = NotificationSettingsStore.shared
     @AppStorage(BedtimeReminderScheduler.settingsKey) private var isBedtimeReminderEnabled = true
-    @AppStorage(BedtimeReminderLeadTime.storageKey)
-    private var bedtimeReminderLeadTime: BedtimeReminderLeadTime = BedtimeReminderLeadTime.defaultValue
+    @AppStorage(BedtimeReminderLeadTime.generalStorageKey)
+    private var bedtimeReminderLeadTime: BedtimeReminderLeadTime = BedtimeReminderLeadTime.generalDefaultValue
+    @AppStorage(AppleWatchBedtimeReminderScheduler.settingsKey)
+    private var isAppleWatchBedtimeReminderEnabled = true
+    @AppStorage(BedtimeReminderLeadTime.watchStorageKey)
+    private var appleWatchBedtimeReminderLeadTime: BedtimeReminderLeadTime = BedtimeReminderLeadTime.watchDefaultValue
     @AppStorage(PostureReminderScheduler.settingsKey) private var isPostureReminderEnabled = false
 
     /// Grouped insight types for display.
@@ -15,32 +19,10 @@ struct NotificationSettingsSection: View {
     ]
 
     var body: some View {
-        Section {
-            ForEach(Self.healthTypes, id: \.self) { type in
-                notificationToggle(for: type)
-            }
-            notificationToggle(for: .workoutPR)
-            Toggle(isOn: $isBedtimeReminderEnabled) {
-                Label("Apple Watch Bedtime Reminder", systemImage: "moon.stars.fill")
-            }
-            Toggle(isOn: $isPostureReminderEnabled) {
-                Label("Posture Reminder", systemImage: "figure.stand")
-            }
-            Picker("Apple Watch Reminder Lead Time", selection: $bedtimeReminderLeadTime) {
-                ForEach(BedtimeReminderLeadTime.allCases, id: \.self) { leadTime in
-                    Text(leadTime.displayName).tag(leadTime)
-                }
-            }
-            .disabled(!isBedtimeReminderEnabled)
-            if isBedtimeReminderEnabled {
-                Text("DUNE skips this reminder when recent Apple Watch heart-rate data suggests you're already wearing your watch.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-        } header: {
-            Text("Notifications")
-        } footer: {
-            Text("Health alerts are sent at most once per day, duplicates are suppressed for one hour, and informational alerts use a daily budget.")
+        Group {
+            notificationsSection
+            bedtimeReminderSection
+            postureReminderSection
         }
         .onChange(of: isBedtimeReminderEnabled) { _, _ in
             rescheduleBedtimeReminder()
@@ -48,8 +30,78 @@ struct NotificationSettingsSection: View {
         .onChange(of: bedtimeReminderLeadTime) { _, _ in
             rescheduleBedtimeReminder()
         }
+        .onChange(of: isAppleWatchBedtimeReminderEnabled) { _, _ in
+            rescheduleAppleWatchBedtimeReminder()
+        }
+        .onChange(of: appleWatchBedtimeReminderLeadTime) { _, _ in
+            rescheduleAppleWatchBedtimeReminder()
+        }
         .onChange(of: isPostureReminderEnabled) { _, _ in
             reschedulePostureReminder()
+        }
+    }
+
+    private var notificationsSection: some View {
+        Section {
+            ForEach(Self.healthTypes, id: \.self) { type in
+                notificationToggle(for: type)
+            }
+            notificationToggle(for: .workoutPR)
+        } header: {
+            Text("Notifications")
+        } footer: {
+            Text("Health alerts are sent at most once per day, duplicates are suppressed for one hour, and informational alerts use a daily budget.")
+        }
+    }
+
+    private var bedtimeReminderSection: some View {
+        Section {
+            Toggle(isOn: $isBedtimeReminderEnabled) {
+                Label("Bedtime Reminder", systemImage: "moon.stars.fill")
+            }
+            .accessibilityIdentifier("settings-row-bedtime-reminder")
+
+            Picker(selection: $bedtimeReminderLeadTime) {
+                ForEach(BedtimeReminderLeadTime.allCases, id: \.self) { leadTime in
+                    Text(leadTime.displayName).tag(leadTime)
+                }
+            } label: {
+                Label("Reminder Lead Time", systemImage: "timer")
+            }
+            .accessibilityIdentifier("settings-row-bedtime-reminder-leadtime")
+            .disabled(!isBedtimeReminderEnabled)
+
+            Toggle(isOn: $isAppleWatchBedtimeReminderEnabled) {
+                Label("Watch Reminder", systemImage: "applewatch")
+            }
+            .accessibilityIdentifier("settings-row-applewatch-bedtime-reminder")
+
+            Picker(selection: $appleWatchBedtimeReminderLeadTime) {
+                ForEach(BedtimeReminderLeadTime.allCases, id: \.self) { leadTime in
+                    Text(leadTime.displayName).tag(leadTime)
+                }
+            } label: {
+                Label("Watch Reminder Lead Time", systemImage: "timer")
+            }
+            .accessibilityIdentifier("settings-row-applewatch-bedtime-reminder-leadtime")
+            .disabled(!isAppleWatchBedtimeReminderEnabled)
+        } header: {
+            Text("Bedtime")
+        } footer: {
+            if isAppleWatchBedtimeReminderEnabled {
+                Text("DUNE skips this reminder when recent heart-rate data suggests you're already wearing your watch.")
+            }
+        }
+    }
+
+    private var postureReminderSection: some View {
+        Section {
+            Toggle(isOn: $isPostureReminderEnabled) {
+                Label("Posture Reminder", systemImage: "figure.stand")
+            }
+            .accessibilityIdentifier("settings-row-posture-reminder")
+        } header: {
+            Text("Posture")
         }
     }
 
@@ -65,6 +117,12 @@ struct NotificationSettingsSection: View {
     private func rescheduleBedtimeReminder() {
         Task {
             await BedtimeReminderScheduler.shared.refreshSchedule(force: true)
+        }
+    }
+
+    private func rescheduleAppleWatchBedtimeReminder() {
+        Task {
+            await AppleWatchBedtimeReminderScheduler.shared.refreshSchedule(force: true)
         }
     }
 

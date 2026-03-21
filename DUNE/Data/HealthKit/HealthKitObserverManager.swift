@@ -93,6 +93,7 @@ final class HealthKitObserverManager: Sendable {
                 async let bedtimeTask: Void = {
                     if sampleType.identifier == HKCategoryType(.sleepAnalysis).identifier {
                         await BedtimeReminderScheduler.shared.refreshSchedule(force: true)
+                        await AppleWatchBedtimeReminderScheduler.shared.refreshSchedule(force: true)
                     }
                 }()
                 _ = await (refreshTask, notifyTask, bedtimeTask)
