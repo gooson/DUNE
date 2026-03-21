@@ -236,6 +236,8 @@ private struct HabitListQueryView: View {
             if let habit = habitsByID[selection.id] {
                 HabitHistorySheet(
                     habitName: habit.name,
+                    iconCategory: habit.iconCategory,
+                    habitType: habit.habitType,
                     entries: viewModel.historyEntries(for: habit)
                 )
             }
@@ -1042,67 +1044,182 @@ private struct HabitListQueryView: View {
 
 private struct HabitHistorySheet: View {
     let habitName: String
+    let iconCategory: HabitIconCategory
+    let habitType: HabitType
     let entries: [LifeViewModel.HabitHistoryEntry]
 
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
-        NavigationStack {
-            Group {
-                Color.clear
-                    .frame(height: 1)
-                    .accessibilityElement()
-                    .accessibilityIdentifier("life-habit-history-screen")
+        VStack(spacing: 0) {
+            // Header with single close button
+            header
 
+            Divider()
+
+            if entries.isEmpty {
+                emptyState
+            } else {
+                entryList
+            }
+        }
+        .background { SheetWaveBackground() }
+        .presentationDetents([.medium, .large])
+        .accessibilityIdentifier("life-habit-history-screen")
+    }
+
+    // MARK: - Header
+
+    private var header: some View {
+        HStack(spacing: DS.Spacing.sm) {
+            Image(systemName: iconCategory.iconName)
+                .font(.title3)
+                .foregroundStyle(iconCategory.themeColor)
+                .frame(width: 36, height: 36)
+                .background {
+                    Circle()
+                        .fill(iconCategory.themeColor.opacity(DS.Opacity.light))
+                }
+
+            VStack(alignment: .leading, spacing: 2) {
                 Text(habitName)
-                    .font(.subheadline)
+                    .font(.headline)
+                Text(String(localized: "\(entries.count) records"))
+                    .font(.caption)
                     .foregroundStyle(.secondary)
-                    .padding(.horizontal, DS.Spacing.lg)
-                    .padding(.top, DS.Spacing.sm)
+            }
 
-                if entries.isEmpty {
-                    EmptyStateView(
-                        icon: "clock.badge.questionmark",
-                        title: "No History",
-                        message: "No history recorded yet.",
-                        actionTitle: "Close",
-                        action: { dismiss() }
-                    )
-                    .accessibilityIdentifier("life-habit-history-empty")
-                } else {
-                    List(Array(entries.enumerated()), id: \.element.id) { index, entry in
-                        HStack(spacing: DS.Spacing.sm) {
-                            Image(systemName: iconName(for: entry.action))
-                                .foregroundStyle(color(for: entry.action))
-                                .frame(width: 20)
-                            Text(title(for: entry.action))
-                                .font(.subheadline)
-                            Spacer()
-                            Text(entry.date.formatted(date: .abbreviated, time: .omitted))
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
-                        .accessibilityElement(children: .combine)
-                        .accessibilityIdentifier("life-habit-history-row-\(index)")
+            Spacer()
+
+            Button {
+                dismiss()
+            } label: {
+                Image(systemName: "xmark.circle.fill")
+                    .font(.title3)
+                    .symbolRenderingMode(.hierarchical)
+                    .foregroundStyle(.secondary)
+            }
+            .buttonStyle(.plain)
+            .accessibilityIdentifier("life-habit-history-close")
+        }
+        .padding(DS.Spacing.md)
+    }
+
+    // MARK: - Entry List
+
+    private var entryList: some View {
+        ScrollView {
+            LazyVStack(spacing: 0) {
+                ForEach(Array(entries.enumerated()), id: \.element.id) { index, entry in
+                    entryRow(entry, index: index)
+
+                    if index < entries.count - 1 {
+                        Divider()
+                            .padding(.leading, 52)
                     }
-                    .listStyle(.plain)
                 }
             }
-            .englishNavigationTitle("History")
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Close") { dismiss() }
-                        .accessibilityIdentifier("life-habit-history-close")
-                }
-            }
+            .padding(.horizontal, DS.Spacing.md)
         }
     }
 
-    private func title(for action: HabitCycleAction) -> String {
-        switch action {
+    private func entryRow(_ entry: LifeViewModel.HabitHistoryEntry, index: Int) -> some View {
+        HStack(spacing: DS.Spacing.sm) {
+            // Action icon
+            Image(systemName: iconName(for: entry.action))
+                .font(.body)
+                .foregroundStyle(color(for: entry.action))
+                .frame(width: 32, height: 32)
+                .background {
+                    Circle()
+                        .fill(color(for: entry.action).opacity(0.12))
+                }
+
+            // Content
+            VStack(alignment: .leading, spacing: 2) {
+                Text(actionTitle(for: entry))
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+
+                if entry.action == .complete {
+                    Text(valueDescription(for: entry))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+
+            Spacer()
+
+            // Date
+            VStack(alignment: .trailing, spacing: 2) {
+                Text(relativeDate(entry.date))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Text(entry.date.formatted(date: .abbreviated, time: .omitted))
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+            }
+        }
+        .padding(.vertical, DS.Spacing.sm)
+        .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("life-habit-history-row-\(index)")
+    }
+
+    // MARK: - Empty State
+
+    private var emptyState: some View {
+        VStack(spacing: DS.Spacing.md) {
+            Spacer()
+            Image(systemName: "clock.badge.questionmark")
+                .font(.system(size: 40))
+                .foregroundStyle(.tertiary)
+            Text("No History")
+                .font(.headline)
+                .foregroundStyle(.secondary)
+            Text("Complete this habit to start building your history")
+                .font(.subheadline)
+                .foregroundStyle(.tertiary)
+                .multilineTextAlignment(.center)
+            Spacer()
+        }
+        .padding(DS.Spacing.xl)
+        .accessibilityIdentifier("life-habit-history-empty")
+    }
+
+    // MARK: - Helpers
+
+    private func actionTitle(for entry: LifeViewModel.HabitHistoryEntry) -> String {
+        switch entry.action {
         case .complete: String(localized: "Completed")
         case .skip: String(localized: "Skipped")
         case .snooze: String(localized: "Snoozed")
+        }
+    }
+
+    private func valueDescription(for entry: LifeViewModel.HabitHistoryEntry) -> String {
+        switch entry.habitType {
+        case .check:
+            return String(localized: "Done")
+        case .duration:
+            let unit = entry.goalUnit ?? String(localized: "min")
+            return "\(Int(entry.value))/\(Int(entry.goalValue)) \(unit)"
+        case .count:
+            let unit = entry.goalUnit ?? ""
+            let text = "\(Int(entry.value))/\(Int(entry.goalValue))"
+            return unit.isEmpty ? text : "\(text) \(unit)"
+        }
+    }
+
+    private func relativeDate(_ date: Date) -> String {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let target = calendar.startOfDay(for: date)
+        let days = calendar.dateComponents([.day], from: target, to: today).day ?? 0
+
+        switch days {
+        case 0: return String(localized: "Today")
+        case 1: return String(localized: "Yesterday")
+        default: return String(localized: "\(days) days ago")
         }
     }
 
