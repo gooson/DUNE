@@ -68,7 +68,9 @@ actor AppRefreshCoordinatorImpl: AppRefreshCoordinating {
     }
 
     func forceRefresh() async {
-        lastRefreshDate = nowProvider()
+        let now = nowProvider()
+        lastRefreshDate = now
+        lastCloudKitRefreshDate = now
         await sharedHealthDataService.invalidateCache()
         continuation.yield(.pullToRefresh)
 

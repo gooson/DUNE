@@ -132,6 +132,30 @@ struct AppRefreshCoordinatorTests {
         #expect(cacheCount == 1)
     }
 
+    @Test("forceRefresh resets CloudKit throttle to prevent post-refresh duplicate")
+    func forceRefreshResetsCloudKitThrottle() async {
+        let clock = MutableDate(Date(timeIntervalSince1970: 1000))
+        let service = MockRefreshService()
+        let coordinator = AppRefreshCoordinatorImpl(
+            sharedHealthDataService: service,
+            throttleInterval: 60,
+            cloudKitThrottleInterval: 5,
+            nowProvider: { clock.value }
+        )
+
+        // Force refresh at t=1000
+        await coordinator.forceRefresh()
+
+        // CloudKit notification at t=1002 (within 5s of force refresh) should be throttled
+        clock.value = Date(timeIntervalSince1970: 1002)
+        let result = await coordinator.requestRefresh(source: .cloudKitRemoteChange)
+
+        #expect(result == false)
+        // Only the forceRefresh cache invalidation, not the CloudKit one
+        let cacheCount = await service.invalidateCacheCallCount
+        #expect(cacheCount == 1)
+    }
+
     // MARK: - Cache Invalidation Only
 
     @Test("invalidateCacheOnly invalidates without yielding to stream")
