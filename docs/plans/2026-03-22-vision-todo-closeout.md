@@ -1,11 +1,12 @@
 ---
 topic: vision-todo-closeout
 date: 2026-03-22
-status: draft
+status: implemented
 confidence: medium
 related_solutions:
   - docs/solutions/general/2026-03-08-vision-pro-todo-state-reconciliation.md
   - docs/solutions/testing/2026-03-16-vision-window-placement-smoke.md
+  - docs/solutions/testing/2026-03-22-vision-no-anchor-placement-closeout.md
 related_brainstorms:
   - docs/brainstorms/2026-03-05-vision-pro-features.md
 ---
