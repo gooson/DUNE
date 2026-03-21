@@ -29,6 +29,7 @@ final class RealtimePoseTracker: @unchecked Sendable {
     private var lastValidTime: CFAbsoluteTime = 0
     private var lastStateUpdateTime: CFAbsoluteTime = 0
     private var pending3DTask: Task<Void, Never>?
+    private var formAnalyzer: ExerciseFormAnalyzer?
 
     // MARK: - Configuration
 
@@ -43,6 +44,21 @@ final class RealtimePoseTracker: @unchecked Sendable {
 
     init(captureService: PostureCaptureService) {
         self.captureService = captureService
+    }
+
+    // MARK: - Exercise Form Mode
+
+    /// Set or clear the exercise form rule. Pass nil to return to general posture mode.
+    func setExercise(_ rule: ExerciseFormRule?) {
+        serialQueue.async { [weak self] in
+            guard let self else { return }
+            if let rule {
+                self.formAnalyzer = ExerciseFormAnalyzer(rule: rule)
+            } else {
+                self.formAnalyzer = nil
+            }
+            self.state.formState = nil
+        }
     }
 
     // MARK: - Lifecycle
@@ -70,6 +86,7 @@ final class RealtimePoseTracker: @unchecked Sendable {
             self?.isStopped = true
             self?.state = RealtimePoseState()
             self?.scoreBuffer.reset()
+            self?.formAnalyzer?.reset()
         }
     }
 
@@ -106,6 +123,11 @@ final class RealtimePoseTracker: @unchecked Sendable {
                     let avgAngleScore = self.score(from: angles)
                     self.scoreBuffer.append(avgAngleScore)
                     self.state.smoothedScore = self.scoreBuffer.average
+                }
+
+                // Exercise form analysis (if active)
+                if let analyzer = self.formAnalyzer {
+                    self.state.formState = analyzer.processFrame(keypoints: keypoints)
                 }
             }
 
