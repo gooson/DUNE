@@ -287,20 +287,22 @@ struct TrainingVolumeAnalysisServiceTests {
         #expect(result.current.totalSessions == 1)
     }
 
-    @Test("Default referenceDate matches today-based analysis")
+    @Test("Default referenceDate matches explicit now-based analysis")
     func defaultReferenceDateMatchesToday() {
         let workout = makeWorkout(duration: 1800, daysAgo: 1)
+        let now = Date()
 
         let withDefault = TrainingVolumeAnalysisService.analyze(
             workouts: [workout],
             manualRecords: [],
-            period: .week
+            period: .week,
+            referenceDate: now
         )
         let withExplicit = TrainingVolumeAnalysisService.analyze(
             workouts: [workout],
             manualRecords: [],
             period: .week,
-            referenceDate: Date()
+            referenceDate: now
         )
 
         #expect(withDefault.current.totalDuration == withExplicit.current.totalDuration)
