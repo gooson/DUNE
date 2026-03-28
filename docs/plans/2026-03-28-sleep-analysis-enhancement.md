@@ -2,7 +2,7 @@
 tags: [sleep, healthkit, rem, waso, breathing-disturbances, nocturnal-vitals, exercise-correlation]
 date: 2026-03-28
 category: plan
-status: approved
+status: implemented
 ---
 
 # Plan: 수면 분석 고도화 (0.7.0)

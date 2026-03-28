@@ -2,7 +2,7 @@
 tags: [sleep, ui-integration, waso, breathing, correlation, nocturnal-vitals, localization]
 date: 2026-03-28
 category: plan
-status: approved
+status: implemented
 ---
 
 # Plan: 수면 분석 카드 통합 + 데이터 로딩 + 번역
