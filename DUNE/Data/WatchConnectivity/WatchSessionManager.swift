@@ -14,7 +14,7 @@ final class WatchSessionManager: NSObject {
         }
     }
 
-    var isReachable: Bool { WCSession.default.isReachable }
+    private(set) var isReachable = false
     private(set) var isPaired = false
     private(set) var isWatchAppInstalled = false
     private(set) var isWatchWorkoutActive = false
@@ -76,9 +76,9 @@ final class WatchSessionManager: NSObject {
                 replyHandler: nil,
                 errorHandler: Self.makeWCErrorHandler("Failed to send bulk sync request")
             )
+        } else {
+            session.transferUserInfo(message)
         }
-
-        session.transferUserInfo(message)
         AppLogger.data.debug("[WatchSync] Requested bulk workout sync since \(since)")
     }
 
@@ -405,8 +405,9 @@ extension WatchSessionManager: WCSessionDelegate {
     }
 
     nonisolated func sessionReachabilityDidChange(_ session: WCSession) {
-        // isReachable is now a computed property — no stored update needed.
-        // Trigger @Observable notification for views observing this manager.
+        Task { @MainActor in
+            isReachable = session.isReachable
+        }
     }
 
     nonisolated func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
