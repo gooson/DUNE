@@ -2,60 +2,81 @@ import Foundation
 import Testing
 @testable import DUNE
 
-@Suite("ExerciseRecordSnapshot Volume Calculation")
+// MARK: - Test stub for WorkoutSetVolumeProviding
+
+private struct StubSet: WorkoutSetVolumeProviding {
+    var isVolumeCompleted: Bool
+    var volumeWeight: Double
+    var volumeReps: Double
+}
+
+@Suite("Training Volume Calculation")
 struct ExerciseRecordVolumeTests {
 
-    // MARK: - Snapshot totalWeight is weight × reps
+    // MARK: - trainingVolume() core calculation
 
-    @Test("Snapshot totalWeight calculates weight × reps correctly")
-    func snapshotTotalWeightIsWeightTimesReps() {
-        // 3 sets: 60kg × 10 reps, 80kg × 8 reps, 100kg × 5 reps
-        // Expected: 60*10 + 80*8 + 100*5 = 600 + 640 + 500 = 1740
-        let snapshot = ExerciseRecordSnapshot(
-            date: Date(),
-            primaryMuscles: [.chest],
-            secondaryMuscles: [],
-            completedSetCount: 3,
-            totalWeight: 1740
-        )
-        #expect(snapshot.totalWeight == 1740)
+    @Test("trainingVolume computes weight × reps correctly")
+    func trainingVolumeWeightTimesReps() {
+        // 3 sets: 60kg × 10, 80kg × 8, 100kg × 5
+        // Expected: 600 + 640 + 500 = 1740
+        let sets: [StubSet] = [
+            StubSet(isVolumeCompleted: true, volumeWeight: 60, volumeReps: 10),
+            StubSet(isVolumeCompleted: true, volumeWeight: 80, volumeReps: 8),
+            StubSet(isVolumeCompleted: true, volumeWeight: 100, volumeReps: 5),
+        ]
+        #expect(sets.trainingVolume() == 1740)
     }
 
-    @Test("Bodyweight exercise has nil totalWeight")
-    func bodyweitTotalWeightIsNil() {
-        let snapshot = ExerciseRecordSnapshot(
-            date: Date(),
-            primaryMuscles: [.chest],
-            secondaryMuscles: [],
-            completedSetCount: 3,
-            totalWeight: nil
-        )
-        #expect(snapshot.totalWeight == nil)
+    @Test("trainingVolume skips incomplete sets")
+    func trainingVolumeSkipsIncomplete() {
+        let sets: [StubSet] = [
+            StubSet(isVolumeCompleted: true, volumeWeight: 60, volumeReps: 10),
+            StubSet(isVolumeCompleted: false, volumeWeight: 80, volumeReps: 8),
+        ]
+        #expect(sets.trainingVolume() == 600) // only the first set
     }
 
-    // MARK: - ExerciseRecord.totalVolume matches snapshot logic
-
-    @Test("ExerciseRecord.totalVolume computes weight × reps")
-    func exerciseRecordTotalVolume() {
-        // This test verifies ExerciseRecord.totalVolume returns weight × reps
-        // which must match the snapshot's totalWeight calculation
-        //
-        // Note: Cannot test directly without ModelContext, but the formula is:
-        // sum of (weight * reps) for completed sets where weight > 0 and reps > 0
-        //
-        // The key invariant: snapshot.totalWeight == record.totalVolume for the same record
-        let snapshot = ExerciseRecordSnapshot(
-            date: Date(),
-            primaryMuscles: [.chest],
-            secondaryMuscles: [],
-            completedSetCount: 3,
-            // 3 × 60kg × 10 reps = 1800
-            totalWeight: 1800
-        )
-        #expect(snapshot.totalWeight == 1800)
+    @Test("trainingVolume returns nil for zero weight")
+    func trainingVolumeNilForZeroWeight() {
+        // Bodyweight exercises: weight = 0
+        let sets: [StubSet] = [
+            StubSet(isVolumeCompleted: true, volumeWeight: 0, volumeReps: 20),
+        ]
+        #expect(sets.trainingVolume() == nil)
     }
 
-    // MARK: - Volume used in WeeklyStats
+    @Test("trainingVolume returns nil for zero reps")
+    func trainingVolumeNilForZeroReps() {
+        let sets: [StubSet] = [
+            StubSet(isVolumeCompleted: true, volumeWeight: 60, volumeReps: 0),
+        ]
+        #expect(sets.trainingVolume() == nil)
+    }
+
+    @Test("trainingVolume returns nil for empty array")
+    func trainingVolumeNilForEmpty() {
+        let sets: [StubSet] = []
+        #expect(sets.trainingVolume() == nil)
+    }
+
+    @Test("trainingVolume is capped at maxTrainingVolume")
+    func trainingVolumeCapped() {
+        let sets: [StubSet] = [
+            StubSet(isVolumeCompleted: true, volumeWeight: 500_000, volumeReps: 10),
+        ]
+        #expect(sets.trainingVolume() == [StubSet].maxTrainingVolume)
+    }
+
+    @Test("trainingVolume skips non-finite weight")
+    func trainingVolumeSkipsInfinity() {
+        let sets: [StubSet] = [
+            StubSet(isVolumeCompleted: true, volumeWeight: .infinity, volumeReps: 10),
+            StubSet(isVolumeCompleted: true, volumeWeight: 60, volumeReps: 10),
+        ]
+        #expect(sets.trainingVolume() == 600)
+    }
+
+    // MARK: - Weekly volume aggregation
 
     @Test("Weekly volume sums snapshot totalWeight values")
     func weeklyVolumeSumsCorrectly() {
@@ -65,14 +86,14 @@ struct ExerciseRecordVolumeTests {
                 primaryMuscles: [.chest],
                 secondaryMuscles: [],
                 completedSetCount: 3,
-                totalWeight: 1800 // Bench Press: 3×60×10
+                totalWeight: 1800
             ),
             ExerciseRecordSnapshot(
                 date: Date(),
                 primaryMuscles: [.quadriceps],
                 secondaryMuscles: [],
                 completedSetCount: 3,
-                totalWeight: 2400 // Squat: 3×80×10
+                totalWeight: 2400
             ),
         ]
 
@@ -95,18 +116,11 @@ struct ExerciseRecordVolumeTests {
                 primaryMuscles: [.chest],
                 secondaryMuscles: [],
                 completedSetCount: 10,
-                totalWeight: nil // bodyweight exercise
+                totalWeight: nil
             ),
         ]
 
         let total = snapshots.compactMap(\.totalWeight).reduce(0, +)
-        #expect(total == 1800) // only weighted exercise contributes
-    }
-
-    @Test("Volume cap at 999_999")
-    func volumeCap() {
-        // Verify the cap prevents unreasonable values
-        let clampedValue = min(1_500_000.0, 999_999.0)
-        #expect(clampedValue == 999_999)
+        #expect(total == 1800)
     }
 }
