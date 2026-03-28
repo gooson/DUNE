@@ -191,6 +191,7 @@ struct ActivityView: View {
                         .reportTabHeroFrame()
                         .accessibilityIdentifier("activity-hero-readiness")
                         .buttonStyle(.plain)
+                        .staggeredAppear(index: 0)
 
                         // ② Recovery Map + Weekly Stats (side-by-side on iPad)
                         if isRegular {
@@ -198,14 +199,18 @@ struct ActivityView: View {
                                 recoveryMapSection(fillHeight: true)
                                 weeklyStatsSection(fillHeight: true)
                             }
+                            .staggeredAppear(index: 1)
                         } else {
                             recoveryMapSection()
+                                .staggeredAppear(index: 1)
                             weeklyStatsSection()
+                                .staggeredAppear(index: 2)
                         }
 
                         // ③ Injury Warning Banner
                         if !cachedInjuryConflicts.isEmpty {
                             InjuryWarningBanner(conflicts: cachedInjuryConflicts)
+                                .staggeredAppear(index: 3)
                         }
 
                         // ③.5 Injury Risk Assessment
@@ -220,12 +225,15 @@ struct ActivityView: View {
                             }
                         }
                         .accessibilityIdentifier("activity-section-injuryrisk")
+                        .staggeredAppear(index: 4)
 
                         // ④ Suggested Workout (with search + templates)
                         suggestedWorkoutSection()
+                            .staggeredAppear(index: 5)
 
                         // ⑤ Training Volume
                         trainingVolumeSection()
+                            .staggeredAppear(index: 6)
 
                         // ⑥ Weekly Report
                         SectionGroup(title: "Weekly Report", icon: "doc.text", iconColor: DS.Color.activity) {
@@ -239,6 +247,7 @@ struct ActivityView: View {
                             }
                         }
                         .accessibilityIdentifier("activity-section-weeklyreport")
+                        .staggeredAppear(index: 7)
 
                         // ⑧ Recent Workouts
                         SectionGroup(title: "Recent Workouts", icon: "clock.arrow.circlepath", iconColor: DS.Color.activity) {
@@ -247,6 +256,7 @@ struct ActivityView: View {
                                 exerciseRecords: recentRecords
                             )
                         }
+                        .staggeredAppear(index: 8)
 
                         // ⑨ Personal Records
                         SectionGroup(title: "Personal Records", icon: "trophy.fill",
@@ -262,6 +272,7 @@ struct ActivityView: View {
                             .buttonStyle(.plain)
                             .accessibilityIdentifier("activity-section-pr")
                         }
+                        .staggeredAppear(index: 9)
 
                         SectionGroup(title: "Achievement History", icon: "medal.fill", iconColor: DS.Color.activity) {
                             NavigationLink(value: ActivityDetailDestination.personalRecords) {
@@ -271,6 +282,7 @@ struct ActivityView: View {
                             .buttonStyle(.plain)
                             .accessibilityIdentifier("activity-section-achievement")
                         }
+                        .staggeredAppear(index: 10)
 
                         // ⑩ Consistency
                         SectionGroup(title: "Consistency", icon: "flame.fill",
@@ -282,6 +294,7 @@ struct ActivityView: View {
                             .buttonStyle(.plain)
                             .accessibilityIdentifier("activity-section-consistency")
                         }
+                        .staggeredAppear(index: 11)
 
                         // ⑪ Exercise Mix
                         SectionGroup(title: "Exercise Mix", icon: "chart.bar.xaxis",
@@ -293,6 +306,7 @@ struct ActivityView: View {
                             .buttonStyle(.plain)
                             .accessibilityIdentifier("activity-section-exercisemix")
                         }
+                        .staggeredAppear(index: 12)
                     }
                 }
                 .padding()
