@@ -2,16 +2,13 @@ import Foundation
 import HealthKit
 
 protocol BreathingDisturbanceQuerying: Sendable {
-    /// Fetches nightly breathing disturbance samples for the given number of past days.
     func fetchNightlyDisturbances(days: Int) async throws -> [BreathingDisturbanceSample]
-    /// Fetches the most recent breathing disturbance sample within the given day range.
     func fetchLatestDisturbance(withinDays days: Int) async throws -> BreathingDisturbanceSample?
-    /// Builds aggregated analysis from raw samples.
     func analyze(samples: [BreathingDisturbanceSample]) -> BreathingDisturbanceAnalysis
 }
 
 struct BreathingDisturbanceQueryService: BreathingDisturbanceQuerying, Sendable {
-    private let manager: HealthKitManaging
+    private let manager: HealthKitManager
 
     /// Valid range for breathing disturbances (count/hour).
     private let validRange = 0.0...100.0
@@ -19,7 +16,7 @@ struct BreathingDisturbanceQueryService: BreathingDisturbanceQuerying, Sendable 
     /// Threshold for classifying a night as elevated (disturbances per hour).
     private let elevatedThreshold = 10.0
 
-    init(manager: HealthKitManaging) {
+    init(manager: HealthKitManager = .shared) {
         self.manager = manager
     }
 
