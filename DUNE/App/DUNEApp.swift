@@ -665,8 +665,8 @@ struct DUNEApp: App {
         }
         scheduleWorkoutTitleBackfill()
 
-        // Diagnose local ExerciseRecord set data
-        Task { await CloudKitDiagnostics.diagnoseLocalRecords(modelContainer: modelContainer) }
+        // Full CloudKit data dump
+        Task { await CloudKitDiagnostics.dumpAllCloudKitData(modelContainer: modelContainer) }
     }
 
     @MainActor
