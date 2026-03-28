@@ -23,6 +23,7 @@ struct MetricDetailView: View {
                     lastUpdated: viewModel.lastUpdated,
                     unitOverride: viewModel.metricUnit.isEmpty ? nil : viewModel.metricUnit
                 )
+                .staggeredAppear(index: 0)
 
                 // Period picker
                 Picker("Period", selection: $viewModel.selectedPeriod) {
@@ -32,9 +33,11 @@ struct MetricDetailView: View {
                 }
                 .pickerStyle(.segmented)
                 .sensoryFeedback(.selection, trigger: viewModel.selectedPeriod)
+                .staggeredAppear(index: 1)
 
                 // Chart header: visible range + trend toggle
                 chartHeader
+                    .staggeredAppear(index: 2)
 
                 // Chart (natively scrollable)
                 // Note: .id() forces full view recreation on period change,
@@ -90,15 +93,18 @@ struct MetricDetailView: View {
                     shimmerTask?.cancel()
                     shimmerTask = nil
                 }
+                .staggeredAppear(index: 3)
 
                 if metric.category == .sleep, let averageBedtime = viewModel.averageBedtime {
                     AverageBedtimeCard(averageBedtime: averageBedtime)
+                        .staggeredAppear(index: 4)
                 }
 
                 // Sleep deficit gauge
                 if metric.category == .sleep, let deficit = viewModel.deficitAnalysis,
                    deficit.level != .insufficient {
                     SleepDeficitGaugeView(analysis: deficit)
+                        .staggeredAppear(index: 4)
                 }
 
                 // Exercise totals + Highlights
@@ -116,14 +122,17 @@ struct MetricDetailView: View {
                             .frame(maxWidth: .infinity)
                         }
                     }
+                    .staggeredAppear(index: 4)
                 } else {
                     if metric.category == .exercise, let totals = viewModel.exerciseTotals {
                         ExerciseTotalsView(totals: totals, tintColor: metric.category.themeColor)
+                            .staggeredAppear(index: 4)
                     }
                     MetricHighlightsView(
                         highlights: viewModel.highlights,
                         category: metric.category
                     )
+                    .staggeredAppear(index: 5)
                 }
 
                 // Show All Data
@@ -143,6 +152,7 @@ struct MetricDetailView: View {
                 }
                 .buttonStyle(.plain)
                 .accessibilityIdentifier("metric-detail-show-all-data")
+                .staggeredAppear(index: 6)
             }
             .padding(sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.lg)
         }

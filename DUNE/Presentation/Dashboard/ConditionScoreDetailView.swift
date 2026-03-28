@@ -42,14 +42,18 @@ struct ConditionScoreDetailView: View {
                         }
                         .frame(maxWidth: .infinity)
                     }
+                    .staggeredAppear(index: 0)
                 } else {
                     scoreHero
+                        .staggeredAppear(index: 0)
                     ConditionInsightSection(status: score.status)
+                        .staggeredAppear(index: 1)
 
                     if !score.contributions.isEmpty {
                         StandardCard {
                             ScoreContributorsView(contributions: score.contributions)
                         }
+                        .staggeredAppear(index: 1)
                     }
                 }
 
@@ -59,6 +63,7 @@ struct ConditionScoreDetailView: View {
                         currentAdjustment: detail.timeOfDayAdjustment,
                         baseScore: Double(score.score) - detail.timeOfDayAdjustment
                     )
+                    .staggeredAppear(index: 2)
                 }
 
                 // 3. Period Picker
@@ -69,6 +74,7 @@ struct ConditionScoreDetailView: View {
                 }
                 .pickerStyle(.segmented)
                 .sensoryFeedback(.selection, trigger: viewModel.selectedPeriod)
+                .staggeredAppear(index: 3)
 
                 // 4. Chart Header
                 ScoreDetailChartHeader(
@@ -76,6 +82,7 @@ struct ConditionScoreDetailView: View {
                     showTrendLine: $viewModel.showTrendLine,
                     tintColor: score.status.color
                 )
+                .staggeredAppear(index: 4)
 
                 // 5. Main Trend Chart (DotLineChartView)
                 StandardCard {
@@ -107,6 +114,7 @@ struct ConditionScoreDetailView: View {
                     .transition(.opacity)
                 }
                 .animation(.easeInOut(duration: 0.25), value: viewModel.selectedPeriod)
+                .staggeredAppear(index: 5)
 
                 // 6. Summary Stats + 7. Highlights
                 if sizeClass == .regular {
@@ -120,12 +128,15 @@ struct ConditionScoreDetailView: View {
                                 .frame(maxWidth: .infinity)
                         }
                     }
+                    .staggeredAppear(index: 6)
                 } else {
                     if let summary = viewModel.summaryStats {
                         ScoreDetailSummaryStats(summary: summary)
+                            .staggeredAppear(index: 6)
                     }
                     if !viewModel.highlights.isEmpty {
                         ScoreDetailHighlights(highlights: viewModel.highlights)
+                            .staggeredAppear(index: 6)
                     }
                 }
 
@@ -138,6 +149,7 @@ struct ConditionScoreDetailView: View {
                         unit: "ms",
                         fractionDigits: 1
                     )
+                    .staggeredAppear(index: 7)
 
                     SubScoreTrendChartView(
                         title: "Resting Heart Rate",
@@ -145,20 +157,24 @@ struct ConditionScoreDetailView: View {
                         color: DS.Color.heartRate,
                         unit: "bpm"
                     )
+                    .staggeredAppear(index: 7)
                 }
 
                 // 9. Component Weights
                 conditionComposition
+                    .staggeredAppear(index: 7)
 
                 // 10. Calculation Card
                 if let detail = score.detail {
                     ConditionCalculationCard(detail: detail)
+                        .staggeredAppear(index: 7)
                 }
 
                 // 11. Explainer
                 StandardCard {
                     ConditionExplainerSection()
                 }
+                .staggeredAppear(index: 7)
             }
             .padding(sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.lg)
         }
