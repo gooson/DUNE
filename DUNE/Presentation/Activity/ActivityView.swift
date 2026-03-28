@@ -428,7 +428,7 @@ struct ActivityView: View {
         // Keep heavy HealthKit reload tied to coordinator/manual refresh only.
         // SwiftData sync churn should update derived UI state without cancel/restart storms.
         .task(id: refreshSignal) {
-            await viewModel.loadActivityData()
+            await viewModel.loadActivityData(records: recentRecords)
             recomputeInjuryConflicts()
             recomputeInjuryRisk()
             await viewModel.generateWeeklyReport()
