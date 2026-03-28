@@ -94,6 +94,9 @@ final class WorkoutSessionViewModel {
     var sessionStartTime: Date = Date()
     var memo: String = ""
 
+    /// Per-set timer start dates for durationIntensity exercises.
+    var setTimerStarts: [UUID: Date] = [:]
+
     var isSaving = false
     var validationError: String?
 
@@ -193,6 +196,7 @@ final class WorkoutSessionViewModel {
         }
 
         sets.append(newSet)
+        startTimerIfNeeded(for: newSet)
     }
 
     /// Creates a new set pre-filled with the last completed set's values.
@@ -206,6 +210,21 @@ final class WorkoutSessionViewModel {
         newSet.distance = lastCompleted.distance
         newSet.level = lastCompleted.level
         sets.append(newSet)
+        startTimerIfNeeded(for: newSet)
+    }
+
+    /// Starts a live timer for the set if the exercise uses durationIntensity input.
+    private func startTimerIfNeeded(for set: EditableSet) {
+        guard exercise.inputType == .durationIntensity else { return }
+        setTimerStarts[set.id] = Date()
+    }
+
+    /// Stops the timer for the given set and records elapsed seconds.
+    /// Returns the elapsed duration in seconds, or nil if no timer was running.
+    func stopTimer(for set: EditableSet) -> TimeInterval? {
+        guard let start = setTimerStarts.removeValue(forKey: set.id) else { return nil }
+        let elapsed = Date().timeIntervalSince(start)
+        return elapsed >= 1 ? elapsed : nil
     }
 
     var hasCompletedSet: Bool {
