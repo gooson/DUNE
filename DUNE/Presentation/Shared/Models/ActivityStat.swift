@@ -11,9 +11,9 @@ struct ActivityStat: Identifiable, Sendable {
     let change: String?
     let changeIsPositive: Bool?
 
-    static func volume(value: String, change: String? = nil, isPositive: Bool? = nil) -> ActivityStat {
+    static func volume(value: String, unit: String = String(localized: "kg"), change: String? = nil, isPositive: Bool? = nil) -> ActivityStat {
         ActivityStat(id: "volume", icon: "scalemass.fill", iconColor: DS.Color.activity,
-                     title: String(localized: "Volume"), value: value, unit: String(localized: "kg"),
+                     title: String(localized: "Volume"), value: value, unit: unit,
                      change: change, changeIsPositive: isPositive)
     }
 
