@@ -4,6 +4,9 @@ import Foundation
 /// Combines strength PRs and cardio PRs under one display shape.
 struct ActivityPersonalRecord: Sendable, Hashable, Identifiable {
     enum Kind: String, Sendable, Hashable, CaseIterable {
+        case estimated1RM
+        case repMax
+        case sessionVolume
         case strengthWeight
         case fastestPace
         case longestDistance
@@ -17,12 +20,15 @@ struct ActivityPersonalRecord: Sendable, Hashable, Identifiable {
 
         var sortOrder: Int {
             switch self {
-            case .strengthWeight: 0
-            case .fastestPace: 1
-            case .longestDistance: 2
-            case .longestDuration: 3
-            case .highestCalories: 4
-            case .highestElevation: 5
+            case .estimated1RM: 0
+            case .repMax: 1
+            case .sessionVolume: 2
+            case .strengthWeight: 3
+            case .fastestPace: 4
+            case .longestDistance: 5
+            case .longestDuration: 6
+            case .highestCalories: 7
+            case .highestElevation: 8
             }
         }
     }

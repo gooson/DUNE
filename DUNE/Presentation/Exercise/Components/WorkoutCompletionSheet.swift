@@ -1,15 +1,42 @@
 import SwiftUI
 
+/// A single PR achieved during this workout session.
+struct WorkoutPRAchievement: Sendable, Identifiable {
+    let id: String
+    let exerciseName: String
+    let kind: ActivityPersonalRecord.Kind
+    let value: Double
+    let previousValue: Double?
+}
+
 /// Sheet displayed after saving a workout with effort input and share option.
 struct WorkoutCompletionSheet: View {
     let shareImage: UIImage?
     let exerciseName: String
     let setCount: Int
     let effortSuggestion: EffortSuggestion?
+    let prAchievements: [WorkoutPRAchievement]
     let onDismiss: (Int?) -> Void
+
+    init(
+        shareImage: UIImage?,
+        exerciseName: String,
+        setCount: Int,
+        effortSuggestion: EffortSuggestion?,
+        prAchievements: [WorkoutPRAchievement] = [],
+        onDismiss: @escaping (Int?) -> Void
+    ) {
+        self.shareImage = shareImage
+        self.exerciseName = exerciseName
+        self.setCount = setCount
+        self.effortSuggestion = effortSuggestion
+        self.prAchievements = prAchievements
+        self.onDismiss = onDismiss
+    }
 
     @State private var showCelebration = false
     @State private var effort: Int?
+    @Environment(\.appTheme) private var theme
 
     var body: some View {
         NavigationStack {
@@ -31,6 +58,11 @@ struct WorkoutCompletionSheet: View {
                 }
                 .padding(.top, DS.Spacing.lg)
                 .accessibilityIdentifier("workout-completion-sheet")
+
+                // PR achievements section
+                if !prAchievements.isEmpty {
+                    prSection
+                }
 
                 Spacer()
 
@@ -105,5 +137,59 @@ struct WorkoutCompletionSheet: View {
         }
         .interactiveDismissDisabled(false)
         .background { SheetWaveBackground() }
+    }
+
+    // MARK: - PR Section
+
+    private var prSection: some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            HStack(spacing: DS.Spacing.xs) {
+                Image(systemName: "trophy.fill")
+                    .foregroundStyle(.yellow)
+                Text(String(localized: "New PR!"))
+                    .font(.headline.weight(.bold))
+            }
+
+            ForEach(prAchievements) { pr in
+                prRow(pr)
+            }
+        }
+        .padding(DS.Spacing.md)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        .padding(.horizontal, DS.Spacing.lg)
+        .accessibilityIdentifier("workout-completion-pr-section")
+    }
+
+    private func prRow(_ pr: WorkoutPRAchievement) -> some View {
+        HStack(spacing: DS.Spacing.sm) {
+            Image(systemName: pr.kind.iconName)
+                .font(.caption)
+                .foregroundStyle(pr.kind.tintColor)
+                .frame(width: 20)
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(pr.exerciseName)
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(DS.Color.textSecondary)
+                Text(pr.kind.displayName)
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+            }
+
+            Spacer(minLength: 0)
+
+            VStack(alignment: .trailing, spacing: 2) {
+                Text(pr.value.formattedWithSeparator() + " kg")
+                    .font(.subheadline.weight(.bold))
+                    .foregroundStyle(theme.heroTextGradient)
+                if let prev = pr.previousValue, prev > 0 {
+                    let delta = pr.value - prev
+                    Text("+\(delta.formattedWithSeparator()) kg")
+                        .font(.caption2.weight(.semibold))
+                        .foregroundStyle(DS.Color.activity)
+                }
+            }
+        }
+        .padding(.vertical, 4)
     }
 }

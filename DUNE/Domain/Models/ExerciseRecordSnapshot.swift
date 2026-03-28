@@ -1,5 +1,11 @@
 import Foundation
 
+/// Per-set weight+reps snapshot for PR calculation (no SwiftData dependency).
+struct SetSnapshot: Sendable {
+    let weight: Double
+    let reps: Int
+}
+
 /// Lightweight snapshot of an exercise/workout record without SwiftData dependency.
 struct ExerciseRecordSnapshot: Sendable {
     let date: Date
@@ -16,6 +22,8 @@ struct ExerciseRecordSnapshot: Sendable {
     let durationMinutes: Double?
     /// Distance in kilometers. Used for cardio load calculation.
     let distanceKm: Double?
+    /// Per-set weight+reps for 1RM / rep-max / volume PR calculation.
+    let completedSetSnapshots: [SetSnapshot]
 
     init(
         date: Date,
@@ -27,7 +35,8 @@ struct ExerciseRecordSnapshot: Sendable {
         totalWeight: Double? = nil,
         totalReps: Int? = nil,
         durationMinutes: Double? = nil,
-        distanceKm: Double? = nil
+        distanceKm: Double? = nil,
+        completedSetSnapshots: [SetSnapshot] = []
     ) {
         self.date = date
         self.exerciseDefinitionID = exerciseDefinitionID
@@ -39,5 +48,6 @@ struct ExerciseRecordSnapshot: Sendable {
         self.totalReps = totalReps
         self.durationMinutes = durationMinutes
         self.distanceKm = distanceKm
+        self.completedSetSnapshots = completedSetSnapshots
     }
 }

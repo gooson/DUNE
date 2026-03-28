@@ -173,35 +173,11 @@ struct PersonalRecordsSection: View {
     }
 
     private func primaryValueText(for record: ActivityPersonalRecord) -> String {
-        switch record.kind {
-        case .strengthWeight:
-            return record.value.formattedWithSeparator()
-        case .fastestPace:
-            let totalSeconds = Int(record.value)
-            let minutes = totalSeconds / 60
-            let seconds = totalSeconds % 60
-            return "\(minutes)'\(String(format: "%02d", seconds))\""
-        case .longestDistance:
-            let km = record.value / 1000.0
-            return km.formattedWithSeparator(fractionDigits: km >= 10 ? 1 : 2)
-        case .highestCalories:
-            return record.value.formattedWithSeparator()
-        case .longestDuration:
-            return TimeInterval(record.value).formattedDuration()
-        case .highestElevation:
-            return record.value.formattedWithSeparator()
-        }
+        record.formattedValue
     }
 
     private func unitText(for record: ActivityPersonalRecord) -> String? {
-        switch record.kind {
-        case .strengthWeight: "kg"
-        case .fastestPace: "/km"
-        case .longestDistance: "km"
-        case .highestCalories: "kcal"
-        case .longestDuration: nil
-        case .highestElevation: "m"
-        }
+        record.kind.unitLabel
     }
 
     private func contextText(for record: ActivityPersonalRecord) -> String? {

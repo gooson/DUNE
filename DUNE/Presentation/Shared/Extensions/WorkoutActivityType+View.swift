@@ -187,6 +187,9 @@ extension PersonalRecordType {
 extension ActivityPersonalRecord.Kind {
     var displayName: String {
         switch self {
+        case .estimated1RM: String(localized: "Est. 1RM")
+        case .repMax: String(localized: "Rep Max")
+        case .sessionVolume: String(localized: "Session Volume")
         case .strengthWeight: String(localized: "Strength Weight")
         case .fastestPace: String(localized: "Fastest Pace")
         case .longestDistance: String(localized: "Longest Distance")
@@ -198,6 +201,9 @@ extension ActivityPersonalRecord.Kind {
 
     var iconName: String {
         switch self {
+        case .estimated1RM: "trophy.fill"
+        case .repMax: "scalemass.fill"
+        case .sessionVolume: "chart.bar.fill"
         case .strengthWeight: "dumbbell.fill"
         case .fastestPace: "speedometer"
         case .longestDistance: "point.topleft.down.to.point.bottomright.curvepath.fill"
@@ -209,6 +215,9 @@ extension ActivityPersonalRecord.Kind {
 
     var tintColor: Color {
         switch self {
+        case .estimated1RM: .yellow
+        case .repMax: .orange
+        case .sessionVolume: .purple
         case .strengthWeight: .orange
         case .fastestPace: DS.Color.activity
         case .longestDistance: DS.Color.activity
@@ -219,7 +228,43 @@ extension ActivityPersonalRecord.Kind {
     }
 }
 
+extension ActivityPersonalRecord.Kind {
+    /// Unit label for this PR kind (e.g. "kg", "/km"). nil for duration.
+    var unitLabel: String? {
+        switch self {
+        case .estimated1RM, .repMax, .sessionVolume, .strengthWeight: "kg"
+        case .fastestPace: "/km"
+        case .longestDistance: "km"
+        case .highestCalories: "kcal"
+        case .longestDuration: nil
+        case .highestElevation: "m"
+        }
+    }
+}
+
 extension ActivityPersonalRecord {
+    /// Formatted primary value text for display.
+    var formattedValue: String {
+        switch kind {
+        case .estimated1RM, .repMax, .strengthWeight, .sessionVolume:
+            return value.formattedWithSeparator()
+        case .fastestPace:
+            let totalSeconds = Int(value)
+            let minutes = totalSeconds / 60
+            let seconds = totalSeconds % 60
+            return "\(minutes)'\(String(format: "%02d", seconds))\""
+        case .longestDistance:
+            let km = value / 1000.0
+            return km.formattedWithSeparator(fractionDigits: km >= 10 ? 1 : 2)
+        case .highestCalories:
+            return value.formattedWithSeparator()
+        case .longestDuration:
+            return TimeInterval(value).formattedDuration()
+        case .highestElevation:
+            return value.formattedWithSeparator()
+        }
+    }
+
     /// Presentation-safe localized title for workout-type records.
     /// Falls back to the original title for custom/manual exercise names.
     var localizedTitle: String {
