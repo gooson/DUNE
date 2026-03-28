@@ -24,6 +24,7 @@
 - sheet 이중 트리거 → `pendingSheet` @State + `onChange` 한 프레임 지연
 - `.repeatForever` 애니메이션 시작 → `.task` 사용 (`.onAppear` 금지; 부모 환경 트랜잭션 간섭)
 - `.onReceive` 핸들러 내 `Task { @MainActor in }` 래핑 금지 — `.onReceive`는 이미 MainActor에서 실행됨. Task 래핑 시 비결정적 scheduling으로 상태 소비 타이밍이 어긋남
+- `.environment()` 에 `@Observable` 프로퍼티 직접 전달 금지 → `@State` 캐시 + `.onChange` 동기화. `.environment()`는 subtree 전체 전파하므로 async 수정 시 NavigationStack layout feedback loop 발생
 
 ## List & Collection
 - `modelContext.delete()` → `withAnimation {}` 래핑 필수 (CollectionView crash)

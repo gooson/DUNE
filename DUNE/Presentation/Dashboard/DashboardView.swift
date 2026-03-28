@@ -51,6 +51,7 @@ struct DashboardView: View {
     @State private var showWhatsNew = false
     @State private var showSettings = false
     @State private var heroFrame: CGRect?
+    @State private var cachedWeatherAtmosphere: WeatherAtmosphere = .default
 
     init(
         sharedHealthDataService: SharedHealthDataService? = nil,
@@ -118,7 +119,7 @@ struct DashboardView: View {
             }
         }
         .onPreferenceChange(TabHeroFramePreferenceKey.self) { heroFrame = $0 }
-        .environment(\.weatherAtmosphere, viewModel.weatherAtmosphere)
+        .environment(\.weatherAtmosphere, cachedWeatherAtmosphere)
         .background {
             TabWaveBackground()
                 .environment(\.tabHeroStartLineInset, heroFrame.map(TabHeroStartLine.inset(for:)))
@@ -168,6 +169,9 @@ struct DashboardView: View {
             if let briefingData = viewModel.briefingData {
                 MorningBriefingView(data: briefingData)
             }
+        }
+        .onChange(of: viewModel.weatherAtmosphere) { _, newValue in
+            cachedWeatherAtmosphere = newValue
         }
         .onChange(of: viewModel.briefingData == nil) { _, isNil in
             if isNil { isShowingBriefing = false }
