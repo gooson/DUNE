@@ -1671,23 +1671,6 @@
         }
       }
     },
-    "%lld%% better than rest days" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "休息日より%lld%%良い"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "휴식일보다 %lld%% 더 좋음"
-          }
-        }
-      }
-    },
     "%lld-Day Average" : {
       "localizations" : {
         "ja" : {
@@ -1787,6 +1770,23 @@
         }
       }
     },
+    "%lld%% better than rest days" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "休息日より%lld%%良い"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "휴식일보다 %lld%% 더 좋음"
+          }
+        }
+      }
+    },
     "%lld°C — perfect conditions for a run or a walk." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1800,29 +1800,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld°C — 러닝이나 산책에 완벽한 조건입니다."
-          }
-        }
-      }
-    },
-    "%lldRM" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lldRM"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lldRM"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lldRM"
           }
         }
       }
@@ -1874,6 +1851,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld분"
+          }
+        }
+      }
+    },
+    "%lldRM" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lldRM"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lldRM"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lldRM"
           }
         }
       }
@@ -3884,6 +3884,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Apple Watch 취침 알림"
+          }
+        }
+      }
+    },
+    "Apple Watch detects awakenings during sleep using motion and heart rate sensors. Only awakenings lasting 5 minutes or longer are counted — brief stirrings are filtered out as normal sleep behavior." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watchは動きと心拍数センサーで睡眠中の覚醒を検出します。5分以上の覚醒のみカウントされ、短い動きは通常の睡眠行動としてフィルタリングされます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch는 동작 및 심박수 센서로 수면 중 각성을 감지합니다. 5분 이상의 각성만 집계되며, 짧은 움직임은 정상적인 수면 행동으로 필터링됩니다."
           }
         }
       }
@@ -7392,23 +7409,6 @@
         }
       }
     },
-    "Collecting sleep data..." : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "睡眠データを収集中..."
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "수면 데이터 수집 중..."
-          }
-        }
-      }
-    },
     "Collecting Data" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -7422,6 +7422,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "데이터 수집 중"
+          }
+        }
+      }
+    },
+    "Collecting sleep data..." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "睡眠データを収集中..."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "수면 데이터 수집 중..."
           }
         }
       }
@@ -9356,6 +9373,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "기본 세트"
+          }
+        }
+      }
+    },
+    "Definition" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "定義"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "정의"
           }
         }
       }
@@ -12519,6 +12553,9 @@
           }
         }
       }
+    },
+    "Force Sync" : {
+
     },
     "Forearms" : {
       "extractionState" : "manual",
@@ -19033,6 +19070,22 @@
         }
       }
     },
+    "MIN" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "分"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "분"
+          }
+        }
+      }
+    },
     "Min HR" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -19046,22 +19099,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "최저 심박수"
-          }
-        }
-      }
-    },
-    "MIN" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "分"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "분"
           }
         }
       }
@@ -20740,23 +20777,6 @@
         }
       }
     },
-    "No significant awakenings detected" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "重大な覚醒は検出されませんでした"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "유의미한 각성이 감지되지 않았습니다"
-          }
-        }
-      }
-    },
     "No data available for this metric" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -21433,6 +21453,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "기록된 세트가 없습니다. 저장 없이 종료할까요?"
+          }
+        }
+      }
+    },
+    "No significant awakenings detected" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重大な覚醒は検出されませんでした"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "유의미한 각성이 감지되지 않았습니다"
           }
         }
       }
@@ -27124,6 +27161,23 @@
         }
       }
     },
+    "Score Guide" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "スコアガイド"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "점수 가이드"
+          }
+        }
+      }
+    },
     "Seamless Sync" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -27569,23 +27623,6 @@
         }
       }
     },
-    "sets" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "セット"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "세트"
-          }
-        }
-      }
-    },
     "sessions" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -27784,6 +27821,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "세트별 RPE, 계단 오르기, VO2 Max 추적, 운동 보상, 수면 분석 강화 — 피트니스 도구가 계속 성장합니다."
+          }
+        }
+      }
+    },
+    "sets" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "セット"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "세트"
           }
         }
       }
@@ -28438,23 +28492,6 @@
         }
       }
     },
-    "Signs of overtraining detected" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "オーバートレーニングの兆候を検出"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "오버트레이닝 징후 감지"
-          }
-        }
-      }
-    },
     "Significant" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -28468,6 +28505,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "주의"
+          }
+        }
+      }
+    },
+    "Signs of overtraining detected" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "オーバートレーニングの兆候を検出"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "오버트레이닝 징후 감지"
           }
         }
       }
@@ -28726,6 +28780,22 @@
         }
       }
     },
+    "Sleep (%)" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "睡眠 (%)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "수면 (%)"
+          }
+        }
+      }
+    },
     "Sleep & Exercise" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -28739,22 +28809,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "수면 및 운동"
-          }
-        }
-      }
-    },
-    "Sleep (%)" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "睡眠 (%)"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "수면 (%)"
           }
         }
       }
@@ -31605,6 +31659,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "남은 숫자를 분으로 처리했습니다."
+          }
+        }
+      }
+    },
+    "The WASO Score (0–100) reflects how uninterrupted your sleep was. Less time awake means a higher score. This score contributes 15% to your overall Sleep Score." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "WASOスコア（0〜100）は睡眠の中断度を反映します。覚醒時間が少ないほど高スコアです。このスコアは全体の睡眠スコアの15%を占めます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "WASO 점수(0~100)는 수면이 얼마나 중단 없이 지속되었는지를 반영합니다. 깨어 있는 시간이 적을수록 높은 점수입니다. 이 점수는 전체 수면 점수의 15%를 차지합니다."
           }
         }
       }
@@ -34649,125 +34720,6 @@
         }
       }
     },
-    "What is WASO?" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "WASOとは？"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "WASO란?"
-          }
-        }
-      }
-    },
-    "WASO stands for Wake After Sleep Onset. It measures the total time you spend awake after initially falling asleep, until your final awakening." : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "WASOはWake After Sleep Onset（入眠後覚醒）の略で、最初に眠りについてから最後に目が覚めるまでの間に、目が覚めていた合計時間を測定します。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "WASO는 Wake After Sleep Onset(입면 후 각성)의 약자로, 처음 잠든 후 마지막으로 깨어날 때까지 깨어 있던 총 시간을 측정합니다."
-          }
-        }
-      }
-    },
-    "Apple Watch detects awakenings during sleep using motion and heart rate sensors. Only awakenings lasting 5 minutes or longer are counted — brief stirrings are filtered out as normal sleep behavior." : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Apple Watchは動きと心拍数センサーで睡眠中の覚醒を検出します。5分以上の覚醒のみカウントされ、短い動きは通常の睡眠行動としてフィルタリングされます。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Apple Watch는 동작 및 심박수 센서로 수면 중 각성을 감지합니다. 5분 이상의 각성만 집계되며, 짧은 움직임은 정상적인 수면 행동으로 필터링됩니다."
-          }
-        }
-      }
-    },
-    "The WASO Score (0–100) reflects how uninterrupted your sleep was. Less time awake means a higher score. This score contributes 15% to your overall Sleep Score." : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "WASOスコア（0〜100）は睡眠の中断度を反映します。覚醒時間が少ないほど高スコアです。このスコアは全体の睡眠スコアの15%を占めます。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "WASO 점수(0~100)는 수면이 얼마나 중단 없이 지속되었는지를 반영합니다. 깨어 있는 시간이 적을수록 높은 점수입니다. 이 점수는 전체 수면 점수의 15%를 차지합니다."
-          }
-        }
-      }
-    },
-    "Score Guide" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "スコアガイド"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "점수 가이드"
-          }
-        }
-      }
-    },
-    "Definition" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "定義"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "정의"
-          }
-        }
-      }
-    },
-    "How It's Measured" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "測定方法"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "측정 방법"
-          }
-        }
-      }
-    },
     "Walk 10,000 Steps" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -34883,6 +34835,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "WASO 점수"
+          }
+        }
+      }
+    },
+    "WASO stands for Wake After Sleep Onset. It measures the total time you spend awake after initially falling asleep, until your final awakening." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "WASOはWake After Sleep Onset（入眠後覚醒）の略で、最初に眠りについてから最後に目が覚めるまでの間に、目が覚めていた合計時間を測定します。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "WASO는 Wake After Sleep Onset(입면 후 각성)의 약자로, 처음 잠든 후 마지막으로 깨어날 때까지 깨어 있던 총 시간을 측정합니다."
           }
         }
       }
@@ -35806,6 +35775,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "웰니스"
+          }
+        }
+      }
+    },
+    "What is WASO?" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "WASOとは？"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "WASO란?"
           }
         }
       }
