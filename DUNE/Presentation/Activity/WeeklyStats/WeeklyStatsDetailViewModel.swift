@@ -181,7 +181,18 @@ final class WeeklyStatsDetailViewModel {
         let durationChange = result.durationChange
         let calChange = result.calorieChange
 
+        // Volume from manual records (weight × reps)
+        let totalVolume = current.exerciseTypes.compactMap(\.totalVolume).reduce(0, +)
+        let prevVolume = result.previous?.exerciseTypes.compactMap(\.totalVolume).reduce(0, +) ?? 0
+        let rawVolChange = prevVolume > 0 ? ((totalVolume - prevVolume) / prevVolume * 100) : nil
+        let volChange = rawVolChange.flatMap { $0.isFinite ? $0 : nil }
+
         summaryStats = [
+            .volume(
+                value: totalVolume > 0 ? totalVolume.formattedWithSeparator() : "\u{2014}",
+                change: volChange.map { "\($0.formattedWithSeparator(alwaysShowSign: true))%" },
+                isPositive: volChange.map { $0 >= 0 }
+            ),
             .duration(
                 value: durationMin > 0 ? min(durationMin, 28_800).formattedWithSeparator() : "\u{2014}",
                 change: durationChange.map { "\($0.formattedWithSeparator(alwaysShowSign: true))%" },
