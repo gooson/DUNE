@@ -38,6 +38,8 @@ enum TrainingVolumeAnalysisService {
             end: currentEnd
         )
 
+        // Filter uses `< currentStart` (exclusive) to avoid boundary gap.
+        // `previousEnd` (currentStart - 1 day) is passed as `end:` for daily breakdown date range only.
         let previousSummary = buildSummary(
             workouts: workouts.filter { $0.date >= previousStart && $0.date < currentStart },
             manualRecords: manualRecords.filter { $0.date >= previousStart && $0.date < currentStart },
