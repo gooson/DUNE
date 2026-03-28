@@ -59,6 +59,22 @@ final class WatchSessionManager: NSObject {
         registeredModelContainer = modelContainer
     }
 
+    /// Request Watch to re-send all recent workout records (bulk recovery).
+    func requestWorkoutBulkSync(since: Date = Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? Date()) {
+        guard WCSession.default.isReachable else {
+            AppLogger.data.warning("[WatchSync] Watch not reachable for bulk sync request")
+            return
+        }
+        let sinceTimestamp = since.timeIntervalSince1970
+        let message: [String: Any] = ["requestWorkoutBulkSync": sinceTimestamp]
+        WCSession.default.sendMessage(
+            message,
+            replyHandler: nil,
+            errorHandler: Self.makeWCErrorHandler("Failed to send bulk sync request")
+        )
+        AppLogger.data.debug("[WatchSync] Requested bulk workout sync since \(since)")
+    }
+
     /// Send current workout state to Watch for display
     func sendWorkoutState(_ state: WatchWorkoutState) {
         guard WCSession.default.isReachable else { return }
@@ -506,6 +522,20 @@ extension WatchSessionManager {
                 AppLogger.ui.error("Failed to decode Watch set update: \(error.localizedDescription)")
             }
         }
+
+        // Handle bulk workout sync from Watch (recovery)
+        if let data = message.bulkWorkoutsData {
+            do {
+                let updates = try JSONDecoder().decode([WatchWorkoutUpdate].self, from: data)
+                AppLogger.data.debug("[WatchSync] Received bulk sync: \(updates.count) workouts")
+                for var update in updates {
+                    update = update.validated()
+                    onWorkoutReceived?(update)
+                }
+            } catch {
+                AppLogger.data.error("[WatchSync] Failed to decode bulk workouts: \(error.localizedDescription)")
+            }
+        }
     }
 }
 
@@ -513,6 +543,7 @@ struct ParsedWatchIncomingMessage: Sendable {
     let workoutCompleteData: Data?
     let setCompletedData: Data?
     let postureSummaryData: Data?
+    let bulkWorkoutsData: Data?
     let requestExerciseLibrarySync: Bool
     let requestWorkoutTemplateSync: Bool
 
@@ -520,6 +551,7 @@ struct ParsedWatchIncomingMessage: Sendable {
         workoutCompleteData = message["workoutComplete"] as? Data
         setCompletedData = message["setCompleted"] as? Data
         postureSummaryData = message["postureSummary"] as? Data
+        bulkWorkoutsData = message["bulkWorkouts"] as? Data
         requestExerciseLibrarySync = (message["requestExerciseLibrarySync"] as? Bool) == true
         requestWorkoutTemplateSync = (message["requestWorkoutTemplateSync"] as? Bool) == true
     }

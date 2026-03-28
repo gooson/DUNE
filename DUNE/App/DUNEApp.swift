@@ -650,6 +650,12 @@ struct DUNEApp: App {
         WatchSessionManager.shared.syncExerciseLibraryToWatch(using: modelContainer)
         wireWatchWorkoutReceiver(modelContainer: modelContainer)
         WatchSessionManager.shared.activate()
+
+        // Request bulk sync of recent Watch workouts that may not have synced via CloudKit
+        Task {
+            try? await Task.sleep(nanoseconds: 3_000_000_000) // wait for Watch session
+            WatchSessionManager.shared.requestWorkoutBulkSync()
+        }
         appRuntime.observerManager?.startObserving()
         appRuntime.scoreRefreshService.startListening(to: appRuntime.refreshCoordinator)
         Task {
@@ -708,6 +714,22 @@ struct DUNEApp: App {
         let library = ExerciseLibraryService.shared
         WatchSessionManager.shared.onWorkoutReceived = { update in
             let context = ModelContext(modelContainer)
+
+            // Dedup: skip if a record with same exercise + similar date already exists
+            let startTime = update.startTime
+            let exerciseName = update.exerciseName
+            let windowStart = startTime.addingTimeInterval(-120)
+            let windowEnd = startTime.addingTimeInterval(120)
+            var dedup = FetchDescriptor<ExerciseRecord>(
+                predicate: #Predicate<ExerciseRecord> {
+                    $0.exerciseType == exerciseName && $0.date >= windowStart && $0.date <= windowEnd
+                }
+            )
+            dedup.fetchLimit = 1
+            if let existing = try? context.fetch(dedup), !existing.isEmpty {
+                AppLogger.data.debug("[WatchSync] Skipped duplicate: \(update.exerciseName) at \(update.startTime)")
+                return
+            }
 
             let definition = library.exercise(byID: update.exerciseID)
             let duration = (update.endTime ?? Date()).timeIntervalSince(update.startTime)

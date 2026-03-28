@@ -78,6 +78,7 @@ struct DUNEWatchApp: App {
             Self.logger.error("ModelContainer failed: \(error.localizedDescription, privacy: .public)")
             modelContainer = Self.recoverModelContainer(after: error, configuration: config)
         }
+        WatchConnectivityManager.shared.registeredModelContainer = modelContainer
     }
 
     private static func deleteStoreFiles(at url: URL) {
