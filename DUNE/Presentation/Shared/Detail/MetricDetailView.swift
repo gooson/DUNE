@@ -104,7 +104,7 @@ struct MetricDetailView: View {
                 if metric.category == .sleep, let deficit = viewModel.deficitAnalysis,
                    deficit.level != .insufficient {
                     SleepDeficitGaugeView(analysis: deficit)
-                        .staggeredAppear(index: 4)
+                        .staggeredAppear(index: 5)
                 }
 
                 // Sleep enhanced insights (always show cards when sleep category)

@@ -239,7 +239,8 @@ struct PersonalRecordsDetailView: View {
                         }
                     }
                 }
-                .frame(height: 220)
+                .padding(.top, 16)
+                .frame(height: 236)
                 .clipped()
             }
         }

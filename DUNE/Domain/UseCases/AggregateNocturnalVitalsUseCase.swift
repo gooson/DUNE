@@ -111,10 +111,11 @@ struct AggregateNocturnalVitalsUseCase: NocturnalVitalsAggregating, Sendable {
         spo2Samples: [Input.TimestampedValue],
         tempBaseline: Double?
     ) -> NocturnalVitalsSnapshot.VitalsSummary {
-        let hrValues = hrSamples.map(\.value)
-        let rrValues = rrSamples.map(\.value)
+        // Range-validate HealthKit values per input-validation.md
+        let hrValues = hrSamples.map(\.value).filter { (20...300).contains($0) }
+        let rrValues = rrSamples.map(\.value).filter { (4...60).contains($0) }
         let tempValues = tempSamples.map(\.value)
-        let spo2Values = spo2Samples.map(\.value)
+        let spo2Values = spo2Samples.map(\.value).filter { (0.5...1.0).contains($0) }
 
         let avgHR: Double? = hrValues.isEmpty ? nil : hrValues.reduce(0, +) / Double(hrValues.count)
         let minHR: Double? = hrValues.min()

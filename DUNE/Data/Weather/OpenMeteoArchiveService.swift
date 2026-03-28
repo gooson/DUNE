@@ -35,7 +35,7 @@ final class OpenMeteoArchiveService: HistoricalWeatherFetching, @unchecked Senda
     }
 
     func fetchDailyWeather(latitude: Double, longitude: Double, start: Date, end: Date) async throws -> [DailyWeatherRecord] {
-        let formatter = Self.makeDateFormatter()
+        let formatter = Cache.dateFormatter
         let startStr = formatter.string(from: start)
         let endStr = formatter.string(from: end)
         let cacheKey = "\(String(format: "%.2f", latitude)),\(String(format: "%.2f", longitude)),\(startStr),\(endStr)"
@@ -114,11 +114,13 @@ final class OpenMeteoArchiveService: HistoricalWeatherFetching, @unchecked Senda
         }
     }
 
-    private static func makeDateFormatter() -> DateFormatter {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        return formatter
+    private enum Cache {
+        static let dateFormatter: DateFormatter = {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd"
+            formatter.locale = Locale(identifier: "en_US_POSIX")
+            return formatter
+        }()
     }
 
     // MARK: - Response Models

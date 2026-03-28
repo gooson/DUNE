@@ -14,7 +14,7 @@ final class WatchSessionManager: NSObject {
         }
     }
 
-    private(set) var isReachable = false
+    var isReachable: Bool { WCSession.default.isReachable }
     private(set) var isPaired = false
     private(set) var isWatchAppInstalled = false
     private(set) var isWatchWorkoutActive = false
@@ -60,18 +60,25 @@ final class WatchSessionManager: NSObject {
     }
 
     /// Request Watch to re-send all recent workout records (bulk recovery).
+    /// Uses sendMessage for immediate delivery + transferUserInfo as background fallback.
     func requestWorkoutBulkSync(since: Date = Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? Date()) {
-        guard WCSession.default.isReachable else {
-            AppLogger.data.warning("[WatchSync] Watch not reachable for bulk sync request")
+        let session = WCSession.default
+        guard session.activationState == .activated else {
+            AppLogger.data.warning("[WatchSync] Session not activated for bulk sync request")
             return
         }
         let sinceTimestamp = since.timeIntervalSince1970
         let message: [String: Any] = ["requestWorkoutBulkSync": sinceTimestamp]
-        WCSession.default.sendMessage(
-            message,
-            replyHandler: nil,
-            errorHandler: Self.makeWCErrorHandler("Failed to send bulk sync request")
-        )
+
+        if session.isReachable {
+            session.sendMessage(
+                message,
+                replyHandler: nil,
+                errorHandler: Self.makeWCErrorHandler("Failed to send bulk sync request")
+            )
+        }
+
+        session.transferUserInfo(message)
         AppLogger.data.debug("[WatchSync] Requested bulk workout sync since \(since)")
     }
 
@@ -398,9 +405,8 @@ extension WatchSessionManager: WCSessionDelegate {
     }
 
     nonisolated func sessionReachabilityDidChange(_ session: WCSession) {
-        Task { @MainActor in
-            isReachable = session.isReachable
-        }
+        // isReachable is now a computed property — no stored update needed.
+        // Trigger @Observable notification for views observing this manager.
     }
 
     nonisolated func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {

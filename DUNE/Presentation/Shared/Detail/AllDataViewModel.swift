@@ -54,6 +54,7 @@ final class AllDataViewModel {
         resetPageRequests()
         currentPage = 0
         dataPoints = []
+        groupedByDate = []
         hasMoreData = true
         isLoading = false
         await loadNextPage()
@@ -75,6 +76,7 @@ final class AllDataViewModel {
                 hasMoreData = false
             } else {
                 dataPoints.append(contentsOf: newPoints)
+                invalidateGroupedByDate()
                 currentPage += 1
             }
         } catch {
@@ -86,13 +88,15 @@ final class AllDataViewModel {
 
     // MARK: - Grouped Data
 
-    /// Data grouped by date section (newest first).
-    var groupedByDate: [(date: Date, points: [ChartDataPoint])] {
+    /// Data grouped by date section (newest first). Cached and invalidated on data change.
+    private(set) var groupedByDate: [(date: Date, points: [ChartDataPoint])] = []
+
+    private func invalidateGroupedByDate() {
         let calendar = Calendar.current
         let grouped = Dictionary(grouping: dataPoints) { point in
             calendar.startOfDay(for: point.date)
         }
-        return grouped
+        groupedByDate = grouped
             .map { (date: $0.key, points: $0.value.sorted(by: { $0.date > $1.date })) }
             .sorted(by: { $0.date > $1.date })
     }

@@ -30,7 +30,7 @@ struct NapDetectionCard: View {
                             }
                             if let freq = analysis.frequencyPerWeek {
                                 statItem(
-                                    value: String(format: "%.1f", freq),
+                                    value: freq.formatted(.number.precision(.fractionLength(1))),
                                     label: String(localized: "Per Week")
                                 )
                             }

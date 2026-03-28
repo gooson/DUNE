@@ -93,14 +93,17 @@ struct SleepRegularityCard: View {
         }
     }
 
+    private static let timeStyle = Date.FormatStyle().hour().minute()
+    private static let baseCalendar: Calendar = {
+        var c = Calendar.current
+        c.timeZone = .current
+        return c
+    }()
+
     private func formatTime(_ components: DateComponents) -> String {
-        let hour = components.hour ?? 0
-        let minute = components.minute ?? 0
-        var calendar = Calendar.current
-        calendar.timeZone = TimeZone.current
-        guard let date = calendar.date(from: DateComponents(hour: hour, minute: minute)) else {
+        guard let date = Self.baseCalendar.date(from: DateComponents(hour: components.hour ?? 0, minute: components.minute ?? 0)) else {
             return "--:--"
         }
-        return date.formatted(.dateTime.hour().minute())
+        return date.formatted(Self.timeStyle)
     }
 }
