@@ -187,6 +187,9 @@ extension PersonalRecordType {
 extension ActivityPersonalRecord.Kind {
     var displayName: String {
         switch self {
+        case .estimated1RM: String(localized: "Est. 1RM")
+        case .repMax: String(localized: "Rep Max")
+        case .sessionVolume: String(localized: "Session Volume")
         case .strengthWeight: String(localized: "Strength Weight")
         case .fastestPace: String(localized: "Fastest Pace")
         case .longestDistance: String(localized: "Longest Distance")
@@ -198,6 +201,9 @@ extension ActivityPersonalRecord.Kind {
 
     var iconName: String {
         switch self {
+        case .estimated1RM: "trophy.fill"
+        case .repMax: "scalemass.fill"
+        case .sessionVolume: "chart.bar.fill"
         case .strengthWeight: "dumbbell.fill"
         case .fastestPace: "speedometer"
         case .longestDistance: "point.topleft.down.to.point.bottomright.curvepath.fill"
@@ -209,6 +215,9 @@ extension ActivityPersonalRecord.Kind {
 
     var tintColor: Color {
         switch self {
+        case .estimated1RM: .yellow
+        case .repMax: .orange
+        case .sessionVolume: .purple
         case .strengthWeight: .orange
         case .fastestPace: DS.Color.activity
         case .longestDistance: DS.Color.activity

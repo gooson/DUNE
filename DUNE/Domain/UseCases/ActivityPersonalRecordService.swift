@@ -202,6 +202,12 @@ enum ActivityPersonalRecordService: Sendable {
         guard value > 0, value.isFinite else { return false }
 
         switch kind {
+        case .estimated1RM:
+            return value <= 750  // Epley can exceed raw 500 cap
+        case .repMax:
+            return value <= 500
+        case .sessionVolume:
+            return value <= 100_000
         case .strengthWeight:
             return value <= 500
         case .fastestPace:

@@ -174,7 +174,7 @@ struct PersonalRecordsSection: View {
 
     private func primaryValueText(for record: ActivityPersonalRecord) -> String {
         switch record.kind {
-        case .strengthWeight:
+        case .estimated1RM, .repMax, .strengthWeight, .sessionVolume:
             return record.value.formattedWithSeparator()
         case .fastestPace:
             let totalSeconds = Int(record.value)
@@ -195,6 +195,9 @@ struct PersonalRecordsSection: View {
 
     private func unitText(for record: ActivityPersonalRecord) -> String? {
         switch record.kind {
+        case .estimated1RM: "kg"
+        case .repMax: "kg"
+        case .sessionVolume: "kg"
         case .strengthWeight: "kg"
         case .fastestPace: "/km"
         case .longestDistance: "km"
