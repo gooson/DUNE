@@ -76,11 +76,36 @@ class UITestBaseCase: XCTestCase {
         }
     }
 
+    private static let appBundleID = "com.raftel.dailve"
+
     @discardableResult
-    private func terminateIfRunning(_ application: XCUIApplication, timeout: TimeInterval = 5) -> Bool {
+    private func terminateIfRunning(_ application: XCUIApplication, timeout: TimeInterval = 10) -> Bool {
         guard isApplicationRunning(application) else { return true }
         application.terminate()
-        return application.wait(for: .notRunning, timeout: timeout)
+        if application.wait(for: .notRunning, timeout: timeout) {
+            return true
+        }
+        // Graceful terminate failed — force-kill via simctl
+        Self.forceTerminateAppProcess()
+        return application.wait(for: .notRunning, timeout: 5)
+    }
+
+    /// Force-terminate the AUT via `xcrun simctl terminate`.
+    /// Uses `posix_spawn` because Foundation `Process` is unavailable in the iOS Simulator SDK.
+    private static func forceTerminateAppProcess() {
+        var pid = pid_t()
+        var args: [UnsafeMutablePointer<CChar>?] = [
+            strdup("/usr/bin/xcrun"),
+            strdup("simctl"),
+            strdup("terminate"),
+            strdup("booted"),
+            strdup(appBundleID),
+            nil
+        ]
+        defer { for arg in args where arg != nil { free(arg) } }
+        guard posix_spawn(&pid, "/usr/bin/xcrun", nil, nil, &args, nil) == 0 else { return }
+        var status: Int32 = 0
+        waitpid(pid, &status, 0)
     }
 
     override func tearDownWithError() throws {
@@ -88,7 +113,12 @@ class UITestBaseCase: XCTestCase {
             if let failureCount = testRun?.failureCount, failureCount > 0 {
                 addScreenshotAttachment(named: defaultArtifactName(suffix: "failure"))
             }
+            // Suppress terminate failures so a single stuck test doesn't cascade
+            // into launch-timeout failures for all subsequent tests in this class.
+            let savedContinueAfterFailure = continueAfterFailure
+            continueAfterFailure = true
             _ = terminateIfRunning(app)
+            continueAfterFailure = savedContinueAfterFailure
         }
         app = nil
         try super.tearDownWithError()
@@ -112,7 +142,8 @@ class UITestBaseCase: XCTestCase {
 
         addSystemPermissionMonitor()
 
-        // Avoid terminating a non-running AUT; this can deadlock the first CI launch.
+        // Ensure the previous AUT instance is fully terminated before launching.
+        // terminateIfRunning already includes force-kill fallback via simctl.
         _ = terminateIfRunning(app)
         app.launch()
     }
