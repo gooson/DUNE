@@ -205,37 +205,20 @@ final class WeeklyStatsDetailViewModel {
 
     private func rebuildSummaryStats(from result: PeriodComparison, period: StatsPeriod, allSnapshots: [ManualExerciseSnapshot]) {
         let current = result.current
-        let calendar = Calendar.current
 
         let durationMin = current.totalDuration / 60.0
         let durationChange = result.durationChange
         let calChange = result.calorieChange
 
-        // Volume from manual records (weight × reps)
-        let periodVolume = current.exerciseTypes.compactMap(\.totalVolume).reduce(0, +)
+        // Volume from manual records (weight × reps) — no fallback
+        let totalVolume = current.exerciseTypes.compactMap(\.totalVolume).reduce(0, +)
         let prevVolume = result.previous?.exerciseTypes.compactMap(\.totalVolume).reduce(0, +) ?? 0
-        let rawVolChange = prevVolume > 0 ? ((periodVolume - prevVolume) / prevVolume * 100) : nil
+        let rawVolChange = prevVolume > 0 ? ((totalVolume - prevVolume) / prevVolume * 100) : nil
         let volChange = rawVolChange.flatMap { $0.isFinite ? $0 : nil }
-
-        // Fallback: weekly average from all records if this period has no volume
-        let totalVolume: Double
-        if periodVolume > 0 {
-            totalVolume = periodVolume
-        } else {
-            let allWithVolume = allSnapshots.filter { $0.totalVolume > 0 }
-            if let oldest = allWithVolume.map(\.date).min() {
-                let allVol = allWithVolume.reduce(0.0) { $0 + $1.totalVolume }
-                let daySpan = max(1, calendar.dateComponents([.day], from: oldest, to: Date()).day ?? 1)
-                let weeks = max(1.0, Double(daySpan) / 7.0)
-                totalVolume = allVol / weeks
-            } else {
-                totalVolume = 0
-            }
-        }
 
         summaryStats = [
             .volume(
-                value: totalVolume > 0 ? totalVolume.formattedWithSeparator() : "\u{2014}",
+                value: totalVolume >= 0.01 ? totalVolume.formattedWithSeparator() : "\u{2014}",
                 change: volChange.map { "\($0.formattedWithSeparator(alwaysShowSign: true))%" },
                 isPositive: volChange.map { $0 >= 0 }
             ),
