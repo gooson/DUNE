@@ -6,35 +6,37 @@ struct WakeAnalysisCard: View {
     var body: some View {
         StandardCard {
             VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                Label(String(localized: "Wake Analysis"), systemImage: "moon.stars")
-                    .font(.callout)
-                    .foregroundStyle(DS.Color.textSecondary)
-
-                HStack(spacing: DS.Spacing.lg) {
-                    statItem(
-                        value: "\(analysis.awakeningCount)",
-                        label: String(localized: "Awakenings")
-                    )
-                    statItem(
-                        value: "\(Int(analysis.totalWASOMinutes))",
-                        unit: String(localized: "min"),
-                        label: String(localized: "Total WASO")
-                    )
-                    statItem(
-                        value: "\(Int(analysis.longestAwakeningMinutes))",
-                        unit: String(localized: "min"),
-                        label: String(localized: "Longest")
-                    )
-                }
-
                 HStack {
-                    Text(String(localized: "WASO Score"))
-                        .font(.caption)
+                    Label(String(localized: "Wake Analysis"), systemImage: "moon.stars")
+                        .font(.callout)
                         .foregroundStyle(DS.Color.textSecondary)
                     Spacer()
                     Text("\(analysis.score)")
                         .font(.title3.bold())
                         .foregroundStyle(scoreColor)
+                }
+
+                if analysis.awakeningCount == 0 {
+                    Text(String(localized: "No significant awakenings detected"))
+                        .font(.subheadline)
+                        .foregroundStyle(DS.Color.sleep)
+                } else {
+                    HStack(spacing: DS.Spacing.lg) {
+                        statItem(
+                            value: "\(analysis.awakeningCount)",
+                            label: String(localized: "Awakenings")
+                        )
+                        statItem(
+                            value: "\(Int(analysis.totalWASOMinutes))",
+                            unit: String(localized: "min"),
+                            label: String(localized: "Total WASO")
+                        )
+                        statItem(
+                            value: "\(Int(analysis.longestAwakeningMinutes))",
+                            unit: String(localized: "min"),
+                            label: String(localized: "Longest")
+                        )
+                    }
                 }
             }
         }

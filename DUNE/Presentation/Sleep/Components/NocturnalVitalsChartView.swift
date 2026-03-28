@@ -76,6 +76,11 @@ struct NocturnalVitalsChartView: View {
             }
         }
         .accessibilityIdentifier("sleep-nocturnal-vitals-card")
+        .task {
+            if activeBuckets.isEmpty, let first = availableTracks.first {
+                selectedTrack = first
+            }
+        }
     }
 
     private var trackPicker: some View {

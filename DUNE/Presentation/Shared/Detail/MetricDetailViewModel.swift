@@ -447,7 +447,7 @@ final class MetricDetailViewModel {
 
     private func loadNocturnalVitals(sleepStart: Date, sleepEnd: Date, requestID: Int) async {
         do {
-            async let hrTask = heartRateService.fetchHeartRateHistory(start: sleepStart, end: sleepEnd)
+            async let hrTask = heartRateService.fetchHeartRateHistory(start: sleepStart, end: sleepEnd, interval: DateComponents(minute: 5))
             async let rrTask = vitalsService.fetchRespiratoryRateCollection(start: sleepStart, end: sleepEnd)
             async let tempTask = vitalsService.fetchWristTemperatureCollection(start: sleepStart, end: sleepEnd)
             async let spo2Task = vitalsService.fetchSpO2Collection(start: sleepStart, end: sleepEnd)
