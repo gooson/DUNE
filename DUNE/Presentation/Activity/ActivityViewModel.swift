@@ -268,7 +268,15 @@ final class ActivityViewModel {
         }
 
         let completedSets = record.completedSets
-        let totalWeight = Swift.min(completedSets.compactMap(\.weight).reduce(0, +), 50_000)
+        let totalWeight = Swift.min(
+            completedSets.reduce(0.0) { total, set in
+                let w = set.weight ?? 0
+                let r = Double(set.reps ?? 0)
+                guard w > 0, r > 0 else { return total }
+                return total + w * r
+            },
+            999_999
+        )
         let totalReps = Swift.min(completedSets.compactMap(\.reps).reduce(0, +), 10_000)
         let durationSec = resolveManualDurationSeconds(for: record)
         let durationMin = durationSec.flatMap { $0 > 0 ? Swift.min($0 / 60.0, 480) : nil }
@@ -573,7 +581,7 @@ final class ActivityViewModel {
 
         weeklyStats = [
             .volume(
-                value: totalVolume > 0 ? min(totalVolume, 50_000).formattedWithSeparator() : "—",
+                value: totalVolume > 0 ? min(totalVolume, 999_999).formattedWithSeparator() : "—",
                 change: volumeChange.map { "\($0.formattedWithSeparator(alwaysShowSign: true))%" },
                 isPositive: volumeChange.map { $0 >= 0 }
             ),

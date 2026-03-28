@@ -308,7 +308,15 @@ final class TrainingVolumeViewModel {
 
     private func makeExerciseSnapshot(from record: ExerciseRecord) -> ExerciseRecordSnapshot {
         let completedSets = record.completedSets
-        let totalWeight = Swift.min(completedSets.compactMap(\.weight).reduce(0, +), 50_000)
+        let totalWeight = Swift.min(
+            completedSets.reduce(0.0) { total, set in
+                let w = set.weight ?? 0
+                let r = Double(set.reps ?? 0)
+                guard w > 0, r > 0 else { return total }
+                return total + w * r
+            },
+            999_999
+        )
         let totalReps = Swift.min(completedSets.compactMap(\.reps).reduce(0, +), 10_000)
         let durationMinutes = record.duration > 0 ? Swift.min(record.duration / 60.0, 480) : nil
 

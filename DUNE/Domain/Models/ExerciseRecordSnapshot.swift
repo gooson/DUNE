@@ -8,7 +8,7 @@ struct ExerciseRecordSnapshot: Sendable {
     let primaryMuscles: [MuscleGroup]
     let secondaryMuscles: [MuscleGroup]
     let completedSetCount: Int
-    /// Total weight lifted across all sets (kg). nil for bodyweight or unknown.
+    /// Total training volume across all completed sets (sum of weight × reps, in kg). nil for bodyweight or unknown.
     let totalWeight: Double?
     /// Total reps across all sets. nil for time-based or unknown.
     let totalReps: Int?
