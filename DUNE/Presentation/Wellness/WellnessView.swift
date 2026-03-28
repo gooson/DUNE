@@ -146,7 +146,7 @@ struct WellnessView: View {
                         PostureAssessmentLinkView(
                             onCapture: { isShowingPostureCapture = true },
                             onRealtime: { isShowingRealtimePosture = true },
-                            onScoreUpdate: { viewModel.postureScore = $0.map { max(0, min(100, $0)) } }
+                            onScoreUpdate: { viewModel.postureScore = $0 }
                         )
                         .staggeredAppear(index: 5)
 
@@ -539,8 +539,8 @@ private struct PostureAssessmentLinkView: View {
                 }
             }
         }
-        .onChange(of: records.first?.overallScore, initial: true) { _, newValue in
-            onScoreUpdate?(newValue)
+        .task(id: records.first?.overallScore) {
+            onScoreUpdate?(records.first?.overallScore)
         }
     }
 
