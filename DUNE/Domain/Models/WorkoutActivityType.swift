@@ -508,6 +508,16 @@ enum PersonalRecordType: String, Codable, Sendable {
     case highestCalories   // Most calories burned in a session
     case longestDuration   // Longest workout duration
     case highestElevation  // Most elevation gained
+
+    var localizedSubtitle: String {
+        switch self {
+        case .fastestPace: String(localized: "Fastest Pace")
+        case .longestDistance: String(localized: "Longest Distance")
+        case .highestCalories: String(localized: "Highest Calories")
+        case .longestDuration: String(localized: "Longest Duration")
+        case .highestElevation: String(localized: "Highest Elevation")
+        }
+    }
 }
 
 // MARK: - Workout Milestones

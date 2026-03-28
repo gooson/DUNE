@@ -96,8 +96,11 @@ struct SleepRegularityCard: View {
     private func formatTime(_ components: DateComponents) -> String {
         let hour = components.hour ?? 0
         let minute = components.minute ?? 0
-        let displayHour = hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour)
-        let period = hour >= 12 ? "PM" : "AM"
-        return String(format: "%d:%02d %@", displayHour, minute, period)
+        var calendar = Calendar.current
+        calendar.timeZone = TimeZone.current
+        guard let date = calendar.date(from: DateComponents(hour: hour, minute: minute)) else {
+            return "--:--"
+        }
+        return date.formatted(.dateTime.hour().minute())
     }
 }

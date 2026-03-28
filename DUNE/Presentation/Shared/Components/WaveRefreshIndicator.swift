@@ -45,7 +45,7 @@ struct WaveRefreshIndicator: View {
         }
         .frame(width: 80, height: 20)
         .clipShape(Capsule())
-        .onAppear {
+        .task {
             guard !reduceMotion else { return }
             withAnimation(Cache.drift) {
                 phase = 2 * .pi
