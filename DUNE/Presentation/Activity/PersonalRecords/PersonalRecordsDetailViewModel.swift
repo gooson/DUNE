@@ -5,12 +5,22 @@ import Observation
 @Observable
 @MainActor
 final class PersonalRecordsDetailViewModel {
-    var personalRecords: [ActivityPersonalRecord] = []
-    var selectedPeriod: TimePeriod = .sixMonths
-    var selectedKind: ActivityPersonalRecord.Kind?
+    var selectedPeriod: TimePeriod = .sixMonths { didSet { invalidateDerived() } }
+    var selectedKind: ActivityPersonalRecord.Kind? { didSet { invalidateDerived() } }
 
     /// PR periods relevant for this view (day/week excluded — PRs are sparse).
     static let availablePeriods: [TimePeriod] = [.month, .sixMonths, .year]
+
+    // MARK: - Cached Derived Data
+
+    private(set) var availableKinds: [ActivityPersonalRecord.Kind] = []
+    private(set) var filteredByKind: [ActivityPersonalRecord] = []
+    private(set) var filteredRecords: [ActivityPersonalRecord] = []
+    private(set) var chartData: [ActivityPersonalRecord] = []
+    private(set) var currentBest: ActivityPersonalRecord?
+    private(set) var allTimeRecords: [ActivityPersonalRecord] = []
+
+    private(set) var personalRecords: [ActivityPersonalRecord] = []
 
     func load(records: [ActivityPersonalRecord]) {
         personalRecords = records.sorted { lhs, rhs in
@@ -18,13 +28,7 @@ final class PersonalRecordsDetailViewModel {
             if lhs.kind.sortOrder != rhs.kind.sortOrder { return lhs.kind.sortOrder < rhs.kind.sortOrder }
             return lhs.value > rhs.value
         }
-    }
-
-    // MARK: - Derived Data (computed — no stored @Observable mutations)
-
-    var availableKinds: [ActivityPersonalRecord.Kind] {
-        let kinds = Set(personalRecords.map(\.kind))
-        return kinds.sorted { $0.sortOrder < $1.sortOrder }
+        invalidateDerived()
     }
 
     var resolvedKind: ActivityPersonalRecord.Kind? {
@@ -34,37 +38,33 @@ final class PersonalRecordsDetailViewModel {
         return availableKinds.first
     }
 
-    var filteredByKind: [ActivityPersonalRecord] {
-        guard let kind = resolvedKind else { return [] }
-        return personalRecords.filter { $0.kind == kind }
-    }
+    private func invalidateDerived() {
+        let kinds = Set(personalRecords.map(\.kind))
+        availableKinds = kinds.sorted { $0.sortOrder < $1.sortOrder }
 
-    /// Records filtered by kind AND period, sorted newest first.
-    var filteredRecords: [ActivityPersonalRecord] {
+        let kind = resolvedKind
+        let byKind: [ActivityPersonalRecord]
+        if let kind {
+            byKind = personalRecords.filter { $0.kind == kind }
+        } else {
+            byKind = []
+        }
+        filteredByKind = byKind
+
         let range = selectedPeriod.dateRange()
-        return filteredByKind
+        let periodFiltered = byKind
             .filter { $0.date >= range.start && $0.date <= range.end }
             .sorted { $0.date > $1.date }
-    }
+        filteredRecords = periodFiltered
+        chartData = periodFiltered.sorted { $0.date < $1.date }
 
-    /// Chart data: filtered records sorted oldest first (date ascending).
-    var chartData: [ActivityPersonalRecord] {
-        filteredRecords.sorted { $0.date < $1.date }
-    }
-
-    /// Current best record for the selected kind (across all time, not just period).
-    var currentBest: ActivityPersonalRecord? {
-        let allForKind = filteredByKind
-        guard let kind = resolvedKind else { return nil }
-        if kind.isLowerBetter {
-            return allForKind.min { $0.value < $1.value }
+        if let kind, kind.isLowerBetter {
+            currentBest = byKind.min { $0.value < $1.value }
+        } else {
+            currentBest = byKind.max { $0.value < $1.value }
         }
-        return allForKind.max { $0.value < $1.value }
-    }
 
-    /// All-time record grid (not period-filtered), sorted newest first.
-    var allTimeRecords: [ActivityPersonalRecord] {
-        filteredByKind.sorted { $0.date > $1.date }
+        allTimeRecords = byKind.sorted { $0.date > $1.date }
     }
 
 }
