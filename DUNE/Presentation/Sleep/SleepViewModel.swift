@@ -14,13 +14,25 @@ final class SleepViewModel {
     private(set) var cachedOutput = CalculateSleepScoreUseCase.Output(score: 0, totalMinutes: 0, efficiency: 0, remRatio: 0, wasoMinutes: 0, wasoCount: 0)
     private(set) var stageBreakdown: [(stage: SleepStage.Stage, minutes: Double)] = []
     private(set) var deficitAnalysis: SleepDeficitAnalysis?
+    private(set) var wasoAnalysis: WakeAfterSleepOnset?
+    private(set) var breathingAnalysis: BreathingDisturbanceAnalysis?
+    private(set) var exerciseCorrelation: SleepExerciseCorrelation?
+    private(set) var nocturnalVitals: NocturnalVitalsSnapshot?
 
     private let sleepService: SleepQuerying
     private let sleepScoreUseCase = CalculateSleepScoreUseCase()
     private let deficitUseCase = CalculateSleepDeficitUseCase()
+    private let wasoUseCase = AnalyzeWASOUseCase()
+    private let breathingService: BreathingDisturbanceQuerying
+    private let correlationUseCase = CorrelateSleepExerciseUseCase()
+    private let nocturnalVitalsUseCase = AggregateNocturnalVitalsUseCase()
 
-    init(sleepService: SleepQuerying? = nil) {
+    init(
+        sleepService: SleepQuerying? = nil,
+        breathingService: BreathingDisturbanceQuerying? = nil
+    ) {
         self.sleepService = sleepService ?? SleepQueryService(manager: .shared)
+        self.breathingService = breathingService ?? BreathingDisturbanceQueryService()
     }
 
     var totalSleepMinutes: Double { cachedOutput.totalMinutes }
@@ -84,11 +96,26 @@ final class SleepViewModel {
             weeklyData = try await weeklyTask
             let allDurations = try await deficitTask
             computeDeficitAnalysis(from: allDurations, today: today)
+
+            // WASO analysis from today's stages (synchronous, no additional fetch)
+            wasoAnalysis = wasoUseCase.execute(stages: todayStages)
+
+            // Load additional insights in parallel (each can fail independently)
+            await loadEnhancedInsights()
         } catch {
             AppLogger.ui.error("Sleep data load failed: \(error.localizedDescription)")
             errorMessage = error.localizedDescription
         }
         isLoading = false
+    }
+
+    private func loadEnhancedInsights() async {
+        do {
+            let samples = try await breathingService.fetchNightlyDisturbances(days: 30)
+            breathingAnalysis = breathingService.analyze(samples: samples)
+        } catch {
+            AppLogger.ui.error("[Sleep] Breathing disturbances fetch failed: \(error, privacy: .private)")
+        }
     }
 
     private func computeDeficitAnalysis(
