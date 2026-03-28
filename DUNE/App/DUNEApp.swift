@@ -648,9 +648,6 @@ struct DUNEApp: App {
             await PostureReminderScheduler.shared.refreshSchedule()
         }
         scheduleWorkoutTitleBackfill()
-
-        // Full CloudKit data dump
-        Task { await CloudKitDiagnostics.dumpAllCloudKitData(modelContainer: modelContainer) }
     }
 
     @MainActor
