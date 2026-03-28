@@ -67,18 +67,4 @@ final class PersonalRecordsDetailViewModel {
         filteredByKind.sorted { $0.date > $1.date }
     }
 
-    var chartXStrideComponent: Calendar.Component {
-        switch selectedPeriod {
-        case .day, .week: .day
-        case .month: .weekOfMonth
-        case .sixMonths, .year: .month
-        }
-    }
-
-    var chartXLabelFormat: Date.FormatStyle {
-        switch selectedPeriod {
-        case .day, .week, .month: .dateTime.day().month(.abbreviated)
-        case .sixMonths, .year: .dateTime.month(.abbreviated)
-        }
-    }
 }
