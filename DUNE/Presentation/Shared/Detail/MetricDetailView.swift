@@ -105,8 +105,13 @@ struct MetricDetailView: View {
                 if metric.category == .sleep {
                     WakeAnalysisCard(analysis: viewModel.wasoAnalysis)
                     BreathingDisturbanceCard(analysis: viewModel.breathingAnalysis)
+                    SleepRegularityCard(regularity: viewModel.sleepRegularity)
+                    NapDetectionCard(analysis: viewModel.napAnalysis)
+                    SleepDebtRecoveryCard(prediction: viewModel.debtRecoveryPrediction)
                     SleepExerciseCorrelationCard(correlation: viewModel.exerciseCorrelation)
                     NocturnalVitalsChartView(snapshot: viewModel.nocturnalVitals)
+                    VitalsTimelineCard(analysis: viewModel.vitalsTimeline)
+                    SleepEnvironmentCard(analysis: viewModel.sleepEnvironment)
                 }
 
                 // Exercise totals + Highlights

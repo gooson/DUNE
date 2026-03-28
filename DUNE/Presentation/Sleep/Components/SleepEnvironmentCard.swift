@@ -94,7 +94,7 @@ struct SleepEnvironmentCard: View {
             .font(.caption2.weight(.medium))
             .padding(.horizontal, DS.Spacing.xs)
             .padding(.vertical, 2)
-            .background(badgeColor(confidence).opacity(DS.Opacity.badge), in: Capsule())
+            .background(badgeColor(confidence).opacity(DS.Opacity.light), in: Capsule())
             .foregroundStyle(badgeColor(confidence))
     }
 

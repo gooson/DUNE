@@ -60,7 +60,7 @@ struct VitalsTimelineCard: View {
                         .padding(.vertical, 4)
                         .background(
                             selectedTrack == type
-                                ? DS.Color.sleep.opacity(DS.Opacity.badge)
+                                ? DS.Color.sleep.opacity(DS.Opacity.light)
                                 : Color.clear,
                             in: Capsule()
                         )

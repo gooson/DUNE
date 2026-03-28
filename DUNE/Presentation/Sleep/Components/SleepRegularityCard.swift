@@ -73,7 +73,7 @@ struct SleepRegularityCard: View {
             .font(.caption2.weight(.medium))
             .padding(.horizontal, DS.Spacing.xs)
             .padding(.vertical, 2)
-            .background(confidenceColor(confidence).opacity(DS.Opacity.badge), in: Capsule())
+            .background(confidenceColor(confidence).opacity(DS.Opacity.light), in: Capsule())
             .foregroundStyle(confidenceColor(confidence))
     }
 
