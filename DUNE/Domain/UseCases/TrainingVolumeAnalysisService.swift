@@ -175,6 +175,7 @@ enum TrainingVolumeAnalysisService {
     ) -> [DailyVolumePoint] {
         let calendar = Calendar.current
         var dailySegments: [Date: [String: TimeInterval]] = [:]
+        var dailyVolume: [Date: Double] = [:]
 
         for workout in workouts {
             guard workout.duration > 0, workout.duration.isFinite else { continue }
@@ -188,6 +189,9 @@ enum TrainingVolumeAnalysisService {
             dailySegments[day, default: [:]][
                 "manual-\(record.exerciseType)", default: 0
             ] += record.duration
+            if record.totalVolume > 0, record.totalVolume.isFinite {
+                dailyVolume[day, default: 0] += record.totalVolume
+            }
         }
 
         // Fill all days in range
@@ -200,7 +204,11 @@ enum TrainingVolumeAnalysisService {
                 DailyVolumePoint.Segment(typeKey: $0.key, duration: $0.value)
             }
             .sorted { $0.duration > $1.duration } ?? []
-            result.append(DailyVolumePoint(date: current, segments: segments))
+            result.append(DailyVolumePoint(
+                date: current,
+                segments: segments,
+                totalVolume: dailyVolume[current] ?? 0
+            ))
             guard let next = calendar.date(byAdding: .day, value: 1, to: current) else { break }
             current = next
         }

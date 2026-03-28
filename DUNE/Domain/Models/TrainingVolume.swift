@@ -48,6 +48,13 @@ struct DailyVolumePoint: Identifiable, Sendable {
     var id: Date { date }
     let date: Date
     let segments: [Segment]
+    let totalVolume: Double // weight × reps (kg), 0 if no strength data
+
+    init(date: Date, segments: [Segment], totalVolume: Double = 0) {
+        self.date = date
+        self.segments = segments
+        self.totalVolume = totalVolume
+    }
 
     var totalDuration: TimeInterval {
         segments.reduce(0) { $0 + $1.duration }

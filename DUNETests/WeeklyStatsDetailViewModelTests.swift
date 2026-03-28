@@ -108,7 +108,7 @@ struct WeeklyStatsDetailViewModelTests {
         await vm.loadData(manualSnapshots: [makeManual(daysAgo: 1, minutes: 20)])
 
         #expect(vm.comparison != nil)
-        #expect(vm.summaryStats.count == 4)
+        #expect(vm.summaryStats.count == 5)
         #expect(vm.summaryStats.contains { $0.id == "sessions" })
         #expect(vm.isLoading == false)
         #expect(vm.errorMessage == nil)
@@ -124,7 +124,7 @@ struct WeeklyStatsDetailViewModelTests {
 
         #expect(vm.comparison != nil)
         #expect(vm.chartDailyBreakdown.count == 28)
-        #expect(vm.summaryStats.count == 4)
+        #expect(vm.summaryStats.count == 5)
         #expect(vm.errorMessage == nil)
     }
 
@@ -207,5 +207,21 @@ struct WeeklyStatsDetailViewModelTests {
 
         #expect(vm.chartDailyBreakdown.count == 60)
         #expect(vm.isLoading == false)
+    }
+
+    @Test("chartDailyBreakdown carries totalVolume from manual records")
+    func chartDailyBreakdownCarriesTotalVolume() async {
+        let vm = WeeklyStatsDetailViewModel(workoutService: MockWeeklyStatsWorkoutService())
+
+        let manual = makeManual(daysAgo: 1, minutes: 20) // totalVolume = 1_000
+        await vm.loadData(manualSnapshots: [manual])
+
+        let manualDay = calendar.startOfDay(for: day(1))
+        let point = vm.chartDailyBreakdown.first { $0.date == manualDay }
+        #expect(point != nil)
+        #expect(point?.totalVolume == 1_000)
+
+        let emptyDay = vm.chartDailyBreakdown.first { $0.date == calendar.startOfDay(for: day(3)) }
+        #expect(emptyDay?.totalVolume == 0)
     }
 }
