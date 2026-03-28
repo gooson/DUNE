@@ -39,7 +39,7 @@ struct AllDataView: View {
                 EmptyStateView(
                     icon: category.iconName,
                     title: "No Data",
-                    message: "No \(category.displayName.lowercased()) data available yet."
+                    message: "No data available yet."
                 )
                 .accessibilityIdentifier("all-data-empty-state")
             }
