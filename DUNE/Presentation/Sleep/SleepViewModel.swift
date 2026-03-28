@@ -16,16 +16,12 @@ final class SleepViewModel {
     private(set) var deficitAnalysis: SleepDeficitAnalysis?
     private(set) var wasoAnalysis: WakeAfterSleepOnset?
     private(set) var breathingAnalysis: BreathingDisturbanceAnalysis?
-    private(set) var exerciseCorrelation: SleepExerciseCorrelation?
-    private(set) var nocturnalVitals: NocturnalVitalsSnapshot?
 
     private let sleepService: SleepQuerying
     private let sleepScoreUseCase = CalculateSleepScoreUseCase()
     private let deficitUseCase = CalculateSleepDeficitUseCase()
     private let wasoUseCase = AnalyzeWASOUseCase()
     private let breathingService: BreathingDisturbanceQuerying
-    private let correlationUseCase = CorrelateSleepExerciseUseCase()
-    private let nocturnalVitalsUseCase = AggregateNocturnalVitalsUseCase()
 
     init(
         sleepService: SleepQuerying? = nil,

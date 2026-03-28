@@ -123,8 +123,8 @@ struct CorrelateSleepExerciseUseCase: SleepExerciseCorrelating, Sendable {
         }
 
         if improvement.isEmpty {
-            return String(localized: "Best sleep after \(bestBand.key.displayName.lowercased()) workouts")
+            return String(localized: "Best sleep after \(bestBand.key.displayName) workouts")
         }
-        return String(localized: "Best sleep after \(bestBand.key.displayName.lowercased()) workouts — \(improvement)")
+        return String(localized: "Best sleep after \(bestBand.key.displayName) workouts — \(improvement)")
     }
 }
