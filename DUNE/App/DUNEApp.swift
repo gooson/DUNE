@@ -664,6 +664,9 @@ struct DUNEApp: App {
             await PostureReminderScheduler.shared.refreshSchedule()
         }
         scheduleWorkoutTitleBackfill()
+
+        // Diagnostic: check iCloud ExerciseRecord data
+        Task { await CloudKitDiagnostics.fetchAllExerciseRecords() }
     }
 
     @MainActor
