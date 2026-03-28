@@ -114,9 +114,11 @@ enum TemplateExerciseProfile: Sendable, Equatable {
         switch inputType {
         case .durationDistance:
             self = .cardio(cardioSecondaryUnit)
+        case .durationIntensity:
+            self = .cardio(.timeOnly)
         case .none:
             self = .unresolved
-        default:
+        case .setsRepsWeight, .setsReps, .roundsBased:
             self = .strengthLike
         }
     }
