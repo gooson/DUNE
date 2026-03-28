@@ -15,6 +15,8 @@ struct SettingsView: View {
     @State private var bodyWeightKg: Double = WorkoutSettingsStore.shared.bodyWeightKg
     @State private var isProcessingSimulatorMockData = false
     @State private var simulatorMockStatusMessage: String?
+    @State private var isSyncing = false
+    @State private var lastCloudSyncDate: Date?
 
     private let store = WorkoutSettingsStore.shared
     private let whatsNewStore = WhatsNewStore.shared
@@ -215,6 +217,25 @@ struct SettingsView: View {
             .accessibilityIdentifier("settings-row-icloud-sync")
 
             Button {
+                triggerCloudKitSync()
+            } label: {
+                Label {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Force Sync")
+                        if let lastSync = lastCloudSyncDate {
+                            Text(lastSync, style: .relative)
+                                .font(.caption2)
+                                .foregroundStyle(DS.Color.textSecondary)
+                        }
+                    }
+                } icon: {
+                    Image(systemName: "arrow.triangle.2.circlepath.icloud")
+                }
+            }
+            .disabled(isSyncing)
+            .accessibilityIdentifier("settings-row-force-sync")
+
+            Button {
                 guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
                 openURL(url)
             } label: {
@@ -255,6 +276,29 @@ struct SettingsView: View {
                 isCloudSyncEnabled = newValue
             }
         )
+    }
+
+    private func triggerCloudKitSync() {
+        guard !isSyncing else { return }
+        isSyncing = true
+
+        // Dummy write + delete triggers CloudKit sync cycle
+        let marker = ExerciseRecord(
+            date: .distantPast,
+            exerciseType: "__cloudkit_sync_trigger__",
+            duration: 0
+        )
+        modelContext.insert(marker)
+        try? modelContext.save()
+        modelContext.delete(marker)
+        try? modelContext.save()
+
+        lastCloudSyncDate = Date()
+
+        Task {
+            try? await Task.sleep(nanoseconds: 2_000_000_000)
+            isSyncing = false
+        }
     }
 
     // MARK: - About
