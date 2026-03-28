@@ -719,6 +719,7 @@
 		A27362F664717D825477BE6A /* DUNEWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 60DC9EE662AC56DDF05072DC /* DUNEWatch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A2CDC5CD2AD32D436D44E014 /* FormCheckOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2515DFF6A1DFD4F81AFE686 /* FormCheckOverlay.swift */; };
 		A2D419490019E4C7ED3BDE05 /* WorkoutActivityType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD727EA537A7E6C6BC61DE2 /* WorkoutActivityType.swift */; };
+		A34AAABBD8E027E6F2C5DC36 /* WASOInfoSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174B0BB41E8AA149149FDE39 /* WASOInfoSheet.swift */; };
 		A3D897D9EB18E54FC8FA0839 /* DashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D5DEEE5C5CBABCAC7D9851 /* DashboardViewModel.swift */; };
 		A456F30DFCAB853310A19071 /* SubScoreTrendChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C24CA27FDCBDE0B4B070A8 /* SubScoreTrendChartView.swift */; };
 		A45C8191021930DBB92A28A9 /* PersistentStoreRecoveryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB154A1DB6B6C1D9420E0B7E /* PersistentStoreRecoveryTests.swift */; };
@@ -1307,6 +1308,7 @@
 		16B2E12557CDFAD3CB6C7F92 /* CardioSessionViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardioSessionViewModelTests.swift; sourceTree = "<group>"; };
 		16FB7DDE7F8284D62F6AE577 /* ConditionScore+View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConditionScore+View.swift"; sourceTree = "<group>"; };
 		17413EA716051F23761DED31 /* WatchPostureMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchPostureMonitor.swift; sourceTree = "<group>"; };
+		174B0BB41E8AA149149FDE39 /* WASOInfoSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WASOInfoSheet.swift; sourceTree = "<group>"; };
 		1767C5CB7CC4252405E56B63 /* WatchRPEEstimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchRPEEstimator.swift; sourceTree = "<group>"; };
 		179B7B1B76AA85C280BD0FE1 /* WorkoutStreak.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutStreak.swift; sourceTree = "<group>"; };
 		17C754BC52DF6DB65A7A942D /* ExercisePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExercisePickerView.swift; sourceTree = "<group>"; };
@@ -3427,6 +3429,7 @@
 				D5D047867A59D9C623B0E918 /* NocturnalVitalsChartView.swift */,
 				023F2A7199D07AEE4AAEF35E /* SleepExerciseCorrelationCard.swift */,
 				8564AAAB9328A7F7505F7E90 /* WakeAnalysisCard.swift */,
+				174B0BB41E8AA149149FDE39 /* WASOInfoSheet.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -4789,6 +4792,7 @@
 				44152CFF5733CB416293DA28 /* VolumeIntensity.swift in Sources */,
 				BA5CB0F31AE47F5283B5CA49 /* VolumeLegendView.swift in Sources */,
 				B89AEB22CAD0D2B4A06726D9 /* VolumePeriod+View.swift in Sources */,
+				A34AAABBD8E027E6F2C5DC36 /* WASOInfoSheet.swift in Sources */,
 				08E55447E8015A95E2EDCA81 /* WakeAfterSleepOnset.swift in Sources */,
 				3D5AE1A42C8922177E20D68A /* WakeAnalysisCard.swift in Sources */,
 				538C565534D6BE12F079C52D /* WatchConnectivityModels.swift in Sources */,

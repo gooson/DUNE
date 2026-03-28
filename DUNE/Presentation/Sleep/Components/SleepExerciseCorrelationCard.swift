@@ -2,10 +2,11 @@ import SwiftUI
 import Charts
 
 struct SleepExerciseCorrelationCard: View {
-    let correlation: SleepExerciseCorrelation
+    let correlation: SleepExerciseCorrelation?
 
     private var sortedBands: [(band: SleepExerciseCorrelation.IntensityBand, stats: SleepExerciseCorrelation.SleepStats)] {
-        SleepExerciseCorrelation.IntensityBand.allCases.compactMap { band in
+        guard let correlation else { return [] }
+        return SleepExerciseCorrelation.IntensityBand.allCases.compactMap { band in
             guard let stats = correlation.intensityBreakdown[band] else { return nil }
             return (band, stats)
         }
@@ -19,55 +20,63 @@ struct SleepExerciseCorrelationCard: View {
                         .font(.callout)
                         .foregroundStyle(DS.Color.textSecondary)
                     Spacer()
-                    confidenceBadge
+                    if let correlation {
+                        confidenceBadge(correlation.confidence)
+                    }
                 }
 
-                if !sortedBands.isEmpty {
-                    Chart(sortedBands, id: \.band) { item in
-                        BarMark(
-                            x: .value("Band", item.band.displayName),
-                            y: .value("Score", item.stats.avgScore)
-                        )
-                        .foregroundStyle(bandColor(item.band))
-                        .annotation(position: .top) {
-                            Text("\(Int(item.stats.avgScore))")
-                                .font(.caption2)
+                if let correlation {
+                    if !sortedBands.isEmpty {
+                        Chart(sortedBands, id: \.band) { item in
+                            BarMark(
+                                x: .value("Band", item.band.displayName),
+                                y: .value("Score", item.stats.avgScore)
+                            )
+                            .foregroundStyle(bandColor(item.band))
+                            .annotation(position: .top) {
+                                Text("\(Int(item.stats.avgScore))")
+                                    .font(.caption2)
+                                    .foregroundStyle(DS.Color.textSecondary)
+                            }
+                        }
+                        .chartYScale(domain: 0...110)
+                        .chartYAxis {
+                            AxisMarks(values: [0, 25, 50, 75, 100]) { _ in
+                                AxisGridLine()
+                                AxisValueLabel()
+                            }
+                        }
+                        .frame(height: 150)
+                        .clipped()
+                    }
+
+                    if let insight = correlation.overallInsight {
+                        HStack(spacing: DS.Spacing.xs) {
+                            Image(systemName: "lightbulb.fill")
+                                .foregroundStyle(.yellow)
+                            Text(insight)
+                                .font(.caption)
                                 .foregroundStyle(DS.Color.textSecondary)
                         }
                     }
-                    .chartYScale(domain: 0...110)
-                    .chartYAxis {
-                        AxisMarks(values: [0, 25, 50, 75, 100]) { _ in
-                            AxisGridLine()
-                            AxisValueLabel()
-                        }
-                    }
-                    .frame(height: 150)
-                    .clipped()
-                }
 
-                if let insight = correlation.overallInsight {
-                    HStack(spacing: DS.Spacing.xs) {
-                        Image(systemName: "lightbulb.fill")
-                            .foregroundStyle(.yellow)
-                        Text(insight)
-                            .font(.caption)
-                            .foregroundStyle(DS.Color.textSecondary)
+                    if correlation.confidence == .low {
+                        Text(String(localized: "More data needed for accurate analysis"))
+                            .font(.caption2)
+                            .foregroundStyle(.tertiary)
                     }
-                }
-
-                if correlation.confidence == .low {
-                    Text(String(localized: "More data needed for accurate analysis"))
-                        .font(.caption2)
-                        .foregroundStyle(.tertiary)
+                } else {
+                    Text(String(localized: "Collecting sleep data..."))
+                        .font(.subheadline)
+                        .foregroundStyle(DS.Color.textSecondary)
                 }
             }
         }
         .accessibilityIdentifier("sleep-exercise-correlation-card")
     }
 
-    private var confidenceBadge: some View {
-        let (text, color): (String, Color) = switch correlation.confidence {
+    private func confidenceBadge(_ confidence: SleepExerciseCorrelation.Confidence) -> some View {
+        let (text, color): (String, Color) = switch confidence {
         case .low: (String(localized: "Low"), .gray)
         case .medium: (String(localized: "Medium"), .orange)
         case .high: (String(localized: "High"), .green)

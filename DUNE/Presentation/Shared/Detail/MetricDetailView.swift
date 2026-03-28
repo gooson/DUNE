@@ -101,26 +101,12 @@ struct MetricDetailView: View {
                     SleepDeficitGaugeView(analysis: deficit)
                 }
 
-                // WASO analysis
-                if metric.category == .sleep, let waso = viewModel.wasoAnalysis {
-                    WakeAnalysisCard(analysis: waso)
-                }
-
-                // Breathing disturbances
-                if metric.category == .sleep, let breathing = viewModel.breathingAnalysis,
-                   !breathing.samples.isEmpty {
-                    BreathingDisturbanceCard(analysis: breathing)
-                }
-
-                // Sleep-exercise correlation
-                if metric.category == .sleep, let correlation = viewModel.exerciseCorrelation,
-                   correlation.dataPointCount >= 7 {
-                    SleepExerciseCorrelationCard(correlation: correlation)
-                }
-
-                // Overnight vitals
-                if metric.category == .sleep, let vitals = viewModel.nocturnalVitals {
-                    NocturnalVitalsChartView(snapshot: vitals)
+                // Sleep enhanced insights (always show cards when sleep category)
+                if metric.category == .sleep {
+                    WakeAnalysisCard(analysis: viewModel.wasoAnalysis)
+                    BreathingDisturbanceCard(analysis: viewModel.breathingAnalysis)
+                    SleepExerciseCorrelationCard(correlation: viewModel.exerciseCorrelation)
+                    NocturnalVitalsChartView(snapshot: viewModel.nocturnalVitals)
                 }
 
                 // Exercise totals + Highlights
