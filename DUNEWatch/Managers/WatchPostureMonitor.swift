@@ -179,7 +179,6 @@ final class WatchPostureMonitor {
         userDefaults.set(enabled, forKey: SettingsKey.isEnabled)
         isEnabled = enabled
         if enabled {
-            requestNotificationAuthorization()
             startMonitoring()
         } else {
             stopMonitoring()
@@ -369,14 +368,8 @@ final class WatchPostureMonitor {
 
     /// Schedules future stretch-reminder notifications at 1x, 2x, 3x threshold intervals.
     /// Uses `UNTimeIntervalNotificationTrigger` so the OS delivers even when the app is suspended.
+    /// Skips individual notifications whose delivery time falls in the night window (22:00–06:00).
     private func scheduleStretchNotifications() {
-        // Suppress during night hours
-        let hour = Calendar.current.component(.hour, from: Date())
-        if hour >= Constants.nightStartHour || hour < Constants.nightEndHour {
-            Self.logger.info("[PostureMonitor] Suppressing scheduled stretch — night hours")
-            return
-        }
-
         // Suppress during active workout
         if isWorkoutActive() {
             Self.logger.info("[PostureMonitor] Suppressing scheduled stretch — workout active")
@@ -384,18 +377,29 @@ final class WatchPostureMonitor {
         }
 
         let center = UNUserNotificationCenter.current()
+        let calendar = Calendar.current
+        let now = Date()
         let thresholdSeconds = TimeInterval(sedentaryThresholdMinutes * 60)
 
         // Cancel any previously scheduled stretch notifications before re-scheduling
         cancelScheduledStretchNotifications()
 
+        var scheduledCount = 0
         for index in 0..<Constants.maxPendingNotifications {
+            let delay = thresholdSeconds * Double(index + 1)
+            let deliveryDate = now.addingTimeInterval(delay)
+            let deliveryHour = calendar.component(.hour, from: deliveryDate)
+
+            // Skip notifications that would deliver during night hours
+            if deliveryHour >= Constants.nightStartHour || deliveryHour < Constants.nightEndHour {
+                continue
+            }
+
             let content = UNMutableNotificationContent()
             content.title = String(localized: "Time to stretch!")
             content.body = String(localized: "You've been sitting for a while. Take a moment to stand and stretch.")
             content.sound = .default
 
-            let delay = thresholdSeconds * Double(index + 1)
             let trigger = UNTimeIntervalNotificationTrigger(timeInterval: delay, repeats: false)
 
             let request = UNNotificationRequest(
@@ -409,17 +413,24 @@ final class WatchPostureMonitor {
                     Self.logger.error("[PostureMonitor] Failed to schedule notification \(index): \(error.localizedDescription)")
                 }
             }
+            scheduledCount += 1
         }
 
-        Self.logger.info("[PostureMonitor] Scheduled \(Constants.maxPendingNotifications) stretch notifications (interval: \(self.sedentaryThresholdMinutes)min)")
+        Self.logger.info("[PostureMonitor] Scheduled \(scheduledCount) stretch notifications (interval: \(self.sedentaryThresholdMinutes)min)")
     }
+
+    /// Identifiers for all scheduled stretch notification slots.
+    private static let scheduledNotificationIdentifiers: [String] = {
+        (0..<Constants.maxPendingNotifications).map {
+            "\(Constants.scheduledNotificationPrefix)-\($0)"
+        }
+    }()
 
     /// Cancels all pending scheduled stretch notifications.
     private func cancelScheduledStretchNotifications() {
-        let identifiers = (0..<Constants.maxPendingNotifications).map {
-            "\(Constants.scheduledNotificationPrefix)-\($0)"
-        }
-        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: identifiers)
+        UNUserNotificationCenter.current().removePendingNotificationRequests(
+            withIdentifiers: Self.scheduledNotificationIdentifiers
+        )
     }
 
     // MARK: - Gait Analysis
