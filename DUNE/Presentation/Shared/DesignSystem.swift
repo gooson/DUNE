@@ -180,6 +180,26 @@ enum DS {
         static let shimmer = SwiftUI.Animation.easeInOut(duration: 0.4)
         /// Weather atmosphere color transition (slow cross-fade)
         static let atmosphereTransition = SwiftUI.Animation.easeInOut(duration: 1.5)
+
+        // MARK: Rich Animation Presets
+
+        /// Card/section entrance (staggered appear)
+        static let cardEntrance = SwiftUI.Animation.spring(duration: 0.5, bounce: 0.15)
+        /// Press-down feedback (instant feel)
+        static let pressDown = SwiftUI.Animation.spring(duration: 0.2, bounce: 0.0)
+        /// Press-up release (bouncy return)
+        static let pressUp = SwiftUI.Animation.spring(duration: 0.4, bounce: 0.15)
+        /// Chart draw reveal (left-to-right)
+        static let chartDraw = SwiftUI.Animation.easeOut(duration: 0.8)
+
+        /// Stagger delay for sequential card/section appearance.
+        /// - Parameters:
+        ///   - index: Position in sequence (0-based).
+        ///   - base: Delay per item in seconds.
+        ///   - max: Maximum index to apply delay (items beyond appear simultaneously).
+        static func staggerDelay(index: Int, base: Double = 0.06, max: Int = 8) -> Double {
+            Double(min(index, max)) * base
+        }
     }
 
     // MARK: - Typography (Dynamic Type compatible)
