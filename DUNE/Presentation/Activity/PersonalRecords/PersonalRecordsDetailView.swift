@@ -78,6 +78,12 @@ struct PersonalRecordsDetailView: View {
         .task(id: recordsUpdateKey) {
             viewModel.load(records: records)
         }
+        .onChange(of: viewModel.selectedPeriod) { _, _ in
+            viewModel.rebuildDerived()
+        }
+        .onChange(of: viewModel.selectedKind) { _, _ in
+            viewModel.rebuildDerived()
+        }
     }
 
     // MARK: - Components

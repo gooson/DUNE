@@ -6,14 +6,8 @@ import Observation
 @MainActor
 final class PersonalRecordsDetailViewModel {
     var personalRecords: [ActivityPersonalRecord] = []
-
-    var selectedPeriod: TimePeriod = .sixMonths {
-        didSet { rebuildDerived() }
-    }
-
-    var selectedKind: ActivityPersonalRecord.Kind? {
-        didSet { rebuildDerived() }
-    }
+    var selectedPeriod: TimePeriod = .sixMonths
+    var selectedKind: ActivityPersonalRecord.Kind?
 
     /// PR periods relevant for this view (day/week excluded — PRs are sparse).
     static let availablePeriods: [TimePeriod] = [.month, .sixMonths, .year]
@@ -40,9 +34,8 @@ final class PersonalRecordsDetailViewModel {
         rebuildDerived()
     }
 
-    // MARK: - Private
-
-    private func rebuildDerived() {
+    /// Called from View's .onChange when selectedPeriod or selectedKind changes.
+    func rebuildDerived() {
         // Available kinds
         let kinds = Set(personalRecords.map(\.kind))
         availableKinds = kinds.sorted { $0.sortOrder < $1.sortOrder }
