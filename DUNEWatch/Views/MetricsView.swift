@@ -11,6 +11,8 @@ struct MetricsView: View {
     @State private var weight: Double = 0
     @State private var reps: Int = WatchSetInputPolicy.defaultReps
     @State private var durationMinutes: Int = 1
+    /// Start date of the current duration-intensity set (live timer).
+    @State private var setTimerStart: Date?
     /// Auto-estimated RPE for the just-completed set (shown on rest timer).
     @State private var estimatedRPE: Double?
     @State private var showInputSheet = false
@@ -207,8 +209,9 @@ struct MetricsView: View {
     // MARK: - Input Card (Tap to Edit)
 
     private var inputCard: some View {
-        Button {
-            showInputSheet = true
+        let isDuration = currentInputType == .durationIntensity
+        return Button {
+            if !isDuration { showInputSheet = true }
         } label: {
             VStack(spacing: DS.Spacing.xxs) {
                 switch currentInputType {
@@ -228,10 +231,12 @@ struct MetricsView: View {
                     .fill(DS.Color.positive.opacity(DS.Opacity.border))
             }
             .overlay(alignment: .topTrailing) {
-                Image(systemName: "pencil")
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-                    .padding(DS.Spacing.sm)
+                if !isDuration {
+                    Image(systemName: "pencil")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .padding(DS.Spacing.sm)
+                }
             }
         }
         .buttonStyle(.plain)
@@ -272,12 +277,13 @@ struct MetricsView: View {
     }
 
     private var durationInputCardContent: some View {
-        HStack(spacing: DS.Spacing.xs) {
-            Text("\(durationMinutes)")
-                .font(DS.Typography.metricValue)
-            Text("min")
-                .font(DS.Typography.tileSubtitle)
-                .foregroundStyle(.secondary)
+        TimelineView(.periodic(from: .now, by: 1)) { context in
+            let elapsed = Int(setTimerStart.map { context.date.timeIntervalSince($0) } ?? 0)
+            let mins = elapsed / 60
+            let secs = elapsed % 60
+            Text(String(format: "%d:%02d", mins, secs))
+                .font(.system(.title2, design: .rounded).monospacedDigit().bold())
+                .contentTransition(.numericText())
         }
     }
 
@@ -373,14 +379,8 @@ struct MetricsView: View {
         let inputType = currentInputType
 
         if inputType == .durationIntensity {
-            // Duration-based exercises: prefill from last completed duration or default 1 min.
-            // Use rounding (not truncation) to avoid lossy round-trip: 90s → 2min, not 1min.
-            if let lastSet = workoutManager.lastCompletedSetForCurrentExercise,
-               let lastDuration = lastSet.duration, lastDuration > 0 {
-                durationMinutes = max(1, Int((lastDuration / 60).rounded()))
-            } else {
-                durationMinutes = 1
-            }
+            // Start the live timer for this set.
+            setTimerStart = Date()
             return
         }
 
@@ -434,12 +434,16 @@ struct MetricsView: View {
         let inputType = currentInputType
 
         if inputType == .durationIntensity {
-            guard durationMinutes > 0 else {
-                showInputSheet = true
+            guard let start = setTimerStart else {
                 WKInterfaceDevice.current().play(.failure)
                 return
             }
-            executeDurationCompleteSet()
+            let elapsed = Date().timeIntervalSince(start)
+            guard elapsed >= 1 else {
+                WKInterfaceDevice.current().play(.failure)
+                return
+            }
+            executeDurationCompleteSet(elapsedSeconds: elapsed)
             return
         }
 
@@ -478,12 +482,12 @@ struct MetricsView: View {
         }
     }
 
-    private func executeDurationCompleteSet() {
+    private func executeDurationCompleteSet(elapsedSeconds: TimeInterval) {
         let wasLastSet = workoutManager.isLastSet
-        let durationSeconds = TimeInterval(durationMinutes) * 60
 
-        workoutManager.completeSet(weight: nil, reps: nil, duration: durationSeconds, rpe: nil)
+        workoutManager.completeSet(weight: nil, reps: nil, duration: elapsedSeconds, rpe: nil)
         refreshPreviousSetsCache()
+        setTimerStart = nil
 
         estimatedRPE = nil
 
