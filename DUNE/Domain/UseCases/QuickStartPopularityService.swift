@@ -15,6 +15,7 @@ enum QuickStartPopularityService {
         "pull-up",
         "overhead-press",
         "barbell-row",
+        "plank",
         "running",
         "stair-climber",
     ]
