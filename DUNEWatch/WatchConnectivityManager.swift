@@ -240,16 +240,16 @@ final class WatchConnectivityManager: NSObject {
                     replyHandler: nil,
                     errorHandler: Self.makeWCErrorHandler("Failed to send set completion")
                 )
+            } else {
+                session.transferUserInfo(message)
             }
-
-            session.transferUserInfo(message)
         } catch {
             Self.logger.error("Failed to encode set completion: \(error.localizedDescription, privacy: .public)")
         }
     }
 
     /// Send completed workout back to iPhone.
-    /// Uses sendMessage for immediate delivery + transferUserInfo as background fallback.
+    /// Uses sendMessage for immediate delivery, transferUserInfo as background fallback.
     func sendWorkoutCompletion(_ update: WatchWorkoutUpdate) {
         let session = WCSession.default
         guard session.activationState == .activated else { return }
@@ -264,9 +264,9 @@ final class WatchConnectivityManager: NSObject {
                     replyHandler: nil,
                     errorHandler: Self.makeWCErrorHandler("Failed to send workout completion")
                 )
+            } else {
+                session.transferUserInfo(message)
             }
-
-            session.transferUserInfo(message)
         } catch {
             Self.logger.error("Failed to encode workout: \(error.localizedDescription, privacy: .public)")
         }
