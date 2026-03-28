@@ -140,6 +140,18 @@ final class MetricDetailViewModel {
     /// Average sleep start time across recent completed nights.
     private(set) var averageBedtime: DateComponents?
 
+    /// WASO analysis for the most recent sleep session.
+    private(set) var wasoAnalysis: WakeAfterSleepOnset?
+
+    /// Breathing disturbance 30-day analysis.
+    private(set) var breathingAnalysis: BreathingDisturbanceAnalysis?
+
+    /// Sleep quality vs exercise intensity correlation.
+    private(set) var exerciseCorrelation: SleepExerciseCorrelation?
+
+    /// Overnight vital signs for the most recent sleep session.
+    private(set) var nocturnalVitals: NocturnalVitalsSnapshot?
+
     /// Trend line data points (linear regression) for the visible chart data.
     private(set) var cachedTrendLine: [ChartDataPoint]?
 
@@ -302,6 +314,10 @@ final class MetricDetailViewModel {
 
     private let deficitUseCase = CalculateSleepDeficitUseCase()
     private let averageBedtimeUseCase = CalculateAverageBedtimeUseCase()
+    private let wasoUseCase = AnalyzeWASOUseCase()
+    private let sleepScoreUseCase: SleepScoreCalculating = CalculateSleepScoreUseCase()
+    private let correlationUseCase = CorrelateSleepExerciseUseCase()
+    private let nocturnalVitalsUseCase = AggregateNocturnalVitalsUseCase()
 
     private func loadSleepData(requestID: Int) async throws {
         let range = extendedRange
@@ -390,6 +406,125 @@ final class MetricDetailViewModel {
         deficitAnalysis = deficit
         averageBedtime = bedtime
         hasLoadedSleepInsightCards = true
+
+        // Load enhanced sleep insights (each can fail independently)
+        await loadSleepEnhancedInsights(today: today, calendar: calendar, requestID: requestID)
+    }
+
+    private func loadSleepEnhancedInsights(today: Date, calendar: Calendar, requestID: Int) async {
+        // Run three independent insight loads in parallel
+        async let wasoTask: Void = loadWASOAndNocturnalVitals(today: today, requestID: requestID)
+        async let breathingTask: Void = loadBreathingDisturbances(requestID: requestID)
+        async let correlationTask: Void = loadSleepExerciseCorrelation(today: today, calendar: calendar, requestID: requestID)
+        _ = await (wasoTask, breathingTask, correlationTask)
+    }
+
+    private func loadWASOAndNocturnalVitals(today: Date, requestID: Int) async {
+        do {
+            let todayStages = try await sleepService.fetchSleepStages(for: today)
+            guard isCurrentReloadRequest(requestID) else { return }
+            wasoAnalysis = wasoUseCase.execute(stages: todayStages)
+
+            // Nocturnal vitals from sleep window (use full stage range including awake bookends)
+            let allDates = todayStages.flatMap { [$0.startDate, $0.endDate] }
+            if let sleepStart = allDates.min(), let sleepEnd = allDates.max() {
+                await loadNocturnalVitals(sleepStart: sleepStart, sleepEnd: sleepEnd, requestID: requestID)
+            }
+        } catch {
+            AppLogger.ui.error("[Sleep] WASO/stages fetch failed: \(error, privacy: .private)")
+        }
+    }
+
+    private func loadBreathingDisturbances(requestID: Int) async {
+        do {
+            let samples = try await breathingDisturbanceService.fetchNightlyDisturbances(days: 30)
+            guard isCurrentReloadRequest(requestID) else { return }
+            breathingAnalysis = breathingDisturbanceService.analyze(samples: samples)
+        } catch {
+            AppLogger.ui.error("[Sleep] Breathing disturbances fetch failed: \(error, privacy: .private)")
+        }
+    }
+
+    private func loadNocturnalVitals(sleepStart: Date, sleepEnd: Date, requestID: Int) async {
+        do {
+            async let hrTask = heartRateService.fetchHeartRateHistory(start: sleepStart, end: sleepEnd)
+            async let rrTask = vitalsService.fetchRespiratoryRateCollection(start: sleepStart, end: sleepEnd)
+            async let tempTask = vitalsService.fetchWristTemperatureCollection(start: sleepStart, end: sleepEnd)
+            async let spo2Task = vitalsService.fetchSpO2Collection(start: sleepStart, end: sleepEnd)
+            async let baselineTask = vitalsService.fetchWristTemperatureBaseline(days: 14)
+
+            let hr = (try? await hrTask) ?? []
+            let rr = (try? await rrTask) ?? []
+            let temp = (try? await tempTask) ?? []
+            let spo2 = (try? await spo2Task) ?? []
+            let baseline = try? await baselineTask
+
+            guard isCurrentReloadRequest(requestID) else { return }
+
+            let input = AggregateNocturnalVitalsUseCase.Input(
+                sleepStart: sleepStart,
+                sleepEnd: sleepEnd,
+                heartRateSamples: hr.map { .init(date: $0.date, value: $0.value) },
+                respiratoryRateSamples: rr.map { .init(date: $0.date, value: $0.value) },
+                wristTemperatureSamples: temp.map { .init(date: $0.date, value: $0.value) },
+                spO2Samples: spo2.map { .init(date: $0.date, value: $0.value) },
+                wristTemperatureBaseline: baseline
+            )
+            nocturnalVitals = nocturnalVitalsUseCase.execute(input: input)
+        } catch {
+            AppLogger.ui.error("[Sleep] Nocturnal vitals fetch failed: \(error, privacy: .private)")
+        }
+    }
+
+    private func loadSleepExerciseCorrelation(today: Date, calendar: Calendar, requestID: Int) async {
+        let correlationDays = 30
+        let start = calendar.date(byAdding: .day, value: -correlationDays, to: today) ?? today
+        let end = calendar.date(byAdding: .day, value: 1, to: today) ?? today
+
+        do {
+            let sleepDurations = try await sleepService.fetchDailySleepDurations(start: start, end: end)
+            let workouts = try await workoutService.fetchWorkouts(start: start, end: end)
+            guard isCurrentReloadRequest(requestID) else { return }
+
+            // Build sleep days using sleepScoreUseCase for consistent scoring
+            let sleepDays: [CorrelateSleepExerciseUseCase.Input.SleepDay] = try await withThrowingTaskGroup(
+                of: CorrelateSleepExerciseUseCase.Input.SleepDay?.self
+            ) { [sleepService, sleepScoreUseCase] group in
+                for day in sleepDurations where day.totalMinutes > 0 {
+                    group.addTask {
+                        let stages = try await sleepService.fetchSleepStages(for: day.date)
+                        guard !stages.isEmpty else { return nil }
+                        let output = sleepScoreUseCase.execute(input: .init(stages: stages))
+                        let deepRatio = day.stageBreakdown[.deep, default: 0] / day.totalMinutes
+                        return .init(
+                            date: day.date,
+                            score: output.score,
+                            deepRatio: deepRatio,
+                            efficiency: output.efficiency
+                        )
+                    }
+                }
+                var results: [CorrelateSleepExerciseUseCase.Input.SleepDay] = []
+                for try await result in group {
+                    if let result { results.append(result) }
+                }
+                return results
+            }
+
+            // Build exercise days from workouts
+            let exerciseDays: [CorrelateSleepExerciseUseCase.Input.ExerciseDay] = workouts.map { workout in
+                let durationMinutes = workout.duration / 60.0
+                let intensity = workout.effortScore.map { $0 / 10.0 } ?? min(1.0, durationMinutes / 60.0 * 0.5)
+                return .init(date: workout.date, maxIntensity: intensity)
+            }
+
+            exerciseCorrelation = correlationUseCase.execute(input: .init(
+                sleepByDate: sleepDays,
+                exerciseByDate: exerciseDays
+            ))
+        } catch {
+            AppLogger.ui.error("[Sleep] Exercise correlation fetch failed: \(error, privacy: .private)")
+        }
     }
 
     private func fetchDeficitAnalysis(today: Date, calendar: Calendar) async -> SleepDeficitAnalysis? {
