@@ -60,6 +60,19 @@ Score에서는 WASO.score를 15pt 스케일로 매핑.
 - 각 bucket: avg/min/max
 - Summary: minHR, avgHR, avgRR, wristTempDeviation(baseline 대비), avgSpO2
 
+### 6. UI 통합 패턴 (PR #643)
+
+**카드 배치**: `MetricDetailView`의 sleep 섹션에 조건부 렌더링:
+- `SleepDeficitGaugeView` 뒤에 WASO → Breathing → Correlation → Nocturnal Vitals 순서 배치
+- 각 카드는 데이터 nil/empty 시 자동 숨김
+
+**데이터 로딩**: `MetricDetailViewModel.loadSleepInsightCards()` → `loadSleepEnhancedInsights()` 체인
+- 3개 독립 작업 병렬 실행: `async let (wasoTask, breathingTask, correlationTask)`
+- 수면-운동 상관: `sleepScoreUseCase`로 일관된 점수 계산 (인라인 공식 금지)
+- 야간 바이탈: 전체 수면 세션 윈도우 사용 (awake bookend 포함)
+
+**Localization**: 21개 신규 문자열 en/ko/ja 등록 (`Shared/Resources/Localizable.xcstrings`)
+
 ## Prevention
 
 1. **Score 가중치 변경 시**: 합이 100인지 검증 + 기존 테스트 업데이트 + What's New 안내
@@ -73,3 +86,5 @@ Score에서는 WASO.score를 15pt 스케일로 매핑.
   region-based isolation checker 에러를 유발 → 단순 순차 호출로 변경 (corrections-active.md 참조)
 - `HealthMetric.Category` 추가 시 10+ 파일의 exhaustive switch 수정 필요 (corrections-active.md #94)
 - `HealthKitManaging` 프로토콜은 최소한의 인터페이스만 노출 — 쿼리 서비스는 `HealthKitManager` 구체 타입 직접 사용
+- 상관분석에서 인라인 score/efficiency 공식은 tautology bug를 유발 — 항상 기존 UseCase를 통해 계산
+- 독립적인 HealthKit 쿼리들은 `async let` 병렬화 필수 — 순차 실행 시 UI 로딩 지연
