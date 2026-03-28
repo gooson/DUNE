@@ -452,18 +452,17 @@ struct WorkoutSessionView: View {
                     .tracking(1.2)
 
                 if set.wrappedValue.isCompleted {
-                    // Show recorded duration for completed sets
-                    let mins = Int(set.wrappedValue.duration) ?? 0
-                    Text(String(format: "%d:%02d", mins, 0))
+                    // Show recorded duration for completed sets (stored as seconds)
+                    let totalSecs = Int(set.wrappedValue.duration) ?? 0
+                    Text(String(format: "%d:%02d", totalSecs / 60, totalSecs % 60))
                         .font(.system(size: 48, weight: .bold, design: .rounded))
                         .monospacedDigit()
                         .foregroundStyle(DS.Color.primaryText)
-                } else {
-                    // Live count-up timer
+                } else if let startDate = viewModel.setTimerStarts[set.wrappedValue.id] {
+                    // Live count-up timer — capture startDate outside TimelineView
+                    // to avoid observation dependency on the entire dictionary.
                     TimelineView(.periodic(from: .now, by: 1)) { context in
-                        let elapsed = Int(viewModel.setTimerStarts[set.wrappedValue.id].map {
-                            context.date.timeIntervalSince($0)
-                        } ?? 0)
+                        let elapsed = Int(context.date.timeIntervalSince(startDate))
                         let mins = elapsed / 60
                         let secs = elapsed % 60
                         Text(String(format: "%d:%02d", mins, secs))
@@ -472,6 +471,11 @@ struct WorkoutSessionView: View {
                             .foregroundStyle(DS.Color.primaryText)
                             .contentTransition(.numericText())
                     }
+                } else {
+                    Text("0:00")
+                        .font(.system(size: 48, weight: .bold, design: .rounded))
+                        .monospacedDigit()
+                        .foregroundStyle(DS.Color.primaryText)
                 }
             }
             .frame(maxWidth: .infinity)
@@ -828,11 +832,14 @@ struct WorkoutSessionView: View {
         isInputFieldFocused = false
         guard viewModel.sets.indices.contains(currentSetIndex) else { return }
 
-        // For durationIntensity: stop timer and record elapsed time before validation
+        // For durationIntensity: stop timer and record elapsed seconds before validation
         if viewModel.exercise.inputType == .durationIntensity {
             if let elapsed = viewModel.stopTimer(for: viewModel.sets[currentSetIndex]) {
-                let mins = Int((elapsed / 60).rounded(.up))
-                viewModel.sets[currentSetIndex].duration = "\(max(1, mins))"
+                let secs = max(1, Int(elapsed.rounded()))
+                viewModel.sets[currentSetIndex].duration = "\(secs)"
+            } else if viewModel.sets[currentSetIndex].duration.isEmpty {
+                viewModel.validationError = String(localized: "Hold the plank for at least 1 second")
+                return
             }
         }
 

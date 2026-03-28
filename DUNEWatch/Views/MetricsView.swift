@@ -376,6 +376,9 @@ struct MetricsView: View {
     private func prefillFromEntry() {
         guard let entry = workoutManager.currentEntry else { return }
 
+        // Always clear stale timer when switching exercises/sets
+        setTimerStart = nil
+
         let inputType = currentInputType
 
         if inputType == .durationIntensity {
@@ -439,7 +442,7 @@ struct MetricsView: View {
                 return
             }
             let elapsed = Date().timeIntervalSince(start)
-            guard elapsed >= 1 else {
+            guard elapsed >= 1, elapsed <= 7200 else {
                 WKInterfaceDevice.current().play(.failure)
                 return
             }
