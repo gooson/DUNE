@@ -152,6 +152,21 @@ final class MetricDetailViewModel {
     /// Overnight vital signs for the most recent sleep session.
     private(set) var nocturnalVitals: NocturnalVitalsSnapshot?
 
+    /// Nap detection analysis (14-day window).
+    private(set) var napAnalysis: NapAnalysis?
+
+    /// Sleep debt recovery prediction (derived from deficitAnalysis).
+    private(set) var debtRecoveryPrediction: SleepDebtRecoveryPrediction?
+
+    /// Sleep regularity index (bedtime/wake consistency).
+    private(set) var sleepRegularity: SleepRegularityIndex?
+
+    /// 30-day vitals timeline with anomaly detection.
+    private(set) var vitalsTimeline: VitalsTimelineAnalysis?
+
+    /// Sleep environment analysis (weather correlation).
+    private(set) var sleepEnvironment: SleepEnvironmentAnalysis?
+
     /// Trend line data points (linear regression) for the visible chart data.
     private(set) var cachedTrendLine: [ChartDataPoint]?
 
@@ -318,6 +333,13 @@ final class MetricDetailViewModel {
     private let sleepScoreUseCase: SleepScoreCalculating = CalculateSleepScoreUseCase()
     private let correlationUseCase = CorrelateSleepExerciseUseCase()
     private let nocturnalVitalsUseCase = AggregateNocturnalVitalsUseCase()
+    private let napDetectionUseCase = DetectNapsUseCase()
+    private let debtRecoveryUseCase = PredictSleepDebtRecoveryUseCase()
+    private let regularityUseCase = CalculateSleepRegularityUseCase()
+    private let vitalsTimelineUseCase = AnalyzeVitalsTimelineUseCase()
+    private let environmentUseCase = AnalyzeSleepEnvironmentUseCase()
+    private let historicalWeatherService: HistoricalWeatherFetching = OpenMeteoArchiveService()
+    private let locationService = LocationService()
 
     private func loadSleepData(requestID: Int) async throws {
         let range = extendedRange
@@ -405,6 +427,9 @@ final class MetricDetailViewModel {
         guard isCurrentReloadRequest(requestID) else { return }
         deficitAnalysis = deficit
         averageBedtime = bedtime
+        if let deficit {
+            debtRecoveryPrediction = debtRecoveryUseCase.execute(deficit: deficit)
+        }
         hasLoadedSleepInsightCards = true
 
         // Load enhanced sleep insights (each can fail independently)
@@ -412,11 +437,14 @@ final class MetricDetailViewModel {
     }
 
     private func loadSleepEnhancedInsights(today: Date, calendar: Calendar, requestID: Int) async {
-        // Run three independent insight loads in parallel
+        // Run independent insight loads in parallel
         async let wasoTask: Void = loadWASOAndNocturnalVitals(today: today, requestID: requestID)
         async let breathingTask: Void = loadBreathingDisturbances(requestID: requestID)
         async let correlationTask: Void = loadSleepExerciseCorrelation(today: today, calendar: calendar, requestID: requestID)
-        _ = await (wasoTask, breathingTask, correlationTask)
+        async let napTask: Void = loadNapAndRegularity(today: today, calendar: calendar, requestID: requestID)
+        async let vitalsTimelineTask: Void = loadVitalsTimeline(today: today, calendar: calendar, requestID: requestID)
+        async let environmentTask: Void = loadSleepEnvironment(today: today, calendar: calendar, requestID: requestID)
+        _ = await (wasoTask, breathingTask, correlationTask, napTask, vitalsTimelineTask, environmentTask)
     }
 
     private func loadWASOAndNocturnalVitals(today: Date, requestID: Int) async {
@@ -524,6 +552,157 @@ final class MetricDetailViewModel {
             ))
         } catch {
             AppLogger.ui.error("[Sleep] Exercise correlation fetch failed: \(error, privacy: .private)")
+        }
+    }
+
+    /// Loads nap detection and sleep regularity (share 14-day stage data).
+    private func loadNapAndRegularity(today: Date, calendar: Calendar, requestID: Int) async {
+        let analysisDays = 14
+        let start = calendar.date(byAdding: .day, value: -analysisDays, to: today) ?? today
+        let end = calendar.date(byAdding: .day, value: 1, to: today) ?? today
+
+        do {
+            let durations = try await sleepService.fetchDailySleepDurations(start: start, end: end)
+            guard isCurrentReloadRequest(requestID) else { return }
+
+            // Fetch stages per day for both nap detection and regularity
+            let stagesByDay: [[SleepStage]] = try await withThrowingTaskGroup(of: [SleepStage].self) { [sleepService] group in
+                for day in durations where day.totalMinutes > 0 {
+                    group.addTask {
+                        try await sleepService.fetchSleepStages(for: day.date)
+                    }
+                }
+                var results: [[SleepStage]] = []
+                for try await stages in group {
+                    if !stages.isEmpty { results.append(stages) }
+                }
+                return results
+            }
+
+            guard isCurrentReloadRequest(requestID) else { return }
+
+            napAnalysis = napDetectionUseCase.execute(input: .init(
+                sleepStagesByDay: stagesByDay,
+                calendar: calendar,
+                analysisDays: analysisDays
+            ))
+
+            sleepRegularity = regularityUseCase.execute(input: .init(
+                sleepStagesByDay: stagesByDay,
+                calendar: calendar
+            ))
+        } catch {
+            AppLogger.ui.error("[Sleep] Nap/regularity analysis failed: \(error, privacy: .private)")
+        }
+    }
+
+    /// Loads 30-day vitals timeline for multi-track overview.
+    private func loadVitalsTimeline(today: Date, calendar: Calendar, requestID: Int) async {
+        let days = 30
+        let start = calendar.date(byAdding: .day, value: -days, to: today) ?? today
+        let end = calendar.date(byAdding: .day, value: 1, to: today) ?? today
+
+        do {
+            async let hrTask = heartRateService.fetchHeartRateHistory(start: start, end: end, interval: DateComponents(day: 1))
+            async let rrTask = vitalsService.fetchRespiratoryRateCollection(start: start, end: end)
+            async let tempTask = vitalsService.fetchWristTemperatureCollection(start: start, end: end)
+            async let spo2Task = vitalsService.fetchSpO2Collection(start: start, end: end)
+
+            let hr = (try? await hrTask) ?? []
+            let rr = (try? await rrTask) ?? []
+            let temp = (try? await tempTask) ?? []
+            let spo2 = (try? await spo2Task) ?? []
+
+            guard isCurrentReloadRequest(requestID) else { return }
+
+            let input = AnalyzeVitalsTimelineUseCase.Input(
+                heartRateSamples: groupByDay(hr, calendar: calendar),
+                respiratoryRateSamples: groupByDay(rr, calendar: calendar),
+                wristTemperatureSamples: groupByDay(temp, calendar: calendar),
+                spO2Samples: groupByDay(spo2, calendar: calendar)
+            )
+            vitalsTimeline = vitalsTimelineUseCase.execute(input: input)
+        } catch {
+            AppLogger.ui.error("[Sleep] Vitals timeline fetch failed: \(error, privacy: .private)")
+        }
+    }
+
+    /// Groups VitalSample array into per-day sample arrays.
+    private func groupByDay(
+        _ samples: [VitalSample],
+        calendar: Calendar
+    ) -> [AnalyzeVitalsTimelineUseCase.Input.DaySample] {
+        let grouped = Dictionary(grouping: samples) { sample in
+            calendar.startOfDay(for: sample.date)
+        }
+        return grouped.map { date, daySamples in
+            .init(date: date, values: daySamples.map(\.value))
+        }.sorted { $0.date < $1.date }
+    }
+
+    /// Loads sleep environment analysis (weather correlation).
+    /// Requires location authorization — silently skips if unavailable.
+    private func loadSleepEnvironment(today: Date, calendar: Calendar, requestID: Int) async {
+        let days = 30
+        let start = calendar.date(byAdding: .day, value: -days, to: today) ?? today
+        let end = today
+
+        do {
+            // Use location service for coordinates; skip if not authorized
+            guard locationService.isAuthorized,
+                  let location = locationService.currentLocation else { return }
+            let latitude = location.coordinate.latitude
+            let longitude = location.coordinate.longitude
+
+            let durations = try await sleepService.fetchDailySleepDurations(start: start, end: end)
+            guard isCurrentReloadRequest(requestID) else { return }
+
+            // Compute sleep scores per day
+            let scoredDays: [(date: Date, score: Int)] = try await withThrowingTaskGroup(
+                of: (Date, Int)?.self
+            ) { [sleepService, sleepScoreUseCase] group in
+                for day in durations where day.totalMinutes > 0 {
+                    group.addTask {
+                        let stages = try await sleepService.fetchSleepStages(for: day.date)
+                        guard !stages.isEmpty else { return nil }
+                        let output = sleepScoreUseCase.execute(input: .init(stages: stages))
+                        return (day.date, output.score)
+                    }
+                }
+                var results: [(Date, Int)] = []
+                for try await result in group {
+                    if let result { results.append(result) }
+                }
+                return results
+            }
+
+            let weatherRecords = try await historicalWeatherService.fetchDailyWeather(
+                latitude: latitude,
+                longitude: longitude,
+                start: start,
+                end: end
+            )
+            guard isCurrentReloadRequest(requestID) else { return }
+
+            // Pair weather with sleep scores by date
+            let weatherByDate = Dictionary(weatherRecords.map { record in
+                (calendar.startOfDay(for: record.date), record)
+            }, uniquingKeysWith: { _, latest in latest })
+
+            let pairs: [AnalyzeSleepEnvironmentUseCase.Input.DayPair] = scoredDays.compactMap { day in
+                let dayStart = calendar.startOfDay(for: day.date)
+                guard let weather = weatherByDate[dayStart] else { return nil }
+                return .init(
+                    date: day.date,
+                    sleepScore: day.score,
+                    avgTemperatureCelsius: weather.temperatureAvgCelsius,
+                    avgHumidityPercent: weather.humidityAvgPercent
+                )
+            }
+
+            sleepEnvironment = environmentUseCase.execute(input: .init(pairs: pairs))
+        } catch {
+            AppLogger.ui.error("[Sleep] Environment analysis failed: \(error, privacy: .private)")
         }
     }
 
