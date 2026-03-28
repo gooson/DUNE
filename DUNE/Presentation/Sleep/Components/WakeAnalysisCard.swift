@@ -1,7 +1,9 @@
 import SwiftUI
 
 struct WakeAnalysisCard: View {
-    let analysis: WakeAfterSleepOnset
+    let analysis: WakeAfterSleepOnset?
+
+    @State private var showingInfoSheet = false
 
     var body: some View {
         StandardCard {
@@ -10,37 +12,56 @@ struct WakeAnalysisCard: View {
                     Label(String(localized: "Wake Analysis"), systemImage: "moon.stars")
                         .font(.callout)
                         .foregroundStyle(DS.Color.textSecondary)
+                    Button {
+                        showingInfoSheet = true
+                    } label: {
+                        Image(systemName: "info.circle")
+                            .font(.callout)
+                            .foregroundStyle(DS.Color.textSecondary)
+                    }
+                    .buttonStyle(.plain)
                     Spacer()
-                    Text("\(analysis.score)")
-                        .font(.title3.bold())
-                        .foregroundStyle(scoreColor)
+                    if let analysis {
+                        Text("\(analysis.score)")
+                            .font(.title3.bold())
+                            .foregroundStyle(scoreColor)
+                    }
                 }
 
-                if analysis.awakeningCount == 0 {
-                    Text(String(localized: "No significant awakenings detected"))
-                        .font(.subheadline)
-                        .foregroundStyle(DS.Color.sleep)
-                } else {
-                    HStack(spacing: DS.Spacing.lg) {
-                        statItem(
-                            value: "\(analysis.awakeningCount)",
-                            label: String(localized: "Awakenings")
-                        )
-                        statItem(
-                            value: "\(Int(analysis.totalWASOMinutes))",
-                            unit: String(localized: "min"),
-                            label: String(localized: "Total WASO")
-                        )
-                        statItem(
-                            value: "\(Int(analysis.longestAwakeningMinutes))",
-                            unit: String(localized: "min"),
-                            label: String(localized: "Longest")
-                        )
+                if let analysis {
+                    if analysis.awakeningCount == 0 {
+                        Text(String(localized: "No significant awakenings detected"))
+                            .font(.subheadline)
+                            .foregroundStyle(DS.Color.sleep)
+                    } else {
+                        HStack(spacing: DS.Spacing.lg) {
+                            statItem(
+                                value: "\(analysis.awakeningCount)",
+                                label: String(localized: "Awakenings")
+                            )
+                            statItem(
+                                value: "\(Int(analysis.totalWASOMinutes))",
+                                unit: String(localized: "min"),
+                                label: String(localized: "Total WASO")
+                            )
+                            statItem(
+                                value: "\(Int(analysis.longestAwakeningMinutes))",
+                                unit: String(localized: "min"),
+                                label: String(localized: "Longest")
+                            )
+                        }
                     }
+                } else {
+                    Text(String(localized: "Collecting sleep data..."))
+                        .font(.subheadline)
+                        .foregroundStyle(DS.Color.textSecondary)
                 }
             }
         }
         .accessibilityIdentifier("sleep-wake-analysis-card")
+        .sheet(isPresented: $showingInfoSheet) {
+            WASOInfoSheet()
+        }
     }
 
     private func statItem(value: String, unit: String = "", label: String) -> some View {
@@ -62,10 +83,11 @@ struct WakeAnalysisCard: View {
     }
 
     private var scoreColor: Color {
-        switch analysis.score {
-        case 80...100: DS.Color.sleep
-        case 50..<80: .orange
-        default: .red
+        guard let score = analysis?.score else { return DS.Color.textSecondary }
+        switch score {
+        case 80...100: return DS.Color.sleep
+        case 50..<80: return .orange
+        default: return .red
         }
     }
 }

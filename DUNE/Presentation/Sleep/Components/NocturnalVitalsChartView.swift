@@ -2,7 +2,7 @@ import SwiftUI
 import Charts
 
 struct NocturnalVitalsChartView: View {
-    let snapshot: NocturnalVitalsSnapshot
+    let snapshot: NocturnalVitalsSnapshot?
 
     @State private var selectedTrack: VitalTrack = .heartRate
 
@@ -35,7 +35,15 @@ struct NocturnalVitalsChartView: View {
                     .font(.callout)
                     .foregroundStyle(DS.Color.textSecondary)
 
-                trackPicker
+                if snapshot == nil {
+                    Text(String(localized: "Collecting sleep data..."))
+                        .font(.subheadline)
+                        .foregroundStyle(DS.Color.textSecondary)
+                }
+
+                if snapshot != nil {
+                    trackPicker
+                }
 
                 if !activeBuckets.isEmpty {
                     Chart(activeBuckets) { bucket in
@@ -106,20 +114,23 @@ struct NocturnalVitalsChartView: View {
         }
     }
 
+    @ViewBuilder
     private var summaryGrid: some View {
-        let summary = snapshot.summary
-        return HStack(spacing: DS.Spacing.md) {
-            if let minHR = summary.minHeartRate {
-                summaryItem(label: String(localized: "Min HR"), value: "\(Int(minHR))", unit: "bpm")
-            }
-            if let avgHR = summary.avgHeartRate {
-                summaryItem(label: String(localized: "Avg HR"), value: "\(Int(avgHR))", unit: "bpm")
-            }
-            if let avgRR = summary.avgRespiratoryRate {
-                summaryItem(label: String(localized: "Avg RR"), value: avgRR.formattedWithSeparator(fractionDigits: 1), unit: "br/min")
-            }
-            if let dev = summary.wristTempDeviation {
-                summaryItem(label: String(localized: "Temp Δ"), value: dev.formattedWithSeparator(fractionDigits: 1, alwaysShowSign: true), unit: "°C")
+        if let snapshot {
+            let summary = snapshot.summary
+            HStack(spacing: DS.Spacing.md) {
+                if let minHR = summary.minHeartRate {
+                    summaryItem(label: String(localized: "Min HR"), value: "\(Int(minHR))", unit: "bpm")
+                }
+                if let avgHR = summary.avgHeartRate {
+                    summaryItem(label: String(localized: "Avg HR"), value: "\(Int(avgHR))", unit: "bpm")
+                }
+                if let avgRR = summary.avgRespiratoryRate {
+                    summaryItem(label: String(localized: "Avg RR"), value: avgRR.formattedWithSeparator(fractionDigits: 1), unit: "br/min")
+                }
+                if let dev = summary.wristTempDeviation {
+                    summaryItem(label: String(localized: "Temp Δ"), value: dev.formattedWithSeparator(fractionDigits: 1, alwaysShowSign: true), unit: "°C")
+                }
             }
         }
     }
@@ -141,16 +152,18 @@ struct NocturnalVitalsChartView: View {
     }
 
     private var activeBuckets: [NocturnalVitalsSnapshot.VitalBucket] {
+        guard let snapshot else { return [] }
         switch selectedTrack {
-        case .heartRate: snapshot.heartRateBuckets
-        case .respiratoryRate: snapshot.respiratoryRateBuckets
-        case .temperature: snapshot.wristTemperatureBuckets
-        case .spO2: snapshot.spO2Buckets
+        case .heartRate: return snapshot.heartRateBuckets
+        case .respiratoryRate: return snapshot.respiratoryRateBuckets
+        case .temperature: return snapshot.wristTemperatureBuckets
+        case .spO2: return snapshot.spO2Buckets
         }
     }
 
     private var availableTracks: [VitalTrack] {
-        VitalTrack.allCases.filter { track in
+        guard let snapshot else { return [] }
+        return VitalTrack.allCases.filter { track in
             switch track {
             case .heartRate: !snapshot.heartRateBuckets.isEmpty
             case .respiratoryRate: !snapshot.respiratoryRateBuckets.isEmpty
